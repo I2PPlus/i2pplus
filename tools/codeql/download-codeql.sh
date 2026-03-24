@@ -5,7 +5,7 @@
 # CodeQL is ~509MB so only downloads when explicitly requested.
 # Installs to tools/codeql/codeql-<version>/ to avoid codeql/codeql nesting.
 #
-# Usage: download-codeql.sh [--force]
+# Usage: download-codeql.sh [--force] [--packs-only]
 #
 set -e
 
@@ -13,8 +13,39 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 VERSION_FILE="${SCRIPT_DIR}/version.txt"
 DOWNLOAD_URL="https://github.com/github/codeql-cli-binaries/releases"
 FORCE=false
+PACKS_ONLY=false
 
-[ "$1" = "--force" ] && FORCE=true
+for arg in "$@"; do
+  [ "$arg" = "--force" ] && FORCE=true
+  [ "$arg" = "--packs-only" ] && PACKS_ONLY=true
+done
+
+download_packs() {
+    PACKS_DIR="${SCRIPT_DIR}/packs"
+    mkdir -p "$PACKS_DIR"
+    CODEQL_BIN="${SCRIPT_DIR}/codeql/codeql"
+    if [ ! -x "$CODEQL_BIN" ]; then
+        echo "ERROR: CodeQL CLI not found at ${CODEQL_BIN}"
+        exit 1
+    fi
+    # Bypass torsocks for pack downloads (network required)
+    local _ld="${LD_PRELOAD:-}"; unset LD_PRELOAD
+    echo "Downloading Java query packs..."
+    "$CODEQL_BIN" pack download codeql/java-all --dir "$PACKS_DIR" 2>/dev/null || echo "WARNING: Could not download java-all"
+    "$CODEQL_BIN" pack download codeql/java-queries --dir "$PACKS_DIR" 2>/dev/null || echo "WARNING: Could not download java-queries"
+    "$CODEQL_BIN" pack download githubsecuritylab/codeql-java-queries --dir "$PACKS_DIR" 2>/dev/null || echo "WARNING: Could not download community java pack"
+    echo "Downloading JavaScript query packs..."
+    "$CODEQL_BIN" pack download codeql/javascript-all --dir "$PACKS_DIR" 2>/dev/null || echo "WARNING: Could not download javascript-all"
+    "$CODEQL_BIN" pack download codeql/javascript-queries --dir "$PACKS_DIR" 2>/dev/null || echo "WARNING: Could not download javascript-queries"
+    "$CODEQL_BIN" pack download githubsecuritylab/codeql-javascript-queries --dir "$PACKS_DIR" 2>/dev/null || echo "WARNING: Could not download community js pack"
+    [ -n "$_ld" ] && export LD_PRELOAD="$_ld"
+    echo "Query packs installed to ${PACKS_DIR}/"
+}
+
+if [ "$PACKS_ONLY" = true ]; then
+    download_packs
+    exit 0
+fi
 
 get_latest_version() {
     curl -sL https://api.github.com/repos/github/codeql-cli-binaries/releases/latest \
@@ -81,10 +112,8 @@ rm -rf "$TMPDIR"
 rm -f "${SCRIPT_DIR}/codeql"
 ln -sf "codeql-${LATEST}" "${SCRIPT_DIR}/codeql"
 
-# Download query packs (stored in ~/.codeql by default)
-echo "Downloading Java query packs..."
-"${INSTALL_DIR}/codeql" pack download codeql/java-all 2>/dev/null || echo "WARNING: Could not download java-all"
-"${INSTALL_DIR}/codeql" pack download codeql/java-queries 2>/dev/null || echo "WARNING: Could not download java-queries"
+# Download query packs
+download_packs
 
 # Record version
 echo -n "$LATEST" > "$VERSION_FILE"

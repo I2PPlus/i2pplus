@@ -96,7 +96,20 @@
     <Match>
         <Class name="~net\.(?!i2p).*" />
     </Match>
+    <Match>
+        <Class name="~edu\..*" />
+    </Match>
     
+    <!-- Exclude GNU libraries (bundled third-party) -->
+    <Match>
+        <Class name="~gnu\..*" />
+    </Match>
+    
+    <!-- Exclude Pack200 -->
+    <Match>
+        <Class name="~io\.pack200.*" />
+    </Match>
+
     <!-- Include only I2P-specific packages - remove these matches to allow analysis -->
     <!-- The following are commented out to allow analysis of I2P code -->
     <!--

@@ -147,12 +147,21 @@ tools/
 !tools/checkstyle/*.sh
 !tools/checkstyle/*.jar
 !tools/checkstyle/*.md
+!tools/spotbugs/*.py
+!tools/spotbugs/*.sh
+!tools/spotbugs/config/*
 !tools/test/
 !tools/test/*
 tools/test/*.jar
 !tools/jsdoc/
 !tools/ant-contrib.jar
 !tools/google-java-format.jar
+!tools/template/icons/*
+!tools/template/js/*
+!tools/template/report-all-java.py
+!tools/template/common.py
+!tools/template/report.css
+tools/template/config.txt
 *.sarif
 nohup.out
 builds/
@@ -197,3 +206,6 @@ package.json
 # Python
 __pycache__/
 tools/codeql/db/
+tools/codeql/packs/
+tools/template/.source-index.json
+tools/codeql/packs/*/

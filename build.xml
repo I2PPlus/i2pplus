@@ -34,134 +34,160 @@
     <echo message="JDK: ${java.vendor} ${java.version} (${java.runtime.name} ${java.runtime.version})"/>
     <echo message="&#8199;"/>
     <echo message="Useful targets:"/>
-    <echo message=" bench                                        Build benchmarks"/>
-    <echo message=" buildAddressbook                             Build Addressbook .jar component &#10140; ./build/addressbook.jar"/>
-    <echo message=" buildCore                                    Build i2p .jar component &#10140; ./build/i2p.jar"/>
-    <echo message=" buildDesktopGui                              Build standalone DesktopGUI &#10140; ./build/desktopgui.jar"/>
-    <echo message=" buildI2PControl                              Build I2PControl .war component &#10140; ./build/jsonrpc.war"/>
-    <echo message=" buildI2PSnark                                Build I2PSnark .jar &amp; .war components &#10140; ./build/i2psnark.(jar|war)"/>
-    <echo message=" buildI2PTunnel                               Build I2PTunnel .jar &amp; .war components &#10140; ./build/i2ptunnel.(jar|war)"/>
-    <echo message=" buildImagegen                                Build Imagegen .war component &#10140; ./build/imagegen.war"/>
-    <echo message=" buildJbigi                                   Build all jbigi native libraries (Win64 + Linux64 + ARM64) &#10140; installer/lib/jbigi/"/>
-    <echo message=" buildJbigi-arm64                             Build Linux ARM64 jbigi .so files &#10140; installer/lib/jbigi/"/>
-    <echo message=" buildJbigi-linux64                           Build Linux 64-bit jbigi .so files &#10140; installer/lib/jbigi/"/>
-    <echo message=" buildJbigi-win64                             Build Windows 64-bit jbigi DLLs using MinGW &#10140; installer/lib/jbigi/"/>
-    <echo message=" buildJetty                                   Build all Jetty related jar components &#10140; ./build/"/>
-    <echo message=" buildJrobin                                  Build the JRobin (RRD4J) .jar component &#10140; ./build/jrobin.jar"/>
-    <echo message=" buildMinistreaming                           Build MiniStreaming .jar component &#10140; ./build/mstreaming.jar"/>
-    <echo message=" buildPack200                                 Build Pack200 .jar component &#10140; ./build/pack200.jar"/>
-    <echo message=" buildProperties                              Display build properties  and Ant / JDK versions for current build"/>
-    <echo message=" buildRequirements                            Information about requirements for building packages using ant"/>
-    <echo message=" buildRouter                                  Build Router .jar component &#10140; ./build/router.jar"/>
-    <echo message=" buildRouterConsole                           Build required .jar components for RouterConsole &#10140; ./build/"/>
-    <echo message=" buildSAM                                     Build SAM .jar component &#10140; ./build/sam.jar"/>
-    <echo message=" buildStreaming                               Build Streaming .jar component &#10140; ./build/streaming.jar"/>
-    <echo message=" buildSusiDNS                                 Build SusiDNS .war component &#10140; ./build/susidns.war"/>
-    <echo message=" buildSusiMail                                Build SusiMail .war component &#10140; ./build/susimail.war"/>
-    <echo message=" buildSusiMailJar                             Build SusiMail .jar component for testing &#10140; ./build/susimail.jar"/>
-    <echo message=" buildWEB                                     Build required .jar &amp; .war components for RouterConsole &#10140; ./build/"/>
-    <echo message=" bumpBuildTime                                Update core/java/src/net/i2p/time/BuildTime.java with today's date"/>
-    <echo message=" bump                                         Increment build (minor version) by 1"/>
-    <echo message=" checkstyle                                   Run Checkstyle analysis &#10140; dist/checkstyle.html"/>
-    <echo message=" checkstyle-local                             Checkstyle report with clickable file links &#10140; dist/checkstyle-local.html"/>
-    <echo message=" checkstyle-fix-errors                        Run fix-style.py on codebase with exclusions"/>
-    <echo message=" codeql                                       Run CodeQL security analysis &#10140; dist/codeql.sarif + dist/codeql.html"/>
-    <echo message=" createThemesZip                              Create zip with all console and webapp themes and resources &#10140; ./dist/themes.zip"/>
-    <echo message=" debian-clean                                 Rollback Debian specific patches then run &apos;distclean&apos;"/>
-    <echo message=" debian                                       Generate Debian packages in ../ then run &apos;debian-clean&apos;"/>
-    <echo message=" debianhowto                                  Instructions on building Debian packages"/>
-    <echo message=" dist200                                      Run &apos;pkg&apos;, &apos;updater200&apos; and &apos;javadoc&apos;"/>
-    <echo message=" distclean                                    Clean up all derived and temporary files in workspace"/>
-    <echo message=" distcleanWebapps                             Clean up all webapp-related derived and temporary files in workspace"/>
-    <echo message=" dist                                         Run &apos;pkg&apos; and &apos;javadoc&apos;"/>
-    <echo message=" getGitRev                                    Check current Git revision in workspace and print truncated revision hash"/>
-    <echo message=" getGitRevLong                                Check current Git revision in workspace and print full revision hash"/>
-    <echo message=" i2psnark                                     Build standalone I2PSnark install &#10140; ./dist/i2psnark-standalone.zip"/>
-    <echo message=" i2psnark7zip                                 Build standalone I2PSnark 7zip install &#10140; ./dist/i2psnark-standalone.7z"/>
-    <echo message=" i2psnark_nozip                               Build standalone I2PSnark install, no zip file &#10140; ./dist/i2psnark-standalone"/>
-    <echo message=" installer / installer5                       Build GUI installer (IzPack4 / IzPack5) &#10140; ./dist/i2pinstall.exe"/>
-    <echo message=" installer-freebsd                            Build FreeBSD GUI installer &#10140; ./dist/i2pinstall&#8230;freebsd-only.jar"/>
-    <echo message=" installer-linux / installer5-linux           Build Linux GUI installer (IzPack4 / Izpack5) &#10140; ./dist/i2pinstall&#8230;linux-only.jar"/>
-    <echo message=" installer-nowindows / installer5-nowindows   Build GUI installer without Windows support (IzPack4 / IzPack5) &#10140; ./dist/i2pinstall&#8230;.jar"/>
-    <echo message=" installer-osx                                Build OS X GUI installer &#10140; ./dist/i2pinstall&#8230;osx.tar.bz2"/>
-    <echo message=" installer-windows / installer5-windows       Build Windows GUI installer (IzPack4 / IzPack5) &#10140; ./dist/i2pinstall&#8230;windows.exe"/>
-    <echo message=" javadoc                                      Create javadocs for project &#10140; ./dist/javadoc"/>
-    <echo message=" javadoc-nostylesheet                         Create javadocs for project without custom stylesheet &#10140; ./dist/javadoc"/>
-    <echo message=" javadoc-test                                 Javadocs for unit test classes &#10140; ./build/javadoc-test"/>
-    <echo message=" javadoc-zip                                  Create javadocs zip for project &#10140; ./dist/javadoc.zip"/>
-    <echo message=" javadoc-zip-nostylesheet                     Create javadocs zip without custom stylesheet for project &#10140; ./dist/javadoc.zip"/>
-    <echo message=" jsdoc                                        Create jsdoc with docdash template (requires npm) &#10140; ./dist/jsdoc"/>
-    <echo message=" jsdoc-minami                                 Create jsdoc with minami template (requires npm) &#10140; ./dist/jsdoc"/>
-    <echo message=" jsdoc-minami-zip                             Create jsdoc zip with minami template &#10140; ./dist/jsdoc-minami.zip"/>
-    <echo message=" jsdoc-tui                                    Create jsdoc with tui-jsdoc-template (requires npm) &#10140; ./dist/jsdoc"/>
-    <echo message=" jsdoc-tui-zip                                Create jsdoc zip with tui-jsdoc-template &#10140; ./dist/jsdoc-tui.zip"/>
-    <echo message=" jsdoc-zip                                    Create jsdoc zip with docdash template &#10140; ./dist/jsdoc.zip"/>
-    <echo message=" pkg                                          Run &apos;distclean&apos; then package everything up (updater, installer)"/>
-    <echo message=" pkg-portable-win32                           Build a minimal, portable install for Win32 &#10140; ./portable-win32.zip"/>
-    <echo message=" pmd                                          Run PMD Java and JavaScript static analysis &#10140; dist/pmd-java.html + dist/pmd-js.html"/>
-    <echo message=" pmd-java                                     Run PMD static analysis on Java sources &#10140; dist/pmd-java.html"/>
-    <echo message=" pmd-java-local                               Java PMD report with clickable file links &#10140; dist/pmd-java-local.html"/>
-    <echo message=" pmd-js                                       Run PMD static analysis on JavaScript sources &#10140; dist/pmd-js.html"/>
-    <echo message=" pmd-js-local                                 JavaScript PMD report with clickable file links &#10140; dist/pmd-js-local.html"/>
-    <echo message=" pmd-fix-errors                               Auto-fix PMD violations (StringBuffer, concat-in-loop, etc.)"/>
-    <echo message=" poupdate-source                              Update the .po files for translators (requires jsp files to be compiled first)"/>
-    <echo message=" signed-updater                               Signed Updater &#10140; ./dist/i2pupdate.su3 (Java14+ compatible)"/>
-    <echo message=" signed-updater200                            Signed Updater (pack200) &#10140; ./dist/i2pupdate.su3"/>
-    <echo message=" signed-updater200WithJavadocAndJetty         Signed Updater (pack200) + javadocs + Jetty &#10140; ./dist/i2pupdate.su3"/>
-    <echo message=" signed-updater200WithJavadoc                 Signed Updater (pack200) + javadocs &#10140; ./dist/i2pupdate.su3"/>
-    <echo message=" signed-updater200withJetty                   Signed Updater (pack200) + Jetty"/>
-    <echo message=" slackpkg                                     Build Slackware package in ./Slackware/i2p"/>
-    <echo message=" spotbugs                                     Run SpotBugs static analysis on Java sources"/>
-    <echo message=" tarball                                      Create tar archive for clean install &#10140; ./dist/i2p.tar.bz2"/>
-    <echo message=" test                                         Run JUnit tests (Core, MiniStreaming, Streaming) via scripts/run-tests.sh"/>
-    <echo message=" testJbigi                                    Benchmark jbigi: native vs pure Java modPow/modPowCT/modInverse"/>
-    <echo message=" testscripts                                  Run various scripts to check certificate validity, file integrity etc"/>
-    <echo message=" updater                                      Build updater for existing installs &#10140; ./dist/i2pupdate.zip"/>
-    <echo message=" updaterCompact                               Updater w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme"/>
-    <echo message=" updaterCompactRouterConsoleNoThemes          Updater with RouterConsole only (no themes)"/>
-    <echo message=" updaterCompactRouterConsole                  Updater with RouterConsole and console/webapp themes only"/>
-    <echo message=" updaterCompactWithDocs                       Compact updater with readme and proxy docs"/>
-    <echo message=" updaterCompactWithGeoIPAndJbigi              Compact updater with GeoIP database and Jbigi"/>
-    <echo message=" updaterCompactWithGeoIP                      Compact updater with GeoIP database"/>
-    <echo message=" updaterWithGeoIP                             Updater + GeoIP database"/>
-    <echo message=" updaterWithJavadocAndJetty                   Updater + javadocs (linked in console) + Jetty "/>
-    <echo message=" updaterWithJavadoc                           Updater + javadocs (linked in console)"/>
-    <echo message=" updaterWithJbigi                             Updater + jBigi library"/>
-    <echo message=" updaterWithJettyFixesAndGeoIP                Updater + local Jetty patches + GeoIP database"/>
-    <echo message=" updaterWithJettyFixesAndJbigi                Updater + local Jetty patches + jBigi library"/>
-    <echo message=" updaterWithJettyFixes                        Updater + local Jetty patches"/>
-    <echo message=" updaterWithJetty                             Updater + Jetty"/>
-    <echo message=" updaterRouter                                Updater with i2p.jar and router.jar only"/>
-    <echo message=" updaterSmall                                 Updater with essentials (no SAM/I2PSnark/SusiMail/SusiDNS/history.txt)"/>
-    <echo message=" updater200                                   Updater (pack200 - requires Java &lt; v14 or pre-existing lib/pack200.jar) &#10140; ./dist/i2pupdate200.zip"/>
-    <echo message=" updater200Compact                            Updater (pack200) w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme"/>
-    <echo message=" updater200CompactWithDocs                    Compact updater (pack200) with readme and proxy docs"/>
-    <echo message=" updater200CompactWithGeoIP                   Compact updater (pack200) with GeoIP database"/>
-    <echo message=" updater200WithGeoIPAndJavadoc                Updater (pack200) + GeoIP database + javadocs"/>
-    <echo message=" updater200WithGeoIPAndJbigi                  Updater (pack200) + GeoIP database + Jbigi"/>
-    <echo message=" updater200WithGeoIP                          Updater (pack200) + GeoIP database"/>
-    <echo message=" updater200WithJavadocAndJbigi                Updater (pack200) + javadocs + jBigi library"/>
-    <echo message=" updater200WithJavadocAndJetty                Updater (pack200) + javadocs (with console link) + Jetty"/>
-    <echo message=" updater200WithJavadoc                        Updater (pack200) + javadocs (with console link)"/>
-    <echo message=" updater200WithJbigi                          Updater (pack200) + jBigi library"/>
-    <echo message=" updater200WithJettyAndGeoIPAndLicenses       Updater (pack200) + Jetty + GeoIP database + licenses"/>
-    <echo message=" updater200WithJettyAndGeoIP                  Updater (pack200) + Jetty + GeoIP database"/>
-    <echo message=" updater200WithJettyFixesAndGeoIP             Updater (pack200) + local Jetty patches + GeoIP database"/>
-    <echo message=" updater200WithJetty                          Updater (pack200) + Jetty"/>
-    <echo message=" updateTorBlocklist                           Update Tor blocklist &#10140; installer/resources/blocklist/blocklist_tor.txt"/>
-    <echo message=" 7zip-freebsd                                 Installation 7zip for FreeBSD without installer &#10140; ./dist/i2p-freebsd.7z"/>
-    <echo message=" 7zip-linux                                   Installation 7zip for Linux without installer &#10140; ./dist/i2p-linux.7z"/>
-    <echo message=" 7zip-macos                                   Installation 7zip for macOS without installer &#10140; ./dist/i2p-macos.7z"/>
-    <echo message=" 7zip-multiplatform                           Installation 7zips for FreeBSD, macOS, Linux and Windows &#10140; ./dist/"/>
-    <echo message=" 7zip-windows                                 Installation 7zip for Windows without installer &#10140; ./dist/i2p-windows.7z"/>
-    <echo message=" zip-freebsd                                  Installation zip for FreeBSD without installer &#10140; ./dist/i2p-freebsd.zip"/>
-    <echo message=" zip-linux                                    Installation zip for Linux without installer &#10140; ./dist/i2p-linux.zip"/>
-    <echo message=" zip-macos                                    Installation zip for macOS without installer &#10140; ./dist/i2p-macos.zip"/>
-    <echo message=" zip-windows                                  Installation zip for Windows without installer &#10140; ./dist/i2p-windows.zip"/>
+    <echo message=""/>
+    <echo message=" === Build Components ==="/>
+    <echo message="  build                                        Build all .jar and .war components"/>
+    <echo message="  buildAddressbook                             Build Addressbook .jar component &#10140; ./build/addressbook.jar"/>
+    <echo message="  buildCore                                    Build Core .jar component &#10140; ./build/i2p.jar"/>
+    <echo message="  buildCore                                    Build i2p .jar component &#10140; ./build/i2p.jar"/>
+    <echo message="  buildDesktopGui                              Build standalone DesktopGUI &#10140; ./build/desktopgui.jar"/>
+    <echo message="  buildI2PControl                              Build I2PControl .war component &#10140; ./build/jsonrpc.war"/>
+    <echo message="  buildI2PSnark                                Build I2PSnark .jar &amp; .war components &#10140; ./build/i2psnark.(jar|war)"/>
+    <echo message="  buildI2PSnark                                Build I2PSnark .jar and .war components &#10140; ./build/i2psnark.jar"/>
+    <echo message="  buildI2PTunnel                               Build I2PTunnel .jar &amp; .war components &#10140; ./build/i2ptunnel.(jar|war)"/>
+    <echo message="  buildI2PTunnel                               Build I2PTunnel .jar component &#10140; ./build/i2ptunnel.jar"/>
+    <echo message="  buildImagegen                                Build Imagegen .war component &#10140; ./build/imagegen.war"/>
+    <echo message="  buildJbigi-arm64                             Build Linux ARM64 jbigi .so files &#10140; installer/lib/jbigi/"/>
+    <echo message="  buildJbigi                                   Build all jbigi native libraries (Win64 + Linux64 + ARM64) &#10140; installer/lib/jbigi/"/>
+    <echo message="  buildJbigi-linux64                           Build Linux 64-bit jbigi .so files &#10140; installer/lib/jbigi/"/>
+    <echo message="  buildJbigi-win64                             Build Windows 64-bit jbigi DLLs using MinGW &#10140; installer/lib/jbigi/"/>
+    <echo message="  buildJetty                                   Build all Jetty related jar components &#10140; ./build/"/>
+    <echo message="  buildJrobin                                  Build the JRobin (RRD4J) .jar component &#10140; ./build/jrobin.jar"/>
+    <echo message="  buildMinistreaming                           Build MiniStreaming .jar component &#10140; ./build/mstreaming.jar"/>
+    <echo message="  buildPack200                                 Build Pack200 .jar component &#10140; ./build/pack200.jar"/>
+    <echo message="  buildProperties                              Display build properties  and Ant / JDK versions for current build"/>
+    <echo message="  buildRequirements                            Information about requirements for building packages using ant"/>
+    <echo message="  buildRouter                                  Build Router .jar component &#10140; ./build/router.jar"/>
+    <echo message="  buildRouterConsole                           Build required .jar components for RouterConsole &#10140; ./build/"/>
+    <echo message="  buildSAM                                     Build SAM .jar component &#10140; ./build/sam.jar"/>
+    <echo message="  buildStreaming                               Build Streaming .jar component &#10140; ./build/streaming.jar"/>
+    <echo message="  buildSusiDNS                                 Build SusiDNS .war component &#10140; ./build/susidns.war"/>
+    <echo message="  buildSusiMail                                Build SusiMail .war component &#10140; ./build/susimail.war"/>
+    <echo message="  buildSusiMailJar                             Build SusiMail .jar component for testing &#10140; ./build/susimail.jar"/>
+    <echo message="  buildWEB                                     Build required .jar &amp; .war components for RouterConsole &#10140; ./build/"/>
+    <echo message="  dist                                         Run &apos;pkg&apos; and &apos;javadoc&apos;"/>
+    <echo message="  dist200                                      Run &apos;pkg&apos;, &apos;updater200&apos; and &apos;javadoc&apos;"/>
+    <echo message=""/>
+    <echo message=" === Installers ==="/>
+    <echo message="  installer / installer5                       Build GUI installer (IzPack4 / IzPack5) &#10140; ./dist/i2pinstall.exe"/>
+    <echo message="  installer-freebsd                            Build FreeBSD GUI installer &#10140; ./dist/i2pinstall&#8230;freebsd-only.jar"/>
+    <echo message="  installer-linux / installer5-linux           Build Linux GUI installer (IzPack4 / Izpack5) &#10140; ./dist/i2pinstall&#8230;linux-only.jar"/>
+    <echo message="  installer-nowindows / installer5-nowindows   Build GUI installer without Windows support (IzPack4 / IzPack5) &#10140; ./dist/i2pinstall&#8230;.jar"/>
+    <echo message="  installer-osx                                Build OS X GUI installer &#10140; ./dist/i2pinstall&#8230;osx.tar.bz2"/>
+    <echo message="  installer-windows / installer5-windows       Build Windows GUI installer (IzPack4 / IzPack5) &#10140; ./dist/i2pinstall&#8230;windows.exe"/>
+    <echo message="  7zip-freebsd                                 Installation 7zip for FreeBSD without installer &#10140; ./dist/i2p-freebsd.7z"/>
+    <echo message="  7zip-linux                                   Installation 7zip for Linux without installer &#10140; ./dist/i2p-linux.7z"/>
+    <echo message="  7zip-macos                                   Installation 7zip for macOS without installer &#10140; ./dist/i2p-macos.7z"/>
+    <echo message="  7zip-multiplatform                           Installation 7zips for FreeBSD, macOS, Linux and Windows &#10140; ./dist/"/>
+    <echo message="  7zip-windows                                 Installation 7zip for Windows without installer &#10140; ./dist/i2p-windows.7z"/>
+    <echo message="  zip-freebsd                                  Installation zip for FreeBSD without installer &#10140; ./dist/i2p-freebsd.zip"/>
+    <echo message="  zip-linux                                    Installation zip for Linux without installer &#10140; ./dist/i2p-linux.zip"/>
+    <echo message="  zip-macos                                    Installation zip for macOS without installer &#10140; ./dist/i2p-macos.zip"/>
+    <echo message="  zip-windows                                  Installation zip for Windows without installer &#10140; ./dist/i2p-windows.zip"/>
+    <echo message=""/>
+    <echo message=" === Updaters ==="/>
+    <echo message="  updater                                      Build updater for existing installs &#10140; ./dist/i2pupdate.zip"/>
+    <echo message="  updaterWithGeoIP                             Updater + GeoIP database"/>
+    <echo message="  updaterWithJavadocAndJetty                   Updater + javadocs (linked in console) + Jetty "/>
+    <echo message="  updaterWithJavadoc                           Updater + javadocs (linked in console)"/>
+    <echo message="  updaterWithJbigi                             Updater + jBigi library"/>
+    <echo message="  updaterWithJettyFixesAndGeoIP                Updater + local Jetty patches + GeoIP database"/>
+    <echo message="  updaterWithJettyFixesAndJbigi                Updater + local Jetty patches + jBigi library"/>
+    <echo message="  updaterWithJettyFixes                        Updater + local Jetty patches"/>
+    <echo message="  updaterWithJetty                             Updater + Jetty"/>
+    <echo message="  updaterCompact                               Updater w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme"/>
+    <echo message="  updaterCompactRouterConsoleNoThemes          Updater with RouterConsole only (no themes)"/>
+    <echo message="  updaterCompactRouterConsole                  Updater with RouterConsole and console/webapp themes only"/>
+    <echo message="  updaterCompactWithDocs                       Compact updater with readme and proxy docs"/>
+    <echo message="  updaterCompactWithGeoIPAndJbigi              Compact updater with GeoIP database and Jbigi"/>
+    <echo message="  updaterCompactWithGeoIP                      Compact updater with GeoIP database"/>
+    <echo message="  updater200                                   Updater (pack200 - requires Java &lt; v14 or pre-existing lib/pack200.jar) &#10140; ./dist/i2pupdate200.zip"/>
+    <echo message="  updater200Compact                            Updater (pack200) w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme"/>
+    <echo message="  updater200CompactWithDocs                    Compact updater (pack200) with readme and proxy docs"/>
+    <echo message="  updater200CompactWithGeoIP                   Compact updater (pack200) with GeoIP database"/>
+    <echo message="  updater200WithGeoIPAndJavadoc                Updater (pack200) + GeoIP database + javadocs"/>
+    <echo message="  updater200WithGeoIPAndJbigi                  Updater (pack200) + GeoIP database + Jbigi"/>
+    <echo message="  updater200WithGeoIP                          Updater (pack200) + GeoIP database"/>
+    <echo message="  updater200WithJavadocAndJbigi                Updater (pack200) + javadocs + jBigi library"/>
+    <echo message="  updater200WithJavadocAndJetty                Updater (pack200) + javadocs (with console link) + Jetty"/>
+    <echo message="  updater200WithJavadoc                        Updater (pack200) + javadocs (with console link)"/>
+    <echo message="  updater200WithJbigi                          Updater (pack200) + jBigi library"/>
+    <echo message="  updater200WithJettyAndGeoIPAndLicenses       Updater (pack200) + Jetty + GeoIP database + licenses"/>
+    <echo message="  updater200WithJettyAndGeoIP                  Updater (pack200) + Jetty + GeoIP database"/>
+    <echo message="  updater200WithJettyFixesAndGeoIP             Updater (pack200) + local Jetty patches + GeoIP database"/>
+    <echo message="  updater200WithJetty                          Updater (pack200) + Jetty"/>
+    <echo message="  updaterRouter                                Updater with i2p.jar and router.jar only"/>
+    <echo message="  updaterSmall                                 Updater with essentials (no SAM/I2PSnark/SusiMail/SusiDNS/history.txt)"/>
+    <echo message="  signed-updater                               Signed Updater &#10140; ./dist/i2pupdate.su3 (Java14+ compatible)"/>
+    <echo message="  signed-updater200                            Signed Updater (pack200) &#10140; ./dist/i2pupdate.su3"/>
+    <echo message="  signed-updater200WithJavadocAndJetty         Signed Updater (pack200) + javadocs + Jetty &#10140; ./dist/i2pupdate.su3"/>
+    <echo message="  signed-updater200WithJavadoc                 Signed Updater (pack200) + javadocs &#10140; ./dist/i2pupdate.su3"/>
+    <echo message="  signed-updater200withJetty                   Signed Updater (pack200) + Jetty"/>
+    <echo message=""/>
+    <echo message=" === I2PSnark ==="/>
+    <echo message="  i2psnark                                     Build standalone I2PSnark install &#10140; ./dist/i2psnark-standalone.zip"/>
+    <echo message="  i2psnark7zip                                 Build standalone I2PSnark 7zip install &#10140; ./dist/i2psnark-standalone.7z"/>
+    <echo message="  i2psnark_nozip                               Build standalone I2PSnark install, no zip file &#10140; ./dist/i2psnark-standalone"/>
+    <echo message=""/>
+    <echo message=" === Utilities ==="/>
+    <echo message="  buildProperties                              Display build properties and Ant / JDK versions for current build"/>
+    <echo message="  buildRequirements                            Information about requirements for building packages using ant"/>
+    <echo message="  distclean                                    Clean up all derived and temporary files in workspace"/>
+    <echo message="  distcleanWebapps                             Clean up all webapp-related derived and temporary files in workspace"/>
+    <echo message="  getGitRev                                    Check current Git revision in workspace and print truncated revision hash"/>
+    <echo message="  getGitRevLong                                Check current Git revision in workspace and print full revision hash"/>
+    <echo message="  poupdate-source                              Update the .po files for translators (requires jsp files to be compiled first)"/>
+    <echo message="  updateTorBlocklist                           Update Tor blocklist &#10140; installer/resources/blocklist/blocklist_tor.txt"/>
+    <echo message=""/>
+    <echo message=" === Distribution &amp; Packaging ==="/>
+    <echo message="  bumpBuildTime                                Update core/java/src/net/i2p/time/BuildTime.java with today's date"/>
+    <echo message="  bump                                         Increment build (minor version) by 1"/>
+    <echo message="  createThemesZip                              Create zip with all console and webapp themes and resources &#10140; ./dist/themes.zip"/>
+    <echo message="  debian                                       Generate Debian packages in ../ then run &apos;debian-clean&apos;"/>
+    <echo message="  debian-clean                                 Rollback Debian specific patches then run &apos;distclean&apos;"/>
+    <echo message="  debianhowto                                  Instructions on building Debian packages"/>
+    <echo message="  pkg                                          Run &apos;distclean&apos; then package everything up (updater, installer)"/>
+    <echo message="  pkg-portable-win32                           Build a minimal, portable install for Win32 &#10140; ./portable-win32.zip"/>
+    <echo message="  slackpkg                                     Build Slackware package in ./Slackware/i2p"/>
+    <echo message="  tarball                                      Create tar archive for clean install &#10140; ./dist/i2p.tar.bz2"/>
+    <echo message=""/>
+    <echo message=" === Documentation ==="/>
+    <echo message="  javadoc                                      Create javadocs for project &#10140; ./dist/javadoc"/>
+    <echo message="  javadoc-nostylesheet                         Create javadocs for project without custom stylesheet &#10140; ./dist/javadoc"/>
+    <echo message="  javadoc-test                                 Javadocs for unit test classes &#10140; ./build/javadoc-test"/>
+    <echo message="  javadoc-zip                                  Create javadocs zip for project &#10140; ./dist/javadoc.zip"/>
+    <echo message="  javadoc-zip-nostylesheet                     Create javadocs zip without custom stylesheet for project &#10140; ./dist/javadoc.zip"/>
+    <echo message="  jsdoc                                        Create jsdoc with docdash template (requires npm) &#10140; ./dist/jsdoc"/>
+    <echo message="  jsdoc-minami                                 Create jsdoc with minami template (requires npm) &#10140; ./dist/jsdoc"/>
+    <echo message="  jsdoc-minami-zip                             Create jsdoc zip with minami template &#10140; ./dist/jsdoc-minami.zip"/>
+    <echo message="  jsdoc-tui                                    Create jsdoc with tui-jsdoc-template (requires npm) &#10140; ./dist/jsdoc"/>
+    <echo message="  jsdoc-tui-zip                                Create jsdoc zip with tui-jsdoc-template &#10140; ./dist/jsdoc-tui.zip"/>
+    <echo message="  jsdoc-zip                                    Create jsdoc zip with docdash template &#10140; ./dist/jsdoc.zip"/>
+    <echo message=""/>
+    <echo message=" === Analysis ==="/>
+    <echo message="  checkstyle                                   Run Checkstyle analysis &#10140; dist/checkstyle.html"/>
+    <echo message="  checkstyle-local                             Checkstyle report with clickable file links &#10140; dist/checkstyle-local.html"/>
+    <echo message="  checkstyle-fix-errors                        Run fix-style.py on codebase with exclusions"/>
+    <echo message="  codeql                                       Run CodeQL security analysis &#10140; dist/codeql-java.html + dist/codeql-js.html"/>
+    <echo message="  pmd                                          Run PMD Java and JavaScript static analysis &#10140; dist/pmd-java.html + dist/pmd-js.html"/>
+    <echo message="  pmd-java                                     Run PMD static analysis on Java sources &#10140; dist/pmd-java.html"/>
+    <echo message="  pmd-java-local                               Java PMD report with clickable file links &#10140; dist/pmd-java-local.html"/>
+    <echo message="  pmd-js                                       Run PMD static analysis on JavaScript sources &#10140; dist/pmd-js.html"/>
+    <echo message="  pmd-js-local                                 JavaScript PMD report with clickable file links &#10140; dist/pmd-js-local.html"/>
+    <echo message="  pmd-fix-errors                               Auto-fix PMD violations (StringBuffer, concat-in-loop, etc.)"/>
+    <echo message="  spotbugs                                     Run SpotBugs static analysis on Java sources &#10140; dist/spotbugs.html"/>
+    <echo message="  report-all-java                              Run all Java analysis tools and combine into single report &#10140; dist/report-all-java.html"/>
+    <echo message="  report-all-java-quick                        Compile combined report from existing results (no re-analysis) &#10140; dist/report-all-java.html"/>
+    <echo message=""/>
+    <echo message=" === Testing ==="/>
+    <echo message="  bench                                        Build benchmarks"/>
+    <echo message="  test                                         Run JUnit tests (Core, MiniStreaming, Streaming) via scripts/run-tests.sh"/>
+    <echo message="  testJbigi                                    Benchmark jbigi: native vs pure Java modPow/modPowCT/modInverse"/>
+    <echo message="  testscripts                                  Run various scripts to check certificate validity, file integrity etc"/>
 
     <!-- <echo message=" translationReport                            Generate in-console translation status report"/> -->
-    <!-- <echo message="  debianrepo                                   Build a Debian repository (reprepro required)"/> -->
-    <!-- <echo message="  syndie                                       Generate a standalone syndie install"/> -->
+    <!-- <echo message="  debianrepo                                  Build a Debian repository (reprepro required)"/> -->
+    <!-- <echo message="  syndie                                      Generate a standalone syndie install"/> -->
   </target>
 
   <target name="debianhowto">
@@ -3149,11 +3175,19 @@
   </target>
 
   <target name="spotbugs" depends="jar, build2, buildUtilityJar">
-    <!-- Download latest SpotBugs if not present -->
-    <echo message="Note: SpotBugs requires Java11 or later."/>
-    <property name="spotbugs.version" value="4.9.8"/>
-<property name="spotbugs.dir" location="tools/spotbugs/spotbugs-${spotbugs.version}"/>
-<property name="spotbugs.jar" location="${spotbugs.dir}/lib/spotbugs-ant.jar"/>
+    <echo message="Running SpotBugs analysis..."/>
+
+    <exec executable="cat" outputproperty="spotbugs.version" failifexecutionfails="false">
+      <arg value="tools/spotbugs/version.txt"/>
+    </exec>
+    <condition property="spotbugs.dir" value="tools/spotbugs/spotbugs-${spotbugs.version}">
+      <and>
+        <isset property="spotbugs.version"/>
+        <not><equals arg1="${spotbugs.version}" arg2="" trim="true"/></not>
+      </and>
+    </condition>
+    <property name="spotbugs.dir" location="tools/spotbugs/spotbugs-unknown"/>
+    <property name="spotbugs.jar" location="${spotbugs.dir}/lib/spotbugs-ant.jar"/>
 
     <available file="${spotbugs.jar}" property="spotbugs.present"/>
     <antcall target="download-spotbugs"/>
@@ -3161,9 +3195,21 @@
     <taskdef resource="edu/umd/cs/findbugs/anttask/tasks.properties" classpath="${spotbugs.jar}"/>
     <property name="spotbugs.home" value="${spotbugs.dir}"/>
     <property name="spotbugs.java" value="${java.home}/bin/java"/>
+
+    <!-- Build aux classpath dynamically from available system jars -->
+    <available file="installer/lib/wrapper/all/wrapper.jar" property="wrapper.jar.path" value="installer/lib/wrapper/all/wrapper.jar"/>
+    <available file="/usr/share/java/ant.jar" property="system.ant.path" value="/usr/share/java/ant.jar"/>
+    <path id="spotbugs.auxclasspath">
+      <fileset dir="build" includes="*.jar"/>
+      <fileset dir="${spotbugs.dir}/lib" includes="*.jar"/>
+      <pathelement location="${wrapper.jar.path}"/>
+      <pathelement location="${system.ant.path}"/>
+    </path>
+    <pathconvert refid="spotbugs.auxclasspath" property="spotbugs.auxclasspath.path" pathsep=":"/>
+
     <spotbugs home="${spotbugs.home}" output="xml:withMessages" outputFile="dist/spotbugs.xml" effort="max" debug="false" reportLevel="medium" timeout="1800000" jvm="${spotbugs.java}" excludeFilter="config/spotbugs-exclude.xml">
       <auxAnalyzepath path="./build"/>
-      <auxClasspath path="build/commons-el.jar:build/commons-logging.jar:build/jasper-compiler.jar:build/jasper-runtime.jar:build/jetty-continuation.jar:build/jetty-deploy.jar:build/jetty-http.jar:build/jetty-i2p.jar:build/jetty-io.jar:build/jetty-java5-threadpool.jar:build/jetty-rewrite-handler.jar:build/jetty-security.jar:build/jetty-servlet.jar:build/jetty-servlets.jar:build/jetty-sslengine.jar:build/jetty-start.jar:build/jetty-util.jar:build/jetty-webapp.jar:build/jetty-xml.jar:build/javax.servlet.jar:build/jo.jsonrpc.war:build/jrobin.jar:build/org.mortbay.jetty.jar:build/org.mortbay.jmx.jar:build/pack200.jar:build/systray.jar:build/tools.jar"/>
+      <auxClasspath path="${spotbugs.auxclasspath.path}"/>
       <!-- Only analyze core I2P JAR files, exclude third-party heavy libraries -->
       <class location="./build/i2p.jar"/>
       <class location="./build/router.jar"/>
@@ -3178,24 +3224,26 @@
       <class location="./build/i2ptunnel.jar"/>
       <sourcePath path="./apps:./router:./core"/>
     </spotbugs>
-    <echo message="Spotbugs XML report written to dist/spotbugs.xml"/>
     <antcall target="transform-spotbugs"/>
   </target>
 
   <target name="transform-spotbugs">
-    <echo message="Transforming SpotBugs XML to HTML using custom stylesheet..."/>
-    <xslt in="dist/spotbugs.xml" out="dist/spotbugs.html" style="config/spotbugs.xsl"/>
-    <echo message="SpotBugs HTML report written to dist/spotbugs.html"/>
+    <fail message="SpotBugs XML report not found. SpotBugs may have failed to produce output.">
+      <condition>
+        <not><available file="dist/spotbugs.xml"/></not>
+      </condition>
+    </fail>
+    <exec executable="python3" failonerror="true">
+      <arg value="tools/spotbugs/spotbugs-to-html.py"/>
+      <arg value="dist/spotbugs.xml"/>
+      <arg value="dist/spotbugs.html"/>
+    </exec>
+    <echo message="SpotBugs: dist/spotbugs.html"/>
   </target>
 
   <target name="download-spotbugs" unless="spotbugs.present">
-    <echo message="Downloading SpotBugs ${spotbugs.version}..."/>
-    <mkdir dir="tools/spotbugs"/>
-    <get src="https://github.com/spotbugs/spotbugs/releases/download/${spotbugs.version}/spotbugs-${spotbugs.version}.tgz"
-         dest="tools/spotbugs/spotbugs-${spotbugs.version}.tgz"
-         usetimestamp="true"/>
-    <untar src="tools/spotbugs/spotbugs-${spotbugs.version}.tgz" dest="tools/spotbugs" compression="gzip"/>
-    <echo message="SpotBugs ${spotbugs.version} downloaded and extracted to ${spotbugs.dir}"/>
+    <echo message="Running SpotBugs download script..."/>
+    <exec executable="tools/spotbugs/download-spotbugs.sh" failonerror="true"/>
   </target>
 
   <target name="pmd" depends="pmd-java,pmd-js"/>
@@ -3204,7 +3252,7 @@
     <exec executable="ant" dir="${basedir}" output="/dev/null" error="/dev/null">
       <arg value="build"/>
     </exec>
-    <echo message="Starting PMD Java analysis..."/>
+    <echo message="Running PMD (Java) analysis..."/>
     <mkdir dir="dist"/>
     <exec executable="${pmd.java}" failonerror="false" outputproperty="pmd.result">
       <arg value="-Xmx4g"/>
@@ -3233,14 +3281,14 @@
       <arg value="dist/pmd-java.html"/>
       <arg value="Java"/>
     </exec>
-    <echo message="PMD Java report written to dist/pmd-java.html (XML: dist/pmd-java.xml)"/>
+    <echo message="PMD (Java): dist/pmd-java.html"/>
   </target>
 
   <target name="pmd-js" depends="pmd-setup">
     <exec executable="ant" dir="${basedir}" output="/dev/null" error="/dev/null">
       <arg value="build"/>
     </exec>
-    <echo message="Starting PMD JavaScript analysis..."/>
+    <echo message="Running PMD (JavaScript) analysis..."/>
     <mkdir dir="dist"/>
     <exec executable="${pmd.java}" failonerror="false" outputproperty="pmd.result">
       <arg value="-Xmx4g"/>
@@ -3265,7 +3313,7 @@
       <arg value="dist/pmd-js.html"/>
       <arg value="JavaScript"/>
     </exec>
-    <echo message="PMD JavaScript report written to dist/pmd-js.html (XML: dist/pmd-js.xml)"/>
+    <echo message="PMD (JavaScript): dist/pmd-js.html"/>
   </target>
 
   <target name="checkstyle-setup">
@@ -3286,7 +3334,7 @@
     <exec executable="ant" dir="${basedir}" output="/dev/null" error="/dev/null">
       <arg value="build"/>
     </exec>
-    <echo message="Starting Checkstyle analysis..."/>
+    <echo message="Running Checkstyle analysis..."/>
     <mkdir dir="dist"/>
     <exec executable="java" failonerror="false" outputproperty="cs.result">
       <arg value="-Xmx4g"/>
@@ -3308,14 +3356,14 @@
       <arg value="dist/checkstyle.xml"/>
       <arg value="dist/checkstyle.html"/>
     </exec>
-    <echo message="Checkstyle report written to dist/checkstyle.html (XML: dist/checkstyle.xml)"/>
+    <echo message="Checkstyle: dist/checkstyle.html"/>
   </target>
 
   <target name="checkstyle-local" depends="checkstyle-setup,checkstyle-download,checkstyle-download-skip">
     <exec executable="ant" dir="${basedir}" output="/dev/null" error="/dev/null">
       <arg value="build"/>
     </exec>
-    <echo message="Starting Checkstyle analysis (local file links enabled)..."/>
+    <echo message="Running Checkstyle analysis (local)..."/>
     <mkdir dir="dist"/>
     <exec executable="java" failonerror="false" outputproperty="cs.result">
       <arg value="-Xmx4g"/>
@@ -3338,13 +3386,14 @@
       <arg value="dist/checkstyle-local.html"/>
       <arg value="--local"/>
     </exec>
-    <echo message="Checkstyle report written to dist/checkstyle-local.html (XML: dist/checkstyle.xml)"/>
-    <echo message="Checkstyle report written to dist/checkstyle-local.html (local file links enabled)"/>
+    <echo message="Checkstyle (local): dist/checkstyle-local.html"/>
   </target>
 
   <!-- CodeQL -->
   <target name="codeql-setup">
     <available property="codeql.present" file="tools/codeql/codeql/codeql"/>
+    <loadfile property="codeql.version" srcFile="tools/codeql/version.txt"/>
+    <property name="codeql.version" value="v2.25.0"/>
   </target>
 
   <target name="codeql-download" unless="codeql.present">
@@ -3358,46 +3407,231 @@
     <echo message="CodeQL CLI found"/>
   </target>
 
-  <target name="codeql" depends="codeql-setup,codeql-download,codeql-download-skip,distclean">
-    <mkdir dir="dist"/>
-    <loadfile property="codeql.version" srcFile="tools/codeql/version.txt"/>
-    <echo message="Building updater to analyze code..."/>
-    <exec executable="ant" dir="${basedir}" output="/dev/null" error="/dev/null">
-      <arg value="updater"/>
+  <target name="codeql-packs-setup" depends="codeql-setup,codeql-download,codeql-download-skip">
+    <available property="codeql.packs.present" file="tools/codeql/packs/java-queries"/>
+    <available property="codeql.js.packs.present" file="tools/codeql/packs/javascript-queries"/>
+  </target>
+
+  <target name="codeql-packs-download" unless="codeql.packs.present">
+    <echo message="Downloading Java query packs..."/>
+    <mkdir dir="/tmp/codeql-packs"/>
+    <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" output="/dev/null" error="/dev/null">
+      <arg value="pack"/>
+      <arg value="download"/>
+      <arg value="codeql/java-all"/>
+      <arg value="--dir=/tmp/codeql-packs"/>
     </exec>
-    <echo message="Creating CodeQL database at /tmp/codeql-db..."/>
-    <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" failonerror="true" outputproperty="cq.create.output" error="/dev/null">
-      <arg value="database"/>
-      <arg value="create"/>
-      <arg value="/tmp/codeql-db"/>
-      <arg value="--language=java"/>
-      <arg value="--command=ant updater"/>
-      <arg value="--overwrite"/>
-      <arg value="--ram=8192"/>
-      <arg value="--search-path=tools/codeql/codeql-${codeql.version}"/>
+    <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" output="/dev/null" error="/dev/null">
+      <arg value="pack"/>
+      <arg value="download"/>
+      <arg value="codeql/java-queries"/>
+      <arg value="--dir=/tmp/codeql-packs"/>
     </exec>
-    <exec executable="bash" dir="${basedir}" outputproperty="cq.files.processed" failonerror="false">
-      <arg value="-c"/>
-      <arg value="grep 'Processed.*files' /tmp/codeql-db/log/build-tracer.log 2>/dev/null | tail -1 | sed 's/.*] //' || echo 'done'"/>
+    <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" output="/dev/null" error="/dev/null">
+      <arg value="pack"/>
+      <arg value="download"/>
+      <arg value="githubsecuritylab/codeql-java-queries"/>
+      <arg value="--dir=/tmp/codeql-packs"/>
     </exec>
-    <echo message="Processing files... ${cq.files.processed}"/>
+    <!-- Restructure to flat layout: tools/codeql/packs/{pack-name}/ -->
+    <mkdir dir="tools/codeql/packs"/>
+    <move todir="tools/codeql/packs" includeemptydirs="true">
+      <fileset dir="/tmp/codeql-packs" includes="**/java-queries/**" excludes="**/java-queries/**/java-all/**"/>
+      <mapper type="regexp" from="(.*/)(codeql|githubsecuritylab)/([^/]+)/(.*)" to="\1\3/\4"/>
+    </move>
+    <move todir="tools/codeql/packs" includeemptydirs="true">
+      <fileset dir="/tmp/codeql-packs" includes="**/java-all/**"/>
+      <mapper type="regexp" from="(.*/)(codeql|githubsecuritylab)/([^/]+)/(.*)" to="\1\3/\4"/>
+    </move>
+    <move todir="tools/codeql/packs" includeemptydirs="true">
+      <fileset dir="/tmp/codeql-packs" includes="**/codeql-java-queries/**"/>
+      <mapper type="regexp" from="(.*/)(codeql|githubsecuritylab)/([^/]+)/(.*)" to="\1\3/\4"/>
+    </move>
+    <delete dir="/tmp/codeql-packs" quiet="true"/>
+    <echo message="Java query packs installed"/>
+  </target>
+
+  <target name="codeql-packs-download-skip" if="codeql.packs.present">
+    <echo message="CodeQL Java query packs found"/>
+  </target>
+
+  <target name="codeql-js-packs-download" unless="codeql.js.packs.present">
+    <echo message="Downloading JavaScript query packs..."/>
+    <mkdir dir="/tmp/codeql-js-packs"/>
+    <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" output="/dev/null" error="/dev/null">
+      <arg value="pack"/>
+      <arg value="download"/>
+      <arg value="codeql/javascript-all"/>
+      <arg value="--dir=/tmp/codeql-js-packs"/>
+    </exec>
+    <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" output="/dev/null" error="/dev/null">
+      <arg value="pack"/>
+      <arg value="download"/>
+      <arg value="codeql/javascript-queries"/>
+      <arg value="--dir=/tmp/codeql-js-packs"/>
+    </exec>
+    <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" output="/dev/null" error="/dev/null">
+      <arg value="pack"/>
+      <arg value="download"/>
+      <arg value="githubsecuritylab/codeql-javascript-queries"/>
+      <arg value="--dir=/tmp/codeql-js-packs"/>
+    </exec>
+    <!-- Restructure to flat layout: tools/codeql/packs/{pack-name}/ -->
+    <mkdir dir="tools/codeql/packs"/>
+    <move todir="tools/codeql/packs" includeemptydirs="true">
+      <fileset dir="/tmp/codeql-js-packs" includes="**/javascript-queries/**"/>
+      <mapper type="regexp" from="(.*/)(codeql|githubsecuritylab)/([^/]+)/(.*)" to="\1\3/\4"/>
+    </move>
+    <move todir="tools/codeql/packs" includeemptydirs="true">
+      <fileset dir="/tmp/codeql-js-packs" includes="**/javascript-all/**"/>
+      <mapper type="regexp" from="(.*/)(codeql|githubsecuritylab)/([^/]+)/(.*)" to="\1\3/\4"/>
+    </move>
+    <move todir="tools/codeql/packs" includeemptydirs="true">
+      <fileset dir="/tmp/codeql-js-packs" includes="**/codeql-javascript-queries/**"/>
+      <mapper type="regexp" from="(.*/)(codeql|githubsecuritylab)/([^/]+)/(.*)" to="\1\3/\4"/>
+    </move>
+    <delete dir="/tmp/codeql-js-packs" quiet="true"/>
+    <echo message="JavaScript query packs installed"/>
+  </target>
+
+  <target name="codeql-js-packs-download-skip" if="codeql.js.packs.present">
+    <echo message="CodeQL JavaScript query packs found"/>
+  </target>
+
+  <target name="codeql" depends="codeql-packs-setup,codeql-packs-download,codeql-packs-download-skip,codeql-js-packs-download,codeql-js-packs-download-skip">
     <echo message="Running CodeQL analysis..."/>
-    <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" failonerror="false" outputproperty="cq.result" error="/dev/null">
+    <exec executable="ant" dir="${basedir}" failonerror="true" output="/dev/null" error="/dev/null">
+      <arg value="distclean"/>
+    </exec>
+    <delete dir="/tmp/codeql" quiet="true"/>
+    <mkdir dir="/tmp/codeql"/>
+    <antcall target="codeql-java"/>
+    <antcall target="codeql-js"/>
+    <antcall target="codeql-jsp"/>
+    <loadfile property="cq.java.issues" srcFile="dist/codeql-java.txt" failonerror="false"/>
+    <loadfile property="cq.js.issues" srcFile="dist/codeql-js.txt" failonerror="false"/>
+    <loadfile property="cq.jsp.issues" srcFile="dist/codeql-jsp.txt" failonerror="false"/>
+    <echo message="CodeQL: ${cq.java.issues} (Java), ${cq.js.issues} (JavaScript), ${cq.jsp.issues} (JSP)"/>
+  </target>
+
+  <target name="codeql-java" depends="codeql-setup">
+    <mkdir dir="dist"/>
+    <mkdir dir="/tmp/codeql"/>
+    <echo message="Creating CodeQL Java database at /tmp/codeql/db-java..."/>
+    <exec executable="bash" dir="${basedir}" failonerror="true">
+      <arg value="-c"/>
+      <arg value="tools/codeql/codeql/codeql database create /tmp/codeql/db-java --language=java --command='ant build' --overwrite --ram=8192 --search-path=tools/codeql/codeql-${codeql.version}"/>
+    </exec>
+    <echo message="Running CodeQL Java analysis..."/>
+    <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" failonerror="false" outputproperty="cq.java.result" error="/dev/null">
       <arg value="database"/>
       <arg value="analyze"/>
-      <arg value="/tmp/codeql-db"/>
+      <arg value="/tmp/codeql/db-java"/>
       <arg value="--format=sarif-latest"/>
-      <arg value="--output=dist/codeql.sarif"/>
+      <arg value="--output=dist/codeql-java.sarif"/>
       <arg value="--sarif-add-query-help"/>
       <arg value="--ram=8192"/>
-      <arg value="--search-path=tools/codeql/codeql-${codeql.version}"/>
+      <arg value="--additional-packs=tools/codeql/packs"/>
+      <arg value="codeql/java-queries"/>
     </exec>
     <exec executable="python3" failonerror="false">
       <arg value="tools/codeql/codeql-to-html.py"/>
-      <arg value="dist/codeql.sarif"/>
-      <arg value="dist/codeql.html"/>
+      <arg value="dist/codeql-java.sarif"/>
+      <arg value="dist/codeql-java.html"/>
     </exec>
-    <echo message="CodeQL report written to dist/codeql.html (SARIF: dist/codeql.sarif)"/>
+    <exec executable="bash" failonerror="false" outputproperty="cq.java.count">
+      <arg value="-c"/>
+      <arg value="python3 tools/codeql/sarif-count.py dist/codeql-java.sarif 2>/dev/null || echo 0"/>
+    </exec>
+    <echo message="${cq.java.count}" file="dist/codeql-java.txt"/>
+    <echo message="CodeQL Java report written to dist/codeql-java.html (${cq.java.count} issues)"/>
+  </target>
+
+  <target name="codeql-js" depends="codeql-setup">
+    <mkdir dir="dist"/>
+    <mkdir dir="/tmp/codeql"/>
+    <echo message="Creating CodeQL JavaScript database at /tmp/codeql/db-js..."/>
+    <exec executable="bash" dir="${basedir}" failonerror="true">
+      <arg value="-c"/>
+      <arg value="tools/codeql/codeql/codeql database create /tmp/codeql/db-js --language=javascript --overwrite --ram=8192 --search-path=tools/codeql/codeql-${codeql.version}"/>
+    </exec>
+    <echo message="Running CodeQL JavaScript analysis..."/>
+    <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" failonerror="false" outputproperty="cq.js.result" error="/dev/null">
+      <arg value="database"/>
+      <arg value="analyze"/>
+      <arg value="/tmp/codeql/db-js"/>
+      <arg value="--format=sarif-latest"/>
+      <arg value="--output=dist/codeql-js.sarif"/>
+      <arg value="--sarif-add-query-help"/>
+      <arg value="--ram=8192"/>
+      <arg value="--additional-packs=tools/codeql/packs"/>
+      <arg value="codeql/javascript-queries"/>
+    </exec>
+    <exec executable="python3" failonerror="false">
+      <arg value="tools/codeql/codeql-to-html.py"/>
+      <arg value="dist/codeql-js.sarif"/>
+      <arg value="dist/codeql-js.html"/>
+    </exec>
+    <exec executable="bash" failonerror="false" outputproperty="cq.js.count">
+      <arg value="-c"/>
+      <arg value="python3 tools/codeql/sarif-count.py dist/codeql-js.sarif 2>/dev/null || echo 0"/>
+    </exec>
+    <echo message="${cq.js.count}" file="dist/codeql-js.txt"/>
+    <echo message="CodeQL JavaScript report written to dist/codeql-js.html (${cq.js.count} issues)"/>
+  </target>
+
+  <target name="codeql-jsp">
+    <echo message="Filtering JSP results from Java SARIF..."/>
+    <exec executable="python3" failonerror="false" outputproperty="cq.jsp.count">
+      <arg value="tools/codeql/sarif-filter.py"/>
+      <arg value="dist/codeql-java.sarif"/>
+      <arg value="dist/codeql-jsp.sarif"/>
+      <arg value="_jsp.java"/>
+    </exec>
+    <exec executable="python3" failonerror="false">
+      <arg value="tools/codeql/codeql-to-html.py"/>
+      <arg value="--no-exclude"/>
+      <arg value="dist/codeql-jsp.sarif"/>
+      <arg value="dist/codeql-jsp.html"/>
+    </exec>
+    <echo message="${cq.jsp.count}" file="dist/codeql-jsp.txt"/>
+    <echo message="CodeQL JSP report written to dist/codeql-jsp.html (${cq.jsp.count} issues)"/>
+  </target>
+
+  <target name="report-all-java" depends="pmd-java,checkstyle,codeql-java,spotbugs">
+    <echo message="Combining all Java analysis results..."/>
+    <exec executable="python3" failonerror="true">
+      <arg value="tools/template/report-all-java.py"/>
+      <arg value="--pmd"/>
+      <arg value="dist/pmd-java.xml"/>
+      <arg value="--checkstyle"/>
+      <arg value="dist/checkstyle.xml"/>
+      <arg value="--codeql"/>
+      <arg value="dist/codeql-java.sarif"/>
+      <arg value="--spotbugs"/>
+      <arg value="dist/spotbugs.xml"/>
+      <arg value="-o"/>
+      <arg value="dist/report-all-java.html"/>
+    </exec>
+    <echo message="Report: dist/report-all-java.html"/>
+  </target>
+
+  <target name="report-all-java-quick">
+    <echo message="Combining existing Java analysis results (no re-analysis)..."/>
+    <exec executable="python3" failonerror="true">
+      <arg value="tools/template/report-all-java.py"/>
+      <arg value="--pmd"/>
+      <arg value="dist/pmd-java.xml"/>
+      <arg value="--checkstyle"/>
+      <arg value="dist/checkstyle.xml"/>
+      <arg value="--codeql"/>
+      <arg value="dist/codeql-java.sarif"/>
+      <arg value="--spotbugs"/>
+      <arg value="dist/spotbugs.xml"/>
+      <arg value="-o"/>
+      <arg value="dist/report-all-java.html"/>
+    </exec>
+    <echo message="Report: dist/report-all-java.html"/>
   </target>
 
   <target name="checkstyle-fix-errors" depends="checkstyle-setup,checkstyle-download,checkstyle-download-skip">

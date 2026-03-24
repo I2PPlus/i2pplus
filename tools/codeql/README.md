@@ -6,64 +6,83 @@ CodeQL is GitHub's semantic code analysis engine. Unlike PMD (syntactic pattern 
 ## Setup
 
 ```bash
-bash tools/codeql/download-codeql.sh            # download if not present
+bash tools/codeql/download-codeql.sh            # download CLI + query packs
 bash tools/codeql/download-codeql.sh --force    # force reinstall
+bash tools/codeql/download-codeql.sh --packs-only  # download packs only (CLI must exist)
 ```
 
-CodeQL CLI is ~509MB. Downloaded to `tools/codeql/codeql/` (not tracked in git).
+CodeQL CLI is ~509MB. Downloaded to `tools/codeql/codeql/` (not tracked in git). Query packs are stored in `tools/codeql/packs/` (also not tracked).
 
 ## Usage
 
-### 1. Create a database
+### Via ant (recommended)
 
 ```bash
-# From the project root:
-tools/codeql/codeql/codeql database create codeql-db \
+ant codeql              # Run Java + JavaScript + JSP analysis
+ant codeql-java         # Java report → dist/codeql-java.html
+ant codeql-js           # JavaScript report → dist/codeql-js.html
+ant codeql-jsp          # JSP report → dist/codeql-jsp.html
+```
+
+### Manual
+
+#### 1. Create a database
+
+```bash
+# Java:
+tools/codeql/codeql/codeql database create /tmp/codeql/db-java \
   --language=java \
-  --command="ant updaterCompact"
+  --command="ant build"
+
+# JavaScript:
+tools/codeql/codeql/codeql database create /tmp/codeql/db-js \
+  --language=javascript
 ```
 
-This runs a full build while CodeQL intercepts the compiler to build a database of the code's structure.
+This runs a full build while CodeQL intercepts the compiler to build a database of the code's structure. JavaScript doesn't require a build step. Databases are stored in `/tmp/codeql/` (cleaned before each run).
 
-### 2. Analyze
+#### 2. Analyze
 
 ```bash
-# Run default security + quality queries:
-tools/codeql/codeql/codeql database analyze codeql-db \
+# Java:
+tools/codeql/codeql/codeql database analyze /tmp/codeql/db-java \
   --format=sarif-latest \
-  --output=dist/codeql.sarif
+  --output=dist/codeql-java.sarif \
+  --additional-packs=tools/codeql/packs \
+  codeql/java-queries
 
-# Run only security queries (faster):
-tools/codeql/codeql/codeql database analyze codeql-db \
+# JavaScript:
+tools/codeql/codeql/codeql database analyze /tmp/codeql/db-js \
   --format=sarif-latest \
-  --output=dist/codeql.sarif \
-  --query-suite=codeql/java-queries:codeql-suites/java-security-and-quality.qls
-
-# View results:
-tools/codeql/codeql/codeql database analyze codeql-db \
-  --format=csv \
-  --output=dist/codeql.csv
+  --output=dist/codeql-js.sarif \
+  --additional-packs=tools/codeql/packs \
+  codeql/javascript-queries
 ```
 
-### 3. Compare with previous results
+#### 3. Compare with previous results
 
 ```bash
 # Differential analysis (new issues only):
-tools/codeql/codeql/codeql database analyze codeql-db \
+tools/codeql/codeql/codeql database analyze /tmp/codeql/db-java \
   --format=sarif-latest \
   --output=dist/codeql-new.sarif \
-  --sarif-add-baseline-file=dist/codeql-baseline.sarif
+  --sarif-add-baseline-file=dist/codeql-baseline.sarif \
+  --additional-packs=tools/codeql/packs \
+  codeql/java-queries
 ```
 
 ## Query Packs
 
-Default query packs are included with the CLI. For custom queries:
+Query packs are stored in `tools/codeql/packs/` (gitignored). The download script handles this automatically. To download manually:
 
 ```bash
-# Download standard Java query pack:
-tools/codeql/codeql/codeql pack download codeql/java-queries
+tools/codeql/codeql/codeql pack download codeql/java-queries --dir tools/codeql/packs
+tools/codeql/codeql/codeql pack download codeql/javascript-queries --dir tools/codeql/packs
+```
 
-# Create custom queries:
+For custom queries:
+
+```bash
 mkdir -p tools/codeql/queries
 # Add .ql files and reference them with --additional-packs
 ```
@@ -88,8 +107,9 @@ mkdir -p tools/codeql/queries
 
 ## Files
 
-| File                  | Purpose                          |
-| --------------------- | -------------------------------- |
-| `download-codeql.sh`  | Download/update CodeQL CLI       |
-| `version.txt`         | Installed version (auto-created) |
-| `codeql/`             | CLI binary (gitignored, ~509MB)  |
+| File                  | Purpose                           |
+| --------------------- | --------------------------------- |
+| `download-codeql.sh`  | Download/update CLI + query packs |
+| `version.txt`         | Installed version (auto-created)  |
+| `codeql/`             | CLI binary (gitignored, ~509MB)   |
+| `packs/`              | Query packs (gitignored)          |

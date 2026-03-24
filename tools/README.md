@@ -72,3 +72,31 @@ The `checkstyle-fix-errors` target runs `fix-style.py` which fixes unused import
 ```bash
 ant spotbugs
 ```
+
+### CodeQL
+
+```bash
+ant codeql              # Run Java + JavaScript + JSP analysis
+ant codeql-java         # Java report → dist/codeql-java.html
+ant codeql-js           # JavaScript report → dist/codeql-js.html
+ant codeql-jsp          # JSP report → dist/codeql-jsp.html
+```
+
+### Combined Report
+
+```bash
+ant report-all-java           # Run PMD + Checkstyle + CodeQL + SpotBugs → dist/report-all-java.html
+ant report-all-java-quick     # Combine existing results (no re-analysis)
+```
+
+### Report Configuration
+
+All report generators (PMD, Checkstyle, CodeQL) share `tools/template/common.py` for CSS, favicon, HTML helpers, and exclusion patterns. Create `tools/template/config.txt` to override defaults:
+
+```
+# Favicon path (relative to project root)
+favicon=installer/resources/themes/console/images/plus.svg
+
+# Report title prefix shown in headers
+report_prefix=I2P+
+```
