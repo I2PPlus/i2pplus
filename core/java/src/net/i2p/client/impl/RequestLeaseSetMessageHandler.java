@@ -570,7 +570,8 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
          *  Reverse order by enc type
          *  @since 0.9.39
          */
-        private static class PrivKeyComparator implements Comparator<PrivateKey> {
+        private static class PrivKeyComparator implements Comparator<PrivateKey>, java.io.Serializable {
+        private static final long serialVersionUID = 1L;
             public int compare(PrivateKey l, PrivateKey r) {return r.getType().compareTo(l.getType());}
         }
     }

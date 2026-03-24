@@ -218,7 +218,7 @@ class IntroductionManager {
                     _log.info("Selected peer has no SSU address: " + ri);
                 continue;
             }
-            if ( /* _context.profileOrganizer().isFailing(cur.getRemotePeer()) || */
+            if (/* _context.profileOrganizer().isFailing(cur.getRemotePeer()) || */
                 _context.banlist().isBanlisted(hash) ||
                 _transport.wasUnreachable(hash)) {
                 if (_log.shouldInfo())
@@ -309,7 +309,8 @@ class IntroductionManager {
      *
      *  @since 0.9.55
      */
-    private static class PeerStateComparator implements Comparator<PeerState> {
+    private static class PeerStateComparator implements Comparator<PeerState>, java.io.Serializable {
+        private static final long serialVersionUID = 1L;
 
         public int compare(PeerState l, PeerState r) {
             long d = r.getKeyEstablishedTime() - l.getKeyEstablishedTime();
@@ -371,7 +372,7 @@ class IntroductionManager {
         long now = _context.clock().now();
         long pingCutoff = now - (105 * 60 * 1000);
         long inactivityCutoff = now - (UDPTransport.MIN_EXPIRE_TIMEOUT / 2);
-        for (Iterator<PeerState> iter = _inbound.values().iterator(); iter.hasNext(); ) {
+        for (Iterator<PeerState> iter = _inbound.values().iterator(); iter.hasNext();) {
             PeerState cur = iter.next();
             if (cur.getIntroducerTime() > pingCutoff &&
                 cur.getLastSendOrPingTime() < inactivityCutoff) {
@@ -919,7 +920,7 @@ class IntroductionManager {
     public void cleanup() {
         if (_nonceToAlice == null || _nonceToAlice.isEmpty())
             return;
-        for (Iterator<PeerState2> iter = _nonceToAlice.values().iterator(); iter.hasNext(); ) {
+        for (Iterator<PeerState2> iter = _nonceToAlice.values().iterator(); iter.hasNext();) {
             PeerState2 state = iter.next();
             if (state.isDead())
                 iter.remove();

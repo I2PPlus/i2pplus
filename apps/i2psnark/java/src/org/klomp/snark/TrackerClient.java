@@ -1255,7 +1255,8 @@ public class TrackerClient implements Runnable {
      *
      * @since 0.9.67
      */
-    private static class URLComparator implements Comparator<String> {
+    private static class URLComparator implements Comparator<String>, java.io.Serializable {
+        private static final long serialVersionUID = 1L;
         public int compare(String l, String r) {
             boolean ul = l.startsWith("udp://");
             boolean ur = r.startsWith("udp://");
