@@ -65,6 +65,7 @@
     <echo message=" checkstyle                                   Run Checkstyle analysis &#10140; dist/checkstyle.html"/>
     <echo message=" checkstyle-local                             Checkstyle report with clickable file links &#10140; dist/checkstyle-local.html"/>
     <echo message=" checkstyle-fix-errors                        Run fix-style.py on codebase with exclusions"/>
+    <echo message=" codeql                                       Run CodeQL security analysis &#10140; dist/codeql.sarif + dist/codeql.html"/>
     <echo message=" createThemesZip                              Create zip with all console and webapp themes and resources &#10140; ./dist/themes.zip"/>
     <echo message=" debian-clean                                 Rollback Debian specific patches then run &apos;distclean&apos;"/>
     <echo message=" debian                                       Generate Debian packages in ../ then run &apos;debian-clean&apos;"/>
@@ -102,6 +103,7 @@
     <echo message=" pmd-java-local                               Java PMD report with clickable file links &#10140; dist/pmd-java-local.html"/>
     <echo message=" pmd-js                                       Run PMD static analysis on JavaScript sources &#10140; dist/pmd-js.html"/>
     <echo message=" pmd-js-local                                 JavaScript PMD report with clickable file links &#10140; dist/pmd-js-local.html"/>
+    <echo message=" pmd-fix-errors                               Auto-fix PMD violations (StringBuffer, concat-in-loop, etc.)"/>
     <echo message=" poupdate-source                              Update the .po files for translators (requires jsp files to be compiled first)"/>
     <echo message=" signed-updater                               Signed Updater &#10140; ./dist/i2pupdate.su3 (Java14+ compatible)"/>
     <echo message=" signed-updater200                            Signed Updater (pack200) &#10140; ./dist/i2pupdate.su3"/>
@@ -3231,8 +3233,7 @@
       <arg value="dist/pmd-java.html"/>
       <arg value="Java"/>
     </exec>
-    <delete file="dist/pmd-java.xml" quiet="true"/>
-    <echo message="PMD Java report written to dist/pmd-java.html"/>
+    <echo message="PMD Java report written to dist/pmd-java.html (XML: dist/pmd-java.xml)"/>
   </target>
 
   <target name="pmd-js" depends="pmd-setup">
@@ -3264,8 +3265,7 @@
       <arg value="dist/pmd-js.html"/>
       <arg value="JavaScript"/>
     </exec>
-    <delete file="dist/pmd-js.xml" quiet="true"/>
-    <echo message="PMD JavaScript report written to dist/pmd-js.html"/>
+    <echo message="PMD JavaScript report written to dist/pmd-js.html (XML: dist/pmd-js.xml)"/>
   </target>
 
   <target name="checkstyle-setup">
@@ -3342,6 +3342,50 @@
     <echo message="Checkstyle report written to dist/checkstyle-local.html (local file links enabled)"/>
   </target>
 
+  <!-- CodeQL -->
+  <target name="codeql-setup">
+    <available property="codeql.present" file="tools/codeql/codeql/codeql"/>
+  </target>
+
+  <target name="codeql-download" unless="codeql.present">
+    <echo message="CodeQL CLI not found. Downloading (~509MB)..."/>
+    <exec executable="bash" dir="${basedir}" failonerror="true">
+      <arg value="tools/codeql/download-codeql.sh"/>
+    </exec>
+  </target>
+
+  <target name="codeql-download-skip" if="codeql.present">
+    <echo message="CodeQL CLI found"/>
+  </target>
+
+  <target name="codeql" depends="updaterCompact,codeql-setup,codeql-download,codeql-download-skip">
+    <mkdir dir="dist"/>
+    <echo message="Creating CodeQL database (this may take 5-10 minutes)..."/>
+    <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" failonerror="true">
+      <arg value="database"/>
+      <arg value="create"/>
+      <arg value="dist/codeql-db"/>
+      <arg value="--language=java"/>
+      <arg value="--command=ant updaterCompact"/>
+      <arg value="--overwrite"/>
+    </exec>
+    <echo message="Running CodeQL analysis..."/>
+    <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" failonerror="false" outputproperty="cq.result">
+      <arg value="database"/>
+      <arg value="analyze"/>
+      <arg value="dist/codeql-db"/>
+      <arg value="--format=sarif-latest"/>
+      <arg value="--output=dist/codeql.sarif"/>
+      <arg value="--sarif-add-query-help"/>
+    </exec>
+    <exec executable="python3" failonerror="true">
+      <arg value="tools/codeql/codeql-to-html.py"/>
+      <arg value="dist/codeql.sarif"/>
+      <arg value="dist/codeql.html"/>
+    </exec>
+    <echo message="CodeQL report written to dist/codeql.html (SARIF: dist/codeql.sarif)"/>
+  </target>
+
   <target name="checkstyle-fix-errors" depends="checkstyle-setup,checkstyle-download,checkstyle-download-skip">
     <echo message="Running Checkstyle fix script..."/>
     <exec executable="python3" failonerror="true">
@@ -3350,6 +3394,15 @@
       <arg value="."/>
       <arg value="-x"/>
       <arg value="dist/checkstyle.xml"/>
+    </exec>
+  </target>
+
+  <target name="pmd-fix-errors">
+    <echo message="Running PMD fix script..."/>
+    <exec executable="python3" failonerror="true">
+      <arg value="tools/pmd/fix-pmd.py"/>
+      <arg value="-p"/>
+      <arg value="."/>
     </exec>
   </target>
 
