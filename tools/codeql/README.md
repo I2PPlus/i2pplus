@@ -7,7 +7,7 @@ CodeQL is GitHub's semantic code analysis engine. Unlike PMD (syntactic pattern 
 
 ```bash
 bash tools/codeql/download-codeql.sh            # download if not present
-bash tools/codeql/download-codeql.sh --force     # force reinstall
+bash tools/codeql/download-codeql.sh --force    # force reinstall
 ```
 
 CodeQL CLI is ~509MB. Downloaded to `tools/codeql/codeql/` (not tracked in git).
@@ -79,12 +79,12 @@ mkdir -p tools/codeql/queries
 
 ## Performance
 
-| Step | Time | Notes |
-|------|------|-------|
-| Database creation | 5-10 min | Full build required |
-| Security queries | 2-5 min | ~300 queries |
-| Quality queries | 5-10 min | ~1000 queries |
-| Full suite | 10-15 min | All queries |
+| Step              | Time      | Notes               |
+| ----------------- | --------- | ------------------- |
+| Database creation | 5-10 min  | Full build required |
+| Security queries  | 2-5 min   | ~300 queries        |
+| Quality queries   | 5-10 min  | ~1000 queries       |
+| Full suite        | 10-15 min | All queries         |
 
 ## Files
 

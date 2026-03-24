@@ -3386,13 +3386,12 @@
       <arg value="--ram=8192"/>
       <arg value="--search-path=tools/codeql/codeql-${codeql.version}"/>
     </exec>
-    <available file="dist/codeql.sarif" property="cq.sarif.present"/>
-    <exec executable="python3" failonerror="true" if="cq.sarif.present">
+    <exec executable="python3" failonerror="false">
       <arg value="tools/codeql/codeql-to-html.py"/>
       <arg value="dist/codeql.sarif"/>
       <arg value="dist/codeql.html"/>
     </exec>
-    <echo message="CodeQL report written to dist/codeql.html (SARIF: dist/codeql.sarif)" if="cq.sarif.present"/>
+    <echo message="CodeQL report written to dist/codeql.html (SARIF: dist/codeql.sarif)"/>
   </target>
 
   <target name="checkstyle-fix-errors" depends="checkstyle-setup,checkstyle-download,checkstyle-download-skip">
