@@ -88,7 +88,7 @@ public class LongOpt extends Object
   * here when this long option is encountered.  If this is null, the value
   * stored in "val" is treated as the name of an equivalent short option.
   */
-    protected StringBuffer flag;
+    protected StringBuilder flag;
 
 /**
   * The value to store in "flag" if flag is not null, otherwise the
@@ -121,7 +121,7 @@ public class LongOpt extends Object
   */
     public
         LongOpt(String name, int has_arg,
-        StringBuffer flag, int val) throws IllegalArgumentException
+        StringBuilder flag, int val) throws IllegalArgumentException
     {
   // Validate has_arg
         if ((has_arg != NO_ARGUMENT) && (has_arg != REQUIRED_ARGUMENT)
@@ -172,7 +172,7 @@ public class LongOpt extends Object
   *
   * @return The value of 'flag'
   */
-    public StringBuffer
+    public StringBuilder
         getFlag()
     {
         return (flag);

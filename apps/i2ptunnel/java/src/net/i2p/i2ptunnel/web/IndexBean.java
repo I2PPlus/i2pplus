@@ -970,8 +970,8 @@ public class IndexBean {
     /** what port should this client/httpclient/ircclient listen on */
     public void setPort(String port) {
         if (port != null) {
-                try {_config.setPort(Integer.parseInt(port.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setPort(Integer.parseInt(port.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
     /**
@@ -991,8 +991,8 @@ public class IndexBean {
     /** What port does this server tunnel point at */
     public void setTargetPort(String port) {
         if (port != null) {
-                try {_config.setTargetPort(Integer.parseInt(port.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setTargetPort(Integer.parseInt(port.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
     /** What host does this http server tunnel spoof */
@@ -1272,8 +1272,8 @@ public class IndexBean {
 
     public void setCloseTime(String val) {
         if (val != null) {
-                try {_config.setCloseTime(Integer.parseInt(val.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setCloseTime(Integer.parseInt(val.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 

@@ -19,11 +19,11 @@ public class IrcOutboundFilter implements Runnable {
 
     private final Socket local;
     private final I2PSocket remote;
-    private final StringBuffer expectedPong;
+    private final StringBuilder expectedPong;
     private final Log _log;
     private final DCCHelper _dccHelper;
 
-    public IrcOutboundFilter(Socket lcl, I2PSocket rem, StringBuffer pong, Log log) {
+    public IrcOutboundFilter(Socket lcl, I2PSocket rem, StringBuilder pong, Log log) {
         this(lcl, rem, pong, log, null);
     }
 
@@ -31,7 +31,7 @@ public class IrcOutboundFilter implements Runnable {
      *  @param helper may be null
      *  @since 0.8.9
      */
-    public IrcOutboundFilter(Socket lcl, I2PSocket rem, StringBuffer pong, Log log, DCCHelper helper) {
+    public IrcOutboundFilter(Socket lcl, I2PSocket rem, StringBuilder pong, Log log, DCCHelper helper) {
         local = lcl;
         remote = rem;
         expectedPong = pong;

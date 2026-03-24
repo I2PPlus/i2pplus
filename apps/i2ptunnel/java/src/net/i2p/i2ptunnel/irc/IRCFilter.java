@@ -57,7 +57,7 @@ abstract class IRCFilter {
      *  @param helper may be null
      *  @return the original or modified line, or null if it should be dropped.
      */
-    public static String inboundFilter(String s, StringBuffer expectedPong, DCCHelper helper) {
+    public static String inboundFilter(String s, StringBuilder expectedPong, DCCHelper helper) {
 
         String field[] = DataHelper.split(s, " ", 5);
         String command;
@@ -283,7 +283,7 @@ abstract class IRCFilter {
      *  @param helper may be null
      *  @return the original or modified line, or null if it should be dropped.
      */
-    public static String outboundFilter(String s, StringBuffer expectedPong, DCCHelper helper) {
+    public static String outboundFilter(String s, StringBuilder expectedPong, DCCHelper helper) {
 
         String field[] = DataHelper.split(s, " ", 4);
 

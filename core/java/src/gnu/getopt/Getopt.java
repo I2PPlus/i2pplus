@@ -231,7 +231,7 @@ import java.util.ResourceBundle;
   * with a contructor that takes four params: a String representing the
   * object name, a integer specifying what arguments the option takes
   * (the value is one of LongOpt.NO_ARGUMENT, LongOpt.REQUIRED_ARGUMENT,
-  * or LongOpt.OPTIONAL_ARGUMENT), a StringBuffer flag object (described
+  * or LongOpt.OPTIONAL_ARGUMENT), a StringBuilder flag object (described
   * below), and an integer value (described below).
   * <p>
   * To enable long option parsing, create an array of LongOpt's representing
@@ -244,7 +244,7 @@ import java.util.ResourceBundle;
   * representing the long option is non-null, then the integer value field
   * is stored there and an integer 0 is returned to the caller.  The val
   * field can then be retrieved from the flag field.  Note that since the
-  * flag field is a StringBuffer, the appropriate String to integer converions
+  * flag field is a StringBuilder, the appropriate String to integer converions
   * must be performed in order to get the actual int value stored there.
   * If the flag field in the LongOpt object is null, then the value field
   * of the LongOpt is returned.  This can be the character of a short option.
@@ -264,7 +264,7 @@ import java.util.ResourceBundle;
   * String arg;
   * LongOpt[] longopts = new LongOpt[3];
   * //
-  * StringBuffer sb = new StringBuffer();
+  * StringBuilder sb = new StringBuilder();
   * longopts[0] = new LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h');
   * longopts[1] = new LongOpt("outputdir", LongOpt.REQUIRED_ARGUMENT, sb, 'o');
   * longopts[2] = new LongOpt("maximum", LongOpt.OPTIONAL_ARGUMENT, null, 2);

@@ -379,7 +379,7 @@ class Code extends Attribute.Holder {
             }
             if (ok) {
                 for (int q = 0; q <= 1; q++) {
-                    StringBuffer sb = new StringBuffer();
+                    StringBuilder sb = new StringBuilder();
                     sb.append("bci "+(q==0?"map":"del")+"["+len+"] = {");
                     for (int j = 0; j < len; j++) {
                         int mapi = ((Number)java.lang.reflect.Array.get(insnMap, j)).intValue() - base;

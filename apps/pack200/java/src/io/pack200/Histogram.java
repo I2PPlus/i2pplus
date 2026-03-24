@@ -360,7 +360,7 @@ final class Histogram {
             out.println(title);
         } else {
             out.println(title+" {");
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             for (int i = 0; i < matrix.length; i++) {
                 buf.setLength(0);
                 buf.append("  ").append(histTitles[i]).append(" {");

@@ -2697,7 +2697,7 @@ abstract
         printArrayTo(ps, cpMap, start, end, false);
     }
     static void printArrayTo(PrintStream ps, Entry[] cpMap, int start, int end, boolean showTags) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         int len = end-start;
         for (int i = 0; i < len; i++) {
             Entry e = cpMap[start+i];

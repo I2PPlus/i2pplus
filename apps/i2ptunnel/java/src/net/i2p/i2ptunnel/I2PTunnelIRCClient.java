@@ -143,7 +143,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             int port = addr.getPort();
             i2ps = createI2PSocket(clientDest, port);
             i2ps.setReadTimeout(readTimeout);
-            StringBuffer expectedPong = new StringBuffer();
+            StringBuilder expectedPong = new StringBuilder();
             DCCHelper dcc = _dccEnabled ? new DCC(s.getLocalAddress().getAddress()) : null;
             Thread in = new I2PAppThread(new IrcInboundFilter(s,i2ps, expectedPong, _log, dcc), "IRC Client " + _clientId + " in", true);
             in.start();

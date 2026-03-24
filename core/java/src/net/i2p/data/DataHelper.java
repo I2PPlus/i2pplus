@@ -2030,7 +2030,7 @@ public class DataHelper {
      *  @deprecated unused
      */
     @Deprecated
-    public static byte[] getUTF8(StringBuffer orig) {
+    public static byte[] getUTF8(StringBuilder orig) {
         if (orig == null) {return new byte[0];}
         return getUTF8(orig.toString());
     }
