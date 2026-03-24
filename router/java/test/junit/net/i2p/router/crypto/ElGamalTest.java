@@ -13,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.nio.charset.StandardCharsets;
 import junit.framework.TestCase;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.KeyGenerator;
@@ -168,7 +169,7 @@ public class ElGamalTest extends TestCase{
             fail();
         }
         assertNotNull(decrypted);
-        String read = new String(decrypted);
+        String read = new String(decrypted, StandardCharsets.UTF_8)
         assertEquals(msg, read);
     }
 
@@ -192,7 +193,7 @@ public class ElGamalTest extends TestCase{
             fail();
         }
         assertNotNull(decrypted);
-        String read = new String(decrypted);
+        String read = new String(decrypted, StandardCharsets.UTF_8)
         assertEquals(msg, read);
     }
 

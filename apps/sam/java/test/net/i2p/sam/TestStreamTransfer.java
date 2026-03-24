@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.nio.charset.StandardCharsets;
 import net.i2p.data.DataHelper;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
@@ -123,27 +124,27 @@ public class TestStreamTransfer {
             Properties props = SAMUtils.parseParams(line);
             String maj = props.getProperty(SAMUtils.COMMAND);
             String min = props.getProperty(SAMUtils.OPCODE);
-            if ( ("STREAM".equals(maj)) && ("CONNECTED".equals(min)) ) {
+            if (("STREAM".equals(maj)) && ("CONNECTED".equals(min))) {
                 String dest = props.getProperty("DESTINATION");
                 String id = props.getProperty("ID");
-                if ( (dest == null) || (id == null) ) {
+                if ((dest == null) || (id == null)) {
                     _log.error("Invalid STREAM CONNECTED line: [" + line + "]");
                     return;
                 }
                 dest = dest.trim();
                 id = id.trim();
                 _streams.put(id, dest);
-            } else if ( ("STREAM".equals(maj)) && ("CLOSED".equals(min)) ) {
+            } else if (("STREAM".equals(maj)) && ("CLOSED".equals(min))) {
                 String id = props.getProperty("ID");
                 if (id == null) {
                     _log.error("Invalid STREAM CLOSED line: [" + line + "]");
                     return;
                 }
                 _streams.remove(id);
-            } else if ( ("STREAM".equals(maj)) && ("RECEIVED".equals(min)) ) {
+            } else if (("STREAM".equals(maj)) && ("RECEIVED".equals(min))) {
                 String id = props.getProperty("ID");
                 String size = props.getProperty("SIZE");
-                if ( (id == null) || (size == null) ) {
+                if ((id == null) || (size == null)) {
                     _log.error("Invalid STREAM RECEIVED line: [" + line + "]");
                     return;
                 }
@@ -172,10 +173,10 @@ public class TestStreamTransfer {
                 // now echo it back
                 String reply = "STREAM SEND ID=" + id +
                                " SIZE=" + payloadSize +
-                               "\n" + new String(payload);
-                _out.write(reply.getBytes());
+                               "\n" + new String(payload, StandardCharsets.UTF_8)
+                _out.write(reply.getBytes(StandardCharsets.UTF_8));
                 _out.flush();
-                _log.info("Reply sent back [" + new String(reply.getBytes()) + "]");
+                _log.info("Reply sent back [" + new String(reply.getBytes(StandardCharsets.UTF_8)) + "]");
                  */
             } else {
                 _log.error("Received unsupported type [" + maj + "/"+ min + "]");

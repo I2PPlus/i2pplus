@@ -12,6 +12,7 @@ import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Locale;
+import java.nio.charset.StandardCharsets;
 import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
@@ -233,7 +234,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                         if (data[j] == ':') {
                             int keyLen = j-(lastEnd+1);
                             int valLen = i-(j+1);
-                            if ( (keyLen <= 0) || (valLen < 0) )
+                            if ((keyLen <= 0) || (valLen < 0))
                                 throw new IOException("Invalid header @ " + j);
                             String key = DataHelper.getUTF8(data, lastEnd+1, keyLen);
                             String val;
@@ -460,7 +461,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         try {
             OutputStream baos = new java.io.ByteArrayOutputStream(4096);
             HTTPResponseOutputStream resp = new HTTPResponseOutputStream(baos);
-            resp.write(orig.getBytes());
+            resp.write(orig.getBytes(StandardCharsets.UTF_8));
             resp.flush();
             String received = new String(baos.toByteArray());
             System.out.println(received);

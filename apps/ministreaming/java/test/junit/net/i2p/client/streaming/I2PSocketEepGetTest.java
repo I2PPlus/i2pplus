@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
+import java.nio.charset.StandardCharsets;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Destination;
 import org.junit.AfterClass;
@@ -50,7 +51,7 @@ public class I2PSocketEepGetTest {
         String line = STATS_HOST + "=" + STATS_DEST + "\n";
         FileOutputStream out = new FileOutputStream("hosts.txt");
         try {
-            out.write(line.getBytes());
+            out.write(line.getBytes(StandardCharsets.UTF_8));
         } finally {
             out.close();
         }

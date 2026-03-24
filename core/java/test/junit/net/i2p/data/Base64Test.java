@@ -18,7 +18,7 @@ public class Base64Test {
         String orig = "you smell";
         String encoded = Base64.encode(DataHelper.getASCII(orig));
         byte decoded[] = Base64.decode(encoded);
-        String transformed = new String(decoded);
+        String transformed = new String(decoded, StandardCharsets.UTF_8)
         assertTrue(orig.equals(transformed));
 
         byte all[] = new byte[256];

@@ -5,6 +5,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -24,6 +26,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.nio.charset.StandardCharsets;
 import net.i2p.I2PAppContext;
 import net.i2p.client.naming.NamingService;
 import net.i2p.client.streaming.I2PSocketManager;
@@ -94,7 +97,7 @@ public class HostChecker {
         }
 
         Properties config = new Properties();
-        try (BufferedReader reader = new BufferedReader(new FileReader(configFile))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(configFile), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -945,7 +948,7 @@ public class HostChecker {
         List<String> validLines = new ArrayList<>();
         boolean hasInvalidLines = false;
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(_hostsCheckFile))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(_hostsCheckFile), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -1192,7 +1195,7 @@ public class HostChecker {
                 // Read the downloaded content to verify it's valid
                 List<String> downloadedLines = new ArrayList<>();
                 int dataLineCount = 0;
-                try (BufferedReader reader = new BufferedReader(new FileReader(tempFile))) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(tempFile), StandardCharsets.UTF_8))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         downloadedLines.add(line);
@@ -1286,7 +1289,7 @@ public class HostChecker {
             // Read current content
             List<String> lines = new ArrayList<>();
             if (_categoriesFile.exists()) {
-                try (BufferedReader reader = new BufferedReader(new FileReader(_categoriesFile))) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(_categoriesFile), StandardCharsets.UTF_8))) {
                     String line;
                     int lineCount = 0;
                     while ((line = reader.readLine()) != null) {
@@ -1372,7 +1375,7 @@ public class HostChecker {
         List<String> validLines = new ArrayList<>();
         boolean hasEmptyLines = false;
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(_categoriesFile))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(_categoriesFile), StandardCharsets.UTF_8))) {
             String line;
             int lineCount = 0;
             int entryCount = 0;
@@ -1592,7 +1595,7 @@ public class HostChecker {
                 // Read the downloaded content to verify it's valid
                 List<String> downloadedLines = new ArrayList<>();
                 int dataLineCount = 0;
-                try (BufferedReader reader = new BufferedReader(new FileReader(tempFile))) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(tempFile), StandardCharsets.UTF_8))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         downloadedLines.add(line);
@@ -1688,7 +1691,7 @@ public class HostChecker {
                 // Read the downloaded content to verify it's valid
                 List<String> downloadedLines = new ArrayList<>();
                 int dataLineCount = 0;
-                try (BufferedReader reader = new BufferedReader(new FileReader(tempFile))) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(tempFile), StandardCharsets.UTF_8))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         downloadedLines.add(line);

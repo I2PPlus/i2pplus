@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Locale;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Encodes and decodes to and from Base64 notation.
@@ -308,10 +309,10 @@ public class Base64 {
 /*******
     private static void test() {
         String orig = "you smell";
-        String encoded = Base64.encode(orig.getBytes());
+        String encoded = Base64.encode(orig.getBytes(StandardCharsets.UTF_8));
         System.out.println("Encoded: [" + encoded + "]");
         byte decoded[] = Base64.decode(encoded);
-        String transformed = new String(decoded);
+        String transformed = new String(decoded, StandardCharsets.UTF_8)
         if (orig.equals(transformed))
             System.out.println("D(E('you smell')) == 'you smell'");
         else
@@ -481,7 +482,7 @@ public class Base64 {
     /**
      * Encodes a byte array into Base64 notation.
      * Equivalen to calling
-     * <code>encodeBytes( source, 0, source.length )</code>
+     * <code>encodeBytes(source, 0, source.length)</code>
      *
      * @param source The data to convert
      * @since 1.4
@@ -529,7 +530,7 @@ public class Base64 {
     /**
      * Encodes a byte array into Base64 notation.
      * Equivalen to calling
-     * <code>encodeBytes( source, 0, source.length )</code>
+     * <code>encodeBytes(source, 0, source.length)</code>
      *
      * @param source The data to convert
      * @param breakLines Break lines at 80 characters or less.
@@ -555,7 +556,7 @@ public class Base64 {
     } // end encodeBytes
 
     private static String encodeBytes(byte[] source, int off, int len, boolean breakLines) {
-        StringBuilder buf = new StringBuilder( (len*4)/3 );
+        StringBuilder buf = new StringBuilder((len*4)/3);
         encodeBytes(source, off, len, breakLines, buf, ALPHABET);
         return buf.toString();
     }
@@ -734,7 +735,7 @@ public class Base64 {
      * Decodes data from Base64 notation and
      * returns it as a string.
      * Equivlaent to calling
-     * <code>new String( decode( s ) )</code>
+     * <code>new String(decode(s))</code>
      *
      * As of 0.9.14, decodes as UTF-8. Prior to that, it used the platform's encoding.
      * For best results, decoded data should be 7 bit.
