@@ -335,6 +335,10 @@ tr[data-detail] {
   color: #ccc
 }
 
+#codeql .priority-cell {
+  width: 1%;
+}
+
 /* Rule documentation icon */
 .rule-doc {
   width: 1%;

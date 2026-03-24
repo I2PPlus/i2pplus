@@ -3358,29 +3358,34 @@
     <echo message="CodeQL CLI found"/>
   </target>
 
-  <target name="codeql" depends="codeql-setup,codeql-download,codeql-download-skip">
+  <target name="codeql" depends="codeql-setup,codeql-download,codeql-download-skip,distclean">
     <mkdir dir="dist"/>
-    <property name="codeql.db" value="/tmp/codeql-db"/>
-    <mkdir dir="${codeql.db}"/>
     <loadfile property="codeql.version" srcFile="tools/codeql/version.txt"/>
-    <echo message="Creating CodeQL database at ${codeql.db} (this may take some time)..."/>
-    <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" failonerror="true">
-      <env key="LGTM_INDEX_XML_MODE" value="all"/>
+    <echo message="Building updater to analyze code..."/>
+    <exec executable="ant" dir="${basedir}" output="/dev/null" error="/dev/null">
+      <arg value="updater"/>
+    </exec>
+    <echo message="Creating CodeQL database at /tmp/codeql-db..."/>
+    <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" failonerror="true" outputproperty="cq.create.output" error="/dev/null">
       <arg value="database"/>
       <arg value="create"/>
-      <arg value="${codeql.db}"/>
+      <arg value="/tmp/codeql-db"/>
       <arg value="--language=java"/>
       <arg value="--command=ant updater"/>
       <arg value="--overwrite"/>
       <arg value="--ram=8192"/>
       <arg value="--search-path=tools/codeql/codeql-${codeql.version}"/>
     </exec>
+    <exec executable="bash" dir="${basedir}" outputproperty="cq.files.processed" failonerror="false">
+      <arg value="-c"/>
+      <arg value="grep 'Processed.*files' /tmp/codeql-db/log/build-tracer.log 2>/dev/null | tail -1 | sed 's/.*] //' || echo 'done'"/>
+    </exec>
+    <echo message="Processing files... ${cq.files.processed}"/>
     <echo message="Running CodeQL analysis..."/>
-    <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" failonerror="false" outputproperty="cq.result">
-      <env key="LGTM_INDEX_XML_MODE" value="all"/>
+    <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" failonerror="false" outputproperty="cq.result" error="/dev/null">
       <arg value="database"/>
       <arg value="analyze"/>
-      <arg value="${codeql.db}"/>
+      <arg value="/tmp/codeql-db"/>
       <arg value="--format=sarif-latest"/>
       <arg value="--output=dist/codeql.sarif"/>
       <arg value="--sarif-add-query-help"/>
