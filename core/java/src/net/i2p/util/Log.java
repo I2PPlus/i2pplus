@@ -252,7 +252,7 @@ public class Log {
     public Object getScope() { return _scope; }
 
     static String getScope(String name, Class<?> cls) {
-        if ( (name == null) && (cls == null) ) {return "f00";}
+        if ((name == null) && (cls == null)) {return "f00";}
         if (cls == null) {return name;}
         if (name == null) {return cls.getName();}
         return name + "" + cls.getName();

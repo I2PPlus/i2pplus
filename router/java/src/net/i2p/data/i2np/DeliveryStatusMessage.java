@@ -80,7 +80,7 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
 
     /** write the message body to the output array, starting at the given index */
     protected int writeMessageBody(byte out[], int curIndex) throws I2NPMessageException {
-        if ( (_id < 0) || (_arrival <= 0) ) throw new I2NPMessageException("Not enough data to write out");
+        if ((_id < 0) || (_arrival <= 0)) throw new I2NPMessageException("Not enough data to write out");
 
         DataHelper.toLong(out, curIndex, 4, _id);
         curIndex += 4;
@@ -98,7 +98,7 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
 
     @Override
     public boolean equals(Object object) {
-        if ( (object != null) && (object instanceof DeliveryStatusMessage) ) {
+        if ((object != null) && (object instanceof DeliveryStatusMessage)) {
             DeliveryStatusMessage msg = (DeliveryStatusMessage)object;
             return _id == msg.getMessageId() &&
                    _arrival == msg.getArrival();

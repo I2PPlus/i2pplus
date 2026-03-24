@@ -32,8 +32,8 @@ import java.io.IOException;
 public class DecodingException extends IOException {
     private static final long serialVersionUID = 1L;
 
-    public DecodingException( String msg ) {
-        super( msg );
+    public DecodingException(String msg) {
+        super(msg);
     }
 
     /**

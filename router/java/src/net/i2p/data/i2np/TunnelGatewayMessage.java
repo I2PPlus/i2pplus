@@ -75,7 +75,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
 
     /** write the message body to the output array, starting at the given index */
     protected int writeMessageBody(byte out[], int curIndex) throws I2NPMessageException {
-        if ((_tunnelId == null) || ((_msg == null) && (_msgData == null)) ) {
+        if ((_tunnelId == null) || ((_msg == null) && (_msgData == null))) {
             _log.log(Log.CRIT, "failing to write out gateway message");
             throw new I2NPMessageException("Not enough data to write out (id=" + _tunnelId + " data=" + _msg + ")");
         }

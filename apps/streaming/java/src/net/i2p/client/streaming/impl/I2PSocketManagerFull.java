@@ -718,7 +718,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
         // should we destroy the _session too?
         // yes, since the old lib did (and SAM wants it to, and I don't know why not)
-        if ( (_session != null) && (!_session.isClosed()) ) {
+        if ((_session != null) && (!_session.isClosed())) {
             try {
                 _session.destroySession();
             } catch (I2PSessionException ise) {

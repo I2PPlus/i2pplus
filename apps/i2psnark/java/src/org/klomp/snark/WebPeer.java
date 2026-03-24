@@ -335,7 +335,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                             DataInputStream dis =
                                     new DataInputStream(
                                             new ByteArrayInputStream(out.toByteArray()));
-                            for (Iterator<Request> iter = requests.iterator(); iter.hasNext(); ) {
+                            for (Iterator<Request> iter = requests.iterator(); iter.hasNext();) {
                                 Request req = iter.next();
                                 if (dis.available() < req.len) break;
                                 req.read(dis, this);

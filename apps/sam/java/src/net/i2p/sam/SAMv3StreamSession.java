@@ -157,7 +157,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
          * @throws I2PException if there's another I2P-related error
          * @throws IOException
          */
-    public void connect ( SAMv3Handler handler, String dest, Properties props )
+    public void connect (SAMv3Handler handler, String dest, Properties props)
             throws I2PException, ConnectException, NoRouteToHostException,
         		DataFormatException, InterruptedIOException, IOException {
 
@@ -193,7 +193,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
 
-        if ( rec==null ) throw new InterruptedIOException();
+        if (rec==null) throw new InterruptedIOException();
 
         handler.notifyStreamResult(verbose, "OK", null);
 
@@ -254,7 +254,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
 
-        if ( rec==null || i2ps==null ) throw new InterruptedIOException();
+        if (rec==null || i2ps==null) throw new InterruptedIOException();
 
         if (verbose) {
             handler.notifyStreamIncomingConnection(i2ps.getPeerDestination(),
@@ -285,10 +285,10 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
         boolean verbose = !Boolean.parseBoolean(props.getProperty("SILENT"));
 
-        if ( rec==null ) throw new InterruptedIOException();
+        if (rec==null) throw new InterruptedIOException();
 
         String portStr = props.getProperty("PORT");
-        if ( portStr==null ) {
+        if (portStr==null) {
             if (_log.shouldDebug())
         			_log.debug("Receiver port not specified");
             throw new SAMException("receiver port not specified");
@@ -296,7 +296,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
         int port = Integer.parseInt(portStr);
 
         String host = props.getProperty("HOST");
-        if ( host==null ) {
+        if (host==null) {
             host = rec.getHandler().getClientIP();
             if (_log.shouldDebug())
             		_log.debug("No host specified. Taken from the client socket : " + host +':'+port);
@@ -500,7 +500,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 
     protected I2PServerSocket getSocketServer()
     {
-        synchronized ( this.socketServerLock ) {
+        synchronized (this.socketServerLock) {
             return this.socketServer;
         }
     }
@@ -513,10 +513,10 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
     {
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
 
-        if ( rec==null ) throw new InterruptedIOException();
+        if (rec==null) throw new InterruptedIOException();
 
         I2PServerSocket server = null;
-        synchronized ( this.socketServerLock )
+        synchronized (this.socketServerLock)
         {
             if (this.socketServer==null) {
                 if (_log.shouldDebug())
@@ -526,11 +526,11 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
             server = this.socketServer;
             this.socketServer = null;
             if (_log.shouldDebug())
-            		_log.debug("Nulling socketServer in stopForwardingIncoming. Object " + this );
+            		_log.debug("Nulling socketServer in stopForwardingIncoming. Object " + this);
         }
         try {
             server.close();
-        } catch ( I2PException e) {}
+        } catch (I2PException e) {}
     }
 
         /**

@@ -232,7 +232,7 @@ public class SecurityManager {
         public void timeReached() {
             _log.debug("Starting cleanup job..");
             synchronized (authTokens) {
-                for (Iterator<AuthToken> iter = authTokens.values().iterator(); iter.hasNext(); ) {
+                for (Iterator<AuthToken> iter = authTokens.values().iterator(); iter.hasNext();) {
                     AuthToken token = iter.next();
                     if (!token.isValid())
                         iter.remove();

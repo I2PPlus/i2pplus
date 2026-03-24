@@ -41,7 +41,7 @@ class ReadLine {
             expires = 0;
         }
         final Reader reader = new UTF8Reader(socket.getInputStream());
-        while ( (c = reader.read()) != -1) {
+        while ((c = reader.read()) != -1) {
             if (++i > MAX_LINE_LENGTH)
                 throw new LineTooLongException("Line too long - max " + MAX_LINE_LENGTH);
             if (c == '\n')

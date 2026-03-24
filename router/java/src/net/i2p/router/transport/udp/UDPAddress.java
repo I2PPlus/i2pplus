@@ -225,7 +225,7 @@ class UDPAddress {
                     String k = addr.getOption(PROP_INTRO_IKEY[i]);
                     if (k == null) continue;
                     ikey = Base64.decode(k);
-                    if ( (ikey == null) || (ikey.length != SessionKey.KEYSIZE_BYTES) )
+                    if ((ikey == null) || (ikey.length != SessionKey.KEYSIZE_BYTES))
                         continue;
                     try {
                         p = Integer.parseInt(port);
@@ -419,7 +419,7 @@ class UDPAddress {
                     rv.append(", ");
             }
         } else {
-            if ( (_host != null) && (_port > 0) )
+            if ((_host != null) && (_port > 0))
                 rv.append("ssu://").append(_host).append(':').append(_port); //.append('/').append(Base64.encode(_introKey));
             else
                 rv.append("ssu://autodetect.not.yet.complete:").append(_port);

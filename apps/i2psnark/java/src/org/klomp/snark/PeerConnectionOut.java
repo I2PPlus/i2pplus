@@ -447,7 +447,7 @@ class PeerConnectionOut implements Runnable {
      */
     void cancelRequestMessages() {
         synchronized (sendQueue) {
-            for (Iterator<Message> it = sendQueue.iterator(); it.hasNext(); ) {
+            for (Iterator<Message> it = sendQueue.iterator(); it.hasNext();) {
                 if (it.next().type == Message.REQUEST) {
                     it.remove();
                 }

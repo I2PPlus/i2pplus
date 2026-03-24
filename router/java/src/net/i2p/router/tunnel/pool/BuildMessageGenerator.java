@@ -51,7 +51,7 @@ abstract class BuildMessageGenerator {
         if (peerKey != null) {
             boolean isEC = peerKey.getType() == EncType.ECIES_X25519;
             BuildRequestRecord req;
-            if ( (!cfg.isInbound()) && (hop + 1 == cfg.getLength()) ) //outbound endpoint
+            if ((!cfg.isInbound()) && (hop + 1 == cfg.getLength())) //outbound endpoint
                 req = createUnencryptedRecord(ctx, cfg, hop, replyRouter, replyTunnel, isEC, isShort, props);
             else
                 req = createUnencryptedRecord(ctx, cfg, hop, null, -1, isEC, isShort, props);
@@ -129,7 +129,7 @@ abstract class BuildMessageGenerator {
                 nextTunnelId = cfg.getConfig(hop+1).getReceiveTunnelId();
                 nextPeer = cfg.getPeer(hop+1);
             } else {
-                if ( (replyTunnel >= 0) && (replyRouter != null) ) {
+                if ((replyTunnel >= 0) && (replyRouter != null)) {
                     nextTunnelId = replyTunnel;
                     nextPeer = replyRouter;
                 } else {
@@ -142,7 +142,7 @@ abstract class BuildMessageGenerator {
             boolean isOutEnd = (!cfg.isInbound() && (hop + 1 >= cfg.getLength()));
 
             long nextMsgId = -1;
-            if (isOutEnd || (cfg.isInbound() && (hop + 2 >= cfg.getLength())) ) {
+            if (isOutEnd || (cfg.isInbound() && (hop + 2 >= cfg.getLength()))) {
                 nextMsgId = cfg.getReplyMessageId();
             } else {
                 // Don't care about these intermediary hops

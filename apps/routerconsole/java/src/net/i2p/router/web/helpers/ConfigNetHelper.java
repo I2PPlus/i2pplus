@@ -223,7 +223,7 @@ public class ConfigNetHelper extends HelperBase {
     public String getAddressSelector() {
         Set<String> addrs = getAddresses();
         // isPubliclyRoutable() rejects some IPv6 addresses that getAddresses() allows
-        for (Iterator<String> iter = addrs.iterator(); iter.hasNext(); ) {
+        for (Iterator<String> iter = addrs.iterator(); iter.hasNext();) {
             byte[] ip = Addresses.getIP(iter.next());
             if (ip == null || !TransportUtil.isPubliclyRoutable(ip, true))
                 iter.remove();
@@ -325,7 +325,7 @@ public class ConfigNetHelper extends HelperBase {
         int numSeconds = 1;
         int rateKBps = _context.bandwidthLimiter().getInboundBurstKBytesPerSecond();
         int burstKB = _context.bandwidthLimiter().getInboundBurstBytes() / 1024;
-        if ( (rateKBps > 0) && (burstKB > 0) )
+        if ((rateKBps > 0) && (burstKB > 0))
             numSeconds = burstKB / rateKBps;
         return getBurstFactor(numSeconds, "inboundburstfactor");
     }
@@ -334,7 +334,7 @@ public class ConfigNetHelper extends HelperBase {
         int numSeconds = 1;
         int rateKBps = _context.bandwidthLimiter().getOutboundBurstKBytesPerSecond();
         int burstKB = _context.bandwidthLimiter().getOutboundBurstBytes() / 1024;
-        if ( (rateKBps > 0) && (burstKB > 0) )
+        if ((rateKBps > 0) && (burstKB > 0))
             numSeconds = burstKB / rateKBps;
         return getBurstFactor(numSeconds, "outboundburstfactor");
     }

@@ -185,7 +185,7 @@ public class InfoHelper extends HelperBase {
             buf.append("&ensp; <a href=\"/configadvanced\">").append(_t("Configure")).append("</a></td></tr>\n");
         }
         if (bwIn() != null && bwOut() != null && bwShare() != null) {
-            buf.append("<tr><td><b>").append(_t("Bandwidth")).append(":</b></td><td class=ajax><b>").append( _t("Inbound")).append(":</b> ")
+            buf.append("<tr><td><b>").append(_t("Bandwidth")).append(":</b></td><td class=ajax><b>").append(_t("Inbound")).append(":</b> ")
                .append(bwIn()).append("KB/s &ensp; <b>").append(_t("Outbound")).append(":</b> ").append(bwOut()).append("KB/s &ensp; <b>")
                .append(_t("Shared")).append(":</b> ").append(bwShare()).append("% (").append(shareBW).append("KB/s) &ensp; <b>")
                .append(_t("Tier")).append(":</b> ").append(ri.getBandwidthTier());

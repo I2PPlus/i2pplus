@@ -159,7 +159,7 @@ public class SimpleTimer {
             _events.put(time, event);
             _eventTimes.put(event, time);
 
-            if ( (_events.size() != _eventTimes.size()) ) {
+            if ((_events.size() != _eventTimes.size())) {
                 _log.error("Skewed events: " + _events.size() + " for " + _eventTimes.size());
                 for (TimedEvent evt : _eventTimes.keySet()) {
                     Long when = _eventTimes.get(evt);

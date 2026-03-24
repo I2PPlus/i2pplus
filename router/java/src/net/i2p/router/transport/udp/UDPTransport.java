@@ -1843,7 +1843,7 @@ public class UDPTransport extends TransportImpl {
         PeerState oldPeer = null;
         if (remotePeer != null) {
             oldPeer = _peersByIdent.put(remotePeer, peer);
-            if ( (oldPeer != null) && (oldPeer != peer) ) {
+            if ((oldPeer != null) && (oldPeer != peer)) {
                 // this happens a lot
                 if (_log.shouldInfo())
                     _log.info("Router already connected (PBID): Old = " + oldPeer + " New = " + peer);
@@ -2108,8 +2108,8 @@ public class UDPTransport extends TransportImpl {
                       " byHostSize: " + _peersByRemoteHost.size());
 
         // deal with races to make sure we drop the peers fully
-        if ( (altByIdent != null) && (peer != altByIdent) ) locked_dropPeer(altByIdent, shouldBanlist, "recurse");
-        if ( (altByHost != null) && (peer != altByHost) ) locked_dropPeer(altByHost, shouldBanlist, "recurse");
+        if ((altByIdent != null) && (peer != altByIdent)) locked_dropPeer(altByIdent, shouldBanlist, "recurse");
+        if ((altByHost != null) && (peer != altByHost)) locked_dropPeer(altByHost, shouldBanlist, "recurse");
     }
 
     /**
@@ -2323,7 +2323,7 @@ public class UDPTransport extends TransportImpl {
             }
 
             // If we don't have a port, all is lost
-            if ( _reachabilityStatus == Status.HOSED) {
+            if (_reachabilityStatus == Status.HOSED) {
                 markUnreachable(to);
                 return null;
             }
@@ -3307,9 +3307,9 @@ public class UDPTransport extends TransportImpl {
     void failed(OutboundMessageState msg, boolean allowPeerFailure) {
         if (msg == null) return;
         OutNetMessage m = msg.getMessage();
-        if ( allowPeerFailure && (msg.getPeer() != null) &&
-             ( (msg.getMaxSends() >= OutboundMessageFragments.MAX_VOLLEYS) ||
-               (msg.isExpired())) ) {
+        if (allowPeerFailure && (msg.getPeer() != null) &&
+             ((msg.getMaxSends() >= OutboundMessageFragments.MAX_VOLLEYS) ||
+               (msg.isExpired()))) {
             int consecutive = msg.getPeer().incrementConsecutiveFailedSends();
             if (_log.shouldInfo())
                 _log.info("Consecutive failure #" + consecutive
@@ -3641,7 +3641,7 @@ public class UDPTransport extends TransportImpl {
                 } else {
                     inactivityCutoff = shortInactivityCutoff;
                 }
-                if ( (peer.getLastReceiveTime() < inactivityCutoff) && (peer.getLastSendTime() < inactivityCutoff) ) {
+                if ((peer.getLastReceiveTime() < inactivityCutoff) && (peer.getLastSendTime() < inactivityCutoff)) {
                     _expireBuffer.add(peer);
                 } else if (shouldPingFirewall &&
                                ((_runCount ^ peer.hashCode()) & (SLICES - 1)) == 0 &&
@@ -3935,7 +3935,7 @@ public class UDPTransport extends TransportImpl {
         boolean requireV2 = peerRole == BOB && !isIPv6 &&
                             (isSymNatted() || STATUS_IPV4_SYMNAT.contains(_reachabilityStatusPending));
         List<PeerState> peers = new ArrayList<PeerState>(_peersByIdent.values());
-        for (Iterator<PeerState> iter = new RandomIterator<PeerState>(peers); iter.hasNext(); ) {
+        for (Iterator<PeerState> iter = new RandomIterator<PeerState>(peers); iter.hasNext();) {
             PeerState peer = iter.next();
             if (peerRole == BOB) {
                 version = peer.getVersion();
@@ -3953,7 +3953,7 @@ public class UDPTransport extends TransportImpl {
                 if (peer.getVersion() != version)
                     continue;
             }
-            if ( (dontInclude != null) && (dontInclude.equals(peer.getRemoteHostId())) )
+            if ((dontInclude != null) && (dontInclude.equals(peer.getRemoteHostId())))
                 continue;
             // enforce IPv4/v6 connection if we are ALICE looking for a BOB
             byte[] ip = peer.getRemoteIP();

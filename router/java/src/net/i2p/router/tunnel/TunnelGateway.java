@@ -122,7 +122,7 @@ abstract class TunnelGateway {
             }
             afterExpire = System.currentTimeMillis();
             remaining = _queue.size();
-            if ( (remaining > 0) && (_log.shouldDebug()) )
+            if ((remaining > 0) && (_log.shouldDebug()))
                 _log.debug("Remaining after preprocessing: " + _queue);
         }
 
@@ -220,7 +220,7 @@ abstract class TunnelGateway {
                 //    System.out.println("foo!");
                 //afterChecked = _context.clock().now();
                 if (!_queue.isEmpty()) {
-                    //if ( (remaining > 0) && (_log.shouldDebug()) )
+                    //if ((remaining > 0) && (_log.shouldDebug()))
                     //    _log.debug("Remaining before delayed flush preprocessing: " + _queue);
                     wantRequeue = _preprocessor.preprocessQueue(_queue, _sender, _receiver);
                     if (wantRequeue) {

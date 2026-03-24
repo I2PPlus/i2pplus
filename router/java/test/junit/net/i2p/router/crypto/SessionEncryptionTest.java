@@ -302,7 +302,7 @@ public class SessionEncryptionTest extends TestCase{
             byte dmsg[] = e.decrypt(emsg, privKey, skm);
             assertTrue(DataHelper.eq(dmsg, msg));
 
-            if ( (tags != null) && (tags.size() > 0) ) {
+            if ((tags != null) && (tags.size() > 0)) {
                 if (nextKey == null) {
                     TagSetHandle tsh = skm.tagsDelivered(pubKey, curKey, tags);
                     skm.tagsAcked(pubKey, curKey, tsh);

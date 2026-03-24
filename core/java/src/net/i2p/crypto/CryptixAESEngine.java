@@ -137,7 +137,7 @@ public final class CryptixAESEngine extends AESEngine {
      */
     @Override
     public void decrypt(byte payload[], int payloadIndex, byte out[], int outIndex, SessionKey sessionKey, byte iv[], int ivOffset, int length) {
-        if ((iv== null) || (payload == null) || (payload.length <= 0) || (sessionKey == null) )
+        if ((iv== null) || (payload == null) || (payload.length <= 0) || (sessionKey == null))
             throw new IllegalArgumentException("Bad setup");
         else if (out == null)
             throw new IllegalArgumentException("Out is null");
@@ -227,7 +227,7 @@ public final class CryptixAESEngine extends AESEngine {
     @Override
     public final void decryptBlock(byte payload[], int inIndex, SessionKey sessionKey, byte rv[], int outIndex) {
         // just let it throw NPE or IAE later for speed, you'll figure it out
-        //if ( (payload == null) || (rv == null) )
+        //if ((payload == null) || (rv == null))
         //    throw new IllegalArgumentException("null block args");
         //if (payload.length - inIndex > rv.length - outIndex)
         //    throw new IllegalArgumentException("Bad block args [payload.len=" + payload.length

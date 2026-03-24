@@ -325,7 +325,7 @@ class Elligator2 {
         PublicKey test = new PublicKey(EncType.ECIES_X25519, TEST1);
         byte[] repr = encode(test, false);
         System.out.println("encoded with false:\n" + HexDump.dump(repr));
-        //00000000  28 20 b6 b2 41 e0 f6 8a  6c 4a 7f ee 3d 97 82 28  |( ..A...lJ..=..(|
+        //00000000  28 20 b6 b2 41 e0 f6 8a  6c 4a 7f ee 3d 97 82 28  |(..A...lJ..=..(|
         //00000010  ef 3a e4 55 33 cd 41 0a  a9 1a 41 53 31 d8 61 2d  |.:.U3.A...AS1.a-|
         repr = encode(test, true);
         System.out.println("encoded with true:\n" + HexDump.dump(repr));

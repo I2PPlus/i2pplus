@@ -90,7 +90,7 @@ public class BandwidthLimiterIT {
         try {
             byte buf[] = new byte[numBytesPerRead];
             int read = 0;
-            while ( (read = in.read(buf)) != -1) {
+            while ((read = in.read(buf)) != -1) {
                 //_log.info("** Read " + read + " bytes");
                 // gobble the data.  who cares
             }

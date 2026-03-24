@@ -184,7 +184,7 @@ public class KeySelector {
      * consider using larger key sizes or alternative selection algorithms.</p>
      */
     public KeySelector (int m, int k) {
-        //if ( (m < 2) || (m > 20)|| (k < 1)
+        //if ((m < 2) || (m > 20)|| (k < 1)
         //             || (bitOffset == null) || (wordOffset == null)) {
         //    throw new IllegalArgumentException();
         //}
@@ -259,8 +259,8 @@ public class KeySelector {
 //                  System.out.println(
 //                      "    before shifting: " + btoh(b[curByte])
 //                  + "\n    after shifting:  "
-//                          + itoh( (0xff & b[curByte]) >> (bitsUnused - 5))
-//                  + "\n    mask:            " + itoh(UNMASK[5]) );
+//                          + itoh((0xff & b[curByte]) >> (bitsUnused - 5))
+//                  + "\n    mask:            " + itoh(UNMASK[5]));
 //                  // END
                 } else if (bitsUnused == 5) {
                     bitOffset[j] = b[curByte] & UNMASK[5];

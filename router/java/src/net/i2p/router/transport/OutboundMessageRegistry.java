@@ -102,7 +102,7 @@ public class OutboundMessageRegistry {
 
         synchronized (_selectors) {
             // ConcurrentModificationException - why?
-            //for (Iterator<MessageSelector> iter = _selectors.iterator(); iter.hasNext(); ) {
+            //for (Iterator<MessageSelector> iter = _selectors.iterator(); iter.hasNext();) {
             //    MessageSelector sel = iter.next();
             for (int i = 0; i < _selectors.size(); i++) {
                 MessageSelector sel = _selectors.get(i);
@@ -130,7 +130,7 @@ public class OutboundMessageRegistry {
                 List<OutNetMessage> msgs = null;
                 synchronized (_selectorToMessage) {
                     Object o;
-                    if ( (removedSelectors != null) && (removedSelectors.contains(sel)) ) {
+                    if ((removedSelectors != null) && (removedSelectors.contains(sel))) {
                         o = _selectorToMessage.remove(sel);
                         removed = true;
                     } else {
@@ -195,7 +195,7 @@ public class OutboundMessageRegistry {
      */
     @SuppressWarnings("unchecked")
     private void registerPending(OutNetMessage msg, boolean allowEmpty) {
-        if ( (!allowEmpty) && (msg.getMessage() == null) )
+        if ((!allowEmpty) && (msg.getMessage() == null))
                 throw new IllegalArgumentException("OutNetMessage doesn't contain an I2NPMessage? Impossible?");
         MessageSelector sel = msg.getReplySelector();
         if (sel == null) throw new IllegalArgumentException("No reply selector? Impossible?");
@@ -272,7 +272,7 @@ public class OutboundMessageRegistry {
             List<MessageSelector> removing = new ArrayList<MessageSelector>(8);
             synchronized (_selectors) {
                 // CME?
-                //for (Iterator<MessageSelector> iter = _selectors.iterator(); iter.hasNext(); ) {
+                //for (Iterator<MessageSelector> iter = _selectors.iterator(); iter.hasNext();) {
                 //    MessageSelector sel = iter.next();
                 for (int i = 0; i < _selectors.size(); i++) {
                     MessageSelector sel = _selectors.get(i);
@@ -344,7 +344,7 @@ public class OutboundMessageRegistry {
         public void scheduleExpiration(MessageSelector sel) {
             long now = _context.clock().now();
             synchronized (_selectors) {
-                if ( (_nextExpire <= now) || (sel.getExpiration() < _nextExpire) ) {
+                if ((_nextExpire <= now) || (sel.getExpiration() < _nextExpire)) {
                     _nextExpire = sel.getExpiration();
                     reschedule(_nextExpire - now);
                 }

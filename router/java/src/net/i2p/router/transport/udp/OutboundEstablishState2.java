@@ -782,7 +782,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             Arrays.fill(d_ba, (byte) 0);
             _handshakeState.destroy();
             if (_requestSentCount == 1)
-                _rtt = (int) ( _context.clock().now() - _lastSend );
+                _rtt = (int) (_context.clock().now() - _lastSend);
             _pstate = new PeerState2(_context, _transport, _bobSocketAddress,
                                      _remotePeer.calculateHash(),
                                      false, _rtt, sender, rcvr,

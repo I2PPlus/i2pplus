@@ -56,7 +56,7 @@ public class TestRawTransfer {
                 return;
             }
             String size = props.getProperty("SIZE");
-            if ( (size == null) || (!size.equals("3")) ) {
+            if ((size == null) || (!size.equals("3"))) {
                 _log.error("Reply of the datagram is incorrect: [" + line + "]");
                 return;
             }

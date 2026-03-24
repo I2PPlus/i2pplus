@@ -95,7 +95,7 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
         } else {
             int port = Integer.parseInt(portStr);
             String host = props.getProperty("HOST");
-            if ( host==null ) {
+            if (host==null) {
                 host = handler.getClientIP();
             }
             return new InetSocketAddress(host, port);

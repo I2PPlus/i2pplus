@@ -100,7 +100,7 @@ class TCBShare {
                        dest.calculateHash().toBase64().substring(0, 4) +
                        " RTT: " + rtt +
                        " RTTDev: "+ rttDev +
-                       " wdw: " + wdw );
+                       " wdw: " + wdw);
         }
         opts.loadFromCache(rtt,rttDev,wdw);
     }
@@ -187,7 +187,7 @@ class TCBShare {
             super(timer);
         }
         public void timeReached() {
-            for (Iterator<Entry> iter = _cache.values().iterator(); iter.hasNext(); ) {
+            for (Iterator<Entry> iter = _cache.values().iterator(); iter.hasNext();) {
                 if (iter.next().isExpired())
                     iter.remove();
             }

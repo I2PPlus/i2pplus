@@ -131,7 +131,7 @@ public class Banlist {
             _toUnbanlist.clear();
             long now = getContext().clock().now();
             try {
-                for (Iterator<Map.Entry<Hash, Entry>> iter = _entries.entrySet().iterator(); iter.hasNext(); ) {
+                for (Iterator<Map.Entry<Hash, Entry>> iter = _entries.entrySet().iterator(); iter.hasNext();) {
                     Map.Entry<Hash, Entry> e = iter.next();
                     if (e.getValue().expireOn <= now) {
                         iter.remove();
@@ -361,7 +361,7 @@ public class Banlist {
         boolean fully = false;
 
         Entry e = _entries.remove(peer);
-        if ( (e == null) || (e.transports == null) || (transport == null) || (e.transports.size() <= 1) ) {
+        if ((e == null) || (e.transports == null) || (transport == null) || (e.transports.size() <= 1)) {
             // fully unbanlisted
             fully = true;
         } else {

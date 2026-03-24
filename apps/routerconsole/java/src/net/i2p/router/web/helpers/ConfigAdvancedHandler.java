@@ -66,7 +66,7 @@ public class ConfigAdvancedHandler extends FormHandler {
             Set<String> keysToRemove = new HashSet<>(oldProps.stringPropertyNames());
 
             // Iterate through the entries in props
-            for (Iterator<Map.Entry<Object, Object>> iter = props.entrySet().iterator(); iter.hasNext(); ) {
+            for (Iterator<Map.Entry<Object, Object>> iter = props.entrySet().iterator(); iter.hasNext();) {
                 Map.Entry<Object, Object> e = iter.next();
                 String key = (String) e.getKey();
                 String newValue = (String) e.getValue();

@@ -137,7 +137,7 @@ public class SDSCache<V extends SimpleDataStructure> {
             } else {
                 // make a new one
                 try {
-                    rv = _rvCon.newInstance(new Object[] { data } );
+                    rv = _rvCon.newInstance(new Object[] { data });
                 } catch (InstantiationException e) {
                     throw new RuntimeException("SDSCache error", e);
                 } catch (IllegalAccessException e) {

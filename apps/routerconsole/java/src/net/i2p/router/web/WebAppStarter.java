@@ -85,7 +85,7 @@ public class WebAppStarter {
 
         // don't scan these wars
         BUILTINS.addAll(Arrays.asList(new String[] {"i2psnark", "i2ptunnel", "imagegen", "jsonrpc",
-                                                    "routerconsole", "susidns", "susimail"} ));
+                                                    "routerconsole", "susidns", "susimail"}));
     }
 
 

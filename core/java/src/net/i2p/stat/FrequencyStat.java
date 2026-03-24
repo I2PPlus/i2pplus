@@ -71,7 +71,7 @@ public class FrequencyStat {
       * @since 0.8.2
       */
     public long getEventCount() {
-        if ( (_frequencies == null) || (_frequencies.length <= 0) ) return 0;
+        if ((_frequencies == null) || (_frequencies.length <= 0)) return 0;
         return _frequencies[0].getEventCount();
     }
 
@@ -82,7 +82,7 @@ public class FrequencyStat {
       * @since 0.8.2
       */
     public long getFrequency() {
-        if ( (_frequencies == null) || (_frequencies.length <= 0) ) return Long.MAX_VALUE;
+        if ((_frequencies == null) || (_frequencies.length <= 0)) return Long.MAX_VALUE;
         double d = _frequencies[0].getStrictAverageInterval();
         if (d > _frequencies[0].getPeriod())
             return Long.MAX_VALUE;

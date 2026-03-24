@@ -522,7 +522,7 @@ public class SybilRenderer {
         buf.append("<h3 id=dest class=sybils>").append(_t("Floodfills Close to Our Destinations")).append("</h3>\n");
         Map<Hash, TunnelPool> clientInboundPools = _context.tunnelManager().getInboundClientPools();
         List<Hash> destinations = new ArrayList<Hash>(clientInboundPools.keySet());
-        for (Iterator<Hash> iter = destinations.iterator(); iter.hasNext(); ) {
+        for (Iterator<Hash> iter = destinations.iterator(); iter.hasNext();) {
             Hash client = iter.next();
             if (!_context.clientManager().isLocal(client) ||
                 !_context.clientManager().shouldPublishLeaseSet(client) ||

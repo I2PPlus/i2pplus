@@ -110,7 +110,7 @@ class Reader {
                         }
                     }
                 } catch (InterruptedException ie) {}
-                if (!_stop && (con != null) ) {
+                if (!_stop && (con != null)) {
                     if (_log.shouldDebug())
                         _log.debug("Begin read for " + con);
                     try {

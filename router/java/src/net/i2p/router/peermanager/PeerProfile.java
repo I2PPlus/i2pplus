@@ -464,7 +464,7 @@ public class PeerProfile {
                 }
             }
 
-            if (_log.shouldDebug() ) {
+            if (_log.shouldDebug()) {
                 StringBuilder buf = new StringBuilder(128);
                 buf.append("1 minute throughput for [");
                 buf.append(_peer.toBase64().substring(0,6));

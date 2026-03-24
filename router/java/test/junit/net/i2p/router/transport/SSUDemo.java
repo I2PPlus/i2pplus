@@ -160,7 +160,7 @@ public class SSUDemo {
             infoDir.mkdirs();
         while (true) {
             File peerFiles[] = infoDir.listFiles();
-            if ( (peerFiles != null) && (peerFiles.length > 0) ) {
+            if ((peerFiles != null) && (peerFiles.length > 0)) {
                 for (int i = 0; i < peerFiles.length; i++) {
                     if (peerFiles[i].isFile() && !peerFiles[i].isHidden()) {
                         if (!_us.routerHash().toBase64().equals(peerFiles[i].getName())) {

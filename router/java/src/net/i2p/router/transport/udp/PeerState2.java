@@ -234,7 +234,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                     _log.debug("[SSU] finishMessages() over " + _sentMessages.size() + " pending ACKs");
                 }
                 loop:
-                for (Iterator<List<PacketBuilder.Fragment>> iter = _sentMessages.values().iterator(); iter.hasNext(); ) {
+                for (Iterator<List<PacketBuilder.Fragment>> iter = _sentMessages.values().iterator(); iter.hasNext();) {
                     List<PacketBuilder.Fragment> frags = iter.next();
                     for (PacketBuilder.Fragment f : frags) {
                         OutboundMessageState state = f.state;

@@ -339,7 +339,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  @param sktMgr the existing socket manager
      */
     public I2PTunnelHTTPClientBase(int localPort, Logging l, I2PSocketManager sktMgr,
-            I2PTunnel tunnel, EventDispatcher notifyThis, long clientId )
+            I2PTunnel tunnel, EventDispatcher notifyThis, long clientId)
             throws IllegalArgumentException {
         super(localPort, l, sktMgr, tunnel, notifyThis, clientId);
         // force connect delay and bulk profile
@@ -660,7 +660,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      */
     private void cleanNonces() {
         long now = _context.clock().now();
-        for (Iterator<NonceInfo> iter = _nonces.values().iterator(); iter.hasNext(); ) {
+        for (Iterator<NonceInfo> iter = _nonces.values().iterator(); iter.hasNext();) {
             NonceInfo info = iter.next();
             if (info.getExpires() <= now) {iter.remove();}
         }

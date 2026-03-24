@@ -52,7 +52,7 @@ public abstract class Encoding {
     * @return the encoded string, SMTP-safe
     * @throws EncodingException if encoding fails
     */
-    public abstract String encode( byte in[] ) throws EncodingException;
+    public abstract String encode(byte in[]) throws EncodingException;
 
    /**
     * Encode a (UTF-8) String to a ASCII or ISO-8859-1 String.

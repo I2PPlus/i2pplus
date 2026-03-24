@@ -919,7 +919,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         Arrays.fill(d_ba, (byte) 0);
         _handshakeState.destroy();
         if (_createdSentCount == 1)
-            _rtt = (int) ( _context.clock().now() - _lastSend );
+            _rtt = (int) (_context.clock().now() - _lastSend);
         _pstate = new PeerState2(_context, _transport, _aliceSocketAddress,
                                  _receivedConfirmedIdentity.calculateHash(),
                                  true, _rtt, sender, rcvr,

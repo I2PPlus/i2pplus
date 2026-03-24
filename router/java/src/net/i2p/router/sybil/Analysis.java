@@ -826,7 +826,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
             int i3 = i & 0xff;
             String reason = "Same IP with <a href=\"/netdb?ip=" +
                             i0 + '.' + i1 + '.' + i2 + '.' + i3 + "&amp; sybil\">" +
-                            (count - 1) + " other" + (( count > 2) ? "s" : "") + "</a>";
+                            (count - 1) + " other" + ((count > 2) ? "s" : "") + "</a>";
             for (RouterInfo info : ris) {
                 byte[] ip = getIP(info);
                 if (ip == null)
@@ -880,7 +880,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
             int i2 = i & 0xff;
             String reason = "Same IPv4 /24 with <a href=\"/netdb?ip=" +
                             i0 + '.' + i1 + '.' + i2 + ".0/24&amp; sybil\">" +
-                            (count - 1) + " other" + (( count > 2) ? "s" : "") + "</a>";
+                            (count - 1) + " other" + ((count > 2) ? "s" : "") + "</a>";
             for (RouterInfo info : ris) {
                 byte[] ip = getIP(info);
                 if (ip == null)
@@ -936,7 +936,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
             int i1 = i & 0xff;
             String reason = "Same IPv4 /16 with <a href=\"/netdb?ip=" +
                             i0 + '.' + i1 + ".0.0/16&amp; sybil\">" +
-                            (count - 1) + " other" + (( count > 2) ? "s" : "") + "</a>";
+                            (count - 1) + " other" + ((count > 2) ? "s" : "") + "</a>";
             for (RouterInfo info : ris) {
                 byte[] ip = getIP(info);
                 if (ip == null)
@@ -994,7 +994,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                             Integer.toString((i4 << 8) | i5, 16) + ':' +
                             Integer.toString((i6 << 8) | i7, 16) +
                             "::&amp; sybil\">" +
-                            (count - 1) + " other" + (( count > 2) ? "s" : "") + "</a>";
+                            (count - 1) + " other" + ((count > 2) ? "s" : "") + "</a>";
             for (RouterInfo info : ris) {
                 byte[] ip = getIPv6(info);
                 if (ip == null)
@@ -1061,7 +1061,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                             Integer.toString((i2 << 8) | i3, 16) + ':' +
                             Integer.toString((i4 << 8) | i5, 16) +
                             "::&amp; sybil\">" +
-                            (count - 1) + " other" + (( count > 2) ? "s" : "") + "</a>";
+                            (count - 1) + " other" + ((count > 2) ? "s" : "") + "</a>";
             for (RouterInfo info : ris) {
                 byte[] ip = getIPv6(info);
                 if (ip == null)
@@ -1122,11 +1122,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                         if (fkc.verifyOurFamily(info)) {
                             point = POINTS_OUR_FAMILY;
                             reason = "Our family \"" + ss + "\" with <a href=\"/netdb?fam=" + ss + "&amp; sybil\">" + (count - 1) +
-                                     " other" + (( count > 2) ? "s" : "") + "</a>";
+                                     " other" + ((count > 2) ? "s" : "") + "</a>";
                         } else {
                             point = POINTS_BAD_OUR_FAMILY;
                             reason = "Spoofed our family \"" + ss + "\" with <a href=\"/netdb?fam=" + ss + "&amp; sybil\">" + (count - 1) +
-                                     " other" + (( count > 2) ? "s" : "") + "</a>";
+                                     " other" + ((count > 2) ? "s" : "") + "</a>";
                         }
                     } else {
                         FamilyKeyCrypto.Result r = fkc.verify(info);
@@ -1143,7 +1143,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                                 point = POINTS_FAMILY_VERIFIED;
                                 if (count > 1)
                                     reason = "In verified family \"" + ss + "\" with <a href=\"/netdb?fam=" + ss + "&amp; sybil\">" + (count - 1) +
-                                             " other" + (( count > 2) ? "s" : "") + "</a>";
+                                             " other" + ((count > 2) ? "s" : "") + "</a>";
                                 else
                                     reason = "In verified family \"" + ss + '"';
                                 break;
@@ -1158,7 +1158,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                                 point = POINTS_FAMILY;
                                 if (count > 1)
                                     reason = "In unverified family \"" + ss + "\" with <a href=\"/netdb?fam=" + ss + "&amp; sybil\">" + (count - 1) +
-                                             " other" + (( count > 2) ? "s" : "") + "</a>";
+                                             " other" + ((count > 2) ? "s" : "") + "</a>";
                                 else
                                     reason = "In unverified family \"" + ss + '"';
                                 break;
@@ -1167,7 +1167,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                 } else if (count > 1) {
                     point = POINTS_FAMILY;
                     reason = "In unverified family \"" + ss + "\" with <a href=\"/netdb?fam=" + ss + "&amp; sybil\">" + (count - 1) +
-                             " other" + (( count > 2) ? "s" : "") + "</a>";
+                             " other" + ((count > 2) ? "s" : "") + "</a>";
                 } else {
                     point = POINTS_FAMILY;
                     reason = "In unverified family \"" + ss + '"';

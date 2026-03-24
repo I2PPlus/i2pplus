@@ -116,7 +116,7 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
 
     @Override
     public boolean equals(Object object) {
-        if ( (object != null) && (object instanceof DatabaseSearchReplyMessage) ) {
+        if ((object != null) && (object instanceof DatabaseSearchReplyMessage)) {
             DatabaseSearchReplyMessage msg = (DatabaseSearchReplyMessage)object;
             return DataHelper.eq(_key,msg._key) &&
             DataHelper.eq(_from,msg._from) &&

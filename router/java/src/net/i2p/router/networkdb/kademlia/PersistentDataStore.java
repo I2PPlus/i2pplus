@@ -151,7 +151,7 @@ public class PersistentDataStore extends TransientDataStore {
      */
     @Override
     public boolean put(Hash key, DatabaseEntry data, boolean persist) {
-        if ( (data == null) || (key == null) ) {return false;}
+        if ((data == null) || (key == null)) {return false;}
         boolean rv = super.put(key, data);
         // Don't bother writing LeaseSets to disk
         if (rv && persist && data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {_writer.queue(key, data);}
@@ -221,7 +221,7 @@ public class PersistentDataStore extends TransientDataStore {
 
             if (_keysToRemove.isEmpty()) {return;}
             int toRemove = 0;
-            for (Iterator<Hash> iter = _keysToRemove.iterator(); iter.hasNext(); ) {
+            for (Iterator<Hash> iter = _keysToRemove.iterator(); iter.hasNext();) {
                 Hash key = iter.next();
                 iter.remove();
                 toRemove++;

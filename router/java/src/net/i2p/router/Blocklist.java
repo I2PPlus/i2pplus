@@ -693,7 +693,7 @@ public class Blocklist {
      *  @return the number of non-comment, non-blank lines
      */
     private int getSize(File blFile) {
-        if ( (!blFile.exists()) || (blFile.length() <= 0) ) return 0;
+        if ((!blFile.exists()) || (blFile.length() <= 0)) return 0;
         int lines = 0;
         BufferedReader br = null;
         try {
@@ -724,7 +724,7 @@ public class Blocklist {
     private int removeOverlap(long blist[], int count) {
         if (count <= 0) {return 0;}
         int lines = 0;
-        for (int i = 0; i < count - 1; ) {
+        for (int i = 0; i < count - 1;) {
             int removed = 0;
             int to = getTo(blist[i]);
             for (int next = i + 1; next < count; next++) {
@@ -1224,7 +1224,7 @@ public class Blocklist {
      * So we also stagger these jobs.
      *
      */
-    private void banlistRouter( Hash peer, String reason, String reasonCode, long duration) {
+    private void banlistRouter(Hash peer, String reason, String reasonCode, long duration) {
         if (duration > 0) {
             if (_banLogger != null) _banLogger.logBan(peer, _context, reason, expireInterval());
             _context.banlist().banlistRouter(peer, reason, reasonCode, null, System.currentTimeMillis() + expireInterval());

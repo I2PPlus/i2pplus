@@ -150,7 +150,7 @@ public class MessageHistory {
             buf.append("(next [").append(getName(nextPeer)).append("]) ");
         if (outTunnel != null)
             buf.append("via [").append(outTunnel.getTunnelId()).append("] ");
-        if ( (replyTunnel != null) && (replyThrough != null) )
+        if ((replyTunnel != null) && (replyThrough != null))
             buf.append("who forwards it through [").append(replyTunnel.getTunnelId()).append("] on [").append(getName(replyThrough)).append("]");
         addEntry(buf.toString());
     }
@@ -271,7 +271,7 @@ public class MessageHistory {
      */
     public void tunnelRejected(Hash peer, TunnelId tunnel, Hash replyThrough, String reason) {
         if (!_doLog) return;
-        if ( (tunnel == null) || (peer == null) ) return;
+        if ((tunnel == null) || (peer == null)) return;
         StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append(getPrefix());
         buf.append("tunnel [").append(tunnel.getTunnelId()).append("] was rejected by [");
@@ -298,7 +298,7 @@ public class MessageHistory {
      */
     public void tunnelRequestTimedOut(Hash peer, TunnelId tunnel) {
         if (!_doLog) return;
-        if ( (tunnel == null) || (peer == null) ) return;
+        if ((tunnel == null) || (peer == null)) return;
         StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append(getPrefix());
         buf.append("tunnel [").append(tunnel.getTunnelId()).append("] timed out on [");
@@ -578,7 +578,7 @@ public class MessageHistory {
     private final static String getName(Hash router) {
         if (router == null) return "UNKNOWN";
         String str = router.toBase64();
-        if ( (str == null) || (str.length() < 6) ) return "INVALID";
+        if ((str == null) || (str.length() < 6)) return "INVALID";
         return str.substring(0, 6);
     }
 

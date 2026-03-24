@@ -905,7 +905,7 @@ public class TransportManager implements TransportEventListener {
 
     TransportBid getBid(OutNetMessage msg) {
         List<TransportBid> bids = getBids(msg);
-        if ( (bids == null) || (bids.isEmpty()) )
+        if ((bids == null) || (bids.isEmpty()))
             return null;
         else
             return bids.get(0);
@@ -967,7 +967,7 @@ public class TransportManager implements TransportEventListener {
                 if (bid.getLatencyMs() == TransportBid.TRANSIENT_FAIL)
                     // this keeps GetBids() from banlisting for "no common transports"
                     msg.transportFailed(t.getStyle());
-                else if ( (rv == null) || (rv.getLatencyMs() > bid.getLatencyMs()) )
+                else if ((rv == null) || (rv.getLatencyMs() > bid.getLatencyMs()))
                     rv = bid;
                 if (_log.shouldDebug() && rv != null)
                     _log.debug("Transport [" + t.getStyle() + "] Bid: " + bid + " currently winning? " + (rv == bid)

@@ -125,17 +125,17 @@ public class CPUID {
     static String getCPUVendorID() {
         CPUIDResult c = doCPUID(0);
         StringBuilder sb= new StringBuilder(13);
-        sb.append((char)( c.EBX        & 0xFF));
+        sb.append((char)(c.EBX        & 0xFF));
         sb.append((char)((c.EBX >> 8)  & 0xFF));
         sb.append((char)((c.EBX >> 16) & 0xFF));
         sb.append((char)((c.EBX >> 24) & 0xFF));
 
-        sb.append((char)( c.EDX        & 0xFF));
+        sb.append((char)(c.EDX        & 0xFF));
         sb.append((char)((c.EDX >> 8)  & 0xFF));
         sb.append((char)((c.EDX >> 16) & 0xFF));
         sb.append((char)((c.EDX >> 24) & 0xFF));
 
-        sb.append((char)( c.ECX        & 0xFF));
+        sb.append((char)(c.ECX        & 0xFF));
         sb.append((char)((c.ECX >> 8)  & 0xFF));
         sb.append((char)((c.ECX >> 16) & 0xFF));
         sb.append((char)((c.ECX >> 24) & 0xFF));

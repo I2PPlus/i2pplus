@@ -42,7 +42,7 @@ class SchedulerConnectedBulk extends SchedulerImpl {
                      (con.getHighestAckedThrough() >= 0) &&
                      (con.getOptions().getProfile() == ConnectionOptions.PROFILE_BULK) &&
                      (!con.getResetReceived()) &&
-                     ( (con.getCloseSentOn() <= 0) || (con.getCloseReceivedOn() <= 0) );
+                     ((con.getCloseSentOn() <= 0) || (con.getCloseReceivedOn() <= 0));
         if (!ok) {
             //if (_log.shouldDebug())
             //    _log.debug("con: " + con + " closeSentOn: " + con.getCloseSentOn()

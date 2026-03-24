@@ -160,7 +160,7 @@ class ConnectionHandler {
             }
 
             Packet syn = null;
-            while ( _active && syn == null) {
+            while (_active && syn == null) {
                 if (_log.shouldDebug()) {
                     _log.debug("Accept("+ timeoutMs+"): active=" + _active + " queue: "+ _synQueue.size());
                 }

@@ -465,7 +465,7 @@ class FloodfillPeerSelector extends PeerSelector {
             // Only add in "good" floodfills here...
             // Let's say published in last 3h and no failed sends in last 30m
             // (Forever banlisted ones are excluded in add() above)
-            for (Iterator<Hash> iter = new RandomIterator<Hash>(_floodfillMatches); (found < howMany) && iter.hasNext(); ) {
+            for (Iterator<Hash> iter = new RandomIterator<Hash>(_floodfillMatches); (found < howMany) && iter.hasNext();) {
                 Hash entry = iter.next();
                 RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(entry);
                 if (info != null && now - info.getPublished() > 3*60*60*1000) {

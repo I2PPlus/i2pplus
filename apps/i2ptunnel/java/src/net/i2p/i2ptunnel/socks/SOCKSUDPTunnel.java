@@ -25,10 +25,10 @@ import net.i2p.i2ptunnel.udpTunnel.I2PTunnelUDPClientBase;
  * A Datagram Tunnel that can have multiple bidirectional ports on the UDP side.
  *
  * TX:
- *   (multiple SOCKSUDPPorts -&gt; ) I2PSink
+ *   (multiple SOCKSUDPPorts -&gt;) I2PSink
  *
  * RX:
- *   (SOCKSUDPWrapper in multiple SOCKSUDPPorts &lt;- ) MultiSink &lt;- I2PSource
+ *   (SOCKSUDPWrapper in multiple SOCKSUDPPorts &lt;-) MultiSink &lt;- I2PSource
  *
  * The replies must be to the same I2CP toPort as the outbound fromPort.
  * If the server does not honor that, the replies will be dropped.

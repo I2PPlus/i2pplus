@@ -58,7 +58,7 @@ public class ConfigNetHandler extends FormHandler {
 
     @Override
     protected void processForm() {
-        if (_saveRequested || ( (_action != null) && (_t("Save changes").equals(_action)) )) {
+        if (_saveRequested || ((_action != null) && (_t("Save changes").equals(_action)))) {
             saveChanges();
         //} else if (_recheckReachabilityRequested) {
         //    recheckReachability();
@@ -306,7 +306,7 @@ public class ConfigNetHandler extends FormHandler {
             }
 
             // UDP Settings
-            if ( (_udpPort != null) && (_udpPort.length() > 0) ) {
+            if ((_udpPort != null) && (_udpPort.length() > 0)) {
                 String oldPort = _context.getProperty(UDPTransport.PROP_INTERNAL_PORT, "unset");
                 if (!oldPort.equals(_udpPort)) {
                     int port = Addresses.getPort(_udpPort);
@@ -488,7 +488,7 @@ public class ConfigNetHandler extends FormHandler {
 
         if (_sharePct != null) {
             String old = _context.router().getConfigSetting(Router.PROP_BANDWIDTH_SHARE_PERCENTAGE);
-            if ( (old == null) || (!old.equals(_sharePct)) ) {
+            if ((old == null) || (!old.equals(_sharePct))) {
                 changes.put(Router.PROP_BANDWIDTH_SHARE_PERCENTAGE, _sharePct);
                 addFormNotice(_t("Updating bandwidth share percentage") + "...", true);
                 updated = true;
@@ -498,7 +498,7 @@ public class ConfigNetHandler extends FormHandler {
         // Since burst is now hidden in the gui, set burst to +10% for 20 seconds (prior to 0.9.33)
         // As of 0.9.33, we set strict bandwidth limits. Specified rate is the burst rate,
         // and we set the standard rate to 50KB or 10% lower (whichever is less).
-        if ( (_inboundRate != null) && (_inboundRate.length() > 0) &&
+        if ((_inboundRate != null) && (_inboundRate.length() > 0) &&
             !_inboundRate.equals(_context.getProperty(FIFOBandwidthRefiller.PROP_INBOUND_BURST_BANDWIDTH,
                                                       Integer.toString(FIFOBandwidthRefiller.DEFAULT_INBOUND_BURST_BANDWIDTH)))) {
             try {
@@ -513,7 +513,7 @@ public class ConfigNetHandler extends FormHandler {
                 addFormError(_t("Invalid bandwidth"));
             }
         }
-        if ( (_outboundRate != null) && (_outboundRate.length() > 0) &&
+        if ((_outboundRate != null) && (_outboundRate.length() > 0) &&
             !_outboundRate.equals(_context.getProperty(FIFOBandwidthRefiller.PROP_OUTBOUND_BURST_BANDWIDTH,
                                                        Integer.toString(FIFOBandwidthRefiller.DEFAULT_OUTBOUND_BURST_BANDWIDTH)))) {
             try {

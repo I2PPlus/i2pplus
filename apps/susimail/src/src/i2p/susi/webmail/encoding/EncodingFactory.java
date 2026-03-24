@@ -44,16 +44,16 @@ public class EncodingFactory {
     static {
         encodings = new HashMap<String, Encoding>();
         // Let's not give the user a chance to break things
-        //String list = Config.getProperty( CONFIG_ENCODING );
+        //String list = Config.getProperty(CONFIG_ENCODING);
         String list = DEFAULT_ENCODINGS;
-        if ( list != null ) {
-            String[] classNames = list.split( "; " );
-            for ( int i = 0; i < classNames.length; i++ ) {
+        if (list != null) {
+            String[] classNames = list.split("; ");
+            for (int i = 0; i < classNames.length; i++) {
                 try {
-                    Class<?> c = Class.forName( classNames[i] );
+                    Class<?> c = Class.forName(classNames[i]);
                     Encoding e = (Encoding) (c.getDeclaredConstructor().newInstance());
-                    encodings.put( e.getName(), e );
-                    //if (_log.shouldDebug()) _log.debug("Registered " + e.getClass().getName() );
+                    encodings.put(e.getName(), e);
+                    //if (_log.shouldDebug()) _log.debug("Registered " + e.getClass().getName());
                 }
                 catch (Exception e) {
                     Log log = I2PAppContext.getGlobalContext().logManager().getLog(EncodingFactory.class);
@@ -70,9 +70,9 @@ public class EncodingFactory {
      *
      * @return Encoder instance
      */
-    public static Encoding getEncoding( String name )
+    public static Encoding getEncoding(String name)
     {
-        return name != null && name.length() > 0 ? encodings.get( name ) : null;
+        return name != null && name.length() > 0 ? encodings.get(name) : null;
     }
     /**
      * Returns list of available encodings;

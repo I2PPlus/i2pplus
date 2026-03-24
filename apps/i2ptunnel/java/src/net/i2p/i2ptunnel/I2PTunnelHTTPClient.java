@@ -927,12 +927,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         }
 
                         if (_log.shouldDebug()) {
-                            _log.debug(getPrefix(requestId) + "Request: " + request );
-                            _log.debug(getPrefix(requestId) + "Request URI: " + requestURI );
-                            _log.debug(getPrefix(requestId) + "New request: " + line );
-                            _log.debug(getPrefix(requestId) + "Host: " + host );
-                            _log.debug(getPrefix(requestId) + "Remote port: " + remotePort );
-                            _log.debug(getPrefix(requestId) + "Destination: " + destination );
+                            _log.debug(getPrefix(requestId) + "Request: " + request);
+                            _log.debug(getPrefix(requestId) + "Request URI: " + requestURI);
+                            _log.debug(getPrefix(requestId) + "New request: " + line);
+                            _log.debug(getPrefix(requestId) + "Host: " + host);
+                            _log.debug(getPrefix(requestId) + "Remote port: " + remotePort);
+                            _log.debug(getPrefix(requestId) + "Destination: " + destination);
                         }
 
                     // end first line processing

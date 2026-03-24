@@ -253,7 +253,7 @@ class EstablishmentManager {
      */
     InboundEstablishState getInboundState(RemoteHostId from) {
         InboundEstablishState state = _inboundStates.get(from);
-            // if ( (state == null) && (_log.shouldDebug()) )
+            // if ((state == null) && (_log.shouldDebug()))
             //     _log.debug("No inbound states for " + from + ", with remaining: " + _inboundStates);
         return state;
     }
@@ -270,7 +270,7 @@ class EstablishmentManager {
                 _log.info("[SSU] Found by claimed address: " + state);
             }
         }
-            // if ( (state == null) && (_log.shouldDebug()) )
+            // if ((state == null) && (_log.shouldDebug()))
             //     _log.debug("No outbound states for " + from + ", with remaining: " + _outboundStates);
         return state;
     }
@@ -2039,7 +2039,7 @@ class EstablishmentManager {
         InboundEstablishState inboundState = null;
         boolean expired = false;
 
-        for (Iterator<InboundEstablishState> iter = _inboundStates.values().iterator(); iter.hasNext(); ) {
+        for (Iterator<InboundEstablishState> iter = _inboundStates.values().iterator(); iter.hasNext();) {
             InboundEstablishState cur = iter.next();
             InboundEstablishState.InboundState istate = cur.getState();
             if (istate == IB_STATE_CONFIRMED_COMPLETELY) {
@@ -2348,7 +2348,7 @@ class EstablishmentManager {
         // expire while we're at it
         long now = _context.clock().now();
         synchronized (_outboundTokens) {
-            for (Iterator<Map.Entry<RemoteHostId, Token>> iter = _outboundTokens.entrySet().iterator(); iter.hasNext(); ) {
+            for (Iterator<Map.Entry<RemoteHostId, Token>> iter = _outboundTokens.entrySet().iterator(); iter.hasNext();) {
                 Map.Entry<RemoteHostId, Token> e = iter.next();
                 if (e.getKey().getIP().length == len || e.getValue().expires < now) {
                     iter.remove();
@@ -2356,7 +2356,7 @@ class EstablishmentManager {
             }
         }
         synchronized (_inboundTokens) {
-            for (Iterator<Map.Entry<RemoteHostId, Token>> iter = _inboundTokens.entrySet().iterator(); iter.hasNext(); ) {
+            for (Iterator<Map.Entry<RemoteHostId, Token>> iter = _inboundTokens.entrySet().iterator(); iter.hasNext();) {
                 Map.Entry<RemoteHostId, Token> e = iter.next();
                 if (e.getKey().getIP().length == len || e.getValue().expires < now)
                     iter.remove();
@@ -2834,21 +2834,21 @@ class EstablishmentManager {
 
         /** @since 0.9.2 */
         private void doFailsafe(long now) {
-            for (Iterator<OutboundEstablishState> iter = _liveIntroductions.values().iterator(); iter.hasNext(); ) {
+            for (Iterator<OutboundEstablishState> iter = _liveIntroductions.values().iterator(); iter.hasNext();) {
                 OutboundEstablishState state = iter.next();
                 if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME) {
                     iter.remove();
                     if (_log.shouldWarn()) {_log.warn("Failsafe removal of LiveIntroduction: " + state);}
                 }
             }
-            for (Iterator<OutboundEstablishState> iter = _outboundByClaimedAddress.values().iterator(); iter.hasNext(); ) {
+            for (Iterator<OutboundEstablishState> iter = _outboundByClaimedAddress.values().iterator(); iter.hasNext();) {
                 OutboundEstablishState state = iter.next();
                 if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME) {
                     iter.remove();
                     if (_log.shouldWarn()) {_log.warn("Failsafe removal of OutboundByClaimedAddress: " + state);}
                 }
             }
-            for (Iterator<OutboundEstablishState> iter = _outboundByHash.values().iterator(); iter.hasNext(); ) {
+            for (Iterator<OutboundEstablishState> iter = _outboundByHash.values().iterator(); iter.hasNext();) {
                 OutboundEstablishState state = iter.next();
                 if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME) {
                     iter.remove();
@@ -2859,7 +2859,7 @@ class EstablishmentManager {
                 // SSU2 only
                 int count = 0;
                 synchronized (_inboundTokens) {
-                    for (Iterator<Token> iter = _inboundTokens.values().iterator(); iter.hasNext(); ) {
+                    for (Iterator<Token> iter = _inboundTokens.values().iterator(); iter.hasNext();) {
                         Token tok = iter.next();
                         if (tok.getExpiration() < now) {
                             iter.remove();
@@ -2870,7 +2870,7 @@ class EstablishmentManager {
                 if (count > 0 && _log.shouldDebug()) {_log.debug("Expired " + count + " inbound tokens");}
                 count = 0;
                 synchronized (_outboundTokens) {
-                    for (Iterator<Token> iter = _outboundTokens.values().iterator(); iter.hasNext(); ) {
+                    for (Iterator<Token> iter = _outboundTokens.values().iterator(); iter.hasNext();) {
                         Token tok = iter.next();
                         if (tok.getExpiration() < now) {
                             iter.remove();

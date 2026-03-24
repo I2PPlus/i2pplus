@@ -247,13 +247,13 @@ public class RouterThrottleImpl implements RouterThrottle {
         double tunnelTestTimeGrowthFactor = getTunnelTestTimeGrowthFactor();
         Rate tunnelTestTime1m = _context.statManager().getRate("tunnel.testSuccessTime").getRate(RateConstants.ONE_MINUTE);
         Rate tunnelTestTime1h = _context.statManager().getRate("tunnel.testSuccessTime").getRate(RateConstants.ONE_HOUR);
-        if ( (tunnelTestTime1m != null) && (tunnelTestTime1h != null) && (tunnelTestTime1m.getLastEventCount() > 0) ) {
+        if ((tunnelTestTime1m != null) && (tunnelTestTime1h != null) && (tunnelTestTime1m.getLastEventCount() > 0)) {
             double avg1m = tunnelTestTime1m.getAverageValue();
             double avg1h = tunnelTestTime1h.getAvgOrLifetimeAvg();
 
             if (avg1h < 5000) {avg1h = 5000;} // minimum before complaining
 
-            if ( (avg1h > 0) && (avg1m > avg1h * tunnelTestTimeGrowthFactor) ) {
+            if ((avg1h > 0) && (avg1m > avg1h * tunnelTestTimeGrowthFactor)) {
                 double probAccept = (avg1h*tunnelTestTimeGrowthFactor)/avg1m;
                 probAccept = probAccept * probAccept; // square the decelerator for test times
                 int v = _context.random().nextInt(100);

@@ -163,7 +163,7 @@ public class Base32 {
      */
     private static void encodeBytes(byte[] source, StringBuilder out) {
         int usedbits = 0;
-        for (int i = 0; i < source.length; ) {
+        for (int i = 0; i < source.length;) {
             int fivebits;
             if (usedbits < 3) {
                 fivebits = (source[i] >> (3 - usedbits)) & 0x1f;

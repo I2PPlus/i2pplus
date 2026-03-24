@@ -284,7 +284,7 @@ public class PluginStarter implements Runnable {
         Log log = ctx.logManager().getLog(PluginStarter.class);
         boolean changed = false;
         Properties props = pluginProperties();
-        for (Iterator<Map.Entry<Object, Object>> iter = props.entrySet().iterator(); iter.hasNext(); ) {
+        for (Iterator<Map.Entry<Object, Object>> iter = props.entrySet().iterator(); iter.hasNext();) {
             Map.Entry<Object, Object> e = iter.next();
             String name = (String)e.getKey();
             if (name.startsWith(PREFIX) && name.endsWith(ENABLED)) {
@@ -327,7 +327,7 @@ public class PluginStarter implements Runnable {
         }
 
         // Do we need to extract an update?
-        File pluginUpdate = new File(ctx.getConfigDir(), PLUGIN_DIR + '/' + appName + "/app.xpi2p.zip" );
+        File pluginUpdate = new File(ctx.getConfigDir(), PLUGIN_DIR + '/' + appName + "/app.xpi2p.zip");
         if (pluginUpdate.exists()) {
             // Compare the start time of the router with the plugin.
             if (ctx.router().getWhenStarted() > pluginUpdate.lastModified()) {
@@ -700,7 +700,7 @@ public class PluginStarter implements Runnable {
 
         boolean deleted = FileUtil.rmdir(pluginDir, false);
         Properties props = pluginProperties();
-        for (Iterator<?> iter = props.keySet().iterator(); iter.hasNext(); ) {
+        for (Iterator<?> iter = props.keySet().iterator(); iter.hasNext();) {
             String name = (String)iter.next();
             if (name.startsWith(PREFIX + appName + '.'))
                 iter.remove();
@@ -781,7 +781,7 @@ public class PluginStarter implements Runnable {
     public static List<String> getPlugins() {
         List<String> rv = getAllPlugins();
         Properties props = pluginProperties();
-        for (Iterator<String> iter = rv.iterator(); iter.hasNext(); ) {
+        for (Iterator<String> iter = rv.iterator(); iter.hasNext();) {
             String app = iter.next();
             if (DELETED.equals(props.getProperty(PREFIX + app + ENABLED)))
                 iter.remove();

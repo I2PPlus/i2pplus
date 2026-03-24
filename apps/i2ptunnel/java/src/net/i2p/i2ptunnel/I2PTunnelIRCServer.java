@@ -324,7 +324,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
         int c;
         int i = 0;
         socket.setReadTimeout(timeout);
-        while ( (c = in.read()) != -1) {
+        while ((c = in.read()) != -1) {
             if (++i > MAX_LINE_LENGTH)
                 throw new RegistrationException("Line too long - max " + MAX_LINE_LENGTH);
             if (c == '\n')

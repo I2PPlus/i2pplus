@@ -51,7 +51,7 @@ public class RouterGenerator {
             String hash = ri.getIdentity().getHash().toBase64();
             if (!hash.startsWith("fwI")) {
                 System.out.print(".");
-                if ( (i % 100) == 0) System.out.println();
+                if ((i % 100) == 0) System.out.println();
                 continue;
             }
 

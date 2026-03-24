@@ -12,7 +12,7 @@
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details ( see the LICENSE file ).
+ * GNU General Public License for more details (see the LICENSE file).
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
@@ -294,7 +294,7 @@ public class MLabRunner {
                         }
                     } finally {
                         if (!completed && listener != null) {
-                            listener.complete( new HashMap<String, Object>());
+                            listener.complete(new HashMap<String, Object>());
                         }
                         _running.set(false);
                     }
@@ -338,14 +338,14 @@ public class MLabRunner {
 
         public void cancel() {
             List<ToolRunListener> copy;
-            synchronized ( this ){
+            synchronized (this){
                 cancelled = true;
                 copy = new ArrayList<ToolRunListener>(listeners);
             }
-            for ( ToolRunListener l: copy ){
+            for (ToolRunListener l: copy){
                 try{
                     l.cancelled();
-                }catch ( Throwable e ){
+                }catch (Throwable e){
                     _log.warn("?", e);
                 }
             }
@@ -360,7 +360,7 @@ public class MLabRunner {
             if (inform) {
                 try{
                     l.cancelled();
-                }catch ( Throwable e ){
+                }catch (Throwable e){
                     _log.warn("?", e);
                 }
             }

@@ -283,7 +283,7 @@ class SAMStreamSession implements SAMMessageSess {
      * @throws I2PException if there's another I2P-related error
      * @throws IOException
      */
-    public boolean connect ( int id, String dest, Properties props ) throws I2PException, ConnectException, NoRouteToHostException, DataFormatException, InterruptedIOException, SAMInvalidDirectionException, IOException {
+    public boolean connect (int id, String dest, Properties props) throws I2PException, ConnectException, NoRouteToHostException, DataFormatException, InterruptedIOException, SAMInvalidDirectionException, IOException {
         if (!canCreate) {
             if (_log.shouldDebug())
                 _log.debug("Trying to create an outgoing connection using a receive-only session");
@@ -311,7 +311,7 @@ class SAMStreamSession implements SAMMessageSess {
 
         createSocketHandler(i2ps, id);
 
-        recv.notifyStreamOutgoingConnection ( id, "OK", null );
+        recv.notifyStreamOutgoingConnection (id, "OK", null);
 
         return true;
     }
@@ -411,7 +411,7 @@ class SAMStreamSession implements SAMMessageSess {
      *
      * @return An id associated to the socket handler
      */
-    protected int createSocketHandler ( I2PSocket s, int id ) {
+    protected int createSocketHandler (I2PSocket s, int id) {
         SAMStreamSessionSocketReader reader;
         StreamSender sender;
         if (id == 0) {
@@ -451,7 +451,7 @@ class SAMStreamSession implements SAMMessageSess {
      * @param id Handler id
      * @return SAM StreamSender handler
      */
-    protected SAMStreamSessionSocketReader getSocketReader ( int id ) {
+    protected SAMStreamSessionSocketReader getSocketReader (int id) {
         synchronized (handlersMap) {
             return handlersMap.get(Integer.valueOf(id));
         }
@@ -468,7 +468,7 @@ class SAMStreamSession implements SAMMessageSess {
      * @param id Handler id
      * @return True if in use
      */
-    protected boolean checkSocketHandlerId ( int id ) {
+    protected boolean checkSocketHandlerId (int id) {
         synchronized (handlersMap) {
             return (!(handlersMap.get(Integer.valueOf(id)) == null));
         }
@@ -479,7 +479,7 @@ class SAMStreamSession implements SAMMessageSess {
      *
      * @param id Handler id to be removed
      */
-    protected void removeSocketHandler ( int id ) {
+    protected void removeSocketHandler (int id) {
         SAMStreamSessionSocketReader reader;
         StreamSender sender;
 
@@ -582,7 +582,7 @@ class SAMStreamSession implements SAMMessageSess {
                     if (_log.shouldDebug())
                         _log.debug("New connection id: " + id);
 
-                    recv.notifyStreamIncomingConnection ( id, i2ps.getPeerDestination() );
+                    recv.notifyStreamIncomingConnection (id, i2ps.getPeerDestination());
                 } catch (I2PException e) {
                     if (_log.shouldDebug())
                         _log.debug("Caught I2PException", e);
@@ -610,10 +610,10 @@ class SAMStreamSession implements SAMMessageSess {
     }
 
 
-    boolean setReceiveLimit ( int id, long limit, boolean nolimit )
+    boolean setReceiveLimit (int id, long limit, boolean nolimit)
     {
         if (_log.shouldDebug())
-            _log.debug ( "Protocol v1 does not support a receive limit for streams" );
+            _log.debug ("Protocol v1 does not support a receive limit for streams");
         return false;
     }
 
@@ -640,7 +640,7 @@ class SAMStreamSession implements SAMMessageSess {
      * @param id Unique id assigned to the handler
      * @throws IOException
          */
-        public SAMStreamSessionSocketReader ( I2PSocket s, int id ) throws IOException {
+        public SAMStreamSessionSocketReader (I2PSocket s, int id) throws IOException {
             i2pSocket = s;
             this.id = id;
         }
@@ -655,8 +655,8 @@ class SAMStreamSession implements SAMMessageSess {
     }
 
     protected SAMStreamSessionSocketReader
-        newSAMStreamSessionSocketReader ( I2PSocket s, int id ) throws IOException {
-        return new SAMv1StreamSessionSocketReader ( s, id );
+        newSAMStreamSessionSocketReader (I2PSocket s, int id) throws IOException {
+        return new SAMv1StreamSessionSocketReader (s, id);
     }
 
     /**
@@ -672,7 +672,7 @@ class SAMStreamSession implements SAMMessageSess {
      * @throws IOException
          */
 
-        public SAMv1StreamSessionSocketReader ( I2PSocket s, int id ) throws IOException {
+        public SAMv1StreamSessionSocketReader (I2PSocket s, int id) throws IOException {
             super(s, id);
             if (_log.shouldDebug())
                 _log.debug("Instantiating new SAM STREAM session socket reader");
@@ -756,7 +756,7 @@ class SAMStreamSession implements SAMMessageSess {
         protected final int _id;
         protected final I2PSocket i2pSocket;
 
-        public StreamSender ( I2PSocket s, int id ) throws IOException {
+        public StreamSender (I2PSocket s, int id) throws IOException {
             _id = id;
             i2pSocket = s;
         }
@@ -768,7 +768,7 @@ class SAMStreamSession implements SAMMessageSess {
      * @param size Count of bytes to send
      * @throws IOException if the client didnt provide enough data
      */
-        public abstract void sendBytes ( InputStream in, int size ) throws IOException;
+        public abstract void sendBytes (InputStream in, int size) throws IOException;
 
 
         /**
@@ -786,8 +786,8 @@ class SAMStreamSession implements SAMMessageSess {
         public abstract void run();
     }
 
-    protected StreamSender newStreamSender ( I2PSocket s, int id ) throws IOException {
-        return new V1StreamSender ( s, id );
+    protected StreamSender newStreamSender (I2PSocket s, int id) throws IOException {
+        return new V1StreamSender (s, id);
     }
 
     private class V1StreamSender extends StreamSender
@@ -798,8 +798,8 @@ class SAMStreamSession implements SAMMessageSess {
         private volatile boolean _stillRunning, _shuttingDownGracefully;
         private final Object runningLock = new Object();
 
-        public V1StreamSender ( I2PSocket s, int id ) throws IOException {
-            super ( s, id );
+        public V1StreamSender (I2PSocket s, int id) throws IOException {
+            super (s, id);
             _data = new ArrayList<ByteArray>(1);
             _cache = ByteCache.getInstance(4, 32*1024);
             _out = s.getOutputStream();

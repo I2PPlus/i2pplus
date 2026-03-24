@@ -43,7 +43,7 @@ public class GarlicMessage extends FastI2NPMessageImpl {
 
         long len = DataHelper.fromLong(data, curIndex, 4);
         curIndex += 4;
-        if ( (len <= 0) || (len > MAX_SIZE) ) throw new I2NPMessageException("size="+len);
+        if ((len <= 0) || (len > MAX_SIZE)) throw new I2NPMessageException("size="+len);
         _data = new byte[(int)len];
         System.arraycopy(data, curIndex, _data, 0, (int)len);
     }
@@ -70,7 +70,7 @@ public class GarlicMessage extends FastI2NPMessageImpl {
 
     @Override
     public boolean equals(Object object) {
-        if ( (object != null) && (object instanceof GarlicMessage) ) {
+        if ((object != null) && (object instanceof GarlicMessage)) {
             GarlicMessage msg = (GarlicMessage)object;
             return DataHelper.eq(getData(),msg.getData());
         } else {

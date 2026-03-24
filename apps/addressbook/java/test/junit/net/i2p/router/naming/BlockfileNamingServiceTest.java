@@ -40,7 +40,7 @@ public class BlockfileNamingServiceTest extends TestCase {
         is = getClass().getResourceAsStream("/hosts.txt");
         byte [] b = new byte[8196];
         int read = 0;
-        while ((read = is.read(b)) > 0 )
+        while ((read = is.read(b)) > 0)
             os.write(b,0,read);
         os.flush(); os.close();
         _bns = new BlockfileNamingService(ctx);

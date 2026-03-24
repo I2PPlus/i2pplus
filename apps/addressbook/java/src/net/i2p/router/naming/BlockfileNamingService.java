@@ -256,7 +256,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 try {
                     in = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"), 16*1024);
                     String line = null;
-                    while ( (line = in.readLine()) != null) {
+                    while ((line = in.readLine()) != null) {
                         if (line.startsWith("#"))
                             continue;
                         int split = line.indexOf('=');
@@ -1173,7 +1173,7 @@ public class BlockfileNamingService extends DummyNamingService {
                     // don't bother validating here
                     iter.next();
                 }
-                for (int i = 0; i < limit && iter.hasNext(); ) {
+                for (int i = 0; i < limit && iter.hasNext();) {
                     String key = iter.nextKey();
                     if (startsWith != null) {
                         if (startsWith.equals("[0-9]")) {
@@ -1267,7 +1267,7 @@ public class BlockfileNamingService extends DummyNamingService {
                     // don't bother validating here
                     iter.next();
                 }
-                for (int i = 0; i < limit && iter.hasNext(); ) {
+                for (int i = 0; i < limit && iter.hasNext();) {
                     String key = iter.nextKey();
                     if (startsWith != null) {
                         if (startsWith.equals("[0-9]")) {
@@ -1493,7 +1493,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 for (int i = 0; i < skip && iter.hasNext(); i++) {
                     iter.next();
                 }
-                for (int i = 0; i < limit && iter.hasNext(); ) {
+                for (int i = 0; i < limit && iter.hasNext();) {
                     String key = iter.nextKey();
                     if (startsWith != null) {
                         if (startsWith.equals("[0-9]")) {
@@ -1806,7 +1806,7 @@ public class BlockfileNamingService extends DummyNamingService {
                         continue;
                     }
                     int i = 0;
-                    for (SkipIterator iter = sl.iterator(); iter.hasNext(); ) {
+                    for (SkipIterator iter = sl.iterator(); iter.hasNext();) {
                          String key = (String) iter.nextKey();
                          DestEntry de = (DestEntry) iter.next();
                          if (!validate(key, de, list))

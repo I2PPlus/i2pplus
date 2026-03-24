@@ -1268,7 +1268,7 @@ public class NTCPTransport extends TransportImpl {
         final long now = _context.clock().now();
         final long timeout = getEstablishTimeout();
 
-        for (Iterator<NTCPConnection> iter = _establishing.iterator(); iter.hasNext(); ) {
+        for (Iterator<NTCPConnection> iter = _establishing.iterator(); iter.hasNext();) {
             NTCPConnection con = iter.next();
             if (con.isClosed() || con.isEstablished()) {iter.remove();}
             else if (con.getTimeSinceCreated(now) > timeout) {

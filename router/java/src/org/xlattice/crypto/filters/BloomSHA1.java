@@ -80,12 +80,12 @@ public class BloomSHA1 {
      *
      * See KeySelector for important restriction on max m and k
      */
-    public BloomSHA1( int m, int k) {
+    public BloomSHA1(int m, int k) {
         // XXX need to devise more reasonable set of checks
-        //if ( m < 2 || m > 20) {
+        //if (m < 2 || m > 20) {
         //    throw new IllegalArgumentException("m out of range");
         //}
-        //if ( k < 1 || ( k * m > 160 )) {
+        //if (k < 1 || (k * m > 160)) {
         //    throw new IllegalArgumentException(
         //        "too many hash functions for filter size");
         //}
@@ -233,7 +233,7 @@ public class BloomSHA1 {
         int[] wordOffset = acquire();
         ks.getOffsets(b, offset, len, bitOffset, wordOffset);
         for (int i = 0; i < k; i++) {
-            if (! ((filter[wordOffset[i]] & (1 << bitOffset[i])) != 0) ) {
+            if (! ((filter[wordOffset[i]] & (1 << bitOffset[i])) != 0)) {
                 buf.offer(bitOffset);
                 buf.offer(wordOffset);
                 return false;
@@ -324,7 +324,7 @@ public class BloomSHA1 {
      */
     public boolean locked_member(FilterKey fk) {
         for (int i = 0; i < k; i++) {
-            if (! ((filter[fk.wordOffset[i]] & (1 << fk.bitOffset[i])) != 0) )
+            if (! ((filter[fk.wordOffset[i]] & (1 << fk.bitOffset[i])) != 0))
                 return false;
         }
         return true;

@@ -47,7 +47,7 @@ class SingleSearchJob extends FloodOnlySearchJob {
         DatabaseLookupMessage dlm = new DatabaseLookupMessage(getContext(), true);
         TunnelInfo replyTunnel = getContext().tunnelManager().selectInboundExploratoryTunnel(_to);
         TunnelInfo outTunnel = getContext().tunnelManager().selectOutboundExploratoryTunnel(_to);
-        if ( (replyTunnel == null) || (outTunnel == null) ) {
+        if ((replyTunnel == null) || (outTunnel == null)) {
             failed();
             return;
         }

@@ -21,7 +21,7 @@ class SessionRecord {
     private ThreadGroup m_threadgroup;
     private final SAMv3Handler m_handler;
 
-    public SessionRecord( String dest, Properties props, SAMv3Handler handler )
+    public SessionRecord(String dest, Properties props, SAMv3Handler handler)
     {
         m_dest = dest;
         m_props = new Properties();
@@ -29,7 +29,7 @@ class SessionRecord {
         m_handler = handler;
     }
 
-    public SessionRecord( SessionRecord in )
+    public SessionRecord(SessionRecord in)
     {
         m_dest = in.getDest();
         m_props = in.getProps();

@@ -41,7 +41,7 @@ class UDPFlooder implements Runnable {
     public void removePeer(PeerState peer) {
         synchronized (_peers) {
             while (_peers.remove(peer)) // can this be written better?
-    ; // loops until its empty
+   ; // loops until its empty
             _peers.notifyAll();
         }
     }

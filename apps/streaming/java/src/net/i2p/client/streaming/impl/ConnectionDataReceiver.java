@@ -238,7 +238,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         // throughout network?
         //
         if (_connection.getOutputStream().getClosed() &&
-            ((size > 0) || (_connection.getUnackedPacketsSent() <= 0) || (packet.getSequenceNum() > 0)) ) {
+            ((size > 0) || (_connection.getUnackedPacketsSent() <= 0) || (packet.getSequenceNum() > 0))) {
             packet.setFlag(Packet.FLAG_CLOSE);
             _connection.notifyCloseSent();
         }

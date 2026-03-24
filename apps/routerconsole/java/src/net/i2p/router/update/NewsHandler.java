@@ -133,8 +133,8 @@ public class NewsHandler extends UpdateHandler implements Checker {
         if (get.fetch()) {
             int status = get.getStatusCode();
             if (status == 200) {
-                SU3File.main(new String[] {"showversion", path} );
-                SU3File.main(new String[] {"extract", "-x", path} );
+                SU3File.main(new String[] {"showversion", path});
+                SU3File.main(new String[] {"extract", "-x", path});
             } else {System.out.println("Failed to fetch -> Status " + status + " for " + url);}
         } else {System.out.println("Failed to fetch " + url);}
     }

@@ -122,7 +122,7 @@ class I2CPMessageProducer {
         for (int i = 0; i < CLIENT_SIDE_OPTIONS.length; i++) {
             props.remove(CLIENT_SIDE_OPTIONS[i]);
         }
-        for (Iterator<Map.Entry<Object, Object>> iter = props.entrySet().iterator(); iter.hasNext(); ) {
+        for (Iterator<Map.Entry<Object, Object>> iter = props.entrySet().iterator(); iter.hasNext();) {
             // Long strings MUST be removed, even in router context,
             // as the session config properties must be serialized to be signed.
             // fixme, bytes could still be over 255 (unlikely)

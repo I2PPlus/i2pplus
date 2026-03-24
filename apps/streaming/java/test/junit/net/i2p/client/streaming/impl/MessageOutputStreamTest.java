@@ -38,7 +38,7 @@ public class MessageOutputStreamTest extends TestCase {
                 "read does not match (first off = " + firstOff + "): \n"
                         + Base64.encode(buf) + "\n"
                         + Base64.encode(read)
-            ,
+           ,
                         firstOff < 0);
     }
 

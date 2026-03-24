@@ -110,7 +110,7 @@ public class Clock implements Timestamper.UpdateListener {
 
             // only allow substantial modifications before the first 10 minutes
             if (_alreadyChanged && (System.currentTimeMillis() - _startedOn > 10 * 60 * 1000)) {
-                if ( (delta > MAX_LIVE_OFFSET) || (delta < 0 - MAX_LIVE_OFFSET) ) {
+                if ((delta > MAX_LIVE_OFFSET) || (delta < 0 - MAX_LIVE_OFFSET)) {
                     Log log = getLog();
                     if (log.shouldWarn())
                         log.warn("The clock has already been updated, but you want to change it by "

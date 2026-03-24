@@ -179,7 +179,7 @@ public class PortMapper {
     public void unregister(String service, int port) {
         if (service.equals(SVC_EEPSITE) || service.equals(SVC_HTTPS_EEPSITE)) {
             String end = ":" + port + '/';
-            for (Iterator<String> iter = _eepsites.iterator(); iter.hasNext(); ) {
+            for (Iterator<String> iter = _eepsites.iterator(); iter.hasNext();) {
                 if (iter.next().endsWith(end))
                      iter.remove();
             }

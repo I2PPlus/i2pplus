@@ -45,7 +45,7 @@ public class BandwidthLimitedOutputStream extends FilterOutputStream {
         // only a single byte, no need to loop
         req.waitForNextAllocation();
         long waited = _context.clock().now() - before;
-        if ( (waited > 1000) && (_log.shouldWarn()) )
+        if ((waited > 1000) && (_log.shouldWarn()))
             _log.warn("Waiting to write a byte took too long [" + waited + "ms");
         out.write(val);
     }

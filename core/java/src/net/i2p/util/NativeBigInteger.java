@@ -1288,7 +1288,7 @@ public class NativeBigInteger extends BigInteger {
         try {
             in = new BufferedReader(new InputStreamReader(new FileInputStream("/proc/cpuinfo"), "ISO-8859-1"), 4096);
             String line = null;
-            while ( (line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null) {
                 String[] parts = DataHelper.split(line, ":", 2);
                 if (parts.length < 2)
                     continue;

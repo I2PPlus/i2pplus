@@ -722,7 +722,7 @@ public class Reseeder {
                 int fetched = 0;
                 int errors = 0;
                 for (Iterator<String> iter = urlList.iterator();
-                     iter.hasNext() && fetched < 250 && System.currentTimeMillis() < timeLimit; ) {
+                     iter.hasNext() && fetched < 250 && System.currentTimeMillis() < timeLimit;) {
                     String routerInfoName = iter.next();
                     try {
                         _checker.setStatus(_t("Reseeding: fetching router info from seed URL ({0} successful, {1} errors).", fetched, errors));
@@ -928,7 +928,7 @@ public class Reseeder {
                 if (!netDbDir.exists()) {netDbDir.mkdirs();}
 
                 // 1000 max from one reseed file
-                for (Iterator<File> iter = fList.iterator(); iter.hasNext() && fetched < 1000; ) {
+                for (Iterator<File> iter = fList.iterator(); iter.hasNext() && fetched < 1000;) {
                     File f = iter.next();
                     String name = f.getName();
                     if (name.length() != ROUTERINFO_PREFIX.length() + 44 + ROUTERINFO_SUFFIX.length() ||

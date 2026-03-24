@@ -111,7 +111,7 @@ public class SingleFileNamingService extends NamingService {
         try {
             in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16*1024);
             String line = null;
-            while ( (line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null) {
                 if (line.startsWith("#"))
                     continue;
                 if (line.indexOf('#') > 0)  // trim off any end of line comment
@@ -149,7 +149,7 @@ public class SingleFileNamingService extends NamingService {
             in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16*1024);
             String line = null;
             String search = host + '=';
-            while ( (line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null) {
                 if (!line.startsWith(search))
                     continue;
                 if (line.indexOf('#') > 0)  // trim off any end of line comment
@@ -187,7 +187,7 @@ public class SingleFileNamingService extends NamingService {
                 in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16*1024);
                 String line = null;
                 String search = hostname + '=';
-                while ( (line = in.readLine()) != null) {
+                while ((line = in.readLine()) != null) {
                     if (line.startsWith(search))
                         continue;
                     out.write(line);
@@ -315,7 +315,7 @@ public class SingleFileNamingService extends NamingService {
             String line = null;
             String search = hostname + '=';
             boolean success = false;
-            while ( (line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null) {
                 if (line.startsWith(search)) {
                     success = true;
                     continue;
@@ -370,7 +370,7 @@ public class SingleFileNamingService extends NamingService {
             in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16*1024);
             String line = null;
             Map<String, Destination> rv = new HashMap<String, Destination>();
-            while ( (line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null) {
                 if (line.length() <= 0)
                     continue;
                 if (startsWith != null) {
@@ -438,7 +438,7 @@ public class SingleFileNamingService extends NamingService {
             in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16*1024);
             String line = null;
             Map<String, String> rv = new HashMap<String, String>();
-            while ( (line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null) {
                 if (line.length() <= 0)
                     continue;
                 if (startsWith != null) {
@@ -498,7 +498,7 @@ public class SingleFileNamingService extends NamingService {
         try {
             in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16*1024);
             String line = null;
-            while ( (line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null) {
                 out.write(line);
                 out.write(nl);
             }
@@ -521,7 +521,7 @@ public class SingleFileNamingService extends NamingService {
             in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16*1024);
             String line = null;
             Set<String> rv = new HashSet<String>();
-            while ( (line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null) {
                 if (line.length() <= 0)
                     continue;
                 if (line.startsWith("#"))
@@ -557,7 +557,7 @@ public class SingleFileNamingService extends NamingService {
             in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16*1024);
             String line = null;
             int rv = 0;
-            while ( (line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null) {
                 if (line.startsWith("#") || line.length() <= 0)
                     continue;
                 rv++;

@@ -424,7 +424,7 @@ class Connection {
                     // if remaining < 3, and every 8 minimum.
                     (remaining < 3) ||
                     (remaining < (windowSize + 2) / 3) /* ||
-                    (packet.getSequenceNum() % 8 == 0) */ ) {
+                    (packet.getSequenceNum() % 8 == 0) */) {
                     packet.setOptionalDelay(0);
                     packet.setFlag(Packet.FLAG_DELAY_REQUESTED);
                     //if (_log.shouldDebug())
@@ -502,7 +502,7 @@ class Connection {
         boolean anyLeft = false;
         synchronized (_outboundPackets) {
             if (!_outboundPackets.isEmpty()) {  // short circuit iterator
-                for (Iterator<Map.Entry<Long, PacketLocal>> iter = _outboundPackets.entrySet().iterator(); iter.hasNext(); ) {
+                for (Iterator<Map.Entry<Long, PacketLocal>> iter = _outboundPackets.entrySet().iterator(); iter.hasNext();) {
                     Map.Entry<Long, PacketLocal> e = iter.next();
                     long id = e.getKey().longValue();
                     if (id <= ackThrough) {
@@ -1448,7 +1448,7 @@ class Connection {
                     if (_log.shouldDebug()) {
                         _log.debug(Connection.this + " cutting SlowStartThreshold and Window");
                     }
-                    _ssthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2 );
+                    _ssthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2);
                     _ssthresh = Math.min(ConnectionPacketHandler.MAX_SLOW_START_WINDOW, _ssthresh);
                     _options.setWindowSize(1);
                 } else if (_log.shouldDebug()) {

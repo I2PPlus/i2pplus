@@ -786,7 +786,7 @@ class PeerState implements DataLoader {
             Request deletedRequest = null;
             // for this piece only
             boolean haveMoreRequests = false;
-            for (Iterator<Request> iter = outstandingRequests.iterator(); iter.hasNext(); ) {
+            for (Iterator<Request> iter = outstandingRequests.iterator(); iter.hasNext();) {
                 Request req = iter.next();
                 if (req.getPiece() == piece) {
                     if (req.off == begin && req.len == length) {

@@ -88,7 +88,7 @@ public class DataMessage extends FastI2NPMessageImpl {
 
     @Override
     public boolean equals(Object object) {
-        if ( (object != null) && (object instanceof DataMessage) ) {
+        if ((object != null) && (object instanceof DataMessage)) {
             DataMessage msg = (DataMessage)object;
             return DataHelper.eq(_data, msg._data);
         } else {

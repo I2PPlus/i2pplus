@@ -1159,7 +1159,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             }
 
             // Now set the new priorities and remove newly unwanted pieces
-            for (Iterator<Piece> iter = wantedPieces.iterator(); iter.hasNext(); ) {
+            for (Iterator<Piece> iter = wantedPieces.iterator(); iter.hasNext();) {
                 Piece p = iter.next();
                 int priority = pri[p.getId()];
                 if (priority >= 0) {
@@ -1497,7 +1497,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         synchronized (wantedPieces) {
             // sorts by preference, highest first
             Collections.sort(partialPieces);
-            for (Iterator<PartialPiece> iter = partialPieces.iterator(); iter.hasNext(); ) {
+            for (Iterator<PartialPiece> iter = partialPieces.iterator(); iter.hasNext();) {
                 PartialPiece pp = iter.next();
                 int savedPiece = pp.getPiece();
                 if (havePieces.get(savedPiece)) {
@@ -1620,7 +1620,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      */
     private void removePartialPiece(int piece) {
         synchronized (wantedPieces) {
-            for (Iterator<PartialPiece> iter = partialPieces.iterator(); iter.hasNext(); ) {
+            for (Iterator<PartialPiece> iter = partialPieces.iterator(); iter.hasNext();) {
                 PartialPiece pp = iter.next();
                 if (pp.getPiece() == piece) {
                     iter.remove();

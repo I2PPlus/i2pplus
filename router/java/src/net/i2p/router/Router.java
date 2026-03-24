@@ -851,7 +851,7 @@ public class Router implements RouterClock.ClockShiftListener {
             log = _log;
         }
         if (log != null && oldState != state && state != State.STOPPED && log.shouldWarn()) {
-            log.warn("Router state change from " + oldState + " to " + state /*, new Exception() */ );
+            log.warn("Router state change from " + oldState + " to " + state /*, new Exception() */);
             //for debugging
             _context.logManager().flush();
         }

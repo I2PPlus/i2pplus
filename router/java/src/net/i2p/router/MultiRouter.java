@@ -56,7 +56,7 @@ public class MultiRouter {
     private static I2PAppContext _defaultContext;
 
     public static void main(String args[]) {
-        if ( (args == null) || (args.length < 1) ) {
+        if ((args == null) || (args.length < 1)) {
             usage();
             return;
         }

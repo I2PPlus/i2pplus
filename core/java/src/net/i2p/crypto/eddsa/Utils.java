@@ -93,7 +93,7 @@ public class Utils {
      * @return the hex representation as a string.
      */
     public static String bytesToHex(byte[] raw) {
-        if ( raw == null ) {
+        if (raw == null) {
             return null;
         }
         final StringBuilder hex = new StringBuilder(2 * raw.length);

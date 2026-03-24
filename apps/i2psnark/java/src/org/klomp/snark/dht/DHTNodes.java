@@ -148,7 +148,7 @@ class DHTNodes {
             if (!_isRunning) return;
             long now = _context.clock().now();
             int peerCount = 0;
-            for (Iterator<NodeInfo> iter = DHTNodes.this.values().iterator(); iter.hasNext(); ) {
+            for (Iterator<NodeInfo> iter = DHTNodes.this.values().iterator(); iter.hasNext();) {
                 NodeInfo peer = iter.next();
                 if (peer.lastSeen() < now - _expireTime) {
                     iter.remove();

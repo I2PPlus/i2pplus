@@ -52,8 +52,8 @@ public class TestDatagramTransfer {
             props = SAMUtils.parseParams(line);
             String size = props.getProperty("SIZE");
             String from = props.getProperty("DESTINATION");
-            if ( (value == null) || (size == null) ||
-                 (!from.equals(value)) || (!size.equals("3")) ) {
+            if ((value == null) || (size == null) ||
+                 (!from.equals(value)) || (!size.equals("3"))) {
                 _log.error("Reply of the datagram is incorrect: [" + line + "]");
                 return;
             }

@@ -94,7 +94,7 @@ public class Folder<O extends Object> {
      * @param currentPage The current page to set.
      */
     public synchronized void setCurrentPage(int currentPage) {
-        if ( currentPage >= 1 && currentPage <= pages )
+        if (currentPage >= 1 && currentPage <= pages)
             this.currentPage = currentPage;
     }
 
@@ -123,7 +123,7 @@ public class Folder<O extends Object> {
      * @return Returns the pageSize.
      */
     public synchronized int getPageSize() {
-        return pageSize > 0 ? pageSize : Config.getProperty( PAGESIZE, DEFAULT_PAGESIZE );
+        return pageSize > 0 ? pageSize : Config.getProperty(PAGESIZE, DEFAULT_PAGESIZE);
     }
 
     /**
@@ -132,7 +132,7 @@ public class Folder<O extends Object> {
      * @param pageSize The page size to set.
      */
     public synchronized void setPageSize(int pageSize) {
-        if ( pageSize > 0 )
+        if (pageSize > 0)
             this.pageSize = pageSize;
         update();
     }
@@ -141,11 +141,11 @@ public class Folder<O extends Object> {
      * Recalculates variables.
      */
     private void update() {
-        if ( elements != null ) {
+        if (elements != null) {
             pages = elements.length / getPageSize();
-            if ( pages * getPageSize() < elements.length )
+            if (pages * getPageSize() < elements.length)
                 pages++;
-            if ( currentPage > pages )
+            if (currentPage > pages)
                 currentPage = pages;
         }
         else {
@@ -173,7 +173,7 @@ public class Folder<O extends Object> {
      *
      * @param elements Array of Os.
      */
-    public synchronized void setElements( O[] elements )
+    public synchronized void setElements(O[] elements)
     {
         if (elements.length > 0) {
             this.elements = elements;
@@ -275,11 +275,11 @@ public class Folder<O extends Object> {
     public synchronized Iterator<O> currentPageIterator()
     {
         ArrayList<O> list = new ArrayList<O>();
-        if ( elements != null ) {
+        if (elements != null) {
             int pageSize = getPageSize();
-            int offset = ( currentPage - 1 ) * pageSize;
-            for ( int i = 0; i < pageSize && offset >= 0 && offset < elements.length; i++ ) {
-                list.add( elements[offset] );
+            int offset = (currentPage - 1) * pageSize;
+            for (int i = 0; i < pageSize && offset >= 0 && offset < elements.length; i++) {
+                list.add(elements[offset]);
                 offset++;
             }
         }
@@ -292,7 +292,7 @@ public class Folder<O extends Object> {
     public synchronized void nextPage()
     {
         currentPage++;
-        if ( currentPage > pages )
+        if (currentPage > pages)
             currentPage = pages;
     }
 
@@ -302,7 +302,7 @@ public class Folder<O extends Object> {
     public synchronized void previousPage()
     {
         currentPage--;
-        if ( currentPage < 1 )
+        if (currentPage < 1)
             currentPage = 1;
     }
 
@@ -329,9 +329,9 @@ public class Folder<O extends Object> {
      * @param id ID to identify the Comparator with @link setSortBy()
      * @param sorter a Comparator to sort the Array given by @link setElements()
      */
-    public synchronized void addSorter( String id, Comparator<O> sorter )
+    public synchronized void addSorter(String id, Comparator<O> sorter)
     {
-        this.sorter.put( id, sorter );
+        this.sorter.put(id, sorter);
     }
 
     /**
@@ -348,7 +348,7 @@ public class Folder<O extends Object> {
     public synchronized void setSortBy(String id, SortOrder direction)
     {
         sortingDirection = direction;
-        currentSorter = sorter.get( id );
+        currentSorter = sorter.get(id);
         if (currentSorter != null) {
             if (sortingDirection == SortOrder.UP)
                 currentSorter = Collections.reverseOrder(currentSorter);
@@ -379,14 +379,14 @@ public class Folder<O extends Object> {
      * @return Element on the current page on the given position.
      */
 /****  unused, we now fetch by UIDL, not position
-    public synchronized O getElementAtPosXonCurrentPage( int x )
+    public synchronized O getElementAtPosXonCurrentPage(int x)
     {
         O result = null;
-        if ( elements != null ) {
+        if (elements != null) {
             int pageSize = getPageSize();
-            int offset = ( currentPage - 1 ) * pageSize;
+            int offset = (currentPage - 1) * pageSize;
             offset += x;
-            if ( offset >= 0 && offset < elements.length )
+            if (offset >= 0 && offset < elements.length)
                 result = elements[offset];
         }
         return result;
@@ -400,7 +400,7 @@ public class Folder<O extends Object> {
      */
     public synchronized O getFirstElement()
     {
-        return elements == null ? null : getElement( 0 );
+        return elements == null ? null : getElement(0);
     }
 
     /**
@@ -410,7 +410,7 @@ public class Folder<O extends Object> {
      */
     public synchronized O getLastElement()
     {
-        return elements == null ? null : getElement(  elements.length - 1 );
+        return elements == null ? null : getElement(  elements.length - 1);
     }
 
     /**
@@ -419,11 +419,11 @@ public class Folder<O extends Object> {
      * @param element
      * @return index
      */
-    private int getIndexOf( O element )
+    private int getIndexOf(O element)
     {
-        if ( elements != null ) {
-            for ( int i = 0; i < elements.length; i++ )
-                if ( elements[i].equals( element ) )
+        if (elements != null) {
+            for (int i = 0; i < elements.length; i++)
+                if (elements[i].equals(element))
                     return i;
         }
         return -1;
@@ -435,15 +435,15 @@ public class Folder<O extends Object> {
      * @param element
      * @return The next element
      */
-    public synchronized O getNextElement( O element )
+    public synchronized O getNextElement(O element)
     {
         O result = null;
 
-        int i = getIndexOf( element );
+        int i = getIndexOf(element);
 
-        if ( i != -1 && elements != null ) {
+        if (i != -1 && elements != null) {
             i++;
-            if ( i >= 0 && i < elements.length )
+            if (i >= 0 && i < elements.length)
                 result = elements[i];
         }
         return result;
@@ -455,15 +455,15 @@ public class Folder<O extends Object> {
      * @param element
      * @return The previous element
      */
-    public synchronized O getPreviousElement( O element )
+    public synchronized O getPreviousElement(O element)
     {
         O result = null;
 
-        int i = getIndexOf( element );
+        int i = getIndexOf(element);
 
-        if ( i != -1 && elements != null ) {
+        if (i != -1 && elements != null) {
             i--;
-            if ( i >= 0 && i < elements.length )
+            if (i >= 0 && i < elements.length)
                 result = elements[i];
         }
         return result;
@@ -474,11 +474,11 @@ public class Folder<O extends Object> {
      * @param i
      * @return Element at index i
      */
-    private O getElement( int i )
+    private O getElement(int i)
     {
         O result = null;
 
-        if ( elements != null ) {
+        if (elements != null) {
             result = elements[i];
         }
         return result;
@@ -501,27 +501,27 @@ public class Folder<O extends Object> {
     }
 
     /**
-     * Returns true, if elements.equals( lastElementOfTheSortedArray ).
+     * Returns true, if elements.equals(lastElementOfTheSortedArray).
      *
      * @param element
      */
-    public synchronized boolean isLastElement( O element )
+    public synchronized boolean isLastElement(O element)
     {
-        if ( elements == null )
+        if (elements == null)
             return false;
-        return elements[elements.length - 1].equals( element );
+        return elements[elements.length - 1].equals(element);
     }
 
     /**
-     * Returns true, if elements.equals( firstElementOfTheSortedArray ).
+     * Returns true, if elements.equals(firstElementOfTheSortedArray).
      *
      * @param element
      */
-    public synchronized boolean isFirstElement( O element )
+    public synchronized boolean isFirstElement(O element)
     {
-        if ( elements == null )
+        if (elements == null)
             return false;
-        return elements[0].equals( element );
+        return elements[0].equals(element);
     }
 
     /**

@@ -150,7 +150,7 @@ class Sorters {
          * @param b non-null
          */
         public static int scompare(Mail a, Mail b) {
-            return a.date != null ? ( b.date != null ? a.date.compareTo( b.date ) : -1 ) : ( b.date != null ? 1 : 0 );
+            return a.date != null ? (b.date != null ? a.date.compareTo(b.date) : -1) : (b.date != null ? 1 : 0);
         }
     }
 

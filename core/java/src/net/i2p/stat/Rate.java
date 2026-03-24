@@ -447,12 +447,12 @@ public class Rate {
         } else {
 
             if (_currentEventCount > 0)
-                out.setCurrent( getCurrentTotalValue() / _currentEventCount );
+                out.setCurrent(getCurrentTotalValue() / _currentEventCount);
             if (_lastEventCount > 0)
-                out.setLast( getLastTotalValue() / _lastEventCount );
+                out.setLast(getLastTotalValue() / _lastEventCount);
 
             out.setTotalValues(getCurrentTotalValue() + getLastTotalValue());
-            out.setAverage( out.getTotalValues()  / total );
+            out.setAverage(out.getTotalValues()  / total);
         }
         return out;
     }

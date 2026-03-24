@@ -141,7 +141,7 @@ public class EventLog {
             br = new BufferedReader(new InputStreamReader(
                     new FileInputStream(_file), "UTF-8"));
             String line = null;
-            while ( (line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 try {
                     String[] s = DataHelper.split(line.trim(), " ", 3);
                     if (!s[1].equals(event))
@@ -183,7 +183,7 @@ public class EventLog {
             br = new BufferedReader(new InputStreamReader(
                     new FileInputStream(_file), "UTF-8"));
             String line = null;
-            while ( (line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 try {
                     String[] s = DataHelper.split(line.trim(), " ", 2);
                     if (s.length < 2)
@@ -220,7 +220,7 @@ public class EventLog {
             br = new BufferedReader(new InputStreamReader(
                     new FileInputStream(_file), "UTF-8"));
             String line = null;
-            while ( (line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 try {
                     String[] s = DataHelper.split(line.trim(), " ", 3);
                     if (s.length < 2)

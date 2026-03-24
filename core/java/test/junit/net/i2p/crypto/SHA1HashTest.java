@@ -73,14 +73,14 @@ public class SHA1HashTest extends TestCase{
             final int ITERATIONS = 200;
             final int BLOCKSIZE = 65536;
             byte[] input = new byte[BLOCKSIZE];
-            for (int i = BLOCKSIZE; --i >= 0; )
+            for (int i = BLOCKSIZE; --i >= 0;)
                 input[i] = (byte)i;
 
 
 
             for (int retry = 0; retry < RETRIES; retry++) {
-                for (int i = ITERATIONS; --i >= 0; );
-                for (int i = ITERATIONS; --i >= 0; )
+                for (int i = ITERATIONS; --i >= 0;);
+                for (int i = ITERATIONS; --i >= 0;)
                     hash.engineUpdate(input, 0, BLOCKSIZE);
             }
             hash.engineReset();
@@ -88,8 +88,8 @@ public class SHA1HashTest extends TestCase{
 
             MessageDigest md = MessageDigest.getInstance("SHA");
             for (int retry = 0; retry < RETRIES; retry++) {
-                for (int i = ITERATIONS; --i >= 0; );
-                for (int i = ITERATIONS; --i >= 0; )
+                for (int i = ITERATIONS; --i >= 0;);
+                for (int i = ITERATIONS; --i >= 0;)
                     md.update(input, 0, BLOCKSIZE);
             }
             md.reset();
@@ -137,7 +137,7 @@ public class SHA1HashTest extends TestCase{
             if ((i & 3) == 0 && i != 0)
                 buf.append(' ');
             buf.append(HEX.charAt((bytes[i] >> 4) & 0xF))
-                .append(HEX.charAt( bytes[i]       & 0xF));
+                .append(HEX.charAt(bytes[i]       & 0xF));
         }
         return buf.toString();
     }

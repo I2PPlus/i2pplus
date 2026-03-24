@@ -17,7 +17,7 @@ import net.i2p.i2ptunnel.udp.*;
  *   UDPSource -&gt; SOCKSUDPUnwrapper -&gt; (I2PSink in SOCKSUDPTunnel)
  *
  * RX:
- *   UDPSink &lt;- SOCKSUDPWrapper ( &lt;- MultiSink &lt;- I2PSource in SOCKSUDPTunnel)
+ *   UDPSink &lt;- SOCKSUDPWrapper (&lt;- MultiSink &lt;- I2PSource in SOCKSUDPTunnel)
  *
  * The Unwrapper passes headers to the Wrapper through a cache.
  * MultiSink routes packets based on toPort.

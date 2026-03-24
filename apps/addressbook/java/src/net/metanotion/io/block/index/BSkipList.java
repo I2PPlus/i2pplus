@@ -315,7 +315,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
         boolean rv = stack.blvlck(fix);
          /****
         int items = 0;
-        for (SkipIterator iter = this.iterator(); iter.hasNext(); ) {
+        for (SkipIterator iter = this.iterator(); iter.hasNext();) {
             String key = (String) iter.nextKey();
             if (isMeta) {
                 int sz = ((Integer) iter.next()).intValue();

@@ -212,7 +212,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         if (opts != null) {
             synchronized (_opts) {
                 // removed options...
-                for (Iterator<String> iter = _opts.keySet().iterator(); iter.hasNext(); ) {
+                for (Iterator<String> iter = _opts.keySet().iterator(); iter.hasNext();) {
                     String k = iter.next();
                     if (!HIDDEN_I2CP_OPTS.contains(k) && !opts.containsKey(k)) {
                         iter.remove();

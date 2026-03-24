@@ -118,7 +118,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
 
     @Override
     public void feedEntropy(String source, byte[] data, int offset, int len) {
-        if ( (offset == 0) && (len == data.length) ) {
+        if ((offset == 0) && (len == data.length)) {
             setSeed(data);
         } else {
             setSeed(_context.sha().calculateHash(data, offset, len).getData());

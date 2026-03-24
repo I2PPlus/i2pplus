@@ -175,7 +175,7 @@ class FileLogWriter extends LogWriter {
         if (!f.isAbsolute())
             base = _manager.getContext().getLogDir();
 
-        if ( (pattern.indexOf('#') < 0) && (pattern.indexOf('@') <= 0) ) {
+        if ((pattern.indexOf('#') < 0) && (pattern.indexOf('@') <= 0)) {
             if (base != null)
                 return new File(base, pattern);
             else
@@ -252,7 +252,7 @@ class FileLogWriter extends LogWriter {
         StringBuilder buf = new StringBuilder(len + 1);
         for (int i = 0; i < len; i++) {
             char c = pattern.charAt(i);
-            if ( (c != '#') && (c != '@') )
+            if ((c != '#') && (c != '@'))
                 buf.append(c);
             else
                 buf.append(num);

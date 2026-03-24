@@ -264,7 +264,7 @@ public class DCCClientManager extends EventReceiver {
      * @since 0.8.9
      */
     private void expireInbound() {
-        for (Iterator<I2PTunnelDCCClient> iter = _incoming.values().iterator(); iter.hasNext(); ) {
+        for (Iterator<I2PTunnelDCCClient> iter = _incoming.values().iterator(); iter.hasNext();) {
             I2PTunnelDCCClient c = iter.next();
             if (c.getExpires() < _tunnel.getContext().clock().now()) {
                 iter.remove();
@@ -272,7 +272,7 @@ public class DCCClientManager extends EventReceiver {
             }
         }
         // shouldn't need to expire active
-        for (Iterator<I2PTunnelDCCClient> iter = _complete.values().iterator(); iter.hasNext(); ) {
+        for (Iterator<I2PTunnelDCCClient> iter = _complete.values().iterator(); iter.hasNext();) {
             I2PTunnelDCCClient c = iter.next();
             if (c.getExpires() < _tunnel.getContext().clock().now()) {
                 iter.remove();

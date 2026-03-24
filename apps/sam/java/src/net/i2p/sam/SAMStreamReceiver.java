@@ -24,14 +24,14 @@ interface SAMStreamReceiver {
      * @param bufferState state of the buffer
      * @throws IOException
      */
-    public void streamSendAnswer( int id, String result, String bufferState ) throws IOException;
+    public void streamSendAnswer(int id, String result, String bufferState) throws IOException;
 
     /**
      * Notifies that the outwards buffer is free for writing
      * @param id stream ID
      * @throws IOException
      */
-    public void notifyStreamSendBufferFree( int id ) throws IOException;
+    public void notifyStreamSendBufferFree(int id) throws IOException;
 
     /**
      * Notify about a new incoming connection
@@ -40,7 +40,7 @@ interface SAMStreamReceiver {
      * @param dest Destination
      * @throws IOException
      */
-    public void notifyStreamIncomingConnection ( int id, Destination dest ) throws IOException;
+    public void notifyStreamIncomingConnection (int id, Destination dest) throws IOException;
 
     /**
      * Notify about a new outgoing connection

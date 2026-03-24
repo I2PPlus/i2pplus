@@ -356,7 +356,7 @@ class FragmentHandler {
                 tunnelId = new TunnelId(id);
             offset += 4;
         }
-        if ( (type == TYPE_ROUTER) || (type == TYPE_TUNNEL) ) {
+        if ((type == TYPE_ROUTER) || (type == TYPE_TUNNEL)) {
             if (offset + Hash.HASH_LENGTH >= preprocessed.length)
                 return -1;
             //byte h[] = new byte[Hash.HASH_LENGTH];

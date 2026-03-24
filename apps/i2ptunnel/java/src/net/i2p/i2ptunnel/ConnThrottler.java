@@ -205,7 +205,7 @@ class ConnThrottler {
 
         /** Caller must synch */
         public int countSince(long time) {
-            for (Iterator<Long> iter = times.iterator(); iter.hasNext(); ) {
+            for (Iterator<Long> iter = times.iterator(); iter.hasNext();) {
                 if (iter.next().longValue() < time)
                     iter.remove();
                 else
@@ -249,7 +249,7 @@ class ConnThrottler {
                     _currentTotal = 0;
                 if (_max > 0 && !_peers.isEmpty()) {
                     long then = Clock.getInstance().now()  - _checkPeriod;
-                    for (Iterator<Record> iter = _peers.values().iterator(); iter.hasNext(); ) {
+                    for (Iterator<Record> iter = _peers.values().iterator(); iter.hasNext();) {
                         Record rec = iter.next();
                         if (rec.getUntil() <= 0 && rec.countSince(then) <= 0)
                             iter.remove();

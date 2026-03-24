@@ -48,29 +48,29 @@ public class Config {
      *
      * @param name
      */
-    public synchronized static String getProperty( String name )
+    public synchronized static String getProperty(String name)
     {
-        if ( configPrefix != null )
+        if (configPrefix != null)
             name = configPrefix + name;
 
         String result = null;
 
-        if ( properties == null ) {
+        if (properties == null) {
             reloadConfiguration();
         }
 
-        result = System.getProperty( name );
+        result = System.getProperty(name);
 
-        if ( result != null )
+        if (result != null)
             return result;
 
-        if ( config != null ) {
-            result = config.getProperty( name );
-            if ( result != null )
+        if (config != null) {
+            result = config.getProperty(name);
+            if (result != null)
                 return result;
         }
 
-        result = properties.getProperty( name );
+        result = properties.getProperty(name);
 
         return result;
     }
@@ -171,9 +171,9 @@ public class Config {
      * @param name
      * @param defaultValue
      */
-    public synchronized static String getProperty( String name, String defaultValue )
+    public synchronized static String getProperty(String name, String defaultValue)
     {
-        String result = getProperty( name );
+        String result = getProperty(name);
         return result != null ? result : defaultValue;
     }
 
@@ -182,17 +182,17 @@ public class Config {
      * @param name
      * @param defaultValue
      */
-    public synchronized static int getProperty( String name, int defaultValue )
+    public synchronized static int getProperty(String name, int defaultValue)
     {
         int result = defaultValue;
 
-        String str = getProperty( name );
+        String str = getProperty(name);
 
-        if ( str != null ) {
+        if (str != null) {
             try {
-                result = Integer.parseInt( str );
+                result = Integer.parseInt(str);
             }
-            catch ( NumberFormatException nfe ) {
+            catch (NumberFormatException nfe) {
                 result = defaultValue;
             }
         }
@@ -203,8 +203,8 @@ public class Config {
      * Static! Not for use by multiple applications!
      * @param prefix
      */
-    public synchronized static void setPrefix( String prefix )
+    public synchronized static void setPrefix(String prefix)
     {
-        configPrefix = prefix.endsWith( "." ) ? prefix : prefix + ".";
+        configPrefix = prefix.endsWith(".") ? prefix : prefix + ".";
     }
 }

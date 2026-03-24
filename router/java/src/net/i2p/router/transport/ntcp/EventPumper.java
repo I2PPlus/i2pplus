@@ -925,7 +925,7 @@ class EventPumper implements Runnable {
 
     private void processWriteRequests(boolean debug, boolean warn) {
         if (_wantsWrite.isEmpty()) return;
-        for (Iterator<NTCPConnection> iter = _wantsWrite.iterator(); iter.hasNext(); ) {
+        for (Iterator<NTCPConnection> iter = _wantsWrite.iterator(); iter.hasNext();) {
             NTCPConnection con = iter.next();
             iter.remove();
             if (con.isClosed()) continue;

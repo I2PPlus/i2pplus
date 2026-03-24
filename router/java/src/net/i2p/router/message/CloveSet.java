@@ -50,8 +50,8 @@ public class CloveSet {
         StringBuilder buf = new StringBuilder(128);
         buf.append("CloveSet: ID ").append(_msgId)
            .append(' ').append(_cert)
-           .append(" expires " ).append(DataHelper.formatTime(_expiration))
-           .append(" cloves: " ).append(_cloves.length)
+           .append(" expires ").append(DataHelper.formatTime(_expiration))
+           .append(" cloves: ").append(_cloves.length)
         .append(" {");
         for (int i = 0; i < _cloves.length; i++) {
             GarlicClove clove = _cloves[i];

@@ -369,7 +369,7 @@ class Yylex {
             }
         }
 
-	// numRead < 0
+    // numRead < 0
         return true;
     }
 
@@ -430,7 +430,7 @@ class Yylex {
    * Returns the text matched by the current regular expression.
    */
     public final String yytext() {
-        return new String( zzBuffer, zzStartRead, zzMarkedPos-zzStartRead );
+        return new String(zzBuffer, zzStartRead, zzMarkedPos-zzStartRead);
     }
 
 
@@ -494,7 +494,7 @@ class Yylex {
    *                This number must not be greater than yylength()!
    */
     public void yypushback(int number)  {
-        if ( number > yylength() )
+        if (number > yylength())
             zzScanError(ZZ_PUSHBACK_2BIG);
 
         zzMarkedPos -= number;
@@ -567,10 +567,10 @@ class Yylex {
                     zzState = zzNext;
 
                     int zzAttributes = zzAttrL[zzState];
-                    if ( (zzAttributes & 1) == 1 ) {
+                    if ((zzAttributes & 1) == 1) {
                         zzAction = zzState;
                         zzMarkedPosL = zzCurrentPosL;
-                        if ( (zzAttributes & 8) == 8 ) break zzForAction;
+                        if ((zzAttributes & 8) == 8) break zzForAction;
                     }
 
                 }
@@ -600,8 +600,8 @@ class Yylex {
                 { try{
                         int ch=Integer.parseInt(yytext().substring(2),16);
                         sb.append((char)ch);
-                    }catch(Exception e){
-			/* The lexer is broken if it can build a 4 byte character code and fail to append the character. */
+                    }catch (Exception e){
+            /* The lexer is broken if it can build a 4 byte character code and fail to append the character. */
                         throw new DeserializationException(yychar, DeserializationException.Problems.UNEXPECTED_EXCEPTION, e);
                     }
                 }

@@ -302,7 +302,7 @@ public class TunnelController implements Logging {
             return true;
         } else {
             File parent = keyFile.getParentFile();
-            if ( (parent != null) && (!parent.exists()) )
+            if ((parent != null) && (!parent.exists()))
                 parent.mkdirs();
         }
         FileOutputStream fos = null;
@@ -509,7 +509,7 @@ public class TunnelController implements Logging {
         }
 
         String type = getType();
-        if ( (type == null) || (type.length() <= 0) ) {
+        if ((type == null) || (type.length() <= 0)) {
             changeState(TunnelState.STOPPED);
             if (_log.shouldError()) {_log.error("Cannot start tunnel - no type specified");}
             return;
@@ -643,7 +643,7 @@ public class TunnelController implements Logging {
      */
     private void startStreamrServer() {
         String listenOn = getListenOnInterface();
-        if ( (listenOn != null) && (listenOn.length() > 0) ) {
+        if ((listenOn != null) && (listenOn.length() > 0)) {
             _tunnel.runListenOn(new String[] { listenOn }, this);
         }
         String listenPort = getTargetPort();
@@ -755,7 +755,7 @@ public class TunnelController implements Logging {
 
     private void setListenOn() {
         String listenOn = getListenOnInterface();
-        if ( (listenOn != null) && (listenOn.length() > 0) ) {
+        if ((listenOn != null) && (listenOn.length() > 0)) {
             _tunnel.runListenOn(new String[] { listenOn }, this);
         }
     }
@@ -808,12 +808,12 @@ public class TunnelController implements Logging {
 
     private void setI2CPOptions() {
         String host = getI2CPHost();
-        if ( (host != null) && (host.length() > 0) )
+        if ((host != null) && (host.length() > 0))
             _tunnel.host = host;
         // woohah, special casing for people with ipv6/etc
         if ("localhost".equals(_tunnel.host)) {_tunnel.host = "127.0.0.1";}
         String port = getI2CPPort();
-        if ( (port != null) && (port.length() > 0) ) {
+        if ((port != null) && (port.length() > 0)) {
             try {
                 int portNum = Integer.parseInt(port);
                 _tunnel.port = String.valueOf(portNum);
@@ -1462,7 +1462,7 @@ public class TunnelController implements Logging {
   /****
     private void getHttpClientSummary(StringBuilder buf) {
         String description = getDescription();
-        if ( (description != null) && (description.trim().length() > 0) )
+        if ((description != null) && (description.trim().length() > 0))
             buf.append("<i>").append(description).append("</i><br />\n");
         buf.append("HTTP proxy listening on port ").append(getListenPort());
         String listenOn = getListenOnInterface();
@@ -1474,7 +1474,7 @@ public class TunnelController implements Logging {
             buf.append(" (reachable at the ").append(listenOn).append(" interface)");
         buf.append("<br />\n");
         String proxies = getProxyList();
-        if ( (proxies == null) || (proxies.trim().length() <= 0) )
+        if ((proxies == null) || (proxies.trim().length() <= 0))
             buf.append("Outproxy: default [squid.i2p]<br />\n");
         else
             buf.append("Outproxy: ").append(proxies).append("<br />\n");
@@ -1483,7 +1483,7 @@ public class TunnelController implements Logging {
 
     private void getClientSummary(StringBuilder buf) {
         String description = getDescription();
-        if ( (description != null) && (description.trim().length() > 0) )
+        if ((description != null) && (description.trim().length() > 0))
             buf.append("<i>").append(description).append("</i><br />\n");
         buf.append("Client tunnel listening on port ").append(getListenPort());
         buf.append(" pointing at ").append(getTargetDestination());
@@ -1500,7 +1500,7 @@ public class TunnelController implements Logging {
 
     private void getServerSummary(StringBuilder buf) {
         String description = getDescription();
-        if ( (description != null) && (description.trim().length() > 0) )
+        if ((description != null) && (description.trim().length() > 0))
             buf.append("<i>").append(description).append("</i><br />\n");
         buf.append("Server tunnel pointing at port ").append(getTargetPort());
         buf.append(" on ").append(getTargetHost());
@@ -1511,7 +1511,7 @@ public class TunnelController implements Logging {
 
     private void getHttpServerSummary(StringBuilder buf) {
         String description = getDescription();
-        if ( (description != null) && (description.trim().length() > 0) )
+        if ((description != null) && (description.trim().length() > 0))
             buf.append("<i>").append(description).append("</i><br />\n");
         buf.append("Server tunnel pointing at port ").append(getTargetPort());
         buf.append(" on ").append(getTargetHost());
@@ -1523,7 +1523,7 @@ public class TunnelController implements Logging {
 
     private void getOptionSummary(StringBuilder buf) {
         String opts = getClientOptions();
-        if ( (opts != null) && (opts.length() > 0) )
+        if ((opts != null) && (opts.length() > 0))
             buf.append("Network options: ").append(opts).append("<br />\n");
         if (_running) {
             List<I2PSession> sessions = _tunnel.getSessions();
@@ -1532,7 +1532,7 @@ public class TunnelController implements Logging {
                 Destination dest = session.getMyDestination();
                 if (dest != null) {
                     buf.append("Destination hash: ").append(dest.calculateHash().toBase64()).append("<br />\n");
-                    if ( ("server".equals(getType())) || ("httpserver".equals(getType())) ) {
+                    if (("server".equals(getType())) || ("httpserver".equals(getType()))) {
                         buf.append("Full destination: ");
                         buf.append("<input type=text size=10 onclick=\"this.select(); \" ");
                         buf.append("value=\"").append(dest.toBase64()).append("\" />\n");

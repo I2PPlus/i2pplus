@@ -232,7 +232,7 @@ public enum SigType {
             getParams();
             if (getBaseAlgorithm() != SigAlgo.EdDSA) {
                 Signature jsig = Signature.getInstance(getAlgorithmName());
-                if (getBaseAlgorithm() == SigAlgo.EC && SystemVersion.isGentoo() ) {
+                if (getBaseAlgorithm() == SigAlgo.EC && SystemVersion.isGentoo()) {
                     // Do a full keygen/sign test on Gentoo, because it lies. Keygen works but sigs fail.
                     // https://bugs.gentoo.org/show_bug.cgi?id=528338
                     // http://icedtea.classpath.org/bugzilla/show_bug.cgi?id=2497

@@ -318,7 +318,7 @@ class BlindCache {
             br = new BufferedReader(new InputStreamReader(
             		new FileInputStream(file), "ISO-8859-1"));
             String line = null;
-            while ( (line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 if (line.startsWith("#"))
                     continue;
                 try {

@@ -244,7 +244,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
 
     @Override
     public boolean equals(Object object) {
-        if ( (object != null) && (object instanceof DatabaseStoreMessage) ) {
+        if ((object != null) && (object instanceof DatabaseStoreMessage)) {
             DatabaseStoreMessage msg = (DatabaseStoreMessage)object;
             return DataHelper.eq(getKey(),msg.getKey()) &&
                    DataHelper.eq(_dbEntry,msg.getEntry()) &&

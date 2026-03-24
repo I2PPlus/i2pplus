@@ -121,7 +121,7 @@ abstract class TrayManager {
                 //                   " trigger? " + menu.isPopupTrigger(e));
                 // http://stackoverflow.com/questions/17258250/changing-the-laf-of-a-popupmenu-for-a-trayicon-in-java
                 // menu visible check is never true
-                if (!frame.isVisible() /* || !menu.isVisible() */ ) {
+                if (!frame.isVisible() /* || !menu.isVisible() */) {
                     frame.setLocation(e.getX(), e.getY());
                     frame.setVisible(true);
                     menu.show(frame, 0, 0);

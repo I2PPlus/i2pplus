@@ -1044,7 +1044,7 @@ public class EepGet {
 
         int remaining = (int)_bytesRemaining;
         byte buf[] = new byte[16*1024];
-        while (_keepFetching && ((remaining > 0) || !strictSize ) && !_aborted) {
+        while (_keepFetching && ((remaining > 0) || !strictSize) && !_aborted) {
             int toRead = buf.length;
             if (strictSize && toRead > remaining)
                 toRead = remaining;

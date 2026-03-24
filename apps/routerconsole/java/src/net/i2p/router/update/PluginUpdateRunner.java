@@ -61,7 +61,7 @@ class PluginUpdateRunner extends UpdateRunner {
     private static final String PROP_ALLOW_NEW_KEYS = "routerconsole.allowUntrustedPlugins";
 
     public PluginUpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris,
-                              String appName, String oldVersion ) {
+                              String appName, String oldVersion) {
         super(ctx, mgr, UpdateType.PLUGIN, uris);
         if (uris.isEmpty())
             throw new IllegalArgumentException("uri cannot be empty");
@@ -522,7 +522,7 @@ class PluginUpdateRunner extends UpdateRunner {
             if (Boolean.parseBoolean(props.getProperty("router-restart-required"))) {
                     // Yup!
                 try {
-                    if (!FileUtil.copy(to, (new SecureFile( new SecureFile(appDir.getCanonicalPath() +"/" + appName +"/"+ ZIP).getCanonicalPath())), true, true)) {
+                    if (!FileUtil.copy(to, (new SecureFile(new SecureFile(appDir.getCanonicalPath() +"/" + appName +"/"+ ZIP).getCanonicalPath())), true, true)) {
                         to.delete();
                         statusDone("<b>" + _t("Cannot copy plugin to directory {0}", destDir.getAbsolutePath()) + "</b>");
                         return;
@@ -571,7 +571,7 @@ class PluginUpdateRunner extends UpdateRunner {
         _updated = true;
         to.delete();
             // install != update. Changing the user's settings like this is probably a bad idea.
-        if (Boolean.parseBoolean( props.getProperty("dont-start-at-install"))) {
+        if (Boolean.parseBoolean(props.getProperty("dont-start-at-install"))) {
             statusDone("<b>" + _t("Plugin {0} installed", appName + ' ' + version) + "</b>");
             if (!update) {
                 Properties pluginProps = PluginStarter.pluginProperties();

@@ -605,7 +605,7 @@ public final class SigUtil {
             in = new FileInputStream(file);
             int read = 0;
             int tot = 0;
-            while ( (read = in.read(buf)) != -1) {
+            while ((read = in.read(buf)) != -1) {
                 out.write(buf, 0, read);
                 tot += read;
                 if (tot > 16*1024)

@@ -388,7 +388,7 @@ public class BlockFile implements Closeable {
     public static void pageSeek(RandomAccessInterface file, int page) throws IOException {
         if (page < METAINDEX_PAGE)
             throw new IOException("Negative page or superblock access attempt: " + page);
-        file.seek((page - 1L) * PAGESIZE );
+        file.seek((page - 1L) * PAGESIZE);
     }
 
     /**
@@ -696,7 +696,7 @@ public class BlockFile implements Closeable {
                 log.info("No errors in meta index in blockfile " + file);
         }
         int items = 0;
-        for (SkipIterator iter = metaIndex.iterator(); iter.hasNext(); ) {
+        for (SkipIterator iter = metaIndex.iterator(); iter.hasNext();) {
             String slname = (String) iter.nextKey();
             Integer page = (Integer) iter.next();
             if (log.shouldInfo())

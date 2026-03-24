@@ -817,7 +817,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     _log.debug("[HTTPServer] Encoding header: " + enc + "/" + altEnc);
                 }
                 boolean alt = (altEnc != null) && (altEnc.indexOf("x-i2p-gzip") >= 0);
-                boolean useGZIP = alt || ( (enc != null) && (enc.indexOf("x-i2p-gzip") >= 0) );
+                boolean useGZIP = alt || ((enc != null) && (enc.indexOf("x-i2p-gzip") >= 0));
                 // Don't pass this on, outproxies should strip so I2P traffic isn't so obvious but they probably don't
                 if (alt) {headers.remove("X-Accept-Encoding");}
 
@@ -1411,8 +1411,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (!ok)
                      throw new BadRequestException("EOF reached before the end of the headers");
             }
-            if ( (buf.length() == 0) ||
-                 ((buf.charAt(0) == '\n') || (buf.charAt(0) == '\r')) ) {
+            if ((buf.length() == 0) ||
+                 ((buf.charAt(0) == '\n') || (buf.charAt(0) == '\r'))) {
                 // end of headers reached
                 return headers;
             } else {

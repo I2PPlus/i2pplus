@@ -387,8 +387,8 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
             }
         }
 
-        //java.util.List c = java.util.Arrays.asList(new String[] {"foo", "bar", "baz", "splat", "barf", "baz", "moose", "bear", "cat", "dog"} );
-        java.util.List c = java.util.Arrays.asList(new String[] {"foo", "bar"} );
+        //java.util.List c = java.util.Arrays.asList(new String[] {"foo", "bar", "baz", "splat", "barf", "baz", "moose", "bear", "cat", "dog"});
+        java.util.List c = java.util.Arrays.asList(new String[] {"foo", "bar"});
         long start = System.currentTimeMillis();
         Set s = new java.util.HashSet(c);
         int runs = 10000000;

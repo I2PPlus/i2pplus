@@ -54,8 +54,8 @@ public class StatsGenerator {
         buf.append(_t("Statistics gathered during this router's uptime")).append(" (");
         long uptime = _context.router().getUptime();
         buf.append(DataHelper.formatDuration2(uptime));
-        buf.append(").  ").append( _t("The data gathered is quantized over a 1 minute period, so should just be used as an estimate."));
-        buf.append(' ').append( _t("These statistics are primarily used for development and debugging."));
+        buf.append(").  ").append(_t("The data gathered is quantized over a 1 minute period, so should just be used as an estimate."));
+        buf.append(' ').append(_t("These statistics are primarily used for development and debugging."));
         buf.append(' ').append("<a href=\"/configstats\">[").append(_t("Configure")).append("]</a>");
         buf.append("</p>");
         buf.append("<div id=statsWrap>\n");

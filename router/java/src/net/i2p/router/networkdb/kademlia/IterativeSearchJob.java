@@ -346,7 +346,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                     peer = _alwaysQueryHash;
                 } else {
                     if (_toTry.isEmpty()) {return;}
-                    for (Iterator<Hash> iter = _toTry.iterator(); iter.hasNext(); ) {
+                    for (Iterator<Hash> iter = _toTry.iterator(); iter.hasNext();) {
                         Hash h = iter.next();
                         iter.remove();
                         Set<String> peerIPs = new MaskedIPSet(getContext(), h, IP_CLOSE_BYTES);
@@ -585,7 +585,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (outMsg == null) {outMsg = dlm;}
         if (isDirect) {
             if (_facade.isClientDb() && _log.shouldWarn()) {
-                _log.warn("Warning! Sending direct search message in a client NetDb context! (DbId: " + _facade + ")" + outMsg );
+                _log.warn("Warning! Sending direct search message in a client NetDb context! (DbId: " + _facade + ")" + outMsg);
             }
             OutNetMessage m = new OutNetMessage(ctx, outMsg, outMsg.getMessageExpiration(),
                                                 OutNetMessage.PRIORITY_MY_NETDB_LOOKUP, ri);

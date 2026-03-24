@@ -46,7 +46,7 @@ public class Base64 extends Encoding {
      * @return Base64-encoded String.
      * @throws EncodingException
      */
-    public String encode( byte in[] ) throws EncodingException
+    public String encode(byte in[]) throws EncodingException
     {
         try {
             Writer strBuf = new StringBuilderWriter();
@@ -70,38 +70,38 @@ public class Base64 extends Encoding {
         int buf[] = new int[3];
         int out[] = new int[4];
         int l = 0;
-        while ( true ) {
+        while (true) {
             int read = in.available();
-            if ( read == 0 )
+            if (read == 0)
                 break;
             int i = 0;
             buf[0] = buf[1] = buf[2] = 0;
-            while ( read > 0 && i < 3 ) {
+            while (read > 0 && i < 3) {
                 buf[i] = in.read();
-                if ( buf[i] < 0 || buf[i] > 255 )
-                    throw new EncodingException( "Encoding supports only values 0..255 (" + buf[i] + ")" );
+                if (buf[i] < 0 || buf[i] > 255)
+                    throw new EncodingException("Encoding supports only values 0..255 (" + buf[i] + ")");
                 i++;
                 read--;
             }
-            out[0] = encodeByte( ( buf[0] >> 2 ) & 63 );
-            out[1] = encodeByte( ( ( buf[0] & 3 ) << 4 ) | ( ( buf[1] >> 4 ) & 15 ) );
-            out[2] = encodeByte( ( ( buf[1] & 15 ) << 2 ) | ( ( buf[2] >> 6 ) & 3 ) );
-            out[3] = encodeByte( buf[2] & 63 );
-            strBuf.append( (char)out[0] );
-            strBuf.append( (char)out[1] );
-            if ( i > 1 ) {
-                strBuf.append( (char)out[2] );
+            out[0] = encodeByte((buf[0] >> 2) & 63);
+            out[1] = encodeByte(((buf[0] & 3) << 4) | ((buf[1] >> 4) & 15));
+            out[2] = encodeByte(((buf[1] & 15) << 2) | ((buf[2] >> 6) & 3));
+            out[3] = encodeByte(buf[2] & 63);
+            strBuf.append((char)out[0]);
+            strBuf.append((char)out[1]);
+            if (i > 1) {
+                strBuf.append((char)out[2]);
             }
             else
-                strBuf.append( "=" );
-            if ( i > 2 )
-                strBuf.append( (char)out[3] );
+                strBuf.append("=");
+            if (i > 2)
+                strBuf.append((char)out[3]);
             else
-                strBuf.append( "=" );
+                strBuf.append("=");
             i += 3;
             l += 4;
-            if ( l >= 76 ) {
-                strBuf.append( "\r\n" );
+            if (l >= 76) {
+                strBuf.append("\r\n");
                 l -= 76;
             }
         }
@@ -131,38 +131,38 @@ public class Base64 extends Encoding {
           15 P            32 g            49 x
           16 Q            33 h            50 y
           */
-        if ( b < 26 )
+        if (b < 26)
             b += 'A';
-        else if ( b < 52 )
+        else if (b < 52)
             b += 'a' - 26;
-        else if ( b < 62 )
+        else if (b < 62)
             b += '0' - 52;
-        else if ( b == 62 )
+        else if (b == 62)
             b = '+';
         else
             b = '/';
         return b;
     }
 
-    private static byte decodeByte( int c ) throws IOException {
+    private static byte decodeByte(int c) throws IOException {
         if (c < 0)
             throw new EOFException();
         byte b = (byte) (c & 0xff);
-        if ( b >= 'A' && b <= 'Z' )
+        if (b >= 'A' && b <= 'Z')
             b -= 'A';
-        else if ( b >= 'a' && b <= 'z' )
+        else if (b >= 'a' && b <= 'z')
             b = (byte) (b - 'a' + 26);
-        else if ( b >= '0' && b <= '9' )
+        else if (b >= '0' && b <= '9')
             b = (byte) (b - '0' + 52);
-        else if ( b == '+' )
+        else if (b == '+')
             b = 62;
-        else if ( b == '/' )
+        else if (b == '/')
             b = 63;
-        else if ( b == '=' )
+        else if (b == '=')
             b = 0;
         else
             throw new DecodingException("Decoding base64 failed, invalid data: " + c);
-        // System.err.println( "decoded " + (char)a + " to " + b );
+        // System.err.println("decoded " + (char)a + " to " + b);
         return b;
     }
 
@@ -184,7 +184,7 @@ public class Base64 extends Encoding {
             if (c < 0)
                 break;
 
-            // System.out.println( "decode: " + (char)in[offset] + (char)in[offset+1]+ (char)in[offset+2]+ (char)in[offset+3] );
+            // System.out.println("decode: " + (char)in[offset] + (char)in[offset+1]+ (char)in[offset+2]+ (char)in[offset+3]);
             byte b1 = decodeByte(c);
             c = readIn(in);
             byte b2 = decodeByte(c);

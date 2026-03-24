@@ -384,7 +384,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         int numPeers = (int)DataHelper.fromLong(data, curIndex, 2);
         curIndex += 2;
 
-        if ( (numPeers < 0) || (numPeers > MAX_NUM_PEERS) )
+        if ((numPeers < 0) || (numPeers > MAX_NUM_PEERS))
             throw new I2NPMessageException("Invalid number of peers - " + numPeers);
         List<Hash> peers = numPeers > 0 ? new ArrayList<Hash>(numPeers) : null;
         for (int i = 0; i < numPeers; i++) {
@@ -484,7 +484,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         } else {
             out[curIndex++] = flag;
         }
-        if ( (_dontIncludePeers == null) || (_dontIncludePeers.isEmpty()) ) {
+        if ((_dontIncludePeers == null) || (_dontIncludePeers.isEmpty())) {
             out[curIndex++] = 0x0;
             out[curIndex++] = 0x0;
         } else {
@@ -530,7 +530,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
 
     @Override
     public boolean equals(Object object) {
-        if ( (object != null) && (object instanceof DatabaseLookupMessage) ) {
+        if ((object != null) && (object instanceof DatabaseLookupMessage)) {
             DatabaseLookupMessage msg = (DatabaseLookupMessage)object;
             return DataHelper.eq(_key, msg._key) &&
                    DataHelper.eq(_fromHash, msg._fromHash) &&

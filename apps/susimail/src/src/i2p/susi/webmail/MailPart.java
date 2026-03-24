@@ -115,13 +115,13 @@ class MailPart {
         String x_description = null;
         String x_version = null;
 
-        for ( int i = 0; i < headerLines.length; i++) {
+        for (int i = 0; i < headerLines.length; i++) {
             String hlc = headerLines[i].toLowerCase(Locale.US);
-            if (hlc.startsWith( "content-transfer-encoding: ")) {
-                x_encoding = getFirstAttribute( headerLines[i]).toLowerCase(Locale.US);
+            if (hlc.startsWith("content-transfer-encoding: ")) {
+                x_encoding = getFirstAttribute(headerLines[i]).toLowerCase(Locale.US);
             }
-            else if (hlc.startsWith( "content-disposition: ")) {
-                x_disposition = getFirstAttribute( headerLines[i]).toLowerCase(Locale.US);
+            else if (hlc.startsWith("content-disposition: ")) {
+                x_disposition = getFirstAttribute(headerLines[i]).toLowerCase(Locale.US);
                 String str;
                 str = getHeaderLineAttribute(headerLines[i], "filename*");
                 if (str != null) {x_name = FilenameUtil.decodeFilenameRFC5987(str);}
@@ -130,28 +130,28 @@ class MailPart {
                     if (str != null) {x_name = str;}
                 }
             }
-            else if (hlc.startsWith( "content-type: ")) {
-                x_type = getFirstAttribute( headerLines[i]).toLowerCase(Locale.US);
+            else if (hlc.startsWith("content-type: ")) {
+                x_type = getFirstAttribute(headerLines[i]).toLowerCase(Locale.US);
                 /*
                  * extract boundary, name and charset from content type
                  */
                 String str;
-                str = getHeaderLineAttribute( headerLines[i], "boundary");
+                str = getHeaderLineAttribute(headerLines[i], "boundary");
                 if (str != null) {boundary = str;}
-                if (x_type.startsWith( "multipart") && boundary != null) {
+                if (x_type.startsWith("multipart") && boundary != null) {
                     x_multipart = true;
-                    str = getHeaderLineAttribute( headerLines[i], "type");
+                    str = getHeaderLineAttribute(headerLines[i], "type");
                     if (str != null) {x_multipart_type = str;}
                 } else if (x_type.startsWith("message")) {x_message = true;}
-                str = getHeaderLineAttribute( headerLines[i], "name");
+                str = getHeaderLineAttribute(headerLines[i], "name");
                 if (str != null) {x_name = str;}
-                str = getHeaderLineAttribute( headerLines[i], "charset");
+                str = getHeaderLineAttribute(headerLines[i], "charset");
                 if (str != null) {x_charset = str.toUpperCase(Locale.US);}
             }
-            else if (hlc.startsWith( "content-description: ")) {x_description = getFirstAttribute( headerLines[i]);}
-            else if (hlc.startsWith( "mime-version: ")) {x_version = getFirstAttribute( headerLines[i]);}
-            else if (hlc.startsWith( "content-id: ")) {
-                x_cid = getFirstAttribute( headerLines[i]);
+            else if (hlc.startsWith("content-description: ")) {x_description = getFirstAttribute(headerLines[i]);}
+            else if (hlc.startsWith("mime-version: ")) {x_version = getFirstAttribute(headerLines[i]);}
+            else if (hlc.startsWith("content-id: ")) {
+                x_cid = getFirstAttribute(headerLines[i]);
                 if (x_cid.startsWith("<")) {x_cid = x_cid.substring(1);}
                 if (x_cid.endsWith(">")) {x_cid = x_cid.substring(0, x_cid.length() - 1);}
             }
@@ -204,7 +204,7 @@ class MailPart {
                     eofin = new EOFOnMatchInputStream(in, counter, match);
                 }
                 MailPart newPart = new MailPart(uidl, id, buffer, eofin, eofin, null);
-                parts.add( newPart);
+                parts.add(newPart);
                 tmpEnd = (int) eofin.getRead();
                 if (!eofin.wasFound()) {
                     // if MailPart contains a MailPart, we may not have drained to the end
@@ -220,7 +220,7 @@ class MailPart {
             MailPart newPart = new MailPart(uidl, id, buffer, in, counter, null);
             // TODO newPart doesn't save message headers we might like to display,
             // like From, To, and Subject
-            parts.add( newPart);
+            parts.add(newPart);
             tmpEnd = (int) counter.getRead();
         } else {
             // read through to the end
@@ -356,13 +356,13 @@ class MailPart {
         return new LimitInputStream(in, end - beginBody - offset);
     }
 
-    private static String getFirstAttribute( String line) {
+    private static String getFirstAttribute(String line) {
         String result = null;
-        int i = line.indexOf( ": ");
+        int i = line.indexOf(": ");
         if (i != - 1) {
             int j = line.indexOf(';', i + 2);
-            if (j == -1) {result = line.substring( i + 2);}
-            else {result = line.substring( i + 2, j);}
+            if (j == -1) {result = line.substring(i + 2);}
+            else {result = line.substring(i + 2, j);}
             result = result.trim();
         }
         return result;
@@ -372,7 +372,7 @@ class MailPart {
      *  @param attributeName must be lower case, will be matched case-insensitively
      *  @return as found, not necessarily lower case
      */
-    private static String getHeaderLineAttribute( String line, String attributeName)
+    private static String getHeaderLineAttribute(String line, String attributeName)
     {
         String lineLC = line.toLowerCase(Locale.US);
         String result = null;
@@ -386,7 +386,7 @@ class MailPart {
             if (j != -1) {
                 int k = line.indexOf('"', j + 1);
                 int m = line.indexOf(';', j + 1);
-                if (k != -1 && ( m == -1 || k < m)) {
+                if (k != -1 && (m == -1 || k < m)) {
                     /* We found a " before a possible; - now we look for the 2nd (not quoted) " */
                     m = -1;
                     int k2 = k + 1;
@@ -395,21 +395,21 @@ class MailPart {
                         if (m == -1) {break;}
                         else {
                             /* Found one! */
-                            if (line.charAt( m - 1) != '\\') {
+                            if (line.charAt(m - 1) != '\\') {
                                 /* It's not quoted, so it is the one we look for */
-                                result = line.substring( k + 1, m);
+                                result = line.substring(k + 1, m);
                                 break;
                             } else {
                                 /* This is quoted, so we extract the quote and continue the search */
-                                StringBuilder lineSb = new StringBuilder(line.substring( 0, m - 1));
-                                lineSb.append(line.substring( m));
+                                StringBuilder lineSb = new StringBuilder(line.substring(0, m - 1));
+                                lineSb.append(line.substring(m));
                                 line = lineSb.toString();
                                 k2 = m;
                             }
                         }
                     }
-                } else if (m != -1) {result = line.substring( j + 1, m).trim();} /* No " found, but a; */
-                else {result = line.substring( j + 1).trim();} /* No " found and no; */
+                } else if (m != -1) {result = line.substring(j + 1, m).trim();} /* No " found, but a; */
+                else {result = line.substring(j + 1).trim();} /* No " found and no; */
             }
         }
         return result;
@@ -424,8 +424,8 @@ class MailPart {
         buf.append("MailPart:")
            .append("\n\tuidl:\t").append(uidl)
            .append("\n\tbuffer:\t").append(buffer)
-           .append("\n\tbuffer offset:\t").append( buffer.getOffset())
-           .append("\n\tbegin:\t").append( begin)
+           .append("\n\tbuffer offset:\t").append(buffer.getOffset())
+           .append("\n\tbegin:\t").append(begin)
            .append("\n\theader lines:\t").append(headerLines.length).append("\n");
         for (int i = 0; i < headerLines.length; i++) {buf.append("\t\t\"").append(headerLines[i]).append("\"\n");}
         buf.append("\tmultipart?\t").append(multipart)

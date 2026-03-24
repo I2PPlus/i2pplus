@@ -119,7 +119,7 @@ public class UIMessages {
             _cachedCount = -1;
         } else {
             boolean modified = false;
-            for (Iterator<Message> iter = _messages.iterator(); iter.hasNext(); ) {
+            for (Iterator<Message> iter = _messages.iterator(); iter.hasNext();) {
                 Message msg = iter.next();
                 if (msg.id > id)
                     break;

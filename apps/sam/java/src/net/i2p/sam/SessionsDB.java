@@ -43,10 +43,10 @@ class SessionsDB {
     public synchronized void put(String nick, SessionRecord session)
         throws ExistingIdException, ExistingDestException
     {
-        if ( map.containsKey(nick) ) {
+        if (map.containsKey(nick)) {
             throw new ExistingIdException();
         }
-        for ( SessionRecord r : map.values() ) {
+        for (SessionRecord r : map.values()) {
             if (r.getDest().equals(session.getDest())) {
                 throw new ExistingDestException();
             }
@@ -67,7 +67,7 @@ class SessionsDB {
     }
 
     /** @return true if removed */
-    synchronized public boolean del( String nick )
+    synchronized public boolean del(String nick)
     {
         return map.remove(nick) != null;
     }
@@ -77,7 +77,7 @@ class SessionsDB {
         return map.get(nick);
     }
 
-    synchronized public boolean containsKey( String nick )
+    synchronized public boolean containsKey(String nick)
     {
         return map.containsKey(nick);
     }

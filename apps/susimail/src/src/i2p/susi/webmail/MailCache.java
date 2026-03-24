@@ -78,7 +78,7 @@ class MailCache {
         _context = ctx;
         Folder<String> folder = new Folder<String>();
         // setElements() sorts, so configure the sorting first
-        //sessionObject.folder.addSorter( SORT_ID, new IDSorter( sessionObject.mailCache ) );
+        //sessionObject.folder.addSorter(SORT_ID, new IDSorter(sessionObject.mailCache));
         if (folderName.equals(WebMail.DIR_DRAFTS) || folderName.equals(WebMail.DIR_SENT))
             folder.addSorter(WebMail.SORT_SENDER, new ToSorter(this));
         else
@@ -325,17 +325,17 @@ class MailCache {
          * synchronize update to Map
          */
         synchronized (mails) {
-            mail = mails.get( uidl );
-            if ( mail == null ) {
+            mail = mails.get(uidl);
+            if (mail == null) {
                 // if not in inbox, we can't fetch, this is what we have
                 if (mailbox == null)
                     return null;
                 newMail = new Mail(uidl);
                 // TODO really?
-                mails.put( uidl, newMail );
+                mails.put(uidl, newMail);
             }
         }
-        if ( mail == null ) {
+        if (mail == null) {
             mail = newMail;
             mail.setSize(mailbox.getSize(uidl));
         }
@@ -428,13 +428,13 @@ class MailCache {
              * synchronize update to Map
              */
             synchronized (mails) {
-                mail = mails.get( uidl );
-                if ( mail == null ) {
+                mail = mails.get(uidl);
+                if (mail == null) {
                     newMail = new Mail(uidl);
-                    mails.put( uidl, newMail );
+                    mails.put(uidl, newMail);
                 }
             }
-            if ( mail == null ) {
+            if (mail == null) {
                 mail = newMail;
                 mail.setSize(mailbox.getSize(uidl));
             }
@@ -443,7 +443,7 @@ class MailCache {
             long sz = mail.getSize();
             if (sz > 0 && sz <= FETCH_ALL_SIZE)
                 headerOnly = false;
-            if ( headerOnly ) {
+            if (headerOnly) {
                 if (!mail.hasHeader()) {
                     if (disk.getMail(mail, true)) {
                         if (_log.shouldDebug()) _log.debug("[SusiMail] Loaded header from disk cache: " + uidl);

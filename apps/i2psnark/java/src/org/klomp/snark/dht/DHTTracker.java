@@ -171,10 +171,10 @@ class DHTTracker {
             int torrentCount = 0;
             int peerCount = 0;
             boolean tooMany = false;
-            for (Iterator<Peers> iter = _torrents.values().iterator(); iter.hasNext(); ) {
+            for (Iterator<Peers> iter = _torrents.values().iterator(); iter.hasNext();) {
                 Peers p = iter.next();
                 int recent = 0;
-                for (Iterator<Peer> iterp = p.values().iterator(); iterp.hasNext(); ) {
+                for (Iterator<Peer> iterp = p.values().iterator(); iterp.hasNext();) {
                     Peer peer = iterp.next();
                     if (peer.lastSeen() < now - _expireTime) iterp.remove();
                     else {

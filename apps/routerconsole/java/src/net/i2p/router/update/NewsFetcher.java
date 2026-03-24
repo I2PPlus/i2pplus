@@ -671,7 +671,7 @@ class NewsFetcher extends UpdateRunner {
         Banlist ban = _context.banlist();
         String reason = "Blocklist feed " + Instant.ofEpochMilli(ble.updated);
         int banned = 0;
-        for (Iterator<String> iter = ble.entries.iterator(); iter.hasNext(); ) {
+        for (Iterator<String> iter = ble.entries.iterator(); iter.hasNext();) {
             String s = iter.next();
             if (s.length() == 44) {
                 byte[] b = Base64.decode(s);

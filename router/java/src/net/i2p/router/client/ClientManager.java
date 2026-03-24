@@ -261,11 +261,11 @@ class ClientManager {
                 _ctx.netDb().fail(dest.calculateHash());
             }
             // just in case
-            for (Iterator<ClientConnectionRunner> iter = _runners.values().iterator(); iter.hasNext(); ) {
+            for (Iterator<ClientConnectionRunner> iter = _runners.values().iterator(); iter.hasNext();) {
                 ClientConnectionRunner r = iter.next();
                 if (r.equals(runner)) {iter.remove();}
             }
-            for (Iterator<ClientConnectionRunner> iter = _runnersByHash.values().iterator(); iter.hasNext(); ) {
+            for (Iterator<ClientConnectionRunner> iter = _runnersByHash.values().iterator(); iter.hasNext();) {
                 ClientConnectionRunner r = iter.next();
                 if (r.equals(runner)) {iter.remove();}
             }

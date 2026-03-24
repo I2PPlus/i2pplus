@@ -261,7 +261,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
                 break;
 
             case EF:
-                if ( (c != 0x00) && (c != 0x02) && (c != 0x04) )
+                if ((c != 0x00) && (c != 0x02) && (c != 0x04))
                     throw new IOException("Invalid extended flags [" + c + "]");
                 _state = HeaderState.OS;
                 break;

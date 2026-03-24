@@ -101,7 +101,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      *  @param sktMgr the existing socket manager
      */
     public I2PTunnelClientBase(int localPort, Logging l, I2PSocketManager sktMgr,
-            I2PTunnel tunnel, EventDispatcher notifyThis, long clientId )
+            I2PTunnel tunnel, EventDispatcher notifyThis, long clientId)
             throws IllegalArgumentException {
         super(localPort + " (uninitialized)", notifyThis, tunnel);
         chained = true;

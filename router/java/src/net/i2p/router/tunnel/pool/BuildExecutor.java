@@ -244,7 +244,7 @@ class BuildExecutor implements Runnable {
         final long expireBefore = now + TEN_MINUTES_MS - BuildRequestor.REQUEST_TIMEOUT;
 
         // Expire really old build requests from recentlyBuilding map
-        for (Iterator<PooledTunnelCreatorConfig> iter = _recentlyBuildingMap.values().iterator(); iter.hasNext(); ) {
+        for (Iterator<PooledTunnelCreatorConfig> iter = _recentlyBuildingMap.values().iterator(); iter.hasNext();) {
             PooledTunnelCreatorConfig cfg = iter.next();
             if (cfg.getExpiration() <= expireRecentlyBefore) {
                 iter.remove();
@@ -255,7 +255,7 @@ class BuildExecutor implements Runnable {
 
         // Expire old build requests from currentlyBuilding map, move them to recentlyBuilding
         // Enhanced with adaptive timeout handling
-        for (Iterator<PooledTunnelCreatorConfig> iter = _currentlyBuildingMap.values().iterator(); iter.hasNext(); ) {
+        for (Iterator<PooledTunnelCreatorConfig> iter = _currentlyBuildingMap.values().iterator(); iter.hasNext();) {
             PooledTunnelCreatorConfig cfg = iter.next();
             long adaptiveTimeout = calculateAdaptiveTimeout(cfg);
             long adjustedExpireBefore = now + TEN_MINUTES_MS - adaptiveTimeout;
@@ -537,7 +537,7 @@ class BuildExecutor implements Runnable {
      * @return number of tunnels allowed after processing these zero hop tunnels (almost always the same as before)
      */
     private int buildZeroHopTunnels(List<TunnelPool> wanted, int allowed) {
-        for (Iterator<TunnelPool> iter = wanted.iterator(); iter.hasNext(); ) {
+        for (Iterator<TunnelPool> iter = wanted.iterator(); iter.hasNext();) {
             TunnelPool pool = iter.next();
             if (pool.getSettings().getLength() == 0) {
                 PooledTunnelCreatorConfig cfg = pool.configureNewTunnel();

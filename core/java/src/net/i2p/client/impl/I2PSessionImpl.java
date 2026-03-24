@@ -635,8 +635,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
         _availabilityNotifier.stopNotifying();
 
-        if ( (_options != null) &&
-             (I2PClient.PROP_RELIABILITY_GUARANTEED.equals(_options.getProperty(I2PClient.PROP_RELIABILITY, I2PClient.PROP_RELIABILITY_BEST_EFFORT))) ) {
+        if ((_options != null) &&
+             (I2PClient.PROP_RELIABILITY_GUARANTEED.equals(_options.getProperty(I2PClient.PROP_RELIABILITY, I2PClient.PROP_RELIABILITY_BEST_EFFORT)))) {
             if (_log.shouldError())
                 _log.error("I2CP guaranteed delivery mode has been removed, using best effort.");
         }
@@ -921,7 +921,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                         size = _pendingSizes.remove(0);
                     }
                 }
-                if ( (msgId != null) && (size != null) ) {
+                if ((msgId != null) && (size != null)) {
                     if (_sessionListener != null) {
                         try {
                             long before = System.currentTimeMillis();
@@ -1950,7 +1950,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     public String toString() {
         StringBuilder buf = new StringBuilder(32);
         if (_myDestination != null) {
-            buf.append("[").append(_myDestination.calculateHash().toBase32().substring(0,8)).append("]" );
+            buf.append("[").append(_myDestination.calculateHash().toBase32().substring(0,8)).append("]");
         } else {buf.append("[null dest] ");}
         buf.append(getPrefix());
         return buf.toString();

@@ -46,7 +46,7 @@ public class EdDSANamedCurveTable {
             ed25519curve,
             "SHA-512", // H
             new Ed25519ScalarOps(), // l
-            ed25519curve.createPoint( // B
+            ed25519curve.createPoint(// B
                     Utils.hexToBytes("5866666666666666666666666666666666666666666666666666666666666666"),
                     true)); // Precompute tables for B
 

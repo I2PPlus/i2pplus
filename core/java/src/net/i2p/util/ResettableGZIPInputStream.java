@@ -239,7 +239,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
         if (c == -1) throw new IOException("EOF on MTIME3 [" + c + "]");
 
         c = in.read();
-        if ( (c != 0x00) && (c != 0x02) && (c != 0x04) )
+        if ((c != 0x00) && (c != 0x02) && (c != 0x04))
             throw new IOException("Invalid extended flags [" + c + "]");
 
         c = in.read(); // ignore creator OS

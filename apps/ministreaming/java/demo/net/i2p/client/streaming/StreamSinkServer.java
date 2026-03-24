@@ -135,7 +135,7 @@ public class StreamSinkServer {
                 byte buf[] = new byte[4096];
                 long written = 0;
                 int read = 0;
-                while ( (read = in.read(buf)) != -1) {
+                while ((read = in.read(buf)) != -1) {
                     //_fos.write(buf, 0, read);
                     written += read;
                     if (_log.shouldDebug())

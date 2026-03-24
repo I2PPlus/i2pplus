@@ -255,7 +255,7 @@ public class DeliveryInstructions extends DataStructureImpl {
                 additionalSize += Hash.HASH_LENGTH;
                 break;
             case FLAG_MODE_TUNNEL:
-                if ( (_routerHash == null) || (_tunnelId == null) ) throw new IllegalStateException("Router hash or tunnel ID is not set");
+                if ((_routerHash == null) || (_tunnelId == null)) throw new IllegalStateException("Router hash or tunnel ID is not set");
                 additionalSize += Hash.HASH_LENGTH;
                 additionalSize += 4; // tunnelId
                 break;
@@ -284,7 +284,7 @@ public class DeliveryInstructions extends DataStructureImpl {
                 offset += Hash.HASH_LENGTH;
                 break;
             case FLAG_MODE_TUNNEL:
-                if ( (_routerHash == null) || (_tunnelId == null) ) throw new IllegalStateException("Router hash or tunnel ID is not set");
+                if ((_routerHash == null) || (_tunnelId == null)) throw new IllegalStateException("Router hash or tunnel ID is not set");
                 System.arraycopy(_routerHash.getData(), 0, rv, offset, Hash.HASH_LENGTH);
                 offset += Hash.HASH_LENGTH;
                 DataHelper.toLong(rv, offset, 4, _tunnelId.getTunnelId());
@@ -311,7 +311,7 @@ public class DeliveryInstructions extends DataStructureImpl {
      * @return the number of bytes written to the target
      */
     public int writeBytes(byte target[], int offset) {
-        if ( (_deliveryMode < 0) || (_deliveryMode > FLAG_MODE_TUNNEL) ) throw new IllegalStateException("Invalid data: mode = " + _deliveryMode);
+        if ((_deliveryMode < 0) || (_deliveryMode > FLAG_MODE_TUNNEL)) throw new IllegalStateException("Invalid data: mode = " + _deliveryMode);
         int flags = getFlags();
         int origOffset = offset;
         target[offset++] = (byte) flags;

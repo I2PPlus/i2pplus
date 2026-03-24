@@ -75,7 +75,7 @@ public class WizardHandler extends FormHandler {
 
         if (sharePct != null) {
             String old = _context.router().getConfigSetting(Router.PROP_BANDWIDTH_SHARE_PERCENTAGE);
-            if ( (old == null) || (!old.equals(sharePct)) ) {
+            if ((old == null) || (!old.equals(sharePct))) {
                 changes.put(Router.PROP_BANDWIDTH_SHARE_PERCENTAGE, sharePct);
                 addFormNotice(_t("Updating bandwidth share percentage"));
                 updated = true;

@@ -241,7 +241,7 @@ public class InstallUpdate {
             fis = new FileInputStream(deleteFile);
             in = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
             String line;
-            while ( (line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null) {
                 String fl = line.trim();
                 if (fl.contains("..") || fl.startsWith("#") || fl.length() == 0)
                     continue;

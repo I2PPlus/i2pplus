@@ -260,7 +260,7 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
             return;
         }
         if (bf.log.shouldDebug())
-            bf.log.debug("Killing " + this + ' ' + print() /*, new Exception() */ );
+            bf.log.debug("Killing " + this + ' ' + print() /*, new Exception() */);
         isKilled = true;
         bsl.levelHash.remove(Integer.valueOf(levelPage));
         bf.freePage(levelPage);

@@ -659,7 +659,7 @@ public class PeerState {
      */
     int expireInboundMessages() {
         int rv = 0;
-        for (Iterator<Map.Entry<Long, InboundMessageState>> iter = _inboundMessages.entrySet().iterator(); iter.hasNext(); ) {
+        for (Iterator<Map.Entry<Long, InboundMessageState>> iter = _inboundMessages.entrySet().iterator(); iter.hasNext();) {
             Map.Entry<Long, InboundMessageState> entry = iter.next();
             InboundMessageState state = entry.getValue();
             if (state.isExpired() || state.isComplete() || _dead) {
@@ -693,12 +693,12 @@ public class PeerState {
         else {
             _sendWindowBytes = getVersion() == 2 ? PeerState2.MAX_MTU : (isIPv6() ? MAX_IPV6_MTU : LARGE_MTU);
             bwe = _bwEstimator.getBandwidthEstimate(now);
-            _slowStartThreshold = Math.max( (int)(bwe * _rtt), 2 * _mtu);
+            _slowStartThreshold = Math.max((int)(bwe * _rtt), 2 * _mtu);
         }
 
         int oldRto = _rto;
         long oldTimer = _retransmitTimer - now;
-        _rto = Math.min(MAX_RTO, Math.max(MIN_RTO, _rto << 1 ));
+        _rto = Math.min(MAX_RTO, Math.max(MIN_RTO, _rto << 1));
         _retransmitTimer = now + _rto;
         if (_log.shouldInfo()) {
             _log.info("[" + _remotePeer.toBase64().substring(0,6) + "] Estimated bandwidth: " +
@@ -1406,7 +1406,7 @@ public class PeerState {
                 long sn = state.getSeqNum();
                 boolean found = false;
                 // We don't do _outboundMessages.remove() so we can use the cached iterator and break out early
-                for (Iterator<OutboundMessageState> iter = _outboundMessages.iterator(); iter.hasNext(); ) {
+                for (Iterator<OutboundMessageState> iter = _outboundMessages.iterator(); iter.hasNext();) {
                     OutboundMessageState state2 = iter.next();
                     if (state == state2) {
                         iter.remove();
@@ -1485,7 +1485,7 @@ public class PeerState {
         boolean startFast = false;
         boolean continueFast = false;
         synchronized (_outboundLock) {
-            for (Iterator<OutboundMessageState> iter = _outboundMessages.iterator(); iter.hasNext(); ) {
+            for (Iterator<OutboundMessageState> iter = _outboundMessages.iterator(); iter.hasNext();) {
                 OutboundMessageState state = iter.next();
                 long sn = state.getSeqNum();
                 if (sn >= highest) {break;}

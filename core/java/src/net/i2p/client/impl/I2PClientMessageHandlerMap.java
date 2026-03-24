@@ -53,7 +53,7 @@ class I2PClientMessageHandlerMap {
     }
 
     public I2CPMessageHandler getHandler(int messageTypeId) {
-        if ( (messageTypeId < 0) || (messageTypeId >= _handlers.length) ) return null;
+        if ((messageTypeId < 0) || (messageTypeId >= _handlers.length)) return null;
         return _handlers[messageTypeId];
     }
 }

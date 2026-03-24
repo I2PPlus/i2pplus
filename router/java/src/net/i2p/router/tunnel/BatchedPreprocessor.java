@@ -237,8 +237,8 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                 // After going through the entire pending list, we have only a partial message.
                 // We might flush it or might not, but we are returning either way.
 
-                if ( (pending.size() > FORCE_BATCH_FLUSH) ||                    // enough msgs - or
-                     ( (_pendingSince > 0) && (getDelayAmount() <= 0) ) ||      // time to flush - or
+                if ((pending.size() > FORCE_BATCH_FLUSH) ||                    // enough msgs - or
+                     ((_pendingSince > 0) && (getDelayAmount() <= 0)) ||      // time to flush - or
                      (allocated >= FULL_ENOUGH_SIZE)) {                         // full enough
                      //(pending.get(0).getFragmentNumber() > 0)) {                // don't delay anybody's last fragment,
                      //                                                           // which would be the first fragment in the message

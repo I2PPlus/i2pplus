@@ -437,7 +437,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  Stop this download
      */
     public void stopUpdate(UpdateType type, String id) {
-        for (Iterator<UpdateTask> iter = _downloaders.keySet().iterator(); iter.hasNext(); ) {
+        for (Iterator<UpdateTask> iter = _downloaders.keySet().iterator(); iter.hasNext();) {
             UpdateTask t = iter.next();
             if (t.getType() == type && id.equals(t.getID())) {
                 iter.remove();
@@ -486,7 +486,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  Stop this check
      */
     public void stopCheck(UpdateType type, String id) {
-        for (Iterator<UpdateTask> iter = _activeCheckers.iterator(); iter.hasNext(); ) {
+        for (Iterator<UpdateTask> iter = _activeCheckers.iterator(); iter.hasNext();) {
             UpdateTask t = iter.next();
             if (t.getType() == type && id.equals(t.getID())) {
                 iter.remove();
@@ -594,7 +594,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
     private UpdateTask retry(UpdateItem ui, Map<UpdateMethod, List<URI>> sourceMap,
                              List<RegisteredUpdater> toTry, long maxTime) {
-        for (Iterator<RegisteredUpdater> iter = toTry.iterator(); iter.hasNext(); ) {
+        for (Iterator<RegisteredUpdater> iter = toTry.iterator(); iter.hasNext();) {
             RegisteredUpdater r = iter.next();
             iter.remove();
             // check in case unregistered later
@@ -1401,7 +1401,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         public void timeReached() {
             if (!_activeCheckers.isEmpty()) {
                 synchronized (_activeCheckers) {
-                    for (Iterator<UpdateTask> iter = _activeCheckers.iterator(); iter.hasNext(); ) {
+                    for (Iterator<UpdateTask> iter = _activeCheckers.iterator(); iter.hasNext();) {
                         UpdateTask t = iter.next();
                         if (!t.isRunning()) {
                             if (_log.shouldWarn()) {_log.warn("Failsafe remove checker " + t);}
@@ -1411,7 +1411,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 }
             }
             if (!_downloaders.isEmpty()) {
-                for (Iterator<UpdateTask> iter = _downloaders.keySet().iterator(); iter.hasNext(); ) {
+                for (Iterator<UpdateTask> iter = _downloaders.keySet().iterator(); iter.hasNext();) {
                     UpdateTask t = iter.next();
                     if (!t.isRunning()) {
                         if (_log.shouldWarn()) {_log.warn("Failsafe remove downloader " + t);}

@@ -74,7 +74,7 @@ public class DSABench {
             }
             if (!(v1 && v2 && v3))
                 throw new RuntimeException("Stream did not verify");
-            if ( (minKey == 0) && (minS == 0) && (minV == 0) ) {
+            if ((minKey == 0) && (minS == 0) && (minV == 0)) {
                 minKey = endkeys - startkeys;
                 maxKey = endkeys - startkeys;
                 minS = endsignstartverify - startsign;

@@ -38,9 +38,9 @@ public class EncodingException extends IOException {
     /**
      * @since public since 0.9.33, was package private
      */
-    public EncodingException( String msg )
+    public EncodingException(String msg)
     {
-        super( msg );
+        super(msg);
     }
 
     /**

@@ -37,7 +37,7 @@ class Executor implements Runnable {
                     _log.error("Executing task " + evt + " exited unexpectedly, please report", t);
                 }
                 long time = _context.clock().now() - before;
-                if ( (time > 1000) && (_log.shouldWarn()) )
+                if ((time > 1000) && (_log.shouldWarn()))
                     _log.warn("event execution took " + time + "ms: " + evt);
             }
         }

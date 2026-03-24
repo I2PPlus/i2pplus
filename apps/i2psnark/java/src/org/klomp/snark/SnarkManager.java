@@ -896,7 +896,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         // old b64 of hash as key
         Map<String, Properties> configs = new HashMap<String, Properties>(16);
         for (Iterator<Map.Entry<Object, Object>> iter = oldProps.entrySet().iterator();
-                iter.hasNext(); ) {
+                iter.hasNext();) {
             Map.Entry<Object, Object> e = iter.next();
             String k = (String) e.getKey();
             if (k.startsWith(PROP_META_PREFIX)) {
@@ -4042,7 +4042,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private void addMagnets(boolean autostart) {
         boolean changed = false;
-        for (Iterator<?> iter = _config.keySet().iterator(); iter.hasNext(); ) {
+        for (Iterator<?> iter = _config.keySet().iterator(); iter.hasNext();) {
             String k = (String) iter.next();
             if (k.startsWith(PROP_META_MAGNET_PREFIX)) {
                 String b64 = k.substring(PROP_META_MAGNET_PREFIX.length());
@@ -4224,7 +4224,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public List<Tracker> getSortedTrackers() {
         List<Tracker> rv = new ArrayList<Tracker>(_trackerMap.values());
         if (!_util.udpEnabled()) {
-            for (Iterator<Tracker> iter = rv.iterator(); iter.hasNext(); ) {
+            for (Iterator<Tracker> iter = rv.iterator(); iter.hasNext();) {
                 Tracker tr = iter.next();
                 if (tr.announceURL.startsWith("udp://")) {
                     iter.remove();

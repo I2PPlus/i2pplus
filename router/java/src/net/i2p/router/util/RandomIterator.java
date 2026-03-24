@@ -176,7 +176,7 @@ public class RandomIterator<E> implements Iterator<E> {
         for (int i = 0; i < n; i++) {
             l.add(Integer.valueOf(i));
         }
-        for (Iterator<Integer> iter = new RandomIterator<Integer>(l); iter.hasNext(); ) {
+        for (Iterator<Integer> iter = new RandomIterator<Integer>(l); iter.hasNext();) {
             System.out.println(iter.next().toString());
         }
     }

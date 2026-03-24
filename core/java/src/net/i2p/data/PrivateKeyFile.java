@@ -1036,7 +1036,7 @@ public class PrivateKeyFile {
             Properties hosts = new Properties();
             try {
                 File f = new File(filenames[i]);
-                if ( (f.exists()) && (f.canRead()) ) {
+                if ((f.exists()) && (f.canRead())) {
                     DataHelper.loadProps(hosts, f, true);
                     int sz = hosts.size();
                     if (sz > 0) {

@@ -88,7 +88,7 @@ public class BuildTestMessageJob extends JobImpl {
 
     private boolean alreadyKnownReachable() {
         PeerProfile profile = getContext().profileOrganizer().getProfile(_target.getIdentity().getHash());
-        if ( (profile == null) || (!profile.getIsActive()) )
+        if ((profile == null) || (!profile.getIsActive()))
             return false;
         else
             return true;
@@ -187,9 +187,9 @@ public class BuildTestMessageJob extends JobImpl {
         }
         public String getName() { return "Reply to Test Message Received"; }
         public void runJob() {
-            if ( (_keyDelivered != null) &&
+            if ((_keyDelivered != null) &&
                  (_sessionTagsDelivered != null) &&
-                 (_sessionTagsDelivered.size() > 0) )
+                 (_sessionTagsDelivered.size() > 0))
                 getContext().sessionKeyManager().tagsDelivered(_target, _keyDelivered, _sessionTagsDelivered);
 
             getContext().jobQueue().addJob(_job);

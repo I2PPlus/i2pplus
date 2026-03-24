@@ -411,7 +411,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         sess.addTags(set);
         if (_log.shouldDebug())
             _log.debug("Tags delivered: " + set +
-                       "\n* Target: " + toString(target) /** + ": " + sessionTags */ );
+                       "\n* Target: " + toString(target) /** + ": " + sessionTags */);
         return set;
     }
 
@@ -633,7 +633,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         synchronized (_outboundSessions) {
             session = _outboundSessions.remove(target);
         }
-        if ( (session != null) && (_log.shouldWarn()) )
+        if ((session != null) && (_log.shouldWarn()))
             _log.warn("Removing session tags with " + session.availableTags() + " available for "
                        + (session.getLastExpirationDate()-_context.clock().now())
                        + "ms more", new Exception("Removed by"));
@@ -939,7 +939,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                         _acked = false;
                         int acked = 0;
                         int unacked = 0;
-                        for (Iterator<TagSet> iter = _tagSets.iterator(); iter.hasNext(); ) {
+                        for (Iterator<TagSet> iter = _tagSets.iterator(); iter.hasNext();) {
                             TagSet ts = iter.next();
                             if (!ts.getAcked()) {
                                 iter.remove();
@@ -1003,7 +1003,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             long now = _context.clock().now();
             int removed = 0;
             synchronized (_tagSets) {
-                for (Iterator<TagSet> iter = _tagSets.iterator(); iter.hasNext(); ) {
+                for (Iterator<TagSet> iter = _tagSets.iterator(); iter.hasNext();) {
                     TagSet set = iter.next();
                     if (set.getDate() + SESSION_TAG_DURATION_MS <= now) {
                         iter.remove();
@@ -1012,7 +1012,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                 }
                 // failsafe, sometimes these are sticking around, not sure why, so clean them periodically
                 if ((now & 0x0f) == 0) {
-                    for (Iterator<TagSet> iter = _unackedTagSets.iterator(); iter.hasNext(); ) {
+                    for (Iterator<TagSet> iter = _unackedTagSets.iterator(); iter.hasNext();) {
                         TagSet set = iter.next();
                         if (set.getDate() + SESSION_TAG_DURATION_MS <= now) {
                             iter.remove();
@@ -1079,7 +1079,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             long last = 0;
             synchronized (_tagSets) {
                 for (TagSet set : _tagSets) {
-                    if ( (set.getDate() > last) && (!set.getTags().isEmpty()) )
+                    if ((set.getDate() > last) && (!set.getTags().isEmpty()))
                         last = set.getDate();
                 }
             }

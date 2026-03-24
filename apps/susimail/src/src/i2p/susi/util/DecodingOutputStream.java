@@ -133,7 +133,7 @@ public class DecodingOutputStream extends OutputStream {
             r.close();
             System.out.println("Received: \"" + w.toString() + '"');
             System.out.println("Test passed? " + w.toString().equals(s));
-            bais = new java.io.ByteArrayInputStream(new byte[] { 'x', (byte) 0xcc, 'x' } );
+            bais = new java.io.ByteArrayInputStream(new byte[] { 'x', (byte) 0xcc, 'x' });
             w = new StringBuilderWriter();
             r = new DecodingOutputStream(w, "UTF-8");
             while ((b = bais.read()) >= 0) {

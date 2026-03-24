@@ -133,16 +133,16 @@ public class SAMReader {
                 while (tok.hasMoreTokens()) {
                     String pair = tok.nextToken();
                     int eq = pair.indexOf('=');
-                    if ( (eq > 0) && (eq < pair.length() - 1) ) {
+                    if ((eq > 0) && (eq < pair.length() - 1)) {
                         String name = pair.substring(0, eq);
                         String val = pair.substring(eq+1);
                         if (val.length() <= 0) {
                             _log.error("Empty value for " + name);
                             continue;
                         }
-                        while ( (val.charAt(0) == '\"') && (val.length() > 0) )
+                        while ((val.charAt(0) == '\"') && (val.length() > 0))
                             val = val.substring(1);
-                        while ( (val.length() > 0) && (val.charAt(val.length()-1) == '\"') )
+                        while ((val.length() > 0) && (val.charAt(val.length()-1) == '\"'))
                             val = val.substring(0, val.length()-1);
                         params.setProperty(name, val);
                     }

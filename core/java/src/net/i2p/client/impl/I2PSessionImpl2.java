@@ -130,7 +130,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
             if (isClosed()) {return;}
             if (!_sendingStates.isEmpty()) {
                 long now = _context.clock().now();
-                for (Iterator<MessageState> iter = _sendingStates.values().iterator(); iter.hasNext(); ) {
+                for (Iterator<MessageState> iter = _sendingStates.values().iterator(); iter.hasNext();) {
                     MessageState state = iter.next();
                     if (state.getExpires() < now) {iter.remove();}
                 }

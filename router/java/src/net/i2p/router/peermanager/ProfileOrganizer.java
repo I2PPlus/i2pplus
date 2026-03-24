@@ -479,7 +479,7 @@ public class ProfileOrganizer {
             List<Hash> selected = new ArrayList<>(needed);
             getReadLock();
             try {
-                for (Iterator<Hash> iter = new RandomIterator<>(_notFailingPeersList); selected.size() < needed && iter.hasNext(); ) {
+                for (Iterator<Hash> iter = new RandomIterator<>(_notFailingPeersList); selected.size() < needed && iter.hasNext();) {
                     Hash cur = iter.next();
                     if (matches.contains(cur) || (exclude != null && exclude.contains(cur))) continue;
                     if (onlyNotFailing && _highCapacityPeers.containsKey(cur)) continue;
@@ -902,7 +902,7 @@ public class ProfileOrganizer {
                                     Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         List<Hash> all = new ArrayList<>(peers.keySet());
 
-        for (Iterator<Hash> iter = new RandomIterator<>(all); matches.size() < howMany && iter.hasNext(); ) {
+        for (Iterator<Hash> iter = new RandomIterator<>(all); matches.size() < howMany && iter.hasNext();) {
             Hash peer = iter.next();
             if (toExclude != null && toExclude.contains(peer)) continue;
             if (matches.contains(peer)) continue;
@@ -925,7 +925,7 @@ public class ProfileOrganizer {
         long k0 = DataHelper.fromLong8(rk, 0);
         long k1 = DataHelper.fromLong8(rk, 8);
 
-        for (Iterator<Hash> iter = new RandomIterator<>(all); matches.size() < howMany && iter.hasNext(); ) {
+        for (Iterator<Hash> iter = new RandomIterator<>(all); matches.size() < howMany && iter.hasNext();) {
             Hash peer = iter.next();
             if (toExclude != null && toExclude.contains(peer)) continue;
             if (matches.contains(peer)) continue;
@@ -947,7 +947,7 @@ public class ProfileOrganizer {
 
     private void locked_selectActive(List<Hash> connected, int howMany, Set<Hash> toExclude,
                                     Set<Hash> matches, int mask, MaskedIPSet ipSet) {
-        for (Iterator<Hash> iter = new RandomIterator<>(connected); matches.size() < howMany && iter.hasNext(); ) {
+        for (Iterator<Hash> iter = new RandomIterator<>(connected); matches.size() < howMany && iter.hasNext();) {
             Hash peer = iter.next();
             if (toExclude != null && toExclude.contains(peer)) continue;
             if (matches.contains(peer)) continue;

@@ -189,7 +189,7 @@ public class BatchedFragmentTest extends FragmentTest {
         int added = 0;
         while (keepGoing) {
             keepGoing = pre.preprocessQueue(messages, new SenderImpl(), receiver);
-            if ( (keepGoing) || ((messages.size() == 0) && (added < 2) ) ) {
+            if ((keepGoing) || ((messages.size() == 0) && (added < 2))) {
                 try { Thread.sleep(150); } catch (InterruptedException ie) {}
 
                 if (added == 0) {

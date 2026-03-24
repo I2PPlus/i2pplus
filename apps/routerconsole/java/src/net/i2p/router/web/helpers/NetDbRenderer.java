@@ -424,7 +424,7 @@ class NetDbRenderer {
                     buf.append("<a href=\"/netdb?pg=").append(page).append("&amp; ps=").append(pageSize).append(ubuf)
                        .append("\" title=\"").append(_t("Previous Page")).append("\"><span id=prevPage class=pageLink>‹</span></a>");
                 }  else {
-                    buf.append("<span id=prevPage class=\"pageLink disabled\">‹</span>" );
+                    buf.append("<span id=prevPage class=\"pageLink disabled\">‹</span>");
                 }
                 for (int i = 1; i <= totalPages; i++) {
                     if (i <= totalPages) {

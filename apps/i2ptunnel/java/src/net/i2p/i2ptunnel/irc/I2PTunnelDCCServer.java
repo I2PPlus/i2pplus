@@ -235,7 +235,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
      */
     public int acceptOutgoing(int port) {
         // do a reverse lookup
-        for (Iterator<Map.Entry<Integer, LocalAddress>> iter = _resume.entrySet().iterator(); iter.hasNext(); ) {
+        for (Iterator<Map.Entry<Integer, LocalAddress>> iter = _resume.entrySet().iterator(); iter.hasNext();) {
             Map.Entry<Integer, LocalAddress> e = iter.next();
             LocalAddress local = e.getValue();
             if (local.port == port) {
@@ -247,12 +247,12 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
     }
 
     private void expireOutbound() {
-        for (Iterator<LocalAddress> iter = _outgoing.values().iterator(); iter.hasNext(); ) {
+        for (Iterator<LocalAddress> iter = _outgoing.values().iterator(); iter.hasNext();) {
             LocalAddress a = iter.next();
             if (a.expire < getTunnel().getContext().clock().now())
                 iter.remove();
         }
-        for (Iterator<LocalAddress> iter = _active.values().iterator(); iter.hasNext(); ) {
+        for (Iterator<LocalAddress> iter = _active.values().iterator(); iter.hasNext();) {
             LocalAddress a = iter.next();
             I2PSocket s = a.socket;
             if (s != null && s.isClosed())

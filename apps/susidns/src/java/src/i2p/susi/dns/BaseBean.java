@@ -56,7 +56,7 @@ public class BaseBean {
     protected void loadConfig() {
         synchronized (BaseBean.class) {
             long currentTime = System.currentTimeMillis();
-            if (!properties.isEmpty() &&  currentTime - configLastLoaded < 10000 ) {return;}
+            if (!properties.isEmpty() &&  currentTime - configLastLoaded < 10000) {return;}
             reload();
         }
     }

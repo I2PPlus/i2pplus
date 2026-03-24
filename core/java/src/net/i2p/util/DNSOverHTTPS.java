@@ -91,7 +91,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         "xa", "xb", "xc", "xd", "xe", "xf", "xg", "xh", "xi", "xj", "xk", "xl", "xm",
         "xn", "xo", "xp", "xq", "xr", "xs", "xt", "xu", "xv", "xw", "xx", "xy", "xz",
         "zz"
-    } );
+    });
 
     static {
         // Public lists:
@@ -763,7 +763,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             FileInputStream fis = new FileInputStream(file);
             in = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
             String line = null;
-            while ( (line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null) {
                 line = line.trim();
                 if (!line.startsWith("sdns://"))
                     continue;

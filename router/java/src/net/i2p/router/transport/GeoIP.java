@@ -560,7 +560,7 @@ public class GeoIP {
             br = new BufferedReader(new InputStreamReader(
                     new FileInputStream(geoFile), "UTF-8"));
             String line = null;
-            while ( (line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 try {
                     if (line.charAt(0) == '#') {
                         continue;

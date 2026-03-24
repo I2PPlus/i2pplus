@@ -64,7 +64,7 @@ public class FileUtil {
                 //System.out.println("info: target null children [" + target.getPath() + "]");
                 return false;
             }
-            if ( (failIfNotEmpty) && (children.length > 0) ) {
+            if ((failIfNotEmpty) && (children.length > 0)) {
                 //System.out.println("info: target is not emtpy[" + target.getPath() + "]");
                 return false;
             }
@@ -114,7 +114,7 @@ public class FileUtil {
                 }
                 File target = new File(targetDir, entry.getName());
                 File parent = target.getParentFile();
-                if ( (parent != null) && (!parent.exists()) ) {
+                if ((parent != null) && (!parent.exists())) {
                     boolean parentsOk = parent.mkdirs();
                     if (!parentsOk) {
                         if (logLevel <= Log.ERROR)
@@ -238,7 +238,7 @@ public class FileUtil {
                     }
                     try {
                         InputStream in = zip.getInputStream(entry);
-                        while ( (in.read(buf)) != -1) {
+                        while ((in.read(buf)) != -1) {
                             // throw the data away
                         }
                         //System.err.println("INFO: File [" + entry.getName() + "] extracted");
@@ -394,9 +394,9 @@ public class FileUtil {
             in = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
             List<String> lines = new ArrayList<String>(maxNumLines > 0 ? maxNumLines : 64);
             String line = null;
-            while ( (line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null) {
                 lines.add(line);
-                if ( (maxNumLines > 0) && (lines.size() >= maxNumLines) ) {
+                if ((maxNumLines > 0) && (lines.size() >= maxNumLines)) {
                     if (startAtBeginning)
                         break;
                     else
@@ -425,7 +425,7 @@ public class FileUtil {
      */
     public static void readFile(String path, String root, OutputStream out) throws IOException {
         File rootDir = new File(root);
-        while (path.startsWith("/") && (path.length() > 0) )
+        while (path.startsWith("/") && (path.length() > 0))
             path = path.substring(1);
         if (path.length() <= 0) throw new FileNotFoundException("Not serving up the root dir");
         File target = new File(rootDir, path);
@@ -533,7 +533,7 @@ public class FileUtil {
      *
      */
     public static void main(String args[]) {
-        if ( (args == null) || (args.length < 2) ) {
+        if ((args == null) || (args.length < 2)) {
             System.err.println("Usage: delete path | copy source dest | rename from to | unzip path.zip");
             //testRmdir();
         } else if ("delete".equals(args[0])) {

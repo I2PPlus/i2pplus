@@ -76,7 +76,7 @@ public class ConfigHomeHandler extends FormHandler {
                     k = k.substring(7);
                     toDelete.add(k);
                 }
-                for (Iterator<App> iter = apps.iterator(); iter.hasNext(); ) {
+                for (Iterator<App> iter = apps.iterator(); iter.hasNext();) {
                     App app = iter.next();
                     if (toDelete.contains(app.name)) {
                         iter.remove();

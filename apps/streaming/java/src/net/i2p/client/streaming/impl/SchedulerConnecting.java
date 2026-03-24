@@ -46,8 +46,8 @@ class SchedulerConnecting extends SchedulerImpl {
 
     public void eventOccurred(Connection con) {
         long waited = _context.clock().now() - con.getCreatedOn();
-        if ( (con.getOptions().getConnectTimeout() > 0) &&
-             (con.getOptions().getConnectTimeout() <= waited) ) {
+        if ((con.getOptions().getConnectTimeout() > 0) &&
+             (con.getOptions().getConnectTimeout() <= waited)) {
             con.setConnectionError("Timeout waiting for ack (waited " + waited + "ms)");
             con.disconnect(false);
             reschedule(0, con);
@@ -61,7 +61,7 @@ class SchedulerConnecting extends SchedulerImpl {
         }
         /*
         long timeTillSend = con.getNextSendTime() - _context.clock().now();
-        if ( (timeTillSend <= 0) && (con.getNextSendTime() > 0) ) {
+        if ((timeTillSend <= 0) && (con.getNextSendTime() > 0)) {
             if (_log.shouldDebug())
                 _log.debug("send next on " + con);
             con.sendAvailable();

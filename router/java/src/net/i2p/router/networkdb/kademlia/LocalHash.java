@@ -75,7 +75,7 @@ class LocalHash extends Hash {
                     int removed = 0;
                     for (Iterator<Hash> iter = _xorCache.keySet().iterator(); iter.hasNext() && removed < toRemove; removed++)
                         keys.add(iter.next());
-                    for (Iterator<Hash> iter = keys.iterator(); iter.hasNext(); )
+                    for (Iterator<Hash> iter = keys.iterator(); iter.hasNext();)
                         _xorCache.remove(iter.next());
                 }
                 distance = DataHelper.xor(key.getData(), getData());

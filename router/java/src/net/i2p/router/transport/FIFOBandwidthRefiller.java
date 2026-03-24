@@ -261,7 +261,7 @@ public class FIFOBandwidthRefiller implements Runnable {
         int in = _context.getProperty(PROP_INBOUND_BANDWIDTH, DEFAULT_INBOUND_BANDWIDTH);
         if (in != _inboundKBytesPerSecond) {
             // bandwidth was specified *and* changed
-            if ( (in <= 0) || (in > MIN_INBOUND_BANDWIDTH) )
+            if ((in <= 0) || (in > MIN_INBOUND_BANDWIDTH))
                     _inboundKBytesPerSecond = in;
             else
                     _inboundKBytesPerSecond = MIN_INBOUND_BANDWIDTH;
@@ -279,7 +279,7 @@ public class FIFOBandwidthRefiller implements Runnable {
             // bandwidth was specified *and* changed
             if (out >= MAX_OUTBOUND_BANDWIDTH)
                     _outboundKBytesPerSecond = MAX_OUTBOUND_BANDWIDTH;
-            else if ( (out <= 0) || (out >= MIN_OUTBOUND_BANDWIDTH) )
+            else if ((out <= 0) || (out >= MIN_OUTBOUND_BANDWIDTH))
                     _outboundKBytesPerSecond = out;
             else
                     _outboundKBytesPerSecond = MIN_OUTBOUND_BANDWIDTH;
@@ -295,7 +295,7 @@ public class FIFOBandwidthRefiller implements Runnable {
         int in = _context.getProperty(PROP_INBOUND_BURST_BANDWIDTH, DEFAULT_INBOUND_BURST_BANDWIDTH);
         if (in != _inboundBurstKBytesPerSecond) {
             // bandwidth was specified *and* changed
-            if ( (in <= 0) || (in >= _inboundKBytesPerSecond) )
+            if ((in <= 0) || (in >= _inboundKBytesPerSecond))
                     _inboundBurstKBytesPerSecond = in;
             else
                     _inboundBurstKBytesPerSecond = _inboundKBytesPerSecond;
@@ -314,7 +314,7 @@ public class FIFOBandwidthRefiller implements Runnable {
         int out = _context.getProperty(PROP_OUTBOUND_BURST_BANDWIDTH, DEFAULT_OUTBOUND_BURST_BANDWIDTH);
         if (out != _outboundBurstKBytesPerSecond) {
             // bandwidth was specified *and* changed
-            if ( (out <= 0) || (out >= _outboundKBytesPerSecond) )
+            if ((out <= 0) || (out >= _outboundKBytesPerSecond))
                     _outboundBurstKBytesPerSecond = out;
             else
                     _outboundBurstKBytesPerSecond = _outboundKBytesPerSecond;

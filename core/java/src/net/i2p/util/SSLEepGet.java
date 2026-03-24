@@ -653,7 +653,7 @@ public class SSLEepGet extends EepGet {
 
         int remaining = (int)_bytesRemaining;
         byte buf[] = new byte[16*1024];
-        while (_keepFetching && ( (remaining > 0) || !strictSize ) && !_aborted) {
+        while (_keepFetching && ((remaining > 0) || !strictSize) && !_aborted) {
             int toRead = buf.length;
             if (strictSize && toRead > remaining)
                 toRead = remaining;
@@ -731,7 +731,7 @@ public class SSLEepGet extends EepGet {
             // 404, etc - transferFailed is called after all attempts fail, by fetch() above
             for (int i = 0; i < _listeners.size(); i++)
                 _listeners.get(i).attemptFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt, _numRetries, new Exception("Attempt failed"));
-        } else if ( (_bytesRemaining == -1) || (remaining == 0) ) {
+        } else if ((_bytesRemaining == -1) || (remaining == 0)) {
             for (int i = 0; i < _listeners.size(); i++)
                 _listeners.get(i).transferComplete(
                         _alreadyTransferred,

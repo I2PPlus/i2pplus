@@ -72,7 +72,7 @@ class TunnelGatewayZeroHop extends TunnelGateway {
     public void add(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
         if (_log.shouldDebug())
             _log.debug("Zero hop gateway: distribute" + (_config.isInbound() ? "Inbound" : " Outbound")
-                       + " to [" + (toRouter != null ? toRouter.toBase64().substring(0,6) + "]" : "" )
+                       + " to [" + (toRouter != null ? toRouter.toBase64().substring(0,6) + "]" : "")
                        + " " + (toTunnel != null ? toTunnel.getTunnelId() + "" : "")
                        + " " + msg);
         if (_config.isInbound()) {

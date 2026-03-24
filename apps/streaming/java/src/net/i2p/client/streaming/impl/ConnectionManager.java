@@ -648,7 +648,7 @@ class ConnectionManager {
             }
         }
 
-        //if ( (_connectionByInboundId.size() > 100) && (_log.shouldInfo()) )
+        //if ((_connectionByInboundId.size() > 100) && (_log.shouldInfo()))
         //    _log.info("More than 100 connections!  " + active
         //              + " total: " + _connectionByInboundId.size());
 
@@ -802,7 +802,7 @@ class ConnectionManager {
     public void disconnectAllHard() {
         //if (_log.shouldInfo())
         //    _log.info("ConnMan hard disconnect", new Exception("I did it"));
-        for (Iterator<Connection> iter = _connectionByInboundId.values().iterator(); iter.hasNext(); ) {
+        for (Iterator<Connection> iter = _connectionByInboundId.values().iterator(); iter.hasNext();) {
             Connection con = iter.next();
             con.disconnect(false, false);
             iter.remove();

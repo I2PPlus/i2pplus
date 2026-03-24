@@ -164,7 +164,7 @@ public class GarlicClove extends DataStructureImpl {
 
     @Override
     public boolean equals(Object obj) {
-        if ( (obj == null) || !(obj instanceof GarlicClove))
+        if ((obj == null) || !(obj instanceof GarlicClove))
             return false;
         GarlicClove clove = (GarlicClove)obj;
         return DataHelper.eq(_certificate, clove._certificate) &&

@@ -230,10 +230,10 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 packet.logTCPDump();
         }
 
-        if ( (packet.getSequenceNum() == 0) && (!packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) ) {
+        if ((packet.getSequenceNum() == 0) && (!packet.isFlagSet(Packet.FLAG_SYNCHRONIZE))) {
             // ack only, so release it asap
             packet.releasePayload();
-        } else if (packet.isFlagSet(Packet.FLAG_ECHO) && !packet.isFlagSet(Packet.FLAG_SIGNATURE_INCLUDED) ) {
+        } else if (packet.isFlagSet(Packet.FLAG_ECHO) && !packet.isFlagSet(Packet.FLAG_SIGNATURE_INCLUDED)) {
             // pong
             packet.releasePayload();
         } else if (packet.isFlagSet(Packet.FLAG_RESET)) {
@@ -375,7 +375,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             if (_dead)
                 return;
             if (!_messageStatusMap.isEmpty()) {
-                for (Iterator<Connection> iter = _messageStatusMap.values().iterator(); iter.hasNext(); ) {
+                for (Iterator<Connection> iter = _messageStatusMap.values().iterator(); iter.hasNext();) {
                     Connection con = iter.next();
                     if (!con.getIsConnected() || con.getLifetime() > 2*60*1000L)
                         iter.remove();

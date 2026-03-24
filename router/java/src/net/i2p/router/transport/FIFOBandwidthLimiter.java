@@ -516,7 +516,7 @@ public class FIFOBandwidthLimiter {
         long start = -1;
         for (int i = 0; i < _pendingInboundRequests.size(); i++) {
             Request req = _pendingInboundRequests.get(i);
-            if ( (start < 0) || (start > req.getRequestTime()) )
+            if ((start < 0) || (start > req.getRequestTime()))
                 start = req.getRequestTime();
         }
         if (start == -1)
@@ -531,7 +531,7 @@ public class FIFOBandwidthLimiter {
         for (int i = 0; i < _pendingOutboundRequests.size(); i++) {
             Request req = _pendingOutboundRequests.get(i);
             if (req == null) continue;
-            if ( (start < 0) || (start > req.getRequestTime()) )
+            if ((start < 0) || (start > req.getRequestTime()))
                 start = req.getRequestTime();
         }
         if (start == -1)

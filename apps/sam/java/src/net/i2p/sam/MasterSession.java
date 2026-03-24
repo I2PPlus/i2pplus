@@ -358,7 +358,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                 int port = i2ps.getLocalPort();
                 SAMMessageSess foundSess = null;
                 Collection<SAMMessageSess> all = sessions.values();
-                for (Iterator<SAMMessageSess> iter = all.iterator(); iter.hasNext(); ) {
+                for (Iterator<SAMMessageSess> iter = all.iterator(); iter.hasNext();) {
                     SAMMessageSess sess = iter.next();
                     if (sess.getListenProtocol() != I2PSession.PROTO_STREAMING) {
                         // remove as we may be going around again below

@@ -300,7 +300,7 @@ public final class DSAEngine {
      *  @return null on error
      */
     public Signature sign(InputStream in, SigningPrivateKey signingKey) {
-        if ((signingKey == null) || (in == null) ) return null;
+        if ((signingKey == null) || (in == null)) return null;
         SHA1Hash h = calculateHash(in);
         return sign(h, signingKey);
     }
@@ -473,7 +473,7 @@ public final class DSAEngine {
         byte buf[] = new byte[64];
         int read = 0;
         try {
-            while ( (read = in.read(buf)) != -1) {
+            while ((read = in.read(buf)) != -1) {
                 digest.update(buf, 0, read);
             }
         } catch (IOException ioe) {

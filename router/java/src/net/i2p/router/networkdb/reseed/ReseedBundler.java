@@ -138,7 +138,7 @@ public class ReseedBundler {
         File rv = new File(_context.getTempDir(), "genreseed-" + _context.random().nextInt() + ".zip");
         ZipOutputStream zip = null;
         try {
-            zip = new ZipOutputStream(new FileOutputStream(rv) );
+            zip = new ZipOutputStream(new FileOutputStream(rv));
             for (RouterInfo ri : toWrite) {
                 String name = getRouterInfoName(ri.getIdentity().calculateHash());
                 ZipEntry entry = new ZipEntry(name);
@@ -156,7 +156,7 @@ public class ReseedBundler {
             rv.delete();
             throw ioe;
         } finally {
-            if ( zip != null) {
+            if (zip != null) {
                 try {
                     zip.finish();
                     zip.close();

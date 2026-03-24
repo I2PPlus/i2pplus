@@ -437,7 +437,7 @@ public class I2PSSLSocketFactory {
                     new FileInputStream(geoFile), "UTF-8"));
             String line = null;
             int i = 0;
-            while ( (line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 try {
                     if (line.charAt(0) == '#')
                         continue;

@@ -293,7 +293,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     return false;
                 }
                 boolean found = false;
-                for (Iterator<OutboundSession> iter = pending.iterator(); iter.hasNext(); ) {
+                for (Iterator<OutboundSession> iter = pending.iterator(); iter.hasNext();) {
                     OutboundSession sess = iter.next();
                     HandshakeState pstate = sess.getHandshakeState();
                     if (oldState.equals(pstate)) {
@@ -645,7 +645,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     private void removeSession(PublicKey target) {
         if (target == null) return;
         OutboundSession session = _outboundSessions.remove(target);
-        if ( (session != null) && (_log.shouldWarn()) )
+        if ((session != null) && (_log.shouldWarn()))
             _log.warn("Removing session tags with " + session.availableTags() + " available for "
                        + (session.getLastExpirationDate()-_context.clock().now())
                        + "ms more", new Exception("Removed by"));
@@ -1427,7 +1427,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                         removed++;
                     }
                 }
-                for (Iterator<RatchetTagSet> iter = _unackedTagSets.iterator(); iter.hasNext(); ) {
+                for (Iterator<RatchetTagSet> iter = _unackedTagSets.iterator(); iter.hasNext();) {
                     RatchetTagSet set = iter.next();
                     if (set.getExpiration() <= now) {
                         iter.remove();

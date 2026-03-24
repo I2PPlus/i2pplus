@@ -1302,7 +1302,7 @@ class SidebarRenderer {
                .append(_t("Peer test average"))
                .append("</b></a></td><td class=digits><span class=volatile>")
                .append(_helper.getAvgPeerTestTimeGood())
-               .append(" / " )
+               .append(" / ")
                 .append(_helper.getAvgPeerTestTime());
             if (_helper.getAvgPeerTestTime() > 0) {buf.append("&nbsp; ms");}
             buf.append("</span></td></tr>\n");

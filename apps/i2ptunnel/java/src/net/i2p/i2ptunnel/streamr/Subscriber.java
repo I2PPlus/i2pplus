@@ -101,7 +101,7 @@ public class Subscriber implements Sink {
                 return;
             }
             long exp = ctx.clock().now() - EXPIRATION;
-            for (Iterator<Map.Entry<MultiSource.MSink, Long>> iter = subscriptions.entrySet().iterator(); iter.hasNext(); ) {
+            for (Iterator<Map.Entry<MultiSource.MSink, Long>> iter = subscriptions.entrySet().iterator(); iter.hasNext();) {
                 Map.Entry<MultiSource.MSink, Long> e = iter.next();
                 long then = e.getValue().longValue();
                 if (then < exp) {

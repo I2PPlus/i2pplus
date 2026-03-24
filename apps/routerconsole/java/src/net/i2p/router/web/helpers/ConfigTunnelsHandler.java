@@ -27,7 +27,7 @@ public class ConfigTunnelsHandler extends FormHandler {
     }
 
     public void setShouldsave(String moo) {
-        if ( (moo != null) && (moo.equals(_t("Save changes"))) )
+        if ((moo != null) && (moo.equals(_t("Save changes"))))
             _shouldSave = true;
     }
 
@@ -68,7 +68,7 @@ public class ConfigTunnelsHandler extends FormHandler {
                 out = mgr.getOutboundSettings(client);
             }
 
-            if ( (in == null) || (out == null) ) {
+            if ((in == null) || (out == null)) {
                 addFormError(_t("Internal error: could not find pool settings for {0}.", poolName), true);
                 continue;
             }

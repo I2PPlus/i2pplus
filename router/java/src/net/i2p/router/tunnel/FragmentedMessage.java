@@ -217,7 +217,7 @@ class FragmentedMessage {
         _releasedAfter = getLifetime();
         for (int i = 0; i <= _highFragmentNum; i++) {
             ByteArray ba = _fragments[i];
-            if ( (ba != null) && (ba.getData().length == TrivialPreprocessor.PREPROCESSED_SIZE) ) {
+            if ((ba != null) && (ba.getData().length == TrivialPreprocessor.PREPROCESSED_SIZE)) {
                 _cache.release(ba);
                 _fragments[i] = null;
             }

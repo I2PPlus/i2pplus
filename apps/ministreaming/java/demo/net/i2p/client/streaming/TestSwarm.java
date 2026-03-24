@@ -96,7 +96,7 @@ public class TestSwarm {
             try {
                 I2PServerSocket ss = _manager.getServerSocket();
                 I2PSocket s = null;
-                while ( (s = ss.accept()) != null) {
+                while ((s = ss.accept()) != null) {
                     I2PThread flooder = new I2PThread(new Flooder(s), "Flooder-" + s.getPeerDestination().calculateHash().toBase64().substring(0,4));
                     flooder.start();
                 }
@@ -196,7 +196,7 @@ public class TestSwarm {
                     InputStream in = _socket.getInputStream();
                     byte buf[] = new byte[8*1024];
                     int read = 0;
-                    while ( (read = in.read(buf)) != -1) {
+                    while ((read = in.read(buf)) != -1) {
                         now = System.currentTimeMillis();
                         _totalReceived += read;
                         _context.statManager().addRateData("swarm." + getConnectionId() + ".totalReceived", _totalReceived, 0);

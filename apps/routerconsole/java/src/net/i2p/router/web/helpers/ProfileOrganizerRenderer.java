@@ -346,8 +346,8 @@ class ProfileOrganizerRenderer {
             else if (speed < 0) {speed = 0;}
             if (speed > 1025) {
                 speed = speed / 1024;
-                buf.append((int)speed).append(' ' ).append("KB");
-            } else {buf.append((int)speed).append(' ' ).append("B");}
+                buf.append((int)speed).append(' ').append("KB");
+            } else {buf.append((int)speed).append(' ').append("B");}
             buf.append("ps</th><th><b>").append(_t("Capacity")).append(": </b>");
             double capThresh = Math.max(1, Math.round(_organizer.getCapacityThreshold()));
             double integThresh = Math.max(1, _organizer.getIntegrationThreshold());

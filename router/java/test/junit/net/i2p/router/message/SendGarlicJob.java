@@ -80,7 +80,7 @@ public class SendGarlicJob extends JobImpl {
         _message = GarlicMessageBuilder.buildMessage(getContext(), _config, _wrappedKey, _wrappedTags,
                                                      getContext().sessionKeyManager());
         long after = getContext().clock().now();
-        if ( (after - before) > 1000) {
+        if ((after - before) > 1000) {
             if (_log.shouldWarn())
                 _log.warn("Building the garlic took too long [" + (after-before)+" ms]");
         } else {

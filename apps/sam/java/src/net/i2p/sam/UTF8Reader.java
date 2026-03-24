@@ -139,7 +139,7 @@ public class UTF8Reader extends Reader {
             System.out.println("Received: " + buf);
             System.out.println("Test passed? " + buf.toString().equals(s));
             buf.setLength(0);
-            bais = new java.io.ByteArrayInputStream(new byte[] { 'x', (byte) 0xcc, 'x' } );
+            bais = new java.io.ByteArrayInputStream(new byte[] { 'x', (byte) 0xcc, 'x' });
             r = new UTF8Reader(bais);
             while ((b = r.read()) >= 0) {
                 buf.append((char) b);
