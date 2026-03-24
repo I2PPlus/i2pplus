@@ -277,7 +277,10 @@ def fix_simple_date(filepath, dry_run=False):
 
 # ── String.format \n → %n (32 fixes) ─────────────────────────────────────────
 
-_FMT_NL = re.compile(r'(String\.format\([^)]*?)\\n([^)]*?\))')
+# Match \n inside String.format() format strings, but NOT in concatenation chains
+# The \n must appear in a single string literal directly inside String.format()
+# e.g. String.format("foo\nbar", args) ✓  vs  String.format("foo" + "\nbar", args) ✗
+_FMT_NL = re.compile(r'String\.format\s*\((\s*"[^"]*?)\\n([^"]*?")\s*,')
 
 
 def fix_format_newline(filepath, dry_run=False):
@@ -290,7 +293,7 @@ def fix_format_newline(filepath, dry_run=False):
         return 0
 
     def replacer(m):
-        return m.group(1) + "%n" + m.group(2)
+        return "String.format(" + m.group(1) + "%n" + m.group(2) + ","
 
     new_content = _FMT_NL.sub(replacer, content)
     changes = 0
