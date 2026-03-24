@@ -3358,7 +3358,7 @@
     <echo message="CodeQL CLI found"/>
   </target>
 
-  <target name="codeql" depends="updater,codeql-setup,codeql-download,codeql-download-skip">
+  <target name="codeql" depends="codeql-setup,codeql-download,codeql-download-skip">
     <mkdir dir="dist"/>
     <mkdir dir="tools/codeql/db"/>
     <loadfile property="codeql.version" srcFile="tools/codeql/version.txt"/>
