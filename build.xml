@@ -3360,27 +3360,30 @@
 
   <target name="codeql" depends="updater,codeql-setup,codeql-download,codeql-download-skip">
     <mkdir dir="dist"/>
+    <mkdir dir="tools/codeql/db"/>
     <echo message="Creating CodeQL database (this may take some time)..."/>
     <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" failonerror="true">
       <env key="LGTM_INDEX_XML_MODE" value="all"/>
       <arg value="database"/>
       <arg value="create"/>
-      <arg value="dist/codeql-db"/>
+      <arg value="tools/codeql/db"/>
       <arg value="--language=java"/>
       <arg value="--command=ant updater"/>
       <arg value="--overwrite"/>
       <arg value="--ram=8192"/>
+      <arg value="--search-path=tools/codeql/codeql"/>
     </exec>
     <echo message="Running CodeQL analysis..."/>
     <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" failonerror="false" outputproperty="cq.result">
       <env key="LGTM_INDEX_XML_MODE" value="all"/>
       <arg value="database"/>
       <arg value="analyze"/>
-      <arg value="dist/codeql-db"/>
+      <arg value="tools/codeql/db"/>
       <arg value="--format=sarif-latest"/>
       <arg value="--output=dist/codeql.sarif"/>
       <arg value="--sarif-add-query-help"/>
       <arg value="--ram=8192"/>
+      <arg value="--search-path=tools/codeql/codeql"/>
     </exec>
     <exec executable="python3" failonerror="true">
       <arg value="tools/codeql/codeql-to-html.py"/>
