@@ -62,7 +62,10 @@ Both the Checkstyle scan and `fix-style.py` read from `BeforeExecutionExclusionF
 - `*/com/maxmind/*`, `*/com/freenetproject/*`, `*/org/freenetproject/*` — third-party
 - `*/com/southernstorm/*` — noise protocol library
 - `*/org/apache/*`, `*/org/minidns/*` — third-party
+- `*/org/bouncycastle/*`, `*/org/cybergarage/*` — third-party
 - `*/com/mpatric/*` — mp3agic library
+- `*/metanotion/*` — third-party
+- `*/vuze/*`, `*/ndt/*` — third-party
 - `*/pack200/*`, `*/jrobin/*` — third-party
 - `*/UPnP.java` — Freenet-derived, tab-based style
 

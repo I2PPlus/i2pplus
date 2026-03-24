@@ -127,6 +127,12 @@ INDENT_ONLY_CFG = """<?xml version="1.0"?>
   <module name="BeforeExecutionExclusionFileFilter">
     <property name="fileNamePattern" value=".*[/\\\\]metanotion[/\\\\].*"/>
   </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]vuze[/\\\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]ndt[/\\\\].*"/>
+  </module>
   <module name="TreeWalker">
     <module name="Indentation">
       <property name="basicOffset" value="4"/>
@@ -365,14 +371,23 @@ def fix_paren_whitespace(filepath, dry_run=False):
     return changes
 
 
-def parse_unused_imports(xml_file, filter_path=None):
-    """Parse Checkstyle XML for UnusedImports, return {filepath: [line_numbers]}."""
-    with open(xml_file, "r") as f:
-        content = f.read()
-    if not content.rstrip().endswith("</checkstyle>"):
-        content = content.rstrip() + "\n</checkstyle>\n"
-    root = ET.fromstring(content)
-
+def parse_xml_violations(xml_file, check_suffix, filter_path=None):
+    """Parse Checkstyle XML for a specific check, return {filepath: [line_numbers]}."""
+    try:
+        with open(xml_file, "r") as f:
+            content = f.read()
+        if not content.rstrip().endswith("</checkstyle>"):
+            last_tag = -1
+            for tag in ("</error>", "</file>"):
+                pos = content.rfind(tag)
+                if pos > last_tag:
+                    last_tag = pos + len(tag)
+            if last_tag > 0:
+                content = content[:last_tag]
+            content = content.rstrip() + "\n</checkstyle>\n"
+        root = ET.fromstring(content)
+    except (ET.ParseError, OSError, IOError):
+        return {}
     fixes = {}
     for fnode in root.findall("file"):
         fname = fnode.attrib["name"]
@@ -380,10 +395,16 @@ def parse_unused_imports(xml_file, filter_path=None):
             continue
         for enode in fnode.findall("error"):
             source = enode.attrib.get("source", "")
-            if "UnusedImportsCheck" not in source:
+            if check_suffix not in source:
                 continue
             line_no = int(enode.attrib.get("line", "0"))
             fixes.setdefault(fname, []).append(line_no)
+    return fixes
+
+
+def parse_unused_imports(xml_file, filter_path=None):
+    """Parse Checkstyle XML for UnusedImports, return {filepath: [line_numbers]}."""
+    return parse_xml_violations(xml_file, "UnusedImportsCheck", filter_path)
 
     return fixes
 
@@ -485,10 +506,11 @@ def fix_brace_paren_whitespace(filepath, dry_run=False):
 
 
 _DOUBLE_SEMI = re.compile(r'(?<![\w()]);;+')
+_EMPTY_BLOCK = re.compile(r'\{[ \t]*;\}')
 
 
 def fix_empty_statements(filepath, dry_run=False):
-    """Replace ;; with ; (double semicolons). Returns changes."""
+    """Replace ;; with ; and {; } with {}. Returns changes."""
     try:
         with open(filepath, "r") as f:
             content = f.read()
@@ -496,6 +518,7 @@ def fix_empty_statements(filepath, dry_run=False):
         return 0
 
     new_content = _DOUBLE_SEMI.sub(";", content)
+    new_content = _EMPTY_BLOCK.sub("{}", new_content)
     changes = 1 if new_content != content else 0
 
     if changes > 0 and not dry_run:
@@ -743,6 +766,18 @@ def main():
         n = run_pass("imports", fix_imports, args.dry_run)
         report("Unused imports", n)
         total_fixes += n
+
+    # Pass 1b: Redundant imports (from Checkstyle XML)
+    if not args.trailing_only and args.xml:
+        print("Checking redundant imports...", file=sys.stderr)
+        redundant_fixes = parse_xml_violations(args.xml, "RedundantImportCheck", filter_path=scan_path)
+        r_count = 0
+        for filepath in sorted(redundant_fixes.keys()):
+            n = fix_unused_imports(filepath, redundant_fixes[filepath], args.dry_run)
+            if n > 0:
+                r_count += n
+        report("Redundant imports", r_count)
+        total_fixes += r_count
 
     # Pass 2: Leading tabs → spaces
     if not args.trailing_only:

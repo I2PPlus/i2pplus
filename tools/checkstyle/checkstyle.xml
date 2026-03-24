@@ -46,6 +46,12 @@
     <property name="fileNamePattern" value=".*[/\\]metanotion[/\\].*"/>
   </module>
   <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]vuze[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]ndt[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
     <property name="fileNamePattern" value=".*[/\\]org[/\\]bouncycastle[/\\].*"/>
   </module>
   <module name="BeforeExecutionExclusionFileFilter">
