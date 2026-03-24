@@ -60,12 +60,34 @@ ant pmd-js-local     # JavaScript report with file links
 ### Checkstyle
 
 ```bash
-ant checkstyle            # Report → dist/checkstyle.html
-ant checkstyle-local      # Report with file links
-ant checkstyle-fix-errors # Auto-fix style violations
+ant checkstyle                  # Report → dist/checkstyle.html
+ant checkstyle-local            # Report with file links
+ant checkstyle-fix-errors       # Preview style fixes (dry run)
+ant checkstyle-fix-errors-apply # Apply style fixes
 ```
 
-The `checkstyle-fix-errors` target runs `fix-style.py` which fixes unused imports, tabs, whitespace, empty statements, indentation, trailing whitespace, and missing newlines. Exclusions from `checkstyle.xml` are applied automatically.
+### Automated Fixes
+
+`fix-java-issues.py` consolidates PMD, SpotBugs, and Checkstyle fix scripts.
+
+```bash
+# Preview all fixes (dry run)
+python3 tools/fix-java-issues.py -p core/java/src --dry-run
+
+# Apply specific fix types
+python3 tools/fix-java-issues.py -p apps/ --fix simpledate newline-fmt encoding
+
+# Checkstyle with indentation (requires XML report)
+python3 tools/fix-java-issues.py -p . --fix checkstyle indent imports -x dist/checkstyle.xml
+
+# Ant targets
+ant pmd-fix-errors              # Preview all fixes (dry run)
+ant pmd-fix-errors-apply        # Apply all fixes
+ant checkstyle-fix-errors       # Preview checkstyle fixes (dry run)
+ant checkstyle-fix-errors-apply # Apply checkstyle fixes
+```
+
+Fix types: `checkstyle`, `imports`, `indent`, `simpledate`, `newline-fmt`, `encoding`, `serializable`, `pattern`, `comparator`, `dead-store`.
 
 ### SpotBugs
 
