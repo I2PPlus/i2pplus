@@ -64,6 +64,7 @@
     <echo message=" bump                                         Increment build (minor version) by 1"/>
     <echo message=" checkstyle                                   Run Checkstyle analysis &#10140; dist/checkstyle.html"/>
     <echo message=" checkstyle-local                             Checkstyle report with clickable file links &#10140; dist/checkstyle-local.html"/>
+    <echo message=" checkstyle-fix-errors                        Run fix-style.py on codebase with exclusions"/>
     <echo message=" createThemesZip                              Create zip with all console and webapp themes and resources &#10140; ./dist/themes.zip"/>
     <echo message=" debian-clean                                 Rollback Debian specific patches then run &apos;distclean&apos;"/>
     <echo message=" debian                                       Generate Debian packages in ../ then run &apos;debian-clean&apos;"/>
@@ -3277,7 +3278,11 @@
     </exec>
   </target>
 
-  <target name="checkstyle" depends="checkstyle-setup,checkstyle-download">
+  <target name="checkstyle-download-skip" if="cs.present">
+    <echo message="Checkstyle JAR found"/>
+  </target>
+
+  <target name="checkstyle" depends="checkstyle-setup,checkstyle-download,checkstyle-download-skip">
     <exec executable="ant" dir="${basedir}" output="/dev/null" error="/dev/null">
       <arg value="build"/>
     </exec>
@@ -3306,7 +3311,7 @@
     <echo message="Checkstyle report written to dist/checkstyle.html (XML: dist/checkstyle.xml)"/>
   </target>
 
-  <target name="checkstyle-local" depends="checkstyle-setup,checkstyle-download">
+  <target name="checkstyle-local" depends="checkstyle-setup,checkstyle-download,checkstyle-download-skip">
     <exec executable="ant" dir="${basedir}" output="/dev/null" error="/dev/null">
       <arg value="build"/>
     </exec>
@@ -3335,6 +3340,17 @@
     </exec>
     <echo message="Checkstyle report written to dist/checkstyle-local.html (XML: dist/checkstyle.xml)"/>
     <echo message="Checkstyle report written to dist/checkstyle-local.html (local file links enabled)"/>
+  </target>
+
+  <target name="checkstyle-fix-errors" depends="checkstyle-setup,checkstyle-download,checkstyle-download-skip">
+    <echo message="Running Checkstyle fix script..."/>
+    <exec executable="python3" failonerror="true">
+      <arg value="tools/checkstyle/fix-style.py"/>
+      <arg value="-p"/>
+      <arg value="."/>
+      <arg value="-x"/>
+      <arg value="dist/checkstyle.xml"/>
+    </exec>
   </target>
 
   <target name="pmd-setup">

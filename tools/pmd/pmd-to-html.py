@@ -274,6 +274,7 @@ def main():
     if favicon:
         w(f'<link rel="icon" type="image/svg+xml" href="{favicon}">')
     suffix = f" ({lang})" if lang else ""
+    body_id = f'id="pmd-{lang.lower().replace("script", "s")}"' if lang else ''
     w(f'<title>I2P+ | PMD Report{suffix}</title>')
     w('<style>')
     w(load_css())
@@ -357,7 +358,7 @@ function hideRule(){
 }''')
     w('</script>')
     w('</head>')
-    w('<body>')
+    w(f'<body {body_id}>')
 
     w(f'<h1>I2P+ PMD Report{suffix}</h1>')
     w(f'<p class="meta">PMD {escape(version)} &middot; {total} violations across {len(files)} files &middot; {escape(timestamp)}</p>')

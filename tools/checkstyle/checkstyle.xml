@@ -43,6 +43,15 @@
     <property name="fileNamePattern" value=".*[/\\]com[/\\]mpatric[/\\].*"/>
   </module>
   <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]metanotion[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]org[/\\]bouncycastle[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]org[/\\]cybergarage[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
     <property name="fileNamePattern" value=".*[/\\]jetty[/\\].*"/>
   </module>
   <module name="BeforeExecutionExclusionFileFilter">
@@ -89,44 +98,38 @@
   </module>
 
   <!-- Tab characters NOISY -->
-  <module name="FileTabCharacter">
-    <property name="eachLine" value="true"/>
-  </module>
+  <!-- <module name="FileTabCharacter"><property name="eachLine" value="true"/></module> -->
 
   <module name="TreeWalker">
-    <!-- Naming conventions -->
-    <!-- ConstantName NOISY --><module name="ConstantName"/>
-    <module name="LocalFinalVariableName"/>
-    <!-- LocalVariableName NOISY --><module name="LocalVariableName"/>
-    <!-- MemberName NOISY --><module name="MemberName"/>
-    <!-- MethodName NOISY --><module name="MethodName"/>
-    <module name="PackageName"/>
-    <!-- ParameterName NOISY --><module name="ParameterName"/>
-    <!-- StaticVariableName NOISY --><module name="StaticVariableName"/>
-    <module name="TypeName"/>
+    <!-- Naming conventions NOISY -->
+    <!-- <module name="ConstantName"/> -->
+    <!-- <module name="LocalFinalVariableName"/> -->
+    <!-- <module name="LocalVariableName"/> -->
+    <!-- <module name="MemberName"/> -->
+    <!-- <module name="MethodName"/> -->
+    <!-- <module name="PackageName"/> -->
+    <!-- <module name="ParameterName"/> -->
+    <!-- <module name="StaticVariableName"/> -->
+    <!-- <module name="TypeName"/> -->
 
     <!-- Imports -->
-    <!-- AvoidStarImport NOISY --><module name="AvoidStarImport"/>
+    <!-- <module name="AvoidStarImport"/> NOISY -->
     <module name="RedundantImport"/>
-    <module name="UnusedImports"/>
+    <!-- <module name="UnusedImports"/> -->
 
-    <!-- Whitespace NOISY -->
-    <module name="WhitespaceAfter"/>
+    <!-- Whitespace -->
+    <!-- <module name="WhitespaceAfter"/> NOISY -->
     <module name="NoWhitespaceBefore"/>
-    <module name="GenericWhitespace"/>
-    <module name="MethodParamPad"/>
-    <module name="ParenPad"/>
-    <module name="TypecastParenPad"/>
+    <!-- <module name="GenericWhitespace"/> NOISY -->
+    <!-- <module name="MethodParamPad"/> NOISY -->
+    <!-- <module name="ParenPad"/> NOISY -->
+    <!-- <module name="TypecastParenPad"/> NOISY -->
 
-    <!-- Blocks NOISY -->
-    <module name="NeedBraces">
-      <property name="allowSingleLineStatement" value="true"/>
-    </module>
-    <module name="LeftCurly"/>
-    <module name="RightCurly"/>
-    <module name="EmptyBlock">
-      <property name="option" value="TEXT"/>
-    </module>
+    <!-- Blocks -->
+    <!-- <module name="NeedBraces"><property name="allowSingleLineStatement" value="true"/></module> NOISY -->
+    <!-- <module name="LeftCurly"/> NOISY -->
+    <!-- <module name="RightCurly"/> NOISY -->
+    <!-- <module name="EmptyBlock"><property name="option" value="TEXT"/></module> NOISY -->
 
     <!-- Coding -->
     <module name="EmptyStatement"/>
@@ -134,16 +137,16 @@
     <module name="SimplifyBooleanExpression"/>
     <module name="SimplifyBooleanReturn"/>
     <module name="StringLiteralEquality"/>
-    <module name="OneStatementPerLine"/>
+    <!-- <module name="OneStatementPerLine"/> NOISY -->
     <module name="FallThrough"/>
-    <module name="MissingSwitchDefault"/>
+    <!-- <module name="MissingSwitchDefault"/> NOISY -->
     <module name="UpperEll"/>
-    <!-- MultipleVariableDeclarations NOISY --><module name="MultipleVariableDeclarations"/>
-    <!-- ModifierOrder NOISY --><module name="ModifierOrder"/>
-    <!-- OverloadMethodsDeclarationOrder NOISY --><module name="OverloadMethodsDeclarationOrder"/>
-    <!-- VariableDeclarationUsageDistance NOISY --><module name="VariableDeclarationUsageDistance"/>
+    <!-- <module name="MultipleVariableDeclarations"/> NOISY -->
+    <!-- <module name="ModifierOrder"/> NOISY -->
+    <!-- <module name="OverloadMethodsDeclarationOrder"/> NOISY -->
+    <!-- <module name="VariableDeclarationUsageDistance"/> NOISY -->
 
-    <!-- Indentation NOISY -->
+    <!-- Indentation -->
     <module name="Indentation">
       <property name="basicOffset" value="4"/>
       <property name="caseIndent" value="4"/>

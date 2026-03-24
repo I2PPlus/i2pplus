@@ -166,15 +166,23 @@ def main():
             }.get(app, app.replace("-", " ").title())
         return "Other"
 
-    def extract_check_name(source):
-        # com.puppycrawl.tools.checkstyle.checks.naming.StaticVariableNameCheck -> StaticVariableName
+    def extract_check_info(source):
+        """Extract check name, category, and doc URL from source."""
+        # com.puppycrawl.tools.checkstyle.checks.naming.StaticVariableNameCheck
         if source:
             parts = source.split(".")
             name = parts[-1]
             if name.endswith("Check"):
                 name = name[:-5]
-            return name
-        return "?"
+            # Category is the package component after 'checks.'
+            category = ""
+            for i, p in enumerate(parts):
+                if p == "checks" and i + 1 < len(parts):
+                    category = parts[i + 1]
+                    break
+            url = f"https://checkstyle.org/checks/{category}/{name.lower()}.html" if category else ""
+            return name, url
+        return "?", ""
 
     for fnode in root.findall("file"):
         fname = fnode.attrib["name"]
@@ -182,7 +190,7 @@ def main():
         for enode in fnode.findall("error"):
             a = enode.attrib
             msg = a.get("message", "")
-            check = extract_check_name(a.get("source", ""))
+            check, url = extract_check_info(a.get("source", ""))
             severity = a.get("severity", "warning")
             line = a.get("line", "?")
             column = a.get("column", "?")
@@ -201,6 +209,7 @@ def main():
                 "message": msg,
                 "subsystem": sub,
                 "file": fname,
+                "url": url,
             }
             violations.append(vdict)
             check_violations.setdefault(check, []).append((fname, vdict))
@@ -260,6 +269,7 @@ def main():
         return "" if noisy(check) else get_code_snippet(f, line)
     check_data_json = json.dumps({check: [(norm_path(f), {"line": v["line"], "column": v["column"],
         "severity": v["severity"], "message": v["message"], "subsystem": v["subsystem"],
+        "url": v.get("url", ""),
         "snippet": maybe_snippet(check, f, v["line"])}) for f, v in vlist]
         for check, vlist in check_violations.items()})
 
@@ -297,9 +307,11 @@ function showCheck(check){
       var pathHtml='<span class="path">'+esc(f)+'</span>';
       if(LOCAL_MODE) pathHtml='<a href="file://'+f+'" class="file-link">'+pathHtml+'</a>';
       h+='<h3>'+pathHtml+'</h3>';
-      h+='<table class="warningtable"><tr><th class="line">Line</th><th>Message</th><th class="rule-category">Severity</th></tr>';}
+      h+='<table class="warningtable"><tr><th class="line">Line</th><th>Message</th><th class="rule-category">Severity</th><th class="rule-doc">Doc</th></tr>';}
     var rng=x.line;
     var sevCls=x.severity==="error"?"p1":"p2";
+    var dl='';
+    if(x.url)dl='<a href="'+esc(x.url)+'" target="_blank" class="rule-doc-link"><span class="rule-doc-icon" title="Rule documentation"></span></a>';
     var details=['<b>Column:</b> '+esc(x.column)];
     var hasDetail=details.length>0||(x.snippet&&x.snippet.length>0);
     var vid='cv'+Math.abs(hashCode(f+x.line+check));
@@ -307,9 +319,10 @@ function showCheck(check){
     else h+='<tr class="tablerow'+(i%2)+'">';
     h+='<td class="line priority-cell '+sevCls+'">'+esc(rng)+'</td>';
     h+='<td>'+esc(x.message)+'</td>';
-    h+='<td class="rule-category">'+esc(x.severity)+'</td></tr>';
+    h+='<td class="rule-category"><span class="severity-'+esc(x.severity)+'">'+esc(x.severity)+'</span></td>';
+    h+='<td class="rule-doc">'+dl+'</td></tr>';
     if(hasDetail){
-      h+='<tr class="detailrow'+(i%2)+' hidden"><td colspan="3">';
+      h+='<tr class="detailrow'+(i%2)+' hidden"><td colspan="4">';
       h+='<div id="'+vid+'" style="display:none" class="detail-content">';
       if(details.length) h+=details.join(' &middot; ');
       if(x.snippet&&x.snippet.length) h+='<pre class="snippet"><code>'+x.snippet+'</code></pre>';
@@ -327,7 +340,7 @@ function hideCheck(){
 }''')
     w('</script>')
     w('</head>')
-    w('<body>')
+    w('<body id="checkstyle">')
 
     w('<h1>I2P+ Checkstyle Report</h1>')
     now = datetime.now(timezone.utc).strftime("%B %-d %Y, %H:%M UTC")
@@ -379,7 +392,7 @@ function hideCheck(){
                     path_html = f'<a href="file://{escape(abs_path)}" class="file-link">{path_html}</a>'
                 w(f'<h3>{path_html} <span class="badge">{len(violations)}</span></h3>')
                 w('<table class="warningtable">')
-                w('<tr><th class="line">Line</th><th>Check</th><th>Message</th><th class="rule-category">Severity</th></tr>')
+                w('<tr><th class="line">Line</th><th>Check</th><th>Message</th><th class="rule-category">Severity</th><th class="rule-doc">Doc</th></tr>')
                 for i, v in enumerate(sorted(violations, key=lambda x: int(x["line"]))):
                     row = "tablerow" + str(i % 2)
                     vid = f"cv{abs(hash(fname + v['line'] + v['check']))}"
@@ -393,10 +406,13 @@ function hideCheck(){
                     w(f'<td class="line priority-cell {sev_cls}">{escape(v["line"])}</td>')
                     w(f'<td>{escape(v["check"])}</td>')
                     w(f'<td>{escape(v["message"])}</td>')
-                    w(f'<td class="rule-category">{escape(v["severity"])}</td>')
+                    w(f'<td class="rule-category"><span class="severity-{escape(v["severity"])}">{escape(v["severity"])}</span></td>')
+                    v_url = v.get("url", "")
+                    dl = f'<a href="{escape(v_url)}" target="_blank" class="rule-doc-link"><span class="rule-doc-icon" title="Rule documentation"></span></a>' if v_url else ""
+                    w(f'<td class="rule-doc">{dl}</td>')
                     w('</tr>')
                     if has_detail:
-                        w(f'<tr class="detailrow{i % 2} hidden"><td colspan="4">')
+                        w(f'<tr class="detailrow{i % 2} hidden"><td colspan="5">')
                         w(f'<div id="{vid}" style="display:none" class="detail-content">')
                         w(f'<pre class="snippet"><code>{snippet}</code></pre>')
                         w('</div>')

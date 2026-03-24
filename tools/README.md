@@ -41,7 +41,34 @@ Output: `dist/jsdoc/`
 ## Other Tools
 
 - `ant-contrib.jar` - Ant tasks extension (required for build.xml)
-- `google-java-format.jar` - Java code formatter, used by `scripts/remove_unused_imports.sh`
+- `google-java-format.jar` - Java code formatter
 - `javadoc/` - Javadoc CSS override theme
-- `pmd-bin-7.7.0/` - PMD source code analyzer
-- `spotbugs/` - Static analysis for Java
+- `pmd/` - PMD source code analyzer (see `pmd/README.md`)
+- `checkstyle/` - Checkstyle code style analyzer (see `checkstyle/README.md`)
+- `spotbugs/` - Static analysis for Java (see `spotbugs/README.md`)
+
+### PMD
+
+```bash
+ant pmd              # Run Java + JS analysis
+ant pmd-java         # Java report → dist/pmd-java.html
+ant pmd-js           # JavaScript report → dist/pmd-js.html
+ant pmd-java-local   # Java report with file links
+ant pmd-js-local     # JavaScript report with file links
+```
+
+### Checkstyle
+
+```bash
+ant checkstyle            # Report → dist/checkstyle.html
+ant checkstyle-local      # Report with file links
+ant checkstyle-fix-errors # Auto-fix style violations
+```
+
+The `checkstyle-fix-errors` target runs `fix-style.py` which fixes unused imports, tabs, whitespace, empty statements, indentation, trailing whitespace, and missing newlines. Exclusions from `checkstyle.xml` are applied automatically.
+
+### SpotBugs
+
+```bash
+ant spotbugs
+```

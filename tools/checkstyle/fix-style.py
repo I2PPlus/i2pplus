@@ -112,6 +112,21 @@ INDENT_ONLY_CFG = """<?xml version="1.0"?>
   <module name="BeforeExecutionExclusionFileFilter">
     <property name="fileNamePattern" value=".*[/\\\\]org[/\\\\]apache[/\\\\].*"/>
   </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]org[/\\\\]minidns[/\\\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]org[/\\\\]bouncycastle[/\\\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]org[/\\\\]cybergarage[/\\\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]com[/\\\\]mpatric[/\\\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]metanotion[/\\\\].*"/>
+  </module>
   <module name="TreeWalker">
     <module name="Indentation">
       <property name="basicOffset" value="4"/>
@@ -300,7 +315,7 @@ def fix_missing_newline(filepath, dry_run=False):
 
 
 # Keywords that need whitespace after them
-_WS_KEYWORDS = re.compile(r'\b(if|for|while|catch|switch|try|return|throw|assert)\(')
+_WS_KEYWORDS = re.compile(r'\b(if|for|while|catch|switch|synchronized|try|return|throw|assert)\(')
 
 
 def fix_whitespace_after(filepath, dry_run=False):
@@ -490,6 +505,37 @@ def fix_empty_statements(filepath, dry_run=False):
     return changes
 
 
+_SEMI_NO_SPACE = re.compile(r';(?![;})\s\047])(?=\S)')
+
+
+def fix_semicolon_whitespace(filepath, dry_run=False):
+    """Add space after ; when followed by non-whitespace: x;y → x; y. Returns changes."""
+    try:
+        with open(filepath, "r") as f:
+            content = f.read()
+    except (OSError, IOError):
+        return 0
+
+    lines = content.split('\n')
+    fixed_lines = []
+    for line in lines:
+        stripped = line.lstrip()
+        if stripped.startswith('//') or stripped.startswith('*'):
+            fixed_lines.append(line)
+            continue
+        line = _SEMI_NO_SPACE.sub('; ', line)
+        fixed_lines.append(line)
+    new_content = '\n'.join(fixed_lines)
+
+    changes = 1 if new_content != content else 0
+
+    if changes > 0 and not dry_run:
+        with open(filepath, "w") as f:
+            f.write(new_content)
+
+    return changes
+
+
 _UPPER_L = re.compile(r'(\d)[lL]\b')
 
 
@@ -632,15 +678,10 @@ def fix_indentation_iterative(scan_path, filter_path, dry_run=False, verbose=Tru
         total_fixes += pass_fixes
 
         if pass_fixes == 0:
-            # No changes made but violations remain — can't auto-fix
             if verbose:
                 remaining = sum(len(v) for v in fixes.values())
                 print(f"  {remaining} violations remain (can't auto-fix).", file=sys.stderr)
             break
-
-        if verbose:
-            action = "would fix" if dry_run else "fixed"
-            print(f"  Pass {iteration + 1}: {pass_fixes} lines {action} in {pass_files} files", file=sys.stderr)
 
     return total_fixes
 
@@ -677,149 +718,108 @@ def main():
     total_fixes = 0
     apply_exclusions = not args.no_exclude
     java_files = find_java_files(scan_path, apply_exclusions=apply_exclusions)
+    dry_label = " (dry run)" if args.dry_run else ""
+
+    def run_pass(label, fix_func, *args_list, **kwargs):
+        """Run a fix pass, return total fixes."""
+        count = 0
+        for filepath in sorted(java_files):
+            n = fix_func(filepath, *args_list, **kwargs)
+            if n > 0:
+                count += n
+        return count
+
+    def report(label, count):
+        """Print pass result."""
+        if count > 0:
+            action = f"would fix{dry_label}" if args.dry_run else f"fixed{dry_label}"
+            print(f"  {label}: {count} {action}", file=sys.stderr)
+        else:
+            print(f"  {label}: 0 (clean)", file=sys.stderr)
 
     # Pass 1: Unused imports (google-java-format --fix-imports-only)
     if not args.trailing_only:
-        print("Fixing unused imports...", file=sys.stderr)
-        import_fixes = 0
-        import_files = 0
-        for filepath in sorted(java_files):
-            n = fix_imports(filepath, args.dry_run)
-            if n > 0:
-                import_fixes += n
-                import_files += 1
-                action = "would fix" if args.dry_run else "fixed"
-                print(f"  {filepath}: {n} import lines {action}")
-        total_fixes += import_fixes
-        if import_fixes == 0:
-            print("No unused imports found.", file=sys.stderr)
+        print("Checking unused imports...", file=sys.stderr)
+        n = run_pass("imports", fix_imports, args.dry_run)
+        report("Unused imports", n)
+        total_fixes += n
 
     # Pass 2: Leading tabs → spaces
     if not args.trailing_only:
-        print("Fixing leading tabs...", file=sys.stderr)
-        tab_files = 0
-        tab_fixes = 0
-        for filepath in sorted(java_files):
-            n = fix_tabs(filepath, args.dry_run)
-            if n > 0:
-                tab_fixes += n
-                tab_files += 1
-                action = "would fix" if args.dry_run else "fixed"
-                print(f"  {filepath}: {n} tab lines {action}")
-        total_fixes += tab_fixes
-        if tab_fixes == 0:
-            print("No leading tabs found.", file=sys.stderr)
+        print("Checking leading tabs...", file=sys.stderr)
+        n = run_pass("tabs", fix_tabs, args.dry_run)
+        report("Leading tabs", n)
+        total_fixes += n
 
     # Pass 2b: Keyword and comma whitespace (if( → if (, x,y → x, y)
     if not args.trailing_only:
-        print("Fixing keyword and comma whitespace...", file=sys.stderr)
-        kw_fixes = 0
-        for filepath in sorted(java_files):
-            n = fix_whitespace_after(filepath, args.dry_run)
-            if n > 0:
-                kw_fixes += n
-                action = "would fix" if args.dry_run else "fixed"
-                print(f"  {filepath}: {n} keyword/comma fixes {action}")
-        total_fixes += kw_fixes
-        if kw_fixes == 0:
-            print("No keyword/comma whitespace violations found.", file=sys.stderr)
+        print("Checking keyword/comma whitespace...", file=sys.stderr)
+        n = run_pass("keywords", fix_whitespace_after, args.dry_run)
+        report("Keyword/comma whitespace", n)
+        total_fixes += n
+
+    # Pass 2c: Semicolon whitespace (x;y → x; y)
+    if not args.trailing_only:
+        print("Checking semicolon whitespace...", file=sys.stderr)
+        n = run_pass("semicolons", fix_semicolon_whitespace, args.dry_run)
+        report("Semicolon whitespace", n)
+        total_fixes += n
 
     # Pass 3: Brace and paren whitespace ({ x } → {x}, ( x ) → (x))
     if not args.trailing_only:
-        print("Fixing brace/paren whitespace...", file=sys.stderr)
-        bp_fixes = 0
-        for filepath in sorted(java_files):
-            n = fix_brace_paren_whitespace(filepath, args.dry_run)
-            if n > 0:
-                bp_fixes += n
-                action = "would fix" if args.dry_run else "fixed"
-                print(f"  {filepath}: {n} whitespace fixes {action}")
-        total_fixes += bp_fixes
-        if bp_fixes == 0:
-            print("No brace/paren whitespace violations found.", file=sys.stderr)
+        print("Checking brace/paren whitespace...", file=sys.stderr)
+        n = run_pass("braces", fix_brace_paren_whitespace, args.dry_run)
+        report("Brace/paren whitespace", n)
+        total_fixes += n
 
     # Pass 4: Empty statements (;; → ;)
     if not args.trailing_only:
-        print("Fixing empty statements...", file=sys.stderr)
-        text_fixes = 0
-        for filepath in sorted(java_files):
-            n = fix_empty_statements(filepath, args.dry_run)
-            if n > 0:
-                text_fixes += n
-                action = "would fix" if args.dry_run else "fixed"
-                print(f"  {filepath}: {n} empty statement fixes {action}")
-        total_fixes += text_fixes
-        if text_fixes == 0:
-            print("No empty-statement violations found.", file=sys.stderr)
+        print("Checking empty statements...", file=sys.stderr)
+        n = run_pass("empty", fix_empty_statements, args.dry_run)
+        report("Empty statements", n)
+        total_fixes += n
 
     # Pass 4b: Upper ell (100l → 100L)
     if not args.trailing_only:
-        print("Fixing upper ell...", file=sys.stderr)
-        ell_fixes = 0
-        for filepath in sorted(java_files):
-            n = fix_upper_ell(filepath, args.dry_run)
-            if n > 0:
-                ell_fixes += n
-                action = "would fix" if args.dry_run else "fixed"
-                print(f"  {filepath}: {n} ell fixes {action}")
-        total_fixes += ell_fixes
-        if ell_fixes == 0:
-            print("No upper ell violations found.", file=sys.stderr)
+        print("Checking upper ell...", file=sys.stderr)
+        n = run_pass("ell", fix_upper_ell, args.dry_run)
+        report("Upper ell", n)
+        total_fixes += n
 
     # Pass 4c: No whitespace before (; ; → ;, , → ,)
     if not args.trailing_only:
-        print("Fixing whitespace before ; and ,...", file=sys.stderr)
-        nws_fixes = 0
-        for filepath in sorted(java_files):
-            n = fix_no_whitespace_before(filepath, args.dry_run)
-            if n > 0:
-                nws_fixes += n
-                action = "would fix" if args.dry_run else "fixed"
-                print(f"  {filepath}: {n} whitespace-before fixes {action}")
-        total_fixes += nws_fixes
-        if nws_fixes == 0:
-            print("No whitespace-before violations found.", file=sys.stderr)
+        print("Checking whitespace before ; and ,...", file=sys.stderr)
+        n = run_pass("before_semi", fix_no_whitespace_before, args.dry_run)
+        report("No whitespace before", n)
+        total_fixes += n
 
     # Pass 5: Indentation (iterative)
     if not args.trailing_only:
-        print("Fixing indentation...", file=sys.stderr)
-        total_fixes += fix_indentation_iterative(scan_path, args.xml, args.dry_run)
-    else:
-        print("Skipping indentation (--trailing-only)", file=sys.stderr)
+        print("Checking indentation...", file=sys.stderr)
+        n = fix_indentation_iterative(scan_path, args.xml, args.dry_run)
+        if n > 0:
+            action = f"would fix{dry_label}" if args.dry_run else f"fixed{dry_label}"
+            print(f"  Indentation: {n} {action}", file=sys.stderr)
+        else:
+            print(f"  Indentation: 0 (clean)", file=sys.stderr)
+        total_fixes += n
 
     # Pass 6: Trailing whitespace
-    print("Fixing trailing whitespace...", file=sys.stderr)
-    trailing_files = 0
-    trailing_fixes = 0
-    for filepath in sorted(java_files):
-        n = fix_trailing_whitespace(filepath, args.dry_run)
-        if n > 0:
-            trailing_fixes += n
-            trailing_files += 1
-            action = "would fix" if args.dry_run else "fixed"
-            print(f"  {filepath}: {n} trailing lines {action}")
-
-    total_fixes += trailing_fixes
-
-    if trailing_fixes == 0:
-        print("No trailing whitespace found.", file=sys.stderr)
+    print("Checking trailing whitespace...", file=sys.stderr)
+    n = run_pass("trailing", fix_trailing_whitespace, args.dry_run)
+    report("Trailing whitespace", n)
+    total_fixes += n
 
     # Pass 7: Missing newline at end of file
-    print("Fixing missing newlines...", file=sys.stderr)
-    newline_files = 0
+    print("Checking missing newlines...", file=sys.stderr)
+    newline_count = 0
     for filepath in sorted(java_files):
-        n = fix_missing_newline(filepath, args.dry_run)
-        if n > 0:
-            newline_files += 1
+        if fix_missing_newline(filepath, args.dry_run):
+            newline_count += 1
             total_fixes += 1
-            action = "would fix" if args.dry_run else "fixed"
-            print(f"  {filepath}: missing newline {action}")
+    report("Missing newlines", newline_count)
 
-    if newline_files == 0:
-        print("No missing newlines found.", file=sys.stderr)
-
-    total_files = trailing_files + newline_files
-    print(f"\nTotal: {total_fixes} lines fixed", file=sys.stderr)
+    print(f"\nTotal: {total_fixes} lines fixed{dry_label}", file=sys.stderr)
 
 
 if __name__ == "__main__":
