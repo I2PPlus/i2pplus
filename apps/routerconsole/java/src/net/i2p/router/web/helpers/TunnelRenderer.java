@@ -32,7 +32,6 @@ import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.Messages;
-import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;

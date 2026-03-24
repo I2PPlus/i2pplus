@@ -243,7 +243,7 @@ final class MatrixUtil {
                     boolean bit;
                     if (bitIndex < dataBits.getSize()) {
                         bit = dataBits.get(bitIndex);
-                        ++bitIndex;
+                      ++bitIndex;
                     } else {
             // Padding bit. If there is no bit left, we'll fill the left cells with 0, as described
             // in 8.4.9 of JISX0510:2004 (p. 24).

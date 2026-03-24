@@ -29,7 +29,6 @@ import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.peermanager.DBHistory;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.stat.Rate;
-import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.SimpleTimer2;

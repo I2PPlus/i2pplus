@@ -1681,7 +1681,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
         sJavaVendor = System.getProperty("java.vendor");
 
-        if (sOsArch.startsWith("x86") == true) {sClient = _resBundDisplayMsgs.getString("pc");}
+        if (sOsArch.startsWith("x86")) {sClient = _resBundDisplayMsgs.getString("pc");}
         else {sClient = _resBundDisplayMsgs.getString("workstation");}
 
         // Calculate some variables and determine path conditions.

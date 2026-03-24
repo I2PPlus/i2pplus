@@ -500,7 +500,7 @@ public class TrackerClient implements Runnable {
                     int random = r.nextInt(120 * 1000);
                     if (completed && runStarted) delay = 3 * SLEEP * 60 * 1000 + random;
                     else if (snark.getTrackerProblems() != null
-                            && ++consecutiveFails < MAX_CONSEC_FAILS) delay = INITIAL_SLEEP;
+                            &&++consecutiveFails < MAX_CONSEC_FAILS) delay = INITIAL_SLEEP;
                     else if ((!runStarted) && _runCount < MAX_CONSEC_FAILS) delay = INITIAL_SLEEP;
                     else
                         // sleep a while, when we wake up we will contact only the trackers whose

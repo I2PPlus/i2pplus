@@ -344,8 +344,8 @@ public class GraphGenerator implements Runnable, ClientApp {
         for (GraphListener lsnr : _listeners) {
             if (lsnr.getRate().equals(rate)) {
                 lsnr.getData().exportXml(out);
-                out.write(DataHelper.getUTF8("<!-- Rate: " + lsnr.getRate().getRateStat().getName() + " for period " + lsnr.getRate().getPeriod() + " -->\n"));
-                out.write(DataHelper.getUTF8("<!-- Average data source name: " + lsnr.getName() + " event count data source name: " + lsnr.getEventName() + " -->\n"));
+                out.write(DataHelper.getUTF8("<!-- Rate: " + lsnr.getRate().getRateStat().getName() + " for period " + lsnr.getRate().getPeriod() + "-->\n"));
+                out.write(DataHelper.getUTF8("<!-- Average data source name: " + lsnr.getName() + " event count data source name: " + lsnr.getEventName() + "-->\n"));
                 return true;
             }
         }

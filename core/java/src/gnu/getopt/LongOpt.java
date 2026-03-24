@@ -1,5 +1,5 @@
 /**************************************************************************
-/* LongOpt.java -- Long option object for Getopt
+/* LongOpt.java-- Long option object for Getopt
 /*
 /* Copyright (c) 1998 by Aaron M. Renn (arenn@urbanophile.com)
 /*

@@ -16,7 +16,6 @@ import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
-import net.i2p.stat.RateConstants;
 import net.i2p.util.ByteCache;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.ConvertToHash;

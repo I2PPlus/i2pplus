@@ -456,7 +456,7 @@ class GraphRenderer {
                     if (count < 1) {legend = _t("Router restarted") + "\\l";}
                     else {legend = null;}
                     def.vrule(started / 1000, RESTART_COLOR, legend, 1.0f);
-                    count ++;
+                    count++;
                 }
                 def.comment(sdf.format(Date.from(Instant.ofEpochMilli(start))) + " — " + sdf.format(Date.from(Instant.ofEpochMilli(end))) + " UTC\\r");
             }

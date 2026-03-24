@@ -451,7 +451,7 @@ public class HostPing {
         System.out.println("  -d              Enable debug output");
         System.out.println("  -h              Ping all hosts in ./hosts.txt");
         System.out.println("  -l <file>       Ping all hosts in specified file");
-        System.out.println("  --help          Show this help message");
+        System.out.println("--help          Show this help message");
         System.out.println();
         System.out.println("Destination formats:");
         System.out.println("  B64 destination (full Base64 string)");

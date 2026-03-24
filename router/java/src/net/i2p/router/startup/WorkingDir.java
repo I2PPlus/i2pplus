@@ -456,7 +456,7 @@ public class WorkingDir {
                 }
                 out.println(s);
             }
-            out.println("<!-- Modified by I2P User dir migration script -->");
+            out.println("<!-- Modified by I2P User dir migration script-->");
             System.err.println("Copied file: " + oldFile + " with modifications");
         } finally {
             if (in != null) try { in.close(); } catch (IOException ioe) {}

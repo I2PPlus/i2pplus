@@ -43,7 +43,7 @@ public class KeyManager {
     private PublicKey _publicKey;
     private SigningPrivateKey _signingPrivateKey;
     private SigningPublicKey _signingPublicKey;
-    private final Map<Hash, LeaseSetKeys> _leaseSetKeys; // Destination --> LeaseSetKeys
+    private final Map<Hash, LeaseSetKeys> _leaseSetKeys; // Destination--> LeaseSetKeys
 
     public final static String PROP_KEYDIR = "router.keyBackupDir";
     public final static String DEFAULT_KEYDIR = "keyBackup";

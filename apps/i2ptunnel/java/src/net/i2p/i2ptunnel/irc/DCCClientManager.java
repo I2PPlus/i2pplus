@@ -125,7 +125,7 @@ public class DCCClientManager extends EventReceiver {
             // Transparent tunnel used for all types...
             // Do we need to do any filtering for chat?
             I2PTunnelDCCClient cTunnel = new I2PTunnelDCCClient(b32, localPort, port, l, sockMgr,
-                                                                _dispatch, _tunnel, ++_id);
+                                                                _dispatch, _tunnel,++_id);
             cTunnel.attachEventDispatcher(this);
             cTunnel.startRunning();
             int lport = cTunnel.getLocalPort();

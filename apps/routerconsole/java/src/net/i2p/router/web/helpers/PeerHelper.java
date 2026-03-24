@@ -359,8 +359,8 @@ public class PeerHelper extends HelperBase {
      *  @since 0.9.31 moved from NTCPTransport
      */
     private void render(NTCPTransport nt, Writer out, String urlBase, int sortFlags) throws IOException {
-        boolean IPv6Enabled = _context.getBooleanProperty("i2np.ntcp.ipv6") != false ||
-                              _context.getBooleanProperty("i2np.udp.ipv6") != false;
+        boolean IPv6Enabled = _context.getBooleanProperty("i2np.ntcp.ipv6") ||
+                              _context.getBooleanProperty("i2np.udp.ipv6");
         TreeSet<NTCPConnection> peers = new TreeSet<NTCPConnection>(getNTCPComparator(sortFlags));
         peers.addAll(nt.getPeers());
 

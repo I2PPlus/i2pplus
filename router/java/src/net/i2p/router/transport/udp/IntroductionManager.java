@@ -637,7 +637,7 @@ class IntroductionManager {
         }
 
         public void timeReached() {
-            boolean ok = receiveRelayIntro(bob, alice, data, ++count);
+            boolean ok = receiveRelayIntro(bob, alice, data,++count);
             if (!ok)
                 reschedule(DELAY << count);
         }

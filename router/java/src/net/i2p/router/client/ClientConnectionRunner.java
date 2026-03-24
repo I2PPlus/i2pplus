@@ -502,7 +502,7 @@ class ClientConnectionRunner {
         synchronized (this) {
             if (sp.leaseRequest == req) {
                 sp.leaseRequest = null;
-                disconnect = ++_consecutiveLeaseRequestFails > MAX_LEASE_FAILS;
+                disconnect =++_consecutiveLeaseRequestFails > MAX_LEASE_FAILS;
             }
         }
         if (disconnect)

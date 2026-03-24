@@ -91,7 +91,7 @@ class FileLogWriter extends LogWriter {
             if (_currentOut != null)
                 _currentOut.flush();
         } catch (IOException ioe) {
-            if (_write && ++_diskFullMessageCount < MAX_DISKFULL_MESSAGES)
+            if (_write &&++_diskFullMessageCount < MAX_DISKFULL_MESSAGES)
                 System.err.println("Error writing the router log - disk full? " + ioe);
         }
     }

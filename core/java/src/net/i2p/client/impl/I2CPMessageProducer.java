@@ -353,7 +353,7 @@ class I2CPMessageProducer {
                 }
 
                 // wait until next period
-                _context.statManager().addRateData("client.sendThrottled", ++waitCount, 0);
+                _context.statManager().addRateData("client.sendThrottled",++waitCount, 0);
                 if (_log.shouldDebug())
                     _log.debug("Throttled " + len + " bytes, wait #" + waitCount + ' ' + (1000 - period) + "ms" /*, new Exception()*/);
                 try {

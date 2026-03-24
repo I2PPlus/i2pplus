@@ -121,7 +121,7 @@ public class TestSwarm {
         public Flooder(Destination dest) {
             _socket = null;
             _remoteDestination = dest;
-            _connectionId = ++__conId;
+            _connectionId =++__conId;
             _closed = false;
             _lastReceived = -1;
             _lastReceivedOn = _context.clock().now();
@@ -134,7 +134,7 @@ public class TestSwarm {
         public Flooder(I2PSocket socket) {
             _socket = socket;
             _remoteDestination = socket.getPeerDestination();
-            _connectionId = ++__conId;
+            _connectionId =++__conId;
             _closed = false;
             _lastReceived = -1;
             _lastReceivedOn = _context.clock().now();

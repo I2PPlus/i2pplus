@@ -445,7 +445,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     else {msg = "✖ Cannot build client tunnels: No connection to router at " + hostAndPort;}
                     String exmsg = ise.getMessage();
                     boolean fail = !_buildingTunnels || (exmsg != null && exmsg.toLowerCase(Locale.ROOT).contains("session limit exceeded"));
-                    if (!fail && ++retries < MAX_RETRIES) {
+                    if (!fail &&++retries < MAX_RETRIES) {
                         String retryMsg = msg + " -> Retrying in " + (RETRY_DELAY / 1000) + "s [" + retries + " / " + MAX_RETRIES + "]";
                         if (log != null) {log.log(retryMsg);}
                         if (_log.shouldWarn()) {_log.warn(retryMsg);}

@@ -372,32 +372,28 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private final boolean shouldAddResponseHeaderAllow() {
         Properties opts = getTunnel().getClientOptions();
         boolean addAllowHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_ALLOW));
-        if (!addAllowHeader) {return false;}
-        else {return true;}
+        return addAllowHeader;
     }
 
     /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeaderCacheControl() {
         Properties opts = getTunnel().getClientOptions();
         boolean addCacheControlHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL));
-        if (!addCacheControlHeader) {return false;}
-        else {return true;}
+        return addCacheControlHeader;
     }
 
     /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeaderReferrerPolicy() {
         Properties opts = getTunnel().getClientOptions();
         boolean addReferrerPolicyHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_REFERRER_POLICY));
-        if (!addReferrerPolicyHeader) {return false;}
-        else {return true;}
+        return addReferrerPolicyHeader;
     }
 
     /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeaderNoSniff() {
         Properties opts = getTunnel().getClientOptions();
         boolean addNoSniffPolicyHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_NOSNIFF));
-        if (!addNoSniffPolicyHeader) {return false;}
-        else {return true;}
+        return addNoSniffPolicyHeader;
     }
 
     /** @since 0.9.9 */

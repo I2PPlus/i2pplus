@@ -808,7 +808,7 @@ class NewsFetcher extends UpdateRunner {
                 return;
             for (NewsEntry e : entries) {
                 if (e.title == null || e.content == null) {continue;}
-                out.write("<!-- Entry Date: " + e.updated + " -->\n");
+                out.write("<!-- Entry Date: " + e.updated + "-->\n");
                 out.write("<h3>");
                 // Warning - update NewsHandler.parseNews() if you change the format
                 out.write(DataHelper.formatDate(e.updated));

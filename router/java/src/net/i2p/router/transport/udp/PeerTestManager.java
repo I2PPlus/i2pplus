@@ -57,7 +57,7 @@ quite simple:</p>
 
     runTest()
     sendTestToBob()     receiveFromAliceAsBob()
-    PeerTest -------------------&gt;
+    PeerTest-------------------&gt;
 
                         sendTestToCharlie()       receiveFromBobAsCharlie()
                              PeerTest--------------------&gt;
@@ -771,7 +771,7 @@ class PeerTestManager {
         }
 
         public void timeReached() {
-            boolean ok = receiveTest(from, fromPeer, msg, hash, data, ++count);
+            boolean ok = receiveTest(from, fromPeer, msg, hash, data,++count);
             if (!ok)
                 reschedule(DELAY << count);
         }

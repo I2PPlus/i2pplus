@@ -38,7 +38,7 @@ public class ObjectCounterUnsafe<K> {
     public int increment(K h) {
         Int i = map.get(h);
         if (i != null) {
-            return ++(i.c);
+            return++(i.c);
         }
         map.put(h, new Int(1));
         return 1;

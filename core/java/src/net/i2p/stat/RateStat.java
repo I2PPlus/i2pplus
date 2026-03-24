@@ -139,7 +139,7 @@ public class RateStat {
     }
 
     private final static String NL = System.getProperty("line.separator");
-    private final static String HR = "# ----------------------------------------------------------------------------------------";
+    private final static String HR = "#----------------------------------------------------------------------------------------";
 
     @Override
     public String toString() {

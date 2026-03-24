@@ -68,7 +68,7 @@ public class LogBean extends BaseBean
 
                 for (int i = lines.size() - 1; i >= 0; i--) { // Reverse order, most recent first
                     if (!lines.get(i).contains("Bad hostname")) {
-                        String[] parts = lines.get(i).split(" -- ");
+                        String[] parts = lines.get(i).split("-- ");
                         String date = parts[0].replace("GMT", "UTC");
                         String message = parts[1];
                         String[] messageParts = message.split(" ");
@@ -140,7 +140,7 @@ public class LogBean extends BaseBean
                 String line;
                 while ((line = br.readLine()) != null) {
                     if (!line.contains("Bad hostname")) {
-                        String[] parts = line.split(" -- ");
+                        String[] parts = line.split("-- ");
                         String date = parts[0].replace("GMT", "UTC");
                         if (isToday(date)) {
                             todayEntryCount++;

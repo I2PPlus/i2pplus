@@ -163,7 +163,7 @@ class ConnThrottler {
                 _peers.put(h, new Record());
             }
         }
-        if (_totalMax > 0 && ++_currentTotal > _totalMax) {
+        if (_totalMax > 0 &&++_currentTotal > _totalMax) {
             if (_totalThrottleUntil == 0) {
                 _totalThrottleUntil = Clock.getInstance().now() + _totalThrottlePeriod;
                 String date = DataHelper.formatTime(_totalThrottleUntil);

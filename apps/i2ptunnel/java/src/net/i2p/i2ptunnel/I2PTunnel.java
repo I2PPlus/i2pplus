@@ -209,7 +209,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         int c;
         while ((c = g.getopt()) != -1) {
             switch (c) {
-                case 'd':  // -d, -die, --die
+                case 'd':  // -d, -die,--die
                     dontDie = false;
                     gui = false;
                     cli = false;
@@ -231,20 +231,20 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                     }
                 // fall thru for -nogui only
 
-                case NOGUI:  // --nogui
+                case NOGUI:  //--nogui
                     gui = false;
                     if (_log.shouldWarn())
                         _log.warn(getPrefix() + "The `-nogui' option of I2PTunnel is deprecated.\n"
                           + "Use `-cli', `-nocli' (aka `-wait') or `-die' instead.");
                 // fall through
 
-                case 'c':  // -c, -cli, --cli
+                case 'c':  // -c, -cli,--cli
                     gui = false;
                     cli = true;
                     checkRunByE = false;
                     break;
 
-                case 'w':  // -w, -wait, --nocli
+                case 'w':  // -w, -wait,--nocli
                     gui = false;
                     cli = false;
                     checkRunByE = false;
@@ -336,13 +336,13 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             "  Default is to run the GUI.\n" +
             "  commandFile: run all commands in this file\n" +
             "  Options:\n" +
-            "    -c, -cli, --cli     :  run the command line interface\n" +
-            "    -d, -die, --die     :  exit immediately, do not wait for commands to finish\n" +
+            "    -c, -cli,--cli     :  run the command line interface\n" +
+            "    -d, -die,--die     :  exit immediately, do not wait for commands to finish\n" +
             "    -e 'command [args]' :  run the command\n" +
-            "    -h, --help          :  display this help\n" +
-            "    -nocli, --nocli     :  do not run the command line interface or GUI\n" +
-            "    -nogui, --nogui     :  do not run the GUI\n" +
-            "    -w, -wait, --wait   :  do not run the command line interface or GUI";
+            "    -h,--help          :  display this help\n" +
+            "    -nocli,--nocli     :  do not run the command line interface or GUI\n" +
+            "    -nogui,--nogui     :  do not run the GUI\n" +
+            "    -w, -wait,--wait   :  do not run the command line interface or GUI";
     }
 
     /**

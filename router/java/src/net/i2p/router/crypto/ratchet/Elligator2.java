@@ -346,7 +346,7 @@ class Elligator2 {
             byte[] enc;
             int j = 0;
             do {
-                System.out.println("Trying encode " + ++j);
+                System.out.println("Trying encode "+++j);
                 KeyPair kp = xkf.getKeys();
                 pub = kp.getPublic();
                 enc = elg2.encode(pub);

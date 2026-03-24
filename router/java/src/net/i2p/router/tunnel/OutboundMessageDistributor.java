@@ -120,7 +120,7 @@ class OutboundMessageDistributor {
         if (_toRouters == null)
             return false;
         synchronized (this) {
-            if (!_toRouters.add(target) || _context.commSystem().isEstablished(target) || ++_newRouterCount <= Math.min(MAX_ROUTERS_PER_PERIOD, 64))
+            if (!_toRouters.add(target) || _context.commSystem().isEstablished(target) ||++_newRouterCount <= Math.min(MAX_ROUTERS_PER_PERIOD, 64))
                 return false;
             long now = _context.clock().now();
             if (_newRouterTime < now - NEW_ROUTER_PERIOD) {

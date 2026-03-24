@@ -1194,14 +1194,14 @@ public class WebMail extends HttpServlet {
                         pw.println();
                         pw.println();
                         pw.println();
-                        pw.println("---- " + _t("begin forwarded mail") + " ----");
+                        pw.println("---- " + _t("begin forwarded mail") + "----");
                         pw.println("From: " + sender);
                         if (mail.to != null && mail.to.length > 0) {Mail.appendRecipients(pw, mail.to, "To: ");}
                         if (mail.cc != null && mail.cc.length > 0) {Mail.appendRecipients(pw, mail.cc, "Cc: ");}
                         if (mail.dateString != null) {pw.print("Date: " + mail.dateString);}
                         pw.println();
                         showPart(pw, part, 0, TEXT_ONLY, HtmlMode.NONE);
-                        pw.println("----  " + _t("end forwarded mail") + "  ----");
+                        pw.println("----  " + _t("end forwarded mail") + "----");
                         pw.flush();
                     }
                     // Store as draft here, put draft UIDL in sessionObject,

@@ -1265,7 +1265,7 @@ class SidebarRenderer {
               .append(_t("Job lag"))
               .append(" / ")
               .append(_t("Message delay"))
-                .append("\">--- / ---</span>");
+                .append("\">--- /---</span>");
         }
         buf.append("</a>")
            .append(getToggle())

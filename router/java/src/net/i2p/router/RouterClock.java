@@ -304,7 +304,7 @@ public class RouterClock extends Clock {
                 // was greater than lastSled + MAX_SLEW, i.e. different
                 // from the last systemNow, thus we won't let the clock go backward,
                 // no need to track when we were last called.
-                _offset = --offset;
+                _offset =--offset;
             }
             _lastSlewed = systemNow;
         }

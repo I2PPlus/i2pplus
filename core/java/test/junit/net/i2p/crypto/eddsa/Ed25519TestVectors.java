@@ -29,7 +29,7 @@ public class Ed25519TestVectors {
         public byte[] sig;
 
         public TestTuple(String line) {
-            caseNum = ++numCases;
+            caseNum =++numCases;
             String[] x = line.split(":");
             seed = Utils.hexToBytes(x[0].substring(0, 64));
             pk = Utils.hexToBytes(x[1]);

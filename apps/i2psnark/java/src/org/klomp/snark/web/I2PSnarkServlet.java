@@ -3940,8 +3940,8 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<input type=checkbox class=\"optbox slider\" name=varyOutbound id=varyOutbound ")
            .append(varyOutbound ? "checked " : "").append("> <span>").append(_t("Outbound")).append("</span></label>")
            .append("</span><br>\n")
-           .append("<script src=\"" + _resourcePath + "js/toggleVaryTunnelLength.js?" + CoreVersion.VERSION + "\" defer></script>\n")
-            .append("<noscript><style>#hopVariance .optbox.slider{pointer-events:none!important; opacity:.4!important}</style></noscript>\n");
+           .append("<script src=\"").append(_resourcePath).append("js/toggleVaryTunnelLength.js?").append(CoreVersion.VERSION).append("\" defer></script>\n")
+           .append("<noscript><style>#hopVariance .optbox.slider{pointer-events:none!important; opacity:.4!important}</style></noscript>\n");
 
         if (isStandalone()) {
             buf.append("<span class=configOption><label><b>")
@@ -6182,8 +6182,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.54+
      */
     private boolean isStandalone() {
-        if (_context.isRouterContext()) {return false;}
-        else {return true;}
+        return !_context.isRouterContext();
     }
 
 }

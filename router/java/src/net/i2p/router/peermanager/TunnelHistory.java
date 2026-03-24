@@ -110,7 +110,7 @@ public class TunnelHistory {
     }
 
     private final static String NL = System.getProperty("line.separator");
-    private final static String HR = "# ----------------------------------------------------------------------------------------";
+    private final static String HR = "#----------------------------------------------------------------------------------------";
 
     public void store(OutputStream out) throws IOException {
         store(out, true);

@@ -242,17 +242,13 @@ abstract class BuildMessageGenerator {
      */
     public static boolean isBlank(TunnelCreatorConfig cfg, int hop) {
         if (cfg.isInbound()) {
-            if (hop + 1 >= cfg.getLength())
-                return true;
-            else
-                return false;
+            return hop + 1 >= cfg.getLength();
         } else {
-            if (hop == 0)
+            if (hop == 0) {
                 return true;
-            else if (hop >= cfg.getLength())
-                return true;
-            else
-                return false;
+            } else {
+                return hop >= cfg.getLength();
+            }
         }
     }
 }

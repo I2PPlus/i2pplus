@@ -37,7 +37,6 @@ import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.NewsHelper;
 import net.i2p.servlet.util.ServletUtil;
 import net.i2p.stat.Rate;
-import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SystemVersion;

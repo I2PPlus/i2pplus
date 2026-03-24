@@ -139,7 +139,7 @@ public abstract class GatewayITBase extends RouterITBase {
         m.setMessageExpiration(_context.clock().now() + 60*1000);
         m.setUniqueId(_context.random().nextLong(I2NPMessage.MAX_ID_VALUE));
 
-        byte [] data = m.toByteArray(); // not sure why, maybe side-effect? --zab
+        byte [] data = m.toByteArray(); // not sure why, maybe side-effect?--zab
         return m;
     }
 

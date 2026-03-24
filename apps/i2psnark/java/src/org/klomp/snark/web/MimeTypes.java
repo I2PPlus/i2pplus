@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.DataHelper;
 import net.i2p.util.SystemVersion;
 
-/* ------------------------------------------------------------ */
+/*------------------------------------------------------------ */
 /**
  * Based on MimeTypes from Jetty 6.1.26, heavily simplified and modified to remove all dependencies
  * on Jetty libs.
@@ -53,7 +53,7 @@ class MimeTypes {
                 || SystemVersion.getMaxMemory() < 100 * 1024 * 1024L)) loadSystemMimeTypes();
     }
 
-    /* ------------------------------------------------------------ */
+    /*------------------------------------------------------------ */
     /**
      * @param resourcePath A Map of file extension to mime-type.
      */
@@ -127,7 +127,7 @@ class MimeTypes {
         }
     }
 
-    /* ------------------------------------------------------------ */
+    /*------------------------------------------------------------ */
     /**
      * Get the MIME type by filename extension.
      *
@@ -154,7 +154,7 @@ class MimeTypes {
         return type;
     }
 
-    /* ------------------------------------------------------------ */
+    /*------------------------------------------------------------ */
     /**
      * Set a mime mapping
      *

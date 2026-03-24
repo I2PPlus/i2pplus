@@ -311,7 +311,7 @@ class MailPart {
         } finally {
             if (lin != null) {
                 try {lin.close();}
-                catch (IOException ioe) {};
+                catch (IOException ioe) { /* ignore */ };
             }
             buffer.readComplete(true);
             if (dout != null) {dout.getOutputStream().flush();}
@@ -337,7 +337,7 @@ class MailPart {
         } finally {
             if (lin != null) {
                 try {lin.close();}
-                catch (IOException ioe) {};
+                catch (IOException ioe) { /* ignore */ };
             }
             buffer.readComplete(true);
         }

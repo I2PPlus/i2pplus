@@ -352,7 +352,7 @@ public class I2Ping extends I2PTunnelClientBase {
                             totalTime += result.duration;
                             l.log(" ✔ " + (i + 1) + ": \t " + result.duration + "ms");
                         } else {
-                            l.log(" ✖ " + (i + 1) + ": \t ------");
+                            l.log(" ✖ " + (i + 1) + ": \t------");
                         }
                     }
                 }

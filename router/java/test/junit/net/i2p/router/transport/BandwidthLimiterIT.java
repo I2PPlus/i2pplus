@@ -233,7 +233,7 @@ public class BandwidthLimiterIT {
         private long _runningTime;
         public OutboundRunner(int numBytes) {
             _numBytes = numBytes;
-            _runnerNum = ++__runnerNum;
+            _runnerNum =++__runnerNum;
         }
         public void run() {
             Thread.currentThread().setName("Out" + _runnerNum);

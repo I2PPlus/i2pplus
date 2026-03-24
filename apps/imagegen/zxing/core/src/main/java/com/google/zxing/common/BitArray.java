@@ -181,7 +181,7 @@ public final class BitArray implements Cloneable {
         if (end == start) {
             return;
         }
-        end--; // will be easier to treat this as the last actually set bit -- inclusive
+        end--; // will be easier to treat this as the last actually set bit-- inclusive
         int firstInt = start / 32;
         int lastInt = end / 32;
         for (int i = firstInt; i <= lastInt; i++) {
@@ -219,7 +219,7 @@ public final class BitArray implements Cloneable {
         if (end == start) {
             return true; // empty range matches
         }
-        end--; // will be easier to treat this as the last actually set bit -- inclusive
+        end--; // will be easier to treat this as the last actually set bit-- inclusive
         int firstInt = start / 32;
         int lastInt = end / 32;
         for (int i = firstInt; i <= lastInt; i++) {

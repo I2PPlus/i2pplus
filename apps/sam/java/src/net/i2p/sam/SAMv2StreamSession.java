@@ -457,7 +457,7 @@ class SAMv2StreamSession extends SAMStreamSession
     public class SAMv2StreamSessionSocketReader extends SAMv1StreamSessionSocketReader
     {
         protected boolean nolimit;
-        protected long    limit  ;
+        protected long    limit;
         protected long    totalReceived;
 
                 /**

@@ -223,7 +223,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
         RouterKeyGenerator rkg = new RouterKeyGenerator(I2PAppContext.getGlobalContext());
         System.out.println("Date: " + rkg._fmt.format(now) + '\n' +
                            "Hash                                         Routing Key\n" +
-                           "----                                         -----------");
+                           "----                                       -----------");
         for (int i = st; i < args.length; i++) {
             String s = args[i];
             String sp = " ";

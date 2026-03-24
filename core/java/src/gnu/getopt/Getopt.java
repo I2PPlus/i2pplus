@@ -1,5 +1,5 @@
 /**************************************************************************
-/* Getopt.java -- Java port of GNU getopt from glibc 2.0.6
+/* Getopt.java-- Java port of GNU getopt from glibc 2.0.6
 /*
 /* Copyright (c) 1987-1997 Free Software Foundation, Inc.
 /* Java Port Copyright (c) 1998 by Aaron M. Renn (arenn@urbanophile.com)
@@ -900,14 +900,14 @@ public class Getopt extends Object
 
             nextchar = "";
             optopt = 0;
-            ++optind;
+          ++optind;
 
             return ('?');
         }
 
         if (pfound != null)
         {
-            ++optind;
+          ++optind;
 
             if (nameend != nextchar.length())
             {
@@ -953,7 +953,7 @@ public class Getopt extends Object
                 if (optind < argv.length)
                 {
                     optarg = argv[optind];
-                    ++optind;
+                  ++optind;
                 }
                 else
                 {
@@ -1146,7 +1146,7 @@ public class Getopt extends Object
                 }
 
                 nextchar = "";
-                ++optind;
+              ++optind;
                 optopt = 0;
 
                 return ('?');
@@ -1165,7 +1165,7 @@ public class Getopt extends Object
             temp = optstring.substring(optstring.indexOf(c));
 
         if (nextchar.equals(""))
-            ++optind;
+          ++optind;
 
         if ((temp == null) || (c == ':'))
         {
@@ -1234,7 +1234,7 @@ public class Getopt extends Object
         // Let the application handle it
             {
                 nextchar = null;
-                ++optind;
+              ++optind;
                 return ('W');
             }
         }
@@ -1247,7 +1247,7 @@ public class Getopt extends Object
                 if (!nextchar.equals(""))
                 {
                     optarg = nextchar;
-                    ++optind;
+                  ++optind;
                 }
                 else
                 {
@@ -1261,7 +1261,7 @@ public class Getopt extends Object
                 if (!nextchar.equals(""))
                 {
                     optarg = nextchar;
-                    ++optind;
+                  ++optind;
                 }
                 else if (optind == argv.length)
                 {
@@ -1284,7 +1284,7 @@ public class Getopt extends Object
                 else
                 {
                     optarg = argv[optind];
-                    ++optind;
+                  ++optind;
 
               // Ok, here's an obscure Posix case.  If we have o:, and
               // we get -o -- foo, then we're supposed to skip the --,
@@ -1316,7 +1316,7 @@ public class Getopt extends Object
                   // Don't permute as we do on -- up above since we
                   // know we aren't in permute mode because of Posix.
                         optarg = argv[optind];
-                        ++optind;
+                      ++optind;
                         first_nonopt = optind;
                         last_nonopt = argv.length;
                         endparse = true;

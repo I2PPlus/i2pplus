@@ -1,4 +1,4 @@
-/* Fortuna.java -- The Fortuna PRNG.
+/* Fortuna.java-- The Fortuna PRNG.
    Copyright (C) 2004  Free Software Foundation, Inc.
 
 This file is part of GNU Crypto.
