@@ -101,6 +101,7 @@ public class TranslationStatus {
 
         // pass 1: for each file
         for (int i = 0; i < files.length; i++) {
+            if (!files[i].exists()) {continue;}
             // pass 1A: collect the class names in the file
             ZipFile zip = null;
             try {
