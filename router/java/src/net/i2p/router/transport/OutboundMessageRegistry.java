@@ -327,14 +327,14 @@ public class OutboundMessageRegistry {
             if (log) {
                 int e = removing.size();
                 int r;
-                synchronized(_selectors) {
+                synchronized (_selectors) {
                     r = _selectors.size();
                 }
                 int a = _activeMessages.size();
                 if (r > 0 || e > 0 || a > 0)
                     _log.debug("Expired: " + e + " remaining: " + r + " active: " + a);
             }
-            synchronized(_selectors) {
+            synchronized (_selectors) {
                 if (_nextExpire <= now)
                     _nextExpire = now + 10*1000;
                 schedule(_nextExpire - now);
@@ -343,7 +343,7 @@ public class OutboundMessageRegistry {
 
         public void scheduleExpiration(MessageSelector sel) {
             long now = _context.clock().now();
-            synchronized(_selectors) {
+            synchronized (_selectors) {
                 if ( (_nextExpire <= now) || (sel.getExpiration() < _nextExpire) ) {
                     _nextExpire = sel.getExpiration();
                     reschedule(_nextExpire - now);

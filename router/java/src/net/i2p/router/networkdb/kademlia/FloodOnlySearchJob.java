@@ -73,7 +73,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
      *  @return number remaining after decrementing
      */
     int decrementRemaining(Hash peer) {
-        synchronized(_unheardFrom) {
+        synchronized (_unheardFrom) {
             _unheardFrom.remove(peer);
             return decrementRemaining();
         }
@@ -91,7 +91,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
             int timeRemaining = (int)(_expiration - getContext().clock().now());
             _log.info("Floodfill search for " + _key + " failed with " + timeRemaining + " remaining after " + time);
         }
-        synchronized(_unheardFrom) {
+        synchronized (_unheardFrom) {
             for (Hash h : _unheardFrom)
                 getContext().profileManager().dbLookupFailed(h);
         }
@@ -123,7 +123,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
          *   StoreJob also calls dbStoreSent() which updates the lastHeardFrom timer - this also helps.
          */
         long time = System.currentTimeMillis() - _created;
-        synchronized(_unheardFrom) {
+        synchronized (_unheardFrom) {
             if (_unheardFrom.size() == 1) {
                 Hash peer = _unheardFrom.iterator().next();
                 getContext().profileManager().dbLookupSuccessful(peer, time);

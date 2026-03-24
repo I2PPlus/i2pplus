@@ -59,7 +59,7 @@ public class MLabRunner {
     private static MLabRunner _instance;
 
     public static MLabRunner getInstance(I2PAppContext ctx) {
-        synchronized(MLabRunner.class) {
+        synchronized (MLabRunner.class) {
             if (_instance == null)
                 _instance = new MLabRunner(ctx);
             return _instance;
@@ -338,7 +338,7 @@ public class MLabRunner {
 
         public void cancel() {
             List<ToolRunListener> copy;
-            synchronized( this ){
+            synchronized ( this ){
                 cancelled = true;
                 copy = new ArrayList<ToolRunListener>(listeners);
             }
@@ -353,7 +353,7 @@ public class MLabRunner {
 
         public void addListener(ToolRunListener l) {
             boolean inform = false;
-            synchronized(this){
+            synchronized (this){
                 inform = cancelled;
                 listeners.add(l);
             }
@@ -367,7 +367,7 @@ public class MLabRunner {
         }
 
         public String getStatus() {
-            synchronized(this) {
+            synchronized (this) {
                 return listeners.isEmpty() ? "" : listeners.get(0).getStatus();
             }
         }

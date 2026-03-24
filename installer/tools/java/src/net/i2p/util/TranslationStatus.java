@@ -256,7 +256,7 @@ public class TranslationStatus {
         }
         if (_html)
             buf2.append("<h2>Compiled Resources")
-                .append("&nbsp;<span class=script><button id=tx_toggle_compiled>")
+                .append("&nbsp; <span class=script><button id=tx_toggle_compiled>")
                 .append("Show Complete Translations</button></span>")
                 .append("</h2>\n");
         else
@@ -390,7 +390,7 @@ public class TranslationStatus {
         int rv  = 0;
         if (_html) {
             buf.append("<h2>Other Resources")
-               .append("&nbsp;<span class=script><button id=tx_toggle_files>")
+               .append("&nbsp; <span class=script><button id=tx_toggle_files>")
                 .append("Show Complete Translations</button></span></h2>\n");
         } else {
             buf.append("\nOther Resources\n\n");

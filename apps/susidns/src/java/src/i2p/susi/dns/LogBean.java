@@ -48,7 +48,7 @@ public class LogBean extends BaseBean
     private File logFile() {return new File(addressbookDir(), LOG_FILE);}
 
     private void reloadLog() {
-        synchronized(LogBean.class) {locked_reloadLog();}
+        synchronized (LogBean.class) {locked_reloadLog();}
     }
 
     private void locked_reloadLog() {
@@ -75,7 +75,7 @@ public class LogBean extends BaseBean
                         String domain = messageParts[2].replace("[","").replace("]","");
                         String subhost = messageParts[3].replace("http://", "");
 
-                        buf.append("<li><span class=date>").append(date).append("</span> &nbsp;").append(_t("New domain"))
+                        buf.append("<li><span class=date>").append(date).append("</span> &nbsp; ").append(_t("New domain"))
                            .append(" <a href=http://").append(domain).append("/ target=_blank>").append(domain)
                            .append("</a> <span class=subhost>").append(subhost).append("</span></li>\n");
                     }

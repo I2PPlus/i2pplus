@@ -296,7 +296,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
         if (nackCount > 0)
             buf.append(" NACKed ").append(nackCount).append(" times");
 
-        synchronized(this) {
+        synchronized (this) {
             if (_ackOn > 0)
                 buf.append(" ACK after ").append(getAckTime()).append("ms");
         }

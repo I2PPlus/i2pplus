@@ -161,8 +161,8 @@ abstract class LogWriter implements Runnable {
      */
     private String dupMessage(int dupCount, LogRecord lastRecord, boolean reverse, boolean html) {
         boolean nohtml = !html || SystemVersion.isAndroid();
-        String arrows = reverse ? (nohtml ? "vvv" : "&darr;&darr;&darr;")
-                                : (nohtml ? "^^^" : "&uarr;&uarr;&uarr;");
+        String arrows = reverse ? (nohtml ? "vvv" : "&darr; &darr; &darr; ")
+                                : (nohtml ? "^^^" : "&uarr; &uarr; &uarr; ");
         return LogRecordFormatter.getWhen(_manager, lastRecord) + " | " + arrows + ' ' +
                ngettext("{0} similar message omitted", "{0} similar messages omitted", dupCount) +
                LogRecordFormatter.NL;

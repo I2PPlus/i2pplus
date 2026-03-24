@@ -78,7 +78,7 @@ class FreeListBlock {
         branches = new int[MAX_SIZE];
         if (len > 0) {
             int good = 0;
-            for (int i=0;i<len;i++) {
+            for (int i=0; i<len; i++) {
                 int fpg = file.readInt();
                 if (fpg > BlockFile.METAINDEX_PAGE)
                     branches[good++] = fpg;
@@ -97,7 +97,7 @@ class FreeListBlock {
         file.writeLong(MAGIC);
         file.writeInt(nextPage);
         file.writeInt(len);
-        for (int i=0;i<len;i++) { file.writeInt(branches[i]); }
+        for (int i=0; i<len; i++) { file.writeInt(branches[i]); }
     }
 
     /**

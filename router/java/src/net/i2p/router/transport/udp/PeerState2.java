@@ -289,7 +289,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      */
     private boolean checkRetransmitSessionConfirmed2(long now, boolean force) {
         UDPPacket[] packets = null;
-        synchronized(this) {
+        synchronized (this) {
             if (_sessConfForReTX != null) {
                 // retransmit Session Confirmed when it's time
                 if (force || _sessConfSentTime + (OutboundEstablishState.RETRANSMIT_DELAY << (_sessConfSentCount - 1)) < now) {
@@ -401,7 +401,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      *  @since public since 0.9.57 for SSU2Sender interface only
      */
     public SSU2Bitfield getReceivedMessages() {
-        synchronized(this) {
+        synchronized (this) {
             _wantACKSendSince = 0; // cancel the ack timer
             _lastACKSend = _context.clock().now();
         }
@@ -478,7 +478,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 _rcvCha.decryptWithAd(header.data, data, off + SHORT_HEADER_SIZE, data, off + SHORT_HEADER_SIZE, len - SHORT_HEADER_SIZE);
             }
             if (_receivedMessages.set(n)) {
-                synchronized(this) {_packetsReceivedDuplicate++;}
+                synchronized (this) {_packetsReceivedDuplicate++;}
                 if (shouldLog) {
                     _log.warn("[SSU] Duplicate packet [#" + n + "]" + fromPeer + " received " + (shouldLogDebug ? this : ""));
                 }
@@ -498,7 +498,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 // Path Response callback is before this and will reset the state if successful.
 
                 boolean limitSending = false;
-                synchronized(_migrationLock) {
+                synchronized (_migrationLock) {
                     switch (_migrationState) {
                         case MIGRATION_STATE_NONE:
                             if (!from.equals(_remoteHostId)) {
@@ -1031,7 +1031,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     public void bitSet(long pktNum) {
         if (pktNum == 0 && !_isInbound) {
             // we don't need to save the Session Confirmed for retransmission any more
-            synchronized(this) {_sessConfForReTX = null;}
+            synchronized (this) {_sessConfForReTX = null;}
             if (shouldLogDebug) {_log.debug("[SSU] New ACK of SessionConfirmed " + this);}
             return;
         }
@@ -1152,7 +1152,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
          *  Will not requeue unless the acks don't all fit (unlikely).
          */
         public void timeReached() {
-            synchronized(PeerState2.this) {
+            synchronized (PeerState2.this) {
                 if (_wantACKSendSince <= 0) {
                     if (shouldLogDebug) {_log.debug("[SSU] Already ACKed " + PeerState2.this);}
                     return;

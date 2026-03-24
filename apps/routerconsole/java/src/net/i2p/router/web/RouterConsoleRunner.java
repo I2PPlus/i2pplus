@@ -245,7 +245,7 @@ public class RouterConsoleRunner implements RouterApp {
         PortMapper portMapper = _context.portMapper();
         portMapper.unregister(PortMapper.SVC_CONSOLE);
         portMapper.unregister(PortMapper.SVC_HTTPS_CONSOLE);
-        synchronized(RouterConsoleRunner.class) {
+        synchronized (RouterConsoleRunner.class) {
             if (_jettyTimer != null) {
                 try {
                     _jettyTimer.stop();
@@ -1020,7 +1020,7 @@ public class RouterConsoleRunner implements RouterApp {
         // No, we can't share the ConstraintSecurityHandler across all webapps
         // But we can force all webapps to use a single Timer thread
         // see HashSessionManager javadoc
-        synchronized(RouterConsoleRunner.class) {
+        synchronized (RouterConsoleRunner.class) {
             if (_jettyTimer == null) {
                 _jettyTimer = new ScheduledExecutorScheduler("Console HashSessionScavenger", true);
                 try {

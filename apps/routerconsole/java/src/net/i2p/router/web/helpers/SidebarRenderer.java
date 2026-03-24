@@ -270,11 +270,11 @@ class SidebarRenderer {
         PortMapper pm = _context.portMapper();
         if (pm.isRegistered(PortMapper.SVC_SUSIDNS)) {
             String tx = _t("Addressbook");
-            rbuf.append("<a href=\"/dns?book=router&amp;filter=latest\" target=_top title=\"")
+            rbuf.append("<a href=\"/dns?book=router&amp; filter=latest\" target=_top title=\"")
                 .append(_t("Manage your I2P hosts file here (I2P domain name resolution)"))
                 .append("\">")
                 .append(nbsp(tx))
-                .append("</a>\n<a class=sb_icon target=_top href=\"/dns?book=router&amp;filter=latest\" title=\"")
+                .append("</a>\n<a class=sb_icon target=_top href=\"/dns?book=router&amp; filter=latest\" title=\"")
                 .append(tx)
                 .append("\" hidden><span><img src=/themes/console/images/addressbook.svg> <span id=newHosts class=\"badge volatile\" title=\"")
                 .append(_t("New hosts in last 24 hours"))
@@ -1046,20 +1046,20 @@ class SidebarRenderer {
            .append("</a>")
            .append(getToggle())
            .append("</h3>\n<hr class=b><table id=sb_bandwidth>\n<tr><td><b>")
-           .append(DataHelper.formatDuration2(3 * 1000).replace("3&nbsp;sec", _t("Current")))
+           .append(DataHelper.formatDuration2(3 * 1000).replace("3&nbsp; sec", _t("Current")))
            .append("</b></td><td class=digits><span class=volatile>")
            .append(_helper.getSecondKBps())
             .append("Bps</span></td></tr>\n");
 
         if (_context.router().getUptime() > 6*60*1000) {
             buf.append("<tr><td><b>")
-               .append(DataHelper.formatDuration2(5 * 60 * 1000).replace("5&nbsp;min", _t("5 Min Average")))
+               .append(DataHelper.formatDuration2(5 * 60 * 1000).replace("5&nbsp; min", _t("5 Min Average")))
                .append("</b></td><td class=digits><span class=volatile>")
                .append(_helper.getFiveMinuteKBps())
                 .append("Bps</span></td></tr>\n");
         } else {
             buf.append("<tr hidden><td><b>")
-               .append(DataHelper.formatDuration2(5 * 60 * 1000).replace("5&nbsp;min", _t("5 Min Average")))
+               .append(DataHelper.formatDuration2(5 * 60 * 1000).replace("5&nbsp; min", _t("5 Min Average")))
                 .append("</b></td><td class=digits><span class=volatile>---Bps</span></td></tr>\n");
         }
 
@@ -1093,8 +1093,8 @@ class SidebarRenderer {
         int refreshPeriod = 3;
         try {refreshPeriod = Integer.parseInt(r);}
         catch (NumberFormatException nfe) {}
-        String t = "&amp;t=" + (_context.clock().now() / 1000);
-        String g = "style=\"background-image:url(\'/viewstat.jsp?stat=bw.combined&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;hideTitle=true" +
+        String t = "&amp; t=" + (_context.clock().now() / 1000);
+        String g = "style=\"background-image:url(\'/viewstat.jsp?stat=bw.combined&amp; periodCount=20&amp; width=250&amp; height=50&amp; hideLegend=true&amp; hideGrid=true&amp; hideTitle=true" +
                     t + "\')\"";
         StringBuilder buf = new StringBuilder(512); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("<div id=sb_graphcontainer class=collapse title=\"")
@@ -1304,7 +1304,7 @@ class SidebarRenderer {
                .append(_helper.getAvgPeerTestTimeGood())
                .append(" / " )
                 .append(_helper.getAvgPeerTestTime());
-            if (_helper.getAvgPeerTestTime() > 0) {buf.append("&nbsp;ms");}
+            if (_helper.getAvgPeerTestTime() > 0) {buf.append("&nbsp; ms");}
             buf.append("</span></td></tr>\n");
         }
 
@@ -1417,7 +1417,7 @@ class SidebarRenderer {
                            .append(getToggle())
                             .append("</h3><hr class=b><div id=sb_newsheadings>\n<table>\n");
                     }
-                    buf.append("<tr><td><a href=\"/home?news=1&amp;consoleNonce=").append(consoleNonce).append("\"");
+                    buf.append("<tr><td><a href=\"/home?news=1&amp; consoleNonce=").append(consoleNonce).append("\"");
                     if (entry.updated > 0) {
                         buf.append(" title=\"")
                            .append(_t("Published"))
@@ -1450,7 +1450,7 @@ class SidebarRenderer {
      *  @since 0.9.18
      */
     private static String nbsp(String s) {
-        if (s.length() <= 30) {return s.replace(" ", "&nbsp;");} // if it's too long, this makes it worse
+        if (s.length() <= 30) {return s.replace(" ", "&nbsp; ");} // if it's too long, this makes it worse
         else {return s;}
     }
 

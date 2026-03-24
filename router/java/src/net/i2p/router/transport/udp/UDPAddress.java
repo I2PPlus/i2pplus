@@ -420,7 +420,7 @@ class UDPAddress {
             }
         } else {
             if ( (_host != null) && (_port > 0) )
-                rv.append("ssu://").append(_host).append(':').append(_port);//.append('/').append(Base64.encode(_introKey));
+                rv.append("ssu://").append(_host).append(':').append(_port); //.append('/').append(Base64.encode(_introKey));
             else
                 rv.append("ssu://autodetect.not.yet.complete:").append(_port);
         }
@@ -483,7 +483,7 @@ class UDPAddress {
      *  @since IPv6
      */
     static void clearCache() {
-        synchronized(_inetAddressCache) {
+        synchronized (_inetAddressCache) {
             _inetAddressCache.clear();
         }
     }

@@ -50,7 +50,7 @@ public class CertHelper extends HelperBase {
                     File f = tunnels[i];
                     String name = f.getName();
                     String b32 = name.substring(10, name.length() - 10);
-                    output(_t("I2PTunnel") + ": <span class=unbold>" + b32.substring(0,6) + "&hellip;</span><span style=float:right>" +
+                    output(_t("I2PTunnel") + ": <span class=unbold>" + b32.substring(0,6) + "&hellip; </span><span style=float:right>" +
                            _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "i2ptunnel" + slash + "</span></span>", f);
                     hasTunnels = true;
                 }

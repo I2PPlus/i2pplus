@@ -76,7 +76,7 @@ class InboundMessageState implements CDQEntry {
      * @return true if successful, false if corrupt or invalid
      */
     public final boolean receiveFragment(byte[] data, int off, int len, int fragmentNum, boolean isLast) throws DataFormatException {
-        synchronized(lock) {
+        synchronized (lock) {
             // Grow array if needed, but cap at MAX_FRAGMENTS
             if (fragmentNum >= _fragments.length) {
                 if (fragmentNum >= MAX_FRAGMENTS) {
@@ -124,7 +124,7 @@ class InboundMessageState implements CDQEntry {
      * Returns whether the specified fragment has been received.
      */
     public boolean hasFragment(int fragmentNum) {
-        synchronized(lock) {
+        synchronized (lock) {
             if (fragmentNum >= _fragments.length)
                 return false;
             return _fragments[fragmentNum] != null;
@@ -135,7 +135,7 @@ class InboundMessageState implements CDQEntry {
      * Returns true if all fragments up to last have been received.
      */
     public boolean isComplete() {
-        synchronized(lock) {
+        synchronized (lock) {
             int last = _lastFragment;
             if (last < 0) return false;
             return _receivedCount == (last + 1);
@@ -160,7 +160,7 @@ class InboundMessageState implements CDQEntry {
      * Sets enqueue time for queueing.
      */
     public void setEnqueueTime(long now) {
-        synchronized(lock) {
+        synchronized (lock) {
             _enqueueTime = now;
         }
     }
@@ -169,7 +169,7 @@ class InboundMessageState implements CDQEntry {
      * Gets the enqueue time.
      */
     public long getEnqueueTime() {
-        synchronized(lock) {
+        synchronized (lock) {
             return _enqueueTime;
         }
     }
@@ -196,7 +196,7 @@ class InboundMessageState implements CDQEntry {
      * @throws IllegalStateException if message incomplete or released
      */
     public int getCompleteSize() {
-        synchronized(lock) {
+        synchronized (lock) {
             if (_completeSize < 0) {
                 if (_lastFragment < 0)
                     throw new IllegalStateException("Last fragment not set");
@@ -219,7 +219,7 @@ class InboundMessageState implements CDQEntry {
      * Creates a bitfield representing received fragments.
      */
     public ACKBitfield createACKBitfield() {
-        synchronized(lock) {
+        synchronized (lock) {
             int last = _lastFragment;
             int sz = (last >= 0) ? last + 1 : _fragments.length;
             return new PartialBitfield(_messageId, _fragments, sz);
@@ -290,7 +290,7 @@ class InboundMessageState implements CDQEntry {
      * Releases all cached fragments and marks this state as released.
      */
     public void releaseResources() {
-        synchronized(lock) {
+        synchronized (lock) {
             _released = true;
             for (int i = 0; i < _fragments.length; i++) {
                 if (_fragments[i] != null) {
@@ -305,7 +305,7 @@ class InboundMessageState implements CDQEntry {
      * Returns the array of fragments, throws if already released.
      */
     public ByteArray[] getFragments() {
-        synchronized(lock) {
+        synchronized (lock) {
             if (_released) {
                 RuntimeException e = new IllegalStateException("Use after free: " + _messageId);
                 _log.error("SSU IMS", e);
@@ -319,7 +319,7 @@ class InboundMessageState implements CDQEntry {
      * Returns number of fragments received or expected.
      */
     public int getFragmentCount() {
-        synchronized(lock) {
+        synchronized (lock) {
             return _lastFragment + 1;
         }
     }
@@ -329,7 +329,7 @@ class InboundMessageState implements CDQEntry {
      */
     @Override
     public String toString() {
-        synchronized(lock) {
+        synchronized (lock) {
             StringBuilder buf = new StringBuilder(256);
             buf.append("\n* Inbound Message: ").append(_messageId);
             buf.append(" from [").append(_from.toString().substring(0,6)).append("]");

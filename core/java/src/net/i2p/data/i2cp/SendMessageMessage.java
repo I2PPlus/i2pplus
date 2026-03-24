@@ -43,7 +43,7 @@ public class SendMessageMessage extends I2CPMessageImpl {
      *  @since 0.9.54
      */
     public SendMessageMessage(SessionId sessID, Destination dest, Payload payload, long nonce) {
-        synchronized(this) {
+        synchronized (this) {
             _sessionId = sessID;
             _destination = dest;
             _payload = payload;

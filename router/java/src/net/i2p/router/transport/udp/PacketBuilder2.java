@@ -1233,7 +1233,7 @@ class PacketBuilder2 {
         byte data[] = pkt.getData();
         int off = pkt.getOffset();
         int len = pkt.getLength();
-        synchronized(chacha) {
+        synchronized (chacha) {
             chacha.setNonce(n);
             try {
                 chacha.encryptWithAd(data, off, SHORT_HEADER_SIZE,

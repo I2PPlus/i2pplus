@@ -100,7 +100,7 @@ public class SecurityManager {
      */
     public String getPasswdHash(String pwd) {
         String salt;
-        synchronized(_conf) {
+        synchronized (_conf) {
             salt = _conf.getConf("auth.salt", "");
             if (salt.equals("")) {
                 salt = BCrypt.gensalt(10, _context.random());
@@ -118,7 +118,7 @@ public class SecurityManager {
      */
     private String getSavedPasswdHash() {
         String pw;
-        synchronized(_conf) {
+        synchronized (_conf) {
             pw = _conf.getConf("auth.password", "");
             if (pw.equals("")) {
                 pw = getPasswdHash(DEFAULT_AUTH_PASSWORD);

@@ -364,7 +364,7 @@ public class HomeHelper extends HelperBase {
                     url.contains("w3schools") || url.contains("translate.idk")) {
                 buf.append(" js");
             }
-            buf.append("\" style=display:inline-block;text-align:center><div class=appicon><a href=\"")
+            buf.append("\" style=display:inline-block; text-align:center><div class=appicon><a href=\"")
                .append(url)
                .append("\" tabindex=-1><img alt=\"\" title=\"")
                .append(app.desc)
@@ -412,8 +412,8 @@ public class HomeHelper extends HelperBase {
                .append(DataHelper.escapeHTML(app.name))
                .append("</label></td><td><a href=\"")
                .append(url).append("\">");
-            String urltext = DataHelper.escapeHTML(app.url).replace("&amp;ref=console", "");
-            if (app.url.length() > 72) {buf.append(urltext.substring(0, 70)).append("&hellip;");}
+            String urltext = DataHelper.escapeHTML(app.url).replace("&amp; ref=console", "");
+            if (app.url.length() > 72) {buf.append(urltext.substring(0, 70)).append("&hellip; ");}
             else {buf.append(urltext);}
             buf.append("</a></td></tr>\n");
         }

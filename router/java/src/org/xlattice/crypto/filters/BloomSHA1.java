@@ -181,7 +181,7 @@ public class BloomSHA1 {
      * @param len number of bytes to use
      */
     public void insert (byte[]b, int offset, int len) {
-        synchronized(this) {
+        synchronized (this) {
             locked_insert(b, offset, len);
         }
     }

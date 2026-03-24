@@ -677,7 +677,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  @throws IllegalStateException if called more than once
      */
     public synchronized void runRouter() {
-        synchronized(_stateLock) {
+        synchronized (_stateLock) {
             if (_state != State.INITIALIZED) {throw new IllegalStateException();}
             changeState(State.STARTING_1);
         }
@@ -709,7 +709,7 @@ public class Router implements RouterClock.ClockShiftListener {
         //_context.adminManager().startup();
         _context.blocklist().startup();
 
-        synchronized(_configFileLock) {
+        synchronized (_configFileLock) {
             // persistent key for peer ordering since 0.9.17
             // These will be replaced in CreateRouterInfoJob if we rekey
             if (!_config.containsKey(PROP_IB_RANDOM_KEY) ||
@@ -743,7 +743,7 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     @SuppressWarnings({"unchecked", "rawtypes" })
     public final void readConfig() {
-        synchronized(_configFileLock) {
+        synchronized (_configFileLock) {
             String f = getConfigFilename();
             Properties config = getConfig(_context, f);
             Map foo = _config; // to avoid compiler errror
@@ -845,7 +845,7 @@ public class Router implements RouterClock.ClockShiftListener {
     private void changeState(State state) {
         State oldState;
         Log log;
-        synchronized(_stateLock) {
+        synchronized (_stateLock) {
             oldState = _state;
             _state = state;
             log = _log;
@@ -864,7 +864,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * @return true if router is in an alive state
      */
     public boolean isAlive() {
-        synchronized(_stateLock) {return STATES_ALIVE.contains(_state);}
+        synchronized (_stateLock) {return STATES_ALIVE.contains(_state);}
     }
 
     /**
@@ -872,7 +872,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * @since 0.9.39
      */
     public boolean isRunning() {
-        synchronized(_stateLock) {return _state == State.RUNNING;}
+        synchronized (_stateLock) {return _state == State.RUNNING;}
     }
 
     /**
@@ -880,7 +880,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * @since 0.9.40
      */
     public boolean isRestarting() {
-        synchronized(_stateLock) {return _state == State.RESTARTING;}
+        synchronized (_stateLock) {return _state == State.RESTARTING;}
     }
 
     /**
@@ -897,7 +897,7 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     public void setNetDbReady() {
         boolean changed = false;
-        synchronized(_stateLock) {
+        synchronized (_stateLock) {
             if (_state == State.STARTING_3) {
                 changeState(State.NETDB_READY);
                 changed = true;
@@ -937,7 +937,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  @since 0.9.18
      */
     public void setExplTunnelsReady() {
-        synchronized(_stateLock) {
+        synchronized (_stateLock) {
             if (_state == State.STARTING_3) {changeState(State.EXPL_TUNNELS_READY);}
             else if (_state == State.NETDB_READY) {changeState(State.RUNNING);}
             else {_log.warn("Invalid state " + _state + " for setExplTunnelsReady()");}
@@ -949,7 +949,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * Note that this also returns true if an uncancellable final shutdown is in progress.
      */
     public boolean gracefulShutdownInProgress() {
-        synchronized(_stateLock) {return STATES_GRACEFUL.contains(_state);}
+        synchronized (_stateLock) {return STATES_GRACEFUL.contains(_state);}
     }
 
     /**
@@ -957,7 +957,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * @since 0.8.12
      */
     public boolean isFinalShutdownInProgress() {
-        synchronized(_stateLock) {return STATES_FINAL.contains(_state);}
+        synchronized (_stateLock) {return STATES_FINAL.contains(_state);}
     }
 
     ////////// end state management
@@ -1304,7 +1304,7 @@ public class Router implements RouterClock.ClockShiftListener {
         }
 
         // now that we have random ports, keeping the same port would be bad
-        synchronized(_configFileLock) {
+        synchronized (_configFileLock) {
             removeConfigSetting(UDPTransport.PROP_INTERNAL_PORT);
             removeConfigSetting(UDPTransport.PROP_EXTERNAL_PORT);
             removeConfigSetting(UDPTransport.PROP_INTRO_KEY);
@@ -1431,7 +1431,7 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     public synchronized void shutdown(int exitCode) {
         if (exitCode < 0) {throw new IllegalArgumentException();}
-        synchronized(_stateLock) {
+        synchronized (_stateLock) {
             if (_state == State.FINAL_SHUTDOWN_1 ||
                 _state == State.FINAL_SHUTDOWN_2 ||
                 _state == State.FINAL_SHUTDOWN_3 ||
@@ -1703,7 +1703,7 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     public void shutdownGracefully(int exitCode) {
         if (exitCode < 0) {throw new IllegalArgumentException();}
-        synchronized(_stateLock) {
+        synchronized (_stateLock) {
             if (isFinalShutdownInProgress()) {return;} // too late
             changeState(State.GRACEFUL_SHUTDOWN);
             _gracefulExitCode = exitCode;
@@ -1722,7 +1722,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * Returns silently if a final shutdown is already in progress.
      */
     public void cancelGracefulShutdown() {
-        synchronized(_stateLock) {
+        synchronized (_stateLock) {
             if (isFinalShutdownInProgress()) {return;} // too late
             changeState(State.RUNNING);
             _gracefulExitCode = -1;
@@ -1741,7 +1741,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * @return one of the EXIT_* values or -1
      */
     public int scheduledGracefulExitCode() {
-        synchronized(_stateLock) {return _gracefulExitCode;}
+        synchronized (_stateLock) {return _gracefulExitCode;}
     }
 
     /**
@@ -1749,7 +1749,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  @return -1 if no shutdown in progress.
      */
     public long getShutdownTimeRemaining() {
-        synchronized(_stateLock) {
+        synchronized (_stateLock) {
             if (_gracefulExitCode <= 0) return -1; // maybe Long.MAX_VALUE would be better?
             if (_gracefulExitCode == EXIT_HARD || _gracefulExitCode == EXIT_HARD_RESTART) {return 0;}
         }
@@ -1767,7 +1767,7 @@ public class Router implements RouterClock.ClockShiftListener {
     public final boolean saveConfig() {
         try {
             Properties ordered = new OrderedProperties();
-            synchronized(_configFileLock) {
+            synchronized (_configFileLock) {
                 ordered.putAll(_config);
                 DataHelper.storeProps(ordered, new File(_configFilename));
             }
@@ -1791,7 +1791,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * @since 0.8.13
      */
     public final boolean saveConfig(String name, String value) {
-        synchronized(_configFileLock) {
+        synchronized (_configFileLock) {
             if (value != null) {_config.put(name, value);}
             else {removeConfigSetting(name);}
             return saveConfig();
@@ -1810,7 +1810,7 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     @SuppressWarnings({"unchecked", "rawtypes" })
     public final boolean saveConfig(Map toAdd, Collection<String> toRemove) {
-        synchronized(_configFileLock) {
+        synchronized (_configFileLock) {
             if (toAdd != null) {_config.putAll(toAdd);}
             if (toRemove != null) {
                 for (String s : toRemove) {removeConfigSetting(s);}
@@ -1827,7 +1827,7 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     public void clockShift(long delta) {
         if (delta > -60*1000 && delta < 60*1000) {return;}
-        synchronized(_stateLock) {
+        synchronized (_stateLock) {
             if (gracefulShutdownInProgress() || !isAlive()) {return;}
         }
         _eventLog.addEvent(EventLog.CLOCK_SHIFT, Long.toString(delta) + "ms");
@@ -1849,7 +1849,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  Not recommended for external use.
      */
     public synchronized void restart() {
-        synchronized(_stateLock) {
+        synchronized (_stateLock) {
             if (gracefulShutdownInProgress() || !isAlive()) {return;}
             changeState(State.RESTARTING);
         }
@@ -1857,7 +1857,7 @@ public class Router implements RouterClock.ClockShiftListener {
         // Stop accepting tunnels, etc.
         // This also prevents netdb from immediately expiring all the RIs
         _started = System.currentTimeMillis();
-        synchronized(_configFileLock) {_downtime = 1;}
+        synchronized (_configFileLock) {_downtime = 1;}
         Thread t = new I2PThread(new Restarter(_context), "Router Restart");
         t.setPriority(I2PThread.NORM_PRIORITY + 1);
         t.start();
@@ -1937,7 +1937,7 @@ public class Router implements RouterClock.ClockShiftListener {
         if (f.exists()) {
             long lastWritten = f.lastModified();
             long downtime = System.currentTimeMillis() - lastWritten;
-            synchronized(_configFileLock) {
+            synchronized (_configFileLock) {
                 if (downtime > 0 && _downtime < 0) {_downtime = downtime;}
             }
             if (downtime > LIVELINESS_DELAY) {
@@ -1975,7 +1975,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  @since 0.9.47
      */
     public long getEstimatedDowntime() {
-        synchronized(_configFileLock) {
+        synchronized (_configFileLock) {
             if (_downtime >= 0) {return _downtime;}
             long begin = System.currentTimeMillis();
             long stopped = _eventLog.getLastEvent(EventLog.STOPPED, _context.clock().now() - 365*24*60*60*1000L);
@@ -1996,7 +1996,7 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     public void setEstimatedDowntime(long downtime) {
         if (downtime <= 0) {downtime = 1;}
-        synchronized(_configFileLock) {_downtime = downtime;}
+        synchronized (_configFileLock) {_downtime = downtime;}
     }
 
     public static final String PROP_BANDWIDTH_SHARE_PERCENTAGE = "router.sharePercentage";

@@ -695,8 +695,8 @@ public class KBucketSet<T extends SimpleDataStructure> {
            .append("</code> <br>")
            .append("<b>Totals:</b> ").append(size())
            .append(" keys in ").append(_buckets.size()).append(" buckets")
-           .append(" &nbsp;<b>Max bucket size:</b> ").append(BUCKET_SIZE)
-           .append(" entries &nbsp;<b>B value:</b> ").append(B_VALUE).append("</div>\n");
+           .append(" &nbsp; <b>Max bucket size:</b> ").append(BUCKET_SIZE)
+           .append(" entries &nbsp; <b>B value:</b> ").append(B_VALUE).append("</div>\n");
         getReadLock();
         try {
             int len = _buckets.size();

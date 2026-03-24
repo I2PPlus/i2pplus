@@ -149,7 +149,7 @@ abstract class EstablishBase implements EstablishState {
      * the EstablishState is responsible for passing it to NTCPConnection.
      */
     public synchronized void receive(ByteBuffer src) {
-        synchronized(_stateLock) {
+        synchronized (_stateLock) {
             if (STATES_DONE.contains(_state))
                 throw new IllegalStateException(prefix() + "received unexpected data on " + _con);
         }
@@ -204,7 +204,7 @@ abstract class EstablishBase implements EstablishState {
 
     /** Caller must synch. */
     protected void fail(String reason, Exception e, boolean bySkew) {
-        synchronized(_stateLock) {
+        synchronized (_stateLock) {
             if (STATES_DONE.contains(_state))
                 return;
             changeState(State.CORRUPT);

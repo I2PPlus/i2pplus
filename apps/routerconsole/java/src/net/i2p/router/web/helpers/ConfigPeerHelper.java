@@ -39,7 +39,7 @@ public class ConfigPeerHelper extends HelperBase {
                 if (to != from) {
                     buf.append("<td>-</td><td>").append(Blocklist.toStr(to)).append("</td></tr>\n");
                 } else {
-                    buf.append("<td></td><td>&nbsp;</td></tr>\n");
+                    buf.append("<td></td><td>&nbsp; </td></tr>\n");
                 }
             }
             // then 128 - 255
@@ -51,7 +51,7 @@ public class ConfigPeerHelper extends HelperBase {
                 if (to != from) {
                     buf.append("<td>-</td><td>").append(Blocklist.toStr(to)).append("</td></tr>\n");
                 } else {
-                    buf.append("<td></td><td>&nbsp;</td></tr>\n");
+                    buf.append("<td></td><td>&nbsp; </td></tr>\n");
                 }
             }
             if (blocklistSize > MAX_DISPLAY)

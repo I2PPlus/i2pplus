@@ -77,7 +77,7 @@ public final class ByteCache extends TryCache<ByteArray> {
      */
     private static class GlobalCleanup implements SimpleTimer.TimedEvent {
         public void timeReached() {
-            synchronized(_allCaches) {
+            synchronized (_allCaches) {
                 for (ByteCache cache : _allCaches) {
                     cache.cleanup();
                 }
@@ -158,7 +158,7 @@ public final class ByteCache extends TryCache<ByteArray> {
     private ByteCache(int maxCachedEntries, int entrySize) {
         super(new ByteArrayFactory(entrySize), maxCachedEntries);
         _entrySize = entrySize;
-        synchronized(_allCaches) {
+        synchronized (_allCaches) {
             _allCaches.add(this);
         }
         I2PAppContext.getGlobalContext().statManager().createRateStat("byteCache.memory." + entrySize,

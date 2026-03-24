@@ -69,7 +69,7 @@ public class NDTConstants {
     public static final int SRV_QUEUE_SERVER_BUSY_60s = 9999;
 
     // Section: Middlebox test related constants
-    public static final int MIDDLEBOX_PREDEFINED_MSS = 8192;// 8k buffer size
+    public static final int MIDDLEBOX_PREDEFINED_MSS = 8192; // 8k buffer size
     public static final int ETHERNET_MTU_SIZE = 1456;
 
     // Section: SFW test related constants
@@ -132,7 +132,7 @@ public class NDTConstants {
 
     // Section: Data units
     public static final int KILO = 1000; // Used in conversions from seconds->mS,
-    public static final int KILO_BITS = 1024;// Used in kilobits->bits conversions
+    public static final int KILO_BITS = 1024; // Used in kilobits->bits conversions
     public static final double EIGHT = 8.0; // Used in octal number, conversions from Bytes-> bits etc
     // EIGHT is a double to minimize overflow when converting.
 

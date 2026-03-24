@@ -124,7 +124,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
             type = data[cur] & 0xff;
             cur++;
         }
-        synchronized(this) {
+        synchronized (this) {
             _uniqueId = DataHelper.fromLong(data, cur, 4);
         }
         cur += 4;
@@ -157,7 +157,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         //long start = _context.clock().now();
         if (_log.shouldDebug()) {
             long uniqueId;
-            synchronized(this) {
+            synchronized (this) {
                 uniqueId = _uniqueId;
             }
             _log.debug("Reading bytes: [Type " + type + "] [ID " + uniqueId + "]\n* Expires: " + Instant.ofEpochMilli(_expiration));

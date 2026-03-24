@@ -159,7 +159,7 @@ class ProfileOrganizerRenderer {
                     buf.append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
                        .append("\"><a href=\"/netdb?v=").append(DataHelper.stripHTML(v)).append("\">").append(DataHelper.stripHTML(v))
                        .append("</a></span>");
-                } else {buf.append("<span>&ensp;</span>");}
+                } else {buf.append("<span>&ensp; </span>");}
                 buf.append("</td><td class=host>");
                 long uptime = _context.router().getUptime();
                 String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getCompatibleIP(info)) : null;
@@ -248,7 +248,7 @@ class ProfileOrganizerRenderer {
                         buf.append("\" title=\"\u2022 ").append(_t("Banned"));
                     }
                     buf.append("\"></span>");
-                } else {buf.append("<span class=mostPass title=\"").append(_t("Most tests passing")).append("\">&ensp;</span>");}
+                } else {buf.append("<span class=mostPass title=\"").append(_t("Most tests passing")).append("\">&ensp; </span>");}
                 buf.append("</td><td class=groups><span class=\"");
                 if (isIntegrated) buf.append("integrated ");
                 switch (tier) {
@@ -285,7 +285,7 @@ class ProfileOrganizerRenderer {
                     buf.append("<span hidden>0</span><span class=\"");
                     if (bonus >= 9999999) {buf.append("testOK ");}
                     else if (capBonus <= -30) {buf.append("testFail ");}
-                    buf.append("nospeed\">&ensp;</span>");
+                    buf.append("nospeed\">&ensp; </span>");
                 }
                 int score = 0;
                 if (bonus >= 9999999) {score = 2;}
@@ -293,7 +293,7 @@ class ProfileOrganizerRenderer {
                 buf.append("</td><td class=latency data-sort=").append(score).append(">");
                 if (bonus >= 9999999) {buf.append("<span class=lowlatency>✔</span>");}
                 else if (capBonus == -30) {buf.append("<span class=highlatency>✖</span>");}
-                else {buf.append("<span>&ensp;</span>");}
+                else {buf.append("<span>&ensp; </span>");}
                 int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
                 int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
                 buf.append("</td><td data-sort=")
@@ -575,7 +575,7 @@ class ProfileOrganizerRenderer {
 
     private static final ThreadLocal<DecimalFormat> _fmt = ThreadLocal.withInitial(() -> new DecimalFormat("###,##0.00"));
     private final static String num(double num) { return _fmt.get().format(num); }
-    private final static String NA = "&ensp;";
+    private final static String NA = "&ensp; ";
 
     private String avg (PeerProfile prof, long rate, RateAverages ra) {
         RateStat rs = prof.getDbResponseTime();

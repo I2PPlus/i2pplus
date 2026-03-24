@@ -298,7 +298,7 @@ class UPnPManager {
         if (_log.shouldDebug())
             _log.debug("UPnP Update with " + ports.size() + " ports", new Exception("I did it"));
 
-        //synchronized(this) {
+        //synchronized (this) {
             // TODO
             // called too often and may block for too long
             // may not have started if net was disconnected previously
@@ -351,7 +351,7 @@ class UPnPManager {
             // and the locking isn't foolproof in UDPTransport.
             // UPnP runs the callbacks in a thread, so we can block.
             // There is only one UPnPCallback, so lock on this
-            synchronized(this) {
+            synchronized (this) {
                 locked_PFS(statuses);
             }
         }

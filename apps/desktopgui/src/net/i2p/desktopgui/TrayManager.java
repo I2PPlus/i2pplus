@@ -225,7 +225,7 @@ abstract class TrayManager {
         if (!_showNotifications)
             return -1;
         final TrayIcon ti;
-        synchronized(this) {
+        synchronized (this) {
             ti = trayIcon;
         }
         if (ti == null)

@@ -343,7 +343,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     public I2PSession addSubsession(InputStream privateKeyStream, Properties opts) throws I2PSessionException {
         if (!_routerSupportsSubsessions) {throw new I2PSessionException("Router does not support sub-sessions");}
         SubSession sub;
-        synchronized(_subsessionLock) {
+        synchronized (_subsessionLock) {
             if (_subsessions.size() > _subsessionMap.size()) {
                 throw new I2PSessionException("Sub-session request already pending");
             }
@@ -367,7 +367,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      */
     public void removeSubsession(I2PSession session) {
         if (!(session instanceof SubSession)) {return;}
-        synchronized(_subsessionLock) {
+        synchronized (_subsessionLock) {
             _subsessions.remove(session);
             SessionId id = ((SubSession) session).getSessionId();
             if (id != null) {_subsessionMap.remove(id);}
@@ -384,7 +384,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  @since 0.9.21
      */
     public List<I2PSession> getSubsessions() {
-        synchronized(_subsessionLock) {return new ArrayList<I2PSession>(_subsessions);}
+        synchronized (_subsessionLock) {return new ArrayList<I2PSession>(_subsessions);}
     }
 
     /**
@@ -606,7 +606,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *                             not reachable
      */
     public void connect() throws I2PSessionException {
-        synchronized(_stateLock) {
+        synchronized (_stateLock) {
             boolean wasOpening = false;
             boolean loop = true;
             while (loop) {
@@ -645,7 +645,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         long startConnect = _context.clock().now();
         try {
             // protect w/ closeSocket()
-            synchronized(_stateLock) {
+            synchronized (_stateLock) {
                 _errorMessage = null;
                 _errorCause = null;
                 // If we are in the router JVM, connect using the internal queue
@@ -743,7 +743,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             success = true;
 
             // now send CreateSessionMessages for all subsessions, one at a time, must wait for each response
-            synchronized(_subsessionLock) {
+            synchronized (_subsessionLock) {
                 for (SubSession ss : _subsessions) {
                     if (_log.shouldInfo()) {_log.info(getPrefix() + " -> Connecting sub-session " + ss);}
                     _producer.connect(ss);
@@ -766,7 +766,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             if (success) {changeState(State.OPEN);}
             else {
                 _availabilityNotifier.stopNotifying();
-                synchronized(_stateLock) {
+                synchronized (_stateLock) {
                     changeState(State.CLOSING);
                     try {_producer.disconnect(this);}
                     catch (I2PSessionException ipe) {}
@@ -786,7 +786,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             if (waitcount++ > 30) {
                 throw new IOException("No handshake received from Router");
             }
-            synchronized(_stateLock) {
+            synchronized (_stateLock) {
                 if (_state == State.GOTDATE)
                         break;
                 if (!STATES_OPENING.contains(_state))
@@ -1210,7 +1210,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * Calls sessionlistener.disconnected()
      */
     public void destroySession(boolean sendDisconnect) {
-        synchronized(_stateLock) {
+        synchronized (_stateLock) {
             if (STATES_CLOSED_OR_CLOSING.contains(_state)) {return;}
             changeState(State.CLOSING);
         }
@@ -1248,7 +1248,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         // maybe not the right place for this, but let's be sure
         Destination d = _myDestination;
         if (d != null) {_context.keyRing().remove(d.calculateHash());}
-        synchronized(_stateLock) {
+        synchronized (_stateLock) {
             changeState(State.CLOSING);
             locked_closeSocket();
             changeState(State.CLOSED);
@@ -1295,7 +1295,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      */
     protected void disconnect() {
         State oldState;
-        synchronized(_stateLock) {
+        synchronized (_stateLock) {
             if (STATES_CLOSED_OR_CLOSING.contains(_state)) {return;}
             oldState = _state;
             changeState(State.CLOSING);
@@ -1667,7 +1667,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     public Destination lookupDest(String name, long maxWait) throws I2PSessionException {
         LookupWaiter waiter = x_lookupDest(name, maxWait);
         if (waiter == null) {return null;}
-        synchronized(waiter) {return waiter.destination;}
+        synchronized (waiter) {return waiter.destination;}
     }
 
     /**
@@ -1682,7 +1682,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     public LookupResult lookupDest2(String name, long maxWait) throws I2PSessionException {
         LookupWaiter waiter = x_lookupDest(name, maxWait);
         if (waiter == null) {return LOOKUP_FAILURE;}
-        synchronized(waiter) {
+        synchronized (waiter) {
             int code = waiter.code;
             Destination d = waiter.destination;
             if (d == null && code == LookupResult.RESULT_SUCCESS) {

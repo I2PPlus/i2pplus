@@ -716,7 +716,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     public String renderStatusHTML() {
         long uptime = Math.max(1000, _context.clock().now() - _started);
         StringBuilder buf = new StringBuilder(256);
-        String separator = " <span class=bullet>&nbsp;&bullet;&nbsp;</span> ";
+        String separator = " <span class=bullet>&nbsp; &bullet; &nbsp; </span> ";
         String bullet = " &bullet; ";
         buf.append("<div class=debugStats>")
                 .append("<span id=rx_in class=stat><b>Received:</b> <span class=dbug>")

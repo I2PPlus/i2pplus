@@ -102,7 +102,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
      */
     public float getBandwidthEstimate(long now) {
         int rtt = _state.getRTT();
-        synchronized(this) {
+        synchronized (this) {
             if (now - _tAck >= Math.max(rtt, WESTWOOD_RTT_MIN))
                 return computeBWE(now, rtt);
             return _bKFiltered;

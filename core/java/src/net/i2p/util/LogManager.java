@@ -407,7 +407,7 @@ public class LogManager implements Flushable {
             String str = config.getProperty(PROP_FLUSH);
             if (str != null) {
                 _flushInterval = Integer.parseInt(str);
-                synchronized(this) {
+                synchronized (this) {
                     if (_writer != null)
                         _writer.setFlushInterval(_flushInterval * 1000);
                 }

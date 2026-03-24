@@ -161,7 +161,7 @@ public class BandwidthManager implements BandwidthListener {
     /** In HTML for debug page */
     @Override
     public String toString() {
-        String separator = " <span class=bullet>&nbsp;&bullet;&nbsp;</span> ";
+        String separator = " <span class=bullet>&nbsp; &bullet; &nbsp; </span> ";
         return "<div class=debugStats id=bwManager>"
                 + "<span id=bw_in class=stat><b>Bandwidth In:</b> <span class=dbug>"
                 + _down.toString().trim().replace("* ", "").replace("Bytes", "B")

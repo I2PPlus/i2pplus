@@ -275,7 +275,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         final boolean empty;
         // Outside sync to avoid deadlock
         final Hash us = getContext().routerHash();
-        synchronized(this) {
+        synchronized (this) {
             _toTry.addAll(floodfillPeers);
             // Don't ask ourselves or the target
             _toTry.remove(us);
@@ -335,7 +335,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             }
             // Even if pend and todo are empty, we don't fail, as there may be more peers coming via newPeerToTry()
             if (done + pend >= _totalSearchLimit) {return;}
-            synchronized(this) {
+            synchronized (this) {
                 if (_alwaysQueryHash != null && !_unheardFrom.contains(_alwaysQueryHash) &&
                     !_failedPeers.contains(_alwaysQueryHash)) {
                     /*
@@ -503,7 +503,7 @@ public class IterativeSearchJob extends FloodSearchJob {
 
         if (_log.shouldDebug()) {
             int tries;
-            synchronized(this) {tries = _unheardFrom.size() + _failedPeers.size();}
+            synchronized (this) {tries = _unheardFrom.size() + _failedPeers.size();}
             if (_key != null && peer != null) {
                 _log.debug("IterativeSearch for " + (_isLease ? "LeaseSet " : "Router ") +
                            " [" + _key.toBase64().substring(0,6) + "] (attempt " + tries + ")" +
@@ -731,7 +731,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         getContext().messageRegistry().unregisterPending(_out);
         int tries;
         final List<Hash> unheard;
-        synchronized(this) {
+        synchronized (this) {
             tries = _unheardFrom.size() + _failedPeers.size();
             unheard = new ArrayList<Hash>(_unheardFrom);
         }
@@ -762,7 +762,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         int tries;
         Hash peer = null;
 
-        synchronized(this) {
+        synchronized (this) {
             if (_dead) {return;}
             _dead = true;
             _success = true;

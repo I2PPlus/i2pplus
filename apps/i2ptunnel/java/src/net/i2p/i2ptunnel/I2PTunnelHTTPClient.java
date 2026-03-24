@@ -773,13 +773,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                                     out.write(("<tr><td class=center>" +
                                                         "<a href=\"" + trustedURL + "\">" +
                                                         "<img src=\"" +
-                                                        conURL + "imagegen/id?s=160&amp;c=" +
+                                                        conURL + "imagegen/id?s=160&amp; c=" +
                                                         h1.toBase64().replace("=", "%3d") +
                                                         "\" width=160 height=160></a>\n" +
                                                         "</td>\n<td class=center>" +
                                                         "<a href=\"" + conflictURL + "\">" +
                                                         "<img src=\"" +
-                                                        conURL + "imagegen/id?s=160&amp;c=" +
+                                                        conURL + "imagegen/id?s=160&amp; c=" +
                                                         h2.toBase64().replace("=", "%3d") +
                                                         "\" width=160 height=160></a>\n" +
                                                         "</td></tr>").getBytes("UTF-8"));
@@ -993,13 +993,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 boolean img = lowercaseLine.indexOf("image") > 0;
                                 if (html && !img && !css) {
                                 // firefox, tor browser
-                                    line = "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+                                    line = "Accept: text/html,application/xhtml+xml,application/xml; q=0.9,*/*; q=0.8";
                                 } else if (img && !html && !css) {
                                 // chrome
-                                    line = "Accept: image/webp,image/apng,image/*,*/*;q=0.8";
+                                    line = "Accept: image/webp,image/apng,image/*,*/*; q=0.8";
                                 } else if (css && !html && !img) {
                                 // chrome, firefox
-                                    line = "Accept: text/css,*/*;q=0.1";
+                                    line = "Accept: text/css,*/*; q=0.1";
                                 }  // else allow as-is
                             }
                         } else if (lowercaseLine.startsWith("accept")) {
@@ -1087,7 +1087,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         //if (!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_ACCEPT)))
                         //    newRequest.append("Accept-Encoding: \r\n");
                             if (!usingInternalOutproxy)
-                                newRequest.append("X-Accept-Encoding: x-i2p-gzip;q=1.0, identity;q=0.5, deflate;q=0, gzip;q=0, *;q=0\r\n");
+                                newRequest.append("X-Accept-Encoding: x-i2p-gzip; q=1.0, identity; q=0.5, deflate; q=0, gzip; q=0, *; q=0\r\n");
                         }
                         if (!shout && !isConnect) {
                             if (!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_USER_AGENT))) {
@@ -1549,7 +1549,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             out.write(" " + _t("If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."));
         }
         // FIXME wasn't escaped
-        String label = _t("Save & continue").replace("&", "&amp;");
+        String label = _t("Save & continue").replace("&", "&amp; ");
         out.write("</p>\n<div class=formaction><button type=submit class=accept name=\"router\" value=\"router\">" +
                   label + "</button></div>\n</div>\n");
 
@@ -1625,7 +1625,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
 
         // FIXME wasn't escaped
-        String label = _t("Save & continue").replace("&", "&amp;");
+        String label = _t("Save & continue").replace("&", "&amp; ");
         out.write("<div class=formaction>\n" + "<button type=submit class=accept name=action value=Save>" +
                   label + "</button>\n" + "</div>\n</form>\n</div>\n");
         writeFooter(out);

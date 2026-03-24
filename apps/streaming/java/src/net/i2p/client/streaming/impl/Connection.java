@@ -349,7 +349,7 @@ class Connection {
         // Unconditionally set
         _resetSentOn.set(now);
         Destination remotePeer;
-        synchronized(this) {
+        synchronized (this) {
             remotePeer = _remotePeer;
         }
         if ((remotePeer == null) || (_sendStreamId.get() <= 0)) {return;}
@@ -879,7 +879,7 @@ class Connection {
      */
     public void setRemotePeer(Destination peer) {
         if (peer == null) {throw new NullPointerException();}
-        synchronized(this) {
+        synchronized (this) {
             if (_remotePeer != null) {
                 throw new RuntimeException("Remote peer already set [" + _remotePeer + ", " + peer + "]");
             }
@@ -909,7 +909,7 @@ class Connection {
      *  @since 0.9.39
      */
     public void setRemoteTransientSPK(SigningPublicKey transientSPK) {
-        synchronized(this) {
+        synchronized (this) {
             if (_transientSPK != null) {
                 throw new RuntimeException("Remote Signing Public Key already set");
             }
@@ -1022,7 +1022,7 @@ class Connection {
      * @return the next time the scheduler will want to send a packet, or -1 if never.
      */
     public long getNextSendTime() {
-        synchronized(_nextSendLock) {return _nextSendTime;}
+        synchronized (_nextSendLock) {return _nextSendTime;}
     }
 
     /**
@@ -1033,7 +1033,7 @@ class Connection {
      *  options.getSendAckDelay() from now (1000 ms)
      */
     public void setNextSendTime(long when) {
-        synchronized(_nextSendLock) {
+        synchronized (_nextSendLock) {
             if (_nextSendTime >= 0) {
                 if (when < _nextSendTime) {_nextSendTime = when;}
             } else {_nextSendTime = when;}
@@ -1330,7 +1330,7 @@ class Connection {
         if (_isInbound) {buf.append(" from ");}
         else {buf.append(" to ");}
         Destination remotePeer;
-        synchronized(this) {
+        synchronized (this) {
             remotePeer = _remotePeer;
         }
         if (remotePeer != null) {buf.append("[").append(remotePeer.calculateHash().toBase32().substring(0,8)).append("]");}
@@ -1434,7 +1434,7 @@ class Connection {
 
             // 2. cut ssthresh to bandwidth estimate, window to 1
             List<PacketLocal> toResend = null;
-            synchronized(_outboundPackets) {
+            synchronized (_outboundPackets) {
                 Map.Entry<Long, PacketLocal> e = _outboundPackets.firstEntry();
                 if (e == null) {
                     if (_log.shouldWarn()) {

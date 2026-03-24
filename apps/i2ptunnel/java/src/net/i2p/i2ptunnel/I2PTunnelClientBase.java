@@ -196,7 +196,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      *                                  badly that we cant create a socketManager
      */
     protected void verifySocketManager() {
-        synchronized(sockLock) {
+        synchronized (sockLock) {
             I2PTunnel t = getTunnel();
             if (t == null) {
                 if (_log.shouldWarn()) {
@@ -225,7 +225,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                      * it will be destroyed in getSocketManager() with the correct locking
                      */
                     boolean shouldDestroy;
-                    synchronized(I2PTunnelClientBase.class) {shouldDestroy = sockMgr != socketManager;}
+                    synchronized (I2PTunnelClientBase.class) {shouldDestroy = sockMgr != socketManager;}
                     if (shouldDestroy) {sockMgr.destroySocketManager();}
                     newManager = true;
                 }  // else the old socket manager will reconnect the old session if necessary
@@ -428,7 +428,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             while (closed) {
                 try {
                     sockMgr.getSession().connect();
-                    synchronized(I2PTunnelClientBase.class) {
+                    synchronized (I2PTunnelClientBase.class) {
                         if (sockMgr == socketManager) {_socketManagerState = SocketManagerState.CONNECTED;}
                     }
                 } catch (I2PSessionException ise) {

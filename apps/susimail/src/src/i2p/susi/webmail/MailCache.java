@@ -143,7 +143,7 @@ class MailCache {
             else
                 mail = new Mail(uidl);
             mail.setBody(buffer);
-            synchronized(mails) {
+            synchronized (mails) {
                 mails.put(uidl, mail);
             }
             folder.addElement(uidl);
@@ -168,7 +168,7 @@ class MailCache {
             toMC.getFolderName().equals(WebMail.DIR_DRAFTS))
             return false;
         Mail mail;
-        synchronized(mails) {
+        synchronized (mails) {
             mail = mails.get(uidl);
             if (mail == null)
                 return false;
@@ -197,7 +197,7 @@ class MailCache {
      * @since 0.9.35
      */
     private void movedTo(Mail mail) {
-        synchronized(mails) {
+        synchronized (mails) {
             // we must reset the body of the mail to the new FileBuffer
             Buffer body = disk.getFullBuffer(mail.uidl);
             mail.setBody(body);
@@ -260,7 +260,7 @@ class MailCache {
                     result = true;
                 if (_log.shouldDebug()) _log.debug("[SusiMail] Folder loaded: " + folderName);
             } finally {
-                synchronized(MailCache.this) {
+                synchronized (MailCache.this) {
                     if (_loadInProgress == _nml)
                         _loadInProgress = null;
                     _isLoaded = true;
@@ -277,7 +277,7 @@ class MailCache {
      * @since 0.9.13
      */
     private void blockingLoadFromDisk() {
-        synchronized(mails) {
+        synchronized (mails) {
             if (_isLoaded)
                 throw new IllegalStateException();
             Collection<Mail> dmails = disk.getMails();
@@ -299,7 +299,7 @@ class MailCache {
      */
     public String[] getUIDLs() {
         List<String> uidls = new ArrayList<String>(mails.size());
-        synchronized(mails) {
+        synchronized (mails) {
             for (Mail mail : mails.values()) {
                 if (!mail.markForDeletion)
                     uidls.add(mail.uidl);
@@ -324,7 +324,7 @@ class MailCache {
         /*
          * synchronize update to Map
          */
-        synchronized(mails) {
+        synchronized (mails) {
             mail = mails.get( uidl );
             if ( mail == null ) {
                 // if not in inbox, we can't fetch, this is what we have
@@ -427,7 +427,7 @@ class MailCache {
             /*
              * synchronize update to Map
              */
-            synchronized(mails) {
+            synchronized (mails) {
                 mail = mails.get( uidl );
                 if ( mail == null ) {
                     newMail = new Mail(uidl);
@@ -562,7 +562,7 @@ class MailCache {
         List<String> toDelete = new ArrayList<String>(uidls.size());
         for (String uidl : uidls) {
             disk.deleteMail(uidl);
-            synchronized(mails) {
+            synchronized (mails) {
                 Mail mail = mails.get(uidl);
                 if (mail == null)
                     continue;

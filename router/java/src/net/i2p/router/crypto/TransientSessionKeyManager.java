@@ -788,8 +788,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             buf.append("\n<tr class=debug_outboundtarget>\n<td>\n<div class=debug_targetinfo>\n" +
                        "<b>Session key:</b> <span class=debug_sesskey>").append(sess.getCurrentKey().toBase64()).append("</span><br>\n" +
                        "<b>Target public key:</b> <span class=debug_pubkey>").append(toString(sess.getTarget())).append("</span><br>\n" +
-                       "<b>Established:</b> ").append(DataHelper.formatDuration2(now - sess.getEstablishedDate())).append(" ago&nbsp;&nbsp;&nbsp;" +
-                       "<b>Ack Received?</b> ").append(sess.getAckReceived()).append("&nbsp;&nbsp;&nbsp;" +
+                       "<b>Established:</b> ").append(DataHelper.formatDuration2(now - sess.getEstablishedDate())).append(" ago&nbsp; &nbsp; &nbsp; " +
+                       "<b>Ack Received?</b> ").append(sess.getAckReceived()).append("&nbsp; &nbsp; &nbsp; " +
                        "<b>Last Used:</b> ").append(DataHelper.formatDuration2(now - sess.getLastUsedDate())).append(" ago\n</div>\n</td>" +
                        "<td><b>Sets:</b> ").append(sess.getTagSets().size()).append("</td></tr>\n" +
                        "<tr class=sentTags>\n<td colspan=2>\n<ul>");

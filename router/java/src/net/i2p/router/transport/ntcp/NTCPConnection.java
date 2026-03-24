@@ -353,7 +353,7 @@ public class NTCPConnection implements Closeable {
     /** @return milliseconds */
     public long getUptime() {
         long establishedOn;
-        synchronized(this) {
+        synchronized (this) {
             if (!isEstablished())
                 return getTimeSinceCreated();
             establishedOn = _establishedOn;
@@ -365,7 +365,7 @@ public class NTCPConnection implements Closeable {
      * @since 0.9.55
      */
     public long getEstablishedOn() {
-        synchronized(this) {
+        synchronized (this) {
             if (!isEstablished())
                 return 0;
             return _establishedOn;
@@ -378,7 +378,7 @@ public class NTCPConnection implements Closeable {
 
     public int getOutboundQueueSize() {
         int queued = _outbound.size();
-        synchronized(_writeLock) {
+        synchronized (_writeLock) {
             queued += _currentOutbound.size();
         }
         return queued;
@@ -386,7 +386,7 @@ public class NTCPConnection implements Closeable {
 
     /** @since 0.9.36 */
     private boolean hasCurrentOutbound() {
-        synchronized(_writeLock) {
+        synchronized (_writeLock) {
             return ! _currentOutbound.isEmpty();
         }
     }
@@ -555,7 +555,7 @@ public class NTCPConnection implements Closeable {
         _bwOutRequests.clear();
 
         List<OutNetMessage> pending = new ArrayList<OutNetMessage>();
-        synchronized(_writeLock) {
+        synchronized (_writeLock) {
             _writeBufs.clear();
             _outbound.drainTo(pending);
             if (!_currentOutbound.isEmpty())
@@ -576,7 +576,7 @@ public class NTCPConnection implements Closeable {
         for (OutNetMessage msg : pending) {
             _transport.afterSend(msg, false, allowRequeue, msg.getLifetime());
         }
-        synchronized(_readLock) {
+        synchronized (_readLock) {
             ByteBuffer bb;
             while ((bb = _readBufs.poll()) != null) {
                 EventPumper.releaseBuf(bb);
@@ -679,7 +679,7 @@ public class NTCPConnection implements Closeable {
             return;
         }
 
-        synchronized(_writeLock) {
+        synchronized (_writeLock) {
             prepareNextWriteNTCP2(prep);
         }
     }
@@ -941,7 +941,7 @@ public class NTCPConnection implements Closeable {
         }
         // use a "read buf" for the temp array
         ByteArray dataBuf = acquireReadBuf();
-        synchronized(_writeLock) {
+        synchronized (_writeLock) {
             if (_sender != null) {
                 sendNTCP2(dataBuf.getData(), blocks);
                 // sendNTCP2() -> wantsWrite() -> pumper.processWrite() -> fail -> close() -> NPE
@@ -972,7 +972,7 @@ public class NTCPConnection implements Closeable {
         // TODO use a buffer
         byte[] enc = new byte[2 + framelen];
 
-        synchronized(_writeLock) {
+        synchronized (_writeLock) {
             if (_sender == null) {
                 if (_log.shouldInfo())
                     _log.info("Sender has disappeared", new Exception());
@@ -1142,7 +1142,7 @@ public class NTCPConnection implements Closeable {
                 _log.warn("recv() on closed con");
             return;
         }
-        synchronized(_statLock) {
+        synchronized (_statLock) {
             _bytesReceived += buf.remaining();
             updateStats();
         }
@@ -1214,7 +1214,7 @@ public class NTCPConnection implements Closeable {
     void removeWriteBuf(ByteBuffer buf) {
         // never clear OutNetMessages during establish phase
         boolean clearMessage = isEstablished();
-        synchronized(_statLock) {
+        synchronized (_statLock) {
             _bytesSent += buf.capacity();
             if (_sendingMeta && (buf.capacity() == META_SIZE)) {
                 _sendingMeta = false;
@@ -1268,14 +1268,14 @@ public class NTCPConnection implements Closeable {
     private float _sendBps;
     private float _recvBps;
 
-    public float getSendRate() { synchronized(_statLock) { return _sendBps; } }
-    public float getRecvRate() { synchronized(_statLock) { return _recvBps; } }
+    public float getSendRate() { synchronized (_statLock) { return _sendBps; } }
+    public float getRecvRate() { synchronized (_statLock) { return _recvBps; } }
 
     /**
      *  Stats only for console
      */
     private void updateStats() {
-        synchronized(_statLock) {
+        synchronized (_statLock) {
             long now = _context.clock().now();
             long time = now - _lastRateUpdated;
             // If enough time has passed...
@@ -1313,7 +1313,7 @@ public class NTCPConnection implements Closeable {
      */
     void recvEncryptedI2NP(ByteBuffer buf) {
         if (isBanned()) {return;}
-        synchronized(_readLock) {
+        synchronized (_readLock) {
             if (_curReadState == null)
                 throw new IllegalStateException("not established");
             _curReadState.receive(buf);
@@ -2034,10 +2034,10 @@ public class NTCPConnection implements Closeable {
                (_remotePeer == null ? "Unknown" : _remotePeer.calculateHash().toBase64().substring(0,6)) + "]" +
                (isEstablished() ? "" : " -> Not established ") +
                (_log.shouldInfo() ? "\n* Connection [ID " + _connID + "]" +
-               "\n* Created: " + DataHelper.formatDuration(getTimeSinceCreated()) + " ago;" +
-               " Last message sent: " + DataHelper.formatDuration(getTimeSinceSend()) + " ago;" +
+               "\n* Created: " + DataHelper.formatDuration(getTimeSinceCreated()) + " ago; " +
+               " Last message sent: " + DataHelper.formatDuration(getTimeSinceSend()) + " ago; " +
                " Last message received: " + DataHelper.formatDuration(getTimeSinceReceive()) + " ago" +
-               "\n* Messages sent: " + _messagesWritten + ";" +
+               "\n* Messages sent: " + _messagesWritten + "; " +
                " Messages received: " + _messagesRead + " " : "");
     }
 }

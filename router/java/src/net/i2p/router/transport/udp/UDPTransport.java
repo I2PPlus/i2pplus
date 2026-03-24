@@ -916,7 +916,7 @@ public class UDPTransport extends TransportImpl {
         if (_peersByConnID != null)
             _peersByConnID.clear();
         if (_recentlyClosedConnIDs != null) {
-            synchronized(_addDropLock) {
+            synchronized (_addDropLock) {
                 for (PeerStateDestroyed psd : _recentlyClosedConnIDs.values()) {
                     psd.kill();
                 }
@@ -1415,7 +1415,7 @@ public class UDPTransport extends TransportImpl {
         // Still could be the same IP/port, we don't check until changeAddress() below.
         boolean changeIt = false;
         Hash lastFrom = null;
-        synchronized(this) {
+        synchronized (this) {
             if (!isIPv6) {
                 if (from.equals(_lastFromv4) || !eq(_lastOurIPv4, _lastOurPortv4, ourIP, ourPort)) {
                     if (_log.shouldInfo())
@@ -1724,7 +1724,7 @@ public class UDPTransport extends TransportImpl {
      */
     PeerStateDestroyed getRecentlyClosed(long rcvConnID) {
         Long id = Long.valueOf(rcvConnID);
-        synchronized(_addDropLock) {
+        synchronized (_addDropLock) {
             return _recentlyClosedConnIDs.get(id);
         }
     }
@@ -1736,7 +1736,7 @@ public class UDPTransport extends TransportImpl {
     void addRecentlyClosed(PeerStateDestroyed peer) {
         Long id = Long.valueOf(peer.getRcvConnID());
         PeerStateDestroyed oldPSD;
-        synchronized(_addDropLock) {
+        synchronized (_addDropLock) {
             oldPSD = _recentlyClosedConnIDs.put(id, peer);
             if (oldPSD != null)
                 _recentlyClosedConnIDs.put(id, oldPSD); // put the old one back
@@ -1751,7 +1751,7 @@ public class UDPTransport extends TransportImpl {
      */
     void removeRecentlyClosed(PeerStateDestroyed peer) {
         Long id = Long.valueOf(peer.getRcvConnID());
-        synchronized(_addDropLock) {
+        synchronized (_addDropLock) {
             _recentlyClosedConnIDs.remove(id);
         }
     }
@@ -1832,7 +1832,7 @@ public class UDPTransport extends TransportImpl {
     boolean addRemotePeerState(PeerState peer) {
         if (_log.shouldDebug())
             _log.debug("Adding remote peer state\n* Peer: " + peer);
-        synchronized(_addDropLock) {
+        synchronized (_addDropLock) {
             return locked_addRemotePeerState(peer);
         }
     }
@@ -2035,7 +2035,7 @@ public class UDPTransport extends TransportImpl {
                .append("]; Consecutive failures: ").append(consec);
             if (why != null) {buf.append("\n* Cause: ").append(why);}
         }
-        synchronized(_addDropLock) {locked_dropPeer(peer, shouldBanlist, why);}
+        synchronized (_addDropLock) {locked_dropPeer(peer, shouldBanlist, why);}
         // The only possible reason to rebuild is if they were an introducer for us
         // so avoid going through rebuildIfNecessary()
         long tag = peer.getTheyRelayToUsAs();

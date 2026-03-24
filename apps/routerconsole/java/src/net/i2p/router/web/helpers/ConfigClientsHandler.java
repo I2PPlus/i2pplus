@@ -247,7 +247,7 @@ public class ConfigClientsHandler extends FormHandler {
 
     private void saveClientChanges() {
         try {
-            synchronized(ClientAppConfig.class) {
+            synchronized (ClientAppConfig.class) {
                 saveClientChanges2();
             }
             addFormNotice(_t("Client configuration saved successfully"), true);

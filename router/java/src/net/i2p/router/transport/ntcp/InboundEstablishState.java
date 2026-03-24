@@ -857,7 +857,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             throw new DataFormatException("BAD s in RouterInfo: " + ri);
         }
         byte[] nb = new byte[32];
-        synchronized(this) {
+        synchronized (this) {
             _handshakeState.getRemotePublicKey().getPublicKey(nb, 0); // Compare to the _handshakeState
         }
         if (!DataHelper.eqCT(sb, 0, nb, 0, KEY_SIZE)) {

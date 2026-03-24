@@ -377,7 +377,7 @@ class InternalTrayManager extends TrayManager {
         if (x) {
             long time = RouterManager.getShutdownTimeRemaining(_context);
             if (time > 5000) {
-                status = _t("Shutdown in {0}", DataHelper.formatDuration2(time).replace("&nbsp;", " "));
+                status = _t("Shutdown in {0}", DataHelper.formatDuration2(time).replace("&nbsp; ", " "));
             } else {
                 status = _t("Shutdown imminent");
                 imminent = true;

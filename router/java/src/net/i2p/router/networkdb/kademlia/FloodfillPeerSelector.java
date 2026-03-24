@@ -207,7 +207,7 @@ class FloodfillPeerSelector extends PeerSelector {
             // copy the Set so we don't confuse StoreJob
             // Use synchronized set to prevent ConcurrentModificationException during copy
             Set<Hash> syncSet = Collections.synchronizedSet(new HashSet<Hash>(8));
-            synchronized(toIgnore) {
+            synchronized (toIgnore) {
                 syncSet.addAll(toIgnore);
             }
             syncSet.add(_context.routerHash());

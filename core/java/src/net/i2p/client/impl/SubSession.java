@@ -99,7 +99,7 @@ class SubSession extends I2PSessionMuxedImpl {
      */
     @Override
     public void connect() throws I2PSessionException {
-        synchronized(_stateLock) {
+        synchronized (_stateLock) {
             if (_state != State.OPEN) {
                 changeState(State.OPENING);
             }
@@ -115,7 +115,7 @@ class SubSession extends I2PSessionMuxedImpl {
                 }
                 synchronized (_leaseSetWait) {_leaseSetWait.wait(500);} // InterruptedException caught below
             }
-            synchronized(_stateLock) {
+            synchronized (_stateLock) {
                 if (_state != State.OPEN) {
                     Thread notifier = new I2PAppThread(_availabilityNotifier, "ClientNotifier " + getName(), true);
                     notifier.start();

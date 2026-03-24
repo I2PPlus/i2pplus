@@ -461,7 +461,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         if (opts != null) {        _limitAction = opts.getProperty(PROP_LIMIT_ACTION, DEFAULT_LIMIT_ACTION);}
         else {_limitAction = DEFAULT_LIMIT_ACTION;}
 
-        synchronized(this) {
+        synchronized (this) {
             _rto = getInt(opts, PROP_INITIAL_RTO, INITIAL_RTO);
         }
         _tagsToSend = getInt(opts, PROP_TAGS_TO_SEND, DEFAULT_TAGS_TO_SEND);
@@ -576,7 +576,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             _tagThreshold = getInt(opts, PROP_TAG_THRESHOLD, DEFAULT_TAG_THRESHOLD);
         }
 
-        synchronized(this) {
+        synchronized (this) {
             _rto = getInt(opts, PROP_INITIAL_RTO, INITIAL_RTO);
         }
     }
@@ -678,7 +678,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *  not public, use updateRTT()
      */
     private void setRTT(int ms) {
-        synchronized(this) {
+        synchronized (this) {
             _rtt = ms;
             if (_rtt > MAX_RTT) {_rtt = MAX_RTT;}
         }

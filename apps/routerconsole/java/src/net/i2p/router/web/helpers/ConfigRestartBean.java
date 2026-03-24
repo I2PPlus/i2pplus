@@ -89,16 +89,16 @@ public class ConfigRestartBean {
             buf.append("<h4 id=sb_shutdownStatus class=volatile><span id=imminent><b>");
             if (restarting) {buf.append(_t("Restart imminent", ctx));}
             else {buf.append(_t("Shutdown imminent", ctx));}
-            buf.append("&hellip;</b></span></h4>");
+            buf.append("&hellip; </b></span></h4>");
         } else if (shuttingDown) {
             buf.append("<h4 id=sb_shutdownStatus class=volatile><span>")
                 .append(_t("Shutdown in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
             if (transit > 0) {
                 if (isAdvanced()) {
-                    buf.append("&hellip;<br>").append(ngettext("{0} transit tunnel still active",
+                    buf.append("&hellip; <br>").append(ngettext("{0} transit tunnel still active",
                                                                "{0} transit tunnels still active", transit, ctx));
                 } else {
-                    buf.append("&hellip;<br>").append(ngettext("Please wait for routing commitment to expire for {0} tunnel",
+                    buf.append("&hellip; <br>").append(ngettext("Please wait for routing commitment to expire for {0} tunnel",
                                                      "Please wait for routing commitments to expire for {0} tunnels", transit, ctx));
                 }
             }
@@ -109,10 +109,10 @@ public class ConfigRestartBean {
                 .append(_t("Restart in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
             if (transit > 0) {
                 if (isAdvanced()) {
-                    buf.append("&hellip;<br>").append(ngettext("{0} transit tunnel still active",
+                    buf.append("&hellip; <br>").append(ngettext("{0} transit tunnel still active",
                                                                "{0} transit tunnels still active", transit, ctx));
                 } else {
-                    buf.append("&hellip;<br>").append(ngettext("Please wait for routing commitment to expire for {0} tunnel",
+                    buf.append("&hellip; <br>").append(ngettext("Please wait for routing commitment to expire for {0} tunnel",
                                                                "Please wait for routing commitments to expire for {0} tunnels",
                                                                transit, ctx));
                 }

@@ -49,7 +49,7 @@ public class EdDSAPrivateKeySpec implements KeySpec {
             h = hash.digest(seed);
 
             /*a = BigInteger.valueOf(2).pow(b-2);
-            for (int i=3;i<(b-2);i++) {
+            for (int i=3; i<(b-2); i++) {
                 a = a.add(BigInteger.valueOf(2).pow(i).multiply(BigInteger.valueOf(Utils.bit(h,i))));
             }*/
             // Saves ~0.4ms per key when running signing tests.

@@ -37,7 +37,7 @@ class PeerMonitorTask implements Runnable {
          * int choking = 0;
          * int choked = 0;
          *
-         * synchronized(coordinator.peers)
+         * synchronized (coordinator.peers)
          * {
          * Iterator it = coordinator.peers.iterator();
          * while (it.hasNext())

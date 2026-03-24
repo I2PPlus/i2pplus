@@ -100,7 +100,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("Span with ").append(nKeys).append(" keys\n");
         if (nKeys > 0 && keys != null && vals != null) {
-            for (int i=0;i<nKeys;i++) {
+            for (int i=0; i<nKeys; i++) {
                 buf.append('\t').append(keys[i]).append(" => ").append(vals[i]).append('\n');
             }
         }
@@ -179,7 +179,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
     }
 
     private void pushTogether(int hole) {
-        for (int i=hole;i<(nKeys - 1);i++) {
+        for (int i=hole; i<(nKeys - 1); i++) {
             keys[i] = keys[i+1];
             vals[i] = vals[i+1];
         }
@@ -187,7 +187,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
     }
 
     private void pushApart(int start) {
-        for (int i=(nKeys-1);i>=start;i--) {
+        for (int i=(nKeys-1); i>=start; i--) {
             keys[i+1] = keys[i];
             vals[i+1] = vals[i];
         }
@@ -203,7 +203,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
         this.next = right;
 
         int start = ((keys.length+1)/2);
-        for (int i=start;i < keys.length; i++) {
+        for (int i=start; i < keys.length; i++) {
             try {
                 right.keys[i-start] = keys[i];
                 right.vals[i-start] = vals[i];
@@ -327,7 +327,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
             if ((this.prev == null) && (this.next != null)) {
                 res[1] = this.next;
                 // We're the first node in the list... copy the next node over and kill it. See also bottom of SkipLevels.java
-                for (int i=0;i<next.nKeys;i++) {
+                for (int i=0; i<next.nKeys; i++) {
                     keys[i] = next.keys[i];
                     vals[i] = next.vals[i];
                 }

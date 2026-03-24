@@ -86,7 +86,7 @@ class PersistentMailCache {
         _log = ctx.logManager().getLog(PersistentMailCache.class);
         _isDrafts = folder.equals(WebMail.DIR_DRAFTS);
         _lock = getLock(host, port, user, pass);
-        synchronized(_lock) {
+        synchronized (_lock) {
             _cacheDir = makeCacheDirs(host, port, user, pass, folder);
             // Debugging only for now.
             File attach = null;
@@ -106,7 +106,7 @@ class PersistentMailCache {
      * @return a new collection
      */
     public Collection<Mail> getMails() {
-        synchronized(_lock) {
+        synchronized (_lock) {
             return locked_getMails();
         }
     }
@@ -176,7 +176,7 @@ class PersistentMailCache {
      * @return success
      */
     public boolean getMail(Mail mail, boolean headerOnly) {
-        synchronized(_lock) {return locked_getMail(mail, headerOnly);}
+        synchronized (_lock) {return locked_getMail(mail, headerOnly);}
     }
 
     private boolean locked_getMail(Mail mail, boolean headerOnly) {
@@ -213,7 +213,7 @@ class PersistentMailCache {
      * @return success
      */
     public boolean saveMail(Mail mail) {
-        synchronized(_lock) {return locked_saveMail(mail);}
+        synchronized (_lock) {return locked_saveMail(mail);}
     }
 
     private boolean locked_saveMail(Mail mail) {
@@ -246,7 +246,7 @@ class PersistentMailCache {
      * Delete data from disk.
      */
     public void deleteMail(String uidl) {
-        synchronized(_lock) {
+        synchronized (_lock) {
             getFullFile(uidl).delete();
             getHeaderFile(uidl).delete();
         }

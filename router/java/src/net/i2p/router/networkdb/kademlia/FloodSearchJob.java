@@ -132,7 +132,7 @@ abstract class FloodSearchJob extends JobImpl {
      *  Deprecated, unused, see FOSJ override
      */
     void success() {
-        synchronized(this) {
+        synchronized (this) {
             _success = true;
         }
     }

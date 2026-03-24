@@ -53,7 +53,7 @@ public class EepGetAndAddNamingService extends EepGetNamingService {
             if (hostname.length() < 516 && hostname.endsWith(".i2p") && ! hostname.endsWith(".b32.i2p")) {
                 File f = new File(_context.getRouterDir(), DEFAULT_HOSTS_FILE);
                 if ( (f.exists()) && (f.canWrite()) ) {
-                    synchronized(this) {
+                    synchronized (this) {
                         FileOutputStream fos = null;
                         try {
                             fos = new FileOutputStream(f, true);

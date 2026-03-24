@@ -101,7 +101,7 @@ class Packet {
      */
     public static final long STREAM_ID_UNKNOWN = 0L;
 
-    public static final long MAX_STREAM_ID = 0xffffffffl;
+    public static final long MAX_STREAM_ID =0xffffffffL;
 
     /**
      * This packet is creating a new socket connection (if the receiveStreamId
@@ -823,7 +823,7 @@ class Packet {
             }
             toFlagString(buf);
             if ((_payload != null) && (_payload.getValid() > 0)) {
-                buf.append("\n* Data: ").append(_payload.getValid()).append(" bytes;");
+                buf.append("\n* Data: ").append(_payload.getValid()).append(" bytes; ");
             }
         } else {buf.append("");}
         return buf;
@@ -840,15 +840,15 @@ class Packet {
             if (isFlagSet(FLAG_CLOSE)) {buf.append(" CLOSE");}
             if (isFlagSet(FLAG_RESET)) {buf.append(" RESET");}
             if (isFlagSet(FLAG_ECHO)) {buf.append(" ECHO");}
-            if (isFlagSet(FLAG_FROM_INCLUDED)) {buf.append(" from ").append(_optionFrom.size()).append(" bytes;");}
+            if (isFlagSet(FLAG_FROM_INCLUDED)) {buf.append(" from ").append(_optionFrom.size()).append(" bytes; ");}
             if (isFlagSet(FLAG_NO_ACK)) {buf.append(" NACK");}
             else {buf.append(" ACK ").append(getAckThrough());}
             if (_nacks != null) {
                 buf.append(" NACK");
                 for (int i = 0; i < _nacks.length; i++) {buf.append(' ').append(_nacks[i]);}
             }
-            if (isFlagSet(FLAG_DELAY_REQUESTED)) buf.append(" DELAY ").append(_optionDelay).append("ms;");
-            if (isFlagSet(FLAG_MAX_PACKET_SIZE_INCLUDED)) buf.append(" MAXSIZE ").append(_optionMaxSize).append(" bytes;");
+            if (isFlagSet(FLAG_DELAY_REQUESTED)) buf.append(" DELAY ").append(_optionDelay).append("ms; ");
+            if (isFlagSet(FLAG_MAX_PACKET_SIZE_INCLUDED)) buf.append(" MAXSIZE ").append(_optionMaxSize).append(" bytes; ");
             if (isFlagSet(FLAG_PROFILE_INTERACTIVE)) buf.append(" INTERACTIVE");
             if (isFlagSet(FLAG_SIGNATURE_REQUESTED)) buf.append(" SIGREQ");
             if (isFlagSet(FLAG_SIGNATURE_OFFLINE)) {

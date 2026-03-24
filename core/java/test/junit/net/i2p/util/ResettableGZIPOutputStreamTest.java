@@ -31,7 +31,7 @@ public class ResettableGZIPOutputStreamTest extends TestCase {
         gzo.flush();
         byte compressed2[] = baos2.toByteArray();
 
-        assertTrue(DataHelper.eq(compressed, compressed2));*/
+        assertTrue(DataHelper.eq(compressed, compressed2)); */
 
         GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(compressed));
         byte rv[] = new byte[128];

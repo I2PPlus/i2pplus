@@ -52,7 +52,7 @@ public class Pinger implements Source, Runnable {
      */
     public void stop() {
         this.running = false;
-        synchronized(this.waitlock) {
+        synchronized (this.waitlock) {
             this.waitlock.notifyAll();
         }
         // send unsubscribe-message
@@ -85,7 +85,7 @@ public class Pinger implements Source, Runnable {
                     log.warn("error sending", re);
                 break;
             }
-            synchronized(this.waitlock) {
+            synchronized (this.waitlock) {
                 int delay = 10000;
                 if (i < 5) {
                     i++;

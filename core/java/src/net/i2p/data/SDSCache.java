@@ -25,7 +25,7 @@ import net.i2p.util.SystemVersion;
  *  Following is sample usage:
  *  <pre>
 
-    private static final SDSCache&lt;Foo&gt; _cache = new SDSCache(Foo.class, LENGTH, 1024);
+    private static final SDSCache&lt; Foo&gt; _cache = new SDSCache(Foo.class, LENGTH, 1024);
 
     public static Foo create(byte[] data) {
         return _cache.get(data);
@@ -101,7 +101,7 @@ public class SDSCache<V extends SimpleDataStructure> {
      * @since 0.9.17
      */
     public void clear() {
-        synchronized(_cache) {
+        synchronized (_cache) {
             _cache.clear();
         }
     }
@@ -124,7 +124,7 @@ public class SDSCache<V extends SimpleDataStructure> {
         int found;
         V rv;
         Integer key = hashCodeOf(data);
-        synchronized(_cache) {
+        synchronized (_cache) {
             WeakReference<V> ref = _cache.get(key);
             if (ref != null)
                 rv = ref.get();

@@ -47,7 +47,7 @@ public class GraphHelper extends FormHandler {
     private static final int MIN_REFRESH = 5;
 
     // Cached common constant substrings for URL building (optimization)
-    private static final String AMP = "&amp;";
+    private static final String AMP = "&amp; ";
     private static final String SHOW_EVENTS_PARAM = AMP + "showEvents=";
     private static final String HIDE_LEGEND_PARAM = AMP + "hideLegend=";
     private static final String PERIOD_COUNT_PARAM = AMP + "periodCount=";
@@ -190,7 +190,7 @@ public class GraphHelper extends FormHandler {
                .append(PERIOD_COUNT_PARAM).append(_periodCount).append(WIDTH_PARAM).append(_width);
             if (!hideLegend) {buf.append(HEIGHT_PARAM).append(_height - 26);}
             else {buf.append(HEIGHT_PARAM).append(_height);}
-            title = title.replace("&nbsp;", "");
+            title = title.replace("&nbsp; ", "");
             buf.append(HIDE_LEGEND_PARAM).append(hideLegend).append(TIME_PARAM).append(now)
                .append("\" alt=\"").append(title).append("\" title=\"").append(title).append("\"></a></span>\n");
         }
@@ -205,7 +205,7 @@ public class GraphHelper extends FormHandler {
                 continue;
             }
             String title = _t("{0} for {1}", rName, DataHelper.formatDuration2(_periodCount * r.getPeriod()));
-            title = title.replace("&nbsp;", "");
+            title = title.replace("&nbsp; ", "");
             buf.append("<span class=graphContainer><a href=\"")
                .append(GRAPH_HREF)
                .append(rName.replace(" ", "%20"))
@@ -288,7 +288,7 @@ public class GraphHelper extends FormHandler {
         buf.append("<h3 id=graphinfo>");
         buf.append(_t("{0} for {1}", displayName, DataHelper.formatDuration2(_periodCount * period)));
         if (_end > 0) {buf.append(' ').append(_t("ending {0} ago", DataHelper.formatDuration2(_end * period)));}
-        buf.append("&nbsp;<a href=/graphs>").append(_t("Return to main graphs page")).append("</a></h3>\n")
+        buf.append("&nbsp; <a href=/graphs>").append(_t("Return to main graphs page")).append("</a></h3>\n")
            .append("<div class=graphspanel id=single>\n<span class=graphContainer><a class=singlegraph href=/graphs title=\"")
            .append(_t("Return to main graphs page"))
            .append("\"><img class=statimage id=graphSingle border=0 src=\"")
@@ -417,7 +417,7 @@ public class GraphHelper extends FormHandler {
            .append(_width)
            .append("\">")
            .append(_t("pixels wide"))
-           .append("&nbsp;&nbsp;&nbsp;<input size=4 type=text name=height value=\"")
+           .append("&nbsp; &nbsp; &nbsp; <input size=4 type=text name=height value=\"")
            .append(_height)
            .append("\">")
            .append(_t("pixels high"))
@@ -443,7 +443,7 @@ public class GraphHelper extends FormHandler {
            .append((_showEvents ? "" : HelperBase.CHECKED))
            .append(">")
            .append(_t("Averages"))
-           .append("</label>&nbsp;&nbsp;&nbsp;<label><input type=radio class=optbox name=\"showEvents\" value=true ")
+           .append("</label>&nbsp; &nbsp; &nbsp; <label><input type=radio class=optbox name=\"showEvents\" value=true ")
            .append((_showEvents ? HelperBase.CHECKED : ""))
            .append(">")
            .append(_t("Events"))

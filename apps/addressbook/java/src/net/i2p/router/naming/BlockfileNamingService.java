@@ -797,11 +797,11 @@ public class BlockfileNamingService extends DummyNamingService {
         }
 
         String key = hostname.toLowerCase(Locale.US);
-        synchronized(_negativeCache) {
+        synchronized (_negativeCache) {
             if (_negativeCache.get(key) != null)
                 return null;
         }
-        synchronized(_bf) {
+        synchronized (_bf) {
             if (_isClosed)
                 return null;
             for (String list : _lists) {
@@ -826,7 +826,7 @@ public class BlockfileNamingService extends DummyNamingService {
         if (d != null) {
             putCache(hostname, d);
         } else {
-            synchronized(_negativeCache) {
+            synchronized (_negativeCache) {
                 _negativeCache.put(key, DUMMY);
             }
         }
@@ -854,7 +854,7 @@ public class BlockfileNamingService extends DummyNamingService {
             return Collections.emptyList();
         }
         String key = hostname.toLowerCase(Locale.US);
-        synchronized(_negativeCache) {
+        synchronized (_negativeCache) {
             if (_negativeCache.get(key) != null)
                 return Collections.emptyList();
         }
@@ -863,7 +863,7 @@ public class BlockfileNamingService extends DummyNamingService {
             listname = lookupOptions.getProperty("list");
 
         List<Destination> rv = null;
-        synchronized(_bf) {
+        synchronized (_bf) {
             if (_isClosed)
                 return Collections.emptyList();
             for (String list : _lists) {
@@ -894,7 +894,7 @@ public class BlockfileNamingService extends DummyNamingService {
         if (rv != null) {
             putCache(hostname, rv.get(0));
         } else {
-            synchronized(_negativeCache) {
+            synchronized (_negativeCache) {
                 _negativeCache.put(key, DUMMY);
             }
         }
@@ -935,7 +935,7 @@ public class BlockfileNamingService extends DummyNamingService {
             return false;
         }
         String key = hostname.toLowerCase(Locale.US);
-        synchronized(_negativeCache) {
+        synchronized (_negativeCache) {
             _negativeCache.remove(key);
         }
         String listname = FALLBACK_LIST;
@@ -949,7 +949,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 props.remove("list");
             }
         }
-        synchronized(_bf) {
+        synchronized (_bf) {
             if (_isClosed)
                 return false;
             try {
@@ -1002,7 +1002,7 @@ public class BlockfileNamingService extends DummyNamingService {
             return false;
         }
         String key = hostname.toLowerCase(Locale.US);
-        synchronized(_negativeCache) {
+        synchronized (_negativeCache) {
             _negativeCache.remove(key);
         }
         String listname = FALLBACK_LIST;
@@ -1021,7 +1021,7 @@ public class BlockfileNamingService extends DummyNamingService {
             }
             outProps.add(props);
         }
-        synchronized(_bf) {
+        synchronized (_bf) {
             if (_isClosed)
                 return false;
             try {
@@ -1076,7 +1076,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 listname = list;
             }
         }
-        synchronized(_bf) {
+        synchronized (_bf) {
             if (_isClosed)
                 return false;
             try {
@@ -1153,7 +1153,7 @@ public class BlockfileNamingService extends DummyNamingService {
             _log.debug("Searching " + listname + " beginning with " + beginWith +
                        " starting with " + startsWith + " search string " + search +
                        " limit=" + limit + " skip=" + skip);
-        synchronized(_bf) {
+        synchronized (_bf) {
             if (_isClosed)
                 return Collections.emptyMap();
             try {
@@ -1247,7 +1247,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 skip = Integer.parseInt(sk);
             } catch (NumberFormatException nfe) {}
         }
-        synchronized(_bf) {
+        synchronized (_bf) {
             if (_isClosed)
                 return Collections.emptyMap();
             try {
@@ -1339,7 +1339,7 @@ public class BlockfileNamingService extends DummyNamingService {
         out.write("# Exported: ");
         out.write(Instant.now().toString());
         out.write(nl);
-        synchronized(_bf) {
+        synchronized (_bf) {
             if (_isClosed)
                 return;
             try {
@@ -1474,7 +1474,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 skip = Integer.parseInt(sk);
             } catch (NumberFormatException nfe) {}
         }
-        synchronized(_bf) {
+        synchronized (_bf) {
             if (_isClosed)
                 return Collections.emptySet();
             try {
@@ -1535,7 +1535,7 @@ public class BlockfileNamingService extends DummyNamingService {
     @Override
     public String reverseLookup(Hash h) {
         List<String> ls;
-        synchronized(_bf) {
+        synchronized (_bf) {
             if (_isClosed)
                 return null;
             ls = getReverseEntries(h);
@@ -1557,7 +1557,7 @@ public class BlockfileNamingService extends DummyNamingService {
      */
     @Override
     public List<String> reverseLookupAll(Hash h) {
-        synchronized(_bf) {
+        synchronized (_bf) {
             if (_isClosed)
                 return Collections.emptyList();
             return getReverseEntries(h);
@@ -1577,7 +1577,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 listname = list;
             }
         }
-        synchronized(_bf) {
+        synchronized (_bf) {
             if (_isClosed)
                 return 0;
             try {
@@ -1652,7 +1652,7 @@ public class BlockfileNamingService extends DummyNamingService {
         if (!_isVersion4)
             return putIfAbsent(hostname, d, options);
         List<Properties> storedOptions = new ArrayList<Properties>(4);
-        synchronized(_bf) {
+        synchronized (_bf) {
             // We use lookupAll2(), not lookupAll(), because if hostname starts with www.,
             // we do not want to read in from the
             // non-www hostname and then copy it to a new www hostname.
@@ -1694,12 +1694,12 @@ public class BlockfileNamingService extends DummyNamingService {
     public boolean remove(String hostname, Destination d, Properties options) {
         if (!_isVersion4) {
             // super does a get-test-remove, so lock around that
-            synchronized(_bf) {
+            synchronized (_bf) {
                 return super.remove(hostname, d, options);
             }
         }
         List<Properties> storedOptions = new ArrayList<Properties>(4);
-        synchronized(_bf) {
+        synchronized (_bf) {
             // We use lookupAll2(), not lookupAll(), because if hostname starts with www.,
             // we do not want to read in from the
             // non-www hostname and then copy it to a new www hostname.
@@ -1795,7 +1795,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
   /****
     private void dumpDB() {
-        synchronized(_bf) {
+        synchronized (_bf) {
             if (_isClosed)
                 _log.error("Database is closed");
             for (String list : _lists) {
@@ -1826,7 +1826,7 @@ public class BlockfileNamingService extends DummyNamingService {
   ****/
 
     private void close() {
-        synchronized(_bf) {
+        synchronized (_bf) {
             try {
                 _bf.close();
             } catch (IOException ioe) {
@@ -1842,7 +1842,7 @@ public class BlockfileNamingService extends DummyNamingService {
             }
             _isClosed = true;
         }
-        synchronized(_negativeCache) {
+        synchronized (_negativeCache) {
             _negativeCache.clear();
         }
         clearCache();

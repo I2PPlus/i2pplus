@@ -952,7 +952,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     private Socket getSocket(Hash from, InetAddress remoteHost, int remotePort, boolean forceNonSSL) throws IOException {
         String opt = getTunnel().getClientOptions().getProperty(PROP_USE_SSL);
         if (!forceNonSSL && Boolean.parseBoolean(opt)) {
-            synchronized(sslLock) {
+            synchronized (sslLock) {
                 if (_sslFactory == null) {
                     try {
                         _sslFactory = new I2PSSLSocketFactory(getTunnel().getContext(),

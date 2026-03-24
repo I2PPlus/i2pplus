@@ -51,7 +51,7 @@ class GetBidsJob extends JobImpl {
     static void getBids(RouterContext context, TransportManager tmgr, OutNetMessage msg) {
         // Ensure BanLogger is initialized
         if (_banLogger == null) {
-            synchronized(GetBidsJob.class) {
+            synchronized (GetBidsJob.class) {
                 if (_banLogger == null) {
                     _banLogger = new BanLogger();
                     _banLogger.initialize(context);

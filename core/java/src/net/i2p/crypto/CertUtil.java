@@ -340,7 +340,7 @@ public final class CertUtil {
                     KeyFactory kf = KeyFactory.getInstance(alg);
                     rv = kf.generatePrivate(ks);
                     break;
-                } catch (GeneralSecurityException gse) {/*gse.printStackTrace();*/}
+                } catch (GeneralSecurityException gse) {/*gse.printStackTrace(); */}
             }
             if (rv == null) {throw new InvalidKeyException("unsupported key type");}
             return rv;

@@ -361,7 +361,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     public String getAPITarget() {
         return _apiTarget;
     }
-   ;
+;
 
     /**
      * @since 0.9.67
@@ -369,7 +369,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     public String getAPIKey() {
         return _apiKey;
     }
-   ;
+;
 
     /**
      * @since 0.9.67
@@ -1285,7 +1285,7 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     private static final boolean SHOULD_SYNC =
             !(SystemVersion.isAndroid() || SystemVersion.isARM());
-    private static final Pattern ILLEGAL_KEY = Pattern.compile("[#=\\r\\n;]");
+    private static final Pattern ILLEGAL_KEY = Pattern.compile("[#=\\r\\n; ]");
     private static final Pattern ILLEGAL_VALUE = Pattern.compile("[\\r\\n]");
 
     /**
@@ -1350,7 +1350,7 @@ public class I2PSnarkUtil implements DisconnectListener {
                     if (ioe == null) {
                         ioe =
                                 new IOException(
-                                        "Invalid character (one of \"#;=\\r\\n\") in key: \""
+                                        "Invalid character (one of \"#; =\\r\\n\") in key: \""
                                                 + name
                                                 + "\" = \""
                                                 + val

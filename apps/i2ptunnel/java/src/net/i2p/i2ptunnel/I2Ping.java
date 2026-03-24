@@ -171,7 +171,7 @@ public class I2Ping extends I2PTunnelClientBase {
                 int i = 0;
                 while ((line = br.readLine()) != null) {
                     line = line.trim();
-                    if (line.isEmpty() || line.startsWith("#") || line.startsWith(";") || line.startsWith("!")) {
+                    if (line.isEmpty() || line.startsWith("#") || line.startsWith("; ") || line.startsWith("!")) {
                         continue;
                     }
                     if (line.indexOf('=') != -1) {

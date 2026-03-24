@@ -148,7 +148,7 @@ class EstablishmentManager {
     /** Max queued msgs per peer while peer connection is queued */
     private static final int MAX_QUEUED_PER_PEER = SystemVersion.isSlow() ? 64 : 256;
 
-    private static final long MAX_NONCE = 0xFFFFFFFFl;
+    private static final long MAX_NONCE = 0xFFFFFFFFL;
 
     /**
      * Kill any outbound that takes more than this.
@@ -621,7 +621,7 @@ class EstablishmentManager {
         int last;
         long periodStart;
         RateAverages ra = RateAverages.getTemp();
-        synchronized(r) {
+        synchronized (r) {
             last = (int) r.getLastEventCount();
             periodStart = r.getLastCoalesceDate();
             r.computeAverages(ra, true);
@@ -1289,7 +1289,7 @@ class EstablishmentManager {
     }
 
     /** the relay tag is a 4-byte field in the protocol */
-    public static final long MAX_TAG_VALUE = 0xFFFFFFFFl;
+    public static final long MAX_TAG_VALUE = 0xFFFFFFFFL;
 
     /**
      *  This handles both initial send and retransmission of Session Created,
@@ -2318,7 +2318,7 @@ class EstablishmentManager {
             if (ip != null && ip.length == 4 && _transport.isSymNatted()) {return;}
         }
         Token tok = new Token(token, expires, now);
-        synchronized(_outboundTokens) {_outboundTokens.put(peer, tok);}
+        synchronized (_outboundTokens) {_outboundTokens.put(peer, tok);}
     }
 
     /**
@@ -2329,7 +2329,7 @@ class EstablishmentManager {
      */
     public long getOutboundToken(RemoteHostId peer) {
         Token tok;
-        synchronized(_outboundTokens) {tok = _outboundTokens.remove(peer);}
+        synchronized (_outboundTokens) {tok = _outboundTokens.remove(peer);}
         if (tok == null) {return 0;}
         if (tok.getExpiration() < _context.clock().now()) {return 0;}
         return tok.getToken();
@@ -2347,7 +2347,7 @@ class EstablishmentManager {
         int len = isIPv6 ? 16 : 4;
         // expire while we're at it
         long now = _context.clock().now();
-        synchronized(_outboundTokens) {
+        synchronized (_outboundTokens) {
             for (Iterator<Map.Entry<RemoteHostId, Token>> iter = _outboundTokens.entrySet().iterator(); iter.hasNext(); ) {
                 Map.Entry<RemoteHostId, Token> e = iter.next();
                 if (e.getKey().getIP().length == len || e.getValue().expires < now) {
@@ -2355,7 +2355,7 @@ class EstablishmentManager {
                 }
             }
         }
-        synchronized(_inboundTokens) {
+        synchronized (_inboundTokens) {
             for (Iterator<Map.Entry<RemoteHostId, Token>> iter = _inboundTokens.entrySet().iterator(); iter.hasNext(); ) {
                 Map.Entry<RemoteHostId, Token> e = iter.next();
                 if (e.getKey().getIP().length == len || e.getValue().expires < now)
@@ -2370,8 +2370,8 @@ class EstablishmentManager {
      *  @since 0.9.54
      */
     public void portChanged() {
-        synchronized(_outboundTokens) {_outboundTokens.clear();}
-        synchronized(_inboundTokens) {_inboundTokens.clear();}
+        synchronized (_outboundTokens) {_outboundTokens.clear();}
+        synchronized (_inboundTokens) {_inboundTokens.clear();}
     }
 
     /**
@@ -2412,7 +2412,7 @@ class EstablishmentManager {
         }
         long expires = now + expiration;
         Token tok = new Token(token, expires, now);
-        synchronized(_inboundTokens) {
+        synchronized (_inboundTokens) {
             Token old = _inboundTokens.put(peer, tok);
             if (old != null && old.getExpiration() > expires - 2*60*1000) {
                 // reuse for the case where we're retransmitting terminations
@@ -2435,7 +2435,7 @@ class EstablishmentManager {
     public boolean isInboundTokenValid(RemoteHostId peer, long token) {
         if (token == 0) {return false;}
         Token tok;
-        synchronized(_inboundTokens) {
+        synchronized (_inboundTokens) {
             tok = _inboundTokens.get(peer);
             if (tok == null) {return false;}
             if (tok.getToken() != token) {return false;}
@@ -2517,8 +2517,8 @@ class EstablishmentManager {
             boolean v6Match = false;
             long now = _context.clock().now();
             int count = 0;
-            synchronized(_inboundTokens) {
-                synchronized(_outboundTokens) {
+            synchronized (_inboundTokens) {
+                synchronized (_outboundTokens) {
                     String line;
                     while ((line = DataHelper.readLine(in)) != null) {
                         if (line.startsWith("#")) {continue;}
@@ -2587,7 +2587,7 @@ class EstablishmentManager {
             // by expiration oldest-first so loadTokens() will put them in the LHMCache in the right order.
             TokenComparator comp = new TokenComparator();
             List<Map.Entry<RemoteHostId, Token>> tmp;
-            synchronized(_inboundTokens) {
+            synchronized (_inboundTokens) {
                 tmp = new ArrayList<Map.Entry<RemoteHostId, Token>>(_inboundTokens.entrySet());
             }
             Collections.sort(tmp, comp);
@@ -2600,7 +2600,7 @@ class EstablishmentManager {
                 count++;
             }
             tmp.clear();
-            synchronized(_outboundTokens) {tmp.addAll(_outboundTokens.entrySet());}
+            synchronized (_outboundTokens) {tmp.addAll(_outboundTokens.entrySet());}
             Collections.sort(tmp, comp);
             for (Map.Entry<RemoteHostId, Token> e : tmp) {
                 Token token = e.getValue();
@@ -2858,7 +2858,7 @@ class EstablishmentManager {
             if (_inboundTokens != null) {
                 // SSU2 only
                 int count = 0;
-                synchronized(_inboundTokens) {
+                synchronized (_inboundTokens) {
                     for (Iterator<Token> iter = _inboundTokens.values().iterator(); iter.hasNext(); ) {
                         Token tok = iter.next();
                         if (tok.getExpiration() < now) {
@@ -2869,7 +2869,7 @@ class EstablishmentManager {
                 }
                 if (count > 0 && _log.shouldDebug()) {_log.debug("Expired " + count + " inbound tokens");}
                 count = 0;
-                synchronized(_outboundTokens) {
+                synchronized (_outboundTokens) {
                     for (Iterator<Token> iter = _outboundTokens.values().iterator(); iter.hasNext(); ) {
                         Token tok = iter.next();
                         if (tok.getExpiration() < now) {

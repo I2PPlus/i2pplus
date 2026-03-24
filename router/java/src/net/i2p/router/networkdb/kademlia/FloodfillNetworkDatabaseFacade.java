@@ -244,13 +244,13 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     public synchronized void shutdown() {
         // only if not forced ff or not restarting
         boolean floodfillEnabled;
-        synchronized(this) {
+        synchronized (this) {
             floodfillEnabled = _floodfillEnabled;
         }
         if (floodfillEnabled && !(_context.router().scheduledGracefulExitCode() == Router.EXIT_HARD_RESTART ||
             _context.router().scheduledGracefulExitCode() == Router.EXIT_GRACEFUL_RESTART)) {
             // turn off to build a new RI...
-            synchronized(this) {_floodfillEnabled = false;}
+            synchronized (this) {_floodfillEnabled = false;}
             // true -> publish inline
             // but job queue is already shut down, so sendStore() called by rebuildRouterInfo() won't work...
             _context.router().rebuildRouterInfo(true);
@@ -436,7 +436,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      */
     boolean shouldThrottleFlood(Hash key) {
         FloodThrottler ft;
-        synchronized(this) {
+        synchronized (this) {
             ft = _floodThrottler;
         }
         return ft != null && ft.shouldThrottle(key);
@@ -639,7 +639,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     @Override
     public boolean floodfillEnabled() {
-        synchronized(this) {return _floodfillEnabled;}
+        synchronized (this) {return _floodfillEnabled;}
     }
 
     /**
@@ -851,7 +851,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
         //boolean isBadFF = isFF && noSSU;
         boolean floodfillEnabled;
-        synchronized(this) {
+        synchronized (this) {
             floodfillEnabled = _floodfillEnabled;
         }
         if ((floodfillEnabled && !forceExplore) ||
@@ -864,7 +864,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
              */
             if (_log.shouldInfo()) {
                 boolean ffEnabled;
-                synchronized(this) {
+                synchronized (this) {
                     ffEnabled = _floodfillEnabled;
                 }
                 if (ffEnabled && !forceExplore) {

@@ -244,7 +244,7 @@ class ConnThrottler {
          *  Called by the timer to clean up expired throttles.
          */
         public void timeReached() {
-            synchronized(ConnThrottler.this) {
+            synchronized (ConnThrottler.this) {
                 if (_totalMax > 0)
                     _currentTotal = 0;
                 if (_max > 0 && !_peers.isEmpty()) {
@@ -257,7 +257,7 @@ class ConnThrottler {
                 }
             }
             long checkPeriod;
-            synchronized(ConnThrottler.this) {
+            synchronized (ConnThrottler.this) {
                 checkPeriod = ConnThrottler.this._checkPeriod;
             }
             schedule(checkPeriod);

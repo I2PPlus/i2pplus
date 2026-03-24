@@ -263,7 +263,7 @@ public abstract class Addresses {
                     }
                 }
                 if (!newMacs.isEmpty()) {
-                    synchronized(_macCache) {
+                    synchronized (_macCache) {
                         _macCache.clear();
                         _macCache.addAll(newMacs);
                     }
@@ -571,7 +571,7 @@ public abstract class Addresses {
             rv = _IPAddress.get(host);
         }
         if (rv == null) {
-            synchronized(_negativeCache) {
+            synchronized (_negativeCache) {
                 Long when = _negativeCache.get(host);
                 if (when != null) {
                     if (when.longValue() > System.currentTimeMillis() - NEG_CACHE_TIME)
@@ -588,7 +588,7 @@ public abstract class Addresses {
                 }
                 // else we do not cache hostnames here, we rely on the JVM
             } catch (UnknownHostException uhe) {
-                synchronized(_negativeCache) {
+                synchronized (_negativeCache) {
                     _negativeCache.put(host, Long.valueOf(System.currentTimeMillis()));
                 }
             }
@@ -663,7 +663,7 @@ public abstract class Addresses {
             return new byte[0];
         if (isIPAddress(host))
             return getIP(host);
-        synchronized(_negativeCache) {
+        synchronized (_negativeCache) {
             Long when = _negativeCache.get(host);
             if (when != null) {
                 if (when.longValue() > System.currentTimeMillis() - NEG_CACHE_TIME)
@@ -687,7 +687,7 @@ public abstract class Addresses {
                 }
             }
         } catch (UnknownHostException uhe) {
-            synchronized(_negativeCache) {
+            synchronized (_negativeCache) {
                 _negativeCache.put(host, Long.valueOf(System.currentTimeMillis()));
             }
         }
@@ -720,7 +720,7 @@ public abstract class Addresses {
                 return Collections.emptyList();
             return Collections.singletonList(brv);
         }
-        synchronized(_negativeCache) {
+        synchronized (_negativeCache) {
             Long when = _negativeCache.get(host);
             if (when != null) {
                 if (when.longValue() > System.currentTimeMillis() - NEG_CACHE_TIME)
@@ -738,7 +738,7 @@ public abstract class Addresses {
             }
             return rv;
         } catch (UnknownHostException uhe) {
-            synchronized(_negativeCache) {
+            synchronized (_negativeCache) {
                 _negativeCache.put(host, Long.valueOf(System.currentTimeMillis()));
             }
         }
@@ -977,7 +977,7 @@ public abstract class Addresses {
         if (!INET6_CACHE_ENABLED)
             return isTemporary(addr);
         Inet6Addr a;
-        synchronized(_ifCache) {
+        synchronized (_ifCache) {
             refreshCache();
             a = _ifCache.get(addr);
         }
@@ -997,7 +997,7 @@ public abstract class Addresses {
         if (!INET6_CACHE_ENABLED)
             return false;
         Inet6Addr a;
-        synchronized(_ifCache) {
+        synchronized (_ifCache) {
             refreshCache();
             a = _ifCache.get(addr);
         }
@@ -1022,7 +1022,7 @@ public abstract class Addresses {
             if (b[8] == 0 && b[9] == 0 && b[10] == 0 && b[11] == 0)
                 return false;
             String last3 = DataHelper.toHexString(Arrays.copyOfRange(b, 13, 16));
-            synchronized(_macCache) {
+            synchronized (_macCache) {
                 for (String m : _macCache) {
                     if (m.endsWith(last3))
                         return false;
@@ -1039,7 +1039,7 @@ public abstract class Addresses {
             return true;
         }
         Inet6Addr a;
-        synchronized(_ifCache) {
+        synchronized (_ifCache) {
             refreshCache();
             a = _ifCache.get(addr);
         }
@@ -1055,19 +1055,19 @@ public abstract class Addresses {
      * @since 0.9.3
      */
     public static void clearCaches() {
-        synchronized(_IPAddress) {
+        synchronized (_IPAddress) {
             _IPAddress.clear();
         }
-        synchronized(_negativeCache) {
+        synchronized (_negativeCache) {
             _negativeCache.clear();
         }
         if (_ifCache != null) {
-            synchronized(_ifCache) {
+            synchronized (_ifCache) {
                 _ifCache.clear();
                 _ifCacheTime = 0;
             }
         }
-        synchronized(_macCache) {
+        synchronized (_macCache) {
             _macCache.clear();
         }
     }

@@ -205,7 +205,7 @@ public class Reseeder {
      */
     int requestReseed(InputStream in) throws IOException {
         _checker.setError("");
-        _checker.setStatus(_t("Reseeding from file") + "&hellip;");
+        _checker.setStatus(_t("Reseeding from file") + "&hellip; ");
         byte[] su3Magic = DataHelper.getASCII(SU3File.MAGIC);
         byte[] zipMagic = new byte[] { 0x50, 0x4b, 0x03, 0x04 };
         int len = Math.max(su3Magic.length, zipMagic.length);
@@ -341,7 +341,7 @@ public class Reseeder {
         private void run2() {
             _isRunning = true;
             _checker.setError("");
-            _checker.setStatus(_t("Initiating Reseed") + "&hellip;");
+            _checker.setStatus(_t("Initiating Reseed") + "&hellip; ");
             System.out.println("Starting Reseed process...");
             int total;
             if (_url != null) {

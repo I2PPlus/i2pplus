@@ -648,7 +648,7 @@ public class HostChecker {
         long startTime = System.currentTimeMillis();
         I2PSocketManager pingSocketManager = null;
         String displayHostname = hostname;
-        if (hostname.length() > 30) {displayHostname = hostname.substring(0,29) + "&hellip;";}
+        if (hostname.length() > 30) {displayHostname = hostname.substring(0,29) + "&hellip; ";}
 
         if (leaseSetTypes == null) {
             leaseSetTypes = "[]";

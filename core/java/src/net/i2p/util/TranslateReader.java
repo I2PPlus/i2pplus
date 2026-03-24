@@ -351,7 +351,7 @@ public class TranslateReader extends FilterReader {
             _name = file;
             _out = new PrintStream(file, "UTF-8");
             _out.println("// Automatically generated, do not edit");
-            _out.println("package dummy;");
+            _out.println("package dummy; ");
             _out.println("class Dummy {");
             _out.println("    void dummy() {");
         }
@@ -367,7 +367,7 @@ public class TranslateReader extends FilterReader {
                 _out.print(args.get(i).replace("\"", "\\\""));
                 _out.print('"');
             }
-            _out.println(");");
+            _out.println("); ");
             _count++;
         }
 

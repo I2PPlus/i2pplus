@@ -109,7 +109,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
         StringBuilder buf = new StringBuilder(128);
         String k = (bottom.nKeys == 0) ? "empty" : (key() != null) ? key().toString() : "null";
         buf.append("LVLS: ").append(k).append(" :: ");
-        for (int i=0;i<levels.length;i++) {
+        for (int i=0; i<levels.length; i++) {
             buf.append(i);
             if (levels[i] != null) {
                 buf.append("->").append(levels[i].key()).append(' ');
@@ -142,7 +142,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
      *  @return the last SkipSpan in this chain
      */
     public SkipSpan<K, V> getEnd() {
-        for (int i=(levels.length - 1);i>=0;i--) {
+        for (int i=(levels.length - 1); i>=0; i--) {
             if (levels[i] != null) { return levels[i].getEnd(); }
         }
         return bottom.getEnd();
@@ -157,7 +157,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
      *  @return the SkipSpan containing the key
      */
     public SkipSpan<K, V> getSpan(int start, K key, int[] search) {
-        for (int i=Math.min(start, levels.length - 1);i>=0;i--) {
+        for (int i=Math.min(start, levels.length - 1); i>=0; i--) {
             if ((levels[i] != null) && (levels[i].key().compareTo(key) <= 0)) {
                 return levels[i].getSpan(i,key,search);
             }
@@ -180,7 +180,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
      *  @return the value, or null if not found
      */
     public V get(int start, K key) {
-        for (int i=Math.min(start, levels.length - 1);i>=0;i--) {
+        for (int i=Math.min(start, levels.length - 1); i>=0; i--) {
             if ((levels[i] != null) && (levels[i].key().compareTo(key) <= 0)) {
                 return levels[i].get(i,key);
             }
@@ -329,7 +329,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
             int height = sl.generateColHeight();
             if (height != 0) {
                 SkipLevels<K, V> slvls = this.newInstance(height, ss, sl);
-                for (int i=0;i<(Math.min(height,levels.length));i++) {
+                for (int i=0; i<(Math.min(height,levels.length)); i++) {
                     // he points to where we used to point
                     // and we now point to him
                     slvls.levels[i] = levels[i];

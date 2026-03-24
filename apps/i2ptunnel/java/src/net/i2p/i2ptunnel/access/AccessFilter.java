@@ -142,11 +142,11 @@ class AccessFilter implements StatefulConnectionFilter {
         Hash hash = d.getHash();
         long now = context.clock().now();
         DestTracker tracker;
-        synchronized(knownDests) {
+        synchronized (knownDests) {
             tracker = knownDests.get(hash);
         }
         if (tracker == null) {
-            synchronized(unknownDests) {
+            synchronized (unknownDests) {
                 tracker = unknownDests.get(hash);
                 if (tracker == null) {
                     tracker = new DestTracker(hash, definition.getDefaultThreshold());
@@ -171,7 +171,7 @@ class AccessFilter implements StatefulConnectionFilter {
             element.update(tmp);
         }
 
-        synchronized(knownDests) {
+        synchronized (knownDests) {
             knownDests.keySet().retainAll(tmp.keySet());
             for (Map.Entry<Hash, DestTracker> e : tmp.entrySet()) {
                 Hash newHash = e.getKey();
@@ -205,7 +205,7 @@ class AccessFilter implements StatefulConnectionFilter {
             }
 
             boolean newBreaches = false;
-            synchronized(unknownDests) {
+            synchronized (unknownDests) {
                 for (DestTracker tracker : unknownDests.values()) {
                     if (!tracker.getCounter().isBreached(threshold, now))
                         continue;
@@ -234,13 +234,13 @@ class AccessFilter implements StatefulConnectionFilter {
     private void purge() {
         long olderThan = context.clock().now() - definition.getPurgeSeconds() * 1000;
 
-        synchronized(knownDests) {
+        synchronized (knownDests) {
             for (DestTracker tracker : knownDests.values()) {
                 tracker.purge(olderThan);
             }
         }
 
-        synchronized(unknownDests) {
+        synchronized (unknownDests) {
             for (Iterator<Map.Entry<Hash,DestTracker>> iter = unknownDests.entrySet().iterator();
                     iter.hasNext();) {
                 Map.Entry<Hash,DestTracker> entry = iter.next();
@@ -263,10 +263,10 @@ class AccessFilter implements StatefulConnectionFilter {
          */
         public void timeReached() {
             if (!timersRunning.get()) {
-                synchronized(knownDests) {
+                synchronized (knownDests) {
                     knownDests.clear();
                 }
-                synchronized(unknownDests) {
+                synchronized (unknownDests) {
                     unknownDests.clear();
                 }
                 return;

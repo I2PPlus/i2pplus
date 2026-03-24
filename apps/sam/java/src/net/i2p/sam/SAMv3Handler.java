@@ -222,7 +222,7 @@ class SAMv3Handler extends SAMv1Handler
                     buf.setLength(0);
                     // first time, set a timeout
                     try {
-                        synchronized(socketRLock) {
+                        synchronized (socketRLock) {
                             ReadLine.readLine(socket, buf, gotFirstLine ? 0 : FIRST_READ_TIMEOUT);
                             socket.setSoTimeout(0);
                         }
@@ -513,7 +513,7 @@ class SAMv3Handler extends SAMv1Handler
                 }
                 // kill the detector
                 detector.done = true;
-                synchronized(socketRLock) {
+                synchronized (socketRLock) {
                     detector.interrupt();
                 }
                 String ignoredCommand = detector.ignoredCommand;
@@ -560,7 +560,7 @@ class SAMv3Handler extends SAMv1Handler
             if (detector != null) {
                 // kill the detector
                 detector.done = true;
-                synchronized(socketRLock) {
+                synchronized (socketRLock) {
                     detector.interrupt();
                 }
                 String ignoredCommand = detector.ignoredCommand;
@@ -611,7 +611,7 @@ class SAMv3Handler extends SAMv1Handler
                     // Only read under lock
                     // And execSessionMessage() must lock before interrupting us
                     // Because interrupting a SocketChannel read will close the socket
-                    synchronized(socketRLock) {
+                    synchronized (socketRLock) {
                         s.setSoTimeout(20);
                         try {
                             // we could use ReadLine here, but let's keep it simple

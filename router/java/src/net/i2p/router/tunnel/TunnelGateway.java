@@ -41,7 +41,7 @@ abstract class TunnelGateway {
     protected final Receiver _receiver;
     protected long _lastFlush;
     //protected int _flushFrequency;
-    protected final DelayedFlush _delayedFlush;// FIXME Exporting non-public type through public API FIXME
+    protected final DelayedFlush _delayedFlush; // FIXME Exporting non-public type through public API FIXME
     protected int _messagesSent;
 
     /**

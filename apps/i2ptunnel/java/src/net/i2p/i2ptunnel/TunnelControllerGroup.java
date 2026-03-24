@@ -544,7 +544,7 @@ public class TunnelControllerGroup implements ClientApp {
         } finally {
             _delayedShutdownExecutor.shutdownNow();
             if (_cancelDelayedShutdown) {
-                synchronized(stoppedServers) {
+                synchronized (stoppedServers) {
                     for (TunnelController tc : stoppedServers) {
                         tc.startTunnelBackground();
                         if (_log.shouldInfo())
@@ -730,7 +730,7 @@ public class TunnelControllerGroup implements ClientApp {
 
     private class StartControllers implements Runnable {
         public void run() {
-            synchronized(TunnelControllerGroup.this) {
+            synchronized (TunnelControllerGroup.this) {
                 _controllersLock.readLock().lock();
                 try {
                     if (_controllers.size() <= 0) {
@@ -775,7 +775,7 @@ public class TunnelControllerGroup implements ClientApp {
                                             tc.log("‣ Startup cancelled for " + name);
                                             return;
                                         }
-                                        synchronized(tc) {
+                                        synchronized (tc) {
                                             if (tc.getState() != TunnelController.TunnelState.DELAYED_START_PENDING) {
                                                 return;
                                             }

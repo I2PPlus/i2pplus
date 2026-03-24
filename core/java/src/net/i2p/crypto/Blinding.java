@@ -145,7 +145,7 @@ public final class Blinding {
         if (type != TYPE && type != TYPER)
             throw new IllegalArgumentException("Unsupported blinding from " + type);
         String modVal;
-        synchronized(_fmt) {
+        synchronized (_fmt) {
             modVal = _fmt.format(now);
         }
         if (modVal.length() != LENGTH)

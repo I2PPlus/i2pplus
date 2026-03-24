@@ -449,7 +449,7 @@ public class NetDbHelper extends FormHandler {
            .append("</select></td></tr>\n")
            .append("<tr><td colspan=4 class=subheading><b>").append(_t("Add Sybil analysis (must pick at least one above)")).append("</b></td></tr>\n")
            .append("<tr id=sybilSearch><td><b>").append(_t("Sybil close to")).append("</b></td><td colspan=3><input type=text name=sybil2 ")
-           .append("title=\"").append(_t("Router hash, destination hash, b32, or from address book")).append("\">&nbsp;")
+           .append("title=\"").append(_t("Router hash, destination hash, b32, or from address book")).append("\">&nbsp; ")
            .append("<label for=closetorouter><b>").append(_t("or Sybil close to this router")).append("</b></label>")
            .append("<input type=checkbox class=optbox value=1 name=sybil id=closetorouter></td></tr>\n")
            .append("<tr><td colspan=4 class=optionsave><button type=submit class=search value=Lookup>")

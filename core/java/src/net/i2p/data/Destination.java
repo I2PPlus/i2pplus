@@ -131,7 +131,7 @@ public class Destination extends KeysAndCert {
             padding = null;
         }
         Destination rv;
-        synchronized(_cache) {
+        synchronized (_cache) {
             rv = _cache.get(sk);
             if (rv != null && rv.getPublicKey().equals(pk) && rv.getCertificate().equals(c) &&
                 DataHelper.eq(rv.getPadding(), padding)) {
@@ -265,7 +265,7 @@ public class Destination extends KeysAndCert {
      *  @since 0.9.9
      */
     public static void clearCache() {
-        synchronized(_cache) {
+        synchronized (_cache) {
             _cache.clear();
         }
     }

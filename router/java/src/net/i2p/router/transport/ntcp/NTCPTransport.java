@@ -1527,7 +1527,7 @@ public class NTCPTransport extends TransportImpl {
                     InetAddress ia = InetAddress.getByAddress(ip);
                     saveLocalAddress(ia);
                 } catch (UnknownHostException uhe) {}
-            } else if (source == SOURCE_CONFIG) {synchronized(this) {_ssuPort = port;}} // save for startListening()
+            } else if (source == SOURCE_CONFIG) {synchronized (this) {_ssuPort = port;}} // save for startListening()
             return;
         }
         // ignore UPnP for now, get everything from SSU if it's enabled

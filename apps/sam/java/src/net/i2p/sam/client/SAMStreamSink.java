@@ -61,8 +61,8 @@ public class SAMStreamSink {
     private static final int MASTER=8;
     private static final String USAGE = "Usage: SAMStreamSink [-s] [-m mode] [-v version] [-b samHost] [-p samPort]\n" +
                                         "                     [-o opt=val] [-u user] [-w password] myDestFile sinkDir\n" +
-                                        "       modes: stream: 0; datagram: 1; v1datagram: 2;\n" +
-                                        "              raw: 3; v1raw: 4; raw-with-headers: 5;\n" +
+                                        "       modes: stream: 0; datagram: 1; v1datagram: 2; \n" +
+                                        "              raw: 3; v1raw: 4; raw-with-headers: 5; \n" +
                                         "              stream-forward: 6; stream-forward-ssl: 7\n" +
                                         "              default is stream\n" +
                                         "       -s: use SSL to connect to bridge\n" +
@@ -376,7 +376,7 @@ public class SAMStreamSink {
             while (true) {
                 try {
                     Thread.sleep(127*1000);
-                    synchronized(_out) {
+                    synchronized (_out) {
                         _out.write(DataHelper.getUTF8("PING " + System.currentTimeMillis() + '\n'));
                         _out.flush();
                     }
@@ -562,7 +562,7 @@ public class SAMStreamSink {
         int port = Integer.parseInt(_samPort);
         if (!isSSL)
             return new Socket(_samHost, port);
-        synchronized(SAMStreamSink.class) {
+        synchronized (SAMStreamSink.class) {
             if (_sslSocketFactory == null) {
                 try {
                     _sslSocketFactory = new I2PSSLSocketFactory(

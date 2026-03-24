@@ -360,7 +360,7 @@ public final class KeyStoreUtil {
                                     Log l = I2PAppContext.getGlobalContext().logManager().getLog(KeyStoreUtil.class);
                                     String subj = cert.getIssuerX500Principal().toString();
                                     l.logAlways(Log.WARN, "Certificate " + subj + " in key store " + location +
-                                                          " will expire in " + DataHelper.formatDuration2(expiresIn).replace("&nbsp;", " ") +
+                                                          " will expire in " + DataHelper.formatDuration2(expiresIn).replace("&nbsp; ", " ") +
                                                           "\n* You should renew the certificate soon." +
                                                           // TODO better help or tools, or autorenew
                                                           "\n* For a local self-signed certificate, you may delete the keystore and restart," +

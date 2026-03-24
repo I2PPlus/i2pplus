@@ -473,7 +473,7 @@ public class SimpleTimer2 {
                 _log.debug("Running: " + this);
             long before = System.currentTimeMillis();
             long delay = 0;
-            synchronized(this) {
+            synchronized (this) {
                 if (Thread.currentThread().isInterrupted()) {
                     if (_log.shouldWarn())
                         _log.warn("I was interrupted in run, state "+_state+" event "+this);
@@ -526,7 +526,7 @@ public class SimpleTimer2 {
             } catch (Throwable t) {
                 _log.log(Log.CRIT, _pool + ": Timed task " + this + " exited unexpectedly, please report", t);
             } finally { // must be in finally
-                synchronized(this) {
+                synchronized (this) {
                     switch (_state) {
                         case SCHEDULED:  // fall through
                         case IDLE:
@@ -630,7 +630,7 @@ public class SimpleTimer2 {
         @Override
         public void run() {
             super.run();
-            synchronized(this) {
+            synchronized (this) {
                 // Task may have rescheduled itself without actually running.
                 // If we schedule again, it will be stuck in a scheduling loop.
                 // This happens after a backwards clock shift.

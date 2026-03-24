@@ -147,27 +147,27 @@ public class SybilRenderer {
         boolean blocklistFileExists = blocklistFile.exists();
         buf.append("<div id=sybilnav>\n<ul>\n" +
                    "<li id=reviewStored><a href=\"netdb?f=3\">" + _t("Review stored analysis") + "</a></li>\n" +
-                   "<li id=runNew><a href=\"netdb?f=3&amp;m=14\">" + _t("Run new analysis") + "</a></li>\n" +
-                   "<li id=configurePeriodic><a href=\"netdb?f=3&amp;m=15\">" + _t("Configure periodic analysis") + "</a></li>\n" +
+                   "<li id=runNew><a href=\"netdb?f=3&amp; m=14\">" + _t("Run new analysis") + "</a></li>\n" +
+                   "<li id=configurePeriodic><a href=\"netdb?f=3&amp; m=15\">" + _t("Configure periodic analysis") + "</a></li>\n" +
                    "<li id=banlisted><a href=\"/profiles?f=3\">" + _t("Review current bans") + "</a></li>\n");
         if (blocklistFileExists) {
-            buf.append("<li id=purgeBans><a href=\"netdb?f=3&amp;m=100\">" + _t("Delete Sybil Blocklist") + "</a></li>\n");
+            buf.append("<li id=purgeBans><a href=\"netdb?f=3&amp; m=100\">" + _t("Delete Sybil Blocklist") + "</a></li>\n");
         }
-        buf.append("<li id=floodfillSummary><a href=\"netdb?f=3&amp;m=1\">" + _t("Floodfill Summary") + "</a></li>\n" +
-                   "<li id=sameFamily><a href=\"netdb?f=3&amp;m=2\">" + _t("Same Family") + "</a></li>\n" +
-                   "<li><a href=\"netdb?f=3&amp;m=3\">" + _t("IP close to us") + "</a></li>\n" +
+        buf.append("<li id=floodfillSummary><a href=\"netdb?f=3&amp; m=1\">" + _t("Floodfill Summary") + "</a></li>\n" +
+                   "<li id=sameFamily><a href=\"netdb?f=3&amp; m=2\">" + _t("Same Family") + "</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp; m=3\">" + _t("IP close to us") + "</a></li>\n" +
 /**
-                   "<li><a href=\"netdb?f=3&amp;m=4\">" + _t("Same IP") + "</a></li>\n" +
-                   "<li><a href=\"netdb?f=3&amp;m=5\">" + _t("Same IPv4") + " /24</a></li>\n" +
-                   "<li><a href=\"netdb?f=3&amp;m=6\">" + _t("Same IPv4") + " /16</a></li>\n" +
-                   "<li><a href=\"netdb?f=3&amp;m=17\">"+ _t("Same IPv6") + " /64</a></li>\n" +
-                   "<li><a href=\"netdb?f=3&amp;m=18\">" + _t("Same IPv6") + " /48</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp; m=4\">" + _t("Same IP") + "</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp; m=5\">" + _t("Same IPv4") + " /24</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp; m=6\">" + _t("Same IPv4") + " /16</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp; m=17\">"+ _t("Same IPv6") + " /64</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp; m=18\">" + _t("Same IPv6") + " /48</a></li>\n" +
 **/
-                   "<li><a href=\"netdb?f=3&amp;m=7\">" + _t("Pair distance") + "</a></li>\n" +
-                   "<li><a href=\"netdb?f=3&amp;m=8\">" + _t("Close to us") + "</a></li>\n" +
-                   "<li><a href=\"netdb?f=3&amp;m=9\">" + _t("Close to us tomorrow") + "</a></li>\n" +
-                   "<li><a href=\"netdb?f=3&amp;m=10\">" + _t("DHT neighbors") + "</a></li>\n" +
-                   "<li><a href=\"netdb?f=3&amp;m=11\">" + _t("Close to our destinations") + "</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp; m=7\">" + _t("Pair distance") + "</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp; m=8\">" + _t("Close to us") + "</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp; m=9\">" + _t("Close to us tomorrow") + "</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp; m=10\">" + _t("DHT neighbors") + "</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp; m=11\">" + _t("Close to our destinations") + "</a></li>\n" +
                    "</ul>\n</div>\n");
         writeBuf(out, buf);
 
@@ -485,7 +485,7 @@ public class SybilRenderer {
     private void renderCloseSummary(Writer out, StringBuilder buf, Analysis analysis, double avgMinDist, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
         // Distance to our router analysis
         buf.append("<h3 id=ritoday class=sybils>").append(_t("Closest Floodfills to Our Routing Key (Where we Store our RI)")).append("</h3>\n");
-        buf.append("<p class=sybil_info><a href=\"/netdb?caps=f&amp;sybil\">See all</a></p>\n");
+        buf.append("<p class=sybil_info><a href=\"/netdb?caps=f&amp; sybil\">See all</a></p>\n");
         Hash ourRKey = _context.router().getRouterInfo().getRoutingKey();
         analysis.calculateRouterInfo(ourRKey, "our rkey", ris, points);
         renderRouterInfoHTML(out, buf, ourRKey, avgMinDist, ris);
@@ -499,7 +499,7 @@ public class SybilRenderer {
         RouterKeyGenerator rkgen = _context.routerKeyGenerator();
         Hash nkey = rkgen.getNextRoutingKey(us);
         buf.append("<h3 id=ritmrw class=sybils>").append(_t("Closest Floodfills to Tomorrow's Routing Key (Where we will Store our RI)")).append("</h3>\n");
-        buf.append("<p class=sybil_info><a href=\"/netdb?caps=f&amp;sybil\">See all</a></p>\n");
+        buf.append("<p class=sybil_info><a href=\"/netdb?caps=f&amp; sybil\">See all</a></p>\n");
         analysis.calculateRouterInfo(nkey, "our rkey (tomorrow)", ris, points);
         renderRouterInfoHTML(out, buf, nkey, avgMinDist, ris);
     }
@@ -544,13 +544,13 @@ public class SybilRenderer {
             String name = (in != null) ? DataHelper.escapeHTML(in.getSettings().getDestinationNickname()) : client.toBase64().substring(0,4);
             buf.append("<h3 class=sybils>").append(_t("Closest floodfills to the Routing Key for"))
                .append(" ").append(name).append(" (").append(_t("where we store our LS")).append(")</h3>");
-            buf.append("<p class=sybil_info><a href=\"/netdb?caps=f&amp;sybil=").append(ls.getHash().toBase64()).append("\">See all</a></p>\n");
+            buf.append("<p class=sybil_info><a href=\"/netdb?caps=f&amp; sybil=").append(ls.getHash().toBase64()).append("\">See all</a></p>\n");
             analysis.calculateRouterInfo(rkey, name, ris, points);
             renderRouterInfoHTML(out, buf, rkey, avgMinDist, ris);
             Hash nkey = rkgen.getNextRoutingKey(ls.getHash());
             buf.append("<h3 class=sybils>").append(_t("Closest floodfills to Tomorrow's Routing Key for"))
                .append(" ").append(name).append(" (").append(_t("where we will store our LS")).append(")</h3>");
-            buf.append("<p class=sybil_info><a href=\"/netdb?caps=f&amp;sybil=").append(ls.getHash().toBase64()).append("\">See all</a></p>\n");
+            buf.append("<p class=sybil_info><a href=\"/netdb?caps=f&amp; sybil=").append(ls.getHash().toBase64()).append("\">See all</a></p>\n");
             analysis.calculateRouterInfo(nkey, name + " (tomorrow)", ris, points);
             renderRouterInfoHTML(out, buf, nkey, avgMinDist, ris);
         }
@@ -727,7 +727,7 @@ public class SybilRenderer {
             int i3 = i & 0xff;
             String sip = i0 + "." + i1 + '.' + i2 + '.' + i3;
             buf.append("<p class=sybil_info><b>").append(count).append(" ").append(_t("routers with IP")).append(" <a href=\"/netdb?ip=")
-               .append(sip).append("&amp;sybil\">").append(sip)
+               .append(sip).append("&amp; sybil\">").append(sip)
                .append("</a>:</b></p>\n");
             for (RouterInfo info : ris) {
                 found = true;
@@ -756,7 +756,7 @@ public class SybilRenderer {
             int i2 = i & 0xff;
             String sip = i0 + "." + i1 + '.' + i2 + ".0/24";
             buf.append("<p class=sybil_info><b>").append(count).append(" ").append(_t("routers with IP")).append(" <a href=\"/netdb?ip=")
-               .append(sip).append("&amp;sybil\">").append(sip)
+               .append(sip).append("&amp; sybil\">").append(sip)
                .append("</a>:</b></p>\n");
             for (RouterInfo info : ris) {
                 found = true;
@@ -784,7 +784,7 @@ public class SybilRenderer {
             int i1 = i & 0xff;
             String sip = i0 + "." + i1 + ".0.0/16";
             buf.append("<p class=sybil_info><b>").append(count).append(" ").append(_t("routers with IP")).append(" <a href=\"/netdb?ip=")
-               .append(sip).append("&amp;sybil\">").append(sip)
+               .append(sip).append("&amp; sybil\">").append(sip)
                .append("</a></b></p>\n");
             for (RouterInfo info : ris) {
                 found = true;
@@ -815,7 +815,7 @@ public class SybilRenderer {
             String sip = Integer.toString(i0, 16) + ":" + Integer.toString(i2, 16) + ':' +
                          Integer.toString(i4, 16) + ':' + Integer.toString(i6, 16) + "::";
             buf.append("<p class=sybil_info><b>").append(count).append(" routers with IP <a href=\"/netdb?ip=")
-               .append(sip).append("&amp;sybil\">").append(sip)
+               .append(sip).append("&amp; sybil\">").append(sip)
                .append("</a></b></p>\n");
             for (RouterInfo info : ris) {
                 found = true;
@@ -845,7 +845,7 @@ public class SybilRenderer {
             String sip = Integer.toString(i0, 16) + ":" + Integer.toString(i2, 16) + ':' +
                          Integer.toString(i4, 16) + "::";
             buf.append("<p class=sybil_info><b>").append(count).append(" routers with IP <a href=\"/netdb?ip=")
-               .append(sip).append("&amp;sybil\">").append(sip)
+               .append(sip).append("&amp; sybil\">").append(sip)
                .append("</a></b></p>");
             for (RouterInfo info : ris) {
                 found = true;
@@ -874,7 +874,7 @@ public class SybilRenderer {
             String ss = DataHelper.escapeHTML(s);
             if (count > 1) {
                 buf.append("<p class=family><b>").append(count).append(' ').append(_t("routers in family"))
-                   .append(":</b> &nbsp;<wbr><a href=\"/netdb?fam=").append(ss).append("&amp;sybil\">").append(ss).append("</a></p>\n");
+                   .append(":</b> &nbsp; <wbr><a href=\"/netdb?fam=").append(ss).append("&amp; sybil\">").append(ss).append("</a></p>\n");
                 found = true;
             }
             //for (RouterInfo info : ris) {
@@ -934,7 +934,7 @@ public class SybilRenderer {
         }
         double avg = tot / count;
         buf.append("<p id=sybil_totals><b>" + _t("Totals for") + " " + count + " " + _t("floodfills") +
-                   ": &nbsp;</b><span class=netdb_name>" + _t("MIN") + ":</span > " + TWO_DECIMALS.get().format(min) +
+                   ": &nbsp; </b><span class=netdb_name>" + _t("MIN") + ":</span > " + TWO_DECIMALS.get().format(min) +
                    "&nbsp; <span class=netdb_name>" + _t("AVG") + ":</span> " + TWO_DECIMALS.get().format(avg) +
                    "&nbsp; <span class=netdb_name>" + _t("MEDIAN") + ":</span> " + TWO_DECIMALS.get().format(median) +
                    "&nbsp; <span class=netdb_name>" + _t("MAX") + ":</span> " + TWO_DECIMALS.get().format(max) + "</p>\n");
@@ -1054,7 +1054,7 @@ public class SybilRenderer {
         }
         buf.append("</span>");
         if (_context.portMapper().isRegistered("imagegen"))
-            buf.append("<img class=identicon src=\"/imagegen/id?s=32&amp;c=").append(hash.replace("=", "%3d")).append("\" height=28 width=28 loading=lazy>");
+            buf.append("<img class=identicon src=\"/imagegen/id?s=32&amp; c=").append(hash.replace("=", "%3d")).append("\" height=28 width=28 loading=lazy>");
         buf.append("</th></tr>\n");
         buf.append("<tr><td class=sybilinfo_params colspan=3>\n<div class=sybilinfo_container>\n");
         if (us != null) {
@@ -1133,7 +1133,7 @@ public class SybilRenderer {
             buf.append("<p><b>").append(_t("Published")).append(":</b> ").append(_t("{0} ago", DataHelper.formatDuration2(age))).append("</p>\n");
         }
 
-        buf.append("<p class=sybil_filler>&nbsp;</p>\n" +
+        buf.append("<p class=sybil_filler>&nbsp; </p>\n" +
                    "</div>\n</td></tr>\n<tr><td class=sybil_addresses colspan=3>\n<table>\n<tr><td><b>" + _t("Addresses") + ":</b></td><td>");
         Collection<RouterAddress> addrs = info.getAddresses();
         if (addrs.size() > 1) {
@@ -1154,7 +1154,7 @@ public class SybilRenderer {
                 String val = (String) e.getValue();
                 buf.append(" <span class=nowrap><span class=netdb_name>").append(_t(DataHelper.stripHTML(name))).append(":</span> <span class=netdb_info>");
                 buf.append(DataHelper.stripHTML(val));
-                buf.append("</span></span>&nbsp;\n");
+                buf.append("</span></span>&nbsp; \n");
             }
         }
         buf.append("</table>\n</td></tr>\n</table>\n");
@@ -1231,7 +1231,7 @@ public class SybilRenderer {
     /** @since 0.9.28 */
     private static void writeDistance(Writer out, DecimalFormat TWO_DECIMALS, BigInteger dist) throws IOException {
         double distance = biLog2(dist);
-        if (distance < MIN_CLOSE) {out.write("<span style=font-weight:600;color:red>");}
+        if (distance < MIN_CLOSE) {out.write("<span style=font-weight:600; color:red>");}
         out.write(TWO_DECIMALS.format(distance));
         if (distance < MIN_CLOSE) {out.write("</span>");}
     }

@@ -122,7 +122,7 @@ class Poly
                             +
                             (KyberEngine.KyberQ / 2)
                         ) / KyberEngine.KyberQ)
-                            & 15);*/
+                            & 15); */
                     // Fix for KyberSlash2: division by KyberQ above is not
                     // constant time.
                     int t_j = this.getCoeffIndex(8 * i + j);
@@ -153,7 +153,7 @@ class Poly
                             (KyberEngine.KyberQ / 2)
                         ) / KyberEngine.KyberQ
                         ) & 31
-                        );*/
+                        ); */
                     // Fix for KyberSlash2: division by KyberQ above is not
                     // constant time.
                     int t_j = this.getCoeffIndex(8 * i + j);

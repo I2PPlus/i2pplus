@@ -456,8 +456,8 @@ class SAMv2StreamSession extends SAMStreamSession
     @SuppressWarnings("PMD.CloseResource")
     public class SAMv2StreamSessionSocketReader extends SAMv1StreamSessionSocketReader
     {
-        protected boolean nolimit      ;
-        protected long    limit        ;
+        protected boolean nolimit;
+        protected long    limit  ;
         protected long    totalReceived;
 
                 /**
@@ -475,8 +475,8 @@ class SAMv2StreamSession extends SAMStreamSession
         {
             synchronized (runningLock)
             {
-                this.limit   = limit   ;
-                this.nolimit = nolimit ;
+                this.limit   = limit;
+                this.nolimit = nolimit;
                 runningLock.notifyAll();
             }
             if (_log.shouldDebug())

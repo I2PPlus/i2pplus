@@ -53,7 +53,7 @@ class SSU2Bitfield {
     public boolean set(long bit) throws IndexOutOfBoundsException {
         if (bit < 0) {throw new IndexOutOfBoundsException(Long.toString(bit));}
         boolean rv;
-        synchronized(this) {
+        synchronized (this) {
             bit -= offset;
             if (bit < 0) {return true;} // too old?
             if (bit >= size) {
@@ -202,7 +202,7 @@ class SSU2Bitfield {
      *
      */
     public synchronized void forEachAndNot(SSU2Bitfield bf2, Callback cb) {
-        synchronized(bf2) {
+        synchronized (bf2) {
             long highest = getHighestSet();
             if (highest < bf2.offset) {return;} // completely older
             // We MUST go bottom-up, because bf2 may shift

@@ -447,7 +447,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
         Hash h = dest.calculateHash();
         Hash e = existingClient.calculateHash();
-        synchronized(this) {
+        synchronized (this) {
             TunnelPool inbound = _clientInboundPools.get(h);
             TunnelPool outbound = _clientOutboundPools.get(h);
             if (inbound != null || outbound != null) {
@@ -485,7 +485,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      */
     public void removeAlias(Destination dest) {
         Hash h = dest.calculateHash();
-        synchronized(this) {
+        synchronized (this) {
             TunnelPool inbound = _clientInboundPools.remove(h);
             if (inbound != null) {
                 Hash p = inbound.getSettings().getAliasOf();

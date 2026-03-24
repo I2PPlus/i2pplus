@@ -229,7 +229,7 @@ public class PeerTestJob extends JobImpl {
         long lag = getContext().jobQueue().getMaxLag();
         boolean keepTesting;
         PeerManager manager;
-        synchronized(this) {
+        synchronized (this) {
             keepTesting = _keepTesting;
             manager = _manager;
         }
@@ -278,7 +278,7 @@ public class PeerTestJob extends JobImpl {
      */
     private Set<RouterInfo> selectPeersToTest() {
         PeerManager manager;
-        synchronized(this) {
+        synchronized (this) {
             manager = _manager;
         }
         PeerSelectionCriteria criteria = new PeerSelectionCriteria();

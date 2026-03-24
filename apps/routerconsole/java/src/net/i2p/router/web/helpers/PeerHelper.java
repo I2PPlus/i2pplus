@@ -172,12 +172,12 @@ public class PeerHelper extends HelperBase {
            .append("<th>").append(_t("Transport")).append("</th>");
 
         if (showIPv4) {
-            buf.append("<th class=\"ipv4 in\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>")
-               .append("<th class=\"ipv4 out\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Outbound")).append("</span></th>");
+            buf.append("<th class=\"ipv4 in\">").append(_t("IPv4")).append("&nbsp; <span>").append(_t("Inbound")).append("</span></th>")
+               .append("<th class=\"ipv4 out\">").append(_t("IPv4")).append("&nbsp; <span>").append(_t("Outbound")).append("</span></th>");
         }
         if (showIPv6) {
-            buf.append("<th class=\"ipv6 in\">").append(_t("IPv6")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>")
-               .append("<th class=\"ipv6 out\">").append(_t("IPv6")).append("&nbsp;<span>").append(_t("Outbound")).append("</span></th>");
+            buf.append("<th class=\"ipv6 in\">").append(_t("IPv6")).append("&nbsp; <span>").append(_t("Inbound")).append("</span></th>")
+               .append("<th class=\"ipv6 out\">").append(_t("IPv6")).append("&nbsp; <span>").append(_t("Outbound")).append("</span></th>");
         }
 
         buf.append("<th title=\"").append(_t("Active connections / Max permitted")).append("\">")
@@ -190,7 +190,7 @@ public class PeerHelper extends HelperBase {
         int totalLimits = 0;
         int rows = 0;
         String bw = "";
-        String bwCounter = " <span class=bw>" + bw + "&thinsp;<span class=kbps>KB/s</span></span>";
+        String bwCounter = " <span class=bw>" + bw + "&thinsp; <span class=kbps>KB/s</span></span>";
 
         SortedMap<String, Transport> transports = _context.commSystem().getTransports();
         for (Map.Entry<String, Transport> e : transports.entrySet()) {
@@ -468,7 +468,7 @@ public class PeerHelper extends HelperBase {
             buf.append("</td>");
             if (IPv6Enabled) {
                 buf.append("<td class=ipv6>");
-                if (con.isIPv6()) {buf.append("<span class=isIPv6>&#x2713;</span>");}
+                if (con.isIPv6()) {buf.append("<span class=isIPv6>&#x2713; </span>");}
                 else {buf.append("");}
                 buf.append("</td>");
             }
@@ -530,7 +530,7 @@ public class PeerHelper extends HelperBase {
                     .append("</span>");
             }
             if (con.isBacklogged()) {
-                buf.append("&nbsp;<span class=backlogged title=\"")
+                buf.append("&nbsp; <span class=backlogged title=\"")
                    .append(_t("Connection is backlogged"))
                     .append("\">!!</span>");
             }
@@ -640,7 +640,7 @@ public class PeerHelper extends HelperBase {
            .append(" / ")
             .append(ut.getMaxConnections());
         if (!debugmode) {
-            buf.append("&nbsp;<span id=ssuadv><a href=\"/peers?transport=ssudebug\">[")
+            buf.append("&nbsp; <span id=ssuadv><a href=\"/peers?transport=ssudebug\">[")
                .append(_t("Advanced View"))
                 .append("]</a></span>");
         }
@@ -787,12 +787,12 @@ public class PeerHelper extends HelperBase {
             }
             buf.append("\"></span>");
             if (introToThem) {
-                buf.append("&nbsp;&nbsp;<span class=\"inbound small\" title=\"")
+                buf.append("&nbsp; &nbsp; <span class=\"inbound small\" title=\"")
                    .append(_t("We offered to introduce them"))
                     .append("\">");
             }
             if (introToUs) {
-                buf.append("&nbsp;&nbsp;<span class=\"outbound small\" title=\"")
+                buf.append("&nbsp; &nbsp; <span class=\"outbound small\" title=\"")
                    .append(_t("They offered to introduce us"))
                     .append("\">");
             }
@@ -817,7 +817,7 @@ public class PeerHelper extends HelperBase {
             buf.append("</td>");
             if (debugmode) {
                 buf.append("<td class=ipv6>");
-                if (peer.isIPv6()) {buf.append("&#x2713;");}
+                if (peer.isIPv6()) {buf.append("&#x2713; ");}
                 else {buf.append("");}
                 buf.append("</td>");
             }
@@ -968,7 +968,7 @@ public class PeerHelper extends HelperBase {
             if (debugmode) {
                 buf.append("<td class=cwnd><b>")
                    .append(cwinTotal/(numPeers*1024))
-                    .append("K</b></td><td class=sst>&nbsp;</td><td class=rtt><b>");
+                    .append("K</b></td><td class=sst>&nbsp; </td><td class=rtt><b>");
                 if (numRTTPeers > 0) {
                     buf.append(DataHelper.formatDuration2(rttTotal/numRTTPeers));
                 } else {buf.append("n/a");}
@@ -1029,13 +1029,13 @@ public class PeerHelper extends HelperBase {
         if (isAdvanced()) {
             buf.append("<li><b id=def.cwnd>CWND (")
                .append(_t("Congestion window"))
-               .append("):</b></br>&nbsp;&nbsp;&bullet; ")
+               .append("):</b></br>&nbsp; &nbsp; &bullet; ")
                .append(_t("How many bytes can be sent without acknowledgement"))
-               .append("<br>\n&nbsp;&nbsp;&bullet; ")
+               .append("<br>\n&nbsp; &nbsp; &bullet; ")
                .append(_t("Number of sent messages awaiting acknowledgement"))
-               .append("<br>\n&nbsp;&nbsp;&bullet; ")
+               .append("<br>\n&nbsp; &nbsp; &bullet; ")
                .append(_t("Maximum number of concurrent messages to send"))
-               .append("<br>\n&nbsp;&nbsp;&bullet; ")
+               .append("<br>\n&nbsp; &nbsp; &bullet; ")
                .append(_t("Number of pending sends which exceed window"))
                .append("</li><li><b id=def.ssthresh>SST (")
                .append(_t("Slow start threshold"))
@@ -1051,9 +1051,9 @@ public class PeerHelper extends HelperBase {
                .append(_t("How long before peer gives up resending lost packet"))
                .append("</li>\n<li><b id=def.mtu>MTU (")
                .append(_t("Maximum transmission unit"))
-               .append("):</b></br>&nbsp;&nbsp;&bullet; ")
+               .append("):</b></br>&nbsp; &nbsp; &bullet; ")
                .append(_t("Maximum send packet size"))
-               .append("<br>&nbsp;&nbsp;&bullet; ")
+               .append("<br>&nbsp; &nbsp; &bullet; ")
                .append(_t("Estimated maximum receive packet size (bytes)"))
                 .append("</li>");
         }

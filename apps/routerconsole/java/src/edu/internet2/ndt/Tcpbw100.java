@@ -701,7 +701,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      * @param msg String value of status
      * */
     public void showStatus(String msg) {
-        synchronized(this) {_displayStatus = msg;}
+        synchronized (this) {_displayStatus = msg;}
         if (_log.shouldWarn()) {_log.warn("Bandwidth test status: " + msg);}
     }
 
@@ -2325,7 +2325,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     @SuppressWarnings("deprecation")
     public void killIt() {
         final ThreadGroup thread_group;
-        synchronized(this) {
+        synchronized (this) {
             thread_group = _thread_group;
             if (thread_group == null) {
                 _log.warn("No thread group to kill");
@@ -2340,7 +2340,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             Thread[] threads = new Thread[thread_group.activeCount()];
             thread_group.enumerate(threads);
             int done = 0;
-            for (int i=0;i<threads.length;i++){
+            for (int i=0; i<threads.length; i++){
                 Thread t = threads[i];
                 if (t != null) {
                     if (_log.shouldWarn()) {_log.warn("Interrupting TG thread " + t);}

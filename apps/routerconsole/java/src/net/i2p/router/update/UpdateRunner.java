@@ -245,11 +245,11 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {
         if (_isPartial) {return;}
         long d = currentWrite + bytesTransferred;
-        String status = "<b>" + _t("Updating I2P").replace("Updating I2P", "Downloading I2P Update") + "&hellip;</b>";
+        String status = "<b>" + _t("Updating I2P").replace("Updating I2P", "Downloading I2P Update") + "&hellip; </b>";
         if (url.contains("skank"))
             status = "<b>" + _t("Updating I2P").replace("Updating", "Downloading")
                                                .replace("I2P", "I2P+")
-                                               .replace("I2P+", "I2P+ Update") + "&hellip;</b>";
+                                               .replace("I2P+", "I2P+ Update") + "&hellip; </b>";
         _mgr.notifyProgress(this, status, d, d + bytesRemaining);
     }
 

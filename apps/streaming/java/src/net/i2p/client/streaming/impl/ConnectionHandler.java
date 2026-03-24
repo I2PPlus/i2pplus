@@ -152,7 +152,7 @@ class ConnectionHandler {
                     sendReset(packet);
                 }
                 boolean restartPending;
-                synchronized(this) {
+                synchronized (this) {
                     restartPending = _restartPending;
                 }
                 if (restartPending) {throw new RouterRestartException();}
@@ -192,7 +192,7 @@ class ConnectionHandler {
             if (syn != null) {
                 if (syn.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) {
                     boolean restartPending;
-                    synchronized(this) {
+                    synchronized (this) {
                         restartPending = _restartPending;
                     }
                     if (restartPending) {throw new RouterRestartException();}

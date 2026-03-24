@@ -885,16 +885,16 @@ public final class SigUtil {
     }
 
     public static void clearCaches() {
-        synchronized(_ECPubkeyCache) {
+        synchronized (_ECPubkeyCache) {
             _ECPubkeyCache.clear();
         }
-        synchronized(_ECPrivkeyCache) {
+        synchronized (_ECPrivkeyCache) {
             _ECPrivkeyCache.clear();
         }
-        synchronized(_EdPubkeyCache) {
+        synchronized (_EdPubkeyCache) {
             _EdPubkeyCache.clear();
         }
-        synchronized(_EdPrivkeyCache) {
+        synchronized (_EdPrivkeyCache) {
             _EdPrivkeyCache.clear();
         }
     }

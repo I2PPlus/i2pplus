@@ -73,7 +73,7 @@ public class KeyManager {
      *  @since 0.9.4 replace individual setters
      */
     public void setKeys(PublicKey key1, PrivateKey key2, SigningPublicKey key3, SigningPrivateKey key4) {
-        synchronized(this) {
+        synchronized (this) {
             _publicKey = key1;
             _privateKey = key2;
             _signingPublicKey = key3;
@@ -186,7 +186,7 @@ public class KeyManager {
             if (!dir.exists())
                 dir.mkdirs();
             if (dir.exists() && dir.isDirectory() && dir.canRead() && dir.canWrite()) {
-                synchronized(KeyManager.this) {
+                synchronized (KeyManager.this) {
                     syncKeys(dir);
                 }
             } else {

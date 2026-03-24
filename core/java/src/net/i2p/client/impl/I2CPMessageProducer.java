@@ -298,7 +298,7 @@ class I2CPMessageProducer {
     private boolean updateBps(int len, long expires) {
         if (_maxBytesPerSecond <= 0)
             return true;
-        //synchronized(this) {
+        //synchronized (this) {
         _lock.lock();
         try {
             int waitCount = 0;

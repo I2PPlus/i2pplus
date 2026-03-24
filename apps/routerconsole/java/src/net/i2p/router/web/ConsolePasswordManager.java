@@ -95,7 +95,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      *  @return success or nothing to migrate
      */
     private boolean migrateConsole() {
-        synchronized(ConsolePasswordManager.class) {
+        synchronized (ConsolePasswordManager.class) {
             if (_context.getBooleanProperty(PROP_MIGRATED))
                 return true;
             // consolePassword

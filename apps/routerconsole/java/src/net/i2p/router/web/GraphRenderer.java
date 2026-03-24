@@ -352,7 +352,7 @@ class GraphRenderer {
 
                 // we want the formatting and translation of formatDuration2(), except not zh, and not the &nbsp;
                 if (IS_WIN && "zh".equals(Messages.getLanguage(_context))) {p = DataHelper.formatDuration(period);}
-                else {p = DataHelper.formatDuration2(period).replace("&nbsp;", " ");}
+                else {p = DataHelper.formatDuration2(period).replace("&nbsp; ", " ");}
                 if (showEvents) {title = graphTitle + ' ' + _t("events in {0}", p);}
                 title = CAMEL_CASE.matcher(graphTitle).replaceAll(" $1");
                 title = title.substring(0, 1).toUpperCase(Locale.ROOT) + title.substring(1);

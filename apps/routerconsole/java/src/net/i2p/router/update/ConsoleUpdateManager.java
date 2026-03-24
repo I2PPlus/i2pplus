@@ -295,7 +295,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             if (r.type == type) {
                 String current = getDownloadedOrInstalledVersion(type, id);
                 UpdateTask t;
-                synchronized(_activeCheckers) {
+                synchronized (_activeCheckers) {
                     t = r.checker.check(type, r.method, id, current, maxWait);
                     if (t != null) {
                         if (_log.shouldInfo()) {_log.info("Starting " + r, new Exception());}
@@ -304,7 +304,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                     }
                 }
                 if (t != null) {
-                    synchronized(t) {
+                    synchronized (t) {
                         try {t.wait(maxWait);}
                         catch (InterruptedException ie) {}
                     }
@@ -333,7 +333,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         for (RegisteredChecker r : _registeredCheckers) {
             if (r.type == type) {
                 String current = getDownloadedOrInstalledVersion(type, id);
-                synchronized(_activeCheckers) {
+                synchronized (_activeCheckers) {
                     UpdateTask t = r.checker.check(type, r.method, id, current, DEFAULT_CHECK_TIME);
                     if (t != null) {
                         if (_log.shouldInfo()) {_log.info("Starting " + r, new Exception());}
@@ -471,7 +471,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  Stop all checks in progress
      */
     public void stopChecks() {
-        synchronized(_activeCheckers) {
+        synchronized (_activeCheckers) {
             for (UpdateTask t : _activeCheckers) {t.shutdown();}
             _activeCheckers.clear();
         }
@@ -896,7 +896,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     public void notifyCheckComplete(UpdateTask task, boolean newer, boolean success) {
         if (_log.shouldInfo()) {_log.info("Checker " + task + " for " + task.getType() + " complete");}
-        synchronized(_activeCheckers) {_activeCheckers.remove(task);}
+        synchronized (_activeCheckers) {_activeCheckers.remove(task);}
         String msg = null;
         switch (task.getType()) {
             case NEWS:
@@ -929,7 +929,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 _status = "";
             }
         }
-        synchronized(task) {task.notifyAll();}
+        synchronized (task) {task.notifyAll();}
     }
 
     public void notifyProgress(UpdateTask task, String status, long downloaded, long totalSize) {
@@ -1361,7 +1361,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         String durl = url;
         if (durl.startsWith("http://")) {durl = durl.substring(7);}
         else if (durl.startsWith("https://")) {durl = durl.substring(8);}
-        if (durl.length() > 28) {durl = durl.substring(0, 25) + "&hellip;";}
+        if (durl.length() > 28) {durl = durl.substring(0, 25) + "&hellip; ";}
         return "<a target=_blank href=\"" + url + "\"/>" + durl + "</a>";
     }
 
@@ -1400,7 +1400,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     private class TaskCleaner implements SimpleTimer.TimedEvent {
         public void timeReached() {
             if (!_activeCheckers.isEmpty()) {
-                synchronized(_activeCheckers) {
+                synchronized (_activeCheckers) {
                     for (Iterator<UpdateTask> iter = _activeCheckers.iterator(); iter.hasNext(); ) {
                         UpdateTask t = iter.next();
                         if (!t.isRunning()) {

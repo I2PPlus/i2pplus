@@ -206,11 +206,11 @@ class NetDbRenderer {
         appendUrlParam(urlParameters, "caps", capabilities);
         appendUrlParam(urlParameters, "tr", transport);
         appendUrlParam(urlParameters, "ip", ipAddress);
-        if (port != 0) urlParameters.append("&amp;port=").append(port);
+        if (port != 0) urlParameters.append("&amp; port=").append(port);
         appendUrlParam(urlParameters, "mtu", mtu);
         appendUrlParam(urlParameters, "ipv6", ipv6Address);
         appendUrlParam(urlParameters, "ssucaps", ssuCapabilities);
-        if (cost != 0) urlParameters.append("&amp;cost=").append(cost);
+        if (cost != 0) urlParameters.append("&amp; cost=").append(cost);
         appendUrlParam(urlParameters, "sybil", sybil);
 
         // Streaming setup
@@ -351,7 +351,7 @@ class NetDbRenderer {
      */
     private void appendUrlParam(StringBuilder sb, String key, String value) {
         if (value != null) {
-            sb.append("&amp;").append(key).append("=").append(value);
+            sb.append("&amp; ").append(key).append("=").append(value);
         }
     }
 
@@ -421,20 +421,20 @@ class NetDbRenderer {
                 int current = page + 1;
                 if (page == 0) {page++;}
                 if (current > 1) {
-                    buf.append("<a href=\"/netdb?pg=").append(page).append("&amp;ps=").append(pageSize).append(ubuf)
+                    buf.append("<a href=\"/netdb?pg=").append(page).append("&amp; ps=").append(pageSize).append(ubuf)
                        .append("\" title=\"").append(_t("Previous Page")).append("\"><span id=prevPage class=pageLink>‹</span></a>");
                 }  else {
                     buf.append("<span id=prevPage class=\"pageLink disabled\">‹</span>" );
                 }
                 for (int i = 1; i <= totalPages; i++) {
                     if (i <= totalPages) {
-                        buf.append(" <a href=\"/netdb?pg=").append(i).append("&amp;ps=").append(pageSize).append(ubuf).append("\"")
+                        buf.append(" <a href=\"/netdb?pg=").append(i).append("&amp; ps=").append(pageSize).append(ubuf).append("\"")
                            .append(i == current ? " id=currentPage" : "").append(">")
                            .append("<span class=pageLink>").append(i).append("</span></a> ");
                     }
                 }
                 if (current < totalPages) {
-                    buf.append("<a href=\"/netdb?pg=").append(page + 2).append("&amp;ps=").append(pageSize).append(ubuf)
+                    buf.append("<a href=\"/netdb?pg=").append(page + 2).append("&amp; ps=").append(pageSize).append(ubuf)
                        .append("\" title=\"").append(_t("Next Page")).append("\">").append("<span id=nextPage class=pageLink>›</span></a>\n");
                 } else {
                     buf.append("<span id=nextPage class=\"pageLink disabled\">›</span>\n");
@@ -762,7 +762,7 @@ class NetDbRenderer {
      */
     private class LookupWaiter extends JobImpl {
         public LookupWaiter() {super(_context);}
-        public void runJob() {synchronized(this) {notifyAll();}}
+        public void runJob() {synchronized (this) {notifyAll();}}
         public String getName() {return "Console NetDb Lookup";}
     }
 
@@ -1103,7 +1103,7 @@ class NetDbRenderer {
             leases.addAll(netdb.getLeases());
             if (ls == null) {
                 LookupWaiter lw = new LookupWaiter();
-                synchronized(lw) {
+                synchronized (lw) {
                     _context.netDb().lookupLeaseSetRemotely(hash, lw, lw, LOOKUP_WAIT, null);
                     try {lw.wait(LOOKUP_WAIT + 1000);}
                     catch (InterruptedException ie) {}
@@ -1179,7 +1179,7 @@ class NetDbRenderer {
             }
         }
         long exp;
-        String bullet = "<span class=bullet>&nbsp; &bullet; &nbsp;</span>";
+        String bullet = "<span class=bullet>&nbsp; &bullet; &nbsp; </span>";
         buf.append("<tr><td>");
         if (type == DatabaseEntry.KEY_TYPE_LEASESET) {exp = ls.getLatestLeaseDate() - now;}
         else {
@@ -1199,7 +1199,7 @@ class NetDbRenderer {
                .append(" <span class=\"nowrap rkey\" title=\"").append(_t("Routing Key")).append("\">")
                .append(bullet).append("<b>").append(_t("Routing Key"))
                .append(":</b> ").append(ls.getRoutingKey().toBase64().substring(0,16))
-               .append("&hellip;</span>");
+               .append("&hellip; </span>");
             if (type != DatabaseEntry.KEY_TYPE_LEASESET) {
                 LeaseSet2 ls2 = (LeaseSet2) ls;
                 if (ls2.isOffline()) {
@@ -1248,7 +1248,7 @@ class NetDbRenderer {
                .append(_t("Encryption Key"))
                .append(":</b> <span title=ELGAMAL_2048>ElGamal")
                .append(debug ? " <span class=pubKey title=\"" + _t("Public Key") + "\">[" +
-                       ls.getEncryptionKey().toBase64().substring(0,8) + "&hellip;]</span>" : "")
+                       ls.getEncryptionKey().toBase64().substring(0,8) + "&hellip; ]</span>" : "")
                 .append("</span>");
         } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
             LeaseSet2 ls2 = (LeaseSet2) ls;
@@ -1273,7 +1273,7 @@ class NetDbRenderer {
                        .append("\">")
                        .append(enctype)
                        .append(debug ? " <span class=pubKey title=\"" + _t("Public Key") + "\">[" +
-                               pk.toBase64().substring(0,8) + "&hellip;]</span>" : "")
+                               pk.toBase64().substring(0,8) + "&hellip; ]</span>" : "")
                         .append("</span>");
                 }
                 else {buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());}
@@ -1384,7 +1384,7 @@ class NetDbRenderer {
         }
         if (showStats) {
             renderRoutersToWriter(routers, out, isLocal, page, pageSize);
-            paginate(buf, new StringBuilder("&amp;f=").append(mode), page, pageSize, hasNextPage, routers.size() - 1);
+            paginate(buf, new StringBuilder("&amp; f=").append(mode), page, pageSize, hasNextPage, routers.size() - 1);
             out.append(buf);
             buf.setLength(0);
         } else {
@@ -1608,15 +1608,15 @@ class NetDbRenderer {
                    .append("<img width=20 height=15 alt=\"").append(country.toUpperCase(Locale.US)).append("\"")
                    .append(" src=\"/flags.jsp?c=").append(country).append("\">")
                    .append(getTranslatedCountry(country).replace("xx", _t("Unknown"))).append("</a></td>")
-                   .append("<td class=countX><a href=\"/netdb?caps=X&amp;cc=").append(country).append("\">")
+                   .append("<td class=countX><a href=\"/netdb?caps=X&amp; cc=").append(country).append("\">")
                    .append(countXTierInCountry(routers, country)).append("</a></td>")
-                   .append("<td class=countFF><a href=\"/netdb?caps=f&amp;cc=").append(country).append("\">")
+                   .append("<td class=countFF><a href=\"/netdb?caps=f&amp; cc=").append(country).append("\">")
                    .append(countFloodfillsInCountry(routers, country)).append("</a></td>")
                    .append("<td class=countCC>").append(totalCount).append("</td></tr>\n");
             }
             buf.append("</tbody>\n</table>\n");
         } else {
-            buf.append("<tbody><tr><td colspan=2>").append(_t("Initializing")).append("&hellip;</td></tr></tbody></table>\n");
+            buf.append("<tbody><tr><td colspan=2>").append(_t("Initializing")).append("&hellip; </td></tr></tbody></table>\n");
         }
     }
 
@@ -1913,7 +1913,7 @@ class NetDbRenderer {
         processedCapsStr = processedCapsStr.replace("\"><span", tooltip);
         buf.append(processedCapsStr);
         String version = DataHelper.stripHTML(routerInfo.getVersion());
-        buf.append("&nbsp;<a href=\"/netdb?v=").append(version).append("\">")
+        buf.append("&nbsp; <a href=\"/netdb?v=").append(version).append("\">")
            .append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
            .append("\">").append(version).append("</span></a>");
         if (!isLocalRouter) {
@@ -1940,7 +1940,7 @@ class NetDbRenderer {
         } else {
             long memoryUsedBytes = (long) _context.statManager().getRate("router.memoryUsed").getRate(RateConstants.ONE_MINUTE).getAvgOrLifetimeAvg();
             long memoryUsedMegabytes = memoryUsedBytes / (1024 * 1024);
-            buf.append("&nbsp;<span id=netdb_ram><b>").append(_t("Memory usage")).append(":</b> ").append(memoryUsedMegabytes).append("M</span>");
+            buf.append("&nbsp; <span id=netdb_ram><b>").append(_t("Memory usage")).append(":</b> ").append(memoryUsedMegabytes).append("M</span>");
         }
         buf.append("</th></tr></thead>\n<tbody>\n<tr>");
         now = _context.clock().now();
@@ -1950,11 +1950,11 @@ class NetDbRenderer {
             buf.append("<td><b>").append(_t("Hidden")).append(", ").append(_t("Updated")).append(":</b></td>")
                .append("<td><span class=netdb_info>")
                .append(_t("{0} ago", DataHelper.formatDuration2(age)))
-               .append("</span>&nbsp;&nbsp;");
+               .append("</span>&nbsp; &nbsp; ");
         } else if (age > 0) {
             buf.append("<td><b>").append(_t("Published")).append(":</b></td><td><span class=netdb_info>")
                .append(_t("{0} ago", DataHelper.formatDuration2(age)))
-               .append("</span>&nbsp;&nbsp;");
+               .append("</span>&nbsp; &nbsp; ");
             String primaryAddress = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(routerInfo));
             String capsStr = processedCapsStr;
             boolean isUnreachableFlag = capsStr.contains("U") || capsStr.contains("H");
@@ -1978,7 +1978,7 @@ class NetDbRenderer {
                     if (enableWhoisLookups) {
                         buf.append(" / ").append(_t("Whois"));
                     }
-                    buf.append(":</b> <span class=rdns>").append(canonicalHostname).append("</span></span>&nbsp;&nbsp;");
+                    buf.append(":</b> <span class=rdns>").append(canonicalHostname).append("</span></span>&nbsp; &nbsp; ");
                 }
             } else if (_context.router().getUptime() > 30 * 1000 && (isUnreachableFlag || primaryAddress == null)) {
                 byte[] ipAddress = TransportImpl.getIP(routerHash);
@@ -2005,22 +2005,22 @@ class NetDbRenderer {
                                 buf.append(" / ").append(_t("Whois"));
                             }
                             buf.append(" (").append(_t("direct")).append("):</b> <span class=rdns>")
-                               .append(canonicalHostname).append(" (").append(directAddressString).append(")</span></span>&nbsp;&nbsp;");
+                               .append(canonicalHostname).append(" (").append(directAddressString).append(")</span></span>&nbsp; &nbsp; ");
                         } else {
                             buf.append("<span class=netdb_info><b>").append(_t("IP Address")).append(" (")
                                .append(_t("direct")).append("):</b> <span class=rdns>").append(directAddressString)
-                               .append("</span></span>&nbsp;&nbsp;");
+                               .append("</span></span>&nbsp; &nbsp; ");
                         }
                     } else {
                         buf.append("<span class=netdb_info><b>").append(_t("IP Address")).append(" (")
                            .append(_t("direct")).append("):</b> <span class=rdns>").append(directAddressString)
-                           .append("</span></span>&nbsp;&nbsp;");
+                           .append("</span></span>&nbsp; &nbsp; ");
                     }
                 }
             }
         } else {
             buf.append("<td><b>").append(_t("Published")).append("</td><td>:</b> in ")
-               .append(DataHelper.formatDuration2(0 - age)).append("<span class=netdb_info>???</span>&nbsp;&nbsp;");
+               .append(DataHelper.formatDuration2(0 - age)).append("<span class=netdb_info>???</span>&nbsp; &nbsp; ");
         }
         if (family != null) {
             FamilyKeyCrypto familyKeyCrypto = _context.router().getFamilyKeyCrypto();
@@ -2039,7 +2039,7 @@ class NetDbRenderer {
            .append("\"><a class=keysearch href=\"/netdb?type=")
            .append(identity.getSigningPublicKey().getType().toString())
            .append("\">").append(identity.getSigningPublicKey().getType().toString())
-           .append("</a></span>&nbsp;<span class=\"signingkey encryption\" title=\"")
+           .append("</a></span>&nbsp; <span class=\"signingkey encryption\" title=\"")
            .append(_t("Show all routers with this encryption type in the NetDb"))
            .append("\"><a class=keysearch href=\"/netdb?etype=")
            .append(identity.getPublicKey().getType().toString())
@@ -2111,7 +2111,7 @@ class NetDbRenderer {
                         }
 
                         if (mtu != null) {
-                            details.append("&nbsp;<span class=\"netdb_info mtu\" hidden><span title=\"")
+                            details.append("&nbsp; <span class=\"netdb_info mtu\" hidden><span title=\"")
                                    .append(_t("Maximum Transmission Unit"))
                                    .append("\">MTU</span>")
                                    .append("<a title=\"")
@@ -2197,7 +2197,7 @@ class NetDbRenderer {
             }
             String value = (String) entry.getValue();
             String label = _t(DataHelper.stripHTML(key).replace("netdb.", "").replace("known", ""));
-            String formattedValue = DataHelper.stripHTML(value).replace(";", " <span class=\"bullet\">&bull;</span> ");
+            String formattedValue = DataHelper.stripHTML(value).replace("; ", " <span class=\"bullet\">&bull; </span> ");
             statsLines.add("<li><b>" + label + ":</b> " + formattedValue + "</li>");
         }
         if (isLocalRouter) {

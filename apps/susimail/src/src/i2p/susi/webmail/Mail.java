@@ -341,7 +341,7 @@ class Mail {
     */
     private void setDate(long dateLong) {
         date = Date.from(Instant.ofEpochMilli(dateLong));
-        synchronized(dateFormatter) {
+        synchronized (dateFormatter) {
             formattedDate = dateFormatter.format(date);
             localFormattedDate = localDateFormatter.format(date);
             quotedDate = longLocalDateFormatter.format(date);
@@ -398,7 +398,7 @@ class Mail {
                             boolean trim = shortSender.length() > 45;
                             if (trim) {shortSender = ServletUtil.truncate(shortSender, 42).trim();}
                             shortSender = html.encode(shortSender);
-                            if (trim) {shortSender = shortSender + "&hellip;";}  // must be after html encode
+                            if (trim) {shortSender = shortSender + "&hellip; ";}  // must be after html encode
                         }
                         else if (hlc.startsWith("date:")) {
                             dateString = line.substring(5).trim();
@@ -411,7 +411,7 @@ class Mail {
                             boolean trim = subject.length() > 75;
                             if (trim) {shortSubject = ServletUtil.truncate(subject, 72).trim();}
                             shortSubject = html.encode(shortSubject);
-                            if (trim) {shortSubject = shortSubject + "&hellip;";}  // must be after html encode
+                            if (trim) {shortSubject = shortSubject + "&hellip; ";}  // must be after html encode
                         }
                         else if (hlc.startsWith("reply-to:")) {reply = getAddress(line.substring(9).trim());}
                         else if (hlc.startsWith("to:")) {

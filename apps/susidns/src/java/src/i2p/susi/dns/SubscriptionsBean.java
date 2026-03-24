@@ -52,7 +52,7 @@ public class SubscriptionsBean extends BaseBean {
     private File subsFile() {return new File(addressbookDir(), SUBS_FILE);}
 
     private void reloadSubs() {
-        synchronized(SubscriptionsBean.class) {locked_reloadSubs();}
+        synchronized (SubscriptionsBean.class) {locked_reloadSubs();}
     }
 
     private void locked_reloadSubs() {
@@ -79,7 +79,7 @@ public class SubscriptionsBean extends BaseBean {
     }
 
     private void save() {
-        synchronized(SubscriptionsBean.class) {locked_save();}
+        synchronized (SubscriptionsBean.class) {locked_save();}
     }
 
     private void locked_save() {

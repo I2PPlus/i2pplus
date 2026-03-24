@@ -81,7 +81,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
         _facade = facade;
         _ignore = Collections.synchronizedSet(new HashSet<Hash>(8));
         if (toSkip != null) {
-            synchronized(toSkip) {_ignore.addAll(toSkip);}
+            synchronized (toSkip) {_ignore.addAll(toSkip);}
         }
         if (sentTo != null) {
             _ipSet = new MaskedIPSet(ctx, sentTo, IP_CLOSE_BYTES);

@@ -670,7 +670,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
         int sz = ips.size();
         if (sz > 0) {
-            synchronized(_exemptIncoming) {
+            synchronized (_exemptIncoming) {
                 for (int i = 0; i < sz; i++) {
                     _exemptIncoming.put(ips.get(i), DUMMY);
                 }
@@ -686,7 +686,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     @Override
     public boolean isExemptIncoming(String ip) {
-        synchronized(_exemptIncoming) {
+        synchronized (_exemptIncoming) {
             return _exemptIncoming.containsKey(ip);
         }
     }
@@ -698,7 +698,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @since 0.9.58
      */
     public void removeExemption(String ip) {
-        synchronized(_exemptIncoming) {
+        synchronized (_exemptIncoming) {
             _exemptIncoming.remove(ip);
         }
     }

@@ -531,7 +531,7 @@ public class CPUID {
             DataHelper.copy(libStream, fos);
             fos.close();
             fos = null;
-            System.load(outFile.getAbsolutePath());//System.load requires an absolute path to the lib
+            System.load(outFile.getAbsolutePath()); //System.load requires an absolute path to the lib
         } catch (UnsatisfiedLinkError ule) {
             if (_doLog) {
                 System.err.println("WARNING: The resource " + resourceName +

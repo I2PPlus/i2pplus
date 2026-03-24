@@ -377,7 +377,7 @@ class UDPPacket implements CDPQEntry {
      * Safe to call multiple times. After release, accessing the packet will log errors.
      */
     public void release() {
-        synchronized(this) {
+        synchronized (this) {
             if (_released) return;
             _released = true;
         }

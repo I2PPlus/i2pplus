@@ -231,7 +231,7 @@ public class WebMail extends HttpServlet {
     private static final String CONFIG_THEME = "theme";
     private static final String DEFAULT_THEME = "dark";
     private static final String spacer = ""; /* this is best done with css */
-    private static final String thSpacer = "<th>&nbsp;</th>";
+    private static final String thSpacer = "<th>&nbsp; </th>";
     private static final String CONSOLE_BUNDLE_NAME = "net.i2p.router.web.messages";
     static {Config.setPrefix("susimail");}
 
@@ -302,7 +302,7 @@ public class WebMail extends HttpServlet {
 
         /** @since 0.9.27 */
         public void addNonce(String nonce) {
-            synchronized(nonces) {
+            synchronized (nonces) {
                 nonces.add(0, nonce);
                 if (nonces.size() > MAX_NONCES) {nonces.remove(MAX_NONCES);}
             }
@@ -311,7 +311,7 @@ public class WebMail extends HttpServlet {
         /** @since 0.9.27 */
         public boolean isValidNonce(String nonce) {
             if (mailbox == null && LOGIN_NONCE.equals(nonce)) {return true;}
-            synchronized(nonces) {return nonces.contains(nonce);}
+            synchronized (nonces) {return nonces.contains(nonce);}
         }
 
         /**
@@ -385,21 +385,21 @@ public class WebMail extends HttpServlet {
     private static String sortHeader(String name, String label, String imgPath,
                                      String currentName, SortOrder currentOrder, int page, String folder) {
         StringBuilder buf = new StringBuilder(128);
-        buf.append(label).append("&nbsp;&nbsp;");
+        buf.append(label).append("&nbsp; &nbsp; ");
         // UP is reverse sort (descending). DOWN is normal sort (ascending).
         if (name.equals(currentName) && currentOrder == SortOrder.UP) {
             buf.append("<img class=\"sort selected\" src=\"").append(imgPath).append("../../images/up.svg\" alt=\"^\">\n");
         } else {
-            buf.append("<a class=sort href=\"").append(myself).append("?page=").append(page).append("&amp;sort=-")
-               .append(name).append("&amp;folder=").append(folder).append("\">")
+            buf.append("<a class=sort href=\"").append(myself).append("?page=").append(page).append("&amp; sort=-")
+               .append(name).append("&amp; folder=").append(folder).append("\">")
                .append("<img class=sort src=\"").append(imgPath).append("../../images/up.svg\" alt=\"^\">")
                .append("</a>\n");
         }
         if (name.equals(currentName) && currentOrder == SortOrder.DOWN) {
             buf.append("<img class=\"sort selected\" src=\"").append(imgPath).append("../../images/down.svg\" alt=\"v\">");
         } else {
-            buf.append("<a class=sort href=\"").append(myself).append("?page=").append(page).append("&amp;sort=")
-               .append(name).append("&amp;folder=").append(folder).append("\">")
+            buf.append("<a class=sort href=\"").append(myself).append("?page=").append(page).append("&amp; sort=")
+               .append(name).append("&amp; folder=").append(folder).append("\">")
                .append("<img class=sort src=\"").append(imgPath).append("../../images/down.svg\" alt=\"v\">")
                .append("</a>");
         }
@@ -443,8 +443,8 @@ public class WebMail extends HttpServlet {
                 String headerName = toTitleCase(headerLine.substring(0, colonIndex));
                 String headerValue = headerLine.substring(colonIndex + 1).trim();
 
-                headerName = headerName.replace("--", "&#45;&#45;").replace("<", "&lt;").replace(">", "&gt;").replace("  ", " ");
-                headerValue = headerValue.replace("--", "&#45;&#45;").replace("<", "&lt;").replace(">", "&gt;").replace("  ", " ");
+                headerName = headerName.replace("--", "&#45; &#45; ").replace("<", "&lt; ").replace(">", "&gt; ").replace("  ", " ");
+                headerValue = headerValue.replace("--", "&#45; &#45; ").replace("<", "&lt; ").replace(">", "&gt; ").replace("  ", " ");
                 headerEntries.add(new AbstractMap.SimpleEntry<>(headerName, headerValue));
             }
 
@@ -491,7 +491,7 @@ public class WebMail extends HttpServlet {
                                 if (allowHtml != HtmlMode.NONE) {
                                     buf.append("<tr id=toggleHtmlView class=mailbody><td colspan=2>")
                                        .append("<p class=info><a id=toggleHtmlLink href=\"").append(myself).append("?")
-                                       .append(SHOW).append("=").append(Base64.encode(subPart.uidl)).append("&amp;")
+                                       .append(SHOW).append("=").append(Base64.encode(subPart.uidl)).append("&amp; ")
                                        .append(HTML).append("=1\">").append(_t("View message as HTML")).append("</a></p>")
                                         .append("</td></tr>\n");
                                 }
@@ -500,7 +500,7 @@ public class WebMail extends HttpServlet {
                                     buf.append("<tr id=toggleHtmlView class=mailbody><td colspan=2>")
                                        .append("<p class=info><a id=toggleHtmlLink class=viewAsPlainText href=\"")
                                        .append(myself).append("?").append(SHOW).append("=").append(Base64.encode(subPart.uidl))
-                                       .append("&amp;").append(HTML).append("=0\">").append(_t("View message as plain text"))
+                                       .append("&amp; ").append(HTML).append("=0\">").append(_t("View message as plain text"))
                                         .append("</a></p></td></tr>\n");
                                 }
                             // show as attachment - if image is loaded as a CID in the iframe, we will still show it as an attachment
@@ -562,7 +562,7 @@ public class WebMail extends HttpServlet {
             if (html && allowHtml != HtmlMode.NONE && showBody && "text/html".equals(mailPart.type)) {
                 boolean enableDarkMode = Boolean.parseBoolean(Config.getProperty(CONFIG_HTML_ENABLE_DARKMODE, "true"));
                 buf.append("<iframe src=\"").append(myself).append('?').append(RAW_ATTACHMENT).append('=').append(mailPart.getID())
-                   .append("&amp;").append(B64UIDL).append('=').append(Base64.encode(mailPart.uidl))
+                   .append("&amp; ").append(B64UIDL).append('=').append(Base64.encode(mailPart.uidl))
                    .append("\" name=\"mailhtmlframe").append(mailPart.getID()).append("\" id=iframeSusiHtmlView ")
                    .append("width=100% height=100% scrolling=auto frameborder=0 border=0 allowtransparency=true data-theme=\"")
                    .append(theme).append("\" class=\"").append((enableDarkMode ? "darkModeActive" : ""))
@@ -609,9 +609,9 @@ public class WebMail extends HttpServlet {
                         }
                         name = quoteHTML(name);
                         buf.append("<img src=\"").append(myself).append('?').append(RAW_ATTACHMENT).append('=').append(mailPart.getID())
-                           .append("&amp;").append(B64UIDL).append('=').append(Base64.encode(mailPart.uidl)).append("\" alt=\"").append(name).append("\">")
+                           .append("&amp; ").append(B64UIDL).append('=').append(Base64.encode(mailPart.uidl)).append("\" alt=\"").append(name).append("\">")
                            .append("<span id=imageInfo><b>").append(_t("File")).append(": ").append("</b><a target=_blank href=\"")
-                           .append(myself).append('?').append(RAW_ATTACHMENT).append('=').append(mailPart.getID()).append("&amp;").append(B64UIDL)
+                           .append(myself).append('?').append(RAW_ATTACHMENT).append('=').append(mailPart.getID()).append("&amp; ").append(B64UIDL)
                            .append('=').append(Base64.encode(mailPart.uidl)).append("\">").append(name).append("</a>");
                     } else if (type != null && (
                         // type list from snark
@@ -626,11 +626,11 @@ public class WebMail extends HttpServlet {
                         ((mailPart.filename != null && mailPart.filename.endsWith(".asc")) ||
                         (mailPart.name != null && mailPart.name.endsWith(".asc")))))) {
                         buf.append("<a href=\"").append(myself).append('?').append(RAW_ATTACHMENT).append('=').append(mailPart.getID())
-                           .append("&amp;").append(B64UIDL).append('=').append(Base64.encode(mailPart.uidl)).append("\">")
+                           .append("&amp; ").append(B64UIDL).append('=').append(Base64.encode(mailPart.uidl)).append("\">")
                            .append(_t("Download attachment {0}", ident)).append("</a>");
                     } else {
                         buf.append("<a target=_blank href=\"").append(myself).append('?').append(DOWNLOAD).append('=').append(mailPart.getID())
-                           .append("&amp;").append(B64UIDL).append('=').append(Base64.encode(mailPart.uidl)).append("\">")
+                           .append("&amp; ").append(B64UIDL).append('=').append(Base64.encode(mailPart.uidl)).append("\">")
                            .append(_t("Download attachment {0}", ident)).append("</a>").append(" (")
                            .append(_t("File is packed into a zipfile for security reasons.")).append(')');
                     }
@@ -841,7 +841,7 @@ public class WebMail extends HttpServlet {
         public LoadWaiter(SessionObject so, MailCache mc) {_so = so; _mc = mc;}
 
         public void foundNewMail(boolean yes) {
-            synchronized(_so) {
+            synchronized (_so) {
                 // Get through cache so we have the disk-only ones too
                 Folder<String> f = _mc.getFolder();
                 String[] uidls = _mc.getUIDLs();
@@ -875,7 +875,7 @@ public class WebMail extends HttpServlet {
             if (connected) {
                 // We do this whether new mail was found or not,
                 // because we may already have UIDLs in the MailCache to fetch
-                synchronized(_so) {
+                synchronized (_so) {
                     mc = _so.caches.get(DIR_FOLDER);
                     if (mc == null) {_so.error += "Internal error, no folder\n"; return;}
                     while (mc.isLoading()) {
@@ -892,7 +892,7 @@ public class WebMail extends HttpServlet {
                 found = mc.getMail(MailCache.FetchMode.HEADER);
             }
             if (log.shouldDebug()) {log.debug("CW.FNM connected? " + connected + " found? " + found);}
-            synchronized(_so) {
+            synchronized (_so) {
                 if (!connected) {
                     String error = _mb.lastError();
                     if (error.length() > 0) {_so.connectError = error;}
@@ -1918,7 +1918,7 @@ public class WebMail extends HttpServlet {
         } else {
             response.setHeader("Content-Security-Policy", "default-src 'self' " + host + "; base-uri 'self' " + host +
                                "; style-src 'self' 'unsafe-inline'; script-src 'self' 'nonce-" + cspNonce + "'; " +
-                               "form-action 'self'; frame-ancestors 'self' " + host + "; object-src 'none'; media-src 'none'; img-src 'self' data:;");
+                               "form-action 'self'; frame-ancestors 'self' " + host + "; object-src 'none'; media-src 'none'; img-src 'self' data:; ");
             response.setCharacterEncoding("UTF-8");
         }
         response.setHeader("X-XSS-Protection", "1; mode=block");
@@ -1934,7 +1934,7 @@ public class WebMail extends HttpServlet {
         HttpSession httpSession = request.getSession(true);
         sessionObject = getSessionObject(httpSession);
 
-        synchronized(sessionObject) {
+        synchronized (sessionObject) {
             sessionObject.pageChanged = false;
             sessionObject.themePath = "/themes/susimail/" + theme + '/';
             sessionObject.imgPath = sessionObject.themePath + "images/";
@@ -2234,15 +2234,15 @@ public class WebMail extends HttpServlet {
                 buf.append("<script src=\"/susimail/js/folder.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                    .append("<script src=\"/js/scrollTo.js?").append(CoreVersion.VERSION).append("\"></script>\n");
             } else if (state == State.LOADING) {
-                buf.append("<noscript><meta http-equiv=refresh content=\"5;url=").append(myself).append("\"></noscript>\n");
+                buf.append("<noscript><meta http-equiv=refresh content=\"5; url=").append(myself).append("\"></noscript>\n");
             } else if (state == State.SHOW) {
                 buf.append("<script src=\"/susimail/js/markdown.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                    .append("<script src=\"/susimail/js/Markdown.Converter.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                    .append("<script src=\"/js/iframeResizer/iframeResizer.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                    .append("<script nonce='").append(cspNonce).append("'>\n")
                    .append("  document.addEventListener('DOMContentLoaded', function(event) {\n")
-                   .append("    const htmlView = iFrameResize({interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#iframeSusiHtmlView');\n")
-                   .append("  });\n")
+                   .append("    const htmlView = iFrameResize({interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#iframeSusiHtmlView'); \n")
+                   .append("  }); \n")
                    .append("</script>\n");
             }
 
@@ -2251,9 +2251,9 @@ public class WebMail extends HttpServlet {
                .append("<script src=/js/iframeResizer/iframeResizer.contentWindow.js></script>\n")
                .append("<script src=\"/js/iframeResizer/updatedEvent.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                .append("<script src=\"/susimail/js/notifications.js?").append(CoreVersion.VERSION).append("\"></script>\n")
-               .append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>\n")
+               .append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\"; </script>\n")
                .append("<script src=/js/detectPageZoom.js type=module></script>\n")
-               .append("<style>body{display:none;pointer-events:none}</style>\n")
+               .append("<style>body{display:none; pointer-events:none}</style>\n")
                 .append("</head>\n");
 
             PrintWriter out = response.getWriter();
@@ -2351,7 +2351,7 @@ public class WebMail extends HttpServlet {
                    .append(_t("{0} is an I2P-exclusive service provided by {1}.", "<b>I2PMail</b>",
                            "<a href=\"http://hq.postman.i2p/\" target=_blank>Postman</a>")).append(' ')
                    .append(_t("{0} webmail client &copy Susi 2004-2005.", "<b>SusiMail</b>")
-                   .replace("&copy", "&copy;")).append("</p>\n</div>\n");
+                   .replace("&copy", "&copy; ")).append("</p>\n</div>\n");
             }
             buf.append("</form>\n</div>\n<span data-iframe-height></span>\n");
             if (sessionObject.isFetching) {
@@ -2367,7 +2367,7 @@ public class WebMail extends HttpServlet {
                     buf.append("<script src=/susimail/js/previewMail.js type=module></script>\n");
                 }
             }
-            buf.append("<style>body{display:block;pointer-events:auto}</style>\n");
+            buf.append("<style>body{display:block; pointer-events:auto}</style>\n");
             buf.append("</body>\n</html>");
 
             out.print(buf.toString());
@@ -2427,11 +2427,11 @@ public class WebMail extends HttpServlet {
             StringBuilder info = new StringBuilder();
             info.append("<p class=info><b>");
             if (sessionObject != null && sessionObject.isFetching) {
-                info.append(_t("Loading messages, please wait...").replace("...", "&hellip;"))
+                info.append(_t("Loading messages, please wait...").replace("...", "&hellip; "))
                     .append("<br>");
             }
             if (sessionObject != null && sessionObject.isFetching) {
-                info.append(_t("Checking for new messages on server")).append("&hellip;<br>");
+                info.append(_t("Checking for new messages on server")).append("&hellip; <br>");
             }
             if (showRefresh) {
                 info.append("<noscript>").append(_t("Refresh the page for updates"))
@@ -2475,7 +2475,7 @@ public class WebMail extends HttpServlet {
             url = url.substring(0, qq);
         buf.append(url);
         if (q != null && q.length() > 0)
-            buf.append(q.replace("&amp;", "&"));  // no you don't html escape the redirect header
+            buf.append(q.replace("&amp; ", "&"));  // no you don't html escape the redirect header
         resp.setHeader("Location", buf.toString());
         resp.setStatus(303);
         resp.getOutputStream().close();
@@ -2551,7 +2551,7 @@ public class WebMail extends HttpServlet {
                         out = new RegexOutputStream(out, "<img*width=1*>", webBug, ""); // remove tracking images
                         out = new RegexOutputStream(out, "</body>", contentWindowJs + "</body>", contentWindowJs);
                         // convert cid: urls to /susimail/?cid= urls
-                        out = new RegexOutputStream(out, " src=\"cid:", " src=\"/susimail/?msg=" + Base64.encode(part.uidl) + "&amp;cid=", null);
+                        out = new RegexOutputStream(out, " src=\"cid:", " src=\"/susimail/?msg=" + Base64.encode(part.uidl) + "&amp; cid=", null);
                         // don't set content length, as it may change due to replacements
                     } else {
                         if (part.decodedLength >= 0) {response.setContentLength(part.decodedLength);}
@@ -2910,7 +2910,7 @@ public class WebMail extends HttpServlet {
             boolean ok = relay.sendMail(host, port, user, pass, sender, recipients, body,
                                         attachments, boundary);
             if (log.shouldDebug()) log.debug("Email send complete, success? " + ok);
-            synchronized(sessionObject) {
+            synchronized (sessionObject) {
                 if (ok) {
                     sessionObject.info += _t("Mail sent.") + '\n';
                     // now delete from drafts
@@ -3079,7 +3079,7 @@ public class WebMail extends HttpServlet {
            .append(NEW_TEXT).append("\">").append(text).append("</textarea></td></tr>\n")
            .append("<tr class=\"bottombuttons spacer\"><td colspan=7><hr></td></tr>\n")
            .append("<tr class=bottombuttons id=addattachment><td class=right>").append(_t("Add Attachment")).append("</td>")
-           .append("<td class=left><input type=file size=50% name=\"").append(NEW_FILENAME).append("\" value=\"\">&nbsp;")
+           .append("<td class=left><input type=file size=50% name=\"").append(NEW_FILENAME).append("\" value=\"\">&nbsp; ")
            .append(button(NEW_UPLOAD, _t("Add attachment"))).append("</td></tr>\n");
         // TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 
@@ -3091,9 +3091,9 @@ public class WebMail extends HttpServlet {
                 if (!wroteHeader) {
                     buf.append("<tr><td class=right>" + _t("Attachments") + "</td>");
                     wroteHeader = true;
-                } else {buf.append("<tr><td>&nbsp;</td>");}
+                } else {buf.append("<tr><td>&nbsp; </td>");}
                 buf.append("<td id=attachedfile class=left><label><input type=checkbox class=optbox name=\"check")
-                           .append(attachment.hashCode()).append("\" value=1>&nbsp;").append(quoteHTML(attachment.getFileName()));
+                           .append(attachment.hashCode()).append("\" value=1>&nbsp; ").append(quoteHTML(attachment.getFileName()));
                 buf.append(" <span class=attachSize>(").append(attachSize).append(")</span></label>");
                 String type = attachment.getContentType();
                 String iconDir = "/themes/susimail/images/";
@@ -3117,7 +3117,7 @@ public class WebMail extends HttpServlet {
                 buf.append("</td></tr>\n");
             }
             // TODO disable in JS if none selected
-            buf.append("<tr class=bottombuttons><td>&nbsp;</td><td id=deleteattached class=left>" +
+            buf.append("<tr class=bottombuttons><td>&nbsp; </td><td id=deleteattached class=left>" +
                         button(DELETE_ATTACHMENT, _t("Delete selected attachments")) + "</td></tr>");
         }
         buf.append("</table>\n</div>");
@@ -3337,7 +3337,7 @@ public class WebMail extends HttpServlet {
                   .append(_t("Really delete the marked messages?"))
                   .append("</span><br>")
                   .append(button(REALLYDELETE, _t("Yes, really delete them!")))
-                  .append("&nbsp;")
+                  .append("&nbsp; ")
                   .append(button(CLEAR, _t("Cancel")))
                     .append("</p></td>");
             } else {
@@ -3347,7 +3347,7 @@ public class WebMail extends HttpServlet {
                   .append(button(DELETE, _t("Delete Selected")))
                   .append("<span class=script>")
                   .append(button(MARKALL, _t("Mark All")))
-                  .append("&nbsp;")
+                  .append("&nbsp; ")
                   .append(button(CLEAR, _t("Clear All")))
                     .append("</span></td>");
             }
@@ -3435,7 +3435,7 @@ public class WebMail extends HttpServlet {
                 int index = mail.shortSender.indexOf("(");
                 mail.shortSender = escapeHtml(mail.shortSender.substring(0, index));
             }
-            sb.append(link).append(mail.shortSender.replaceAll("@.*", "").replace("&lt;", "").replace("&gt;", ""))
+            sb.append(link).append(mail.shortSender.replaceAll("@.*", "").replace("&lt; ", "").replace("&gt; ", ""))
               .append("</a></td>");
         }
 
@@ -3466,7 +3466,7 @@ public class WebMail extends HttpServlet {
 
         sb.append("<td class=\"mailListSize ").append(jslink).append("><span class=listSize>");
         String mailSize = mail.getSize() > 0 ? DataHelper.formatSize2(mail.getSize()) + "B" : "???";
-        if (mail.getSize() > 0) {mailSize = mailSize.replace("&#8239;", "<span class=listSizeUnit>").replace("iB", "");}
+        if (mail.getSize() > 0) {mailSize = mailSize.replace("&#8239; ", "<span class=listSizeUnit>").replace("iB", "");}
         else {mailSize = "<span class=unknown title=\"" + _t("Message body not downloaded") + "\">???";}
         sb.append(mailSize)
           .append("</span></span></td><td class=mailListDelete><input type=checkbox class=\"optbox delete1\" name=\"check")
@@ -3488,11 +3488,11 @@ public class WebMail extends HttpServlet {
         String dateOnly = (mail != null && mail.dateOnly != null) ? mail.dateOnly : "";
         String formatted = mail != null ? mail.localFormattedDate : "";
         formatted = formatted.replace(",", "")
-                             .replace("/", "</span>&#8239;/&#8239;<span>")
-                             .replace(":", "&#8239;:&#8239;")
-                             .replaceFirst(" ", "</span></span>&nbsp;<span class=listTime>")
-                             .replace(" AM", "&#8239;<span class=listClock>AM</span>")
-                             .replace(" PM", "&#8239;<span class=listClock>PM</span>");
+                             .replace("/", "</span>&#8239; /&#8239; <span>")
+                             .replace(":", "&#8239; :&#8239; ")
+                             .replaceFirst(" ", "</span></span>&nbsp; <span class=listTime>")
+                             .replace(" AM", "&#8239; <span class=listClock>AM</span>")
+                             .replace(" PM", "&#8239; <span class=listClock>PM</span>");
 
         StringBuilder cell = new StringBuilder(320); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         cell.append("<td class=\"mailListDate ")
@@ -3520,11 +3520,11 @@ public class WebMail extends HttpServlet {
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             switch (c) {
-                case '&': out.append("&amp;"); break;
-                case '<': out.append("&lt;"); break;
-                case '>': out.append("&gt;"); break;
-                case '"': out.append("&quot;"); break;
-                case '\'': out.append("&#39;"); break;
+                case '&': out.append("&amp; "); break;
+                case '<': out.append("&lt; "); break;
+                case '>': out.append("&gt; "); break;
+                case '"': out.append("&quot; "); break;
+                case '\'': out.append("&#39; "); break;
                 default: out.append(c);
             }
         }
@@ -3559,7 +3559,7 @@ public class WebMail extends HttpServlet {
             String prevLabel  = _t("Previous");
             if (page <= 1) {
                 sb.append(button2(FIRSTPAGE, firstLabel))
-                  .append("&nbsp;")
+                  .append("&nbsp; ")
                     .append(button2(PREVPAGE, prevLabel));
             } else {
                 if (outputHidden) {
@@ -3570,13 +3570,13 @@ public class WebMail extends HttpServlet {
                         .append("\">");
                 }
                 sb.append(button(FIRSTPAGE, firstLabel))
-                  .append("&nbsp;")
+                  .append("&nbsp; ")
                     .append(button(PREVPAGE, prevLabel));
             }
 
             sb.append("</div><div class=pagenum>")
               .append(page)
-              .append("&nbsp;/&nbsp;")
+              .append("&nbsp; /&nbsp; ")
               .append(pages)
                 .append("</div><div class=pagenav>");
 
@@ -3584,7 +3584,7 @@ public class WebMail extends HttpServlet {
             String lastLabel = _t("Last");
             if (page >= pages) {
                 sb.append(button2(NEXTPAGE, nextLabel))
-                  .append("&nbsp;")
+                  .append("&nbsp; ")
                     .append(button2(LASTPAGE, lastLabel));
             } else {
                 if (outputHidden) {
@@ -3595,7 +3595,7 @@ public class WebMail extends HttpServlet {
                         .append("\">");
                 }
                 sb.append(button(NEXTPAGE, nextLabel))
-                  .append("&nbsp;")
+                  .append("&nbsp; ")
                     .append(button(LASTPAGE, lastLabel));
             }
         }
@@ -3648,7 +3648,7 @@ public class WebMail extends HttpServlet {
         if (reallyDelete) {
             buf.append("<p class=error id=nukemail>")
                .append("<span>").append(_t("Really delete this message?")).append("</span><br>")
-               .append(button(REALLYDELETE, _t("Yes, really delete it!"))).append("&nbsp;")
+               .append(button(REALLYDELETE, _t("Yes, really delete it!"))).append("&nbsp; ")
                .append(button(CANCEL, _t("Cancel"))).append("</p>");
         }
         Mail mail = mc.getMail(showUIDL, MailCache.FetchMode.ALL);
@@ -3807,8 +3807,8 @@ public class WebMail extends HttpServlet {
         else
             sz = Config.getProperty(Folder.PAGESIZE, Folder.DEFAULT_PAGESIZE);
         out.print("<div class=topbuttons id=pagesize><b>");
-        out.print(_t("Folder Page Size") + ":</b>&nbsp;<input type=text name=\"" + PAGESIZE +
-                    "\" size=4 value=\"" +  sz + "\">&nbsp;" + button(SETPAGESIZE, _t("Set")) + "</div>\n");
+        out.print(_t("Folder Page Size") + ":</b>&nbsp; <input type=text name=\"" + PAGESIZE +
+                    "\" size=4 value=\"" +  sz + "\">&nbsp; " + button(SETPAGESIZE, _t("Set")) + "</div>\n");
         out.print("<h3 id=config>");
         out.print(_t("Advanced Configuration"));
         Properties config = Config.getProperties();

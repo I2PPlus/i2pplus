@@ -452,7 +452,7 @@ class ClientConnectionRunner {
                     _context.tunnelManager().removeTunnels(sp.dest);
                 else
                     _context.tunnelManager().removeAlias(sp.dest);
-                synchronized(this) {
+                synchronized (this) {
                     if (sp.rerequestTimer != null)
                         sp.rerequestTimer.cancel();
                 }
@@ -473,7 +473,7 @@ class ClientConnectionRunner {
                 if (ls != null && _floodfillNetworkDatabaseFacade != null)
                     _floodfillNetworkDatabaseFacade.unpublish(ls);
                 _context.tunnelManager().removeAlias(sp.dest);
-                synchronized(this) {
+                synchronized (this) {
                     if (sp.rerequestTimer != null)
                         sp.rerequestTimer.cancel();
                 }
@@ -724,7 +724,7 @@ class ClientConnectionRunner {
      */
     public boolean registerEncryptedLS(Hash hash) {
         boolean rv = true;
-        synchronized(this) {
+        synchronized (this) {
             if (!hash.equals(_encryptedLSHash)) {
                 if (_encryptedLSHash != null)
                     _manager.unregisterEncryptedDestination(this, _encryptedLSHash);
@@ -1036,7 +1036,7 @@ class ClientConnectionRunner {
                     _log.warn("Cancelled request for LeaseSet [" + h.toBase32().substring(0,8) +"] -> Session disappeared");
                 return;
             }
-            synchronized(ClientConnectionRunner.this) {
+            synchronized (ClientConnectionRunner.this) {
                 if (sp.rerequestTimer != Rerequest.this) { // NOPMD - CompareObjectsWithEquals (timer identity check)
                     if (_log.shouldInfo())
                         _log.info("Cancelled request for LeaseSet [" + h.toBase32().substring(0,8) + "] -> Newer request received");

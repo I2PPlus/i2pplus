@@ -170,48 +170,48 @@ public class InfoHelper extends HelperBase {
         if (h != null) {
             buf.append("<tr><td><b>").append(_t("Identity")).append(":</b></td><td><code><a href=\"/netdb?r=.\" title =\"")
                .append(_t("Network Database entry")).append("\">").append(h.toBase64()).append("</a></code>");
-            if (getFamily() != null) {buf.append("&ensp;<b>").append(_t("Family")).append(":</b> ").append(getFamily());}
+            if (getFamily() != null) {buf.append("&ensp; <b>").append(_t("Family")).append(":</b> ").append(getFamily());}
             buf.append("</td></tr>\n");
         }
         if (getUdpIP() != null && getUdpPort() != null) {
             buf.append("<tr><td><b>").append(_t("IP Address")).append(":</b></td><td class=ajax>").append(getUdpIP());
             if (lastCountry() != null) {
-                buf.append(" &ensp;<img width=20 height=15 src=\"/flags.jsp?c=").append(lastCountry()).append("\">");
+                buf.append(" &ensp; <img width=20 height=15 src=\"/flags.jsp?c=").append(lastCountry()).append("\">");
             }
-            buf.append(" &ensp;<b>").append(_t("UDP Port")).append(":</b> ").append(getUdpPort())
-               .append(" &ensp;<b>").append(_t("Status")).append(":</b> ").append(_t(_context.commSystem().getStatus().toStatusString()))
-               .append(" &ensp;<b>").append(_t("Floodfill Role")).append(":</b> ");
+            buf.append(" &ensp; <b>").append(_t("UDP Port")).append(":</b> ").append(getUdpPort())
+               .append(" &ensp; <b>").append(_t("Status")).append(":</b> ").append(_t(_context.commSystem().getStatus().toStatusString()))
+               .append(" &ensp; <b>").append(_t("Floodfill Role")).append(":</b> ");
             if (_context.netDb().floodfillEnabled()) {buf.append(_t("Active"));}
             else {buf.append(_t("Inactive"));}
-            buf.append("&ensp;<a href=\"/configadvanced\">").append(_t("Configure")).append("</a></td></tr>\n");
+            buf.append("&ensp; <a href=\"/configadvanced\">").append(_t("Configure")).append("</a></td></tr>\n");
         }
         if (bwIn() != null && bwOut() != null && bwShare() != null) {
             buf.append("<tr><td><b>").append(_t("Bandwidth")).append(":</b></td><td class=ajax><b>").append( _t("Inbound")).append(":</b> ")
-               .append(bwIn()).append("KB/s &ensp;<b>").append(_t("Outbound")).append(":</b> ").append(bwOut()).append("KB/s &ensp;<b>")
-               .append(_t("Shared")).append(":</b> ").append(bwShare()).append("% (").append(shareBW).append("KB/s) &ensp;<b>")
+               .append(bwIn()).append("KB/s &ensp; <b>").append(_t("Outbound")).append(":</b> ").append(bwOut()).append("KB/s &ensp; <b>")
+               .append(_t("Shared")).append(":</b> ").append(bwShare()).append("% (").append(shareBW).append("KB/s) &ensp; <b>")
                .append(_t("Tier")).append(":</b> ").append(ri.getBandwidthTier());
             if (congestionCap != null && !congestionCap.equals("Unknown")) {
-                buf.append("&ensp;<b>").append(_t("Congestion Cap")).append(":</b> ").append(congestionCap);
+                buf.append("&ensp; <b>").append(_t("Congestion Cap")).append(":</b> ").append(congestionCap);
                 if (congestionCap.equals("D")) {buf.append(" (").append(_t("Moderate")).append(")");}
                 else if (congestionCap.equals("E")) {buf.append(" (").append(_t("Severe")).append(")");}
                 else if (congestionCap.equals("G")) {buf.append(" (").append(_t("No transit tunnels")).append(")");}
             }
         }
-        buf.append("&ensp;<a href=\"/config\">").append(_t("Configure")).append("</a></td></tr>\n")
+        buf.append("&ensp; <a href=\"/config\">").append(_t("Configure")).append("</a></td></tr>\n")
            .append("<tr><td><b>").append(_t("Performance")).append(":</b></td><td><b>").append(_t("Available CPU Cores")).append(":</b> ")
-           .append(getCoreCount()).append("&ensp;<b>").append(_t("Maximum available RAM")).append(":</b> ").append(maxMemMB).append("MB")
-           .append("&ensp;<b>").append(_t("Classified as slow")).append(":</b>");
+           .append(getCoreCount()).append("&ensp; <b>").append(_t("Maximum available RAM")).append(":</b> ").append(maxMemMB).append("MB")
+           .append("&ensp; <b>").append(_t("Classified as slow")).append(":</b>");
         if (isRouterSlow()) {buf.append(" <span class=\"yes\">").append(_t("Yes")).append("</span>");}
         else {buf.append(" <span class=\"no\">").append(_t("No")).append("</span>");}
         buf.append("</td></tr>\n");
         buf.append("<tr><td><b>").append(_t("GeoIP Db")).append(":</b></td><td>").append(getGeoIPBuildInfo()).append("</td></tr>");
         if (isAdvanced) {
             buf.append("<tr><td><b>CoDel:</b></td><td><b>").append(_t("Target")).append(":</b> ").append(codelTarget())
-               .append("ms &ensp;<b>").append(_t("Interval")).append(":</b> ").append(codelInterval()).append("ms</td></tr>\n");
+               .append("ms &ensp; <b>").append(_t("Interval")).append(":</b> ").append(codelInterval()).append("ms</td></tr>\n");
         }
         if (rdnsEnabled) {
             int rdnsCacheSize = CommSystemFacadeImpl.countRdnsCacheEntries();
-            String rdnsFileSize = (_context.router().getUptime() > 5 * 1000 ? CommSystemFacadeImpl.rdnsCacheSize() : _t("initializing") + "&hellip;");
+            String rdnsFileSize = (_context.router().getUptime() > 5 * 1000 ? CommSystemFacadeImpl.rdnsCacheSize() : _t("initializing") + "&hellip; ");
             String maxRdnsCache;
             if (maxMem < 512*1024*1024) {
                 maxRdnsCache = "8000";
@@ -221,26 +221,26 @@ public class InfoHelper extends HelperBase {
                 maxRdnsCache = "24000";
             }
             buf.append("<tr><td><b>RDNS Cache:</b></td><td class=ajax>").append(rdnsCacheSize).append(" / ")
-               .append(maxRdnsCache).append(" ").append(_t("entries")).append("&ensp;<b>")
+               .append(maxRdnsCache).append(" ").append(_t("entries")).append("&ensp; <b>")
                .append(_t("Cache file")).append(":</b> ").append(configDir).append("rdnscache.txt (").append(rdnsFileSize).append(")</td></tr>\n");
         }
         if (firstInstalled() != null && firstVersion() != null && lastUpdated() != null) {
             buf.append("<tr><td><b>").append(_t("Installed")).append(":</b></td><td>").append(installDate).append(" (")
-               .append(firstVersion()).append(")").append(" &ensp;<span class=nowrap><b>").append(_t("Location")).append(":</b> ")
-               .append(appDir.toString()).append("</span>").append(" &ensp;<span class=nowrap><b>").append(_t("Config Dir"))
+               .append(firstVersion()).append(")").append(" &ensp; <span class=nowrap><b>").append(_t("Location")).append(":</b> ")
+               .append(appDir.toString()).append("</span>").append(" &ensp; <span class=nowrap><b>").append(_t("Config Dir"))
                .append(":</b> ").append(configDir).append("</span></td></tr>\n")
                .append("<tr><td><b>").append(_t("Updated")).append(":</b></td><td>").append(lastUpdate);
             if (updatePolicy() != null) {
-                buf.append(" &ensp;<b>").append(_t("Update Policy")).append(":</b> ").append(updatePolicy());
+                buf.append(" &ensp; <b>").append(_t("Update Policy")).append(":</b> ").append(updatePolicy());
             }
             if ((updateUnsigned() != null && updateUnsigned().contains("true")) || (updateDevSU3() !=null && updateDevSU3().contains("true"))) {
                 buf.append(" (").append(_t("Development updates enabled")).append(")");
             }
-            buf.append(" &ensp;<a href=\"/configupdate\">").append(_t("Configure")).append("</a></td></tr>\n");
+            buf.append(" &ensp; <a href=\"/configupdate\">").append(_t("Configure")).append("</a></td></tr>\n");
         }
         buf           .append("<tr><td><b>").append(_t("Started")).append(":</b></td><td class=ajax>").append(Instant.ofEpochMilli(_context.router().getWhenStarted()))
-           .append(" &ensp;<b>").append(_t("Uptime")).append(":</b> ").append(DataHelper.formatDuration(_context.router().getUptime()))
-           .append(" &ensp;<b>").append(_t("Clock Skew")).append(":</b> ").append(_context.clock().getOffset()).append("ms</td></tr>\n")
+           .append(" &ensp; <b>").append(_t("Uptime")).append(":</b> ").append(DataHelper.formatDuration(_context.router().getUptime()))
+           .append(" &ensp; <b>").append(_t("Clock Skew")).append(":</b> ").append(_context.clock().getOffset()).append("ms</td></tr>\n")
            .append("</table>\n");
 
         buf.append("<h3 id=transports>").append(_t("Router Transport Addresses")).append("</h3>\n<pre id=activetransports class=ajax>\n");

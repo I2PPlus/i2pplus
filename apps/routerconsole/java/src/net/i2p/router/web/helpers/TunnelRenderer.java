@@ -203,7 +203,7 @@ class TunnelRenderer {
             sb.append("<div class=tablewrap>\n<h3 class=tabletitle id=participating>");
             if (bySpeed) {sb.append(_t("Fastest Active Transit Tunnels"));}
             else {sb.append(_t("Most Recent Active Transit Tunnels"));}
-            sb.append("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=/transit>")
+            sb.append("&nbsp; &nbsp; <a id=refreshPage class=refreshpage style=float:right href=/transit>")
               .append(_t("Refresh")).append("</a></h3>\n");
             int bwShare = getShareBandwidth();
             if (bwShare > 12) {
@@ -276,7 +276,7 @@ class TunnelRenderer {
                     sb.append("<td class=\"cells datatransfer\" data-sort=")
                       .append(count).append("><span class=right>")
                       .append(sizeInKB >= 1024 ? String.format("%.2f", sizeInMB) : String.format("%.0f", sizeInKB))
-                      .append("</span><span class=left>&#8239;")
+                      .append("</span><span class=left>&#8239; ")
                       .append(sizeInKB >= 1024 ? "MB" : "KB")
                         .append("</span></td>");
 
@@ -286,7 +286,7 @@ class TunnelRenderer {
                     float bps = 1024 * count / lifetime;
                     float kbps = bps / 1024;
                     sb.append("<td class=\"cells bps\" data-sort=").append(bps).append("><span class=right>")
-                      .append(TWO_DECIMALS.get().format(kbps)).append("&#8239;</span><span class=left>KB/s</span></td>");
+                      .append(TWO_DECIMALS.get().format(kbps)).append("&#8239; </span><span class=left>KB/s</span></td>");
 
                     long recv = cfg.getReceiveTunnelId();
                     if (isAdvanced) {
@@ -298,35 +298,35 @@ class TunnelRenderer {
                         if (recv != 0) {
                             sb.append("<td title=\"").append(_t("Tunnel identity")).append("\"><span class=tunnel_id>")
                               .append(recv).append("</span></td>");
-                        } else {sb.append("<td><span hidden>&ndash;</span></td>");}
+                        } else {sb.append("<td><span hidden>&ndash; </span></td>");}
                     }
                     if (from != null) {sb.append("<td><div class=tunnel_peer>").append(netDbLink(from)).append("</div></td>");}
-                    else {sb.append("<td><span hidden>&ndash;</span></td>");}
+                    else {sb.append("<td><span hidden>&ndash; </span></td>");}
                     long send = cfg.getSendTunnelId();
                     if (isAdvanced) {
                         if (send != 0) {
                             sb.append("<td title=\"").append(_t("Tunnel identity")).append("\"><span class=tunnel_id>")
                               .append(send).append("</span></td>");
                         } else {
-                            sb.append("<td><span hidden>&ndash;</span></td>");
+                            sb.append("<td><span hidden>&ndash; </span></td>");
                         }
                     }
                     if (to != null) {sb.append("<td><div class=tunnel_peer>").append(netDbLink(to)).append("</div></td>");}
-                    else {sb.append("<td><span hidden>&ndash;</span></td>");}
+                    else {sb.append("<td><span hidden>&ndash; </span></td>");}
                     sb.append("</tr>\n");
                 }
                 sb.append("</tbody>\n<tfoot id=statusnotes><tr><td colspan=8>");
                 if (displayed >= 2) {
-                    sb.append("<b>").append(_t("Active") ).append(":</b>&nbsp;").append(displayed);
+                    sb.append("<b>").append(_t("Active") ).append(":</b>&nbsp; ").append(displayed);
                     if (inactive > 0) {
-                        sb.append("&nbsp;&bullet;&nbsp;<b>").append(_t("Inactive")).append(":</b>&nbsp;").append(inactive)
-                          .append("&nbsp;&bullet;&nbsp;<b>").append(_t("Total")).append(":</b>&nbsp;").append((inactive + displayed));
+                        sb.append("&nbsp; &bullet; &nbsp; <b>").append(_t("Inactive")).append(":</b>&nbsp; ").append(inactive)
+                          .append("&nbsp; &bullet; &nbsp; <b>").append(_t("Total")).append(":</b>&nbsp; ").append((inactive + displayed));
                     }
                 } else if (inactive > 0) {
-                    sb.append("<b>").append(_t("Inactive")).append(":</b>&nbsp;").append(inactive);
+                    sb.append("<b>").append(_t("Inactive")).append(":</b>&nbsp; ").append(inactive);
                 }
                 sb.append("</td></tr>\n<tr class=bwUsage><td colspan=8>")
-                  .append("<b>").append(_t("Lifetime bandwidth usage")).append(":</b>&nbsp;")
+                  .append("<b>").append(_t("Lifetime bandwidth usage")).append(":</b>&nbsp; ")
                   .append(DataHelper.formatSize2(processed*1024, true).replace("i", "")).append("B")
                     .append("</td></tr></tfoot>\n</table>\n</div>\n");
             } else { // bwShare < 12K/s
@@ -460,7 +460,7 @@ class TunnelRenderer {
                 if (ip != null && !"null".equals(ip)) {
                     if (ip.contains(":")) sb.append("<span hidden>[IPv6]</span>");
                     sb.append(ip);
-                } else {sb.append("&ndash;");}
+                } else {sb.append("&ndash; ");}
                 sb.append("</span></td>");
 
                 if (enableReverseLookups()) {
@@ -540,7 +540,7 @@ class TunnelRenderer {
             StringBuilder headerSb = new StringBuilder(peerList.size() * 640 + 2048);
             headerSb.append("<div class=tablewrap>\n<h3 class=tabletitle id=peercount>")
                   .append(_t("All Tunnels by Peer"))
-                  .append("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=/tunnelpeercount>")
+                  .append("&nbsp; &nbsp; <a id=refreshPage class=refreshpage style=float:right href=/tunnelpeercount>")
                   .append(_t("Refresh"))
                   .append("</a></h3>\n<table id=tunnelPeerCount><thead class=lazy>\n<tr><th id=country data-sort-direction=ascending>")
                   .append(_t("Country")).append("</th><th id=router>")
@@ -618,7 +618,7 @@ class TunnelRenderer {
                     if (ip != null && !ip.isEmpty()) {
                         if (ip.contains(":")) {chunkSb.append("<span hidden>[IPv6]</span>");}
                         chunkSb.append(ip);
-                    } else {chunkSb.append("&ndash;");}
+                    } else {chunkSb.append("&ndash; ");}
                     chunkSb.append("</span>");
 
                     if (doReverseLookups) {
@@ -630,7 +630,7 @@ class TunnelRenderer {
                             chunkSb.append("<span class=rlookup title=\"").append(rlResult.canonicalHostName).append("\">")
                                    .append(display).append("</span>");
                         } else {
-                            chunkSb.append("&ndash;");
+                            chunkSb.append("&ndash; ");
                         }
                         chunkSb.append("</td>");
                     }
@@ -793,15 +793,15 @@ class TunnelRenderer {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<div class=tablewrap>\n<h3 class=tabletitle id=defs>")
            .append(_t("Bandwidth Tiers"))
-           .append("</h3>\n<table id=tunnel_defs>\n<tbody><tr><td>&nbsp;</td><td><span class=tunnel_cap><b>L</b></span></td><td>")
+           .append("</h3>\n<table id=tunnel_defs>\n<tbody><tr><td>&nbsp; </td><td><span class=tunnel_cap><b>L</b></span></td><td>")
            .append(_t("{0} shared bandwidth", range(Router.MIN_BW_L, Router.MIN_BW_M)))
            .append("</td><td><span class=tunnel_cap><b>M</b></span></td><td>")
            .append(_t("{0} shared bandwidth", range(Router.MIN_BW_M, Router.MIN_BW_N)))
-           .append("</td><td>&nbsp;</td></tr>\n<tr><td>&nbsp;</td><td><span class=tunnel_cap><b>N</b></span></td><td>")
+           .append("</td><td>&nbsp; </td></tr>\n<tr><td>&nbsp; </td><td><span class=tunnel_cap><b>N</b></span></td><td>")
            .append(_t("{0} shared bandwidth", range(Router.MIN_BW_N, Router.MIN_BW_O)))
            .append("</td><td><span class=tunnel_cap><b>O</b></span></td><td>")
            .append(_t("{0} shared bandwidth", range(Router.MIN_BW_O, Router.MIN_BW_P)))
-           .append("</td><td>&nbsp;</td></tr>\n<tr><td>&nbsp;</td><td><span class=tunnel_cap><b>P</b></span></td><td>")
+           .append("</td><td>&nbsp; </td></tr>\n<tr><td>&nbsp; </td><td><span class=tunnel_cap><b>P</b></span></td><td>")
            .append(_t("{0} shared bandwidth", range(Router.MIN_BW_P, Router.MIN_BW_X)))
            .append("</td><td><span class=tunnel_cap><b>X</b></span></td><td>")
            .append(_t("Over {0} shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f) + "KB/s"))
@@ -994,7 +994,7 @@ class TunnelRenderer {
             int latency = info.getLastLatency();
             buf.append("<td class=latency data-sort=").append(latency).append(">");
             if (latency > 0) {
-                buf.append("<span>").append(latency).append("</span><span class=left>&#8239;ms</span>");
+                buf.append("<span>").append(latency).append("</span><span class=left>&#8239; ms</span>");
             }
             buf.append("</td>");
 
@@ -1005,7 +1005,7 @@ class TunnelRenderer {
             if (count > 0) {
                 buf.append("<span class=right>")
                    .append(sizeInKB >= 1024 ? String.format("%.2f", sizeInMB) : String.format("%.0f", sizeInKB))
-                   .append("</span><span class=left>&#8239;")
+                   .append("</span><span class=left>&#8239; ")
                    .append(sizeInKB >= 1024 ? "MB" : "KB")
                     .append("</span>");
             }
@@ -1053,7 +1053,7 @@ class TunnelRenderer {
             int colCount = 5 + maxLength;
             buf.append("<tfoot id=statusnotes>")
                .append("<tr class=bwUsage><td colspan=").append(colCount)
-               .append(" class=center><b>").append(_t("Lifetime bandwidth usage")).append(":&nbsp;&nbsp;")
+               .append(" class=center><b>").append(_t("Lifetime bandwidth usage")).append(":&nbsp; &nbsp; ")
                .append(DataHelper.formatSize2(processedIn*1024, true).replace("i", ""))
                .append("B ").append(_t("in")).append(", ")
                .append(DataHelper.formatSize2(processedOut*1024, true).replace("i", ""))
@@ -1240,9 +1240,9 @@ class TunnelRenderer {
         out.write("<th class=outCount title=\"" + _t("Outbound") + ": " + _t("Active / Configured") + "\">" +
                    outCount + sep + outWanted + "</th><th id=sep></th>");
         out.write("<th class=\"inBuild" + (buildIn ? " building" : "") + "\" title=\"" + _t("Inbound") +
-                  ": " + _t("Building") + "&hellip;\">" + inBuilding + "</th>");
+                  ": " + _t("Building") + "&hellip; \">" + inBuilding + "</th>");
         out.write("<th class=\"outBuild" + (buildOut ? " building" : "") + "\"  title=\"" + _t("Outbound") +
-                  ": " + _t("Building") + "&hellip;\">" + outBuilding + "</th>");
+                  ": " + _t("Building") + "&hellip; \">" + outBuilding + "</th>");
         out.write("</tr></thead>\n</table>\n");
     }
 

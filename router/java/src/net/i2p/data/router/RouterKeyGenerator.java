@@ -183,7 +183,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      */
     public Hash getRoutingKey(Hash origKey, long time) {
         String modVal;
-        synchronized(this) {
+        synchronized (this) {
             modVal = _fmt.format(time);
         }
         if (modVal.length() != LENGTH)

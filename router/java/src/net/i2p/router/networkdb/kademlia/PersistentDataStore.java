@@ -279,7 +279,7 @@ public class PersistentDataStore extends TransientDataStore {
         }
 
         public void flush() {
-            synchronized(_waitLock) {
+            synchronized (_waitLock) {
                 _quit = true;
                 _waitLock.notifyAll();
             }

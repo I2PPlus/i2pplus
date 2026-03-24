@@ -376,7 +376,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         if (_log.shouldInfo())
             _log.info("Closing " + out + " -> Compressed? " + shouldCompress() +
                       " KeepAliveIn? " + _keepAliveIn + " KeepAliveOut? " + _keepAliveOut);
-        synchronized(this) {
+        synchronized (this) {
             // synch with changing out field below
             super.close();
         }
@@ -384,7 +384,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
 
     protected void beginProcessing() throws IOException {
         OutputStream po = new GunzipOutputStream(out, _callback);
-        synchronized(this) {
+        synchronized (this) {
             out = po;
         }
     }

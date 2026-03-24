@@ -174,7 +174,7 @@ public class I2PControlController implements RouterApp {
             File pluginDir = new File(args[1]);
             if (!pluginDir.exists())
                 throw new IllegalArgumentException("Plugin directory " + pluginDir.getAbsolutePath() + " does not exist");
-            synchronized(I2PControlController.class) {
+            synchronized (I2PControlController.class) {
                 if (_instance != null)
                     throw new IllegalStateException();
                 I2PControlController i2pcc = new I2PControlController(pluginDir);
@@ -186,7 +186,7 @@ public class I2PControlController implements RouterApp {
                 }
             }
         } else if ("stop".equals(args[2])) {
-            synchronized(I2PControlController.class) {
+            synchronized (I2PControlController.class) {
                 if (_instance != null) {
                     _instance.shutdown(null);
                     _instance = null;

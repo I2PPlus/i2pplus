@@ -554,7 +554,7 @@ public abstract class TransportImpl implements Transport {
      *  @since IPv6
      */
     public List<RouterAddress> getCurrentAddresses() {
-        synchronized(_currentAddresses) {
+        synchronized (_currentAddresses) {
             return new ArrayList<RouterAddress>(_currentAddresses);
         }
     }
@@ -570,7 +570,7 @@ public abstract class TransportImpl implements Transport {
      *  @since IPv6
      */
     public RouterAddress getCurrentAddress(boolean ipv6) {
-        synchronized(_currentAddresses) {
+        synchronized (_currentAddresses) {
             for (RouterAddress ra : _currentAddresses) {
                 if (ipv6 == TransportUtil.isIPv6(ra)) {return ra;}
             }
@@ -583,7 +583,7 @@ public abstract class TransportImpl implements Transport {
      *  @since IPv6
      */
     public boolean hasCurrentAddress() {
-        synchronized(_currentAddresses) {return !_currentAddresses.isEmpty();}
+        synchronized (_currentAddresses) {return !_currentAddresses.isEmpty();}
     }
 
     /**
@@ -593,7 +593,7 @@ public abstract class TransportImpl implements Transport {
      * @since 0.7.12
      */
     public List<RouterAddress> updateAddress() {
-        synchronized(_currentAddresses) {return new ArrayList<RouterAddress>(_currentAddresses);}
+        synchronized (_currentAddresses) {return new ArrayList<RouterAddress>(_currentAddresses);}
     }
 
     /**
@@ -614,7 +614,7 @@ public abstract class TransportImpl implements Transport {
             }
         } else {isIPv6 = false;}
         int sz;
-        synchronized(_currentAddresses) {
+        synchronized (_currentAddresses) {
             if (address == null) {
                 _currentAddresses.clear();
                 sz = 0;
@@ -645,7 +645,7 @@ public abstract class TransportImpl implements Transport {
         if (_log.shouldWarn()) {_log.warn("Removing exisiting address\n* " + address);}
         boolean changed;
         int sz;
-        synchronized(_currentAddresses) {
+        synchronized (_currentAddresses) {
             changed = _currentAddresses.remove(address);
             sz = _currentAddresses.size();
         }
@@ -667,7 +667,7 @@ public abstract class TransportImpl implements Transport {
         if (_log.shouldWarn()) {_log.warn("Removing addresses, ipv6? " + ipv6);}
         boolean changed = false;
         int sz;
-        synchronized(_currentAddresses) {
+        synchronized (_currentAddresses) {
             for (Iterator<RouterAddress> iter = _currentAddresses.iterator(); iter.hasNext(); ) {
                 RouterAddress ra = iter.next();
                 if (ipv6 == TransportUtil.isIPv6(ra)) {
@@ -1000,7 +1000,7 @@ public abstract class TransportImpl implements Transport {
      *  @since 0.9.3
      */
     static void clearCaches() {
-        synchronized(_IPMap) {_IPMap.clear();}
+        synchronized (_IPMap) {_IPMap.clear();}
     }
 
     /**

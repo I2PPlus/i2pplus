@@ -727,14 +727,14 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                                     + old.getInactiveTime()
                                     + "ms");
                 }
-                // toDisconnect = peer to get out of synchronized(peers)
+                // toDisconnect = peer to get out of synchronized (peers)
                 peer.disconnect(false); // Don't deregister this connection/peer.
                 // Already checked in addPeer() but we could have gone over the limit since then
             } else if (peers.size() >= getMaxConnections()) {
                 if (_log.shouldWarn()) {
                     _log.warn("Already at MAX_CONNECTIONS in connected() with peer [" + peer + "]");
                 }
-                // toDisconnect = peer to get out of synchronized(peers)
+                // toDisconnect = peer to get out of synchronized (peers)
                 peer.disconnect(false);
             } else {
                 if (_log.shouldInfo()) {

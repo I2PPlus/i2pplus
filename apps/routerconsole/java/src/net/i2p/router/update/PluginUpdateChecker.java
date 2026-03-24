@@ -58,7 +58,7 @@ class PluginUpdateChecker extends UpdateRunner {
             _mgr.notifyCheckComplete(this, false, false);
             return;
         }
-        updateStatus("<b><i>" + _t("Checking for update of plugin {0}", _appName) + "&hellip;</i></b>");
+        updateStatus("<b><i>" + _t("Checking for update of plugin {0}", _appName) + "&hellip; </i></b>");
         _baos.reset();
         try {
             _get = new PartialEepGet(_context, proxyHost, proxyPort, _baos, _currentURI.toString(), TrustedUpdate.HEADER_BYTES);

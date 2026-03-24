@@ -117,7 +117,7 @@ public class BandwidthLimiterIT {
         predict = (NUM_KB/4)*1000;
         error = predict/ms;
         //assertTrue(error>.89);
-        assertTrue(error<1.05);*/
+        assertTrue(error<1.05); */
 
         prepareLimiter(-1, 32, -1, 32*1024);
         ms = testOutboundThrottle(NUM_KB*1024, 1*1024);
@@ -153,7 +153,7 @@ public class BandwidthLimiterIT {
         predict = (NUM_KB/4)*1000;
         error = predict/ms;
         //assertTrue(error>.89);
-        assertTrue(error<1.05);*/
+        assertTrue(error<1.05); */
 
         prepareLimiter(32, -1, 32*1024, -1);
         ms = testInboundThrottle(NUM_KB*1024, 1*1024);

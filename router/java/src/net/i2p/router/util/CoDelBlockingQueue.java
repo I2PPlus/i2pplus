@@ -148,7 +148,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     @Override
     public void clear() {
         super.clear();
-        synchronized(this) {
+        synchronized (this) {
             _first_above_time = 0;
             _drop_next = 0;
             _count = 0;

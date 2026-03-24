@@ -67,7 +67,7 @@ public class I2PSimpleSession extends I2PSessionImpl2 {
         boolean success = false;
         try {
             // protect w/ closeSocket()
-            synchronized(_stateLock) {
+            synchronized (_stateLock) {
                 // If we are in the router JVM, connect using the interal queue
                 if (_context.isRouterContext()) {
                     // _socket and _writer remain null

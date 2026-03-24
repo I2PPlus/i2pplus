@@ -85,7 +85,7 @@ public class HeaderLine extends Encoding {
 /*
     private static boolean isSpecial(char c) {
         return c == '(' || c == ')' || c == '<' || c == '>' ||
-               c == '@' || c == ',' || c == ';' || c == ':' ||
+               c == '@' || c == ',' || c == '; ' || c == ':' ||
                c == '\\' || c == '"' || c == '.' || c == '[' ||
                c == ']';
     }

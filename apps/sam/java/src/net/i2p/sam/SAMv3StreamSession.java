@@ -233,7 +233,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
     public void accept(SAMv3Handler handler, boolean verbose)
         	throws I2PException, InterruptedIOException, IOException, SAMException {
 
-        synchronized(this.socketServerLock) {
+        synchronized (this.socketServerLock) {
             if (this.socketServer != null) {
                 if (_log.shouldWarn())
                     _log.warn("a forwarding server is already defined for this destination");
@@ -307,7 +307,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
                 _log.warn("An accepting server is already defined for this destination");
             throw new SAMException("an accepting server is already defined for this destination");
         }
-        synchronized(this.socketServerLock) {
+        synchronized (this.socketServerLock) {
             if (this.socketServer!=null) {
                 if (_log.shouldWarn())
                     _log.warn("a forwarding server is already defined for this destination");
@@ -372,7 +372,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
                 try {
                     if (isSSL) {
                         I2PAppContext ctx =  I2PAppContext.getGlobalContext();
-                        synchronized(SAMv3StreamSession.class) {
+                        synchronized (SAMv3StreamSession.class) {
                             if (_sslSocketFactory == null) {
                                 try {
                                     _sslSocketFactory = new I2PSSLSocketFactory(
@@ -441,7 +441,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 
     private static class Pipe implements Runnable, Handler
     {
-        private final ReadableByteChannel in ;
+        private final ReadableByteChannel in;
         private final WritableByteChannel out;
         private final ByteBuffer buf;
         private final SAMBridge bridge;
@@ -516,7 +516,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
         if ( rec==null ) throw new InterruptedIOException();
 
         I2PServerSocket server = null;
-        synchronized( this.socketServerLock )
+        synchronized ( this.socketServerLock )
         {
             if (this.socketServer==null) {
                 if (_log.shouldDebug())

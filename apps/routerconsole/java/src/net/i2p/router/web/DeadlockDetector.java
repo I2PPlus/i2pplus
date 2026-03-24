@@ -133,10 +133,10 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
         final Object o2 = new Object();
         Thread t1 = new Thread(new Runnable() {
             public void run() {
-                synchronized(o1) {
+                synchronized (o1) {
                     try { Thread.sleep(1000); } catch (InterruptedException ie) {}
                     // should hang here
-                    synchronized(o2) {
+                    synchronized (o2) {
                         System.out.println("Test fail");
                     }
                 }
@@ -145,9 +145,9 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
         t1.start();
         Thread t2 = new Thread(new Runnable() {
             public void run() {
-                synchronized(o2) {
+                synchronized (o2) {
                     // should hang here
-                    synchronized(o1) {
+                    synchronized (o1) {
                         System.out.println("Test fail");
                     }
                 }

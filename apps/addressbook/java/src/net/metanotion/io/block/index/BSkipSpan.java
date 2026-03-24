@@ -209,7 +209,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
             byte[] keyData;
             byte[] valData;
 
-            for (int i=0;i<nKeys;i++) {
+            for (int i=0; i<nKeys; i++) {
                 if ((pageCounter[0] + 4) > BlockFile.PAGESIZE) {
                     if (curNextPage[0] == 0) {
                         curNextPage[0] = bf.allocPage();
@@ -364,7 +364,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
         pageCounter[0] = HEADER_LEN;
 //        System.out.println("Span Load " + sz + " nKeys " + nKeys + " page " + curPage);
         int fail = 0;
-        for (int i=0;i<this.nKeys;i++) {
+        for (int i=0; i<this.nKeys; i++) {
             if ((pageCounter[0] + 4) > BlockFile.PAGESIZE) {
                 BlockFile.pageSeek(this.bf.file, curNextPage[0]);
                 int magic = bf.file.readInt();

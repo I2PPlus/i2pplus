@@ -343,7 +343,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private void setupPostThrottle() {
         int pp = getIntOption(OPT_POST_MAX, 0);
         int pt = getIntOption(OPT_POST_TOTAL_MAX, 0);
-        synchronized(this) {
+        synchronized (this) {
             if (pp != 0 || pt != 0 || _postThrottler != null) {
                 long pw = 1000L * getIntOption(OPT_POST_WINDOW, DEFAULT_POST_WINDOW);
                 long pb = 1000L * getIntOption(OPT_POST_BAN_TIME, DEFAULT_POST_BAN_TIME);
@@ -403,7 +403,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /** @since 0.9.9 */
     @Override
     public boolean close(boolean forced) {
-        synchronized(this) {
+        synchronized (this) {
             if (_postThrottler != null) {_postThrottler.stop();}
         }
         return super.close(forced);
@@ -728,7 +728,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
 
                 ConnThrottler postThrottler;
-                synchronized(this) {
+                synchronized (this) {
                     postThrottler = _postThrottler;
                 }
                 if (postThrottler != null && command.length() >= 5 &&
@@ -1186,7 +1186,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         if (_log.shouldWarn()) {_log.warn("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());}
                     }
                 }
-                synchronized(this) {_failure = ioe;}
+                synchronized (this) {_failure = ioe;}
             }
         }
 

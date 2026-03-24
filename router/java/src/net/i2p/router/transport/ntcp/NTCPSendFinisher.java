@@ -69,7 +69,7 @@ class NTCPSendFinisher {
      */
     public void add(OutNetMessage msg) {
         ThreadPoolExecutor executor;
-        synchronized(this) {
+        synchronized (this) {
             executor = _executor;
         }
         if (executor == null || executor.isShutdown() || executor.isTerminated()) {

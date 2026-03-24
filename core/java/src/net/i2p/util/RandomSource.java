@@ -166,7 +166,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
         t.start();
         try {
             t.join(10*1000);
-            synchronized(tbuf) {
+            synchronized (tbuf) {
                 for (int i = 0; i < tbuf.length; i++) {
                     if (tbuf[i] != 0) {
                         ok = true;
@@ -214,7 +214,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
                 SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
                 for (int i = 0; i < buf.length; i += SZ) {
                     sr.nextBytes(buf2);
-                    synchronized(buf) {
+                    synchronized (buf) {
                         System.arraycopy(buf2, 0, buf, i, Math.min(SZ, buf.length - i));
                     }
                 }

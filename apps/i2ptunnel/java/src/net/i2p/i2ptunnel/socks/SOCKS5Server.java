@@ -294,7 +294,7 @@ class SOCKS5Server extends SOCKSServer {
                     DataHelper.toLong(fake, 1, 3, hash);
                     String fakeIP = Addresses.toString(fake);
                     String old;
-                    synchronized(_torCache) {
+                    synchronized (_torCache) {
                         old = _torCache.put(fakeIP, host);
                     }
                     if (old != null && !old.equals(host)) {
@@ -309,7 +309,7 @@ class SOCKS5Server extends SOCKSServer {
                 //if (host.startsWith("4fff:")) {
                 if (host.startsWith("255.")) {
                 // For Tor, where hostname was sent previously in the RESOLVE
-                    synchronized(_torCache) {
+                    synchronized (_torCache) {
                         connHostName = _torCache.get(host);
                     }
                     if (connHostName == null) {

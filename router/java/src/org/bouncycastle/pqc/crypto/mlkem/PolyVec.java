@@ -77,7 +77,7 @@ class PolyVec
                                     ((this.getVectorIndex(i).getCoeffIndex(4 * j + k) << 10)
                                         + (KyberEngine.KyberQ / 2))
                                         / KyberEngine.KyberQ)
-                                    & 0x3ff);*/
+                                    & 0x3ff); */
                         // Fix for KyberSlash2: division by KyberQ above is not
                         // constant time.
                         long t_k = this.getVectorIndex(i).getCoeffIndex(4 * j + k);
@@ -112,7 +112,7 @@ class PolyVec
                                     ((this.getVectorIndex(i).getCoeffIndex(8 * j + k) << 11)
                                         + (KyberEngine.KyberQ / 2))
                                         / KyberEngine.KyberQ)
-                                    & 0x7ff);*/
+                                    & 0x7ff); */
                         // Fix for KyberSlash2: division by KyberQ above is not
                         // constant time.
                         long t_k = this.getVectorIndex(i).getCoeffIndex(8 * j + k);

@@ -88,7 +88,7 @@ class TCBShare {
         if (e == null || e.isExpired())
             return;
         final int rtt, rttDev, wdw;
-        synchronized(e) {
+        synchronized (e) {
             rtt = e.getRTT();
             rttDev = e.getRTTDev();
             wdw = e.getWindowSize();
@@ -123,7 +123,7 @@ class TCBShare {
             e = new Entry(opts.getRTT(), opts.getWindowSize(), opts.getRTTDev());
             _cache.put(dest, e);
         } else {
-            synchronized(e) {
+            synchronized (e) {
                 old = e.getRTT();
                 oldw = e.getWindowSize();
                 oldDev = e.getRTTDev();

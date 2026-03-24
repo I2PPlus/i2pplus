@@ -72,9 +72,9 @@ public class ContentHelper extends HelperBase {
             for (int i=0; i < str.length(); i++) {
                 char c = str.charAt(i);
                 switch (str.charAt(i)) {
-                    case '<': sb.append("&lt;"); break;
-                    case '>': sb.append("&gt;"); break;
-                    case '&': sb.append("&amp;"); break;
+                    case '<': sb.append("&lt; "); break;
+                    case '>': sb.append("&gt; "); break;
+                    case '&': sb.append("&amp; "); break;
                     default: sb.append(c); break;
                 }
             }

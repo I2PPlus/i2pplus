@@ -63,7 +63,7 @@ class ConfigParser {
      * @return A String without comments, but otherwise identical to inputLine.
      */
     public static String stripComments(String inputLine) {
-        if (inputLine.startsWith(";")) {return "";}
+        if (inputLine.startsWith("; ")) {return "";}
         int hash = inputLine.indexOf('#');
         if (hash >= 0) {return inputLine.substring(0, hash);}
         else {return inputLine;}

@@ -112,7 +112,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
             // grow our stack
             //BlockFile.log.info("Top level old hgt " + stack.levels.length +  " new hgt " + slvls.levels.length);
             SkipLevels<K, V>[] levels = (SkipLevels<K, V>[]) new SkipLevels[slvls.levels.length];
-            for (int i=0;i < slvls.levels.length; i++) {
+            for (int i=0; i < slvls.levels.length; i++) {
                 if (i < stack.levels.length) {
                     levels[i] = stack.levels[i];
                 } else {
@@ -132,7 +132,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
         if (res != null) {
             if (res[1] != null) {
                 SkipLevels<K, V> slvls = (SkipLevels<K, V>) res[1];
-                for (int i=0;i < slvls.levels.length; i++) {
+                for (int i=0; i < slvls.levels.length; i++) {
                     if (stack.levels[i] == slvls) {
                         stack.levels[i] = slvls.levels[i];
                     }
@@ -327,37 +327,37 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
         System.out.println("Height " + sl.stack.levels.length);
 
         SkipIterator si = sl.iterator();
-        for (int i=0;i<5;i++) {
+        for (int i=0; i<5; i++) {
             System.out.println("Iterator: " + si.next());
         }
-        for (int i=0;i<3;i++) {
+        for (int i=0; i<3; i++) {
             System.out.println("Iterator: " + si.previous());
         }
 
         System.out.println("Find 10");
         si = sl.find("10");
-        for (int i=0;i<5;i++) {
+        for (int i=0; i<5; i++) {
             System.out.println("Iterator: " + si.next());
         }
-        for (int i=0;i<3;i++) {
+        for (int i=0; i<3; i++) {
             System.out.println("Iterator: " + si.previous());
         }
 
         System.out.println("Find 34");
         si = sl.find("34");
-        for (int i=0;i<3;i++) {
+        for (int i=0; i<3; i++) {
             System.out.println("Iterator: " + si.previous());
         }
-        for (int i=0;i<5;i++) {
+        for (int i=0; i<5; i++) {
             System.out.println("Iterator: " + si.next());
         }
 
         System.out.println("Max");
         si = sl.max();
-        for (int i=0;i<3;i++) {
+        for (int i=0; i<3; i++) {
             System.out.println("Iterator: " + si.previous());
         }
-        for (int i=0;i<5;i++) {
+        for (int i=0; i<5; i++) {
             System.out.println("Iterator: " + si.next());
         }
     }

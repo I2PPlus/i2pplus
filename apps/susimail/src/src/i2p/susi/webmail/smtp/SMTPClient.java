@@ -341,8 +341,8 @@ public class SMTPClient {
                 String name3 = FilenameUtil.encodeFilenameRFC5987(name);
                 out.write("\r\n--" + boundary +
                           "\r\nContent-type: " + attachment.getContentType() +
-                          "\r\nContent-Disposition: attachment;\r\n\tfilename=\"" + name2 +
-                          "\";\r\n\tfilename*=" + name3 +
+                          "\r\nContent-Disposition: attachment; \r\n\tfilename=\"" + name2 +
+                          "\"; \r\n\tfilename*=" + name3 +
                           "\r\nContent-Transfer-Encoding: " + attachment.getTransferEncoding() +
                           "\r\n\r\n");
                 InputStream in = null;

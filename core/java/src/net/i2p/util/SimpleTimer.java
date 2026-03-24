@@ -87,7 +87,7 @@ public class SimpleTimer {
      * Removes the SimpleTimer.
      */
     public void removeSimpleTimer() {
-        synchronized(_events) {
+        synchronized (_events) {
             runn.setAnswer(false);
             _events.clear();
             _eventTimes.clear();

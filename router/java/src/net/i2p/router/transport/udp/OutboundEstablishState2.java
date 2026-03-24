@@ -834,7 +834,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         IntroState rv;
         if (_introducers == null) {rv = IntroState.INTRO_STATE_INVALID;}
         else {
-            synchronized(_introducers) {rv = _introducers.get(h);}
+            synchronized (_introducers) {rv = _introducers.get(h);}
             if (rv == null) {rv = IntroState.INTRO_STATE_INVALID;}
         }
         return rv;
@@ -847,7 +847,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     public void setIntroState(Hash h, IntroState state) {
         if (_introducers == null) {return;}
         IntroState old;
-        synchronized(_introducers) {old = _introducers.put(h, state);}
+        synchronized (_introducers) {old = _introducers.put(h, state);}
         if (old != state && _log.shouldDebug()) {
             _log.debug("Change state for Introducer [" + h.toBase64().substring(0,6) + "] from " + old + " to " + state + " on " + this);
         }

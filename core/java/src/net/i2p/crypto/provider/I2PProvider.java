@@ -111,7 +111,7 @@ public final class I2PProvider extends Provider {
      *  @since 0.9.25
      */
     public static void addProvider() {
-        synchronized(I2PProvider.class) {
+        synchronized (I2PProvider.class) {
             if (!_installed) {
                 try {
                     Provider us = new I2PProvider();

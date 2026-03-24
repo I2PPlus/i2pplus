@@ -143,7 +143,7 @@ class DHTTracker {
 
     /** Debug info, HTML formatted */
     public void renderStatusHTML(StringBuilder buf) {
-        String separator = " <span class=bullet>&nbsp;&bullet;&nbsp;</span> ";
+        String separator = " <span class=bullet>&nbsp; &bullet; &nbsp; </span> ";
         buf.append("<div class=debugStats>")
                 .append("<span class=stat><b>DHT Torrents:</b> <span class=dbug>")
                 .append(_torrentCount)

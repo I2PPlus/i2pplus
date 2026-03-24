@@ -107,7 +107,7 @@ public class EventLogHelper extends FormHandler {
             for (int i = 0; i < _times.length; i++) {
                 writeOption(_times[i]);
             }
-            _out.write("</select>&nbsp;<b>");
+            _out.write("</select>&nbsp; <b>");
             _out.write(_t("Event type") + ":</b> <select name=type>");
             // sorted by translated display string
             Map<String, String> events = new TreeMap<String, String>(Collator.getInstance());
@@ -119,7 +119,7 @@ public class EventLogHelper extends FormHandler {
                 writeOption(e.getKey(), e.getValue());
             }
             _out.write("</select>" +
-                       "&nbsp;<input type=submit class=accept value=\"" + _t("Filter events") + "\"></form>\n");
+                       "&nbsp; <input type=submit class=accept value=\"" + _t("Filter events") + "\"></form>\n");
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }

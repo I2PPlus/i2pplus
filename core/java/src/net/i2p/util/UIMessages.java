@@ -41,7 +41,7 @@ public class UIMessages {
      *  @return the message id
      */
     public int addMessage(String message) {
-        return addMessageNoEscape(message.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"));
+        return addMessageNoEscape(message.replace("&", "&amp; ").replace("<", "&lt; ").replace(">", "&gt; "));
     }
 
     /**

@@ -237,7 +237,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
             throw new IllegalStateException("Not in router context");
         RoutingKeyGenerator gen = ctx.routingKeyGenerator();
         long mod = gen.getLastChanged();
-        synchronized(this) {
+        synchronized (this) {
             if (mod != _routingKeyGenMod) {
                 _currentRoutingKey = gen.getRoutingKey(getHash());
                 _routingKeyGenMod = mod;

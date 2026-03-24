@@ -188,7 +188,7 @@ public class GeoIP {
         private static final int CLEAR = 8;
 
         public void run() {
-            synchronized(this) {
+            synchronized (this) {
                 runit();
             }
         }
@@ -523,7 +523,7 @@ public class GeoIP {
         try (DatabaseReader reader = openGeoIP2(geoFile)) {
             long buildTime = reader.getMetadata() != null && reader.getMetadata().getBuildDate() != null ? reader.getMetadata().getBuildDate().getTime() : 0;
             Date buildDate = Date.from(Instant.ofEpochMilli(buildTime));
-            return "<b>Built:</b> " + GEO_DATE_FORMAT.get().format(buildDate) + "&ensp;<b>Size:</b> " + formattedFileSize + "MB&ensp;<b>Location:</b> " + filePath;
+            return "<b>Built:</b> " + GEO_DATE_FORMAT.get().format(buildDate) + "&ensp; <b>Size:</b> " + formattedFileSize + "MB&ensp; <b>Location:</b> " + filePath;
         } catch (Exception e) {return "Unknown GeoIP Db version";}
     }
 
@@ -784,7 +784,7 @@ public class GeoIP {
      */
     public static void banCountry(RouterContext ctx, String country) {
         if (_banLogger == null) {
-            synchronized(GeoIP.class) {
+            synchronized (GeoIP.class) {
                 if (_banLogger == null) {
                     _banLogger = new BanLogger();
                     _banLogger.initialize(ctx);
@@ -885,7 +885,7 @@ public class GeoIP {
             return rv;
         } else {
             for (int i = 0; i < 4; i++) {rv |= (ip[i] & 0xff) << ((3-i)*8);}
-            return rv & 0xffffffffl;
+            return rv &0xffffffffL;
         }
     }
 

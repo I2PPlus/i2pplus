@@ -230,7 +230,7 @@ public class SAMStreamSend {
         int port = Integer.parseInt(_samPort);
         if (!isSSL)
             return new Socket(_samHost, port);
-        synchronized(SAMStreamSink.class) {
+        synchronized (SAMStreamSink.class) {
             if (_sslSocketFactory == null) {
                 try {
                     _sslSocketFactory = new I2PSSLSocketFactory(

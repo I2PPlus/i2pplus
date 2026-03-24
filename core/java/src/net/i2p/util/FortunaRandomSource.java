@@ -67,14 +67,14 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
      *  @since 0.8.8
      */
     public void shutdown() {
-        synchronized(_fortuna) {
+        synchronized (_fortuna) {
             _fortuna.shutdown();
         }
     }
 
     @Override
     public void setSeed(byte buf[]) {
-        synchronized(_fortuna) {
+        synchronized (_fortuna) {
             _fortuna.addRandomBytes(buf);
         }
     }
@@ -137,7 +137,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
         else
             numBits = 8;
         int rv;
-        synchronized(_fortuna) {
+        synchronized (_fortuna) {
             rv = nextBits(numBits);
         }
         return rv % n;
@@ -175,7 +175,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     @Override
     public boolean nextBoolean() {
         byte val;
-        synchronized(_fortuna) {
+        synchronized (_fortuna) {
             val = _fortuna.nextByte();
         }
         return ((val & 0x01) != 0);
@@ -183,7 +183,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
 
     @Override
     public void nextBytes(byte buf[]) {
-        synchronized(_fortuna) {
+        synchronized (_fortuna) {
             _fortuna.nextBytes(buf);
         }
     }
@@ -195,7 +195,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
      */
     @Override
     public void nextBytes(byte buf[], int offset, int length) {
-        synchronized(_fortuna) {
+        synchronized (_fortuna) {
             _fortuna.nextBytes(buf, offset, length);
         }
     }
@@ -206,7 +206,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
      * @since 0.9.24
      */
     public byte nextByte() {
-        synchronized(_fortuna) {
+        synchronized (_fortuna) {
             return _fortuna.nextByte();
         }
     }
@@ -217,7 +217,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     @Override
     public double nextDouble() {
         long d;
-        synchronized(_fortuna) {
+        synchronized (_fortuna) {
             d = ((long)nextBits(26) << 27) + nextBits(27);
         }
         return d / (double)(1L << 53);
@@ -229,7 +229,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     @Override
     public float nextFloat() {
         int d;
-        synchronized(_fortuna) {
+        synchronized (_fortuna) {
             d = nextBits(24);
         }
         return d / ((float)(1 << 24));
@@ -280,7 +280,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     /** reseed the fortuna */
     @Override
     public void feedEntropy(String source, long data, int bitoffset, int bits) {
-        synchronized(_fortuna) {
+        synchronized (_fortuna) {
             _fortuna.addRandomByte((byte)(data & 0xFF));
         }
     }
@@ -289,7 +289,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     @Override
     public void feedEntropy(String source, byte[] data, int offset, int len) {
         try {
-            synchronized(_fortuna) {
+            synchronized (_fortuna) {
                 _fortuna.addRandomBytes(data, offset, len);
             }
         } catch (RuntimeException e) {

@@ -111,7 +111,7 @@ public class StatisticsManager {
                     // copy over the pubkey and signature
                     key = oldRI.getOption(FamilyKeyCrypto.OPT_KEY);
                     if (key != null) {
-                        if (key.contains(";")) {
+                        if (key.contains("; ")) {
                             // we changed the separator from ';' to ':'
                             key = null;
                         } else {
@@ -203,9 +203,9 @@ public class StatisticsManager {
         }
         long numPeriods = rate.getLifetimePeriods();
         if (fudgeQuantity) {
-            buf.append("555;");
+            buf.append("555; ");
             if (numPeriods > 0) {
-                buf.append("555;555;");
+                buf.append("555; 555; ");
             }
         } else {
             buf.append(num(rate.getLastEventCount())).append(';');
@@ -258,14 +258,14 @@ public class StatisticsManager {
      */
     private String renderRate(Rate rate, double fudgeQuantity) {
         if (SIMPLE_STATS)
-            return "0;0;0;" + num(fudgeQuantity);
+            return "0; 0; 0; " + num(fudgeQuantity);
         StringBuilder buf = new StringBuilder(128);
         buf.append(num(rate.getAverageValue())).append(';');
         buf.append(num(rate.getExtremeAverageValue())).append(';');
         buf.append(pct(rate.getPercentageOfLifetimeValue())).append(';');
         if (rate.getLifetimeTotalEventTime() > 0) {
             // bah saturation
-            buf.append("0;0;0;0;");
+            buf.append("0; 0; 0; 0; ");
         }
         buf.append(num(fudgeQuantity)).append(';');
         return buf.toString();

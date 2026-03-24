@@ -69,7 +69,7 @@ public class I2PSink implements Sink {
         // create payload
         byte[] payload;
         if (!this.raw) {
-            synchronized(this.maker) {
+            synchronized (this.maker) {
                 payload = this.maker.makeI2PDatagram(data);
             }
         } else {

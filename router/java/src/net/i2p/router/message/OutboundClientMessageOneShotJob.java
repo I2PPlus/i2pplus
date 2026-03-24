@@ -573,7 +573,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      *
      */
     private void send() {
-        synchronized(this) {
+        synchronized (this) {
             if (_finished != Result.NONE) {
                 if (_log.shouldWarn()) {
                     _log.warn(OutboundClientMessageOneShotJob.this.getJobId() + ": SEND-AFTER-" + _finished);
@@ -890,7 +890,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      */
     private void dieFatal(int status) {
         // never fail twice or fail after success
-        synchronized(this) {
+        synchronized (this) {
             if (_finished != Result.NONE) {
                 if (_log.shouldWarn()) {
                     _log.warn("[Job " + OutboundClientMessageOneShotJob.this.getJobId()
@@ -1083,7 +1083,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // do we leak tags here?
             Result old;
             // never succeed twice but we can succeed after fail
-            synchronized(OutboundClientMessageOneShotJob.this) {
+            synchronized (OutboundClientMessageOneShotJob.this) {
                 old = _finished;
                 if (old == Result.SUCCESS) {
                     if (_log.shouldWarn()) {
@@ -1192,7 +1192,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         public void runJob() {
             Result old;
             // never fail after success
-            synchronized(OutboundClientMessageOneShotJob.this) {
+            synchronized (OutboundClientMessageOneShotJob.this) {
                 old = _finished;
                 if (old == Result.SUCCESS) {
                     if (_log.shouldInfo()) {

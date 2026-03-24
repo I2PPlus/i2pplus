@@ -616,7 +616,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         String hashes = _context.getProperty(PROP_DSALIST, "");
         if (!_userDsaList.equals(hashes)) {
             // rebuild _userDsaOnly when property changes
-            synchronized(_userDsaOnly) {
+            synchronized (_userDsaOnly) {
                 if (hashes.length() > 0) {
                     Set<Hash> newSet = new HashSet<Hash>();
                     StringTokenizer tok = new StringTokenizer(hashes, ",; ");
@@ -725,7 +725,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
                 _log.warn("Unable to destroy the session", ise);
             }
             PcapWriter pcap = null;
-            synchronized(_pcapInitLock) {
+            synchronized (_pcapInitLock) {
                 pcap = pcapWriter;
             }
             if (pcap != null)
@@ -784,7 +784,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     private static void debugInit(I2PAppContext ctx) {
         if (!ctx.getBooleanProperty(PROP_PCAP))
             return;
-        synchronized(_pcapInitLock) {
+        synchronized (_pcapInitLock) {
             if (!_pcapInitialized) {
                 try {
                     pcapWriter = new PcapWriter(ctx, PCAP_FILE);

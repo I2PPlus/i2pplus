@@ -174,7 +174,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
         pageCounter[0] = HEADER_LEN;
         int fail = 0;
         //System.out.println("Span Load " + sz + " nKeys " + nKeys + " page " + curPage);
-        for (int i=0;i<this.nKeys;i++) {
+        for (int i=0; i<this.nKeys; i++) {
             if ((pageCounter[0] + 4) > BlockFile.PAGESIZE) {
                 BlockFile.pageSeek(this.bf.file, curNextPage[0]);
                 int magic = bf.file.readInt();

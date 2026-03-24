@@ -125,7 +125,7 @@ public class RouterThrottleImpl implements RouterThrottle {
 
         // Don't use CRIT because we don't want peers to think we're failing
         if (_context.router().getUptime() < _rejectStartupTime && !_context.router().isHidden()) {
-            setTunnelStatus("[starting]" + _x("Starting up") + "&hellip;");
+            setTunnelStatus("[starting]" + _x("Starting up") + "&hellip; ");
         } else if (_context.router().isHidden()) {
             setTunnelStatus("[hidden]" + _x("Declining all tunnel requests" + ":<br>" + _x("Hidden Mode")));
             return TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
@@ -455,7 +455,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     }
 
     private void setTunnelStatus() {
-        setTunnelStatus("[starting]" + _x("Starting up") + "&hellip;");
+        setTunnelStatus("[starting]" + _x("Starting up") + "&hellip; ");
     }
 
     public static boolean isShuttingDown(RouterContext _context) {
@@ -466,9 +466,9 @@ public class RouterThrottleImpl implements RouterThrottle {
     /** @since 0.8.12 */
     public void setShutdownStatus() {
         if (isShuttingDown(_context)) {
-            setTunnelStatus("[shutdown]" + _x("Declining requests") + ": " + _x("Shutting down") + "&hellip;");
+            setTunnelStatus("[shutdown]" + _x("Declining requests") + ": " + _x("Shutting down") + "&hellip; ");
         } else {
-            setTunnelStatus("[shutdown]" + _x("Declining requests") + ": " + _x("Restarting") + "&hellip;");
+            setTunnelStatus("[shutdown]" + _x("Declining requests") + ": " + _x("Restarting") + "&hellip; ");
         }
     }
 

@@ -402,7 +402,7 @@ class BuildHandler implements Runnable {
                 if (cfg.getTunnelPool().getSettings().isExploratory()) {
                     // Notify router that exploratory tunnels are ready
                     boolean isIn = cfg.isInbound();
-                    synchronized(_startupLock) {
+                    synchronized (_startupLock) {
                         switch (_explState) {
                             case NONE:
                                 if (isIn) {_explState = ExplState.IB;}

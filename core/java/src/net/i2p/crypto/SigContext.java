@@ -21,7 +21,7 @@ public enum SigContext {
     SC_SU3      ("i2pSU3FileFormat"),
     SC_TEST     ("test1234test5678"),
 
-   ;
+;
 
     private final SigContextSpec spec;
 

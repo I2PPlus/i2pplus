@@ -98,7 +98,7 @@ public class POP3MailBox implements NewMailListener {
      * @return Byte buffer containing header data or null
      */
     public Buffer getHeader(String uidl) {
-        synchronized(synchronizer) {
+        synchronized (synchronizer) {
             try {checkConnection();} // we must be connected to know the UIDL to ID mapping
             catch (IOException ioe) {
                 if (_log.shouldDebug()) {_log.debug("Error fetching header", ioe);}
@@ -141,7 +141,7 @@ public class POP3MailBox implements NewMailListener {
      * @return the buffer containing body data or null
      */
     public Buffer getBody(String uidl, Buffer buffer) {
-        synchronized(synchronizer) {
+        synchronized (synchronizer) {
             try {checkConnection();} // we must be connected to know the UIDL to ID mapping
             catch (IOException ioe) {
                 if (_log.shouldDebug()) {_log.debug("Error fetching body", ioe);}
@@ -162,7 +162,7 @@ public class POP3MailBox implements NewMailListener {
      */
     public void getBodies(Collection<FetchRequest> requests) {
         List<SendRecv> srs = new ArrayList<SendRecv>(requests.size());
-        synchronized(synchronizer) {
+        synchronized (synchronizer) {
             try {checkConnection();} // we must be connected to know the UIDL to ID mapping
             catch (IOException ioe) {
                 if (_log.shouldDebug()) {_log.debug("Error fetching", ioe);}
@@ -255,7 +255,7 @@ public class POP3MailBox implements NewMailListener {
     void deletePending(boolean noWait) {
         Collection<String> uidls = delayedDeleter.getQueued();
         if (uidls.isEmpty()) {return;}
-        synchronized(synchronizer) {
+        synchronized (synchronizer) {
             try {
                 if (isConnected()) {doDelete(noWait);}
                 else {
@@ -287,7 +287,7 @@ public class POP3MailBox implements NewMailListener {
      * @return Message size in bytes or 0 if not found
      */
     public int getSize(String uidl) {
-        synchronized(synchronizer) {
+        synchronized (synchronizer) {
             int id = getIDfromUIDL(uidl);
             if (id < 0) {return 0;}
             return getSize(id);
@@ -315,7 +315,7 @@ public class POP3MailBox implements NewMailListener {
      * @return true or false
      */
     boolean isConnected() {
-        synchronized(synchronizer) {
+        synchronized (synchronizer) {
             if (socket == null) {connected = false;}
             else if (!socket.isConnected() || socket.isInputShutdown() || socket.isOutputShutdown() || socket.isClosed()) {
                 socket = null;
@@ -463,7 +463,7 @@ public class POP3MailBox implements NewMailListener {
      */
     public boolean connectToServer(NewMailListener nml) {
         Thread t;
-        synchronized(synchronizer) {
+        synchronized (synchronizer) {
             if (isConnected()) {t = new I2PAppThread(new RecheckRunner(nml), "POP3 Checker");}
             else {t = new I2PAppThread(new ConnectRunner(nml), "POP3 Connector");}
         }
@@ -493,7 +493,7 @@ public class POP3MailBox implements NewMailListener {
 
         public void run() {
             boolean result = false;
-            try { synchronized(synchronizer) {result = check();} }
+            try { synchronized (synchronizer) {result = check();} }
             finally {_nml.foundNewMail(result);}
         }
 
@@ -551,7 +551,7 @@ public class POP3MailBox implements NewMailListener {
      * @since 0.9.13
      */
     boolean blockingConnectToServer() {
-        synchronized(synchronizer) {
+        synchronized (synchronizer) {
             if (isConnected()) {return true;}
             connect();
             return isConnected();
@@ -1039,7 +1039,7 @@ public class POP3MailBox implements NewMailListener {
      * @return The amount of e-mails available.
      */
     public int getNumMails() {
-        synchronized(synchronizer) {
+        synchronized (synchronizer) {
             if (_log.shouldDebug()) {_log.debug("getNumMails()");}
             try {checkConnection();}
             catch (IOException ioe) {}
@@ -1088,7 +1088,7 @@ public class POP3MailBox implements NewMailListener {
      */
     public void destroy() {
         delayedDeleter.cancel();
-        synchronized(synchronizer) {
+        synchronized (synchronizer) {
             if (backgroundChecker != null) {backgroundChecker.cancel();}
             close(false);
         }
@@ -1118,7 +1118,7 @@ public class POP3MailBox implements NewMailListener {
      *  @since 0.9.13
      */
     void close(boolean shouldWait) {
-        synchronized(synchronizer) {
+        synchronized (synchronizer) {
             if (_log.shouldDebug()) _log.debug("close()");
             if (idleCloser != null) {idleCloser.cancel();}
             if (socket != null && socket.isConnected()) {
@@ -1166,7 +1166,7 @@ public class POP3MailBox implements NewMailListener {
      */
     public Collection<String> getUIDLs() {
         if (!isConnected()) {return Collections.emptyList();}
-        synchronized(synchronizer) {return new ArrayList<String>(uidlToID.keySet());}
+        synchronized (synchronizer) {return new ArrayList<String>(uidlToID.keySet());}
     }
 
     /** for SendRecv */

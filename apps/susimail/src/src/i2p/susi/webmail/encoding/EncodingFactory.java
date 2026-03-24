@@ -37,7 +37,7 @@ import net.i2p.util.Log;
 public class EncodingFactory {
 
     private static final String CONFIG_ENCODING = "encodings";
-    private static final String DEFAULT_ENCODINGS = "i2p.susi.webmail.encoding.HeaderLine;i2p.susi.webmail.encoding.QuotedPrintable;i2p.susi.webmail.encoding.Base64;i2p.susi.webmail.encoding.SevenBit;i2p.susi.webmail.encoding.EightBit;i2p.susi.webmail.encoding.HTML";
+    private static final String DEFAULT_ENCODINGS = "i2p.susi.webmail.encoding.HeaderLine; i2p.susi.webmail.encoding.QuotedPrintable; i2p.susi.webmail.encoding.Base64; i2p.susi.webmail.encoding.SevenBit; i2p.susi.webmail.encoding.EightBit; i2p.susi.webmail.encoding.HTML";
 
     private static final Map<String, Encoding> encodings;
 
@@ -47,7 +47,7 @@ public class EncodingFactory {
         //String list = Config.getProperty( CONFIG_ENCODING );
         String list = DEFAULT_ENCODINGS;
         if ( list != null ) {
-            String[] classNames = list.split( ";" );
+            String[] classNames = list.split( "; " );
             for ( int i = 0; i < classNames.length; i++ ) {
                 try {
                     Class<?> c = Class.forName( classNames[i] );

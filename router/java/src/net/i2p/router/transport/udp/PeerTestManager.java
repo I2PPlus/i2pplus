@@ -63,19 +63,19 @@ quite simple:</p>
                              PeerTest--------------------&gt;
 
                         receiveFromCharlieAsBob()
-                                &lt;-------------------PeerTest
+                                &lt; -------------------PeerTest
 
     receiveTestReply()
-         &lt;-------------------PeerTest
+         &lt; -------------------PeerTest
 
     receiveTestReply()
-         &lt;------------------------------------------PeerTest
+         &lt; ------------------------------------------PeerTest
 
                                                   receiveFromAliceAsCharlie()
     PeerTest------------------------------------------&gt;
 
     receiveTestReply()
-         &lt;------------------------------------------PeerTest
+         &lt; ------------------------------------------PeerTest
 </pre>
 
 <p>Each of the PeerTest messages carry a nonce identifying the
@@ -1361,7 +1361,7 @@ class PeerTestManager {
                 if (test.getReceiveCharlieTime() > 0) {
                     // send msg 6
                     // logged in sendTestToCharlie()
-                    synchronized(this) {
+                    synchronized (this) {
                         sendTestToCharlie();
                     }
                 } else {
@@ -1448,7 +1448,7 @@ class PeerTestManager {
                 if (test.getCharlieIntroKey() != null) {
                     // send msg 6
                     // logged in sendTestToCharlie()
-                    synchronized(this) {
+                    synchronized (this) {
                         sendTestToCharlie();
                     }
                 } else {

@@ -71,7 +71,7 @@ public class RouterPasswordManager extends PasswordManager {
      *  @return success or nothing to migrate
      */
     protected final boolean migrate() {
-        synchronized(RouterPasswordManager.class) {
+        synchronized (RouterPasswordManager.class) {
             if (_context.getBooleanProperty(PROP_MIGRATED))
                 return true;
             // i2cp.password

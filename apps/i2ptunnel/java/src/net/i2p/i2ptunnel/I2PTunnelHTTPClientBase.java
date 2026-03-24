@@ -99,7 +99,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             "Content-Type: text/html; charset=UTF-8\r\n" +
             "Cache-Control: no-cache\r\n" +
             "Connection: close\r\n"+
-            "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.5\r\n"; // try to get a UTF-8-encoded response back for the password
+            "Accept-Charset: ISO-8859-1,utf-8; q=0.7,*; q=0.5\r\n"; // try to get a UTF-8-encoded response back for the password
     // put the auth type and realm in between
     private static final String ERR_AUTH2 =
             "\r\n" +
@@ -395,7 +395,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         public AuthResult isValid(int nc) {
             if (nc <= 0) {return AuthResult.AUTH_BAD;}
             if (nc >= MAX_NONCE_COUNT) {return AuthResult.AUTH_STALE;}
-            synchronized(counts) {
+            synchronized (counts) {
                 if (counts.get(nc)) {return AuthResult.AUTH_BAD;}
                 counts.set(nc);
             }
@@ -416,7 +416,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         String proxies = props.getProperty("proxyList");
         if (proxies != null) {
             StringTokenizer tok = new StringTokenizer(proxies, ",; \r\n\t");
-            synchronized(_proxyList) {
+            synchronized (_proxyList) {
                 _proxyList.clear();
                 while (tok.hasMoreTokens()) {
                     String p = tok.nextToken().trim();
@@ -424,7 +424,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                 }
             }
         } else {
-            synchronized(_proxyList) {_proxyList.clear();}
+            synchronized (_proxyList) {_proxyList.clear();}
         }
         super.optionsUpdated(tunnel);
     }
@@ -998,7 +998,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             out.write("</a>");
             if (usingWWWProxy) {
                 if (wwwProxy == null) {wwwProxy = "No Outproxy configured";}
-                else if (wwwProxy.length() > 30) {wwwProxy = wwwProxy.substring(0,29) + "&hellip;";}
+                else if (wwwProxy.length() > 30) {wwwProxy = wwwProxy.substring(0,29) + "&hellip; ";}
                 out.write("<hr><span id=outproxy><b>");
                 out.write(_t("HTTP Outproxy"));
                 out.write(":</b> <span id=outproxydest>" + wwwProxy + "</span></span><br><br>");
@@ -1126,7 +1126,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         //   .append(new Date().toString())
         //   .append("</i></div>\n</body>\n</html>\n");
         //return buf.toString();
-        return "<style>body{display:block!important;pointer-events:auto!important}</style>\n</body>\n</html>\n";
+        return "<style>body{display:block!important; pointer-events:auto!important}</style>\n</body>\n</html>\n";
     }
 
     /**

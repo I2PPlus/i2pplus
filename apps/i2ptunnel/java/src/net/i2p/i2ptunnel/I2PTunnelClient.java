@@ -91,7 +91,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
         if (destinations == null)
             return;
         StringTokenizer tok = new StringTokenizer(destinations, ", ");
-        synchronized(_addrs) {
+        synchronized (_addrs) {
             _addrs.clear();
             while (tok.hasMoreTokens()) {
                 String destination = tok.nextToken();
@@ -193,7 +193,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
     }
 
     private final I2PSocketAddress pickDestination() {
-        synchronized(_addrs) {
+        synchronized (_addrs) {
             int size = _addrs.size();
             if (size <= 0) {
                 if (_log.shouldError()) {_log.error("No client targets?!");}

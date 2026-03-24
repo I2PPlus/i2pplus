@@ -102,7 +102,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         if (destinations == null)
             return;
         StringTokenizer tok = new StringTokenizer(destinations, ", ");
-        synchronized(_addrs) {
+        synchronized (_addrs) {
             _addrs.clear();
             while (tok.hasMoreTokens()) {
                 String destination = tok.nextToken();
@@ -185,7 +185,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     private final I2PSocketAddress pickDestination() {
-        synchronized(_addrs) {
+        synchronized (_addrs) {
             int size = _addrs.size();
             if (size <= 0) {
                 if (_log.shouldError())
@@ -227,7 +227,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         int reg = _context.portMapper().getPort(PortMapper.SVC_IRC);
         if (reg == getLocalPort())
             _context.portMapper().unregister(PortMapper.SVC_IRC);
-        synchronized(this) {
+        synchronized (this) {
             if (_DCCServer != null) {
                 _DCCServer.close(forced);
                 _DCCServer = null;
@@ -272,7 +272,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
 
         public int newOutgoing(byte[] ip, int port, String type) {
             I2PTunnelDCCServer server;
-            synchronized(this) {
+            synchronized (this) {
                 if (_DCCServer == null) {
                     if (_log.shouldInfo())
                         _log.info("[IRC Client] Starting DCC Server...");
@@ -290,7 +290,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
 
         public int newIncoming(String b32, int port, String type) {
             DCCClientManager tracker;
-            synchronized(this) {
+            synchronized (this) {
                 if (_DCCClientManager == null) {
                     if (_log.shouldInfo())
                         _log.info("[IRC Client] Starting DCC Client...");

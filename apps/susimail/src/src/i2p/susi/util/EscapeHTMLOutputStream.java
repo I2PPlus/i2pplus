@@ -14,12 +14,12 @@ import net.i2p.data.DataHelper;
  */
 public class EscapeHTMLOutputStream extends FilterOutputStream {
 
-    private static final byte[] AMP = DataHelper.getASCII("&amp;");
-    private static final byte[] QUOT = DataHelper.getASCII("&quot;");
-    private static final byte[] LT = DataHelper.getASCII("&lt;");
-    private static final byte[] GT = DataHelper.getASCII("&gt;");
-    private static final byte[] APOS = DataHelper.getASCII("&apos;");
-    private static final byte[] MDASH = DataHelper.getASCII("&#45;");
+    private static final byte[] AMP = DataHelper.getASCII("&amp; ");
+    private static final byte[] QUOT = DataHelper.getASCII("&quot; ");
+    private static final byte[] LT = DataHelper.getASCII("&lt; ");
+    private static final byte[] GT = DataHelper.getASCII("&gt; ");
+    private static final byte[] APOS = DataHelper.getASCII("&apos; ");
+    private static final byte[] MDASH = DataHelper.getASCII("&#45; ");
     private static final byte[] BR = DataHelper.getASCII("<br>\n");
 
 

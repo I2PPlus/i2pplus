@@ -95,7 +95,7 @@ public class NavHelper implements NavService, ClientApp {
             if (tip != null) {
                 buf.append(" title=\"").append(tip).append("\"");
             }
-            buf.append('>').append(name.replace(" ", "&nbsp;")).append("</a>\n");
+            buf.append('>').append(name.replace(" ", "&nbsp; ")).append("</a>\n");
             rv.put(name, buf.toString());
         }
         return rv;

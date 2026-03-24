@@ -625,7 +625,7 @@ public class SidebarHelper extends HelperBase {
         DecimalFormat fmt;
         if ((in >= 1000 || out >= 1000) && mega) {fmt = TWO_DECIMALS.get();}
         else {fmt = ONE_DECIMAL;}
-        return fmt.format(in) + THINSP + fmt.format(out) + "&nbsp;" + (mega ? 'M' : 'K');
+        return fmt.format(in) + THINSP + fmt.format(out) + "&nbsp; " + (mega ? 'M' : 'K');
     }
 
     /**
@@ -714,12 +714,12 @@ public class SidebarHelper extends HelperBase {
                 buf.append("</td><td><b><a href=\"/tunnels#").append(h.toBase64().substring(0,4));
                 buf.append("\" target=_top title=\"").append(_t("Show tunnels"));
                 if (isAdvanced()) {
-                    buf.append(" [").append(h.toBase32().substring(0,8)).append("&hellip;b32.i2p]");
+                    buf.append(" [").append(h.toBase32().substring(0,8)).append("&hellip; b32.i2p]");
                 }
                 buf.append("\">");
                 // Increase permitted max length of tunnel name & handle overflow with css
                 if (name.length() <= 32) {buf.append(DataHelper.escapeHTML(name));}
-                else {buf.append(DataHelper.escapeHTML(ServletUtil.truncate(name, 29))).append("&hellip;");}
+                else {buf.append(DataHelper.escapeHTML(ServletUtil.truncate(name, 29))).append("&hellip; ");}
                 buf.append("</a></b></td>\n");
                 LeaseSet ls = _context.clientNetDb(client.calculateHash()).lookupLeaseSetLocally(h);
                 int outboundCount = _context.tunnelManager().getOutboundClientTunnelCount(h);
@@ -730,10 +730,10 @@ public class SidebarHelper extends HelperBase {
                     if ((timeToExpire < 0) || !ls.isCurrent(0)) {
                         // red light
                         buf.append("<td class=tunnelRebuilding><img src=/themes/console/images/local_down.svg alt=\"")
-                           .append(_t("Rebuilding")).append("&hellip;\" title=\"").append(_t("Leases expired")).append(" ")
+                           .append(_t("Rebuilding")).append("&hellip; \" title=\"").append(_t("Leases expired")).append(" ")
                            .append(DataHelper.formatDuration2(0 - timeToExpire))
                            .append(" ").append(_t("ago")).append(". ").append(_t("Rebuilding"))
-                            .append("&hellip;\" width=16 height=16></td></tr>\n");
+                            .append("&hellip; \" width=16 height=16></td></tr>\n");
                     } else {
                         // green light
                         buf.append("<td class=tunnelReady><img src=/themes/console/images/local_up.svg alt=\"")
@@ -743,8 +743,8 @@ public class SidebarHelper extends HelperBase {
                 } else {
                     // yellow light
                     buf.append("<td class=tunnelBuilding><img src=/themes/console/images/local_inprogress.svg alt=\"")
-                       .append(_t("Building")).append("&hellip;\" title=\"").append(_t("Building tunnels"))
-                        .append("&hellip;\" width=16 height=16></td></tr>\n");
+                       .append(_t("Building")).append("&hellip; \" title=\"").append(_t("Building tunnels"))
+                        .append("&hellip; \" width=16 height=16></td></tr>\n");
                 }
             }
             buf.append("</table>");
@@ -926,11 +926,11 @@ public class SidebarHelper extends HelperBase {
             }
         } else {
             if (lagRate.getAverageValue() < 1 && (double)maxLag < 1) {
-                return DataHelper.formatDuration2((double)lagRate.getAverageValue()) + THINSP + (double)maxLag + "&nbsp;µs";
+                return DataHelper.formatDuration2((double)lagRate.getAverageValue()) + THINSP + (double)maxLag + "&nbsp; µs";
             } else if (lagRate.getAverageValue() < 1) {
-                return DataHelper.formatDuration2((double)lagRate.getAverageValue()) + THINSP + maxLag + "&nbsp;ms";
+                return DataHelper.formatDuration2((double)lagRate.getAverageValue()) + THINSP + maxLag + "&nbsp; ms";
             } else {
-                return (long)lagRate.getAverageValue() + THINSP + maxLag + "&nbsp;ms";
+                return (long)lagRate.getAverageValue() + THINSP + maxLag + "&nbsp; ms";
             }
         }
     }
@@ -1085,7 +1085,7 @@ public class SidebarHelper extends HelperBase {
                    (_context.getProperty("router.updatePolicy") != null &&
                    !_context.getProperty("router.updatePolicy").equals("install"))) {
             buf.append("<h4 id=shutdownInProgress class=\"sb_info sb_update volatile\"><b>")
-               .append(_t("Updating after restart")).append("&hellip;</b></h4>");
+               .append(_t("Updating after restart")).append("&hellip; </b></h4>");
         }
         boolean avail = updateAvailable();
         boolean unsignedAvail = unsignedUpdateAvailable();
@@ -1347,11 +1347,11 @@ public class SidebarHelper extends HelperBase {
             String name = sectionNames.get(section);
             if (name == null) {continue;}
             buf.append("<tr><td><input type=checkbox class=optbox id=\"")
-               .append(name.replace(" ", "_").replace("\'", "").replace("(", "").replace(")", "").replace("&amp;", ""))
+               .append(name.replace(" ", "_").replace("\'", "").replace("(", "").replace(")", "").replace("&amp; ", ""))
                .append("\" name=\"delete_")
                .append(i)
                .append("\"></td><td><label for=\"")
-               .append(name.replace(" ", "_").replace("\'", "").replace("(", "").replace(")", "").replace("&amp;", ""))
+               .append(name.replace(" ", "_").replace("\'", "").replace("(", "").replace(")", "").replace("&amp; ", ""))
                .append("\">")
                .append(_t(name))
                .append("</label></td><td><input type=hidden name=\"order_")

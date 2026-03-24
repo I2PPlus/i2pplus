@@ -418,7 +418,7 @@ class FragmentHandler {
             }
 
             // synchronized is required, fragments may be arriving in different threads
-            synchronized(msg) {
+            synchronized (msg) {
                 boolean ok = msg.receive(preprocessed, offset, size, false, router, tunnelId);
                 if (!ok) return -1;
                 if (msg.isComplete()) {
@@ -485,7 +485,7 @@ class FragmentHandler {
         }
 
         // synchronized is required, fragments may be arriving in different threads
-        synchronized(msg) {
+        synchronized (msg) {
             boolean ok = msg.receive(fragmentNum, preprocessed, offset, size, isLast);
             if (!ok) return -1;
 

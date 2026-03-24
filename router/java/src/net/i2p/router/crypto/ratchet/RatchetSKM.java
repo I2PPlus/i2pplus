@@ -574,7 +574,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
         boolean firstInbound;
         SessionKeyAndNonce key;
-        synchronized(tagSet) {
+        synchronized (tagSet) {
             firstInbound = !tagSet.getAcked();
             key = tagSet.consume(tag);
             if (key != null)
@@ -822,7 +822,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                .append(sets.size())
                 .append("</td></tr>\n<tr class=expiry>\n<td colspan=2>\n<ul>\n");
             for (RatchetTagSet ts : sets) {
-                synchronized(ts) {
+                synchronized (ts) {
                     int size = ts.size();
                     total += size;
                     buf.append("<li><b>ID: ");
@@ -875,7 +875,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                .append(sets.size())
                 .append("</td>\n</tr>\n<tr>\n<td colspan=2>\n<ul>\n");
             for (RatchetTagSet ts : sets) {
-                synchronized(ts) {
+                synchronized (ts) {
                     long expires = ts.getExpiration() - now;
                     if (expires <= 0)
                         continue;
@@ -1454,7 +1454,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                         //if (_log.shouldDebug())
                         //    _log.debug("Cancelled the ack timer");
                     }
-                    synchronized(_tagSet) {
+                    synchronized (_tagSet) {
                         // use even if expired, this will reset the expiration
                         RatchetSessionTag tag = _tagSet.consumeNext();
                         if (tag != null) {
@@ -1520,7 +1520,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             long now = _context.clock().now();
             synchronized (_unackedTagSets) {
                 if (_tagSet != null) {
-                    synchronized(_tagSet) {
+                    synchronized (_tagSet) {
                         if (_tagSet.getExpiration() > now)
                             return _tagSet.remaining();
                     }

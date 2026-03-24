@@ -174,7 +174,7 @@ class ConnectionManager {
      *  @since 0.9.12
      */
     public boolean wasRecentlyClosed(long inboundID) {
-        synchronized(_recentlyClosed) {
+        synchronized (_recentlyClosed) {
             // use get() instead of containsKey() to update LRU access order,
             // as we may get additional packets with the same ID
             return _recentlyClosed.get(Long.valueOf(inboundID)) != null;
@@ -200,7 +200,7 @@ class ConnectionManager {
     public void setAllowIncomingConnections(boolean allow) {
         _connectionHandler.setActive(allow);
         if (allow) {
-            synchronized(this) {
+            synchronized (this) {
                 if (!_throttlersInitialized) {
                     updateOptions();
                     _throttlersInitialized = true;
@@ -501,7 +501,7 @@ class ConnectionManager {
      */
     private void assignReceiveStreamId(Connection con) {
         long receiveId;
-        synchronized(_recentlyClosed) {
+        synchronized (_recentlyClosed) {
             Long rcvID;
             do {
                 receiveId = _context.random().nextLong(Packet.MAX_STREAM_ID-1)+1;
@@ -521,7 +521,7 @@ class ConnectionManager {
      */
     private long assignPingId(PingRequest req) {
         long receiveId;
-        synchronized(_recentlyClosed) {
+        synchronized (_recentlyClosed) {
             Long rcvID;
             do {
                 receiveId = _context.random().nextLong(Packet.MAX_STREAM_ID-1)+1;
@@ -541,7 +541,7 @@ class ConnectionManager {
      */
     private long assignRejectId() {
         long receiveId;
-        synchronized(_recentlyClosed) {
+        synchronized (_recentlyClosed) {
             Long rcvID;
             do {
                 receiveId = _context.random().nextLong(Packet.MAX_STREAM_ID-1)+1;
@@ -696,7 +696,7 @@ class ConnectionManager {
         String hashes = _context.getProperty(PROP_BLACKLIST, "");
         if (!_currentBlacklist.equals(hashes)) {
             // rebuild _globalBlacklist when property changes
-            synchronized(_globalBlacklist) {
+            synchronized (_globalBlacklist) {
                 if (hashes.length() > 0) {
                     Set<Hash> newSet = new HashSet<Hash>();
                     StringTokenizer tok = new StringTokenizer(hashes, ",; ");
@@ -808,7 +808,7 @@ class ConnectionManager {
             con.disconnect(false, false);
             iter.remove();
         }
-        synchronized(_recentlyClosed) {
+        synchronized (_recentlyClosed) {
             _recentlyClosed.clear();
         }
         _pendingPings.clear();
@@ -846,7 +846,7 @@ class ConnectionManager {
     public void removeConnection(Connection con) {
 
         Long rcvID = Long.valueOf(con.getReceiveStreamId());
-        synchronized(_recentlyClosed) {
+        synchronized (_recentlyClosed) {
             _recentlyClosed.put(rcvID, DUMMY);
         }
 

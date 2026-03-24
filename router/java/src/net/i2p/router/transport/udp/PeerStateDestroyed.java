@@ -364,7 +364,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
          *  Also does retransmission, if we were the one that sent the first termination.
          */
         public void timeReached() {
-            synchronized(PeerStateDestroyed.this) {
+            synchronized (PeerStateDestroyed.this) {
                 if (_wantACKSendSince <= 0 && _destroyReason == REASON_TERMINATION)
                     return;
                 _wantACKSendSince = 0;

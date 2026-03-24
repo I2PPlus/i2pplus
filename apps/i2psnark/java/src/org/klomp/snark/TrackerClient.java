@@ -1244,7 +1244,7 @@ public class TrackerClient implements Runnable {
             if (path == null || path.length() < 517 || !path.startsWith("/")) {
                 return null;
             }
-            String[] parts = DataHelper.split(path.substring(1), "[/\\?&;]", 2);
+            String[] parts = DataHelper.split(path.substring(1), "[/\\?&; ]", 2);
             return ConvertToHash.getHash(parts[0]);
         }
         return null;

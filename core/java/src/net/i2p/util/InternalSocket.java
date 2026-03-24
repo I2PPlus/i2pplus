@@ -345,7 +345,7 @@ public class InternalSocket extends Socket {
     @Override
     public void shutdownOutput() throws IOException {
         OutputStream out;
-        synchronized(this) {
+        synchronized (this) {
             out = _os;
         }
         if (out == null)
@@ -355,7 +355,7 @@ public class InternalSocket extends Socket {
             out.flush();
             out.close();
         } finally {
-            synchronized(this) {
+            synchronized (this) {
                 _os = null;
             }
         }

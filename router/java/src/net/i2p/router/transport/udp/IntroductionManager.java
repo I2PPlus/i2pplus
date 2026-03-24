@@ -458,7 +458,7 @@ class IntroductionManager {
         } else {
             Long lnonce = Long.valueOf(nonce);
             boolean isDup;
-            synchronized(_recentRelaysAsBob) {
+            synchronized (_recentRelaysAsBob) {
                 isDup = _recentRelaysAsBob.put(lnonce, DUMMY) != null;
             }
             if (isDup) {
@@ -847,7 +847,7 @@ class IntroductionManager {
             } catch (IOException ioe) {}
         } else {
             boolean isDup;
-            synchronized(_recentRelaysAsBob) {
+            synchronized (_recentRelaysAsBob) {
                 isDup = _recentRelaysAsBob.get(lnonce) != null;
             }
             if (isDup) {

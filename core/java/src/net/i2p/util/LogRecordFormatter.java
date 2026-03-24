@@ -86,7 +86,7 @@ class LogRecordFormatter {
     public static String getWhen(LogManager manager, LogRecord logRecord) {
         SimpleDateFormat fmt = manager.getDateFormat();
         Date d = Date.from(Instant.ofEpochMilli(logRecord.getDate()));
-        synchronized(fmt) {
+        synchronized (fmt) {
             return fmt.format(d);
         }
     }

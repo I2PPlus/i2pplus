@@ -63,7 +63,7 @@ public class ConfigUIHelper extends HelperBase {
         for (String theme : themes) {
             buf.append("<label for=\"")
                .append(theme)
-               .append("\"><div class=themechoice style=display:inline-block;text-align:center>")
+               .append("\"><div class=themechoice style=display:inline-block; text-align:center>")
                 .append("<input type=radio class=optbox name=theme ");
             if (theme.equals(current)) {buf.append(CHECKED);}
             buf.append("value=\"")
@@ -315,7 +315,7 @@ public class ConfigUIHelper extends HelperBase {
         buf.append("<table id=consolepass>\n");
         if (userpw.isEmpty()) {
             buf.append("<tr><td class=infohelp colspan=3>")
-               .append(_t("Add a user and password to enable.")).append("&nbsp;")
+               .append(_t("Add a user and password to enable.")).append("&nbsp; ")
                .append(_t("Note: If you forget your password, removing the configuration entry in your router.config file will clear it (restart required)."))
                 .append("</td></tr>\n");
         } else {
@@ -324,7 +324,7 @@ public class ConfigUIHelper extends HelperBase {
                .append("</td></tr>\n")
                .append("<tr><th title=\"").append(_t("Mark for deletion")).append("\">")
                .append(_t("Remove")).append("</th><th>").append(_t("Username"))
-                .append("</th><th>&nbsp;</th></tr>\n");
+                .append("</th><th>&nbsp; </th></tr>\n");
             for (String name : userpw.keySet()) {
                 buf.append("<tr><td><input type=checkbox class=optbox id=\"").append(name)
                    .append("\" name=\"delete_").append(name).append("\"></td>")

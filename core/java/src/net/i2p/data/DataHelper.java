@@ -177,7 +177,7 @@ public class DataHelper {
         }
     }
 
-    private static final Pattern ILLEGAL_KEY =  Pattern.compile("[#=\\r\\n;]");
+    private static final Pattern ILLEGAL_KEY =  Pattern.compile("[#=\\r\\n; ]");
     private static final Pattern ILLEGAL_VALUE =  Pattern.compile("[#\\r\\n]");
 
     /**
@@ -602,7 +602,7 @@ public class DataHelper {
                 String val = (String) entry.getValue();
                 if (ILLEGAL_KEY.matcher(name).find()) {
                     if (iae == null) {
-                        iae = new IllegalArgumentException("Invalid character (one of \"#;=\\r\\n\") in key: \"" +
+                        iae = new IllegalArgumentException("Invalid character (one of \"#; =\\r\\n\") in key: \"" +
                                                            name + "\" = \"" + val + '\"');
                     }
                     continue;
@@ -1489,8 +1489,8 @@ public class DataHelper {
          * Although it's longer than a standard '-' on graphical browsers
          * http: *www.cs.tut.fi/~jkorpela/dashes.html
          */
-        if (ms < 0) {t = t.replace("-", "&minus;");}
-        return t.replace(" ", "&nbsp;"); // do it here to keep &nbsp; out of the tags for translator sanity
+        if (ms < 0) {t = t.replace("-", "&minus; ");}
+        return t.replace(" ", "&nbsp; "); // do it here to keep &nbsp; out of the tags for translator sanity
     }
 
     /**
@@ -1525,8 +1525,8 @@ public class DataHelper {
             // years
             t = ngettext("{0} year", "{0} years", (int) (ms / (365L * 24 * 60 * 60 * 1000)));
         } else {return _t("n/a");}
-        if (ms < 0) {t = t.replace("-", "&minus;");}
-        return t.replace(" ", "&nbsp;");
+        if (ms < 0) {t = t.replace("-", "&minus; ");}
+        return t.replace(" ", "&nbsp; ");
     }
 
     private static final String BUNDLE_NAME = "net.i2p.util.messages";
@@ -1607,7 +1607,7 @@ public class DataHelper {
      * @since 0.9.31
      */
     public static String formatSize2(long bytes, boolean nonBreaking) {
-        String space = nonBreaking ? "&#8239;" : " ";
+        String space = nonBreaking ? "&#8239; " : " ";
         if (bytes < 1024) {return bytes + space;}
         double val = bytes;
         int scale = 0;
@@ -1664,7 +1664,7 @@ public class DataHelper {
      * @since 0.9.34
      */
     public static String formatSize2Decimal(long bytes, boolean nonBreaking) {
-        String space = nonBreaking ? "&#8239;" : " ";
+        String space = nonBreaking ? "&#8239; " : " ";
         if (bytes < 1000) {return bytes + space;}
         double val = bytes;
         int scale = 0;
@@ -1698,7 +1698,7 @@ public class DataHelper {
      *  @since 0.9.43
      */
     public static String formatDate(long now) {
-        synchronized(DATE_FORMAT) {
+        synchronized (DATE_FORMAT) {
             if (!_date_tz_set) {
                 // delayed set, too early if done in static block
                 TimeZone tz = SystemVersion.getSystemTimeZone();
@@ -1718,7 +1718,7 @@ public class DataHelper {
      *  @since 0.9.43
      */
     public static String formatTime(long now) {
-        synchronized(TIME_FORMAT) {
+        synchronized (TIME_FORMAT) {
             if (!_time_tz_set) {
                 // delayed set, too early if done in static block
                 TimeZone tz = SystemVersion.getSystemTimeZone();
@@ -1743,7 +1743,7 @@ public class DataHelper {
     }
 
     private static final String escapeChars[] = {"&", "\"", "<", ">", "'"};
-    private static final String escapeCodes[] = {"&amp;", "&quot;", "&lt;", "&gt;", "&apos;"};
+    private static final String escapeCodes[] = {"&amp; ", "&quot; ", "&lt; ", "&gt; ", "&apos; "};
 
     /**
      * Escape a string for inclusion in HTML

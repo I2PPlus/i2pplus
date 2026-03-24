@@ -376,10 +376,10 @@ public abstract class LocalHTTPServer {
             out.write(("<a href=\"" + conURL + "susidns/index\">" + _t("Addressbook") + "</a> ").getBytes("UTF-8"));
         out.write(("<a href=\"" + conURL + "config\">" + _t("Configuration") + "</a> " +
                   "<a href=\"" + conURL + "help/\">" + _t("Help") + "</a>\n").getBytes("UTF-8"));
-        out.write(("</div>\n<div class=\"warning redirect\" id=warning>\n<h3>" + _t("Redirection in progress") + "&hellip;</h3>\n<br>\n<p><b>" +
+        out.write(("</div>\n<div class=\"warning redirect\" id=warning>\n<h3>" + _t("Redirection in progress") + "&hellip; </h3>\n<br>\n<p><b>" +
                   (success ?
-                           _t("Saved {0} to the {1} addressbook, redirecting now.", idn, tbook).replace("now.", "now&hellip;") :
-                           _t("Failed to save {0} to the {1} addressbook, redirecting now.", idn, tbook).replace("now.", "now&hellip;")) +
+                           _t("Saved {0} to the {1} addressbook, redirecting now.", idn, tbook).replace("now.", "now&hellip; ") :
+                           _t("Failed to save {0} to the {1} addressbook, redirecting now.", idn, tbook).replace("now.", "now&hellip; ")) +
                   "</h3>\n<hr><p><a href=\"" + url + "\">" +
                   _t("Click here if you are not redirected automatically.") +
                   "</a></p>\n<br></div>\n").getBytes("UTF-8"));
@@ -406,7 +406,7 @@ public abstract class LocalHTTPServer {
         out.write(("<a href=\"" + conURL + "config\">" + _t("Configuration") + "</a> " +
                   "<a href=\"" + conURL + "help/\">" + _t("Help") + "</a>\n").getBytes("UTF-8"));
         out.write(("</div>\n<div class=\"warning redirect\" id=warning>\n<h3>" +
-                  _t("Saved the authentication for {0}, redirecting now.", idn).replace("now.", "now&hellip;") +
+                  _t("Saved the authentication for {0}, redirecting now.", idn).replace("now.", "now&hellip; ") +
                   "</b></p>\n<hr>\n<p><a href=\"" + url + "\">" +
                   _t("Click here if you are not redirected automatically.") +
                   "</a></p>\n<br>\n</div>\n").getBytes("UTF-8"));
@@ -515,7 +515,7 @@ public abstract class LocalHTTPServer {
         "a=b&i2paddresshelper=foo",
         "a=b&i2paddresshelper&c=d",
         "a=b&i2paddresshelper=foo&c=d",
-        "a=b;i2paddresshelper=foo;c=d",
+        "a=b; i2paddresshelper=foo; c=d",
         "a=b&i2paddresshelper=foo&c",
         "a=b&i2paddresshelper=foo==&c",
         "a=b&i2paddresshelper=foo%3d%3d&c",

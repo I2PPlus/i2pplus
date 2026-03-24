@@ -59,7 +59,7 @@ class NegativeLookupCache {
     public boolean isCached(Hash h) {
         if (counter.count(h) >= _maxFails)
             return true;
-        synchronized(badDests) {
+        synchronized (badDests) {
             return badDests.get(h) != null;
         }
     }
@@ -72,7 +72,7 @@ class NegativeLookupCache {
      */
     public void failPermanently(Destination dest) {
         Hash h = dest.calculateHash();
-        synchronized(badDests) {
+        synchronized (badDests) {
             badDests.put(h, dest);
         }
     }
@@ -84,7 +84,7 @@ class NegativeLookupCache {
      *  @since 0.9.16
      */
     public Destination getBadDest(Hash h) {
-        synchronized(badDests) {
+        synchronized (badDests) {
             return badDests.get(h);
         }
     }
@@ -94,7 +94,7 @@ class NegativeLookupCache {
      */
     public void clear() {
         counter.clear();
-        synchronized(badDests) {
+        synchronized (badDests) {
             badDests.clear();
         }
     }

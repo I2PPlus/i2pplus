@@ -329,9 +329,9 @@ public class Blocklist {
     }
 
     private void clear() {
-        synchronized(_singleIPBlocklist) {_singleIPBlocklist.clear();}
+        synchronized (_singleIPBlocklist) {_singleIPBlocklist.clear();}
         if (_singleIPv6Blocklist != null) {
-            synchronized(_singleIPv6Blocklist) {_singleIPv6Blocklist.clear();}
+            synchronized (_singleIPv6Blocklist) {_singleIPv6Blocklist.clear();}
         }
     }
 
@@ -854,7 +854,7 @@ public class Blocklist {
         // save space, don't put in both
         if (isPermanentlyBlocklisted(ip)) {return false;}
         Integer iip = Integer.valueOf(ip);
-        synchronized(_singleIPBlocklist) {return _singleIPBlocklist.put(iip, DUMMY) == null;}
+        synchronized (_singleIPBlocklist) {return _singleIPBlocklist.put(iip, DUMMY) == null;}
     }
 
     /**
@@ -862,12 +862,12 @@ public class Blocklist {
      */
     private void remove(int ip) {
         Integer iip = Integer.valueOf(ip);
-        synchronized(_singleIPBlocklist) {_singleIPBlocklist.remove(iip);}
+        synchronized (_singleIPBlocklist) {_singleIPBlocklist.remove(iip);}
     }
 
     private boolean isOnSingleList(int ip) {
         Integer iip = Integer.valueOf(ip);
-        synchronized(_singleIPBlocklist) {return _singleIPBlocklist.get(iip) != null;}
+        synchronized (_singleIPBlocklist) {return _singleIPBlocklist.get(iip) != null;}
     }
 
     /**
@@ -877,7 +877,7 @@ public class Blocklist {
      */
     private boolean add(BigInteger ip) {
         if (_singleIPv6Blocklist != null) {
-            synchronized(_singleIPv6Blocklist) {return _singleIPv6Blocklist.put(ip, DUMMY) == null;}
+            synchronized (_singleIPv6Blocklist) {return _singleIPv6Blocklist.put(ip, DUMMY) == null;}
         }
         return false;
     }
@@ -888,7 +888,7 @@ public class Blocklist {
      */
     private void remove(BigInteger ip) {
         if (_singleIPv6Blocklist != null) {
-            synchronized(_singleIPv6Blocklist) {_singleIPv6Blocklist.remove(ip);}
+            synchronized (_singleIPv6Blocklist) {_singleIPv6Blocklist.remove(ip);}
         }
     }
 
@@ -898,7 +898,7 @@ public class Blocklist {
      */
     private boolean isOnSingleList(BigInteger ip) {
         if (_singleIPv6Blocklist != null) {
-            synchronized(_singleIPv6Blocklist) {return _singleIPv6Blocklist.get(ip) != null;}
+            synchronized (_singleIPv6Blocklist) {return _singleIPv6Blocklist.get(ip) != null;}
         }
         return false;
     }
@@ -1298,7 +1298,7 @@ public class Blocklist {
      *  @since 0.9.48
      */
     public List<Integer> getTransientIPv4Blocks() {
-        synchronized(_singleIPBlocklist) {
+        synchronized (_singleIPBlocklist) {
             return new ArrayList<Integer>(_singleIPBlocklist.keySet());
         }
     }
@@ -1314,7 +1314,7 @@ public class Blocklist {
     public List<BigInteger> getTransientIPv6Blocks() {
         if (!_haveIPv6) {return Collections.<BigInteger>emptyList();}
         if (_singleIPv6Blocklist != null) {
-            synchronized(_singleIPv6Blocklist) {return new ArrayList<BigInteger>(_singleIPv6Blocklist.keySet());}
+            synchronized (_singleIPv6Blocklist) {return new ArrayList<BigInteger>(_singleIPv6Blocklist.keySet());}
         }
         return Collections.<BigInteger>emptyList();
     }

@@ -858,7 +858,7 @@ class PeerState implements DataLoader {
         addRequest();
 
         /**** taken care of in addRequest()
-         * synchronized(this)
+         * synchronized (this)
          * {
          * // Is the peer still interesting?
          * if (lastRequest == null)

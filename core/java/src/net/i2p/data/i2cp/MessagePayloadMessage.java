@@ -42,7 +42,7 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
      *  @since 0.9.54
      */
     public MessagePayloadMessage(long sessID, long msgID, Payload payload) {
-        synchronized(this) {
+        synchronized (this) {
             _sessionId = (int) sessID;
             _messageId = msgID;
             _payload = payload;

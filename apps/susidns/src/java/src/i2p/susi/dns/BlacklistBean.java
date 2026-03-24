@@ -65,7 +65,7 @@ public class BlacklistBean extends BaseBean {
      * Reload blacklist from file
      */
     private void reloadBlacklist() {
-        synchronized(BlacklistBean.class) {locked_reloadBlacklist();}
+        synchronized (BlacklistBean.class) {locked_reloadBlacklist();}
     }
 
     /**
@@ -127,7 +127,7 @@ public class BlacklistBean extends BaseBean {
      * Save blacklist to file
      */
     private void save() {
-        synchronized(BlacklistBean.class) {locked_save();}
+        synchronized (BlacklistBean.class) {locked_save();}
     }
 
     /**
@@ -473,7 +473,7 @@ public class BlacklistBean extends BaseBean {
             if (out.checkError()) {throw new IOException("Failed write to " + file);}
             debug("Saved blacklist to file: " + file.getAbsolutePath() + " (" + allEntries.size() + " entries)");
             // Update static cache after saving
-            synchronized(BlacklistBean.class) {
+            synchronized (BlacklistBean.class) {
                 cachedContent = null;
                 lastModified = 0;
             }

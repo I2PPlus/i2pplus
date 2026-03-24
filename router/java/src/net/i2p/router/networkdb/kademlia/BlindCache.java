@@ -198,7 +198,7 @@ class BlindCache {
         if (bd.getSecret() != null || bd.getAuthPrivKey() != null) {
             store();
         } else {
-            synchronized(this) { _changed = true; }
+            synchronized (this) { _changed = true; }
         }
         enforceMaxSize();
     }

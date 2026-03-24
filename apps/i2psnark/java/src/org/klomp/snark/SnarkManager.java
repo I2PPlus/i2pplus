@@ -85,7 +85,7 @@ import org.klomp.snark.dht.KRPC;
 @SuppressWarnings("PMD.CloseResource")
 public class SnarkManager implements CompleteListener, ClientApp, DisconnectListener {
 
-    private static final Pattern COMMENT_SANITIZE = Pattern.compile("[\n\r<>#;]");
+    private static final Pattern COMMENT_SANITIZE = Pattern.compile("[\n\r<>#; ]");
 
     /**
      * Map of (canonical) filename of the .torrent file to Snark instance. This is a CHM so
@@ -607,15 +607,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private long lastAddedMessageTimestamp;
     private String lastAddedMessage;
 
-    /** Use if it does not include a link. Escapes '&lt;' and '&gt;' before queueing */
+    /** Use if it does not include a link. Escapes '&lt; ' and '&gt; ' before queueing */
     public void addMessage(String message) {
         long currentTime = System.currentTimeMillis() / 1000;
         if (lastAddedMessageTimestamp != currentTime || !lastAddedMessage.equals(message)) {
             addMessageNoEscape(
-                    message.replace("&", "&amp;")
-                            .replace("&lt;", "<")
-                            .replace("&gt;", ">")
-                            .replace("&amp;nbsp", "&nbsp;"));
+                    message.replace("&", "&amp; ")
+                            .replace("&lt; ", "<")
+                            .replace("&gt; ", ">")
+                            .replace("&amp; nbsp", "&nbsp; "));
         } else if (lastAddedMessage.startsWith(_t("Download already running: "))
                 && lastAddedMessage.contains(_t("Downloading"))) {
             lastAddedMessage = lastAddedMessage.replace(_t("Download already running: "), "");
@@ -1660,7 +1660,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                         DataHelper.formatDuration2(secs * 1000));
                         addMessageNoEscape(msg);
                         if (!_context.isRouterContext()) {
-                            System.out.println(" • " + msg.replace("&nbsp;", " "));
+                            System.out.println(" • " + msg.replace("&nbsp; ", " "));
                         }
                     } else {
                         String msg = _t("Refresh disabled");
@@ -3631,7 +3631,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                 getTime()
                                         + "&nbsp; "
                                         + _t(
-                                                "Adding torrents in {0}" + "&hellip;",
+                                                "Adding torrents in {0}" + "&hellip; ",
                                                 DataHelper.formatDuration2(delay)));
                 try {
                     Thread.sleep(delay);
@@ -4005,9 +4005,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         .replace("]", "%5D")
                         .replace("|", "%7C")
                         .replace(" ", "%20")
-                        .replace("è", "&egrave;")
-                        .replace("é", "&eacute;")
-                        .replace("à", "&agrave;");
+                        .replace("è", "&egrave; ")
+                        .replace("é", "&eacute; ")
+                        .replace("à", "&agrave; ");
         buf.append("<a href=\"").append(_contextPath).append('/').append(enc);
         if (meta.getFiles() != null || !storage.complete()) {
             buf.append('/');
@@ -4015,9 +4015,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         buf.append("\">")
                 .append(
                         base.replace("%20", " ")
-                                .replace("&egrave;", "è")
-                                .replace("&eacute;", "é")
-                                .replace("&agrave;", "à"))
+                                .replace("&egrave; ", "è")
+                                .replace("&eacute; ", "é")
+                                .replace("&agrave; ", "à"))
                 .append("</a>");
         return buf.toString();
     }
@@ -4268,8 +4268,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         } else {
             String[] toks = DataHelper.split(trackers, ",");
             for (int i = 0; i < toks.length; i += 2) {
-                String name = toks[i].trim().replace("&#44;", ",");
-                String url = toks[i + 1].trim().replace("&#44;", ",");
+                String name = toks[i].trim().replace("&#44; ", ",");
+                String url = toks[i + 1].trim().replace("&#44; ", ",");
                 if ((name.length() > 0) && (url.length() > 0)) {
                     String urls[] = DataHelper.split(url, "=", 2);
                     String url2 = urls.length > 1 ? urls[1] : "";
@@ -4289,8 +4289,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
         String[] toks = DataHelper.split(torrentCreateFilters, ",");
         for (int i = 0; i < toks.length; i += 2) {
-            String name = toks[i].trim().replace("&#44;", ",");
-            String filterPattern = toks[i + 1].trim().replace("&#44;", ",");
+            String name = toks[i].trim().replace("&#44; ", ",");
+            String filterPattern = toks[i + 1].trim().replace("&#44; ", ",");
             if ((name.length() > 0) && (filterPattern.length() > 0)) {
                 String data[] = DataHelper.split(filterPattern, "=", 2);
                 boolean isDefault = data.length > 1 ? true : false;
@@ -4409,9 +4409,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 comma = true;
             }
             Tracker t = e.getValue();
-            buf.append(e.getKey().replace(",", "&#44;"))
+            buf.append(e.getKey().replace(",", "&#44; "))
                     .append(',')
-                    .append(t.announceURL.replace(",", "&#44;"));
+                    .append(t.announceURL.replace(",", "&#44; "));
             if (t.baseURL != null) {
                 buf.append('=').append(t.baseURL);
             }

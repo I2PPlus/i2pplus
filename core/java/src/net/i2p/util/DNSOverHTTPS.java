@@ -413,7 +413,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
                 int ittl = (int) Math.min(ttl, MAX_TTL);
                 long expires = end + (ittl * 1000L);
                 Map<String, Result> cache = isv6 ? v6Cache : v4Cache;
-                synchronized(cache) {
+                synchronized (cache) {
                     cache.put(host, new Result(data, expires));
                 }
                 log("Received answer: " + host + ' ' + ttl + ' ' + data + " in " + (end - fetchStart) + "ms");

@@ -1506,7 +1506,7 @@ public class IndexBean {
         byte[] enc = Base64.decode(v);
         if (enc == null) {return null;}
         SessionKey key;
-        synchronized(_formKeys) {key = _formKeys.get(Integer.valueOf(_tunnel));}
+        synchronized (_formKeys) {key = _formKeys.get(Integer.valueOf(_tunnel));}
         if (key == null) {return null;}
         byte[] kb = DataHelper.getUTF8(k);
         byte[] iv = new byte[32];
@@ -1531,7 +1531,7 @@ public class IndexBean {
         if (v == null || v.length() <= 0) {return v;}
         byte[] dec = DataHelper.getUTF8(v);
         SessionKey key;
-        synchronized(_formKeys) {
+        synchronized (_formKeys) {
             // Clean up old form keys if we're approaching the limit
             if (_formKeys.size() >= MAX_FORM_KEYS) {
                 // Remove half of the entries (FIFO order for HashMap is insertion order since Java 8)
