@@ -3,6 +3,7 @@
 # Download or update CodeQL CLI for I2P+ analysis.
 # Checks current version against latest release and downloads if needed.
 # CodeQL is ~509MB so only downloads when explicitly requested.
+# Installs to tools/codeql/codeql-<version>/ to avoid codeql/codeql nesting.
 #
 # Usage: download-codeql.sh [--force]
 #
@@ -11,7 +12,6 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 VERSION_FILE="${SCRIPT_DIR}/version.txt"
 DOWNLOAD_URL="https://github.com/github/codeql-cli-binaries/releases"
-QUERY_REPO="https://github.com/github/codeql.git"
 FORCE=false
 
 [ "$1" = "--force" ] && FORCE=true
@@ -44,6 +44,8 @@ if [ "$FORCE" = false ] && [ "$INSTALLED" != "none" ]; then
         exit 0
     fi
     echo "Update available: $INSTALLED -> $LATEST"
+    # Remove old version directory
+    rm -rf "${SCRIPT_DIR}/codeql-${INSTALLED}"
 else
     LATEST=$(get_latest_version)
     if [ -z "$LATEST" ]; then
@@ -54,19 +56,34 @@ fi
 
 DIST_URL="${DOWNLOAD_URL}/download/${LATEST}/codeql-linux64.zip"
 ZIP_FILE="${SCRIPT_DIR}/.codeql-dist.zip"
+INSTALL_DIR="${SCRIPT_DIR}/codeql-${LATEST}"
 
 echo "Downloading CodeQL ${LATEST} (~509MB)..."
 curl -L --progress-bar -o "$ZIP_FILE" "$DIST_URL"
 
-echo "Extracting..."
-rm -rf "${SCRIPT_DIR}/codeql"
-mkdir -p "${SCRIPT_DIR}/codeql"
-unzip -q -o "$ZIP_FILE" -d "${SCRIPT_DIR}/codeql"
-mv "${SCRIPT_DIR}/codeql/codeql/codeql" "${SCRIPT_DIR}/codeql/codeql-cli" 2>/dev/null || true
+echo "Extracting to codeql-${LATEST}/..."
+rm -rf "$INSTALL_DIR"
+mkdir -p "$INSTALL_DIR"
+
+# Zip contains codeql/ directory with the binary and query packs
+TMPDIR="${SCRIPT_DIR}/.codeql-extract"
+rm -rf "$TMPDIR"
+mkdir -p "$TMPDIR"
+unzip -q -o "$ZIP_FILE" -d "$TMPDIR"
+
+# Move contents from codeql/ subdirectory to our versioned directory
 shopt -s dotglob
-mv "${SCRIPT_DIR}/codeql/codeql"/* "${SCRIPT_DIR}/codeql/"
-rmdir "${SCRIPT_DIR}/codeql/codeql" 2>/dev/null || true
+mv "$TMPDIR"/codeql/* "$INSTALL_DIR"/
 shopt -u dotglob
+rm -rf "$TMPDIR"
+
+# Symlink for convenience: tools/codeql/codeql -> tools/codeql/codeql-vX.Y.Z
+rm -f "${SCRIPT_DIR}/codeql"
+ln -sf "codeql-${LATEST}" "${SCRIPT_DIR}/codeql"
+
+# Download query packs
+echo "Downloading Java query pack..."
+"${INSTALL_DIR}/codeql" pack download codeql/java-all 2>/dev/null || echo "WARNING: Could not download Java pack"
 
 # Record version
 echo -n "$LATEST" > "$VERSION_FILE"
@@ -74,12 +91,13 @@ echo -n "$LATEST" > "$VERSION_FILE"
 # Clean up
 rm -f "$ZIP_FILE"
 
-echo "CodeQL ${LATEST} installed to ${SCRIPT_DIR}/codeql/"
-echo "Binary: ${SCRIPT_DIR}/codeql/codeql"
+echo "CodeQL ${LATEST} installed to ${INSTALL_DIR}/"
+echo "Binary: ${INSTALL_DIR}/codeql"
+echo "Symlink: ${SCRIPT_DIR}/codeql -> codeql-${LATEST}"
 echo ""
 echo "To create a database:"
 echo "  cd /path/to/i2pplus"
-echo "  ${SCRIPT_DIR}/codeql/codeql database create codeql-db --language=java --command='ant updaterCompact'"
+echo "  ${INSTALL_DIR}/codeql database create codeql-db --language=java --command='ant updaterCompact'"
 echo ""
 echo "To analyze:"
-echo "  ${SCRIPT_DIR}/codeql/codeql database analyze codeql-db --format=sarif-latest --output=dist/codeql.sarif"
+echo "  ${INSTALL_DIR}/codeql database analyze codeql-db --format=sarif-latest --output=dist/codeql.sarif"

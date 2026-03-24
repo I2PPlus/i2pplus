@@ -140,6 +140,7 @@ tools/
 !tools/pmd/*.sh
 !tools/pmd/*.xml
 !tools/codeql/*.sh
+!tools/codeql/*.py
 !tools/codeql/*.md
 !tools/checkstyle/*.py
 !tools/checkstyle/*.xml
