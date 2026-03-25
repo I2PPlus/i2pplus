@@ -844,7 +844,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             buf.setLength(0);
         }
         buf.append("<tr><th colspan=2>Total inbound tags: ").append(total).append(" (")
-           .append(DataHelper.formatSize2(8 * total)).append("B); sets: ").append(totalSets)
+           .append(DataHelper.formatSize2(8L * total)).append("B); sets: ").append(totalSets)
            .append("; sessions: ")
            .append(inboundSets.size())
            .append("</th></tr>\n</table><h3 class=debug_outboundsessions>")

@@ -167,7 +167,7 @@ class BuildExecutor implements Runnable {
         }
 
         // Cap the timeout to prevent excessive waits
-        long maxTimeout = BuildRequestor.REQUEST_TIMEOUT * 3; // Triple the base timeout
+        long maxTimeout = (long) BuildRequestor.REQUEST_TIMEOUT * 3; // Triple the base timeout
         return Math.min(baseTimeout, maxTimeout);
     }
 

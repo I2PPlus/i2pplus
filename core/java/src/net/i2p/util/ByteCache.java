@@ -99,7 +99,7 @@ public final class ByteCache extends TryCache<ByteArray> {
             int toRemove = origsz / 2;
             shrink(origsz - toRemove);
         }
-        I2PAppContext.getGlobalContext().statManager().addRateData("byteCache.memory." + _entrySize, _entrySize * origsz);
+        I2PAppContext.getGlobalContext().statManager().addRateData("byteCache.memory." + _entrySize, (long) _entrySize * origsz);
     }
 
     @SuppressWarnings("PMD.SingletonClassReturningNewInstance")

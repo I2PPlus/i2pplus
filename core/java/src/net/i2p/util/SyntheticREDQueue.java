@@ -325,7 +325,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
             for (int i = 0; i < numRTTs; i++) {
                 decayBandwidth();
             }
-            deltaT -= numRTTs * rtt;
+            deltaT -= (long) numRTTs * rtt;
         }
 
         if (packets > 0) {
@@ -354,7 +354,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
                 if (_avgQueueSize <= 0) break;
                 decayQueue(WESTWOOD_RTT_MIN);
             }
-            deltaT -= numRTTs * WESTWOOD_RTT_MIN;
+            deltaT -= (long) numRTTs * WESTWOOD_RTT_MIN;
         }
 
         int originalNewDataSize = _newDataSize;

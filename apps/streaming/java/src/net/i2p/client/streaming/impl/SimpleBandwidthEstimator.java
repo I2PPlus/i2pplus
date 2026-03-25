@@ -122,7 +122,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
             for (int i = 0; i < numrtts; i++) {
                 decay();
             }
-            deltaT -= numrtts * rtt;
+            deltaT -= (long) numrtts * rtt;
             if (_log.shouldDebug())
                 _log.debug("decayed " + numrtts + " times, new _bK_ns_est: " + _bK_ns_est + ' ' + this);
         }
