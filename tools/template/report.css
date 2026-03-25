@@ -547,6 +547,15 @@ span.severity-warning {
   background: #905010;
 }
 
+th.filtered {
+  background: #2a2d35;
+  border-bottom: 2px solid #5a9fd4;
+}
+
+th.filtered span {
+  transform: scale(1.2);
+}
+
 /* ---- combined report source badges ---- */
 .src-badge,
 .pmd,
