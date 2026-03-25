@@ -928,7 +928,7 @@ public abstract class Addresses {
             in = new BufferedReader(new InputStreamReader(new FileInputStream(IF_INET6_FILE), "ISO-8859-1"), 1024);
             String line = null;
             StringBuilder buf = new StringBuilder(40);
-            while ( (line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null) {
                 // http://tldp.org/HOWTO/html_single/Linux+IPv6-HOWTO/#PROC-NET
                 // 00000000000000000000000000000001 01 80 10 80       lo
                 String[] parts = DataHelper.split(line, " ", 6);

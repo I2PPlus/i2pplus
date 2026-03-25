@@ -234,7 +234,7 @@ class ConnectionPacketHandler {
                 final long lastSendTime = con.getLastSendTime();
 
                 if (_log.shouldInfo())
-                    _log.info(String.format("%s \n* Congestion: DUP packet %s ACKDelay %d; Last Send: %s ago",
+                    _log.info(String.format("%s %n* Congestion: DUP packet %s ACKDelay %d; Last Send: %s ago",
                                     con, packet, ackDelay, DataHelper.formatDuration(now - lastSendTime)));
 
                 // If this is longer than his RTO, he will always retransmit, and

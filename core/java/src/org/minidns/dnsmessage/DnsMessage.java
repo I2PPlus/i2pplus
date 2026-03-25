@@ -78,7 +78,7 @@ public class DnsMessage {
         BADALG(21),
         BADTRUNC(22),
         BADCOOKIE(23),
-        ;
+       ;
 
         /**
          * Reverse lookup table for response codes.
@@ -144,7 +144,7 @@ public class DnsMessage {
         UNASSIGNED3,
         NOTIFY,
         UPDATE,
-        ;
+       ;
 
         /**
          * Lookup table for for opcode resolution.
@@ -677,11 +677,11 @@ public class DnsMessage {
     public String asTerminalOutput() {
         if (terminalOutputCache != null) return terminalOutputCache;
 
-        StringBuilder sb = new StringBuilder(";; ->>HEADER<<-")
+        StringBuilder sb = new StringBuilder("; ->>HEADER<<-")
                 .append(" opcode: ").append(opcode)
                 .append(", status: ").append(responseCode)
                 .append(", id: ").append(id).append("\n")
-                .append(";; flags:");
+                .append("; flags:");
         if (!qr) sb.append(" qr");
         if (authoritativeAnswer) sb.append(" aa");
         if (truncated) sb.append(" tr");
@@ -697,12 +697,12 @@ public class DnsMessage {
         for (Record<? extends Data> record : additionalSection) {
             Edns edns = Edns.fromRecord(record);
             if (edns != null) {
-                sb.append(";; OPT PSEUDOSECTION:\n; ").append(edns.asTerminalOutput());
+                sb.append("; OPT PSEUDOSECTION:\n; ").append(edns.asTerminalOutput());
                 break;
             }
         }
         if (questions.size() != 0) {
-            sb.append(";; QUESTION SECTION:\n");
+            sb.append("; QUESTION SECTION:\n");
             for (Question question : questions) {
                 sb.append(';').append(question.toString()).append('\n');
             }
@@ -1039,7 +1039,7 @@ public class DnsMessage {
         /**
          * Set the recursion available flog from this DNS message.
          *
-		 * @param recursionAvailable The new recursion available status.
+         * @param recursionAvailable The new recursion available status.
          * @return a reference to this builder.
          */
         public Builder setRecursionAvailable(boolean recursionAvailable) {

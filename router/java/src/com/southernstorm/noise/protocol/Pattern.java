@@ -27,81 +27,81 @@ package com.southernstorm.noise.protocol;
  */
 class Pattern {
 
-	private Pattern() {}
+    private Pattern() {}
 
-	// Token codes.
-	public static final short S = 1;
-	public static final short E = 2;
-	public static final short EE = 3;
-	public static final short ES = 4;
-	public static final short SE = 5;
-	public static final short SS = 6;
-	public static final short F = 7;
-	public static final short FF = 8;
-	public static final short FLIP_DIR = 255;
+    // Token codes.
+    public static final short S = 1;
+    public static final short E = 2;
+    public static final short EE = 3;
+    public static final short ES = 4;
+    public static final short SE = 5;
+    public static final short SS = 6;
+    public static final short F = 7;
+    public static final short FF = 8;
+    public static final short FLIP_DIR = 255;
 
-	// Pattern flag bits.
-	public static final short FLAG_LOCAL_STATIC = 0x0001;
-	public static final short FLAG_LOCAL_EPHEMERAL = 0x0002;
-	public static final short FLAG_LOCAL_REQUIRED = 0x0004;
-	public static final short FLAG_LOCAL_EPHEM_REQ = 0x0008;
-	public static final short FLAG_LOCAL_HYBRID = 0x0010;
-	public static final short FLAG_LOCAL_HYBRID_REQ = 0x0020;
-	public static final short FLAG_REMOTE_STATIC = 0x0100;
-	public static final short FLAG_REMOTE_EPHEMERAL = 0x0200;
-	public static final short FLAG_REMOTE_REQUIRED = 0x0400;
-	public static final short FLAG_REMOTE_EPHEM_REQ = 0x0800;
-	public static final short FLAG_REMOTE_HYBRID = 0x1000;
-	public static final short FLAG_REMOTE_HYBRID_REQ = 0x2000;
+    // Pattern flag bits.
+    public static final short FLAG_LOCAL_STATIC = 0x0001;
+    public static final short FLAG_LOCAL_EPHEMERAL = 0x0002;
+    public static final short FLAG_LOCAL_REQUIRED = 0x0004;
+    public static final short FLAG_LOCAL_EPHEM_REQ = 0x0008;
+    public static final short FLAG_LOCAL_HYBRID = 0x0010;
+    public static final short FLAG_LOCAL_HYBRID_REQ = 0x0020;
+    public static final short FLAG_REMOTE_STATIC = 0x0100;
+    public static final short FLAG_REMOTE_EPHEMERAL = 0x0200;
+    public static final short FLAG_REMOTE_REQUIRED = 0x0400;
+    public static final short FLAG_REMOTE_EPHEM_REQ = 0x0800;
+    public static final short FLAG_REMOTE_HYBRID = 0x1000;
+    public static final short FLAG_REMOTE_HYBRID_REQ = 0x2000;
 
-	private static final short[] noise_pattern_N = {
-	    FLAG_LOCAL_EPHEMERAL |
+    private static final short[] noise_pattern_N = {
+        FLAG_LOCAL_EPHEMERAL |
             FLAG_REMOTE_STATIC |
             FLAG_REMOTE_REQUIRED,
 
-	    E,
-	    ES
-	};
+        E,
+        ES
+    };
 
-	private static final short[] noise_pattern_XK = {
-	    FLAG_LOCAL_STATIC |
+    private static final short[] noise_pattern_XK = {
+        FLAG_LOCAL_STATIC |
             FLAG_LOCAL_EPHEMERAL |
             FLAG_REMOTE_STATIC |
             FLAG_REMOTE_EPHEMERAL |
             FLAG_REMOTE_REQUIRED,
 
-	    E,
-	    ES,
-	    FLIP_DIR,
-	    E,
-	    EE,
-	    FLIP_DIR,
-	    S,
-	    SE
-	};
+        E,
+        ES,
+        FLIP_DIR,
+        E,
+        EE,
+        FLIP_DIR,
+        S,
+        SE
+    };
 
-	private static final short[] noise_pattern_IK = {
-	    FLAG_LOCAL_STATIC |
+    private static final short[] noise_pattern_IK = {
+        FLAG_LOCAL_STATIC |
             FLAG_LOCAL_EPHEMERAL |
             FLAG_REMOTE_STATIC |
             FLAG_REMOTE_EPHEMERAL |
             FLAG_REMOTE_REQUIRED,
 
-	    E,
-	    ES,
-	    S,
-	    SS,
-	    FLIP_DIR,
-	    E,
-	    EE,
-	    SE
-	};
+        E,
+        ES,
+        S,
+        SS,
+        FLIP_DIR,
+        E,
+        EE,
+        SE
+    };
 
-	/**
-	 * @since 0.9.67
-	 */
-	private static final short[] noise_pattern_IKhfs = {
-	    FLAG_LOCAL_STATIC |
+    /**
+     * @since 0.9.67
+     */
+    private static final short[] noise_pattern_IKhfs = {
+        FLAG_LOCAL_STATIC |
             FLAG_LOCAL_EPHEMERAL |
             FLAG_LOCAL_HYBRID |
             FLAG_REMOTE_STATIC |
@@ -109,46 +109,46 @@ class Pattern {
             FLAG_REMOTE_HYBRID |
             FLAG_REMOTE_REQUIRED,
 
-	    E,
-	    ES,
-	    F,
-	    S,
-	    SS,
-	    FLIP_DIR,
-	    E,
-	    EE,
-	    F,
-	    FF,
-	    SE
-	};
+        E,
+        ES,
+        F,
+        S,
+        SS,
+        FLIP_DIR,
+        E,
+        EE,
+        F,
+        FF,
+        SE
+    };
 
-	/**
-	 * Look up the description information for a pattern.
-	 *
-	 * @param name The name of the pattern.
-	 * @return The pattern description or null.
-	 */
-	public static short[] lookup(String name)
-	{
-		if (name.equals("N"))
-			return noise_pattern_N;
-		else if (name.equals("XK"))
-			return noise_pattern_XK;
-		else if (name.equals("IK"))
-			return noise_pattern_IK;
-		else if (name.equals("IKhfs"))
-			return noise_pattern_IKhfs;
-		return null;
-	}
+    /**
+     * Look up the description information for a pattern.
+     *
+     * @param name The name of the pattern.
+     * @return The pattern description or null.
+     */
+    public static short[] lookup(String name)
+    {
+        if (name.equals("N"))
+            return noise_pattern_N;
+        else if (name.equals("XK"))
+            return noise_pattern_XK;
+        else if (name.equals("IK"))
+            return noise_pattern_IK;
+        else if (name.equals("IKhfs"))
+            return noise_pattern_IKhfs;
+        return null;
+    }
 
-	/**
-	 * Reverses the local and remote flags for a pattern.
-	 *
-	 * @param flags The flags, assuming that the initiator is "local".
-	 * @return The reversed flags, with the responder now being "local".
-	 */
-	public static short reverseFlags(short flags)
-	{
-		return (short)(((flags >> 8) & 0x00FF) | ((flags << 8) & 0xFF00));
-	}
+    /**
+     * Reverses the local and remote flags for a pattern.
+     *
+     * @param flags The flags, assuming that the initiator is "local".
+     * @return The reversed flags, with the responder now being "local".
+     */
+    public static short reverseFlags(short flags)
+    {
+        return (short)(((flags >> 8) & 0x00FF) | ((flags << 8) & 0xFF00));
+    }
 }

@@ -86,8 +86,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private static final float TCP_KAPPA = 4;
 
     private static final String PROP_INITIAL_RTO = "i2p.streaming.initialRTO";
-    private static final int INITIAL_RTO = 4000;
-    private static final int MAX_RTO = 30000;
+    private static final int INITIAL_RTO = 3000;
+    private static final int MAX_RTO = 10000;
 
     public static final String PROP_CONNECT_DELAY = "i2p.streaming.connectDelay";
     public static final String PROP_MAX_MESSAGE_SIZE = "i2p.streaming.maxMessageSize";
@@ -134,7 +134,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * Increased to 16 for I2P's high-latency environment to improve initial bandwidth utilization.
      */
     static final int INITIAL_WINDOW_SIZE = 16;
-    static final int DEFAULT_MAX_SENDS = 30;
+    static final int DEFAULT_MAX_SENDS = 3;
     /**
      *  Initial RTT estimate for new connections before first measurement.
      *  I2P typically has 2-10 second RTT, so 8 seconds provides a conservative

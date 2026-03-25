@@ -246,7 +246,7 @@ public class TranslationStatus {
                                                      flag, lang, country, s, resources - bundles.count(loc), 100f * counts.count(loc) / grandtot,
                                                      100f * counts.count(loc) / grandtot));
             } else {
-                buf2.append(String.format("%s\t%5.1f%%\t%s %s\n", s, 100f * counts.count(loc) / grandtot, resources - bundles.count(loc), lang, country));
+                buf2.append(String.format("%s\t%5.1f%%\t%s %s%n", s, 100f * counts.count(loc) / grandtot, resources - bundles.count(loc), lang, country));
             }
         }
         if (_html) {
@@ -349,7 +349,7 @@ public class TranslationStatus {
                                                     "<span class=percentBarInner style=\"width:%5.1f%%\"></span></span></td></tr>\n",
                                                     row, flag, dlang, country, lang, tot, 100f * tot / max, 100f * tot / max));
             } else {
-                buf.append(String.format("%s\t%4d\t%5.1f%%\t%s %s\n", lang, tot, 100f * tot / max, dlang, country));
+                buf.append(String.format("%s\t%4d\t%5.1f%%\t%s %s%n", lang, tot, 100f * tot / max, dlang, country));
             }
         }
         buf.append("</tbody>");

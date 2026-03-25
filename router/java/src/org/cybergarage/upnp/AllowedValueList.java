@@ -56,7 +56,7 @@ public class AllowedValueList extends Vector<AllowedValue> {
         for (int i = 0; i < values.length; i++) {
             add(new AllowedValue(values[i]));
         }
-   ;
+  ;
     }
 
     ////////////////////////////////////////////////
@@ -80,7 +80,7 @@ public class AllowedValueList extends Vector<AllowedValue> {
      * @return true if the value is in the list
      */
     public boolean isAllowed(String v) {
-        for (Iterator<AllowedValue> i = this.iterator(); i.hasNext(); ) {
+        for (Iterator<AllowedValue> i = this.iterator(); i.hasNext();) {
             AllowedValue av = i.next();
             if (av.getValue().equals(v)) return true;
         }

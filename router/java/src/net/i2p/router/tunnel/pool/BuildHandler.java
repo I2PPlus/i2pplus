@@ -594,11 +594,11 @@ class BuildHandler implements Runnable {
                 String fromHash = from != null ? from.toString() : "Unknown";
                 if (handleTime > 0) {
                     _log.debug(String.format(
-                        "Build tunnel request [MsgID: %s] handled in %dms %s \n* Decrypted in: %dms; Elapsed time since received: %dms\n* From: %s %s",
+                        "Build tunnel request [MsgID: %s] handled in %dms %s %n* Decrypted in: %dms; Elapsed time since received: %dms\n* From: %s %s",
                         msgId, handleTime, nextHop, decryptTime, timeSinceReceived, fromHash, req));
                 } else {
                     _log.debug(String.format(
-                        "Build tunnel request [MsgID: %s] handled %s \n* From: %s %s",
+                        "Build tunnel request [MsgID: %s] handled %s %n* From: %s %s",
                         msgId, nextHop, fromHash, req));
 
                 }

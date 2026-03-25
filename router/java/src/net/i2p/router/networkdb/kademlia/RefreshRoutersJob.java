@@ -271,7 +271,7 @@ class RefreshRoutersJob extends JobImpl {
         }
 
         if (_log.shouldInfo()) {
-            _log.info(String.format("Refreshing Router [%s] - %ds timeout\n* Published: %s",
+            _log.info(String.format("Refreshing Router [%s] - %ds timeout%n* Published: %s",
                 routerHash.toBase64().substring(0, 6), refreshTimeoutSeconds, Instant.ofEpochMilli(ri.getPublished())));
         }
 

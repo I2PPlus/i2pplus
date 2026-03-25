@@ -509,7 +509,7 @@ public class Node {
      */
     public int getIndex(String name) {
         int index = -1;
-        for (Iterator<Node> i = nodeList.iterator(); i.hasNext(); ) {
+        for (Iterator<Node> i = nodeList.iterator(); i.hasNext();) {
             index++;
             Node n = i.next();
             if (n.getName().equals(name)) return index;

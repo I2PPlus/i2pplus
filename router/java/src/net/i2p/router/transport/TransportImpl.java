@@ -139,7 +139,7 @@ public abstract class TransportImpl implements Transport {
         _context = context;
         _log = _context.logManager().getLog(getClass());
 
-        _context.statManager().createRateStat("transport.expiredOnQueueLifetime", "Time to process message expired in outbound queue (ms)", "Transport", RATES );
+        _context.statManager().createRateStat("transport.expiredOnQueueLifetime", "Time to process message expired in outbound queue (ms)", "Transport", RATES);
         _context.statManager().createRateStat("transport.receiveMessageTimeSlow", "Time to read a received message (over 1s)", "Transport", RATES);
         _context.statManager().createRateStat("transport.receiveMessageTime", "Time to read a received message (ms)", "Transport", RATES);
         _context.statManager().createRateStat("transport.sendMessageFailureLifetime", "Lifetime of failed sent messages", "Transport", RATES);
@@ -385,20 +385,20 @@ public abstract class TransportImpl implements Transport {
 
         if (msToSend > 1500 && debug) {
             _log.debug("[" + style + "] afterSend slow: " + (sendSuccessful ? "Success! " : "FAIL! ") +
-                       String.format("\n* %d byte %s[MsgID %d] to [%s] took %d ms", msg.getMessageSize(),
+                       String.format("%n* %d byte %s[MsgID %d] to [%s] took %d ms", msg.getMessageSize(),
                        msg.getMessageType(), msg.getMessageId(), peerHash, msToSend));
         }
 
         long lifetime = msg.getLifetime();
         if (lifetime > 3000) {
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.log(Log.DEBUG, String.format("[%s] afterSend slow: %s(Lifetime: %dms / Time taken: %dms)\n* %d byte %s [MsgID %d] from [%s] to [%s]: %s",
+                _log.log(Log.DEBUG, String.format("[%s] afterSend slow: %s(Lifetime: %dms / Time taken: %dms)%n* %d byte %s [MsgID %d] from [%s] to [%s]: %s",
                                                  style, (sendSuccessful ? "Success! " : "FAIL! "), lifetime, msToSend,
                                                  msg.getMessageSize(), msg.getMessageType(), msg.getMessageId(),
                                                  routerHash, peerHash, msg));
             }
         } else if (debug) {
-            _log.debug(String.format("[%s] afterSend: %s\n* %d byte %s [MsgID %d] from [%s] to [%s] %s",
+            _log.debug(String.format("[%s] afterSend: %s%n* %d byte %s [MsgID %d] from [%s] to [%s] %s",
                       style, (sendSuccessful ? "Success! " : "FAIL! "), msg.getMessageSize(), msg.getMessageType(),
                       msg.getMessageId(), routerHash, peerHash, msg));
         }
@@ -432,12 +432,12 @@ public abstract class TransportImpl implements Transport {
         long sendTime = now - msg.getSendBegin();
         long allTime = now - msg.getCreated();
         if (allTime > 5000 && debug) {
-            _log.debug(String.format("Took too long (%d ms) from preparation to afterSend (ok? %b)\n* Sent: %s after failing on %s%s",
+            _log.debug(String.format("Took too long (%d ms) from preparation to afterSend (ok? %b)%n* Sent: %s after failing on %s%s",
                       allTime, sendSuccessful, Instant.ofEpochMilli(sendTime), msg.getFailedTransports(),
                       (sendSuccessful ? " and succeeding on " + style : "")));
         }
         if (allTime > 60000 && sendSuccessful && _log.shouldWarn()) {
-            _log.warn(String.format("Severe latency? More than a minute slow?\n* %s of [MsgID %d]\n* Send began: %s\n* Message created: %s%s",
+            _log.warn(String.format("Severe latency? More than a minute slow?%n* %s of [MsgID %d]\n* Send began: %s\n* Message created: %s%s",
                     msg.getMessageType(), msg.getMessageId(), Instant.ofEpochMilli(msg.getSendBegin()), Instant.ofEpochMilli(msg.getCreated()), msg));
             _context.messageHistory().messageProcessingError(msg.getMessageId(), msg.getMessageType(),
                                                              "Took too long to send [" + allTime + "ms]");
@@ -619,7 +619,7 @@ public abstract class TransportImpl implements Transport {
                 _currentAddresses.clear();
                 sz = 0;
             } else {
-                for (Iterator<RouterAddress> iter = _currentAddresses.iterator(); iter.hasNext(); ) {
+                for (Iterator<RouterAddress> iter = _currentAddresses.iterator(); iter.hasNext();) {
                     RouterAddress ra = iter.next();
                     if (isIPv6 == TransportUtil.isIPv6(ra)) {iter.remove();}
                 }
@@ -668,7 +668,7 @@ public abstract class TransportImpl implements Transport {
         boolean changed = false;
         int sz;
         synchronized (_currentAddresses) {
-            for (Iterator<RouterAddress> iter = _currentAddresses.iterator(); iter.hasNext(); ) {
+            for (Iterator<RouterAddress> iter = _currentAddresses.iterator(); iter.hasNext();) {
                 RouterAddress ra = iter.next();
                 if (ipv6 == TransportUtil.isIPv6(ra)) {
                     iter.remove();
@@ -919,13 +919,13 @@ public abstract class TransportImpl implements Transport {
         public void timeReached() {
             long now = _context.clock().now();
             long limit = now - UNREACHABLE_PERIOD;
-            for (Iterator<Long> iter = _unreachableEntries.values().iterator(); iter.hasNext(); ) {
+            for (Iterator<Long> iter = _unreachableEntries.values().iterator(); iter.hasNext();) {
                 Long when = iter.next();
                 if (when.longValue() < limit)
                     iter.remove();
             }
             limit = now - WAS_UNREACHABLE_PERIOD;
-            for (Iterator<Long> iter = _wasUnreachableEntries.values().iterator(); iter.hasNext(); ) {
+            for (Iterator<Long> iter = _wasUnreachableEntries.values().iterator(); iter.hasNext();) {
                 Long when = iter.next();
                 if (when.longValue() < limit)
                     iter.remove();

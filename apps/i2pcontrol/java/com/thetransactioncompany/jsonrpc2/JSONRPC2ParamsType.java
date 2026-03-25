@@ -18,20 +18,20 @@ package com.thetransactioncompany.jsonrpc2;
 public enum JSONRPC2ParamsType {
 
 
-	/**
-	 * No parameters.
-	 */
-	NO_PARAMS,
+    /**
+     * No parameters.
+     */
+    NO_PARAMS,
 
 
-	/**
-	 * Positional parameters, packed as a JSON array.
-	 */
-	ARRAY,
+    /**
+     * Positional parameters, packed as a JSON array.
+     */
+    ARRAY,
 
 
-	/**
-	 * Named parameters, packed as a JSON object.
-	 */
-	OBJECT
+    /**
+     * Named parameters, packed as a JSON object.
+     */
+    OBJECT
 }

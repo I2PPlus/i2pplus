@@ -36,8 +36,8 @@ package com.southernstorm.noise.protocol;
  */
 public interface Destroyable {
 
-	/**
-	 * Destroys all sensitive state in the current object.
-	 */
-	void destroy();
+    /**
+     * Destroys all sensitive state in the current object.
+     */
+    void destroy();
 }
