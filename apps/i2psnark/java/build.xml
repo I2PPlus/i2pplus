@@ -419,12 +419,13 @@
 
   <target name="junit.compileTest" depends="build">
     <mkdir dir="./build/obj"/>
+    <mkdir dir="./build/testobj"/>
     <javac srcdir="./test/junit" debug="true" source="${javac.version}" target="${javac.version}" deprecation="on"
       release="${javac.release}"
       debuglevel="lines,vars,source"
       includeAntRuntime="true"
       encoding="UTF-8"
-      destdir="./build/obj">
+      destdir="./build/testobj">
       <classpath>
         <pathelement location="./build/i2psnark.jar"/>
         <pathelement location="../../../core/java/build/i2p.jar"/>
@@ -452,6 +453,7 @@
         <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
         <pathelement location="./build/obj"/>
+        <pathelement location="./build/testobj"/>
       </classpath>
       <batchtest todir="../../../reports/i2psnark/junit/">
         <fileset dir="./test/junit">
@@ -460,6 +462,7 @@
       </batchtest>
       <formatter type="xml"/>
     </junit>
+    <delete dir="./build/testobj"/>
   </target>
 
   <target name="junit.report" depends="junit.test"/>

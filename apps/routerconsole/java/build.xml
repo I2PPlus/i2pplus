@@ -602,7 +602,7 @@
     <property name="scala-xml.jar" value="${scalatest.libs}/scala-xml.jar"/>
     <property name="scalactic.jar" value="${scalatest.libs}/scalactic.jar"/>
     <property name="scalatest.jar" value="${scalatest.libs}/scalatest.jar"/>
-    <property name="mockito.home" value="${ant.home}/lib"/>
+    <property name="mockito.home" value="../../../tools/test/mockito"/>
     <taskdef resource="scala/tools/ant/antlib.xml">
       <classpath>
         <pathelement location="${scalatest.libs}/scala-compiler.jar"/>

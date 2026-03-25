@@ -459,7 +459,7 @@
   <target name="compileTest">
     <mkdir dir="./build"/>
     <mkdir dir="./build/obj"/>
-    <property name="junit.home" value="${ant.home}/lib/"/>
+    <property name="junit.home" value="../../../tools/test/junit"/>
     <!-- We need the ant runtime, as it includes junit -->
     <javac srcdir="./src:./test/junit" debug="true" source="${javac.version}"
       target="${javac.version}"

@@ -224,15 +224,16 @@
     <ant dir="../../../core/java" target="jar"/>
   </target>
   <target name="junit.compileTest" depends="builddeptest, compile">
+    <mkdir dir="./build/testobj"/>
 
     <echo message="[DEBUG] ant home is ${ant.home}"/>
     <echo message="[DEBUG] junit home before override is ${junit.home}"/>
     <echo message="[DEBUG] hamcrest home before override is ${hamcrest.home}"/>
     <echo message="[DEBUG] mockito home before override is ${mockito.home}"/>
 
-    <property name="junit.home" value="${ant.home}/lib"/>
-    <property name="hamcrest.home" value="${ant.home}/lib"/>
-    <property name="mockito.home" value="${ant.home}/lib"/>
+    <property name="junit.home" value="../../../tools/test/junit"/>
+    <property name="hamcrest.home" value="../../../tools/test/hamcrest"/>
+    <property name="mockito.home" value="../../../tools/test/mockito"/>
 
     <echo message="[DEBUG] junit home after override is ${junit.home}"/>
     <echo message="[DEBUG] hamcrest home after override is ${hamcrest.home}"/>
@@ -244,9 +245,10 @@
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="./build/obj">
+      destdir="./build/testobj">
       <classpath>
         <pathelement path="${javac.classpath}"/>
+        <pathelement location="./build/obj"/>
         <pathelement location="../../../core/java/build/i2p.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest.jar"/>
@@ -295,9 +297,9 @@
       </fileset>
     </delete>
 
-    <property name="junit.home" value="${ant.home}/lib"/>
-    <property name="hamcrest.home" value="${ant.home}/lib"/>
-    <property name="mockito.home" value="${ant.home}/lib"/>
+    <property name="junit.home" value="../../../tools/test/junit"/>
+    <property name="hamcrest.home" value="../../../tools/test/hamcrest"/>
+    <property name="mockito.home" value="../../../tools/test/mockito"/>
 
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes">
       <sysproperty key="net.sourceforge.cobertura.datafile" file="./cobertura.ser"/>
@@ -313,6 +315,7 @@
         <pathelement location="${junit.home}/junit4.jar"/>
         <pathelement location="./build/obj_cobertura"/>
         <pathelement location="./build/obj"/>
+        <pathelement location="./build/testobj"/>
         <pathelement location="../../../core/java/build/i2ptest.jar"/>
         <pathelement location="../../../core/java/build/i2p.jar"/>
         <pathelement location="../../build/jbigi.jar"/>
@@ -334,6 +337,7 @@
       replace="\1&quot;${host.fakename}&quot;">
       <fileset dir="../../../reports/ministreaming/junit/"/>
     </replaceregexp>
+    <delete dir="./build/testobj"/>
   </target>
   <target name="test" depends="junit.test"/>
   <!-- test reports -->

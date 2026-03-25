@@ -1,0 +1,8 @@
+# Test dependency jars - downloaded by download-test-deps.sh
+hamcrest/*.jar
+hamcrest/version.txt
+junit/*.jar
+junit/version.txt
+mockito/*.jar
+mockito/version.txt
+scala/*.jar

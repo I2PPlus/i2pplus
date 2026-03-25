@@ -260,15 +260,16 @@
   <target name="junit.compileTest" depends="builddeptest, compile">
     <mkdir dir="./build"/>
     <mkdir dir="./build/obj"/>
+    <mkdir dir="./build/testobj"/>
     <!-- set hamcrest and junit homes to the old default unless overridden elsewhere -->
-    <property name="hamcrest.home" value="${ant.home}/lib/"/>
-    <property name="junit.home" value="${ant.home}/lib/"/>
+    <property name="hamcrest.home" value="../../tools/test/hamcrest"/>
+    <property name="junit.home" value="../../tools/test/junit"/>
     <javac srcdir="./test/junit" debug="true" source="${javac.version}" target="${javac.version}" deprecation="on"
       release="${javac.release}"
       debuglevel="lines,vars,source"
       includeAntRuntime="true"
       encoding="UTF-8"
-      destdir="./build/obj">
+      destdir="./build/testobj">
       <classpath>
         <pathelement path="${javac.classpath}"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
@@ -419,6 +420,7 @@
         <pathelement location="${junit.home}/junit4.jar"/>
         <pathelement location="./build/obj_cobertura"/>
         <pathelement location="./build/obj"/>
+        <pathelement location="./build/testobj"/>
         <pathelement location="../../core/java/build/i2ptest.jar"/>
         <pathelement location="../../build/jbigi.jar"/>
         <pathelement location="${with.clover}"/>
@@ -440,6 +442,7 @@
       replace="\1&quot;${host.fakename}&quot;">
       <fileset dir="../../reports/router/junit/"/>
     </replaceregexp>
+    <delete dir="./build/testobj"/>
   </target>
 
   <!-- both junit and scala, but we have no scala tests yet -->
