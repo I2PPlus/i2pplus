@@ -16,6 +16,8 @@
 
 package net.i2p.router.crypto.ratchet;
 
+import java.lang.reflect.Array;
+
 /**
  * Utility methods for creating unpadded arrays with optimal growth sizing
  */
@@ -33,6 +35,6 @@ class ArrayUtils {
 
     @SuppressWarnings("unchecked")
     public static <T> T[] newUnpaddedArray(Class<T> clazz, int minLen) {
-        return (T[]) new Object[minLen];
+        return (T[]) Array.newInstance(clazz, minLen);
     }
 }
