@@ -104,6 +104,11 @@
     <Match>
         <Class name="~gnu\..*" />
     </Match>
+
+    <!-- Exclude compiled resource bundles (from PO translations) -->
+    <Match>
+        <Class name="~.*\.messages_[a-z]{2}.*" />
+    </Match>
     
     <!-- Exclude Pack200 -->
     <Match>

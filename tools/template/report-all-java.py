@@ -370,8 +370,12 @@ def main():
 
     # Count by source
     source_counts = defaultdict(int)
+    source_sev = defaultdict(lambda: {"p1": 0, "p2": 0, "p3": 0})
     for r in all_results:
         source_counts[r["source"]] += 1
+        sev = r["severity"]
+        if sev in source_sev[r["source"]]:
+            source_sev[r["source"]][sev] += 1
     source_order = ["PMD", "Checkstyle", "CodeQL", "SpotBugs"]
 
     # Count by sub-system
@@ -407,14 +411,28 @@ def main():
         # Summary by source (clickable to filter)
         w('<div class="tabletitle"><a name="summary">By Source</a></div>')
         w('<table id="summary">')
-        w('<tr><th>Source</th><th class="summary-count">Issues</th><th class="summary-count">Files</th></tr>')
+        w('<tr><th>Source</th>'
+          '<th class="summary-count"><span class="severity-error" title="Priority 1 / error level">error</span></th>'
+          '<th class="summary-count"><span class="severity-warning" title="Priority 2 / warning level">warning</span></th>'
+          '<th class="summary-count"><span class="severity-info" title="Priority 3 / note level">info</span></th>'
+          '<th class="summary-count">Issues</th><th class="summary-count">Files</th></tr>')
         for src in source_order:
             count = source_counts.get(src, 0)
             if count == 0:
                 continue
             src_files = len(set(r["file"] for r in all_results if r["source"] == src))
-            w(f'<tr class="tablerow0 src-filter-row" data-source="{src.lower()}" title="Click to filter by {src}"><td><span class="src-badge {src.lower()}" title="Source: {src}">{src}</span></td><td class="summary-count">{count}</td><td class="summary-count">{src_files}</td></tr>')
-        w(f'<tr class="tablerow1"><td><b>Total</b></td><td class="summary-count"><b>{total}</b></td><td class="summary-count"><b>{len(file_counts)}</b></td></tr>')
+            sev = source_sev[src]
+            w(f'<tr class="tablerow0 src-filter-row" data-source="{src.lower()}" title="Click to filter by {src}">'
+              f'<td><span class="src-badge {src.lower()}" title="Source: {src}">{src}</span></td>'
+              f'<td class="summary-count">{sev["p1"]}</td>'
+              f'<td class="summary-count">{sev["p2"]}</td>'
+              f'<td class="summary-count">{sev["p3"]}</td>'
+              f'<td class="summary-count">{count}</td><td class="summary-count">{src_files}</td></tr>')
+        w(f'<tr class="tablerow1"><td><b>Total</b></td>'
+          f'<td class="summary-count"><b>{sum(s["p1"] for s in source_sev.values())}</b></td>'
+          f'<td class="summary-count"><b>{sum(s["p2"] for s in source_sev.values())}</b></td>'
+          f'<td class="summary-count"><b>{sum(s["p3"] for s in source_sev.values())}</b></td>'
+          f'<td class="summary-count"><b>{total}</b></td><td class="summary-count"><b>{len(file_counts)}</b></td></tr>')
         w('</table>')
 
         # Issues grouped by sub-system
@@ -447,9 +465,9 @@ def main():
                             has_detail = bool(snippet)
                             vid = f"v{abs(hash(fr['file'] + str(fr['line']) + fr['rule'] + fr['source']))}" if has_detail else ""
                             if has_detail:
-                                w(f'<tr class="{row}" data-detail="{vid}" data-source="{fr["source"].lower()}">')
+                                w(f'<tr class="{row}" data-detail="{vid}" data-source="{fr["source"].lower()}" data-severity="{fr["severity"]}">')
                             else:
-                                w(f'<tr class="{row}" data-source="{fr["source"].lower()}">')
+                                w(f'<tr class="{row}" data-source="{fr["source"].lower()}" data-severity="{fr["severity"]}">')
                             w(f'<td class="line priority-cell {fr["severity"]}">{escape(rng)}</td>')
                             w(f'<td><span class="src-badge {fr["source"].lower()}" title="Source: {escape(fr["source"])}">{escape(fr["source"])}</span></td>')
                             w(f'<td>{escape(fr["rule"])}</td>')
@@ -458,7 +476,7 @@ def main():
                             w(f'<td class="rule-doc">{doc_link}</td>')
                             w('</tr>')
                             if has_detail:
-                                w(f'<tr class="detailrow{row_idx % 2} hidden" data-source="{fr["source"].lower()}"><td colspan="6">')
+                                w(f'<tr class="detailrow{row_idx % 2} hidden" data-source="{fr["source"].lower()}" data-severity="{fr["severity"]}"><td colspan="6">')
                                 w(f'<div id="{vid}" style="display:none" class="detail-content">')
                                 w(f'<pre class="snippet"><code>{snippet}</code></pre>')
                                 w('</div>')

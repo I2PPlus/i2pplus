@@ -143,8 +143,15 @@ def main():
     local = "--local" in sys.argv
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
-    tree = ET.parse(xml_file)
-    root = tree.getroot()
+    try:
+        tree = ET.parse(xml_file)
+        root = tree.getroot()
+    except (ET.ParseError, FileNotFoundError) as e:
+        # SpotBugs may produce empty/corrupt XML if it crashes mid-analysis
+        print(f"Warning: Could not parse {xml_file}: {e}", file=sys.stderr)
+        with open(html_file, "w", encoding="utf-8") as f:
+            f.write("<html><body><h1>SpotBugs: no output (analysis failed)</h1></body></html>")
+        sys.exit(0)
 
     version = root.attrib.get("version", "?")
     ts_ms = root.attrib.get("timestamp", "")
