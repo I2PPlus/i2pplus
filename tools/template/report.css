@@ -230,8 +230,12 @@ th {
 
 /* Summary count column */
 .summary-count {
-  text-align: right;
+  text-align: center;
   font-variant-numeric: tabular-nums
+}
+
+th.summary-count span:hover {
+  cursor: pointer;
 }
 
 /* ---- Section Headers ---- */

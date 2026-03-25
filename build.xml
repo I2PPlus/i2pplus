@@ -3601,8 +3601,167 @@
     <echo message="CodeQL JSP report written to dist/codeql-jsp.html (${cq.jsp.count} issues)"/>
   </target>
 
-  <target name="report-all-java" depends="pmd-java,checkstyle,codeql-java,spotbugs">
-    <echo message="Combining all Java analysis results..."/>
+  <target name="report-all-java" depends="jar, build2, buildUtilityJar, pmd-setup, checkstyle-setup, checkstyle-download">
+    <echo message="Running analysis tools..."/>
+
+    <!-- Suppress verbose build output, keep our progress echoes -->
+    <record name="dist/report-all-java.log" action="start" loglevel="warn"/>
+
+    <!-- CodeQL version setup (inline, since codeql-setup has download dependency we handle here) -->
+    <loadfile property="codeql.version" srcFile="tools/codeql/version.txt"/>
+    <property name="codeql.version" value="v2.25.0"/>
+    <available property="codeql.present" file="tools/codeql/codeql/codeql"/>
+    <antcall target="codeql-download"/>
+
+    <!-- SpotBugs setup -->
+    <exec executable="cat" outputproperty="spotbugs.version" failifexecutionfails="false">
+      <arg value="tools/spotbugs/version.txt"/>
+    </exec>
+    <condition property="spotbugs.dir" value="tools/spotbugs/spotbugs-${spotbugs.version}">
+      <and>
+        <isset property="spotbugs.version"/>
+        <not><equals arg1="${spotbugs.version}" arg2="" trim="true"/></not>
+      </and>
+    </condition>
+    <property name="spotbugs.dir" location="tools/spotbugs/spotbugs-unknown"/>
+    <property name="spotbugs.jar" location="${spotbugs.dir}/lib/spotbugs-ant.jar"/>
+    <property name="spotbugs.home" value="${spotbugs.dir}"/>
+    <property name="spotbugs.java" value="${java.home}/bin/java"/>
+    <antcall target="download-spotbugs"/>
+
+    <mkdir dir="dist"/>
+
+    <!-- CodeQL compilation first (creates the database) -->
+    <echo message="  [1/2] CodeQL compilation..."/>
+    <mkdir dir="/tmp/codeql"/>
+    <mkdir dir="/tmp/codeql/classes"/>
+    <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" failonerror="true" output="/dev/null" error="/dev/null">
+      <arg value="database"/>
+      <arg value="create"/>
+      <arg value="/tmp/codeql/db-java"/>
+      <arg value="--language=java"/>
+      <arg value="--source-root=."/>
+      <arg value="--overwrite"/>
+      <arg value="--ram=8192"/>
+      <arg value="--search-path=tools/codeql/codeql-${codeql.version}"/>
+      <arg value="--command"/>
+      <arg value="bash tools/codeql/build-java.sh"/>
+    </exec>
+    <echo message="  [1/2] CodeQL database ready. Starting parallel analysis..."/>
+
+    <!-- All 4 analysis tools run in parallel -->
+    <parallel threadCount="4">
+      <sequential>
+        <echo message="    PMD running..."/>
+        <exec executable="${pmd.java}" failonerror="false" output="/dev/null" error="/dev/null">
+          <arg value="-Xmx4g"/>
+          <arg value="-Xss1g"/>
+          <arg value="-cp"/>
+          <arg value="${pmd.dir}/lib/*"/>
+          <arg value="net.sourceforge.pmd.cli.PmdCli"/>
+          <arg value="check"/>
+          <arg value="-d"/>
+          <arg value="core/java/src/net/i2p"/>
+          <arg value="-d"/>
+          <arg value="router/java/src"/>
+          <arg value="-d"/>
+          <arg value="apps"/>
+          <arg value="-R"/>
+          <arg value="tools/pmd/ruleset-java.xml"/>
+          <arg value="-f"/>
+          <arg value="xml"/>
+          <arg value="-r"/>
+          <arg value="dist/pmd-java.xml"/>
+          <arg value="--no-cache"/>
+        </exec>
+        <exec executable="python3" failonerror="false" output="/dev/null" error="/dev/null">
+          <arg value="tools/pmd/pmd-to-html.py"/>
+          <arg value="dist/pmd-java.xml"/>
+          <arg value="dist/pmd-java.html"/>
+          <arg value="Java"/>
+        </exec>
+        <echo message="    PMD done."/>
+      </sequential>
+      <sequential>
+        <echo message="    Checkstyle running..."/>
+        <exec executable="java" failonerror="false" output="/dev/null" error="/dev/null">
+          <arg value="-Xmx4g"/>
+          <arg value="-Xss1g"/>
+          <arg value="-jar"/>
+          <arg value="tools/checkstyle/checkstyle-all.jar"/>
+          <arg value="-c"/>
+          <arg value="tools/checkstyle/checkstyle.xml"/>
+          <arg value="-f"/>
+          <arg value="xml"/>
+          <arg value="-o"/>
+          <arg value="dist/checkstyle.xml"/>
+          <arg value="core/java/src/net/i2p"/>
+          <arg value="router/java/src"/>
+          <arg value="apps"/>
+        </exec>
+        <exec executable="python3" failonerror="false" output="/dev/null" error="/dev/null">
+          <arg value="tools/checkstyle/checkstyle-to-html.py"/>
+          <arg value="dist/checkstyle.xml"/>
+          <arg value="dist/checkstyle.html"/>
+        </exec>
+        <echo message="    Checkstyle done."/>
+      </sequential>
+      <sequential>
+        <echo message="    SpotBugs running..."/>
+        <taskdef resource="edu/umd/cs/findbugs/anttask/tasks.properties" classpath="${spotbugs.jar}"/>
+        <available file="installer/lib/wrapper/all/wrapper.jar" property="wrapper.jar.path" value="installer/lib/wrapper/all/wrapper.jar"/>
+        <available file="/usr/share/java/ant.jar" property="system.ant.path" value="/usr/share/java/ant.jar"/>
+        <path id="spotbugs.auxclasspath">
+          <fileset dir="build" includes="*.jar"/>
+          <fileset dir="${spotbugs.dir}/lib" includes="*.jar"/>
+          <pathelement location="${wrapper.jar.path}"/>
+          <pathelement location="${system.ant.path}"/>
+        </path>
+        <pathconvert refid="spotbugs.auxclasspath" property="spotbugs.auxclasspath.path" pathsep=":"/>
+        <spotbugs home="${spotbugs.home}" output="xml:withMessages" outputFile="dist/spotbugs.xml" effort="max" debug="false" reportLevel="medium" timeout="1800000" jvm="${spotbugs.java}" excludeFilter="config/spotbugs-exclude.xml">
+          <auxAnalyzepath path="./build"/>
+          <auxClasspath path="${spotbugs.auxclasspath.path}"/>
+          <class location="./build/i2p.jar"/>
+          <class location="./build/router.jar"/>
+          <class location="./build/streaming.jar"/>
+          <class location="./build/mstreaming.jar"/>
+          <class location="./build/utility.jar"/>
+          <class location="./build/sam.jar"/>
+          <class location="./build/addressbook.jar"/>
+          <class location="./build/desktopgui.jar"/>
+          <class location="./build/i2psnark.jar"/>
+          <class location="./build/i2ptunnel.jar"/>
+          <sourcePath path="./apps:./router:./core"/>
+        </spotbugs>
+        <antcall target="transform-spotbugs"/>
+        <echo message="    SpotBugs done."/>
+      </sequential>
+      <sequential>
+        <echo message="    CodeQL running..."/>
+        <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" failonerror="false" output="/dev/null" error="/dev/null">
+          <arg value="database"/>
+          <arg value="analyze"/>
+          <arg value="/tmp/codeql/db-java"/>
+          <arg value="--format=sarif-latest"/>
+          <arg value="--output=dist/codeql-java.sarif"/>
+          <arg value="--sarif-add-query-help"/>
+          <arg value="--ram=8192"/>
+          <arg value="--additional-packs=tools/codeql/packs"/>
+          <arg value="codeql/java-queries:codeql-suites/java-security-and-quality.qls"/>
+        </exec>
+        <exec executable="python3" failonerror="false" output="/dev/null" error="/dev/null">
+          <arg value="tools/codeql/codeql-to-html.py"/>
+          <arg value="dist/codeql-java.sarif"/>
+          <arg value="dist/codeql-java.html"/>
+        </exec>
+        <echo message="    CodeQL done."/>
+      </sequential>
+    </parallel>
+
+    <record name="dist/report-all-java.log" action="stop"/>
+
+    <!-- Combine all results -->
+    <echo message="  [2/2] Combining results..."/>
     <exec executable="python3" failonerror="true">
       <arg value="tools/template/report-all-java.py"/>
       <arg value="--pmd"/>
