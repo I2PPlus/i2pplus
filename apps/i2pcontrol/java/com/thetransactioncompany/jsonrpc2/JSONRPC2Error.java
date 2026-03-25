@@ -53,217 +53,217 @@ import org.json.simple.JsonObject;
 public class JSONRPC2Error extends Exception {
 
 
-	/**
-	 * Serial version UID.
-	 */
-	private static final long serialVersionUID = 4682571044532698806L;
+    /**
+     * Serial version UID.
+     */
+    private static final long serialVersionUID = 4682571044532698806L;
 
 
-	/**
-	 * JSON parse error (-32700).
-	 */
-	public static final JSONRPC2Error PARSE_ERROR = new JSONRPC2Error(-32700, "JSON parse error");
+    /**
+     * JSON parse error (-32700).
+     */
+    public static final JSONRPC2Error PARSE_ERROR = new JSONRPC2Error(-32700, "JSON parse error");
 
 
-	/**
-	 * Invalid JSON-RPC 2.0 request error (-32600).
-	 */
-	public static final JSONRPC2Error INVALID_REQUEST = new JSONRPC2Error(-32600, "Invalid request");
+    /**
+     * Invalid JSON-RPC 2.0 request error (-32600).
+     */
+    public static final JSONRPC2Error INVALID_REQUEST = new JSONRPC2Error(-32600, "Invalid request");
 
 
-	/**
-	 * Method not found error (-32601).
-	 */
-	public static final JSONRPC2Error METHOD_NOT_FOUND = new JSONRPC2Error(-32601, "Method not found");
+    /**
+     * Method not found error (-32601).
+     */
+    public static final JSONRPC2Error METHOD_NOT_FOUND = new JSONRPC2Error(-32601, "Method not found");
 
 
-	/**
-	 * Invalid parameters error (-32602).
-	 */
-	public static final JSONRPC2Error INVALID_PARAMS = new JSONRPC2Error(-32602, "Invalid parameters");
+    /**
+     * Invalid parameters error (-32602).
+     */
+    public static final JSONRPC2Error INVALID_PARAMS = new JSONRPC2Error(-32602, "Invalid parameters");
 
 
-	/**
-	 * Internal JSON-RPC 2.0 error (-32603).
-	 */
-	public static final JSONRPC2Error INTERNAL_ERROR = new JSONRPC2Error(-32603, "Internal error");
+    /**
+     * Internal JSON-RPC 2.0 error (-32603).
+     */
+    public static final JSONRPC2Error INTERNAL_ERROR = new JSONRPC2Error(-32603, "Internal error");
 
 
-	/**
-	 * The error code.
-	 */
-	private final int code;
+    /**
+     * The error code.
+     */
+    private final int code;
 
 
-	/**
-	 * The optional error data.
-	 */
-	private final Object data;
+    /**
+     * The optional error data.
+     */
+    private final Object data;
 
 
-	/**
-	 * Appends the specified string to the message of a JSON-RPC 2.0 error.
-	 *
-	 * @param err The JSON-RPC 2.0 error. Must not be {@code null}.
-	 * @param apx The string to append to the original error message.
-	 *
-	 * @return A new JSON-RPC 2.0 error with the appended message.
-	 */
-	@Deprecated
-	public static JSONRPC2Error appendMessage(final JSONRPC2Error err, final String apx) {
+    /**
+     * Appends the specified string to the message of a JSON-RPC 2.0 error.
+     *
+     * @param err The JSON-RPC 2.0 error. Must not be {@code null}.
+     * @param apx The string to append to the original error message.
+     *
+     * @return A new JSON-RPC 2.0 error with the appended message.
+     */
+    @Deprecated
+    public static JSONRPC2Error appendMessage(final JSONRPC2Error err, final String apx) {
 
-		return new JSONRPC2Error(err.getCode(), err.getMessage() + apx, err.getData());
-	}
-
-
-	/**
-	 * Sets the specified data to a JSON-RPC 2.0 error.
-	 *
-	 * @param err  The JSON-RPC 2.0 error to have its data field set. Must
-	 *             not be {@code null}.
-	 * @param data Optional error data, must <a href="#map">map</a> to a
-	 *             valid JSON type.
-	 *
-	 * @return A new JSON-RPC 2.0 error with the set data.
-	 */
-	@Deprecated
-	public static JSONRPC2Error setData(final JSONRPC2Error err, final Object data) {
-
-		return new JSONRPC2Error(err.getCode(), err.getMessage(), data);
-	}
+        return new JSONRPC2Error(err.getCode(), err.getMessage() + apx, err.getData());
+    }
 
 
-	/**
-	 * Creates a new JSON-RPC 2.0 error with the specified code and
-	 * message. The optional data is omitted.
-	 *
-	 * @param code    The error code (standard pre-defined or
-	 *                application-specific).
-	 * @param message The error message.
-	 */
-	public JSONRPC2Error(int code, String message) {
+    /**
+     * Sets the specified data to a JSON-RPC 2.0 error.
+     *
+     * @param err  The JSON-RPC 2.0 error to have its data field set. Must
+     *             not be {@code null}.
+     * @param data Optional error data, must <a href="#map">map</a> to a
+     *             valid JSON type.
+     *
+     * @return A new JSON-RPC 2.0 error with the set data.
+     */
+    @Deprecated
+    public static JSONRPC2Error setData(final JSONRPC2Error err, final Object data) {
 
-		this(code, message, null);
-	}
-
-
-	/**
-	 * Creates a new JSON-RPC 2.0 error with the specified code,
-	 * message and data.
-	 *
-	 * @param code    The error code (standard pre-defined or
-	 *                application-specific).
-	 * @param message The error message.
-	 * @param data    Optional error data, must <a href="#map">map</a>
-	 *                to a valid JSON type.
-	 */
-	public JSONRPC2Error(int code, String message, Object data) {
-
-		super(message);
-		this.code = code;
-		this.data = data;
-	}
+        return new JSONRPC2Error(err.getCode(), err.getMessage(), data);
+    }
 
 
-	/**
-	 * Gets the JSON-RPC 2.0 error code.
-	 *
-	 * @return The error code.
-	 */
-	public int getCode() {
+    /**
+     * Creates a new JSON-RPC 2.0 error with the specified code and
+     * message. The optional data is omitted.
+     *
+     * @param code    The error code (standard pre-defined or
+     *                application-specific).
+     * @param message The error message.
+     */
+    public JSONRPC2Error(int code, String message) {
 
-		return code;
-	}
-
-
-	/**
-	 * Gets the JSON-RPC 2.0 error data.
-	 *
-	 * @return The error data, {@code null} if none was specified.
-	 */
-	public Object getData() {
-
-		return data;
-	}
+        this(code, message, null);
+    }
 
 
-	/**
-	 * Sets the specified data to a JSON-RPC 2.0 error.
-	 *
-	 * @param data Optional error data, must <a href="#map">map</a> to a
-	 *             valid JSON type.
-	 *
-	 * @return A new JSON-RPC 2.0 error with the set data.
-	 */
-	public JSONRPC2Error setData(final Object data) {
+    /**
+     * Creates a new JSON-RPC 2.0 error with the specified code,
+     * message and data.
+     *
+     * @param code    The error code (standard pre-defined or
+     *                application-specific).
+     * @param message The error message.
+     * @param data    Optional error data, must <a href="#map">map</a>
+     *                to a valid JSON type.
+     */
+    public JSONRPC2Error(int code, String message, Object data) {
 
-		return new JSONRPC2Error(code, getMessage(), data);
-	}
-
-
-	/**
-	 * Appends the specified string to the message of this JSON-RPC 2.0
-	 * error.
-	 *
-	 * @param apx The string to append to the original error message.
-	 *
-	 * @return A new JSON-RPC 2.0 error with the appended message.
-	 */
-	public JSONRPC2Error appendMessage(final String apx) {
-
-		return new JSONRPC2Error(code, getMessage() + apx, data);
-	}
+        super(message);
+        this.code = code;
+        this.data = data;
+    }
 
 
-	/**
-	 * @see #toJSONObject
-	 */
-	@Deprecated
-	public JsonObject toJSON() {
+    /**
+     * Gets the JSON-RPC 2.0 error code.
+     *
+     * @return The error code.
+     */
+    public int getCode() {
 
-		return toJSONObject();
-	}
-
-
-	/**
-	 * Returns a JSON object representation of this JSON-RPC 2.0 error.
-	 *
-	 * @return A JSON object representing this error object.
-	 */
-	public JsonObject toJSONObject() {
-
-		JsonObject out = new JsonObject();
-
-		out.put("code", code);
-		out.put("message", super.getMessage());
-		if (data != null)
-			out.put("data", data);
-
-		return out;
-	}
+        return code;
+    }
 
 
-	/**
-	 * Serialises the error object to a JSON string.
-	 *
-	 * @return A JSON-encoded string representing this error object.
-	 */
-	@Override
-	public String toString() {
+    /**
+     * Gets the JSON-RPC 2.0 error data.
+     *
+     * @return The error data, {@code null} if none was specified.
+     */
+    public Object getData() {
 
-		return toJSON().toString();
-	}
+        return data;
+    }
 
 
-	/**
+    /**
+     * Sets the specified data to a JSON-RPC 2.0 error.
+     *
+     * @param data Optional error data, must <a href="#map">map</a> to a
+     *             valid JSON type.
+     *
+     * @return A new JSON-RPC 2.0 error with the set data.
+     */
+    public JSONRPC2Error setData(final Object data) {
+
+        return new JSONRPC2Error(code, getMessage(), data);
+    }
+
+
+    /**
+     * Appends the specified string to the message of this JSON-RPC 2.0
+     * error.
+     *
+     * @param apx The string to append to the original error message.
+     *
+     * @return A new JSON-RPC 2.0 error with the appended message.
+     */
+    public JSONRPC2Error appendMessage(final String apx) {
+
+        return new JSONRPC2Error(code, getMessage() + apx, data);
+    }
+
+
+    /**
+     * @see #toJSONObject
+     */
+    @Deprecated
+    public JsonObject toJSON() {
+
+        return toJSONObject();
+    }
+
+
+    /**
+     * Returns a JSON object representation of this JSON-RPC 2.0 error.
+     *
+     * @return A JSON object representing this error object.
+     */
+    public JsonObject toJSONObject() {
+
+        JsonObject out = new JsonObject();
+
+        out.put("code", code);
+        out.put("message", super.getMessage());
+        if (data != null)
+            out.put("data", data);
+
+        return out;
+    }
+
+
+    /**
+     * Serialises the error object to a JSON string.
+     *
+     * @return A JSON-encoded string representing this error object.
+     */
+    @Override
+    public String toString() {
+
+        return toJSON().toString();
+    }
+
+
+    /**
          * Overrides {@code Object.equals()}.
          *
          * @param object The object to compare to.
          *
          * @return {@code true} if both objects are instances if this class and
-	 *         their error codes are identical, {@code false} if not.
+     *         their error codes are identical, {@code false} if not.
          */
-	@Override
+    @Override
         public boolean equals(Object object) {
 
         return object != null &&
