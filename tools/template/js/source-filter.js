@@ -1,15 +1,32 @@
 /* I2P+ Source Filter - Combined report (report-all) */
-/* Filters rows by analysis source (PMD, Checkstyle, CodeQL, SpotBugs) */
+/* Filters rows by analysis source and/or severity level */
 
 var activeSource = null;
+var activeSeverities = new Set();
 
 document.addEventListener("click", function(e) {
+  var sevTh = e.target.closest("#summary th .severity-error, #summary th .severity-warning, #summary th .severity-info");
+  if (sevTh) {
+    e.preventDefault();
+    var th = sevTh.closest("th");
+    var sev = sevTh.classList.contains("severity-error") ? "p1"
+            : sevTh.classList.contains("severity-warning") ? "p2" : "p3";
+    if (activeSeverities.has(sev)) {
+      activeSeverities.delete(sev);
+      th.classList.remove("filtered");
+    } else {
+      activeSeverities.add(sev);
+      th.classList.add("filtered");
+    }
+    applyFilters();
+    return;
+  }
   var row = e.target.closest(".src-filter-row");
   if (row) {
     e.preventDefault();
     var src = row.dataset.source;
     activeSource = (activeSource === src) ? null : src;
-    filterBySource(activeSource);
+    applyFilters();
     return;
   }
   var sub = e.target.closest("[data-sub]");
@@ -24,16 +41,23 @@ document.addEventListener("click", function(e) {
   }
 });
 
-function filterBySource(src) {
-  // Highlight active filter row
+function applyFilters() {
+  var hasSource = activeSource !== null;
+  var hasSev = activeSeverities.size > 0;
+
+  // Source filter on summary rows
   document.querySelectorAll(".src-filter-row").forEach(function(r) {
-    r.classList.toggle("active", src !== null && r.dataset.source === src);
+    r.classList.toggle("active", hasSource && r.dataset.source === activeSource);
   });
-  // Show/hide violation rows
+
+  // Combined filter on violation rows
   document.querySelectorAll("tr[data-source]:not(.src-filter-row)").forEach(function(tr) {
-    if (src === null) { tr.classList.remove("source-hidden"); }
-    else { tr.classList.toggle("source-hidden", tr.dataset.source !== src); }
+    var show = true;
+    if (hasSource && tr.dataset.source !== activeSource) show = false;
+    if (hasSev && !activeSeverities.has(tr.dataset.severity)) show = false;
+    tr.classList.toggle("source-hidden", !show);
   });
+
   // Hide empty file headers
   document.querySelectorAll("#violations h3").forEach(function(h3) {
     var tbl = h3.nextElementSibling;
@@ -42,12 +66,14 @@ function filterBySource(src) {
     h3.style.display = vis.length ? "" : "none";
     tbl.style.display = vis.length ? "" : "none";
   });
-  // Hide empty section groups + update navbar badges
+
+  // Hide empty section groups
   document.querySelectorAll("#violations details").forEach(function(d) {
     var vis = d.querySelectorAll("tr[data-source]:not(.source-hidden):not([class*=detailrow])");
-    if (src === null) { d.style.display = ""; }
-    else { d.style.display = vis.length ? "" : "none"; }
+    d.style.display = (hasSource || hasSev) ? (vis.length ? "" : "none") : "";
   });
+
+  // Update navbar badges
   document.querySelectorAll("#navbar span").forEach(function(span) {
     var link = span.querySelector("a[data-sub]");
     if (!link) return;
@@ -55,7 +81,8 @@ function filterBySource(src) {
     if (!section) return;
     var vis = section.querySelectorAll("tr[data-source]:not(.source-hidden):not([class*=detailrow])");
     var badge = link.querySelector(".badge");
-    if (src === null) {
+    var filtered = hasSource || hasSev;
+    if (!filtered) {
       span.style.display = "";
       if (badge && badge.dataset.total) badge.textContent = badge.dataset.total;
     } else {
