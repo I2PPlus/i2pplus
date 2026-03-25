@@ -194,12 +194,13 @@ public abstract class TransportUtil {
     public static AddressType getType(String host) {
         if (host == null)
             return null;
-        if (host.indexOf('.') > 0)
+        if (net.i2p.util.Addresses.isIPv4Address(host))
             return AddressType.IPV4;
         if (host.indexOf(':') >= 0) {
             if (YGGDRASIL_PATTERN.matcher(host).matches())
                 return AddressType.YGG;
-            return AddressType.IPV6;
+            if (net.i2p.util.Addresses.isIPv6Address(host))
+                return AddressType.IPV6;
         }
         return null;
     }
