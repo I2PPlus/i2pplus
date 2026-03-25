@@ -3534,7 +3534,8 @@
       <arg value="--sarif-add-query-help"/>
       <arg value="--ram=8192"/>
       <arg value="--additional-packs=tools/codeql/packs"/>
-      <arg value="codeql/java-queries"/>
+      <arg value="codeql/java-queries:codeql-suites/java-security-and-quality.qls"/>
+      <arg value="githubsecuritylab/codeql-java-queries"/>
     </exec>
     <exec executable="python3" failonerror="false">
       <arg value="tools/codeql/codeql-to-html.py"/>
@@ -3567,7 +3568,8 @@
       <arg value="--sarif-add-query-help"/>
       <arg value="--ram=8192"/>
       <arg value="--additional-packs=tools/codeql/packs"/>
-      <arg value="codeql/javascript-queries"/>
+      <arg value="codeql/javascript-queries:codeql-suites/javascript-security-and-quality.qls"/>
+      <arg value="githubsecuritylab/codeql-javascript-queries"/>
     </exec>
     <exec executable="python3" failonerror="false">
       <arg value="tools/codeql/codeql-to-html.py"/>

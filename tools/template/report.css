@@ -562,14 +562,6 @@ span.severity-warning {
   margin: -4px 0;
 }
 
-.src-badge:hover {
-  transform: scale(1.2);
-}
-
-.src-badge:active {
-  transform: scale(.9);
-}
-
 .src-badge.pmd,
 .pmd {
   background: var(--pmd);
@@ -588,6 +580,14 @@ span.severity-warning {
 .src-badge.spotbugs,
 .spotbugs {
   background: var(--spotbugs)  no-repeat center center / 22px;
+}
+
+#summary .src-badge:hover {
+  transform: scale(1.2);
+}
+
+#summary  .src-badge:active {
+  transform: scale(.9);
 }
 
 .src-filter-row {
