@@ -304,6 +304,7 @@
       destdir="./build/testobj">
       <classpath>
         <pathelement path="${javac.classpath.mod}"/>
+        <pathelement location="./build/obj"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-integration.jar"/>

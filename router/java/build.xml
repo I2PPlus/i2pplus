@@ -272,6 +272,9 @@
       destdir="./build/testobj">
       <classpath>
         <pathelement path="${javac.classpath}"/>
+        <pathelement location="./build/obj"/>
+        <pathelement location="../../core/java/build/obj"/>
+        <pathelement location="../../core/java/build/testobj"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-integration.jar"/>
@@ -421,6 +424,7 @@
         <pathelement location="./build/obj_cobertura"/>
         <pathelement location="./build/obj"/>
         <pathelement location="./build/testobj"/>
+        <pathelement location="../../core/java/build/testobj"/>
         <pathelement location="../../core/java/build/i2ptest.jar"/>
         <pathelement location="../../build/jbigi.jar"/>
         <pathelement location="${with.clover}"/>

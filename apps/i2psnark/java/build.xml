@@ -427,6 +427,7 @@
       encoding="UTF-8"
       destdir="./build/testobj">
       <classpath>
+        <pathelement location="./build/obj"/>
         <pathelement location="./build/i2psnark.jar"/>
         <pathelement location="../../../core/java/build/i2p.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
