@@ -82,7 +82,7 @@ public class EditBean extends IndexBean {
         if (tun == null)
             return null;
         String keyFile = tun.getPrivKeyFile();
-        if (keyFile != null && keyFile.trim().length() > 0) {
+        if (keyFile != null && !keyFile.trim().isEmpty()) {
             File f = new File(keyFile);
             if (!f.isAbsolute())
                 f = new File(_context.getConfigDir(), keyFile);

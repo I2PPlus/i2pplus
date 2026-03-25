@@ -1000,7 +1000,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 String trimmed = CONTENT_FOR.matcher(reason.replace("http://", "").replace("java.io.IOException", _t("Error"))).replaceAll("");
                 buf.append("<br>").append(trimmed);
             }
-            if (t != null && t.getMessage() != null && t.getMessage().length() > 0) {
+            if (t != null && t.getMessage() != null && !t.getMessage().isEmpty()) {
                 buf.append("<br>").append(DataHelper.stripHTML(t.getMessage()));
             }
             buf.append("</b>");

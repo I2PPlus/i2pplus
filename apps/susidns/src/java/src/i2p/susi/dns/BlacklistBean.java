@@ -378,7 +378,7 @@ public class BlacklistBean extends BaseBean {
         int added = 0;
         List<String> newEntries = new ArrayList<String>();
         for (String entry : entries) {
-            if (entry != null && entry.trim().length() > 0) {
+            if (entry != null && !entry.trim().isEmpty()) {
                 String trimmedEntry = entry.trim();
                 if (isValidI2PAddress(trimmedEntry) && !isEntryInContent(trimmedEntry, currentContent)) {
                     newEntries.add(trimmedEntry);

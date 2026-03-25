@@ -343,7 +343,7 @@ public class RouterTimestamper extends Timestamper {
      */
     private void updateConfig() {
         String serverList = _context.getProperty(PROP_SERVER_LIST);
-        if ((serverList == null) || (serverList.trim().length() <= 0)) {
+        if ((serverList == null) || (serverList.trim().isEmpty())) {
             serverList = DEFAULT_SERVER_LIST;
             String country = _context.getProperty(PROP_IP_COUNTRY);
             if (country == null) {

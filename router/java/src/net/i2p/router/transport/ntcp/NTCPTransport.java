@@ -1420,7 +1420,7 @@ public class NTCPTransport extends TransportImpl {
     private String getConfiguredIP() {
         // Fixme doesn't check PROP_BIND_INTERFACE
         String name = _context.getProperty(PROP_I2NP_NTCP_HOSTNAME);
-        if ((name == null) || (name.trim().length() <= 0) || ("null".equals(name))) {
+        if ((name == null) || (name.trim().isEmpty()) || ("null".equals(name))) {
             return null;
         }
         String[] hosts = DataHelper.split(name, "[,; \r\n\t]");

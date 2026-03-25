@@ -112,7 +112,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
         if (tags != null && !tags.isEmpty())
             _log.error("Who is sending tags through the streaming lib? " + tags.size());
       /****
-        if ( (_tagsSent != null) && (!_tagsSent.isEmpty()) && (!tags.isEmpty()) ) {
+        if ((_tagsSent != null) && (!_tagsSent.isEmpty()) && (!tags.isEmpty())) {
             //int old = _tagsSent.size();
             //_tagsSent.addAll(tags);
             if (!_tagsSent.equals(tags))
@@ -290,7 +290,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     public StringBuilder formatAsString() {
         StringBuilder buf = super.formatAsString();
 
-        //if ( (_tagsSent != null) && (!_tagsSent.isEmpty()) )
+        //if ((_tagsSent != null) && (!_tagsSent.isEmpty()))
         //    buf.append(" with tags");
         final int nackCount = _nackCount.get();
         if (nackCount > 0)
@@ -349,7 +349,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                 _acceptedOn = -1;
                 releasePayload();
             }
-            if ( (_acceptedOn - before > 1000) && (_log.shouldDebug()) )  {
+            if ((_acceptedOn - before > 1000) && (_log.shouldDebug()))  {
                 int queued = _connection.getUnackedPacketsSent();
                 int window = _connection.getOptions().getWindowSize();
                 int afterQueued = _connection.getUnackedPacketsSent();
@@ -369,7 +369,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
         try {
             while (true) {
                 long timeRemaining = expiration - _context.clock().now();
-                if ( (timeRemaining <= 0) && (maxWaitMs > 0) ) break;
+                if ((timeRemaining <= 0) && (maxWaitMs > 0)) break;
                 synchronized (this) {
                     if (_ackOn > 0) break;
                     if (!_connection.getIsConnected()) {

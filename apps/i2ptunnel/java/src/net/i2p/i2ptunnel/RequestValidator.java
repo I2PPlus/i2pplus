@@ -249,7 +249,7 @@ public class RequestValidator {
         if (blockAgents == null) {return false;}
         String[] agents = DataHelper.split(blockAgents, ",");
         for (String ag : agents) {
-            if (ag.trim().length() > 0 && ua.contains(ag.trim())) {return true;}
+            if (!ag.trim().isEmpty() && ua.contains(ag.trim())) {return true;}
         }
         return false;
     }

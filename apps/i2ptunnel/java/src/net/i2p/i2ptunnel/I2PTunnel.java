@@ -1948,7 +1948,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                                             String i2cpPort, boolean isSSL,
                                             String user, String pw) throws DataFormatException {
 
-        if ((name == null) || (name.trim().length() <= 0)) throw new DataFormatException("Empty destination provided");
+        if ((name == null) || (name.trim().isEmpty())) throw new DataFormatException("Empty destination provided");
 
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         Log log = ctx.logManager().getLog(I2PTunnel.class);

@@ -143,7 +143,7 @@ public class ConfigTunnelsHandler extends FormHandler {
         else
             str = ((String[])val)[0];
 
-        if (str.trim().length() <= 0) return 0;
+        if (str.trim().isEmpty()) return 0;
         try { return Integer.parseInt(str); } catch (NumberFormatException nfe) { return 0; }
     }
 }

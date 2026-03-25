@@ -124,7 +124,7 @@ public class IndexBean {
     }
 
     public void setNonce(String nonce) {
-        if ((nonce == null) || (nonce.trim().length() <= 0)) return;
+        if ((nonce == null) || (nonce.trim().isEmpty())) return;
         _curNonce = nonce;
     }
 
@@ -147,12 +147,12 @@ public class IndexBean {
     }
 
     public void setAction(String action) {
-        if ((action == null) || (action.trim().length() <= 0)) return;
+        if ((action == null) || (action.trim().isEmpty())) return;
         _action = action;
     }
 
     public void setTunnel(String tunnel) {
-        if ((tunnel == null) || (tunnel.trim().length() <= 0)) return;
+        if ((tunnel == null) || (tunnel.trim().isEmpty())) return;
         try {_tunnel = Integer.parseInt(tunnel);}
         catch (NumberFormatException nfe) {_tunnel = -1;}
     }
@@ -166,7 +166,7 @@ public class IndexBean {
 
     /** @return non-null */
     private String processAction() {
-        if ((_action == null) || (_action.trim().length() <= 0) || ("Cancel".equals(_action))) {return "";}
+        if ((_action == null) || (_action.trim().isEmpty()) || ("Cancel".equals(_action))) {return "";}
         if (_group == null) {return _t("Error - tunnels are not initialized yet");}
 
 /**     // Disabled for now, doesn't work correctly with js auto-refresh
@@ -1585,7 +1585,7 @@ public class IndexBean {
                 break;
 
             case Certificate.CERTIFICATE_TYPE_SIGNED:
-                if (_certSigner == null || _certSigner.trim().length() <= 0) {
+                if (_certSigner == null || _certSigner.trim().isEmpty()) {
                     return "No signing destination specified";
                 }
                 // Find the signer's key file...

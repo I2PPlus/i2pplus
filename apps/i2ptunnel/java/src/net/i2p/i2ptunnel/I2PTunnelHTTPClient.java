@@ -533,7 +533,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 }
                                 requestURI = changeURI(requestURI, null, 0, null);
                             }
-                            if (requestURI.getPath() == null || requestURI.getPath().length() <= 0) {
+                            if (requestURI.getPath() == null || requestURI.getPath().isEmpty()) {
                                 // Add a path
                                 if (_log.shouldDebug()) {
                                     _log.debug(getPrefix(requestId) + "Adding / path to [" + request + "]");

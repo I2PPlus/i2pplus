@@ -78,7 +78,7 @@ public class XMLParser extends JaxpParser {
         // Only add it to the value if we don't have any other nodes.
         // Otherwise, add it as a node.
         if (domNodeType == org.w3c.dom.Node.TEXT_NODE) {
-            if (WHITESPACE.matcher(domNodeValue).replaceAll("").length() == 0) {
+            if (WHITESPACE.matcher(domNodeValue).replaceAll("").isEmpty()) {
                 return parentNode;
             }
             if (!parentNode.hasNodes()) {

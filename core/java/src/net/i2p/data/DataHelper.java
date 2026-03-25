@@ -544,7 +544,7 @@ public class DataHelper {
             in = new BufferedReader(new InputStreamReader(inStr, "UTF-8"), 4*1024);
             String line = null;
             while ((line = in.readLine()) != null) {
-                if (line.trim().length() <= 0) {continue;}
+                if (line.trim().isEmpty()) {continue;}
                 if (line.charAt(0) == '#') {continue;}
                 if (line.charAt(0) == ';') continue;
                 if (line.indexOf('#') > 0) {line = line.substring(0, line.indexOf('#')).trim();} // trim off any end of line comment

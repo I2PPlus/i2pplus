@@ -46,7 +46,7 @@ public class BaseException extends Exception {
         while (true) {
             s.append('[');
             s.append(t.getClass().getName());
-            if (t.getMessage() != null && t.getMessage().length() > 0) {
+            if (t.getMessage() != null && !t.getMessage().isEmpty()) {
                 s.append(": ");
                 s.append(t.getMessage());
             }

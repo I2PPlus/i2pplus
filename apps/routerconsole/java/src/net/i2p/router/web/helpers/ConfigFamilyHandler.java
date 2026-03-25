@@ -29,7 +29,7 @@ public class ConfigFamilyHandler extends FormHandler {
         if (_action.equals(_t("Create Family"))) {
             String family = getJettyString("family");
             String old = _context.getProperty(FamilyKeyCrypto.PROP_FAMILY_NAME);
-            if (family == null || family.trim().length() <= 0) {
+            if (family == null || family.trim().isEmpty()) {
                 addFormError(_t("You must enter a family name"));
             } else if (old != null) {
                 addFormError("Family already configured: " + family);

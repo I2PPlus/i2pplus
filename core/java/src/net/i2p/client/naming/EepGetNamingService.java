@@ -121,7 +121,7 @@ public class EepGetNamingService extends DummyNamingService {
                     _log.error("Invalid key: " + url + hostname);
                     return null;
                 }
-                if (VALID_DEST_CHARS.matcher(key).replaceAll("").length() != 0) {
+                if (!VALID_DEST_CHARS.matcher(key).replaceAll("").isEmpty()) {
                     _log.error("Invalid chars: " + url + hostname);
                     return null;
                 }

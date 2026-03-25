@@ -26,6 +26,7 @@ Example:
 import sys
 import os
 import re
+import json
 import subprocess
 import tempfile
 import argparse
@@ -573,6 +574,197 @@ def fix_dead_store(filepath, dry_run=False):
     return 0
 
 
+# ── @Override annotation (CodeQL: java/missing-override-annotation, ~2360) ─────
+
+def _parse_override_locations(sarif_path):
+    """Parse CodeQL SARIF for missing-override-annotation locations.
+    Returns {filepath: [line_numbers]}."""
+    try:
+        with open(sarif_path) as f:
+            sarif = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return {}
+    locations = {}
+    for run in sarif.get("runs", []):
+        for result in run.get("results", []):
+            if result.get("ruleId") != "java/missing-override-annotation":
+                continue
+            loc = result.get("locations", [{}])[0].get("physicalLocation", {})
+            uri = loc.get("artifactLocation", {}).get("uri", "")
+            region = loc.get("region", {})
+            line = region.get("startLine", 0)
+            if uri and line:
+                locations.setdefault(uri, []).append(line)
+    return locations
+
+
+def fix_override(filepath, sarif_path=None, dry_run=False):
+    """Add @Override to methods identified by CodeQL SARIF.
+    Walks UP from the reported line to find the actual method declaration."""
+    if sarif_path is None or not os.path.exists(sarif_path):
+        return 0
+
+    # Lazily build the location map on first call
+    if not hasattr(fix_override, "_locations"):
+        fix_override._locations = _parse_override_locations(sarif_path)
+
+    rel = os.path.relpath(filepath)
+    reported_lines = fix_override._locations.get(rel, [])
+    if not reported_lines:
+        return 0
+
+    if is_excluded(filepath):
+        return 0
+
+    try:
+        content, lines = read_file(filepath)
+    except OSError:
+        return 0
+
+    # Method declaration pattern: access modifiers returnType name(params)
+    _METHOD_SIG = re.compile(
+        r'^\s+((?:@\w+\s+)*'
+        r'(?:public|protected|private)\s+'
+        r'(?:(?:static|final|synchronized|abstract|native|default|strictfp)\s+)*'
+        r'(?:[\w<>\[\]?,\s&]+?)\s+'
+        r'\w+\s*\([^)]*\))'
+    )
+
+    changes = 0
+    # Deduplicate: track which method declarations we've already annotated
+    annotated_lines = set()
+
+    for reported_line in reported_lines:
+        # Walk up from the reported line to find the method declaration
+        method_line_idx = None
+        for j in range(reported_line - 1, max(reported_line - 12, -1), -1):
+            if j < 0 or j >= len(lines):
+                continue
+            candidate = lines[j]
+            # Skip blank lines and closing braces
+            if not stripped or stripped == "}":
+                continue
+            # Check for NOPMD in comments — skip this method entirely
+            if "NOPMD" in stripped:
+                method_line_idx = None  # mark as excluded
+                break
+            # If we hit a field declaration or assignment, stop — we're past the method signature
+            if "=" in stripped and "(" not in stripped:
+                break
+            # If we hit an opening brace, we're inside the method body
+            if stripped.startswith("{"):
+                break
+            # Check if this looks like a method declaration
+            if _METHOD_SIG.match(candidate):
+                method_line_idx = j
+                break
+            # If we hit a field declaration or assignment, stop — we're past the method signature
+            if "=" in stripped and "(" not in stripped:
+                break
+            # If we hit an opening brace, we're inside the method body
+            if stripped.startswith("{"):
+                break
+            # If we hit a NOPMD comment, skip this method
+            if "NOPMD" in stripped:
+                break
+
+        if method_line_idx is None:
+            continue
+
+        # Check if @Override already present on the line above
+        if method_line_idx > 0 and lines[method_line_idx - 1].strip() == "@Override":
+            continue
+        # Check if @Override is already on the same line (inline annotation)
+        if "@Override" in lines[method_line_idx]:
+            continue
+        # Don't annotate the same method twice
+        if method_line_idx in annotated_lines:
+            continue
+
+        annotated_lines.add(method_line_idx)
+        indent = len(lines[method_line_idx]) - len(lines[method_line_idx].lstrip())
+        annotation = " " * indent + "@Override"
+        changes += 1
+        if dry_run:
+            print_fix(filepath, method_line_idx + 1, lines[method_line_idx].strip(), annotation, dry_run)
+
+    if changes > 0 and not dry_run:
+        # Insert annotations in reverse order to preserve line numbers
+        for idx in sorted(annotated_lines):
+            indent = len(lines[idx]) - len(lines[idx].lstrip())
+            lines.insert(idx, " " * indent + "@Override")
+        with open(filepath, "w") as f:
+            f.write("\n".join(lines) + ("\n" if content.endswith("\n") else ""))
+
+    return changes
+
+
+# ── .isEmpty() (CodeQL: java/inefficient-empty-string-test, ~66) ──────────────
+
+# Match variable.length() patterns, but NOT File.length() (which returns long, not String)
+# Capture group: full variable expression including dots and method calls
+# Negative lookahead: skip if preceded by 'File' type or 'long' context markers
+_LEN_PATTERN = r'(?<!File )(?<!File  )(?<!File\t)' r'(\w+(?:\.\w+(?:\([^)]*\))?)+)\.length\(\)'
+
+# .length() == 0 → .isEmpty()
+_LEN_EQ_0 = re.compile(_LEN_PATTERN + r'\s*==\s*0')
+# .length() != 0 → !foo.isEmpty()
+_LEN_NE_0 = re.compile(_LEN_PATTERN + r'\s*!=\s*0')
+# .length() > 0 → !foo.isEmpty()
+_LEN_GT_0 = re.compile(_LEN_PATTERN + r'\s*>\s*0')
+# .length() <= 0 → .isEmpty()
+_LEN_LTE_0 = re.compile(_LEN_PATTERN + r'\s*<=\s*0')
+
+
+# File-like variable names to skip (File.length() returns long, not String)
+_FILE_NAMES = re.compile(r'(?:^|[.\s(])(?:file|tempFile|configFile|f|dir|dirpath|path|fpath|dest)\b\.length\(\)')
+
+
+def fix_empty_string(filepath, dry_run=False):
+    """Replace .length() == 0 with .isEmpty() and similar patterns."""
+    if is_excluded(filepath):
+        return 0
+    try:
+        content, _ = read_file(filepath)
+    except OSError:
+        return 0
+
+    original = content
+
+    # Process line by line to skip lines already using .isEmpty() or File.length()
+    new_lines = []
+    for line in content.split("\n"):
+        if ".isEmpty()" in line:
+            new_lines.append(line)
+            continue
+        if _FILE_NAMES.search(line):
+            new_lines.append(line)
+            continue
+        # .length() == 0 → .isEmpty()
+        line = _LEN_EQ_0.sub(r'\1.isEmpty()', line)
+        # .length() != 0 → !foo.isEmpty()
+        line = _LEN_NE_0.sub(r'!\1.isEmpty()', line)
+        # .length() > 0 → !foo.isEmpty()
+        line = _LEN_GT_0.sub(r'!\1.isEmpty()', line)
+        # .length() <= 0 → .isEmpty()
+        line = _LEN_LTE_0.sub(r'\1.isEmpty()', line)
+        new_lines.append(line)
+
+    content = "\n".join(new_lines)
+
+    changes = 0
+    if content != original:
+        for old_line, new_line in zip(original.split("\n"), content.split("\n")):
+            if old_line != new_line:
+                changes += 1
+                if dry_run:
+                    print_fix(filepath, None, old_line, new_line, dry_run)
+        if not dry_run:
+            write_file(filepath, content, dry_run)
+
+    return changes
+
+
 # ── Imports (google-java-format + Checkstyle XML) ─────────────────────────────
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -823,6 +1015,8 @@ def fix_indentation(scan_path, xml_path, dry_run=False):
 ALL_FIXES = {
     "checkstyle": ("Tabs, whitespace, braces, trailing ws", fix_checkstyle),
     "imports": ("Unused imports (google-java-format)", fix_imports),
+    "override": ("Add @Override from CodeQL SARIF [java/missing-override-annotation]", fix_override),
+    "is-empty": ("Replace .length() == 0 with .isEmpty() [java/inefficient-empty-string-test]", fix_empty_string),
     "simpledate": ("SimpleDateFormat → DateTimeFormatter", fix_simple_date),
     "newline-fmt": (r"\n → %n in String.format", fix_format_newline),
     "encoding": ("Default encoding → StandardCharsets", fix_default_encoding),
@@ -850,6 +1044,7 @@ def main():
     parser.add_argument("-f", "--fix", nargs="+", default=list(ALL_FIXES.keys()),
                         help="Fix types to apply (default: all checkstyle/pmd/spotbugs)")
     parser.add_argument("-x", "--xml", help="Checkstyle XML report (for indent and redundant imports)")
+    parser.add_argument("-s", "--sarif", help="CodeQL SARIF report (for override fix)")
     args = parser.parse_args()
 
     scan_path = os.path.abspath(args.path)
@@ -893,6 +1088,27 @@ def main():
                 n += r_n
             print(f"")
             total += n
+            continue
+
+        # Handle override (uses SARIF)
+        if fix_type == "override":
+            desc = ALL_FIXES[fix_type][0]
+            print(f"── override: {desc}", file=sys.stderr)
+            if not args.sarif:
+                print("   (skipped — use -s dist/codeql-java.sarif)", file=sys.stderr)
+                print(f"")
+                continue
+            # Reset cached locations for each run
+            if hasattr(fix_override, "_locations"):
+                delattr(fix_override, "_locations")
+            count = 0
+            for filepath in sorted(java_files):
+                n = fix_override(filepath, args.sarif, args.dry_run)
+                if n > 0:
+                    count += n
+            label = "would fix" if args.dry_run else "fixed"
+            print(f"   {count} {label}\n", file=sys.stderr)
+            total += count
             continue
 
         if fix_type not in ALL_FIXES:

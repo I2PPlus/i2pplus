@@ -1293,7 +1293,7 @@ public class TunnelConfig {
         if (!_context.isRouterContext()) {
             if (_i2cpHost != null)
                 config.setProperty(TunnelController.PROP_I2CP_HOST, _i2cpHost);
-            if ((_i2cpPort != null) && (_i2cpPort.trim().length() > 0)) {
+            if ((_i2cpPort != null) && (!_i2cpPort.trim().isEmpty())) {
                 config.setProperty(TunnelController.PROP_I2CP_PORT, _i2cpPort);
             } else {
                 config.setProperty(TunnelController.PROP_I2CP_PORT, Integer.toString(I2PClient.DEFAULT_LISTEN_PORT));

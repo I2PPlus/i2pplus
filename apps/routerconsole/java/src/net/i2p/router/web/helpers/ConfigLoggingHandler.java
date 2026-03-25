@@ -142,7 +142,7 @@ public class ConfigLoggingHandler extends FormHandler {
             shouldSave = true;
         }
 
-        if ((_recordFormat != null) && (_recordFormat.trim().length() > 0)) {
+        if ((_recordFormat != null) && (!_recordFormat.trim().isEmpty())) {
             _recordFormat = _recordFormat.trim();
             String old = new String(mgr.getFormat());
             if (_recordFormat.equalsIgnoreCase(old)) {

@@ -49,7 +49,7 @@ public abstract class Parser {
     private static final String PROP_HURLC_PROXY1 = "http.proxyHost";
     private static final boolean HURLC_PROXY_ENABLED =
             System.getProperty(PROP_HURLC_PROXY1) != null
-                    && System.getProperty(PROP_HURLC_PROXY1).length() > 0;
+                    && !System.getProperty(PROP_HURLC_PROXY1).isEmpty();
 
     ////////////////////////////////////////////////
     //	Constructor

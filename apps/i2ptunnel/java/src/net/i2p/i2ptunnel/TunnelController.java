@@ -1462,7 +1462,7 @@ public class TunnelController implements Logging {
   /****
     private void getHttpClientSummary(StringBuilder buf) {
         String description = getDescription();
-        if ((description != null) && (description.trim().length() > 0))
+        if ((description != null) && (!description.trim().isEmpty()))
             buf.append("<i>").append(description).append("</i><br />\n");
         buf.append("HTTP proxy listening on port ").append(getListenPort());
         String listenOn = getListenOnInterface();
@@ -1474,7 +1474,7 @@ public class TunnelController implements Logging {
             buf.append(" (reachable at the ").append(listenOn).append(" interface)");
         buf.append("<br />\n");
         String proxies = getProxyList();
-        if ((proxies == null) || (proxies.trim().length() <= 0))
+        if ((proxies == null) || (proxies.trim().isEmpty()))
             buf.append("Outproxy: default [squid.i2p]<br />\n");
         else
             buf.append("Outproxy: ").append(proxies).append("<br />\n");
@@ -1483,7 +1483,7 @@ public class TunnelController implements Logging {
 
     private void getClientSummary(StringBuilder buf) {
         String description = getDescription();
-        if ((description != null) && (description.trim().length() > 0))
+        if ((description != null) && (!description.trim().isEmpty()))
             buf.append("<i>").append(description).append("</i><br />\n");
         buf.append("Client tunnel listening on port ").append(getListenPort());
         buf.append(" pointing at ").append(getTargetDestination());
@@ -1500,7 +1500,7 @@ public class TunnelController implements Logging {
 
     private void getServerSummary(StringBuilder buf) {
         String description = getDescription();
-        if ((description != null) && (description.trim().length() > 0))
+        if ((description != null) && (!description.trim().isEmpty()))
             buf.append("<i>").append(description).append("</i><br />\n");
         buf.append("Server tunnel pointing at port ").append(getTargetPort());
         buf.append(" on ").append(getTargetHost());
@@ -1511,7 +1511,7 @@ public class TunnelController implements Logging {
 
     private void getHttpServerSummary(StringBuilder buf) {
         String description = getDescription();
-        if ((description != null) && (description.trim().length() > 0))
+        if ((description != null) && (!description.trim().isEmpty()))
             buf.append("<i>").append(description).append("</i><br />\n");
         buf.append("Server tunnel pointing at port ").append(getTargetPort());
         buf.append(" on ").append(getTargetHost());

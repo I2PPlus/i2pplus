@@ -1386,7 +1386,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private int getInt(String prop, int defaultVal) {
         String p = _config.getProperty(prop);
         try {
-            if ((p != null) && (p.trim().length() > 0)) {
+            if ((p != null) && (!p.trim().isEmpty())) {
                 return Integer.parseInt(p.trim());
             }
         } catch (NumberFormatException nfe) {
@@ -1826,7 +1826,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
         boolean reconnect =
                 i2cpHost != null
-                        && i2cpHost.trim().length() > 0
+                        && !i2cpHost.trim().isEmpty()
                         && port > 0
                         && (port != _util.getI2CPPort() || !oldI2CPHost.equals(i2cpHost));
         if (reconnect || !oldOpts.equals(opts)) {
@@ -4261,9 +4261,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private void initTrackerMap() {
         String trackers = _config.getProperty(PROP_TRACKERS);
-        if ((trackers == null) || (trackers.trim().length() <= 0))
+        if ((trackers == null) || (trackers.trim().isEmpty()))
             trackers = _context.getProperty(PROP_TRACKERS);
-        if ((trackers == null) || (trackers.trim().length() <= 0)) {
+        if ((trackers == null) || (trackers.trim().isEmpty())) {
             setDefaultTrackerMap(true);
         } else {
             String[] toks = DataHelper.split(trackers, ",");
@@ -4306,7 +4306,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private void initTorrentCreateFilterMap() {
         String torrentCreateFilters = _config.getProperty(PROP_TORRENT_CREATE_FILTERS);
-        if (!((torrentCreateFilters == null) || (torrentCreateFilters.trim().length() <= 0))) {
+        if (!((torrentCreateFilters == null) || (torrentCreateFilters.trim().isEmpty()))) {
             convertFiltersToNewConfig();
             _config.remove(PROP_TORRENT_CREATE_FILTERS);
             saveConfig();

@@ -323,7 +323,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     private void setupI2PTunnelHTTPServer(String spoofHost) {
-        _spoofHost = (spoofHost != null && spoofHost.trim().length() > 0) ? spoofHost.trim() : null;
+        _spoofHost = (spoofHost != null && !spoofHost.trim().isEmpty()) ? spoofHost.trim() : null;
         getTunnel().getContext().statManager().createRateStat("i2ptunnel.httpserver.blockingHandleTime",
                                                               "How long the blocking handle takes to complete",
                                                               "Tunnels [HTTPServer]", new long[] { 60*1000, 10*60*1000, 3*60*60*1000 });
@@ -413,7 +413,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         Properties props = tunnel.getClientOptions();
         // see TunnelController.setSessionOptions()
         String spoofHost = props.getProperty(TunnelController.PROP_SPOOFED_HOST);
-        _spoofHost = (spoofHost != null && spoofHost.trim().length() > 0) ? spoofHost.trim() : null;
+        _spoofHost = (spoofHost != null && !spoofHost.trim().isEmpty()) ? spoofHost.trim() : null;
         super.optionsUpdated(tunnel);
     }
 

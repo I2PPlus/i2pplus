@@ -144,7 +144,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (!configName.equals(DEFAULT_NAME)) {configName = DEFAULT_NAME + '_' + _contextName;}
         _manager = new SnarkManager(_context, _contextPath, configName);
         String configFile = _context.getProperty(PROP_CONFIG_FILE);
-        if ((configFile == null) || (configFile.trim().length() <= 0)) {configFile = configName + ".config";}
+        if ((configFile == null) || (configFile.trim().isEmpty())) {configFile = configName + ".config";}
         _manager.loadConfig(configFile);
         _manager.start();
         loadMimeMap("org/klomp/snark/web/mime");
@@ -341,7 +341,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         String nonce = req.getParameter("nonce");
         if (nonce != null) {
-            if (( "POST".equals(method) || "Clear".equals(req.getParameter("action"))) &&
+            if (("POST".equals(method) || "Clear".equals(req.getParameter("action"))) &&
                 nonce.equals(String.valueOf(_nonce))) {
                 processRequest(req);
             } else {
@@ -3541,7 +3541,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // display incoming parameter if a GET so links will work
         StringBuilder buf = new StringBuilder(1024);
         String newURL = req.getParameter("nofilter_newURL");
-        if (newURL == null || newURL.trim().length() <= 0 || req.getMethod().equals("POST")) {newURL = "";}
+        if (newURL == null || newURL.trim().isEmpty() || req.getMethod().equals("POST")) {newURL = "";}
         else {newURL = DataHelper.stripHTML(newURL);} // XSS
 
         String addTop =
@@ -3579,7 +3579,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<label id=tab_newtorrent class=toggleview for=toggle_createtorrent><span class=tab_label>").append(_t("Create Torrent"))
            .append("</span></label><hr>\n<table border=0><tr><td class=right><span>").append(_t("Data to seed"))
            .append("</span>:</td><td class=left><input id=createTorrentFile type=text name=nofilter_baseFile size=85 value=\"\" spellcheck=false title=\"")
-           .append(_t("File or directory to seed (full path or within the directory {0} )", _manager.getDataDir().getAbsolutePath() + File.separatorChar))
+           .append(_t("File or directory to seed (full path or within the directory {0})", _manager.getDataDir().getAbsolutePath() + File.separatorChar))
            .append("\" required> <input type=submit class=create value=\"").append(_t("Create torrent")).append("\" name=foo></td></tr>\n")
            .append("<tr id=createTorrentFilters title=\"").append(_t("Exclude files from the torrent if they reside in the torrent folder")).append("\">")
            .append("<td class=right><span>").append(_t("Content Filters")).append("</span>:</td><td class=left><div id=contentFilter>");
@@ -5536,7 +5536,7 @@ public class I2PSnarkServlet extends BasicServlet {
         Iterator<Comment> iter = null;
         int myRating = 0;
         CommentSet comments = snark.getComments();
-        boolean canRate = esc && _manager.util().getCommentsName().length() > 0;
+        boolean canRate = esc && !_manager.util().getCommentsName().isEmpty();
 
         buf.append("<table id=commentInfo>\n<tr><th colspan=3>")
            .append(_t("Ratings and Comments").replace("and", "&amp; "))
@@ -5983,7 +5983,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         List<Tracker> newTrackers = _manager.getSortedTrackers();
-        for (Iterator<Tracker> iter = newTrackers.iterator(); iter.hasNext(); ) {
+        for (Iterator<Tracker> iter = newTrackers.iterator(); iter.hasNext();) {
             Tracker t = iter.next();
             String announceURL = t.announceURL.replace("&#61; ", "=");
             if (announceURL.equals(announce) || annlist.contains(announceURL)) {iter.remove();}
@@ -6090,7 +6090,7 @@ public class I2PSnarkServlet extends BasicServlet {
         List<Tracker> newTrackers = _manager.getSortedTrackers();
         for (Integer i : toDel) {
             int hc = i.intValue();
-            for (Iterator<String> iter = annlist.iterator(); iter.hasNext(); ) {
+            for (Iterator<String> iter = annlist.iterator(); iter.hasNext();) {
                 String s = iter.next();
                 if (s.hashCode() == hc) {iter.remove();}
             }

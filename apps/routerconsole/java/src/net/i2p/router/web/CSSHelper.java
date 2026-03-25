@@ -117,7 +117,7 @@ public class CSSHelper extends HelperBase {
     public void setLang(String lang) {
         // Protected with nonce in css.jsi
         if (lang != null && lang.length() >= 2 && lang.length() <= 6 &&
-            ALPHA_UNDERSCORE.matcher(lang).replaceAll("").length() == 0) {
+            ALPHA_UNDERSCORE.matcher(lang).replaceAll("").isEmpty()) {
             Map<String, String> m = new HashMap<String, String>(2);
             int under = lang.indexOf('_');
             if (under < 0) {

@@ -298,7 +298,7 @@ public class ConfigClientsHandler extends FormHandler {
             isAdvanced()) {
             int newClient = clients.size();
             String newDesc = getJettyString("nofilter_desc" + newClient);
-            if (newDesc != null && newDesc.trim().length() > 0) {
+            if (newDesc != null && !newDesc.trim().isEmpty()) {
                 // new entry
                 int spc = newDesc.indexOf(' ');
                 String clss = newDesc;
@@ -308,7 +308,7 @@ public class ConfigClientsHandler extends FormHandler {
                     args = newDesc.substring(spc + 1);
                 }
                 String name = getJettyString("nofilter_name" + newClient);
-                if (name == null || name.trim().length() <= 0) name = "new client";
+                if (name == null || name.trim().isEmpty()) name = "new client";
                 ClientAppConfig ca = new ClientAppConfig(clss, name, args, 2*60*1000,
                                                          _settings.get(newClient + ".enabled") == null);  // true for disabled
                 clients.add(ca);

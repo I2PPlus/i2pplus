@@ -1300,7 +1300,7 @@ public class I2PSnarkUtil implements DisconnectListener {
             in = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF-8"), 1024);
             String line = null;
             while ((line = in.readLine()) != null) {
-                if (line.trim().length() <= 0) {
+                if (line.trim().isEmpty()) {
                     continue;
                 }
                 if (line.charAt(0) == '#') {

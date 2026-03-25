@@ -82,6 +82,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
      * including 0, excluding n.
      *
      * This code unused, see FortunaRandomSource override
+     * NOPMD - nextLong(long) doesn't override SecureRandom (added in Java 17)
      */
     public long nextLong(long n) {
         long v = super.nextLong();

@@ -2100,7 +2100,7 @@ public class WebMail extends HttpServlet {
                 if (showUIDL != null) {
                     MailCache mc = getCurrentMailCache(sessionObject, request);
                     Mail mail = (mc != null) ? mc.getMail(showUIDL, MailCache.FetchMode.ALL) : null;
-                    if (mail != null && mail.error.length() > 0) {
+                    if (mail != null && !mail.error.isEmpty()) {
                         sessionObject.error += mail.error;
                         mail.error = "";
                     }
@@ -2147,7 +2147,7 @@ public class WebMail extends HttpServlet {
                     for (Iterator<String> it = folder.currentPageIterator(); it != null && it.hasNext();) {
                         String uidl = it.next();
                         Mail mail = mc.getMail(uidl, MailCache.FetchMode.HEADER_CACHE_ONLY);
-                        if (mail != null && mail.error.length() > 0) {
+                        if (mail != null && !mail.error.isEmpty()) {
                             sessionObject.error += mail.error;
                             mail.error = "";
                         }
@@ -2606,7 +2606,7 @@ public class WebMail extends HttpServlet {
         if (content == null)
             return false;
         String name;
-        if (mail.subject.length() > 0)
+        if (!mail.subject.isEmpty())
             name = mail.subject.trim() + ".eml";
         else
             name = "message.eml";
@@ -2670,7 +2670,7 @@ public class WebMail extends HttpServlet {
                                               String from, String to, String cc, String bcc,
                                               String subject, String text, List<Attachment> attachments) {
         boolean ok = true;
-        if (subject == null || subject.trim().length() <= 0)
+        if (subject == null || subject.trim().isEmpty())
             subject = _t("no subject");
         else
             subject = subject.trim();
