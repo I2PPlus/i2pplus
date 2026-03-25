@@ -238,12 +238,8 @@ def fix_simple_date(filepath, dry_run=False):
         # Replace the new SimpleDateFormat(...) with DateTimeFormatter.ofPattern(...)
         new_line = line[:m.start()] + dtf_init + line[m.end():]
 
-        # If it's a .format() call, we need to handle the different API
-        # SimpleDateFormat.format(Date) → DateTimeFormatter.format(TemporalAccessor)
-        if ".format(" in new_line:
-            # For inline usage, convert .format(dateObj) to .format(dateObj.toInstant())
-            # This is approximate — needs manual review for complex cases
-            new_line = re.sub(r'\.format\(([^)]+)\)', r'.format(\1)', new_line)
+        # Also change the type declaration if present (e.g., "SimpleDateFormat sdf =")
+        new_line = re.sub(r'\bSimpleDateFormat\b(\s+\w+\s*=)', r'DateTimeFormatter\1', new_line)
 
         if new_line != line:
             changes += 1
@@ -320,9 +316,16 @@ _FILEREADER = re.compile(r'new\s+FileReader\s*\(\s*([^)]+?)\s*\)')
 # new String(bytes) → new String(bytes, StandardCharsets.UTF_8)
 _STRING_BYTES = re.compile(r'new\s+String\s*\(\s*(\w+)\s*\)\s*;')
 # str.getBytes() → str.getBytes(StandardCharsets.UTF_8)
+# Only match common String variable patterns, not custom getBytes() methods
 _GETBYTES = re.compile(r'(\w+)\s*\.\s*getBytes\s*\(\s*\)')
 # path.getBytes("UTF-8") is fine, skip those
 _GETBYTES_CHARSET = re.compile(r'\.getBytes\s*\(\s*"[^"]*"\s*\)')
+# Known non-String variable names that have custom getBytes() methods
+_GETBYTES_SKIP_NAMES = frozenset([
+    'h', 'header', 'packet', 'socks', 'icon', 'msg', 'message',
+    'resp', 'response', 'req', 'request', 'obj', 'data', 'block',
+    'bytebuf', 'buf', 'bytes', 'raw', 'payload', 'output', 'input',
+])
 
 
 def fix_default_encoding(filepath, dry_run=False):
@@ -361,6 +364,9 @@ def fix_default_encoding(filepath, dry_run=False):
     # getBytes() → getBytes(StandardCharsets.UTF_8)
     def getbytes_replacer(m):
         nonlocal needs_import, changes
+        # Skip known non-String variable names with custom getBytes() methods
+        if m.group(1).lower() in _GETBYTES_SKIP_NAMES:
+            return m.group(0)
         needs_import = True
         changes += 1
         return f"{m.group(1)}.getBytes(StandardCharsets.UTF_8)"
