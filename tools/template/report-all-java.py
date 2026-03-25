@@ -356,7 +356,7 @@ def main():
             if count == 0:
                 continue
             src_files = len(set(r["file"] for r in all_results if r["source"] == src))
-            w(f'<tr class="tablerow0 src-filter-row" data-source="{src.lower()}" title="Click to filter by {src}"><td><span class="src-badge {src.lower()}">{src}</span></td><td class="summary-count">{count}</td><td class="summary-count">{src_files}</td></tr>')
+            w(f'<tr class="tablerow0 src-filter-row" data-source="{src.lower()}" title="Click to filter by {src}"><td><span class="src-badge {src.lower()}" title="Source: {src}">{src}</span></td><td class="summary-count">{count}</td><td class="summary-count">{src_files}</td></tr>')
         w(f'<tr class="tablerow1"><td><b>Total</b></td><td class="summary-count"><b>{total}</b></td><td class="summary-count"><b>{len(file_counts)}</b></td></tr>')
         w('</table>')
 
@@ -394,7 +394,7 @@ def main():
                             else:
                                 w(f'<tr class="{row}" data-source="{fr["source"].lower()}">')
                             w(f'<td class="line priority-cell {fr["severity"]}">{escape(rng)}</td>')
-                            w(f'<td><span class="src-badge {fr["source"].lower()}">{escape(fr["source"])}</span></td>')
+                            w(f'<td><span class="src-badge {fr["source"].lower()}" title="Source: {escape(fr["source"])}">{escape(fr["source"])}</span></td>')
                             w(f'<td>{escape(fr["rule"])}</td>')
                             w(f'<td>{escape(fr["message"])}</td>')
                             w(f'<td class="rule-category">{escape(fr["category"])}</td>')
@@ -418,17 +418,7 @@ def main():
 
         w('</div>')
 
-    # Inject source badge CSS
-    source_css = """
-.src-badge,.pmd,.checkstyle,.codeql,.spotbugs{display:inline-block;padding:1px 8px;font-size:8pt;font-weight:700;border-radius:3px;color:#fff;text-shadow:1px 1px 1px #000}
-.src-badge.pmd,.pmd{background:#6040a0}.src-badge.checkstyle,.checkstyle{background:#206080}.src-badge.codeql,.codeql{background:#a04020}.src-badge.spotbugs,.spotbugs{background:#208040}
-.src-filter-row{cursor:pointer}.src-filter-row:hover{background:#2a2a40!important}
-.src-filter-row.active td:first-child{box-shadow:inset 3px 0 0 #e88830}
-tr.source-hidden{display:none}
-"""
-
     html_so_far = "\n".join(lines)
-    html_so_far = html_so_far.replace("</style>", source_css + "</style>")
     lines = [html_so_far]
     w = lines.append
     w(html_footer())

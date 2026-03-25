@@ -547,6 +547,65 @@ span.severity-warning {
   background: #905010;
 }
 
+/* ---- combined report source badges ---- */
+.src-badge,
+.pmd,
+.checkstyle,
+.codeql,
+.spotbugs {
+  display: inline-block;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  font-size: 0;
+  vertical-align: middle;
+  margin: -4px 0;
+}
+
+.src-badge:hover {
+  transform: scale(1.2);
+}
+
+.src-badge:active {
+  transform: scale(.9);
+}
+
+.src-badge.pmd,
+.pmd {
+  background: var(--pmd);
+}
+
+.src-badge.checkstyle,
+.checkstyle {
+  background: var(--checkstyle) no-repeat center center / 22px;
+}
+
+.src-badge.codeql,
+.codeql {
+  background: var(--codeql);
+}
+
+.src-badge.spotbugs,
+.spotbugs {
+  background: var(--spotbugs)  no-repeat center center / 22px;
+}
+
+.src-filter-row {
+  cursor: pointer
+}
+
+.src-filter-row:hover {
+  background: #2a2a40 !important
+}
+
+.src-filter-row.active td:first-child {
+  box-shadow: inset 3px 0 0 #e88830
+}
+
+tr.source-hidden {
+  display: none
+}
+
 /* ---- Responsive ---- */
 @media (max-width:900px) {
   body {

@@ -42,10 +42,20 @@ function filterBySource(src) {
     h3.style.display = vis.length ? "" : "none";
     tbl.style.display = vis.length ? "" : "none";
   });
-  // Hide empty section groups
+  // Hide empty section groups + corresponding navbar buttons
   document.querySelectorAll("#violations details").forEach(function(d) {
     if (src === null) { d.style.display = ""; return; }
     var vis = d.querySelectorAll("tr[data-source]:not(.source-hidden):not([class*=detailrow])");
     d.style.display = vis.length ? "" : "none";
+  });
+  document.querySelectorAll("#navbar span").forEach(function(span) {
+    var link = span.querySelector("a[data-sub]");
+    if (!link) return;
+    if (src === null) { span.style.display = ""; return; }
+    var section = document.getElementById(link.dataset.sub);
+    if (section) {
+      var vis = section.querySelectorAll("tr[data-source]:not(.source-hidden):not([class*=detailrow])");
+      span.style.display = vis.length ? "" : "none";
+    }
   });
 }
