@@ -25,7 +25,7 @@
 
   <target name="distclean" depends="clean"/>
 
-  <target name="junit.compileTest" depends="build">
+  <target name="junit.compileTest" depends="jar">
     <mkdir dir="${build}"/>
     <mkdir dir="${build}/obj"/>
     <javac srcdir="./java/test/junit" debug="true" source="${javac.version}" target="${javac.version}" deprecation="on"
