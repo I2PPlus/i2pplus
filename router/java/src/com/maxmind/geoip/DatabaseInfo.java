@@ -85,7 +85,7 @@ public class DatabaseInfo {
             return COUNTRY_EDITION;
         } else {
             // Get the type code from the database info string and then
-            // subtract 105 from the value to preserve compatability with
+            // subtract 105 from the value to preserve compatibility with
             // databases from April 2003 and earlier.
             return Integer.parseInt(info.substring(4, 7)) - 105;
         }

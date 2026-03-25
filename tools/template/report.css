@@ -557,7 +557,7 @@ th.filtered {
 }
 
 th.filtered span {
-  transform: scale(1.2);
+  transform: scale(1.2) translateY( -1px);
 }
 
 /* ---- combined report source badges ---- */
