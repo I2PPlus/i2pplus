@@ -165,24 +165,6 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     private static final long ACCEPT_TIMEOUT_DEFAULT = 10*1000;
 
     /**
-     * @deprecated use 4-arg constructor
-     * @throws UnsupportedOperationException always
-     */
-    @Deprecated
-    public I2PSocketManagerFull() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * @deprecated use 4-arg constructor
-     * @throws UnsupportedOperationException always
-     */
-    @Deprecated
-    public void init(I2PAppContext context, I2PSession session, Properties opts, String name) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
      * This is what I2PSocketManagerFactory.createManager() returns.
      * Direct instantiation by others is deprecated.
      *

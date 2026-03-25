@@ -213,12 +213,6 @@ public interface I2PSocketManager {
      */
     public void setName(String name);
 
-    /**
-     * Deprecated - Factory will initialize.
-     * @throws UnsupportedOperationException always
-     */
-    public void init(I2PAppContext context, I2PSession session, Properties opts, String name);
-
     public void addDisconnectListener(DisconnectListener lsnr);
     public void removeDisconnectListener(DisconnectListener lsnr);
 

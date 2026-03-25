@@ -159,13 +159,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     @Override
     public void setName(String name) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void init(I2PAppContext context, I2PSession session,
-            Properties opts, String name) {
-        throw new UnsupportedOperationException();
+        _name = name;
     }
 
     @Override
