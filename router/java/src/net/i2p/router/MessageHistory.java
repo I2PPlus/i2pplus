@@ -16,7 +16,9 @@ import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 
 /**
- * Logs router message traffic for debugging and network analysis. Records inbound and outbound messages with timestamps when enabled, providing detailed traffic history for troubleshooting.
+ * Logs router message traffic for debugging and network analysis.
+ * Records inbound and outbound messages with timestamps when enabled,
+ * providing detailed traffic history for troubleshooting.
  *
  * <p>This is always instantiated in context and WriteJob runs every minute,
  * (except on Android, we don't set up the WriteJob)
@@ -125,59 +127,6 @@ public class MessageHistory {
         }
         public String getName() { return "Reinitialize Message History"; }
     }
-
-    /**
-     * We are requesting that the peerRequested create the tunnel specified with the
-     * given nextPeer, and we are sending that request to them through outTunnel with
-     * a request that the reply is sent back to us through replyTunnel on the given
-     * replyThrough router.
-     *
-     * @param createTunnel tunnel being created
-     * @param outTunnel tunnel we are sending this request out
-     * @param peerRequested peer asked to participate in the tunnel
-     * @param nextPeer who peerRequested should forward messages to (or null if it is the endpoint)
-     * @param replyTunnel the tunnel sourceRoutePeer should forward the source routed message to
-     * @param replyThrough the gateway of the tunnel that the sourceRoutePeer will be sending to
-     */
-/********
-    public void requestTunnelCreate(TunnelId createTunnel, TunnelId outTunnel, Hash peerRequested, Hash nextPeer, TunnelId replyTunnel, Hash replyThrough) {
-        if (!_doLog) return;
-        StringBuilder buf = new StringBuilder(128);
-        buf.append(getPrefix());
-        buf.append("request [").append(getName(peerRequested)).append("] to create tunnel [");
-        buf.append(createTunnel.getTunnelId()).append("] ");
-        if (nextPeer != null)
-            buf.append("(next [").append(getName(nextPeer)).append("]) ");
-        if (outTunnel != null)
-            buf.append("via [").append(outTunnel.getTunnelId()).append("] ");
-        if ((replyTunnel != null) && (replyThrough != null))
-            buf.append("who forwards it through [").append(replyTunnel.getTunnelId()).append("] on [").append(getName(replyThrough)).append("]");
-        addEntry(buf.toString());
-    }
-*********/
-
-    /**
-     * The local router has received a request to join the createTunnel with the next hop being nextPeer,
-     * and we should send our decision to join it through sourceRoutePeer
-     *
-     * @param createTunnel tunnel being joined
-     * @param nextPeer next hop in the tunnel (or null if this is the endpoint)
-     * @param expire when this tunnel expires
-     * @param ok whether we will join the tunnel
-     * @param sourceRoutePeer peer through whom we should send our garlic routed ok through
-     */
-/*********
-    public void receiveTunnelCreate(TunnelId createTunnel, Hash nextPeer, Date expire, boolean ok, Hash sourceRoutePeer) {
-        if (!_doLog) return;
-        StringBuilder buf = new StringBuilder(128);
-        buf.append(getPrefix());
-        buf.append("receive tunnel create [").append(createTunnel.getTunnelId()).append("] ");
-        if (nextPeer != null)
-            buf.append("(next [").append(getName(nextPeer)).append("]) ");
-        buf.append("ok? ").append(ok).append(" expiring on [").append(getTime(expire.getTime())).append("]");
-        addEntry(buf.toString());
-    }
-*********/
 
     /**
      * The local router has joined the given tunnel operating in the given state.
@@ -653,18 +602,4 @@ public class MessageHistory {
         }
     }
 
-/****
-    public static void main(String args[]) {
-        RouterContext ctx = new RouterContext(null);
-        MessageHistory hist = new MessageHistory(ctx);
-        //, new Hash(new byte[32]), "messageHistory.txt");
-        hist.setDoLog(false);
-        hist.addEntry("you smell before");
-        hist.setDoLog(true);
-        hist.addEntry("you smell after");
-        hist.setDoLog(false);
-        hist.addEntry("you smell finished");
-        hist.flushEntries();
-    }
-****/
 }
