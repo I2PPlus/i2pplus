@@ -1563,7 +1563,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         boolean shouldBoost = _context.router().isHidden() ||
                               _context.router().getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
         if (expireRI != null) {
-            try {return Integer.parseInt(expireRI)*60*60*1000L;}
+            try {return Integer.parseInt(expireRI)*60L *60*1000L;}
             catch (NumberFormatException ignored) {}
         }
         long calculatedExpiry = ROUTER_INFO_EXPIRATION;
@@ -2438,3 +2438,4 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
 }
+

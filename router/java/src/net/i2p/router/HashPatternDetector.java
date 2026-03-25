@@ -408,10 +408,10 @@ public class HashPatternDetector implements Serializable {
         try {
             if (prop.length() > 1 && (prop.endsWith("m") || prop.endsWith("M"))) {
                 int minutes = Integer.parseInt(prop.substring(0, prop.length() - 1));
-                return minutes * 60 * 1000L;
+                return minutes * 60L * 1000L;
             } else {
                 int hours = Integer.parseInt(prop);
-                return hours * 60 * 60 * 1000L;
+                return hours * 60L * 60 * 1000L;
             }
         } catch (NumberFormatException e) {
             if (_log.shouldWarn())
@@ -702,3 +702,4 @@ public class HashPatternDetector implements Serializable {
         }
     }
 }
+

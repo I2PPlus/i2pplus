@@ -232,7 +232,7 @@ class AccessFilter implements StatefulConnectionFilter {
     }
 
     private void purge() {
-        long olderThan = context.clock().now() - definition.getPurgeSeconds() * 1000;
+        long olderThan = context.clock().now() - definition.getPurgeSeconds() * 1000L;
 
         synchronized (knownDests) {
             for (DestTracker tracker : knownDests.values()) {
@@ -308,3 +308,4 @@ class AccessFilter implements StatefulConnectionFilter {
         }
     }
 }
+

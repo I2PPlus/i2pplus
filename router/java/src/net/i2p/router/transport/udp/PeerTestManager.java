@@ -355,10 +355,10 @@ class PeerTestManager {
                         }
                         // earlier because charlie will go away at 15 sec
                         // retx at 4, 6, 9, 13 elapsed time
-                        reschedule(sent*1000);
+                        reschedule(sent* 1000L);
                     } else {
                     // retx at 4, 10, 17, 25 elapsed time
-                        reschedule(RESEND_TIMEOUT + (sent*1000));
+                        reschedule(RESEND_TIMEOUT + (sent* 1000L));
                     }
                 } else {
                     reschedule(RESEND_TIMEOUT - timeSinceSend);
@@ -1993,3 +1993,4 @@ class PeerTestManager {
         }
     }
 }
+

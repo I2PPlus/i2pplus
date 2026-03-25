@@ -771,6 +771,167 @@ def fix_empty_string(filepath, dry_run=False):
     return changes
 
 
+# ── Unbox primitive wrappers (CodeQL: java/non-null-boxed-variable, ~23) ──────
+
+_BOXED_TO_PRIM = {
+    "Integer": "int", "Long": "long", "Double": "double",
+    "Float": "float", "Boolean": "boolean", "Short": "short",
+    "Byte": "byte", "Character": "char",
+}
+_BOXED_DECL = re.compile(r'^(\s+)((?:final\s+)?)(Integer|Long|Double|Float|Boolean|Short|Byte|Character)\s+(\w+)\s*(=|;|\))')
+
+
+def fix_unbox(filepath, dry_run=False):
+    """Replace boxed primitive types with primitives where never-null."""
+    if is_excluded(filepath):
+        return 0
+    try:
+        content, _ = read_file(filepath)
+    except OSError:
+        return 0
+
+    original = content
+    changes = 0
+    new_lines = []
+
+    for line in content.split("\n"):
+        m = _BOXED_DECL.match(line)
+        if m:
+            indent = m.group(1)
+            modifiers = m.group(2)
+            boxed = m.group(3)
+            var_name = m.group(4)
+            prim = _BOXED_TO_PRIM[boxed]
+            new_line = f"{indent}{modifiers}{prim} {var_name} {'=' if m.group(5) == '=' else m.group(5)}"
+            # Reconstruct the rest of the line after the match
+            rest = line[m.end():]
+            new_line = new_line + rest
+            if new_line != line:
+                changes += 1
+                if dry_run:
+                    print_fix(filepath, None, line.strip(), new_line.strip(), dry_run)
+            new_lines.append(new_line)
+        else:
+            new_lines.append(line)
+
+    content = "\n".join(new_lines)
+
+    if changes > 0 and not dry_run:
+        write_file(filepath, content, dry_run)
+
+    return changes
+
+
+# ── Integer multiplication cast to long (CodeQL: ~42, prevents overflow) ──────
+
+def _parse_int_mult_locations(sarif_path):
+    """Parse CodeQL SARIF for integer-multiplication-cast-to-long locations."""
+    try:
+        with open(sarif_path) as f:
+            sarif = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return {}
+    locations = {}
+    for run in sarif.get("runs", []):
+        for result in run.get("results", []):
+            if result.get("ruleId") != "java/integer-multiplication-cast-to-long":
+                continue
+            loc = result.get("locations", [{}])[0].get("physicalLocation", {})
+            uri = loc.get("artifactLocation", {}).get("uri", "")
+            region = loc.get("region", {})
+            line = region.get("startLine", 0)
+            col = region.get("startColumn", 0)
+            if uri and line:
+                locations.setdefault(uri, []).append((line, col))
+    return locations
+
+
+def fix_int_mult(filepath, sarif_path=None, dry_run=False):
+    """Add L suffix to integer literals in multiplications reported by CodeQL.
+    Only fixes lines identified in SARIF — conservative, no bulk regex."""
+    if sarif_path is None or not os.path.exists(sarif_path):
+        return 0
+
+    if not hasattr(fix_int_mult, "_locations"):
+        fix_int_mult._locations = _parse_int_mult_locations(sarif_path)
+
+    rel = os.path.relpath(filepath)
+    reported = fix_int_mult._locations.get(rel, [])
+    if not reported:
+        return 0
+
+    if is_excluded(filepath):
+        return 0
+
+    try:
+        content, lines = read_file(filepath)
+    except OSError:
+        return 0
+
+    # For each reported line, find integer literals in multiplication context
+    # and add L suffix. Be conservative: only add L to the LAST integer literal
+    # before the reported column, or the FIRST after, whichever is in a multiply.
+    changes = 0
+    fix_lines = set()
+
+    for line_no, col in reported:
+        idx = line_no - 1
+        if idx < 0 or idx >= len(lines):
+            continue
+        line = lines[idx]
+        if line in fix_lines:
+            continue
+
+        # Skip if line is inside an array literal { ... }
+        stripped = line.strip()
+        if stripped.startswith("//") or stripped.startswith("*"):
+            continue
+
+        # Find the multiplication near the reported column
+        # Strategy: find all " * constant" patterns on the line,
+        # add L to the first integer literal that's an operand of *
+        new_line = line
+        # Match: digit(s) followed by * or preceded by * (without already having L)
+        # Be conservative: only fix the specific multiplication reported
+        col_pos = col - 1 if col > 0 else 0
+        # Find "number * number" pattern near the column
+        before = line[:col_pos + 20]
+        after = line[col_pos:]
+
+        # Look for " * constant" or "constant * " near the reported position
+        m = re.search(r'(\d+)\s*\*\s*(\d+)', line[max(0, col_pos - 10):col_pos + 30])
+        if m:
+            full_match = m.group(0)
+            # Add L to the first operand if it doesn't already have one
+            if not m.group(1).endswith('L'):
+                replacement = m.group(1) + 'L' + m.group(0)[len(m.group(1)):]
+                # Verify we're not in an array context
+                if '{' not in line.split('*')[0].split('=')[-1]:
+                    new_line = line[:line.find(full_match)] + replacement + line[line.find(full_match) + len(full_match):]
+        else:
+            # Simpler: just add L to integer literals in "* N" patterns
+            # But only if there's a multiplication operator on the line
+            if '*' in line:
+                # Find all "* number" and "number *" patterns
+                # Add L to the operand
+                new_line = re.sub(r'(?<!\d)(\d{2,})(?!\d)(?![lL])\s*\*', r'\1L *', line, count=1)
+                if new_line == line:
+                    new_line = re.sub(r'\*\s*(\d{2,})(?!\d)(?![lL])(?!\.)', r'* \1L', line, count=1)
+
+        if new_line != line:
+            fix_lines.add(line)
+            changes += 1
+            if dry_run:
+                print_fix(filepath, line_no, line.strip(), new_line.strip(), dry_run)
+            lines[idx] = new_line
+
+    if changes > 0 and not dry_run:
+        with open(filepath, "w") as f:
+            f.write("\n".join(lines) + ("\n" if content.endswith("\n") else ""))
+
+    return changes
+
+
 # ── Imports (google-java-format + Checkstyle XML) ─────────────────────────────
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -1023,6 +1184,8 @@ ALL_FIXES = {
     "imports": ("Unused imports (google-java-format)", fix_imports),
     "override": ("Add @Override from CodeQL SARIF [java/missing-override-annotation]", fix_override),
     "is-empty": ("Replace .length() == 0 with .isEmpty() [java/inefficient-empty-string-test]", fix_empty_string),
+    "unbox": ("Unbox Integer/Long/etc to int/long [java/non-null-boxed-variable]", fix_unbox),
+    "int-mult": ("Add L suffix to int multiplications [java/integer-multiplication-cast-to-long]", fix_int_mult),
     "simpledate": ("SimpleDateFormat → DateTimeFormatter", fix_simple_date),
     "newline-fmt": (r"\n → %n in String.format", fix_format_newline),
     "encoding": ("Default encoding → StandardCharsets", fix_default_encoding),
@@ -1110,6 +1273,26 @@ def main():
             count = 0
             for filepath in sorted(java_files):
                 n = fix_override(filepath, args.sarif, args.dry_run)
+                if n > 0:
+                    count += n
+            label = "would fix" if args.dry_run else "fixed"
+            print(f"   {count} {label}\n", file=sys.stderr)
+            total += count
+            continue
+
+        # Handle int-mult (uses SARIF)
+        if fix_type == "int-mult":
+            desc = ALL_FIXES[fix_type][0]
+            print(f"── int-mult: {desc}", file=sys.stderr)
+            if not args.sarif:
+                print("   (skipped — use -s dist/codeql-java.sarif)", file=sys.stderr)
+                print(f"")
+                continue
+            if hasattr(fix_int_mult, "_locations"):
+                delattr(fix_int_mult, "_locations")
+            count = 0
+            for filepath in sorted(java_files):
+                n = fix_int_mult(filepath, args.sarif, args.dry_run)
                 if n > 0:
                     count += n
             label = "would fix" if args.dry_run else "fixed"

@@ -251,7 +251,7 @@ public class EepGet {
                         break;
 
                     case 't':
-                        inactivityTimeout = 1000 * Integer.parseInt(g.getOptarg());
+                        inactivityTimeout = 1000L * Integer.parseInt(g.getOptarg());
                         break;
 
                     case 'e':
@@ -2413,3 +2413,4 @@ public class EepGet {
         }
     }
 }
+

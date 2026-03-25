@@ -143,7 +143,7 @@ class BuildExecutor implements Runnable {
         // Adjust timeout based on tunnel length
         int length = cfg.getLength();
         if (length > 3) {
-            baseTimeout += (length - 3) * 5*1000; // Add 5s per additional hop
+            baseTimeout += (length - 3) * 5L*1000; // Add 5s per additional hop
         }
 
         // Adjust based on recent network performance
@@ -747,3 +747,4 @@ class BuildExecutor implements Runnable {
     }
 
 }
+

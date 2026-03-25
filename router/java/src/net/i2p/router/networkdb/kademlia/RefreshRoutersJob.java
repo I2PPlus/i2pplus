@@ -275,7 +275,7 @@ class RefreshRoutersJob extends JobImpl {
                 routerHash.toBase64().substring(0, 6), refreshTimeoutSeconds, Instant.ofEpochMilli(ri.getPublished())));
         }
 
-        _facade.search(routerHash, null, null, refreshTimeoutSeconds * 1000, false);
+        _facade.search(routerHash, null, null, refreshTimeoutSeconds * 1000L, false);
     }
 
     /**
@@ -337,3 +337,4 @@ class RefreshRoutersJob extends JobImpl {
     }
 
 }
+

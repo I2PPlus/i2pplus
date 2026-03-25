@@ -59,7 +59,7 @@ class BackgroundChecker {
                 minutes = mins;
             } catch (NumberFormatException nfe) {}
         }
-        return minutes * 60 * 1000L;
+        return minutes * 60L * 1000L;
     }
 
     private class Checker extends SimpleTimer2.TimedEvent {
@@ -107,3 +107,4 @@ class BackgroundChecker {
     }
 
 }
+

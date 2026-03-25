@@ -191,8 +191,8 @@ public class FIFOBandwidthRefiller implements Runnable {
         if (numMs >= REPLENISH_FREQUENCY * 50 || numMs <= 0)
             numMs = REPLENISH_FREQUENCY;
         if (numMs >= REPLENISH_FREQUENCY) {
-            long inboundToAdd = (1024*_inboundKBytesPerSecond * numMs)/1000;
-            long outboundToAdd = (1024*_outboundKBytesPerSecond * numMs)/1000;
+            long inboundToAdd = (1024L *_inboundKBytesPerSecond * numMs)/1000;
+            long outboundToAdd = (1024L *_outboundKBytesPerSecond * numMs)/1000;
 
             if (inboundToAdd < 0) inboundToAdd = 0;
             if (outboundToAdd < 0) outboundToAdd = 0;
@@ -212,8 +212,8 @@ public class FIFOBandwidthRefiller implements Runnable {
             }
          ****/
 
-            long maxBurstIn = ((_inboundBurstKBytesPerSecond-_inboundKBytesPerSecond)*1024*numMs)/1000;
-            long maxBurstOut = ((_outboundBurstKBytesPerSecond-_outboundKBytesPerSecond)*1024*numMs)/1000;
+            long maxBurstIn = ((_inboundBurstKBytesPerSecond-_inboundKBytesPerSecond)*1024L *numMs)/1000;
+            long maxBurstOut = ((_outboundBurstKBytesPerSecond-_outboundKBytesPerSecond)*1024L *numMs)/1000;
             _limiter.refillBandwidthQueues(buffer, inboundToAdd, outboundToAdd, maxBurstIn, maxBurstOut);
 
             //if (_log.shouldDebug()) {
@@ -416,3 +416,4 @@ public class FIFOBandwidthRefiller implements Runnable {
                 _context.statManager().addRateData("bwLimiter.participatingBandwidthQueue", (long) _partBWE.getQueueSizeEstimate());
     }
 }
+

@@ -433,7 +433,7 @@ public class GraphHelper extends FormHandler {
             buf.append("<option value=\"").append(times[i]).append('"');
             if (times[i] == _refreshDelaySeconds) {buf.append(HelperBase.SELECTED);}
             buf.append('>');
-            if (times[i] > 0) {buf.append(DataHelper.formatDuration2(times[i] * 1000));}
+            if (times[i] > 0) {buf.append(DataHelper.formatDuration2(times[i] * 1000L));}
             else {buf.append(_t("Never"));}
             buf.append("</option>\n");
         }
@@ -561,3 +561,4 @@ public class GraphHelper extends FormHandler {
         }
     }
 }
+

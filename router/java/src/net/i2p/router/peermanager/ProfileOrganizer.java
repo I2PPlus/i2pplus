@@ -518,7 +518,7 @@ public class ProfileOrganizer {
     }
 
     private static final long MIN_EXPIRE_TIME = 3 * 24 * 60 * 60 * 1000;
-    private static final long MAX_EXPIRE_TIME = 4 * 7 * 24 * 60 * 60 * 1000;
+    private static final long MAX_EXPIRE_TIME = 4L * 7 * 24 * 60 * 60 * 1000;
     private static final int ENOUGH_PROFILES = SystemVersion.isSlow() ? 1000 : 4000;
 
     void reorganize() {
@@ -1161,3 +1161,4 @@ public class ProfileOrganizer {
     }
 
 }
+

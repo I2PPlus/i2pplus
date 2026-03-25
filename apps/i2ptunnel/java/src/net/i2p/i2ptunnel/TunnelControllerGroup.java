@@ -769,7 +769,7 @@ public class TunnelControllerGroup implements ClientApp {
                                     public void run() {
                                         tc.log(msg);
                                         try {
-                                            Thread.sleep(delay * 1000);
+                                            Thread.sleep(delay * 1000L);
                                         } catch (InterruptedException e) {
                                             Thread.currentThread().interrupt();
                                             tc.log("‣ Startup cancelled for " + name);
@@ -1364,3 +1364,4 @@ public class TunnelControllerGroup implements ClientApp {
         }
     }
 }
+

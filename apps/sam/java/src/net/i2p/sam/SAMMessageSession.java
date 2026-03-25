@@ -203,7 +203,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
         if (tagThreshold > 0)
             opts.setTagThreshold(tagThreshold);
         if (expiration > 0)
-            opts.setDate(I2PAppContext.getGlobalContext().clock().now() + (expiration * 1000));
+            opts.setDate(I2PAppContext.getGlobalContext().clock().now() + (expiration * 1000L));
 
         return session.sendMessage(d, data, 0, data.length, proto, fromPort, toPort, opts);
     }
@@ -387,3 +387,4 @@ abstract class SAMMessageSession implements SAMMessageSess {
         }
     }
 }
+

@@ -306,7 +306,7 @@ public class ClientAppConfig {
         } else {
             delay = DEFAULT_STARTUP_DELAY;
             if (delayStr != null)
-                try { delay = 1000*Integer.parseInt(delayStr); } catch (NumberFormatException nfe) {}
+                try { delay = 1000L *Integer.parseInt(delayStr); } catch (NumberFormatException nfe) {}
         }
         return new ClientAppConfig(className, clientName, args, delay, dis,
                                        classpath, stopargs, uninstallargs);
@@ -452,3 +452,4 @@ public class ClientAppConfig {
         return false;
     }
 }
+

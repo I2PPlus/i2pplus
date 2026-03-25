@@ -247,7 +247,7 @@ public class ShellCommand {
         commandThread.start();
         try {
             if (seconds > 0) {
-                commandThread.join(seconds * 1000);
+                commandThread.join(seconds * 1000L);
                 if (commandThread.isAlive())
                     return true;
             }
@@ -518,3 +518,4 @@ public class ShellCommand {
         _outputStream = null;
     }
 }
+

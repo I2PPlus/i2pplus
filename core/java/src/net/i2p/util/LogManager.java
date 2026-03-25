@@ -196,7 +196,7 @@ public class LogManager implements Flushable {
         }
         // Default writer
         if (_writer == null) {_writer = new FileLogWriter(this);}
-        _writer.setFlushInterval(_flushInterval * 1000);
+        _writer.setFlushInterval(_flushInterval * 1000L);
         // if you enable logging in I2PThread again, you MUST change this back to Thread
         Thread t = new I2PThread(_writer, "LogWriter");
         t.setDaemon(true);
@@ -409,7 +409,7 @@ public class LogManager implements Flushable {
                 _flushInterval = Integer.parseInt(str);
                 synchronized (this) {
                     if (_writer != null)
-                        _writer.setFlushInterval(_flushInterval * 1000);
+                        _writer.setFlushInterval(_flushInterval * 1000L);
                 }
             }
         } catch (NumberFormatException nfe) {
@@ -798,3 +798,4 @@ public class LogManager implements Flushable {
     I2PAppContext getContext() {return _context;}
 
 }
+

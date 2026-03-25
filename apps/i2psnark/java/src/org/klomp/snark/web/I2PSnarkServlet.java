@@ -3713,7 +3713,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<option value=\"").append(Integer.toString(times[i])).append("\"");
             if (times[i] == delay) {buf.append(" selected");}
             buf.append(">");
-            if (times[i] > 0) {buf.append(DataHelper.formatDuration2(times[i] * 1000));}
+            if (times[i] > 0) {buf.append(DataHelper.formatDuration2(times[i] * 1000L));}
             else {buf.append(_t("Never"));}
             buf.append("</option>\n");
         }
@@ -6189,3 +6189,4 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
 }
+

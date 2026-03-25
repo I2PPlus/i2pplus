@@ -342,7 +342,7 @@ public class SybilRenderer {
             buf.append("<option value=\"");
             buf.append(HOURS[i]);
             buf.append('"');
-            long time = HOURS[i] * 60*60*1000L;
+            long time = HOURS[i] * 60L*60*1000L;
             if (time == freq)
                 buf.append(HelperBase.SELECTED);
             buf.append('>');
@@ -364,7 +364,7 @@ public class SybilRenderer {
             buf.append("<option value=\"");
             buf.append(DAYS[i]);
             buf.append('"');
-            long time = DAYS[i] * 24*60*60*1000L;
+            long time = DAYS[i] * 24L*60*60*1000L;
             if (time == age)
                 buf.append(HelperBase.SELECTED);
             buf.append('>');
@@ -1262,3 +1262,4 @@ public class SybilRenderer {
         return Messages.getString(s, o, _context);
     }
 }
+
