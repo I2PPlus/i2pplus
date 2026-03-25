@@ -65,6 +65,7 @@ public class EventLogHelper extends FormHandler {
         _xevents = new HashMap<String, String>(1 + (_events.length / 2));
     }
 
+    @Override
     protected void processForm() {}
 
     /** set the defaults after we have a context */
@@ -228,3 +229,4 @@ public class EventLogHelper extends FormHandler {
         return buf.toString();
     }
 }
+

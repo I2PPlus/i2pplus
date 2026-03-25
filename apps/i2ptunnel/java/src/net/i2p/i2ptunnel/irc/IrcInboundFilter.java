@@ -39,6 +39,7 @@ public class IrcInboundFilter implements Runnable {
         _dccHelper = helper;
     }
 
+    @Override
     public void run() {
         // Todo: Don't use BufferedReader - IRC spec limits line length to 512 but...
         BufferedReader in;
@@ -104,3 +105,4 @@ public class IrcInboundFilter implements Runnable {
             _log.debug("[IRC Client] Inbound Filter: Stopped");
     }
 }
+

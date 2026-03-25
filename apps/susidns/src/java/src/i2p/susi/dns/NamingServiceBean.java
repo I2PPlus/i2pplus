@@ -72,6 +72,7 @@ public class NamingServiceBean extends AddressbookBean {
      * Gets the total count of filtered results for pagination display.
      * Returns the count BEFORE manual pagination is applied.
      */
+    @Override
     protected int getTotalFilteredCount() {
         if (isDirect()) {return resultSize();}
         if (fullFilteredEntries != null) {

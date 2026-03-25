@@ -32,7 +32,9 @@ public class StartupJob extends JobImpl {
         super(context);
     }
 
+    @Override
     public String getName() { return "Boot Router"; }
+    @Override
     public void runJob() {
         if (!SystemVersion.isAndroid())
             getContext().jobQueue().addJob(new LoadClientAppsJob(getContext()));

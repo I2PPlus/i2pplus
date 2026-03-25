@@ -41,6 +41,7 @@ class SingleLookupJob extends JobImpl {
         _dsrm = dsrm;
     }
 
+    @Override
     public void runJob() {
         Hash from = _dsrm.getFromHash();
         int limit = Math.min(_dsrm.getNumReplies(), MAX_TO_FOLLOW);
@@ -59,5 +60,6 @@ class SingleLookupJob extends JobImpl {
         }
     }
 
+    @Override
     public String getName() { return "Process DbStoreReplyMsg"; }
 }

@@ -23,8 +23,9 @@ public class MultiSink<S extends Sink> implements Source, Sink {
     }
 
     /** Don't use this - put sinks in the cache */
+    @Override
     public void setSink(Sink sink) {}
-
+@Override
     public void start() {}
 
     /**
@@ -36,6 +37,7 @@ public class MultiSink<S extends Sink> implements Source, Sink {
      *  @param fromPort passed along
      *  @param toPort passed along
      *  @since 0.9.53 added fromPort and toPort parameters
+     @Override
      *  @throws RuntimeException
      */
     public void send(Destination from, int fromPort, int toPort, byte[] data) {
@@ -54,3 +56,4 @@ public class MultiSink<S extends Sink> implements Source, Sink {
         s.send(from, fromPort, toPort, data);
     }
 }
+

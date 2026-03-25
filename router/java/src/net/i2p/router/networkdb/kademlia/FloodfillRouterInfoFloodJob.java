@@ -29,8 +29,10 @@ class FloodfillRouterInfoFloodJob extends JobImpl {
         _log = context.logManager().getLog(FloodfillRouterInfoFloodJob.class);
     }
 
+    @Override
     public String getName() { return "Distribute Local RouterInfo to Floodfills"; }
 
+    @Override
     public void runJob() {
         FloodfillPeerSelector sel = (FloodfillPeerSelector)_facade.getPeerSelector();
         DatabaseStoreMessage dsm;

@@ -70,6 +70,7 @@ public class ConfigServiceHandler extends FormHandler {
             _tellWrapper = tellWrapper;
         }
 
+        @Override
         public void run() {
             try {
                 if (_rekey)
@@ -121,7 +122,7 @@ public class ConfigServiceHandler extends FormHandler {
         private static final int HASHCODE = 123999871;
 
         public FinalWrapperTask(int exitCode) {_exitCode = exitCode;}
-
+@Override
         public void run() {
             try {WrapperManager.signalStopped(_exitCode);}
             catch (Throwable t) {t.printStackTrace();}
@@ -133,7 +134,6 @@ public class ConfigServiceHandler extends FormHandler {
          */
         @Override
         public int hashCode() {return HASHCODE;}
-
         /**
          *  Make them all look the same since the hooks are stored in a set
          *  and we don't want dups
@@ -141,7 +141,6 @@ public class ConfigServiceHandler extends FormHandler {
         @Override
         public boolean equals(Object o) {return (o != null) && (o instanceof FinalWrapperTask);}
     }
-
     /**
      *  Register a handler for signals,
      *  so we can handle HUP from the wrapper (wrapper 3.2.0 or higher)
@@ -416,3 +415,4 @@ public class ConfigServiceHandler extends FormHandler {
     }
 
 }
+

@@ -12,5 +12,6 @@ import javax.crypto.interfaces.DHPrivateKey;
  * in the ElGamal public-key cryptosystem.
  */
 public interface ElGamalPrivateKey extends ElGamalKey, DHPrivateKey {
+    @Override
     public BigInteger getX();
 }

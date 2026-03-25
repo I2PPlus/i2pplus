@@ -50,6 +50,7 @@ class SearchMessageSelector implements MessageSelector {
                  "] for key [" + _state.getTarget().toBase32().substring(0,8) + "]";
     }
 
+    @Override
     public boolean continueMatching() {
         boolean expired = _context.clock().now() > _exp;
         if (expired) return false;
@@ -69,8 +70,10 @@ class SearchMessageSelector implements MessageSelector {
         }
     }
 
+    @Override
     public long getExpiration() { return _exp; }
 
+    @Override
     public boolean isMatch(I2NPMessage message) {
         int type = message.getType();
         if (type == DatabaseStoreMessage.MESSAGE_TYPE) {

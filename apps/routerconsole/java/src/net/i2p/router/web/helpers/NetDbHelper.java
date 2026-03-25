@@ -252,6 +252,7 @@ public class NetDbHelper extends FormHandler {
      *  Now we're a FormHandler
      *  @since 0.9.38
      */
+    @Override
     protected void processForm() {
         _postOK = "Start Scan".equals(_action) || "Review".equals(_action);
         if ("Save".equals(_action)) {
@@ -526,3 +527,4 @@ public class NetDbHelper extends FormHandler {
     }
 
 }
+

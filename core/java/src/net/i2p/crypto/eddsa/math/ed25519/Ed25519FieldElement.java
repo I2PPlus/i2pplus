@@ -50,6 +50,7 @@ public class Ed25519FieldElement extends FieldElement {
      *
      * @return 1 if it is non-zero, 0 otherwise.
      */
+    @Override
     public boolean isNonZero() {
         final byte[] s = toByteArray();
         return Utils.equal(s, ZERO) == 0;
@@ -73,6 +74,7 @@ public class Ed25519FieldElement extends FieldElement {
      * @param val The field element to add.
      * @return The field element this + val.
      */
+    @Override
     public FieldElement add(FieldElement val) {
         int[] g = ((Ed25519FieldElement)val).t;
         int[] h = new int[10];
@@ -127,6 +129,7 @@ public class Ed25519FieldElement extends FieldElement {
      *
      * @return The field element (-1) * this.
      */
+    @Override
     public FieldElement negate() {
         int[] h = new int[10];
         for (int i = 0; i < 10; i++) {
@@ -173,6 +176,7 @@ public class Ed25519FieldElement extends FieldElement {
      * @param val The field element to multiply.
      * @return The (reasonably reduced) field element this * val.
      */
+    @Override
     public FieldElement multiply(FieldElement val) {
         int[] g = ((Ed25519FieldElement)val).t;
         int g1_19 = 19 * g[1]; /* 1.959375*2^29 */
@@ -404,6 +408,7 @@ public class Ed25519FieldElement extends FieldElement {
      *
      * @return The (reasonably reduced) square of this field element.
      */
+    @Override
     public FieldElement square() {
         int f0 = t[0];
         int f1 = t[1];
@@ -560,6 +565,7 @@ public class Ed25519FieldElement extends FieldElement {
      *
      * @return The (reasonably reduced) square of this field element times 2.
      */
+    @Override
     public FieldElement squareAndDouble() {
         int f0 = t[0];
         int f1 = t[1];
@@ -712,6 +718,7 @@ public class Ed25519FieldElement extends FieldElement {
      *
      * @return The inverse of this field element.
      */
+    @Override
     public FieldElement invert() {
         FieldElement t0, t1, t2, t3;
 
@@ -833,6 +840,7 @@ public class Ed25519FieldElement extends FieldElement {
      *
      * @return This field element to the power of $(2^{252} - 3)$.
      */
+    @Override
     public FieldElement pow22523() {
         FieldElement t0, t1, t2;
 

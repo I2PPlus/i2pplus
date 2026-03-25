@@ -18,8 +18,10 @@ class BootPeerManagerJob extends JobImpl {
         super(ctx);
     }
 
+    @Override
     public String getName() { return "Boot Peer Manager"; }
 
+    @Override
     public void runJob() {
         getContext().peerManager().startup();
     }

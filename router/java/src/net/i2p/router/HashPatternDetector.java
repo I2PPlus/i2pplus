@@ -651,6 +651,7 @@ public class HashPatternDetector implements Serializable {
      * @since 0.9.68
      */
     private class NetDbScanTask implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {
             scanNetDBForPatterns();
         }

@@ -112,6 +112,7 @@ class SearchJob extends JobImpl {
         getContext().statManager().addRateData("netDb.searchCount", 1);
     }
 
+    @Override
     public void runJob() {
         if (_startedOn <= 0) {_startedOn = getContext().clock().now();}
         if (_log.shouldDebug()) {
@@ -324,7 +325,9 @@ class SearchJob extends JobImpl {
         public RequeuePending(RouterContext enclosingContext) {
             super(enclosingContext);
         }
+        @Override
         public String getName() {return "Requeue Search with Pending";}
+        @Override
         public void runJob() {searchNext();}
     }
 
@@ -510,6 +513,7 @@ class SearchJob extends JobImpl {
             _sentOn = enclosingContext.clock().now();
             _isFloodfill = FloodfillNetworkDatabaseFacade.isFloodfill(peer);
         }
+        @Override
         public void runJob() {
             if (_isFloodfill) {_floodfillSearchesOutstanding--;}
             if (_state.completed()) {return;}
@@ -528,6 +532,7 @@ class SearchJob extends JobImpl {
             getContext().statManager().addRateData("netDb.failedPeers", 1);
             searchNext();
         }
+        @Override
         public String getName() {return "Timeout Kademlia Search";}
     }
 
@@ -718,6 +723,7 @@ class SearchJob extends JobImpl {
         public long getExpiration() {return _expiration;}
     }
 
+    @Override
     public String getName() {return "Start Kademlia NetDb Search";}
 
     @Override

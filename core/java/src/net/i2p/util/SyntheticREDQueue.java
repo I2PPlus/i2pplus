@@ -122,6 +122,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      *
      * @param size size of packet in bytes
      */
+    @Override
     public void addSample(int size) {
         offer(size, 0f);
     }
@@ -239,6 +240,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      *
      * @return bandwidth estimate in bytes/ms
      */
+    @Override
     public float getBandwidthEstimate() {
         long now = _context.clock().now();
         synchronized (this) {

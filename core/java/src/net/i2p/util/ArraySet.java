@@ -245,6 +245,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
         return true;
     }
 
+    @Override
     public int size() {
         return _size;
     }
@@ -269,6 +270,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      *  Supports comodification checks.
      * @return an iterator over this set
      */
+    @Override
     public Iterator<E> iterator() {
         return new ASIterator();
     }
@@ -313,11 +315,13 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
          */
         int expectedModCount = modCount;
 
+        @Override
         public boolean hasNext() {
             return cursor != _size;
         }
 
         @SuppressWarnings("unchecked")
+        @Override
         public E next() {
             checkForComodification();
             try {
@@ -332,6 +336,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
             }
         }
 
+        @Override
         public void remove() {
             if (lastRet < 0)
                 throw new IllegalStateException();

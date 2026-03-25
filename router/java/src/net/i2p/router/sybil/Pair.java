@@ -16,6 +16,7 @@ public class Pair implements Comparable<Pair> {
         r1 = ri1; r2 = ri2; dist = distance;
     }
 
+    @Override
     public int compareTo(Pair p) {
         return this.dist.compareTo(p.dist);
     }

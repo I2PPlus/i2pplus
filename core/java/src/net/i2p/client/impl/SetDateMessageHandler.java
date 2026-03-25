@@ -24,6 +24,7 @@ class SetDateMessageHandler extends HandlerImpl {
         super(ctx, SetDateMessage.MESSAGE_TYPE);
     }
 
+    @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
         if (_log.shouldDebug()) {_log.debug("Handling " + message);}
         SetDateMessage msg = (SetDateMessage) message;

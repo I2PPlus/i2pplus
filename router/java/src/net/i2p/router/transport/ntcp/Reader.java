@@ -87,6 +87,7 @@ class Reader {
 
         public void stop() { _stop = true; }
 
+        @Override
         public void run() {
             if (_log.shouldInfo()) _log.info("Starting NTCP Reader...");
             NTCPConnection con = null;

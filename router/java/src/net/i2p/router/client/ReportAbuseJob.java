@@ -39,8 +39,10 @@ class ReportAbuseJob extends JobImpl {
         _severity = severity;
     }
 
+    @Override
     public String getName() { return "Report Abuse to Client"; }
 
+    @Override
     public void runJob() {
         if (_runner.isDead()) return;
         AbuseReason res = new AbuseReason();

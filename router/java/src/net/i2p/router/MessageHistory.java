@@ -122,9 +122,11 @@ public class MessageHistory {
         private ReinitializeJob() {
             super(MessageHistory.this._context);
         }
+        @Override
         public void runJob() {
             initialize(true);
         }
+        @Override
         public String getName() { return "Reinitialize Message History"; }
     }
 
@@ -594,7 +596,9 @@ public class MessageHistory {
         public WriteJob() {
             super(MessageHistory.this._context);
         }
+        @Override
         public String getName() { return _doLog ? "Message Debug Log" : "Message Debug Log (disabled)"; }
+        @Override
         public void runJob() {
             flushEntries();
             updateSettings();

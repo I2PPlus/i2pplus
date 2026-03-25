@@ -192,6 +192,7 @@ class UDPEndpoint implements SocketListener {
     /**
      *  @since 0.9.16
      */
+    @Override
     public void fail() {
         shutdown();
         _transport.fail(this);

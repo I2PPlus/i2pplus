@@ -210,6 +210,7 @@ public class MetaNamingService extends DummyNamingService {
      *  Duplicates not removed (for efficiency)
      *  @since 0.9.20
      */
+    @Override
     public void export(Writer out, Properties options) throws IOException {
         for (NamingService ns : _services) {
             ns.export(out, options);
@@ -230,6 +231,7 @@ public class MetaNamingService extends DummyNamingService {
         return rv;
     }
 
+    @Override
     public void shutdown() {
         for (NamingService ns : _services) {
             ns.shutdown();

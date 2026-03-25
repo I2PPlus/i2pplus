@@ -1028,6 +1028,7 @@ class ClientConnectionRunner {
             _onFailed = onFailed;
         }
 
+        @Override
         public void timeReached() {
             Hash h = _ls.getDestination().calculateHash();
             SessionParams sp = _sessions.get(h);
@@ -1151,11 +1152,13 @@ class ClientConnectionRunner {
             _status = status;
         }
 
+        @Override
         public String getName() { return "Update Message Delivery Status"; }
 
         /**
          * Note that this sends the Guaranteed status codes, even though we only support best effort.
          */
+        @Override
         public void runJob() {
             if (_dead) return;
 

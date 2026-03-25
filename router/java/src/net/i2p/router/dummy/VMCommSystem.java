@@ -73,10 +73,14 @@ public class VMCommSystem extends CommSystemFacade {
      */
     @Override
     public X25519KeyFactory getXDHFactory() { return _xdhThread; }
+    @Override
     public int countActivePeers() { return Math.max(_commSystemFacades.size() - 1, 0); }
+    @Override
     public int countActiveSendPeers()  { return Math.max(_commSystemFacades.size() - 1, 0); }
+    @Override
     public boolean isEstablished(Hash peer) { return _commSystemFacades.containsKey(peer); }
 
+    @Override
     public List<Hash> getEstablished() {
         List<Hash> rv;
         synchronized (_commSystemFacades) {
@@ -92,6 +96,7 @@ public class VMCommSystem extends CommSystemFacade {
      * The router wants us to send the given message to the peer.  Do so, or fire
      * off the failing job.
      */
+    @Override
     public void processMessage(OutNetMessage msg) {
         Hash peer = msg.getTarget().getIdentity().getHash();
         VMCommSystem peerSys = _commSystemFacades.get(peer);
@@ -145,6 +150,7 @@ public class VMCommSystem extends CommSystemFacade {
             // bah, ueberspeed!
             getTiming().setStartAfter(us.clock().now());
         }
+        @Override
         public void runJob() {
             I2NPMessageHandler handler = new I2NPMessageHandler(_ctx);
             try {
@@ -165,6 +171,7 @@ public class VMCommSystem extends CommSystemFacade {
                 _log.error("Error reading/formatting a VM message? Something is not right...", e);
             }
         }
+        @Override
         public String getName() { return "Receive Message"; }
     }
 
@@ -178,19 +185,23 @@ public class VMCommSystem extends CommSystemFacade {
         _context.jobQueue().addJob(new ReceiveJob(fromPeer, message, _context));
     }
 
+    @Override
     public void shutdown() {
         _commSystemFacades.remove(_context.routerHash());
     }
 
+    @Override
     public void startup() {
         _commSystemFacades.put(_context.routerHash(), this);
     }
 
+    @Override
     public void restart() {
         _commSystemFacades.remove(_context.routerHash());
         _commSystemFacades.put(_context.routerHash(), this);
     }
 
+    @Override
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {
         out.write("<p class=\"infohelp vmcomm\">Router is running without transports: <i>i2p.vmCommSystem=true</i></p>");
     }

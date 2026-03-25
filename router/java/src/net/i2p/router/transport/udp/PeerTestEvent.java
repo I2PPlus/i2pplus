@@ -42,6 +42,7 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
         _testManager = ptmgr;
     }
 
+    @Override
     public synchronized void timeReached() {
         if (shouldTest()) {
             long now = _context.clock().now();

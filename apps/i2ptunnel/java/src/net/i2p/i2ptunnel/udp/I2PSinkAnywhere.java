@@ -50,6 +50,7 @@ public class I2PSinkAnywhere implements Sink {
      *  @since 0.9.53
      *  @throws RuntimeException if session is closed
      */
+    @Override
     public synchronized void send(Destination to, int fromPort, int toPort, byte[] data) {
         // create payload
         byte[] payload;
@@ -71,3 +72,4 @@ public class I2PSinkAnywhere implements Sink {
         }
     }
 }
+

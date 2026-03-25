@@ -393,6 +393,7 @@ public class NTCPTransport extends TransportImpl {
      * Processes the next outbound message by retrieving or creating a connection,
      * preparing it for sending, and handling related failures or bans.
      */
+    @Override
     protected void outboundMessageReady() {
         OutNetMessage msg = getNextMessage();
         if (msg == null) return;
@@ -585,6 +586,7 @@ public class NTCPTransport extends TransportImpl {
         super.afterSend(msg, sendSuccessful, allowRequeue, msToSend);
     }
 
+    @Override
     public TransportBid bid(RouterInfo toAddress, int dataSize) {
         if (!isAlive()) {return null;}
         // passed in dataSize assumes 16 byte header, if NTCP2 then
@@ -765,6 +767,7 @@ public class NTCPTransport extends TransportImpl {
      *
      * @since 0.9.38
      */
+    @Override
     public void forceDisconnect(Hash peer) {
         NTCPConnection con = _conByIdent.remove(peer);
         boolean isBanned = _context.banlist().isBanlisted(peer);
@@ -798,6 +801,7 @@ public class NTCPTransport extends TransportImpl {
         return removed;
     }
 
+    @Override
     public int countPeers() {
         return _conByIdent.size();
     }
@@ -808,6 +812,7 @@ public class NTCPTransport extends TransportImpl {
      *         version 2 ipv4 in/out, ipv6 in/out
      * @since 0.9.57
      */
+    @Override
     public int[] getPeerCounts() {
         int[] rv = new int[8];
         final long now = _context.clock().now();
@@ -841,6 +846,7 @@ public class NTCPTransport extends TransportImpl {
      * @return a copy, modifiable
      * @since 0.9.34
      */
+    @Override
     public List<Hash> getEstablished() {
         List<Hash> rv = new ArrayList<Hash>(_conByIdent.size());
         for (Map.Entry<Hash, NTCPConnection> e : _conByIdent.entrySet()) {
@@ -855,6 +861,7 @@ public class NTCPTransport extends TransportImpl {
      * How many peers have we talked to in the last minute?
      * As of 0.9.20, actually returns active peer count, not total.
      */
+    @Override
     public int countActivePeers() {
         final long now = _context.clock().now();
         int active = 0;
@@ -871,6 +878,7 @@ public class NTCPTransport extends TransportImpl {
     /**
      * How many peers are we actively sending messages to (this minute)
      */
+    @Override
     public int countActiveSendPeers() {
         final long now = _context.clock().now();
         int active = 0;
@@ -934,6 +942,7 @@ public class NTCPTransport extends TransportImpl {
      * settings, and sets fallback addresses as needed. This method is synchronized
      * to prevent concurrent starts.
      */
+    @Override
     public synchronized void startListening() {
         if (_pumper.isAlive()) return;
         if (_log.shouldWarn()) _log.warn("Starting NTCP transport listening...");
@@ -1209,6 +1218,7 @@ public class NTCPTransport extends TransportImpl {
     /**
      * @return always "NTCP"
      */
+    @Override
     public String getStyle() {return STYLE;}
 
     /**
@@ -1828,6 +1838,7 @@ public class NTCPTransport extends TransportImpl {
      *
      * Previously returned short, now enum as of 0.9.20
      */
+    @Override
     public Status getReachabilityStatus() {
         boolean fwV4 = isIPv4Firewalled();
         boolean fwV6 = isIPv6Firewalled();
@@ -1920,6 +1931,7 @@ public class NTCPTransport extends TransportImpl {
      *  This doesn't (completely) block, caller should check isAlive()
      *  before calling startListening() or restartListening()
      */
+    @Override
     public synchronized void stopListening() {
         if (_log.shouldWarn()) _log.warn("Stopping NTCP transport...");
         _pumper.stopPumping();

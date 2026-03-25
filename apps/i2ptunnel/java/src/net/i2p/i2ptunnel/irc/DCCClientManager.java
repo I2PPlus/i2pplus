@@ -202,6 +202,7 @@ public class DCCClientManager extends EventReceiver {
      * @param args the event arguments (I2PTunnelDCCClient for start, Integer port for stop)
      * @since 0.8.9
      */
+    @Override
     public void notifyEvent(String eventName, Object args) {
         if (eventName.equals(I2PTunnelDCCClient.CONNECT_START_EVENT)) {
             try {
@@ -281,3 +282,4 @@ public class DCCClientManager extends EventReceiver {
         }
     }
 }
+

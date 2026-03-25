@@ -59,6 +59,7 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
         edParameters.put(Integer.valueOf(256), new EdDSAGenParameterSpec(EdDSANamedCurveTable.ED_25519));
     }
 
+    @Override
     public void initialize(int keysize, SecureRandom random) {
         AlgorithmParameterSpec edParams = edParameters.get(Integer.valueOf(keysize));
         if (edParams == null)
@@ -83,6 +84,7 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
         initialized = true;
     }
 
+    @Override
     public KeyPair generateKeyPair() {
         if (!initialized)
             initialize(DEFAULT_KEYSIZE, RandomSource.getInstance());

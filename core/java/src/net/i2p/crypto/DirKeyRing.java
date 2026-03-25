@@ -37,6 +37,7 @@ public class DirKeyRing implements KeyRing {
      *
      *  @return null if file doesn't exist, throws on all other errors
      */
+    @Override
     public PublicKey getKey(String keyName, String scope, SigType type)
                             throws GeneralSecurityException, IOException {
         String fileName = keyName.replace("@", "_at_").replace("<", "_").replace(">", "_");
@@ -64,5 +65,6 @@ public class DirKeyRing implements KeyRing {
     /**
      *  Unimplemented, unused.
      */
+    @Override
     public void setKey(String keyName, String scope, PublicKey key) {}
 }

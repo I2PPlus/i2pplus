@@ -86,6 +86,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
         return _nextModData;
     }
 
+    @Override
     public long getLastChanged() {
         return _lastChanged;
     }
@@ -162,6 +163,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      *
      * @throws IllegalArgumentException if origKey is null
      */
+    @Override
     public Hash getRoutingKey(Hash origKey) {
         return getKey(origKey, _currentModData);
     }

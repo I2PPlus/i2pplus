@@ -145,6 +145,7 @@ public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements So
      *  @return true if closed successfully
      *  @since 0.9.53
      */
+    @Override
     public boolean close(boolean forced) {
         if (!open) return true;
         if (_session != null) {
@@ -171,6 +172,7 @@ public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements So
     /**
      *  Starts the I2P source to begin receiving datagrams.
      *
+     @Override
      *  @since 0.9.53
      */
     public void start() {
@@ -182,6 +184,7 @@ public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements So
      *
      * @param to - ignored if configured for a single destination
      *             (we use the dest specified in the constructor)
+     @Override
      * @since 0.9.53 added fromPort and toPort parameters
      * @throws RuntimeException if session is closed
      */
@@ -189,3 +192,4 @@ public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements So
         _i2pSink.send(to, fromPort, toPort, data);
     }
 }
+

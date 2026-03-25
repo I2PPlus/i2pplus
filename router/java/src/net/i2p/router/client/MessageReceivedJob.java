@@ -45,8 +45,10 @@ class MessageReceivedJob extends JobImpl {
         _sendDirect = sendDirect;
     }
 
+    @Override
     public String getName() { return "Deliver New Message"; }
 
+    @Override
     public void runJob() {
         receiveMessage();
     }

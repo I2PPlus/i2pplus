@@ -75,16 +75,19 @@ public class ElGamalPublicKeyImpl
         //this.elSpec = elSpec;
     }
 
+    @Override
     public String getAlgorithm()
     {
         return "ElGamal";
     }
 
+    @Override
     public String getFormat()
     {
         return "X.509";
     }
 
+    @Override
     public byte[] getEncoded()
     {
         byte[] pb = elSpec.getP().toByteArray();
@@ -156,16 +159,19 @@ public class ElGamalPublicKeyImpl
         return 1 + rv + val;
     }
 
+    @Override
     public ElGamalParameterSpec getParameters()
     {
         return elSpec;
     }
 
+    @Override
     public DHParameterSpec getParams()
     {
         return new DHParameterSpec(elSpec.getP(), elSpec.getG());
     }
 
+    @Override
     public BigInteger getY()
     {
         return y;

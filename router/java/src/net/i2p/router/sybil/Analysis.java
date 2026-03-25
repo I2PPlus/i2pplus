@@ -234,8 +234,10 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     private class InitJob extends JobImpl {
         public InitJob() { super(_context); }
 
+        @Override
         public String getName() { return "Load Sybil Blocklist"; }
 
+        @Override
         public void runJob() {
             Map<String, Long> map = _persister.readBlocklist();
             if (map == null || map.isEmpty()) return;
@@ -270,6 +272,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
 
     /////// begin Job methods
 
+    @Override
     public void runJob() {
         Thread t = new I2PAppThread(this, getDisplayName());
         t.setPriority(Thread.MIN_PRIORITY);
@@ -282,6 +285,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      *
      *  @since 0.9.58
      */
+    @Override
     public void run() {
         long now = _context.clock().now();
         _log.info("Running Sybil analysis...");
@@ -306,6 +310,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      *  Registers with the ClientAppManager, loads persisted blocklist data,
      *  and schedules the first analysis run.
      */
+    @Override
     public synchronized void startup() {
         changeState(STARTING);
         changeState(RUNNING);
@@ -323,6 +328,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      *
      *  @param args ignored (required by interface)
      */
+    @Override
     public synchronized void shutdown(String[] args) {
         if (_state == STOPPED)
             return;
@@ -335,6 +341,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      *
      *  @return the current ClientAppState
      */
+    @Override
     public ClientAppState getState() {
         return _state;
     }
@@ -344,6 +351,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      *
      *  @return the constant APP_NAME
      */
+    @Override
     public String getName() {
         return APP_NAME;
     }
@@ -353,6 +361,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      *
      *  @return "Sybil Analyzer"
      */
+    @Override
     public String getDisplayName() {
         return "Sybil Analyzer";
     }
@@ -399,6 +408,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         public RouterInfoRoutingKeyComparator(Hash us) {
             _us = us;
         }
+        @Override
         public int compare(RouterInfo l, RouterInfo r) {
             return HashDistance.getDistance(_us, l.getHash()).compareTo(HashDistance.getDistance(_us, r.getHash()));
         }

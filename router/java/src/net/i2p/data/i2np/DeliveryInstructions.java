@@ -158,6 +158,7 @@ public class DeliveryInstructions extends DataStructureImpl {
      * @throws UnsupportedOperationException always
      */
     @Deprecated
+    @Override
     public void readBytes(InputStream in) {
         throw new UnsupportedOperationException();
     }
@@ -303,6 +304,7 @@ public class DeliveryInstructions extends DataStructureImpl {
      * @throws UnsupportedOperationException always
      */
     @Deprecated
+    @Override
     public void writeBytes(OutputStream out) {
         throw new UnsupportedOperationException();
     }

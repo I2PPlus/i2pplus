@@ -43,6 +43,7 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
     /**
      *  @throws IllegalStateException if data previously set, to protect saved checksum
      */
+    @Override
     public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
         if (_data != null) {throw new IllegalStateException();}
         if (type != _type) throw new I2NPMessageException("Message type is incorrect for this message");
@@ -54,12 +55,14 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
     }
 
     /** calculate the message body's length (not including the header and footer */
+    @Override
     protected int calculateWrittenLength() {
         if (_data == null) {return 0;}
         else {return _data.length;}
     }
 
     /** write the message body to the output array, starting at the given index */
+    @Override
     protected int writeMessageBody(byte out[], int curIndex) {
         if (_data != null) {
             System.arraycopy(_data, 0, out, curIndex, _data.length);
@@ -74,6 +77,7 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
      *
      *  @return 0-255
      */
+    @Override
     public int getType() {return _type;}
 
     /**

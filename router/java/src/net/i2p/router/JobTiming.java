@@ -64,8 +64,8 @@ public class JobTiming implements Clock.ClockUpdateListener {
     /**
      * Adjust all timing values by the specified delta
      */
+    @Override
     public void offsetChanged(long delta) {
-        if (_start != 0) _start += delta;
         if (_actualStart != 0) _actualStart += delta;
         if (_actualEnd != 0) _actualEnd += delta;
     }

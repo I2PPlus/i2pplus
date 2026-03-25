@@ -41,6 +41,7 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
     }
 
     /** how long do we want to wait before flushing */
+    @Override
     public long getDelayAmount() { return 0; }
 
     /**
@@ -49,6 +50,7 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
      *
      * NOTE: Unused here, see BatchedPreprocessor override, super is not called.
      */
+    @Override
     public boolean preprocessQueue(List<PendingGatewayMessage> pending, TunnelGateway.Sender sender, TunnelGateway.Receiver rec) {
         throw new UnsupportedOperationException("unused, right?");
     }

@@ -246,6 +246,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *
      * @throws IllegalStateException if already running
      */
+    @Override
     public synchronized void startup() {
         _log.info("Starting the Comm System...");
         _manager.startListening();
@@ -276,6 +277,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *
      * @throws IllegalStateException if not running
      */
+    @Override
     public synchronized void shutdown() {
         _manager.shutdown();
         _geoIP.shutdown();
@@ -356,6 +358,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *
      * @throws IllegalStateException if not running
      */
+    @Override
     public synchronized void restart() {
         if (!_wasStarted) {
             startup();
@@ -451,6 +454,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *
      * @param msg the outbound message to be processed and delivered
      */
+    @Override
     public void processMessage(OutNetMessage msg) {
         if (msg == null) {return;}
         if (isDummy()) { // testing
@@ -474,6 +478,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @return a new list, may be modified
      *  @since 0.9.34
      */
+    @Override
     public List<Hash> getEstablished() {
         return _manager.getEstablished();
     }
@@ -558,6 +563,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @return SortedMap of style to Transport (a copy)
      *  @since 0.9.31
      */
+    @Override
     public SortedMap<String, Transport> getTransports() {
         return _manager.getTransports();
     }
@@ -595,6 +601,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @since 0.9.50
      */
     private static class AddrComparator implements Comparator<RouterAddress>, Serializable {
+        @Override
         public int compare(RouterAddress l, RouterAddress r) {
             int rv = l.getCost() - r.getCost();
             if (rv != 0) {return rv;}
@@ -701,6 +708,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @param ip canonical string
      *  @since 0.9.58
      */
+    @Override
     public void removeExemption(String ip) {
         synchronized (_exemptIncoming) {
             _exemptIncoming.remove(ip);
@@ -784,6 +792,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  As of 0.9.32, works only for literal IPs, ignores host names.
      */
     private class QueueAll implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {
             long uptime = _context.router().getUptime();
             for (Hash h : _context.netDb().getAllRouters()) {
@@ -800,6 +809,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     private class Lookup implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {
             (new LookupThread()).start();
         }
@@ -816,6 +826,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             setDaemon(true);
         }
 
+        @Override
         public void run() {
             long start = System.currentTimeMillis();
             _geoIP.blockingLookup();
@@ -2112,6 +2123,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * Returns empty map if geoIP data is unavailable.
      * @since 0.9.53
      */
+    @Override
     public Map<String, String> getCountries() {
         if (_geoIP == null) return Collections.emptyMap();
         return _geoIP.getCountries();
@@ -2178,6 +2190,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return buf.toString();
     }
 
+    @Override
     public String renderPeerFlag(Hash peer) {
         StringBuilder buf = new StringBuilder(128);
         RouterInfo ri = getRouterInfoCached(peer);
@@ -2355,6 +2368,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @since 0.7.12
      */
     private class Timestamper implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {
              // use the same % as in RouterClock so that check will never fail
              // This is their our offset w.r.t. them...
@@ -2380,6 +2394,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         public NetMonitor() {super(_context.simpleTimer2(), 0);}
 
+        @Override
         public void timeReached() {
             Set<AddressType> addrs = Addresses.getConnectedAddressTypes();
             boolean good = addrs.contains(AddressType.IPV4) || addrs.contains(AddressType.IPV6);

@@ -107,6 +107,7 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
      *   <li>Thread counts and system resources</li>
      * </ul>
      */
+    @Override
     public void timeReached() {
         StatManager sm = _ctx.statManager();
         int known = _ctx.netDb().getKnownRouters() - 1;

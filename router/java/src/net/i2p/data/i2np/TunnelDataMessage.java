@@ -102,6 +102,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
         _data = data;
     }
 
+    @Override
     public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
@@ -123,8 +124,10 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     }
 
     /** calculate the message body's length (not including the header and footer */
+    @Override
     protected int calculateWrittenLength() {return 4 + DATA_SIZE;}
     /** write the message body to the output array, starting at the given index */
+    @Override
     protected int writeMessageBody(byte out[], int curIndex) throws I2NPMessageException {
         if ((_tunnelId <= 0) || (_data == null)) {
             throw new I2NPMessageException("Not enough data to write out (id=" + _tunnelId + ")");
@@ -149,6 +152,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
         return curIndex;
     }
 
+    @Override
     public int getType() {return MESSAGE_TYPE;}
 
     @Override

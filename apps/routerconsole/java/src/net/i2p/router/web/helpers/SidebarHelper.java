@@ -61,6 +61,7 @@ public class SidebarHelper extends HelperBase {
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
+    @Override
     public boolean isAdvanced() {return ctx.getBooleanProperty(PROP_ADVANCED);}
     public boolean unifiedSidebar() {return _context.getBooleanProperty(PROP_UNIFIED_SIDEBAR);}
     static final String PROP_SUMMARYBAR = "routerconsole.summaryBar.";
@@ -775,7 +776,7 @@ public class SidebarHelper extends HelperBase {
     private class AlphaComparator implements Comparator<Destination> {
         private final String xsc = _t("Shared Clients");
         private final String snark = _t("I2PSnark");
-
+@Override
         public int compare(Destination lhs, Destination rhs) {
             String lname = getTunnelName(lhs);
             String rname = getTunnelName(rhs);
@@ -1424,3 +1425,4 @@ public class SidebarHelper extends HelperBase {
         return buf.toString();
     }
 }
+

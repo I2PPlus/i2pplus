@@ -94,6 +94,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
         getContext().statManager().createRateStat("netDb.floodfillVerifyTimeout", "Floodfill verify timeout (ms)", "NetworkDatabase", RATES);
     }
 
+    @Override
     public String getName() { return "Verify NetDb Store"; }
 
     /**
@@ -103,6 +104,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
      *  If it fails (after a timeout period), resend the data.
      *  If the queried data is older than what we stored, that counts as a fail.
      **/
+    @Override
     public void runJob() {
         _target = pickTarget();
         if (_target == null) {
@@ -306,8 +308,11 @@ class FloodfillVerifyStoreJob extends JobImpl {
     }
 
     private class VerifyReplySelector implements MessageSelector {
+        @Override
         public boolean continueMatching() {return false;} // only want one match
+        @Override
         public long getExpiration() { return _expiration; }
+        @Override
         public boolean isMatch(I2NPMessage message) {
             int type = message.getType();
             if (type == DatabaseStoreMessage.MESSAGE_TYPE) {
@@ -324,8 +329,10 @@ class FloodfillVerifyStoreJob extends JobImpl {
     private class VerifyReplyJob extends JobImpl implements ReplyJob {
         private I2NPMessage _message;
         public VerifyReplyJob(RouterContext ctx) {super(ctx);}
+        @Override
         public String getName() { return "Handle Floodfill Verification Reply"; }
 
+        @Override
         public void runJob() {
             final RouterContext ctx = getContext();
             long delay = ctx.clock().now() - _sendTime;
@@ -406,6 +413,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             resend();
         }
 
+        @Override
         public void setMessage(I2NPMessage message) {_message = message;}
     }
 
@@ -455,7 +463,9 @@ class FloodfillVerifyStoreJob extends JobImpl {
 
     private class VerifyTimeoutJob extends JobImpl {
         public VerifyTimeoutJob(RouterContext ctx) {super(ctx);}
+        @Override
         public String getName() { return "Timeout Floodfill Verification"; }
+        @Override
         public void runJob() {
             if (_wrappedMessage != null) {_wrappedMessage.fail();}
             getContext().profileManager().dbLookupFailed(_target); // Only blame the verify peer

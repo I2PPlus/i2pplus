@@ -277,6 +277,7 @@ public class RouterAddress extends DataStructureImpl {
      *  Restored as of 0.9.12, wait several more releases before using.
      *  @throws IllegalStateException if was already read in
      */
+    @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         if (_transportStyle != null)
             throw new IllegalStateException();
@@ -302,6 +303,7 @@ public class RouterAddress extends DataStructureImpl {
      *  As of 0.9.3, expiration MUST be all zeros as it is ignored on
      *  readin and the signature will fail.
      */
+    @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_transportStyle == null)
             throw new DataFormatException("uninitialized");

@@ -43,6 +43,7 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
         return rv * 60*60*1000L;
     }
 
+    @Override
     public void timeReached() {
         long start = System.currentTimeMillis();
         boolean detected = detect();
@@ -164,4 +165,5 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
     }
 */
 }
+
 

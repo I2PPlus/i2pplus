@@ -21,6 +21,7 @@ public class AddressByNameSorter implements Comparator<AddressBean>, Serializabl
     public AddressByNameSorter() {
     }
 
+    @Override
     public int compare(AddressBean a, AddressBean b) {
         return a.getDisplayName().compareToIgnoreCase(b.getDisplayName());
     }

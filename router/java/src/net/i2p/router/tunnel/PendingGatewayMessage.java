@@ -89,6 +89,7 @@ class PendingGatewayMessage implements CDQEntry {
      *  For CDQ
      *  @since 0.9.3
      */
+    @Override
     public void setEnqueueTime(long now) {
         _enqueueTime = now;
     }
@@ -97,6 +98,7 @@ class PendingGatewayMessage implements CDQEntry {
      *  For CDQ
      *  @since 0.9.3
      */
+    @Override
     public long getEnqueueTime() {
         return _enqueueTime;
     }
@@ -105,6 +107,7 @@ class PendingGatewayMessage implements CDQEntry {
      *  For CDQ
      *  @since 0.9.3
      */
+    @Override
     public void drop() {
     }
 

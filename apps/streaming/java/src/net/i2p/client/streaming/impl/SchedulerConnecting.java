@@ -34,6 +34,7 @@ class SchedulerConnecting extends SchedulerImpl {
         super(ctx);
     }
 
+    @Override
     public boolean accept(Connection con) {
         if (con == null) return false;
         boolean notYetConnected = (con.getIsConnected()) &&
@@ -43,7 +44,7 @@ class SchedulerConnecting extends SchedulerImpl {
                                   (!con.getResetReceived());
         return notYetConnected;
     }
-
+@Override
     public void eventOccurred(Connection con) {
         long waited = _context.clock().now() - con.getCreatedOn();
         if ((con.getOptions().getConnectTimeout() > 0) &&
@@ -76,3 +77,4 @@ class SchedulerConnecting extends SchedulerImpl {
         */
     }
 }
+

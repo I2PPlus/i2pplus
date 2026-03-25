@@ -52,6 +52,7 @@ class IPThrottler {
     }
 
     private class Cleaner implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {
             _counter.clear();
         }

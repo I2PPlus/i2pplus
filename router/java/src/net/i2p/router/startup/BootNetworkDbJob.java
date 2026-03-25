@@ -18,8 +18,10 @@ class BootNetworkDbJob extends JobImpl {
         super(ctx);
     }
 
+    @Override
     public String getName() { return "Boot NetDb"; }
 
+    @Override
     public void runJob() {
         getContext().netDbSegmentor().startup();
     }

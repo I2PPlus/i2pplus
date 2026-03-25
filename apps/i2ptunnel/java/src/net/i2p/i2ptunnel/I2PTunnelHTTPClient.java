@@ -349,6 +349,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /** @since 0.9.4 */
+    @Override
     protected String getRealm() {
         return AUTH_REALM;
     }
@@ -1800,3 +1801,4 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
 }
+

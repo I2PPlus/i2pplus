@@ -46,8 +46,10 @@ class ExpireLeasesJob extends JobImpl {
         _facade = facade;
     }
 
+    @Override
     public String getName() { return "Expire Leases"; }
 
+    @Override
     public void runJob() {
         long uptime = getContext().router().getUptime();
         List<Hash> toExpire = selectKeysToExpire();
@@ -128,6 +130,7 @@ class ExpireLeasesJob extends JobImpl {
      */
     private static class LeaseSetComparator implements Comparator<LeaseSet>, java.io.Serializable {
         private static final long serialVersionUID = 1L;
+        @Override
         public int compare(LeaseSet l, LeaseSet r) {
             long dl = l.getLatestLeaseDate();
             long dr = r.getLatestLeaseDate();

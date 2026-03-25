@@ -80,6 +80,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         _msgIDBloomXor = msgIDBloomXor;
     }
 
+    @Override
     public void runJob() {
         long recvBegin = System.currentTimeMillis();
 
@@ -521,6 +522,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 }
                 // Flood in separate thread to avoid blocking main thread
                 Runnable floodTask = new Runnable() {
+                    @Override
                     public void run() {
                         long floodBegin = System.currentTimeMillis();
                         _facade.flood(entry);
@@ -642,6 +644,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         }
     }
 
+    @Override
     public String getName() {return "Handle Floodfill DbStoreMessage";}
 
     @Override

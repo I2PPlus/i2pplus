@@ -137,8 +137,11 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
 
     /// begin SSU2Sender interface ///
 
+    @Override
     public RemoteHostId getRemoteHostId() { return _remoteHostId; }
+    @Override
     public boolean isIPv6() { return _remoteHostId.getIP().length == 16; }
+    @Override
     public InetAddress getRemoteIPAddress() {
         try {
             return InetAddress.getByAddress(_remoteHostId.getIP());
@@ -146,20 +149,32 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
             return null;
         }
     }
+    @Override
     public int getRemotePort() { return _remoteHostId.getPort(); }
+    @Override
     public int getMTU() { return _mtu; }
+    @Override
     public long getNextPacketNumber() { return _packetNumber.getAndIncrement(); }
+    @Override
     public long getSendConnID() { return _sendConnID; }
+    @Override
     public CipherState getSendCipher() { return _sendCha; }
+    @Override
     public byte[] getSendHeaderEncryptKey1() { return _sendHeaderEncryptKey1; }
+    @Override
     public byte[] getSendHeaderEncryptKey2() { return _sendHeaderEncryptKey2; }
+    @Override
     public void setDestroyReason(int reason) {}
+    @Override
     public SSU2Bitfield getReceivedMessages() { return _receivedMessages; }
     /**
      *  @return null always, we don't care what was acked
      */
+    @Override
     public SSU2Bitfield getAckedMessages() { return null; }
+    @Override
     public void fragmentsSent(long pktNum, int length, List<PacketBuilder.Fragment> fragments) {}
+    @Override
     public byte getFlags() { return 0; }
 
     /// end SSU2Sender interface ///
@@ -247,49 +262,61 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     // begin payload callbacks
     /////////////////////////////////////////////////////////
 
+    @Override
     public void gotDateTime(long time) {}
+    @Override
     public void gotOptions(byte[] options, boolean isHandshake) {}
 
+    @Override
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) {
         if (_log.shouldDebug())
             _log.debug("Received RouterInfo block from " + this);
         messagePartiallyReceived();
     }
 
+    @Override
     public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
         if (_log.shouldDebug())
             _log.debug("Received RouterInfo FRAGMENT block from " + this);
         messagePartiallyReceived();
     }
 
+    @Override
     public void gotAddress(byte[] ip, int port) {}
+    @Override
     public void gotRelayTagRequest() {}
+    @Override
     public void gotRelayTag(long tag) {}
 
+    @Override
     public void gotRelayRequest(byte[] data) {
         if (_log.shouldDebug())
             _log.debug("Received RELAY block from " + this);
         messagePartiallyReceived();
     }
 
+    @Override
     public void gotRelayResponse(int status, byte[] data) {
         if (_log.shouldDebug())
             _log.debug("Received RELAY block from " + this);
         messagePartiallyReceived();
     }
 
+    @Override
     public void gotRelayIntro(Hash aliceHash, byte[] data) {
         if (_log.shouldDebug())
             _log.debug("Received RELAY block from " + this);
         messagePartiallyReceived();
     }
 
+    @Override
     public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
         if (_log.shouldDebug())
             _log.debug("Received PEER TEST block from " + this);
         messagePartiallyReceived();
     }
 
+    @Override
     public void gotToken(long token, long expires) {
         if (_log.shouldDebug())
             _log.debug("Received TOKEN: " + token + " expires " + DataHelper.formatTime(expires) + " from " + this);
@@ -298,20 +325,24 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         // gotTermination() will request ack if necessary
     }
 
+    @Override
     public void gotI2NP(I2NPMessage msg) {
         if (_log.shouldDebug())
             _log.debug("Received I2NP block: " + msg + " from " + this);
         messagePartiallyReceived();
     }
 
+    @Override
     public void gotFragment(byte[] data, int off, int len, long messageId, int frag, boolean isLast) {
         if (_log.shouldDebug())
             _log.debug("Received FRAGMENT block from " + this);
         messagePartiallyReceived();
     }
 
+    @Override
     public void gotACK(long ackThru, int acks, byte[] ranges) {}
 
+    @Override
     public void gotTermination(int reason, long count) {
         if (_log.shouldInfo()) {
             _log.info("Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) +
@@ -333,7 +364,9 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         }
     }
 
+    @Override
     public void gotPathChallenge(RemoteHostId from, byte[] data) {}
+    @Override
     public void gotPathResponse(RemoteHostId from, byte[] data) {}
 
     /////////////////////////////////////////////////////////
@@ -363,6 +396,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
          *  as indicated by _wantACKSendSince == 0.
          *  Also does retransmission, if we were the one that sent the first termination.
          */
+        @Override
         public void timeReached() {
             synchronized (PeerStateDestroyed.this) {
                 if (_wantACKSendSince <= 0 && _destroyReason == REASON_TERMINATION)
@@ -397,6 +431,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
             super(_context.simpleTimer2());
         }
 
+        @Override
         public void timeReached() {
             //if (_log.shouldDebug())
             //    _log.debug("Done listening for " + PeerStateDestroyed.this);

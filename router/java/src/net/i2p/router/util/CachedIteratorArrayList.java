@@ -77,10 +77,12 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
             expectedModCount = modCount;
         }
 
+        @Override
         public boolean hasNext() {
             return cursor != size();
         }
 
+        @Override
         public E next() {
             checkForComodification();
             try {
@@ -95,6 +97,7 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
             }
         }
 
+        @Override
         public void remove() {
             if (lastRet < 0)
                 throw new IllegalStateException();

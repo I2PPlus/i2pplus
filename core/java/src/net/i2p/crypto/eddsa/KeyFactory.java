@@ -91,6 +91,7 @@ public final class KeyFactory extends KeyFactorySpi {
      *
      * Supports PKCS8EncodedKeySpec since version 0.9.25.
      */
+    @Override
     protected PrivateKey engineGeneratePrivate(KeySpec keySpec)
             throws InvalidKeySpecException {
         if (keySpec instanceof EdDSAPrivateKeySpec) {
@@ -115,6 +116,7 @@ public final class KeyFactory extends KeyFactorySpi {
      *
      * Supports X509EncodedKeySpec since version 0.9.25.
      */
+    @Override
     protected PublicKey engineGeneratePublic(KeySpec keySpec)
             throws InvalidKeySpecException {
         if (keySpec instanceof EdDSAPublicKeySpec) {
@@ -141,6 +143,7 @@ public final class KeyFactory extends KeyFactorySpi {
      * @since 0.9.15
      */
     @SuppressWarnings("unchecked")
+    @Override
     protected <T extends KeySpec> T engineGetKeySpec(Key key, Class<T> keySpec)
             throws InvalidKeySpecException {
         if (keySpec.isAssignableFrom(EdDSAPublicKeySpec.class) && key instanceof EdDSAPublicKey) {
@@ -169,6 +172,7 @@ public final class KeyFactory extends KeyFactorySpi {
      * @throws InvalidKeyException always, as no other EdDSA providers are supported
      * @since 0.9.15
      */
+    @Override
     protected Key engineTranslateKey(Key key) throws InvalidKeyException {
         throw new InvalidKeyException("No other EdDSA key providers known");
     }

@@ -92,6 +92,7 @@ public class TestSwarm {
     }
 
     private class Listener implements Runnable {
+        @Override
         public void run() {
             try {
                 I2PServerSocket ss = _manager.getServerSocket();
@@ -146,7 +147,7 @@ public class TestSwarm {
 
         public long getConnectionId() { return _connectionId; }
         public Destination getDestination() { return _remoteDestination; }
-
+@Override
         public void run() {
             _started = _context.clock().now();
             _context.statManager().addRateData("swarm." + _connectionId + ".started", 1, 0);
@@ -187,8 +188,8 @@ public class TestSwarm {
                 _log.error("Error sending", e);
             }
         }
-
         private class FloodListener implements Runnable {
+            @Override
             public void run() {
                 long lastRead = System.currentTimeMillis();
                 long now = lastRead;
@@ -214,3 +215,4 @@ public class TestSwarm {
         return Boolean.valueOf(_context.getProperty("shouldSend", "false")).booleanValue();
     }
 }
+

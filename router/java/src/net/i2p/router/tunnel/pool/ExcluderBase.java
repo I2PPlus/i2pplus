@@ -32,20 +32,35 @@ abstract class ExcluderBase implements Set<Hash> {
      *  @param o a Hash
      *  @return true if peer should be excluded
      */
+    @Override
     public abstract boolean contains(Object o);
+    @Override
     public boolean add(Hash h) {return s.add(h);}
+    @Override
     public boolean addAll(Collection<? extends Hash> c) {return s.addAll(c);}
+    @Override
     public void clear() {s.clear();}
+    @Override
     public boolean containsAll(Collection<?> c) {return s.containsAll(c);}
+    @Override
     public boolean equals(Object o) {return s.equals(o);}
+    @Override
     public int hashCode() {return s.hashCode();}
+    @Override
     public boolean isEmpty() {return s.isEmpty();}
+    @Override
     public Iterator<Hash> iterator() {return s.iterator();}
+    @Override
     public boolean remove(Object o) {return s.remove(o);}
+    @Override
     public boolean removeAll(Collection<?> c) {return s.removeAll(c);}
+    @Override
     public boolean retainAll(Collection<?> c) {return s.retainAll(c);}
+    @Override
     public int size() {return s.size();}
+    @Override
     public Object[] toArray() {return s.toArray();}
+    @Override
     public <Hash> Hash[] toArray(Hash[] a) {return s.toArray(a);}
 
     @Override

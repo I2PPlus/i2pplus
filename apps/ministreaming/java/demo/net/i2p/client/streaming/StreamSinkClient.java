@@ -179,8 +179,10 @@ public class StreamSinkClient {
         public Runner(StreamSinkClient client) {
             _client = client;
         }
+        @Override
         public void run() {
             _client.runClient();
         }
     }
 }
+

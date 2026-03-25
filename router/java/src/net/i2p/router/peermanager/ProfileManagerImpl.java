@@ -31,6 +31,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * This should only be called if the transport considered the send successful.
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
+    @Override
     public void messageSent(Hash peer, String transport, long msToSend, long bytesSent) {
         PeerProfile data = getProfileNonblocking(peer);
         if (data == null) return;
@@ -42,6 +43,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * Note that the router failed to send a message to the peer over the transport specified.
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
+    @Override
     public void messageFailed(Hash peer, String transport) {
         // do not create profile if it didn't exist
         PeerProfile data = _context.profileOrganizer().getProfileNonblocking(peer);
@@ -53,6 +55,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * Note that the router failed to send a message to the peer over any transport.
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
+    @Override
     public void messageFailed(Hash peer) {
         // do not create profile if it didn't exist
         PeerProfile data = _context.profileOrganizer().getProfileNonblocking(peer);
@@ -66,6 +69,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * @deprecated unused
      */
     @Deprecated
+    @Override
     public void commErrorOccurred(Hash peer) {
         if (_log.shouldInfo())
             _log.info("Comm error occurred for peer " + peer.toBase64(), new Exception("Comm error"));
@@ -78,6 +82,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * Note that the router agreed to participate in a tunnel
      *
      */
+    @Override
     public void tunnelJoined(Hash peer, long responseTimeMs) {
         PeerProfile data = getProfile(peer);
         //if (data == null) return;
@@ -93,6 +98,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * @param severity how much the peer doesnt want to participate in the
      *                 tunnel (large == more severe)
      */
+    @Override
     public void tunnelRejected(Hash peer, long responseTimeMs, int severity) {
         PeerProfile data = getProfile(peer);
         //if (data == null) return;
@@ -106,6 +112,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * Since TunnelHistory doesn't have a timeout stat, pretend we were
      * rejected for bandwidth reasons.
      */
+    @Override
     public void tunnelTimedOut(Hash peer) {
         PeerProfile data = getProfile(peer);
         //if (data == null) return;
@@ -122,6 +129,7 @@ public class ProfileManagerImpl implements ProfileManager {
      */
     @Deprecated
     @SuppressWarnings("deprecation")
+    @Override
     public void tunnelTestSucceeded(Hash peer, long responseTimeMs) {
         if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
             PeerProfile data = getProfileNonblocking(peer);
@@ -134,6 +142,7 @@ public class ProfileManagerImpl implements ProfileManager {
     /**
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
+    @Override
     public void tunnelDataPushed(Hash peer, long rtt, int size) {
         if (_context.routerHash().equals(peer))
             return;
@@ -145,6 +154,7 @@ public class ProfileManagerImpl implements ProfileManager {
     /**
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
+    @Override
     public void tunnelDataPushed1m(Hash peer, int size) {
         if (_context.routerHash().equals(peer))
             return;
@@ -156,6 +166,7 @@ public class ProfileManagerImpl implements ProfileManager {
     /**
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
+    @Override
     public void tunnelLifetimePushed(Hash peer, long lifetime, long size) {
         if (_context.routerHash().equals(peer))
             return;
@@ -171,6 +182,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * Blame the peer with a probability of pct/100.
      *
      */
+    @Override
     public void tunnelFailed(Hash peer, int pct) {
         PeerProfile data = getProfile(peer);
         //if (data == null) return;
@@ -183,6 +195,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * This will force creation of DB stats
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
+    @Override
     public void dbLookupSuccessful(Hash peer, long responseTimeMs) {
         PeerProfile data = getProfileNonblocking(peer);
         if (data == null) return;
@@ -201,6 +214,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * This will force creation of DB stats
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
+    @Override
     public void dbLookupFailed(Hash peer) {
         // do not create profile if it didn't exist
         PeerProfile data = _context.profileOrganizer().getProfileNonblocking(peer);
@@ -220,6 +234,7 @@ public class ProfileManagerImpl implements ProfileManager {
      *
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
+    @Override
     public void dbLookupReply(Hash peer, int newPeers, int oldPeers, int invalid, int duplicate, long responseTimeMs) {
         PeerProfile data = getProfileNonblocking(peer);
         if (data == null) return;
@@ -237,6 +252,7 @@ public class ProfileManagerImpl implements ProfileManager {
      *
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
+    @Override
     public void dbLookupReceived(Hash peer) {
         PeerProfile data = getProfileNonblocking(peer);
         if (data == null) return;
@@ -252,6 +268,7 @@ public class ProfileManagerImpl implements ProfileManager {
      *
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
+    @Override
     public void dbStoreReceived(Hash peer, boolean wasNewKey) {
         PeerProfile data = getProfileNonblocking(peer);
         if (data == null) return;
@@ -272,6 +289,7 @@ public class ProfileManagerImpl implements ProfileManager {
      *
      * @param responseTimeMs duration
      */
+    @Override
     public void dbStoreSent(Hash peer, long responseTimeMs) {
         PeerProfile data = getProfile(peer);
         //if (data == null) return;
@@ -289,6 +307,7 @@ public class ProfileManagerImpl implements ProfileManager {
      *
      * This will force creation of DB stats
      */
+    @Override
     public void dbStoreSuccessful(Hash peer) {
         PeerProfile data = getProfile(peer);
         //if (data == null) return;
@@ -307,6 +326,7 @@ public class ProfileManagerImpl implements ProfileManager {
      *
      * This will force creation of DB stats
      */
+    @Override
     public void dbStoreFailed(Hash peer) {
         PeerProfile data = getProfile(peer);
         //if (data == null) return;
@@ -323,6 +343,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * through an explicit dbStore or in a dbLookupReply
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
+    @Override
     public void heardAbout(Hash peer) {
         PeerProfile data = getProfileNonblocking(peer);
         if (data == null) return;
@@ -334,6 +355,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * at a certain time. Only update the time if newer.
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
+    @Override
     public void heardAbout(Hash peer, long when) {
         PeerProfile data = getProfileNonblocking(peer);
         if (data == null) return;
@@ -347,6 +369,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * available.
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
+    @Override
     public void messageReceived(Hash peer, String style, long msToReceive, int bytesRead) {
         PeerProfile data = getProfileNonblocking(peer);
         if (data == null) return;

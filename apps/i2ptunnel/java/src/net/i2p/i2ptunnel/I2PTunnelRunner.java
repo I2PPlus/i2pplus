@@ -351,6 +351,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      *
      * @since 0.9.62
      */
+    @Override
     public void streamDone() {
         if (_keepAliveSocket && fromI2P != null) {
             // we are client-side
@@ -713,6 +714,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      * Deprecated, unimplemented in streaming, never called.
      * @deprecated unused
      */
+    @Override
     @Deprecated
     public void errorOccurred() {
         synchronized (finishLock) {
@@ -722,3 +724,4 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     }
 
 }
+

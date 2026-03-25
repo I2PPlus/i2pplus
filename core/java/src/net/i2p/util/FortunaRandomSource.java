@@ -110,6 +110,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
      *  @return all possible int values, positive and negative
      *  @since 0.9.54
      */
+    @Override
     public int signedNextInt() {
         byte[] b = new byte[4];
         nextBytes(b);

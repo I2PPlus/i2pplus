@@ -343,6 +343,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      *  Cannot be restarted.
      */
+    @Override
     public synchronized void shutdown() {
         if (_log.shouldInfo()) {_log.info("NetDb shutdown: " + this);}
         _initialized = false;
@@ -367,6 +368,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @deprecated
      */
     @Deprecated
+    @Override
     public synchronized void restart() {throw new UnsupportedOperationException();}
 
     @Override
@@ -401,6 +403,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return true;
     }
 
+    @Override
     public void startup() {
         RouterInfo ri = _context.router().getRouterInfo();
         String dbDir = _context.getProperty(PROP_DB_DIR, DEFAULT_DB_DIR);
@@ -485,6 +488,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @param key the real key, NOT the routing key
      * @param peersToIgnore can be null
      */
+    @Override
     public Set<Hash> findNearestRouters(Hash key, int maxNumRouters, Set<Hash> peersToIgnore) {
         if (isClientDb()) {return Collections.emptySet();}
         if (!_initialized) {return Collections.emptySet();}
@@ -492,6 +496,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /** get the hashes for all known routers */
+    @Override
     public Set<Hash> getAllRouters() {
         if (isClientDb() || !_initialized) {return Collections.emptySet();}
         Set<Hash> result = new HashSet<>();
@@ -591,6 +596,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @return RouterInfo, LeaseSet, or null, validated
      *  @since 0.8.3
      */
+    @Override
     public DatabaseEntry lookupLocally(Hash key) {
         if (!_initialized) {return null;}
         DatabaseEntry rv = _ds.get(key);
@@ -617,6 +623,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @return RouterInfo, LeaseSet, or null, NOT validated
      *  @since 0.9.9, public since 0.9.38
      */
+    @Override
     public DatabaseEntry lookupLocallyWithoutValidation(Hash key) {
         if (!_initialized) {return null;}
         return _ds.get(key);
@@ -626,6 +633,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  Lookup using exploratory tunnels.
      *  Use lookupDestination() if you don't need the LS or don't need it validated.
      */
+    @Override
     public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {
         lookupLeaseSet(key, onFindJob, onFailedLookupJob, timeoutMs, null);
     }
@@ -637,6 +645,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      *  @since 0.9.10
      */
+    @Override
     public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob,
                                long timeoutMs, Hash fromLocalDest) {
         if (!_initialized) return;
@@ -663,6 +672,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      *  @since 0.9.25
      */
+    @Override
     public void lookupLeaseSetRemotely(Hash key, Hash fromLocalDest) {
         if (!_initialized) return;
         key = blindCache().getHash(key);
@@ -678,6 +688,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @param onFailedLookupJob may be null
      *  @since 0.9.47
      */
+    @Override
     public void lookupLeaseSetRemotely(Hash key, Job onFindJob, Job onFailedLookupJob,
                                        long timeoutMs, Hash fromLocalDest) {
         if (!_initialized) {return;}
@@ -689,6 +700,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      *  Use lookupDestination() if you don't need the LS or don't need it validated.
      */
+    @Override
     public LeaseSet lookupLeaseSetLocally(Hash key) {
         if (!_initialized) {return null;}
         DatabaseEntry ds = _ds.get(key);
@@ -713,6 +725,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      *  @since 0.9.16
      */
+    @Override
     public void lookupDestination(Hash key, Job onFinishedJob, long timeoutMs, Hash fromLocalDest) {
         if (!_initialized) return;
         Destination d = lookupDestinationLocally(key);
@@ -734,6 +747,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      *  @since 0.9.16
      */
+    @Override
     public Destination lookupDestinationLocally(Hash key) {
         if (!_initialized) {return null;}
         DatabaseEntry ds = _ds.get(key);
@@ -751,6 +765,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return caps != null && caps.indexOf(capability) >= 0;
     }
 
+    @Override
     public void lookupRouterInfo(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {
         if (!_initialized) return;
         RouterInfo ri = lookupRouterInfoLocally(key);
@@ -898,6 +913,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      * @return null always for client dbs
      */
+    @Override
     public RouterInfo lookupRouterInfoLocally(Hash key) {
         if (!_initialized || isClientDb()) {return null;}
         DatabaseEntry ds = _ds.get(key);
@@ -920,6 +936,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @param localLeaseSet the LeaseSet to publish
      * @throws IllegalArgumentException if LeaseSet is invalid or expired
      */
+    @Override
     public void publish(LeaseSet localLeaseSet) throws IllegalArgumentException {
         if (!_initialized) {
             if (_log.shouldWarn()) {
@@ -1094,6 +1111,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @throws IllegalArgumentException if the local router info is invalid
      *         or if this is a client DB
      */
+    @Override
     public void publish(RouterInfo localRouterInfo) throws IllegalArgumentException {
         if (isClientDb()) {throw new IllegalArgumentException("RouterInfo publication to ClientDb attempted");}
         if (!_initialized) {return;}
@@ -1231,6 +1249,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return null;
     }
 
+    @Override
     public LeaseSet store(Hash key, LeaseSet leaseSet) throws IllegalArgumentException {
         return store(key, leaseSet, false);
     }
@@ -1895,6 +1914,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @throws UnsupportedCryptoException if that's why it failed.
      * @return previous entry or null
      */
+    @Override
     public RouterInfo store(Hash key, RouterInfo routerInfo) throws IllegalArgumentException {
         return store(key, routerInfo, true);
     }
@@ -2041,6 +2061,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  Final remove for a leaseset.
      *  For a router info, will look up in the network before dropping.
      */
+    @Override
     public void fail(Hash dbEntry) {
         if (!_initialized) {return;}
         DatabaseEntry o = _ds.get(dbEntry);
@@ -2103,6 +2124,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return loggedFailure;
     }
 
+    @Override
     public void unpublish(LeaseSet localLeaseSet) {
         if (!_initialized) return;
         Hash h = localLeaseSet.getHash();
@@ -2325,6 +2347,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @param key only for Destinations; for RouterIdentities, see Banlist
      *  @since 0.9.16
      */
+    @Override
     public boolean isNegativeCachedForever(Hash key) {return key != null && _negativeCache.getBadDest(key) != null;}
 
     /**
@@ -2434,6 +2457,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;
         public Disconnector(Hash h) {this.h = h;}
+        @Override
         public void timeReached() {_context.commSystem().forceDisconnect(h);}
     }
 

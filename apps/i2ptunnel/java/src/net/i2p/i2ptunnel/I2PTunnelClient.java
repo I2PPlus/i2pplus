@@ -163,6 +163,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
         task.run();
     }
 
+    @Override
     protected void clientConnectionRun(Socket s) {
         I2PSocket i2ps = null;
         try {
@@ -268,3 +269,4 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
         return rv;
     }
 }
+

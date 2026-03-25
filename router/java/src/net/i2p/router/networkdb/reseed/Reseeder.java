@@ -330,6 +330,7 @@ public class Reseeder {
         /*
          * Do it.
          */
+        @Override
         public void run() {
             try {run2();}
             finally {
@@ -416,6 +417,7 @@ public class Reseeder {
         }
 
         // EepGet status listeners
+        @Override
         public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause) {
             /*
              * Since readURL() runs an EepGet with 0 retries, we can report errors with
@@ -435,13 +437,17 @@ public class Reseeder {
             }
         }
 
+        @Override
         public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {}
+        @Override
         public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {}
+        @Override
         public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {}
 
         /**
          *  Use the Date header as a backup time source
          */
+        @Override
         public void headerReceived(String url, int attemptNum, String key, String val) {
             /*
              * We do this more than once, because the first SSL handshake may take a while,
@@ -476,6 +482,7 @@ public class Reseeder {
         }
 
         /** save the start time */
+        @Override
         public void attempting(String url) {
             if (_gotDate < MAX_DATE_SETS)
                 _attemptStarted = System.currentTimeMillis();

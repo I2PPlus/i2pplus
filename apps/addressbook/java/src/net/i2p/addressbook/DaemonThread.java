@@ -81,7 +81,9 @@ public class DaemonThread extends I2PAppThread implements NamingServiceUpdater {
      *  @param options ignored, may be null
      *  @since 0.8.7
      */
+    @Override
     public void update(Properties options) {
         interrupt();
     }
 }
+

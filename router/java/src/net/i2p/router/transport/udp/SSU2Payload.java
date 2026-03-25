@@ -527,10 +527,12 @@ class SSU2Payload {
             frt = total;
         }
 
+        @Override
         public int getDataLength() {
             return 2 + data.length;
         }
 
+        @Override
         public int writeData(byte[] tgt, int off) {
             byte b = (byte) (f ? 1 : 0);
             if (gz)

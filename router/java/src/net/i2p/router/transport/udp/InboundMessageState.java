@@ -159,6 +159,7 @@ class InboundMessageState implements CDQEntry {
     /**
      * Sets enqueue time for queueing.
      */
+    @Override
     public void setEnqueueTime(long now) {
         synchronized (lock) {
             _enqueueTime = now;
@@ -168,6 +169,7 @@ class InboundMessageState implements CDQEntry {
     /**
      * Gets the enqueue time.
      */
+    @Override
     public long getEnqueueTime() {
         synchronized (lock) {
             return _enqueueTime;
@@ -177,6 +179,7 @@ class InboundMessageState implements CDQEntry {
     /**
      * Drops and releases resources.
      */
+    @Override
     public void drop() {
         releaseResources();
     }
@@ -257,17 +260,23 @@ class InboundMessageState implements CDQEntry {
             return 1L << fragment;
         }
 
+        @Override
         public int fragmentCount() { return _fragmentCount; }
+        @Override
         public int ackCount() { return _ackCount; }
+        @Override
         public int highestReceived() { return _highestReceived; }
+        @Override
         public long getMessageId() { return _bitfieldMessageId; }
 
+        @Override
         public boolean received(int fragmentNum) {
             if (fragmentNum < 0 || fragmentNum > _highestReceived)
                 return false;
             return (_fragmentAcks & mask(fragmentNum)) != 0;
         }
 
+        @Override
         public boolean receivedComplete() { return _ackCount == _fragmentCount; }
 
         @Override

@@ -41,6 +41,7 @@ public class StreamSinkTestStandalone {
         System.setProperty("tunnels.depthInbound", ""+hops);
 
         new Thread(new Runnable() {
+            @Override
             public void run() {
                 StreamSinkServer.main(new String[] { HOST1, PORT1, "streamSinkTestDir", "streamSinkTestServer.key" });
             }
@@ -62,6 +63,7 @@ public class StreamSinkTestStandalone {
 
     private static void run(final int kb, final int msBetweenWrites) {
         Thread t = new Thread(new Runnable() {
+            @Override
             public void run() {
                 StreamSinkClient.main(new String[] { HOST2, PORT2, kb+"", msBetweenWrites+"", "streamSinkTestServer.key" });
             }
@@ -76,6 +78,7 @@ public class StreamSinkTestStandalone {
 
     private static void run(final String filename, final int msBetweenWrites) {
         Thread t = new Thread(new Runnable() {
+            @Override
             public void run() {
                 StreamSinkSend.main(new String[] { filename, msBetweenWrites+"", "streamSinkTestServer.key" });
             }
@@ -88,3 +91,4 @@ public class StreamSinkTestStandalone {
         } catch (InterruptedException ie) {}
     }
 }
+

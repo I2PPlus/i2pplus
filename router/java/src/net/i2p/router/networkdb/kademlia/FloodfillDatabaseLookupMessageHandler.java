@@ -81,6 +81,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
      * @return a Job to handle the lookup if accepted, or null if dropped
      * @throws ClassCastException if receivedMessage is not a DatabaseLookupMessage
      */
+    @Override
     public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {
         _context.statManager().addRateData("netDb.lookupsReceived", 1);
 

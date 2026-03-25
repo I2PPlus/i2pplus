@@ -96,6 +96,7 @@ class NTCPSendFinisher {
     }
 
     private static class CustomThreadFactory implements ThreadFactory {
+        @Override
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
             rv.setName("NTCPTXFinis " + _count.incrementAndGet() + '/' + THREADS);
@@ -114,6 +115,7 @@ class NTCPSendFinisher {
             _msg = msg;
         }
 
+        @Override
         public void run() {
             try {
                 _transport.afterSend(_msg, true, false, _msg.getSendTime());

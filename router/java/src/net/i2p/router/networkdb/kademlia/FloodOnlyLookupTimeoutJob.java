@@ -25,6 +25,7 @@ class FloodOnlyLookupTimeoutJob extends JobImpl {
         _search = job;
     }
 
+    @Override
     public void runJob() {
         Log log = getContext().logManager().getLog(getClass());
         if (log.shouldDebug())
@@ -32,5 +33,6 @@ class FloodOnlyLookupTimeoutJob extends JobImpl {
         _search.failed();
     }
 
+    @Override
     public String getName() { return "Timeout NetDb FloodSearch"; }
 }

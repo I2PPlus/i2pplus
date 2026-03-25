@@ -35,6 +35,7 @@ public class TempDirScanner extends SimpleTimer2.TimedEvent {
         schedule(DELAY);
     }
 
+    @Override
     public void timeReached() {
         scan(ctx.getTempDir());
         schedule(DELAY);

@@ -37,8 +37,10 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
     }
 
     /** unused */
+    @Override
     public void messageAvailable(I2PSession session, int msgId, long size) {}
 
+    @Override
     public void messageAvailable(I2PSession session, int msgId, long size, int proto, int fromport, int toport) {
         I2PSessionMuxedListener l = findListener(proto, toport);
         if (l != null) {l.messageAvailable(session, msgId, size, proto, fromport, toport);}
@@ -76,6 +78,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
         }
     }
 
+    @Override
     public void reportAbuse(I2PSession session, int severity) {
         Collection<I2PSessionMuxedListener> lsnrs = _listeners.values();
         // dedup
@@ -86,6 +89,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
         }
     }
 
+    @Override
     public void disconnected(I2PSession session) {
         Collection<I2PSessionMuxedListener> lsnrs = _listeners.values();
         // dedup
@@ -98,6 +102,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
         }
     }
 
+    @Override
     public void errorOccurred(I2PSession session, String message, Throwable error) {
         Collection<I2PSessionMuxedListener> lsnrs = _listeners.values();
         // dedup
@@ -181,18 +186,23 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
             _l = l;
         }
 
+        @Override
         public void messageAvailable(I2PSession session, int msgId, long size) {
             throw new IllegalArgumentException("no");
         }
+        @Override
         public void messageAvailable(I2PSession session, int msgId, long size, int proto, int fromport, int toport) {
             _l.messageAvailable(session, msgId, size);
         }
+        @Override
         public void reportAbuse(I2PSession session, int severity) {
             _l.reportAbuse(session, severity);
         }
+        @Override
         public void disconnected(I2PSession session) {
             _l.disconnected(session);
         }
+        @Override
         public void errorOccurred(I2PSession session, String message, Throwable error) {
             _l.errorOccurred(session, message, error);
         }

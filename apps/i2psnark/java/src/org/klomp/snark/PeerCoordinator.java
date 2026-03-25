@@ -1881,6 +1881,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @param comments non-null
      * @since 0.9.31
      */
+    @Override
     public void gotComments(Peer peer, List<Comment> comments) {
         /* TODO cache per-torrent setting, use it instead */
         if (!_util.utCommentsEnabled()) {

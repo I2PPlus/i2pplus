@@ -35,6 +35,7 @@ public class BigIntegerLittleEndianEncoding extends Encoding implements Serializ
         mask = BigInteger.ONE.shiftLeft(f.getb()-1).subtract(BigInteger.ONE);
     }
 
+    @Override
     public byte[] encode(FieldElement x) {
         return encode(((BigIntegerFieldElement)x).bi.and(mask));
     }
@@ -70,6 +71,7 @@ public class BigIntegerLittleEndianEncoding extends Encoding implements Serializ
      *  @throws IllegalStateException if field not set
      *  @throws IllegalArgumentException if encoding is invalid
      */
+    @Override
     public FieldElement decode(byte[] in) {
         if (f == null)
             throw new IllegalStateException("field not set");
@@ -100,6 +102,7 @@ public class BigIntegerLittleEndianEncoding extends Encoding implements Serializ
      * elements of $F_q$ are $\{1, 3, 5,\dots, q-2\}$.
      * @return true if negative
      */
+    @Override
     public boolean isNegative(FieldElement x) {
         return ((BigIntegerFieldElement)x).bi.testBit(0);
     }

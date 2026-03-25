@@ -135,10 +135,11 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
     }
 
     /** @since 0.9.4 */
+    @Override
     protected String getRealm() {
         return AUTH_REALM;
     }
-
+@Override
     protected void clientConnectionRun(Socket s) {
         InputStream in = null;
         OutputStream out = null;
@@ -377,3 +378,4 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
         writeFooter(out);
     }
 }
+

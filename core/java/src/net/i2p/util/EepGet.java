@@ -528,6 +528,7 @@ public class EepGet {
             _firstTime = true;
         }
 
+        @Override
         public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {
             if (_firstTime) {
                 if (alreadyTransferred > 0) {
@@ -614,6 +615,7 @@ public class EepGet {
             }
         }
 
+        @Override
         public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {
             long transferred;
             if (_firstTime)
@@ -666,6 +668,7 @@ public class EepGet {
                 System.out.println(" • ETag: " + _etag);
         }
 
+        @Override
         public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause) {
             System.out.println(" ✖ Attempt " + (currentAttempt + 1) + " to retrieve " + url + " failed");
             System.out.println(" • Transferred " + bytesTransferred
@@ -675,6 +678,7 @@ public class EepGet {
             _written = 0;
         }
 
+        @Override
         public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {
             System.out.println(" ✖ Transfer of " + url + " failed after " + (currentAttempt + 1) + " retries");
             System.out.println(" • Transfer size: " + bytesTransferred + " with "
@@ -691,7 +695,9 @@ public class EepGet {
             System.out.println(buf.toString());
         }
 
+        @Override
         public void attempting(String url) {}
+        @Override
         public void headerReceived(String url, int currentAttempt, String key, String val) {}
     }
 
@@ -752,6 +758,7 @@ public class EepGet {
                 final SocketTimeout stimeout = timeout;
                 final Thread thread = Thread.currentThread();
                 timeout.setTimeoutCommand(new Runnable() {
+                    @Override
                     public void run() {
                         if (_log.shouldDebug())
                             _log.debug("Timeout reached on " + _url + ": " + stimeout);
@@ -2389,6 +2396,7 @@ public class EepGet {
             _out = out;
         }
 
+        @Override
         public void run() {
             ReusableGZIPInputStream in = ReusableGZIPInputStream.acquire();
             ByteArray ba = null;

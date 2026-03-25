@@ -17,6 +17,7 @@ class BWLimitsMessageHandler extends HandlerImpl {
         super(ctx, BandwidthLimitsMessage.MESSAGE_TYPE);
     }
 
+    @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
         if (_log.shouldDebug()) {_log.debug("Handling " + message);}
         BandwidthLimitsMessage msg = (BandwidthLimitsMessage) message;

@@ -205,6 +205,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      * java.security.MessageDigestSpi.
      * @param input  the byte to use for the update.
      */
+    @Override
     public void engineUpdate(byte input) {
         bytes++;
         if (padding < 63) {

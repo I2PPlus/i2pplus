@@ -160,6 +160,7 @@ public class RouterTimestamper extends Timestamper {
 
     /** @since 0.8.8 */
     private class Shutdown implements Runnable {
+        @Override
         public void run() {
             _isRunning = false;
             if (_timestamperThread != null)

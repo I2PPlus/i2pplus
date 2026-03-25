@@ -77,6 +77,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         notifyEvent("openSOCKSTunnelResult", "ok");
     }
 
+    @Override
     protected void clientConnectionRun(Socket s) {
         I2PSocket destSock = null;
         try {
@@ -193,3 +194,4 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
     }
 
 }
+

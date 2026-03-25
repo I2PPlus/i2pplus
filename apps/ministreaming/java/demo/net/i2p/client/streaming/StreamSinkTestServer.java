@@ -10,9 +10,11 @@ public class StreamSinkTestServer {
         System.setProperty("tunnels.depthInbound", "0");
 
         new Thread(new Runnable() {
+            @Override
             public void run() {
                 StreamSinkServer.main(new String[] { "streamSinkTestLiveDir", "streamSinkTestLiveServer.key" });
             }
         }, "server").start();
     }
 }
+

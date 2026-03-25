@@ -65,8 +65,10 @@ public class CreateRouterInfoJob extends JobImpl {
         _log = ctx.logManager().getLog(CreateRouterInfoJob.class);
     }
 
+    @Override
     public String getName() { return "Create New Local Router Info"; }
 
+    @Override
     public void runJob() {
         _log.debug("Creating the new router info");
         // create a new router info and store it where LoadRouterInfoJob looks

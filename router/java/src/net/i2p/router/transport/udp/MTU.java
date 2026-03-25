@@ -259,6 +259,7 @@ public class MTU {
     /** @since 0.9.57 */
     private static class IAComparator implements Comparator<InetAddress>, java.io.Serializable {
         private static final long serialVersionUID = 1L;
+        @Override
         public int compare(InetAddress l, InetAddress r) {
             return (l.getHostAddress()).compareTo((r.getHostAddress()));
         }

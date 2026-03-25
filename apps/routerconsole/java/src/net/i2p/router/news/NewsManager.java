@@ -124,6 +124,7 @@ public class NewsManager implements ClientApp {
     /**
      *  ClientApp interface
      */
+    @Override
     public synchronized void startup() {
         changeState(STARTING);
         _currentNews = PersistNews.load(_context);
@@ -135,6 +136,9 @@ public class NewsManager implements ClientApp {
     /**
      *  ClientApp interface
      *  @param args ignored
+     @Override
+     @Override
+     @Override
      */
     public synchronized void shutdown(String[] args) {changeState(STOPPED);}
     public ClientAppState getState() {return _state;}
@@ -262,3 +266,4 @@ public class NewsManager implements ClientApp {
     }
 
 }
+

@@ -148,6 +148,7 @@ abstract class EstablishBase implements EstablishState {
      * If there are additional data in the buffer after the handshake is complete,
      * the EstablishState is responsible for passing it to NTCPConnection.
      */
+    @Override
     public synchronized void receive(ByteBuffer src) {
         synchronized (_stateLock) {
             if (STATES_DONE.contains(_state))
@@ -162,9 +163,11 @@ abstract class EstablishBase implements EstablishState {
      * We are establishing an outbound connection, so prepare ourselves by
      * queueing up the write of the first part of the handshake
      */
+    @Override
     public void prepareOutbound() {}
 
     /** did the handshake fail for some reason? */
+    @Override
     public boolean isCorrupt() {
         return _isCorrupt.get();
     }
@@ -176,6 +179,7 @@ abstract class EstablishBase implements EstablishState {
      *
      *  @return is the handshake complete and valid?
      */
+    @Override
     public boolean isComplete() {
         return _isComplete.get();
     }
@@ -185,6 +189,7 @@ abstract class EstablishBase implements EstablishState {
      *  @return 1, 2, or 0 if unknown
      *  @since 0.9.35
      */
+    @Override
     public abstract int getVersion();
 
     /**
@@ -192,6 +197,7 @@ abstract class EstablishBase implements EstablishState {
      *  @param e may be null
      *  @since 0.9.16
      */
+    @Override
     public synchronized void close(String reason, Exception e) {
         fail(reason, e);
     }
@@ -248,6 +254,7 @@ abstract class EstablishBase implements EstablishState {
             changeState(State.VERIFIED);
         }
 
+        @Override
         public int getVersion() { return 1; }
 
         /*
@@ -280,6 +287,7 @@ abstract class EstablishBase implements EstablishState {
             changeState(State.CORRUPT);
         }
 
+        @Override
         public int getVersion() { return 1; }
 
         /*
@@ -313,3 +321,4 @@ abstract class EstablishBase implements EstablishState {
     }
 
 }
+

@@ -180,6 +180,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * Return an iterator over the addresses in the AddressBook.
      * @since 0.8.7
      */
+    @Override
     public Iterator<Map.Entry<String, HostTxtEntry>> iterator() {
         if (this.subFile != null) {
             try {return new HostTxtIterator(this.subFile);}

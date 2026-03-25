@@ -36,6 +36,7 @@ public final class KeyPairGenerator extends KeyPairGeneratorSpi {
      *  @param strength must be 2048
      *  @param random ignored
      */
+    @Override
     public void initialize(int strength, SecureRandom random) {
         if (strength != DEFAULT_STRENGTH)
             throw new InvalidParameterException("Unknown key type.");
@@ -68,6 +69,7 @@ public final class KeyPairGenerator extends KeyPairGeneratorSpi {
         initialized = true;
     }
 
+    @Override
     public KeyPair generateKeyPair() {
         if (!initialized)
             initialize(DEFAULT_STRENGTH, RandomSource.getInstance());

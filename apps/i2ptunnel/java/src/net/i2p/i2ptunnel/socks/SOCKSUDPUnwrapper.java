@@ -30,6 +30,7 @@ public class SOCKSUDPUnwrapper implements Source, Sink {
      *  @param sink the sink to receive unwrapped datagrams
      *  @since 0.9.53
      */
+    @Override
     public void setSink(Sink sink) {
         this.sink = sink;
     }
@@ -48,6 +49,7 @@ public class SOCKSUDPUnwrapper implements Source, Sink {
      *  @param fromPort will be passed along
      *  @param toPort ignored
      *  @since 0.9.53 added fromPort and toPort parameters
+     @Override
      *  @throws RuntimeException
      */
     public void send(Destination ignored_from, int fromPort, int toPort, byte[] data) {
@@ -78,3 +80,4 @@ public class SOCKSUDPUnwrapper implements Source, Sink {
         this.sink.send(dest, fromPort, h.getPort(), unwrapped);
     }
 }
+

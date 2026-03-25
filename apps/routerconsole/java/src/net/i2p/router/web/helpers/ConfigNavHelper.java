@@ -49,6 +49,7 @@ public class ConfigNavHelper extends HelperBase {
             coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
         }
 
+        @Override
         public int compare(Tab l, Tab r) {
             return coll.compare(l.title, r.title);
         }
@@ -85,3 +86,4 @@ public class ConfigNavHelper extends HelperBase {
     }
 
 }
+

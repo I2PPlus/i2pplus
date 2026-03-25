@@ -80,6 +80,7 @@ public class ElGamalPrivateKeyImpl
         //this.elSpec = new ElGamalParameterSpec(spec.getP(), spec.getG());
     }
 
+    @Override
     public String getAlgorithm()
     {
         return "ElGamal";
@@ -90,6 +91,7 @@ public class ElGamalPrivateKeyImpl
      *
      * @return the string "PKCS#8"
      */
+    @Override
     public String getFormat()
     {
         return "PKCS#8";
@@ -101,6 +103,7 @@ public class ElGamalPrivateKeyImpl
      *
      * @return a PKCS8 representation of the key.
      */
+    @Override
     public byte[] getEncoded()
     {
         byte[] pb = elSpec.getP().toByteArray();
@@ -161,16 +164,19 @@ public class ElGamalPrivateKeyImpl
         return rv;
     }
 
+    @Override
     public ElGamalParameterSpec getParameters()
     {
         return elSpec;
     }
 
+    @Override
     public DHParameterSpec getParams()
     {
         return new DHParameterSpec(elSpec.getP(), elSpec.getG());
     }
 
+    @Override
     public BigInteger getX()
     {
         return x;

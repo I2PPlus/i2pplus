@@ -26,6 +26,7 @@ public class EncryptedBuildRecord extends SimpleDataStructure {
         super(data);
     }
 
+    @Override
     public int length() {
         return LENGTH;
     }

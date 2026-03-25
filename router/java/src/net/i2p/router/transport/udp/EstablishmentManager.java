@@ -2471,6 +2471,7 @@ class EstablishmentManager {
         /** @since 0.9.57 */
         public long getWhenAdded() {return (added & 0xFFFFFFFFL) << 10;}
         /** @since 0.9.57 */
+        @Override
         public String toString() {
             return "Token [" + token + "]\n* Added: " + DataHelper.formatTime(getWhenAdded()) +
                    "\n* Expires: " + DataHelper.formatTime(getExpiration());
@@ -2624,6 +2625,7 @@ class EstablishmentManager {
      * @since 0.9.57
      */
     private static class TokenComparator implements Comparator<Map.Entry<RemoteHostId, Token>> {
+        @Override
         public int compare(Map.Entry<RemoteHostId, Token> l, Map.Entry<RemoteHostId, Token> r) {
             long le = l.getValue().expires;
             long re = r.getValue().expires;
@@ -2676,39 +2678,48 @@ class EstablishmentManager {
             _log = log;
         }
 
+        @Override
         public void gotDateTime(long time) {
             _timeReceived = time;
         }
 
+        @Override
         public void gotOptions(byte[] options, boolean isHandshake) {
             // Options are allowed in HolePunch (but ignored)
         }
 
+        @Override
         public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) {
             warn("Unexpected RI block in HolePunch");
         }
 
+        @Override
         public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
             warn("Unexpected RI fragment block in HolePunch");
         }
 
+        @Override
         public void gotAddress(byte[] ip, int port) {
             _aliceIP = ip;
             _alicePort = port;
         }
 
+        @Override
         public void gotRelayTagRequest() {
             warn("Unexpected RelayTagRequest block in HolePunch");
         }
 
+        @Override
         public void gotRelayTag(long tag) {
             warn("Unexpected RelayTag block in HolePunch");
         }
 
+        @Override
         public void gotRelayRequest(byte[] data) {
             warn("Unexpected RelayRequest block in HolePunch");
         }
 
+        @Override
         public void gotRelayResponse(int status, byte[] data) {
             if (data == null || data.length < 12) {
                 warn("Invalid RelayResponse data in HolePunch");
@@ -2718,38 +2729,47 @@ class EstablishmentManager {
             _respData = data;
         }
 
+        @Override
         public void gotRelayIntro(Hash aliceHash, byte[] data) {
             warn("Unexpected RelayIntro block in HolePunch");
         }
 
+        @Override
         public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
             warn("Unexpected PeerTest block in HolePunch");
         }
 
+        @Override
         public void gotToken(long token, long expires) {
             warn("Unexpected Token block in HolePunch");
         }
 
+        @Override
         public void gotI2NP(I2NPMessage msg) {
             warn("Unexpected I2NP block in HolePunch");
         }
 
+        @Override
         public void gotFragment(byte[] data, int off, int len, long messageId, int frag, boolean isLast) {
             warn("Unexpected Fragment block in HolePunch");
         }
 
+        @Override
         public void gotACK(long ackThru, int acks, byte[] ranges) {
             warn("Unexpected ACK block in HolePunch");
         }
 
+        @Override
         public void gotTermination(int reason, long count) {
             warn("Unexpected Termination block in HolePunch");
         }
 
+        @Override
         public void gotPathChallenge(RemoteHostId from, byte[] data) {
             warn("Unexpected PathChallenge block in HolePunch");
         }
 
+        @Override
         public void gotPathResponse(RemoteHostId from, byte[] data) {
             warn("Unexpected PathResponse block in HolePunch");
         }
@@ -2771,6 +2791,7 @@ class EstablishmentManager {
      *
      */
     private class Establisher implements Runnable {
+        @Override
         public void run() {
             while (_alive) {
                 try {doPass();}

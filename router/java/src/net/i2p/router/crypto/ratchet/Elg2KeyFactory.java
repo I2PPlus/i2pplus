@@ -78,6 +78,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         _keys.clear();
     }
 
+    @Override
     public void run() {
         try {run2();}
         catch (IllegalStateException ise) {
@@ -117,6 +118,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
      * Pulls a prebuilt keypair from the queue,
      * or if not available, construct a new one.
      */
+    @Override
     public Elg2KeyPair getKeys() {
         _context.statManager().addRateData("crypto.EDHUsed", 1);
         Elg2KeyPair rv = _keys.poll();

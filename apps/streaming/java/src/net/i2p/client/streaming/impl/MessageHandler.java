@@ -42,6 +42,7 @@ class MessageHandler implements I2PSessionMuxedListener {
      * @param msgId message number available
      * @param size size of the message
      */
+    @Override
     public void messageAvailable(I2PSession session, int msgId, long size) {
         messageAvailable(session, msgId, size, I2PSession.PROTO_UNSPECIFIED,
                          I2PSession.PORT_UNSPECIFIED, I2PSession.PORT_UNSPECIFIED);
@@ -94,6 +95,7 @@ class MessageHandler implements I2PSessionMuxedListener {
     /** Instruct the client that the session specified seems to be under attack
      * and that the client may wish to move its destination to another router.
      * @param session session to report abuse to
+     @Override
      * @param severity how bad the abuse is
      */
     public void reportAbuse(I2PSession session, int severity) {
@@ -108,6 +110,7 @@ class MessageHandler implements I2PSessionMuxedListener {
      *
      * As of 0.9.54, this does not clear the listeners, so
      * they will be notified again after a subsequent connection and disconnection.
+     @Override
      *
      * @param session that has been terminated
      */
@@ -134,6 +137,7 @@ class MessageHandler implements I2PSessionMuxedListener {
     /**
      * Notify the client that some error occurred
      *
+     @Override
      * @param session of the client
      * @param message to send to the client about the error
      * @param error the actual error
@@ -151,3 +155,4 @@ class MessageHandler implements I2PSessionMuxedListener {
         _listeners.remove(lsnr);
     }
 }
+

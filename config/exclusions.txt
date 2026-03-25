@@ -1,0 +1,94 @@
+# Exclusions for fix-java-issues.py
+#
+# Format: source:rule:filepath[:line]
+#   source  = pmd | checkstyle | spotbugs | codeql | all
+#   rule    = exact rule ID, or * for all rules
+#   filepath = relative path (supports * wildcard)
+#   line    = optional specific line number
+#
+# Rule formats per source:
+#   pmd        = CamelCaseName (e.g. ConstructorCallsOverridableMethod)
+#   checkstyle = module.name (e.g. whitespace.FileTabCharacter)
+#   spotbugs   = CATEGORY_BUG_TYPE (e.g. DLS_DEAD_LOCAL_STORE)
+#   codeql     = java/rule-name (e.g. java/missing-override-annotation)
+#
+# Examples:
+#   # Exclude all violations in a file
+#   all:*:core/java/src/net/i2p/client/impl/I2PSessionImpl.java
+#
+#   # Exclude specific PMD rule in a file
+#   pmd:ConstructorCallsOverridableMethod:router/java/src/net/i2p/router/JobQueue.java
+#
+#   # Exclude specific SpotBugs rule everywhere
+#   spotbugs:EI_EXPOSE_REP:*
+#
+#   # Exclude specific line
+#   codeql:java/dereferenced-value-may-be-null:apps/i2psnark/java/src/org/klomp/snark/SnarkManager.java:3855
+#
+# Lines starting with # are comments. Blank lines are ignored.
+#
+
+# ── CodeQL: missing-override-annotation (false positives) ──────────────────
+codeql:java/missing-override-annotation:apps/addressbook/java/src/net/i2p/addressbook/HostChecker.java
+codeql:java/missing-override-annotation:apps/addressbook/java/src/net/i2p/addressbook/HostTxtIterator.java
+codeql:java/missing-override-annotation:apps/desktopgui/src/net/i2p/desktopgui/ExternalMain.java
+codeql:java/missing-override-annotation:apps/desktopgui/src/net/i2p/desktopgui/InternalTrayManager.java
+codeql:java/missing-override-annotation:apps/desktopgui/src/net/i2p/desktopgui/Main.java
+codeql:java/missing-override-annotation:apps/desktopgui/src/net/i2p/desktopgui/TrayManager.java
+codeql:java/missing-override-annotation:apps/i2psnark/java/src/org/klomp/snark/dht/KRPC.java
+codeql:java/missing-override-annotation:apps/i2ptunnel/java/src/net/i2p/i2ptunnel/I2PTunnelClientBase.java
+codeql:java/missing-override-annotation:apps/i2ptunnel/java/src/net/i2p/i2ptunnel/I2PTunnelIRCClient.java
+codeql:java/missing-override-annotation:apps/i2ptunnel/java/src/net/i2p/i2ptunnel/I2PTunnelServer.java
+codeql:java/missing-override-annotation:apps/i2ptunnel/java/src/net/i2p/i2ptunnel/irc/EventReceiver.java
+codeql:java/missing-override-annotation:apps/i2ptunnel/java/src/net/i2p/i2ptunnel/socks/MultiSink.java
+codeql:java/missing-override-annotation:apps/i2ptunnel/java/src/net/i2p/i2ptunnel/socks/SocketWrapper.java
+codeql:java/missing-override-annotation:apps/i2ptunnel/java/src/net/i2p/i2ptunnel/socks/SOCKS4aServer.java
+codeql:java/missing-override-annotation:apps/i2ptunnel/java/src/net/i2p/i2ptunnel/socks/SOCKS5Server.java
+codeql:java/missing-override-annotation:apps/i2ptunnel/java/src/net/i2p/i2ptunnel/TunnelControllerGroup.java
+codeql:java/missing-override-annotation:apps/i2ptunnel/java/src/net/i2p/i2ptunnel/TunnelController.java
+codeql:java/missing-override-annotation:apps/i2ptunnel/java/src/net/i2p/i2ptunnel/udp/I2PSource.java
+codeql:java/missing-override-annotation:apps/i2ptunnel/java/src/net/i2p/i2ptunnel/udp/UDPSource.java
+codeql:java/missing-override-annotation:apps/jetty/*
+codeql:java/missing-override-annotation:apps/ministreaming/java/src/net/i2p/client/streaming/IncomingConnectionFilter.java
+codeql:java/missing-override-annotation:apps/routerconsole/java/src/net/i2p/router/update/ConsoleUpdateManager.java
+codeql:java/missing-override-annotation:apps/routerconsole/java/src/net/i2p/router/update/UpdateRunner.java
+codeql:java/missing-override-annotation:apps/routerconsole/java/src/net/i2p/router/web/GraphGenerator.java
+codeql:java/missing-override-annotation:apps/routerconsole/java/src/net/i2p/router/web/helpers/HomeHelper.java
+codeql:java/missing-override-annotation:apps/routerconsole/java/src/net/i2p/router/web/helpers/JobQueueHelper.java
+codeql:java/missing-override-annotation:apps/routerconsole/java/src/net/i2p/router/web/helpers/NetDbRenderer.java
+codeql:java/missing-override-annotation:apps/routerconsole/java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java
+codeql:java/missing-override-annotation:apps/routerconsole/java/src/net/i2p/router/web/helpers/SybilRenderer.java
+codeql:java/missing-override-annotation:apps/routerconsole/java/src/net/i2p/router/web/helpers/TunnelRenderer.java
+codeql:java/missing-override-annotation:apps/routerconsole/java/src/net/i2p/router/web/NavHelper.java
+codeql:java/missing-override-annotation:apps/routerconsole/java/src/net/i2p/router/web/RouterConsoleRunner.java
+codeql:java/missing-override-annotation:apps/routerconsole/java/src/net/i2p/router/web/ShellService.java
+codeql:java/missing-override-annotation:apps/sam/java/src/net/i2p/sam/MasterSession.java
+codeql:java/missing-override-annotation:apps/sam/java/src/net/i2p/sam/SAMStreamSession.java
+codeql:java/missing-override-annotation:apps/streaming/java/src/net/i2p/client/streaming/impl/ConnectionDataReceiver.java
+codeql:java/missing-override-annotation:apps/streaming/java/src/net/i2p/client/streaming/impl/Connection.java
+codeql:java/missing-override-annotation:apps/streaming/java/src/net/i2p/client/streaming/impl/I2PServerSocketFull.java
+codeql:java/missing-override-annotation:apps/streaming/java/src/net/i2p/client/streaming/impl/I2PSocketOptionsImpl.java
+codeql:java/missing-override-annotation:apps/streaming/java/src/net/i2p/client/streaming/impl/PacketLocal.java
+codeql:java/missing-override-annotation:apps/streaming/java/src/net/i2p/client/streaming/impl/PacketQueue.java
+codeql:java/missing-override-annotation:apps/streaming/java/src/net/i2p/client/streaming/impl/SchedulerChooser.java
+codeql:java/missing-override-annotation:apps/systray/java/src/net/i2p/apps/systray/UrlLauncher.java
+codeql:java/missing-override-annotation:core/java/src/net/i2p/client/impl/I2PSessionImpl.java
+codeql:java/missing-override-annotation:core/java/src/net/i2p/util/RandomSource.java
+codeql:java/missing-override-annotation:router/java/src/net/i2p/router/dummy/DummyClientManagerFacade.java
+codeql:java/missing-override-annotation:router/java/src/net/i2p/router/JobQueue.java
+codeql:java/missing-override-annotation:router/java/src/net/i2p/router/JobQueueRunner.java
+codeql:java/missing-override-annotation:router/java/src/net/i2p/router/KeyManager.java
+codeql:java/missing-override-annotation:router/java/src/net/i2p/router/networkdb/kademlia/FloodfillVerifyStoreJob.java
+codeql:java/missing-override-annotation:router/java/src/net/i2p/router/networkdb/kademlia/TransientDataStore.java
+codeql:java/missing-override-annotation:router/java/src/net/i2p/router/OutNetMessage.java
+codeql:java/missing-override-annotation:router/java/src/net/i2p/router/peermanager/PeerTestJob.java
+codeql:java/missing-override-annotation:router/java/src/net/i2p/router/startup/LoadClientAppsJob.java
+codeql:java/missing-override-annotation:router/java/src/net/i2p/router/startup/LoadRouterInfoJob.java
+codeql:java/missing-override-annotation:router/java/src/net/i2p/router/transport/TransportImpl.java
+codeql:java/missing-override-annotation:router/java/src/net/i2p/router/transport/udp/SSU2Payload.java
+codeql:java/missing-override-annotation:router/java/src/net/i2p/router/tunnel/InboundGatewayReceiver.java
+codeql:java/missing-override-annotation:router/java/src/net/i2p/router/tunnel/pool/BuildHandler.java
+codeql:java/missing-override-annotation:router/java/src/net/i2p/router/tunnel/pool/TunnelPoolManager.java
+codeql:java/missing-override-annotation:router/java/src/net/i2p/router/tunnel/TunnelCreatorConfig.java
+codeql:java/missing-override-annotation:router/java/src/net/i2p/router/util/DecayingHashSet.java
+codeql:java/missing-override-annotation:router/java/src/net/i2p/router/util/RandomIterator.java

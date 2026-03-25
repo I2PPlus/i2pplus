@@ -63,6 +63,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
         _msg = msg;
     }
 
+    @Override
     protected int calculateWrittenLength() {
         int rv = 4 + 2;
         synchronized (this) {
@@ -74,6 +75,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
     }
 
     /** write the message body to the output array, starting at the given index */
+    @Override
     protected int writeMessageBody(byte out[], int curIndex) throws I2NPMessageException {
         if ((_tunnelId == null) || ((_msg == null) && (_msgData == null))) {
             _log.log(Log.CRIT, "failing to write out gateway message");
@@ -102,6 +104,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
     }
 
 
+    @Override
     public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
         //I2NPMessageHandler h = new I2NPMessageHandler(_context);
         //readMessage(data, offset, dataSize, type, h);
@@ -155,6 +158,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
         _msg = umsg;
     }
 
+    @Override
     public int getType() {return MESSAGE_TYPE;}
 
     @Override

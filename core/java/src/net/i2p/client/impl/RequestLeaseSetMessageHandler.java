@@ -116,6 +116,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         return false;
     }
 
+    @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
         if (_log.shouldDebug()) {_log.debug("Handling " + message);}
         RequestLeaseSetMessage msg = (RequestLeaseSetMessage) message;
@@ -572,6 +573,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
          */
         private static class PrivKeyComparator implements Comparator<PrivateKey>, java.io.Serializable {
         private static final long serialVersionUID = 1L;
+            @Override
             public int compare(PrivateKey l, PrivateKey r) {return r.getType().compareTo(l.getType());}
         }
     }

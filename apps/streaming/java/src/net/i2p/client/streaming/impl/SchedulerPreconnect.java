@@ -29,12 +29,13 @@ class SchedulerPreconnect extends SchedulerImpl {
         super(ctx);
     }
 
+    @Override
     public boolean accept(Connection con) {
         return (con != null) &&
                (con.getSendStreamId() <= 0) &&
                (con.getLastSendId() < 0);
     }
-
+@Override
     public void eventOccurred(Connection con) {
         if (con.getNextSendTime() < 0)
             con.setNextSendTime(_context.clock().now() + con.getOptions().getConnectDelay());
@@ -52,3 +53,4 @@ class SchedulerPreconnect extends SchedulerImpl {
         }
     }
 }
+

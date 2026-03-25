@@ -37,6 +37,7 @@ class SchedulerConnectedBulk extends SchedulerImpl {
         super(ctx);
     }
 
+    @Override
     public boolean accept(Connection con) {
         boolean ok = (con != null) &&
                      (con.getHighestAckedThrough() >= 0) &&
@@ -50,7 +51,7 @@ class SchedulerConnectedBulk extends SchedulerImpl {
         }
         return ok;
     }
-
+@Override
     public void eventOccurred(Connection con) {
         if (con.getNextSendTime() <= 0)
             return;
@@ -65,3 +66,4 @@ class SchedulerConnectedBulk extends SchedulerImpl {
         }
     }
 }
+

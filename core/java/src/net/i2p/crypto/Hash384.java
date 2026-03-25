@@ -36,7 +36,9 @@ public class Hash384 extends SimpleDataStructure {
         super(data);
     }
 
+    @Override
     public int length() {
         return HASH_LENGTH;
     }
 }
+

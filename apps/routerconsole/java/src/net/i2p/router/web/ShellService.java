@@ -183,6 +183,7 @@ public class ShellService implements ClientApp {
      * has been started yet. If it hasn't, attempt to start the process and
      * notify the router that it has been started.
      */
+    @Override
     public synchronized void startup() throws Throwable {
         File exe = new File(_commandPath);
         if (!exe.exists()) {
@@ -254,6 +255,7 @@ public class ShellService implements ClientApp {
      * Shut down the process by calling Process.destroy()
      *
      * @param args generally null but could be stopArgs from clients.config
+     @Override
      */
     public synchronized void shutdown(String[] args) throws Throwable {
         if (getName().equals("unnamedClient")) {
@@ -276,6 +278,7 @@ public class ShellService implements ClientApp {
      * or not. Convert to corresponding ClientAppState and return the correct
      * value.
      *
+     @Override
      * @return non-null
      */
     public ClientAppState getState() {
@@ -292,6 +295,7 @@ public class ShellService implements ClientApp {
      * The generic name of the ClientApp, used for registration,
      * e.g. "console". Do not translate. Has a special use in the context of
      * ShellService, must match the plugin name.
+     @Override
      *
      * @return non-null
      */
@@ -301,6 +305,7 @@ public class ShellService implements ClientApp {
 
     /**
      * The display name of the ClientApp, used in user interfaces.
+     @Override
      * The app must translate.
      *
      * @return non-null
@@ -310,3 +315,4 @@ public class ShellService implements ClientApp {
     }
 
 }
+

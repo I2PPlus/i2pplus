@@ -992,6 +992,7 @@ public class TunnelPool {
      *
      */
     private static class LeaseComparator implements Comparator<Lease>, Serializable {
+        @Override
         public int compare(Lease l, Lease r) {
             long lt = l.getEndTime();
             long rt = r.getEndTime();
@@ -1018,6 +1019,7 @@ public class TunnelPool {
             _avoidZero = avoidZeroHop;
         }
 
+        @Override
         public int compare(TunnelInfo lhs, TunnelInfo rhs) {
             if (_avoidZero) {
                 // put the zero-hops last

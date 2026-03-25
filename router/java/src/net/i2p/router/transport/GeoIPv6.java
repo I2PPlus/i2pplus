@@ -303,6 +303,7 @@ public class GeoIPv6 {
         }
 
         /** twos complement */
+        @Override
         public int compareTo(V6Entry r) {
             if (from < r.from) return -1;
             if (r.from < from) return 1;

@@ -21,12 +21,20 @@ import java.util.Collections;
  *
  */
 public class DummyPeerManagerFacade implements PeerManagerFacade {
+    @Override
     public void shutdown() {}
+    @Override
     public void startup() {}
+    @Override
     public void restart() {}
+    @Override
     public void renderStatusHTML(Writer out) {}
+    @Override
     public Set<Hash> getPeersByCapability(char capability) {return Collections.emptySet();}
+    @Override
     public int countPeersByCapability(char capability) {return 0;}
+    @Override
     public void setCapabilities(Hash peer, String caps) {}
+    @Override
     public void removeCapabilities(Hash peer) {}
 }

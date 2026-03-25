@@ -122,11 +122,13 @@ public class Banlist {
             getTiming().setStartAfter(ctx.clock().now() + BANLIST_CLEANER_START_DELAY);
         }
 
+        @Override
         public String getName() {return "Expire Banned Peers";}
 
         /**
          *  Removes expired ban entries and updates message history.
          */
+        @Override
         public void runJob() {
             _toUnbanlist.clear();
             long now = getContext().clock().now();

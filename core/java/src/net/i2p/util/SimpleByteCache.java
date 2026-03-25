@@ -32,6 +32,7 @@ public final class SimpleByteCache {
      * Global cleanup task that iterates over all caches.
      */
     private static class GlobalCleanup implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {
             for (SimpleByteCache cache : _allCaches.values()) {
                 cache.cleanup();
@@ -104,6 +105,7 @@ public final class SimpleByteCache {
 
         ByteArrayFactory(int entrySize) {sz = entrySize;}
 
+        @Override
         public byte[] newInstance() {return new byte[sz];}
     }
 

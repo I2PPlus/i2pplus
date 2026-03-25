@@ -75,6 +75,7 @@ public class RouterThrottleImpl implements RouterThrottle {
      *  @since 0.8.12
      */
     private class ResetStatus implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {
             if (_tunnelStatus.contains(_x("Starting up"))) {cancelShutdownStatus();}
         }
@@ -88,6 +89,7 @@ public class RouterThrottleImpl implements RouterThrottle {
      * FIXME should put warning on the console
      * FIXME or should we do this at all? We have Codel queues all over now...
      */
+    @Override
     public boolean acceptNetworkMessage() {
         long lag = _context.jobQueue().getMaxLag();
         if ((lag > JOB_LAG_LIMIT_NETWORK) && (_context.router().getUptime() > 60*1000)) {
@@ -99,6 +101,7 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     /** @deprecated unused, function moved to netdb */
     @Deprecated
+    @Override
     public boolean acceptNetDbLookupRequest(Hash key) {
         long lag = _context.jobQueue().getMaxLag();
         if (lag > JOB_LAG_LIMIT_NETDB) {
@@ -115,6 +118,7 @@ public class RouterThrottleImpl implements RouterThrottle {
      *
      *  @return 0 for accept or nonzero reject code
      */
+    @Override
     public int acceptTunnelRequest() {
         if (_context.router().gracefulShutdownInProgress()) {
             if (_log.shouldWarn()) {_log.warn("Refusing all Tunnel Requests -> Graceful shutdown in progress...");}
@@ -432,6 +436,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         } catch (NumberFormatException nfe) {return 1.5d;}
     }
 
+    @Override
     public long getMessageDelay() {
         RateStat rs = _context.statManager().getRate("transport.sendProcessingTime");
         if (rs == null) {return 0;}
@@ -439,17 +444,20 @@ public class RouterThrottleImpl implements RouterThrottle {
         return (long)delayRate.getAverageValue();
     }
 
+    @Override
     public long getTunnelLag() {
         Rate lagRate = _context.statManager().getRate("tunnel.testSuccessTime").getRate(RateConstants.ONE_HOUR);
         return (long)lagRate.getAverageValue();
     }
 
+    @Override
     public String getTunnelStatus() {return _tunnelStatus;}
 
     /**
      * getTunnelStatus(), translated if available.
      * @since 0.9.45
      */
+    @Override
     public String getLocalizedTunnelStatus() {
         return Translate.getString(_tunnelStatus, _context, CommSystemFacade.ROUTER_BUNDLE_NAME);
     }
@@ -464,6 +472,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     }
 
     /** @since 0.8.12 */
+    @Override
     public void setShutdownStatus() {
         if (isShuttingDown(_context)) {
             setTunnelStatus("[shutdown]" + _x("Declining requests") + ": " + _x("Shutting down") + "&hellip; ");
@@ -473,6 +482,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     }
 
     /** @since 0.8.12 */
+    @Override
     public void cancelShutdownStatus() {
         // try hard to guess the state, before we actually get a request
         int maxTunnels = _context.getProperty(PROP_MAX_TUNNELS, DEFAULT_MAX_TUNNELS);
@@ -482,6 +492,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         } else {setTunnelStatus("[rejecting/disabled]" + _x("Declining Tunnel Requests"));}
     }
 
+    @Override
     public final void setTunnelStatus(String msg) {_tunnelStatus = msg;}
 
     /**

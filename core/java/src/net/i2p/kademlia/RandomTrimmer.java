@@ -19,6 +19,7 @@ public class RandomTrimmer<T extends SimpleDataStructure> implements KBucketTrim
         _max = max;
     }
 
+    @Override
     public boolean trim(KBucket<T> kbucket, T toAdd) {
         List<T> e = new ArrayList<T>(kbucket.getEntries());
         int sz = e.size();

@@ -22,6 +22,7 @@ class ExternalTrayManager extends TrayManager {
         super(ctx, useSwing);
     }
 
+    @Override
     public PopupMenu getMainMenu() {
         PopupMenu popup = new PopupMenu();
         MenuItem startItem = new MenuItem(_t("Start I2P"));
@@ -52,7 +53,7 @@ class ExternalTrayManager extends TrayManager {
         popup.add(_notificationItem1);
         return popup;
     }
-
+@Override
     public JPopupMenu getSwingMainMenu() {
         JPopupMenu popup = new JPopupMenu();
 /*
@@ -90,6 +91,7 @@ class ExternalTrayManager extends TrayManager {
      * Update the menu
      * @since 0.9.26
      */
+    @Override
     protected void updateMenu() {
         if (_notificationItem1 != null)
             _notificationItem1.setEnabled(_showNotifications);
@@ -101,3 +103,4 @@ class ExternalTrayManager extends TrayManager {
             _jnotificationItem2.setVisible(!_showNotifications);
     }
 }
+

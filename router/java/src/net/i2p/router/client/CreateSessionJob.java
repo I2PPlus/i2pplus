@@ -34,8 +34,10 @@ class CreateSessionJob extends JobImpl {
         if (_log.shouldDebug()) {_log.debug("CreateSessionJob for config: " + config);}
     }
 
+    @Override
     public String getName() {return "Request Tunnels for New Client";}
 
+    @Override
     public void runJob() {
         Hash dest = _config.getDestination().calculateHash();
         if (_log.shouldInfo()) {_log.info("Requesting LeaseSet for destination: " + dest);}

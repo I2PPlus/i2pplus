@@ -82,6 +82,7 @@ public final class KeyFactory extends KeyFactorySpi {
      * @throws InvalidKeySpecException if the key specification is unsupported or malformed
      * @since 0.9.25
      */
+    @Override
     protected PrivateKey engineGeneratePrivate(KeySpec keySpec)
             throws InvalidKeySpecException {
         if (keySpec instanceof ElGamalPrivateKeySpec) {
@@ -104,6 +105,7 @@ public final class KeyFactory extends KeyFactorySpi {
      * @throws InvalidKeySpecException if the key specification is unsupported or malformed
      * @since 0.9.25
      */
+    @Override
     protected PublicKey engineGeneratePublic(KeySpec keySpec)
             throws InvalidKeySpecException {
         if (keySpec instanceof ElGamalPublicKeySpec) {
@@ -130,6 +132,7 @@ public final class KeyFactory extends KeyFactorySpi {
      * @since 0.9.25
      */
     @SuppressWarnings("unchecked")
+    @Override
     protected <T extends KeySpec> T engineGetKeySpec(Key key, Class<T> keySpec)
             throws InvalidKeySpecException {
         if (keySpec.isAssignableFrom(ElGamalPublicKeySpec.class) && key instanceof ElGamalPublicKey) {
@@ -160,6 +163,7 @@ public final class KeyFactory extends KeyFactorySpi {
      * @throws InvalidKeyException always, as no other ElGamal providers are supported
      * @since 0.9.25
      */
+    @Override
     protected Key engineTranslateKey(Key key) throws InvalidKeyException {
         throw new InvalidKeyException("No other ElGamal key providers known");
     }

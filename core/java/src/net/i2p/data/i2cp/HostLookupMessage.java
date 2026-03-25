@@ -131,6 +131,7 @@ public class HostLookupMessage extends I2CPMessageImpl {
         return _host;
     }
 
+    @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
             _sessionId = new SessionId();
@@ -154,6 +155,7 @@ public class HostLookupMessage extends I2CPMessageImpl {
         }
     }
 
+    @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         int len;
         if (_lookupType == LOOKUP_HASH) {
@@ -184,6 +186,7 @@ public class HostLookupMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    @Override
     public int getType() {
         return MESSAGE_TYPE;
     }

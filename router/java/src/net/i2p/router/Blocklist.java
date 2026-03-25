@@ -297,6 +297,7 @@ public class Blocklist {
             blfs = bf;
         }
 
+        @Override
         public void timeReached() {
             ClientAppManager cmgr = _context.clientAppManager();
             if (cmgr != null) {
@@ -314,12 +315,14 @@ public class Blocklist {
 
     private class CleanupJob extends JobImpl {
         public CleanupJob() {super(_context);}
+        @Override
         public String getName() {
             if (expireInterval() > 0) {
                 String expiry = expireInterval() >= 600000 ? (expireInterval() / 60 / 1000) + "m" : (expireInterval() / 1000 + "s");
                 return "Expire blocklist at user-defined interval of " + expiry;
             } else {return "Expire blocklist";}
         }
+        @Override
         public void runJob() {
             clear();
             _lastExpired = System.currentTimeMillis();
@@ -346,8 +349,10 @@ public class Blocklist {
             _files = files;
         }
 
+        @Override
         public String getName() {return "Read Blocklist";}
 
+        @Override
         public void runJob() {
             synchronized (_lock) {
                 _blocklist = allocate(_files);
@@ -1208,7 +1213,9 @@ public class Blocklist {
             _peer = p;
             _ips = ips;
         }
+        @Override
         public String getName() {return "Enforce Blocklist IP Ban";}
+        @Override
         public void runJob() {
             banlistRouter(_peer, _ips, expireInterval());
             synchronized (_inProcess) {_inProcess.remove(_peer);}

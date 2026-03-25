@@ -149,6 +149,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     public void rescan() {}
 
     /** Debug only - all user info moved to NetDbRenderer in router console */
+    @Override
     public void renderStatusHTML(Writer out) throws IOException {}
     /** public for NetDbRenderer in routerconsole */
     public Set<LeaseSet> getLeases() {return Collections.emptySet();}

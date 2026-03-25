@@ -53,6 +53,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
         _log = _context.logManager().getLog(ClientManagerFacadeImpl.class);
     }
 
+    @Override
     public synchronized void startup() {
         _log.info("Starting up the Router Client Manager...");
         int port = _context.getProperty(PROP_CLIENT_PORT, DEFAULT_PORT);
@@ -60,16 +61,19 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
         _manager.start();
     }
 
+    @Override
     public synchronized void shutdown() {shutdown("Router shutdown");}
 
     /**
      *  @param msg message to send to the clients
      *  @since 0.8.8
      */
+    @Override
     public synchronized void shutdown(String msg) {
         if (_manager != null) {_manager.shutdown(msg);}
     }
 
+    @Override
     public synchronized void restart() {
         if (_manager != null) {_manager.restart();}
         else {startup();}
@@ -187,6 +191,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      * @param onCreateJob Job to run after the LeaseSet is authorized
      * @param onFailedJob Job to run after the timeout passes without receiving authorization
      */
+    @Override
     public void requestLeaseSet(Destination dest, LeaseSet set, long timeout, Job onCreateJob, Job onFailedJob) {
         if (_manager != null) {_manager.requestLeaseSet(dest, set, timeout, onCreateJob, onFailedJob);}
         else {_log.error("Null manager on requestLeaseSet!");}
@@ -200,6 +205,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      *            signed version (as well as any changed/added/removed Leases).
      *            The LeaseSet contains Leases only; it is unsigned and does not have the destination set.
      */
+    @Override
     public void requestLeaseSet(Hash dest, LeaseSet set) {
         if (_manager != null) {_manager.requestLeaseSet(dest, set);}
     }
@@ -212,6 +218,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      * @param reason Why the router thinks that there is abusive behavior
      * @param severity How severe the abuse is, with 0 being not severe and 255 is the max
      */
+    @Override
     public void reportAbuse(Destination dest, String reason, int severity) {
         if (_manager != null) {_manager.reportAbuse(dest, reason, severity);}
         else if (_log.shouldError()) {_log.error("Null manager on reportAbuse!");}
@@ -222,6 +229,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      *
      * @param dest Destination to be checked
      */
+    @Override
     public boolean isLocal(Destination dest) {
         if (_manager != null) {return _manager.isLocal(dest);}
         else if (_log.shouldDebug()) {_log.debug("Null manager on isLocal(dest)!");}
@@ -233,6 +241,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      *
      * @param destHash Hash of Destination to be checked
      */
+    @Override
     public boolean isLocal(Hash destHash) {
         if (_manager != null) {return _manager.isLocal(destHash);}
         else if (_log.shouldDebug()) {_log.debug("Null manager on isLocal(hash)!");}
@@ -249,11 +258,13 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      *  @param messageNonce the client's ID for this message, greater than zero
      *  @param status see I2CP MessageStatusMessage for success/failure codes
      */
+    @Override
     public void messageDeliveryStatusUpdate(Destination fromDest, MessageId id, long messageNonce, int status) {
         if (_manager != null) {_manager.messageDeliveryStatusUpdate(fromDest, id, messageNonce, status);}
         else if (_log.shouldError()) {_log.error("Null manager on messageDeliveryStatusUpdate!");}
     }
 
+    @Override
     public void messageReceived(ClientMessage msg) {
         if (_manager != null) {_manager.messageReceived(msg);}
         else if (_log.shouldError()) {_log.error("Null manager on messageReceived!");}
@@ -263,6 +274,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      * Return the client's current config, or null if not connected
      *
      */
+    @Override
     public SessionConfig getClientSessionConfig(Destination dest) {
         if (_manager != null) {return _manager.getClientSessionConfig(dest);}
         else if (_log.shouldError()) {_log.error("Null manager on getClientSessionConfig!");}
@@ -273,6 +285,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      * Return the client's current manager or null if not connected
      *
      */
+    @Override
     public SessionKeyManager getClientSessionKeyManager(Hash dest) {
         if (_manager != null) {return _manager.getClientSessionKeyManager(dest);}
         else if (_log.shouldError()) {_log.error("Null manager on getClientSessionKeyManager!");}
@@ -296,7 +309,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      *  @throws I2PSessionException if the router isn't ready
      *  @since 0.8.3
      */
-    public I2CPMessageQueue connect() throws I2PSessionException {
+     @Override
+     public I2CPMessageQueue connect() throws I2PSessionException {
         if (_manager != null) {return _manager.internalConnect();}
         throw new I2PSessionException("No Client Manager yet");
     }
@@ -350,3 +364,4 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
 }
+

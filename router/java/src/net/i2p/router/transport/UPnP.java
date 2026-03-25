@@ -1291,6 +1291,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
      *  @since 0.9.46
      */
     private static class UDNComparator implements Comparator<Map.Entry<String, Device>>, Serializable {
+        @Override
         public int compare(Map.Entry<String, Device> l, Map.Entry<String, Device> r) {
             Device ld = l.getValue();
             Device rd = r.getValue();
@@ -1878,6 +1879,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
             portsToForwardNow = ports;
         }
 
+        @Override
         public void run() {
             // This renews the subscriptions for all services on all devices
             renewSubscriberService(LEASE_TIME_SECONDS);
@@ -1931,6 +1933,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
             portsToForwardNow = ports;
         }
 
+        @Override
         public void run() {
             for (ForwardPort port : portsToForwardNow) {
                 String proto = protoToString(port.protocol);

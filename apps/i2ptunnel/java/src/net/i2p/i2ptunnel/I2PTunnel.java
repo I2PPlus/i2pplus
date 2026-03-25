@@ -1861,6 +1861,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Log the given message (using both the logging subsystem and standard output...)
      *
      */
+    @Override
     public void log(String s) {
         System.out.println(s);
         //if (_log.shouldInfo())
@@ -2086,3 +2087,4 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         public void routerDisconnected();
     }
 }
+

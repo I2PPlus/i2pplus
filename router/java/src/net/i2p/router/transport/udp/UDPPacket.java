@@ -218,6 +218,7 @@ class UDPPacket implements CDPQEntry {
      *
      * @return packet priority as integer
      */
+    @Override
     public int getPriority() {
         return _priority;
     }
@@ -322,6 +323,7 @@ class UDPPacket implements CDPQEntry {
      *
      * @param now enqueue time in milliseconds
      */
+    @Override
     public void setEnqueueTime(long now) {
         _enqueueTime = now;
     }
@@ -338,6 +340,7 @@ class UDPPacket implements CDPQEntry {
      *
      * @return enqueue timestamp in milliseconds
      */
+    @Override
     public long getEnqueueTime() {
         return _enqueueTime;
     }
@@ -486,6 +489,7 @@ class UDPPacket implements CDPQEntry {
     /**
      * Convenience method to release the packet.
      */
+    @Override
     public void drop() {
         release();
     }

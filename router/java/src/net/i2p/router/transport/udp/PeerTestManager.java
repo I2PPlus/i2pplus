@@ -289,6 +289,7 @@ class PeerTestManager {
             schedule(RESEND_TIMEOUT);
         }
 
+        @Override
         public void timeReached() {
             synchronized (PeerTestManager.this) {
                 PeerTestState state = _currentTest;
@@ -770,6 +771,7 @@ class PeerTestManager {
             schedule(DELAY);
         }
 
+        @Override
         public void timeReached() {
             boolean ok = receiveTest(from, fromPeer, msg, hash, data,++count);
             if (!ok)
@@ -1750,6 +1752,7 @@ class PeerTestManager {
             schedule(delay);
         }
 
+        @Override
         public void timeReached() {
             _activeTests.remove(_nonce);
             // TODO send code as bob if no response from charlie
@@ -1773,6 +1776,7 @@ class PeerTestManager {
             schedule(RESEND_TIMEOUT);
         }
 
+        @Override
         public void timeReached() {
             PeerTestState state = _activeTests.get(_nonce);
             if (state == null)
@@ -1884,6 +1888,7 @@ class PeerTestManager {
             schedule(delay);
         }
 
+        @Override
         public void timeReached() {
             _transport.send(pkt);
         }
@@ -1905,12 +1910,15 @@ class PeerTestManager {
             _from = from;
         }
 
+        @Override
         public void gotDateTime(long time) {
             _timeReceived = time;
         }
 
+        @Override
         public void gotOptions(byte[] options, boolean isHandshake) {}
 
+        @Override
         public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) {
             if (ri.getPublished() < 0) {
                 if (_log.shouldWarn()) {
@@ -1931,63 +1939,78 @@ class PeerTestManager {
             }
         }
 
+        @Override
         public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
             throw new IllegalStateException("Bad block in PT");
         }
 
+        @Override
         public void gotAddress(byte[] ip, int port) {
             _aliceIP = ip;
             _alicePort = port;
         }
 
+        @Override
         public void gotRelayTagRequest() {
             throw new IllegalStateException("Bad block in PT");
         }
 
+        @Override
         public void gotRelayTag(long tag) {
             throw new IllegalStateException("Bad block in PT");
         }
 
+        @Override
         public void gotRelayRequest(byte[] data) {
             throw new IllegalStateException("Bad block in PT");
         }
 
+        @Override
         public void gotRelayResponse(int status, byte[] data) {
             throw new IllegalStateException("Bad block in PT");
         }
 
+        @Override
         public void gotRelayIntro(Hash aliceHash, byte[] data) {
             throw new IllegalStateException("Bad block in PT");
         }
 
+        @Override
         public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
             receiveTest(_from, null, msg, status, h, data, _aliceIP, _alicePort);
         }
 
+        @Override
         public void gotToken(long token, long expires) {
             throw new IllegalStateException("Bad block in PT");
         }
 
+        @Override
         public void gotI2NP(I2NPMessage msg) {
             throw new IllegalStateException("Bad block in PT");
         }
 
+        @Override
         public void gotFragment(byte[] data, int off, int len, long messageId,int frag, boolean isLast) {
             throw new IllegalStateException("Bad block in PT");
         }
 
+        @Override
         public void gotACK(long ackThru, int acks, byte[] ranges) {
             throw new IllegalStateException("Bad block in PT");
         }
 
+        @Override
         public void gotTermination(int reason, long count) {
             throw new IllegalStateException("Bad block in PT");
         }
 
+        @Override
         public void gotPathChallenge(RemoteHostId from, byte[] data) {
             throw new IllegalStateException("Bad block in PT");
         }
 
+        @Override
         public void gotPathResponse(RemoteHostId from, byte[] data) {
             throw new IllegalStateException("Bad block in PT");
         }

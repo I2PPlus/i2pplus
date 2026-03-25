@@ -43,7 +43,9 @@ class GetBidsJob extends JobImpl {
         _msg = msg;
     }
 
+    @Override
     public String getName() { return "Fetch bids for a message to be delivered"; }
+    @Override
     public void runJob() {
         getBids(getContext(), _tmgr, _msg);
     }

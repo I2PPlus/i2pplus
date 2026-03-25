@@ -19,6 +19,7 @@ public class StreamSinkTestClient {
 
     private static void send(final String filename) {
         Thread t = new Thread(new Runnable() {
+            @Override
             public void run() {
                 StreamSinkSend.main(new String[] { filename, "0", "streamSinkTestLiveServer.key" });
             }
@@ -30,3 +31,4 @@ public class StreamSinkTestClient {
         //System.exit(0);
     }
 }
+

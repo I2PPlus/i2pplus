@@ -75,6 +75,7 @@ public class MarkLiveliness implements SimpleTimer.TimedEvent {
      * The ping file allows other router instances using the same configuration
      * to detect if another instance is already running.
      */
+    @Override
     public void timeReached() {
         if (_router.isAlive())
             ping();

@@ -251,6 +251,7 @@ class ProfilePersistenceHelper {
     }
 
     private static class ProfileFilter implements FilenameFilter {
+        @Override
         public boolean accept(File dir, String filename) {
             return (filename.startsWith(PREFIX) &&
                     filename.length() >= MIN_NAME_LENGTH &&

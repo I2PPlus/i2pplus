@@ -1772,6 +1772,7 @@ public class UDPTransport extends TransportImpl {
      * @return a copy, modifiable
      * @since 0.9.34
      */
+    @Override
     public List<Hash> getEstablished() {
         return new ArrayList<Hash>(_peersByIdent.keySet());
     }
@@ -1995,6 +1996,7 @@ public class UDPTransport extends TransportImpl {
     private class RemoveDropList implements SimpleTimer.TimedEvent {
         private final RemoteHostId _peer;
         public RemoveDropList(RemoteHostId peer) { _peer = peer; }
+        @Override
         public void timeReached() {
             _dropList.remove(_peer);
         }
@@ -2296,6 +2298,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
+    @Override
     public TransportBid bid(RouterInfo toAddress, int dataSize) {
         if (dataSize > OutboundMessageState.MAX_MSG_SIZE) {
             // NTCP max is lower, so msg will get dropped
@@ -2511,6 +2514,7 @@ public class UDPTransport extends TransportImpl {
     private static final int MAX_IDLE_TIME = EXPIRE_TIMEOUT;
     public static final int MIN_EXPIRE_TIMEOUT = 3*60*1000;
 
+    @Override
     public String getStyle() {return STYLE;}
 
     /**
@@ -2661,10 +2665,13 @@ public class UDPTransport extends TransportImpl {
     }
 
     // we don't need the following, since we have our own queueing
+    @Override
     protected void outboundMessageReady() { throw new UnsupportedOperationException("Not used for UDP"); }
 
+    @Override
     public void startListening() {startup();}
 
+    @Override
     public void stopListening() {
         shutdown();
         replaceAddress(null);
@@ -3107,6 +3114,7 @@ public class UDPTransport extends TransportImpl {
         public RebuildEvent() {
             super(_context.simpleTimer2());
         }
+        @Override
         public void timeReached() {
             _context.router().rebuildRouterInfo(true);
         }
@@ -3352,6 +3360,7 @@ public class UDPTransport extends TransportImpl {
             super.afterSend(m, true);
     }
 
+    @Override
     public int countPeers() {
         return _peersByIdent.size();
     }
@@ -3367,6 +3376,7 @@ public class UDPTransport extends TransportImpl {
      * @return an array of 8 integers representing peer counts for each category
      * @since 0.9.57
      */
+    @Override
     public int[] getPeerCounts() {
         int[] rv = new int[8];
         long old = _context.clock().now() - 60*1000;
@@ -3386,6 +3396,7 @@ public class UDPTransport extends TransportImpl {
         return rv;
     }
 
+    @Override
     public int countActivePeers() {
         long old = _context.clock().now() - 60*1000;
         int active = 0;
@@ -3399,6 +3410,7 @@ public class UDPTransport extends TransportImpl {
         return active;
     }
 
+    @Override
     public int countActiveSendPeers() {
         long old = _context.clock().now() - 60*1000;
         int active = 0;
@@ -3445,6 +3457,7 @@ public class UDPTransport extends TransportImpl {
      *
      * @since 0.9.38
      */
+    @Override
     public void forceDisconnect(Hash peer) {
         PeerState ps =  _peersByIdent.get(peer);
         boolean isBanned = _context.banlist().isBanlisted(peer);
@@ -3574,6 +3587,7 @@ public class UDPTransport extends TransportImpl {
             _expireBuffer = new ArrayList<PeerState>();
         }
 
+        @Override
         public void timeReached() {
             boolean weAreFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
                                       _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
@@ -3877,6 +3891,7 @@ public class UDPTransport extends TransportImpl {
      * @return the current status, never null
      */
     @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
+    @Override
     public Status getReachabilityStatus() {
         String override = _context.getProperty(PROP_REACHABILITY_STATUS_OVERRIDE);
         if (override != null) {
@@ -4018,6 +4033,7 @@ public class UDPTransport extends TransportImpl {
      *  @since 0.8.11
      */
     private class PingIntroducers implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {
             if (introducersRequired(false) || introducersRequired(true))
                 _introManager.pingIntroducers();

@@ -705,6 +705,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             k1 = DataHelper.fromLong8(b, 24);
         }
 
+        @Override
         public int compare(Hash l, Hash r) {
             long lh = SipHashInline.hash24(k0, k1, l.getData());
             long rh = SipHashInline.hash24(k0, k1, r.getData());
@@ -874,6 +875,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
          * @param o a Hash object to check
          * @return true if peer should be excluded (and added to set)
          */
+        @Override
         public boolean contains(Object o) {
             if (s.contains(o)) {return true;}
             Hash h = (Hash) o;

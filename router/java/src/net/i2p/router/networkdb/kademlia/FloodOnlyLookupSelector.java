@@ -32,12 +32,15 @@ class FloodOnlyLookupSelector implements MessageSelector {
         _log = ctx.logManager().getLog(getClass());
     }
 
+    @Override
     public boolean continueMatching() {
         return _search.getLookupsRemaining() > 0 && !_matchFound && _context.clock().now() < getExpiration();
     }
 
+    @Override
     public long getExpiration() { return (_matchFound ? -1 : _search.getExpiration()); }
 
+    @Override
     public boolean isMatch(I2NPMessage message) {
         if (message == null) return false;
         int type = message.getType();
@@ -85,6 +88,7 @@ class FloodOnlyLookupSelector implements MessageSelector {
     }
 
     /** @since 0.9.12 */
+    @Override
     public String toString() {
         return "FloodOnlyLookup Selector for " + _search.getKey();
     }

@@ -27,8 +27,10 @@ class BootCommSystemJob extends JobImpl {
         _log = context.logManager().getLog(BootCommSystemJob.class);
     }
 
+    @Override
     public String getName() { return "Boot Communication System"; }
 
+    @Override
     public void runJob() {
         // The netDb and the peer manager both take a long time to start up,
         // as they may have to read in ~1000 files or more each

@@ -265,8 +265,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         ctx.statManager().createRequiredRateStat("client.sendAckTime", "Message round trip time (ms)", "ClientMessages", RATES);
     }
 
+    @Override
     public String getName() {return "Outbound client message";}
 
+    @Override
     public void runJob() {
         if (_to.getEncType() != EncType.ELGAMAL_2048) {
             // Enc type in key cert, proposal 145, unsupported
@@ -379,8 +381,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     private class SendJob extends JobImpl {
         public SendJob(RouterContext enclosingContext) {super(enclosingContext);}
 
+        @Override
         public String getName() {return "Delay OB Client Message Send";}
 
+        @Override
         public void runJob() {
             if (_leaseSetLookupBegin > 0) {
                 long lookupTime = getContext().clock().now() - _leaseSetLookupBegin;
@@ -541,7 +545,9 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      */
     private class LookupLeaseSetFailedJob extends JobImpl {
         public LookupLeaseSetFailedJob(RouterContext enclosingContext) {super(enclosingContext);}
+        @Override
         public String getName() {return "Timeout OB Client Message Lease Lookup";}
+        @Override
         public void runJob() {
             if (_leaseSetLookupBegin > 0) {
                 long lookupTime = getContext().clock().now() - _leaseSetLookupBegin;
@@ -751,8 +757,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             _replyTimeout = timeout;
         }
 
+        @Override
         public String getName() {return "Outbound client message dispatch";}
 
+        @Override
         public void runJob() {
             if (_selector != null) {
                 if (_overallExpiration >= _selector.getExpiration()) {
@@ -1012,10 +1020,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             _expiration = expiration;
         }
 
+        @Override
         public boolean continueMatching() {return false;}
 
+        @Override
         public long getExpiration() {return _expiration;}
 
+        @Override
         public boolean isMatch(I2NPMessage inMsg) {
             if (inMsg.getType() == DeliveryStatusMessage.MESSAGE_TYPE) {
                 return _pendingToken == ((DeliveryStatusMessage)inMsg).getMessageId();
@@ -1058,11 +1069,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             _replyTimeout = timeout;
         }
 
+        @Override
         public String getName() {return "Verify OB Client Message Send";}
 
         /**
          * May be run after SendTimeoutJob, will re-add the tags.
          */
+        @Override
         public void runJob() {
             if (_deliveredLS != null) {
                 // note that the delivered LS was acked
@@ -1143,6 +1156,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             }
         }
 
+        @Override
         public void setMessage(I2NPMessage msg) {}
     }
 
@@ -1154,11 +1168,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     private class ECIESReplyCallback extends SendSuccessJob implements ReplyCallback {
         public ECIESReplyCallback(LeaseSet ls, SendTimeoutJob timeout) {super(null, null, ls, timeout);}
 
+        @Override
         public long getExpiration() {
             // longer timeout so we can have success-after-failure via ratchet
             return Math.max(_overallExpiration, _start + RATCHET_REPLY_TIMEOUT_MS_MIN);
         }
 
+        @Override
         public void onReply() {super.runJob();}
     }
 
@@ -1184,11 +1200,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             _tags = tags;
         }
 
+        @Override
         public String getName() {return "Timeout OB Client Message Send";}
 
         /**
          * May be run after SendSuccessJob, will have no effect.
          */
+        @Override
         public void runJob() {
             Result old;
             // never fail after success

@@ -267,6 +267,7 @@ public class OutboundMessageRegistry {
         }
 
         @SuppressWarnings("unchecked")
+        @Override
         public void timeReached() {
             long now = _context.clock().now();
             List<MessageSelector> removing = new ArrayList<MessageSelector>(8);

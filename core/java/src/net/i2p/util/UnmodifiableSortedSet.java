@@ -70,8 +70,10 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
         initialized = true;
     }
 
+    @Override
     public Comparator<? super E> comparator() { return comp; }
 
+    @Override
     @SuppressWarnings("unchecked")
     public E first() {
         if (isEmpty())
@@ -79,6 +81,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
         return (E) _entries[0];
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public E last() {
         int sz = size();
@@ -90,6 +93,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     /**
      *  @throws UnsupportedOperationException
      */
+    @Override
     public SortedSet<E> headSet(E toElement) {
         throw new UnsupportedOperationException();
     }
@@ -97,6 +101,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     /**
      *  @throws UnsupportedOperationException
      */
+    @Override
     public SortedSet<E> subSet(E fromElement, E toElement) {
         throw new UnsupportedOperationException();
     }
@@ -104,6 +109,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     /**
      *  @throws UnsupportedOperationException
      */
+    @Override
     public SortedSet<E> tailSet(E fromElement) {
         throw new UnsupportedOperationException();
     }

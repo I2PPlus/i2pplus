@@ -50,6 +50,7 @@ public class SocketTimeout extends SimpleTimer2.TimedEvent {
         schedule(delay);
     }
 
+    @Override
     public void timeReached() {
         if (_cancelled) return;
         long now = System.currentTimeMillis();
@@ -76,6 +77,7 @@ public class SocketTimeout extends SimpleTimer2.TimedEvent {
      *  0.9.3 accidentally broke Syndie, sorry.
      *  Recompile Syndie to fix it.
      */
+    @Override
     public boolean cancel() {
         _cancelled = true;
         return super.cancel();

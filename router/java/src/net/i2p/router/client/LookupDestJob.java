@@ -128,10 +128,12 @@ class LookupDestJob extends JobImpl {
         _blindData = bd;
     }
 
+    @Override
     public String getName() {
         return _name != null ? "Lookup Hostname for Client" : "Lookup LeaseSet for Client";
     }
 
+    @Override
     public void runJob() {
         if (_blindData != null) {
             boolean fail1 = _blindData.getAuthRequired() && _blindData.getAuthPrivKey() == null;
@@ -188,8 +190,10 @@ class LookupDestJob extends JobImpl {
     private class DoneJob extends JobImpl {
         public DoneJob(RouterContext enclosingContext) {super(enclosingContext);}
 
+        @Override
         public String getName() {return "Lookup LeaseSet &amp; Reply to Client";}
 
+        @Override
         public void runJob() {
             NetworkDatabaseFacade db = _runner.getFloodfillNetworkDatabaseFacade();
             if (db == null) {db = getContext().netDb();}

@@ -117,10 +117,12 @@ abstract class StoreJob extends JobImpl {
      *
      * @return job name
      */
+    @Override
     public String getName() {return "Process Kademlia NetDb Store";}
     /**
      * Execute the job to start sending to the next batch of peers.
      */
+    @Override
     public void runJob() {sendNext();}
     /**
      * Check if the store operation has expired.
@@ -597,6 +599,7 @@ abstract class StoreJob extends JobImpl {
          * @param rhs second lease to compare
          * @return negative if lhs is closer, positive if rhs is closer, 0 if equal
          */
+        @Override
         public int compare(Lease lhs, Lease rhs) {
             byte lhsb[] = lhs.getGateway().getData();
             byte rhsb[] = rhs.getGateway().getData();
@@ -703,12 +706,14 @@ abstract class StoreJob extends JobImpl {
         /**
          * Execute the wait and then continue sending.
          */
+        @Override
         public void runJob() {sendNext();}
         /**
          * Get the name of this wait job.
          *
          * @return job name
          */
+        @Override
         public String getName() {return "Delay Kademlia Store Send";}
     }
 
@@ -804,11 +809,13 @@ abstract class StoreJob extends JobImpl {
          *
          * @return job name
          */
+        @Override
         public String getName() { return "Verify Kademlia Store Send"; }
 
         /**
          * Handle the successful delivery acknowledgment.
          */
+        @Override
         public void runJob() {
             Hash hash = _peer.getIdentity().getHash();
             MessageWrapper.WrappedMessage wm = _state.getPendingMessage(hash);
@@ -845,6 +852,7 @@ abstract class StoreJob extends JobImpl {
          *
          * @param message the received message (ignored)
          */
+        @Override
         public void setMessage(I2NPMessage message) {} // ignored, since if the selector matched it, its fine by us
     }
 
@@ -877,6 +885,7 @@ abstract class StoreJob extends JobImpl {
         /**
          * Handle the failed store attempt.
          */
+        @Override
         public void runJob() {
             if (!_wasRun.compareAndSet(false, true)) {return;}
             Hash hash = _peer.getIdentity().getHash();
@@ -899,6 +908,7 @@ abstract class StoreJob extends JobImpl {
          *
          * @return job name
          */
+        @Override
         public String getName() {return "Timeout Kademlia Store Send";}
     }
 

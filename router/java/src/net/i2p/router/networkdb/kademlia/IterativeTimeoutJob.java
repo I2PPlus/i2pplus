@@ -32,10 +32,12 @@ class IterativeTimeoutJob extends JobImpl {
         _search = job;
     }
 
+    @Override
     public void runJob() {
         _search.failed(_peer, true);
     }
 
+    @Override
     public String getName() { return "Timeout Iterative Search"; }
 
     /**

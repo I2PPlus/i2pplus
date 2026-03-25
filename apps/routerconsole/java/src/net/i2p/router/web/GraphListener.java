@@ -63,6 +63,7 @@ public class GraphListener implements RateSummaryListener {
         _isPersistent = _context.getBooleanPropertyDefaultTrue(PROP_PERSISTENT);
     }
 
+    @Override
     public void add(double totalValue, long eventCount, double totalEventTime, long period) {
         long now = now();
         long when = now / 1000;
@@ -250,3 +251,4 @@ public class GraphListener implements RateSummaryListener {
     @Override
     public int hashCode() {return _rate.hashCode();}
 }
+

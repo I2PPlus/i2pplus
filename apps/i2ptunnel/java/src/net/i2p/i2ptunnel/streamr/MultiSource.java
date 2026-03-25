@@ -30,6 +30,7 @@ public class MultiSource implements Source, Sink {
      *  @param sink the sink to receive distributed data
      *  @since 0.9.53
      */
+    @Override
     public void setSink(Sink sink) {
         this.sink = sink;
     }
@@ -51,6 +52,7 @@ public class MultiSource implements Source, Sink {
     /**
      *  May throw RuntimeException from underlying sinks
      *  @since 0.9.53 added fromPort and toPort parameters
+     @Override
      *  @throws RuntimeException
      */
     public void send(Destination ignored_from, int ignored_fromPort, int ignored_toPort, byte[] data) {
@@ -113,3 +115,4 @@ public class MultiSource implements Source, Sink {
         }
     }
 }
+

@@ -23,6 +23,7 @@ public class PoisonI2CPMessage extends I2CPMessageImpl {
      *  @throws I2CPMessageException always
      */
     @Deprecated
+    @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException {
         throw new I2CPMessageException("Don't do this");
     }
@@ -32,10 +33,12 @@ public class PoisonI2CPMessage extends I2CPMessageImpl {
      *  @throws I2CPMessageException always
      */
     @Deprecated
+    @Override
     protected byte[] doWriteMessage() throws I2CPMessageException {
         throw new I2CPMessageException("Don't do this");
     }
 
+    @Override
     public int getType() {
         return MESSAGE_TYPE;
     }

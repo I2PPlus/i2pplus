@@ -64,6 +64,7 @@ public class SOCKSUDPPort implements Source, Sink {
      *  @param sink the sink to receive processed UDP datagrams
      *  @since 0.9.53
      */
+    @Override
     public void setSink(Sink sink) {
         this.unwrapper.setSink(sink);
     }
@@ -95,9 +96,11 @@ public class SOCKSUDPPort implements Source, Sink {
      *  @param fromPort will be passed along
      *  @param toPort will be passed along
      *  @since 0.9.53 added fromPort and toPort parameters
+     @Override
      *  @throws RuntimeException
      */
     public void send(Destination from, int fromPort, int toPort, byte[] data) {
         this.wrapper.send(from, fromPort, toPort, data);
     }
 }
+

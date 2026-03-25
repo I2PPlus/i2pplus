@@ -126,6 +126,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
         public RemoveExpired() {super(_context.simpleTimer2(), REMOVE_EXPIRED_TIME);}
 
+        @Override
         public void timeReached() {
             if (isClosed()) {return;}
             if (!_sendingStates.isEmpty()) {
@@ -170,42 +171,51 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /** @throws UnsupportedOperationException always, use MuxedImpl */
+    @Override
     public void addSessionListener(I2PSessionListener lsnr, int proto, int port) {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
     /** @throws UnsupportedOperationException always, use MuxedImpl */
+    @Override
     public void addMuxedSessionListener(I2PSessionMuxedListener l, int proto, int port) {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
     /** @throws UnsupportedOperationException always, use MuxedImpl */
+    @Override
     public void removeListener(int proto, int port) {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
     /** @throws UnsupportedOperationException always, use MuxedImpl */
+    @Override
     public boolean sendMessage(Destination dest, byte[] payload, int proto, int fromport, int toport) throws I2PSessionException {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
     /** @throws UnsupportedOperationException always, use MuxedImpl */
+    @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent,
                                int proto, int fromport, int toport) throws I2PSessionException {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
     /** @throws UnsupportedOperationException always, use MuxedImpl */
+    @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire,
                                int proto, int fromport, int toport) throws I2PSessionException {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
     /** @throws UnsupportedOperationException always, use MuxedImpl */
+    @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire,
                                int proto, int fromport, int toport, int flags) throws I2PSessionException {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
     /** @throws UnsupportedOperationException always, use MuxedImpl */
+    @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size,
                                int proto, int fromport, int toport, SendMessageOptions options) throws I2PSessionException {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
     /** @throws UnsupportedOperationException always, use MuxedImpl */
+    @Override
     public long sendMessage(Destination dest, byte[] payload, int offset, int size,
                                int proto, int fromport, int toport,
                                SendMessageOptions options, SendMessageStatusListener listener) throws I2PSessionException {
@@ -218,6 +228,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         return sendMessage(dest, payload, 0, payload.length);
     }
 
+    @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size) throws I2PSessionException {
         // we don't do end-to-end crypto any more
         //return sendMessage(dest, payload, offset, size, new SessionKey(), new HashSet(64), 0);
@@ -237,6 +248,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
      */
+    @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent)
                    throws I2PSessionException {
         return sendMessage(dest, payload, offset, size, keyUsed, tagsSent, 0);
@@ -248,6 +260,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
      */
+    @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expires)
                    throws I2PSessionException {
         if (_log.shouldDebug()) {_log.debug("Sending message");}

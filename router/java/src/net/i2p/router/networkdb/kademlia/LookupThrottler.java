@@ -95,6 +95,7 @@ class LookupThrottler {
     }
 
     private class Cleaner implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {
             LookupThrottler.this.counter.clear();
             synchronized (burstTimestamps) {

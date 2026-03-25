@@ -18,6 +18,7 @@ class InverseCapacityComparator implements Comparator<PeerProfile>, Serializable
      * @return -1 if the right hand side is smaller, 1 if the left hand side is
      *         smaller, or 0 if they are the same peer (Comparator.compare() inverted)
      */
+    @Override
     public int compare(PeerProfile left, PeerProfile right) {
 
         double rval = right.getCapacityValue();

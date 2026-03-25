@@ -221,6 +221,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     /**
      *  Create a copy of the current options, to be used in a setDefaultOptions() call.
      */
+    @Override
     public I2PSocketOptions buildOptions() { return buildOptions(null); }
 
     /**
@@ -230,6 +231,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *
      *  @param opts The new options, may be null
      */
+    @Override
     public I2PSocketOptions buildOptions(Properties opts) {
         ConnectionOptions curOpts = new ConnectionOptions(_defaultOptions);
         curOpts.setProperties(opts);
@@ -239,6 +241,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     /**
      *  @return the session, non-null
      */
+    @Override
     public I2PSession getSession() {
         return _session;
     }
@@ -326,6 +329,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *
      *  @since 0.9.21
      */
+     @Override
     public void removeSubsession(I2PSession session) {
         _session.removeSubsession(session);
         boolean removed = _subsessions.remove(session);
@@ -342,6 +346,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *  @return a list of subsessions, non-null, does not include the primary session
      *  @since 0.9.21
      */
+    @Override
     public List<I2PSession> getSubsessions() {
         return _session.getSubsessions();
     }
@@ -383,6 +388,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @return true on success, false on failure
      * @throws IllegalArgumentException
      */
+    @Override
     public boolean ping(Destination peer, long timeoutMs) {
         if (timeoutMs <= 0)
             throw new IllegalArgumentException("Bad timeout");
@@ -406,6 +412,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @throws IllegalArgumentException
      * @since 0.9.12
      */
+    @Override
     public boolean ping(Destination peer, int localPort, int remotePort, long timeoutMs) {
         if (localPort < 0 || localPort > 65535 ||
             remotePort < 0 || remotePort > 65535)
@@ -432,6 +439,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @throws IllegalArgumentException
      * @since 0.9.18
      */
+    @Override
     public byte[] ping(Destination peer, int localPort, int remotePort, long timeoutMs, byte[] payload) {
         if (localPort < 0 || localPort > 65535 ||
             remotePort < 0 || remotePort > 65535)
@@ -450,6 +458,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     public void setAcceptTimeout(long ms) { _acceptTimeout = ms; }
     public long getAcceptTimeout() { return _acceptTimeout; }
 
+
     /**
      *  Update the options on a running socket manager.
      *  Parameters in the I2PSocketOptions interface may be changed directly
@@ -460,6 +469,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *
      *  @param options as created from a call to buildOptions(properties), non-null
      */
+    @Override
     public void setDefaultOptions(I2PSocketOptions options) {
         if (!(options instanceof ConnectionOptions))
             throw new IllegalArgumentException();
@@ -474,6 +484,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *
      *  TODO There is no facility to specify the session.
      */
+    @Override
     public I2PSocketOptions getDefaultOptions() {
         return _defaultOptions;
     }
@@ -488,6 +499,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *
      *  @return non-null
      */
+    @Override
     public I2PServerSocket getServerSocket() {
         _connectionManager.setAllowIncomingConnections(true);
         return _serverSocket;
@@ -540,6 +552,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @throws NoRouteToHostException if the peer is not found or not reachable
      * @throws I2PException if there is some other I2P-related problem
      */
+    @Override
     public I2PSocket connect(Destination peer, I2PSocketOptions options)
                              throws I2PException, NoRouteToHostException {
         if (peer == null)
@@ -634,6 +647,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @throws NoRouteToHostException if the peer is not found or not reachable
      * @throws I2PException if there is some other I2P-related problem
      */
+    @Override
     public I2PSocket connect(Destination peer) throws I2PException, NoRouteToHostException {
         return connect(peer, _defaultOptions);
     }
@@ -720,15 +734,16 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *
      * @since 0.9.9
      */
+    @Override
     public boolean isDestroyed() {
         return _isDestroyed.get();
     }
 
     /**
      * Retrieve a set of currently connected I2PSockets, either initiated locally or remotely.
-     *
      * @return set of currently connected I2PSockets
      */
+    @Override
     public Set<I2PSocket> listSockets() {
         Set<Connection> connections = _connectionManager.listConnections();
         Set<I2PSocket> rv = new HashSet<I2PSocket>(connections.size());
@@ -778,3 +793,4 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         }
     }
 }
+

@@ -190,6 +190,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     }
 
     private class CleanupEvent implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {
             if (!_alive) {return;}
             long beforeExpire = _context.clock().now();
@@ -829,6 +830,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      *  Earliest first
      */
     private static class TagSetComparator implements Comparator<TagSet>, Serializable {
+        @Override
         public int compare(TagSet l, TagSet r) {
             int rv = (int) (l.getDate() - r.getDate());
             if (rv != 0)

@@ -113,8 +113,8 @@ public class MultiRouter {
 
             /* Start the routers in separate threads since it takes some time. */
             (new Thread() {
+                @Override
                 public void run() {
-                    r.runRouter();
                 }
             }).start();
             try { Thread.sleep(100); } catch (InterruptedException ie) {}

@@ -73,6 +73,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         _keys.clear();
     }
 
+    @Override
     public void run() {
         try {run2();}
         catch (IllegalStateException ise) {
@@ -113,6 +114,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
      * Pulls a prebuilt keypair from the queue,
      * or if not available, construct a new one.
      */
+    @Override
     public KeyPair getKeys() {
         _context.statManager().addRateData("crypto.XDHUsed", 1);
         KeyPair rv = _keys.poll();

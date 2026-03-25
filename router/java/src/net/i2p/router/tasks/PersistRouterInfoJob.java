@@ -76,6 +76,7 @@ public class PersistRouterInfoJob extends JobImpl {
      *
      * @return job name for logging and identification
      */
+    @Override
     public String getName() { return "Store Updated Router Information"; }
 
     /**
@@ -89,6 +90,7 @@ public class PersistRouterInfoJob extends JobImpl {
      * writes and prevent corruption. Any errors during the write process
      * are logged but do not prevent the job from completing.
      */
+    @Override
     public void runJob() {
         Log _log = getContext().logManager().getLog(PersistRouterInfoJob.class);
         if (_log.shouldDebug())

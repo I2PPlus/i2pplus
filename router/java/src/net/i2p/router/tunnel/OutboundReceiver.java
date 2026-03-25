@@ -38,6 +38,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         // all createRateStat() in TunnelDispatcher
     }
 
+    @Override
     public long receiveEncrypted(byte encrypted[]) {
         TunnelDataMessage msg = new TunnelDataMessage(_context);
         msg.setData(encrypted);
@@ -68,6 +69,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
      * @return non-null
      * @since 0.9.3
      */
+    @Override
     public Hash getSendTo() {
         return _config.getPeer(1);
     }
@@ -90,8 +92,10 @@ class OutboundReceiver implements TunnelGateway.Receiver {
             _msg = msg;
         }
 
+        @Override
         public String getName() { return "Send to OBGW after Lookup"; }
 
+        @Override
         public void runJob() {
             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(_config.getPeer(1));
             if (_log.shouldDebug())
@@ -117,8 +121,10 @@ class OutboundReceiver implements TunnelGateway.Receiver {
             super(ctx);
         }
 
+        @Override
         public String getName() { return "Timeout OBGW Lookup"; }
 
+        @Override
         public void runJob() {
             if (_log.shouldWarn())
                 _log.warn("Lookup of [" + _config.getPeer(1).toBase64().substring(0,6) + "] failed for " + _config);
@@ -137,8 +143,10 @@ class OutboundReceiver implements TunnelGateway.Receiver {
             super(ctx);
         }
 
+        @Override
         public String getName() { return "OBGW Send Failure"; }
 
+        @Override
         public void runJob() {
             if (_log.shouldWarn())
                 _log.warn("Send to [" + _config.getPeer(1).toBase64().substring(0,6) + "] failed for " + _config);

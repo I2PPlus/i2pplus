@@ -76,6 +76,7 @@ public final class ByteCache extends TryCache<ByteArray> {
      * Global cleanup task that iterates over all caches.
      */
     private static class GlobalCleanup implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {
             synchronized (_allCaches) {
                 for (ByteCache cache : _allCaches) {
@@ -147,6 +148,7 @@ public final class ByteCache extends TryCache<ByteArray> {
 
         ByteArrayFactory(int entrySize) {sz = entrySize;}
 
+        @Override
         public ByteArray newInstance() {
             byte data[] = new byte[sz];
             ByteArray rv = new ByteArray(data);

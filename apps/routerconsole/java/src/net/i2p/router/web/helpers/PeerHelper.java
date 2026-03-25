@@ -600,6 +600,7 @@ public class PeerHelper extends HelperBase {
     }
 
     private static class PeerComparator implements Comparator<NTCPConnection>, Serializable {
+        @Override
         public int compare(NTCPConnection l, NTCPConnection r) {
             if (l == null || r == null) {throw new IllegalArgumentException();}
             return HashComparator.comp(l.getRemotePeer().calculateHash(), r.getRemotePeer().calculateHash());
@@ -1086,4 +1087,5 @@ public class PeerHelper extends HelperBase {
     }
 
 }
+
 

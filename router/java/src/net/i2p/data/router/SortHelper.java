@@ -71,6 +71,7 @@ class SortHelper {
      * @since 0.8.3
      */
     private static class DataStructureComparator implements Comparator<DataStructure>, Serializable {
+        @Override
         public int compare(DataStructure l, DataStructure r) {
             return l.calculateHash().toBase64().compareTo(r.calculateHash().toBase64());
         }

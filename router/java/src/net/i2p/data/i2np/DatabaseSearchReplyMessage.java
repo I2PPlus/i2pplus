@@ -57,6 +57,7 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     public Hash getFromHash() { return _from; }
     public void setFromHash(Hash from) { _from = from; }
 
+    @Override
     public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
@@ -89,11 +90,13 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     }
 
     /** calculate the message body's length (not including the header and footer */
+    @Override
     protected int calculateWrittenLength() {
         return Hash.HASH_LENGTH + 1 + getNumReplies()*Hash.HASH_LENGTH + Hash.HASH_LENGTH;
     }
 
     /** write the message body to the output array, starting at the given index */
+    @Override
     protected int writeMessageBody(byte out[], int curIndex) throws I2NPMessageException {
         if (_key == null)
             throw new I2NPMessageException("Key in reply to not specified");
@@ -112,6 +115,7 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
         return curIndex;
     }
 
+    @Override
     public int getType() { return MESSAGE_TYPE; }
 
     @Override

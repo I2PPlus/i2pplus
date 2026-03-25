@@ -41,6 +41,7 @@ public class UpdateRoutingKeyModifierJob extends JobImpl {
      *
      * @return job name for logging and identification
      */
+    @Override
     public String getName() { return "Update Routing Key Modifier"; }
 
     /**
@@ -54,6 +55,7 @@ public class UpdateRoutingKeyModifierJob extends JobImpl {
      * If the modifier data changes, notifies the network database that
      * routing keys have changed.
      */
+    @Override
     public void runJob() {
         RouterKeyGenerator gen = getContext().routerKeyGenerator();
         // make sure we requeue quickly if just before midnight

@@ -653,25 +653,35 @@ public class KBucketSet<T extends SimpleDataStructure> {
 
         public DummyBucket(int range) {r = range;}
 
+        @Override
         public int getRangeBegin() {return r;}
+        @Override
         public int getRangeEnd() {return r;}
 
+        @Override
         public int getKeyCount() {return 0;}
 
+        @Override
         public Set<T> getEntries() {throw new UnsupportedOperationException();}
 
+        @Override
         public void getEntries(SelectionCollector<T> collector) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public void clear() {}
 
+        @Override
         public boolean add(T peer) {throw new UnsupportedOperationException();}
 
+        @Override
         public boolean remove(T peer) {return false;}
 
+        @Override
         public void setLastChanged() {}
 
+        @Override
         public long getLastChanged() {return 0;}
     }
 
@@ -680,6 +690,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      *  Returns equal for any overlap.
      */
     private static class BucketComparator<T extends SimpleDataStructure> implements Comparator<KBucket<T>>, Serializable {
+        @Override
         public int compare(KBucket<T> l, KBucket<T> r) {
             if (l.getRangeEnd() < r.getRangeBegin()) {return -1;}
             if (l.getRangeBegin() > r.getRangeEnd()) {return 1;}

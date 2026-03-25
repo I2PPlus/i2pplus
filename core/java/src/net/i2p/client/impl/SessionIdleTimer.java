@@ -79,6 +79,7 @@ class SessionIdleTimer implements SimpleTimer.TimedEvent {
         _minimumTime = minimumTime;
     }
 
+    @Override
     public void timeReached() {
         if (_session.isClosed()) {return;}
         long now = _context.clock().now();

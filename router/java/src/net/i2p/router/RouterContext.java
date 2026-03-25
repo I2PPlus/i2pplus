@@ -193,6 +193,7 @@ public class RouterContext extends I2PAppContext {
      *
      * @param callback the callback to be notified of property changes
      */
+    @Override
     public void addPropertyCallback(I2PPropertyCallback callback) {
         _overrideProps.addCallBack(callback);
     }
@@ -764,6 +765,7 @@ public class RouterContext extends I2PAppContext {
      *  @return downtime in ms or 0 if unknown
      *  @since 0.9.47
      */
+    @Override
     public long getEstimatedDowntime() {
         if (_router == null)
             return 0L;

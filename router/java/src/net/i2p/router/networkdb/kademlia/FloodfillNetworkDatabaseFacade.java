@@ -227,6 +227,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             super(SimpleTimer2.getInstance(), 2000);
         }
 
+        @Override
         public void timeReached() {
             processElapsedTimeouts();
             reschedule(2000);
@@ -311,6 +312,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             super(_context.simpleTimer2());
             localRouterInfo = local;
         }
+        @Override
         public void timeReached() {
             RouterInfo latest = _context.router().getRouterInfo();
             boolean shouldLog = _log.shouldWarn() || _log.shouldInfo();
@@ -589,7 +591,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             super(ctx);
             _peer = peer;
         }
+        @Override
         public String getName() {return "Flood failed";}
+        @Override
         public void runJob() {getContext().profileManager().dbStoreFailed(_peer);}
     }
 
@@ -604,7 +608,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             super(ctx);
             _peer = peer;
         }
+        @Override
         public String getName() {return "Flood succeeded";}
+        @Override
         public void runJob() {getContext().profileManager().dbStoreSuccessful(_peer);}
     }
 
@@ -689,6 +695,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     // ToDo: With repect to segmented netDb clients, this framework needs refinement.
     // A client with a segmented netDb can not use exploratory tunnels.
     // The return messages will not have sufficient information to be directed back to the client making the query.
+    @Override
     SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease, Hash fromLocalDest) {
         if (key == null) {
             if (_log.shouldWarn()) {_log.warn("NULL key search requested -> Dropping...");}
@@ -976,7 +983,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             super(ctx);
             _peer = peer;
         }
+        @Override
         public String getName() { return "Timeout NetDb Lookup for Failing Peer"; }
+        @Override
         public void runJob() {
             if (!dropAfterLookupFailed(_peer)) {
                 dropAfterLookupFailed(_peer);
@@ -993,7 +1002,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             _peer = peer;
             _info = info;
         }
+        @Override
         public String getName() { return "Verify NetDb Lookup for Failing Peer"; }
+        @Override
         public void runJob() {
             RouterInfo updated = lookupRouterInfoLocally(_peer);
             if (updated == null || updated.getPublished() <= _info.getPublished()) {

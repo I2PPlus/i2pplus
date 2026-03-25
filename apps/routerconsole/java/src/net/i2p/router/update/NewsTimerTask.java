@@ -43,6 +43,7 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
         // UpdateManager calls NewsFetcher to check the existing news at startup
     }
 
+    @Override
     public void timeReached() {
         if (shouldFetchNews()) {
             Thread t = new Fetcher();
@@ -121,7 +122,7 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
             super("News Fetcher");
             setDaemon(true);
         }
-
+@Override
         public void run() {
             // blocking
             fetchNews();
@@ -142,3 +143,4 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
         }
     }
 }
+

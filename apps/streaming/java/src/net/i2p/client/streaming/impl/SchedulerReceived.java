@@ -13,12 +13,13 @@ class SchedulerReceived extends SchedulerImpl {
         super(ctx);
     }
 
+    @Override
     public boolean accept(Connection con) {
         return (con != null) &&
                (con.getLastSendId() < 0) &&
                (con.getSendStreamId() > 0);
     }
-
+@Override
     public void eventOccurred(Connection con) {
         if (con.getUnackedPacketsReceived() <= 0) {
             if (_log.shouldWarn())
@@ -44,3 +45,4 @@ class SchedulerReceived extends SchedulerImpl {
         }
     }
 }
+

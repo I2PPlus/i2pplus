@@ -74,6 +74,7 @@ public class PersistentDataStore extends TransientDataStore {
     private static final int MAX_ROUTERS_INIT = 6000;
 
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
+    @Override
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
     private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
@@ -236,6 +237,7 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
+        @Override
         public void run() {
             if (isShuttingDown(_context)) return;
             _quit = false;
@@ -278,6 +280,7 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
+        @Override
         public void flush() {
             synchronized (_waitLock) {
                 _quit = true;
@@ -506,8 +509,10 @@ public class PersistentDataStore extends TransientDataStore {
 
         public ReadJob() {super(PersistentDataStore.this._context);}
 
+        @Override
         public String getName() {return "Read NetDb";}
 
+        @Override
         public void runJob() {
             if (getContext().router().gracefulShutdownInProgress()) {
                 return;
@@ -669,6 +674,7 @@ public class PersistentDataStore extends TransientDataStore {
             _key = key;
         }
 
+        @Override
         public String getName() {return "Read RouterInfo";}
 
         private boolean shouldRead() {
@@ -687,6 +693,7 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
+        @Override
         public void runJob() {
             read();
         }
@@ -1017,6 +1024,7 @@ public class PersistentDataStore extends TransientDataStore {
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;
         public Disconnector(Hash h) {this.h = h;}
+        @Override
         public void timeReached() {_context.commSystem().forceDisconnect(h);}
     }
 

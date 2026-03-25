@@ -95,6 +95,7 @@ class PeerManager {
 
     private class Reorg extends SimpleTimer2.TimedEvent {
         public Reorg() {super(_context.simpleTimer2(), REORGANIZE_TIME);}
+        @Override
         public void timeReached() {(new ReorgThread(this)).start();}
     }
 
@@ -114,6 +115,7 @@ class PeerManager {
             _event = event;
         }
 
+        @Override
         public void run() {
             long start = System.currentTimeMillis();
             long uptime = _context.router().getUptime();

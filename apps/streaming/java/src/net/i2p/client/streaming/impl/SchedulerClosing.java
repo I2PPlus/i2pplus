@@ -34,6 +34,7 @@ class SchedulerClosing extends SchedulerImpl {
         super(ctx);
     }
 
+    @Override
     public boolean accept(Connection con) {
         if (con == null)
             return false;
@@ -45,7 +46,7 @@ class SchedulerClosing extends SchedulerImpl {
                      ((con.getUnackedPacketsReceived() > 0) || (con.getUnackedPacketsSent() > 0));
         return ok;
     }
-
+@Override
     public void eventOccurred(Connection con) {
         long nextSend = con.getNextSendTime();
         long now = _context.clock().now();
@@ -74,3 +75,4 @@ class SchedulerClosing extends SchedulerImpl {
         }
     }
 }
+

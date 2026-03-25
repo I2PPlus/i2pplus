@@ -490,7 +490,9 @@ public class LogsHelper extends HelperBase {
         return Translate.getString(s, _context, CORE_BUNDLE_NAME);
     }
 
+    @Override
     public boolean isAdvanced() {
         return _context.getBooleanProperty(PROP_ADVANCED);
     }
 }
+

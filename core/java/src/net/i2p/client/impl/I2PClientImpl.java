@@ -52,6 +52,7 @@ public class I2PClientImpl implements I2PClient {
      * @param destKeyStream location to write out the destination, PrivateKey, and SigningPrivateKey,
      *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      */
+    @Override
     public Destination createDestination(OutputStream destKeyStream) throws I2PException, IOException {
         return createDestination(destKeyStream, DEFAULT_SIGTYPE);
     }
@@ -68,6 +69,7 @@ public class I2PClientImpl implements I2PClient {
      *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      * @since 0.9.12
      */
+    @Override
     public Destination createDestination(OutputStream destKeyStream, SigType type) throws I2PException, IOException {
         Certificate cert;
         if (type == SigType.DSA_SHA1) {cert = Certificate.NULL_CERT;}
@@ -89,6 +91,7 @@ public class I2PClientImpl implements I2PClient {
      * @param destKeyStream location to write out the destination, PrivateKey, and SigningPrivateKey,
      *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      */
+    @Override
     public Destination createDestination(OutputStream destKeyStream, Certificate cert) throws I2PException, IOException {
         Destination d = new Destination();
         // Repeating pattern to be used in pubkey and padding, so the destination will be compressible
@@ -149,6 +152,7 @@ public class I2PClientImpl implements I2PClient {
      *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      * @param options set of options to configure the router with, if null will use System properties
      */
+    @Override
     public I2PSession createSession(InputStream destKeyStream, Properties options) throws I2PSessionException {
         return createSession(I2PAppContext.getGlobalContext(), destKeyStream, options);
     }

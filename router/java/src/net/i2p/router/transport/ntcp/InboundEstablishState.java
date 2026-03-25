@@ -222,6 +222,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @return 2 for NTCP 2, as this class only supports the NTCP 2 protocol
      * @since 0.9.35
      */
+    @Override
     public int getVersion() {return 2;}
 
     /**
@@ -817,6 +818,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      *                              key mismatch, IP mismatch, banned, etc.)
      * @since 0.9.36
      */
+    @Override
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException {
         // Validate Alice static key
         // find address with matching version
@@ -993,6 +995,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @param isHandshake always true; indicates this is during handshake processing
      * @since 0.9.36
      */
+    @Override
     public synchronized void gotOptions(byte[] options, boolean isHandshake) {
         NTCP2Options hisPadding = NTCP2Options.fromByteArray(options);
         if (hisPadding == null) {
@@ -1014,6 +1017,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @param frameLength the total length of the frame including padding
      * @since 0.9.36
      */
+    @Override
     public void gotPadding(int paddingLength, int frameLength) {}
 
     // These payload types are illegal during the NTCP 2 handshake
@@ -1027,6 +1031,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @param lastReceived the number of bytes received when termination occurred
      * @since 0.9.36
      */
+    @Override
     public void gotTermination(int reason, long lastReceived) {}
     /**
      * Illegal during handshake - unknown payload types should not appear.
@@ -1035,6 +1040,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @param len the payload length
      * @since 0.9.36
      */
+    @Override
     public void gotUnknown(int type, int len) {}
     /**
      * Illegal during handshake - date/time is only in the options, not a separate payload.
@@ -1042,6 +1048,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @param time the timestamp
      * @since 0.9.36
      */
+    @Override
     public void gotDateTime(long time) {}
     /**
      * Illegal during handshake - I2NP messages are only in the data phase.
@@ -1049,6 +1056,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @param msg the I2NP message
      * @since 0.9.36
      */
+    @Override
     public void gotI2NP(I2NPMessage msg) {}
 
     /**
@@ -1112,6 +1120,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;
         public Disconnector(Hash h) { this.h = h; }
+        @Override
         public void timeReached() {_context.commSystem().forceDisconnect(h);}
     }
 

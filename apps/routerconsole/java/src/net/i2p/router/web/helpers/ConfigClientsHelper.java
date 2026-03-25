@@ -218,6 +218,7 @@ public class ConfigClientsHelper extends HelperBase {
             coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
         }
 
+        @Override
         public int compare(CAC l, CAC r) {
             return coll.compare(l.xname, r.xname);
         }
@@ -433,3 +434,4 @@ public class ConfigClientsHelper extends HelperBase {
         return PluginStarter.stripHTML(props, key);
     }
 }
+

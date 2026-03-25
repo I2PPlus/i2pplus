@@ -35,26 +35,39 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
         _context = ctx;
     }
 
+    @Override
     public void restart() {}
+    @Override
     public void shutdown() {}
+    @Override
     public void startup() {
         RouterInfo info = _context.router().getRouterInfo();
         _routers.put(info.getIdentity().getHash(), info);
     }
 
+    @Override
     public DatabaseEntry lookupLocally(Hash key) { return null; }
+    @Override
     public DatabaseEntry lookupLocallyWithoutValidation(Hash key) { return null; }
+    @Override
     public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {}
+    @Override
     public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, Hash fromLocalDest) {}
+    @Override
     public LeaseSet lookupLeaseSetLocally(Hash key) { return null; }
+    @Override
     public void lookupLeaseSetRemotely(Hash key, Hash fromLocalDest) {}
+    @Override
     public void lookupLeaseSetRemotely(Hash key, Job onFindJob, Job onFailedLookupJob,
                                        long timeoutMs, Hash fromLocalDest) {}
 
+    @Override
     public void lookupDestination(Hash key, Job onFinishedJob, long timeoutMs, Hash fromLocalDest) {}
 
+    @Override
     public Destination lookupDestinationLocally(Hash key) { return null; }
 
+    @Override
     public void lookupRouterInfo(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {
         RouterInfo info = lookupRouterInfoLocally(key);
         if (info == null)
@@ -62,22 +75,32 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
         else
             _context.jobQueue().addJob(onFindJob);
     }
+
+    @Override
     public RouterInfo lookupRouterInfoLocally(Hash key) { return _routers.get(key); }
 
+    @Override
     public void publish(LeaseSet localLeaseSet) {}
+    @Override
     public void publish(RouterInfo localRouterInfo) {}
 
+    @Override
     public LeaseSet store(Hash key, LeaseSet leaseSet) { return leaseSet; }
+    @Override
     public RouterInfo store(Hash key, RouterInfo routerInfo) {
         RouterInfo rv = _routers.put(key, routerInfo);
         return rv;
     }
 
+    @Override
     public void unpublish(LeaseSet localLeaseSet) {}
+    @Override
     public void fail(Hash dbEntry) {
         _routers.remove(dbEntry);
     }
 
+    @Override
     public Set<Hash> getAllRouters() { return new HashSet<Hash>(_routers.keySet()); }
+    @Override
     public Set<Hash> findNearestRouters(Hash key, int maxNumRouters, Set<Hash> peersToIgnore) { return getAllRouters(); }
 }

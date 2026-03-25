@@ -340,6 +340,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  @param opts subsession options if any, may be null
      *  @since 0.9.21
      */
+    @Override
     public I2PSession addSubsession(InputStream privateKeyStream, Properties opts) throws I2PSessionException {
         if (!_routerSupportsSubsessions) {throw new I2PSessionException("Router does not support sub-sessions");}
         SubSession sub;
@@ -365,6 +366,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      *  @since 0.9.21
      */
+    @Override
     public void removeSubsession(I2PSession session) {
         if (!(session instanceof SubSession)) {return;}
         synchronized (_subsessionLock) {
@@ -383,6 +385,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  @return a list of subsessions, non-null, does not include the primary session
      *  @since 0.9.21
      */
+    @Override
     public List<I2PSession> getSubsessions() {
         synchronized (_subsessionLock) {return new ArrayList<I2PSession>(_subsessions);}
     }
@@ -489,6 +492,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * Update the tunnel and bandwidth settings
      * @since 0.8.4
      */
+    @Override
     public void updateOptions(Properties options) {
         _options.putAll(filter(options));
         _producer.updateBandwidth(this);
@@ -570,24 +574,28 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  Does this session have offline and transient keys?
      *  @since 0.9.38
      */
+    @Override
     public boolean isOffline() {return _offlineSignature != null;}
 
     /**
      *  @return Java time (ms) or 0 if not initialized or does not have offline keys
      *  @since 0.9.38
      */
+    @Override
     public long getOfflineExpiration() {return _offlineExpiration;}
 
     /**
      *  @return null on error or if not initialized or does not have offline keys
      *  @since 0.9.38
      */
+    @Override
     public Signature getOfflineSignature() {return _offlineSignature;}
 
     /**
      *  @return null on error or if not initialized or does not have offline keys
      *  @since 0.9.38
      */
+    @Override
     public SigningPublicKey getTransientSigningPublicKey() {return _transientSigningPublicKey;}
 
     /**
@@ -605,6 +613,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * @throws I2PSessionException if there is a configuration error or the router is
      *                             not reachable
      */
+    @Override
     public void connect() throws I2PSessionException {
         synchronized (_stateLock) {
             boolean wasOpening = false;
@@ -803,6 +812,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * notified the user that its available.
      *
      */
+    @Override
     public byte[] receiveMessage(int msgId) throws I2PSessionException {
         MessagePayloadMessage msg = _availableMessages.remove(Long.valueOf(msgId));
         if (msg == null) {
@@ -816,6 +826,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * Report abuse with regards to the given messageId
      */
+    @Override
     public void reportAbuse(int msgId, int severity) throws I2PSessionException {
         verifyOpen();
         _producer.reportAbuse(this, msgId, severity);
@@ -862,6 +873,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             super(_context.simpleTimer2(), VERIFY_USAGE_TIME);
         }
 
+        @Override
         public void timeReached() {
             if (isClosed()) {return;}
             if (!toCheck.isEmpty()) {
@@ -906,6 +918,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                 AvailabilityNotifier.this.notifyAll();
             }
         }
+        @Override
         public void run() {
             _alive = true;
             while (_alive) {
@@ -957,6 +970,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *
      * @param reader unused
      */
+    @Override
     public void messageReceived(I2CPMessageReader reader, I2CPMessage message) {
         int type = message.getType();
         SessionId id = message.sessionId();
@@ -1022,6 +1036,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * @param reader unused
      * @param error non-null
      */
+    @Override
     public void readError(I2CPMessageReader reader, Exception error) {
         propagateError("There was an error reading data", error);
     }
@@ -1029,6 +1044,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * Retrieve the destination of the session
      */
+    @Override
     public Destination getMyDestination() {return _myDestination;}
 
     /**
@@ -1036,12 +1052,14 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * @deprecated this key is unused
      */
     @Deprecated
+    @Override
     public PrivateKey getDecryptionKey() {return _privateKey;}
 
     /**
      * Retrieve the signing SigningPrivateKey.
      * As of 0.9.38, this will be the transient key if offline signed.
      */
+    @Override
     public SigningPrivateKey getPrivateKey() {return _signingPrivateKey;}
 
     /**
@@ -1092,12 +1110,14 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     void setLastLS2SignTime(long now) {_lastLS2SignTime.set(now);};
 
     /** configure the listener */
+    @Override
     public void setSessionListener(I2PSessionListener lsnr) {_sessionListener = lsnr;}
 
     /**
      *  Has the session been closed (or not yet connected)?
      *  False when open and during transitions. Synchronized.
      */
+    @Override
     public boolean isClosed() {
         synchronized (_stateLock) {
             return STATES_CLOSED.contains(_state);
@@ -1201,6 +1221,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *
      * Blocks if session has not been fully started.
      */
+    @Override
     public void destroySession() {destroySession(true);}
 
     /**
@@ -1287,6 +1308,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * Calls sessionlistener.disconnected()
      * @param reader unused
      */
+    @Override
     public void disconnected(I2CPMessageReader reader) {disconnect();}
 
     /**
@@ -1580,6 +1602,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  Multiple outstanding lookups are now allowed.
      *  @return null on failure
      */
+    @Override
     public Destination lookupDest(Hash h) throws I2PSessionException {
         return lookupDest(h, 10*1000);
     }
@@ -1590,6 +1613,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  @since 0.8.3
      *  @return null on failure
      */
+    @Override
     public Destination lookupDest(Hash h, long maxWait) throws I2PSessionException {
         synchronized (_lookupCache) {
             Destination rv = _lookupCache.get(h);
@@ -1653,6 +1677,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *
      *  @since 0.9.11
      */
+    @Override
     public Destination lookupDest(String name) throws I2PSessionException {
         return lookupDest(name, 10*1000);
     }
@@ -1664,6 +1689,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  @since 0.9.11
      *  @return null on failure
      */
+    @Override
     public Destination lookupDest(String name, long maxWait) throws I2PSessionException {
         LookupWaiter waiter = x_lookupDest(name, maxWait);
         if (waiter == null) {return null;}
@@ -1679,6 +1705,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  @since 0.9.43
      *  @return non-null
      */
+    @Override
     public LookupResult lookupDest2(String name, long maxWait) throws I2PSessionException {
         LookupWaiter waiter = x_lookupDest(name, maxWait);
         if (waiter == null) {return LOOKUP_FAILURE;}
@@ -1751,6 +1778,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  @return non-null. If result code is RESULT_DEFERRED, callback will be called later
      *  @since 0.9.67
      */
+    @Override
     public LookupResult lookupDest(Hash h, long maxWait, LookupCallback callback) throws I2PSessionException {
         synchronized (_lookupCache) {
             Destination rv = _lookupCache.get(h);
@@ -1797,6 +1825,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  @return non-null. If result code is RESULT_DEFERRED, callback will be called later
      *  @since 0.9.67
      */
+    @Override
     public LookupResult lookupDest(String name, long maxWait, LookupCallback callback) throws I2PSessionException {
         if (name.length() == 0)
             return LOOKUP_FAILURE;
@@ -1881,6 +1910,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  Multiple outstanding lookups are now allowed.
      *  @return null on failure
      */
+    @Override
     public int[] bandwidthLimits() throws I2PSessionException {
         synchronized (_stateLock) {
             // not before GOTDATE
@@ -1899,6 +1929,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *
      *  @since 0.9.43
      */
+    @Override
     public void sendBlindingInfo(BlindData bd) throws I2PSessionException {
         if (!_routerSupportsBlindingInfo) {throw new I2PSessionException("Router does not support BlindingInfo");}
         if (_log.shouldInfo()) {_log.info("Sending BlindingInfo...");}
@@ -1913,6 +1944,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  @return null if unknown
      *  @since 0.9.46
      */
+    @Override
     public String getRouterVersion() {
         if (_context.isRouterContext()) {return CoreVersion.PUBLISHED_VERSION;}
         return _routerVersion;

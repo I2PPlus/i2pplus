@@ -54,6 +54,7 @@ public class Points implements Comparable<Points> {
         reasons.add(rsn);
     }
 
+    @Override
     public int compareTo(Points r) {
         return Double.compare(points, r.points);
     }

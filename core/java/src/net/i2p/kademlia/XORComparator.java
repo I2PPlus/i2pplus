@@ -20,6 +20,7 @@ public class XORComparator<T extends SimpleDataStructure> implements Comparator<
         _base = target.getData();
     }
 
+    @Override
     public int compare(T lhs, T rhs) {
         // same as the following but byte-by-byte for efficiency
         //byte lhsDelta[] = DataHelper.xor(lhs.getData(), _base);

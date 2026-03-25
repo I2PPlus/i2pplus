@@ -863,6 +863,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         /**
          *  @param ex may be null
          */
+        @Override
         public void onFail(Exception ex) {
             if (_usingProxy && _targetHost != null) {
                 noteProxyResult(_wwwProxy, _targetHost, _isSSL, false);
@@ -890,7 +891,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         public OnProxySuccess(String proxy, String host, boolean isSSL) {
             _proxy = proxy; _host = host; _isSSL = isSSL;
         }
-
+@Override
         public void onSuccess() {
             noteProxyResult(_proxy, _host, _isSSL, true);
         }
@@ -1155,3 +1156,4 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         return Translate.getString(key, o, o2, _context, BUNDLE_NAME);
     }
 }
+

@@ -63,6 +63,7 @@ public class OOMListener implements I2PThread.OOMEventListener {
      *
      * @param oom the out-of-memory error that triggered this handler
      */
+    @Override
     public void outOfMemory(OutOfMemoryError oom) {
         try {
             // prevent multiple parallel shutdowns (when you OOM, you OOM a lot...)

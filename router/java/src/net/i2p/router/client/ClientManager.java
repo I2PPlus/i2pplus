@@ -476,8 +476,10 @@ class ClientManager {
             _messageNonce = messageNonce;
         }
 
+        @Override
         public String getName() {return "Distribute Local Message";}
 
+        @Override
         public void runJob() {
             boolean ok = _to.receiveMessage(_toDest, _fromDest, _payload);
             if (_from != null) {
@@ -706,8 +708,10 @@ class ClientManager {
             _msg = msg;
         }
 
+        @Override
         public String getName() {return "Handle Inbound Client Messages";}
 
+        @Override
         public void runJob() {
             ClientConnectionRunner runner;
             Destination dest = _msg.getDestination();
@@ -738,6 +742,7 @@ class ClientManager {
         /** must call schedule() later */
         public ClientTimestamper() {super(_ctx.simpleTimer2());}
 
+        @Override
         public void timeReached() {
             if (!_isStarted) {return;}
             if (_runners.isEmpty()) {schedule(LOOP_TIME); return;}

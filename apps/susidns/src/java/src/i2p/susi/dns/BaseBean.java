@@ -137,7 +137,7 @@ public class BaseBean {
     public String[] getThemes() {
         String[] themes;
         File dir = new File(_context.getBaseDir(), "docs/themes/susidns");
-        FileFilter fileFilter = new FileFilter() { public boolean accept(File file) { return file.isDirectory(); } };
+        FileFilter fileFilter = new FileFilter() { @Override public boolean accept(File file) { return file.isDirectory(); } };
         File[] dirnames = dir.listFiles(fileFilter);
         if (dirnames != null) {
             List<String> th = new ArrayList<String>(dirnames.length);

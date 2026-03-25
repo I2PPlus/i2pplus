@@ -134,6 +134,7 @@ public class EepPost extends EepGet {
     /**
      * @throws UnsupportedOperationException always
      */
+    @Override
     public boolean fetch() {
         throw new UnsupportedOperationException("use post()");
     }
@@ -141,6 +142,7 @@ public class EepPost extends EepGet {
     /**
      * @throws UnsupportedOperationException always
      */
+    @Override
     public boolean fetch(long fetchHeaderTimeout) {
         throw new UnsupportedOperationException("use post()");
     }
@@ -148,6 +150,7 @@ public class EepPost extends EepGet {
     /**
      * @throws UnsupportedOperationException always
      */
+    @Override
     public boolean fetch(long fetchHeaderTimeout, long totalTimeout, long inactivityTimeout) {
         throw new UnsupportedOperationException("use post()");
     }

@@ -356,6 +356,7 @@ public class TranslateReader extends FilterReader {
             _out.println("    void dummy() {");
         }
 
+        @Override
         public void tag(List<String> args) {
             if (args.size() <= 0)
                 return;
@@ -371,6 +372,7 @@ public class TranslateReader extends FilterReader {
             _count++;
         }
 
+        @Override
         public void close() throws IOException {
             _out.println("    }");
             _out.println("}");

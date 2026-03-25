@@ -46,6 +46,7 @@ public class FloodfillDatabaseStoreMessageHandler implements HandlerJobBuilder {
         context.statManager().createRateStat("netDb.storeLocalLeaseSetAttempt", "Number of attempted local LeaseSet store messages", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
     }
 
+    @Override
     public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {
         DatabaseStoreMessage dsm = (DatabaseStoreMessage)receivedMessage;
         // store to client db if received by that client

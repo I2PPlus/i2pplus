@@ -30,10 +30,12 @@ public class BigIntegerFieldElement extends FieldElement implements Serializable
         this.bi = bi;
     }
 
+    @Override
     public boolean isNonZero() {
         return !bi.equals(BigInteger.ZERO);
     }
 
+    @Override
     public FieldElement add(FieldElement val) {
         return new BigIntegerFieldElement(f, bi.add(((BigIntegerFieldElement)val).bi)).mod(f.getQ());
     }
@@ -43,6 +45,7 @@ public class BigIntegerFieldElement extends FieldElement implements Serializable
         return new BigIntegerFieldElement(f, bi.add(BigInteger.ONE)).mod(f.getQ());
     }
 
+    @Override
     public FieldElement subtract(FieldElement val) {
         return new BigIntegerFieldElement(f, bi.subtract(((BigIntegerFieldElement)val).bi)).mod(f.getQ());
     }
@@ -52,6 +55,7 @@ public class BigIntegerFieldElement extends FieldElement implements Serializable
         return new BigIntegerFieldElement(f, bi.subtract(BigInteger.ONE)).mod(f.getQ());
     }
 
+    @Override
     public FieldElement negate() {
         return f.getQ().subtract(this);
     }
@@ -65,19 +69,23 @@ public class BigIntegerFieldElement extends FieldElement implements Serializable
         return new BigIntegerFieldElement(f, bi.divide(val)).mod(f.getQ());
     }
 
+    @Override
     public FieldElement multiply(FieldElement val) {
         return new BigIntegerFieldElement(f, bi.multiply(((BigIntegerFieldElement)val).bi)).mod(f.getQ());
     }
 
+    @Override
     public FieldElement square() {
         return multiply(this);
     }
 
+    @Override
     public FieldElement squareAndDouble() {
         FieldElement sq = square();
         return sq.add(sq);
     }
 
+    @Override
     public FieldElement invert() {
         // Euler's theorem
         //return modPow(f.getQm2(), f.getQ());
@@ -96,6 +104,7 @@ public class BigIntegerFieldElement extends FieldElement implements Serializable
         return modPow(e, f.getQ());
     }
 
+    @Override
     public FieldElement pow22523(){
         return pow(f.getQm5d8());
     }

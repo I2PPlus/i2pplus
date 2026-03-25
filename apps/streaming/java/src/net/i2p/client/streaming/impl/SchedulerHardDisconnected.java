@@ -32,6 +32,7 @@ class SchedulerHardDisconnected extends SchedulerImpl {
         super(ctx);
     }
 
+    @Override
     public boolean accept(Connection con) {
         if (con == null) return false;
         long timeSinceClose = _context.clock().now() - con.getCloseSentOn();
@@ -41,8 +42,9 @@ class SchedulerHardDisconnected extends SchedulerImpl {
                      (timeSinceClose < Connection.DISCONNECT_TIMEOUT);
         return ok || con.getResetReceived();
     }
-
+@Override
     public void eventOccurred(Connection con) {
         // noop.  we do the timeout through the simpleTimer anyway
     }
 }
+

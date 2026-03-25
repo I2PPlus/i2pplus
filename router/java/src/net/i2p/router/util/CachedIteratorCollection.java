@@ -129,6 +129,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
      *
      * @return a thread-local {@link CachedIterator} instance, reset to the beginning
      */
+    @Override
     public Iterator<E> iterator() {
         _iterator.get().reset();
         return _iterator.get();
@@ -205,8 +206,9 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
         /**
          *  Returns true as long as current Iteration Index Node (itrIndexNode)
          *  is non-null
-         *
-         */
+          *
+          */
+        @Override
         public boolean hasNext() {
             return itrIndexNode != null;
         }
@@ -215,6 +217,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
          * Returns the next node in the iteration
          *
          */
+        @Override
         public E next() {
             if (this.hasNext()) {
                 Node<E> node = itrIndexNode;
@@ -230,6 +233,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     /**
      * Return size of current LinkedListTest object
      */
+    @Override
     public int size() {
         return this.size;
     }

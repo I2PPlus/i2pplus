@@ -52,6 +52,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
      *
      * @param acked number of bytes newly acknowledged
      */
+    @Override
     public void addSample(int acked) {
         long now = _context.clock().now();
         int rtt = _state.getRTT();
@@ -89,6 +90,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
      *
      * @return bandwidth estimate in bytes per millisecond
      */
+    @Override
     public float getBandwidthEstimate() {
         return getBandwidthEstimate(_context.clock().now());
     }

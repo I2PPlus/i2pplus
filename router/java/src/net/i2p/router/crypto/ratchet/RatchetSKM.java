@@ -137,6 +137,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             super(_context.simpleTimer2(), SESSION_PENDING_DURATION_MS);
         }
 
+        @Override
         public void timeReached() {
             if (!_alive)
                 return;
@@ -715,6 +716,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      *
      *  @return true if added, false if dup
      */
+    @Override
     public boolean addTag(RatchetSessionTag tag, RatchetTagSet ts) {
         return _inboundTagSets.putIfAbsent(tag, ts) == null;
     }
@@ -722,6 +724,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /**
      *  Remove the tag associated with this tagset.
      */
+    @Override
     public void expireTag(RatchetSessionTag tag, RatchetTagSet ts) {
         _inboundTagSets.remove(tag, ts);
     }
@@ -923,6 +926,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      *  Earliest first
      */
     private static class RatchetTagSetComparator implements Comparator<RatchetTagSet>, Serializable {
+        @Override
         public int compare(RatchetTagSet l, RatchetTagSet r) {
             return l.getDebugID() - r.getDebugID();
         }

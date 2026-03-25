@@ -466,6 +466,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             file = f;
         }
 
+        @Override
         public void run() {
             FileUtil.rmdir(file, false);
         }
@@ -475,6 +476,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.9.4
      */
     private class Register implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {
             if (!_running) {
                 return;

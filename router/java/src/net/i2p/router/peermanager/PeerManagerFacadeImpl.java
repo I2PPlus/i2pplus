@@ -37,6 +37,7 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
         _testJob = ENABLE_PEER_TEST ? new PeerTestJob(_context) : null;
     }
 
+    @Override
     public synchronized void startup() {
         _log.info("Starting Peer Manager...");
         _manager = new PeerManager(_context);
@@ -44,6 +45,7 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
         if (_testJob != null) {_testJob.startTesting(_manager);}
     }
 
+    @Override
     public synchronized void shutdown() {
         _log.info("Shutting down Peer Manager...");
         if (_testJob != null) {_testJob.stopTesting();}
@@ -53,6 +55,7 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
         }
     }
 
+    @Override
     public synchronized void restart() {
         _manager.storeProfiles();
         _persistenceHelper.setUs(_context.routerHash());
@@ -62,11 +65,13 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     /**
      *  @param caps non-null
      */
+    @Override
     public void setCapabilities(Hash peer, String caps) {
         if (_manager == null) return;
         _manager.setCapabilities(peer, caps);
     }
 
+    @Override
     public void removeCapabilities(Hash peer) {
         if (_manager == null) return;
         _manager.removeCapabilities(peer);
@@ -76,6 +81,7 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
      *  @param capability case-insensitive
      *  @return non-null unmodifiable set
      */
+    @Override
     public Set<Hash> getPeersByCapability(char capability) {
         if (_manager == null) return Collections.emptySet();
         return _manager.getPeersByCapability(capability);
@@ -86,6 +92,7 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
      *  @return how many
      *  @since 0.9.45
      */
+    @Override
     public int countPeersByCapability(char capability) {
         if (_manager == null) return 0;
         return _manager.countPeersByCapability(capability);
@@ -93,6 +100,7 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
 
     /** @deprecated moved to routerconsole */
     @Deprecated
+    @Override
     public void renderStatusHTML(Writer out) throws IOException {}
 
 }

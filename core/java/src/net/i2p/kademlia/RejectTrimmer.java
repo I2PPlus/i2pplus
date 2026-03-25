@@ -8,6 +8,7 @@ import net.i2p.data.SimpleDataStructure;
  *  @param <T> type of SimpleDataStructure objects in the bucket
  */
 public class RejectTrimmer<T extends SimpleDataStructure> implements KBucketTrimmer<T> {
+    @Override
     public boolean trim(KBucket<T> kbucket, T toAdd) {
         return false;
     }

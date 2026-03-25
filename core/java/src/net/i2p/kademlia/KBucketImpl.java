@@ -73,10 +73,13 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
         _trimmer = trimmer;
     }
 
+    @Override
     public int getRangeBegin() { return _begin; }
 
+    @Override
     public int getRangeEnd() { return _end; }
 
+    @Override
     public int getKeyCount() {
         return _entries.size();
     }
@@ -84,16 +87,19 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     /**
      *  @return an unmodifiable view; not a copy
      */
+    @Override
     public Set<T> getEntries() {
         return Collections.unmodifiableSet(_entries);
     }
 
+    @Override
     public void getEntries(SelectionCollector<T> collector) {
         for (T h : _entries) {
             collector.add(h);
         }
     }
 
+    @Override
     public void clear() {
         _entries.clear();
     }
@@ -104,6 +110,7 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
      *  If begin != end then add it and caller must do bucket splitting.
      *  @return true if added
      */
+    @Override
     public boolean add(T peer) {
         if (_begin != _end || _entries.size() < _max ||
             _entries.contains(peer) || _trimmer.trim(this, peer)) {
@@ -118,6 +125,7 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     /**
      *  @return if removed. Does NOT set lastChanged.
      */
+    @Override
     public boolean remove(T peer) {
         boolean rv = _entries.remove(peer);
         //if (rv)
@@ -128,6 +136,7 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     /**
      *  Update the last-changed timestamp to now.
      */
+    @Override
     public void setLastChanged() {
         _lastChanged = _context.clock().now();
     }
@@ -135,6 +144,7 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     /**
      *  The last-changed timestamp, which actually indicates last-added or last-seen.
      */
+    @Override
     public long getLastChanged() {
         return _lastChanged;
     }

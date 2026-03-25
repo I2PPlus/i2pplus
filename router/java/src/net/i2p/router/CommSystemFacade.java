@@ -35,6 +35,7 @@ public abstract class CommSystemFacade implements Service {
     public abstract void processMessage(OutNetMessage msg);
 
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException { }
+    @Override
     public void renderStatusHTML(Writer out) throws IOException { renderStatusHTML(out, null, 0); }
 
     /** Create the list of RouterAddress structures based on the router's config */

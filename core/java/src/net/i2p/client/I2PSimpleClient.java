@@ -27,6 +27,7 @@ public class I2PSimpleClient implements I2PClient {
      *  @throws UnsupportedOperationException always
      */
     @Deprecated
+    @Override
     public Destination createDestination(OutputStream destKeyStream) throws I2PException, IOException {
         throw new UnsupportedOperationException();
     }
@@ -37,6 +38,7 @@ public class I2PSimpleClient implements I2PClient {
      *  @since 0.9.12
      */
     @Deprecated
+    @Override
     public Destination createDestination(OutputStream destKeyStream, SigType type) throws I2PException, IOException {
         throw new UnsupportedOperationException();
     }
@@ -46,6 +48,7 @@ public class I2PSimpleClient implements I2PClient {
      *  @throws UnsupportedOperationException always
      */
     @Deprecated
+    @Override
     public Destination createDestination(OutputStream destKeyStream, Certificate cert) throws I2PException, IOException {
         throw new UnsupportedOperationException();
     }
@@ -54,6 +57,7 @@ public class I2PSimpleClient implements I2PClient {
      * Create a new session (though do not connect it yet)
      *
      */
+    @Override
     public I2PSession createSession(InputStream destKeyStream, Properties options) throws I2PSessionException {
         return createSession(I2PAppContext.getGlobalContext(), options);
     }

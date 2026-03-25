@@ -58,6 +58,7 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
     /**
      *  Accept one connection only.
      */
+    @Override
     protected void clientConnectionRun(Socket s) {
         I2PSocket i2ps = null;
         if (_log.shouldInfo())
@@ -164,3 +165,4 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
         }
     }
 }
+

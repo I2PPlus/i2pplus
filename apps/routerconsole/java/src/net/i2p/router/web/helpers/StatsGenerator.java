@@ -214,6 +214,7 @@ public class StatsGenerator {
      *  @since 0.9.3
      */
     private class AlphaComparator implements Comparator<String> {
+        @Override
         public int compare(String lhs, String rhs) {
             String lname = _t(lhs);
             String rname = _t(rhs);
@@ -242,3 +243,4 @@ public class StatsGenerator {
     private String ngettext(String s, String p, int n) {return Messages.getString(n, s, p, _context);}
 
 }
+

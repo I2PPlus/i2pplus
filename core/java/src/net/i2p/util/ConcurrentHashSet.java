@@ -49,10 +49,12 @@ public class ConcurrentHashSet<E> extends AbstractSet<E> implements Set<E> {
         return _map.remove(o) != null;
     }
 
+    @Override
     public int size() {
         return _map.size();
     }
 
+    @Override
     public Iterator<E> iterator() {
         return _map.keySet().iterator();
     }

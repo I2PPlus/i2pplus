@@ -89,10 +89,12 @@ public class RandomIterator<E> implements Iterator<E> {
         upper = LIST_SIZE - 1;
     }
 
+    @Override
     public boolean hasNext() {
         return servedCount < LIST_SIZE;
     }
 
+    @Override
     public E next() {
         if (!hasNext())
             throw new NoSuchElementException();
@@ -157,6 +159,7 @@ public class RandomIterator<E> implements Iterator<E> {
     /**
      *  @throws UnsupportedOperationException always
      */
+    @Override
     public void remove() {
         throw new UnsupportedOperationException();
     }

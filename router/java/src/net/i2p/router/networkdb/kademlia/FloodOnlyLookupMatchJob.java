@@ -31,6 +31,7 @@ class FloodOnlyLookupMatchJob extends JobImpl implements ReplyJob {
         _search = job;
     }
 
+    @Override
     public void runJob() {
         if (_success) {
             if (_log.shouldInfo()) {
@@ -47,8 +48,10 @@ class FloodOnlyLookupMatchJob extends JobImpl implements ReplyJob {
         }
     }
 
+    @Override
     public String getName() { return "Match NetDb FloodSearch"; }
 
+    @Override
     public void setMessage(I2NPMessage message) {
         int mtype = message.getType();
         if (mtype == DatabaseSearchReplyMessage.MESSAGE_TYPE) {

@@ -1036,6 +1036,7 @@ public class TransportManager implements TransportEventListener {
      * @param fromRouter identity of the sending router
      * @param fromRouterHash hash of the sending router for quick lookup
      */
+    @Override
     public void messageReceived(I2NPMessage message, RouterIdentity fromRouter, Hash fromRouterHash) {
         if (_log.shouldDebug()) {
             _log.debug("I2NPMessage received: " + message.getClass().getSimpleName());
@@ -1067,6 +1068,7 @@ public class TransportManager implements TransportEventListener {
      *   <li>Network topology changes</li>
      * </ul>
      */
+    @Override
     public void transportAddressChanged() {
         if (_upnpManager != null) {
             synchronized (_upnpManager) {
@@ -1093,6 +1095,7 @@ public class TransportManager implements TransportEventListener {
      * @since 0.9.39
      */
     private class UpdatePorts implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {
             Set<Port> ports = getPorts();
             synchronized (_upnpManager) {
@@ -1113,6 +1116,7 @@ public class TransportManager implements TransportEventListener {
     private class UPnPRefresher extends SimpleTimer2.TimedEvent {
         public UPnPRefresher() { super(_context.simpleTimer2()); }
 
+        @Override
         public void timeReached() {
             transportAddressChanged();
             reschedule(UPNP_REFRESH_TIME);

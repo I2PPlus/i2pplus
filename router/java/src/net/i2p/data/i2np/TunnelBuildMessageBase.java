@@ -48,8 +48,10 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
 
     public static final int RECORD_SIZE = 512+16;
 
+    @Override
     protected int calculateWrittenLength() {return RECORD_SIZE * RECORD_COUNT;}
 
+    @Override
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != getType()) {throw new I2NPMessageException("Message type is incorrect for this message");}
         if (dataSize != calculateWrittenLength()) {
@@ -64,6 +66,7 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
         }
     }
 
+    @Override
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         int remaining = out.length - (curIndex + calculateWrittenLength());
         if (remaining < 0) {

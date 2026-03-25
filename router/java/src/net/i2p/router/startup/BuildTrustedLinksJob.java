@@ -23,8 +23,10 @@ class BuildTrustedLinksJob extends JobImpl {
         _next = next;
     }
 
+    @Override
     public String getName() { return "Build Trusted Links with Peers"; }
 
+    @Override
     public void runJob() {
         // create trusted links with peers
 

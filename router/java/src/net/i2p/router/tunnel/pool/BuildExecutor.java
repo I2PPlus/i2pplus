@@ -340,6 +340,7 @@ class BuildExecutor implements Runnable {
      * Catches a specific fatal error related to Java versioning and ensures the
      * running state is properly reset on exit.
      */
+    @Override
     public void run() {
         _isRunning = true;
         try {
@@ -521,6 +522,7 @@ class BuildExecutor implements Runnable {
          * @param tpr right tunnel pool
          * @return -1 if tpl has higher priority, 1 if tpr has higher priority, 0 if equal
          */
+        @Override
         public int compare(TunnelPool tpl, TunnelPool tpr) {
             if (tpl.getSettings().isExploratory() && !tpr.getSettings().isExploratory()) return -1;
             if (tpr.getSettings().isExploratory() && !tpl.getSettings().isExploratory()) return 1;

@@ -33,6 +33,7 @@ public class FileSuffixFilter implements FileFilter {
         end = suffix.toLowerCase(Locale.US);
     }
 
+    @Override
     public boolean accept(File file) {
         String name = file.getName().toLowerCase(Locale.US);
         return name.endsWith(end) &&

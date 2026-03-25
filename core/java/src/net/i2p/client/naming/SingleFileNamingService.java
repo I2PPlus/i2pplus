@@ -423,6 +423,7 @@ public class SingleFileNamingService extends NamingService {
      *          Returned Map is not sorted.
      *  @since 0.9.20
      */
+    @Override
     public Map<String, String> getBase64Entries(Properties options) {
         if (!_file.exists())
             return Collections.emptyMap();
@@ -485,6 +486,7 @@ public class SingleFileNamingService extends NamingService {
      *  @param options ignored
      *  @since 0.9.20
      */
+    @Override
     public void export(Writer out, Properties options) throws IOException {
         out.write("# Address book: ");
         out.write(getName());
@@ -512,6 +514,7 @@ public class SingleFileNamingService extends NamingService {
      *  @param options ignored
      *  @return all known host names, unsorted
      */
+    @Override
     public Set<String> getNames(Properties options) {
         if (!_file.exists())
             return Collections.emptySet();
@@ -574,6 +577,7 @@ public class SingleFileNamingService extends NamingService {
         }
     }
 
+    @Override
     public void shutdown() {
         if (!getWriteLock())
             return;

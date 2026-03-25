@@ -134,14 +134,17 @@ public class RouterInfo extends DatabaseEntry {
         setPeers(old.getPeers());
     }
 
+    @Override
     public long getDate() {
         return _published;
     }
 
+    @Override
     public KeysAndCert getKeysAndCert() {
         return _identity;
     }
 
+    @Override
     public int getType() {
         return KEY_TYPE_ROUTERINFO;
     }
@@ -317,6 +320,7 @@ public class RouterInfo extends DatabaseEntry {
      *
      * @throws DataFormatException if the data is somehow b0rked (missing props, etc)
      */
+    @Override
     protected byte[] getBytes() throws DataFormatException {
         if (_byteified != null) return _byteified;
         ByteArrayOutputStream out = new ByteArrayOutputStream(2*1024);
@@ -541,6 +545,7 @@ public class RouterInfo extends DatabaseEntry {
      *
      *  @throws IllegalStateException if RouterInfo was already read in
      */
+    @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         readBytes(in, false);
     }
@@ -631,6 +636,7 @@ public class RouterInfo extends DatabaseEntry {
     /**
      *  This does NOT validate the signature
      */
+    @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_signature == null) throw new DataFormatException("Signature is null");
         writeDataBytes(out);

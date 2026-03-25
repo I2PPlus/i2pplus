@@ -830,10 +830,15 @@ public class JobQueue {
     private static final int POISON_ID = -99999;
 
     private static class PoisonJob implements Job {
+        @Override
         public String getName() {return null;}
+        @Override
         public long getJobId() {return POISON_ID;}
+        @Override
         public JobTiming getTiming() {return null;}
+        @Override
         public void runJob() {}
+        @Override
         public void dropped() {}
     }
 

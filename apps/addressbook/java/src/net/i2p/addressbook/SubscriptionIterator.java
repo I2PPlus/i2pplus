@@ -62,6 +62,7 @@ class SubscriptionIterator implements Iterator<AddressBook> {
     /* (non-Javadoc)
      * @see java.util.Iterator#hasNext()
      */
+    @Override
     public boolean hasNext() {
         return this.subIterator.hasNext();
     }
@@ -72,7 +73,8 @@ class SubscriptionIterator implements Iterator<AddressBook> {
      * see java.util.Iterator#next()
      * @return non-null AddressBook (empty if the minimum delay has not been met,
      *          or there is no proxy tunnel, or the fetch otherwise fails)
-     */
+      */
+    @Override
     public AddressBook next() {
         Subscription sub = this.subIterator.next();
         if (sub.getLocation().startsWith("file:")) {
@@ -95,7 +97,9 @@ class SubscriptionIterator implements Iterator<AddressBook> {
     /* (non-Javadoc)
      * @see java.util.Iterator#remove()
      */
+    @Override
     public void remove() {
         throw new UnsupportedOperationException();
     }
 }
+

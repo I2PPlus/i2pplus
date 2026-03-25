@@ -108,6 +108,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
      */
     public void setReceivedAsReply() {_receivedAsReply = true;}
 
+    @Override
     public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
@@ -177,6 +178,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
      *
      *  @throws IllegalStateException
      */
+    @Override
     protected int calculateWrittenLength() {
         // TODO if _byteCache is non-null, don't check _dbEntry
         if (_dbEntry == null) {throw new IllegalStateException("Missing entry");}
@@ -198,6 +200,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     }
 
     /** write the message body to the output array, starting at the given index */
+    @Override
     protected int writeMessageBody(byte out[], int curIndex) throws I2NPMessageException {
         if (_dbEntry == null) {throw new I2NPMessageException("Missing entry");}
         int type = _dbEntry.getType();
@@ -231,6 +234,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
         return curIndex;
     }
 
+    @Override
     public int getType() {return MESSAGE_TYPE;}
 
     @Override

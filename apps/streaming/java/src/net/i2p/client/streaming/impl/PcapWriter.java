@@ -88,12 +88,13 @@ public class PcapWriter implements Closeable, Flushable {
         //}
     }
 
+    @Override
     public void close() {
         try {
             _fos.close();
         } catch (IOException ioe) {}
     }
-
+@Override
     public void flush() {
         try {
             _fos.flush();
@@ -382,3 +383,4 @@ public class PcapWriter implements Closeable, Flushable {
         return rv;
     }
 }
+

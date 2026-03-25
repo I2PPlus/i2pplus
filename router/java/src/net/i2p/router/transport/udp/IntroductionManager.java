@@ -312,6 +312,7 @@ class IntroductionManager {
     private static class PeerStateComparator implements Comparator<PeerState>, java.io.Serializable {
         private static final long serialVersionUID = 1L;
 
+        @Override
         public int compare(PeerState l, PeerState r) {
             long d = r.getKeyEstablishedTime() - l.getKeyEstablishedTime();
             if (d < 0)
@@ -637,6 +638,7 @@ class IntroductionManager {
             schedule(DELAY);
         }
 
+        @Override
         public void timeReached() {
             boolean ok = receiveRelayIntro(bob, alice, data,++count);
             if (!ok)
@@ -659,6 +661,7 @@ class IntroductionManager {
             schedule(delay);
         }
 
+        @Override
         public void timeReached() {
             _transport.send(pkt);
         }

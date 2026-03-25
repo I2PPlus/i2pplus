@@ -338,6 +338,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         }
     }
 
+    @Override
     public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
@@ -420,6 +421,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         }
     }
 
+    @Override
     protected int calculateWrittenLength() {
         int totalLength = 0;
         totalLength += Hash.HASH_LENGTH*2; // key+fromHash
@@ -443,6 +445,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         return totalLength;
     }
 
+    @Override
     protected int writeMessageBody(byte out[], int curIndex) throws I2NPMessageException {
         if (_key == null) throw new I2NPMessageException("Key being searched for not specified");
         if (_fromHash == null) throw new I2NPMessageException("From address not specified");
@@ -518,6 +521,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         return curIndex;
     }
 
+    @Override
     public int getType() { return MESSAGE_TYPE; }
 
     @Override

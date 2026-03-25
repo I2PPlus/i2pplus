@@ -682,6 +682,7 @@ public class I2PSnarkUtil implements DisconnectListener {
             _dest = dest;
         }
 
+        @Override
         public void timeReached() {
             _banlist.remove(_dest);
         }

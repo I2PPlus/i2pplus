@@ -48,8 +48,10 @@ class FloodfillMonitorJob extends JobImpl {
         _log = context.logManager().getLog(FloodfillMonitorJob.class);
     }
 
+    @Override
     public String getName() {return "Monitor Floodfill Pool";}
 
+    @Override
     public synchronized void runJob() {
         if (!getContext().commSystem().isRunning()) {
             // Avoid deadlock in the transports through here via Router.rebuildRouterInfo() at startup

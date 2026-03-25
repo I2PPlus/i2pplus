@@ -99,6 +99,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *  @param type the message type or -1 if we should read it here
      *  @return total length of the message
      */
+    @Override
     public int readBytes(byte data[], int type, int offset) throws I2NPMessageException {
         return readBytes(data, type, offset, data.length - offset);
     }
@@ -113,6 +114,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *                This includes the type byte only if type &lt; 0
      *  @since 0.8.12
      */
+    @Override
     public int readBytes(byte data[], int type, int offset, int maxLen) throws I2NPMessageException {
         int headerSize = HEADER_LENGTH;
         if (type >= 0)
@@ -184,10 +186,12 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     /**
      * Replay resistant message Id
      */
+    @Override
     public synchronized long getUniqueId(long msgIDBloomXor) {
         return getUniqueId() ^ msgIDBloomXor;
     }
 
+    @Override
     public synchronized long getUniqueId() {
         // Lazy initialization of value
         if (_uniqueId < 0) {
@@ -199,19 +203,23 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     /**
      *  The ID is set to a random value when written but it can be overridden here.
      */
+    @Override
     public synchronized void setUniqueId(long id) { _uniqueId = id; }
 
     /**
      * Date after which the message should be dropped (and the associated uniqueId forgotten)
      *
      */
+    @Override
     public long getMessageExpiration() { return _expiration; }
 
     /**
      *  The expiration is set to one minute from now in the constructor but it can be overridden here.
      */
+    @Override
     public void setMessageExpiration(long exp) { _expiration = exp; }
 
+    @Override
     public synchronized int getMessageSize() {
         return calculateWrittenLength() + (15 + CHECKSUM_LENGTH); // 16 bytes in the header
     }
@@ -220,10 +228,12 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *  The raw header consists of a one-byte type and a 4-byte expiration in seconds only.
      *  Used by SSU only!
      */
+    @Override
     public synchronized int getRawMessageSize() {
         return calculateWrittenLength()+5;
     }
 
+    @Override
     public byte[] toByteArray() {
         byte data[] = new byte[getMessageSize()];
         int written = toByteArray(data);
@@ -243,6 +253,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *
      * @return the length written
      */
+    @Override
     public int toByteArray(byte buffer[]) {
         return toByteArray(buffer, 0);
     }
@@ -257,6 +268,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      * @return the new offset (NOT the length)
      * @since 0.9.36 with off param
      */
+    @Override
     public int toByteArray(byte buffer[], int off) {
         int start = off;
         try {
@@ -299,6 +311,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *
      *  @return the new offset (NOT the length)
      */
+    @Override
     public int toRawByteArray(byte buffer[]) {
         try {
             int off = 0;
@@ -324,6 +337,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      * @return the new offset (NOT the length)
      * @since 0.9.36
      */
+    @Override
     public int toRawByteArrayNTCP2(byte buffer[], int off) {
         try {
             buffer[off++] = (byte) getType();
@@ -340,6 +354,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         }
     }
 
+    @Override
     public void readMessage(byte data[], int offset, int dataSize, int type, I2NPMessageHandler handler) throws I2NPMessageException {
         // ignore the handler (overridden in subclasses if necessary
         try {

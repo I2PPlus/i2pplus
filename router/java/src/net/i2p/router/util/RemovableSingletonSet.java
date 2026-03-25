@@ -53,10 +53,12 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
         return rv;
     }
 
+    @Override
     public int size() {
         return _elem != null ? 1 : 0;
     }
 
+    @Override
     public Iterator<E> iterator() {
         return new RSSIterator();
     }
@@ -64,10 +66,12 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
     private class RSSIterator implements Iterator<E> {
         boolean done;
 
+        @Override
         public boolean hasNext() {
             return _elem != null && !done;
         }
 
+        @Override
         public E next() {
             if (!hasNext())
                 throw new NoSuchElementException();
@@ -75,6 +79,7 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
             return _elem;
         }
 
+        @Override
         public void remove() {
             if (_elem == null || !done)
                 throw new IllegalStateException();

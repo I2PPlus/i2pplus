@@ -863,21 +863,28 @@ public class FIFOBandwidthLimiter {
         }
 
         /** uses System clock, not context clock */
+        @Override
         public long getRequestTime() { return _requestTime; }
+        @Override
         public int getTotalRequested() { return _total; }
+        @Override
         public synchronized int getPendingRequested() { return _total - _allocated; }
+        @Override
         public boolean getAborted() { return _aborted; }
+        @Override
         public synchronized void abort() {
             _aborted = true;
             // so isComplete() will return true
             _allocated = _total;
             notifyAllocation();
         }
+        @Override
         public synchronized CompleteListener getCompleteListener() { return _lsnr; }
 
         /**
          *  Only used by NTCP.
          */
+        @Override
         public void setCompleteListener(CompleteListener lsnr) {
             boolean complete = false;
             synchronized (this) {
@@ -900,6 +907,7 @@ public class FIFOBandwidthLimiter {
          *  May return without allocating.
          *  Check getPendingRequested() &gt; 0 in a loop.
          */
+        @Override
         public void waitForNextAllocation() {
             boolean complete = false;
             try {
@@ -948,13 +956,18 @@ public class FIFOBandwidthLimiter {
             }
         }
 
+        @Override
         public void attach(Object obj) { _attachment = obj; }
+        @Override
         public Object attachment() { return _attachment; }
 
         // PQEntry methods
+        @Override
         public int getPriority() { return _priority; };
         // uncomment for switch to PBQ
+        @Override
         public void setSeqNum(long num) { /** _requestId = num; */ };
+        @Override
         public long getSeqNum() { return _requestId; };
 
         @Override
@@ -1001,25 +1014,38 @@ public class FIFOBandwidthLimiter {
     private static final NoopRequest _noop = new NoopRequest();
 
     private static class NoopRequest implements Request {
+        @Override
         public void abort() {}
+        @Override
         public boolean getAborted() { return false; }
+        @Override
         public int getPendingRequested() { return 0; }
         @Override
         public String toString() { return "noop"; }
+        @Override
         public long getRequestTime() { return 0; }
+        @Override
         public int getTotalRequested() { return 0; }
+        @Override
         public void waitForNextAllocation() {}
+        @Override
         public CompleteListener getCompleteListener() { return null; }
+        @Override
         public void setCompleteListener(CompleteListener lsnr) {
             lsnr.complete(NoopRequest.this);
         }
+        @Override
         public void attach(Object obj) {
             throw new UnsupportedOperationException("Don't attach to a satisfied request");
         }
+        @Override
         public Object attachment() { return null; }
         // PQEntry methods
+        @Override
         public int getPriority() { return 0; };
+        @Override
         public void setSeqNum(long num) {};
+        @Override
         public long getSeqNum() { return 0; };
     }
 }

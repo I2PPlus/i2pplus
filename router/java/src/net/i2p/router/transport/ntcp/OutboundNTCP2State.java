@@ -149,6 +149,7 @@ class OutboundNTCP2State implements EstablishState {
     }
 
     /** did the handshake fail for some reason? */
+    @Override
     public boolean isCorrupt() {
         synchronized (_stateLock) {
             return _state == State.CORRUPT;
@@ -160,6 +161,7 @@ class OutboundNTCP2State implements EstablishState {
      *
      *  @return is the handshake complete and valid?
      */
+    @Override
     public boolean isComplete() {
         synchronized (_stateLock) {
             return _state == State.VERIFIED;
@@ -170,6 +172,7 @@ class OutboundNTCP2State implements EstablishState {
      *  Get the NTCP version
      *  @return 2
      */
+    @Override
     public int getVersion() { return 2; }
 
     /**
@@ -198,6 +201,7 @@ class OutboundNTCP2State implements EstablishState {
      *
      *  @throws IllegalStateException
      */
+    @Override
     public synchronized void prepareOutbound() {
         if (!(_state == State.OB_INIT)) {
             throw new IllegalStateException(this + " -> Unexpected prepareOutbound()");
@@ -508,6 +512,7 @@ class OutboundNTCP2State implements EstablishState {
      *  @param e may be null
      *  @since 0.9.16
      */
+    @Override
     public synchronized void close(String reason, Exception e) {fail(reason, e);}
     protected void fail(String reason) {fail(reason, null);}
     protected void fail(String reason, Exception e) {fail(reason, e, false);}

@@ -638,7 +638,9 @@ public class Router implements RouterClock.ClockShiftListener {
     public RouterContext getContext() {return _context;}
 
     private class LoggerCallback implements UPnPScannerCallback {
+        @Override
         public void beforeScan() {_log.info("SSDP beforeScan()");}
+        @Override
         public void afterScan() {_log.info("SSDP afterScan()");}
     }
 
@@ -1825,6 +1827,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *
      *  @since 0.8.8
      */
+    @Override
     public void clockShift(long delta) {
         if (delta > -60*1000 && delta < 60*1000) {return;}
         synchronized (_stateLock) {

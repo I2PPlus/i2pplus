@@ -14,6 +14,7 @@ public class RandomIfOldTrimmer<T extends SimpleDataStructure> extends RandomTri
         super(ctx, max);
     }
 
+    @Override
     public boolean trim(KBucket<T> kbucket, T toAdd) {
         if (kbucket.getLastChanged() > _ctx.clock().now() - 5*60*1000)
             return false;

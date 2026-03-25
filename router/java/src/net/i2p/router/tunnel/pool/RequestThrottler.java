@@ -332,6 +332,7 @@ class RequestThrottler {
      * Periodic timer event that clears the request counts to reset throttling.
      */
     private class Cleaner implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {RequestThrottler.this.counter.clear();}
     }
 
@@ -343,6 +344,7 @@ class RequestThrottler {
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;
         public Disconnector(Hash h) {this.h = h;}
+        @Override
         public void timeReached() {context.commSystem().forceDisconnect(h);}
     }
 

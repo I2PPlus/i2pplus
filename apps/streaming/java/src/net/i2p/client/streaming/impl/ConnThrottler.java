@@ -80,6 +80,7 @@ class ConnThrottler {
     }
 
     private class Cleaner implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {
             if (_totalMax > 0)
                 _currentTotal.set(0);
@@ -88,3 +89,4 @@ class ConnThrottler {
         }
     }
 }
+

@@ -31,6 +31,7 @@ class SchedulerDead extends SchedulerImpl {
         super(ctx);
     }
 
+    @Override
     public boolean accept(Connection con) {
         if (con == null) return false;
         long timeSinceClose = _context.clock().now() - con.getDisconnectScheduledOn();
@@ -41,8 +42,9 @@ class SchedulerDead extends SchedulerImpl {
                            con.getLifetime() >= Connection.DISCONNECT_TIMEOUT;
         return nothingLeftToDo || timedOut;
     }
-
+@Override
     public void eventOccurred(Connection con) {
         con.disconnectComplete();
     }
 }
+

@@ -67,6 +67,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
 
     protected boolean answerAllQueries() {return false;}
 
+    @Override
     public void runJob() {
 
         Hash fromKey = _message.getFrom();
@@ -330,6 +331,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         }
     }
 
+    @Override
     public String getName() {return "Handle Database Lookup Message";}
 
     @Override

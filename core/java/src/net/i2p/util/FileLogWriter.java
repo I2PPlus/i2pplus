@@ -46,6 +46,7 @@ class FileLogWriter extends LogWriter {
      *  File may not exist or have old logs in it if not opened yet
      *  @return non-null
      */
+    @Override
     public synchronized String currentFile() {
         if (_currentFile != null)
             return _currentFile.getAbsolutePath();
@@ -55,10 +56,12 @@ class FileLogWriter extends LogWriter {
         return rv;
     }
 
+    @Override
     protected synchronized void writeRecord(LogRecord rec, String formatted) {
      	writeRecord(rec.getPriority(), formatted);
     }
 
+    @Override
     protected synchronized void writeRecord(int priority, String val) {
         if (val == null) return;
         if (_currentOut == null) {
@@ -86,6 +89,7 @@ class FileLogWriter extends LogWriter {
     /**
      *  @since 0.9.19
      */
+    @Override
     protected void flushWriter() {
         try {
             if (_currentOut != null)
@@ -99,6 +103,7 @@ class FileLogWriter extends LogWriter {
     /**
      *  @since 0.9.19 renamed from closeFile()
      */
+    @Override
     protected void closeWriter() {
         closeWriter(_currentFile, false);
     }

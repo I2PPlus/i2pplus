@@ -333,6 +333,7 @@ class RefreshRoutersJob extends JobImpl {
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;
         public Disconnector(Hash h) {this.h = h;}
+        @Override
         public void timeReached() {getContext().commSystem().forceDisconnect(h);}
     }
 

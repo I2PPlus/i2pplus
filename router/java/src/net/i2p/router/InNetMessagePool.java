@@ -404,6 +404,7 @@ public class InNetMessagePool implements Service {
      * Restart the message pool by shutting down and then starting up again.
      * Clears all queued messages and reinitializes the dispatcher.
      */
+    @Override
     public void restart() {
         synchronized (this) {
             shutdown();
@@ -420,6 +421,7 @@ public class InNetMessagePool implements Service {
     /**
      * Shutdown the message pool, stopping all dispatchers and clearing queued messages.
      */
+    @Override
     public synchronized void shutdown() {
         _alive.set(false);
         if (!DISPATCH_DIRECT) {
@@ -431,6 +433,7 @@ public class InNetMessagePool implements Service {
     /**
      * Startup the message pool and, if configured, start dispatcher threads.
      */
+    @Override
     public synchronized void startup() {
         _alive.set(true);
         if (_dispatchThreaded) {

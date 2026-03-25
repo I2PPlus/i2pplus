@@ -161,7 +161,9 @@ public class ConfigKeyringHelper extends HelperBase {
 
     /** @since 0.9.41 */
     private static class BDComparator implements Comparator<BlindData>, Serializable {
+        @Override
         public int compare(BlindData l, BlindData r) {return l.toBase32().compareTo(r.toBase32());}
     }
 
 }
+

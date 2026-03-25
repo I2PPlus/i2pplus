@@ -190,8 +190,10 @@ class OutboundMessageDistributor {
             _tunnel = id;
         }
 
+        @Override
         public String getName() { return "Distribute OBEP after Lookup"; }
 
+        @Override
         public void runJob() {
             RouterInfo info = getContext().netDb().lookupRouterInfoLocally(_target);
             int stat;

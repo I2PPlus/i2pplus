@@ -82,6 +82,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      * @since 0.9.61
     *
     */
+    @Override
     public synchronized void shutdown() {
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Shutdown called from FNDS, shutting down main and multihome db");
@@ -94,6 +95,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      * @since 0.9.61
      *
      */
+    @Override
     public synchronized void startup() {
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Startup called from FNDS, starting up main and multihome db");

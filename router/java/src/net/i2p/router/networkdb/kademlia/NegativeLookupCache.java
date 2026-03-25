@@ -119,6 +119,7 @@ class NegativeLookupCache {
             super(pool, cleanTime);
         }
 
+        @Override
         public void timeReached() {
             counter.clear();
             reschedule(cleanTime);

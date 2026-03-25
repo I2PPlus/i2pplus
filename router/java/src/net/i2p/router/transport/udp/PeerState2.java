@@ -321,6 +321,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * starts at 1 for Alice (0 is Session Confirmed) and 0 for Bob
      * @since public since 0.9.57 for SSU2Sender interface only
      */
+    @Override
     public long getNextPacketNumber() throws IOException {
         if (_dead) {
             IOException ioe = new IOException("Peer is dead: " + _remotePeer.toBase64());
@@ -339,23 +340,28 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /**
      * @since public since 0.9.57 for SSU2Sender interface only
      */
+    @Override
     public long getSendConnID() {return _sendConnID;}
     /**
      * Caller must sync on returned object when encrypting
      * @since public since 0.9.57 for SSU2Sender interface only
      */
+    @Override
     public CipherState getSendCipher() {return _sendCha;}
     /**
      * @since public since 0.9.57 for SSU2Sender interface only
      */
+    @Override
     public byte[] getSendHeaderEncryptKey1() {return _sendHeaderEncryptKey1;}
     /**
      * @since public since 0.9.57 for SSU2Sender interface only
      */
+    @Override
     public byte[] getSendHeaderEncryptKey2() {return _sendHeaderEncryptKey2;}
     /**
      * @since 0.9.57
      */
+    @Override
     public void setDestroyReason(int reason) {_destroyReason = reason;}
 
     /// end SSU2Sender interface ///
@@ -400,6 +406,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /**
      *  @since public since 0.9.57 for SSU2Sender interface only
      */
+    @Override
     public SSU2Bitfield getReceivedMessages() {
         synchronized (this) {
             _wantACKSendSince = 0; // cancel the ack timer
@@ -411,6 +418,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /**
      *  @since public since 0.9.57 for SSU2Sender interface only
      */
+    @Override
     public SSU2Bitfield getAckedMessages() {return _ackedMessages;}
 
     /**
@@ -607,13 +615,16 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     // begin payload callbacks
     /////////////////////////////////////////////////////////
 
+    @Override
     public void gotDateTime(long time) {
         // super adds CLOCK_SKEW_FUDGE that doesn't apply here
         adjustClockSkew((_context.clock().now() - time) - CLOCK_SKEW_FUDGE);
     }
 
+    @Override
     public void gotOptions(byte[] options, boolean isHandshake) {}
 
+    @Override
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException {
         if (shouldLogDebug) {
             _log.debug("Received RouterInfo in data phase " + ri + this);
@@ -648,12 +659,15 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         }
     }
 
+    @Override
     public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
         throw new IllegalStateException("RouterInfo fragment in Data phase");
     }
 
+    @Override
     public void gotAddress(byte[] ip, int port) {_ourIP = ip; _ourPort = port;} // TODO validate
 
+    @Override
     public void gotRelayTagRequest() {
         if (shouldLogDebug) {_log.debug("[SSU] Received RELAY TAG REQUEST " + this);}
         long tag = getWeRelayToThemAs();
@@ -675,6 +689,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         }
     }
 
+    @Override
     public void gotRelayTag(long tag) {
         long old = getTheyRelayToUsAs();
         if (old != 0) {
@@ -687,30 +702,35 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         _transport.getIntroManager().add(this);
     }
 
+    @Override
     public void gotRelayRequest(byte[] data) {
         _transport.getIntroManager().receiveRelayRequest(this, data);
         // Relay blocks are ACK-eliciting
         messagePartiallyReceived();
     }
 
+    @Override
     public void gotRelayResponse(int status, byte[] data) {
         _transport.getIntroManager().receiveRelayResponse(this, status, data);
         // Relay blocks are ACK-eliciting
         messagePartiallyReceived();
     }
 
+    @Override
     public void gotRelayIntro(Hash aliceHash, byte[] data) {
         _transport.getIntroManager().receiveRelayIntro(this, aliceHash, data);
         // Relay blocks are ACK-eliciting
         messagePartiallyReceived();
     }
 
+    @Override
     public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
         _transport.getPeerTestManager().receiveTest(_remoteHostId, this, msg, status, h, data);
         // Peer Test block is ACK-eliciting
         messagePartiallyReceived();
     }
 
+    @Override
     public void gotToken(long token, long expires) {
         if (shouldLogDebug) {
             _log.debug("[SSU] Received TOKEN block: " + token + " expires " + DataHelper.formatTime(expires) + this);
@@ -718,6 +738,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         _transport.getEstablisher().addOutboundToken(_remoteHostId, token, expires);
     }
 
+    @Override
     public void gotI2NP(I2NPMessage msg) {
         if (shouldLogDebug) {_log.debug("[SSU] Received I2NP block: " + msg);}
         // 9 byte header
@@ -735,6 +756,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         _transport.messageReceived(msg, null, _remotePeer, 0, size);
     }
 
+    @Override
     public void gotFragment(byte[] data, int off, int len, long messageId, int frag, boolean isLast) throws DataFormatException {
         if (shouldLogDebug) {
             _log.debug("[SSU] Received FRAGMENT block: " + messageId + " fragment " + frag + " (" + len + " bytes)" +
@@ -820,6 +842,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         }
     }
 
+    @Override
     public void gotACK(long ackThru, int acks, byte[] ranges) {
         int hc = (((int) ackThru) << 8) ^ (acks << 24) ^ DataHelper.hashCode(ranges);
         if (_lastAckHashCode.getAndSet(hc) == hc) {
@@ -844,6 +867,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
 
+    @Override
     public void gotTermination(int reason, long count) {
         if (shouldLogDebug) {
             _log.debug("[SSU] Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) + "; Count: " + count + " " + this);
@@ -863,6 +887,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         }
     }
 
+    @Override
     public void gotPathChallenge(RemoteHostId from, byte[] data) {
         if (shouldLogDebug) {_log.debug("Received PATH CHALLENGE block, length: " + data.length + " " + this);}
         SSU2Payload.Block block = new SSU2Payload.PathResponseBlock(data);
@@ -878,6 +903,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         } catch (IOException ioe) {}
     }
 
+    @Override
     public void gotPathResponse(RemoteHostId from, byte[] data) {
         if (shouldLogDebug) {
             _log.debug("Received PATH RESPONSE block, length: " + data.length + " from " + from + ' ' + this);
@@ -1012,6 +1038,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      *  @since public since 0.9.57 for SSU2Sender interface only
      *
      */
+    @Override
     public void fragmentsSent(long pktNum, int length, List<PacketBuilder.Fragment> fragments) {
         List<PacketBuilder.Fragment> old = _sentMessages.putIfAbsent(Long.valueOf(pktNum), fragments);
         if (old != null) {
@@ -1028,6 +1055,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      *  Callback from SSU2Bitfield.forEachAndNot().
      *  A new ack was received.
      */
+    @Override
     public void bitSet(long pktNum) {
         if (pktNum == 0 && !_isInbound) {
             // we don't need to save the Session Confirmed for retransmission any more
@@ -1101,6 +1129,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      *
      *  @since 0.9.56, public since 0.9.57 for SSU2Sender interface
      */
+    @Override
     public byte getFlags() {return shouldRequestImmediateAck() ? (byte) 0x01 : 0;}
 
     /**
@@ -1151,6 +1180,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
          *  as indicated by _wantACKSendSince == 0.
          *  Will not requeue unless the acks don't all fit (unlikely).
          */
+        @Override
         public void timeReached() {
             synchronized (PeerState2.this) {
                 if (_wantACKSendSince <= 0) {

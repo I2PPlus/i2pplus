@@ -10,6 +10,7 @@ import net.i2p.data.DataHelper;
  */
 class SpeedComparator implements Comparator<PeerProfile>, Serializable {
 
+    @Override
     public int compare(PeerProfile left, PeerProfile right) {
 
         double lval = left.getSpeedValue();

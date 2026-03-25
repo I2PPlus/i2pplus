@@ -34,6 +34,7 @@ public final class MLKEM {
     private static class MLKEMFactory implements KeyFactory {
         private final EncType t;
         public MLKEMFactory(EncType type) { t = type; }
+        @Override
         public KeyPair getKeys() {
             try {
                 return MLKEM.getKeys(t);

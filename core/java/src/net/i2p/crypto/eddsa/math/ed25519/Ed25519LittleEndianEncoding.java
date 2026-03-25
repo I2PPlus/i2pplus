@@ -75,6 +75,7 @@ public class Ed25519LittleEndianEncoding extends Encoding {
      * <p>
      * Inserting the expression for $x$ into $(1)$ we get the desired expression for $q$.
      */
+    @Override
     public byte[] encode(FieldElement x) {
         int[] h = ((Ed25519FieldElement)x).t;
         int h0 = h[0];
@@ -186,6 +187,7 @@ public class Ed25519LittleEndianEncoding extends Encoding {
      * @param in The 32 byte representation.
      * @return The field element in its $2^{25.5}$ bit representation.
      */
+    @Override
     public FieldElement decode(byte[] in) {
         long h0 = load_4(in, 0);
         long h1 = load_3(in, 4) << 6;
@@ -248,6 +250,7 @@ public class Ed25519LittleEndianEncoding extends Encoding {
      *
      * @return true if $x$ is in $\{1,3,5,\dots,q-2\}$, false otherwise.
      */
+    @Override
     public boolean isNegative(FieldElement x) {
         byte[] s = encode(x);
         return (s[0] & 1) != 0;

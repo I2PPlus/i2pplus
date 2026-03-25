@@ -33,6 +33,7 @@ public class Pinger implements Source, Runnable {
      *  @param sink the sink to receive ping messages
      *  @since 0.9.53
      */
+    @Override
     public void setSink(Sink sink) {
         this.sink = sink;
     }
@@ -68,6 +69,7 @@ public class Pinger implements Source, Runnable {
     /**
      *  Main run loop that periodically sends subscribe messages.
      *  Runs until stop() is called.
+     @Override
      *  @since 0.9.53
      */
     public void run() {
@@ -100,3 +102,4 @@ public class Pinger implements Source, Runnable {
         }
     }
 }
+

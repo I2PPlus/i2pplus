@@ -49,6 +49,7 @@ public class HelpSectionHelper extends HelperBase {
             coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
         }
 
+        @Override
         public int compare(Tab l, Tab r) {
             return coll.compare(l.title, r.title);
         }
@@ -77,3 +78,4 @@ public class HelpSectionHelper extends HelperBase {
     }
 
 }
+

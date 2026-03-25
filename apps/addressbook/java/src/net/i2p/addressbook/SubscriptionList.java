@@ -124,6 +124,7 @@ class SubscriptionList implements Iterable<AddressBook> {
      *
      * @return A SubscriptionIterator.
      */
+    @Override
     public SubscriptionIterator iterator() {
         return new SubscriptionIterator(this.subscriptions, this.delay, this.proxyHost,
                 this.proxyPort);
@@ -160,3 +161,4 @@ class SubscriptionList implements Iterable<AddressBook> {
         } catch (IOException exp) {}
     }
 }
+

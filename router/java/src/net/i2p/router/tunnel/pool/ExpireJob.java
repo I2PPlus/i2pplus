@@ -52,6 +52,7 @@ class ExpireJob extends JobImpl {
         getTiming().setStartAfter(expire);
     }
 
+    @Override
     public String getName() {return "Expire Local Tunnels";}
 
     /**
@@ -115,6 +116,7 @@ class ExpireJob extends JobImpl {
         _dropAfter = 0;
     }
 
+    @Override
     public void runJob() {
         synchronized (ExpireJob.class) {
             _isScheduled = false;

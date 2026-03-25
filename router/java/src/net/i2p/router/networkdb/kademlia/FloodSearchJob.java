@@ -94,6 +94,7 @@ abstract class FloodSearchJob extends JobImpl {
     /**
      *  Deprecated, unused, see FOSJ override
      */
+    @Override
     public void runJob() {
         throw new UnsupportedOperationException("use override");
     }
@@ -101,6 +102,7 @@ abstract class FloodSearchJob extends JobImpl {
     /**
      *  Deprecated, unused, see FOSJ override
      */
+    @Override
     public String getName() { return "NetDb Search (phase 1)"; }
 
     public Hash getKey() { return _key; }

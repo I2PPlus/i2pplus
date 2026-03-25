@@ -231,10 +231,12 @@ class NTCP2Payload {
             f = flood;
         }
 
+        @Override
         public int getDataLength() {
             return 1 + data.length;
         }
 
+        @Override
         public int writeData(byte[] tgt, int off) {
             tgt[off++] = (byte) (f ? 1 : 0);    // flag
             System.arraycopy(data, 0, tgt, off, data.length);
@@ -253,10 +255,12 @@ class NTCP2Payload {
             m = msg;
         }
 
+        @Override
         public int getDataLength() {
             return m.getMessageSize() - 7;
         }
 
+        @Override
         public int writeData(byte[] tgt, int off) {
             return m.toRawByteArrayNTCP2(tgt, off);
         }
@@ -281,10 +285,12 @@ class NTCP2Payload {
             ctx = context;
         }
 
+        @Override
         public int getDataLength() {
             return sz;
         }
 
+        @Override
         public int writeData(byte[] tgt, int off) {
             if (ctx != null)
                 ctx.random().nextBytes(tgt, off, sz);
@@ -306,10 +312,12 @@ class NTCP2Payload {
             now = ctx.clock().now();
         }
 
+        @Override
         public int getDataLength() {
             return 4;
         }
 
+        @Override
         public int writeData(byte[] tgt, int off) {
             DataHelper.toLong(tgt, off, 4, (now + 500) / 1000);
             return off + 4;
@@ -327,10 +335,12 @@ class NTCP2Payload {
             opts = options;
         }
 
+        @Override
         public int getDataLength() {
             return opts.length;
         }
 
+        @Override
         public int writeData(byte[] tgt, int off) {
             System.arraycopy(opts, 0, tgt, off, opts.length);
             return off + opts.length;
@@ -350,10 +360,12 @@ class NTCP2Payload {
             rcvd = lastReceived;
         }
 
+        @Override
         public int getDataLength() {
             return 9;
         }
 
+        @Override
         public int writeData(byte[] tgt, int off) {
             DataHelper.toLong8(tgt, off, rcvd);
             tgt[off + 8] = rsn;

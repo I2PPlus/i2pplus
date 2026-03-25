@@ -176,6 +176,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         }
     }
 
+    @Override
     public String getName() {return "Republish Local LeaseSet" + (highPriority ? " [High priority]" : "");}
 
     private long getRepublishInterval() {
@@ -298,8 +299,10 @@ public class RepublishLeaseSetJob extends JobImpl {
             _ls = ls;
         }
 
+        @Override
         public String getName() {return "Timeout LeaseSet Publication";}
 
+        @Override
         public void runJob() {
             int count = failCount.get();
             LeaseSet ls = _facade.lookupLeaseSetLocally(_ls.getHash());
@@ -340,7 +343,9 @@ public class RepublishLeaseSetJob extends JobImpl {
             String name = !tunnelName.isEmpty() ? " for '" + tunnelName + "'" : " for key";
 
             Job onFound = new JobImpl(getContext()) {
+                @Override
                 public String getName() {return "Verify LS Published";}
+                @Override
                 public void runJob() {
                     _lookupInProgress.set(false);
                     clearRetryInProgress();
@@ -359,7 +364,9 @@ public class RepublishLeaseSetJob extends JobImpl {
             };
 
             Job onFailed = new JobImpl(getContext()) {
+                @Override
                 public String getName() {return "Verify LS Failed";}
+                @Override
                 public void runJob() {
                     _lookupInProgress.set(false);
                     clearRetryInProgress();

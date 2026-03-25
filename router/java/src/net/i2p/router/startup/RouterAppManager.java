@@ -218,6 +218,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
      *  @since 0.9.6
      */
     public class Shutdown implements Runnable {
+        @Override
         public void run() {
             shutdown();
         }

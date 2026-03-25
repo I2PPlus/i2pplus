@@ -34,6 +34,7 @@ public abstract class JobImpl implements Job {
      *
      * @return the unique job identifier
      */
+    @Override
     public long getJobId() { return _id; }
 
     /**
@@ -41,6 +42,7 @@ public abstract class JobImpl implements Job {
      *
      * @return the JobTiming object controlling when this job runs
      */
+    @Override
     public JobTiming getTiming() { return _timing; }
 
     /**
@@ -85,6 +87,7 @@ public abstract class JobImpl implements Job {
      * Called when the job is dropped due to router overload.
      * Subclasses can override to perform cleanup or requeueing of other tasks.
      */
+    @Override
     public void dropped() {}
 
     /**

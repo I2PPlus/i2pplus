@@ -494,6 +494,7 @@ class OutboundMessageState implements CDPQEntry {
      *  For CDQ
      *  @since 0.9.3
      */
+    @Override
     public void setEnqueueTime(long now) {
         _enqueueTime = now;
     }
@@ -502,6 +503,7 @@ class OutboundMessageState implements CDPQEntry {
      *  For CDQ
      *  @since 0.9.3
      */
+    @Override
     public long getEnqueueTime() {
         return _enqueueTime;
     }
@@ -510,6 +512,7 @@ class OutboundMessageState implements CDPQEntry {
      *  For CDQ
      *  @since 0.9.3
      */
+    @Override
     public void drop() {
         _peer.getTransport().failed(this, false);
     }
@@ -518,6 +521,7 @@ class OutboundMessageState implements CDPQEntry {
      *  For CDPQ
      *  @since 0.9.3
      */
+    @Override
     public void setSeqNum(long num) {
         _seqNum = num;
     }
@@ -526,6 +530,7 @@ class OutboundMessageState implements CDPQEntry {
      *  For CDPQ
      *  @since 0.9.3
      */
+    @Override
     public long getSeqNum() {
         return _seqNum;
     }
@@ -535,6 +540,7 @@ class OutboundMessageState implements CDPQEntry {
      *  @return OutNetMessage priority or 1000 for injected
      *  @since 0.9.3
      */
+    @Override
     public int getPriority() {
         return _message != null ? _message.getPriority() : PacketBuilder.PRIORITY_HIGH;
     }

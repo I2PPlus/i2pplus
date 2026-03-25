@@ -177,6 +177,7 @@ public class TunnelDispatcher implements Service {
      * This is a safety net in case LeaveTunnel job fails to remove them.
      */
     private class PeriodicCleanup implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {
             cleanupExpiredTunnels();
         }
@@ -944,6 +945,7 @@ public class TunnelDispatcher implements Service {
     /**
      * Start up the TunnelDispatcher
      */
+    @Override
     public synchronized void startup() {
         _validator = new BloomFilterIVValidator(_context, getShareBandwidth(_context));
     }
@@ -951,6 +953,7 @@ public class TunnelDispatcher implements Service {
     /**
      * Shut down TunnelDispatcher
      */
+    @Override
     public synchronized void shutdown() {
         if (_validator != null) {
             _validator.destroy();
@@ -973,6 +976,7 @@ public class TunnelDispatcher implements Service {
     /**
      * Restart the TunnelDispatcher
      */
+    @Override
     public void restart() {
         shutdown();
         startup();
@@ -982,6 +986,7 @@ public class TunnelDispatcher implements Service {
      * Render status HTML (deprecated)
      */
     @Deprecated
+    @Override
     public void renderStatusHTML(Writer out) throws IOException {}
 
     /**
@@ -1022,10 +1027,12 @@ public class TunnelDispatcher implements Service {
             return _configs;
         }
 
+        @Override
         public String getName() {
             return "Expire Participating Tunnels";
         }
 
+        @Override
         public void runJob() {
             long now = getContext().clock().now() + 1000;
             long nextTime = now + 10 * 60 * 1000;

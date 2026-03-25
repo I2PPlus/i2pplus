@@ -59,6 +59,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
      *         to build through, and the settings reject 0 hop tunnels, this will
      *         return null.
      */
+    @Override
     public List<Hash> selectPeers(TunnelPoolSettings settings) {
         int length = getLength(settings);
         if (length < 0 || ((length == 0) && (settings.getLength() + settings.getLengthVariance() > 0))) {
@@ -486,8 +487,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
          *  and add the Hash to the set if not.
          *
          *  @param o a Hash
-         *  @return true if peer should be excluded
-         */
+          *  @return true if peer should be excluded
+          */
+        @Override
         public boolean contains(Object o) {
             if (s.contains(o)) {return true;}
             Hash h = (Hash) o;
@@ -525,8 +527,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
          *  and add the Hash to the set if not.
          *
          *  @param o a Hash
-         *  @return true if peer should be excluded
-         */
+          *  @return true if peer should be excluded
+          */
+        @Override
         public boolean contains(Object o) {
             if (s.contains(o)) {return true;}
             Hash h = (Hash) o;

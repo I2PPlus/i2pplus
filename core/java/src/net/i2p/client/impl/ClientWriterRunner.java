@@ -71,6 +71,7 @@ class ClientWriterRunner implements Runnable {
         catch (InterruptedException ie) {}
     }
 
+    @Override
     public void run() {
         I2CPMessage msg;
         while (!_session.isClosed()) {

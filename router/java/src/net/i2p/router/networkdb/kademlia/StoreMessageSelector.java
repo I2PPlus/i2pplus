@@ -41,10 +41,13 @@ class StoreMessageSelector implements MessageSelector {
         _expiration = expiration;
     }
 
+    @Override
     public boolean continueMatching() { return !_found; }
 
+    @Override
     public long getExpiration() { return _expiration; }
 
+    @Override
     public boolean isMatch(I2NPMessage message) {
         if (message.getType() == DeliveryStatusMessage.MESSAGE_TYPE) {
             DeliveryStatusMessage msg = (DeliveryStatusMessage)message;

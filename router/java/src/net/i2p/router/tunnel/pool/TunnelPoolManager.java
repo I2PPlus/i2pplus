@@ -105,6 +105,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *
      * @return null if none
      */
+    @Override
     public TunnelInfo selectInboundTunnel() {
         TunnelInfo info = _inboundExploratory.selectTunnel();
         if (info == null) {
@@ -121,6 +122,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * @param destination if null, returns inbound exploratory tunnel
      * @return null if none
      */
+    @Override
     public TunnelInfo selectInboundTunnel(Hash destination) {
         if (destination == null) return selectInboundTunnel();
         TunnelPool pool = _clientInboundPools.get(destination);
@@ -135,6 +137,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *
      * @return null if none
      */
+    @Override
     public TunnelInfo selectOutboundTunnel() {
         TunnelInfo info = _outboundExploratory.selectTunnel();
         if (info == null) {
@@ -151,6 +154,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * @param destination if null, returns outbound exploratory tunnel
      * @return null if none
      */
+    @Override
     public TunnelInfo selectOutboundTunnel(Hash destination)  {
         if (destination == null) return selectOutboundTunnel();
         TunnelPool pool = _clientOutboundPools.get(destination);
@@ -169,6 +173,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * @return null if none
      * @since 0.8.10
      */
+    @Override
     public TunnelInfo selectInboundExploratoryTunnel(Hash closestTo) {
         TunnelInfo info = _inboundExploratory.selectTunnel(closestTo);
         if (info == null) {
@@ -190,6 +195,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * @return null if none
      * @since 0.8.10
      */
+    @Override
     public TunnelInfo selectInboundTunnel(Hash destination, Hash closestTo) {
         if (destination == null) return selectInboundExploratoryTunnel(closestTo);
         TunnelPool pool = _clientInboundPools.get(destination);
@@ -210,6 +216,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * @return null if none
      * @since 0.8.10
      */
+    @Override
     public TunnelInfo selectOutboundExploratoryTunnel(Hash closestTo) {
         TunnelInfo info = _outboundExploratory.selectTunnel(closestTo);
         if (info == null) {
@@ -231,6 +238,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * @return null if none
      * @since 0.8.10
      */
+    @Override
     public TunnelInfo selectOutboundTunnel(Hash destination, Hash closestTo) {
         if (destination == null) return selectOutboundExploratoryTunnel(closestTo);
         TunnelPool pool = _clientOutboundPools.get(destination);
@@ -241,12 +249,15 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /** @return number of valid (non-failed, non-expired) inbound exploratory tunnels */
+    @Override
     public int getFreeTunnelCount() {return _inboundExploratory.getValidTunnelCount();}
 
     /** @return number of valid (non-failed, non-expired) outbound exploratory tunnels */
+    @Override
     public int getOutboundTunnelCount() {return _outboundExploratory.getValidTunnelCount();}
 
     /** @return number of valid (non-failed, non-expired) inbound client tunnels across all destinations */
+    @Override
     public int getInboundClientTunnelCount() {
         int count = 0;
         for (TunnelPool pool : _clientInboundPools.values()) {
@@ -256,6 +267,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /** @return number of valid (non-failed, non-expired) outbound client tunnels across all destinations */
+    @Override
     public int getOutboundClientTunnelCount() {
         int count = 0;
         for (TunnelPool pool : _clientOutboundPools.values()) {
@@ -269,6 +281,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @return number of valid outbound client tunnels for the given destination
      *  @since 0.7.11
      */
+    @Override
     public int getOutboundClientTunnelCount(Hash destination)  {
         TunnelPool pool = _clientOutboundPools.get(destination);
         if (pool != null) {return pool.getValidTunnelCount();}
@@ -280,6 +293,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @return number of valid inbound client tunnels for the given destination
      *  @since 0.9.68+
      */
+    @Override
     public int getInboundClientTunnelCount(Hash destination)  {
         TunnelPool pool = _clientInboundPools.get(destination);
         if (pool != null) {return pool.getValidTunnelCount();}
@@ -287,9 +301,11 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /** Get the number of tunnels we're participating in as a gateway or endpoint. */
+    @Override
     public int getParticipatingCount() { return _context.tunnelDispatcher().getParticipatingCount(); }
 
     /** Get the expiration time of the last participating tunnel. */
+    @Override
     public long getLastParticipatingExpiration() { return _context.tunnelDispatcher().getLastParticipatingExpiration(); }
 
     /**
@@ -298,6 +314,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  We just use length setting, not variance, for speed
      *  @since 0.7.10
      */
+    @Override
     public double getShareRatio() {
         int part = getParticipatingCount();
         if (part <= 0) {return 0d;}
@@ -318,6 +335,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @param tunnel tunnel to validate
      *  @return true if the tunnel is valid and belongs to the client's pool
      */
+    @Override
     public boolean isValidTunnel(Hash client, TunnelInfo tunnel) {
         if (tunnel.getTunnelFailed()) {return false;}
         if (tunnel.getExpiration() < _context.clock().now()) {return false;}
@@ -329,15 +347,19 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /** Get the inbound exploratory tunnel pool settings. */
+    @Override
     public TunnelPoolSettings getInboundSettings() { return _inboundExploratory.getSettings(); }
 
     /** Get the outbound exploratory tunnel pool settings. */
+    @Override
     public TunnelPoolSettings getOutboundSettings() { return _outboundExploratory.getSettings(); }
 
     /** Set the inbound exploratory tunnel pool settings. */
+    @Override
     public void setInboundSettings(TunnelPoolSettings settings) { _inboundExploratory.setSettings(settings); }
 
     /** Set the outbound exploratory tunnel pool settings. */
+    @Override
     public void setOutboundSettings(TunnelPoolSettings settings) { _outboundExploratory.setSettings(settings); }
 
     /**
@@ -345,6 +367,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @param client destination hash
      *  @return settings or null if not found
      */
+    @Override
     public TunnelPoolSettings getInboundSettings(Hash client) {
         TunnelPool pool = _clientInboundPools.get(client);
         if (pool != null) {return pool.getSettings();}
@@ -356,6 +379,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @param client destination hash
      *  @return settings or null if not found
      */
+    @Override
     public TunnelPoolSettings getOutboundSettings(Hash client) {
         TunnelPool pool = _clientOutboundPools.get(client);
         if (pool != null) {return pool.getSettings();}
@@ -366,6 +390,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  Set settings for a client's inbound tunnel pool.
      *  @param client destination hash
      */
+    @Override
     public void setInboundSettings(Hash client, TunnelPoolSettings settings) {
         setSettings(_clientInboundPools, client, settings);
     }
@@ -374,6 +399,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  Set settings for a client's outbound tunnel pool.
      *  @param client destination hash
      */
+    @Override
     public void setOutboundSettings(Hash client, TunnelPoolSettings settings) {
         setSettings(_clientOutboundPools, client, settings);
     }
@@ -384,6 +410,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /** Restart all tunnel handlers and rebuild all tunnels */
+    @Override
     public synchronized void restart() {
         _handler.restart();
         _executor.restart();
@@ -396,6 +423,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  Do not use to change settings.
      *  Do not use for aliased destinations; use addAlias().
      */
+    @Override
     public void buildTunnels(Destination client, ClientTunnelSettings settings) {
         Hash dest = client.calculateHash();
         if (_log.shouldDebug()) {
@@ -438,6 +466,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @return success
      *  @since 0.9.21
      */
+    @Override
     public boolean addAlias(Destination dest, ClientTunnelSettings settings, Destination existingClient) {
         if (dest.getSigningPublicKey().equals(existingClient.getSigningPublicKey())) {
             throw new IllegalArgumentException("Signing key must differ");
@@ -483,6 +512,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  Remove a destination for the same tunnels as another.
      *  @since 0.9.21
      */
+    @Override
     public void removeAlias(Destination dest) {
         Hash h = dest.calculateHash();
         synchronized (this) {
@@ -517,6 +547,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
         public DelayedStartup(TunnelPool p) {this.pool = p;}
 
+        @Override
         public void timeReached() {this.pool.startup();}
     }
 
@@ -525,6 +556,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *
      *  @since 0.9.48
      */
+    @Override
     public void removeTunnels(Destination dest) {
         removeTunnels(dest.calculateHash());
     }
@@ -611,7 +643,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             _pool = pool;
             getTiming().setStartAfter(ctx.clock().now() + 5*1000);
         }
+        @Override
         public String getName() { return "Bootstrap Tunnel Pool"; }
+        @Override
         public void runJob() {
             _pool.buildFallback();
         }
@@ -628,8 +662,10 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             getTiming().setStartAfter(ctx.clock().now() + STARTUP_DELAY);
         }
 
+        @Override
         public String getName() { return "Remove Slow Tunnels Job"; }
 
+        @Override
         public void runJob() {
             if (_mgr.isShutdown()) {
                 if (_mgr._log.shouldInfo())
@@ -697,8 +733,10 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             getTiming().setStartAfter(ctx.clock().now() + REFRESH_DELAY_AFTER_REMOVAL);
         }
 
+        @Override
         public String getName() { return "Refresh LeaseSets Job"; }
 
+        @Override
         public void runJob() {
             if (_mgr.isShutdown()) {
                 return;
@@ -913,6 +951,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /**
      *  Cannot be restarted
      */
+    @Override
     public synchronized void shutdown() {
         _handler.shutdown(_numHandlerThreads);
         _executor.shutdown();
@@ -926,6 +965,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /** list of TunnelPool instances currently in play */
+    @Override
     public void listPools(List<TunnelPool> out) {
         out.addAll(_clientInboundPools.values());
         out.addAll(_clientOutboundPools.values());
@@ -945,10 +985,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     boolean isShutdown() { return _isShutdown; }
 
     /** @return size of the inbound build queue */
+    @Override
     public int getInboundBuildQueueSize() { return _handler.getInboundBuildQueueSize(); }
 
     /** @deprecated moved to routerconsole */
     @Deprecated
+    @Override
     public void renderStatusHTML(Writer out) throws IOException {
     }
 
@@ -988,6 +1030,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *
      *  @return Set of peers that should not be allowed in another tunnel
      */
+    @Override
     public Set<Hash> selectPeersInTooManyTunnels() {
         ObjectCounterUnsafe<Hash> lc = new ObjectCounterUnsafe<Hash>();
         int tunnelCount = countTunnelsPerPeer(lc);
@@ -1017,11 +1060,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /** for TunnelRenderer in router console */
+    @Override
     public Map<Hash, TunnelPool> getInboundClientPools() {
         return new HashMap<Hash, TunnelPool>(_clientInboundPools);
     }
 
     /** for TunnelRenderer in router console */
+    @Override
     public Map<Hash, TunnelPool> getOutboundClientPools() {
         return new HashMap<Hash, TunnelPool>(_clientOutboundPools);
     }
@@ -1030,6 +1075,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  For TunnelRenderer in router console
      *  @return non-null
      */
+    @Override
     public TunnelPool getInboundExploratoryPool() {
         return _inboundExploratory;
     }
@@ -1038,6 +1084,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  For TunnelRenderer in router console
      *  @return non-null
      */
+    @Override
     public TunnelPool getOutboundExploratoryPool() {
         return _outboundExploratory;
     }
@@ -1046,6 +1093,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @return pool or null
      *  @since 0.9.34
      */
+    @Override
     public TunnelPool getInboundPool(Hash client) {
         return _clientInboundPools.get(client);
     }
@@ -1054,6 +1102,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @return pool or null
      *  @since 0.9.34
      */
+    @Override
     public TunnelPool getOutboundPool(Hash client) {
         return _clientOutboundPools.get(client);
     }
@@ -1066,6 +1115,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *
      *  @since 0.8.13
      */
+    @Override
     public void fail(Hash peer) {
         failTunnelsWithFirstHop(_outboundExploratory, peer);
         for (TunnelPool pool : _clientOutboundPools.values()) {
@@ -1124,6 +1174,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * @return the GhostPeerManager instance
      * @since 0.9.68+
      */
+    @Override
     public GhostPeerManager getGhostPeerManager() {
         return _ghostPeerManager;
     }

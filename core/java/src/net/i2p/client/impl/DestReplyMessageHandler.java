@@ -19,6 +19,7 @@ class DestReplyMessageHandler extends HandlerImpl {
         super(ctx, DestReplyMessage.MESSAGE_TYPE);
     }
 
+    @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
         if (_log.shouldDebug()) {_log.debug("Handling " + message);}
         DestReplyMessage msg = (DestReplyMessage) message;

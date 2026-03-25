@@ -248,11 +248,11 @@ class UPnPManager {
      */
     private class Rescanner extends SimpleTimer2.TimedEvent {
 
-        /** caller must schedule() */
         public Rescanner() {
             super(_context.simpleTimer2());
         }
 
+        @Override
         public void timeReached() {
             if (_shouldBeRunning) {
                 rescan();
@@ -273,6 +273,7 @@ class UPnPManager {
             super(_context.simpleTimer2());
         }
 
+        @Override
         public void timeReached() {
             _scannerCallback.afterScan();
         }
