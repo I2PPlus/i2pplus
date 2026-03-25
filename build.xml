@@ -3519,10 +3519,11 @@
   <target name="codeql-java" depends="codeql-setup">
     <mkdir dir="dist"/>
     <mkdir dir="/tmp/codeql"/>
+    <mkdir dir="/tmp/codeql/classes"/>
     <echo message="Creating CodeQL Java database at /tmp/codeql/db-java..."/>
     <exec executable="bash" dir="${basedir}" failonerror="true">
       <arg value="-c"/>
-      <arg value="tools/codeql/codeql/codeql database create /tmp/codeql/db-java --language=java --command='ant build' --overwrite --ram=8192 --search-path=tools/codeql/codeql-${codeql.version}"/>
+      <arg value="tools/codeql/codeql/codeql database create /tmp/codeql/db-java --language=java --source-root=. --overwrite --ram=8192 --search-path=tools/codeql/codeql-${codeql.version} --command='bash tools/codeql/build-java.sh'"/>
     </exec>
     <echo message="Running CodeQL Java analysis..."/>
     <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" failonerror="false" outputproperty="cq.java.result" error="/dev/null">
@@ -3535,7 +3536,6 @@
       <arg value="--ram=8192"/>
       <arg value="--additional-packs=tools/codeql/packs"/>
       <arg value="codeql/java-queries:codeql-suites/java-security-and-quality.qls"/>
-      <arg value="githubsecuritylab/codeql-java-queries"/>
     </exec>
     <exec executable="python3" failonerror="false">
       <arg value="tools/codeql/codeql-to-html.py"/>
@@ -3569,7 +3569,6 @@
       <arg value="--ram=8192"/>
       <arg value="--additional-packs=tools/codeql/packs"/>
       <arg value="codeql/javascript-queries:codeql-suites/javascript-security-and-quality.qls"/>
-      <arg value="githubsecuritylab/codeql-javascript-queries"/>
     </exec>
     <exec executable="python3" failonerror="false">
       <arg value="tools/codeql/codeql-to-html.py"/>
