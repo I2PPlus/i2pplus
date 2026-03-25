@@ -205,9 +205,9 @@ public class MessageInputStreamTest {
 
     @Test
     public void testGetNacks() {
-        assertThat(in.getNacks(), is(nullValue()));
+        assertThat(in.getNacks().length, is(0));
         in.messageReceived(0, new ByteArray());
-        assertThat(in.getNacks(), is(nullValue()));
+        assertThat(in.getNacks().length, is(0));
         in.messageReceived(2, new ByteArray());
         assertThat(in.getNacks(), is(equalTo(new long[] {1})));
         in.messageReceived(4, new ByteArray());
@@ -215,14 +215,14 @@ public class MessageInputStreamTest {
         in.messageReceived(1, new ByteArray());
         assertThat(in.getNacks(), is(equalTo(new long[] {3})));
         in.messageReceived(3, new ByteArray());
-        assertThat(in.getNacks(), is(nullValue()));
+        assertThat(in.getNacks().length, is(0));
     }
 
     @Test
     public void testUpdateAcks_noMsgs() {
         in.updateAcks(packetLocal);
         verify(packetLocal).setAckThrough(-1);
-        verify(packetLocal).setNacks(null);
+        verify(packetLocal).setNacks(eq(new long[0]));
     }
 
     @Test
@@ -232,7 +232,7 @@ public class MessageInputStreamTest {
         in.messageReceived(2, new ByteArray());
         in.updateAcks(packetLocal);
         verify(packetLocal).setAckThrough(2);
-        verify(packetLocal).setNacks(null);
+        verify(packetLocal).setNacks(eq(new long[0]));
     }
 
     @Test

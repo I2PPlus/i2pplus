@@ -417,6 +417,53 @@
   <target name="cleandep" depends="clean"/>
   <target name="distclean" depends="clean"/>
 
+  <target name="junit.compileTest" depends="build">
+    <mkdir dir="./build/obj"/>
+    <javac srcdir="./test/junit" debug="true" source="${javac.version}" target="${javac.version}" deprecation="on"
+      release="${javac.release}"
+      debuglevel="lines,vars,source"
+      includeAntRuntime="true"
+      encoding="UTF-8"
+      destdir="./build/obj">
+      <classpath>
+        <pathelement location="./build/i2psnark.jar"/>
+        <pathelement location="../../../core/java/build/i2p.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="junit.test" depends="junit.compileTest">
+    <mkdir dir="../../../reports/i2psnark/junit/"/>
+    <delete>
+      <fileset dir="../../../reports/i2psnark/junit">
+        <include name="TEST-*.xml"/>
+      </fileset>
+    </delete>
+    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes">
+      <classpath>
+        <pathelement location="./build/i2psnark.jar"/>
+        <pathelement location="../../../core/java/build/i2p.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="./build/obj"/>
+      </classpath>
+      <batchtest todir="../../../reports/i2psnark/junit/">
+        <fileset dir="./test/junit">
+          <include name="**/*Test.java"/>
+        </fileset>
+      </batchtest>
+      <formatter type="xml"/>
+    </junit>
+  </target>
+
+  <target name="junit.report" depends="junit.test"/>
+
   <target name="compressJavascript">
     <exec executable="uglifyjs">
       <arg value="${file}"/>

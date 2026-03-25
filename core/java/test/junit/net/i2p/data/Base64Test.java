@@ -10,6 +10,7 @@ package net.i2p.data;
 
 import static org.junit.Assert.*;
 
+import java.nio.charset.StandardCharsets;
 import org.junit.Test;
 
 public class Base64Test {
@@ -18,7 +19,7 @@ public class Base64Test {
         String orig = "you smell";
         String encoded = Base64.encode(DataHelper.getASCII(orig));
         byte decoded[] = Base64.decode(encoded);
-        String transformed = new String(decoded, StandardCharsets.UTF_8)
+        String transformed = new String(decoded, StandardCharsets.UTF_8);
         assertTrue(orig.equals(transformed));
 
         byte all[] = new byte[256];

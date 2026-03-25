@@ -110,16 +110,20 @@ case "${1:-all}" in
     run_build apps/ministreaming/java
     run_test apps/streaming/java "Streaming"
     ;;
+  router)
+    run_build core/java
+    run_build router/java
+    run_test router/java "Router"
+    ;;
   all|*)
     run_build core/java
     run_build apps/ministreaming/java
     run_build apps/streaming/java
+    run_build router/java
     run_test core/java "Core"
-    run_build core/java
-    run_build apps/ministreaming/java
-    run_build apps/streaming/java
     run_test apps/ministreaming/java "MiniStreaming"
     run_test apps/streaming/java "Streaming"
+    run_test router/java "Router"
     ;;
 esac
 

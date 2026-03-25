@@ -25,6 +25,52 @@
 
   <target name="distclean" depends="clean"/>
 
+  <target name="junit.compileTest" depends="build">
+    <mkdir dir="${build}"/>
+    <mkdir dir="${build}/obj"/>
+    <javac srcdir="./java/test/junit" debug="true" source="${javac.version}" target="${javac.version}" deprecation="on"
+      release="${javac.release}"
+      debuglevel="lines,vars,source"
+      includeAntRuntime="true"
+      encoding="UTF-8"
+      destdir="${build}/obj">
+      <classpath>
+        <pathelement location="${dist}/addressbook.jar"/>
+        <pathelement location="../../core/java/build/i2p.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="junit.test" depends="junit.compileTest">
+    <mkdir dir="../../reports/addressbook/junit/"/>
+    <delete>
+      <fileset dir="../../reports/addressbook/junit">
+        <include name="TEST-*.xml"/>
+      </fileset>
+    </delete>
+    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes">
+      <classpath>
+        <pathelement location="${dist}/addressbook.jar"/>
+        <pathelement location="../../core/java/build/i2p.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${build}/obj"/>
+      </classpath>
+      <batchtest todir="../../reports/addressbook/junit/">
+        <fileset dir="./java/test/junit">
+          <include name="**/*Test.java"/>
+        </fileset>
+      </batchtest>
+      <formatter type="xml"/>
+    </junit>
+  </target>
+
   <condition property="depend.available">
     <typefound name="depend"/>
   </condition>

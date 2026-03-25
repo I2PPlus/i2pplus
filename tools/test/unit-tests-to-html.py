@@ -11,8 +11,10 @@ Defaults:
 
 import sys
 import os
+import re
 import glob
 import html as htmlmod
+import subprocess
 from datetime import datetime, timezone
 from urllib.parse import quote
 from xml.etree import ElementTree as ET
@@ -23,7 +25,8 @@ def escape(s):
 
 
 def load_favicon():
-    path = os.path.join(os.path.dirname(__file__), "..", "..", "installer", "resources", "themes", "console", "images", "plus.svg")
+    path = os.path.join(os.path.dirname(__file__), "..", "..", "installer",
+                        "resources", "themes", "console", "images", "plus.svg")
     try:
         with open(path) as f:
             return f"data:image/svg+xml,{quote(f.read())}"
@@ -36,14 +39,67 @@ def load_css():
     try:
         with open(path) as f:
             css = f.read()
-        # Basic minification
-        import re
         css = re.sub(r'/\*.*?\*/', '', css, flags=re.DOTALL)
         css = re.sub(r'\s+', ' ', css)
         css = re.sub(r'\s*([{}:;,])\s*', r'\1', css)
         return css.strip()
     except FileNotFoundError:
         return ""
+
+
+def load_js():
+    path = os.path.join(os.path.dirname(__file__), "test-report.js")
+    try:
+        with open(path) as f:
+            js = f.read()
+        js = re.sub(r'//.*?\n', '\n', js)
+        js = re.sub(r'\s+', ' ', js)
+        return js.strip()
+    except FileNotFoundError:
+        return ""
+
+
+def git_info():
+    info = {}
+    try:
+        branch = subprocess.check_output(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            stderr=subprocess.DEVNULL).decode().strip()
+        info["branch"] = branch
+    except Exception:
+        pass
+    try:
+        commit = subprocess.check_output(
+            ["git", "rev-parse", "--short", "HEAD"],
+            stderr=subprocess.DEVNULL).decode().strip()
+        info["commit"] = commit
+    except Exception:
+        pass
+    try:
+        dirty = subprocess.check_output(
+            ["git", "status", "--porcelain"],
+            stderr=subprocess.DEVNULL).decode().strip()
+        info["dirty"] = bool(dirty)
+    except Exception:
+        pass
+    return info
+
+
+def system_info():
+    import platform
+    info = {}
+    info["python"] = platform.python_version()
+    info["arch"] = platform.machine()
+    try:
+        java_version = subprocess.check_output(
+            ["java", "-version"], stderr=subprocess.STDOUT).decode()
+        first_line = java_version.split("\n")[0]
+        m = re.search(r'"([^"]+)"', first_line)
+        if m:
+            info["java"] = m.group(1)
+    except Exception:
+        pass
+    return info
 
 
 def parse_junit_xml(path):
@@ -61,18 +117,39 @@ def parse_junit_xml(path):
     name = attrs.get("name", os.path.splitext(os.path.basename(path))[0])
     if name.startswith("TEST-"):
         name = name[5:]
+
+    all_cases = []
     fail_cases = []
     for tc in root.findall(".//testcase"):
         failure = tc.find("failure")
         error = tc.find("error")
-        if failure is not None or error is not None:
+        skipped_elem = tc.find("skipped")
+        case_name = tc.get("name", "?")
+        case_class = tc.get("classname", "")
+        case_time = float(tc.get("time", 0))
+        status = "pass"
+        if failure is not None:
+            status = "fail"
+        elif error is not None:
+            status = "error"
+        elif skipped_elem is not None:
+            status = "skip"
+        all_cases.append({
+            "method": case_name,
+            "classname": case_class,
+            "time": case_time,
+            "status": status,
+        })
+        if status in ("fail", "error"):
             elem = failure if failure is not None else error
             fail_cases.append({
-                "method": tc.get("name", "?"),
-                "type": elem.get("type", "failure"),
-                "message": (elem.get("message", "") or "").strip()[:200],
-                "trace": (elem.text or "").strip()[:800],
+                "method": case_name,
+                "classname": case_class,
+                "type": elem.get("type", status),
+                "message": (elem.get("message", "") or "").strip()[:500],
+                "trace": (elem.text or "").strip()[:2000],
             })
+
     return {
         "name": name,
         "tests": tests,
@@ -81,7 +158,106 @@ def parse_junit_xml(path):
         "skipped": skipped,
         "time": time_s,
         "fail_cases": fail_cases,
+        "all_cases": all_cases,
     }
+
+
+def pass_rate(passed, total):
+    if total == 0:
+        return 100.0
+    return (passed / total) * 100.0
+
+
+def rate_color(rate):
+    if rate >= 100:
+        return "#2ecc71"
+    if rate >= 90:
+        return "#27ae60"
+    if rate >= 75:
+        return "#f39c12"
+    if rate >= 50:
+        return "#e67e22"
+    return "#e74c3c"
+
+
+def progress_bar(passed, failed, errors, skipped, total):
+    if total == 0:
+        return '<div class="progress-bar"><div class="pb-empty"></div></div>'
+    p_pct = (passed / total) * 100
+    f_pct = (failed / total) * 100
+    e_pct = (errors / total) * 100
+    s_pct = (skipped / total) * 100
+    parts = []
+    if p_pct > 0:
+        parts.append(f'<div class="pb-pass" style="width:{p_pct:.1f}%"></div>')
+    if f_pct > 0:
+        parts.append(f'<div class="pb-fail" style="width:{f_pct:.1f}%"></div>')
+    if e_pct > 0:
+        parts.append(f'<div class="pb-error" style="width:{e_pct:.1f}%"></div>')
+    if s_pct > 0:
+        parts.append(f'<div class="pb-skip" style="width:{s_pct:.1f}%"></div>')
+    return '<div class="progress-bar">' + "".join(parts) + '</div>'
+
+
+def module_id(name):
+    return re.sub(r'[^a-zA-Z0-9_-]', '-', name)
+
+
+def get_package(name):
+    """Extract package prefix from a test class name."""
+    if '.' in name:
+        parts = name.split('.')
+        # Class name is last part, package is everything before it
+        return '.'.join(parts[:-1])
+    return ''
+
+
+def group_by_package(results):
+    """Group test results by package prefix. Returns OrderedDict of package -> [results]."""
+    groups = {}
+    for r in sorted(results, key=lambda x: x["name"]):
+        pkg = get_package(r["name"])
+        groups.setdefault(pkg, []).append(r)
+    return groups
+
+
+_row_counter = [0]
+
+
+def emit_test_row(o, r):
+    """Emit a test class row plus its collapsible detail row."""
+    _row_counter[0] += 1
+    row_id = f"det-{_row_counter[0]}"
+
+    cls = ' class="test-row'
+    if r["failures"] or r["errors"]:
+        cls += ' fail-name'
+    elif r["skipped"]:
+        cls += ' skip-name'
+    cls += '"'
+    passed = r["tests"] - r["failures"] - r["errors"] - r["skipped"]
+
+    has_cases = r.get("all_cases")
+    if has_cases:
+        o(f'<tr{cls} onclick="toggleDetail(\'{row_id}\')" style="cursor:pointer">')
+    else:
+        o(f'<tr{cls}>')
+    o(f'<td>{escape(r["name"])}</td>')
+    o(f'<td>{passed}</td><td>{r["failures"]}</td><td>{r["errors"]}</td>')
+    o(f'<td class="time">{r["time"]:.3f}s</td></tr>')
+
+    # Detail row with individual test cases
+    if has_cases:
+        o(f'<tr class="detail-row" id="{row_id}" style="display:none">')
+        o('<td colspan="5"><div class="detail-inner">')
+        o('<table class="detail-table">')
+        o('<thead><tr><th>Test</th><th></th><th>Time</th></tr></thead><tbody>')
+        for c in sorted(has_cases, key=lambda x: x["method"]):
+            status_cls = "pass" if c["status"] == "pass" else "fail"
+            o(f'<tr><td>{escape(c["method"])}</td>')
+            o(f'<td class="{status_cls}"></td>')
+            o(f'<td class="time">{c["time"]:.3f}s</td></tr>')
+        o('</tbody></table></div></td></tr>')
 
 
 def main():
@@ -103,7 +279,18 @@ def main():
     total_skip = sum(r["skipped"] for rs in modules.values() for r in rs)
     total_passed = total_tests - total_fail - total_err - total_skip
     total_time = sum(r["time"] for rs in modules.values() for r in rs)
+    total_rate = pass_rate(total_passed, total_tests)
     timestamp = datetime.now(timezone.utc).strftime("%B %-d %Y, %H:%M UTC")
+    git = git_info()
+    sysinfo = system_info()
+
+    # Collect all test cases for slowest analysis
+    all_cases = []
+    for rs in modules.values():
+        for r in rs:
+            for c in r.get("all_cases", []):
+                all_cases.append(c)
+    slowest = sorted(all_cases, key=lambda c: c["time"], reverse=True)[:10]
 
     os.makedirs(os.path.dirname(output), exist_ok=True)
 
@@ -120,57 +307,196 @@ def main():
     o('<title>I2P+ Test Report</title>')
     o('<style>')
     o(load_css())
-    o('</style></head><body>')
+    o('</style>')
+    o('<script>')
+    o(load_js())
+    o('</script>')
+    o('</head><body>')
 
-    o(f'<h1>I2P+ Test Report</h1>')
+    # Header
+    o('<header>')
+    o('<h1>I2P+ Test Report</h1>')
     o(f'<p class="meta">{escape(timestamp)} &middot; Total test time: {total_time:.1f}s</p>')
 
+    # Info badges
+    info_bits = []
+    if git.get("branch"):
+        info_bits.append(f'<span class="badge badge-git">{escape(git["branch"])}</span>')
+    if git.get("commit"):
+        dirty = " *" if git.get("dirty") else ""
+        info_bits.append(f'<span class="badge badge-git">{escape(git["commit"])}{dirty}</span>')
+    if sysinfo.get("java"):
+        info_bits.append(f'<span class="badge badge-sys">Java {escape(sysinfo["java"])}</span>')
+    if sysinfo.get("python"):
+        info_bits.append(f'<span class="badge badge-sys">Python {escape(sysinfo["python"])}</span>')
+    if sysinfo.get("arch"):
+        info_bits.append(f'<span class="badge badge-sys">{escape(sysinfo["arch"])}</span>')
+    if info_bits:
+        o('<div class="info-badges">' + " ".join(info_bits) + '</div>')
+    o('</header>')
+
+    # Search
+    o('<div class="search-bar"><input type="text" placeholder="Filter tests by name..." class="search-input"></div>')
+
+    # Summary cards
     o('<div class="summary">')
     o(f'<div class="card total"><div class="num">{total_tests}</div><div class="label">Total</div></div>')
     o(f'<div class="card pass"><div class="num">{total_passed}</div><div class="label">Passed</div></div>')
     if total_fail:
         o(f'<div class="card fail"><div class="num">{total_fail}</div><div class="label">Failed</div></div>')
+    if total_err:
+        o(f'<div class="card error"><div class="num">{total_err}</div><div class="label">Errors</div></div>')
+    if total_skip:
+        o(f'<div class="card skip"><div class="num">{total_skip}</div><div class="label">Skipped</div></div>')
+    o(f'<div class="card rate"><div class="num" style="color:{rate_color(total_rate)}">{total_rate:.1f}%</div><div class="label">Pass Rate</div></div>')
     o('</div>')
 
-    for module, results in sorted(modules.items()):
+    # Overall progress bar
+    o(progress_bar(total_passed, total_fail, total_err, total_skip, total_tests))
+
+    # Module TOC
+    o('<nav class="module-toc"><strong>Modules:</strong> ')
+    for module in sorted(modules.keys()):
+        mid = module_id(module)
+        m_tests = sum(r["tests"] for r in modules[module])
+        m_fail = sum(r["failures"] for r in modules[module])
+        m_err = sum(r["errors"] for r in modules[module])
+        m_skip = sum(r["skipped"] for r in modules[module])
+        m_pass = m_tests - m_fail - m_err - m_skip
+        m_rate = pass_rate(m_pass, m_tests)
+        dot = "dot-pass" if m_rate >= 90 else "dot-fail" if m_rate < 75 else "dot-warn"
+        o(f'<a href="#{mid}" class="toc-link"><span class="dot {dot}"></span>{escape(module)} <span class="toc-rate">{m_rate:.0f}%</span></a>')
+    o('</nav>')
+
+    # Module sections
+    for module in sorted(modules.keys()):
+        results = modules[module]
+        mid = module_id(module)
         m_tests = sum(r["tests"] for r in results)
         m_fail = sum(r["failures"] for r in results)
         m_err = sum(r["errors"] for r in results)
         m_skip = sum(r["skipped"] for r in results)
         m_pass = m_tests - m_fail - m_err - m_skip
         m_time = sum(r["time"] for r in results)
+        m_rate = pass_rate(m_pass, m_tests)
 
+        o(f'<section id="{mid}" class="module-section">')
         o(f'<h2>{escape(module)} &middot; {m_tests} tests &middot; ')
         if m_fail or m_err:
-            o(f'<span style="color:var(--fail)">{m_fail} failed</span> &middot; ')
+            o(f'<span class="fail-name">{m_fail} failed</span> &middot; ')
+        if m_err and m_err != m_fail:
+            o(f'<span class="error-name">{m_err} errors</span> &middot; ')
         o(f'<span class="pass">{m_pass} passed</span>')
-        o(f' &middot; All tests completed in: <span class="time">{m_time:.1f}s</span></h2>')
+        o(f' &middot; <span class="time">{m_time:.1f}s</span>')
+        o(f' &middot; <span style="color:{rate_color(m_rate)}" class="pass-rate-badge">{m_rate:.1f}%</span>')
+        o('</h2>')
 
-        o('<table><tr><th>Test</th><th>Passed</th><th>Failed</th><th>Errors</th><th>Time</th></tr>')
-        for r in sorted(results, key=lambda x: x["name"]):
-            cls = ' class="fail-name"' if r["failures"] or r["errors"] else ""
-            passed = r["tests"] - r["failures"] - r["errors"] - r["skipped"]
-            o(f'<tr><td{cls}>{escape(r["name"])}</td>')
-            o(f'<td>{passed}</td><td>{r["failures"]}</td><td>{r["errors"]}</td>')
-            o(f'<td class="time">{r["time"]:.3f}s</td></tr>')
-        o('</table>')
+        # Module progress bar
+        o(progress_bar(m_pass, m_fail, m_err, m_skip, m_tests))
 
-        fails = [(r, fc) for r in results for fc in r["fail_cases"]]
+        # Failure traces at top for easy access
+        fails = [(r, fc) for r in results for fc in r.get("fail_cases", [])]
         if fails:
+            o(f'<details><summary><div class="tabletitle">{len(fails)} failure/error trace(s)</div></summary>')
+            o('<div class="trace-container">')
             for r, fc in fails:
                 o(f'<pre class="trace"><b>{escape(r["name"])}.{escape(fc["method"])}</b>')
+                if fc.get("classname"):
+                    o(f' <span class="trace-class">({escape(fc["classname"])})</span>')
+                o(f' <span class="trace-type">[{escape(fc["type"])}]</span>')
                 if fc["message"]:
                     o(f'\n{escape(fc["message"])}')
                 if fc["trace"]:
                     o(f'\n{escape(fc["trace"])}')
                 o('</pre>')
+            o('</div></details>')
+
+        # Group by package for sub-sections
+        pkg_groups = group_by_package(results)
+
+        # Column header sort buttons
+        col_headers = (
+            f'<th onclick="sortTable(\'{mid}\',0)" class="sortable">Test</th>'
+            f'<th onclick="sortTable(\'{mid}\',1)" class="sortable">Passed</th>'
+            f'<th onclick="sortTable(\'{mid}\',2)" class="sortable">Failed</th>'
+            f'<th onclick="sortTable(\'{mid}\',3)" class="sortable">Errors</th>'
+            f'<th onclick="sortTable(\'{mid}\',4)" class="sortable">Time</th>'
+        )
+
+        if len(pkg_groups) <= 1:
+            # Single group — wrap in details
+            pkg = list(pkg_groups.keys())[0]
+            pkg_results = pkg_groups[pkg]
+            pkg_label = pkg if pkg else module
+            pkg_tests = sum(r["tests"] for r in pkg_results)
+            pkg_fail = sum(r["failures"] for r in pkg_results)
+            pkg_err = sum(r["errors"] for r in pkg_results)
+            pkg_skip = sum(r["skipped"] for r in pkg_results)
+            pkg_pass = pkg_tests - pkg_fail - pkg_err - pkg_skip
+            pkg_rate = pass_rate(pkg_pass, pkg_tests)
+
+            label = f"{escape(pkg_label)} &middot; {pkg_tests} tests"
+            if pkg_fail or pkg_err:
+                label += f' &middot; <span class="fail-name">{pkg_fail} failed</span>'
+            label += f' &middot; <span class="pass">{pkg_pass} passed</span>'
+            label += f' &middot; <span style="color:{rate_color(pkg_rate)}">{pkg_rate:.0f}%</span>'
+
+            o(f'<details><summary><div class="tabletitle">{label}</div></summary>')
+            o('<table>')
+            o(f'<thead><tr>{col_headers}</tr></thead>')
+            o('<tbody>')
+            for r in sorted(pkg_results, key=lambda x: x["name"]):
+                emit_test_row(o, r)
+            o('</tbody></table>')
+            o('</details>')
+        else:
+            # Multiple groups — sub-sections
+            for pkg, pkg_results in pkg_groups.items():
+                pkg_label = pkg if pkg else "(default)"
+                pkg_tests = sum(r["tests"] for r in pkg_results)
+                pkg_fail = sum(r["failures"] for r in pkg_results)
+                pkg_err = sum(r["errors"] for r in pkg_results)
+                pkg_skip = sum(r["skipped"] for r in pkg_results)
+                pkg_pass = pkg_tests - pkg_fail - pkg_err - pkg_skip
+                pkg_rate = pass_rate(pkg_pass, pkg_tests)
+
+                label = f"{escape(pkg_label)} &middot; {pkg_tests} tests"
+                if pkg_fail or pkg_err:
+                    label += f' &middot; <span class="fail-name">{pkg_fail} failed</span>'
+                label += f' &middot; <span class="pass">{pkg_pass} passed</span>'
+                label += f' &middot; <span style="color:{rate_color(pkg_rate)}">{pkg_rate:.0f}%</span>'
+
+                o(f'<details><summary><div class="tabletitle">{label}</div></summary>')
+                o(progress_bar(pkg_pass, pkg_fail, pkg_err, pkg_skip, pkg_tests))
+                o('<table>')
+                o(f'<thead><tr>{col_headers}</tr></thead>')
+                o('<tbody>')
+                for r in sorted(pkg_results, key=lambda x: x["name"]):
+                    emit_test_row(o, r)
+                o('</tbody></table>')
+                o('</details>')
+
+        o('</section>')
+
+    # Slowest tests panel
+    if slowest:
+        o('<section id="slowest-tests" class="module-section">')
+        o('<h2>Slowest Tests (Top 10)</h2>')
+        o('<table><thead><tr><th>Test</th><th>Status</th><th>Time</th></tr></thead><tbody>')
+        for c in slowest:
+            status_cls = "pass" if c["status"] == "pass" else "fail"
+            o(f'<tr class="test-row"><td>{escape(c["method"])}</td>')
+            o(f'<td><span class="{status_cls}"></span></td>')
+            o(f'<td class="time">{c["time"]:.3f}s</td></tr>')
+        o('</tbody></table>')
+        o('</section>')
 
     o('</body></html>')
 
     with open(output, "w") as f:
         f.write("".join(out))
 
-    print(f"Test report: {output} ({total_tests} tests, {total_fail} failed, {total_err} errors)")
+    print(f"Test report: {output} ({total_tests} tests, {total_fail} failed, {total_err} errors, {total_skip} skipped, {total_rate:.1f}% pass rate)")
 
 
 if __name__ == "__main__":

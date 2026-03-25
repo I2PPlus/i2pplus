@@ -2963,10 +2963,14 @@
   <target name="updateTest" depends="prepTest, zipit"/>
 
   <target name="junit.test" depends="buildProperties, jbigi">
-    <ant dir="core/java/" target="junit.test"/>
-    <ant dir="router/java/" target="junit.test"/>
-    <ant dir="apps/ministreaming/java/" target="junit.test"/>
-    <ant dir="apps/streaming/java/" target="junit.test"/>
+    <parallel>
+      <ant dir="core/java/" target="junit.test"/>
+      <ant dir="router/java/" target="junit.test"/>
+      <ant dir="apps/ministreaming/java/" target="junit.test"/>
+      <ant dir="apps/streaming/java/" target="junit.test"/>
+      <ant dir="apps/i2psnark/java/" target="junit.test"/>
+      <ant dir="apps/addressbook/" target="junit.test"/>
+    </parallel>
   </target>
 
   <target name="scalatest.test" depends="buildProperties, jbigi">
@@ -3004,10 +3008,12 @@
   </target>
 
   <target name="junit.report" depends="buildProperties">
-    <ant dir="core/java/" target="junit.report"/>
-    <ant dir="router/java/" target="junit.report"/>
-    <ant dir="apps/ministreaming/java/" target="junit.report"/>
-    <ant dir="apps/streaming/java/" target="junit.report"/>
+    <parallel>
+      <ant dir="core/java/" target="junit.report"/>
+      <ant dir="router/java/" target="junit.report"/>
+      <ant dir="apps/ministreaming/java/" target="junit.report"/>
+      <ant dir="apps/streaming/java/" target="junit.report"/>
+    </parallel>
   </target>
 
   <target name="clover.report" depends="buildProperties" if="with.clover">
@@ -3650,7 +3656,7 @@
     <echo message="  [1/2] CodeQL database ready. Starting parallel analysis..."/>
 
     <!-- All 4 analysis tools run in parallel -->
-    <parallel threadCount="4">
+    <parallel>
       <sequential>
         <echo message="    PMD running..."/>
         <exec executable="${pmd.java}" failonerror="false" output="/dev/null" error="/dev/null">

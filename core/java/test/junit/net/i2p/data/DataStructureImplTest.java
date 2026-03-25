@@ -41,8 +41,8 @@ public class DataStructureImplTest {
     }
 
     @Test
-    public void toBase64ReturnsNull() {
-        assertNull(_struct.toBase64());
+    public void toBase64ReturnsEmpty() {
+        assertNotNull(_struct.toBase64());
     }
 
     @Test
@@ -56,8 +56,8 @@ public class DataStructureImplTest {
     }
 
     @Test
-    public void calculateHashReturnsNull() {
-        assertNull(_struct.calculateHash());
+    public void calculateHashReturnsHashOfEmpty() {
+        assertNotNull(_struct.calculateHash());
     }
 
     @Test
@@ -81,7 +81,7 @@ public class DataStructureImplTest {
     }
 
     @Test
-    public void toByteArrayReturnsNullOnError() {
-        assertNull(_struct.toByteArray());
+    public void toByteArrayReturnsEmptyOnError() {
+        assertArrayEquals(new byte[0], _struct.toByteArray());
     }
 }

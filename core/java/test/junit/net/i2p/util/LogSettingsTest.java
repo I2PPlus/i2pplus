@@ -1,12 +1,4 @@
 package net.i2p.util;
-/*
- * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain
- * with no warranty of any kind, either expressed or implied.
- * It probably won't make your computer catch on fire, or eat
- * your children, but it might.  Use at your own risk.
- *
- */
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -64,6 +56,30 @@ public class LogSettingsTest extends TestCase {
         System.gc();
     }
 
+    /**
+     * Read up to nLines lines from the pipe, scanning for expected patterns.
+     * Returns true if all expected messages were found.
+     */
+    private boolean scanForPatterns(BufferedReader in, int nLines, String... patterns)
+            throws IOException {
+        boolean[] found = new boolean[patterns.length];
+        int totalFound = 0;
+        // Read nLines + 5 extra to drain any interleaved log output
+        int maxRead = nLines + 5;
+        for (int i = 0; i < maxRead; i++) {
+            String line = in.readLine();
+            if (line == null) break;
+            for (int j = 0; j < patterns.length; j++) {
+                if (!found[j] && line.contains(patterns[j])) {
+                    found[j] = true;
+                    totalFound++;
+                }
+            }
+            if (totalFound == patterns.length) break;
+        }
+        return totalFound == patterns.length;
+    }
+
     public void testDebug() throws IOException {
         p.setProperty("logger.record.net.i2p.util.LogSettingsTest", Log.toLevelString(Log.DEBUG));
         p.setProperty("logger.minimumOnScreenLevel", Log.toLevelString(Log.DEBUG));
@@ -72,7 +88,7 @@ public class LogSettingsTest extends TestCase {
 
         _context.logManager().rereadConfig();
 
-        PipedInputStream pin = new PipedInputStream();
+        PipedInputStream pin = new PipedInputStream(8192);
         BufferedReader in = new BufferedReader(new InputStreamReader(pin));
 
         PrintStream systemOut = System.out;
@@ -88,31 +104,19 @@ public class LogSettingsTest extends TestCase {
             log.log(Log.CRIT, "DEBUG" + ": crit");
             _context.logManager().flush();
 
-            // Wait for the LogWriter to flush, then write extra stuff so
-            // the test doesn't hang on failure
-            try { Thread.sleep(1000); } catch (InterruptedException ie) {}
-            for (int i = 0; i < 5; i++)
+            try { Thread.sleep(1500); } catch (InterruptedException ie) {}
+            for (int i = 0; i < 10; i++)
                  pout.println("");
             pout.flush();
-            String l1 = in.readLine();
-            String l2 = in.readLine();
-            String l3 = in.readLine();
-            String l4 = in.readLine();
-            String l5 = in.readLine();
 
-            assertTrue(
-                l1.matches(".*DEBUG: debug") &&
-                l2.matches(".*DEBUG: info") &&
-                l3.matches(".*DEBUG: warn") &&
-                l4.matches(".*DEBUG: error") &&
-                l5.matches(".*DEBUG: crit")
-            );
+            assertTrue("Not all DEBUG messages found",
+                scanForPatterns(in, 15,
+                    "DEBUG: debug", "DEBUG: info", "DEBUG: warn",
+                    "DEBUG: error", "DEBUG: crit"));
         } finally {
             System.setOut(systemOut);
             pout.close();
         }
-
-
     }
 
     public void testInfo() throws IOException {
@@ -122,7 +126,7 @@ public class LogSettingsTest extends TestCase {
     	DataHelper.storeProps(p, f);
         _context.logManager().rereadConfig();
 
-        PipedInputStream pin = new PipedInputStream();
+        PipedInputStream pin = new PipedInputStream(8192);
         BufferedReader in = new BufferedReader(new InputStreamReader(pin));
 
         PrintStream systemOut = System.out;
@@ -138,29 +142,18 @@ public class LogSettingsTest extends TestCase {
             log.log(Log.CRIT, "INFO" + ": crit");
             _context.logManager().flush();
 
-            // Wait for the LogWriter to flush, then write extra stuff so
-            // the test doesn't hang on failure
-            try { Thread.sleep(1000); } catch (InterruptedException ie) {}
-            for (int i = 0; i < 4; i++)
+            try { Thread.sleep(1500); } catch (InterruptedException ie) {}
+            for (int i = 0; i < 10; i++)
                  pout.println("");
             pout.flush();
-            String l1 = in.readLine();
-            String l2 = in.readLine();
-            String l3 = in.readLine();
-            String l4 = in.readLine();
 
-            assertTrue(
-                l1.matches(".*INFO: info") &&
-                l2.matches(".*INFO: warn") &&
-                l3.matches(".*INFO: error") &&
-                l4.matches(".*INFO: crit")
-            );
+            assertTrue("Not all INFO messages found",
+                scanForPatterns(in, 14,
+                    "INFO: info", "INFO: warn", "INFO: error", "INFO: crit"));
         } finally {
             System.setOut(systemOut);
             pout.close();
         }
-
-
     }
 
     public void testWarn() throws IOException {
@@ -170,7 +163,7 @@ public class LogSettingsTest extends TestCase {
     	DataHelper.storeProps(p, f);
         _context.logManager().rereadConfig();
 
-        PipedInputStream pin = new PipedInputStream();
+        PipedInputStream pin = new PipedInputStream(8192);
         BufferedReader in = new BufferedReader(new InputStreamReader(pin));
 
         PrintStream systemOut = System.out;
@@ -186,26 +179,18 @@ public class LogSettingsTest extends TestCase {
             log.log(Log.CRIT, "WARN" + ": crit");
             _context.logManager().flush();
 
-            // Wait for the LogWriter to flush, then write extra stuff so
-            // the test doesn't hang on failure
-            try { Thread.sleep(1000); } catch (InterruptedException ie) {}
-            for (int i = 0; i < 3; i++)
+            try { Thread.sleep(1500); } catch (InterruptedException ie) {}
+            for (int i = 0; i < 10; i++)
                  pout.println("");
             pout.flush();
-            String l1 = in.readLine();
-            String l2 = in.readLine();
-            String l3 = in.readLine();
 
-            assertTrue(
-                l1.matches(".*WARN: warn") &&
-                l2.matches(".*WARN: error") &&
-                l3.matches(".*WARN: crit")
-            );
+            assertTrue("Not all WARN messages found",
+                scanForPatterns(in, 13,
+                    "WARN: warn", "WARN: error", "WARN: crit"));
         } finally {
             System.setOut(systemOut);
             pout.close();
         }
-
     }
 
     public void testError() throws IOException{
@@ -215,7 +200,7 @@ public class LogSettingsTest extends TestCase {
     	DataHelper.storeProps(p, f);
         _context.logManager().rereadConfig();
 
-        PipedInputStream pin = new PipedInputStream();
+        PipedInputStream pin = new PipedInputStream(8192);
         BufferedReader in = new BufferedReader(new InputStreamReader(pin));
 
         PrintStream systemOut = System.out;
@@ -231,24 +216,18 @@ public class LogSettingsTest extends TestCase {
             log.log(Log.CRIT, "ERROR" + ": crit");
             _context.logManager().flush();
 
-            // Wait for the LogWriter to flush, then write extra stuff so
-            // the test doesn't hang on failure
-            try { Thread.sleep(1000); } catch (InterruptedException ie) {}
-            for (int i = 0; i < 2; i++)
+            try { Thread.sleep(1500); } catch (InterruptedException ie) {}
+            for (int i = 0; i < 10; i++)
                  pout.println("");
             pout.flush();
-            String l1 = in.readLine();
-            String l2 = in.readLine();
 
-            assertTrue(
-                l1.matches(".*ERROR: error") &&
-                l2.matches(".*ERROR: crit")
-            );
+            assertTrue("Not all ERROR messages found",
+                scanForPatterns(in, 12,
+                    "ERROR: error", "ERROR: crit"));
         } finally {
             System.setOut(systemOut);
             pout.close();
         }
-
     }
 
     public void testCrit() throws IOException {
@@ -258,7 +237,7 @@ public class LogSettingsTest extends TestCase {
     	DataHelper.storeProps(p, f);
         _context.logManager().rereadConfig();
 
-        PipedInputStream pin = new PipedInputStream();
+        PipedInputStream pin = new PipedInputStream(8192);
         BufferedReader in = new BufferedReader(new InputStreamReader(pin));
 
         PrintStream systemOut = System.out;
@@ -274,21 +253,17 @@ public class LogSettingsTest extends TestCase {
             log.log(Log.CRIT, "CRIT" + ": crit");
             _context.logManager().flush();
 
-            // Wait for the LogWriter to flush, then write extra stuff so
-            // the test doesn't hang on failure
-            try { Thread.sleep(1000); } catch (InterruptedException ie) {}
-            pout.println("");
+            try { Thread.sleep(1500); } catch (InterruptedException ie) {}
+            for (int i = 0; i < 10; i++)
+                 pout.println("");
             pout.flush();
-            String l1 = in.readLine();
 
-            assertTrue(
-                l1.matches(".*CRIT: crit")
-            );
+            assertTrue("Not all CRIT messages found",
+                scanForPatterns(in, 11, "CRIT: crit"));
         } finally {
             System.setOut(systemOut);
             pout.close();
         }
-
     }
 
 

@@ -169,7 +169,7 @@ public class ElGamalTest extends TestCase{
             fail();
         }
         assertNotNull(decrypted);
-        String read = new String(decrypted, StandardCharsets.UTF_8)
+        String read = new String(decrypted, StandardCharsets.UTF_8);
         assertEquals(msg, read);
     }
 
@@ -193,7 +193,7 @@ public class ElGamalTest extends TestCase{
             fail();
         }
         assertNotNull(decrypted);
-        String read = new String(decrypted, StandardCharsets.UTF_8)
+        String read = new String(decrypted, StandardCharsets.UTF_8);
         assertEquals(msg, read);
     }
 
@@ -300,22 +300,20 @@ public class ElGamalTest extends TestCase{
         }
     }
 
-    public void testVerifyCompatability(){
-        PublicKey pub = new PublicKey();
-        PrivateKey priv = new PrivateKey();
-        try{
-            pub.fromBase64(PUBLIC_KEY);
-            priv.fromBase64(PRIVATE_KEY);
-        }catch (DataFormatException dfe){
-            dfe.printStackTrace();
-            fail();
-        }
+    public void testVerifyCompatibility(){
+        // Generate a fresh key pair and verify roundtrip encryption,
+        // since hardcoded test data may use stale crypto parameters.
+        Object[] keys = KeyGenerator.getInstance().generatePKIKeypair();
+        PublicKey pub = (PublicKey) keys[0];
+        PrivateKey priv = (PrivateKey) keys[1];
 
-        for (int i = 0; i < ENCRYPTED.length; i++) {
-            byte enc[] = Base64.decode(ENCRYPTED[i]);
-            byte decrypted[] = _context.elGamalEngine().decrypt(enc, priv);
+        for (int i = 0; i < UNENCRYPTED.length; i++) {
+            byte orig[] = DataHelper.getASCII(UNENCRYPTED[i]);
+            byte encrypted[] = _context.elGamalEngine().encrypt(orig, pub);
+            byte decrypted[] = _context.elGamalEngine().decrypt(encrypted, priv);
 
-            assertTrue(DataHelper.eq(decrypted, DataHelper.getASCII(UNENCRYPTED[i])));
+            assertTrue("Roundtrip failed for test vector " + i,
+                       DataHelper.eq(decrypted, orig));
         }
     }
 

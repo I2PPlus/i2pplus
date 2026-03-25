@@ -27,8 +27,11 @@ public class X25519DH {
     public static SessionKey dh(PrivateKey priv, PublicKey pub) {
         if (priv.getType() != TYPE || pub.getType() != TYPE)
             throw new IllegalArgumentException();
+        byte[] pubData = pub.getData();
+        if ((pubData[31] & 0x80) != 0)
+            throw new IllegalArgumentException("Public key high bit must be cleared");
         byte[] rv = new byte[32];
-        Curve25519.eval(rv, 0, priv.getData(), pub.getData());
+        Curve25519.eval(rv, 0, priv.getData(), pubData);
         return new SessionKey(rv);
     }
 

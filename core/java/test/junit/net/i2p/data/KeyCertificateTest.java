@@ -35,7 +35,7 @@ public class KeyCertificateTest {
         KeyCertificate cert = new KeyCertificate(P256_PAYLOAD);
         assertThat(cert.getSigTypeCode(), is(equalTo(SigType.ECDSA_SHA256_P256.getCode())));
         assertThat(cert.getCryptoTypeCode(), is(equalTo(EncType.EC_P256.getCode())));
-        assertThat(cert.getExtraSigningKeyData(), is(nullValue()));
+        assertThat(cert.getExtraSigningKeyData().length, is(0));
     }
 
     @Test

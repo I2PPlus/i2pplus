@@ -171,6 +171,21 @@ public class ElGamalPublicKeyImpl
         return y;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!(obj instanceof ElGamalPublicKeyImpl))
+            return false;
+        ElGamalPublicKeyImpl other = (ElGamalPublicKeyImpl) obj;
+        return y.equals(other.y) && elSpec.getP().equals(other.elSpec.getP()) && elSpec.getG().equals(other.elSpec.getG());
+    }
+
+    @Override
+    public int hashCode() {
+        return y.hashCode() ^ elSpec.getP().hashCode() ^ elSpec.getG().hashCode();
+    }
+
     private void readObject(
         ObjectInputStream   in)
         throws IOException, ClassNotFoundException

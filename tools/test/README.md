@@ -19,6 +19,7 @@ gitignored and not removed by `ant clean` or `ant distclean`.
 | File                    | Purpose                                          |
 | ----------------------- | ------------------------------------------------ |
 | `test-report.css`       | Embedded stylesheet for `dist/test-report.html`  |
+| `test-report.js`        | Embedded JavaScript for sorting/toggling/search  |
 | `unit-tests-to-html.py` | Generate HTML report from JUnit XML results      |
 
 ## Usage
@@ -31,7 +32,7 @@ ant test                             # runs script automatically
 ant testJbigi                        # benchmark native vs Java BigInteger
 ```
 
-Running `ant test` auto-generates an HTML report at `dist/test-report.html` with per-module pass/fail counts, timing, and failure traces.
+Running `ant test` auto-generates an HTML report at `dist/test-report.html` with per-module pass/fail counts, timing, failure traces, pass rate progress bars, sortable columns, test search filtering, and slowest-tests analysis.
 
 ## What the tests cover
 
