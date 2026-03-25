@@ -925,8 +925,20 @@ public class TunnelDispatcher implements Service {
                                               RouterThrottleImpl.DEFAULT_MAX_TUNNELS);
         int max = _context.bandwidthLimiter().getMaxShareBandwidth();
 
-        // Maximum bandwidth allocation - completely remove per-tunnel limits
-        return Integer.MAX_VALUE;
+        // Calculate per-tunnel bandwidth limit based on available bandwidth
+        // and expected tunnel count to avoid bandwidth limit rejections
+        if (maxTunnels <= 0) maxTunnels = RouterThrottleImpl.DEFAULT_MAX_TUNNELS;
+        if (max <= 0) max = 16 * 1024; // 16KB/s default
+
+        // Reserve bandwidth overhead and divide among expected tunnels
+        int overhead = Math.max(max / 10, 4096); // 10% overhead, min 4KB/s
+        int available = Math.max(max - overhead, 4096);
+
+        // Divide available bandwidth among expected tunnels with some headroom
+        int perTunnel = available / Math.max(maxTunnels / 100, 1);
+        int minPerTunnel = 4096; // Minimum 4KB/s per tunnel
+
+        return Math.max(perTunnel, minPerTunnel);
     }
 
     /**
