@@ -24,6 +24,7 @@ import { refreshElements } from "./refreshElements.js";
   let sorterFF = null;
   let sorterP = null;
   let sorterBans = null;
+  const disabledReasons = new Set();
 
   /**
    * Initializes sort listeners and refresh schedules for profile pages.
@@ -82,7 +83,7 @@ import { refreshElements } from "./refreshElements.js";
 
     // Refresh session bans every 15 seconds
     if (sessionBans) {
-      const targetSelectors = "#sessionBanlist, #banSummary h2, #banSummary ul";
+      const targetSelectors = "#sessionBanlist, #banSummary h2";
       refreshElements(targetSelectors, uri, 15000);
     }
 
@@ -91,9 +92,39 @@ import { refreshElements } from "./refreshElements.js";
       if (sorterP) {sorterP.refresh();}
       if (sorterFF) {sorterFF.refresh();}
       if (sorterBans) {sorterBans.refresh();}
-      if (banBody) {updateBanSummary(banBody);}
     });
 
+  }
+
+  /**
+   * Filters the session ban table based on active reasons in the summary list.
+   * @function filterBanTable
+   * @returns {void}
+   */
+  function filterBanTable() {
+    if (!banBody) return;
+    const activeReasons = new Set();
+    document.querySelectorAll("#banSummary ul.ban-reasons li.active").forEach(li => {
+      let reason = li.textContent.replace(/^\d+\s*/, "").trim();
+      activeReasons.add(reason);
+    });
+    banBody.querySelectorAll("tr").forEach(row => {
+      const reasonCell = row.querySelector("td.reason");
+      if (!reasonCell) { return; }
+      let reason = reasonCell.textContent;
+      reason = reason.split("(")[0].trim();
+      reason = reason.replace("<b> -&gt; </b>", "")
+                     .replace("<b> -> </b>", "")
+                     .replace(/>\s*/, "")
+                     .replace(/->\s*/, "")
+                     .replace(/➜\s*/, "")
+                     .replace(/^-\s*/, "")
+                     .replace(/^ \-> /, "")
+                     .replace("Excessive NTCP connection", "Excessive connection")
+                     .replace(/Blocklist:\s*[\d.:a-f]+/i, "Blocklist");
+      reason = reason.trim();
+      row.style.display = activeReasons.has(reason) ? "" : "none";
+    });
   }
 
   /**
@@ -132,8 +163,11 @@ import { refreshElements } from "./refreshElements.js";
     });
 
     let summaryDiv = document.getElementById("banSummary");
-    let html = `<h2>Total Session Bans: ${total}</h2>\n<ul>`;
-    sorted.forEach(([reason, count]) => { html += `<li><span class=badge>${count}</span> ${reason}</li>\n`; });
+    let html = `<h2>Total Session Bans: ${total}</h2>\n<ul class="ban-reasons">`;
+    sorted.forEach(([reason, count]) => {
+      const cls = disabledReasons.has(reason) ? "" : " active";
+      html += `<li class="${cls}"><span class=badge>${count}</span> ${reason}</li>\n`;
+    });
     html += "</ul>";
 
     if (!summaryDiv) {
@@ -144,12 +178,30 @@ import { refreshElements } from "./refreshElements.js";
       }
     }
     summaryDiv.innerHTML = html;
+    filterBanTable();
     const footer = document.getElementById("sessionBanlistFooter");
     if (footer) {footer.remove();}
   }
 
+  document.addEventListener("click", (e) => {
+    const li = e.target.closest("#banSummary ul.ban-reasons li");
+    if (!li) return;
+    li.classList.toggle("active");
+    const reason = li.textContent.replace(/^\d+\s*/, "").trim();
+    if (li.classList.contains("active")) {
+      disabledReasons.delete(reason);
+    } else {
+      disabledReasons.add(reason);
+    }
+    filterBanTable();
+  });
+
   document.addEventListener("DOMContentLoaded", () => {
     initRefresh();
-    if (banBody) {updateBanSummary(banBody);}
+    if (banBody) {
+      updateBanSummary(banBody);
+      new MutationObserver(() => updateBanSummary(banBody))
+        .observe(banBody, {childList: true});
+    }
  });
 })();
