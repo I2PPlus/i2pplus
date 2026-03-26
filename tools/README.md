@@ -52,43 +52,14 @@ Output: `dist/jsdoc/`
 
 ### Google Java Format (Custom Build)
 
-`google-java-format.jar` is a custom build with I2P+ defaults.
-
-**I2P defaults (no flags needed):**
-
-| Setting | Default | Override |
-|---|---|---|
-| Indentation | 4-space (AOSP) | `--aosp` is the default |
-| Line length | 900 (no wrapping) | `--column-limit N` |
-| String reflow | Disabled | `--skip-reflowing-long-strings` is the default |
-| Javadoc formatting | Disabled | `--skip-javadoc-formatting` is the default |
-| Import sorting | Disabled | `--skip-sorting-imports` is the default |
-
-All I2P defaults are baked in — running `java -jar google-java-format.jar file.java` applies
-AOSP style with no line wrapping, no javadoc changes, no import reordering, and no string reflowing.
-
-To enable line wrapping at a specific column limit, pass `--column-limit N` explicitly:
+`java-formatter.py` wraps `google-java-format.jar` with I2P defaults and parallel processing. Dry-run by default.
 
 ```bash
-# Default usage (I2P style, no wrapping)
-java -jar tools/google-java-format.jar file.java
-
-# Enable line wrapping at 100 columns (upstream default)
-java -jar tools/google-java-format.jar --column-limit 100 file.java
-
-# Replace files in-place
-java -jar tools/google-java-format.jar -r file.java
-
-# Via wrapper script
-python3 tools/java-formatter.py --dry-run file.java
+python3 tools/java-format/java-formatter.py ./           # Preview
+python3 tools/java-format/java-formatter.py -r core/     # Apply
 ```
 
-**Build notes:**
-- Source: `/tmp/google-java-format/` (`core` module only)
-- Build: `cd core && mvn package -DskipTests`
-- Fat JAR: `core/target/google-java-format-HEAD-SNAPSHOT-all-deps.jar`
-- The `--column-limit` CLI flag was added to support per-invocation override
-- `JavaFormatterOptions` and `CommandLineOptions` extended with `columnLimit` field
+See `tools/java-format/README.md` for full documentation.
 
 ### PMD
 

@@ -155,7 +155,9 @@ tools/
 tools/test/*.jar
 !tools/jsdoc/
 !tools/ant-contrib.jar
-!tools/google-java-format.jar
+!tools/java-format/google-java-format.jar
+!tools/java-format/exclude.txt
+!tools/java-format/java-formatter.py
 !tools/fix-java-issues.py
 !tools/template/icons/*
 !tools/template/js/*
@@ -212,3 +214,5 @@ tools/template/.source-index.json
 tools/codeql/packs/*/
 TODO.md
 google-java-format/
+!tools/java-format/google-java-format/build.sh
+tools/java-format-errors.txt
