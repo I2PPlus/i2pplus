@@ -32,6 +32,8 @@ import difflib
 import tempfile
 import argparse
 import re
+import concurrent.futures
+from functools import partial
 
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -276,6 +278,14 @@ def format_file(filepath, args):
     return original, formatted
 
 
+def process_one(filepath, args):
+    """Format a single file. Returns (filepath, original, formatted) or None."""
+    original, formatted = format_file(filepath, args)
+    if original is None or original == formatted:
+        return None
+    return (filepath, original, formatted)
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Java formatter with I2P style conventions (AOSP indent, no wrapping)",
@@ -300,6 +310,8 @@ def main():
                         help="Max column width (enables wrapping; default: no wrapping)")
     parser.add_argument("--lines", nargs="+", metavar="RANGE",
                         help="Line ranges to format (e.g. 1:50 100:200)")
+    parser.add_argument("--threads", type=int, default=0,
+                        help="Number of threads (default: all cores)")
 
     args = parser.parse_args()
 
@@ -311,17 +323,23 @@ def main():
         print("No .java files found", file=sys.stderr)
         sys.exit(1)
 
-    print(f"Formatting {len(files)} file(s)", file=sys.stderr)
+    threads = args.threads or os.cpu_count() or 4
+    print(f"Formatting {len(files)} file(s) with {threads} threads", file=sys.stderr)
+
+    # Process files in parallel
+    results = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as pool:
+        futures = {pool.submit(process_one, f, args): f for f in files}
+        for future in concurrent.futures.as_completed(futures):
+            result = future.result()
+            if result is not None:
+                results.append(result)
+
+    # Sort results by filepath for deterministic output
+    results.sort(key=lambda r: r[0])
 
     changed = 0
-    for filepath in files:
-        original, formatted = format_file(filepath, args)
-        if original is None:
-            continue
-
-        if original == formatted:
-            continue
-
+    for filepath, original, formatted in results:
         changed += 1
 
         if args.dry_run:
