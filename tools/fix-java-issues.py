@@ -91,6 +91,9 @@ _UPPER_L = re.compile(r'(\d)[lL]\b')
 _WS_BEFORE_SEMI = re.compile(r' (?=;)')
 _WS_BEFORE_COMMA = re.compile(r' (?=,)')
 
+# Don't remove space before ; if it's part of an HTML entity like &amp; &lt; &#1234;
+_HTML_ENTITY_SEMI = re.compile(r'&(?:amp|lt|gt|apos|quot|nbsp|#\d+|#x[0-9a-fA-F]+);$')
+
 EXCLUDE_PATTERNS = [
     r".*_jsp\.java$", r".*[/\\]WEB-INF[/\\].*", r".*[/\\]jetty[/\\].*",
     r".*[/\\]build[/\\].*", r".*[/\\]pack200[/\\].*", r".*[/\\]jrobin[/\\].*",
@@ -99,6 +102,36 @@ EXCLUDE_PATTERNS = [
     r".*[/\\]com[/\\]maxmind[/\\].*", r".*[/\\]org[/\\]bouncycastle[/\\].*",
 ]
 EXCLUDE_RE = [re.compile(p) for p in EXCLUDE_PATTERNS]
+
+# Exclusions loaded from config/exclusions.txt
+_OVERRIDE_EXCLUSIONS = None
+
+def _load_override_exclusions():
+    """Load file-level exclusions for missing-override-annotation from config/exclusions.txt."""
+    global _OVERRIDE_EXCLUSIONS
+    if _OVERRIDE_EXCLUSIONS is not None:
+        return _OVERRIDE_EXCLUSIONS
+    _OVERRIDE_EXCLUSIONS = set()
+    config_path = os.path.join(os.path.dirname(SCRIPT_DIR), "config", "exclusions.txt")
+    if not os.path.exists(config_path):
+        # Try relative to script dir
+        config_path = os.path.join(SCRIPT_DIR, "..", "config", "exclusions.txt")
+    if not os.path.exists(config_path):
+        return _OVERRIDE_EXCLUSIONS
+    with open(config_path) as f:
+        for line in f:
+            line = line.strip()
+            if line.startswith("#") or not line:
+                continue
+            parts = line.split(":")
+            if len(parts) >= 3 and parts[1] == "java/missing-override-annotation":
+                filepath = parts[2]
+                if filepath.endswith("/*"):
+                    # Wildcard directory exclusion - store prefix
+                    _OVERRIDE_EXCLUSIONS.add(filepath[:-1])
+                else:
+                    _OVERRIDE_EXCLUSIONS.add(filepath)
+    return _OVERRIDE_EXCLUSIONS
 
 
 def is_excluded(filepath):
@@ -144,10 +177,17 @@ def fix_checkstyle(filepath, dry_run=False):
     content = _UPPER_L.sub(r'\1L', content)
 
     # No whitespace before ; and ,
+    # But don't break HTML entities: &amp; &lt; &gt; &#NNN; in string literals
+    _HTML_ENTITY = re.compile(r'&(?:amp|lt|gt|apos|quot|nbsp|#\d+|#x[0-9a-fA-F]+);')
     new_lines = []
     for line in content.split("\n"):
         stripped = line.lstrip()
         if stripped.startswith("//") or stripped.startswith("*"):
+            new_lines.append(line)
+            continue
+        # Skip lines containing HTML entities — don't remove space before ;
+        # as it may be part of an entity like &amp; in a string literal
+        if _HTML_ENTITY.search(line):
             new_lines.append(line)
             continue
         line = _WS_BEFORE_SEMI.sub("", line)
@@ -606,7 +646,8 @@ def _parse_override_locations(sarif_path):
 
 def fix_override(filepath, sarif_path=None, dry_run=False):
     """Add @Override to methods identified by CodeQL SARIF.
-    Walks UP from the reported line to find the actual method declaration."""
+    Walks from the reported line to find the actual method declaration.
+    Never places @Override inside Javadoc or at wrong indentation."""
     if sarif_path is None or not os.path.exists(sarif_path):
         return 0
 
@@ -621,6 +662,15 @@ def fix_override(filepath, sarif_path=None, dry_run=False):
 
     if is_excluded(filepath):
         return 0
+
+    # Check config/exclusions.txt for file-level exclusions
+    exclusions = _load_override_exclusions()
+    if rel in exclusions:
+        return 0
+    # Check for wildcard directory exclusions (e.g., apps/jetty/*)
+    for excluded in exclusions:
+        if excluded.endswith("/") and rel.startswith(excluded):
+            return 0
 
     try:
         content, lines = read_file(filepath)
@@ -637,68 +687,113 @@ def fix_override(filepath, sarif_path=None, dry_run=False):
     )
 
     changes = 0
-    # Deduplicate: track which method declarations we've already annotated
-    annotated_lines = set()
+    # Track which method declarations we've already annotated: (idx, indent)
+    annotations = []
+
+    def find_method_declaration(start_idx):
+        """Walk forward from start_idx to find a method declaration.
+        Returns (method_line_idx, indent) or (None, 0)."""
+        in_javadoc = False
+        for j in range(start_idx, min(start_idx + 20, len(lines))):
+            stripped = lines[j].strip()
+
+            # Track Javadoc state
+            if '/**' in stripped:
+                in_javadoc = True
+            if '*/' in stripped:
+                in_javadoc = False
+                continue
+
+            # Skip lines inside Javadoc
+            if in_javadoc or stripped.startswith('*'):
+                continue
+
+            # Skip blank lines
+            if not stripped:
+                continue
+
+            # Check for method declaration
+            if _METHOD_SIG.match(lines[j]):
+                indent = len(lines[j]) - len(lines[j].lstrip())
+                return j, indent
+
+            # If we hit an opening brace, we're inside a body — stop
+            if stripped == '{':
+                return None, 0
+
+            # If we hit a field declaration or assignment with no parens, stop
+            if '=' in stripped and '(' not in stripped:
+                return None, 0
+
+        return None, 0
 
     for reported_line in reported_lines:
-        # Walk up from the reported line to find the method declaration
-        method_line_idx = None
-        for j in range(reported_line - 1, max(reported_line - 12, -1), -1):
-            if j < 0 or j >= len(lines):
-                continue
-            candidate = lines[j]
-            # Skip blank lines and closing braces
-            if not stripped or stripped == "}":
-                continue
-            # Check for NOPMD in comments — skip this method entirely
-            if "NOPMD" in stripped:
-                method_line_idx = None  # mark as excluded
-                break
-            # If we hit a field declaration or assignment, stop — we're past the method signature
-            if "=" in stripped and "(" not in stripped:
-                break
-            # If we hit an opening brace, we're inside the method body
-            if stripped.startswith("{"):
-                break
-            # Check if this looks like a method declaration
-            if _METHOD_SIG.match(candidate):
-                method_line_idx = j
-                break
-            # If we hit a field declaration or assignment, stop — we're past the method signature
-            if "=" in stripped and "(" not in stripped:
-                break
-            # If we hit an opening brace, we're inside the method body
-            if stripped.startswith("{"):
-                break
-            # If we hit a NOPMD comment, skip this method
-            if "NOPMD" in stripped:
-                break
-
-        if method_line_idx is None:
+        idx = reported_line - 1
+        if idx < 0 or idx >= len(lines):
             continue
 
-        # Check if @Override already present on the line above
-        if method_line_idx > 0 and lines[method_line_idx - 1].strip() == "@Override":
+        # Find the actual method declaration from this starting point
+        method_idx, indent = find_method_declaration(idx)
+        if method_idx is None:
             continue
-        # Check if @Override is already on the same line (inline annotation)
-        if "@Override" in lines[method_line_idx]:
+
+        stripped = lines[method_idx].strip()
+
+        # Skip if already has @Override on line above
+        has_override = False
+        for k in range(1, 4):
+            if method_idx - k >= 0 and lines[method_idx - k].strip() == "@Override":
+                has_override = True
+                break
+        if has_override:
             continue
+        if "@Override" in lines[method_idx]:
+            continue
+
+        # Skip constructors (method name == class name, uppercase start)
+        paren_pos = lines[method_idx].find("(")
+        if paren_pos > 0:
+            before_paren = lines[method_idx][:paren_pos].strip()
+            # Skip static methods
+            if "static " in before_paren:
+                continue
+            parts = before_paren.split()
+            method_name = parts[-1] if parts else ""
+            if method_name and method_name[0].isupper() and "static" not in before_paren:
+                continue
+
         # Don't annotate the same method twice
-        if method_line_idx in annotated_lines:
+        already = any(a[0] == method_idx for a in annotations)
+        if already:
             continue
 
-        annotated_lines.add(method_line_idx)
-        indent = len(lines[method_line_idx]) - len(lines[method_line_idx].lstrip())
-        annotation = " " * indent + "@Override"
+        annotations.append((method_idx, indent))
         changes += 1
         if dry_run:
-            print_fix(filepath, method_line_idx + 1, lines[method_line_idx].strip(), annotation, dry_run)
+            print_fix(filepath, method_idx + 1, lines[method_idx].strip(),
+                       " " * indent + "@Override", dry_run)
 
     if changes > 0 and not dry_run:
         # Insert annotations in reverse order to preserve line numbers
-        for idx in sorted(annotated_lines):
-            indent = len(lines[idx]) - len(lines[idx].lstrip())
+        for idx, indent in sorted(annotations, key=lambda x: -x[0]):
             lines.insert(idx, " " * indent + "@Override")
+
+        # Post-edit cleanup: remove any @Override inside Javadoc blocks
+        cleaned = []
+        in_javadoc = False
+        for i, line in enumerate(lines):
+            stripped = line.strip()
+            if '/**' in stripped:
+                in_javadoc = True
+            if '*/' in stripped:
+                in_javadoc = False
+            # Remove @Override if it's inside Javadoc
+            if in_javadoc and stripped == "@Override":
+                changes -= 1
+                continue
+            cleaned.append(line)
+        lines = cleaned
+
         with open(filepath, "w") as f:
             f.write("\n".join(lines) + ("\n" if content.endswith("\n") else ""))
 
@@ -1177,6 +1272,39 @@ def fix_indentation(scan_path, xml_path, dry_run=False):
     return total
 
 
+def fix_trailing_newlines(filepath, dry_run=False):
+    """Remove excessive trailing newlines, keep exactly one. Add one if missing."""
+    try:
+        with open(filepath, "rb") as f:
+            content = f.read()
+    except OSError:
+        return 0
+
+    if not content:
+        return 0
+
+    stripped = content.rstrip(b"\n")
+    trailing = len(content) - len(stripped)
+
+    if trailing == 1:
+        return 0  # already correct
+
+    corrected = stripped + b"\n"
+
+    if not dry_run:
+        with open(filepath, "wb") as f:
+            f.write(corrected)
+
+    rel = os.path.relpath(filepath)
+    if trailing == 0:
+        print_fix(filepath, len(content), "no trailing newline",
+                  "added trailing newline", dry_run)
+    else:
+        print_fix(filepath, trailing, f"{trailing} trailing newlines",
+                  "1 trailing newline", dry_run)
+    return 1
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 ALL_FIXES = {
@@ -1193,6 +1321,7 @@ ALL_FIXES = {
     "pattern": ("Extract Pattern.compile to static final", fix_pattern_static),
     "comparator": ("Extract inline Comparators to static final", fix_comparator_static),
     "dead-store": ("Remove dead local stores (disabled — needs AST)", fix_dead_store),
+    "trailing": ("Remove excessive trailing newlines (keep exactly one)", fix_trailing_newlines),
 }
 
 
