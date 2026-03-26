@@ -609,15 +609,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private long lastAddedMessageTimestamp;
     private String lastAddedMessage;
 
-    /** Use if it does not include a link. Escapes '&lt; ' and '&gt; ' before queueing */
+    /** Use if it does not include a link. Escapes '&lt;' and '&gt;' before queueing */
     public void addMessage(String message) {
         long currentTime = System.currentTimeMillis() / 1000;
         if (lastAddedMessageTimestamp != currentTime || !lastAddedMessage.equals(message)) {
             addMessageNoEscape(
-                    message.replace("&", "&amp; ")
-                            .replace("&lt; ", "<")
-                            .replace("&gt; ", ">")
-                            .replace("&amp; nbsp", "&nbsp; "));
+                    message.replace("&", "&amp;")
+                           .replace("&amp;nbsp", "&nbsp;")
+                           .replace("&lt;", "<")
+                           .replace("&gt;", ">"));
         } else if (lastAddedMessage.startsWith(_t("Download already running: "))
                 && lastAddedMessage.contains(_t("Downloading"))) {
             lastAddedMessage = lastAddedMessage.replace(_t("Download already running: "), "");

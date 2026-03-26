@@ -412,7 +412,7 @@ public class HomeHelper extends HelperBase {
                .append(DataHelper.escapeHTML(app.name))
                .append("</label></td><td><a href=\"")
                .append(url).append("\">");
-            String urltext = DataHelper.escapeHTML(app.url).replace("&amp; ref=console", "");
+            String urltext = DataHelper.escapeHTML(app.url).replace("&amp;ref=console", "");
             if (app.url.length() > 72) {buf.append(urltext.substring(0, 70)).append("&hellip; ");}
             else {buf.append(urltext);}
             buf.append("</a></td></tr>\n");

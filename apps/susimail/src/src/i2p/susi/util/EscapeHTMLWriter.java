@@ -13,11 +13,11 @@ import java.io.Writer;
  */
 public class EscapeHTMLWriter extends FilterWriter {
 
-    private static final String AMP = "&amp; ";
-    private static final String QUOT = "&quot; ";
-    private static final String LT = "&lt; ";
-    private static final String GT = "&gt; ";
-    private static final String APOS = "&apos; ";
+    private static final String AMP = "&amp;";
+    private static final String QUOT = "&quot;";
+    private static final String LT = "&lt;";
+    private static final String GT = "&gt;";
+    private static final String APOS = "&apos;";
     private static final String MDASH = "&#45; ";
     private static final String BR = "<br>\n";
     private static final String EMSP = "&emsp; ";

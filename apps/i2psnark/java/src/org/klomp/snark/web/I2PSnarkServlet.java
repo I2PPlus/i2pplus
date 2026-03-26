@@ -711,14 +711,14 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(" tabindex=0>\n<a id=closelog href=\"")
                .append(_contextPath).append('/');
             if (isConfigure) {buf.append("configure");}
-            if (peerString.length() > 0) {buf.append(peerString).append("&amp; ");}
+            if (peerString.length() > 0) {buf.append(peerString).append("&amp;");}
             else {buf.append("?");}
             int lastID = msgs.get(msgs.size() - 1).id;
             String tx = _t("clear messages");
             String x = _t("Expand");
             String s = _t("Shrink");
-            buf.append("action=Clear&amp; id=").append(lastID)
-               .append("&amp; nonce=").append(_nonce).append("\">");
+            buf.append("action=Clear&amp;id=").append(lastID)
+               .append("&amp;nonce=").append(_nonce).append("\">");
             appendIcon(buf, "delete", tx, tx, true, true);
             buf.append("</a>\n<a class=script id=expand hidden>");
             appendIcon(buf, "expand", x, x, true, true);
@@ -2523,7 +2523,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // Validate parameter p as numeric (digits only)
         if (p != null && !p.isEmpty()) {
             // Remove any HTML entities &amp; before validating
-            String decodedP = p.replace("&amp; ", "&");
+            String decodedP = p.replace("&amp;", "&");
             // Check that decodedP only contains digits and optional query characters
             // Example: if p is query string starting with '?', allow appropriate format
             // For strict numeric only:
@@ -2842,8 +2842,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 String announce = meta.getAnnounce();
                 String magnetLink = MagnetURI.MAGNET_FULL + hex;
                 buf.append("<a class=magnetlink href=\"").append(magnetLink);
-                if (announce != null) buf.append("&amp; tr=").append(announce);
-                if (encodedBaseName != null) buf.append("&amp; dn=").append(encodedBaseName.replace(".torrent", ""));
+                if (announce != null) buf.append("&amp;tr=").append(announce);
+                if (encodedBaseName != null) buf.append("&amp;dn=").append(encodedBaseName.replace(".torrent", ""));
                 buf.append("\">");
                 appendIcon(buf, "magnet", "", "", false, true);
                 buf.append("<span class=copyMagnet></span></a>");
@@ -4348,13 +4348,13 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.8.13
      */
     private static String urlEncode(String s) {
-        return s.replace("; ", "%3B").replace("&", "&amp; ").replace(" ", "%20")
+        return s.replace(";", "%3B").replace("&", "&amp;").replace(" ", "%20")
                 .replace("<", "%3C").replace(">", "%3E")
                 .replace("[", "%5B").replace("]", "%5D");
     }
 
     private static final String escapeChars[] = {"\"", "<", ">", "'"};
-    private static final String escapeCodes[] = {"&quot; ", "&lt; ", "&gt; ", "&apos; "};
+    private static final String escapeCodes[] = {"&quot; ", "&lt;", "&gt;", "&apos;"};
 
     /**
      * Modded from DataHelper.
@@ -4689,7 +4689,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (hasCompleteAudio(fileList, storage, remainingArray)) {
                 buf.append("<a href=\"").append(base).append("?playlist");
                 if (sortParam != null && !"0".equals(sortParam) && !"1".equals(sortParam)) {
-                    buf.append("&amp; sort=").append(sortParam);
+                    buf.append("&amp;sort=").append(sortParam);
                 }
                 buf.append("\">");
                 appendIcon(buf, "playlist", "", _t("Audio Playlist"), false, true);
@@ -4997,15 +4997,15 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         if (meta != null && !meta.isPrivate()) {
             buf.append("<a class=magnetlink href=\"").append(MagnetURI.MAGNET_FULL).append(hex);
-            if (announce != null) { buf.append("&amp; tr=").append(announce); }
+            if (announce != null) { buf.append("&amp;tr=").append(announce); }
             if (baseName != null) {
-                buf.append("&amp; dn=").append(DataHelper.escapeHTML(baseName).replace(".torrent", "")
+                buf.append("&amp;dn=").append(DataHelper.escapeHTML(baseName).replace(".torrent", "")
                     .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
             }
             buf.append("\" title=\"").append(MagnetURI.MAGNET_FULL).append(hex);
-            if (announce != null) { buf.append("&amp; tr=").append(announce); }
+            if (announce != null) { buf.append("&amp;tr=").append(announce); }
             if (baseName != null) {
-                buf.append("&amp; dn=").append(DataHelper.escapeHTML(baseName).replace(".torrent", "")
+                buf.append("&amp;dn=").append(DataHelper.escapeHTML(baseName).replace(".torrent", "")
                     .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
             }
             buf.append("\">");

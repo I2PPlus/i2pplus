@@ -27,7 +27,7 @@ import net.i2p.util.UIMessages;
 public class LogsHelper extends HelperBase {
 
     private static final Pattern LOG_LEVEL_PATTERN = Pattern.compile("\\|\\s*(DEBUG|INFO|WARN|ERROR|CRIT)\\s");
-    private static final Pattern AMP_DARR_PATTERN = Pattern.compile("&amp; (darr|uarr|#10140|hellip;)");
+    private static final Pattern AMP_DARR_PATTERN = Pattern.compile("&amp;(darr|uarr|#10140|hellip;)");
     private static final Pattern BRACKET_CLEANUP_PATTERN = Pattern.compile("\\[\\[(&#10004; |&#10008;)\\]\\]");
     private static final Pattern NEWLINE_STAR_PATTERN = Pattern.compile("\n(\\t)?\\* ");
     private static final Pattern[] FILTER_PATTERNS = {
@@ -289,7 +289,7 @@ public class LogsHelper extends HelperBase {
             obuf.append("<p>").append(_t("File location")).append(": <a href=\"/wrapper.log\" target=_blank>")
                 .append(loc).append("</a>").append("</p></td></tr>\n<tr><td>");
             if (str.length() > 0) {
-                str = str.replace("&", "&amp; ").replace("<", "&lt; ").replace(">", "&gt; ");
+                str = str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
                 obuf.append("<pre id=service_logs>").append(str).append("</pre>");
             } else {
                 obuf.append("<p class=nologs><i>").append(_t("No log messages")).append("</i></p>");
@@ -349,17 +349,17 @@ public class LogsHelper extends HelperBase {
         for (int i = msgs.size() - 1; i >= 0; i--) {
             String msg = msgs.get(i);
             // don't display the dup message if it is first
-            if (!displayed && msg.contains("&uarr; ") || !displayed && msg.contains("&darr; ")) {continue;}
+            if (!displayed && msg.contains("&uarr;") || !displayed && msg.contains("&darr;")) {continue;}
             displayed = true;
-            msg = msg.replace("&", "&amp; ").replace("<", "&lt; ").replace(">", "&gt; ");
-            msg = msg.replace("&amp; darr; ", "&darr; ");  // hack - undo the damage (LogWriter) BUFFER_DISPLAYED_REVERSE = true;
-            msg = msg.replace("&amp; uarr; ", "&uarr; ");  // hack - undo the damage (LogWriter)
-            msg = msg.replace("&amp; #10140; ", "&#10140; ");
-            msg = msg.replace("--&gt; ", " &#10140; ");
-            msg = msg.replace(" -&gt; ", " &#10140; ");
-            msg = msg.replace("-&gt; ", " &#10140; ");
-            msg = msg.replace("  &#10140;  ", " &#10140; ");
-            msg = msg.replace("&amp; hellip; ", "...");
+            msg = msg.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+            msg = msg.replace("&amp;darr;", "&darr;");  // hack - undo the damage (LogWriter) BUFFER_DISPLAYED_REVERSE = true;
+            msg = msg.replace("&amp;uarr;", "&uarr;");  // hack - undo the damage (LogWriter)
+            msg = msg.replace("&amp;#10140;", "&#10140;");
+            msg = msg.replace("--&gt;", " &#10140;");
+            msg = msg.replace(" -&gt;", " &#10140;");
+            msg = msg.replace("-&gt;", " &#10140;");
+            msg = msg.replace("  &#10140;  ", " &#10140;");
+            msg = msg.replace("&amp;hellip;", "...");
             msg = msg.replace("…obQueue", "JobQueue");
             msg = msg.replace("[DBWriter   ]", "[NetDB Writer]");
             msg = msg.replace("[NTCP Pumper", "[ NTCP Pumper");
@@ -371,29 +371,29 @@ public class LogsHelper extends HelperBase {
             msg = msg.replace("[Timestamper]", "[Timestamper ]");
             msg = msg.replace("[DHT Explore]", "[DHT Explore ]");
             msg = msg.replace("[HostChecker]", "[HostChecker ]");
-            msg = msg.replace("false", "[&#10008; ]"); // no (cross)
-            msg = msg.replace("[&#10008; ] positives", "false positives");
-            msg = msg.replace("true", "[&#10004; ]"); // yes (tick)
+            msg = msg.replace("false", "[&#10008;]"); // no (cross)
+            msg = msg.replace("[&#10008;] positives", "false positives");
+            msg = msg.replace("true", "[&#10004;]"); // yes (tick)
             // Use regex to clean up double brackets
             Matcher bm = BRACKET_CLEANUP_PATTERN.matcher(msg);
             msg = bm.replaceAll("[$1]");
-            msg = msg.replace("=[&#10004; ]", "=true");
-            msg = msg.replace("=[&#10008; ]", "=false");
-            msg = msg.replace("[IRC Client] Inbound message", "[IRC Client] &#11167; ");
-            msg = msg.replace("[IRC Client] Outbound message", "[IRC Client] &#11165; ");
+            msg = msg.replace("=[&#10004;]", "=true");
+            msg = msg.replace("=[&#10008;]", "=false");
+            msg = msg.replace("[IRC Client] Inbound message", "[IRC Client] &#11167;");
+            msg = msg.replace("[IRC Client] Outbound message", "[IRC Client] &#11165;");
             msg = msg.replace("not publishing old one: RouterInfo:", "not publishing old one:");
             msg = msg.replace("Publishing our RouterInfo after delay: RouterInfo:", "Publishing our RouterInfo after delay:");
             msg = msg.replace(":  ", ": ");
             // Use regex for bullet replacements
             Matcher nm = NEWLINE_STAR_PATTERN.matcher(msg);
-            msg = nm.replaceAll("\n$1&bullet; ");
+            msg = nm.replaceAll("\n$1&bullet;");
             msg = msg.replace("\r\n\r\n", "");
             msg = msg.replace("<br>:", " ");
             msg = msg.replace("<b>", "");
             msg = msg.replace("</b>", "");
-            msg = msg.replace("&lt; b&gt; ", "");
-            msg = msg.replace("&lt; /b&gt; ", "");
-            msg = msg.replace("...", "&hellip; ");
+            msg = msg.replace("&lt;b&gt;", "");
+            msg = msg.replace("&lt;/b&gt;", "");
+            msg = msg.replace("...", "&hellip;");
             msg = msg.replace("]]", "]");
             // highlight log level indicators using regex
             Matcher m = LOG_LEVEL_PATTERN.matcher(msg);
@@ -401,12 +401,12 @@ public class LogsHelper extends HelperBase {
                 String level = m.group(1);
                 msg = m.replaceFirst("| <span class=log_level>" + level + "</span> ");
             }
-            if (msg.contains("| &darr; &darr; &darr; ")) {msg = msg.replace("| &darr; &darr; &darr; ", " <span class=log_omitted>&darr; &darr; &darr; </span> ");} // LogWriter BUFFER_DISPLAYED_REVERSE = true;
-            if (msg.contains("| &uarr; &uarr; &uarr; ")) {msg = msg.replace("| &uarr; &uarr; &uarr; ", " <span class=log_omitted>&uarr; &uarr; &uarr; </span> ");}
+            if (msg.contains("| &darr; &darr; &darr;")) {msg = msg.replace("| &darr;darr;&darr;", " <span class=log_omitted>&darr;&darr;&darr;</span> ");} // LogWriter BUFFER_DISPLAYED_REVERSE = true;
+            if (msg.contains("| &uarr;&uarr;&uarr;")) {msg = msg.replace("| &uarr;&uarr;&uarr;", " <span class=log_omitted>&uarr;&uarr;&uarr;</span> ");}
             // remove  last \n that LogRecordFormatter added
             if (msg.endsWith(NL)) {msg = msg.substring(0, msg.length() - NL.length());}
             // replace \n so that exception stack traces will format correctly and will paste nicely into pastebin
-            msg = msg.replace("\n", "<br>&nbsp; &nbsp; \n");
+            msg = msg.replace("\n", "<br>&nbsp;&nbsp;\n");
             if (msg.contains("Sending client")) {msg = msg.replace("<br>&nbsp; &nbsp; \n", "");} // SAM client
             if (msg.contains("org.eclipse.jetty") && msg.contains(_c("WARN"))) {continue;} // hide jetty warn level logging
             String level;
@@ -415,7 +415,7 @@ public class LogsHelper extends HelperBase {
             else if (msg.contains(_c("ERROR"))) {level = "log_error";}
             else if (msg.contains(_c("WARN"))) {level = "log_warn";}
             else if (msg.contains(_c("INFO"))) {level = "log_info";}
-            else if (msg.contains("&darr; ") || msg.contains("&uarr; "))  {level = "log_omitted";}
+            else if (msg.contains("&darr;") || msg.contains("&uarr;"))  {level = "log_omitted";}
             else {level = "log_debug";}
             buf.append("<li class=\"").append(level);
             if (colorize) {buf.append(" colorize");}

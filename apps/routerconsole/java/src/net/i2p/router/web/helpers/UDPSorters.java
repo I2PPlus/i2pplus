@@ -329,20 +329,20 @@ class UDPSorters {
 
     static void appendSortLinks(StringBuilder buf, String urlBase, int sortFlags, String descr, int ascending) {
         if (ascending == FLAG_ALPHA) { // 0
-            buf.append("<span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp; sort=0\" title=\"")
+            buf.append("<span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=0\" title=\"")
                .append(descr).append("\"><img src=/themes/console/images/inbound.svg alt=\"V\"></a></span>");
         } else if (sortFlags == ascending) {
-            buf.append(" <span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp; sort=").append(0-ascending)
+            buf.append(" <span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=").append(0-ascending)
                .append("\" title=\"").append(descr).append("\"><img src=/themes/console/images/inbound.svg alt=\"V\"></a></span>")
                .append("<span class=\"sortupactive\"><b><img src=/themes/console/images/outbound.svg alt=\"^\"></b></span>");
         } else if (sortFlags == 0 - ascending) {
             buf.append(" <span class=\"sortdownactive\"><b><img src=/themes/console/images/inbound.svg alt=\"V\"></b></span>")
-               .append("<span class=\"sortup\"><a href=\"").append(urlBase).append("?transport=ssu&amp; sort=").append(ascending)
+               .append("<span class=\"sortup\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=").append(ascending)
                .append("\" title=\"").append(descr).append("\"><img src=/themes/console/images/outbound.svg alt=\"^\"></a></span>");
         } else {
-            buf.append(" <span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp; sort=").append(0-ascending)
+            buf.append(" <span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=").append(0-ascending)
                .append("\" title=\"").append(descr).append("\"><img src=/themes/console/images/inbound.svg alt=\"V\"></a></span>")
-               .append("<span class=\"sortup\"><a href=\"").append(urlBase).append("?transport=ssu&amp; sort=").append(ascending)
+               .append("<span class=\"sortup\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=").append(ascending)
                .append("\" title=\"").append(descr).append("\"><img src=/themes/console/images/outbound.svg alt=\"^\"></a></span>");
         }
     }

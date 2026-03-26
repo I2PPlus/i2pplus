@@ -206,11 +206,11 @@ class NetDbRenderer {
         appendUrlParam(urlParameters, "caps", capabilities);
         appendUrlParam(urlParameters, "tr", transport);
         appendUrlParam(urlParameters, "ip", ipAddress);
-        if (port != 0) urlParameters.append("&amp; port=").append(port);
+        if (port != 0) urlParameters.append("&amp;port=").append(port);
         appendUrlParam(urlParameters, "mtu", mtu);
         appendUrlParam(urlParameters, "ipv6", ipv6Address);
         appendUrlParam(urlParameters, "ssucaps", ssuCapabilities);
-        if (cost != 0) urlParameters.append("&amp; cost=").append(cost);
+        if (cost != 0) urlParameters.append("&amp;cost=").append(cost);
         appendUrlParam(urlParameters, "sybil", sybil);
 
         // Streaming setup
@@ -351,7 +351,7 @@ class NetDbRenderer {
      */
     private void appendUrlParam(StringBuilder sb, String key, String value) {
         if (value != null) {
-            sb.append("&amp; ").append(key).append("=").append(value);
+            sb.append("&amp;").append(key).append("=").append(value);
         }
     }
 
@@ -421,20 +421,20 @@ class NetDbRenderer {
                 int current = page + 1;
                 if (page == 0) {page++;}
                 if (current > 1) {
-                    buf.append("<a href=\"/netdb?pg=").append(page).append("&amp; ps=").append(pageSize).append(ubuf)
+                    buf.append("<a href=\"/netdb?pg=").append(page).append("&amp;ps=").append(pageSize).append(ubuf)
                        .append("\" title=\"").append(_t("Previous Page")).append("\"><span id=prevPage class=pageLink>‹</span></a>");
                 }  else {
                     buf.append("<span id=prevPage class=\"pageLink disabled\">‹</span>");
                 }
                 for (int i = 1; i <= totalPages; i++) {
                     if (i <= totalPages) {
-                        buf.append(" <a href=\"/netdb?pg=").append(i).append("&amp; ps=").append(pageSize).append(ubuf).append("\"")
+                        buf.append(" <a href=\"/netdb?pg=").append(i).append("&amp;ps=").append(pageSize).append(ubuf).append("\"")
                            .append(i == current ? " id=currentPage" : "").append(">")
                            .append("<span class=pageLink>").append(i).append("</span></a> ");
                     }
                 }
                 if (current < totalPages) {
-                    buf.append("<a href=\"/netdb?pg=").append(page + 2).append("&amp; ps=").append(pageSize).append(ubuf)
+                    buf.append("<a href=\"/netdb?pg=").append(page + 2).append("&amp;ps=").append(pageSize).append(ubuf)
                        .append("\" title=\"").append(_t("Next Page")).append("\">").append("<span id=nextPage class=pageLink>›</span></a>\n");
                 } else {
                     buf.append("<span id=nextPage class=\"pageLink disabled\">›</span>\n");
@@ -1384,7 +1384,7 @@ class NetDbRenderer {
         }
         if (showStats) {
             renderRoutersToWriter(routers, out, isLocal, page, pageSize);
-            paginate(buf, new StringBuilder("&amp; f=").append(mode), page, pageSize, hasNextPage, routers.size() - 1);
+            paginate(buf, new StringBuilder("&amp;f=").append(mode), page, pageSize, hasNextPage, routers.size() - 1);
             out.append(buf);
             buf.setLength(0);
         } else {
@@ -1608,9 +1608,9 @@ class NetDbRenderer {
                    .append("<img width=20 height=15 alt=\"").append(country.toUpperCase(Locale.US)).append("\"")
                    .append(" src=\"/flags.jsp?c=").append(country).append("\">")
                    .append(getTranslatedCountry(country).replace("xx", _t("Unknown"))).append("</a></td>")
-                   .append("<td class=countX><a href=\"/netdb?caps=X&amp; cc=").append(country).append("\">")
+                   .append("<td class=countX><a href=\"/netdb?caps=X&amp;cc=").append(country).append("\">")
                    .append(countXTierInCountry(routers, country)).append("</a></td>")
-                   .append("<td class=countFF><a href=\"/netdb?caps=f&amp; cc=").append(country).append("\">")
+                   .append("<td class=countFF><a href=\"/netdb?caps=f&amp;cc=").append(country).append("\">")
                    .append(countFloodfillsInCountry(routers, country)).append("</a></td>")
                    .append("<td class=countCC>").append(totalCount).append("</td></tr>\n");
             }

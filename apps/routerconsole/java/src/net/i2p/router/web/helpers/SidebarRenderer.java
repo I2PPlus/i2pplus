@@ -270,11 +270,11 @@ class SidebarRenderer {
         PortMapper pm = _context.portMapper();
         if (pm.isRegistered(PortMapper.SVC_SUSIDNS)) {
             String tx = _t("Addressbook");
-            rbuf.append("<a href=\"/dns?book=router&amp; filter=latest\" target=_top title=\"")
+            rbuf.append("<a href=\"/dns?book=router&amp;filter=latest\" target=_top title=\"")
                 .append(_t("Manage your I2P hosts file here (I2P domain name resolution)"))
                 .append("\">")
                 .append(nbsp(tx))
-                .append("</a>\n<a class=sb_icon target=_top href=\"/dns?book=router&amp; filter=latest\" title=\"")
+                .append("</a>\n<a class=sb_icon target=_top href=\"/dns?book=router&amp;filter=latest\" title=\"")
                 .append(tx)
                 .append("\" hidden><span><img src=/themes/console/images/addressbook.svg> <span id=newHosts class=\"badge volatile\" title=\"")
                 .append(_t("New hosts in last 24 hours"))
@@ -1093,8 +1093,8 @@ class SidebarRenderer {
         int refreshPeriod = 3;
         try {refreshPeriod = Integer.parseInt(r);}
         catch (NumberFormatException nfe) {}
-        String t = "&amp; t=" + (_context.clock().now() / 1000);
-        String g = "style=\"background-image:url(\'/viewstat.jsp?stat=bw.combined&amp; periodCount=20&amp; width=250&amp; height=50&amp; hideLegend=true&amp; hideGrid=true&amp; hideTitle=true" +
+        String t = "&amp;t=" + (_context.clock().now() / 1000);
+        String g = "style=\"background-image:url(\'/viewstat.jsp?stat=bw.combined&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;hideTitle=true" +
                     t + "\')\"";
         StringBuilder buf = new StringBuilder(512); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("<div id=sb_graphcontainer class=collapse title=\"")
@@ -1417,7 +1417,7 @@ class SidebarRenderer {
                            .append(getToggle())
                             .append("</h3><hr class=b><div id=sb_newsheadings>\n<table>\n");
                     }
-                    buf.append("<tr><td><a href=\"/home?news=1&amp; consoleNonce=").append(consoleNonce).append("\"");
+                    buf.append("<tr><td><a href=\"/home?news=1&amp;consoleNonce=").append(consoleNonce).append("\"");
                     if (entry.updated > 0) {
                         buf.append(" title=\"")
                            .append(_t("Published"))

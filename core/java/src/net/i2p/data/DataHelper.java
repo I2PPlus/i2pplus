@@ -1490,7 +1490,7 @@ public class DataHelper {
          * http: *www.cs.tut.fi/~jkorpela/dashes.html
          */
         if (ms < 0) {t = t.replace("-", "&minus; ");}
-        return t.replace(" ", "&nbsp; "); // do it here to keep &nbsp; out of the tags for translator sanity
+        return t.replace(" ", "&nbsp;"); // do it here to keep &nbsp; out of the tags for translator sanity
     }
 
     /**
@@ -1526,7 +1526,7 @@ public class DataHelper {
             t = ngettext("{0} year", "{0} years", (int) (ms / (365L * 24 * 60 * 60 * 1000)));
         } else {return _t("n/a");}
         if (ms < 0) {t = t.replace("-", "&minus; ");}
-        return t.replace(" ", "&nbsp; ");
+        return t.replace(" ", "&nbsp;");
     }
 
     private static final String BUNDLE_NAME = "net.i2p.util.messages";
@@ -1743,7 +1743,7 @@ public class DataHelper {
     }
 
     private static final String escapeChars[] = {"&", "\"", "<", ">", "'"};
-    private static final String escapeCodes[] = {"&amp; ", "&quot; ", "&lt; ", "&gt; ", "&apos; "};
+    private static final String escapeCodes[] = {"&amp;", "&quot;", "&lt;", "&gt;", "&apos;"};
 
     /**
      * Escape a string for inclusion in HTML

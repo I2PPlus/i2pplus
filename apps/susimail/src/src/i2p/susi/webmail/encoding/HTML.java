@@ -30,9 +30,9 @@ public class HTML extends Encoding {
 
     @Override
   public String encode(String str) throws EncodingException {
-        String escaped = str.replace("&", "&amp; ")  // must be first
-               .replace("<", "&lt; ")
-               .replace(">", "&gt; ");
+        String escaped = str.replace("&", "&amp;")  // must be first
+               .replace("<", "&lt;")
+               .replace(">", "&gt;");
         return NEWLINE_PATTERN.matcher(escaped).replaceAll("<br>\r\n");
     }
 

@@ -182,11 +182,11 @@ public class StatsGenerator {
 
             if (curRate.getSummaryListener() != null) {
                 buf.append("<br><span class=statsViewGraphs><a class=graphstat href=\"graph?stat=").append(name.replace(" ", "%20"))
-                   .append('.').append(periods[i]).append("&amp; w=600&amp; h=200\">").append(_t("Graph Data")).append("</a> ")
+                   .append('.').append(periods[i]).append("&amp;w=600&amp;h=200\">").append(_t("Graph Data")).append("</a> ")
                    .append(" <a class=graphstat href=\"graph?stat=").append(name.replace(" ", "%20")).append('.').append(periods[i])
-                   .append("&amp; w=600&amp; h=200&amp; showEvents=true\">").append(_t("Graph Event Count")).append("</a> ")
-                   .append(" <a class=graphstat href=\"/viewstat.jsp?stat=").append(name.replace(" ", "%20")).append("&amp; period=").append(periods[i])
-                   .append("&amp; format=xml\" download=\"graphdata_").append(name.replace(".", "_").replace("%20", "s")).append(".xml\">")
+                   .append("&amp;w=600&amp;h=200&amp;showEvents=true\">").append(_t("Graph Event Count")).append("</a> ")
+                   .append(" <a class=graphstat href=\"/viewstat.jsp?stat=").append(name.replace(" ", "%20")).append("&amp;period=").append(periods[i])
+                   .append("&amp;format=xml\" download=\"graphdata_").append(name.replace(".", "_").replace("%20", "s")).append(".xml\">")
                    .append(_t("Export Data as XML")).append("</a>").append("</span>");
             }
             buf.append("</li>\n");

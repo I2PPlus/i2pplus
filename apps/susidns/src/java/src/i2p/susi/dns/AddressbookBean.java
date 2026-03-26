@@ -374,7 +374,7 @@ public class AddressbookBean extends BaseBean {
                                    "Filtered list contains {0} entries.",
                                    getTotalFilteredCount()).replace(".", "");
             }
-            filterArg = "&amp; filter=" + filter;
+            filterArg = "&amp;filter=" + filter;
         } else if (search != null && search.length() > 0) {
             message = ngettext("One result for: " + "<span class=active>" + search + "</span>",
                                "{0} results for: " + "<span class=active>" + search + "</span>",
@@ -401,7 +401,7 @@ public class AddressbookBean extends BaseBean {
                 int newBegin = Math.max(0, pageBegin - DISPLAY_SIZE);
                 int newEnd = Math.max(0, pageBegin - 1);
                 message += " <span id=prev><a href=\"addressbook?book=" + getBook() + filterArg +
-                           "&amp; begin=" + newBegin + "&amp; end=" + newEnd + "\">" + (newBegin+1) +
+                           "&amp;begin=" + newBegin + "&amp;end=" + newEnd + "\">" + (newBegin+1) +
                            " - "  + (newEnd+1) + "</a></span> | ";
             } else {
                 message += " <span id=prev class=inactive></span> | ";
@@ -412,7 +412,7 @@ public class AddressbookBean extends BaseBean {
                 int nextBegin = pageBegin + DISPLAY_SIZE;
                 int nextEnd = Math.min(nextBegin + DISPLAY_SIZE - 1, totalCount - 1);
                 message += "<span id=next><a href=\"addressbook?book=" + getBook() + filterArg +
-                           "&amp; begin=" + nextBegin + "&amp; end=" + nextEnd + "\">" + (nextBegin+1) +
+                           "&amp;begin=" + nextBegin + "&amp;end=" + nextEnd + "\">" + (nextBegin+1) +
                            " - " + (nextEnd+1) + "</a></span>";
             } else {message += "<span id=next class=inactive></span>";}
             message += "</span>"; // close #showing span in NamingServiceBean

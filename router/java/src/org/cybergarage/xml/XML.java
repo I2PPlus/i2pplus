@@ -61,22 +61,22 @@ public class XML {
         for (int i = 0; i < oldsize; i++) {
             switch (old[i]) {
                 case '&':
-                    entity = "&amp; ";
+                    entity = "&amp;";
                     break;
                 case '<':
-                    entity = "&lt; ";
+                    entity = "&lt;";
                     break;
                 case '>':
-                    entity = "&gt; ";
+                    entity = "&gt;";
                     break;
                 case '\'':
                     if (quote) {
-                        entity = "&apos; ";
+                        entity = "&apos;";
                         break;
                     }
                 case '"':
                     if (quote) {
-                        entity = "&quot; ";
+                        entity = "&quot;";
                         break;
                     }
             }
@@ -130,11 +130,11 @@ public class XML {
 
         String outStr;
 
-        outStr = input.replace("&amp; ", "&");
-        outStr = outStr.replace("&lt; ", "<");
-        outStr = outStr.replace("&gt; ", ">");
-        outStr = outStr.replace("&apos; ", "\'");
-        outStr = outStr.replace("&quot; ", "\"");
+        outStr = input.replace("&amp;", "&");
+        outStr = outStr.replace("&lt;", "<");
+        outStr = outStr.replace("&gt;", ">");
+        outStr = outStr.replace("&apos;", "\'");
+        outStr = outStr.replace("&quot;", "\"");
 
         return outStr;
     }

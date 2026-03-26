@@ -762,13 +762,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                                     out.write(("<tr><td class=center>" +
                                                         "<a href=\"" + trustedURL + "\">" +
                                                         "<img src=\"" +
-                                                        conURL + "imagegen/id?s=160&amp; c=" +
+                                                        conURL + "imagegen/id?s=160&amp;c=" +
                                                         h1.toBase64().replace("=", "%3d") +
                                                         "\" width=160 height=160></a>\n" +
                                                         "</td>\n<td class=center>" +
                                                         "<a href=\"" + conflictURL + "\">" +
                                                         "<img src=\"" +
-                                                        conURL + "imagegen/id?s=160&amp; c=" +
+                                                        conURL + "imagegen/id?s=160&amp;c=" +
                                                         h2.toBase64().replace("=", "%3d") +
                                                         "\" width=160 height=160></a>\n" +
                                                         "</td></tr>").getBytes("UTF-8"));
@@ -1544,7 +1544,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             out.write(" " + _t("If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."));
         }
         // FIXME wasn't escaped
-        String label = _t("Save & continue").replace("&", "&amp; ");
+        String label = _t("Save & continue").replace("&", "&amp;");
         out.write("</p>\n<div class=formaction><button type=submit class=accept name=\"router\" value=\"router\">" +
                   label + "</button></div>\n</div>\n");
 
@@ -1621,7 +1621,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
 
         // FIXME wasn't escaped
-        String label = _t("Save & continue").replace("&", "&amp; ");
+        String label = _t("Save & continue").replace("&", "&amp;");
         out.write("<div class=formaction>\n" + "<button type=submit class=accept name=action value=Save>" +
                   label + "</button>\n" + "</div>\n</form>\n</div>\n");
         writeFooter(out);

@@ -1347,11 +1347,11 @@ public class SidebarHelper extends HelperBase {
             String name = sectionNames.get(section);
             if (name == null) {continue;}
             buf.append("<tr><td><input type=checkbox class=optbox id=\"")
-               .append(name.replace(" ", "_").replace("\'", "").replace("(", "").replace(")", "").replace("&amp; ", ""))
+               .append(name.replace(" ", "_").replace("\'", "").replace("(", "").replace(")", "").replace("&amp;", ""))
                .append("\" name=\"delete_")
                .append(i)
                .append("\"></td><td><label for=\"")
-               .append(name.replace(" ", "_").replace("\'", "").replace("(", "").replace(")", "").replace("&amp; ", ""))
+               .append(name.replace(" ", "_").replace("\'", "").replace("(", "").replace(")", "").replace("&amp;", ""))
                .append("\">")
                .append(_t(name))
                .append("</label></td><td><input type=hidden name=\"order_")
