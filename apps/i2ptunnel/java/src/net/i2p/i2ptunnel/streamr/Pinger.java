@@ -42,6 +42,7 @@ public class Pinger implements Source, Runnable {
      *  Starts the pinger thread to send periodic subscribe messages.
      *  @since 0.9.53
      */
+    @Override
     public void start() {
         this.running = true;
         this.thread.start();
@@ -69,9 +70,9 @@ public class Pinger implements Source, Runnable {
     /**
      *  Main run loop that periodically sends subscribe messages.
      *  Runs until stop() is called.
-     @Override
      *  @since 0.9.53
      */
+    @Override
     public void run() {
         // send subscribe-message
         byte[] data = new byte[1];
@@ -102,4 +103,3 @@ public class Pinger implements Source, Runnable {
         }
     }
 }
-

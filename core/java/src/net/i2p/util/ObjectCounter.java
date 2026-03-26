@@ -87,4 +87,3 @@ public class ObjectCounter<K> implements Serializable {
         this.map.remove(h);
     }
 }
-

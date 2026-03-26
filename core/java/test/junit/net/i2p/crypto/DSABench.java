@@ -96,4 +96,3 @@ public class DSABench {
         System.out.println("Verification Time Average  : " + (verifytime/times) + "\ttotal: " + verifytime + "\tmin: " + minV + "\tmax: " + maxV + "\tDecryption Bps: " + (times*message.length*1000)/verifytime);
     }
 }
-

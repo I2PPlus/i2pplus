@@ -119,4 +119,3 @@ public class SendGarlicJob extends JobImpl {
         _log.debug("Garlic message added to outbound network message pool");
     }
 }
-

@@ -41,4 +41,3 @@ class RouterInfoComparator implements Comparator<RouterInfo>, Serializable {
         return HashComparator.comp(lh, rh);
     }
 }
-

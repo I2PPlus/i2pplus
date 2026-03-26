@@ -378,4 +378,3 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
         writeFooter(out);
     }
 }
-

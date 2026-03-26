@@ -562,5 +562,3 @@ public class GraphHelper extends FormHandler {
         }
     }
 }
-
-

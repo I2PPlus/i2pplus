@@ -194,4 +194,3 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
     }
 
 }
-

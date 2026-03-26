@@ -4910,4 +4910,3 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
     }
 }
-

@@ -17,4 +17,3 @@ public class StreamSinkTestServer {
         }, "server").start();
     }
 }
-

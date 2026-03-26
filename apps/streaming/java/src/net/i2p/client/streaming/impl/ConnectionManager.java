@@ -1090,4 +1090,3 @@ class ConnectionManager {
         return "ConnectionManager for " + _session;
     }
 }
-

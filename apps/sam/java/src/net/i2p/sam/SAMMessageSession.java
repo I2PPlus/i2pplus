@@ -387,4 +387,3 @@ abstract class SAMMessageSession implements SAMMessageSess {
         }
     }
 }
-

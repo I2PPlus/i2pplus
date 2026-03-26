@@ -618,4 +618,3 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
 }
-

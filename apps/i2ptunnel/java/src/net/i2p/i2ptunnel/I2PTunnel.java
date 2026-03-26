@@ -2087,4 +2087,3 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         public void routerDisconnected();
     }
 }
-

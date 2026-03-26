@@ -452,4 +452,3 @@ public class ClientAppConfig {
         return false;
     }
 }
-

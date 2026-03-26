@@ -29,4 +29,3 @@ public interface NamingServiceListener {
 
     public void entryRemoved(NamingService ns, String hostname);
 }
-

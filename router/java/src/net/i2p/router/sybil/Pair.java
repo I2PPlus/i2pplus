@@ -21,4 +21,3 @@ public class Pair implements Comparable<Pair> {
         return this.dist.compareTo(p.dist);
     }
 }
-

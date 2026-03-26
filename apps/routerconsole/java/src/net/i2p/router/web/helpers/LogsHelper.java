@@ -495,4 +495,3 @@ public class LogsHelper extends HelperBase {
         return _context.getBooleanProperty(PROP_ADVANCED);
     }
 }
-

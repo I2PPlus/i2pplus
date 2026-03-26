@@ -8,4 +8,3 @@ package net.i2p.sam;
 interface Session extends SAMMessageSess {
     String getNick();
 }
-

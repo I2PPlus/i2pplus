@@ -161,4 +161,3 @@ class SubscriptionList implements Iterable<AddressBook> {
         } catch (IOException exp) {}
     }
 }
-

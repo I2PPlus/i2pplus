@@ -201,4 +201,3 @@ public class BuildTestMessageJob extends JobImpl {
 
     }
 }
-

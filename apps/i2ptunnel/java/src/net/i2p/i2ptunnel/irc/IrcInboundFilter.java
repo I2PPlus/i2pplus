@@ -105,4 +105,3 @@ public class IrcInboundFilter implements Runnable {
             _log.debug("[IRC Client] Inbound Filter: Stopped");
     }
 }
-

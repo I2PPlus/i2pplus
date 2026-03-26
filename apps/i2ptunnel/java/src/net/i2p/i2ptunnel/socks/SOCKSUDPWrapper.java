@@ -51,6 +51,7 @@ public class SOCKSUDPWrapper implements Source, Sink {
      *
      *  @since 0.9.53
      */
+    @Override
     public void start() {}
 
     /**
@@ -58,9 +59,9 @@ public class SOCKSUDPWrapper implements Source, Sink {
      *
      *  May throw RuntimeException from underlying sink
      *  @since 0.9.53 added fromPort and toPort parameters
-     @Override
      *  @throws RuntimeException
      */
+    @Override
     public void send(Destination from, int fromPort, int toPort, byte[] data) {
         if (this.sink == null)
             return;
@@ -88,4 +89,3 @@ public class SOCKSUDPWrapper implements Source, Sink {
         this.sink.send(from, fromPort, toPort, wrapped);
     }
 }
-

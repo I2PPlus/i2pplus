@@ -195,4 +195,3 @@ public class StreamSinkServer {
             server.runServer();
     }
 }
-

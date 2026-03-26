@@ -129,4 +129,3 @@ public class CryptoChecker {
         warnUnavailableCrypto(null);
     }
 }
-

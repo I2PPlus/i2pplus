@@ -251,4 +251,3 @@ public class GraphListener implements RateSummaryListener {
     @Override
     public int hashCode() {return _rate.hashCode();}
 }
-

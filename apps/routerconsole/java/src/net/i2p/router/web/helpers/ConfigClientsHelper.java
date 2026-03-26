@@ -434,4 +434,3 @@ public class ConfigClientsHelper extends HelperBase {
         return PluginStarter.stripHTML(props, key);
     }
 }
-

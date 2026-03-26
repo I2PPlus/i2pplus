@@ -38,4 +38,3 @@ public class TunnelHelper extends HelperBase {
         return _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
     }
 }
-

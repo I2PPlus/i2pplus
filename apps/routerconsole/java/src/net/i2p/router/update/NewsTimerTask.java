@@ -143,4 +143,3 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
         }
     }
 }
-

@@ -28,4 +28,3 @@ class HashComparator implements Comparator<Hash>, Serializable {
         return DataHelper.compareTo(l.getData(), r.getData());
     }
 }
-

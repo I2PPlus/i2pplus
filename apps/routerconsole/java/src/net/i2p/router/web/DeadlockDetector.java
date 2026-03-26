@@ -165,5 +165,3 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
     }
 */
 }
-
-

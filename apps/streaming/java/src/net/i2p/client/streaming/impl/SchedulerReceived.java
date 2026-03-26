@@ -45,4 +45,3 @@ class SchedulerReceived extends SchedulerImpl {
         }
     }
 }
-

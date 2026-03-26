@@ -94,4 +94,3 @@ class PluginUpdateChecker extends UpdateRunner {
         _mgr.notifyCheckComplete(this, false, false);
     }
 }
-

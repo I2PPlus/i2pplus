@@ -74,6 +74,7 @@ public class SOCKSUDPPort implements Source, Sink {
      *
      *  @since 0.9.53
      */
+    @Override
     public void start() {
         // the other Sources don't use start
         this.udpsource.start();
@@ -96,11 +97,10 @@ public class SOCKSUDPPort implements Source, Sink {
      *  @param fromPort will be passed along
      *  @param toPort will be passed along
      *  @since 0.9.53 added fromPort and toPort parameters
-     @Override
      *  @throws RuntimeException
      */
+    @Override
     public void send(Destination from, int fromPort, int toPort, byte[] data) {
         this.wrapper.send(from, fromPort, toPort, data);
     }
 }
-

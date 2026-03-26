@@ -417,4 +417,3 @@ public class FIFOBandwidthRefiller implements Runnable {
                 _context.statManager().addRateData("bwLimiter.participatingBandwidthQueue", (long) _partBWE.getQueueSizeEstimate());
     }
 }
-

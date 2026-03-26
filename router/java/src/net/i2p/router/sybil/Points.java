@@ -108,4 +108,3 @@ public class Points implements Comparable<Points> {
         return rv;
     }
 }
-

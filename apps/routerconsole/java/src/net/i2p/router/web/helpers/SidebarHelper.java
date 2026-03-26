@@ -1425,4 +1425,3 @@ public class SidebarHelper extends HelperBase {
         return buf.toString();
     }
 }
-

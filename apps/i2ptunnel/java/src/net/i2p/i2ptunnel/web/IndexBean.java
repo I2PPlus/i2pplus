@@ -1684,4 +1684,3 @@ public class IndexBean {
     }
 
 }
-

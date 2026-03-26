@@ -56,4 +56,3 @@ public class MultiSink<S extends Sink> implements Source, Sink {
         s.send(from, fromPort, toPort, data);
     }
 }
-

@@ -71,4 +71,3 @@ class AccessCounter {
         return accesses.isEmpty();
     }
 }
-

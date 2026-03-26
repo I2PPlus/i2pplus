@@ -47,4 +47,3 @@ class SchedulerHardDisconnected extends SchedulerImpl {
         // noop.  we do the timeout through the simpleTimer anyway
     }
 }
-

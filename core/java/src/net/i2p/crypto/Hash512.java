@@ -42,4 +42,3 @@ public class Hash512 extends SimpleDataStructure {
         return HASH_LENGTH;
     }
 }
-

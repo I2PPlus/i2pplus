@@ -41,4 +41,3 @@ public class Hash384 extends SimpleDataStructure {
         return HASH_LENGTH;
     }
 }
-

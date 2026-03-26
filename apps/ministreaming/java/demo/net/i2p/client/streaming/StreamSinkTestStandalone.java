@@ -91,4 +91,3 @@ public class StreamSinkTestStandalone {
         } catch (InterruptedException ie) {}
     }
 }
-

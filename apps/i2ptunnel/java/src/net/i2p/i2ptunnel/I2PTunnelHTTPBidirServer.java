@@ -118,4 +118,3 @@ public class I2PTunnelHTTPBidirServer extends I2PTunnelHTTPServer {
         notifyEvent("openServerResult", "ok");
     }
 }
-

@@ -87,4 +87,3 @@ public class I2PSink implements Sink {
         }
     }
 }
-

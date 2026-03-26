@@ -793,4 +793,3 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         }
     }
 }
-

@@ -160,4 +160,3 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
     }
 *****/
 }
-

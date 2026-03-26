@@ -143,4 +143,3 @@ public class ReusableGZIPInputStream extends ResettableGZIPInputStream {
     }
 ******/
 }
-

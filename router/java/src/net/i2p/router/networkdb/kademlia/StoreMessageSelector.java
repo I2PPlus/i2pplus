@@ -69,4 +69,3 @@ class StoreMessageSelector implements MessageSelector {
         return rv.toString();
     }
 }
-

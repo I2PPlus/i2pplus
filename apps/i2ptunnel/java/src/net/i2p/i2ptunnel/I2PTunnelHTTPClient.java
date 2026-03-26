@@ -375,6 +375,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      *  Note: This does not handle RFC 2616 header line splitting,
      *  which is obsoleted in RFC 7230.
      */
+    @Override
     protected void clientConnectionRun(Socket s) {
         OutputStream out = null;
 
@@ -1801,4 +1802,3 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
 }
-

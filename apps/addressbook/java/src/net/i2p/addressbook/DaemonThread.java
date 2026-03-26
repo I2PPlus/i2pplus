@@ -86,4 +86,3 @@ public class DaemonThread extends I2PAppThread implements NamingServiceUpdater {
         interrupt();
     }
 }
-

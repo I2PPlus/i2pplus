@@ -288,6 +288,7 @@ class AccessFilter implements StatefulConnectionFilter {
          *
          * @since 0.9.40
          */
+        @Override
         public void timeReached() {
             if (!timersRunning.get())
                 return;
@@ -309,5 +310,3 @@ class AccessFilter implements StatefulConnectionFilter {
         }
     }
 }
-
-

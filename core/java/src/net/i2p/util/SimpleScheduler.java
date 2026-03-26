@@ -217,4 +217,3 @@ public class SimpleScheduler {
             "; Queued: " + _executor.getQueue().size();
     }
 }
-

@@ -103,4 +103,3 @@ class ExternalTrayManager extends TrayManager {
             _jnotificationItem2.setVisible(!_showNotifications);
     }
 }
-

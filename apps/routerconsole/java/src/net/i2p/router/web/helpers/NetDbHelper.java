@@ -527,4 +527,3 @@ public class NetDbHelper extends FormHandler {
     }
 
 }
-

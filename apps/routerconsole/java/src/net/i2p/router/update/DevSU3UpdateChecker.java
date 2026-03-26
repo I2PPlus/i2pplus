@@ -98,4 +98,3 @@ class DevSU3UpdateChecker extends UpdateRunner {
         _mgr.notifyCheckComplete(this, false, false);
     }
 }
-

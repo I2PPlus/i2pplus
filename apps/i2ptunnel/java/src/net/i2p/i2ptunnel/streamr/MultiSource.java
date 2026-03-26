@@ -115,4 +115,3 @@ public class MultiSource implements Source, Sink {
         }
     }
 }
-

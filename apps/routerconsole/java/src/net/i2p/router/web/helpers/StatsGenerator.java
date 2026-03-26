@@ -243,4 +243,3 @@ public class StatsGenerator {
     private String ngettext(String s, String p, int n) {return Messages.getString(n, s, p, _context);}
 
 }
-

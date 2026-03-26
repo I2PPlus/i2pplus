@@ -67,4 +67,3 @@ public class DummyClientManagerFacade extends ClientManagerFacade {
         return Collections.emptySet();
     }
 }
-

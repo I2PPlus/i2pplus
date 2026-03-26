@@ -383,4 +383,3 @@ public class PcapWriter implements Closeable, Flushable {
         return rv;
     }
 }
-

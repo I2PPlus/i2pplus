@@ -102,4 +102,3 @@ class SubscriptionIterator implements Iterator<AddressBook> {
         throw new UnsupportedOperationException();
     }
 }
-

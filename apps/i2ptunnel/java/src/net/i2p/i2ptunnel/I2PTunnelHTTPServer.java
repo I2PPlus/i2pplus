@@ -1545,4 +1545,3 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         public BadRequestException(String s) {super(s);}
     }
 }
-

@@ -192,4 +192,3 @@ public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements So
         _i2pSink.send(to, fromPort, toPort, data);
     }
 }
-

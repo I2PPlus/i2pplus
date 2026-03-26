@@ -75,4 +75,3 @@ class SchedulerClosing extends SchedulerImpl {
         }
     }
 }
-

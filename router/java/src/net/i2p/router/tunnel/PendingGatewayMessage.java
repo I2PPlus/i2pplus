@@ -134,4 +134,3 @@ class PendingGatewayMessage implements CDQEntry {
         return buf.toString();
     }
 }
-

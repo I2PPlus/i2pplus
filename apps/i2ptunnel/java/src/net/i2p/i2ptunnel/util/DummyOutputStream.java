@@ -24,4 +24,3 @@ public class DummyOutputStream extends OutputStream {
     @Override
     public void close() {}
 }
-

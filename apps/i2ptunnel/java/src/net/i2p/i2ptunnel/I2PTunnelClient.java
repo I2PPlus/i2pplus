@@ -269,4 +269,3 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
         return rv;
     }
 }
-

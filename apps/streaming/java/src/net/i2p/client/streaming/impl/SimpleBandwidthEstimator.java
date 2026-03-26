@@ -80,6 +80,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
     /**
      * @return the current bandwidth estimate in packets/ms.
      */
+    @Override
     public synchronized float getBandwidthEstimate() {
         long now = _context.clock().now();
         // anti-aliasing filter
@@ -159,4 +160,3 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
                 "Bps";
     }
 }
-

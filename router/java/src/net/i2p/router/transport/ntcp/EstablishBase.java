@@ -321,4 +321,3 @@ abstract class EstablishBase implements EstablishState {
     }
 
 }
-

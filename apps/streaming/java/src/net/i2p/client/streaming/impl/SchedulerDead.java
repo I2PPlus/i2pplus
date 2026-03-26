@@ -47,4 +47,3 @@ class SchedulerDead extends SchedulerImpl {
         con.disconnectComplete();
     }
 }
-

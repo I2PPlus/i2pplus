@@ -229,4 +229,3 @@ public class EventLogHelper extends FormHandler {
         return buf.toString();
     }
 }
-

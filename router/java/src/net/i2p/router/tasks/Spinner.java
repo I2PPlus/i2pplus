@@ -54,4 +54,3 @@ public class Spinner extends Thread {
         } catch (InterruptedException ie) {}
     }
 }
-

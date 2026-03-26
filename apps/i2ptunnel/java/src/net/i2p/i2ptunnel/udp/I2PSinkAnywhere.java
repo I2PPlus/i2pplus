@@ -72,4 +72,3 @@ public class I2PSinkAnywhere implements Sink {
         }
     }
 }
-

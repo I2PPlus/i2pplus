@@ -66,4 +66,3 @@ class SchedulerConnectedBulk extends SchedulerImpl {
         }
     }
 }
-

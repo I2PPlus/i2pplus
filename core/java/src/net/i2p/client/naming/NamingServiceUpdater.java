@@ -14,4 +14,3 @@ public interface NamingServiceUpdater {
      */
     public void update(Properties options);
 }
-

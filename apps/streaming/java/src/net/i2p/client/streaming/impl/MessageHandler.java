@@ -155,4 +155,3 @@ class MessageHandler implements I2PSessionMuxedListener {
         _listeners.remove(lsnr);
     }
 }
-

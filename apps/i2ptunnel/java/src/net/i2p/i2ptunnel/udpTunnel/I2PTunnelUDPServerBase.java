@@ -202,5 +202,3 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
         _i2pSink.send(to, fromPort, toPort, data);
     }
 }
-
-

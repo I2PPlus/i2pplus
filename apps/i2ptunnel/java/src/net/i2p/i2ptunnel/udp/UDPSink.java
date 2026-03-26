@@ -95,4 +95,3 @@ public class UDPSink implements Sink {
         this.sock.close();
     }
 }
-

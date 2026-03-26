@@ -31,4 +31,3 @@ public class StreamSinkTestClient {
         //System.exit(0);
     }
 }
-

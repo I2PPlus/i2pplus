@@ -798,4 +798,3 @@ public class LogManager implements Flushable {
     I2PAppContext getContext() {return _context;}
 
 }
-

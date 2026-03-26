@@ -518,4 +518,3 @@ public class ShellCommand {
         _outputStream = null;
     }
 }
-

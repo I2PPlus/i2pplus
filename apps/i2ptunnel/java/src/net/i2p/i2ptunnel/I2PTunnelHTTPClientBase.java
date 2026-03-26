@@ -1156,4 +1156,3 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         return Translate.getString(key, o, o2, _context, BUNDLE_NAME);
     }
 }
-
