@@ -41,11 +41,54 @@ Output: `dist/jsdoc/`
 ## Other Tools
 
 - `ant-contrib.jar` - Ant tasks extension (required for build.xml)
-- `google-java-format.jar` - Java code formatter
+- `google-java-format.jar` - Custom I2P+ build of [google-java-format](https://github.com/google/google-java-format) (see below)
 - `javadoc/` - Javadoc CSS override theme
 - `pmd/` - PMD source code analyzer (see `pmd/README.md`)
 - `checkstyle/` - Checkstyle code style analyzer (see `checkstyle/README.md`)
 - `spotbugs/` - Static analysis for Java (see `spotbugs/README.md`)
+- `fix-java-issues.py` - Automated code fixes (PMD, SpotBugs, Checkstyle, CodeQL)
+- `java-formatter.py` - Wrapper for google-java-format with I2P defaults
+- `codeql/filter-sarif.py` - Filters CodeQL SARIF reports by `config/exclusions.txt`
+
+### Google Java Format (Custom Build)
+
+`google-java-format.jar` is a custom build with I2P+ defaults.
+
+**I2P defaults (no flags needed):**
+
+| Setting | Default | Override |
+|---|---|---|
+| Indentation | 4-space (AOSP) | `--aosp` is the default |
+| Line length | 900 (no wrapping) | `--column-limit N` |
+| String reflow | Disabled | `--skip-reflowing-long-strings` is the default |
+| Javadoc formatting | Disabled | `--skip-javadoc-formatting` is the default |
+| Import sorting | Disabled | `--skip-sorting-imports` is the default |
+
+All I2P defaults are baked in — running `java -jar google-java-format.jar file.java` applies
+AOSP style with no line wrapping, no javadoc changes, no import reordering, and no string reflowing.
+
+To enable line wrapping at a specific column limit, pass `--column-limit N` explicitly:
+
+```bash
+# Default usage (I2P style, no wrapping)
+java -jar tools/google-java-format.jar file.java
+
+# Enable line wrapping at 100 columns (upstream default)
+java -jar tools/google-java-format.jar --column-limit 100 file.java
+
+# Replace files in-place
+java -jar tools/google-java-format.jar -r file.java
+
+# Via wrapper script
+python3 tools/java-formatter.py --dry-run file.java
+```
+
+**Build notes:**
+- Source: `/tmp/google-java-format/` (`core` module only)
+- Build: `cd core && mvn package -DskipTests`
+- Fat JAR: `core/target/google-java-format-HEAD-SNAPSHOT-all-deps.jar`
+- The `--column-limit` CLI flag was added to support per-invocation override
+- `JavaFormatterOptions` and `CommandLineOptions` extended with `columnLimit` field
 
 ### PMD
 
