@@ -1,17 +1,18 @@
 package net.i2p.router.transport.udp;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.util.concurrent.BlockingQueue;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
-//import net.i2p.router.util.CoDelBlockingQueue;
+// import net.i2p.router.util.CoDelBlockingQueue;
 import net.i2p.router.util.CoDelPriorityBlockingQueue;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * Lowest level UDP packet sender that pushes packets from its queue ASAP.
@@ -46,10 +47,12 @@ public class UDPSender {
      * Queue sizes are tuned to compete with NTCP bandwidth requests and to optimize CoDel behavior.
      */
     private static final int MIN_QUEUE_SIZE = 128;
+
     private static final int MAX_QUEUE_SIZE = 1024;
 
     /** CoDel algorithm target delay in milliseconds and interval to control pacing. */
     public static final int CODEL_TARGET = 20;
+
     public static final int CODEL_INTERVAL = 100;
 
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
@@ -84,9 +87,7 @@ public class UDPSender {
         long maxMemory = SystemVersion.getMaxMemory();
         int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, (maxMemory) / (64 * 1024 * 1024)));
 
-        _outboundQueue = new CoDelPriorityBlockingQueue<>(ctx, "UDP-Sender", qsize,
-                ctx.getProperty(PROP_CODEL_TARGET, CODEL_TARGET),
-                ctx.getProperty(PROP_CODEL_INTERVAL, CODEL_INTERVAL));
+        _outboundQueue = new CoDelPriorityBlockingQueue<>(ctx, "UDP-Sender", qsize, ctx.getProperty(PROP_CODEL_TARGET, CODEL_TARGET), ctx.getProperty(PROP_CODEL_INTERVAL, CODEL_INTERVAL));
         _socket = socket;
         _runner = new Runner();
         _name = name;
@@ -101,10 +102,8 @@ public class UDPSender {
         _context.statManager().createRateStat("udp.sendACKTime", "How long an ACK packet is blocked for", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.sendFailsafe", "Time bandwidth limiter is stuck", "Transport [UDP]", RATES);
 
-        if (fullStats())
-            _context.statManager().createRequiredRateStat("udp.sendException", "Send fails (Windows exception?)", "Transport [UDP]", RATES);
-        else
-            _context.statManager().createRequiredRateStat("udp.sendException", "Send fails (Windows exception?)", "Transport", RATES);
+        if (fullStats()) _context.statManager().createRequiredRateStat("udp.sendException", "Send fails (Windows exception?)", "Transport [UDP]", RATES);
+        else _context.statManager().createRequiredRateStat("udp.sendException", "Send fails (Windows exception?)", "Transport", RATES);
     }
 
     /**
@@ -192,8 +191,7 @@ public class UDPSender {
             return;
         }
 
-        if (psz > 0 && psz < SSU2Util.MIN_DATA_LEN && _log.shouldWarn())
-            _log.warn("Small UDP packet " + psz + " bytes from " + packet, new Exception());
+        if (psz > 0 && psz < SSU2Util.MIN_DATA_LEN && _log.shouldWarn()) _log.warn("Small UDP packet " + psz + " bytes from " + packet, new Exception());
 
         if (_dummy) {
             // Testing mode: immediately release the packet back to cache

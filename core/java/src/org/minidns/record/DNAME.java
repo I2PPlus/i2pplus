@@ -10,10 +10,11 @@
  */
 package org.minidns.record;
 
-import java.io.DataInputStream;
-import java.io.IOException;
 import org.minidns.dnsname.DnsName;
 import org.minidns.record.Record.TYPE;
+
+import java.io.DataInputStream;
+import java.io.IOException;
 
 /**
  * DNS DNAME (Domain Name) redirection record payload.<br>
@@ -41,5 +42,4 @@ public class DNAME extends RRWithTarget {
     public TYPE getType() {
         return TYPE.DNAME;
     }
-
 }

@@ -1,12 +1,13 @@
 package net.i2p.i2ptunnel.irc;
 
+import net.i2p.client.streaming.I2PSocket;
+import net.i2p.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import net.i2p.client.streaming.I2PSocket;
-import net.i2p.util.Log;
 
 /**
  *  Thread to do outbound filtering.
@@ -46,62 +47,53 @@ public class IrcOutboundFilter implements Runnable {
         OutputStream output;
         try {
             in = new BufferedReader(new InputStreamReader(local.getInputStream(), "ISO-8859-1"));
-            output=remote.getOutputStream();
+            output = remote.getOutputStream();
         } catch (IOException e) {
-            if (_log.shouldWarn())
-                _log.warn("[IRC Client] Outbound Filter: No streams", e);
+            if (_log.shouldWarn()) _log.warn("[IRC Client] Outbound Filter: No streams", e);
             return;
         }
-        if (_log.shouldDebug())
-            _log.debug("[IRC Client] Outbound Filter: Running");
+        if (_log.shouldDebug()) _log.debug("[IRC Client] Outbound Filter: Running");
         try {
-            while (true)
-            {
+            while (true) {
                 try {
                     String inmsg = in.readLine();
-                    if (inmsg==null)
-                        break;
-                    if (inmsg.endsWith("\r"))
-                        inmsg=inmsg.substring(0,inmsg.length()-1);
+                    if (inmsg == null) break;
+                    if (inmsg.endsWith("\r")) inmsg = inmsg.substring(0, inmsg.length() - 1);
                     // dupe of info level log
-                    //if (_log.shouldDebug())
+                    // if (_log.shouldDebug())
                     //    _log.debug("[IRC Client] Out: [" + inmsg + "]");
                     String outmsg = IRCFilter.outboundFilter(inmsg, expectedPong, _dccHelper);
-                    if (outmsg!=null)
-                    {
+                    if (outmsg != null) {
                         if (!inmsg.equals(outmsg)) {
                             if (_log.shouldInfo()) {
                                 _log.info("[IRC Client] Outbound message FILTERED [" + outmsg + "]");
                                 _log.info("[IRC Client] Outbound message [" + inmsg + "]");
                             }
                         } else {
-                            if (_log.shouldInfo())
-                                _log.info("[IRC Client] Outbound message [" + outmsg + "]");
+                            if (_log.shouldInfo()) _log.info("[IRC Client] Outbound message [" + outmsg + "]");
                         }
                         outmsg = outmsg + "\r\n"; // rfc1459 sec. 2.3
                         output.write(outmsg.getBytes("ISO-8859-1"));
                         // save 250 ms in streaming
                         // Check ready() so we don't split the initial handshake up into multiple streaming messages
-                        if (!in.ready())
-                            output.flush();
+                        if (!in.ready()) output.flush();
                     } else {
-                        if (_log.shouldWarn())
-                            _log.warn("[IRC Client] Outbound message BLOCKED [" + inmsg + "]");
+                        if (_log.shouldWarn()) _log.warn("[IRC Client] Outbound message BLOCKED [" + inmsg + "]");
                     }
                 } catch (IOException e1) {
-                    if (_log.shouldInfo())
-                        _log.info("[IRC Client] Outbound Filter: Disconnected", e1);
-                    else if (_log.shouldWarn())
-                        _log.warn("[IRC Client] Outbound Filter: Disconnected");
+                    if (_log.shouldInfo()) _log.info("[IRC Client] Outbound Filter: Disconnected", e1);
+                    else if (_log.shouldWarn()) _log.warn("[IRC Client] Outbound Filter: Disconnected");
                     break;
                 }
             }
         } catch (RuntimeException re) {
             _log.error("[IRC Client] Error filtering outbound data", re);
         } finally {
-            try { remote.close(); } catch (IOException e) {}
+            try {
+                remote.close();
+            } catch (IOException e) {
+            }
         }
-        if (_log.shouldDebug())
-            _log.debug("[IRC Client] Outbound Filter: Stopped");
+        if (_log.shouldDebug()) _log.debug("[IRC Client] Outbound Filter: Stopped");
     }
 }

@@ -1,8 +1,10 @@
 package net.i2p.stat;
 
-import java.util.Properties;
 import junit.framework.TestCase;
+
 import org.junit.Test;
+
+import java.util.Properties;
 
 public class RateStatTest extends TestCase {
 
@@ -12,12 +14,13 @@ public class RateStatTest extends TestCase {
         try {
             new RateStat("test", "test RateStat getters etc", "tests", emptyArray);
             fail("created a rate stat with no periods");
-        } catch (IllegalArgumentException expected){}
+        } catch (IllegalArgumentException expected) {
+        }
     }
 
     @Test
-    public void testGettersEtc() throws Exception{
-        final long periods[] = new long[]{10};
+    public void testGettersEtc() throws Exception {
+        final long periods[] = new long[] {10};
         RateStat rs = new RateStat("test", "test RateStat getters etc", "tests", periods);
 
         // Test basic getters
@@ -34,23 +37,24 @@ public class RateStatTest extends TestCase {
     @SuppressWarnings("deprecation")
     @Test
     public void testAddingAndRemovingThrows() throws Exception {
-        final long periods[] = new long[]{10};
+        final long periods[] = new long[] {10};
         RateStat rs = new RateStat("test", "test RateStat getters etc", "tests", periods);
 
         try {
             rs.addRate(1000);
             fail("adding periods should not be supported");
-        } catch (UnsupportedOperationException expected){}
+        } catch (UnsupportedOperationException expected) {
+        }
         try {
             rs.removeRate(10);
             fail("removing periods should not be supported");
-        } catch (UnsupportedOperationException expected){}
+        } catch (UnsupportedOperationException expected) {
+        }
     }
 
     @Test
-    public void testRateStat() throws Exception{
-        RateStat rs = new RateStat("moo", "moo moo moo", "cow trueisms", new long[] { 60 * 1000, 60 * 60 * 1000,
-                                                                                      24 * 60 * 60 * 1000});
+    public void testRateStat() throws Exception {
+        RateStat rs = new RateStat("moo", "moo moo moo", "cow trueisms", new long[] {60 * 1000, 60 * 60 * 1000, 24 * 60 * 60 * 1000});
         // Use deterministic timestamps instead of Thread.sleep to avoid timing issues
         long currentTime = System.currentTimeMillis();
         for (int i = 0; i < 50; i++) {
@@ -67,15 +71,12 @@ public class RateStatTest extends TestCase {
         Properties props = new Properties();
         props.load(new java.io.ByteArrayInputStream(data));
 
-        RateStat loadedRs = new RateStat("moo", "moo moo moo", "cow trueisms", new long[] { 60 * 1000,
-                                                                                            60 * 60 * 1000,
-                                                                                            24 * 60 * 60 * 1000});
+        RateStat loadedRs = new RateStat("moo", "moo moo moo", "cow trueisms", new long[] {60 * 1000, 60 * 60 * 1000, 24 * 60 * 60 * 1000});
         loadedRs.load(props, "rateStat.test", true);
 
         // Compare basic properties instead of full object which includes timing-dependent data
         assertEquals("moo", loadedRs.getName());
         assertEquals("cow trueisms", loadedRs.getGroupName());
         assertEquals("moo moo moo", loadedRs.getDescription());
-
     }
 }

@@ -1,4 +1,5 @@
 package net.i2p.i2pcontrol;
+
 /*
  *  Copyright 2010 hottuna (dev@robertfoss.se)
  *
@@ -18,15 +19,6 @@ package net.i2p.i2pcontrol;
 
 import static net.i2p.app.ClientAppState.*;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 import net.i2p.app.ClientAppManager;
 import net.i2p.app.ClientAppState;
 import net.i2p.i2pcontrol.security.KeyStoreProvider;
@@ -36,8 +28,19 @@ import net.i2p.i2pcontrol.servlets.configuration.ConfigurationManager;
 import net.i2p.router.RouterContext;
 import net.i2p.router.app.RouterApp;
 import net.i2p.util.Log;
+
 import org.json.simple.DeserializationException;
 import org.json.simple.Jsoner;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This handles the starting and stopping of a ServerSocket
@@ -98,8 +101,7 @@ public class SocketController implements RouterApp {
     }
 
     public synchronized void shutdown(String[] args) {
-        if (_state == STOPPED)
-            return;
+        if (_state == STOPPED) return;
         changeState(STOPPING);
         stop();
         changeState(STOPPED);
@@ -125,22 +127,17 @@ public class SocketController implements RouterApp {
 
     private synchronized void changeState(ClientAppState state, String msg, Exception e) {
         _state = state;
-        if (_mgr != null)
-            _mgr.notify(this, state, msg, e);
+        if (_mgr != null) _mgr.notify(this, state, msg, e);
         if (_context == null) {
-            if (msg != null)
-                System.out.println(state + ": " + msg);
-            if (e != null)
-                e.printStackTrace();
+            if (msg != null) System.out.println(state + ": " + msg);
+            if (e != null) e.printStackTrace();
         }
     }
 
     private synchronized void start(String args[]) throws Exception {
         _context.logManager().getLog(JSONRPC2Servlet.class).setMinimumPriority(Log.DEBUG);
         _server = buildServer();
-        _context.portMapper().register(SVC_SKT_I2PCONTROL,
-                                       _conf.getConf("i2pcontrol.listen.address", "127.0.0.1"),
-                                       _conf.getConf("i2pcontrol.listen.port", DEFAULT_PORT));
+        _context.portMapper().register(SVC_SKT_I2PCONTROL, _conf.getConf("i2pcontrol.listen.address", "127.0.0.1"), _conf.getConf("i2pcontrol.listen.port", DEFAULT_PORT));
     }
 
     /**
@@ -173,7 +170,10 @@ public class SocketController implements RouterApp {
             } finally {
                 synchronized (SocketController.this) {
                     if (_server != null) {
-                        try { _server.close(); } catch (IOException ioe) {}
+                        try {
+                            _server.close();
+                        } catch (IOException ioe) {
+                        }
                     }
                 }
             }
@@ -183,7 +183,9 @@ public class SocketController implements RouterApp {
     private class Handler implements Runnable {
         private final Socket s;
 
-        public Handler(Socket skt) { s = skt; }
+        public Handler(Socket skt) {
+            s = skt;
+        }
 
         public void run() {
             try {
@@ -203,7 +205,10 @@ public class SocketController implements RouterApp {
                 synchronized (SocketController.this) {
                     _listeners.remove(s);
                 }
-                try { s.close(); } catch (IOException ioe) {}
+                try {
+                    s.close();
+                } catch (IOException ioe) {
+                }
             }
         }
     }
@@ -211,18 +216,19 @@ public class SocketController implements RouterApp {
     /**
      * Stop it
      */
-    private synchronized void stopServer()
-    {
+    private synchronized void stopServer() {
         try {
             if (_server != null) {
                 _context.portMapper().unregister(SVC_SKT_I2PCONTROL);
                 try {
                     _server.close();
-                } catch (IOException ioe) {}
+                } catch (IOException ioe) {
+                }
                 for (Socket listener : _listeners) {
                     try {
                         listener.close();
-                    } catch (IOException ioe) {}
+                    } catch (IOException ioe) {
+                    }
                 }
                 _listeners.clear();
             }

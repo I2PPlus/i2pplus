@@ -14,12 +14,12 @@ import net.i2p.data.SessionKey;
  */
 class OutboundGatewayProcessor {
     private final I2PAppContext _context;
-    //private final Log _log;
+    // private final Log _log;
     private final TunnelCreatorConfig _config;
 
     public OutboundGatewayProcessor(I2PAppContext ctx, TunnelCreatorConfig cfg) {
         _context = ctx;
-        //_log = ctx.logManager().getLog(OutboundGatewayProcessor.class);
+        // _log = ctx.logManager().getLog(OutboundGatewayProcessor.class);
         _config = cfg;
     }
 
@@ -33,12 +33,12 @@ class OutboundGatewayProcessor {
      *               Should always be 1024 bytes.
      */
     public void process(byte orig[], int offset, int length) {
-        //if (_log.shouldDebug()) {
+        // if (_log.shouldDebug()) {
         //    _log.debug("Original random IV: " + Base64.encode(orig, offset, IV_LENGTH));
         //    _log.debug("data:  " + Base64.encode(orig, IV_LENGTH, length - IV_LENGTH));
-        //}
+        // }
         decrypt(_config, orig, offset, length);
-        //if (_log.shouldDebug())
+        // if (_log.shouldDebug())
         //    _log.debug("Finished processing the preprocessed data for first hop from our Outbound Gateway.");
     }
 
@@ -55,10 +55,10 @@ class OutboundGatewayProcessor {
         // Don't include hop 0, since that is the creator
         for (int i = cfg.getLength() - 1; i >= 1; i--) {
             decrypt(_context, orig, offset, length, cfg.getConfig(i));
-            //if (_log.shouldDebug()) {
+            // if (_log.shouldDebug()) {
             //    _log.debug("IV at hop " + i + " before decrypt: " + Base64.encode(orig, offset, IV_LENGTH));
             //    _log.debug("hop " + i + ": " + Base64.encode(orig, offset + IV_LENGTH, length - IV_LENGTH));
-            //}
+            // }
         }
     }
 
@@ -77,12 +77,11 @@ class OutboundGatewayProcessor {
         AESEngine aes = ctx.aes();
         // update the IV for the previous (next?) hop
         aes.decryptBlock(orig, offset, ivkey, orig, offset);
-        //Log log = ctx.logManager().getLog(OutboundGatewayProcessor.class);
-        //log.debug("IV at curHop after decrypt: " + Base64.encode(orig, offset, IV_LENGTH));
-        aes.decrypt(orig, offset + IV_LENGTH, orig, offset + IV_LENGTH, config.getLayerKey(),
-                          orig, offset, length - IV_LENGTH);
+        // Log log = ctx.logManager().getLog(OutboundGatewayProcessor.class);
+        // log.debug("IV at curHop after decrypt: " + Base64.encode(orig, offset, IV_LENGTH));
+        aes.decrypt(orig, offset + IV_LENGTH, orig, offset + IV_LENGTH, config.getLayerKey(), orig, offset, length - IV_LENGTH);
         // double IV encryption
         aes.decryptBlock(orig, offset, ivkey, orig, offset);
-        //log.debug("IV at curHop after double decrypt: " + Base64.encode(orig, offset, IV_LENGTH));
+        // log.debug("IV at curHop after double decrypt: " + Base64.encode(orig, offset, IV_LENGTH));
     }
 }

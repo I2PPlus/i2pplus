@@ -1,4 +1,5 @@
 package net.i2p.router.client;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,13 +9,14 @@ package net.i2p.router.client;
  *
  */
 
-import java.util.Properties;
 import net.i2p.data.Hash;
 import net.i2p.data.i2cp.SessionConfig;
 import net.i2p.router.ClientTunnelSettings;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+
+import java.util.Properties;
 
 /**
  * Given an established connection, walk through the process of establishing the
@@ -31,16 +33,22 @@ class CreateSessionJob extends JobImpl {
         super(context);
         _log = context.logManager().getLog(CreateSessionJob.class);
         _config = config;
-        if (_log.shouldDebug()) {_log.debug("CreateSessionJob for config: " + config);}
+        if (_log.shouldDebug()) {
+            _log.debug("CreateSessionJob for config: " + config);
+        }
     }
 
     @Override
-    public String getName() {return "Request Tunnels for New Client";}
+    public String getName() {
+        return "Request Tunnels for New Client";
+    }
 
     @Override
     public void runJob() {
         Hash dest = _config.getDestination().calculateHash();
-        if (_log.shouldInfo()) {_log.info("Requesting LeaseSet for destination: " + dest);}
+        if (_log.shouldInfo()) {
+            _log.info("Requesting LeaseSet for destination: " + dest);
+        }
         ClientTunnelSettings settings = new ClientTunnelSettings(dest);
         Properties props = new Properties();
 

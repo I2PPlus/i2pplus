@@ -1,9 +1,10 @@
 package net.i2p.router;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Hash;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Minor extention of the router throttle to handle some DoS events and
@@ -15,16 +16,14 @@ import net.i2p.util.Log;
 class RouterDoSThrottle extends RouterThrottleImpl {
     public RouterDoSThrottle(RouterContext context) {
         super(context);
-        context.statManager().createRateStat("router.throttleNetDbDoS",
-                                              "NetDb lookup messages received during detected DoS", "Router [Throttle]",
-                                              RateConstants.TUNNEL_RATES);
+        context.statManager().createRateStat("router.throttleNetDbDoS", "NetDb lookup messages received during detected DoS", "Router [Throttle]", RateConstants.TUNNEL_RATES);
         _log = context.logManager().getLog(RouterDoSThrottle.class);
     }
 
     private volatile long _currentLookupPeriod;
     private final AtomicInteger _currentLookupCount = new AtomicInteger();
     // if we receive over 20 netDb lookups in 10 seconds, someone is acting up
-    private static final long LOOKUP_THROTTLE_PERIOD = 20*1000;
+    private static final long LOOKUP_THROTTLE_PERIOD = 20 * 1000;
     private static final long LOOKUP_THROTTLE_MAX = 50;
     private final Log _log;
 
@@ -41,18 +40,21 @@ class RouterDoSThrottle extends RouterThrottleImpl {
             int cnt = _currentLookupCount.incrementAndGet();
             if (cnt >= LOOKUP_THROTTLE_MAX) {
                 _context.statManager().addRateData("router.throttleNetDbDoS", cnt);
-                if (cnt >= LOOKUP_THROTTLE_MAX*2) {
-                    _context.banlist().banlistRouter(key, " <b>➜</b> Excessive NetDb lookups", null, null, now + 5*60*1000);
+                if (cnt >= LOOKUP_THROTTLE_MAX * 2) {
+                    _context.banlist().banlistRouter(key, " <b>➜</b> Excessive NetDb lookups", null, null, now + 5 * 60 * 1000);
                     BanLogger bl = BanLogger.getInstance();
-                    if (bl != null) {bl.logBan(key, _context, "Excessive NetDb lookups", 5*60*1000L);}
+                    if (bl != null) {
+                        bl.logBan(key, _context, "Excessive NetDb lookups", 5 * 60 * 1000L);
+                    }
                     if (_log.shouldWarn()) {
-                        _log.warn("Banning [" + key.toBase64().substring(0,6) + "] for 5m for excessive NetDB lookups " +
-                                  "(Limit (over 20s period): " + LOOKUP_THROTTLE_MAX + " -> Requests: " + cnt + ")");
+                        _log.warn("Banning [" + key.toBase64().substring(0, 6) + "] for 5m for excessive NetDB lookups " + "(Limit (over 20s period): " + LOOKUP_THROTTLE_MAX + " -> Requests: " + cnt + ")");
                     }
                 }
                 int rand = _context.random().nextInt(cnt);
                 return rand > LOOKUP_THROTTLE_MAX;
-            } else {return true;} // no DoS, at least, not yet
+            } else {
+                return true;
+            } // no DoS, at least, not yet
         } else {
             // on to the next period, reset counter, no DoS
             // (no, I'm not worried about concurrency here)
@@ -61,5 +63,4 @@ class RouterDoSThrottle extends RouterThrottleImpl {
             return true;
         }
     }
-
 }

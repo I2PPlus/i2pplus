@@ -6,16 +6,18 @@
 
 package org.klomp.snark;
 
-import java.io.IOException;
-import java.net.UnknownHostException;
-import java.util.Map;
 import net.i2p.data.Base32;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
+
 import org.klomp.snark.bencode.BDecoder;
 import org.klomp.snark.bencode.BEValue;
 import org.klomp.snark.bencode.InvalidBEncodingException;
+
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.Map;
 
 /**
  * Store the address information about a peer. Prior to 0.8.1, an instantiation required a peer ID,
@@ -60,9 +62,7 @@ public class PeerID implements Comparable<PeerID> {
         bevalue = m.get("ip");
         if (bevalue == null) throw new InvalidBEncodingException("ip missing");
         address = I2PSnarkUtil.getDestinationFromBase64(bevalue.getString());
-        if (address == null)
-            throw new InvalidBEncodingException(
-                    "Invalid destination [" + bevalue.getString() + "]");
+        if (address == null) throw new InvalidBEncodingException("Invalid destination [" + bevalue.getString() + "]");
 
         port = TrackerClient.PORT;
         this.destHash = address.calculateHash().getData();
@@ -188,10 +188,7 @@ public class PeerID implements Comparable<PeerID> {
                 break;
             }
         }
-        _toStringCache =
-                Base64.encode(id, nonZero, id.length - nonZero).substring(0, 4)
-                        + "@"
-                        + address.toBase64().substring(0, 6);
+        _toStringCache = Base64.encode(id, nonZero, id.length - nonZero).substring(0, 4) + "@" + address.toBase64().substring(0, 6);
         return _toStringCache;
     }
 

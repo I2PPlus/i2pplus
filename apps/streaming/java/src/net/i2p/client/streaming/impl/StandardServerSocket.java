@@ -1,5 +1,9 @@
 package net.i2p.client.streaming.impl;
 
+import net.i2p.I2PException;
+import net.i2p.client.streaming.I2PSocket;
+import net.i2p.client.streaming.I2PSocketAddress;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -7,9 +11,6 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.nio.channels.ServerSocketChannel;
-import net.i2p.I2PException;
-import net.i2p.client.streaming.I2PSocket;
-import net.i2p.client.streaming.I2PSocketAddress;
 
 /**
  * Bridge to I2PServerSocket.
@@ -40,8 +41,7 @@ class StandardServerSocket extends ServerSocket {
     public Socket accept() throws IOException {
         try {
             I2PSocket sock = _socket.accept();
-            if (sock == null)
-                throw new IOException("No socket");
+            if (sock == null) throw new IOException("No socket");
             return new StandardSocket(sock);
         } catch (I2PException i2pe) {
             IOException ioe = new IOException("accept fail");
@@ -68,8 +68,7 @@ class StandardServerSocket extends ServerSocket {
 
     @Override
     public void close() throws IOException {
-        if (isClosed())
-            throw new IOException("Already closed");
+        if (isClosed()) throw new IOException("Already closed");
         _socket.close();
     }
 
@@ -78,7 +77,7 @@ class StandardServerSocket extends ServerSocket {
      */
     @Override
     public ServerSocketChannel getChannel() {
-        //return _socket.getChannel();
+        // return _socket.getChannel();
         return null;
     }
 
@@ -111,9 +110,8 @@ class StandardServerSocket extends ServerSocket {
 
     @Override
     public int getReceiveBufferSize() {
-        ConnectionOptions opts = (ConnectionOptions) ((I2PSocketManagerFull)_socket.getManager()).getDefaultOptions();
-        if (opts == null)
-            return 64*1024;
+        ConnectionOptions opts = (ConnectionOptions) ((I2PSocketManagerFull) _socket.getManager()).getDefaultOptions();
+        if (opts == null) return 64 * 1024;
         return opts.getInboundBufferSize();
     }
 
@@ -140,29 +138,26 @@ class StandardServerSocket extends ServerSocket {
 
     @Override
     public boolean isClosed() {
-        return !((I2PSocketManagerFull)_socket.getManager()).getConnectionManager().getAllowIncomingConnections();
+        return !((I2PSocketManagerFull) _socket.getManager()).getConnectionManager().getAllowIncomingConnections();
     }
 
     /**
      *  Does nothing.
      */
     @Override
-    public void setPerformancePreferences(int connectionTime, int latency, int bandwidth) {
-    }
+    public void setPerformancePreferences(int connectionTime, int latency, int bandwidth) {}
 
     /**
      *  Does nothing.
      */
     @Override
-    public void setReceiveBufferSize(int size) {
-    }
+    public void setReceiveBufferSize(int size) {}
 
     /**
      *  Does nothing.
      */
     @Override
-    public void setReuseAddress(boolean on) {
-    }
+    public void setReuseAddress(boolean on) {}
 
     @Override
     public void setSoTimeout(int timeout) throws SocketException {

@@ -24,7 +24,7 @@ class HopProcessor {
     private final IVValidator _validator;
 
     /** helpful flag for debugging */
-    //static final boolean USE_ENCRYPTION = true;
+    // static final boolean USE_ENCRYPTION = true;
     /**
      * as of i2p 0.6, the tunnel crypto changed  to encrypt the IV both before
      * and after using it at each hop so as to prevent a certain type of replay/confirmation
@@ -80,42 +80,40 @@ class HopProcessor {
                 RouterContext ctx = (RouterContext) RouterContext.getGlobalContext();
                 long now = ctx.clock().now();
                 if (_log.shouldWarn()) {
-                    //_log.warn("Attempted mid-tunnel injection from: " + prev + "\n* Expected: " + _config.getReceiveFrom());
-                    _log.warn("Banning [" + prev.toBase32().substring(0,6) +
-                              "] for 24h -> Attempted mid-tunnel injection \n* Expected: " +
-                              _config.getReceiveFrom());
+                    // _log.warn("Attempted mid-tunnel injection from: " + prev + "\n* Expected: " + _config.getReceiveFrom());
+                    _log.warn("Banning [" + prev.toBase32().substring(0, 6) + "] for 24h -> Attempted mid-tunnel injection \n* Expected: " + _config.getReceiveFrom());
                 }
-                ctx.banlist().banlistRouter(prev, " <b>➜</b> Mid-tunnel injection attempt", null, null, now + 24*60*60*1000);
+                ctx.banlist().banlistRouter(prev, " <b>➜</b> Mid-tunnel injection attempt", null, null, now + 24 * 60 * 60 * 1000);
                 BanLogger bl = BanLogger.getInstance();
-                if (bl != null) {bl.logBan(prev, ctx, "Mid-tunnel injection attempt", 24*60*60*1000L);}
+                if (bl != null) {
+                    bl.logBan(prev, ctx, "Mid-tunnel injection attempt", 24 * 60 * 60 * 1000L);
+                }
                 return false;
             }
         }
 
         boolean okIV = _validator.receiveIV(orig, offset, orig, offset + IV_LENGTH);
         if (!okIV) {
-            if (_log.shouldInfo())
-                _log.info("Invalid IV, dropping at hop... " + _config);
+            if (_log.shouldInfo()) _log.info("Invalid IV, dropping at hop... " + _config);
             return false;
         }
 
-        //if (_log.shouldDebug()) {
+        // if (_log.shouldDebug()) {
         //    _log.debug("IV received before decrypt: " + Base64.encode(orig, offset, IV_LENGTH));
         //    _log.debug("Data before processing:\n" + Base64.encode(orig, IV_LENGTH, orig.length - IV_LENGTH));
-        //}
+        // }
 
         SessionKey ivkey = _config.getIVKey();
         AESEngine aes = _context.aes();
         // double IV encryption
         aes.encryptBlock(orig, offset, ivkey, orig, offset);
-        aes.encrypt(orig, offset + IV_LENGTH, orig, offset + IV_LENGTH, _config.getLayerKey(),
-                    orig, offset, length - IV_LENGTH);
+        aes.encrypt(orig, offset + IV_LENGTH, orig, offset + IV_LENGTH, _config.getLayerKey(), orig, offset, length - IV_LENGTH);
         aes.encryptBlock(orig, offset, ivkey, orig, offset);
 
-        //if (_log.shouldDebug()) {
+        // if (_log.shouldDebug()) {
         //    _log.debug("IV sent: " + Base64.encode(orig, offset, IV_LENGTH));
         //    _log.debug("Data after processing:\n" + Base64.encode(orig, IV_LENGTH, orig.length - IV_LENGTH));
-        //}
+        // }
         return true;
     }
 

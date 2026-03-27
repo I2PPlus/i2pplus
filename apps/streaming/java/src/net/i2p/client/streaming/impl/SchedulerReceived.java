@@ -15,23 +15,20 @@ class SchedulerReceived extends SchedulerImpl {
 
     @Override
     public boolean accept(Connection con) {
-        return (con != null) &&
-               (con.getLastSendId() < 0) &&
-               (con.getSendStreamId() > 0);
+        return (con != null) && (con.getLastSendId() < 0) && (con.getSendStreamId() > 0);
     }
-@Override
+
+    @Override
     public void eventOccurred(Connection con) {
         if (con.getUnackedPacketsReceived() <= 0) {
-            if (_log.shouldWarn())
-                _log.warn("hmm, state is received, but no unacked packets received?");
+            if (_log.shouldWarn()) _log.warn("hmm, state is received, but no unacked packets received?");
             return;
         }
 
         long timeTillSend = con.getNextSendTime() - _context.clock().now();
         if (timeTillSend <= 0) {
             if (con.getNextSendTime() > 0) {
-                if (_log.shouldDebug())
-                    _log.debug("Received connection... send a packet");
+                if (_log.shouldDebug()) _log.debug("Received connection... send a packet");
                 con.sendAvailable();
                 con.setNextSendTime(-1);
             } else {
@@ -39,8 +36,7 @@ class SchedulerReceived extends SchedulerImpl {
                 reschedule(con.getOptions().getSendAckDelay(), con);
             }
         } else {
-            if (_log.shouldDebug())
-                _log.debug("Received connection... time until next send: " + timeTillSend);
+            if (_log.shouldDebug()) _log.debug("Received connection... time until next send: " + timeTillSend);
             reschedule(timeTillSend, con);
         }
     }

@@ -27,6 +27,3 @@
  * @author Vladimir Dzhuvinov
  */
 package com.thetransactioncompany.jsonrpc2;
-
-
-

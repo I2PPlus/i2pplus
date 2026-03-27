@@ -1,5 +1,9 @@
 package net.i2p.router.web.helpers;
 
+import net.i2p.router.web.HelperBase;
+import net.i2p.router.web.Messages;
+import net.i2p.router.web.PluginStarter;
+
 import java.io.IOException;
 import java.text.Collator;
 import java.util.ArrayList;
@@ -7,9 +11,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import net.i2p.router.web.HelperBase;
-import net.i2p.router.web.Messages;
-import net.i2p.router.web.PluginStarter;
 
 /**
  * Render the configuration menu at the top of all the config pages.
@@ -19,23 +20,17 @@ import net.i2p.router.web.PluginStarter;
 public class ConfigNavHelper extends HelperBase {
 
     /** configX.jsp */
-    private static final String pages[] =
-        {"", "net", "ui", "sidebar", "home", "service", "update", "tunnels",
-            "clients", "peer", "keyring", "logging", "stats",
-            "i2cp", "plugins", "webapps",  "reseed", "advanced", "family"};
+    private static final String pages[] = {"", "net", "ui", "sidebar", "home", "service", "update", "tunnels", "clients", "peer", "keyring", "logging", "stats", "i2cp", "plugins", "webapps", "reseed", "advanced", "family"};
 
-    private static final String titles[] =
-        {_x("Bandwidth"), _x("Network"), _x("UI"), _x("Sidebar"), _x("Home Page"),
-                                           _x("Service"), _x("Update"), _x("Tunnels"),
-                                           _x("Clients"), _x("Peers"), _x("Keyring"), _x("Logging"), _x("Stats"),
-                                           _x("I2CP"), _x("Plugins"), _x("Web Apps"),
-                                           _x("Reseeding"), _x("Advanced"), _x("Router Family") };
+    private static final String titles[] = {_x("Bandwidth"), _x("Network"), _x("UI"), _x("Sidebar"), _x("Home Page"), _x("Service"), _x("Update"), _x("Tunnels"), _x("Clients"), _x("Peers"), _x("Keyring"), _x("Logging"), _x("Stats"), _x("I2CP"), _x("Plugins"), _x("Web Apps"), _x("Reseeding"), _x("Advanced"), _x("Router Family")};
 
     /** @since 0.9.19 */
     private static class Tab {
         public final String page, title;
+
         public Tab(String p, String t) {
-            page = p; title = t;
+            page = p;
+            title = t;
         }
     }
 
@@ -64,7 +59,9 @@ public class ConfigNavHelper extends HelperBase {
         List<Tab> tabs = new ArrayList<Tab>(pages.length);
         boolean hidePlugins = !PluginStarter.pluginsEnabled(_context);
         for (int i = 0; i < pages.length; i++) {
-            if (hidePlugins && pages[i].equals("plugins")) {continue;}
+            if (hidePlugins && pages[i].equals("plugins")) {
+                continue;
+            }
             tabs.add(new Tab(pages[i], _t(titles[i])));
         }
         Collections.sort(tabs, new TabComparator());
@@ -72,17 +69,18 @@ public class ConfigNavHelper extends HelperBase {
             String page = "config" + tabs.get(i).page;
             String id = page.equals("config") ? "configbandwidth" : page;
             id = id.replace("config", "nav_");
-            if (requestURI.endsWith(page) || requestURI.endsWith(page + ".jsp")) {// we are there
+            if (requestURI.endsWith(page) || requestURI.endsWith(page + ".jsp")) { // we are there
                 buf.append("<span id=").append(id).append(" class=tab2>").append(tabs.get(i).title);
             } else {
                 // we are not there, make a link
                 buf.append("<span id=").append(id).append(" class=tab title=\"").append(tabs.get(i).title).append("\">");
-                if (page.equals("configembed")) {page = "embed";}
+                if (page.equals("configembed")) {
+                    page = "embed";
+                }
                 buf.append("<a href=\"").append(page).append("\">").append(tabs.get(i).title).append("</a>");
             }
             buf.append("</span>\n");
         }
         _out.append(buf);
     }
-
 }

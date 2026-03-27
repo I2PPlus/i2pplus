@@ -1,9 +1,5 @@
 package net.i2p.router.transport.ntcp;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
@@ -11,6 +7,11 @@ import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.i2np.I2NPMessageException;
 import net.i2p.data.i2np.I2NPMessageImpl;
 import net.i2p.data.router.RouterInfo;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * NTCP 2 payload generation and parsing utilities.
@@ -72,9 +73,7 @@ class NTCP2Payload {
      *  @throws DataFormatException on parsing of individual blocks
      *  @throws I2NPMessageException on parsing of I2NP block
      */
-    public static int processPayload(I2PAppContext ctx, PayloadCallback cb,
-                                     byte[] payload, int off, int length, boolean isHandshake)
-                                    throws IOException, DataFormatException, I2NPMessageException {
+    public static int processPayload(I2PAppContext ctx, PayloadCallback cb, byte[] payload, int off, int length, boolean isHandshake) throws IOException, DataFormatException, I2NPMessageException {
         int blocks = 0;
         boolean gotPadding = false;
         boolean gotTermination = false;
@@ -82,82 +81,61 @@ class NTCP2Payload {
         final int end = off + length;
         while (i < end) {
             int type = payload[i++] & 0xff;
-            if (gotPadding)
-                throw new IOException("Illegal block after padding: " + type);
-            if (gotTermination && type != BLOCK_PADDING)
-                throw new IOException("Illegal block after termination: " + type);
-            if (isHandshake && blocks == 0 && type != BLOCK_ROUTERINFO)
-                throw new IOException("Illegal first block in handshake: " + type);
+            if (gotPadding) throw new IOException("Illegal block after padding: " + type);
+            if (gotTermination && type != BLOCK_PADDING) throw new IOException("Illegal block after termination: " + type);
+            if (isHandshake && blocks == 0 && type != BLOCK_ROUTERINFO) throw new IOException("Illegal first block in handshake: " + type);
             int len = (int) DataHelper.fromLong(payload, i, 2);
             i += 2;
             if (i + len > end) {
-                throw new IOException("Block " + blocks + " type " + type + " length " + len +
-                                      " at offset " + (i - 3 - off) + " runs over frame of size " + length +
-                                      '\n' + net.i2p.util.HexDump.dump(payload, off, length));
+                throw new IOException("Block " + blocks + " type " + type + " length " + len + " at offset " + (i - 3 - off) + " runs over frame of size " + length + '\n' + net.i2p.util.HexDump.dump(payload, off, length));
             }
             switch (type) {
                 // don't modify i inside switch
 
-                case BLOCK_DATETIME:
-                    if (isHandshake)
-                        throw new IOException("Illegal block in handshake: " + type);
-                    if (len != 4)
-                        throw new IOException("Bad length for DATETIME: " + len);
+                case BLOCK_DATETIME: if (isHandshake) throw new IOException("Illegal block in handshake: " + type);
+                    if (len != 4) throw new IOException("Bad length for DATETIME: " + len);
                     long time = DataHelper.fromLong(payload, i, 4) * 1000;
                     cb.gotDateTime(time);
                     break;
 
-                case BLOCK_OPTIONS:
-                    byte[] options = new byte[len];
+                case BLOCK_OPTIONS: byte[] options = new byte[len];
                     System.arraycopy(payload, i, options, 0, len);
                     cb.gotOptions(options, isHandshake);
                     break;
 
-                case BLOCK_ROUTERINFO:
-                    int flag = payload[i] & 0xff;
-                    if (len - 1 > RouterInfo.MAX_UNCOMPRESSED_SIZE)
-                        throw new DataFormatException("RouterInfo too big: " + (len - 1));
+                case BLOCK_ROUTERINFO: int flag = payload[i] & 0xff;
+                    if (len - 1 > RouterInfo.MAX_UNCOMPRESSED_SIZE) throw new DataFormatException("RouterInfo too big: " + (len - 1));
                     RouterInfo alice = new RouterInfo();
                     ByteArrayInputStream bais = new ByteArrayInputStream(payload, i + 1, len - 1);
                     alice.readBytes(bais, true);
-                    cb.gotRI(alice, isHandshake, (flag & 0x01) != 0 && len < 3*1024);
+                    cb.gotRI(alice, isHandshake, (flag & 0x01) != 0 && len < 3 * 1024);
                     break;
 
-                case BLOCK_I2NP:
-                    if (isHandshake)
-                        throw new IOException("Illegal block in handshake: " + type);
+                case BLOCK_I2NP: if (isHandshake) throw new IOException("Illegal block in handshake: " + type);
                     I2NPMessage msg = I2NPMessageImpl.fromRawByteArrayNTCP2(ctx, payload, i, len, null);
                     cb.gotI2NP(msg);
                     break;
 
-                case BLOCK_TERMINATION:
-                    if (isHandshake)
-                        throw new IOException("Illegal block in handshake: " + type);
-                    if (len < 9)
-                        throw new IOException("Bad length for TERMINATION: " + len);
+                case BLOCK_TERMINATION: if (isHandshake) throw new IOException("Illegal block in handshake: " + type);
+                    if (len < 9) throw new IOException("Bad length for TERMINATION: " + len);
                     long last = DataHelper.fromLong8(payload, i);
                     int rsn = payload[i + 8] & 0xff;
                     cb.gotTermination(rsn, last);
                     gotTermination = true;
                     break;
 
-                case BLOCK_PADDING:
-                    gotPadding = true;
+                case BLOCK_PADDING: gotPadding = true;
                     cb.gotPadding(len, length);
                     break;
 
-                default:
-                    if (isHandshake)
-                        throw new IOException("Illegal block in handshake: " + type);
+                default: if (isHandshake) throw new IOException("Illegal block in handshake: " + type);
                     cb.gotUnknown(type, len);
                     break;
-
             }
             i += len;
             blocks++;
         }
-        if (isHandshake && blocks == 0)
-            throw new IOException("No blocks in handshake");
+        if (isHandshake && blocks == 0) throw new IOException("No blocks in handshake");
         return blocks;
     }
 
@@ -179,7 +157,7 @@ class NTCP2Payload {
     /**
      * Base class for NTCP 2 payload blocks.
      */
-    public static abstract class Block {
+    public abstract static class Block {
         private final int type;
 
         public Block(int ttype) {
@@ -238,7 +216,7 @@ class NTCP2Payload {
 
         @Override
         public int writeData(byte[] tgt, int off) {
-            tgt[off++] = (byte) (f ? 1 : 0);    // flag
+            tgt[off++] = (byte) (f ? 1 : 0); // flag
             System.arraycopy(data, 0, tgt, off, data.length);
             return off + data.length;
         }
@@ -292,10 +270,8 @@ class NTCP2Payload {
 
         @Override
         public int writeData(byte[] tgt, int off) {
-            if (ctx != null)
-                ctx.random().nextBytes(tgt, off, sz);
-            else
-                Arrays.fill(tgt, off, off + sz, (byte) 0);
+            if (ctx != null) ctx.random().nextBytes(tgt, off, sz);
+            else Arrays.fill(tgt, off, off + sz, (byte) 0);
             return off + sz;
         }
     }

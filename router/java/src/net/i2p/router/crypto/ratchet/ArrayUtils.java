@@ -23,7 +23,9 @@ import java.lang.reflect.Array;
  */
 class ArrayUtils {
 
-    private ArrayUtils() { /* cannot be instantiated */ }
+    private ArrayUtils() {
+        /* cannot be instantiated */
+    }
 
     public static char[] newUnpaddedCharArray(int minLen) {
         return new char[minLen];

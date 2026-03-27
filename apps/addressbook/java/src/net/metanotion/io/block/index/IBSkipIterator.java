@@ -28,10 +28,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package net.metanotion.io.block.index;
 
-import java.io.IOException;
-import java.util.NoSuchElementException;
 import net.metanotion.util.skiplist.SkipIterator;
 import net.metanotion.util.skiplist.SkipSpan;
+
+import java.io.IOException;
+import java.util.NoSuchElementException;
 
 /**
  * SkipList iterator with on-demand span loading (I2P version).
@@ -63,7 +64,7 @@ public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIter
         if (index < ss.nKeys) {
             if (ss.vals == null) {
                 try {
-                    ((IBSkipSpan)ss).seekAndLoadData();
+                    ((IBSkipSpan) ss).seekAndLoadData();
                 } catch (IOException ioe) {
                     throw new RuntimeException("Error in iterator", ioe);
                 }
@@ -73,7 +74,7 @@ public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIter
             throw new NoSuchElementException();
         }
 
-        if (index < (ss.nKeys-1)) {
+        if (index < (ss.nKeys - 1)) {
             index++;
         } else if (ss.next != null) {
             ss.keys = null;
@@ -99,7 +100,7 @@ public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIter
         if (index < ss.nKeys) {
             if (ss.keys == null) {
                 try {
-                    ((IBSkipSpan)ss).seekAndLoadData();
+                    ((IBSkipSpan) ss).seekAndLoadData();
                 } catch (IOException ioe) {
                     throw new RuntimeException("Error in iterator", ioe);
                 }
@@ -122,7 +123,9 @@ public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIter
             ss.keys = null;
             ss.vals = null;
             ss = ss.prev;
-            if (ss.nKeys <= 0) { throw new NoSuchElementException(); }
+            if (ss.nKeys <= 0) {
+                throw new NoSuchElementException();
+            }
             index = (ss.nKeys - 1);
         } else {
             ss.keys = null;
@@ -131,7 +134,7 @@ public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIter
         }
         if (ss.vals == null) {
             try {
-                ((IBSkipSpan)ss).seekAndLoadData();
+                ((IBSkipSpan) ss).seekAndLoadData();
             } catch (IOException ioe) {
                 throw new RuntimeException("Error in iterator", ioe);
             }

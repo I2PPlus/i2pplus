@@ -9,12 +9,14 @@ package net.i2p.data;
  *
  */
 
-import java.util.Arrays;
-import javax.security.auth.Destroyable;
 import net.i2p.crypto.Blinding;
 import net.i2p.crypto.KeyGenerator;
 import net.i2p.crypto.SigType;
 import net.i2p.util.SimpleByteCache;
+
+import java.util.Arrays;
+
+import javax.security.auth.Destroyable;
 
 /**
  * Cryptographic private key for digital signature generation in I2P.
@@ -91,7 +93,7 @@ import net.i2p.util.SimpleByteCache;
  */
 public class SigningPrivateKey extends SimpleDataStructure implements Destroyable {
     private static final SigType DEF_TYPE = SigType.DSA_SHA1;
-    public final static int KEYSIZE_BYTES = DEF_TYPE.getPrivkeyLen();
+    public static final int KEYSIZE_BYTES = DEF_TYPE.getPrivkeyLen();
 
     private final SigType _type;
 
@@ -124,11 +126,10 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
      * @param base64Data a string of base64 data (the output of .toBase64() called
      * on a prior instance of SigningPrivateKey
      */
-    public SigningPrivateKey(String base64Data)  throws DataFormatException {
+    public SigningPrivateKey(String base64Data) throws DataFormatException {
         this();
         fromBase64(base64Data);
     }
-
 
     @Override
     public int length() {
@@ -136,10 +137,10 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
     }
 
     /**
-      *  Gets the signature type of this private key.
-      *
-      *  @since 0.9.8
-      */
+     *  Gets the signature type of this private key.
+     *
+     *  @since 0.9.8
+     */
     public SigType getType() {
         return _type;
     }
@@ -172,8 +173,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
      *  @since 0.9.39 moved from PrivateKeyFile
      */
     public boolean isOffline() {
-        if (_data == null)
-            return true;
+        if (_data == null) return true;
         byte b = 0;
         for (int i = 0; i < _data.length; i++) {
             b |= _data[i];
@@ -185,7 +185,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
      *  javax.security.auth.Destroyable interface
      *
      *  @since 0.9.40
-      */
+     */
     @Override
     public void destroy() {
         byte[] data = _data;
@@ -200,7 +200,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
      *  javax.security.auth.Destroyable interface
      *
      *  @since 0.9.40
-      */
+     */
     @Override
     public boolean isDestroyed() {
         return _data == null;

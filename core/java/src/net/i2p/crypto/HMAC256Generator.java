@@ -1,14 +1,16 @@
 package net.i2p.crypto;
 
+import net.i2p.I2PAppContext;
+import net.i2p.data.DataHelper;
+import net.i2p.data.SessionKey;
+
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.concurrent.LinkedBlockingQueue;
+
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
-import net.i2p.I2PAppContext;
-import net.i2p.data.DataHelper;
-import net.i2p.data.SessionKey;
 
 /**
  * HMAC-SHA256 message authentication code generator for I2P cryptographic operations.
@@ -95,8 +97,7 @@ public final class HMAC256Generator extends HMACGenerator {
      *  @since 0.9.12 overrides HMACGenerator
      */
     @Override
-    public boolean verify(SessionKey key, byte curData[], int curOffset, int curLength,
-                          byte origMAC[], int origMACOffset, int origMACLength) {
+    public boolean verify(SessionKey key, byte curData[], int curOffset, int curLength, byte origMAC[], int origMACOffset, int origMACLength) {
         byte calc[] = acquireTmp();
         calculate(key, curData, curOffset, curLength, calc, 0);
         boolean eq = DataHelper.eq(calc, 0, origMAC, origMACOffset, origMACLength);
@@ -156,14 +157,23 @@ public final class HMAC256Generator extends HMACGenerator {
     static final class HMACKey implements SecretKey {
         private final byte[] _data;
 
-        public HMACKey(byte[] data) { _data = data; }
+        public HMACKey(byte[] data) {
+            _data = data;
+        }
 
         @Override
-        public String getAlgorithm() { return "HmacSHA256"; }
+        public String getAlgorithm() {
+            return "HmacSHA256";
+        }
+
         @Override
-        public byte[] getEncoded() { return Arrays.copyOf(_data, 32); }
+        public byte[] getEncoded() {
+            return Arrays.copyOf(_data, 32);
+        }
+
         @Override
-        public String getFormat() { return "RAW"; }
+        public String getFormat() {
+            return "RAW";
+        }
     }
-
 }

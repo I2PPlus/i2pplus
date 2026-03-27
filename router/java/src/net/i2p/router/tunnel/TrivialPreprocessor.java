@@ -1,6 +1,5 @@
 package net.i2p.router.tunnel;
 
-import java.util.List;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -8,6 +7,8 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleByteCache;
+
+import java.util.List;
 
 /**
  * Do the simplest thing possible for preprocessing - for each message available,
@@ -42,7 +43,9 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
 
     /** how long do we want to wait before flushing */
     @Override
-    public long getDelayAmount() { return 0; }
+    public long getDelayAmount() {
+        return 0;
+    }
 
     /**
      * Return true if there were messages remaining, and we should queue up
@@ -71,41 +74,41 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
         System.arraycopy(iv, 0, fragments, fragmentLength, IV_SIZE);
 
         byte[] hashBuf = SimpleByteCache.acquire(Hash.HASH_LENGTH);
-        //Hash h = _context.sha().calculateHash(fragments, 0, fragmentLength + IV_SIZE);
+        // Hash h = _context.sha().calculateHash(fragments, 0, fragmentLength + IV_SIZE);
         _context.sha().calculateHash(fragments, 0, fragmentLength + IV_SIZE, hashBuf, 0);
 
-        //Hash h = _context.sha().calculateHash(target, 0, offset + IV_SIZE);
-        //_log.debug("before shift: " + Base64.encode(target));
+        // Hash h = _context.sha().calculateHash(target, 0, offset + IV_SIZE);
+        // _log.debug("before shift: " + Base64.encode(target));
         // now shiiiiiift
         int distance = PREPROCESSED_SIZE - fragmentLength;
         System.arraycopy(fragments, 0, fragments, distance, fragmentLength);
 
-        //if (_log.shouldDebug())
+        // if (_log.shouldDebug())
         //    _log.debug(msg.getMessageId() + ": fragments begin at " + distance + " (size="
         //               + payloadLength + " offset=" + offset +")");
 
-        java.util.Arrays.fill(fragments, 0, distance, (byte)0x0);
-        //_log.debug("after shift: " + Base64.encode(target));
+        java.util.Arrays.fill(fragments, 0, distance, (byte) 0x0);
+        // _log.debug("after shift: " + Base64.encode(target));
 
         int offset = 0;
         System.arraycopy(iv, 0, fragments, offset, IV_SIZE);
         offset += IV_SIZE;
-        //System.arraycopy(h.getData(), 0, fragments, offset, 4);
+        // System.arraycopy(h.getData(), 0, fragments, offset, 4);
         System.arraycopy(hashBuf, 0, fragments, offset, 4);
         offset += 4;
-        //_log.debug("before pad  : " + Base64.encode(target));
+        // _log.debug("before pad  : " + Base64.encode(target));
 
         SimpleByteCache.release(hashBuf);
         SimpleByteCache.release(iv);
 
         // fits in a single message, so may be smaller than the full size
-        int numPadBytes = PREPROCESSED_SIZE     // max
-                          - IV_SIZE             // hmm..
-                          - 4                   // 4 bytes of the SHA256
-                          - 1                   // the 0x00 after the padding
-                          - fragmentLength;     // the size of the fragments (instructions+payload)
+        int numPadBytes = PREPROCESSED_SIZE // max
+                        - IV_SIZE // hmm..
+                        - 4 // 4 bytes of the SHA256
+                        - 1 // the 0x00 after the padding
+                        - fragmentLength; // the size of the fragments (instructions+payload)
 
-        //_log.debug("# pad bytes:  " + numPadBytes + " payloadLength: " + payloadLength + " instructions: " + instructionsLength);
+        // _log.debug("# pad bytes:  " + numPadBytes + " payloadLength: " + payloadLength + " instructions: " + instructionsLength);
 
         if (numPadBytes > 0) {
             fillRandomNonZero(fragments, offset, numPadBytes);
@@ -114,8 +117,7 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
 
         fragments[offset] = 0x0; // no more padding
         offset++;
-        if (_log.shouldDebug())
-            _log.debug("Preprocessing beginning of the fragment instructions at offset: " + offset);
+        if (_log.shouldDebug()) _log.debug("Preprocessing beginning of the fragment instructions at offset: " + offset);
     }
 
     /**
@@ -131,10 +133,8 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
         int extra = len;
         for (int i = 0; i < len; i++) {
             while (tmp[i] == 0) {
-                if (extra < est)
-                    tmp[i] = tmp[extra++];  // use from the extra we have at the end
-                else
-                    tmp[i] = (byte)(_context.random().nextInt() & 0xFF);  // waste 3/4 of the entropy
+                if (extra < est) tmp[i] = tmp[extra++]; // use from the extra we have at the end
+                else tmp[i] = (byte) (_context.random().nextInt() & 0xFF); // waste 3/4 of the entropy
             }
         }
         System.arraycopy(tmp, 0, b, off, len);
@@ -142,8 +142,9 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
 
     /** is this a follw up byte? */
     private static final byte MASK_IS_SUBSEQUENT = FragmentHandler.MASK_IS_SUBSEQUENT;
+
     /** how should this be delivered?  shift this 5 the right and get TYPE_* */
-    //private static final byte MASK_TYPE = FragmentHandler.MASK_TYPE;
+    // private static final byte MASK_TYPE = FragmentHandler.MASK_TYPE;
     /** is this the first of a fragmented message? */
     private static final byte MASK_FRAGMENTED = FragmentHandler.MASK_FRAGMENTED;
 
@@ -151,10 +152,10 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
      *  are there follow up headers?
      *  @deprecated unimplemented
      */
-    @Deprecated
-    private static final byte MASK_EXTENDED = FragmentHandler.MASK_EXTENDED;
-    private static final byte MASK_TUNNEL = (byte)(FragmentHandler.TYPE_TUNNEL << 5);
-    private static final byte MASK_ROUTER = (byte)(FragmentHandler.TYPE_ROUTER << 5);
+    @Deprecated private static final byte MASK_EXTENDED = FragmentHandler.MASK_EXTENDED;
+
+    private static final byte MASK_TUNNEL = (byte) (FragmentHandler.TYPE_TUNNEL << 5);
+    private static final byte MASK_ROUTER = (byte) (FragmentHandler.TYPE_ROUTER << 5);
 
     protected int writeFirstFragment(PendingGatewayMessage msg, byte target[], int offset) {
         boolean fragmented = false;
@@ -164,29 +165,17 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
             fragmented = true;
             instructionsLength += 4; // messageId
             payloadLength = PREPROCESSED_SIZE - IV_SIZE - 1 - 4 - instructionsLength - offset;
-            if (payloadLength <= 0)
-                throw new RuntimeException("Fragment too small! payloadLen=" + payloadLength
-                                           + " target.length=" + target.length + " offset="+offset
-                                           + " msg.length=" + msg.getData().length + " msg.offset=" + msg.getOffset()
-                                           + " instructionsLength=" + instructionsLength + " for " + msg);
+            if (payloadLength <= 0) throw new RuntimeException("Fragment too small! payloadLen=" + payloadLength + " target.length=" + target.length + " offset=" + offset + " msg.length=" + msg.getData().length + " msg.offset=" + msg.getOffset() + " instructionsLength=" + instructionsLength + " for " + msg);
         }
-        if (payloadLength <= 0)
-            throw new RuntimeException("Full size too small! payloadLen=" + payloadLength
-                                       + " target.length=" + target.length + " offset="+offset
-                                       + " msg.length=" + msg.getData().length + " msg.offset=" + msg.getOffset()
-                                       + " instructionsLength=" + instructionsLength + " for " + msg);
+        if (payloadLength <= 0) throw new RuntimeException("Full size too small! payloadLen=" + payloadLength + " target.length=" + target.length + " offset=" + offset + " msg.length=" + msg.getData().length + " msg.offset=" + msg.getOffset() + " instructionsLength=" + instructionsLength + " for " + msg);
 
         // first fragment, or full message
         target[offset] = 0x0;
-        if (msg.getToTunnel() != null)
-            target[offset] |= MASK_TUNNEL;
-        else if (msg.getToRouter() != null)
-            target[offset] |= MASK_ROUTER;
-        if (fragmented)
-            target[offset] |= MASK_FRAGMENTED;
+        if (msg.getToTunnel() != null) target[offset] |= MASK_TUNNEL;
+        else if (msg.getToRouter() != null) target[offset] |= MASK_ROUTER;
+        if (fragmented) target[offset] |= MASK_FRAGMENTED;
 
-        if (_log.shouldDebug())
-            _log.debug("CONTROL: " + Integer.toHexString(target[offset]));
+        if (_log.shouldDebug()) _log.debug("CONTROL: " + Integer.toHexString(target[offset]));
 
         offset++;
 
@@ -200,25 +189,20 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
         }
         if (fragmented) {
             DataHelper.toLong(target, offset, 4, msg.getMessageId());
-            if (_log.shouldDebug())
-                _log.debug("Writing [MsgID " + msg.getMessageId() + "] at offset: " + offset);
+            if (_log.shouldDebug()) _log.debug("Writing [MsgID " + msg.getMessageId() + "] at offset: " + offset);
             offset += 4;
         }
         DataHelper.toLong(target, offset, 2, payloadLength);
         offset += 2;
-        //_log.debug("raw data    : " + Base64.encode(msg.getData()));
+        // _log.debug("raw data    : " + Base64.encode(msg.getData()));
         System.arraycopy(msg.getData(), msg.getOffset(), target, offset, payloadLength);
-        if (_log.shouldDebug())
-            _log.debug("Initial fragment [" + msg.getMessageId() + "/" + msg.getFragmentNumber()+ "/"
-                       + (PREPROCESSED_SIZE - offset - payloadLength) + "/" + payloadLength + "]: "
-                       );
-                       //+ Base64.encode(target, offset, payloadLength));
+        if (_log.shouldDebug()) _log.debug("Initial fragment [" + msg.getMessageId() + "/" + msg.getFragmentNumber() + "/" + (PREPROCESSED_SIZE - offset - payloadLength) + "/" + payloadLength + "]: ");
+        // + Base64.encode(target, offset, payloadLength));
 
         offset += payloadLength;
 
         msg.setOffset(msg.getOffset() + payloadLength);
-        if (fragmented)
-            msg.incrementFragmentNumber();
+        if (fragmented) msg.incrementFragmentNumber();
         return offset;
     }
 
@@ -235,13 +219,10 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
         // first fragment, or full message
         target[offset] = 0x0;
         target[offset] |= MASK_IS_SUBSEQUENT;
-        target[offset] |= (byte)(msg.getFragmentNumber() << 1); // max 63 fragments
-        if (isLast)
-            target[offset] |= 1;
+        target[offset] |= (byte) (msg.getFragmentNumber() << 1); // max 63 fragments
+        if (isLast) target[offset] |= 1;
 
-        if (_log.shouldDebug())
-            _log.debug("CONTROL: " + Integer.toHexString(target[offset]) + "/"
-                       + Base64.encode(target, offset, 1) + " at offset: " + offset);
+        if (_log.shouldDebug()) _log.debug("CONTROL: " + Integer.toHexString(target[offset]) + "/" + Base64.encode(target, offset, 1) + " at offset: " + offset);
 
         offset++;
 
@@ -250,16 +231,12 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
         DataHelper.toLong(target, offset, 2, payloadLength);
         offset += 2;
         System.arraycopy(msg.getData(), msg.getOffset(), target, offset, payloadLength);
-        if (_log.shouldDebug())
-            _log.debug("Subsequent fragment [" + msg.getMessageId() + "/" + msg.getFragmentNumber()+ "/"
-                       + offset + "/" + payloadLength + "]: "
-                       );
-                       //+ Base64.encode(target, offset, payloadLength));
+        if (_log.shouldDebug()) _log.debug("Subsequent fragment [" + msg.getMessageId() + "/" + msg.getFragmentNumber() + "/" + offset + "/" + payloadLength + "]: ");
+        // + Base64.encode(target, offset, payloadLength));
 
         offset += payloadLength;
 
-        if (!isLast)
-            msg.incrementFragmentNumber();
+        if (!isLast) msg.incrementFragmentNumber();
         msg.setOffset(msg.getOffset() + payloadLength);
         return offset;
     }
@@ -271,16 +248,13 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
      *  call getInstructionAugmentationSize() for that.
      */
     protected static int getInstructionsSize(PendingGatewayMessage msg) {
-        if (msg.getFragmentNumber() > 0)
-            return 7;
+        if (msg.getFragmentNumber() > 0) return 7;
         // control byte
         int header = 1;
         // tunnel ID
-        if (msg.getToTunnel() != null)
-            header += 4;
+        if (msg.getToTunnel() != null) header += 4;
         // router hash
-        if (msg.getToRouter() != null)
-            header += 32;
+        if (msg.getToRouter() != null) header += 32;
         // size
         header += 2;
 

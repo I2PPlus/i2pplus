@@ -25,11 +25,17 @@ public class ConfigUpdateHelper extends HelperBase {
         _dontInstall = NewsHelper.dontInstall(_context);
     }
 
-    public boolean canInstall() {return !_dontInstall;}
+    public boolean canInstall() {
+        return !_dontInstall;
+    }
 
-    public boolean updateAvailable() {return true;}
+    public boolean updateAvailable() {
+        return true;
+    }
 
-    public String getNewsURL() {return getNewsURL(_context);}
+    public String getNewsURL() {
+        return getNewsURL(_context);
+    }
 
     public static String getNewsURL(I2PAppContext ctx) {
         String url = ctx.getProperty(ConfigUpdateHandler.PROP_NEWS_URL);
@@ -38,17 +44,24 @@ public class ConfigUpdateHelper extends HelperBase {
 
     public String getUpdateURL() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_URL);
-        if (url != null) {return url.replace(",", "\n");}
-        else {return ConfigUpdateHandler.DEFAULT_UPDATE_URL;}
+        if (url != null) {
+            return url.replace(",", "\n");
+        } else {
+            return ConfigUpdateHandler.DEFAULT_UPDATE_URL;
+        }
     }
 
     public String getProxyHost() {
-        if (isInternal()) {return _t("internal") + "\" readonly";}
+        if (isInternal()) {
+            return _t("internal") + "\" readonly";
+        }
         return _context.getProperty(ConfigUpdateHandler.PROP_PROXY_HOST, ConfigUpdateHandler.DEFAULT_PROXY_HOST);
     }
 
     public String getProxyPort() {
-        if (isInternal()) {return _t("internal") + "\" readonly";}
+        if (isInternal()) {
+            return _t("internal") + "\" readonly";
+        }
         return Integer.toString(ConfigUpdateHandler.proxyPort(_context));
     }
 
@@ -60,60 +73,76 @@ public class ConfigUpdateHelper extends HelperBase {
     private boolean isInternal() {
         String host = _context.getProperty(ConfigUpdateHandler.PROP_PROXY_HOST);
         String port = _context.getProperty(ConfigUpdateHandler.PROP_PROXY_PORT);
-        return (host == null || host.equals(ConfigUpdateHandler.DEFAULT_PROXY_HOST)) &&
-               (port == null || port.equals(ConfigUpdateHandler.DEFAULT_PROXY_PORT)) &&
-               _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY) == ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT;
+        return (host == null || host.equals(ConfigUpdateHandler.DEFAULT_PROXY_HOST))
+                && (port == null || port.equals(ConfigUpdateHandler.DEFAULT_PROXY_PORT))
+                && _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY)
+                        == ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT;
     }
 
     public String getUpdateThroughProxy() {
         if (_context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY)) {
-            return "<input type=checkbox class=\"optbox slider\" value=true name=\"updateThroughProxy\" id=updateThroughProxy checked>";
+            return "<input type=checkbox class=\"optbox slider\" value=true name=\"updateThroughProxy\""
+                    + " id=updateThroughProxy checked>";
         } else {
-            return "<input type=checkbox class=\"optbox slider\" value=true name=\"updateThroughProxy\" id=updateThroughProxy >";
+            return "<input type=checkbox class=\"optbox slider\" value=true name=\"updateThroughProxy\""
+                    + " id=updateThroughProxy >";
         }
     }
 
     /** @since 0.9.9 */
     public String getNewsThroughProxy() {
-        if (_context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY_NEWS, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY_NEWS)) {
-            return "<input type=checkbox class=\"optbox slider\" value=true name=\"newsThroughProxy\" id=newsThroughProxy checked>";
+        if (_context.getProperty(
+                ConfigUpdateHandler.PROP_SHOULD_PROXY_NEWS, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY_NEWS)) {
+            return "<input type=checkbox class=\"optbox slider\" value=true name=\"newsThroughProxy\""
+                    + " id=newsThroughProxy checked>";
         } else {
-            return "<input type=checkbox class=\"optbox slider\" value=true name=\"newsThroughProxy\" id=newsThroughProxy >";
+            return "<input type=checkbox class=\"optbox slider\" value=true name=\"newsThroughProxy\""
+                    + " id=newsThroughProxy >";
         }
     }
 
     public String getUpdateUnsigned() {
-        return "<input type=checkbox class=\"optbox slider\" value=true name=\"updateUnsigned\" id=updateUnsigned " +
-               getChecked(ConfigUpdateHandler.PROP_UPDATE_UNSIGNED) + '>';
+        return "<input type=checkbox class=\"optbox slider\" value=true name=\"updateUnsigned\" id=updateUnsigned "
+                + getChecked(ConfigUpdateHandler.PROP_UPDATE_UNSIGNED) + '>';
     }
 
     /** @since 0.9.20 */
     public String getUpdateDevSU3() {
-        return "<input type=checkbox class=\"optbox slider\" value=true name=\"updateDevSU3\" id=updateDevSU3 " +
-               getChecked(ConfigUpdateHandler.PROP_UPDATE_DEV_SU3) + '>';
+        return "<input type=checkbox class=\"optbox slider\" value=true name=\"updateDevSU3\" id=updateDevSU3 "
+                + getChecked(ConfigUpdateHandler.PROP_UPDATE_DEV_SU3) + '>';
     }
 
-    private static final long PERIODS[] = new long[] { 4*60*60*1000L, 8*60*60*1000L, 12*60*60*1000L,
-                                                       24*60*60*1000L, 36*60*60*1000L, 48*60*60*1000L,
-                                                       3*24*60*60*1000L, 7*24*60*60*1000L, -1L };
+    private static final long PERIODS[] = new long[] {
+        4 * 60 * 60 * 1000L, 8 * 60 * 60 * 1000L, 12 * 60 * 60 * 1000L,
+        24 * 60 * 60 * 1000L, 36 * 60 * 60 * 1000L, 48 * 60 * 60 * 1000L,
+        3 * 24 * 60 * 60 * 1000L, 7 * 24 * 60 * 60 * 1000L, -1L
+    };
 
     public String getRefreshFrequencySelectBox() {
-        String freq = _context.getProperty(ConfigUpdateHandler.PROP_REFRESH_FREQUENCY,
-                                           ConfigUpdateHandler.DEFAULT_REFRESH_FREQUENCY);
+        String freq = _context.getProperty(
+                ConfigUpdateHandler.PROP_REFRESH_FREQUENCY, ConfigUpdateHandler.DEFAULT_REFRESH_FREQUENCY);
         long ms = ConfigUpdateHandler.DEFAULT_REFRESH_FREQ;
         try {
             ms = Long.parseLong(freq);
-            if (ms <= 0) {ms = -1;}
-        } catch (NumberFormatException nfe) {}
+            if (ms <= 0) {
+                ms = -1;
+            }
+        } catch (NumberFormatException nfe) {
+        }
 
         StringBuilder buf = new StringBuilder(256);
         buf.append("<select name=\"refreshFrequency\">\n");
         for (int i = 0; i < PERIODS.length; i++) {
             buf.append("<option value=\"").append(PERIODS[i]).append("\"");
-            if (PERIODS[i] == ms) {buf.append(SELECTED);}
+            if (PERIODS[i] == ms) {
+                buf.append(SELECTED);
+            }
             buf.append(">");
-            if (PERIODS[i] == -1) {buf.append(_t("Never"));}
-            else {buf.append(_t("Every")).append(' ').append(DataHelper.formatDuration2(PERIODS[i]));}
+            if (PERIODS[i] == -1) {
+                buf.append(_t("Never"));
+            } else {
+                buf.append(_t("Every")).append(' ').append(DataHelper.formatDuration2(PERIODS[i]));
+            }
             buf.append("</option>\n");
         }
         buf.append("</select>\n");
@@ -124,25 +153,34 @@ public class ConfigUpdateHelper extends HelperBase {
      *  Right now the jsp hides the whole select box if _dontInstall is true but this could change
      */
     public String getUpdatePolicySelectBox() {
-        String policy = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_POLICY, ConfigUpdateHandler.DEFAULT_UPDATE_POLICY);
+        String policy =
+                _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_POLICY, ConfigUpdateHandler.DEFAULT_UPDATE_POLICY);
 
         StringBuilder buf = new StringBuilder(256);
 
         buf.append("<select name=\"updatePolicy\">");
 
         buf.append("<option value=\"notify\"");
-        if ("notify".equals(policy) || _dontInstall) {buf.append(SELECTED);}
+        if ("notify".equals(policy) || _dontInstall) {
+            buf.append(SELECTED);
+        }
         buf.append('>').append(_t("Notify only")).append("</option>");
 
         buf.append("<option value=\"download\"");
-        if (_dontInstall) {buf.append(" disabled");}
-        else if ("download".equals(policy)) {buf.append(SELECTED);}
+        if (_dontInstall) {
+            buf.append(" disabled");
+        } else if ("download".equals(policy)) {
+            buf.append(SELECTED);
+        }
         buf.append('>').append(_t("Download and verify only")).append("</option>");
 
         if (_context.hasWrapper()) {
             buf.append("<option value=\"install\"");
-            if (_dontInstall) {buf.append(" disabled");}
-            else if ("install".equals(policy)) {buf.append(SELECTED);}
+            if (_dontInstall) {
+                buf.append(" disabled");
+            } else if ("install".equals(policy)) {
+                buf.append(SELECTED);
+            }
             buf.append('>').append(_t("Download, verify, and restart")).append("</option>");
         }
 
@@ -150,7 +188,9 @@ public class ConfigUpdateHelper extends HelperBase {
         return buf.toString();
     }
 
-    public String getTrustedKeys() {return new TrustedUpdate(_context).getTrustedKeysString();}
+    public String getTrustedKeys() {
+        return new TrustedUpdate(_context).getTrustedKeysString();
+    }
 
     public String getZipURL() {
         return _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL, "http://skank.i2p/i2pupdate.zip");
@@ -161,6 +201,7 @@ public class ConfigUpdateHelper extends HelperBase {
         return _context.getProperty(ConfigUpdateHandler.PROP_DEV_SU3_URL, "");
     }
 
-    public String getNewsStatus() {return NewsHelper.status(_context);}
-
+    public String getNewsStatus() {
+        return NewsHelper.status(_context);
+    }
 }

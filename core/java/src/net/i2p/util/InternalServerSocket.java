@@ -29,39 +29,40 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 @SuppressWarnings("PMD.CloseResource")
 public class InternalServerSocket extends ServerSocket {
-    private static final ConcurrentHashMap<Integer, InternalServerSocket> _sockets = new ConcurrentHashMap<Integer, InternalServerSocket>(4);
+    private static final ConcurrentHashMap<Integer, InternalServerSocket> _sockets =
+            new ConcurrentHashMap<Integer, InternalServerSocket>(4);
     private final BlockingQueue<InternalSocket> _acceptQueue;
     private final Integer _port;
     private volatile boolean _running;
-    //private static Log _log = I2PAppContext.getGlobalContext().logManager().getLog(InternalServerSocket.class);
+
+    // private static Log _log = I2PAppContext.getGlobalContext().logManager().getLog(InternalServerSocket.class);
 
     /**
      *  @param port &gt; 0
      */
     public InternalServerSocket(int port) throws IOException {
-        if (port <= 0)
-             throw new IOException("Bad port: " + port);
+        if (port <= 0) throw new IOException("Bad port: " + port);
         _port = Integer.valueOf(port);
         InternalServerSocket previous = _sockets.putIfAbsent(_port, this);
-        if (previous != null)
-             throw new IOException("Internal port in use: " + port);
+        if (previous != null) throw new IOException("Internal port in use: " + port);
         _running = true;
         _acceptQueue = new LinkedBlockingQueue<InternalSocket>();
-         //if (_log.shouldDebug())
-         //    _log.debug("Registered " + _port);
+        // if (_log.shouldDebug())
+        //    _log.debug("Registered " + _port);
     }
 
     @Override
     public void close() {
-         //if (_log.shouldDebug())
-         //   _log.debug("Closing " + _port);
+        // if (_log.shouldDebug())
+        //   _log.debug("Closing " + _port);
         _running = false;
         _sockets.remove(_port);
         _acceptQueue.clear();
         try {
             // use null streams as a poison
             _acceptQueue.put(new InternalSocket(null, null));
-        } catch (InterruptedException ie) {}
+        } catch (InterruptedException ie) {
+        }
     }
 
     @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
@@ -69,18 +70,18 @@ public class InternalServerSocket extends ServerSocket {
     public Socket accept() throws IOException {
         InternalSocket serverSock = null;
         while (_running) {
-            //if (_log.shouldDebug())
+            // if (_log.shouldDebug())
             //    _log.debug("Accepting " + _port);
             try {
                 serverSock = _acceptQueue.take();
             } catch (InterruptedException ie) {
-                if (_running)
-                    throw new InterruptedIOException();
+                if (_running) throw new InterruptedIOException();
                 throw new IOException("closed");
             }
-            if (serverSock.getInputStream() == null) // poison
+            if (serverSock.getInputStream() == null) {// poison
                 throw new IOException("closed");
-            //if (_log.shouldDebug())
+            }
+            // if (_log.shouldDebug())
             //    _log.debug("Accepted " + _port);
             break;
         }
@@ -99,10 +100,9 @@ public class InternalServerSocket extends ServerSocket {
      */
     static void internalConnect(int port, InternalSocket clientSock) throws IOException {
         InternalServerSocket iss = _sockets.get(Integer.valueOf(port));
-        if (iss == null)
-             throw new IOException("No server for port: " + port);
-        TimeoutPipedInputStream cis = new TimeoutPipedInputStream(64*1024);
-        TimeoutPipedInputStream sis = new TimeoutPipedInputStream(64*1024);
+        if (iss == null) throw new IOException("No server for port: " + port);
+        TimeoutPipedInputStream cis = new TimeoutPipedInputStream(64 * 1024);
+        TimeoutPipedInputStream sis = new TimeoutPipedInputStream(64 * 1024);
         PipedOutputStream cos = new TimeoutPipedOutputStream(sis);
         PipedOutputStream sos = new TimeoutPipedOutputStream(cis);
         clientSock.setInputStream(cis);
@@ -111,13 +111,13 @@ public class InternalServerSocket extends ServerSocket {
     }
 
     private void queueConnection(InternalSocket sock) throws IOException {
-        if (!_running)
-             throw new IOException("Server closed for port: " + _port);
-        //if (_log.shouldDebug())
+        if (!_running) throw new IOException("Server closed for port: " + _port);
+        // if (_log.shouldDebug())
         //    _log.debug("Queueing " + _port);
         try {
             _acceptQueue.put(sock);
-        } catch (InterruptedException ie) {}
+        } catch (InterruptedException ie) {
+        }
     }
 
     @Override
@@ -132,7 +132,7 @@ public class InternalServerSocket extends ServerSocket {
     public void setSoTimeout(int timeout) {}
 
     @Override
-    public int getSoTimeout () {
+    public int getSoTimeout() {
         return 0;
     }
 
@@ -144,6 +144,7 @@ public class InternalServerSocket extends ServerSocket {
     public void bind(SocketAddress endpoint) {
         throw new IllegalArgumentException("unsupported");
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
@@ -165,18 +166,21 @@ public class InternalServerSocket extends ServerSocket {
     public InetAddress getInetAddress() {
         throw new IllegalArgumentException("unsupported");
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
     public SocketAddress getLocalSocketAddress() {
         throw new IllegalArgumentException("unsupported");
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
     public int getReceiveBufferSize() {
         throw new IllegalArgumentException("unsupported");
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
@@ -206,6 +210,7 @@ public class InternalServerSocket extends ServerSocket {
     public void setReceiveBufferSize(int size) {
         throw new IllegalArgumentException("unsupported");
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override

@@ -1,11 +1,12 @@
 package net.i2p.crypto;
 
+import net.i2p.I2PAppContext;
+import net.i2p.data.Hash;
+
 import java.security.DigestException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.LinkedBlockingQueue;
-import net.i2p.I2PAppContext;
-import net.i2p.data.Hash;
 
 /**
  * Defines a wrapper for SHA-256 operation.
@@ -81,10 +82,8 @@ public final class SHA256Generator {
      */
     public MessageDigest acquire() {
         MessageDigest rv = _digests.poll();
-        if (rv != null)
-            rv.reset();
-        else
-            rv = getDigestInstance();
+        if (rv != null) rv.reset();
+        else rv = getDigestInstance();
         return rv;
     }
 
@@ -94,8 +93,7 @@ public final class SHA256Generator {
      *  @since public since 0.9.66
      */
     public void release(MessageDigest digest) {
-        if (!digest.getAlgorithm().equals("SHA-256"))
-            throw new IllegalArgumentException();
+        if (!digest.getAlgorithm().equals("SHA-256")) throw new IllegalArgumentException();
         _digests.offer(digest);
     }
 

@@ -2,10 +2,11 @@ package net.i2p.router.transport.udp;
 
 import static net.i2p.router.transport.udp.SSU2Util.*;
 
-import java.net.DatagramPacket;
 import net.i2p.crypto.ChaCha20;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
+
+import java.net.DatagramPacket;
 
 /**
  *  Encrypt/decrypt headers
@@ -16,6 +17,7 @@ final class SSU2Header {
 
     /** 8 bytes of zeros */
     public static final byte[] HEADER_PROT_DATA = new byte[HEADER_PROT_DATA_LEN];
+
     /** 12 bytes of zeros */
     public static final byte[] CHACHA_IV_0 = new byte[CHACHA_IV_LEN];
 
@@ -30,8 +32,7 @@ final class SSU2Header {
      */
     public static Header trialDecryptHandshakeHeader(UDPPacket packet, byte[] key1, byte[] key2) {
         DatagramPacket pkt = packet.getPacket();
-        if (pkt.getLength() < MIN_HANDSHAKE_DATA_LEN)
-            return null;
+        if (pkt.getLength() < MIN_HANDSHAKE_DATA_LEN) return null;
         Header header = new Header(SESSION_HEADER_SIZE);
         decryptHandshakeHeader(pkt, key1, key2, header);
         return header;
@@ -46,8 +47,7 @@ final class SSU2Header {
      */
     public static Header trialDecryptLongHeader(UDPPacket packet, byte[] key1, byte[] key2) {
         DatagramPacket pkt = packet.getPacket();
-        if (pkt.getLength() < MIN_LONG_DATA_LEN)
-            return null;
+        if (pkt.getLength() < MIN_LONG_DATA_LEN) return null;
         Header header = new Header(LONG_HEADER_SIZE);
         decryptLongHeader(pkt, key1, key2, header);
         return header;
@@ -62,8 +62,7 @@ final class SSU2Header {
      */
     public static Header trialDecryptShortHeader(UDPPacket packet, byte[] key1, byte[] key2) {
         DatagramPacket pkt = packet.getPacket();
-        if (pkt.getLength() < MIN_DATA_LEN)
-            return null;
+        if (pkt.getLength() < MIN_DATA_LEN) return null;
         Header header = new Header(SHORT_HEADER_SIZE);
         decryptShortHeader(pkt, key1, key2, header);
         return header;
@@ -99,7 +98,6 @@ final class SSU2Header {
         byte data[] = pkt.getData();
         System.arraycopy(header.data, 0, data, off, header.data.length);
     }
-
 
     /**
      *  Decrypt bytes 0-63 from pkt to header
@@ -156,28 +154,54 @@ final class SSU2Header {
     public static class Header {
         public final byte[] data;
 
-        public Header(int len) { data = new byte[len]; }
+        public Header(int len) {
+            data = new byte[len];
+        }
 
         /** all headers */
-        public long getDestConnID() { return DataHelper.fromLong8(data, 0); }
+        public long getDestConnID() {
+            return DataHelper.fromLong8(data, 0);
+        }
+
         /** all headers */
-        public long getPacketNumber() { return DataHelper.fromLong(data, PKT_NUM_OFFSET, PKT_NUM_LEN); }
+        public long getPacketNumber() {
+            return DataHelper.fromLong(data, PKT_NUM_OFFSET, PKT_NUM_LEN);
+        }
+
         /** all headers */
-        public int getType() { return data[TYPE_OFFSET] & 0xff; }
+        public int getType() {
+            return data[TYPE_OFFSET] & 0xff;
+        }
 
         /** short headers only */
-        public int getShortHeaderFlags() { return (int) DataHelper.fromLong(data, SHORT_HEADER_FLAGS_OFFSET, SHORT_HEADER_FLAGS_LEN); }
+        public int getShortHeaderFlags() {
+            return (int) DataHelper.fromLong(data, SHORT_HEADER_FLAGS_OFFSET, SHORT_HEADER_FLAGS_LEN);
+        }
 
         /** long headers only */
-        public int getVersion() { return data[VERSION_OFFSET] & 0xff; }
+        public int getVersion() {
+            return data[VERSION_OFFSET] & 0xff;
+        }
+
         /** long headers only */
-        public int getNetID() { return data[NETID_OFFSET] & 0xff; }
+        public int getNetID() {
+            return data[NETID_OFFSET] & 0xff;
+        }
+
         /** long headers only */
-        public int getHandshakeHeaderFlags() { return data[LONG_HEADER_FLAGS_OFFSET] & 0xff; }
+        public int getHandshakeHeaderFlags() {
+            return data[LONG_HEADER_FLAGS_OFFSET] & 0xff;
+        }
+
         /** long headers only */
-        public long getSrcConnID() { return DataHelper.fromLong8(data, SRC_CONN_ID_OFFSET); }
+        public long getSrcConnID() {
+            return DataHelper.fromLong8(data, SRC_CONN_ID_OFFSET);
+        }
+
         /** long headers only */
-        public long getToken() { return DataHelper.fromLong8(data, TOKEN_OFFSET); }
+        public long getToken() {
+            return DataHelper.fromLong8(data, TOKEN_OFFSET);
+        }
 
         /** handshake headers only */
         public byte[] getEphemeralKey() {
@@ -189,15 +213,12 @@ final class SSU2Header {
         @Override
         public String toString() {
             if (data.length >= SESSION_HEADER_SIZE) {
-                return "Handshake header: DestID: " + getDestConnID() + "; Packet [#" + getPacketNumber() + "]; Type: " + getType() +
-                       "; SourceID: " + getSrcConnID() + "\n* Token: " + getToken() + "; Key: " + Base64.encode(getEphemeralKey());
+                return "Handshake header: DestID: " + getDestConnID() + "; Packet [#" + getPacketNumber() + "]; Type: " + getType() + "; SourceID: " + getSrcConnID() + "\n* Token: " + getToken() + "; Key: " + Base64.encode(getEphemeralKey());
             }
             if (data.length >= LONG_HEADER_SIZE) {
-                return "Long header: DestID: " + getDestConnID() + "; Packet [#" + getPacketNumber() + "]; Type: " + getType() +
-                       "; SourceID: " + getSrcConnID() + "\n* Token: " + getToken();
+                return "Long header: DestID: " + getDestConnID() + "; Packet [#" + getPacketNumber() + "]; Type: " + getType() + "; SourceID: " + getSrcConnID() + "\n* Token: " + getToken();
             }
-            return "Short header: DestID: " + getDestConnID() + "; Packet [#" + getPacketNumber() + "]; Type: " + getType() +
-                   "; Flags: " + getShortHeaderFlags();
+            return "Short header: DestID: " + getDestConnID() + "; Packet [#" + getPacketNumber() + "]; Type: " + getType() + "; Flags: " + getShortHeaderFlags();
         }
     }
 
@@ -248,7 +269,4 @@ final class SSU2Header {
             data[i + off + HEADER_PROT_2_OFFSET] ^= xor[i];
         }
     }
-
-
-
 }

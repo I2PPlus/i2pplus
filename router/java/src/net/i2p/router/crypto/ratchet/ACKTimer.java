@@ -23,13 +23,13 @@ class ACKTimer extends SimpleTimer2.TimedEvent {
     private final Log _log;
     private final Destination _from, _to;
 
-    private static final long EXPIRATION = 60*1000;
+    private static final long EXPIRATION = 60 * 1000;
     // ClientMessageOptions.LS_MASK, don't send LS
     // Never bundle our LS with a ratchet-layer ACK, because we don't need to,
     // and because it will be the wrong LS for subsessions
     private static final int LS_MASK = 0x0100;
 
-/**
+    /**
      * ACK timer for ratchet.
      *
      * @param context router context for timer and logging
@@ -58,7 +58,6 @@ class ACKTimer extends SimpleTimer2.TimedEvent {
         // null payload, no nonce
         ClientMessage cmsg = new ClientMessage(_to, null, config, _from, msgID, 0, exp, LS_MASK);
         _context.clientMessagePool().add(cmsg, true);
-        if (_log.shouldInfo())
-            _log.info("Sent ratchet ack from " + _from.toBase32() + " to " + _to.toBase32());
+        if (_log.shouldInfo()) _log.info("Sent ratchet ack from " + _from.toBase32() + " to " + _to.toBase32());
     }
 }

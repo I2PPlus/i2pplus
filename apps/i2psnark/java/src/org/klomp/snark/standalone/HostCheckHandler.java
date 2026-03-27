@@ -1,17 +1,20 @@
 package org.klomp.snark.standalone;
 
+import net.i2p.I2PAppContext;
+import net.i2p.util.Addresses;
+import net.i2p.util.Log;
+
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.i2p.I2PAppContext;
-import net.i2p.util.Addresses;
-import net.i2p.util.Log;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
 
 /**
  * Block certain Host headers to prevent DNS rebinding attacks.
@@ -56,28 +59,13 @@ public class HostCheckHandler extends AbstractHandler {
     }
 
     /** Block by Host header, redirect HTTP to HTTPS, pass everything else to the delegate. */
-    public void handle(
-            String pathInContext,
-            Request baseRequest,
-            HttpServletRequest httpRequest,
-            HttpServletResponse httpResponse)
-            throws IOException, ServletException {
+    public void handle(String pathInContext, Request baseRequest, HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException, ServletException {
 
         String host = httpRequest.getHeader("Host");
         if (!allowHost(host)) {
             Log log = _context.logManager().getLog(HostCheckHandler.class);
             host = getHost(host);
-            String s =
-                    "Console request denied.\n"
-                            + "    To allow access using the hostname \""
-                            + host
-                            + "\", add the line \""
-                            + PROP_ALLOWED_HOSTS
-                            + '='
-                            + host
-                            + "\" in the file "
-                            + RunStandalone.APP_CONFIG_FILE.getAbsolutePath()
-                            + " and restart.";
+            String s = "Console request denied.\n" + "    To allow access using the hostname \"" + host + "\", add the line \"" + PROP_ALLOWED_HOSTS + '=' + host + "\" in the file " + RunStandalone.APP_CONFIG_FILE.getAbsolutePath() + " and restart.";
             log.logAlways(Log.WARN, s);
             httpResponse.sendError(403, s);
             baseRequest.setHandled(true);
@@ -96,9 +84,7 @@ public class HostCheckHandler extends AbstractHandler {
     private boolean allowHost(String host) {
         if (host == null) return true;
         // common cases
-        if (host.equals("127.0.0.1:8002")
-                || host.equals("localhost:8002")
-                || host.equals("[::1]:8002")) return true;
+        if (host.equals("127.0.0.1:8002") || host.equals("localhost:8002") || host.equals("[::1]:8002")) return true;
         // all allowed?
         if (_listenHosts.isEmpty()) return true;
         host = getHost(host);

@@ -23,7 +23,7 @@ class SingleSearchJob extends FloodOnlySearchJob {
     private final Hash _to;
     private OutNetMessage _onm;
 
-    private static final int TIMEOUT = 8*1000;
+    private static final int TIMEOUT = 8 * 1000;
 
     /**
      *  @param key for Router Info ONLY
@@ -36,10 +36,14 @@ class SingleSearchJob extends FloodOnlySearchJob {
     }
 
     @Override
-    public String getName() { return "Start DbStoreReplyMsg Search for NetDb key"; }
+    public String getName() {
+        return "Start DbStoreReplyMsg Search for NetDb key";
+    }
 
     @Override
-    public boolean shouldProcessDSRM() { return false; } // don't loop
+    public boolean shouldProcessDSRM() {
+        return false;
+    } // don't loop
 
     @Override
     public void runJob() {
@@ -52,13 +56,12 @@ class SingleSearchJob extends FloodOnlySearchJob {
             return;
         }
         dlm.setFrom(replyTunnel.getPeer(0));
-        dlm.setMessageExpiration(getContext().clock().now()+5*1000);
+        dlm.setMessageExpiration(getContext().clock().now() + 5 * 1000);
         dlm.setReplyTunnel(replyTunnel.getReceiveTunnelId(0));
         dlm.setSearchKey(_key);
         dlm.setSearchType(DatabaseLookupMessage.Type.RI);
 
-        if (_log.shouldInfo())
-            _log.info("SingleSearch for [" + _key.toBase64().substring(0,6) + "] sent to [" + _to.toBase64().substring(0,6) + "]");
+        if (_log.shouldInfo()) _log.info("SingleSearch for [" + _key.toBase64().substring(0, 6) + "] sent to [" + _to.toBase64().substring(0, 6) + "]");
         getContext().tunnelDispatcher().dispatchOutbound(dlm, outTunnel.getSendTunnelId(0), _to);
         _lookupsRemaining.set(1);
     }
@@ -71,6 +74,6 @@ class SingleSearchJob extends FloodOnlySearchJob {
 
     @Override
     void success() {
-        getContext().profileManager().dbLookupSuccessful(_to, System.currentTimeMillis()-_created);
+        getContext().profileManager().dbLookupSuccessful(_to, System.currentTimeMillis() - _created);
     }
 }

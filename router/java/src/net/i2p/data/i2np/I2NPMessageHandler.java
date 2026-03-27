@@ -1,4 +1,5 @@
 package net.i2p.data.i2np;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -7,7 +8,6 @@ package net.i2p.data.i2np;
  * your children, but it might.  Use at your own risk.
  *
  */
-
 
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
@@ -73,8 +73,7 @@ public class I2NPMessageHandler {
         } catch (I2NPMessageException ime) {
             throw ime;
         } catch (RuntimeException e) {
-            if (_log.shouldWarn())
-                _log.warn("Error reading the stream", e);
+            if (_log.shouldWarn()) _log.warn("Error reading the stream", e);
             throw new I2NPMessageException("Unknown error reading the " + msg.getClass().getSimpleName(), e);
         }
         _lastRead = msg;

@@ -82,7 +82,7 @@ public class MultiRouter {
         _defaultContext = new I2PAppContext(buildRouterProps(0));
         _defaultContext.clock().setOffset(0);
 
-        _out.println("RouterConsole for Router 0 is listening on: 127.0.0.1:" + (BASE_PORT-1));
+        _out.println("RouterConsole for Router 0 is listening on: 127.0.0.1:" + (BASE_PORT - 1));
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
@@ -91,7 +91,10 @@ public class MultiRouter {
                 for (Router r : _routers) {
                     r.shutdown(0);
                 }
-                try { Thread.sleep(1500); } catch (InterruptedException ie) {}
+                try {
+                    Thread.sleep(1500);
+                } catch (InterruptedException ie) {
+                }
                 Runtime.getRuntime().halt(0);
             }
         });
@@ -101,23 +104,30 @@ public class MultiRouter {
             router.setKillVMOnEnd(false);
             _routers.add(router);
             _out.println("Router " + i + " was created");
-            try { Thread.sleep(100); } catch (InterruptedException ie) {}
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ie) {
+                /* ignore */
+            }
         }
 
         for (int i = 0; i < nbrRouters; i++) {
             final Router r = _routers.get(i);
-            long offset = r.getContext().random().nextLong(Router.CLOCK_FUDGE_FACTOR/2);
-            if (r.getContext().random().nextBoolean())
-                offset = 0 - offset;
+            long offset = r.getContext().random().nextLong(Router.CLOCK_FUDGE_FACTOR / 2);
+            if (r.getContext().random().nextBoolean()) offset = 0 - offset;
             r.getContext().clock().setOffset(offset, true);
 
             /* Start the routers in separate threads since it takes some time. */
             (new Thread() {
                 @Override
-                public void run() {
-                }
+                public void run() {}
             }).start();
-            try { Thread.sleep(100); } catch (InterruptedException ie) {}
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ie) {
+                /* ignore */
+            }
 
             _out.println("Router " + i + " was started with time offset " + offset);
         }
@@ -125,10 +135,13 @@ public class MultiRouter {
 
         /* Wait for routers to start services and generate keys
          * before doing the internal reseed. */
-        int waitForRouters = (nbrRouters/10)*1000;
-        _out.println("Waiting " + waitForRouters/1000 +  " seconds for routers to start" +
-                     "before doing the internal reseed");
-        try { Thread.sleep(waitForRouters); } catch (InterruptedException ie) {}
+        int waitForRouters = (nbrRouters / 10) * 1000;
+        _out.println("Waiting " + waitForRouters / 1000 + "s for routers to start before internal reseed...");
+        try {
+            Thread.sleep(waitForRouters);
+        } catch (InterruptedException ie) {
+            /* ignore */
+        }
         internalReseed();
 
         waitForCompletion();
@@ -141,7 +154,7 @@ public class MultiRouter {
             riSet.addAll(r.getContext().netDb().getRouters());
         }
         for (Router r : _routers) {
-            for (RouterInfo ri : riSet){
+            for (RouterInfo ri : riSet) {
                 r.getContext().netDb().publish(ri);
             }
         }
@@ -181,12 +194,12 @@ public class MultiRouter {
 
         /* If MultiRouter is not run from a dir containing lib/, webapps/, docs/, etc.
          * point i2p.dir.base to a directory containing the above. */
-        //props.setProperty("i2p.dir.base", getBaseDir(id));
+        // props.setProperty("i2p.dir.base", getBaseDir(id));
         props.setProperty("i2p.dir.config", getBaseDir(id));
         props.setProperty("i2p.dir.log", getBaseDir(id));
         props.setProperty("i2p.dir.router", getBaseDir(id));
         props.setProperty("i2p.dir.pid", getBaseDir(id));
-        //props.setProperty("i2p.vmCommSystem", "true");
+        // props.setProperty("i2p.vmCommSystem", "true");
         props.setProperty("i2np.ntcp.hostname", "127.0.0.1");
         props.setProperty("i2np.udp.host", "127.0.0.1");
         props.setProperty("i2np.ntcp.port", BASE_PORT + id + "");
@@ -216,7 +229,7 @@ public class MultiRouter {
     private static Properties getClientProps() {
         Properties props = new Properties();
 
-        props.setProperty("clientApp.0.args", (BASE_PORT-1) + " 127.0.0.1 ./webapps");
+        props.setProperty("clientApp.0.args", (BASE_PORT - 1) + " 127.0.0.1 ./webapps");
         props.setProperty("clientApp.0.main", "net.i2p.router.web.RouterConsoleRunner");
         props.setProperty("clientApp.0.name", "webconsole");
         props.setProperty("clientApp.0.onBoot", "true");
@@ -230,7 +243,7 @@ public class MultiRouter {
 
     private static String getBaseDir(int id) {
         File f = new File(".");
-        return f.getAbsoluteFile().getParentFile().toString() + "/multirouter/"+ Integer.toString(id);
+        return f.getAbsoluteFile().getParentFile().toString() + "/multirouter/" + Integer.toString(id);
     }
 
     private static void waitForCompletion() {
@@ -245,7 +258,12 @@ public class MultiRouter {
                 }
             }
             if (alive > 0) {
-                try { Thread.sleep(30*1000); } catch (InterruptedException ie) {Thread.currentThread().interrupt(); break;}
+                try {
+                    Thread.sleep(30 * 1000);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
             } else {
                 break;
             }

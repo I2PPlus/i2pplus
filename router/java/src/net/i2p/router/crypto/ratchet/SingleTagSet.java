@@ -33,8 +33,7 @@ class SingleTagSet extends RatchetTagSet {
 
     @Override
     public SessionKeyAndNonce consume(RatchetSessionTag tag) {
-        if (_isUsed || !tag.equals(_tag))
-            return null;
+        if (_isUsed || !tag.equals(_tag)) return null;
         _isUsed = true;
         return new SessionKeyAndNonce(_key.getData(), 0);
     }

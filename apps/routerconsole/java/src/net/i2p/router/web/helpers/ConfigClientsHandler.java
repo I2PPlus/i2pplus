@@ -2,20 +2,6 @@ package net.i2p.router.web.helpers;
 
 import static net.i2p.update.UpdateType.*;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppState;
 import net.i2p.crypto.SU3File;
@@ -36,7 +22,23 @@ import net.i2p.router.web.UpdateHandler;
 import net.i2p.router.web.WebAppStarter;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SecureFileOutputStream;
+
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * Handles configuration changes for I2P client applications and web apps.
@@ -50,10 +52,8 @@ public class ConfigClientsHandler extends FormHandler {
         // set action for when CR is hit in a text input box
         if (_action.length() <= 0) {
             String url = getJettyString("pluginURL");
-            if (url != null && url.length() > 0)
-                _action = "Install Plugin";
-            else
-                _action = "Save Client Configuration";
+            if (url != null && url.length() > 0) _action = "Install Plugin";
+            else _action = "Save Client Configuration";
         }
 
         if (_action.equals(_t("Save Client Configuration"))) {
@@ -70,35 +70,23 @@ public class ConfigClientsHandler extends FormHandler {
         }
         boolean pluginsEnabled = PluginStarter.pluginsEnabled(_context);
         if (_action.equals(_t("Save Plugin Configuration"))) {
-            if (pluginsEnabled)
-                savePluginChanges();
-            else
-                addFormError(_t("Plugins disabled"), true);
+            if (pluginsEnabled) savePluginChanges();
+            else addFormError(_t("Plugins disabled"), true);
             return;
         }
         if (_action.equals(_t("Install Plugin"))) {
-            if (pluginsEnabled &&
-                (_context.getBooleanPropertyDefaultTrue(ConfigClientsHelper.PROP_ENABLE_PLUGIN_INSTALL) ||
-                 isAdvanced()))
-                installPlugin();
-            else
-                addFormError(_t("Plugins disabled"), true);
+            if (pluginsEnabled && (_context.getBooleanPropertyDefaultTrue(ConfigClientsHelper.PROP_ENABLE_PLUGIN_INSTALL) || isAdvanced())) installPlugin();
+            else addFormError(_t("Plugins disabled"), true);
             return;
         }
         if (_action.equals(_t("Install Plugin from File"))) {
-            if (pluginsEnabled &&
-                (_context.getBooleanPropertyDefaultTrue(ConfigClientsHelper.PROP_ENABLE_PLUGIN_INSTALL) ||
-                 isAdvanced()))
-                installPluginFromFile();
-            else
-                addFormError(_t("Plugins disabled"), true);
+            if (pluginsEnabled && (_context.getBooleanPropertyDefaultTrue(ConfigClientsHelper.PROP_ENABLE_PLUGIN_INSTALL) || isAdvanced())) installPluginFromFile();
+            else addFormError(_t("Plugins disabled"), true);
             return;
         }
         if (_action.equals(_t("Update All Installed Plugins"))) {
-            if (pluginsEnabled)
-                updateAllPlugins();
-            else
-                addFormError(_t("Plugins disabled"), true);
+            if (pluginsEnabled) updateAllPlugins();
+            else addFormError(_t("Plugins disabled"), true);
             return;
         }
         // value
@@ -107,16 +95,15 @@ public class ConfigClientsHandler extends FormHandler {
             int appnum = -1;
             try {
                 appnum = Integer.parseInt(app);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) {
+            }
             if (appnum >= 0) {
                 startClient(appnum);
             } else {
                 List<String> plugins = PluginStarter.getPlugins();
                 if (plugins.contains(app)) {
-                    if (pluginsEnabled)
-                        startPlugin(app);
-                    else
-                        addFormError(_t("Plugins disabled"), true);
+                    if (pluginsEnabled) startPlugin(app);
+                    else addFormError(_t("Plugins disabled"), true);
                 } else {
                     startWebApp(app);
                 }
@@ -130,10 +117,10 @@ public class ConfigClientsHandler extends FormHandler {
             int appnum = -1;
             try {
                 appnum = Integer.parseInt(app);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) {
+            }
             if (appnum >= 0) {
-                if (_context.getBooleanProperty(ConfigClientsHelper.PROP_ENABLE_CLIENT_CHANGE) ||
-                    isAdvanced()) {
+                if (_context.getBooleanProperty(ConfigClientsHelper.PROP_ENABLE_CLIENT_CHANGE) || isAdvanced()) {
                     deleteClient(appnum);
                 } else {
                     addFormError(_t("Delete client disabled"), true);
@@ -147,14 +134,14 @@ public class ConfigClientsHandler extends FormHandler {
                     // and it sait it was when it was not. -- Sponge
                 } catch (Throwable e) {
                     addFormError(_t("Error stopping plugin {0}", app) + ": " + e.getMessage(), true);
-                    _log.error("Error stopping plugin " + app,  e);
+                    _log.error("Error stopping plugin " + app, e);
                 }
                 try {
                     PluginStarter.deletePlugin(_context, app);
                     addFormNotice(_t("Deleted plugin {0}", app), true);
                 } catch (Throwable e) {
                     addFormError(_t("Error deleting plugin {0}", app) + ": " + e.getMessage(), true);
-                    _log.error("Error deleting plugin " + app,  e);
+                    _log.error("Error deleting plugin " + app, e);
                 }
             } else {
                 addFormError(_t("Plugins disabled"), true);
@@ -169,7 +156,8 @@ public class ConfigClientsHandler extends FormHandler {
             int appnum = -1;
             try {
                 appnum = Integer.parseInt(app);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) {
+            }
             if (appnum >= 0) {
                 stopClient(appnum);
             } else {
@@ -184,7 +172,7 @@ public class ConfigClientsHandler extends FormHandler {
                         }
                     } catch (Throwable e) {
                         addFormError(_t("Error stopping plugin {0}", app) + ": " + e.getMessage(), true);
-                        _log.error("Error stopping plugin " + app,  e);
+                        _log.error("Error stopping plugin " + app, e);
                     }
                 } else {
                     WebAppStarter.stopWebApp(_context, app);
@@ -218,31 +206,28 @@ public class ConfigClientsHandler extends FormHandler {
 
         // label (IE)
         String xStart = _t("Start");
-        if (_action.toLowerCase(Locale.US).startsWith(xStart + "<span class=hide> ") &&
-                   _action.toLowerCase(Locale.US).endsWith("</span>")) {
+        if (_action.toLowerCase(Locale.US).startsWith(xStart + "<span class=hide> ") && _action.toLowerCase(Locale.US).endsWith("</span>")) {
             // IE sucks
             String app = _action.substring(xStart.length() + 18, _action.length() - 7);
             int appnum = -1;
             try {
                 appnum = Integer.parseInt(app);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) {
+            }
             if (appnum >= 0) {
                 startClient(appnum);
             } else {
                 List<String> plugins = PluginStarter.getPlugins();
                 if (plugins.contains(app)) {
-                    if (pluginsEnabled)
-                        startPlugin(app);
-                    else
-                        addFormError(_t("Plugins disabled"), true);
+                    if (pluginsEnabled) startPlugin(app);
+                    else addFormError(_t("Plugins disabled"), true);
                 } else {
                     startWebApp(app);
                 }
             }
         } else {
-            //addFormError(_t("Unsupported") + ' ' + _action + '.');
+            // addFormError(_t("Unsupported") + ' ' + _action + '.');
         }
-
     }
 
     private void saveClientChanges() {
@@ -266,7 +251,7 @@ public class ConfigClientsHandler extends FormHandler {
         for (int cur = 0; cur < clients.size(); cur++) {
             ClientAppConfig ca = clients.get(cur);
             Object val = _settings.get(cur + ".enabled");
-            if (! (RouterConsoleRunner.class.getName().equals(ca.className))) {
+            if (!(RouterConsoleRunner.class.getName().equals(ca.className))) {
                 boolean newval = val == null;
                 if (ca.disabled != newval) {
                     ca.disabled = newval;
@@ -274,8 +259,7 @@ public class ConfigClientsHandler extends FormHandler {
                 }
             }
             // edit of an existing entry
-            if (_context.getBooleanProperty(ConfigClientsHelper.PROP_ENABLE_CLIENT_CHANGE) ||
-                isAdvanced()) {
+            if (_context.getBooleanProperty(ConfigClientsHelper.PROP_ENABLE_CLIENT_CHANGE) || isAdvanced()) {
                 String desc = getJettyString("nofilter_desc" + cur);
                 if (desc != null) {
                     int spc = desc.indexOf(' ');
@@ -294,8 +278,7 @@ public class ConfigClientsHandler extends FormHandler {
         }
 
         // new client
-        if (_context.getBooleanProperty(ConfigClientsHelper.PROP_ENABLE_CLIENT_CHANGE) ||
-            isAdvanced()) {
+        if (_context.getBooleanProperty(ConfigClientsHelper.PROP_ENABLE_CLIENT_CHANGE) || isAdvanced()) {
             int newClient = clients.size();
             String newDesc = getJettyString("nofilter_desc" + newClient);
             if (newDesc != null && !newDesc.trim().isEmpty()) {
@@ -309,8 +292,7 @@ public class ConfigClientsHandler extends FormHandler {
                 }
                 String name = getJettyString("nofilter_name" + newClient);
                 if (name == null || name.trim().isEmpty()) name = "new client";
-                ClientAppConfig ca = new ClientAppConfig(clss, name, args, 2*60*1000,
-                                                         _settings.get(newClient + ".enabled") == null);  // true for disabled
+                ClientAppConfig ca = new ClientAppConfig(clss, name, args, 2 * 60 * 1000, _settings.get(newClient + ".enabled") == null); // true for disabled
                 clients.add(ca);
                 saveClients.add(ca);
                 addFormNotice(_t("New client added") + ": " + name + " (" + clss + ").");
@@ -347,7 +329,8 @@ public class ConfigClientsHandler extends FormHandler {
                 // Give a chance for status to update
                 try {
                     Thread.sleep(1000);
-                } catch (InterruptedException ie) {}
+                } catch (InterruptedException ie) {
+                }
             } catch (Throwable t) {
                 addFormError("Cannot stop client " + ca.className + ": " + t, true);
                 _log.error("Error stopping client " + ca.className, t);
@@ -369,7 +352,8 @@ public class ConfigClientsHandler extends FormHandler {
         // Give a chance for status to update
         try {
             Thread.sleep(1000);
-        } catch (InterruptedException ie) {}
+        } catch (InterruptedException ie) {
+        }
     }
 
     private void deleteClient(int i) {
@@ -392,12 +376,10 @@ public class ConfigClientsHandler extends FormHandler {
         Properties props = RouterConsoleRunner.webAppProperties(_context);
         Set<String> keys = props.stringPropertyNames();
         for (String name : keys) {
-            if (! (name.startsWith(RouterConsoleRunner.PREFIX) && name.endsWith(RouterConsoleRunner.ENABLED)))
-                continue;
+            if (!(name.startsWith(RouterConsoleRunner.PREFIX) && name.endsWith(RouterConsoleRunner.ENABLED))) continue;
             String app = name.substring(RouterConsoleRunner.PREFIX.length(), name.lastIndexOf(RouterConsoleRunner.ENABLED));
             Object val = _settings.get(app + ".enabled");
-            if (! RouterConsoleRunner.ROUTERCONSOLE.equals(app))
-                props.setProperty(name, Boolean.toString(val != null));
+            if (!RouterConsoleRunner.ROUTERCONSOLE.equals(app)) props.setProperty(name, Boolean.toString(val != null));
         }
         RouterConsoleRunner.storeWebAppProperties(_context, props);
         addFormNotice(_t("WebApp configuration saved."), true);
@@ -407,8 +389,7 @@ public class ConfigClientsHandler extends FormHandler {
         Properties props = PluginStarter.pluginProperties();
         Set<String> keys = props.stringPropertyNames();
         for (String name : keys) {
-            if (! (name.startsWith(PluginStarter.PREFIX) && name.endsWith(PluginStarter.ENABLED)))
-                continue;
+            if (!(name.startsWith(PluginStarter.PREFIX) && name.endsWith(PluginStarter.ENABLED))) continue;
             String app = name.substring(PluginStarter.PREFIX.length(), name.lastIndexOf(PluginStarter.ENABLED));
             Object val = _settings.get(app + ".enabled");
             props.setProperty(name, Boolean.toString(val != null));
@@ -456,9 +437,9 @@ public class ConfigClientsHandler extends FormHandler {
         // go to some trouble to verify it's an su3 or xpi2p file before
         // passing it along, so we can display a good error message
         byte[] su3Magic = DataHelper.getASCII(SU3File.MAGIC);
-        byte[] zipMagic = new byte[] { 0x50, 0x4b, 0x03, 0x04 };
+        byte[] zipMagic = new byte[] {0x50, 0x4b, 0x03, 0x04};
         byte[] magic = new byte[TrustedUpdate.HEADER_BYTES + zipMagic.length];
-        File tmp =  null;
+        File tmp = null;
         OutputStream out = null;
         try {
             // non-null but zero bytes if no file entered, don't know why
@@ -471,12 +452,11 @@ public class ConfigClientsHandler extends FormHandler {
             if (!isSU3) {
                 if (!DataHelper.eq(magic, TrustedUpdate.HEADER_BYTES, zipMagic, 0, zipMagic.length)) {
                     String name = _requestWrapper.getFilename("pluginFile");
-                    if (name == null)
-                        name = "File";
+                    if (name == null) name = "File";
                     throw new IOException(name + " is not an xpi2p or su3 plugin");
                 }
             }
-            tmp =  new File(_context.getTempDir(), "plugin-" + _context.random().nextInt() + (isSU3 ? ".su3" : ".xpi2p"));
+            tmp = new File(_context.getTempDir(), "plugin-" + _context.random().nextInt() + (isSU3 ? ".su3" : ".xpi2p"));
             out = new BufferedOutputStream(new SecureFileOutputStream(tmp));
             out.write(magic);
             DataHelper.copy(in, out);
@@ -487,8 +467,7 @@ public class ConfigClientsHandler extends FormHandler {
             // above sleeps 1000, give it some more time?
             // or check for complete?
             ConsoleUpdateManager mgr = UpdateHandler.updateManager(_context);
-            if (mgr == null)
-                return;
+            if (mgr == null) return;
             for (int i = 0; i < 20; i++) {
                 if (!mgr.isUpdateInProgress(PLUGIN)) {
                     tmp.delete();
@@ -496,26 +475,30 @@ public class ConfigClientsHandler extends FormHandler {
                 }
                 try {
                     Thread.sleep(500);
-                } catch (InterruptedException ie) {}
+                } catch (InterruptedException ie) {
+                }
             }
             String status = mgr.getStatus();
-            if (status != null && status.length() > 0)
-                 addFormNoticeNoEscape(status);
+            if (status != null && status.length() > 0) addFormNoticeNoEscape(status);
         } catch (IOException ioe) {
             addFormError(_t("Install from file failed") + " - " + ioe.getLocalizedMessage(), true);
         } finally {
             // it's really a ByteArrayInputStream but we'll play along...
-            if (in != null)
-                try { in.close(); } catch (IOException ioe) {}
-            if (out != null)  try { out.close(); } catch (IOException ioe) {}
+            if (in != null) try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
+            if (out != null) try {
+                    out.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 
     private void updatePlugin(String app) {
         Properties props = PluginStarter.pluginProperties(_context, app);
         String url = props.getProperty("updateURL.su3");
-        if (url == null)
-            url = props.getProperty("updateURL");
+        if (url == null) url = props.getProperty("updateURL");
         if (url == null) {
             addFormError(_t("No update URL specified for {0}", app), true);
             return;
@@ -529,14 +512,14 @@ public class ConfigClientsHandler extends FormHandler {
             addFormError(_t("Plugin or update download already in progress."), true);
             return;
         }
-        if (!verifyProxy())
-            return;
+        if (!verifyProxy()) return;
         addFormNotice(_t("Updating all plugins"), true);
         PluginStarter.updateAll(_context);
         // So that update() will post a status to the summary bar before we reload
         try {
             Thread.sleep(1000);
-        } catch (InterruptedException ie) {}
+        } catch (InterruptedException ie) {
+        }
     }
 
     /**
@@ -565,21 +548,19 @@ public class ConfigClientsHandler extends FormHandler {
                 addFormError(_t("Bad URL {0}", url), true);
                 return;
             }
-            if (!verifyProxy())
-                return;
+            if (!verifyProxy()) return;
         }
         if (mgr.installPlugin(app, uri)) {
-            if (url.startsWith("file:"))
-                addFormNotice(_t("Installing plugin from {0}", uri.getPath()), true);
-            else
-                addFormNotice(_t("Downloading plugin from {0}", url), true);
+            if (url.startsWith("file:")) addFormNotice(_t("Installing plugin from {0}", uri.getPath()), true);
+            else addFormNotice(_t("Downloading plugin from {0}", url), true);
         } else {
             addFormError(_t("Cannot install, check logs"), true);
         }
         // So that update() will post a status to the summary bar before we reload
         try {
             Thread.sleep(5000);
-        } catch (InterruptedException ie) {}
+        } catch (InterruptedException ie) {
+        }
     }
 
     private void checkPlugin(String app) {
@@ -588,14 +569,14 @@ public class ConfigClientsHandler extends FormHandler {
             addFormError(_t("Update manager not registered, cannot check"), true);
             return;
         }
-        if (!verifyProxy())
-            return;
+        if (!verifyProxy()) return;
         mgr.check(PLUGIN, app);
         addFormNotice(_t("Checking plugin {0} for updates", app), true);
         // So that update() will post a status to the summary bar before we reload
         try {
             Thread.sleep(1000);
-        } catch (InterruptedException ie) {}
+        } catch (InterruptedException ie) {
+        }
     }
 
     /**
@@ -610,12 +591,8 @@ public class ConfigClientsHandler extends FormHandler {
     private boolean verifyProxy() {
         String proxyHost = _context.getProperty(ConfigUpdateHandler.PROP_PROXY_HOST, ConfigUpdateHandler.DEFAULT_PROXY_HOST);
         int proxyPort = ConfigUpdateHandler.proxyPort(_context);
-        boolean rv = !
-            (proxyPort == ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT &&
-             proxyHost.equals(ConfigUpdateHandler.DEFAULT_PROXY_HOST) &&
-             !_context.portMapper().isRegistered(PortMapper.SVC_HTTP_PROXY));
-        if (!rv)
-            addFormError(_t("HTTP client proxy tunnel must be running").replace("client proxy tunnel", "proxy tunnel"), true);
+        boolean rv = !(proxyPort == ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT && proxyHost.equals(ConfigUpdateHandler.DEFAULT_PROXY_HOST) && !_context.portMapper().isRegistered(PortMapper.SVC_HTTP_PROXY));
+        if (!rv) addFormError(_t("HTTP client proxy tunnel must be running").replace("client proxy tunnel", "proxy tunnel"), true);
         return rv;
     }
 
@@ -625,15 +602,19 @@ public class ConfigClientsHandler extends FormHandler {
             // linkify the app name for the message if available
             Properties props = PluginStarter.pluginProperties(_context, app);
             String name = ConfigClientsHelper.stripHTML(props, "consoleLinkName_" + Messages.getLanguage(_context));
-            if (name == null) {name = ConfigClientsHelper.stripHTML(props, "consoleLinkName");}
+            if (name == null) {
+                name = ConfigClientsHelper.stripHTML(props, "consoleLinkName");
+            }
             String url = ConfigClientsHelper.stripHTML(props, "consoleLinkURL");
             if (name != null && url != null && name.length() > 0 && url.length() > 0) {
                 app = "<a href=\"" + url + "\" target=_blank>" + name + "</a>";
                 addFormNoticeNoEscape(_t("Started plugin {0}", app), true);
-            } else {addFormNotice(_t("Started plugin {0}", app), true);}
+            } else {
+                addFormNotice(_t("Started plugin {0}", app), true);
+            }
         } catch (Throwable e) {
             addFormError(_t("Error starting plugin {0}", app) + ": " + e.getMessage(), true);
-            _log.error("Error starting plugin " + app,  e);
+            _log.error("Error starting plugin " + app, e);
         }
     }
 
@@ -680,8 +661,9 @@ public class ConfigClientsHandler extends FormHandler {
         }
         if (_context.router().saveConfig(changes, null)) {
             addFormNotice(_t("Interface configuration saved"), true);
-            if (restart) {addFormNotice(_t("Restart required to take effect"), true);}
-        } else
-            addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);
+            if (restart) {
+                addFormNotice(_t("Restart required to take effect"), true);
+            }
+        } else addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);
     }
 }

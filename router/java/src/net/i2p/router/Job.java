@@ -1,4 +1,5 @@
 package net.i2p.router;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -7,7 +8,6 @@ package net.i2p.router;
  * your children, but it might.  Use at your own risk.
  *
  */
-
 
 /**
  * Interface for router-internal executable tasks. Defines job timing, execution, and failure handling for scheduled operations within the job queue system.
@@ -20,16 +20,19 @@ public interface Job {
      * @return the descriptive name of the task
      */
     public String getName();
+
     /**
      * Unique id for this job.
      * @return the unique job id
      */
     public long getJobId();
+
     /**
      * Timing criteria for the task
      * @return the job timing object
      */
     public JobTiming getTiming();
+
     /**
      * Actually perform the task.  This call blocks until the Job is complete.
      */

@@ -120,8 +120,6 @@ public enum EncType {
      *  @since 0.9.67
      */
     MLKEM1024_X25519_CT(100010, 1568, 0, EncAlgo.ECIES_MLKEM_INT, "EC/None/NoPadding", X25519_SPEC, "0.9.67");
-
-
     private final int code, pubkeyLen, privkeyLen;
     private final EncAlgo base;
     private final String algoName, since;
@@ -133,8 +131,14 @@ public enum EncType {
      *  @param transformation algorithm/mode/padding
      *
      */
-    EncType(int cod, int pubLen, int privLen, EncAlgo baseAlgo,
-            String transformation, AlgorithmParameterSpec pSpec, String supportedSince) {
+    EncType(
+            int cod,
+            int pubLen,
+            int privLen,
+            EncAlgo baseAlgo,
+            String transformation,
+            AlgorithmParameterSpec pSpec,
+            String supportedSince) {
         if (pubLen > 256 && baseAlgo != EncAlgo.ECIES_MLKEM_INT)
             throw new IllegalArgumentException("fixup PublicKey for longer keys");
         code = cod;
@@ -149,27 +153,36 @@ public enum EncType {
     }
 
     /** the unique identifier for this type */
-    public int getCode() { return code; }
+    public int getCode() {
+        return code;
+    }
 
     /** the length of the public key, in bytes */
-    public int getPubkeyLen() { return pubkeyLen; }
+    public int getPubkeyLen() {
+        return pubkeyLen;
+    }
 
     /** the length of the private key, in bytes */
-    public int getPrivkeyLen() { return privkeyLen; }
+    public int getPrivkeyLen() {
+        return privkeyLen;
+    }
 
     /** the standard base algorithm name used for the Java crypto factories */
-    public EncAlgo getBaseAlgorithm() { return base; }
+    public EncAlgo getBaseAlgorithm() {
+        return base;
+    }
 
     /** the standard name used for the Java crypto factories */
-    public String getAlgorithmName() { return algoName; }
+    public String getAlgorithmName() {
+        return algoName;
+    }
 
     /**
      *  The elliptic curve ECParameterSpec for ECDSA; DSAParameterSpec for DSA
      *  @throws InvalidParameterSpecException if the algorithm is not available on this JVM.
      */
     public AlgorithmParameterSpec getParams() throws InvalidParameterSpecException {
-        if (params == null)
-            throw new InvalidParameterSpecException(toString() + " is not available in this JVM");
+        if (params == null) throw new InvalidParameterSpecException(toString() + " is not available in this JVM");
         return params;
     }
 
@@ -181,10 +194,10 @@ public enum EncType {
     }
 
     /**
-      *  Checks if this encryption type is available in the JVM.
-      *
-      *  @return true if supported in this JVM
-      */
+     *  Checks if this encryption type is available in the JVM.
+     *
+     *  @return true if supported in this JVM
+     */
     public boolean isAvailable() {
         return isAvail;
     }
@@ -209,36 +222,34 @@ public enum EncType {
     }
 
     /**
-      *  Checks if the encryption type with the given code is available.
-      *
-      *  @return true if supported in this JVM
-      */
+     *  Checks if the encryption type with the given code is available.
+     *
+     *  @return true if supported in this JVM
+     */
     public static boolean isAvailable(int code) {
         EncType type = getByCode(code);
-        if (type == null)
-            return false;
+        if (type == null) return false;
         return type.isAvailable();
     }
 
     /**
-      *  Checks if the encryption type with the given name or number is available.
-      *
-      *  @param stype number or name
-      *  @return true if supported in this JVM
-      */
+     *  Checks if the encryption type with the given name or number is available.
+     *
+     *  @param stype number or name
+     *  @return true if supported in this JVM
+     */
     public static boolean isAvailable(String stype) {
         EncType type = parseEncType(stype);
-        if (type == null)
-            return false;
+        if (type == null) return false;
         return type.isAvailable();
     }
 
     /**
-      *  Checks if this is a post-quantum encryption type.
-      *
-      *  @since 0.9.67
-      *  @return true if this is a PQ type
-      */
+     *  Checks if this is a post-quantum encryption type.
+     *
+     *  @since 0.9.67
+     *  @return true if this is a PQ type
+     */
     public boolean isPQ() {
         return isPQ;
     }
@@ -251,19 +262,17 @@ public enum EncType {
         BY_CODE = new EncType[max + 1];
         for (EncType type : values) {
             int i = type.getCode();
-            if (BY_CODE[i] != null)
-                throw new IllegalStateException("Duplicate EncType code");
+            if (BY_CODE[i] != null) throw new IllegalStateException("Duplicate EncType code");
             BY_CODE[i] = type;
         }
     }
 
     /** Gets the encryption type by code.
-      *
-      *  @return null if not supported
-      */
+     *
+     *  @return null if not supported
+     */
     public static EncType getByCode(int code) {
-        if (code < 0 || code >= BY_CODE.length)
-            return null;
+        if (code < 0 || code >= BY_CODE.length) return null;
         return BY_CODE[code];
     }
 

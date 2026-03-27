@@ -1,4 +1,5 @@
 package net.i2p.sam;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
@@ -8,9 +9,6 @@ package net.i2p.sam;
  *
  */
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 import net.i2p.client.I2PSession;
 import net.i2p.client.I2PSessionException;
 import net.i2p.client.datagram.I2PDatagramDissector;
@@ -19,6 +17,10 @@ import net.i2p.client.datagram.I2PInvalidDatagramException;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Destination;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 /**
  * SAM DATAGRAM session class.
  *
@@ -26,7 +28,7 @@ import net.i2p.data.Destination;
  */
 class SAMDatagramSession extends SAMMessageSession {
 
-    public static final int DGRAM_SIZE_MAX = 31*1024;
+    public static final int DGRAM_SIZE_MAX = 31 * 1024;
 
     // FIXME make final after fixing SAMv3DatagramSession override
     protected SAMDatagramReceiver recv;
@@ -43,9 +45,7 @@ class SAMDatagramSession extends SAMMessageSession {
      * @throws DataFormatException
      * @throws I2PSessionException
      */
-    protected SAMDatagramSession(String dest, Properties props,
-                              SAMDatagramReceiver recv) throws IOException,
-                              DataFormatException, I2PSessionException {
+    protected SAMDatagramSession(String dest, Properties props, SAMDatagramReceiver recv) throws IOException, DataFormatException, I2PSessionException {
         super(dest, props);
         this.recv = recv;
         dgramMaker = new I2PDatagramMaker(getI2PSession());
@@ -63,9 +63,7 @@ class SAMDatagramSession extends SAMMessageSession {
      * @throws DataFormatException
      * @throws I2PSessionException
      */
-    public SAMDatagramSession(InputStream destStream, Properties props,
-                              SAMDatagramReceiver recv) throws IOException,
-                              DataFormatException, I2PSessionException {
+    public SAMDatagramSession(InputStream destStream, Properties props, SAMDatagramReceiver recv) throws IOException, DataFormatException, I2PSessionException {
         super(destStream, props);
         this.recv = recv;
         dgramMaker = new I2PDatagramMaker(getI2PSession());
@@ -77,9 +75,7 @@ class SAMDatagramSession extends SAMMessageSession {
      * @param props unused for now
      * @since 0.9.25
      */
-    protected SAMDatagramSession(I2PSession sess, Properties props, int listenPort,
-                              SAMDatagramReceiver recv) throws IOException,
-                              DataFormatException, I2PSessionException {
+    protected SAMDatagramSession(I2PSession sess, Properties props, int listenPort, SAMDatagramReceiver recv) throws IOException, DataFormatException, I2PSessionException {
         super(sess, I2PSession.PROTO_DATAGRAM, listenPort);
         this.recv = recv;
         dgramMaker = new I2PDatagramMaker(getI2PSession());
@@ -96,10 +92,8 @@ class SAMDatagramSession extends SAMMessageSession {
      * @throws DataFormatException on unknown / bad dest
      * @throws I2PSessionException on serious error, probably session closed
      */
-    public boolean sendBytes(String dest, byte[] data, int proto,
-                             int fromPort, int toPort) throws DataFormatException, I2PSessionException {
-        if (data.length > DGRAM_SIZE_MAX)
-            throw new DataFormatException("Datagram size exceeded (" + data.length + ")");
+    public boolean sendBytes(String dest, byte[] data, int proto, int fromPort, int toPort) throws DataFormatException, I2PSessionException {
+        if (data.length > DGRAM_SIZE_MAX) throw new DataFormatException("Datagram size exceeded (" + data.length + ")");
         byte[] dgram;
         synchronized (dgramMaker) {
             dgram = dgramMaker.makeI2PDatagram(data);
@@ -112,19 +106,13 @@ class SAMDatagramSession extends SAMMessageSession {
      *
      * @since 0.9.25
      */
-    public boolean sendBytes(String dest, byte[] data, int proto,
-                             int fromPort, int toPort,
-                             boolean sendLeaseSet, int sendTags,
-                             int tagThreshold, int expiration)
-                                 throws DataFormatException, I2PSessionException {
-        if (data.length > DGRAM_SIZE_MAX)
-            throw new DataFormatException("Datagram size exceeded (" + data.length + ")");
+    public boolean sendBytes(String dest, byte[] data, int proto, int fromPort, int toPort, boolean sendLeaseSet, int sendTags, int tagThreshold, int expiration) throws DataFormatException, I2PSessionException {
+        if (data.length > DGRAM_SIZE_MAX) throw new DataFormatException("Datagram size exceeded (" + data.length + ")");
         byte[] dgram;
         synchronized (dgramMaker) {
             dgram = dgramMaker.makeI2PDatagram(data);
         }
-        return sendBytesThroughMessageSession(dest, dgram, I2PSession.PROTO_DATAGRAM, fromPort, toPort,
-                                              sendLeaseSet, sendTags,tagThreshold, expiration);
+        return sendBytesThroughMessageSession(dest, dgram, I2PSession.PROTO_DATAGRAM, fromPort, toPort, sendLeaseSet, sendTags, tagThreshold, expiration);
     }
 
     protected void messageReceived(byte[] msg, int proto, int fromPort, int toPort) {

@@ -20,6 +20,7 @@ public class ConcurrentHashSet<E> extends AbstractSet<E> implements Set<E> {
     public ConcurrentHashSet() {
         _map = new ConcurrentHashMap<E, Object>();
     }
+
     public ConcurrentHashSet(int capacity) {
         _map = new ConcurrentHashMap<E, Object>(capacity);
     }
@@ -62,8 +63,7 @@ public class ConcurrentHashSet<E> extends AbstractSet<E> implements Set<E> {
     @Override
     public boolean addAll(Collection<? extends E> c) {
         boolean rv = false;
-        for (E e : c)
-            rv |= _map.put(e, DUMMY) == null;
+        for (E e : c) rv |= _map.put(e, DUMMY) == null;
         return rv;
     }
 }

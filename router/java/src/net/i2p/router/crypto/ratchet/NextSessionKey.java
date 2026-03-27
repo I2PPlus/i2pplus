@@ -55,10 +55,8 @@ class NextSessionKey extends PublicKey {
     @Override
     public int hashCode() {
         int rv = super.hashCode() ^ _id;
-        if (_isReverse)
-            rv ^= 1 << 31;
-        if (_isRequest)
-            rv ^= 1 << 30;
+        if (_isReverse) rv ^= 1 << 31;
+        if (_isRequest) rv ^= 1 << 30;
         return rv;
     }
 
@@ -67,15 +65,10 @@ class NextSessionKey extends PublicKey {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == null)
-            return false;
-        if (!(obj instanceof NextSessionKey))
-            return false;
+        if (obj == null) return false;
+        if (!(obj instanceof NextSessionKey)) return false;
         NextSessionKey o = (NextSessionKey) obj;
-        return _id == o._id &&
-               _isReverse == o._isReverse &&
-               _isRequest == o._isRequest &&
-               super.equals(o);
+        return _id == o._id && _isReverse == o._isReverse && _isRequest == o._isRequest && super.equals(o);
     }
 
     @Override

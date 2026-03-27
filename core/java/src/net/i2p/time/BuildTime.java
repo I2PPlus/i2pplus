@@ -1,5 +1,8 @@
 package net.i2p.time;
 
+import net.i2p.I2PAppContext;
+import net.i2p.util.SystemVersion;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,8 +15,6 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
-import net.i2p.I2PAppContext;
-import net.i2p.util.SystemVersion;
 
 /**
  *  Get the build date as set in i2p.jar,
@@ -32,9 +33,11 @@ public class BuildTime {
     private static final long _buildTime;
     private static final long _earliestTime;
     private static final long _latestTime;
-    private static final long YEARS_25 = 25L*365*24*60*60*1000;
+    private static final long YEARS_25 = 25L * 365 * 24 * 60 * 60 * 1000;
+
     /** update this periodically */
     private static final String EARLIEST = "2025-01-01 12:00:00 UTC";
+
     // fallback if parse fails ticket #1976
     // date -d 202x-xx-xx +%s
     private static final long EARLIEST_LONG = 1735776000 * 1000L;
@@ -47,8 +50,11 @@ public class BuildTime {
         long min;
         try {
             Date date = fmt.parse(EARLIEST);
-            if (date == null) {min = EARLIEST_LONG;}
-            else {min = date.getTime();}
+            if (date == null) {
+                min = EARLIEST_LONG;
+            } else {
+                min = date.getTime();
+            }
         } catch (ParseException pe) {
             System.out.println("BuildTime FAIL");
             min = EARLIEST_LONG;
@@ -66,7 +72,7 @@ public class BuildTime {
         } else {
             // build time looks reasonable
             // allow 24h skew on build machine
-            min = build - 24*60*60*1000L;
+            min = build - 24 * 60 * 60 * 1000L;
         }
         _earliestTime = min;
         _latestTime = max;
@@ -78,7 +84,9 @@ public class BuildTime {
      *
      *  @return the earliest possible time if actual build date is unknown
      */
-    public static long getBuildTime() {return _buildTime;}
+    public static long getBuildTime() {
+        return _buildTime;
+    }
 
     /**
      *  Get the earliest it could possibly be right now.
@@ -86,7 +94,9 @@ public class BuildTime {
      *
      *  @return the time
      */
-    public static long getEarliestTime() {return _earliestTime;}
+    public static long getEarliestTime() {
+        return _earliestTime;
+    }
 
     /**
      *  Get the latest it could possibly be right now.
@@ -94,7 +104,9 @@ public class BuildTime {
      *
      *  @return the time
      */
-    public static long getLatestTime() {return _latestTime;}
+    public static long getLatestTime() {
+        return _latestTime;
+    }
 
     private BuildTime() {}
 
@@ -104,17 +116,26 @@ public class BuildTime {
      *  @return 0 if unknown
      */
     private static long getBuildTime(SimpleDateFormat fmt, String jar) {
-        if (SystemVersion.isAndroid()) {return 0;}
+        if (SystemVersion.isAndroid()) {
+            return 0;
+        }
         File f = I2PAppContext.getGlobalContext().getLibDir();
         f = new File(f, jar);
         Attributes atts = attributes(f);
-        if (atts == null) {return 0;}
+        if (atts == null) {
+            return 0;
+        }
         String s = atts.getValue("Build-Date");
-        if (s == null) {return 0;}
+        if (s == null) {
+            return 0;
+        }
         try {
             Date date = fmt.parse(s);
-            if (date != null) {return date.getTime();}
-        } catch (ParseException pe) {}
+            if (date != null) {
+                return date.getTime();
+            }
+        } catch (ParseException pe) {
+        }
         return 0;
     }
 
@@ -124,11 +145,14 @@ public class BuildTime {
             in = (new URL("jar:file:" + f.getAbsolutePath() + "!/META-INF/MANIFEST.MF")).openStream();
             Manifest man = new Manifest(in);
             return man.getMainAttributes();
-        } catch (IOException ioe) {return new java.util.jar.Attributes();}
-        finally {
+        } catch (IOException ioe) {
+            return new java.util.jar.Attributes();
+        } finally {
             if (in != null) {
-                try {in.close();}
-                catch (IOException e) {}
+                try {
+                    in.close();
+                } catch (IOException e) {
+                }
             }
         }
     }
@@ -146,5 +170,4 @@ public class BuildTime {
         date = getLatestTime();
         System.out.println("Latest date: " + Instant.ofEpochMilli(date));
     }
-
 }

@@ -32,12 +32,12 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 /**	A basic iterator for a skip list.
- 	This is not a complete ListIterator, in particular, since the
- 	skip list is a map and is therefore indexed by Comparable objects instead
- 	of int's, nextIndex and previousIndex methods are not really relevant.
-
-    To be clear, this is an iterator through values.
-    To get the key, call nextKey() BEFORE calling next().
+ * This is not a complete ListIterator, in particular, since the
+ * skip list is a map and is therefore indexed by Comparable objects instead
+ * of int's, nextIndex and previousIndex methods are not really relevant.
+ *
+ * To be clear, this is an iterator through values.
+ * To get the key, call nextKey() BEFORE calling next().
  *
  * @param <K> type of keys maintained by this iterator
  * @param <V> type of values returned by this iterator
@@ -51,7 +51,9 @@ public class SkipIterator<K extends Comparable<? super K>, V> implements ListIte
     }
 
     public SkipIterator(SkipSpan<K, V> ss, int index) {
-        if (ss==null) { throw new NullPointerException(); }
+        if (ss == null) {
+            throw new NullPointerException();
+        }
         this.ss = ss;
         this.index = index;
     }
@@ -72,7 +74,7 @@ public class SkipIterator<K extends Comparable<? super K>, V> implements ListIte
             throw new NoSuchElementException();
         }
 
-        if (index < (ss.nKeys-1)) {
+        if (index < (ss.nKeys - 1)) {
             index++;
         } else if (ss.next != null) {
             ss = ss.next;
@@ -84,12 +86,14 @@ public class SkipIterator<K extends Comparable<? super K>, V> implements ListIte
     }
 
     /**
-         * The key. Does NOT advance the index.
+     * The key. Does NOT advance the index.
      * @return the key for which the value will be returned in the subsequent call to next()
      * @throws NoSuchElementException
      */
     public K nextKey() {
-        if (index < ss.nKeys) { return ss.keys[index]; }
+        if (index < ss.nKeys) {
+            return ss.keys[index];
+        }
         throw new NoSuchElementException();
     }
 
@@ -106,18 +110,32 @@ public class SkipIterator<K extends Comparable<? super K>, V> implements ListIte
             index--;
         } else if (ss.prev != null) {
             ss = ss.prev;
-            if (ss.nKeys <= 0) { throw new NoSuchElementException(); }
+            if (ss.nKeys <= 0) {
+                throw new NoSuchElementException();
+            }
             index = (ss.nKeys - 1);
         }
         return ss.vals[index];
     }
 
-
     // Optional methods
-    public void add(V o)	{ throw new UnsupportedOperationException(); }
-    public void remove()		{ throw new UnsupportedOperationException(); }
-    public void set(V o)	{ throw new UnsupportedOperationException(); }
-    public int nextIndex()		{ throw new UnsupportedOperationException(); }
-    public int previousIndex()	{ throw new UnsupportedOperationException(); }
+    public void add(V o) {
+        throw new UnsupportedOperationException();
+    }
 
+    public void remove() {
+        throw new UnsupportedOperationException();
+    }
+
+    public void set(V o) {
+        throw new UnsupportedOperationException();
+    }
+
+    public int nextIndex() {
+        throw new UnsupportedOperationException();
+    }
+
+    public int previousIndex() {
+        throw new UnsupportedOperationException();
+    }
 }

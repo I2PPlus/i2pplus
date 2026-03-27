@@ -1,16 +1,17 @@
 package net.i2p.router.web;
 
+import net.i2p.I2PAppContext;
+import net.i2p.app.ClientApp;
+import net.i2p.app.ClientAppManager;
+import net.i2p.app.ClientAppState;
+import net.i2p.app.NavService;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import net.i2p.I2PAppContext;
-import net.i2p.app.ClientApp;
-import net.i2p.app.ClientAppManager;
-import net.i2p.app.ClientAppState;
-import net.i2p.app.NavService;
 
 /**
  * Helper for navigation and client application management in router console.
@@ -36,8 +37,7 @@ public class NavHelper implements NavService, ClientApp {
      * @since 0.9.20 added iconpath parameter
      */
     public void registerApp(String appName, String displayName, String path, String tooltip, String iconpath) {
-        if (iconpath != null && !iconpath.startsWith("/"))
-            iconpath = null;
+        if (iconpath != null && !iconpath.startsWith("/")) iconpath = null;
         _apps.put(appName, new App(displayName, tooltip, path, iconpath));
     }
 
@@ -54,11 +54,9 @@ public class NavHelper implements NavService, ClientApp {
      *  @return null if not found
      *  @since 0.9.25
      */
-    public byte[] getBinary(String name){
-        if (name != null)
-            return _binary.get(name);
-        else
-            return new byte[0];
+    public byte[] getBinary(String name) {
+        if (name != null) return _binary.get(name);
+        else return new byte[0];
     }
 
     /**
@@ -66,26 +64,23 @@ public class NavHelper implements NavService, ClientApp {
      *  @param name plugin name
      *  @since 0.9.25
      */
-    public void setBinary(String name, byte[] arr){
+    public void setBinary(String name, byte[] arr) {
         _binary.put(name, arr);
     }
-
 
     /**
      *  Translated string is loaded by PluginStarter
      *  @return map of translated name to HTML string, or null if none
      */
     public Map<String, String> getClientAppLinks() {
-        if (_apps.isEmpty())
-            return Collections.emptyMap();
+        if (_apps.isEmpty()) return Collections.emptyMap();
         Map<String, String> rv = new HashMap<String, String>(_apps.size());
         StringBuilder buf = new StringBuilder(128);
         for (Map.Entry<String, App> e : _apps.entrySet()) {
             String appName = e.getKey();
             App app = e.getValue();
             String path = app.url;
-            if (path == null)
-                continue;
+            if (path == null) continue;
             String name = app.name;
             String tip = app.desc;
             buf.setLength(0);
@@ -122,24 +117,19 @@ public class NavHelper implements NavService, ClientApp {
      *  @since 0.9, public since 0.9.33, was package private
      */
     public List<App> getClientApps(I2PAppContext ctx) {
-        if (_apps.isEmpty())
-            return Collections.emptyList();
+        if (_apps.isEmpty()) return Collections.emptyList();
         List<App> rv = new ArrayList<App>(_apps.size());
         for (Map.Entry<String, App> e : _apps.entrySet()) {
             String name = e.getKey();
             App mapp = e.getValue();
-            if (mapp.url == null)
-                continue;
+            if (mapp.url == null) continue;
             String tip = mapp.desc;
-            if (tip == null)
-                tip = "";
+            if (tip == null) tip = "";
             String icon = mapp.icon;
             if (icon == null) {
                 // hardcoded hack
-                if (name.equals("i2pbote"))
-                    icon = "/themes/console/images/email.png";
-                else
-                    icon = "/themes/console/images/plugin.png";
+                if (name.equals("i2pbote")) icon = "/themes/console/images/email.png";
+                else icon = "/themes/console/images/plugin.png";
             }
             App app = new App(mapp.name, tip, mapp.url, icon);
             rv.add(app);
@@ -155,8 +145,7 @@ public class NavHelper implements NavService, ClientApp {
     /** @since 0.9.56 */
     public static NavHelper getInstance(I2PAppContext ctx) {
         ClientAppManager cmgr = ctx.clientAppManager();
-        if (cmgr != null)
-            return (NavHelper) cmgr.getRegisteredApp("NavHelper");
+        if (cmgr != null) return (NavHelper) cmgr.getRegisteredApp("NavHelper");
         return null;
     }
 

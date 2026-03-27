@@ -1,4 +1,5 @@
 package net.i2p.sam;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
@@ -8,6 +9,11 @@ package net.i2p.sam;
  *
  */
 
+import net.i2p.I2PAppContext;
+import net.i2p.client.I2PSession;
+import net.i2p.util.I2PAppThread;
+import net.i2p.util.Log;
+import net.i2p.util.PortMapper;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -18,11 +24,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import net.i2p.I2PAppContext;
-import net.i2p.client.I2PSession;
-import net.i2p.util.I2PAppThread;
-import net.i2p.util.Log;
-import net.i2p.util.PortMapper;
 
 /**
  *  This is the thread listening on 127.0.0.1:7655 or as specified by
@@ -62,8 +63,7 @@ class SAMv3DatagramServer implements Handler {
      */
     public synchronized void start() {
         _listener.start();
-        if (_parent != null)
-            _parent.register(this);
+        if (_parent != null) _parent.register(this);
     }
 
     /**
@@ -73,10 +73,10 @@ class SAMv3DatagramServer implements Handler {
     public synchronized void stopHandling() {
         try {
             _server.close();
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) {
+        }
         _listener.interrupt();
-        if (_parent != null)
-            _parent.unregister(this);
+        if (_parent != null) _parent.unregister(this);
     }
 
     public void send(SocketAddress addr, ByteBuffer msg) throws IOException {
@@ -84,17 +84,20 @@ class SAMv3DatagramServer implements Handler {
     }
 
     /** @since 0.9.24 */
-    public String getHost() { return _host; }
+    public String getHost() {
+        return _host;
+    }
 
     /** @since 0.9.24 */
-    public int getPort() { return _port; }
+    public int getPort() {
+        return _port;
+    }
 
     private class Listener implements Runnable {
 
         private final DatagramChannel server;
 
-        public Listener(DatagramChannel server)
-        {
+        public Listener(DatagramChannel server) {
             this.server = server;
         }
 
@@ -108,23 +111,22 @@ class SAMv3DatagramServer implements Handler {
         }
 
         private void run2() {
-            ByteBuffer inBuf = ByteBuffer.allocateDirect(SAMRawSession.RAW_SIZE_MAX+1024);
+            ByteBuffer inBuf = ByteBuffer.allocateDirect(SAMRawSession.RAW_SIZE_MAX + 1024);
 
-            while (!Thread.interrupted())
-            {
+            while (!Thread.interrupted()) {
                 // not ByteBuffer to avoid Java 8/9 issues
-                ((Buffer)inBuf).clear();
+                ((Buffer) inBuf).clear();
                 try {
                     server.receive(inBuf);
                 } catch (IOException e) {
                     break;
                 }
-                ((Buffer)inBuf).flip();
+                ((Buffer) inBuf).flip();
                 ByteBuffer outBuf = ByteBuffer.wrap(new byte[inBuf.remaining()]);
                 outBuf.put(inBuf);
-                ((Buffer)outBuf).flip();
+                ((Buffer) outBuf).flip();
                 // A new thread for every message is wildly inefficient...
-                //new I2PAppThread(new MessageDispatcher(outBuf.array()), "MessageDispatcher").start();
+                // new I2PAppThread(new MessageDispatcher(outBuf.array()), "MessageDispatcher").start();
                 // inline
                 // Even though we could be sending messages through multiple sessions,
                 // that isn't a common use case, and blocking should be rare.
@@ -136,7 +138,7 @@ class SAMv3DatagramServer implements Handler {
 
     private static class MessageDispatcher implements Runnable {
         private final ByteArrayInputStream is;
-        private static final int MAX_LINE_LENGTH = 2*1024;
+        private static final int MAX_LINE_LENGTH = 2 * 1024;
 
         public MessageDispatcher(byte[] buf) {
             this.is = new ByteArrayInputStream(buf);
@@ -145,18 +147,16 @@ class SAMv3DatagramServer implements Handler {
         public void run() {
             try {
                 // not UTF-8
-                //String header = DataHelper.readLine(is).trim();
+                // String header = DataHelper.readLine(is).trim();
                 // we cannot use SAMUtils.parseParams() here
                 final UTF8Reader reader = new UTF8Reader(is);
                 final StringBuilder buf = new StringBuilder(MAX_LINE_LENGTH);
                 int c;
                 int i = 0;
                 while ((c = reader.read()) != -1) {
-                    if (++i > MAX_LINE_LENGTH)
-                        throw new IOException("Line too long - max " + MAX_LINE_LENGTH);
-                    if (c == '\n')
-                        break;
-                    buf.append((char)c);
+                    if (++i > MAX_LINE_LENGTH) throw new IOException("Line too long - max " + MAX_LINE_LENGTH);
+                    if (c == '\n') break;
+                    buf.append((char) c);
                 }
                 String header = buf.toString();
                 StringTokenizer tok = new StringTokenizer(header, " ");
@@ -174,7 +174,7 @@ class SAMv3DatagramServer implements Handler {
                 String dest = tok.nextToken();
 
                 SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
-                if (rec!=null) {
+                if (rec != null) {
                     Properties sprops = rec.getProps();
                     // 3.2 props
                     String pr = sprops.getProperty("PROTOCOL");
@@ -188,26 +188,19 @@ class SAMv3DatagramServer implements Handler {
                     String st = sprops.getProperty("crypto.tagsToSend");
                     String tt = sprops.getProperty("crypto.lowTagThreshold");
                     String sl = sprops.getProperty("shouldBundleReplyInfo");
-                    String exms = sprops.getProperty("clientMessageTimeout");  // ms
-                    String exs = null;                                         // seconds
+                    String exms = sprops.getProperty("clientMessageTimeout"); // ms
+                    String exs = null; // seconds
                     while (tok.hasMoreTokens()) {
                         String t = tok.nextToken();
                         // 3.2 props
-                        if (t.startsWith("PROTOCOL="))
-                            pr = t.substring("PROTOCOL=".length());
-                        else if (t.startsWith("FROM_PORT="))
-                            fp = t.substring("FROM_PORT=".length());
-                        else if (t.startsWith("TO_PORT="))
-                            tp = t.substring("TO_PORT=".length());
+                        if (t.startsWith("PROTOCOL=")) pr = t.substring("PROTOCOL=".length());
+                        else if (t.startsWith("FROM_PORT=")) fp = t.substring("FROM_PORT=".length());
+                        else if (t.startsWith("TO_PORT=")) tp = t.substring("TO_PORT=".length());
                         // 3.3 props
-                        else if (t.startsWith("SEND_TAGS="))
-                            st = t.substring("SEND_TAGS=".length());
-                        else if (t.startsWith("TAG_THRESHOLD="))
-                            tt = t.substring("TAG_THRESHOLD=".length());
-                        else if (t.startsWith("EXPIRES="))
-                            exs = t.substring("EXPIRES=".length());
-                        else if (t.startsWith("SEND_LEASESET="))
-                            sl = t.substring("SEND_LEASESET=".length());
+                        else if (t.startsWith("SEND_TAGS=")) st = t.substring("SEND_TAGS=".length());
+                        else if (t.startsWith("TAG_THRESHOLD=")) tt = t.substring("TAG_THRESHOLD=".length());
+                        else if (t.startsWith("EXPIRES=")) exs = t.substring("EXPIRES=".length());
+                        else if (t.startsWith("SEND_LEASESET=")) sl = t.substring("SEND_LEASESET=".length());
                     }
 
                     // 3.2 props
@@ -221,23 +214,15 @@ class SAMv3DatagramServer implements Handler {
                     boolean sendLeaseSet = true;
                     try {
                         // 3.2 props
-                        if (pr != null)
-                            proto = Integer.parseInt(pr);
-                        if (fp != null)
-                            fromPort = Integer.parseInt(fp);
-                        if (tp != null)
-                            toPort = Integer.parseInt(tp);
+                        if (pr != null) proto = Integer.parseInt(pr);
+                        if (fp != null) fromPort = Integer.parseInt(fp);
+                        if (tp != null) toPort = Integer.parseInt(tp);
                         // 3.3 props
-                        if (st != null)
-                            sendTags = Integer.parseInt(st);
-                        if (tt != null)
-                            tagThreshold = Integer.parseInt(tt);
-                        if (exs != null)
-                            expires = Integer.parseInt(exs);
-                        else if (exms != null)
-                            expires = Integer.parseInt(exms) / 1000;
-                        if (sl != null)
-                            sendLeaseSet = Boolean.parseBoolean(sl);
+                        if (st != null) sendTags = Integer.parseInt(st);
+                        if (tt != null) tagThreshold = Integer.parseInt(tt);
+                        if (exs != null) expires = Integer.parseInt(exs);
+                        else if (exms != null) expires = Integer.parseInt(exms) / 1000;
+                        if (sl != null) sendLeaseSet = Boolean.parseBoolean(sl);
                     } catch (NumberFormatException nfe) {
                         warn("Bad datagram header received");
                         return;
@@ -248,8 +233,7 @@ class SAMv3DatagramServer implements Handler {
                     Session sess = rec.getHandler().getSession();
                     if (sess != null) {
                         if (sendTags > 0 || tagThreshold > 0 || expires > 0 || !sendLeaseSet) {
-                            sess.sendBytes(dest, data, proto, fromPort, toPort,
-                                           sendLeaseSet, sendTags, tagThreshold, expires);
+                            sess.sendBytes(dest, data, proto, fromPort, toPort, sendLeaseSet, sendTags, tagThreshold, expires);
                         } else {
                             sess.sendBytes(dest, data, proto, fromPort, toPort);
                         }
@@ -272,8 +256,7 @@ class SAMv3DatagramServer implements Handler {
         /** @since 0.9.22 */
         private static void warn(String s, Throwable t) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(SAMv3DatagramServer.class);
-            if (log.shouldWarn())
-                log.warn(s, t);
+            if (log.shouldWarn()) log.warn(s, t);
         }
     }
 }

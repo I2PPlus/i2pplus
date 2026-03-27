@@ -42,21 +42,27 @@ abstract class BuildMessageGenerator {
      * @param props properties to go in the build record, non-null
      * @throws IllegalArgumentException if hop bigger than config
      */
-    public static void createRecord(int recordNum, int hop, TunnelBuildMessage msg,
-                                    TunnelCreatorConfig cfg, Hash replyRouter,
-                                    long replyTunnel, RouterContext ctx, PublicKey peerKey, Properties props) {
+    public static void createRecord(
+            int recordNum,
+            int hop,
+            TunnelBuildMessage msg,
+            TunnelCreatorConfig cfg,
+            Hash replyRouter,
+            long replyTunnel,
+            RouterContext ctx,
+            PublicKey peerKey,
+            Properties props) {
         int mtype = msg.getType();
         boolean isShort = mtype == ShortTunnelBuildMessage.MESSAGE_TYPE;
         EncryptedBuildRecord erec;
         if (peerKey != null) {
             boolean isEC = peerKey.getType() == EncType.ECIES_X25519;
             BuildRequestRecord req;
-            if ((!cfg.isInbound()) && (hop + 1 == cfg.getLength())) //outbound endpoint
+            // outbound endpoint
+            if ((!cfg.isInbound()) && (hop + 1 == cfg.getLength()))
                 req = createUnencryptedRecord(ctx, cfg, hop, replyRouter, replyTunnel, isEC, isShort, props);
-            else
-                req = createUnencryptedRecord(ctx, cfg, hop, null, -1, isEC, isShort, props);
-            if (req == null)
-                throw new IllegalArgumentException("hop bigger than config");
+            else req = createUnencryptedRecord(ctx, cfg, hop, null, -1, isEC, isShort, props);
+            if (req == null) throw new IllegalArgumentException("hop bigger than config");
             Hash peer = cfg.getPeer(hop);
             if (isEC) {
                 erec = req.encryptECIESRecord(ctx, peerKey, peer);
@@ -66,8 +72,8 @@ abstract class BuildMessageGenerator {
                     HopConfig hopConfig = cfg.getConfig(hop);
                     hopConfig.setLayerKey(req.readLayerKey());
                     hopConfig.setIVKey(req.readIVKey());
-                    if (!cfg.isInbound() && hop + 1 == cfg.getLength()) //outbound endpoint
-                        cfg.setGarlicReplyKeys(req.readGarlicKeys());
+                    // outbound endpoint
+                    if (!cfg.isInbound() && hop + 1 == cfg.getLength()) cfg.setGarlicReplyKeys(req.readGarlicKeys());
                 }
             } else {
                 erec = req.encryptRecord(ctx, peerKey, peer);
@@ -82,7 +88,11 @@ abstract class BuildMessageGenerator {
                 PublicKey pub = kp.getPublic();
                 int plen = pub.length();
                 System.arraycopy(pub.getData(), 0, encrypted, BuildRequestRecord.PEER_SIZE, plen);
-                ctx.random().nextBytes(encrypted, BuildRequestRecord.PEER_SIZE + plen, len - (BuildRequestRecord.PEER_SIZE + plen));
+                ctx.random()
+                        .nextBytes(
+                                encrypted,
+                                BuildRequestRecord.PEER_SIZE + plen,
+                                len - (BuildRequestRecord.PEER_SIZE + plen));
                 byte[] h = new byte[Hash.HASH_LENGTH];
                 ctx.sha().calculateHash(encrypted, 0, len, h, 0);
                 cfg.setBlankHash(new Hash(h));
@@ -109,25 +119,28 @@ abstract class BuildMessageGenerator {
      * @return the build request record, or null if hop >= cfg.length
      * @throws IllegalArgumentException if isShort is true but isEC is false
      */
-    private static BuildRequestRecord createUnencryptedRecord(I2PAppContext ctx, TunnelCreatorConfig cfg, int hop,
-                                                              Hash replyRouter, long replyTunnel, boolean isEC,
-                                                              boolean isShort, Properties props) {
-        if (isShort && !isEC)
-            throw new IllegalArgumentException();
+    private static BuildRequestRecord createUnencryptedRecord(
+            I2PAppContext ctx,
+            TunnelCreatorConfig cfg,
+            int hop,
+            Hash replyRouter,
+            long replyTunnel,
+            boolean isEC,
+            boolean isShort,
+            Properties props) {
+        if (isShort && !isEC) throw new IllegalArgumentException();
         if (hop < cfg.getLength()) {
             // ok, now lets fill in some data
             HopConfig hopConfig = cfg.getConfig(hop);
             Hash peer = cfg.getPeer(hop);
             long recvTunnelId = -1;
-            if (cfg.isInbound() || (hop > 0))
-                recvTunnelId = hopConfig.getReceiveTunnelId();
-            else
-                recvTunnelId = 0;
+            if (cfg.isInbound() || (hop > 0)) recvTunnelId = hopConfig.getReceiveTunnelId();
+            else recvTunnelId = 0;
             long nextTunnelId = -1;
             Hash nextPeer = null;
             if (hop + 1 < cfg.getLength()) {
-                nextTunnelId = cfg.getConfig(hop+1).getReceiveTunnelId();
-                nextPeer = cfg.getPeer(hop+1);
+                nextTunnelId = cfg.getConfig(hop + 1).getReceiveTunnelId();
+                nextPeer = cfg.getPeer(hop + 1);
             } else {
                 if ((replyTunnel >= 0) && (replyRouter != null)) {
                     nextTunnelId = replyTunnel;
@@ -152,30 +165,47 @@ abstract class BuildMessageGenerator {
             if (isEC) {
                 // TODO pass properties from cfg
                 if (isShort) {
-                    rec = new BuildRequestRecord(ctx, recvTunnelId, nextTunnelId, nextPeer,
-                                                 nextMsgId,
-                                                 isInGW, isOutEnd, props);
+                    rec = new BuildRequestRecord(
+                            ctx, recvTunnelId, nextTunnelId, nextPeer, nextMsgId, isInGW, isOutEnd, props);
                 } else {
                     SessionKey layerKey = hopConfig.getLayerKey();
                     SessionKey ivKey = hopConfig.getIVKey();
                     SessionKey replyKey = cfg.getAESReplyKey(hop);
                     byte iv[] = cfg.getAESReplyIV(hop);
-                    if (iv == null)
-                        throw new IllegalStateException();
-                    rec = new BuildRequestRecord(ctx, recvTunnelId, nextTunnelId, nextPeer,
-                                                 nextMsgId, layerKey, ivKey, replyKey,
-                                                 iv, isInGW, isOutEnd, props);
+                    if (iv == null) throw new IllegalStateException();
+                    rec = new BuildRequestRecord(
+                            ctx,
+                            recvTunnelId,
+                            nextTunnelId,
+                            nextPeer,
+                            nextMsgId,
+                            layerKey,
+                            ivKey,
+                            replyKey,
+                            iv,
+                            isInGW,
+                            isOutEnd,
+                            props);
                 }
             } else {
                 SessionKey layerKey = hopConfig.getLayerKey();
                 SessionKey ivKey = hopConfig.getIVKey();
                 SessionKey replyKey = cfg.getAESReplyKey(hop);
                 byte iv[] = cfg.getAESReplyIV(hop);
-                if (iv == null)
-                    throw new IllegalStateException();
-                rec = new BuildRequestRecord(ctx, recvTunnelId, peer, nextTunnelId, nextPeer,
-                                             nextMsgId, layerKey, ivKey, replyKey,
-                                             iv, isInGW, isOutEnd);
+                if (iv == null) throw new IllegalStateException();
+                rec = new BuildRequestRecord(
+                        ctx,
+                        recvTunnelId,
+                        peer,
+                        nextTunnelId,
+                        nextPeer,
+                        nextMsgId,
+                        layerKey,
+                        ivKey,
+                        replyKey,
+                        iv,
+                        isInGW,
+                        isOutEnd);
             }
             return rec;
         } else {
@@ -194,8 +224,8 @@ abstract class BuildMessageGenerator {
      * @param cfg the tunnel creator configuration
      * @param order list of hop #s as Integers. For instance, if (order.get(1) is 4), it is peer cfg.getPeer(4)
      */
-    public static void layeredEncrypt(I2PAppContext ctx, TunnelBuildMessage msg,
-                                      TunnelCreatorConfig cfg, List<Integer> order) {
+    public static void layeredEncrypt(
+            I2PAppContext ctx, TunnelBuildMessage msg, TunnelCreatorConfig cfg, List<Integer> order) {
         int mtype = msg.getType();
         boolean isShort = mtype == ShortTunnelBuildMessage.MESSAGE_TYPE;
         int size = isShort ? ShortTunnelBuildMessage.SHORT_RECORD_SIZE : TunnelBuildMessage.RECORD_SIZE;
@@ -205,13 +235,13 @@ abstract class BuildMessageGenerator {
             EncryptedBuildRecord rec = msg.getRecord(i);
             Integer hopNum = order.get(i);
             int hop = hopNum.intValue();
-            if ((isBlank(cfg, hop) && !(cfg.isInbound() && hop + 1 == cfg.getLength())) ||
-                (!cfg.isInbound() && hop == 1)) {
+            if ((isBlank(cfg, hop) && !(cfg.isInbound() && hop + 1 == cfg.getLength()))
+                    || (!cfg.isInbound() && hop == 1)) {
                 continue;
             }
             // ok, now decrypt the record with all of the reply keys from cfg.getConfig(0) through hop-1
             int stop = (cfg.isInbound() ? 0 : 1);
-            for (int j = hop-1; j >= stop; j--) {
+            for (int j = hop - 1; j >= stop; j--) {
                 SessionKey key;
                 byte iv[];
                 // corrupts the SDS

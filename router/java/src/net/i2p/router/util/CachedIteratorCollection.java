@@ -46,11 +46,10 @@ import java.util.NoSuchElementException;
  * @param <E>  type of elements in this collection
  * @since 0.9.36
  */
-
 public class CachedIteratorCollection<E> extends AbstractCollection<E> {
 
     // FOR DEBUGGING & LOGGING PURPOSES
-    //Log log = I2PAppContext.getGlobalContext().logManager().getLog(CachedIteratorCollection.class);
+    // Log log = I2PAppContext.getGlobalContext().logManager().getLog(CachedIteratorCollection.class);
 
     // Thread-local iterators to avoid concurrent modification when multiple threads iterate
     private final ThreadLocal<CachedIterator> _iterator = ThreadLocal.withInitial(() -> new CachedIterator());
@@ -85,8 +84,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     /**
      * Default constructor
      */
-    public CachedIteratorCollection() {
-    }
+    public CachedIteratorCollection() {}
 
     /**
      * Adds a data object (element) as a Node and sets previous/next pointers accordingly
@@ -102,7 +100,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
         }
         this.last = newNode;
         this.size++;
-        //log.debug("CachedIteratorAbstractCollection: Element added");
+        // log.debug("CachedIteratorAbstractCollection: Element added");
         return true;
     }
 
@@ -117,7 +115,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
         this.size = 0;
         // Reset all thread-local iterators
         _iterator.remove();
-        //log.debug("CachedIteratorAbstractCollection: Cleared");
+        // log.debug("CachedIteratorAbstractCollection: Cleared");
     }
 
     /**
@@ -191,13 +189,13 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
                         // There are no more items, clear() the collection
                         nextCalled = false;
                         clear();
-                        //log.debug("CachedIteratorAbstractCollection: Element Removed");
+                        // log.debug("CachedIteratorAbstractCollection: Element Removed");
                         return;
                     }
                 }
                 size--;
                 nextCalled = false;
-                //log.debug("CachedIteratorAbstractCollection: Element Removed");
+                // log.debug("CachedIteratorAbstractCollection: Element Removed");
             } else {
                 throw new IllegalStateException();
             }
@@ -206,8 +204,8 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
         /**
          *  Returns true as long as current Iteration Index Node (itrIndexNode)
          *  is non-null
-          *
-          */
+         *
+         */
         @Override
         public boolean hasNext() {
             return itrIndexNode != null;

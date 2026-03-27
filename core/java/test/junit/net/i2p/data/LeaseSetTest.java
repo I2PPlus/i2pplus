@@ -1,4 +1,5 @@
 package net.i2p.data;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -22,15 +23,18 @@ public class LeaseSetTest extends StructureTest {
     @Override
     public DataStructure createDataStructure() throws DataFormatException {
         LeaseSet leaseSet = new LeaseSet();
-        leaseSet.setDestination((Destination)(new DestinationTest()).createDataStructure());
-        leaseSet.setEncryptionKey((PublicKey)(new PublicKeyTest()).createDataStructure());
-        leaseSet.setSignature((Signature)(new SignatureTest()).createDataStructure());
-        leaseSet.setSigningKey((SigningPublicKey)(new SigningPublicKeyTest()).createDataStructure());
-    //leaseSet.setVersion(42L);
+        leaseSet.setDestination((Destination) (new DestinationTest()).createDataStructure());
+        leaseSet.setEncryptionKey((PublicKey) (new PublicKeyTest()).createDataStructure());
+        leaseSet.setSignature((Signature) (new SignatureTest()).createDataStructure());
+        leaseSet.setSigningKey((SigningPublicKey) (new SigningPublicKeyTest()).createDataStructure());
+        // leaseSet.setVersion(42L);
         return leaseSet;
     }
+
     @Override
-    public DataStructure createStructureToRead() { return new LeaseSet(); }
+    public DataStructure createStructureToRead() {
+        return new LeaseSet();
+    }
 
     @Test
     public void failsToGetLeaseWhenEmpty() {
@@ -41,7 +45,8 @@ public class LeaseSetTest extends StructureTest {
         try {
             subj.getLease(0);
             fail("exception not thrown");
-        } catch (IndexOutOfBoundsException expected) {}
+        } catch (IndexOutOfBoundsException expected) {
+        }
     }
 
     @Test
@@ -53,7 +58,8 @@ public class LeaseSetTest extends StructureTest {
         try {
             subj.getLease(-1);
             fail("exception not thrown");
-        } catch (IndexOutOfBoundsException expected) {}
+        } catch (IndexOutOfBoundsException expected) {
+        }
     }
 
     @Test

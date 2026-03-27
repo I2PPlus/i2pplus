@@ -1,8 +1,8 @@
 package net.i2p.i2ptunnel;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -82,8 +82,11 @@ public class HttpHeaderFormatter {
         if (request.contains("peer_id")) {
             int ampersand = request.indexOf("&");
             String truncatedRequest = request.substring(0, ampersand) + "...";
-            if (request.endsWith("HTTP/1.1")) {truncatedRequest += " HTTP/1.1";}
-            else if (request.endsWith("HTTP/1.0")) {truncatedRequest += " HTTP/1.0";}
+            if (request.endsWith("HTTP/1.1")) {
+                truncatedRequest += " HTTP/1.1";
+            } else if (request.endsWith("HTTP/1.0")) {
+                truncatedRequest += " HTTP/1.0";
+            }
             request = truncatedRequest;
         }
         if (!request.toLowerCase(Locale.ROOT).contains("head")) {
@@ -94,12 +97,10 @@ public class HttpHeaderFormatter {
             String lcName = name.toLowerCase(Locale.ROOT).trim();
             String value = e.getValue().iterator().next().trim();
             boolean hasUA = name.toLowerCase(Locale.ROOT).contains("user-agent") && !value.isEmpty();
-            if (request.toLowerCase(Locale.ROOT).contains("head")) {continue;}
-            if (lcName.contains("desthash") || lcName.contains("destb64") || lcName.contains("dnt") ||
-                lcName.contains("connection") || lcName.contains("accept") || lcName.contains("cookie") ||
-                lcName.contains("pragma") || lcName.contains("cache-control") || lcName.contains("referer") ||
-                lcName.contains("upgrade-insecure-requests") || (lcName.equals("content-length") && value.equals("0")) ||
-                (lcName.contains("user-agent") && hasUA && value.contains("MYOB"))) {
+            if (request.toLowerCase(Locale.ROOT).contains("head")) {
+                continue;
+            }
+            if (lcName.contains("desthash") || lcName.contains("destb64") || lcName.contains("dnt") || lcName.contains("connection") || lcName.contains("accept") || lcName.contains("cookie") || lcName.contains("pragma") || lcName.contains("cache-control") || lcName.contains("referer") || lcName.contains("upgrade-insecure-requests") || (lcName.equals("content-length") && value.equals("0")) || (lcName.contains("user-agent") && hasUA && value.contains("MYOB"))) {
                 continue;
             }
             for (String val : e.getValue()) {

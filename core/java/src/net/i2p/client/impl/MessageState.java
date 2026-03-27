@@ -1,6 +1,5 @@
 package net.i2p.client.impl;
 
-
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.client.SendMessageStatusListener;
@@ -27,7 +26,14 @@ class MessageState {
     private final SendMessageStatusListener _listener;
     private final I2PSession _session;
 
-    private enum State { INIT, ACCEPTED, PROBABLE_FAIL, FAIL, SUCCESS };
+    private enum State {
+        INIT,
+        ACCEPTED,
+        PROBABLE_FAIL,
+        FAIL,
+        SUCCESS
+    };
+
     private State _state = State.INIT;
 
     /**
@@ -40,7 +46,7 @@ class MessageState {
         _nonce = nonce;
         _prefix = prefix + '[' + _nonce + "]: ";
         _created = ctx.clock().now();
-        _expires = _created + 60*1000L;
+        _expires = _created + 60 * 1000L;
         _listener = null;
         _session = null;
     }
@@ -50,8 +56,7 @@ class MessageState {
      *  @param expires absolute time (not interval)
      *  @since 0.9.14
      */
-    public MessageState(I2PAppContext ctx, long nonce, I2PSession session,
-                        long expires, SendMessageStatusListener listener) {
+    public MessageState(I2PAppContext ctx, long nonce, I2PSession session, long expires, SendMessageStatusListener listener) {
         _context = ctx;
         _log = ctx.logManager().getLog(MessageState.class);
         _nonce = nonce;
@@ -73,8 +78,7 @@ class MessageState {
         }
         if (_listener != null) {
             // only notify on changing state, and only if we haven't expired
-            if (oldState != newState && _expires > _context.clock().now())
-                _listener.messageStatus(_session, _nonce, status);
+            if (oldState != newState && _expires > _context.clock().now()) _listener.messageStatus(_session, _nonce, status);
         }
     }
 
@@ -104,18 +108,15 @@ class MessageState {
         while (true) {
             long timeToWait = expiration - _context.clock().now();
             if (timeToWait <= 0) {
-                if (_log.shouldWarn())
-                    _log.warn(_prefix + "Expired waiting for the status");
+                if (_log.shouldWarn()) _log.warn(_prefix + "Expired waiting for the status");
                 return;
             }
             synchronized (this) {
                 if (_state != State.INIT) {
-                    if (_log.shouldDebug())
-                        _log.debug(_prefix + "Received a confirm (one way or another)");
+                    if (_log.shouldDebug()) _log.debug(_prefix + "Received a confirm (one way or another)");
                     return;
                 }
-                if (timeToWait > 5000)
-                    timeToWait = 5000;
+                if (timeToWait > 5000) timeToWait = 5000;
                 this.wait(timeToWait);
             }
         }
@@ -129,15 +130,13 @@ class MessageState {
         switch (status) {
             case MessageStatusMessage.STATUS_SEND_ACCEPTED:
                 // only trumps init
-                if (_state == State.INIT)
-                    _state = State.ACCEPTED;
+                if (_state == State.INIT) _state = State.ACCEPTED;
                 break;
 
             case MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE:
             case MessageStatusMessage.STATUS_SEND_GUARANTEED_FAILURE:
                 // does not trump failure or success
-                if (_state != State.FAIL && _state != State.SUCCESS)
-                    _state = State.PROBABLE_FAIL;
+                if (_state != State.FAIL && _state != State.SUCCESS) _state = State.PROBABLE_FAIL;
                 break;
 
             case MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL:
@@ -159,8 +158,7 @@ class MessageState {
             case MessageStatusMessage.STATUS_SEND_FAILURE_LOOPBACK:
             case SendMessageStatusListener.STATUS_CANCELLED:
                 // does not trump success
-                if (_state != State.SUCCESS)
-                    _state = State.FAIL;
+                if (_state != State.SUCCESS) _state = State.FAIL;
                 break;
 
             case MessageStatusMessage.STATUS_SEND_BEST_EFFORT_SUCCESS:
@@ -170,8 +168,7 @@ class MessageState {
                 _state = State.SUCCESS;
                 break;
 
-            default:
-                break;
+            default: break;
         }
     }
 

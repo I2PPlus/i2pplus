@@ -1,4 +1,5 @@
 package net.i2p.data.i2np;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,11 +9,12 @@ package net.i2p.data.i2np;
  *
  */
 
-import java.util.ArrayList;
-import java.util.List;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Defines the message a router sends to another router in response to a
@@ -22,7 +24,7 @@ import net.i2p.data.Hash;
  * @author jrandom
  */
 public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
-    public final static int MESSAGE_TYPE = 3;
+    public static final int MESSAGE_TYPE = 3;
     private Hash _key;
     private final List<Hash> _peerHashes;
     private Hash _from;
@@ -30,78 +32,91 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     public DatabaseSearchReplyMessage(I2PAppContext context) {
         super(context);
         // do this in netdb if we need it
-        //_context.statManager().createRateStat("netDb.searchReplyMessageSend", "How many search reply messages we send", "NetworkDatabase", new long[] { 60*1000, 5*60*1000, 10*60*1000, 60*60*1000 });
-        //_context.statManager().createRateStat("netDb.searchReplyMessageReceive", "How many search reply messages we receive", "NetworkDatabase", new long[] { 60*1000, 5*60*1000, 10*60*1000, 60*60*1000 });
+        // _context.statManager().createRateStat("netDb.searchReplyMessageSend", "How many search reply messages we send", "NetworkDatabase", new long[] { 60*1000, 5*60*1000, 10*60*1000, 60*60*1000 });
+        // _context.statManager().createRateStat("netDb.searchReplyMessageReceive", "How many search reply messages we receive", "NetworkDatabase", new long[] { 60*1000, 5*60*1000, 10*60*1000, 60*60*1000 });
         _peerHashes = new ArrayList<Hash>(3);
     }
 
     /**
      * Defines the key being searched for
      */
-    public Hash getSearchKey() { return _key; }
+    public Hash getSearchKey() {
+        return _key;
+    }
 
     /**
      * @throws IllegalStateException if key previously set, to protect saved checksum
      */
     public void setSearchKey(Hash key) {
-        if (_key != null)
-            throw new IllegalStateException();
+        if (_key != null) throw new IllegalStateException();
         _key = key;
     }
 
-    public int getNumReplies() { return _peerHashes.size(); }
-    public Hash getReply(int index) { return _peerHashes.get(index); }
-    public void addReply(Hash peer) { _peerHashes.add(peer); }
-    //public void addReplies(Collection replies) { _peerHashes.addAll(replies); }
+    public int getNumReplies() {
+        return _peerHashes.size();
+    }
 
-    public Hash getFromHash() { return _from; }
-    public void setFromHash(Hash from) { _from = from; }
+    public Hash getReply(int index) {
+        return _peerHashes.get(index);
+    }
+
+    public void addReply(Hash peer) {
+        _peerHashes.add(peer);
+    }
+
+    // public void addReplies(Collection replies) { _peerHashes.addAll(replies); }
+
+    public Hash getFromHash() {
+        return _from;
+    }
+
+    public void setFromHash(Hash from) {
+        _from = from;
+    }
 
     @Override
     public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
 
-        //byte keyData[] = new byte[Hash.HASH_LENGTH];
-        //System.arraycopy(data, curIndex, keyData, 0, Hash.HASH_LENGTH);
+        // byte keyData[] = new byte[Hash.HASH_LENGTH];
+        // System.arraycopy(data, curIndex, keyData, 0, Hash.HASH_LENGTH);
         _key = Hash.create(data, curIndex);
         curIndex += Hash.HASH_LENGTH;
-        //_key = new Hash(keyData);
+        // _key = new Hash(keyData);
 
         int num = data[curIndex] & 0xff;
         curIndex++;
 
         _peerHashes.clear();
         for (int i = 0; i < num; i++) {
-            //byte peer[] = new byte[Hash.HASH_LENGTH];
-            //System.arraycopy(data, curIndex, peer, 0, Hash.HASH_LENGTH);
+            // byte peer[] = new byte[Hash.HASH_LENGTH];
+            // System.arraycopy(data, curIndex, peer, 0, Hash.HASH_LENGTH);
             Hash p = Hash.create(data, curIndex);
             curIndex += Hash.HASH_LENGTH;
             addReply(p);
         }
 
-        //byte from[] = new byte[Hash.HASH_LENGTH];
-        //System.arraycopy(data, curIndex, from, 0, Hash.HASH_LENGTH);
+        // byte from[] = new byte[Hash.HASH_LENGTH];
+        // System.arraycopy(data, curIndex, from, 0, Hash.HASH_LENGTH);
         _from = Hash.create(data, curIndex);
         curIndex += Hash.HASH_LENGTH;
-        //_from = new Hash(from);
+        // _from = new Hash(from);
 
-        //_context.statManager().addRateData("netDb.searchReplyMessageReceive", num*32 + 64, 1);
+        // _context.statManager().addRateData("netDb.searchReplyMessageReceive", num*32 + 64, 1);
     }
 
     /** calculate the message body's length (not including the header and footer */
     @Override
     protected int calculateWrittenLength() {
-        return Hash.HASH_LENGTH + 1 + getNumReplies()*Hash.HASH_LENGTH + Hash.HASH_LENGTH;
+        return Hash.HASH_LENGTH + 1 + getNumReplies() * Hash.HASH_LENGTH + Hash.HASH_LENGTH;
     }
 
     /** write the message body to the output array, starting at the given index */
     @Override
     protected int writeMessageBody(byte out[], int curIndex) throws I2NPMessageException {
-        if (_key == null)
-            throw new I2NPMessageException("Key in reply to not specified");
-        if (_from == null)
-            throw new I2NPMessageException("No 'from' address specified!");
+        if (_key == null) throw new I2NPMessageException("Key in reply to not specified");
+        if (_from == null) throw new I2NPMessageException("No 'from' address specified!");
 
         System.arraycopy(_key.getData(), 0, out, curIndex, Hash.HASH_LENGTH);
         curIndex += Hash.HASH_LENGTH;
@@ -116,15 +131,15 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     }
 
     @Override
-    public int getType() { return MESSAGE_TYPE; }
+    public int getType() {
+        return MESSAGE_TYPE;
+    }
 
     @Override
     public boolean equals(Object object) {
         if ((object != null) && (object instanceof DatabaseSearchReplyMessage)) {
-            DatabaseSearchReplyMessage msg = (DatabaseSearchReplyMessage)object;
-            return DataHelper.eq(_key,msg._key) &&
-            DataHelper.eq(_from,msg._from) &&
-            DataHelper.eq(_peerHashes,msg._peerHashes);
+            DatabaseSearchReplyMessage msg = (DatabaseSearchReplyMessage) object;
+            return DataHelper.eq(_key, msg._key) && DataHelper.eq(_from, msg._from) && DataHelper.eq(_peerHashes, msg._peerHashes);
         } else {
             return false;
         }
@@ -132,21 +147,19 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
 
     @Override
     public int hashCode() {
-        return DataHelper.hashCode(_key) +
-        DataHelper.hashCode(_from) +
-        DataHelper.hashCode(_peerHashes);
+        return DataHelper.hashCode(_key) + DataHelper.hashCode(_from) + DataHelper.hashCode(_peerHashes);
     }
 
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-//        buf.append("\n\tDatabaseSearchReplyMessage: ");
-        buf.append("from [").append(_from.toBase64().substring(0,6)).append("]");
-        buf.append(" for key [").append(_key.toBase64().substring(0,6)).append("]");
+        //        buf.append("\n\tDatabaseSearchReplyMessage: ");
+        buf.append("from [").append(_from.toBase64().substring(0, 6)).append("]");
+        buf.append(" for key [").append(_key.toBase64().substring(0, 6)).append("]");
         if (getNumReplies() > 0) {
             buf.append("\n* Replies (").append(getNumReplies()).append("):");
             for (int i = 0; i < getNumReplies(); i++) {
-                buf.append(" [").append(getReply(i).toBase64().substring(0,6)).append("]");
+                buf.append(" [").append(getReply(i).toBase64().substring(0, 6)).append("]");
             }
         }
         return buf.toString();

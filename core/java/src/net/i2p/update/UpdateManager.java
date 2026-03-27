@@ -96,10 +96,7 @@ public interface UpdateManager {
      *  @param minVersion The minimum installed version to be able to update to newVersion
      *  @return true if we didn't know already
      */
-    public boolean notifyVersionAvailable(UpdateTask task, URI newsSource,
-                                          UpdateType type, String id,
-                                          UpdateMethod method, List<URI> updateSources,
-                                          String newVersion, String minVersion);
+    public boolean notifyVersionAvailable(UpdateTask task, URI newsSource, UpdateType type, String id, UpdateMethod method, List<URI> updateSources, String newVersion, String minVersion);
 
     /**
      *  Called by the Checker, either after check() was called, or it found out on its own.
@@ -115,10 +112,7 @@ public interface UpdateManager {
      *  @return true if we didn't know already
      *  @since 0.9.6
      */
-    public boolean notifyVersionAvailable(UpdateTask task, URI newsSource,
-                                          UpdateType type, String id,
-                                          Map<UpdateMethod, List<URI>> sourceMap,
-                                          String newVersion, String minVersion);
+    public boolean notifyVersionAvailable(UpdateTask task, URI newsSource, UpdateType type, String id, Map<UpdateMethod, List<URI>> sourceMap, String newVersion, String minVersion);
 
     /**
      *  A new version is available but cannot be downloaded or installed due to some constraint.
@@ -133,9 +127,7 @@ public interface UpdateManager {
      *  @param message A translated message to be displayed to the user, non-null
      *  @since 0.9.9
      */
-    public void notifyVersionConstraint(UpdateTask task, URI newsSource,
-                                        UpdateType type, String id,
-                                        String newVersion, String message);
+    public void notifyVersionConstraint(UpdateTask task, URI newsSource, UpdateType type, String id, String newVersion, String message);
 
     /**
      *  Called by the Checker after check() was called and all notifyVersionAvailable() callbacks are finished

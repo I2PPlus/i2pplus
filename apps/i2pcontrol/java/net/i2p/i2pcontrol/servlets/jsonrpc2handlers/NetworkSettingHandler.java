@@ -5,17 +5,19 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 import com.thetransactioncompany.jsonrpc2.server.MessageContext;
 import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.Map;
+
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.FIFOBandwidthRefiller;
 import net.i2p.router.transport.TransportManager;
 import net.i2p.router.transport.ntcp.NTCPTransport;
 import net.i2p.router.transport.udp.UDPTransport;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /*
  *  Copyright 2011 hottuna (dev@robertfoss.se)
@@ -64,17 +66,12 @@ public class NetworkSettingHandler implements RequestHandler {
         }
     }
 
-
     private JSONRPC2Response process(JSONRPC2Request req) {
         JSONRPC2Error err = _helper.validateParams(null, req);
-        if (err != null)
-            return new JSONRPC2Response(err, req.getID());
+        if (err != null) return new JSONRPC2Response(err, req.getID());
 
         if (_context == null) {
-            return new JSONRPC2Response(
-                       new JSONRPC2Error(JSONRPC2Error.INTERNAL_ERROR.getCode(),
-                                         "RouterContext was not initialized. Query failed"),
-                       req.getID());
+            return new JSONRPC2Response(new JSONRPC2Error(JSONRPC2Error.INTERNAL_ERROR.getCode(), "RouterContext was not initialized. Query failed"), req.getID());
         }
         Map<String, Object> inParams = req.getNamedParams();
         Map<String, Object> outParams = new HashMap<String, Object>(4);
@@ -94,10 +91,7 @@ public class NetworkSettingHandler implements RequestHandler {
                             throw new NumberFormatException();
                         }
                     } catch (NumberFormatException e) {
-                        return new JSONRPC2Response(
-                                   new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(),
-                                                     "\"i2p.router.net.ntcp.port\" must be a string representing a number in the range 1-65535. " + inParam + " isn't valid."),
-                                   req.getID());
+                        return new JSONRPC2Response(new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(), "\"i2p.router.net.ntcp.port\" must be a string representing a number in the range 1-65535. " + inParam + " isn't valid."), req.getID());
                     }
                     Map<String, String> config = new HashMap<String, String>();
                     config.put(NTCPTransport.PROP_I2NP_NTCP_PORT, String.valueOf(newPort));
@@ -140,10 +134,7 @@ public class NetworkSettingHandler implements RequestHandler {
                         _context.router().saveConfig(NTCPTransport.PROP_I2NP_NTCP_AUTO_IP, inParam);
                         restartNeeded = true;
                     } else {
-                        return new JSONRPC2Response(
-                                   new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(),
-                                                     "\"i2p.router.net.ntcp.autoip\" can only be always, true or false. " + inParam + " isn't valid."),
-                                   req.getID());
+                        return new JSONRPC2Response(new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(), "\"i2p.router.net.ntcp.autoip\" can only be always, true or false. " + inParam + " isn't valid."), req.getID());
                     }
                 }
                 settingsSaved = true;
@@ -163,10 +154,7 @@ public class NetworkSettingHandler implements RequestHandler {
                             throw new NumberFormatException();
                         }
                     } catch (NumberFormatException e) {
-                        return new JSONRPC2Response(
-                                   new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(),
-                                                     "\"i2p.router.net.ssu.port\" must be a string representing a number in the range 1-65535. " + inParam + " isn't valid."),
-                                   req.getID());
+                        return new JSONRPC2Response(new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(), "\"i2p.router.net.ssu.port\" must be a string representing a number in the range 1-65535. " + inParam + " isn't valid."), req.getID());
                     }
                     Map<String, String> config = new HashMap<String, String>();
                     config.put(UDPTransport.PROP_EXTERNAL_PORT, String.valueOf(newPort));
@@ -194,7 +182,7 @@ public class NetworkSettingHandler implements RequestHandler {
         }
 
         if (inParams.containsKey("i2p.router.net.ssu.autoip")) {
-            String oldSSUAutoIP =  _context.getProperty(UDPTransport.PROP_SOURCES);
+            String oldSSUAutoIP = _context.getProperty(UDPTransport.PROP_SOURCES);
             if ((inParam = (String) inParams.get("i2p.router.net.ssu.autoip")) != null) {
                 inParam = inParam.trim().toLowerCase(Locale.ROOT);
                 if (oldSSUAutoIP == null || !oldSSUAutoIP.equals(inParam)) {
@@ -202,10 +190,7 @@ public class NetworkSettingHandler implements RequestHandler {
                         _context.router().saveConfig(UDPTransport.PROP_SOURCES, inParam);
                         restartNeeded = true;
                     } else {
-                        return new JSONRPC2Response(
-                                   new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(),
-                                                     "\"i2p.router.net.ssu.autoip\" can only be ssu/local,upnp,ssu/local/ssu/upnp,ssu. " + inParam + " isn't valid."),
-                                   req.getID());
+                        return new JSONRPC2Response(new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(), "\"i2p.router.net.ssu.autoip\" can only be ssu/local,upnp,ssu/local/ssu/upnp,ssu. " + inParam + " isn't valid."), req.getID());
                     }
                 }
                 settingsSaved = true;
@@ -251,10 +236,7 @@ public class NetworkSettingHandler implements RequestHandler {
                             throw new NumberFormatException();
                         }
                     } catch (NumberFormatException e) {
-                        return new JSONRPC2Response(
-                                   new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(),
-                                                     "\"i2p.router.net.bw.share\" A positive integer must supplied, \"" + inParam + "\" isn't valid"),
-                                   req.getID());
+                        return new JSONRPC2Response(new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(), "\"i2p.router.net.bw.share\" A positive integer must supplied, \"" + inParam + "\" isn't valid"), req.getID());
                     }
                     _context.router().saveConfig(Router.PROP_BANDWIDTH_SHARE_PERCENTAGE, inParam);
                 }
@@ -274,10 +256,7 @@ public class NetworkSettingHandler implements RequestHandler {
                         throw new NumberFormatException();
                     }
                 } catch (NumberFormatException e) {
-                    return new JSONRPC2Response(
-                               new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(),
-                                                 "\"i2p.router.net.bw.in\" A positive integer must supplied, " + inParam + " isn't valid"),
-                               req.getID());
+                    return new JSONRPC2Response(new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(), "\"i2p.router.net.bw.in\" A positive integer must supplied, " + inParam + " isn't valid"), req.getID());
                 }
                 Integer burstRate = (rate * BW_BURST_PCT) / 100;
                 Integer burstSize = (burstRate * BW_BURST_TIME);
@@ -300,13 +279,9 @@ public class NetworkSettingHandler implements RequestHandler {
                 Integer rate;
                 try {
                     rate = Integer.parseInt(inParam);
-                    if (rate < 0 || inParam.length() == 0)
-                        throw new NumberFormatException();
+                    if (rate < 0 || inParam.length() == 0) throw new NumberFormatException();
                 } catch (NumberFormatException e) {
-                    return new JSONRPC2Response(
-                               new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(),
-                                                 "\"i2p.router.net.bw.out\" A positive integer must supplied, " + inParam + " isn't valid"),
-                               req.getID());
+                    return new JSONRPC2Response(new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(), "\"i2p.router.net.bw.out\" A positive integer must supplied, " + inParam + " isn't valid"), req.getID());
                 }
                 Integer burstRate = (rate * BW_BURST_PCT) / 100;
                 Integer burstSize = (burstRate * BW_BURST_TIME);
@@ -335,8 +310,7 @@ public class NetworkSettingHandler implements RequestHandler {
             }
         }
 
-        if (settingsSaved)
-            _context.router().saveConfig();
+        if (settingsSaved) _context.router().saveConfig();
 
         outParams.put("SettingsSaved", settingsSaved);
         outParams.put("RestartNeeded", restartNeeded);

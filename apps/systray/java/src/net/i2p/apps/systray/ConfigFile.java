@@ -27,7 +27,7 @@ public class ConfigFile {
 
     // TODO Make write operations keep original line comments intact.
 
-    private String     _configFile;
+    private String _configFile;
     private Properties _properties = new Properties();
 
     /**
@@ -66,7 +66,10 @@ public class ConfigFile {
             rv = false;
         } finally {
             if (fileInputStream != null) {
-                try { fileInputStream.close(); } catch (IOException e) {}
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                }
             }
         }
         return rv;
@@ -83,7 +86,10 @@ public class ConfigFile {
             rv = false;
         } finally {
             if (fileOutputStream != null) {
-                try { fileOutputStream.close(); } catch (IOException e) {}
+                try {
+                    fileOutputStream.close();
+                } catch (IOException e) {
+                }
             }
         }
         return rv;

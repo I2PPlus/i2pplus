@@ -13,10 +13,12 @@ package net.i2p.crypto.eddsa.math.ed25519;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.math.BigInteger;
 import net.i2p.crypto.eddsa.math.*;
+
 import org.hamcrest.core.*;
 import org.junit.*;
+
+import java.math.BigInteger;
 
 /**
  * Tests rely on the BigInteger class.
@@ -51,13 +53,13 @@ public class Ed25519FieldElementTest extends AbstractFieldElementTest {
         new Ed25519FieldElement(MathUtils.getField(), new int[10]);
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void cannotConstructFieldElementFromArrayWithIncorrectLength() {
         // Assert:
         new Ed25519FieldElement(MathUtils.getField(), new int[9]);
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void cannotConstructFieldElementWithoutField() {
         // Assert:
         new Ed25519FieldElement(null, new int[9]);
@@ -87,8 +89,8 @@ public class Ed25519FieldElementTest extends AbstractFieldElementTest {
     public void toStringReturnsCorrectRepresentation() {
         // Arrange:
         final byte[] bytes = new byte[32];
-        for (int i=0; i<32; i++) {
-            bytes[i] = (byte)(i+1);
+        for (int i = 0; i < 32; i++) {
+            bytes[i] = (byte) (i + 1);
         }
         final FieldElement f = MathUtils.getField().getEncoding().decode(bytes);
 

@@ -1,4 +1,5 @@
 package net.i2p.router.message;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -34,33 +35,36 @@ public class CloveSet {
         _expiration = expiration;
     }
 
-    public int getCloveCount() { return _cloves.length; }
+    public int getCloveCount() {
+        return _cloves.length;
+    }
 
     /** @throws ArrayIndexOutOfBoundsException */
-    public GarlicClove getClove(int index) { return _cloves[index]; }
+    public GarlicClove getClove(int index) {
+        return _cloves[index];
+    }
 
-    public Certificate getCertificate() { return _cert; }
+    public Certificate getCertificate() {
+        return _cert;
+    }
 
-    public long getMessageId() { return _msgId; }
+    public long getMessageId() {
+        return _msgId;
+    }
 
-    public long getExpiration() { return _expiration; }
+    public long getExpiration() {
+        return _expiration;
+    }
 
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
-        buf.append("CloveSet: ID ").append(_msgId)
-           .append(' ').append(_cert)
-           .append(" expires ").append(DataHelper.formatTime(_expiration))
-           .append(" cloves: ").append(_cloves.length)
-        .append(" {");
+        buf.append("CloveSet: ID ").append(_msgId).append(' ').append(_cert).append(" expires ").append(DataHelper.formatTime(_expiration)).append(" cloves: ").append(_cloves.length).append(" {");
         for (int i = 0; i < _cloves.length; i++) {
             GarlicClove clove = _cloves[i];
-            if (clove.getData() != null)
-                buf.append(clove.getData().getClass().getSimpleName());
-            else
-                buf.append("[null clove]");
-            if (i < _cloves.length - 1)
-                buf.append(", ");
+            if (clove.getData() != null) buf.append(clove.getData().getClass().getSimpleName());
+            else buf.append("[null clove]");
+            if (i < _cloves.length - 1) buf.append(", ");
         }
         buf.append('}');
         return buf.toString();

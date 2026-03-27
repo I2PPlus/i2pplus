@@ -24,8 +24,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     /**
      *  Creates an empty ByteArray.
      */
-    public ByteArray() {
-    }
+    public ByteArray() {}
 
     /**
      *  Sets valid = data.length, unless data is null
@@ -77,35 +76,43 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
      *
      * @return the number of valid bytes
      */
-    public int getValid() { return _valid; }
+    public int getValid() {
+        return _valid;
+    }
 
     /**
      * Sets the number of valid bytes.
      *
      * @param valid the new valid count
      */
-    public void setValid(int valid) { _valid = valid; }
+    public void setValid(int valid) {
+        _valid = valid;
+    }
 
     /**
      * Returns the offset into the byte array.
      *
      * @return the offset
      */
-    public int getOffset() { return _offset; }
+    public int getOffset() {
+        return _offset;
+    }
 
     /**
      * Sets the offset into the byte array.
      *
      * @param offset the new offset
      */
-    public void setOffset(int offset) { _offset = offset; }
+    public void setOffset(int offset) {
+        _offset = offset;
+    }
 
     @Override
     public final boolean equals(Object o) {
         if (o == this) return true;
         if (o == null) return false;
         if (o instanceof ByteArray) {
-            ByteArray ba = (ByteArray)o;
+            ByteArray ba = (ByteArray) o;
             return compare(getData(), _offset, _valid, ba.getData(), ba.getOffset(), ba.getValid());
         }
 

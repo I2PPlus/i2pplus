@@ -1,5 +1,12 @@
 package org.klomp.snark;
 
+import net.i2p.I2PAppContext;
+import net.i2p.crypto.SHA1;
+import net.i2p.data.ByteArray;
+import net.i2p.util.ByteCache;
+import net.i2p.util.Log;
+import net.i2p.util.SecureFile;
+
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.EOFException;
@@ -8,12 +15,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.security.MessageDigest;
 import java.util.Objects;
-import net.i2p.I2PAppContext;
-import net.i2p.crypto.SHA1;
-import net.i2p.data.ByteArray;
-import net.i2p.util.ByteCache;
-import net.i2p.util.Log;
-import net.i2p.util.SecureFile;
 
 /**
  * Represents a piece of a torrent being downloaded, storing partial data either on the heap or in a
@@ -72,8 +73,7 @@ class PartialPiece implements Comparable<PartialPiece> {
                 } catch (OutOfMemoryError oom) {
                     if (_max_in_mem > PeerState.PARTSIZE) _max_in_mem /= 2;
                     Log log = I2PAppContext.getGlobalContext().logManager().getLog(PartialPiece.class);
-                    log.logAlways(Log.WARN, "OOM creating new partial piece -> RAM cache reduced to " +
-                                             _max_in_mem / 1024 + "KB");
+                    log.logAlways(Log.WARN, "OOM creating new partial piece -> RAM cache reduced to " + _max_in_mem / 1024 + "KB");
                     // fall through to use temp file
                 }
             }
@@ -107,8 +107,7 @@ class PartialPiece implements Comparable<PartialPiece> {
         int chunk = off / PeerState.PARTSIZE;
         int sz = bitfield.size();
         for (int i = chunk; i < sz; i++) {
-            if (!bitfield.get(i))
-                return new Request(this, off, Math.min(pclen - off, PeerState.PARTSIZE));
+            if (!bitfield.get(i)) return new Request(this, off, Math.min(pclen - off, PeerState.PARTSIZE));
             if (i == sz - 1) off = pclen;
             else off += PeerState.PARTSIZE;
         }
@@ -230,8 +229,7 @@ class PartialPiece implements Comparable<PartialPiece> {
      * @throws IOException on I/O errors or incorrect offset
      * @since 0.9.1
      */
-    public void read(DataInputStream din, int offset, int len, BandwidthListener bwl)
-            throws IOException {
+    public void read(DataInputStream din, int offset, int len, BandwidthListener bwl) throws IOException {
         if (offset % PeerState.PARTSIZE != 0) throw new IOException("Bad offset " + offset);
         int chunk = offset / PeerState.PARTSIZE;
 

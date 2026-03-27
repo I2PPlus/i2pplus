@@ -10,11 +10,12 @@
  */
 package org.minidns.record;
 
+import org.minidns.dnsname.DnsName;
+import org.minidns.record.Record.TYPE;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import org.minidns.dnsname.DnsName;
-import org.minidns.record.Record.TYPE;
 
 /**
  * DNS MX (Mail Exchange) record payload.<br>
@@ -37,11 +38,9 @@ public class MX extends Data {
      *
      * @deprecated use {@link #target} instead.
      */
-    @Deprecated
-    public final DnsName name;
+    @Deprecated public final DnsName name;
 
-    public static MX parse(DataInputStream dis, byte[] data)
-        throws IOException {
+    public static MX parse(DataInputStream dis, byte[] data) throws IOException {
         int priority = dis.readUnsignedShort();
         DnsName name = DnsName.parse(dis, data);
         return new MX(priority, name);
@@ -72,5 +71,4 @@ public class MX extends Data {
     public TYPE getType() {
         return TYPE.MX;
     }
-
 }

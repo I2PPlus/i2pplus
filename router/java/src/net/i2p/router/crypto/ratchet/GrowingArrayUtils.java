@@ -39,8 +39,7 @@ final class GrowingArrayUtils {
 
         if (currentSize + 1 > array.length) {
             @SuppressWarnings("unchecked")
-            T[] newArray = ArrayUtils.newUnpaddedArray(
-                    (Class<T>) array.getClass().getComponentType(), growSize(currentSize));
+            T[] newArray = ArrayUtils.newUnpaddedArray((Class<T>) array.getClass().getComponentType(), growSize(currentSize));
             System.arraycopy(array, 0, newArray, 0, currentSize);
             array = newArray;
         }
@@ -84,8 +83,7 @@ final class GrowingArrayUtils {
         }
 
         @SuppressWarnings("unchecked")
-        T[] newArray = ArrayUtils.newUnpaddedArray((Class<T>)array.getClass().getComponentType(),
-                growSize(currentSize));
+        T[] newArray = ArrayUtils.newUnpaddedArray((Class<T>) array.getClass().getComponentType(), growSize(currentSize));
         System.arraycopy(array, 0, newArray, 0, index);
         newArray[index] = element;
         System.arraycopy(array, index, newArray, index + 1, array.length - index);

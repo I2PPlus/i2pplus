@@ -1,13 +1,14 @@
 package net.i2p.util;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.DSAEngine;
 import net.i2p.data.Signature;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
 
 /**
  *  OutputStream to InputStream adapter.
@@ -41,8 +42,7 @@ public class ByteArrayStream extends ByteArrayOutputStream {
      */
     @Override
     public void reset() {
-        if (count > 0)
-            throw new IllegalStateException();
+        if (count > 0) throw new IllegalStateException();
     }
 
     /**
@@ -53,8 +53,7 @@ public class ByteArrayStream extends ByteArrayOutputStream {
      */
     @Override
     public byte[] toByteArray() {
-        if (count == buf.length)
-            return buf;
+        if (count == buf.length) return buf;
         return Arrays.copyOfRange(buf, 0, count);
     }
 

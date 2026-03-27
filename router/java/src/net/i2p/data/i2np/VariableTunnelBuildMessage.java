@@ -20,20 +20,22 @@ public class VariableTunnelBuildMessage extends TunnelBuildMessage {
     }
 
     @Override
-    protected int calculateWrittenLength() { return 1 + super.calculateWrittenLength(); }
+    protected int calculateWrittenLength() {
+        return 1 + super.calculateWrittenLength();
+    }
 
     @Override
-    public int getType() { return MESSAGE_TYPE; }
+    public int getType() {
+        return MESSAGE_TYPE;
+    }
 
     @Override
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         // message type will be checked in super()
         int r = data[offset] & 0xff;
-        if (r <= 0 || r > MAX_RECORD_COUNT)
-            throw new I2NPMessageException("Bad record count " + r);
+        if (r <= 0 || r > MAX_RECORD_COUNT) throw new I2NPMessageException("Bad record count " + r);
         RECORD_COUNT = r;
-        if (dataSize != calculateWrittenLength())
-            throw new I2NPMessageException("Wrong length (expects " + calculateWrittenLength() + ", recv " + dataSize + ")");
+        if (dataSize != calculateWrittenLength()) throw new I2NPMessageException("Wrong length (expects " + calculateWrittenLength() + ", recv " + dataSize + ")");
         _records = new EncryptedBuildRecord[RECORD_COUNT];
         super.readMessage(data, offset + 1, dataSize, type);
     }
@@ -41,13 +43,11 @@ public class VariableTunnelBuildMessage extends TunnelBuildMessage {
     @Override
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         int remaining = out.length - (curIndex + calculateWrittenLength());
-        if (remaining < 0)
-            throw new I2NPMessageException("Not large enough (too short by " + remaining + ")");
-        if (RECORD_COUNT <= 0 || RECORD_COUNT > MAX_RECORD_COUNT)
-            throw new I2NPMessageException("Bad record count " + RECORD_COUNT);
+        if (remaining < 0) throw new I2NPMessageException("Not large enough (too short by " + remaining + ")");
+        if (RECORD_COUNT <= 0 || RECORD_COUNT > MAX_RECORD_COUNT) throw new I2NPMessageException("Bad record count " + RECORD_COUNT);
         out[curIndex++] = (byte) RECORD_COUNT;
         // can't call super, written length check will fail
-        //return super.writeMessageBody(out, curIndex + 1);
+        // return super.writeMessageBody(out, curIndex + 1);
         for (int i = 0; i < RECORD_COUNT; i++) {
             System.arraycopy(_records[i].getData(), 0, out, curIndex, RECORD_SIZE);
             curIndex += RECORD_SIZE;
@@ -58,8 +58,7 @@ public class VariableTunnelBuildMessage extends TunnelBuildMessage {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64); // NOPMD - AvoidUnnecessaryStringBuilderCreation
-        buf.append("VariableTunnelBuildMessage [ID: ").append(getUniqueId())
-           .append("] -> ").append(getRecordCount()).append(" records");
+        buf.append("VariableTunnelBuildMessage [ID: ").append(getUniqueId()).append("] -> ").append(getRecordCount()).append(" records");
         return buf.toString();
     }
 }

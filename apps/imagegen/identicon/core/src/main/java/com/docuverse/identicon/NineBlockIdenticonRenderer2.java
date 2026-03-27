@@ -19,30 +19,25 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
     private static final int PATCH_MOVETO = -1;
 
     private static final int[][] PATCH_TYPES = {
-            {0, 4, 24, 20},
-            {0, 4, 20},
-            {2, 24, 20},
-            {0, 2, 20, 22},
-            {2, 14, 22, 10},
-            {0, 14, 24, 22},
-            {2, 24, 22, 13, 11, 22, 20},
-            {0, 14, 22},
-            {6, 8, 18, 16},
-            {4, 20, 10, 12, 2},
-            {0, 2, 12, 10},
-            {10, 14, 22},
-            {20, 12, 24},
-            {10, 2, 12},
-            {0, 2, 10},
-            {0, 4, 24, 20}
+        {0, 4, 24, 20},
+        {0, 4, 20},
+        {2, 24, 20},
+        {0, 2, 20, 22},
+        {2, 14, 22, 10},
+        {0, 14, 24, 22},
+        {2, 24, 22, 13, 11, 22, 20},
+        {0, 14, 22},
+        {6, 8, 18, 16},
+        {4, 20, 10, 12, 2},
+        {0, 2, 12, 10},
+        {10, 14, 22},
+        {20, 12, 24},
+        {10, 2, 12},
+        {0, 2, 10},
+        {0, 4, 24, 20}
     };
 
-    private static final byte[] PATCH_FLAGS = {
-        PATCH_SYMMETRIC, 0, 0, 0,
-        PATCH_SYMMETRIC, 0, 0, 0,
-        PATCH_SYMMETRIC, 0, 0, 0,
-        0, 0, 0, PATCH_SYMMETRIC + PATCH_INVERTED
-    };
+    private static final byte[] PATCH_FLAGS = {PATCH_SYMMETRIC, 0, 0, 0, PATCH_SYMMETRIC, 0, 0, 0, PATCH_SYMMETRIC, 0, 0, 0, 0, 0, 0, PATCH_SYMMETRIC + PATCH_INVERTED};
 
     private static final int[] CENTER_PATCH_TYPES = {0, 4, 8, 15};
 
@@ -97,7 +92,7 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
     }
 
     public BufferedImage render(BigInteger code, int size) {
-        return renderQuilt((int)code.longValue(), size);
+        return renderQuilt((int) code.longValue(), size);
     }
 
     public BufferedImage render(int code, int size) {

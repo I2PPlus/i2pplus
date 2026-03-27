@@ -9,10 +9,11 @@ package net.i2p.data.i2cp;
  *
  */
 
-import java.io.IOException;
-import java.io.InputStream;
 import net.i2p.data.DataFormatException;
 import net.i2p.util.ByteArrayStream;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Defines the message a client sends to a router when destroying
@@ -21,11 +22,10 @@ import net.i2p.util.ByteArrayStream;
  * @author jrandom
  */
 public class DestroySessionMessage extends I2CPMessageImpl {
-    public final static int MESSAGE_TYPE = 3;
+    public static final int MESSAGE_TYPE = 3;
     private SessionId _sessionId;
 
-    public DestroySessionMessage() {
-    }
+    public DestroySessionMessage() {}
 
     public SessionId getSessionId() {
         return _sessionId;
@@ -58,8 +58,7 @@ public class DestroySessionMessage extends I2CPMessageImpl {
 
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
-        if (_sessionId == null)
-            throw new I2CPMessageException("Unable to write out the message as there is not enough data");
+        if (_sessionId == null) throw new I2CPMessageException("Unable to write out the message as there is not enough data");
         ByteArrayStream os = new ByteArrayStream(2);
         try {
             _sessionId.writeBytes(os);

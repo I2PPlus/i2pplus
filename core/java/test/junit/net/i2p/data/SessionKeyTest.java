@@ -1,4 +1,5 @@
 package net.i2p.data;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -7,7 +8,6 @@ package net.i2p.data;
  * your children, but it might.  Use at your own risk.
  *
  */
-
 
 /**
  * Test harness for loading / storing SessionKey objects
@@ -19,11 +19,13 @@ public class SessionKeyTest extends StructureTest {
     public DataStructure createDataStructure() throws DataFormatException {
         SessionKey key = new SessionKey();
         byte data[] = new byte[SessionKey.KEYSIZE_BYTES];
-        for (int i = 0; i < data.length; i++)
-            data[i] = (byte)(i%16);
+        for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 16);
         key.setData(data);
         return key;
     }
+
     @Override
-    public DataStructure createStructureToRead() { return new SessionKey(); }
+    public DataStructure createStructureToRead() {
+        return new SessionKey();
+    }
 }

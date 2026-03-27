@@ -9,15 +9,6 @@ package net.i2p.client.impl;
  *
  */
 
-import java.io.EOFException;
-import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSessionException;
 import net.i2p.crypto.EncType;
@@ -47,6 +38,16 @@ import net.i2p.data.SimpleDataStructure;
 import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.data.i2cp.RequestLeaseSetMessage;
 import net.i2p.util.OrderedProperties;
+
+import java.io.EOFException;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Handle I2CP RequestLeaseSetMessage from the router by granting all leases,
@@ -96,38 +97,51 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      *  @since 0.9.38
      */
     protected boolean requiresLS2(I2PSessionImpl session) {
-        if (!session.supportsLS2()) {return false;}
+        if (!session.supportsLS2()) {
+            return false;
+        }
         // we do this check first because we must set _ls2Type regardless
         String s = session.getOptions().getProperty(PROP_LS_TYPE);
         if (s != null) {
             try {
                 int type = Integer.parseInt(s);
                 _ls2Type = type;
-                if (type != DatabaseEntry.KEY_TYPE_LEASESET) {return true;}
+                if (type != DatabaseEntry.KEY_TYPE_LEASESET) {
+                    return true;
+                }
             } catch (NumberFormatException nfe) {
                 session.propagateError("BAD LeaseSet2 type", nfe);
                 session.destroySession();
                 return true;
             }
         }
-        if (session.isOffline()) {return true;}
+        if (session.isOffline()) {
+            return true;
+        }
         s = session.getOptions().getProperty(PROP_LS_ENCTYPE);
-        if (s != null && !s.equals("0") && !s.equals("ELGAMAL_2048")) {return true;}
+        if (s != null && !s.equals("0") && !s.equals("ELGAMAL_2048")) {
+            return true;
+        }
         return false;
     }
 
     @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
-        if (_log.shouldDebug()) {_log.debug("Handling " + message);}
+        if (_log.shouldDebug()) {
+            _log.debug("Handling " + message);
+        }
         RequestLeaseSetMessage msg = (RequestLeaseSetMessage) message;
         boolean isLS2 = requiresLS2(session);
         LeaseSet leaseSet;
         if (isLS2) {
             LeaseSet2 ls2;
-            if (_ls2Type == DatabaseEntry.KEY_TYPE_LS2) {ls2 = new LeaseSet2();}
-            else if (_ls2Type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {ls2 = new EncryptedLeaseSet();}
-            else if (_ls2Type == DatabaseEntry.KEY_TYPE_META_LS2) {ls2 = new MetaLeaseSet();}
-            else {
+            if (_ls2Type == DatabaseEntry.KEY_TYPE_LS2) {
+                ls2 = new LeaseSet2();
+            } else if (_ls2Type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
+                ls2 = new EncryptedLeaseSet();
+            } else if (_ls2Type == DatabaseEntry.KEY_TYPE_META_LS2) {
+                ls2 = new MetaLeaseSet();
+            } else {
                 session.propagateError("Unsupported LS2 type", new Exception());
                 session.destroySession();
                 return;
@@ -141,26 +155,37 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             Properties props = null;
             for (int i = 0; i < 10; i++) {
                 String v = session.getOptions().getProperty(k);
-                if (v == null) {break;}
+                if (v == null) {
+                    break;
+                }
                 String[] vs = DataHelper.split(v, "=", 2);
-                if (vs.length < 2) {continue;}
-                if (props == null) {props = new OrderedProperties();}
+                if (vs.length < 2) {
+                    continue;
+                }
+                if (props == null) {
+                    props = new OrderedProperties();
+                }
                 props.setProperty(vs[0], vs[1]);
                 k = new StringBuilder("i2cp.leaseSetOption.").append(i + 1).toString();
             }
-            if (props != null) {ls2.setOptions(props);}
+            if (props != null) {
+                ls2.setOptions(props);
+            }
 
             // ensure 1-second resolution timestamp is higher than last one
             long now = Math.max(_context.clock().now(), session.getLastLS2SignTime() + 1000);
             ls2.setPublished(now);
             session.setLastLS2SignTime(now);
             leaseSet = ls2;
-        } else {leaseSet = new LeaseSet();}
+        } else {
+            leaseSet = new LeaseSet();
+        }
         // Full Meta support TODO
         for (int i = 0; i < msg.getEndpoints(); i++) {
             Lease lease;
-            if (_ls2Type == DatabaseEntry.KEY_TYPE_META_LS2) {lease = new MetaLease();}
-            else if (isLS2) {
+            if (_ls2Type == DatabaseEntry.KEY_TYPE_META_LS2) {
+                lease = new MetaLease();
+            } else if (isLS2) {
                 lease = new Lease2();
                 lease.setTunnelId(msg.getTunnelId(i));
             } else {
@@ -169,7 +194,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             }
             lease.setGateway(msg.getRouter(i));
             lease.setEndDate(msg.getEndDate().getTime());
-            //lease.setStartDate(msg.getStartDate());
+            // lease.setStartDate(msg.getStartDate());
             leaseSet.addLease(lease);
         }
         signLeaseSet(leaseSet, isLS2, session);
@@ -199,8 +224,11 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             List<EncType> types = new ArrayList<EncType>(2);
             String senc = session.getOptions().getProperty(PROP_LS_ENCTYPE);
             if (senc != null) {
-                if (!PREFER_NEW_ENC && senc.equals("4,0")) {senc = "0,4";}
-                else if (PREFER_NEW_ENC && senc.equals("0,4")) {senc = "4,0";}
+                if (!PREFER_NEW_ENC && senc.equals("4,0")) {
+                    senc = "0,4";
+                } else if (PREFER_NEW_ENC && senc.equals("0,4")) {
+                    senc = "4,0";
+                }
                 String[] senca = DataHelper.split(senc, ",");
                 for (String sencaa : senca) {
                     EncType newtype = EncType.parseEncType(sencaa);
@@ -209,13 +237,18 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                             _log.error("Duplicate crypto type: " + newtype);
                             continue;
                         }
-                        if (newtype.isAvailable()) {types.add(newtype);}
-                        else {_log.error("Unsupported crypto type: " + newtype);}
-                    } else {_log.error("Unsupported crypto type: " + sencaa);}
+                        if (newtype.isAvailable()) {
+                            types.add(newtype);
+                        } else {
+                            _log.error("Unsupported crypto type: " + newtype);
+                        }
+                    } else {
+                        _log.error("Unsupported crypto type: " + sencaa);
+                    }
                 }
             }
             if (types.isEmpty()) {
-                //types.add(EncType.ELGAMAL_2048);
+                // types.add(EncType.ELGAMAL_2048);
                 types.add(EncType.ECIES_X25519);
             }
 
@@ -234,8 +267,11 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                     if (colon > 0) {
                         String stype = sspk.substring(0, colon);
                         SigType t = SigType.parseSigType(stype);
-                        if (t == type) {sspk = sspk.substring(colon + 1);}
-                        else {useOldKeys = false;}
+                        if (t == type) {
+                            sspk = sspk.substring(colon + 1);
+                        } else {
+                            useOldKeys = false;
+                        }
                     }
                     if (useOldKeys) {
                         try {
@@ -247,7 +283,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                         }
                     }
                 }
-                if (useOldKeys) {parsePrivateKeys(spk, privKeys, types);}
+                if (useOldKeys) {
+                    parsePrivateKeys(spk, privKeys, types);
+                }
             }
             if (privKeys.isEmpty() && !_existingLeaseSets.isEmpty()) {
                 // look for private keys from another dest using same pubkey
@@ -256,8 +294,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                     if (pk.equals(e.getKey().getPublicKey())) {
                         privKeys.addAll(e.getValue().getPrivateKeys());
                         if (_log.shouldInfo()) {
-                            _log.info("Creating LeaseInfo for [" + dest.toBase32().substring(0,8) + "] " +
-                                      "with private key from [" + e.getKey().toBase32().substring(0,8) + "]");
+                            _log.info("Creating LeaseInfo for [" + dest.toBase32().substring(0, 8) + "] " + "with private key from [" + e.getKey().toBase32().substring(0, 8) + "]");
                         }
                         break;
                     }
@@ -266,32 +303,29 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             if (!privKeys.isEmpty()) {
                 if (signingPrivKey != null) {
                     li = new LeaseInfo(privKeys, signingPrivKey);
-                    if (_log.shouldInfo())
-                        _log.info("Creating LS1 LeaseInfo for [" + dest.toBase32().substring(0,8) + "] with configured private keys");
+                    if (_log.shouldInfo()) _log.info("Creating LS1 LeaseInfo for [" + dest.toBase32().substring(0, 8) + "] with configured private keys");
                 } else if (isLS2) {
                     li = new LeaseInfo(privKeys);
-                    if (_log.shouldInfo())
-                        _log.info("Creating LS2 LeaseInfo for [" + dest.toBase32().substring(0,8) + "] with configured private keys");
+                    if (_log.shouldInfo()) _log.info("Creating LS2 LeaseInfo for [" + dest.toBase32().substring(0, 8) + "] with configured private keys");
                 } else {
                     li = new LeaseInfo(privKeys, dest);
-                    if (_log.shouldInfo())
-                        _log.info("Creating LS1 LeaseInfo for [" + dest.toBase32().substring(0,8) + "] with configured private keys and new revocation key");
+                    if (_log.shouldInfo()) _log.info("Creating LS1 LeaseInfo for [" + dest.toBase32().substring(0, 8) + "] with configured private keys and new revocation key");
                 }
             } else {
                 li = new LeaseInfo(dest, types, isLS2);
-                if (_log.shouldInfo())
-                    _log.info("Creating LeaseInfo for [" + dest.toBase32().substring(0,8) + "] without configured private keys");
+                if (_log.shouldInfo()) _log.info("Creating LeaseInfo for [" + dest.toBase32().substring(0, 8) + "] without configured private keys");
             }
             _existingLeaseSets.put(dest, li);
         } else {
-            if (_log.shouldInfo())
-                _log.info("Caching old LeaseInfo keys for [" + dest.toBase32().substring(0,8) + "]");
+            if (_log.shouldInfo()) _log.info("Caching old LeaseInfo keys for [" + dest.toBase32().substring(0, 8) + "]");
         }
 
         if (isLS2) {
             LeaseSet2 ls2 = (LeaseSet2) leaseSet;
             if (_ls2Type != DatabaseEntry.KEY_TYPE_META_LS2) {
-                for (PublicKey key : li.getPublicKeys()) {ls2.addEncryptionKey(key);}
+                for (PublicKey key : li.getPublicKeys()) {
+                    ls2.addEncryptionKey(key);
+                }
             }
         } else {
             leaseSet.setEncryptionKey(li.getPublicKey());
@@ -300,8 +334,11 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         }
         // SubSession options aren't updated via the gui, so use the primary options
         Properties opts;
-        if (session instanceof SubSession) {opts = ((SubSession) session).getPrimaryOptions();}
-        else {opts = session.getOptions();}
+        if (session instanceof SubSession) {
+            opts = ((SubSession) session).getPrimaryOptions();
+        } else {
+            opts = session.getOptions();
+        }
         boolean encrypt = Boolean.parseBoolean(opts.getProperty(PROP_LS_ENCRYPT));
         String sk = opts.getProperty(PROP_LS_KEY);
         Hash h = dest.calculateHash();
@@ -315,17 +352,21 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 _log.error("BAD LeaseSet key: " + sk);
                 _context.keyRing().remove(h);
             }
-        } else {_context.keyRing().remove(h);}
+        } else {
+            _context.keyRing().remove(h);
+        }
         // offline keys
         if (session.isOffline()) {
             LeaseSet2 ls2 = (LeaseSet2) leaseSet;
             long exp = session.getOfflineExpiration();
-            boolean ok = ls2.setOfflineSignature(exp, session.getTransientSigningPublicKey(),
-                                                 session.getOfflineSignature());
+            boolean ok = ls2.setOfflineSignature(exp, session.getTransientSigningPublicKey(), session.getOfflineSignature());
             if (!ok) {
                 String s;
-                if (exp <= _context.clock().now()) {s = "Offline Signature for tunnel expired " + DataHelper.formatTime(exp);}
-                else {s = "BAD Offline Signature";}
+                if (exp <= _context.clock().now()) {
+                    s = "Offline Signature for tunnel expired " + DataHelper.formatTime(exp);
+                } else {
+                    s = "BAD Offline Signature";
+                }
                 session.propagateError(s, new Exception());
                 session.destroySession();
             }
@@ -339,23 +380,30 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                     List<PublicKey> clientKeys = new ArrayList<PublicKey>(4);
                     String pfx = PROP_DH;
                     String p = opts.getProperty(PROP_PRIV_KEY);
-                    if (p == null) {_log.error("No " + PROP_PRIV_KEY + " for DH auth");}
-                    else {
+                    if (p == null) {
+                        _log.error("No " + PROP_PRIV_KEY + " for DH auth");
+                    } else {
                         byte[] b = Base64.decode(p);
                         try {
                             PrivateKey pk = new PrivateKey(EncType.ECIES_X25519, b);
                             clientKeys.add(pk.toPublic());
-                        } catch (IllegalArgumentException iae) {_log.error("BAD private key: " + p, iae);}
+                        } catch (IllegalArgumentException iae) {
+                            _log.error("BAD private key: " + p, iae);
+                        }
                     }
                     int i = 0;
                     while ((p = opts.getProperty(pfx + i)) != null) {
                         int colon = p.indexOf(':');
-                        if (colon >= 0) {p = p.substring(colon + 1);}
+                        if (colon >= 0) {
+                            p = p.substring(colon + 1);
+                        }
                         byte[] b = Base64.decode(p);
                         try {
                             PublicKey pk = new PublicKey(EncType.ECIES_X25519, b);
                             clientKeys.add(pk);
-                        } catch (IllegalArgumentException iae) {_log.error("BAD client key: " + p, iae);}
+                        } catch (IllegalArgumentException iae) {
+                            _log.error("BAD client key: " + p, iae);
+                        }
                         i++;
                     }
                     els2.sign(session.getPrivateKey(), authType, clientKeys);
@@ -364,41 +412,56 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                     List<PrivateKey> clientKeys = new ArrayList<PrivateKey>(4);
                     String pfx = PROP_PSK;
                     String p = opts.getProperty(PROP_PRIV_KEY);
-                    if (p == null) {_log.error("No " + PROP_PRIV_KEY + " for PSK auth");}
-                    else {
+                    if (p == null) {
+                        _log.error("No " + PROP_PRIV_KEY + " for PSK auth");
+                    } else {
                         byte[] b = Base64.decode(p);
                         try {
                             PrivateKey pk = new PrivateKey(EncType.ECIES_X25519, b);
                             clientKeys.add(pk);
-                        } catch (IllegalArgumentException iae) {_log.error("BAD private key: " + p, iae);}
+                        } catch (IllegalArgumentException iae) {
+                            _log.error("BAD private key: " + p, iae);
+                        }
                     }
                     int i = 0;
                     while ((p = opts.getProperty(pfx + i)) != null) {
                         int colon = p.indexOf(':');
-                        if (colon >= 0) {p = p.substring(colon + 1);}
+                        if (colon >= 0) {
+                            p = p.substring(colon + 1);
+                        }
                         byte[] b = Base64.decode(p);
                         try {
                             PrivateKey pk = new PrivateKey(EncType.ECIES_X25519, b);
                             clientKeys.add(pk);
-                        } catch (IllegalArgumentException iae) {_log.error("BAD client key: " + p, iae);}
+                        } catch (IllegalArgumentException iae) {
+                            _log.error("BAD client key: " + p, iae);
+                        }
                         i++;
                     }
                     els2.sign(session.getPrivateKey(), authType, clientKeys);
-                } else {els2.sign(session.getPrivateKey());}
-            } else {leaseSet.sign(session.getPrivateKey());}
+                } else {
+                    els2.sign(session.getPrivateKey());
+                }
+            } else {
+                leaseSet.sign(session.getPrivateKey());
+            }
             SigningPrivateKey spk = li.getSigningPrivateKey();
-            if (isLS2) {spk = null;} // no revocation key in LS2
+            if (isLS2) {
+                spk = null;
+            } // no revocation key in LS2
             else if (!_context.isRouterContext() && spk.getType() != SigType.DSA_SHA1) {
-               /**
-                * Workaround for unparsable serialized signing private key for revocation
-                * Send him a dummy DSA_SHA1 private key since it's unused anyway
-                * See CreateLeaseSetMessage.doReadMessage()
-                * For LS1 only
-                */
+                /**
+                 * Workaround for unparsable serialized signing private key for revocation
+                 * Send him a dummy DSA_SHA1 private key since it's unused anyway
+                 * See CreateLeaseSetMessage.doReadMessage()
+                 * For LS1 only
+                 */
                 byte[] dummy = new byte[SigningPrivateKey.KEYSIZE_BYTES];
                 _context.random().nextBytes(dummy);
                 spk = new SigningPrivateKey(dummy);
-                if (_log.shouldDebug()) {_log.debug("Generated random dummy SPK " + spk);}
+                if (_log.shouldDebug()) {
+                    _log.debug("Generated random dummy SPK " + spk);
+                }
             }
             if (session.isClosed()) {
                 if (_log.shouldWarn()) {
@@ -415,7 +478,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                     return;
                 }
                 session.setLeaseSet(leaseSet);
-                if (_log.shouldInfo()) {_log.info("Created and signed " + leaseSet);}
+                if (_log.shouldInfo()) {
+                    _log.info("Created and signed " + leaseSet);
+                }
             } catch (I2PSessionException ise) {
                 if (session.isClosed()) {
                     /**
@@ -425,7 +490,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                     EOFException eof = new EOFException("Session closed while signing LeaseSet");
                     eof.initCause(ise);
                     session.propagateError("Session closed while signing LeaseSet", eof);
-                } else {session.propagateError("Error sending the signed LeaseSet", ise);}
+                } else {
+                    session.propagateError("Error sending the signed LeaseSet", ise);
+                }
             }
         } catch (DataFormatException dfe) {
             session.propagateError("Error signing the LeaseSet", dfe);
@@ -451,10 +518,18 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                                 PrivateKey privKey = new PrivateKey(type);
                                 privKey.fromBase64(spk.substring(colon + 1));
                                 privKeys.add(privKey);
-                            } catch (DataFormatException dfe) {_log.error("BAD private key: " + spk, dfe);}
-                        } else if (_log.shouldDebug()) {_log.debug("Ignoring private key with unconfigured crypto type: " + type);}
-                    } else {_log.error("Unsupported crypto type: " + type);}
-                } else {_log.error("Unsupported crypto type: " + spk);}
+                            } catch (DataFormatException dfe) {
+                                _log.error("BAD private key: " + spk, dfe);
+                            }
+                        } else if (_log.shouldDebug()) {
+                            _log.debug("Ignoring private key with unconfigured crypto type: " + type);
+                        }
+                    } else {
+                        _log.error("Unsupported crypto type: " + type);
+                    }
+                } else {
+                    _log.error("Unsupported crypto type: " + spk);
+                }
             } else if (colon < 0) {
                 EncType type = EncType.ELGAMAL_2048;
                 if (allowedTypes.contains(type)) {
@@ -462,9 +537,15 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                         PrivateKey privKey = new PrivateKey();
                         privKey.fromBase64(spk);
                         privKeys.add(privKey);
-                    } catch (DataFormatException dfe) {_log.error("BAD private key: " + spk, dfe);}
-                } else if (_log.shouldDebug()) {_log.debug("Ignoring private key with unconfigured crypto type: " + type);}
-            } else {_log.error("Empty crypto type");}
+                    } catch (DataFormatException dfe) {
+                        _log.error("BAD private key: " + spk, dfe);
+                    }
+                } else if (_log.shouldDebug()) {
+                    _log.debug("Ignoring private key with unconfigured crypto type: " + type);
+                }
+            } else {
+                _log.error("Empty crypto type");
+            }
         }
     }
 
@@ -498,8 +579,11 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             } else {
                 // must be same type as the Destination's signing key
                 SimpleDataStructure signKeys[];
-                try {signKeys = KeyGenerator.getInstance().generateSigningKeys(dest.getSigningPublicKey().getType());}
-                catch (GeneralSecurityException gse) {throw new IllegalStateException(gse);}
+                try {
+                    signKeys = KeyGenerator.getInstance().generateSigningKeys(dest.getSigningPublicKey().getType());
+                } catch (GeneralSecurityException gse) {
+                    throw new IllegalStateException(gse);
+                }
                 _signingPubKey = (SigningPublicKey) signKeys[0];
                 _signingPrivKey = (SigningPrivateKey) signKeys[1];
             }
@@ -511,10 +595,14 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
          *  @since 0.9.18
          */
         public LeaseInfo(List<PrivateKey> privKeys, SigningPrivateKey signingPrivKey) {
-            if (privKeys.size() > 1) {Collections.sort(privKeys, new PrivKeyComparator());}
+            if (privKeys.size() > 1) {
+                Collections.sort(privKeys, new PrivKeyComparator());
+            }
             _privKeys = privKeys;
             _pubKeys = new ArrayList<PublicKey>(privKeys.size());
-            for (PrivateKey privKey : privKeys) {_pubKeys.add(KeyGenerator.getPublicKey(privKey));}
+            for (PrivateKey privKey : privKeys) {
+                _pubKeys.add(KeyGenerator.getPublicKey(privKey));
+            }
             _signingPubKey = KeyGenerator.getSigningPublicKey(signingPrivKey);
             _signingPrivKey = signingPrivKey;
         }
@@ -526,11 +614,16 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
          */
         public LeaseInfo(List<PrivateKey> privKeys, Destination dest) {
             SimpleDataStructure signKeys[];
-            try {signKeys = KeyGenerator.getInstance().generateSigningKeys(dest.getSigningPublicKey().getType());}
-            catch (GeneralSecurityException gse) {throw new IllegalStateException(gse);}
+            try {
+                signKeys = KeyGenerator.getInstance().generateSigningKeys(dest.getSigningPublicKey().getType());
+            } catch (GeneralSecurityException gse) {
+                throw new IllegalStateException(gse);
+            }
             _privKeys = privKeys;
             _pubKeys = new ArrayList<PublicKey>(privKeys.size());
-            for (PrivateKey privKey : privKeys) {_pubKeys.add(KeyGenerator.getPublicKey(privKey));}
+            for (PrivateKey privKey : privKeys) {
+                _pubKeys.add(KeyGenerator.getPublicKey(privKey));
+            }
             _signingPubKey = (SigningPublicKey) signKeys[0];
             _signingPrivKey = (SigningPrivateKey) signKeys[1];
         }
@@ -541,41 +634,59 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
          *  @since 0.9.47
          */
         public LeaseInfo(List<PrivateKey> privKeys) {
-            if (privKeys.size() > 1) {Collections.sort(privKeys, new PrivKeyComparator());}
+            if (privKeys.size() > 1) {
+                Collections.sort(privKeys, new PrivKeyComparator());
+            }
             _privKeys = privKeys;
             _pubKeys = new ArrayList<PublicKey>(privKeys.size());
-            for (PrivateKey privKey : privKeys) {_pubKeys.add(KeyGenerator.getPublicKey(privKey));}
+            for (PrivateKey privKey : privKeys) {
+                _pubKeys.add(KeyGenerator.getPublicKey(privKey));
+            }
             _signingPubKey = null;
             _signingPrivKey = null;
         }
 
         /** @return the first one if more than one */
-        public PublicKey getPublicKey() {return _pubKeys.get(0);}
+        public PublicKey getPublicKey() {
+            return _pubKeys.get(0);
+        }
 
         /** @return the first one if more than one */
-        public PrivateKey getPrivateKey() {return _privKeys.get(0);}
+        public PrivateKey getPrivateKey() {
+            return _privKeys.get(0);
+        }
 
         /** @since 0.9.39 */
-        public List<PublicKey> getPublicKeys() {return _pubKeys;}
+        public List<PublicKey> getPublicKeys() {
+            return _pubKeys;
+        }
 
         /** @since 0.9.39 */
-        public List<PrivateKey> getPrivateKeys() {return _privKeys;}
+        public List<PrivateKey> getPrivateKeys() {
+            return _privKeys;
+        }
 
         /** @return null for LS2 */
-        public SigningPublicKey getSigningPublicKey() {return _signingPubKey;}
+        public SigningPublicKey getSigningPublicKey() {
+            return _signingPubKey;
+        }
 
         /** @return null for LS2 */
-        public SigningPrivateKey getSigningPrivateKey() {return _signingPrivKey;}
+        public SigningPrivateKey getSigningPrivateKey() {
+            return _signingPrivKey;
+        }
 
         /**
          *  Reverse order by enc type
          *  @since 0.9.39
          */
         private static class PrivKeyComparator implements Comparator<PrivateKey>, java.io.Serializable {
-        private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
+
             @Override
-            public int compare(PrivateKey l, PrivateKey r) {return r.getType().compareTo(l.getType());}
+            public int compare(PrivateKey l, PrivateKey r) {
+                return r.getType().compareTo(l.getType());
+            }
         }
     }
-
 }

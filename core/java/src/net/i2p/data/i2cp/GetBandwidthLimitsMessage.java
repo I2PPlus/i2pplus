@@ -14,7 +14,7 @@ import java.io.InputStream;
  * @author zzz
  */
 public class GetBandwidthLimitsMessage extends I2CPMessageImpl {
-    public final static int MESSAGE_TYPE = 8;
+    public static final int MESSAGE_TYPE = 8;
 
     public GetBandwidthLimitsMessage() {
         super();

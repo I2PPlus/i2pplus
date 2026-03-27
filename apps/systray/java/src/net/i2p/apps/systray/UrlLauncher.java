@@ -11,6 +11,13 @@ package net.i2p.apps.systray;
 
 import static net.i2p.app.ClientAppState.*;
 
+import net.i2p.I2PAppContext;
+import net.i2p.app.*;
+import net.i2p.util.I2PAppThread;
+import net.i2p.util.Log;
+import net.i2p.util.ShellCommand;
+import net.i2p.util.SystemVersion;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
@@ -24,12 +31,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
-import net.i2p.I2PAppContext;
-import net.i2p.app.*;
-import net.i2p.util.I2PAppThread;
-import net.i2p.util.Log;
-import net.i2p.util.ShellCommand;
-import net.i2p.util.SystemVersion;
 
 /**
  * <p>A quick and simple multi-platform URL launcher. It attempts to launch the
@@ -50,8 +51,8 @@ public class UrlLauncher implements ClientApp {
     private final String[] _args;
     private final Log _log;
 
-    private static final int WAIT_TIME = 5*1000;
-    private static final int MAX_WAIT_TIME = 5*60*1000;
+    private static final int WAIT_TIME = 5 * 1000;
+    private static final int MAX_WAIT_TIME = 5 * 60 * 1000;
     private static final int MAX_TRIES = 99;
     private static final String REGISTERED_NAME = "UrlLauncher";
     private static final String PROP_BROWSER = "routerconsole.browser";
@@ -61,16 +62,16 @@ public class UrlLauncher implements ClientApp {
      *  Browsers to try IN-ORDER
      */
     private static final String[] BROWSERS = {
-            // This debian script tries everything in $BROWSER, then gnome-www-browser and x-www-browser
-            // if X is running and www-browser otherwise. Those point to the user's preferred
-            // browser using the update-alternatives system.
+        // This debian script tries everything in $BROWSER, then gnome-www-browser and x-www-browser
+        // if X is running and www-browser otherwise. Those point to the user's preferred
+        // browser using the update-alternatives system.
         "sensible-browser",
-            // another one that opens a preferred browser
+        // another one that opens a preferred browser
         "xdg-open",
-            // Try x-www-browser directly
+        // Try x-www-browser directly
         "x-www-browser",
-            // general graphical browsers
-        "defaultbrowser",  // puppy linux
+        // general graphical browsers
+        "defaultbrowser", // puppy linux
         "firefox",
         "opera -newpage",
         "falkon",
@@ -80,7 +81,7 @@ public class UrlLauncher implements ClientApp {
         "netscape",
         "konqueror",
         "galeon",
-            // Text Mode Browsers only below here
+        // Text Mode Browsers only below here
         "www-browser",
         "links",
         "lynx"
@@ -98,8 +99,7 @@ public class UrlLauncher implements ClientApp {
         _context = context;
         _log = _context.logManager().getLog(UrlLauncher.class);
         _mgr = mgr;
-        if (args == null || args.length <= 0)
-            args = new String[] { context.portMapper().getConsoleURL() };
+        if (args == null || args.length <= 0) args = new String[] {context.portMapper().getConsoleURL()};
         _args = args;
         _shellCommand = new ShellCommand();
         _state = INITIALIZED;
@@ -154,20 +154,25 @@ public class UrlLauncher implements ClientApp {
                     test.connect(sa, WAIT_TIME);
                     // it worked
                 } finally {
-                    if (test != null) try { test.close(); } catch (IOException ioe) {}
+                    if (test != null) try {
+                            test.close();
+                        } catch (IOException ioe) {
+                        }
                 }
                 // Jetty 6 seems to start the Connector before the
                 // webapp is completely ready
                 try {
-                    Thread.sleep(2*1000);
-                } catch (InterruptedException ie) {}
+                    Thread.sleep(2 * 1000);
+                } catch (InterruptedException ie) {
+                }
                 return true;
-            } catch (IOException e) {}
-            if (System.currentTimeMillis() > done)
-                break;
+            } catch (IOException e) {
+            }
+            if (System.currentTimeMillis() > done) break;
             try {
                 Thread.sleep(WAIT_TIME);
-            } catch (InterruptedException ie) {}
+            } catch (InterruptedException ie) {
+            }
         }
         return false;
     }
@@ -196,7 +201,7 @@ public class UrlLauncher implements ClientApp {
     private String getDefaultWindowsBrowser(String url) {
         String defaultBrowser;
         String key;
-        if (url.startsWith("https://")){
+        if (url.startsWith("https://")) {
             // User-Configured HTTPS Browser
             key = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\Shell\\Associations\\URLAssociations\\https\\UserChoice";
         } else {
@@ -204,18 +209,15 @@ public class UrlLauncher implements ClientApp {
             key = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\Shell\\Associations\\URLAssociations\\http\\UserChoice";
         }
         defaultBrowser = getDefaultOutOfRegistry(key);
-        if (defaultBrowser != null)
-            return defaultBrowser;
+        if (defaultBrowser != null) return defaultBrowser;
         // MSEdge on pretty much everything after Windows 7
         key = "HKEY_CLASSES_ROOT\\MSEdgeHTM\\shell\\open\\command";
         defaultBrowser = getDefaultOutOfRegistry(key);
-        if (defaultBrowser != null)
-            return defaultBrowser;
+        if (defaultBrowser != null) return defaultBrowser;
         // iexplore usually, depends on the Windows, sometimes Edge
         key = "HKEY_CLASSES_ROOT\\http\\shell\\open\\command";
         defaultBrowser = getDefaultOutOfRegistry(key);
-        if (defaultBrowser != null)
-            return defaultBrowser;
+        if (defaultBrowser != null) return defaultBrowser;
         return "C:\\Program Files\\Internet Explorer\\iexplore.exe";
     }
 
@@ -249,8 +251,7 @@ public class UrlLauncher implements ClientApp {
             // Match wasn't found, still need to close Scanner
             kb.close();
         } catch (Exception e) {
-            if (_log.shouldError())
-                _log.error(hkeyquery, e);
+            if (_log.shouldError()) _log.error(hkeyquery, e);
         }
         return null;
     }
@@ -268,7 +269,7 @@ public class UrlLauncher implements ClientApp {
      * @since 2.0.0
      */
     private String followUserConfiguredBrowserToCommand(String hkeyquery) {
-        String progIdValue = registryQuery(hkeyquery,"ProgId");
+        String progIdValue = registryQuery(hkeyquery, "ProgId");
         return followProgIdToCommand(progIdValue);
     }
 
@@ -282,11 +283,10 @@ public class UrlLauncher implements ClientApp {
      * @since 2.0.0
      */
     private String followProgIdToCommand(String progid) {
-        String hkeyquery = "HKEY_CLASSES_ROOT\\"+progid+"\\shell\\open\\command";
+        String hkeyquery = "HKEY_CLASSES_ROOT\\" + progid + "\\shell\\open\\command";
         String finalValue = registryQuery(hkeyquery, "(Default)");
         if (finalValue != null) {
-            if (!finalValue.equals(""))
-                return finalValue;
+            if (!finalValue.equals("")) return finalValue;
         }
         return null;
     }
@@ -301,13 +301,11 @@ public class UrlLauncher implements ClientApp {
     private String getDefaultOutOfRegistry(String hkeyquery) {
         String defaultValue = registryQuery(hkeyquery, "Default");
         if (defaultValue != null) {
-            if (!defaultValue.equals(""))
-                return defaultValue;
-        }else{
+            if (!defaultValue.equals("")) return defaultValue;
+        } else {
             defaultValue = followUserConfiguredBrowserToCommand(hkeyquery);
             if (defaultValue != null) {
-                if (!defaultValue.equals(""))
-                    return defaultValue;
+                if (!defaultValue.equals("")) return defaultValue;
             }
         }
         return null;
@@ -331,11 +329,10 @@ public class UrlLauncher implements ClientApp {
      * @throws IOException
      */
     public boolean openUrl(String url) throws IOException {
-        if (IS_SERVICE)
-            return false;
+        if (IS_SERVICE) return false;
         if (_log.shouldDebug()) _log.debug("Waiting for Router Console initialization before launching browser...");
         waitForServer(url);
-//        if (_log.shouldDebug()) _log.debug("Done waiting for router console to be ready for browser launch");
+        //        if (_log.shouldDebug()) _log.debug("Done waiting for router console to be ready for browser launch");
         if (validateUrlFormat(url)) {
             String cbrowser = _context.getProperty(PROP_BROWSER);
             if (cbrowser != null) {
@@ -344,27 +341,24 @@ public class UrlLauncher implements ClientApp {
             if (SystemVersion.isMac()) {
                 String osName = System.getProperty("os.name");
                 if (osName.toLowerCase(Locale.US).startsWith("mac os x")) {
-                    String[] args = new String[] { "open", url };
+                    String[] args = new String[] {"open", url};
                     if (_log.shouldDebug()) _log.debug("Execute: " + Arrays.toString(args));
-                    if (_shellCommand.executeSilentAndWaitTimed(args, 5))
-                        return true;
+                    if (_shellCommand.executeSilentAndWaitTimed(args, 5)) return true;
                 } else {
                     return false;
                 }
-                String[] args = new String[] { "iexplore", url };
+                String[] args = new String[] {"iexplore", url};
                 if (_log.shouldDebug()) _log.debug("Execute: " + Arrays.toString(args));
-                if (_shellCommand.executeSilentAndWaitTimed(args, 5))
-                    return true;
+                if (_shellCommand.executeSilentAndWaitTimed(args, 5)) return true;
             } else if (SystemVersion.isWindows()) {
-                String[] browserString  = new String[] { "C:\\Program Files\\Internet Explorer\\iexplore.exe", "-nohome", url };
+                String[] browserString = new String[] {"C:\\Program Files\\Internet Explorer\\iexplore.exe", "-nohome", url};
                 String line = getDefaultWindowsBrowser(url);
                 String[] aarg = parseArgs(line, url);
                 if (aarg.length > 0) {
                     browserString = aarg;
                 }
                 if (_log.shouldDebug()) _log.debug("Execute: " + Arrays.toString(browserString));
-                if (_shellCommand.executeSilentAndWaitTimed(browserString, 5))
-                    return true;
+                if (_shellCommand.executeSilentAndWaitTimed(browserString, 5)) return true;
                 if (_log.shouldInfo()) _log.info("Failed: " + Arrays.toString(browserString));
             } else {
                 // fall through
@@ -374,8 +368,7 @@ public class UrlLauncher implements ClientApp {
             for (int i = 0; i < BROWSERS.length; i++) {
                 args[0] = BROWSERS[i];
                 if (_log.shouldDebug()) _log.debug("Execute: " + Arrays.toString(args));
-                if (_shellCommand.executeSilentAndWaitTimed(args, 5))
-                    return true;
+                if (_shellCommand.executeSilentAndWaitTimed(args, 5)) return true;
                 if (_log.shouldInfo()) _log.info("Failed: " + Arrays.toString(args));
             }
         }
@@ -401,15 +394,13 @@ public class UrlLauncher implements ClientApp {
      * @throws IOException
      */
     public boolean openUrl(String url, String browser) throws IOException {
-        if (IS_SERVICE)
-            return false;
+        if (IS_SERVICE) return false;
         waitForServer(url);
         if (validateUrlFormat(url)) {
             String[] args = parseArgs(browser, url);
             if (args.length > 0) {
                 if (_log.shouldDebug()) _log.debug("Execute: " + Arrays.toString(args));
-                if (_shellCommand.executeSilentAndWaitTimed(args, 5))
-                    return true;
+                if (_shellCommand.executeSilentAndWaitTimed(args, 5)) return true;
             }
         }
         return false;
@@ -437,11 +428,9 @@ public class UrlLauncher implements ClientApp {
             char c = args.charAt(j);
             switch (c) {
                 case '\'':
-                case '"':
-                    if (isQuoted) {
+                case '"': if (isQuoted) {
                         String str = buf.toString().trim();
-                        if (str.length() > 0)
-                            argList.add(str);
+                        if (str.length() > 0) argList.add(str);
                         buf.setLength(0);
                     }
                     isQuoted = !isQuoted;
@@ -454,23 +443,19 @@ public class UrlLauncher implements ClientApp {
                         buf.append(c);
                     } else {
                         String str = buf.toString().trim();
-                        if (str.length() > 0)
-                            argList.add(str);
+                        if (str.length() > 0) argList.add(str);
                         buf.setLength(0);
                     }
                     break;
-                default:
-                    buf.append(c);
+                default: buf.append(c);
                     break;
             }
         }
         if (buf.length() > 0) {
             String str = buf.toString().trim();
-            if (str.length() > 0)
-                argList.add(str);
+            if (str.length() > 0) argList.add(str);
         }
-        if (argList.isEmpty())
-            return new String[] {};
+        if (argList.isEmpty()) return new String[] {};
         boolean foundpct = false;
         // replace %1 with the url
         for (int i = 0; i < argList.size(); i++) {
@@ -481,8 +466,7 @@ public class UrlLauncher implements ClientApp {
             }
         }
         // add url if no %1
-        if (!foundpct)
-            argList.add(url);
+        if (!foundpct) argList.add(url);
         return argList.toArray(new String[argList.size()]);
     }
 
@@ -567,8 +551,7 @@ public class UrlLauncher implements ClientApp {
      */
     private synchronized void changeState(ClientAppState state, Exception e) {
         _state = state;
-        if (_mgr != null)
-            _mgr.notify(this, state, null, e);
+        if (_mgr != null) _mgr.notify(this, state, null, e);
     }
 
     /**
@@ -586,10 +569,9 @@ public class UrlLauncher implements ClientApp {
     public static void main(String args[]) {
         UrlLauncher launcher = new UrlLauncher();
         try {
-            if (args.length > 0)
-                launcher.openUrl(args[0]);
-            else
-                launcher.openUrl(I2PAppContext.getGlobalContext().portMapper().getConsoleURL());
-        } catch (IOException e) {}
+            if (args.length > 0) launcher.openUrl(args[0]);
+            else launcher.openUrl(I2PAppContext.getGlobalContext().portMapper().getConsoleURL());
+        } catch (IOException e) {
+        }
     }
 }

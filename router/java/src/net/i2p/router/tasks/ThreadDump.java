@@ -1,10 +1,11 @@
 package net.i2p.router.tasks;
 
-import java.io.File;
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 import net.i2p.util.ShellCommand;
 import net.i2p.util.SystemVersion;
+
+import java.io.File;
 
 /**
  * Thread dump utility for debugging hung router instances.
@@ -53,14 +54,18 @@ abstract class ThreadDump {
      * @since 0.9.3 moved from RouterWatchdog
      */
     public static boolean dump(I2PAppContext context, int secondsToWait) {
-        if (SystemVersion.isWindows() || !context.hasWrapper()) {return false;}
+        if (SystemVersion.isWindows() || !context.hasWrapper()) {
+            return false;
+        }
         ShellCommand sc = new ShellCommand();
         File i2pr = new File(context.getBaseDir(), "i2prouter");
         String[] args = new String[2];
         args[0] = i2pr.getAbsolutePath();
         args[1] = "dump";
         boolean success = sc.executeSilentAndWaitTimed(args, secondsToWait);
-        if (secondsToWait <= 0) {success = true;}
+        if (secondsToWait <= 0) {
+            success = true;
+        }
         if (success) {
             Log log = context.logManager().getLog(ThreadDump.class);
             File f = new File(context.getConfigDir(), "wrapper.log");
@@ -69,5 +74,4 @@ abstract class ThreadDump {
         }
         return success;
     }
-
 }

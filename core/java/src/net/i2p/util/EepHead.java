@@ -40,7 +40,9 @@ public class EepHead extends EepGet {
 
     public EepHead(I2PAppContext ctx, String proxyHost, int proxyPort, int numRetries, String url) {
         // we're using this constructor:
-        // public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort, int numRetries, long minSize, long maxSize, String outputFile, OutputStream outputStream, String url, boolean allowCaching, String etag, String postData) {
+        // public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort, int numRetries, long
+        // minSize, long maxSize, String outputFile, OutputStream outputStream, String url, boolean allowCaching, String
+        // etag, String postData) {
         super(ctx, true, proxyHost, proxyPort, numRetries, -1, -1, null, _dummyStream, url, true, null, null);
     }
 
@@ -56,7 +58,7 @@ public class EepHead extends EepGet {
         String proxyHost = "127.0.0.1";
         int proxyPort = 4444;
         int numRetries = 1;
-        int inactivityTimeout = 10*1000;
+        int inactivityTimeout = 10 * 1000;
         String username = null;
         String password = null;
         boolean error = false;
@@ -69,18 +71,18 @@ public class EepHead extends EepGet {
                         String s = g.getOptarg();
                         int colon = s.indexOf(':');
                         if (colon >= 0) {
-                        // Todo IPv6 [a:b:c]:4444
+                            // Todo IPv6 [a:b:c]:4444
                             proxyHost = s.substring(0, colon);
                             String port = s.substring(colon + 1);
                             proxyPort = Integer.parseInt(port);
                         } else {
                             proxyHost = s;
-                        // proxyPort remains default
+                            // proxyPort remains default
                         }
                         break;
 
                     case 'c':
-                    // no proxy, same as -p :0
+                        // no proxy, same as -p :0
                         proxyHost = "";
                         proxyPort = 0;
                         break;
@@ -106,7 +108,7 @@ public class EepHead extends EepGet {
                     default:
                         error = true;
                         break;
-                }  // switch
+                } // switch
             } // while
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -127,8 +129,7 @@ public class EepHead extends EepGet {
                     do {
                         System.err.print("Proxy password: ");
                         password = r.readLine();
-                        if (password == null)
-                            throw new IOException();
+                        if (password == null) throw new IOException();
                         password = password.trim();
                     } while (password.length() <= 0);
                 } catch (IOException ioe) {
@@ -138,7 +139,7 @@ public class EepHead extends EepGet {
             get.addAuthorization(username, password);
         }
 
-        if (get.fetch(10*1000, -1, inactivityTimeout)) {
+        if (get.fetch(10 * 1000, -1, inactivityTimeout)) {
             System.out.println(" • URL: " + url);
             String x = get.getServer();
             String cc = get.getCacheControl();
@@ -151,11 +152,19 @@ public class EepHead extends EepGet {
             String st = get.getStatus().toString();
             if (x != null) {
                 System.out.println(" • Server: " + x);
-            } else if (cc != null && (cc.equals("max-age=3600,public") || cc.equals("no-cache, private, max-age=2628000"))) {
+            } else if (cc != null
+                    && (cc.equals("max-age=3600,public") || cc.equals("no-cache, private, max-age=2628000"))) {
                 System.out.println(" • Server: Jetty (?)");
-            } else if (cc == null && (cl != null && cl.equals("217")) && lm != null && (ar != null && ar.equals("bytes")) && et == null) {
+            } else if (cc == null
+                    && (cl != null && cl.equals("217"))
+                    && lm != null
+                    && (ar != null && ar.equals("bytes"))
+                    && et == null) {
                 System.out.println(" • Server: Jetty (ZZZOT)");
-            } else if (cc == null && (xf != null && xf.equals("DENY")) && (cto != null && cto.equals("nosniff")) && (st != null && st.equals("200"))) {
+            } else if (cc == null
+                    && (xf != null && xf.equals("DENY"))
+                    && (cto != null && cto.equals("nosniff"))
+                    && (st != null && st.equals("200"))) {
                 System.out.println(" • Server: Jetty (?)"); // MuCats
             } else if ((ar != null && ar.equals("bytes")) && lm != null && et != null) {
                 System.out.println(" • Server: nginx (?)");
@@ -163,54 +172,37 @@ public class EepHead extends EepGet {
                 System.out.println(" • Server: unknown");
             }
             x = get.getXPoweredBy();
-            if (x != null)
-                System.out.println(" • X-Powered-By: " + x);
-            if (st != null)
-                System.out.println(" • Status: " + st);
+            if (x != null) System.out.println(" • X-Powered-By: " + x);
+            if (st != null) System.out.println(" • Status: " + st);
             x = get.getContentType();
-            if (x != null)
-                System.out.println(" • Content-Type: " + x);
+            if (x != null) System.out.println(" • Content-Type: " + x);
             System.out.println(" • Content-Length: " + cl);
             x = get.getTransferEncoding();
-            if (x != null)
-                System.out.println(" • Transfer-Encoding: " + x);
+            if (x != null) System.out.println(" • Transfer-Encoding: " + x);
             x = get.getContentEncoding();
-            if (x != null)
-                System.out.println(" • Content-Encoding: " + x);
+            if (x != null) System.out.println(" • Content-Encoding: " + x);
             x = get.getContentLanguage();
-            if (x != null && !x.equals(""))
-                System.out.println(" • Content-Language: " + x);
-            if (lm != null)
-                System.out.println(" • Last-Modified: " + lm);
-            if (et != null)
-                System.out.println(" • Etag: " + et);
-            if (cc != null)
-                System.out.println(" • Cache-Control: " + cc);
-            if (ar != null)
-                System.out.println(" • Accept-Ranges: " + ar);
+            if (x != null && !x.equals("")) System.out.println(" • Content-Language: " + x);
+            if (lm != null) System.out.println(" • Last-Modified: " + lm);
+            if (et != null) System.out.println(" • Etag: " + et);
+            if (cc != null) System.out.println(" • Cache-Control: " + cc);
+            if (ar != null) System.out.println(" • Accept-Ranges: " + ar);
             x = get.getVary();
-            if (x != null)
-                System.out.println(" • Vary: " + x);
+            if (x != null) System.out.println(" • Vary: " + x);
             x = get.getExpiryDate();
-            if (x != null)
-                System.out.println(" • Expires: " + x);
+            if (x != null) System.out.println(" • Expires: " + x);
             x = get.getCookie();
-            if (x != null)
-                System.out.println(" • Set-Cookie: " + x);
+            if (x != null) System.out.println(" • Set-Cookie: " + x);
             x = get.getReferrerPolicy();
-            if (x != null)
-                System.out.println(" • Referrer-Policy: " + x);
-            if (cto != null)
-                System.out.println(" • X-Content-Type-Options: " + cto);
-            if (xf != null)
-                System.out.println(" • X-FrameOptions: " + xf);
+            if (x != null) System.out.println(" • Referrer-Policy: " + x);
+            if (cto != null) System.out.println(" • X-Content-Type-Options: " + cto);
+            if (xf != null) System.out.println(" • X-FrameOptions: " + xf);
             x = get.getCSP();
-            if (x != null)
-                System.out.println(" • Content-Security-Policy: " + x);
+            if (x != null) System.out.println(" • Content-Security-Policy: " + x);
             x = get.getXSSProtection();
-            if (x != null)
-                System.out.println(" • X-XSS-Protection: " + x);
-//            System.out.println("Response time: " + "ms"); // TODO response time from request start -> request end
+            if (x != null) System.out.println(" • X-XSS-Protection: " + x);
+            //            System.out.println("Response time: " + "ms"); // TODO response time from request start ->
+            // request end
         } else {
             System.out.println(" ✖ No response from: " + url);
             System.exit(1);
@@ -218,16 +210,11 @@ public class EepHead extends EepGet {
     }
 
     private static String usage() {
-        return
-            "Usage:\n" +
-            "  eephead [opts] <url>   request server headers for url\n\n" +
-            "Options:\n" +
-            "  -c               do not use proxy\n" +
-            "  -n <value>       number of retries (default 1)\n" +
-            "  -p <host:port>   use alternative proxy (default is 127.0.0.1:4444)\n" +
-            "  -t <value>       timeout in seconds (default 10)\n" +
-            "  -u <value>       proxy username\n" +
-            "  -x <value>       proxy password\n";
+        return "Usage:\n" + "  eephead [opts] <url>   request server headers for url\n\n" + "Options:\n"
+                + "  -c               do not use proxy\n" + "  -n <value>       number of retries (default 1)\n"
+                + "  -p <host:port>   use alternative proxy (default is 127.0.0.1:4444)\n"
+                + "  -t <value>       timeout in seconds (default 10)\n" + "  -u <value>       proxy username\n"
+                + "  -x <value>       proxy password\n";
     }
 
     /**
@@ -237,15 +224,12 @@ public class EepHead extends EepGet {
     protected void doFetch(SocketTimeout timeout) throws IOException {
         _aborted = false;
         readHeaders();
-        if (_aborted)
-            throw new IOException("Timed out reading the HTTP headers");
+        if (_aborted) throw new IOException("Timed out reading the HTTP headers");
 
         if (timeout != null) {
             timeout.resetTimer();
-            if (_fetchInactivityTimeout > 0)
-                timeout.setInactivityTimeout(_fetchInactivityTimeout);
-            else
-                timeout.setInactivityTimeout(INACTIVITY_TIMEOUT);
+            if (_fetchInactivityTimeout > 0) timeout.setInactivityTimeout(_fetchInactivityTimeout);
+            else timeout.setInactivityTimeout(INACTIVITY_TIMEOUT);
         }
 
         // Should we even follow redirects for HEAD?
@@ -259,16 +243,14 @@ public class EepHead extends EepGet {
                     // This oddly adds a ":" even if no port, but that seems to work.
                     URI url = new URI(_actualURL);
                     String host = url.getHost();
-                    if (host == null)
-                        throw new MalformedURLException("Redirected to invalid URL");
+                    if (host == null) throw new MalformedURLException("Redirected to invalid URL");
                     int port = url.getPort();
-                    if (port < 0)
-                        port = 80;
+                    if (port < 0) port = 80;
                     if (_redirectLocation.startsWith("/"))
                         _actualURL = "http://" + host + ":" + port + _redirectLocation;
                     else
                         // this blows up completely on a redirect to https://, for example
-                        _actualURL = "http://" + host+ ":" + port + "/" + _redirectLocation;
+                        _actualURL = "http://" + host + ":" + port + "/" + _redirectLocation;
                 }
             } catch (URISyntaxException use) {
                 IOException ioe = new MalformedURLException("Redirected to invalid URL");
@@ -278,25 +260,25 @@ public class EepHead extends EepGet {
 
             AuthState as = _authState;
             if (_responseCode == 407) {
-                if (!_shouldProxy)
-                    throw new IOException("Proxy auth response from non-proxy");
-                if (as == null)
-                    throw new IOException("Proxy requires authentication");
-                if (as.authSent)
-                    throw new IOException("Proxy authentication failed");  // ignore stale
+                if (!_shouldProxy) throw new IOException("Proxy auth response from non-proxy");
+                if (as == null) throw new IOException("Proxy requires authentication");
+                if (as.authSent) throw new IOException("Proxy authentication failed"); // ignore stale
                 if (_log.shouldInfo()) _log.info("Adding auth");
                 // actually happens in getRequest()
             } else {
                 _redirects++;
                 if (_redirects > 5) {
                     String redirectURL = _redirectLocation;
-                    if (redirectURL.startsWith("http://")) {redirectURL = redirectURL.substring(7, redirectURL.length());}
-                    if (redirectURL.contains("b32.i2p")) {redirectURL = redirectURL.substring(0,32) + "...";}
+                    if (redirectURL.startsWith("http://")) {
+                        redirectURL = redirectURL.substring(7, redirectURL.length());
+                    }
+                    if (redirectURL.contains("b32.i2p")) {
+                        redirectURL = redirectURL.substring(0, 32) + "...";
+                    }
                     throw new IOException("Too many redirects to " + redirectURL);
                 }
                 if (_log.shouldInfo()) _log.info("Redirecting to " + _redirectLocation);
-                if (as != null)
-                    as.authSent = false;
+                if (as != null) as.authSent = false;
             }
 
             // reset some important variables, we don't want to save the values from the redirect
@@ -311,27 +293,24 @@ public class EepHead extends EepGet {
             doFetch(timeout);
             return;
         }
-        if (timeout != null)
-            timeout.cancel();
+        if (timeout != null) timeout.cancel();
 
-        if (_log.shouldDebug())
-            _log.debug("Headers read completely");
+        if (_log.shouldDebug()) _log.debug("Headers read completely");
 
-        if (_out != null)
-            _out.close();
+        if (_out != null) _out.close();
         _out = null;
 
-        if (_aborted)
-            throw new IOException("Timed out reading the HTTP data");
+        if (_aborted) throw new IOException("Timed out reading the HTTP data");
 
         if (_transferFailed) {
             // 404, etc - transferFailed is called after all attempts fail, by fetch() above
             for (int i = 0; i < _listeners.size(); i++)
-                _listeners.get(i).attemptFailed(_url, 0, 0, _currentAttempt, _numRetries, new Exception("Attempt failed"));
+                _listeners
+                        .get(i)
+                        .attemptFailed(_url, 0, 0, _currentAttempt, _numRetries, new Exception("Attempt failed"));
         } else {
             for (int i = 0; i < _listeners.size(); i++)
-                _listeners.get(i).transferComplete(
-                        0, 0, 0, _url, "dummy", false);
+                _listeners.get(i).transferComplete(0, 0, 0, _url, "dummy", false);
         }
     }
 
@@ -341,7 +320,9 @@ public class EepHead extends EepGet {
      *  @since 0.9.50
      */
     @Override
-    protected boolean shouldReadBody() { return false; }
+    protected boolean shouldReadBody() {
+        return false;
+    }
 
     @Override
     protected String getRequest() throws IOException {
@@ -355,32 +336,25 @@ public class EepHead extends EepGet {
             throw ioe;
         }
         String host = url.getHost();
-        if (host == null)
-            throw new MalformedURLException("Invalid URL");
+        if (host == null) throw new MalformedURLException("Invalid URL");
         int port = url.getPort();
         String path = url.getRawPath();
         String query = url.getRawQuery();
-        if (_log.shouldDebug())
-            _log.debug("Requesting headers for:" + _actualURL);
+        if (_log.shouldDebug()) _log.debug("Requesting headers for:" + _actualURL);
         // RFC 2616 sec 5.1.2 - full URL if proxied, absolute path only if not proxied
         String urlToSend;
         if (_shouldProxy) {
             urlToSend = _actualURL;
-            if ((path == null || path.length()<= 0) &&
-                (query == null || query.length()<= 0))
-                urlToSend += "/";
+            if ((path == null || path.length() <= 0) && (query == null || query.length() <= 0)) urlToSend += "/";
         } else {
             urlToSend = path;
-            if (urlToSend == null || urlToSend.length()<= 0)
-                urlToSend = "/";
-            if (query != null)
-                urlToSend += '?' + query;
+            if (urlToSend == null || urlToSend.length() <= 0) urlToSend = "/";
+            if (query != null) urlToSend += '?' + query;
         }
         buf.append("HEAD ").append(urlToSend).append(" HTTP/1.1\r\n");
         // RFC 2616 sec 5.1.2 - host + port (NOT authority, which includes userinfo)
         buf.append("Host: ").append(host);
-        if (port >= 0)
-            buf.append(':').append(port);
+        if (port >= 0) buf.append(':').append(port);
         buf.append("\r\n");
         buf.append("Accept-Encoding: \r\n");
         // This will be replaced if we are going through I2PTunnelHTTPClient
@@ -391,8 +365,7 @@ public class EepHead extends EepGet {
             buf.append("\r\n");
         }
         buf.append("Connection: close\r\n\r\n");
-        if (_log.shouldDebug())
-            _log.debug("Request: [" + buf.toString() + "]");
+        if (_log.shouldDebug()) _log.debug("Request: [" + buf.toString() + "]");
         return buf.toString();
     }
 

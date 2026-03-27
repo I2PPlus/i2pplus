@@ -32,7 +32,7 @@ class I2PClientMessageHandlerMap {
 
     /** for extension */
     protected I2PClientMessageHandlerMap(int highest) {
-        _handlers = new I2CPMessageHandler[highest+1];
+        _handlers = new I2CPMessageHandler[highest + 1];
     }
 
     public I2PClientMessageHandlerMap(I2PAppContext context) {

@@ -1,4 +1,5 @@
 package net.i2p.client;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,9 +9,10 @@ package net.i2p.client;
  *
  */
 
+import junit.framework.TestCase;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import junit.framework.TestCase;
 
 /**
  *
@@ -21,11 +23,11 @@ public class I2PClientTest extends TestCase {
     private I2PClient _client;
 
     @Override
-    public void setUp(){
+    public void setUp() {
         _client = I2PClientFactory.createClient();
     }
 
-    public void testI2PClient() throws Exception{
+    public void testI2PClient() throws Exception {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         _client.createDestination(out);
         _client.createSession(new ByteArrayInputStream(out.toByteArray()), null);

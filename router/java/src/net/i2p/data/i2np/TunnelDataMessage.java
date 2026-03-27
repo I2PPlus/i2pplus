@@ -1,4 +1,5 @@
 package net.i2p.data.i2np;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -29,12 +30,14 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     private byte[] _data;
     private ByteArray _dataBuf;
 
-    public final static int MESSAGE_TYPE = 18;
+    public static final int MESSAGE_TYPE = 18;
     public static final int DATA_SIZE = 1024;
+
     /** if we can't deliver a tunnel message in 10s, forget it */
-    private static final int EXPIRATION_PERIOD = 10*1000;
+    private static final int EXPIRATION_PERIOD = 10 * 1000;
 
     private static final ByteCache _cache;
+
     /**
      * When true, it means this tunnelDataMessage is being used as part of a tunnel processing
      * pipeline, where the byte array is acquired during the TunnelDataMessage's creation
@@ -48,8 +51,11 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     private static final boolean PIPELINED_CACHE = true;
 
     static {
-        if (PIPELINED_CACHE) {_cache = ByteCache.getInstance(512, DATA_SIZE);}
-        else {_cache = null;}
+        if (PIPELINED_CACHE) {
+            _cache = ByteCache.getInstance(512, DATA_SIZE);
+        } else {
+            _cache = null;
+        }
     }
 
     /** For use-after-free checks. Always false if PIPELINED_CACHE is false. */
@@ -60,7 +66,9 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
         setMessageExpiration(context.clock().now() + EXPIRATION_PERIOD);
     }
 
-    public long getTunnelId() {return _tunnelId;}
+    public long getTunnelId() {
+        return _tunnelId;
+    }
 
     /**
      *  (correctly) Invalidates stored checksum
@@ -71,7 +79,9 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     }
 
     public TunnelId getTunnelIdObj() {
-        if (_tunnelIdObj == null) {_tunnelIdObj = new TunnelId(_tunnelId);} // not thread safe, but immutable, so who cares
+        if (_tunnelIdObj == null) {
+            _tunnelIdObj = new TunnelId(_tunnelId);
+        } // not thread safe, but immutable, so who cares
         return _tunnelIdObj;
     }
 
@@ -97,8 +107,12 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
      *  @throws IllegalStateException if data previously set, to protect saved checksum
      */
     public void setData(byte data[]) {
-        if (_data != null) {throw new IllegalStateException();}
-        if ((data == null) || (data.length <= 0)) {throw new IllegalArgumentException("Empty tunnel payload?");}
+        if (_data != null) {
+            throw new IllegalStateException();
+        }
+        if ((data == null) || (data.length <= 0)) {
+            throw new IllegalArgumentException("Empty tunnel payload?");
+        }
         _data = data;
     }
 
@@ -108,7 +122,9 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
         int curIndex = offset;
         _tunnelId = DataHelper.fromLong(data, curIndex, 4);
         curIndex += 4;
-        if (_tunnelId <= 0) {throw new I2NPMessageException("Invalid tunnel Id " + _tunnelId);}
+        if (_tunnelId <= 0) {
+            throw new I2NPMessageException("Invalid tunnel Id " + _tunnelId);
+        }
 
         /**
          * We can't cache it in trivial form, as other components (e.g. HopProcessor)
@@ -119,13 +135,18 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
             _dataBuf = _cache.acquire();
             _data = _dataBuf.getData();
             _hadCache = true;
-        } else {_data = new byte[DATA_SIZE];}
+        } else {
+            _data = new byte[DATA_SIZE];
+        }
         System.arraycopy(data, curIndex, _data, 0, DATA_SIZE);
     }
 
     /** calculate the message body's length (not including the header and footer */
     @Override
-    protected int calculateWrittenLength() {return 4 + DATA_SIZE;}
+    protected int calculateWrittenLength() {
+        return 4 + DATA_SIZE;
+    }
+
     /** write the message body to the output array, starting at the given index */
     @Override
     protected int writeMessageBody(byte out[], int curIndex) throws I2NPMessageException {
@@ -153,23 +174,31 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     }
 
     @Override
-    public int getType() {return MESSAGE_TYPE;}
+    public int getType() {
+        return MESSAGE_TYPE;
+    }
 
     @Override
-    public int hashCode() {return (int)_tunnelId +DataHelper.hashCode(_data);}
+    public int hashCode() {
+        return (int) _tunnelId + DataHelper.hashCode(_data);
+    }
 
     @Override
     public boolean equals(Object object) {
         if ((object != null) && (object instanceof TunnelDataMessage)) {
-            TunnelDataMessage msg = (TunnelDataMessage)object;
-            return _tunnelId == msg.getTunnelId() && DataHelper.eq(getData(),msg.getData());
-        } else {return false;}
+            TunnelDataMessage msg = (TunnelDataMessage) object;
+            return _tunnelId == msg.getTunnelId() && DataHelper.eq(getData(), msg.getData());
+        } else {
+            return false;
+        }
     }
 
     @Override
     public byte[] toByteArray() {
         byte rv[] = super.toByteArray();
-        if (rv == null) {throw new RuntimeException("unable to toByteArray(): " + toString());}
+        if (rv == null) {
+            throw new RuntimeException("unable to toByteArray(): " + toString());
+        }
         return rv;
     }
 
@@ -182,5 +211,4 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
         buf.append(paddedUid).append("]");
         return buf.toString();
     }
-
 }

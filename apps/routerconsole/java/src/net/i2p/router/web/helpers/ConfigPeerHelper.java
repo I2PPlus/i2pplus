@@ -1,12 +1,13 @@
 package net.i2p.router.web.helpers;
 
-import java.math.BigInteger;
-import java.util.Collections;
-import java.util.List;
 import net.i2p.data.Hash;
 import net.i2p.router.Blocklist;
 import net.i2p.router.web.HelperBase;
 import net.i2p.util.Addresses;
+
+import java.math.BigInteger;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Helper for peer configuration page rendering and form processing.
@@ -17,23 +18,23 @@ public class ConfigPeerHelper extends HelperBase {
     private static final int MAX_DISPLAY = 1000;
 
     public String getBlocklistSummary() {
-        StringBuilder buf = new StringBuilder(128*1024);
+        StringBuilder buf = new StringBuilder(128 * 1024);
         Blocklist bl = _context.blocklist();
 
         buf.append("<table id=bannedips style=display:none><tr><td>\n");
 
         // permabanned
-        buf.append("<table id=permabanned>")
-           .append("<tr><th colspan=3><b>").append(_t("IPs Permanently Banned")).append("</b></th></tr>\n");
+        buf.append("<table id=permabanned>").append("<tr><th colspan=3><b>").append(_t("IPs Permanently Banned")).append("</b></th></tr>\n");
         int blocklistSize = bl.getBlocklistSize();
         if (blocklistSize > 0) {
-            buf.append("<tr><td><b>").append(_t("From")).append("</b></td><td></td>")
-               .append("<td><b>").append(_t("To")).append("</b></td></tr>\n");
+            buf.append("<tr><td><b>").append(_t("From")).append("</b></td><td></td>").append("<td><b>").append(_t("To")).append("</b></td></tr>\n");
             long[] blocklist = bl.getPermanentBlocks(MAX_DISPLAY);
             // first 0 - 127
             for (int i = 0; i < blocklist.length; i++) {
                 int from = Blocklist.getFrom(blocklist[i]);
-                if (from < 0) {continue;}
+                if (from < 0) {
+                    continue;
+                }
                 buf.append("<tr><td>").append(Blocklist.toStr(from)).append("</td>");
                 int to = Blocklist.getTo(blocklist[i]);
                 if (to != from) {
@@ -45,7 +46,9 @@ public class ConfigPeerHelper extends HelperBase {
             // then 128 - 255
             for (int i = 0; i < blocklist.length; i++) {
                 int from = Blocklist.getFrom(blocklist[i]);
-                if (from >= 0) {break;}
+                if (from >= 0) {
+                    break;
+                }
                 buf.append("<tr><td>").append(Blocklist.toStr(from)).append("</td>");
                 int to = Blocklist.getTo(blocklist[i]);
                 if (to != from) {
@@ -54,9 +57,7 @@ public class ConfigPeerHelper extends HelperBase {
                     buf.append("<td></td><td>&nbsp; </td></tr>\n");
                 }
             }
-            if (blocklistSize > MAX_DISPLAY)
-                buf.append("<tr><th colspan=3>").append(_t("First {0} displayed, see the {1} file for the full list",
-                            MAX_DISPLAY, Blocklist.BLOCKLIST_FILE_DEFAULT)).append("</th></tr>");
+            if (blocklistSize > MAX_DISPLAY) buf.append("<tr><th colspan=3>").append(_t("First {0} displayed, see the {1} file for the full list", MAX_DISPLAY, Blocklist.BLOCKLIST_FILE_DEFAULT)).append("</th></tr>");
         } else {
             buf.append("<tr><td><i>").append(_t("none")).append("</i></td></tr>");
         }
@@ -76,15 +77,23 @@ public class ConfigPeerHelper extends HelperBase {
             // first 0 - 127
             for (Integer ii : singles) {
                 int ip = ii.intValue();
-                if (ip < 0) {continue;}
-                if (bl.isPermanentlyBlocklisted(ip)) {continue;} // don't display if on the permanent blocklist also
+                if (ip < 0) {
+                    continue;
+                }
+                if (bl.isPermanentlyBlocklisted(ip)) {
+                    continue;
+                } // don't display if on the permanent blocklist also
                 buf.append("<tr><td>").append(Blocklist.toStr(ip)).append("</td></tr>\n");
             }
             // then 128 - 255
             for (Integer ii : singles) {
                 int ip = ii.intValue();
-                if (ip >= 0) {break;}
-                if (bl.isPermanentlyBlocklisted(ip)) {continue;} // don't display if on the permanent blocklist also
+                if (ip >= 0) {
+                    break;
+                }
+                if (bl.isPermanentlyBlocklisted(ip)) {
+                    continue;
+                } // don't display if on the permanent blocklist also
                 buf.append("<tr><td>").append(Blocklist.toStr(ip)).append("</td></tr>\n");
             }
             // then IPv6
@@ -96,8 +105,7 @@ public class ConfigPeerHelper extends HelperBase {
                 }
             }
         } else {
-            buf.append("<tr><td><i>").append(_t("none")).append("<style>#sessionIpBans{display:none!important}</style>")
-               .append("</i></td></tr>\n");
+            buf.append("<tr><td><i>").append(_t("none")).append("<style>#sessionIpBans{display:none!important}</style>").append("</i></td></tr>\n");
         }
         buf.append("</table>");
 
@@ -108,7 +116,9 @@ public class ConfigPeerHelper extends HelperBase {
     /**
      *  @since 0.9.50
      */
-    public boolean isBanned(Hash h) {return _context.banlist().isBanlisted(h);}
+    public boolean isBanned(Hash h) {
+        return _context.banlist().isBanlisted(h);
+    }
 
     /**
      *  Convert a (non-negative) two's complement IP to exactly 16 bytes
@@ -118,10 +128,15 @@ public class ConfigPeerHelper extends HelperBase {
     private static byte[] toIPBytes(BigInteger bi) {
         byte[] ba = bi.toByteArray();
         int len = ba.length;
-        if (len == 16) {return ba;}
+        if (len == 16) {
+            return ba;
+        }
         byte[] rv = new byte[16];
-        if (len < 16) {System.arraycopy(ba, 0, rv, 16 - len, len);}
-        else {System.arraycopy(ba, len - 16, rv, 0, 16);}
+        if (len < 16) {
+            System.arraycopy(ba, 0, rv, 16 - len, len);
+        } else {
+            System.arraycopy(ba, len - 16, rv, 0, 16);
+        }
         return rv;
     }
 }

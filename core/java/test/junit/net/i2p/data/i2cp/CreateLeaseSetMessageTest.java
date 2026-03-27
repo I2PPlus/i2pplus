@@ -1,4 +1,5 @@
 package net.i2p.data.i2cp;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -25,12 +26,15 @@ public class CreateLeaseSetMessageTest extends I2CPTstBase {
     @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
         CreateLeaseSetMessage msg = new CreateLeaseSetMessage();
-    	msg.setPrivateKey((PrivateKey)(new PrivateKeyTest()).createDataStructure());
-    	msg.setSigningPrivateKey((SigningPrivateKey)(new SigningPrivateKeyTest()).createDataStructure());
-    	msg.setLeaseSet((LeaseSet)(new LeaseSetTest()).createDataStructure());
-        msg.setSessionId((SessionId)(new SessionIdTest()).createDataStructure());
+        msg.setPrivateKey((PrivateKey) (new PrivateKeyTest()).createDataStructure());
+        msg.setSigningPrivateKey((SigningPrivateKey) (new SigningPrivateKeyTest()).createDataStructure());
+        msg.setLeaseSet((LeaseSet) (new LeaseSetTest()).createDataStructure());
+        msg.setSessionId((SessionId) (new SessionIdTest()).createDataStructure());
         return msg;
     }
+
     @Override
-    public I2CPMessageImpl createStructureToRead() { return new CreateLeaseSetMessage(); }
+    public I2CPMessageImpl createStructureToRead() {
+        return new CreateLeaseSetMessage();
+    }
 }

@@ -6,6 +6,8 @@
 
 package org.klomp.snark.bencode;
 
+import net.i2p.data.DataHelper;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,7 +19,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import net.i2p.data.DataHelper;
 
 /**
  * Converts Java objects to bencoded format for BitTorrent protocol communication.
@@ -56,8 +57,7 @@ public class BEncoder {
      * @throws IllegalArgumentException if the object type cannot be encoded
      * @throws NullPointerException if the object is null
      */
-    public static void bencode(Object o, OutputStream out)
-            throws IOException, IllegalArgumentException {
+    public static void bencode(Object o, OutputStream out) throws IOException, IllegalArgumentException {
         if (o == null) throw new NullPointerException("Cannot bencode null");
         if (o instanceof String) bencode((String) o, out);
         else if (o instanceof byte[]) bencode((byte[]) o, out);
@@ -151,8 +151,7 @@ public class BEncoder {
      * @throws IOException if an I/O error occurs
      * @throws IllegalArgumentException if keys are not all Strings or all byte[]s
      */
-    public static void bencode(Map<?, ?> m, OutputStream out)
-            throws IOException, IllegalArgumentException {
+    public static void bencode(Map<?, ?> m, OutputStream out) throws IOException, IllegalArgumentException {
         out.write('d');
 
         Set<?> s = m.keySet();
@@ -171,8 +170,7 @@ public class BEncoder {
                     b = new ArrayList<byte[]>(s.size());
                     b.add((byte[]) k);
                 } else {
-                    throw new IllegalArgumentException(
-                            "Cannot bencode map: contains key of type " + k.getClass());
+                    throw new IllegalArgumentException("Cannot bencode map: contains key of type " + k.getClass());
                 }
             }
         } catch (ClassCastException cce) {

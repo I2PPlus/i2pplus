@@ -1,12 +1,13 @@
 package net.i2p.client.streaming.impl;
 
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
 import net.i2p.I2PException;
 import net.i2p.client.streaming.AcceptingChannel;
 import net.i2p.client.streaming.I2PServerSocket;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketManager;
+
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 
 /**
  * Bridge to allow accepting new connections
@@ -57,6 +58,7 @@ class I2PServerSocketFull implements I2PServerSocket {
     public void setSoTimeout(long x) {
         _socketManager.getConnectionManager().setSoTimeout(x);
     }
+
     /**
      * Close the connection.
      */

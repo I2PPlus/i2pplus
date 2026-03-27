@@ -1,4 +1,5 @@
 package net.i2p.data.i2cp;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -24,6 +25,9 @@ public class AbuseReasonTest extends StructureTest {
         res.setReason("Because they're mean");
         return res;
     }
+
     @Override
-    public DataStructure createStructureToRead() { return new AbuseReason(); }
+    public DataStructure createStructureToRead() {
+        return new AbuseReason();
+    }
 }

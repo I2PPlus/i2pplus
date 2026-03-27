@@ -9,12 +9,13 @@ package net.i2p.data.i2cp;
  *
  */
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Payload;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Defines the payload message a router sends to the client
@@ -22,7 +23,7 @@ import net.i2p.data.Payload;
  * @author jrandom
  */
 public class MessagePayloadMessage extends I2CPMessageImpl {
-    public final static int MESSAGE_TYPE = 31;
+    public static final int MESSAGE_TYPE = 31;
     private int _sessionId;
     private long _messageId;
     private Payload _payload;
@@ -117,19 +118,16 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
-      * Write out the full message to the stream, including the 4 byte size and 1
-      * byte type header.
-      *
-      * @throws IOException if there's an error writing to the stream
-      */
+     * Write out the full message to the stream, including the 4 byte size and 1
+     * byte type header.
+     *
+     * @throws IOException if there's an error writing to the stream
+     */
     @Override
     public synchronized void writeMessage(OutputStream out) throws I2CPMessageException, IOException {
-        if (_sessionId < 0)
-            throw new I2CPMessageException("Unable to write out the message, as the session ID has not been defined");
-        if (_messageId < 0)
-            throw new I2CPMessageException("Unable to write out the message, as the message ID has not been defined");
-        if (_payload == null)
-            throw new I2CPMessageException("Unable to write out the message, as the payload has not been defined");
+        if (_sessionId < 0) throw new I2CPMessageException("Unable to write out the message, as the session ID has not been defined");
+        if (_messageId < 0) throw new I2CPMessageException("Unable to write out the message, as the message ID has not been defined");
+        if (_payload == null) throw new I2CPMessageException("Unable to write out the message, as the payload has not been defined");
 
         int size = 2 + 4 + 4 + _payload.getSize();
         try {

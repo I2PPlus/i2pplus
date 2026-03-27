@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -104,11 +104,12 @@ public class TunnelControllerGroup implements ClientApp {
      *  as there is no limit on threads.
      */
     private ThreadPoolExecutor _executor;
+
     private static final AtomicLong _executorThreadCount = new AtomicLong();
     private final Object _executorLock = new Object();
-    /** how long to wait before dropping an idle thread */
-    private static final long HANDLER_KEEPALIVE_MS = 2*60*1000;
 
+    /** how long to wait before dropping an idle thread */
+    private static final long HANDLER_KEEPALIVE_MS = 2 * 60 * 1000;
 
     /**
      *  In I2PAppContext will instantiate if necessary and always return non-null.
@@ -202,8 +203,7 @@ public class TunnelControllerGroup implements ClientApp {
                 _instance = this;
             } else {
                 _log.logAlways(Log.WARN, "New TunnelControllerGroup, now you have two");
-                if (_log.shouldWarn())
-                    _log.warn("I did it", new Exception());
+                if (_log.shouldWarn()) _log.warn("I did it", new Exception());
             }
         }
         _state = INITIALIZED;
@@ -218,19 +218,18 @@ public class TunnelControllerGroup implements ClientApp {
      * @param args must be the args passed to TunnelControllerGroup.
      * @return an array of exactly 2 strings, where [0] is the the value for
      * _configFile and [1] is the value for _configDirectory
-    */
-    private String[] setupArguments(String args[]){
+     */
+    private String[] setupArguments(String args[]) {
         String configFile = DEFAULT_CONFIG_FILE;
         String configDirectory = CONFIG_DIR;
         File check = new File(args[0]);
-        if (!check.isAbsolute())
-            check = new File(_context.getConfigDir(), args[0]);
+        if (!check.isAbsolute()) check = new File(_context.getConfigDir(), args[0]);
         if (check.isFile()) {
             configFile = args[0];
         } else if (check.isDirectory()) {
             configDirectory = args[0];
         }
-        return new String[]{configFile, configDirectory};
+        return new String[] {configFile, configDirectory};
     }
 
     /**
@@ -261,11 +260,9 @@ public class TunnelControllerGroup implements ClientApp {
      */
     public void startup() {
         File configFile = new File(_configFile);
-        if (!configFile.isAbsolute())
-            configFile = new File(_context.getConfigDir(), _configFile);
+        if (!configFile.isAbsolute()) configFile = new File(_context.getConfigDir(), _configFile);
         try {
-            if (_log.shouldInfo())
-                _log.info("Configuring tunnels from " + configFile);
+            if (_log.shouldInfo()) _log.info("Configuring tunnels from " + configFile);
             loadControllers(configFile);
         } catch (IllegalArgumentException iae) {
             if (DEFAULT_CONFIG_FILE.equals(configFile.getName()) && !_context.isRouterContext()) {
@@ -279,11 +276,9 @@ public class TunnelControllerGroup implements ClientApp {
             }
         }
         startControllers();
-        if (_mgr != null)
-            _mgr.register(this);
-            // RouterAppManager registers its own shutdown hook
-        else
-            _context.addShutdownTask(new Shutdown());
+        if (_mgr != null) _mgr.register(this);
+        // RouterAppManager registers its own shutdown hook
+        else _context.addShutdownTask(new Shutdown());
     }
 
     /**
@@ -322,8 +317,7 @@ public class TunnelControllerGroup implements ClientApp {
      */
     private synchronized void changeState(ClientAppState state, Exception e) {
         _state = state;
-        if (_mgr != null)
-            _mgr.notify(this, state, null, e);
+        if (_mgr != null) _mgr.notify(this, state, null, e);
     }
 
     /**
@@ -354,11 +348,9 @@ public class TunnelControllerGroup implements ClientApp {
      *  @since 0.8.8
      */
     public synchronized void shutdown(boolean waitForDelayed) {
-        if (_state != STARTING && _state != RUNNING)
-            return;
+        if (_state != STARTING && _state != RUNNING) return;
         changeState(STOPPING);
-        if (_mgr != null)
-            _mgr.unregister(this);
+        if (_mgr != null) _mgr.unregister(this);
 
         if (waitForDelayed) {
             shutdownDelayedServers();
@@ -366,8 +358,7 @@ public class TunnelControllerGroup implements ClientApp {
 
         unloadControllers();
         synchronized (TunnelControllerGroup.class) {
-            if (_instance == this) // NOPMD - CompareObjectsWithEquals (singleton identity)
-                _instance = null;
+            if (_instance == this) _instance = null; // NOPMD - CompareObjectsWithEquals (singleton identity)
         }
         killClientExecutor();
         changeState(STOPPED);
@@ -503,28 +494,30 @@ public class TunnelControllerGroup implements ClientApp {
             final String name = controller.getName();
             final int actualDelay = delay;
             final List<TunnelController> stoppedList = stoppedServers;
-            _delayedShutdownExecutor.submit(new I2PAppThread(new Runnable() {
-                public void run() {
-                    if (actualDelay > 0) {
-                        for (int i = 0; i < actualDelay; i++) {
+            _delayedShutdownExecutor.submit(new I2PAppThread(
+                    new Runnable() {
+                        public void run() {
+                            if (actualDelay > 0) {
+                                for (int i = 0; i < actualDelay; i++) {
+                                    if (_cancelDelayedShutdown) {
+                                        return;
+                                    }
+                                    try {
+                                        Thread.sleep(1000);
+                                    } catch (InterruptedException e) {
+                                        Thread.currentThread().interrupt();
+                                        return;
+                                    }
+                                }
+                            }
                             if (_cancelDelayedShutdown) {
                                 return;
                             }
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                Thread.currentThread().interrupt();
-                                return;
-                            }
+                            tc.stopTunnel();
+                            stoppedList.add(tc);
                         }
-                    }
-                    if (_cancelDelayedShutdown) {
-                        return;
-                    }
-                    tc.stopTunnel();
-                    stoppedList.add(tc);
-                }
-            }, "Shutdown timer for " + name));
+                    },
+                    "Shutdown timer for " + name));
         }
 
         _delayedShutdownExecutor.shutdown();
@@ -533,11 +526,9 @@ public class TunnelControllerGroup implements ClientApp {
             boolean completed = _delayedShutdownExecutor.awaitTermination(maxWait, TimeUnit.MILLISECONDS);
             long elapsed = (System.currentTimeMillis() - _delayedShutdownStartTime) / 1000;
             if (completed) {
-                if (_log.shouldInfo())
-                    _log.info("All delayed servers stopped in " + elapsed + "s");
+                if (_log.shouldInfo()) _log.info("All delayed servers stopped in " + elapsed + "s");
             } else {
-                if (_log.shouldWarn())
-                    _log.warn("Timeout waiting for servers to stop after " + elapsed + "s");
+                if (_log.shouldWarn()) _log.warn("Timeout waiting for servers to stop after " + elapsed + "s");
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -547,8 +538,7 @@ public class TunnelControllerGroup implements ClientApp {
                 synchronized (stoppedServers) {
                     for (TunnelController tc : stoppedServers) {
                         tc.startTunnelBackground();
-                        if (_log.shouldInfo())
-                            _log.info("Restarted " + tc.getName() + " after shutdown cancelled");
+                        if (_log.shouldInfo()) _log.info("Restarted " + tc.getName() + " after shutdown cancelled");
                     }
                 }
             }
@@ -571,12 +561,15 @@ public class TunnelControllerGroup implements ClientApp {
         try {
             if (_context.isRouterContext()) {
                 if (!SystemVersion.isAndroid()) {
-                    if (!_context.getConfigDir().getCanonicalPath().equals(_context.getBaseDir().getCanonicalPath())) {
+                    if (!_context.getConfigDir()
+                            .getCanonicalPath()
+                            .equals(_context.getBaseDir().getCanonicalPath())) {
                         return true;
                     }
                 }
             }
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) {
+        }
         return false;
     }
 
@@ -591,8 +584,7 @@ public class TunnelControllerGroup implements ClientApp {
      * @throws IllegalArgumentException if unable to load from file
      */
     public synchronized void loadControllers(File cfgFile) {
-        if (_controllersLoaded)
-            return;
+        if (_controllersLoaded) return;
 
         loadControllers(cfgFile, shouldMigrate());
     }
@@ -603,8 +595,7 @@ public class TunnelControllerGroup implements ClientApp {
      * @throws IllegalArgumentException if unable to load from file
      */
     private synchronized void loadControllers(File cfgFile, boolean shouldMigrate) {
-        if (_log.shouldInfo())
-            _log.info("Getting controllers from config file " + cfgFile);
+        if (_log.shouldInfo()) _log.info("Getting controllers from config file " + cfgFile);
         File dir = new SecureDirectory(_context.getConfigDir(), CONFIG_DIR);
         List<Properties> props = null;
         if (cfgFile.exists()) {
@@ -621,8 +612,7 @@ public class TunnelControllerGroup implements ClientApp {
                     _log.logAlways(Log.WARN, "Not migrating tunnel configurations");
                 }
             } catch (IOException ioe) {
-                if (_log.shouldError())
-                    _log.error("Unable to load the controllers from " + cfgFile.getAbsolutePath());
+                if (_log.shouldError()) _log.error("Unable to load the controllers from " + cfgFile.getAbsolutePath());
                 throw new IllegalArgumentException("Unable to load the controllers from " + cfgFile, ioe);
             }
         } else if (!shouldMigrate) {
@@ -638,8 +628,7 @@ public class TunnelControllerGroup implements ClientApp {
                         if (!props.isEmpty()) {
                             for (Properties cfg : props) {
                                 String type = cfg.getProperty("type");
-                                if (type == null)
-                                    continue;
+                                if (type == null) continue;
                                 TunnelController controller = new TunnelController(cfg, "");
                                 _controllers.add(controller);
                             }
@@ -647,20 +636,18 @@ public class TunnelControllerGroup implements ClientApp {
                                 _log.info("Loaded application config from " + f.toString());
                             }
                         } else {
-                            if (_log.shouldError())
-                                _log.error("Error loading the client app properties from " + f);
+                            if (_log.shouldError()) _log.error("Error loading the client app properties from " + f);
                         }
                     } catch (IOException ioe) {
                         if (_log.shouldError())
-                            _log.error("Error loading the client app properties from " + f + ' '+ ioe);
+                            _log.error("Error loading the client app properties from " + f + ' ' + ioe);
                     }
                 }
             } else if (props != null) {
                 // use what we got from i2ptunnel.config
                 for (Properties cfg : props) {
                     String type = cfg.getProperty("type");
-                    if (type == null)
-                        continue;
+                    if (type == null) continue;
                     TunnelController controller = new TunnelController(cfg, "");
                     _controllers.add(controller);
                 }
@@ -672,8 +659,7 @@ public class TunnelControllerGroup implements ClientApp {
         _controllersLoaded = true;
         int i = _controllers.size();
         if (i > 0) {
-            if (_log.shouldInfo())
-                _log.info(i + " controllers loaded from " + cfgFile);
+            if (_log.shouldInfo()) _log.info(i + " controllers loaded from " + cfgFile);
         } else {
             _log.logAlways(Log.WARN, "No i2ptunnel configurations found in " + cfgFile + " or " + dir);
         }
@@ -686,33 +672,27 @@ public class TunnelControllerGroup implements ClientApp {
      * @since 0.9.42
      */
     private boolean migrate(List<Properties> tunnels, File from, File dir) {
-        if (!dir.isDirectory() && !dir.mkdirs())
-            return false;
+        if (!dir.isDirectory() && !dir.mkdirs()) return false;
         boolean ok = true;
         int i = 0;
         for (Properties props : tunnels) {
             String tname = props.getProperty("name");
-            if (tname == null)
-                tname = "tunnel";
-            else
-                tname = sanitize(tname);
+            if (tname == null) tname = "tunnel";
+            else tname = sanitize(tname);
             String name = i + "-" + tname + "-i2ptunnel.config";
-            if (i < 10)
-                name = '0' + name;
+            if (i < 10) name = '0' + name;
             File f = new File(dir, name);
             props.setProperty(TunnelController.PROP_CONFIG_FILE, f.getAbsolutePath());
             try {
                 DataHelper.storeProps(props, f);
             } catch (IOException ioe) {
-                if (_log.shouldError())
-                    _log.error("Error migrating the i2ptunnel configuration to " + f, ioe);
+                if (_log.shouldError()) _log.error("Error migrating the i2ptunnel configuration to " + f, ioe);
                 ok = false;
             }
             i++;
         }
         if (ok) {
-            if (!FileUtil.rename(from, new File(from.getAbsolutePath() + ".bak")))
-                from.delete();
+            if (!FileUtil.rename(from, new File(from.getAbsolutePath() + ".bak"))) from.delete();
         }
         return ok;
     }
@@ -738,13 +718,13 @@ public class TunnelControllerGroup implements ClientApp {
                         return;
                     }
                     for (TunnelController controller : _controllers) {
-                        if (!controller.getStartOnLoad())
-                            continue;
+                        if (!controller.getStartOnLoad()) continue;
                         if (!controller.isClient()) {
                             int delayMin = controller.getStartupDelayMin();
                             int delayMax = controller.getStartupDelayMax();
                             if (delayMax > delayMin && delayMin >= 0) {
-                                int delay = delayMin + RandomSource.getInstance().nextInt(Math.max(1, delayMax - delayMin));
+                                int delay =
+                                        delayMin + RandomSource.getInstance().nextInt(Math.max(1, delayMax - delayMin));
                                 String name = controller.getName();
                                 String type = controller.getType();
                                 String host = controller.getTargetHost();
@@ -763,7 +743,8 @@ public class TunnelControllerGroup implements ClientApp {
                                 }
                                 controller.changeState(TunnelController.TunnelState.DELAYED_START_PENDING);
                                 controller.setStartupDelayEndTime(delay * 1000L);
-                                final String msg = "‣ Delaying startup of " + name + " [" + typeDesc + " on " + host + ":" + port + "] for " + delay + "s...";
+                                final String msg = "‣ Delaying startup of " + name + " [" + typeDesc + " on " + host
+                                        + ":" + port + "] for " + delay + "s...";
                                 final TunnelController tc = controller;
                                 new I2PAppThread(new Runnable() {
                                     public void run() {
@@ -783,7 +764,8 @@ public class TunnelControllerGroup implements ClientApp {
                                         tc.log("‣ Starting " + name);
                                         tc.startTunnelBackground();
                                     }
-                                }, "Tunnel startup delay for " + name).start();
+                                },
+                                "Tunnel startup delay for " + name).start();
                                 continue;
                             }
                         }
@@ -806,8 +788,7 @@ public class TunnelControllerGroup implements ClientApp {
     public synchronized void reloadControllers() {
         unloadControllers();
         File cfgFile = new File(_configFile);
-        if (!cfgFile.isAbsolute())
-            cfgFile = new File(_context.getConfigDir(), _configFile);
+        if (!cfgFile.isAbsolute()) cfgFile = new File(_context.getConfigDir(), _configFile);
         loadControllers(cfgFile);
         startControllers();
     }
@@ -817,8 +798,7 @@ public class TunnelControllerGroup implements ClientApp {
      *
      */
     public synchronized void unloadControllers() {
-        if (!_controllersLoaded)
-            return;
+        if (!_controllersLoaded) return;
 
         _controllersLock.writeLock().lock();
         try {
@@ -829,8 +809,7 @@ public class TunnelControllerGroup implements ClientApp {
         }
 
         _controllersLoaded = false;
-        if (_log.shouldInfo())
-            _log.info("All controllers stopped and unloaded");
+        if (_log.shouldInfo()) _log.info("All controllers stopped and unloaded");
     }
 
     /**
@@ -880,8 +859,7 @@ public class TunnelControllerGroup implements ClientApp {
                 controller.stopTunnel();
                 msgs.addAll(controller.clearMessages());
             }
-            if (_log.shouldInfo())
-                _log.info(_controllers.size() + " controllers stopped");
+            if (_log.shouldInfo()) _log.info(_controllers.size() + " controllers stopped");
         } finally {
             _controllersLock.readLock().unlock();
         }
@@ -898,8 +876,7 @@ public class TunnelControllerGroup implements ClientApp {
         for (TunnelController controller : _controllers) {
             controller.destroyTunnel();
         }
-        if (_log.shouldInfo())
-            _log.info(_controllers.size() + " controllers stopped");
+        if (_log.shouldInfo()) _log.info(_controllers.size() + " controllers stopped");
     }
 
     /**
@@ -917,8 +894,7 @@ public class TunnelControllerGroup implements ClientApp {
                 msgs.addAll(controller.clearMessages());
             }
 
-            if (_log.shouldInfo())
-                _log.info(_controllers.size() + " controllers started");
+            if (_log.shouldInfo()) _log.info(_controllers.size() + " controllers started");
         } finally {
             _controllersLock.readLock().unlock();
         }
@@ -939,8 +915,7 @@ public class TunnelControllerGroup implements ClientApp {
                 controller.restartTunnel();
                 msgs.addAll(controller.clearMessages());
             }
-            if (_log.shouldInfo())
-                _log.info(_controllers.size() + " controllers restarted");
+            if (_log.shouldInfo()) _log.info(_controllers.size() + " controllers restarted");
         } finally {
             _controllersLock.readLock().unlock();
         }
@@ -985,8 +960,7 @@ public class TunnelControllerGroup implements ClientApp {
         } else {
             try {
                 File cfgFile = new File(_configFile);
-                if (!cfgFile.isAbsolute())
-                    cfgFile = new File(_context.getConfigDir(), _configFile);
+                if (!cfgFile.isAbsolute()) cfgFile = new File(_context.getConfigDir(), _configFile);
                 saveConfig(cfgFile);
             } finally {
                 _controllersLock.readLock().unlock();
@@ -1010,8 +984,7 @@ public class TunnelControllerGroup implements ClientApp {
      */
     private synchronized void saveConfig(File cfgFile) throws IOException {
         File parent = cfgFile.getParentFile();
-        if (parent != null && !parent.exists())
-            parent.mkdirs();
+        if (parent != null && !parent.exists()) parent.mkdirs();
         Properties map = new OrderedProperties();
         _controllersLock.readLock().lock();
         try {
@@ -1034,12 +1007,11 @@ public class TunnelControllerGroup implements ClientApp {
      * @since 0.9.42
      */
     public synchronized void saveConfig(TunnelController tc) throws IOException {
-        if (!shouldMigrate()){
+        if (!shouldMigrate()) {
             saveConfig();
             return;
         }
-        if (_log.shouldInfo())
-            _log.info("Saving tunnel configuration for " + tc);
+        if (_log.shouldInfo()) _log.info("Saving tunnel configuration for " + tc);
         Properties inputController = new OrderedProperties();
         inputController.putAll(tc.getConfig(""));
         File cfgFile = assureConfigFile(tc);
@@ -1055,25 +1027,90 @@ public class TunnelControllerGroup implements ClientApp {
     public synchronized void removeConfig(TunnelController tc) throws IOException {
         File cfgFile = assureConfigFile(tc);
         if (!FileUtil.rename(cfgFile, new File(cfgFile.getAbsolutePath() + ".bak")))
-            if (! cfgFile.delete())
-                if (_log.shouldWarn())
-                    _log.warn("could not delete config file" + cfgFile.toString());
-        if (!shouldMigrate())
-            saveConfig();
+            if (!cfgFile.delete())
+                if (_log.shouldWarn()) _log.warn("could not delete config file" + cfgFile.toString());
+        if (!shouldMigrate()) saveConfig();
     }
 
     /** From i2psnark Storage.java */
     private static final char[] ILLEGAL = new char[] {
-        '<', '>', ':', '"', '/', '\\', '|', '?', '*',
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-        16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+        '<',
+        '>',
+        ':',
+        '"',
+        '/',
+        '\\',
+        '|',
+        '?',
+        '*',
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
         0x7f,
-        0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87,
-        0x88, 0x89, 0x8a, 0x8b, 0x8c, 0x8d, 0x8e, 0x8f,
-        0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97,
-        0x98, 0x99, 0x9a, 0x9b, 0x9c, 0x9d, 0x9e, 0x9f,
+        0x80,
+        0x81,
+        0x82,
+        0x83,
+        0x84,
+        0x85,
+        0x86,
+        0x87,
+        0x88,
+        0x89,
+        0x8a,
+        0x8b,
+        0x8c,
+        0x8d,
+        0x8e,
+        0x8f,
+        0x90,
+        0x91,
+        0x92,
+        0x93,
+        0x94,
+        0x95,
+        0x96,
+        0x97,
+        0x98,
+        0x99,
+        0x9a,
+        0x9b,
+        0x9c,
+        0x9d,
+        0x9e,
+        0x9f,
         // unicode newlines
-        0x2028, 0x2029
+        0x2028,
+        0x2029
     };
 
     /**
@@ -1082,8 +1119,7 @@ public class TunnelControllerGroup implements ClientApp {
      */
     private static String sanitize(String rv) {
         for (int i = 0; i < ILLEGAL.length; i++) {
-            if (rv.indexOf(ILLEGAL[i]) >= 0)
-                rv = rv.replace(ILLEGAL[i], '_');
+            if (rv.indexOf(ILLEGAL[i]) >= 0) rv = rv.replace(ILLEGAL[i], '_');
         }
         return rv;
     }
@@ -1097,20 +1133,15 @@ public class TunnelControllerGroup implements ClientApp {
      */
     private synchronized File assureConfigFile(TunnelController tc) throws IOException {
         File file = tc.getConfigFile();
-        if (file != null)
-            return file;
+        if (file != null) return file;
         Properties inputController = tc.getConfig("");
         String fileName = inputController.getProperty("name");
-        if (fileName == null)
-            fileName = "New Tunnel";
-        else
-            fileName = sanitize(fileName);
+        if (fileName == null) fileName = "New Tunnel";
+        else fileName = sanitize(fileName);
         String configFileName = _controllers.size() + "-" + fileName + "-i2ptunnel.config";
-        if (_controllers.size() < 10)
-            configFileName = '0' + configFileName;
+        if (_controllers.size() < 10) configFileName = '0' + configFileName;
         File folder = new File(_configDirectory);
-        if (!folder.isAbsolute())
-            folder = new File(_context.getConfigDir(), _configDirectory);
+        if (!folder.isAbsolute()) folder = new File(_context.getConfigDir(), _configDirectory);
         file = new File(folder, configFileName);
         tc.setConfigFile(file);
         return file;
@@ -1125,23 +1156,19 @@ public class TunnelControllerGroup implements ClientApp {
      */
     private List<File> listFiles() {
         File folder = new File(_configDirectory);
-        if (!folder.isAbsolute())
-            folder = new File(_context.getConfigDir(), _configDirectory);
-        if (_log.shouldInfo())
-            _log.info("Seeking controller configs in " + folder.toString());
+        if (!folder.isAbsolute()) folder = new File(_context.getConfigDir(), _configDirectory);
+        if (_log.shouldInfo()) _log.info("Seeking controller configs in " + folder.toString());
         File[] listOfFiles = folder.listFiles(new FileSuffixFilter(".config"));
         List<File> files = new ArrayList<File>();
-        if (listOfFiles != null && listOfFiles.length > 0){
+        if (listOfFiles != null && listOfFiles.length > 0) {
             for (File afile : listOfFiles) {
                 files.add(afile);
-                if (_log.shouldInfo())
-                    _log.info("Found controller config " + afile.toString());
+                if (_log.shouldInfo()) _log.info("Found controller config " + afile.toString());
             }
             Collections.sort(files);
         } else {
             File cfgFile = new File(_configFile);
-            if (!cfgFile.isAbsolute())
-                cfgFile = new File(_context.getConfigDir(), _configFile);
+            if (!cfgFile.isAbsolute()) cfgFile = new File(_context.getConfigDir(), _configFile);
             files.add(cfgFile);
         }
         return files;
@@ -1160,12 +1187,10 @@ public class TunnelControllerGroup implements ClientApp {
         DataHelper.loadProps(config, cfgFile);
         for (String key : config.stringPropertyNames()) {
             if (key.startsWith(PREFIX)) {
-                if (_log.shouldDebug())
-                    _log.debug("Found monolithic config file " + cfgFile);
+                if (_log.shouldDebug()) _log.debug("Found monolithic config file " + cfgFile);
                 return splitMonolithicConfig(config);
             } else {
-                if (_log.shouldDebug())
-                    _log.debug("Found split config file " + cfgFile);
+                if (_log.shouldDebug()) _log.debug("Found split config file " + cfgFile);
                 List<Properties> rv = new ArrayList<Properties>(1);
                 config.setProperty(TunnelController.PROP_CONFIG_FILE, cfgFile.getAbsolutePath());
                 rv.add(config);
@@ -1197,8 +1222,7 @@ public class TunnelControllerGroup implements ClientApp {
                     p.setProperty(key, val);
                 }
             }
-            if (p.isEmpty())
-                break;
+            if (p.isEmpty()) break;
             rv.add(p);
             i++;
         }
@@ -1217,8 +1241,7 @@ public class TunnelControllerGroup implements ClientApp {
     public List<TunnelController> getControllers() {
         List<TunnelController> rv = new ArrayList<TunnelController>();
         File cfgFile = new File(_configFile);
-        if (!cfgFile.isAbsolute())
-            cfgFile = new File(_context.getConfigDir(), _configFile);
+        if (!cfgFile.isAbsolute()) cfgFile = new File(_context.getConfigDir(), _configFile);
         rv.addAll(getControllers(cfgFile));
         return rv;
     }
@@ -1235,8 +1258,7 @@ public class TunnelControllerGroup implements ClientApp {
      */
     private List<TunnelController> getControllers(File cfgFile) {
         synchronized (this) {
-            if (!_controllersLoaded)
-                loadControllers(cfgFile);
+            if (!_controllersLoaded) loadControllers(cfgFile);
         }
 
         _controllersLock.readLock().lock();
@@ -1262,9 +1284,7 @@ public class TunnelControllerGroup implements ClientApp {
             }
             owners.add(controller);
         }
-        if (_log.shouldInfo())
-            _log.info("Acquiring session " + session + "\n* For: " + controller);
-
+        if (_log.shouldInfo()) _log.info("Acquiring session " + session + "\n* For: " + controller);
     }
 
     /**
@@ -1280,28 +1300,29 @@ public class TunnelControllerGroup implements ClientApp {
                 owners.remove(controller);
                 if (owners.isEmpty()) {
                     if (_log.shouldInfo())
-                        _log.info("After releasing session " + session + " by " + controller + ", no more owners remain");
+                        _log.info(
+                                "After releasing session " + session + " by " + controller + ", no more owners remain");
                     shouldClose = true;
                     _sessions.remove(session);
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("After releasing session " + session + " by " + controller + ", " + owners.size() + " owners remain");
+                        _log.info("After releasing session " + session + " by " + controller + ", " + owners.size()
+                                + " owners remain");
                     shouldClose = false;
                 }
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("After releasing session " + session + " by " + controller + ", no owners were even known?!");
+                    _log.warn("After releasing session " + session + " by " + controller
+                            + ", no owners were even known?!");
                 shouldClose = true;
             }
         }
         if (shouldClose) {
             try {
                 session.destroySession();
-                if (_log.shouldInfo())
-                    _log.info("Session destroyed: " + session);
+                if (_log.shouldInfo()) _log.info("Session destroyed: " + session);
             } catch (I2PSessionException ise) {
-                if (_log.shouldError())
-                    _log.error("Error closing the client session", ise);
+                if (_log.shouldError()) _log.error("Error closing the client session", ise);
             }
         }
     }
@@ -1312,8 +1333,7 @@ public class TunnelControllerGroup implements ClientApp {
      */
     ThreadPoolExecutor getClientExecutor() {
         synchronized (_executorLock) {
-            if (_executor == null)
-                _executor = new CustomThreadPoolExecutor();
+            if (_executor == null) _executor = new CustomThreadPoolExecutor();
         }
         return _executor;
     }
@@ -1346,8 +1366,13 @@ public class TunnelControllerGroup implements ClientApp {
      */
     static class CustomThreadPoolExecutor extends ThreadPoolExecutor {
         public CustomThreadPoolExecutor() {
-            super(0, Integer.MAX_VALUE, HANDLER_KEEPALIVE_MS, TimeUnit.MILLISECONDS,
-                   new SynchronousQueue<Runnable>(), new CustomThreadFactory());
+            super(
+                    0,
+                    Integer.MAX_VALUE,
+                    HANDLER_KEEPALIVE_MS,
+                    TimeUnit.MILLISECONDS,
+                    new SynchronousQueue<Runnable>(),
+                    new CustomThreadFactory());
         }
     }
 

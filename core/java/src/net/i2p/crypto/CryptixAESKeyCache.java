@@ -41,8 +41,7 @@ public final class CryptixAESKeyCache {
     @Deprecated
     public final KeyCacheEntry acquireKey() {
         KeyCacheEntry rv = _availableKeys.poll();
-        if (rv != null)
-            return rv;
+        if (rv != null) return rv;
         return createNew();
     }
 
@@ -94,6 +93,7 @@ public final class CryptixAESKeyCache {
     public static class KeyCacheEntry implements Serializable {
         /** encryption round keys */
         final int[][] Ke;
+
         /** decryption round keys */
         final int[][] Kd;
 

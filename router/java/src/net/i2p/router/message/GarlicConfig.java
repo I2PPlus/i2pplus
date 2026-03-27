@@ -1,4 +1,5 @@
 package net.i2p.router.message;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,13 +9,14 @@ package net.i2p.router.message;
  *
  */
 
-import java.util.ArrayList;
-import java.time.Instant;
-import java.util.List;
 import net.i2p.data.Certificate;
 import net.i2p.data.PublicKey;
 import net.i2p.data.i2np.DeliveryInstructions;
 import net.i2p.data.router.RouterInfo;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Define the contents of a garlic chunk that contains 1 or more sub garlics.
@@ -31,28 +33,28 @@ class GarlicConfig {
     private final long _expiration;
     private final List<GarlicConfig> _cloveConfigs;
     private final DeliveryInstructions _instructions;
+
     // unused
-    //private boolean _requestAck;
-    //private RouterInfo _replyThroughRouter; // router through which any replies will be sent before delivery to us
-    //private DeliveryInstructions _replyInstructions; // how the message will be sent from the replyThroughRouter to us
+    // private boolean _requestAck;
+    // private RouterInfo _replyThroughRouter; // router through which any replies will be sent before delivery to us
+    // private DeliveryInstructions _replyInstructions; // how the message will be sent from the replyThroughRouter to us
     // unused and undocumented
-    //private Certificate _replyBlockCertificate;
-    //private long _replyBlockMessageId;
-    //private long _replyBlockExpiration;
+    // private Certificate _replyBlockCertificate;
+    // private long _replyBlockMessageId;
+    // private long _replyBlockExpiration;
 
     public GarlicConfig(Certificate cert, long id, long expiration, DeliveryInstructions di) {
         this(new ArrayList<GarlicConfig>(4), cert, id, expiration, di);
     }
 
-    protected GarlicConfig(List<GarlicConfig> cloveConfigs, Certificate cert, long id,
-                           long expiration, DeliveryInstructions di) {
+    protected GarlicConfig(List<GarlicConfig> cloveConfigs, Certificate cert, long id, long expiration, DeliveryInstructions di) {
         _cert = cert;
         _id = id;
         _expiration = expiration;
         _cloveConfigs = cloveConfigs;
         _instructions = di;
-    //_replyBlockMessageId = -1;
-    //_replyBlockExpiration = -1;
+        // _replyBlockMessageId = -1;
+        // _replyBlockExpiration = -1;
     }
 
     /**
@@ -64,8 +66,13 @@ class GarlicConfig {
      * Used only if recipient public key is not set.
      *
      */
-    public void setRecipient(RouterInfo info) { _recipient = info; }
-    public RouterInfo getRecipient() { return _recipient; }
+    public void setRecipient(RouterInfo info) {
+        _recipient = info;
+    }
+
+    public RouterInfo getRecipient() {
+        return _recipient;
+    }
 
     /**
      * Public key of the router to receive and process this clove.  This is useful
@@ -74,32 +81,45 @@ class GarlicConfig {
      * via the LeaseSet
      *
      */
-    public void setRecipientPublicKey(PublicKey recipientPublicKey) { _recipientPublicKey = recipientPublicKey; }
-    public PublicKey getRecipientPublicKey() { return _recipientPublicKey; }
+    public void setRecipientPublicKey(PublicKey recipientPublicKey) {
+        _recipientPublicKey = recipientPublicKey;
+    }
+
+    public PublicKey getRecipientPublicKey() {
+        return _recipientPublicKey;
+    }
 
     /**
      * Certificate for the getRecipient() to pay for their processing
      *
      */
-    public Certificate getCertificate() { return _cert; }
+    public Certificate getCertificate() {
+        return _cert;
+    }
 
     /**
      * Unique ID of the clove
      *
      */
-    public long getId() { return _id; }
+    public long getId() {
+        return _id;
+    }
 
     /**
      * Expiration of the clove, after which it should be dropped
      *
      */
-    public long getExpiration() { return _expiration; }
+    public long getExpiration() {
+        return _expiration;
+    }
 
     /**
      * Specify how the I2NPMessage in the clove should be handled.
      *
      */
-    public DeliveryInstructions getDeliveryInstructions() { return _instructions; }
+    public DeliveryInstructions getDeliveryInstructions() {
+        return _instructions;
+    }
 
     /**
      * If true, the recipient of this clove is requested to send a DeliveryStatusMessage
@@ -108,10 +128,10 @@ class GarlicConfig {
      * no reply is expected.
      *
      */
-  /****
-    public void setRequestAck(boolean request) { _requestAck = request; }
-    public boolean getRequestAck() { return _requestAck; }
-  ****/
+    /****
+     * public void setRequestAck(boolean request) { _requestAck = request; }
+     * public boolean getRequestAck() { return _requestAck; }
+     ****/
 
     /**
      * Specify the router through which a reply to this clove can be sent.  The
@@ -119,10 +139,10 @@ class GarlicConfig {
      * and it them uses those to send the reply to this router.
      *
      */
-  /****
-    public void setReplyThroughRouter(RouterInfo replyThroughRouter) { _replyThroughRouter = replyThroughRouter; }
-    public RouterInfo getReplyThroughRouter() { return _replyThroughRouter; }
-  ****/
+    /****
+     * public void setReplyThroughRouter(RouterInfo replyThroughRouter) { _replyThroughRouter = replyThroughRouter; }
+     * public RouterInfo getReplyThroughRouter() { return _replyThroughRouter; }
+     ****/
 
     /**
      * Specify how any reply will be routed so that it reaches this router after being
@@ -131,21 +151,21 @@ class GarlicConfig {
      * the replyThrough router
      *
      */
-  /****
-    public void setReplyInstructions(DeliveryInstructions instructions) { _replyInstructions = instructions; }
-    public DeliveryInstructions getReplyInstructions() { return _replyInstructions; }
-  ****/
+    /****
+     * public void setReplyInstructions(DeliveryInstructions instructions) { _replyInstructions = instructions; }
+     * public DeliveryInstructions getReplyInstructions() { return _replyInstructions; }
+     ****/
 
-  /****
-    public long getReplyBlockMessageId() { return _replyBlockMessageId; }
-    public void setReplyBlockMessageId(long id) { _replyBlockMessageId = id; }
-
-    public Certificate getReplyBlockCertificate() { return _replyBlockCertificate; }
-    public void setReplyBlockCertificate(Certificate cert) { _replyBlockCertificate = cert; }
-
-    public long getReplyBlockExpiration() { return _replyBlockExpiration; }
-    public void setReplyBlockExpiration(long expiration) { _replyBlockExpiration = expiration; }
-   ****/
+    /****
+     * public long getReplyBlockMessageId() { return _replyBlockMessageId; }
+     * public void setReplyBlockMessageId(long id) { _replyBlockMessageId = id; }
+     *
+     * public Certificate getReplyBlockCertificate() { return _replyBlockCertificate; }
+     * public void setReplyBlockCertificate(Certificate cert) { _replyBlockCertificate = cert; }
+     *
+     * public long getReplyBlockExpiration() { return _replyBlockExpiration; }
+     * public void setReplyBlockExpiration(long expiration) { _replyBlockExpiration = expiration; }
+     ****/
 
     /**
      * Add a clove to the current message - if any cloves are added, an I2NP message
@@ -159,15 +179,23 @@ class GarlicConfig {
         }
     }
 
-    public int getCloveCount() { return _cloveConfigs.size(); }
+    public int getCloveCount() {
+        return _cloveConfigs.size();
+    }
 
-    public GarlicConfig getClove(int index) { return _cloveConfigs.get(index); }
+    public GarlicConfig getClove(int index) {
+        return _cloveConfigs.get(index);
+    }
 
-    public void clearCloves() { _cloveConfigs.clear(); }
+    public void clearCloves() {
+        _cloveConfigs.clear();
+    }
 
-    protected String getSubData() { return ""; }
+    protected String getSubData() {
+        return "";
+    }
 
-    private final static String NL = System.getProperty("line.separator");
+    private static final String NL = System.getProperty("line.separator");
 
     @Override
     public String toString() {
@@ -179,16 +207,15 @@ class GarlicConfig {
         buf.append("<garlicId>").append(getId()).append("</garlicId>").append(NL);
         buf.append("<recipient>").append(getRecipient()).append("</recipient>").append(NL);
         buf.append("<recipientPublicKey>").append(getRecipientPublicKey()).append("</recipientPublicKey>").append(NL);
-    //buf.append("<replyBlockCertificate>").append(getReplyBlockCertificate()).append("</replyBlockCertificate>").append(NL);
-    //buf.append("<replyBlockExpiration>").append(new Date(getReplyBlockExpiration())).append("</replyBlockExpiration>").append(NL);
-    //buf.append("<replyBlockMessageId>").append(getReplyBlockMessageId()).append("</replyBlockMessageId>").append(NL);
-    //buf.append("<replyInstructions>").append(getReplyInstructions()).append("</replyInstructions>").append(NL);
-    //buf.append("<replyThroughRouter>").append(getReplyThroughRouter()).append("</replyThroughRouter>").append(NL);
-    //buf.append("<requestAck>").append(getRequestAck()).append("</requestAck>").append(NL);
+        // buf.append("<replyBlockCertificate>").append(getReplyBlockCertificate()).append("</replyBlockCertificate>").append(NL);
+        // buf.append("<replyBlockExpiration>").append(new Date(getReplyBlockExpiration())).append("</replyBlockExpiration>").append(NL);
+        // buf.append("<replyBlockMessageId>").append(getReplyBlockMessageId()).append("</replyBlockMessageId>").append(NL);
+        // buf.append("<replyInstructions>").append(getReplyInstructions()).append("</replyInstructions>").append(NL);
+        // buf.append("<replyThroughRouter>").append(getReplyThroughRouter()).append("</replyThroughRouter>").append(NL);
+        // buf.append("<requestAck>").append(getRequestAck()).append("</requestAck>").append(NL);
         buf.append(getSubData());
         buf.append("<subcloves>").append(NL);
-        for (int i = 0; i < getCloveCount(); i++)
-            buf.append("<clove>").append(getClove(i)).append("</clove>").append(NL);
+        for (int i = 0; i < getCloveCount(); i++) buf.append("<clove>").append(getClove(i)).append("</clove>").append(NL);
         buf.append("</subcloves>").append(NL);
         buf.append("</garlicConfig>").append(NL);
         return buf.toString();

@@ -18,6 +18,7 @@ public class I2PSink implements Sink {
     protected final I2PSession sess;
     protected final Destination dest;
     protected final I2PDatagramMaker maker;
+
     /**
      *  @since 0.9.53
      */
@@ -66,7 +67,7 @@ public class I2PSink implements Sink {
      */
     @Override
     public synchronized void send(Destination src, int fromPort, int ign_toPort, byte[] data) {
-        //System.out.print("w");
+        // System.out.print("w");
         // create payload
         byte[] payload;
         if (!this.raw) {
@@ -79,9 +80,7 @@ public class I2PSink implements Sink {
 
         // send message
         try {
-            this.sess.sendMessage(this.dest, payload,
-                                  (this.raw ? I2PSession.PROTO_DATAGRAM_RAW : I2PSession.PROTO_DATAGRAM),
-                                  fromPort, toPort);
+            this.sess.sendMessage(this.dest, payload, (this.raw ? I2PSession.PROTO_DATAGRAM_RAW : I2PSession.PROTO_DATAGRAM), fromPort, toPort);
         } catch (I2PSessionException ise) {
             throw new RuntimeException("failed to send data", ise);
         }

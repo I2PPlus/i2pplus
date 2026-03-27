@@ -1,5 +1,8 @@
 package net.i2p.i2ptunnel.access;
 
+import net.i2p.I2PAppContext;
+import net.i2p.client.streaming.StatefulConnectionFilter;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,8 +11,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import net.i2p.I2PAppContext;
-import net.i2p.client.streaming.StatefulConnectionFilter;
 
 /**
  * Factory for incoming connection filters. Only public class in this package.
@@ -25,9 +26,7 @@ public class FilterFactory {
      * @param context the context this is running in
      * @param definition file containing the filter definition
      */
-    public static StatefulConnectionFilter createFilter(I2PAppContext context,
-                                                        File definition)
-        throws IOException, InvalidDefinitionException {
+    public static StatefulConnectionFilter createFilter(I2PAppContext context, File definition) throws IOException, InvalidDefinitionException {
         List<String> linesList = new ArrayList<String>();
 
         BufferedReader reader = null;
@@ -36,14 +35,15 @@ public class FilterFactory {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
-                if (line.length() == 0)
-                    continue;
-                if (line.startsWith("#"))
-                    continue;
+                if (line.length() == 0) continue;
+                if (line.startsWith("#")) continue;
                 linesList.add(line);
             }
         } finally {
-            if (reader != null) try { reader.close(); } catch (IOException ignored) {}
+            if (reader != null) try {
+                    reader.close();
+                } catch (IOException ignored) {
+                }
         }
 
         FilterDefinition parsedDefinition = DefinitionParser.parse(linesList.toArray(new String[0]));

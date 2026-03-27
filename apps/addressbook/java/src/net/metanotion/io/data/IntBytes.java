@@ -48,18 +48,15 @@ public class IntBytes implements Serializer<Integer> {
     public byte[] getBytes(Integer o) {
         byte[] b = new byte[4];
         int v = o.intValue();
-        b[0] = (byte)(0xff & (v >> 24));
-        b[1] = (byte)(0xff & (v >> 16));
-        b[2] = (byte)(0xff & (v >>  8));
-        b[3] = (byte)(0xff & v);
+        b[0] = (byte) (0xff & (v >> 24));
+        b[1] = (byte) (0xff & (v >> 16));
+        b[2] = (byte) (0xff & (v >> 8));
+        b[3] = (byte) (0xff & v);
         return b;
     }
 
     public Integer construct(byte[] b) {
-        int v = (((b[0] & 0xff) << 24) |
-                 ((b[1] & 0xff) << 16) |
-                 ((b[2] & 0xff) <<  8) |
-                 (b[3] & 0xff));
+        int v = (((b[0] & 0xff) << 24) | ((b[1] & 0xff) << 16) | ((b[2] & 0xff) << 8) | (b[3] & 0xff));
         return Integer.valueOf(v);
     }
 }

@@ -1,4 +1,5 @@
 package net.i2p.data;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -10,10 +11,11 @@ package net.i2p.data;
 
 import static org.junit.Assert.*;
 
+import org.junit.Test;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
-import org.junit.Test;
 
 /**
  * Test harness for loading / storing SigningPrivateKey objects
@@ -26,20 +28,21 @@ public class SigningPrivateKeyTest extends StructureTest {
     public DataStructure createDataStructure() throws DataFormatException {
         SigningPrivateKey signingPrivateKey = new SigningPrivateKey();
         byte data[] = new byte[SigningPrivateKey.KEYSIZE_BYTES];
-        for (int i = 0; i < data.length; i++)
-            data[i] = (byte)(i%16);
+        for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 16);
         signingPrivateKey.setData(data);
         return signingPrivateKey;
     }
+
     @Override
-    public DataStructure createStructureToRead() { return new SigningPrivateKey(); }
+    public DataStructure createStructureToRead() {
+        return new SigningPrivateKey();
+    }
 
     @Test
-    public void testBase64Constructor() throws Exception{
+    public void testBase64Constructor() throws Exception {
         SigningPrivateKey signingPrivateKey = new SigningPrivateKey();
         byte data[] = new byte[SigningPrivateKey.KEYSIZE_BYTES];
-        for (int i = 0; i < data.length; i++)
-            data[i] = (byte)(i%56);
+        for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 56);
         signingPrivateKey.setData(data);
 
         SigningPrivateKey key2 = new SigningPrivateKey(signingPrivateKey.toBase64());
@@ -47,18 +50,17 @@ public class SigningPrivateKeyTest extends StructureTest {
     }
 
     @Test
-    public void testNullEquals(){
+    public void testNullEquals() {
         SigningPrivateKey signingPrivateKey = new SigningPrivateKey();
         byte data[] = new byte[SigningPrivateKey.KEYSIZE_BYTES];
-        for (int i = 0; i < data.length; i++)
-            data[i] = (byte)(i%56);
+        for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 56);
         signingPrivateKey.setData(data);
 
         assertFalse(signingPrivateKey.equals(null));
     }
 
     @Test
-    public void testNullData() throws Exception{
+    public void testNullData() throws Exception {
         SigningPrivateKey signingPrivateKey = new SigningPrivateKey();
         assertNotNull(signingPrivateKey.toString());
 
@@ -71,11 +73,10 @@ public class SigningPrivateKeyTest extends StructureTest {
     }
 
     @Test
-    public void testShortData() throws Exception{
+    public void testShortData() throws Exception {
         SigningPrivateKey signingPrivateKey = new SigningPrivateKey();
         byte data[] = new byte[56];
-        for (int i = 0; i < data.length; i++)
-            data[i] = (byte)(i);
+        for (int i = 0; i < data.length; i++) data[i] = (byte) (i);
 
         try {
             signingPrivateKey.setData(data);
@@ -87,7 +88,7 @@ public class SigningPrivateKeyTest extends StructureTest {
     }
 
     @Test
-    public void testShortRead() throws Exception{
+    public void testShortRead() throws Exception {
         SigningPrivateKey signingPrivateKey = new SigningPrivateKey();
         ByteArrayInputStream in = new ByteArrayInputStream(DataHelper.getASCII("short"));
 

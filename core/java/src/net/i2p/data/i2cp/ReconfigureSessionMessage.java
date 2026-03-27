@@ -9,10 +9,11 @@ package net.i2p.data.i2cp;
  *
  */
 
+import net.i2p.data.DataFormatException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import net.i2p.data.DataFormatException;
 
 /**
  * Defines the message a client sends to a router when
@@ -21,12 +22,11 @@ import net.i2p.data.DataFormatException;
  * @author zzz
  */
 public class ReconfigureSessionMessage extends I2CPMessageImpl {
-    public final static int MESSAGE_TYPE = 2;
+    public static final int MESSAGE_TYPE = 2;
     private SessionId _sessionId;
     private SessionConfig _sessionConfig;
 
-    public ReconfigureSessionMessage() {
-    }
+    public ReconfigureSessionMessage() {}
 
     public SessionId getSessionId() {
         return _sessionId;
@@ -68,8 +68,7 @@ public class ReconfigureSessionMessage extends I2CPMessageImpl {
 
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
-        if (_sessionId == null || _sessionConfig == null)
-            throw new I2CPMessageException("Unable to write out the message as there is not enough data");
+        if (_sessionId == null || _sessionConfig == null) throw new I2CPMessageException("Unable to write out the message as there is not enough data");
         ByteArrayOutputStream os = new ByteArrayOutputStream(1024);
         try {
             _sessionId.writeBytes(os);

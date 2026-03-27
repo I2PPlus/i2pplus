@@ -1,13 +1,16 @@
 package net.i2p.imagegen;
 
 import com.docuverse.identicon.IdenticonUtil;
+
+import net.i2p.data.Hash;
+import net.i2p.util.ConvertToHash;
+
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.i2p.data.Hash;
-import net.i2p.util.ConvertToHash;
 
 /**
  * This servlet generates random art (visual identifier) images.
@@ -25,11 +28,9 @@ public class RandomArtServlet extends HttpServlet {
     private long identiconExpiresInMillis = DEFAULT_IDENTICON_EXPIRES_IN_MILLIS;
 
     @Override
-    protected void doGet(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        if (request.getCharacterEncoding() == null)
-            request.setCharacterEncoding("UTF-8");
+        if (request.getCharacterEncoding() == null) request.setCharacterEncoding("UTF-8");
         String codeParam = request.getParameter(PARAM_IDENTICON_CODE_SHORT);
         boolean codeSpecified = codeParam != null && codeParam.length() > 0;
         if (!codeSpecified) {
@@ -38,8 +39,7 @@ public class RandomArtServlet extends HttpServlet {
         }
         String modeParam = request.getParameter(PARAM_IDENTICON_MODE_SHORT);
         boolean html = modeParam == null || modeParam.startsWith("h");
-        String identiconETag = IdenticonUtil.getIdenticonETag(codeParam.hashCode(), 0,
-                version);
+        String identiconETag = IdenticonUtil.getIdenticonETag(codeParam.hashCode(), 0, version);
         String requestETag = request.getHeader("If-None-Match");
 
         if (requestETag != null && requestETag.equals(identiconETag)) {
@@ -68,14 +68,12 @@ public class RandomArtServlet extends HttpServlet {
                 response.setHeader("Accept-Ranges", "none");
                 response.setHeader("Cache-control", "max-age=2628000, immutable");
                 buf.append(RandomArt.gnutls_key_fingerprint_randomart(h.getData(), "SHA", 256, "", true, html));
-                if (html)
-                    buf.append("\n</body>\n</html>");
+                if (html) buf.append("\n</body>\n</html>");
 
                 // set ETag and, if code was provided, Expires header
                 response.setHeader("ETag", identiconETag);
                 if (codeSpecified) {
-                    long expires = System.currentTimeMillis()
-                            + identiconExpiresInMillis;
+                    long expires = System.currentTimeMillis() + identiconExpiresInMillis;
                     response.addDateHeader("Expires", expires);
                 }
 

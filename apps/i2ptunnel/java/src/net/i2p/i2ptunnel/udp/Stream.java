@@ -11,6 +11,7 @@ public interface Stream {
      *  Starts the stream.
      */
     public void start();
+
     /**
      *  Stops the stream.
      */

@@ -21,11 +21,13 @@ final class SSU2Util {
     // lengths
     /** 32 */
     public static final int KEY_LEN = EncType.ECIES_X25519.getPubkeyLen();
+
     public static final int MAC_LEN = 16;
     public static final int CHACHA_IV_LEN = 12;
     public static final int INTRO_KEY_LEN = 32;
     public static final int SHORT_HEADER_SIZE = 16;
     public static final int LONG_HEADER_SIZE = 32;
+
     /** 64 */
     public static final int SESSION_HEADER_SIZE = LONG_HEADER_SIZE + KEY_LEN;
 
@@ -59,16 +61,22 @@ final class SSU2Util {
 
     /** 40 */
     public static final int MIN_DATA_LEN = SHORT_HEADER_SIZE + TOTAL_PROT_SAMPLE_LEN;
+
     /** 56 */
     public static final int MIN_LONG_DATA_LEN = LONG_HEADER_SIZE + TOTAL_PROT_SAMPLE_LEN;
+
     /** 88 */
     public static final int MIN_HANDSHAKE_DATA_LEN = SESSION_HEADER_SIZE + TOTAL_PROT_SAMPLE_LEN;
+
     /** 56 */
     public static final int MIN_TOKEN_REQUEST_LEN = MIN_LONG_DATA_LEN;
+
     /** 56 */
     public static final int MIN_RETRY_LEN = MIN_LONG_DATA_LEN;
+
     /** 88 */
     public static final int MIN_SESSION_REQUEST_LEN = MIN_HANDSHAKE_DATA_LEN;
+
     /** 88 */
     public static final int MIN_SESSION_CREATED_LEN = MIN_HANDSHAKE_DATA_LEN;
 
@@ -90,6 +98,7 @@ final class SSU2Util {
      *  The message types, 0-11, as bytes
      */
     public static final byte SESSION_REQUEST_FLAG_BYTE = UDPPacket.PAYLOAD_TYPE_SESSION_REQUEST;
+
     public static final byte SESSION_CREATED_FLAG_BYTE = UDPPacket.PAYLOAD_TYPE_SESSION_CREATED;
     public static final byte SESSION_CONFIRMED_FLAG_BYTE = UDPPacket.PAYLOAD_TYPE_SESSION_CONFIRMED;
     public static final byte DATA_FLAG_BYTE = UDPPacket.PAYLOAD_TYPE_DATA;
@@ -99,9 +108,9 @@ final class SSU2Util {
     public static final byte HOLE_PUNCH_FLAG_BYTE = 11;
 
     // HKDF infos
-    public static final String INFO_CREATED =   "SessCreateHeader";
+    public static final String INFO_CREATED = "SessCreateHeader";
     public static final String INFO_CONFIRMED = "SessionConfirmed";
-    public static final String INFO_DATA =      "HKDFSSU2DataKeys";
+    public static final String INFO_DATA = "HKDFSSU2DataKeys";
 
     public static final byte[] ZEROLEN = new byte[0];
     public static final byte[] ZEROKEY = new byte[KEY_LEN];
@@ -170,30 +179,30 @@ final class SSU2Util {
 
     public static String terminationCodeToString(int code) {
         switch (code) {
-            case REASON_UNSPEC:          return "Unspecified reason";
-            case REASON_TERMINATION:     return "Termination requested";
-            case REASON_TIMEOUT:         return "Timeout occurred";
-            case REASON_SHUTDOWN:        return "Shutdown in progress";
-            case REASON_AEAD:            return "AEAD verification failure";
-            case REASON_OPTIONS:         return "Options mismatch";
-            case REASON_SIGTYPE:         return "Signature type error";
-            case REASON_SKEW:            return "Clock skew too large";
-            case REASON_PADDING:         return "Padding error";
-            case REASON_FRAMING:         return "Framing error";
-            case REASON_PAYLOAD:         return "Payload error";
-            case REASON_MSG1:            return "Message 1 error";
-            case REASON_MSG2:            return "Message 2 error";
-            case REASON_MSG3:            return "Message 3 error";
-            case REASON_FRAME_TIMEOUT:   return "Frame timeout";
-            case REASON_SIGFAIL:         return "Signature verification failed";
-            case REASON_S_MISMATCH:      return "Session mismatch";
-            case REASON_BANNED:          return "Banned";
-            case REASON_TOKEN:           return "Token error";
-            case REASON_LIMITS:          return "Resource limits exceeded";
-            case REASON_VERSION:         return "Protocol version mismatch";
-            case REASON_NETID:           return "Network ID mismatch";
-            case REASON_REPLACED:        return "Session replaced";
-            default:                     return "Unknown termination reason: " + code;
+            case REASON_UNSPEC: return "Unspecified reason";
+            case REASON_TERMINATION: return "Termination requested";
+            case REASON_TIMEOUT: return "Timeout occurred";
+            case REASON_SHUTDOWN: return "Shutdown in progress";
+            case REASON_AEAD: return "AEAD verification failure";
+            case REASON_OPTIONS: return "Options mismatch";
+            case REASON_SIGTYPE: return "Signature type error";
+            case REASON_SKEW: return "Clock skew too large";
+            case REASON_PADDING: return "Padding error";
+            case REASON_FRAMING: return "Framing error";
+            case REASON_PAYLOAD: return "Payload error";
+            case REASON_MSG1: return "Message 1 error";
+            case REASON_MSG2: return "Message 2 error";
+            case REASON_MSG3: return "Message 3 error";
+            case REASON_FRAME_TIMEOUT: return "Frame timeout";
+            case REASON_SIGFAIL: return "Signature verification failed";
+            case REASON_S_MISMATCH: return "Session mismatch";
+            case REASON_BANNED: return "Banned";
+            case REASON_TOKEN: return "Token error";
+            case REASON_LIMITS: return "Resource limits exceeded";
+            case REASON_VERSION: return "Protocol version mismatch";
+            case REASON_NETID: return "Network ID mismatch";
+            case REASON_REPLACED: return "Session replaced";
+            default: return "Unknown termination reason: " + code;
         }
     }
 
@@ -218,12 +227,10 @@ final class SSU2Util {
      *  @param ip may be null
      *  @return null on failure
      */
-    public static byte[] createPeerTestData(I2PAppContext ctx, Hash h, Hash h2,
-                                            PeerTestState.Role role, long nonce, byte[] ip, int port,
-                                            SigningPrivateKey spk) {
+    public static byte[] createPeerTestData(I2PAppContext ctx, Hash h, Hash h2, PeerTestState.Role role, long nonce, byte[] ip, int port, SigningPrivateKey spk) {
         int datalen = 12 + (ip != null ? ip.length : 0);
         byte[] data = new byte[datalen + spk.getType().getSigLen()];
-        data[0] = 2;  // version
+        data[0] = 2; // version
         DataHelper.toLong(data, 1, 4, nonce);
         DataHelper.toLong(data, 5, 4, ctx.clock().now() / 1000);
         int iplen = (ip != null) ? ip.length : 0;
@@ -233,8 +240,7 @@ final class SSU2Util {
             System.arraycopy(ip, 0, data, 12, iplen);
         }
         Signature sig = sign(ctx, PEER_TEST_PROLOGUE, h, h2, data, datalen, spk);
-        if (sig == null)
-            return new byte[0];
+        if (sig == null) return new byte[0];
         byte[] s = sig.getData();
         System.arraycopy(s, 0, data, datalen, s.length);
         return data;
@@ -249,24 +255,21 @@ final class SSU2Util {
      *  @return null on failure
      *  @since 0.9.55
      */
-    public static byte[] createRelayRequestData(I2PAppContext ctx, Hash h, Hash h2,
-                                                long nonce, long tag, byte[] ip, int port,
-                                                SigningPrivateKey spk) {
+    public static byte[] createRelayRequestData(I2PAppContext ctx, Hash h, Hash h2, long nonce, long tag, byte[] ip, int port, SigningPrivateKey spk) {
         int datalen = 16 + ip.length;
         byte[] data = new byte[datalen];
         DataHelper.toLong(data, 0, 4, nonce);
         DataHelper.toLong(data, 4, 4, tag);
         DataHelper.toLong(data, 8, 4, ctx.clock().now() / 1000);
-        data[12] = 2;  // version
+        data[12] = 2; // version
         data[13] = (byte) (ip.length + 2);
         DataHelper.toLong(data, 14, 2, port);
         System.arraycopy(ip, 0, data, 16, ip.length);
         Signature sig = sign(ctx, RELAY_REQUEST_PROLOGUE, h, h2, data, datalen, spk);
-        if (sig == null)
-            return new byte[0];
+        if (sig == null) return new byte[0];
         int len = 1 + datalen + spk.getType().getSigLen();
         byte[] rv = new byte[len];
-        //rv[0] = 0;  // flag
+        // rv[0] = 0;  // flag
         System.arraycopy(data, 0, rv, 1, data.length);
         byte[] s = sig.getData();
         System.arraycopy(s, 0, rv, 1 + datalen, s.length);
@@ -283,16 +286,13 @@ final class SSU2Util {
      *  @return null on failure
      *  @since 0.9.55
      */
-    public static byte[] createRelayResponseData(I2PAppContext ctx, Hash h, int code,
-                                                 long nonce, byte[] ip, int port,
-                                                 SigningPrivateKey spk, long token) {
+    public static byte[] createRelayResponseData(I2PAppContext ctx, Hash h, int code, long nonce, byte[] ip, int port, SigningPrivateKey spk, long token) {
         int datalen = 10;
-        if (ip != null)
-            datalen += 2 + ip.length;
+        if (ip != null) datalen += 2 + ip.length;
         byte[] data = new byte[datalen];
         DataHelper.toLong(data, 0, 4, nonce);
         DataHelper.toLong(data, 4, 4, ctx.clock().now() / 1000);
-        data[8] = 2;  // version
+        data[8] = 2; // version
         if (ip != null) {
             data[9] = (byte) (ip.length + 2);
             DataHelper.toLong(data, 10, 2, port);
@@ -301,19 +301,16 @@ final class SSU2Util {
             // data[9] = 0;
         }
         Signature sig = sign(ctx, RELAY_RESPONSE_PROLOGUE, h, null, data, datalen, spk);
-        if (sig == null)
-            return new byte[0];
+        if (sig == null) return new byte[0];
         int len = 2 + datalen + spk.getType().getSigLen();
-        if (token != 0)
-            len += 8;
+        if (token != 0) len += 8;
         byte[] rv = new byte[len];
-        //rv[0] = 0;  // flag
+        // rv[0] = 0;  // flag
         rv[1] = (byte) code;
         System.arraycopy(data, 0, rv, 2, data.length);
         byte[] s = sig.getData();
         System.arraycopy(s, 0, rv, 2 + datalen, s.length);
-        if (token != 0)
-            DataHelper.toLong8(rv, 2 + datalen + s.length, token);
+        if (token != 0) DataHelper.toLong8(rv, 2 + datalen + s.length, token);
         return rv;
     }
 
@@ -328,11 +325,9 @@ final class SSU2Util {
      *  @param h2 may be null, to be included in sig, not included in data
      *  @return null on failure
      */
-    public static Signature sign(I2PAppContext ctx, byte[] prologue, Hash h, Hash h2,
-                                 byte[] data, int datalen, SigningPrivateKey spk) {
+    public static Signature sign(I2PAppContext ctx, byte[] prologue, Hash h, Hash h2, byte[] data, int datalen, SigningPrivateKey spk) {
         int len = prologue.length + Hash.HASH_LENGTH + datalen;
-        if (h2 != null)
-            len += Hash.HASH_LENGTH;
+        if (h2 != null) len += Hash.HASH_LENGTH;
         byte[] buf = new byte[len];
         System.arraycopy(prologue, 0, buf, 0, prologue.length);
         System.arraycopy(h.getData(), 0, buf, prologue.length, Hash.HASH_LENGTH);
@@ -357,8 +352,7 @@ final class SSU2Util {
         SigType type = spk.getType();
         int siglen = type.getSigLen();
         int len = prologue.length + Hash.HASH_LENGTH + data.length - siglen;
-        if (h2 != null)
-            len += Hash.HASH_LENGTH;
+        if (h2 != null) len += Hash.HASH_LENGTH;
         byte[] buf = new byte[len];
         System.arraycopy(prologue, 0, buf, 0, prologue.length);
         System.arraycopy(h.getData(), 0, buf, prologue.length, Hash.HASH_LENGTH);

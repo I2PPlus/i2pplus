@@ -19,7 +19,7 @@ class InboundEndpointProcessor {
     private final TunnelCreatorConfig _config;
     private final IVValidator _validator;
 
-    //static final boolean USE_ENCRYPTION = HopProcessor.USE_ENCRYPTION;
+    // static final boolean USE_ENCRYPTION = HopProcessor.USE_ENCRYPTION;
 
     /**
      *  @deprecated used only by unit tests
@@ -36,8 +36,13 @@ class InboundEndpointProcessor {
         _validator = validator;
     }
 
-    public Hash getDestination() { return _config.getDestination(); }
-    public TunnelCreatorConfig getConfig() { return _config; }
+    public Hash getDestination() {
+        return _config.getDestination();
+    }
+
+    public TunnelCreatorConfig getConfig() {
+        return _config;
+    }
 
     /**
      * Undo all of the encryption done by the peers in the tunnel, recovering the
@@ -51,22 +56,19 @@ class InboundEndpointProcessor {
      *         if it was a duplicate or from the wrong peer.
      */
     public boolean retrievePreprocessedData(byte orig[], int offset, int length, Hash prev) {
-        Hash last = _config.getPeer(_config.getLength()-2);
+        Hash last = _config.getPeer(_config.getLength() - 2);
         if (!last.equals(prev)) {
             // shouldn't happen now that we have good dup ID detection in BuildHandler
-            if (_log.shouldWarn())
-                _log.warn("Attempted Inbound Endpoint injection from " + prev
-                               + ", expected " + last);
+            if (_log.shouldWarn()) _log.warn("Attempted Inbound Endpoint injection from " + prev + ", expected " + last);
             return false;
         }
 
-        //if (_config.getLength() > 1)
+        // if (_config.getLength() > 1)
         //    _log.debug("IV at inbound endpoint before decrypt: " + Base64.encode(iv));
 
         boolean ok = _validator.receiveIV(orig, offset, orig, offset + HopProcessor.IV_LENGTH);
         if (!ok) {
-            if (_log.shouldInfo())
-                _log.info("Invalid IV, dropping at Inbound Endpoint... " + _config);
+            if (_log.shouldInfo()) _log.info("Invalid IV, dropping at Inbound Endpoint... " + _config);
             return false;
         }
 
@@ -75,7 +77,7 @@ class InboundEndpointProcessor {
 
         if (_config.getLength() > 0) {
             int rtt = 0; // dunno... may not be related to an rtt
-            //if (_log.shouldDebug())
+            // if (_log.shouldDebug())
             //    _log.debug("Received " + length + " byte message through: " + _config);
             ProfileManager pm = _context.profileManager();
             // null for unit tests
@@ -102,11 +104,10 @@ class InboundEndpointProcessor {
         // Don't include the endpoint, since that is the creator
         for (int i = cfg.getLength() - 2; i >= 0; i--) {
             OutboundGatewayProcessor.decrypt(ctx, orig, offset, length, cfg.getConfig(i));
-            //if (_log.shouldDebug()) {
-                //_log.debug("IV at hop " + i + ": " + Base64.encode(orig, offset, HopProcessor.IV_LENGTH));
-                //_log.debug("hop " + i + ": " + Base64.encode(orig, offset + HopProcessor.IV_LENGTH, length - HopProcessor.IV_LENGTH));
-            //}
+            // if (_log.shouldDebug()) {
+            // _log.debug("IV at hop " + i + ": " + Base64.encode(orig, offset, HopProcessor.IV_LENGTH));
+            // _log.debug("hop " + i + ": " + Base64.encode(orig, offset + HopProcessor.IV_LENGTH, length - HopProcessor.IV_LENGTH));
+            // }
         }
     }
-
 }

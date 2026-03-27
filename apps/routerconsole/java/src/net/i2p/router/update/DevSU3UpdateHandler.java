@@ -3,14 +3,15 @@ package net.i2p.router.update;
 import static net.i2p.update.UpdateMethod.*;
 import static net.i2p.update.UpdateType.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Collections;
-import java.util.List;
 import net.i2p.router.RouterContext;
 import net.i2p.router.web.ConfigUpdateHandler;
 import net.i2p.router.web.NewsHelper;
 import net.i2p.update.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * <p>Handles the request to update the router by firing off an
@@ -39,8 +40,7 @@ class DevSU3UpdateHandler implements Checker, Updater {
      */
     public List<URI> getUpdateSources() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_DEV_SU3_URL);
-        if (url == null)
-            return Collections.emptyList();
+        if (url == null) return Collections.emptyList();
 
         try {
             return Collections.singletonList(new URI(url));
@@ -53,21 +53,17 @@ class DevSU3UpdateHandler implements Checker, Updater {
      *  @param currentVersion ignored, we use current router version
      *  @return active task or null if unable to check
      */
-    public UpdateTask check(UpdateType type, UpdateMethod method,
-                            String id, String currentVersion, long maxTime) {
-        if (type != UpdateType.ROUTER_DEV_SU3 || method != UpdateMethod.HTTP)
-            return null;
+    public UpdateTask check(UpdateType type, UpdateMethod method, String id, String currentVersion, long maxTime) {
+        if (type != UpdateType.ROUTER_DEV_SU3 || method != UpdateMethod.HTTP) return null;
 
         List<URI> updateSources = getUpdateSources();
-        if (updateSources == null)
-            return null;
+        if (updateSources == null) return null;
 
         long ms = _context.getProperty(NewsHelper.PROP_LAST_UPDATE_TIME, 0L);
         if (ms <= 0) {
             // we don't know what version you have, so stamp it with the current time,
             // and we'll look for something newer next time around.
-            _context.router().saveConfig(NewsHelper.PROP_LAST_UPDATE_TIME,
-                                               Long.toString(_context.clock().now()));
+            _context.router().saveConfig(NewsHelper.PROP_LAST_UPDATE_TIME, Long.toString(_context.clock().now()));
         }
 
         UpdateRunner update = new DevSU3UpdateChecker(_context, _mgr, updateSources);
@@ -82,10 +78,8 @@ class DevSU3UpdateHandler implements Checker, Updater {
      *  @param maxTime how long you have
      *  @return active task or null if unable to download
      */
-    public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources,
-                             String id, String newVersion, long maxTime) {
-        if (type != ROUTER_DEV_SU3 || method != HTTP || updateSources.isEmpty())
-            return null;
+    public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources, String id, String newVersion, long maxTime) {
+        if (type != ROUTER_DEV_SU3 || method != HTTP || updateSources.isEmpty()) return null;
         UpdateRunner update = new DevSU3UpdateRunner(_context, _mgr, updateSources);
         // set status before thread to ensure UI feedback
         _mgr.notifyProgress(update, "<b>" + _mgr._t("Updating") + "</b>");

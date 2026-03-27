@@ -1,11 +1,12 @@
 package net.i2p.router.web.helpers;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.Properties;
 import net.i2p.data.DataHelper;
 import net.i2p.router.web.FormHandler;
 import net.i2p.util.LogManager;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 /**
  * Handler to deal with form submissions from the logging config form and act
@@ -33,23 +34,30 @@ public class ConfigLoggingHandler extends FormHandler {
         }
     }
 
-    public void setShouldsave(String moo) { _shouldSave = true; }
+    public void setShouldsave(String moo) {
+        _shouldSave = true;
+    }
 
     public void setLevels(String levels) {
         _levels = (levels != null ? levels.trim() : null);
     }
+
     public void setDefaultloglevel(String level) {
         _defaultLevel = (level != null ? level.trim() : null);
     }
+
     public void setLogfilename(String filename) {
         _filename = (filename != null ? filename.trim() : null);
     }
+
     public void setLogformat(String format) {
         _recordFormat = (format != null ? format.trim() : null);
     }
+
     public void setLogdateformat(String format) {
         _dateFormat = (format != null ? format.trim() : null);
     }
+
     public void setLogfilesize(String size) {
         _fileSize = (size != null ? size.trim() : null);
     }
@@ -61,14 +69,12 @@ public class ConfigLoggingHandler extends FormHandler {
 
     /** @since 0.8.1 */
     public void setNewlogclass(String s) {
-        if (s != null && s.length() > 0)
-            _newLogClass = s;
+        if (s != null && s.length() > 0) _newLogClass = s;
     }
 
     /** @since 0.8.1 */
     public void setNewloglevel(String s) {
-        if (s != null)
-            _newLogLevel = s;
+        if (s != null) _newLogLevel = s;
     }
 
     /**
@@ -83,10 +89,8 @@ public class ConfigLoggingHandler extends FormHandler {
         if ((_levels != null && _levels.length() > 0) || _newLogClass != null) {
             try {
                 Properties props = new Properties();
-                if (_levels != null)
-                    props.load(new ByteArrayInputStream(DataHelper.getUTF8(_levels)));
-                if (_newLogClass != null)
-                    props.setProperty(_newLogClass, _newLogLevel);
+                if (_levels != null) props.load(new ByteArrayInputStream(DataHelper.getUTF8(_levels)));
+                if (_newLogClass != null) props.setProperty(_newLogClass, _newLogLevel);
                 if (!props.equals(mgr.getLimits())) {
                     shouldSave = true;
                     mgr.setLimits(props);
@@ -133,7 +137,9 @@ public class ConfigLoggingHandler extends FormHandler {
                     shouldSave = true;
                     addFormNotice(_t("File size updated"), true);
                 }
-            } else {addFormError(_t("Specified file size limit is not valid ({0}) - not updated", _fileSize), true);}
+            } else {
+                addFormError(_t("Specified file size limit is not valid ({0}) - not updated", _fileSize), true);
+            }
         }
 
         if (_logCompress != mgr.shouldGzip()) {
@@ -149,7 +155,9 @@ public class ConfigLoggingHandler extends FormHandler {
                 // noop - no change
             } else {
                 char fmt[] = new char[_recordFormat.length()];
-                for (int i = 0; i < fmt.length; i++) {fmt[i] = _recordFormat.charAt(i);}
+                for (int i = 0; i < fmt.length; i++) {
+                    fmt[i] = _recordFormat.charAt(i);
+                }
                 mgr.setFormat(fmt);
                 shouldSave = true;
                 addFormNotice(_t("Log record format updated"), true);
@@ -159,8 +167,11 @@ public class ConfigLoggingHandler extends FormHandler {
         if (shouldSave) {
             boolean saved = mgr.saveConfig();
 
-            if (saved) {addFormNotice(_t("Log configuration saved"), true);}
-            else {addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);}
+            if (saved) {
+                addFormNotice(_t("Log configuration saved"), true);
+            } else {
+                addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);
+            }
         }
     }
 }

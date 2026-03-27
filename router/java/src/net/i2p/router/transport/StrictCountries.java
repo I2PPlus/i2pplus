@@ -62,7 +62,7 @@ public abstract class StrictCountries {
             "UZ", // Uzbekistan
             "VE", // Venezuela
             "VN", // Vietnam
-            "YE"  // Yemen
+            "YE" // Yemen
         };
         _countries = new HashSet<String>(Arrays.asList(c));
     }

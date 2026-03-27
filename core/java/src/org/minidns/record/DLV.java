@@ -10,10 +10,11 @@
  */
 package org.minidns.record;
 
-import java.io.DataInputStream;
-import java.io.IOException;
 import org.minidns.constants.DnssecConstants.DigestAlgorithm;
 import org.minidns.constants.DnssecConstants.SignatureAlgorithm;
+
+import java.io.DataInputStream;
+import java.io.IOException;
 
 /**
  * DNS DLV (DNSSEC Lookaside Validation) record payload.<br>
@@ -24,7 +25,7 @@ import org.minidns.constants.DnssecConstants.SignatureAlgorithm;
  */
 public class DLV extends DelegatingDnssecRR {
 
-    public static DLV parse (DataInputStream dis, int length) throws IOException {
+    public static DLV parse(DataInputStream dis, int length) throws IOException {
         SharedData parsedData = DelegatingDnssecRR.parseSharedData(dis, length);
         return new DLV(parsedData.keyTag, parsedData.algorithm, parsedData.digestType, parsedData.digest);
     }

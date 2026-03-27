@@ -10,17 +10,18 @@
  */
 package org.minidns.edns;
 
+import org.minidns.dnsname.DnsName;
+import org.minidns.record.Data;
+import org.minidns.record.OPT;
+import org.minidns.record.Record;
+import org.minidns.record.Record.TYPE;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.minidns.dnsname.DnsName;
-import org.minidns.record.Data;
-import org.minidns.record.OPT;
-import org.minidns.record.Record;
-import org.minidns.record.Record.TYPE;
 
 /**
  * EDNS - Extension Mechanism for DNS.
@@ -190,8 +191,7 @@ public class Edns {
         if (terminalOutputCache == null) {
             StringBuilder sb = new StringBuilder();
             sb.append("EDNS: version: ").append(version).append(", flags:");
-            if (dnssecOk)
-                sb.append(" do");
+            if (dnssecOk) sb.append(" do");
             sb.append("; udp: ").append(udpPayloadSize);
             if (!variablePart.isEmpty()) {
                 sb.append('\n');
@@ -248,8 +248,7 @@ public class Edns {
         private boolean dnssecOk;
         private List<EdnsOption> variablePart;
 
-        private Builder() {
-        }
+        private Builder() {}
 
         /**
          * Sets the UDP payload size.

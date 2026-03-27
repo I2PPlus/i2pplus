@@ -1,4 +1,5 @@
 package net.i2p.router.transport;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,14 +9,15 @@ package net.i2p.router.transport;
  *
  */
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.List;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.OutNetMessage;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.util.List;
 
 /**
  * Core interface for I2P transport protocols.
@@ -86,7 +88,9 @@ public interface Transport {
      * @param msg the message to send, containing destination, payload, and callbacks
      */
     public void send(OutNetMessage msg);
+
     public void startListening();
+
     public void stopListening();
 
     /**
@@ -277,7 +281,9 @@ public interface Transport {
     public List<Hash> getEstablished();
 
     public int countPeers();
+
     public int countActivePeers();
+
     public int countActiveSendPeers();
 
     /**
@@ -302,6 +308,7 @@ public interface Transport {
     public int[] getPeerCounts();
 
     public boolean haveCapacity();
+
     public boolean haveCapacity(int pct);
 
     /**
@@ -387,6 +394,7 @@ public interface Transport {
     public boolean wasUnreachable(Hash peer);
 
     public boolean isUnreachable(Hash peer);
+
     public boolean isEstablished(Hash peer);
 
     /**

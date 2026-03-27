@@ -17,17 +17,13 @@ public class MessageValidator {
     private final RouterContext _context;
     private DecayingBloomFilter _filter;
 
-
     public MessageValidator(RouterContext context) {
         _log = context.logManager().getLog(MessageValidator.class);
         _context = context;
-        long[] rates = new long[] { 60*1000, 60*60*1000, 24*60*60*1000 };
-        context.statManager().createRateStat("router.duplicateMessageId", "Duplicate messageId received", "Router",
-                                             rates);
-        context.statManager().createRateStat("router.invalidMessageTime", "Message outside valid range received", "Router",
-                                             rates);
+        long[] rates = new long[] {60 * 1000, 60 * 60 * 1000, 24 * 60 * 60 * 1000};
+        context.statManager().createRateStat("router.duplicateMessageId", "Duplicate messageId received", "Router", rates);
+        context.statManager().createRateStat("router.invalidMessageTime", "Message outside valid range received", "Router", rates);
     }
-
 
     /**
      * Determine if this message should be accepted as valid (not expired, not a duplicate)
@@ -36,17 +32,15 @@ public class MessageValidator {
      */
     public String validateMessage(long messageId, long expiration) {
         String msg = validateMessage(expiration);
-        if (msg != null)
-            return msg;
+        if (msg != null) return msg;
 
         boolean isDuplicate = noteReception(messageId, expiration);
         if (isDuplicate) {
-            if (_log.shouldInfo())
-                _log.info("Rejecting message " + messageId + " duplicate", new Exception("Duplicate origin"));
+            if (_log.shouldInfo()) _log.info("Rejecting message " + messageId + " duplicate", new Exception("Duplicate origin"));
             _context.statManager().addRateData("router.duplicateMessageId", 1);
             return "Duplicate message";
         } else {
-            //if (_log.shouldDebug())
+            // if (_log.shouldDebug())
             //    _log.debug("Accepting message " + messageId + " because it is NOT a duplicate", new Exception("Original origin"));
             return null;
         }
@@ -58,15 +52,13 @@ public class MessageValidator {
     public String validateMessage(long expiration) {
         long now = _context.clock().now();
         if (now - (Router.CLOCK_FUDGE_FACTOR * 3 / 2) >= expiration) {
-            if (_log.shouldInfo())
-                _log.info("Rejecting message expired " + (now-expiration) + "ms ago");
-            _context.statManager().addRateData("router.invalidMessageTime", (now-expiration));
-            return "Expired " + (now-expiration) + "ms ago";
-        } else if (now + 4*Router.CLOCK_FUDGE_FACTOR < expiration) {
-            if (_log.shouldInfo())
-                _log.info("Rejecting message expiring too far in the future (" + (expiration-now) + "ms)");
-            _context.statManager().addRateData("router.invalidMessageTime", (now-expiration));
-            return "Expires too far in the future (" + (expiration-now) + "ms)";
+            if (_log.shouldInfo()) _log.info("Rejecting message expired " + (now - expiration) + "ms ago");
+            _context.statManager().addRateData("router.invalidMessageTime", (now - expiration));
+            return "Expired " + (now - expiration) + "ms ago";
+        } else if (now + 4 * Router.CLOCK_FUDGE_FACTOR < expiration) {
+            if (_log.shouldInfo()) _log.info("Rejecting message expiring too far in the future (" + (expiration - now) + "ms)");
+            _context.statManager().addRateData("router.invalidMessageTime", (now - expiration));
+            return "Expires too far in the future (" + (expiration - now) + "ms)";
         }
         return null;
     }
@@ -85,14 +77,11 @@ public class MessageValidator {
         long val = messageId;
         double fp = _filter.getFalsePositiveRate();
         // tweak phe high order bits with the message expiration /seconds/
-        ////val ^= (messageExpiration & TIME_MASK) << 16;
+        //// val ^= (messageExpiration & TIME_MASK) << 16;
         val ^= (messageExpiration & TIME_MASK);
         boolean dup = _filter.add(val);
         if (dup && _log.shouldWarn()) {
-            _log.warn("Duplicate message [MsgID " + messageId + "] with " + _filter.getCurrentDuplicateCount()
-                      + " other duplicates, " + _filter.getInsertedCount()
-                      + " other entries" + (fp > 0 ? ", and a FALSE POSITIVE rate of "
-                      + fp : ""));
+            _log.warn("Duplicate message [MsgID " + messageId + "] with " + _filter.getCurrentDuplicateCount() + " other duplicates, " + _filter.getInsertedCount() + " other entries" + (fp > 0 ? ", and a FALSE POSITIVE rate of " + fp : ""));
         }
         return dup;
     }
@@ -101,7 +90,7 @@ public class MessageValidator {
      * Start the message validator, initializing the duplicate detection filter.
      */
     public synchronized void startup() {
-        _filter = new DecayingHashSet(_context, (int)Router.CLOCK_FUDGE_FACTOR * 2, 8, "RouterMV");
+        _filter = new DecayingHashSet(_context, (int) Router.CLOCK_FUDGE_FACTOR * 2, 8, "RouterMV");
     }
 
     /**

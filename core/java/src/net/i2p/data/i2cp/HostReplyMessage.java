@@ -6,13 +6,14 @@ package net.i2p.data.i2cp;
  *
  */
 
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.util.ByteArrayStream;
+
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Response to HostLookupMessage. Replaces DestReplyMessage.
@@ -20,7 +21,7 @@ import net.i2p.util.ByteArrayStream;
  * @since 0.9.11
  */
 public class HostReplyMessage extends I2CPMessageImpl {
-    public final static int MESSAGE_TYPE = 39;
+    public static final int MESSAGE_TYPE = 39;
 
     private Destination _dest;
     private long _reqID;
@@ -28,19 +29,24 @@ public class HostReplyMessage extends I2CPMessageImpl {
     private SessionId _sessionId;
 
     public static final int RESULT_SUCCESS = 0;
+
     /** generic fail, other codes TBD */
     public static final int RESULT_FAILURE = 1;
+
     /** Request secret required result code.
-      * @since 0.9.41 */
+     * @since 0.9.41 */
     public static final int RESULT_SECRET_REQUIRED = 2;
+
     /** Request key required result code.
-      * @since 0.9.41 */
+     * @since 0.9.41 */
     public static final int RESULT_KEY_REQUIRED = 3;
+
     /** Request secret and key required result code.
-      * @since 0.9.41 */
+     * @since 0.9.41 */
     public static final int RESULT_SECRET_AND_KEY_REQUIRED = 4;
+
     /** Decryption failure result code.
-      * @since 0.9.41 */
+     * @since 0.9.41 */
     public static final int RESULT_DECRYPTION_FAILURE = 5;
 
     private static final long MAX_INT = (1L << 32) - 1;
@@ -54,8 +60,12 @@ public class HostReplyMessage extends I2CPMessageImpl {
      *  @param reqID 0 to 2**32 - 1
      */
     public HostReplyMessage(SessionId id, Destination d, long reqID) {
-        if (id == null || d == null) {throw new IllegalArgumentException();}
-        if (reqID < 0 || reqID > MAX_INT) {throw new IllegalArgumentException();}
+        if (id == null || d == null) {
+            throw new IllegalArgumentException();
+        }
+        if (reqID < 0 || reqID > MAX_INT) {
+            throw new IllegalArgumentException();
+        }
         _sessionId = id;
         _dest = d;
         _reqID = reqID;
@@ -68,15 +78,23 @@ public class HostReplyMessage extends I2CPMessageImpl {
      *  @param reqID from the HostLookup 0 to 2**32 - 1
      */
     public HostReplyMessage(SessionId id, int failureCode, long reqID) {
-        if (id == null) {throw new IllegalArgumentException();}
-        if (failureCode <= 0 || failureCode > 255) {throw new IllegalArgumentException();}
-        if (reqID < 0 || reqID > MAX_INT) {throw new IllegalArgumentException();}
+        if (id == null) {
+            throw new IllegalArgumentException();
+        }
+        if (failureCode <= 0 || failureCode > 255) {
+            throw new IllegalArgumentException();
+        }
+        if (reqID < 0 || reqID > MAX_INT) {
+            throw new IllegalArgumentException();
+        }
         _sessionId = id;
         _code = failureCode;
         _reqID = reqID;
     }
 
-    public SessionId getSessionId() {return _sessionId;}
+    public SessionId getSessionId() {
+        return _sessionId;
+    }
 
     /**
      * Return the SessionId for this message.
@@ -84,28 +102,36 @@ public class HostReplyMessage extends I2CPMessageImpl {
      * @since 0.9.21
      */
     @Override
-    public SessionId sessionId() {return _sessionId;}
+    public SessionId sessionId() {
+        return _sessionId;
+    }
 
     /**
-      *  Gets the request ID.
-      *
-      *  @return 0 to 2**32 - 1
-      */
-    public long getReqID() {return _reqID;}
+     *  Gets the request ID.
+     *
+     *  @return 0 to 2**32 - 1
+     */
+    public long getReqID() {
+        return _reqID;
+    }
 
     /**
-      *  Gets the result code.
-      *
-      *  @return 0 on success, 1-255 on failure
-      */
-    public int getResultCode() {return _code;}
+     *  Gets the result code.
+     *
+     *  @return 0 on success, 1-255 on failure
+     */
+    public int getResultCode() {
+        return _code;
+    }
 
     /**
-      *  Gets the destination.
-      *
-      *  @return non-null only if result code is zero
-      */
-    public Destination getDestination() {return _dest;}
+     *  Gets the destination.
+     *
+     *  @return non-null only if result code is zero
+     */
+    public Destination getDestination() {
+        return _dest;
+    }
 
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
@@ -114,9 +140,15 @@ public class HostReplyMessage extends I2CPMessageImpl {
             _sessionId.readBytes(in);
             _reqID = DataHelper.readLong(in, 4);
             _code = in.read();
-            if (_code < 0) {throw new EOFException();}
-            if (_code == RESULT_SUCCESS) {_dest = Destination.create(in);}
-        } catch (DataFormatException dfe) {throw new I2CPMessageException("BAD data", dfe);}
+            if (_code < 0) {
+                throw new EOFException();
+            }
+            if (_code == RESULT_SUCCESS) {
+                _dest = Destination.create(in);
+            }
+        } catch (DataFormatException dfe) {
+            throw new I2CPMessageException("BAD data", dfe);
+        }
     }
 
     @Override
@@ -133,8 +165,12 @@ public class HostReplyMessage extends I2CPMessageImpl {
             _sessionId.writeBytes(os);
             DataHelper.writeLong(os, 4, _reqID);
             os.write((byte) _code);
-            if (_code == RESULT_SUCCESS) {_dest.writeBytes(os);}
-        } catch (DataFormatException dfe) {throw new I2CPMessageException("BAD data", dfe);}
+            if (_code == RESULT_SUCCESS) {
+                _dest.writeBytes(os);
+            }
+        } catch (DataFormatException dfe) {
+            throw new I2CPMessageException("BAD data", dfe);
+        }
         return os.toByteArray();
     }
 
@@ -150,7 +186,9 @@ public class HostReplyMessage extends I2CPMessageImpl {
         buf.append("\n* ").append(_sessionId);
         buf.append(" RequestID: ").append(_reqID);
         buf.append(" Result: ").append(_code);
-        if (_code == RESULT_SUCCESS) {buf.append("\n* Destination: ").append(_dest);}
+        if (_code == RESULT_SUCCESS) {
+            buf.append("\n* Destination: ").append(_dest);
+        }
         return buf.toString();
     }
 }

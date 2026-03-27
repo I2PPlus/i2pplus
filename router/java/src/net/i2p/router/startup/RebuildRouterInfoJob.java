@@ -1,4 +1,5 @@
 package net.i2p.router.startup;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,10 +9,6 @@ package net.i2p.router.startup;
  *
  */
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Properties;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
@@ -19,6 +16,11 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.startup.LoadRouterInfoJob.KeyData;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 /**
  * This used be called from StartAcceptingClientsJob but is now disabled.
@@ -39,7 +41,7 @@ import net.i2p.util.SecureFileOutputStream;
 class RebuildRouterInfoJob extends JobImpl {
     private final Log _log;
 
-    private final static long REBUILD_DELAY = 45*1000; // every 45 seconds
+    private static final long REBUILD_DELAY = 45 * 1000; // every 45 seconds
 
     public RebuildRouterInfoJob(RouterContext context) {
         super(context);
@@ -47,25 +49,27 @@ class RebuildRouterInfoJob extends JobImpl {
     }
 
     @Override
-    public String getName() { return "Rebuild RouterInfo"; }
+    public String getName() {
+        return "Rebuild RouterInfo";
+    }
 
     @Override
     public void runJob() {
         throw new UnsupportedOperationException();
-/****
-        _log.debug("Testing to rebuild router info");
-        File info = new File(getContext().getRouterDir(), CreateRouterInfoJob.INFO_FILENAME);
-        File keyFile = new File(getContext().getRouterDir(), CreateRouterInfoJob.KEYS2_FILENAME);
-
-        if (!info.exists() || !keyFile.exists()) {
-            _log.info("Router info file [" + info.getAbsolutePath() + "] or private key file [" + keyFile.getAbsolutePath() + "] deleted, rebuilding");
-            rebuildRouterInfo();
-        } else {
-            _log.debug("Router info file [" + info.getAbsolutePath() + "] exists, not rebuilding");
-        }
-        getTiming().setStartAfter(getContext().clock().now() + REBUILD_DELAY);
-        getContext().jobQueue().addJob(this);
-****/
+        /****
+         * _log.debug("Testing to rebuild router info");
+         * File info = new File(getContext().getRouterDir(), CreateRouterInfoJob.INFO_FILENAME);
+         * File keyFile = new File(getContext().getRouterDir(), CreateRouterInfoJob.KEYS2_FILENAME);
+         *
+         * if (!info.exists() || !keyFile.exists()) {
+         * _log.info("Router info file [" + info.getAbsolutePath() + "] or private key file [" + keyFile.getAbsolutePath() + "] deleted, rebuilding");
+         * rebuildRouterInfo();
+         * } else {
+         * _log.debug("Router info file [" + info.getAbsolutePath() + "] exists, not rebuilding");
+         * }
+         * getTiming().setStartAfter(getContext().clock().now() + REBUILD_DELAY);
+         * getContext().jobQueue().addJob(this);
+         ****/
     }
 
     void rebuildRouterInfo() {
@@ -150,7 +154,10 @@ class RebuildRouterInfoJob extends JobImpl {
                 } catch (IOException ioe) {
                     _log.log(Log.CRIT, "Error writing out the rebuilt RouterInfo", ioe);
                 } finally {
-                    if (fos != null) try { fos.close(); } catch (IOException ioe) {}
+                    if (fos != null) try {
+                            fos.close();
+                        } catch (IOException ioe) {
+                        }
                 }
             }
 
@@ -163,9 +170,8 @@ class RebuildRouterInfoJob extends JobImpl {
             }
         }
 
-        //MessageHistory.initialize();
+        // MessageHistory.initialize();
         getContext().router().setRouterInfo(info);
         _log.info("Router info rebuilt and stored at " + infoFile + " [" + info + "]");
     }
-
 }

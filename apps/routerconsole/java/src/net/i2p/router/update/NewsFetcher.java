@@ -3,26 +3,6 @@ package net.i2p.router.update;
 import static net.i2p.update.UpdateMethod.*;
 import static net.i2p.update.UpdateType.*;
 
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.StringTokenizer;
 import net.i2p.app.ClientAppManager;
 import net.i2p.crypto.CertUtil;
 import net.i2p.crypto.SU3File;
@@ -57,7 +37,29 @@ import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
+
 import org.cybergarage.xml.Node;
+
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.security.GeneralSecurityException;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * Task to fetch updates to the news.xml, and to keep
@@ -73,9 +75,12 @@ class NewsFetcher extends UpdateRunner {
     private final long _timeout;
     private final boolean _showStatus;
     private String _failMsg;
+
     /** is the news newer */
     private boolean _isNewer;
+
     private boolean _success;
+
     /** did we get a new news entry */
     private boolean _gotNewEntry;
 
@@ -83,7 +88,7 @@ class NewsFetcher extends UpdateRunner {
     static final String PROP_BLOCKLIST_TIME = "router.blocklistVersion";
     private static final String BLOCKLIST_DIR = "docs/feed/blocklist";
     private static final String BLOCKLIST_FILE = "blocklist.txt";
-    private static final long DEFAULT_TIMEOUT = 60*1000;
+    private static final long DEFAULT_TIMEOUT = 60 * 1000;
 
     public NewsFetcher(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris) {
         this(ctx, mgr, uris, DEFAULT_TIMEOUT);
@@ -102,16 +107,20 @@ class NewsFetcher extends UpdateRunner {
         _showStatus = timeout < DEFAULT_TIMEOUT;
         if (!langChanged()) {
             long lastMod = NewsHelper.lastUpdated(ctx);
-            if (lastMod > 0) {_lastModified = RFC822Date.to822Date(lastMod);}
+            if (lastMod > 0) {
+                _lastModified = RFC822Date.to822Date(lastMod);
+            }
         }
     }
 
     @Override
     public void run() {
         _isRunning = true;
-        try {fetchNews();}
-        catch (Throwable t) {_mgr.notifyTaskFailed(this, "", t);}
-        finally {
+        try {
+            fetchNews();
+        } catch (Throwable t) {
+            _mgr.notifyTaskFailed(this, "", t);
+        } finally {
             _mgr.notifyCheckComplete(this, _isNewer, _success);
             _isRunning = false;
         }
@@ -121,23 +130,27 @@ class NewsFetcher extends UpdateRunner {
         boolean shouldProxy = _context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY_NEWS, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY_NEWS);
         String proxyHost = _context.getProperty(ConfigUpdateHandler.PROP_PROXY_HOST, ConfigUpdateHandler.DEFAULT_PROXY_HOST);
         int proxyPort = ConfigUpdateHandler.proxyPort(_context);
-        if (shouldProxy && proxyPort == ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT &&
-            proxyHost.equals(ConfigUpdateHandler.DEFAULT_PROXY_HOST) &&
-            _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY) < 0) {
-            if (_log.shouldWarn()) {_log.warn("News fetch failed -> HTTP proxy tunnel not running");}
+        if (shouldProxy && proxyPort == ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT && proxyHost.equals(ConfigUpdateHandler.DEFAULT_PROXY_HOST) && _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY) < 0) {
+            if (_log.shouldWarn()) {
+                _log.warn("News fetch failed -> HTTP proxy tunnel not running");
+            }
             return;
         }
         if (shouldProxy && _context.commSystem().isDummy()) {
-            if (_log.shouldWarn()) {_log.warn("Cannot fetch news -> VM Comm system is enabled");}
+            if (_log.shouldWarn()) {
+                _log.warn("Cannot fetch news -> VM Comm system is enabled");
+            }
             return;
         }
 
         for (URI uri : _urls) {
             _currentURI = addLang(uri);
             String newsURL = _currentURI.toString();
-            String newsHost = _currentURI.getHost().substring(0,6) + "...b32.i2p";
+            String newsHost = _currentURI.getHost().substring(0, 6) + "...b32.i2p";
 
-            if (_tempFile.exists()) {_tempFile.delete();}
+            if (_tempFile.exists()) {
+                _tempFile.delete();
+            }
 
             try {
                 EepGet get;
@@ -161,29 +174,51 @@ class NewsFetcher extends UpdateRunner {
                             opts.put(NewsHelper.PROP_LAST_UPDATED, lastMod);
                             String lang = Translate.getLanguage(_context);
                             opts.put(NewsHelper.PROP_LAST_LANG, lang);
-                            if (_gotNewEntry) {opts.put(NewsHelper.PROP_LAST_NEW_ENTRY, lastMod);}
+                            if (_gotNewEntry) {
+                                opts.put(NewsHelper.PROP_LAST_NEW_ENTRY, lastMod);
+                            }
                         }
                         _context.router().saveConfig(opts, null);
-                        if (_failMsg != null) {_mgr.notifyComplete(this, "<b class=fail>" + _failMsg + "</b>");} // from checkForUpdates()
+                        if (_failMsg != null) {
+                            _mgr.notifyComplete(this, "<b class=fail>" + _failMsg + "</b>");
+                        } // from checkForUpdates()
                         else if (_showStatus) {
-                            if (status == 200) {_mgr.notifyComplete(this, "News updated from " + newsHost);}
-                            else {_mgr.notifyComplete(this, "No news updates from " + newsHost);}
+                            if (status == 200) {
+                                _mgr.notifyComplete(this, "News updated from " + newsHost);
+                            } else {
+                                _mgr.notifyComplete(this, "No news updates from " + newsHost);
+                            }
                         }
                         return;
-                    } else {_mgr.notifyComplete(this, "Could not connect to news host [" + status + "]");}
+                    } else {
+                        _mgr.notifyComplete(this, "Could not connect to news host [" + status + "]");
+                    }
                 } else {
                     int status = get.getStatusCode();
                     String msg;
-                    if (status == 504 || status <= 0) {msg = "Unable to connect to news server " + newsHost;}
-                    else if (status == 500) {msg = "News: " + _currentURI.getHost() + " not found in address book";}
-                    else if (status == 403) {msg = "News: Connection Reset";}
-                    else if (status == 404) {msg = "News: 404 from " + newsURL.replace("http://", "");}
-                    else if (status == 429) {msg = "News: Too Many Requests";}
-                    else {msg = status + " " + DataHelper.stripHTML(get.getStatusText());}
-                    if (_showStatus) {updateStatus("<b class=fail>" + msg + "</b>");} // only display if manually initiated
-                    if (_log.shouldWarn()) {_log.warn(msg);}
+                    if (status == 504 || status <= 0) {
+                        msg = "Unable to connect to news server " + newsHost;
+                    } else if (status == 500) {
+                        msg = "News: " + _currentURI.getHost() + " not found in address book";
+                    } else if (status == 403) {
+                        msg = "News: Connection Reset";
+                    } else if (status == 404) {
+                        msg = "News: 404 from " + newsURL.replace("http://", "");
+                    } else if (status == 429) {
+                        msg = "News: Too Many Requests";
+                    } else {
+                        msg = status + " " + DataHelper.stripHTML(get.getStatusText());
+                    }
+                    if (_showStatus) {
+                        updateStatus("<b class=fail>" + msg + "</b>");
+                    } // only display if manually initiated
+                    if (_log.shouldWarn()) {
+                        _log.warn(msg);
+                    }
                 }
-            } catch (Throwable t) {_log.error("Error fetching the news", t);}
+            } catch (Throwable t) {
+                _log.error("Error fetching the news", t);
+            }
         }
     }
 
@@ -195,21 +230,35 @@ class NewsFetcher extends UpdateRunner {
      *  @since 0.9.21
      */
     private URI addLang(URI uri) {
-        if (!_context.getBooleanPropertyDefaultTrue(NewsHelper.PROP_TRANSLATE)) {return uri;}
+        if (!_context.getBooleanPropertyDefaultTrue(NewsHelper.PROP_TRANSLATE)) {
+            return uri;
+        }
         String lang = Translate.getLanguage(_context);
-        if (lang.equals("en")) {return uri;}
+        if (lang.equals("en")) {
+            return uri;
+        }
         String query = uri.getRawQuery();
-        if (query != null && (query.startsWith("lang=") || query.contains("&lang="))) {return uri;}
+        if (query != null && (query.startsWith("lang=") || query.contains("&lang="))) {
+            return uri;
+        }
         String url = uri.toString();
         StringBuilder buf = new StringBuilder();
         buf.append(url);
-        if (query != null) {buf.append("&lang=");}
-        else {buf.append("?lang=");}
+        if (query != null) {
+            buf.append("&lang=");
+        } else {
+            buf.append("?lang=");
+        }
         buf.append(lang);
         String co = Translate.getCountry(_context);
-        if (co.length() > 0) {buf.append('_').append(co);}
-        try {return new URI(buf.toString());}
-        catch (URISyntaxException use) {return uri;}
+        if (co.length() > 0) {
+            buf.append('_').append(co);
+        }
+        try {
+            return new URI(buf.toString());
+        } catch (URISyntaxException use) {
+            return uri;
+        }
     }
 
     /**
@@ -217,7 +266,9 @@ class NewsFetcher extends UpdateRunner {
      */
     private boolean langChanged() {
         String old = _context.getProperty(NewsHelper.PROP_LAST_LANG);
-        if (old == null) {return false;}
+        if (old == null) {
+            return false;
+        }
         String lang = Translate.getLanguage(_context);
         return !lang.equals(old);
     }
@@ -265,10 +316,12 @@ class NewsFetcher extends UpdateRunner {
             while (DataHelper.readLine(in, buf)) {
                 int index = buf.indexOf(VERSION_PREFIX);
                 if (index >= 0) {
-                    Map<String, String> args = parseArgs(buf.substring(index+VERSION_PREFIX.length()));
+                    Map<String, String> args = parseArgs(buf.substring(index + VERSION_PREFIX.length()));
                     String ver = args.get(VERSION_KEY);
                     if (ver != null) {
-                        if (_log.shouldDebug()) {_log.debug("Router is running version: " + ver);}
+                        if (_log.shouldDebug()) {
+                            _log.debug("Router is running version: " + ver);
+                        }
                         if (TrustedUpdate.needsUpdate(RouterVersion.VERSION, ver)) {
                             if (NewsHelper.isUpdateDisabled(_context)) {
                                 String msg = _mgr._t("In-network updates disabled. Check package manager.");
@@ -283,14 +336,14 @@ class NewsFetcher extends UpdateRunner {
                                 _mgr.notifyVersionConstraint(this, _currentURI, ROUTER_SIGNED, "", ver, msg);
                                 return;
                             }
-/*
-                            if (!FileUtil.isPack200Supported()) {
-                                String msg = _mgr._t("No Pack200 support in Java runtime.");
-                                _log.logAlways(Log.WARN, "Cannot update to version " + ver + ": " + msg);
-                                _mgr.notifyVersionConstraint(this, _currentURI, ROUTER_SIGNED, "", ver, msg);
-                                return;
-                            }
-*/
+                            /*
+                                                        if (!FileUtil.isPack200Supported()) {
+                                                            String msg = _mgr._t("No Pack200 support in Java runtime.");
+                                                            _log.logAlways(Log.WARN, "Cannot update to version " + ver + ": " + msg);
+                                                            _mgr.notifyVersionConstraint(this, _currentURI, ROUTER_SIGNED, "", ver, msg);
+                                                            return;
+                                                        }
+                            */
                             if (!ConfigUpdateHandler.USE_SU3_UPDATE) {
                                 String msg = _mgr._t("No update certificates installed.");
                                 _log.logAlways(Log.WARN, "Cannot update to version " + ver + ": " + msg);
@@ -329,29 +382,43 @@ class NewsFetcher extends UpdateRunner {
                             if (enableVanillaUpdates) {
                                 addMethod(HTTP, args.get(I2P_SU3_KEY), sourceMap);
                                 boolean enableTorrentUpdates = _context.getProperty(PROP_ENABLE_TORRENT_UPDATES, DEFAULT_ENABLE_TORRENT_UPDATES);
-                                if (enableTorrentUpdates) {addMethod(TORRENT, args.get(SU3_KEY), sourceMap);}
+                                if (enableTorrentUpdates) {
+                                    addMethod(TORRENT, args.get(SU3_KEY), sourceMap);
+                                }
                                 addMethod(HTTP_CLEARNET, args.get(CLEARNET_HTTP_SU3_KEY), sourceMap);
                                 addMethod(HTTPS_CLEARNET, args.get(CLEARNET_HTTPS_SU3_KEY), sourceMap);
                                 // notify about all sources at once
                                 _mgr.notifyVersionAvailable(this, _currentURI, ROUTER_SIGNED_SU3, "", sourceMap, ver, "");
                             }
-                        } else if (_log.shouldDebug()) {_log.debug("Router is up to date (" + ver + ")");}
+                        } else if (_log.shouldDebug()) {
+                            _log.debug("Router is up to date (" + ver + ")");
+                        }
                         return;
-                    } else if (_log.shouldWarn()) {_log.warn("No version in " + buf.toString());}
-                } else if (_log.shouldDebug()) {_log.debug("No match in " + buf.toString());}
+                    } else if (_log.shouldWarn()) {
+                        _log.warn("No version in " + buf.toString());
+                    }
+                } else if (_log.shouldDebug()) {
+                    _log.debug("No match in " + buf.toString());
+                }
                 buf.setLength(0);
             }
         } catch (IOException ioe) {
             _failMsg = "Error checking the news for an update -> " + ioe.getMessage();
-            if (_log.shouldWarn()) {_log.warn(_failMsg);}
+            if (_log.shouldWarn()) {
+                _log.warn(_failMsg);
+            }
             return;
         } finally {
             if (in != null) {
-                try {in.close();}
-                catch (IOException ioe) {}
+                try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
             }
         }
-        if (_log.shouldWarn()) {_log.warn("No version found in news.xml file");}
+        if (_log.shouldWarn()) {
+            _log.warn("No version found in news.xml file");
+        }
     }
 
     /**
@@ -370,8 +437,7 @@ class NewsFetcher extends UpdateRunner {
         for (int i = 0; i < data.length; i++) {
             switch (data[i]) {
                 case '\'':
-                case '"':
-                    if (isQuoted) {
+                case '"': if (isQuoted) {
                         // keys never quoted
                         if (key != null) {
                             rv.put(key, buf.toString().trim());
@@ -400,8 +466,7 @@ class NewsFetcher extends UpdateRunner {
                     }
                     break;
 
-                case '=':
-                    if (isQuoted) {
+                case '=': if (isQuoted) {
                         buf.append(data[i]);
                     } else {
                         key = buf.toString().trim().toLowerCase(Locale.US);
@@ -409,12 +474,13 @@ class NewsFetcher extends UpdateRunner {
                     }
                     break;
 
-                default:
-                    buf.append(data[i]);
+                default: buf.append(data[i]);
                     break;
             }
         }
-        if (key != null) {rv.put(key, buf.toString().trim());}
+        if (key != null) {
+            rv.put(key, buf.toString().trim());
+        }
         return rv;
     }
 
@@ -422,8 +488,10 @@ class NewsFetcher extends UpdateRunner {
         StringTokenizer tok = new StringTokenizer(URLs, ",\r\n");
         List<URI> rv = new ArrayList<URI>();
         while (tok.hasMoreTokens()) {
-            try {rv.add(new URI(tok.nextToken().trim()));}
-            catch (URISyntaxException use) {}
+            try {
+                rv.add(new URI(tok.nextToken().trim()));
+            } catch (URISyntaxException use) {
+            }
         }
         return rv;
     }
@@ -455,7 +523,9 @@ class NewsFetcher extends UpdateRunner {
         if ("Last-Modified".equals(key)) {
             long lm = RFC822Date.parse822Date(val);
             // _newLastModified was set to start time in fetchNews() above
-            if (lm > 0 && lm < _newLastModified) {_newLastModified = lm;}
+            if (lm > 0 && lm < _newLastModified) {
+                _newLastModified = lm;
+            }
         }
     }
 
@@ -466,13 +536,14 @@ class NewsFetcher extends UpdateRunner {
     @Override
     public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {
         if (_log.shouldInfo()) {
-            _log.info("News fetched from " + url + " with " + (alreadyTransferred+bytesTransferred));
+            _log.info("News fetched from " + url + " with " + (alreadyTransferred + bytesTransferred));
         }
 
         if (_tempFile.exists() && _tempFile.length() > 0) {
             File from;
-            try {from = processSU3();}
-            catch (IOException ioe) {
+            try {
+                from = processSU3();
+            } catch (IOException ioe) {
                 _log.error("Failed to extract the news file", ioe);
                 _tempFile.delete();
                 return;
@@ -486,8 +557,12 @@ class NewsFetcher extends UpdateRunner {
                 _mgr.notifyVersionAvailable(this, _currentURI, NEWS, "", HTTP, null, newVer, "");
                 _isNewer = true;
                 checkForUpdates();
-            } else if (_log.shouldError()) {_log.error("Failed to copy the news file!");}
-        } else if (_log.shouldWarn()) {_log.warn("Transfer complete, but no file? - probably 304 Not Modified");}
+            } else if (_log.shouldError()) {
+                _log.error("Failed to copy the news file!");
+            }
+        } else if (_log.shouldWarn()) {
+            _log.warn("Transfer complete, but no file? - probably 304 Not Modified");
+        }
         _success = true;
     }
 
@@ -501,7 +576,9 @@ class NewsFetcher extends UpdateRunner {
         if (_showStatus) {
             String msg = "Unable to connect to news server " + url + ": " + DataHelper.stripHTML(cause.toString());
             updateStatus("<b class=fail>" + msg + "</b>");
-            if (_log.shouldWarn()) {_log.warn(msg);}
+            if (_log.shouldWarn()) {
+                _log.warn(msg);
+            }
         }
         _mgr.notifyAttemptFailed(this, url, null); // update manager will also log
     }
@@ -515,7 +592,9 @@ class NewsFetcher extends UpdateRunner {
         if (_showStatus) {
             String msg = "Failed downloading news from " + url;
             updateStatus("<b class=fail>" + msg + "</b>");
-            if (_log.shouldWarn()) {_log.warn(msg);}
+            if (_log.shouldWarn()) {
+                _log.warn(msg);
+            }
         }
         _mgr.notifyAttemptFailed(this, url, null); // update manager will also log
     }
@@ -539,7 +618,9 @@ class NewsFetcher extends UpdateRunner {
             if (su3.getContentType() != SU3File.CONTENT_NEWS) {
                 throw new IOException("Bad content type: " + su3.getContentType());
             }
-            if (type == SU3File.TYPE_HTML) {return to1;}
+            if (type == SU3File.TYPE_HTML) {
+                return to1;
+            }
             if (type != SU3File.TYPE_XML && type != SU3File.TYPE_XML_GZ) {
                 throw new IOException("Bad file type: " + type);
             }
@@ -548,7 +629,9 @@ class NewsFetcher extends UpdateRunner {
                 gunzip(to1, to2);
                 xml = to2;
                 to1.delete();
-            } else {xml = to1;}
+            } else {
+                xml = to1;
+            }
             NewsXMLParser parser = new NewsXMLParser(_context);
             Node root = parser.parse(xml);
             xml.delete();
@@ -566,13 +649,19 @@ class NewsFetcher extends UpdateRunner {
             }
             // Persist any new CRL entries
             List<CRLEntry> crlEntries = parser.getCRLEntries();
-            if (crlEntries != null) {persistCRLEntries(crlEntries);}
-            else {_log.info("No CRL entries found in news feed");}
+            if (crlEntries != null) {
+                persistCRLEntries(crlEntries);
+            } else {
+                _log.info("No CRL entries found in news feed");
+            }
 
             // Block any new blocklist entries
             BlocklistEntries ble = parser.getBlocklistEntries();
-            if (ble != null && ble.isVerified()) {processBlocklistEntries(ble);}
-            else {_log.info("No blocklist entries found in news feed");}
+            if (ble != null && ble.isVerified()) {
+                processBlocklistEntries(ble);
+            } else {
+                _log.info("No blocklist entries found in news feed");
+            }
 
             // store entries and metadata in old news.xml format
             String sudVersion = su3.getVersionString();
@@ -580,7 +669,9 @@ class NewsFetcher extends UpdateRunner {
             File to3 = new File(_context.getTempDir(), "tmp3-" + _context.random().nextInt() + ".xml");
             outputOldNewsXML(data, entries, sudVersion, signingKeyName, to3);
             return to3;
-        } finally {to2.delete();}
+        } finally {
+            to2.delete();
+        }
     }
 
     /**
@@ -598,7 +689,8 @@ class NewsFetcher extends UpdateRunner {
         } finally {
             if (out != null) try {
                     out.close();
-                } catch (IOException ioe) {}
+                } catch (IOException ioe) {
+                }
             ReusableGZIPInputStream.release(in);
         }
     }
@@ -622,8 +714,7 @@ class NewsFetcher extends UpdateRunner {
         int i = 0;
         for (CRLEntry e : entries) {
             if (e.id == null || e.data == null) {
-                if (_log.shouldWarn())
-                    _log.warn("Bad CRL entry received");
+                if (_log.shouldWarn()) _log.warn("Bad CRL entry received");
                 continue;
             }
             byte[] bid = DataHelper.getUTF8(e.id);
@@ -631,8 +722,7 @@ class NewsFetcher extends UpdateRunner {
             _context.sha().calculateHash(bid, 0, bid.length, hash, 0);
             String name = "crl-" + Base64.encode(hash) + ".crl";
             File f = new File(dir, name);
-            if (f.exists() && f.lastModified() >= e.updated)
-                continue;
+            if (f.exists() && f.lastModified() >= e.updated) continue;
             OutputStream out = null;
             try {
                 byte[] data = DataHelper.getUTF8(e.data);
@@ -645,13 +735,15 @@ class NewsFetcher extends UpdateRunner {
             } catch (IOException ioe) {
                 _log.error("Failed to write CRL", ioe);
             } finally {
-                if (out != null) try { out.close(); } catch (IOException ioe) {}
+                if (out != null) try {
+                        out.close();
+                    } catch (IOException ioe) {
+                    }
             }
             f.setLastModified(e.updated);
             i++;
         }
-        if (i > 0)
-            _log.logAlways(Log.WARN, "Stored " + i + " new CRL " + (i > 1 ? "entries" : "entry"));
+        if (i > 0) _log.logAlways(Log.WARN, "Stored " + i + " new CRL " + (i > 1 ? "entries" : "entry"));
     }
 
     /**
@@ -662,16 +754,14 @@ class NewsFetcher extends UpdateRunner {
     private void processBlocklistEntries(BlocklistEntries ble) {
         long oldTime = _context.getProperty(PROP_BLOCKLIST_TIME, 0L);
         if (ble.updated <= oldTime) {
-            if (_log.shouldWarn())
-                _log.warn("Not updating blocklist " + Instant.ofEpochMilli(ble.updated) +
-                           "; already have " + Instant.ofEpochMilli(oldTime));
+            if (_log.shouldWarn()) _log.warn("Not updating blocklist " + Instant.ofEpochMilli(ble.updated) + "; already have " + Instant.ofEpochMilli(oldTime));
             return;
         }
         Blocklist bl = _context.blocklist();
         Banlist ban = _context.banlist();
         String reason = "Blocklist feed " + Instant.ofEpochMilli(ble.updated);
         int banned = 0;
-        for (Iterator<String> iter = ble.entries.iterator(); iter.hasNext();) {
+        for (Iterator<String> iter = ble.entries.iterator(); iter.hasNext(); ) {
             String s = iter.next();
             if (s.length() == 44) {
                 byte[] b = Base64.decode(s);
@@ -683,7 +773,9 @@ class NewsFetcher extends UpdateRunner {
                 if (!ban.isBanlistedForever(h)) {
                     ban.banlistRouterForever(h, reason);
                     BanLogger banLogger = BanLogger.getInstance();
-                    if (banLogger != null) {banLogger.logBanForever(h, _context, reason);}
+                    if (banLogger != null) {
+                        banLogger.logBanForever(h, _context, reason);
+                    }
                     _context.commSystem().forceDisconnect(h);
                 }
             } else {
@@ -692,25 +784,22 @@ class NewsFetcher extends UpdateRunner {
                     iter.remove();
                     continue;
                 }
-                if (!bl.isBlocklisted(ip))
-                    bl.add(ip);
+                if (!bl.isBlocklisted(ip)) bl.add(ip);
             }
-            if (++banned >= BlocklistEntries.MAX_ENTRIES) {break;} // prevent somebody from destroying the whole network
+            if (++banned >= BlocklistEntries.MAX_ENTRIES) {
+                break;
+            } // prevent somebody from destroying the whole network
         }
         for (String s : ble.removes) {
             if (s.length() == 44) {
                 byte[] b = Base64.decode(s);
-                if (b == null || b.length != Hash.HASH_LENGTH)
-                    continue;
+                if (b == null || b.length != Hash.HASH_LENGTH) continue;
                 Hash h = Hash.create(b);
-                if (ban.isBanlistedForever(h))
-                    ban.unbanlistRouter(h);
+                if (ban.isBanlistedForever(h)) ban.unbanlistRouter(h);
             } else {
                 byte[] ip = Addresses.getIP(s);
-                if (ip == null)
-                    continue;
-                if (bl.isBlocklisted(ip))
-                    bl.remove(ip);
+                if (ip == null) continue;
+                if (bl.isBlocklisted(ip)) bl.remove(ip);
             }
         }
         // Save the blocks. We do not save the unblocks.
@@ -731,15 +820,16 @@ class NewsFetcher extends UpdateRunner {
                 out.write(':');
                 out.write(s);
                 out.newLine();
-                if (++banned >= BlocklistEntries.MAX_ENTRIES)
-                    break;
+                if (++banned >= BlocklistEntries.MAX_ENTRIES) break;
             }
         } catch (IOException ioe) {
             _log.error("Error writing blocklist", ioe);
             fail = true;
         } finally {
-            if (out != null) try {out.close();}
-                catch (IOException ioe) {}
+            if (out != null) try {
+                    out.close();
+                } catch (IOException ioe) {
+                }
         }
         if (!fail) {
             f.setLastModified(ble.updated);
@@ -757,8 +847,7 @@ class NewsFetcher extends UpdateRunner {
      *
      *  @since 0.9.17
      */
-    private void outputOldNewsXML(NewsMetadata data, List<NewsEntry> entries,
-                                  String sudVersion, String signingKeyName, File to) throws IOException {
+    private void outputOldNewsXML(NewsMetadata data, List<NewsEntry> entries, String sudVersion, String signingKeyName, File to) throws IOException {
         NewsMetadata.Release latestRelease = data.releases.get(0);
         Writer out = null;
         try {
@@ -766,12 +855,9 @@ class NewsFetcher extends UpdateRunner {
             out.write("<!--\n");
             // update metadata in old format
             out.write(VERSION_PREFIX);
-            if (latestRelease.i2pVersion != null)
-                out.write(" version=\"" + latestRelease.i2pVersion + '"');
-            if (latestRelease.minVersion != null)
-                out.write(" minVersion=\"" + latestRelease.minVersion + '"');
-            if (latestRelease.minJavaVersion != null)
-                out.write(" minJavaVersion=\"" + latestRelease.minJavaVersion + '"');
+            if (latestRelease.i2pVersion != null) out.write(" version=\"" + latestRelease.i2pVersion + '"');
+            if (latestRelease.minVersion != null) out.write(" minVersion=\"" + latestRelease.minVersion + '"');
+            if (latestRelease.minJavaVersion != null) out.write(" minJavaVersion=\"" + latestRelease.minJavaVersion + '"');
             String su3Torrent = "";
             String su2Torrent = "";
             List<String> i2pnet = null;
@@ -789,10 +875,8 @@ class NewsFetcher extends UpdateRunner {
                     }
                 }
             }
-            if (!su2Torrent.isEmpty())
-                out.write(" su2Torrent=\"" + su2Torrent + '"');
-            if (!su3Torrent.isEmpty())
-                out.write(" su3Torrent=\"" + su3Torrent + '"');
+            if (!su2Torrent.isEmpty()) out.write(" su2Torrent=\"" + su2Torrent + '"');
+            if (!su3Torrent.isEmpty()) out.write(" su3Torrent=\"" + su3Torrent + '"');
             writeList(out, I2P_SU3_KEY, i2pnet);
             writeList(out, CLEARNET_HTTPS_SU3_KEY, clearnetssl);
             writeList(out, CLEARNET_HTTP_SU3_KEY, clearnet);
@@ -804,10 +888,11 @@ class NewsFetcher extends UpdateRunner {
             out.write("** Feed ID:\t" + DataHelper.stripHTML(data.feedID) + '\n');
             out.write("** Feed Date:\t" + Instant.ofEpochMilli(data.feedUpdated) + '\n');
             out.write("-->\n");
-            if (entries == null)
-                return;
+            if (entries == null) return;
             for (NewsEntry e : entries) {
-                if (e.title == null || e.content == null) {continue;}
+                if (e.title == null || e.content == null) {
+                    continue;
+                }
                 out.write("<!-- Entry Date: " + e.updated + "-->\n");
                 out.write("<h3>");
                 // Warning - update NewsHandler.parseNews() if you change the format
@@ -821,7 +906,8 @@ class NewsFetcher extends UpdateRunner {
         } finally {
             if (out != null) try {
                     out.close();
-                } catch (IOException ioe) {}
+                } catch (IOException ioe) {
+                }
         }
     }
 
@@ -833,14 +919,18 @@ class NewsFetcher extends UpdateRunner {
      *  @since 0.9.52
      */
     private static void writeList(Writer out, String key, List<String> values) throws IOException {
-        if (values == null || values.isEmpty()) {return;}
+        if (values == null || values.isEmpty()) {
+            return;
+        }
         out.write(' ');
         out.write(key);
         out.write("=\"");
         int sz = values.size();
         for (int i = 0; i < sz; i++) {
             out.write(values.get(i));
-            if (i != sz - 1) {out.write(',');}
+            if (i != sz - 1) {
+                out.write(',');
+            }
         }
         out.write('"');
     }

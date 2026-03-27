@@ -99,14 +99,12 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
 
         @Override
         public void remove() {
-            if (lastRet < 0)
-                throw new IllegalStateException();
+            if (lastRet < 0) throw new IllegalStateException();
             checkForComodification();
 
             try {
                 CachedIteratorArrayList.this.remove(lastRet);
-                if (lastRet < cursor)
-                    cursor--;
+                if (lastRet < cursor) cursor--;
                 lastRet = -1;
                 expectedModCount = modCount;
             } catch (IndexOutOfBoundsException e) {
@@ -115,10 +113,7 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
         }
 
         final void checkForComodification() {
-            if (modCount != expectedModCount)
-                throw new ConcurrentModificationException();
+            if (modCount != expectedModCount) throw new ConcurrentModificationException();
         }
-
     }
-
 }

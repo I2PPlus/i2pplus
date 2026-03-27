@@ -1,4 +1,5 @@
 package net.i2p.kademlia;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,8 +9,9 @@ package net.i2p.kademlia;
  *
  */
 
-import java.util.Set;
 import net.i2p.data.SimpleDataStructure;
+
+import java.util.Set;
 
 /**
  * Group, without inherent ordering, a set of keys a certain distance away from

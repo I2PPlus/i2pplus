@@ -38,12 +38,12 @@ abstract class TrayManager {
 
     protected final I2PAppContext _appContext;
     protected final boolean _useSwing;
-    ///The tray area, or null if unsupported
+    /// The tray area, or null if unsupported
     protected SystemTray tray;
-    ///Our tray icon, or null if unsupported
+    /// Our tray icon, or null if unsupported
     protected TrayIcon trayIcon;
     protected volatile boolean _showNotifications;
-    protected MenuItem  _notificationItem1, _notificationItem2;
+    protected MenuItem _notificationItem1, _notificationItem2;
     protected JMenuItem _jnotificationItem1, _jnotificationItem2;
 
     private static final String PNG_DIR = "/desktopgui/resources/images/";
@@ -64,33 +64,37 @@ abstract class TrayManager {
      * Add the tray icon to the system tray and start everything up.
      */
     public synchronized void startManager() throws AWTException {
-        if (!SystemTray.isSupported())
-            throw new AWTException("SystemTray not supported");
+        if (!SystemTray.isSupported()) throw new AWTException("SystemTray not supported");
         _showNotifications = _appContext.getBooleanPropertyDefaultTrue(PROP_NOTIFICATIONS);
         tray = SystemTray.getSystemTray();
         // Windows typically has tooltips; Linux (at least Ubuntu) doesn't
         String tooltip = SystemVersion.isWindows() ? _t("I2P: Right-click for menu") : null;
         TrayIcon ti;
-        if (_useSwing)
-            ti = getSwingTrayIcon(tooltip);
-        else
-            ti = getAWTTrayIcon(tooltip);
-        ti.setImageAutoSize(true); //Resize image to fit the system tray
+        if (_useSwing) ti = getSwingTrayIcon(tooltip);
+        else ti = getAWTTrayIcon(tooltip);
+        ti.setImageAutoSize(true); // Resize image to fit the system tray
         tray.add(ti);
         trayIcon = ti;
     }
 
     private TrayIcon getAWTTrayIcon(String tooltip) throws AWTException {
         PopupMenu menu = getMainMenu();
-        if (!SystemVersion.isWindows())
-            menu.setFont(new Font("Arial", Font.BOLD, 14));
+        if (!SystemVersion.isWindows()) menu.setFont(new Font("Arial", Font.BOLD, 14));
         TrayIcon ti = new TrayIcon(getTrayImage(), tooltip, menu);
         ti.addMouseListener(new MouseListener() {
-            public void mouseClicked(MouseEvent m)  {}
-            public void mouseEntered(MouseEvent m)  {}
-            public void mouseExited(MouseEvent m)   {}
-            public void mousePressed(MouseEvent m)  { updateMenu(); }
-            public void mouseReleased(MouseEvent m) { updateMenu(); }
+            public void mouseClicked(MouseEvent m) {}
+
+            public void mouseEntered(MouseEvent m) {}
+
+            public void mouseExited(MouseEvent m) {}
+
+            public void mousePressed(MouseEvent m) {
+                updateMenu();
+            }
+
+            public void mouseReleased(MouseEvent m) {
+                updateMenu();
+            }
         });
         return ti;
     }
@@ -110,13 +114,22 @@ abstract class TrayManager {
         frame.add(menu);
         TrayIcon ti = new TrayIcon(getTrayImage(), tooltip, null);
         ti.addMouseListener(new MouseListener() {
-            public void mouseClicked(MouseEvent e)  {}
-            public void mouseEntered(MouseEvent e)  {}
-            public void mouseExited(MouseEvent e)   {}
-            public void mousePressed(MouseEvent e)  { handle(e); }
-            public void mouseReleased(MouseEvent e) { handle(e); }
+            public void mouseClicked(MouseEvent e) {}
+
+            public void mouseEntered(MouseEvent e) {}
+
+            public void mouseExited(MouseEvent e) {}
+
+            public void mousePressed(MouseEvent e) {
+                handle(e);
+            }
+
+            public void mouseReleased(MouseEvent e) {
+                handle(e);
+            }
+
             private void handle(MouseEvent e) {
-                //System.out.println("Button " + e.getButton() + " Frame was visible? " +
+                // System.out.println("Button " + e.getButton() + " Frame was visible? " +
                 //                   frame.isVisible() + " menu was visible? " + menu.isVisible() +
                 //                   " trigger? " + menu.isPopupTrigger(e));
                 // http://stackoverflow.com/questions/17258250/changing-the-laf-of-a-popupmenu-for-a-trayicon-in-java
@@ -130,24 +143,34 @@ abstract class TrayManager {
             }
         });
         menu.addPopupMenuListener(new PopupMenuListener() {
-            public void popupMenuCanceled(PopupMenuEvent e)            { /* frame.setVisible(false); */ }
-            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) { frame.setVisible(false); }
-            public void popupMenuWillBecomeVisible(PopupMenuEvent e)   {}
+            public void popupMenuCanceled(PopupMenuEvent e) {
+                /* frame.setVisible(false); */
+            }
+
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+                frame.setVisible(false);
+            }
+
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}
         });
         // this is to make it go away when we click elsewhere
         // doesn't do anything
         menu.addFocusListener(new FocusListener() {
             public void focusGained(FocusEvent e) {}
-            public void focusLost(FocusEvent e)   { frame.setVisible(false); }
+
+            public void focusLost(FocusEvent e) {
+                frame.setVisible(false);
+            }
         });
         // this is to make it go away when we hit escape
         // doesn't do anything
         menu.addMenuKeyListener(new MenuKeyListener() {
-            public void menuKeyPressed(MenuKeyEvent e)  {}
+            public void menuKeyPressed(MenuKeyEvent e) {}
+
             public void menuKeyReleased(MenuKeyEvent e) {}
-            public void menuKeyTyped(MenuKeyEvent e)    {
-                if (e.getKeyChar() == (char) 0x1b)
-                    frame.setVisible(false);
+
+            public void menuKeyTyped(MenuKeyEvent e) {
+                if (e.getKeyChar() == (char) 0x1b) frame.setVisible(false);
             }
         });
         return ti;
@@ -168,8 +191,7 @@ abstract class TrayManager {
 
     public synchronized void languageChanged() {
         if (trayIcon != null) {
-            if (!_useSwing)
-                trayIcon.setPopupMenu(getMainMenu());
+            if (!_useSwing) trayIcon.setPopupMenu(getMainMenu());
             // else TODO
         }
     }
@@ -200,15 +222,11 @@ abstract class TrayManager {
      */
     private Image getTrayImage() throws AWTException {
         String img;
-        if (SystemVersion.isWindows())
-            img = WIN_ICON;
-        else if (SystemVersion.isMac())
-            img = MAC_ICON;
-        else
-            img = LIN_ICON;
+        if (SystemVersion.isWindows()) img = WIN_ICON;
+        else if (SystemVersion.isMac()) img = MAC_ICON;
+        else img = LIN_ICON;
         URL url = getClass().getResource(PNG_DIR + img);
-        if (url == null)
-            throw new AWTException("cannot load tray image " + img);
+        if (url == null) throw new AWTException("cannot load tray image " + img);
         Image image = Toolkit.getDefaultToolkit().getImage(url);
         return image;
     }
@@ -222,65 +240,59 @@ abstract class TrayManager {
      *  @return 0, or -1 on failure
      */
     public int displayMessage(int priority, String title, String message, String path) {
-        if (!_showNotifications)
-            return -1;
+        if (!_showNotifications) return -1;
         final TrayIcon ti;
         synchronized (this) {
             ti = trayIcon;
         }
-        if (ti == null)
-            return -1;
+        if (ti == null) return -1;
         TrayIcon.MessageType type;
-        if (priority <= Log.DEBUG)
-            type = TrayIcon.MessageType.NONE;
-        else if (priority <= Log.INFO)
-            type = TrayIcon.MessageType.INFO;
-        else if (priority <= Log.WARN)
-            type = TrayIcon.MessageType.WARNING;
-        else
-            type = TrayIcon.MessageType.ERROR;
+        if (priority <= Log.DEBUG) type = TrayIcon.MessageType.NONE;
+        else if (priority <= Log.INFO) type = TrayIcon.MessageType.INFO;
+        else if (priority <= Log.WARN) type = TrayIcon.MessageType.WARNING;
+        else type = TrayIcon.MessageType.ERROR;
         ti.displayMessage(title, message, type);
-/*
- * There's apparently no way to bind a particular message to an action
-   that comes back. We can't keep a queue because we don't get
-   an action back when the message is removed via timeout or user x-out.
-   On OSX, new messages dismiss previous ones.
-   On LXDE (and Gnome?), new messages go under previous ones. Timeout is only 10 seconds.
-   Message timeout is platform-dependent.
-   So the order of events is unknowable.
-   This only works if there is only one message ever.
+        /*
+         * There's apparently no way to bind a particular message to an action
+           that comes back. We can't keep a queue because we don't get
+           an action back when the message is removed via timeout or user x-out.
+           On OSX, new messages dismiss previous ones.
+           On LXDE (and Gnome?), new messages go under previous ones. Timeout is only 10 seconds.
+           Message timeout is platform-dependent.
+           So the order of events is unknowable.
+           This only works if there is only one message ever.
 
-        if (path != null && path.length() > 0) {
-            if (path.charAt(0) == '/');
-                path = path.substring(1);
-            final String url = _appContext.portMapper().getConsoleURL() + path;
-            ti.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    ti.removeActionListener(this);
-                    new SwingWorker<Object, Object>() {
+                if (path != null && path.length() > 0) {
+                    if (path.charAt(0) == '/');
+                        path = path.substring(1);
+                    final String url = _appContext.portMapper().getConsoleURL() + path;
+                    ti.addActionListener(new ActionListener() {
                         @Override
-                        protected Object doInBackground() throws Exception {
-                            System.out.println("DIB " + arg0);
-                            UrlLauncher launcher = new UrlLauncher(_appContext, null, null);
-                            try {
-                                launcher.openUrl(url);
-                                System.out.println("DIB success " + url);
-                            } catch (IOException e1) {
-                                System.out.println("DIB fail " + url);
-                            }
-                            return null;
-                        }
+                        public void actionPerformed(ActionEvent arg0) {
+                            ti.removeActionListener(this);
+                            new SwingWorker<Object, Object>() {
+                                @Override
+                                protected Object doInBackground() throws Exception {
+                                    System.out.println("DIB " + arg0);
+                                    UrlLauncher launcher = new UrlLauncher(_appContext, null, null);
+                                    try {
+                                        launcher.openUrl(url);
+                                        System.out.println("DIB success " + url);
+                                    } catch (IOException e1) {
+                                        System.out.println("DIB fail " + url);
+                                    }
+                                    return null;
+                                }
 
-                        @Override
-                        protected void done() {
-                            System.out.println("done " + arg0);
+                                @Override
+                                protected void done() {
+                                    System.out.println("done " + arg0);
+                                }
+                            }.execute();
                         }
-                    }.execute();
+                    });
                 }
-            });
-        }
-*/
+        */
         return 0;
     }
 

@@ -43,5 +43,4 @@ public class UnknownEdnsOption extends EdnsOption {
     protected CharSequence toStringInternal() {
         return asTerminalOutputInternal();
     }
-
 }

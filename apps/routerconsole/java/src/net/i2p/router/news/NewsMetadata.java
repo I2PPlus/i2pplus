@@ -1,8 +1,9 @@
 package net.i2p.router.news;
 
-import java.util.List;
 import net.i2p.data.DataHelper;
 import net.i2p.util.VersionComparator;
+
+import java.util.List;
 
 /**
  * Data structure for I2P router news feed metadata and update information.
@@ -64,10 +65,8 @@ public class NewsMetadata {
          */
         @Override
         public boolean equals(Object o) {
-            if (o == null)
-                return false;
-            if (!(o instanceof Release))
-                return false;
+            if (o == null) return false;
+            if (!(o instanceof Release)) return false;
             Release r = (Release) o;
             return DataHelper.eq(i2pVersion, r.i2pVersion);
         }
@@ -97,14 +96,17 @@ public class NewsMetadata {
     public static class Update implements Comparable<Update> {
         public String type;
         public String torrent;
+
         /**
          *  Stored as of 0.9.52, but there is no registered handler
          */
         public List<String> clearnet;
+
         /**
          *  Stored as of 0.9.52, but there is no registered handler
          */
         public List<String> ssl;
+
         /**
          *  In-net URLs
          *  @since 0.9.52
@@ -118,12 +120,9 @@ public class NewsMetadata {
 
         /** lower is preferred */
         protected int getTypeOrder() {
-            if ("su3".equalsIgnoreCase(type))
-                return 1;
-            else if ("su2".equalsIgnoreCase(type))
-                return 2;
-            else
-                return 3;
+            if ("su3".equalsIgnoreCase(type)) return 1;
+            else if ("su2".equalsIgnoreCase(type)) return 2;
+            else return 3;
         }
 
         /**
@@ -134,10 +133,8 @@ public class NewsMetadata {
          */
         @Override
         public boolean equals(Object o) {
-            if (o == null)
-                return false;
-            if (!(o instanceof Update))
-                return false;
+            if (o == null) return false;
+            if (!(o instanceof Update)) return false;
             Update u = (Update) o;
             return getTypeOrder() == u.getTypeOrder();
         }

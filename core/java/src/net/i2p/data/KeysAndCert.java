@@ -9,16 +9,17 @@ package net.i2p.data;
  *
  */
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Arrays;
+import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SHA256Generator;
 import net.i2p.crypto.SigType;
 import net.i2p.util.ByteArrayStream;
-import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Arrays;
 
 /**
  * Container for cryptographic keys and certificate as used by I2P identities.
@@ -78,6 +79,7 @@ public class KeysAndCert extends DataStructureImpl {
     private Hash __calculatedHash;
     // if compressed, 32 bytes only
     private byte[] _padding;
+
     /**
      *  If compressed, the padding size / 32, else 0
      *  @since 0.9.62
@@ -92,25 +94,23 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-      *  Sets the certificate.
-      *
-      * @throws IllegalStateException if was already set
-      */
+     *  Sets the certificate.
+     *
+     * @throws IllegalStateException if was already set
+     */
     public void setCertificate(Certificate cert) {
-        if (_certificate != null)
-            throw new IllegalStateException();
+        if (_certificate != null) throw new IllegalStateException();
         _certificate = cert;
     }
 
     /**
-      *  Gets the signature type from the certificate.
-      *
-      *  @return null if not set or unknown
-      *  @since 0.9.17
-      */
+     *  Gets the signature type from the certificate.
+     *
+     *  @return null if not set or unknown
+     *  @since 0.9.17
+     */
     public SigType getSigType() {
-        if (_certificate == null)
-            return null;
+        if (_certificate == null) return null;
         if (_certificate.getCertificateType() == Certificate.CERTIFICATE_TYPE_KEY) {
             try {
                 KeyCertificate kcert = _certificate.toKeyCertificate();
@@ -123,14 +123,13 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-      *  Gets the encryption type from the certificate.
-      *
-      *  @return null if not set or unknown
-      *  @since 0.9.42
-      */
+     *  Gets the encryption type from the certificate.
+     *
+     *  @return null if not set or unknown
+     *  @since 0.9.42
+     */
     public EncType getEncType() {
-        if (_certificate == null)
-            return null;
+        if (_certificate == null) return null;
         if (_certificate.getCertificateType() == Certificate.CERTIFICATE_TYPE_KEY) {
             try {
                 KeyCertificate kcert = _certificate.toKeyCertificate();
@@ -151,13 +150,12 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-      *  Sets the public key.
-      *
-      * @throws IllegalStateException if was already set
-      */
+     *  Sets the public key.
+     *
+     * @throws IllegalStateException if was already set
+     */
     public void setPublicKey(PublicKey key) {
-        if (_publicKey != null)
-            throw new IllegalStateException();
+        if (_publicKey != null) throw new IllegalStateException();
         _publicKey = key;
     }
 
@@ -166,38 +164,41 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-      *  Sets the signing public key.
-      *
-      * @throws IllegalStateException if was already set
-      */
+     *  Sets the signing public key.
+     *
+     * @throws IllegalStateException if was already set
+     */
     public void setSigningPublicKey(SigningPublicKey key) {
-        if (_signingKey != null)
-            throw new IllegalStateException();
+        if (_signingKey != null) throw new IllegalStateException();
         _signingKey = key;
     }
 
     /**
-      *  Gets the padding bytes.
-      *
-      * @since 0.9.16
-      */
+     *  Gets the padding bytes.
+     *
+     * @since 0.9.16
+     */
     public byte[] getPadding() {
-        if (_paddingBlocks <= 1) {return _padding;}
+        if (_paddingBlocks <= 1) {
+            return _padding;
+        }
         byte[] rv = new byte[PAD_COMP_LEN * _paddingBlocks];
-        for (int i = 0; i <_paddingBlocks; i++) {
+        for (int i = 0; i < _paddingBlocks; i++) {
             System.arraycopy(_padding, 0, rv, i * PAD_COMP_LEN, PAD_COMP_LEN);
         }
         return rv;
     }
 
     /**
-      *  Sets the padding bytes.
-      *
-      * @throws IllegalStateException if was already set
-      * @since 0.9.12
-      */
+     *  Sets the padding bytes.
+     *
+     * @throws IllegalStateException if was already set
+     * @since 0.9.12
+     */
     public void setPadding(byte[] padding) {
-        if (_padding != null) {throw new IllegalStateException();}
+        if (_padding != null) {
+            throw new IllegalStateException();
+        }
         _padding = padding;
         compressPadding();
     }
@@ -211,12 +212,11 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-      * @throws IllegalStateException if data already set
-      */
+     * @throws IllegalStateException if data already set
+     */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
-        if (_publicKey != null || _signingKey != null || _certificate != null)
-            throw new IllegalStateException();
+        if (_publicKey != null || _signingKey != null || _certificate != null) throw new IllegalStateException();
         PublicKey pk = PublicKey.create(in);
         SigningPublicKey spk = SigningPublicKey.create(in);
         Certificate cert = Certificate.create(in);
@@ -238,16 +238,14 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-      *  Combines two padding arrays.
-      *
-      * @return null if both are null
-      * @since 0.9.42
-      */
+     *  Combines two padding arrays.
+     *
+     * @return null if both are null
+     * @since 0.9.42
+     */
     protected static byte[] combinePadding(byte[] pad1, byte[] pad2) {
-        if (pad1 == null)
-            return pad2;
-        if (pad2 == null)
-            return pad1;
+        if (pad1 == null) return pad2;
+        if (pad2 == null) return pad1;
         byte[] rv = new byte[pad1.length + pad2.length];
         System.arraycopy(pad1, 0, rv, 0, pad1.length);
         System.arraycopy(pad2, 0, rv, pad1.length, pad2.length);
@@ -267,7 +265,9 @@ public class KeysAndCert extends DataStructureImpl {
         }
         int blks = _padding.length / PAD_COMP_LEN;
         for (int i = 1; i < blks; i++) {
-            if (!DataHelper.eq(_padding, 0, _padding, i * PAD_COMP_LEN, PAD_COMP_LEN)) {return;}
+            if (!DataHelper.eq(_padding, 0, _padding, i * PAD_COMP_LEN, PAD_COMP_LEN)) {
+                return;
+            }
         }
         byte[] comp = new byte[PAD_COMP_LEN];
         System.arraycopy(_padding, 0, comp, 0, PAD_COMP_LEN);
@@ -281,8 +281,7 @@ public class KeysAndCert extends DataStructureImpl {
      * @since 0.9.62
      */
     protected int writePaddingBytes(byte[] target, int off) {
-        if (_padding == null)
-            return off;
+        if (_padding == null) return off;
         if (_paddingBlocks > 1) {
             for (int i = 0; i < _paddingBlocks; i++) {
                 System.arraycopy(_padding, 0, target, off, _padding.length);
@@ -297,19 +296,17 @@ public class KeysAndCert extends DataStructureImpl {
 
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
-        if ((_certificate == null) || (_publicKey == null) || (_signingKey == null))
-            throw new DataFormatException("Not enough data to format the router identity");
+        if ((_certificate == null) || (_publicKey == null) || (_signingKey == null)) throw new DataFormatException("Not enough data to format the router identity");
         _publicKey.writeBytes(out);
         if (_padding != null) {
             if (_paddingBlocks <= 1) {
                 out.write(_padding);
             } else {
-                for (int i = 0; i <_paddingBlocks; i++) {
+                for (int i = 0; i < _paddingBlocks; i++) {
                     out.write(_padding, 0, PAD_COMP_LEN);
                 }
             }
-        } else if (_signingKey.length() < SigningPublicKey.KEYSIZE_BYTES ||
-                   _publicKey.length() < PublicKey.KEYSIZE_BYTES) {
+        } else if (_signingKey.length() < SigningPublicKey.KEYSIZE_BYTES || _publicKey.length() < PublicKey.KEYSIZE_BYTES) {
             throw new DataFormatException("No padding set");
         }
         _signingKey.writeTruncatedBytes(out);
@@ -320,15 +317,11 @@ public class KeysAndCert extends DataStructureImpl {
     public boolean equals(Object object) {
         if (object == this) return true;
         if ((object == null) || !(object instanceof KeysAndCert)) return false;
-        KeysAndCert  ident = (KeysAndCert) object;
-        return
-               DataHelper.eq(_signingKey, ident._signingKey)
-               && DataHelper.eq(_publicKey, ident._publicKey)
-               && DataHelper.eq(_certificate, ident._certificate)
-               && (Arrays.equals(_padding, ident._padding) ||
-                   // failsafe as some code paths may not compress padding
-                   ((_paddingBlocks > 1 || ident._paddingBlocks > 1) &&
-                    Arrays.equals(getPadding(), ident.getPadding())));
+        KeysAndCert ident = (KeysAndCert) object;
+        return DataHelper.eq(_signingKey, ident._signingKey) && DataHelper.eq(_publicKey, ident._publicKey) && DataHelper.eq(_certificate, ident._certificate)
+                && (Arrays.equals(_padding, ident._padding) ||
+                        // failsafe as some code paths may not compress padding
+                        ((_paddingBlocks > 1 || ident._paddingBlocks > 1) && Arrays.equals(getPadding(), ident.getPadding())));
     }
 
     /** the signing key has enough randomness in it to use it by itself for speed */
@@ -346,20 +339,21 @@ public class KeysAndCert extends DataStructureImpl {
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
         String cls = getClass().getSimpleName();
-        if (cls.equals("RouterIdentity")) {cls = "Router";}
+        if (cls.equals("RouterIdentity")) {
+            cls = "Router";
+        }
         buf.append(cls);
         buf.append(" [");
         if (cls.equals("Destination")) {
-            buf.append(getHash().toBase32().substring(0,8));
+            buf.append(getHash().toBase32().substring(0, 8));
         } else {
-            buf.append(getHash().toBase64().substring(0,6));
+            buf.append(getHash().toBase64().substring(0, 6));
         }
         buf.append("]");
 
         if (_log.shouldInfo()) {
             buf.append("\n* Certificate: ").append(_certificate);
-            if ((_publicKey != null && _publicKey.getType() != EncType.ELGAMAL_2048) ||
-                !cls.equals("Destination")) {
+            if ((_publicKey != null && _publicKey.getType() != EncType.ELGAMAL_2048) || !cls.equals("Destination")) {
                 buf.append("\n* Public Key: ").append(_publicKey); // router identities only
             }
             buf.append("\n* Public Signing Key: ").append(_signingKey);
@@ -376,29 +370,27 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-      *  Throws IllegalStateException if keys and cert are not initialized,
-      *  as of 0.9.12. Prior to that, returned null.
-      *
-      *  @throws IllegalStateException if keys and cert are not initialized
-      */
+     *  Throws IllegalStateException if keys and cert are not initialized,
+     *  as of 0.9.12. Prior to that, returned null.
+     *
+     *  @throws IllegalStateException if keys and cert are not initialized
+     */
     @Override
     public Hash calculateHash() {
         return getHash();
     }
 
     /**
-      *  Throws IllegalStateException if keys and cert are not initialized,
-      *  as of 0.9.12. Prior to that, returned null.
-      *
-      *  @throws IllegalStateException if keys and cert are not initialized
-      */
+     *  Throws IllegalStateException if keys and cert are not initialized,
+     *  as of 0.9.12. Prior to that, returned null.
+     *
+     *  @throws IllegalStateException if keys and cert are not initialized
+     */
     public Hash getHash() {
-        if (__calculatedHash != null)
-            return __calculatedHash;
+        if (__calculatedHash != null) return __calculatedHash;
         byte identBytes[];
         try {
-            if (_certificate == null)
-                throw new IllegalStateException("KAC hash error");
+            if (_certificate == null) throw new IllegalStateException("KAC hash error");
             ByteArrayStream baos = new ByteArrayStream(384 + _certificate.size());
             writeBytes(baos);
             identBytes = baos.toByteArray();

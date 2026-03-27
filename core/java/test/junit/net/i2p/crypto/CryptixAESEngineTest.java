@@ -1,4 +1,5 @@
 package net.i2p.crypto;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -9,11 +10,12 @@ package net.i2p.crypto;
  */
 
 import junit.framework.TestCase;
+
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.data.SessionKey;
 
-public class CryptixAESEngineTest extends TestCase{
+public class CryptixAESEngineTest extends TestCase {
     public void testED() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         SessionKey key = ctx.keyGenerator().generateSessionKey();
@@ -26,7 +28,7 @@ public class CryptixAESEngineTest extends TestCase{
         CryptixAESEngine aes = new CryptixAESEngine(ctx);
         aes.encrypt(orig, 0, encrypted, 0, key, iv, orig.length);
         aes.decrypt(encrypted, 0, decrypted, 0, key, iv, encrypted.length);
-        assertTrue(DataHelper.eq(decrypted,orig));
+        assertTrue(DataHelper.eq(decrypted, orig));
     }
 
     public static void testED2() {
@@ -40,7 +42,7 @@ public class CryptixAESEngineTest extends TestCase{
         CryptixAESEngine aes = new CryptixAESEngine(ctx);
         aes.encrypt(orig, 0, data, 0, key, iv, data.length);
         aes.decrypt(data, 0, data, 0, key, iv, data.length);
-        assertTrue(DataHelper.eq(data,orig));
+        assertTrue(DataHelper.eq(data, orig));
     }
 
     public static void testFake() {
@@ -56,7 +58,7 @@ public class CryptixAESEngineTest extends TestCase{
         CryptixAESEngine aes = new CryptixAESEngine(ctx);
         aes.encrypt(orig, 0, encrypted, 0, key, iv, orig.length);
         aes.decrypt(encrypted, 0, decrypted, 0, wrongKey, iv, encrypted.length);
-        assertFalse(DataHelper.eq(decrypted,orig));
+        assertFalse(DataHelper.eq(decrypted, orig));
     }
 
     public static void testNull() {
@@ -93,7 +95,7 @@ public class CryptixAESEngineTest extends TestCase{
         CryptixAESEngine aes = new CryptixAESEngine(ctx);
         aes.encryptBlock(orig, 0, key, encrypted, 0);
         aes.decryptBlock(encrypted, 0, key, decrypted, 0);
-        assertTrue(DataHelper.eq(decrypted,orig));
+        assertTrue(DataHelper.eq(decrypted, orig));
     }
 
     public static void testEDBlock2() {
@@ -107,6 +109,6 @@ public class CryptixAESEngineTest extends TestCase{
         CryptixAESEngine aes = new CryptixAESEngine(ctx);
         aes.encryptBlock(orig, 0, key, data, 0);
         aes.decryptBlock(data, 0, key, data, 0);
-        assertTrue(DataHelper.eq(data,orig));
+        assertTrue(DataHelper.eq(data, orig));
     }
 }

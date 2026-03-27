@@ -1,15 +1,16 @@
 package net.i2p.client.impl;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.client.I2PSessionException;
 import net.i2p.client.I2PSessionListener;
 import net.i2p.client.I2PSessionMuxedListener;
 import net.i2p.util.Log;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /*
  * public domain
@@ -43,38 +44,35 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
     @Override
     public void messageAvailable(I2PSession session, int msgId, long size, int proto, int fromport, int toport) {
         I2PSessionMuxedListener l = findListener(proto, toport);
-        if (l != null) {l.messageAvailable(session, msgId, size, proto, fromport, toport);}
-        else {
+        if (l != null) {
+            l.messageAvailable(session, msgId, size, proto, fromport, toport);
+        } else {
             // no listener, throw it out
             if (_listeners.isEmpty()) {
-                if (_log.shouldWarn()) {_log.warn("No listeners for incoming message");}
+                if (_log.shouldWarn()) {
+                    _log.warn("No listeners for incoming message");
+                }
             } else {
                 if (_log.shouldWarn()) {
-                    _log.warn("No listener for protocol " + protocolNumberToString(proto) + " on port: " + toport +
-                              " from pool of " + _listeners.size() + " listeners");
+                    _log.warn("No listener for protocol " + protocolNumberToString(proto) + " on port: " + toport + " from pool of " + _listeners.size() + " listeners");
                 }
             }
-            try {session.receiveMessage(msgId);}
-            catch (I2PSessionException ise) {}
+            try {
+                session.receiveMessage(msgId);
+            } catch (I2PSessionException ise) {
+            }
         }
     }
 
     public static String protocolNumberToString(int proto) {
         switch (proto) {
-            case 0:
-                return "ANY (0)";
-            case 6:
-                return "STREAMING (6)";
-            case 17:
-                return "DATAGRAM1 (17)";
-            case 18:
-                return "DATAGRAM_RAW (18)";
-            case 19:
-                return "DATAGRAM2 (19)";
-            case 20:
-                return "DATAGRAM3 (20)";
-            default:
-                return "Unknown (" + proto + ")";
+            case 0: return "ANY (0)";
+            case 6: return "STREAMING (6)";
+            case 17: return "DATAGRAM1 (17)";
+            case 18: return "DATAGRAM_RAW (18)";
+            case 19: return "DATAGRAM2 (19)";
+            case 20: return "DATAGRAM3 (20)";
+            default: return "Unknown (" + proto + ")";
         }
     }
 
@@ -82,8 +80,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
     public void reportAbuse(I2PSession session, int severity) {
         Collection<I2PSessionMuxedListener> lsnrs = _listeners.values();
         // dedup
-        if (lsnrs.size() > 1)
-            lsnrs = new HashSet<I2PSessionMuxedListener>(lsnrs);
+        if (lsnrs.size() > 1) lsnrs = new HashSet<I2PSessionMuxedListener>(lsnrs);
         for (I2PSessionMuxedListener l : lsnrs) {
             l.reportAbuse(session, severity);
         }
@@ -93,11 +90,9 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
     public void disconnected(I2PSession session) {
         Collection<I2PSessionMuxedListener> lsnrs = _listeners.values();
         // dedup
-        if (lsnrs.size() > 1)
-            lsnrs = new HashSet<I2PSessionMuxedListener>(lsnrs);
+        if (lsnrs.size() > 1) lsnrs = new HashSet<I2PSessionMuxedListener>(lsnrs);
         for (I2PSessionMuxedListener l : lsnrs) {
-            if (_log.shouldInfo())
-                _log.info("Sending disconnected() to " + l);
+            if (_log.shouldInfo()) _log.info("Sending disconnected() to " + l);
             l.disconnected(session);
         }
     }
@@ -106,11 +101,9 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
     public void errorOccurred(I2PSession session, String message, Throwable error) {
         Collection<I2PSessionMuxedListener> lsnrs = _listeners.values();
         // dedup
-        if (lsnrs.size() > 1)
-            lsnrs = new HashSet<I2PSessionMuxedListener>(lsnrs);
+        if (lsnrs.size() > 1) lsnrs = new HashSet<I2PSessionMuxedListener>(lsnrs);
         for (I2PSessionMuxedListener l : lsnrs) {
-            if (_log.shouldInfo())
-                 _log.info("Sending errorOccurred() \"" + message + "\" to " + l);
+            if (_log.shouldInfo()) _log.info("Sending errorOccurred() \"" + message + "\" to " + l);
             l.errorOccurred(session, message, error);
         }
     }
@@ -121,13 +114,10 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
      *  (Streaming lib)
      */
     public void addListener(I2PSessionListener l, int proto, int port) {
-        if (proto < 0 || proto > 254 || port < 0 || port > 65535)
-            throw new IllegalArgumentException();
-        if (_log.shouldInfo())
-            _log.info("Old addListener() " + l + ' ' + proto + ' ' + port);
+        if (proto < 0 || proto > 254 || port < 0 || port > 65535) throw new IllegalArgumentException();
+        if (_log.shouldInfo()) _log.info("Old addListener() " + l + ' ' + proto + ' ' + port);
         I2PSessionListener old = _listeners.put(key(proto, port), new NoPortsListener(l));
-        if (old != null && _log.shouldWarn())
-            _log.warn("Listener " + l + " replaces " + old + " for proto: " + proto + " port: " + port);
+        if (old != null && _log.shouldWarn()) _log.warn("Listener " + l + " replaces " + old + " for proto: " + proto + " port: " + port);
     }
 
     /**
@@ -135,20 +125,15 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
      *  UDP perhaps
      */
     public void addMuxedListener(I2PSessionMuxedListener l, int proto, int port) {
-        if (proto < 0 || proto > 254 || port < 0 || port > 65535)
-            throw new IllegalArgumentException();
-        if (_log.shouldInfo())
-            _log.info("addMuxedListener() " + l + ' ' + proto + ' ' + port);
+        if (proto < 0 || proto > 254 || port < 0 || port > 65535) throw new IllegalArgumentException();
+        if (_log.shouldInfo()) _log.info("addMuxedListener() " + l + ' ' + proto + ' ' + port);
         I2PSessionListener old = _listeners.put(key(proto, port), l);
-        if (old != null && _log.shouldWarn())
-            _log.warn("Listener " + l + " replaces " + old + " for proto: " + proto + " port: " + port);
+        if (old != null && _log.shouldWarn()) _log.warn("Listener " + l + " replaces " + old + " for proto: " + proto + " port: " + port);
     }
 
     public void removeListener(int proto, int port) {
-        if (proto < 0 || proto > 254 || port < 0 || port > 65535)
-            throw new IllegalArgumentException();
-        if (_log.shouldInfo())
-            _log.info("removeListener() " + proto + ' ' + port);
+        if (proto < 0 || proto > 254 || port < 0 || port > 65535) throw new IllegalArgumentException();
+        if (_log.shouldInfo()) _log.info("removeListener() " + proto + ' ' + port);
         _listeners.remove(key(proto, port));
     }
 
@@ -190,18 +175,22 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
         public void messageAvailable(I2PSession session, int msgId, long size) {
             throw new IllegalArgumentException("no");
         }
+
         @Override
         public void messageAvailable(I2PSession session, int msgId, long size, int proto, int fromport, int toport) {
             _l.messageAvailable(session, msgId, size);
         }
+
         @Override
         public void reportAbuse(I2PSession session, int severity) {
             _l.reportAbuse(session, severity);
         }
+
         @Override
         public void disconnected(I2PSession session) {
             _l.disconnected(session);
         }
+
         @Override
         public void errorOccurred(I2PSession session, String message, Throwable error) {
             _l.errorOccurred(session, message, error);

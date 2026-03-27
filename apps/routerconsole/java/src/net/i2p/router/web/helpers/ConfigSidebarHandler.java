@@ -1,14 +1,15 @@
 package net.i2p.router.web.helpers;
 
+import net.i2p.data.DataHelper;
+import net.i2p.router.web.CSSHelper;
+import net.i2p.router.web.FormHandler;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import net.i2p.data.DataHelper;
-import net.i2p.router.web.CSSHelper;
-import net.i2p.router.web.FormHandler;
 
 /**
  * Simple sidebar configuration handler.
@@ -43,10 +44,15 @@ public class ConfigSidebarHandler extends FormHandler {
         boolean unifiedSidebar = ctx.getBooleanProperty("routerconsole.unifiedSidebar");
         boolean stickySidebar = ctx.getBooleanProperty("routerconsole.stickySidebar");
 
-        if (_action.equals(_t("Save")) && "0".equals(group)) {handleSave(unifiedSidebar, stickySidebar);}
-        else if (_action.equals(_t("Restore full default"))) {restoreDefault(true);}
-        else if (_action.equals(_t("Restore minimal default"))) {restoreDefault(false);}
-        else if (editing) {moveSection();}
+        if (_action.equals(_t("Save")) && "0".equals(group)) {
+            handleSave(unifiedSidebar, stickySidebar);
+        } else if (_action.equals(_t("Restore full default"))) {
+            restoreDefault(true);
+        } else if (_action.equals(_t("Restore minimal default"))) {
+            restoreDefault(false);
+        } else if (editing) {
+            moveSection();
+        }
     }
 
     private void handleSave(boolean currentUnifiedSidebar, boolean currentStickySidebar) {
@@ -82,7 +88,9 @@ public class ConfigSidebarHandler extends FormHandler {
 
     private int parseRefreshInterval(String refreshStr) throws NumberFormatException {
         int refresh = Integer.parseInt(refreshStr);
-        if (refresh < 0) {return 0;}
+        if (refresh < 0) {
+            return 0;
+        }
         return refresh;
     }
 
@@ -93,8 +101,7 @@ public class ConfigSidebarHandler extends FormHandler {
 
     private void restoreDefault(boolean full) {
         String prop = SidebarHelper.PROP_SUMMARYBAR + "default";
-        String value = isAdvanced() ? (full ? SidebarHelper.DEFAULT_FULL_ADVANCED : SidebarHelper.DEFAULT_MINIMAL_ADVANCED)
-                                    : (full ? SidebarHelper.DEFAULT_FULL : SidebarHelper.DEFAULT_MINIMAL);
+        String value = isAdvanced() ? (full ? SidebarHelper.DEFAULT_FULL_ADVANCED : SidebarHelper.DEFAULT_MINIMAL_ADVANCED) : (full ? SidebarHelper.DEFAULT_FULL : SidebarHelper.DEFAULT_MINIMAL);
         _context.router().saveConfig(prop, value);
         addFormNotice(_t(full ? "Full sidebar defaults restored." : "Minimal sidebar defaults restored."), true);
     }
@@ -111,13 +118,19 @@ public class ConfigSidebarHandler extends FormHandler {
         Map<Integer, String> sections = new TreeMap<>();
 
         for (Object o : _settings.keySet()) {
-            if (!(o instanceof String)) {continue;}
+            if (!(o instanceof String)) {
+                continue;
+            }
             String k = (String) o;
-            if (!k.startsWith(ORDER_PREFIX)) {continue;}
+            if (!k.startsWith(ORDER_PREFIX)) {
+                continue;
+            }
             String v = getJettyString(k);
             String keyTrimmed = k.substring(ORDER_PREFIX.length());
             int underscoreIndex = keyTrimmed.indexOf('_');
-            if (underscoreIndex == -1) {continue;}
+            if (underscoreIndex == -1) {
+                continue;
+            }
             k = keyTrimmed.substring(underscoreIndex + 1);
             try {
                 int order = Integer.parseInt(v);
@@ -128,9 +141,13 @@ public class ConfigSidebarHandler extends FormHandler {
             }
         }
 
-        if (adding) {handleAddSection(sections);}
-        else if (deleting) {handleDeleteSections(sections);}
-        else if (moving) {handleMoveSection(sections);}
+        if (adding) {
+            handleAddSection(sections);
+        } else if (deleting) {
+            handleDeleteSections(sections);
+        } else if (moving) {
+            handleMoveSection(sections);
+        }
 
         SidebarHelper.saveSummaryBarSections(_context, "default", sections);
         addFormNotice(_t("Saved order of sections.") + " " + _t("Sidebar will refresh shortly."), true);
@@ -161,14 +178,19 @@ public class ConfigSidebarHandler extends FormHandler {
     private void handleDeleteSections(Map<Integer, String> sections) {
         Set<Integer> toDelete = new HashSet<>();
         for (Object o : _settings.keySet()) {
-            if (!(o instanceof String)) {continue;}
+            if (!(o instanceof String)) {
+                continue;
+            }
             String k = (String) o;
-            if (!k.startsWith(DELETE_PREFIX)) {continue;}
+            if (!k.startsWith(DELETE_PREFIX)) {
+                continue;
+            }
             k = k.substring(DELETE_PREFIX.length());
             try {
                 int keyInt = Integer.parseInt(k);
                 toDelete.add(keyInt);
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) {
+            }
         }
         Iterator<Map.Entry<Integer, String>> iter = sections.entrySet().iterator();
         while (iter.hasNext()) {
@@ -186,20 +208,15 @@ public class ConfigSidebarHandler extends FormHandler {
             int from = Integer.parseInt(parts[1]);
             int to = 0;
             switch (parts[2]) {
-                case "top":
-                    to = 0;
+                case "top": to = 0;
                     break;
-                case "up":
-                    to = from - 1;
+                case "up": to = from - 1;
                     break;
-                case "down":
-                    to = from + 1;
+                case "down": to = from + 1;
                     break;
-                case "bottom":
-                    to = sections.size() - 1;
+                case "bottom": to = sections.size() - 1;
                     break;
-                default:
-                    to = from;
+                default: to = from;
                     break;
             }
             int direction = (parts[2].equals("down") || parts[2].equals("bottom")) ? 1 : -1;
@@ -219,7 +236,9 @@ public class ConfigSidebarHandler extends FormHandler {
      */
     public void setMovingAction() {
         for (Object o : _settings.keySet()) {
-            if (!(o instanceof String)) {continue;}
+            if (!(o instanceof String)) {
+                continue;
+            }
             String k = (String) o;
             if (k.startsWith(MOVE_PREFIX) && k.endsWith(".x") && _settings.get(k) != null) {
                 _action = k.substring(0, k.length() - 2);
@@ -227,5 +246,4 @@ public class ConfigSidebarHandler extends FormHandler {
             }
         }
     }
-
 }

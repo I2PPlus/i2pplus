@@ -10,11 +10,12 @@
  */
 package org.minidns.record;
 
+import org.minidns.record.Record.TYPE;
+import org.minidns.util.InetAddressUtil;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Inet6Address;
-import org.minidns.record.Record.TYPE;
-import org.minidns.util.InetAddressUtil;
 
 /**
  * DNS AAAA record payload representing an IPv6 address.<br>
@@ -61,8 +62,7 @@ public class AAAA extends InternetAddressRR<Inet6Address> {
      * @return parsed AAAA record
      * @throws java.io.IOException if I/O error occurs
      */
-    public static AAAA parse(DataInputStream dis)
-            throws IOException {
+    public static AAAA parse(DataInputStream dis) throws IOException {
         byte[] ip = new byte[16];
         dis.readFully(ip);
         return new AAAA(ip);
@@ -75,11 +75,8 @@ public class AAAA extends InternetAddressRR<Inet6Address> {
             if (i != 0) {
                 sb.append(':');
             }
-            sb.append(Integer.toHexString(
-                ((ip[i] & 0xff) << 8) + (ip[i + 1] & 0xff)
-            ));
+            sb.append(Integer.toHexString(((ip[i] & 0xff) << 8) + (ip[i + 1] & 0xff)));
         }
         return sb.toString();
     }
-
 }

@@ -1,5 +1,19 @@
 package net.i2p.router.sybil;
 
+import net.i2p.I2PAppContext;
+import net.i2p.app.ClientApp;
+import net.i2p.app.ClientAppManager;
+import net.i2p.data.DataFormatException;
+import net.i2p.data.DataHelper;
+import net.i2p.data.Hash;
+import net.i2p.router.Blocklist;
+import net.i2p.update.UpdateManager;
+import net.i2p.update.UpdateType;
+import net.i2p.util.FileSuffixFilter;
+import net.i2p.util.Log;
+import net.i2p.util.SecureDirectory;
+import net.i2p.util.SecureFileOutputStream;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,19 +29,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-import net.i2p.I2PAppContext;
-import net.i2p.app.ClientApp;
-import net.i2p.app.ClientAppManager;
-import net.i2p.data.DataFormatException;
-import net.i2p.data.DataHelper;
-import net.i2p.data.Hash;
-import net.i2p.router.Blocklist;
-import net.i2p.update.UpdateManager;
-import net.i2p.update.UpdateType;
-import net.i2p.util.FileSuffixFilter;
-import net.i2p.util.Log;
-import net.i2p.util.SecureDirectory;
-import net.i2p.util.SecureFileOutputStream;
 
 /**
  *  Store and retrieve analysis files from disk.
@@ -59,8 +60,7 @@ public class PersistSybil {
      */
     public synchronized void store(long date, Map<Hash, Points> entries) throws IOException {
         File dir = new SecureDirectory(_context.getConfigDir(), DIR);
-        if (!dir.exists())
-            dir.mkdirs();
+        if (!dir.exists()) dir.mkdirs();
         File file = new File(dir, PFX + date + SFX);
         StringBuilder buf = new StringBuilder(128);
         Writer out = null;
@@ -78,7 +78,10 @@ public class PersistSybil {
                 buf.setLength(0);
             }
         } finally {
-            if (out != null) try { out.close(); } catch (IOException ioe) {}
+            if (out != null) try {
+                    out.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 
@@ -91,14 +94,14 @@ public class PersistSybil {
         File dir = new File(_context.getConfigDir(), DIR);
         List<Long> rv = new ArrayList<Long>();
         File[] files = dir.listFiles(new FileSuffixFilter(PFX, SFX));
-        if (files == null)
-            return rv;
+        if (files == null) return rv;
         for (File file : files) {
             try {
                 String name = file.getName();
                 long d = Long.parseLong(name.substring(PFX.length(), name.length() - SFX.length()));
                 rv.add(Long.valueOf(d));
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) {
+            }
         }
         Collections.sort(rv, Collections.reverseOrder());
         return rv;
@@ -118,13 +121,10 @@ public class PersistSybil {
             in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), "UTF-8"));
             String line;
             while ((line = in.readLine()) != null) {
-                if (line.startsWith("#"))
-                    continue;
+                if (line.startsWith("#")) continue;
                 int colon = line.indexOf(':');
-                if (colon != 44)
-                    continue;
-                if (line.length() < 46)
-                    continue;
+                if (colon != 44) continue;
+                if (line.length() < 46) continue;
                 Hash h = new Hash();
                 try {
                     h.fromBase64(line.substring(0, 44));
@@ -132,12 +132,14 @@ public class PersistSybil {
                     continue;
                 }
                 Points p = Points.fromString(line.substring(45));
-                if (p == null)
-                    continue;
+                if (p == null) continue;
                 rv.put(h, p);
             }
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null) try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
         }
         return rv;
     }
@@ -159,17 +161,17 @@ public class PersistSybil {
                 in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), "UTF-8"));
                 String line;
                 while ((line = in.readLine()) != null) {
-                    if (!line.startsWith(bh))
-                        continue;
-                    if (line.length() < 46)
-                        continue;
+                    if (!line.startsWith(bh)) continue;
+                    if (line.length() < 46) continue;
                     Points p = Points.fromString(line.substring(45));
-                    if (p == null)
-                        continue;
+                    if (p == null) continue;
                     rv.put(date, p);
                 }
             } finally {
-                if (in != null) try { in.close(); } catch (IOException ioe) {}
+                if (in != null) try {
+                        in.close();
+                    } catch (IOException ioe) {
+                    }
             }
         }
         return rv;
@@ -187,40 +189,32 @@ public class PersistSybil {
         ClientAppManager cmgr = _context.clientAppManager();
         if (cmgr != null) {
             ClientApp console = cmgr.getRegisteredApp("console");
-            if (console != null)
-                removeTime = Analysis.DEFAULT_REMOVE_TIME;
+            if (console != null) removeTime = Analysis.DEFAULT_REMOVE_TIME;
         }
         long age = _context.getProperty(Analysis.PROP_REMOVETIME, removeTime);
         // 0 means never delete
-        if (age <= 0)
-            return;
+        if (age <= 0) return;
         long freq2 = 2 * _context.getProperty(Analysis.PROP_FREQUENCY, Analysis.DEFAULT_FREQUENCY);
-        if (age < freq2)
-            age = freq2;
-        if (age < 60*1000)
-            return;
+        if (age < freq2) age = freq2;
+        if (age < 60 * 1000) return;
         long cutoff = _context.clock().now() - age;
         File dir = new File(_context.getConfigDir(), DIR);
         File[] files = dir.listFiles(new FileSuffixFilter(PFX, SFX));
-        if (files == null)
-            return;
+        if (files == null) return;
         int deleted = 0;
         for (File file : files) {
             try {
                 String name = file.getName();
                 long d = Long.parseLong(name.substring(PFX.length(), name.length() - SFX.length()));
                 if (d < cutoff) {
-                    if (file.delete())
-                        deleted++;
-                    else if (_log.shouldWarn())
-                        _log.warn("Failed to delete: " + file);
+                    if (file.delete()) deleted++;
+                    else if (_log.shouldWarn()) _log.warn("Failed to delete: " + file);
                 }
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) {
+            }
         }
-        if (deleted > 0 && _log.shouldWarn())
-            _log.warn("Deleted " + deleted + " old analysis files");
+        if (deleted > 0 && _log.shouldWarn()) _log.warn("Deleted " + deleted + " old analysis files");
     }
-
 
     /**
      *  Delete the file for a particular date
@@ -272,8 +266,7 @@ public class PersistSybil {
     Map<String, Long> readBlocklist() {
         File f = getBlocklistFile();
         Map<String, Long> rv = readBlocklist(f);
-        if (rv != null)
-            notifyVersion(f.lastModified());
+        if (rv != null) notifyVersion(f.lastModified());
         return rv;
     }
 
@@ -288,30 +281,29 @@ public class PersistSybil {
         if (blFile.exists()) {
             BufferedReader br = null;
             try {
-                br = new BufferedReader(new InputStreamReader(
-                        new FileInputStream(blFile), "UTF-8"));
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(blFile), "UTF-8"));
                 rv = new HashMap<String, Long>();
                 String buf = null;
-                long now = _context.clock().now() + 5*60*1000L;
+                long now = _context.clock().now() + 5 * 60 * 1000L;
                 while ((buf = br.readLine()) != null) {
                     int index = buf.indexOf('#');
-                    if (index == 0)
-                        continue;
+                    if (index == 0) continue;
                     String[] ss = DataHelper.split(buf, ",", 2);
-                    if (ss.length != 2)
-                        continue;
+                    if (ss.length != 2) continue;
                     try {
                         long exp = Long.parseLong(ss[1]);
-                        if (exp < now)
-                            continue;
+                        if (exp < now) continue;
                         rv.put(ss[0], Long.valueOf(exp));
-                    } catch (NumberFormatException nfe) {}
+                    } catch (NumberFormatException nfe) {
+                    }
                 }
             } catch (IOException ioe) {
-                if (_log.shouldWarn())
-                    _log.warn("Error reading the blocklist file", ioe);
+                if (_log.shouldWarn()) _log.warn("Error reading the blocklist file", ioe);
             } finally {
-                if (br != null) try { br.close(); } catch (IOException ioe) {}
+                if (br != null) try {
+                        br.close();
+                    } catch (IOException ioe) {
+                    }
             }
         }
         return rv;
@@ -327,12 +319,10 @@ public class PersistSybil {
      */
     synchronized void storeBlocklist(Set<String> blocks, long blockUntil) {
         File dir = new SecureDirectory(_context.getConfigDir(), SDIR);
-        if (!dir.exists())
-            dir.mkdirs();
+        if (!dir.exists()) dir.mkdirs();
         File blFile = new File(dir, BLOCKLIST_SYBIL_FILE);
         Map<String, Long> map = readBlocklist(blFile);
-        if (map == null)
-            map = new HashMap<String, Long>();
+        if (map == null) map = new HashMap<String, Long>();
         Long until = Long.valueOf(blockUntil);
         for (String s : blocks) {
             Long old = map.put(s, until);
@@ -354,10 +344,12 @@ public class PersistSybil {
             }
             notifyVersion(_context.clock().now());
         } catch (IOException ioe) {
-            if (_log.shouldWarn())
-                _log.warn("Error writing the blocklist file", ioe);
+            if (_log.shouldWarn()) _log.warn("Error writing the blocklist file", ioe);
         } finally {
-            if (out != null) try { out.close(); } catch (IOException ioe) {}
+            if (out != null) try {
+                    out.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 
@@ -368,43 +360,42 @@ public class PersistSybil {
         ClientAppManager cmgr = _context.clientAppManager();
         if (cmgr != null) {
             UpdateManager umgr = (UpdateManager) cmgr.getRegisteredApp(UpdateManager.APP_NAME);
-            if (umgr != null)
-                umgr.notifyInstalled(UpdateType.BLOCKLIST, Blocklist.ID_SYBIL, Long.toString(v));
+            if (umgr != null) umgr.notifyInstalled(UpdateType.BLOCKLIST, Blocklist.ID_SYBIL, Long.toString(v));
         }
     }
 
-/****
-    public static void main(String[] args) {
-        I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        PersistSybil ps = new PersistSybil(ctx);
-        byte[] b = new byte[32];
-        ctx.random().nextBytes(b);
-        Hash h = new Hash(b);
-        String rsn = "Test reason";
-        Points p = new Points(1.234, rsn);
-        rsn = "Test reason2";
-        p.addPoints(2.345, rsn);
-        Map<Hash, Points> map = new HashMap<Hash, Points>();
-        map.put(h, p);
-        b = new byte[32];
-        ctx.random().nextBytes(b);
-        h = new Hash(b);
-        map.put(h, p);
-        try {
-            long now = System.currentTimeMillis();
-            System.out.println("storing entries: " + map.size());
-            ps.store(System.currentTimeMillis(), map);
-            List<Long> dates = ps.load();
-            System.out.println("Found sets: " + dates.size());
-            map = ps.load(Long.valueOf(now));
-            System.out.println("loaded entries: " + map.size());
-            for (Map.Entry<Hash, Points> e : map.entrySet()) {
-                System.out.println(e.getKey().toString() + ": " + e.getValue());
-            }
-        } catch (IOException ioe) {
-            System.out.println("store error from " + args[0]);
-            ioe.printStackTrace();
-        }
-    }
-****/
+    /****
+     * public static void main(String[] args) {
+     * I2PAppContext ctx = I2PAppContext.getGlobalContext();
+     * PersistSybil ps = new PersistSybil(ctx);
+     * byte[] b = new byte[32];
+     * ctx.random().nextBytes(b);
+     * Hash h = new Hash(b);
+     * String rsn = "Test reason";
+     * Points p = new Points(1.234, rsn);
+     * rsn = "Test reason2";
+     * p.addPoints(2.345, rsn);
+     * Map<Hash, Points> map = new HashMap<Hash, Points>();
+     * map.put(h, p);
+     * b = new byte[32];
+     * ctx.random().nextBytes(b);
+     * h = new Hash(b);
+     * map.put(h, p);
+     * try {
+     * long now = System.currentTimeMillis();
+     * System.out.println("storing entries: " + map.size());
+     * ps.store(System.currentTimeMillis(), map);
+     * List<Long> dates = ps.load();
+     * System.out.println("Found sets: " + dates.size());
+     * map = ps.load(Long.valueOf(now));
+     * System.out.println("loaded entries: " + map.size());
+     * for (Map.Entry<Hash, Points> e : map.entrySet()) {
+     * System.out.println(e.getKey().toString() + ": " + e.getValue());
+     * }
+     * } catch (IOException ioe) {
+     * System.out.println("store error from " + args[0]);
+     * ioe.printStackTrace();
+     * }
+     * }
+     ****/
 }

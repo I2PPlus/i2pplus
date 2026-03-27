@@ -24,14 +24,19 @@ import java.util.Set;
 public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     /** The maximum capacity for this set */
     public static final int MAX_CAPACITY = 32;
+
     /** The underlying array of entries */
     protected final Object[] _entries;
+
     /** Whether to throw on overflow */
     private final boolean _throwOnFull;
+
     /** The current size of the set */
     private int _size;
+
     /** The overflow index for overwrite mode */
     private int _overflowIndex;
+
     /** The modification count for fail-fast iterators */
     private transient int modCount;
 
@@ -99,7 +104,6 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
         addAll(c);
     }
 
-
     /**
      *  A fixed capacity of arr.length.
      *  Adds over capacity will throw a SetFullException.
@@ -113,8 +117,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
         _entries = arr;
         int i;
         for (i = 0; i < arr.length; i++) {
-            if (arr[i] == null)
-                break;
+            if (arr[i] == null) break;
         }
         _size = i;
         _throwOnFull = true;
@@ -143,8 +146,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      * @throws IllegalArgumentException if capacity less than 1.
      */
     public ArraySet(int capacity, boolean throwOnFull) {
-        if (capacity <= 0)
-            throw new IllegalArgumentException("Bad capacity");
+        if (capacity <= 0) throw new IllegalArgumentException("Bad capacity");
         _entries = new Object[capacity];
         _throwOnFull = throwOnFull;
     }
@@ -158,8 +160,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     protected int indexOf(Object o) {
         if (o != null) {
             for (int i = 0; i < _size; i++) {
-                if (o.equals(_entries[i]))
-                    return i;
+                if (o.equals(_entries[i])) return i;
             }
         }
         return -1;
@@ -172,8 +173,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      */
     @Override
     public boolean add(E o) {
-        if (o == null)
-            throw new NullPointerException();
+        if (o == null) throw new NullPointerException();
         int i = indexOf(o);
         if (i >= 0) {
             _entries[i] = o;
@@ -196,8 +196,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     public void addUnique(E o) {
         int i;
         if (_size >= _entries.length) {
-            if (_throwOnFull)
-                throw new SetFullException();
+            if (_throwOnFull) throw new SetFullException();
             i = _overflowIndex++;
             if (i >= _entries.length) {
                 i = 0;
@@ -234,8 +233,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     @Override
     public boolean remove(Object o) {
         int i = indexOf(o);
-        if (i < 0)
-            return false;
+        if (i < 0) return false;
         modCount++;
         _size--;
         for (int j = i; j < _size; j++) {
@@ -260,8 +258,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      */
     @SuppressWarnings("unchecked")
     public E get(int index) {
-        if (index < 0 || index > _size - 1)
-            throw new IndexOutOfBoundsException();
+        if (index < 0 || index > _size - 1) throw new IndexOutOfBoundsException();
         return (E) _entries[index];
     }
 
@@ -338,14 +335,12 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
 
         @Override
         public void remove() {
-            if (lastRet < 0)
-                throw new IllegalStateException();
+            if (lastRet < 0) throw new IllegalStateException();
             checkForComodification();
 
             try {
                 ArraySet.this.remove(lastRet);
-                if (lastRet < cursor)
-                    cursor--;
+                if (lastRet < cursor) cursor--;
                 lastRet = -1;
                 expectedModCount = modCount;
             } catch (IndexOutOfBoundsException e) {
@@ -354,60 +349,59 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
         }
 
         final void checkForComodification() {
-            if (modCount != expectedModCount)
-                throw new ConcurrentModificationException();
+            if (modCount != expectedModCount) throw new ConcurrentModificationException();
         }
     }
 
     /**
      *  About 3x faster than HashSet.
      */
-/****
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public static void main(String[] args) {
-        if (args.length > 0) {
-            System.out.println("Test with overwrite");
-            Set s = new ArraySet(4, false);
-            for (int i = 0; i < args.length; i++) {
-                System.out.println("Added " + args[i] + "? " + s.add(args[i]));
-                System.out.println("Size is now " + s.size());
-            }
-            // toString tests the iterator
-            System.out.println("Set now contains" + s);
-            for (int i = 0; i < args.length; i++) {
-                System.out.println("Removed " + args[i] + "? " + s.remove(args[i]));
-                System.out.println("Size is now " + s.size());
-            }
-            System.out.println("\nTest with throw on full");
-            s = new ArraySet(4);
-            for (int i = 0; i < args.length; i++) {
-                System.out.println("Added " + args[i] + "? " + s.add(args[i]));
-                System.out.println("Size is now " + s.size());
-            }
-            // toString tests the iterator
-            System.out.println("Set now contains" + s);
-            for (int i = 0; i < args.length; i++) {
-                System.out.println("Removed " + args[i] + "? " + s.remove(args[i]));
-                System.out.println("Size is now " + s.size());
-            }
-        }
-
-        //java.util.List c = java.util.Arrays.asList(new String[] {"foo", "bar", "baz", "splat", "barf", "baz", "moose", "bear", "cat", "dog"});
-        java.util.List c = java.util.Arrays.asList(new String[] {"foo", "bar"});
-        long start = System.currentTimeMillis();
-        Set s = new java.util.HashSet(c);
-        int runs = 10000000;
-        for (int i = 0; i < runs; i++) {
-            s = new java.util.HashSet(s);
-        }
-        System.out.println("HashSet took " + (System.currentTimeMillis() - start));
-
-        start = System.currentTimeMillis();
-        s = new ArraySet(c);
-        for (int i = 0; i < runs; i++) {
-            s = new ArraySet(s);
-        }
-        System.out.println("ArraySet took " + (System.currentTimeMillis() - start));
-    }
-****/
+    /****
+     * @SuppressWarnings({ "unchecked", "rawtypes" })
+     * public static void main(String[] args) {
+     * if (args.length > 0) {
+     * System.out.println("Test with overwrite");
+     * Set s = new ArraySet(4, false);
+     * for (int i = 0; i < args.length; i++) {
+     * System.out.println("Added " + args[i] + "? " + s.add(args[i]));
+     * System.out.println("Size is now " + s.size());
+     * }
+     * // toString tests the iterator
+     * System.out.println("Set now contains" + s);
+     * for (int i = 0; i < args.length; i++) {
+     * System.out.println("Removed " + args[i] + "? " + s.remove(args[i]));
+     * System.out.println("Size is now " + s.size());
+     * }
+     * System.out.println("\nTest with throw on full");
+     * s = new ArraySet(4);
+     * for (int i = 0; i < args.length; i++) {
+     * System.out.println("Added " + args[i] + "? " + s.add(args[i]));
+     * System.out.println("Size is now " + s.size());
+     * }
+     * // toString tests the iterator
+     * System.out.println("Set now contains" + s);
+     * for (int i = 0; i < args.length; i++) {
+     * System.out.println("Removed " + args[i] + "? " + s.remove(args[i]));
+     * System.out.println("Size is now " + s.size());
+     * }
+     * }
+     *
+     * //java.util.List c = java.util.Arrays.asList(new String[] {"foo", "bar", "baz", "splat", "barf", "baz", "moose", "bear", "cat", "dog"});
+     * java.util.List c = java.util.Arrays.asList(new String[] {"foo", "bar"});
+     * long start = System.currentTimeMillis();
+     * Set s = new java.util.HashSet(c);
+     * int runs = 10000000;
+     * for (int i = 0; i < runs; i++) {
+     * s = new java.util.HashSet(s);
+     * }
+     * System.out.println("HashSet took " + (System.currentTimeMillis() - start));
+     *
+     * start = System.currentTimeMillis();
+     * s = new ArraySet(c);
+     * for (int i = 0; i < runs; i++) {
+     * s = new ArraySet(s);
+     * }
+     * System.out.println("ArraySet took " + (System.currentTimeMillis() - start));
+     * }
+     ****/
 }

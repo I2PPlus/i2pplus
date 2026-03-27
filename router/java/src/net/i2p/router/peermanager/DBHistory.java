@@ -1,12 +1,13 @@
 package net.i2p.router.peermanager;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Properties;
 import net.i2p.router.RouterContext;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Properties;
 
 /**
  * History of NetDb related activities (lookups, replies, stores, etc)
@@ -31,49 +32,71 @@ public class DBHistory {
         _context = context;
         _log = context.logManager().getLog(DBHistory.class);
         _statGroup = statGroup;
-        _failedLookupRate = new RateStat("dbHistory.failedLookupRate", "How often peer responds to a lookup",
-                                         statGroup, new long[] {RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
-        _invalidReplyRate = new RateStat("dbHistory.invalidReplyRate", "How often peer sends us a bad RouterInfo?",
-                                         statGroup, new long[] {RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        _failedLookupRate = new RateStat("dbHistory.failedLookupRate", "How often peer responds to a lookup", statGroup, new long[] {RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR});
+        _invalidReplyRate = new RateStat("dbHistory.invalidReplyRate", "How often peer sends us a bad RouterInfo?", statGroup, new long[] {RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR});
     }
 
     /** how many times we have sent them a db lookup and received the value back from them */
-    public long getSuccessfulLookups() {return _successfulLookups;}
+    public long getSuccessfulLookups() {
+        return _successfulLookups;
+    }
+
     /** how many times we have sent them a db lookup and not received the value or a lookup reply */
-    public long getFailedLookups() {return _failedLookups;}
+    public long getFailedLookups() {
+        return _failedLookups;
+    }
 
     /**
      *  Not persisted until 0.9.24
      *  @since 0.7.8
      */
-    public long getLastLookupSuccessful() {return _lastLookupSuccessful;}
+    public long getLastLookupSuccessful() {
+        return _lastLookupSuccessful;
+    }
 
     /**
      *  Not persisted until 0.9.24
      *  @since 0.7.8
      */
-    public long getLastLookupFailed() {return _lastLookupFailed;}
+    public long getLastLookupFailed() {
+        return _lastLookupFailed;
+    }
 
     /**
      *  Not persisted until 0.9.24
      *  @since 0.7.8
      */
-    public long getLastStoreSuccessful() {return _lastStoreSuccessful;}
+    public long getLastStoreSuccessful() {
+        return _lastStoreSuccessful;
+    }
 
     /**
      *  Not persisted until 0.9.24
      *  @since 0.7.8
      */
-    public long getLastStoreFailed() {return _lastStoreFailed;}
+    public long getLastStoreFailed() {
+        return _lastStoreFailed;
+    }
 
     /** how many times have they sent us data we didn't ask for and that we've never seen? */
-    public long getUnpromptedDbStoreNew() {return _unpromptedDbStoreNew;}
+    public long getUnpromptedDbStoreNew() {
+        return _unpromptedDbStoreNew;
+    }
+
     /** how many times have they sent us data we didn't ask for but that we have seen? */
-    public long getUnpromptedDbStoreOld() {return _unpromptedDbStoreOld;}
+    public long getUnpromptedDbStoreOld() {
+        return _unpromptedDbStoreOld;
+    }
+
     /** how often does the peer fail to reply to a lookup request, broken into 1 hour and 1 day periods */
-    public RateStat getFailedLookupRate() {return _failedLookupRate;}
+    public RateStat getFailedLookupRate() {
+        return _failedLookupRate;
+    }
+
     /** not sure how much this is used, to be investigated */
-    public RateStat getInvalidReplyRate() {return _invalidReplyRate;}
+    public RateStat getInvalidReplyRate() {
+        return _invalidReplyRate;
+    }
 
     /** Note that the peer was not only able to respond to the lookup, but sent us the data we wanted! */
     public void lookupSuccessful() {
@@ -125,7 +148,9 @@ public class DBHistory {
      *                  themselves if they don't know anyone else)
      */
     public void lookupReply(int newPeers, int oldPeers, int invalid, int duplicate) {
-        if (invalid > 0) {_invalidReplyRate.addData(invalid);}
+        if (invalid > 0) {
+            _invalidReplyRate.addData(invalid);
+        }
     }
 
     /**
@@ -133,25 +158,44 @@ public class DBHistory {
      * @param wasNew whether we already knew about this data point or not
      */
     public void unpromptedStoreReceived(boolean wasNew) {
-        if (wasNew) {_unpromptedDbStoreNew++;}
-        else {_unpromptedDbStoreOld++;}
+        if (wasNew) {
+            _unpromptedDbStoreNew++;
+        } else {
+            _unpromptedDbStoreOld++;
+        }
     }
 
-    public void setSuccessfulLookups(long num) {_successfulLookups = num;}
-    public void setFailedLookups(long num) {_failedLookups = num;}
-    public void setUnpromptedDbStoreNew(long num) {_unpromptedDbStoreNew = num;}
-    public void setUnpromptedDbStoreOld(long num) {_unpromptedDbStoreOld = num;}
+    public void setSuccessfulLookups(long num) {
+        _successfulLookups = num;
+    }
+
+    public void setFailedLookups(long num) {
+        _failedLookups = num;
+    }
+
+    public void setUnpromptedDbStoreNew(long num) {
+        _unpromptedDbStoreNew = num;
+    }
+
+    public void setUnpromptedDbStoreOld(long num) {
+        _unpromptedDbStoreOld = num;
+    }
 
     public void coalesceStats() {
-        if (_log.shouldDebug()) {_log.debug("Coalescing Profile Manager stats");}
+        if (_log.shouldDebug()) {
+            _log.debug("Coalescing Profile Manager stats");
+        }
         _failedLookupRate.coalesceStats();
         _invalidReplyRate.coalesceStats();
     }
 
-    private final static String NL = System.getProperty("line.separator");
-    private final static String HR = "# ----------------------------------------------------------------------------------------";
+    private static final String NL = System.getProperty("line.separator");
+    private static final String HR = "# ----------------------------------------------------------------------------------------";
+
     /** write out the data from the profile to the stream including comments */
-    public void store(OutputStream out) throws IOException {store(out, true);}
+    public void store(OutputStream out) throws IOException {
+        store(out, true);
+    }
 
     /**
      * write out the data from the profile to the stream
@@ -181,7 +225,9 @@ public class DBHistory {
     }
 
     private static void add(StringBuilder buf, boolean addComments, String name, long val, String description) {
-        if (addComments) {buf.append("# ").append(description).append(": ").append(val).append(NL);}
+        if (addComments) {
+            buf.append("# ").append(description).append(": ").append(val).append(NL);
+        }
     }
 
     public void load(Properties props) {
@@ -201,11 +247,14 @@ public class DBHistory {
             _log.warn("Db History Failed Lookup rate is corrupt (" + iae.getMessage() + ") -> resetting...");
         }
 
-        try {_invalidReplyRate.load(props, "dbHistory.invalidReplyRate", true);}
-        catch (IllegalArgumentException iae) {_log.warn("Db History Invalid Reply rate is corrupt -> " + iae.getMessage());}
+        try {
+            _invalidReplyRate.load(props, "dbHistory.invalidReplyRate", true);
+        } catch (IllegalArgumentException iae) {
+            _log.warn("Db History Invalid Reply rate is corrupt -> " + iae.getMessage());
+        }
     }
 
-    private final static long getLong(Properties props, String key) {
+    private static final long getLong(Properties props, String key) {
         return ProfilePersistenceHelper.getLong(props, key);
     }
 }

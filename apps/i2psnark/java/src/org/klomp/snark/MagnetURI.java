@@ -1,5 +1,7 @@
 package org.klomp.snark;
 
+import net.i2p.data.Base32;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -7,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import net.i2p.data.Base32;
 
 /**
  * Magnet URI parser and handler for BitTorrent magnet links.
@@ -76,10 +77,7 @@ public class MagnetURI {
             ih = new byte[20];
             try {
                 for (int i = 0; i < 20; i++) {
-                    ih[i] =
-                            (byte)
-                                    (Integer.parseInt(ihash.substring(i * 2, (i * 2) + 2), 16)
-                                            & 0xff);
+                    ih[i] = (byte) (Integer.parseInt(ihash.substring(i * 2, (i * 2) + 2), 16) & 0xff);
                 }
             } catch (NumberFormatException nfe) {
                 ih = null;
@@ -205,8 +203,7 @@ public class MagnetURI {
                     continue;
                 }
                 protocol = protocol.toLowerCase(Locale.US);
-                if (!(protocol.equals("http") || protocol.equals("udp"))
-                        || !host.toLowerCase(Locale.US).endsWith(".i2p")) {
+                if (!(protocol.equals("http") || protocol.equals("udp")) || !host.toLowerCase(Locale.US).endsWith(".i2p")) {
                     continue;
                 }
                 rv.add(t);

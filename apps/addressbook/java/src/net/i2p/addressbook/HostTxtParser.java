@@ -1,5 +1,12 @@
 package net.i2p.addressbook;
 
+import net.i2p.client.naming.HostTxtEntry;
+import net.i2p.data.DataHelper;
+import net.i2p.data.Destination;
+import net.i2p.util.SecureFile;
+import net.i2p.util.SecureFileOutputStream;
+import net.i2p.util.SystemVersion;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,12 +18,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-import net.i2p.client.naming.HostTxtEntry;
-import net.i2p.data.DataHelper;
-import net.i2p.data.Destination;
-import net.i2p.util.SecureFile;
-import net.i2p.util.SecureFileOutputStream;
-import net.i2p.util.SystemVersion;
 
 /**
  * Utility class providing methods to parse and write files in a hosts.txt file
@@ -55,13 +56,15 @@ public class HostTxtParser {
             String inputLine;
             while ((inputLine = input.readLine()) != null) {
                 HostTxtEntry he = parse(inputLine, false);
-                if (he == null)
-                    continue;
+                if (he == null) continue;
                 result.put(he.getName(), he);
             }
             return result;
         } finally {
-            try { input.close(); } catch (IOException ioe) {}
+            try {
+                input.close();
+            } catch (IOException ioe) {
+            }
         }
     }
 
@@ -75,20 +78,17 @@ public class HostTxtParser {
      * @return null if no entry found or on error
      */
     public static HostTxtEntry parse(String inputLine, boolean allowCommandOnly) {
-        if (inputLine.startsWith("; "))
-            return null;
+        if (inputLine.startsWith("; ")) return null;
         int comment = inputLine.indexOf('#');
         String kv;
         String sprops;
         if (comment >= 0) {
             int shebang = inputLine.indexOf(HostTxtEntry.PROPS_SEPARATOR);
             if (shebang == comment && shebang + 2 < inputLine.length()) {
-                if (comment == 0 && !allowCommandOnly)
-                    return null;
+                if (comment == 0 && !allowCommandOnly) return null;
                 sprops = inputLine.substring(shebang + 2);
             } else {
-                if (comment == 0)
-                    return null;
+                if (comment == 0) return null;
                 sprops = null;
             }
             kv = inputLine.substring(0, comment);
@@ -100,12 +100,10 @@ public class HostTxtParser {
         if (comment != 0) {
             // we have a name=dest
             String[] splitLine = DataHelper.split(kv, "=", 2);
-            if (splitLine.length < 2)
-                return null;
+            if (splitLine.length < 2) return null;
             name = splitLine[0].trim().toLowerCase(Locale.US);
             dest = splitLine[1].trim();
-            if (name.length() == 0 || dest.length() == 0)
-                return null;
+            if (name.length() == 0 || dest.length() == 0) return null;
         } else {
             // line starts with #!, rv will contain props only
             name = null;
@@ -140,14 +138,14 @@ public class HostTxtParser {
         FileInputStream fileStream = null;
         try {
             fileStream = new FileInputStream(file);
-            BufferedReader input = new BufferedReader(new InputStreamReader(
-                    fileStream, "UTF-8"));
+            BufferedReader input = new BufferedReader(new InputStreamReader(fileStream, "UTF-8"));
             return parse(input);
         } finally {
             if (fileStream != null) {
                 try {
                     fileStream.close();
-                } catch (IOException ioe) {}
+                } catch (IOException ioe) {
+                }
             }
         }
     }
@@ -170,8 +168,7 @@ public class HostTxtParser {
         try {
             result = parse(file);
             for (Map.Entry<String, HostTxtEntry> entry : map.entrySet()) {
-                if (!result.containsKey(entry.getKey()))
-                    result.put(entry.getKey(), entry.getValue());
+                if (!result.containsKey(entry.getKey())) result.put(entry.getKey(), entry.getValue());
             }
         } catch (IOException exp) {
             result = map;
@@ -200,7 +197,10 @@ public class HostTxtParser {
                 entry.getValue().write(output);
             }
         } finally {
-            try { output.close(); } catch (IOException ioe) {}
+            try {
+                output.close();
+            } catch (IOException ioe) {
+            }
         }
     }
 
@@ -226,7 +226,7 @@ public class HostTxtParser {
             success = tmp.renameTo(file);
             if (!success) {
                 tmp.delete();
-                //System.out.println("Warning: addressbook rename fail from " + tmp + " to " + file);
+                // System.out.println("Warning: addressbook rename fail from " + tmp + " to " + file);
             }
         }
         if (!success) {
@@ -250,8 +250,7 @@ public class HostTxtParser {
         }
         HostTxtEntry e = parse(args[1].trim(), false);
         if (e == null) {
-            if (!quiet)
-                System.err.println("Bad format");
+            if (!quiet) System.err.println("Bad format");
             System.exit(2);
         }
         if (!e.hasValidSig()) {
@@ -267,7 +266,7 @@ public class HostTxtParser {
                 }
                 Properties p = e.getProps();
                 if (p != null) {
-                    for (Map.Entry<?,?> m : p.entrySet()) {
+                    for (Map.Entry<?, ?> m : p.entrySet()) {
                         System.err.println(m.getKey() + "=" + m.getValue());
                     }
                 }
@@ -276,14 +275,11 @@ public class HostTxtParser {
         }
         Properties p = e.getProps();
         if (p != null) {
-            if (p.containsKey(HostTxtEntry.PROP_ACTION) ||
-                p.containsKey(HostTxtEntry.PROP_OLDDEST) ||
-                p.containsKey(HostTxtEntry.PROP_OLDNAME) ||
-                p.containsKey(HostTxtEntry.PROP_OLDSIG)) {
+            if (p.containsKey(HostTxtEntry.PROP_ACTION) || p.containsKey(HostTxtEntry.PROP_OLDDEST) || p.containsKey(HostTxtEntry.PROP_OLDNAME) || p.containsKey(HostTxtEntry.PROP_OLDSIG)) {
                 if (!e.hasValidSig()) {
                     if (!quiet) {
                         System.err.println("Bad inner signature for " + e.getName());
-                        for (Map.Entry<?,?> m : p.entrySet()) {
+                        for (Map.Entry<?, ?> m : p.entrySet()) {
                             System.err.println(m.getKey() + "=" + m.getValue());
                         }
                     }
@@ -303,7 +299,7 @@ public class HostTxtParser {
                 ex.printStackTrace(System.err);
             }
             if (p != null) {
-                for (Map.Entry<?,?> m : p.entrySet()) {
+                for (Map.Entry<?, ?> m : p.entrySet()) {
                     System.err.println(m.getKey() + "=" + m.getValue());
                 }
             }
@@ -311,18 +307,18 @@ public class HostTxtParser {
         System.exit(0);
     }
 
-/****
-    public static void test(String[] args) throws Exception {
-        File f = new File("tmp-hosts.txt");
-        Map<String, HostTxtEntry> map = parse(f);
-        for (HostTxtEntry e : map.values()) {
-            System.out.println("Host: " + e.getName() +
-                               "\nDest: " + e.getDest() +
-                               "\nAction: " + (e.getProps() != null ? e.getProps().getProperty("action") : "(none)") +
-                               "\nValid Inner? " + e.hasValidInnerSig() +
-                               "\nValid? " + e.hasValidSig() +
-                               '\n');
-        }
-    }
-****/
+    /****
+     * public static void test(String[] args) throws Exception {
+     * File f = new File("tmp-hosts.txt");
+     * Map<String, HostTxtEntry> map = parse(f);
+     * for (HostTxtEntry e : map.values()) {
+     * System.out.println("Host: " + e.getName() +
+     * "\nDest: " + e.getDest() +
+     * "\nAction: " + (e.getProps() != null ? e.getProps().getProperty("action") : "(none)") +
+     * "\nValid Inner? " + e.hasValidInnerSig() +
+     * "\nValid? " + e.hasValidSig() +
+     * '\n');
+     * }
+     * }
+     ****/
 }

@@ -1,23 +1,26 @@
 package org.klomp.snark.standalone;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Properties;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import net.i2p.CoreVersion;
 import net.i2p.I2PAppContext;
 import net.i2p.apps.systray.UrlLauncher;
 import net.i2p.data.DataHelper;
 import net.i2p.jetty.I2PLogger;
 import net.i2p.jetty.JettyStart;
+
 import org.eclipse.jetty.util.log.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Properties;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * Standalone runner for I2PSnark.
@@ -80,8 +83,7 @@ public class RunStandalone {
     public void start() {
         try {
             String url = "http://" + _host + ':' + _port + "/i2psnark/";
-            System.out.println(
-                    " • Starting I2P+ I2PSnark Standalone " + CoreVersion.VERSION + " at " + url);
+            System.out.println(" • Starting I2P+ I2PSnark Standalone " + CoreVersion.VERSION + " at " + url);
             System.out.println(" • Revision: " + getSnarkRevision());
             _jettyStart.startup();
             try {
@@ -125,13 +127,7 @@ public class RunStandalone {
         File jar = new File(base, "i2psnark.jar");
         String rev = "", date = "";
         try {
-            Manifest manifest =
-                    new Manifest(
-                            new URL(
-                                            "jar:"
-                                                    + jar.toURI().toURL().toString()
-                                                    + "!/META-INF/MANIFEST.MF")
-                                    .openStream());
+            Manifest manifest = new Manifest(new URL("jar:" + jar.toURI().toURL().toString() + "!/META-INF/MANIFEST.MF").openStream());
             Attributes att = manifest.getMainAttributes();
             rev = att.getValue("Base-Revision");
             date = att.getValue("Build-Date");

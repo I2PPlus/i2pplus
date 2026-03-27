@@ -24,16 +24,12 @@ public class JobStats {
 
     private static final int DEFAULT_MAX_RECENT_ENTRIES = 500;
     private static final int HIGH_FREQ_MAX_RECENT_ENTRIES = 5000;
-    private static final Set<String> HIGH_FREQ_JOBS = new HashSet<>(Arrays.asList(
-        "NetDb Direct RouterInfo Lookup",
-        "Direct Lookup Match",
-        "Verify NetDb Lookup for Failing Peer"
-    ));
+    private static final Set<String> HIGH_FREQ_JOBS = new HashSet<>(Arrays.asList("NetDb Direct RouterInfo Lookup", "Direct Lookup Match", "Verify NetDb Lookup for Failing Peer"));
     private static final long RECENT_WINDOW_MS = 10 * 1000;
 
     private static volatile boolean _recentTrackingEnabled;
     private static volatile long _lastTrackingEnableTime;
-    private static final long TRACKING_TIMEOUT_MS = 60 * 1000;  // Keep tracking for 60s after last view
+    private static final long TRACKING_TIMEOUT_MS = 60 * 1000; // Keep tracking for 60s after last view
 
     private final int _maxRecentEntries;
     private final RecentExecution[] _recentExecutions;
@@ -107,11 +103,19 @@ public class JobStats {
     public void jobRan(long runTime, long lag) {
         _numRuns.incrementAndGet();
         _totalTime.addAndGet(runTime);
-        if ((_maxTime < 0) || (runTime > _maxTime)) {_maxTime = runTime;}
-        if ((_minTime < 0) || (runTime < _minTime)) {_minTime = runTime;}
+        if ((_maxTime < 0) || (runTime > _maxTime)) {
+            _maxTime = runTime;
+        }
+        if ((_minTime < 0) || (runTime < _minTime)) {
+            _minTime = runTime;
+        }
         _totalPendingTime.addAndGet(lag);
-        if ((_maxPendingTime < 0) || (lag > _maxPendingTime)) {_maxPendingTime = lag;}
-        if ((_minPendingTime < 0) || (lag < _minPendingTime)) {_minPendingTime = lag;}
+        if ((_maxPendingTime < 0) || (lag > _maxPendingTime)) {
+            _maxPendingTime = lag;
+        }
+        if ((_minPendingTime < 0) || (lag < _minPendingTime)) {
+            _minPendingTime = lag;
+        }
 
         long now = System.currentTimeMillis();
         _lastRunTime = now;
@@ -126,12 +130,16 @@ public class JobStats {
         }
     }
 
-    public long getLastRunTime() {return _lastRunTime;}
+    public long getLastRunTime() {
+        return _lastRunTime;
+    }
 
     /**
      * Record that a job of this type was dropped due to overload.
      */
-    public void jobDropped() {_numDropped.incrementAndGet();}
+    public void jobDropped() {
+        _numDropped.incrementAndGet();
+    }
 
     /**
      * Get the number of jobs that were dropped.
@@ -139,49 +147,63 @@ public class JobStats {
      * @return the count of dropped jobs
      * @since 0.9.19
      */
-    public long getDropped() {return _numDropped.get();}
+    public long getDropped() {
+        return _numDropped.get();
+    }
 
     /**
      * Get the name of this job type.
      *
      * @return the job name
      */
-    public String getName() {return _job;}
+    public String getName() {
+        return _job;
+    }
 
     /**
      * Get the maximum number of recent execution entries tracked.
      *
      * @return the max recent entries limit
      */
-    public int getMaxRecentEntries() {return _maxRecentEntries;}
+    public int getMaxRecentEntries() {
+        return _maxRecentEntries;
+    }
 
     /**
      * Get the total number of times this job type has run.
      *
      * @return the run count
      */
-    public long getRuns() {return _numRuns.get();}
+    public long getRuns() {
+        return _numRuns.get();
+    }
 
     /**
      * Get the total execution time for all runs of this job type.
      *
      * @return total time in milliseconds
      */
-    public long getTotalTime() {return _totalTime.get();}
+    public long getTotalTime() {
+        return _totalTime.get();
+    }
 
     /**
      * Get the maximum execution time for a single run of this job type.
      *
      * @return maximum time in milliseconds, or -1 if never run
      */
-    public long getMaxTime() {return _maxTime;}
+    public long getMaxTime() {
+        return _maxTime;
+    }
 
     /**
      * Get the minimum execution time for a single run of this job type.
      *
      * @return minimum time in milliseconds, or -1 if never run
      */
-    public long getMinTime() {return _minTime;}
+    public long getMinTime() {
+        return _minTime;
+    }
 
     /**
      * Get the average execution time for this job type.
@@ -190,29 +212,39 @@ public class JobStats {
      */
     public double getAvgTime() {
         long numRuns = _numRuns.get();
-        if (numRuns > 0) {return _totalTime.get() / (double) numRuns;}
-        else {return 0;}
+        if (numRuns > 0) {
+            return _totalTime.get() / (double) numRuns;
+        } else {
+            return 0;
+        }
     }
+
     /**
      * Get the total pending/wait time for all runs of this job type.
      *
      * @return total pending time in milliseconds
      */
-    public long getTotalPendingTime() {return _totalPendingTime.get();}
+    public long getTotalPendingTime() {
+        return _totalPendingTime.get();
+    }
 
     /**
      * Get the maximum pending/wait time for a single run of this job type.
      *
      * @return maximum pending time in milliseconds, or -1 if never run
      */
-    public long getMaxPendingTime() {return _maxPendingTime;}
+    public long getMaxPendingTime() {
+        return _maxPendingTime;
+    }
 
     /**
      * Get the minimum pending/wait time for a single run of this job type.
      *
      * @return minimum pending time in milliseconds, or -1 if never run
      */
-    public long getMinPendingTime() {return _minPendingTime;}
+    public long getMinPendingTime() {
+        return _minPendingTime;
+    }
 
     /**
      * Get the average pending/wait time for this job type.
@@ -221,8 +253,11 @@ public class JobStats {
      */
     public double getAvgPendingTime() {
         long numRuns = _numRuns.get();
-        if (numRuns > 0) {return _totalPendingTime.get() / (double) numRuns;}
-        else {return 0;}
+        if (numRuns > 0) {
+            return _totalPendingTime.get() / (double) numRuns;
+        } else {
+            return 0;
+        }
     }
 
     public RecentStats getRecentStats() {
@@ -257,8 +292,7 @@ public class JobStats {
             }
         }
 
-        return new RecentStats(recentRuns, recentTotalTime, recentMaxTime, recentMinTime,
-                              recentTotalPending, recentMaxPending, recentMinPending);
+        return new RecentStats(recentRuns, recentTotalTime, recentMaxTime, recentMinTime, recentTotalPending, recentMaxPending, recentMinPending);
     }
 
     /**
@@ -273,8 +307,7 @@ public class JobStats {
         public final long maxPendingTime;
         public final long minPendingTime;
 
-        RecentStats(long runs, long totalTime, long maxTime, long minTime,
-                   long totalPendingTime, long maxPendingTime, long minPendingTime) {
+        RecentStats(long runs, long totalTime, long maxTime, long minTime, long totalPendingTime, long maxPendingTime, long minPendingTime) {
             this.runs = runs;
             this.totalTime = totalTime;
             this.maxTime = maxTime;
@@ -292,5 +325,4 @@ public class JobStats {
             return runs > 0 ? totalPendingTime / (double) runs : 0;
         }
     }
-
 }

@@ -9,12 +9,13 @@ package net.i2p.data.i2cp;
  *
  */
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * The I2CPMessageReader reads an InputStream (using
@@ -102,26 +103,26 @@ public class I2CPMessageReader {
          * Notify the listener that a message has been received from the given
          * reader
          *
-     * @param reader I2CPMessageReader to notify
-     * @param message the I2CPMessage
-     */
+         * @param reader I2CPMessageReader to notify
+         * @param message the I2CPMessage
+         */
         public void messageReceived(I2CPMessageReader reader, I2CPMessage message);
 
         /**
          * Notify the listener that an exception was thrown while reading from the given
          * reader. For most errors, disconnected() will also be called, as of 0.9.41.
          *
-     * @param reader I2CPMessageReader to notify
-     * @param error Exception that was thrown, non-null
-     */
+         * @param reader I2CPMessageReader to notify
+         * @param error Exception that was thrown, non-null
+         */
         public void readError(I2CPMessageReader reader, Exception error);
 
         /**
          * Notify the listener that the stream this reader was reading was
          * closed. For most errors, readError() will be called first, as of 0.9.41
          *
-     * @param reader I2CPMessageReader to notify
-     */
+         * @param reader I2CPMessageReader to notify
+         */
         public void disconnected(I2CPMessageReader reader);
     }
 
@@ -182,9 +183,9 @@ public class I2CPMessageReader {
                     try {
                         I2CPMessage msg = I2CPMessageHandler.readMessage(_stream);
                         if (msg != null) {
-                            //_log.debug("Before handling the newly received message");
+                            // _log.debug("Before handling the newly received message");
                             _listener.messageReceived(I2CPMessageReader.this, msg);
-                            //_log.debug("After handling the newly received message");
+                            // _log.debug("After handling the newly received message");
                         }
                     } catch (I2CPMessageException ime) {
                         _log.warn("Error handling message", ime);

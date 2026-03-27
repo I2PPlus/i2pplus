@@ -1,4 +1,5 @@
 package net.i2p.i2pcontrol.servlets;
+
 /*
  *  Copyright 2011 hottuna (dev@robertfoss.se)
  *
@@ -18,18 +19,7 @@ package net.i2p.i2pcontrol.servlets;
 
 import com.thetransactioncompany.jsonrpc2.*;
 import com.thetransactioncompany.jsonrpc2.server.Dispatcher;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
-import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
 import net.i2p.I2PAppContext;
 import net.i2p.i2pcontrol.I2PControlVersion;
 import net.i2p.i2pcontrol.security.SecurityManager;
@@ -38,6 +28,20 @@ import net.i2p.i2pcontrol.servlets.jsonrpc2handlers.*;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+
+import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Provide an JSON-RPC 2.0 API for remote controlling of I2P
@@ -63,16 +67,15 @@ public class JSONRPC2Servlet extends HttpServlet {
      */
     public JSONRPC2Servlet() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        if (!ctx.isRouterContext())
-            throw new IllegalStateException();
+        if (!ctx.isRouterContext()) throw new IllegalStateException();
         _context = (RouterContext) ctx;
         File appDir = ctx.getAppDir();
         _conf = new ConfigurationManager(ctx, appDir, false);
         // we don't really need a keystore
-        //File ksDir = new File(ctx.getConfigDir(), "keystore");
-        //ksDir.mkDir();
-        //KeyStoreProvider ksp = new KeyStoreProvider(ksDir.getAbsolutePath());
-        //_secMan = new SecurityManager(ctx, ksp, _conf);
+        // File ksDir = new File(ctx.getConfigDir(), "keystore");
+        // ksDir.mkDir();
+        // KeyStoreProvider ksp = new KeyStoreProvider(ksDir.getAbsolutePath());
+        // _secMan = new SecurityManager(ctx, ksp, _conf);
         _secMan = new SecurityManager(ctx, null, _conf);
         _helper = new JSONRPC2Helper(_secMan);
         _log = ctx.logManager().getLog(JSONRPC2Servlet.class);
@@ -87,10 +90,8 @@ public class JSONRPC2Servlet extends HttpServlet {
         _context = ctx;
         _secMan = secMan;
         _helper = new JSONRPC2Helper(_secMan);
-        if (ctx != null)
-            _log = ctx.logManager().getLog(JSONRPC2Servlet.class);
-        else
-            _log = I2PAppContext.getGlobalContext().logManager().getLog(JSONRPC2Servlet.class);
+        if (ctx != null) _log = ctx.logManager().getLog(JSONRPC2Servlet.class);
+        else _log = I2PAppContext.getGlobalContext().logManager().getLog(JSONRPC2Servlet.class);
         _conf = null;
         _isWebapp = false;
     }
@@ -128,10 +129,8 @@ public class JSONRPC2Servlet extends HttpServlet {
     public void destroy() {
         if (_isWebapp) {
             PortMapper pm = _context.portMapper();
-            if (_isHTTP)
-                pm.unregister(SVC_HTTP_I2PCONTROL);
-            if (_isHTTPS)
-                pm.unregister(SVC_HTTPS_I2PCONTROL);
+            if (_isHTTP) pm.unregister(SVC_HTTP_I2PCONTROL);
+            if (_isHTTPS) pm.unregister(SVC_HTTPS_I2PCONTROL);
             _secMan.stopTimedEvents();
             _conf.writeConfFile();
         }
@@ -149,8 +148,7 @@ public class JSONRPC2Servlet extends HttpServlet {
         out.println("<link rel=icon href=\"/themes/console/midnight/images/favicon.svg\">");
         out.println("<link href=\"/themes/i2pcontrol/i2pcontrol.css\" rel=stylesheet>");
         out.println("</head>\n<body>");
-        out.println("<h1>I2PControl RPC Service&nbsp; &nbsp; <a href=\"/configwebapps\" title=\"Control and configure service\">" +
-                    "<img src=\"/themes/console/images/configure.svg\" height=16 width=16></a></h1>");
+        out.println("<h1>I2PControl RPC Service&nbsp; &nbsp; <a href=\"/configwebapps\" title=\"Control and configure service\">" + "<img src=\"/themes/console/images/configure.svg\" height=16 width=16></a></h1>");
         out.println("<p><b>Version:</b> " + I2PControlVersion.VERSION + "<br>");
         out.println("<b>Status:</b> Running</p>");
         if ("/password".equals(httpServletRequest.getServletPath())) {
@@ -160,18 +158,13 @@ public class JSONRPC2Servlet extends HttpServlet {
             } else {
                 out.println("<p><span class=prompt>Current API password:</span> <input name=\"password\" type=password></p>");
             }
-            out.println("<p><span class=prompt>New API password:</span> <input name=\"password2\" type=password placeholder=\"new password\">&nbsp; " +
-                        "<input name=\"password3\" type=password placeholder=\"confirm new password\">" + "</p>\n" +
-                        "<p id=password><input name=\"save\" type=submit value=\"Change API Password\"></p>\n" +
-                        "<hr><p class=infohelp>If you forget the API password, stop I2PControl, delete the config file and restart I2PControl.\n" +
-                        "<br><b>Location:</b> <code>" + _conf.getConfFile() + "</code></p>\n</form>");
+            out.println("<p><span class=prompt>New API password:</span> <input name=\"password2\" type=password placeholder=\"new password\">&nbsp; " + "<input name=\"password3\" type=password placeholder=\"confirm new password\">" + "</p>\n" + "<p id=password><input name=\"save\" type=submit value=\"Change API Password\"></p>\n" + "<hr><p class=infohelp>If you forget the API password, stop I2PControl, delete the config file and restart I2PControl.\n" + "<br><b>Location:</b> <code>" + _conf.getConfFile() + "</code></p>\n</form>");
         } else {
             out.println("<hr><p id=password><a href=\"password\">Change API Password</a></p>");
         }
         out.println("</body>\n</html>");
         out.close();
     }
-
 
     /**
      *  @since 0.9.48
@@ -182,7 +175,7 @@ public class JSONRPC2Servlet extends HttpServlet {
         resp.setHeader("Content-Security-Policy", "default-src 'self'; object-src 'none'; media-src 'none'");
         resp.setHeader("X-XSS-Protection", "1; mode=block");
         resp.setHeader("X-Content-Type-Options", "nosniff");
-        resp.setHeader("Cache-Control","private, no-cache, max-age=14400");
+        resp.setHeader("Cache-Control", "private, no-cache, max-age=14400");
     }
 
     /** @since 0.12 */
@@ -190,10 +183,8 @@ public class JSONRPC2Servlet extends HttpServlet {
         setHeaders(httpServletResponse);
         PrintWriter out = httpServletResponse.getWriter();
         String pw = req.getParameter("password");
-        if (pw == null)
-            pw = _secMan.DEFAULT_AUTH_PASSWORD;
-        else
-            pw = pw.trim();
+        if (pw == null) pw = _secMan.DEFAULT_AUTH_PASSWORD;
+        else pw = pw.trim();
         String pw2 = req.getParameter("password2");
         String pw3 = req.getParameter("password3");
         out.println("<!DOCTYPE html>");
@@ -203,8 +194,7 @@ public class JSONRPC2Servlet extends HttpServlet {
         out.println("<link rel=icon href=\"/themes/console/midnight/images/favicon.svg\">");
         out.println("<link href=\"/themes/i2pcontrol/i2pcontrol.css\" rel=stylesheet>");
         out.println("</head>\n<body>");
-        out.println("<h1>I2PControl RPC Service&nbsp; &nbsp; <a href=\"/configwebapps\" title=\"Control and configure service\">" +
-                    "<img src=\"/themes/console/images/configure.svg\" height=16 width=16></a></h1>");
+        out.println("<h1>I2PControl RPC Service&nbsp; &nbsp; <a href=\"/configwebapps\" title=\"Control and configure service\">" + "<img src=\"/themes/console/images/configure.svg\" height=16 width=16></a></h1>");
         if (pw2 == null || pw3 == null) {
             out.println("<p>Please fill in both fields&hellip; </p>");
         } else {
@@ -240,17 +230,15 @@ public class JSONRPC2Servlet extends HttpServlet {
             msg = JSONRPC2Message.parse(req);
 
             if (msg instanceof JSONRPC2Request) {
-                jsonResp = disp.process((JSONRPC2Request)msg, null);
+                jsonResp = disp.process((JSONRPC2Request) msg, null);
                 jsonResp.toJSONObject().put("API", I2PControlVersion.API_VERSION);
                 if (_log.shouldDebug()) {
                     _log.debug("Request: " + msg);
                     _log.debug("Response: " + jsonResp);
                 }
-            }
-            else if (msg instanceof JSONRPC2Notification) {
-                disp.process((JSONRPC2Notification)msg, null);
-                if (_log.shouldDebug())
-                    _log.debug("Notification: " + msg);
+            } else if (msg instanceof JSONRPC2Notification) {
+                disp.process((JSONRPC2Notification) msg, null);
+                if (_log.shouldDebug()) _log.debug("Notification: " + msg);
             }
 
             out.println(jsonResp);

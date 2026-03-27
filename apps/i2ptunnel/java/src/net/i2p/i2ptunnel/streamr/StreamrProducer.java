@@ -1,11 +1,12 @@
 package net.i2p.i2ptunnel.streamr;
 
-import java.io.File;
 import net.i2p.i2ptunnel.I2PTunnel;
 import net.i2p.i2ptunnel.Logging;
 import net.i2p.i2ptunnel.udp.*;
 import net.i2p.i2ptunnel.udpTunnel.I2PTunnelUDPServerBase;
 import net.i2p.util.EventDispatcher;
+
+import java.io.File;
 
 /**
  * Streamr producer that acts as an I2P server and UDP client,
@@ -27,9 +28,7 @@ public class StreamrProducer extends I2PTunnelUDPServerBase {
      * @param tunnel the tunnel context
      * @since 0.9.53
      */
-    public StreamrProducer(int port,
-                           File privkey, String privkeyname, Logging l,
-                           EventDispatcher notifyThis, I2PTunnel tunnel) {
+    public StreamrProducer(int port, File privkey, String privkeyname, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
         super(privkey, privkeyname, l, notifyThis, tunnel);
 
         // The broadcaster

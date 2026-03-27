@@ -1,8 +1,9 @@
 package net.i2p.client.streaming.impl;
 
-import java.util.Properties;
 import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.util.SystemVersion;
+
+import java.util.Properties;
 
 /**
  * Define the configuration for streaming and verifying data on the socket.
@@ -16,14 +17,15 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     private int _localPort;
     private int _remotePort;
 
-    public static final int DEFAULT_BUFFER_SIZE = SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512*1024*1024 ?
-        // Slow systems: 1730 * (1.5*192 + 2) = 500KB, rounded to 512KB for safety margin
-        512*1024 :
-        // Normal systems: 1730 * (1.5*384 + 2) = 998KB, rounded to 1MB for safety margin
-        1024*1024;
+    public static final int DEFAULT_BUFFER_SIZE = SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512 * 1024 * 1024 ?
+                    // Slow systems: 1730 * (1.5*192 + 2) = 500KB, rounded to 512KB for safety margin
+                    512 * 1024
+                    :
+                    // Normal systems: 1730 * (1.5*384 + 2) = 998KB, rounded to 1MB for safety margin
+                    1024 * 1024;
     public static final int DEFAULT_READ_TIMEOUT = -1;
     public static final int DEFAULT_WRITE_TIMEOUT = -1;
-    public static final int DEFAULT_CONNECT_TIMEOUT = 60*1000;
+    public static final int DEFAULT_CONNECT_TIMEOUT = 60 * 1000;
 
     /**
      *  Sets max buffer size, connect timeout, read timeout, and write timeout
@@ -71,14 +73,10 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      */
     public void setProperties(Properties opts) {
         if (opts == null) return;
-        if (opts.getProperty(PROP_BUFFER_SIZE) != null)
-            _maxBufferSize = getInt(opts, PROP_BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
-        if (opts.getProperty(PROP_CONNECT_TIMEOUT) != null)
-            _connectTimeout = getInt(opts, PROP_CONNECT_TIMEOUT, DEFAULT_CONNECT_TIMEOUT);
-        if (opts.getProperty(PROP_READ_TIMEOUT) != null)
-            _readTimeout = getInt(opts, PROP_READ_TIMEOUT, DEFAULT_READ_TIMEOUT);
-        if (opts.getProperty(PROP_WRITE_TIMEOUT) != null)
-            _writeTimeout = getInt(opts, PROP_WRITE_TIMEOUT, DEFAULT_WRITE_TIMEOUT);
+        if (opts.getProperty(PROP_BUFFER_SIZE) != null) _maxBufferSize = getInt(opts, PROP_BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
+        if (opts.getProperty(PROP_CONNECT_TIMEOUT) != null) _connectTimeout = getInt(opts, PROP_CONNECT_TIMEOUT, DEFAULT_CONNECT_TIMEOUT);
+        if (opts.getProperty(PROP_READ_TIMEOUT) != null) _readTimeout = getInt(opts, PROP_READ_TIMEOUT, DEFAULT_READ_TIMEOUT);
+        if (opts.getProperty(PROP_WRITE_TIMEOUT) != null) _writeTimeout = getInt(opts, PROP_WRITE_TIMEOUT, DEFAULT_WRITE_TIMEOUT);
     }
 
     /**
@@ -241,8 +239,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      *  @since 0.8.9
      */
     public void setPort(int port) {
-        if (port < 0 || port > 65535)
-            throw new IllegalArgumentException("Bad port");
+        if (port < 0 || port > 65535) throw new IllegalArgumentException("Bad port");
         _remotePort = port;
     }
 
@@ -265,8 +262,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      *  @since 0.8.9
      */
     public void setLocalPort(int port) {
-        if (port < 0 || port > 65535)
-            throw new IllegalArgumentException("Bad port");
+        if (port < 0 || port > 65535) throw new IllegalArgumentException("Bad port");
         _localPort = port;
     }
 }

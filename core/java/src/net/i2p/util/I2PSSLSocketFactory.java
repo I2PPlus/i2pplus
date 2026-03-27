@@ -111,18 +111,15 @@ public class I2PSSLSocketFactory {
         "pro", "tel", "travel", "xxx"
     };
     // not in countries.txt or public-suffix-list.txt
-    private static final String[] ADDITIONAL_TLDS = {
-        "i2p", "mooo.com", "onion"
-    };
+    private static final String[] ADDITIONAL_TLDS = {"i2p", "mooo.com", "onion"};
 
     /**
      *  Unmodifiable.
      *  Public for RouterConsoleRunner.
      *  @since 0.9.16
      */
-    public static final List<String> EXCLUDE_PROTOCOLS = Collections.unmodifiableList(Arrays.asList(new String[] {
-        "SSLv2Hello", "SSLv3"
-    }));
+    public static final List<String> EXCLUDE_PROTOCOLS =
+            Collections.unmodifiableList(Arrays.asList(new String[] {"SSLv2Hello", "SSLv3"}));
 
     /**
      *  Java 7 does not enable 1.1 or 1.2 by default on the client side.
@@ -138,9 +135,8 @@ public class I2PSSLSocketFactory {
      *  Public for RouterConsoleRunner.
      *  @since 0.9.16
      */
-    public static final List<String> INCLUDE_PROTOCOLS = Collections.unmodifiableList(Arrays.asList(new String[] {
-        "TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"
-    }));
+    public static final List<String> INCLUDE_PROTOCOLS =
+            Collections.unmodifiableList(Arrays.asList(new String[] {"TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"}));
 
     /**
      *  We exclude everything that Java 8 disables by default, plus some others.
@@ -229,6 +225,7 @@ public class I2PSSLSocketFactory {
 
     /** the "real" factory */
     private final SSLSocketFactory _factory;
+
     private final I2PAppContext _context;
 
     /**
@@ -236,7 +233,7 @@ public class I2PSSLSocketFactory {
      * @since 0.9.9 was static
      */
     public I2PSSLSocketFactory(I2PAppContext context, boolean loadSystemCerts, String relativeCertPath)
-                               throws GeneralSecurityException {
+            throws GeneralSecurityException {
         _factory = initSSLContext(context, loadSystemCerts, relativeCertPath);
         _context = context;
     }
@@ -293,13 +290,12 @@ public class I2PSSLSocketFactory {
      */
     public static void verifyHostname(I2PAppContext ctx, SSLSocket socket, String host) throws SSLException {
         Log log = ctx.logManager().getLog(I2PSSLSocketFactory.class);
-        if (ctx.getBooleanProperty(PROP_DISABLE) ||
-            host.equals("localhost") ||
-            host.equals("127.0.0.1") ||
-            host.equals("::1") ||
-            host.equals("0:0:0:0:0:0:0:1")) {
-            if (log.shouldWarn())
-                log.warn("Skipping hostname validation for " + host);
+        if (ctx.getBooleanProperty(PROP_DISABLE)
+                || host.equals("localhost")
+                || host.equals("127.0.0.1")
+                || host.equals("::1")
+                || host.equals("0:0:0:0:0:0:0:1")) {
+            if (log.shouldWarn()) log.warn("Skipping hostname validation for " + host);
             return;
         }
         HostnameVerifier hv;
@@ -309,7 +305,8 @@ public class I2PSSLSocketFactory {
         } else {
             // haha the above may work for Android but it doesn't in Oracle
             //
-            // quote http://kevinlocke.name/bits/2012/10/03/ssl-certificate-verification-in-dispatch-and-asynchttpclient/ :
+            // quote
+            // http://kevinlocke.name/bits/2012/10/03/ssl-certificate-verification-in-dispatch-and-asynchttpclient/ :
             // Unlike SSLContext, using the Java default (HttpsURLConnection.getDefaultHostnameVerifier)
             // is not a viable option because the default HostnameVerifier expects to only be called
             // in the case that there is a mismatch (and therefore always returns false) while some
@@ -346,8 +343,7 @@ public class I2PSSLSocketFactory {
             if (!_matcherLoaded) {
                 String geoDir = ctx.getProperty(PROP_GEOIP_DIR, GEOIP_DIR_DEFAULT);
                 File geoFile = new File(geoDir);
-                if (!geoFile.isAbsolute())
-                    geoFile = new File(ctx.getBaseDir(), geoDir);
+                if (!geoFile.isAbsolute()) geoFile = new File(ctx.getBaseDir(), geoDir);
                 geoFile = new File(geoFile, PUBLIC_SUFFIX_LIST);
                 Log log = ctx.logManager().getLog(I2PSSLSocketFactory.class);
                 if (geoFile.exists()) {
@@ -357,24 +353,28 @@ public class I2PSSLSocketFactory {
                         // underlying PublicSuffixList is immutable and inaccessible
                         long begin = System.currentTimeMillis();
                         InputStream in = null;
-                        PublicSuffixList list = new PublicSuffixList(Arrays.asList(ADDITIONAL_TLDS),
-                                                                     Collections.<String>emptyList());
+                        PublicSuffixList list =
+                                new PublicSuffixList(Arrays.asList(ADDITIONAL_TLDS), Collections.<String>emptyList());
                         try {
                             in = new FileInputStream(geoFile);
-                            PublicSuffixList list2 = new PublicSuffixListParser().parse(
-                                 new InputStreamReader(in, "UTF-8"));
+                            PublicSuffixList list2 =
+                                    new PublicSuffixListParser().parse(new InputStreamReader(in, "UTF-8"));
                             list = merge(list, list2);
                         } finally {
-                            try { if (in != null) in.close(); } catch (IOException ioe) {}
+                            try {
+                                if (in != null) in.close();
+                            } catch (IOException ioe) {
+                            }
                         }
                         DEFAULT_MATCHER = new PublicSuffixMatcher(list.getRules(), list.getExceptions());
                         if (log.shouldWarn())
-                            log.warn("Loaded " + geoFile + " in " + (System.currentTimeMillis() - begin) +
-                                     " ms and created list with " + list.getRules().size() + " entries and " +
-                                     list.getExceptions().size() + " exceptions");
+                            log.warn("Loaded " + geoFile + " in " + (System.currentTimeMillis() - begin)
+                                    + " ms and created list with "
+                                    + list.getRules().size() + " entries and "
+                                    + list.getExceptions().size() + " exceptions");
                     } catch (IOException ex) {
                         log.error("Failure loading public suffix list from " + geoFile, ex);
-                         // DEFAULT_MATCHER remains null
+                        // DEFAULT_MATCHER remains null
                     }
                 } else {
                     List<String> list = new ArrayList<String>(320);
@@ -383,8 +383,8 @@ public class I2PSSLSocketFactory {
                     list.addAll(Arrays.asList(ADDITIONAL_TLDS));
                     DEFAULT_MATCHER = new PublicSuffixMatcher(list, null);
                     if (log.shouldWarn())
-                        log.warn("No public suffix list found at " + geoFile +
-                                 " - created default with " + list.size() + " entries");
+                        log.warn("No public suffix list found at " + geoFile + " - created default with " + list.size()
+                                + " entries");
                 }
             }
             _matcherLoaded = true;
@@ -392,12 +392,12 @@ public class I2PSSLSocketFactory {
         return DEFAULT_MATCHER;
     }
 
-   /**
-    *  Merge two PublicSuffixLists
-    *  Have to do this because they are unmodifiable
-    *
-    *  @since 0.9.20
-    */
+    /**
+     *  Merge two PublicSuffixLists
+     *  Have to do this because they are unmodifiable
+     *
+     *  @since 0.9.20
+     */
     private static PublicSuffixList merge(PublicSuffixList a, PublicSuffixList b) {
         List<String> ar = a.getRules();
         List<String> ae = a.getExceptions();
@@ -412,47 +412,47 @@ public class I2PSSLSocketFactory {
         return new PublicSuffixList(cr, ce);
     }
 
-   /**
-    *  Read in the country file and add all TLDs to the list.
-    *  It would almost be easier just to add all possible 26*26 two-letter codes.
-    *
-    *  @param tlds out parameter
-    *  @since 0.9.20 adapted from GeoIP.loadCountryFile()
-    */
+    /**
+     *  Read in the country file and add all TLDs to the list.
+     *  It would almost be easier just to add all possible 26*26 two-letter codes.
+     *
+     *  @param tlds out parameter
+     *  @since 0.9.20 adapted from GeoIP.loadCountryFile()
+     */
     private static void addCountries(I2PAppContext ctx, List<String> tlds) {
         Log log = ctx.logManager().getLog(I2PSSLSocketFactory.class);
         String geoDir = ctx.getProperty(PROP_GEOIP_DIR, GEOIP_DIR_DEFAULT);
         File geoFile = new File(geoDir);
-        if (!geoFile.isAbsolute())
-            geoFile = new File(ctx.getBaseDir(), geoDir);
+        if (!geoFile.isAbsolute()) geoFile = new File(ctx.getBaseDir(), geoDir);
         geoFile = new File(geoFile, COUNTRY_FILE_DEFAULT);
         if (!geoFile.exists()) {
-            if (log.shouldWarn())
-                log.warn("Country file not found: " + geoFile.getAbsolutePath());
+            if (log.shouldWarn()) log.warn("Country file not found: " + geoFile.getAbsolutePath());
             return;
         }
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(geoFile), "UTF-8"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(geoFile), "UTF-8"));
             String line = null;
             int i = 0;
             while ((line = br.readLine()) != null) {
                 try {
-                    if (line.charAt(0) == '#')
-                        continue;
+                    if (line.charAt(0) == '#') continue;
                     String[] s = DataHelper.split(line, ",");
                     String lc = s[0].toLowerCase(Locale.US);
                     tlds.add(lc);
                     i++;
-                } catch (IndexOutOfBoundsException ioobe) {}
+                } catch (IndexOutOfBoundsException ioobe) {
+                }
             }
-            if (log.shouldInfo())
-                log.info("Loaded " + i + " TLDs from " + geoFile.getAbsolutePath());
+            if (log.shouldInfo()) log.info("Loaded " + i + " TLDs from " + geoFile.getAbsolutePath());
         } catch (IOException ioe) {
             log.error("Error reading the Country File", ioe);
         } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) {}
+            if (br != null)
+                try {
+                    br.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 
@@ -463,14 +463,13 @@ public class I2PSSLSocketFactory {
      *
      *  @param relativeCertPath e.g. "certificates/i2cp"; as of 0.9.41, may be absolute
      */
-    private static SSLSocketFactory initSSLContext(I2PAppContext context, boolean loadSystemCerts, String relativeCertPath)
-                               throws GeneralSecurityException {
+    private static SSLSocketFactory initSSLContext(
+            I2PAppContext context, boolean loadSystemCerts, String relativeCertPath) throws GeneralSecurityException {
         Log log = context.logManager().getLog(I2PSSLSocketFactory.class);
         KeyStore ks;
         if (loadSystemCerts) {
             ks = KeyStoreUtil.loadSystemKeyStore();
-            if (ks == null)
-                throw new GeneralSecurityException("Key Store init error");
+            if (ks == null) throw new GeneralSecurityException("Key Store init error");
         } else {
             try {
                 ks = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -482,13 +481,11 @@ public class I2PSSLSocketFactory {
 
         File dir = new File(relativeCertPath);
         boolean wasAbsolute = dir.isAbsolute();
-        if (!wasAbsolute)
-            dir = new File(context.getConfigDir(), relativeCertPath);
+        if (!wasAbsolute) dir = new File(context.getConfigDir(), relativeCertPath);
         int adds = KeyStoreUtil.addCerts(dir, ks);
         int totalAdds = adds;
         if (adds > 0) {
-            if (log.shouldInfo())
-                log.info("Loaded " + adds + " trusted certificates from " + dir.getAbsolutePath());
+            if (log.shouldInfo()) log.info("Loaded " + adds + " trusted certificates from " + dir.getAbsolutePath());
         }
 
         File dir2;
@@ -507,19 +504,18 @@ public class I2PSSLSocketFactory {
             dir2 = dir;
         }
         if (totalAdds > 0 || loadSystemCerts) {
-            if (log.shouldInfo())
-                log.info("Loaded total of " + totalAdds + " new trusted certificates");
+            if (log.shouldInfo()) log.info("Loaded total of " + totalAdds + " new trusted certificates");
         } else {
-            String msg = "No trusted certificates loaded (looked in " +
-                       dir.getAbsolutePath() + (dir.getAbsolutePath().equals(dir2.getAbsolutePath()) ? "" : (" and " + dir2.getAbsolutePath())) +
-                       ", SSL connections will fail. " +
-                       "Copy the cert in " + relativeCertPath + " from the router to the directory.";
+            String msg = "No trusted certificates loaded (looked in " + dir.getAbsolutePath()
+                    + (dir.getAbsolutePath().equals(dir2.getAbsolutePath()) ? "" : (" and " + dir2.getAbsolutePath()))
+                    + ", SSL connections will fail. " + "Copy the cert in " + relativeCertPath
+                    + " from the router to the directory.";
             // don't continue, since we didn't load the system keystore, we have nothing.
             throw new GeneralSecurityException(msg);
         }
 
         SSLContext sslc = SSLContext.getInstance("TLS");
-        TrustManagerFactory tmf =   TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         tmf.init(ks);
         sslc.init(null, tmf.getTrustManagers(), context.random());
         return sslc.getSocketFactory();
@@ -535,10 +531,9 @@ public class I2PSSLSocketFactory {
      * @since 0.9.16
      */
     public static void setProtocolsAndCiphers(SSLSocket socket) {
-        socket.setEnabledProtocols(selectProtocols(socket.getEnabledProtocols(),
-                                                   socket.getSupportedProtocols()));
-        socket.setEnabledCipherSuites(selectCipherSuites(socket.getEnabledCipherSuites(),
-                                                         socket.getSupportedCipherSuites()));
+        socket.setEnabledProtocols(selectProtocols(socket.getEnabledProtocols(), socket.getSupportedProtocols()));
+        socket.setEnabledCipherSuites(
+                selectCipherSuites(socket.getEnabledCipherSuites(), socket.getSupportedCipherSuites()));
     }
 
     /**
@@ -551,17 +546,15 @@ public class I2PSSLSocketFactory {
      * @since 0.9.16
      */
     public static void setProtocolsAndCiphers(SSLServerSocket socket) {
-        String[] p = selectProtocols(socket.getEnabledProtocols(),
-                                     socket.getSupportedProtocols());
+        String[] p = selectProtocols(socket.getEnabledProtocols(), socket.getSupportedProtocols());
         for (int i = 0; i < p.length; i++) {
             // if we left SSLv3 in there, we don't support TLS,
             // so we should't remove the SSL ciphers
-            if (p[i].equals("SSLv3"))
-                return;
+            if (p[i].equals("SSLv3")) return;
         }
         socket.setEnabledProtocols(p);
-        socket.setEnabledCipherSuites(selectCipherSuites(socket.getEnabledCipherSuites(),
-                                                         socket.getSupportedCipherSuites()));
+        socket.setEnabledCipherSuites(
+                selectCipherSuites(socket.getEnabledCipherSuites(), socket.getSupportedCipherSuites()));
     }
 
     /**
@@ -603,8 +596,8 @@ public class I2PSSLSocketFactory {
      * @param toExclude Remove all these from what is enabled
      * @since 0.9.16
      */
-    private static String[] select(String[] enabledArr, String[] supportedArr,
-                            List<String> toEnable, List<String> toExclude) {
+    private static String[] select(
+            String[] enabledArr, String[] supportedArr, List<String> toEnable, List<String> toExclude) {
         Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PSSLSocketFactory.class);
         Set<String> selected = new HashSet<String>(enabledArr.length);
         selected.addAll(Arrays.asList(enabledArr));
@@ -614,8 +607,7 @@ public class I2PSSLSocketFactory {
         for (String s : toEnable) {
             if (supported.contains(s)) {
                 if (selected.add(s)) {
-                    if (log.shouldInfo())
-                        log.info("Added, previously disabled: " + s);
+                    if (log.shouldInfo()) log.info("Added, previously disabled: " + s);
                 }
             } else if (log.shouldInfo()) {
                 log.info("Not supported in this JVM: " + s);

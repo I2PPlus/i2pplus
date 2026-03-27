@@ -1,5 +1,8 @@
 package net.i2p.stat;
 
+import net.i2p.I2PAppContext;
+import net.i2p.util.Log;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.Collator;
@@ -10,8 +13,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
-import net.i2p.I2PAppContext;
-import net.i2p.util.Log;
 
 /**
  * Coordinate the management of various frequencies and rates within I2P components,
@@ -26,10 +27,12 @@ public class StatManager {
 
     /** stat name to FrequencyStat */
     private final ConcurrentHashMap<String, FrequencyStat> _frequencyStats;
+
     /** stat name to RateStat */
     private final ConcurrentHashMap<String, RateStat> _rateStats;
 
     private int coalesceCounter;
+
     /** every this many minutes for frequencies */
     private static final int FREQ_COALESCE_RATE = 9;
 
@@ -45,8 +48,8 @@ public class StatManager {
     public StatManager(I2PAppContext context) {
         _context = context;
         _log = context.logManager().getLog(getClass());
-        _frequencyStats = new ConcurrentHashMap<String,FrequencyStat>(8);
-        _rateStats = new ConcurrentHashMap<String,RateStat>(128);
+        _frequencyStats = new ConcurrentHashMap<String, FrequencyStat>(8);
+        _rateStats = new ConcurrentHashMap<String, RateStat>(128);
     }
 
     /**
@@ -125,21 +128,15 @@ public class StatManager {
     /** update the given frequency statistic, taking note that an event occurred (and recalculating all frequencies) */
     public void updateFrequency(String name) {
         FrequencyStat freq = _frequencyStats.get(name);
-        if (freq != null)
-            freq.eventOccurred();
-        else
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Invalid frequency stat : " + name);
+        if (freq != null) freq.eventOccurred();
+        else if (_log.shouldLog(Log.DEBUG)) _log.debug("Invalid frequency stat : " + name);
     }
 
     /** update the given rate statistic, taking note that the given data point was received (and recalculating all rates) */
     public void addRateData(String name, long data, long eventDuration) {
         RateStat stat = _rateStats.get(name); // unsynchronized
-        if (stat != null)
-            stat.addData(data, eventDuration);
-        else
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Invalid rate stat : " + name);
+        if (stat != null) stat.addData(data, eventDuration);
+        else if (_log.shouldLog(Log.DEBUG)) _log.debug("Invalid rate stat : " + name);
     }
 
     /**
@@ -149,11 +146,8 @@ public class StatManager {
      */
     public void addRateData(String name, long data) {
         RateStat stat = _rateStats.get(name); // unsynchronized
-        if (stat != null)
-            stat.addData(data);
-        else
-            if (_log.shouldLog(Log.DEBUG))
-                _log.warn("Invalid rate stat : " + name);
+        if (stat != null) stat.addData(data);
+        else if (_log.shouldLog(Log.DEBUG)) _log.warn("Invalid rate stat : " + name);
     }
 
     public synchronized void coalesceStats() {
@@ -259,7 +253,7 @@ public class StatManager {
             fs.store(out, prefix);
         }
         for (RateStat rs : _rateStats.values()) {
-            rs.store(out,prefix);
+            rs.store(out, prefix);
         }
     }
 }

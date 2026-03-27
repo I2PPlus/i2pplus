@@ -33,10 +33,7 @@ public abstract class LdhLabel extends DnsLabel {
 
         for (int i = 0; i < label.length(); i++) {
             char c = label.charAt(i);
-            if ((c >= 'a' && c <= 'z')
-                    || (c >= 'A' && c <= 'Z')
-                    || (c >= '0' && c <= '9')
-                    || c == '-') {
+            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '-') {
                 continue;
             }
             return false;

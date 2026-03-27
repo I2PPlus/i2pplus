@@ -21,6 +21,8 @@
 
 package net.i2p.addressbook;
 
+import net.i2p.client.naming.HostTxtEntry;
+
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
@@ -30,7 +32,6 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import net.i2p.client.naming.HostTxtEntry;
 
 /**
  *  A class to iterate through a hosts.txt or config file without
@@ -67,13 +68,19 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
 
     @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     public boolean hasNext() {
-        if (input == null) {return false;}
-        if (next != null) {return true;}
+        if (input == null) {
+            return false;
+        }
+        if (next != null) {
+            return true;
+        }
         try {
             String inputLine;
             while ((inputLine = input.readLine()) != null) {
                 HostTxtEntry he = HostTxtParser.parse(inputLine, true);
-                if (he == null) {continue;}
+                if (he == null) {
+                    continue;
+                }
                 next = new MapEntry(he.getName(), he);
                 return true;
             }
@@ -81,8 +88,9 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
             // Log the error but continue with cleanup
             System.err.println("Error reading from host file: " + ioe.getMessage());
         }
-        try {input.close();}
-        catch (IOException ioe) {
+        try {
+            input.close();
+        } catch (IOException ioe) {
             // Log warning but don't throw - we're cleaning up
             System.err.println("Warning: Failed to close host file: " + ioe.getMessage());
         }
@@ -97,18 +105,24 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
      *  and non-null props.
      */
     public Map.Entry<String, HostTxtEntry> next() {
-        if (!hasNext()) {throw new NoSuchElementException();}
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
         Map.Entry<String, HostTxtEntry> rv = next;
         next = null;
         return rv;
     }
 
-    public void remove() {throw new UnsupportedOperationException();}
+    public void remove() {
+        throw new UnsupportedOperationException();
+    }
 
     public void close() {
         if (input != null) {
-            try {input.close();}
-            catch (IOException ioe) {}
+            try {
+                input.close();
+            } catch (IOException ioe) {
+            }
         }
     }
 
@@ -124,22 +138,29 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
             value = v;
         }
 
-        public String getKey() {return key;}
+        public String getKey() {
+            return key;
+        }
 
-        public HostTxtEntry getValue() {return value;}
+        public HostTxtEntry getValue() {
+            return value;
+        }
 
         public HostTxtEntry setValue(HostTxtEntry v) {
             throw new UnsupportedOperationException();
         }
 
-        public int hashCode() {return key.hashCode() ^ value.hashCode();}
+        public int hashCode() {
+            return key.hashCode() ^ value.hashCode();
+        }
 
         public boolean equals(Object o) {
-            if (!(o instanceof Map.Entry)) {return false;}
+            if (!(o instanceof Map.Entry)) {
+                return false;
+            }
             @SuppressWarnings("unchecked")
             Map.Entry<Object, Object> e = (Map.Entry<Object, Object>) o;
             return key.equals(e.getKey()) && value.equals(e.getValue());
         }
     }
-
 }

@@ -32,8 +32,7 @@ class StoreMessageSelector implements MessageSelector {
      *  @param storeJobId just for logging
      *  @param peer just for logging
      */
-    public StoreMessageSelector(RouterContext ctx, long storeJobId, RouterInfo peer, long waitingForId,
-                                long expiration) {
+    public StoreMessageSelector(RouterContext ctx, long storeJobId, RouterInfo peer, long waitingForId, long expiration) {
         _log = ctx.logManager().getLog(StoreMessageSelector.class);
         _peer = peer.getIdentity().getHash();
         _storeJobId = storeJobId;
@@ -42,18 +41,21 @@ class StoreMessageSelector implements MessageSelector {
     }
 
     @Override
-    public boolean continueMatching() { return !_found; }
+    public boolean continueMatching() {
+        return !_found;
+    }
 
     @Override
-    public long getExpiration() { return _expiration; }
+    public long getExpiration() {
+        return _expiration;
+    }
 
     @Override
     public boolean isMatch(I2NPMessage message) {
         if (message.getType() == DeliveryStatusMessage.MESSAGE_TYPE) {
-            DeliveryStatusMessage msg = (DeliveryStatusMessage)message;
+            DeliveryStatusMessage msg = (DeliveryStatusMessage) message;
             if (msg.getMessageId() == _waitingForId) {
-                if (_log.shouldInfo())
-                    _log.info("[Job " + _storeJobId + "] Found match for the key we're waiting for [MsgID " + _waitingForId  + "]");
+                if (_log.shouldInfo()) _log.info("[Job " + _storeJobId + "] Found match for the key we're waiting for [MsgID " + _waitingForId + "]");
                 _found = true;
                 return true;
             }

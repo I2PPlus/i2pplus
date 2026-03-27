@@ -1,16 +1,17 @@
 package net.i2p.client.streaming.impl;
 
-import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.io.OutputStream;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
+
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.io.OutputStream;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * An OutputStream implementation that buffers data and forwards it
@@ -46,7 +47,7 @@ class MessageOutputStream extends OutputStream {
     // Buffer and buffer management
     // _buf is fetched from ByteCache, length == _originalBufferSize
     private byte[] _buf;
-    private int _valid;  // Number of valid bytes currently in buffer
+    private int _valid; // Number of valid bytes currently in buffer
 
     private final Object _dataLock = new Object();
 
@@ -87,6 +88,7 @@ class MessageOutputStream extends OutputStream {
      * Default passive flush delay optimized for lower latency while maintaining stability.
      */
     private static final int DEFAULT_PASSIVE_FLUSH_DELAY = SystemVersion.isSlow() ? 200 : 100;
+
     private static final String PROP_PASSIVE_FLUSH_DELAY = "router.passiveFlushDelay";
 
     /**
@@ -98,8 +100,7 @@ class MessageOutputStream extends OutputStream {
      * @param bufSize      Maximum buffer size allowed (will be clamped to preset max values)
      * @param initBufSize  Initial buffer size to use for buffering (&lt;= bufSize)
      */
-    public MessageOutputStream(I2PAppContext ctx, SimpleTimer2 timer,
-                               DataReceiver receiver, int bufSize, int initBufSize) {
+    public MessageOutputStream(I2PAppContext ctx, SimpleTimer2 timer, DataReceiver receiver, int bufSize, int initBufSize) {
         this(ctx, timer, receiver, bufSize, initBufSize, DEFAULT_PASSIVE_FLUSH_DELAY);
     }
 
@@ -113,15 +114,13 @@ class MessageOutputStream extends OutputStream {
      * @param initBufSize        Initial buffer size to use for buffering (&lt;= bufSize)
      * @param passiveFlushDelay  Delay in ms before passive flush if data is buffered but not flushed
      */
-    public MessageOutputStream(I2PAppContext ctx, SimpleTimer2 timer,
-                               DataReceiver receiver, int bufSize, int initBufSize, int passiveFlushDelay) {
+    public MessageOutputStream(I2PAppContext ctx, SimpleTimer2 timer, DataReceiver receiver, int bufSize, int initBufSize, int passiveFlushDelay) {
         super();
 
         // Clamp buffer size to allowed maximums to prevent resource exhaustion attacks
         if (bufSize < ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE) {
             bufSize = ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE;
-        } else if (bufSize > ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE &&
-                   bufSize < ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE_RATCHET) {
+        } else if (bufSize > ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE && bufSize < ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE_RATCHET) {
             bufSize = ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE_RATCHET;
         }
 
@@ -129,10 +128,8 @@ class MessageOutputStream extends OutputStream {
         _originalBufferSize = bufSize;
 
         // Ensure initial buffer size doesn't exceed original buffer size
-        if (initBufSize <= 0 || initBufSize > _originalBufferSize)
-            _currentBufferSize = _originalBufferSize;
-        else
-            _currentBufferSize = initBufSize;
+        if (initBufSize <= 0 || initBufSize > _originalBufferSize) _currentBufferSize = _originalBufferSize;
+        else _currentBufferSize = initBufSize;
 
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
@@ -746,7 +743,8 @@ class MessageOutputStream extends OutputStream {
                 if (_log.shouldDebug()) {
                     _log.debug("Passive flush executed: " + ws);
                 }
-                if (ws != null) {} //no-op
+                if (ws != null) {
+                } // no-op
                 else {
                     if (_log.shouldWarn()) {
                         _log.warn("Passive flush executed but WriteStatus was null");
@@ -755,5 +753,4 @@ class MessageOutputStream extends OutputStream {
             }
         }
     }
-
 }

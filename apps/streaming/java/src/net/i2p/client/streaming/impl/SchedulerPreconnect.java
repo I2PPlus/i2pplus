@@ -31,24 +31,20 @@ class SchedulerPreconnect extends SchedulerImpl {
 
     @Override
     public boolean accept(Connection con) {
-        return (con != null) &&
-               (con.getSendStreamId() <= 0) &&
-               (con.getLastSendId() < 0);
+        return (con != null) && (con.getSendStreamId() <= 0) && (con.getLastSendId() < 0);
     }
-@Override
+
+    @Override
     public void eventOccurred(Connection con) {
-        if (con.getNextSendTime() < 0)
-            con.setNextSendTime(_context.clock().now() + con.getOptions().getConnectDelay());
+        if (con.getNextSendTime() < 0) con.setNextSendTime(_context.clock().now() + con.getOptions().getConnectDelay());
 
         long timeTillSend = con.getNextSendTime() - _context.clock().now();
         if (timeTillSend <= 0) {
-            if (_log.shouldDebug())
-                _log.debug("Sending available for the SYN on " + con);
+            if (_log.shouldDebug()) _log.debug("Sending available for the SYN on " + con);
             con.sendAvailable();
             con.setNextSendTime(-1);
         } else {
-            if (_log.shouldDebug())
-                _log.debug("Waiting " + timeTillSend + "ms before sending the SYN on " + con);
+            if (_log.shouldDebug()) _log.debug("Waiting " + timeTillSend + "ms before sending the SYN on " + con);
             reschedule(timeTillSend, con);
         }
     }

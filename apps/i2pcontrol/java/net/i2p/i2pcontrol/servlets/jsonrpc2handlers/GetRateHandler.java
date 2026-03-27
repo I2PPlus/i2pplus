@@ -5,11 +5,13 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 import com.thetransactioncompany.jsonrpc2.server.MessageContext;
 import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
-import java.util.HashMap;
-import java.util.Map;
+
 import net.i2p.I2PAppContext;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /*
  *  Copyright 2011 hottuna (dev@robertfoss.se)
@@ -50,8 +52,7 @@ public class GetRateHandler implements RequestHandler {
     public JSONRPC2Response process(JSONRPC2Request req, MessageContext ctx) {
         if (req.getMethod().equals("GetRate")) {
             JSONRPC2Error err = _helper.validateParams(requiredArgs, req);
-            if (err != null)
-                return new JSONRPC2Response(err, req.getID());
+            if (err != null) return new JSONRPC2Response(err, req.getID());
 
             Map<String, Object> inParams = req.getNamedParams();
 
@@ -60,8 +61,7 @@ public class GetRateHandler implements RequestHandler {
                 return new JSONRPC2Response(JSONRPC2Error.INVALID_PARAMS, req.getID());
             }
             Number p = (Number) inParams.get("Period");
-            if (p == null)
-                return new JSONRPC2Response(JSONRPC2Error.INVALID_PARAMS, req.getID());
+            if (p == null) return new JSONRPC2Response(JSONRPC2Error.INVALID_PARAMS, req.getID());
             long period = p.longValue();
 
             RateStat rateStat = I2PAppContext.getGlobalContext().statManager().getRate(input);
@@ -73,8 +73,7 @@ public class GetRateHandler implements RequestHandler {
                 I2PAppContext.getGlobalContext().statManager().createRequiredRateStat(input, "I2PControl", "I2PControl", tempArr);
                 rateStat = I2PAppContext.getGlobalContext().statManager().getRate(input);
             }
-            if (rateStat.getRate(period) == null)
-                return new JSONRPC2Response(JSONRPC2Error.INTERNAL_ERROR, req.getID());
+            if (rateStat.getRate(period) == null) return new JSONRPC2Response(JSONRPC2Error.INTERNAL_ERROR, req.getID());
             Map<String, Object> outParams = new HashMap<String, Object>(4);
             Rate rate = rateStat.getRate(period);
             rate.coalesce();

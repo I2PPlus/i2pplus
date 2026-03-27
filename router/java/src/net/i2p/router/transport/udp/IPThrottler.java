@@ -28,17 +28,14 @@ class IPThrottler {
         // for IPv4 we simply use the IP;
         // for IPv6 we use a hash of the first 8 bytes
         Integer key;
-        if (ip.length == 4)
-            key = toInt(ip);
-        else
-            key = hashCode(ip);
+        if (ip.length == 4) key = toInt(ip);
+        else key = hashCode(ip);
         return _counter.increment(key) > _max;
     }
 
     private static Integer toInt(byte ip[]) {
         int rv = 0;
-        for (int i = 0; i < 4; i++)
-            rv |= (ip[i] & 0xff) << ((3-i)*8);
+        for (int i = 0; i < 4; i++) rv |= (ip[i] & 0xff) << ((3 - i) * 8);
         return Integer.valueOf(rv);
     }
 

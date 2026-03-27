@@ -1,4 +1,5 @@
 package net.i2p.router.web.helpers;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,6 +9,14 @@ package net.i2p.router.web.helpers;
  *
  */
 
+import net.i2p.data.DataHelper;
+import net.i2p.data.Hash;
+import net.i2p.router.Banlist;
+import net.i2p.router.RouterContext;
+import net.i2p.router.transport.TransportImpl;
+import net.i2p.router.web.Messages;
+import net.i2p.util.Addresses;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -16,18 +25,11 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
 import java.util.TreeMap;
-import net.i2p.data.DataHelper;
-import net.i2p.data.Hash;
-import net.i2p.router.Banlist;
-import net.i2p.router.RouterContext;
-import net.i2p.router.transport.TransportImpl;
-import net.i2p.router.web.Messages;
-import net.i2p.util.Addresses;
-import java.util.Locale;
+import java.util.regex.Pattern;
 
 /**
  * Renders HTML display of banned routers for the router console.
@@ -309,18 +311,23 @@ class BanlistRenderer {
         for (Map.Entry<Hash, Banlist.Entry> e : entries.entrySet()) {
             Hash key = e.getKey();
             Banlist.Entry entry = e.getValue();
-            long expires = entry.expireOn-_context.clock().now();
-            if (expires <= 0) {continue;}
-            if (entries.size() > 300 && (entry.causeCode != null && entry.causeCode.contains("LU")) ||
-                (entry.cause != null && entry.cause.contains("LU"))) {
+            long expires = entry.expireOn - _context.clock().now();
+            if (expires <= 0) {
+                continue;
+            }
+            if (entries.size() > 300 && (entry.causeCode != null && entry.causeCode.contains("LU")) || (entry.cause != null && entry.cause.contains("LU"))) {
                 continue;
             }
             buf.append("<li class=lazy>").append(_context.commSystem().renderPeerHTML(key, false));
             buf.append(' ').append("<span class=banperiod>");
             String expireString = DataHelper.formatDuration2(expires);
-            if (key.equals(Hash.FAKE_HASH) || key.equals(Banlist.HASH_ZERORI)) {buf.append(_t("Permanently banned"));}
-            else if (expires < 5L*24*60*60*1000) {buf.append(_t("Temporary ban expiring in {0}", expireString));}
-            else {buf.append(_t("Banned for {0} / until restart", expireString));}
+            if (key.equals(Hash.FAKE_HASH) || key.equals(Banlist.HASH_ZERORI)) {
+                buf.append(_t("Permanently banned"));
+            } else if (expires < 5L * 24 * 60 * 60 * 1000) {
+                buf.append(_t("Temporary ban expiring in {0}", expireString));
+            } else {
+                buf.append(_t("Banned for {0} / until restart", expireString));
+            }
             buf.append("</span>");
             Set<String> transports = entry.transports;
             if ((transports != null) && (!transports.isEmpty())) {
@@ -328,12 +335,14 @@ class BanlistRenderer {
             }
             if (entry.cause != null) {
                 buf.append("<hr>\n");
-                if (entry.causeCode != null) {buf.append(_t(entry.cause, entry.causeCode));}
-                else {buf.append(_t(entry.cause));}
+                if (entry.causeCode != null) {
+                    buf.append(_t(entry.cause, entry.causeCode));
+                } else {
+                    buf.append(_t(entry.cause));
+                }
             }
             if (!key.equals(Hash.FAKE_HASH)) {
-                buf.append(" <a href=\"configpeer?peer=").append(key.toBase64())
-                   .append("#unsh\" title=\"Unban\">[").append(_t("unban now")).append("]</a>");
+                buf.append(" <a href=\"configpeer?peer=").append(key.toBase64()).append("#unsh\" title=\"Unban\">[").append(_t("unban now")).append("]</a>");
             }
             buf.append("</li>\n");
         }
@@ -358,23 +367,11 @@ class BanlistRenderer {
         }
 
         // Column order: Country Flag, Router Hash, IP Address, Port, Hostname, Reason, Expiry
-        buf.append("<div class=tablewrap id=sessionBanned>\n<table id=sbans>\n<thead><tr><th class=country>")
-           .append(_t("Country"))
-           .append("</th><th class=hash data-sort-use-group=true>")
-           .append(_t("Router"))
-           .append("</th><th class=ip>")
-           .append(_t("IP Address"))
-           .append("</th><th class=port data-sort-method=number>")
-           .append(_t("Port"))
-            .append("</th>");
+        buf.append("<div class=tablewrap id=sessionBanned>\n<table id=sbans>\n<thead><tr><th class=country>").append(_t("Country")).append("</th><th class=hash data-sort-use-group=true>").append(_t("Router")).append("</th><th class=ip>").append(_t("IP Address")).append("</th><th class=port data-sort-method=number>").append(_t("Port")).append("</th>");
         if (enableReverseLookups()) {
             buf.append("<th class=hostname>").append(_t("Hostname")).append("</th>");
         }
-        buf.append("<th class=reason>")
-           .append(_t("Reason"))
-           .append("</th><th class=expires data-sort-method=number data-sort-direction=ascending>")
-           .append(_t("Expiry"))
-            .append("</th></tr></thead>\n<tbody id=sessionBanlist>\n");
+        buf.append("<th class=reason>").append(_t("Reason")).append("</th><th class=expires data-sort-method=number data-sort-direction=ascending>").append(_t("Expiry")).append("</th></tr></thead>\n<tbody id=sessionBanlist>\n");
         int tempBanned = 0;
 
         // Render hash-based bans
@@ -383,9 +380,7 @@ class BanlistRenderer {
             Banlist.Entry entry = e.getValue();
             long expires = entry.expireOn - _context.clock().now();
             String expireString = DataHelper.formatDuration2(expires);
-            if (expires <= 0 || key.equals(Hash.FAKE_HASH) || entry.cause == null ||
-                (entry.cause.toLowerCase(Locale.ROOT).contains("hash") &&
-                 !entry.cause.toLowerCase(Locale.ROOT).contains("hashpatterndetector"))) {
+            if (expires <= 0 || key.equals(Hash.FAKE_HASH) || entry.cause == null || (entry.cause.toLowerCase(Locale.ROOT).contains("hash") && !entry.cause.toLowerCase(Locale.ROOT).contains("hashpatterndetector"))) {
                 continue;
             }
             buf.append("<tr");
@@ -393,13 +388,7 @@ class BanlistRenderer {
                 buf.append(" class=\"banFF\"");
             }
             buf.append(">");
-            String reason = LEADING_ARROW.matcher(
-                _t(entry.cause, entry.causeCode)
-                .replace("<b>➜</b> ", "")
-                .replace("<b> -> </b>", "")
-                .replace("➜ ", "")
-                .replace(" -> ", "")).replaceAll("")
-                .trim();
+            String reason = LEADING_ARROW.matcher(_t(entry.cause, entry.causeCode).replace("<b>➜</b> ", "").replace("<b> -> </b>", "").replace("➜ ", "").replace(" -> ", "")).replaceAll("").trim();
             // Get IP from hash if not in reason
             String ip = null;
             String port = null;
@@ -430,10 +419,9 @@ class BanlistRenderer {
                 ip = extractIP(ipPort);
                 port = extractPort(ipPort);
             } else {
-                 // Debug: Check if hash exists in banlist but not in sessionbans
+                // Debug: Check if hash exists in banlist but not in sessionbans
                 if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(net.i2p.util.Log.DEBUG)) {
-                    _context.logManager().getLog(BanlistRenderer.class).debug(
-                         "Hash not found in ipMap: " + key.toBase64().substring(0, 8));
+                    _context.logManager().getLog(BanlistRenderer.class).debug("Hash not found in ipMap: " + key.toBase64().substring(0, 8));
                 }
             }
             // If still no IP, try extractedIP from reason
@@ -461,17 +449,14 @@ class BanlistRenderer {
                     countryCode = geoCountry.toLowerCase(Locale.ROOT);
                 }
             }
-             // Fallback to IP lookup if hash lookup failed or returned "xx"
+            // Fallback to IP lookup if hash lookup failed or returned "xx"
             if (("xx".equals(countryCode) || countryCode.isEmpty()) && ip != null && !ip.isEmpty()) {
-                  // Check if ipPort was actually in the map (for debugging)
+                // Check if ipPort was actually in the map (for debugging)
                 String ipPortDebug = ipMap.get(key != null ? key.toBase64() : "");
                 if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(net.i2p.util.Log.DEBUG)) {
-                    _context.logManager().getLog(BanlistRenderer.class).debug(
-                          "GeoIP lookup for hash " + (key != null ? key.toBase64().substring(0, 8) : "null") +
-                          ": ipPort=" + ipPortDebug + ", extractedIP=" + ip +
-                          ", ipFromMap=" + (ipMap.get(key != null ? key.toBase64() : "") != null ? "yes" : "no"));
+                    _context.logManager().getLog(BanlistRenderer.class).debug("GeoIP lookup for hash " + (key != null ? key.toBase64().substring(0, 8) : "null") + ": ipPort=" + ipPortDebug + ", extractedIP=" + ip + ", ipFromMap=" + (ipMap.get(key != null ? key.toBase64() : "") != null ? "yes" : "no"));
                 }
-                  // Queue the IP for GeoIP lookup if not already in database
+                // Queue the IP for GeoIP lookup if not already in database
                 byte[] geoIpBytes = Addresses.getIPOnly(ip);
                 if (geoIpBytes != null && geoIpBytes.length > 0) {
                     _context.commSystem().queueLookup(geoIpBytes);
@@ -480,8 +465,7 @@ class BanlistRenderer {
                 if (geoCountry != null && !geoCountry.isEmpty() && !"xx".equals(geoCountry)) {
                     countryCode = geoCountry.toLowerCase(Locale.ROOT);
                 } else if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(net.i2p.util.Log.DEBUG)) {
-                    _context.logManager().getLog(BanlistRenderer.class).debug(
-                          "GeoIP lookup failed for IP: " + ip + ", geoCountry=" + geoCountry);
+                    _context.logManager().getLog(BanlistRenderer.class).debug("GeoIP lookup failed for IP: " + ip + ", geoCountry=" + geoCountry);
                 }
             }
             // Final fallback to xx if unknown
@@ -489,27 +473,12 @@ class BanlistRenderer {
                 countryCode = "xx";
             }
 
-            String countryName =  _context.commSystem().getCountryName(countryCode);
-            buf.append("<td class=country data-sort=").append(countryCode).append(">")
-               .append("<img width=28 height=21 title=\"").append(countryName)
-               .append("\" src=\"/flags.jsp?c=").append(countryCode).append("\">")
-               .append("</td><td class=hash>")
-               .append(key != null ? "<span class=b64>" + key.toBase64() + "</span>" : "")
-               .append("</td><td class=ip>")
-               .append(ip != null ? ip : "")
-               .append("</td><td class=port data-sort=").append(port != null ? port : "0").append(">")
-               .append(port != null ? port : "")
-               .append("</td>");
+            String countryName = _context.commSystem().getCountryName(countryCode);
+            buf.append("<td class=country data-sort=").append(countryCode).append(">").append("<img width=28 height=21 title=\"").append(countryName).append("\" src=\"/flags.jsp?c=").append(countryCode).append("\">").append("</td><td class=hash>").append(key != null ? "<span class=b64>" + key.toBase64() + "</span>" : "").append("</td><td class=ip>").append(ip != null ? ip : "").append("</td><td class=port data-sort=").append(port != null ? port : "0").append(">").append(port != null ? port : "").append("</td>");
             if (enableReverseLookups()) {
-                buf.append("<td class=hostname>")
-                   .append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? hostname : "")
-                    .append("</td>");
+                buf.append("<td class=hostname>").append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? hostname : "").append("</td>");
             }
-            buf.append("<td class=reason>")
-               .append(reason)
-               .append("</td><td class=expires data-sort=").append(expires).append(">")
-               .append(expireString)
-                .append("</td></tr>\n");
+            buf.append("<td class=reason>").append(reason).append("</td><td class=expires data-sort=").append(expires).append(">").append(expireString).append("</td></tr>\n");
             tempBanned++;
         }
 
@@ -524,10 +493,10 @@ class BanlistRenderer {
             if (hostname == null && enableReverseLookups()) {
                 hostname = reverseLookup(ip);
             }
-             // GeoIP lookup for country flag - IP only (no hash available for IP-only bans)
+            // GeoIP lookup for country flag - IP only (no hash available for IP-only bans)
             String countryCode = "xx";
             if (ip != null && !ip.isEmpty()) {
-                 // Queue the IP for GeoIP lookup if not already in database
+                // Queue the IP for GeoIP lookup if not already in database
                 byte[] geoIpBytes = Addresses.getIPOnly(ip);
                 if (geoIpBytes != null && geoIpBytes.length > 0) {
                     _context.commSystem().queueLookup(geoIpBytes);
@@ -540,45 +509,33 @@ class BanlistRenderer {
             if ("unknown".equals(countryCode)) {
                 countryCode = "xx";
             }
-            String countryName =  _context.commSystem().getCountryName(countryCode);
-            buf.append("<tr class=ipOnly>")
-               .append("<td class=country data-sort=").append(countryCode).append(">")
-               .append("<img width=28 height=21 title=\"").append(countryName)
-               .append("\" src=\"/flags.jsp?c=").append(countryCode).append("\">")
-               .append("</td>")
-               .append("<td class=hash>")  // No hash available for IP-only bans
-               .append("</td>")
-                .append("<td class=ip>")
-                .append(ip != null ? ip : "")
-                .append("</td><td class=port data-sort=").append(port != null ? port : "0").append(">")
-                .append(port != null ? port : "")
-                .append("</td>");
-            if (enableReverseLookups()) {
-                buf.append("<td class=hostname>")
-                    .append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? hostname : "")
+            String countryName = _context.commSystem().getCountryName(countryCode);
+            buf.append("<tr class=ipOnly>") .append("<td class=country data-sort=") .append(countryCode)
+                    .append(">")
+                    .append("<img width=28 height=21 title=\"")
+                    .append(countryName)
+                    .append("\" src=\"/flags.jsp?c=")
+                    .append(countryCode)
+                    .append("\">")
+                    .append("</td>")
+                    .append("<td class=hash>") // No hash available for IP-only bans
+                    .append("</td>")
+                    .append("<td class=ip>")
+                    .append(ip != null ? ip : "")
+                    .append("</td><td class=port data-sort=")
+                    .append(port != null ? port : "0")
+                    .append(">")
+                    .append(port != null ? port : "")
                     .append("</td>");
+            if (enableReverseLookups()) {
+                buf.append("<td class=hostname>").append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? hostname : "").append("</td>");
             }
-            String ipReason = ipBan.reason.isEmpty() ? "IP Ban" :
-                LEADING_ARROW.matcher(
-                    ipBan.reason.replace("<b>➜</b> ", "")
-                                .replace("<b> -> </b>", "")
-                                .replace("➜ ", "")
-                                .replace(" -> ", "")).replaceAll("")
-                            .trim();
-            buf.append("<td class=reason>")
-               .append(ipReason)
-               .append("</td><td class=expires data-sort=").append(ipBan.expires).append(">")
-               .append(expireString)
-                .append("</td></tr>\n");
+            String ipReason = ipBan.reason.isEmpty() ? "IP Ban" : LEADING_ARROW.matcher(ipBan.reason.replace("<b>➜</b> ", "").replace("<b> -> </b>", "").replace("➜ ", "").replace(" -> ", "")).replaceAll("").trim();
+            buf.append("<td class=reason>").append(ipReason).append("</td><td class=expires data-sort=").append(ipBan.expires).append(">").append(expireString).append("</td></tr>\n");
             tempBanned++;
         }
 
-        buf.append("</tbody>\n<tfoot id=sessionBanlistFooter><tr><th colspan=")
-           .append(enableReverseLookups() ? "7" : "6")
-           .append(">")
-           .append(_t("Total session-only bans"))
-           .append(": ").append(tempBanned)
-            .append("</th></tr></tfoot>\n</table>\n</div>\n");
+        buf.append("</tbody>\n<tfoot id=sessionBanlistFooter><tr><th colspan=").append(enableReverseLookups() ? "7" : "6").append(">").append(_t("Total session-only bans")).append(": ").append(tempBanned).append("</th></tr></tfoot>\n</table>\n</div>\n");
         out.append(buf);
         out.flush();
     }

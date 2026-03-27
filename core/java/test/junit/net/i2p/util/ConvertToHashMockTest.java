@@ -7,6 +7,7 @@ import net.i2p.TestContext;
 import net.i2p.client.naming.NamingService;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
+
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class ConvertToHashMockTest{
+public class ConvertToHashMockTest {
 
     @Mock private NamingService namingService;
     @Mock private Destination destination;
@@ -33,7 +34,7 @@ public class ConvertToHashMockTest{
      * We would otherwise pollute the other tests that depend on I2PAppContext
      */
     @AfterClass
-    public static void afterClass(){
+    public static void afterClass() {
         TestContext.setGlobalContext(null);
     }
 

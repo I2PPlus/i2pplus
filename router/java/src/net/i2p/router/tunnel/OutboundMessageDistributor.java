@@ -1,7 +1,5 @@
 package net.i2p.router.tunnel;
 
-import java.util.HashSet;
-import java.util.Set;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.DatabaseLookupMessage;
@@ -17,6 +15,9 @@ import net.i2p.util.Log;
 import net.i2p.util.SyntheticREDQueue;
 import net.i2p.util.SystemVersion;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * When a message arrives at the outbound tunnel endpoint, this distributor
  * honors the instructions.
@@ -31,11 +32,11 @@ class OutboundMessageDistributor {
     private int _newRouterCount;
     private long _newRouterTime;
 
-    private static final long MAX_DISTRIBUTE_TIME = 15*1000;
+    private static final long MAX_DISTRIBUTE_TIME = 15 * 1000;
     // This is probably too high, to be reduced later
     private static final int coreCount = SystemVersion.getCores();
     private static final int MAX_ROUTERS_PER_PERIOD = SystemVersion.isSlow() ? 32 : 64;
-    private static final long NEW_ROUTER_PERIOD = SystemVersion.isSlow() ? 30*1000 : 15*1000;
+    private static final long NEW_ROUTER_PERIOD = SystemVersion.isSlow() ? 30 * 1000 : 15 * 1000;
 
     /**
      *  @param priority OutNetMessage.PRIORITY_PARTICIPATING for somebody else's OBEP, or
@@ -58,7 +59,9 @@ class OutboundMessageDistributor {
         if (priority <= OutNetMessage.PRIORITY_PARTICIPATING) {
             _toRouters = new HashSet<Hash>(4);
             _toRouters.add(ctx.routerHash());
-        } else {_toRouters = null;}
+        } else {
+            _toRouters = null;
+        }
         _partBWE = bwe;
         // all createRateStat() in TunnelDispatcher
     }
@@ -79,11 +82,9 @@ class OutboundMessageDistributor {
         if (shouldDrop(target)) {
             _context.statManager().addRateData("tunnel.dropAtOBEP", 1);
             if (_log.shouldInfo()) {
-                _log.warn("Dropping I2NPMessage to [" + target.toBase64().substring(0,6) + "] at Outbound Endpoint [TunnelID " +
-                           tunnel.getTunnelId() + "] -> New connection throttle" + msg);
+                _log.warn("Dropping I2NPMessage to [" + target.toBase64().substring(0, 6) + "] at Outbound Endpoint [TunnelID " + tunnel.getTunnelId() + "] -> New connection throttle" + msg);
             } else if (_log.shouldWarn()) {
-                _log.warn("Dropping I2NPMessage (" + msg.getType() + ") to [" + target.toBase64().substring(0,6) + "] " +
-                           "at Outbound Endpoint [TunnelID " + tunnel.getTunnelId() + "] -> New connection throttle");
+                _log.warn("Dropping I2NPMessage (" + msg.getType() + ") to [" + target.toBase64().substring(0, 6) + "] " + "at Outbound Endpoint [TunnelID " + tunnel.getTunnelId() + "] -> New connection throttle");
             }
             return;
         }
@@ -94,21 +95,19 @@ class OutboundMessageDistributor {
                 // credit our lookup message as part. traffic
                 if (_context.tunnelDispatcher().shouldDropParticipatingMessage(TunnelDispatcher.Location.OBEP, DatabaseLookupMessage.MESSAGE_TYPE, 1024, _partBWE)) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Dropping I2NPMessage (" + msg.getType() + ") to [" + target.toBase64().substring(0,6) + "] " +
-                                  "at Outbound Endpoint -> Lookup bandwidth throttle");
+                        _log.warn("Dropping I2NPMessage (" + msg.getType() + ") to [" + target.toBase64().substring(0, 6) + "] " + "at Outbound Endpoint -> Lookup bandwidth throttle");
                     }
                     return;
                 }
             }
-            if (_log.shouldInfo())
-                _log.info("Outbound distributor to [" + target.toBase64().substring(0,6)
-                           + "]" + (tunnel != null ? "." + tunnel.getTunnelId() + "" : "")
-                           + " -> No local info, searching...");
+            if (_log.shouldInfo()) _log.info("Outbound distributor to [" + target.toBase64().substring(0, 6) + "]" + (tunnel != null ? "." + tunnel.getTunnelId() + "" : "") + " -> No local info, searching...");
             // TODO - should we set the search timeout based on the message timeout,
             // or is that a bad idea due to clock skews?
             _context.netDb().lookupRouterInfo(target, new DistributeJob(_context, msg, target, tunnel), null, MAX_DISTRIBUTE_TIME);
             return;
-        } else {distribute(msg, info, tunnel);}
+        } else {
+            distribute(msg, info, tunnel);
+        }
     }
 
     /**
@@ -117,11 +116,9 @@ class OutboundMessageDistributor {
      *  @since 0.9.12
      */
     private boolean shouldDrop(Hash target) {
-        if (_toRouters == null)
-            return false;
+        if (_toRouters == null) return false;
         synchronized (this) {
-            if (!_toRouters.add(target) || _context.commSystem().isEstablished(target) ||++_newRouterCount <= Math.min(MAX_ROUTERS_PER_PERIOD, 64))
-                return false;
+            if (!_toRouters.add(target) || _context.commSystem().isEstablished(target) || ++_newRouterCount <= Math.min(MAX_ROUTERS_PER_PERIOD, 64)) return false;
             long now = _context.clock().now();
             if (_newRouterTime < now - NEW_ROUTER_PERIOD) {
                 // latest guy is outside previous period
@@ -149,8 +146,7 @@ class OutboundMessageDistributor {
                     UnknownI2NPMessage umsg = (UnknownI2NPMessage) msg;
                     msg = umsg.convert();
                 } catch (I2NPMessageException ime) {
-                    if (_log.shouldInfo())
-                        _log.info("Unable to convert to standard message class at zero-hop Inbound Gateway \n* " + ime.getMessage());
+                    if (_log.shouldInfo()) _log.info("Unable to convert to standard message class at zero-hop Inbound Gateway \n* " + ime.getMessage());
                     return;
                 }
             }
@@ -165,15 +161,13 @@ class OutboundMessageDistributor {
         }
 
         if (toUs) {
-            if (_log.shouldDebug())
-                _log.debug("Queueing Inbound message to ourselves: " + msg);
+            if (_log.shouldDebug()) _log.debug("Queueing Inbound message to ourselves: " + msg);
             _context.inNetMessagePool().add(msg, null, null, 0);
             return;
         } else {
             OutNetMessage out = new OutNetMessage(_context, msg, _context.clock().now() + MAX_DISTRIBUTE_TIME, _priority, target);
 
-            if (_log.shouldDebug())
-                _log.debug("Queueing Outbound message to: [" + target.getIdentity().calculateHash().toBase64().substring(0,6) + "]");
+            if (_log.shouldDebug()) _log.debug("Queueing Outbound message to: [" + target.getIdentity().calculateHash().toBase64().substring(0, 6) + "]");
             _context.outNetMessagePool().add(out);
         }
     }
@@ -191,22 +185,20 @@ class OutboundMessageDistributor {
         }
 
         @Override
-        public String getName() { return "Distribute OBEP after Lookup"; }
+        public String getName() {
+            return "Distribute OBEP after Lookup";
+        }
 
         @Override
         public void runJob() {
             RouterInfo info = getContext().netDb().lookupRouterInfoLocally(_target);
             int stat;
             if (info != null) {
-                if (_log.shouldDebug())
-                    _log.debug("Lookup succeeded for Outbound distributor to [" + _target.toBase64().substring(0,6) + "]" +
-                               (_tunnel != null ? " for [TunnelID " + _tunnel.getTunnelId() + "]" : ""));
+                if (_log.shouldDebug()) _log.debug("Lookup succeeded for Outbound distributor to [" + _target.toBase64().substring(0, 6) + "]" + (_tunnel != null ? " for [TunnelID " + _tunnel.getTunnelId() + "]" : ""));
                 distribute(_message, info, _tunnel);
                 stat = 1;
             } else {
-                if (_log.shouldWarn())
-                    _log.warn("Lookup failed for Outbound distributor to [" + _target.toBase64().substring(0,6) + "]" +
-                              (_tunnel != null ? " for [TunnelID " + _tunnel.getTunnelId() + "]" : ""));
+                if (_log.shouldWarn()) _log.warn("Lookup failed for Outbound distributor to [" + _target.toBase64().substring(0, 6) + "]" + (_tunnel != null ? " for [TunnelID " + _tunnel.getTunnelId() + "]" : ""));
                 stat = 0;
             }
             _context.statManager().addRateData("tunnel.distributeLookupSuccess", stat);

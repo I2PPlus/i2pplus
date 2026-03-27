@@ -1,5 +1,13 @@
 package net.i2p.sam;
 
+import net.i2p.I2PAppContext;
+import net.i2p.data.DataHelper;
+import net.i2p.sam.client.SAMEventHandler;
+import net.i2p.sam.client.SAMReader;
+import net.i2p.stat.RateConstants;
+import net.i2p.util.I2PThread;
+import net.i2p.util.Log;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -8,13 +16,6 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
-import net.i2p.I2PAppContext;
-import net.i2p.data.DataHelper;
-import net.i2p.sam.client.SAMEventHandler;
-import net.i2p.sam.client.SAMReader;
-import net.i2p.stat.RateConstants;
-import net.i2p.util.I2PThread;
-import net.i2p.util.Log;
 
 /**
  * Sit around on a SAM destination, receiving lots of data and sending lots of
@@ -38,6 +39,7 @@ public class TestSwarm {
     private SAMReader _reader;
     private boolean _dead;
     private SAMEventHandler _eventHandler;
+
     /** Connection id (Integer) to peer (Flooder) */
     private Map _remotePeers;
 
@@ -88,11 +90,14 @@ public class TestSwarm {
     }
 
     private class SwarmEventHandler extends SAMEventHandler {
-        public SwarmEventHandler(I2PAppContext ctx) { super(ctx); }
+        public SwarmEventHandler(I2PAppContext ctx) {
+            super(ctx);
+        }
+
         public void streamClosedReceived(String result, int id, String message) {
             Flooder flooder = null;
             synchronized (_remotePeers) {
-                flooder = (Flooder)_remotePeers.remove(Integer.valueOf(id));
+                flooder = (Flooder) _remotePeers.remove(Integer.valueOf(id));
             }
             if (flooder != null) {
                 flooder.closed();
@@ -101,10 +106,11 @@ public class TestSwarm {
                 _log.error("Not connected to " + id + " but we were just closed?");
             }
         }
+
         public void streamDataReceived(int id, byte data[], int offset, int length) {
             Flooder flooder = null;
             synchronized (_remotePeers) {
-                flooder = (Flooder)_remotePeers.get(Integer.valueOf(id));
+                flooder = (Flooder) _remotePeers.get(Integer.valueOf(id));
             }
             long value = DataHelper.fromLong(data, 0, 4);
             if (flooder != null) {
@@ -113,6 +119,7 @@ public class TestSwarm {
                 _log.error("not connected to " + id + " but we received " + value + "?");
             }
         }
+
         public void streamConnectedReceived(String dest, int id) {
             _log.debug("Connection " + id + " received from " + dest);
 
@@ -123,7 +130,6 @@ public class TestSwarm {
             I2PThread t = new I2PThread(flooder, "Flood " + id);
             t.start();
         }
-
     }
 
     private boolean connect() {
@@ -146,8 +152,7 @@ public class TestSwarm {
                 _log.debug("Hello sent");
                 String serverVersion = _eventHandler.waitForHelloReply();
                 _log.debug("Hello reply found: " + serverVersion);
-                if (serverVersion == null)
-                    throw new IOException("hello failed?");
+                if (serverVersion == null) throw new IOException("hello failed?");
                 String req = "SESSION CREATE STYLE=STREAM DESTINATION=" + _destFile + " " + _conOptions + "\n";
                 _samOut.write(DataHelper.getUTF8(req));
                 _samOut.flush();
@@ -239,22 +244,28 @@ public class TestSwarm {
             _lastReceivedOn = _context.clock().now();
             _context.statManager().createRateStat("swarm." + conId + ".totalReceived", "Data size received", "swarm", RateConstants.SHORT_TERM_RATES);
             _context.statManager().createRateStat("swarm." + conId + ".totalSent", "Data size sent", "swarm", RateConstants.SHORT_TERM_RATES);
-            _context.statManager().createRateStat("swarm." + conId + ".started", "When we start", "swarm", new long[] { RateConstants.ONE_MINUTE });
-            _context.statManager().createRateStat("swarm." + conId + ".lifetime", "How long we talk to a peer", "swarm", new long[] { RateConstants.ONE_MINUTE });
+            _context.statManager().createRateStat("swarm." + conId + ".started", "When we start", "swarm", new long[] {RateConstants.ONE_MINUTE});
+            _context.statManager().createRateStat("swarm." + conId + ".lifetime", "How long we talk to a peer", "swarm", new long[] {RateConstants.ONE_MINUTE});
         }
 
-        public int getConnectionId() { return _connectionId; }
-        public String getDestination() { return _remoteDestination; }
+        public int getConnectionId() {
+            return _connectionId;
+        }
+
+        public String getDestination() {
+            return _remoteDestination;
+        }
 
         public void closed() {
             _closed = true;
             long lifetime = _context.clock().now() - _started;
             _context.statManager().addRateData("swarm." + _connectionId + ".lifetime", lifetime, lifetime);
         }
+
         public void run() {
             _started = _context.clock().now();
             _context.statManager().addRateData("swarm." + _connectionId + ".started", 1, 0);
-            byte data[] = new byte[32*1024];
+            byte data[] = new byte[32 * 1024];
             long value = 0;
             long lastSend = _context.clock().now();
             while (!_closed) {
@@ -273,30 +284,28 @@ public class TestSwarm {
                 _totalSent += data.length;
                 _context.statManager().addRateData("swarm." + _connectionId + ".totalSent", _totalSent, 0);
                 value++;
-                try { Thread.sleep(20); } catch (InterruptedException ie) {}
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException ie) {
+                }
                 long now = _context.clock().now();
-                _log.debug("Sending " + value + " on " + _connectionId + " after " + (now-lastSend));
+                _log.debug("Sending " + value + " on " + _connectionId + " after " + (now - lastSend));
                 lastSend = now;
             }
         }
+
         public void received(int len, long value) {
             _totalReceived += len;
-            if ((!_outOfSync) && (len % 32*1024 != 0)) {
+            if ((!_outOfSync) && (len % 32 * 1024 != 0)) {
                 _outOfSync = true;
-                if (_log.shouldError())
-                    _log.error("Out of sync (len=" + len + " after " + (_totalReceived-len) + ")");
+                if (_log.shouldError()) _log.error("Out of sync (len=" + len + " after " + (_totalReceived - len) + ")");
             }
             _context.statManager().addRateData("swarm." + getConnectionId() + ".totalReceived", _totalReceived, 0);
             if (value != _lastReceived + 1) {
-                if (!_outOfSync)
-                    _log.error("Received " + value + " when expecting " + (_lastReceived+1) + " on "
-                               + _connectionId + " with " + _remoteDestination.substring(0,6));
-                else
-                    _log.debug("(out of sync) Received " + value + " when expecting " + (_lastReceived+1) + " on "
-                               + _connectionId + " with " + _remoteDestination.substring(0,6));
+                if (!_outOfSync) _log.error("Received " + value + " when expecting " + (_lastReceived + 1) + " on " + _connectionId + " with " + _remoteDestination.substring(0, 6));
+                else _log.debug("(out of sync) Received " + value + " when expecting " + (_lastReceived + 1) + " on " + _connectionId + " with " + _remoteDestination.substring(0, 6));
             } else {
-                _log.debug("Received " + value + " on " + _connectionId + " after " + (_context.clock().now()-_lastReceivedOn)
-                           + "ms with " + _remoteDestination.substring(0,6));
+                _log.debug("Received " + value + " on " + _connectionId + " after " + (_context.clock().now() - _lastReceivedOn) + "ms with " + _remoteDestination.substring(0, 6));
             }
             _lastReceived = value;
             _lastReceivedOn = _context.clock().now();

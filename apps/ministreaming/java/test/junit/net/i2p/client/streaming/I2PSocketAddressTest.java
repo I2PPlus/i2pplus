@@ -3,16 +3,18 @@ package net.i2p.client.streaming;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+import net.i2p.client.I2PClientFactory;
+import net.i2p.data.Destination;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import net.i2p.client.I2PClientFactory;
-import net.i2p.data.Destination;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class I2PSocketAddressTest {
     private static final String STATS_HOST = "stats.i2p";
@@ -55,22 +57,22 @@ public class I2PSocketAddressTest {
         assertFalse(addr.isUnresolved());
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testConstruct_Host_negPort_throwsIAE() {
         new I2PSocketAddress(STATS_HOST + ":-1");
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testConstruct_Host_highPort_throwsIAE() {
         new I2PSocketAddress(STATS_HOST + ":90000");
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testConstruct_Host_missingPort_throwsIAE() {
         new I2PSocketAddress(STATS_HOST + ":");
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testConstruct_Host_notAPort_throwsIAE() {
         new I2PSocketAddress(STATS_HOST + ":spam");
     }
@@ -85,17 +87,17 @@ public class I2PSocketAddressTest {
         assertFalse(addr.isUnresolved());
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testConstruct_nullDest_throwsNPE() {
-        new I2PSocketAddress((Destination)null, 1234);
+        new I2PSocketAddress((Destination) null, 1234);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testConstruct_Dest_negPort_throwsIAE() {
         new I2PSocketAddress(new Destination(), -1);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testConstruct_Dest_highPort_throwsIAE() {
         new I2PSocketAddress(new Destination(), 90000);
     }
@@ -109,12 +111,12 @@ public class I2PSocketAddressTest {
         assertFalse(addr.isUnresolved());
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testConstruct_HostPort_negPort_throwsIAE() {
         new I2PSocketAddress(STATS_HOST, -1);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testConstruct_HostPort_highPort_throwsIAE() {
         new I2PSocketAddress(STATS_HOST, 90000);
     }
@@ -129,12 +131,12 @@ public class I2PSocketAddressTest {
         assertFalse(addr.isUnresolved());
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testCreateUnresolved_negPort_throwsIAE() {
         I2PSocketAddress.createUnresolved(STATS_HOST, -1);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testCreateUnresolved_highPort_throwsIAE() {
         I2PSocketAddress.createUnresolved(STATS_HOST, 90000);
     }

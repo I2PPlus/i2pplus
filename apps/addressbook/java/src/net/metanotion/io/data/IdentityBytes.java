@@ -42,8 +42,12 @@ import net.metanotion.io.Serializer;
 public class IdentityBytes implements Serializer<byte[]> {
 
     /** @return byte[] */
-    public byte[] getBytes(byte[] o) { return o; }
+    public byte[] getBytes(byte[] o) {
+        return o;
+    }
 
     /** @return b */
-    public byte[] construct(byte[] b) { return b; }
+    public byte[] construct(byte[] b) {
+        return b;
+    }
 }

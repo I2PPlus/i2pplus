@@ -13,6 +13,7 @@ public interface Source {
      *  @param sink the sink to receive data
      */
     public void setSink(Sink sink);
+
     /**
      *  Starts the source.
      */

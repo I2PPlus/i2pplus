@@ -1,10 +1,11 @@
 package net.i2p.i2ptunnel;
 
+import net.i2p.data.DataHelper;
+import net.i2p.util.Log;
+
 import java.net.InetAddress;
 import java.util.List;
 import java.util.Properties;
-import net.i2p.data.DataHelper;
-import net.i2p.util.Log;
 
 /**
  * Validates HTTP requests for security and policy compliance.
@@ -71,8 +72,7 @@ public class RequestValidator {
                 if (address != null) {
                     if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
                         if (_log.shouldWarn()) {
-                            _log.warn("[HTTPServer] WARNING! Attempt to access localhost or loopback address via [" + hostname + "]" +
-                                      " -> Adding dest to clients blocklist file \n* Client: " + _peerB32);
+                            _log.warn("[HTTPServer] WARNING! Attempt to access localhost or loopback address via [" + hostname + "]" + " -> Adding dest to clients blocklist file \n* Client: " + _peerB32);
                         }
                         if (_blocklistManager != null) {
                             _blocklistManager.logBlockedDestination(_peerB32);
@@ -82,8 +82,7 @@ public class RequestValidator {
                     } else if (address.isAnyLocalAddress()) {
                         if (!hostname.equals("::") && !hostname.equals("0.0.0.0")) {
                             if (_log.shouldWarn()) {
-                                _log.warn("[HTTPServer] DNS server appears to be blocking requests to " + hostname +
-                                          " -> Sending Error 403 \n* Client: " + _peerB32);
+                                _log.warn("[HTTPServer] DNS server appears to be blocking requests to " + hostname + " -> Sending Error 403 \n* Client: " + _peerB32);
                             }
                             result.errorResponse = I2PTunnelHTTPServer.ERR_FORBIDDEN;
                             result.isValid = false;
@@ -95,15 +94,13 @@ public class RequestValidator {
                         }
                     } else {
                         if (_log.shouldInfo() && !hostname.equals(address.getHostAddress())) {
-                            _log.info("[HTTPServer] Hostname " + hostname + " validated" +
-                                      " -> Resolves to: " + address.getHostAddress());
+                            _log.info("[HTTPServer] Hostname " + hostname + " validated" + " -> Resolves to: " + address.getHostAddress());
                         }
                         result.isPossibleExploit = false;
                     }
                 } else {
                     if (_log.shouldWarn()) {
-                        _log.warn("[HTTPServer] Could not resolve " + hostname + " to IP address" +
-                                  " -> Sending Error 404 \n* Client: " + _peerB32);
+                        _log.warn("[HTTPServer] Could not resolve " + hostname + " to IP address" + " -> Sending Error 404 \n* Client: " + _peerB32);
                     }
                     result.errorResponse = I2PTunnelHTTPServer.ERR_NOT_FOUND;
                     result.isValid = false;
@@ -114,8 +111,7 @@ public class RequestValidator {
                         _blocklistManager.logBlockedDestination(_peerB32);
                     }
                     if (_log.shouldWarn()) {
-                        _log.warn("[HTTPServer] Client attempted to access private or wildcard address " + hostname +
-                                  " -> Sending Error 403 and adding to blocklist \n* Client: " + _peerB32);
+                        _log.warn("[HTTPServer] Client attempted to access private or wildcard address " + hostname + " -> Sending Error 403 and adding to blocklist \n* Client: " + _peerB32);
                     }
                 }
             } catch (Exception e) {
@@ -143,10 +139,7 @@ public class RequestValidator {
         if (!Boolean.parseBoolean(_opts.getProperty(I2PTunnelHTTPServer.OPT_REJECT_INPROXY))) {
             return false;
         }
-        return headers.containsKey("X-Forwarded-For") ||
-               headers.containsKey("X-Forwarded-Server") ||
-               headers.containsKey("Forwarded") ||
-               headers.containsKey("X-Forwarded-Host");
+        return headers.containsKey("X-Forwarded-For") || headers.containsKey("X-Forwarded-Server") || headers.containsKey("Forwarded") || headers.containsKey("X-Forwarded-Host");
     }
 
     /**
@@ -163,13 +156,21 @@ public class RequestValidator {
         StringBuilder buf = new StringBuilder();
         buf.append("[HTTPServer] Refusing Inproxy access \n* Client: ").append(_peerB32);
         List<String> h = headers.get("X-Forwarded-For");
-        if (h != null) {buf.append("\n* X-Forwarded-For: ").append(h.get(0));}
+        if (h != null) {
+            buf.append("\n* X-Forwarded-For: ").append(h.get(0));
+        }
         h = headers.get("X-Forwarded-Server");
-        if (h != null) {buf.append("\n* X-Forwarded-Server: ").append(h.get(0));}
+        if (h != null) {
+            buf.append("\n* X-Forwarded-Server: ").append(h.get(0));
+        }
         h = headers.get("X-Forwarded-Host");
-        if (h != null) {buf.append("\n* X-Forwarded-Host: ").append(h.get(0));}
+        if (h != null) {
+            buf.append("\n* X-Forwarded-Host: ").append(h.get(0));
+        }
         h = headers.get("Forwarded");
-        if (h != null) {buf.append("\n* Forwarded: ").append(h.get(0));}
+        if (h != null) {
+            buf.append("\n* Forwarded: ").append(h.get(0));
+        }
         return buf.toString();
     }
 
@@ -189,9 +190,13 @@ public class RequestValidator {
             return false;
         }
         List<String> h = headers.get("Referer");
-        if (h == null) {return false;}
+        if (h == null) {
+            return false;
+        }
         String referer = h.get(0);
-        if (referer.length() <= 9) {return false;}
+        if (referer.length() <= 9) {
+            return false;
+        }
         referer = referer.substring(9);
         return referer.startsWith("http://") || referer.startsWith("https://");
     }
@@ -238,18 +243,26 @@ public class RequestValidator {
             if (blockAgents != null) {
                 String[] agents = DataHelper.split(blockAgents, ",");
                 for (String ag : agents) {
-                    if (ag.trim().equals("none")) {return true;}
+                    if (ag.trim().equals("none")) {
+                        return true;
+                    }
                 }
             }
             return false;
         }
         String ua = headers.get("User-Agent").get(0);
-        if (ua.startsWith("MYOB")) {return false;}
+        if (ua.startsWith("MYOB")) {
+            return false;
+        }
         String blockAgents = _opts.getProperty(I2PTunnelHTTPServer.OPT_USER_AGENTS);
-        if (blockAgents == null) {return false;}
+        if (blockAgents == null) {
+            return false;
+        }
         String[] agents = DataHelper.split(blockAgents, ",");
         for (String ag : agents) {
-            if (!ag.trim().isEmpty() && ua.contains(ag.trim())) {return true;}
+            if (!ag.trim().isEmpty() && ua.contains(ag.trim())) {
+                return true;
+            }
         }
         return false;
     }

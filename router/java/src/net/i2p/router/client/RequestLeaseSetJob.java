@@ -1,4 +1,5 @@
 package net.i2p.router.client;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,9 +9,6 @@ package net.i2p.router.client;
  *
  */
 
-import java.time.Instant;
-import java.util.Date;
-import java.util.Properties;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Destination;
 import net.i2p.data.Lease;
@@ -25,6 +23,10 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
+import java.time.Instant;
+import java.util.Date;
+import java.util.Properties;
+
 /**
  * Async job to walk the client through generating a lease set.
  * Sends the request to the client and handles the response.
@@ -36,7 +38,7 @@ class RequestLeaseSetJob extends JobImpl {
     private final ClientConnectionRunner _runner;
     private final LeaseRequestState _requestState;
 
-    private static final long DEFAULT_MAX_FUDGE = 5*1000;
+    private static final long DEFAULT_MAX_FUDGE = 5 * 1000;
     private static final String PROP_MAX_FUDGE = "router.requestLeaseSetMaxFudge";
     private static final long TEN_MINUTES_MS = 10 * 60 * 1000;
     // Maximum future time for lease expiration (must match KademliaNetworkDatabaseFacade.MAX_LEASE_FUDGE)
@@ -52,11 +54,15 @@ class RequestLeaseSetJob extends JobImpl {
     }
 
     @Override
-    public String getName() {return "Request LeaseSet from Client";}
+    public String getName() {
+        return "Request LeaseSet from Client";
+    }
 
     @Override
     public void runJob() {
-        if (_runner.isDead()) {return;}
+        if (_runner.isDead()) {
+            return;
+        }
 
         boolean isLS2 = false;
         SessionConfig cfg = _runner.getPrimaryConfig();
@@ -64,7 +70,9 @@ class RequestLeaseSetJob extends JobImpl {
             Properties props = cfg.getOptions();
             if (props != null) {
                 String lsType = props.getProperty("i2cp.leaseSetType");
-                if (lsType != null && !lsType.equals(Integer.toString(DatabaseEntry.KEY_TYPE_LEASESET))) {isLS2 = true;}
+                if (lsType != null && !lsType.equals(Integer.toString(DatabaseEntry.KEY_TYPE_LEASESET))) {
+                    isLS2 = true;
+                }
             }
         }
 
@@ -90,7 +98,9 @@ class RequestLeaseSetJob extends JobImpl {
              * the dates are truncated, and 0.9.38 did not use LeaseSet2.getPublished()
              */
             long earliest = maxFudge + _requestState.getCurrentEarliestLeaseDate();
-            if (endTime < earliest) {endTime = earliest;}
+            if (endTime < earliest) {
+                endTime = earliest;
+            }
         } else {
             long diff = endTime - getContext().clock().now();
             long fudge = maxFudge - (diff / (TEN_MINUTES_MS / Math.max(1, maxFudge)));
@@ -121,8 +131,7 @@ class RequestLeaseSetJob extends JobImpl {
             return;
         }
         I2CPMessage msg;
-        if (_runner instanceof QueuedClientConnectionRunner ||
-             RequestVariableLeaseSetMessage.isSupported(_runner.getClientVersion())) {
+        if (_runner instanceof QueuedClientConnectionRunner || RequestVariableLeaseSetMessage.isSupported(_runner.getClientVersion())) {
             // new style - leases will have individual expirations
             RequestVariableLeaseSetMessage rmsg = new RequestVariableLeaseSetMessage();
             rmsg.setSessionId(id);
@@ -164,5 +173,4 @@ class RequestLeaseSetJob extends JobImpl {
             _runner.failLeaseRequest(_requestState);
         }
     }
-
 }

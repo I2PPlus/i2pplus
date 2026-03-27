@@ -9,8 +9,9 @@ package net.i2p.i2ptunnel.irc;
  *
  */
 
-import java.util.Set;
 import net.i2p.util.EventDispatcher;
+
+import java.util.Set;
 
 /**
  * An implementation of the EventDispatcher interface for

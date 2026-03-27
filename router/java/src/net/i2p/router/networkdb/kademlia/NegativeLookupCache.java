@@ -1,12 +1,13 @@
 package net.i2p.router.networkdb.kademlia;
 
-import java.util.Map;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.util.LHMCache;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer2;
+
+import java.util.Map;
 
 /**
  * Negative cache for network database lookup operations.
@@ -33,12 +34,12 @@ class NegativeLookupCache {
 
     static final int MAX_FAILS = 3;
     private static final int MAX_BAD_DESTS = 128;
-    private static final long CLEAN_TIME = 2*60*1000;
+    private static final long CLEAN_TIME = 2 * 60 * 1000;
 
     public NegativeLookupCache(RouterContext context) {
         this.counter = new ObjectCounter<Hash>();
         this.badDests = new LHMCache<Hash, Destination>(MAX_BAD_DESTS);
-        this._maxFails = context.getProperty("netdb.negativeCache.maxFails",MAX_FAILS);
+        this._maxFails = context.getProperty("netdb.negativeCache.maxFails", MAX_FAILS);
         cleanTime = context.getProperty("netdb.negativeCache.cleanupInterval", CLEAN_TIME);
         cleaner = new Cleaner(context.simpleTimer2());
     }
@@ -57,8 +58,7 @@ class NegativeLookupCache {
     }
 
     public boolean isCached(Hash h) {
-        if (counter.count(h) >= _maxFails)
-            return true;
+        if (counter.count(h) >= _maxFails) return true;
         synchronized (badDests) {
             return badDests.get(h) != null;
         }

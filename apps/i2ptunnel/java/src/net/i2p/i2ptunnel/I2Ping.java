@@ -157,7 +157,10 @@ public class I2Ping extends I2PTunnelClientBase {
         }
 
         int remaining = argv.length - g.getOptind();
-        if (error || remaining > 1 || (remaining <= 0 && hostListFile == null) || (remaining > 0 && hostListFile != null)) {
+        if (error
+                || remaining > 1
+                || (remaining <= 0 && hostListFile == null)
+                || (remaining > 0 && hostListFile != null)) {
             System.out.println(usage());
             return;
         }
@@ -178,7 +181,8 @@ public class I2Ping extends I2PTunnelClientBase {
                         line = line.substring(0, line.indexOf('=')).trim();
                     }
                     if (line.isEmpty()) continue;
-                    PingHandler ph = new PingHandler(line, count, localPort, remotePort, timeout, countPing, reportTimes);
+                    PingHandler ph =
+                            new PingHandler(line, count, localPort, remotePort, timeout, countPing, reportTimes);
                     ph.start();
                     pingHandlers.add(ph);
                     if (++i > 1) {
@@ -192,7 +196,8 @@ public class I2Ping extends I2PTunnelClientBase {
                 if (br != null) {
                     try {
                         br.close();
-                    } catch (IOException ignored) {}
+                    } catch (IOException ignored) {
+                    }
                 }
             }
             return;
@@ -206,18 +211,13 @@ public class I2Ping extends I2PTunnelClientBase {
     }
 
     public static String usage() {
-        return
-            "Usage:\n" +
-            "  ping [opts] <b32|b64|host>   pings a single host\n" +
-            "  ping [opts] -h               pings all hosts in hosts.txt in current directory\n" +
-            "  ping [opts] -l <file>        pings a list of hosts in specified file\n\n" +
-            "Options:\n" +
-            "  -c           require 5 consecutive pongs to report success\n" +
-            "  -m <value>   max concurrent pings (default 16)\n" +
-            "  -n <value>   number of pings (default 10)\n" +
-            "  -t <value>   timeout in milliseconds (default 8000)\n" +
-            "  -f <value>   from (source) port\n" +
-            "  -p <value>   to (destination) port";
+        return "Usage:\n" + "  ping [opts] <b32|b64|host>   pings a single host\n"
+                + "  ping [opts] -h               pings all hosts in hosts.txt in current directory\n"
+                + "  ping [opts] -l <file>        pings a list of hosts in specified file\n\n" + "Options:\n"
+                + "  -c           require 5 consecutive pongs to report success\n"
+                + "  -m <value>   max concurrent pings (default 16)\n" + "  -n <value>   number of pings (default 10)\n"
+                + "  -t <value>   timeout in milliseconds (default 8000)\n" + "  -f <value>   from (source) port\n"
+                + "  -p <value>   to (destination) port";
     }
 
     @Override
@@ -260,8 +260,8 @@ public class I2Ping extends I2PTunnelClientBase {
         private final int localPort;
         private final int remotePort;
 
-        public PingHandler(String dest, int count, int fromPort, int toPort,
-                           long timeout, boolean countPings, boolean report) {
+        public PingHandler(
+                String dest, int count, int fromPort, int toPort, long timeout, boolean countPings, boolean report) {
             this.destination = dest;
             cnt = count;
             localPort = fromPort;
@@ -378,7 +378,9 @@ public class I2Ping extends I2PTunnelClientBase {
                 result.append(" • Results for ").append(destination).append(": ");
                 result.append(successful).append(" / ").append(cnt).append(" pongs received");
                 if (successful > 0) {
-                    result.append(", average response ").append(totalDuration / successful).append("ms");
+                    result.append(", average response ")
+                            .append(totalDuration / successful)
+                            .append("ms");
                 }
             }
             l.log(result.toString());

@@ -14,15 +14,16 @@ public class SimpleStore {
     private boolean answer;
 
     SimpleStore(boolean x) {
-        answer=x;
+        answer = x;
     }
 
     /**
-      * set the answer
-      */
+     * set the answer
+     */
     public void setAnswer(boolean x) {
         answer = x;
     }
+
     /**
      * Returns the stored answer.
      * @return boolean
@@ -30,5 +31,4 @@ public class SimpleStore {
     public boolean getAnswer() {
         return answer;
     }
-
 }

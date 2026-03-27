@@ -22,8 +22,7 @@ class RatchetEntry {
         this(tag, key, keyID, pn, null, null, null);
     }
 
-    public RatchetEntry(RatchetSessionTag tag, SessionKeyAndNonce key, int keyID, int pn,
-                        NextSessionKey nextFwdKey, NextSessionKey nextRevKey, List<Integer> acksToSend) {
+    public RatchetEntry(RatchetSessionTag tag, SessionKeyAndNonce key, int keyID, int pn, NextSessionKey nextFwdKey, NextSessionKey nextRevKey, List<Integer> acksToSend) {
         this.tag = tag;
         this.key = key;
         this.keyID = keyID;

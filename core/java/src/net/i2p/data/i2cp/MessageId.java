@@ -9,11 +9,12 @@ package net.i2p.data.i2cp;
  *
  */
 
+import net.i2p.data.DataFormatException;
+import net.i2p.data.DataHelper;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import net.i2p.data.DataFormatException;
-import net.i2p.data.DataHelper;
 
 /**
  * Defines the message ID of a message delivered between a router and a client
@@ -26,10 +27,21 @@ import net.i2p.data.DataHelper;
 public class MessageId {
     private long _messageId;
 
-    public MessageId() {_messageId = -1;}
-    public MessageId(long id) {_messageId = id;}
-    public long getMessageId() {return _messageId;}
-    public void setMessageId(long id) {_messageId = id;}
+    public MessageId() {
+        _messageId = -1;
+    }
+
+    public MessageId(long id) {
+        _messageId = id;
+    }
+
+    public long getMessageId() {
+        return _messageId;
+    }
+
+    public void setMessageId(long id) {
+        _messageId = id;
+    }
 
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         _messageId = DataHelper.readLong(in, 4);
@@ -42,14 +54,19 @@ public class MessageId {
 
     @Override
     public boolean equals(Object object) {
-        if ((object == null) || !(object instanceof MessageId)) {return false;}
+        if ((object == null) || !(object instanceof MessageId)) {
+            return false;
+        }
         return _messageId == ((MessageId) object).getMessageId();
     }
 
     @Override
-    public int hashCode() {return (int)_messageId;}
+    public int hashCode() {
+        return (int) _messageId;
+    }
 
     @Override
-    public String toString() {return "[MsgID " + _messageId + "]";}
-
+    public String toString() {
+        return "[MsgID " + _messageId + "]";
+    }
 }

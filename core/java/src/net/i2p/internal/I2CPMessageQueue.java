@@ -1,7 +1,8 @@
 package net.i2p.internal;
 
-import java.io.Closeable;
 import net.i2p.data.i2cp.I2CPMessage;
+
+import java.io.Closeable;
 
 /**
  * Contains the methods to talk to a router or client via I2CP,

@@ -1,5 +1,10 @@
 package net.i2p.crypto.elgamal;
 
+import net.i2p.crypto.SHA256Generator;
+import net.i2p.crypto.SigUtil;
+import net.i2p.util.NativeBigInteger;
+import net.i2p.util.RandomSource;
+
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
@@ -7,10 +12,6 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
-import net.i2p.crypto.SHA256Generator;
-import net.i2p.crypto.SigUtil;
-import net.i2p.util.NativeBigInteger;
-import net.i2p.util.RandomSource;
 
 /**
  * ElG signatures with SHA-256
@@ -66,8 +67,7 @@ public final class ElGamalSigEngine extends Signature {
     }
 
     @Override
-    protected void engineUpdate(byte[] b, int off, int len)
-            throws SignatureException {
+    protected void engineUpdate(byte[] b, int off, int len) throws SignatureException {
         digest.update(b, off, len);
     }
 
@@ -80,8 +80,7 @@ public final class ElGamalSigEngine extends Signature {
         BigInteger pm1 = elgp.subtract(BigInteger.ONE);
         BigInteger elgg = key.getParams().getG();
         BigInteger x = ((ElGamalPrivateKey) key).getX();
-        if (!(x instanceof NativeBigInteger))
-            x = new NativeBigInteger(x);
+        if (!(x instanceof NativeBigInteger)) x = new NativeBigInteger(x);
         byte[] data = digest.digest();
 
         BigInteger k;
@@ -117,17 +116,14 @@ public final class ElGamalSigEngine extends Signature {
         BigInteger pm1 = elgp.subtract(BigInteger.ONE);
         BigInteger elgg = key.getParams().getG();
         BigInteger y = ((ElGamalPublicKey) key).getY();
-        if (!(y instanceof NativeBigInteger))
-            y = new NativeBigInteger(y);
+        if (!(y instanceof NativeBigInteger)) y = new NativeBigInteger(y);
         byte[] data = digest.digest();
 
         try {
             BigInteger[] rs = SigUtil.aSN1ToBigInteger(sigBytes, 256);
             BigInteger r = rs[0];
             BigInteger s = rs[1];
-            if (r.signum() != 1 || s.signum() != 1 ||
-                r.compareTo(elgp) != -1 || s.compareTo(pm1) != -1)
-                return false;
+            if (r.signum() != 1 || s.signum() != 1 || r.compareTo(elgp) != -1 || s.compareTo(pm1) != -1) return false;
             NativeBigInteger h = new NativeBigInteger(1, data);
             BigInteger modvalr = r.modPow(s, elgp);
             BigInteger modvaly = y.modPow(r, elgp);

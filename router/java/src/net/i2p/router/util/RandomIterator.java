@@ -53,36 +53,37 @@ public class RandomIterator<E> implements Iterator<E> {
 
     /** The amount of items served so far */
     private int servedCount;
+
     private final List<E> list;
     private final int LIST_SIZE;
 
     /**
-    * The random number generator has a great influence
-    * on the running time of this iterator.
-    *
-    * See, for instance,
-    * <a href="http://www.qbrundage.com/michaelb/pubs/essays/random_number_generation" title="http://www.qbrundage.com/michaelb/pubs/essays/random_number_generation" target="_blank">http://www.qbrundage.com/michaelb/pubs/e&#8230;</a>
-    * for some implementations, which are faster than java.util.Random.
-    */
+     * The random number generator has a great influence
+     * on the running time of this iterator.
+     *
+     * See, for instance,
+     * <a href="http://www.qbrundage.com/michaelb/pubs/essays/random_number_generation" title="http://www.qbrundage.com/michaelb/pubs/essays/random_number_generation" target="_blank">http://www.qbrundage.com/michaelb/pubs/e&#8230;</a>
+     * for some implementations, which are faster than java.util.Random.
+     */
     private final Random rand = RandomSource.getInstance();
 
     /** Used to narrow the range to take random indexes from */
     private int lower, upper;
 
     private static final boolean hasAndroidBug;
+
     static {
         if (SystemVersion.isAndroid()) {
             // only present on Gingerbread (API 11), but set if version check failed also
             int ver = SystemVersion.getAndroidVersion();
             hasAndroidBug = ver == 11 || ver == 0;
-            if (hasAndroidBug)
-                testAndroid();
+            if (hasAndroidBug) testAndroid();
         } else {
             hasAndroidBug = false;
         }
     }
 
-    public RandomIterator(List<E> list){
+    public RandomIterator(List<E> list) {
         this.list = list;
         LIST_SIZE = list.size();
         served = new BitSet(LIST_SIZE);
@@ -96,26 +97,23 @@ public class RandomIterator<E> implements Iterator<E> {
 
     @Override
     public E next() {
-        if (!hasNext())
-            throw new NoSuchElementException();
+        if (!hasNext()) throw new NoSuchElementException();
         int range = upper - lower + 1;
 
         // This has unbounded behavior, even with lower/upper
-        //int index;
-        //do {
+        // int index;
+        // do {
         //    index = lower + rand.nextInt(range);
-        //} while (served.get(index));
+        // } while (served.get(index));
 
         // This tends to "clump" results, escpecially toward the end of the iteration.
         // It also tends to leave the first and last few elements until the end.
         int start = lower + rand.nextInt(range);
         int index;
-        if ((start % 2) == 0)  // coin flip
-            index = served.nextClearBit(start);
-        else
-            index = previousClearBit(start);
-        if (index < 0)
-            throw new NoSuchElementException("shouldn't happen");
+        // coin flip
+        if ((start % 2) == 0) index = served.nextClearBit(start);
+        else index = previousClearBit(start);
+        if (index < 0) throw new NoSuchElementException("shouldn't happen");
         servedCount++;
         served.set(index);
 
@@ -126,8 +124,7 @@ public class RandomIterator<E> implements Iterator<E> {
             if (index == lower)
                 // workaround for Android ICS bug - see below
                 lower = hasAndroidBug ? nextClearBit(index) : served.nextClearBit(index);
-            else if (index == upper)
-                upper = previousClearBit(index - 1);
+            else if (index == upper) upper = previousClearBit(index - 1);
         }
         return list.get(index);
     }
@@ -164,26 +161,26 @@ public class RandomIterator<E> implements Iterator<E> {
         throw new UnsupportedOperationException();
     }
 
-/*
-    public static void main(String[] args) {
-        testAndroid();
-        test(0);
-        test(1);
-        test(2);
-        test(1000);
-    }
+    /*
+        public static void main(String[] args) {
+            testAndroid();
+            test(0);
+            test(1);
+            test(2);
+            test(1000);
+        }
 
-    private static void test(int n) {
-        System.out.println("testing with " + n);
-        List<Integer> l = new ArrayList<Integer>(n);
-        for (int i = 0; i < n; i++) {
-            l.add(Integer.valueOf(i));
+        private static void test(int n) {
+            System.out.println("testing with " + n);
+            List<Integer> l = new ArrayList<Integer>(n);
+            for (int i = 0; i < n; i++) {
+                l.add(Integer.valueOf(i));
+            }
+            for (Iterator<Integer> iter = new RandomIterator<Integer>(l); iter.hasNext();) {
+                System.out.println(iter.next().toString());
+            }
         }
-        for (Iterator<Integer> iter = new RandomIterator<Integer>(l); iter.hasNext();) {
-            System.out.println(iter.next().toString());
-        }
-    }
-*/
+    */
 
     /**
      *  Test case from android ticket above
@@ -192,7 +189,7 @@ public class RandomIterator<E> implements Iterator<E> {
     private static void testAndroid() {
         System.out.println("Checking for Android BitSet bug");
         BitSet theBitSet = new BitSet(864);
-        for (int exp =0; exp < 864; exp++) {
+        for (int exp = 0; exp < 864; exp++) {
             int act = theBitSet.nextClearBit(0);
             if (exp != act) {
                 System.err.println(String.format("Test failed for: exp=%d, act=%d", exp, act));

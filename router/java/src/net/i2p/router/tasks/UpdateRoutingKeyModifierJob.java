@@ -1,4 +1,5 @@
 package net.i2p.router.tasks;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -23,7 +24,7 @@ import net.i2p.util.Log;
 public class UpdateRoutingKeyModifierJob extends JobImpl {
     private final Log _log;
     // Run every 15 minutes in case of time zone change, clock skew, etc.
-    private static final long MAX_DELAY_FAILSAFE = 15*60*1000;
+    private static final long MAX_DELAY_FAILSAFE = 15 * 60 * 1000;
 
     /**
      * Create a new routing key modifier update job.
@@ -42,7 +43,9 @@ public class UpdateRoutingKeyModifierJob extends JobImpl {
      * @return job name for logging and identification
      */
     @Override
-    public String getName() { return "Update Routing Key Modifier"; }
+    public String getName() {
+        return "Update Routing Key Modifier";
+    }
 
     /**
      * Update the routing key modifier if needed.
@@ -62,8 +65,7 @@ public class UpdateRoutingKeyModifierJob extends JobImpl {
         long delay = Math.max(5, Math.min(MAX_DELAY_FAILSAFE, gen.getTimeTillMidnight()));
         // tell netdb if mod data changed
         boolean changed = gen.generateDateBasedModData();
-        if (changed)
-            getContext().netDb().routingKeyChanged();
+        if (changed) getContext().netDb().routingKeyChanged();
         requeue(delay);
     }
 }

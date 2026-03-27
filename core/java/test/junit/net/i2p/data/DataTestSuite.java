@@ -26,5 +26,4 @@ import org.junit.runners.Suite;
     TunnelIdTest.class,
     UnsignedIntegerTest.class,
 })
-public class DataTestSuite {
-}
+public class DataTestSuite {}

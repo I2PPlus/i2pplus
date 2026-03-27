@@ -2,6 +2,8 @@ package org.klomp.snark.bencode;
 
 import static org.junit.Assert.*;
 
+import org.junit.Test;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.Test;
 
 /**
  *  Tests for BEncoder and BDecoder round-trip encoding/decoding.

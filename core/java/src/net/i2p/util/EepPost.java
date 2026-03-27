@@ -28,7 +28,7 @@ public class EepPost extends EepGet {
 
     private static final String CRLF = "\r\n";
     private static final byte[] CRLFB = DataHelper.getASCII(CRLF);
-    private static final int PROP_MAX_POST_PAYLOAD_RAM = 32*1024;
+    private static final int PROP_MAX_POST_PAYLOAD_RAM = 32 * 1024;
 
     public EepPost(I2PAppContext ctx, String proxyHost, int proxyPort, int numRetries, String outputFile, String url) {
         /*
@@ -52,8 +52,7 @@ public class EepPost extends EepGet {
      * Note: param field values must be String or File.
      */
     public boolean post(Map<String, Object> fields, long headerTimeout, long totalTimeout, long inactivityTimeout) {
-        if (fields.isEmpty())
-            throw new IllegalArgumentException();
+        if (fields.isEmpty()) throw new IllegalArgumentException();
         boolean multipart = false;
         long sz = 0;
         for (Object o : fields.values()) {
@@ -71,17 +70,26 @@ public class EepPost extends EepGet {
             ByteArrayOutputStream baos = null;
             try {
                 if (useTmp) {
-                    tmp = new File(_context.getTempDir(), "eeppost-" + _context.random().nextLong() + ".dat");
+                    tmp = new File(
+                            _context.getTempDir(),
+                            "eeppost-" + _context.random().nextLong() + ".dat");
                     out = new FileOutputStream(tmp);
-                    if (_log.shouldDebug())
-                        _log.debug("Estimated size: " + sz + ", using temp file " + tmp);
-                } else {baos = new ByteArrayOutputStream(4096);}
+                    if (_log.shouldDebug()) _log.debug("Estimated size: " + sz + ", using temp file " + tmp);
+                } else {
+                    baos = new ByteArrayOutputStream(4096);
+                }
                 sendFields(out, sep, fields);
-                if (useTmp) {out.close();}
+                if (useTmp) {
+                    out.close();
+                }
             } catch (IOException ioe) {
-                try {out.close();}
-                catch (IOException ioe2) {}
-                if (tmp != null) {tmp.delete();}
+                try {
+                    out.close();
+                } catch (IOException ioe2) {
+                }
+                if (tmp != null) {
+                    tmp.delete();
+                }
                 return false;
             }
             String type = "multipart/form-data, boundary=" + sep;
@@ -104,9 +112,9 @@ public class EepPost extends EepGet {
     /**
      *  In-memory, not for large POSTs
      */
-    public boolean post(String contentType, String data, long headerTimeout, long totalTimeout, long inactivityTimeout) {
-        if (data.length() == 0)
-            throw new IllegalArgumentException();
+    public boolean post(
+            String contentType, String data, long headerTimeout, long totalTimeout, long inactivityTimeout) {
+        if (data.length() == 0) throw new IllegalArgumentException();
         setPostData(contentType, data);
         return super.fetch(headerTimeout, totalTimeout, inactivityTimeout);
     }
@@ -114,9 +122,9 @@ public class EepPost extends EepGet {
     /**
      *  In-memory, not for large POSTs
      */
-    public boolean post(String contentType, byte[] data, long headerTimeout, long totalTimeout, long inactivityTimeout) {
-        if (data.length == 0)
-            throw new IllegalArgumentException();
+    public boolean post(
+            String contentType, byte[] data, long headerTimeout, long totalTimeout, long inactivityTimeout) {
+        if (data.length == 0) throw new IllegalArgumentException();
         setPostData(contentType, data);
         return super.fetch(headerTimeout, totalTimeout, inactivityTimeout);
     }
@@ -125,8 +133,7 @@ public class EepPost extends EepGet {
      *  For large POSTs
      */
     public boolean post(String contentType, File data, long headerTimeout, long totalTimeout, long inactivityTimeout) {
-        if (!data.isFile() || data.length() == 0)
-            throw new IllegalArgumentException();
+        if (!data.isFile() || data.length() == 0) throw new IllegalArgumentException();
         setPostData(contentType, data);
         return super.fetch(headerTimeout, totalTimeout, inactivityTimeout);
     }
@@ -163,8 +170,7 @@ public class EepPost extends EepGet {
         for (Map.Entry<String, Object> e : fields.entrySet()) {
             String field = e.getKey();
             Object val = e.getValue();
-            if (!first)
-                out.append('&');
+            if (!first) out.append('&');
             sendField(out, field, val.toString());
             first = false;
         }
@@ -181,7 +187,7 @@ public class EepPost extends EepGet {
             String field = e.getKey();
             Object val = e.getValue();
             if (val instanceof File) {
-                sendFile(out, separator, field, (File)val);
+                sendFile(out, separator, field, (File) val);
             } else {
                 sendField(out, separator, field, val.toString());
             }
@@ -216,7 +222,8 @@ public class EepPost extends EepGet {
      */
     private static void sendFile(OutputStream out, String separator, String field, File file) throws IOException {
         out.write(DataHelper.getUTF8("--" + separator + CRLF));
-        out.write(DataHelper.getUTF8("Content-Disposition: form-data; name=\"" + field + "\"; filename=\"" + file.getName() + "\"" + CRLF));
+        out.write(DataHelper.getUTF8(
+                "Content-Disposition: form-data; name=\"" + field + "\"; filename=\"" + file.getName() + "\"" + CRLF));
         out.write(DataHelper.getUTF8("Content-Type: application/octet-stream" + CRLF + CRLF));
         FileInputStream in = new FileInputStream(file);
         try {
@@ -262,28 +269,26 @@ public class EepPost extends EepGet {
                         String s = g.getOptarg();
                         int colon = s.indexOf(':');
                         if (colon >= 0) {
-                        // Todo IPv6 [a:b:c]:4444
+                            // Todo IPv6 [a:b:c]:4444
                             proxyHost = s.substring(0, colon);
                             String port = s.substring(colon + 1);
                             proxyPort = Integer.parseInt(port);
                         } else {
                             proxyHost = s;
-                        // proxyPort remains default
+                            // proxyPort remains default
                         }
                         break;
 
                     case 'c':
-                    // no proxy, same as -p :0
+                        // no proxy, same as -p :0
                         proxyHost = "";
                         proxyPort = 0;
                         break;
 
                     case 'f': {
                         String[] t = DataHelper.split(g.getOptarg(), "=", 2);
-                        if (t.length == 2 && t[0].length() > 0)
-                            fields.put(t[0], new File(t[1]));
-                        else
-                            error = true;
+                        if (t.length == 2 && t[0].length() > 0) fields.put(t[0], new File(t[1]));
+                        else error = true;
                         break;
                     }
 
@@ -305,10 +310,8 @@ public class EepPost extends EepGet {
 
                     case 's': {
                         String[] t = DataHelper.split(g.getOptarg(), "=", 2);
-                        if (t.length == 2 && t[0].length() > 0)
-                            fields.put(t[0], t[1]);
-                        else
-                            error = true;
+                        if (t.length == 2 && t[0].length() > 0) fields.put(t[0], t[1]);
+                        else error = true;
                         break;
                     }
 
@@ -337,7 +340,7 @@ public class EepPost extends EepGet {
                     default:
                         error = true;
                         break;
-                }  // switch
+                } // switch
             } // while
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -345,15 +348,13 @@ public class EepPost extends EepGet {
         }
 
         if (error || args.length - g.getOptind() != 1 || fields.isEmpty()) {
-            if (fields.isEmpty())
-                System.err.println("At least one -s or -f parameter required");
+            if (fields.isEmpty()) System.err.println("At least one -s or -f parameter required");
             usage();
             System.exit(1);
         }
         String url = args[g.getOptind()];
 
-        if (saveAs == null)
-            saveAs = suggestName(url);
+        if (saveAs == null) saveAs = suggestName(url);
 
         EepPost post = new EepPost(I2PAppContext.getGlobalContext(), proxyHost, proxyPort, numRetries, saveAs, url);
         if (username != null) {
@@ -363,8 +364,7 @@ public class EepPost extends EepGet {
                     do {
                         System.err.print("Proxy password: ");
                         password = r.readLine();
-                        if (password == null)
-                            throw new IOException();
+                        if (password == null) throw new IOException();
                         password = password.trim();
                     } while (password.length() <= 0);
                 } catch (IOException ioe) {
@@ -381,17 +381,12 @@ public class EepPost extends EepGet {
     }
 
     private static void usage() {
-        System.err.println("eeppost [-p 127.0.0.1[:4444]] [-c] [-o outputFile]\n" +
-                           "        [-s key=value]*\n" +
-                           "        [-f key=file]*\n" +
-                           "        [-m markSize] (default 1024)\n" +
-                           "        [-l lineLen]  (default 40)\n" +
-                           "        [-n #retries] (default 0)\n" +
-                           "        [-t headerTimeout]  (default 45 sec)\n" +
-                           "        [-u inactivityTimeout]  (default 60 sec)\n" +
-                           "        [-w totalTimeout]  (default unlimited)\n" +
-                           "        [-u username] [-x password] url\n" +
-                           "        (use -c or -p :0 for no proxy)");
+        System.err.println("eeppost [-p 127.0.0.1[:4444]] [-c] [-o outputFile]\n" + "        [-s key=value]*\n"
+                + "        [-f key=file]*\n" + "        [-m markSize] (default 1024)\n"
+                + "        [-l lineLen]  (default 40)\n" + "        [-n #retries] (default 0)\n"
+                + "        [-t headerTimeout]  (default 45 sec)\n"
+                + "        [-u inactivityTimeout]  (default 60 sec)\n"
+                + "        [-w totalTimeout]  (default unlimited)\n" + "        [-u username] [-x password] url\n"
+                + "        (use -c or -p :0 for no proxy)");
     }
-
 }

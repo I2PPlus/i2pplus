@@ -9,12 +9,13 @@ package net.i2p.data.i2cp;
  *
  */
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.DataStructureImpl;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Defines the structure for why abuse was reported either by the client to
@@ -28,8 +29,7 @@ public class AbuseReason extends DataStructureImpl {
     /**
      * Create a new abuse reason.
      */
-    public AbuseReason() {
-    }
+    public AbuseReason() {}
 
     /**
      * Get the abuse reason.

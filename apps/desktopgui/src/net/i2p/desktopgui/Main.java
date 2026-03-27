@@ -75,15 +75,12 @@ public class Main implements RouterApp, NotificationService {
         final TrayManager trayManager;
         boolean useSwingDefault = !(SystemVersion.isWindows() || SystemVersion.isMac());
         boolean useSwing = _appContext.getProperty(PROP_SWING, useSwingDefault);
-        if (_context != null)
-            trayManager = new InternalTrayManager(_context, this, useSwing);
-        else
-            trayManager = new ExternalTrayManager(_appContext, useSwing);
+        if (_context != null) trayManager = new InternalTrayManager(_context, this, useSwing);
+        else trayManager = new ExternalTrayManager(_appContext, useSwing);
         trayManager.startManager();
         _trayManager = trayManager;
         changeState(RUNNING);
-        if (_mgr != null)
-            _mgr.register(this);
+        if (_mgr != null) _mgr.register(this);
 
         if (_context != null) {
             _context.addPropertyCallback(new I2PPropertyCallback() {
@@ -117,18 +114,16 @@ public class Main implements RouterApp, NotificationService {
         String headless = System.getProperty("java.awt.headless");
         boolean isHeadless = Boolean.parseBoolean(headless);
         if (isHeadless) {
-        	log.warn("Headless environment: not starting desktopgui!");
+            log.warn("Headless environment: not starting desktopgui!");
             changeState(START_FAILED, "Headless environment: not starting desktopgui!", null);
             return;
         }
-        if (SystemVersion.isMac())
-            setMacTrayIcon();
+        if (SystemVersion.isMac()) setMacTrayIcon();
 
         // TODO process args with getopt if needed
 
-        if (_context == null)
-            launchForeverLoop();
-        //We'll be doing GUI work, so let's stay in the event dispatcher thread.
+        if (_context == null) launchForeverLoop();
+        // We'll be doing GUI work, so let's stay in the event dispatcher thread.
         SwingUtilities.invokeLater(new Runnable() {
 
             @Override
@@ -139,11 +134,8 @@ public class Main implements RouterApp, NotificationService {
                     log.error("Failed while running desktopgui!", e);
                     changeState(START_FAILED, "Failed while running desktopgui!", e);
                 }
-
             }
-
         });
-
     }
 
     /**
@@ -167,8 +159,7 @@ public class Main implements RouterApp, NotificationService {
     @SuppressWarnings("unchecked")
     private void setMacTrayIcon() {
         File f = new File(_appContext.getBaseDir(), "docs/themes/console/images/itoopie_sm.png");
-        if (!f.exists())
-            return;
+        if (!f.exists()) return;
         try {
             Class util = Class.forName("com.apple.eawt.Application");
             Method getApplication = util.getMethod("getApplication", new Class[0]);
@@ -180,8 +171,7 @@ public class Main implements RouterApp, NotificationService {
             Image image = Toolkit.getDefaultToolkit().getImage(url);
             setDockIconImage.invoke(application, image);
         } catch (Exception e) {
-            if (log.shouldWarn())
-                log.warn("Can't set OSX Dock icon", e);
+            if (log.shouldWarn()) log.warn("Can't set OSX Dock icon", e);
         }
     }
 
@@ -221,8 +211,7 @@ public class Main implements RouterApp, NotificationService {
      */
     public int notify(String source, String category, int priority, String title, String message, String path) {
         TrayManager tm = _trayManager;
-        if (tm == null)
-            return -1;
+        if (tm == null) return -1;
         return tm.displayMessage(priority, title, message, path);
     }
 
@@ -255,11 +244,9 @@ public class Main implements RouterApp, NotificationService {
 
     /** @since 0.9.26 */
     public synchronized void shutdown(String[] args) {
-        if (_state == STOPPED)
-            return;
+        if (_state == STOPPED) return;
         changeState(STOPPING);
-        if (_trayManager != null)
-            _trayManager.stopManager();
+        if (_trayManager != null) _trayManager.stopManager();
         changeState(STOPPED);
     }
 
@@ -288,13 +275,10 @@ public class Main implements RouterApp, NotificationService {
     /** @since 0.9.26 */
     private synchronized void changeState(ClientAppState state, String msg, Exception e) {
         _state = state;
-        if (_mgr != null)
-            _mgr.notify(this, state, msg, e);
+        if (_mgr != null) _mgr.notify(this, state, msg, e);
         if (_context == null) {
-            if (msg != null)
-                System.out.println(state + ": " + msg);
-            if (e != null)
-                e.printStackTrace();
+            if (msg != null) System.out.println(state + ": " + msg);
+            if (e != null) e.printStackTrace();
         }
     }
 }

@@ -3,6 +3,7 @@ package org.klomp.snark;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
+
 import net.i2p.data.DataHelper;
 
 /**
@@ -37,12 +38,7 @@ public class Mp3Test {
                 System.out.println("Title: " + id3v2Tag.getTitle());
                 System.out.println("Album: " + id3v2Tag.getAlbum());
                 System.out.println("Year: " + id3v2Tag.getYear());
-                System.out.println(
-                        "Genre: "
-                                + id3v2Tag.getGenre()
-                                + " ("
-                                + id3v2Tag.getGenreDescription()
-                                + ")");
+                System.out.println("Genre: " + id3v2Tag.getGenre() + " (" + id3v2Tag.getGenreDescription() + ")");
                 System.out.println("Comment: " + id3v2Tag.getComment());
                 System.out.println("Lyrics: " + id3v2Tag.getLyrics());
                 System.out.println("Composer: " + id3v2Tag.getComposer());
@@ -54,10 +50,8 @@ public class Mp3Test {
                 System.out.println("Encoder: " + id3v2Tag.getEncoder());
                 byte[] albumImageData = id3v2Tag.getAlbumImage();
                 if (albumImageData != null) {
-                    System.out.println(
-                            "Have album image data, length: " + albumImageData.length + " bytes");
-                    System.out.println(
-                            "Album image mime type: " + id3v2Tag.getAlbumImageMimeType());
+                    System.out.println("Have album image data, length: " + albumImageData.length + " bytes");
+                    System.out.println("Album image mime type: " + id3v2Tag.getAlbumImageMimeType());
                 }
             } else if (mp3file.hasId3v1Tag()) {
                 ID3v1 id3v1Tag = mp3file.getId3v1Tag();
@@ -66,17 +60,10 @@ public class Mp3Test {
                 System.out.println("Title: " + id3v1Tag.getTitle());
                 System.out.println("Album: " + id3v1Tag.getAlbum());
                 System.out.println("Year: " + id3v1Tag.getYear());
-                System.out.println(
-                        "Genre: "
-                                + id3v1Tag.getGenre()
-                                + " ("
-                                + id3v1Tag.getGenreDescription()
-                                + ")");
+                System.out.println("Genre: " + id3v1Tag.getGenre() + " (" + id3v1Tag.getGenreDescription() + ")");
                 System.out.println("Comment: " + id3v1Tag.getComment());
             }
-            System.out.println(
-                    "Tag extraction took: "
-                            + DataHelper.formatDuration(System.currentTimeMillis() - start));
+            System.out.println("Tag extraction took: " + DataHelper.formatDuration(System.currentTimeMillis() - start));
         }
     }
 }

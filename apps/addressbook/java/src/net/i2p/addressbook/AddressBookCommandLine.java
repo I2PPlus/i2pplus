@@ -36,14 +36,16 @@ public class AddressBookCommandLine extends net.i2p.util.CommandLine {
         List<String> classes = new ArrayList<String>(ACLASSES.size() + CLASSES.size());
         classes.addAll(ACLASSES);
         classes.addAll(CLASSES);
-        if (args.length > 0) {exec(args, classes);}
+        if (args.length > 0) {
+            exec(args, classes);
+        }
         usage(classes);
         System.exit(1);
     }
 
     private static void usage(List<String> classes) {
-        System.err.println("I2P Address book version " + CoreVersion.VERSION + '\n' +
-                           "USAGE: java -jar /path/to/addressbook.jar command [args]");
+        System.err.println("I2P Address book version " + CoreVersion.VERSION + '\n'
+                + "USAGE: java -jar /path/to/addressbook.jar command [args]");
         printCommands(classes);
     }
 }

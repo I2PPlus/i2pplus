@@ -9,10 +9,11 @@ package net.i2p.data.i2cp;
  *
  */
 
-import java.io.IOException;
-import java.io.InputStream;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Defines the message a client sends to a router when asking the
@@ -21,7 +22,7 @@ import net.i2p.data.DataHelper;
  * @author jrandom
  */
 public class ReceiveMessageEndMessage extends I2CPMessageImpl {
-    public final static int MESSAGE_TYPE = 7;
+    public static final int MESSAGE_TYPE = 7;
     private int _sessionId;
     private long _messageId;
 
@@ -45,10 +46,10 @@ public class ReceiveMessageEndMessage extends I2CPMessageImpl {
     }
 
     /**
-      *  Sets the session ID for this message.
-      *
-      * @param id 0-65535
-      */
+     *  Sets the session ID for this message.
+     *
+     * @param id 0-65535
+     */
     public void setSessionId(long id) {
         _sessionId = (int) id;
     }
@@ -73,9 +74,8 @@ public class ReceiveMessageEndMessage extends I2CPMessageImpl {
 
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
-        if ((_sessionId < 0) || (_messageId < 0))
-            throw new I2CPMessageException("Unable to write out the message as there is not enough data");
-        byte rv[] = new byte[2+4];
+        if ((_sessionId < 0) || (_messageId < 0)) throw new I2CPMessageException("Unable to write out the message as there is not enough data");
+        byte rv[] = new byte[2 + 4];
         DataHelper.toLong(rv, 0, 2, _sessionId);
         DataHelper.toLong(rv, 2, 4, _messageId);
         return rv;

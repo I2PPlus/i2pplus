@@ -1,5 +1,12 @@
 package net.i2p.router.tunnel;
 
+import net.i2p.data.Hash;
+import net.i2p.router.RouterContext;
+import net.i2p.util.I2PThread;
+import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer;
+import net.i2p.util.SystemVersion;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -7,12 +14,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
-import net.i2p.data.Hash;
-import net.i2p.router.RouterContext;
-import net.i2p.util.I2PThread;
-import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
-import net.i2p.util.SystemVersion;
 
 /**
  * TunnelGatewayPumper runs a pool of threads that process PumpedTunnelGateway instances which need
@@ -67,7 +68,7 @@ class TunnelGatewayPumper implements Runnable {
         // Leave most CPU for other router operations
         int calculatedPumps = Math.max(1, cores / 4);
         if (SystemVersion.isSlow()) {
-            MAX_PUMPERS = 1;  // Slow systems: single pumper
+            MAX_PUMPERS = 1; // Slow systems: single pumper
         } else {
             MAX_PUMPERS = Math.min(6, calculatedPumps);
         }
@@ -130,8 +131,7 @@ class TunnelGatewayPumper implements Runnable {
 
         long adjusted = (SystemVersion.getCPULoadAvg() > 95) ? REQUEUE_TIME * 3 / 2 : REQUEUE_TIME;
         if (_log.shouldWarn() && adjusted != REQUEUE_TIME) {
-            _log.warn("Router JVM under sustained high CPU load, increasing pump interval from " + REQUEUE_TIME + " to "
-                    + adjusted + "ms");
+            _log.warn("Router JVM under sustained high CPU load, increasing pump interval from " + REQUEUE_TIME + " to " + adjusted + "ms");
         }
 
         // Interrupt threads to promptly unblock and finish

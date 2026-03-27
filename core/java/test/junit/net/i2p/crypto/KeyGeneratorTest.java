@@ -1,4 +1,5 @@
 package net.i2p.crypto;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -9,6 +10,7 @@ package net.i2p.crypto;
  */
 
 import junit.framework.TestCase;
+
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.data.PrivateKey;
@@ -18,8 +20,8 @@ import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.util.RandomSource;
 
-public class KeyGeneratorTest extends TestCase{
-    public void testKeyGen(){
+public class KeyGeneratorTest extends TestCase {
+    public void testKeyGen() {
         RandomSource.getInstance().nextBoolean();
         byte src[] = new byte[200];
         RandomSource.getInstance().nextBytes(src);

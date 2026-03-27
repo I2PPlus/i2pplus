@@ -2,8 +2,6 @@ package net.i2p.util;
 
 import static org.junit.Assert.*;
 
-import java.util.Enumeration;
-import java.util.Set;
 import org.junit.Test;
 
 public class OrderedPropertiesTest {
@@ -64,11 +62,11 @@ public class OrderedPropertiesTest {
     public void testKeySetSortedForManyEntries() {
         OrderedProperties op = new OrderedProperties();
         for (int i = 25; i >= 0; i--) {
-            op.setProperty(String.valueOf((char)('a' + i)), String.valueOf(i));
+            op.setProperty(String.valueOf((char) ('a' + i)), String.valueOf(i));
         }
         Object[] keys = op.keySet().toArray();
         for (int i = 1; i < keys.length; i++) {
-            assertTrue(((String) keys[i-1]).compareTo((String) keys[i]) <= 0);
+            assertTrue(((String) keys[i - 1]).compareTo((String) keys[i]) <= 0);
         }
     }
 }

@@ -1,9 +1,10 @@
 package org.klomp.snark;
 
+import net.i2p.crypto.SHA1Hash;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import net.i2p.crypto.SHA1Hash;
 
 /**
  * Thread-safe collection for managing PeerCoordinator instances across multiple torrents.

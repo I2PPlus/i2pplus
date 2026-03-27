@@ -1,7 +1,7 @@
 package net.i2p.addressbook;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Bridge class to provide static access to HostChecker functionality for JSP pages
@@ -109,5 +109,4 @@ public class HostCheckerBridge {
         }
         return checker.getCategoryDescription(category);
     }
-
 }

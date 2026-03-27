@@ -9,14 +9,15 @@ package net.i2p.data;
  *
  */
 
+import net.i2p.I2PAppContext;
+import net.i2p.crypto.SHA256Generator;
+import net.i2p.util.Log;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import net.i2p.I2PAppContext;
-import net.i2p.crypto.SHA256Generator;
-import net.i2p.util.Log;
 
 /**
  * Base implementation of all data structures
@@ -28,8 +29,7 @@ public abstract class DataStructureImpl implements DataStructure, Serializable {
     @Override
     public String toBase64() {
         byte data[] = toByteArray();
-        if (data == null)
-            return null;
+        if (data == null) return null;
 
         return Base64.encode(data);
     }
@@ -77,7 +77,7 @@ public abstract class DataStructureImpl implements DataStructure, Serializable {
         }
     }
 
-/**
+    /**
      * Repeated reads until buffer is full or IOException is thrown
      *
      * @param in input stream to read from

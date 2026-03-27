@@ -1,4 +1,5 @@
 package net.i2p.router.transport;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -44,7 +45,10 @@ class GetBidsJob extends JobImpl {
     }
 
     @Override
-    public String getName() { return "Fetch bids for a message to be delivered"; }
+    public String getName() {
+        return "Fetch bids for a message to be delivered";
+    }
+
     @Override
     public void runJob() {
         getBids(getContext(), _tmgr, _msg);
@@ -75,9 +79,8 @@ class GetBidsJob extends JobImpl {
         msg.timestamp("Bid");
 
         if (context.banlist().isBanlisted(to)) {
-            if (log.shouldInfo())
-                log.info("Attempted to send message to banlisted peer [" + to.toBase64().substring(0,6) + "]");
-            //context.messageRegistry().peerFailed(to);
+            if (log.shouldInfo()) log.info("Attempted to send message to banlisted peer [" + to.toBase64().substring(0, 6) + "]");
+            // context.messageRegistry().peerFailed(to);
             context.statManager().addRateData("transport.bidFailBanlisted", msg.getLifetime());
             fail(context, msg);
             return;
@@ -85,8 +88,7 @@ class GetBidsJob extends JobImpl {
 
         Hash us = context.routerHash();
         if (to.equals(us)) {
-            if (log.shouldError())
-                log.error("Send a message to ourselves? nuh uh..." + msg, new Exception("I did it"));
+            if (log.shouldError()) log.error("Send a message to ourselves? nuh uh..." + msg, new Exception("I did it"));
             context.statManager().addRateData("transport.bidFailSelf", msg.getLifetime());
             fail(context, msg);
             return;
@@ -108,12 +110,10 @@ class GetBidsJob extends JobImpl {
             }
             fail(context, msg);
         } else {
-            if (log.shouldInfo())
-                log.info("Attempting to send on transport [" + bid.getTransport().getStyle() + "]: " + bid);
+            if (log.shouldInfo()) log.info("Attempting to send on transport [" + bid.getTransport().getStyle() + "]: " + bid);
             bid.getTransport().send(msg);
         }
     }
-
 
     static void fail(RouterContext context, OutNetMessage msg) {
         if (msg.getOnFailedSendJob() != null) {
@@ -150,7 +150,9 @@ class GetBidsJob extends JobImpl {
      * @return IP:PORT string or empty string if not available
      */
     private static String getRouterIPPort(RouterInfo router) {
-        if (router == null) { return ""; }
+        if (router == null) {
+            return "";
+        }
         try {
             // Try getCompatibleIP first - returns IP for our supported protocols
             byte[] ip = CommSystemFacadeImpl.getCompatibleIP(router);

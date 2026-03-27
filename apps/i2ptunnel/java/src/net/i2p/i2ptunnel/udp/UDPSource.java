@@ -1,11 +1,12 @@
 package net.i2p.i2ptunnel.udp;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import net.i2p.I2PAppContext;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 
 /**
  * UDP source implementation for streaming data.
@@ -77,11 +78,10 @@ public class UDPSource implements Source, Runnable {
 
                 // transfer to sink
                 this.sink.send(null, port, 0, nbuf);
-                //System.out.print("i");
+                // System.out.print("i");
             } catch (Exception e) {
                 Log log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
-                if (log.shouldWarn())
-                    log.warn("error sending", e);
+                if (log.shouldWarn()) log.warn("error sending", e);
                 break;
             }
         }

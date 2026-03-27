@@ -65,8 +65,11 @@ public class Servlet extends HttpServlet {
     @SuppressWarnings("unchecked")
     @Override
     public void init(ServletConfig config) {
-        try {super.init(config);}
-        catch (ServletException exp) {System.err.println("Addressbook init exception: " + exp);}
+        try {
+            super.init(config);
+        } catch (ServletException exp) {
+            System.err.println("Addressbook init exception: " + exp);
+        }
         String[] args = new String[1];
         args[0] = config.getInitParameter("home");
         try {
@@ -75,8 +78,8 @@ public class Servlet extends HttpServlet {
             Class<?> cls = Class.forName("net.i2p.addressbook.DaemonThread", true, cl);
             // We do it this way so that if we can't find addressbook, the whole thing doesn't die.
             // We do add addressbook.jar in WebAppConfiguration, so this is just in case.
-            //Thread t = new DaemonThread(args);
-            Thread t = (Thread) cls.getConstructor(String[].class).newInstance((Object)args);
+            // Thread t = new DaemonThread(args);
+            Thread t = (Thread) cls.getConstructor(String[].class).newInstance((Object) args);
             t.setDaemon(true);
             t.setName("Addressbook");
             t.start();
@@ -85,41 +88,59 @@ public class Servlet extends HttpServlet {
             // Store HostChecker in servlet context for JSP access with retry mechanism
             // HostChecker is initialized asynchronously in Daemon.run(), so we need to wait
             java.util.concurrent.ScheduledExecutorService scheduler = java.util.concurrent.Executors.newSingleThreadScheduledExecutor();
-            scheduler.scheduleAtFixedRate(new Runnable() {
-                private int retryCount = 0;
-                private final int maxRetries = 60; // Try for 10 minutes (60 * 10 seconds)
-@Override
-                public void run() {
-                    try {
-                        ClassLoader cl2 = getServletContext().getClassLoader();
-                        Class<?> daemonClass = Class.forName("net.i2p.addressbook.Daemon", true, cl2);
-                        Object hostChecker = daemonClass.getDeclaredMethod("getHostCheckerInstance").invoke(null);
+            scheduler.scheduleAtFixedRate(
+                    new Runnable() {
+                        private int retryCount = 0;
+                        private final int maxRetries = 60; // Try for 10 minutes (60 * 10 seconds)
 
-                        if (hostChecker != null) {
-                            getServletContext().setAttribute("hostChecker", hostChecker);
-                            scheduler.shutdown();
-                            return;
-                        } else {
-                            retryCount++;
-                            if (retryCount >= maxRetries) {
-                                I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).warn("HostChecker instance still null after " + maxRetries + " attempts, giving up...");
-                                scheduler.shutdown();
-                            } else {
-                                //I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).debug("HostChecker instance is null, retry " + retryCount + "/" + maxRetries);
+                        @Override
+                        public void run() {
+                            try {
+                                ClassLoader cl2 = getServletContext().getClassLoader();
+                                Class<?> daemonClass = Class.forName("net.i2p.addressbook.Daemon", true, cl2);
+                                Object hostChecker = daemonClass
+                                        .getDeclaredMethod("getHostCheckerInstance")
+                                        .invoke(null);
+
+                                if (hostChecker != null) {
+                                    getServletContext().setAttribute("hostChecker", hostChecker);
+                                    scheduler.shutdown();
+                                    return;
+                                } else {
+                                    retryCount++;
+                                    if (retryCount >= maxRetries) {
+                                        I2PAppContext.getGlobalContext()
+                                                .logManager()
+                                                .getLog(Servlet.class)
+                                                .warn("HostChecker instance still null after " + maxRetries
+                                                        + " attempts, giving up...");
+                                        scheduler.shutdown();
+                                    } else {
+                                        // I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).debug("HostChecker instance is null, retry " + retryCount + "/" + maxRetries);
+                                    }
+                                }
+                            } catch (Exception e) {
+                                I2PAppContext.getGlobalContext()
+                                        .logManager()
+                                        .getLog(Servlet.class)
+                                        .warn("Failed to get HostChecker instance (retry " + retryCount + "): "
+                                                + e.getMessage());
+                                retryCount++;
+                                if (retryCount >= maxRetries) {
+                                    scheduler.shutdown();
+                                }
                             }
                         }
-                    } catch (Exception e) {
-                        I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).warn("Failed to get HostChecker instance (retry " + retryCount + "): " + e.getMessage());
-                        retryCount++;
-                        if (retryCount >= maxRetries) {
-                            scheduler.shutdown();
-                        }
-                    }
-                }
-            }, 10, 10, java.util.concurrent.TimeUnit.SECONDS); // Start after 10 seconds, retry every 10 seconds
+                    },
+                    10,
+                    10,
+                    java.util.concurrent.TimeUnit.SECONDS); // Start after 10 seconds, retry every 10 seconds
         } catch (Throwable t) {
             // addressbook.jar may not be in the classpath
-            I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).logAlways(Log.WARN, "Addressbook thread not started: " + t);
+            I2PAppContext.getGlobalContext()
+                    .logManager()
+                    .getLog(Servlet.class)
+                    .logAlways(Log.WARN, "Addressbook thread not started: " + t);
         }
     }
 
@@ -132,7 +153,8 @@ public class Servlet extends HttpServlet {
                 Class<?> cls = Class.forName("net.i2p.addressbook.DaemonThread", true, cl);
                 Object t = cls.cast(this.thread);
                 cls.getDeclaredMethod("halt").invoke(t);
-            } catch (Throwable t) {}
+            } catch (Throwable t) {
+            }
         }
         super.destroy();
     }

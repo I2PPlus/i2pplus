@@ -1,4 +1,5 @@
 package net.i2p.data.i2cp;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by str4d in 2012 and released into the public domain
@@ -19,10 +20,13 @@ public class ReconfigureSessionMessageTest extends I2CPTstBase {
     @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
         ReconfigureSessionMessage msg = new ReconfigureSessionMessage();
-        msg.setSessionId((SessionId)(new SessionIdTest()).createDataStructure());
-        msg.setSessionConfig((SessionConfig)(new SessionConfigTest()).createDataStructure());
+        msg.setSessionId((SessionId) (new SessionIdTest()).createDataStructure());
+        msg.setSessionConfig((SessionConfig) (new SessionConfigTest()).createDataStructure());
         return msg;
     }
+
     @Override
-    public I2CPMessageImpl createStructureToRead() { return new ReconfigureSessionMessage(); }
+    public I2CPMessageImpl createStructureToRead() {
+        return new ReconfigureSessionMessage();
+    }
 }

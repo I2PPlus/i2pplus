@@ -62,9 +62,9 @@ public class Pinger implements Source, Runnable {
         data[0] = 1;
         try {
             this.sink.send(null, fromPort, 0, data);
-            if (log.shouldDebug())
-                log.debug("Sent unsubscribe from port " + fromPort);
-        } catch (RuntimeException re) {}
+            if (log.shouldDebug()) log.debug("Sent unsubscribe from port " + fromPort);
+        } catch (RuntimeException re) {
+        }
     }
 
     /**
@@ -81,11 +81,9 @@ public class Pinger implements Source, Runnable {
         while (this.running) {
             try {
                 this.sink.send(null, fromPort, 0, data);
-                if (log.shouldDebug())
-                    log.debug("Sent subscribe from port " + fromPort);
+                if (log.shouldDebug()) log.debug("Sent subscribe from port " + fromPort);
             } catch (RuntimeException re) {
-                if (log.shouldWarn())
-                    log.warn("error sending", re);
+                if (log.shouldWarn()) log.warn("error sending", re);
                 break;
             }
             synchronized (this.waitlock) {

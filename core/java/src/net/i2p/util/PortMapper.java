@@ -1,5 +1,7 @@
 package net.i2p.util;
 
+import net.i2p.I2PAppContext;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.net.InetSocketAddress;
@@ -10,7 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import net.i2p.I2PAppContext;
 
 /**
  * Map services to internal or external application ports
@@ -29,45 +30,56 @@ public class PortMapper {
     public static final String SVC_HTTP_PROXY = "HTTP";
     public static final String SVC_HTTPS_PROXY = "HTTPS";
     public static final String SVC_EEPSITE = "eepsite";
+
     /** HTTPS eepsite service name.
      *  @since 0.9.34
      */
     public static final String SVC_HTTPS_EEPSITE = "https_eepsite";
+
     public static final String SVC_IRC = "irc";
     public static final String SVC_SOCKS = "socks";
     public static final String SVC_TAHOE = "tahoe-lafs";
     public static final String SVC_SMTP = "SMTP";
     public static final String SVC_POP = "POP3";
     public static final String SVC_SAM = "SAM";
+
     /** SAM-UDP service name.
      *  @since 0.9.24
      */
     public static final String SVC_SAM_UDP = "SAM-UDP";
+
     /** SAM-SSL service name.
      *  @since 0.9.24
      */
     public static final String SVC_SAM_SSL = "SAM-SSL";
+
     public static final String SVC_BOB = "BOB";
+
     /** not necessary, already in config? */
     public static final String SVC_I2CP = "I2CP";
+
     /** I2CP-SSL service name.
      *  @since 0.9.23
      */
     public static final String SVC_I2CP_SSL = "I2CP-SSL";
+
     /** HTTP I2PControl service name.
      *  @since 0.9.34
      */
     public static final String SVC_HTTP_I2PCONTROL = "http_i2pcontrol";
+
     /** HTTPS I2PControl service name.
      *  @since 0.9.34
      */
     public static final String SVC_HTTPS_I2PCONTROL = "https_i2pcontrol";
+
     /**
      *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
      *  For actual base URL, use getConsoleURL()
      *  @since 0.9.34
      */
     public static final String SVC_I2PSNARK = "i2psnark";
+
     /**
      *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
      *  For actual base URL, use getConsoleURL()
@@ -78,44 +90,49 @@ public class PortMapper {
      *  @since 0.9.34
      */
     public static final String SVC_I2PTUNNEL = "i2ptunnel";
+
     /**
      *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
      *  For actual base URL, use getConsoleURL()
      *  @since 0.9.34
      */
     public static final String SVC_IMAGEGEN = "imagegen";
+
     /**
      *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
      *  For actual base URL, use getConsoleURL()
      *  @since 0.9.34
      */
     public static final String SVC_SUSIDNS = "susidns";
+
     /**
      *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
      *  For actual base URL, use getConsoleURL()
      *  @since 0.9.34
      */
     public static final String SVC_SUSIMAIL = "susimail";
+
     /**
      *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
      *  For actual base URL, use getConsoleURL()
-      *  @since 0.9.39
-      */
+     *  @since 0.9.39
+     */
     public static final String SVC_JSONRPC = "jsonrpc";
 
     /** Default HTTP console port.
      *  @since 0.9.34
      */
     public static final int DEFAULT_CONSOLE_PORT = 7657;
+
     /** Default HTTPS console port.
      *  @since 0.9.34
      */
     public static final int DEFAULT_HTTPS_CONSOLE_PORT = 7667;
+
     /** Default host for local services.
      *  @since 0.9.34
      */
     public static final String DEFAULT_HOST = "127.0.0.1";
-
 
     /**
      *  @param context unused for now
@@ -144,11 +161,9 @@ public class PortMapper {
      *  @since 0.9.21
      */
     public boolean register(String service, String host, int port) {
-        if (port <= 0 || port > 65535)
-            return false;
+        if (port <= 0 || port > 65535) return false;
         boolean rv = _dir.putIfAbsent(service, InetSocketAddress.createUnresolved(host, port)) == null;
-        if (service.equals(SVC_EEPSITE) || service.equals(SVC_HTTPS_EEPSITE))
-            rv = _eepsites.add(toURL(service, host, port));
+        if (service.equals(SVC_EEPSITE) || service.equals(SVC_HTTPS_EEPSITE)) rv = _eepsites.add(toURL(service, host, port));
         return rv;
     }
 
@@ -179,14 +194,12 @@ public class PortMapper {
     public void unregister(String service, int port) {
         if (service.equals(SVC_EEPSITE) || service.equals(SVC_HTTPS_EEPSITE)) {
             String end = ":" + port + '/';
-            for (Iterator<String> iter = _eepsites.iterator(); iter.hasNext();) {
-                if (iter.next().endsWith(end))
-                     iter.remove();
+            for (Iterator<String> iter = _eepsites.iterator(); iter.hasNext(); ) {
+                if (iter.next().endsWith(end)) iter.remove();
             }
         }
         // not synched
-        if (getPort(service) == port)
-            _dir.remove(service);
+        if (getPort(service) == port) _dir.remove(service);
     }
 
     /**
@@ -205,8 +218,7 @@ public class PortMapper {
      */
     public int getPort(String service, int def) {
         InetSocketAddress ia = _dir.get(service);
-        if (ia == null)
-            return def;
+        if (ia == null) return def;
         return ia.getPort();
     }
 
@@ -219,8 +231,7 @@ public class PortMapper {
      */
     public String getHost(String service, String def) {
         InetSocketAddress ia = _dir.get(service);
-        if (ia == null)
-            return def;
+        if (ia == null) return def;
         return ia.getHostName();
     }
 
@@ -238,8 +249,7 @@ public class PortMapper {
      */
     public String getActualHost(String service, String def) {
         InetSocketAddress ia = _dir.get(service);
-        if (ia == null)
-            return def;
+        if (ia == null) return def;
         return convertWildcard(ia.getHostName(), def);
     }
 
@@ -321,14 +331,11 @@ public class PortMapper {
         int httpsPort = getPort(SVC_HTTPS_CONSOLE);
         boolean httpsOnly = httpsPort > 0 && httpHost.equals(unset) && !httpsHost.equals(unset);
         if (httpsOnly) {
-            if (httpsHost.contains(":"))
-                return "https://[" + httpsHost + "]:" + httpsPort + '/';
+            if (httpsHost.contains(":")) return "https://[" + httpsHost + "]:" + httpsPort + '/';
             return "https://" + httpsHost + ':' + httpsPort + '/';
         }
-        if (httpHost.equals(unset))
-            httpHost = DEFAULT_HOST;
-        if (httpHost.contains(":"))
-            return "http://[" + httpHost + "]:" + httpPort + '/';
+        if (httpHost.equals(unset)) httpHost = DEFAULT_HOST;
+        if (httpHost.contains(":")) return "http://[" + httpHost + "]:" + httpPort + '/';
         return "http://" + httpHost + ':' + httpPort + '/';
     }
 
@@ -344,14 +351,11 @@ public class PortMapper {
         int httpsPort = getPort(SVC_HTTPS_CONSOLE, DEFAULT_HTTPS_CONSOLE_PORT);
         boolean httpOnly = httpPort > 0 && httpsHost.equals(unset) && !httpHost.equals(unset);
         if (httpOnly) {
-            if (httpHost.contains(":"))
-                return "http://[" + httpHost + "]:" + httpPort + '/';
+            if (httpHost.contains(":")) return "http://[" + httpHost + "]:" + httpPort + '/';
             return "http://" + httpHost + ':' + httpPort + '/';
         }
-        if (httpsHost.equals(unset))
-            return "http://" + DEFAULT_HOST + ':' + DEFAULT_CONSOLE_PORT + '/';
-        if (httpsHost.contains(":"))
-            return "https://[" + httpsHost + "]:" + httpsPort + '/';
+        if (httpsHost.equals(unset)) return "http://" + DEFAULT_HOST + ':' + DEFAULT_CONSOLE_PORT + '/';
+        if (httpsHost.contains(":")) return "https://[" + httpsHost + "]:" + httpsPort + '/';
         return "https://" + httpsHost + ':' + httpsPort + '/';
     }
 
@@ -361,8 +365,7 @@ public class PortMapper {
      * @since 0.9.50
      */
     public List<String> getEepsiteURLs() {
-        if (_eepsites.isEmpty())
-            return Collections.emptyList();
+        if (_eepsites.isEmpty()) return Collections.emptyList();
         return new ArrayList<String>(_eepsites);
     }
 
@@ -373,14 +376,10 @@ public class PortMapper {
         StringBuilder buf = new StringBuilder(64); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append(svc.equals(SVC_HTTPS_EEPSITE) ? "https://" : "http://");
         host = convertWildcard(host, "127.0.0.1");
-        if (host.contains(":"))
-            buf.append('[');
+        if (host.contains(":")) buf.append('[');
         buf.append(host);
-        if (host.contains(":"))
-            buf.append(']');
-        buf.append(':')
-           .append(port)
-            .append('/');
+        if (host.contains(":")) buf.append(']');
+        buf.append(':').append(port).append('/');
         return buf.toString();
     }
 
@@ -390,13 +389,11 @@ public class PortMapper {
      */
     public void renderStatusHTML(Writer out) throws IOException {
         List<String> services = new ArrayList<String>(_dir.keySet());
-        out.write("<h2 id=debug_portmapper>Port Mapper</h2>\n" +
-                  "<table id=portmapper>\n<thead>\n<tr><th>Service</th><th>Host</th><th>Port</th></tr>\n</thead>\n");
+        out.write("<h2 id=debug_portmapper>Port Mapper</h2>\n" + "<table id=portmapper>\n<thead>\n<tr><th>Service</th><th>Host</th><th>Port</th></tr>\n</thead>\n");
         Collections.sort(services, Collator.getInstance());
         for (String s : services) {
             InetSocketAddress ia = _dir.get(s);
-            if (ia == null)
-                continue;
+            if (ia == null) continue;
             out.write("<tr><td>" + s + "</td><td>" + convertWildcard(ia.getHostName(), DEFAULT_HOST) + "</td><td>" + ia.getPort() + "</td></tr>\n");
         }
         if (!_eepsites.isEmpty()) {

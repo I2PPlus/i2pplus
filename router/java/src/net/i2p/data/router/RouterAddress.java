@@ -9,6 +9,12 @@ package net.i2p.data.router;
  *
  */
 
+import net.i2p.data.DataFormatException;
+import net.i2p.data.DataHelper;
+import net.i2p.data.DataStructureImpl;
+import net.i2p.util.Addresses;
+import net.i2p.util.OrderedProperties;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,11 +23,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
-import net.i2p.data.DataFormatException;
-import net.i2p.data.DataHelper;
-import net.i2p.data.DataStructureImpl;
-import net.i2p.util.Addresses;
-import net.i2p.util.OrderedProperties;
 
 /**
  * Defines a method of communicating with a router
@@ -68,8 +69,7 @@ public class RouterAddress extends DataStructureImpl {
     public RouterAddress(String style, OrderedProperties options, int cost) {
         _transportStyle = style;
         _options = options;
-        if (cost < 0 || cost > 255)
-            throw new IllegalArgumentException();
+        if (cost < 0 || cost > 255) throw new IllegalArgumentException();
         _cost = (short) cost;
     }
 
@@ -96,8 +96,7 @@ public class RouterAddress extends DataStructureImpl {
      * NTCP is set to 10 and SSU to 5 by default, unused before 0.7.12
      */
     public void setCost(int cost) {
-        if (cost < 0 || cost > 255)
-            throw new IllegalArgumentException();
+        if (cost < 0 || cost > 255) throw new IllegalArgumentException();
         _cost = (short) cost;
     }
 
@@ -113,9 +112,8 @@ public class RouterAddress extends DataStructureImpl {
      */
     @Deprecated
     public Date getExpiration() {
-        //return _expiration;
-        if (_expiration > 0)
-            return Date.from(Instant.ofEpochMilli(_expiration));
+        // return _expiration;
+        if (_expiration > 0) return Date.from(Instant.ofEpochMilli(_expiration));
         return null;
     }
 
@@ -144,10 +142,8 @@ public class RouterAddress extends DataStructureImpl {
      */
     @Deprecated
     public void setExpiration(Date expiration) {
-        if (expiration != null)
-            _expiration = expiration.getTime();
-        else
-            _expiration = 0;
+        if (expiration != null) _expiration = expiration.getTime();
+        else _expiration = 0;
     }
 
     /**
@@ -166,8 +162,7 @@ public class RouterAddress extends DataStructureImpl {
      */
     @Deprecated
     public void setTransportStyle(String transportStyle) {
-        if (_transportStyle != null)
-            throw new IllegalStateException();
+        if (_transportStyle != null) throw new IllegalStateException();
         _transportStyle = transportStyle;
     }
 
@@ -208,8 +203,7 @@ public class RouterAddress extends DataStructureImpl {
      */
     @Deprecated
     public void setOptions(Properties options) {
-        if (!_options.isEmpty())
-            throw new IllegalStateException();
+        if (!_options.isEmpty()) throw new IllegalStateException();
         _options.putAll(options);
     }
 
@@ -233,8 +227,7 @@ public class RouterAddress extends DataStructureImpl {
             if (host != null) {
                 byte[] tmp = Addresses.getIPOnly(host);
                 _ip = (tmp != null && tmp.length > 0) ? tmp : null;
-            } else
-                _ip = null;
+            } else _ip = null;
         }
         return _ip;
     }
@@ -258,15 +251,14 @@ public class RouterAddress extends DataStructureImpl {
      *  @since 0.9.3
      */
     public int getPort() {
-        if (_port != 0)
-            return _port;
+        if (_port != 0) return _port;
         String port = _options.getProperty(PROP_PORT);
         if (port != null) {
             try {
                 int rv = Integer.parseInt(port);
-                if (rv > 0 && rv <= 65535)
-                    _port = rv;
-            } catch (NumberFormatException nfe) {}
+                if (rv > 0 && rv <= 65535) _port = rv;
+            } catch (NumberFormatException nfe) {
+            }
         }
         return _port;
     }
@@ -279,21 +271,16 @@ public class RouterAddress extends DataStructureImpl {
      */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
-        if (_transportStyle != null)
-            throw new IllegalStateException();
+        if (_transportStyle != null) throw new IllegalStateException();
         // EOF will be thrown in next read
         _cost = (short) in.read();
         _expiration = DataHelper.readLong(in, 8);
         _transportStyle = DataHelper.readString(in);
         // reduce Object proliferation
-        if (_transportStyle.equals("SSU"))
-            _transportStyle = "SSU";
-        else if (_transportStyle.equals("NTCP2"))
-            _transportStyle = "NTCP2";
-        else if (_transportStyle.equals("NTCP"))
-            _transportStyle = "NTCP";
-        else if (_transportStyle.equals("SSU2"))
-            _transportStyle = "SSU2";
+        if (_transportStyle.equals("SSU")) _transportStyle = "SSU";
+        else if (_transportStyle.equals("NTCP2")) _transportStyle = "NTCP2";
+        else if (_transportStyle.equals("NTCP")) _transportStyle = "NTCP";
+        else if (_transportStyle.equals("SSU2")) _transportStyle = "SSU2";
         // enforce mapping order so bad ones will fail-fast
         // before the signature check
         DataHelper.readProperties(in, _options, true);
@@ -305,8 +292,7 @@ public class RouterAddress extends DataStructureImpl {
      */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
-        if (_transportStyle == null)
-            throw new DataFormatException("uninitialized");
+        if (_transportStyle == null) throw new DataFormatException("uninitialized");
         out.write((byte) _cost);
         DataHelper.writeLong(out, 8, _expiration);
         DataHelper.writeString(out, _transportStyle);
@@ -322,14 +308,10 @@ public class RouterAddress extends DataStructureImpl {
         if (object == this) return true;
         if ((object == null) || !(object instanceof RouterAddress)) return false;
         RouterAddress addr = (RouterAddress) object;
-        boolean rv =
-               getPort() == addr.getPort() &&
-               DataHelper.eq(getHost(), addr.getHost()) &&
-               DataHelper.eq(_transportStyle, addr._transportStyle);
-               //DataHelper.eq(_options, addr._options) &&
-               //DataHelper.eq(_expiration, addr._expiration);
-        if (!rv || !_transportStyle.equals("SSU"))
-               return rv;
+        boolean rv = getPort() == addr.getPort() && DataHelper.eq(getHost(), addr.getHost()) && DataHelper.eq(_transportStyle, addr._transportStyle);
+        // DataHelper.eq(_options, addr._options) &&
+        // DataHelper.eq(_expiration, addr._expiration);
+        if (!rv || !_transportStyle.equals("SSU")) return rv;
         // SSU 4/6 caps
         return DataHelper.eq(_options.getProperty("caps"), addr._options.getProperty("caps"));
     }
@@ -340,10 +322,7 @@ public class RouterAddress extends DataStructureImpl {
      *  @since IPv6
      */
     public boolean deepEquals(RouterAddress addr) {
-        return
-               equals(addr) &&
-               _cost == addr._cost &&
-               _options.equals(addr._options);
+        return equals(addr) && _cost == addr._cost && _options.equals(addr._options);
     }
 
     /**
@@ -352,9 +331,7 @@ public class RouterAddress extends DataStructureImpl {
      */
     @Override
     public int hashCode() {
-        return DataHelper.hashCode(_transportStyle) ^
-               DataHelper.hashCode(getIP()) ^
-               getPort();
+        return DataHelper.hashCode(_transportStyle) ^ DataHelper.hashCode(getIP()) ^ getPort();
     }
 
     /**
@@ -374,8 +351,7 @@ public class RouterAddress extends DataStructureImpl {
             buf.append(" ").append(val);
         }
         buf.append("\n\t* cost: ").append(_cost);
-        if (_expiration > 0)
-            buf.append("\n\t* expires: ").append(Instant.ofEpochMilli(_expiration));
+        if (_expiration > 0) buf.append("\n\t* expires: ").append(Instant.ofEpochMilli(_expiration));
         return buf.toString();
     }
 }

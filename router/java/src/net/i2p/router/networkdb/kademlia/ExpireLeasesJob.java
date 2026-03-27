@@ -1,4 +1,5 @@
 package net.i2p.router.networkdb.kademlia;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,12 +9,6 @@ package net.i2p.router.networkdb.kademlia;
  *
  */
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
@@ -26,6 +21,13 @@ import net.i2p.router.TunnelPoolSettings;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * Periodically searches through all leases to find expired ones, failing those
  * keys and firing up a new search for each (in case we want it later, might as
@@ -36,7 +38,7 @@ import net.i2p.util.SystemVersion;
 class ExpireLeasesJob extends JobImpl {
     private final Log _log;
     private final KademliaNetworkDatabaseFacade _facade;
-    private final static long RERUN_DELAY_MS = 45*1000;
+    private static final long RERUN_DELAY_MS = 45 * 1000;
     private static final int LIMIT_LEASES_FF = 1250;
     private static final int LIMIT_LEASES_CLIENT = SystemVersion.isSlow() ? 300 : 750;
 
@@ -47,15 +49,21 @@ class ExpireLeasesJob extends JobImpl {
     }
 
     @Override
-    public String getName() { return "Expire Leases"; }
+    public String getName() {
+        return "Expire Leases";
+    }
 
     @Override
     public void runJob() {
         long uptime = getContext().router().getUptime();
         List<Hash> toExpire = selectKeysToExpire();
-        if (!toExpire.isEmpty() && uptime >= 90*1000) {
-            for (Hash key : toExpire) {_facade.fail(key);}
-            if (_log.shouldInfo()) {_log.info("Leases expired: " + toExpire.size());}
+        if (!toExpire.isEmpty() && uptime >= 90 * 1000) {
+            for (Hash key : toExpire) {
+                _facade.fail(key);
+            }
+            if (_log.shouldInfo()) {
+                _log.info("Leases expired: " + toExpire.size());
+            }
         }
         requeue(RERUN_DELAY_MS);
     }
@@ -70,7 +78,7 @@ class ExpireLeasesJob extends JobImpl {
         long now = ctx.clock().now();
         boolean isClient = _facade.isClientDb();
         boolean isFFDB = _facade.floodfillEnabled() && !isClient;
-        Set<Map.Entry<Hash, DatabaseEntry>> entries =  _facade.getDataStore().getMapEntries();
+        Set<Map.Entry<Hash, DatabaseEntry>> entries = _facade.getDataStore().getMapEntries();
         List<LeaseSet> current = new ArrayList<LeaseSet>(isFFDB ? 512 : (isClient ? entries.size() : 128)); // clientdb only has leasesets
         List<Hash> toExpire = new ArrayList<Hash>(Math.min(entries.size(), 128));
         int sz = 0;
@@ -104,20 +112,25 @@ class ExpireLeasesJob extends JobImpl {
                     Hash h = ls.getHash();
                     // don't drop very close to us
                     byte[] rkey = gen.getRoutingKey(h).getData();
-                    int distance = (((rkey[0] ^ ourRKey[0]) & 0xff) << 8) |
-                                    ((rkey[1] ^ ourRKey[1]) & 0xff);
+                    int distance = (((rkey[0] ^ ourRKey[0]) & 0xff) << 8) | ((rkey[1] ^ ourRKey[1]) & 0xff);
                     // they have to be within 1/256 of the keyspace
                     if (distance >= 256) {
                         toExpire.add(h);
-                        if (--sz <= limit) {break;}
+                        if (--sz <= limit) {
+                            break;
+                        }
                     }
                 }
             } else {
                 Collections.sort(current, new LeaseSetComparator());
                 for (LeaseSet ls : current) {
                     toExpire.add(ls.getHash());
-                    if (_log.shouldInfo()) {_log.info("Aggressively expiring LeaseSets for " + _facade + "\n*" + ls);}
-                    if (--sz <= limit) {break;}
+                    if (_log.shouldInfo()) {
+                        _log.info("Aggressively expiring LeaseSets for " + _facade + "\n*" + ls);
+                    }
+                    if (--sz <= limit) {
+                        break;
+                    }
                 }
             }
         }
@@ -130,6 +143,7 @@ class ExpireLeasesJob extends JobImpl {
      */
     private static class LeaseSetComparator implements Comparator<LeaseSet>, java.io.Serializable {
         private static final long serialVersionUID = 1L;
+
         @Override
         public int compare(LeaseSet l, LeaseSet r) {
             long dl = l.getLatestLeaseDate();
@@ -148,10 +162,12 @@ class ExpireLeasesJob extends JobImpl {
                 TunnelPoolSettings out = getContext().tunnelManager().getOutboundSettings(d.calculateHash());
                 name = (out != null ? out.getDestinationNickname() : null);
             }
-            if (name != null) {return name;}
-            else {return "";}
+            if (name != null) {
+                return name;
+            } else {
+                return "";
+            }
         }
         return "";
     }
-
 }

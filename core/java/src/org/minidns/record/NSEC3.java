@@ -10,6 +10,10 @@
  */
 package org.minidns.record;
 
+import org.minidns.dnslabel.DnsLabel;
+import org.minidns.record.Record.TYPE;
+import org.minidns.util.Base32;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -18,9 +22,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.minidns.dnslabel.DnsLabel;
-import org.minidns.record.Record.TYPE;
-import org.minidns.util.Base32;
 
 /**
  * DNS NSEC3 (Next Secure 3) record payload for DNSSEC.<br>
@@ -163,12 +164,7 @@ public class NSEC3 extends Data {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder()
-                .append(hashAlgorithm).append(' ')
-                .append(flags).append(' ')
-                .append(iterations).append(' ')
-                .append(salt.length == 0 ? "-" : new BigInteger(1, salt).toString(16).toUpperCase()).append(' ')
-                .append(Base32.encodeToString(nextHashed));
+        StringBuilder sb = new StringBuilder().append(hashAlgorithm).append(' ').append(flags).append(' ').append(iterations).append(' ').append(salt.length == 0 ? "-" : new BigInteger(1, salt).toString(16).toUpperCase()).append(' ').append(Base32.encodeToString(nextHashed));
         for (TYPE type : types) {
             sb.append(' ').append(type);
         }

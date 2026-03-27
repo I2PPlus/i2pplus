@@ -9,23 +9,24 @@ package net.i2p.util;
  *
  */
 
+import net.i2p.I2PAppContext;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
-import net.i2p.I2PAppContext;
 
 /**
  * Render a log record according to the log manager's settings
  *
  */
 class LogRecordFormatter {
-    final static String NL = System.getProperty("line.separator");
+    static final String NL = System.getProperty("line.separator");
     // arbitrary max length for the classname property (this makes sure it lines up nicely)
-    private final static int MAX_WHERE_LENGTH = 16;
-    private final static int MAX_THREAD_LENGTH = 11;
-    private final static int MAX_PRIORITY_LENGTH = 5;
+    private static final int MAX_WHERE_LENGTH = 16;
+    private static final int MAX_THREAD_LENGTH = 11;
+    private static final int MAX_PRIORITY_LENGTH = 5;
 
     public static String formatRecord(LogManager manager, LogRecord rec) {
         return formatRecord(manager, rec, true);
@@ -37,34 +38,24 @@ class LogRecordFormatter {
      */
     static String formatRecord(LogManager manager, LogRecord rec, boolean showDate) {
         int size = 128 + rec.getMessage().length();
-        if (rec.getThrowable() != null)
-            size += 512;
+        if (rec.getThrowable() != null) size += 512;
         StringBuilder buf = new StringBuilder(size);
         char format[] = manager.getFormat();
         for (int i = 0; i < format.length; ++i) {
             switch (format[i]) {
-                case LogManager.DATE:
-                    if (showDate)
-                        buf.append(getWhen(manager, rec));
-                    else if (i+1 < format.length && format[i+1] == ' ')
-                        i++;  // skip following space
+                case LogManager.DATE: if (showDate) buf.append(getWhen(manager, rec));
+                    else if (i + 1 < format.length && format[i + 1] == ' ') i++; // skip following space
                     break;
-                case LogManager.CLASS:
-                    buf.append(getWhere(rec));
+                case LogManager.CLASS: buf.append(getWhere(rec));
                     break;
-                case LogManager.THREAD:
-                    buf.append(getThread(rec));
+                case LogManager.THREAD: buf.append(getThread(rec));
                     break;
-                case LogManager.PRIORITY:
-                    buf.append("| ").append(getPriority(rec, manager.getContext()));
+                case LogManager.PRIORITY: buf.append("| ").append(getPriority(rec, manager.getContext()));
                     break;
-                case LogManager.MESSAGE:
-                    String msg = getWhat(rec);
-                    if (msg != null)
-                        buf.append(msg);
+                case LogManager.MESSAGE: String msg = getWhat(rec);
+                    if (msg != null) buf.append(msg);
                     break;
-                default:
-                    buf.append(format[i]);
+                default: buf.append(format[i]);
                     break;
             }
         }
@@ -92,29 +83,27 @@ class LogRecordFormatter {
     }
 
     /** don't translate */
-/****
-    private static String getPriority(LogRecord rec) {
-        return toString(Log.toLevelString(rec.getPriority()), MAX_PRIORITY_LENGTH);
-    }
-****/
+    /****
+     * private static String getPriority(LogRecord rec) {
+     * return toString(Log.toLevelString(rec.getPriority()), MAX_PRIORITY_LENGTH);
+     * }
+     ****/
 
     /** */
     private static final String BUNDLE_NAME = "net.i2p.util.messages";
+
     static {
         // just for tagging
-        String[] levels = { _x("CRIT"), _x("ERROR"), _x("WARN"), _x("INFO"), _x("DEBUG") };
+        String[] levels = {_x("CRIT"), _x("ERROR"), _x("WARN"), _x("INFO"), _x("DEBUG")};
     }
 
     /** translate @since 0.7.14 */
     private static String getPriority(LogRecord rec, I2PAppContext ctx) {
         int len;
-        if (Translate.getLanguage(ctx).equals("de"))
-            len = 8;  // KRITISCH
-        else
-            len = MAX_PRIORITY_LENGTH;
+        if (Translate.getLanguage(ctx).equals("de")) len = 8; // KRITISCH
+        else len = MAX_PRIORITY_LENGTH;
         StringBuilder buf = new StringBuilder();
-        while (buf.length() < len)
-            buf.append(' ');
+        while (buf.length() < len) buf.append(' ');
         return toString(Translate.getString(Log.toLevelString(rec.getPriority()), ctx, BUNDLE_NAME), len);
     }
 
@@ -138,8 +127,7 @@ class LogRecordFormatter {
             buf.append(ellipsis);
         }
         buf.append(str);
-        while (buf.length() < size)
-            buf.append(' ');
+        while (buf.length() < size) buf.append(' ');
         return buf.toString();
     }
 

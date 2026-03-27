@@ -2,8 +2,9 @@ package net.i2p.util;
 
 import static org.junit.Assert.*;
 
-import java.util.Set;
 import org.junit.Test;
+
+import java.util.Set;
 
 public class ObjectCounterTest {
 

@@ -10,7 +10,6 @@ package net.i2p.i2ptunnel;
  * abstracting the underlying logging implementation. Routes messages
  * to console, file, or GUI based on I2P client configuration.
  */
-
 public interface Logging {
     public void log(String s);
 }

@@ -1,17 +1,21 @@
 package net.i2p.stat;
 
+import net.i2p.data.DataHelper;
+
 import java.io.IOException;
 import java.io.OutputStream;
-import net.i2p.data.DataHelper;
 
 /** coordinate an event frequency over various periods */
 public class FrequencyStat {
     /** unique name of the statistic */
     private final String _statName;
+
     /** grouping under which the stat is kept */
     private final String _groupName;
+
     /** describe the stat */
     private final String _description;
+
     /** actual frequency objects for this statistic */
     private final Frequency _frequencies[];
 
@@ -20,22 +24,19 @@ public class FrequencyStat {
         _description = description;
         _groupName = group;
         _frequencies = new Frequency[periods.length];
-        for (int i = 0; i < periods.length; i++)
-            _frequencies[i] = new Frequency(periods[i]);
+        for (int i = 0; i < periods.length; i++) _frequencies[i] = new Frequency(periods[i]);
     }
 
     /** update all of the frequencies for the various periods */
     public void eventOccurred() {
-        for (int i = 0; i < _frequencies.length; i++)
-            _frequencies[i].eventOccurred();
+        for (int i = 0; i < _frequencies.length; i++) _frequencies[i].eventOccurred();
     }
 
     /**
      * coalesce all the stats
      */
     public void coalesceStats() {
-        for (int i = 0; i < _frequencies.length; i++)
-            _frequencies[i].recalculate();
+        for (int i = 0; i < _frequencies.length; i++) _frequencies[i].recalculate();
     }
 
     public String getName() {
@@ -52,8 +53,7 @@ public class FrequencyStat {
 
     public long[] getPeriods() {
         long rv[] = new long[_frequencies.length];
-        for (int i = 0; i < _frequencies.length; i++)
-            rv[i] = _frequencies[i].getPeriod();
+        for (int i = 0; i < _frequencies.length; i++) rv[i] = _frequencies[i].getPeriod();
         return rv;
     }
 
@@ -65,27 +65,26 @@ public class FrequencyStat {
     }
 
     /**
-      *  Gets the lifetime event count.
-      *
-      * @return lifetime event count
-      * @since 0.8.2
-      */
+     *  Gets the lifetime event count.
+     *
+     * @return lifetime event count
+     * @since 0.8.2
+     */
     public long getEventCount() {
         if ((_frequencies == null) || (_frequencies.length <= 0)) return 0;
         return _frequencies[0].getEventCount();
     }
 
     /**
-      *  Gets the lifetime average frequency.
-      *
-      * @return lifetime average frequency in millisedonds, i.e. the average time between events, or Long.MAX_VALUE if no events ever
-      * @since 0.8.2
-      */
+     *  Gets the lifetime average frequency.
+     *
+     * @return lifetime average frequency in millisedonds, i.e. the average time between events, or Long.MAX_VALUE if no events ever
+     * @since 0.8.2
+     */
     public long getFrequency() {
         if ((_frequencies == null) || (_frequencies.length <= 0)) return Long.MAX_VALUE;
         double d = _frequencies[0].getStrictAverageInterval();
-        if (d > _frequencies[0].getPeriod())
-            return Long.MAX_VALUE;
+        if (d > _frequencies[0].getPeriod()) return Long.MAX_VALUE;
         return Math.round(d);
     }
 
@@ -98,10 +97,10 @@ public class FrequencyStat {
     @Override
     public boolean equals(Object obj) {
         if ((obj == null) || !(obj instanceof FrequencyStat)) return false;
-        return _statName.equals(((FrequencyStat)obj)._statName);
+        return _statName.equals(((FrequencyStat) obj)._statName);
     }
 
-    private final static String NL = System.getProperty("line.separator");
+    private static final String NL = System.getProperty("line.separator");
 
     /**
      * Serializes this FrequencyStat to the provided OutputStream
@@ -119,15 +118,13 @@ public class FrequencyStat {
         buf.append("# ").append(NL).append(NL);
         out.write(buf.toString().getBytes("UTF-8"));
         buf.setLength(0);
-        for (Frequency r: _frequencies){
+        for (Frequency r : _frequencies) {
             buf.append("#######").append(NL);
-            buf.append("# Period : ").append(DataHelper.formatDuration(r.getPeriod())).append(" for rate ")
-                .append(_groupName).append(" - ").append(_statName).append(NL);
+            buf.append("# Period : ").append(DataHelper.formatDuration(r.getPeriod())).append(" for rate ").append(_groupName).append(" - ").append(_statName).append(NL);
             buf.append(NL);
             r.store(buf);
             out.write(buf.toString().getBytes("UTF-8"));
             buf.setLength(0);
         }
     }
-
 }

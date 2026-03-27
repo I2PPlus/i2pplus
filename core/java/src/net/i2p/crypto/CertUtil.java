@@ -1,5 +1,16 @@
 package net.i2p.crypto;
 
+import net.i2p.I2PAppContext;
+import net.i2p.crypto.provider.I2PProvider;
+import net.i2p.data.Base64;
+import net.i2p.data.DataHelper;
+import net.i2p.data.SigningPrivateKey;
+import net.i2p.data.SigningPublicKey;
+import net.i2p.util.FileSuffixFilter;
+import net.i2p.util.Log;
+import net.i2p.util.SecureFileOutputStream;
+import net.i2p.util.SystemVersion;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -34,17 +45,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+
 import javax.security.auth.x500.X500Principal;
-import net.i2p.I2PAppContext;
-import net.i2p.crypto.provider.I2PProvider;
-import net.i2p.data.Base64;
-import net.i2p.data.DataHelper;
-import net.i2p.data.SigningPrivateKey;
-import net.i2p.data.SigningPublicKey;
-import net.i2p.util.FileSuffixFilter;
-import net.i2p.util.Log;
-import net.i2p.util.SecureFileOutputStream;
-import net.i2p.util.SystemVersion;
 
 /**
  *  Java X.509 certificate utilities, consolidated from various places.
@@ -57,7 +59,9 @@ public final class CertUtil {
     private static final String REVOCATION_DIR = "revocations";
     private static final int LINE_LENGTH = 64;
 
-    static {I2PProvider.addProvider();}
+    static {
+        I2PProvider.addProvider();
+    }
 
     /**
      *  Write a certificate to a file in base64 format.
@@ -68,8 +72,8 @@ public final class CertUtil {
     public static boolean saveCert(Certificate cert, File file) {
         OutputStream os = null;
         try {
-           // The point is probably to share this, so don't make it 600
-           //os = new SecureFileOutputStream(file);
+            // The point is probably to share this, so don't make it 600
+            // os = new SecureFileOutputStream(file);
             os = new FileOutputStream(file);
             exportCert(cert, os);
             return true;
@@ -80,8 +84,10 @@ public final class CertUtil {
             error("Error writing X509 Certificate " + file.getAbsolutePath(), ioe);
             return false;
         } finally {
-            try {if (os != null) os.close();}
-            catch (IOException foo) {}
+            try {
+                if (os != null) os.close();
+            } catch (IOException foo) {
+            }
         }
     }
 
@@ -95,11 +101,14 @@ public final class CertUtil {
      *  @throws CertificateEncodingException if a cert does not support encoding
      *  @since 0.9.24
      */
-    public static void exportPrivateKey(PrivateKey pk, Certificate[] certs, OutputStream out)
-                                                throws IOException, GeneralSecurityException {
+    public static void exportPrivateKey(PrivateKey pk, Certificate[] certs, OutputStream out) throws IOException, GeneralSecurityException {
         exportPrivateKey(pk, out);
-        if (certs == null) {return;}
-        for (int i = 0; i < certs.length; i++) {exportCert(certs[i], out);}
+        if (certs == null) {
+            return;
+        }
+        for (int i = 0; i < certs.length; i++) {
+            exportCert(certs[i], out);
+        }
     }
 
     /**
@@ -111,8 +120,7 @@ public final class CertUtil {
      *
      *  @since 0.9.24, pulled out of saveCert(), public since 0.9.25
      */
-    public static void exportCert(Certificate cert, OutputStream out)
-                                                throws IOException, CertificateEncodingException {
+    public static void exportCert(Certificate cert, OutputStream out) throws IOException, CertificateEncodingException {
         // Get the encoded form which is suitable for exporting
         byte[] buf = cert.getEncoded();
         writePEM(buf, "CERTIFICATE", out);
@@ -128,11 +136,12 @@ public final class CertUtil {
      *  @throws InvalidKeyException if the key does not support encoding
      *  @since 0.9.24
      */
-    private static void exportPrivateKey(PrivateKey pk, OutputStream out)
-                                                throws IOException, InvalidKeyException {
+    private static void exportPrivateKey(PrivateKey pk, OutputStream out) throws IOException, InvalidKeyException {
         // Get the encoded form which is suitable for exporting
         byte[] buf = pk.getEncoded();
-        if (buf == null) {throw new InvalidKeyException("encoding unsupported for this key");}
+        if (buf == null) {
+            throw new InvalidKeyException("encoding unsupported for this key");
+        }
         writePEM(buf, "PRIVATE KEY", out);
     }
 
@@ -174,11 +183,14 @@ public final class CertUtil {
             Collection<List<?>> c = cert.getSubjectAlternativeNames();
             if (c != null) {
                 for (List<?> list : c) {
-                    try {rv.add((String) list.get(1));}
-                    catch (ClassCastException cce) {}
+                    try {
+                        rv.add((String) list.get(1));
+                    } catch (ClassCastException cce) {
+                    }
                 }
             }
-        } catch (GeneralSecurityException gse) {}
+        } catch (GeneralSecurityException gse) {
+        }
         return rv;
     }
 
@@ -223,7 +235,9 @@ public final class CertUtil {
             error("Don't call this in Android", new UnsupportedOperationException("I did it"));
             return null;
         }
-        if (p == null) {return null;}
+        if (p == null) {
+            return null;
+        }
         type = type.toUpperCase(Locale.US);
         String subj = p.getName();
         // Use reflection for this to avoid VerifyErrors on some Androids
@@ -240,12 +254,12 @@ public final class CertUtil {
                     return (String) getValue.invoke(rdn);
                 }
             }
+        } catch (ClassNotFoundException e) {
+        } catch (IllegalAccessException e) {
+        } catch (InstantiationException e) {
+        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException e) {
         }
-        catch (ClassNotFoundException e) {}
-        catch (IllegalAccessException e) {}
-        catch (InstantiationException e) {}
-        catch (InvocationTargetException e) {}
-        catch (NoSuchMethodException e) {}
         return null;
     }
 
@@ -269,7 +283,9 @@ public final class CertUtil {
      */
     public static PublicKey loadKey(File kd) throws IOException, GeneralSecurityException {
         X509Certificate cert = loadCert(kd);
-        if (isRevoked(cert)) {throw new CRLException("Certificate is revoked");}
+        if (isRevoked(cert)) {
+            throw new CRLException("Certificate is revoked");
+        }
         return cert.getPublicKey();
     }
 
@@ -291,10 +307,11 @@ public final class CertUtil {
         try {
             fis = new FileInputStream(kd);
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
-            X509Certificate cert = (X509Certificate)cf.generateCertificate(fis);
+            X509Certificate cert = (X509Certificate) cf.generateCertificate(fis);
             cert.checkValidity();
-            try {cert.verify(cert.getPublicKey());}
-            catch (Exception e) {
+            try {
+                cert.verify(cert.getPublicKey());
+            } catch (Exception e) {
                 System.out.println("Warning: Cert is not self-signed or has a bad signature: " + kd + " - " + e);
             }
             return cert;
@@ -304,8 +321,10 @@ public final class CertUtil {
             // at java.util.Base64$Decoder.decode0(Base64.java:704)
             throw new GeneralSecurityException("cert error", iae);
         } finally {
-            try {if (fis != null) fis.close();}
-            catch (IOException foo) {}
+            try {
+                if (fis != null) fis.close();
+            } catch (IOException foo) {
+            }
         }
     }
 
@@ -320,17 +339,27 @@ public final class CertUtil {
         try {
             String line;
             while ((line = DataHelper.readLine(in)) != null) {
-                if (line.startsWith("---") && line.contains("BEGIN") && line.contains("PRIVATE")) {break;}
+                if (line.startsWith("---") && line.contains("BEGIN") && line.contains("PRIVATE")) {
+                    break;
+                }
             }
-            if (line == null) {throw new IOException("no private key found");}
+            if (line == null) {
+                throw new IOException("no private key found");
+            }
             StringBuilder buf = new StringBuilder(128);
             while ((line = DataHelper.readLine(in)) != null) {
-                if (line.startsWith("---")) {break;}
+                if (line.startsWith("---")) {
+                    break;
+                }
                 buf.append(line.trim());
             }
-            if (buf.length() <= 0) {throw new IOException("no private key found");}
+            if (buf.length() <= 0) {
+                throw new IOException("no private key found");
+            }
             byte[] data = Base64.decode(buf.toString(), true);
-            if (data == null) {throw new CertificateEncodingException("bad base64 cert");}
+            if (data == null) {
+                throw new CertificateEncodingException("bad base64 cert");
+            }
             PrivateKey rv = null;
             // try all the types
             KeySpec ks = new PKCS8EncodedKeySpec(data);
@@ -340,9 +369,13 @@ public final class CertUtil {
                     KeyFactory kf = KeyFactory.getInstance(alg);
                     rv = kf.generatePrivate(ks);
                     break;
-                } catch (GeneralSecurityException gse) {/*gse.printStackTrace(); */}
+                } catch (GeneralSecurityException gse) {
+                    /*gse.printStackTrace(); */
+                }
             }
-            if (rv == null) {throw new InvalidKeyException("unsupported key type");}
+            if (rv == null) {
+                throw new InvalidKeyException("unsupported key type");
+            }
             return rv;
         } catch (IllegalArgumentException iae) {
             // java 1.8.0_40-b10, openSUSE
@@ -375,7 +408,9 @@ public final class CertUtil {
                 xcert.checkValidity();
                 rv.add(xcert);
             }
-            if (rv.isEmpty()) {throw new IOException("No certs found");}
+            if (rv.isEmpty()) {
+                throw new IOException("No certs found");
+            }
             return rv;
         } catch (IllegalArgumentException iae) {
             // java 1.8.0_40-b10, openSUSE
@@ -383,8 +418,10 @@ public final class CertUtil {
             // at java.util.Base64$Decoder.decode0(Base64.java:704)
             throw new GeneralSecurityException("Certificate error", iae);
         } finally {
-            try {in.close();}
-            catch (IOException foo) {}
+            try {
+                in.close();
+            } catch (IOException foo) {
+            }
         }
     }
 
@@ -407,8 +444,10 @@ public final class CertUtil {
             error("Error writing X509 CRL " + file.getAbsolutePath(), ioe);
             return false;
         } finally {
-            try {if (os != null) os.close();}
-            catch (IOException foo) {}
+            try {
+                if (os != null) os.close();
+            } catch (IOException foo) {
+            }
         }
     }
 
@@ -458,9 +497,12 @@ public final class CertUtil {
     public static boolean isRevoked(CertStore store, Certificate cert) {
         try {
             for (CRL crl : store.getCRLs(null)) {
-                if (crl.isRevoked(cert)) {return true;}
+                if (crl.isRevoked(cert)) {
+                    return true;
+                }
             }
-        } catch (GeneralSecurityException gse) {}
+        } catch (GeneralSecurityException gse) {
+        }
         return false;
     }
 
@@ -486,14 +528,16 @@ public final class CertUtil {
         dir = new File(dir, REVOCATION_DIR);
         loadCRLs(crls, dir);
         boolean diff = true;
-        try {diff = !ctx.getBaseDir().getCanonicalPath().equals(ctx.getConfigDir().getCanonicalPath());}
-        catch (IOException ioe) {}
+        try {
+            diff = !ctx.getBaseDir().getCanonicalPath().equals(ctx.getConfigDir().getCanonicalPath());
+        } catch (IOException ioe) {
+        }
         if (diff) {
             File dir2 = new File(ctx.getConfigDir(), CERT_DIR);
             dir2 = new File(dir2, REVOCATION_DIR);
             loadCRLs(crls, dir2);
         }
-        //System.out.println("Loaded " + crls.size() + " CRLs");
+        // System.out.println("Loaded " + crls.size() + " CRLs");
         CollectionCertStoreParameters ccsp = new CollectionCertStoreParameters(crls);
         try {
             CertStore store = CertStore.getInstance("Collection", ccsp);
@@ -543,8 +587,10 @@ public final class CertUtil {
             return loadCRL(in);
         } finally {
             if (in != null) {
-                try {in.close();}
-                catch (IOException ioe) {}
+                try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
             }
         }
     }
@@ -559,7 +605,6 @@ public final class CertUtil {
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
         return (X509CRL) cf.generateCRL(in);
     }
-
 
     public static final void main(String[] args) {
         if (args.length < 2) {
@@ -593,7 +638,7 @@ public final class CertUtil {
                 System.out.println("Found private key: " + spk);
             } else if (args[0].equals("checkall")) {
                 int rv = checkAll(f);
-                //System.exit(rv);
+                // System.exit(rv);
             } else {
                 System.out.println("Usage: [loadcert | loadcrl | loadcrldir | loadcrldirs | isrevoked | loadprivatekey | checkall] file");
             }
@@ -605,7 +650,7 @@ public final class CertUtil {
     }
 
     // threshold for warning
-    private static final long CHECK = 180*24*60*60*1000L;
+    private static final long CHECK = 180 * 24 * 60 * 60 * 1000L;
 
     /**
      *  For use in the build process.
@@ -620,11 +665,12 @@ public final class CertUtil {
         Set<X509CRL> crls = new HashSet<X509CRL>(8);
         File rdir = new File(dir, REVOCATION_DIR);
         loadCRLs(crls, rdir);
-        //System.out.println("Loaded " + crls.size() + " CRLs");
+        // System.out.println("Loaded " + crls.size() + " CRLs");
         CollectionCertStoreParameters ccsp = new CollectionCertStoreParameters(crls);
         CertStore store;
-        try {store = CertStore.getInstance("Collection", ccsp);}
-        catch (GeneralSecurityException gse) {
+        try {
+            store = CertStore.getInstance("Collection", ccsp);
+        } catch (GeneralSecurityException gse) {
             error("CertStore", gse); // shouldn't happen
             throw new UnsupportedOperationException(gse);
         }
@@ -633,8 +679,12 @@ public final class CertUtil {
         if (dirs != null) {
             for (int i = 0; i < dirs.length; i++) {
                 File d = dirs[i];
-                if (!d.isDirectory()) {continue;}
-                if (d.getName().equals(REVOCATION_DIR)) {continue;}
+                if (!d.isDirectory()) {
+                    continue;
+                }
+                if (d.getName().equals(REVOCATION_DIR)) {
+                    continue;
+                }
                 File[] files = d.listFiles(new FileSuffixFilter(".crt"));
                 if (files != null) {
                     for (int j = 0; j < files.length; j++) {
@@ -650,7 +700,9 @@ public final class CertUtil {
                             if (exp < CHECK) {
                                 System.out.println("**** WARNING: Cert " + f + " expires in " + DataHelper.formatDuration(exp));
                                 soon++;
-                            } else {good++;}
+                            } else {
+                                good++;
+                            }
                         } catch (IOException ioe) {
                             System.out.println("**** ERROR: Cannot load cert from " + f + ": " + ioe);
                             bad++;
@@ -668,5 +720,4 @@ public final class CertUtil {
         System.out.println("Found " + good + " valid certs, " + bad + " bad certs, " + soon + " about to expire certs");
         return (bad > 0) ? 1 : 0;
     }
-
 }

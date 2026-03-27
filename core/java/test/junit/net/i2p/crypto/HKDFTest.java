@@ -2,10 +2,12 @@ package net.i2p.crypto;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
 import net.i2p.I2PAppContext;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.util.Arrays;
 
 public class HKDFTest {
 

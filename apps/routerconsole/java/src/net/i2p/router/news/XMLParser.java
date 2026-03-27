@@ -1,29 +1,31 @@
 package net.i2p.router.news;
 
 /******************************************************************
-*  Contains code modified from JaxpParser:
-*
-*    CyberXML for Java
-*
-*    Copyright (C) Satoshi Konno 2004
-*
-*    Author: Markus Thurner (http://thoean.com)
-*
-*  Contains code modified from Node:
-*
-*    CyberXML for Java
-*
-*    Copyright (C) Satoshi Konno 2002
-******************************************************************/
+ *  Contains code modified from JaxpParser:
+ *
+ *    CyberXML for Java
+ *
+ *    Copyright (C) Satoshi Konno 2004
+ *
+ *    Author: Markus Thurner (http://thoean.com)
+ *
+ *  Contains code modified from Node:
+ *
+ *    CyberXML for Java
+ *
+ *    Copyright (C) Satoshi Konno 2002
+ ******************************************************************/
 
 import net.i2p.I2PAppContext;
-import java.util.regex.Pattern;
 import net.i2p.util.Log;
+
 import org.cybergarage.xml.Attribute;
 import org.cybergarage.xml.Node;
 import org.cybergarage.xml.XML;
 import org.cybergarage.xml.parser.JaxpParser;
 import org.w3c.dom.NamedNodeMap;
+
+import java.util.regex.Pattern;
 
 /**
  * Enhanced XML parser for I2P news content with XHTML support.
@@ -66,11 +68,8 @@ public class XMLParser extends JaxpParser {
         int arrrsLen = (attrs != null) ? attrs.getLength() : 0;
 
         if (_log.shouldDebug()) {
-            String val = domNodeValue != null ?
-                         " = \"" + domNodeValue.replace("\n", "\\n").replace("\r", "\\r") + '"' :
-                         "";
-            _log.debug("[" + rank + "] ELEM : \"" + domNodeName + '"' + val +
-                       " type = " + domNodeType + " with " + arrrsLen + " attrs");
+            String val = domNodeValue != null ? " = \"" + domNodeValue.replace("\n", "\\n").replace("\r", "\\r") + '"' : "";
+            _log.debug("[" + rank + "] ELEM : \"" + domNodeName + '"' + val + " type = " + domNodeType + " with " + arrrsLen + " attrs");
         }
 
         // I2P -
@@ -103,13 +102,11 @@ public class XMLParser extends JaxpParser {
                 text.setName(TEXT_NAME);
                 text.setValue(oldValue);
                 parentNode.addNode(text);
-                if (_log.shouldDebug())
-                    _log.debug("Converted value to node");
+                if (_log.shouldDebug()) _log.debug("Converted value to node");
             }
             parentNode.addNode(node);
         }
-        if (domNodeType == org.w3c.dom.Node.TEXT_NODE)
-            return parentNode;
+        if (domNodeType == org.w3c.dom.Node.TEXT_NODE) return parentNode;
 
         if (attrs != null) {
             for (int n = 0; n < arrrsLen; n++) {
@@ -125,8 +122,8 @@ public class XMLParser extends JaxpParser {
             node.setValue("");
             return node;
         }
-        do{
-            parse(node, child, rank+1);
+        do {
+            parse(node, child, rank + 1);
             child = child.getNextSibling();
         } while (child != null);
 
@@ -139,7 +136,6 @@ public class XMLParser extends JaxpParser {
     public static void toString(StringBuilder buf, Node node) {
         output(buf, node, 0);
     }
-
 
     /**
      *  A replacement for Node.output(), which does not recognize #text.

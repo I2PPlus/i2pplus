@@ -29,10 +29,11 @@ package net.i2p.crypto;
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.io.ByteArrayInputStream;
 import net.i2p.data.Signature;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;
+
+import java.io.ByteArrayInputStream;
 
 public class DSABench {
     public static void main(String args[]) {
@@ -47,14 +48,13 @@ public class DSABench {
         long maxV = 0;
         long minV = 0;
         Object[] keys = KeyGenerator.getInstance().generateSigningKeypair();
-        byte[] message = new byte[32+32];
-        for (int i = 0; i < message.length; i++)
-            message[i] = (byte)((i%26)+'a');
+        byte[] message = new byte[32 + 32];
+        for (int i = 0; i < message.length; i++) message[i] = (byte) ((i % 26) + 'a');
         for (int x = 0; x < times; x++) {
             long startkeys = System.currentTimeMillis();
             keys = KeyGenerator.getInstance().generateSigningKeypair();
-            SigningPublicKey pubkey = (SigningPublicKey)keys[0];
-            SigningPrivateKey privkey = (SigningPrivateKey)keys[1];
+            SigningPublicKey pubkey = (SigningPublicKey) keys[0];
+            SigningPrivateKey privkey = (SigningPrivateKey) keys[1];
             long endkeys = System.currentTimeMillis();
             long startsign = System.currentTimeMillis();
             Signature s = DSAEngine.getInstance().sign(message, privkey);
@@ -72,8 +72,7 @@ public class DSABench {
             if (!v) {
                 throw new RuntimeException("Holy crap, did not verify");
             }
-            if (!(v1 && v2 && v3))
-                throw new RuntimeException("Stream did not verify");
+            if (!(v1 && v2 && v3)) throw new RuntimeException("Stream did not verify");
             if ((minKey == 0) && (minS == 0) && (minV == 0)) {
                 minKey = endkeys - startkeys;
                 maxKey = endkeys - startkeys;
@@ -91,8 +90,8 @@ public class DSABench {
             }
         }
         System.out.println();
-        System.out.println("Key Generation Time Average: " + (keygentime/times) + "\ttotal: " + keygentime + "\tmin: " + minKey + "\tmax: " + maxKey  + "\tKeygen/second: " + (keygentime == 0 ? "NaN" : ""+(times*1000)/keygentime));
-        System.out.println("Signing Time Average       : " + (signtime/times) + "\ttotal: " + signtime + "\tmin: " + minS + "\tmax: " + maxS + "\tSigning Bps: " + (times*message.length*1000)/signtime);
-        System.out.println("Verification Time Average  : " + (verifytime/times) + "\ttotal: " + verifytime + "\tmin: " + minV + "\tmax: " + maxV + "\tDecryption Bps: " + (times*message.length*1000)/verifytime);
+        System.out.println("Key Generation Time Average: " + (keygentime / times) + "\ttotal: " + keygentime + "\tmin: " + minKey + "\tmax: " + maxKey + "\tKeygen/second: " + (keygentime == 0 ? "NaN" : "" + (times * 1000) / keygentime));
+        System.out.println("Signing Time Average       : " + (signtime / times) + "\ttotal: " + signtime + "\tmin: " + minS + "\tmax: " + maxS + "\tSigning Bps: " + (times * message.length * 1000) / signtime);
+        System.out.println("Verification Time Average  : " + (verifytime / times) + "\ttotal: " + verifytime + "\tmin: " + minV + "\tmax: " + maxV + "\tDecryption Bps: " + (times * message.length * 1000) / verifytime);
     }
 }

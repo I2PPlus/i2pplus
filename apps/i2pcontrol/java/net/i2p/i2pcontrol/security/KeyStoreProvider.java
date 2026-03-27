@@ -1,5 +1,7 @@
 package net.i2p.i2pcontrol.security;
 
+import net.i2p.crypto.KeyStoreUtil;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -7,7 +9,6 @@ import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.cert.X509Certificate;
-import net.i2p.crypto.KeyStoreUtil;
 
 /**
  * Provider for managing I2PControl keystore operations.
@@ -17,8 +18,8 @@ public class KeyStoreProvider {
     public static final String DEFAULT_CERTIFICATE_ALGORITHM_STRING = "RSA";
     public static final int DEFAULT_CERTIFICATE_KEY_LENGTH = 4096;
     public static final int DEFAULT_CERTIFICATE_VALIDITY = 365 * 10;
-    public final static String DEFAULT_CERTIFICATE_DOMAIN = "localhost";
-    public final static String DEFAULT_CERTIFICATE_ALIAS = "I2PControl CA";
+    public static final String DEFAULT_CERTIFICATE_DOMAIN = "localhost";
+    public static final String DEFAULT_CERTIFICATE_ALIAS = "I2PControl CA";
     public static final String DEFAULT_KEYSTORE_NAME = "i2pcontrol.ks";
     public static final String DEFAULT_KEYSTORE_PASSWORD = KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD;
     public static final String DEFAULT_CERTIFICATE_PASSWORD = "nut'nfancy";
@@ -30,15 +31,7 @@ public class KeyStoreProvider {
     }
 
     public void initialize() {
-        KeyStoreUtil.createKeys(new File(getKeyStoreLocation()),
-                                DEFAULT_KEYSTORE_PASSWORD,
-                                DEFAULT_CERTIFICATE_ALIAS,
-                                DEFAULT_CERTIFICATE_DOMAIN,
-                                "i2pcontrol",
-                                DEFAULT_CERTIFICATE_VALIDITY,
-                                DEFAULT_CERTIFICATE_ALGORITHM_STRING,
-                                DEFAULT_CERTIFICATE_KEY_LENGTH,
-                                DEFAULT_CERTIFICATE_PASSWORD);
+        KeyStoreUtil.createKeys(new File(getKeyStoreLocation()), DEFAULT_KEYSTORE_PASSWORD, DEFAULT_CERTIFICATE_ALIAS, DEFAULT_CERTIFICATE_DOMAIN, "i2pcontrol", DEFAULT_CERTIFICATE_VALIDITY, DEFAULT_CERTIFICATE_ALGORITHM_STRING, DEFAULT_CERTIFICATE_KEY_LENGTH, DEFAULT_CERTIFICATE_PASSWORD);
     }
 
     /**
@@ -93,7 +86,10 @@ public class KeyStoreProvider {
             } catch (Exception e) {
                 // Ignore. Not an issue. Let's just create a new keystore instead.
             } finally {
-                if (is != null) try { is.close(); } catch (IOException ioe) {}
+                if (is != null) try {
+                        is.close();
+                    } catch (IOException ioe) {
+                    }
             }
             return null;
         } else {

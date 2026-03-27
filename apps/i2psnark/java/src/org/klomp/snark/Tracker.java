@@ -34,7 +34,6 @@ public class Tracker {
         this.name = name;
         this.announceURL = announceURL;
         this.baseURL = baseURL;
-        this.supportsDetails =
-                name.contains("tracker2.postman.i2p") || name.contains("torrfreedom.i2p");
+        this.supportsDetails = name.contains("tracker2.postman.i2p") || name.contains("torrfreedom.i2p");
     }
 }

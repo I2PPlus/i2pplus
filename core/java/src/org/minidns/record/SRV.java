@@ -10,11 +10,12 @@
  */
 package org.minidns.record;
 
+import org.minidns.dnsname.DnsName;
+import org.minidns.record.Record.TYPE;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import org.minidns.dnsname.DnsName;
-import org.minidns.record.Record.TYPE;
 
 /**
  * DNS SRV (Service) record payload for service discovery.<br>
@@ -49,11 +50,9 @@ public class SRV extends Data implements Comparable<SRV> {
      *
      * @deprecated use {@link #target} instead.
      */
-    @Deprecated
-    public final DnsName name;
+    @Deprecated public final DnsName name;
 
-    public static SRV parse(DataInputStream dis, byte[] data)
-        throws IOException {
+    public static SRV parse(DataInputStream dis, byte[] data) throws IOException {
         int priority = dis.readUnsignedShort();
         int weight = dis.readUnsignedShort();
         int port = dis.readUnsignedShort();

@@ -24,10 +24,8 @@ class TunnelGatewayZeroHop extends TunnelGateway {
     public TunnelGatewayZeroHop(RouterContext context, TunnelCreatorConfig config) {
         super(context, null, null, null);
         _config = config;
-        if (config.isInbound())
-            _inDistributor = new InboundMessageDistributor(context, config.getDestination());
-        else
-            _outDistributor = new OutboundMessageDistributor(context, OutNetMessage.PRIORITY_MY_DATA);
+        if (config.isInbound()) _inDistributor = new InboundMessageDistributor(context, config.getDestination());
+        else _outDistributor = new OutboundMessageDistributor(context, OutNetMessage.PRIORITY_MY_DATA);
     }
 
     /**
@@ -48,10 +46,8 @@ class TunnelGatewayZeroHop extends TunnelGateway {
                     UnknownI2NPMessage umsg = (UnknownI2NPMessage) imsg;
                     imsg = umsg.convert();
                 } catch (I2NPMessageException ime) {
-                    if (_log.shouldDebug())
-                        _log.debug("Unable to convert to standard message class at zero-hop IBGW", ime);
-                    else if (_log.shouldInfo())
-                        _log.info("Unable to convert to standard message class at zero-hop IBGW \n* Reason: " + ime.getMessage());
+                    if (_log.shouldDebug()) _log.debug("Unable to convert to standard message class at zero-hop IBGW", ime);
+                    else if (_log.shouldInfo()) _log.info("Unable to convert to standard message class at zero-hop IBGW \n* Reason: " + ime.getMessage());
                     return;
                 }
             }
@@ -70,11 +66,7 @@ class TunnelGatewayZeroHop extends TunnelGateway {
      */
     @Override
     public void add(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
-        if (_log.shouldDebug())
-            _log.debug("Zero hop gateway: distribute" + (_config.isInbound() ? "Inbound" : " Outbound")
-                       + " to [" + (toRouter != null ? toRouter.toBase64().substring(0,6) + "]" : "")
-                       + " " + (toTunnel != null ? toTunnel.getTunnelId() + "" : "")
-                       + " " + msg);
+        if (_log.shouldDebug()) _log.debug("Zero hop gateway: distribute" + (_config.isInbound() ? "Inbound" : " Outbound") + " to [" + (toRouter != null ? toRouter.toBase64().substring(0, 6) + "]" : "") + " " + (toTunnel != null ? toTunnel.getTunnelId() + "" : "") + " " + msg);
         if (_config.isInbound()) {
             _inDistributor.distribute(msg, toRouter, toTunnel);
         } else {

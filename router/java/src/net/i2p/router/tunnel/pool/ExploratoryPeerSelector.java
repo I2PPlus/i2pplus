@@ -1,6 +1,7 @@
 package net.i2p.router.tunnel.pool;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import net.i2p.data.Hash;
@@ -13,7 +14,6 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.ArraySet;
 import net.i2p.util.SystemVersion;
-import java.util.Collections;
 
 /**
  * Pick peers randomly out of the not-failing pool, and put them into a tunnel
@@ -23,7 +23,9 @@ import java.util.Collections;
 class ExploratoryPeerSelector extends TunnelPeerSelector {
 
     private static String formatExcludedPeers(Set<Hash> peers) {
-        if (peers == null || peers.isEmpty()) {return "[no exclusions]";}
+        if (peers == null || peers.isEmpty()) {
+            return "[no exclusions]";
+        }
         StringBuilder sb = new StringBuilder(peers.size() * 10);
         int count = 0;
         for (Hash h : peers) {
@@ -55,8 +57,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
     public List<Hash> selectPeers(TunnelPoolSettings settings) {
         int length = getLength(settings);
         if (length < 0) {
-            if (log.shouldDebug())
-                log.debug("Tunnel length requested is zero: " + settings);
+            if (log.shouldDebug()) log.debug("Tunnel length requested is zero: " + settings);
             return Collections.emptyList();
         }
 
@@ -73,13 +74,15 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         // for these cases, check the closest hop up front,
         // otherwise, will be done in checkTunnel() at the end
         boolean checkClosestHop = v6Only || ntcpDisabled || ssuDisabled;
-        boolean hidden = nonzero && (ctx.router().isHidden() ||
-                                     ctx.router().getRouterInfo().getAddressCount() <= 0 ||
-                                     !ctx.commSystem().haveInboundCapacity(95));
+        boolean hidden = nonzero
+                && (ctx.router().isHidden()
+                        || ctx.router().getRouterInfo().getAddressCount() <= 0
+                        || !ctx.commSystem().haveInboundCapacity(95));
         boolean hiddenInbound = hidden && isInbound;
         boolean hiddenOutbound = hidden && !isInbound;
         boolean lowOutbound = nonzero && !isInbound && !ctx.commSystem().haveHighOutboundCapacity();
-        int ipRestriction =  (ctx.getBooleanProperty("i2np.allowLocal") || length <= 1) ? 0 : settings.getIPRestriction();
+        int ipRestriction =
+                (ctx.getBooleanProperty("i2np.allowLocal") || length <= 1) ? 0 : settings.getIPRestriction();
         MaskedIPSet ipSet = ipRestriction > 0 ? new MaskedIPSet(ipRestriction) : null;
 
         ArrayList<Hash> rv = new ArrayList<>(length + 3);
@@ -112,20 +115,20 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
 
                 if (closest.isEmpty() && ctx.commSystem().getEstablished().isEmpty()) {
                     if (log.shouldWarn()) {
-                        log.warn("Firewalled router with no established connections -> Allowing 0-hop exploratory tunnel...");
+                        log.warn("Firewalled router with no established connections -> Allowing 0-hop exploratory"
+                                + " tunnel...");
                     }
                     return new ArrayList<Hash>(1); // Empty list = 0-hop tunnel
                 }
             } else if (exploreHighCap) {
-                if (log.shouldInfo())
-                    log.info("EPS SHCP closest " + (isInbound ? "IB " : "OB ") + closestExclude);
+                if (log.shouldInfo()) log.info("EPS SHCP closest " + (isInbound ? "IB " : "OB ") + closestExclude);
                 ctx.profileOrganizer().selectHighCapacityPeers(1, closestExclude, closest, ipRestriction, ipSet);
             } else {
-                if (log.shouldInfo())
-                    log.info("EPS SANFP closest " + (isInbound ? "IB " : "OB ") + closestExclude);
+                if (log.shouldInfo()) log.info("EPS SANFP closest " + (isInbound ? "IB " : "OB ") + closestExclude);
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, closestExclude, closest, ipRestriction, ipSet);
                 if (closest.isEmpty()) {
-                    ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet);
+                    ctx.profileOrganizer()
+                            .selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet);
                 }
             }
             if (!closest.isEmpty()) {
@@ -150,9 +153,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             TunnelPoolSettings tps = tp.getSettings();
             int len = tps.getLength();
             boolean pickFurthest = true;
-            if (len <= 0 ||
-                tps.getLengthOverride() == 0 ||
-                len + tps.getLengthVariance() <= 0) {
+            if (len <= 0 || tps.getLengthOverride() == 0 || len + tps.getLengthVariance() <= 0) {
                 // leave it true
             } else {
                 for (TunnelInfo ti : tp.listTunnels()) {
@@ -164,13 +165,11 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             }
             if (pickFurthest) {
                 ArraySet<Hash> furthest = new ArraySet<Hash>(1);
-                if (log.shouldInfo())
-                    log.info("EPS SANFP OBEP exclude " + formatExcludedPeers(exclude));
+                if (log.shouldInfo()) log.info("EPS SANFP OBEP exclude " + formatExcludedPeers(exclude));
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, exclude, furthest, ipRestriction, ipSet);
                 if (furthest.isEmpty()) {
                     // ANFP does not fall back to non-connected
-                    if (log.shouldInfo())
-                        log.info("EPS SFP OBEP exclude " + formatExcludedPeers(exclude));
+                    if (log.shouldInfo()) log.info("EPS SFP OBEP exclude " + formatExcludedPeers(exclude));
                     ctx.profileOrganizer().selectFastPeers(1, exclude, furthest, ipRestriction, ipSet);
                 }
                 if (!furthest.isEmpty()) {
@@ -192,8 +191,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 // As of 0.9.23, we include a max of 2 not failing peers,
                 // to improve build success on 3-hop tunnels.
                 // Peer org credits existing items in matches
-                if (length > 2)
-                    ctx.profileOrganizer().selectHighCapacityPeers(length - 2, exclude, matches);
+                if (length > 2) ctx.profileOrganizer().selectHighCapacityPeers(length - 2, exclude, matches);
                 // select will check both matches and exclude, no need to add matches to exclude here
                 if (log.shouldInfo())
                     log.info("EPS SNFP " + length + (isInbound ? " IB " : " OB ") + formatExcludedPeers(exclude));
@@ -210,37 +208,28 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             log.info("EPS " + length + (isInbound ? " IB " : " OB ") + "final: " + formatExcludedPeers(exclude));
 
         if (closestHop != null) {
-            if (isInbound)
-                rv.add(0, closestHop);
-            else
-                rv.add(closestHop);
+            if (isInbound) rv.add(0, closestHop);
+            else rv.add(closestHop);
             length++;
         }
         if (furthestHop != null) {
             // always OBEP for now, nothing special for IBGW
-            if (isInbound)
-                rv.add(furthestHop);
-            else
-                rv.add(0, furthestHop);
+            if (isInbound) rv.add(furthestHop);
+            else rv.add(0, furthestHop);
             length++;
         }
-        if (rv.size() > 1)
-            orderPeers(rv, settings.getRandomKey());
-        //if (length != rv.size() && log.shouldWarn())
+        if (rv.size() > 1) orderPeers(rv, settings.getRandomKey());
+        // if (length != rv.size() && log.shouldWarn())
         //    log.warn("EPS requested " + length + " got " + rv.size() + ": " + DataHelper.toString(rv));
-        //else if (log.shouldDebug())
+        // else if (log.shouldDebug())
         //    log.debug("EPS result: " + DataHelper.toString(rv));
-        if (isInbound)
-            rv.add(0, ctx.routerHash());
-        else
-            rv.add(ctx.routerHash());
+        if (isInbound) rv.add(0, ctx.routerHash());
+        else rv.add(ctx.routerHash());
 
         if (rv.size() > 1) {
-            if (!checkTunnel(isInbound, true, rv))
-                rv = null;
+            if (!checkTunnel(isInbound, true, rv)) rv = null;
         }
-        if (isInbound && rv != null && rv.size() > 1)
-            ctx.commSystem().exemptIncoming(rv.get(1));
+        if (isInbound && rv != null && rv.size() > 1) ctx.commSystem().exemptIncoming(rv.get(1));
         return rv;
     }
 
@@ -255,8 +244,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
      *  is maintained.
      */
     private boolean shouldPickHighCap() {
-        if (ctx.getBooleanProperty("router.exploreHighCapacity"))
-            return true;
+        if (ctx.getBooleanProperty("router.exploreHighCapacity")) return true;
 
         // If we don't have enough connected peers, use exploratory
         // tunnel building to get us better-connected.
@@ -265,23 +253,18 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         // will decline also, as we repeatedly try to build tunnels
         // through the same few peers.
         int active = ctx.commSystem().countActivePeers();
-        if (active < MIN_ACTIVE_PEERS_STARTUP)
-            return false;
+        if (active < MIN_ACTIVE_PEERS_STARTUP) return false;
 
         // no need to explore too wildly at first (if we have enough connected peers)
         long uptime = ctx.router().getUptime();
-        if (uptime <= (SystemVersion.isAndroid() ? 15*60*1000 : 5*60*1000))
-            return true;
+        if (uptime <= (SystemVersion.isAndroid() ? 15 * 60 * 1000 : 5 * 60 * 1000)) return true;
         // wait for first expiration of old RIs, if we had a long downtime
-        if (uptime <= 61*60*1000 && ctx.router().getEstimatedDowntime() > 3*24*60*60*1000L)
-            return true;
+        if (uptime <= 61 * 60 * 1000 && ctx.router().getEstimatedDowntime() > 3 * 24 * 60 * 60 * 1000L) return true;
         // or at the end
-        if (ctx.router().gracefulShutdownInProgress())
-            return true;
+        if (ctx.router().gracefulShutdownInProgress()) return true;
 
         // see above
-        if (active < MIN_ACTIVE_PEERS)
-            return false;
+        if (active < MIN_ACTIVE_PEERS) return false;
 
         // ok, if we aren't explicitly asking for it, we should try to pick peers
         // randomly from the 'not failing' pool.  However, if we are having a
@@ -289,21 +272,19 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         // high capacity peers, at least for a little bit.
         int failPct;
         // getEvents() will be 0 for first 10 minutes
-        if (uptime <= 11*60*1000) {
+        if (uptime <= 11 * 60 * 1000) {
             failPct = 100 - MIN_NONFAILING_PCT;
         } else {
             // If well connected or ff, don't pick from high cap
             // even during congestion, because congestion starts from the top
-            if (active > 500 || ctx.netDb().floodfillEnabled())
-                return false;
+            if (active > 500 || ctx.netDb().floodfillEnabled()) return false;
 
             failPct = getExploratoryFailPercentage();
-            //Log l = ctx.logManager().getLog(getClass());
-            //if (l.shouldLog(Log.DEBUG))
+            // Log l = ctx.logManager().getLog(getClass());
+            // if (l.shouldLog(Log.DEBUG))
             //    l.debug("Normalized Fail pct: " + failPct);
             // always try a little, this helps keep the failPct stat accurate too
-            if (failPct > 100 - MIN_NONFAILING_PCT)
-                failPct = 100 - MIN_NONFAILING_PCT;
+            if (failPct > 100 - MIN_NONFAILING_PCT) failPct = 100 - MIN_NONFAILING_PCT;
         }
         return (failPct >= ctx.random().nextInt(100));
     }
@@ -322,36 +303,32 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
     private int getExploratoryFailPercentage() {
         int c = getFailPercentage("Client");
         int e = getFailPercentage("Exploratory");
-        //Log l = ctx.logManager().getLog(getClass());
-        //if (l.shouldDebug())
+        // Log l = ctx.logManager().getLog(getClass());
+        // if (l.shouldDebug())
         //    l.debug("Client, Expl. Fail pct: " + c + ", " + e);
-        if (e <= c || e <= 25) // doing very well (unlikely)
-            return 0;
+        // doing very well (unlikely)
+        if (e <= c || e <= 25) return 0;
         // Doing very badly? This is important to prevent network congestion collapse
-        if (c >= 70 || e >= 75)
-            return 100 - MIN_NONFAILING_PCT;
-        return (100 * (e-c)) / (100-c);
+        if (c >= 70 || e >= 75) return 100 - MIN_NONFAILING_PCT;
+        return (100 * (e - c)) / (100 - c);
     }
 
     private int getFailPercentage(String t) {
         String pfx = "tunnel.build" + t;
-        int timeout = getEvents(pfx + "Expire", 10*60*1000);
-        int reject = getEvents(pfx + "Reject", 10*60*1000);
-        int accept = getEvents(pfx + "Success", 10*60*1000);
-        if (accept + reject + timeout <= 0)
-            return 0;
-        double pct = (double)(reject + timeout) / (accept + reject + timeout);
-        return (int)(100 * pct);
+        int timeout = getEvents(pfx + "Expire", 10 * 60 * 1000);
+        int reject = getEvents(pfx + "Reject", 10 * 60 * 1000);
+        int accept = getEvents(pfx + "Success", 10 * 60 * 1000);
+        if (accept + reject + timeout <= 0) return 0;
+        double pct = (double) (reject + timeout) / (accept + reject + timeout);
+        return (int) (100 * pct);
     }
 
     /** Use current + last to get more recent and smoother data */
     private int getEvents(String stat, long period) {
         RateStat rs = ctx.statManager().getRate(stat);
-        if (rs == null)
-            return 0;
+        if (rs == null) return 0;
         Rate r = rs.getRate(period);
-        if (r == null)
-            return 0;
+        if (r == null) return 0;
         return (int) (r.computeAverages().getTotalEventCount());
     }
 }

@@ -21,6 +21,11 @@
 
 package net.i2p.addressbook;
 
+import net.i2p.I2PAppContext;
+import net.i2p.client.naming.HostTxtEntry;
+import net.i2p.util.EepGet;
+import net.i2p.util.SecureFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
@@ -28,10 +33,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Pattern;
-import net.i2p.I2PAppContext;
-import net.i2p.client.naming.HostTxtEntry;
-import net.i2p.util.EepGet;
-import net.i2p.util.SecureFile;
 
 /**
  * An address book for storing human readable names mapped to base64 i2p
@@ -46,15 +47,17 @@ import net.i2p.util.SecureFile;
 class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
 
     private final String location;
+
     /** either addresses or subFile will be non-null, but not both */
     private final Map<String, HostTxtEntry> addresses;
+
     private final File subFile;
     private boolean modified;
     private static final boolean DEBUG = false;
     private static final net.i2p.util.Log _log = new net.i2p.util.Log(AddressBook.class);
 
     private static final int MIN_DEST_LENGTH = 516;
-    private static final int MAX_DEST_LENGTH = MIN_DEST_LENGTH + 100;  // longer than any known cert type for now
+    private static final int MAX_DEST_LENGTH = MIN_DEST_LENGTH + 100; // longer than any known cert type for now
 
     /**
      * 5-67 chars lower/upper case
@@ -113,8 +116,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
             if (loc.startsWith("http://i2p-projekt.i2p/") && etag != null && etag.endsWith("-gzip\"")) {
                 etag = etag.substring(0, etag.length() - 6) + '"'; // Strip -gzip from the etag
             }
-            EepGet get = new EepGet(I2PAppContext.getGlobalContext(), true, proxyHost, proxyPort, 10, -1L, MAX_SUB_SIZE,
-                                    tmp.getAbsolutePath(), null, loc, true, etag, subscription.getLastModified(), null);
+            EepGet get = new EepGet(I2PAppContext.getGlobalContext(), true, proxyHost, proxyPort, 10, -1L, MAX_SUB_SIZE, tmp.getAbsolutePath(), null, loc, true, etag, subscription.getLastModified(), null);
             if (get.fetch()) {
                 subscription.setEtag(get.getEtag());
                 subscription.setLastModified(get.getLastModified());
@@ -125,9 +127,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
                 boolean hasLastMod = get.getLastModified() != null;
                 boolean hasEtag = get.getEtag() != null;
                 if (_log.shouldInfo()) {
-                    _log.info("Checking [" + loc.replace("http://", "") + "] -> " +
-                              (hasLastMod ? "Last modified: " + lastMod : hasEtag ? "ETag: " +
-                              eTag : "No ETag or Last Modified headers"));
+                    _log.info("Checking [" + loc.replace("http://", "") + "] -> " + (hasLastMod ? "Last modified: " + lastMod : hasEtag ? "ETag: " + eTag : "No ETag or Last Modified headers"));
                 }
                 a = Collections.emptyMap(); // Addresses not loaded here, so keep empty map
             } else {
@@ -158,8 +158,11 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
     public AddressBook(File file) {
         this.location = file.toString();
         Map<String, HostTxtEntry> a;
-        try {a = HostTxtParser.parse(file);}
-        catch (IOException exp) {a = new HashMap<String, HostTxtEntry>();}
+        try {
+            a = HostTxtParser.parse(file);
+        } catch (IOException exp) {
+            a = new HashMap<String, HostTxtEntry>();
+        }
         this.addresses = a;
         this.subFile = null;
     }
@@ -183,8 +186,11 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
     @Override
     public Iterator<Map.Entry<String, HostTxtEntry>> iterator() {
         if (this.subFile != null) {
-            try {return new HostTxtIterator(this.subFile);}
-            catch (IOException ioe) {return new HostTxtIterator();}
+            try {
+                return new HostTxtIterator(this.subFile);
+            } catch (IOException ioe) {
+                return new HostTxtIterator();
+            }
         }
         return this.addresses.entrySet().iterator();
     }
@@ -196,10 +202,10 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
     public void delete() {
         if (this.subFile != null) {
             this.subFile.delete();
-        }
-        else if (this.addresses != null) {
-            try {this.addresses.clear();}
-            catch (UnsupportedOperationException uoe) {
+        } else if (this.addresses != null) {
+            try {
+                this.addresses.clear();
+            } catch (UnsupportedOperationException uoe) {
                 // Clearing not supported, ignore
             }
         }
@@ -212,7 +218,9 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      *         depending on how the instance was constructed.
      *         Will be null if created with the Map constructor.
      */
-    public String getLocation() {return this.location;}
+    public String getLocation() {
+        return this.location;
+    }
 
     /**
      * Return a string representation of the origin of the AddressBook.
@@ -257,14 +265,14 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
         }
 
         // Check reserved exact names and reserved suffixes
-        String[] reservedExact = { "proxy.i2p", "router.i2p", "console.i2p", "b32.i2p" };
+        String[] reservedExact = {"proxy.i2p", "router.i2p", "console.i2p", "b32.i2p"};
         for (String res : reservedExact) {
             if (host.equals(res)) {
                 return false;
             }
         }
 
-        String[] reservedSuffixes = { ".proxy.i2p", ".router.i2p", ".console.i2p", ".b32.i2p" };
+        String[] reservedSuffixes = {".proxy.i2p", ".router.i2p", ".console.i2p", ".b32.i2p"};
         for (String suffix : reservedSuffixes) {
             if (host.endsWith(suffix)) {
                 return false;
@@ -290,7 +298,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      */
     private static boolean isValidDest(String dest) {
         if (dest == null) {
-            return false;  // Defensive null check
+            return false; // Defensive null check
         }
 
         final int len = dest.length();
@@ -335,8 +343,9 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
             throw new IllegalStateException();
         }
         Iterator<Map.Entry<String, HostTxtEntry>> iter = other.iterator();
-        try {merge2(other, iter, overwrite, log);}
-        finally {
+        try {
+            merge2(other, iter, overwrite, log);
+        } finally {
             if (iter instanceof HostTxtIterator) {
                 ((HostTxtIterator) iter).close();
             }
@@ -352,8 +361,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
             if (isValidKey(otherKey) && isValidDest(otherValue.getDest())) {
                 if (this.addresses.containsKey(otherKey) && !overwrite) {
                     if (DEBUG && log != null && !this.addresses.get(otherKey).equals(otherValue.getDest())) {
-                        log.append("Conflict for " + otherKey + " from " + other.location +
-                                   ". Destination in remote address book is " + otherValue);
+                        log.append("Conflict for " + otherKey + " from " + other.location + ". Destination in remote address book is " + otherValue);
                     }
                 } else if (!this.addresses.containsKey(otherKey) || !this.addresses.get(otherKey).equals(otherValue)) {
                     this.addresses.put(otherKey, otherValue);
@@ -379,8 +387,9 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
             throw new IllegalStateException();
         }
         if (this.modified) {
-            try {HostTxtParser.write(this.addresses, file);}
-            catch (IOException exp) {
+            try {
+                HostTxtParser.write(this.addresses, file);
+            } catch (IOException exp) {
                 _log.error("Error writing addressbook " + file.getAbsolutePath(), exp);
             }
         }
@@ -399,5 +408,4 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
         }
         this.write(new File(this.location));
     }
-
 }

@@ -10,6 +10,10 @@
  */
 package org.minidns.record;
 
+import org.minidns.dnsmessage.DnsMessage;
+import org.minidns.dnsmessage.Question;
+import org.minidns.dnsname.DnsName;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -20,9 +24,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.minidns.dnsmessage.DnsMessage;
-import org.minidns.dnsmessage.Question;
-import org.minidns.dnsname.DnsName;
 
 /**
  * A generic DNS record.
@@ -239,8 +240,7 @@ public final class Record<D extends Data> {
          * Internal reverse lookup table to map binary class values to symbolic
          * names.
          */
-        private static final HashMap<Integer, CLASS> INVERSE_LUT =
-                                            new HashMap<Integer, CLASS>();
+        private static final HashMap<Integer, CLASS> INVERSE_LUT = new HashMap<Integer, CLASS>();
 
         static {
             // Initialize the interal reverse lookup table.
@@ -278,7 +278,6 @@ public final class Record<D extends Data> {
         public static CLASS getClass(int value) {
             return INVERSE_LUT.get(value);
         }
-
     }
 
     /**
@@ -335,74 +334,52 @@ public final class Record<D extends Data> {
         int clazzValue = dis.readUnsignedShort();
         CLASS clazz = CLASS.getClass(clazzValue & 0x7fff);
         boolean unicastQuery = (clazzValue & 0x8000) > 0;
-        long ttl = (((long) dis.readUnsignedShort()) << 16) +
-                   dis.readUnsignedShort();
+        long ttl = (((long) dis.readUnsignedShort()) << 16) + dis.readUnsignedShort();
         int payloadLength = dis.readUnsignedShort();
         Data payloadData;
         switch (type) {
-            case SOA:
-                payloadData = SOA.parse(dis, data);
+            case SOA: payloadData = SOA.parse(dis, data);
                 break;
-            case SRV:
-                payloadData = SRV.parse(dis, data);
+            case SRV: payloadData = SRV.parse(dis, data);
                 break;
-            case MX:
-                payloadData = MX.parse(dis, data);
+            case MX: payloadData = MX.parse(dis, data);
                 break;
-            case AAAA:
-                payloadData = AAAA.parse(dis);
+            case AAAA: payloadData = AAAA.parse(dis);
                 break;
-            case A:
-                payloadData = A.parse(dis);
+            case A: payloadData = A.parse(dis);
                 break;
-            case NS:
-                payloadData = NS.parse(dis, data);
+            case NS: payloadData = NS.parse(dis, data);
                 break;
-            case CNAME:
-                payloadData = CNAME.parse(dis, data);
+            case CNAME: payloadData = CNAME.parse(dis, data);
                 break;
-            case DNAME:
-                payloadData = DNAME.parse(dis, data);
+            case DNAME: payloadData = DNAME.parse(dis, data);
                 break;
-            case PTR:
-                payloadData = PTR.parse(dis, data);
+            case PTR: payloadData = PTR.parse(dis, data);
                 break;
-            case TXT:
-                payloadData = TXT.parse(dis, payloadLength);
+            case TXT: payloadData = TXT.parse(dis, payloadLength);
                 break;
-            case OPT:
-                payloadData = OPT.parse(dis, payloadLength);
+            case OPT: payloadData = OPT.parse(dis, payloadLength);
                 break;
-            case DNSKEY:
-                payloadData = DNSKEY.parse(dis, payloadLength);
+            case DNSKEY: payloadData = DNSKEY.parse(dis, payloadLength);
                 break;
-            case RRSIG:
-                payloadData = RRSIG.parse(dis, data, payloadLength);
+            case RRSIG: payloadData = RRSIG.parse(dis, data, payloadLength);
                 break;
-            case DS:
-                payloadData = DS.parse(dis, payloadLength);
+            case DS: payloadData = DS.parse(dis, payloadLength);
                 break;
-            case NSEC:
-                payloadData = NSEC.parse(dis, data, payloadLength);
+            case NSEC: payloadData = NSEC.parse(dis, data, payloadLength);
                 break;
-            case NSEC3:
-                payloadData = NSEC3.parse(dis, payloadLength);
+            case NSEC3: payloadData = NSEC3.parse(dis, payloadLength);
                 break;
-            case NSEC3PARAM:
-                payloadData = NSEC3PARAM.parse(dis);
+            case NSEC3PARAM: payloadData = NSEC3PARAM.parse(dis);
                 break;
-            case TLSA:
-                payloadData = TLSA.parse(dis, payloadLength);
+            case TLSA: payloadData = TLSA.parse(dis, payloadLength);
                 break;
-            case OPENPGPKEY:
-                payloadData = OPENPGPKEY.parse(dis, payloadLength);
+            case OPENPGPKEY: payloadData = OPENPGPKEY.parse(dis, payloadLength);
                 break;
-            case DLV:
-                payloadData = DLV.parse(dis, payloadLength);
+            case DLV: payloadData = DLV.parse(dis, payloadLength);
                 break;
             case UNKNOWN:
-            default:
-                payloadData = UNKNOWN.parse(dis, payloadLength, type);
+            default: payloadData = UNKNOWN.parse(dis, payloadLength, type);
                 break;
         }
         return new Record<>(name, type, clazz, clazzValue, ttl, payloadData, unicastQuery);
@@ -454,9 +431,8 @@ public final class Record<D extends Data> {
 
     public byte[] toByteArray() {
         if (bytes == null) {
-            int totalSize = name.size()
-                    + 10 // 2 byte short type + 2 byte short classValue + 4 byte int ttl + 2 byte short payload length.
-                    + payloadData.length();
+            int totalSize = name.size() + 10 // 2 byte short type + 2 byte short classValue + 4 byte int ttl + 2 byte short payload length.
+                            + payloadData.length();
             ByteArrayOutputStream baos = new ByteArrayOutputStream(totalSize);
             DataOutputStream dos = new DataOutputStream(baos);
             try {
@@ -485,9 +461,7 @@ public final class Record<D extends Data> {
      * @return True if this record is a valid answer.
      */
     public boolean isAnswer(Question q) {
-        return ((q.type == type) || (q.type == TYPE.ANY)) &&
-               ((q.clazz == clazz) || (q.clazz == CLASS.ANY)) &&
-               q.name.equals(name);
+        return ((q.type == type) || (q.type == TYPE.ANY)) && ((q.clazz == clazz) || (q.clazz == CLASS.ANY)) && q.name.equals(name);
     }
 
     /**
@@ -523,13 +497,11 @@ public final class Record<D extends Data> {
     public Question getQuestion() {
         switch (type) {
             case OPT:
-            // OPT records are not retrievable.
+                // OPT records are not retrievable.
                 return null;
-            case RRSIG:
-                RRSIG rrsig = (RRSIG) payloadData;
+            case RRSIG: RRSIG rrsig = (RRSIG) payloadData;
                 return new Question(name, rrsig.typeCovered, clazz);
-            default:
-                return new Question(name, type, clazz);
+            default: return new Question(name, type, clazz);
         }
     }
 
@@ -609,19 +581,16 @@ public final class Record<D extends Data> {
         return eRecord;
     }
 
-    public static <E extends Data> void filter(Collection<Record<E>> result, Class<E> dataClass,
-            Collection<Record<? extends Data>> input) {
+    public static <E extends Data> void filter(Collection<Record<E>> result, Class<E> dataClass, Collection<Record<? extends Data>> input) {
         for (Record<? extends Data> record : input) {
             Record<E> filteredRecord = record.ifPossibleAs(dataClass);
-            if (filteredRecord == null)
-                continue;
+            if (filteredRecord == null) continue;
 
             result.add(filteredRecord);
         }
     }
 
-    public static <E extends Data> List<Record<E>> filter(Class<E> dataClass,
-            Collection<Record<? extends Data>> input) {
+    public static <E extends Data> List<Record<E>> filter(Class<E> dataClass, Collection<Record<? extends Data>> input) {
         List<Record<E>> result = new ArrayList<>(input.size());
         filter(result, dataClass, input);
         return result;

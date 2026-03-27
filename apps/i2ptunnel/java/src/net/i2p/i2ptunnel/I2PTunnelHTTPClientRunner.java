@@ -3,6 +3,9 @@
  */
 package net.i2p.i2ptunnel;
 
+import net.i2p.client.streaming.I2PSocket;
+import net.i2p.util.I2PAppThread;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,8 +14,6 @@ import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
-import net.i2p.client.streaming.I2PSocket;
-import net.i2p.util.I2PAppThread;
 
 /**
  * HTTP client runner that filters response headers to enforce the
@@ -48,13 +49,9 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
      * @param isHead true if responding to an HTTP HEAD request (no body expected)
      * @throws IllegalArgumentException if keep-alive I2P is requested but browser socket keep-alive is disabled
      */
-    public I2PTunnelHTTPClientRunner(Socket s, I2PSocket i2ps, Object slock, byte[] initialI2PData,
-                                     List<I2PSocket> sockList, FailCallback onFail,
-                                     boolean allowKeepAliveI2P, boolean allowKeepAliveSocket,
-                                     boolean isHead) {
+    public I2PTunnelHTTPClientRunner(Socket s, I2PSocket i2ps, Object slock, byte[] initialI2PData, List<I2PSocket> sockList, FailCallback onFail, boolean allowKeepAliveI2P, boolean allowKeepAliveSocket, boolean isHead) {
         super(s, i2ps, slock, initialI2PData, null, sockList, onFail, allowKeepAliveI2P, allowKeepAliveSocket);
-        if (allowKeepAliveI2P && !allowKeepAliveSocket)
-            throw new IllegalArgumentException("Cannot keep I2P alive if browser socket is not kept alive");
+        if (allowKeepAliveI2P && !allowKeepAliveSocket) throw new IllegalArgumentException("Cannot keep I2P alive if browser socket is not kept alive");
         _isHead = isHead;
     }
 
@@ -68,8 +65,7 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
      */
     @Override
     protected OutputStream getSocketOut() throws IOException {
-        if (_hout != null)
-            throw new IllegalStateException("getSocketOut called multiple times");
+        if (_hout != null) throw new IllegalStateException("getSocketOut called multiple times");
         final OutputStream raw = super.getSocketOut();
         _hout = new HTTPResponseOutputStream(raw, super.getKeepAliveI2P(), super.getKeepAliveSocket(), _isHead, this);
         return _hout;
@@ -80,8 +76,10 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
      */
     private void closeQuietly(AutoCloseable resource) {
         if (resource != null) {
-            try {resource.close();}
-            catch (Exception ignored) {}
+            try {
+                resource.close();
+            } catch (Exception ignored) {
+            }
         }
     }
 
@@ -90,17 +88,14 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
      * Optionally closes I2P socket in a background thread if keep-alive is enabled on the browser socket.
      */
     @Override
-    protected void close(OutputStream out, InputStream in, OutputStream i2pout, InputStream i2pin,
-                         Socket s, I2PSocket i2ps, Thread t1, Thread t2) throws InterruptedException {
+    protected void close(OutputStream out, InputStream in, OutputStream i2pout, InputStream i2pin, Socket s, I2PSocket i2ps, Thread t1, Thread t2) throws InterruptedException {
 
         final boolean keepaliveSocket = getKeepAliveSocket();
         final boolean keepaliveI2P = getKeepAliveI2P();
         final boolean threadI2PClose = keepaliveSocket && !keepaliveI2P && i2pout != null && !i2ps.isClosed();
 
         if (_log.shouldDebug()) {
-            _log.debug("Closing HTTPClientRunner: keepaliveI2P=" + keepaliveI2P +
-                       ", keepaliveSocket=" + keepaliveSocket +
-                       ", threadedClose=" + threadI2PClose);
+            _log.debug("Closing HTTPClientRunner: keepaliveI2P=" + keepaliveI2P + ", keepaliveSocket=" + keepaliveSocket + ", threadedClose=" + threadI2PClose);
         }
 
         // Close I2P resources in background if needed
@@ -122,26 +117,40 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
         } else {
             if (!keepaliveI2P) closeQuietly(i2pin);
             try {
-                if (keepaliveI2P) {i2pout.flush();}
-                else {closeQuietly(i2pout);}
-            } catch (IOException ignored) {}
+                if (keepaliveI2P) {
+                    i2pout.flush();
+                } else {
+                    closeQuietly(i2pout);
+                }
+            } catch (IOException ignored) {
+            }
         }
 
         // Close local socket resources
-        if (!keepaliveSocket) {closeQuietly(in);}
+        if (!keepaliveSocket) {
+            closeQuietly(in);
+        }
 
         try {
-            if (keepaliveSocket) {out.flush();}
-            else {
-                if (_hout != null) {_hout.flush();} // Ensure all buffered data is written before closing
+            if (keepaliveSocket) {
+                out.flush();
+            } else {
+                if (_hout != null) {
+                    _hout.flush();
+                } // Ensure all buffered data is written before closing
                 closeQuietly(out);
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
 
         // Final close of I2P socket and browser socket if not kept alive
-        if (!threadI2PClose && !keepaliveI2P) {closeQuietly(i2ps);}
+        if (!threadI2PClose && !keepaliveI2P) {
+            closeQuietly(i2ps);
+        }
 
-        if (!keepaliveSocket) {closeQuietly(s);}
+        if (!keepaliveSocket) {
+            closeQuietly(s);
+        }
 
         // Wait for upstream thread to finish
         if (t1 != null) {

@@ -1,4 +1,5 @@
 package net.i2p.router;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,13 +9,14 @@ package net.i2p.router;
  *
  */
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.router.tunnel.pool.GhostPeerManager;
 import net.i2p.router.tunnel.pool.TunnelPool;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Manages tunnel creation, maintenance, and selection for encrypted routing. Coordinates exploratory and client-specific tunnels for secure message delivery.
@@ -109,18 +111,25 @@ public interface TunnelManagerFacade extends Service {
 
     /** how many tunnels are we participating in? */
     public int getParticipatingCount();
+
     /** how many free inbound tunnels do we have available? */
     public int getFreeTunnelCount();
+
     /** how many outbound tunnels do we have available? */
     public int getOutboundTunnelCount();
+
     /** how many free inbound client tunnels do we have available? */
     public int getInboundClientTunnelCount();
+
     /** how many outbound client tunnels do we have available? */
     public int getOutboundClientTunnelCount();
+
     /** how many outbound client tunnels in this pool? */
     public int getOutboundClientTunnelCount(Hash destination);
+
     /** how many inbound client tunnels in this pool? */
     public int getInboundClientTunnelCount(Hash destination);
+
     public double getShareRatio();
 
     /** When does the last tunnel we are participating in expire? */
@@ -161,21 +170,33 @@ public interface TunnelManagerFacade extends Service {
     public void removeAlias(Destination dest);
 
     public TunnelPoolSettings getInboundSettings();
+
     public TunnelPoolSettings getOutboundSettings();
+
     public TunnelPoolSettings getInboundSettings(Hash client);
+
     public TunnelPoolSettings getOutboundSettings(Hash client);
+
     public void setInboundSettings(TunnelPoolSettings settings);
+
     public void setOutboundSettings(TunnelPoolSettings settings);
+
     public void setInboundSettings(Hash client, TunnelPoolSettings settings);
+
     public void setOutboundSettings(Hash client, TunnelPoolSettings settings);
+
     /** for TunnelRenderer in router console */
     public void listPools(List<TunnelPool> out);
+
     /** for TunnelRenderer in router console */
     public Map<Hash, TunnelPool> getInboundClientPools();
+
     /** for TunnelRenderer in router console */
     public Map<Hash, TunnelPool> getOutboundClientPools();
+
     /** for TunnelRenderer in router console */
     public TunnelPool getInboundExploratoryPool();
+
     /** for TunnelRenderer in router console */
     public TunnelPool getOutboundExploratoryPool();
 

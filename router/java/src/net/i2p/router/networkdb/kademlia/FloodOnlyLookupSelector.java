@@ -38,14 +38,16 @@ class FloodOnlyLookupSelector implements MessageSelector {
     }
 
     @Override
-    public long getExpiration() { return (_matchFound ? -1 : _search.getExpiration()); }
+    public long getExpiration() {
+        return (_matchFound ? -1 : _search.getExpiration());
+    }
 
     @Override
     public boolean isMatch(I2NPMessage message) {
         if (message == null) return false;
         int type = message.getType();
         if (type == DatabaseStoreMessage.MESSAGE_TYPE) {
-            DatabaseStoreMessage dsm = (DatabaseStoreMessage)message;
+            DatabaseStoreMessage dsm = (DatabaseStoreMessage) message;
             // is it worth making sure the reply came in on the right tunnel?
             if (_search.getKey().equals(dsm.getKey())) {
                 _search.decrementRemaining();
@@ -53,30 +55,26 @@ class FloodOnlyLookupSelector implements MessageSelector {
                 return true;
             }
         } else if (type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
-            DatabaseSearchReplyMessage dsrm = (DatabaseSearchReplyMessage)message;
+            DatabaseSearchReplyMessage dsrm = (DatabaseSearchReplyMessage) message;
             if (_search.getKey().equals(dsrm.getSearchKey())) {
 
                 // TODO - dsrm.getFromHash() can't be trusted - check against the list of
                 // those we sent the search to in _search ?
 
                 // assume 0 new, all old, 0 invalid, 0 dup
-                _context.profileManager().dbLookupReply(dsrm.getFromHash(),  0, dsrm.getNumReplies(), 0, 0,
-                                                        System.currentTimeMillis()-_search.getCreated());
+                _context.profileManager().dbLookupReply(dsrm.getFromHash(), 0, dsrm.getNumReplies(), 0, 0, System.currentTimeMillis() - _search.getCreated());
 
                 // Moved from FloodOnlyLookupMatchJob so it is called for all replies
                 // rather than just the last one
                 // Got a netDb reply pointing us at other floodfills...
                 // Only process if we don't know enough floodfills or are starting up
                 if (_search.shouldProcessDSRM()) {
-                    if (_log.shouldInfo())
-                        _log.info("[Job " + _search.getJobId() + "] Processing DbSearchReplyMsg via SingleLookupJob from [" +
-                                  dsrm.getFromHash().toBase64().substring(0,6) + "]");
+                    if (_log.shouldInfo()) _log.info("[Job " + _search.getJobId() + "] Processing DbSearchReplyMsg via SingleLookupJob from [" + dsrm.getFromHash().toBase64().substring(0, 6) + "]");
                     // Chase the hashes from the reply
                     _context.jobQueue().addJob(new SingleLookupJob(_context, dsrm));
                 } else if (_log.shouldInfo()) {
                     int remaining = _search.getLookupsRemaining();
-                    _log.info("[Job " + _search.getJobId() + "] DbSearchReplyMsg from [" + dsrm.getFromHash().toBase64().substring(0,6) + "] while looking for ["
-                              + _search.getKey().toBase64().substring(0,6) + "] with " + remaining + " outstanding searches");
+                    _log.info("[Job " + _search.getJobId() + "] DbSearchReplyMsg from [" + dsrm.getFromHash().toBase64().substring(0, 6) + "] while looking for [" + _search.getKey().toBase64().substring(0, 6) + "] with " + remaining + " outstanding searches");
                 }
 
                 // if no more left, time to fail

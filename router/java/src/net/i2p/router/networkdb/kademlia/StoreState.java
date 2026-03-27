@@ -1,5 +1,10 @@
 package net.i2p.router.networkdb.kademlia;
 
+import net.i2p.data.DatabaseEntry;
+import net.i2p.data.Hash;
+import net.i2p.router.RouterContext;
+import net.i2p.router.networkdb.kademlia.MessageWrapper.WrappedMessage;
+
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,10 +12,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import net.i2p.data.DatabaseEntry;
-import net.i2p.data.Hash;
-import net.i2p.router.RouterContext;
-import net.i2p.router.networkdb.kademlia.MessageWrapper.WrappedMessage;
 
 /**
  * Manages state for network database store operations.
@@ -65,8 +66,13 @@ class StoreState {
         _started = _context.clock().now();
     }
 
-    public Hash getTarget() { return _key; }
-    public DatabaseEntry getData() { return _data; }
+    public Hash getTarget() {
+        return _key;
+    }
+
+    public DatabaseEntry getData() {
+        return _data;
+    }
 
     public int getPendingCount() {
         synchronized (_pendingPeers) {
@@ -106,8 +112,7 @@ class StoreState {
      */
     public Hash getSuccessful() {
         synchronized (_successfulPeers) {
-            if (_successfulPeers.isEmpty())
-                return null;
+            if (_successfulPeers.isEmpty()) return null;
             try {
                 return _successfulPeers.iterator().next();
             } catch (NoSuchElementException nsee) {
@@ -116,15 +121,25 @@ class StoreState {
         }
     }
 
-    public boolean completed() { return _completed != -1; }
-    public void complete(boolean completed) {
-        if (completed && _completed <= 0)
-            _completed = _context.clock().now();
+    public boolean completed() {
+        return _completed != -1;
     }
-    public int getCompleteCount() { return _completeCount; }
 
-    public long getWhenStarted() { return _started; }
-    public long getWhenCompleted() { return _completed; }
+    public void complete(boolean completed) {
+        if (completed && _completed <= 0) _completed = _context.clock().now();
+    }
+
+    public int getCompleteCount() {
+        return _completeCount;
+    }
+
+    public long getWhenStarted() {
+        return _started;
+    }
+
+    public long getWhenCompleted() {
+        return _completed;
+    }
 
     /*
      * @since 0.7.10
@@ -153,8 +168,7 @@ class StoreState {
             _pendingPeerTimes.put(peer, now);
         }
         synchronized (_attemptedPeers) {
-            if (_attemptedPeers.add(peer))
-                _attempted++;
+            if (_attemptedPeers.add(peer)) _attempted++;
         }
     }
 
@@ -170,8 +184,7 @@ class StoreState {
         synchronized (_pendingPeers) {
             _pendingPeers.remove(peer);
             Long when = _pendingPeerTimes.remove(peer);
-            if (when != null)
-                rv = _context.clock().now() - when.longValue();
+            if (when != null) rv = _context.clock().now() - when.longValue();
         }
         synchronized (_successfulPeers) {
             _successfulPeers.add(peer);
@@ -191,17 +204,15 @@ class StoreState {
         StringBuilder buf = new StringBuilder(256);
         buf.append("\n* Storing ").append(_key);
         buf.append(' ');
-        if (_successfulPeers.size() <= 0)
-            buf.append(" - Completed? false ");
-        else
-            buf.append("\n* Completed: ").append(Instant.ofEpochMilli(_completed));
+        if (_successfulPeers.size() <= 0) buf.append(" - Completed? false ");
+        else buf.append("\n* Completed: ").append(Instant.ofEpochMilli(_completed));
         if (_attemptedPeers.size() > 0) {
             buf.append("\n* Queried: ").append(_attempted);
             buf.append("\n* Queried and skipped: ");
             synchronized (_attemptedPeers) {
                 buf.append(_attemptedPeers.size()).append(' ');
                 for (Hash peer : _attemptedPeers) {
-                    buf.append("[").append(peer.toBase64().substring(0,6)).append("] ");
+                    buf.append("[").append(peer.toBase64().substring(0, 6)).append("] ");
                 }
             }
         }
@@ -210,7 +221,7 @@ class StoreState {
             synchronized (_pendingPeers) {
                 buf.append(_pendingPeers.size()).append(' ');
                 for (Hash peer : _pendingPeers) {
-                    buf.append("[").append(peer.toBase64().substring(0,6)).append("] ");
+                    buf.append("[").append(peer.toBase64().substring(0, 6)).append("] ");
                 }
             }
         }

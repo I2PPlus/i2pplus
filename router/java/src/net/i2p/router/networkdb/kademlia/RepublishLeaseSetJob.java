@@ -41,13 +41,13 @@ import net.i2p.util.Log;
  */
 public class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
-    public final static long REPUBLISH_LEASESET_TIMEOUT = 30 * 1000;
-    private final static int RETRY_DELAY = 2000;
-    private final static long REPUBLISH_INTERVAL = 8 * 60 * 1000; // 8 minutes
-    private final static long REPUBLISH_INTERVAL_LOW_SUCCESS = 7 * 60 * 1000; // 7 minutes (build success < 40%)
-    private final static long REPUBLISH_INTERVAL_VERY_LOW_SUCCESS = 6 * 60 * 1000; // 6 minutes (build success < 30%)
-    private final static long REPUBLISH_INTERVAL_CRITICAL = 5 * 60 * 1000; // 5 minutes (build success < 20%)
-    private final static long EXPIRY_WINDOW = 3 * 60 * 1000;
+    public static final long REPUBLISH_LEASESET_TIMEOUT = 30 * 1000;
+    private static final int RETRY_DELAY = 2000;
+    private static final long REPUBLISH_INTERVAL = 8 * 60 * 1000; // 8 minutes
+    private static final long REPUBLISH_INTERVAL_LOW_SUCCESS = 7 * 60 * 1000; // 7 minutes (build success < 40%)
+    private static final long REPUBLISH_INTERVAL_VERY_LOW_SUCCESS = 6 * 60 * 1000; // 6 minutes (build success < 30%)
+    private static final long REPUBLISH_INTERVAL_CRITICAL = 5 * 60 * 1000; // 5 minutes (build success < 20%)
+    private static final long EXPIRY_WINDOW = 3 * 60 * 1000;
     private static final long CACHE_CLEANUP_THRESHOLD = 15 * 60 * 1000;
     private static final ConcurrentHashMap<Hash, Boolean> _retryInProgress = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<Hash, Long> _lastPublishLogTime = new ConcurrentHashMap<>();
@@ -83,7 +83,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         // Check if this job was successfully registered
         if (!_registered) {
             if (_log.shouldWarn()) {
-                _log.warn("Job not registered for [" + _dest.toBase32().substring(0,8) + "] - skipping execution");
+                _log.warn("Job not registered for [" + _dest.toBase32().substring(0, 8) + "] - skipping execution");
             }
             return;
         }
@@ -95,7 +95,8 @@ public class RepublishLeaseSetJob extends JobImpl {
                 if (ls != null) {
                     _facade.fail(_dest);
                     if (_log.shouldDebug()) {
-                        _log.debug("Cleaning up local LeaseSet [" + _dest.toBase32().substring(0,8) + "] on service stop");
+                        _log.debug("Cleaning up local LeaseSet ["
+                                + _dest.toBase32().substring(0, 8) + "] on service stop");
                     }
                 }
                 _facade.stopPublishing(_dest);
@@ -116,7 +117,8 @@ public class RepublishLeaseSetJob extends JobImpl {
                     if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
                         // LeaseSet is already expired - request immediate rebuild
                         if (_log.shouldWarn()) {
-                            _log.warn("LeaseSet EXPIRED - triggering immediate rebuild for " + name + " [" + _dest.toBase32().substring(0,8) + "]");
+                            _log.warn("LeaseSet EXPIRED - triggering immediate rebuild for " + name + " ["
+                                    + _dest.toBase32().substring(0, 8) + "]");
                         }
                         getContext().clientManager().requestLeaseSet(_dest, ls);
                         scheduleRepublish(REPUBLISH_INTERVAL);
@@ -128,20 +130,23 @@ public class RepublishLeaseSetJob extends JobImpl {
                         if (timeUntilExpiry <= EXPIRY_WINDOW) {
                             // Too close to expiry - renew immediately
                             if (_log.shouldInfo()) {
-                                _log.info("LeaseSet expiring soon - immediate renew for " + name + " [" + _dest.toBase32().substring(0,8) +
-                                          "] (expires in " + (timeUntilExpiry / 1000) + "s)");
+                                _log.info("LeaseSet expiring soon - immediate renew for " + name + " ["
+                                        + _dest.toBase32().substring(0, 8) + "] (expires in " + (timeUntilExpiry / 1000)
+                                        + "s)");
                             }
                             lastPubLog = null; // Force log
                         }
                         if (_log.shouldInfo() && (lastPubLog == null || (now - lastPubLog > 10 * 1000))) {
-                            _log.info("Publishing LeaseSet" + name + " [" + _dest.toBase32().substring(0,8) +
-                                       "] (expires in " + (timeUntilExpiry / 1000) + "s)...");
+                            _log.info("Publishing LeaseSet" + name + " ["
+                                    + _dest.toBase32().substring(0, 8) + "] (expires in " + (timeUntilExpiry / 1000)
+                                    + "s)...");
                             _lastPublishLogTime.put(_dest, now);
                         }
                         cleanupStaleEntries();
                         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
                         failCount.set(0);
-                        _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), REPUBLISH_LEASESET_TIMEOUT, null);
+                        _facade.sendStore(
+                                _dest, ls, null, new OnRepublishFailure(ls), REPUBLISH_LEASESET_TIMEOUT, null);
                         _lastPublished = now;
                         // Schedule next republish for EXPIRY_WINDOW before expiry
                         long nextRepublish = Math.max(REPUBLISH_INTERVAL, timeUntilExpiry - EXPIRY_WINDOW);
@@ -150,7 +155,8 @@ public class RepublishLeaseSetJob extends JobImpl {
                 } else {
                     // No LeaseSet found - request immediate rebuild
                     if (_log.shouldWarn()) {
-                        _log.warn("Client [" + _dest.toBase32().substring(0,8) + "] is LOCAL, but no valid LeaseSet found -> Requesting immediate rebuild");
+                        _log.warn("Client [" + _dest.toBase32().substring(0, 8)
+                                + "] is LOCAL, but no valid LeaseSet found -> Requesting immediate rebuild");
                     }
                     clearRetryInProgress();
                     getContext().clientManager().requestLeaseSet(_dest, null);
@@ -158,7 +164,8 @@ public class RepublishLeaseSetJob extends JobImpl {
                 }
             } else {
                 if (_log.shouldInfo()) {
-                    _log.info("Client [" + _dest.toBase32().substring(0,8) + "] is no longer LOCAL -> Not republishing LeaseSet");
+                    _log.info("Client [" + _dest.toBase32().substring(0, 8)
+                            + "] is no longer LOCAL -> Not republishing LeaseSet");
                 }
                 LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
                 if (ls != null && !ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
@@ -167,7 +174,9 @@ public class RepublishLeaseSetJob extends JobImpl {
                 _facade.stopPublishing(_dest);
             }
         } catch (RuntimeException re) {
-            if (_log.shouldError()) {_log.error("Uncaught error republishing the LeaseSet", re);}
+            if (_log.shouldError()) {
+                _log.error("Uncaught error republishing the LeaseSet", re);
+            }
             _facade.stopPublishing(_dest);
             throw re;
         } finally {
@@ -177,7 +186,9 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     @Override
-    public String getName() {return "Republish Local LeaseSet" + (highPriority ? " [High priority]" : "");}
+    public String getName() {
+        return "Republish Local LeaseSet" + (highPriority ? " [High priority]" : "");
+    }
 
     private long getRepublishInterval() {
         double buildSuccess = net.i2p.util.SystemVersion.getTunnelBuildSuccess() / 100.0;
@@ -197,8 +208,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     private void scheduleRepublish(long delayMs) {
         if (_facade.hasActiveRepublishJob(_dest)) {
             if (_log.shouldDebug()) {
-                _log.debug("Skipping republish for [" + _dest.toBase32().substring(0, 8) +
-                           "] -> Job already active");
+                _log.debug("Skipping republish for [" + _dest.toBase32().substring(0, 8) + "] -> Job already active");
             }
             return;
         }
@@ -206,8 +216,8 @@ public class RepublishLeaseSetJob extends JobImpl {
         // Try to register the job - if it fails, another job is already active
         if (!nextJob.registerSelf()) {
             if (_log.shouldDebug()) {
-                _log.debug("Skipping republish for [" + _dest.toBase32().substring(0, 8) +
-                           "] -> Registration failed (job already active)");
+                _log.debug("Skipping republish for [" + _dest.toBase32().substring(0, 8)
+                        + "] -> Registration failed (job already active)");
             }
             return;
         }
@@ -218,7 +228,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     void requeueRepublish() {
         if (_retryInProgress.putIfAbsent(_dest, Boolean.TRUE) != null) {
             if (_log.shouldDebug()) {
-                _log.debug("Retry already in progress for " + _dest.toBase32().substring(0,8) + "] -> Skipping...");
+                _log.debug("Retry already in progress for " + _dest.toBase32().substring(0, 8) + "] -> Skipping...");
             }
             return;
         }
@@ -232,7 +242,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         }
         int count = failCount.incrementAndGet();
         LeaseSet ls = getContext().clientManager().isLocal(_dest) ? _facade.lookupLeaseSetLocally(_dest) : null;
-        String b32 = _dest.toBase32().substring(0,8);
+        String b32 = _dest.toBase32().substring(0, 8);
         String tunnelName = ls != null ? getTunnelName(ls.getDestination()) : "";
         String name = !tunnelName.isEmpty() ? "'" + tunnelName + "'" + " [" + b32 + "]" : "[" + b32 + "]";
         String countStr = count > 1 ? " (Attempt: " + count + ")" : "";
@@ -251,8 +261,8 @@ public class RepublishLeaseSetJob extends JobImpl {
         // Try to register the job - if it fails, another job is already active
         if (!retryJob.registerSelf()) {
             if (_log.shouldDebug()) {
-                _log.debug("Skipping retry for [" + _dest.toBase32().substring(0, 8) +
-                           "] -> Registration failed (job already active)");
+                _log.debug("Skipping retry for [" + _dest.toBase32().substring(0, 8)
+                        + "] -> Registration failed (job already active)");
             }
             clearRetryInProgress();
             return;
@@ -287,9 +297,13 @@ public class RepublishLeaseSetJob extends JobImpl {
         }
     }
 
-    public long lastPublished() {return _lastPublished;}
+    public long lastPublished() {
+        return _lastPublished;
+    }
 
-    Hash getDestHash() {return _dest;}
+    Hash getDestHash() {
+        return _dest;
+    }
 
     private class OnRepublishFailure extends JobImpl {
         private final LeaseSet _ls;
@@ -300,7 +314,9 @@ public class RepublishLeaseSetJob extends JobImpl {
         }
 
         @Override
-        public String getName() {return "Timeout LeaseSet Publication";}
+        public String getName() {
+            return "Timeout LeaseSet Publication";
+        }
 
         @Override
         public void runJob() {
@@ -314,9 +330,9 @@ public class RepublishLeaseSetJob extends JobImpl {
                 long now = getContext().clock().now();
                 Long lastNotRequeueLog = _lastNotRequeueLogTime.get(_ls.getHash());
                 if (_log.shouldInfo() && (lastNotRequeueLog == null || (now - lastNotRequeueLog > 10 * 1000))) {
-                    _log.info("Not requeueing LeaseSet" + name + " [" +
-                              _ls.getDestination().calculateHash().toBase32().substring(0,8) +
-                              "] -> Newer LeaseSet exists locally");
+                    _log.info("Not requeueing LeaseSet" + name + " ["
+                            + _ls.getDestination().calculateHash().toBase32().substring(0, 8)
+                            + "] -> Newer LeaseSet exists locally");
                     _lastNotRequeueLogTime.put(_ls.getHash(), now);
                 }
                 cleanupStaleEntries();
@@ -327,8 +343,8 @@ public class RepublishLeaseSetJob extends JobImpl {
                 long now = getContext().clock().now();
                 Long lastVerifyLog = _lastVerifyLogTime.get(_ls.getHash());
                 if (_log.shouldInfo() && (lastVerifyLog == null || (now - lastVerifyLog > 10 * 1000))) {
-                    _log.info("Verifying LeaseSet publication" + name + " [" +
-                              _ls.getDestination().calculateHash().toBase32().substring(0,8) + "] via floodfill...");
+                    _log.info("Verifying LeaseSet publication" + name + " ["
+                            + _ls.getDestination().calculateHash().toBase32().substring(0, 8) + "] via floodfill...");
                     _lastVerifyLogTime.put(_ls.getHash(), now);
                 }
                 cleanupStaleEntries();
@@ -344,7 +360,10 @@ public class RepublishLeaseSetJob extends JobImpl {
 
             Job onFound = new JobImpl(getContext()) {
                 @Override
-                public String getName() {return "Verify LS Published";}
+                public String getName() {
+                    return "Verify LS Published";
+                }
+
                 @Override
                 public void runJob() {
                     _lookupInProgress.set(false);
@@ -365,7 +384,10 @@ public class RepublishLeaseSetJob extends JobImpl {
 
             Job onFailed = new JobImpl(getContext()) {
                 @Override
-                public String getName() {return "Verify LS Failed";}
+                public String getName() {
+                    return "Verify LS Failed";
+                }
+
                 @Override
                 public void runJob() {
                     _lookupInProgress.set(false);
@@ -377,7 +399,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                 }
             };
 
-            _facade.lookupLeaseSetRemotely(_ls.getHash(), onFound, onFailed, 10*1000, null);
+            _facade.lookupLeaseSetRemotely(_ls.getHash(), onFound, onFailed, 10 * 1000, null);
         }
     }
 
@@ -388,6 +410,6 @@ public class RepublishLeaseSetJob extends JobImpl {
             TunnelPoolSettings out = getContext().tunnelManager().getOutboundSettings(d.calculateHash());
             name = (out != null ? out.getDestinationNickname() : null);
         }
-        return name != null ? name : "[" + d.calculateHash().toBase32().substring(0,8) + "]";
+        return name != null ? name : "[" + d.calculateHash().toBase32().substring(0, 8) + "]";
     }
 }

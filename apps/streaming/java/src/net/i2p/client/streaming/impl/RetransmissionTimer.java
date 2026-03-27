@@ -18,7 +18,6 @@ public class RetransmissionTimer extends SimpleTimer2 {
         return new RetransmissionTimer(I2PAppContext.getGlobalContext(), "RetransmissionTimer");
     }
 
-
     /**
      *  @since 0.9
      */

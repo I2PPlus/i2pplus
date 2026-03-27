@@ -32,8 +32,7 @@ class Request {
         this.len = len;
 
         // Sanity check
-        if (off < 0 || len <= 0 || off + len > piece.getLength())
-            throw new IndexOutOfBoundsException("Illegal Request " + toString());
+        if (off < 0 || len <= 0 || off + len > piece.getLength()) throw new IndexOutOfBoundsException("Illegal Request " + toString());
     }
 
     /**
@@ -49,8 +48,7 @@ class Request {
         this.len = 0;
 
         // Sanity check
-        if (off < 0 || off > piece.getLength())
-            throw new IndexOutOfBoundsException("Illegal Request " + toString());
+        if (off < 0 || off > piece.getLength()) throw new IndexOutOfBoundsException("Illegal Request " + toString());
     }
 
     /**

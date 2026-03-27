@@ -2,9 +2,10 @@ package net.i2p.util;
 
 import static org.junit.Assert.*;
 
+import org.junit.Test;
+
 import java.net.Inet6Address;
 import java.net.UnknownHostException;
-import org.junit.Test;
 
 /**
  * @since 0.9.49
@@ -23,9 +24,7 @@ public class AddressesTest {
 
     @Test
     public void getIPWithIPString() {
-        byte[] address = {
-            1, 2, 3, 4
-        };
+        byte[] address = {1, 2, 3, 4};
         assertArrayEquals(address, Addresses.getIP("1.2.3.4"));
     }
 
@@ -36,14 +35,7 @@ public class AddressesTest {
 
     @Test
     public void getPort__invalidPort() {
-        String[] strings = {
-            "",
-            " 80",
-            "-100",
-            "a",
-            "99999",
-            null
-        };
+        String[] strings = {"", " 80", "-100", "a", "99999", null};
         for (String string : strings) {
             assertEquals(0, Addresses.getPort(string));
         }
@@ -131,14 +123,8 @@ public class AddressesTest {
         byte[] address = {1};
         String string = Addresses.toString(address, 80);
         String expectedStartString = "(Bad IP length";
-        assertTrue(
-            String.format("%s doesn't start with: %s", string, expectedStartString),
-            string.startsWith(expectedStartString)
-        );
+        assertTrue(String.format("%s doesn't start with: %s", string, expectedStartString), string.startsWith(expectedStartString));
         String expectedEndString = "80";
-        assertTrue(
-            String.format("%s doesn't end with: %s", string, expectedEndString),
-            string.endsWith(expectedEndString)
-        );
+        assertTrue(String.format("%s doesn't end with: %s", string, expectedEndString), string.endsWith(expectedEndString));
     }
 }

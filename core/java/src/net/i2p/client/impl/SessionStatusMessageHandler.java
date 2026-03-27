@@ -27,31 +27,27 @@ class SessionStatusMessageHandler extends HandlerImpl {
 
     @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
-        if (_log.shouldDebug()) {_log.debug("Handling " + message);}
+        if (_log.shouldDebug()) {
+            _log.debug("Handling " + message);
+        }
         SessionStatusMessage msg = (SessionStatusMessage) message;
         session.setSessionId(msg.getSessionId());
         switch (msg.getStatus()) {
-            case SessionStatusMessage.STATUS_CREATED:
-                _log.info("Session created successfully");
+            case SessionStatusMessage.STATUS_CREATED: _log.info("Session created successfully");
                 break;
-            case SessionStatusMessage.STATUS_DESTROYED:
-                _log.warn("Session destroyed");
-            // Spec says router should send this message in response to DestroySessionMessage.
-            // However, Java router side does not, other implementations may.
-            // As this should be only in response to DestroySession, should be safe to ignore it here.
-            //session.propagateError("Destroyed", new I2PSessionException("Session Status Message received"));
+            case SessionStatusMessage.STATUS_DESTROYED: _log.warn("Session destroyed");
+                // Spec says router should send this message in response to DestroySessionMessage.
+                // However, Java router side does not, other implementations may.
+                // As this should be only in response to DestroySession, should be safe to ignore it here.
+                // session.propagateError("Destroyed", new I2PSessionException("Session Status Message received"));
                 break;
-            case SessionStatusMessage.STATUS_INVALID:
-                _log.warn("Session invalid");
+            case SessionStatusMessage.STATUS_INVALID: _log.warn("Session invalid");
                 session.propagateError("Invalid", new I2PSessionException("Session Status Message received"));
                 session.destroySession(); // ok, honor this destroy message, because we're b0rked
                 break;
-            case SessionStatusMessage.STATUS_UPDATED:
-                _log.info("Session status updated");
+            case SessionStatusMessage.STATUS_UPDATED: _log.info("Session status updated");
                 break;
-            default:
-                if (_log.shouldWarn())
-                    _log.warn("Unknown session status sent: " + msg.getStatus());
+            default: if (_log.shouldWarn()) _log.warn("Unknown session status sent: " + msg.getStatus());
         }
         return;
     }

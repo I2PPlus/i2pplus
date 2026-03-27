@@ -8,11 +8,12 @@
  */
 package net.i2p.crypto.eddsa.math.bigint;
 
-import java.io.Serializable;
-import java.math.BigInteger;
 import net.i2p.crypto.eddsa.math.Encoding;
 import net.i2p.crypto.eddsa.math.Field;
 import net.i2p.crypto.eddsa.math.FieldElement;
+
+import java.io.Serializable;
+import java.math.BigInteger;
 
 /**
  * Little-endian encoding implementation for EdDSA field elements using BigInteger.
@@ -24,6 +25,7 @@ import net.i2p.crypto.eddsa.math.FieldElement;
  */
 public class BigIntegerLittleEndianEncoding extends Encoding implements Serializable {
     private static final long serialVersionUID = 3984579843759837L;
+
     /**
      * Mask where only the first b-1 bits are set.
      */
@@ -32,12 +34,12 @@ public class BigIntegerLittleEndianEncoding extends Encoding implements Serializ
     @Override
     public synchronized void setField(Field f) {
         super.setField(f);
-        mask = BigInteger.ONE.shiftLeft(f.getb()-1).subtract(BigInteger.ONE);
+        mask = BigInteger.ONE.shiftLeft(f.getb() - 1).subtract(BigInteger.ONE);
     }
 
     @Override
     public byte[] encode(FieldElement x) {
-        return encode(((BigIntegerFieldElement)x).bi.and(mask));
+        return encode(((BigIntegerFieldElement) x).bi.and(mask));
     }
 
     /**
@@ -49,12 +51,11 @@ public class BigIntegerLittleEndianEncoding extends Encoding implements Serializ
      *  @throws IllegalStateException if field not set
      */
     public byte[] encode(BigInteger x) {
-        if (f == null)
-            throw new IllegalStateException("field not set");
+        if (f == null) throw new IllegalStateException("field not set");
         byte[] in = x.toByteArray();
-        byte[] out = new byte[f.getb()/8];
+        byte[] out = new byte[f.getb() / 8];
         for (int i = 0; i < in.length; i++) {
-            out[i] = in[in.length-1-i];
+            out[i] = in[in.length - 1 - i];
         }
         for (int i = in.length; i < out.length; i++) {
             out[i] = 0;
@@ -73,10 +74,8 @@ public class BigIntegerLittleEndianEncoding extends Encoding implements Serializ
      */
     @Override
     public FieldElement decode(byte[] in) {
-        if (f == null)
-            throw new IllegalStateException("field not set");
-        if (in.length != f.getb()/8)
-            throw new IllegalArgumentException("Not a valid encoding");
+        if (f == null) throw new IllegalStateException("field not set");
+        if (in.length != f.getb() / 8) throw new IllegalArgumentException("Not a valid encoding");
         return new BigIntegerFieldElement(f, toBigInteger(in).and(mask));
     }
 
@@ -89,7 +88,7 @@ public class BigIntegerLittleEndianEncoding extends Encoding implements Serializ
     public BigInteger toBigInteger(byte[] in) {
         byte[] out = new byte[in.length];
         for (int i = 0; i < in.length; i++) {
-            out[i] = in[in.length-1-i];
+            out[i] = in[in.length - 1 - i];
         }
         return new BigInteger(1, out);
     }
@@ -104,6 +103,6 @@ public class BigIntegerLittleEndianEncoding extends Encoding implements Serializ
      */
     @Override
     public boolean isNegative(FieldElement x) {
-        return ((BigIntegerFieldElement)x).bi.testBit(0);
+        return ((BigIntegerFieldElement) x).bi.testBit(0);
     }
 }

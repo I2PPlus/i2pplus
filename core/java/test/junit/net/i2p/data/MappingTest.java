@@ -1,4 +1,5 @@
 package net.i2p.data;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -10,10 +11,11 @@ package net.i2p.data;
 
 import static org.junit.Assert.*;
 
+import org.junit.Test;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Properties;
-import org.junit.Test;
 
 /**
  * Test harness for the date structure
@@ -22,7 +24,7 @@ import org.junit.Test;
  */
 public class MappingTest {
     @Test
-    public void testProperties() throws Exception{
+    public void testProperties() throws Exception {
         byte[] temp = null;
 
         Properties orig = new Properties();

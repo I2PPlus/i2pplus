@@ -1,16 +1,18 @@
 package net.i2p.router.startup;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Released into the public domain
  * with no warranty of any kind, either expressed or implied.
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 import net.i2p.router.RouterContext;
 import net.i2p.util.FileUtil;
 import net.i2p.util.VersionComparator;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 /**
  *  Second migration, as of 2.9.0:
@@ -70,7 +72,9 @@ abstract class MigrateJetty {
      *  migrate it to the new Jetty class, and update the Jetty config files.
      */
     public static void migrate(RouterContext ctx, List<ClientAppConfig> apps) {
-        if (ctx.getBooleanProperty(PROP_JETTY9_MIGRATED_2)) {return;}
+        if (ctx.getBooleanProperty(PROP_JETTY9_MIGRATED_2)) {
+            return;
+        }
         String installed = ctx.getProperty("router.firstVersion");
         if (installed != null && VersionComparator.comp(installed, "2.9.0") >= 0) {
             ctx.router().saveConfig(PROP_JETTY9_MIGRATED_2, "true");
@@ -88,21 +92,17 @@ abstract class MigrateJetty {
             String backupSuffix;
             if (migrated1) {
                 if (app.className.equals(NEW_CLASS)) {
-                    client = "client application " + i + " [" + app.clientName +
-                             "] to fix DTDs and duplicate ids";
+                    client = "client application " + i + " [" + app.clientName + "] to fix DTDs and duplicate ids";
                     backupSuffix = BACKUP_SUFFIX_9;
                 } else {
                     continue;
                 }
             } else {
                 if (app.className.equals(NEW_CLASS)) {
-                    client = "client application " + i + " [" + app.clientName +
-                             "] from Jetty 7/8 to Jetty 9";
+                    client = "client application " + i + " [" + app.clientName + "] from Jetty 7/8 to Jetty 9";
                     backupSuffix = BACKUP_SUFFIX_8;
                 } else if (app.className.equals(OLD_CLASS) || app.className.equals(OLD_CLASS_6)) {
-                    client = "client application " + i + " [" + app.clientName +
-                             "] from Jetty 5/6 " + app.className +
-                             " to Jetty 9 " + NEW_CLASS;
+                    client = "client application " + i + " [" + app.clientName + "] from Jetty 5/6 " + app.className + " to Jetty 9 " + NEW_CLASS;
                     backupSuffix = BACKUP_SUFFIX;
                 } else {
                     continue;
@@ -112,16 +112,13 @@ abstract class MigrateJetty {
                 System.err.println("WARNING: Jetty 7 unavailable, cannot migrate " + client);
                 continue;
             }
-            if (app.args == null)
-                continue;
+            if (app.args == null) continue;
             // remove quotes
             String args[] = LoadClientAppsJob.parseArgs(app.args);
-            if (args.length == 0)
-                continue;
+            if (args.length == 0) continue;
             if (!migrated1) {
                 // migration from 0.9.29 or earlier (2017-02-27) straight to 2.9.0 or later
-                System.err.println("WARNING: Unable to migrate " + client +
-                                   ", delete client or uninstall and reinstall I2P+");
+                System.err.println("WARNING: Unable to migrate " + client + ", delete client or uninstall and reinstall I2P+");
                 app.disabled = true;
                 continue;
             }
@@ -131,11 +128,9 @@ abstract class MigrateJetty {
             // to the command line, not in the arg list here,
             // but it does not contain anything we need to fix.
             for (String xml : args) {
-                if (!xml.endsWith(".xml"))
-                    continue;
+                if (!xml.endsWith(".xml")) continue;
                 File xmlFile = new File(xml);
-                if (!xmlFile.isAbsolute())
-                    xmlFile = new File(ctx.getAppDir(), xml);
+                if (!xmlFile.isAbsolute()) xmlFile = new File(ctx.getAppDir(), xml);
                 if (!xmlFile.exists()) {
                     System.err.println("WARNING: XML file " + xmlFile + " not found, cannot migrate " + client);
                     continue;
@@ -147,23 +142,18 @@ abstract class MigrateJetty {
                 }
                 File tmpFile = new File(xmlFile + ".tmp");
                 try {
-                    WorkingDir.migrateFileXML(xmlFile, tmpFile,
-                                              "<Ref id=", "<Ref refid=",
-                                              "/jetty/configure.dtd", "/jetty/configure_9_3.dtd");
+                    WorkingDir.migrateFileXML(xmlFile, tmpFile, "<Ref id=", "<Ref refid=", "/jetty/configure.dtd", "/jetty/configure_9_3.dtd");
                     ok = FileUtil.rename(tmpFile, xmlFile);
-                    if (!ok)
-                        throw new IOException();
+                    if (!ok) throw new IOException();
                 } catch (IOException ioe) {
-                    System.err.println("WARNING: Failed to migrate XML file " + xmlFile +
-                                       ", cannot migrate " + client);
+                    System.err.println("WARNING: Failed to migrate XML file " + xmlFile + ", cannot migrate " + client);
                     continue;
                 }
                 migration2success = true;
             }
             System.err.println("Migrated " + client);
         }
-        if (migration2success)
-            ctx.router().saveConfig(PROP_JETTY9_MIGRATED_2, "true");
+        if (migration2success) ctx.router().saveConfig(PROP_JETTY9_MIGRATED_2, "true");
     }
 
     /** do we have Jetty 7/8/9? */
@@ -172,7 +162,8 @@ abstract class MigrateJetty {
             try {
                 LoadClientAppsJob.testClient(TEST_CLASS, null);
                 _hasLatestJetty = true;
-            } catch (ClassNotFoundException cnfe) {}
+            } catch (ClassNotFoundException cnfe) {
+            }
             _wasChecked = true;
         }
         return _hasLatestJetty;
@@ -193,16 +184,12 @@ abstract class MigrateJetty {
      *  @since Jetty 9
      */
     private static boolean backupFile(File from, String suffix) {
-        if (!from.exists())
-            return true;
+        if (!from.exists()) return true;
         File to = new File(from.getAbsolutePath() + suffix);
-        if (to.exists())
-            to = new File(to.getAbsolutePath() + "." + System.currentTimeMillis());
+        if (to.exists()) to = new File(to.getAbsolutePath() + "." + System.currentTimeMillis());
         boolean rv = WorkingDir.copyFile(from, to);
-        if (rv)
-            System.err.println("Backed up file " + from + " to " + to);
-        else
-            System.err.println("WARNING: Failed to back up file " + from + " to " + to);
+        if (rv) System.err.println("Backed up file " + from + " to " + to);
+        else System.err.println("WARNING: Failed to back up file " + from + " to " + to);
         return rv;
     }
 

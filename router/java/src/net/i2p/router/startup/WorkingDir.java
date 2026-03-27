@@ -1,5 +1,10 @@
 package net.i2p.router.startup;
 
+import net.i2p.data.DataHelper;
+import net.i2p.util.SecureDirectory;
+import net.i2p.util.SecureFileOutputStream;
+import net.i2p.util.SystemVersion;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,10 +14,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.Properties;
-import net.i2p.data.DataHelper;
-import net.i2p.util.SecureDirectory;
-import net.i2p.util.SecureFileOutputStream;
-import net.i2p.util.SystemVersion;
 
 /**
  * Get a working directory for i2p.
@@ -44,15 +45,18 @@ import net.i2p.util.SystemVersion;
 @SuppressWarnings("PMD.CloseResource")
 public class WorkingDir {
 
-    private final static String PROP_BASE_DIR = "i2p.dir.base";
-    private final static String PROP_WORKING_DIR = "i2p.dir.config";
-    private final static String WORKING_DIR_DEFAULT_WINDOWS = "I2P";
-    private final static String WORKING_DIR_DEFAULT_MAC = "i2p";
-    private final static String WORKING_DIR_DEFAULT = ".i2p";
-    private final static String WORKING_DIR_DEFAULT_DAEMON = "i2p-config";
+    private static final String PROP_BASE_DIR = "i2p.dir.base";
+    private static final String PROP_WORKING_DIR = "i2p.dir.config";
+    private static final String WORKING_DIR_DEFAULT_WINDOWS = "I2P";
+    private static final String WORKING_DIR_DEFAULT_MAC = "i2p";
+    private static final String WORKING_DIR_DEFAULT = ".i2p";
+    private static final String WORKING_DIR_DEFAULT_DAEMON = "i2p-config";
+
     /** we do a couple of things differently if this is the username */
     private static final String PROP_WRAPPER_LOG = "wrapper.logfile";
+
     private static final String DEFAULT_WRAPPER_LOG = "wrapper.log";
+
     /** Feb 16 2006 */
     private static final long EEPSITE_TIMESTAMP = 1140048000000L;
 
@@ -67,10 +71,8 @@ public class WorkingDir {
      */
     public static String getWorkingDir(Properties envProps, boolean migrateOldConfig) {
         String dir = null;
-        if (envProps != null)
-            dir = envProps.getProperty(PROP_WORKING_DIR);
-        if (dir == null)
-            dir = System.getProperty(PROP_WORKING_DIR);
+        if (envProps != null) dir = envProps.getProperty(PROP_WORKING_DIR);
+        if (dir == null) dir = System.getProperty(PROP_WORKING_DIR);
 
         boolean isWindows = SystemVersion.isWindows();
         File dirf = null;
@@ -90,7 +92,7 @@ public class WorkingDir {
                 String appdata = System.getenv("APPDATA");
                 if (appdata != null) {
                     File checkOld = new File(appdata, WORKING_DIR_DEFAULT_WINDOWS);
-                    if (checkOld.exists() && checkOld.isDirectory()){
+                    if (checkOld.exists() && checkOld.isDirectory()) {
                         File routerConfig = new File(checkOld.getAbsolutePath(), "router.config");
                         // The Firefox profile installer was mistakenly using the Roaming application data
                         // which is synced between devices on some Windows machines using MS cloud services,
@@ -103,8 +105,7 @@ public class WorkingDir {
                             home = appdata;
                         } else {
                             clientAppsConfig = new File(checkOld.getAbsolutePath(), "clients.config");
-                            if (routerConfig.exists() && clientAppsConfig.exists())
-                                home = appdata;
+                            if (routerConfig.exists() && clientAppsConfig.exists()) home = appdata;
                         }
                         System.err.println("System is Windows: " + home);
                     }
@@ -112,17 +113,15 @@ public class WorkingDir {
                 dirf = new SecureDirectory(home, WORKING_DIR_DEFAULT_WINDOWS);
             } else if (SystemVersion.isMac()) {
                 String appdata = "/Library/Application Support/";
-                File old = new File(home,WORKING_DIR_DEFAULT);
-                if (old.exists() && old.isDirectory())
-                    dirf = new SecureDirectory(home, WORKING_DIR_DEFAULT);
+                File old = new File(home, WORKING_DIR_DEFAULT);
+                if (old.exists() && old.isDirectory()) dirf = new SecureDirectory(home, WORKING_DIR_DEFAULT);
                 else {
-                    home = home+appdata;
+                    home = home + appdata;
                     dirf = new SecureDirectory(home, WORKING_DIR_DEFAULT_MAC);
                 }
             } else {
                 if (SystemVersion.isLinuxService()) {
-                    if (SystemVersion.isGentoo() &&
-                        SystemVersion.GENTOO_USER.equals(System.getProperty("user.name"))) {
+                    if (SystemVersion.isGentoo() && SystemVersion.GENTOO_USER.equals(System.getProperty("user.name"))) {
                         // whoops, we didn't recognize Gentoo as a service until 0.9.29,
                         // so the config dir was /var/lib/i2p/.i2p through 0.9.28
                         // and changed to /var/lib/i2p/i2p-config in 0.9.29.
@@ -142,11 +141,7 @@ public class WorkingDir {
                                 // d1 now is the older one
                             }
                             dirf = d2;
-                            gentooWarning = "Warning - Found both an old configuration directory " + d1.getAbsolutePath() +
-                                            " and new configuration directory " + d2.getAbsolutePath() +
-                                            " created due to a bug in release 0.9.29\n. Using the new configuration" +
-                                            " directory. To use the old directory instead, stop i2p," +
-                                            " delete the new directory, and restart.";
+                            gentooWarning = "Warning - Found both an old configuration directory " + d1.getAbsolutePath() + " and new configuration directory " + d2.getAbsolutePath() + " created due to a bug in release 0.9.29\n. Using the new configuration" + " directory. To use the old directory instead, stop i2p," + " delete the new directory, and restart.";
                         } else if (e1 && !e2) {
                             dirf = d1;
                         } else if (!e1 && e2) {
@@ -165,12 +160,10 @@ public class WorkingDir {
 
         // where we are now
         String cwd = null;
-        if (envProps != null)
-            cwd = envProps.getProperty(PROP_BASE_DIR);
+        if (envProps != null) cwd = envProps.getProperty(PROP_BASE_DIR);
         if (cwd == null) {
             cwd = System.getProperty(PROP_BASE_DIR);
-            if (cwd == null)
-                cwd = System.getProperty("user.dir");
+            if (cwd == null) cwd = System.getProperty("user.dir");
         }
 
         // Check for a hosts.txt file, if it exists then I2P is there
@@ -178,8 +171,7 @@ public class WorkingDir {
         File test = new File(oldDirf, "hosts.txt");
         if (!test.exists()) {
             setupSystemOut(cwd);
-            System.err.println("ERROR - Cannot find I2P installation in " + cwd +
-                  " - Will probably be just a router with no apps or console at all!");
+            System.err.println("ERROR - Cannot find I2P installation in " + cwd + " - Will probably be just a router with no apps or console at all!");
             // we are probably doomed...
             return cwd;
         }
@@ -190,7 +182,8 @@ public class WorkingDir {
                 setupSystemOut(cwd);
                 return cwd;
             }
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) {
+        }
 
         // where we want to go
         String rv = dirf.getAbsolutePath();
@@ -199,12 +192,10 @@ public class WorkingDir {
                 if (isSetup(dirf)) {
                     setupSystemOut(rv);
                     // see above for why
-                    if (gentooWarning != null)
-                        System.err.println(gentooWarning);
+                    if (gentooWarning != null) System.err.println(gentooWarning);
                     return rv; // all is good, we found the user directory
                 }
-            }
-            else {
+            } else {
                 setupSystemOut(null);
                 System.err.println("Wanted to use " + rv + " for a working directory but it is not a directory");
                 return cwd;
@@ -271,13 +262,11 @@ public class WorkingDir {
     private static boolean isSetup(File dir) {
         if (dir.isDirectory()) {
             String[] files = dir.list();
-            if (files == null)
-                return false;
+            if (files == null) return false;
             String migrated[] = DataHelper.split(MIGRATE_BASE, ",");
-            for (String file: files) {
+            for (String file : files) {
                 for (int i = 0; i < migrated.length; i++) {
-                    if (file.equals(migrated[i]))
-                        return true;
+                    if (file.equals(migrated[i])) return true;
                 }
             }
         }
@@ -299,10 +288,8 @@ public class WorkingDir {
      *  @since 0.8.13
      */
     private static void setupSystemOut(String dir) {
-        if (SystemVersion.hasWrapper())
-            return;
-        if (System.getProperty("I2P_DISABLE_OUTPUT_OVERRIDE") != null)
-            return;
+        if (SystemVersion.hasWrapper()) return;
+        if (System.getProperty("I2P_DISABLE_OUTPUT_OVERRIDE") != null) return;
         String path = System.getProperty(PROP_WRAPPER_LOG);
         File logfile;
         if (path != null) {
@@ -310,8 +297,7 @@ public class WorkingDir {
         } else {
             logfile = new File(DEFAULT_WRAPPER_LOG);
             if (!logfile.exists()) {
-                if (dir == null)
-                    dir = System.getProperty("java.io.tmpdir");
+                if (dir == null) dir = System.getProperty("java.io.tmpdir");
                 logfile = new File(dir, DEFAULT_WRAPPER_LOG);
             }
         }
@@ -332,18 +318,19 @@ public class WorkingDir {
      * The user should not delete these in the old location, leave them as templates for new users
      */
     private static final String MIGRATE_BASE =
-        // base install - dirs
-        // We don't currently have a default addressbook/ in the base distribution,
-        // but distros might put one in
-        "addressbook,eepsite," +
-        // 0.9.15 support bundled router infos
-        "netDb," +
-        // base install - files
-        // We don't currently have a default router.config, logger.config, susimail.config, or webapps.config in the base distribution,
-        // but distros might put one in
-        // blocklist.txt now accessed in base dir, user can add another in config dir if desired
-        "hosts.txt,i2psnark.config,i2ptunnel.config,jetty-i2psnark.xml," +
-        "logger.config,router.config,susimail.config,systray.config,webapps.config";
+            // base install - dirs
+            // We don't currently have a default addressbook/ in the base distribution,
+            // but distros might put one in
+            "addressbook,eepsite," +
+                    // 0.9.15 support bundled router infos
+                    "netDb,"
+                    +
+                    // base install - files
+                    // We don't currently have a default router.config, logger.config, susimail.config, or webapps.config in the base distribution,
+                    // but distros might put one in
+                    // blocklist.txt now accessed in base dir, user can add another in config dir if desired
+                    "hosts.txt,i2psnark.config,i2ptunnel.config,jetty-i2psnark.xml,"
+                    + "logger.config,router.config,susimail.config,systray.config,webapps.config";
 
     private static boolean migrate(String list, File olddir, File todir) {
         boolean rv = true;
@@ -363,8 +350,7 @@ public class WorkingDir {
      */
     private static boolean migrateClientsConfig(File olddir, File todir) {
         File oldFile = new File(olddir, "clients.config");
-        if (!oldFile.exists())
-            return true;
+        if (!oldFile.exists()) return true;
         File newFile = new File(todir, "clients.config");
         FileInputStream in = null;
         PrintWriter out = null;
@@ -376,12 +362,9 @@ public class WorkingDir {
             boolean isDaemon = SystemVersion.isLinuxService();
             while ((s = DataHelper.readLine(in)) != null) {
                 // readLine() doesn't strip \r
-                if (s.endsWith("\r"))
-                    s = s.substring(0, s.length() - 1);
+                if (s.endsWith("\r")) s = s.substring(0, s.length() - 1);
                 if (s.endsWith("=\"eepsite/jetty.xml\"")) {
-                    s = s.replace("=\"eepsite/jetty.xml\"", "=\"" + todir.getAbsolutePath() +
-                                                            File.separatorChar + "eepsite" +
-                                                            File.separatorChar + "jetty.xml\"");
+                    s = s.replace("=\"eepsite/jetty.xml\"", "=\"" + todir.getAbsolutePath() + File.separatorChar + "eepsite" + File.separatorChar + "jetty.xml\"");
                 } else if (isDaemon && s.equals("clientApp.4.startOnLoad=true")) {
                     // disable browser launch for daemon
                     s = "clientApp.4.startOnLoad=false";
@@ -389,14 +372,16 @@ public class WorkingDir {
                 out.println(s);
             }
             System.err.println("Copied file: " + oldFile + " with modifications");
-            if (out.checkError())
-                throw new IOException("Failed write to " + newFile);
+            if (out.checkError()) throw new IOException("Failed write to " + newFile);
             return true;
         } catch (IOException ioe) {
             System.err.println("FAILED copy of: " + oldFile + ": " + ioe);
             return false;
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null) try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
             if (out != null) out.close();
         }
     }
@@ -410,8 +395,7 @@ public class WorkingDir {
      */
     static boolean migrateJettyXml(File olddir, File todir, String filename, String oldString, String newString) {
         File oldFile = new File(olddir, filename);
-        if (!oldFile.exists())
-            return true;
+        if (!oldFile.exists()) return true;
         File newFile = new File(todir, filename);
         FileInputStream in = null;
         PrintWriter out = null;
@@ -436,8 +420,7 @@ public class WorkingDir {
      *  @throws IOException on all errors
      *  @since 0.9.66
      */
-    static void migrateFileXML(File oldFile, File newFile, String oldString, String newString,
-                               String oldString2, String newString2) throws IOException {
+    static void migrateFileXML(File oldFile, File newFile, String oldString, String newString, String oldString2, String newString2) throws IOException {
         FileInputStream in = null;
         PrintWriter out = null;
         try {
@@ -446,8 +429,7 @@ public class WorkingDir {
             String s = null;
             while ((s = DataHelper.readLine(in)) != null) {
                 // readLine() doesn't strip \r
-                if (s.endsWith("\r"))
-                    s = s.substring(0, s.length() - 1);
+                if (s.endsWith("\r")) s = s.substring(0, s.length() - 1);
                 if (s.indexOf(oldString) >= 0) {
                     s = s.replace(oldString, newString);
                 }
@@ -459,7 +441,10 @@ public class WorkingDir {
             out.println("<!-- Modified by I2P User dir migration script-->");
             System.err.println("Copied file: " + oldFile + " with modifications");
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null) try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
             if (out != null) out.close();
         }
     }
@@ -472,8 +457,7 @@ public class WorkingDir {
      * @return true for success OR if src does not exist
      */
     private static boolean copy(File src, File targetDir) {
-        if (!src.exists())
-            return true;
+        if (!src.exists()) return true;
         if (!targetDir.exists()) {
             if (!targetDir.mkdir()) {
                 System.err.println("FAILED copy " + src.getPath());
@@ -483,8 +467,7 @@ public class WorkingDir {
         }
         // SecureDirectory is a File so this works for non-directories too
         File targetFile = new SecureDirectory(targetDir, src.getName());
-        if (!src.isDirectory())
-            return copyFile(src, targetFile);
+        if (!src.isDirectory()) return copyFile(src, targetFile);
         File children[] = src.listFiles();
         if (children == null) {
             System.err.println("FAILED copy " + src.getPath());
@@ -525,11 +508,18 @@ public class WorkingDir {
             System.err.println("FAILED copy " + src.getPath() + ": " + ioe);
             rv = false;
         } finally {
-            if (out != null) try { out.close(); } catch (IOException ioe) {/* ignored */}
-            if (in != null) try { in.close(); } catch (IOException ioe) {/* ignored */}
+            if (out != null) try {
+                    out.close();
+                } catch (IOException ioe) {
+                    /* ignored */
+                }
+            if (in != null) try {
+                    in.close();
+                } catch (IOException ioe) {
+                    /* ignored */
+                }
         }
-        if (rv)
-            dst.setLastModified(src.lastModified());
+        if (rv) dst.setLastModified(src.lastModified());
         return rv;
     }
 
@@ -541,20 +531,16 @@ public class WorkingDir {
      * @since 0.8.13
      */
     private static void touchRecursive(File target, long time) {
-        if (!target.exists())
-            return;
+        if (!target.exists()) return;
         if (target.isFile()) {
             target.setLastModified(time);
             return;
         }
-        if (!target.isDirectory())
-            return;
+        if (!target.isDirectory()) return;
         File children[] = target.listFiles();
-        if (children == null)
-            return;
+        if (children == null) return;
         for (int i = 0; i < children.length; i++) {
             touchRecursive(children[i], time);
         }
     }
-
 }

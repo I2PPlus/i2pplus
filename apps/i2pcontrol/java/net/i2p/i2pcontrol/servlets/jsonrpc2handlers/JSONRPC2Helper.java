@@ -3,10 +3,12 @@ package net.i2p.i2pcontrol.servlets.jsonrpc2handlers;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2ParamsType;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
-import java.util.Map;
+
 import net.i2p.i2pcontrol.security.ExpiredAuthTokenException;
 import net.i2p.i2pcontrol.security.InvalidAuthTokenException;
 import net.i2p.i2pcontrol.security.SecurityManager;
+
+import java.util.Map;
 
 /*
  *  Copyright 2011 hottuna (dev@robertfoss.se)
@@ -30,8 +32,8 @@ import net.i2p.i2pcontrol.security.SecurityManager;
  * Provides common functionality for parameter validation and authentication token verification.
  */
 public class JSONRPC2Helper {
-    public final static Boolean USE_NO_AUTH = false;
-    public final static Boolean USE_AUTH = true;
+    public static final Boolean USE_NO_AUTH = false;
+    public static final Boolean USE_AUTH = true;
 
     private final SecurityManager _secMan;
 
@@ -88,8 +90,6 @@ public class JSONRPC2Helper {
         return validateParams(requiredArgs, req, JSONRPC2Helper.USE_AUTH);
     }
 
-
-
     /**
      * Will check incoming parameters to make sure they contain a valid token.
      * @param req - Parameters of incoming request
@@ -105,8 +105,7 @@ public class JSONRPC2Helper {
         } catch (InvalidAuthTokenException e) {
             return JSONRPC2ExtendedError.INVALID_TOKEN;
         } catch (ExpiredAuthTokenException e) {
-            JSONRPC2Error err = new JSONRPC2ExtendedError(JSONRPC2ExtendedError.TOKEN_EXPIRED.getCode(),
-                    "Provided authentication token expired " + e.getExpirytime() + ", will be removed.");
+            JSONRPC2Error err = new JSONRPC2ExtendedError(JSONRPC2ExtendedError.TOKEN_EXPIRED.getCode(), "Provided authentication token expired " + e.getExpirytime() + ", will be removed.");
             return err;
         }
         return null;

@@ -38,7 +38,7 @@ public class ObjectCounterUnsafe<K> {
     public int increment(K h) {
         Int i = map.get(h);
         if (i != null) {
-            return++(i.c);
+            return ++(i.c);
         }
         map.put(h, new Int(1));
         return 1;
@@ -63,8 +63,7 @@ public class ObjectCounterUnsafe<K> {
      */
     public int count(K h) {
         Int i = map.get(h);
-        if (i != null)
-            return i.c;
+        if (i != null) return i.c;
         return 0;
     }
 
@@ -103,7 +102,10 @@ public class ObjectCounterUnsafe<K> {
      */
     private static class Int {
         int c;
-        public Int(int i) { c = i; }
+
+        public Int(int i) {
+            c = i;
+        }
     }
 
     /**
@@ -113,8 +115,7 @@ public class ObjectCounterUnsafe<K> {
         @Override
         public int compare(K l, K r) {
             int rv = map.get(r).c - map.get(l).c;
-            if (rv != 0)
-                return rv;
+            if (rv != 0) return rv;
             return l.toString().compareTo(r.toString());
         }
     }

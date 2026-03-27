@@ -1,9 +1,10 @@
 package net.i2p.sam;
 
-import java.io.Closeable;
 import net.i2p.client.I2PSessionException;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Destination;
+
+import java.io.Closeable;
 
 /**
  * Base interface for SAMMessageSession, which is the base for
@@ -42,19 +43,14 @@ interface SAMMessageSess extends Closeable {
      * @throws DataFormatException on unknown / bad dest
      * @throws I2PSessionException on serious error, probably session closed
      */
-    public boolean sendBytes(String dest, byte[] data, int proto,
-                             int fromPort, int toPort) throws DataFormatException, I2PSessionException;
+    public boolean sendBytes(String dest, byte[] data, int proto, int fromPort, int toPort) throws DataFormatException, I2PSessionException;
 
     /**
      * Send bytes through a SAM message-based session.
      *
      * @since 0.9.25
      */
-    public boolean sendBytes(String dest, byte[] data, int proto,
-                             int fromPort, int toPort,
-                             boolean sendLeaseSet, int sendTags,
-                             int tagThreshold, int expiration)
-                                  throws DataFormatException, I2PSessionException;
+    public boolean sendBytes(String dest, byte[] data, int proto, int fromPort, int toPort, boolean sendLeaseSet, int sendTags, int tagThreshold, int expiration) throws DataFormatException, I2PSessionException;
 
     public int getListenProtocol();
 

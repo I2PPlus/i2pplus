@@ -1,4 +1,5 @@
 package net.i2p.router;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,8 +9,9 @@ package net.i2p.router;
  *
  */
 
-import java.util.Set;
 import net.i2p.data.Hash;
+
+import java.util.Set;
 
 /**
  * Manage peer references and keep them up to date so that when asked for peers,
@@ -19,7 +21,10 @@ import net.i2p.data.Hash;
  */
 public interface PeerManagerFacade extends Service {
     public Set<Hash> getPeersByCapability(char capability);
+
     public int countPeersByCapability(char capability);
+
     public void setCapabilities(Hash peer, String caps);
+
     public void removeCapabilities(Hash peer);
 }

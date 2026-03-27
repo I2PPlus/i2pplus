@@ -4,13 +4,14 @@
  */
 package net.i2p.client.naming;
 
+import net.i2p.I2PAppContext;
+import net.i2p.data.DataHelper;
+import net.i2p.data.Destination;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Locale;
-import net.i2p.I2PAppContext;
-import net.i2p.data.DataHelper;
-import net.i2p.data.Destination;
 
 /**
  * Simple extension to EepGetNamingService to append what we find to hosts.txt,
@@ -38,7 +39,7 @@ import net.i2p.data.Destination;
 public class EepGetAndAddNamingService extends EepGetNamingService {
 
     /** default hosts.txt filename */
-    private final static String DEFAULT_HOSTS_FILE = "hosts.txt";
+    private static final String DEFAULT_HOSTS_FILE = "hosts.txt";
 
     public EepGetAndAddNamingService(I2PAppContext context) {
         super(context);
@@ -50,7 +51,7 @@ public class EepGetAndAddNamingService extends EepGetNamingService {
         if (rv != null) {
             hostname = hostname.toLowerCase(Locale.US);
             // If it's long, assume it's a key.
-            if (hostname.length() < 516 && hostname.endsWith(".i2p") && ! hostname.endsWith(".b32.i2p")) {
+            if (hostname.length() < 516 && hostname.endsWith(".i2p") && !hostname.endsWith(".b32.i2p")) {
                 File f = new File(_context.getRouterDir(), DEFAULT_HOSTS_FILE);
                 if ((f.exists()) && (f.canWrite())) {
                     synchronized (this) {
@@ -62,7 +63,10 @@ public class EepGetAndAddNamingService extends EepGetNamingService {
                         } catch (IOException ioe) {
                             System.err.println("Error appending: " + ioe);
                         } finally {
-                            if (fos != null) try { fos.close(); } catch (IOException cioe) {}
+                            if (fos != null) try {
+                                    fos.close();
+                                } catch (IOException cioe) {
+                                }
                         }
                     }
                 }

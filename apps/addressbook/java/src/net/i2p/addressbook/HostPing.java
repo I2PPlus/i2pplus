@@ -1,5 +1,12 @@
 package net.i2p.addressbook;
 
+import net.i2p.I2PAppContext;
+import net.i2p.client.naming.NamingService;
+import net.i2p.client.streaming.I2PSocketManager;
+import net.i2p.client.streaming.I2PSocketManagerFactory;
+import net.i2p.data.Destination;
+import net.i2p.util.Log;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -8,13 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Pattern;
-
-import net.i2p.I2PAppContext;
-import net.i2p.client.naming.NamingService;
-import net.i2p.client.streaming.I2PSocketManager;
-import net.i2p.client.streaming.I2PSocketManagerFactory;
-import net.i2p.data.Destination;
-import net.i2p.util.Log;
 
 /**
  * Simple command-line ping tool
@@ -225,8 +225,7 @@ public class HostPing {
             }
 
             long avg = total / responseTimes.size();
-            System.out.printf("Results for %s: %d / %d pongs received, average response %dms\n",
-                destination, successCount, totalCount, avg);
+            System.out.printf("Results for %s: %d / %d pongs received, average response %dms\n", destination, successCount, totalCount, avg);
         } else {
             System.out.printf("Results for %s: 0 / %d pongs received\n", destination, totalCount);
         }
@@ -257,8 +256,7 @@ public class HostPing {
             }
         }
 
-        System.out.printf("\nBatch results: %d / %d destinations reachable\n",
-            successCount, destinations.size());
+        System.out.printf("\nBatch results: %d / %d destinations reachable\n", successCount, destinations.size());
 
         return successCount > 0 ? 0 : 1;
     }

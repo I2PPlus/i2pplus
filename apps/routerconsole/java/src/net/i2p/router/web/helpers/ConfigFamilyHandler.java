@@ -1,5 +1,12 @@
 package net.i2p.router.web.helpers;
 
+import net.i2p.crypto.CertUtil;
+import net.i2p.crypto.KeyStoreUtil;
+import net.i2p.data.router.RouterInfo;
+import net.i2p.router.crypto.FamilyKeyCrypto;
+import net.i2p.router.web.FormHandler;
+import net.i2p.util.SecureDirectory;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,12 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.i2p.crypto.CertUtil;
-import net.i2p.crypto.KeyStoreUtil;
-import net.i2p.data.router.RouterInfo;
-import net.i2p.router.crypto.FamilyKeyCrypto;
-import net.i2p.router.web.FormHandler;
-import net.i2p.util.SecureDirectory;
 
 /**
  *  Handler for family configuration.
@@ -79,12 +80,10 @@ public class ConfigFamilyHandler extends FormHandler {
                     addFormError(_t("Bad characters in Family: " + family), true);
                     return;
                 }
-                if (family.endsWith(FamilyKeyCrypto.CN_SUFFIX) && family.length() > FamilyKeyCrypto.CN_SUFFIX.length())
-                    family = family.substring(0, family.length() - FamilyKeyCrypto.CN_SUFFIX.length());
+                if (family.endsWith(FamilyKeyCrypto.CN_SUFFIX) && family.length() > FamilyKeyCrypto.CN_SUFFIX.length()) family = family.substring(0, family.length() - FamilyKeyCrypto.CN_SUFFIX.length());
                 // store to keystore
                 File ks = new SecureDirectory(_context.getConfigDir(), "keystore");
-                if (!ks.exists())
-                    ks.mkdirs();
+                if (!ks.exists()) ks.mkdirs();
                 ks = new File(ks, FamilyKeyCrypto.KEYSTORE_PREFIX + family + FamilyKeyCrypto.KEYSTORE_SUFFIX);
                 if (ks.exists()) {
                     addFormError(_t("Keystore {0} already exists for family {1}! Delete or rename it first.", ks, family), true);
@@ -94,11 +93,9 @@ public class ConfigFamilyHandler extends FormHandler {
                 KeyStoreUtil.storePrivateKey(ks, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD, family, keypw, pk, certs);
                 // store certificate
                 File cf = new SecureDirectory(_context.getConfigDir(), "certificates");
-                if (!cf.exists())
-                    cf.mkdirs();
+                if (!cf.exists()) cf.mkdirs();
                 cf = new SecureDirectory(cf, "family");
-                if (!ks.exists())
-                    ks.mkdirs();
+                if (!ks.exists()) ks.mkdirs();
                 cf = new File(cf, family + FamilyKeyCrypto.CERT_SUFFIX);
                 // ignore failure
                 KeyStoreUtil.exportCert(ks, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD, family, cf);
@@ -119,7 +116,10 @@ public class ConfigFamilyHandler extends FormHandler {
                 addFormError(_t("Load from file failed") + " - " + ioe.getMessage(), true);
             } finally {
                 // it's really a ByteArrayInputStream but we'll play along...
-                try { in.close(); } catch (IOException ioe) {}
+                try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
             }
         } else if (_action.equals(_t("Leave Family"))) {
             List<String> removes = new ArrayList<String>();
@@ -133,6 +133,6 @@ public class ConfigFamilyHandler extends FormHandler {
                 addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);
             }
         }
-        //addFormError(_t("Unsupported") + ' ' + _action + '.');
+        // addFormError(_t("Unsupported") + ' ' + _action + '.');
     }
 }

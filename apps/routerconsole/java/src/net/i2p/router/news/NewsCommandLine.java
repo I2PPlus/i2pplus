@@ -1,10 +1,11 @@
 package net.i2p.router.news;
 
+import net.i2p.router.RouterCommandLine;
+import net.i2p.router.RouterVersion;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import net.i2p.router.RouterCommandLine;
-import net.i2p.router.RouterVersion;
 
 /**
  * Command line interface for news and blocklist management utilities.
@@ -22,12 +23,7 @@ import net.i2p.router.RouterVersion;
  */
 public class NewsCommandLine extends net.i2p.router.RouterCommandLine {
 
-    protected static final List<String> NCLASSES = Arrays.asList(new String[] {
-        "com.vuze.plugins.mlab.MLabRunner",
-        "net.i2p.router.news.BlocklistEntries",
-        "net.i2p.router.news.NewsXMLParser",
-        "net.i2p.router.update.NewsHandler"
-    });
+    protected static final List<String> NCLASSES = Arrays.asList(new String[] {"com.vuze.plugins.mlab.MLabRunner", "net.i2p.router.news.BlocklistEntries", "net.i2p.router.news.NewsXMLParser", "net.i2p.router.update.NewsHandler"});
 
     protected NewsCommandLine() {}
 
@@ -44,8 +40,7 @@ public class NewsCommandLine extends net.i2p.router.RouterCommandLine {
     }
 
     public static void usage(List<String> classes) {
-        System.err.println("I2P Router Console version " + RouterVersion.FULL_VERSION + '\n' +
-                           "USAGE: java -jar /path/to/routerconsole.jar command [args]");
+        System.err.println("I2P Router Console version " + RouterVersion.FULL_VERSION + '\n' + "USAGE: java -jar /path/to/routerconsole.jar command [args]");
         printCommands(classes);
     }
 }

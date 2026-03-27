@@ -1,13 +1,14 @@
 package net.i2p.router.util;
 
-import java.io.Serializable;
-import java.util.Comparator;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+
+import java.io.Serializable;
+import java.util.Comparator;
+import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Priority blocking queue with bounded capacity and FIFO ordering within priority levels.
@@ -32,8 +33,8 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
 
     private static final long serialVersionUID = 1L;
 
-    protected transient final I2PAppContext _context;
-    protected transient final Log _log;
+    protected final transient I2PAppContext _context;
+    protected final transient Log _log;
     protected final String _name;
 
     /**
@@ -61,12 +62,14 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
      * Default backlog and max size depending on system speed.
      */
     protected static final int DEFAULT_BACKLOG_SIZE = SystemVersion.isSlow() ? 256 : 384;
+
     protected static final int DEFAULT_MAX_SIZE = SystemVersion.isSlow() ? 512 : 1024;
 
     /**
      * Configuration property keys for max size and backlog thresholds.
      */
     public static final String PROP_MAX_SIZE = "router.codelMaxQueue";
+
     public static final String PROP_BACKLOG_SIZE = "router.codelBacklog";
 
     /**
@@ -145,8 +148,7 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
         @Override
         public int compare(E l, E r) {
             int priorityCompare = Integer.compare(r.getPriority(), l.getPriority());
-            if (priorityCompare != 0)
-                return priorityCompare;
+            if (priorityCompare != 0) return priorityCompare;
             return Long.compare(l.getSeqNum(), r.getSeqNum());
         }
     }

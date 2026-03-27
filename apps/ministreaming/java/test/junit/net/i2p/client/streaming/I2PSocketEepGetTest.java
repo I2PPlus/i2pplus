@@ -4,15 +4,9 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Properties;
-import java.nio.charset.StandardCharsets;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Destination;
+
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -22,25 +16,24 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Properties;
+
 public class I2PSocketEepGetTest {
     private static final String STATS_HOST = "stats.i2p";
     private static final String STATS_DEST = "Okd5sN9hFWx-sr0HH8EFaxkeIMi6PC5eGTcjM1KB7uQ0ffCUJ2nVKzcsKZFHQc7pLONjOs2LmG5H-2SheVH504EfLZnoB7vxoamhOMENnDABkIRGGoRisc5AcJXQ759LraLRdiGSR0WTHQ0O1TU0hAz7vAv3SOaDp9OwNDr9u902qFzzTKjUTG5vMTayjTkLo2kOwi6NVchDeEj9M7mjj5ySgySbD48QpzBgcqw1R27oIoHQmjgbtbmV2sBL-2Tpyh3lRe1Vip0-K0Sf4D-Zv78MzSh8ibdxNcZACmZiVODpgMj2ejWJHxAEz41RsfBpazPV0d38Mfg4wzaS95R5hBBo6SdAM4h5vcZ5ESRiheLxJbW0vBpLRd4mNvtKOrcEtyCvtvsP3FpA-6IKVswyZpHgr3wn6ndDHiVCiLAQZws4MsIUE1nkfxKpKtAnFZtPrrB8eh7QO9CkH2JBhj7bG0ED6mV5~X5iqi52UpsZ8gnjZTgyG5pOF8RcFrk86kHxAAAA";
     private static final String FETCH_URL = "http://" + STATS_HOST;
     private static final String FETCH_B64 = "http://i2p/" + STATS_DEST + "/";
     private static final String FETCH_BAD_B64 = "http://i2p/" + STATS_DEST;
-    private static final String FETCH_RESULT_HEADER = "HTTP/1.1 200 OK\n" +
-            "Date: Sun, 26 Jul 2015 00:00:00 GMT\n" +
-            "Content-Length: 50\n" +
-            "Last-Modified: Wed, 01 Jul 2015 13:37:00 GMT\n" +
-            "Connection: close\n" +
-            "Content-Type: text/html\n" +
-            "Accept-Ranges: bytes\n" +
-            "Cache-Control: max-age=3600,public\n" +
-            "Proxy-Connection: close\n\n";
+    private static final String FETCH_RESULT_HEADER = "HTTP/1.1 200 OK\n" + "Date: Sun, 26 Jul 2015 00:00:00 GMT\n" + "Content-Length: 50\n" + "Last-Modified: Wed, 01 Jul 2015 13:37:00 GMT\n" + "Connection: close\n" + "Content-Type: text/html\n" + "Accept-Ranges: bytes\n" + "Cache-Control: max-age=3600,public\n" + "Proxy-Connection: close\n\n";
     private static final String FETCH_RESULT = "<html><head><title>stats.i2p</title></head></html>";
 
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
+    @Rule public MockitoRule rule = MockitoJUnit.rule();
 
     @Mock private I2PSocketManager mgr;
     @Mock private I2PSocketOptions opts;
@@ -78,8 +71,7 @@ public class I2PSocketEepGetTest {
 
     public void fetchFrom(String url, boolean shouldSucceed) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        I2PSocketEepGet eep = new I2PSocketEepGet(I2PAppContext.getGlobalContext(),
-                mgr, 0, -1, -1, null, baos, url);
+        I2PSocketEepGet eep = new I2PSocketEepGet(I2PAppContext.getGlobalContext(), mgr, 0, -1, -1, null, baos, url);
         if (shouldSucceed) {
             assertTrue(eep.fetch());
             assertThat(baos.toString(), is(equalTo(FETCH_RESULT)));

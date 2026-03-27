@@ -1,14 +1,15 @@
 package net.i2p.router.networkdb.kademlia;
 
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
+
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * Provides denial-of-service protection for network database lookup operations.
@@ -29,10 +30,12 @@ class LookupThrottler {
 
     /** the id of this is -1 */
     private static final TunnelId DUMMY_ID = new TunnelId();
+
     /** this seems like plenty */
     private static final int DEFAULT_MAX_LOOKUPS = 30;
+
     private static final int DEFAULT_MAX_NON_FF_LOOKUPS = 10;
-    private static final long DEFAULT_CLEAN_TIME = 3*60*1000;
+    private static final long DEFAULT_CLEAN_TIME = 3 * 60 * 1000;
     // Max requests allowed in 1-second burst window
     private static final int BURST_THRESHOLD = 5;
     private static final long BURST_WINDOW_MS = 1000L;

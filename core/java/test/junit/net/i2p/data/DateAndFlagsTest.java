@@ -1,4 +1,5 @@
 package net.i2p.data;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by str4d in 2012 and released into the public domain
@@ -27,5 +28,4 @@ public class DateAndFlagsTest extends StructureTest {
     public DataStructure createStructureToRead() {
         return new DateAndFlags();
     }
-
 }

@@ -56,9 +56,7 @@ public abstract class HMACGenerator {
      * @param origMACLength how much of the MAC do we want to verify
      * @throws IllegalArgumentException for bad key
      */
-    public abstract boolean verify(SessionKey key, byte curData[], int curOffset, int curLength,
-                                   byte origMAC[], int origMACOffset, int origMACLength);
-
+    public abstract boolean verify(SessionKey key, byte curData[], int curOffset, int curLength, byte origMAC[], int origMACOffset, int origMACLength);
 
     /**
      * 32 bytes from the byte array cache.

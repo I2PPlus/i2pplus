@@ -50,53 +50,43 @@ public class UTF8Reader extends Reader {
     @Override
     public int read() throws IOException {
         int b = _in.read();
-        if (b < 0)
-            return b;
+        if (b < 0) return b;
         // https://en.wikipedia.org/wiki/Utf-8
-        if ((b & 0x80) == 0)
-            return b;
+        if ((b & 0x80) == 0) return b;
         if (_bb == null) {
             _bb = ByteBuffer.allocate(6);
             _cb = CharBuffer.allocate(1);
             _dc = Charset.forName("UTF-8").newDecoder();
         } else {
-            ((Buffer)_bb).clear();
-            ((Buffer)_cb).clear();
+            ((Buffer) _bb).clear();
+            ((Buffer) _cb).clear();
         }
         _bb.put((byte) b);
-        int end;  // how many more
-        if ((b & 0xe0) == 0xc0)
-            end = 1;
-        else if ((b & 0xf0) == 0xe0)
-            end = 2;
-        else if ((b & 0xf8) == 0xf0)
-            end = 3;
-        else if ((b & 0xfc) == 0xf8)
-            end = 4;
-        else if ((b & 0xfe) == 0xfc)
-            end = 5;
-        else  //  error, 10xxxxxx
-            return REPLACEMENT;
+        int end; // how many more
+        if ((b & 0xe0) == 0xc0) end = 1;
+        else if ((b & 0xf0) == 0xe0) end = 2;
+        else if ((b & 0xf8) == 0xf0) end = 3;
+        else if ((b & 0xfc) == 0xf8) end = 4;
+        else if ((b & 0xfe) == 0xfc) end = 5;
+        //  error, 10xxxxxx
+        else return REPLACEMENT;
         for (int i = 0; i < end; i++) {
             b = _in.read();
-            if (b < 0)
-                return REPLACEMENT;  // next read will return EOF
+            if (b < 0) return REPLACEMENT; // next read will return EOF
             // we aren't going to check for all errors,
             // but let's fail fast on this one
-            if ((b & 0x80) == 0)
-                return REPLACEMENT;
+            if ((b & 0x80) == 0) return REPLACEMENT;
             _bb.put((byte) b);
         }
         _dc.reset();
         // not ByteBuffer to avoid Java 8/9 issues with flip()
-        ((Buffer)_bb).flip();
+        ((Buffer) _bb).flip();
         CoderResult result = _dc.decode(_bb, _cb, true);
         // Overflow and underflow are not errors.
         // It seems to return underflow every time.
         // So just check if we got a character back in the buffer.
-        ((Buffer)_cb).flip();
-        if (result.isError() || !_cb.hasRemaining())
-            return REPLACEMENT;
+        ((Buffer) _cb).flip();
+        if (result.isError() || !_cb.hasRemaining()) return REPLACEMENT;
         // let underflow and overflow go, return first
         return _cb.get() & 0xffff;
     }
@@ -110,8 +100,7 @@ public class UTF8Reader extends Reader {
         for (int i = 0; i < len; i++) {
             int c = read();
             if (c < 0) {
-                if (i == 0)
-                    return -1;
+                if (i == 0) return -1;
                 return i;
             }
             cbuf[off + i] = (char) c;
@@ -123,31 +112,31 @@ public class UTF8Reader extends Reader {
         _in.close();
     }
 
-/****
-    public static void main(String[] args) {
-        try {
-            String s = "Consider the encoding of the Euro sign, €." +
-                       " The Unicode code point for \"€\" is U+20AC.";
-            byte[] test = s.getBytes("UTF-8");
-            InputStream bais = new java.io.ByteArrayInputStream(test);
-            UTF8Reader r = new UTF8Reader(bais);
-            int b;
-            StringBuilder buf = new StringBuilder(128);
-            while ((b = r.read()) >= 0) {
-                buf.append((char) b);
-            }
-            System.out.println("Received: " + buf);
-            System.out.println("Test passed? " + buf.toString().equals(s));
-            buf.setLength(0);
-            bais = new java.io.ByteArrayInputStream(new byte[] { 'x', (byte) 0xcc, 'x' });
-            r = new UTF8Reader(bais);
-            while ((b = r.read()) >= 0) {
-                buf.append((char) b);
-            }
-            System.out.println("Received: " + buf);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-    }
-****/
+    /****
+     * public static void main(String[] args) {
+     * try {
+     * String s = "Consider the encoding of the Euro sign, €." +
+     * " The Unicode code point for \"€\" is U+20AC.";
+     * byte[] test = s.getBytes("UTF-8");
+     * InputStream bais = new java.io.ByteArrayInputStream(test);
+     * UTF8Reader r = new UTF8Reader(bais);
+     * int b;
+     * StringBuilder buf = new StringBuilder(128);
+     * while ((b = r.read()) >= 0) {
+     * buf.append((char) b);
+     * }
+     * System.out.println("Received: " + buf);
+     * System.out.println("Test passed? " + buf.toString().equals(s));
+     * buf.setLength(0);
+     * bais = new java.io.ByteArrayInputStream(new byte[] { 'x', (byte) 0xcc, 'x' });
+     * r = new UTF8Reader(bais);
+     * while ((b = r.read()) >= 0) {
+     * buf.append((char) b);
+     * }
+     * System.out.println("Received: " + buf);
+     * } catch (IOException ioe) {
+     * ioe.printStackTrace();
+     * }
+     * }
+     ****/
 }

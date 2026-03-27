@@ -88,118 +88,107 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
     // how long to wait for another request on the same socket
     // Firefox timeout appears to be about 114 seconds, so it will close before we do.
-    static final int BROWSER_KEEPALIVE_TIMEOUT = 2*60*1000;
+    static final int BROWSER_KEEPALIVE_TIMEOUT = 2 * 60 * 1000;
     private static final boolean DEFAULT_KEEPALIVE_BROWSER = true;
     private static final boolean DEFAULT_KEEPALIVE_I2P = true;
 
     /**
      *  These are backups if the xxx.ht error page is missing.
      */
-    private final static String ERR_REQUEST_DENIED =
-        "HTTP/1.1 403 Access Denied\r\n" +
-        "Content-Type: text/html; charset=iso-8859-1\r\n" +
-        "Cache-Control: no-cache\r\n" +
-        "Connection: close\r\n"+
-        "\r\n" +
-        "<html><body><H1>I2P ERROR: REQUEST DENIED</H1>" +
-        "The requested address appears to be invalid.<BR>";
+    private static final String ERR_REQUEST_DENIED =
+            "HTTP/1.1 403 Access Denied\r\n" + "Content-Type: text/html; charset=iso-8859-1\r\n"
+                    + "Cache-Control: no-cache\r\n"
+                    + "Connection: close\r\n"
+                    + "\r\n"
+                    + "<html><body><H1>I2P ERROR: REQUEST DENIED</H1>"
+                    + "The requested address appears to be invalid.<BR>";
 
-    private final static String ERR_BLACKLISTED =
-        "HTTP/1.1 403 Address Blacklisted\r\n" +
-        "Content-Type: text/html; charset=iso-8859-1\r\n" +
-        "Cache-Control: no-cache\r\n" +
-        "Connection: close\r\n"+
-        "\r\n" +
-        "<html><body><H1>I2P ERROR: ADDRESS BLACKLISTED</H1>" +
-        "The requested address has been blacklisted.<BR>";
+    private static final String ERR_BLACKLISTED =
+            "HTTP/1.1 403 Address Blacklisted\r\n" + "Content-Type: text/html; charset=iso-8859-1\r\n"
+                    + "Cache-Control: no-cache\r\n"
+                    + "Connection: close\r\n"
+                    + "\r\n"
+                    + "<html><body><H1>I2P ERROR: ADDRESS BLACKLISTED</H1>"
+                    + "The requested address has been blacklisted.<BR>";
 
-    private final static String ERR_NO_OUTPROXY =
-        "HTTP/1.1 503 Service Unavailable\r\n" +
-        "Content-Type: text/html; charset=iso-8859-1\r\n" +
-        "Cache-Control: no-cache\r\n" +
-        "Connection: close\r\n"+
-        "\r\n" +
-        "<html><body><H1>I2P ERROR: No outproxy found</H1>" +
-        "Your request was for a site outside of I2P, but you have no " +
-        "HTTP outproxy configured. Please configure an outproxy in I2PTunnel";
+    private static final String ERR_NO_OUTPROXY =
+            "HTTP/1.1 503 Service Unavailable\r\n" + "Content-Type: text/html; charset=iso-8859-1\r\n"
+                    + "Cache-Control: no-cache\r\n"
+                    + "Connection: close\r\n"
+                    + "\r\n"
+                    + "<html><body><H1>I2P ERROR: No outproxy found</H1>"
+                    + "Your request was for a site outside of I2P, but you have no "
+                    + "HTTP outproxy configured. Please configure an outproxy in I2PTunnel";
 
-    private final static String ERR_AHELPER_CONFLICT =
-        "HTTP/1.1 409 Conflict\r\n" +
-        "Content-Type: text/html; charset=iso-8859-1\r\n" +
-        "Cache-Control: no-cache\r\n" +
-        "Connection: close\r\n"+
-        "\r\n" +
-        "<html><body><H1>I2P ERROR: Destination key conflict</H1>" +
-        "The addresshelper link you followed specifies a different destination key " +
-        "than a host entry in your host database. " +
-        "Someone could be trying to impersonate another website, " +
-        "or people have given two websites identical names.<p>" +
-        "You can resolve the conflict by considering which key you trust, " +
-        "and either discarding the addresshelper link, " +
-        "discarding the host entry from your host database, " +
-        "or naming one of them differently.<p>";
+    private static final String ERR_AHELPER_CONFLICT =
+            "HTTP/1.1 409 Conflict\r\n" + "Content-Type: text/html; charset=iso-8859-1\r\n"
+                    + "Cache-Control: no-cache\r\n"
+                    + "Connection: close\r\n"
+                    + "\r\n"
+                    + "<html><body><H1>I2P ERROR: Destination key conflict</H1>"
+                    + "The addresshelper link you followed specifies a different destination key "
+                    + "than a host entry in your host database. "
+                    + "Someone could be trying to impersonate another website, "
+                    + "or people have given two websites identical names.<p>"
+                    + "You can resolve the conflict by considering which key you trust, "
+                    + "and either discarding the addresshelper link, "
+                    + "discarding the host entry from your host database, "
+                    + "or naming one of them differently.<p>";
 
-    private final static String ERR_AHELPER_NOTFOUND =
-        "HTTP/1.1 404 Not Found\r\n" +
-        "Content-Type: text/html; charset=iso-8859-1\r\n" +
-        "Cache-Control: no-cache\r\n" +
-        "Connection: close\r\n"+
-        "\r\n" +
-        "<html><body><H1>I2P ERROR: Helper key not resolvable.</H1>" +
-        "The helper key you put for i2paddresshelper= is not resolvable. " +
-        "It seems to be garbage data, or a mistyped b32. Check your URL " +
-        "to try and fix the helper key to be either a b32 or a base64.";
+    private static final String ERR_AHELPER_NOTFOUND =
+            "HTTP/1.1 404 Not Found\r\n" + "Content-Type: text/html; charset=iso-8859-1\r\n"
+                    + "Cache-Control: no-cache\r\n"
+                    + "Connection: close\r\n"
+                    + "\r\n"
+                    + "<html><body><H1>I2P ERROR: Helper key not resolvable.</H1>"
+                    + "The helper key you put for i2paddresshelper= is not resolvable. "
+                    + "It seems to be garbage data, or a mistyped b32. Check your URL "
+                    + "to try and fix the helper key to be either a b32 or a base64.";
 
-    private final static String ERR_AHELPER_NEW =
-        "HTTP/1.1 409 New Address\r\n" +
-        "Content-Type: text/html; charset=iso-8859-1\r\n" +
-        "Cache-Control: no-cache\r\n" +
-        "Connection: close\r\n"+
-        "\r\n" +
-        "<html><body><H1>New Host Name with Address Helper</H1>" +
-        "The address helper link you followed is for a new host name that is not in your addressbook. " +
-        "You may either save the destination for this host name to your addressbook, or remember it only until your router restarts. " +
-        "If you save it to your addressbook, you will not see this message again. " +
-        "If you do not wish to visit this host, click the \"back\" button on your browser.";
+    private static final String ERR_AHELPER_NEW = "HTTP/1.1 409 New Address\r\n"
+            + "Content-Type: text/html; charset=iso-8859-1\r\n"
+            + "Cache-Control: no-cache\r\n"
+            + "Connection: close\r\n"
+            + "\r\n"
+            + "<html><body><H1>New Host Name with Address Helper</H1>The address helper link you followed is for a"
+            + " new host name that is not in your addressbook. You may either save the destination for this host"
+            + " name to your addressbook, or remember it only until your router restarts. If you save it to your"
+            + " addressbook, you will not see this message again. If you do not wish to visit this host, click the"
+            + " \"back\" button on your browser.";
 
-    private final static String ERR_BAD_PROTOCOL =
-        "HTTP/1.1 403 Bad Protocol\r\n" +
-        "Content-Type: text/html; charset=iso-8859-1\r\n" +
-        "Cache-Control: no-cache\r\n" +
-        "Connection: close\r\n"+
-        "\r\n" +
-        "<html><body><H1>I2P ERROR: NON-HTTP PROTOCOL</H1>" +
-        "The request uses a bad protocol. " +
-        "The I2P HTTP Proxy supports HTTP and HTTPS requests only. Other protocols such as FTP are not allowed.<BR>";
+    private static final String ERR_BAD_PROTOCOL = "HTTP/1.1 403 Bad Protocol\r\n"
+            + "Content-Type: text/html; charset=iso-8859-1\r\n"
+            + "Cache-Control: no-cache\r\n"
+            + "Connection: close\r\n"
+            + "\r\n"
+            + "<html><body><H1>I2P ERROR: NON-HTTP PROTOCOL</H1>The request uses a bad protocol. The I2P HTTP"
+            + " Proxy supports HTTP and HTTPS requests only. Other protocols such as FTP are not allowed.<BR>";
 
-    private final static String ERR_BAD_URI =
-        "HTTP/1.1 403 Bad URI\r\n" +
-        "Content-Type: text/html; charset=iso-8859-1\r\n" +
-        "Cache-Control: no-cache\r\n" +
-        "Connection: close\r\n"+
-        "\r\n" +
-        "<html><body><H1>I2P ERROR: INVALID REQUEST URI</H1>" +
-        "The request URI is invalid, and probably contains illegal characters. " +
-        "If you clicked e.g. a forum link, check the end of the URI for any characters the browser has mistakenly added on.<BR>";
+    private static final String ERR_BAD_URI = "HTTP/1.1 403 Bad URI\r\n"
+            + "Content-Type: text/html; charset=iso-8859-1\r\n"
+            + "Cache-Control: no-cache\r\n"
+            + "Connection: close\r\n"
+            + "\r\n"
+            + "<html><body><H1>I2P ERROR: INVALID REQUEST URI</H1>The request URI is invalid, and probably"
+            + " contains illegal characters. If you clicked e.g. a forum link, check the end of the URI for any"
+            + " characters the browser has mistakenly added on.<BR>";
 
-    private final static String ERR_LOCALHOST =
-        "HTTP/1.1 403 Access Denied\r\n" +
-        "Content-Type: text/html; charset=iso-8859-1\r\n" +
-        "Cache-Control: no-cache\r\n" +
-        "Connection: close\r\n"+
-        "\r\n" +
-        "<html><body><H1>I2P ERROR: REQUEST DENIED</H1>" +
-        "Your browser is misconfigured. Do not use the proxy to access the router console or other localhost destinations.<BR>";
+    private static final String ERR_LOCALHOST = "HTTP/1.1 403 Access Denied\r\n"
+            + "Content-Type: text/html; charset=iso-8859-1\r\n"
+            + "Cache-Control: no-cache\r\n"
+            + "Connection: close\r\n"
+            + "\r\n"
+            + "<html><body><H1>I2P ERROR: REQUEST DENIED</H1>Your browser is misconfigured. Do not use the proxy"
+            + " to access the router console or other localhost destinations.<BR>";
 
-    private final static String ERR_INTERNAL_SSL =
-        "HTTP/1.1 403 SSL Rejected\r\n" +
-        "Content-Type: text/html; charset=iso-8859-1\r\n" +
-        "Cache-Control: no-cache\r\n" +
-        "Connection: close\r\n"+
-        "\r\n" +
-        "<html><body><H1>I2P ERROR: SSL to I2P address rejected</H1>" +
-        "SSL to .i2p addresses denied by configuration." +
-        "You may change the configuration in I2PTunnel";
+    private static final String ERR_INTERNAL_SSL =
+            "HTTP/1.1 403 SSL Rejected\r\n" + "Content-Type: text/html; charset=iso-8859-1\r\n"
+                    + "Cache-Control: no-cache\r\n"
+                    + "Connection: close\r\n"
+                    + "\r\n"
+                    + "<html><body><H1>I2P ERROR: SSL to I2P address rejected</H1>"
+                    + "SSL to .i2p addresses denied by configuration."
+                    + "You may change the configuration in I2PTunnel";
 
     /**
      *  This constructor always starts the tunnel (ignoring the i2cp.delayOpen option).
@@ -210,7 +199,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      *
      *  @param sockMgr the existing socket manager
      */
-    public I2PTunnelHTTPClient(int localPort, Logging l, I2PSocketManager sockMgr, I2PTunnel tunnel, EventDispatcher notifyThis, long clientId) {
+    public I2PTunnelHTTPClient(
+            int localPort,
+            Logging l,
+            I2PSocketManager sockMgr,
+            I2PTunnel tunnel,
+            EventDispatcher notifyThis,
+            long clientId) {
         super(localPort, l, sockMgr, tunnel, notifyThis, clientId);
         _proxyNonce = Long.toString(_context.random().nextLong());
         // proxyList = new ArrayList();
@@ -226,13 +221,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * @throws IllegalArgumentException if the I2PTunnel does not contain
      *                                  valid config to contact the router
      */
-    public I2PTunnelHTTPClient(int localPort, Logging l, boolean ownDest,
-                               String wwwProxy, EventDispatcher notifyThis,
-                               I2PTunnel tunnel) throws IllegalArgumentException {
+    public I2PTunnelHTTPClient(
+            int localPort, Logging l, boolean ownDest, String wwwProxy, EventDispatcher notifyThis, I2PTunnel tunnel)
+            throws IllegalArgumentException {
         super(localPort, ownDest, l, notifyThis, "HTTP Proxy on " + tunnel.listenHost + ':' + localPort, tunnel);
         _proxyNonce = Long.toString(_context.random().nextLong());
 
-        //proxyList = new ArrayList(); // We won't use outside of i2p
+        // proxyList = new ArrayList(); // We won't use outside of i2p
 
         if (wwwProxy != null) {
             StringTokenizer tok = new StringTokenizer(wwwProxy, ", ");
@@ -269,7 +264,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         if (!defaultOpts.contains(I2PSocketOptions.PROP_READ_TIMEOUT)) {
             defaultOpts.setProperty(I2PSocketOptions.PROP_READ_TIMEOUT, "" + DEFAULT_READ_TIMEOUT);
         }
-        //if (!defaultOpts.contains("i2p.streaming.inactivityTimeout"))
+        // if (!defaultOpts.contains("i2p.streaming.inactivityTimeout"))
         //    defaultOpts.setProperty("i2p.streaming.inactivityTimeout", ""+DEFAULT_READ_TIMEOUT);
         // delayed start
         verifySocketManager();
@@ -304,6 +299,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
         return opts;
     }
+
     private InternalSocketRunner isr;
 
     /**
@@ -314,9 +310,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     @Override
     public void startRunning() {
         // following are for HTTPResponseOutputStream
-        //_context.statManager().createRateStat("i2ptunnel.httpCompressionRatio", "ratio of compressed size to decompressed size after transfer", "I2PTunnel", new long[] { 60*1000, 60*60*1000 });
-        //_context.statManager().createRateStat("i2ptunnel.httpCompressed", "compressed size transferred", "I2PTunnel", new long[] { 60*1000, 60*60*1000 });
-        //_context.statManager().createRateStat("i2ptunnel.httpExpanded", "size transferred after expansion", "I2PTunnel", new long[] { 60*1000, 60*60*1000 });
+        // _context.statManager().createRateStat("i2ptunnel.httpCompressionRatio", "ratio of compressed size to
+        // decompressed size after transfer", "I2PTunnel", new long[] { 60*1000, 60*60*1000 });
+        // _context.statManager().createRateStat("i2ptunnel.httpCompressed", "compressed size transferred", "I2PTunnel",
+        // new long[] { 60*1000, 60*60*1000 });
+        // _context.statManager().createRateStat("i2ptunnel.httpExpanded", "size transferred after expansion",
+        // "I2PTunnel", new long[] { 60*1000, 60*60*1000 });
         super.startRunning();
         if (open) {
             this.isr = new InternalSocketRunner(this);
@@ -359,6 +358,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     private static final boolean DEFAULT_GZIP = true;
     /** all default to false */
     public static final String PROP_REFERER = "i2ptunnel.httpclient.sendReferer";
+
     public static final String PROP_USER_AGENT = "i2ptunnel.httpclient.sendUserAgent";
     public static final String PROP_VIA = "i2ptunnel.httpclient.sendVia";
     public static final String PROP_JUMP_SERVERS = "i2ptunnel.httpclient.jumpServers";
@@ -411,20 +411,19 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // Connection: close, InternalSocket,
             // or after analysis of the response headers in HTTPResponseOutputStream,
             // or on errors in I2PTunnelRunner.
-            boolean keepalive = getBooleanOption(OPT_KEEPALIVE_BROWSER, DEFAULT_KEEPALIVE_BROWSER) &&
-                                !(s instanceof InternalSocket);
+            boolean keepalive = getBooleanOption(OPT_KEEPALIVE_BROWSER, DEFAULT_KEEPALIVE_BROWSER)
+                    && !(s instanceof InternalSocket);
 
             do { // while (keepalive)
-               if (requestCount > 0) {
-                   try {
+                if (requestCount > 0) {
+                    try {
                         s.setSoTimeout(BROWSER_KEEPALIVE_TIMEOUT);
                     } catch (IOException ioe) {
                         if (_log.shouldInfo())
                             _log.info("Socket closed (timeout) before connection #" + requestCount + " completed");
                         return;
                     }
-                    if (_log.shouldDebug())
-                        _log.debug("KeepAlive, awaiting request #" + requestCount);
+                    if (_log.shouldDebug()) _log.debug("KeepAlive, awaiting request #" + requestCount);
                 }
 
                 String line, method = null, protocol = null, host = null, destination = null;
@@ -454,7 +453,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     if (method == null) {
                         // first line GET/POST/etc.
                         if (_log.shouldDebug()) {
-                            _log.debug(getPrefix(requestId) + "Request [#" + requestCount + "] \n* First line: " + line);
+                            _log.debug(
+                                    getPrefix(requestId) + "Request [#" + requestCount + "] \n* First line: " + line);
                         }
 
                         String[] params = DataHelper.split(line, " ", 3);
@@ -464,7 +464,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         String request = params[1];
 
                         // various obscure fixups
-                        if (request.startsWith("/") && getTunnel().getClientOptions().getProperty("i2ptunnel.noproxy") != null) {
+                        if (request.startsWith("/")
+                                && getTunnel().getClientOptions().getProperty("i2ptunnel.noproxy") != null) {
                             // what is this for ???
                             request = "http://i2p" + request;
                         }
@@ -498,8 +499,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 int idx = 0;
                                 for (int i = 0; i < 2; i++) {
                                     idx = request.indexOf('/', idx);
-                                    if (idx < 0)
-                                        break;
+                                    if (idx < 0) break;
                                     idx++;
                                 }
                                 if (idx > 0) {
@@ -518,7 +518,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                             request = testRequest;
                                             error = false;
                                         } catch (URISyntaxException use2) {
-                                        // didn't work, give up
+                                            // didn't work, give up
                                         }
                                     }
                                 }
@@ -535,7 +535,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 }
                                 requestURI = changeURI(requestURI, null, 0, null);
                             }
-                            if (requestURI.getPath() == null || requestURI.getPath().isEmpty()) {
+                            if (requestURI.getPath() == null
+                                    || requestURI.getPath().isEmpty()) {
                                 // Add a path
                                 if (_log.shouldDebug()) {
                                     _log.debug(getPrefix(requestId) + "Adding / path to [" + request + "]");
@@ -564,8 +565,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         }
 
                         String protocolVersion = params[2];
-                        if (!protocolVersion.equals("HTTP/1.1"))
-                            keepalive = false;
+                        if (!protocolVersion.equals("HTTP/1.1")) keepalive = false;
 
                         protocol = requestURI.getScheme();
                         host = requestURI.getHost();
@@ -586,7 +586,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
                         hostLowerCase = host.toLowerCase(Locale.US);
                         if (hostLowerCase.equals(LOCAL_SERVER)) {
-                        // so we don't do any naming service lookups
+                            // so we don't do any naming service lookups
                             destination = host;
                             usingInternalServer = true;
                             internalPath = requestURI.getPath();
@@ -626,12 +626,19 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             }
                         } else if (NamingService.isI2PHost(hostLowerCase)) {
                             destination = host; // Destination gets the host name
-                            host = getHostName(destination); // Host becomes the destination's "{b32}.b32.i2p" string, or "i2p" on lookup failure
+                            host = getHostName(
+                                    destination); // Host becomes the destination's "{b32}.b32.i2p" string, or "i2p" on
+                                                  // lookup failure
 
                             int rPort = requestURI.getPort();
-                            if (rPort > 0) {remotePort = rPort;} // Save it to put in the I2PSocketOptions
-                            else if ("https".equals(protocol) || isConnect) {remotePort = 443;}
-                            else {remotePort = 80;}
+                            if (rPort > 0) {
+                                remotePort = rPort;
+                            } // Save it to put in the I2PSocketOptions
+                            else if ("https".equals(protocol) || isConnect) {
+                                remotePort = 443;
+                            } else {
+                                remotePort = 80;
+                            }
 
                             String query = requestURI.getRawQuery();
                             if (query != null) {
@@ -639,8 +646,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
                                 // Try to find an address helper in the query
                                 String[] helperStrings = removeHelper(query);
-                                if (helperStrings != null &&
-                                    !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_DISABLE_HELPER))) {
+                                if (helperStrings != null
+                                        && !Boolean.parseBoolean(
+                                                getTunnel().getClientOptions().getProperty(PROP_DISABLE_HELPER))) {
                                     query = helperStrings[0];
                                     if (query.equals("")) {
                                         query = null;
@@ -663,17 +671,22 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                              *  i.e. on your eepsite put
                                              *  <a href="?i2paddresshelper=name.i2p">This is the name I want to be called.</a>
                                              */
-                                            Destination _dest = _context.namingService().lookup(ahelperKey);
+                                            Destination _dest =
+                                                    _context.namingService().lookup(ahelperKey);
                                             if (_dest == null) {
                                                 if (_log.shouldWarn()) {
-                                                    _log.warn(getPrefix(requestId) + "Could not find destination for " + ahelperKey);
+                                                    _log.warn(getPrefix(requestId) + "Could not find destination for "
+                                                            + ahelperKey);
                                                 }
                                                 String header = getErrorPage("ahelper-notfound", ERR_AHELPER_NOTFOUND);
                                                 try {
                                                     out.write(header.getBytes("UTF-8"));
-                                                    out.write(("<p>" + _t("This seems to be a bad destination:") + " " + ahelperKey + " " +
-                                                           _t("i2paddresshelper cannot help you with a destination like that!") +
-                                                           "</p>").getBytes("UTF-8"));
+                                                    out.write(("<p>" + _t("This seems to be a bad destination:") + " "
+                                                                    + ahelperKey + " "
+                                                                    + _t("i2paddresshelper cannot help you with a"
+                                                                            + " destination like that!")
+                                                                    + "</p>")
+                                                            .getBytes("UTF-8"));
                                                     writeFooter(out);
                                                     reader.drain();
                                                 } catch (IOException ioe) {
@@ -689,31 +702,37 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                         if (host == null || "i2p".equals(host)) {
                                             // Host lookup failed - resolvable only with addresshelper
                                             // Store in local HashMap unless there is conflict
-                                            String old = addressHelpers.putIfAbsent(destination.toLowerCase(Locale.US), ahelperKey);
+                                            String old = addressHelpers.putIfAbsent(
+                                                    destination.toLowerCase(Locale.US), ahelperKey);
                                             ahelperNew = old == null;
                                             // inr address helper links without trailing '=', so omit from comparison
-                                            if ((!ahelperNew) && !old.replace("=", "").equals(ahelperKey.replace("=", ""))) {
+                                            if ((!ahelperNew)
+                                                    && !old.replace("=", "").equals(ahelperKey.replace("=", ""))) {
                                                 // Conflict: handle when URL reconstruction done
                                                 ahelperConflict = true;
                                                 if (_log.shouldWarn()) {
-                                                    _log.warn(getPrefix(requestId) + "Addresshelper key conflict for site [" + destination +
-                                                        "], trusted key [" + old + "], specified key [" + ahelperKey + "].");
+                                                    _log.warn(getPrefix(requestId)
+                                                            + "Addresshelper key conflict for site [" + destination
+                                                            + "], trusted key [" + old + "], specified key ["
+                                                            + ahelperKey + "].");
                                                 }
                                             }
                                         } else {
                                             // If the host is resolvable from database, verify addresshelper key
                                             // Silently bypass correct keys, otherwise alert
-                                            Destination hostDest = _context.namingService().lookup(destination);
+                                            Destination hostDest =
+                                                    _context.namingService().lookup(destination);
                                             if (hostDest != null) {
                                                 String destB64 = hostDest.toBase64();
                                                 if (destB64 != null && !destB64.equals(ahelperKey)) {
                                                     // Conflict: handle when URL reconstruction done
                                                     ahelperConflict = true;
                                                     if (_log.shouldWarn()) {
-                                                        _log.warn(getPrefix(requestId) + "Addresshelper key conflict for site [" + destination +
-                                                            "] -> Trusted key [" + destB64 + "] - Specified key [" + ahelperKey + "]");
+                                                        _log.warn(getPrefix(requestId)
+                                                                + "Addresshelper key conflict for site [" + destination
+                                                                + "] -> Trusted key [" + destB64 + "] - Specified key ["
+                                                                + ahelperKey + "]");
                                                     }
-
                                                 }
                                             }
                                         }
@@ -744,35 +763,48 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                             String header = getErrorPage("ahelper-conflict", ERR_AHELPER_CONFLICT);
                                             out.write(header.getBytes("UTF-8"));
                                             out.write("<p>".getBytes("UTF-8"));
-                                            out.write(_t("To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. " +
-                                                      "To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>.",
-                                                      trustedURL, conflictURL).getBytes("UTF-8"));
+                                            out.write(_t(
+                                                            "To visit the destination in your addressbook, click <a"
+                                                                    + " href=\"{0}\">here</a>. To visit the conflicting"
+                                                                    + " addresshelper destination, click <a"
+                                                                    + " href=\"{1}\">here</a>.",
+                                                            trustedURL, conflictURL)
+                                                    .getBytes("UTF-8"));
                                             out.write("</p>".getBytes("UTF-8"));
                                             Hash h1 = ConvertToHash.getHash(requestURI.getHost());
                                             Hash h2 = ConvertToHash.getHash(ahelperKey);
                                             if (h1 != null && h2 != null) {
-                                                String conURL = _context.portMapper().getConsoleURL();
-                                                out.write(("\n<table id=destConflict><tr><th class=center>" +
-                                                           "<a href=\"" + trustedURL + "\">").getBytes("UTF-8"));
-                                                out.write(_t("Destination for {0} in addressbook", requestURI.getHost()).getBytes("UTF-8"));
-                                                out.write(("</a></th>\n<th class=center>" +
-                                                           "<a href=\"" + conflictURL + "\">").getBytes("UTF-8"));
-                                                out.write(_t("Conflicting address helper destination").getBytes("UTF-8"));
+                                                String conURL =
+                                                        _context.portMapper().getConsoleURL();
+                                                out.write(("\n<table id=destConflict><tr><th class=center>"
+                                                                + "<a href=\"" + trustedURL + "\">")
+                                                        .getBytes("UTF-8"));
+                                                out.write(_t("Destination for {0} in addressbook", requestURI.getHost())
+                                                        .getBytes("UTF-8"));
+                                                out.write(("</a></th>\n<th class=center>" + "<a href=\"" + conflictURL
+                                                                + "\">")
+                                                        .getBytes("UTF-8"));
+                                                out.write(_t("Conflicting address helper destination")
+                                                        .getBytes("UTF-8"));
                                                 out.write(("</a></th></tr>\n").getBytes("UTF-8"));
                                                 if (_context.portMapper().isRegistered(PortMapper.SVC_IMAGEGEN)) {
-                                                    out.write(("<tr><td class=center>" +
-                                                        "<a href=\"" + trustedURL + "\">" +
-                                                        "<img src=\"" +
-                                                        conURL + "imagegen/id?s=160&amp;c=" +
-                                                        h1.toBase64().replace("=", "%3d") +
-                                                        "\" width=160 height=160></a>\n" +
-                                                        "</td>\n<td class=center>" +
-                                                        "<a href=\"" + conflictURL + "\">" +
-                                                        "<img src=\"" +
-                                                        conURL + "imagegen/id?s=160&amp;c=" +
-                                                        h2.toBase64().replace("=", "%3d") +
-                                                        "\" width=160 height=160></a>\n" +
-                                                        "</td></tr>").getBytes("UTF-8"));
+                                                    out.write(("<tr><td class=center>" + "<a href=\""
+                                                                    + trustedURL + "\">" + "<img src=\""
+                                                                    + conURL
+                                                                    + "imagegen/id?s=160&amp;c="
+                                                                    + h1.toBase64()
+                                                                            .replace("=", "%3d")
+                                                                    + "\" width=160 height=160></a>\n"
+                                                                    + "</td>\n<td class=center>"
+                                                                    + "<a href=\""
+                                                                    + conflictURL + "\">" + "<img src=\""
+                                                                    + conURL
+                                                                    + "imagegen/id?s=160&amp;c="
+                                                                    + h2.toBase64()
+                                                                            .replace("=", "%3d")
+                                                                    + "\" width=160 height=160></a>\n"
+                                                                    + "</td></tr>")
+                                                            .getBytes("UTF-8"));
                                                 }
                                                 out.write("</table>".getBytes("UTF-8"));
                                             }
@@ -781,11 +813,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                         }
                                         reader.drain();
                                     } catch (IOException ioe) {
-                                    // ignore
+                                        // ignore
                                     }
                                     return;
                                 }
-                            }  // end query processing
+                            } // end query processing
 
                             String addressHelper = addressHelpers.get(destination);
                             if (addressHelper != null) {
@@ -796,30 +828,42 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             if (!isConnect) {
                                 // now strip everything but path and query from URI
                                 String newURI = requestURI.getRawPath();
-                                if (query != null) {newURI += '?' + query;} // NOPMD - once per request
+                                if (query != null) {
+                                    newURI += '?' + query;
+                                } // NOPMD - once per request
                                 // strip :80 from request if we are http://
-                                if (newURI.contains(":80/")) {newURI = newURI.replaceAll(":80/", "/");}
-                                try {requestURI = new URI(newURI);}
-                                catch (URISyntaxException use) { // shouldnt happen
+                                if (newURI.contains(":80/")) {
+                                    newURI = newURI.replaceAll(":80/", "/");
+                                }
+                                try {
+                                    requestURI = new URI(newURI);
+                                } catch (URISyntaxException use) { // shouldnt happen
                                     _log.warn(request, use);
                                     method = null;
                                     break;
                                 }
                             }
 
-                        // end of (host endsWith(".i2p"))
+                            // end of (host endsWith(".i2p"))
 
-                        } else if (hostLowerCase.equals("localhost") || host.equals("127.0.0.1") || host.startsWith("10.0.") ||
-                               host.startsWith("172.16.") || host.startsWith("192.168.") || host.equals("[::1]")) {
+                        } else if (hostLowerCase.equals("localhost")
+                                || host.equals("127.0.0.1")
+                                || host.startsWith("10.0.")
+                                || host.startsWith("172.16.")
+                                || host.startsWith("192.168.")
+                                || host.equals("[::1]")) {
                             // if somebody is trying to get to 192.168.example.com, oh well
                             try {
-                                out.write(getErrorPage("localhost", ERR_LOCALHOST).getBytes("UTF-8"));
+                                out.write(
+                                        getErrorPage("localhost", ERR_LOCALHOST).getBytes("UTF-8"));
                                 writeFooter(out);
                                 reader.drain();
-                            } catch (IOException ioe) {} // ignore
+                            } catch (IOException ioe) {
+                            } // ignore
                             return;
                         } else if (host.contains(".") || host.startsWith("[")) {
-                            if (Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_USE_OUTPROXY_PLUGIN, "true"))) {
+                            if (Boolean.parseBoolean(
+                                    getTunnel().getClientOptions().getProperty(PROP_USE_OUTPROXY_PLUGIN, "true"))) {
                                 ClientAppManager mgr = _context.clientAppManager();
                                 if (mgr != null) {
                                     ClientApp op = mgr.getRegisteredApp(Outproxy.NAME);
@@ -853,26 +897,31 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                     currentProxy = selectSSLProxy(hostLowerCase);
                                     String outproxyName = currentProxy;
                                     if (currentProxy != null && currentProxy.length() > 20)
-                                        outproxyName = currentProxy.substring(0,12) + "...";
+                                        outproxyName = currentProxy.substring(0, 12) + "...";
                                     if (_log.shouldDebug())
-                                        _log.debug("[HTTPClient] Selected [" + outproxyName + "] SSL outproxy for " + host);
+                                        _log.debug("[HTTPClient] Selected [" + outproxyName + "] SSL outproxy for "
+                                                + host);
                                 } else {
                                     currentProxy = selectProxy(hostLowerCase);
                                     String outproxyName = currentProxy;
                                     if (currentProxy != null && currentProxy.length() > 20)
-                                        outproxyName = currentProxy.substring(0,12) + "...";
+                                        outproxyName = currentProxy.substring(0, 12) + "...";
                                     if (_log.shouldDebug())
                                         _log.debug("[HTTPClient] Selected [" + outproxyName + "] outproxy for " + host);
                                 }
                                 if (currentProxy == null) {
                                     if (_log.shouldWarn()) {
-                                        _log.warn("[HTTPClient] Cannot connect to site; no outproxy configured \n* Request: " + requestURI);
+                                        _log.warn("[HTTPClient] Cannot connect to site; no outproxy configured \n"
+                                                + "* Request: "
+                                                + requestURI);
                                     }
                                     try {
-                                        out.write(getErrorPage("noproxy", ERR_NO_OUTPROXY).getBytes("UTF-8"));
+                                        out.write(getErrorPage("noproxy", ERR_NO_OUTPROXY)
+                                                .getBytes("UTF-8"));
                                         writeFooter(out);
                                         reader.drain();
-                                    } catch (IOException ioe) {} // ignore
+                                    } catch (IOException ioe) {
+                                    } // ignore
                                     return;
                                 }
                                 destination = currentProxy;
@@ -880,10 +929,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 targetRequest = requestURI.toASCIIString();
                                 String outproxyName = destination;
                                 if (destination != null && destination.length() > 20) {
-                                    outproxyName = destination.substring(0,15) + "...";
+                                    outproxyName = destination.substring(0, 15) + "...";
                                 }
                                 if (_log.shouldDebug()) {
-                                    _log.debug(getPrefix(requestId) + " for [" + host + "] forwarded via outproxy: " + outproxyName);
+                                    _log.debug(getPrefix(requestId) + " for [" + host + "] forwarded via outproxy: "
+                                            + outproxyName);
                                 }
                             }
                         } else {
@@ -895,15 +945,19 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 _log.warn("[HTTPClient] Malformed hostname " + request + " - aborting...");
                             }
                             try {
-                                out.write(getErrorPage("denied", ERR_REQUEST_DENIED).getBytes("UTF-8"));
+                                out.write(getErrorPage("denied", ERR_REQUEST_DENIED)
+                                        .getBytes("UTF-8"));
                                 writeFooter(out);
                                 reader.drain();
-                            } catch (IOException ioe) {} // ignore
+                            } catch (IOException ioe) {
+                            } // ignore
                             return;
-                        }   // end host name processing
+                        } // end host name processing
 
-                        boolean isValid = usingInternalOutproxy || usingWWWProxy ||
-                                      usingInternalServer || isSupportedAddress(host, protocol);
+                        boolean isValid = usingInternalOutproxy
+                                || usingWWWProxy
+                                || usingInternalServer
+                                || isSupportedAddress(host, protocol);
                         if (!isValid) {
                             if (_log.shouldInfo()) {
                                 _log.info(getPrefix(requestId) + "notValid(" + host + ")");
@@ -916,16 +970,21 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         if (isConnect) {
                             // fix up the change to requestURI above to get back to the original host:port
                             if (usingInternalOutproxy || usingWWWProxy)
-                                line = method + ' ' + requestURI.getHost() + ':' + requestURI.getPort() + ' ' + protocolVersion;
-                            else
-                                line = method + ' ' + host + ':' + remotePort + ' ' + protocolVersion;
+                                line = method
+                                        + ' '
+                                        + requestURI.getHost()
+                                        + ':'
+                                        + requestURI.getPort()
+                                        + ' '
+                                        + protocolVersion;
+                            else line = method + ' ' + host + ':' + remotePort + ' ' + protocolVersion;
                         } else {
                             line = method + ' ' + requestURI.toASCIIString() + ' ' + protocolVersion;
                         }
 
                         String outproxyName = destination;
                         if (destination != null && destination.length() > 20) {
-                            outproxyName = destination.substring(0,15) + "...";
+                            outproxyName = destination.substring(0, 15) + "...";
                         }
 
                         if (_log.shouldDebug()) {
@@ -937,7 +996,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             _log.debug(getPrefix(requestId) + "Destination: " + destination);
                         }
 
-                    // end first line processing
+                        // end first line processing
 
                     } else {
                         if (lowercaseLine.startsWith("connection: ")) {
@@ -958,8 +1017,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 }
                                 continue;
                             }
-                        } else if (lowercaseLine.startsWith("keep-alive: ") ||
-                               lowercaseLine.startsWith("proxy-connection: ")) {
+                        } else if (lowercaseLine.startsWith("keep-alive: ")
+                                || lowercaseLine.startsWith("proxy-connection: ")) {
                             if (lowercaseLine.contains("close")) {
                                 keepalive = false;
                             }
@@ -974,12 +1033,14 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         } else if (lowercaseLine.startsWith("user-agent: ")) {
                             // save for deciding whether to offer address book form
                             userAgent = lowercaseLine.substring(12);
-                            if (!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_USER_AGENT))) {
+                            if (!Boolean.parseBoolean(
+                                    getTunnel().getClientOptions().getProperty(PROP_USER_AGENT))) {
                                 line = null;
                                 continue;
                             }
                         } else if (lowercaseLine.startsWith("accept: ")) {
-                            if (!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_ACCEPT))) {
+                            if (!Boolean.parseBoolean(
+                                    getTunnel().getClientOptions().getProperty(PROP_ACCEPT))) {
                                 // Replace with a standard one if possible
                                 boolean html = lowercaseLine.indexOf("text/html") > 0;
                                 boolean css = lowercaseLine.indexOf("text/css") > 0;
@@ -993,7 +1054,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 } else if (css && !html && !img) {
                                     // chrome, firefox
                                     line = "Accept: text/css,*/*; q=0.1";
-                                }  // else allow as-is
+                                } // else allow as-is
                             }
                         } else if (lowercaseLine.startsWith("accept")) {
                             // strip the accept-blah headers, as they vary dramatically from
@@ -1001,23 +1062,25 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             // But allow Accept-Encoding: gzip, deflate
                             if (lowercaseLine.startsWith("accept-encoding: ")) {
                                 allowGzip = lowercaseLine.contains("gzip");
-                            } else if (!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_ACCEPT))) {
+                            } else if (!Boolean.parseBoolean(
+                                    getTunnel().getClientOptions().getProperty(PROP_ACCEPT))) {
                                 line = null;
                                 continue;
                             }
                         } else if (lowercaseLine.startsWith("referer: ")) {
                             // save for address helper form below
                             referer = line.substring(9);
-                            if (!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_REFERER))) {
+                            if (!Boolean.parseBoolean(
+                                    getTunnel().getClientOptions().getProperty(PROP_REFERER))) {
                                 try {
                                     // Either strip or rewrite the referer line
                                     URI refererURI = new URI(referer);
                                     String origHost = origRequestURI.getHost();
                                     String refererHost = refererURI.getHost();
                                     if (refererHost != null) {
-                                        if (!refererHost.equals(origHost) ||
-                                            refererURI.getPort() != origRequestURI.getPort() ||
-                                            !DataHelper.eq(refererURI.getScheme(), origRequestURI.getScheme())) {
+                                        if (!refererHost.equals(origHost)
+                                                || refererURI.getPort() != origRequestURI.getPort()
+                                                || !DataHelper.eq(refererURI.getScheme(), origRequestURI.getScheme())) {
                                             line = null;
                                             continue; // completely strip the line if everything doesn't match
                                         }
@@ -1036,13 +1099,14 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                     continue; // completely strip the line
                                 }
                             } // else allow
-                        } else if (lowercaseLine.startsWith("via: ") &&
-                            !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_VIA))) {
-                            //line = "Via: i2p";
+                        } else if (lowercaseLine.startsWith("via: ")
+                                && !Boolean.parseBoolean(
+                                        getTunnel().getClientOptions().getProperty(PROP_VIA))) {
+                            // line = "Via: i2p";
                             line = null;
                             continue; // completely strip the line
                         } else if (lowercaseLine.startsWith("from: ")) {
-                            //line = "From: i2p";
+                            // line = "From: i2p";
                             line = null;
                             continue; // completely strip the line
                         } else if (lowercaseLine.startsWith("authorization: ntlm ")) {
@@ -1054,7 +1118,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             // to block Windows NTLM after a far-end 407.
                             // Response to far-end shouldn't happen, as we
                             // strip Proxy-Authenticate from the response in HTTPResponseOutputStream
-                            authorization = line.substring(21);  // "proxy-authorization: ".length()
+                            authorization = line.substring(21); // "proxy-authorization: ".length()
                             line = null;
                             continue;
                         } else if (lowercaseLine.startsWith("icy")) {
@@ -1077,13 +1141,16 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             // According to rfc2616 s14.3, this *should* force identity, even if
                             // an explicit q=0 for gzip doesn't.  tested against orion.i2p, and it
                             // seems to work.
-                            //if (!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_ACCEPT)))
+                            // if (!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_ACCEPT)))
                             //    newRequest.append("Accept-Encoding: \r\n");
                             if (!usingInternalOutproxy)
-                                newRequest.append("X-Accept-Encoding: x-i2p-gzip; q=1.0, identity; q=0.5, deflate; q=0, gzip; q=0, *; q=0\r\n");
+                                newRequest.append(
+                                        "X-Accept-Encoding: x-i2p-gzip; q=1.0, identity; q=0.5, deflate; q=0, gzip;"
+                                                + " q=0, *; q=0\r\n");
                         }
                         if (!shout && !isConnect) {
-                            if (!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_USER_AGENT))) {
+                            if (!Boolean.parseBoolean(
+                                    getTunnel().getClientOptions().getProperty(PROP_USER_AGENT))) {
                                 // let's not advertise to external sites that we are from I2P
                                 String ua;
                                 if (usingWWWProxy || usingInternalOutproxy) {
@@ -1107,19 +1174,27 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             }
                         }
                         // Add Proxy-Authentication header for next hop (outproxy)
-                        if (usingWWWProxy && Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_OUTPROXY_AUTH))) {
+                        if (usingWWWProxy
+                                && Boolean.parseBoolean(
+                                        getTunnel().getClientOptions().getProperty(PROP_OUTPROXY_AUTH))) {
                             // specific for this proxy
-                            String user = getTunnel().getClientOptions().getProperty(PROP_OUTPROXY_USER_PREFIX + currentProxy);
-                            String pw = getTunnel().getClientOptions().getProperty(PROP_OUTPROXY_PW_PREFIX + currentProxy);
+                            String user = getTunnel()
+                                    .getClientOptions()
+                                    .getProperty(PROP_OUTPROXY_USER_PREFIX + currentProxy);
+                            String pw =
+                                    getTunnel().getClientOptions().getProperty(PROP_OUTPROXY_PW_PREFIX + currentProxy);
                             if (user == null || pw == null) {
                                 // if not, look at default user and pw
                                 user = getTunnel().getClientOptions().getProperty(PROP_OUTPROXY_USER);
                                 pw = getTunnel().getClientOptions().getProperty(PROP_OUTPROXY_PW);
                             }
                             if (user != null && pw != null) {
-                                newRequest.append("Proxy-Authorization: Basic ")
-                                    .append(Base64.encode((user + ':' + pw).getBytes("UTF-8"), true)) // true = use standard alphabet
-                                    .append("\r\n");
+                                newRequest
+                                        .append("Proxy-Authorization: Basic ")
+                                        .append(Base64.encode(
+                                                (user + ':' + pw).getBytes("UTF-8"),
+                                                true)) // true = use standard alphabet
+                                        .append("\r\n");
                             }
                         }
                         if (preserveConnectionHeader) {
@@ -1153,7 +1228,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             out.write(getErrorPage("protocol", ERR_BAD_PROTOCOL).getBytes("UTF-8"));
                         }
                         writeFooter(out);
-                    } catch (IOException ioe) {} // ignore
+                    } catch (IOException ioe) {
+                    } // ignore
                     return;
                 }
 
@@ -1175,7 +1251,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     try {
                         out.write(getAuthError(result == AuthResult.AUTH_STALE).getBytes("UTF-8"));
                         writeFooter(out);
-                    } catch (IOException ioe) {} // ignore
+                    } catch (IOException ioe) {
+                    } // ignore
                     return;
                 }
 
@@ -1183,21 +1260,32 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 // Ignore all the headers
                 if (usingInternalServer) {
                     try {
-                    // disable the add form if address helper is disabled
-                        if (internalPath.equals("/add") &&
-                            Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_DISABLE_HELPER))) {
+                        // disable the add form if address helper is disabled
+                        if (internalPath.equals("/add")
+                                && Boolean.parseBoolean(
+                                        getTunnel().getClientOptions().getProperty(PROP_DISABLE_HELPER))) {
                             out.write(ERR_HELPER_DISABLED.getBytes("UTF-8"));
                         } else {
-                            LocalHTTPServer.serveLocalFile(_context, sockMgr, out, method, internalPath, internalRawQuery, _proxyNonce, allowGzip);
+                            LocalHTTPServer.serveLocalFile(
+                                    _context,
+                                    sockMgr,
+                                    out,
+                                    method,
+                                    internalPath,
+                                    internalRawQuery,
+                                    _proxyNonce,
+                                    allowGzip);
                         }
-                    } catch (IOException ioe) {} // ignore
+                    } catch (IOException ioe) {
+                    } // ignore
                     return;
                 }
 
                 // no destination, going to outproxy plugin
                 if (usingInternalOutproxy) {
                     Socket outSocket = outproxy.connect(host, remotePort);
-                    OnTimeout onTimeout = new OnTimeout(s, s.getOutputStream(), targetRequest, usingWWWProxy, currentProxy, requestId);
+                    OnTimeout onTimeout = new OnTimeout(
+                            s, s.getOutputStream(), targetRequest, usingWWWProxy, currentProxy, requestId);
                     byte[] data;
                     byte[] response;
                     if (isConnect) {
@@ -1225,40 +1313,46 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         // remove bad entries
                         addressHelpers.remove(destination.toLowerCase(Locale.US));
                         if (_log.shouldWarn()) {
-                            _log.warn(getPrefix(requestId) + "[HTTPClient] Could not find destination for " + addressHelper);
+                            _log.warn(getPrefix(requestId) + "[HTTPClient] Could not find destination for "
+                                    + addressHelper);
                         }
                         String header = getErrorPage("ahelper-notfound", ERR_AHELPER_NOTFOUND);
                         try {
                             writeErrorMessage(header, out, targetRequest, false, destination);
-                        } catch (IOException ioe) {} // ignore
+                        } catch (IOException ioe) {
+                        } // ignore
                         return;
                     }
-                } else if ("i2p".equals(host)) {clientDest = null;}
-                else if (NamingService.isB32Host(destination)) {
+                } else if ("i2p".equals(host)) {
+                    clientDest = null;
+                } else if (NamingService.isB32Host(destination)) {
                     int len = destination.length();
                     if (len < 60 || (len >= 61 && len <= 63)) {
                         // 8-59 or 61-63 chars, this won't work
                         String header = getErrorPage("b32", ERR_DESTINATION_UNKNOWN);
-                        try {writeErrorMessage(header, _t("Corrupt Base32 address"), out, targetRequest, false, destination);}
-                        catch (IOException ioe) {} // ignore
+                        try {
+                            writeErrorMessage(
+                                    header, _t("Corrupt Base32 address"), out, targetRequest, false, destination);
+                        } catch (IOException ioe) {
+                        } // ignore
                         return;
                     }
                     if (NamingService.isBlindedHost(destination)) {
                         // catch b33 errors before session lookup
                         try {
                             BlindData bd = Blinding.decode(_context, destination);
-                            if (_log.shouldWarn())
-                                _log.warn("[HTTPClient] Resolved b33: " + bd);
+                            if (_log.shouldWarn()) _log.warn("[HTTPClient] Resolved b33: " + bd);
                             // TESTING
-                            //sess.sendBlindingInfo(bd, 24*60*60*1000);
+                            // sess.sendBlindingInfo(bd, 24*60*60*1000);
                         } catch (IllegalArgumentException iae) {
-                            if (_log.shouldWarn())
-                                _log.warn("[HTTPClient] Unable to resolve b33: " + destination, iae);
+                            if (_log.shouldWarn()) _log.warn("[HTTPClient] Unable to resolve b33: " + destination, iae);
                             // b33 error page
                             String header = getErrorPage("b32", ERR_DESTINATION_UNKNOWN);
                             try {
                                 writeErrorMessage(header, iae.getMessage(), out, targetRequest, false, destination);
-                            } catch (IOException ioe) { /* ignore */ }
+                            } catch (IOException ioe) {
+                                /* ignore */
+                            }
                             return;
                         }
                     }
@@ -1273,7 +1367,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                     _log.info("[HTTPClient] Looking up b32 in-session: " + destination);
                                 }
                                 Hash hash = Hash.create(hData);
-                                clientDest = sess.lookupDest(hash, 20*1000);
+                                clientDest = sess.lookupDest(hash, 20 * 1000);
                             } else {
                                 clientDest = null;
                             }
@@ -1281,12 +1375,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             if (_log.shouldInfo()) {
                                 _log.info("[HTTPClient] Lookup b33 in-session " + destination);
                             }
-                            LookupResult lresult = sess.lookupDest2(destination, 20*1000);
+                            LookupResult lresult = sess.lookupDest2(destination, 20 * 1000);
                             clientDest = lresult.getDestination();
                             int code = lresult.getResultCode();
                             if (code != LookupResult.RESULT_SUCCESS) {
                                 if (_log.shouldWarn()) {
-                                    _log.warn("[HTTPClient] Unable to resolve b33 " + destination + " error code " + code);
+                                    _log.warn("[HTTPClient] Unable to resolve b33 " + destination + " error code "
+                                            + code);
                                 }
                                 if (code != LookupResult.RESULT_FAILURE) {
                                     // form to supply missing data
@@ -1306,7 +1401,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 } else {
                     String destName = destination;
                     if (destination != null && destination.length() > 20)
-                        destName = destination.substring(0,15) + "...";
+                        destName = destination.substring(0, 15) + "...";
                     if (_log.shouldInfo()) {
                         _log.info("[HTTPClient] Looking up hostname: " + destName);
                     }
@@ -1325,60 +1420,80 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             writeFooter(out);
                             reader.drain();
                             out.close();
-                        } catch (IOException ioe) { /* ignore */ }
+                        } catch (IOException ioe) {
+                            /* ignore */
+                        }
                         return;
                     }
                 }
 
                 if (clientDest == null) {
-                //l.log("Could not resolve " + destination + ".");
+                    // l.log("Could not resolve " + destination + ".");
                     if (_log.shouldWarn()) {
                         String destName = destination;
                         if (destination != null && destination.length() > 20) {
-                            destName = destination.substring(0,15) + "...";
+                            destName = destination.substring(0, 15) + "...";
                         }
-                        _log.warn("[HTTPClient] Unable to resolve " + destName + "..." +
-                              (usingWWWProxy ? " (Outproxy)" : "") + "\n* Request: " + targetRequest);
+                        _log.warn("[HTTPClient] Unable to resolve " + destName + "..."
+                                + (usingWWWProxy ? " (Outproxy)" : "") + "\n* Request: " + targetRequest);
                     }
                     String header;
                     String jumpServers = null;
                     String extraMessage = null;
-                    if (usingWWWProxy) {header = getErrorPage("dnfp", ERR_DESTINATION_UNKNOWN);}
-                    else if (ahelperPresent) {header = getErrorPage("dnfb", ERR_DESTINATION_UNKNOWN);}
-                    else if (NamingService.isB32Host(destination)) {
+                    if (usingWWWProxy) {
+                        header = getErrorPage("dnfp", ERR_DESTINATION_UNKNOWN);
+                    } else if (ahelperPresent) {
+                        header = getErrorPage("dnfb", ERR_DESTINATION_UNKNOWN);
+                    } else if (NamingService.isB32Host(destination)) {
                         header = getErrorPage("nols", ERR_DESTINATION_UNKNOWN);
                         extraMessage = _t("Destination LeaseSet not found");
                     } else {
                         header = getErrorPage("dnfh", ERR_DESTINATION_UNKNOWN);
                         jumpServers = getTunnel().getClientOptions().getProperty(PROP_JUMP_SERVERS);
-                        if (jumpServers == null) {jumpServers = DEFAULT_JUMP_SERVERS;}
+                        if (jumpServers == null) {
+                            jumpServers = DEFAULT_JUMP_SERVERS;
+                        }
                         int jumpDelay = 400 + _context.random().nextInt(256);
-                        try {Thread.sleep(jumpDelay);}
-                        catch (InterruptedException ie) {}
+                        try {
+                            Thread.sleep(jumpDelay);
+                        } catch (InterruptedException ie) {
+                        }
                     }
-                    try {writeErrorMessage(header, extraMessage, out, targetRequest, usingWWWProxy, destination, jumpServers);}
-                    catch (IOException ioe) {} // ignore
+                    try {
+                        writeErrorMessage(
+                                header, extraMessage, out, targetRequest, usingWWWProxy, destination, jumpServers);
+                    } catch (IOException ioe) {
+                    } // ignore
                     return;
                 }
 
                 // as of 0.9.35, allowInternalSSL defaults to true, and overridden to true unless PROP_SSL_SET is set
-                if (isConnect && !usingWWWProxy &&
-                    getTunnel().getClientOptions().getProperty(PROP_SSL_SET) != null &&
-                    !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_INTERNAL_SSL, "true"))) {
-                    try {writeErrorMessage(ERR_INTERNAL_SSL, out, targetRequest, false, destination);}
-                    catch (IOException ioe) {}  // ignore
-                    if (_log.shouldWarn()) {_log.warn("SSL to I2P destinations denied by configuration: " + targetRequest);}
+                if (isConnect
+                        && !usingWWWProxy
+                        && getTunnel().getClientOptions().getProperty(PROP_SSL_SET) != null
+                        && !Boolean.parseBoolean(
+                                getTunnel().getClientOptions().getProperty(PROP_INTERNAL_SSL, "true"))) {
+                    try {
+                        writeErrorMessage(ERR_INTERNAL_SSL, out, targetRequest, false, destination);
+                    } catch (IOException ioe) {
+                    } // ignore
+                    if (_log.shouldWarn()) {
+                        _log.warn("SSL to I2P destinations denied by configuration: " + targetRequest);
+                    }
                     return;
                 }
 
                 // Address helper response form
                 // This will only load once - the second time it won't be "new"
                 // Don't do this for eepget, which uses a user-agent of "Wget"
-                if (ahelperNew && "GET".equals(method) &&
-                    (userAgent == null || !userAgent.startsWith("Wget")) &&
-                    !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_DISABLE_HELPER))) {
-                    try {writeHelperSaveForm(out, destination, ahelperKey, targetRequest, referer);}
-                    catch (IOException ioe) {} // ignore
+                if (ahelperNew
+                        && "GET".equals(method)
+                        && (userAgent == null || !userAgent.startsWith("Wget"))
+                        && !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_DISABLE_HELPER))) {
+                    try {
+                        writeHelperSaveForm(out, destination, ahelperKey, targetRequest, referer);
+                    } catch (IOException ioe) {
+                    } // ignore
                     return;
                 }
 
@@ -1388,48 +1503,65 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 // Syndie can't handle a redirect of a POST
                 if (ahelperPresent && !"POST".equals(method) && !"PUT".equals(method)) {
                     String uri = targetRequest;
-                    if (_log.shouldDebug()) {_log.debug("[HTTPClient] Auto redirecting to " + uri);}
+                    if (_log.shouldDebug()) {
+                        _log.debug("[HTTPClient] Auto redirecting to " + uri);
+                    }
                     try {
-                        out.write(("HTTP/1.1 301 Address Helper Accepted\r\n" +
-                            "Location: " + uri + "\r\n" +
-                            "Connection: close\r\n"+
-                            "\r\n").getBytes("UTF-8"));
-                    } catch (IOException ioe) {} // ignore
+                        out.write(("HTTP/1.1 301 Address Helper Accepted\r\n" + "Location: "
+                                        + uri + "\r\n" + "Connection: close\r\n"
+                                        + "\r\n")
+                                .getBytes("UTF-8"));
+                    } catch (IOException ioe) {
+                    } // ignore
                     return;
                 }
 
                 // Close persistent I2PSocket if destination or port changes and open a new one.
                 // We do not maintain a pool of open I2PSockets or look for an available one. Keep it very simple.
                 // As long as the traffic keeps going to the same place we will keep reusing it.
-                // While we should be able to reuse it if only the port changes, that should be extremely rare, so don't bother.
+                // While we should be able to reuse it if only the port changes, that should be extremely rare, so don't
+                // bother.
                 // For common use patterns including outproxy use, this should still be quite effective.
-                if (i2ps == null || i2ps.isClosed() ||
-                    remotePort != i2ps.getPort() ||
-                    !clientDest.equals(i2ps.getPeerDestination())) {
+                if (i2ps == null
+                        || i2ps.isClosed()
+                        || remotePort != i2ps.getPort()
+                        || !clientDest.equals(i2ps.getPeerDestination())) {
                     if (i2ps != null) {
-                        if (_log.shouldInfo()) {_log.info("Old socket closed or different dest/port, opening new one");}
-                        try {i2ps.close();}
-                        catch (IOException ioe) { /* ignore */ }
+                        if (_log.shouldInfo()) {
+                            _log.info("Old socket closed or different dest/port, opening new one");
+                        }
+                        try {
+                            i2ps.close();
+                        } catch (IOException ioe) {
+                            /* ignore */
+                        }
                     }
 
                     Properties opts = new Properties();
-                    //opts.setProperty("i2p.streaming.inactivityTimeout", ""+120*1000);
+                    // opts.setProperty("i2p.streaming.inactivityTimeout", ""+120*1000);
                     // 1 == disconnect.  see ConnectionOptions in the new streaming lib, which i
                     // Don't want to hard link to here
-                    //opts.setProperty("i2p.streaming.inactivityTimeoutAction", ""+1);
+                    // opts.setProperty("i2p.streaming.inactivityTimeoutAction", ""+1);
                     I2PSocketOptions sktOpts;
-                    try {sktOpts = getDefaultOptions(opts);}
-                    catch (RuntimeException re) {
+                    try {
+                        sktOpts = getDefaultOptions(opts);
+                    } catch (RuntimeException re) {
                         // tunnel build failure
                         StringBuilder buf = new StringBuilder(128);
                         buf.append("HTTP/1.1 503 Service Unavailable");
-                        if (re.getMessage() != null) {buf.append(" - ").append(re.getMessage());}
+                        if (re.getMessage() != null) {
+                            buf.append(" - ").append(re.getMessage());
+                        }
                         buf.append("\r\n\r\n");
-                        try {out.write(buf.toString().getBytes("UTF-8"));}
-                        catch (IOException ioe) {}
+                        try {
+                            out.write(buf.toString().getBytes("UTF-8"));
+                        } catch (IOException ioe) {
+                        }
                         throw re;
                     }
-                    if (remotePort > 0) {sktOpts.setPort(remotePort);}
+                    if (remotePort > 0) {
+                        sktOpts.setPort(remotePort);
+                    }
                     i2ps = createI2PSocket(clientDest, sktOpts);
                 }
 
@@ -1449,11 +1581,18 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     t = new I2PTunnelRunner(s, i2ps, sockLock, data, response, mySockets, (OnTimeout) null);
                 } else {
                     byte[] data = newRequest.toString().getBytes("ISO-8859-1");
-                    OnTimeout onTimeout = new OnTimeout(s, s.getOutputStream(), targetRequest, usingWWWProxy,
-                                                    currentProxy, requestId, hostLowerCase, isConnect);
+                    OnTimeout onTimeout = new OnTimeout(
+                            s,
+                            s.getOutputStream(),
+                            targetRequest,
+                            usingWWWProxy,
+                            currentProxy,
+                            requestId,
+                            hostLowerCase,
+                            isConnect);
                     boolean keepaliveI2P = keepalive && getBooleanOption(OPT_KEEPALIVE_I2P, DEFAULT_KEEPALIVE_I2P);
-                    hrunner = new I2PTunnelHTTPClientRunner(s, i2ps, sockLock, data, mySockets, onTimeout,
-                                                        keepaliveI2P, keepalive, isHead);
+                    hrunner = new I2PTunnelHTTPClientRunner(
+                            s, i2ps, sockLock, data, mySockets, onTimeout, keepaliveI2P, keepalive, isHead);
                     t = hrunner;
                 }
                 if (usingWWWProxy) {
@@ -1499,7 +1638,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         } finally {
             // only because we are running it inline
             closeSocket(s);
-            if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) {}
+            if (i2ps != null)
+                try {
+                    i2ps.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 
@@ -1507,8 +1650,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * @param destination the hostname
      * @since 0.8.7
      */
-    private void writeHelperSaveForm(OutputStream outs, String destination, String ahelperKey,
-                                     String targetRequest, String referer) throws IOException {
+    private void writeHelperSaveForm(
+            OutputStream outs, String destination, String ahelperKey, String targetRequest, String referer)
+            throws IOException {
         if (outs == null) {
             return;
         }
@@ -1516,53 +1660,67 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         Writer out = new BufferedWriter(new OutputStreamWriter(outs, "UTF-8"));
         String header = getErrorPage("ahelper-new", ERR_AHELPER_NEW);
         out.write(header);
-        out.write("<table id=proxyNewHost>\n<tr><td class=right>" + _t("Host") +
-                "</td><td>" + idn + "</td></tr>\n");
+        out.write("<table id=proxyNewHost>\n<tr><td class=right>" + _t("Host") + "</td><td>" + idn + "</td></tr>\n");
         try {
-            String b32 = Base32.encode(SHA256Generator.getInstance().calculateHash(Base64.decode(ahelperKey)).getData());
-            out.write("<tr><td class=right>" + _t("Base32") + "</td>" +
-                      "<td><a href=\"http://" + b32 + ".b32.i2p/\">" + b32 + ".b32.i2p</a></td></tr>");
-        } catch (Exception e) { /* ignore */ }
+            String b32 = Base32.encode(SHA256Generator.getInstance()
+                    .calculateHash(Base64.decode(ahelperKey))
+                    .getData());
+            out.write("<tr><td class=right>" + _t("Base32") + "</td>" + "<td><a href=\"http://" + b32 + ".b32.i2p/\">"
+                    + b32 + ".b32.i2p</a></td></tr>");
+        } catch (Exception e) {
+            /* ignore */
+        }
 
-        out.write("<tr><td class=right>" + _t("Destination") + "</td><td><span id=b64 style=user-select:all>" + ahelperKey +
-                  "</span></td></tr>\n</table>\n" + "<hr>\n" +
+        out.write(
+                "<tr><td class=right>" + _t("Destination") + "</td><td><span id=b64 style=user-select:all>" + ahelperKey
+                        + "</span></td></tr>\n</table>\n"
+                        + "<hr>\n" +
 
-                  // FIXME if there is a query remaining it is lost
-                  "<form method=GET action=\"" + targetRequest + "\">\n<hr>\n<div class=option>" +
-                  "<h4>" + _t("Continue to {0} without saving", idn) + "</h4>\n<p>" +
-                  _t("You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router.") +
-                  "</p>\n<div class=formaction><button type=submit class=go>" + _t("Continue without saving") + "</button></div>" + "\n</div>\n</form>\n" +
-
-                  "<form method=GET action=\"http://" + LOCAL_SERVER + "/add\">\n" +
-                  "<input type=hidden name=\"host\" value=\"" + destination + "\">\n" +
-                  "<input type=hidden name=\"dest\" value=\"" + ahelperKey + "\">\n" +
-                  "<input type=hidden name=\"nonce\" value=\"" + _proxyNonce + "\">\n" +
-
-                  "<hr>\n<div class=option>\n<h4>" + _t("Save {0} to router address book and continue to website", destination) + "</h4>\n<p>" +
-                  _t("This address will be saved to your Router addressbook where your subscription-based addresses are stored."));
+                        // FIXME if there is a query remaining it is lost
+                        "<form method=GET action=\""
+                        + targetRequest + "\">\n<hr>\n<div class=option>" + "<h4>"
+                        + _t("Continue to {0} without saving", idn) + "</h4>\n<p>"
+                        + _t("You can browse to the site without saving it to the addressbook. The address will be"
+                                + " remembered until you restart your I2P router.")
+                        + "</p>\n<div class=formaction><button type=submit class=go>"
+                        + _t("Continue without saving") + "</button></div>" + "\n</div>\n</form>\n"
+                        + "<form method=GET action=\"http://"
+                        + LOCAL_SERVER + "/add\">\n" + "<input type=hidden name=\"host\" value=\""
+                        + destination + "\">\n" + "<input type=hidden name=\"dest\" value=\""
+                        + ahelperKey + "\">\n" + "<input type=hidden name=\"nonce\" value=\""
+                        + _proxyNonce + "\">\n" + "<hr>\n<div class=option>\n<h4>"
+                        + _t("Save {0} to router address book and continue to website", destination) + "</h4>\n<p>"
+                        + _t("This address will be saved to your Router addressbook where your subscription-based"
+                                + " addresses are stored."));
 
         if (_context.namingService().getName().equals("BlockfileNamingService")) {
-            out.write(" " + _t("If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."));
+            out.write(" "
+                    + _t("If you want to keep track of sites you have added manually, add to your Master or"
+                            + " Private addressbook instead."));
         }
         // FIXME wasn't escaped
         String label = _t("Save & continue").replace("&", "&amp;");
-        out.write("</p>\n<div class=formaction><button type=submit class=accept name=\"router\" value=\"router\">" +
-                  label + "</button></div>\n</div>\n");
+        out.write("</p>\n<div class=formaction><button type=submit class=accept name=\"router\" value=\"router\">"
+                + label + "</button></div>\n</div>\n");
 
         if (_context.namingService().getName().equals("BlockfileNamingService")) {
             // only blockfile supports multiple books
 
-            out.write("<hr>\n<div class=option>\n<h4>" + _t("Save {0} to master addressbook and continue to website", idn) + "</h4>\n<p>" +
-                      _t("This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main " +
-                      "router address book, but don't mind publishing.") +
-                      "</p>\n<div class=formaction><button type=submit class=accept name=\"master\" value=\"master\">" +
-                      label + "</button></div>\n</div>\n");
+            out.write("<hr>\n<div class=option>\n<h4>"
+                    + _t("Save {0} to master addressbook and continue to website", idn) + "</h4>\n<p>"
+                    + _t("This address will be saved to your Master addressbook. Select this option for addresses"
+                            + " you wish to keep separate from the main router address book, but don't mind"
+                            + " publishing.")
+                    + "</p>\n<div class=formaction><button type=submit class=accept name=\"master\" value=\"master\">"
+                    + label
+                    + "</button></div>\n</div>\n");
 
-            out.write("<hr>\n<div class=option><h4>" + _t("Save {0} to private addressbook and continue to website", idn) + "</h4>\n<p>" +
-                      _t("This address will be saved to your Private addressbook, ensuring it is never published.") +
-                      "</p>\n<div class=formaction><button type=submit class=accept name=\"private\" value=\"private\">" +
-                      label + "</button></div>\n</div>\n");
-
+            out.write("<hr>\n<div class=option><h4>"
+                    + _t("Save {0} to private addressbook and continue to website", idn) + "</h4>\n<p>"
+                    + _t("This address will be saved to your Private addressbook, ensuring it is never published.")
+                    + "</p>\n<div class=formaction><button type=submit class=accept name=\"private\" value=\"private\">"
+                    + label
+                    + "</button></div>\n</div>\n");
         }
         // Firefox (and others?) don't send referer to meta refresh target, which is
         // what the jump servers use, so this isn't that useful.
@@ -1574,10 +1732,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /** @since 0.9.43 */
-    private void writeB32SaveForm(OutputStream outs, String destination, int code,
-                                     String targetRequest) throws IOException {
-        if (outs == null)
-            return;
+    private void writeB32SaveForm(OutputStream outs, String destination, int code, String targetRequest)
+            throws IOException {
+        if (outs == null) return;
         Writer out = new BufferedWriter(new OutputStreamWriter(outs, "UTF-8"));
         String header = getErrorPage("b32-auth", ERR_DESTINATION_UNKNOWN);
         out.write(header);
@@ -1595,36 +1752,39 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             msg = "lookup failure code " + code;
         }
         out.write("<p><b>" + msg + "</b></p>");
-        out.write("<form method=GET action=\"http://" + LOCAL_SERVER + "/b32\">\n" +
-                  "<input type=hidden name=\"host\" value=\"" + destination + "\">\n" +
-                  "<input type=hidden name=\"url\" value=\"" + targetRequest + "\">\n" +
-                  "<input type=hidden name=\"code\" value=\"" + code + "\">\n" +
-                  "<input type=hidden name=\"nonce\" value=\"" + _proxyNonce + "\">\n");
+        out.write("<form method=GET action=\"http://" + LOCAL_SERVER + "/b32\">\n"
+                + "<input type=hidden name=\"host\" value=\""
+                + destination + "\">\n" + "<input type=hidden name=\"url\" value=\""
+                + targetRequest + "\">\n" + "<input type=hidden name=\"code\" value=\""
+                + code + "\">\n" + "<input type=hidden name=\"nonce\" value=\""
+                + _proxyNonce + "\">\n");
 
         if (code == LookupResult.RESULT_KEY_REQUIRED || code == LookupResult.RESULT_SECRET_AND_KEY_REQUIRED) {
             String label = _t("Generate");
-            out.write("<h4>" + _t("Encryption key") + "</h4>\n" +
-                      "<p>" + _t("You must either enter a PSK encryption key provided by the server operator, " +
-                      "or generate a DH encryption key and send that to the server operator.") +
-                      ' ' + _t("Ask the server operator for help.") + "</p>\n" +
-                      "<p><b>PSK:</b> " + _t("Enter PSK encryption key") + ":</p>\n" +
-                      "<input type=text size=55 name=\"privkey\" value=\"\">\n" +
-                      "<p><b>DH:</b> " + _t("Generate new DH encryption key") + ":</p>\n" +
-                      "<div class=formaction_xx>" + "<button type=submit class=accept name=action value=\"newdh\">" +
-                      label + "</button>\n</div>\n");
-                      //"<p>" + _t("Generate new PSK encryption key") +
-                      //"<button type=submit class=accept name=action value=\"newpsk\">" + label + "</button>\n");
+            out.write("<h4>" + _t("Encryption key") + "</h4>\n" + "<p>"
+                    + _t("You must either enter a PSK encryption key provided by the server operator, "
+                            + "or generate a DH encryption key and send that to the server operator.")
+                    + ' '
+                    + _t("Ask the server operator for help.") + "</p>\n" + "<p><b>PSK:</b> "
+                    + _t("Enter PSK encryption key") + ":</p>\n"
+                    + "<input type=text size=55 name=\"privkey\" value=\"\">\n"
+                    + "<p><b>DH:</b> "
+                    + _t("Generate new DH encryption key") + ":</p>\n" + "<div class=formaction_xx>"
+                    + "<button type=submit class=accept name=action value=\"newdh\">" + label
+                    + "</button>\n</div>\n");
+            // "<p>" + _t("Generate new PSK encryption key") +
+            // "<button type=submit class=accept name=action value=\"newpsk\">" + label + "</button>\n");
         }
         if (code == LookupResult.RESULT_SECRET_REQUIRED || code == LookupResult.RESULT_SECRET_AND_KEY_REQUIRED) {
-            out.write("<h4>" + _t("Lookup password") + "</h4>\n" +
-                      "<p>" + _t("You must enter the password provided by the server operator.") + "</p>\n" +
-                      "<input type=text size=55 name=\"secret\" value=\"\">\n");
+            out.write("<h4>" + _t("Lookup password") + "</h4>\n" + "<p>"
+                    + _t("You must enter the password provided by the server operator.") + "</p>\n"
+                    + "<input type=text size=55 name=\"secret\" value=\"\">\n");
         }
 
         // FIXME wasn't escaped
         String label = _t("Save & continue").replace("&", "&amp;");
-        out.write("<div class=formaction>\n" + "<button type=submit class=accept name=action value=Save>" +
-                  label + "</button>\n" + "</div>\n</form>\n</div>\n");
+        out.write("<div class=formaction>\n" + "<button type=submit class=accept name=action value=Save>" + label
+                + "</button>\n" + "</div>\n</form>\n</div>\n");
         writeFooter(out);
     }
 
@@ -1663,7 +1823,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     line = DataHelper.readLine(_s);
                     // \r not stripped so length == 1 is empty
                 } while (line != null && line.length() > 1);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) {
+            }
         }
     }
 
@@ -1672,17 +1833,21 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      *  Prior to 0.7.12, returned b64 key
      */
     private final String getHostName(String host) {
-        if (host == null) {return null;}
-        if (NamingService.isB32Host(host)) {return host;}
+        if (host == null) {
+            return null;
+        }
+        if (NamingService.isB32Host(host)) {
+            return host;
+        }
         Destination dest = _context.namingService().lookup(host);
-        if (dest == null) {return "i2p";}
+        if (dest == null) {
+            return "i2p";
+        }
         return dest.toBase32();
     }
 
     public static final String DEFAULT_JUMP_SERVERS =
-            "http://notbob.i2p/cgi-bin/jump.cgi?q=," +
-            "http://reg.i2p/jump/," +
-            "http://stats.i2p/cgi-bin/jump.cgi?a=";
+            "http://notbob.i2p/cgi-bin/jump.cgi?q=," + "http://reg.i2p/jump/," + "http://stats.i2p/cgi-bin/jump.cgi?a=";
 
     /** @param host ignored */
     private static boolean isSupportedAddress(String host, String protocol) {
@@ -1694,12 +1859,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         return lc.equals("http") || lc.equals("https");
     }
 
-    private final static String ERR_HELPER_DISABLED =
-            "HTTP/1.1 403 Disabled\r\n" +
-            "Content-Type: text/plain\r\n" +
-            "Connection: close\r\n"+
-            "\r\n" +
-            "Address helpers disabled";
+    private static final String ERR_HELPER_DISABLED = "HTTP/1.1 403 Disabled\r\n" + "Content-Type: text/plain\r\n"
+            + "Connection: close\r\n"
+            + "\r\n"
+            + "Address helpers disabled";
 
     /**
      *  Change various parts of the URI.
@@ -1716,7 +1879,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      *  @since 0.9
      */
     private static URI changeURI(URI uri, String host, int port, String path) throws URISyntaxException {
-        return new URI(uri.getScheme(),
+        return new URI(
+                uri.getScheme(),
                 null,
                 host != null ? host : uri.getHost(),
                 port != 0 ? port : uri.getPort(),
@@ -1737,13 +1901,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     private static URI replaceQuery(URI uri, String query) throws URISyntaxException {
         URI rv = uri;
         if (rv.getRawQuery() != null) {
-            rv = new URI(rv.getScheme(),
-                    null,
-                    uri.getHost(),
-                    uri.getPort(),
-                    uri.getPath(),
-                    null,
-                    null);
+            rv = new URI(rv.getScheme(), null, uri.getHost(), uri.getPort(), uri.getPath(), null, null);
         }
         if (query != null) {
             String newURI = rv.toASCIIString() + '?' + query;
@@ -1800,5 +1958,4 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
         return null;
     }
-
 }

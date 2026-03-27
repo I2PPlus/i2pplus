@@ -1,10 +1,10 @@
 package com.thetransactioncompany.jsonrpc2;
 
+import org.json.simple.JsonObject;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.json.simple.JsonObject;
 
 /**
  * The base abstract class for JSON-RPC 2.0 requests, notifications and
@@ -53,13 +53,11 @@ import org.json.simple.JsonObject;
  */
 public abstract class JSONRPC2Message {
 
-
     /**
      * Map of non-standard JSON-RPC 2.0 message attributes, {@code null} if
      * none.
      */
-    private Map <String,Object> nonStdAttributes = null;
-
+    private Map<String, Object> nonStdAttributes = null;
 
     /**
      * Provides common parsing of JSON-RPC 2.0 requests, notifications
@@ -90,12 +88,10 @@ public abstract class JSONRPC2Message {
      * @throws JSONRPC2ParseException With detailed message if parsing
      *                                failed.
      */
-    public static JSONRPC2Message parse(final String jsonString)
-        throws JSONRPC2ParseException {
+    public static JSONRPC2Message parse(final String jsonString) throws JSONRPC2ParseException {
 
         return parse(jsonString, false, false);
     }
-
 
     /**
      * Provides common parsing of JSON-RPC 2.0 requests, notifications
@@ -126,14 +122,12 @@ public abstract class JSONRPC2Message {
      * @throws JSONRPC2ParseException With detailed message if parsing
      *                                failed.
      */
-    public static JSONRPC2Message parse(final String jsonString, final boolean preserveOrder, final boolean ignoreVersion)
-        throws JSONRPC2ParseException {
+    public static JSONRPC2Message parse(final String jsonString, final boolean preserveOrder, final boolean ignoreVersion) throws JSONRPC2ParseException {
 
         JSONRPC2Parser parser = new JSONRPC2Parser(preserveOrder, ignoreVersion);
 
         return parser.parseJSONRPC2Message(jsonString);
     }
-
 
     /**
      * Appends a non-standard attribute to this JSON-RPC 2.0 message. This is
@@ -155,33 +149,15 @@ public abstract class JSONRPC2Message {
     public void appendNonStdAttribute(final String name, final Object value) {
 
         // Name check
-        if (name == null          ||
-            name.equals("method") ||
-            name.equals("id")     ||
-            name.equals("params") ||
-            name.equals("result") ||
-            name.equals("error")  ||
-            name.equals("jsonrpc")   )
-
-            throw new IllegalArgumentException("Non-standard attribute name violation");
+        if (name == null || name.equals("method") || name.equals("id") || name.equals("params") || name.equals("result") || name.equals("error") || name.equals("jsonrpc")) throw new IllegalArgumentException("Non-standard attribute name violation");
 
         // Value check
-        if (value != null                &&
-             ! (value instanceof Boolean) &&
-             ! (value instanceof Number)  &&
-             ! (value instanceof String)  &&
-             ! (value instanceof List)    &&
-             ! (value instanceof Map)        )
+        if (value != null && !(value instanceof Boolean) && !(value instanceof Number) && !(value instanceof String) && !(value instanceof List) && !(value instanceof Map)) throw new IllegalArgumentException("Illegal non-standard attribute value, must map to a valid JSON type");
 
-            throw new IllegalArgumentException("Illegal non-standard attribute value, must map to a valid JSON type");
-
-
-        if (nonStdAttributes == null)
-            nonStdAttributes = new HashMap<String,Object>();
+        if (nonStdAttributes == null) nonStdAttributes = new HashMap<String, Object>();
 
         nonStdAttributes.put(name, value);
     }
-
 
     /**
      * Retrieves a non-standard JSON-RPC 2.0 message attribute.
@@ -194,23 +170,20 @@ public abstract class JSONRPC2Message {
      */
     public Object getNonStdAttribute(final String name) {
 
-        if (nonStdAttributes == null)
-            return null;
+        if (nonStdAttributes == null) return null;
 
         return nonStdAttributes.get(name);
     }
-
 
     /**
      * Retrieves the non-standard JSON-RPC 2.0 message attributes.
      *
      * @return The non-standard attributes as a map, {@code null} if none.
      */
-    public Map<String,Object> getNonStdAttributes() {
+    public Map<String, Object> getNonStdAttributes() {
 
         return nonStdAttributes;
     }
-
 
     /**
      * Returns a JSON object representing this JSON-RPC 2.0 message.
@@ -218,7 +191,6 @@ public abstract class JSONRPC2Message {
      * @return The JSON object.
      */
     public abstract JsonObject toJSONObject();
-
 
     /**
      * Returns a JSON string representation of this JSON-RPC 2.0 message.
@@ -232,7 +204,6 @@ public abstract class JSONRPC2Message {
 
         return toString();
     }
-
 
     /**
      * Serialises this JSON-RPC 2.0 message to a JSON object string.

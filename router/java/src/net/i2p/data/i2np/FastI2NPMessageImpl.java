@@ -1,4 +1,5 @@
 package net.i2p.data.i2np;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -7,7 +8,6 @@ package net.i2p.data.i2np;
  * your children, but it might.  Use at your own risk.
  *
  */
-
 
 import net.i2p.I2PAppContext;
 import net.i2p.data.Base64;
@@ -54,13 +54,10 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
      */
     @Override
     public int readBytes(byte data[], int type, int offset, int maxLen) throws I2NPMessageException {
-        if (_hasChecksum)
-            throw new IllegalStateException(getClass().getSimpleName() + " read twice");
+        if (_hasChecksum) throw new IllegalStateException(getClass().getSimpleName() + " read twice");
         int headerSize = HEADER_LENGTH;
-        if (type >= 0)
-            headerSize--;
-        if (maxLen < headerSize)
-            throw new I2NPMessageException("Payload is too short " + maxLen);
+        if (type >= 0) headerSize--;
+        if (maxLen < headerSize) throw new I2NPMessageException("Payload is too short " + maxLen);
         int cur = offset;
         if (type < 0) {
             type = data[cur] & 0xff;
@@ -70,25 +67,18 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
         cur += 4;
         _expiration = DataHelper.fromLong(data, cur, DataHelper.DATE_LENGTH);
         cur += DataHelper.DATE_LENGTH;
-        int size = (int)DataHelper.fromLong(data, cur, 2);
+        int size = (int) DataHelper.fromLong(data, cur, 2);
         cur += 2;
         _checksum = data[cur];
         cur++;
 
-        if (cur + size > data.length || headerSize + size > maxLen)
-            throw new I2NPMessageException("Payload is too short ["
-                                           + "data.len=" + data.length
-                                           + "maxLen=" + maxLen
-                                           + " offset=" + offset
-                                           + " cur=" + cur
-                                           + " wanted=" + size + "]: " + getClass().getSimpleName());
+        if (cur + size > data.length || headerSize + size > maxLen) throw new I2NPMessageException("Payload is too short [" + "data.len=" + data.length + "maxLen=" + maxLen + " offset=" + offset + " cur=" + cur + " wanted=" + size + "]: " + getClass().getSimpleName());
 
         int sz = Math.min(size, maxLen - headerSize);
         readMessage(data, cur, sz, type);
         cur += sz;
         _hasChecksum = true;
-        if (VERIFY_TEST && _log.shouldInfo())
-            _log.info("Ignored c/s " + getClass().getSimpleName());
+        if (VERIFY_TEST && _log.shouldInfo()) _log.info("Ignored c/s " + getClass().getSimpleName());
         return cur - offset;
     }
 
@@ -106,10 +96,8 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
      */
     @Override
     public int toByteArray(byte buffer[]) {
-        if (_hasChecksum)
-            return toByteArrayWithSavedChecksum(buffer);
-        if (VERIFY_TEST && _log.shouldInfo())
-            _log.info("Generating new c/s " + getClass().getSimpleName());
+        if (_hasChecksum) return toByteArrayWithSavedChecksum(buffer);
+        if (VERIFY_TEST && _log.shouldInfo()) _log.info("Generating new c/s " + getClass().getSimpleName());
         return super.toByteArray(buffer);
     }
 
@@ -123,10 +111,7 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
                 byte[] h = SimpleByteCache.acquire(32);
                 _context.sha().calculateHash(buffer, HEADER_LENGTH, writtenLen - HEADER_LENGTH, h, 0);
                 if (h[0] != _checksum) {
-                    _log.log(Log.CRIT, "Please report " + getClass().getSimpleName() +
-                                       " size " + writtenLen +
-                                       " saved c/s " + Integer.toHexString(_checksum & 0xff) +
-                                       " calc " + Integer.toHexString(h[0] & 0xff), new Exception());
+                    _log.log(Log.CRIT, "Please report " + getClass().getSimpleName() + " size " + writtenLen + " saved c/s " + Integer.toHexString(_checksum & 0xff) + " calc " + Integer.toHexString(h[0] & 0xff), new Exception());
                     _log.log(Log.CRIT, "DUMP:\n" + HexDump.dump(buffer, HEADER_LENGTH, writtenLen - HEADER_LENGTH));
                     _log.log(Log.CRIT, "RAW:\n" + Base64.encode(buffer, HEADER_LENGTH, writtenLen - HEADER_LENGTH));
                     _checksum = h[0];

@@ -9,8 +9,9 @@ package net.i2p.data;
  *
  */
 
-import java.util.Arrays;
 import net.i2p.crypto.SigType;
+
+import java.util.Arrays;
 
 /**
  * Cryptographic signature implementation for I2P data structures and identity verification.
@@ -66,10 +67,15 @@ import net.i2p.crypto.SigType;
  */
 public class Signature extends SimpleDataStructure {
     private static final SigType DEF_TYPE = SigType.DSA_SHA1;
+
     /** 40 */
-    public final static int SIGNATURE_BYTES = DEF_TYPE.getSigLen();
+    public static final int SIGNATURE_BYTES = DEF_TYPE.getSigLen();
+
     private final SigType _type;
-    public Signature() {this(DEF_TYPE);}
+
+    public Signature() {
+        this(DEF_TYPE);
+    }
 
     /**
      *  Unknown type not allowed as we won't know the length to read in the data.
@@ -79,11 +85,15 @@ public class Signature extends SimpleDataStructure {
      */
     public Signature(SigType type) {
         super();
-        if (type == null) {throw new IllegalArgumentException("Unknown type");}
+        if (type == null) {
+            throw new IllegalArgumentException("Unknown type");
+        }
         _type = type;
     }
 
-    public Signature(byte data[]) {this(DEF_TYPE, data);}
+    public Signature(byte data[]) {
+        this(DEF_TYPE, data);
+    }
 
     /**
      *  Should we allow an unknown type here?
@@ -93,21 +103,27 @@ public class Signature extends SimpleDataStructure {
      */
     public Signature(SigType type, byte data[]) {
         super();
-        if (type == null) {throw new IllegalArgumentException("Unknown type");}
+        if (type == null) {
+            throw new IllegalArgumentException("Unknown type");
+        }
         _type = type;
         setData(data);
     }
 
     @Override
-    public int length() {return _type.getSigLen();}
+    public int length() {
+        return _type.getSigLen();
+    }
 
     /**
-      *  Gets the signature type.
-      *
-      *  @return non-null
-      *  @since 0.9.8
-      */
-    public SigType getType() {return _type;}
+     *  Gets the signature type.
+     *
+     *  @return non-null
+     *  @since 0.9.8
+     */
+    public SigType getType() {
+        return _type;
+    }
 
     /**
      *  @since 0.9.8
@@ -117,9 +133,13 @@ public class Signature extends SimpleDataStructure {
         StringBuilder buf = new StringBuilder(64);
         buf.append(_type).append(" (");
         int length = length();
-        if (_data == null) {buf.append("null");}
-        else if (length <= 32) {buf.append(toBase64());}
-        else {buf.append("Size: ").append(Integer.toString(length)).append(" bytes)");}
+        if (_data == null) {
+            buf.append("null");
+        } else if (length <= 32) {
+            buf.append(toBase64());
+        } else {
+            buf.append("Size: ").append(Integer.toString(length)).append(" bytes)");
+        }
         return buf.toString();
     }
 
@@ -127,7 +147,9 @@ public class Signature extends SimpleDataStructure {
      *  @since 0.9.17
      */
     @Override
-    public int hashCode() {return DataHelper.hashCode(_type) ^ super.hashCode();}
+    public int hashCode() {
+        return DataHelper.hashCode(_type) ^ super.hashCode();
+    }
 
     /**
      *  @since 0.9.17

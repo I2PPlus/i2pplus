@@ -3,6 +3,7 @@ package net.i2p.util;
 import static org.junit.Assert.*;
 
 import net.i2p.I2PAppContext;
+
 import org.junit.Test;
 
 public class SyntheticREDQueueTest {

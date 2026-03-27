@@ -113,7 +113,7 @@ public interface DataStructure /* extends Serializable */ {
      */
     public String toBase64();
 
-/**
+    /**
      * Load the structure from the provided base64 string.
      *
      * Warning - many classes will throw IllegalStateException if data is already set.
@@ -131,7 +131,7 @@ public interface DataStructure /* extends Serializable */ {
      */
     public byte[] toByteArray();
 
-/**
+    /**
      * Load's structure from the data provided
      *
      * Warning - many classes will throw IllegalStateException if data is already set.

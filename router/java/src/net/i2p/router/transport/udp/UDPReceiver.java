@@ -1,14 +1,15 @@
 package net.i2p.router.transport.udp;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.util.Arrays;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.util.Arrays;
 
 /**
  * Lowest level component to pull raw UDP datagrams off the wire as fast as possible,
@@ -32,8 +33,7 @@ class UDPReceiver {
 
     private static final boolean _isAndroid = SystemVersion.isAndroid();
 
-    public UDPReceiver(RouterContext ctx, UDPTransport transport, DatagramSocket socket, String name,
-                       SocketListener lsnr) {
+    public UDPReceiver(RouterContext ctx, UDPTransport transport, DatagramSocket socket, String name, SocketListener lsnr) {
         _context = ctx;
         _log = ctx.logManager().getLog(UDPReceiver.class);
         _name = name;
@@ -41,7 +41,9 @@ class UDPReceiver {
         _transport = transport;
         _endpoint = lsnr;
         _handler = transport.getPacketHandler();
-        if (_handler == null) {throw new IllegalStateException();}
+        if (_handler == null) {
+            throw new IllegalStateException();
+        }
         _runner = new Runner();
         _context.statManager().createRateStat("udp.ignorePacketFromDroplist", "Packet lifetime for those dropped on the drop list", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.receiveFailsafe", "How often we failed to receive a UDP packet", "Transport [UDP]", UDPTransport.RATES);
@@ -61,10 +63,12 @@ class UDPReceiver {
     }
 
     /** if a packet been sitting in the queue for a full second (meaning the handlers are overwhelmed), drop subsequent packets */
-    private static final long MAX_QUEUE_PERIOD = 2*1000;
+    private static final long MAX_QUEUE_PERIOD = 2 * 1000;
 
     /** @return zero (was queue size) */
-    private int receive(UDPPacket packet) {return doReceive(packet);}
+    private int receive(UDPPacket packet) {
+        return doReceive(packet);
+    }
 
     /**
      * BLOCKING if queue between here and PacketHandler is full.
@@ -72,12 +76,18 @@ class UDPReceiver {
      * @return zero (was queue size)
      */
     private final int doReceive(UDPPacket packet) {
-        if (!_keepRunning) {return 0;}
-        if (_log.shouldInfo()) {_log.info("Received UDP packet from " + packet);}
+        if (!_keepRunning) {
+            return 0;
+        }
+        if (_log.shouldInfo()) {
+            _log.info("Received UDP packet from " + packet);
+        }
 
         RemoteHostId from = packet.getRemoteHost();
         if (_transport.isInDropList(from)) {
-            if (_log.shouldInfo()) {_log.info("Ignoring UDP packet from the drop-listed peer: " + from);}
+            if (_log.shouldInfo()) {
+                _log.info("Ignoring UDP packet from the drop-listed peer: " + from);
+            }
             _context.statManager().addRateData("udp.ignorePacketFromDroplist", packet.getLifetime());
             packet.release();
             return 0;
@@ -85,17 +95,20 @@ class UDPReceiver {
 
         // drop anything apparently from our IP (any port)
         if (Arrays.equals(from.getIP(), _transport.getExternalIP()) && !_transport.allowLocal()) {
-            if (_log.shouldWarn()) {_log.warn("Dropping (spoofed?) UDP packet from ourselves");}
+            if (_log.shouldWarn()) {
+                _log.warn("Dropping (spoofed?) UDP packet from ourselves");
+            }
             packet.release();
             return 0;
         }
 
-        try {_handler.queueReceived(packet);}
-        catch (InterruptedException ie) {
+        try {
+            _handler.queueReceived(packet);
+        } catch (InterruptedException ie) {
             packet.release();
             _keepRunning = false;
         }
-        //return queueSize + 1;
+        // return queueSize + 1;
         return 0;
     }
 
@@ -108,11 +121,15 @@ class UDPReceiver {
                 DatagramPacket dpacket = packet.getPacket();
 
                 // Android ICS bug - http://code.google.com/p/android/issues/detail?id=24748
-                if (_isAndroid) {dpacket.setLength(UDPPacket.MAX_PACKET_SIZE);}
+                if (_isAndroid) {
+                    dpacket.setLength(UDPPacket.MAX_PACKET_SIZE);
+                }
 
                 while (!_context.throttle().acceptNetworkMessage()) {
-                    try {Thread.sleep(10);}
-                    catch (InterruptedException ie) {}
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException ie) {
+                    }
                 }
 
                 try {
@@ -128,18 +145,22 @@ class UDPReceiver {
                         // DatagramSocket javadocs: If the message is longer than the packet's length, the message is truncated.
                         throw new IOException("UDP packet too large! Truncated and dropped from: " + packet.getRemoteHost());
                     }
-                    if (_context.commSystem().isDummy()) {packet.release();} // testing
+                    if (_context.commSystem().isDummy()) {
+                        packet.release();
+                    } // testing
                     else if (size >= SSU2Util.MIN_DATA_LEN) {
                         FIFOBandwidthLimiter.Request req = _context.bandwidthLimiter().requestInbound(size, "UDP receiver");
                         int waitCount = 0; // failsafe, don't wait forever
-                        while (req.getPendingRequested() > 0 && waitCount++ < 5) {req.waitForNextAllocation();}
+                        while (req.getPendingRequested() > 0 && waitCount++ < 5) {
+                            req.waitForNextAllocation();
+                        }
                         if (waitCount >= 5) {
                             // tell FBL we didn't receive it, but accept it anyway
                             req.abort();
                             _context.statManager().addRateData("udp.receiveFailsafe", 1);
                         }
                         receive(packet);
-                        //_context.statManager().addRateData("udp.receivePacketSize", size);
+                        // _context.statManager().addRateData("udp.receivePacketSize", size);
                     } else {
                         // SSU1 had 0 byte hole punch, SSU2 does not
                         if (_log.shouldWarn()) {
@@ -149,8 +170,11 @@ class UDPReceiver {
                         packet.release();
                     }
                 } catch (IOException ioe) {
-                    if (_log.shouldDebug()) {_log.debug("Error receiving UDP packet", ioe);}
-                    else if (_log.shouldWarn()) {_log.warn("Error receiving UDP packet: " + ioe.getMessage());}
+                    if (_log.shouldDebug()) {
+                        _log.debug("Error receiving UDP packet", ioe);
+                    } else if (_log.shouldWarn()) {
+                        _log.warn("Error receiving UDP packet: " + ioe.getMessage());
+                    }
                     packet.release();
                     if (_socket.isClosed()) {
                         if (_keepRunning) {
@@ -159,13 +183,16 @@ class UDPReceiver {
                         }
                     } else if (_keepRunning) {
                         // TODO count consecutive errors, give up after too many?
-                        try {Thread.sleep(100);}
-                        catch (InterruptedException ie) {}
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException ie) {
+                        }
                     }
                 }
             }
-            if (_log.shouldWarn()) {_log.warn("Stopped receiving UDP packets on: " + _endpoint);}
+            if (_log.shouldWarn()) {
+                _log.warn("Stopped receiving UDP packets on: " + _endpoint);
+            }
         }
     }
-
 }

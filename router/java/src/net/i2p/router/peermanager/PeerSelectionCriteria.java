@@ -1,4 +1,5 @@
 package net.i2p.router.peermanager;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -18,25 +19,42 @@ package net.i2p.router.peermanager;
  */
 class PeerSelectionCriteria {
     /** The peers will be used in a tunnel */
-    //public final static int PURPOSE_TUNNEL = 1;
+    // public final static int PURPOSE_TUNNEL = 1;
     /** The peers will be used for garlic routed messages */
-    //public final static int PURPOSE_GARLIC = 2;
+    // public final static int PURPOSE_GARLIC = 2;
     /** The peers will be used for a source routed reply block message */
-    //public final static int PURPOSE_SOURCE_ROUTE = 3;
+    // public final static int PURPOSE_SOURCE_ROUTE = 3;
     /** The peers will be used for a test message */
-    public final static int PURPOSE_TEST = 4;
+    public static final int PURPOSE_TEST = 4;
 
     private int _minReq;
     private int _maxReq;
     private int _purpose;
 
     /** Minimum number of peers required */
-    public int getMinimumRequired() { return _minReq; }
-    public void setMinimumRequired(int min) { _minReq = min; }
+    public int getMinimumRequired() {
+        return _minReq;
+    }
+
+    public void setMinimumRequired(int min) {
+        _minReq = min;
+    }
+
     /** Maximum number of peers required */
-    public int getMaximumRequired() { return _maxReq; }
-    public void setMaximumRequired(int max) { _maxReq = max; }
+    public int getMaximumRequired() {
+        return _maxReq;
+    }
+
+    public void setMaximumRequired(int max) {
+        _maxReq = max;
+    }
+
     /** Purpose for which the peers will be used */
-    public int getPurpose() { return _purpose; }
-    public void setPurpose(int purpose) { _purpose = purpose; }
+    public int getPurpose() {
+        return _purpose;
+    }
+
+    public void setPurpose(int purpose) {
+        _purpose = purpose;
+    }
 }

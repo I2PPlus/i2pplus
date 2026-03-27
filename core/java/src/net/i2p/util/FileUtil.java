@@ -1,5 +1,7 @@
 package net.i2p.util;
 
+import net.i2p.data.DataHelper;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,7 +18,6 @@ import java.util.List;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import net.i2p.data.DataHelper;
 
 /**
  * General helper methods for messing with files
@@ -41,6 +42,7 @@ public class FileUtil {
     public static final boolean rmdir(String path, boolean failIfNotEmpty) {
         return rmdir(new File(path), failIfNotEmpty);
     }
+
     /**
      * Delete the path as well as any files or directories underneath it.
      *
@@ -52,27 +54,26 @@ public class FileUtil {
      */
     public static final boolean rmdir(File target, boolean failIfNotEmpty) {
         if (!target.exists()) {
-            //System.out.println("info: target does not exist [" + target.getPath() + "]");
+            // System.out.println("info: target does not exist [" + target.getPath() + "]");
             return true;
         }
         if (!target.isDirectory()) {
-            //System.out.println("info: target is not a directory [" + target.getPath() + "]");
+            // System.out.println("info: target is not a directory [" + target.getPath() + "]");
             return target.delete();
         } else {
             File children[] = target.listFiles();
             if (children == null) {
-                //System.out.println("info: target null children [" + target.getPath() + "]");
+                // System.out.println("info: target null children [" + target.getPath() + "]");
                 return false;
             }
             if ((failIfNotEmpty) && (children.length > 0)) {
-                //System.out.println("info: target is not emtpy[" + target.getPath() + "]");
+                // System.out.println("info: target is not emtpy[" + target.getPath() + "]");
                 return false;
             }
             for (int i = 0; i < children.length; i++) {
-                if (!rmdir(children[i], failIfNotEmpty))
-                    return false;
+                if (!rmdir(children[i], failIfNotEmpty)) return false;
 
-                //System.out.println("info: target removed recursively [" + children[i].getPath() + "]");
+                // System.out.println("info: target removed recursively [" + children[i].getPath() + "]");
             }
             return target.delete();
         }
@@ -88,13 +89,13 @@ public class FileUtil {
     }
 
     /**
-      * Warning - do not call any new classes from here, or
-      * update will crash the JVM.
-      *
-      * @param logLevel Log.WARN, etc.
-      * @return true if it was copied successfully
-      * @since 0.9.7
-      */
+     * Warning - do not call any new classes from here, or
+     * update will crash the JVM.
+     *
+     * @param logLevel Log.WARN, etc.
+     * @return true if it was copied successfully
+     * @since 0.9.7
+     */
     public static boolean extractZip(File zipfile, File targetDir, int logLevel) {
         int files = 0;
         ZipFile zip = null;
@@ -103,7 +104,7 @@ public class FileUtil {
             zip = new ZipFile(zipfile);
             Enumeration<? extends ZipEntry> entries = zip.entries();
             while (entries.hasMoreElements()) {
-                ZipEntry entry = (ZipEntry)entries.nextElement();
+                ZipEntry entry = (ZipEntry) entries.nextElement();
                 if (entry.getName().contains("..")) {
                     System.err.println("ERROR: Refusing to extract a zip entry with '..' in it [" + entry.getName() + "]");
                     return false;
@@ -117,8 +118,7 @@ public class FileUtil {
                 if ((parent != null) && (!parent.exists())) {
                     boolean parentsOk = parent.mkdirs();
                     if (!parentsOk) {
-                        if (logLevel <= Log.ERROR)
-                            System.err.println("ERROR: Unable to create the parent dir for " + entry.getName() + ": [" + parent.getAbsolutePath() + "]");
+                        if (logLevel <= Log.ERROR) System.err.println("ERROR: Unable to create the parent dir for " + entry.getName() + ": [" + parent.getAbsolutePath() + "]");
                         return false;
                     }
                 }
@@ -126,8 +126,7 @@ public class FileUtil {
                     if (!target.exists()) {
                         boolean created = target.mkdirs();
                         if (!created) {
-                            if (logLevel <= Log.ERROR)
-                                System.err.println("ERROR: Unable to create the directory [" + entry.getName() + "]");
+                            if (logLevel <= Log.ERROR) System.err.println("ERROR: Unable to create the directory [" + entry.getName() + "]");
                             return false;
                         } else if (logLevel <= Log.INFO) {
                             System.err.println("INFO: Creating directory [" + entry.getName() + "]");
@@ -143,27 +142,23 @@ public class FileUtil {
                             target = new File(targetDir, entry.getName().substring(0, entry.getName().length() - ".pack".length()));
                             jos = new JarOutputStream(new FileOutputStream(target));
                             unpack(in, jos);
-                            if (logLevel <= Log.INFO)
-                                System.err.println("INFO: File [" + entry.getName() + "] extracted and unpacked");
+                            if (logLevel <= Log.INFO) System.err.println("INFO: File [" + entry.getName() + "] extracted and unpacked");
                         } else {
                             fos = new FileOutputStream(target);
                             // We do NOT use DataHelper.copy() because it loads new classes
                             // and causes the update to crash.
-                            //DataHelper.copy(in, fos);
+                            // DataHelper.copy(in, fos);
                             int read;
                             while ((read = in.read(buf)) != -1) {
                                 fos.write(buf, 0, read);
                             }
-                            if (logLevel == Log.DEBUG)
-                                System.err.println("INFO: File [" + entry.getName() + "] extracted");
+                            if (logLevel == Log.DEBUG) System.err.println("INFO: File [" + entry.getName() + "] extracted");
                         }
                         files++;
                     } catch (IOException ioe) {
                         if (logLevel <= Log.ERROR) {
                             System.err.println("ERROR: Error extracting the zip entry (" + entry.getName() + ')');
-                            if (ioe.getMessage() != null && ioe.getMessage().indexOf("CAFED00D") >= 0)
-                                System.err.println("This may be caused by a packed library that requires Java 1.6, your Java version is: " +
-                                                   System.getProperty("java.version"));
+                            if (ioe.getMessage() != null && ioe.getMessage().indexOf("CAFED00D") >= 0) System.err.println("This may be caused by a packed library that requires Java 1.6, your Java version is: " + System.getProperty("java.version"));
                             ioe.printStackTrace();
                         }
                         return false;
@@ -177,9 +172,18 @@ public class FileUtil {
                         }
                         return false;
                     } finally {
-                        try { if (in != null) in.close(); } catch (IOException ioe) {}
-                        try { if (fos != null) fos.close(); } catch (IOException ioe) {}
-                        try { if (jos != null) jos.close(); } catch (IOException ioe) {}
+                        try {
+                            if (in != null) in.close();
+                        } catch (IOException ioe) {
+                        }
+                        try {
+                            if (fos != null) fos.close();
+                        } catch (IOException ioe) {
+                        }
+                        try {
+                            if (jos != null) jos.close();
+                        } catch (IOException ioe) {
+                        }
                     }
                 }
             }
@@ -192,9 +196,12 @@ public class FileUtil {
             return false;
         } finally {
             if (zip != null) {
-                try { zip.close(); } catch (IOException ioe) {}
+                try {
+                    zip.close();
+                } catch (IOException ioe) {
+                }
             }
-            //if (files > 0 && logLevel <= Log.WARN)
+            // if (files > 0 && logLevel <= Log.WARN)
             //    System.err.println("INFO: " + files + " files extracted to " + targetDir);
         }
     }
@@ -215,12 +222,12 @@ public class FileUtil {
     public static boolean verifyZip(File zipfile) {
         ZipFile zip = null;
         try {
-            byte buf[] = new byte[16*1024];
+            byte buf[] = new byte[16 * 1024];
             zip = new ZipFile(zipfile);
             Enumeration<? extends ZipEntry> entries = zip.entries();
             boolean p200TestRequired = true;
             while (entries.hasMoreElements()) {
-                ZipEntry entry = (ZipEntry)entries.nextElement();
+                ZipEntry entry = (ZipEntry) entries.nextElement();
                 if (entry.getName().indexOf("..") != -1) {
                     System.err.println("ERROR: Refusing to extract a zip entry with '..' in the name [" + entry.getName() + "]");
                     return false;
@@ -228,8 +235,7 @@ public class FileUtil {
                 if (entry.isDirectory()) {
                     // noop
                 } else {
-                    if (p200TestRequired &&
-                        (entry.getName().endsWith(".jar.pack") || entry.getName().endsWith(".war.pack"))) {
+                    if (p200TestRequired && (entry.getName().endsWith(".jar.pack") || entry.getName().endsWith(".war.pack"))) {
                         if (!isPack200Supported()) {
                             System.err.println("ERROR: Zip verify failed, your JVM does not support unpack200");
                             return false;
@@ -241,7 +247,7 @@ public class FileUtil {
                         while ((in.read(buf)) != -1) {
                             // throw the data away
                         }
-                        //System.err.println("INFO: File [" + entry.getName() + "] extracted");
+                        // System.err.println("INFO: File [" + entry.getName() + "] extracted");
                         in.close();
                     } catch (IOException ioe) {
                         System.err.println("ERROR: Error extracting the zip entry (" + entry.getName() + "]");
@@ -257,7 +263,10 @@ public class FileUtil {
             return false;
         } finally {
             if (zip != null) {
-                try { zip.close(); } catch (IOException ioe) {}
+                try {
+                    zip.close();
+                } catch (IOException ioe) {
+                }
             }
         }
     }
@@ -270,26 +279,29 @@ public class FileUtil {
         try {
             Class.forName("java.util.jar.Pack200", false, ClassLoader.getSystemClassLoader());
             return true;
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         try {
             Class.forName("io.pack200.Pack200", false, ClassLoader.getSystemClassLoader());
             return true;
-        } catch (Exception e) {}
-/**
-        try {
-            Class.forName("org.apache.commons.compress.harmony.unpack200.Archive", false, ClassLoader.getSystemClassLoader());
-            return true;
-        } catch (Exception e) {}
-        try {
-            Class.forName("org.apache.harmony.unpack200.Archive", false, ClassLoader.getSystemClassLoader());
-            return true;
-        } catch (Exception e) {}
-**/
+        } catch (Exception e) {
+        }
+        /**
+         * try {
+         * Class.forName("org.apache.commons.compress.harmony.unpack200.Archive", false, ClassLoader.getSystemClassLoader());
+         * return true;
+         * } catch (Exception e) {}
+         * try {
+         * Class.forName("org.apache.harmony.unpack200.Archive", false, ClassLoader.getSystemClassLoader());
+         * return true;
+         * } catch (Exception e) {}
+         **/
         return false;
     }
 
     private static boolean _failedOracle;
-    //private static boolean _failedApache;
+
+    // private static boolean _failedApache;
 
     /**
      * Unpack using either Oracle or Apache's unpack200 library,
@@ -304,7 +316,7 @@ public class FileUtil {
      */
     private static void unpack(InputStream in, JarOutputStream out) throws Exception {
         // For Sun, OpenJDK, IcedTea, etc, use this
-        //Pack200.newUnpacker().unpack(in, out);
+        // Pack200.newUnpacker().unpack(in, out);
         if (!_failedOracle) {
             try {
                 Class<?> p200;
@@ -316,7 +328,7 @@ public class FileUtil {
                     p200 = Class.forName("io.pack200.Pack200", true, ClassLoader.getSystemClassLoader());
                 }
                 Method newUnpacker = p200.getMethod("newUnpacker");
-                Object unpacker = newUnpacker.invoke(null,(Object[])  null);
+                Object unpacker = newUnpacker.invoke(null, (Object[]) null);
                 Method unpack = unpacker.getClass().getMethod("unpack", InputStream.class, JarOutputStream.class);
                 // throws IOException
                 unpack.invoke(unpacker, new Object[] {in, out});
@@ -332,38 +344,38 @@ public class FileUtil {
 
         // ------------------
         // For Apache Harmony or if you put its pack200.jar in your library directory use this
-        //(new Archive(in, out)).unpack();
+        // (new Archive(in, out)).unpack();
         // warning:
         // Apache ONLY supports format 150.7 which is Java 5.
         // Incompatible with pack200 from Java 6-13
         // Error is:
         // org.apache.commons.compress.harmony.pack200.Pack200Exception: Invalid segment minor version
-/**
-        if (!_failedApache) {
-            try {
-                Class<?> p200;
-                try {
-                    // new commons-compress-1.x.jar
-                    p200 = Class.forName("org.apache.commons.compress.harmony.unpack200.Archive", true, ClassLoader.getSystemClassLoader());
-                } catch (Exception e) {
-                    // old pack200.jar
-                    p200 = Class.forName("org.apache.harmony.unpack200.Archive", true, ClassLoader.getSystemClassLoader());
-                }
-                Constructor<?> newUnpacker = p200.getConstructor(InputStream.class, JarOutputStream.class);
-                Object unpacker = newUnpacker.newInstance(in, out);
-                Method unpack = unpacker.getClass().getMethod("unpack");
-                // throws IOException or Pack200Exception
-                unpack.invoke(unpacker, (Object[]) null);
-                return;
-            } catch (ClassNotFoundException e) {
-                _failedApache = true;
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                _failedApache = true;
-                e.printStackTrace();
-            }
-        }
-**/
+        /**
+         * if (!_failedApache) {
+         * try {
+         * Class<?> p200;
+         * try {
+         * // new commons-compress-1.x.jar
+         * p200 = Class.forName("org.apache.commons.compress.harmony.unpack200.Archive", true, ClassLoader.getSystemClassLoader());
+         * } catch (Exception e) {
+         * // old pack200.jar
+         * p200 = Class.forName("org.apache.harmony.unpack200.Archive", true, ClassLoader.getSystemClassLoader());
+         * }
+         * Constructor<?> newUnpacker = p200.getConstructor(InputStream.class, JarOutputStream.class);
+         * Object unpacker = newUnpacker.newInstance(in, out);
+         * Method unpack = unpacker.getClass().getMethod("unpack");
+         * // throws IOException or Pack200Exception
+         * unpack.invoke(unpacker, (Object[]) null);
+         * return;
+         * } catch (ClassNotFoundException e) {
+         * _failedApache = true;
+         * e.printStackTrace();
+         * } catch (NoSuchMethodException e) {
+         * _failedApache = true;
+         * e.printStackTrace();
+         * }
+         * }
+         **/
         // ------------------
         // For gcj, gij, etc., use this
         throw new IOException("Unpack200 not supported");
@@ -397,10 +409,8 @@ public class FileUtil {
             while ((line = in.readLine()) != null) {
                 lines.add(line);
                 if ((maxNumLines > 0) && (lines.size() >= maxNumLines)) {
-                    if (startAtBeginning)
-                        break;
-                    else
-                        lines.remove(0);
+                    if (startAtBeginning) break;
+                    else lines.remove(0);
                 }
             }
             StringBuilder buf = new StringBuilder(lines.size() * 80);
@@ -411,7 +421,10 @@ public class FileUtil {
         } catch (IOException ioe) {
             return null;
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null) try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 
@@ -425,8 +438,7 @@ public class FileUtil {
      */
     public static void readFile(String path, String root, OutputStream out) throws IOException {
         File rootDir = new File(root);
-        while (path.startsWith("/") && (path.length() > 0))
-            path = path.substring(1);
+        while (path.startsWith("/") && (path.length() > 0)) path = path.substring(1);
         if (path.length() <= 0) throw new FileNotFoundException("Not serving up the root dir");
         File target = new File(rootDir, path);
         if (!target.exists()) throw new FileNotFoundException("Requested file does not exist: " + path);
@@ -438,24 +450,29 @@ public class FileUtil {
         try {
             in = new FileInputStream(target);
             DataHelper.copy(in, out);
-            try { out.close(); } catch (IOException ioe) {}
+            try {
+                out.close();
+            } catch (IOException ioe) {
+            }
         } finally {
-            if (in != null)
-                try { in.close(); } catch (IOException ioe) {}
+            if (in != null) try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 
     /**
-      * @return true if it was copied successfully
-      */
+     * @return true if it was copied successfully
+     */
     public static boolean copy(String source, String dest, boolean overwriteExisting) {
         return copy(source, dest, overwriteExisting, false);
     }
 
     /**
-      * @param quiet don't log fails to wrapper log if true
-      * @return true if it was copied successfully
-      */
+     * @param quiet don't log fails to wrapper log if true
+     * @return true if it was copied successfully
+     */
     public static boolean copy(String source, String dest, boolean overwriteExisting, boolean quiet) {
         File src = new File(source);
         File dst = new File(dest);
@@ -463,13 +480,12 @@ public class FileUtil {
     }
 
     /**
-      * @param quiet don't log fails to wrapper log if true
-      * @return true if it was copied successfully
-      * @since 0.8.8
-      */
+     * @param quiet don't log fails to wrapper log if true
+     * @return true if it was copied successfully
+     * @since 0.8.8
+     */
     public static boolean copy(File src, File dst, boolean overwriteExisting, boolean quiet) {
-        if (dst.exists() && dst.isDirectory())
-            dst = new File(dst, src.getName());
+        if (dst.exists() && dst.isDirectory()) dst = new File(dst, src.getName());
 
         if (!src.exists()) return false;
         if (dst.exists() && !overwriteExisting) return false;
@@ -481,7 +497,7 @@ public class FileUtil {
             out = new FileOutputStream(dst);
             // We do NOT use DataHelper.copy() because it's used in installer.jar
             // which does not contain DataHelper
-            //DataHelper.copy(in, out);
+            // DataHelper.copy(in, out);
             int read;
             byte buf[] = new byte[4096];
             while ((read = in.read(buf)) != -1) {
@@ -489,12 +505,17 @@ public class FileUtil {
             }
             return true;
         } catch (IOException ioe) {
-            if (!quiet)
-                ioe.printStackTrace();
+            if (!quiet) ioe.printStackTrace();
             return false;
         } finally {
-            try { if (in != null) in.close(); } catch (IOException ioe) {}
-            try { if (out != null) out.close(); } catch (IOException ioe) {}
+            try {
+                if (in != null) in.close();
+            } catch (IOException ioe) {
+            }
+            try {
+                if (out != null) out.close();
+            } catch (IOException ioe) {
+            }
         }
     }
 
@@ -507,22 +528,18 @@ public class FileUtil {
      * @since 0.8.8
      */
     public static boolean rename(File from, File to) {
-        if (!from.exists())
-            return false;
+        if (!from.exists()) return false;
         boolean success = false;
         boolean isWindows = SystemVersion.isWindows();
         // overwrite fails on windows
         boolean exists = to.exists();
-        if (!isWindows || !exists)
-            success = from.renameTo(to);
+        if (!isWindows || !exists) success = from.renameTo(to);
         if (!success) {
-            if (exists && to.delete())
-                success = from.renameTo(to);
+            if (exists && to.delete()) success = from.renameTo(to);
             if (!success) {
                 // hard way
                 success = copy(from, to, true, true);
-                if (success)
-                    from.delete();
+                if (success) from.delete();
             }
         }
         return success;
@@ -535,46 +552,40 @@ public class FileUtil {
     public static void main(String args[]) {
         if ((args == null) || (args.length < 2)) {
             System.err.println("Usage: delete path | copy source dest | rename from to | unzip path.zip");
-            //testRmdir();
+            // testRmdir();
         } else if ("delete".equals(args[0])) {
             boolean deleted = FileUtil.rmdir(args[1], false);
-            if (!deleted)
-                System.err.println("Error deleting [" + args[1] + "]");
+            if (!deleted) System.err.println("Error deleting [" + args[1] + "]");
         } else if ("copy".equals(args[0])) {
             boolean copied = FileUtil.copy(args[1], args[2], false);
-            if (!copied)
-                System.err.println("Error copying [" + args[1] + "] to [" + args[2] + "]");
+            if (!copied) System.err.println("Error copying [" + args[1] + "] to [" + args[2] + "]");
         } else if ("unzip".equals(args[0])) {
             File f = new File(args[1]);
             File to = new File("tmp");
             to.mkdir();
             boolean copied = verifyZip(f);
-            if (!copied)
-                System.err.println("Error verifying " + args[1]);
-            copied = extractZip(f,  to);
-            if (copied)
-                System.err.println("Unzipped [" + args[1] + "] to [" + to + "]");
-            else
-                System.err.println("Error unzipping [" + args[1] + "] to [" + to + "]");
+            if (!copied) System.err.println("Error verifying " + args[1]);
+            copied = extractZip(f, to);
+            if (copied) System.err.println("Unzipped [" + args[1] + "] to [" + to + "]");
+            else System.err.println("Error unzipping [" + args[1] + "] to [" + to + "]");
         } else if ("rename".equals(args[0])) {
             boolean success = rename(new File(args[1]), new File(args[2]));
-            if (!success)
-                System.err.println("Error renaming [" + args[1] + "] to [" + args[2] + "]");
+            if (!success) System.err.println("Error renaming [" + args[1] + "] to [" + args[2] + "]");
         } else {
             System.err.println("Usage: delete path | copy source dest | rename from to | unzip path.zip");
         }
     }
 
-  /*****
-    private static void testRmdir() {
-        File t = new File("rmdirTest/test/subdir/blah");
-        boolean created = t.mkdirs();
-        if (!t.exists()) throw new RuntimeException("Unable to create test");
-        boolean deleted = FileUtil.rmdir("rmdirTest", false);
-        if (!deleted)
-            System.err.println("FAIL: unable to delete rmdirTest");
-        else
-            System.out.println("PASS: rmdirTest deleted");
-    }
-   *****/
+    /*****
+     * private static void testRmdir() {
+     * File t = new File("rmdirTest/test/subdir/blah");
+     * boolean created = t.mkdirs();
+     * if (!t.exists()) throw new RuntimeException("Unable to create test");
+     * boolean deleted = FileUtil.rmdir("rmdirTest", false);
+     * if (!deleted)
+     * System.err.println("FAIL: unable to delete rmdirTest");
+     * else
+     * System.out.println("PASS: rmdirTest deleted");
+     * }
+     *****/
 }

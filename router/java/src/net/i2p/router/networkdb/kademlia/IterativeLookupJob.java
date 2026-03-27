@@ -25,7 +25,6 @@ import net.i2p.util.Log;
  *
  * @since 0.8.9
  */
-
 class IterativeLookupJob extends JobImpl {
     private static final long ONE_HOUR_MS = 60 * 60 * 1000;
     private final Log _log;
@@ -49,7 +48,9 @@ class IterativeLookupJob extends JobImpl {
             if (log.shouldWarn()) {
                 boolean isBanlisted = ctx.banlist().isBanlisted(from);
                 String msg = "Received unsolicited DbSearchReply message from [" + from.toBase64().substring(0, 6) + "]";
-                if (isBanlisted) {msg += " (Router is banlisted)";}
+                if (isBanlisted) {
+                    msg += " (Router is banlisted)";
+                }
                 log.warn(msg);
             }
             return;
@@ -101,8 +102,7 @@ class IterativeLookupJob extends JobImpl {
         }
 
         if (log.shouldInfo()) {
-            log.info("IterativeLookup -> DbSearchReplyMsg\n* Processed: " + newPeers +
-                     " new, " + oldPeers + " old, and " + invalidPeers + " invalid hashes");
+            log.info("IterativeLookup -> DbSearchReplyMsg\n* Processed: " + newPeers + " new, " + oldPeers + " old, and " + invalidPeers + " invalid hashes");
         }
 
         long timeSent = _search.timeSent(from);
@@ -113,5 +113,7 @@ class IterativeLookupJob extends JobImpl {
     }
 
     @Override
-    public String getName() {return "Process DbStoreReplyMsg";}
+    public String getName() {
+        return "Process DbStoreReplyMsg";
+    }
 }

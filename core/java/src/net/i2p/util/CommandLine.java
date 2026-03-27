@@ -71,8 +71,7 @@ public class CommandLine {
         boolean help = false;
         String cmd = args[0].toLowerCase(Locale.US);
         if (cmd.equals("help")) {
-            if (args.length != 2)
-                return;
+            if (args.length != 2) return;
             cmd = args[1].toLowerCase(Locale.US);
             args[1] = "-?";
             help = true;
@@ -89,7 +88,8 @@ public class CommandLine {
                             usage.setAccessible(true);
                             usage.invoke(null);
                             System.exit(0);
-                        } catch (Exception e) {}
+                        } catch (Exception e) {
+                        }
                         // else fall through to try main("-?")
                     }
                     Method main = c.getMethod("main", String[].class);
@@ -106,8 +106,8 @@ public class CommandLine {
     }
 
     private static void usage() {
-        System.err.println("I2P Core version " + CoreVersion.VERSION + '\n' +
-                           "USAGE: java -jar /path/to/i2p.jar command [args]");
+        System.err.println(
+                "I2P Core version " + CoreVersion.VERSION + '\n' + "USAGE: java -jar /path/to/i2p.jar command [args]");
         printCommands(CLASSES);
     }
 
@@ -118,15 +118,13 @@ public class CommandLine {
         for (String cls : classes) {
             String ccmd = cls.substring(cls.lastIndexOf('.') + 1).toLowerCase(Locale.US);
             cmds.add(ccmd);
-            if (ccmd.length() > max)
-                max = ccmd.length();
+            if (ccmd.length() > max) max = ccmd.length();
         }
         Collections.sort(cmds);
         StringBuilder buf = new StringBuilder(80);
         for (String cmd : cmds) {
             int len = buf.length();
-            if (len == 0)
-                buf.append("    ");
+            if (len == 0) buf.append("    ");
             buf.append(cmd);
             if (len > 80 - max) {
                 System.err.println(buf);
@@ -138,8 +136,7 @@ public class CommandLine {
                 }
             }
         }
-        if (buf.length() > 0)
-            System.out.println(buf);
+        if (buf.length() > 0) System.out.println(buf);
         System.err.println();
         System.err.println("Enter \"help command\" for detailed help.");
     }

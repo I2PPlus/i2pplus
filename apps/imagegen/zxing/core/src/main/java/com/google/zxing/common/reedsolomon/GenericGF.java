@@ -46,17 +46,17 @@ public final class GenericGF {
     private final int primitive;
     private final int generatorBase;
 
-  /**
-   * Create a representation of GF(size) using the given primitive polynomial.
-   *
-   * @param primitive irreducible polynomial whose coefficients are represented by
-   *  the bits of an int, where the least-significant bit represents the constant
-   *  coefficient
-   * @param size the size of the field
-   * @param b the factor b in the generator polynomial can be 0- or 1-based
-   *  (g(x) = (x+a^b)(x+a^(b+1))...(x+a^(b+2t-1))).
-   *  In most cases it should be 1, but for QR code it is 0.
-   */
+    /**
+     * Create a representation of GF(size) using the given primitive polynomial.
+     *
+     * @param primitive irreducible polynomial whose coefficients are represented by
+     *  the bits of an int, where the least-significant bit represents the constant
+     *  coefficient
+     * @param size the size of the field
+     * @param b the factor b in the generator polynomial can be 0- or 1-based
+     *  (g(x) = (x+a^b)(x+a^(b+1))...(x+a^(b+2t-1))).
+     *  In most cases it should be 1, but for QR code it is 0.
+     */
     public GenericGF(int primitive, int size, int b) {
         this.primitive = primitive;
         this.size = size;
@@ -76,9 +76,9 @@ public final class GenericGF {
         for (int i = 0; i < size - 1; i++) {
             logTable[expTable[i]] = i;
         }
-    // logTable[0] == 0 but this should never be used
-        zero = new GenericGFPoly(this, new int[]{0});
-        one = new GenericGFPoly(this, new int[]{1});
+        // logTable[0] == 0 but this should never be used
+        zero = new GenericGFPoly(this, new int[] {0});
+        one = new GenericGFPoly(this, new int[] {1});
     }
 
     GenericGFPoly getZero() {
@@ -89,9 +89,9 @@ public final class GenericGF {
         return one;
     }
 
-  /**
-   * @return the monomial representing coefficient * x^degree
-   */
+    /**
+     * @return the monomial representing coefficient * x^degree
+     */
     GenericGFPoly buildMonomial(int degree, int coefficient) {
         if (degree < 0) {
             throw new IllegalArgumentException();
@@ -104,25 +104,25 @@ public final class GenericGF {
         return new GenericGFPoly(this, coefficients);
     }
 
-  /**
-   * Implements both addition and subtraction -- they are the same in GF(size).
-   *
-   * @return sum/difference of a and b
-   */
+    /**
+     * Implements both addition and subtraction -- they are the same in GF(size).
+     *
+     * @return sum/difference of a and b
+     */
     static int addOrSubtract(int a, int b) {
         return a ^ b;
     }
 
-  /**
-   * @return 2 to the power of a in GF(size)
-   */
+    /**
+     * @return 2 to the power of a in GF(size)
+     */
     int exp(int a) {
         return expTable[a];
     }
 
-  /**
-   * @return base 2 log of a in GF(size)
-   */
+    /**
+     * @return base 2 log of a in GF(size)
+     */
     int log(int a) {
         if (a == 0) {
             throw new IllegalArgumentException();
@@ -130,9 +130,9 @@ public final class GenericGF {
         return logTable[a];
     }
 
-  /**
-   * @return multiplicative inverse of a
-   */
+    /**
+     * @return multiplicative inverse of a
+     */
     int inverse(int a) {
         if (a == 0) {
             throw new ArithmeticException();
@@ -140,9 +140,9 @@ public final class GenericGF {
         return expTable[size - logTable[a] - 1];
     }
 
-  /**
-   * @return product of a and b in GF(size)
-   */
+    /**
+     * @return product of a and b in GF(size)
+     */
     int multiply(int a, int b) {
         if (a == 0 || b == 0) {
             return 0;
@@ -159,8 +159,7 @@ public final class GenericGF {
     }
 
     @Override
-  public String toString() {
+    public String toString() {
         return "GF(0x" + Integer.toHexString(primitive) + ',' + size + ')';
     }
-
 }

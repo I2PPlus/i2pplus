@@ -1,4 +1,5 @@
 package net.i2p.router.peermanager;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,14 +9,15 @@ package net.i2p.router.peermanager;
  *
  */
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Collections;
-import java.util.Set;
 import net.i2p.data.Hash;
 import net.i2p.router.PeerManagerFacade;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * Base implementation that has simple algorithms and periodically saves state
@@ -42,13 +44,17 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
         _log.info("Starting Peer Manager...");
         _manager = new PeerManager(_context);
         _persistenceHelper.setUs(_context.routerHash());
-        if (_testJob != null) {_testJob.startTesting(_manager);}
+        if (_testJob != null) {
+            _testJob.startTesting(_manager);
+        }
     }
 
     @Override
     public synchronized void shutdown() {
         _log.info("Shutting down Peer Manager...");
-        if (_testJob != null) {_testJob.stopTesting();}
+        if (_testJob != null) {
+            _testJob.stopTesting();
+        }
         if (_manager != null) {
             _manager.storeProfiles();
             _manager.clearProfiles();
@@ -102,5 +108,4 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     @Deprecated
     @Override
     public void renderStatusHTML(Writer out) throws IOException {}
-
 }

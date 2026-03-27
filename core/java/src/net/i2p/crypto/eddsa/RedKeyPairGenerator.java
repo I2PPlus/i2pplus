@@ -1,9 +1,10 @@
 package net.i2p.crypto.eddsa;
 
-import java.security.KeyPair;
 import net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec;
 import net.i2p.crypto.eddsa.spec.EdDSAPublicKeySpec;
 import net.i2p.util.RandomSource;
+
+import java.security.KeyPair;
 
 /**
  *  Default keysize is 256 (Ed25519)
@@ -14,11 +15,10 @@ public final class RedKeyPairGenerator extends KeyPairGenerator {
 
     @Override
     public KeyPair generateKeyPair() {
-        if (!initialized)
-            initialize(DEFAULT_KEYSIZE, RandomSource.getInstance());
+        if (!initialized) initialize(DEFAULT_KEYSIZE, RandomSource.getInstance());
 
         // 64 bytes
-        byte[] seed = new byte[edParams.getCurve().getField().getb()/4];
+        byte[] seed = new byte[edParams.getCurve().getField().getb() / 4];
         random.nextBytes(seed);
         byte[] b = EdDSABlinding.reduce(seed);
 
@@ -28,28 +28,28 @@ public final class RedKeyPairGenerator extends KeyPairGenerator {
         return new KeyPair(new EdDSAPublicKey(pubKey), new EdDSAPrivateKey(privKey));
     }
 
-/****
-    public static void main(String[] args) {
-        (new RedKeyPairGenerator()).test();
-    }
-
-    public void test() {
-        if (!initialized)
-            initialize(DEFAULT_KEYSIZE, RandomSource.getInstance());
-
-        // 64 bytes
-        byte[] seed = new byte[edParams.getCurve().getField().getb()/4];
-        random.nextBytes(seed);
-        byte[] b = EdDSABlinding.reduce(seed);
-        b[0] &= 0xf0;
-
-        for (int i = 0; i < 16; i++) {
-            EdDSAPrivateKeySpec privKey = new EdDSAPrivateKeySpec(b, null, edParams);
-            EdDSAPrivateKey pk = new EdDSAPrivateKey(privKey);
-            System.out.println("Privkey:\n" + net.i2p.util.HexDump.dump(b));
-            System.out.println("Pubkey:\n" + net.i2p.util.HexDump.dump(pk.getAbyte()));
-            b[0]++;
-        }
-    }
-****/
+    /****
+     * public static void main(String[] args) {
+     * (new RedKeyPairGenerator()).test();
+     * }
+     *
+     * public void test() {
+     * if (!initialized)
+     * initialize(DEFAULT_KEYSIZE, RandomSource.getInstance());
+     *
+     * // 64 bytes
+     * byte[] seed = new byte[edParams.getCurve().getField().getb()/4];
+     * random.nextBytes(seed);
+     * byte[] b = EdDSABlinding.reduce(seed);
+     * b[0] &= 0xf0;
+     *
+     * for (int i = 0; i < 16; i++) {
+     * EdDSAPrivateKeySpec privKey = new EdDSAPrivateKeySpec(b, null, edParams);
+     * EdDSAPrivateKey pk = new EdDSAPrivateKey(privKey);
+     * System.out.println("Privkey:\n" + net.i2p.util.HexDump.dump(b));
+     * System.out.println("Pubkey:\n" + net.i2p.util.HexDump.dump(pk.getAbyte()));
+     * b[0]++;
+     * }
+     * }
+     ****/
 }

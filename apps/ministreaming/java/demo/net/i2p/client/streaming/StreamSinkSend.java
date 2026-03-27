@@ -1,16 +1,17 @@
 package net.i2p.client.streaming;
 
+import net.i2p.I2PAppContext;
+import net.i2p.I2PException;
+import net.i2p.data.DataFormatException;
+import net.i2p.data.Destination;
+import net.i2p.util.Log;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
-import net.i2p.I2PAppContext;
-import net.i2p.I2PException;
-import net.i2p.data.DataFormatException;
-import net.i2p.data.Destination;
-import net.i2p.util.Log;
 
 /**
  * Simple streaming lib test app that connects to a given destination and sends
@@ -55,35 +56,38 @@ public class StreamSinkSend {
             _log.error("Peer destination is not valid in " + _peerDestFile, dfe);
             return;
         } finally {
-            if (fis != null) try { fis.close(); } catch (IOException ioe) {}
+            if (fis != null) try {
+                    fis.close();
+                } catch (IOException ioe) {
+                }
         }
-
 
         System.out.println("Send " + _sendFile + " to " + peer.calculateHash().toBase64());
 
         try {
             I2PSocket sock = mgr.connect(peer);
-            byte buf[] = new byte[32*1024];
+            byte buf[] = new byte[32 * 1024];
             OutputStream out = sock.getOutputStream();
             long beforeSending = System.currentTimeMillis();
             fis = new FileInputStream(_sendFile);
             long size = 0;
             while (true) {
                 int read = fis.read(buf);
-                if (read < 0)
-                    break;
+                if (read < 0) break;
                 out.write(buf, 0, read);
                 size += read;
-                if (_log.shouldDebug())
-                    _log.debug("Wrote " + read);
+                if (_log.shouldDebug()) _log.debug("Wrote " + read);
                 if (_writeDelay > 0) {
-                    try { Thread.sleep(_writeDelay); } catch (InterruptedException ie) {}
+                    try {
+                        Thread.sleep(_writeDelay);
+                    } catch (InterruptedException ie) {
+                    }
                 }
             }
             fis.close();
             sock.close();
             long afterSending = System.currentTimeMillis();
-            System.out.println("Sent " + (size / 1024) + "KB in " + (afterSending-beforeSending) + "ms");
+            System.out.println("Sent " + (size / 1024) + "KB in " + (afterSending - beforeSending) + "ms");
         } catch (InterruptedIOException iie) {
             _log.error("Timeout connecting to the peer", iie);
             return;

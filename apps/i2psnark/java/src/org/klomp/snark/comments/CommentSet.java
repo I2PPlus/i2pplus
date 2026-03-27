@@ -4,6 +4,8 @@
  */
 package org.klomp.snark.comments;
 
+import net.i2p.util.SecureFileOutputStream;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,7 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-import net.i2p.util.SecureFileOutputStream;
 
 /**
  * Store comments.
@@ -70,18 +71,14 @@ public class CommentSet extends AbstractSet<Comment> {
         this();
         BufferedReader br = null;
         try {
-            br =
-                    new BufferedReader(
-                            new InputStreamReader(
-                                    new GZIPInputStream(new FileInputStream(file)), "UTF-8"));
+            br = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), "UTF-8"));
             String line = null;
             while ((line = br.readLine()) != null) {
                 Comment c = Comment.fromPersistentString(line);
                 if (c != null) add(c);
             }
         } finally {
-            if (br != null)
-                try {
+            if (br != null) try {
                     br.close();
                 } catch (IOException ioe) {
                 }
@@ -96,11 +93,7 @@ public class CommentSet extends AbstractSet<Comment> {
     public void save(File file) throws IOException {
         PrintWriter out = null;
         try {
-            out =
-                    new PrintWriter(
-                            new OutputStreamWriter(
-                                    new GZIPOutputStream(new SecureFileOutputStream(file)),
-                                    "UTF-8"));
+            out = new PrintWriter(new OutputStreamWriter(new GZIPOutputStream(new SecureFileOutputStream(file)), "UTF-8"));
             for (List<Comment> l : map.values()) {
                 for (Comment c : l) {
                     out.println(c.toPersistentString());

@@ -14,8 +14,7 @@ class NTCP2Options {
     private final float _sendMin, _sendMax, _recvMin, _recvMax;
     private final int _sendDummy, _recvDummy, _sendDelay, _recvDelay;
 
-    public NTCP2Options(float sendMin, float sendMax, float recvMin, float recvMax,
-                        int sendDummy, int recvDummy, int sendDelay, int recvDelay) {
+    public NTCP2Options(float sendMin, float sendMax, float recvMin, float recvMax, int sendDummy, int recvDummy, int sendDelay, int recvDelay) {
         _sendMin = sendMin;
         _sendMax = sendMax;
         _recvMin = recvMin;
@@ -26,40 +25,60 @@ class NTCP2Options {
         _recvDelay = recvDelay;
     }
 
-    public float getSendMin() { return _sendMin; }
-    public float getSendMax() { return _sendMax; }
-    public float getRecvMin() { return _recvMin; }
-    public float getRecvMax() { return _recvMax; }
-    public int getSendDummy() { return _sendDummy; }
-    public int getRecvDummy() { return _recvDummy; }
-    public int getSendDelay() { return _sendDelay; }
-    public int getRecvDelay() { return _recvDelay; }
+    public float getSendMin() {
+        return _sendMin;
+    }
 
-/**
- * NTCP2 Padding/Dummy/Delay configuration for data phase.
- * Contains timing and padding parameters for NTCP2 data transmission.
- * Provides methods to merge configurations and validate compatibility.
- *
- * @since 0.9.36
- */
+    public float getSendMax() {
+        return _sendMax;
+    }
+
+    public float getRecvMin() {
+        return _recvMin;
+    }
+
+    public float getRecvMax() {
+        return _recvMax;
+    }
+
+    public int getSendDummy() {
+        return _sendDummy;
+    }
+
+    public int getRecvDummy() {
+        return _recvDummy;
+    }
+
+    public int getSendDelay() {
+        return _sendDelay;
+    }
+
+    public int getRecvDelay() {
+        return _recvDelay;
+    }
+
+    /**
+     * NTCP2 Padding/Dummy/Delay configuration for data phase.
+     * Contains timing and padding parameters for NTCP2 data transmission.
+     * Provides methods to merge configurations and validate compatibility.
+     *
+     * @since 0.9.36
+     */
     public NTCP2Options merge(NTCP2Options his) {
         float xsMin = Math.max(_sendMin, his.getRecvMin());
         float xsMax = Math.min(_sendMax, his.getRecvMax());
-        if (xsMin > xsMax)
-            xsMin = xsMax;
+        if (xsMin > xsMax) xsMin = xsMax;
 
         float xrMin = Math.max(_recvMin, his.getSendMin());
         float xrMax = Math.min(_recvMax, his.getSendMax());
-        if (xrMin > xrMax)
-            xrMin = xrMax;
+        if (xrMin > xrMax) xrMin = xrMax;
 
         int xsDummy = Math.min(_sendDummy, his.getRecvDummy());
         int xrDummy = Math.min(_recvDummy, his.getSendDummy());
         int xsDelay = Math.min(_sendDelay, his.getRecvDelay());
         int xrDelay = Math.min(_recvDelay, his.getSendDelay());
 
-        return new NTCP2Options(xsMin, xsMax, xrMin, xrMax,
-                                xsDummy, xrDummy, xsDelay, xrDelay);
+        return new NTCP2Options(xsMin, xsMax, xrMin, xrMax, xsDummy, xrDummy, xsDelay, xrDelay);
     }
 
     /**
@@ -67,8 +86,7 @@ class NTCP2Options {
      *  @return null on error
      */
     public static NTCP2Options fromByteArray(byte[] options) {
-        if (options.length < 12)
-            return null;
+        if (options.length < 12) return null;
         float tmin = (options[0] & 0xff) / 16.0f;
         float tmax = (options[1] & 0xff) / 16.0f;
         float rmin = (options[2] & 0xff) / 16.0f;
@@ -77,15 +95,11 @@ class NTCP2Options {
         int rdummy = (int) DataHelper.fromLong(options, 6, 2);
         int tdelay = (int) DataHelper.fromLong(options, 8, 2);
         int rdelay = (int) DataHelper.fromLong(options, 10, 2);
-        return new NTCP2Options(tmin, tmax, rmin, rmax,
-                                tdummy, rdummy, tdelay, rdelay);
+        return new NTCP2Options(tmin, tmax, rmin, rmax, tdummy, rdummy, tdelay, rdelay);
     }
 
     @Override
     public String toString() {
-        return "Padding options: send min/max %: (" + (_sendMin * 100) + ", " + (_sendMax * 100) +
-               ") recv min/max %: (" + (_recvMin * 100) + ", " + (_recvMax * 100) +
-               ") dummy send/recv B/s: (" + _sendDummy + ", " + _recvDummy +
-               ") delay send/recv ms: (" + _sendDelay + ", " + _recvDelay + ')';
+        return "Padding options: send min/max %: (" + (_sendMin * 100) + ", " + (_sendMax * 100) + ") recv min/max %: (" + (_recvMin * 100) + ", " + (_recvMax * 100) + ") dummy send/recv B/s: (" + _sendDummy + ", " + _recvDummy + ") delay send/recv ms: (" + _sendDelay + ", " + _recvDelay + ')';
     }
 }

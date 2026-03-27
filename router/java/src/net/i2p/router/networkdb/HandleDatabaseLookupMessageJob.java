@@ -1,4 +1,5 @@
 package net.i2p.router.networkdb;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,9 +9,6 @@ package net.i2p.router.networkdb;
  *
  */
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
@@ -34,6 +32,10 @@ import net.i2p.router.message.SendMessageDirectJob;
 import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.util.Log;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Handle a lookup for a key received from a remote peer.  Needs to be implemented
  * to send back replies, etc
@@ -46,16 +48,16 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
     private final Hash _us;
     private final long _msgIDBloomXor;
 
-    private final static int MAX_ROUTERS_RETURNED = 3;
-    private final static int CLOSENESS_THRESHOLD = 8; // FNDF.MAX_TO_FLOOD + 1
-    private final static int REPLY_TIMEOUT = 60*1000;
-    private final static int MESSAGE_PRIORITY = OutNetMessage.PRIORITY_NETDB_REPLY;
+    private static final int MAX_ROUTERS_RETURNED = 3;
+    private static final int CLOSENESS_THRESHOLD = 8; // FNDF.MAX_TO_FLOOD + 1
+    private static final int REPLY_TIMEOUT = 60 * 1000;
+    private static final int MESSAGE_PRIORITY = OutNetMessage.PRIORITY_NETDB_REPLY;
 
     /**
      * If a routerInfo structure isn't this recent, don't send it out.
      * Equal to KNDF.ROUTER_INFO_EXPIRATION_FLOODFILL.
      */
-    public final static long EXPIRE_DELAY = 60*60*1000;
+    public static final long EXPIRE_DELAY = 60 * 60 * 1000;
 
     public HandleDatabaseLookupMessageJob(RouterContext ctx, DatabaseLookupMessage receivedMessage, RouterIdentity from, Hash fromHash, long msgIDBloomXor) {
         super(ctx);
@@ -65,7 +67,9 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         _msgIDBloomXor = msgIDBloomXor;
     }
 
-    protected boolean answerAllQueries() {return false;}
+    protected boolean answerAllQueries() {
+        return false;
+    }
 
     @Override
     public void runJob() {
@@ -76,7 +80,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         if (toTunnel == null && fromKey.equals(_us)) {
             if (_log.shouldWarn()) {
                 // exploratory, no reply key/tag. i2pd bug?
-                _log.warn("Dropping NetDb Lookup for [" + searchKey.toBase64().substring(0,6) + "] with replies to us");
+                _log.warn("Dropping NetDb Lookup for [" + searchKey.toBase64().substring(0, 6) + "] with replies to us");
             }
             return;
         }
@@ -84,27 +88,26 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         // If we are hidden we should not get queries, log and return
         if (getContext().router().isHidden() && !searchKey.equals(_us)) {
             if (_log.shouldWarn()) {
-                _log.warn("Ignoring unexpected NetDb Lookup for our key from [" +  fromKey.toBase64().substring(0,6) + "] " +
-                          "while in hidden mode");
-                          //"\n* Source: " + fromKey.toBase64().substring(0,6) + "] -> [Tunnel " + toTunnel + "]");
+                _log.warn("Ignoring unexpected NetDb Lookup for our key from [" + fromKey.toBase64().substring(0, 6) + "] " + "while in hidden mode");
+                // "\n* Source: " + fromKey.toBase64().substring(0,6) + "] -> [Tunnel " + toTunnel + "]");
             }
             return;
         }
 
         if (searchKey.equals(Hash.FAKE_HASH)) { // i2pd bug?
-            //if (_log.shouldWarn()) {_log.warn("Zero Lookup (fake hash)", new Exception());}
-            if (_log.shouldWarn()) {_log.warn("Dropping NetDb Lookup for fake hash key");}
+            // if (_log.shouldWarn()) {_log.warn("Zero Lookup (fake hash)", new Exception());}
+            if (_log.shouldWarn()) {
+                _log.warn("Dropping NetDb Lookup for fake hash key");
+            }
             getContext().statManager().addRateData("netDb.DLMAllZeros", 1);
             return;
         }
 
         if (_log.shouldDebug()) {
             if (toTunnel != null) {
-                _log.debug("NetDb Lookup received with replies going to [" + fromKey.toBase64().substring(0,6) +
-                           "] -> [Tunnel " + toTunnel + "]");
+                _log.debug("NetDb Lookup received with replies going to [" + fromKey.toBase64().substring(0, 6) + "] -> [Tunnel " + toTunnel + "]");
             } else {
-                _log.debug("Handling database lookup message for [" + searchKey.toBase64().substring(0,6) + "] with replies to [" +
-                           fromKey.toBase64().substring(0,6) + "]");
+                _log.debug("Handling database lookup message for [" + searchKey.toBase64().substring(0, 6) + "] with replies to [" + fromKey.toBase64().substring(0, 6) + "]");
             }
         }
 
@@ -112,8 +115,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         // only lookup once, then cast to correct type
         DatabaseEntry dbe = getContext().netDb().lookupLocally(searchKey);
         int type = dbe != null ? dbe.getType() : -1;
-        if (DatabaseEntry.isLeaseSet(type) && (lookupType == DatabaseLookupMessage.Type.ANY ||
-                                               lookupType == DatabaseLookupMessage.Type.LS)) {
+        if (DatabaseEntry.isLeaseSet(type) && (lookupType == DatabaseLookupMessage.Type.ANY || lookupType == DatabaseLookupMessage.Type.LS)) {
             LeaseSet ls = (LeaseSet) dbe;
             /**
              *  Answer any request for a LeaseSet if it has been published to us.
@@ -133,7 +135,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                  *  they do not require special handling and are handled here.
                  */
                 if (_log.shouldInfo()) {
-                    _log.info("We have the published LeaseSet [" + searchKey.toBase64().substring(0,6) + "] -> Answering query...");
+                    _log.info("We have the published LeaseSet [" + searchKey.toBase64().substring(0, 6) + "] -> Answering query...");
                 }
                 getContext().statManager().addRateData("netDb.lookupsMatchedReceivedPublished", 1);
                 sendData(searchKey, ls, fromKey, toTunnel);
@@ -149,30 +151,28 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
             } else if (info.isCurrent(EXPIRE_DELAY) && isFast) {
                 if (info.isHidden()) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Ignoring NetDb Lookup for a hidden peer from [" +fromKey.toBase64().substring(0,6) + "]");
+                        _log.warn("Ignoring NetDb Lookup for a hidden peer from [" + fromKey.toBase64().substring(0, 6) + "]");
                     }
                     Set<Hash> us = Collections.singleton(_us);
                     sendClosest(searchKey, us, fromKey, toTunnel);
                 } else {
                     // send that routerInfo to the _message.getFromHash peer
                     if (_log.shouldDebug()) {
-                        _log.debug("We have key [" + searchKey.toBase64().substring(0,6) +
-                                   "] locally as a RouterInfo -> Sending to [" + fromKey.toBase64().substring(0,6) + "]");
+                        _log.debug("We have key [" + searchKey.toBase64().substring(0, 6) + "] locally as a RouterInfo -> Sending to [" + fromKey.toBase64().substring(0, 6) + "]");
                     }
                     sendData(searchKey, info, fromKey, toTunnel);
                 }
-            } else if (info.isCurrent(10*60*1000)) {
+            } else if (info.isCurrent(10 * 60 * 1000)) {
                 if (info.isHidden()) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Ignoring NetDb Lookup for a hidden peer from [" + fromKey.toBase64().substring(0,6) + "]");
+                        _log.warn("Ignoring NetDb Lookup for a hidden peer from [" + fromKey.toBase64().substring(0, 6) + "]");
                     }
                     Set<Hash> us = Collections.singleton(_us);
                     sendClosest(searchKey, us, fromKey, toTunnel);
                 } else {
                     // send that routerInfo to the _message.getFromHash peer
                     if (_log.shouldDebug()) {
-                        _log.debug("We have key [" + searchKey.toBase64().substring(0,6) +
-                                   "] locally as a RouterInfo -> Sending to [" + fromKey.toBase64().substring(0,6) + "]");
+                        _log.debug("We have key [" + searchKey.toBase64().substring(0, 6) + "] locally as a RouterInfo -> Sending to [" + fromKey.toBase64().substring(0, 6) + "]");
                     }
                     sendData(searchKey, info, fromKey, toTunnel);
                 }
@@ -190,8 +190,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                 //  }
 
                 if (_log.shouldDebug()) {
-                    _log.debug("Expired [" + searchKey.toBase64().substring(0,6) + "] locally -> Sending back " +
-                               routerHashSet.size() + " peers to [" + fromKey.toBase64().substring(0,6) + "]");
+                    _log.debug("Expired [" + searchKey.toBase64().substring(0, 6) + "] locally -> Sending back " + routerHashSet.size() + " peers to [" + fromKey.toBase64().substring(0, 6) + "]");
                 }
                 sendClosest(searchKey, routerHashSet, fromKey, toTunnel);
             }
@@ -199,8 +198,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
             // not found locally - return closest peer hashes
             Set<Hash> routerHashSet = getNearestRouters(lookupType);
             if (_log.shouldDebug()) {
-                _log.debug("We don't have key [" + searchKey.toBase64().substring(0,6) + "] locally -> Sending back " +
-                           routerHashSet.size() + " peers to [" + fromKey.toBase64().substring(0,6) + "]");
+                _log.debug("We don't have key [" + searchKey.toBase64().substring(0, 6) + "] locally -> Sending back " + routerHashSet.size() + " peers to [" + fromKey.toBase64().substring(0, 6) + "]");
             }
             sendClosest(searchKey, routerHashSet, fromKey, toTunnel);
         }
@@ -220,34 +218,35 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
             dontInclude = new HashSet<Hash>(2);
             dontInclude.add(_us);
             dontInclude.add(Hash.FAKE_HASH);
-        } else if (dontInclude == null) {dontInclude = Collections.singleton(_us);}
-        else if (lookupType == DatabaseLookupMessage.Type.EXPL) {
+        } else if (dontInclude == null) {
+            dontInclude = Collections.singleton(_us);
+        } else if (lookupType == DatabaseLookupMessage.Type.EXPL) {
             dontInclude.add(_us);
             dontInclude.add(Hash.FAKE_HASH);
-        } else {dontInclude.add(_us);}
+        } else {
+            dontInclude.add(_us);
+        }
 
         //  Honor flag to exclude all floodfills
         //  if (dontInclude.contains(Hash.FAKE_HASH)) {
         //  This is handled in FloodfillPeerSelector
-        return getContext().netDb().findNearestRouters(_message.getSearchKey(),
-                                                       MAX_ROUTERS_RETURNED,
-                                                       dontInclude);
+        return getContext().netDb().findNearestRouters(_message.getSearchKey(), MAX_ROUTERS_RETURNED, dontInclude);
     }
 
     private void sendData(Hash key, DatabaseEntry data, Hash toPeer, TunnelId replyTunnel) {
         if (!key.equals(data.getHash())) {
             if (_log.shouldWarn()) {
-                _log.warn("Cannot send to [" + toPeer.toBase64().substring(0,6) +
-                           "] -> BAD key (Hash mismatch detected in HandleDatabaseLookupMessageJob)");
+                _log.warn("Cannot send to [" + toPeer.toBase64().substring(0, 6) + "] -> BAD key (Hash mismatch detected in HandleDatabaseLookupMessageJob)");
             }
             return;
         }
         if (_log.shouldDebug()) {
-            _log.debug("Sending data matching key [" + key.toBase32().substring(0,8) + "] to [" +
-                       toPeer.toBase64().substring(0,6) + "] via [TunnelId " + replyTunnel + "]");
+            _log.debug("Sending data matching key [" + key.toBase32().substring(0, 8) + "] to [" + toPeer.toBase64().substring(0, 6) + "] via [TunnelId " + replyTunnel + "]");
         }
         DatabaseStoreMessage msg = new DatabaseStoreMessage(getContext());
-        if (data.isLeaseSet()) {getContext().statManager().addRateData("netDb.lookupsMatchedLeaseSet", 1);}
+        if (data.isLeaseSet()) {
+            getContext().statManager().addRateData("netDb.lookupsMatchedLeaseSet", 1);
+        }
         msg.setEntry(data);
         getContext().statManager().addRateData("netDb.lookupsMatched", 1);
         getContext().statManager().addRateData("netDb.lookupsHandled", 1);
@@ -256,8 +255,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
 
     protected void sendClosest(Hash key, Set<Hash> routerHashes, Hash toPeer, TunnelId replyTunnel) {
         if (_log.shouldDebug()) {
-            _log.debug("Sending " + routerHashes.size() + " of our closest routers to [" +
-                       key.toBase64().substring(0,6) + "] -> [Tunnel " + replyTunnel + "]");
+            _log.debug("Sending " + routerHashes.size() + " of our closest routers to [" + key.toBase64().substring(0, 6) + "] -> [Tunnel " + replyTunnel + "]");
         }
         DatabaseSearchReplyMessage msg = new DatabaseSearchReplyMessage(getContext());
         msg.setFromHash(_us);
@@ -265,7 +263,9 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         int i = 0;
         for (Hash h : routerHashes) {
             msg.addReply(h);
-            if (++i >= MAX_ROUTERS_RETURNED) {break;}
+            if (++i >= MAX_ROUTERS_RETURNED) {
+                break;
+            }
         }
         getContext().statManager().addRateData("netDb.lookupsHandled", 1);
         sendMessage(msg, toPeer, replyTunnel); // should this go via garlic messages instead?
@@ -276,11 +276,11 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
             sendThroughTunnel(message, toPeer, replyTunnel);
         } else {
             if (_log.shouldDebug()) {
-                _log.debug("Sending reply directly to [" + toPeer.toBase64().substring(0,6) + "]");
+                _log.debug("Sending reply directly to [" + toPeer.toBase64().substring(0, 6) + "]");
             }
             Job send = new SendMessageDirectJob(getContext(), message, toPeer, REPLY_TIMEOUT, MESSAGE_PRIORITY, _msgIDBloomXor);
             send.runJob();
-            //getContext().netDb().lookupRouterInfo(toPeer, send, null, REPLY_TIMEOUT);
+            // getContext().netDb().lookupRouterInfo(toPeer, send, null, REPLY_TIMEOUT);
         }
     }
 
@@ -302,20 +302,20 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                     SessionTag tag = _message.getReplyTag();
                     if (tag != null) {
                         if (_log.shouldInfo()) {
-                            _log.info("Sending AES reply to [" + toPeer.toBase64().substring(0,6) + "] \n* Key: " +
-                                      replyKey + " \n* Session Tag: " + tag);
+                            _log.info("Sending AES reply to [" + toPeer.toBase64().substring(0, 6) + "] \n* Key: " + replyKey + " \n* Session Tag: " + tag);
                         }
                         message = MessageWrapper.wrap(getContext(), message, replyKey, tag);
                     } else {
                         RatchetSessionTag rtag = _message.getRatchetReplyTag();
                         if (_log.shouldInfo()) {
-                            _log.info("Sending AEAD reply to [" + toPeer.toBase64().substring(0,6) + "] \n* Key: " +
-                                      replyKey + " \n* Session Tag (ratchet): " + rtag);
+                            _log.info("Sending AEAD reply to [" + toPeer.toBase64().substring(0, 6) + "] \n* Key: " + replyKey + " \n* Session Tag (ratchet): " + rtag);
                         }
                         message = MessageWrapper.wrap(getContext(), message, replyKey, rtag);
                     }
                     if (message == null) {
-                        if (_log.shouldWarn()) {_log.warn("DbLookupMessage reply -> Encryption error");}
+                        if (_log.shouldWarn()) {
+                            _log.warn("DbLookupMessage reply -> Encryption error");
+                        }
                         return;
                     }
                     _replyKeyConsumed = true;
@@ -325,18 +325,19 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
             m.setMessage(message);
             m.setMessageExpiration(message.getMessageExpiration());
             m.setTunnelId(replyTunnel);
-            SendMessageDirectJob j = new SendMessageDirectJob(getContext(), m, toPeer, 10*1000, MESSAGE_PRIORITY, _msgIDBloomXor);
+            SendMessageDirectJob j = new SendMessageDirectJob(getContext(), m, toPeer, 10 * 1000, MESSAGE_PRIORITY, _msgIDBloomXor);
             j.runJob();
-            //getContext().jobQueue().addJob(j);
+            // getContext().jobQueue().addJob(j);
         }
     }
 
     @Override
-    public String getName() {return "Handle Database Lookup Message";}
+    public String getName() {
+        return "Handle Database Lookup Message";
+    }
 
     @Override
     public void dropped() {
         getContext().messageHistory().messageProcessingError(_message.getUniqueId(), _message.getClass().getName(), "Dropped due to overload");
     }
-
 }

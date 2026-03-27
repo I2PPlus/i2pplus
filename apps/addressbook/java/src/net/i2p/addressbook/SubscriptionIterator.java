@@ -21,12 +21,13 @@
 
 package net.i2p.addressbook;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 import net.i2p.I2PAppContext;
 import net.i2p.client.naming.HostTxtEntry;
 import net.i2p.util.PortMapper;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * An iterator over the subscriptions in a SubscriptionList.  Note that this iterator
@@ -58,7 +59,6 @@ class SubscriptionIterator implements Iterator<AddressBook> {
         this.proxyPort = proxyPort;
     }
 
-
     /* (non-Javadoc)
      * @see java.util.Iterator#hasNext()
      */
@@ -73,20 +73,18 @@ class SubscriptionIterator implements Iterator<AddressBook> {
      * see java.util.Iterator#next()
      * @return non-null AddressBook (empty if the minimum delay has not been met,
      *          or there is no proxy tunnel, or the fetch otherwise fails)
-      */
+     */
     @Override
     public AddressBook next() {
         Subscription sub = this.subIterator.next();
         if (sub.getLocation().startsWith("file:")) {
             // test only
             return new AddressBook(sub.getLocation().substring(5));
-        } else if (sub.getLastFetched() + this.delay < I2PAppContext.getGlobalContext().clock().now() &&
-            I2PAppContext.getGlobalContext().portMapper().getPort(PortMapper.SVC_HTTP_PROXY) >= 0 &&
-            !I2PAppContext.getGlobalContext().getBooleanProperty("i2p.vmCommSystem")) {
-            //System.err.println("Fetching addressbook from " + sub.getLocation());
+        } else if (sub.getLastFetched() + this.delay < I2PAppContext.getGlobalContext().clock().now() && I2PAppContext.getGlobalContext().portMapper().getPort(PortMapper.SVC_HTTP_PROXY) >= 0 && !I2PAppContext.getGlobalContext().getBooleanProperty("i2p.vmCommSystem")) {
+            // System.err.println("Fetching addressbook from " + sub.getLocation());
             return new AddressBook(sub, this.proxyHost, this.proxyPort);
         } else {
-            //System.err.println("Addressbook " + sub.getLocation() + " was last fetched " +
+            // System.err.println("Addressbook " + sub.getLocation() + " was last fetched " +
             //                   DataHelper.formatDuration(I2PAppContext.getGlobalContext().clock().now() - sub.getLastFetched()) +
             //                   " ago but the minimum delay is " +
             //                   DataHelper.formatDuration(this.delay));

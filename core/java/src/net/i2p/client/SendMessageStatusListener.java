@@ -21,5 +21,4 @@ public interface SendMessageStatusListener {
      * @param status of the message, as defined in MessageStatusMessage and this class.
      */
     void messageStatus(I2PSession session, long msgId, int status);
-
 }

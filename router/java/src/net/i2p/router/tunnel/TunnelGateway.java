@@ -1,7 +1,5 @@
 package net.i2p.router.tunnel;
 
-import java.util.ArrayList;
-import java.util.List;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.I2NPMessage;
@@ -9,6 +7,9 @@ import net.i2p.data.i2np.TunnelGatewayMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Serve as the gatekeeper for a tunnel, accepting messages, coalescing and/or
@@ -40,7 +41,7 @@ abstract class TunnelGateway {
     protected final Sender _sender;
     protected final Receiver _receiver;
     protected long _lastFlush;
-    //protected int _flushFrequency;
+    // protected int _flushFrequency;
     protected final DelayedFlush _delayedFlush; // FIXME Exporting non-public type through public API FIXME
     protected int _messagesSent;
 
@@ -59,11 +60,11 @@ abstract class TunnelGateway {
         _preprocessor = preprocessor;
         _sender = sender;
         _receiver = receiver;
-        //_flushFrequency = 500;
+        // _flushFrequency = 500;
         _delayedFlush = new DelayedFlush();
         _lastFlush = _context.clock().now();
-        //_context.statManager().createRateStat("tunnel.lockedGatewayAdd", "How long do we block when adding a message to a tunnel gateway's queue", "Tunnels", new long[] { 60*1000, 10*60*1000 });
-        //_context.statManager().createRateStat("tunnel.lockedGatewayCheck", "How long do we block when flushing a tunnel gateway's queue", "Tunnels", new long[] { 60*1000, 10*60*1000 });
+        // _context.statManager().createRateStat("tunnel.lockedGatewayAdd", "How long do we block when adding a message to a tunnel gateway's queue", "Tunnels", new long[] { 60*1000, 10*60*1000 });
+        // _context.statManager().createRateStat("tunnel.lockedGatewayCheck", "How long do we block when flushing a tunnel gateway's queue", "Tunnels", new long[] { 60*1000, 10*60*1000 });
     }
 
     /**
@@ -88,62 +89,64 @@ abstract class TunnelGateway {
      */
     public void add(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
         throw new UnsupportedOperationException("unused, right?");
-/****
-        _messagesSent++;
-        long startAdd = System.currentTimeMillis();
-        boolean delayedFlush = false;
-        long delayAmount = -1;
-        int remaining = 0;
-        Pending cur = new PendingImpl(msg, toRouter, toTunnel);
-        long beforeLock = System.currentTimeMillis();
-        long afterAdded = -1;
-        long afterPreprocess = 0;
-        long afterExpire = 0;
-        synchronized (_queue) {
-            _queue.add(cur);
-            afterAdded = System.currentTimeMillis();
-            if (_log.shouldDebug())
-                _log.debug("Added before direct flush preprocessing: " + _queue);
-            delayedFlush = _preprocessor.preprocessQueue(_queue, _sender, _receiver);
-            afterPreprocess = System.currentTimeMillis();
-            if (delayedFlush)
-                delayAmount = _preprocessor.getDelayAmount();
-            _lastFlush = _context.clock().now();
-
-            // expire any as necessary, even if its framented
-            for (int i = 0; i < _queue.size(); i++) {
-                Pending m = _queue.get(i);
-                if (m.getExpiration() + Router.CLOCK_FUDGE_FACTOR < _lastFlush) {
-                    if (_log.shouldDebug())
-                        _log.debug("Expire on the queue (size=" + _queue.size() + "): " + m);
-                    _queue.remove(i);
-                    i--;
-                }
-            }
-            afterExpire = System.currentTimeMillis();
-            remaining = _queue.size();
-            if ((remaining > 0) && (_log.shouldDebug()))
-                _log.debug("Remaining after preprocessing: " + _queue);
-        }
-
-        if (delayedFlush) {
-            _delayedFlush.reschedule(delayAmount);
-        }
-        _context.statManager().addRateData("tunnel.lockedGatewayAdd", afterAdded-beforeLock, remaining);
-        if (_log.shouldDebug()) {
-            long complete = System.currentTimeMillis();
-            _log.debug("Time to add the message " + msg.getUniqueId() + ": " + (complete-startAdd)
-                       + " delayed? " + delayedFlush + " remaining: " + remaining
-                       + " prepare: " + (beforeLock-startAdd)
-                       + " add: " + (afterAdded-beforeLock)
-                       + " preprocess: " + (afterPreprocess-afterAdded)
-                       + " expire: " + (afterExpire-afterPreprocess)
-                       + " queue flush: " + (complete-afterExpire));
-        }
-****/
+        /****
+         * _messagesSent++;
+         * long startAdd = System.currentTimeMillis();
+         * boolean delayedFlush = false;
+         * long delayAmount = -1;
+         * int remaining = 0;
+         * Pending cur = new PendingImpl(msg, toRouter, toTunnel);
+         * long beforeLock = System.currentTimeMillis();
+         * long afterAdded = -1;
+         * long afterPreprocess = 0;
+         * long afterExpire = 0;
+         * synchronized (_queue) {
+         * _queue.add(cur);
+         * afterAdded = System.currentTimeMillis();
+         * if (_log.shouldDebug())
+         * _log.debug("Added before direct flush preprocessing: " + _queue);
+         * delayedFlush = _preprocessor.preprocessQueue(_queue, _sender, _receiver);
+         * afterPreprocess = System.currentTimeMillis();
+         * if (delayedFlush)
+         * delayAmount = _preprocessor.getDelayAmount();
+         * _lastFlush = _context.clock().now();
+         *
+         * // expire any as necessary, even if its framented
+         * for (int i = 0; i < _queue.size(); i++) {
+         * Pending m = _queue.get(i);
+         * if (m.getExpiration() + Router.CLOCK_FUDGE_FACTOR < _lastFlush) {
+         * if (_log.shouldDebug())
+         * _log.debug("Expire on the queue (size=" + _queue.size() + "): " + m);
+         * _queue.remove(i);
+         * i--;
+         * }
+         * }
+         * afterExpire = System.currentTimeMillis();
+         * remaining = _queue.size();
+         * if ((remaining > 0) && (_log.shouldDebug()))
+         * _log.debug("Remaining after preprocessing: " + _queue);
+         * }
+         *
+         * if (delayedFlush) {
+         * _delayedFlush.reschedule(delayAmount);
+         * }
+         * _context.statManager().addRateData("tunnel.lockedGatewayAdd", afterAdded-beforeLock, remaining);
+         * if (_log.shouldDebug()) {
+         * long complete = System.currentTimeMillis();
+         * _log.debug("Time to add the message " + msg.getUniqueId() + ": " + (complete-startAdd)
+         * + " delayed? " + delayedFlush + " remaining: " + remaining
+         * + " prepare: " + (beforeLock-startAdd)
+         * + " add: " + (afterAdded-beforeLock)
+         * + " preprocess: " + (afterPreprocess-afterAdded)
+         * + " expire: " + (afterExpire-afterPreprocess)
+         * + " queue flush: " + (complete-afterExpire));
+         * }
+         ****/
     }
 
-    public int getMessagesSent() { return _messagesSent; }
+    public int getMessagesSent() {
+        return _messagesSent;
+    }
 
     /**
      * Interface for sending preprocessed tunnel data.
@@ -210,35 +213,32 @@ abstract class TunnelGateway {
         @Override
         public void timeReached() {
             boolean wantRequeue = false;
-            //int remaining = 0;
-            //long beforeLock = _context.clock().now();
-            //long afterChecked = -1;
+            // int remaining = 0;
+            // long beforeLock = _context.clock().now();
+            // long afterChecked = -1;
             long delayAmount = -1;
-            //if (_queue.size() > 10000) // stay out of the synchronized block
+            // if (_queue.size() > 10000) // stay out of the synchronized block
             //    System.out.println("foo!");
             synchronized (_queue) {
-                //if (_queue.size() > 10000) // stay in the synchronized block
+                // if (_queue.size() > 10000) // stay in the synchronized block
                 //    System.out.println("foo!");
-                //afterChecked = _context.clock().now();
+                // afterChecked = _context.clock().now();
                 if (!_queue.isEmpty()) {
-                    //if ((remaining > 0) && (_log.shouldDebug()))
+                    // if ((remaining > 0) && (_log.shouldDebug()))
                     //    _log.debug("Remaining before delayed flush preprocessing: " + _queue);
                     wantRequeue = _preprocessor.preprocessQueue(_queue, _sender, _receiver);
                     if (wantRequeue) {
                         delayAmount = _preprocessor.getDelayAmount();
-                        if (_log.shouldDebug())
-                            _log.debug("Remaining after delayed flush preprocessing: " + _queue);
+                        if (_log.shouldDebug()) _log.debug("Remaining after delayed flush preprocessing: " + _queue);
                     }
                 }
-                //remaining = _queue.size();
+                // remaining = _queue.size();
             }
 
-            if (wantRequeue)
-                schedule(delayAmount);
-            else
-                _lastFlush = _context.clock().now();
+            if (wantRequeue) schedule(delayAmount);
+            else _lastFlush = _context.clock().now();
 
-            //_context.statManager().addRateData("tunnel.lockedGatewayCheck", afterChecked-beforeLock, remaining);
+            // _context.statManager().addRateData("tunnel.lockedGatewayCheck", afterChecked-beforeLock, remaining);
         }
     }
 }

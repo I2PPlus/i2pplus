@@ -6,6 +6,15 @@
 
 package org.klomp.snark;
 
+import net.i2p.I2PAppContext;
+import net.i2p.client.streaming.I2PSocket;
+import net.i2p.data.DataHelper;
+import net.i2p.data.Destination;
+import net.i2p.util.Log;
+
+import org.klomp.snark.bencode.BEValue;
+import org.klomp.snark.bencode.InvalidBEncodingException;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -16,13 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
-import net.i2p.I2PAppContext;
-import net.i2p.client.streaming.I2PSocket;
-import net.i2p.data.DataHelper;
-import net.i2p.data.Destination;
-import net.i2p.util.Log;
-import org.klomp.snark.bencode.BEValue;
-import org.klomp.snark.bencode.InvalidBEncodingException;
 
 /**
  * Represents a peer in the BitTorrent network, managing all public information and communication
@@ -85,8 +87,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     private final AtomicBoolean _disconnected = new AtomicBoolean();
 
     static final long CHECK_PERIOD = PeerCoordinator.CHECK_PERIOD; // 40 seconds
-    static final int RATE_DEPTH =
-            PeerCoordinator.RATE_DEPTH; // make following arrays RATE_DEPTH long
+    static final int RATE_DEPTH = PeerCoordinator.RATE_DEPTH; // make following arrays RATE_DEPTH long
     private final long uploaded_old[] = {-1, -1, -1};
     private final long downloaded_old[] = {-1, -1, -1};
 
@@ -131,14 +132,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      * @param metainfo null if in magnet mode
      * @throws IOException when an error occurred during the handshake.
      */
-    public Peer(
-            final I2PSocket sock,
-            InputStream in,
-            OutputStream out,
-            byte[] my_id,
-            byte[] infohash,
-            MetaInfo metainfo)
-            throws IOException {
+    public Peer(final I2PSocket sock, InputStream in, OutputStream out, byte[] my_id, byte[] infohash, MetaInfo metainfo) throws IOException {
         this.my_id = my_id;
         this.infohash = infohash;
         this.metainfo = metainfo;
@@ -147,9 +141,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         byte[] id = handshake(in, out);
         this.peerID = new PeerID(id, sock.getPeerDestination());
         _id = __id.incrementAndGet();
-        if (_log.shouldDebug())
-            _log.debug(
-                    "Creating a new peer " + peerID.toString(), new Exception("creating " + _id));
+        if (_log.shouldDebug()) _log.debug("Creating a new peer " + peerID.toString(), new Exception("creating " + _id));
         _isIncoming = true;
     }
 
@@ -183,11 +175,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     public String getSocket() {
         if (state != null) {
             String r = state.getRequests();
-            if (r != null)
-                return sock.toString()
-                        + "<br><b>Requests:</b> <span class=debugRequests>"
-                        + r
-                        + "</span>";
+            if (r != null) return sock.toString() + "<br><b>Requests:</b> <span class=debugRequests>" + r + "</span>";
         }
         return sock.toString();
     }
@@ -238,17 +226,10 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      *
      * @param uploadOnly if we are complete with skipped files, i.e. a partial seed
      */
-    public void runConnection(
-            I2PSnarkUtil util,
-            PeerListener listener,
-            BandwidthListener bwl,
-            BitField bitfield,
-            MagnetState mState,
-            boolean uploadOnly) {
+    public void runConnection(I2PSnarkUtil util, PeerListener listener, BandwidthListener bwl, BitField bitfield, MagnetState mState, boolean uploadOnly) {
         if (state != null) throw new IllegalStateException("Peer already started");
 
-        if (_log.shouldDebug())
-            _log.debug("Running connection to " + peerID.toString(), new Exception("connecting"));
+        if (_log.shouldDebug()) _log.debug("Running connection to " + peerID.toString(), new Exception("connecting"));
         try {
             // Do we need to handshake?
             if (din == null) {
@@ -265,28 +246,19 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
                 if (expected_id == null) {
                     peerID.setID(id);
                 } else if (Arrays.equals(expected_id, id)) {
-                    if (_log.shouldDebug())
-                        _log.debug("Handshake got matching IDs with " + toString());
+                    if (_log.shouldDebug()) _log.debug("Handshake got matching IDs with " + toString());
                 } else {
-                    throw new IOException(
-                            "Unexpected peerID '"
-                                    + PeerID.idencode(id)
-                                    + "' expected '"
-                                    + PeerID.idencode(expected_id)
-                                    + "'");
+                    throw new IOException("Unexpected peerID '" + PeerID.idencode(id) + "' expected '" + PeerID.idencode(expected_id) + "'");
                 }
             } else {
                 // Incoming connection
-                if (_log.shouldDebug())
-                    _log.debug("Already have din [" + sock + "] with " + toString());
+                if (_log.shouldDebug()) _log.debug("Already have din [" + sock + "] with " + toString());
             }
 
             // bad idea?
             if (metainfo == null && (options & OPTION_EXTENSION) == 0) {
-                if (_log.shouldInfo())
-                    _log.info("Peer does not support extensions and we need metainfo, dropping");
-                throw new IOException(
-                        "Peer does not support extensions and we need metainfo, dropping");
+                if (_log.shouldInfo()) _log.info("Peer does not support extensions and we need metainfo, dropping");
+                throw new IOException("Peer does not support extensions and we need metainfo, dropping");
             }
 
             PeerConnectionIn in = new PeerConnectionIn(this, din);
@@ -294,16 +266,12 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             PeerState s = new PeerState(this, listener, bwl, metainfo, in, out);
 
             if ((options & OPTION_EXTENSION) != 0) {
-                if (_log.shouldDebug())
-                    _log.debug("Peer supports extensions, sending reply message");
+                if (_log.shouldDebug()) _log.debug("Peer supports extensions, sending reply message");
                 int metasize = metainfo != null ? metainfo.getInfoBytesLength() : -1;
                 boolean pexAndMetadata = metainfo == null || !metainfo.isPrivate();
                 boolean dht = util.getDHT() != null;
                 boolean comment = util.utCommentsEnabled();
-                out.sendExtension(
-                        0,
-                        ExtensionHandler.getHandshake(
-                                metasize, pexAndMetadata, dht, uploadOnly, comment));
+                out.sendExtension(0, ExtensionHandler.getHandshake(metasize, pexAndMetadata, dht, uploadOnly, comment));
             }
 
             // Send our bitmap
@@ -366,8 +334,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         din = new DataInputStream(in);
         byte b = din.readByte();
         if (b != HANDSHAKE.length) {
-            throw new IOException(
-                    "Handshake failure, expected 19, got " + (b & 0xff) + " on " + sock);
+            throw new IOException("Handshake failure, expected 19, got " + (b & 0xff) + " on " + sock);
         }
 
         byte[] bs = new byte[HANDSHAKE.length];
@@ -388,8 +355,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
 
         // Handshake read - peer id
         din.readFully(bs);
-        if (_log.shouldDebug())
-            _log.debug("Read the remote side's hash and peerID fully from " + toString());
+        if (_log.shouldDebug()) _log.debug("Read the remote side's hash and peerID fully from " + toString());
 
         if (DataHelper.eq(my_id, bs)) {
             throw new IOException("Connected to myself");
@@ -397,9 +363,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
 
         if (options != 0) {
             // send them something in runConnection() above
-            if (_log.shouldDebug())
-                _log.debug(
-                        "Peer supports options 0x" + Long.toHexString(options) + ": " + toString());
+            if (_log.shouldDebug()) _log.debug("Peer supports options 0x" + Long.toHexString(options) + ": " + toString());
         }
 
         return bs;
@@ -449,8 +413,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         if (bev != null) {
             try {
                 int reqq = bev.getInt();
-                _maxPipeline =
-                        Math.min(PeerState.MAX_PIPELINE, Math.max(PeerState.MIN_PIPELINE, reqq));
+                _maxPipeline = Math.min(PeerState.MAX_PIPELINE, Math.max(PeerState.MIN_PIPELINE, reqq));
             } catch (InvalidBEncodingException ibee) {
             }
         } else {
@@ -831,9 +794,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      * @since 0.9.36
      */
     public long getMaxInactiveTime() {
-        return isCompleted() && !isInteresting()
-                ? PeerCoordinator.MAX_SEED_INACTIVE
-                : PeerCoordinator.MAX_INACTIVE;
+        return isCompleted() && !isInteresting() ? PeerCoordinator.MAX_SEED_INACTIVE : PeerCoordinator.MAX_INACTIVE;
     }
 
     /** Send keepalive */

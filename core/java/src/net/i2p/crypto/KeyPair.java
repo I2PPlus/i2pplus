@@ -28,8 +28,7 @@ public class KeyPair {
     public KeyPair(PublicKey publicKey, PrivateKey privateKey) {
         pub = publicKey;
         priv = privateKey;
-        if (pub.getType() != priv.getType())
-            throw new IllegalArgumentException();
+        if (pub.getType() != priv.getType()) throw new IllegalArgumentException();
     }
 
     public PublicKey getPublic() {

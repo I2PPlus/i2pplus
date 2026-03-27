@@ -10,8 +10,9 @@
  */
 package org.minidns.idna;
 
-import java.net.IDN;
 import org.minidns.dnsname.DnsName;
+
+import java.net.IDN;
 
 public class DefaultIdnaTransformator implements IdnaTransformator {
 
@@ -31,5 +32,4 @@ public class DefaultIdnaTransformator implements IdnaTransformator {
     public String toUnicode(String input) {
         return IDN.toUnicode(input);
     }
-
 }

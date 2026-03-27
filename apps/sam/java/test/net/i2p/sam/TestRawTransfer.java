@@ -1,12 +1,13 @@
 package net.i2p.sam;
 
+import net.i2p.data.DataHelper;
+import net.i2p.util.Log;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Properties;
-import net.i2p.data.DataHelper;
-import net.i2p.util.Log;
 
 @SuppressWarnings("PMD.CloseResource")
 public class TestRawTransfer {
@@ -73,7 +74,10 @@ public class TestRawTransfer {
                 _log.error("Payload is incorrect!  [" + new String(buf) + "]");
             }
 
-            try { Thread.sleep(5*1000); } catch (InterruptedException ie) {}
+            try {
+                Thread.sleep(5 * 1000);
+            } catch (InterruptedException ie) {
+            }
             s.close();
         } catch (Exception e) {
             _log.error("Error testing for valid version", e);
@@ -86,8 +90,7 @@ public class TestRawTransfer {
         String conOptions = "i2cp.tcp.host=dev.i2p.net i2cp.tcp.port=7002 tunnels.inboundDepth=0";
         if (args.length > 0) {
             conOptions = "";
-            for (int i = 0; i < args.length; i++)
-                conOptions = conOptions + " " + args[i];
+            for (int i = 0; i < args.length; i++) conOptions = conOptions + " " + args[i];
         }
         try {
             TestUtil.startupBridge(6000);
@@ -95,7 +98,10 @@ public class TestRawTransfer {
         } catch (Throwable t) {
             _log.error("Error running test", t);
         }
-        try { Thread.sleep(5*1000); } catch (InterruptedException ie) {}
+        try {
+            Thread.sleep(5 * 1000);
+        } catch (InterruptedException ie) {
+        }
         System.exit(0);
     }
 }

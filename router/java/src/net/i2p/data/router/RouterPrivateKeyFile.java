@@ -1,11 +1,5 @@
 package net.i2p.data.router;
 
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataFormatException;
@@ -13,6 +7,12 @@ import net.i2p.data.Destination;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.PrivateKeyFile;
 import net.i2p.data.SigningPrivateKey;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Handles router private key files, extending PrivateKeyFile to provide
@@ -38,13 +38,11 @@ public class RouterPrivateKeyFile extends PrivateKeyFile {
             RouterIdentity ri = new RouterIdentity();
             ri.readBytes(in);
             EncType etype = ri.getPublicKey().getType();
-            if (etype == null)
-                throw new DataFormatException("Unknown encryption type");
+            if (etype == null) throw new DataFormatException("Unknown encryption type");
             privKey = new PrivateKey(etype);
             privKey.readBytes(in);
             SigType type = ri.getSigningPublicKey().getType();
-            if (type == null)
-                throw new DataFormatException("Unknown signature type");
+            if (type == null) throw new DataFormatException("Unknown signature type");
             signingPrivKey = new SigningPrivateKey(type);
             signingPrivKey.readBytes(in);
 
@@ -59,7 +57,10 @@ public class RouterPrivateKeyFile extends PrivateKeyFile {
             return ri;
         } finally {
             if (in != null) {
-                try { in.close(); } catch (IOException ioe) {}
+                try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
             }
         }
     }

@@ -1,4 +1,5 @@
 package net.i2p.i2ptunnel.web;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2005 and released into the public domain
@@ -31,7 +32,9 @@ import net.i2p.util.Addresses;
 /** Web interface bean for editing and configuring I2P tunnel settings */
 public class EditBean extends IndexBean {
     /** Default constructor @since 0.8.3 */
-    public EditBean() { super(); }
+    public EditBean() {
+        super();
+    }
 
     /**
      *  Is it a client or server in the UI and I2P side?
@@ -40,13 +43,19 @@ public class EditBean extends IndexBean {
      */
     public static boolean staticIsClient(int tunnel) {
         TunnelControllerGroup group = TunnelControllerGroup.getInstance();
-        if (group == null) {return false;}
+        if (group == null) {
+            return false;
+        }
         List<TunnelController> controllers = group.getControllers();
         if (controllers.size() > tunnel) {
             TunnelController cur = controllers.get(tunnel);
-            if (cur == null) {return false;}
+            if (cur == null) {
+                return false;
+            }
             return isClient(cur.getType());
-        } else {return false;}
+        } else {
+            return false;
+        }
     }
 
     /** @return the target host for the tunnel @since 0.8.3 */
@@ -79,13 +88,11 @@ public class EditBean extends IndexBean {
      */
     public SigningPrivateKey getSigningPrivateKey(int tunnel) {
         TunnelController tun = getController(tunnel);
-        if (tun == null)
-            return null;
+        if (tun == null) return null;
         String keyFile = tun.getPrivKeyFile();
         if (keyFile != null && !keyFile.trim().isEmpty()) {
             File f = new File(keyFile);
-            if (!f.isAbsolute())
-                f = new File(_context.getConfigDir(), keyFile);
+            if (!f.isAbsolute()) f = new File(_context.getConfigDir(), keyFile);
             PrivateKeyFile pkf = new PrivateKeyFile(f);
             return pkf.getSigningPrivKey();
         }
@@ -282,20 +289,28 @@ public class EditBean extends IndexBean {
 
     /** @since 0.9.33 */
     public boolean canChangeSigType(int tunnel) {
-        if (tunnel < 0) {return true;}
-        if (getDestination(tunnel) != null) {return false;}
+        if (tunnel < 0) {
+            return true;
+        }
+        if (getDestination(tunnel) != null) {
+            return false;
+        }
         return getTunnelStatus(tunnel) == GeneralHelper.NOT_RUNNING;
     }
 
     /** @since 0.9.46 */
     public boolean canChangeEncType(int tunnel) {
-        if (tunnel < 0) {return true;}
+        if (tunnel < 0) {
+            return true;
+        }
         return getTunnelStatus(tunnel) == GeneralHelper.NOT_RUNNING;
     }
 
     /** @since 0.9.46 */
     public boolean canChangePort(int tunnel) {
-        if (tunnel < 0) {return true;}
+        if (tunnel < 0) {
+            return true;
+        }
         return getTunnelStatus(tunnel) == GeneralHelper.NOT_RUNNING;
     }
 
@@ -423,13 +438,14 @@ public class EditBean extends IndexBean {
 
     /** @return true if proxy authentication is enabled @since 0.8.2 */
     public boolean getProxyAuth(int tunnel) {
-        return _helper.getProxyAuth(tunnel) != "false";
+        return !_helper.getProxyAuth(tunnel).equals("false");
     }
+
     /** @return true if outproxy authentication is enabled @since 0.8.3 */
     public boolean getOutproxyAuth(int tunnel) {
-        return _helper.getOutproxyAuth(tunnel) &&
-               getOutproxyUsername(tunnel).length() > 0 &&
-               getOutproxyPassword(tunnel).length() > 0;
+        return _helper.getOutproxyAuth(tunnel)
+                && getOutproxyUsername(tunnel).length() > 0
+                && getOutproxyPassword(tunnel).length() > 0;
     }
 
     /** @return the outproxy username @since 0.8.3 */
@@ -543,18 +559,28 @@ public class EditBean extends IndexBean {
 
     /** @return the I2CP host for the tunnel @since 0.8.3 */
     public String getI2CPHost(int tunnel) {
-        if (_context.isRouterContext()) {return _t("internal");}
+        if (_context.isRouterContext()) {
+            return _t("internal");
+        }
         TunnelController tun = getController(tunnel);
-        if (tun != null) {return tun.getI2CPHost();}
-        else {return "127.0.0.1";}
+        if (tun != null) {
+            return tun.getI2CPHost();
+        } else {
+            return "127.0.0.1";
+        }
     }
 
     /** @return the I2CP port for the tunnel @since 0.8.3 */
     public String getI2CPPort(int tunnel) {
-        if (_context.isRouterContext()) {return _t("internal");}
+        if (_context.isRouterContext()) {
+            return _t("internal");
+        }
         TunnelController tun = getController(tunnel);
-        if (tun != null) {return tun.getI2CPPort();}
-        else {return Integer.toString(I2PClient.DEFAULT_LISTEN_PORT);}
+        if (tun != null) {
+            return tun.getI2CPPort();
+        } else {
+            return Integer.toString(I2PClient.DEFAULT_LISTEN_PORT);
+        }
     }
 
     /** @return the custom options string for the tunnel @since 0.8.3 */
@@ -585,11 +611,10 @@ public class EditBean extends IndexBean {
             return buf.toString();
         }
 
-        int tunnelQuantity = mode == 2 ? getTunnelQuantityOut(tunnel, DFLT_QUANTITY)
-                                       : getTunnelQuantity(tunnel, DFLT_QUANTITY);
+        int tunnelQuantity =
+                mode == 2 ? getTunnelQuantityOut(tunnel, DFLT_QUANTITY) : getTunnelQuantity(tunnel, DFLT_QUANTITY);
         boolean adv = isAdvanced();
-        int maxQuantity = adv ? MAX_ADVANCED_QUANTITY :
-                             (isClient(tunnel) ? MAX_CLIENT_QUANTITY : MAX_SERVER_QUANTITY);
+        int maxQuantity = adv ? MAX_ADVANCED_QUANTITY : (isClient(tunnel) ? MAX_CLIENT_QUANTITY : MAX_SERVER_QUANTITY);
         if (tunnelQuantity > maxQuantity) {
             maxQuantity = tunnelQuantity;
         }
@@ -597,16 +622,26 @@ public class EditBean extends IndexBean {
         StringBuilder buf = new StringBuilder(256);
         for (int i = 1; i <= maxQuantity; i++) {
             buf.append("<option value=\"").append(i).append('"');
-            if (i == tunnelQuantity) {buf.append(" selected");}
+            if (i == tunnelQuantity) {
+                buf.append(" selected");
+            }
             buf.append('>');
-            if (mode == 1) {buf.append(ngettext("{0} inbound tunnel", "{0} inbound tunnels", i));}
-            else if (mode == 2) {buf.append(ngettext("{0} outbound tunnel", "{0} outbound tunnels", i));}
-            else {buf.append(ngettext("{0} inbound, {0} outbound tunnel", "{0} inbound, {0} outbound tunnels", i));}
+            if (mode == 1) {
+                buf.append(ngettext("{0} inbound tunnel", "{0} inbound tunnels", i));
+            } else if (mode == 2) {
+                buf.append(ngettext("{0} outbound tunnel", "{0} outbound tunnels", i));
+            } else {
+                buf.append(ngettext("{0} inbound, {0} outbound tunnel", "{0} inbound, {0} outbound tunnels", i));
+            }
             if (i <= 3 && !adv) {
                 buf.append(" (");
-                if (i == 1) {buf.append(_t("lower bandwidth and reliability"));}
-                else if (i == 2) {buf.append(_t("standard bandwidth and reliability"));}
-                else if (i == 3) {buf.append(_t("higher bandwidth and reliability"));}
+                if (i == 1) {
+                    buf.append(_t("lower bandwidth and reliability"));
+                } else if (i == 2) {
+                    buf.append(_t("standard bandwidth and reliability"));
+                } else if (i == 3) {
+                    buf.append(_t("higher bandwidth and reliability"));
+                }
                 buf.append(')');
             }
             buf.append("</option>\n");
@@ -619,8 +654,9 @@ public class EditBean extends IndexBean {
      *  @since 0.9.47
      */
     public String unlessAdvanced(String s) {
-        if (isAdvanced()) {return "";}
+        if (isAdvanced()) {
+            return "";
+        }
         return " (" + _t(s) + ')';
     }
-
 }

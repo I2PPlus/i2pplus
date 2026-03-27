@@ -1,6 +1,5 @@
 package net.i2p.router.transport.udp;
 
-
 /**
  * Builder for UDP packets.
  */
@@ -11,11 +10,13 @@ class PacketBuilder {
 
     /** 4 byte msg ID + 3 byte fragment info */
     public static final int FRAGMENT_HEADER_SIZE = 7;
+
     /** not including acks. 46 */
     public static final int DATA_HEADER_SIZE = HEADER_SIZE + 2 + FRAGMENT_HEADER_SIZE;
 
     /** IPv4 only */
     public static final int IP_HEADER_SIZE = 20;
+
     /** Same for IPv4 and IPv6 */
     public static final int UDP_HEADER_SIZE = 8;
 
@@ -23,6 +24,7 @@ class PacketBuilder {
     public static final int MIN_DATA_PACKET_OVERHEAD = IP_HEADER_SIZE + UDP_HEADER_SIZE + DATA_HEADER_SIZE;
 
     public static final int IPV6_HEADER_SIZE = 40;
+
     /** 94 */
     public static final int MIN_IPV6_DATA_PACKET_OVERHEAD = IPV6_HEADER_SIZE + UDP_HEADER_SIZE + DATA_HEADER_SIZE;
 
@@ -53,5 +55,4 @@ class PacketBuilder {
             return "Fragment " + num + " (" + state.fragmentSize(num) + " bytes)" + state;
         }
     }
-
 }

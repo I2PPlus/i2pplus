@@ -3,14 +3,15 @@ package net.i2p.router.update;
 import static net.i2p.update.UpdateMethod.*;
 import static net.i2p.update.UpdateType.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Collections;
-import java.util.List;
 import net.i2p.router.RouterContext;
 import net.i2p.router.web.ConfigUpdateHandler;
 import net.i2p.router.web.NewsHelper;
 import net.i2p.update.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * <p>Handles the request to update the router by firing off an
@@ -37,8 +38,7 @@ class UnsignedUpdateHandler implements Checker, Updater {
      */
     public List<URI> getUpdateSources() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
-        if (url == null)
-            return Collections.emptyList();
+        if (url == null) return Collections.emptyList();
 
         try {
             return Collections.singletonList(new URI(url));
@@ -51,13 +51,15 @@ class UnsignedUpdateHandler implements Checker, Updater {
      *  @param currentVersion ignored, we use time stored in a property
      */
     @Override
-    public UpdateTask check(UpdateType type, UpdateMethod method,
-                            String id, String currentVersion, long maxTime) {
-        if (type != UpdateType.ROUTER_UNSIGNED || method != UpdateMethod.HTTP) {return null;}
-
+    public UpdateTask check(UpdateType type, UpdateMethod method, String id, String currentVersion, long maxTime) {
+        if (type != UpdateType.ROUTER_UNSIGNED || method != UpdateMethod.HTTP) {
+            return null;
+        }
 
         List<URI> updateSources = getUpdateSources();
-        if (updateSources == null) {return null;}
+        if (updateSources == null) {
+            return null;
+        }
 
         long ms = _context.getProperty(NewsHelper.PROP_LAST_UPDATE_TIME, 0L);
         long now = _context.clock().now();
@@ -82,21 +84,17 @@ class UnsignedUpdateHandler implements Checker, Updater {
      *  @return active task or null if unable to download
      */
     @Override
-    public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources,
-                             String id, String newVersion, long maxTime) {
+    public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources, String id, String newVersion, long maxTime) {
         if (type != ROUTER_UNSIGNED || method != HTTP || updateSources.isEmpty() || NewsHelper.isUpdateInProgress()) {
             return null;
         }
         UpdateRunner update = new UnsignedUpdateRunner(_context, _mgr, updateSources);
         // set status before thread to ensure UI feedback
         if (updateSources.toString().contains("skank") && type == ROUTER_UNSIGNED) {
-            _mgr.notifyProgress(update, "<span id=contactserver class=volatile><b>" +
-                _mgr._t("Updating I2P").replace("Updating I2P", "Contacting I2P+ update server") + "&hellip; </b></span>");
+            _mgr.notifyProgress(update, "<span id=contactserver class=volatile><b>" + _mgr._t("Updating I2P").replace("Updating I2P", "Contacting I2P+ update server") + "&hellip; </b></span>");
         } else {
-            _mgr.notifyProgress(update, "<span id=contactserver class=volatile><b>" +
-                _mgr._t("Updating I2P").replace("Updating I2P", "Contacting I2P update server") + "&hellip; </b></span>");
+            _mgr.notifyProgress(update, "<span id=contactserver class=volatile><b>" + _mgr._t("Updating I2P").replace("Updating I2P", "Contacting I2P update server") + "&hellip; </b></span>");
         }
         return update;
     }
-
 }

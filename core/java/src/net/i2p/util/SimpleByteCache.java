@@ -19,9 +19,10 @@ public final class SimpleByteCache {
     private static final int DEFAULT_SIZE = 64;
 
     /** how often do we cleanup all caches */
-    private static final int CLEANUP_FREQUENCY = 60*1000; // 1 minute
+    private static final int CLEANUP_FREQUENCY = 60 * 1000; // 1 minute
+
     /** if we haven't exceeded the cache size in 90 seconds, cut our cache in half */
-    private static final long EXPIRE_PERIOD = 90*1000;
+    private static final long EXPIRE_PERIOD = 90 * 1000;
 
     static {
         // Start single global cleanup timer for all caches
@@ -62,7 +63,9 @@ public final class SimpleByteCache {
      * @param size how large should the objects cached be?
      */
     @SuppressWarnings("PMD.SingletonClassReturningNewInstance")
-    public static SimpleByteCache getInstance(int size) {return getInstance(DEFAULT_SIZE, size);}
+    public static SimpleByteCache getInstance(int size) {
+        return getInstance(DEFAULT_SIZE, size);
+    }
 
     /**
      * Get a cache responsible for objects of the given size
@@ -93,7 +96,9 @@ public final class SimpleByteCache {
      *  Clear everything (memory pressure)
      */
     public static void clearAll() {
-        for (SimpleByteCache bc : _caches.values()) {bc.clear();}
+        for (SimpleByteCache bc : _caches.values()) {
+            bc.clear();
+        }
     }
 
     private final TryCache<byte[]> _available;
@@ -103,10 +108,14 @@ public final class SimpleByteCache {
     private static class ByteArrayFactory implements TryCache.ObjectFactory<byte[]> {
         private final int sz;
 
-        ByteArrayFactory(int entrySize) {sz = entrySize;}
+        ByteArrayFactory(int entrySize) {
+            sz = entrySize;
+        }
 
         @Override
-        public byte[] newInstance() {return new byte[sz];}
+        public byte[] newInstance() {
+            return new byte[sz];
+        }
     }
 
     private SimpleByteCache(int maxCachedEntries, int entrySize) {
@@ -123,34 +132,43 @@ public final class SimpleByteCache {
     /**
      * Get the next available array, either from the cache or a brand new one
      */
-    public static byte[] acquire(int size) {return getInstance(size).acquire();}
+    public static byte[] acquire(int size) {
+        return getInstance(size).acquire();
+    }
 
-     /**
+    /**
      * Get the next available array, either from the cache or a brand new one
      */
-    private byte[] acquire() {return _available.acquire();}
+    private byte[] acquire() {
+        return _available.acquire();
+    }
 
     /**
      * Put this array back onto the available cache for reuse
      */
     public static void release(byte[] entry) {
         SimpleByteCache cache = _caches.get(entry.length);
-        if (cache != null) {cache.releaseIt(entry);}
+        if (cache != null) {
+            cache.releaseIt(entry);
+        }
     }
 
     /**
      * Put this array back onto the available cache for reuse
      */
     private void releaseIt(byte[] entry) {
-        if (entry == null || entry.length != _entrySize) {return;}
+        if (entry == null || entry.length != _entrySize) {
+            return;
+        }
         // should be safe without this
-        //Arrays.fill(entry, (byte) 0);
+        // Arrays.fill(entry, (byte) 0);
         _available.release(entry);
     }
 
     /**
      *  Clear everything (memory pressure)
      */
-    private void clear() {_available.clear();}
-
+    private void clear() {
+        _available.clear();
+    }
 }

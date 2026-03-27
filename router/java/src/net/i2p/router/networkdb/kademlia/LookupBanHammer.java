@@ -1,12 +1,13 @@
 package net.i2p.router.networkdb.kademlia;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
+
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  * Tracks the frequency of recent lookup requests targeting a specific reply peer/tunnel pair

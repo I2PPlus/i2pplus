@@ -1,6 +1,5 @@
 package com.thetransactioncompany.jsonrpc2;
 
-
 /**
  * Thrown to indicate an exception during the parsing of a JSON-RPC 2.0
  * message string.
@@ -9,12 +8,10 @@ package com.thetransactioncompany.jsonrpc2;
  */
 public class JSONRPC2ParseException extends Exception {
 
-
     /**
      * Serial version UID.
      */
     private static final long serialVersionUID = 3376608778436136410L;
-
 
     /**
      * Indicates a parse exception caused by a JSON message not conforming
@@ -22,25 +19,20 @@ public class JSONRPC2ParseException extends Exception {
      */
     public static final int PROTOCOL = 0;
 
-
     /**
      * Indicates a parse exception caused by invalid JSON.
      */
     public static final int JSON = 1;
-
 
     /**
      * The parse exception cause type. Default is {@link #PROTOCOL}.
      */
     private int causeType = PROTOCOL;
 
-
-
     /**
      * The string that could't be parsed.
      */
     private String unparsableString = null;
-
 
     /**
      * Creates a new parse exception with the specified message. The cause
@@ -52,7 +44,6 @@ public class JSONRPC2ParseException extends Exception {
 
         super(message);
     }
-
 
     /**
      * Creates a new parse exception with the specified message and the
@@ -68,7 +59,6 @@ public class JSONRPC2ParseException extends Exception {
         this.unparsableString = unparsableString;
     }
 
-
     /**
      * Creates a new parse exception with the specified message, cause type
      * and the original string that didn't parse.
@@ -82,13 +72,11 @@ public class JSONRPC2ParseException extends Exception {
 
         super(message);
 
-        if (causeType != PROTOCOL && causeType != JSON)
-            throw new IllegalArgumentException("Cause type must be either PROTOCOL or JSON");
+        if (causeType != PROTOCOL && causeType != JSON) throw new IllegalArgumentException("Cause type must be either PROTOCOL or JSON");
 
         this.causeType = causeType;
         this.unparsableString = unparsableString;
     }
-
 
     /**
      * Gets the parse exception cause type.
@@ -99,7 +87,6 @@ public class JSONRPC2ParseException extends Exception {
 
         return causeType;
     }
-
 
     /**
      * Gets original string that caused the parse exception (if specified).

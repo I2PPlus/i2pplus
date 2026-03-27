@@ -1,4 +1,5 @@
 package net.i2p.sam;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
@@ -40,9 +41,7 @@ class SessionsDB {
         map = new HashMap<String, SessionRecord>();
     }
 
-    public synchronized void put(String nick, SessionRecord session)
-        throws ExistingIdException, ExistingDestException
-    {
+    public synchronized void put(String nick, SessionRecord session) throws ExistingIdException, ExistingDestException {
         if (map.containsKey(nick)) {
             throw new ExistingIdException();
         }
@@ -51,34 +50,29 @@ class SessionsDB {
                 throw new ExistingDestException();
             }
         }
-        session.createThreadGroup("SAM session "+nick);
+        session.createThreadGroup("SAM session " + nick);
         map.put(nick, session);
     }
 
     /** @since 0.9.25 */
-    public synchronized void putDupDestOK(String nick, SessionRecord session)
-        throws ExistingIdException
-    {
+    public synchronized void putDupDestOK(String nick, SessionRecord session) throws ExistingIdException {
         if (map.containsKey(nick)) {
             throw new ExistingIdException();
         }
-        session.createThreadGroup("SAM session "+nick);
+        session.createThreadGroup("SAM session " + nick);
         map.put(nick, session);
     }
 
     /** @return true if removed */
-    synchronized public boolean del(String nick)
-    {
+    public synchronized boolean del(String nick) {
         return map.remove(nick) != null;
     }
 
-    synchronized public SessionRecord get(String nick)
-    {
+    public synchronized SessionRecord get(String nick) {
         return map.get(nick);
     }
 
-    synchronized public boolean containsKey(String nick)
-    {
+    public synchronized boolean containsKey(String nick) {
         return map.containsKey(nick);
     }
 }

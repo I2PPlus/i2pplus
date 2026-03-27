@@ -15,5 +15,4 @@ package net.i2p.crypto;
 public interface KeyFactory {
 
     public KeyPair getKeys();
-
 }

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import net.i2p.I2PAppContext;
 import net.i2p.data.Destination;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +30,7 @@ public class DummyNamingServiceTest {
 
         assertNull(ns.lookup(""));
         // TODO: Could this case ever come up?
-        //assertNull(ns.lookup(null));
+        // assertNull(ns.lookup(null));
     }
 
     @Test
@@ -41,13 +42,13 @@ public class DummyNamingServiceTest {
         // TODO: Check that the b64 is preserved.
 
         // TODO: Mock out I2CP response
-        //Destination dGoodB32 = ns.lookup(goodB32);
-        //assertNotNull(dGoodB32);
+        // Destination dGoodB32 = ns.lookup(goodB32);
+        // assertNotNull(dGoodB32);
         // TODO: Check that the b32 is preserved.
 
         // TODO: Come up with an actual bad b64 and b32
-        //assertNull(ns.lookup(badB64));
-        //assertNull(ns.lookup(badB32));
+        // assertNull(ns.lookup(badB64));
+        // assertNull(ns.lookup(badB32));
     }
 
     @Test

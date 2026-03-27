@@ -36,8 +36,6 @@ public class FileSuffixFilter implements FileFilter {
     @Override
     public boolean accept(File file) {
         String name = file.getName().toLowerCase(Locale.US);
-        return name.endsWith(end) &&
-               (begin == null || name.startsWith(begin)) &&
-               file.isFile();
+        return name.endsWith(end) && (begin == null || name.startsWith(begin)) && file.isFile();
     }
 }

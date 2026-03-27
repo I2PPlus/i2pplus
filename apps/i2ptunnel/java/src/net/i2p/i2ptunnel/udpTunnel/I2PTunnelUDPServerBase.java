@@ -3,10 +3,6 @@
  */
 package net.i2p.i2ptunnel.udpTunnel;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import net.i2p.I2PException;
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PClientFactory;
@@ -20,29 +16,33 @@ import net.i2p.i2ptunnel.udp.*;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.Log;
 
-/**
-     * Base client class that sets up an I2P Datagram server destination.
-     * The UDP side is not implemented here, as there are at least
-     * two possibilities:
-     *
-     * 1) UDP side is a "client"
-     *    Example: Streamr Producer
-     *    - configure an inbound port
-     *    - External application receives no data
-     *    - Extending class must have a constructor with a port argument
-     *
-     * 2) UDP side is a client/server
-     *    Example: DNS
-     *    - configure an inbound port and a destination host and port
-     *    - External application sends and receives data
-     *    - Extending class must have a constructor with host and 2 port arguments
-     *
-     * So the implementing class must create a UDPSource and/or UDPSink,
-     * and must call setSink().
-     *
-     * @author zzz with portions from welterde's streamr
-     */
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
+/**
+ * Base client class that sets up an I2P Datagram server destination.
+ * The UDP side is not implemented here, as there are at least
+ * two possibilities:
+ *
+ * 1) UDP side is a "client"
+ *    Example: Streamr Producer
+ *    - configure an inbound port
+ *    - External application receives no data
+ *    - Extending class must have a constructor with a port argument
+ *
+ * 2) UDP side is a client/server
+ *    Example: DNS
+ *    - configure an inbound port and a destination host and port
+ *    - External application sends and receives data
+ *    - Extending class must have a constructor with host and 2 port arguments
+ *
+ * So the implementing class must create a UDPSource and/or UDPSink,
+ * and must call setSink().
+ *
+ * @author zzz with portions from welterde's streamr
+ */
 public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sink {
 
     private final Log _log;
@@ -53,6 +53,7 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
     protected Logging l;
 
     private static final long DEFAULT_READ_TIMEOUT = -1; // 3*60*1000;
+
     /** default timeout to 3 minutes - override if desired */
     protected long readTimeout = DEFAULT_READ_TIMEOUT;
 
@@ -66,8 +67,7 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
      *                                  badly that we cant create a socketManager
      *
      */
-    public I2PTunnelUDPServerBase(File privkey, String privkeyname, Logging l,
-                           EventDispatcher notifyThis, I2PTunnel tunnel) {
+    public I2PTunnelUDPServerBase(File privkey, String privkeyname, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
         super("UDPServer <- " + privkeyname, notifyThis, tunnel);
         _log = tunnel.getContext().logManager().getLog(I2PTunnelUDPServerBase.class);
         FileInputStream fis = null;
@@ -78,8 +78,10 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
             _log.error("Error starting server", ioe);
             notifyEvent("openServerResult", "error");
         } finally {
-            if (fis != null)
-                try { fis.close(); } catch (IOException ioe) {}
+            if (fis != null) try {
+                    fis.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 
@@ -111,14 +113,14 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
      *  @since 0.9.53
      */
     public void startRunning() {
-        //synchronized (startLock) {
+        // synchronized (startLock) {
         try {
             _session.connect();
         } catch (I2PSessionException exc) {
             throw new RuntimeException("failed to connect session", exc);
         }
         start();
-        //}
+        // }
 
         notifyEvent("openServerResult", "ok");
         open = true;
@@ -182,7 +184,7 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
     /**
      *  Starts the I2P source to begin receiving datagrams.
      *
-     @Override
+     * @Override
      *  @since 0.9.53
      */
     public void start() {
@@ -194,7 +196,7 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
      *
      * @param to
      * @since 0.9.53 added fromPort and toPort parameters
-     @Override
+     * @Override
      * @throws RuntimeException if session is closed
      *
      */

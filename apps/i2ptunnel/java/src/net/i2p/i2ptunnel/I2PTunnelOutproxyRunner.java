@@ -1,5 +1,13 @@
 package net.i2p.i2ptunnel;
 
+import net.i2p.I2PAppContext;
+import net.i2p.data.ByteArray;
+import net.i2p.util.ByteCache;
+import net.i2p.util.Clock;
+import net.i2p.util.I2PAppThread;
+import net.i2p.util.InternalSocket;
+import net.i2p.util.Log;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,14 +17,8 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
+
 import javax.net.ssl.SSLException;
-import net.i2p.I2PAppContext;
-import net.i2p.data.ByteArray;
-import net.i2p.util.ByteCache;
-import net.i2p.util.Clock;
-import net.i2p.util.I2PAppThread;
-import net.i2p.util.InternalSocket;
-import net.i2p.util.Log;
 
 /**
  * I2PTunnelOutproxyRunner forwards data bidirectionally between two connected sockets:
@@ -43,6 +45,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
 
     /** Max bytes streamed in a packet - smaller packets might be filled up to this size */
     private static final int MAX_PACKET_SIZE = 4 * 1024;
+
     private static final int NETWORK_BUFFER_SIZE = MAX_PACKET_SIZE * 8;
 
     private final Socket s;
@@ -58,14 +61,14 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
     /** When the runner started up */
     private final long startedOn;
 
-/**
- * Thread that forwards data between local socket and I2PSocket.
- * <p>
- * Stripped-down version of I2PTunnelRunner without SSL or read timeout support.
- * Intended for outproxy use only. Not maintained as stable public API.
- *
- * @since 0.9.11
- */
+    /**
+     * Thread that forwards data between local socket and I2PSocket.
+     * <p>
+     * Stripped-down version of I2PTunnelRunner without SSL or read timeout support.
+     * Intended for outproxy use only. Not maintained as stable public API.
+     *
+     * @since 0.9.11
+     */
     private final I2PTunnelRunner.FailCallback onTimeout;
 
     // Use AtomicLong to safely count totals across threads
@@ -86,8 +89,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
      * @param initialSocketData initial data to send to socket side, nullable
      * @param onTimeout fail callback if no data received (except initial), nullable
      */
-    public I2PTunnelOutproxyRunner(Socket s, Socket i2ps, Object slock, byte[] initialI2PData,
-                                   byte[] initialSocketData, I2PTunnelRunner.FailCallback onTimeout) {
+    public I2PTunnelOutproxyRunner(Socket s, Socket i2ps, Object slock, byte[] initialI2PData, byte[] initialSocketData, I2PTunnelRunner.FailCallback onTimeout) {
         this.s = s;
         this.i2ps = i2ps;
         this.slock = slock;
@@ -121,12 +123,12 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
 
     @Override
     public void run() {
-        try (Socket autoCloseS = s; Socket autoCloseI2PS = i2ps;
-             InputStream in = (s instanceof InternalSocket) ? s.getInputStream() :
-                     new BufferedInputStream(s.getInputStream(), 2 * NETWORK_BUFFER_SIZE);
-             OutputStream out = s.getOutputStream();
-             InputStream i2pin = i2ps.getInputStream();
-             OutputStream i2pout = i2ps.getOutputStream()) {
+        try (Socket autoCloseS = s;
+                Socket autoCloseI2PS = i2ps;
+                InputStream in = (s instanceof InternalSocket) ? s.getInputStream() : new BufferedInputStream(s.getInputStream(), 2 * NETWORK_BUFFER_SIZE);
+                OutputStream out = s.getOutputStream();
+                InputStream i2pin = i2ps.getInputStream();
+                OutputStream i2pout = i2ps.getOutputStream()) {
 
             if (initialI2PData != null) {
                 i2pout.write(initialI2PData);
@@ -138,10 +140,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
             }
 
             if (_log.shouldDebug()) {
-                _log.debug("Initial data (" + (initialI2PData != null ? initialI2PData.length : 0)
-                        + " bytes) written to the outproxy, "
-                        + (initialSocketData != null ? initialSocketData.length : 0)
-                        + " bytes written to the socket, starting forwarders...");
+                _log.debug("Initial data (" + (initialI2PData != null ? initialI2PData.length : 0) + " bytes) written to the outproxy, " + (initialSocketData != null ? initialSocketData.length : 0) + " bytes written to the socket, starting forwarders...");
             }
 
             Thread t1 = new StreamForwarder(in, i2pout, true);
@@ -158,8 +157,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
 
             if (onTimeout != null) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Runner has a timeout job, totalReceived = " + totalReceived.get()
-                            + " totalSent = " + totalSent.get() + " job = " + onTimeout);
+                    _log.debug("Runner has a timeout job, totalReceived = " + totalReceived.get() + " totalSent = " + totalSent.get() + " job = " + onTimeout);
                 }
                 if (totalReceived.get() <= 0) {
                     onTimeout.onFail(null);
@@ -168,19 +166,15 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
         } catch (InterruptedException ex) {
             // Preserve interrupt status
             Thread.currentThread().interrupt();
-            if (_log.shouldError())
-                _log.error("Interrupted (" + ex.getMessage() + ")");
+            if (_log.shouldError()) _log.error("Interrupted (" + ex.getMessage() + ")");
         } catch (SSLException she) {
             _log.error("SSL error", she);
         } catch (IOException ex) {
-            if (_log.shouldDebug())
-                _log.debug("Error forwarding (" + ex.getMessage() + ")");
+            if (_log.shouldDebug()) _log.debug("Error forwarding (" + ex.getMessage() + ")");
         } catch (IllegalStateException ise) {
-            if (_log.shouldWarn())
-                _log.warn("gnu?", ise);
+            if (_log.shouldWarn()) _log.warn("gnu?", ise);
         } catch (RuntimeException e) {
-            if (_log.shouldError())
-                _log.error("Internal error", e);
+            if (_log.shouldError()) _log.error("Internal error", e);
         }
     }
 
@@ -221,7 +215,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
 
         @Override
         public void run() {
-            String from = "todo";  // Can be improved with socket info
+            String from = "todo"; // Can be improved with socket info
             String to = "todo";
 
             if (_log.shouldDebug()) {
@@ -239,10 +233,8 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
                 while ((len = in.read(buffer)) != -1) {
                     if (len > 0) {
                         out.write(buffer, 0, len);
-                        if (_toI2P)
-                            totalSent.addAndGet(len);
-                        else
-                            totalReceived.addAndGet(len);
+                        if (_toI2P) totalSent.addAndGet(len);
+                        else totalReceived.addAndGet(len);
                         flushedSinceLast += len;
                     }
 
@@ -257,8 +249,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
                     _log.debug(direction + " Socket closed - error reading/writing (" + ex.getMessage() + ")");
                 }
             } catch (InterruptedIOException ex) {
-                if (_log.shouldWarn())
-                    _log.warn(direction + " Closing connection due to timeout (" + ex.getMessage() + ")");
+                if (_log.shouldWarn()) _log.warn(direction + " Closing connection due to timeout (" + ex.getMessage() + ")");
                 // Restore interrupt state
                 Thread.currentThread().interrupt();
             } catch (IOException ex) {
@@ -271,8 +262,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
                 try {
                     in.close();
                 } catch (IOException ex) {
-                    if (_log.shouldWarn())
-                        _log.warn(direction + " Error closing input stream (" + ex.getMessage() + ")");
+                    if (_log.shouldWarn()) _log.warn(direction + " Error closing input stream (" + ex.getMessage() + ")");
                 }
                 try {
                     // If onTimeout is set, don't close output stream from socket side if no data received
@@ -282,8 +272,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
                         _log.info(direction + " Not closing stream to write the error message...");
                     }
                 } catch (IOException ioe) {
-                    if (_log.shouldWarn())
-                        _log.warn(direction + " Error closing output stream (" + ioe.getMessage() + ")");
+                    if (_log.shouldWarn()) _log.warn(direction + " Error closing output stream (" + ioe.getMessage() + ")");
                 }
 
                 finishLatch.countDown();

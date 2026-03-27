@@ -1,11 +1,12 @@
 package net.i2p.sam;
 
+import net.i2p.data.DataHelper;
+import net.i2p.util.Log;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import net.i2p.data.DataHelper;
-import net.i2p.util.Log;
 
 @SuppressWarnings("PMD.CloseResource")
 public class TestHello {
@@ -62,7 +63,6 @@ public class TestHello {
         }
     }
 
-
     public static void main(String args[]) {
         try {
             TestUtil.startupBridge(6000);
@@ -70,7 +70,10 @@ public class TestHello {
         } catch (Throwable t) {
             _log.error("Error running test", t);
         }
-        try { Thread.sleep(5*1000); } catch (InterruptedException ie) {}
+        try {
+            Thread.sleep(5 * 1000);
+        } catch (InterruptedException ie) {
+        }
         System.exit(0);
     }
 }

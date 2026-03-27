@@ -1,4 +1,5 @@
 package net.i2p.data.i2np;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,16 +9,17 @@ package net.i2p.data.i2np;
  *
  */
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.time.Instant;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleByteCache;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.time.Instant;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Defines the base message implementation.
@@ -39,22 +41,24 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      */
     private long _uniqueId = -1;
 
-    public final static long DEFAULT_EXPIRATION_MS = 60*1000; // 1 minute by default
-    public final static int CHECKSUM_LENGTH = 1; //Hash.HASH_LENGTH;
+    public static final long DEFAULT_EXPIRATION_MS = 60 * 1000; // 1 minute by default
+    public static final int CHECKSUM_LENGTH = 1; // Hash.HASH_LENGTH;
 
     /** 16 */
     public static final int HEADER_LENGTH = 1 // type
-                        + 4 // uniqueId
-                        + DataHelper.DATE_LENGTH // expiration
-                        + 2 // payload length
-                        + CHECKSUM_LENGTH;
+                    + 4 // uniqueId
+                    + DataHelper.DATE_LENGTH // expiration
+                    + 2 // payload length
+                    + CHECKSUM_LENGTH;
 
     /** unused */
     private static final Map<Integer, Builder> _builders = new ConcurrentHashMap<Integer, Builder>(1);
 
     /** @deprecated unused */
     @Deprecated
-    public static final void registerBuilder(Builder builder, int type) { _builders.put(Integer.valueOf(type), builder); }
+    public static final void registerBuilder(Builder builder, int type) {
+        _builders.put(Integer.valueOf(type), builder);
+    }
 
     /** interface for extending the types of messages handled - unused */
     public interface Builder {
@@ -66,8 +70,8 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         _context = context;
         _log = context.logManager().getLog(I2NPMessageImpl.class);
         _expiration = _context.clock().now() + DEFAULT_EXPIRATION_MS;
-        //_context.statManager().createRateStat("i2np.writeTime", "Time to write an I2NP message", "I2NP", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        //_context.statManager().createRateStat("i2np.readTime", "Time to read an I2NP message", "I2NP", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        // _context.statManager().createRateStat("i2np.writeTime", "Time to write an I2NP message", "I2NP", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        // _context.statManager().createRateStat("i2np.readTime", "Time to read an I2NP message", "I2NP", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
     }
 
     /**
@@ -117,10 +121,8 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     @Override
     public int readBytes(byte data[], int type, int offset, int maxLen) throws I2NPMessageException {
         int headerSize = HEADER_LENGTH;
-        if (type >= 0)
-            headerSize--;
-        if (maxLen < headerSize)
-            throw new I2NPMessageException("Payload is too short " + maxLen);
+        if (type >= 0) headerSize--;
+        if (maxLen < headerSize) throw new I2NPMessageException("Payload is too short " + maxLen);
         int cur = offset;
         if (type < 0) {
             type = data[cur] & 0xff;
@@ -132,31 +134,24 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         cur += 4;
         _expiration = DataHelper.fromLong(data, cur, DataHelper.DATE_LENGTH);
         cur += DataHelper.DATE_LENGTH;
-        int size = (int)DataHelper.fromLong(data, cur, 2);
+        int size = (int) DataHelper.fromLong(data, cur, 2);
         cur += 2;
 
-        if (cur + size > data.length || headerSize + size > maxLen)
-            throw new I2NPMessageException("Payload is too short ["
-                                           + "data.len=" + data.length
-                                           + "maxLen=" + maxLen
-                                           + " offset=" + offset
-                                           + " cur=" + cur
-                                           + " wanted=" + size + "]: " + getClass().getSimpleName());
+        if (cur + size > data.length || headerSize + size > maxLen) throw new I2NPMessageException("Payload is too short [" + "data.len=" + data.length + "maxLen=" + maxLen + " offset=" + offset + " cur=" + cur + " wanted=" + size + "]: " + getClass().getSimpleName());
 
         int sz = Math.min(size, maxLen - headerSize);
         byte[] calc = SimpleByteCache.acquire(Hash.HASH_LENGTH);
 
         // Compare the checksum in data to the checksum of the data after the checksum
         _context.sha().calculateHash(data, cur + CHECKSUM_LENGTH, sz, calc, 0);
-        //boolean eq = DataHelper.eq(data, cur, calc, 0, CHECKSUM_LENGTH);
+        // boolean eq = DataHelper.eq(data, cur, calc, 0, CHECKSUM_LENGTH);
         boolean eq = data[cur] == calc[0];
         cur += CHECKSUM_LENGTH;
 
         SimpleByteCache.release(calc);
-        if (!eq)
-            throw new I2NPMessageException("Bad checksum on " + size + " byte I2NP " + getClass().getSimpleName());
+        if (!eq) throw new I2NPMessageException("Bad checksum on " + size + " byte I2NP " + getClass().getSimpleName());
 
-        //long start = _context.clock().now();
+        // long start = _context.clock().now();
         if (_log.shouldDebug()) {
             long uniqueId;
             synchronized (this) {
@@ -166,8 +161,8 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         }
         readMessage(data, cur, sz, type);
         cur += sz;
-        //long time = _context.clock().now() - start;
-        //if (time > 50)
+        // long time = _context.clock().now() - start;
+        // if (time > 50)
         //    _context.statManager().addRateData("i2np.readTime", time, time);
         return cur - offset;
     }
@@ -204,20 +199,26 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *  The ID is set to a random value when written but it can be overridden here.
      */
     @Override
-    public synchronized void setUniqueId(long id) { _uniqueId = id; }
+    public synchronized void setUniqueId(long id) {
+        _uniqueId = id;
+    }
 
     /**
      * Date after which the message should be dropped (and the associated uniqueId forgotten)
      *
      */
     @Override
-    public long getMessageExpiration() { return _expiration; }
+    public long getMessageExpiration() {
+        return _expiration;
+    }
 
     /**
      *  The expiration is set to one minute from now in the constructor but it can be overridden here.
      */
     @Override
-    public void setMessageExpiration(long exp) { _expiration = exp; }
+    public void setMessageExpiration(long exp) {
+        _expiration = exp;
+    }
 
     @Override
     public synchronized int getMessageSize() {
@@ -230,7 +231,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      */
     @Override
     public synchronized int getRawMessageSize() {
-        return calculateWrittenLength()+5;
+        return calculateWrittenLength() + 5;
     }
 
     @Override
@@ -238,8 +239,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         byte data[] = new byte[getMessageSize()];
         int written = toByteArray(data);
         if (written != data.length) {
-            _log.log(Log.CRIT, "Error writing out " + data.length + " (written: " + written + ", msgSize: " + getMessageSize() +
-                               ", writtenLen: " + calculateWrittenLength() + ") for " + getClass().getSimpleName());
+            _log.log(Log.CRIT, "Error writing out " + data.length + " (written: " + written + ", msgSize: " + getMessageSize() + ", writtenLen: " + calculateWrittenLength() + ") for " + getClass().getSimpleName());
             return new byte[0];
         }
         return data;
@@ -284,7 +284,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
             off += DataHelper.DATE_LENGTH;
             DataHelper.toLong(buffer, off, 2, payloadLen);
             off += 2;
-            //System.arraycopy(h, 0, buffer, off, CHECKSUM_LENGTH);
+            // System.arraycopy(h, 0, buffer, off, CHECKSUM_LENGTH);
             buffer[off] = h[0];
             SimpleByteCache.release(h);
 
@@ -364,20 +364,18 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         }
     }
 
-
-/*****
-    public static I2NPMessage fromRawByteArray(I2PAppContext ctx, byte buffer[], int offset, int len) throws I2NPMessageException {
-        return fromRawByteArray(ctx, buffer, offset, len, new I2NPMessageHandler(ctx));
-    }
-*****/
+    /*****
+     * public static I2NPMessage fromRawByteArray(I2PAppContext ctx, byte buffer[], int offset, int len) throws I2NPMessageException {
+     * return fromRawByteArray(ctx, buffer, offset, len, new I2NPMessageHandler(ctx));
+     * }
+     *****/
 
     /**
      *  Read the message with a short 5-byte header.
      *  THe header consists of a one-byte type and a 4-byte expiration in seconds only.
      *  Used by SSU only!
      */
-    public static I2NPMessage fromRawByteArray(I2PAppContext ctx, byte buffer[], int offset,
-                                               int len, I2NPMessageHandler handler) throws I2NPMessageException {
+    public static I2NPMessage fromRawByteArray(I2PAppContext ctx, byte buffer[], int offset, int len, I2NPMessageHandler handler) throws I2NPMessageException {
         int type = buffer[offset] & 0xff;
         offset++;
         I2NPMessage msg = createMessage(ctx, type);
@@ -404,8 +402,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *  @param handler ignored, may be null
      *  @since 0.9.35
      */
-    public static I2NPMessage fromRawByteArrayNTCP2(I2PAppContext ctx, byte buffer[], int offset,
-                                                    int len, I2NPMessageHandler handler) throws I2NPMessageException {
+    public static I2NPMessage fromRawByteArrayNTCP2(I2PAppContext ctx, byte buffer[], int offset, int len, I2NPMessageHandler handler) throws I2NPMessageException {
         int type = buffer[offset] & 0xff;
         offset++;
         I2NPMessage msg = createMessage(ctx, type);
@@ -433,47 +430,32 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      */
     public static I2NPMessage createMessage(I2PAppContext context, int type) throws I2NPMessageException {
         switch (type) {
-            case DatabaseStoreMessage.MESSAGE_TYPE:
-                return new DatabaseStoreMessage(context);
-            case DatabaseLookupMessage.MESSAGE_TYPE:
-                return new DatabaseLookupMessage(context);
-            case DatabaseSearchReplyMessage.MESSAGE_TYPE:
-                return new DatabaseSearchReplyMessage(context);
-            case DeliveryStatusMessage.MESSAGE_TYPE:
-                return new DeliveryStatusMessage(context);
+            case DatabaseStoreMessage.MESSAGE_TYPE: return new DatabaseStoreMessage(context);
+            case DatabaseLookupMessage.MESSAGE_TYPE: return new DatabaseLookupMessage(context);
+            case DatabaseSearchReplyMessage.MESSAGE_TYPE: return new DatabaseSearchReplyMessage(context);
+            case DeliveryStatusMessage.MESSAGE_TYPE: return new DeliveryStatusMessage(context);
             // unused since forever (0.5?)
-            //case DateMessage.MESSAGE_TYPE:
+            // case DateMessage.MESSAGE_TYPE:
             //    return new DateMessage(context);
-            case GarlicMessage.MESSAGE_TYPE:
-                return new GarlicMessage(context);
-            case TunnelDataMessage.MESSAGE_TYPE:
-                return new TunnelDataMessage(context);
-            case TunnelGatewayMessage.MESSAGE_TYPE:
-                return new TunnelGatewayMessage(context);
-            case DataMessage.MESSAGE_TYPE:
-                return new DataMessage(context);
+            case GarlicMessage.MESSAGE_TYPE: return new GarlicMessage(context);
+            case TunnelDataMessage.MESSAGE_TYPE: return new TunnelDataMessage(context);
+            case TunnelGatewayMessage.MESSAGE_TYPE: return new TunnelGatewayMessage(context);
+            case DataMessage.MESSAGE_TYPE: return new DataMessage(context);
             // unused since 0.6.1.10
-            case TunnelBuildMessage.MESSAGE_TYPE:
-                return new TunnelBuildMessage(context);
-            case TunnelBuildReplyMessage.MESSAGE_TYPE:
-                return new TunnelBuildReplyMessage(context);
+            case TunnelBuildMessage.MESSAGE_TYPE: return new TunnelBuildMessage(context);
+            case TunnelBuildReplyMessage.MESSAGE_TYPE: return new TunnelBuildReplyMessage(context);
             // since 0.7.10
-            case VariableTunnelBuildMessage.MESSAGE_TYPE:
-                return new VariableTunnelBuildMessage(context);
+            case VariableTunnelBuildMessage.MESSAGE_TYPE: return new VariableTunnelBuildMessage(context);
             // since 0.7.10
-            case VariableTunnelBuildReplyMessage.MESSAGE_TYPE:
-                return new VariableTunnelBuildReplyMessage(context);
+            case VariableTunnelBuildReplyMessage.MESSAGE_TYPE: return new VariableTunnelBuildReplyMessage(context);
             // since 0.9.51
-            case OutboundTunnelBuildReplyMessage.MESSAGE_TYPE:
-                return new OutboundTunnelBuildReplyMessage(context);
+            case OutboundTunnelBuildReplyMessage.MESSAGE_TYPE: return new OutboundTunnelBuildReplyMessage(context);
             // since 0.9.51
-            case ShortTunnelBuildMessage.MESSAGE_TYPE:
-                return new ShortTunnelBuildMessage(context);
+            case ShortTunnelBuildMessage.MESSAGE_TYPE: return new ShortTunnelBuildMessage(context);
             default:
                 // unused
                 Builder builder = _builders.get(Integer.valueOf(type));
-                if (builder != null)
-                    return builder.build(context);
+                if (builder != null) return builder.build(context);
                 return new UnknownI2NPMessage(context, type);
         }
     }

@@ -1,4 +1,5 @@
 package net.i2p.router.util;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,9 +9,10 @@ package net.i2p.router.util;
  *
  */
 
-import java.math.BigInteger;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+
+import java.math.BigInteger;
 
 /**
  * Utility for calculating XOR distance between router hashes.

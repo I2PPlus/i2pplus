@@ -3,6 +3,11 @@
  */
 package net.i2p.client.streaming.impl;
 
+import net.i2p.I2PAppContext;
+import net.i2p.data.ByteArray;
+import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
@@ -12,10 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-import net.i2p.I2PAppContext;
-import net.i2p.data.ByteArray;
-import net.i2p.util.Log;
-import net.i2p.util.SystemVersion;
 
 /**
  * InputStream implementation that accepts messages arriving out of order
@@ -68,9 +69,9 @@ class MessageInputStream extends InputStream {
 
     private final Log _log;
     private final List<ByteArray> _readyDataBlocks; // Ordered list of ready data blocks
-    private int _readyDataBlockIndex;               // Index in the current ready block
-    private long _highestReadyBlockId;              // Highest fully received block ID
-    private long _highestBlockId;                   // Highest received block ID (includes out-of-order)
+    private int _readyDataBlockIndex; // Index in the current ready block
+    private long _highestReadyBlockId; // Highest fully received block ID
+    private long _highestBlockId; // Highest received block ID (includes out-of-order)
     private final Map<Long, ByteArray> _notYetReadyBlocks; // Out-of-order blocks
 
     private boolean _closeReceived; // EOF signal received
@@ -80,8 +81,8 @@ class MessageInputStream extends InputStream {
     private long _readTotal; // Total bytes read so far
 
     private final int _maxMessageSize; // Max size per message block
-    private final int _maxWindowSize;  // Max number of messages in window
-    private final int _maxBufferSize;  // Max total buffer size in bytes
+    private final int _maxWindowSize; // Max number of messages in window
+    private final int _maxBufferSize; // Max total buffer size in bytes
     private final int _maxPacketCount; // Max number of packets regardless of size
 
     private final byte[] _oneByte = new byte[1]; // For single-byte reads
@@ -307,9 +308,7 @@ class MessageInputStream extends InputStream {
     public void closeReceived() {
         synchronized (_dataLock) {
             if (_log.shouldDebug()) {
-                _log.debug("Close received: ready blocks=" + _readyDataBlocks.size()
-                        + ", not ready blocks=" + _notYetReadyBlocks.size()
-                        + ", highest ready block=" + _highestReadyBlockId);
+                _log.debug("Close received: ready blocks=" + _readyDataBlocks.size() + ", not ready blocks=" + _notYetReadyBlocks.size() + ", highest ready block=" + _highestReadyBlockId);
             }
             _closeReceived = true;
             _dataLock.notifyAll();
@@ -337,8 +336,7 @@ class MessageInputStream extends InputStream {
      */
     public boolean messageReceived(long messageId, ByteArray payload) {
         if (_log.shouldDebug()) {
-            _log.debug("Received message ID " + messageId + ", length: " +
-                       (payload != null ? payload.getValid() : "no payload"));
+            _log.debug("Received message ID " + messageId + ", length: " + (payload != null ? payload.getValid() : "no payload"));
         }
 
         synchronized (_dataLock) {
@@ -489,11 +487,7 @@ class MessageInputStream extends InputStream {
                     int available = cur.getValid() - _readyDataBlockIndex;
                     int toRead = Math.min(available, length - totalRead);
 
-                    System.arraycopy(
-                        cur.getData(), cur.getOffset() + _readyDataBlockIndex,
-                        target, offset + totalRead,
-                        toRead
-                    );
+                    System.arraycopy(cur.getData(), cur.getOffset() + _readyDataBlockIndex, target, offset + totalRead, toRead);
 
                     _readyDataBlockIndex += toRead;
                     totalRead += toRead;
@@ -562,9 +556,7 @@ class MessageInputStream extends InputStream {
     public void close() {
         synchronized (_dataLock) {
             if (_log.shouldDebug()) {
-                _log.debug("close(): ready blocks=" + _readyDataBlocks.size()
-                        + ", not ready blocks=" + _notYetReadyBlocks.size()
-                        + ", highest ready block=" + _highestReadyBlockId);
+                _log.debug("close(): ready blocks=" + _readyDataBlocks.size() + ", not ready blocks=" + _notYetReadyBlocks.size() + ", highest ready block=" + _highestReadyBlockId);
             }
 
             _readyDataBlocks.clear();

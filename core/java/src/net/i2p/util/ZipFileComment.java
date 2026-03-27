@@ -1,12 +1,13 @@
 package net.i2p.util;
 
+import net.i2p.data.DataHelper;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipException;
-import net.i2p.data.DataHelper;
 
 /**
  * Not available in ZipFile until Java 7. Refs:
@@ -57,29 +58,27 @@ public abstract class ZipFileComment {
      *  @throws IOException if no valid end-of-central-directory record found
      */
     public static String getComment(File file, int max, int skip) throws IOException {
-        if (!file.exists())
-            throw new FileNotFoundException("File not found: " + file);
+        if (!file.exists()) throw new FileNotFoundException("File not found: " + file);
         long len = file.length();
-        if (len < BLOCK_LEN + HEADER_LEN + skip)
-            throw new ZipException("File too short: " + file);
-        if (len > Integer.MAX_VALUE)
-            throw new ZipException("File too long: " + file);
+        if (len < BLOCK_LEN + HEADER_LEN + skip) throw new ZipException("File too short: " + file);
+        if (len > Integer.MAX_VALUE) throw new ZipException("File too long: " + file);
         int fileLen = (int) len;
         byte[] buffer = new byte[Math.min(fileLen - skip, max + BLOCK_LEN)];
         InputStream in = null;
         try {
             in = new FileInputStream(file);
-            if (skip > 0)
-                DataHelper.skip(in, skip);
+            if (skip > 0) DataHelper.skip(in, skip);
             byte[] hdr = new byte[HEADER_LEN];
             DataHelper.read(in, hdr);
-            if (!DataHelper.eq(hdr, magicStart))
-                throw new ZipException("Not a zip file: " + file);
+            if (!DataHelper.eq(hdr, magicStart)) throw new ZipException("Not a zip file: " + file);
             DataHelper.skip(in, fileLen - (skip + HEADER_LEN + buffer.length));
             DataHelper.read(in, buffer);
             return getComment(buffer);
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null) try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 
@@ -89,8 +88,7 @@ public abstract class ZipFileComment {
     private static String getComment(byte[] buffer) throws IOException {
         for (int i = buffer.length - (1 + BLOCK_LEN - MAGIC_LEN); i >= 0; i--) {
             if (DataHelper.eq(buffer, i, magicDirEnd, 0, MAGIC_LEN)) {
-                int commentLen = (buffer[i + BLOCK_LEN - 2] & 0xff) +
-                                 ((buffer[i + BLOCK_LEN - 1] & 0xff) * 256);
+                int commentLen = (buffer[i + BLOCK_LEN - 2] & 0xff) + ((buffer[i + BLOCK_LEN - 1] & 0xff) * 256);
                 return new String(buffer, i + BLOCK_LEN, commentLen, "UTF-8");
             }
         }
@@ -104,8 +102,7 @@ public abstract class ZipFileComment {
         }
         int skip = 0;
         String file = args[0];
-        if (file.endsWith(".sud") || file.endsWith(".su2"))
-            skip = 56;
+        if (file.endsWith(".sud") || file.endsWith(".su2")) skip = 56;
         String c = getComment(new File(file), 256, skip);
         System.out.println("comment is: \"" + c + '\"');
     }

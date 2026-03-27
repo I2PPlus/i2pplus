@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -29,7 +30,6 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import org.rrd4j.core.RrdBackendFactory;
 import org.rrd4j.core.RrdNioBackendFactory;
-import java.util.Objects;
 
 /**
  *  A thread started by RouterConsoleRunner that checks the configuration for
@@ -45,13 +45,15 @@ import java.util.Objects;
 public class GraphGenerator implements Runnable, ClientApp {
     private final RouterContext _context;
     private final Log _log;
+
     /** list of GraphListener instances */
     private final List<GraphListener> _listeners;
+
     private static int cores = SystemVersion.getCores();
     private static long maxMem = SystemVersion.getMaxMemory();
-    private static final int MAX_CONCURRENT_PNG = SystemVersion.isARM() ? Math.max(2, cores / 2) :
-                                                  maxMem < 256*1024*1024 ? Math.max(8, cores / 2) :
-                                                  Math.max(12, cores);
+    private static final int MAX_CONCURRENT_PNG = SystemVersion.isARM()
+            ? Math.max(2, cores / 2)
+            : maxMem < 256 * 1024 * 1024 ? Math.max(8, cores / 2) : Math.max(12, cores);
     private final Semaphore _sem;
     private volatile boolean _isRunning;
     private ScheduledExecutorService _scheduler;
@@ -68,7 +70,9 @@ public class GraphGenerator implements Runnable, ClientApp {
     /**
      * @return null if disabled
      */
-    public static GraphGenerator instance() {return instance(I2PAppContext.getGlobalContext());}
+    public static GraphGenerator instance() {
+        return instance(I2PAppContext.getGlobalContext());
+    }
 
     /**
      * @return null if disabled
@@ -82,11 +86,11 @@ public class GraphGenerator implements Runnable, ClientApp {
     public void run() {
         // JRobin 1.5.9 crashes these JVMs
         if (SystemVersion.isApache() /* Harmony */ || SystemVersion.isGNU()) /* JamVM or gij */ {
-            _log.logAlways(Log.WARN, "Graphing not supported with this JVM: " +
-                                     System.getProperty("java.vendor") + ' ' +
-                                     System.getProperty("java.version") + " (" +
-                                     System.getProperty("java.runtime.name") + ' ' +
-                                     System.getProperty("java.runtime.version") + ')');
+            _log.logAlways(
+                    Log.WARN,
+                    "Graphing not supported with this JVM: " + System.getProperty("java.vendor") + ' '
+                            + System.getProperty("java.version") + " (" + System.getProperty("java.runtime.name") + ' '
+                            + System.getProperty("java.runtime.version") + ')');
             return;
         }
         _isRunning = true;
@@ -98,7 +102,9 @@ public class GraphGenerator implements Runnable, ClientApp {
             syncThreads = 1;
             // delete files for unconfigured rates
             Set<String> configured = new HashSet<String>(rates.length);
-            for (String r : rates) {configured.add(GraphListener.createName(_context, r));}
+            for (String r : rates) {
+                configured.add(GraphListener.createName(_context, r));
+            }
             File rrdDir = new File(_context.getRouterDir(), GraphListener.RRD_DIR);
             FileFilter filter = new FileSuffixFilter(GraphListener.RRD_PREFIX, GraphListener.RRD_SUFFIX);
             File[] files = rrdDir.listFiles(filter);
@@ -106,8 +112,11 @@ public class GraphGenerator implements Runnable, ClientApp {
                 for (int i = 0; i < files.length; i++) {
                     File f = files[i];
                     String name = f.getName();
-                    String hash = name.substring(GraphListener.RRD_PREFIX.length(), name.length() - GraphListener.RRD_SUFFIX.length());
-                    if (!configured.contains(hash)) {f.delete();}
+                    String hash = name.substring(
+                            GraphListener.RRD_PREFIX.length(), name.length() - GraphListener.RRD_SUFFIX.length());
+                    if (!configured.contains(hash)) {
+                        f.delete();
+                    }
                 }
             }
         } else {
@@ -125,17 +134,21 @@ public class GraphGenerator implements Runnable, ClientApp {
 
         final String[] specsHolder = {""};
         try {
-            _scheduler.scheduleAtFixedRate(() -> {
-                try {
-                    if (!_isRunning || !_context.router().isAlive()) {
-                        stop();
-                        return;
-                    }
-                    specsHolder[0] = adjustDatabases(specsHolder[0]);
-                } catch (Exception e) {
-                    _log.error("Failed to sync RRD4J stats to disk", e);
-                }
-            }, 0, 90, TimeUnit.SECONDS);
+            _scheduler.scheduleAtFixedRate(
+                    () -> {
+                        try {
+                            if (!_isRunning || !_context.router().isAlive()) {
+                                stop();
+                                return;
+                            }
+                            specsHolder[0] = adjustDatabases(specsHolder[0]);
+                        } catch (Exception e) {
+                            _log.error("Failed to sync RRD4J stats to disk", e);
+                        }
+                    },
+                    0,
+                    90,
+                    TimeUnit.SECONDS);
         } catch (Exception e) {
             _log.error("Failed to sync RRD4J stats to disk", e);
         }
@@ -171,7 +184,9 @@ public class GraphGenerator implements Runnable, ClientApp {
      */
     static void setDisabled(I2PAppContext ctx) {
         GraphGenerator ss = instance(ctx);
-        if (ss != null) {ss.setDisabled();}
+        if (ss != null) {
+            ss.setDisabled();
+        }
     }
 
     /**
@@ -201,13 +216,19 @@ public class GraphGenerator implements Runnable, ClientApp {
     public void shutdown(String[] args) {}
 
     /** @since 0.9.38 */
-    public ClientAppState getState() {return ClientAppState.RUNNING;}
+    public ClientAppState getState() {
+        return ClientAppState.RUNNING;
+    }
 
     /** @since 0.9.38 */
-    public String getName() {return NAME;}
+    public String getName() {
+        return NAME;
+    }
 
     /** @since 0.9.38 */
-    public String getDisplayName() {return "I2P+ Graph Generator";}
+    public String getDisplayName() {
+        return "I2P+ Graph Generator";
+    }
 
     /////// End ClientApp methods
 
@@ -215,21 +236,20 @@ public class GraphGenerator implements Runnable, ClientApp {
      *  List of GraphListener instances
      *  @since public since 0.9.33, was package private
      */
-    public List<GraphListener> getListeners() { return _listeners; }
+    public List<GraphListener> getListeners() {
+        return _listeners;
+    }
 
     /**  @since public since 0.9.33, was package private */
-    public static final String DEFAULT_DATABASES = "bw.sendRate.60000" +
-                                                   ",bw.recvRate.60000" +
-                                                   ",jobQueue.jobLag.60000" +
-                                                   ",router.activePeers.60000" +
-                                                   ",router.cpuLoad.60000" +
-                                                   ",router.memoryUsed.60000" +
-                                                   ",tunnel.participatingTunnels.60000" +
-                                                   ",tunnel.tunnelBuildSuccessAvg.60000" +
-                                                   ",tunnel.testSuccessTime.60000";
+    public static final String DEFAULT_DATABASES =
+            "bw.sendRate.60000" + ",bw.recvRate.60000" + ",jobQueue.jobLag.60000" + ",router.activePeers.60000"
+                    + ",router.cpuLoad.60000" + ",router.memoryUsed.60000" + ",tunnel.participatingTunnels.60000"
+                    + ",tunnel.tunnelBuildSuccessAvg.60000" + ",tunnel.testSuccessTime.60000";
 
     /** @since 0.9.62+ */
-    public int countGraphs() {return _listeners.size();}
+    public int countGraphs() {
+        return _listeners.size();
+    }
 
     private String adjustDatabases(String oldSpecs) {
         String spec = _context.getProperty("stat.summaries", DEFAULT_DATABASES);
@@ -242,15 +262,22 @@ public class GraphGenerator implements Runnable, ClientApp {
 
         // remove old ones
         for (Rate r : old) {
-            if (!newSpecs.contains(r)) {removeDb(r);}
+            if (!newSpecs.contains(r)) {
+                removeDb(r);
+            }
         }
         // add new ones
         StringBuilder buf = new StringBuilder();
         boolean comma = false;
         for (Rate r : newSpecs) {
-            if (!old.contains(r)) {addDb(r);}
-            if (comma) {buf.append(',');}
-            else {comma = true;}
+            if (!old.contains(r)) {
+                addDb(r);
+            }
+            if (comma) {
+                buf.append(',');
+            } else {
+                comma = true;
+            }
             buf.append(r.getRateStat().getName()).append(".").append(r.getPeriod());
         }
         return buf.toString();
@@ -269,8 +296,11 @@ public class GraphGenerator implements Runnable, ClientApp {
     private void addDb(Rate r) {
         GraphListener lsnr = new GraphListener(r);
         boolean success = lsnr.startListening();
-        if (success) {_listeners.add(lsnr);}
-        else {_log.error("Failed to add RRD for rate " + r.getRateStat().getName() + '.' + r.getPeriod());}
+        if (success) {
+            _listeners.add(lsnr);
+        } else {
+            _log.error("Failed to add RRD for rate " + r.getRateStat().getName() + '.' + r.getPeriod());
+        }
     }
 
     public boolean renderSvg(Rate rate, OutputStream out) throws IOException {
@@ -285,15 +315,37 @@ public class GraphGenerator implements Runnable, ClientApp {
      *  @param end number of periods before now
      *  @return success
      */
-    public boolean renderSvg(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
-                                        boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
-                                        int end, boolean showCredit) throws IOException {
+    public boolean renderSvg(
+            Rate rate,
+            OutputStream out,
+            int width,
+            int height,
+            boolean hideLegend,
+            boolean hideGrid,
+            boolean hideTitle,
+            boolean showEvents,
+            int periodCount,
+            int end,
+            boolean showCredit)
+            throws IOException {
         try {
-            try {_sem.acquire();}
-            catch (InterruptedException ie) {}
             try {
-                return locked_renderSvg(rate, out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
-                                        periodCount, end, showCredit);
+                _sem.acquire();
+            } catch (InterruptedException ie) {
+            }
+            try {
+                return locked_renderSvg(
+                        rate,
+                        out,
+                        width,
+                        height,
+                        hideLegend,
+                        hideGrid,
+                        hideTitle,
+                        showEvents,
+                        periodCount,
+                        end,
+                        showCredit);
             } catch (NoClassDefFoundError ncdfe) {
                 setDisabled();
                 String s = "Error rendering - disabling graph generation.";
@@ -302,44 +354,75 @@ public class GraphGenerator implements Runnable, ClientApp {
                 ioe.initCause(ncdfe);
                 throw ioe;
             }
-        } finally {_sem.release();}
+        } finally {
+            _sem.release();
+        }
     }
 
     /**
      *  @param end number of periods before now
      */
-    private boolean locked_renderSvg(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
-                                      boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
-                                      int end, boolean showCredit) throws IOException {
-        if (width > MAX_X) {width = MAX_X;}
-        else if (width <= 0) {width = DEFAULT_X;}
-        if (height > MAX_Y) {height = MAX_Y;}
-        else if (height <= 0) {height = DEFAULT_Y;}
-        if (end < 0) {end = 0;}
+    private boolean locked_renderSvg(
+            Rate rate,
+            OutputStream out,
+            int width,
+            int height,
+            boolean hideLegend,
+            boolean hideGrid,
+            boolean hideTitle,
+            boolean showEvents,
+            int periodCount,
+            int end,
+            boolean showCredit)
+            throws IOException {
+        if (width > MAX_X) {
+            width = MAX_X;
+        } else if (width <= 0) {
+            width = DEFAULT_X;
+        }
+        if (height > MAX_Y) {
+            height = MAX_Y;
+        } else if (height <= 0) {
+            height = DEFAULT_Y;
+        }
+        if (end < 0) {
+            end = 0;
+        }
         for (GraphListener lsnr : _listeners) {
             if (lsnr.getRate().equals(rate)) {
-                lsnr.renderSvg(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);
+                lsnr.renderSvg(
+                        out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);
                 return true;
             }
         }
-        if (_log.shouldWarn()) {_log.warn("No listener for rate: " + rate.getRateStat().getName() + " period=" + rate.getPeriod() + " listeners=" + _listeners.size());}
+        if (_log.shouldWarn()) {
+            _log.warn("No listener for rate: " + rate.getRateStat().getName() + " period=" + rate.getPeriod()
+                    + " listeners=" + _listeners.size());
+        }
         return false;
     }
 
     public boolean getXML(Rate rate, OutputStream out) throws IOException {
         try {
-            try {_sem.acquire();}
-            catch (InterruptedException ie) {}
+            try {
+                _sem.acquire();
+            } catch (InterruptedException ie) {
+            }
             return locked_getXML(rate, out);
-        } finally {_sem.release();}
+        } finally {
+            _sem.release();
+        }
     }
 
     private boolean locked_getXML(Rate rate, OutputStream out) throws IOException {
         for (GraphListener lsnr : _listeners) {
             if (lsnr.getRate().equals(rate)) {
                 lsnr.getData().exportXml(out);
-                out.write(DataHelper.getUTF8("<!-- Rate: " + lsnr.getRate().getRateStat().getName() + " for period " + lsnr.getRate().getPeriod() + "-->\n"));
-                out.write(DataHelper.getUTF8("<!-- Average data source name: " + lsnr.getName() + " event count data source name: " + lsnr.getEventName() + "-->\n"));
+                out.write(DataHelper.getUTF8(
+                        "<!-- Rate: " + lsnr.getRate().getRateStat().getName() + " for period "
+                                + lsnr.getRate().getPeriod() + "-->\n"));
+                out.write(DataHelper.getUTF8("<!-- Average data source name: " + lsnr.getName()
+                        + " event count data source name: " + lsnr.getEventName() + "-->\n"));
                 return true;
             }
         }
@@ -354,14 +437,27 @@ public class GraphGenerator implements Runnable, ClientApp {
      *  @param end number of periods before now
      *  @return success
      */
-    public boolean renderRateSvg(OutputStream out, int width, int height, boolean hideLegend,
-                                 boolean hideGrid, boolean hideTitle, boolean showEvents,
-                                 int periodCount, int end, boolean showCredit) throws IOException {
+    public boolean renderRateSvg(
+            OutputStream out,
+            int width,
+            int height,
+            boolean hideLegend,
+            boolean hideGrid,
+            boolean hideTitle,
+            boolean showEvents,
+            int periodCount,
+            int end,
+            boolean showCredit)
+            throws IOException {
         try {
-            try {_sem.acquire();}
-            catch (InterruptedException ie) {}
-            try {return locked_renderRateSvg(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);}
-            catch (NoClassDefFoundError ncdfe) {
+            try {
+                _sem.acquire();
+            } catch (InterruptedException ie) {
+            }
+            try {
+                return locked_renderRateSvg(
+                        out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);
+            } catch (NoClassDefFoundError ncdfe) {
                 setDisabled();
                 String s = "Error rendering - disabling graph generation.";
                 _log.logAlways(Log.WARN, s);
@@ -369,37 +465,85 @@ public class GraphGenerator implements Runnable, ClientApp {
                 ioe.initCause(ncdfe);
                 throw ioe;
             }
-        } finally {_sem.release();}
+        } finally {
+            _sem.release();
+        }
     }
 
-    private boolean locked_renderRateSvg(OutputStream out, int width, int height, boolean hideLegend,
-                                         boolean hideGrid, boolean hideTitle, boolean showEvents,
-                                         int periodCount, int end, boolean showCredit) throws IOException {
+    private boolean locked_renderRateSvg(
+            OutputStream out,
+            int width,
+            int height,
+            boolean hideLegend,
+            boolean hideGrid,
+            boolean hideTitle,
+            boolean showEvents,
+            int periodCount,
+            int end,
+            boolean showCredit)
+            throws IOException {
 
         // go to some trouble to see if we have the data for the combined bw graph
         GraphListener txLsnr = null;
         GraphListener rxLsnr = null;
         for (GraphListener lsnr : getListeners()) {
             String title = lsnr.getRate().getRateStat().getName();
-            if (title.equals("bw.sendRate")) {txLsnr = lsnr;}
-            else if (title.equals("bw.recvRate")) {rxLsnr = lsnr;}
+            if (title.equals("bw.sendRate")) {
+                txLsnr = lsnr;
+            } else if (title.equals("bw.recvRate")) {
+                rxLsnr = lsnr;
+            }
         }
         if (txLsnr == null || rxLsnr == null) {
-            if (_log.shouldWarn()) {_log.warn("Combined graph: txLsnr=" + (txLsnr != null) + " rxLsnr=" + (rxLsnr != null) + " listeners=" + getListeners().size());}
+            if (_log.shouldWarn()) {
+                _log.warn("Combined graph: txLsnr=" + (txLsnr != null) + " rxLsnr=" + (rxLsnr != null) + " listeners="
+                        + getListeners().size());
+            }
             throw new IOException("No rates for combined bandwidth graph");
         }
-        if (_log.shouldDebug()) {_log.debug("Combined graph: tx=" + txLsnr.getRate().getRateStat().getName() + " rx=" + rxLsnr.getRate().getRateStat().getName() + " w=" + width + " h=" + height);}
+        if (_log.shouldDebug()) {
+            _log.debug("Combined graph: tx=" + txLsnr.getRate().getRateStat().getName() + " rx="
+                    + rxLsnr.getRate().getRateStat().getName() + " w=" + width + " h=" + height);
+        }
 
-        if (width > MAX_X) {width = MAX_X;}
-        else if (width <= 0) {width = DEFAULT_X;}
-        if (height > MAX_Y) {height = MAX_Y;}
-        else if (height <= 0) {height = DEFAULT_Y;}
+        if (width > MAX_X) {
+            width = MAX_X;
+        } else if (width <= 0) {
+            width = DEFAULT_X;
+        }
+        if (height > MAX_Y) {
+            height = MAX_Y;
+        } else if (height <= 0) {
+            height = DEFAULT_Y;
+        }
         if (hideTitle) {
-            txLsnr.renderSvg(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                             end, showCredit, rxLsnr, null);
+            txLsnr.renderSvg(
+                    out,
+                    width,
+                    height,
+                    hideLegend,
+                    hideGrid,
+                    hideTitle,
+                    showEvents,
+                    periodCount,
+                    end,
+                    showCredit,
+                    rxLsnr,
+                    null);
         } else {
-            txLsnr.renderSvg(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                             end, showCredit, rxLsnr, "[" + _t("Router") + "] " + _t("Bandwidth usage").replace("usage", "Usage"));
+            txLsnr.renderSvg(
+                    out,
+                    width,
+                    height,
+                    hideLegend,
+                    hideGrid,
+                    hideTitle,
+                    showEvents,
+                    periodCount,
+                    end,
+                    showCredit,
+                    rxLsnr,
+                    "[" + _t("Router") + "] " + _t("Bandwidth usage").replace("usage", "Usage"));
         }
         return true;
     }
@@ -410,24 +554,31 @@ public class GraphGenerator implements Runnable, ClientApp {
      * @since public since 0.9.33, was package private
      */
     public Set<Rate> parseSpecs(String specs) {
-        if (specs == null) {return Collections.emptySet();}
+        if (specs == null) {
+            return Collections.emptySet();
+        }
         StringTokenizer tok = new StringTokenizer(specs, ",");
         Set<Rate> rv = new HashSet<Rate>();
         while (tok.hasMoreTokens()) {
             String spec = tok.nextToken();
             int split = spec.lastIndexOf('.');
-            if ((split <= 0) || (split + 1 >= spec.length())) {continue;}
+            if ((split <= 0) || (split + 1 >= spec.length())) {
+                continue;
+            }
             String name = spec.substring(0, split);
-            String per = spec.substring(split+1);
+            String per = spec.substring(split + 1);
             long period = -1;
             try {
                 period = Long.parseLong(per);
                 RateStat rs = _context.statManager().getRate(name);
                 if (rs != null) {
                     Rate r = rs.getRate(period);
-                    if (r != null) {rv.add(r);}
+                    if (r != null) {
+                        rv.add(r);
+                    }
                 }
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) {
+            }
         }
         return rv;
     }
@@ -447,7 +598,9 @@ public class GraphGenerator implements Runnable, ClientApp {
     private String _t(String s) {
         // The RRD font doesn't have zh chars, at least on my system
         // Works on 1.5.9 except on windows
-        if (IS_WIN && "zh".equals(Messages.getLanguage(_context))) {return s;}
+        if (IS_WIN && "zh".equals(Messages.getLanguage(_context))) {
+            return s;
+        }
         return Messages.getString(s, _context);
     }
 
@@ -458,13 +611,16 @@ public class GraphGenerator implements Runnable, ClientApp {
     private class Shutdown implements Runnable {
         public void run() {
             setDisabled();
-            for (GraphListener lsnr : _listeners) {lsnr.stopListening();} // FIXME could cause exceptions if rendering?
+            for (GraphListener lsnr : _listeners) {
+                lsnr.stopListening();
+            } // FIXME could cause exceptions if rendering?
             _listeners.clear();
             stop();
             // Stops the sync thread pool in NIO; noop if not persistent, we set num threads to zero in run() above
-            try {RrdBackendFactory.getDefaultFactory().close();}
-            catch (IOException ioe) {}
+            try {
+                RrdBackendFactory.getDefaultFactory().close();
+            } catch (IOException ioe) {
+            }
         }
     }
-
 }

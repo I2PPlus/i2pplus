@@ -1,4 +1,5 @@
 package net.i2p.data.i2np;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -45,7 +46,9 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
      */
     @Override
     public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
-        if (_data != null) {throw new IllegalStateException();}
+        if (_data != null) {
+            throw new IllegalStateException();
+        }
         if (type != _type) throw new I2NPMessageException("Message type is incorrect for this message");
         if (dataSize > MAX_SIZE) {
             throw new I2NPMessageException("size mismatch, too big, size=" + dataSize);
@@ -57,8 +60,11 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
     /** calculate the message body's length (not including the header and footer */
     @Override
     protected int calculateWrittenLength() {
-        if (_data == null) {return 0;}
-        else {return _data.length;}
+        if (_data == null) {
+            return 0;
+        } else {
+            return _data.length;
+        }
     }
 
     /** write the message body to the output array, starting at the given index */
@@ -78,7 +84,9 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
      *  @return 0-255
      */
     @Override
-    public int getType() {return _type;}
+    public int getType() {
+        return _type;
+    }
 
     /**
      *  Attempt to convert this message to a known message class.
@@ -111,14 +119,18 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
     }
 
     @Override
-    public int hashCode() {return _type + DataHelper.hashCode(_data);}
+    public int hashCode() {
+        return _type + DataHelper.hashCode(_data);
+    }
 
     @Override
     public boolean equals(Object object) {
         if ((object != null) && (object instanceof UnknownI2NPMessage)) {
-            UnknownI2NPMessage msg = (UnknownI2NPMessage)object;
+            UnknownI2NPMessage msg = (UnknownI2NPMessage) object;
             return _type == msg.getType() && DataHelper.eq(_data, msg._data);
-        } else {return false;}
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -129,5 +141,4 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
         buf.append("; Length: ").append(calculateWrittenLength());
         return buf.toString();
     }
-
 }

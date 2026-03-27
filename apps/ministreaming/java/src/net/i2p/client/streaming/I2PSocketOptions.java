@@ -7,24 +7,31 @@ package net.i2p.client.streaming;
 public interface I2PSocketOptions {
     /** How much data will we accept that hasn't been written out yet. */
     public static final String PROP_BUFFER_SIZE = "i2p.streaming.bufferSize";
+
     /** How long wait for the ACK from a SYN, in milliseconds. */
     public static final String PROP_CONNECT_TIMEOUT = "i2p.streaming.connectTimeout";
+
     /** How long to block on read. */
     public static final String PROP_READ_TIMEOUT = "i2p.streaming.readTimeout";
+
     /** How long to block on write/flush */
     public static final String PROP_WRITE_TIMEOUT = "i2p.streaming.writeTimeout";
+
     /**
      *  @since 0.9.66 promoted from ConnectionOptions
      */
     public static final String PROP_PROFILE = "i2p.streaming.profile";
+
     /**
      *  @since 0.9.66 promoted from ConnectionOptions
      */
     public static final int PROFILE_BULK = 1;
+
     /**
      *  @since 0.9.66 promoted from ConnectionOptions
      */
     public static final int PROFILE_INTERACTIVE = 2;
+
     /**
      * How long we will wait for the ACK from a SYN, in milliseconds.
      *

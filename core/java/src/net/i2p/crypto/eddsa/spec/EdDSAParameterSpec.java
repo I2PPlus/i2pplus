@@ -11,13 +11,14 @@
  */
 package net.i2p.crypto.eddsa.spec;
 
+import net.i2p.crypto.eddsa.math.Curve;
+import net.i2p.crypto.eddsa.math.GroupElement;
+import net.i2p.crypto.eddsa.math.ScalarOps;
+
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
-import net.i2p.crypto.eddsa.math.Curve;
-import net.i2p.crypto.eddsa.math.GroupElement;
-import net.i2p.crypto.eddsa.math.ScalarOps;
 
 /**
  * Parameter specification for an EdDSA algorithm.
@@ -40,13 +41,11 @@ public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable 
      * @param B the parameter B
      * @throws IllegalArgumentException if hash algorithm is unsupported or length is wrong
      */
-    public EdDSAParameterSpec(Curve curve, String hashAlgo,
-            ScalarOps sc, GroupElement B) {
+    public EdDSAParameterSpec(Curve curve, String hashAlgo, ScalarOps sc, GroupElement B) {
         try {
             MessageDigest hash = MessageDigest.getInstance(hashAlgo);
             // EdDSA hash function must produce 2b-bit output
-            if (curve.getField().getb()/4 != hash.getDigestLength())
-                throw new IllegalArgumentException("Hash output is not 2b-bit");
+            if (curve.getField().getb() / 4 != hash.getDigestLength()) throw new IllegalArgumentException("Hash output is not 2b-bit");
         } catch (NoSuchAlgorithmException e) {
             throw new IllegalArgumentException("Unsupported hash algorithm");
         }
@@ -81,9 +80,7 @@ public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable 
      */
     @Override
     public int hashCode() {
-        return hashAlgo.hashCode() ^
-               curve.hashCode() ^
-               B.hashCode();
+        return hashAlgo.hashCode() ^ curve.hashCode() ^ B.hashCode();
     }
 
     /**
@@ -91,13 +88,9 @@ public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable 
      */
     @Override
     public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof EdDSAParameterSpec))
-            return false;
+        if (o == this) return true;
+        if (!(o instanceof EdDSAParameterSpec)) return false;
         EdDSAParameterSpec s = (EdDSAParameterSpec) o;
-        return hashAlgo.equals(s.getHashAlgorithm()) &&
-               curve.equals(s.getCurve()) &&
-               B.equals(s.getB());
+        return hashAlgo.equals(s.getHashAlgorithm()) && curve.equals(s.getCurve()) && B.equals(s.getB());
     }
 }

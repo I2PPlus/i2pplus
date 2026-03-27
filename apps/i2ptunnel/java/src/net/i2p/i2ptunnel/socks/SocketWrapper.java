@@ -13,16 +13,16 @@ package net.i2p.i2ptunnel.socks;
  * outproxies, enabling the tunnel framework to treat outproxy
  * connections as I2P connections for consistent handling.
  */
+import net.i2p.client.streaming.I2PSocket;
+import net.i2p.client.streaming.I2PSocketOptions;
+import net.i2p.data.DataFormatException;
+import net.i2p.data.Destination;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.channels.SelectableChannel;
-import net.i2p.client.streaming.I2PSocket;
-import net.i2p.client.streaming.I2PSocketOptions;
-import net.i2p.data.DataFormatException;
-import net.i2p.data.Destination;
 
 /**
  *  Wrapper around the Socket obtained from the Outproxy, which is a
@@ -35,6 +35,7 @@ class SocketWrapper implements I2PSocket {
     private final Socket socket;
 
     private static final Destination DUMMY_DEST = new Destination();
+
     static {
         try {
             DUMMY_DEST.fromByteArray(new byte[387]);

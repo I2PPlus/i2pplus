@@ -5,11 +5,13 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 import com.thetransactioncompany.jsonrpc2.server.MessageContext;
 import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
-import java.util.HashMap;
-import java.util.Map;
+
 import net.i2p.i2pcontrol.I2PControlVersion;
 import net.i2p.i2pcontrol.security.AuthToken;
 import net.i2p.i2pcontrol.security.SecurityManager;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /*
  *
@@ -53,8 +55,7 @@ public class AuthenticateHandler implements RequestHandler {
     public JSONRPC2Response process(JSONRPC2Request req, MessageContext ctx) {
         if (req.getMethod().equals("Authenticate")) {
             JSONRPC2Error err = _helper.validateParams(requiredArgs, req, JSONRPC2Helper.USE_NO_AUTH);
-            if (err != null)
-                return new JSONRPC2Response(err, req.getID());
+            if (err != null) return new JSONRPC2Response(err, req.getID());
 
             Map<String, Object> inParams = req.getNamedParams();
 
@@ -69,9 +70,7 @@ public class AuthenticateHandler implements RequestHandler {
 
             Object api = inParams.get("API");
             err = validateAPIVersion(api);
-            if (err != null)
-                return new JSONRPC2Response(err, req.getID());
-
+            if (err != null) return new JSONRPC2Response(err, req.getID());
 
             Map<String, Object> outParams = new HashMap<String, Object>(4);
             outParams.put("Token", token.getId());
@@ -102,8 +101,7 @@ public class AuthenticateHandler implements RequestHandler {
                 sb.append(", ").append(i);
             }
             String supportedAPIVersions = sb.toString();
-            return new JSONRPC2Error(JSONRPC2ExtendedError.UNSUPPORTED_API_VERSION.getCode(),
-                                     "The provided API version \'" + apiVersion + "\' is not supported. The supported versions are" + supportedAPIVersions + ".");
+            return new JSONRPC2Error(JSONRPC2ExtendedError.UNSUPPORTED_API_VERSION.getCode(), "The provided API version \'" + apiVersion + "\' is not supported. The supported versions are" + supportedAPIVersions + ".");
         }
         return null;
     }

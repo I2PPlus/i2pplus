@@ -1,4 +1,5 @@
 package net.i2p.router.networkdb.kademlia;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -31,8 +32,10 @@ abstract class PeerSelector {
     }
 
     abstract List<Hash> selectNearest(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets);
-    abstract List<Hash> selectNearestExplicit(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets);
-    abstract List<Hash> selectNearestExplicitThin(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets);
-    abstract List<Hash> selectMostReliablePeers(Hash key, int numClosest, Set<Hash> alreadyChecked, KBucketSet<Hash> kbuckets);
 
+    abstract List<Hash> selectNearestExplicit(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets);
+
+    abstract List<Hash> selectNearestExplicitThin(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets);
+
+    abstract List<Hash> selectMostReliablePeers(Hash key, int numClosest, Set<Hash> alreadyChecked, KBucketSet<Hash> kbuckets);
 }

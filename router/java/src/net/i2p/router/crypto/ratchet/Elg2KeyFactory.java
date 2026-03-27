@@ -1,6 +1,5 @@
 package net.i2p.router.crypto.ratchet;
 
-import java.util.concurrent.LinkedBlockingQueue;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyFactory;
 import net.i2p.crypto.KeyPair;
@@ -9,6 +8,8 @@ import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  *  Threaded factory for pre-calculating Elligator2-encoded X25519 key pairs to prevent Diffie-Hellman computation bottlenecks in critical paths
@@ -30,12 +31,12 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     private volatile boolean _isRunning;
     private long _checkDelay = 10 * 1000;
 
-    private final static String PROP_DH_PRECALC_MIN = "crypto.edh.precalc.min";
-    private final static String PROP_DH_PRECALC_MAX = "crypto.edh.precalc.max";
-    private final static String PROP_DH_PRECALC_DELAY = "crypto.edh.precalc.delay";
-    private final static int DEFAULT_DH_PRECALC_MIN = SystemVersion.isSlow() ? 20 : 50;
-    private final static int DEFAULT_DH_PRECALC_MAX = SystemVersion.isSlow() ? 100 : 200;
-    private final static int DEFAULT_DH_PRECALC_DELAY = 25;
+    private static final String PROP_DH_PRECALC_MIN = "crypto.edh.precalc.min";
+    private static final String PROP_DH_PRECALC_MAX = "crypto.edh.precalc.max";
+    private static final String PROP_DH_PRECALC_DELAY = "crypto.edh.precalc.delay";
+    private static final int DEFAULT_DH_PRECALC_MIN = SystemVersion.isSlow() ? 20 : 50;
+    private static final int DEFAULT_DH_PRECALC_MAX = SystemVersion.isSlow() ? 100 : 200;
+    private static final int DEFAULT_DH_PRECALC_DELAY = 25;
     private final boolean RETURN_UNUSED_TO_XDH;
 
     public Elg2KeyFactory(RouterContext ctx) {
@@ -43,17 +44,19 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         _context = ctx;
         _log = ctx.logManager().getLog(Elg2KeyFactory.class);
         _elg2 = new Elligator2(ctx);
-        ctx.statManager().createRateStat("crypto.EDHGenerateTime", "Time to create x and X", "Encryption", new long[] { RateConstants.ONE_MINUTE });
-        ctx.statManager().createRateStat("crypto.EDHUsed", "Need a DH from the queue", "Encryption", new long[] { RateConstants.ONE_MINUTE });
-        ctx.statManager().createRateStat("crypto.EDHReused", "Unused DH requeued", "Encryption", new long[] { RateConstants.ONE_MINUTE });
-        ctx.statManager().createRateStat("crypto.EDHEmpty", "DH queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE });
+        ctx.statManager().createRateStat("crypto.EDHGenerateTime", "Time to create x and X", "Encryption", new long[] {RateConstants.ONE_MINUTE});
+        ctx.statManager().createRateStat("crypto.EDHUsed", "Need a DH from the queue", "Encryption", new long[] {RateConstants.ONE_MINUTE});
+        ctx.statManager().createRateStat("crypto.EDHReused", "Unused DH requeued", "Encryption", new long[] {RateConstants.ONE_MINUTE});
+        ctx.statManager().createRateStat("crypto.EDHEmpty", "DH queue empty", "Encryption", new long[] {RateConstants.ONE_MINUTE});
 
         // add to the defaults for every 128MB of RAM, up to 512MB
         long maxMemory = SystemVersion.getMaxMemory();
-        int factor = (int) Math.max(1L, Math.min(4L, 1 + (maxMemory / (128*1024*1024L))));
+        int factor = (int) Math.max(1L, Math.min(4L, 1 + (maxMemory / (128 * 1024 * 1024L))));
         boolean slow = SystemVersion.isSlow();
         RETURN_UNUSED_TO_XDH = slow;
-        if (slow) {factor *= 2;}
+        if (slow) {
+            factor *= 2;
+        }
         int defaultMin = DEFAULT_DH_PRECALC_MIN * factor;
         int defaultMax = DEFAULT_DH_PRECALC_MAX * factor;
         _minSize = ctx.getProperty(PROP_DH_PRECALC_MIN, defaultMin);
@@ -64,7 +67,9 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
             _log.debug("EDH Precalc (minimum: " + _minSize + " max: " + _maxSize + ", delay: " + _calcDelay + ")");
         }
         _keys = new LinkedBlockingQueue<Elg2KeyPair>(_maxSize);
-        if (!SystemVersion.isWindows()) {setPriority(Thread.NORM_PRIORITY - 1);}
+        if (!SystemVersion.isWindows()) {
+            setPriority(Thread.NORM_PRIORITY - 1);
+        }
     }
 
     /**
@@ -80,9 +85,12 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
 
     @Override
     public void run() {
-        try {run2();}
-        catch (IllegalStateException ise) {
-            if (_isRunning) {throw ise;}
+        try {
+            run2();
+        } catch (IllegalStateException ise) {
+            if (_isRunning) {
+                throw ise;
+            }
             // else ignore, thread can be slow to shutdown on Android,
             // PRNG gets stopped first and throws ISE
         }
@@ -93,24 +101,35 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         while (_isRunning) {
             int startSize = getSize();
             // Adjust delay
-            if (startSize <= (_minSize * 2 / 3) && _checkDelay > 1000) {_checkDelay -= 1000;}
-            else if (startSize > (_minSize * 3 / 2) && _checkDelay < 60*1000) {_checkDelay += 1000;}
+            if (startSize <= (_minSize * 2 / 3) && _checkDelay > 1000) {
+                _checkDelay -= 1000;
+            } else if (startSize > (_minSize * 3 / 2) && _checkDelay < 60 * 1000) {
+                _checkDelay += 1000;
+            }
             if (startSize < _minSize) {
                 // fill all the way up, do the check here so we don't throw away one when full in addValues()
                 while (getSize() < _maxSize && _isRunning) {
                     long curStart = System.currentTimeMillis();
-                    if (!addKeys(precalc())) {break;}
+                    if (!addKeys(precalc())) {
+                        break;
+                    }
                     long curCalc = System.currentTimeMillis() - curStart;
                     // for some relief...
                     if (!interrupted()) {
-                        try {Thread.sleep(Math.min(200, Math.max(10, _calcDelay + (curCalc * 3))));}
-                        catch (InterruptedException ie) {}
+                        try {
+                            Thread.sleep(Math.min(200, Math.max(10, _calcDelay + (curCalc * 3))));
+                        } catch (InterruptedException ie) {
+                        }
                     }
                 }
             }
-            if (!_isRunning) {break;}
-            try {Thread.sleep(_checkDelay);}
-            catch (InterruptedException ie) {} // no-op
+            if (!_isRunning) {
+                break;
+            }
+            try {
+                Thread.sleep(_checkDelay);
+            } catch (InterruptedException ie) {
+            } // no-op
         }
     }
 
@@ -158,8 +177,11 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     public void returnUnused(Elg2KeyPair kp) {}
 
     /** @return true if successful, false if full */
-    private final boolean addKeys(Elg2KeyPair kp) {return _keys.offer(kp);}
+    private final boolean addKeys(Elg2KeyPair kp) {
+        return _keys.offer(kp);
+    }
 
-    private final int getSize() {return _keys.size();}
-
+    private final int getSize() {
+        return _keys.size();
+    }
 }

@@ -1,7 +1,8 @@
 package net.i2p.i2ptunnel.access;
 
-import java.util.Map;
 import net.i2p.data.Hash;
+
+import java.util.Map;
 
 /**
  * Filter definition element for a single explicitly defined remote destination.
@@ -24,8 +25,7 @@ class ExplicitFilterDefinitionElement extends FilterDefinitionElement {
 
     @Override
     public void update(Map<Hash, DestTracker> map) {
-        if (map.containsKey(hash))
-            return;
+        if (map.containsKey(hash)) return;
         map.put(hash, new DestTracker(hash, threshold));
     }
 }

@@ -1,5 +1,10 @@
 package net.i2p.router;
 
+import net.i2p.data.Hash;
+import net.i2p.data.router.RouterAddress;
+import net.i2p.data.router.RouterInfo;
+import net.i2p.util.Log;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,14 +15,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
-
-import net.i2p.data.Hash;
-import net.i2p.data.router.RouterAddress;
-import net.i2p.data.router.RouterInfo;
-import net.i2p.util.Log;
-import java.util.Locale;
 
 /**
  * Dedicated logger for all ban events.
@@ -64,18 +64,23 @@ public class BanLogger {
      * Initialize the logger. Safe to call multiple times.
      */
     public final void initialize(RouterContext context) {
-        if (context == null) {return;}
-        if (_initialized) {return;}
+        if (context == null) {
+            return;
+        }
+        if (_initialized) {
+            return;
+        }
         synchronized (_writeLock) {
-            if (_initialized) {return;}
+            if (_initialized) {
+                return;
+            }
             _context = context;
             _log = context.logManager().getLog(BanLogger.class);
             File dataDir = context.getRouterDir();
             File logDir = new File(dataDir, LOG_DIR);
             if (!logDir.exists()) {
                 if (!logDir.mkdirs()) {
-                    if (_log.shouldLog(Log.WARN))
-                        _log.warn("Failed to create ban log directory: " + logDir);
+                    if (_log.shouldLog(Log.WARN)) _log.warn("Failed to create ban log directory: " + logDir);
                     return;
                 }
             }
@@ -128,20 +133,22 @@ public class BanLogger {
      * Called during initialization before opening a new writer.
      */
     private void archiveExisting() {
-        if (!_logFile.exists()) {return;}
+        if (!_logFile.exists()) {
+            return;
+        }
         long mtime = _logFile.lastModified();
-        if (mtime <= 0) {mtime = System.currentTimeMillis();}
+        if (mtime <= 0) {
+            mtime = System.currentTimeMillis();
+        }
         String timestamp = _dateFormat.format(Date.from(Instant.ofEpochMilli(mtime)));
         String safeTimestamp = timestamp.replace(':', '-').replace('T', '_');
         String archiveName = ARCHIVE_PREFIX + safeTimestamp + ".txt";
         File archiveFile = new File(_logFile.getParentFile(), archiveName);
         if (_logFile.renameTo(archiveFile)) {
             cleanupOldArchives();
-            if (_log != null && _log.shouldLog(Log.INFO))
-                _log.info("Archived previous ban log: " + archiveFile.getName());
+            if (_log != null && _log.shouldLog(Log.INFO)) _log.info("Archived previous ban log: " + archiveFile.getName());
         } else {
-            if (_log != null && _log.shouldLog(Log.WARN))
-                _log.warn("Failed to archive previous ban log");
+            if (_log != null && _log.shouldLog(Log.WARN)) _log.warn("Failed to archive previous ban log");
         }
     }
 
@@ -150,8 +157,12 @@ public class BanLogger {
      * Uses the router start time to timestamp the archive.
      */
     public void archiveIfNeeded() {
-        if (!_logFile.exists()) {return;}
-        if (_banCount <= 0) {return;}
+        if (!_logFile.exists()) {
+            return;
+        }
+        if (_banCount <= 0) {
+            return;
+        }
         String timestamp = _dateFormat.format(Date.from(Instant.ofEpochMilli(_startTime)));
         String safeTimestamp = timestamp.replace(':', '-').replace('T', '_');
         String archiveName = ARCHIVE_PREFIX + safeTimestamp + ".txt";
@@ -159,11 +170,9 @@ public class BanLogger {
         if (_logFile.renameTo(archiveFile)) {
             _banCount = 0;
             cleanupOldArchives();
-            if (_log != null && _log.shouldLog(Log.INFO))
-                _log.info("Archived ban log: " + archiveFile.getName());
+            if (_log != null && _log.shouldLog(Log.INFO)) _log.info("Archived ban log: " + archiveFile.getName());
         } else {
-            if (_log != null && _log.shouldLog(Log.WARN))
-                _log.warn("Failed to archive ban log");
+            if (_log != null && _log.shouldLog(Log.WARN)) _log.warn("Failed to archive ban log");
         }
     }
 
@@ -171,33 +180,39 @@ public class BanLogger {
      * Clean up old archives, keeping only the configured maximum.
      */
     private void cleanupOldArchives() {
-        if (_context == null || _logFile == null) {return;}
+        if (_context == null || _logFile == null) {
+            return;
+        }
         File logDir = _logFile.getParentFile();
-        if (logDir == null) {return;}
+        if (logDir == null) {
+            return;
+        }
 
         int maxArchives = DEFAULT_MAX_ARCHIVES;
         try {
             String prop = _context.getProperty(PROP_MAX_ARCHIVES);
             if (prop != null) {
                 maxArchives = Integer.parseInt(prop);
-                if (maxArchives < 0) {maxArchives = DEFAULT_MAX_ARCHIVES;}
+                if (maxArchives < 0) {
+                    maxArchives = DEFAULT_MAX_ARCHIVES;
+                }
             }
         } catch (NumberFormatException e) {
             maxArchives = DEFAULT_MAX_ARCHIVES;
         }
 
         File[] archives = logDir.listFiles((dir, name) -> name.startsWith(ARCHIVE_PREFIX) && name.endsWith(".txt"));
-        if (archives == null || archives.length <= maxArchives) {return;}
+        if (archives == null || archives.length <= maxArchives) {
+            return;
+        }
 
         Arrays.sort(archives, (a, b) -> Long.compare(b.lastModified(), a.lastModified()));
 
         for (int i = maxArchives; i < archives.length; i++) {
             if (!archives[i].delete()) {
-                if (_log != null && _log.shouldLog(Log.WARN))
-                    _log.warn("Failed to delete old ban log archive: " + archives[i].getName());
+                if (_log != null && _log.shouldLog(Log.WARN)) _log.warn("Failed to delete old ban log archive: " + archives[i].getName());
             } else {
-                if (_log != null && _log.shouldLog(Log.DEBUG))
-                    _log.debug("Deleted old ban log archive: " + archives[i].getName());
+                if (_log != null && _log.shouldLog(Log.DEBUG)) _log.debug("Deleted old ban log archive: " + archives[i].getName());
             }
         }
     }
@@ -206,7 +221,9 @@ public class BanLogger {
      * Log the router start time.
      */
     private void logStartTime() {
-        if (_writer == null) {return;}
+        if (_writer == null) {
+            return;
+        }
         _writer.println();
         _writer.println("############################################################");
         _writer.println("# Router started: " + _dateFormat.format(Date.from(Instant.ofEpochMilli(_startTime))));
@@ -230,8 +247,7 @@ public class BanLogger {
             try {
                 _writer = new PrintWriter(new FileWriter(_logFile, true), true);
             } catch (IOException e) {
-                if (_log != null && _log.shouldLog(Log.WARN))
-                    _log.warn("Failed to open ban log file: " + _logFile, e);
+                if (_log != null && _log.shouldLog(Log.WARN)) _log.warn("Failed to open ban log file: " + _logFile, e);
             }
         }
     }
@@ -309,7 +325,9 @@ public class BanLogger {
      * Get IP address from banlist for the given hash.
      */
     private String getIPFromContext(Hash hash, RouterContext context) {
-        if (hash == null) {return "UNKNOWN";}
+        if (hash == null) {
+            return "UNKNOWN";
+        }
         try {
             // Try to look up RouterInfo from netdb
             RouterInfo ri = context.netDb().lookupRouterInfoLocally(hash);
@@ -329,7 +347,9 @@ public class BanLogger {
      * Extract IP address and port from RouterInfo.
      */
     private String getIPFromRouterInfo(RouterInfo router) {
-        if (router == null) { return ""; }
+        if (router == null) {
+            return "";
+        }
         try {
             for (RouterAddress addr : router.getAddresses()) {
                 if (addr != null && addr.getHost() != null) {
@@ -403,8 +423,7 @@ public class BanLogger {
         }
 
         String timestamp = _dateFormat.format(Date.from(Instant.now()));
-        String entry = String.format("%s | %s | %s | %s | %s",
-                                     timestamp, hashStr, ip, reason, durationStr);
+        String entry = String.format("%s | %s | %s | %s | %s", timestamp, hashStr, ip, reason, durationStr);
 
         synchronized (_writeLock) {
             if (_writer != null) {
@@ -425,8 +444,7 @@ public class BanLogger {
             }
         }
 
-        if (_log != null && _log.shouldLog(Log.DEBUG))
-            _log.debug("Ban logged: " + entry);
+        if (_log != null && _log.shouldLog(Log.DEBUG)) _log.debug("Ban logged: " + entry);
     }
 
     /**

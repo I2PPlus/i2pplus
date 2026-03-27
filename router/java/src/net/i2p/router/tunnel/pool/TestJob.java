@@ -1,11 +1,7 @@
 package net.i2p.router.tunnel.pool;
 
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.ConcurrentHashMap;
-import net.i2p.data.Hash;
 import net.i2p.crypto.SessionKeyManager;
+import net.i2p.data.Hash;
 import net.i2p.data.SessionTag;
 import net.i2p.data.i2np.DeliveryStatusMessage;
 import net.i2p.data.i2np.I2NPMessage;
@@ -28,6 +24,11 @@ import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Repeatedly tests a single tunnel for its lifetime to ensure it remains functional.
  * Sends a garlic-encrypted DeliveryStatusMessage through the tunnel and validates the reply.
@@ -47,8 +48,8 @@ public class TestJob extends JobImpl {
     private RatchetSessionTag _ratchetEncryptTag;
     private static final AtomicInteger __id = new AtomicInteger();
     private int _id;
-    private static final int MIN_TEST_PERIOD = 30*1000;
-    private static final int MAX_TEST_PERIOD = 60*1000;
+    private static final int MIN_TEST_PERIOD = 30 * 1000;
+    private static final int MAX_TEST_PERIOD = 60 * 1000;
 
     /**
      * Maximum number of tunnel tests that can run concurrently.
@@ -70,6 +71,7 @@ public class TestJob extends JobImpl {
      * Prevents job queue saturation from too many waiting tunnel tests.
      */
     private static final int MAX_QUEUED_TESTS = SystemVersion.isSlow() ? 16 : 32;
+
     public static int maxQueuedTests = MAX_QUEUED_TESTS;
 
     /**
@@ -138,8 +140,7 @@ public class TestJob extends JobImpl {
             if (nickname != null) {
                 return "client-" + nickname + "-" + (pool.getSettings().isInbound() ? "inbound" : "outbound");
             } else {
-                return "client-" + pool.getSettings().getDestination().toBase32().substring(0,8) +
-                       "-" + (pool.getSettings().isInbound() ? "inbound" : "outbound");
+                return "client-" + pool.getSettings().getDestination().toBase32().substring(0, 8) + "-" + (pool.getSettings().isInbound() ? "inbound" : "outbound");
             }
         }
     }
@@ -174,8 +175,7 @@ public class TestJob extends JobImpl {
         TunnelPool pool = cfg.getTunnelPool();
         if (pool != null) {
             String tunnelNickname = pool.getSettings().getDestinationNickname();
-            if (tunnelNickname != null && (tunnelNickname.equals("I2Ping") ||
-                (tunnelNickname.startsWith("Ping") && tunnelNickname.contains("[")))) {
+            if (tunnelNickname != null && (tunnelNickname.equals("I2Ping") || (tunnelNickname.startsWith("Ping") && tunnelNickname.contains("[")))) {
                 if (log.shouldDebug()) {
                     log.debug("Skipping test scheduling for ping tunnel: " + tunnelNickname);
                 }
@@ -309,9 +309,7 @@ public class TestJob extends JobImpl {
      * @param instanceLog instance logger (null for static calls)
      * @return true if limits allow scheduling
      */
-    private static boolean checkQueueLimits(RouterContext ctx, PooledTunnelCreatorConfig cfg,
-                                            TunnelPool pool, int existingTests, boolean isRetest,
-                                            Log log, String logPrefix, Log instanceLog) {
+    private static boolean checkQueueLimits(RouterContext ctx, PooledTunnelCreatorConfig cfg, TunnelPool pool, int existingTests, boolean isRetest, Log log, String logPrefix, Log instanceLog) {
         int readyCount = ctx.jobQueue().getReadyCount();
         long maxLag = ctx.jobQueue().getMaxLag();
         int activeRunners = ctx.jobQueue().getActiveRunnerCount();
@@ -323,10 +321,7 @@ public class TestJob extends JobImpl {
         // Lag check
         if (readyCount > 50 || maxLag > 10 || currentTestJobs >= maxTestJobs) {
             if ((instanceLog != null ? instanceLog : log).shouldInfo()) {
-                (instanceLog != null ? instanceLog : log).info(
-                    (readyCount > 50 || maxLag > 10 ? "Job queue lagging" : "Too many test jobs") +
-                    " (" + readyCount + " ready, Max lag: " + maxLag + "ms, Test jobs: " +
-                    currentTestJobs + "/" + maxTestJobs + ") -> " + logPrefix + cfg);
+                (instanceLog != null ? instanceLog : log).info((readyCount > 50 || maxLag > 10 ? "Job queue lagging" : "Too many test jobs") + " (" + readyCount + " ready, Max lag: " + maxLag + "ms, Test jobs: " + currentTestJobs + "/" + maxTestJobs + ") -> " + logPrefix + cfg);
             }
             return false;
         }
@@ -334,8 +329,7 @@ public class TestJob extends JobImpl {
         // Hard limit check
         if (currentTestJobs >= hardLimit) {
             if ((instanceLog != null ? instanceLog : log).shouldInfo()) {
-                (instanceLog != null ? instanceLog : log).info(
-                    "Hard limit reached (" + currentTestJobs + " >= " + hardLimit + ") -> " + logPrefix + cfg);
+                (instanceLog != null ? instanceLog : log).info("Hard limit reached (" + currentTestJobs + " >= " + hardLimit + ") -> " + logPrefix + cfg);
             }
             return false;
         }
@@ -565,8 +559,7 @@ public class TestJob extends JobImpl {
 
         if (totalCount >= HARD_TEST_JOB_LIMIT) {
             if (_log.shouldInfo()) {
-                _log.info("Hard limit reached (" + totalCount + " >= " + HARD_TEST_JOB_LIMIT +
-                          ") -> Cancelling test of " + _cfg);
+                _log.info("Hard limit reached (" + totalCount + " >= " + HARD_TEST_JOB_LIMIT + ") -> Cancelling test of " + _cfg);
             }
             ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
             ctx.statManager().addRateData("jobQueue.testJobHardLimit", 1);
@@ -612,8 +605,7 @@ public class TestJob extends JobImpl {
             current = CONCURRENT_TESTS.get();
             if (current >= maxTests) {
                 if (_log.shouldInfo()) {
-                    _log.info("Max " + maxTests + " concurrent tunnel tests reached \n* Rescheduling test for " + _cfg +
-                              " (Queued: " + totalCount + ")");
+                    _log.info("Max " + maxTests + " concurrent tunnel tests reached \n* Rescheduling test for " + _cfg + " (Queued: " + totalCount + ")");
                 }
                 ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
                 if (!scheduleRetest(false)) {
@@ -633,26 +625,17 @@ public class TestJob extends JobImpl {
 
         if (_cfg.isInbound()) {
             _replyTunnel = _cfg;
-            _outTunnel = isExploratory ?
-                ctx.tunnelManager().selectOutboundTunnel() :
-                ctx.tunnelManager().selectOutboundTunnel(_pool.getSettings().getDestination());
+            _outTunnel = isExploratory ? ctx.tunnelManager().selectOutboundTunnel() : ctx.tunnelManager().selectOutboundTunnel(_pool.getSettings().getDestination());
         } else {
-            _replyTunnel = isExploratory ?
-                ctx.tunnelManager().selectInboundTunnel() :
-                ctx.tunnelManager().selectInboundTunnel(_pool.getSettings().getDestination());
+            _replyTunnel = isExploratory ? ctx.tunnelManager().selectInboundTunnel() : ctx.tunnelManager().selectInboundTunnel(_pool.getSettings().getDestination());
             _outTunnel = _cfg;
         }
 
-        _otherTunnel = (_outTunnel instanceof PooledTunnelCreatorConfig)
-            ? (PooledTunnelCreatorConfig) _outTunnel
-            : (_replyTunnel instanceof PooledTunnelCreatorConfig)
-                ? (PooledTunnelCreatorConfig) _replyTunnel
-                : null;
+        _otherTunnel = (_outTunnel instanceof PooledTunnelCreatorConfig) ? (PooledTunnelCreatorConfig) _outTunnel : (_replyTunnel instanceof PooledTunnelCreatorConfig) ? (PooledTunnelCreatorConfig) _replyTunnel : null;
 
         // Early viability guard
         if (_replyTunnel == null || _outTunnel == null) {
-            if (_log.shouldWarn())
-                _log.warn("Insufficient tunnels to test " + _cfg + " with: " + _replyTunnel + " / " + _outTunnel);
+            if (_log.shouldWarn()) _log.warn("Insufficient tunnels to test " + _cfg + " with: " + _replyTunnel + " / " + _outTunnel);
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
             CONCURRENT_TESTS.decrementAndGet();
             cleanupTunnelTracking();
@@ -700,8 +683,7 @@ public class TestJob extends JobImpl {
         int pending = PENDING_REPLIES.get();
         if (pending >= MAX_PENDING_REPLIES) {
             if (_log.shouldInfo()) {
-                _log.info("Max pending replies reached (" + pending + "/" + MAX_PENDING_REPLIES +
-                          ") -> Deferring test for " + _cfg);
+                _log.info("Max pending replies reached (" + pending + "/" + MAX_PENDING_REPLIES + ") -> Deferring test for " + _cfg);
             }
             return false;
         }
@@ -745,26 +727,19 @@ public class TestJob extends JobImpl {
         }
 
         if (_log.shouldDebug()) {
-            _log.debug("Sending " + (useEncryption ? "" : "unencrypted ") + "garlic test [#" + _id + "] \n* " +
-                       _outTunnel + " / " + _replyTunnel);
+            _log.debug("Sending " + (useEncryption ? "" : "unencrypted ") + "garlic test [#" + _id + "] \n* " + _outTunnel + " / " + _replyTunnel);
         }
 
         // Readiness check: ensure outbound gateway exists before dispatch
         if (_outTunnel != null && _replyTunnel != null) {
             if (!ctx.tunnelDispatcher().hasOutboundGateway(_outTunnel.getSendTunnelId(0))) {
                 if (_log.shouldInfo()) {
-                    _log.info("Outbound gateway for tunnel " + _outTunnel.getSendTunnelId(0) +
-                              " not yet registered \n* Deferring test for " + _cfg);
+                    _log.info("Outbound gateway for tunnel " + _outTunnel.getSendTunnelId(0) + " not yet registered \n* Deferring test for " + _cfg);
                 }
                 PENDING_REPLIES.decrementAndGet();
                 return false; // Let caller handle cleanup & rescheduling
             }
-            ctx.tunnelDispatcher().dispatchOutbound(
-                m,
-                _outTunnel.getSendTunnelId(0),
-                _replyTunnel.getReceiveTunnelId(0),
-                _replyTunnel.getPeer(0)
-            );
+            ctx.tunnelDispatcher().dispatchOutbound(m, _outTunnel.getSendTunnelId(0), _replyTunnel.getReceiveTunnelId(0), _replyTunnel.getPeer(0));
             return true;
         } else {
             if (_log.shouldWarn()) {
@@ -800,8 +775,7 @@ public class TestJob extends JobImpl {
         _cfg.testJobSuccessful(ms);
 
         if (_log.shouldDebug()) {
-            _log.debug("Tunnel Test [#" + _id + "] succeeded in " + ms + "ms → " + _cfg + " (Success rate: " +
-                       String.format("%.1f%%", getSuccessRate() * 100) + ")");
+            _log.debug("Tunnel Test [#" + _id + "] succeeded in " + ms + "ms → " + _cfg + " (Success rate: " + String.format("%.1f%%", getSuccessRate() * 100) + ")");
         }
 
         // Clean up session tags
@@ -823,27 +797,27 @@ public class TestJob extends JobImpl {
 
         if (maxLag < 500 && avgLag < 2) {
             // Super low lag - run more frequently
-            min = MIN_TEST_DELAY / 2;      // 15s
-            max = BASE_TEST_DELAY;          // 90s
+            min = MIN_TEST_DELAY / 2; // 15s
+            max = BASE_TEST_DELAY; // 90s
         } else if (maxLag < 1000 && avgLag < 5) {
             // Very low lag
-            min = MIN_TEST_DELAY * 2 / 3;   // 20s
-            max = BASE_TEST_DELAY;          // 90s
+            min = MIN_TEST_DELAY * 2 / 3; // 20s
+            max = BASE_TEST_DELAY; // 90s
         } else if (maxLag < 1500 && avgLag < 10) {
             // Low lag - normal operation
-            min = MIN_TEST_DELAY;            // 30s
-            max = MAX_TEST_DELAY / 2;        // 60s
+            min = MIN_TEST_DELAY; // 30s
+            max = MAX_TEST_DELAY / 2; // 60s
         } else if (maxLag < 2000 || avgLag > 20) {
             // Moderate lag - back off
-            min = BASE_TEST_DELAY;            // 90s
-            max = MAX_TEST_DELAY;             // 120s
+            min = BASE_TEST_DELAY; // 90s
+            max = MAX_TEST_DELAY; // 120s
         } else {
             // Severe lag - significantly back off
-            min = BASE_TEST_DELAY * 3 / 2;    // 135s
-            max = MAX_TEST_DELAY * 2;         // 240s
+            min = BASE_TEST_DELAY * 3 / 2; // 135s
+            max = MAX_TEST_DELAY * 2; // 240s
         }
 
-        return new int[] { min, max };
+        return new int[] {min, max};
     }
 
     private int getDelay() {
@@ -964,9 +938,7 @@ public class TestJob extends JobImpl {
         }
 
         boolean isExploratory = _pool.getSettings().isExploratory();
-        getContext().statManager().addRateData(
-            isExploratory ? "tunnel.testExploratoryFailedTime" : "tunnel.testFailedTime",
-            timeToFail);
+        getContext().statManager().addRateData(isExploratory ? "tunnel.testExploratoryFailedTime" : "tunnel.testFailedTime", timeToFail);
 
         // Only fail the tunnel under test — do NOT blame _otherTunnel
         // Increment the tunnel's global failure count and check if we should continue
@@ -984,9 +956,7 @@ public class TestJob extends JobImpl {
                 decrementTotalJobs(); // Clean up if couldn't reschedule
             }
         } else {
-            getContext().statManager().addRateData(
-                isExploratory ? "tunnel.testExploratoryFailedCompletelyTime" : "tunnel.testFailedCompletelyTime",
-                timeToFail);
+            getContext().statManager().addRateData(isExploratory ? "tunnel.testExploratoryFailedCompletelyTime" : "tunnel.testFailedCompletelyTime", timeToFail);
 
             // Immediately remove tunnel from pool after 3 consecutive failures
             // This ensures failed tunnels don't remain in the pool consuming resources
@@ -1034,8 +1004,7 @@ public class TestJob extends JobImpl {
         if (_pool == null || !_pool.isAlive()) return false;
 
         // Use consolidated queue limit checks
-        if (!checkQueueLimits(getContext(), _cfg, _pool, 1, true, _log,
-                              "Skipping retest for ", _log)) {
+        if (!checkQueueLimits(getContext(), _cfg, _pool, 1, true, _log, "Skipping retest for ", _log)) {
             return false;
         }
 
@@ -1061,15 +1030,19 @@ public class TestJob extends JobImpl {
             _expiration = expiration;
         }
 
-        @Override public boolean continueMatching() {
+        @Override
+        public boolean continueMatching() {
             return !_found && getContext().clock().now() < _expiration;
         }
 
-        @Override public long getExpiration() { return _expiration; }
+        @Override
+        public long getExpiration() {
+            return _expiration;
+        }
 
-        @Override public boolean isMatch(I2NPMessage m) {
-            return m.getType() == DeliveryStatusMessage.MESSAGE_TYPE &&
-                   ((DeliveryStatusMessage) m).getMessageId() == _id;
+        @Override
+        public boolean isMatch(I2NPMessage m) {
+            return m.getType() == DeliveryStatusMessage.MESSAGE_TYPE && ((DeliveryStatusMessage) m).getMessageId() == _id;
         }
     }
 
@@ -1077,15 +1050,22 @@ public class TestJob extends JobImpl {
         private long _successTime;
         private OutNetMessage _sentMessage;
 
-        public OnTestReply() { super(TestJob.this.getContext()); }
+        public OnTestReply() {
+            super(TestJob.this.getContext());
+        }
 
-        @Override public String getName() { return "Verify Tunnel Test"; }
-        public void setSentMessage(OutNetMessage m) { _sentMessage = m; }
+        @Override
+        public String getName() {
+            return "Verify Tunnel Test";
+        }
+
+        public void setSentMessage(OutNetMessage m) {
+            _sentMessage = m;
+        }
 
         @Override
         public void runJob() {
-            if (_sentMessage != null)
-                getContext().messageRegistry().unregisterPending(_sentMessage);
+            if (_sentMessage != null) getContext().messageRegistry().unregisterPending(_sentMessage);
             if (_successTime < getTestPeriod()) {
                 testSuccessful((int) _successTime);
             } else {
@@ -1113,7 +1093,10 @@ public class TestJob extends JobImpl {
             _started = now;
         }
 
-        @Override public String getName() { return "Timeout Tunnel Test"; }
+        @Override
+        public String getName() {
+            return "Timeout Tunnel Test";
+        }
 
         @Override
         public void runJob() {
@@ -1133,9 +1116,7 @@ public class TestJob extends JobImpl {
     private SessionKeyManager getSessionKeyManager() {
         final RouterContext ctx = getContext();
         if (_cfg.isInbound() && !_pool.getSettings().isExploratory()) {
-            return ctx.clientManager() != null ?
-                ctx.clientManager().getClientSessionKeyManager(_pool.getSettings().getDestination()) :
-                null;
+            return ctx.clientManager() != null ? ctx.clientManager().getClientSessionKeyManager(_pool.getSettings().getDestination()) : null;
         } else {
             return ctx.sessionKeyManager();
         }
@@ -1160,5 +1141,4 @@ public class TestJob extends JobImpl {
             decrementTotalJobs();
         }
     }
-
 }

@@ -19,7 +19,6 @@ package net.i2p.i2ptunnel.socks;
  * differences between protocol versions and ensuring proper server
  * instantiation based on client capabilities.
  */
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -35,14 +34,11 @@ import net.i2p.socks.SOCKSException;
  */
 class SOCKSServerFactory {
 
-    private final static String ERR_REQUEST_DENIED =
-        "HTTP/1.1 403 Access Denied - This is a SOCKS proxy, not a HTTP proxy\r\n" +
-        "Content-Type: text/html; charset=iso-8859-1\r\n" +
-        "Cache-Control: no-cache\r\n" +
-        "\r\n" +
-        "<html><body><H1>I2P SOCKS PROXY ERROR: REQUEST DENIED</H1>" +
-        "Your browser is misconfigured. This is a SOCKS proxy, not a HTTP proxy" +
-        "</body></html>";
+    private static final String ERR_REQUEST_DENIED =
+            "HTTP/1.1 403 Access Denied - This is a SOCKS proxy, not a HTTP proxy\r\n"
+                    + "Content-Type: text/html; charset=iso-8859-1\r\n" + "Cache-Control: no-cache\r\n" + "\r\n"
+                    + "<html><body><H1>I2P SOCKS PROXY ERROR: REQUEST DENIED</H1>"
+                    + "Your browser is misconfigured. This is a SOCKS proxy, not a HTTP proxy" + "</body></html>";
 
     /**
      * Create a new SOCKS server, using the provided socket (that must
@@ -62,16 +58,16 @@ class SOCKSServerFactory {
 
             switch (socksVer) {
                 case 0x04:
-                // SOCKS version 4/4a
-                    if (Boolean.parseBoolean(props.getProperty(I2PTunnelHTTPClientBase.PROP_AUTH)) &&
-                        props.containsKey(I2PTunnelHTTPClientBase.PROP_USER) &&
-                        props.containsKey(I2PTunnelHTTPClientBase.PROP_PW)) {
+                    // SOCKS version 4/4a
+                    if (Boolean.parseBoolean(props.getProperty(I2PTunnelHTTPClientBase.PROP_AUTH))
+                            && props.containsKey(I2PTunnelHTTPClientBase.PROP_USER)
+                            && props.containsKey(I2PTunnelHTTPClientBase.PROP_PW)) {
                         throw new SOCKSException("SOCKS 4/4a not supported when authorization is required");
                     }
                     serv = new SOCKS4aServer(ctx, s, props);
                     break;
                 case 0x05:
-                // SOCKS version 5
+                    // SOCKS version 5
                     serv = new SOCKS5Server(ctx, s, props);
                     break;
                 case 'C':
@@ -82,10 +78,11 @@ class SOCKSServerFactory {
                     out.write(DataHelper.getASCII(ERR_REQUEST_DENIED));
                     throw new SOCKSException("HTTP request to socks");
                 default:
-                    throw new SOCKSException("SOCKS protocol version not supported (" + Integer.toHexString(socksVer) + ")");
+                    throw new SOCKSException(
+                            "SOCKS protocol version not supported (" + Integer.toHexString(socksVer) + ")");
             }
         } catch (IOException e) {
-            //_log.debug("error reading SOCKS protocol version");
+            // _log.debug("error reading SOCKS protocol version");
             throw new SOCKSException("Connection error", e);
         }
 

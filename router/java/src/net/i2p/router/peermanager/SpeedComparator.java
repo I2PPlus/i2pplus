@@ -1,8 +1,9 @@
 package net.i2p.router.peermanager;
 
+import net.i2p.data.DataHelper;
+
 import java.io.Serializable;
 import java.util.Comparator;
-import net.i2p.data.DataHelper;
 
 /**
  * Order profiles by their speed (lowest first).
@@ -16,15 +17,13 @@ class SpeedComparator implements Comparator<PeerProfile>, Serializable {
         double lval = left.getSpeedValue();
         double rval = right.getSpeedValue();
         int rv = Double.compare(lval, rval);
-        if (rv != 0)
-            return rv;
+        if (rv != 0) return rv;
 
         // we don't wan't to return 0 so profiles don't vanish in the TreeSet
         lval = left.getCapacityValue();
         rval = right.getCapacityValue();
         rv = Double.compare(lval, rval);
-        if (rv != 0)
-            return rv;
+        if (rv != 0) return rv;
         return DataHelper.compareTo(right.getPeer().getData(), left.getPeer().getData());
     }
 }

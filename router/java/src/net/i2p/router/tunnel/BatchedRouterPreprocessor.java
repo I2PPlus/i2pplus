@@ -1,9 +1,10 @@
 package net.i2p.router.tunnel;
 
-import java.util.List;
-import java.util.Properties;
 import net.i2p.router.RouterContext;
 import net.i2p.util.SystemVersion;
+
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Honor the 'batchFrequency' tunnel pool setting or the 'router.batchFrequency'
@@ -21,16 +22,20 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
      * Only applies to OBGWs.
      */
     public static final String PROP_BATCH_FREQUENCY = "batchFrequency";
+
     /** This goes in router advanced config */
     public static final String PROP_ROUTER_BATCH_FREQUENCY = "router.batchFrequency";
+
     /** for client OBGWs only (our data) */
-//    public static final int OB_CLIENT_BATCH_FREQ = 37;
+    //    public static final int OB_CLIENT_BATCH_FREQ = 37;
     public static final int OB_CLIENT_BATCH_FREQ = SystemVersion.isSlow() ? 37 : 25;
+
     /** for exploratory OBGWs only (our tunnel tests and build messages) */
-//    public static final int OB_EXPL_BATCH_FREQ = 100;
+    //    public static final int OB_EXPL_BATCH_FREQ = 100;
     public static final int OB_EXPL_BATCH_FREQ = SystemVersion.isSlow() ? 100 : 75;
+
     /** for IBGWs for efficiency (not our data) */
-//    public static final int DEFAULT_BATCH_FREQUENCY = 75;
+    //    public static final int DEFAULT_BATCH_FREQUENCY = 75;
     public static final int DEFAULT_BATCH_FREQUENCY = SystemVersion.isSlow() ? 75 : 50;
 
     /** for OBGWs */
@@ -52,32 +57,28 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
     private static String getName(HopConfig cfg) {
         if (cfg == null) return "[Inbound ??]";
         long id = cfg.getReceiveTunnelId();
-        if (id != 0)
-            return "[Inbound " + id + "]";
+        if (id != 0) return "[Inbound " + id + "]";
         id = cfg.getSendTunnelId();
-        if (id != 0)
-            return "[Inbound " + id + "]";
-        else
-            return "[Inbound ??]";
+        if (id != 0) return "[Inbound " + id + "]";
+        else return "[Inbound ??]";
     }
 
     private static String getName(TunnelCreatorConfig cfg) {
         if (cfg == null) return "[Outbound ??]";
         long id = cfg.getConfig(0).getReceiveTunnelId();
-        if (id != 0)
-            return "[Outbound " + id + "]";
+        if (id != 0) return "[Outbound " + id + "]";
         id = cfg.getConfig(0).getSendTunnelId();
-        if (id != 0)
-            return "[Outbound " + id + "]";
-        else
-            return "[Outbound ??]";
+        if (id != 0) return "[Outbound " + id + "]";
+        else return "[Outbound ??]";
     }
 
     /**
      *  how long should we wait before flushing
      */
     @Override
-    protected long getSendDelay() { return _sendDelay; }
+    protected long getSendDelay() {
+        return _sendDelay;
+    }
 
     /*
      *  Extend the batching time for exploratory OBGWs, they have a lot of small
@@ -95,17 +96,16 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
                 if (freq != null) {
                     try {
                         return Integer.parseInt(freq);
-                    } catch (NumberFormatException nfe) {}
+                    } catch (NumberFormatException nfe) {
+                    }
                 }
             }
         }
 
         int def;
         if (_config != null) {
-            if (_config.getDestination() != null)
-                def = OB_CLIENT_BATCH_FREQ;
-            else
-                def = OB_EXPL_BATCH_FREQ;
+            if (_config.getDestination() != null) def = OB_CLIENT_BATCH_FREQ;
+            else def = OB_EXPL_BATCH_FREQ;
         } else {
             def = DEFAULT_BATCH_FREQUENCY;
         }
@@ -114,9 +114,7 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
 
     @Override
     protected void notePreprocessing(long messageId, int numFragments, int totalLength, List<Long> messageIds, String msg) {
-        if (_config != null)
-            _context.messageHistory().fragmentMessage(messageId, numFragments, totalLength, messageIds, _config, msg);
-        else
-            _context.messageHistory().fragmentMessage(messageId, numFragments, totalLength, messageIds, _hopConfig, msg);
+        if (_config != null) _context.messageHistory().fragmentMessage(messageId, numFragments, totalLength, messageIds, _config, msg);
+        else _context.messageHistory().fragmentMessage(messageId, numFragments, totalLength, messageIds, _hopConfig, msg);
     }
 }

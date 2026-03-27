@@ -1,9 +1,10 @@
 package net.i2p.router.web.helpers;
 
-import java.util.HashMap;
-import java.util.Map;
 import net.i2p.router.web.FormHandler;
 import net.i2p.stat.StatManager;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Handler to deal with form submissions from the stats config form and act
@@ -33,8 +34,7 @@ public class ConfigStatsHandler extends FormHandler {
             for (int i = 0; i < stats.length; i++) {
                 String cur = stats[i].trim();
                 if (cur.length() > 0) {
-                    if (s.length() > 0)
-                        s.append(",");
+                    if (s.length() > 0) s.append(",");
                     s.append(cur);
                 }
             }
@@ -44,7 +44,9 @@ public class ConfigStatsHandler extends FormHandler {
         }
     }
 
-    public void setIsFull(String foo) { _isFull = true; }
+    public void setIsFull(String foo) {
+        _isFull = true;
+    }
 
     /**
      * The user made changes to the config and wants to save them, so
@@ -59,12 +61,13 @@ public class ConfigStatsHandler extends FormHandler {
         changes.put(StatManager.PROP_STAT_FULL, Boolean.toString(_isFull));
         _context.router().saveConfig(changes, null);
         if (fullChanged) {
-            if (_isFull) {addFormNotice(_t("Full statistics enabled"), true);}
-            else {addFormNotice(_t("Full statistics disabled"), true);}
+            if (_isFull) {
+                addFormNotice(_t("Full statistics enabled"), true);
+            } else {
+                addFormNotice(_t("Full statistics disabled"), true);
+            }
             addFormNotice(_t("Restart required to take effect"), true);
         }
-        if (graphsChanged)
-            addFormNoticeNoEscape(_t("Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}", "<a href=\"graphs\">", "</a>"), true);
+        if (graphsChanged) addFormNoticeNoEscape(_t("Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}", "<a href=\"graphs\">", "</a>"), true);
     }
-
 }

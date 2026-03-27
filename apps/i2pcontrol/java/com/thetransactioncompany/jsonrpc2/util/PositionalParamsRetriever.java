@@ -1,7 +1,7 @@
 package com.thetransactioncompany.jsonrpc2.util;
 
-
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
+
 import java.util.List;
 import java.util.Map;
 
@@ -66,15 +66,12 @@ import java.util.Map;
  *
  * @author Vladimir Dzhuvinov
  */
-public class PositionalParamsRetriever
-    extends ParamsRetriever {
-
+public class PositionalParamsRetriever extends ParamsRetriever {
 
     /**
      * The positional parameters interface.
      */
     private List<Object> params = null;
-
 
     /**
      * Throws a JSON-RPC 2.0 error indicating a missing positional
@@ -84,13 +81,10 @@ public class PositionalParamsRetriever
      *
      * @throws JSONRPC2Error Formatted JSON-RPC 2.0 error.
      */
-    private static void throwMissingParameterException(final int position)
-        throws JSONRPC2Error {
+    private static void throwMissingParameterException(final int position) throws JSONRPC2Error {
 
-        throw JSONRPC2Error.INVALID_PARAMS.
-            appendMessage(": Missing parameter at position " + position);
+        throw JSONRPC2Error.INVALID_PARAMS.appendMessage(": Missing parameter at position " + position);
     }
-
 
     /**
      * Throws a JSON-RPC 2.0 error indicating a positional parameter with
@@ -100,13 +94,10 @@ public class PositionalParamsRetriever
      *
      * @throws JSONRPC2Error Formatted JSON-RPC 2.0 error.
      */
-    private static void throwNullParameterException(final int position)
-        throws JSONRPC2Error {
+    private static void throwNullParameterException(final int position) throws JSONRPC2Error {
 
-        throw JSONRPC2Error.INVALID_PARAMS.
-            appendMessage(": Parameter at position " + position + " must not be null");
+        throw JSONRPC2Error.INVALID_PARAMS.appendMessage(": Parameter at position " + position + " must not be null");
     }
-
 
     /**
      * Throws a JSON-RPC 2.0 error indicating a positional parameter with
@@ -118,20 +109,14 @@ public class PositionalParamsRetriever
      *
      * @throws JSONRPC2Error Formatted JSON-RPC 2.0 error.
      */
-    private static void throwEnumParameterException(final int position,
-                                                final String[] enumStrings)
-        throws JSONRPC2Error {
+    private static void throwEnumParameterException(final int position, final String[] enumStrings) throws JSONRPC2Error {
 
-        StringBuilder msg = new StringBuilder(": Enumerated parameter at position " +
-            position + "\" must have values ");
+        StringBuilder msg = new StringBuilder(": Enumerated parameter at position " + position + "\" must have values ");
 
-        for (int i=0; i < enumStrings.length; i++) {
+        for (int i = 0; i < enumStrings.length; i++) {
 
-            if (i > 0 && i == enumStrings.length - 1)
-                msg.append(" or ");
-
-            else if (i > 0)
-                msg.append(", ");
+            if (i > 0 && i == enumStrings.length - 1) msg.append(" or ");
+            else if (i > 0) msg.append(", ");
 
             msg.append('"');
             msg.append(enumStrings[i]);
@@ -140,7 +125,6 @@ public class PositionalParamsRetriever
 
         throw JSONRPC2Error.INVALID_PARAMS.appendMessage(msg.toString());
     }
-
 
     /**
      * Throws a JSON-RPC 2.0 error indicating a positional parameter with
@@ -152,22 +136,16 @@ public class PositionalParamsRetriever
      *
      * @throws JSONRPC2Error Formatted JSON-RPC 2.0 error.
      */
-    private static <T extends Enum<T>> void throwEnumParameterException(final int position,
-                                                                    final Class<T> enumClass)
-        throws JSONRPC2Error {
+    private static <T extends Enum<T>> void throwEnumParameterException(final int position, final Class<T> enumClass) throws JSONRPC2Error {
 
-        StringBuilder msg = new StringBuilder(": Enumerated parameter at position " +
-            position + " must have values ");
+        StringBuilder msg = new StringBuilder(": Enumerated parameter at position " + position + " must have values ");
 
         T[] constants = enumClass.getEnumConstants();
 
         for (int i = 0; i < constants.length; i++) {
 
-            if (i > 0 && i == constants.length - 1)
-                msg.append(" or ");
-
-            else if (i > 0)
-                msg.append(", ");
+            if (i > 0 && i == constants.length - 1) msg.append(" or ");
+            else if (i > 0) msg.append(", ");
 
             msg.append('"');
             msg.append(constants[i].toString());
@@ -176,7 +154,6 @@ public class PositionalParamsRetriever
 
         throw JSONRPC2Error.INVALID_PARAMS.appendMessage(msg.toString());
     }
-
 
     /**
      * Creates a JSON-RPC 2.0 error indicating a positional parameter with
@@ -188,10 +165,8 @@ public class PositionalParamsRetriever
      */
     private static JSONRPC2Error newUnexpectedParameterTypeException(final int position) {
 
-        return JSONRPC2Error.INVALID_PARAMS.
-            appendMessage(": Parameter at position " + position + " has an unexpected JSON type");
+        return JSONRPC2Error.INVALID_PARAMS.appendMessage(": Parameter at position " + position + " has an unexpected JSON type");
     }
-
 
     /**
      * Creates a JSON-RPC 2.0 error indicating an array exception.
@@ -202,10 +177,8 @@ public class PositionalParamsRetriever
      */
     private static JSONRPC2Error newArrayException(final int position) {
 
-        return JSONRPC2Error.INVALID_PARAMS.
-            appendMessage(": Parameter at position " + position + " caused an array exception");
+        return JSONRPC2Error.INVALID_PARAMS.appendMessage(": Parameter at position " + position + " caused an array exception");
     }
-
 
     /**
      * Creates a new positional parameters retriever from the specified
@@ -216,12 +189,10 @@ public class PositionalParamsRetriever
      */
     public PositionalParamsRetriever(final List<Object> params) {
 
-        if (params == null)
-            throw new IllegalArgumentException("The parameters list must not be null");
+        if (params == null) throw new IllegalArgumentException("The parameters list must not be null");
 
         this.params = params;
     }
-
 
     /**
      * Gets the positional parameters for this retriever.
@@ -233,13 +204,11 @@ public class PositionalParamsRetriever
         return params;
     }
 
-
     @Override
     public int size() {
 
         return params.size();
     }
-
 
     /**
      * Returns {@code true} a parameter at the specified position exists,
@@ -254,7 +223,6 @@ public class PositionalParamsRetriever
         return position < params.size();
     }
 
-
     /**
      * @see #hasParam
      */
@@ -263,7 +231,6 @@ public class PositionalParamsRetriever
 
         return hasParam(position);
     }
-
 
     /**
      * Throws a {@code JSONRPC2Error.INVALID_PARAMS} exception if there is
@@ -278,24 +245,19 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a missing parameter
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public void ensureParam(final int position)
-        throws JSONRPC2Error {
+    public void ensureParam(final int position) throws JSONRPC2Error {
 
-        if (position >= params.size())
-            throwMissingParameterException(position);
+        if (position >= params.size()) throwMissingParameterException(position);
     }
-
 
     /**
      * @see #ensureParam
      */
     @Deprecated
-    public void ensureParameter(final int position)
-        throws JSONRPC2Error {
+    public void ensureParameter(final int position) throws JSONRPC2Error {
 
         ensureParam(position);
     }
-
 
     /**
      * Throws a {@code JSONRPC2Error.INVALID_PARAMS} exception if there is
@@ -315,23 +277,19 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a missing parameter, {@code null} value or
      *                       bad type ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public <T> void ensureParam(final int position, final Class<T> clazz)
-        throws JSONRPC2Error {
+    public <T> void ensureParam(final int position, final Class<T> clazz) throws JSONRPC2Error {
 
         ensureParameter(position, clazz, false);
     }
-
 
     /**
      * @see #ensureParam(int, Class)
      */
     @Deprecated
-    public <T> void ensureParameter(final int position, final Class<T> clazz)
-        throws JSONRPC2Error {
+    public <T> void ensureParameter(final int position, final Class<T> clazz) throws JSONRPC2Error {
 
         ensureParam(position, clazz);
     }
-
 
     /**
      * Throws a {@code JSONRPC2Error.INVALID_PARAMS} exception if there is
@@ -353,10 +311,7 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a missing parameter or bad type
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public <T> void ensureParam(final int position,
-                            final Class<T> clazz,
-                            final boolean allowNull)
-        throws JSONRPC2Error {
+    public <T> void ensureParam(final int position, final Class<T> clazz, final boolean allowNull) throws JSONRPC2Error {
 
         // First, check existence only
         ensureParameter(position);
@@ -366,29 +321,21 @@ public class PositionalParamsRetriever
 
         if (value == null) {
 
-            if (allowNull)
-                return; // ok
-            else
-                throwNullParameterException(position);
+            if (allowNull) return; // ok
+            else throwNullParameterException(position);
         }
 
-        if (! clazz.isAssignableFrom(value.getClass()))
-            throw newUnexpectedParameterTypeException(position);
+        if (!clazz.isAssignableFrom(value.getClass())) throw newUnexpectedParameterTypeException(position);
     }
-
 
     /**
      * @see #ensureParam(int, Class, boolean)
      */
     @Deprecated
-    public <T> void ensureParameter(final int position,
-                                final Class<T> clazz,
-                                final boolean allowNull)
-        throws JSONRPC2Error {
+    public <T> void ensureParameter(final int position, final Class<T> clazz, final boolean allowNull) throws JSONRPC2Error {
 
         ensureParam(position, clazz, allowNull);
     }
-
 
     /**
      * Retrieves the specified parameter which can be of any type. Use this
@@ -402,14 +349,12 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a missing parameter
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public Object get(final int position)
-        throws JSONRPC2Error {
+    public Object get(final int position) throws JSONRPC2Error {
 
         ensureParameter(position);
 
         return params.get(position);
     }
-
 
     /**
      * Retrieves the specified parameter which must map to the provided
@@ -427,12 +372,10 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a missing parameter, {@code null} value or
      *                       bad type ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public <T> T get(final int position, final Class<T> clazz)
-        throws JSONRPC2Error {
+    public <T> T get(final int position, final Class<T> clazz) throws JSONRPC2Error {
 
         return get(position, clazz, false);
     }
-
 
     /**
      * Retrieves the specified parameter which must map to the provided
@@ -453,20 +396,18 @@ public class PositionalParamsRetriever
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
     @SuppressWarnings("unchecked")
-    public <T> T get(final int position, final Class<T> clazz, final boolean allowNull)
-        throws JSONRPC2Error {
+    public <T> T get(final int position, final Class<T> clazz, final boolean allowNull) throws JSONRPC2Error {
 
         ensureParameter(position, clazz, allowNull);
 
         try {
-            return (T)params.get(position);
+            return (T) params.get(position);
 
         } catch (ClassCastException e) {
 
             throw newUnexpectedParameterTypeException(position);
         }
     }
-
 
     /**
      * Retrieves the specified optional parameter which must map to the
@@ -488,12 +429,10 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a bad parameter type or {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public <T> T getOpt(final int position, final Class<T> clazz, final T defaultValue)
-        throws JSONRPC2Error {
+    public <T> T getOpt(final int position, final Class<T> clazz, final T defaultValue) throws JSONRPC2Error {
 
         return getOpt(position, clazz, false, defaultValue);
     }
-
 
     /**
      * Retrieves the specified optional parameter which must map to the
@@ -518,26 +457,20 @@ public class PositionalParamsRetriever
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
     @SuppressWarnings("unchecked")
-    public <T> T getOpt(final int position,
-                    final Class<T> clazz,
-                    final boolean allowNull,
-                    final T defaultValue)
-        throws JSONRPC2Error {
+    public <T> T getOpt(final int position, final Class<T> clazz, final boolean allowNull, final T defaultValue) throws JSONRPC2Error {
 
-        if (! hasParameter(position))
-            return defaultValue;
+        if (!hasParameter(position)) return defaultValue;
 
         ensureParameter(position, clazz, allowNull);
 
         try {
-            return (T)params.get(position);
+            return (T) params.get(position);
 
         } catch (ClassCastException e) {
 
             throw newUnexpectedParameterTypeException(position);
         }
     }
-
 
     /**
      * Retrieves the specified string parameter.
@@ -550,12 +483,10 @@ public class PositionalParamsRetriever
      *                       {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public String getString(final int position)
-        throws JSONRPC2Error {
+    public String getString(final int position) throws JSONRPC2Error {
 
         return getString(position, false);
     }
-
 
     /**
      * Retrieves the specified string parameter.
@@ -568,12 +499,10 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a missing parameter or bad type
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public String getString(final int position, final boolean allowNull)
-        throws JSONRPC2Error {
+    public String getString(final int position, final boolean allowNull) throws JSONRPC2Error {
 
         return get(position, String.class, allowNull);
     }
-
 
     /**
      * Retrieves the specified optional string parameter. If it doesn't
@@ -588,12 +517,10 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a bad type or {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public String getOptString(final int position, final String defaultValue)
-        throws JSONRPC2Error {
+    public String getOptString(final int position, final String defaultValue) throws JSONRPC2Error {
 
         return getOptString(position, false, defaultValue);
     }
-
 
     /**
      * Retrieves the specified optional string parameter. If it doesn't
@@ -608,12 +535,10 @@ public class PositionalParamsRetriever
      *
      * @throws JSONRPC2Error On a bad type ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public String getOptString(final int position, final boolean allowNull, final String defaultValue)
-        throws JSONRPC2Error {
+    public String getOptString(final int position, final boolean allowNull, final String defaultValue) throws JSONRPC2Error {
 
         return getOpt(position, String.class, allowNull, defaultValue);
     }
-
 
     /**
      * Retrieves the specified enumerated string parameter.
@@ -628,12 +553,10 @@ public class PositionalParamsRetriever
      *                       bad enumeration value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public String getEnumString(final int position, final String[] enumStrings)
-        throws JSONRPC2Error {
+    public String getEnumString(final int position, final String[] enumStrings) throws JSONRPC2Error {
 
         return getEnumString(position, enumStrings, false);
     }
-
 
     /**
      * Retrieves the specified enumerated string parameter, allowing for a
@@ -650,21 +573,16 @@ public class PositionalParamsRetriever
      *                       bad enumeration value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public String getEnumString(final int position,
-                            final String[] enumStrings,
-                            final boolean ignoreCase)
-        throws JSONRPC2Error {
+    public String getEnumString(final int position, final String[] enumStrings, final boolean ignoreCase) throws JSONRPC2Error {
 
         String value = get(position, String.class);
 
         String match = getEnumStringMatch(value, enumStrings, ignoreCase);
 
-        if (match == null)
-            throwEnumParameterException(position, enumStrings);
+        if (match == null) throwEnumParameterException(position, enumStrings);
 
         return match;
     }
-
 
     /**
      * Retrieves the specified optional enumerated string parameter. If it
@@ -681,14 +599,10 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a bad type or bad enumeration value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public String getOptEnumString(final int position,
-                               final String[] enumStrings,
-                               final String defaultValue)
-        throws JSONRPC2Error {
+    public String getOptEnumString(final int position, final String[] enumStrings, final String defaultValue) throws JSONRPC2Error {
 
         return getOptEnumString(position, enumStrings, defaultValue, false);
     }
-
 
     /**
      * Retrieves the specified optional enumerated string parameter,
@@ -707,25 +621,18 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a bad type or bad enumeration value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public String getOptEnumString(final int position,
-                               final String[] enumStrings,
-                               final String defaultValue,
-                               final boolean ignoreCase)
-        throws JSONRPC2Error {
+    public String getOptEnumString(final int position, final String[] enumStrings, final String defaultValue, final boolean ignoreCase) throws JSONRPC2Error {
 
         String value = getOpt(position, String.class, defaultValue);
 
-        if (defaultValue == null && value == null)
-            return null;
+        if (defaultValue == null && value == null) return null;
 
         String match = getEnumStringMatch(value, enumStrings, ignoreCase);
 
-        if (match == null)
-            throwEnumParameterException(position, enumStrings);
+        if (match == null) throwEnumParameterException(position, enumStrings);
 
         return match;
     }
-
 
     /**
      * Retrieves the specified enumerated parameter (from a JSON string
@@ -742,12 +649,10 @@ public class PositionalParamsRetriever
      *                       bad enumeration value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public <T extends Enum<T>> T getEnum(final int position, final Class<T> enumClass)
-        throws JSONRPC2Error {
+    public <T extends Enum<T>> T getEnum(final int position, final Class<T> enumClass) throws JSONRPC2Error {
 
         return getEnum(position, enumClass, false);
     }
-
 
     /**
      * Retrieves the specified enumerated parameter (from a JSON string
@@ -767,21 +672,16 @@ public class PositionalParamsRetriever
      *                       bad enumeration value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public <T extends Enum<T>> T getEnum(final int position,
-                                     final Class<T> enumClass,
-                                     final boolean ignoreCase)
-        throws JSONRPC2Error {
+    public <T extends Enum<T>> T getEnum(final int position, final Class<T> enumClass, final boolean ignoreCase) throws JSONRPC2Error {
 
         String value = get(position, String.class);
 
         T match = getEnumStringMatch(value, enumClass, ignoreCase);
 
-        if (match == null)
-            throwEnumParameterException(position, enumClass);
+        if (match == null) throwEnumParameterException(position, enumClass);
 
         return match;
     }
-
 
     /**
      * Retrieves the specified optional enumerated parameter (from a JSON
@@ -800,14 +700,10 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a bad type or bad enumeration value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public <T extends Enum<T>> T getOptEnum(final int position,
-                                        final Class<T> enumClass,
-                                        final String defaultValue)
-        throws JSONRPC2Error {
+    public <T extends Enum<T>> T getOptEnum(final int position, final Class<T> enumClass, final String defaultValue) throws JSONRPC2Error {
 
         return getOptEnum(position, enumClass, defaultValue, false);
     }
-
 
     /**
      * Retrieves the specified optional enumerated parameter (from a JSON
@@ -829,25 +725,18 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a bad type or bad enumeration value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public <T extends Enum<T>> T getOptEnum(final int position,
-                                        final Class<T> enumClass,
-                                        final String defaultValue,
-                                        final boolean ignoreCase)
-        throws JSONRPC2Error {
+    public <T extends Enum<T>> T getOptEnum(final int position, final Class<T> enumClass, final String defaultValue, final boolean ignoreCase) throws JSONRPC2Error {
 
         String value = getOpt(position, String.class, defaultValue);
 
-        if (defaultValue == null && value == null)
-            return null;
+        if (defaultValue == null && value == null) return null;
 
         T match = getEnumStringMatch(value, enumClass, ignoreCase);
 
-        if (match == null)
-            throwEnumParameterException(position, enumClass);
+        if (match == null) throwEnumParameterException(position, enumClass);
 
         return match;
     }
-
 
     /**
      * Retrieves the specified boolean (maps from JSON true/false)
@@ -861,12 +750,10 @@ public class PositionalParamsRetriever
      *                       {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public boolean getBoolean(final int position)
-        throws JSONRPC2Error {
+    public boolean getBoolean(final int position) throws JSONRPC2Error {
 
         return get(position, Boolean.class);
     }
-
 
     /**
      * Retrieves the specified optional boolean (maps from JSON true/false)
@@ -882,12 +769,10 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a bad parameter type or {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public boolean getOptBoolean(final int position, final boolean defaultValue)
-        throws JSONRPC2Error {
+    public boolean getOptBoolean(final int position, final boolean defaultValue) throws JSONRPC2Error {
 
         return getOpt(position, Boolean.class, defaultValue);
     }
-
 
     /**
      * Retrieves the specified numeric parameter as an {@code int}.
@@ -900,13 +785,11 @@ public class PositionalParamsRetriever
      *                       {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public int getInt(final int position)
-        throws JSONRPC2Error {
+    public int getInt(final int position) throws JSONRPC2Error {
 
         Number number = get(position, Number.class);
         return number.intValue();
     }
-
 
     /**
      * Retrieves the specified optional numeric parameter as an
@@ -922,13 +805,11 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a bad parameter type or {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public int getOptInt(final int position, final int defaultValue)
-        throws JSONRPC2Error {
+    public int getOptInt(final int position, final int defaultValue) throws JSONRPC2Error {
 
         Number number = getOpt(position, Number.class, defaultValue);
         return number.intValue();
     }
-
 
     /**
      * Retrieves the specified numeric parameter as a {@code long}.
@@ -941,13 +822,11 @@ public class PositionalParamsRetriever
      *                       {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public long getLong(final int position)
-        throws JSONRPC2Error {
+    public long getLong(final int position) throws JSONRPC2Error {
 
         Number number = get(position, Number.class);
         return number.longValue();
     }
-
 
     /**
      * Retrieves the specified optional numeric parameter as a
@@ -963,13 +842,11 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a bad parameter type or {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public long getOptLong(final int position, final long defaultValue)
-        throws JSONRPC2Error {
+    public long getOptLong(final int position, final long defaultValue) throws JSONRPC2Error {
 
         Number number = getOpt(position, Number.class, defaultValue);
         return number.longValue();
     }
-
 
     /**
      * Retrieves the specified numeric parameter as a {@code float}.
@@ -982,13 +859,11 @@ public class PositionalParamsRetriever
      *                       {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public float getFloat(final int position)
-        throws JSONRPC2Error {
+    public float getFloat(final int position) throws JSONRPC2Error {
 
         Number number = get(position, Number.class);
         return number.floatValue();
     }
-
 
     /**
      * Retrieves the specified optional numeric parameter as a
@@ -1004,13 +879,11 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a bad parameter type or {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public float getOptFloat(final int position, final float defaultValue)
-        throws JSONRPC2Error {
+    public float getOptFloat(final int position, final float defaultValue) throws JSONRPC2Error {
 
         Number number = getOpt(position, Number.class, defaultValue);
         return number.floatValue();
     }
-
 
     /**
      * Retrieves the specified numeric parameter as a {@code double}.
@@ -1023,13 +896,11 @@ public class PositionalParamsRetriever
      *                       {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public double getDouble(final int position)
-        throws JSONRPC2Error {
+    public double getDouble(final int position) throws JSONRPC2Error {
 
         Number number = get(position, Number.class);
         return number.doubleValue();
     }
-
 
     /**
      * Retrieves the specified optional numeric parameter as a
@@ -1045,13 +916,11 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a bad parameter type or {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public double getOptDouble(final int position, final double defaultValue)
-        throws JSONRPC2Error {
+    public double getOptDouble(final int position, final double defaultValue) throws JSONRPC2Error {
 
         Number number = getOpt(position, Number.class, defaultValue);
         return number.doubleValue();
     }
-
 
     /**
      * Retrieves the specified list (maps from JSON array) parameter.
@@ -1064,14 +933,12 @@ public class PositionalParamsRetriever
      *                       {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public List<Object> getList(final int position)
-        throws JSONRPC2Error {
+    public List<Object> getList(final int position) throws JSONRPC2Error {
 
         final boolean allowNull = false;
 
         return getList(position, allowNull);
     }
-
 
     /**
      * Retrieves the specified list (maps from JSON array) parameter.
@@ -1085,12 +952,10 @@ public class PositionalParamsRetriever
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
     @SuppressWarnings("unchecked")
-    public List<Object> getList(final int position, final boolean allowNull)
-        throws JSONRPC2Error {
+    public List<Object> getList(final int position, final boolean allowNull) throws JSONRPC2Error {
 
-        return (List<Object>)get(position, List.class, allowNull);
+        return (List<Object>) get(position, List.class, allowNull);
     }
-
 
     /**
      * Retrieves the specified optional list (maps from JSON array)
@@ -1106,14 +971,12 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a bad parameter type or {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public List<Object> getOptList(final int position, final List<Object> defaultValue)
-        throws JSONRPC2Error {
+    public List<Object> getOptList(final int position, final List<Object> defaultValue) throws JSONRPC2Error {
 
         final boolean allowNull = false;
 
         return getOptList(position, allowNull, defaultValue);
     }
-
 
     /**
      * Retrieves the specified optional list (maps from JSON array)
@@ -1131,14 +994,10 @@ public class PositionalParamsRetriever
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
     @SuppressWarnings("unchecked")
-    public List<Object> getOptList(final int position,
-                               final boolean allowNull,
-                               final List<Object> defaultValue)
-        throws JSONRPC2Error {
+    public List<Object> getOptList(final int position, final boolean allowNull, final List<Object> defaultValue) throws JSONRPC2Error {
 
-        return (List<Object>)getOpt(position, List.class, allowNull, defaultValue);
+        return (List<Object>) getOpt(position, List.class, allowNull, defaultValue);
     }
-
 
     /**
      * Retrieves the specified string array (maps from JSON array of
@@ -1152,14 +1011,12 @@ public class PositionalParamsRetriever
      *                       {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public String[] getStringArray(final int position)
-        throws JSONRPC2Error {
+    public String[] getStringArray(final int position) throws JSONRPC2Error {
 
         final boolean allowNull = false;
 
         return getStringArray(position, allowNull);
     }
-
 
     /**
      * Retrieves the specified string array (maps from JSON array of
@@ -1174,13 +1031,11 @@ public class PositionalParamsRetriever
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
     @SuppressWarnings("unchecked")
-    public String[] getStringArray(final int position, final boolean allowNull)
-        throws JSONRPC2Error {
+    public String[] getStringArray(final int position, final boolean allowNull) throws JSONRPC2Error {
 
         List<Object> list = getList(position, allowNull);
 
-        if (list == null)
-            return new String[0];
+        if (list == null) return new String[0];
 
         try {
             return list.toArray(new String[list.size()]);
@@ -1191,7 +1046,6 @@ public class PositionalParamsRetriever
         }
     }
 
-
     /**
      * Retrieves the specified optional string array (maps from JSON array
      * of strings) parameter. If it doesn't exist the method will return
@@ -1206,14 +1060,12 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a bad parameter type or {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public String[] getOptStringArray(final int position, final String[] defaultValue)
-        throws JSONRPC2Error {
+    public String[] getOptStringArray(final int position, final String[] defaultValue) throws JSONRPC2Error {
 
         final boolean allowNull = false;
 
         return getOptStringArray(position, allowNull, defaultValue);
     }
-
 
     /**
      * Retrieves the specified optional string array (maps from JSON array
@@ -1230,17 +1082,12 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a bad parameter type
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public String[] getOptStringArray(final int position,
-                                  final boolean allowNull,
-                                  final String[] defaultValue)
-        throws JSONRPC2Error {
+    public String[] getOptStringArray(final int position, final boolean allowNull, final String[] defaultValue) throws JSONRPC2Error {
 
-        if (! hasParameter(position))
-            return defaultValue;
+        if (!hasParameter(position)) return defaultValue;
 
         return getStringArray(position, allowNull);
     }
-
 
     /**
      * Retrieves the specified map (maps from JSON object) parameter.
@@ -1253,12 +1100,10 @@ public class PositionalParamsRetriever
      *                       {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public Map<String,Object> getMap(final int position)
-        throws JSONRPC2Error {
+    public Map<String, Object> getMap(final int position) throws JSONRPC2Error {
 
         return getMap(position, false);
     }
-
 
     /**
      * Retrieves the specified map (maps from JSON object) parameter.
@@ -1272,18 +1117,16 @@ public class PositionalParamsRetriever
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
     @SuppressWarnings("unchecked")
-    public Map<String,Object> getMap(final int position, final boolean allowNull)
-        throws JSONRPC2Error {
+    public Map<String, Object> getMap(final int position, final boolean allowNull) throws JSONRPC2Error {
 
         try {
-            return (Map<String,Object>)get(position, Map.class, allowNull);
+            return (Map<String, Object>) get(position, Map.class, allowNull);
 
         } catch (ClassCastException e) {
 
             throw newUnexpectedParameterTypeException(position);
         }
     }
-
 
     /**
      * Retrieves the specified optional map (maps from JSON object)
@@ -1299,12 +1142,10 @@ public class PositionalParamsRetriever
      * @throws JSONRPC2Error On a bad parameter type or {@code null} value
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
-    public Map<String,Object> getOptMap(final int position, final Map<String,Object> defaultValue)
-        throws JSONRPC2Error {
+    public Map<String, Object> getOptMap(final int position, final Map<String, Object> defaultValue) throws JSONRPC2Error {
 
         return getOptMap(position, false, defaultValue);
     }
-
 
     /**
      * Retrieves the specified optional map (maps from JSON object)
@@ -1322,13 +1163,10 @@ public class PositionalParamsRetriever
      *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
      */
     @SuppressWarnings("unchecked")
-    public Map<String,Object> getOptMap(final int position,
-                                    final boolean allowNull,
-                                    final Map<String,Object> defaultValue)
-        throws JSONRPC2Error {
+    public Map<String, Object> getOptMap(final int position, final boolean allowNull, final Map<String, Object> defaultValue) throws JSONRPC2Error {
 
         try {
-            return (Map<String,Object>)getOpt(position, Map.class, allowNull, defaultValue);
+            return (Map<String, Object>) getOpt(position, Map.class, allowNull, defaultValue);
 
         } catch (ClassCastException e) {
 

@@ -9,6 +9,21 @@ package net.i2p.data.router;
  *
  */
 
+import net.i2p.I2PAppContext;
+import net.i2p.crypto.DSAEngine;
+import net.i2p.crypto.SigType;
+import net.i2p.data.DataFormatException;
+import net.i2p.data.DataHelper;
+import net.i2p.data.DatabaseEntry;
+import net.i2p.data.Hash;
+import net.i2p.data.KeysAndCert;
+import net.i2p.data.Signature;
+import net.i2p.data.SimpleDataStructure;
+import net.i2p.router.Router;
+import net.i2p.util.Clock;
+import net.i2p.util.Log;
+import net.i2p.util.OrderedProperties;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,20 +39,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import net.i2p.I2PAppContext;
-import net.i2p.crypto.DSAEngine;
-import net.i2p.crypto.SigType;
-import net.i2p.data.DataFormatException;
-import net.i2p.data.DataHelper;
-import net.i2p.data.DatabaseEntry;
-import net.i2p.data.Hash;
-import net.i2p.data.KeysAndCert;
-import net.i2p.data.Signature;
-import net.i2p.data.SimpleDataStructure;
-import net.i2p.router.Router;
-import net.i2p.util.Clock;
-import net.i2p.util.Log;
-import net.i2p.util.OrderedProperties;
 
 /**
  * Defines the data that a router either publishes to the global routing table or
@@ -59,21 +60,26 @@ public class RouterInfo extends DatabaseEntry {
     private final Log log = ctx.logManager().getLog(RouterInfo.class);
     private RouterIdentity _identity;
     private volatile long _published;
+
     /**
      *  Save addresses in the order received so the signature works.
      */
     private final List<RouterAddress> _addresses;
+
     /** may be null to save memory, no longer final */
     private Set<Hash> _peers;
+
     private final Properties _options;
     private volatile boolean _validated;
     private volatile boolean _isValid;
-    //private volatile String _stringified;
+    // private volatile String _stringified;
     private volatile byte _byteified[];
     private volatile int _hashCode;
     private volatile boolean _hashCodeInitialized;
+
     /** should we cache the byte and string versions _byteified ? **/
     private volatile boolean _shouldCache;
+
     /**
      * Maybe we should check if we are floodfill?
      * If we do bring this back, don't do on ARM or Android
@@ -93,30 +99,27 @@ public class RouterInfo extends DatabaseEntry {
      *
      *  @since 0.9.62
      */
-    public static final int MAX_UNCOMPRESSED_SIZE = 4*1024;
+    public static final int MAX_UNCOMPRESSED_SIZE = 4 * 1024;
 
     /** Public string of chars which serve as bandwidth capacity markers
      * NOTE: individual chars defined in Router.java
      */
     public static final String BW_CAPABILITY_CHARS = "" +
-        // reverse, so e.g. "POfR" works correctly
-        Router.CAPABILITY_BW_UNLIMITED +
-        Router.CAPABILITY_BW512 +
-        Router.CAPABILITY_BW256 +
-        Router.CAPABILITY_BW128 +
-        Router.CAPABILITY_BW64 +
-        Router.CAPABILITY_BW32 +
-        Router.CAPABILITY_BW12;
+                    // reverse, so e.g. "POfR" works correctly
+                    Router.CAPABILITY_BW_UNLIMITED
+                    + Router.CAPABILITY_BW512
+                    + Router.CAPABILITY_BW256
+                    + Router.CAPABILITY_BW128
+                    + Router.CAPABILITY_BW64
+                    + Router.CAPABILITY_BW32
+                    + Router.CAPABILITY_BW12;
 
     /** Public string of chars which serve as bandwidth congestion markers
      * NOTE: individual chars defined in Router.java
      *
      * @since 0.9.63+
      */
-    public static final String CONGESTION_CAPABILITY_CHARS = "" +
-        Router.CAPABILITY_CONGESTION_MODERATE +
-        Router.CAPABILITY_CONGESTION_SEVERE +
-        Router.CAPABILITY_NO_TUNNELS;
+    public static final String CONGESTION_CAPABILITY_CHARS = "" + Router.CAPABILITY_CONGESTION_MODERATE + Router.CAPABILITY_CONGESTION_SEVERE + Router.CAPABILITY_NO_TUNNELS;
 
     public RouterInfo() {
         _addresses = new ArrayList<RouterAddress>(2);
@@ -163,8 +166,7 @@ public class RouterInfo extends DatabaseEntry {
      * @throws IllegalStateException if RouterInfo is already signed
      */
     public final void setIdentity(RouterIdentity ident) {
-        if (_signature != null)
-            throw new IllegalStateException();
+        if (_signature != null) throw new IllegalStateException();
         _identity = ident;
         // We only want to cache the bytes for our own RI, which is frequently written.
         // To cache for all RIs doubles the RI memory usage.
@@ -189,8 +191,7 @@ public class RouterInfo extends DatabaseEntry {
      * @throws IllegalStateException if RouterInfo is already signed
      */
     public void setPublished(long published) {
-        if (_signature != null)
-            throw new IllegalStateException();
+        if (_signature != null) throw new IllegalStateException();
         _published = published;
     }
 
@@ -223,9 +224,13 @@ public class RouterInfo extends DatabaseEntry {
      * @throws IllegalArgumentException if too many addresses
      */
     public void setAddresses(Collection<RouterAddress> addresses) {
-        if (_signature != null || !_addresses.isEmpty()) {throw new IllegalStateException();}
+        if (_signature != null || !_addresses.isEmpty()) {
+            throw new IllegalStateException();
+        }
         if (addresses != null) {
-            if (addresses.size() > MAX_ADDRESSES) {throw new IllegalArgumentException("Too many addresses");}
+            if (addresses.size() > MAX_ADDRESSES) {
+                throw new IllegalArgumentException("Too many addresses");
+            }
             _addresses.addAll(addresses);
         }
     }
@@ -238,8 +243,7 @@ public class RouterInfo extends DatabaseEntry {
      */
     @Deprecated
     public Set<Hash> getPeers() {
-        if (_peers == null)
-            return Collections.emptySet();
+        if (_peers == null) return Collections.emptySet();
         return _peers;
     }
 
@@ -252,14 +256,12 @@ public class RouterInfo extends DatabaseEntry {
      */
     @Deprecated
     public final void setPeers(Set<Hash> peers) {
-        if (_signature != null)
-            throw new IllegalStateException();
+        if (_signature != null) throw new IllegalStateException();
         if (peers == null || peers.isEmpty()) {
             _peers = null;
             return;
         }
-        if (_peers == null)
-            _peers = new HashSet<Hash>(2);
+        if (_peers == null) _peers = new HashSet<Hash>(2);
         synchronized (_peers) {
             _peers.clear();
             _peers.addAll(peers);
@@ -273,7 +275,9 @@ public class RouterInfo extends DatabaseEntry {
      * @return sorted, non-null, NOT a copy, do not modify!!!
      */
     @Deprecated
-    public Properties getOptions() {return _options;}
+    public Properties getOptions() {
+        return _options;
+    }
 
     /**
      * Retrieve a set of options or statistics that the router can expose.
@@ -285,7 +289,9 @@ public class RouterInfo extends DatabaseEntry {
         return Collections.unmodifiableMap(_options);
     }
 
-    public String getOption(String opt) {return _options.getProperty(opt);}
+    public String getOption(String opt) {
+        return _options.getProperty(opt);
+    }
 
     /**
      * For convenience, the same as getOption("router.version"),
@@ -309,9 +315,13 @@ public class RouterInfo extends DatabaseEntry {
      * @throws IllegalStateException if RouterInfo is already signed
      */
     public void setOptions(Properties options) {
-        if (_signature != null) {throw new IllegalStateException();}
+        if (_signature != null) {
+            throw new IllegalStateException();
+        }
         _options.clear();
-        if (options != null) {_options.putAll(options);}
+        if (options != null) {
+            _options.putAll(options);
+        }
     }
 
     /**
@@ -323,11 +333,16 @@ public class RouterInfo extends DatabaseEntry {
     @Override
     protected byte[] getBytes() throws DataFormatException {
         if (_byteified != null) return _byteified;
-        ByteArrayOutputStream out = new ByteArrayOutputStream(2*1024);
-        try {writeDataBytes(out);}
-        catch (IOException ioe) {throw new DataFormatException("IO Error getting bytes", ioe);}
+        ByteArrayOutputStream out = new ByteArrayOutputStream(2 * 1024);
+        try {
+            writeDataBytes(out);
+        } catch (IOException ioe) {
+            throw new DataFormatException("IO Error getting bytes", ioe);
+        }
         byte data[] = out.toByteArray();
-        if (CACHE_ALL || _shouldCache) {_byteified = data;}
+        if (CACHE_ALL || _shouldCache) {
+            _byteified = data;
+        }
         return data;
     }
 
@@ -340,31 +355,37 @@ public class RouterInfo extends DatabaseEntry {
      * @since 0.9.24
      */
     private void writeDataBytes(OutputStream out) throws DataFormatException, IOException {
-        if (_identity == null) {throw new DataFormatException("Missing identity");}
-        if (_published < 0) {throw new DataFormatException("Invalid published date: " + _published);}
+        if (_identity == null) {
+            throw new DataFormatException("Missing identity");
+        }
+        if (_published < 0) {
+            throw new DataFormatException("Invalid published date: " + _published);
+        }
 
         _identity.writeBytes(out);
         DataHelper.writeLong(out, 8, _published);
-            // There shouldn't be any addresses when hidden, but if there are,
-            // write them out, so as not to invalidate the signature
+        // There shouldn't be any addresses when hidden, but if there are,
+        // write them out, so as not to invalidate the signature
         int sz = _addresses.size();
         out.write((byte) sz);
         if (sz > 0) {
-            for (RouterAddress addr : _addresses) {addr.writeBytes(out);}
+            for (RouterAddress addr : _addresses) {
+                addr.writeBytes(out);
+            }
         }
-            // XXX: what about peers?
-            // answer: they're always empty... they're a placeholder for one particular
-            //         method of trusted links, which isn't implemented in the router
-            //         at the moment, and may not be later.
+        // XXX: what about peers?
+        // answer: they're always empty... they're a placeholder for one particular
+        //         method of trusted links, which isn't implemented in the router
+        //         at the moment, and may not be later.
         int psz = _peers == null ? 0 : _peers.size();
         out.write((byte) psz);
         if (psz > 0) {
             Collection<Hash> peers = _peers;
             if (psz > 1)
-                    // WARNING this sort algorithm cannot be changed, as it must be consistent
-                    // network-wide. The signature is not checked at readin time, but only
-                    // later, and the hashes are stored in a Set, not a List.
-                    peers = SortHelper.sortStructures(peers);
+                // WARNING this sort algorithm cannot be changed, as it must be consistent
+                // network-wide. The signature is not checked at readin time, but only
+                // later, and the hashes are stored in a Set, not a List.
+                peers = SortHelper.sortStructures(peers);
             for (Hash peerHash : peers) {
                 peerHash.writeBytes(out);
             }
@@ -398,10 +419,14 @@ public class RouterInfo extends DatabaseEntry {
     public int getNetworkId() {
         String id = _options.getProperty(PROP_NETWORK_ID);
         // shortcut
-        if ("2".equals(id)) {return 2;}
+        if ("2".equals(id)) {
+            return 2;
+        }
         if (id != null) {
-            try {return Integer.parseInt(id);}
-            catch (NumberFormatException nfe) {}
+            try {
+                return Integer.parseInt(id);
+            } catch (NumberFormatException nfe) {
+            }
         }
         return -1;
     }
@@ -412,8 +437,11 @@ public class RouterInfo extends DatabaseEntry {
      */
     public String getCapabilities() {
         String capabilities = _options.getProperty(PROP_CAPABILITIES);
-        if (capabilities != null) {return capabilities;}
-        else {return "";}
+        if (capabilities != null) {
+            return capabilities;
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -422,8 +450,7 @@ public class RouterInfo extends DatabaseEntry {
      * @return true if either 'H' is in the capbilities, or router identity contains a hidden cert.
      */
     public boolean isHidden() {
-        return (getCapabilities().indexOf(CAPABILITY_HIDDEN) >= 0) ||
-               (_identity != null && _identity.isHidden());
+        return (getCapabilities().indexOf(CAPABILITY_HIDDEN) >= 0) || (_identity != null && _identity.isHidden());
     }
 
     /**
@@ -474,8 +501,7 @@ public class RouterInfo extends DatabaseEntry {
      */
     public boolean isCurrent(long maxAgeMs) {
         long earliestExpire = Clock.getInstance().now() - maxAgeMs;
-        if (_published < earliestExpire)
-            return false;
+        if (_published < earliestExpire) return false;
 
         return true;
     }
@@ -487,8 +513,7 @@ public class RouterInfo extends DatabaseEntry {
      */
     public RouterAddress getTargetAddress(String transportStyle) {
         for (RouterAddress addr : _addresses) {
-            if (addr.getTransportStyle().equals(transportStyle))
-                return addr;
+            if (addr.getTransportStyle().equals(transportStyle)) return addr;
         }
         return null;
     }
@@ -501,8 +526,7 @@ public class RouterInfo extends DatabaseEntry {
     public List<RouterAddress> getTargetAddresses(String transportStyle) {
         List<RouterAddress> ret = new ArrayList<RouterAddress>(_addresses.size());
         for (RouterAddress addr : _addresses) {
-            if (addr.getTransportStyle().equals(transportStyle))
-                ret.add(addr);
+            if (addr.getTransportStyle().equals(transportStyle)) ret.add(addr);
         }
         return ret;
     }
@@ -518,8 +542,7 @@ public class RouterInfo extends DatabaseEntry {
         List<RouterAddress> ret = new ArrayList<RouterAddress>(_addresses.size());
         for (RouterAddress addr : _addresses) {
             String style = addr.getTransportStyle();
-            if (style.equals(transportStyle1) || style.equals(transportStyle2))
-                ret.add(addr);
+            if (style.equals(transportStyle1) || style.equals(transportStyle2)) ret.add(addr);
         }
         return ret;
     }
@@ -535,7 +558,7 @@ public class RouterInfo extends DatabaseEntry {
             if (log.shouldInfo()) {
                 log.warn("Signature verify fail: " + toString(), new Exception("from"));
             } else if (log.shouldWarn()) {
-                log.warn("RouterInfo [" + _identity.getHash().toBase64().substring(0,6) + "] has INVALID signature");
+                log.warn("RouterInfo [" + _identity.getHash().toBase64().substring(0, 6) + "] has INVALID signature");
             }
         }
     }
@@ -560,7 +583,9 @@ public class RouterInfo extends DatabaseEntry {
      *  @since 0.9
      */
     public void readBytes(InputStream in, boolean verifySig) throws DataFormatException, IOException {
-        if (_signature != null) {throw new IllegalStateException();}
+        if (_signature != null) {
+            throw new IllegalStateException();
+        }
         _identity = new RouterIdentity();
         _identity.readBytes(in);
         // can't set the digest until we know the sig type
@@ -569,7 +594,9 @@ public class RouterInfo extends DatabaseEntry {
         SigType type = _identity.getSigningPublicKey().getType();
         // Even if not verifying, we have to construct a Signature object
         // below, which will fail for null type.
-        if (type == null) {throw new DataFormatException("Unknown Signature Type");}
+        if (type == null) {
+            throw new DataFormatException("Unknown Signature Type");
+        }
         if (verifySig) {
             if (type != SigType.EdDSA_SHA512_Ed25519) {
                 // This won't work for EdDSA
@@ -589,7 +616,9 @@ public class RouterInfo extends DatabaseEntry {
 
         // EOF will be thrown in properties read below
         int numAddresses = din.read();
-        if (numAddresses > MAX_ADDRESSES) {throw new DataFormatException("Too many addresses");}
+        if (numAddresses > MAX_ADDRESSES) {
+            throw new DataFormatException("Too many addresses");
+        }
         for (int i = 0; i < numAddresses; i++) {
             RouterAddress address = new RouterAddress();
             address.readBytes(din);
@@ -597,14 +626,15 @@ public class RouterInfo extends DatabaseEntry {
         }
         // EOF will be thrown in properties read below
         int numPeers = din.read();
-        if (numPeers <= 0) {_peers = null;}
-        else {
+        if (numPeers <= 0) {
+            _peers = null;
+        } else {
             _peers = new HashSet<Hash>(numPeers);
             if (numPeers > MAX_INTRODUCERS) {
                 if (_identity != null) {
                     Hash h = _identity.getHash();
                     if (log.shouldWarn()) {
-                        log.warn("Warning! [" + h.toBase64().substring(0,6) + "] has too many introducers (" + numPeers + ")");
+                        log.warn("Warning! [" + h.toBase64().substring(0, 6) + "] has too many introducers (" + numPeers + ")");
                     }
                 }
                 throw new DataFormatException("Too many introducers");
@@ -628,8 +658,12 @@ public class RouterInfo extends DatabaseEntry {
                 hash.setData(digest.digest());
                 _isValid = DSAEngine.getInstance().verifySignature(_signature, hash, _identity.getSigningPublicKey());
                 _validated = true;
-            } else {doValidate();} // doValidate will log
-            if (!_isValid) {throw new DataFormatException("BAD RouterInfo signature");}
+            } else {
+                doValidate();
+            } // doValidate will log
+            if (!_isValid) {
+                throw new DataFormatException("BAD RouterInfo signature");
+            }
         }
     }
 
@@ -648,14 +682,11 @@ public class RouterInfo extends DatabaseEntry {
         if (object == this) return true;
         if ((object == null) || !(object instanceof RouterInfo)) return false;
         RouterInfo info = (RouterInfo) object;
-        return
-               _published == info.getPublished()
-               && DataHelper.eq(_signature, info.getSignature())
-               && DataHelper.eq(_identity, info.getIdentity())
-               // Let's speed up the NetDB
-               && DataHelper.eq(_addresses, info.getAddresses())
-               && DataHelper.eq(_options, info.getOptions())
-               && DataHelper.eq(getPeers(), info.getPeers());
+        return _published == info.getPublished() && DataHelper.eq(_signature, info.getSignature()) && DataHelper.eq(_identity, info.getIdentity())
+                // Let's speed up the NetDB
+                && DataHelper.eq(_addresses, info.getAddresses())
+                && DataHelper.eq(_options, info.getOptions())
+                && DataHelper.eq(getPeers(), info.getPeers());
     }
 
     @Override
@@ -727,11 +758,13 @@ public class RouterInfo extends DatabaseEntry {
                 fail = true;
             } finally {
                 if (is != null) {
-                    try { is.close(); } catch (IOException ioe) {}
+                    try {
+                        is.close();
+                    } catch (IOException ioe) {
+                    }
                 }
             }
         }
-        if (fail)
-            System.exit(1);
+        if (fail) System.exit(1);
     }
 }

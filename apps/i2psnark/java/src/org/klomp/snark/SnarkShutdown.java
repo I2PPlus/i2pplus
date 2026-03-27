@@ -6,8 +6,9 @@
 
 package org.klomp.snark;
 
-import java.io.IOException;
 import net.i2p.util.I2PAppThread;
+
+import java.io.IOException;
 
 /**
  * Makes sure everything ends correctly when shutting down.
@@ -24,12 +25,7 @@ public class SnarkShutdown extends I2PAppThread {
     private final ShutdownListener listener;
 
     /* FIXME Exporting non-public type through public API FIXME */
-    public SnarkShutdown(
-            Storage storage,
-            PeerCoordinator coordinator,
-            ConnectionAcceptor acceptor,
-            TrackerClient trackerclient,
-            ShutdownListener listener) {
+    public SnarkShutdown(Storage storage, PeerCoordinator coordinator, ConnectionAcceptor acceptor, TrackerClient trackerclient, ShutdownListener listener) {
         this.storage = storage;
         this.coordinator = coordinator;
         this.acceptor = acceptor;

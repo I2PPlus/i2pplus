@@ -1,17 +1,20 @@
 package net.i2p.i2pcontrol;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import net.i2p.I2PAppContext;
 import net.i2p.apache.http.conn.util.InetAddressUtils;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
+
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.HandlerWrapper;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Block certain Host headers to prevent DNS rebinding attacks.
@@ -24,8 +27,7 @@ import org.eclipse.jetty.server.handler.HandlerWrapper;
  *
  * @since 0.12 copied from routerconsole
  */
-public class HostCheckHandler extends HandlerWrapper
-{
+public class HostCheckHandler extends HandlerWrapper {
     private final I2PAppContext _context;
     private final Set<String> _listenHosts;
 
@@ -53,21 +55,13 @@ public class HostCheckHandler extends HandlerWrapper
     /**
      *  Block by Host header, pass everything else to the delegate.
      */
-    public void handle(String pathInContext,
-                       Request baseRequest,
-                       HttpServletRequest httpRequest,
-                       HttpServletResponse httpResponse)
-         throws IOException, ServletException
-    {
+    public void handle(String pathInContext, Request baseRequest, HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException, ServletException {
 
         String host = httpRequest.getHeader("Host");
         if (!allowHost(host)) {
             Log log = _context.logManager().getLog(HostCheckHandler.class);
             host = DataHelper.stripHTML(getHost(host));
-            String s = "Console request denied.\n" +
-                       "    To allow access using the hostname \"" + host + "\", add the line \"" +
-                       I2PControlController.PROP_ALLOWED_HOSTS + '=' + host +
-                       "\" to I2PControl.conf and restart.";
+            String s = "Console request denied.\n" + "    To allow access using the hostname \"" + host + "\", add the line \"" + I2PControlController.PROP_ALLOWED_HOSTS + '=' + host + "\" to I2PControl.conf and restart.";
             log.logAlways(Log.WARN, s);
             httpResponse.sendError(403, s);
             return;
@@ -85,22 +79,16 @@ public class HostCheckHandler extends HandlerWrapper
      *  @return true if OK
      */
     private boolean allowHost(String host) {
-        if (host == null)
-            return true;
+        if (host == null) return true;
         // common cases
-        if (host.equals("127.0.0.1:7650") ||
-            host.equals("localhost:7650"))
-            return true;
+        if (host.equals("127.0.0.1:7650") || host.equals("localhost:7650")) return true;
         // all allowed?
-        if (_listenHosts.isEmpty())
-            return true;
+        if (_listenHosts.isEmpty()) return true;
         host = getHost(host);
-        if (_listenHosts.contains(host))
-            return true;
+        if (_listenHosts.contains(host)) return true;
         // allow all IP addresses
-        if (InetAddressUtils.isIPv4Address(host) || InetAddressUtils.isIPv6Address(host))
-            return true;
-        //System.out.println(host + " not found in " + s);
+        if (InetAddressUtils.isIPv4Address(host) || InetAddressUtils.isIPv6Address(host)) return true;
+        // System.out.println(host + " not found in " + s);
         return false;
     }
 
@@ -113,12 +101,10 @@ public class HostCheckHandler extends HandlerWrapper
         if (host.startsWith("[")) {
             host = host.substring(1);
             int brack = host.indexOf(']');
-            if (brack >= 0)
-                host = host.substring(0, brack);
+            if (brack >= 0) host = host.substring(0, brack);
         } else {
             int colon = host.indexOf(':');
-            if (colon >= 0)
-                host = host.substring(0, colon);
+            if (colon >= 0) host = host.substring(0, colon);
         }
         return host;
     }

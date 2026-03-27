@@ -1,5 +1,9 @@
 package net.i2p.router.transport.ntcp;
 
+import net.i2p.router.RouterContext;
+import net.i2p.util.I2PThread;
+import net.i2p.util.Log;
+
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -7,9 +11,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import net.i2p.router.RouterContext;
-import net.i2p.util.I2PThread;
-import net.i2p.util.Log;
 
 /**
  * Pool of running threads which will process any read bytes on any of the
@@ -68,8 +69,7 @@ class Reader {
                 _pendingConnections.notifyAll();
             }
         }
-        if (_log.shouldDebug())
-            _log.debug("wantsRead: " + con + " already live? " + already);
+        if (_log.shouldDebug()) _log.debug("wantsRead: " + con + " already live? " + already);
     }
 
     public void connectionClosed(NTCPConnection con) {
@@ -85,7 +85,9 @@ class Reader {
 
         public Runner() {}
 
-        public void stop() { _stop = true; }
+        public void stop() {
+            _stop = true;
+        }
 
         @Override
         public void run() {
@@ -95,14 +97,16 @@ class Reader {
                 try {
                     synchronized (_pendingConnections) {
                         boolean keepReading = (con != null) && _readAfterLive.remove(con);
-                        if (keepReading) {} // keep on reading the same one
+                        if (keepReading) {
+                        } // keep on reading the same one
                         else {
                             if (con != null) {
                                 _liveReads.remove(con);
                                 con = null;
                             }
-                            if (_pendingConnections.isEmpty()) {_pendingConnections.wait();}
-                            else {
+                            if (_pendingConnections.isEmpty()) {
+                                _pendingConnections.wait();
+                            } else {
                                 Iterator<NTCPConnection> iter = _pendingConnections.iterator();
                                 con = iter.next();
                                 iter.remove();
@@ -110,16 +114,15 @@ class Reader {
                             }
                         }
                     }
-                } catch (InterruptedException ie) {}
+                } catch (InterruptedException ie) {
+                }
                 if (!_stop && (con != null)) {
-                    if (_log.shouldDebug())
-                        _log.debug("Begin read for " + con);
+                    if (_log.shouldDebug()) _log.debug("Begin read for " + con);
                     try {
                         processRead(con);
                     } catch (IllegalStateException ise) {
                         // FailedEstablishState.receive() (race - see below)
-                        if (_log.shouldWarn())
-                            _log.warn("Error in the NTCP Reader", ise);
+                        if (_log.shouldWarn()) _log.warn("Error in the NTCP Reader", ise);
                     } catch (IllegalArgumentException iae) {
                         // probably a race with a cancelled key
                         // java.lang.IllegalArgumentException
@@ -128,12 +131,20 @@ class Reader {
                         // at net.i2p.router.transport.ntcp.NTCPConnection$NTCP2ReadState.receive(NTCPConnection.java:2054)
                         // at net.i2p.router.transport.ntcp.NTCPConnection.recvEncryptedI2NP(NTCPConnection.java:1383)
                         // at net.i2p.router.transport.ntcp.Reader.processRead(Reader.java:170)
-                        if (_log.shouldWarn()) {_log.warn("Error in the NTCP reader", iae);}
-                    } catch (RuntimeException re) {_log.error("Error in the NTCP Reader", re);}
-                    if (_log.shouldDebug()) {_log.debug("End read for " + con);}
+                        if (_log.shouldWarn()) {
+                            _log.warn("Error in the NTCP reader", iae);
+                        }
+                    } catch (RuntimeException re) {
+                        _log.error("Error in the NTCP Reader", re);
+                    }
+                    if (_log.shouldDebug()) {
+                        _log.debug("End read for " + con);
+                    }
                 }
             }
-            if (_log.shouldInfo()) {_log.info("Stopping NTCP Reader...");}
+            if (_log.shouldInfo()) {
+                _log.info("Stopping NTCP Reader...");
+            }
         }
     }
 
@@ -149,10 +160,16 @@ class Reader {
         ByteBuffer buf = null;
         while (true) {
             synchronized (con) {
-                if (con.isClosed()) {return;}
-                if (con.isEstablished()) {break;}
+                if (con.isClosed()) {
+                    return;
+                }
+                if (con.isEstablished()) {
+                    break;
+                }
             }
-            if ((buf = con.getNextReadBuf()) == null) {return;}
+            if ((buf = con.getNextReadBuf()) == null) {
+                return;
+            }
             EstablishState est = con.getEstablishState();
             if (est == null) {
                 if (_log.shouldWarn()) _log.warn("EstablishState is null for connection: " + con);
@@ -163,8 +180,7 @@ class Reader {
             if (est.isComplete()) {
                 // why is it complete yet !con.isEstablished?
                 if (_log.shouldWarn()) {
-                    _log.warn("Establishment state [" + est + "] is complete, yet the connection isn't established? " +
-                               con.isEstablished() + " (inbound? " + con.isInbound() + " " + con + ")");
+                    _log.warn("Establishment state [" + est + "] is complete, yet the connection isn't established? " + con.isEstablished() + " (inbound? " + con.isInbound() + " " + con + ")");
                 }
                 EventPumper.releaseBuf(buf);
                 break;
@@ -173,11 +189,15 @@ class Reader {
             try {
                 est.receive(buf);
             } catch (NullPointerException npe) {
-                if (_log.shouldWarn()) {_log.warn("NPE in EstablishState.receive() for connection: " + con, npe);}
+                if (_log.shouldWarn()) {
+                    _log.warn("NPE in EstablishState.receive() for connection: " + con, npe);
+                }
                 con.close();
                 return;
             } catch (IllegalStateException ise) {
-                if (_log.shouldWarn()) {_log.warn("IllegalState in EstablishState.receive() for connection: " + con, ise);}
+                if (_log.shouldWarn()) {
+                    _log.warn("IllegalState in EstablishState.receive() for connection: " + con, ise);
+                }
                 con.close();
                 return;
             }
@@ -193,12 +213,16 @@ class Reader {
             try {
                 con.recvEncryptedI2NP(buf);
             } catch (NullPointerException npe) {
-                if (_log.shouldWarn()) {_log.error("NPE in recvEncryptedI2NP() for connection: " + con, npe);}
+                if (_log.shouldWarn()) {
+                    _log.error("NPE in recvEncryptedI2NP() for connection: " + con, npe);
+                }
                 con.close();
                 if (buf != null) EventPumper.releaseBuf(buf);
                 return;
             } catch (IllegalStateException ise) {
-                if (_log.shouldWarn()) {_log.warn("IllegalState in recvEncryptedI2NP() for connection: " + con, ise);}
+                if (_log.shouldWarn()) {
+                    _log.warn("IllegalState in recvEncryptedI2NP() for connection: " + con, ise);
+                }
                 con.close();
                 if (buf != null) EventPumper.releaseBuf(buf);
                 return;

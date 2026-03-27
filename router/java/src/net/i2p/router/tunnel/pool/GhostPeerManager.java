@@ -2,7 +2,6 @@ package net.i2p.router.tunnel.pool;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.router.peermanager.ProfileOrganizer;
@@ -30,10 +29,10 @@ public class GhostPeerManager {
     private static final int THRESHOLD_MODERATE = 6;
     private static final int THRESHOLD_STRESSED = 4;
     private static final int THRESHOLD_ATTACK = 3;
-    private static final long COOLDOWN_FIRST_MS = 60*1000;   // 1m
-    private static final long COOLDOWN_REPEAT_MS = 120*1000;  // 2m
-    private static final long COOLDOWN_PERSIST_MS = 240*1000; // 4m
-    private static final long GHOST_COUNT_DECAY_MS = 10*60*1000; // 10m decay
+    private static final long COOLDOWN_FIRST_MS = 60 * 1000; // 1m
+    private static final long COOLDOWN_REPEAT_MS = 120 * 1000; // 2m
+    private static final long COOLDOWN_PERSIST_MS = 240 * 1000; // 4m
+    private static final long GHOST_COUNT_DECAY_MS = 10 * 60 * 1000; // 10m decay
     private static final int MAX_TRACKED_PEERS = 1024;
 
     public GhostPeerManager(RouterContext context) {
@@ -52,7 +51,9 @@ public class GhostPeerManager {
      * @param peer the peer hash that timed out
      */
     public void recordTimeout(Hash peer) {
-        if (peer == null || peer.equals(_context.routerHash())) {return;}
+        if (peer == null || peer.equals(_context.routerHash())) {
+            return;
+        }
 
         AtomicInteger count = _timeoutCounts.putIfAbsent(peer, new AtomicInteger(1));
         if (count != null) {
@@ -68,9 +69,9 @@ public class GhostPeerManager {
                 int ghostCount = gc != null ? gc.incrementAndGet() : 1;
                 long cooldown = getCoolDown(ghostCount);
                 if (_log.shouldWarn()) {
-                    _log.warn("Peer [" + peer.toBase64().substring(0,6) + "] marked as ghost for " +
-                              (cooldown/1000) + "s -> " + newCount + " consecutive tunnel build timeouts" +
-                              " (threshold: " + threshold + ", repeat: " + ghostCount + ")");
+                    _log.warn("Peer [" + peer.toBase64().substring(0, 6) + "] marked as ghost for " + (cooldown / 1000)
+                            + "s -> " + newCount + " consecutive tunnel build timeouts" + " (threshold: " + threshold
+                            + ", repeat: " + ghostCount + ")");
                 }
                 scheduleDecay(peer);
                 // Promote a replacement peer to fast pool to maintain connectivity
@@ -111,7 +112,9 @@ public class GhostPeerManager {
      * @param peer the peer hash that participated successfully
      */
     public void recordSuccess(Hash peer) {
-        if (peer == null || peer.equals(_context.routerHash())) {return;}
+        if (peer == null || peer.equals(_context.routerHash())) {
+            return;
+        }
 
         _timeoutCounts.computeIfPresent(peer, (k, count) -> {
             count.set(0);
@@ -127,7 +130,9 @@ public class GhostPeerManager {
      * @return true if the peer is a ghost and should be skipped
      */
     public boolean isGhost(Hash peer) {
-        if (peer == null || peer.equals(_context.routerHash())) {return false;}
+        if (peer == null || peer.equals(_context.routerHash())) {
+            return false;
+        }
 
         Long since = _ghostSince.get(peer);
         if (since != null) {
@@ -144,7 +149,9 @@ public class GhostPeerManager {
         }
 
         AtomicInteger count = _timeoutCounts.get(peer);
-        if (count == null) {return false;}
+        if (count == null) {
+            return false;
+        }
         return count.get() >= getThreshold();
     }
 
@@ -172,7 +179,9 @@ public class GhostPeerManager {
      * @param peer the peer hash to clear
      */
     public void clearGhost(Hash peer) {
-        if (peer == null) {return;}
+        if (peer == null) {
+            return;
+        }
         _timeoutCounts.remove(peer);
         _ghostSince.remove(peer);
     }

@@ -25,20 +25,19 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
     private final ConsoleUpdateManager _mgr;
     private volatile boolean _firstRun = true;
 
-    private static final long INITIAL_DELAY = 5*60*1000;
-    private static final long NEW_INSTALL_DELAY = 25*60*1000;
-    private static final long RUN_DELAY = 10*60*1000;
+    private static final long INITIAL_DELAY = 5 * 60 * 1000;
+    private static final long NEW_INSTALL_DELAY = 25 * 60 * 1000;
+    private static final long RUN_DELAY = 10 * 60 * 1000;
 
     public NewsTimerTask(RouterContext ctx, ConsoleUpdateManager mgr) {
         _context = ctx;
         _log = ctx.logManager().getLog(NewsTimerTask.class);
         _mgr = mgr;
         long installed = ctx.getProperty("router.firstInstalled", 0L);
-        boolean isNew = (ctx.clock().now() - installed) < 30*60*1000L;
+        boolean isNew = (ctx.clock().now() - installed) < 30 * 60 * 1000L;
         long delay = isNew ? NEW_INSTALL_DELAY : INITIAL_DELAY;
         delay += _context.random().nextLong(INITIAL_DELAY);
-        if (_log.shouldInfo())
-            _log.info("Scheduling first news check in " + DataHelper.formatDuration(delay));
+        if (_log.shouldInfo()) _log.info("Scheduling first news check in " + DataHelper.formatDuration(delay));
         ctx.simpleTimer2().addPeriodicEvent(this, delay, RUN_DELAY);
         // UpdateManager calls NewsFetcher to check the existing news at startup
     }
@@ -57,8 +56,7 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
             // this will fire off an update.
             // If disabled this does nothing.
             // TODO unsigned too?
-            if (_mgr.shouldInstall() &&
-                !_mgr.isCheckInProgress() && !_mgr.isUpdateInProgress())
+            if (_mgr.shouldInstall() && !_mgr.isCheckInProgress() && !_mgr.isUpdateInProgress())
                 // non-blocking
                 _mgr.update(ROUTER_SIGNED);
         }
@@ -66,50 +64,40 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
     }
 
     private boolean shouldFetchNews() {
-        if (_context.router().gracefulShutdownInProgress())
-            return false;
-        if (_mgr.isCheckInProgress() || _mgr.isUpdateInProgress())
-            return false;
+        if (_context.router().gracefulShutdownInProgress()) return false;
+        if (_mgr.isCheckInProgress() || _mgr.isUpdateInProgress()) return false;
         long lastFetch = NewsHelper.lastChecked(_context);
-        String freq = _context.getProperty(ConfigUpdateHandler.PROP_REFRESH_FREQUENCY,
-                                           ConfigUpdateHandler.DEFAULT_REFRESH_FREQUENCY);
+        String freq = _context.getProperty(ConfigUpdateHandler.PROP_REFRESH_FREQUENCY, ConfigUpdateHandler.DEFAULT_REFRESH_FREQUENCY);
         try {
             long ms = Long.parseLong(freq);
-            if (ms <= 0)
-                return false;
+            if (ms <= 0) return false;
 
             if (lastFetch + ms < _context.clock().now()) {
                 return true;
             } else {
-                if (_log.shouldDebug())
-                    _log.debug("Last fetched " + DataHelper.formatDuration(_context.clock().now() - lastFetch) + " ago");
+                if (_log.shouldDebug()) _log.debug("Last fetched " + DataHelper.formatDuration(_context.clock().now() - lastFetch) + " ago");
                 return false;
             }
         } catch (NumberFormatException nfe) {
-            if (_log.shouldError())
-                _log.error("Invalid refresh frequency: " + freq);
+            if (_log.shouldError()) _log.error("Invalid refresh frequency: " + freq);
             return false;
         }
     }
 
     /** blocking */
     private void fetchNews() {
-        _mgr.checkAvailable(NEWS, 60*1000);
+        _mgr.checkAvailable(NEWS, 60 * 1000);
     }
 
     private boolean shouldFetchUnsigned() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
-        return url != null && url.length() > 0 &&
-               _context.getBooleanProperty(ConfigUpdateHandler.PROP_UPDATE_UNSIGNED) &&
-               !NewsHelper.dontInstall(_context);
+        return url != null && url.length() > 0 && _context.getBooleanProperty(ConfigUpdateHandler.PROP_UPDATE_UNSIGNED) && !NewsHelper.dontInstall(_context);
     }
 
     /** @since 0.9.20 */
     private boolean shouldFetchDevSU3() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_DEV_SU3_URL);
-        return url != null && url.length() > 0 &&
-               _context.getBooleanProperty(ConfigUpdateHandler.PROP_UPDATE_DEV_SU3) &&
-               !NewsHelper.dontInstall(_context);
+        return url != null && url.length() > 0 && _context.getBooleanProperty(ConfigUpdateHandler.PROP_UPDATE_DEV_SU3) && !NewsHelper.dontInstall(_context);
     }
 
     /**
@@ -122,20 +110,27 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
             super("News Fetcher");
             setDaemon(true);
         }
-@Override
+
+        @Override
         public void run() {
             // blocking
             fetchNews();
             if (shouldFetchDevSU3()) {
                 // give it a sec for the download to kick in, if it's going to
-                try { Thread.sleep(5*1000); } catch (InterruptedException ie) {}
+                try {
+                    Thread.sleep(5 * 1000);
+                } catch (InterruptedException ie) {
+                }
                 if (!_mgr.isCheckInProgress() && !_mgr.isUpdateInProgress())
                     // nonblocking
                     _mgr.check(ROUTER_DEV_SU3);
             }
             if (shouldFetchUnsigned()) {
                 // give it a sec for the download to kick in, if it's going to
-                try { Thread.sleep(5*1000); } catch (InterruptedException ie) {}
+                try {
+                    Thread.sleep(5 * 1000);
+                } catch (InterruptedException ie) {
+                }
                 if (!_mgr.isCheckInProgress() && !_mgr.isUpdateInProgress())
                     // nonblocking
                     _mgr.check(ROUTER_UNSIGNED);

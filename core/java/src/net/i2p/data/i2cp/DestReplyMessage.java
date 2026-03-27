@@ -6,12 +6,13 @@ package net.i2p.data.i2cp;
  *
  */
 
-import java.io.IOException;
-import java.io.InputStream;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.util.ByteArrayStream;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Response to DestLookupMessage.
@@ -20,7 +21,7 @@ import net.i2p.util.ByteArrayStream;
  * Payload may be empty (failure), a Hash (failure), or a Destination.
  */
 public class DestReplyMessage extends I2CPMessageImpl {
-    public final static int MESSAGE_TYPE = 35;
+    public static final int MESSAGE_TYPE = 35;
     private Destination _dest;
     private Hash _hash;
 
@@ -45,10 +46,10 @@ public class DestReplyMessage extends I2CPMessageImpl {
     }
 
     /**
-      *  Gets the hash of the destination.
-      *
-      * @since 0.8.3
-      */
+     *  Gets the hash of the destination.
+     *
+     * @since 0.8.3
+     */
     public Hash getHash() {
         return _hash;
     }
@@ -75,8 +76,7 @@ public class DestReplyMessage extends I2CPMessageImpl {
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         if (_dest == null) {
-            if (_hash == null)
-                return new byte[0];  // null response allowed
+            if (_hash == null) return new byte[0]; // null response allowed
             return _hash.getData();
         }
         ByteArrayStream os = new ByteArrayStream(_dest.size());

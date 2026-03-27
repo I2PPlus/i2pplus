@@ -1,4 +1,5 @@
 package net.i2p.router.client;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,22 +9,6 @@ package net.i2p.router.client;
  *
  */
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.client.I2PClient;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SessionKeyManager;
@@ -58,6 +43,23 @@ import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Bridge the router and the client - managing state for a client.
  *
@@ -70,43 +72,57 @@ class ClientConnectionRunner {
     protected final Log _log;
     protected final RouterContext _context;
     protected final ClientManager _manager;
+
     /** socket for this particular peer connection */
     private final Socket _socket;
+
     /** output stream of the socket that I2CP messages bound to the client should be written to */
     private OutputStream _out;
 
     private final ConcurrentHashMap<Hash, SessionParams> _sessions;
 
     private String _clientVersion;
+
     /**
      *  Mapping of MessageId to Payload, storing messages for retrieval.
      *  Unused for i2cp.fastReceive = "true" (_dontSendMSMOnRecive = true)
      */
     private final Map<MessageId, Payload> _messages;
+
     private int _consecutiveLeaseRequestFails;
+
     /**
      *  Set of messageIds created but not yet ACCEPTED.
      *  Unused for i2cp.messageReliability = "none" (_dontSendMSM = true)
      */
     private final Set<MessageId> _acceptedPending;
+
     /** thingy that does stuff */
     protected I2CPMessageReader _reader;
+
     /** Used for all sessions, which must all have the same crypto keys */
     private SessionKeyManager _sessionKeyManager;
+
     /** Used for leaseSets sent to and received from this client */
     private FloodfillNetworkDatabaseFacade _floodfillNetworkDatabaseFacade;
+
     /**
      * This contains the last 10 MessageIds that have had their (non-ack) status
      * delivered to the client (so that we can be sure only to update when necessary)
      */
     private final List<MessageId> _alreadyProcessed;
+
     private ClientWriterRunner _writer;
+
     /** are we, uh, dead */
     private volatile boolean _dead;
+
     /** For outbound traffic. true if i2cp.messageReliability = "none"; @since 0.8.1 */
     private boolean _dontSendMSM;
+
     /** For inbound traffic. true if i2cp.fastReceive = "true"; @since 0.9.4 */
     private boolean _dontSendMSMOnReceive;
+
     private final AtomicInteger _messageId; // messageId counter
     private Hash _encryptedLSHash;
 
@@ -117,11 +133,12 @@ class ClientConnectionRunner {
     private static final int MAX_MESSAGE_ID = 0x4000000;
 
     private static final int MAX_LEASE_FAILS = 5;
-    private static final int BUF_SIZE = 32*1024;
+    private static final int BUF_SIZE = 32 * 1024;
     private static final int MAX_SESSIONS = 4;
 
     /** @since 0.9.2 */
     private static final String PROP_TAGS = "crypto.tagsToSend";
+
     private static final String PROP_THRESH = "crypto.lowTagThreshold";
 
     /**
@@ -135,8 +152,10 @@ class ClientConnectionRunner {
         SessionConfig config;
         LeaseRequestState leaseRequest;
         Rerequest rerequestTimer;
+
         /** possibly decrypted */
         LeaseSet currentLeaseSet;
+
         /** only if encrypted */
         LeaseSet currentEncryptedLeaseSet;
 
@@ -172,10 +191,8 @@ class ClientConnectionRunner {
      *
      */
     public synchronized void startRunning() throws IOException {
-        if (_dead || _reader != null)
-                throw new IllegalStateException();
-        _reader = new I2CPMessageReader(new BufferedInputStream(_socket.getInputStream(), BUF_SIZE),
-                                            createListener());
+        if (_dead || _reader != null) throw new IllegalStateException();
+        _reader = new I2CPMessageReader(new BufferedInputStream(_socket.getInputStream(), BUF_SIZE), createListener());
         _writer = new ClientWriterRunner(_context, this);
         I2PThread t = new I2PThread(_writer);
         t.setName("I2CP Writer " + __id.incrementAndGet());
@@ -183,7 +200,7 @@ class ClientConnectionRunner {
         t.start();
         _out = new BufferedOutputStream(_socket.getOutputStream());
         _reader.startReading();
-            // TODO need a cleaner for unclaimed items in _messages, but we have no timestamps...
+        // TODO need a cleaner for unclaimed items in _messages, but we have no timestamps...
     }
 
     /**
@@ -200,20 +217,19 @@ class ClientConnectionRunner {
     public synchronized void stopRunning() {
         if (_dead) return;
         // router may be null in unit tests
-        if ((_context.router() == null || _context.router().isAlive()) &&
-            _log.shouldDebug())
-            _log.warn("Stopping the I2CP connection!", new Exception("Stop client connection"));
+        if ((_context.router() == null || _context.router().isAlive()) && _log.shouldDebug()) _log.warn("Stopping the I2CP connection!", new Exception("Stop client connection"));
         _dead = true;
         // we need these keys to unpublish the leaseSet
         if (_reader != null) _reader.stopReading();
         if (_writer != null) _writer.stopWriting();
-        if (_socket != null) try { _socket.close(); } catch (IOException ioe) { }
+        if (_socket != null) try {
+                _socket.close();
+            } catch (IOException ioe) {
+            }
         _messages.clear();
         _acceptedPending.clear();
-        if (_sessionKeyManager != null)
-            _sessionKeyManager.shutdown();
-        if (_encryptedLSHash != null)
-            _manager.unregisterEncryptedDestination(this, _encryptedLSHash);
+        if (_sessionKeyManager != null) _sessionKeyManager.shutdown();
+        if (_encryptedLSHash != null) _manager.unregisterEncryptedDestination(this, _encryptedLSHash);
         _manager.unregisterConnection(this);
         // netdb may be null in unit tests
         if (_context.netDb() != null) {
@@ -223,18 +239,14 @@ class ClientConnectionRunner {
             for (SessionParams sp : _sessions.values()) {
                 // we don't need to unpublish(),
                 // as we shut down our subdb below.
-                if (!sp.isPrimary)
-                    _context.tunnelManager().removeAlias(sp.dest);
+                if (!sp.isPrimary) _context.tunnelManager().removeAlias(sp.dest);
             }
             for (SessionParams sp : _sessions.values()) {
-                if (sp.isPrimary)
-                    _context.tunnelManager().removeTunnels(sp.dest);
-                if (sp.rerequestTimer != null)
-                    sp.rerequestTimer.cancel();
+                if (sp.isPrimary) _context.tunnelManager().removeTunnels(sp.dest);
+                if (sp.rerequestTimer != null) sp.rerequestTimer.cancel();
             }
         }
-        if (_floodfillNetworkDatabaseFacade != null)
-            _floodfillNetworkDatabaseFacade.shutdown();
+        if (_floodfillNetworkDatabaseFacade != null) _floodfillNetworkDatabaseFacade.shutdown();
         synchronized (_alreadyProcessed) {
             _alreadyProcessed.clear();
         }
@@ -255,9 +267,8 @@ class ClientConnectionRunner {
      *  @since 0.9.21 added hash param
      */
     public SessionConfig getConfig(Hash h) {
-        SessionParams sp  = _sessions.get(h);
-        if (sp == null)
-            return null;
+        SessionParams sp = _sessions.get(h);
+        if (sp == null) return null;
         return sp.config;
     }
 
@@ -269,11 +280,9 @@ class ClientConnectionRunner {
      *  @since 0.9.21 added id param
      */
     public SessionConfig getConfig(SessionId id) {
-        if (id == null)
-            return null;
+        if (id == null) return null;
         for (SessionParams sp : _sessions.values()) {
-            if (id.equals(sp.sessionId))
-                return sp.config;
+            if (id.equals(sp.sessionId)) return sp.config;
         }
         return null;
     }
@@ -285,8 +294,7 @@ class ClientConnectionRunner {
      */
     public SessionConfig getPrimaryConfig() {
         for (SessionParams sp : _sessions.values()) {
-            if (sp.isPrimary)
-                return sp.config;
+            if (sp.isPrimary) return sp.config;
         }
         return null;
     }
@@ -312,7 +320,9 @@ class ClientConnectionRunner {
      *  The current client's SessionKeyManager.
      *  As of 0.9.44, returned implementation varies based on supported encryption types.
      */
-    public SessionKeyManager getSessionKeyManager() { return _sessionKeyManager; }
+    public SessionKeyManager getSessionKeyManager() {
+        return _sessionKeyManager;
+    }
 
     /**
      *  Currently allocated leaseSet.
@@ -322,8 +332,7 @@ class ClientConnectionRunner {
      */
     public LeaseSet getLeaseSet(Hash h) {
         SessionParams sp = _sessions.get(h);
-        if (sp == null)
-            return null;
+        if (sp == null) return null;
         return sp.currentLeaseSet;
     }
 
@@ -337,7 +346,9 @@ class ClientConnectionRunner {
      */
     public Hash getDestHash() {
         SessionConfig cfg = getPrimaryConfig();
-        if (cfg != null) {return cfg.getDestination().calculateHash();}
+        if (cfg != null) {
+            return cfg.getDestination().calculateHash();
+        }
         return null;
     }
 
@@ -347,9 +358,13 @@ class ClientConnectionRunner {
      *  @since 0.9.21
      */
     public Hash getDestHash(SessionId id) {
-        if (id == null) {return null;}
+        if (id == null) {
+            return null;
+        }
         for (Map.Entry<Hash, SessionParams> e : _sessions.entrySet()) {
-            if (id.equals(e.getValue().sessionId)) {return e.getKey();}
+            if (id.equals(e.getValue().sessionId)) {
+                return e.getKey();
+            }
         }
         return null;
     }
@@ -360,9 +375,13 @@ class ClientConnectionRunner {
      *  @since 0.9.21
      */
     public Destination getDestination(SessionId id) {
-        if (id == null) {return null;}
+        if (id == null) {
+            return null;
+        }
         for (SessionParams sp : _sessions.values()) {
-            if (id.equals(sp.sessionId)) {return sp.dest;}
+            if (id.equals(sp.sessionId)) {
+                return sp.dest;
+            }
         }
         return null;
     }
@@ -376,7 +395,9 @@ class ClientConnectionRunner {
      */
     SessionId getSessionId(Hash h) {
         SessionParams sp = _sessions.get(h);
-        if (sp == null) {return null;}
+        if (sp == null) {
+            return null;
+        }
         return sp.sessionId;
     }
 
@@ -390,7 +411,9 @@ class ClientConnectionRunner {
         List<SessionId> rv = new ArrayList<SessionId>(_sessions.size());
         for (SessionParams sp : _sessions.values()) {
             SessionId id = sp.sessionId;
-            if (id != null) {rv.add(id);}
+            if (id != null) {
+                rv.add(id);
+            }
         }
         return rv;
     }
@@ -403,7 +426,9 @@ class ClientConnectionRunner {
      */
     List<Destination> getDestinations() {
         List<Destination> rv = new ArrayList<Destination>(_sessions.size());
-        for (SessionParams sp : _sessions.values()) {rv.add(sp.dest);}
+        for (SessionParams sp : _sessions.values()) {
+            rv.add(sp.dest);
+        }
         return rv;
     }
 
@@ -415,10 +440,16 @@ class ClientConnectionRunner {
      *  @since 0.9.21 added hash param
      */
     void setSessionId(Hash hash, SessionId id) {
-        if (hash == null) {throw new IllegalStateException();}
-        if (id == null) {throw new NullPointerException();}
+        if (hash == null) {
+            throw new IllegalStateException();
+        }
+        if (id == null) {
+            throw new NullPointerException();
+        }
         SessionParams sp = _sessions.get(hash);
-        if (sp == null || sp.sessionId != null) {throw new IllegalStateException();}
+        if (sp == null || sp.sessionId != null) {
+            throw new IllegalStateException();
+        }
         sp.sessionId = id;
     }
 
@@ -429,32 +460,25 @@ class ClientConnectionRunner {
      *  @since 0.9.21
      */
     void removeSession(SessionId id) {
-        if (id == null)
-            return;
+        if (id == null) return;
         boolean isPrimary = false;
-        for (Iterator<SessionParams> iter = _sessions.values().iterator(); iter.hasNext();) {
+        for (Iterator<SessionParams> iter = _sessions.values().iterator(); iter.hasNext(); ) {
             SessionParams sp = iter.next();
             if (id.equals(sp.sessionId)) {
-                if (_log.shouldInfo())
-                    _log.info("Destroying client session " + id);
+                if (_log.shouldInfo()) _log.info("Destroying client session " + id);
                 iter.remove();
                 // Tell client manger
                 _manager.unregisterSession(id, sp.dest);
                 LeaseSet ls = sp.currentLeaseSet;
-                if (ls != null && _floodfillNetworkDatabaseFacade != null)
-                    _floodfillNetworkDatabaseFacade.unpublish(ls);
+                if (ls != null && _floodfillNetworkDatabaseFacade != null) _floodfillNetworkDatabaseFacade.unpublish(ls);
                 // unpublish encrypted LS also
                 ls = sp.currentEncryptedLeaseSet;
-                if (ls != null && _floodfillNetworkDatabaseFacade != null)
-                    _floodfillNetworkDatabaseFacade.unpublish(ls);
+                if (ls != null && _floodfillNetworkDatabaseFacade != null) _floodfillNetworkDatabaseFacade.unpublish(ls);
                 isPrimary = sp.isPrimary;
-                if (isPrimary)
-                    _context.tunnelManager().removeTunnels(sp.dest);
-                else
-                    _context.tunnelManager().removeAlias(sp.dest);
+                if (isPrimary) _context.tunnelManager().removeTunnels(sp.dest);
+                else _context.tunnelManager().removeAlias(sp.dest);
                 synchronized (this) {
-                    if (sp.rerequestTimer != null)
-                        sp.rerequestTimer.cancel();
+                    if (sp.rerequestTimer != null) sp.rerequestTimer.cancel();
                 }
                 break;
             }
@@ -462,20 +486,16 @@ class ClientConnectionRunner {
         if (isPrimary && !_sessions.isEmpty()) {
             // kill all the others also
             for (SessionParams sp : _sessions.values()) {
-                if (_log.shouldInfo())
-                    _log.info("Destroying remaining client subsession " + sp.sessionId);
+                if (_log.shouldInfo()) _log.info("Destroying remaining client subsession " + sp.sessionId);
                 _manager.unregisterSession(sp.sessionId, sp.dest);
                 LeaseSet ls = sp.currentLeaseSet;
-                if (ls != null && _floodfillNetworkDatabaseFacade != null)
-                    _floodfillNetworkDatabaseFacade.unpublish(ls);
+                if (ls != null && _floodfillNetworkDatabaseFacade != null) _floodfillNetworkDatabaseFacade.unpublish(ls);
                 // unpublish encrypted LS also
                 ls = sp.currentEncryptedLeaseSet;
-                if (ls != null && _floodfillNetworkDatabaseFacade != null)
-                    _floodfillNetworkDatabaseFacade.unpublish(ls);
+                if (ls != null && _floodfillNetworkDatabaseFacade != null) _floodfillNetworkDatabaseFacade.unpublish(ls);
                 _context.tunnelManager().removeAlias(sp.dest);
                 synchronized (this) {
-                    if (sp.rerequestTimer != null)
-                        sp.rerequestTimer.cancel();
+                    if (sp.rerequestTimer != null) sp.rerequestTimer.cancel();
                 }
             }
             _sessions.clear();
@@ -489,7 +509,9 @@ class ClientConnectionRunner {
      */
     LeaseRequestState getLeaseRequest(Hash h) {
         SessionParams sp = _sessions.get(h);
-        if (sp == null) {return null;}
+        if (sp == null) {
+            return null;
+        }
         return sp.leaseRequest;
     }
 
@@ -498,19 +520,22 @@ class ClientConnectionRunner {
         boolean disconnect = false;
         Hash h = req.getRequested().getDestination().calculateHash();
         SessionParams sp = _sessions.get(h);
-        if (sp == null) {return;}
+        if (sp == null) {
+            return;
+        }
         synchronized (this) {
             if (sp.leaseRequest == req) {
                 sp.leaseRequest = null;
-                disconnect =++_consecutiveLeaseRequestFails > MAX_LEASE_FAILS;
+                disconnect = ++_consecutiveLeaseRequestFails > MAX_LEASE_FAILS;
             }
         }
-        if (disconnect)
-            disconnectClient("Too many leaseset request fails");
+        if (disconnect) disconnectClient("Too many leaseset request fails");
     }
 
     /** already closed? */
-    boolean isDead() { return _dead; }
+    boolean isDead() {
+        return _dead;
+    }
 
     /**
      *  Only call if _dontSendMSMOnReceive is false, otherwise will always be null
@@ -523,8 +548,7 @@ class ClientConnectionRunner {
      *  Only call if _dontSendMSMOnReceive is false
      */
     void setPayload(MessageId id, Payload payload) {
-        if (!_dontSendMSMOnReceive)
-            _messages.put(id, payload);
+        if (!_dontSendMSMOnReceive) _messages.put(id, payload);
     }
 
     /**
@@ -544,16 +568,14 @@ class ClientConnectionRunner {
     public int sessionEstablished(SessionConfig config) {
         Destination dest = config.getDestination();
         Hash destHash = dest.calculateHash();
-        if (_log.shouldLog(Log.DEBUG))
-            _log.debug("SessionEstablished called for destination [" + destHash.toBase32().substring(0,8) + "]");
-        if (_sessions.size() > MAX_SESSIONS)
-            return SessionStatusMessage.STATUS_REFUSED;
+        if (_log.shouldLog(Log.DEBUG)) _log.debug("SessionEstablished called for destination [" + destHash.toBase32().substring(0, 8) + "]");
+        if (_sessions.size() > MAX_SESSIONS) return SessionStatusMessage.STATUS_REFUSED;
         boolean isPrimary = _sessions.isEmpty();
         if (!isPrimary) {
             // all encryption keys must be the same
             for (SessionParams sp : _sessions.values()) {
                 if (!dest.getPublicKey().equals(sp.dest.getPublicKey())) {
-                    _log.error("LeaseSet public key mismatch for key [" + destHash.toBase32().substring(0,8) + "]");
+                    _log.error("LeaseSet public key mismatch for key [" + destHash.toBase32().substring(0, 8) + "]");
                     return SessionStatusMessage.STATUS_INVALID;
                 }
             }
@@ -561,8 +583,7 @@ class ClientConnectionRunner {
         SessionParams sp = new SessionParams(dest, isPrimary);
         sp.config = config;
         SessionParams old = _sessions.putIfAbsent(destHash, sp);
-        if (old != null)
-            return SessionStatusMessage.STATUS_DUP_DEST;
+        if (old != null) return SessionStatusMessage.STATUS_DUP_DEST;
         // We process a few options here, but most are handled by the tunnel manager.
         // The ones here can't be changed later.
         Properties opts = config.getOptions();
@@ -585,19 +606,27 @@ class ClientConnectionRunner {
             if (opts != null && _context.router() != null) {
                 String ptags = opts.getProperty(PROP_TAGS);
                 if (ptags != null) {
-                    try { tags = Integer.parseInt(ptags); } catch (NumberFormatException nfe) {}
+                    try {
+                        tags = Integer.parseInt(ptags);
+                    } catch (NumberFormatException nfe) {
+                    }
                 }
                 String pthresh = opts.getProperty(PROP_THRESH);
                 if (pthresh != null) {
-                    try { thresh = Integer.parseInt(pthresh); } catch (NumberFormatException nfe) {}
+                    try {
+                        thresh = Integer.parseInt(pthresh);
+                    } catch (NumberFormatException nfe) {
+                    }
                 }
                 String senc = opts.getProperty("i2cp.leaseSetEncType");
                 if (senc != null) {
                     String[] senca = DataHelper.split(senc, ",");
                     for (String sencaa : senca) {
-                        if (sencaa.equals("0")) {hasElg = true;}
-                        else if (sencaa.equals("4")) {hasEC = true;}
-                        else if (sencaa.equals("5") || sencaa.equals("6") || sencaa.equals("7")) {
+                        if (sencaa.equals("0")) {
+                            hasElg = true;
+                        } else if (sencaa.equals("4")) {
+                            hasEC = true;
+                        } else if (sencaa.equals("5") || sencaa.equals("6") || sencaa.equals("7")) {
                             if (hasPQ) {
                                 _log.error("Bad encryption type combination in i2cp.leaseSetEncType for " + dest.toBase32());
                                 return SessionStatusMessage.STATUS_INVALID;
@@ -606,8 +635,12 @@ class ClientConnectionRunner {
                             hasPQ = true;
                         }
                     }
-                } else {hasElg = true;}
-            } else {hasElg = true;}
+                } else {
+                    hasElg = true;
+                }
+            } else {
+                hasElg = true;
+            }
             if (hasElg) {
                 if (hasPQ) {
                     _log.error("Bad encryption type combination in i2cp.leaseSetEncType for " + dest.toBase32());
@@ -634,14 +667,16 @@ class ClientConnectionRunner {
                 if (hasEC) {
                     _sessionKeyManager = new RatchetSKM(_context, dest);
                 } else {
-                    _log.error("No supported encryption types in i2cp.leaseSetEncType for key [" + dest.toBase32().substring(0,8) + "]");
+                    _log.error("No supported encryption types in i2cp.leaseSetEncType for key [" + dest.toBase32().substring(0, 8) + "]");
                     return SessionStatusMessage.STATUS_INVALID;
                 }
             }
         }
 
         if (isPrimary && _floodfillNetworkDatabaseFacade == null) {
-            if (_log.shouldDebug()) {_log.debug("Initializing subDb for client" + destHash);}
+            if (_log.shouldDebug()) {
+                _log.debug("Initializing subDb for client" + destHash);
+            }
             _floodfillNetworkDatabaseFacade = new FloodfillNetworkDatabaseFacade(_context, destHash);
             _floodfillNetworkDatabaseFacade.startup();
         }
@@ -662,11 +697,17 @@ class ClientConnectionRunner {
      *  @param status see I2CP MessageStatusMessage for success/failure codes
      */
     void updateMessageDeliveryStatus(Destination dest, MessageId id, long messageNonce, int status) {
-        if (_dead || messageNonce <= 0) {return;}
+        if (_dead || messageNonce <= 0) {
+            return;
+        }
         SessionParams sp = _sessions.get(dest.calculateHash());
-        if (sp == null) {return;}
+        if (sp == null) {
+            return;
+        }
         SessionId sid = sp.sessionId;
-        if (sid == null) {return;}  // sid = new SessionId(foo) ???
+        if (sid == null) {
+            return;
+        } // sid = new SessionId(foo) ???
         _context.jobQueue().addJob(new MessageDeliveryStatusUpdate(sid, id, messageNonce, status));
     }
 
@@ -679,7 +720,9 @@ class ClientConnectionRunner {
     void leaseSetCreated(LeaseSet ls) {
         Hash h = ls.getDestination().calculateHash();
         SessionParams sp = _sessions.get(h);
-        if (sp == null) {return;}
+        if (sp == null) {
+            return;
+        }
         LeaseRequestState state;
         synchronized (this) {
             if (ls.getType() == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
@@ -692,13 +735,11 @@ class ClientConnectionRunner {
             if (state == null) {
                 // We got the LS after the timeout?
                 // ClientMessageEventListener told the router to publish.
-                if (_log.shouldWarn())
-                    _log.warn("LeaseRequest is null and we've received a new Lease? " + ls);
+                if (_log.shouldWarn()) _log.warn("LeaseRequest is null and we've received a new Lease? " + ls);
                 return;
             } else {
                 state.setIsSuccessful(true);
-                if (_log.shouldDebug())
-                    _log.debug("LeaseSet creation completed: " + state + '\n' + ls);
+                if (_log.shouldDebug()) _log.debug("LeaseSet creation completed: " + state + '\n' + ls);
                 sp.leaseRequest = null;
                 _consecutiveLeaseRequestFails = 0;
                 if (sp.rerequestTimer != null) {
@@ -726,11 +767,9 @@ class ClientConnectionRunner {
         boolean rv = true;
         synchronized (this) {
             if (!hash.equals(_encryptedLSHash)) {
-                if (_encryptedLSHash != null)
-                    _manager.unregisterEncryptedDestination(this, _encryptedLSHash);
+                if (_encryptedLSHash != null) _manager.unregisterEncryptedDestination(this, _encryptedLSHash);
                 rv = _manager.registerEncryptedDestination(this, hash);
-                if (rv)
-                    _encryptedLSHash = hash;
+                if (rv) _encryptedLSHash = hash;
             }
         }
         return rv;
@@ -743,7 +782,9 @@ class ClientConnectionRunner {
      *  for why we don't send a SessionStatusMessage when we do this.
      *  @param reason will be truncated to 255 bytes
      */
-    void disconnectClient(String reason) {disconnectClient(reason, Log.ERROR);}
+    void disconnectClient(String reason) {
+        disconnectClient(reason, Log.ERROR);
+    }
 
     /**
      * @param reason will be truncated to 255 bytes
@@ -752,19 +793,27 @@ class ClientConnectionRunner {
      */
     void disconnectClient(String reason, int logLevel) {
         DisconnectMessage msg = new DisconnectMessage();
-        if (_log.shouldWarn()) {_log.warn("Disconnecting the client -> " + reason);}
-        if (reason.length() > 255) {reason = reason.substring(0, 255);}
+        if (_log.shouldWarn()) {
+            _log.warn("Disconnecting the client -> " + reason);
+        }
+        if (reason.length() > 255) {
+            reason = reason.substring(0, 255);
+        }
         msg.setReason(reason);
-        try {doSend(msg);}
-        catch (I2CPMessageException ime) {
+        try {
+            doSend(msg);
+        } catch (I2CPMessageException ime) {
             if (_log.shouldWarn()) {
                 _log.warn("Error writing out the disconnect message", ime);
             }
         }
         // give it a little time to get sent out...
         // even better would be to have stopRunning() flush it?
-        try {Thread.sleep(50);}
-        catch (InterruptedException ie) {Thread.currentThread().interrupt();}
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
         stopRunning();
     }
 
@@ -786,17 +835,16 @@ class ClientConnectionRunner {
             expiration = msg.getExpirationTime();
             flags = msg.getFlags();
         }
-        if ((!_dontSendMSM) && message.getNonce() != 0) {_acceptedPending.add(id);}
+        if ((!_dontSendMSM) && message.getNonce() != 0) {
+            _acceptedPending.add(id);
+        }
 
         if (_log.shouldDebug()) {
-            _log.debug("** Receiving message " + id.getMessageId() + " with payload of size "
-                       + payload.getSize() + " for session " + message.getSessionId());
+            _log.debug("** Receiving message " + id.getMessageId() + " with payload of size " + payload.getSize() + " for session " + message.getSessionId());
         }
         // the following blocks as described above
         Destination fromDest = getDestination(message.getSessionId());
-        if (fromDest != null)
-            _manager.distributeMessage(this, fromDest, dest, payload,
-                                       id, message.getNonce(), expiration, flags);
+        if (fromDest != null) _manager.distributeMessage(this, fromDest, dest, payload, id, message.getNonce(), expiration, flags);
         return id;
     }
 
@@ -810,7 +858,9 @@ class ClientConnectionRunner {
      * @param nonce HIS id for the message
      */
     void ackSendMessage(SessionId sid, MessageId id, long nonce) {
-        if (_dontSendMSM || nonce == 0) {return;}
+        if (_dontSendMSM || nonce == 0) {
+            return;
+        }
         if (_log.shouldDebug()) {
             _log.debug("ACKing message send [accepted]" + id + " / " + nonce + " for sessionId " + sid);
         }
@@ -824,7 +874,9 @@ class ClientConnectionRunner {
             doSend(status);
             _acceptedPending.remove(id);
         } catch (I2CPMessageException ime) {
-            if (_log.shouldWarn()) {_log.warn("Error writing out the message status message", ime);}
+            if (_log.shouldWarn()) {
+                _log.warn("Error writing out the message status message", ime);
+            }
         }
     }
 
@@ -839,7 +891,9 @@ class ClientConnectionRunner {
      * @return success
      */
     boolean receiveMessage(Destination toDest, Destination fromDest, Payload payload) {
-        if (_dead) {return false;}
+        if (_dead) {
+            return false;
+        }
         MessageReceivedJob j = new MessageReceivedJob(_context, this, toDest, fromDest, payload, _dontSendMSMOnReceive);
         return j.receiveMessage();
     }
@@ -858,8 +912,7 @@ class ClientConnectionRunner {
     boolean receiveMessage(Hash toHash, Destination fromDest, Payload payload) {
         SessionParams sp = _sessions.get(toHash);
         if (sp == null) {
-            if (_log.shouldWarn())
-                _log.warn("No session found for receiveMessage()");
+            if (_log.shouldWarn()) _log.warn("No session found for receiveMessage()");
             return false;
         }
         return receiveMessage(sp.dest, fromDest, payload);
@@ -893,16 +946,13 @@ class ClientConnectionRunner {
      */
     void requestLeaseSet(Hash h, LeaseSet set, long expirationTime, Job onCreateJob, Job onFailedJob) {
         if (_dead) {
-            if (_log.shouldWarn())
-                _log.warn("Requesting LeaseSet from a dead client: " + set);
-            if (onFailedJob != null)
-                _context.jobQueue().addJob(onFailedJob);
+            if (_log.shouldWarn()) _log.warn("Requesting LeaseSet from a dead client: " + set);
+            if (onFailedJob != null) _context.jobQueue().addJob(onFailedJob);
             return;
         }
         SessionParams sp = _sessions.get(h);
         if (sp == null) {
-            if (_log.shouldWarn())
-                _log.warn("Requesting LeaseSet for an unknown sesssion");
+            if (_log.shouldWarn()) _log.warn("Requesting LeaseSet for an unknown sesssion");
             return;
         }
         // If set is null, use the current LeaseSet as the basis for renewal
@@ -911,14 +961,11 @@ class ClientConnectionRunner {
                 set = sp.currentLeaseSet;
             }
             if (set == null) {
-                if (_log.shouldWarn())
-                    _log.warn("Requesting LeaseSet with null LeaseSet and no current LeaseSet for hash: " + h);
-                if (onFailedJob != null)
-                    _context.jobQueue().addJob(onFailedJob);
+                if (_log.shouldWarn()) _log.warn("Requesting LeaseSet with null LeaseSet and no current LeaseSet for hash: " + h);
+                if (onFailedJob != null) _context.jobQueue().addJob(onFailedJob);
                 return;
             }
-            if (_log.shouldInfo())
-                _log.info("Using current LeaseSet as basis for renewal: " + set);
+            if (_log.shouldInfo()) _log.info("Using current LeaseSet as basis for renewal: " + set);
         }
         // We can't use LeaseSet.equals() here because the dest, keys, and sig on
         // the new LeaseSet are null. So we compare leases one by one.
@@ -936,36 +983,28 @@ class ClientConnectionRunner {
         synchronized (this) {
             current = sp.currentLeaseSet;
             // Skip this check for meta, for now, TODO
-            if (current != null && current.getLeaseCount() == leases &&
-                current.getType() != DatabaseEntry.KEY_TYPE_META_LS2) {
+            if (current != null && current.getLeaseCount() == leases && current.getType() != DatabaseEntry.KEY_TYPE_META_LS2) {
                 for (int i = 0; i < leases; i++) {
-                    if (! current.getLease(i).getTunnelId().equals(set.getLease(i).getTunnelId()))
-                        break;
-                    if (! current.getLease(i).getGateway().equals(set.getLease(i).getGateway()))
-                        break;
+                    if (!current.getLease(i).getTunnelId().equals(set.getLease(i).getTunnelId())) break;
+                    if (!current.getLease(i).getGateway().equals(set.getLease(i).getGateway())) break;
                     if (i == leases - 1) {
-                        if (_log.shouldDebug())
-                            _log.debug("Requested LeaseSet hasn't changed");
-                        if (onCreateJob != null)
-                            _context.jobQueue().addJob(onCreateJob);
+                        if (_log.shouldDebug()) _log.debug("Requested LeaseSet hasn't changed");
+                        if (onCreateJob != null) _context.jobQueue().addJob(onCreateJob);
                         return; // no change
                     }
                 }
             }
 
-            if (_log.shouldInfo())
-                _log.info("Current " + current + "; New LeaseSet: " + set);
+            if (_log.shouldInfo()) _log.info("Current " + current + "; New LeaseSet: " + set);
 
             state = sp.leaseRequest;
             if (state != null) {
                 LeaseSet requested = state.getRequested();
                 LeaseSet granted = state.getGranted();
                 long ours = set.getEarliestLeaseDate();
-                if (((requested != null) && (requested.getEarliestLeaseDate() > ours)) ||
-                     ((granted != null) && (granted.getEarliestLeaseDate() > ours))) {
+                if (((requested != null) && (requested.getEarliestLeaseDate() > ours)) || ((granted != null) && (granted.getEarliestLeaseDate() > ours))) {
                     // theirs is newer
-                    if (_log.shouldDebug())
-                        _log.debug("Already requesting, theirs is newer -> Doing nothing... " + state);
+                    if (_log.shouldDebug()) _log.debug("Already requesting, theirs is newer -> Doing nothing... " + state);
                 } else {
                     // ours is newer, so wait a few secs and retry
                     set.setDestination(dest);
@@ -975,9 +1014,8 @@ class ClientConnectionRunner {
                     }
                     Rerequest timer = new Rerequest(set, expirationTime, onCreateJob, onFailedJob);
                     sp.rerequestTimer = timer;
-                    timer.schedule(3*1000);
-                    if (_log.shouldDebug())
-                        _log.debug("Already requesting, ours is newer -> Waiting for 3 sec... " + state);
+                    timer.schedule(3 * 1000);
+                    if (_log.shouldDebug()) _log.debug("Already requesting, ours is newer -> Waiting for 3 sec... " + state);
                 }
                 // fire onCreated?
                 return; // already requesting
@@ -990,8 +1028,7 @@ class ClientConnectionRunner {
                     Rerequest timer = new Rerequest(set, expirationTime, onCreateJob, onFailedJob);
                     sp.rerequestTimer = timer;
                     timer.schedule(1000);
-                    if (_log.shouldDebug())
-                        _log.debug("No current LeaseSet and no Outbound tunnels -> Waiting 1 sec to request [" + h.toBase32().substring(0,8) + "]...");
+                    if (_log.shouldDebug()) _log.debug("No current LeaseSet and no Outbound tunnels -> Waiting 1 sec to request [" + h.toBase32().substring(0, 8) + "]...");
                     return;
                 } else {
                     // so the timer won't fire off with an older LS request
@@ -1000,10 +1037,8 @@ class ClientConnectionRunner {
                         sp.rerequestTimer = null;
                     }
                     long earliest = (current != null) ? current.getEarliestLeaseDate() : 0;
-                    sp.leaseRequest = state = new LeaseRequestState(onCreateJob, onFailedJob, earliest,
-                                                                _context.clock().now() + expirationTime, set);
-                    if (_log.shouldDebug())
-                        _log.debug("New LeaseSet request: " + state);
+                    sp.leaseRequest = state = new LeaseRequestState(onCreateJob, onFailedJob, earliest, _context.clock().now() + expirationTime, set);
+                    if (_log.shouldDebug()) _log.debug("New LeaseSet request: " + state);
                 }
             }
         }
@@ -1033,14 +1068,12 @@ class ClientConnectionRunner {
             Hash h = _ls.getDestination().calculateHash();
             SessionParams sp = _sessions.get(h);
             if (sp == null) {
-                if (_log.shouldWarn())
-                    _log.warn("Cancelled request for LeaseSet [" + h.toBase32().substring(0,8) +"] -> Session disappeared");
+                if (_log.shouldWarn()) _log.warn("Cancelled request for LeaseSet [" + h.toBase32().substring(0, 8) + "] -> Session disappeared");
                 return;
             }
             synchronized (ClientConnectionRunner.this) {
                 if (sp.rerequestTimer != Rerequest.this) { // NOPMD - CompareObjectsWithEquals (timer identity check)
-                    if (_log.shouldInfo())
-                        _log.info("Cancelled request for LeaseSet [" + h.toBase32().substring(0,8) + "] -> Newer request received");
+                    if (_log.shouldInfo()) _log.info("Cancelled request for LeaseSet [" + h.toBase32().substring(0, 8) + "] -> Newer request received");
                     return;
                 }
             }
@@ -1049,12 +1082,13 @@ class ClientConnectionRunner {
     }
 
     void disconnected() {
-        if (_log.shouldDebug())
-            _log.warn("Disconnected", new Exception("Disconnected?"));
+        if (_log.shouldDebug()) _log.warn("Disconnected", new Exception("Disconnected?"));
         stopRunning();
     }
 
-    boolean getIsDead() { return _dead; }
+    boolean getIsDead() {
+        return _dead;
+    }
 
     /**
      *  Not thread-safe. Blocking. Only used for external sockets.
@@ -1070,12 +1104,10 @@ class ClientConnectionRunner {
             stopRunning();
         } catch (EOFException eofe) {
             // only warn if client went away
-            if (_log.shouldWarn())
-                _log.warn("Error sending I2CP message -> Client disappeared (" + eofe.getMessage() + ")");
+            if (_log.shouldWarn()) _log.warn("Error sending I2CP message -> Client disappeared (" + eofe.getMessage() + ")");
             stopRunning();
         } catch (IOException ioe) {
-            if (_log.shouldWarn())
-                _log.warn("Error sending I2CP message to client -> " + ioe.getMessage());
+            if (_log.shouldWarn()) _log.warn("Error sending I2CP message to client -> " + ioe.getMessage());
             stopRunning();
         } catch (Throwable t) {
             _log.log(Log.CRIT, "Unhandled exception sending I2CP message to client", t);
@@ -1114,8 +1146,9 @@ class ClientConnectionRunner {
      * So, we just wait REQUEUE_DELAY ms before trying again.
      *
      */
-    private final static long REQUEUE_DELAY = 500;
-    private static final int MAX_REQUEUE = 60;  // retries
+    private static final long REQUEUE_DELAY = 500;
+
+    private static final int MAX_REQUEUE = 60; // retries
 
     /**
      * Get the FloodfillNetworkDatabaseFacade for this runner. This is the client netDb.
@@ -1153,7 +1186,9 @@ class ClientConnectionRunner {
         }
 
         @Override
-        public String getName() { return "Update Message Delivery Status"; }
+        public String getName() {
+            return "Update Message Delivery Status";
+        }
 
         /**
          * Note that this sends the Guaranteed status codes, even though we only support best effort.
@@ -1173,16 +1208,15 @@ class ClientConnectionRunner {
             if (!alreadyAccepted(_messageId)) {
                 if (_requeueCount++ > MAX_REQUEUE) {
                     // bug requeueing forever? failsafe
-                    _log.error("Abandoning update for [MsgID " + _messageId + "] to " +
-                                MessageStatusMessage.getStatusString(msg.getStatus()) + " for " + _sessId);
+                    _log.error("Abandoning update for [MsgID " + _messageId + "] to " + MessageStatusMessage.getStatusString(msg.getStatus()) + " for " + _sessId);
                 } else {
                     long delay = REQUEUE_DELAY;
-                    if (_requeueCount < 10) {delay = REQUEUE_DELAY / 5;}
-                    else if (_requeueCount < 20) {delay = REQUEUE_DELAY / 2;}
-                    if (_log.shouldWarn())
-                        _log.warn("Almost sent update for [MsgID " + _messageId + "] to " +
-                                  MessageStatusMessage.getStatusString(msg.getStatus()) + " for " + _sessId +
-                                  " before they knew the ID -> Delaying for " + delay + "ms...");
+                    if (_requeueCount < 10) {
+                        delay = REQUEUE_DELAY / 5;
+                    } else if (_requeueCount < 20) {
+                        delay = REQUEUE_DELAY / 2;
+                    }
+                    if (_log.shouldWarn()) _log.warn("Almost sent update for [MsgID " + _messageId + "] to " + MessageStatusMessage.getStatusString(msg.getStatus()) + " for " + _sessId + " before they knew the ID -> Delaying for " + delay + "ms...");
                     _lastTried = _context.clock().now();
                 }
                 return;
@@ -1198,38 +1232,27 @@ class ClientConnectionRunner {
                     alreadyProcessed = true;
                 } else {
                     _alreadyProcessed.add(_messageId);
-                    while (_alreadyProcessed.size() > 10)
-                        _alreadyProcessed.remove(0);
+                    while (_alreadyProcessed.size() > 10) _alreadyProcessed.remove(0);
                 }
             }
             long afterLock = _context.clock().now();
 
             if (afterLock - beforeLock > 50) {
-                _log.warn("MessageDeliveryStatusUpdate.locking took too long: " + (afterLock-beforeLock)
-                          + " overall, synchronized took " + (inLock - beforeLock));
+                _log.warn("MessageDeliveryStatusUpdate.locking took too long: " + (afterLock - beforeLock) + " overall, synchronized took " + (inLock - beforeLock));
             }
 
             if (alreadyProcessed) return;
 
             if (_lastTried > 0) {
-                if (_log.shouldDebug())
-                    _log.info("Updating message status for message " + _messageId + " to "
-                              + MessageStatusMessage.getStatusString(msg.getStatus())
-                              + " for " + _sessId
-                              + " (with nonce=2), retrying after "
-                              + (_context.clock().now() - _lastTried));
+                if (_log.shouldDebug()) _log.info("Updating message status for message " + _messageId + " to " + MessageStatusMessage.getStatusString(msg.getStatus()) + " for " + _sessId + " (with nonce=2), retrying after " + (_context.clock().now() - _lastTried));
             } else {
-                if (_log.shouldDebug())
-                    _log.debug("Updating message status for message " + _messageId + " to "
-                               + MessageStatusMessage.getStatusString(msg.getStatus())
-                               + " for " + _sessId + " (with nonce=2)");
+                if (_log.shouldDebug()) _log.debug("Updating message status for message " + _messageId + " to " + MessageStatusMessage.getStatusString(msg.getStatus()) + " for " + _sessId + " (with nonce=2)");
             }
 
             try {
                 doSend(msg);
             } catch (I2CPMessageException ime) {
-                if (_log.shouldWarn())
-                    _log.warn("Error updating the status for message ID " + _messageId + " -> " + ime.getMessage());
+                if (_log.shouldWarn()) _log.warn("Error updating the status for message ID " + _messageId + " -> " + ime.getMessage());
             }
         }
     }

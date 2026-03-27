@@ -1,11 +1,5 @@
 package net.i2p.client.streaming;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.util.Map;
-import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PClient;
@@ -15,6 +9,13 @@ import net.i2p.client.I2PSessionException;
 import net.i2p.crypto.SigType;
 import net.i2p.util.ByteArrayStream;
 import net.i2p.util.Log;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Simplify the creation of I2PSession and transient I2P Destination objects if
@@ -36,8 +37,7 @@ public class I2PSocketManagerFactory {
      *  Ignored since 0.9.12, cannot be changed via properties.
      *  @deprecated
      */
-    @Deprecated
-    public static final String PROP_MANAGER = "i2p.streaming.manager";
+    @Deprecated public static final String PROP_MANAGER = "i2p.streaming.manager";
 
     /**
      *  The one and only manager.
@@ -54,8 +54,7 @@ public class I2PSocketManagerFactory {
      * @return the newly created socket manager, or null if there were errors
      */
     public static I2PSocketManager createManager() {
-        return createManager(getHost(), getPort(), (Properties) System.getProperties().clone(),
-                    IncomingConnectionFilter.ALLOW);
+        return createManager(getHost(), getPort(), (Properties) System.getProperties().clone(), IncomingConnectionFilter.ALLOW);
     }
 
     /**
@@ -116,8 +115,7 @@ public class I2PSocketManagerFactory {
      * @return the newly created socket manager, or null if there were errors
      */
     public static I2PSocketManager createManager(String host, int port) {
-        return createManager(host, port, (Properties) System.getProperties().clone(),
-                      IncomingConnectionFilter.ALLOW);
+        return createManager(host, port, (Properties) System.getProperties().clone(), IncomingConnectionFilter.ALLOW);
     }
 
     /**
@@ -167,8 +165,7 @@ public class I2PSocketManagerFactory {
      * @param filter The filter to use for incoming connections
      * @return the newly created socket manager, or null if there were errors
      */
-    public static I2PSocketManager createManager(String i2cpHost, int i2cpPort, Properties opts,
-                    IncomingConnectionFilter filter) {
+    public static I2PSocketManager createManager(String i2cpHost, int i2cpPort, Properties opts, IncomingConnectionFilter filter) {
         I2PClient client = I2PClientFactory.createClient();
         ByteArrayStream keyStream = new ByteArrayStream(1024);
         try {
@@ -284,8 +281,7 @@ public class I2PSocketManagerFactory {
      * @param filter The filter to use for incoming connections
      * @return the newly created socket manager, or null if there were errors
      */
-    public static I2PSocketManager createManager(InputStream myPrivateKeyStream, String i2cpHost, int i2cpPort, Properties opts,
-                                                 IncomingConnectionFilter filter) {
+    public static I2PSocketManager createManager(InputStream myPrivateKeyStream, String i2cpHost, int i2cpPort, Properties opts, IncomingConnectionFilter filter) {
         try {
             return createManager(myPrivateKeyStream, i2cpHost, i2cpPort, opts, true, filter);
         } catch (I2PSessionException ise) {
@@ -312,13 +308,8 @@ public class I2PSocketManagerFactory {
      * @return the newly created socket manager, non-null (throws on error)
      * @since 0.9.8
      */
-    public static I2PSocketManager createDisconnectedManager(InputStream myPrivateKeyStream, String i2cpHost,
-                                                             int i2cpPort, Properties opts) throws I2PSessionException {
-        return createDisconnectedManager(myPrivateKeyStream,
-                                         i2cpHost,
-                                         i2cpPort,
-                                         opts,
-                                         IncomingConnectionFilter.ALLOW);
+    public static I2PSocketManager createDisconnectedManager(InputStream myPrivateKeyStream, String i2cpHost, int i2cpPort, Properties opts) throws I2PSessionException {
+        return createDisconnectedManager(myPrivateKeyStream, i2cpHost, i2cpPort, opts, IncomingConnectionFilter.ALLOW);
     }
 
     /**
@@ -340,12 +331,7 @@ public class I2PSocketManagerFactory {
      * @return the newly created socket manager, non-null (throws on error)
      * @since 0.9.40
      */
-    public static I2PSocketManager createDisconnectedManager(InputStream myPrivateKeyStream,
-                                                             String i2cpHost,
-                                                             int i2cpPort,
-                                                             Properties opts,
-                                                             IncomingConnectionFilter filter)
-                                    throws I2PSessionException {
+    public static I2PSocketManager createDisconnectedManager(InputStream myPrivateKeyStream, String i2cpHost, int i2cpPort, Properties opts, IncomingConnectionFilter filter) throws I2PSessionException {
         if (myPrivateKeyStream == null) {
             I2PClient client = I2PClientFactory.createClient();
             ByteArrayStream keyStream = new ByteArrayStream(1024);
@@ -378,59 +364,42 @@ public class I2PSocketManagerFactory {
      * @return the newly created socket manager, non-null (throws on error)
      * @since 0.9.40
      */
-    private static I2PSocketManager createManager(InputStream myPrivateKeyStream, String i2cpHost, int i2cpPort,
-                                                 Properties opts, boolean connect,
-                                                 IncomingConnectionFilter filter) throws I2PSessionException {
+    private static I2PSocketManager createManager(InputStream myPrivateKeyStream, String i2cpHost, int i2cpPort, Properties opts, boolean connect, IncomingConnectionFilter filter) throws I2PSessionException {
         I2PClient client = I2PClientFactory.createClient();
-        if (opts == null)
-            opts = new Properties();
+        if (opts == null) opts = new Properties();
         Properties syscopy = (Properties) System.getProperties().clone();
         for (Map.Entry<Object, Object> e : syscopy.entrySet()) {
             String name = (String) e.getKey();
-            if (opts.getProperty(name) == null)
-                opts.setProperty(name, (String) e.getValue());
+            if (opts.getProperty(name) == null) opts.setProperty(name, (String) e.getValue());
         }
         // as of 0.8.1 (I2CP default is BestEffort)
-        if (opts.getProperty(I2PClient.PROP_RELIABILITY) == null)
-            opts.setProperty(I2PClient.PROP_RELIABILITY, I2PClient.PROP_RELIABILITY_NONE);
+        if (opts.getProperty(I2PClient.PROP_RELIABILITY) == null) opts.setProperty(I2PClient.PROP_RELIABILITY, I2PClient.PROP_RELIABILITY_NONE);
 
-        if (i2cpHost != null)
-            opts.setProperty(I2PClient.PROP_TCP_HOST, i2cpHost);
-        if (i2cpPort > 0)
-            opts.setProperty(I2PClient.PROP_TCP_PORT, Integer.toString(i2cpPort));
+        if (i2cpHost != null) opts.setProperty(I2PClient.PROP_TCP_HOST, i2cpHost);
+        if (i2cpPort > 0) opts.setProperty(I2PClient.PROP_TCP_PORT, Integer.toString(i2cpPort));
 
         I2PSession session = client.createSession(myPrivateKeyStream, opts);
-        if (connect)
-            session.connect();
+        if (connect) session.connect();
         I2PSocketManager sockMgr = createManager(session, opts, "manager", filter);
         return sockMgr;
     }
 
-    private static I2PSocketManager createManager(I2PSession session, Properties opts, String name,
-                                                  IncomingConnectionFilter filter) {
+    private static I2PSocketManager createManager(I2PSession session, Properties opts, String name, IncomingConnectionFilter filter) {
         I2PAppContext context = I2PAppContext.getGlobalContext();
         // As of 0.9.12, ignore this setting, as jwebcache and i2phex set it to the old value.
         // There is no other valid manager.
-        //String classname = opts.getProperty(PROP_MANAGER, DEFAULT_MANAGER);
+        // String classname = opts.getProperty(PROP_MANAGER, DEFAULT_MANAGER);
         String classname = DEFAULT_MANAGER;
         try {
             Class<?> cls = Class.forName(classname);
-            if (!I2PSocketManager.class.isAssignableFrom(cls))
-                throw new IllegalArgumentException(classname + " is not an I2PSocketManager");
-            Constructor<?> con =
-                  cls.getConstructor(I2PAppContext.class,
-                                     I2PSession.class,
-                                     Properties.class,
-                                     String.class,
-                                     IncomingConnectionFilter.class);
-            I2PSocketManager mgr = (I2PSocketManager) con.newInstance(
-                                   new Object[] {context, session, opts, name, filter});
+            if (!I2PSocketManager.class.isAssignableFrom(cls)) throw new IllegalArgumentException(classname + " is not an I2PSocketManager");
+            Constructor<?> con = cls.getConstructor(I2PAppContext.class, I2PSession.class, Properties.class, String.class, IncomingConnectionFilter.class);
+            I2PSocketManager mgr = (I2PSocketManager) con.newInstance(new Object[] {context, session, opts, name, filter});
             return mgr;
         } catch (Throwable t) {
             getLog().log(Log.CRIT, "Error loading " + classname, t);
             throw new IllegalStateException(t);
         }
-
     }
 
     private static String getHost() {
@@ -459,12 +428,9 @@ public class I2PSocketManagerFactory {
             String st = opts.getProperty(I2PClient.PROP_SIGTYPE);
             if (st != null) {
                 SigType rv = SigType.parseSigType(st);
-                if (rv != null && rv.isAvailable())
-                    return rv;
-                if (rv != null)
-                    st = rv.toString();
-                getLog().logAlways(Log.WARN, "Tunnel configuration error: Unsupported Signature Type " + st +
-                                             ", reverting to EdDSA_SHA512_Ed25519");
+                if (rv != null && rv.isAvailable()) return rv;
+                if (rv != null) st = rv.toString();
+                getLog().logAlways(Log.WARN, "Tunnel configuration error: Unsupported Signature Type " + st + ", reverting to EdDSA_SHA512_Ed25519");
             }
         }
         return SigType.EdDSA_SHA512_Ed25519;

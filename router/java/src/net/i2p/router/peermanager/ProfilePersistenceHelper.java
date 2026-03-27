@@ -1,5 +1,16 @@
 package net.i2p.router.peermanager;
 
+import net.i2p.data.Base64;
+import net.i2p.data.DataHelper;
+import net.i2p.data.Hash;
+import net.i2p.data.router.RouterInfo;
+import net.i2p.router.RouterContext;
+import net.i2p.util.FileUtil;
+import net.i2p.util.Log;
+import net.i2p.util.SecureDirectory;
+import net.i2p.util.SecureFileOutputStream;
+import net.i2p.util.SystemVersion;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -13,21 +24,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-import net.i2p.data.Base64;
-import net.i2p.data.DataHelper;
-import net.i2p.data.Hash;
-import net.i2p.data.router.RouterInfo;
-import net.i2p.router.RouterContext;
-import net.i2p.util.FileUtil;
-import net.i2p.util.Log;
-import net.i2p.util.SecureDirectory;
-import net.i2p.util.SecureFileOutputStream;
-import net.i2p.util.SystemVersion;
-import java.util.Locale;
 
 /**
  *  Write profiles to disk at shutdown, read at startup.
@@ -39,11 +40,11 @@ class ProfilePersistenceHelper {
     private final Log _log;
     private final RouterContext _context;
 
-    public final static String PROP_PEER_PROFILE_DIR = "router.profileDir";
-    public final static String DEFAULT_PEER_PROFILE_DIR = "peerProfiles";
-    private final static String NL = System.getProperty("line.separator");
-    private final static String TAB = "\t";
-    private final static String HR = "#----------------------------------------------------------------------------------------";
+    public static final String PROP_PEER_PROFILE_DIR = "router.profileDir";
+    public static final String DEFAULT_PEER_PROFILE_DIR = "peerProfiles";
+    private static final String NL = System.getProperty("line.separator");
+    private static final String TAB = "\t";
+    private static final String HR = "#----------------------------------------------------------------------------------------";
     private static final String PREFIX = "profile-";
     private static final String SUFFIX = ".txt.gz";
     private static final String UNCOMPRESSED_SUFFIX = ".txt";
@@ -62,14 +63,20 @@ class ProfilePersistenceHelper {
         _log = ctx.logManager().getLog(ProfilePersistenceHelper.class);
         String dir = _context.getProperty(PROP_PEER_PROFILE_DIR, DEFAULT_PEER_PROFILE_DIR);
         _profileDir = new SecureDirectory(_context.getRouterDir(), dir);
-        if (!_profileDir.exists()) {_profileDir.mkdirs();}
+        if (!_profileDir.exists()) {
+            _profileDir.mkdirs();
+        }
         for (int j = 0; j < B64.length(); j++) {
             File subdir = new SecureDirectory(_profileDir, DIR_PREFIX + B64.charAt(j));
-            if (!subdir.exists()) {subdir.mkdir();}
+            if (!subdir.exists()) {
+                subdir.mkdir();
+            }
         }
     }
 
-    public void setUs(Hash routerIdentHash) {_us = routerIdentHash;}
+    public void setUs(Hash routerIdentHash) {
+        _us = routerIdentHash;
+    }
 
     /**
      * write out the data from the profile to the file
@@ -86,8 +93,11 @@ class ProfilePersistenceHelper {
             return false;
         } finally {
             if (fos != null) {
-                try {fos.close();}
-                catch (IOException ioe) {/* ignored */}
+                try {
+                    fos.close();
+                } catch (IOException ioe) {
+                    /* ignored */
+                }
             }
         }
         return true;
@@ -97,7 +107,9 @@ class ProfilePersistenceHelper {
      * write out the data from the profile to the stream
      * includes comments
      */
-    public void writeProfile(PeerProfile profile, OutputStream out) throws IOException {writeProfile(profile, out, true);}
+    public void writeProfile(PeerProfile profile, OutputStream out) throws IOException {
+        writeProfile(profile, out, true);
+    }
 
     /**
      * write out the data from the profile to the stream
@@ -107,11 +119,17 @@ class ProfilePersistenceHelper {
     @SuppressWarnings("deprecation")
     public void writeProfile(PeerProfile profile, OutputStream out, boolean addComments) throws IOException {
         String groups = null;
-        if (!_context.profileOrganizer().isHighCapacity(profile.getPeer())) {groups = "Standard";}
-        else {
-            if (_context.profileOrganizer().isFast(profile.getPeer())) {groups = "Fast, High Capacity";}
-            else {groups = "High Capacity";}
-            if (_context.profileOrganizer().isWellIntegrated(profile.getPeer())) {groups = groups + ", Integrated";}
+        if (!_context.profileOrganizer().isHighCapacity(profile.getPeer())) {
+            groups = "Standard";
+        } else {
+            if (_context.profileOrganizer().isFast(profile.getPeer())) {
+                groups = "Fast, High Capacity";
+            } else {
+                groups = "High Capacity";
+            }
+            if (_context.profileOrganizer().isWellIntegrated(profile.getPeer())) {
+                groups = groups + ", Integrated";
+            }
         }
 
         StringBuilder buf = new StringBuilder(512);
@@ -123,7 +141,9 @@ class ProfilePersistenceHelper {
         if (addComments) {
             buf.append(HR).append(NL);
             buf.append("# Profile for peer: ").append(profile.getPeer().toBase64()).append(NL);
-            if (_us != null) {buf.append("# as calculated by ").append(_us.toBase64()).append(NL);}
+            if (_us != null) {
+                buf.append("# as calculated by ").append(_us.toBase64()).append(NL);
+            }
             buf.append(HR).append(NL).append(NL);
             // TODO: copy version, sig, caps to parent header?
             if (info != null) {
@@ -132,43 +152,59 @@ class ProfilePersistenceHelper {
                 buf.append("# Router Information").append(NL);
                 buf.append(HR).append(NL).append(NL);
                 buf.append("# ").append("Version: ").append(version != null ? version : "unknown").append(NL);
-                String sigType = info.getIdentity() != null && info.getIdentity().getSigningPublicKey() != null &&
-                                info.getIdentity().getSigningPublicKey().getType() != null ?
-                                info.getIdentity().getSigningPublicKey().getType().toString() : "unknown";
+                String sigType = info.getIdentity() != null && info.getIdentity().getSigningPublicKey() != null && info.getIdentity().getSigningPublicKey().getType() != null ? info.getIdentity().getSigningPublicKey().getType().toString() : "unknown";
                 buf.append("# ").append("Signature: ").append(DataHelper.stripHTML(sigType)).append(NL);
                 buf.append("# ").append("Capabilities: ").append(DataHelper.stripHTML(info.getCapabilities()).toUpperCase(Locale.ROOT).replace("XO", "X").replace("PO", "P")).append(NL);
-                if (speed > 0) {buf.append("# ").append("Speed: ").append(speed).append(" B/s").append(NL);}
-                if (capacity > 0) {buf.append("# ").append("Capacity: ").append(capacity).append(capacity == 1 ? " tunnel" : " tunnels").append(" per hour").append(NL);}
-                if (integration > 0) {buf.append("# ").append("Integration: ").append(integration).append(integration == 1 ? " peer" : " peers").append(NL);}
+                if (speed > 0) {
+                    buf.append("# ").append("Speed: ").append(speed).append(" B/s").append(NL);
+                }
+                if (capacity > 0) {
+                    buf.append("# ").append("Capacity: ").append(capacity).append(capacity == 1 ? " tunnel" : " tunnels").append(" per hour").append(NL);
+                }
+                if (integration > 0) {
+                    buf.append("# ").append("Integration: ").append(integration).append(integration == 1 ? " peer" : " peers").append(NL);
+                }
                 buf.append("# ").append("Groups: ").append(groups).append(NL);
-            } else {buf.append("# No RouterInfo found for peer").append(NL);}
+            } else {
+                buf.append("# No RouterInfo found for peer").append(NL);
+            }
         }
-        if (profile.getSpeedBonus() != 0) {add(buf, addComments, "speedBonus", profile.getSpeedBonus(), "Manual Speed Score adjustment: " +  profile.getSpeedBonus());}
-        if (profile.getCapacityBonus() != 0) {add(buf, addComments, "capacityBonus", profile.getCapacityBonus(), "Manual Capacity Score adjustment: " +  profile.getCapacityBonus());}
-        if (profile.getIntegrationBonus() != 0) {add(buf, addComments, "integrationBonus", profile.getIntegrationBonus(), "Manual Integration Score adjustment:");}
+        if (profile.getSpeedBonus() != 0) {
+            add(buf, addComments, "speedBonus", profile.getSpeedBonus(), "Manual Speed Score adjustment: " + profile.getSpeedBonus());
+        }
+        if (profile.getCapacityBonus() != 0) {
+            add(buf, addComments, "capacityBonus", profile.getCapacityBonus(), "Manual Capacity Score adjustment: " + profile.getCapacityBonus());
+        }
+        if (profile.getIntegrationBonus() != 0) {
+            add(buf, addComments, "integrationBonus", profile.getIntegrationBonus(), "Manual Integration Score adjustment:");
+        }
         addDate(buf, addComments, "firstHeardAbout", profile.getFirstHeardAbout(), "First reference to peer received:");
         addDate(buf, addComments, "lastHeardAbout", profile.getLastHeardAbout(), "Last reference to peer received:");
-        if (profile.getLastHeardFrom() != 0) {addDate(buf, addComments, "lastHeardFrom", profile.getLastHeardFrom(), "Last message from peer received:");}
-        if (profile.getLastSendSuccessful() != 0) {addDate(buf, addComments, "lastSentToSuccessfully", profile.getLastSendSuccessful(), "Last successful message sent to peer:");}
-        if (profile.getLastSendFailed() != 0) {addDate(buf, addComments, "lastFailedSend", profile.getLastSendFailed(), "Last failed message to sent peer:");}
+        if (profile.getLastHeardFrom() != 0) {
+            addDate(buf, addComments, "lastHeardFrom", profile.getLastHeardFrom(), "Last message from peer received:");
+        }
+        if (profile.getLastSendSuccessful() != 0) {
+            addDate(buf, addComments, "lastSentToSuccessfully", profile.getLastSendSuccessful(), "Last successful message sent to peer:");
+        }
+        if (profile.getLastSendFailed() != 0) {
+            addDate(buf, addComments, "lastFailedSend", profile.getLastSendFailed(), "Last failed message to sent peer:");
+        }
         if (profile.getTunnelTestTimeAverage() != 0 && PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
-            add(buf, addComments, "tunnelTestTimeAverage", (long) profile.getTunnelTestTimeAverage(), "Average peer response time (ms):" +
-                profile.getTunnelTestTimeAverage());
+            add(buf, addComments, "tunnelTestTimeAverage", (long) profile.getTunnelTestTimeAverage(), "Average peer response time (ms):" + profile.getTunnelTestTimeAverage());
         }
         // TODO: needs clarification - difference between tunnel peak and tunnel peak tunnel? And round down KBps display to 2 decimal places
         if (profile.getPeakThroughputKBps() >= 1) {
-            add(buf, addComments, "tunnelPeakThroughput", (long) profile.getPeakThroughputKBps(), "Tunnel Peak throughput (KB/s): " +
-                profile.getPeakThroughputKBps());
+            add(buf, addComments, "tunnelPeakThroughput", (long) profile.getPeakThroughputKBps(), "Tunnel Peak throughput (KB/s): " + profile.getPeakThroughputKBps());
         }
         if (profile.getPeakTunnelThroughputKBps() >= 1) {
-            add(buf, addComments, "tunnelPeakTunnelThroughput", (long) profile.getPeakTunnelThroughputKBps(), "Tunnel Peak Tunnel throughput (KB/s): " +
-                profile.getPeakTunnelThroughputKBps());
+            add(buf, addComments, "tunnelPeakTunnelThroughput", (long) profile.getPeakTunnelThroughputKBps(), "Tunnel Peak Tunnel throughput (KB/s): " + profile.getPeakTunnelThroughputKBps());
         }
         if (profile.getPeakTunnel1mThroughputKBps() >= 1) {
-            add(buf, addComments, "tunnelPeakTunnel1mThroughput", (long) profile.getPeakTunnel1mThroughputKBps(), "Tunnel Peak Tunnel throughput for 1 minute (KB/s): " +
-                profile.getPeakTunnel1mThroughputKBps());
+            add(buf, addComments, "tunnelPeakTunnel1mThroughput", (long) profile.getPeakTunnel1mThroughputKBps(), "Tunnel Peak Tunnel throughput for 1 minute (KB/s): " + profile.getPeakTunnel1mThroughputKBps());
         }
-        if (addComments) {buf.append(HR).append(NL).append(NL);}
+        if (addComments) {
+            buf.append(HR).append(NL).append(NL);
+        }
         out.write(buf.toString().getBytes("UTF-8"));
 
         if (profile.getIsExpanded()) { // only write out expanded data if, uh, we've got it
@@ -194,25 +230,30 @@ class ProfilePersistenceHelper {
         if (addComments) {
             String when = val > 0 ? Instant.ofEpochMilli(val).toString() : "Never";
             add(buf, true, name, val, description + ' ' + when);
-        } else {add(buf, false, name, val, description);}
+        } else {
+            add(buf, false, name, val, description);
+        }
     }
 
     /** @since 0.8.5 */
     private static void add(StringBuilder buf, boolean addComments, String name, long val, String description) {
-        if (addComments) {buf.append("# ").append(description).append(NL);}
-        else {buf.append(name).append('=').append(val).append(NL);}
+        if (addComments) {
+            buf.append("# ").append(description).append(NL);
+        } else {
+            buf.append(name).append('=').append(val).append(NL);
+        }
     }
 
     public List<PeerProfile> readProfiles() {
         long start = System.currentTimeMillis();
         long down = _context.router().getEstimatedDowntime();
         long cutoff;
-        if (down < 24*60*60*1000L) {
-            cutoff = start - 3*24*60*60*1000;  // 3 days for low downtime
-        } else if (down < 15*24*60*60*1000L) {
-            cutoff = start - down - 14*24*60*60*1000;  // 14 days minus downtime
+        if (down < 24 * 60 * 60 * 1000L) {
+            cutoff = start - 3 * 24 * 60 * 60 * 1000; // 3 days for low downtime
+        } else if (down < 15 * 24 * 60 * 60 * 1000L) {
+            cutoff = start - down - 14 * 24 * 60 * 60 * 1000; // 14 days minus downtime
         } else {
-            cutoff = start - 7*24*60*60*1000;  // 7 days default
+            cutoff = start - 7 * 24 * 60 * 60 * 1000; // 7 days default
         }
         List<File> files = selectFiles();
         // Pre-filter stale files by file timestamp to avoid reading them
@@ -230,7 +271,9 @@ class ProfilePersistenceHelper {
             _log.info("Deleted " + staleDeleted + " stale profile files by timestamp");
         }
 
-        if (freshFiles.size() > LIMIT_PROFILES) {Collections.shuffle(freshFiles, _context.random());}
+        if (freshFiles.size() > LIMIT_PROFILES) {
+            Collections.shuffle(freshFiles, _context.random());
+        }
         List<PeerProfile> profiles = new ArrayList<PeerProfile>(Math.min(LIMIT_PROFILES, freshFiles.size()));
         int count = 0;
         for (File f : freshFiles) {
@@ -246,29 +289,35 @@ class ProfilePersistenceHelper {
         }
 
         long duration = System.currentTimeMillis() - start;
-        if (_log.shouldInfo()) {_log.info("Loaded " + count + " peer profiles in " + duration + "ms");}
+        if (_log.shouldInfo()) {
+            _log.info("Loaded " + count + " peer profiles in " + duration + "ms");
+        }
         return profiles;
     }
 
     private static class ProfileFilter implements FilenameFilter {
         @Override
         public boolean accept(File dir, String filename) {
-            return (filename.startsWith(PREFIX) &&
-                    filename.length() >= MIN_NAME_LENGTH &&
-                    (filename.endsWith(SUFFIX) || filename.endsWith(OLD_SUFFIX) || filename.endsWith(UNCOMPRESSED_SUFFIX)));
+            return (filename.startsWith(PREFIX) && filename.length() >= MIN_NAME_LENGTH && (filename.endsWith(SUFFIX) || filename.endsWith(OLD_SUFFIX) || filename.endsWith(UNCOMPRESSED_SUFFIX)));
         }
     }
 
     private List<File> selectFiles() {
         FilenameFilter filter = new ProfileFilter();
         File files[] = _profileDir.listFiles(filter);
-        if (files != null && files.length > 0) {migrate(files);}
+        if (files != null && files.length > 0) {
+            migrate(files);
+        }
         List<File> rv = new ArrayList<File>(1024);
         for (int j = 0; j < B64.length(); j++) {
             File subdir = new File(_profileDir, DIR_PREFIX + B64.charAt(j));
             files = subdir.listFiles(filter);
-            if (files == null) {continue;}
-            for (int i = 0; i < files.length; i++) {rv.add(files[i]);}
+            if (files == null) {
+                continue;
+            }
+            for (int i = 0; i < files.length; i++) {
+                rv.add(files[i]);
+            }
         }
         return rv;
     }
@@ -280,7 +329,9 @@ class ProfilePersistenceHelper {
     private void migrate(File[] files) {
         for (int i = 0; i < files.length; i++) {
             File from = files[i];
-            if (!from.isFile()) {continue;}
+            if (!from.isFile()) {
+                continue;
+            }
             File dir = new File(_profileDir, DIR_PREFIX + from.getName().charAt(PREFIX.length()));
             File to = new File(dir, from.getName());
             FileUtil.rename(from, to);
@@ -297,17 +348,19 @@ class ProfilePersistenceHelper {
         List<File> files = selectFiles();
         int i = 0;
         for (File f : files) {
-            if (!f.isFile()) {continue;}
+            if (!f.isFile()) {
+                continue;
+            }
             if (f.lastModified() < cutoff && files.size() > LIMIT_PROFILES) {
                 i++;
                 f.delete();
-                //_log.warn("Not deleting " + f + " (debugging active)");
+                // _log.warn("Not deleting " + f + " (debugging active)");
             }
         }
         if (_log.shouldWarn()) {
             if (i > 0) {
                 _log.warn("Deleted " + i + " STALE peer profiles");
-                //_log.warn("Not deleting " + i + " (stale?) peer profiles -> Will expire when read at startup");
+                // _log.warn("Not deleting " + i + " (stale?) peer profiles -> Will expire when read at startup");
             }
         }
         return i;
@@ -319,7 +372,7 @@ class ProfilePersistenceHelper {
     @SuppressWarnings("deprecation")
     public PeerProfile readProfile(File file, long cutoff) {
         if (file.lastModified() < cutoff) {
-            //if (_log.shouldWarn())
+            // if (_log.shouldWarn())
             //    _log.warn("Not deleting STALE peer profile " + file.getName() + " -> Will expire when read at startup");
             file.delete();
             return null;
@@ -327,7 +380,9 @@ class ProfilePersistenceHelper {
         Hash peer = getHash(file.getName());
         try {
             if (peer == null) {
-                if (_log.shouldError()) {_log.error("Peer profile: " + file.getName() + " is not a valid hash -> Ignoring...");}
+                if (_log.shouldError()) {
+                    _log.error("Peer profile: " + file.getName() + " is not a valid hash -> Ignoring...");
+                }
                 file.delete();
                 return null;
             }
@@ -340,21 +395,28 @@ class ProfilePersistenceHelper {
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
             String caps = "";
 
-            if (info != null) {caps = DataHelper.stripHTML(info.getCapabilities());}
-            else {
-                if (_log.shouldDebug()) {_log.debug("Deleting profile without RouterInfo: " + file.getName());}
+            if (info != null) {
+                caps = DataHelper.stripHTML(info.getCapabilities());
+            } else {
+                if (_log.shouldDebug()) {
+                    _log.debug("Deleting profile without RouterInfo: " + file.getName());
+                }
                 file.delete();
                 return null;
             }
 
             if (lastSentToSuccessfully <= cutoff && lastHeardFrom <= cutoff) {
-                if (_log.shouldDebug()) {_log.debug("Deleting stale profile: " + file.getName());}
+                if (_log.shouldDebug()) {
+                    _log.debug("Deleting stale profile: " + file.getName());
+                }
                 file.delete();
                 return null;
             }
 
             if (!caps.equals("") && caps.contains("K") || caps.contains("L") || caps.contains("M") || caps.contains("U")) {
-                if (_log.shouldDebug()) {_log.debug("Deleting uninteresting profile: " + file.getName() + " -> K, L, M or unreachable");}
+                if (_log.shouldDebug()) {
+                    _log.debug("Deleting uninteresting profile: " + file.getName() + " -> K, L, M or unreachable");
+                }
                 file.delete();
                 return null;
             } else if (file.getName().endsWith(OLD_SUFFIX)) {
@@ -362,7 +424,9 @@ class ProfilePersistenceHelper {
                 String newName = file.getAbsolutePath();
                 newName = newName.substring(0, newName.length() - OLD_SUFFIX.length()) + SUFFIX;
                 boolean success = file.renameTo(new File(newName));
-                if (!success) {file.delete();} // new file exists and on Windows?
+                if (!success) {
+                    file.delete();
+                } // new file exists and on Windows?
             }
 
             profile.setCapacityBonus((int) getLong(props, "capacityBonus"));
@@ -370,10 +434,14 @@ class ProfilePersistenceHelper {
             profile.setSpeedBonus((int) getLong(props, "speedBonus"));
 
             long fh = getLong(props, "firstHeardAbout");
-            if (fh <= 0) {fh = file.lastModified();}
+            if (fh <= 0) {
+                fh = file.lastModified();
+            }
             profile.setFirstHeardAbout(fh);
             long lh = getLong(props, "lastHeardAbout");
-            if (lh <= 0) {lh = fh;}
+            if (lh <= 0) {
+                lh = fh;
+            }
             profile.setLastHeardAbout(lh);
             profile.setLastSendSuccessful(getLong(props, "lastSentToSuccessfully"));
             profile.setLastSendFailed(getLong(props, "lastFailedSend"));
@@ -391,11 +459,7 @@ class ProfilePersistenceHelper {
             // In the interest of keeping the in-memory profiles small,
             // don't load the DB info at all unless there is something interesting there
             // (i.e. floodfills)
-            if (getLong(props, "dbHistory.lastLookupSuccessful") > 0 ||
-                getLong(props, "dbHistory.lastLookupFailed") > 0 ||
-                getLong(props, "dbHistory.lastStoreSuccessful") > 0 ||
-                getLong(props, "dbHistory.lastStoreFailed") > 0 &&
-                (!caps.equals("") && !caps.contains("K") || !caps.contains("L") || !caps.contains("M") || !caps.contains("U"))) {
+            if (getLong(props, "dbHistory.lastLookupSuccessful") > 0 || getLong(props, "dbHistory.lastLookupFailed") > 0 || getLong(props, "dbHistory.lastStoreSuccessful") > 0 || getLong(props, "dbHistory.lastStoreFailed") > 0 && (!caps.equals("") && !caps.contains("K") || !caps.contains("L") || !caps.contains("M") || !caps.contains("U"))) {
                 profile.expandDBProfile();
                 profile.getDBHistory().load(props);
                 profile.getDbIntroduction().load(props, "dbIntroduction", true);
@@ -410,13 +474,15 @@ class ProfilePersistenceHelper {
             }
 
             if (_log.shouldDebug()) {
-                _log.debug("Loaded profile for [" + peer.toBase64().substring(0,6) + "] from " + file.getName());
+                _log.debug("Loaded profile for [" + peer.toBase64().substring(0, 6) + "] from " + file.getName());
             }
 
             fixupFirstHeardAbout(profile);
             return profile;
         } catch (Exception e) {
-            if (_log.shouldWarn()) {_log.warn("Error loading properties from " + file.getAbsolutePath(), e);}
+            if (_log.shouldWarn()) {
+                _log.warn("Error loading properties from " + file.getAbsolutePath(), e);
+            }
             file.delete();
             return null;
         }
@@ -456,8 +522,7 @@ class ProfilePersistenceHelper {
         long fha = p.getFirstHeardAbout();
         if (min > 0 && min < Long.MAX_VALUE && (fha <= 0 || min < fha)) {
             p.setFirstHeardAbout(min);
-            if (_log.shouldDebug())
-                _log.debug("Fixed FirstHeardAbout time for [" + p.getPeer().toBase64().substring(0,6) + "] to " + Instant.ofEpochMilli(min));
+            if (_log.shouldDebug()) _log.debug("Fixed FirstHeardAbout time for [" + p.getPeer().toBase64().substring(0, 6) + "] to " + Instant.ofEpochMilli(min));
         }
     }
 
@@ -466,17 +531,21 @@ class ProfilePersistenceHelper {
         if (val != null) {
             try {
                 return Long.parseLong(val);
-            } catch (NumberFormatException nfe) {/* ignored */}
+            } catch (NumberFormatException nfe) {
+                /* ignored */
+            }
         }
         return 0;
     }
 
-    private final static float getFloat(Properties props, String key) {
+    private static final float getFloat(Properties props, String key) {
         String val = props.getProperty(key);
         if (val != null) {
             try {
                 return Float.parseFloat(val);
-            } catch (NumberFormatException nfe) {/* ignored */}
+            } catch (NumberFormatException nfe) {
+                /* ignored */
+            }
         }
         return 0.0f;
     }
@@ -490,33 +559,31 @@ class ProfilePersistenceHelper {
             fin.reset();
             if (c == '#') {
                 // uncompressed
-                if (_log.shouldDebug())
-                    _log.debug("Loading " + file.getName());
+                if (_log.shouldDebug()) _log.debug("Loading " + file.getName());
                 DataHelper.loadProps(props, fin);
             } else {
                 // compressed (or corrupt...)
-                if (_log.shouldDebug())
-                    _log.debug("Loading " + file.getName());
+                if (_log.shouldDebug()) _log.debug("Loading " + file.getName());
                 DataHelper.loadProps(props, new GZIPInputStream(fin));
             }
         } finally {
             try {
                 if (fin != null) fin.close();
-            } catch (IOException e) {/* ignored */}
+            } catch (IOException e) {
+                /* ignored */
+            }
         }
     }
 
     private Hash getHash(String name) {
-        if (name.length() < PREFIX.length() + 44)
-            return null;
+        if (name.length() < PREFIX.length() + 44) return null;
         String key = name.substring(PREFIX.length());
         key = key.substring(0, 44);
-        //Hash h = new Hash();
+        // Hash h = new Hash();
         try {
-            //h.fromBase64(key);
+            // h.fromBase64(key);
             byte[] b = Base64.decode(key);
-            if (b == null)
-                return null;
+            if (b == null) return null;
             Hash h = Hash.create(b);
             return h;
         } catch (RuntimeException dfe) {
@@ -602,7 +669,10 @@ class ProfilePersistenceHelper {
     private static class FileMetadata {
         final File file;
         final long lastModified;
-        FileMetadata(File f, long lm) { file = f; lastModified = lm; }
-    }
 
+        FileMetadata(File f, long lm) {
+            file = f;
+            lastModified = lm;
+        }
+    }
 }

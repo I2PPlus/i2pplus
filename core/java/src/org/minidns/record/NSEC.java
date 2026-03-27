@@ -10,6 +10,9 @@
  */
 package org.minidns.record;
 
+import org.minidns.dnsname.DnsName;
+import org.minidns.record.Record.TYPE;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -20,8 +23,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
-import org.minidns.dnsname.DnsName;
-import org.minidns.record.Record.TYPE;
 
 /**
  * DNS NSEC (Next Secure) record payload for DNSSEC.<br>
@@ -80,8 +81,7 @@ public class NSEC extends Data {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder()
-                .append(next).append('.');
+        StringBuilder sb = new StringBuilder().append(next).append('.');
         for (TYPE type : types) {
             sb.append(' ').append(type);
         }

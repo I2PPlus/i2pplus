@@ -26,7 +26,7 @@ import net.i2p.util.OrderedProperties;
  * Since 0.9.11, optionally include options.
  */
 public class GetDateMessage extends I2CPMessageImpl {
-    public final static int MESSAGE_TYPE = 32;
+    public static final int MESSAGE_TYPE = 32;
     private String _version;
     private Properties _options;
 
@@ -56,18 +56,17 @@ public class GetDateMessage extends I2CPMessageImpl {
      */
     public GetDateMessage(String version, Properties options) {
         super();
-        if (version == null && options != null && !options.isEmpty())
-            throw new IllegalArgumentException();
+        if (version == null && options != null && !options.isEmpty()) throw new IllegalArgumentException();
         _version = version;
         _options = options;
     }
 
     /**
-      *  Gets the protocol version.
-      *
-      *  @return may be null
-      *  @since 0.8.7
-      */
+     *  Gets the protocol version.
+     *
+     *  @return may be null
+     *  @since 0.8.7
+     */
     public String getVersion() {
         return _version;
     }
@@ -88,8 +87,9 @@ public class GetDateMessage extends I2CPMessageImpl {
         if (size > 0) {
             try {
                 _version = DataHelper.readString(in);
-                if (size > 1 + _version.length())  // assume ascii
+                if (size > 1 + _version.length()) { // assume ascii
                     _options = DataHelper.readProperties(in);
+                }
             } catch (DataFormatException dfe) {
                 throw new I2CPMessageException("Bad version string", dfe);
             }
@@ -98,13 +98,11 @@ public class GetDateMessage extends I2CPMessageImpl {
 
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
-        if (_version == null)
-            return new byte[0];
+        if (_version == null) return new byte[0];
         ByteArrayStream os = new ByteArrayStream(_options != null ? 128 : (1 + 6));
         try {
             DataHelper.writeString(os, _version);
-            if (_options != null && !_options.isEmpty())
-                DataHelper.writeProperties(os, _options, true);  // UTF-8
+            if (_options != null && !_options.isEmpty()) DataHelper.writeProperties(os, _options, true); // UTF-8
         } catch (DataFormatException dfe) {
             throw new I2CPMessageException("Error writing out the message data", dfe);
         }

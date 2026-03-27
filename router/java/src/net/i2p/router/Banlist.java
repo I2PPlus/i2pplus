@@ -1,4 +1,5 @@
 package net.i2p.router;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -7,6 +8,13 @@ package net.i2p.router;
  * your children, but it might.  Use at your own risk.
  *
  */
+
+import net.i2p.data.Base64;
+import net.i2p.data.DataHelper;
+import net.i2p.data.Hash;
+import net.i2p.time.BuildTime;
+import net.i2p.util.ConcurrentHashSet;
+import net.i2p.util.Log;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -17,12 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import net.i2p.data.Base64;
-import net.i2p.data.DataHelper;
-import net.i2p.data.Hash;
-import net.i2p.time.BuildTime;
-import net.i2p.util.ConcurrentHashSet;
-import net.i2p.util.Log;
 
 /**
  * Manages router banlist entries with configurable expiration times and transport-specific bans.
@@ -44,10 +46,13 @@ public class Banlist {
     public static class Entry {
         /** when it should expire, per the i2p clock */
         public long expireOn;
+
         /** why they were banlisted */
         public String cause;
+
         /** separate code so cause can contain {0} for translation */
         public String causeCode;
+
         /** set of transports to ban, null means all transports */
         public Set<String> transports;
 
@@ -60,19 +65,22 @@ public class Banlist {
     /**
      * Default ban duration for transient bans.
      */
-    public final static long BANLIST_DURATION_MS = 7*60*1000; // Don't make this too long as the failure may be transient due to connection limits.
+    public static final long BANLIST_DURATION_MS = 7 * 60 * 1000; // Don't make this too long as the failure may be transient due to connection limits.
+
     /**
      * Maximum ban duration for transient bans.
      */
-    public final static long BANLIST_DURATION_MAX = 30*60*1000;
+    public static final long BANLIST_DURATION_MAX = 30 * 60 * 1000;
+
     /**
      * Default ban duration for transport-specific bans.
      */
-    public final static long BANLIST_DURATION_PARTIAL = 10*60*1000;
+    public static final long BANLIST_DURATION_PARTIAL = 10 * 60 * 1000;
+
     /**
      * Permanent ban duration (will be rounded down to 180 days on console).
      */
-    public final static long BANLIST_DURATION_FOREVER = 181L*24*60*60*1000; // will get rounded down to 180d on console
+    public static final long BANLIST_DURATION_FOREVER = 181L * 24 * 60 * 60 * 1000; // will get rounded down to 180d on console
 
     /**
      *  Buggy i2pd fork
@@ -82,12 +90,14 @@ public class Banlist {
      *  Buggy i2pd fork
      *  @since 0.9.52
      */
-    public final static long BANLIST_DURATION_NO_NETWORK = 30*24*60*60*1000L;
+    public static final long BANLIST_DURATION_NO_NETWORK = 30 * 24 * 60 * 60 * 1000L;
+
     /**
      * Ban duration for private IP addresses.
      */
-    public final static long BANLIST_DURATION_PRIVATE = 2*60*60*1000;
-    private final static long BANLIST_CLEANER_START_DELAY = BANLIST_DURATION_PARTIAL;
+    public static final long BANLIST_DURATION_PRIVATE = 2 * 60 * 60 * 1000;
+
+    private static final long BANLIST_CLEANER_START_DELAY = BANLIST_DURATION_PARTIAL;
 
     /**
      *  A ban that expires after this will return true in isBanlistedForever().
@@ -96,7 +106,7 @@ public class Banlist {
      *  Not-forever is treated as a soft ban, with outbound rejected
      *  but inbound will be allowed and will automatically unban.
      */
-    private static final long BANLIST_FOREVER_THRESHOLD = 24*60*60*1000L;
+    private static final long BANLIST_FOREVER_THRESHOLD = 24 * 60 * 60 * 1000L;
 
     /**
      *  Constructor.
@@ -113,6 +123,7 @@ public class Banlist {
 
     private class Cleanup extends JobImpl {
         private List<Hash> _toUnbanlist;
+
         /**
          *  @param ctx the router context
          */
@@ -123,7 +134,9 @@ public class Banlist {
         }
 
         @Override
-        public String getName() {return "Expire Banned Peers";}
+        public String getName() {
+            return "Expire Banned Peers";
+        }
 
         /**
          *  Removes expired ban entries and updates message history.
@@ -133,23 +146,24 @@ public class Banlist {
             _toUnbanlist.clear();
             long now = getContext().clock().now();
             try {
-                for (Iterator<Map.Entry<Hash, Entry>> iter = _entries.entrySet().iterator(); iter.hasNext();) {
+                for (Iterator<Map.Entry<Hash, Entry>> iter = _entries.entrySet().iterator(); iter.hasNext(); ) {
                     Map.Entry<Hash, Entry> e = iter.next();
                     if (e.getValue().expireOn <= now) {
                         iter.remove();
                         _toUnbanlist.add(e.getKey());
                     }
                 }
-            } catch (IllegalStateException ise) {} // next time...
+            } catch (IllegalStateException ise) {
+            } // next time...
             List<Hash> toUnban = new ArrayList<>(_toUnbanlist);
             for (Hash peer : toUnban) {
                 _context.messageHistory().unbanlist(peer);
                 BanLogger.clearLoggedHash(peer);
                 if (_log.shouldInfo()) {
-                    _log.info("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]");
+                    _log.info("Removing expired ban from [" + peer.toBase64().substring(0, 6) + "]");
                 }
             }
-            requeue(30*1000);
+            requeue(30 * 1000);
         }
     }
 
@@ -157,7 +171,9 @@ public class Banlist {
      *  Get the number of currently banlisted routers.
      *  @return the number of currently banlisted routers
      */
-    public int getRouterCount() {return _entries.size();}
+    public int getRouterCount() {
+        return _entries.size();
+    }
 
     /**
      *  Get the banlist entries.
@@ -165,14 +181,18 @@ public class Banlist {
      *  Note - may contain expired entries.
      *  @return an unmodifiable map of router hashes to banlist entries
      */
-    public Map<Hash, Entry> getEntries() {return Collections.unmodifiableMap(_entries);}
+    public Map<Hash, Entry> getEntries() {
+        return Collections.unmodifiableMap(_entries);
+    }
 
     /**
      *  Ban a router with default duration.
      *  @param peer the router hash to ban
      *  @return true if it WAS previously on the list
      */
-    public boolean banlistRouter(Hash peer) {return banlistRouter(peer, null);}
+    public boolean banlistRouter(Hash peer) {
+        return banlistRouter(peer, null);
+    }
 
     /**
      *  Ban a router with default duration.
@@ -180,7 +200,9 @@ public class Banlist {
      *  @param reason the reason for the ban (may be null)
      *  @return true if it WAS previously on the list
      */
-    public boolean banlistRouter(Hash peer, String reason) {return banlistRouter(peer, reason, null);}
+    public boolean banlistRouter(Hash peer, String reason) {
+        return banlistRouter(peer, reason, null);
+    }
 
     /**
      *  Ban a router with default duration.
@@ -248,11 +270,15 @@ public class Banlist {
      */
     private boolean banlistRouter(Hash peer, String reason, String reasonCode, String transport, boolean forever) {
         long expireOn;
-        if (forever) {expireOn = _context.clock().now() + BANLIST_DURATION_FOREVER;}
-        else if (transport != null) {expireOn = _context.clock().now() + BANLIST_DURATION_PARTIAL;}
-        else {
+        if (forever) {
+            expireOn = _context.clock().now() + BANLIST_DURATION_FOREVER;
+        } else if (transport != null) {
+            expireOn = _context.clock().now() + BANLIST_DURATION_PARTIAL;
+        } else {
             long period = BANLIST_DURATION_MS + _context.random().nextLong(BANLIST_DURATION_MS / 4);
-            if (period > BANLIST_DURATION_MAX) {period = BANLIST_DURATION_MAX;}
+            if (period > BANLIST_DURATION_MAX) {
+                period = BANLIST_DURATION_MAX;
+            }
             expireOn = _context.clock().now() + period;
         }
         return banlistRouter(peer, reason, reasonCode, transport, expireOn); // NOPMD - overload delegation
@@ -270,7 +296,7 @@ public class Banlist {
      *  @since 0.9.18
      */
     public boolean banlistRouter(Hash peer, String reason, String reasonCode, String transport, long expireOn) {
-        long banDuration =  ((expireOn - _context.clock().now()) / 1000) / 60;
+        long banDuration = ((expireOn - _context.clock().now()) / 1000) / 60;
         if (expireOn < _context.clock().now()) {
             if (expireOn < BuildTime.getEarliestTime()) {
                 throw new IllegalArgumentException("Bad expiration: " + DataHelper.formatTime(expireOn)); // catch errors where we were passed a duration
@@ -278,18 +304,21 @@ public class Banlist {
             return false;
         }
         if (peer == null) {
-            if (_log.shouldWarn()) {_log.warn("Cannot apply Router ban, peer is null");}
+            if (_log.shouldWarn()) {
+                _log.warn("Cannot apply Router ban, peer is null");
+            }
             return false;
         }
         if (peer.equals(_context.routerHash())) {
-            if (_log.shouldWarn()) {_log.warn("Not banning our own router!");}
+            if (_log.shouldWarn()) {
+                _log.warn("Not banning our own router!");
+            }
             return false;
         }
         boolean wasAlready = false;
         String logReason = reason.replace("<b>➜</b>", "->");
         if (_log.shouldInfo()) {
-            _log.info("Banning [" + peer.toBase64().substring(0,6) + "] for " + banDuration + " minutes " +
-                ((transport != null) ? "on transport " + transport : "") + logReason);
+            _log.info("Banning [" + peer.toBase64().substring(0, 6) + "] for " + banDuration + " minutes " + ((transport != null) ? "on transport " + transport : "") + logReason);
         }
 
         Entry e = new Entry();
@@ -328,7 +357,9 @@ public class Banlist {
             _context.netDb().fail(peer);
             _context.tunnelManager().fail(peer);
         }
-        if (!wasAlready) {_context.messageHistory().banlist(peer, reason);}
+        if (!wasAlready) {
+            _context.messageHistory().banlist(peer, reason);
+        }
         return wasAlready;
     }
 
@@ -336,18 +367,26 @@ public class Banlist {
      *  Remove a router from the banlist.
      *  @param peer the router hash to remove from banlist
      */
-    public void unbanlistRouter(Hash peer) {unbanlistRouter(peer, true);}
+    public void unbanlistRouter(Hash peer) {
+        unbanlistRouter(peer, true);
+    }
+
     /**
      *  @param peer the router hash to remove from banlist
      *  @param realUnbanlist if true, update message history
      */
-    private void unbanlistRouter(Hash peer, boolean realUnbanlist) {unbanlistRouter(peer, realUnbanlist, null);}
+    private void unbanlistRouter(Hash peer, boolean realUnbanlist) {
+        unbanlistRouter(peer, realUnbanlist, null);
+    }
+
     /**
      *  Remove a router from the banlist for a specific transport.
      *  @param peer the router hash to remove from banlist
      *  @param transport the transport to unban (may be null for all transports)
      */
-    public void unbanlistRouter(Hash peer, String transport) {unbanlistRouter(peer, true, transport);}
+    public void unbanlistRouter(Hash peer, String transport) {
+        unbanlistRouter(peer, true, transport);
+    }
 
     /**
      *  Remove a router from the banlist.
@@ -357,9 +396,7 @@ public class Banlist {
      */
     private void unbanlistRouter(Hash peer, boolean realUnbanlist, String transport) {
         if (peer == null) return;
-        if (_log.shouldInfo())
-            _log.info("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]"
-                      + (transport != null ? "/" + transport : ""));
+        if (_log.shouldInfo()) _log.info("Removing expired ban from [" + peer.toBase64().substring(0, 6) + "]" + (transport != null ? "/" + transport : ""));
         boolean fully = false;
 
         Entry e = _entries.remove(peer);
@@ -368,18 +405,14 @@ public class Banlist {
             fully = true;
         } else {
             e.transports.remove(transport);
-            if (e.transports.isEmpty())
-                fully = true;
-            else
-                _entries.put(peer, e);
+            if (e.transports.isEmpty()) fully = true;
+            else _entries.put(peer, e);
         }
 
         if (fully) {
             _context.messageHistory().unbanlist(peer);
             BanLogger.clearLoggedHash(peer);
-            if (_log.shouldInfo() && e != null)
-                _log.info("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]"
-                          + (transport != null ? " / " + transport : ""));
+            if (_log.shouldInfo() && e != null) _log.info("Removing expired ban from [" + peer.toBase64().substring(0, 6) + "]" + (transport != null ? " / " + transport : ""));
         }
     }
 
@@ -388,7 +421,9 @@ public class Banlist {
      *  @param peer the router hash to check
      *  @return true if the router is banlisted on any transport
      */
-    public boolean isBanlisted(Hash peer) {return isBanlisted(peer, null);}
+    public boolean isBanlisted(Hash peer) {
+        return isBanlisted(peer, null);
+    }
 
     /**
      *  Check if a router is banlisted on a specific transport.
@@ -397,25 +432,31 @@ public class Banlist {
      *  @return true if the router is banlisted on the specified transport
      */
     public boolean isBanlisted(Hash peer, String transport) {
-        if (peer == null || transport == null) {return false;}
+        if (peer == null || transport == null) {
+            return false;
+        }
 
         boolean rv = false;
         boolean unbanlist = false;
 
         Entry entry = _entries.get(peer);
-        if (entry == null) {rv = false;}
-        else if (entry.expireOn <= _context.clock().now()) {
+        if (entry == null) {
+            rv = false;
+        } else if (entry.expireOn <= _context.clock().now()) {
             _entries.remove(peer);
             unbanlist = true;
             rv = false;
-        } else if (entry.transports == null) {rv = true;}
-        else {rv = entry.transports.contains(transport);}
+        } else if (entry.transports == null) {
+            rv = true;
+        } else {
+            rv = entry.transports.contains(transport);
+        }
 
         if (unbanlist) {
             _context.messageHistory().unbanlist(peer);
             BanLogger.clearLoggedHash(peer);
             if (_log.shouldInfo()) {
-                _log.info("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]");
+                _log.info("Removing expired ban from [" + peer.toBase64().substring(0, 6) + "]");
             }
         }
 
@@ -441,12 +482,13 @@ public class Banlist {
     public boolean isBanlistedHostile(Hash peer) {
         if (peer != null) {
             Entry entry = _entries.get(peer);
-            return entry != null && entry.expireOn >= _context.clock().now() + 60*60*1000L;
-        } else {return false;}
+            return entry != null && entry.expireOn >= _context.clock().now() + 60 * 60 * 1000L;
+        } else {
+            return false;
+        }
     }
 
     /** @deprecated moved to router console */
     @Deprecated
     public void renderStatusHTML(Writer out) throws IOException {}
-
 }

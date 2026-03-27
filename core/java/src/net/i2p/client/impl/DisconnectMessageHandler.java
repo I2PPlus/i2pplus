@@ -26,11 +26,13 @@ class DisconnectMessageHandler extends HandlerImpl {
 
     @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
-        if (_log.shouldDebug()) {_log.debug("Handling " + message);}
-        String reason = ((DisconnectMessage)message).getReason();
+        if (_log.shouldDebug()) {
+            _log.debug("Handling " + message);
+        }
+        String reason = ((DisconnectMessage) message).getReason();
         session.propagateError(reason, new I2PSessionException("Disconnect Message received: " + reason));
         session.destroySession(false);
         // Higher layers (only) must do the reconnect, to prevent dup destinations
-        //if (reason.contains("restart")) ...
+        // if (reason.contains("restart")) ...
     }
 }

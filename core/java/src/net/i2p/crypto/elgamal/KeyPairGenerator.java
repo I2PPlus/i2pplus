@@ -2,12 +2,6 @@ package net.i2p.crypto.elgamal;
 
 import static net.i2p.crypto.CryptoConstants.I2P_ELGAMAL_2048_SPEC;
 
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidParameterException;
-import java.security.KeyPair;
-import java.security.KeyPairGeneratorSpi;
-import java.security.SecureRandom;
-import java.security.spec.AlgorithmParameterSpec;
 import net.i2p.crypto.KeyGenerator;
 import net.i2p.crypto.elgamal.impl.ElGamalPrivateKeyImpl;
 import net.i2p.crypto.elgamal.impl.ElGamalPublicKeyImpl;
@@ -19,6 +13,13 @@ import net.i2p.data.SimpleDataStructure;
 import net.i2p.util.NativeBigInteger;
 import net.i2p.util.RandomSource;
 
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidParameterException;
+import java.security.KeyPair;
+import java.security.KeyPairGeneratorSpi;
+import java.security.SecureRandom;
+import java.security.spec.AlgorithmParameterSpec;
+
 /**
  * Modified from eddsa
  * Only supported strength is 2048
@@ -29,7 +30,7 @@ public final class KeyPairGenerator extends KeyPairGeneratorSpi {
     // always long, don't use short key
     private static final int DEFAULT_STRENGTH = 2048;
     private ElGamalParameterSpec elgParams;
-    //private SecureRandom random;
+    // private SecureRandom random;
     private boolean initialized;
 
     /**
@@ -38,8 +39,7 @@ public final class KeyPairGenerator extends KeyPairGeneratorSpi {
      */
     @Override
     public void initialize(int strength, SecureRandom random) {
-        if (strength != DEFAULT_STRENGTH)
-            throw new InvalidParameterException("Unknown key type.");
+        if (strength != DEFAULT_STRENGTH) throw new InvalidParameterException("Unknown key type.");
         elgParams = I2P_ELGAMAL_2048_SPEC;
         try {
             initialize(elgParams, random);
@@ -55,24 +55,21 @@ public final class KeyPairGenerator extends KeyPairGeneratorSpi {
     public void initialize(AlgorithmParameterSpec params, SecureRandom random) throws InvalidAlgorithmParameterException {
         if (params instanceof ElGamalParameterSpec) {
             elgParams = (ElGamalParameterSpec) params;
-            if (!elgParams.equals(I2P_ELGAMAL_2048_SPEC))
-                throw new InvalidAlgorithmParameterException("unsupported ElGamalParameterSpec");
+            if (!elgParams.equals(I2P_ELGAMAL_2048_SPEC)) throw new InvalidAlgorithmParameterException("unsupported ElGamalParameterSpec");
         } else if (params instanceof ElGamalGenParameterSpec) {
             ElGamalGenParameterSpec elgGPS = (ElGamalGenParameterSpec) params;
-            if (elgGPS.getPrimeSize() != DEFAULT_STRENGTH)
-                throw new InvalidAlgorithmParameterException("unsupported prime size");
+            if (elgGPS.getPrimeSize() != DEFAULT_STRENGTH) throw new InvalidAlgorithmParameterException("unsupported prime size");
             elgParams = I2P_ELGAMAL_2048_SPEC;
         } else {
             throw new InvalidAlgorithmParameterException("parameter object not a ElGamalParameterSpec");
         }
-        //this.random = random;
+        // this.random = random;
         initialized = true;
     }
 
     @Override
     public KeyPair generateKeyPair() {
-        if (!initialized)
-            initialize(DEFAULT_STRENGTH, RandomSource.getInstance());
+        if (!initialized) initialize(DEFAULT_STRENGTH, RandomSource.getInstance());
         KeyGenerator kg = KeyGenerator.getInstance();
         SimpleDataStructure[] keys = kg.generatePKIKeys();
         PublicKey pubKey = (PublicKey) keys[0];

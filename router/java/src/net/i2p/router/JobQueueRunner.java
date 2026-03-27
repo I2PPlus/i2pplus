@@ -5,10 +5,10 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
-  Worker thread that executes jobs from the router job queue.
-  Handles job execution, timing collection, error handling,
-  and performance monitoring for individual job processing threads.
-*/
+ * Worker thread that executes jobs from the router job queue.
+ * Handles job execution, timing collection, error handling,
+ * and performance monitoring for individual job processing threads.
+ */
 class JobQueueRunner extends I2PThread {
     private final Log _log;
     private final RouterContext _context;
@@ -28,13 +28,33 @@ class JobQueueRunner extends I2PThread {
         // all createRateStat in JobQueue
     }
 
-    public Job getCurrentJob() {return _currentJob;}
-    public Job getLastJob() {return _lastJob;}
-    public int getRunnerId() {return _id;}
-    public void stopRunning() {_keepRunning = false;}
-    public void startRunning() {_keepRunning = true;}
-    public long getLastBegin() {return _lastBegin;}
-    public long getLastEnd() {return _lastEnd;}
+    public Job getCurrentJob() {
+        return _currentJob;
+    }
+
+    public Job getLastJob() {
+        return _lastJob;
+    }
+
+    public int getRunnerId() {
+        return _id;
+    }
+
+    public void stopRunning() {
+        _keepRunning = false;
+    }
+
+    public void startRunning() {
+        _keepRunning = true;
+    }
+
+    public long getLastBegin() {
+        return _lastBegin;
+    }
+
+    public long getLastEnd() {
+        return _lastEnd;
+    }
 
     public void run() {
         long lastActive = _context.clock().now();
@@ -51,10 +71,12 @@ class JobQueueRunner extends I2PThread {
 
                 long enqueuedTime = 0;
                 if (job instanceof JobImpl) {
-                    long when = ((JobImpl)job).getMadeReadyOn();
+                    long when = ((JobImpl) job).getMadeReadyOn();
                     if (when <= 0) {
                         _log.error("Job was not made ready?! " + job, new Exception("Not made ready?!"));
-                    } else {enqueuedTime = now - when;}
+                    } else {
+                        enqueuedTime = now - when;
+                    }
                 }
 
                 _currentJob = job;
@@ -73,7 +95,9 @@ class JobQueueRunner extends I2PThread {
                 long diff = _context.clock().now() - beforeUpdate;
 
                 long lag = doStart - origStartAfter;
-                if (lag < 0) {lag = 0;}
+                if (lag < 0) {
+                    lag = 0;
+                }
 
                 _context.statManager().addRateData("jobQueue.jobRun", duration, duration);
                 _context.statManager().addRateData("jobQueue.jobLag", lag);
@@ -81,8 +105,8 @@ class JobQueueRunner extends I2PThread {
 
                 if (duration > 1500) {
                     _context.statManager().addRateData("jobQueue.jobRunSlow", duration, duration);
-                    if (_log.shouldWarn() && doStart-origStartAfter > 100) {
-                        _log.warn(_currentJob + " completed in " + duration + "ms -> Lag: " + (doStart-origStartAfter) + "ms");
+                    if (_log.shouldWarn() && doStart - origStartAfter > 100) {
+                        _log.warn(_currentJob + " completed in " + duration + "ms -> Lag: " + (doStart - origStartAfter) + "ms");
                     } else if (_log.shouldInfo()) {
                         _log.warn(_currentJob + " completed in " + duration + "ms");
                     }
@@ -98,24 +122,33 @@ class JobQueueRunner extends I2PThread {
                 _lastJob = _currentJob;
                 _currentJob = null;
                 _lastEnd = lastActive;
-            } catch (Throwable t) {_log.log(Log.CRIT, "Error running?", t);}
+            } catch (Throwable t) {
+                _log.log(Log.CRIT, "Error running?", t);
+            }
         }
-        if (_context.router().isAlive()) {_log.log(Log.WARN, "Queue runner " + _id + " removed (idle)");}
+        if (_context.router().isAlive()) {
+            _log.log(Log.WARN, "Queue runner " + _id + " removed (idle)");
+        }
         _context.jobQueue().removeRunner(_id);
     }
 
     private void runCurrentJob() {
         try {
             _lastBegin = _context.clock().now();
-            if (_currentJob != null) {_currentJob.runJob();}
+            if (_currentJob != null) {
+                _currentJob.runJob();
+            }
         } catch (OutOfMemoryError oom) {
             try {
-                if (SystemVersion.isAndroid()) {_context.router().shutdown(Router.EXIT_OOM);}
-                else {fireOOM(oom);}
-            } catch (Throwable t) {}
+                if (SystemVersion.isAndroid()) {
+                    _context.router().shutdown(Router.EXIT_OOM);
+                } else {
+                    fireOOM(oom);
+                }
+            } catch (Throwable t) {
+            }
         } catch (Throwable t) {
             _log.log(Log.CRIT, "Error processing job [" + _currentJob.getName() + "] on thread " + _id, t);
         }
     }
-
 }

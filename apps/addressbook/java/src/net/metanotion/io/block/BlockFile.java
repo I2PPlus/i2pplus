@@ -28,14 +28,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package net.metanotion.io.block;
 
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.NoSuchElementException;
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 import net.metanotion.io.RAIFile;
@@ -48,6 +40,15 @@ import net.metanotion.io.data.IntBytes;
 import net.metanotion.io.data.StringBytes;
 import net.metanotion.io.data.UTF8StringBytes;
 import net.metanotion.util.skiplist.SkipIterator;
+
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Block-based file storage system with indexed access.
@@ -71,8 +72,10 @@ import net.metanotion.util.skiplist.SkipIterator;
 public class BlockFile implements Closeable {
     /** Page size in bytes for block file pages */
     public static final int PAGESIZE = 1024;
+
     /** File offset where the mounted flag is stored */
     public static final long OFFSET_MOUNTED = 20;
+
     /** Logger instance for this BlockFile */
     public final Log log = I2PAppContext.getGlobalContext().logManager().getLog(BlockFile.class);
 
@@ -84,20 +87,25 @@ public class BlockFile implements Closeable {
     private static final int MIN_MAJOR = 0x01;
     private static final int MIN_MINOR = 0x01;
     // I2P changed magic number, format changed, magic numbers now on all pages
-    private static final long MAGIC_BASE = 0x3141de4932500000L;   // 0x3141de I 2 P 00 00
+    private static final long MAGIC_BASE = 0x3141de4932500000L; // 0x3141de I 2 P 00 00
     private static final long MAGIC = MAGIC_BASE | (MAJOR << 8) | MINOR;
     private long magicBytes = MAGIC;
+
     /** Magic number for continuation pages ("CONT") */
-    public static final int MAGIC_CONT = 0x434f4e54;   // "CONT"
+    public static final int MAGIC_CONT = 0x434f4e54; // "CONT"
+
     /** Page number for the metaindex */
     public static final int METAINDEX_PAGE = 2;
+
     /** 2**32 pages of 1024 bytes each, more or less */
     private static final long MAX_LEN = (2L << (32 + 10)) - 1;
 
     /** new BlockFile length, containing a superblock page and a metaindex page. */
     private long fileLen = PAGESIZE * 2;
+
     private int freeListStart = 0;
     private int mounted = 0;
+
     /** Default span size for new skiplists */
     public int spanSize = 16;
 
@@ -106,8 +114,10 @@ public class BlockFile implements Closeable {
 
     private final BSkipList<String, Integer> metaIndex;
     private boolean _isClosed;
+
     /** cached list of free pages, only valid if freListStart > 0 */
     private FreeListBlock flb;
+
     private final HashMap<String, BSkipList> openIndices = new HashMap<String, BSkipList>();
 
     private void mount() throws IOException {
@@ -118,9 +128,9 @@ public class BlockFile implements Closeable {
 
     private void writeSuperBlock() throws IOException {
         file.seek(0);
-        file.writeLong(	magicBytes);
-        file.writeLong(	fileLen);
-        file.writeInt(	freeListStart);
+        file.writeLong(magicBytes);
+        file.writeLong(fileLen);
+        file.writeInt(freeListStart);
         file.writeShort(mounted);
         file.writeShort(spanSize);
         // added in version 1.2
@@ -129,11 +139,11 @@ public class BlockFile implements Closeable {
 
     private void readSuperBlock() throws IOException {
         file.seek(0);
-        magicBytes		= file.readLong();
-        fileLen			= file.readLong();
-        freeListStart	= file.readUnsignedInt();
-        mounted			= file.readUnsignedShort();
-        spanSize		= file.readUnsignedShort();
+        magicBytes = file.readLong();
+        fileLen = file.readLong();
+        freeListStart = file.readUnsignedInt();
+        mounted = file.readUnsignedShort();
+        spanSize = file.readUnsignedShort();
         // assume 1024 page size
     }
 
@@ -162,8 +172,14 @@ public class BlockFile implements Closeable {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (bf != null) try { bf.close(); } catch (IOException ioe) {}
-            if (raif != null) try { raif.close(); } catch (IOException ioe) {}
+            if (bf != null) try {
+                    bf.close();
+                } catch (IOException ioe) {
+                }
+            if (raif != null) try {
+                    raif.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 
@@ -186,20 +202,19 @@ public class BlockFile implements Closeable {
         while (dct < data.length) {
             int len = PAGESIZE - pageCounter;
             if (len <= 0) {
-                if (curNextPage==0) {
+                if (curNextPage == 0) {
                     curNextPage = this.allocPage();
                     BlockFile.pageSeek(this.file, curNextPage);
                     this.file.writeInt(MAGIC_CONT);
                     this.file.writeInt(0);
                     BlockFile.pageSeek(this.file, curPage);
-                    this.file.skipBytes(4);   // skip magic
+                    this.file.skipBytes(4); // skip magic
                     this.file.writeInt(curNextPage);
                 }
                 BlockFile.pageSeek(this.file, curNextPage);
                 curPage = curNextPage;
                 int magic = this.file.readInt();
-                if (magic != MAGIC_CONT)
-                    throw new IOException("Bad SkipSpan continuation magic number 0x" + Integer.toHexString(magic) + " on page " + curNextPage);
+                if (magic != MAGIC_CONT) throw new IOException("Bad SkipSpan continuation magic number 0x" + Integer.toHexString(magic) + " on page " + curNextPage);
                 curNextPage = this.file.readUnsignedInt();
                 pageCounter = BSkipSpan.CONT_HEADER_LEN;
                 len = PAGESIZE - pageCounter;
@@ -231,19 +246,19 @@ public class BlockFile implements Closeable {
         while (dct < arr.length) {
             int len = PAGESIZE - pageCounter;
             if (len <= 0) {
-                if (curNextPage <= 0)
-                    throw new IOException("Not enough pages to read data still need " + (arr.length - dct));
+                if (curNextPage <= 0) throw new IOException("Not enough pages to read data still need " + (arr.length - dct));
                 BlockFile.pageSeek(this.file, curNextPage);
                 int magic = this.file.readInt();
-                if (magic != MAGIC_CONT)
-                    throw new IOException("Bad SkipSpan continuation magic number 0x" + Integer.toHexString(magic) + " on page " + curNextPage);
+                if (magic != MAGIC_CONT) throw new IOException("Bad SkipSpan continuation magic number 0x" + Integer.toHexString(magic) + " on page " + curNextPage);
                 curPage = curNextPage;
                 curNextPage = this.file.readUnsignedInt();
                 pageCounter = BSkipSpan.CONT_HEADER_LEN;
                 len = PAGESIZE - pageCounter;
             }
             int res = this.file.read(arr, dct, Math.min(len, arr.length - dct));
-            if (res == -1) { throw new IOException(); }
+            if (res == -1) {
+                throw new IOException();
+            }
             pageCounter += Math.min(len, arr.length - dct);
             dct += res;
         }
@@ -271,12 +286,10 @@ public class BlockFile implements Closeable {
         while (dct < length) {
             int len = PAGESIZE - pageCounter;
             if (len <= 0) {
-                if (curNextPage <= 0)
-                    throw new IOException("not enough pages to skip");
+                if (curNextPage <= 0) throw new IOException("not enough pages to skip");
                 BlockFile.pageSeek(this.file, curNextPage);
                 int magic = this.file.readInt();
-                if (magic != MAGIC_CONT)
-                    throw new IOException("Bad SkipSpan continuation magic number 0x" + Integer.toHexString(magic) + " on page " + curNextPage);
+                if (magic != MAGIC_CONT) throw new IOException("Bad SkipSpan continuation magic number 0x" + Integer.toHexString(magic) + " on page " + curNextPage);
                 curPage = curNextPage;
                 curNextPage = this.file.readUnsignedInt();
                 pageCounter = BSkipSpan.CONT_HEADER_LEN;
@@ -297,7 +310,9 @@ public class BlockFile implements Closeable {
      *  @param rai the RandomAccessInterface to use
      *  @throws IOException if an I/O error occurs
      */
-    public BlockFile(RandomAccessInterface rai) throws IOException { this(rai, false); }
+    public BlockFile(RandomAccessInterface rai) throws IOException {
+        this(rai, false);
+    }
 
     /**
      *  Create a BlockFile from a RandomAccessFile.
@@ -305,7 +320,9 @@ public class BlockFile implements Closeable {
      *  @param raf the RandomAccessFile to use
      *  @throws IOException if an I/O error occurs
      */
-    public BlockFile(RandomAccessFile raf) throws IOException { this(new RAIFile(raf), false); }
+    public BlockFile(RandomAccessFile raf) throws IOException {
+        this(new RAIFile(raf), false);
+    }
 
     /**
      *  Create a BlockFile from a RandomAccessFile with optional initialization.
@@ -314,7 +331,9 @@ public class BlockFile implements Closeable {
      *  @param init if true, initialize the file with a new block structure
      *  @throws IOException if an I/O error occurs
      */
-    public BlockFile(RandomAccessFile raf, boolean init) throws IOException { this(new RAIFile(raf), init); }
+    public BlockFile(RandomAccessFile raf, boolean init) throws IOException {
+        this(new RAIFile(raf), init);
+    }
 
     /**
      *  Create a BlockFile from a File with optional initialization.
@@ -323,7 +342,9 @@ public class BlockFile implements Closeable {
      *  @param init if true, initialize the file with a new block structure
      *  @throws IOException if an I/O error occurs
      */
-    public BlockFile(File f, boolean init) throws IOException { this(new RAIFile(f, true, true), init); }
+    public BlockFile(File f, boolean init) throws IOException {
+        this(new RAIFile(f, true, true), init);
+    }
 
     /**
      *  Create a BlockFile from a RandomAccessInterface with optional initialization.
@@ -333,7 +354,9 @@ public class BlockFile implements Closeable {
      *  @throws IOException if an I/O error occurs
      */
     public BlockFile(RandomAccessInterface rai, boolean init) throws IOException {
-        if (rai==null) { throw new NullPointerException(); }
+        if (rai == null) {
+            throw new NullPointerException();
+        }
 
         file = rai;
 
@@ -348,22 +371,15 @@ public class BlockFile implements Closeable {
             if ((magicBytes & MAGIC_BASE) == MAGIC_BASE) {
                 long major = (magicBytes >> 8) & 0xff;
                 long minor = magicBytes & 0xff;
-                if (major < MIN_MAJOR ||
-                    (major == MIN_MAJOR && minor < MIN_MINOR))
-                    throw new IOException("Expected " + MAJOR + '.' + MINOR +
-                                          " but got " + major + '.' + minor);
+                if (major < MIN_MAJOR || (major == MIN_MAJOR && minor < MIN_MINOR)) throw new IOException("Expected " + MAJOR + '.' + MINOR + " but got " + major + '.' + minor);
             } else {
                 throw new IOException("Bad magic number");
             }
         }
         _wasMounted = mounted != 0;
-        if (_wasMounted)
-            log.warn("Warning - file was not previously closed");
-        if (fileLen != file.length())
-            throw new IOException("Expected file length " + fileLen +
-                                      " but actually " + file.length());
-        if (rai.canWrite())
-            mount();
+        if (_wasMounted) log.warn("Warning - file was not previously closed");
+        if (fileLen != file.length()) throw new IOException("Expected file length " + fileLen + " but actually " + file.length());
+        if (rai.canWrite()) mount();
 
         metaIndex = new BSkipList<String, Integer>(spanSize, this, METAINDEX_PAGE, new StringBytes(), new IntBytes());
     }
@@ -386,8 +402,7 @@ public class BlockFile implements Closeable {
      *  @throws IOException if page is invalid
      */
     public static void pageSeek(RandomAccessInterface file, int page) throws IOException {
-        if (page < METAINDEX_PAGE)
-            throw new IOException("Negative page or superblock access attempt: " + page);
+        if (page < METAINDEX_PAGE) throw new IOException("Negative page or superblock access attempt: " + page);
         file.seek((page - 1L) * PAGESIZE);
     }
 
@@ -399,15 +414,12 @@ public class BlockFile implements Closeable {
     public int allocPage() throws IOException {
         if (freeListStart != 0) {
             try {
-                if (flb == null)
-                    flb = new FreeListBlock(file, freeListStart);
+                if (flb == null) flb = new FreeListBlock(file, freeListStart);
                 if (!flb.isEmpty()) {
-                    if (log.shouldDebug())
-                        log.debug("Alloc from " + flb);
+                    if (log.shouldDebug()) log.debug("Alloc from " + flb);
                     return flb.takePage();
                 } else {
-                    if (log.shouldDebug())
-                        log.debug("Alloc returning empty " + flb);
+                    if (log.shouldDebug()) log.debug("Alloc returning empty " + flb);
                     freeListStart = flb.getNextPage();
                     writeSuperBlock();
                     int rv = flb.page;
@@ -443,17 +455,14 @@ public class BlockFile implements Closeable {
                 freeListStart = page;
                 FreeListBlock.initPage(file, page);
                 writeSuperBlock();
-                if (log.shouldDebug())
-                    log.debug("Freed page " + page + " as new FLB");
+                if (log.shouldDebug()) log.debug("Freed page " + page + " as new FLB");
                 return;
             }
             try {
-                if (flb == null)
-                    flb = new FreeListBlock(file, freeListStart);
+                if (flb == null) flb = new FreeListBlock(file, freeListStart);
                 if (flb.isFull()) {
                     // Make the free page a new FLB
-                    if (log.shouldDebug())
-                        log.debug("Full: " + flb);
+                    if (log.shouldDebug()) log.debug("Full: " + flb);
                     FreeListBlock.initPage(file, page);
                     if (flb.getNextPage() == 0) {
                         // Put it at the tail.
@@ -467,13 +476,11 @@ public class BlockFile implements Closeable {
                         freeListStart = page;
                         writeSuperBlock();
                     }
-                    if (log.shouldDebug())
-                        log.debug("Freed page " + page + " to full " + flb);
+                    if (log.shouldDebug()) log.debug("Freed page " + page + " to full " + flb);
                     return;
                 }
                 flb.addPage(page);
-                if (log.shouldDebug())
-                    log.debug("Freed page " + page + " to " + flb);
+                if (log.shouldDebug()) log.debug("Freed page " + page + " to " + flb);
             } catch (IOException ioe) {
                 log.error("Discarding corrupt free list block page " + freeListStart, ioe);
                 freeListStart = page;
@@ -506,18 +513,17 @@ public class BlockFile implements Closeable {
     public <K extends Comparable<? super K>, V> BSkipList<K, V> getIndex(String name, Serializer<K> key, Serializer<V> val) throws IOException {
         // added I2P
         BSkipList<K, V> bsl = (BSkipList<K, V>) openIndices.get(name);
-        if (bsl != null)
-            return bsl;
+        if (bsl != null) return bsl;
 
         Integer page = metaIndex.get(name);
-        if (page == null) { return null; }
+        if (page == null) {
+            return null;
+        }
         bsl = new BSkipList<K, V>(spanSize, this, page.intValue(), key, val, true);
         if (file.canWrite()) {
             log.info("Checking skiplist " + name + " in blockfile " + file);
-            if (bsl.bslck(true, false))
-                log.logAlways(Log.WARN, "Repaired skiplist " + name + " in blockfile " + file);
-            else
-                log.info("No errors in skiplist " + name + " in blockfile " + file);
+            if (bsl.bslck(true, false)) log.logAlways(Log.WARN, "Repaired skiplist " + name + " in blockfile " + file);
+            else log.info("No errors in skiplist " + name + " in blockfile " + file);
         }
         openIndices.put(name, bsl);
         return bsl;
@@ -536,7 +542,9 @@ public class BlockFile implements Closeable {
      *  @throws IOException if already exists or other errors
      */
     public <K extends Comparable<? super K>, V> BSkipList<K, V> makeIndex(String name, Serializer<K> key, Serializer<V> val) throws IOException {
-        if (metaIndex.get(name) != null) { throw new IOException("Index already exists"); }
+        if (metaIndex.get(name) != null) {
+            throw new IOException("Index already exists");
+        }
         int page = allocPage();
         metaIndex.put(name, Integer.valueOf(page));
         BSkipList.init(this, page, spanSize);
@@ -554,11 +562,9 @@ public class BlockFile implements Closeable {
      *  @throws IOException if it is closed.
      */
     public void delIndex(String name) throws IOException {
-        if (metaIndex.get(name) == null)
-                    return;
+        if (metaIndex.get(name) == null) return;
         BSkipList bsl = openIndices.get(name);
-        if (bsl == null)
-            throw new IOException("Cannot delete closed skiplist, open it first: " + name);
+        if (bsl == null) throw new IOException("Cannot delete closed skiplist, open it first: " + name);
         bsl.delete();
         openIndices.remove(name);
         metaIndex.remove(name);
@@ -571,8 +577,7 @@ public class BlockFile implements Closeable {
      */
     public void closeIndex(String name) {
         BSkipList bsl = openIndices.remove(name);
-        if (bsl != null)
-            bsl.flush();
+        if (bsl != null) bsl.flush();
     }
 
     /**
@@ -591,13 +596,10 @@ public class BlockFile implements Closeable {
      *  @throws IOException if it is open or on errors
      *  @since 0.9.26
      */
-    public <K extends Comparable<? super K>, V> void reformatIndex(String name, Serializer<K> oldKey, Serializer<V> oldVal,
-                              Serializer<K> newKey, Serializer<V> newVal) throws IOException {
-        if (openIndices.containsKey(name))
-            throw new IOException("Cannot reformat open skiplist " + name);
+    public <K extends Comparable<? super K>, V> void reformatIndex(String name, Serializer<K> oldKey, Serializer<V> oldVal, Serializer<K> newKey, Serializer<V> newVal) throws IOException {
+        if (openIndices.containsKey(name)) throw new IOException("Cannot reformat open skiplist " + name);
         BSkipList<K, V> old = getIndex(name, oldKey, oldVal);
-        if (old == null)
-            return;
+        if (old == null) return;
         long start = System.currentTimeMillis();
         String tmpName = "---tmp---" + name + "---tmp---";
         BSkipList<K, V> tmp = getIndex(tmpName, newKey, newVal);
@@ -630,8 +632,7 @@ public class BlockFile implements Closeable {
             for (int i = keys.size() - 1; i >= 0; i--) {
                 old.remove(keys.get(i));
             }
-            if (done)
-                break;
+            if (done) break;
             keys.clear();
             vals.clear();
         }
@@ -642,9 +643,7 @@ public class BlockFile implements Closeable {
         Integer page = metaIndex.get(tmpName);
         metaIndex.put(name, page);
         metaIndex.remove(tmpName);
-        if (log.shouldWarn())
-            log.warn("reformatted list: " + name + " in " +
-                     (System.currentTimeMillis() - start) + "ms");
+        if (log.shouldWarn()) log.warn("reformatted list: " + name + " in " + (System.currentTimeMillis() - start) + "ms");
     }
 
     /**
@@ -655,8 +654,7 @@ public class BlockFile implements Closeable {
      */
     public void close() throws IOException {
         // added I2P
-        if (_isClosed)
-            return;
+        if (_isClosed) return;
         _isClosed = true;
         metaIndex.close();
 
@@ -689,18 +687,15 @@ public class BlockFile implements Closeable {
         }
         boolean rv = metaIndex.bslck(fix, true);
         if (rv) {
-            if (log.shouldWarn())
-                log.warn("Repaired meta index in blockfile " + file);
+            if (log.shouldWarn()) log.warn("Repaired meta index in blockfile " + file);
         } else {
-            if (log.shouldInfo())
-                log.info("No errors in meta index in blockfile " + file);
+            if (log.shouldInfo()) log.info("No errors in meta index in blockfile " + file);
         }
         int items = 0;
-        for (SkipIterator iter = metaIndex.iterator(); iter.hasNext();) {
+        for (SkipIterator iter = metaIndex.iterator(); iter.hasNext(); ) {
             String slname = (String) iter.nextKey();
             Integer page = (Integer) iter.next();
-            if (log.shouldInfo())
-                log.info("List " + slname + " page " + page);
+            if (log.shouldInfo()) log.info("List " + slname + " page " + page);
             try {
                 // This uses IdentityBytes, so the value class won't be right, but at least
                 // it won't fail the out-of-order check
@@ -726,15 +721,13 @@ public class BlockFile implements Closeable {
         log.info("Checked meta index and " + items + " skiplists");
         if (freeListStart != 0) {
             try {
-                if (flb == null)
-                    flb = new FreeListBlock(file, freeListStart);
+                if (flb == null) flb = new FreeListBlock(file, freeListStart);
                 flb.flbck(true);
             } catch (IOException ioe) {
                 log.error("Free list error", ioe);
             }
         } else {
-            if (log.shouldInfo())
-                log.info("No freelist");
+            if (log.shouldInfo()) log.info("No freelist");
         }
         return rv;
     }

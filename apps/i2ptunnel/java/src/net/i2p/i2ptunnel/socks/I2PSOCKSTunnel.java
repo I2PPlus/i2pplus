@@ -6,15 +6,6 @@
  */
 package net.i2p.i2ptunnel.socks;
 
-import java.io.IOException;
-import java.net.Socket;
-import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.StringTokenizer;
 import net.i2p.client.naming.NamingService;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketOptions;
@@ -25,6 +16,16 @@ import net.i2p.i2ptunnel.Logging;
 import net.i2p.i2ptunnel.TunnelController;
 import net.i2p.socks.SOCKSException;
 import net.i2p.util.EventDispatcher;
+
+import java.io.IOException;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.StringTokenizer;
 
 /**
  * SOCKS proxy server that routes TCP connections through I2P network.
@@ -48,12 +49,13 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
      *  See I2PTunnelHTTPServer or SAM's ReadLine if we need that.
      *  @since 0.9.33
      */
-    protected static final int INITIAL_SO_TIMEOUT = 15*1000;
+    protected static final int INITIAL_SO_TIMEOUT = 15 * 1000;
 
-    private final HashMap<String, List<String>> proxies;  // port# + "" or "default" -> hostname list
+    private final HashMap<String, List<String>> proxies; // port# + "" or "default" -> hostname list
 
     /** @since 0.9.57 for storing passwords */
     public static final String AUTH_REALM = "I2P SOCKS Proxy";
+
     /** @since 0.9.57 */
     public static final String PROP_OUTPROXY_TYPE = "outproxyType";
 
@@ -67,7 +69,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         super(localPort, ownDest, l, notifyThis, "SOCKS Proxy on " + tunnel.listenHost + ':' + localPort, tunnel, pkf);
         // force connect delay and bulk profile
         Properties opts = tunnel.getClientOptions();
-//        opts.setProperty("i2p.streaming.connectDelay", "200");
+        //        opts.setProperty("i2p.streaming.connectDelay", "200");
         opts.setProperty("i2p.streaming.connectDelay", "150");
         opts.remove("i2p.streaming.maxWindowSize");
 
@@ -83,30 +85,34 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         try {
             try {
                 s.setSoTimeout(INITIAL_SO_TIMEOUT);
-            } catch (SocketException ioe) {}
+            } catch (SocketException ioe) {
+            }
             SOCKSServer serv = SOCKSServerFactory.createSOCKSServer(_context, s, getTunnel().getClientOptions());
             Socket clientSock = serv.getClientSocket();
             try {
                 s.setSoTimeout(0);
-            } catch (SocketException ioe) {}
+            } catch (SocketException ioe) {
+            }
             destSock = serv.getDestinationI2PSocket(this);
-            Thread t = new I2PTunnelRunner(clientSock, destSock, sockLock, null, null, mySockets,
-                                           (I2PTunnelRunner.FailCallback) null);
+            Thread t = new I2PTunnelRunner(clientSock, destSock, sockLock, null, null, mySockets, (I2PTunnelRunner.FailCallback) null);
             // we are called from an unlimited thread pool, so run inline
-            //t.start();
+            // t.start();
             t.run();
         } catch (SOCKSException e) {
-            if (_log.shouldWarn())
-                _log.warn("Error from SOCKS connection", e);
+            if (_log.shouldWarn()) _log.warn("Error from SOCKS connection", e);
         } finally {
             // only because we are running it inline
             closeSocket(s);
-            if (destSock != null) try { destSock.close(); } catch (IOException ioe) {}
+            if (destSock != null) try {
+                    destSock.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 
     /** add "default" or port number */
     public static final String PROP_PROXY_PREFIX = "i2ptunnel.socks.proxy.";
+
     public static final String DEFAULT = "default";
     public static final String PROP_PROXY_DEFAULT = PROP_PROXY_PREFIX + DEFAULT;
 
@@ -117,8 +123,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
      */
     @Override
     public void optionsUpdated(I2PTunnel tunnel) {
-        if (getTunnel() != tunnel)
-            return;
+        if (getTunnel() != tunnel) return;
         proxies.clear();
         parseOptions();
         super.optionsUpdated(tunnel);
@@ -128,23 +133,24 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         Properties opts = getTunnel().getClientOptions();
         if (!opts.containsKey(PROP_PROXY_DEFAULT)) {
             String proxyList = opts.getProperty(TunnelController.PROP_PROXIES);
-            if (proxyList != null)
-                opts.setProperty(PROP_PROXY_DEFAULT, proxyList);
+            if (proxyList != null) opts.setProperty(PROP_PROXY_DEFAULT, proxyList);
         }
         for (Map.Entry<Object, Object> e : opts.entrySet()) {
-            String prop = (String)e.getKey();
-            if ((!prop.startsWith(PROP_PROXY_PREFIX)) || prop.length() <= PROP_PROXY_PREFIX.length())
-                continue;
+            String prop = (String) e.getKey();
+            if ((!prop.startsWith(PROP_PROXY_PREFIX)) || prop.length() <= PROP_PROXY_PREFIX.length()) continue;
             String port = prop.substring(PROP_PROXY_PREFIX.length());
             List<String> proxyList = new ArrayList<String>(1);
-            StringTokenizer tok = new StringTokenizer((String)e.getValue(), ", \t");
+            StringTokenizer tok = new StringTokenizer((String) e.getValue(), ", \t");
             while (tok.hasMoreTokens()) {
                 String proxy = tok.nextToken().trim();
                 String host = proxy;
                 int colon = proxy.indexOf(':');
-                if (colon > 0) {host = host.substring(0, colon);}
-                if (NamingService.isI2PHost(host)) {proxyList.add(proxy);}
-                else {
+                if (colon > 0) {
+                    host = host.substring(0, colon);
+                }
+                if (NamingService.isI2PHost(host)) {
+                    proxyList.add(proxy);
+                } else {
                     String m = "Non-i2p SOCKS outproxy: " + proxy;
                     l.log(m);
                     _log.error(m);
@@ -159,7 +165,9 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
      *
      * @return a map of port strings to proxy lists
      */
-    public HashMap<String, List<String>> getProxyMap() {return proxies;}
+    public HashMap<String, List<String>> getProxyMap() {
+        return proxies;
+    }
 
     /**
      *  Gets the proxy list for a specific port.
@@ -172,11 +180,15 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
      */
     public List<String> getProxies(int port) {
         List<String> rv = proxies.get(Integer.toString(port));
-        if (rv == null) {rv = getDefaultProxies();}
+        if (rv == null) {
+            rv = getDefaultProxies();
+        }
         return rv;
     }
 
-    public List<String> getDefaultProxies() {return proxies.get(DEFAULT);}
+    public List<String> getDefaultProxies() {
+        return proxies.get(DEFAULT);
+    }
 
     /**
      * Because getDefaultOptions() in super() is protected
@@ -188,9 +200,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         // delayed start
         verifySocketManager();
         I2PSocketOptions opts = sockMgr.buildOptions(defaultOpts);
-        if (!defaultOpts.containsKey(I2PSocketOptions.PROP_CONNECT_TIMEOUT))
-            opts.setConnectTimeout(60 * 1000);
+        if (!defaultOpts.containsKey(I2PSocketOptions.PROP_CONNECT_TIMEOUT)) opts.setConnectTimeout(60 * 1000);
         return opts;
     }
-
 }

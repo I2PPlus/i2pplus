@@ -1,7 +1,5 @@
 package net.i2p.router.transport.udp;
 
-import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
 import net.i2p.data.DataHelper;
 import net.i2p.data.SessionKey;
 import net.i2p.data.Signature;
@@ -12,6 +10,9 @@ import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Data for a new connection being established, where we initiated the
@@ -40,7 +41,7 @@ class OutboundEstablishState {
     private long _sentSignedOnTime;
     // general status
     protected final long _establishBegin;
-    //private long _lastReceive;
+    // private long _lastReceive;
     protected long _lastSend;
     protected long _nextSend;
     protected RemoteHostId _remoteHostId;
@@ -120,7 +121,7 @@ class OutboundEstablishState {
      *  max delay including backoff
      *  This should be a little longer than for inbound.
      */
-    private static final long MAX_DELAY = 15*1000;
+    private static final long MAX_DELAY = 15 * 1000;
 
     private static final long WAIT_FOR_HOLE_PUNCH_DELAY = 500;
 
@@ -129,18 +130,14 @@ class OutboundEstablishState {
      *
      *  @since 0.9.54
      */
-    protected OutboundEstablishState(RouterContext ctx, RemoteHostId claimedAddress,
-                                  RemoteHostId remoteHostId,
-                                  RouterIdentity remotePeer,
-                                  boolean needIntroduction,
-                                  SessionKey introKey, UDPAddress addr) {
+    protected OutboundEstablishState(RouterContext ctx, RemoteHostId claimedAddress, RemoteHostId remoteHostId, RouterIdentity remotePeer, boolean needIntroduction, SessionKey introKey, UDPAddress addr) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
         if (claimedAddress != null) {
             _bobIP = claimedAddress.getIP();
             _bobPort = claimedAddress.getPort();
         } else {
-            //_bobIP = null;
+            // _bobIP = null;
             _bobPort = -1;
         }
         _claimedAddress = claimedAddress;
@@ -154,8 +151,7 @@ class OutboundEstablishState {
         _remoteAddress = addr;
         _introductionNonce = -1;
         if (addr.getIntroducerCount() > 0) {
-            if (_log.shouldDebug())
-                _log.debug("new outbound establish to " + remotePeer.calculateHash() + ", with address: " + addr);
+            if (_log.shouldDebug()) _log.debug("new outbound establish to " + remotePeer.calculateHash() + ", with address: " + addr);
             _currentState = OutboundState.OB_STATE_PENDING_INTRO;
         } else {
             _currentState = OutboundState.OB_STATE_UNKNOWN;
@@ -165,9 +161,13 @@ class OutboundEstablishState {
     /**
      * @since 0.9.54
      */
-    public int getVersion() { return 1; }
+    public int getVersion() {
+        return 1;
+    }
 
-    public synchronized OutboundState getState() { return _currentState; }
+    public synchronized OutboundState getState() {
+        return _currentState;
+    }
 
     /** @return if previously complete */
     public synchronized boolean complete() {
@@ -177,27 +177,39 @@ class OutboundEstablishState {
     }
 
     /** @return non-null */
-    public UDPAddress getRemoteAddress() { return _remoteAddress; }
+    public UDPAddress getRemoteAddress() {
+        return _remoteAddress;
+    }
 
-    public void setIntroNonce(long nonce) { _introductionNonce = nonce; }
+    public void setIntroNonce(long nonce) {
+        _introductionNonce = nonce;
+    }
 
     /** @return -1 if unset */
-    public long getIntroNonce() { return _introductionNonce; }
+    public long getIntroNonce() {
+        return _introductionNonce;
+    }
 
     /**
      *  Are we allowed to send extended options to this peer?
      *  @since 0.9.24
      */
-    public boolean isExtendedOptionsAllowed() { return _allowExtendedOptions; }
+    public boolean isExtendedOptionsAllowed() {
+        return _allowExtendedOptions;
+    }
 
     /**
      *  Should we ask this peer to be an introducer for us?
      *  Ignored unless allowExtendedOptions is true
      *  @since 0.9.24
      */
-    public boolean needIntroduction() { return _needIntroduction; }
+    public boolean needIntroduction() {
+        return _needIntroduction;
+    }
 
-    synchronized int getRTT() { return _rtt; }
+    synchronized int getRTT() {
+        return _rtt;
+    }
 
     /**
      *  Queue a message to be sent after the session is established.
@@ -208,18 +220,15 @@ class OutboundEstablishState {
             if (m.getType() == DatabaseStoreMessage.MESSAGE_TYPE) {
                 DatabaseStoreMessage dsm = (DatabaseStoreMessage) m;
                 if (dsm.getKey().equals(_context.routerHash())) {
-                   // version 2 sends our RI in handshake
-                    if (getVersion() > 1)
-                        return;
+                    // version 2 sends our RI in handshake
+                    if (getVersion() > 1) return;
                     _isFirstMessageOurDSM = true;
                 }
             }
         }
         // chance of a duplicate here in a race, that's ok
-        if (!_queuedMessages.contains(msg))
-            _queuedMessages.offer(msg);
-        else if (_log.shouldWarn())
-             _log.warn("Attempt to add duplicate msg to queue: " + msg);
+        if (!_queuedMessages.contains(msg)) _queuedMessages.offer(msg);
+        else if (_log.shouldWarn()) _log.warn("Attempt to add duplicate msg to queue: " + msg);
     }
 
     /**
@@ -235,24 +244,32 @@ class OutboundEstablishState {
         return _queuedMessages.poll();
     }
 
-    public RouterIdentity getRemoteIdentity() { return _remotePeer; }
+    public RouterIdentity getRemoteIdentity() {
+        return _remotePeer;
+    }
 
     /**
      *  Bob's introduction key, as published in the netdb
      */
-    public SessionKey getIntroKey() { return _introKey; }
+    public SessionKey getIntroKey() {
+        return _introKey;
+    }
 
     /**
      * The remote side (Bob) - note that in some places he's called Charlie.
      * Warning - may change after introduction. May be null before introduction.
      */
-    public synchronized byte[] getSentIP() { return _bobIP; }
+    public synchronized byte[] getSentIP() {
+        return _bobIP;
+    }
 
     /**
      * The remote side (Bob) - note that in some places he's called Charlie.
      * Warning - may change after introduction. May be -1 before introduction.
      */
-    public synchronized int getSentPort() { return _bobPort; }
+    public synchronized int getSentPort() {
+        return _bobPort;
+    }
 
     /**
      * Blocking call (run in the establisher thread) to determine if the
@@ -286,11 +303,25 @@ class OutboundEstablishState {
         _nextSend = _context.clock().now();
     }
 
-    public synchronized long getReceivedRelayTag() { return _receivedRelayTag; }
-    public synchronized long getSentSignedOnTime() { return _sentSignedOnTime; }
-    public synchronized long getReceivedSignedOnTime() { return _receivedSignedOnTime; }
-    public synchronized byte[] getReceivedIP() { return _aliceIP; }
-    public synchronized int getReceivedPort() { return _alicePort; }
+    public synchronized long getReceivedRelayTag() {
+        return _receivedRelayTag;
+    }
+
+    public synchronized long getSentSignedOnTime() {
+        return _sentSignedOnTime;
+    }
+
+    public synchronized long getReceivedSignedOnTime() {
+        return _receivedSignedOnTime;
+    }
+
+    public synchronized byte[] getReceivedIP() {
+        return _aliceIP;
+    }
+
+    public synchronized int getReceivedPort() {
+        return _alicePort;
+    }
 
     /** note that we just sent the SessionConfirmed packet */
     public synchronized void confirmedPacketsSent() {
@@ -300,26 +331,21 @@ class OutboundEstablishState {
             delay = RETRANSMIT_DELAY;
             _confirmedSentTime = _lastSend;
         } else {
-            delay = Math.min(RETRANSMIT_DELAY << _confirmedSentCount,
-                             _confirmedSentTime + EstablishmentManager.OB_MESSAGE_TIMEOUT - _lastSend);
+            delay = Math.min(RETRANSMIT_DELAY << _confirmedSentCount, _confirmedSentTime + EstablishmentManager.OB_MESSAGE_TIMEOUT - _lastSend);
         }
         _confirmedSentCount++;
         _nextSend = _lastSend + delay;
-        if (_log.shouldDebug())
-            _log.debug("Send confirm packets, nextSend in " + delay + "ms on " + this);
-        if (_currentState == OutboundState.OB_STATE_UNKNOWN ||
-            _currentState == OutboundState.OB_STATE_PENDING_INTRO ||
-            _currentState == OutboundState.OB_STATE_INTRODUCED ||
-            _currentState == OutboundState.OB_STATE_REQUEST_SENT ||
-            _currentState == OutboundState.OB_STATE_CREATED_RECEIVED)
-            _currentState = OutboundState.OB_STATE_CONFIRMED_PARTIALLY;
+        if (_log.shouldDebug()) _log.debug("Send confirm packets, nextSend in " + delay + "ms on " + this);
+        if (_currentState == OutboundState.OB_STATE_UNKNOWN || _currentState == OutboundState.OB_STATE_PENDING_INTRO || _currentState == OutboundState.OB_STATE_INTRODUCED || _currentState == OutboundState.OB_STATE_REQUEST_SENT || _currentState == OutboundState.OB_STATE_CREATED_RECEIVED) _currentState = OutboundState.OB_STATE_CONFIRMED_PARTIALLY;
     }
 
     /**
      *  @return when we sent the first SessionConfirmed packet, or 0
      *  @since 0.9.2
      */
-    public long getConfirmedSentTime() { return _confirmedSentTime; }
+    public long getConfirmedSentTime() {
+        return _confirmedSentTime;
+    }
 
     /** note that we just sent the SessionRequest packet */
     public synchronized void requestSent() {
@@ -329,24 +355,21 @@ class OutboundEstablishState {
             delay = RETRANSMIT_DELAY;
             _requestSentTime = _lastSend;
         } else {
-            delay = Math.min(RETRANSMIT_DELAY << _requestSentCount,
-                             _requestSentTime + EstablishmentManager.OB_MESSAGE_TIMEOUT - _lastSend);
+            delay = Math.min(RETRANSMIT_DELAY << _requestSentCount, _requestSentTime + EstablishmentManager.OB_MESSAGE_TIMEOUT - _lastSend);
         }
         _requestSentCount++;
         _nextSend = _lastSend + delay;
-        if (_log.shouldDebug())
-            _log.debug("Sent a Session Request packet; next send in " + delay + "ms on " + this);
-        if (_currentState == OutboundState.OB_STATE_UNKNOWN ||
-            _currentState == OutboundState.OB_STATE_INTRODUCED)
-            _currentState = OutboundState.OB_STATE_REQUEST_SENT;
+        if (_log.shouldDebug()) _log.debug("Sent a Session Request packet; next send in " + delay + "ms on " + this);
+        if (_currentState == OutboundState.OB_STATE_UNKNOWN || _currentState == OutboundState.OB_STATE_INTRODUCED) _currentState = OutboundState.OB_STATE_REQUEST_SENT;
     }
-
 
     /**
      *  @return when we sent the first SessionRequest packet, or 0
      *  @since 0.9.2
      */
-    public long getRequestSentTime() { return _requestSentTime; }
+    public long getRequestSentTime() {
+        return _requestSentTime;
+    }
 
     /** note that we just sent the RelayRequest packet */
     public synchronized void introSent() {
@@ -356,20 +379,20 @@ class OutboundEstablishState {
             delay = RETRANSMIT_DELAY;
             _introSentTime = _lastSend;
         } else {
-            delay = Math.min(RETRANSMIT_DELAY << _introSentCount,
-                             _introSentTime + EstablishmentManager.OB_MESSAGE_TIMEOUT - _lastSend);
+            delay = Math.min(RETRANSMIT_DELAY << _introSentCount, _introSentTime + EstablishmentManager.OB_MESSAGE_TIMEOUT - _lastSend);
         }
         _introSentCount++;
         _nextSend = _lastSend + delay;
-        if (_currentState == OutboundState.OB_STATE_UNKNOWN)
-            _currentState = OutboundState.OB_STATE_PENDING_INTRO;
+        if (_currentState == OutboundState.OB_STATE_UNKNOWN) _currentState = OutboundState.OB_STATE_PENDING_INTRO;
     }
 
     /**
      *  @return when we sent the first RelayRequest packet, or 0
      *  @since 0.9.2
      */
-    public long getIntroSentTime() { return _introSentTime; }
+    public long getIntroSentTime() {
+        return _introSentTime;
+    }
 
     public synchronized void introductionFailed() {
         _nextSend = _context.clock().now();
@@ -383,8 +406,7 @@ class OutboundEstablishState {
      *  All params are for the remote end (NOT the introducer) and must have been validated already.
      */
     public synchronized void introduced(byte bobIP[], int bobPort) {
-        if (_currentState != OutboundState.OB_STATE_PENDING_INTRO)
-            return; // we've already successfully been introduced, so don't overwrite old settings
+        if (_currentState != OutboundState.OB_STATE_PENDING_INTRO) return; // we've already successfully been introduced, so don't overwrite old settings
         _nextSend = _context.clock().now() + WAIT_FOR_HOLE_PUNCH_DELAY; // wait briefly for the hole punching
         _currentState = OutboundState.OB_STATE_INTRODUCED;
         if (_claimedAddress != null && bobPort == _bobPort && DataHelper.eq(bobIP, _bobIP)) {
@@ -396,8 +418,7 @@ class OutboundEstablishState {
             _bobPort = bobPort;
             _remoteHostId = new RemoteHostId(bobIP, bobPort);
         }
-        if (_log.shouldInfo())
-            _log.info("Introduced to " + _remoteHostId + ", attempting to establish connection...");
+        if (_log.shouldInfo()) _log.info("Introduced to " + _remoteHostId + ", attempting to establish connection...");
     }
 
     /**
@@ -407,13 +428,10 @@ class OutboundEstablishState {
      *  @since 0.9.15
      */
     synchronized boolean receiveHolePunch() {
-        if (_currentState != OutboundState.OB_STATE_INTRODUCED)
-            return false;
-        if (_requestSentCount > 0)
-            return false;
+        if (_currentState != OutboundState.OB_STATE_INTRODUCED) return false;
+        if (_requestSentCount > 0) return false;
         long now = _context.clock().now();
-        if (_log.shouldInfo())
-            _log.info(toString() + " accelerating Session Request by " + (_nextSend - now) + "ms");
+        if (_log.shouldInfo()) _log.info(toString() + " accelerating Session Request by " + (_nextSend - now) + "ms");
         _nextSend = now;
         return true;
     }
@@ -421,22 +439,30 @@ class OutboundEstablishState {
     /**
      * how long have we been trying to establish this session?
      */
-    public long getLifetime() { return getLifetime(_context.clock().now()); }
+    public long getLifetime() {
+        return getLifetime(_context.clock().now());
+    }
 
     /**
      * how long have we been trying to establish this session?
      * @since 0.9.57
      */
-    public long getLifetime(long now) { return now - _establishBegin; }
+    public long getLifetime(long now) {
+        return now - _establishBegin;
+    }
 
-    public long getEstablishBeginTime() { return _establishBegin; }
+    public long getEstablishBeginTime() {
+        return _establishBegin;
+    }
 
     /**
      *  @return 0 at initialization (to force sending session request),
      *          rcv time after receiving a packet,
      *          send time + delay after sending a packet (including session request)
      */
-    public synchronized long getNextSendTime() { return _nextSend; }
+    public synchronized long getNextSendTime() {
+        return _nextSend;
+    }
 
     /**
      *  This should be what the state is currently indexed by in the _outboundStates table.
@@ -445,7 +471,9 @@ class OutboundEstablishState {
      *  After introduced() is called, this is set to the IP/port the introducer told us.
      *  @return non-null
      */
-    RemoteHostId getRemoteHostId() { return _remoteHostId; }
+    RemoteHostId getRemoteHostId() {
+        return _remoteHostId;
+    }
 
     /**
      *  This will never be a hash-based address.
@@ -453,7 +481,9 @@ class OutboundEstablishState {
      *  It is not changed after introduction. Use getRemoteHostId() for the verified address.
      *  @return may be null
      */
-    RemoteHostId getClaimedAddress() { return _claimedAddress; }
+    RemoteHostId getClaimedAddress() {
+        return _claimedAddress;
+    }
 
     /** we have received a real data packet, so we're done establishing */
     public synchronized void dataReceived() {
@@ -466,14 +496,13 @@ class OutboundEstablishState {
      */
     protected void packetReceived() {
         _nextSend = _context.clock().now();
-        //if (_log.shouldDebug())
+        // if (_log.shouldDebug())
         //    _log.debug("Received a packet, nextSend == now");
     }
 
     /** @since 0.8.9 */
     @Override
     public String toString() {
-        return "OutboundEstablishState [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " + _remoteHostId +
-               "\n* Lifetime: " + DataHelper.formatDuration(getLifetime()) + ' ' + _currentState;
+        return "OutboundEstablishState [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " + _remoteHostId + "\n* Lifetime: " + DataHelper.formatDuration(getLifetime()) + ' ' + _currentState;
     }
 }

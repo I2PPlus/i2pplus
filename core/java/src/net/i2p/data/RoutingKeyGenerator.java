@@ -98,5 +98,4 @@ public abstract class RoutingKeyGenerator {
      * @throws IllegalArgumentException if origKey is null
      */
     public abstract Hash getRoutingKey(Hash origKey);
-
 }

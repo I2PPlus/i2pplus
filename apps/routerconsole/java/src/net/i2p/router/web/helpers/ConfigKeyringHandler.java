@@ -1,6 +1,5 @@
 package net.i2p.router.web.helpers;
 
-
 import net.i2p.crypto.Blinding;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
@@ -71,14 +70,14 @@ public class ConfigKeyringHandler extends FormHandler {
                 BlindData bdin = null;
                 try {
                     bdin = Blinding.decode(_context, _peer);
-                } catch (IllegalArgumentException iae) {}
+                } catch (IllegalArgumentException iae) {
+                }
 
                 // we need the dest or the spk, not just the desthash
                 SigningPublicKey spk = null;
                 Destination d = null;
                 // don't cause LS fetch
-                if (!_peer.endsWith(".b32.i2p"))
-                    d = _context.namingService().lookup(_peer);
+                if (!_peer.endsWith(".b32.i2p")) d = _context.namingService().lookup(_peer);
                 if (d != null) {
                     spk = d.getSigningPublicKey();
                 } else if (bdin != null) {
@@ -89,8 +88,7 @@ public class ConfigKeyringHandler extends FormHandler {
                     return;
                 }
                 BlindData bdold = _context.netDb().getBlindData(spk);
-                if (bdold != null && d == null)
-                    d = bdold.getDestination();
+                if (bdold != null && d == null) d = bdold.getDestination();
                 if (d != null && _context.clientManager().isLocal(d)) {
                     // don't bother translating
                     addFormError(_t("Cannot add key for local destination. Enable encryption in the Hidden Services Manager."), true);
@@ -123,8 +121,7 @@ public class ConfigKeyringHandler extends FormHandler {
                     atype = BlindData.AUTH_NONE;
                     pk = null;
                 }
-                if (_mode == 2 || _mode == 4 || _mode == 6)
-                    _secret = null;
+                if (_mode == 2 || _mode == 4 || _mode == 6) _secret = null;
                 if (bdin != null) {
                     // more checks based on supplied b33
                     if (bdin.getSecretRequired() && _secret == null) {
@@ -153,8 +150,7 @@ public class ConfigKeyringHandler extends FormHandler {
                     bdout = new BlindData(_context, spk, blindType, _secret, atype, pk);
                 }
                 if (bdold != null) {
-                    if (_log.shouldDebug())
-                        _log.debug("Already cached: " + bdold);
+                    if (_log.shouldDebug()) _log.debug("Already cached: " + bdold);
                 }
                 try {
                     _context.netDb().setBlindData(bdout);
@@ -205,21 +201,18 @@ public class ConfigKeyringHandler extends FormHandler {
     }
 
     public void setPeer(String peer) {
-        if (peer != null)
-            _peer = peer.trim();
+        if (peer != null) _peer = peer.trim();
     }
 
     public void setKey(String key) {
-        if (key != null)
-            _key = key.trim();
+        if (key != null) _key = key.trim();
     }
 
     /** @since 0.9.41 */
     public void setNofilter_blindedPassword(String pw) {
         if (pw != null) {
             pw = pw.trim();
-            if (pw.length() > 0)
-                _secret = pw;
+            if (pw.length() > 0) _secret = pw;
         }
     }
 

@@ -17,7 +17,9 @@ class DirectLookupMatchJob extends FloodOnlyLookupMatchJob {
     }
 
     @Override
-    public String getName() { return "Direct Lookup Match"; }
+    public String getName() {
+        return "Direct Lookup Match";
+    }
 
     /**
      * Override to not call failed() in setMessage(),
@@ -25,10 +27,8 @@ class DirectLookupMatchJob extends FloodOnlyLookupMatchJob {
      */
     @Override
     public void setMessage(I2NPMessage message) {
-        if (message.getType() != DatabaseStoreMessage.MESSAGE_TYPE)
-            return;
-        DatabaseStoreMessage dsm = (DatabaseStoreMessage)message;
-        if (dsm.getKey().equals(_search.getKey()))
-            _success = true;
+        if (message.getType() != DatabaseStoreMessage.MESSAGE_TYPE) return;
+        DatabaseStoreMessage dsm = (DatabaseStoreMessage) message;
+        if (dsm.getKey().equals(_search.getKey())) _success = true;
     }
 }

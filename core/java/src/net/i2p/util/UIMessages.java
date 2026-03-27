@@ -27,8 +27,7 @@ public class UIMessages {
      * @param maxSize the maximum number of messages to keep
      */
     public UIMessages(int maxSize) {
-        if (maxSize < 1)
-            throw new IllegalArgumentException();
+        if (maxSize < 1) throw new IllegalArgumentException();
         _maxSize = maxSize;
         _messages = new LinkedList<Message>();
     }
@@ -73,8 +72,7 @@ public class UIMessages {
      * @return a copy
      */
     public synchronized List<Message> getMessages() {
-        if (_messages.peekLast() == null)
-            return Collections.emptyList();
+        if (_messages.peekLast() == null) return Collections.emptyList();
         return new ArrayList<Message>(_messages);
     }
 
@@ -84,8 +82,7 @@ public class UIMessages {
      * @since 0.9.46
      */
     public synchronized List<String> getMessageStrings() {
-        if (_messages.peekLast() == null)
-            return Collections.emptyList();
+        if (_messages.peekLast() == null) return Collections.emptyList();
         // Return cached version if available and messages haven't changed
         if (_cachedStrings != null && _cachedCount == _count - 1) {
             return _cachedStrings;
@@ -119,10 +116,9 @@ public class UIMessages {
             _cachedCount = -1;
         } else {
             boolean modified = false;
-            for (Iterator<Message> iter = _messages.iterator(); iter.hasNext();) {
+            for (Iterator<Message> iter = _messages.iterator(); iter.hasNext(); ) {
                 Message msg = iter.next();
-                if (msg.id > id)
-                    break;
+                if (msg.id > id) break;
                 iter.remove();
                 modified = true;
             }

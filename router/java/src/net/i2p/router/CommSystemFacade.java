@@ -1,4 +1,5 @@
 package net.i2p.router;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -34,12 +35,17 @@ public abstract class CommSystemFacade implements Service {
 
     public abstract void processMessage(OutNetMessage msg);
 
-    public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException { }
+    public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {}
+
     @Override
-    public void renderStatusHTML(Writer out) throws IOException { renderStatusHTML(out, null, 0); }
+    public void renderStatusHTML(Writer out) throws IOException {
+        renderStatusHTML(out, null, 0);
+    }
 
     /** Create the list of RouterAddress structures based on the router's config */
-    public List<RouterAddress> createAddresses() { return Collections.emptyList(); }
+    public List<RouterAddress> createAddresses() {
+        return Collections.emptyList();
+    }
 
     /**
      *  How many peers are we currently connected to, that we have
@@ -54,22 +60,37 @@ public abstract class CommSystemFacade implements Service {
      */
     public abstract int countActiveSendPeers();
 
-    public boolean haveInboundCapacity(int pct) { return true; }
-    public boolean haveOutboundCapacity(int pct) { return true; }
-    public boolean haveHighOutboundCapacity() { return true; }
-    public List<String> getMostRecentErrorMessages() { return Collections.emptyList(); }
+    public boolean haveInboundCapacity(int pct) {
+        return true;
+    }
+
+    public boolean haveOutboundCapacity(int pct) {
+        return true;
+    }
+
+    public boolean haveHighOutboundCapacity() {
+        return true;
+    }
+
+    public List<String> getMostRecentErrorMessages() {
+        return Collections.emptyList();
+    }
 
     /**
      * Median clock skew of connected peers in seconds, or null if we cannot answer.
      * CommSystemFacadeImpl overrides this.
      */
-    public Long getMedianPeerClockSkew() { return null; }
+    public Long getMedianPeerClockSkew() {
+        return null;
+    }
 
     /**
      * Return framed average clock skew of connected peers in seconds, or null if we cannot answer.
      * CommSystemFacadeImpl overrides this.
      */
-    public long getFramedAveragePeerClockSkew(int percentToInclude) { return 0; }
+    public long getFramedAveragePeerClockSkew(int percentToInclude) {
+        return 0;
+    }
 
     /**
      * Determine under what conditions we are remotely reachable.
@@ -80,13 +101,17 @@ public abstract class CommSystemFacade implements Service {
      * @deprecated use getStatus()
      */
     @Deprecated
-    public short getReachabilityStatus() { return (short) getStatus().getCode(); }
+    public short getReachabilityStatus() {
+        return (short) getStatus().getCode();
+    }
 
     /**
      * Determine under what conditions we are remotely reachable.
      * @since 0.9.20
      */
-    public Status getStatus() { return Status.OK; }
+    public Status getStatus() {
+        return Status.OK;
+    }
 
     /**
      * getStatus().toStatusString(), translated if available.
@@ -102,10 +127,20 @@ public abstract class CommSystemFacade implements Service {
     @Deprecated
     public void recheckReachability() {}
 
-    public boolean isBacklogged(Hash peer) { return false; }
-    public boolean wasUnreachable(Hash peer) { return false; }
+    public boolean isBacklogged(Hash peer) {
+        return false;
+    }
+
+    public boolean wasUnreachable(Hash peer) {
+        return false;
+    }
+
     public abstract boolean isEstablished(Hash peer);
-    public byte[] getIP(Hash dest) { return new byte[0]; }
+
+    public byte[] getIP(Hash dest) {
+        return new byte[0];
+    }
+
     public void queueLookup(byte[] ip) {}
 
     /**
@@ -124,20 +159,36 @@ public abstract class CommSystemFacade implements Service {
     public void forceDisconnect(Hash peer) {}
 
     /** @since 0.8.11 */
-    public String getOurCountry() { return null; }
+    public String getOurCountry() {
+        return null;
+    }
 
     /** @since 0.8.13 */
-    public boolean isInStrictCountry() { return false; }
+    public boolean isInStrictCountry() {
+        return false;
+    }
 
     /** @since 0.9.16 */
-    public boolean isInStrictCountry(Hash peer) { return false; }
+    public boolean isInStrictCountry(Hash peer) {
+        return false;
+    }
 
     /** @since 0.9.16 */
-    public boolean isInStrictCountry(RouterInfo ri) { return false; }
+    public boolean isInStrictCountry(RouterInfo ri) {
+        return false;
+    }
 
-    public String getCountry(Hash peer) { return null; }
-    public String getCountry(String ip) { return null; }
-    public String getCountryName(String code) { return code; }
+    public String getCountry(Hash peer) {
+        return null;
+    }
+
+    public String getCountry(String ip) {
+        return null;
+    }
+
+    public String getCountryName(String code) {
+        return code;
+    }
 
     /**
      * Get the country code map
@@ -188,10 +239,14 @@ public abstract class CommSystemFacade implements Service {
     public abstract List<Hash> getEstablished();
 
     /** @since 0.8.13 */
-    public boolean isDummy() { return true; }
+    public boolean isDummy() {
+        return true;
+    }
 
     /** @since 0.9.53 */
-    public boolean isRunning() { return true; }
+    public boolean isRunning() {
+        return true;
+    }
 
     /**
      * Tell other transports our address changed
@@ -226,7 +281,9 @@ public abstract class CommSystemFacade implements Service {
      *  Factory for making X25519 key pairs.
      *  @since 0.9.46
      */
-    public X25519KeyFactory getXDHFactory() { return null; }
+    public X25519KeyFactory getXDHFactory() {
+        return null;
+    }
 
     /**
      *  Router must call after netdb is initialized
@@ -246,7 +303,9 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.58
      */
-    public boolean isExemptIncoming(String ip) { return false; }
+    public boolean isExemptIncoming(String ip) {
+        return false;
+    }
 
     /**
      *  Remove this IP from the exemptions
@@ -412,7 +471,7 @@ public abstract class CommSystemFacade implements Service {
      */
     public static final short STATUS_UNKNOWN = 16;
 
-/**
+    /**
      * Network connectivity status enumeration for IPv4 and IPv6 transport capabilities.
      * Represents firewall status, NAT configuration, and transport readiness for tunnel participation.
      *  Since codes may change.
@@ -459,11 +518,9 @@ public abstract class CommSystemFacade implements Service {
          */
         public static Status merge(Status oldStatus, Status newStatus) {
             // shortcut newStatus
-            if (oldStatus == newStatus || newStatus == UNKNOWN)
-                return oldStatus;
+            if (oldStatus == newStatus || newStatus == UNKNOWN) return oldStatus;
             // shortcut oldStatus
-            if (oldStatus == UNKNOWN || oldStatus == DISCONNECTED || oldStatus == HOSED)
-                return newStatus;
+            if (oldStatus == UNKNOWN || oldStatus == DISCONNECTED || oldStatus == HOSED) return newStatus;
             switch (newStatus) {
                 case IPV4_OK_IPV6_UNKNOWN:
                     switch (oldStatus) {
@@ -500,7 +557,7 @@ public abstract class CommSystemFacade implements Service {
                             return newStatus;
                     }
 
-                    // fall through
+                // fall through
 
                 case IPV4_UNKNOWN_IPV6_OK:
                     switch (oldStatus) {
@@ -543,7 +600,7 @@ public abstract class CommSystemFacade implements Service {
                             return newStatus;
                     }
 
-                    // fall through
+                // fall through
 
                 case IPV4_FIREWALLED_IPV6_UNKNOWN:
                     switch (oldStatus) {
@@ -580,7 +637,7 @@ public abstract class CommSystemFacade implements Service {
                             return newStatus;
                     }
 
-                    // fall through
+                // fall through
 
                 case IPV4_UNKNOWN_IPV6_FIREWALLED:
                     switch (oldStatus) {
@@ -625,7 +682,7 @@ public abstract class CommSystemFacade implements Service {
                             return newStatus;
                     }
 
-                    // fall through
+                // fall through
 
                 case IPV4_DISABLED_IPV6_UNKNOWN:
                     switch (oldStatus) {
@@ -662,7 +719,7 @@ public abstract class CommSystemFacade implements Service {
                             return newStatus;
                     }
 
-                    // fall through
+                // fall through
 
                 case IPV4_SNAT_IPV6_UNKNOWN:
                     switch (oldStatus) {
@@ -699,7 +756,7 @@ public abstract class CommSystemFacade implements Service {
                             return newStatus;
                     }
 
-                    // fall through
+                // fall through
 
                 case UNKNOWN:
                     return oldStatus;
@@ -732,6 +789,8 @@ public abstract class CommSystemFacade implements Service {
         /**
          *  Tag for translation.
          */
-        private static String _x(String s) { return s; }
+        private static String _x(String s) {
+            return s;
+        }
     }
 }

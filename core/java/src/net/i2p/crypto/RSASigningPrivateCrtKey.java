@@ -5,11 +5,12 @@ package net.i2p.crypto;
  * No warranty of any kind, either expressed or implied.
  */
 
+import net.i2p.data.SigningPrivateKey;
+
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.interfaces.RSAPrivateCrtKey;
 import java.security.spec.RSAKeyGenParameterSpec;
-import net.i2p.data.SigningPrivateKey;
 
 /**
  * A SigningPrivateKey that retains the Chinese Remainder Theorem
@@ -35,14 +36,10 @@ final class RSASigningPrivateCrtKey extends SigningPrivateKey {
     public static RSASigningPrivateCrtKey fromJavaKey(RSAPrivateCrtKey pk) throws GeneralSecurityException {
         int sz = pk.getModulus().bitLength();
         SigType type;
-        if (sz <= ((RSAKeyGenParameterSpec) SigType.RSA_SHA256_2048.getParams()).getKeysize())
-            type = SigType.RSA_SHA256_2048;
-        else if (sz <= ((RSAKeyGenParameterSpec) SigType.RSA_SHA384_3072.getParams()).getKeysize())
-            type = SigType.RSA_SHA384_3072;
-        else if (sz <= ((RSAKeyGenParameterSpec) SigType.RSA_SHA512_4096.getParams()).getKeysize())
-            type = SigType.RSA_SHA512_4096;
-        else
-            throw new GeneralSecurityException("Unknown RSA type");
+        if (sz <= ((RSAKeyGenParameterSpec) SigType.RSA_SHA256_2048.getParams()).getKeysize()) type = SigType.RSA_SHA256_2048;
+        else if (sz <= ((RSAKeyGenParameterSpec) SigType.RSA_SHA384_3072.getParams()).getKeysize()) type = SigType.RSA_SHA384_3072;
+        else if (sz <= ((RSAKeyGenParameterSpec) SigType.RSA_SHA512_4096.getParams()).getKeysize()) type = SigType.RSA_SHA512_4096;
+        else throw new GeneralSecurityException("Unknown RSA type");
         // private key is modulus (pubkey) + exponent
         BigInteger n = pk.getModulus();
         BigInteger d = pk.getPrivateExponent();

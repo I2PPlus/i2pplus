@@ -47,25 +47,33 @@ class SearchReplyJob extends JobImpl {
         _searchJob = job;
         _msg = message;
         _peer = peer;
-        if (duration > 0) {_duration = duration;}
-        else {_duration = 0;}
+        if (duration > 0) {
+            _duration = duration;
+        } else {
+            _duration = 0;
+        }
     }
 
     @Override
-    public String getName() { return "Process Kademlia Search Reply"; }
+    public String getName() {
+        return "Process Kademlia Search Reply";
+    }
 
     @Override
     public void runJob() {
         int count = Math.min(_msg.getNumReplies(), 2 * SingleLookupJob.MAX_TO_FOLLOW);
-        for (int i = 0; i < count; i++) {processPeer(i);}
+        for (int i = 0; i < count; i++) {
+            processPeer(i);
+        }
 
-        if (count == 0 && _log.shouldDebug())
-            _log.debug("DbSearchReply received with no routers referenced");
+        if (count == 0 && _log.shouldDebug()) _log.debug("DbSearchReply received with no routers referenced");
 
         // either they didn't tell us anything new or we have verified
         // (or failed to verify) all of them.  we're done
         getContext().profileManager().dbLookupReply(_peer, _newPeers, _seenPeers, 0, _duplicatePeers, _duration);
-        if (_newPeers > 0) {_searchJob.newPeersFound(_newPeers);}
+        if (_newPeers > 0) {
+            _searchJob.newPeersFound(_newPeers);
+        }
     }
 
     private void processPeer(int curIndex) {
@@ -75,39 +83,41 @@ class SearchReplyJob extends JobImpl {
 
         RouterInfo info = getContext().netDb().lookupRouterInfoLocally(peer);
         if (info == null) {
-                // if the peer is giving us lots of bad peer references,
-                // Don't try to fetch them.
+            // if the peer is giving us lots of bad peer references,
+            // Don't try to fetch them.
 
             boolean sendsBadInfo = getContext().profileOrganizer().peerSendsBadReplies(_peer);
             if (!sendsBadInfo) {
-                    // we don't need to search for everthing we're given here - only ones that
-                    // are next in our search path...
-                    // note: no need to think about banlisted targets in the netdb search, given
-                    //       the floodfill's behavior
-                    // This keeps us from continually chasing blocklisted floodfills
+                // we don't need to search for everthing we're given here - only ones that
+                // are next in our search path...
+                // note: no need to think about banlisted targets in the netdb search, given
+                //       the floodfill's behavior
+                // This keeps us from continually chasing blocklisted floodfills
                 if (getContext().banlist().isBanlisted(peer)) {
                     //    if (_log.shouldInfo())
                     //        _log.info("Not looking for a banlisted peer...");
                     //    getContext().statManager().addRateData("netDb.searchReplyValidationSkipped", 1, 0);
                 } else {
-                        //getContext().netDb().lookupRouterInfo(peer, new ReplyVerifiedJob(getContext(), peer), new ReplyNotVerifiedJob(getContext(), peer), _timeoutMs);
-                        //_repliesPendingVerification++;
+                    // getContext().netDb().lookupRouterInfo(peer, new ReplyVerifiedJob(getContext(), peer), new ReplyNotVerifiedJob(getContext(), peer), _timeoutMs);
+                    // _repliesPendingVerification++;
                     shouldAdd = true;
                 }
             } else {
-                if (_log.shouldInfo())
-                        _log.info("Peer [" + _peer.toBase64().substring(0,6) + "] sends us bad replies, so not verifying");
+                if (_log.shouldInfo()) _log.info("Peer [" + _peer.toBase64().substring(0, 6) + "] sends us bad replies, so not verifying");
                 getContext().statManager().addRateData("netDb.searchReplyValidationSkipped", 1);
             }
         }
 
-        if (_searchJob.wasAttempted(peer)) {_duplicatePeers++;}
-        if (_log.shouldDebug())
-                _log.debug("DbSearchReply received on search, referencing Router [" + peer.toBase64().substring(0,6) +
-                           "] - Already known? " + (info != null));
+        if (_searchJob.wasAttempted(peer)) {
+            _duplicatePeers++;
+        }
+        if (_log.shouldDebug()) _log.debug("DbSearchReply received on search, referencing Router [" + peer.toBase64().substring(0, 6) + "] - Already known? " + (info != null));
         if (shouldAdd) {
-            if (_searchJob.add(peer)) {_newPeers++;}
-            else {_seenPeers++;}
+            if (_searchJob.add(peer)) {
+                _newPeers++;
+            } else {
+                _seenPeers++;
+            }
         }
     }
 }

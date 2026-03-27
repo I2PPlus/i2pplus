@@ -65,5 +65,4 @@ public interface LookupResult {
      * @since 0.9.67
      */
     public int getNonce();
-
 }

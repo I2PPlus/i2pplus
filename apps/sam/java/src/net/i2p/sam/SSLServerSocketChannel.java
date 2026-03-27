@@ -3,10 +3,9 @@ package net.i2p.sam;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketAddress;
-/* requires Java 7 */
 import java.net.SocketOption;
-import java.nio.channels.SocketChannel;
 import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 import java.util.Collections;
 import java.util.Set;
@@ -32,19 +31,17 @@ class SSLServerSocketChannel extends ServerSocketChannel {
     //// ServerSocketChannel abstract methods
 
     public SocketChannel accept() throws IOException {
-        return new SSLSocketChannel((SSLSocket)_socket.accept());
+        return new SSLSocketChannel((SSLSocket) _socket.accept());
     }
 
     public ServerSocket socket() {
         return _socket;
     }
 
-    /** requires Java 7 */
     public ServerSocketChannel bind(SocketAddress local, int backlog) {
         throw new UnsupportedOperationException();
     }
 
-    /** requires Java 7 */
     public <T> ServerSocketChannel setOption(SocketOption<T> name, T value) {
         return this;
     }
@@ -56,8 +53,7 @@ class SSLServerSocketChannel extends ServerSocketChannel {
     }
 
     public void implConfigureBlocking(boolean block) throws IOException {
-        if (!block)
-            throw new UnsupportedOperationException();
+        if (!block) throw new UnsupportedOperationException();
     }
 
     //// NetworkChannel interface methods

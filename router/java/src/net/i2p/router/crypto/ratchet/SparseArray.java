@@ -66,7 +66,6 @@ package net.i2p.router.crypto.ratchet;
  *
  * @param <E> type of objects stored in this sparse array
  */
-
 class SparseArray<E> implements Cloneable {
     private static final char[] EMPTY_CHARS = new char[0];
     private static final Object[] EMPTY_OBJECTS = new Object[0];
@@ -132,8 +131,7 @@ class SparseArray<E> implements Cloneable {
      */
     @SuppressWarnings("unchecked")
     public E get(int key, E valueIfKeyNotFound) {
-        if (key < 0 || key > 65535)
-            return valueIfKeyNotFound;
+        if (key < 0 || key > 65535) return valueIfKeyNotFound;
         int i = ContainerHelpers.binarySearch(mKeys, mSize, (char) key);
 
         if (i < 0 || mValues[i] == DELETED) {
@@ -149,8 +147,7 @@ class SparseArray<E> implements Cloneable {
      * @param key 0 MIN, 65535 MAX
      */
     public void delete(int key) {
-        if (key < 0 || key > 65535)
-            return;
+        if (key < 0 || key > 65535) return;
         int i = ContainerHelpers.binarySearch(mKeys, mSize, (char) key);
 
         if (i >= 0) {
@@ -168,8 +165,7 @@ class SparseArray<E> implements Cloneable {
      */
     @SuppressWarnings("unchecked")
     public E removeReturnOld(int key) {
-        if (key < 0 || key > 65535)
-            return null;
+        if (key < 0 || key > 65535) return null;
         int i = ContainerHelpers.binarySearch(mKeys, mSize, (char) key);
 
         if (i >= 0) {
@@ -261,8 +257,7 @@ class SparseArray<E> implements Cloneable {
      * @param key 0 MIN, 65535 MAX
      */
     public void put(int key, E value) {
-        if (key < 0 || key > 65535)
-            throw new IllegalArgumentException();
+        if (key < 0 || key > 65535) throw new IllegalArgumentException();
         int i = ContainerHelpers.binarySearch(mKeys, mSize, (char) key);
 
         if (i >= 0) {
@@ -387,8 +382,7 @@ class SparseArray<E> implements Cloneable {
      * @param key 0 MIN, 65535 MAX
      */
     public int indexOfKey(int key) {
-        if (key < 0 || key > 65535)
-            return -1;
+        if (key < 0 || key > 65535) return -1;
         if (mGarbage) {
             gc();
         }
@@ -470,8 +464,7 @@ class SparseArray<E> implements Cloneable {
      * @param key 0 MIN, 65535 MAX
      */
     public void append(int key, E value) {
-        if (key < 0 || key > 65535)
-            throw new IllegalArgumentException();
+        if (key < 0 || key > 65535) throw new IllegalArgumentException();
         if (mSize != 0 && key <= mKeys[mSize - 1]) {
             put(key, value);
             return;
@@ -501,7 +494,7 @@ class SparseArray<E> implements Cloneable {
 
         StringBuilder buffer = new StringBuilder(mSize * 28);
         buffer.append('{');
-        for (int i=0; i<mSize; i++) {
+        for (int i = 0; i < mSize; i++) {
             if (i > 0) {
                 buffer.append(", ");
             }

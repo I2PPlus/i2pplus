@@ -79,7 +79,8 @@ package net.i2p.data;
 public class SessionKey extends SimpleDataStructure {
     private Object _preparedKey;
 
-    public final static int KEYSIZE_BYTES = 32;
+    public static final int KEYSIZE_BYTES = 32;
+
     /** A key with all zeroes in the data */
     public static final SessionKey INVALID_KEY = new SessionKey(new byte[KEYSIZE_BYTES]);
 
@@ -111,6 +112,11 @@ public class SessionKey extends SimpleDataStructure {
      * retrieve an internal representation of the session key, as known
      * by the AES engine used.  this can be reused safely
      */
-    public Object getPreparedKey() { return _preparedKey; }
-    public void setPreparedKey(Object obj) { _preparedKey = obj; }
+    public Object getPreparedKey() {
+        return _preparedKey;
+    }
+
+    public void setPreparedKey(Object obj) {
+        _preparedKey = obj;
+    }
 }

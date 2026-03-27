@@ -4,6 +4,7 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Notification;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
+
 import java.util.Hashtable;
 
 /**
@@ -41,12 +42,12 @@ public class Dispatcher implements RequestHandler, NotificationHandler {
     /**
      * Hashtable of request name / handler pairs.
      */
-    private final Hashtable<String,RequestHandler> requestHandlers;
+    private final Hashtable<String, RequestHandler> requestHandlers;
 
     /**
      * Hashtable of notification name / handler pairs.
      */
-    private final Hashtable<String,NotificationHandler> notificationHandlers;
+    private final Hashtable<String, NotificationHandler> notificationHandlers;
 
     /**
      * Controls reporting of request processing time by appending a
@@ -58,8 +59,8 @@ public class Dispatcher implements RequestHandler, NotificationHandler {
      * Creates a new dispatcher with no registered handlers.
      */
     public Dispatcher() {
-        requestHandlers = new Hashtable<String,RequestHandler>();
-        notificationHandlers = new Hashtable<String,NotificationHandler>();
+        requestHandlers = new Hashtable<String, RequestHandler>();
+        notificationHandlers = new Hashtable<String, NotificationHandler>();
     }
 
     /**
@@ -68,12 +69,11 @@ public class Dispatcher implements RequestHandler, NotificationHandler {
      * @param handler The request handler to register. Must not be {@code null}.
      *
      * @throws IllegalArgumentException On attempting to register a handler that
-                                        duplicates an existing request name.
+     * duplicates an existing request name.
      */
     public void register(final RequestHandler handler) {
-        for (String name: handler.handledRequests()) {
-            if (requestHandlers.containsKey(name))
-                throw new IllegalArgumentException("Cannot register a duplicate JSON-RPC 2.0 handler for request " + name);
+        for (String name : handler.handledRequests()) {
+            if (requestHandlers.containsKey(name)) throw new IllegalArgumentException("Cannot register a duplicate JSON-RPC 2.0 handler for request " + name);
 
             requestHandlers.put(name, handler);
         }
@@ -85,12 +85,11 @@ public class Dispatcher implements RequestHandler, NotificationHandler {
      * @param handler The notification handler to register. Must not be {@code null}.
      *
      * @throws IllegalArgumentException On attempting to register a handler that
-                                        duplicates an existing notification name.
+     * duplicates an existing notification name.
      */
     public void register(final NotificationHandler handler) {
-        for (String name: handler.handledNotifications()) {
-            if (notificationHandlers.containsKey(name))
-                throw new IllegalArgumentException("Cannot register a duplicate JSON-RPC 2.0 handler for notification " + name);
+        for (String name : handler.handledNotifications()) {
+            if (notificationHandlers.containsKey(name)) throw new IllegalArgumentException("Cannot register a duplicate JSON-RPC 2.0 handler for notification " + name);
 
             notificationHandlers.put(name, handler);
         }
@@ -143,8 +142,7 @@ public class Dispatcher implements RequestHandler, NotificationHandler {
         long startNanosec = 0;
 
         // Measure request processing time?
-        if (reportProcTime)
-            startNanosec = System.nanoTime();
+        if (reportProcTime) startNanosec = System.nanoTime();
 
         final String method = request.getMethod();
 
@@ -183,7 +181,9 @@ public class Dispatcher implements RequestHandler, NotificationHandler {
 
         NotificationHandler handler = getNotificationHandler(method);
 
-        if (handler == null) {return;} // We didn't find a handler for the requested RPC
+        if (handler == null) {
+            return;
+        } // We didn't find a handler for the requested RPC
 
         // Process the notification
         handler.process(notification, notificationCtx);
@@ -197,7 +197,9 @@ public class Dispatcher implements RequestHandler, NotificationHandler {
      * @param enable {@code true} to enable proccessing time reporting,
      *               {@code false} to disable it.
      */
-    public void reportProcTime(final boolean enable) {reportProcTime = enable;}
+    public void reportProcTime(final boolean enable) {
+        reportProcTime = enable;
+    }
 
     /**
      * Returns {@code true} if reporting of request processing time is
@@ -207,5 +209,7 @@ public class Dispatcher implements RequestHandler, NotificationHandler {
      * @return {@code true} if reporting of request processing time is
      *         enabled, else {@code false}.
      */
-    public boolean reportsProcTime() {return reportProcTime;}
+    public boolean reportsProcTime() {
+        return reportProcTime;
+    }
 }

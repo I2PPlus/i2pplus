@@ -172,10 +172,7 @@ class NodeInfo extends SimpleDataStructure {
         if (!KRPC.SECURE_NID) return;
         byte[] nb = nID.getData();
         byte[] hb = hash.getData();
-        if ((!DataHelper.eq(nb, 0, hb, 0, 4))
-                || ((nb[4] ^ (port >> 8)) & 0xff) != (hb[4] & 0xff)
-                || ((nb[5] ^ port) & 0xff) != (hb[5] & 0xff))
-            throw new IllegalArgumentException("NID/Hash mismatch");
+        if ((!DataHelper.eq(nb, 0, hb, 0, 4)) || ((nb[4] ^ (port >> 8)) & 0xff) != (hb[4] & 0xff) || ((nb[5] ^ port) & 0xff) != (hb[5] & 0xff)) throw new IllegalArgumentException("NID/Hash mismatch");
     }
 
     public int length() {
@@ -209,9 +206,7 @@ class NodeInfo extends SimpleDataStructure {
      */
     public void setDestination(Destination dest) throws IllegalArgumentException {
         if (this.dest != null) return;
-        if (!dest.calculateHash().equals(this.hash))
-            throw new IllegalArgumentException(
-                    "Hash mismatch, was: " + this.hash + " new: " + dest.calculateHash());
+        if (!dest.calculateHash().equals(this.hash)) throw new IllegalArgumentException("Hash mismatch, was: " + this.hash + " new: " + dest.calculateHash());
         this.dest = dest;
     }
 
@@ -241,11 +236,7 @@ class NodeInfo extends SimpleDataStructure {
 
     @Override
     public String toString() {
-        return "["
-                + nID.toBase64().substring(0, 8)
-                + "]:"
-                + port
-                + (dest != null ? " -> Known destination" : "");
+        return "[" + nID.toBase64().substring(0, 8) + "]:" + port + (dest != null ? " -> Known destination" : "");
     }
 
     /**

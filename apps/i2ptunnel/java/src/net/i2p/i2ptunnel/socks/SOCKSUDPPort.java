@@ -1,12 +1,13 @@
 package net.i2p.i2ptunnel.socks;
 
+import net.i2p.client.streaming.I2PSocketAddress;
+import net.i2p.data.Destination;
+import net.i2p.i2ptunnel.udp.*;
+
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import net.i2p.client.streaming.I2PSocketAddress;
-import net.i2p.data.Destination;
-import net.i2p.i2ptunnel.udp.*;
 
 /**
  * Implements a UDP port and Socks encapsulation / decapsulation.
@@ -92,7 +93,7 @@ public class SOCKSUDPPort implements Source, Sink {
 
     /**
      *  May throw RuntimeException from underlying sink
-
+     *
      *  @param from will be passed along
      *  @param fromPort will be passed along
      *  @param toPort will be passed along

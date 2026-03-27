@@ -1,8 +1,5 @@
 package net.i2p.client.streaming.impl;
 
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.client.I2PSessionException;
@@ -11,6 +8,10 @@ import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.I2PSocketManager.DisconnectListener;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
+
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Receive raw information from the I2PSession and turn it into
@@ -30,9 +31,7 @@ class MessageHandler implements I2PSessionMuxedListener {
         _context = ctx;
         _listeners = new CopyOnWriteArraySet<DisconnectListener>();
         _log = ctx.logManager().getLog(MessageHandler.class);
-        _context.statManager().createRateStat("stream.packetReceiveFailure",
-                                              "Number of times we fail to decrypt or otherwise receive a packet sent to us",
-                                              "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
+        _context.statManager().createRateStat("stream.packetReceiveFailure", "Number of times we fail to decrypt or otherwise receive a packet sent to us", "Stream", new long[] {RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR});
     }
 
     /** Instruct the client that the given session has received a message with
@@ -44,8 +43,7 @@ class MessageHandler implements I2PSessionMuxedListener {
      */
     @Override
     public void messageAvailable(I2PSession session, int msgId, long size) {
-        messageAvailable(session, msgId, size, I2PSession.PROTO_UNSPECIFIED,
-                         I2PSession.PORT_UNSPECIFIED, I2PSession.PORT_UNSPECIFIED);
+        messageAvailable(session, msgId, size, I2PSession.PROTO_UNSPECIFIED, I2PSession.PORT_UNSPECIFIED, I2PSession.PORT_UNSPECIFIED);
     }
 
     /** Instruct the client that the given session has received a message with
@@ -60,21 +58,14 @@ class MessageHandler implements I2PSessionMuxedListener {
             data = session.receiveMessage(msgId);
         } catch (I2PSessionException ise) {
             _context.statManager().addRateData("stream.packetReceiveFailure", 1);
-            if (_log.shouldWarn())
-                _log.warn("Error receiving the message -> " + ise.getMessage());
+            if (_log.shouldWarn()) _log.warn("Error receiving the message -> " + ise.getMessage());
             return;
         }
         if (data == null) {
-            if (_log.shouldWarn())
-                _log.warn("Received null data on " + session + "\n* Protocol: " + proto +
-                          " fromPort: " + fromPort + " toPort: " + toPort);
+            if (_log.shouldWarn()) _log.warn("Received null data on " + session + "\n* Protocol: " + proto + " fromPort: " + fromPort + " toPort: " + toPort);
             return;
         }
-        if (_log.shouldDebug())
-            _log.debug("Received " + data.length + " bytes on " + session +
-                       "\n* " + _manager +
-                       "\n* Protocol: " + proto +
-                       " fromPort: " + fromPort + " toPort: " + toPort);
+        if (_log.shouldDebug()) _log.debug("Received " + data.length + " bytes on " + session + "\n* " + _manager + "\n* Protocol: " + proto + " fromPort: " + fromPort + " toPort: " + toPort);
         Packet packet = new Packet(session);
         try {
             packet.readPacket(data, 0, data.length);
@@ -83,19 +74,17 @@ class MessageHandler implements I2PSessionMuxedListener {
             _manager.getPacketHandler().receivePacket(packet);
         } catch (IndexOutOfBoundsException ioobe) {
             _context.statManager().addRateData("stream.packetReceiveFailure", 1);
-            if (_log.shouldWarn())
-                _log.warn("Received an invalid packet -> " + ioobe.getMessage());
+            if (_log.shouldWarn()) _log.warn("Received an invalid packet -> " + ioobe.getMessage());
         } catch (IllegalArgumentException iae) {
             _context.statManager().addRateData("stream.packetReceiveFailure", 1);
-            if (_log.shouldWarn())
-                _log.warn("Received an invalid packet -> " + iae.getMessage());
+            if (_log.shouldWarn()) _log.warn("Received an invalid packet -> " + iae.getMessage());
         }
     }
 
     /** Instruct the client that the session specified seems to be under attack
      * and that the client may wish to move its destination to another router.
      * @param session session to report abuse to
-     @Override
+     * @Override
      * @param severity how bad the abuse is
      */
     public void reportAbuse(I2PSession session, int severity) {
@@ -110,15 +99,13 @@ class MessageHandler implements I2PSessionMuxedListener {
      *
      * As of 0.9.54, this does not clear the listeners, so
      * they will be notified again after a subsequent connection and disconnection.
-     @Override
+     * @Override
      *
      * @param session that has been terminated
      */
     public void disconnected(I2PSession session) {
         if (_log.shouldInfo()) {
-            String destInfo = session.getMyDestination() != null ?
-                              session.getMyDestination().calculateHash().toBase32().substring(0,8) :
-                              "unknown";
+            String destInfo = session.getMyDestination() != null ? session.getMyDestination().calculateHash().toBase32().substring(0, 8) : "unknown";
             _log.info("I2PSession disconnected for destination [" + destInfo + "]");
         }
         _manager.disconnectAllHard();
@@ -137,20 +124,23 @@ class MessageHandler implements I2PSessionMuxedListener {
     /**
      * Notify the client that some error occurred
      *
-     @Override
+     * @Override
      * @param session of the client
      * @param message to send to the client about the error
      * @param error the actual error
      */
     public void errorOccurred(I2PSession session, String message, Throwable error) {
         _restartPending.set(message.contains("restart"));
-        if (_log.shouldWarn()) {_log.warn("Error occurred: " + message, error);}
-        //_manager.disconnectAllHard();
+        if (_log.shouldWarn()) {
+            _log.warn("Error occurred: " + message, error);
+        }
+        // _manager.disconnectAllHard();
     }
 
     public void addDisconnectListener(I2PSocketManager.DisconnectListener lsnr) {
         _listeners.add(lsnr);
     }
+
     public void removeDisconnectListener(I2PSocketManager.DisconnectListener lsnr) {
         _listeners.remove(lsnr);
     }

@@ -1,15 +1,16 @@
 package net.i2p.router.web.helpers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
 import net.i2p.data.DataHelper;
 import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.ConsolePasswordManager;
 import net.i2p.router.web.FormHandler;
 import net.i2p.router.web.RouterConsoleRunner;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Handles router console UI configuration and theme management.
@@ -28,21 +29,44 @@ public class ConfigUIHandler extends FormHandler {
 
     @Override
     protected void processForm() {
-        if (_shouldSave) {saveChanges();}
-        else if (_action.equals(_t("Delete selected"))) {delUser();}
-        else if (_action.equals(_t("Add user"))) {addUser();}
+        if (_shouldSave) {
+            saveChanges();
+        } else if (_action.equals(_t("Delete selected"))) {
+            delUser();
+        } else if (_action.equals(_t("Add user"))) {
+            addUser();
+        }
     }
 
-    public void setShouldsave(String moo) {_shouldSave = true;}
-    public void setUniversalTheming(String baa) {_universalTheming = true;}
-    public void setForceMobileConsole(String baa) {_forceMobileConsole = true;}
-    public void setEmbedApps(String baa) {_embedApps = true;}
-    public void setUseSoraFont(String baa) {_useSoraFont = true;}
-    public void setTheme(String val) {_config = val;}
+    public void setShouldsave(String moo) {
+        _shouldSave = true;
+    }
+
+    public void setUniversalTheming(String baa) {
+        _universalTheming = true;
+    }
+
+    public void setForceMobileConsole(String baa) {
+        _forceMobileConsole = true;
+    }
+
+    public void setEmbedApps(String baa) {
+        _embedApps = true;
+    }
+
+    public void setUseSoraFont(String baa) {
+        _useSoraFont = true;
+    }
+
+    public void setTheme(String val) {
+        _config = val;
+    }
 
     /** Note - lang change is handled in CSSHelper but we still need to save it here */
     private void saveChanges() {
-        if (_config == null || _config.length() <= 0) {return;}
+        if (_config == null || _config.length() <= 0) {
+            return;
+        }
         if (!THEME_CHARS.matcher(_config).replaceAll("").isEmpty()) {
             addFormError(_t("Cannot save theme choice, theme name has illegal characters"), true);
             return;
@@ -52,25 +76,45 @@ public class ConfigUIHandler extends FormHandler {
         String oldTheme = _context.getProperty(CSSHelper.PROP_THEME_NAME, CSSHelper.DEFAULT_THEME);
         boolean oldForceMobileConsole = _context.getBooleanProperty(CSSHelper.PROP_FORCE_MOBILE_CONSOLE);
 
-        if (_config.equals("default")) {removes.add(CSSHelper.PROP_THEME_NAME);} // obsolete
-        else {changes.put(CSSHelper.PROP_THEME_NAME, _config);}
+        if (_config.equals("default")) {
+            removes.add(CSSHelper.PROP_THEME_NAME);
+        } // obsolete
+        else {
+            changes.put(CSSHelper.PROP_THEME_NAME, _config);
+        }
 
-        if (_universalTheming) {changes.put(CSSHelper.PROP_UNIVERSAL_THEMING, "true");}
-        else {removes.add(CSSHelper.PROP_UNIVERSAL_THEMING);}
+        if (_universalTheming) {
+            changes.put(CSSHelper.PROP_UNIVERSAL_THEMING, "true");
+        } else {
+            removes.add(CSSHelper.PROP_UNIVERSAL_THEMING);
+        }
 
-        if (_forceMobileConsole) {changes.put(CSSHelper.PROP_FORCE_MOBILE_CONSOLE, "true");}
-        else {removes.add(CSSHelper.PROP_FORCE_MOBILE_CONSOLE);}
+        if (_forceMobileConsole) {
+            changes.put(CSSHelper.PROP_FORCE_MOBILE_CONSOLE, "true");
+        } else {
+            removes.add(CSSHelper.PROP_FORCE_MOBILE_CONSOLE);
+        }
 
-        if (_embedApps) {changes.put(CSSHelper.PROP_EMBED_APPS, "true");}
-        else {removes.add(CSSHelper.PROP_EMBED_APPS);}
+        if (_embedApps) {
+            changes.put(CSSHelper.PROP_EMBED_APPS, "true");
+        } else {
+            removes.add(CSSHelper.PROP_EMBED_APPS);
+        }
 
-        if (_useSoraFont) {changes.put(CSSHelper.PROP_ENABLE_SORA_FONT, "true");}
-        else {removes.add(CSSHelper.PROP_ENABLE_SORA_FONT);}
+        if (_useSoraFont) {
+            changes.put(CSSHelper.PROP_ENABLE_SORA_FONT, "true");
+        } else {
+            removes.add(CSSHelper.PROP_ENABLE_SORA_FONT);
+        }
 
         boolean ok = _context.router().saveConfig(changes, removes);
         if (ok) {
-            if (!oldTheme.equals(_config)) {addFormNoticeNoEscape(_t("Theme change saved."), true);}
-            if (oldForceMobileConsole != _forceMobileConsole) {addFormNoticeNoEscape(_t("Mobile console option saved."), true);}
+            if (!oldTheme.equals(_config)) {
+                addFormNoticeNoEscape(_t("Theme change saved."), true);
+            }
+            if (oldForceMobileConsole != _forceMobileConsole) {
+                addFormNoticeNoEscape(_t("Mobile console option saved."), true);
+            }
         } else {
             addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs."), true);
         }
@@ -101,11 +145,9 @@ public class ConfigUIHandler extends FormHandler {
         ConsolePasswordManager mgr = new ConsolePasswordManager(_context);
         // rfc 2617
         if (mgr.saveMD5(RouterConsoleRunner.PROP_CONSOLE_PW, RouterConsoleRunner.JETTY_REALM, name, pw)) {
-            if (!_context.getBooleanProperty(RouterConsoleRunner.PROP_PW_ENABLE))
-                _context.router().saveConfig(RouterConsoleRunner.PROP_PW_ENABLE, "true");
+            if (!_context.getBooleanProperty(RouterConsoleRunner.PROP_PW_ENABLE)) _context.router().saveConfig(RouterConsoleRunner.PROP_PW_ENABLE, "true");
             addFormNotice(_t("Added user {0}", name), true);
-            addFormNotice(_t("To recover from a forgotten or non-working password, stop I2P, edit the file {0}, delete the line {1}, and restart I2P.",
-                             _context.router().getConfigFilename(), RouterConsoleRunner.PROP_PW_ENABLE + "=true"), true);
+            addFormNotice(_t("To recover from a forgotten or non-working password, stop I2P, edit the file {0}, delete the line {1}, and restart I2P.", _context.router().getConfigFilename(), RouterConsoleRunner.PROP_PW_ENABLE + "=true"), true);
             addFormError(_t("Restart required to take effect"), true);
         } else {
             addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs."), true);
@@ -116,9 +158,13 @@ public class ConfigUIHandler extends FormHandler {
         ConsolePasswordManager mgr = new ConsolePasswordManager(_context);
         boolean success = false;
         for (Object o : _settings.keySet()) {
-            if (!(o instanceof String)) {continue;}
+            if (!(o instanceof String)) {
+                continue;
+            }
             String k = (String) o;
-            if (!k.startsWith("delete_")) {continue;}
+            if (!k.startsWith("delete_")) {
+                continue;
+            }
             k = k.substring(7);
             if (mgr.remove(RouterConsoleRunner.PROP_CONSOLE_PW, k)) {
                 addFormNotice(_t("Removed user {0}", k), true);
@@ -127,7 +173,8 @@ public class ConfigUIHandler extends FormHandler {
                 addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs."), true);
             }
         }
-        if (success) {addFormError(_t("Restart required to take effect"), true);}
+        if (success) {
+            addFormError(_t("Restart required to take effect"), true);
+        }
     }
-
 }

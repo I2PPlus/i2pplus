@@ -1,14 +1,5 @@
 package net.i2p.i2ptunnel.ui;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.TreeMap;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PClient;
@@ -32,6 +23,16 @@ import net.i2p.util.ConvertToHash;
 import net.i2p.util.FileUtil;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * General helper functions used by all UIs.
@@ -82,8 +83,11 @@ public class GeneralHelper {
         if (tunnel < 0) return null;
         if (tcg == null) return null;
         List<TunnelController> controllers = tcg.getControllers();
-        if (controllers.size() > tunnel) {return controllers.get(tunnel);}
-        else {return null;}
+        if (controllers.size() > tunnel) {
+            return controllers.get(tunnel);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -140,8 +144,7 @@ public class GeneralHelper {
                 // Add the local interface and all targets to the cert
                 String intfc = props.getProperty(TunnelController.PROP_INTFC);
                 Set<String> altNames = new HashSet<String>(4);
-                if (intfc != null && !intfc.equals("0.0.0.0") && !intfc.equals("::") &&
-                    !intfc.equals("0:0:0:0:0:0:0:0")) {
+                if (intfc != null && !intfc.equals("0.0.0.0") && !intfc.equals("::") && !intfc.equals("0:0:0:0:0:0:0:0")) {
                     altNames.add(intfc);
                 }
                 String tgts = props.getProperty(TunnelController.PROP_DEST);
@@ -150,11 +153,15 @@ public class GeneralHelper {
                     String[] hosts = DataHelper.split(tgts, "[,]");
                     for (String h : hosts) {
                         int colon = h.indexOf(':');
-                        if (colon >= 0) {h = h.substring(0, colon);}
+                        if (colon >= 0) {
+                            h = h.substring(0, colon);
+                        }
                         altNames.add(h);
                         if (!h.endsWith(".b32.i2p")) {
                             Hash hash = ConvertToHash.getHash(h);
-                            if (hash != null) {altNames.add(hash.toBase32());}
+                            if (hash != null) {
+                                altNames.add(hash.toBase32());
+                            }
                         }
                     }
                 }
@@ -166,8 +173,7 @@ public class GeneralHelper {
                         msgs.add("Created new self-signed certificate for tunnel " + name);
                     }
                 } catch (IOException ioe) {
-                    msgs.add("Failed to create new self-signed certificate for tunnel " +
-                            getTunnelName(tcg, tunnel) + ", check logs: " + ioe);
+                    msgs.add("Failed to create new self-signed certificate for tunnel " + getTunnelName(tcg, tunnel) + ", check logs: " + ioe);
                 }
             }
         }
@@ -175,8 +181,12 @@ public class GeneralHelper {
             // creating new
             cur = new TunnelController(props, "", true);
             tcg.addController(cur);
-            if (cur.getStartOnLoad()) {cur.startTunnelBackground();}
-        } else {cur.setConfig(props, "");}
+            if (cur.getStartOnLoad()) {
+                cur.startTunnelBackground();
+            }
+        } else {
+            cur.setConfig(props, "");
+        }
 
         // Only modify other shared tunnels if the current tunnel is shared, and of supported type
         if (Boolean.parseBoolean(cur.getSharedClient()) && TunnelController.isClient(cur.getType())) {
@@ -188,8 +198,9 @@ public class GeneralHelper {
                 // Only modify this non-current tunnel if it belongs to a shared destination, and of supported type
                 if (Boolean.parseBoolean(c.getSharedClient()) && TunnelController.isClient(c.getType())) {
                     copySharedOptions(config, props, c);
-                    try {tcg.saveConfig(c);}
-                    catch (IOException ioe) {
+                    try {
+                        tcg.saveConfig(c);
+                    } catch (IOException ioe) {
                         msgs.add(0, _t("Failed to save configuration", tcg.getContext()) + ": " + ioe);
                     }
                 }
@@ -206,21 +217,29 @@ public class GeneralHelper {
      */
     private static final String[] SHARED_OPTIONS = {
         // I2CP
-        "i2cp.reduceOnIdle", "i2cp.closeOnIdle", "i2cp.newDestOnResume",
-        "i2cp.reduceIdleTime", "i2cp.reduceQuantity", "i2cp.closeIdleTime",
+        "i2cp.reduceOnIdle",
+        "i2cp.closeOnIdle",
+        "i2cp.newDestOnResume",
+        "i2cp.reduceIdleTime",
+        "i2cp.reduceQuantity",
+        "i2cp.closeIdleTime",
         // dest / LS
-        I2PClient.PROP_SIGTYPE, "i2cp.leaseSetEncType", "i2cp.leaseSetType",
+        I2PClient.PROP_SIGTYPE,
+        "i2cp.leaseSetEncType",
+        "i2cp.leaseSetType",
         "persistentClientKey",
         // following are mostly server but could also be persistent client
-        "inbound.randomKey", "outbound.randomKey", "i2cp.leaseSetSigningPrivateKey", "i2cp.leaseSetPrivateKey"
+        "inbound.randomKey",
+        "outbound.randomKey",
+        "i2cp.leaseSetSigningPrivateKey",
+        "i2cp.leaseSetPrivateKey"
     };
 
     /**
      *  Copy relevant options over
      *  @since 0.9.46 pulled out of updateTunnelConfig
      */
-    private static void copySharedOptions(TunnelConfig fromConfig, Properties from,
-                                          TunnelController to) {
+    private static void copySharedOptions(TunnelConfig fromConfig, Properties from, TunnelController to) {
         Properties cOpt = to.getConfig("");
         fromConfig.updateTunnelQuantities(cOpt);
         cOpt.setProperty("option.inbound.nickname", TunnelConfig.SHARED_CLIENT_NICKNAME);
@@ -228,12 +247,17 @@ public class GeneralHelper {
         for (String p : SHARED_OPTIONS) {
             String k = TunnelController.PFX_OPTION + p;
             String v = from.getProperty(k);
-            if (v != null) {cOpt.setProperty(k, v);}
-            else {cOpt.remove(k);}
+            if (v != null) {
+                cOpt.setProperty(k, v);
+            } else {
+                cOpt.remove(k);
+            }
         }
         // persistent client key, not prefixed with "option."
         String v = from.getProperty(TunnelController.PROP_FILE);
-        if (v != null) {cOpt.setProperty(TunnelController.PROP_FILE, v);}
+        if (v != null) {
+            cOpt.setProperty(TunnelController.PROP_FILE, v);
+        }
         to.setConfig(cOpt, "");
     }
 
@@ -297,8 +321,11 @@ public class GeneralHelper {
         }
 
         msgs = tcg.removeController(cur);
-        try {tcg.removeConfig(cur);}
-        catch (IOException ioe) {msgs.add(ioe.toString());}
+        try {
+            tcg.removeConfig(cur);
+        } catch (IOException ioe) {
+            msgs.add(ioe.toString());
+        }
 
         /*
          * Rename private key file if it was a default name in the default directory,
@@ -306,9 +333,10 @@ public class GeneralHelper {
          * Use configured file name if available, not the one from the form.
          */
         String pk = cur.getPrivKeyFile();
-        if (pk == null) {pk = privKeyFile;}
-        if (pk != null && pk.startsWith("i2ptunnel") && pk.endsWith("-privKeys.dat") &&
-            ((!TunnelController.isClient(cur.getType())) || cur.getPersistentClientKey())) {
+        if (pk == null) {
+            pk = privKeyFile;
+        }
+        if (pk != null && pk.startsWith("i2ptunnel") && pk.endsWith("-privKeys.dat") && ((!TunnelController.isClient(cur.getType())) || cur.getPersistentClientKey())) {
             File pkf = new File(context.getConfigDir(), pk);
             if (pkf.exists()) {
                 String name = cur.getName();
@@ -316,17 +344,24 @@ public class GeneralHelper {
                     name = cur.getDescription();
                     if (name == null) {
                         name = cur.getType();
-                        if (name == null) {name = Long.toString(context.clock().now());}
+                        if (name == null) {
+                            name = Long.toString(context.clock().now());
+                        }
                     }
                 }
                 name = name.replace(' ', '_').replace(':', '_').replace("..", "_").replace('/', '_').replace('\\', '_');
                 name = "i2ptunnel-deleted-" + name + '-' + context.clock().now() + "-privkeys.dat";
                 File backupDir = new SecureFile(context.getConfigDir(), TunnelController.KEY_BACKUP_DIR);
                 File to;
-                if (backupDir.isDirectory() || backupDir.mkdir()) {to = new File(backupDir, name);}
-                else {to = new File(context.getConfigDir(), name);}
+                if (backupDir.isDirectory() || backupDir.mkdir()) {
+                    to = new File(backupDir, name);
+                } else {
+                    to = new File(context.getConfigDir(), name);
+                }
                 boolean success = FileUtil.rename(pkf, to);
-                if (success) {msgs.add("✔ Private key file " + pkf.getAbsolutePath() + " renamed to " + to.getAbsolutePath());}
+                if (success) {
+                    msgs.add("✔ Private key file " + pkf.getAbsolutePath() + " renamed to " + to.getAbsolutePath());
+                }
             }
         }
         return msgs;
@@ -373,9 +408,14 @@ public class GeneralHelper {
     public int getTargetPort(int tunnel) {
         TunnelController tun = getController(tunnel);
         if (tun != null && tun.getTargetPort() != null) {
-            try {return Integer.parseInt(tun.getTargetPort());}
-            catch (NumberFormatException e) {return -1;}
-        } else {return -1;}
+            try {
+                return Integer.parseInt(tun.getTargetPort());
+            } catch (NumberFormatException e) {
+                return -1;
+            }
+        } else {
+            return -1;
+        }
     }
 
     public String getSpoofedHost(int tunnel) {
@@ -397,9 +437,13 @@ public class GeneralHelper {
         TunnelController tun = getController(tcg, tunnel);
         if (tun != null) {
             String rv = tun.getPrivKeyFile();
-            if (rv != null) {return rv;}
+            if (rv != null) {
+                return rv;
+            }
         }
-        if (tunnel < 0) {tunnel = tcg == null ? 999 : tcg.getControllers().size();}
+        if (tunnel < 0) {
+            tunnel = tcg == null ? 999 : tcg.getControllers().size();
+        }
         String rv = "i2ptunnel" + tunnel + "-privKeys.dat";
         // Don't default to a file that already exists,
         // which could happen after other tunnels are deleted.
@@ -426,7 +470,9 @@ public class GeneralHelper {
         TunnelController tun = getController(tcg, tunnel);
         if (tun != null) {
             File f = tun.getAlternatePrivateKeyFile();
-            if (f != null) {return f.getAbsolutePath();}
+            if (f != null) {
+                return f.getAbsolutePath();
+            }
         }
         return "";
     }
@@ -434,27 +480,42 @@ public class GeneralHelper {
     public String getClientInterface(int tunnel) {
         TunnelController tun = getController(tunnel);
         if (tun != null) {
-            if ("streamrclient".equals(tun.getType())) {return tun.getTargetHost();}
-            else {return tun.getListenOnInterface();}
-        } else {return "127.0.0.1";}
+            if ("streamrclient".equals(tun.getType())) {
+                return tun.getTargetHost();
+            } else {
+                return tun.getListenOnInterface();
+            }
+        } else {
+            return "127.0.0.1";
+        }
     }
 
     public int getClientPort(int tunnel) {
         TunnelController tun = getController(tunnel);
         if (tun != null && tun.getListenPort() != null) {
-            try {return Integer.parseInt(tun.getListenPort());}
-            catch (NumberFormatException e) {return -1;}
-        } else {return -1;}
+            try {
+                return Integer.parseInt(tun.getListenPort());
+            } catch (NumberFormatException e) {
+                return -1;
+            }
+        } else {
+            return -1;
+        }
     }
 
     public int getTunnelStatus(int tunnel) {
         TunnelController tun = getController(tunnel);
         if (tun == null) return NOT_RUNNING;
         if (tun.getIsRunning()) {
-            if (tun.isClient() && tun.getIsStandby()) {return STANDBY;}
-            else {return RUNNING;}
+            if (tun.isClient() && tun.getIsStandby()) {
+                return STANDBY;
+            } else {
+                return RUNNING;
+            }
         } else if (tun.getIsStarting()) return STARTING;
-        else {return NOT_RUNNING;}
+        else {
+            return NOT_RUNNING;
+        }
     }
 
     /**
@@ -473,11 +534,11 @@ public class GeneralHelper {
         TunnelController tun = getController(tunnel);
         if (tun == null) return "";
         String rv;
-        if (TunnelController.TYPE_STD_CLIENT.equals(tun.getType()) ||
-            TunnelController.TYPE_IRC_CLIENT.equals(tun.getType()) ||
-            TunnelController.TYPE_STREAMR_CLIENT.equals(tun.getType())) {
+        if (TunnelController.TYPE_STD_CLIENT.equals(tun.getType()) || TunnelController.TYPE_IRC_CLIENT.equals(tun.getType()) || TunnelController.TYPE_STREAMR_CLIENT.equals(tun.getType())) {
             rv = tun.getTargetDestination();
-        } else {rv = tun.getProxyList();}
+        } else {
+            rv = tun.getProxyList();
+        }
         return rv != null ? rv : "";
     }
 
@@ -489,17 +550,21 @@ public class GeneralHelper {
         TunnelController tun = getController(tunnel);
         if (tun != null) {
             Destination rv = tun.getDestination();
-            if (rv != null) {return rv;}
+            if (rv != null) {
+                return rv;
+            }
             // if not running, do this the hard way
             File keyFile = tun.getPrivateKeyFile();
             if (keyFile != null) {
                 PrivateKeyFile pkf = new PrivateKeyFile(keyFile);
                 try {
                     rv = pkf.getDestination();
-                    if (rv != null) {return rv;}
+                    if (rv != null) {
+                        return rv;
+                    }
+                } catch (I2PException e) {
+                } catch (IOException e) {
                 }
-                catch (I2PException e) {}
-                catch (IOException e) {}
             }
         }
         return null;
@@ -519,10 +584,12 @@ public class GeneralHelper {
                 PrivateKeyFile pkf = new PrivateKeyFile(keyFile);
                 try {
                     Destination rv = pkf.getDestination();
-                    if (rv != null) {return rv;}
+                    if (rv != null) {
+                        return rv;
+                    }
+                } catch (I2PException e) {
+                } catch (IOException e) {
                 }
-                catch (I2PException e) {}
-                catch (IOException e) {}
             }
         }
         return null;
@@ -536,7 +603,9 @@ public class GeneralHelper {
     public boolean isOfflineKeys(int tunnel) {
         TunnelController tun = getController(tunnel);
         if (tun != null) {
-            if (tun.getIsRunning()) {return tun.getIsOfflineKeys();}
+            if (tun.getIsRunning()) {
+                return tun.getIsOfflineKeys();
+            }
             // do this the hard way
             File keyFile = tun.getPrivateKeyFile();
             if (keyFile != null) {
@@ -619,33 +688,57 @@ public class GeneralHelper {
      * @return time in minutes
      */
     public int getReduceTime(int tunnel, int def) {
-        return getProperty(tunnel, "i2cp.reduceIdleTime", def*60*1000) / (60*1000);
+        return getProperty(tunnel, "i2cp.reduceIdleTime", def * 60 * 1000) / (60 * 1000);
     }
 
-    public int getCert(int tunnel) {return 0;}
-    public int getEffort(int tunnel) {return 23;}
-    public String getSigner(int tunnel) {return "";}
-    public boolean getEncrypt(int tunnel) {return getBooleanProperty(tunnel, "i2cp.encryptLeaseSet");}
+    public int getCert(int tunnel) {
+        return 0;
+    }
+
+    public int getEffort(int tunnel) {
+        return 23;
+    }
+
+    public String getSigner(int tunnel) {
+        return "";
+    }
+
+    public boolean getEncrypt(int tunnel) {
+        return getBooleanProperty(tunnel, "i2cp.encryptLeaseSet");
+    }
 
     /**
      *  @since 0.9.40
      */
     public int getEncryptMode(int tunnel) {
-        if (getEncrypt(tunnel)) {return 1;}
+        if (getEncrypt(tunnel)) {
+            return 1;
+        }
         String lstype = getProperty(tunnel, "i2cp.leaseSetType", "1");
         if (lstype.equals("5")) {
             int rv;
             String authType = getProperty(tunnel, "i2cp.leaseSetAuthType", "0");
             if (authType.equals("2")) {
-                if (getProperty(tunnel, "i2cp.leaseSetClient.psk.0", null) != null) {rv = 6;} // per-client PSK key
-                else {rv = 4; } // shared PSK key
-            } else if (authType.equals("1")) {rv = 8;}
-            else {rv = 2;}
+                if (getProperty(tunnel, "i2cp.leaseSetClient.psk.0", null) != null) {
+                    rv = 6;
+                } // per-client PSK key
+                else {
+                    rv = 4;
+                } // shared PSK key
+            } else if (authType.equals("1")) {
+                rv = 8;
+            } else {
+                rv = 2;
+            }
 
             String pw = getBlindedPassword(tunnel);
-            if (pw != null && pw.length() > 0) {rv++;}
+            if (pw != null && pw.length() > 0) {
+                rv++;
+            }
             return rv;
-        } else if (lstype.equals("3")) {return 10;}
+        } else if (lstype.equals("3")) {
+            return 10;
+        }
         return 0;
     }
 
@@ -654,8 +747,12 @@ public class GeneralHelper {
      */
     public String getBlindedPassword(int tunnel) {
         String rv = getProperty(tunnel, "i2cp.leaseSetSecret", null);
-        if (rv != null) {rv = DataHelper.getUTF8(Base64.decode(rv));}
-        if (rv == null) {rv = "";}
+        if (rv != null) {
+            rv = DataHelper.getUTF8(Base64.decode(rv));
+        }
+        if (rv == null) {
+            rv = "";
+        }
         return rv;
     }
 
@@ -688,12 +785,13 @@ public class GeneralHelper {
         String ttype;
         if (tunnel >= 0) {
             ttype = getTunnelType(tunnel);
-            if (!TunnelController.isClient(ttype) ||
-                getBooleanProperty(tunnel, "persistentClientKey")) {
+            if (!TunnelController.isClient(ttype) || getBooleanProperty(tunnel, "persistentClientKey")) {
                 Destination d = getDestination(tunnel);
                 if (d != null) {
                     type = d.getSigType();
-                    if (type != null) {return type.getCode();}
+                    if (type != null) {
+                        return type.getCode();
+                    }
                 }
             }
             String stype = getProperty(tunnel, I2PClient.PROP_SIGTYPE, null);
@@ -704,16 +802,11 @@ public class GeneralHelper {
         }
         if (type == null) {
             // same default logic as in TunnelController.setConfig()
-            if (!TunnelController.isClient(ttype) ||
-                TunnelController.TYPE_IRC_CLIENT.equals(ttype) ||
-                TunnelController.TYPE_SOCKS_IRC.equals(ttype) ||
-                TunnelController.TYPE_SOCKS.equals(ttype) ||
-                TunnelController.TYPE_STREAMR_CLIENT.equals(ttype) ||
-                TunnelController.TYPE_STD_CLIENT.equals(ttype) ||
-                TunnelController.TYPE_CONNECT.equals(ttype) ||
-                TunnelController.TYPE_HTTP_CLIENT.equals(ttype)) {
+            if (!TunnelController.isClient(ttype) || TunnelController.TYPE_IRC_CLIENT.equals(ttype) || TunnelController.TYPE_SOCKS_IRC.equals(ttype) || TunnelController.TYPE_SOCKS.equals(ttype) || TunnelController.TYPE_STREAMR_CLIENT.equals(ttype) || TunnelController.TYPE_STD_CLIENT.equals(ttype) || TunnelController.TYPE_CONNECT.equals(ttype) || TunnelController.TYPE_HTTP_CLIENT.equals(ttype)) {
                 type = TunnelController.PREFERRED_SIGTYPE;
-            } else {type = SigType.EdDSA_SHA512_Ed25519;}
+            } else {
+                type = SigType.EdDSA_SHA512_Ed25519;
+            }
         }
         return type.getCode();
     }
@@ -724,14 +817,18 @@ public class GeneralHelper {
      */
     public boolean hasEncType(int tunnel, int encType) {
         TunnelController tun = getController(tunnel);
-        if (tun == null) {return encType == 4;} // New clients and servers now default to MLKEM768+ECIES
+        if (tun == null) {
+            return encType == 4;
+        } // New clients and servers now default to MLKEM768+ECIES
         String type = tun.getType();
         String dflt = "6,4";
         String senc = getProperty(tunnel, "i2cp.leaseSetEncType", dflt);
         String[] senca = DataHelper.split(senc, ",");
         String se = Integer.toString(encType);
         for (int i = 0; i < senca.length; i++) {
-            if (se.equals(senca[i])) {return true;}
+            if (se.equals(senca[i])) {
+                return true;
+            }
         }
         return false;
     }
@@ -768,8 +865,12 @@ public class GeneralHelper {
     }
 
     public int getAccessMode(int tunnel) {
-        if (getBooleanProperty(tunnel, PROP_ENABLE_ACCESS_LIST)) {return 1;}
-        if (getBooleanProperty(tunnel, PROP_ENABLE_BLACKLIST)) {return 2;}
+        if (getBooleanProperty(tunnel, PROP_ENABLE_ACCESS_LIST)) {
+            return 1;
+        }
+        if (getBooleanProperty(tunnel, PROP_ENABLE_BLACKLIST)) {
+            return 2;
+        }
         return 0;
     }
 
@@ -784,15 +885,13 @@ public class GeneralHelper {
         TunnelController tunnelController = getController(tunnel);
         if (tunnelController != null) {
             String filter = tunnelController.getFilter();
-            if (filter != null)
-                return filter;
+            if (filter != null) return filter;
         }
         return "";
     }
 
     public String getJumpList(int tunnel) {
-        return getProperty(tunnel, I2PTunnelHTTPClient.PROP_JUMP_SERVERS,
-                           I2PTunnelHTTPClient.DEFAULT_JUMP_SERVERS).replace(",", "\n");
+        return getProperty(tunnel, I2PTunnelHTTPClient.PROP_JUMP_SERVERS, I2PTunnelHTTPClient.DEFAULT_JUMP_SERVERS).replace(",", "\n");
     }
 
     public boolean getCloseOnIdle(int tunnel, boolean def) {
@@ -800,13 +899,11 @@ public class GeneralHelper {
     }
 
     public int getCloseTime(int tunnel, int def) {
-        return getProperty(tunnel, "i2cp.closeIdleTime", def*60*1000) / (60*1000);
+        return getProperty(tunnel, "i2cp.closeIdleTime", def * 60 * 1000) / (60 * 1000);
     }
 
     public boolean getNewDest(int tunnel) {
-        return getBooleanProperty(tunnel, "i2cp.newDestOnResume", true) &&
-               getBooleanProperty(tunnel, "i2cp.closeOnIdle") &&
-               !getBooleanProperty(tunnel, "persistentClientKey");
+        return getBooleanProperty(tunnel, "i2cp.newDestOnResume", true) && getBooleanProperty(tunnel, "i2cp.closeOnIdle") && !getBooleanProperty(tunnel, "persistentClientKey");
     }
 
     public boolean getPersistentClientKey(int tunnel) {
@@ -834,8 +931,7 @@ public class GeneralHelper {
      *  PROP_SSL_SET is set
      */
     public boolean getAllowInternalSSL(int tunnel) {
-        return getBooleanProperty(tunnel, I2PTunnelHTTPClient.PROP_INTERNAL_SSL, true) ||
-               !getBooleanProperty(tunnel, I2PTunnelHTTPClient.PROP_SSL_SET, true);
+        return getBooleanProperty(tunnel, I2PTunnelHTTPClient.PROP_INTERNAL_SSL, true) || !getBooleanProperty(tunnel, I2PTunnelHTTPClient.PROP_SSL_SET, true);
     }
 
     public boolean getMultihome(int tunnel) {
@@ -855,8 +951,7 @@ public class GeneralHelper {
     }
 
     public String getOutproxyPassword(int tunnel) {
-        if (getOutproxyUsername(tunnel).length() <= 0)
-            return "";
+        if (getOutproxyUsername(tunnel).length() <= 0) return "";
         return getProperty(tunnel, I2PTunnelHTTPClientBase.PROP_OUTPROXY_PW, "");
     }
 
@@ -877,7 +972,9 @@ public class GeneralHelper {
      */
     public String getOutproxyType(int tunnel) {
         String type = getTunnelType(tunnel);
-        if (!type.equals("sockstunnel") && !type.equals("socksirctunnel")) {return "connect";}
+        if (!type.equals("sockstunnel") && !type.equals("socksirctunnel")) {
+            return "connect";
+        }
         return getProperty(tunnel, I2PSOCKSTunnel.PROP_OUTPROXY_TYPE, "socks");
     }
 
@@ -961,30 +1058,39 @@ public class GeneralHelper {
         TunnelController tun = getController(tunnel);
         if (tun != null) {
             Properties opts = tun.getClientOptionProps();
-            if (opts == null) {return "";}
-            boolean isMD5Proxy = TunnelController.TYPE_HTTP_CLIENT.equals(tun.getType()) ||
-                                 TunnelController.TYPE_CONNECT.equals(tun.getType());
+            if (opts == null) {
+                return "";
+            }
+            boolean isMD5Proxy = TunnelController.TYPE_HTTP_CLIENT.equals(tun.getType()) || TunnelController.TYPE_CONNECT.equals(tun.getType());
             Map<String, String> sorted = new TreeMap<String, String>();
             for (Map.Entry<Object, Object> e : opts.entrySet()) {
-                String key = (String)e.getKey();
-                if (TunnelConfig._noShowSet.contains(key))
-                    continue;
+                String key = (String) e.getKey();
+                if (TunnelConfig._noShowSet.contains(key)) continue;
                 // Leave in for HTTP and Connect so it can get migrated to MD5,
                 // hide for SOCKS until migrated to MD5
-                if (((!isMD5Proxy) && TunnelConfig._nonProxyNoShowSet.contains(key)) ||
-                    key.startsWith("i2cp.leaseSetClient.")) {continue;}
-                sorted.put(key, (String)e.getValue());
+                if (((!isMD5Proxy) && TunnelConfig._nonProxyNoShowSet.contains(key)) || key.startsWith("i2cp.leaseSetClient.")) {
+                    continue;
+                }
+                sorted.put(key, (String) e.getValue());
             }
-            if (sorted.isEmpty()) {return "";}
+            if (sorted.isEmpty()) {
+                return "";
+            }
             StringBuilder buf = new StringBuilder(64);
             boolean space = false;
             for (Map.Entry<String, String> e : sorted.entrySet()) {
-                if (space) {buf.append(' ');}
-                else {space = true;}
+                if (space) {
+                    buf.append(' ');
+                } else {
+                    space = true;
+                }
                 buf.append(e.getKey()).append('=');
                 String v = e.getValue();
-                if (v.contains(" ") || v.contains("\t")) {buf.append('"').append(v).append('"');}
-                else {buf.append(v);}
+                if (v.contains(" ") || v.contains("\t")) {
+                    buf.append('"').append(v).append('"');
+                } else {
+                    buf.append(v);
+                }
             }
             return DataHelper.escapeHTML(buf.toString());
         } else {
@@ -1003,8 +1109,10 @@ public class GeneralHelper {
             if (opts != null) {
                 String s = opts.getProperty(prop);
                 if (s == null) return def;
-                try {return Integer.parseInt(s);}
-                catch (NumberFormatException nfe) {}
+                try {
+                    return Integer.parseInt(s);
+                } catch (NumberFormatException nfe) {
+                }
             }
         }
         return def;
@@ -1016,7 +1124,9 @@ public class GeneralHelper {
             Properties opts = tun.getClientOptionProps();
             if (opts != null) {
                 String rv = opts.getProperty(prop);
-                if (rv != null) {return DataHelper.escapeHTML(rv);}
+                if (rv != null) {
+                    return DataHelper.escapeHTML(rv);
+                }
             }
         }
         return def;
@@ -1031,7 +1141,9 @@ public class GeneralHelper {
         TunnelController tun = getController(tunnel);
         if (tun != null) {
             Properties opts = tun.getClientOptionProps();
-            if (opts != null) {return Boolean.parseBoolean(opts.getProperty(prop));}
+            if (opts != null) {
+                return Boolean.parseBoolean(opts.getProperty(prop));
+            }
         }
         return def;
     }
@@ -1039,5 +1151,4 @@ public class GeneralHelper {
     protected static String _t(String key, I2PAppContext context) {
         return Messages._t(key, context);
     }
-
 }

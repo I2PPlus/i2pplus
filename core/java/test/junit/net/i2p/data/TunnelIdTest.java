@@ -1,4 +1,5 @@
 package net.i2p.data;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -7,7 +8,6 @@ package net.i2p.data;
  * your children, but it might.  Use at your own risk.
  *
  */
-
 
 /**
  * Test harness for loading / storing TunnelId objects
@@ -21,8 +21,11 @@ public class TunnelIdTest extends StructureTest {
         id.setTunnelId(42);
         return id;
     }
+
     @Override
-    public DataStructure createStructureToRead() { return new TunnelIdStructure(); }
+    public DataStructure createStructureToRead() {
+        return new TunnelIdStructure();
+    }
 
     /**
      * so we can test it as a structure
@@ -30,14 +33,24 @@ public class TunnelIdTest extends StructureTest {
      */
     private static class TunnelIdStructure extends TunnelId implements DataStructure {
         @Override
-        public Hash calculateHash() { return null; }
+        public Hash calculateHash() {
+            return null;
+        }
+
         @Override
         public void fromByteArray(byte[] in) {}
+
         @Override
-        public byte[] toByteArray() { return null; }
+        public byte[] toByteArray() {
+            return null;
+        }
+
         @Override
         public void fromBase64(String in) {}
+
         @Override
-        public String toBase64() { return null; }
+        public String toBase64() {
+            return null;
+        }
     }
 }

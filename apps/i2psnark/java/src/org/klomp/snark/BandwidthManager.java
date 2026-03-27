@@ -108,13 +108,7 @@ public class BandwidthManager implements BandwidthListener {
     /** Should we send this many bytes? Do NOT call uploaded() if this returns true. */
     public boolean shouldSend(int size) {
         boolean rv = _up.offer(size, 1.0f);
-        if (!rv && _log.shouldWarn())
-            _log.warn(
-                    "Declining send request for "
-                            + size
-                            + " bytes -> Upload rate: "
-                            + DataHelper.formatSize(getUploadRate())
-                            + "B/s");
+        if (!rv && _log.shouldWarn()) _log.warn("Declining send request for " + size + " bytes -> Upload rate: " + DataHelper.formatSize(getUploadRate()) + "B/s");
         return rv;
     }
 
@@ -125,16 +119,7 @@ public class BandwidthManager implements BandwidthListener {
      */
     public boolean shouldRequest(Peer peer, int size) {
         boolean rv = !overDownBWLimit() && _req.offer(size, 1.0f);
-        if (!rv && _log.shouldWarn())
-            _log.warn(
-                    "Not requesting "
-                            + size
-                            + " bytes (bandwidth limit exceeded) -> Download / Request rate: "
-                            + DataHelper.formatSize(getDownloadRate())
-                            + "B/s"
-                            + " / "
-                            + DataHelper.formatSize(getRequestRate())
-                            + "B/s");
+        if (!rv && _log.shouldWarn()) _log.warn("Not requesting " + size + " bytes (bandwidth limit exceeded) -> Download / Request rate: " + DataHelper.formatSize(getDownloadRate()) + "B/s" + " / " + DataHelper.formatSize(getRequestRate()) + "B/s");
         return rv;
     }
 
@@ -162,14 +147,6 @@ public class BandwidthManager implements BandwidthListener {
     @Override
     public String toString() {
         String separator = " <span class=bullet>&nbsp; &bullet; &nbsp; </span> ";
-        return "<div class=debugStats id=bwManager>"
-                + "<span id=bw_in class=stat><b>Bandwidth In:</b> <span class=dbug>"
-                + _down.toString().trim().replace("* ", "").replace("Bytes", "B")
-                + "</span></span>"
-                + separator
-                + "<span id=bw_out class=stat><b>Bandwidth Out:</b> <span class=dbug>"
-                + _up.toString().trim().replace("* ", "").replace("Bytes", "B")
-                + "</span></span>"
-                + "</div>";
+        return "<div class=debugStats id=bwManager>" + "<span id=bw_in class=stat><b>Bandwidth In:</b> <span class=dbug>" + _down.toString().trim().replace("* ", "").replace("Bytes", "B") + "</span></span>" + separator + "<span id=bw_out class=stat><b>Bandwidth Out:</b> <span class=dbug>" + _up.toString().trim().replace("* ", "").replace("Bytes", "B") + "</span></span>" + "</div>";
     }
 }

@@ -25,7 +25,7 @@ import java.util.Map;
  * its contents are valid JSON.
  * @see Jsoner
  * @since 2.0.0 */
-public class JsonArray extends ArrayList<Object> implements Jsonable{
+public class JsonArray extends ArrayList<Object> implements Jsonable {
     /** The serialization version this class is compatible
      * with. This value doesn't need to be incremented if and only if the only changes to occur were updating comments,
      * updating javadocs, adding new
@@ -34,13 +34,13 @@ public class JsonArray extends ArrayList<Object> implements Jsonable{
     private static final long serialVersionUID = 1L;
 
     /** Instantiates an empty JsonArray. */
-    public JsonArray(){
+    public JsonArray() {
         super();
     }
 
     /** Instantiate a new JsonArray using ArrayList's constructor of the same type.
      * @param collection represents the elements to produce the JsonArray with. */
-    public JsonArray(final Collection<?> collection){
+    public JsonArray(final Collection<?> collection) {
         super(collection);
     }
 
@@ -53,9 +53,9 @@ public class JsonArray extends ArrayList<Object> implements Jsonable{
      *        provided.
      * @throws ClassCastException if the unchecked cast of an element to T fails. */
     @SuppressWarnings("unchecked")
-    public <T> void asCollection(final Collection<T> destination){
-        for (final Object o : this){
-            destination.add((T)o);
+    public <T> void asCollection(final Collection<T> destination) {
+        for (final Object o : this) {
+            destination.add((T) o);
         }
     }
 
@@ -68,18 +68,18 @@ public class JsonArray extends ArrayList<Object> implements Jsonable{
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal.
      * @see BigDecimal
      * @see Number#doubleValue() */
-    public BigDecimal getBigDecimal(final int index){
+    public BigDecimal getBigDecimal(final int index) {
         Object returnable = this.get(index);
-        if (returnable instanceof BigDecimal){
+        if (returnable instanceof BigDecimal) {
             /* Success there was a BigDecimal. */
-        }else if (returnable instanceof Number){
+        } else if (returnable instanceof Number) {
             /* A number can be used to construct a BigDecimal. */
             returnable = new BigDecimal(returnable.toString());
-        }else if (returnable instanceof String){
+        } else if (returnable instanceof String) {
             /* A number can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return (BigDecimal)returnable;
+        return (BigDecimal) returnable;
     }
 
     /** A convenience method that assumes there is a Boolean or String value at the given index.
@@ -87,12 +87,12 @@ public class JsonArray extends ArrayList<Object> implements Jsonable{
      * @return the value at the index provided cast to a boolean.
      * @throws ClassCastException if there was a value but didn't match the assumed return type.
      * @throws IndexOutOfBoundsException if the index is outside of the range of element indexes in the JsonArray. */
-    public Boolean getBoolean(final int index){
+    public Boolean getBoolean(final int index) {
         Object returnable = this.get(index);
-        if (returnable instanceof String){
-            returnable = Boolean.valueOf((String)returnable);
+        if (returnable instanceof String) {
+            returnable = Boolean.valueOf((String) returnable);
         }
-        return (Boolean)returnable;
+        return (Boolean) returnable;
     }
 
     /** A convenience method that assumes there is a Number or String value at the given index.
@@ -103,16 +103,16 @@ public class JsonArray extends ArrayList<Object> implements Jsonable{
      *         represents the double or float Infinity or NaN.
      * @throws IndexOutOfBoundsException if the index is outside of the range of element indexes in the JsonArray.
      * @see Number */
-    public Byte getByte(final int index){
+    public Byte getByte(final int index) {
         Object returnable = this.get(index);
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).byteValue();
+        return ((Number) returnable).byteValue();
     }
 
     /** A convenience method that assumes there is a Collection value at the given index.
@@ -124,10 +124,10 @@ public class JsonArray extends ArrayList<Object> implements Jsonable{
      * @throws IndexOutOfBoundsException if the index is outside of the range of element indexes in the JsonArray.
      * @see Collection */
     @SuppressWarnings("unchecked")
-    public <T extends Collection<?>> T getCollection(final int index){
+    public <T extends Collection<?>> T getCollection(final int index) {
         /* The unchecked warning is suppressed because there is no way of guaranteeing at compile time the cast will
          * work. */
-        return (T)this.get(index);
+        return (T) this.get(index);
     }
 
     /** A convenience method that assumes there is a Number or String value at the given index.
@@ -138,16 +138,16 @@ public class JsonArray extends ArrayList<Object> implements Jsonable{
      *         represents the double or float Infinity or NaN.
      * @throws IndexOutOfBoundsException if the index is outside of the range of element indexes in the JsonArray.
      * @see Number */
-    public Double getDouble(final int index){
+    public Double getDouble(final int index) {
         Object returnable = this.get(index);
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).doubleValue();
+        return ((Number) returnable).doubleValue();
     }
 
     /** A convenience method that assumes there is a String value at the given index representing a fully qualified name
@@ -166,7 +166,7 @@ public class JsonArray extends ArrayList<Object> implements Jsonable{
      * @deprecated 2.3.0 Jsoner deprecated automatically serializing enums as Strings. */
     @Deprecated
     @SuppressWarnings("unchecked")
-    public <T extends Enum<T>> T getEnum(final int index) throws ClassNotFoundException{
+    public <T extends Enum<T>> T getEnum(final int index) throws ClassNotFoundException {
         /* Supressing the unchecked warning because the returnType is dynamically identified and could lead to a
          * ClassCastException when returnType is cast to Class<T>, which is expected by the method's contract. */
         T returnable;
@@ -178,7 +178,7 @@ public class JsonArray extends ArrayList<Object> implements Jsonable{
         final Class<T> returnType;
         /* Make sure the element at the index is a String. */
         element = this.getString(index);
-        if (element == null){
+        if (element == null) {
             return null;
         }
         /* Get the package, class, and enum names. */
@@ -186,16 +186,16 @@ public class JsonArray extends ArrayList<Object> implements Jsonable{
         numberOfValues = splitValues.length;
         returnTypeName = new StringBuilder();
         enumName = new StringBuilder();
-        for (int i = 0; i < numberOfValues; i++){
-            if (i == (numberOfValues - 1)){
+        for (int i = 0; i < numberOfValues; i++) {
+            if (i == (numberOfValues - 1)) {
                 /* If it is the last split value then it should be the name of the Enum since dots are not allowed in
                  * enum names. */
                 enumName.append(splitValues[i]);
-            }else if (i == (numberOfValues - 2)){
+            } else if (i == (numberOfValues - 2)) {
                 /* If it is the penultimate split value then it should be the end of the package/enum type and not need
                  * a dot appended to it. */
                 returnTypeName.append(splitValues[i]);
-            }else{
+            } else {
                 /* Must be part of the package/enum type and will need a dot appended to it since they got removed in
                  * the split. */
                 returnTypeName.append(splitValues[i]);
@@ -203,7 +203,7 @@ public class JsonArray extends ArrayList<Object> implements Jsonable{
             }
         }
         /* Use the package/class and enum names to get the Enum<T>. */
-        returnType = (Class<T>)Class.forName(returnTypeName.toString());
+        returnType = (Class<T>) Class.forName(returnTypeName.toString());
         returnable = Enum.valueOf(returnType, enumName.toString());
         return returnable;
     }
@@ -216,16 +216,16 @@ public class JsonArray extends ArrayList<Object> implements Jsonable{
      *         represents the double or float Infinity or NaN.
      * @throws IndexOutOfBoundsException if the index is outside of the range of element indexes in the JsonArray.
      * @see Number */
-    public Float getFloat(final int index){
+    public Float getFloat(final int index) {
         Object returnable = this.get(index);
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).floatValue();
+        return ((Number) returnable).floatValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given index.
@@ -236,16 +236,16 @@ public class JsonArray extends ArrayList<Object> implements Jsonable{
      *         represents the double or float Infinity or NaN.
      * @throws IndexOutOfBoundsException if the index is outside of the range of element indexes in the JsonArray.
      * @see Number */
-    public Integer getInteger(final int index){
+    public Integer getInteger(final int index) {
         Object returnable = this.get(index);
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).intValue();
+        return ((Number) returnable).intValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given index.
@@ -256,16 +256,16 @@ public class JsonArray extends ArrayList<Object> implements Jsonable{
      *         represents the double or float Infinity or NaN.
      * @throws IndexOutOfBoundsException if the index is outside of the range of element indexes in the JsonArray.
      * @see Number */
-    public Long getLong(final int index){
+    public Long getLong(final int index) {
         Object returnable = this.get(index);
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).longValue();
+        return ((Number) returnable).longValue();
     }
 
     /** A convenience method that assumes there is a Map value at the given index.
@@ -276,10 +276,10 @@ public class JsonArray extends ArrayList<Object> implements Jsonable{
      * @throws IndexOutOfBoundsException if the index is outside of the range of element indexes in the JsonArray.
      * @see Map */
     @SuppressWarnings("unchecked")
-    public <T extends Map<?, ?>> T getMap(final int index){
+    public <T extends Map<?, ?>> T getMap(final int index) {
         /* The unchecked warning is suppressed because there is no way of guaranteeing at compile time the cast will
          * work. */
-        return (T)this.get(index);
+        return (T) this.get(index);
     }
 
     /** A convenience method that assumes there is a Number or String value at the given index.
@@ -290,16 +290,16 @@ public class JsonArray extends ArrayList<Object> implements Jsonable{
      *         represents the double or float Infinity or NaN.
      * @throws IndexOutOfBoundsException if the index is outside of the range of element indexes in the JsonArray.
      * @see Number */
-    public Short getShort(final int index){
+    public Short getShort(final int index) {
         Object returnable = this.get(index);
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).shortValue();
+        return ((Number) returnable).shortValue();
     }
 
     /** A convenience method that assumes there is a Boolean, Number, or String value at the given index.
@@ -307,24 +307,24 @@ public class JsonArray extends ArrayList<Object> implements Jsonable{
      * @return the value at the index provided cast to a String.
      * @throws ClassCastException if there was a value but didn't match the assumed return type.
      * @throws IndexOutOfBoundsException if the index is outside of the range of element indexes in the JsonArray. */
-    public String getString(final int index){
+    public String getString(final int index) {
         Object returnable = this.get(index);
-        if (returnable instanceof Boolean){
+        if (returnable instanceof Boolean) {
             returnable = returnable.toString();
-        }else if (returnable instanceof Number){
+        } else if (returnable instanceof Number) {
             returnable = returnable.toString();
         }
-        return (String)returnable;
+        return (String) returnable;
     }
 
     /* (non-Javadoc)
      * @see org.json.simple.Jsonable#asJsonString() */
     @Override
-    public String toJson(){
+    public String toJson() {
         final StringWriter writable = new StringWriter();
-        try{
+        try {
             this.toJson(writable);
-        }catch (final IOException caught){
+        } catch (final IOException caught) {
             /* See java.io.StringWriter. */
         }
         return writable.toString();
@@ -333,14 +333,14 @@ public class JsonArray extends ArrayList<Object> implements Jsonable{
     /* (non-Javadoc)
      * @see org.json.simple.Jsonable#toJsonString(java.io.Writer) */
     @Override
-    public void toJson(final Writer writable) throws IOException{
+    public void toJson(final Writer writable) throws IOException {
         boolean isFirstElement = true;
         final Iterator<Object> elements = this.iterator();
         writable.write('[');
-        while (elements.hasNext()){
-            if (isFirstElement){
+        while (elements.hasNext()) {
+            if (isFirstElement) {
                 isFirstElement = false;
-            }else{
+            } else {
                 writable.write(',');
             }
             writable.write(Jsoner.serialize(elements.next()));

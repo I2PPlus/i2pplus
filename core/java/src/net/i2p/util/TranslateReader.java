@@ -50,14 +50,19 @@ public class TranslateReader extends FilterReader {
 
     private final String _bundle;
     private final I2PAppContext _ctx;
+
     /** parse in progress */
     private final StringBuilder _inBuf;
+
     /** parsed and translated */
     private final StringBuilder _outBuf;
+
     /** pending string or parameter for translation */
     private final StringBuilder _argBuf;
+
     /** parsed string and parameters */
     private final List<String> _args;
+
     private S _state = S.START;
     private TagHook _hook;
 
@@ -88,17 +93,15 @@ public class TranslateReader extends FilterReader {
     @Override
     public int read() throws IOException {
         int rv = popit();
-        if (rv > 0)
-            return rv;
+        if (rv > 0) return rv;
         return parse();
     }
 
     private int parse() throws IOException {
         while (true) {
             int c = in.read();
-            if (c >= 0)
-                pushit((char) c);
-            //System.err.println("State: " + _state + " char: '" + ((char)c) + "'");
+            if (c >= 0) pushit((char) c);
+            // System.err.println("State: " + _state + " char: '" + ((char)c) + "'");
 
             switch (c) {
                 case -1:
@@ -113,7 +116,7 @@ public class TranslateReader extends FilterReader {
                             break;
                         case BACK:
                             _state = S.QUOTE;
-                            // fall thru
+                        // fall thru
                         case QUOTE:
                             _argBuf.append((char) c);
                             break;
@@ -130,7 +133,7 @@ public class TranslateReader extends FilterReader {
                             break;
                         case BACK:
                             _state = S.QUOTE;
-                            // fall thru
+                        // fall thru
                         case QUOTE:
                             _argBuf.append((char) c);
                             break;
@@ -143,8 +146,7 @@ public class TranslateReader extends FilterReader {
                     switch (_state) {
                         case LPAREN:
                             // got an opening quote for a parameter
-                            if (_args.size() >= MAX_ARGS)
-                                return flushit();
+                            if (_args.size() >= MAX_ARGS) return flushit();
                             _argBuf.setLength(0);
                             _state = S.QUOTE;
                             break;
@@ -182,7 +184,7 @@ public class TranslateReader extends FilterReader {
                     switch (_state) {
                         case BACK:
                             _state = S.QUOTE;
-                            // fall thru
+                        // fall thru
                         case QUOTE:
                             _argBuf.append((char) c);
                             break;
@@ -198,7 +200,7 @@ public class TranslateReader extends FilterReader {
                     switch (_state) {
                         case BACK:
                             _state = S.QUOTE;
-                            // fall thru
+                        // fall thru
                         case QUOTE:
                             _argBuf.append((char) c);
                             break;
@@ -215,7 +217,7 @@ public class TranslateReader extends FilterReader {
                     switch (_state) {
                         case BACK:
                             _state = S.QUOTE;
-                            // fall thru
+                        // fall thru
                         case QUOTE:
                             _argBuf.append((char) c);
                             break;
@@ -232,8 +234,7 @@ public class TranslateReader extends FilterReader {
         for (int i = 0; i < len; i++) {
             int c = read();
             if (c < 0) {
-                if (i == 0)
-                    return -1;
+                if (i == 0) return -1;
                 return i;
             }
             cbuf[off + i] = (char) c;
@@ -246,8 +247,7 @@ public class TranslateReader extends FilterReader {
         for (long i = 0; i < n; i++) {
             int c = read();
             if (c < 0) {
-                if (i == 0)
-                    return -1;
+                if (i == 0) return -1;
                 return i;
             }
         }
@@ -256,7 +256,7 @@ public class TranslateReader extends FilterReader {
 
     @Override
     public boolean ready() throws IOException {
-        return _outBuf.length() > 0 || _inBuf.length() > 0 ||in.ready();
+        return _outBuf.length() > 0 || _inBuf.length() > 0 || in.ready();
     }
 
     @Override
@@ -318,7 +318,7 @@ public class TranslateReader extends FilterReader {
      *  reset state
      */
     private void translate() {
-        //System.err.println("Translating: " + _args.toString());
+        // System.err.println("Translating: " + _args.toString());
         int argCount = _args.size();
         if (argCount <= 0 || argCount > MAX_ARGS) {
             flushit();
@@ -331,10 +331,10 @@ public class TranslateReader extends FilterReader {
             return;
         }
         String tx = null;
-        if (argCount == 1)
-            tx = Translate.getString(_args.get(0), _ctx, _bundle);
+        if (argCount == 1) tx = Translate.getString(_args.get(0), _ctx, _bundle);
         else
-            tx = Translate.getString(_args.get(0), _ctx, _bundle, _args.subList(1, _args.size()).toArray());
+            tx = Translate.getString(
+                    _args.get(0), _ctx, _bundle, _args.subList(1, _args.size()).toArray());
         _outBuf.append(tx);
     }
 
@@ -358,12 +358,10 @@ public class TranslateReader extends FilterReader {
 
         @Override
         public void tag(List<String> args) {
-            if (args.size() <= 0)
-                return;
+            if (args.size() <= 0) return;
             _out.print("\t_t(");
             for (int i = 0; i < args.size(); i++) {
-                if (i > 0)
-                    _out.print(", ");
+                if (i > 0) _out.print(", ");
                 _out.print('"');
                 _out.print(args.get(i).replace("\"", "\\\""));
                 _out.print('"');
@@ -376,8 +374,7 @@ public class TranslateReader extends FilterReader {
         public void close() throws IOException {
             _out.println("    }");
             _out.println("}");
-            if (_out.checkError())
-                throw new IOException();
+            if (_out.checkError()) throw new IOException();
             _out.close();
             System.out.println(_count + " strings written to " + _name);
         }
@@ -388,16 +385,12 @@ public class TranslateReader extends FilterReader {
      */
     public static void main(String[] args) {
         try {
-            if (args.length >= 2 && args[0].equals("test"))
-                test(args[1]);
-            else if (args.length >= 2 && args[0].equals("tag"))
-                tag(args);
+            if (args.length >= 2 && args[0].equals("test")) test(args[1]);
+            else if (args.length >= 2 && args[0].equals("tag")) tag(args);
             else
-                System.err.println("Usage:\n" +
-                                   "\ttest file (output to stdout)\n" +
-                                   "\ttag file (output to file.java)\n" +
-                                   "\ttag dir outfile\n" +
-                                   "\ttag file1 [file2...] outfile");
+                System.err.println(
+                        "Usage:\n" + "\ttest file (output to stdout)\n" + "\ttag file (output to file.java)\n"
+                                + "\ttag dir outfile\n" + "\ttag file1 [file2...] outfile");
         } catch (IOException ioe) {
             throw new RuntimeException(ioe);
         }
@@ -406,16 +399,19 @@ public class TranslateReader extends FilterReader {
     private static void test(String file) throws IOException {
         TranslateReader r = null;
         try {
-            r = new TranslateReader(I2PAppContext.getGlobalContext(),
-                                    "net.i2p.router.web.messages",
-                                    new FileInputStream(file));
+            r = new TranslateReader(
+                    I2PAppContext.getGlobalContext(), "net.i2p.router.web.messages", new FileInputStream(file));
             int c;
             while ((c = r.read()) >= 0) {
-                System.out.print((char)c);
+                System.out.print((char) c);
             }
             System.out.flush();
         } finally {
-            if (r != null) try { r.close(); } catch (IOException ioe) {}
+            if (r != null)
+                try {
+                    r.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 
@@ -431,13 +427,11 @@ public class TranslateReader extends FilterReader {
             outfile = files[2];
             File dir = new File(files[1]);
             File[] listing = dir.listFiles();
-            if (listing == null)
-                throw new IOException();
+            if (listing == null) throw new IOException();
             filelist = new ArrayList<String>(listing.length);
             for (int i = 0; i < listing.length; i++) {
                 File f = listing[i];
-                if (!f.isDirectory())
-                    filelist.add(f.getAbsolutePath());
+                if (!f.isDirectory()) filelist.add(f.getAbsolutePath());
             }
         } else {
             outfile = files[files.length - 1];
@@ -449,9 +443,7 @@ public class TranslateReader extends FilterReader {
             for (String file : filelist) {
                 TranslateReader r = null;
                 try {
-                    r = new TranslateReader(I2PAppContext.getGlobalContext(),
-                                            null,
-                                            new FileInputStream(file));
+                    r = new TranslateReader(I2PAppContext.getGlobalContext(), null, new FileInputStream(file));
                     r._hook = tagger;
                     while (r.read(buf, 0, buf.length) >= 0) {
                         // throw away output

@@ -1,10 +1,11 @@
 package net.i2p.stat;
 
-import java.time.Instant;
-import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
+
+import java.time.Instant;
+import java.util.Properties;
 
 /**
  *  Output rate data.
@@ -12,17 +13,15 @@ import net.i2p.util.Log;
  *  must be compatible.
  */
 class PersistenceHelper {
-    private final static String NL = System.getProperty("line.separator");
+    private static final String NL = System.getProperty("line.separator");
 
-    public final static void add(StringBuilder buf, boolean addComments, String prefix, String name, String description, double value) {
-        if (addComments)
-            buf.append("# ").append(description).append(NL);
-        else
-            buf.append(prefix).append(name).append('=').append(value).append(NL);
+    public static final void add(StringBuilder buf, boolean addComments, String prefix, String name, String description, double value) {
+        if (addComments) buf.append("# ").append(description).append(NL);
+        else buf.append(prefix).append(name).append('=').append(value).append(NL);
     }
 
     /** @since 0.8.5 */
-    public final static void addDate(StringBuilder buf, boolean addComments, String prefix, String name, String description, long value) {
+    public static final void addDate(StringBuilder buf, boolean addComments, String prefix, String name, String description, long value) {
         if (addComments) {
             String when = value > 0 ? Instant.ofEpochMilli(value).toString() : "Never";
             add(buf, true, prefix, name, description + ' ' + when, value);
@@ -32,7 +31,7 @@ class PersistenceHelper {
     }
 
     /** @since 0.8.5 */
-    public final static void addTime(StringBuilder buf, boolean addComments, String prefix, String name, String description, long value) {
+    public static final void addTime(StringBuilder buf, boolean addComments, String prefix, String name, String description, long value) {
         if (addComments) {
             String when = DataHelper.formatDuration(value);
             add(buf, true, prefix, name, description + ' ' + when, value);
@@ -42,17 +41,15 @@ class PersistenceHelper {
     }
 
     /** @param value non-negative */
-    public final static void add(StringBuilder buf, boolean addComments, String prefix, String name, String description, long value) {
-        if (addComments)
-            buf.append("# ").append(description).append(NL);
-        else
-            buf.append(prefix).append(name).append('=').append(value).append(NL);
+    public static final void add(StringBuilder buf, boolean addComments, String prefix, String name, String description, long value) {
+        if (addComments) buf.append("# ").append(description).append(NL);
+        else buf.append(prefix).append(name).append('=').append(value).append(NL);
     }
 
     /**
      *  @return non-negative, returns 0 on error
      */
-    public final static long getLong(Properties props, String prefix, String name) {
+    public static final long getLong(Properties props, String prefix, String name) {
         String val = props.getProperty(prefix + name);
         if (val != null) {
             try {
@@ -69,7 +66,7 @@ class PersistenceHelper {
     /**
      *  @return 0 on error
      */
-    public final static double getDouble(Properties props, String prefix, String name) {
+    public static final double getDouble(Properties props, String prefix, String name) {
         String val = props.getProperty(prefix + name);
         if (val != null) {
             try {
@@ -86,7 +83,7 @@ class PersistenceHelper {
      *  @return non-negative, returns 0 on error
      *  @since 0.8.13
      */
-    public final static int getInt(Properties props, String prefix, String name) {
+    public static final int getInt(Properties props, String prefix, String name) {
         String val = props.getProperty(prefix + name);
         if (val != null) {
             try {
@@ -99,5 +96,4 @@ class PersistenceHelper {
         }
         return 0;
     }
-
 }

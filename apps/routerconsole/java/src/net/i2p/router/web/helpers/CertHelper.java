@@ -1,12 +1,13 @@
 package net.i2p.router.web.helpers;
 
-import java.io.File;
-import java.io.IOException;
 import net.i2p.data.DataHelper;
 import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.web.HelperBase;
 import net.i2p.util.FileSuffixFilter;
 import net.i2p.util.FileUtil;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  *  Dump out our local SSL certs, if any
@@ -28,15 +29,13 @@ public class CertHelper extends HelperBase {
         File configPath = _context.getConfigDir();
         try {
             _out.write("<p class=infohelp>");
-            _out.write(_t("Certificates are used to authenticate encrypted services running on the network, provision optional SSL for hosted services and the router console, " +
-                          "or provide proof of ownership of a router family."));
+            _out.write(_t("Certificates are used to authenticate encrypted services running on the network, provision optional SSL for hosted services and the router console, " + "or provide proof of ownership of a router family."));
             _out.write("</p><h3>");
             _out.write(_t("Local SSL Certificates"));
             _out.write("</h3>\n");
 
             // console
-            output(_t("Router Console") + "<span style=float:right>" +
-                   _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "console" + slash + "</span></span>", new File(dir, CONSOLE));
+            output(_t("Router Console") + "<span style=float:right>" + _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "console" + slash + "</span></span>", new File(dir, CONSOLE));
 
             // I2CP
             output(_t("I2CP"), new File(dir, I2CP));
@@ -50,8 +49,7 @@ public class CertHelper extends HelperBase {
                     File f = tunnels[i];
                     String name = f.getName();
                     String b32 = name.substring(10, name.length() - 10);
-                    output(_t("I2PTunnel") + ": <span class=unbold>" + b32.substring(0,6) + "&hellip; </span><span style=float:right>" +
-                           _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "i2ptunnel" + slash + "</span></span>", f);
+                    output(_t("I2PTunnel") + ": <span class=unbold>" + b32.substring(0, 6) + "&hellip; </span><span style=float:right>" + _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "i2ptunnel" + slash + "</span></span>", f);
                     hasTunnels = true;
                 }
             }
@@ -63,8 +61,7 @@ public class CertHelper extends HelperBase {
             if (tunnels != null) {
                 for (int i = 0; i < tunnels.length; i++) {
                     File f = tunnels[i];
-                    output(_t("SAM") + "<span style=float:right>" +
-                           _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "sam" + slash + "</span></span>", f);
+                    output(_t("SAM") + "<span style=float:right>" + _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "sam" + slash + "</span></span>", f);
                     hasTunnels = true;
                 }
             }
@@ -77,8 +74,7 @@ public class CertHelper extends HelperBase {
                 for (int i = 0; i < tunnels.length; i++) {
                     File f = tunnels[i];
                     String name = f.getName();
-                    output(_t("Website") + ": <span class=unbold>" + name.substring(0, name.length() - 4) + "</span><span style=float:right>" +
-                           _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "eepsite" + slash + "</span></span>", f);
+                    output(_t("Website") + ": <span class=unbold>" + name.substring(0, name.length() - 4) + "</span><span style=float:right>" + _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "eepsite" + slash + "</span></span>", f);
                     hasTunnels = true;
                 }
             }
@@ -91,11 +87,12 @@ public class CertHelper extends HelperBase {
                 _out.write("</h3>\n");
                 File f = new File(dir, "family");
                 f = new File(f, family + ".crt");
-                output(_t("Family") + ": <span class=unbold>" + DataHelper.escapeHTML(family) + "</span><span style=float:right>" +
-                       _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "family" + slash + "</span></span>", f);
+                output(_t("Family") + ": <span class=unbold>" + DataHelper.escapeHTML(family) + "</span><span style=float:right>" + _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "family" + slash + "</span></span>", f);
             }
             // anything else? plugins?
-        } catch (IOException ioe) {ioe.printStackTrace();}
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
         return "";
     }
 
@@ -123,9 +120,7 @@ public class CertHelper extends HelperBase {
             _out.write(_t("Router Console"));
             _out.write("</h4>");
             _out.write("<p class=infohelp>");
-            _out.write(_t("To enable SSL access for the Router Console, see the commented <code>clients.config</code> file " +
-                          "located in your I2P application directory for more information. You will need to edit the " +
-                          "RouterConsoleRunner config file located in the directory: ").replace("I2P", "I2P+"));
+            _out.write(_t("To enable SSL access for the Router Console, see the commented <code>clients.config</code> file " + "located in your I2P application directory for more information. You will need to edit the " + "RouterConsoleRunner config file located in the directory: ").replace("I2P", "I2P+"));
             _out.write("<code>" + configPath + slash + "clients.config.d" + slash + "</code>.");
             _out.write("</p>\n");
         }

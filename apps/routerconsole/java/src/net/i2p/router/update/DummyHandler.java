@@ -1,10 +1,11 @@
 package net.i2p.router.update;
 
+import net.i2p.router.RouterContext;
+import net.i2p.update.*;
+
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
-import net.i2p.router.RouterContext;
-import net.i2p.update.*;
 
 /**
  * Dummy to lock up the updates for a period of time
@@ -23,20 +24,16 @@ class DummyHandler implements Checker, Updater {
     /**
      *  Spins off an UpdateTask that sleeps
      */
-    public UpdateTask check(UpdateType type, UpdateMethod method,
-                            String id, String currentVersion, long maxTime) {
-        if (type != UpdateType.TYPE_DUMMY)
-            return null;
+    public UpdateTask check(UpdateType type, UpdateMethod method, String id, String currentVersion, long maxTime) {
+        if (type != UpdateType.TYPE_DUMMY) return null;
         return new DummyRunner(_context, _mgr, maxTime);
     }
 
     /**
      *  Spins off an UpdateTask that sleeps
      */
-    public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources,
-                             String id, String newVersion, long maxTime) {
-        if (type != UpdateType.TYPE_DUMMY)
-            return null;
+    public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources, String id, String newVersion, long maxTime) {
+        if (type != UpdateType.TYPE_DUMMY) return null;
         return new DummyRunner(_context, _mgr, maxTime);
     }
 
@@ -47,18 +44,21 @@ class DummyHandler implements Checker, Updater {
         private final long _delay;
 
         public DummyRunner(RouterContext ctx, ConsoleUpdateManager mgr, long maxTime) {
-            super(ctx, mgr, UpdateType.TYPE_DUMMY, Collections.<URI> emptyList());
+            super(ctx, mgr, UpdateType.TYPE_DUMMY, Collections.<URI>emptyList());
             _delay = maxTime;
         }
 
         @Override
-        public UpdateMethod getMethod() { return UpdateMethod.METHOD_DUMMY; }
+        public UpdateMethod getMethod() {
+            return UpdateMethod.METHOD_DUMMY;
+        }
 
         @Override
         protected void update() {
             try {
                 Thread.sleep(_delay);
-            } catch (InterruptedException ie) {}
+            } catch (InterruptedException ie) {
+            }
             _mgr.notifyCheckComplete(this, false, false);
             _mgr.notifyTaskFailed(this, "dummy", null);
         }

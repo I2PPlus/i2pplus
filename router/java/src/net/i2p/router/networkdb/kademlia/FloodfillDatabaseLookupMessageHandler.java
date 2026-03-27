@@ -1,4 +1,5 @@
 package net.i2p.router.networkdb.kademlia;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,21 +9,22 @@ package net.i2p.router.networkdb.kademlia;
  *
  */
 
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.DatabaseLookupMessage;
-import net.i2p.stat.RateConstants;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.data.router.RouterAddress;
+import net.i2p.router.BanLogger;
 import net.i2p.router.HandlerJobBuilder;
 import net.i2p.router.Job;
 import net.i2p.router.RouterContext;
-import net.i2p.router.BanLogger;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.RandomSource;
+
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Handler for DatabaseLookupMessage received on floodfills.
@@ -99,10 +101,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         final boolean isRISearch = type == DatabaseLookupMessage.Type.RI;
         final int keyLength = isRISearch ? 6 : 8;
         final boolean isDirect = dlm.getReplyTunnel() == null;
-        final boolean isBanned = dlm.getFrom() != null &&
-            (_context.banlist().isBanlisted(dlm.getFrom()) ||
-             _context.banlist().isBanlistedHostile(dlm.getFrom()) ||
-             _context.banlist().isBanlistedForever(dlm.getFrom()));
+        final boolean isBanned = dlm.getFrom() != null && (_context.banlist().isBanlisted(dlm.getFrom()) || _context.banlist().isBanlistedHostile(dlm.getFrom()) || _context.banlist().isBanlistedForever(dlm.getFrom()));
 
         RouterInfo info = (RouterInfo) _context.netDb().lookupLocally(dlm.getFrom());
         final String caps = info != null ? info.getCapabilities() : "";
@@ -119,23 +118,25 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         final long bantime = _context.clock().now() + 30 * 60 * 1000;
 
         DatabaseLookupMessage processedDLM = preProcessDatabaseLookup(dlm, fromHash);
-        if (processedDLM == null) {return null;}
+        if (processedDLM == null) {
+            return null;
+        }
 
-        if (shouldBan && uptime > 5*60*1000) {
+        if (shouldBan && uptime > 5 * 60 * 1000) {
             if (dlm.getFrom() != null) {
                 String ipPort = getIPFromHash(dlm.getFrom());
-                _context.banlist().banlistRouter(dlm.getFrom(), " <b>➜</b> Excessive lookups" + (isFF ? " (Floodfill)" : ""),
-                                                 null, null, bantime);
+                _context.banlist().banlistRouter(dlm.getFrom(), " <b>➜</b> Excessive lookups" + (isFF ? " (Floodfill)" : ""), null, null, bantime);
                 _banLogger.logBan(dlm.getFrom(), ipPort != null ? ipPort : "UNKNOWN", "Excessive lookups" + (isFF ? " (Floodfill)" : ""), bantime);
                 _context.commSystem().mayDisconnect(dlm.getFrom());
             }
 
             if (_log.shouldWarn() && dlm.getFrom() != null && _loggedBans.add(dlm.getFrom())) {
                 StringBuilder message = new StringBuilder(128);
-                message.append("Dropping ").append(isDirect ? "direct " : "").append(searchType).append(" lookup from ")
-                       .append(isFF ? "floodfill ": "").append("[").append(fromBase64.substring(0,6)).append("]");
+                message.append("Dropping ").append(isDirect ? "direct " : "").append(searchType).append(" lookup from ").append(isFF ? "floodfill " : "").append("[").append(fromBase64.substring(0, 6)).append("]");
 
-                if (!isDirect && _log.shouldInfo()) {message.append(" via [TunnelId ").append(dlm.getReplyTunnel()).append("]");}
+                if (!isDirect && _log.shouldInfo()) {
+                    message.append(" via [TunnelId ").append(dlm.getReplyTunnel()).append("]");
+                }
                 message.append(" and banning for 10m -> Max 60 requests in 30s or 10/s exceeded");
                 _log.warn(message.toString());
             }
@@ -175,11 +176,9 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
 
             if (_log.shouldInfo()) {
                 if (dlm.getReplyTunnel() != null) {
-                    _log.info("Replying to " + searchType + " lookup from [" + fromBase64.substring(0,6) + "] for [" +
-                              searchKeyBase64.substring(0, keyLength) + "] via [TunnelId " + dlm.getReplyTunnel() + "]");
+                    _log.info("Replying to " + searchType + " lookup from [" + fromBase64.substring(0, 6) + "] for [" + searchKeyBase64.substring(0, keyLength) + "] via [TunnelId " + dlm.getReplyTunnel() + "]");
                 } else {
-                    _log.info("Replying to direct " + searchType + " lookup from [" + fromBase64.substring(0,6) + "] for [" +
-                              searchKeyBase64.substring(0, keyLength) + "]");
+                    _log.info("Replying to direct " + searchType + " lookup from [" + fromBase64.substring(0, 6) + "] for [" + searchKeyBase64.substring(0, keyLength) + "]");
                 }
             }
             return new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash, _msgIDBloomXor);
@@ -208,14 +207,16 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             if (dlm.getFrom().equals(_context.routerHash())) {
                 if (fromHash != null) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Fixing direct " + searchType + " lookup from us, actually from [" + fromHash.toBase64().substring(0,6) + "]");
+                        _log.warn("Fixing direct " + searchType + " lookup from us, actually from [" + fromHash.toBase64().substring(0, 6) + "]");
                     }
                     DatabaseLookupMessage newdlm = new DatabaseLookupMessage(_context);
                     newdlm.setFrom(fromHash);
                     newdlm.setSearchType(dlm.getSearchType());
                     newdlm.setSearchKey(dlm.getSearchKey());
                     Set<Hash> dont = dlm.getDontIncludePeers();
-                    if (dont != null) {newdlm.setDontIncludePeers(dont);}
+                    if (dont != null) {
+                        newdlm.setDontIncludePeers(dont);
+                    }
                     return newdlm;
                 } else {
                     if (_log.shouldWarn()) {
@@ -227,12 +228,11 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             }
 
             // Block direct EXPL/ANY lookups from floodfills
-            if (dlm.getSearchType() == DatabaseLookupMessage.Type.EXPL ||
-                dlm.getSearchType() == DatabaseLookupMessage.Type.ANY) {
+            if (dlm.getSearchType() == DatabaseLookupMessage.Type.EXPL || dlm.getSearchType() == DatabaseLookupMessage.Type.ANY) {
                 RouterInfo to = _facade.lookupRouterInfoLocally(dlm.getFrom());
                 if (to != null && to.getCapabilities().indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Dropping direct " + searchType + " lookup from floodfill [" + dlm.getFrom().toBase64().substring(0,6) + "]");
+                        _log.warn("Dropping direct " + searchType + " lookup from floodfill [" + dlm.getFrom().toBase64().substring(0, 6) + "]");
                     }
                     _context.statManager().addRateData("netDb.lookupsDropped", 1);
                     return null;
@@ -257,16 +257,17 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
      * @param isBanned true if the sender router is banned
      * @param maxLookups max allowed lookups in time window for floodfill or non-floodfill
      */
-    private void logDroppedLookup(String searchType, String fromBase64, String searchKeyBase64, int keyLength, boolean isFF,
-                                  boolean floodfillMode, boolean isDirect, boolean isBanned, int maxLookups) {
-        if (!_log.shouldInfo() || isBanned) {return;}
+    private void logDroppedLookup(String searchType, String fromBase64, String searchKeyBase64, int keyLength, boolean isFF, boolean floodfillMode, boolean isDirect, boolean isBanned, int maxLookups) {
+        if (!_log.shouldInfo() || isBanned) {
+            return;
+        }
         StringBuilder msg = new StringBuilder(128);
-        msg.append("Dropping ").append(isDirect ? "direct " : "").append(searchType)
-           .append(" lookup from ").append(isFF? "floodfill " : "").append("[").append(fromBase64.substring(0,6)).append("]")
-           .append(" for [").append(searchKeyBase64, 0, keyLength).append("]");
-        if (!floodfillMode) {msg.append(" -> We are not a floodfill");}
-        else if (!isFF) {msg.append(" -> Max ").append(maxLookups).append(" requests in 3m or 5/s exceeded");}
-        else if (isFF && !isDirect) {
+        msg.append("Dropping ").append(isDirect ? "direct " : "").append(searchType).append(" lookup from ").append(isFF ? "floodfill " : "").append("[").append(fromBase64.substring(0, 6)).append("]").append(" for [").append(searchKeyBase64, 0, keyLength).append("]");
+        if (!floodfillMode) {
+            msg.append(" -> We are not a floodfill");
+        } else if (!isFF) {
+            msg.append(" -> Max ").append(maxLookups).append(" requests in 3m or 5/s exceeded");
+        } else if (isFF && !isDirect) {
             msg.append(" -> Max ").append(maxLookups).append(" requests in 3m or 5/s exceeded");
         } else if (isFF && isDirect && (searchType.equals("ANY") || searchType.equals("EXPL"))) {
             msg.append(" -> Direct search for Exploratory or Any from floodfill");
@@ -289,11 +290,8 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
      *
      * @since 0.9.67+
      */
-    private boolean shouldAcceptLookup(boolean isSenderUs, boolean shouldThrottle, boolean shouldBan,
-                                       boolean ourRI, boolean floodfillMode, boolean isFF,
-                                       DatabaseLookupMessage.Type type) {
-        return isSenderUs || (!shouldThrottle && !shouldBan && (ourRI || (floodfillMode && !isFF) ||
-               (floodfillMode && isFF && type != DatabaseLookupMessage.Type.EXPL && type != DatabaseLookupMessage.Type.ANY)));
+    private boolean shouldAcceptLookup(boolean isSenderUs, boolean shouldThrottle, boolean shouldBan, boolean ourRI, boolean floodfillMode, boolean isFF, DatabaseLookupMessage.Type type) {
+        return isSenderUs || (!shouldThrottle && !shouldBan && (ourRI || (floodfillMode && !isFF) || (floodfillMode && isFF && type != DatabaseLookupMessage.Type.EXPL && type != DatabaseLookupMessage.Type.ANY)));
     }
 
     /**
@@ -307,10 +305,10 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
     private static String typeToString(DatabaseLookupMessage.Type type) {
         switch (type) {
             case EXPL: return "Exploratory";
-            case RI:   return "RouterInfo";
-            case LS:   return "LeaseSet";
-            case ANY:  return "Any";
-            default:   return "";
+            case RI: return "RouterInfo";
+            case LS: return "LeaseSet";
+            case ANY: return "Any";
+            default: return "";
         }
     }
 
@@ -331,8 +329,9 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                     }
                 }
             }
-        } catch (Exception e) {if (_log.shouldDebug()) _log.debug("Ignored", e);}
+        } catch (Exception e) {
+            if (_log.shouldDebug()) _log.debug("Ignored", e);
+        }
         return null;
     }
-
 }

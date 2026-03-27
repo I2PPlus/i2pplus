@@ -69,9 +69,7 @@ public class Lease2 extends Lease {
         if (object == this) return true;
         if ((object == null) || !(object instanceof Lease2)) return false;
         Lease2 lse = (Lease2) object;
-        return _end == lse.getEndTime() &&
-                       DataHelper.eq(_tunnelId, lse.getTunnelId()) &&
-                       DataHelper.eq(_gateway, lse.getGateway());
+        return _end == lse.getEndTime() && DataHelper.eq(_tunnelId, lse.getTunnelId()) && DataHelper.eq(_gateway, lse.getGateway());
     }
 
     @Override

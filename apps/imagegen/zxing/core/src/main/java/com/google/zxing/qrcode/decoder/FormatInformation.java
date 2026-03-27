@@ -28,9 +28,9 @@ final class FormatInformation {
 
     private static final int FORMAT_INFO_MASK_QR = 0x5412;
 
-  /**
-   * See ISO 18004:2006, Annex C, Table C.1
-   */
+    /**
+     * See ISO 18004:2006, Annex C, Table C.1
+     */
     private static final int[][] FORMAT_INFO_DECODE_LOOKUP = {
         {0x5412, 0x00},
         {0x5125, 0x01},
@@ -70,9 +70,9 @@ final class FormatInformation {
     private final byte dataMask;
 
     private FormatInformation(int formatInfo) {
-    // Bits 3,4
+        // Bits 3,4
         errorCorrectionLevel = ErrorCorrectionLevel.forBits((formatInfo >> 3) & 0x03);
-    // Bottom 3 bits
+        // Bottom 3 bits
         dataMask = (byte) (formatInfo & 0x07);
     }
 
@@ -80,33 +80,32 @@ final class FormatInformation {
         return Integer.bitCount(a ^ b);
     }
 
-  /**
-   * @param maskedFormatInfo1 format info indicator, with mask still applied
-   * @param maskedFormatInfo2 second copy of same info; both are checked at the same time
-   *  to establish best match
-   * @return information about the format it specifies, or {@code null}
-   *  if doesn't seem to match any known pattern
-   */
+    /**
+     * @param maskedFormatInfo1 format info indicator, with mask still applied
+     * @param maskedFormatInfo2 second copy of same info; both are checked at the same time
+     *  to establish best match
+     * @return information about the format it specifies, or {@code null}
+     *  if doesn't seem to match any known pattern
+     */
     static FormatInformation decodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2) {
         FormatInformation formatInfo = doDecodeFormatInformation(maskedFormatInfo1, maskedFormatInfo2);
         if (formatInfo != null) {
             return formatInfo;
         }
-    // Should return null, but, some QR codes apparently
-    // do not mask this info. Try again by actually masking the pattern
-    // first
-        return doDecodeFormatInformation(maskedFormatInfo1 ^ FORMAT_INFO_MASK_QR,
-                                     maskedFormatInfo2 ^ FORMAT_INFO_MASK_QR);
+        // Should return null, but, some QR codes apparently
+        // do not mask this info. Try again by actually masking the pattern
+        // first
+        return doDecodeFormatInformation(maskedFormatInfo1 ^ FORMAT_INFO_MASK_QR, maskedFormatInfo2 ^ FORMAT_INFO_MASK_QR);
     }
 
     private static FormatInformation doDecodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2) {
-    // Find the int in FORMAT_INFO_DECODE_LOOKUP with fewest bits differing
+        // Find the int in FORMAT_INFO_DECODE_LOOKUP with fewest bits differing
         int bestDifference = Integer.MAX_VALUE;
         int bestFormatInfo = 0;
         for (int[] decodeInfo : FORMAT_INFO_DECODE_LOOKUP) {
             int targetInfo = decodeInfo[0];
             if (targetInfo == maskedFormatInfo1 || targetInfo == maskedFormatInfo2) {
-        // Found an exact match
+                // Found an exact match
                 return new FormatInformation(decodeInfo[1]);
             }
             int bitsDifference = numBitsDiffering(maskedFormatInfo1, targetInfo);
@@ -115,7 +114,7 @@ final class FormatInformation {
                 bestDifference = bitsDifference;
             }
             if (maskedFormatInfo1 != maskedFormatInfo2) {
-        // also try the other option
+                // also try the other option
                 bitsDifference = numBitsDiffering(maskedFormatInfo2, targetInfo);
                 if (bitsDifference < bestDifference) {
                     bestFormatInfo = decodeInfo[1];
@@ -123,8 +122,8 @@ final class FormatInformation {
                 }
             }
         }
-    // Hamming distance of the 32 masked codes is 7, by construction, so <= 3 bits
-    // differing means we found a match
+        // Hamming distance of the 32 masked codes is 7, by construction, so <= 3 bits
+        // differing means we found a match
         if (bestDifference <= 3) {
             return new FormatInformation(bestFormatInfo);
         }
@@ -140,18 +139,16 @@ final class FormatInformation {
     }
 
     @Override
-  public int hashCode() {
+    public int hashCode() {
         return (errorCorrectionLevel.ordinal() << 3) | dataMask;
     }
 
     @Override
-  public boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (!(o instanceof FormatInformation)) {
             return false;
         }
         FormatInformation other = (FormatInformation) o;
-        return this.errorCorrectionLevel == other.errorCorrectionLevel &&
-            this.dataMask == other.dataMask;
+        return this.errorCorrectionLevel == other.errorCorrectionLevel && this.dataMask == other.dataMask;
     }
-
 }

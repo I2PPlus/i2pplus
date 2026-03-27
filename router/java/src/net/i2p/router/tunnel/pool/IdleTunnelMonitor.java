@@ -1,16 +1,16 @@
 package net.i2p.router.tunnel.pool;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Monitors transit tunnels for idle behavior.
@@ -119,8 +119,7 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
                 idleTunnelsByPeer.computeIfAbsent(peer, k -> new ArrayList<>()).add(tunnel);
 
                 if (_log.shouldDebug()) {
-                    _log.debug("Detected idle tunnel from peer [" + peer.toBase64().substring(0, 6) +
-                              "] -> Age: " + (age/1000) + "s [" + messages + (messages > 1 ? " messages" : " message") + "]");
+                    _log.debug("Detected idle tunnel from peer [" + peer.toBase64().substring(0, 6) + "] -> Age: " + (age / 1000) + "s [" + messages + (messages > 1 ? " messages" : " message") + "]");
                 }
             }
         }
@@ -176,8 +175,7 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
             }
 
             if (_log.shouldDebug()) {
-                _log.debug("Dropped idle tunnel [" + tunnel.getReceiveTunnelId() +
-                          "] -> Messages: " + tunnel.getProcessedMessagesCount());
+                _log.debug("Dropped idle tunnel [" + tunnel.getReceiveTunnelId() + "] -> Messages: " + tunnel.getProcessedMessagesCount());
             }
         } catch (Exception e) {
             if (_log.shouldWarn()) {

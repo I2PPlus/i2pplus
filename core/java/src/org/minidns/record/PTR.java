@@ -10,10 +10,11 @@
  */
 package org.minidns.record;
 
-import java.io.DataInputStream;
-import java.io.IOException;
 import org.minidns.dnsname.DnsName;
 import org.minidns.record.Record.TYPE;
+
+import java.io.DataInputStream;
+import java.io.IOException;
 
 /**
  * DNS PTR (Pointer) record payload.<br>
@@ -39,5 +40,4 @@ public class PTR extends RRWithTarget {
     public TYPE getType() {
         return TYPE.PTR;
     }
-
 }

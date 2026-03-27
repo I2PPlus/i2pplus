@@ -14,6 +14,7 @@ public interface RouterThrottle {
      *
      */
     public boolean acceptNetworkMessage();
+
     /**
      * Should we accept the request to participate in the given tunnel,
      * taking into account our current load and bandwidth usage commitments?
@@ -21,6 +22,7 @@ public interface RouterThrottle {
      * @return 0 if it should be accepted, higher values for more severe rejection
      */
     public int acceptTunnelRequest();
+
     /**
      * Should we accept the netDb lookup message, replying either with the
      * value or some closer peers, or should we simply drop it due to overload?
@@ -30,6 +32,7 @@ public interface RouterThrottle {
 
     /** How backed up we are at the moment processing messages (in milliseconds) */
     public long getMessageDelay();
+
     /** How backed up our tunnels are at the moment (in milliseconds) */
     public long getTunnelLag();
 
@@ -37,6 +40,7 @@ public interface RouterThrottle {
      * Message on the state of participating tunnel acceptance
      */
     public String getTunnelStatus();
+
     public void setTunnelStatus(String msg);
 
     /**

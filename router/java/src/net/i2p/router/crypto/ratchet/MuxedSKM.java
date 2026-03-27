@@ -1,9 +1,5 @@
 package net.i2p.router.crypto.ratchet;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.crypto.TagSetHandle;
@@ -11,6 +7,11 @@ import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
 import net.i2p.router.crypto.TransientSessionKeyManager;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Multiplexed session key manager combining ECIES and post-quantum key management
@@ -32,9 +33,13 @@ public class MuxedSKM extends SessionKeyManager {
         _ec = ec;
     }
 
-    public TransientSessionKeyManager getElgSKM() { return _elg; }
+    public TransientSessionKeyManager getElgSKM() {
+        return _elg;
+    }
 
-    public RatchetSKM getECSKM() { return _ec; }
+    public RatchetSKM getECSKM() {
+        return _ec;
+    }
 
     /**
      *  Should we try the Ratchet slow decrypt before ElG slow decrypt?
@@ -46,9 +51,7 @@ public class MuxedSKM extends SessionKeyManager {
     boolean preferRatchet() {
         int ec = _ecCounter.get();
         int elg = _elgCounter.get();
-        if (ec > RESTART_COUNTERS / 10 &&
-            elg > RESTART_COUNTERS / 10 &&
-            ec + elg > RESTART_COUNTERS) {
+        if (ec > RESTART_COUNTERS / 10 && elg > RESTART_COUNTERS / 10 && ec + elg > RESTART_COUNTERS) {
             _ecCounter.set(0);
             _elgCounter.set(0);
             return true;
@@ -65,10 +68,8 @@ public class MuxedSKM extends SessionKeyManager {
      */
     void reportDecryptResult(boolean isRatchet, boolean success) {
         if (success) {
-            if (isRatchet)
-                _ecCounter.incrementAndGet();
-            else
-                _elgCounter.incrementAndGet();
+            if (isRatchet) _ecCounter.incrementAndGet();
+            else _elgCounter.incrementAndGet();
         }
     }
 
@@ -78,8 +79,7 @@ public class MuxedSKM extends SessionKeyManager {
     @Override
     public SessionKey getCurrentKey(PublicKey target) {
         EncType type = target.getType();
-        if (type == EncType.ELGAMAL_2048)
-            return _elg.getCurrentKey(target);
+        if (type == EncType.ELGAMAL_2048) return _elg.getCurrentKey(target);
         return null;
     }
 
@@ -89,8 +89,7 @@ public class MuxedSKM extends SessionKeyManager {
     @Override
     public SessionKey getCurrentOrNewKey(PublicKey target) {
         EncType type = target.getType();
-        if (type == EncType.ELGAMAL_2048)
-            return _elg.getCurrentOrNewKey(target);
+        if (type == EncType.ELGAMAL_2048) return _elg.getCurrentOrNewKey(target);
         return null;
     }
 
@@ -100,10 +99,8 @@ public class MuxedSKM extends SessionKeyManager {
     @Override
     public void createSession(PublicKey target, SessionKey key) {
         EncType type = target.getType();
-        if (type == EncType.ELGAMAL_2048)
-            _elg.createSession(target, key);
-        else
-            throw new IllegalArgumentException();
+        if (type == EncType.ELGAMAL_2048) _elg.createSession(target, key);
+        else throw new IllegalArgumentException();
     }
 
     /**
@@ -112,8 +109,7 @@ public class MuxedSKM extends SessionKeyManager {
     @Override
     public SessionKey createSession(PublicKey target) {
         EncType type = target.getType();
-        if (type == EncType.ELGAMAL_2048)
-            return _elg.createSession(target);
+        if (type == EncType.ELGAMAL_2048) return _elg.createSession(target);
         return null;
     }
 
@@ -123,8 +119,7 @@ public class MuxedSKM extends SessionKeyManager {
     @Override
     public SessionTag consumeNextAvailableTag(PublicKey target, SessionKey key) {
         EncType type = target.getType();
-        if (type == EncType.ELGAMAL_2048)
-            return _elg.consumeNextAvailableTag(target, key);
+        if (type == EncType.ELGAMAL_2048) return _elg.consumeNextAvailableTag(target, key);
         return null;
     }
 
@@ -133,16 +128,20 @@ public class MuxedSKM extends SessionKeyManager {
      */
     public RatchetEntry consumeNextAvailableTag(PublicKey target) {
         EncType type = target.getType();
-        if (type == EncType.ECIES_X25519)
-            return _ec.consumeNextAvailableTag(target);
+        if (type == EncType.ECIES_X25519) return _ec.consumeNextAvailableTag(target);
         return null;
     }
 
     @Override
-    public int getTagsToSend() { return 0; };
+    public int getTagsToSend() {
+        return 0;
+    }
 
     @Override
-    public int getLowThreshold() { return 0; };
+    public int getLowThreshold() {
+        return 0;
+    }
+    
 
     /**
      *  ElG only
@@ -150,8 +149,7 @@ public class MuxedSKM extends SessionKeyManager {
     @Override
     public boolean shouldSendTags(PublicKey target, SessionKey key) {
         EncType type = target.getType();
-        if (type == EncType.ELGAMAL_2048)
-            return _elg.shouldSendTags(target, key);
+        if (type == EncType.ELGAMAL_2048) return _elg.shouldSendTags(target, key);
         return false;
     }
 
@@ -161,28 +159,23 @@ public class MuxedSKM extends SessionKeyManager {
     @Override
     public boolean shouldSendTags(PublicKey target, SessionKey key, int lowThreshold) {
         EncType type = target.getType();
-        if (type == EncType.ELGAMAL_2048)
-            return _elg.shouldSendTags(target, key, lowThreshold);
+        if (type == EncType.ELGAMAL_2048) return _elg.shouldSendTags(target, key, lowThreshold);
         return false;
     }
 
     @Override
     public int getAvailableTags(PublicKey target, SessionKey key) {
         EncType type = target.getType();
-        if (type == EncType.ELGAMAL_2048)
-            return _elg.getAvailableTags(target, key);
-        if (type == EncType.ECIES_X25519)
-            return _ec.getAvailableTags(target, key);
+        if (type == EncType.ELGAMAL_2048) return _elg.getAvailableTags(target, key);
+        if (type == EncType.ECIES_X25519) return _ec.getAvailableTags(target, key);
         return 0;
     }
 
     @Override
     public long getAvailableTimeLeft(PublicKey target, SessionKey key) {
         EncType type = target.getType();
-        if (type == EncType.ELGAMAL_2048)
-            return _elg.getAvailableTimeLeft(target, key);
-        if (type == EncType.ECIES_X25519)
-            return _ec.getAvailableTimeLeft(target, key);
+        if (type == EncType.ELGAMAL_2048) return _elg.getAvailableTimeLeft(target, key);
+        if (type == EncType.ECIES_X25519) return _ec.getAvailableTimeLeft(target, key);
         return 0;
     }
 
@@ -192,8 +185,7 @@ public class MuxedSKM extends SessionKeyManager {
     @Override
     public TagSetHandle tagsDelivered(PublicKey target, SessionKey key, Set<SessionTag> sessionTags) {
         EncType type = target.getType();
-        if (type == EncType.ELGAMAL_2048)
-            return _elg.tagsDelivered(target, key, sessionTags);
+        if (type == EncType.ELGAMAL_2048) return _elg.tagsDelivered(target, key, sessionTags);
         return null;
     }
 
@@ -251,8 +243,7 @@ public class MuxedSKM extends SessionKeyManager {
     @Override
     public void failTags(PublicKey target, SessionKey key, TagSetHandle ts) {
         EncType type = target.getType();
-        if (type == EncType.ELGAMAL_2048)
-            _elg.failTags(target, key, ts);
+        if (type == EncType.ELGAMAL_2048) _elg.failTags(target, key, ts);
     }
 
     /**
@@ -261,7 +252,6 @@ public class MuxedSKM extends SessionKeyManager {
     @Override
     public void tagsAcked(PublicKey target, SessionKey key, TagSetHandle ts) {
         EncType type = target.getType();
-        if (type == EncType.ELGAMAL_2048)
-            _elg.tagsAcked(target, key, ts);
+        if (type == EncType.ELGAMAL_2048) _elg.tagsAcked(target, key, ts);
     }
 }

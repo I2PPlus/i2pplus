@@ -10,14 +10,15 @@
  */
 package org.minidns.dnsmessage;
 
+import org.minidns.dnsname.DnsName;
+import org.minidns.record.Record.CLASS;
+import org.minidns.record.Record.TYPE;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
-import org.minidns.dnsname.DnsName;
-import org.minidns.record.Record.CLASS;
-import org.minidns.record.Record.TYPE;
 
 /**
  * A DNS question (request).

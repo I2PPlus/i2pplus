@@ -29,7 +29,7 @@ public class Ed25519TestVectors {
         public byte[] sig;
 
         public TestTuple(String line) {
-            caseNum =++numCases;
+            caseNum = ++numCases;
             String[] x = line.split(":");
             seed = Utils.hexToBytes(x[0].substring(0, 64));
             pk = Utils.hexToBytes(x[1]);
@@ -45,8 +45,7 @@ public class Ed25519TestVectors {
         BufferedReader file = null;
         try {
             InputStream is = Ed25519TestVectors.class.getResourceAsStream(fileName);
-            if (is == null)
-                throw new IOException("Resource not found: " + fileName);
+            if (is == null) throw new IOException("Resource not found: " + fileName);
             file = new BufferedReader(new InputStreamReader(is));
             String line;
             while ((line = file.readLine()) != null) {
@@ -55,7 +54,10 @@ public class Ed25519TestVectors {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (file != null) try { file.close(); } catch (IOException e) {}
+            if (file != null) try {
+                    file.close();
+                } catch (IOException e) {
+                }
         }
         return testCases;
     }

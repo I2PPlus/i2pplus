@@ -1,4 +1,5 @@
 package net.i2p.router.transport;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -11,15 +12,6 @@ package net.i2p.router.transport;
 /**
  * Tracks the status of outbound messages.
  */
-
-import java.io.IOException;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.Job;
 import net.i2p.router.MessageSelector;
@@ -30,15 +22,27 @@ import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /**
  *  Tracks outbound messages.
  */
 public class OutboundMessageRegistry {
     private final Log _log;
+
     /** list of currently active MessageSelector instances */
     private final List<MessageSelector> _selectors;
+
     /** map of active MessageSelector to either an OutNetMessage or a List of OutNetMessages causing it (for quick removal) */
     private final Map<MessageSelector, Object> _selectorToMessage;
+
     /**
      *  set of active OutNetMessage (for quick removal and selector fetching)
      *  !! Really? seems only for dup detection in registerPending().
@@ -48,6 +52,7 @@ public class OutboundMessageRegistry {
      *  But in TransportImpl.afterSend() it does requeue a previous ONM if allowRequeue=true.
      */
     private final Set<OutNetMessage> _activeMessages;
+
     private final CleanupTask _cleanupTask;
     private final RouterContext _context;
 
@@ -102,7 +107,7 @@ public class OutboundMessageRegistry {
 
         synchronized (_selectors) {
             // ConcurrentModificationException - why?
-            //for (Iterator<MessageSelector> iter = _selectors.iterator(); iter.hasNext();) {
+            // for (Iterator<MessageSelector> iter = _selectors.iterator(); iter.hasNext();) {
             //    MessageSelector sel = iter.next();
             for (int i = 0; i < _selectors.size(); i++) {
                 MessageSelector sel = _selectors.get(i);
@@ -113,7 +118,7 @@ public class OutboundMessageRegistry {
                     if (!sel.continueMatching()) {
                         if (removedSelectors == null) removedSelectors = new ArrayList<MessageSelector>(1);
                         removedSelectors.add(sel);
-                        //iter.remove();
+                        // iter.remove();
                         _selectors.remove(i);
                         i--;
                     }
@@ -138,10 +143,10 @@ public class OutboundMessageRegistry {
                     }
 
                     if (o instanceof OutNetMessage) {
-                        msg = (OutNetMessage)o;
+                        msg = (OutNetMessage) o;
                         rv.add(msg);
                     } else if (o instanceof List) {
-                        msgs = (List<OutNetMessage>)o;
+                        msgs = (List<OutNetMessage>) o;
                         rv.addAll(msgs);
                     }
                 }
@@ -175,9 +180,7 @@ public class OutboundMessageRegistry {
         msg.setOnReplyJob(onReply);
         msg.setReplySelector(replySelector);
         registerPending(msg, true);
-        if (_log.shouldDebug())
-            _log.debug("Registered: " + replySelector + " with reply job " + onReply +
-                       " and timeout job " + onTimeout);
+        if (_log.shouldDebug()) _log.debug("Registered: " + replySelector + " with reply job " + onReply + " and timeout job " + onTimeout);
         return msg;
     }
 
@@ -188,41 +191,42 @@ public class OutboundMessageRegistry {
      *
      *  @param msg msg.getMessage() and msg.getReplySelector() must be non-null
      */
-    public void registerPending(OutNetMessage msg) { registerPending(msg, false); }
+    public void registerPending(OutNetMessage msg) {
+        registerPending(msg, false);
+    }
 
     /**
      *  @param allowEmpty is msg.getMessage() allowed to be null?
      */
     @SuppressWarnings("unchecked")
     private void registerPending(OutNetMessage msg, boolean allowEmpty) {
-        if ((!allowEmpty) && (msg.getMessage() == null))
-                throw new IllegalArgumentException("OutNetMessage doesn't contain an I2NPMessage? Impossible?");
+        if ((!allowEmpty) && (msg.getMessage() == null)) throw new IllegalArgumentException("OutNetMessage doesn't contain an I2NPMessage? Impossible?");
         MessageSelector sel = msg.getReplySelector();
         if (sel == null) throw new IllegalArgumentException("No reply selector? Impossible?");
 
-        if (!_activeMessages.add(msg))
-            return; // don't add dups
+        if (!_activeMessages.add(msg)) return; // don't add dups
 
         synchronized (_selectorToMessage) {
             Object oldMsg = _selectorToMessage.put(sel, msg);
             if (oldMsg != null) {
                 List<OutNetMessage> multi = null;
                 if (oldMsg instanceof OutNetMessage) {
-                    //multi = Collections.synchronizedList(new ArrayList(4));
+                    // multi = Collections.synchronizedList(new ArrayList(4));
                     multi = new ArrayList<OutNetMessage>(4);
-                    multi.add((OutNetMessage)oldMsg);
+                    multi.add((OutNetMessage) oldMsg);
                     multi.add(msg);
                     _selectorToMessage.put(sel, multi);
                 } else if (oldMsg instanceof List) {
-                    multi = (List<OutNetMessage>)oldMsg;
+                    multi = (List<OutNetMessage>) oldMsg;
                     multi.add(msg);
                     _selectorToMessage.put(sel, multi);
                 }
-                if (_log.shouldWarn())
-                    _log.warn("A single message selector [" + sel + "] with multiple messages (" + multi + ")");
+                if (_log.shouldWarn()) _log.warn("A single message selector [" + sel + "] with multiple messages (" + multi + ")");
             }
         }
-        synchronized (_selectors) { _selectors.add(sel); }
+        synchronized (_selectors) {
+            _selectors.add(sel);
+        }
 
         _cleanupTask.scheduleExpiration(sel);
     }
@@ -239,7 +243,7 @@ public class OutboundMessageRegistry {
             Object old = _selectorToMessage.remove(sel);
             if (old != null) {
                 if (old instanceof List) {
-                    List<OutNetMessage> l = (List<OutNetMessage>)old;
+                    List<OutNetMessage> l = (List<OutNetMessage>) old;
                     l.remove(msg);
                     if (!l.isEmpty()) {
                         _selectorToMessage.put(sel, l);
@@ -248,8 +252,9 @@ public class OutboundMessageRegistry {
                 }
             }
         }
-        if (!stillActive)
-            synchronized (_selectors) { _selectors.remove(sel); }
+        if (!stillActive) synchronized (_selectors) {
+                _selectors.remove(sel);
+            }
         _activeMessages.remove(msg);
     }
 
@@ -273,14 +278,14 @@ public class OutboundMessageRegistry {
             List<MessageSelector> removing = new ArrayList<MessageSelector>(8);
             synchronized (_selectors) {
                 // CME?
-                //for (Iterator<MessageSelector> iter = _selectors.iterator(); iter.hasNext();) {
+                // for (Iterator<MessageSelector> iter = _selectors.iterator(); iter.hasNext();) {
                 //    MessageSelector sel = iter.next();
                 for (int i = 0; i < _selectors.size(); i++) {
                     MessageSelector sel = _selectors.get(i);
                     long expiration = sel.getExpiration();
                     if (expiration <= now) {
                         removing.add(sel);
-                        //iter.remove();
+                        // iter.remove();
                         _selectors.remove(i);
                         i--;
                     } else if (expiration < _nextExpire || _nextExpire < now) {
@@ -298,29 +303,24 @@ public class OutboundMessageRegistry {
                         o = _selectorToMessage.remove(sel);
                     }
                     if (o instanceof OutNetMessage) {
-                        msg = (OutNetMessage)o;
+                        msg = (OutNetMessage) o;
                     } else if (o instanceof List) {
-                        msgs = (List<OutNetMessage>)o;
+                        msgs = (List<OutNetMessage>) o;
                     }
                     if (msg != null) {
                         _activeMessages.remove(msg);
                         Job fail = msg.getOnFailedReplyJob();
-                        if (fail != null)
-                            _context.jobQueue().addJob(fail);
-                        if (log)
-                            _log.debug("Expired: " + sel + " with timeout job " + fail);
+                        if (fail != null) _context.jobQueue().addJob(fail);
+                        if (log) _log.debug("Expired: " + sel + " with timeout job " + fail);
                     } else if (msgs != null) {
                         _activeMessages.removeAll(msgs);
                         for (OutNetMessage m : msgs) {
                             Job fail = m.getOnFailedReplyJob();
-                            if (fail != null)
-                                _context.jobQueue().addJob(fail);
-                            if (log)
-                                _log.debug("Expired: " + sel + " with timeout job(s) " + fail);
+                            if (fail != null) _context.jobQueue().addJob(fail);
+                            if (log) _log.debug("Expired: " + sel + " with timeout job(s) " + fail);
                         }
                     } else {
-                        if (log)
-                            _log.debug("Expired: " + sel + " with no known messages");
+                        if (log) _log.debug("Expired: " + sel + " with no known messages");
                     }
                 }
             }
@@ -332,12 +332,10 @@ public class OutboundMessageRegistry {
                     r = _selectors.size();
                 }
                 int a = _activeMessages.size();
-                if (r > 0 || e > 0 || a > 0)
-                    _log.debug("Expired: " + e + " remaining: " + r + " active: " + a);
+                if (r > 0 || e > 0 || a > 0) _log.debug("Expired: " + e + " remaining: " + r + " active: " + a);
             }
             synchronized (_selectors) {
-                if (_nextExpire <= now)
-                    _nextExpire = now + 10*1000;
+                if (_nextExpire <= now) _nextExpire = now + 10 * 1000;
                 schedule(_nextExpire - now);
             }
         }

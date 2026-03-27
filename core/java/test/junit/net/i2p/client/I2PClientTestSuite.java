@@ -1,4 +1,5 @@
 package net.i2p.client;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -10,6 +11,7 @@ package net.i2p.client;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
 import net.i2p.client.datagram.DatagramTest;
 
 /**

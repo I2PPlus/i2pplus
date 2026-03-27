@@ -9,15 +9,16 @@ package net.i2p.data.i2cp;
  *
  */
 
+import net.i2p.data.DataFormatException;
+import net.i2p.data.Lease;
+import net.i2p.util.ByteArrayStream;
+import net.i2p.util.VersionComparator;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import net.i2p.data.DataFormatException;
-import net.i2p.data.Lease;
-import net.i2p.util.ByteArrayStream;
-import net.i2p.util.VersionComparator;
 
 /**
  * Defines the message a router sends to a client to request that
@@ -29,13 +30,15 @@ import net.i2p.util.VersionComparator;
  * @since 0.9.7
  */
 public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
-    public final static int MESSAGE_TYPE = 37;
+    public static final int MESSAGE_TYPE = 37;
     private SessionId _sessionId;
     private final List<Lease> _endpoints;
 
     private static final String MIN_VERSION = "0.9.7";
 
-    public RequestVariableLeaseSetMessage() {_endpoints = new ArrayList<Lease>(6);}
+    public RequestVariableLeaseSetMessage() {
+        _endpoints = new ArrayList<Lease>(6);
+    }
 
     /**
      *  Does the client support this message?
@@ -47,7 +50,9 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
         return clientVersion != null && VersionComparator.comp(clientVersion, MIN_VERSION) >= 0;
     }
 
-    public SessionId getSessionId() {return _sessionId;}
+    public SessionId getSessionId() {
+        return _sessionId;
+    }
 
     /**
      * Return the SessionId for this message.
@@ -55,30 +60,44 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
      * @since 0.9.21
      */
     @Override
-    public SessionId sessionId() {return _sessionId;}
+    public SessionId sessionId() {
+        return _sessionId;
+    }
 
-    public void setSessionId(SessionId id) {_sessionId = id;}
+    public void setSessionId(SessionId id) {
+        _sessionId = id;
+    }
 
-    public int getEndpoints() {return _endpoints.size();}
+    public int getEndpoints() {
+        return _endpoints.size();
+    }
 
     public Lease getEndpoint(int endpoint) {
-        if ((endpoint < 0) || (_endpoints.size() <= endpoint)) {return null;}
+        if ((endpoint < 0) || (_endpoints.size() <= endpoint)) {
+            return null;
+        }
         return _endpoints.get(endpoint);
     }
 
     public void addEndpoint(Lease lease) {
-        if (lease == null) {throw new IllegalArgumentException();}
+        if (lease == null) {
+            throw new IllegalArgumentException();
+        }
         _endpoints.add(lease);
     }
 
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
-            if (_sessionId != null) {throw new IllegalStateException();}
+            if (_sessionId != null) {
+                throw new IllegalStateException();
+            }
             _sessionId = new SessionId();
             _sessionId.readBytes(in);
             int numTunnels = in.read();
-            if (numTunnels < 0) {throw new EOFException();}
+            if (numTunnels < 0) {
+                throw new EOFException();
+            }
             for (int i = 0; i < numTunnels; i++) {
                 Lease lease = new Lease();
                 lease.readBytes(in);
@@ -91,13 +110,17 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
 
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
-        if (_sessionId == null) {throw new I2CPMessageException("No data");}
+        if (_sessionId == null) {
+            throw new I2CPMessageException("No data");
+        }
         int len = 2 + 1 + (_endpoints.size() * 44);
         ByteArrayStream os = new ByteArrayStream(len);
         try {
             _sessionId.writeBytes(os);
             os.write((byte) _endpoints.size());
-            for (int i = 0; i < _endpoints.size(); i++) {_endpoints.get(i).writeBytes(os);}
+            for (int i = 0; i < _endpoints.size(); i++) {
+                _endpoints.get(i).writeBytes(os);
+            }
         } catch (DataFormatException dfe) {
             throw new I2CPMessageException("Error writing out the message data", dfe);
         }
@@ -105,14 +128,17 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
     }
 
     @Override
-    public int getType() {return MESSAGE_TYPE;}
+    public int getType() {
+        return MESSAGE_TYPE;
+    }
 
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append(getSessionId()).append(" RequestVariableLeaseSetMessage ");
-        for (int i = 0; i < getEndpoints(); i++) {buf.append(_endpoints.get(i));}
+        for (int i = 0; i < getEndpoints(); i++) {
+            buf.append(_endpoints.get(i));
+        }
         return buf.toString();
     }
-
 }

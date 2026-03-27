@@ -39,9 +39,9 @@ class ExternalTrayManager extends TrayManager {
                     @Override
                     protected void done() {
                         trayIcon.displayMessage(_t("Starting"), _t("I2P is starting!"), TrayIcon.MessageType.INFO);
-                        //Hide the tray icon.
-                        //We cannot stop the desktopgui program entirely,
-                        //since that risks killing the I2P process as well.
+                        // Hide the tray icon.
+                        // We cannot stop the desktopgui program entirely,
+                        // since that risks killing the I2P process as well.
                         tray.remove(trayIcon);
                     }
                 }.execute();
@@ -53,34 +53,35 @@ class ExternalTrayManager extends TrayManager {
         popup.add(_notificationItem1);
         return popup;
     }
-@Override
+
+    @Override
     public JPopupMenu getSwingMainMenu() {
         JPopupMenu popup = new JPopupMenu();
-/*
-        JMenuItem startItem = new JMenuItem(_t("Start I2P"));
-        startItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                new SwingWorker<Object, Object>() {
+        /*
+                JMenuItem startItem = new JMenuItem(_t("Start I2P"));
+                startItem.addActionListener(new ActionListener() {
                     @Override
-                    protected Object doInBackground() throws Exception {
-                        RouterManager.start();
-                        return null;
-                    }
+                    public void actionPerformed(ActionEvent arg0) {
+                        new SwingWorker<Object, Object>() {
+                            @Override
+                            protected Object doInBackground() throws Exception {
+                                RouterManager.start();
+                                return null;
+                            }
 
-                    @Override
-                    protected void done() {
-                        trayIcon.displayMessage(_t("Starting"), _t("I2P is starting!"), TrayIcon.MessageType.INFO);
-                        //Hide the tray icon.
-                        //We cannot stop the desktopgui program entirely,
-                        //since that risks killing the I2P process as well.
-                        tray.remove(trayIcon);
+                            @Override
+                            protected void done() {
+                                trayIcon.displayMessage(_t("Starting"), _t("I2P is starting!"), TrayIcon.MessageType.INFO);
+                                //Hide the tray icon.
+                                //We cannot stop the desktopgui program entirely,
+                                //since that risks killing the I2P process as well.
+                                tray.remove(trayIcon);
+                            }
+                        }.execute();
                     }
-                }.execute();
-            }
-        });
-        popup.add(startItem);
-*/
+                });
+                popup.add(startItem);
+        */
         initializeJNotificationItems();
         popup.add(_jnotificationItem2);
         popup.add(_jnotificationItem1);
@@ -93,13 +94,9 @@ class ExternalTrayManager extends TrayManager {
      */
     @Override
     protected void updateMenu() {
-        if (_notificationItem1 != null)
-            _notificationItem1.setEnabled(_showNotifications);
-        if (_notificationItem2 != null)
-            _notificationItem2.setEnabled(!_showNotifications);
-        if (_jnotificationItem1 != null)
-            _jnotificationItem1.setVisible(_showNotifications);
-        if (_jnotificationItem2 != null)
-            _jnotificationItem2.setVisible(!_showNotifications);
+        if (_notificationItem1 != null) _notificationItem1.setEnabled(_showNotifications);
+        if (_notificationItem2 != null) _notificationItem2.setEnabled(!_showNotifications);
+        if (_jnotificationItem1 != null) _jnotificationItem1.setVisible(_showNotifications);
+        if (_jnotificationItem2 != null) _jnotificationItem2.setVisible(!_showNotifications);
     }
 }

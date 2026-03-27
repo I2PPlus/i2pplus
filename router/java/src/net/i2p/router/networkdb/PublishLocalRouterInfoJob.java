@@ -1,4 +1,5 @@
 package net.i2p.router.networkdb;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,6 +9,14 @@ package net.i2p.router.networkdb;
  *
  */
 
+import net.i2p.data.DataFormatException;
+import net.i2p.data.SigningPrivateKey;
+import net.i2p.data.router.RouterAddress;
+import net.i2p.data.router.RouterInfo;
+import net.i2p.router.JobImpl;
+import net.i2p.router.RouterContext;
+import net.i2p.util.Log;
+
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -16,13 +25,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
-import net.i2p.data.DataFormatException;
-import net.i2p.data.SigningPrivateKey;
-import net.i2p.data.router.RouterAddress;
-import net.i2p.data.router.RouterInfo;
-import net.i2p.router.JobImpl;
-import net.i2p.router.RouterContext;
-import net.i2p.util.Log;
 
 /**
  * Publish the local router's RouterInfo periodically.
@@ -37,14 +39,14 @@ public class PublishLocalRouterInfoJob extends JobImpl {
      *  Don't store if somebody else stored it recently.
      *  Must be less than PUBLISH_DELAY * 3 / 16 (see getDelay())
      */
-    private static final long MIN_PUBLISH_DELAY = 9*60*1000;
+    private static final long MIN_PUBLISH_DELAY = 9 * 60 * 1000;
 
     /**
      *  Too short and the network puts a big connection load on the
      *  floodfills since we store directly.
      *  Too long and the floodfill will drop us - timeout is 60 minutes.
      */
-    private static final long PUBLISH_DELAY = 43*60*1000;
+    private static final long PUBLISH_DELAY = 43 * 60 * 1000;
 
     /** this needs to be long enough to give us time to start up,
      *  but less than 20m (when we start accepting tunnels and could be a IBGW)
@@ -55,7 +57,8 @@ public class PublishLocalRouterInfoJob extends JobImpl {
      *  First publish after netdb ready is now done via state machine
      *  in Router.setNetDbReady(), so we probably don't need this anymore
      */
-    private static final long FIRST_TIME_DELAY = 90*1000;
+    private static final long FIRST_TIME_DELAY = 90 * 1000;
+
     private volatile boolean _notFirstTime;
     private final AtomicInteger _runCount = new AtomicInteger();
 
@@ -65,14 +68,15 @@ public class PublishLocalRouterInfoJob extends JobImpl {
     }
 
     @Override
-    public String getName() { return "Publish Local RouterInfo"; }
+    public String getName() {
+        return "Publish Local RouterInfo";
+    }
 
     @Override
     public void runJob() {
         if (!getContext().commSystem().isRunning()) {
             // Avoid deadlock in the transports through here via FNDF.publish() at startup
-            if (_log.shouldWarn())
-                _log.warn("Attempted to publish local RouterInfo before comm system started, retrying...");
+            if (_log.shouldWarn()) _log.warn("Attempted to publish local RouterInfo before comm system started, retrying...");
             requeue(100);
             return;
         }
@@ -84,16 +88,13 @@ public class PublishLocalRouterInfoJob extends JobImpl {
             return;
         }
         RouterInfo oldRI = getContext().router().getRouterInfo();
-        if (_log.shouldDebug())
-            _log.debug("Old RouterInfo contains " + oldRI.getAddresses().size()
-                       + " addresses and " + oldRI.getOptionsMap().size() + " options");
+        if (_log.shouldDebug()) _log.debug("Old RouterInfo contains " + oldRI.getAddresses().size() + " addresses and " + oldRI.getOptionsMap().size() + " options");
         try {
             List<RouterAddress> oldAddrs = new ArrayList<RouterAddress>(oldRI.getAddresses());
             List<RouterAddress> newAddrs = getContext().commSystem().createAddresses();
             int count = _runCount.incrementAndGet();
             RouterInfo ri = new RouterInfo(oldRI);
-            if ((count % 4) != 0 && oldAddrs.size() == newAddrs.size() &&
-                getContext().random().nextInt(32) != 0) {
+            if ((count % 4) != 0 && oldAddrs.size() == newAddrs.size() && getContext().random().nextInt(32) != 0) {
                 // 3 times out of 4, we don't republish if everything is the same...
                 // If something changed, including the cost, then publish, otherwise don't.
                 String newcaps = getContext().router().getCapabilities();
@@ -110,17 +111,12 @@ public class PublishLocalRouterInfoJob extends JobImpl {
                         }
                     }
                     if (!different) {
-                        if (_log.shouldInfo())
-                            _log.info("Not republishing early because costs, caps and addresses are the same");
+                        if (_log.shouldInfo()) _log.info("Not republishing early because costs, caps and addresses are the same");
                         requeue(getDelay());
                         return;
                     }
                 }
-                if (_log.shouldInfo())
-                    _log.info("Republishing early because addresses or costs or caps have changed -" +
-                              " Old Caps: " + oldRI.getCapabilities() + "; New Caps: " + newcaps +
-                              "\nOLD:\n" +
-                              oldAddrs + "\nNEW:\n" + newAddrs);
+                if (_log.shouldInfo()) _log.info("Republishing early because addresses or costs or caps have changed -" + " Old Caps: " + oldRI.getCapabilities() + "; New Caps: " + newcaps + "\nOLD:\n" + oldAddrs + "\nNEW:\n" + newAddrs);
             }
             ri.setPublished(getContext().clock().now());
             Properties stats = getContext().statPublisher().publishStatistics();
@@ -130,15 +126,12 @@ public class PublishLocalRouterInfoJob extends JobImpl {
             SigningPrivateKey key = getContext().keyManager().getSigningPrivateKey();
             if (key == null) {
                 _log.log(Log.CRIT, "Internal error - signing private key not known; rescheduling publish for 30s");
-                requeue(30*1000);
+                requeue(30 * 1000);
                 return;
             }
             ri.sign(key);
             getContext().router().setRouterInfo(ri);
-            if (_log.shouldInfo())
-                _log.info("Newly updated RouterInfo is published with " + stats.size() +
-                          "/" + ri.getOptionsMap().size() + " options" +
-                          "\n* Published: " + Instant.ofEpochMilli(ri.getPublished()));
+            if (_log.shouldInfo()) _log.info("Newly updated RouterInfo is published with " + stats.size() + "/" + ri.getOptionsMap().size() + " options" + "\n* Published: " + Instant.ofEpochMilli(ri.getPublished()));
             try {
                 // This won't really publish until the netdb is initialized.
                 getContext().netDb().publish(ri);
@@ -172,14 +165,11 @@ public class PublishLocalRouterInfoJob extends JobImpl {
         @Override
         public int compare(RouterAddress l, RouterAddress r) {
             int c = l.getTransportStyle().compareTo(r.getTransportStyle());
-            if (c != 0)
-                return c;
+            if (c != 0) return c;
             String lh = l.getHost();
             String rh = r.getHost();
-            if (lh == null)
-                return rh == null ? 0 : -1;
-            if (rh == null)
-                return 1;
+            if (lh == null) return rh == null ? 0 : -1;
+            if (rh == null) return 1;
             return lh.compareTo(rh);
         }
     }

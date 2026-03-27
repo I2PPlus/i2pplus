@@ -1,5 +1,10 @@
 package net.i2p.router.util;
 
+import net.i2p.I2PAppContext;
+import net.i2p.data.DataHelper;
+import net.i2p.util.SecureFileOutputStream;
+import net.i2p.util.SystemVersion;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,10 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import net.i2p.I2PAppContext;
-import net.i2p.data.DataHelper;
-import net.i2p.util.SecureFileOutputStream;
-import net.i2p.util.SystemVersion;
 
 /**
  * Event logging utility with caching and file-based persistence.
@@ -40,13 +41,16 @@ public class EventLog {
 
     private final I2PAppContext _context;
     private final File _file;
+
     /** event to cached map */
     private final Map<String, SortedMap<Long, String>> _cache;
+
     /** event to starting time of cached map */
     private final Map<String, Long> _cacheTime;
 
     /** for convenience, not required */
     public static final String ABORTED = "aborted";
+
     public static final String BECAME_FLOODFILL = "becameFloodfill";
     public static final String CHANGE_IP = "changeIP";
     public static final String CHANGE_PORT = "changePort";
@@ -73,7 +77,7 @@ public class EventLog {
      *  @param file should be absolute
      */
     public EventLog(I2PAppContext ctx, File file) {
-        //if (!file.isAbsolute())
+        // if (!file.isAbsolute())
         //    throw new IllegalArgumentException();
         _context = ctx;
         _file = file;
@@ -97,9 +101,7 @@ public class EventLog {
      *  @throws IllegalArgumentException if event contains a space or either contains a newline
      */
     public synchronized void addEvent(String event, String info) {
-        if (event.contains(" ") || event.contains("\n") ||
-            (info != null && info.contains("\n")))
-            throw new IllegalArgumentException();
+        if (event.contains(" ") || event.contains("\n") || (info != null && info.contains("\n"))) throw new IllegalArgumentException();
         _cache.remove(event);
         _cacheTime.remove(event);
         OutputStream out = null;
@@ -107,15 +109,16 @@ public class EventLog {
             out = new SecureFileOutputStream(_file, true);
             StringBuilder buf = new StringBuilder(128);
             buf.append(_context.clock().now()).append(' ').append(event);
-            if (info != null && info.length() > 0)
-                buf.append(' ').append(info);
-            if (SystemVersion.isWindows())
-                buf.append('\r');
+            if (info != null && info.length() > 0) buf.append(' ').append(info);
+            if (SystemVersion.isWindows()) buf.append('\r');
             buf.append('\n');
             out.write(buf.toString().getBytes("UTF-8"));
         } catch (IOException ioe) {
         } finally {
-            if (out != null) try { out.close(); } catch (IOException ioe) {}
+            if (out != null) try {
+                    out.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 
@@ -131,24 +134,20 @@ public class EventLog {
         if (rv != null) {
             Long cacheTime = _cacheTime.get(event);
             if (cacheTime != null) {
-                if (since >= cacheTime.longValue())
-                    return rv.tailMap(Long.valueOf(since));
+                if (since >= cacheTime.longValue()) return rv.tailMap(Long.valueOf(since));
             }
         }
         rv = new TreeMap<Long, String>();
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(_file), "UTF-8"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"));
             String line = null;
             while ((line = br.readLine()) != null) {
                 try {
                     String[] s = DataHelper.split(line.trim(), " ", 3);
-                    if (!s[1].equals(event))
-                        continue;
+                    if (!s[1].equals(event)) continue;
                     long time = Long.parseLong(s[0]);
-                    if (time <= since)
-                        continue;
+                    if (time <= since) continue;
                     Long ltime = Long.valueOf(time);
                     String info = s.length > 2 ? s[2] : "";
                     rv.put(ltime, info);
@@ -161,7 +160,10 @@ public class EventLog {
             _cacheTime.put(event, Long.valueOf(since));
         } catch (IOException ioe) {
         } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) {}
+            if (br != null) try {
+                    br.close();
+                } catch (IOException ioe) {
+                }
         }
         return rv;
     }
@@ -180,17 +182,14 @@ public class EventLog {
         SortedMap<Long, String> rv = new TreeMap<Long, String>();
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(_file), "UTF-8"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"));
             String line = null;
             while ((line = br.readLine()) != null) {
                 try {
                     String[] s = DataHelper.split(line.trim(), " ", 2);
-                    if (s.length < 2)
-                        continue;
+                    if (s.length < 2) continue;
                     long time = Long.parseLong(s[0]);
-                    if (time <= since)
-                        continue;
+                    if (time <= since) continue;
                     Long ltime = Long.valueOf(time);
                     rv.put(ltime, s[1]);
                 } catch (IndexOutOfBoundsException ioobe) {
@@ -200,7 +199,10 @@ public class EventLog {
             rv = Collections.unmodifiableSortedMap(rv);
         } catch (IOException ioe) {
         } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) {}
+            if (br != null) try {
+                    br.close();
+                } catch (IOException ioe) {
+                }
         }
         return rv;
     }
@@ -217,26 +219,25 @@ public class EventLog {
         long rv = 0;
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(_file), "UTF-8"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"));
             String line = null;
             while ((line = br.readLine()) != null) {
                 try {
                     String[] s = DataHelper.split(line.trim(), " ", 3);
-                    if (s.length < 2)
-                        continue;
-                    if (!s[1].equals(event))
-                        continue;
+                    if (s.length < 2) continue;
+                    if (!s[1].equals(event)) continue;
                     long time = Long.parseLong(s[0]);
-                    if (time <= since)
-                        continue;
+                    if (time <= since) continue;
                     rv = time;
                 } catch (NumberFormatException nfe) {
                 }
             }
         } catch (IOException ioe) {
         } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) {}
+            if (br != null) try {
+                    br.close();
+                } catch (IOException ioe) {
+                }
         }
         return rv;
     }

@@ -3,11 +3,12 @@ package net.i2p.router.update;
 import static net.i2p.update.UpdateMethod.*;
 import static net.i2p.update.UpdateType.*;
 
-import java.net.URI;
-import java.util.List;
 import net.i2p.router.RouterContext;
 import net.i2p.router.web.ConfigUpdateHandler;
 import net.i2p.update.*;
+
+import java.net.URI;
+import java.util.List;
 
 /**
  * <p>Handles the request to update the router by firing one or more
@@ -37,11 +38,9 @@ class UpdateHandler implements Updater {
      *  @param maxTime how long you have
      *  @return active task or null if unable to download
      */
-    public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources,
-                             String id, String newVersion, long maxTime) {
+    public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources, String id, String newVersion, long maxTime) {
         boolean shouldProxy = _context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY);
-        if ((type != ROUTER_SIGNED && type != ROUTER_SIGNED_SU3) || (shouldProxy && method != HTTP) ||
-            ((!shouldProxy) && method != HTTP_CLEARNET && method != HTTPS_CLEARNET) || updateSources.isEmpty()) {
+        if ((type != ROUTER_SIGNED && type != ROUTER_SIGNED_SU3) || (shouldProxy && method != HTTP) || ((!shouldProxy) && method != HTTP_CLEARNET && method != HTTPS_CLEARNET) || updateSources.isEmpty()) {
             return null;
         }
         UpdateRunner update = new UpdateRunner(_context, _mgr, type, method, updateSources);

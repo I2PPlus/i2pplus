@@ -1,18 +1,21 @@
 package net.i2p.router.web;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
+
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.gzip.GzipHandler;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Block certain Host headers to prevent DNS rebinding attacks.
@@ -23,8 +26,7 @@ import org.eclipse.jetty.server.handler.gzip.GzipHandler;
  *
  * @since 0.9.32
  */
-public class HostCheckHandler extends GzipHandler
-{
+public class HostCheckHandler extends GzipHandler {
     private final I2PAppContext _context;
     private final PortMapper _portMapper;
     private final Set<String> _listenHosts;
@@ -39,24 +41,19 @@ public class HostCheckHandler extends GzipHandler
         _context = ctx;
         _portMapper = ctx.portMapper();
         _listenHosts = new HashSet<String>(8);
-        //setMinGzipSize(64*1024);
+        // setMinGzipSize(64*1024);
         // set this super small so we clobber almost everything
         // this has the side effect of faster page loads with less progressive rendering
         // include js so we hit the lightbox snark script -> 26/6K
         setMinGzipSize(512);
         if (_context.getBooleanPropertyDefaultTrue(PROP_GZIP)) {
             setCompressionLevel(9);
-            addIncludedMimeTypes(
-                                 "application/javascript", "application/x-javascript", "text/javascript",
-                                 "application/xhtml+xml", "application/xml", "application/pdf", "text/xml",
-                                 "image/svg+xml", "application/x-font-ttf", "application/x-font-truetype",
-                                 "font/ttf", "font/otf", "font/woff", "text/css", "text/html", "text/plain"
-            );
+            addIncludedMimeTypes("application/javascript", "application/x-javascript", "text/javascript", "application/xhtml+xml", "application/xml", "application/pdf", "text/xml", "image/svg+xml", "application/x-font-ttf", "application/x-font-truetype", "font/ttf", "font/otf", "font/woff", "text/css", "text/html", "text/plain");
         } else {
             // poorly documented, but we must put something in,
             // if empty all are matched,
             // see IncludeExcludeSet
-//            addIncludedMimeTypes("xyzzy");
+            //            addIncludedMimeTypes("xyzzy");
             addIncludedMimeTypes("text/html");
         }
     }
@@ -78,21 +75,13 @@ public class HostCheckHandler extends GzipHandler
      *  redirect HTTP to HTTPS,
      *  pass everything else to the delegate.
      */
-    public void handle(String pathInContext,
-                       Request baseRequest,
-                       HttpServletRequest httpRequest,
-                       HttpServletResponse httpResponse)
-         throws IOException, ServletException
-    {
+    public void handle(String pathInContext, Request baseRequest, HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException, ServletException {
 
         String host = httpRequest.getHeader("Host");
         if (!allowHost(host)) {
             Log log = _context.logManager().getLog(HostCheckHandler.class);
             host = DataHelper.stripHTML(getHost(host));
-            String s = "Console request denied.\n" +
-                       "    To allow access using the hostname \"" + host + "\",\n" +
-                       "    add the line \"" + RouterConsoleRunner.PROP_ALLOWED_HOSTS + '=' + host + "\"\n" +
-                       "    to advanced configuration and restart.";
+            String s = "Console request denied.\n" + "    To allow access using the hostname \"" + host + "\",\n" + "    add the line \"" + RouterConsoleRunner.PROP_ALLOWED_HOSTS + '=' + host + "\"\n" + "    to advanced configuration and restart.";
             log.logAlways(Log.WARN, s);
             httpResponse.sendError(403, s);
             baseRequest.setHandled(true);
@@ -107,8 +96,7 @@ public class HostCheckHandler extends GzipHandler
             int httpsPort = _portMapper.getPort(PortMapper.SVC_HTTPS_CONSOLE);
             if (httpsPort > 0 && httpRequest.getLocalPort() != httpsPort) {
                 String redir = _context.getProperty(PROP_REDIRECT);
-                if (Boolean.parseBoolean(redir) ||
-                    (redir == null && "1".equals(httpRequest.getHeader("Upgrade-Insecure-Requests")))) {
+                if (Boolean.parseBoolean(redir) || (redir == null && "1".equals(httpRequest.getHeader("Upgrade-Insecure-Requests")))) {
                     sendRedirect(httpsPort, httpRequest, httpResponse);
                     baseRequest.setHandled(true);
                     return;
@@ -128,26 +116,16 @@ public class HostCheckHandler extends GzipHandler
      *  @return true if OK
      */
     private boolean allowHost(String host) {
-        if (host == null)
-            return true;
+        if (host == null) return true;
         // common cases
-        if (host.equals("127.0.0.1:7657") ||
-            host.equals("localhost:7657") ||
-            host.equals("[::1]:7657") ||
-            host.equals("127.0.0.1:7667") ||
-            host.equals("localhost:7667") ||
-            host.equals("[::1]:7667"))
-            return true;
+        if (host.equals("127.0.0.1:7657") || host.equals("localhost:7657") || host.equals("[::1]:7657") || host.equals("127.0.0.1:7667") || host.equals("localhost:7667") || host.equals("[::1]:7667")) return true;
         // all allowed?
-        if (_listenHosts.isEmpty())
-            return true;
+        if (_listenHosts.isEmpty()) return true;
         host = getHost(host);
-        if (_listenHosts.contains(host))
-            return true;
+        if (_listenHosts.contains(host)) return true;
         // allow all IP addresses
-        if (Addresses.isIPAddress(host))
-            return true;
-        //System.out.println(host + " not found in " + s);
+        if (Addresses.isIPAddress(host)) return true;
+        // System.out.println(host + " not found in " + s);
         return false;
     }
 
@@ -160,12 +138,10 @@ public class HostCheckHandler extends GzipHandler
         if (host.startsWith("[")) {
             host = host.substring(1);
             int brack = host.indexOf(']');
-            if (brack >= 0)
-                host = host.substring(0, brack);
+            if (brack >= 0) host = host.substring(0, brack);
         } else {
             int colon = host.indexOf(':');
-            if (colon >= 0)
-                host = host.substring(0, colon);
+            if (colon >= 0) host = host.substring(0, colon);
         }
         return host;
     }
@@ -175,22 +151,17 @@ public class HostCheckHandler extends GzipHandler
      *
      *  @since 0.9.34
      */
-    private static void sendRedirect(int httpsPort, HttpServletRequest httpRequest,
-                                     HttpServletResponse httpResponse) throws IOException {
+    private static void sendRedirect(int httpsPort, HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException {
         StringBuilder buf = new StringBuilder(64); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("https://");
         String name = httpRequest.getServerName();
         boolean ipv6 = name.indexOf(':') >= 0 && !name.startsWith("[");
-        if (ipv6)
-            buf.append('[');
+        if (ipv6) buf.append('[');
         buf.append(name);
-        if (ipv6)
-            buf.append(']');
-        buf.append(':').append(httpsPort)
-           .append(httpRequest.getRequestURI());
+        if (ipv6) buf.append(']');
+        buf.append(':').append(httpsPort).append(httpRequest.getRequestURI());
         String q = httpRequest.getQueryString();
-        if (q != null)
-            buf.append('?').append(q);
+        if (q != null) buf.append('?').append(q);
         httpResponse.setHeader("Location", buf.toString());
         // https://w3c.github.io/webappsec-upgrade-insecure-requests/
         httpResponse.setHeader("Vary", "Upgrade-Insecure-Requests");

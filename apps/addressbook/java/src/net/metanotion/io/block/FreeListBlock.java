@@ -28,10 +28,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package net.metanotion.io.block;
 
-import java.io.IOException;
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 import net.metanotion.io.RandomAccessInterface;
+
+import java.io.IOException;
 
 /**
  * Manages free pages in a block file.
@@ -53,8 +54,8 @@ import net.metanotion.io.RandomAccessInterface;
  * </pre>
  */
 class FreeListBlock {
-    private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
-    private static final long MAGIC_FREE = 0x7e2146524545217el;  // "~!FREE!~"
+    private static final long MAGIC = 0x2366724c69737423L; // "#frList#"
+    private static final long MAGIC_FREE = 0x7e2146524545217el; // "~!FREE!~"
     private static final int HEADER_LEN = 16;
     private static final int MAX_SIZE = (BlockFile.PAGESIZE - HEADER_LEN) / 4;
 
@@ -69,19 +70,16 @@ class FreeListBlock {
         this.page = startPage;
         BlockFile.pageSeek(file, startPage);
         long magic = file.readLong();
-        if (magic != MAGIC)
-            throw new IOException("Bad freelist magic number 0x" + Long.toHexString(magic) + " on page " + startPage);
+        if (magic != MAGIC) throw new IOException("Bad freelist magic number 0x" + Long.toHexString(magic) + " on page " + startPage);
         nextPage = file.readUnsignedInt();
         len = file.readUnsignedInt();
-        if (len > MAX_SIZE)
-            throw new IOException("Bad freelist size " + len);
+        if (len > MAX_SIZE) throw new IOException("Bad freelist size " + len);
         branches = new int[MAX_SIZE];
         if (len > 0) {
             int good = 0;
-            for (int i=0; i<len; i++) {
+            for (int i = 0; i < len; i++) {
                 int fpg = file.readInt();
-                if (fpg > BlockFile.METAINDEX_PAGE)
-                    branches[good++] = fpg;
+                if (fpg > BlockFile.METAINDEX_PAGE) branches[good++] = fpg;
             }
             if (good != len) {
                 Log log = I2PAppContext.getGlobalContext().logManager().getLog(BlockFile.class);
@@ -97,7 +95,9 @@ class FreeListBlock {
         file.writeLong(MAGIC);
         file.writeInt(nextPage);
         file.writeInt(len);
-        for (int i=0; i<len; i++) { file.writeInt(branches[i]); }
+        for (int i = 0; i < len; i++) {
+            file.writeInt(branches[i]);
+        }
     }
 
     /**
@@ -130,8 +130,7 @@ class FreeListBlock {
         BlockFile.pageSeek(file, page);
         file.skipBytes(12);
         file.writeInt(len);
-        if (len > 1)
-            file.skipBytes((len - 1) * 4);
+        if (len > 1) file.skipBytes((len - 1) * 4);
         file.writeInt(branches[len - 1]);
     }
 
@@ -148,8 +147,7 @@ class FreeListBlock {
      *  @throws IllegalStateException if full
      */
     public void addPage(int freePage) throws IOException {
-        if (len >= MAX_SIZE)
-            throw new IllegalStateException("full");
+        if (len >= MAX_SIZE) throw new IllegalStateException("full");
         if (getMagic(freePage) == MAGIC_FREE) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(BlockFile.class);
             log.error("Double free page " + freePage, new Exception());
@@ -165,8 +163,7 @@ class FreeListBlock {
      *  @throws IllegalStateException if empty
      */
     public int takePage() throws IOException {
-        if (len <= 0)
-            throw new IllegalStateException("empty");
+        if (len <= 0) throw new IllegalStateException("empty");
         len--;
         writeLen();
         int rv = branches[len];
@@ -205,8 +202,7 @@ class FreeListBlock {
     public boolean flbck(boolean fix) throws IOException {
         Log log = I2PAppContext.getGlobalContext().logManager().getLog(BlockFile.class);
         log.info(toString());
-        if (nextPage > 0)
-            (new FreeListBlock(file, nextPage)).flbck(fix);
+        if (nextPage > 0) (new FreeListBlock(file, nextPage)).flbck(fix);
         return true;
     }
 

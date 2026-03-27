@@ -22,7 +22,7 @@ class DirectLookupJob extends FloodOnlySearchJob {
     private OutNetMessage _onm;
     private final RouterInfo _oldRI;
 
-    private static final int TIMEOUT = 8*1000;
+    private static final int TIMEOUT = 8 * 1000;
 
     /**
      *  @param peer for Router Info only
@@ -33,10 +33,14 @@ class DirectLookupJob extends FloodOnlySearchJob {
     }
 
     @Override
-    public String getName() { return "NetDb Direct RouterInfo Lookup"; }
+    public String getName() {
+        return "NetDb Direct RouterInfo Lookup";
+    }
 
     @Override
-    public boolean shouldProcessDSRM() { return false; } // don't loop
+    public boolean shouldProcessDSRM() {
+        return false;
+    } // don't loop
 
     @Override
     public void runJob() {
@@ -44,12 +48,11 @@ class DirectLookupJob extends FloodOnlySearchJob {
         _onm = ctx.messageRegistry().registerPending(_replySelector, _onReply, _onTimeout);
         DatabaseLookupMessage dlm = new DatabaseLookupMessage(ctx, true);
         dlm.setFrom(ctx.routerHash());
-        long exp = ctx.clock().now() + 5*1000;
+        long exp = ctx.clock().now() + 5 * 1000;
         dlm.setMessageExpiration(exp);
         dlm.setSearchKey(_key);
         dlm.setSearchType(DatabaseLookupMessage.Type.RI);
-        OutNetMessage m = new OutNetMessage(ctx, dlm, exp,
-                                            OutNetMessage.PRIORITY_MY_NETDB_LOOKUP, _oldRI);
+        OutNetMessage m = new OutNetMessage(ctx, dlm, exp, OutNetMessage.PRIORITY_MY_NETDB_LOOKUP, _oldRI);
         ctx.commSystem().processMessage(m);
         _lookupsRemaining.set(1);
     }
@@ -68,7 +71,7 @@ class DirectLookupJob extends FloodOnlySearchJob {
     @Override
     void success() {
         // don't give him any credit
-        //getContext().profileManager().dbLookupSuccessful(_to, System.currentTimeMillis()-_created);
+        // getContext().profileManager().dbLookupSuccessful(_to, System.currentTimeMillis()-_created);
         _facade.complete(_key);
         RouterContext ctx = getContext();
         for (Job j : _onFind) {

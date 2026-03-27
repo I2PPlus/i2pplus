@@ -1,5 +1,10 @@
 package net.i2p.router.transport.ntcp;
 
+import net.i2p.I2PAppContext;
+import net.i2p.router.OutNetMessage;
+import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
@@ -7,10 +12,6 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import net.i2p.I2PAppContext;
-import net.i2p.router.OutNetMessage;
-import net.i2p.util.Log;
-import net.i2p.util.SystemVersion;
 
 /**
  * Handles asynchronous post-send processing of OutNetMessage using a
@@ -88,10 +89,7 @@ class NTCPSendFinisher {
 
     private static class CustomThreadPoolExecutor extends ThreadPoolExecutor {
         public CustomThreadPoolExecutor(int num) {
-            super(num, num, 10_000, TimeUnit.MILLISECONDS,
-                  new LinkedBlockingQueue<>(QUEUE_CAPACITY),
-                  new CustomThreadFactory(),
-                  new ThreadPoolExecutor.CallerRunsPolicy());
+            super(num, num, 10_000, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(QUEUE_CAPACITY), new CustomThreadFactory(), new ThreadPoolExecutor.CallerRunsPolicy());
         }
     }
 

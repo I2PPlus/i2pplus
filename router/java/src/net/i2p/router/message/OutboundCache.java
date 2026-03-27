@@ -1,8 +1,5 @@
 package net.i2p.router.message;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.Hash;
 import net.i2p.data.Lease;
 import net.i2p.data.LeaseSet;
@@ -10,6 +7,10 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.util.SimpleTimer;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Helper cache manager for outbound message optimization in OCMOSJ.
@@ -159,7 +160,7 @@ public class OutboundCache {
      */
     private static void cleanLeaseSetCache(final RouterContext ctx, final Map<HashPair, LeaseSet> tc) {
         final long now = ctx.clock().now();
-        for (Iterator<LeaseSet> iter = tc.values().iterator(); iter.hasNext();) {
+        for (Iterator<LeaseSet> iter = tc.values().iterator(); iter.hasNext(); ) {
             final LeaseSet l = iter.next();
             if (l.getEarliestLeaseDate() < now) {
                 iter.remove();
@@ -173,7 +174,7 @@ public class OutboundCache {
      * @param tc the Lease cache to clean.
      */
     private static void cleanLeaseCache(final Map<HashPair, Lease> tc) {
-        for (Iterator<Lease> iter = tc.values().iterator(); iter.hasNext();) {
+        for (Iterator<Lease> iter = tc.values().iterator(); iter.hasNext(); ) {
             final Lease l = iter.next();
             if (l.isExpired(Router.CLOCK_FUDGE_FACTOR)) {
                 iter.remove();
@@ -188,7 +189,7 @@ public class OutboundCache {
      * @param tc  the TunnelInfo cache to clean.
      */
     private static void cleanTunnelCache(final RouterContext ctx, final Map<HashPair, TunnelInfo> tc) {
-        for (Iterator<Map.Entry<HashPair, TunnelInfo>> iter = tc.entrySet().iterator(); iter.hasNext();) {
+        for (Iterator<Map.Entry<HashPair, TunnelInfo>> iter = tc.entrySet().iterator(); iter.hasNext(); ) {
             final Map.Entry<HashPair, TunnelInfo> entry = iter.next();
             final HashPair key = entry.getKey();
             final TunnelInfo tunnel = entry.getValue();
@@ -208,7 +209,7 @@ public class OutboundCache {
     private static void cleanReplyCache(final RouterContext ctx, final Map<HashPair, Long> tc) {
         final long now = ctx.clock().now();
         final long expiration = now - CLEAN_INTERVAL;
-        for (Iterator<Long> iter = tc.values().iterator(); iter.hasNext();) {
+        for (Iterator<Long> iter = tc.values().iterator(); iter.hasNext(); ) {
             final Long timestamp = iter.next();
             if (timestamp < expiration) {
                 iter.remove();

@@ -1,4 +1,5 @@
 package net.i2p.crypto;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -9,6 +10,7 @@ package net.i2p.crypto;
  */
 
 import junit.framework.TestCase;
+
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.data.SessionKey;
@@ -17,7 +19,7 @@ import net.i2p.util.RandomSource;
 /**
  * @author Comwiz
  */
-public class AES256Test extends TestCase{
+public class AES256Test extends TestCase {
     private I2PAppContext _context;
     private byte[] iv;
 
@@ -26,8 +28,8 @@ public class AES256Test extends TestCase{
         _context = I2PAppContext.getGlobalContext();
     }
 
-    public void testMultiple(){
-        for (int i = 0; i < 100; i++){
+    public void testMultiple() {
+        for (int i = 0; i < 100; i++) {
 
             SessionKey key = _context.keyGenerator().generateSessionKey();
 
@@ -47,12 +49,11 @@ public class AES256Test extends TestCase{
     }
 
     @SuppressWarnings("deprecation")
-    public void testLong(){
+    public void testLong() {
         I2PAppContext ctx = new I2PAppContext();
         SessionKey key = ctx.keyGenerator().generateSessionKey();
         byte iv[] = new byte[16];
         RandomSource.getInstance().nextBytes(iv);
-
 
         byte lbuf[] = new byte[1024];
         RandomSource.getInstance().nextBytes(lbuf);
@@ -61,7 +62,7 @@ public class AES256Test extends TestCase{
         assertTrue(DataHelper.eq(ld, lbuf));
     }
 
-    public void testShort(){
+    public void testShort() {
         I2PAppContext ctx = new I2PAppContext();
         SessionKey key = ctx.keyGenerator().generateSessionKey();
         byte iv[] = new byte[16];

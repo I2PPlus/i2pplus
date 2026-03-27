@@ -1,11 +1,12 @@
 package net.i2p.router.client;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.data.i2cp.I2CPMessageException;
 import net.i2p.internal.PoisonI2CPMessage;
 import net.i2p.router.RouterContext;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Async writer class so that if a client app hangs, it won't take down the
@@ -18,6 +19,7 @@ class ClientWriterRunner implements Runnable {
     private final BlockingQueue<I2CPMessage> _messagesToWrite;
     private final ClientConnectionRunner _runner;
     private static final int QUEUE_SIZE = 256;
+
     public ClientWriterRunner(RouterContext context, ClientConnectionRunner runner) {
         _messagesToWrite = new LinkedBlockingQueue<I2CPMessage>(QUEUE_SIZE);
         _runner = runner;
@@ -30,7 +32,9 @@ class ClientWriterRunner implements Runnable {
      */
     public void addMessage(I2CPMessage msg) throws I2CPMessageException {
         boolean success = _messagesToWrite.offer(msg);
-        if (!success) {throw new I2CPMessageException("I2CP write to queue failed");}
+        if (!success) {
+            throw new I2CPMessageException("I2CP write to queue failed");
+        }
     }
 
     /**
@@ -39,19 +43,25 @@ class ClientWriterRunner implements Runnable {
      */
     public void stopWriting() {
         _messagesToWrite.clear();
-        try {_messagesToWrite.put(new PoisonI2CPMessage());}
-        catch (InterruptedException ie) {}
+        try {
+            _messagesToWrite.put(new PoisonI2CPMessage());
+        } catch (InterruptedException ie) {
+        }
     }
 
     @Override
     public void run() {
         I2CPMessage msg;
         while (!_runner.getIsDead()) {
-            try {msg = _messagesToWrite.take();}
-            catch (InterruptedException ie) {continue;}
-            if (msg.getType() == PoisonI2CPMessage.MESSAGE_TYPE) {break;}
+            try {
+                msg = _messagesToWrite.take();
+            } catch (InterruptedException ie) {
+                continue;
+            }
+            if (msg.getType() == PoisonI2CPMessage.MESSAGE_TYPE) {
+                break;
+            }
             _runner.writeMessage(msg);
         }
     }
-
 }

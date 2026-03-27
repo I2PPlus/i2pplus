@@ -1,9 +1,10 @@
 package net.i2p.router.web.helpers;
 
-import java.io.Serializable;
-import java.util.Comparator;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+
+import java.io.Serializable;
+import java.util.Comparator;
 
 /**
  *  Sorts in true binary order, not Base64 string order.
@@ -17,7 +18,9 @@ class HashComparator implements Comparator<Hash>, Serializable {
     /**
      * Thread safe, no state
      */
-    public static HashComparator getInstance() { return _instance; }
+    public static HashComparator getInstance() {
+        return _instance;
+    }
 
     @Override
     public int compare(Hash l, Hash r) {

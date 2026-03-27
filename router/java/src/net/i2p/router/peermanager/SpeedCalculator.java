@@ -15,7 +15,7 @@ class SpeedCalculator {
 
     public static double calc(PeerProfile profile) {
         // measures 1 minute throughput of individual tunnels
-        double d = (profile.getPeakTunnel1mThroughputKBps()*1024d) + profile.getSpeedBonus();
+        double d = (profile.getPeakTunnel1mThroughputKBps() * 1024d) + profile.getSpeedBonus();
         if (d >= 0) return d;
         return 0.0d;
     }

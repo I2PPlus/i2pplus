@@ -23,6 +23,5 @@ public interface Updater {
      *  @param maxTime how long you have
      *  @return active task or null if unable to download
      */
-    public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources,
-                               String id, String newVersion, long maxTime);
+    public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources, String id, String newVersion, long maxTime);
 }

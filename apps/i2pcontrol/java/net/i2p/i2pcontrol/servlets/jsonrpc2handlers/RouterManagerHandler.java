@@ -41,8 +41,7 @@ public class RouterManagerHandler implements RequestHandler {
     private final JSONRPC2Helper _helper;
     private final RouterContext _context;
 
-    private final static int SHUTDOWN_WAIT = 1500;
-
+    private static final int SHUTDOWN_WAIT = 1500;
 
     public RouterManagerHandler(RouterContext ctx, JSONRPC2Helper helper) {
         _helper = helper;
@@ -51,7 +50,7 @@ public class RouterManagerHandler implements RequestHandler {
 
     // Reports the method names of the handled requests
     public String[] handledRequests() {
-        return new String[] { "RouterManager" };
+        return new String[] {"RouterManager"};
     }
 
     // Processes the requests
@@ -60,21 +59,17 @@ public class RouterManagerHandler implements RequestHandler {
             return process(req);
         } else {
             // Method name not supported
-            return new JSONRPC2Response(JSONRPC2Error.METHOD_NOT_FOUND,
-                                        req.getID());
+            return new JSONRPC2Response(JSONRPC2Error.METHOD_NOT_FOUND, req.getID());
         }
     }
 
     private JSONRPC2Response process(JSONRPC2Request req) {
         JSONRPC2Error err = _helper.validateParams(null, req);
-        if (err != null)
-            return new JSONRPC2Response(err, req.getID());
+        if (err != null) return new JSONRPC2Response(err, req.getID());
 
         if (_context == null) {
-            return new JSONRPC2Response(new JSONRPC2Error(
-                                            JSONRPC2Error.INTERNAL_ERROR.getCode(),
-                                            "RouterContext was not initialized. Query failed"),
-                                        req.getID());
+            return new JSONRPC2Response(new JSONRPC2Error(JSONRPC2Error.INTERNAL_ERROR.getCode(),
+                "RouterContext was not initialized. Query failed"), req.getID());
         }
         Map<String, Object> inParams = req.getNamedParams();
         final Map<String, Object> outParams = new HashMap<String, Object>(4);
@@ -86,9 +81,9 @@ public class RouterManagerHandler implements RequestHandler {
                 public void run() {
                     try {
                         Thread.sleep(SHUTDOWN_WAIT);
-                    } catch (InterruptedException e) {}
-                    _context.addShutdownTask(new UpdateWrapperManagerTask(Router.EXIT_HARD));
-                    _context.router().shutdown(Router.EXIT_HARD);
+                    } catch (InterruptedException e) { /* ignored */ }
+                        _context.addShutdownTask(new UpdateWrapperManagerTask(Router.EXIT_HARD));
+                        _context.router().shutdown(Router.EXIT_HARD);
                 }
             }).start();
             return new JSONRPC2Response(outParams, req.getID());
@@ -101,9 +96,9 @@ public class RouterManagerHandler implements RequestHandler {
                 public void run() {
                     try {
                         Thread.sleep(SHUTDOWN_WAIT);
-                    } catch (InterruptedException e) {}
-                    _context.addShutdownTask(new UpdateWrapperManagerTask(Router.EXIT_HARD_RESTART));
-                    _context.router().shutdown(Router.EXIT_HARD_RESTART);
+                    } catch (InterruptedException e) { /* ignored */ }
+                        _context.addShutdownTask(new UpdateWrapperManagerTask(Router.EXIT_HARD_RESTART));
+                        _context.router().shutdown(Router.EXIT_HARD_RESTART);
                 }
             }).start();
             return new JSONRPC2Response(outParams, req.getID());
@@ -116,9 +111,9 @@ public class RouterManagerHandler implements RequestHandler {
                 public void run() {
                     try {
                         Thread.sleep(SHUTDOWN_WAIT);
-                    } catch (InterruptedException e) {}
-                    _context.addShutdownTask(new UpdateWrapperManagerTask(Router.EXIT_GRACEFUL));
-                    _context.router().shutdownGracefully();
+                    } catch (InterruptedException e) { /* ignored */ }
+                        _context.addShutdownTask(new UpdateWrapperManagerTask(Router.EXIT_GRACEFUL));
+                        _context.router().shutdownGracefully();
                 }
             }).start();
             return new JSONRPC2Response(outParams, req.getID());
@@ -131,9 +126,9 @@ public class RouterManagerHandler implements RequestHandler {
                 public void run() {
                     try {
                         Thread.sleep(SHUTDOWN_WAIT);
-                    } catch (InterruptedException e) {}
-                    _context.addShutdownTask(new UpdateWrapperManagerTask(Router.EXIT_GRACEFUL_RESTART));
-                    _context.router().shutdownGracefully(Router.EXIT_GRACEFUL_RESTART);
+                    } catch (InterruptedException e) { /* ignored */ }
+                        _context.addShutdownTask(new UpdateWrapperManagerTask(Router.EXIT_GRACEFUL_RESTART));
+                        _context.router().shutdownGracefully(Router.EXIT_GRACEFUL_RESTART);
                 }
             }).start();
             return new JSONRPC2Response(outParams, req.getID());
@@ -172,7 +167,7 @@ public class RouterManagerHandler implements RequestHandler {
             t.start();
             try {
                 t.join();
-            } catch (InterruptedException e) {}
+            } catch (InterruptedException e) { /* ignored */ }
             return new JSONRPC2Response(outParams, req.getID());
         }
 
@@ -211,7 +206,7 @@ public class RouterManagerHandler implements RequestHandler {
             t.start();
             try {
                 t.join();
-            } catch (InterruptedException e) {}
+            } catch (InterruptedException e) { /* ignored */ }
             return new JSONRPC2Response(outParams, req.getID());
         }
 
@@ -221,9 +216,11 @@ public class RouterManagerHandler implements RequestHandler {
     /** Task to update the wrapper manager with a specific exit code */
     public static class UpdateWrapperManagerTask implements Runnable {
         private int _exitCode;
+
         public UpdateWrapperManagerTask(int exitCode) {
             _exitCode = exitCode;
         }
+
         public void run() {
             try {
                 WrapperManager.signalStopped(_exitCode);

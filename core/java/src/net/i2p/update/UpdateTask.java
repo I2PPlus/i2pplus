@@ -40,7 +40,7 @@ public interface UpdateTask {
      */
     public UpdateMethod getMethod();
 
-   /**
+    /**
      *  The current URI being checked or downloaded from.
      *  Can change if there are multiple URIs to try.
      *
@@ -48,7 +48,7 @@ public interface UpdateTask {
      */
     public URI getURI();
 
-   /**
+    /**
      *  Valid for plugins
      *
      *  @return plugin ID

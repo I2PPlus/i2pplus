@@ -1,15 +1,16 @@
 package net.i2p.i2ptunnel;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.util.Clock;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Connection rate limiter providing basic DoS protection.
@@ -46,8 +47,7 @@ class ConnThrottler {
      * @param totalThrottlePeriod how long to ban all peers (ms)
      * @param action just a name to note in the log
      */
-    public ConnThrottler(int max, int totalMax, long period,
-                         long throttlePeriod, long totalThrottlePeriod, String action, Log log) {
+    public ConnThrottler(int max, int totalMax, long period, long throttlePeriod, long totalThrottlePeriod, String action, Log log) {
         updateLimits(max, totalMax, period, throttlePeriod, totalThrottlePeriod);
         _peers = new HashMap<Hash, Record>(4);
         _action = action;
@@ -69,8 +69,7 @@ class ConnThrottler {
      * @since 0.9.40
      */
     public synchronized void start() {
-        if (_isRunning)
-            return;
+        if (_isRunning) return;
         _isRunning = true;
         _cleaner.schedule(_checkPeriod);
     }
@@ -107,9 +106,9 @@ class ConnThrottler {
     public final synchronized void updateLimits(int max, int totalMax, long checkPeriod, long throttlePeriod, long totalThrottlePeriod) {
         _max = max;
         _totalMax = totalMax;
-        _checkPeriod = Math.max(checkPeriod, 10*1000);
-        _throttlePeriod = Math.max(throttlePeriod, 10*1000);
-        _totalThrottlePeriod = Math.max(totalThrottlePeriod, 10*1000);
+        _checkPeriod = Math.max(checkPeriod, 10 * 1000);
+        _throttlePeriod = Math.max(throttlePeriod, 10 * 1000);
+        _totalThrottlePeriod = Math.max(totalThrottlePeriod, 10 * 1000);
     }
 
     /**
@@ -135,8 +134,7 @@ class ConnThrottler {
         // all throttled already?
         if (_totalMax > 0) {
             if (_totalThrottleUntil > 0) {
-                if (_totalThrottleUntil > Clock.getInstance().now())
-                    return true;
+                if (_totalThrottleUntil > Clock.getInstance().now()) return true;
                 _totalThrottleUntil = 0;
             }
         }
@@ -145,17 +143,13 @@ class ConnThrottler {
             Record rec = _peers.get(h);
             if (rec != null) {
                 // peer throttled already?
-                if (rec.getUntil() > 0)
-                    return true;
+                if (rec.getUntil() > 0) return true;
                 rec.increment();
                 long now = Clock.getInstance().now();
                 if (rec.countSince(now - _checkPeriod) > _max) {
                     long until = now + _throttlePeriod;
                     String date = DataHelper.formatTime(until);
-                    _log.logAlways(Log.WARN, "Throttling " + _action + " until " + date +
-                                             " after exceeding max of " + _max +
-                                             " in " + DataHelper.formatDuration(_checkPeriod) +
-                                             "\n* Client: " + h.toBase64());
+                    _log.logAlways(Log.WARN, "Throttling " + _action + " until " + date + " after exceeding max of " + _max + " in " + DataHelper.formatDuration(_checkPeriod) + "\n* Client: " + h.toBase64());
                     rec.ban(until);
                     return true;
                 }
@@ -163,13 +157,11 @@ class ConnThrottler {
                 _peers.put(h, new Record());
             }
         }
-        if (_totalMax > 0 &&++_currentTotal > _totalMax) {
+        if (_totalMax > 0 && ++_currentTotal > _totalMax) {
             if (_totalThrottleUntil == 0) {
                 _totalThrottleUntil = Clock.getInstance().now() + _totalThrottlePeriod;
                 String date = DataHelper.formatTime(_totalThrottleUntil);
-                _log.logAlways(Log.WARN, "*** Throttling " + _action + " from ALL peers until " + date +
-                                         " after exceeding max of " + _max +
-                                         " in " + DataHelper.formatDuration(_checkPeriod));
+                _log.logAlways(Log.WARN, "*** Throttling " + _action + " from ALL peers until " + date + " after exceeding max of " + _max + " in " + DataHelper.formatDuration(_checkPeriod));
             }
             return true;
         }
@@ -205,11 +197,9 @@ class ConnThrottler {
 
         /** Caller must synch */
         public int countSince(long time) {
-            for (Iterator<Long> iter = times.iterator(); iter.hasNext();) {
-                if (iter.next().longValue() < time)
-                    iter.remove();
-                else
-                    break;
+            for (Iterator<Long> iter = times.iterator(); iter.hasNext(); ) {
+                if (iter.next().longValue() < time) iter.remove();
+                else break;
             }
             return times.size();
         }
@@ -228,8 +218,7 @@ class ConnThrottler {
 
         /** Caller must synch */
         public long getUntil() {
-            if (until < Clock.getInstance().now())
-                until = 0;
+            if (until < Clock.getInstance().now()) until = 0;
             return until;
         }
     }
@@ -246,14 +235,12 @@ class ConnThrottler {
         @Override
         public void timeReached() {
             synchronized (ConnThrottler.this) {
-                if (_totalMax > 0)
-                    _currentTotal = 0;
+                if (_totalMax > 0) _currentTotal = 0;
                 if (_max > 0 && !_peers.isEmpty()) {
-                    long then = Clock.getInstance().now()  - _checkPeriod;
-                    for (Iterator<Record> iter = _peers.values().iterator(); iter.hasNext();) {
+                    long then = Clock.getInstance().now() - _checkPeriod;
+                    for (Iterator<Record> iter = _peers.values().iterator(); iter.hasNext(); ) {
                         Record rec = iter.next();
-                        if (rec.getUntil() <= 0 && rec.countSince(then) <= 0)
-                            iter.remove();
+                        if (rec.getUntil() <= 0 && rec.countSince(then) <= 0) iter.remove();
                     }
                 }
             }

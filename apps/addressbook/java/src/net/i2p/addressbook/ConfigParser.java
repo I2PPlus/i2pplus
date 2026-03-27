@@ -21,6 +21,11 @@
 
 package net.i2p.addressbook;
 
+import net.i2p.data.DataHelper;
+import net.i2p.util.SecureFile;
+import net.i2p.util.SecureFileOutputStream;
+import net.i2p.util.SystemVersion;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -33,10 +38,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import net.i2p.data.DataHelper;
-import net.i2p.util.SecureFile;
-import net.i2p.util.SecureFileOutputStream;
-import net.i2p.util.SystemVersion;
 
 /**
  * Utility class providing methods to parse and write files in config file
@@ -63,10 +64,15 @@ class ConfigParser {
      * @return A String without comments, but otherwise identical to inputLine.
      */
     public static String stripComments(String inputLine) {
-        if (inputLine.startsWith("; ")) {return "";}
+        if (inputLine.startsWith("; ")) {
+            return "";
+        }
         int hash = inputLine.indexOf('#');
-        if (hash >= 0) {return inputLine.substring(0, hash);}
-        else {return inputLine;}
+        if (hash >= 0) {
+            return inputLine.substring(0, hash);
+        } else {
+            return inputLine;
+        }
     }
 
     /**
@@ -90,7 +96,9 @@ class ConfigParser {
             String inputLine;
             while ((inputLine = input.readLine()) != null) {
                 inputLine = stripComments(inputLine);
-                if (inputLine.length() == 0) {continue;}
+                if (inputLine.length() == 0) {
+                    continue;
+                }
                 String[] splitLine = DataHelper.split(inputLine, "=", 2);
                 if (splitLine.length == 2) {
                     result.put(splitLine[0].trim().toLowerCase(Locale.US), splitLine[1].trim());
@@ -98,8 +106,9 @@ class ConfigParser {
             }
             return result;
         } finally {
-            try {input.close();}
-            catch (IOException ioe) {
+            try {
+                input.close();
+            } catch (IOException ioe) {
                 // Ignore IOException
             }
         }
@@ -123,9 +132,10 @@ class ConfigParser {
             return parse(input);
         } finally {
             if (fileStream != null) {
-                try {fileStream.close();}
-                catch (IOException ioe) {
-                // Ignore IOException
+                try {
+                    fileStream.close();
+                } catch (IOException ioe) {
+                    // Ignore IOException
                 }
             }
         }
@@ -150,12 +160,16 @@ class ConfigParser {
         try {
             result = parse(file);
             fileParsedSuccessfully = true;
-        } catch (IOException exp) {result = new HashMap<>(map);} // Avoid modifying original map
+        } catch (IOException exp) {
+            result = new HashMap<>(map);
+        } // Avoid modifying original map
 
         try {
             // Migrate "local_addressbook" to "master_addressbook"
             String localBook = result.remove("local_addressbook");
-            if (localBook != null) {result.put("master_addressbook", localBook);}
+            if (localBook != null) {
+                result.put("master_addressbook", localBook);
+            }
 
             // Merge map entries only if they don't exist in result
             for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -164,35 +178,37 @@ class ConfigParser {
                 }
             }
             // Only write back if we successfully parsed the file originally
-            if (!fileParsedSuccessfully) {write(result, file);}
+            if (!fileParsedSuccessfully) {
+                write(result, file);
+            }
         } catch (IOException exp) {
-                // Ignore IOException
+            // Ignore IOException
         }
         return result;
     }
 
-/*    public static Map<String, String> parse(File file, Map<String, String> map) {
-        Map<String, String> result;
-        try {
-            result = parse(file);
-            // migrate from I2P
-            String master = result.remove("local_addressbook");
-            if (master != null) {result.put("master_addressbook", master);}
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                if (!result.containsKey(entry.getKey())) {
-                    result.put(entry.getKey(), entry.getValue());
+    /*    public static Map<String, String> parse(File file, Map<String, String> map) {
+            Map<String, String> result;
+            try {
+                result = parse(file);
+                // migrate from I2P
+                String master = result.remove("local_addressbook");
+                if (master != null) {result.put("master_addressbook", master);}
+                for (Map.Entry<String, String> entry : map.entrySet()) {
+                    if (!result.containsKey(entry.getKey())) {
+                        result.put(entry.getKey(), entry.getValue());
+                    }
+                }
+            } catch (IOException exp) {
+                result = map;
+                try {write(result, file);}
+                catch (IOException exp2) {
+                    // Ignore IOException
                 }
             }
-        } catch (IOException exp) {
-            result = map;
-            try {write(result, file);}
-            catch (IOException exp2) {
-                // Ignore IOException
-            }
+            return result;
         }
-        return result;
-    }
-*/
+    */
 
     /**
      * Return a List where each element is a line from the BufferedReader input.
@@ -209,12 +225,15 @@ class ConfigParser {
             String inputLine;
             while ((inputLine = input.readLine()) != null) {
                 inputLine = stripComments(inputLine).trim();
-                if (inputLine.length() > 0) {result.add(inputLine);}
+                if (inputLine.length() > 0) {
+                    result.add(inputLine);
+                }
             }
             return result;
         } finally {
-            try {input.close();}
-            catch (IOException ioe) {
+            try {
+                input.close();
+            } catch (IOException ioe) {
                 // Ignore IOException
             }
         }
@@ -237,9 +256,10 @@ class ConfigParser {
             return parseSubscriptions(input);
         } finally {
             if (fileStream != null) {
-                try {fileStream.close();}
-                catch (IOException ioe) {
-                // Ignore IOException
+                try {
+                    fileStream.close();
+                } catch (IOException ioe) {
+                    // Ignore IOException
                 }
             }
         }
@@ -264,17 +284,22 @@ class ConfigParser {
             // which was changed in 0.9.11
             if (result.remove(Daemon.OLD_DEFAULT_SUB)) {
                 for (String sub : list) {
-                    if (!result.contains(sub)) {result.add(sub);}
+                    if (!result.contains(sub)) {
+                        result.add(sub);
+                    }
                 }
-                try {writeSubscriptions(result, file);} // TODO log
+                try {
+                    writeSubscriptions(result, file);
+                } // TODO log
                 catch (IOException ioe) {
-                // Ignore IOException
+                    // Ignore IOException
                 }
             }
         } catch (IOException exp) {
             result = list;
-            try {writeSubscriptions(result, file);}
-            catch (IOException exp2) {
+            try {
+                writeSubscriptions(result, file);
+            } catch (IOException exp2) {
                 // Ignore IOException
             }
         }
@@ -299,8 +324,9 @@ class ConfigParser {
                 output.newLine();
             }
         } finally {
-            try {output.close();}
-            catch (IOException ioe) {
+            try {
+                output.close();
+            } catch (IOException ioe) {
                 // Ignore IOException
             }
         }
@@ -326,7 +352,9 @@ class ConfigParser {
             File tmp = SecureFile.createTempFile("temp-", ".tmp", file.getAbsoluteFile().getParentFile());
             write(map, new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(tmp), "UTF-8")));
             success = tmp.renameTo(file);
-            if (!success) {tmp.delete();}
+            if (!success) {
+                tmp.delete();
+            }
         }
         if (!success) {
             // hmm, that didn't work, try it the old way
@@ -352,8 +380,9 @@ class ConfigParser {
                 output.newLine();
             }
         } finally {
-            try {output.close();}
-            catch (IOException ioe) {
+            try {
+                output.close();
+            } catch (IOException ioe) {
                 // Ignore IOException
             }
         }
@@ -373,5 +402,4 @@ class ConfigParser {
     private static void writeSubscriptions(List<String> list, File file) throws IOException {
         writeSubscriptions(list, new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "UTF-8")));
     }
-
 }

@@ -1,4 +1,5 @@
 package net.i2p.router.time;
+
 /*
  * Copyright (c) 2004, Adam Buckley
  * All rights reserved.
@@ -28,6 +29,12 @@ package net.i2p.router.time;
  * POSSIBILITY OF SUCH DAMAGE.
  *
  */
+import net.i2p.I2PAppContext;
+import net.i2p.data.DataHelper;
+import net.i2p.util.DNSOverHTTPS;
+import net.i2p.util.HexDump;
+import net.i2p.util.Log;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -39,11 +46,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import net.i2p.I2PAppContext;
-import net.i2p.data.DataHelper;
-import net.i2p.util.DNSOverHTTPS;
-import net.i2p.util.HexDump;
-import net.i2p.util.Log;
 
 /**
  * NtpClient - an NTP client for Java.  This program connects to an NTP server
@@ -66,6 +68,7 @@ import net.i2p.util.Log;
 public class NtpClient {
     /** difference between the unix epoch and jan 1 1900 (NTP uses that) */
     static final double SECONDS_1900_TO_EPOCH = 2208988800.0;
+
     private static final int NTP_PORT = 123;
     private static final int DEFAULT_TIMEOUT = 10 * 1000;
     private static final int OFF_ORIGTIME = 24;
@@ -77,6 +80,7 @@ public class NtpClient {
      * KoD is a special NTP stratum 0 response indicating the server requests the client to stop querying temporarily.
      */
     private static final Map<String, String> kisses = new ConcurrentHashMap<>(2);
+
     private static final String PROP_USE_DNS_OVER_HTTPS = "time.useDNSOverHTTPS";
     private static final boolean DEFAULT_USE_DNS_OVER_HTTPS = false;
 
@@ -165,8 +169,7 @@ public class NtpClient {
             byte[] transmitTimestampBytes = new byte[8];
             socket = new DatagramSocket();
             // Set transmit timestamp just before sending for accuracy
-            NtpMessage.encodeTimestamp(packet.getData(), OFF_TXTIME,
-                    (System.currentTimeMillis() / 1000.0) + SECONDS_1900_TO_EPOCH);
+            NtpMessage.encodeTimestamp(packet.getData(), OFF_TXTIME, (System.currentTimeMillis() / 1000.0) + SECONDS_1900_TO_EPOCH);
             socket.send(packet);
             System.arraycopy(packet.getData(), OFF_TXTIME, transmitTimestampBytes, 0, 8);
             if (log != null && log.shouldDebug()) {
@@ -186,14 +189,12 @@ public class NtpClient {
             String fromIP = packet.getAddress().getHostAddress();
             int fromPort = packet.getPort();
             if (log != null && log.shouldDebug()) {
-                log.debug("Received NTP response from " + fromIP + ":" + fromPort + "\n" +
-                          msg + "\n" + HexDump.dump(packet.getData()));
+                log.debug("Received NTP response from " + fromIP + ":" + fromPort + "\n" + msg + "\n" + HexDump.dump(packet.getData()));
             }
             // Spoofing check: confirm response from expected host and port
             if (fromPort != NTP_PORT || !ipAddress.equals(fromIP)) {
                 if (log != null && log.shouldWarn()) {
-                    log.warn("Potential spoof detected: Sent request to " + ipAddress + ":" + NTP_PORT +
-                             " but received response from " + packet.getSocketAddress());
+                    log.warn("Potential spoof detected: Sent request to " + ipAddress + ":" + NTP_PORT + " but received response from " + packet.getSocketAddress());
                 }
                 return new long[0];
             }
@@ -207,15 +208,12 @@ public class NtpClient {
             // Origin timestamp check for spoofing protection
             if (!DataHelper.eq(transmitTimestampBytes, 0, packet.getData(), OFF_ORIGTIME, 8)) {
                 if (log != null && log.shouldWarn()) {
-                    log.warn("Origin timestamp mismatch between sent and received NTP packets:\nSent:\n" +
-                             HexDump.dump(transmitTimestampBytes) + "Received:\n" + HexDump.dump(packet.getData(), OFF_ORIGTIME, 8));
+                    log.warn("Origin timestamp mismatch between sent and received NTP packets:\nSent:\n" + HexDump.dump(transmitTimestampBytes) + "Received:\n" + HexDump.dump(packet.getData(), OFF_ORIGTIME, 8));
                 }
                 return new long[0];
             }
             // Sanity checks - leapIndicator, version, mode, timestamps, delays
-            if (msg.leapIndicator == 3 || msg.version < 3 || msg.mode != 4 ||
-                msg.transmitTimestamp <= 0 || Math.abs(msg.rootDelay) > 1.0d ||
-                Math.abs(msg.rootDispersion) > 1.0d) {
+            if (msg.leapIndicator == 3 || msg.version < 3 || msg.mode != 4 || msg.transmitTimestamp <= 0 || Math.abs(msg.rootDelay) > 1.0d || Math.abs(msg.rootDispersion) > 1.0d) {
                 if (log != null && log.shouldWarn()) {
                     log.warn("Sanity check failed for NTP response from " + serverName + " (" + ipAddress + "):\n" + msg);
                 }
@@ -231,16 +229,13 @@ public class NtpClient {
                 return new long[0];
             }
             // Calculate local clock offset relative to received NTP time
-            double localClockOffset = ((msg.receiveTimestamp - msg.originateTimestamp) +
-                                       (msg.transmitTimestamp - destinationTimestamp)) / 2;
+            double localClockOffset = ((msg.receiveTimestamp - msg.originateTimestamp) + (msg.transmitTimestamp - destinationTimestamp)) / 2;
             long[] result = new long[2];
-            result[0] = (long)(System.currentTimeMillis() + localClockOffset * 1000);
+            result[0] = (long) (System.currentTimeMillis() + localClockOffset * 1000);
             result[1] = msg.stratum;
             if (log != null && log.shouldInfo()) {
-                double roundTripDelay = (destinationTimestamp - msg.originateTimestamp) -
-                                        (msg.receiveTimestamp - msg.transmitTimestamp);
-                log.info(String.format("NTP time synchronization info from %s - RTT: %.3f sec, Local clock offset: %.6f sec",
-                        packet.getAddress().getHostAddress(), roundTripDelay, localClockOffset));
+                double roundTripDelay = (destinationTimestamp - msg.originateTimestamp) - (msg.receiveTimestamp - msg.transmitTimestamp);
+                log.info(String.format("NTP time synchronization info from %s - RTT: %.3f sec, Local clock offset: %.6f sec", packet.getAddress().getHostAddress(), roundTripDelay, localClockOffset));
             }
             return result;
         } catch (IOException ioe) {
@@ -280,17 +275,15 @@ public class NtpClient {
             }
         }
         if (args.length <= 0) {
-            args = new String[] { "pool.ntp.org" };
+            args = new String[] {"pool.ntp.org"};
         }
         System.out.println("Querying " + Arrays.toString(args));
         Log log = new Log(NtpClient.class);
         try {
             long[] rv = currentTimeAndStratum(args, DEFAULT_TIMEOUT, ipv6, log);
-            System.out.println("Current time: " + java.time.Instant.ofEpochMilli(rv[0]) + " (stratum " + rv[1] +
-                               ") offset " + (rv[0] - System.currentTimeMillis()) + "ms");
+            System.out.println("Current time: " + java.time.Instant.ofEpochMilli(rv[0]) + " (stratum " + rv[1] + ") offset " + (rv[0] - System.currentTimeMillis()) + "ms");
         } catch (IllegalArgumentException iae) {
             System.out.println("Failed: " + iae.getMessage());
         }
     }
-
 }

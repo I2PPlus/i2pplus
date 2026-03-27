@@ -1,12 +1,13 @@
 package net.i2p.router.transport.ntcp;
 
+import net.i2p.router.RouterContext;
+import net.i2p.util.Log;
+import net.i2p.util.SimpleByteCache;
+
 import java.nio.ByteBuffer;
 import java.util.EnumSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import net.i2p.router.RouterContext;
-import net.i2p.util.Log;
-import net.i2p.util.SimpleByteCache;
 
 /**
  * Base class for NTCP connection establishment.
@@ -28,6 +29,7 @@ abstract class EstablishBase implements EstablishState {
     protected final byte _X[];
     // alice receives (and bob sends)
     protected final byte _Y[];
+
     /**
      *  OUR clock minus HIS clock, in seconds
      *
@@ -151,11 +153,9 @@ abstract class EstablishBase implements EstablishState {
     @Override
     public synchronized void receive(ByteBuffer src) {
         synchronized (_stateLock) {
-            if (STATES_DONE.contains(_state))
-                throw new IllegalStateException(prefix() + "received unexpected data on " + _con);
+            if (STATES_DONE.contains(_state)) throw new IllegalStateException(prefix() + "received unexpected data on " + _con);
         }
-        if (_log.shouldDebug())
-            _log.debug(prefix() + "Receiving: " + src.remaining() + " Received: " + _received);
+        if (_log.shouldDebug()) _log.debug(prefix() + "Receiving: " + src.remaining() + " Received: " + _received);
     }
 
     /**
@@ -203,21 +203,25 @@ abstract class EstablishBase implements EstablishState {
     }
 
     /** Caller must synch. */
-    protected void fail(String reason) { fail(reason, null); }
+    protected void fail(String reason) {
+        fail(reason, null);
+    }
 
     /** Caller must synch. */
-    protected void fail(String reason, Exception e) { fail(reason, e, false); }
+    protected void fail(String reason, Exception e) {
+        fail(reason, e, false);
+    }
 
     /** Caller must synch. */
     protected void fail(String reason, Exception e, boolean bySkew) {
         synchronized (_stateLock) {
-            if (STATES_DONE.contains(_state))
-                return;
+            if (STATES_DONE.contains(_state)) return;
             changeState(State.CORRUPT);
         }
-        if (_log.shouldWarn()) {_log.warn(prefix() + reason);}
-        if (!bySkew)
-            _context.statManager().addRateData("ntcp.receiveCorruptEstablishment", 1);
+        if (_log.shouldWarn()) {
+            _log.warn(prefix() + reason);
+        }
+        if (!bySkew) _context.statManager().addRateData("ntcp.receiveCorruptEstablishment", 1);
         releaseBufs(false);
         // con.close()?
     }
@@ -228,11 +232,12 @@ abstract class EstablishBase implements EstablishState {
      */
     protected void releaseBufs(boolean isVerified) {
         // null or longer for OB
-        if (_prevEncrypted != null && _prevEncrypted.length == AES_SIZE)
-            SimpleByteCache.release(_prevEncrypted);
+        if (_prevEncrypted != null && _prevEncrypted.length == AES_SIZE) SimpleByteCache.release(_prevEncrypted);
     }
 
-    protected String prefix() { return toString(); }
+    protected String prefix() {
+        return toString();
+    }
 
     @Override
     public String toString() {
@@ -255,7 +260,9 @@ abstract class EstablishBase implements EstablishState {
         }
 
         @Override
-        public int getVersion() { return 1; }
+        public int getVersion() {
+            return 1;
+        }
 
         /*
          * @throws IllegalStateException always
@@ -274,7 +281,9 @@ abstract class EstablishBase implements EstablishState {
         }
 
         @Override
-        public String toString() { return "VerifiedEstablishState: ";}
+        public String toString() {
+            return "VerifiedEstablishState: ";
+        }
     }
 
     /**
@@ -288,7 +297,9 @@ abstract class EstablishBase implements EstablishState {
         }
 
         @Override
-        public int getVersion() { return 1; }
+        public int getVersion() {
+            return 1;
+        }
 
         /*
          * @throws IllegalStateException always
@@ -307,7 +318,9 @@ abstract class EstablishBase implements EstablishState {
         }
 
         @Override
-        public String toString() { return "FailedEstablishState: ";}
+        public String toString() {
+            return "FailedEstablishState: ";
+        }
     }
 
     /**
@@ -319,5 +332,4 @@ abstract class EstablishBase implements EstablishState {
     protected static final String _x(String s) {
         return s;
     }
-
 }

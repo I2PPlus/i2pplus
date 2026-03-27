@@ -10,12 +10,13 @@
  */
 package org.minidns.record;
 
+import org.minidns.record.Record.TYPE;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
-import org.minidns.record.Record.TYPE;
 
 /**
  * Abstract base class for DNS record data payloads.<br>

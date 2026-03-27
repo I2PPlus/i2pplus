@@ -60,7 +60,7 @@ public final class QRCode {
     }
 
     @Override
-  public String toString() {
+    public String toString() {
         StringBuilder result = new StringBuilder(200);
         result.append("<<\n");
         result.append(" mode: ");
@@ -101,9 +101,8 @@ public final class QRCode {
         matrix = value;
     }
 
-  // Check if "mask_pattern" is valid.
+    // Check if "mask_pattern" is valid.
     public static boolean isValidMaskPattern(int maskPattern) {
         return maskPattern >= 0 && maskPattern < NUM_MASK_PATTERNS;
     }
-
 }

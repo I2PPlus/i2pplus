@@ -1,6 +1,5 @@
 package net.i2p.crypto.eddsa;
 
-import java.math.BigInteger;
 import net.i2p.crypto.eddsa.math.Field;
 import net.i2p.crypto.eddsa.math.GroupElement;
 import net.i2p.crypto.eddsa.math.ScalarOps;
@@ -9,6 +8,8 @@ import net.i2p.crypto.eddsa.math.bigint.BigIntegerScalarOps;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
 import net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec;
 import net.i2p.crypto.eddsa.spec.EdDSAPublicKeySpec;
+
+import java.math.BigInteger;
 
 /**
  * Utilities for EdDSA key blinding operations.
@@ -38,7 +39,7 @@ public final class EdDSABlinding {
         GroupElement d = a.add(aa.toCached());
         EdDSAPublicKeySpec pubKey = new EdDSAPublicKeySpec(d, key.getParams());
         EdDSAPublicKey rv = new EdDSAPublicKey(pubKey);
-        //System.out.println("Adding pubkey\n" +
+        // System.out.println("Adding pubkey\n" +
         //   net.i2p.util.HexDump.dump(key.getAbyte()) +
         //   "\nplus privkey\n" +
         //   net.i2p.util.HexDump.dump(alpha.geta()) +
@@ -64,7 +65,7 @@ public final class EdDSABlinding {
         // Add the two private keys together.
         // just for now, since we don't have a pure add.
         byte[] d = sc.multiplyAndAdd(ONE, a, aa);
-        //System.out.println("Adding privkeys\n" +
+        // System.out.println("Adding privkeys\n" +
         //   net.i2p.util.HexDump.dump(a) +
         //   "\nplus\n" +
         //   net.i2p.util.HexDump.dump(aa) +
@@ -92,8 +93,7 @@ public final class EdDSABlinding {
      *  @return 32 bytes little endian mod l
      */
     public static byte[] reduce(byte[] b) {
-        if (b.length != 64)
-            throw new IllegalArgumentException("Must be 64 bytes");
+        if (b.length != 64) throw new IllegalArgumentException("Must be 64 bytes");
         ScalarOps sc = new BigIntegerScalarOps(FIELD, ORDER);
         return sc.reduce(b);
     }

@@ -69,16 +69,9 @@ class LogRecord {
      */
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof LogRecord))
-            return false;
+        if (!(o instanceof LogRecord)) return false;
         LogRecord r = (LogRecord) o;
-        return _source == r._source &&
-               ((_message == null && r._message == null) ||
-                (_message != null && r._message != null &&
-                 ((_message.length() <= MATCH_LEN) ? _message.equals(r._message)
-                                                   : _message.regionMatches(0, r._message, 0, MATCH_LEN)))) &&
-               ((_throwable == null && r._throwable == null) ||
-                (_throwable != null && r._throwable != null && _throwable.getClass() == r._throwable.getClass()));
+        return _source == r._source && ((_message == null && r._message == null) || (_message != null && r._message != null && ((_message.length() <= MATCH_LEN) ? _message.equals(r._message) : _message.regionMatches(0, r._message, 0, MATCH_LEN)))) && ((_throwable == null && r._throwable == null) || (_throwable != null && r._throwable != null && _throwable.getClass() == r._throwable.getClass()));
     }
 
     @Override

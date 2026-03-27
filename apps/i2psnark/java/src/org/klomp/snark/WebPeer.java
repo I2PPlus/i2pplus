@@ -1,5 +1,10 @@
 package org.klomp.snark;
 
+import net.i2p.client.streaming.I2PSocketEepGet;
+import net.i2p.client.streaming.I2PSocketManager;
+import net.i2p.data.DataHelper;
+import net.i2p.util.EepGet;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -10,10 +15,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import net.i2p.client.streaming.I2PSocketEepGet;
-import net.i2p.client.streaming.I2PSocketManager;
-import net.i2p.data.DataHelper;
-import net.i2p.util.EepGet;
 
 /**
  * BEP 19. Does not have an associated PeerState. All request tracking is done here.
@@ -59,12 +60,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     public WebPeer(PeerCoordinator coord, URI uri, PeerID peerID, MetaInfo metainfo) {
         super(peerID, null, null, metainfo);
         // no use asking for more than the number of chunks in a piece
-        MAX_REQUESTS =
-                Math.max(
-                        1,
-                        Math.min(
-                                ABSOLUTE_MAX_REQUESTS,
-                                metainfo.getPieceLength(0) / PeerState.PARTSIZE));
+        MAX_REQUESTS = Math.max(1, Math.min(ABSOLUTE_MAX_REQUESTS, metainfo.getPieceLength(0) / PeerState.PARTSIZE));
         MIN_REQUESTS = Math.min(ABSOLUTE_MIN_REQUESTS, MAX_REQUESTS);
         maxRequests = MIN_REQUESTS;
         isMultiFile = metainfo.getLengths() != null;
@@ -112,13 +108,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
      * @param uploadOnly if we are complete with skipped files, i.e. a partial seed
      */
     @Override
-    public void runConnection(
-            I2PSnarkUtil util,
-            PeerListener listener,
-            BandwidthListener bwl,
-            BitField ignore,
-            MagnetState mState,
-            boolean uploadOnly) {
+    public void runConnection(I2PSnarkUtil util, PeerListener listener, BandwidthListener bwl, BitField ignore, MagnetState mState, boolean uploadOnly) {
         if (uploadOnly) return;
         int fails = 0;
         int successes = 0;
@@ -249,8 +239,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                                 }
                                 fstart += filelen;
                             }
-                            if (filenum < 0)
-                                throw new IllegalStateException(lastRequest.toString());
+                            if (filenum < 0) throw new IllegalStateException(lastRequest.toString());
                         } else {
                             // next file
                             filenum++;
@@ -292,25 +281,12 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                     }
 
                     // do the fetch
-                    EepGet get =
-                            new I2PSocketEepGet(
-                                    util.getContext(), mgr, 0, flen, flen, null, out, url);
+                    EepGet get = new I2PSocketEepGet(util.getContext(), mgr, 0, flen, flen, null, out, url);
                     get.addHeader("User-Agent", I2PSnarkUtil.EEPGET_USER_AGENT);
                     get.addHeader("Range", "bytes=" + foff + '-' + (foff + flen - 1));
                     get.addStatusListener(this);
                     int osz = out.size();
-                    if (_log.shouldDebug())
-                        _log.debug(
-                                "Fetching piece: "
-                                        + piece
-                                        + " offset: "
-                                        + off
-                                        + " file offset: "
-                                        + foff
-                                        + " len: "
-                                        + flen
-                                        + " from "
-                                        + url);
+                    if (_log.shouldDebug()) _log.debug("Fetching piece: " + piece + " offset: " + off + " file offset: " + foff + " len: " + flen + " from " + url);
                     if (get.fetch(HEADER_TIMEOUT, TOTAL_TIMEOUT, INACTIVITY_TIMEOUT)) {
                         int resp = get.getStatusCode();
                         if (resp != 200 && resp != 206) {
@@ -319,29 +295,19 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                         }
                         int sz = out.size() - osz;
                         if (sz != flen) {
-                            if (_log.shouldWarn())
-                                _log.warn(
-                                        "Fetch of "
-                                                + url
-                                                + " received: "
-                                                + sz
-                                                + " expected: "
-                                                + flen);
+                            if (_log.shouldWarn()) _log.warn("Fetch of " + url + " received: " + sz + " expected: " + flen);
                             return;
                         }
                     } else {
                         if (out.size() > 0) {
                             // save any complete chunks received
-                            DataInputStream dis =
-                                    new DataInputStream(
-                                            new ByteArrayInputStream(out.toByteArray()));
-                            for (Iterator<Request> iter = requests.iterator(); iter.hasNext();) {
+                            DataInputStream dis = new DataInputStream(new ByteArrayInputStream(out.toByteArray()));
+                            for (Iterator<Request> iter = requests.iterator(); iter.hasNext(); ) {
                                 Request req = iter.next();
                                 if (dis.available() < req.len) break;
                                 req.read(dis, this);
                                 iter.remove();
-                                if (_log.shouldWarn())
-                                    _log.warn("Saved chunk " + req + " recvd before failure");
+                                if (_log.shouldWarn()) _log.warn("Saved chunk " + req + " recvd before failure");
                             }
                         }
                         int resp = get.getStatusCode();
@@ -356,21 +322,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                 } // for each file
 
                 // all data received successfully, now process it
-                if (_log.shouldDebug())
-                    _log.debug(
-                            "Fetch of piece: "
-                                    + piece
-                                    + " chunks: "
-                                    + requests.size()
-                                    + " offset: "
-                                    + off
-                                    + " torrent offset: "
-                                    + toff
-                                    + " len: "
-                                    + tlen
-                                    + " successful");
-                DataInputStream dis =
-                        new DataInputStream(new ByteArrayInputStream(out.toByteArray()));
+                if (_log.shouldDebug()) _log.debug("Fetch of piece: " + piece + " chunks: " + requests.size() + " offset: " + off + " torrent offset: " + toff + " len: " + tlen + " successful");
+                DataInputStream dis = new DataInputStream(new ByteArrayInputStream(out.toByteArray()));
                 for (Request req : requests) {
                     req.read(dis, this);
                 }
@@ -392,8 +345,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
 
                 long time = lastRcvd - start;
                 if (time < TARGET_FETCH_TIME) maxRequests = Math.min(MAX_REQUESTS, 2 * maxRequests);
-                else if (time > 2 * TARGET_FETCH_TIME)
-                    maxRequests = Math.max(MIN_REQUESTS, maxRequests / 2);
+                else if (time > 2 * TARGET_FETCH_TIME) maxRequests = Math.max(MIN_REQUESTS, maxRequests / 2);
             } // request loop
         } catch (IOException eofe) {
             if (_log.shouldWarn()) _log.warn(toString(), eofe);
@@ -407,28 +359,13 @@ class WebPeer extends Peer implements EepGet.StatusListener {
             if (!pcs.isEmpty()) listener.savePartialPieces(this, pcs);
             listener.disconnected(this);
             disconnect();
-            if (_log.shouldWarn())
-                _log.warn(
-                        "Completed, successful fetches: "
-                                + successes
-                                + " downloaded: "
-                                + dl
-                                + " for "
-                                + this);
+            if (_log.shouldWarn()) _log.warn("Completed, successful fetches: " + successes + " downloaded: " + dl + " for " + this);
         }
     }
 
     private void fail(String url, int resp) {
         if (_log.shouldWarn()) _log.warn("Fetch of " + url + " failed, rc: " + resp);
-        if (resp == 301
-                || resp == 308
-                || resp == 401
-                || resp == 403
-                || resp == 404
-                || resp == 410
-                || resp == 414
-                || resp == 416
-                || resp == 451) {
+        if (resp == 301 || resp == 308 || resp == 401 || resp == 403 || resp == 404 || resp == 410 || resp == 414 || resp == 416 || resp == 451) {
             // ban forever
             _coordinator.banWebPeer(_uri.getHost(), true);
             if (_log.shouldWarn()) _log.warn("Permanently banning the webseed " + url);
@@ -579,8 +516,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                     PartialPiece nextPiece = lastRequest.getPartialPiece();
                     int nextBegin = lastRequest.off + PeerState.PARTSIZE;
                     int maxLength = pieceLength - nextBegin;
-                    int nextLength =
-                            maxLength > PeerState.PARTSIZE ? PeerState.PARTSIZE : maxLength;
+                    int nextLength = maxLength > PeerState.PARTSIZE ? PeerState.PARTSIZE : maxLength;
                     Request req = new Request(nextPiece, nextBegin, nextLength);
                     outstandingRequests.add(req);
                     lastRequest = req;
@@ -623,8 +559,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
               if (interesting && lastRequest == null) {
                   interesting = false;
                   out.sendInterest(false);
-                  if (_log.shouldDebug())
-                      _log.debug(peer + " nothing more to request, now uninteresting");
+                  if (_log.shouldDebug()) _log.debug(peer + " nothing more to request, now uninteresting");
               }
         */
         return false;
@@ -676,33 +611,15 @@ class WebPeer extends Peer implements EepGet.StatusListener {
 
     // EepGet status listeners to maintain the state for the web page
 
-    public void bytesTransferred(
-            long alreadyTransferred,
-            int currentWrite,
-            long bytesTransferred,
-            long bytesRemaining,
-            String url) {
+    public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {
         lastRcvd = System.currentTimeMillis();
     }
 
-    public void attemptFailed(
-            String url,
-            long bytesTransferred,
-            long bytesRemaining,
-            int currentAttempt,
-            int numRetries,
-            Exception cause) {}
+    public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause) {}
 
-    public void transferComplete(
-            long alreadyTransferred,
-            long bytesTransferred,
-            long bytesRemaining,
-            String url,
-            String outputFile,
-            boolean notModified) {}
+    public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {}
 
-    public void transferFailed(
-            String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {}
+    public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {}
 
     public void headerReceived(String url, int attemptNum, String key, String val) {}
 

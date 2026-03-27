@@ -15,7 +15,7 @@ public class HexDumpTest {
 
     @Test
     public void testDumpSingleByte() {
-        String result = HexDump.dump(new byte[]{0x42});
+        String result = HexDump.dump(new byte[] {0x42});
         assertTrue(result.contains("42"));
     }
 

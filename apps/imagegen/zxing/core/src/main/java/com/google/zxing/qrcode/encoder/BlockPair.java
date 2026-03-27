@@ -38,5 +38,4 @@ final class BlockPair {
     public byte[] getErrorCorrectionBytes() {
         return errorCorrectionBytes;
     }
-
 }

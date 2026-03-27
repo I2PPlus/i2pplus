@@ -1,4 +1,5 @@
 package net.i2p.data.i2np;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -18,7 +19,7 @@ import net.i2p.data.DataHelper;
  * @author jrandom
  */
 public class DeliveryStatusMessage extends FastI2NPMessageImpl {
-    public final static int MESSAGE_TYPE = 10;
+    public static final int MESSAGE_TYPE = 10;
     private long _id;
     private long _arrival;
 
@@ -31,7 +32,9 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
         _arrival = -1;
     }
 
-    public long getMessageId() { return _id; }
+    public long getMessageId() {
+        return _id;
+    }
 
     /**
      *  @param id 0 to (2**32) - 1
@@ -39,10 +42,8 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
      *  @throws IllegalArgumentException
      */
     public void setMessageId(long id) {
-        if (_id >= 0)
-            throw new IllegalStateException();
-        if (id < 0 || id > MAX_MSG_ID)
-            throw new IllegalArgumentException();
+        if (_id >= 0) throw new IllegalStateException();
+        if (id < 0 || id > MAX_MSG_ID) throw new IllegalArgumentException();
         _id = id;
     }
 
@@ -50,7 +51,9 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
      *  Misnamed, as it is generally (always?) set by the creator to the current time,
      *  in some future usage it could be set on arrival
      */
-    public long getArrival() { return _arrival; }
+    public long getArrival() {
+        return _arrival;
+    }
 
     /**
      *  Misnamed, as it is generally (always?) set by the creator to the current time,
@@ -59,8 +62,7 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
     public void setArrival(long arrival) {
         // To accomodate setting on arrival,
         // invalidate the stored checksum instead of throwing ISE
-        if (_arrival >= 0)
-            _hasChecksum = false;
+        if (_arrival >= 0) _hasChecksum = false;
         _arrival = arrival;
     }
 
@@ -93,19 +95,20 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
     }
 
     @Override
-    public int getType() { return MESSAGE_TYPE; }
+    public int getType() {
+        return MESSAGE_TYPE;
+    }
 
     @Override
     public int hashCode() {
-        return (int)getMessageId() ^ (int)getArrival();
+        return (int) getMessageId() ^ (int) getArrival();
     }
 
     @Override
     public boolean equals(Object object) {
         if ((object != null) && (object instanceof DeliveryStatusMessage)) {
-            DeliveryStatusMessage msg = (DeliveryStatusMessage)object;
-            return _id == msg.getMessageId() &&
-                   _arrival == msg.getArrival();
+            DeliveryStatusMessage msg = (DeliveryStatusMessage) object;
+            return _id == msg.getMessageId() && _arrival == msg.getArrival();
         } else {
             return false;
         }

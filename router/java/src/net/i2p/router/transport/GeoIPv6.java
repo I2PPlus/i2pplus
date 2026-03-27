@@ -1,4 +1,5 @@
 package net.i2p.router.transport;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Use at your own risk.
@@ -7,6 +8,9 @@ package net.i2p.router.transport;
 /**
  * Generates and manages compressed IPv6 geoip database.
  */
+import net.i2p.I2PAppContext;
+import net.i2p.data.DataHelper;
+import net.i2p.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -28,9 +32,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-import net.i2p.I2PAppContext;
-import net.i2p.data.DataHelper;
-import net.i2p.util.Log;
 
 /**
  *  Generate compressed geoipv6.dat.gz file, and
@@ -47,6 +48,7 @@ public class GeoIPv6 {
     private static final String GEOIP_FILE_DEFAULT = "geoipv6.dat.gz";
     private static final String MAGIC = "I2PGeoIPv6\0\001\0\0\0\0";
     private static final String COMMENT = "I2P compressed geoipv6 file. See GeoIPv6.java for format.";
+
     /** includes magic */
     private static final int HEADER_LEN = 256;
 
@@ -64,8 +66,7 @@ public class GeoIPv6 {
         File geoFile = new File(context.getBaseDir(), GEOIP_DIR_DEFAULT);
         geoFile = new File(geoFile, GEOIP_FILE_DEFAULT);
         if (!geoFile.exists()) {
-            if (log.shouldWarn())
-                log.warn("GeoIP file not found: " + geoFile.getAbsolutePath());
+            if (log.shouldWarn()) log.warn("GeoIP file not found: " + geoFile.getAbsolutePath());
             return new String[0];
         }
         return readGeoIPFile(context, geoFile, search, codeCache, log);
@@ -90,8 +91,7 @@ public class GeoIPv6 {
             GeoIP.notifyVersion(context, "I2Pv6", geoFile.lastModified());
             byte[] magic = new byte[MAGIC.length()];
             DataHelper.read(in, magic);
-            if (!DataHelper.eq(magic, DataHelper.getASCII(MAGIC)))
-                throw new IOException("Not a IPv6 geoip data file");
+            if (!DataHelper.eq(magic, DataHelper.getASCII(MAGIC))) throw new IOException("Not a IPv6 geoip data file");
             // skip timestamp and comments
             DataHelper.skip(in, HEADER_LEN - MAGIC.length());
             byte[] buf = new byte[18];
@@ -113,62 +113,61 @@ public class GeoIPv6 {
                     String lc = new String(buf, 16, 2, "ISO-8859-1");
                     // replace the new string with the identical one from the cache
                     String cached = codeCache.get(lc);
-                    if (cached == null)
-                        cached = lc;
+                    if (cached == null) cached = lc;
                     rv[idx++] = cached;
                 }
             }
         } catch (IOException ioe) {
-            if (log.shouldError())
-                log.error("Error reading the geoFile", ioe);
+            if (log.shouldError()) log.error("Error reading the geoFile", ioe);
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null) try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
         }
 
-        if (log.shouldInfo())
-            log.info("GeoIPv6 processing finished, time: " + (System.currentTimeMillis() - start));
+        if (log.shouldInfo()) log.info("GeoIPv6 processing finished, time: " + (System.currentTimeMillis() - start));
         return rv;
     }
 
-
-   /**
-    * Read in and parse multiple IPv6 geoip CSV files,
-    * merge them, and write out a gzipped binary IPv6 geoip file.
-    *
-    * Acceptable input formats (IPv6 only):
-    *<pre>
-    *   #comment (# must be in column 1)
-    *   "text IP", "text IP", "bigint IP", "bigint IP", "country code", "country name"
-    *</pre>
-    * Quotes and spaces optional. Sorting not required.
-    * Country code case-insensitive.
-    * Fields 1, 2, and 5 are used; fields 3, 4, and 6 are ignored.
-    * This is identical to the format of the MaxMind GeoLite IPv6 file.
-    *
-    * Example:
-    *<pre>
-    *   "2001:200::", "2001:200:ffff:ffff:ffff:ffff:ffff:ffff", "42540528726795050063891204319802818560", "42540528806023212578155541913346768895", "JP", "Japan"
-    *</pre>
-    *
-    *<pre>
-    * Output format:
-    *   Bytes 0-9: Magic number "I2PGeoIPv6"
-    *   Bytes 10-11: version (0x0001)
-    *   Bytes 12-15 flags (0)
-    *   Bytes 16-23: Date (long)
-    *   Bytes 24-xx: Comment (UTF-8)
-    *   Bytes xx-255: null padding
-    *   Bytes 256-: 18 byte records:
-    *       8 byte from (/64)
-    *       8 byte to (/64)
-    *       2 byte country code LOWER case (ASCII)
-    *   Data must be sorted (SIGNED twos complement), no overlap
-    *</pre>
-    *
-    * SLOW. For preprocessing only!
-    *
-    * @return success
-    */
+    /**
+     * Read in and parse multiple IPv6 geoip CSV files,
+     * merge them, and write out a gzipped binary IPv6 geoip file.
+     *
+     * Acceptable input formats (IPv6 only):
+     *<pre>
+     *   #comment (# must be in column 1)
+     *   "text IP", "text IP", "bigint IP", "bigint IP", "country code", "country name"
+     *</pre>
+     * Quotes and spaces optional. Sorting not required.
+     * Country code case-insensitive.
+     * Fields 1, 2, and 5 are used; fields 3, 4, and 6 are ignored.
+     * This is identical to the format of the MaxMind GeoLite IPv6 file.
+     *
+     * Example:
+     *<pre>
+     *   "2001:200::", "2001:200:ffff:ffff:ffff:ffff:ffff:ffff", "42540528726795050063891204319802818560", "42540528806023212578155541913346768895", "JP", "Japan"
+     *</pre>
+     *
+     *<pre>
+     * Output format:
+     *   Bytes 0-9: Magic number "I2PGeoIPv6"
+     *   Bytes 10-11: version (0x0001)
+     *   Bytes 12-15 flags (0)
+     *   Bytes 16-23: Date (long)
+     *   Bytes 24-xx: Comment (UTF-8)
+     *   Bytes xx-255: null padding
+     *   Bytes 256-: 18 byte records:
+     *       8 byte from (/64)
+     *       8 byte to (/64)
+     *       2 byte country code LOWER case (ASCII)
+     *   Data must be sorted (SIGNED twos complement), no overlap
+     *</pre>
+     *
+     * SLOW. For preprocessing only!
+     *
+     * @return success
+     */
     private static boolean compressGeoIPv6CSVFiles(List<File> inFiles, File outFile) {
         boolean DEBUG = false;
         List<V6Entry> entries = new ArrayList<V6Entry>(20000);
@@ -178,8 +177,7 @@ public class GeoIPv6 {
             BufferedReader br = null;
             try {
                 in = new BufferedInputStream(new FileInputStream(geoFile));
-                if (geoFile.getName().endsWith(".gz"))
-                    in = new GZIPInputStream(in);
+                if (geoFile.getName().endsWith(".gz")) in = new GZIPInputStream(in);
                 String buf = null;
                 br = new BufferedReader(new InputStreamReader(in, "ISO-8859-1"));
                 while ((buf = br.readLine()) != null) {
@@ -204,12 +202,18 @@ public class GeoIPv6 {
                 System.err.println("Read " + count + " entries from " + geoFile);
             } catch (IOException ioe) {
                 ioe.printStackTrace();
-                //if (_log.shouldError())
+                // if (_log.shouldError())
                 //    _log.error("Error reading the geoFile", ioe);
                 return false;
             } finally {
-                if (in != null) try { in.close(); } catch (IOException ioe) {}
-                if (br != null) try { br.close(); } catch (IOException ioe) {}
+                if (in != null) try {
+                        in.close();
+                    } catch (IOException ioe) {
+                    }
+                if (br != null) try {
+                        br.close();
+                    } catch (IOException ioe) {
+                    }
             }
         }
         Collections.sort(entries);
@@ -217,13 +221,11 @@ public class GeoIPv6 {
         V6Entry old = null;
         for (int i = 0; i < entries.size(); i++) {
             V6Entry e = entries.get(i);
-            if (DEBUG)
-                System.out.println("proc " + e.toString());
+            if (DEBUG) System.out.println("proc " + e.toString());
             if (old != null) {
                 if (e.from == old.from && e.to == old.to) {
                     // dup
-                    if (DEBUG)
-                        System.out.println("remove dup " + e);
+                    if (DEBUG) System.out.println("remove dup " + e);
                     entries.remove(i);
                     i--;
                     continue;
@@ -233,15 +235,13 @@ public class GeoIPv6 {
                     // truncate old
                     if (e.from < old.to) {
                         V6Entry rewrite = new V6Entry(old.from, e.from - 1, old.cc);
-                        if (DEBUG)
-                            System.out.println("rewrite old to " + rewrite);
+                        if (DEBUG) System.out.println("rewrite old to " + rewrite);
                         entries.set(i - 1, rewrite);
                     }
                     if (e.to < old.to) {
                         // e inside old, add new after e
                         V6Entry insert = new V6Entry(e.to + 1, old.to, old.cc);
-                        if (DEBUG)
-                            System.out.println("insert " + insert);
+                        if (DEBUG) System.out.println("insert " + insert);
                         int j = i + 1;
                         while (j < entries.size() && insert.compareTo(entries.get(j)) > 0) {
                             j++;
@@ -268,11 +268,14 @@ public class GeoIPv6 {
             System.err.println("Wrote " + entries.size() + " entries to " + outFile);
         } catch (IOException ioe) {
             ioe.printStackTrace();
-            //if (_log.shouldError())
+            // if (_log.shouldError())
             //    _log.error("Error reading the geoFile", ioe);
             return false;
         } finally {
-            if (out != null) try { out.close(); } catch (IOException ioe) {}
+            if (out != null) try {
+                    out.close();
+                } catch (IOException ioe) {
+                }
         }
         return true;
     }
@@ -285,21 +288,18 @@ public class GeoIPv6 {
         public final String cc;
 
         public V6Entry(byte[] f, byte[] t, String c) {
-            if (f.length != 16 || t.length != 16 || c.length() != 2)
-                throw new IllegalArgumentException();
+            if (f.length != 16 || t.length != 16 || c.length() != 2) throw new IllegalArgumentException();
             from = toLong(f);
             to = toLong(t);
             cc = c;
-            if (to < from)
-                throw new IllegalArgumentException(toString());
+            if (to < from) throw new IllegalArgumentException(toString());
         }
 
         public V6Entry(long f, long t, String c) {
             from = f;
             to = t;
             cc = c;
-            if (t < f)
-                throw new IllegalArgumentException(toString());
+            if (t < f) throw new IllegalArgumentException(toString());
         }
 
         /** twos complement */
@@ -313,10 +313,14 @@ public class GeoIPv6 {
         }
 
         @Override
-        public int hashCode() { return (((int) from) ^ ((int) to)); }
+        public int hashCode() {
+            return (((int) from) ^ ((int) to));
+        }
 
         @Override
-        public boolean equals(Object o) { return (o instanceof V6Entry) && compareTo((V6Entry)o) == 0; }
+        public boolean equals(Object o) {
+            return (o instanceof V6Entry) && compareTo((V6Entry) o) == 0;
+        }
 
         @Override
         public final String toString() {
@@ -326,8 +330,7 @@ public class GeoIPv6 {
 
     private static long toLong(byte ip[]) {
         long rv = 0;
-        for (int i = 0; i < 8; i++)
-            rv |= (ip[i] & 0xffL) << ((7-i)*8);
+        for (int i = 0; i < 8; i++) rv |= (ip[i] & 0xffL) << ((7 - i) * 8);
         return rv;
     }
 
@@ -373,7 +376,6 @@ public class GeoIPv6 {
             System.exit(1);
         }
         // readback for testing
-        readGeoIPFile(I2PAppContext.getGlobalContext(), outfile, new Long[] { Long.MAX_VALUE },
-                      Collections.<String, String> emptyMap(), new Log(GeoIPv6.class));
+        readGeoIPFile(I2PAppContext.getGlobalContext(), outfile, new Long[] {Long.MAX_VALUE}, Collections.<String, String>emptyMap(), new Log(GeoIPv6.class));
     }
 }

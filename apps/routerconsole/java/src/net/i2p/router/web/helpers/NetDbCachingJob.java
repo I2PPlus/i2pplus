@@ -1,8 +1,5 @@
 package net.i2p.router.web.helpers;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
@@ -10,6 +7,10 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SimpleTimer2.TimedEvent;
 import net.i2p.util.SystemVersion;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * A caching job that periodically performs:
@@ -26,7 +27,7 @@ public class NetDbCachingJob extends JobImpl {
     // Shared interval (in ms)
     private static final long INTERVAL = 30 * 60 * 1000L; // Every 30 minutes
     private static final long SCHEDULE_DELAY = 15 * 60 * 1000L; // First run after 15 minutes
-    private static final boolean ENOUGH_RAM = SystemVersion.getMaxMemory() >= 1024*1024*1024;
+    private static final boolean ENOUGH_RAM = SystemVersion.getMaxMemory() >= 1024 * 1024 * 1024;
 
     // Prevent duplicate scheduling
     private static final AtomicBoolean SCHEDULED = new AtomicBoolean(false);

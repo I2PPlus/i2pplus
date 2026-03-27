@@ -1,16 +1,17 @@
 package net.i2p.client.streaming.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.channels.SelectableChannel;
-import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.data.Destination;
 import net.i2p.util.Log;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.channels.SelectableChannel;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Bridge between the full streaming lib and the I2PSocket API
@@ -29,8 +30,7 @@ class I2PSocketFull implements I2PSocket {
         if (con != null) {
             _remotePeer = con.getRemotePeer();
             _localPeer = con.getSession().getMyDestination();
-        } else
-            _remotePeer = _localPeer = null;
+        } else _remotePeer = _localPeer = null;
     }
 
     /**
@@ -43,15 +43,15 @@ class I2PSocketFull implements I2PSocket {
      *  Closing this socket will also close the socket's InputStream and OutputStream.
      */
     public void close() throws IOException {
-        if (!_closed.compareAndSet(false,true)) {
+        if (!_closed.compareAndSet(false, true)) {
             // log a trace to find out why
-            log.logCloseLoop("I2PSocket",_localPeer,"-->",_remotePeer,_connection);
+            log.logCloseLoop("I2PSocket", _localPeer, "-->", _remotePeer, _connection);
             return;
         }
         Connection c = _connection;
         if (c == null) return;
         if (log.shouldInfo())
-//            log.info("close() called, connected? " + c.getIsConnected() + " : " + c, new Exception());
+            //            log.info("close() called, connected? " + c.getIsConnected() + " : " + c, new Exception());
             log.info("close() called, connected? " + c.getIsConnected() + " : " + c);
         if (c.getIsConnected()) {
             MessageInputStream in = c.getInputStream();
@@ -62,7 +62,7 @@ class I2PSocketFull implements I2PSocket {
             // to throw an IOE
             c.windowAdjusted();
         } else {
-            //throw new IOException("Not connected");
+            // throw new IOException("Not connected");
         }
         destroy();
     }
@@ -82,8 +82,7 @@ class I2PSocketFull implements I2PSocket {
     public void reset() throws IOException {
         Connection c = _connection;
         if (c == null) return;
-        if (log.shouldInfo())
-            log.info("reset() called, connected? " + c.getIsConnected() + " : " + c, new Exception());
+        if (log.shouldInfo()) log.info("reset() called, connected? " + c.getIsConnected() + " : " + c, new Exception());
         if (c.getIsConnected()) {
             c.disconnect(false);
             // this will cause any thread waiting in Connection.packetSendChoke()
@@ -93,7 +92,9 @@ class I2PSocketFull implements I2PSocket {
         destroy();
     }
 
-    Connection getConnection() { return _connection; }
+    Connection getConnection() {
+        return _connection;
+    }
 
     /**
      *  As of 0.9.9 will throw an IOE if socket is closed.
@@ -102,17 +103,14 @@ class I2PSocketFull implements I2PSocket {
      */
     public InputStream getInputStream() throws IOException {
         Connection c = _connection;
-        if (c != null)
-            return c.getInputStream();
+        if (c != null) return c.getInputStream();
         throw new IOException("Socket closed");
     }
 
     public I2PSocketOptions getOptions() {
         Connection c = _connection;
-        if (c != null)
-            return c.getOptions();
-        else
-            return null;
+        if (c != null) return c.getOptions();
+        else return null;
     }
 
     /**
@@ -134,55 +132,49 @@ class I2PSocketFull implements I2PSocket {
      */
     public OutputStream getOutputStream() throws IOException {
         Connection c = _connection;
-        if (c != null)
-            return c.getOutputStream();
+        if (c != null) return c.getOutputStream();
         throw new IOException("Socket closed");
     }
 
-    public Destination getPeerDestination() { return _remotePeer; }
+    public Destination getPeerDestination() {
+        return _remotePeer;
+    }
 
     public long getReadTimeout() {
         I2PSocketOptions opts = getOptions();
-        if (opts != null)
-            return opts.getReadTimeout();
-        else
-            return -1;
+        if (opts != null) return opts.getReadTimeout();
+        else return -1;
     }
 
-    public Destination getThisDestination() { return _localPeer; }
+    public Destination getThisDestination() {
+        return _localPeer;
+    }
 
     public void setOptions(I2PSocketOptions options) {
         Connection c = _connection;
         if (c == null) return;
 
-        if (options instanceof ConnectionOptions)
-            c.setOptions((ConnectionOptions)options);
-        else
-            c.setOptions(new ConnectionOptions(options));
+        if (options instanceof ConnectionOptions) c.setOptions((ConnectionOptions) options);
+        else c.setOptions(new ConnectionOptions(options));
     }
 
     public void setReadTimeout(long ms) {
         Connection c = _connection;
         if (c == null) return;
 
-        if (ms > Integer.MAX_VALUE)
-            ms = Integer.MAX_VALUE;
-        c.getInputStream().setReadTimeout((int)ms);
+        if (ms > Integer.MAX_VALUE) ms = Integer.MAX_VALUE;
+        c.getInputStream().setReadTimeout((int) ms);
         c.getOptions().setReadTimeout(ms);
     }
 
     /**
      *  Deprecated, unimplemented, does nothing
      */
-    public void setSocketErrorListener(I2PSocket.SocketErrorListener lsnr) {
-    }
+    public void setSocketErrorListener(I2PSocket.SocketErrorListener lsnr) {}
 
     public boolean isClosed() {
         Connection c = _connection;
-        return ((c == null) ||
-                (!c.getIsConnected()) ||
-                (c.getResetReceived()) ||
-                (c.getResetSent()));
+        return ((c == null) || (!c.getIsConnected()) || (c.getResetReceived()) || (c.getResetSent()));
     }
 
     void destroy() {
@@ -221,9 +213,7 @@ class I2PSocketFull implements I2PSocket {
     @Override
     public String toString() {
         Connection c = _connection;
-        if (c == null)
-            return super.toString();
-        else
-            return c.toString();
+        if (c == null) return super.toString();
+        else return c.toString();
     }
 }

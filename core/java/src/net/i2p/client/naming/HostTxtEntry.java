@@ -1,10 +1,5 @@
 package net.i2p.client.naming;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.Map;
 import net.i2p.crypto.DSAEngine;
 import net.i2p.crypto.SigType;
 import net.i2p.data.Base64;
@@ -15,6 +10,13 @@ import net.i2p.data.Signature;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.util.OrderedProperties;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.Map;
+
 // for testing only
 
 /**
@@ -110,13 +112,11 @@ public class HostTxtEntry {
         for (int i = 0; i < entries.length; i++) {
             String kv = entries[i];
             int eq = kv.indexOf('=');
-            if (eq <= 0 || eq == kv.length() - 1)
-                throw new IllegalArgumentException("No value: \"" + kv + '"');
+            if (eq <= 0 || eq == kv.length() - 1) throw new IllegalArgumentException("No value: \"" + kv + '"');
             String k = kv.substring(0, eq);
             String v = kv.substring(eq + 1);
             Object old = rv.setProperty(k, v);
-            if (old != null)
-                throw new IllegalArgumentException("Dup key: " + k);
+            if (old != null) throw new IllegalArgumentException("Dup key: " + k);
         }
         return rv;
     }
@@ -161,8 +161,7 @@ public class HostTxtEntry {
      * Must have been constructed with non-null properties.
      */
     public void writeRemove(Writer out) throws IOException {
-        if (props == null)
-            throw new IllegalStateException();
+        if (props == null) throw new IllegalStateException();
         if (name != null && dest != null) {
             props.setProperty(PROP_NAME, name);
             props.setProperty(PROP_DEST, dest);
@@ -185,15 +184,12 @@ public class HostTxtEntry {
      * Write the props part (if any) only, without newline
      */
     private void writeProps(Writer out, boolean omitSig, boolean omitOldSig) throws IOException {
-        if (props == null)
-            return;
+        if (props == null) return;
         boolean started = false;
         for (Map.Entry<Object, Object> e : props.entrySet()) {
             String k = (String) e.getKey();
-            if (omitSig && k.equals(PROP_SIG))
-                continue;
-            if (omitOldSig && k.equals(PROP_OLDSIG))
-                continue;
+            if (omitSig && k.equals(PROP_SIG)) continue;
+            if (omitOldSig && k.equals(PROP_OLDSIG)) continue;
             if (started) {
                 out.write(PROP_SEPARATOR);
             } else {
@@ -211,14 +207,12 @@ public class HostTxtEntry {
      * Verify with the dest public key using the "sig" property
      */
     public boolean hasValidSig() {
-        if (props == null || name == null || dest == null)
-            return false;
+        if (props == null || name == null || dest == null) return false;
         if (!isValidated) {
             isValidated = true;
             StringWriter buf = new StringWriter(1024);
             String sig = props.getProperty(PROP_SIG);
-            if (sig == null)
-                return false;
+            if (sig == null) return false;
             buf.append(name);
             buf.append(KV_SEPARATOR);
             buf.append(dest);
@@ -229,8 +223,7 @@ public class HostTxtEntry {
                 return false;
             }
             byte[] sdata = Base64.decode(sig);
-            if (sdata == null)
-                return false;
+            if (sdata == null) return false;
             Destination d;
             try {
                 d = new Destination(dest);
@@ -239,8 +232,7 @@ public class HostTxtEntry {
             }
             SigningPublicKey spk = d.getSigningPublicKey();
             SigType type = spk.getType();
-            if (type == null)
-                return false;
+            if (type == null) return false;
             Signature s;
             try {
                 s = new Signature(type, sdata);
@@ -256,15 +248,13 @@ public class HostTxtEntry {
      * Verify with the "olddest" property's public key using the "oldsig" property
      */
     public boolean hasValidInnerSig() {
-        if (props == null || name == null || dest == null)
-            return false;
+        if (props == null || name == null || dest == null) return false;
         boolean rv = false;
         // don't cache result
         StringWriter buf = new StringWriter(1024);
         String sig = props.getProperty(PROP_OLDSIG);
         String olddest = props.getProperty(PROP_OLDDEST);
-        if (sig == null || olddest == null)
-            return false;
+        if (sig == null || olddest == null) return false;
         buf.append(name);
         buf.append(KV_SEPARATOR);
         buf.append(dest);
@@ -275,8 +265,7 @@ public class HostTxtEntry {
             return false;
         }
         byte[] sdata = Base64.decode(sig);
-        if (sdata == null)
-            return false;
+        if (sdata == null) return false;
         Destination d;
         try {
             d = new Destination(olddest);
@@ -285,8 +274,7 @@ public class HostTxtEntry {
         }
         SigningPublicKey spk = d.getSigningPublicKey();
         SigType type = spk.getType();
-        if (type == null)
-            return false;
+        if (type == null) return false;
         Signature s;
         try {
             s = new Signature(type, sdata);
@@ -301,15 +289,13 @@ public class HostTxtEntry {
      * Verify with the "dest" property's public key using the "sig" property
      */
     public boolean hasValidRemoveSig() {
-        if (props == null)
-            return false;
+        if (props == null) return false;
         boolean rv = false;
         // don't cache result
         StringWriter buf = new StringWriter(1024);
         String sig = props.getProperty(PROP_SIG);
         String olddest = props.getProperty(PROP_DEST);
-        if (sig == null || olddest == null)
-            return false;
+        if (sig == null || olddest == null) return false;
         try {
             writeProps(buf, true, true);
         } catch (IOException ioe) {
@@ -317,8 +303,7 @@ public class HostTxtEntry {
             return false;
         }
         byte[] sdata = Base64.decode(sig);
-        if (sdata == null)
-            return false;
+        if (sdata == null) return false;
         Destination d;
         try {
             d = new Destination(olddest);
@@ -327,8 +312,7 @@ public class HostTxtEntry {
         }
         SigningPublicKey spk = d.getSigningPublicKey();
         SigType type = spk.getType();
-        if (type == null)
-            return false;
+        if (type == null) return false;
         Signature s;
         try {
             s = new Signature(type, sdata);
@@ -349,10 +333,8 @@ public class HostTxtEntry {
      */
     @Override
     public boolean equals(Object o) {
-        if (o == this)
-              return true;
-        if (!(o instanceof HostTxtEntry))
-              return false;
+        if (o == this) return true;
+        if (!(o instanceof HostTxtEntry)) return false;
         HostTxtEntry he = (HostTxtEntry) o;
         return dest.equals(he.getDest());
     }
@@ -378,14 +360,11 @@ public class HostTxtEntry {
      * Must have been constructed with non-null properties.
      */
     public void signRemove(SigningPrivateKey spk) {
-        if (props == null)
-            throw new IllegalStateException();
-        if (props.containsKey(PROP_SIG))
-            throw new IllegalStateException();
+        if (props == null) throw new IllegalStateException();
+        if (props.containsKey(PROP_SIG)) throw new IllegalStateException();
         props.setProperty(PROP_NAME, name);
         props.setProperty(PROP_DEST, dest);
-        if (!props.containsKey(PROP_DATE))
-            props.setProperty(PROP_DATE, Long.toString(System.currentTimeMillis() / 1000));
+        if (!props.containsKey(PROP_DATE)) props.setProperty(PROP_DATE, Long.toString(System.currentTimeMillis() / 1000));
         StringWriter buf = new StringWriter(1024);
         try {
             writeProps(buf);
@@ -395,8 +374,7 @@ public class HostTxtEntry {
         props.remove(PROP_NAME);
         props.remove(PROP_DEST);
         Signature s = DSAEngine.getInstance().sign(DataHelper.getUTF8(buf.toString()), spk);
-        if (s == null)
-            throw new IllegalArgumentException("sig failed");
+        if (s == null) throw new IllegalArgumentException("sig failed");
         props.setProperty(PROP_SIG, s.toBase64());
     }
 
@@ -404,12 +382,9 @@ public class HostTxtEntry {
      * @param sigprop The signature property to set
      */
     private void signIt(SigningPrivateKey spk, String sigprop) {
-        if (props == null)
-            throw new IllegalStateException();
-        if (props.containsKey(sigprop))
-            throw new IllegalStateException();
-        if (!props.containsKey(PROP_DATE))
-            props.setProperty(PROP_DATE, Long.toString(System.currentTimeMillis() / 1000));
+        if (props == null) throw new IllegalStateException();
+        if (props.containsKey(sigprop)) throw new IllegalStateException();
+        if (!props.containsKey(PROP_DATE)) props.setProperty(PROP_DATE, Long.toString(System.currentTimeMillis() / 1000));
         StringWriter buf = new StringWriter(1024);
         buf.append(name);
         buf.append(KV_SEPARATOR);
@@ -420,109 +395,108 @@ public class HostTxtEntry {
             throw new IllegalStateException(ioe);
         }
         Signature s = DSAEngine.getInstance().sign(DataHelper.getUTF8(buf.toString()), spk);
-        if (s == null)
-            throw new IllegalArgumentException("sig failed");
+        if (s == null) throw new IllegalArgumentException("sig failed");
         props.setProperty(sigprop, s.toBase64());
     }
 
     /**
      *  Usage: HostTxtEntry [-i] [-x] [hostname.i2p] [key=val]...
      */
-/****
-    public static void main(String[] args) throws Exception {
-        boolean inner = false;
-        boolean remove = false;
-        if (args.length > 0 && args[0].equals("-i")) {
-            inner = true;
-            args = Arrays.copyOfRange(args, 1, args.length);
-        }
-        if (args.length > 0 && args[0].equals("-x")) {
-            remove = true;
-            args = Arrays.copyOfRange(args, 1, args.length);
-        }
-        String host;
-        if (args.length > 0 && args[0].endsWith(".i2p")) {
-            host = args[0];
-            args = Arrays.copyOfRange(args, 1, args.length);
-        } else {
-            byte[] rand = new byte[5];
-            RandomSource.getInstance().nextBytes(rand);
-            host = Base32.encode(rand) + ".i2p";
-        }
-        OrderedProperties props = new OrderedProperties();
-        for (int i = 0; i < args.length; i++) {
-            int eq = args[i].indexOf("=");
-            props.setProperty(args[i].substring(0, eq), args[i].substring(eq + 1));
-        }
-        props.setProperty("zzzz", "zzzzzzzzzzzzzzz");
-        // outer
-        File f = new File("tmp-eepPriv.dat");
-        PrivateKeyFile pkf = new PrivateKeyFile(f);
-        pkf.createIfAbsent(SigType.EdDSA_SHA512_Ed25519);
-        //f.delete();
-        PrivateKeyFile pkf2;
-        if (inner) {
-            // inner
-            File f2 = new File("tmp-eepPriv2.dat");
-            pkf2 = new PrivateKeyFile(f2);
-            pkf2.createIfAbsent(SigType.DSA_SHA1);
-            //f2.delete();
-            props.setProperty(PROP_OLDDEST, pkf2.getDestination().toBase64());
-        } else {
-            pkf2 = null;
-        }
-        HostTxtEntry he = new HostTxtEntry(host, pkf.getDestination().toBase64(), props);
-        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
-        //out.write("Before signing:\n");
-        //he.write(out);
-        //out.flush();
-        SigningPrivateKey priv = pkf.getSigningPrivKey();
-        StringWriter sw = new StringWriter(1024);
-        BufferedWriter buf = new BufferedWriter(sw);
-        if (!remove) {
-            if (inner) {
-                SigningPrivateKey priv2 = pkf2.getSigningPrivKey();
-                he.signInner(priv2);
-                //out.write("After signing inner:\n");
-                //he.write(out);
-            }
-            he.sign(priv);
-            //out.write("After signing:\n");
-            he.write(out);
-            out.flush();
-            if (inner && !he.hasValidInnerSig())
-                throw new IllegalStateException("Inner fail 1");
-            if (!he.hasValidSig())
-                throw new IllegalStateException("Outer fail 1");
-            // now create 2nd, read in
-            he.write(buf);
-            buf.flush();
-            String line = sw.toString();
-            line = line.substring(line.indexOf(PROPS_SEPARATOR) + 2);
-            HostTxtEntry he2 = new HostTxtEntry(host, pkf.getDestination().toBase64(), line);
-            if (inner && !he2.hasValidInnerSig())
-                throw new IllegalStateException("Inner fail 2");
-            if (!he2.hasValidSig())
-                throw new IllegalStateException("Outer fail 2");
-        } else {
-            // 'remove' tests (corrupts earlier sigs)
-            he.getProps().remove(PROP_SIG);
-            he.signRemove(priv);
-            //out.write("Remove entry:\n");
-            sw = new StringWriter(1024);
-            buf = new BufferedWriter(sw);
-            he.writeRemoveLine(buf);
-            buf.flush();
-            out.write(sw.toString());
-            out.flush();
-            String line = sw.toString().substring(2).trim();
-            HostTxtEntry he3 = new HostTxtEntry(line);
-            if (!he3.hasValidRemoveSig())
-                throw new IllegalStateException("Remove verify fail");
-        }
-
-        //out.write("Test passed\n");
-        //out.flush();
-    }
-****/
+    /****
+     * public static void main(String[] args) throws Exception {
+     * boolean inner = false;
+     * boolean remove = false;
+     * if (args.length > 0 && args[0].equals("-i")) {
+     * inner = true;
+     * args = Arrays.copyOfRange(args, 1, args.length);
+     * }
+     * if (args.length > 0 && args[0].equals("-x")) {
+     * remove = true;
+     * args = Arrays.copyOfRange(args, 1, args.length);
+     * }
+     * String host;
+     * if (args.length > 0 && args[0].endsWith(".i2p")) {
+     * host = args[0];
+     * args = Arrays.copyOfRange(args, 1, args.length);
+     * } else {
+     * byte[] rand = new byte[5];
+     * RandomSource.getInstance().nextBytes(rand);
+     * host = Base32.encode(rand) + ".i2p";
+     * }
+     * OrderedProperties props = new OrderedProperties();
+     * for (int i = 0; i < args.length; i++) {
+     * int eq = args[i].indexOf("=");
+     * props.setProperty(args[i].substring(0, eq), args[i].substring(eq + 1));
+     * }
+     * props.setProperty("zzzz", "zzzzzzzzzzzzzzz");
+     * // outer
+     * File f = new File("tmp-eepPriv.dat");
+     * PrivateKeyFile pkf = new PrivateKeyFile(f);
+     * pkf.createIfAbsent(SigType.EdDSA_SHA512_Ed25519);
+     * //f.delete();
+     * PrivateKeyFile pkf2;
+     * if (inner) {
+     * // inner
+     * File f2 = new File("tmp-eepPriv2.dat");
+     * pkf2 = new PrivateKeyFile(f2);
+     * pkf2.createIfAbsent(SigType.DSA_SHA1);
+     * //f2.delete();
+     * props.setProperty(PROP_OLDDEST, pkf2.getDestination().toBase64());
+     * } else {
+     * pkf2 = null;
+     * }
+     * HostTxtEntry he = new HostTxtEntry(host, pkf.getDestination().toBase64(), props);
+     * BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
+     * //out.write("Before signing:\n");
+     * //he.write(out);
+     * //out.flush();
+     * SigningPrivateKey priv = pkf.getSigningPrivKey();
+     * StringWriter sw = new StringWriter(1024);
+     * BufferedWriter buf = new BufferedWriter(sw);
+     * if (!remove) {
+     * if (inner) {
+     * SigningPrivateKey priv2 = pkf2.getSigningPrivKey();
+     * he.signInner(priv2);
+     * //out.write("After signing inner:\n");
+     * //he.write(out);
+     * }
+     * he.sign(priv);
+     * //out.write("After signing:\n");
+     * he.write(out);
+     * out.flush();
+     * if (inner && !he.hasValidInnerSig())
+     * throw new IllegalStateException("Inner fail 1");
+     * if (!he.hasValidSig())
+     * throw new IllegalStateException("Outer fail 1");
+     * // now create 2nd, read in
+     * he.write(buf);
+     * buf.flush();
+     * String line = sw.toString();
+     * line = line.substring(line.indexOf(PROPS_SEPARATOR) + 2);
+     * HostTxtEntry he2 = new HostTxtEntry(host, pkf.getDestination().toBase64(), line);
+     * if (inner && !he2.hasValidInnerSig())
+     * throw new IllegalStateException("Inner fail 2");
+     * if (!he2.hasValidSig())
+     * throw new IllegalStateException("Outer fail 2");
+     * } else {
+     * // 'remove' tests (corrupts earlier sigs)
+     * he.getProps().remove(PROP_SIG);
+     * he.signRemove(priv);
+     * //out.write("Remove entry:\n");
+     * sw = new StringWriter(1024);
+     * buf = new BufferedWriter(sw);
+     * he.writeRemoveLine(buf);
+     * buf.flush();
+     * out.write(sw.toString());
+     * out.flush();
+     * String line = sw.toString().substring(2).trim();
+     * HostTxtEntry he3 = new HostTxtEntry(line);
+     * if (!he3.hasValidRemoveSig())
+     * throw new IllegalStateException("Remove verify fail");
+     * }
+     *
+     * //out.write("Test passed\n");
+     * //out.flush();
+     * }
+     ****/
 }

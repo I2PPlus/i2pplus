@@ -1,13 +1,14 @@
 package net.i2p.stat;
 
-import java.util.Arrays;
-import java.util.Set;
-import java.util.TreeSet;
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
+
 public class SimpleStatDumper {
-    private final static Log _log = new Log(SimpleStatDumper.class);
+    private static final Log _log = new Log(SimpleStatDumper.class);
 
     public static void dumpStats(I2PAppContext context, int logLevel) {
         if (!_log.shouldLog(logLevel)) return;
@@ -24,8 +25,7 @@ public class SimpleStatDumper {
         for (String name : frequencies) {
             FrequencyStat freq = ctx.statManager().getFrequency(name);
             buf.append('\n');
-            buf.append(freq.getGroupName()).append('.').append(freq.getName()).append(": ")
-               .append(freq.getDescription()).append('\n');
+            buf.append(freq.getGroupName()).append('.').append(freq.getName()).append(": ").append(freq.getDescription()).append('\n');
             long periods[] = freq.getPeriods();
             Arrays.sort(periods);
             for (int i = 0; i < periods.length; i++) {
@@ -43,8 +43,7 @@ public class SimpleStatDumper {
         for (String name : rates) {
             RateStat rate = ctx.statManager().getRate(name);
             buf.append('\n');
-            buf.append(rate.getGroupName()).append('.').append(rate.getName()).append(": ")
-               .append(rate.getDescription()).append('\n');
+            buf.append(rate.getGroupName()).append('.').append(rate.getName()).append(": ").append(rate.getDescription()).append('\n');
             long periods[] = rate.getPeriods();
             Arrays.sort(periods);
             for (int i = 0; i < periods.length; i++) {

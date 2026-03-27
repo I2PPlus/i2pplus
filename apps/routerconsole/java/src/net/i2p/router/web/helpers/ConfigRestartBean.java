@@ -19,6 +19,7 @@ public class ConfigRestartBean {
      *  order is: form value, form class, display text.
      */
     private static final String[] SET1 = {"shutdownImmediate", "stop now", "Shutdown immediately", "cancelShutdown", "cancel", "Cancel shutdown"};
+
     private static final String[] SET2 = {"restartImmediate", "reload now", "Restart immediately", "cancelShutdown", "cancel", "Cancel restart"};
     private static final String[] SET3 = {"restart", "reload", "Restart", "shutdown", "stop", "Shutdown"};
     private static final String[] SET4 = {"shutdown", "stop", "Shutdown"};
@@ -26,7 +27,9 @@ public class ConfigRestartBean {
     private static final String _systemNonce = Long.toString(RandomSource.getInstance().nextLong());
     private static final String PROP_ADVANCED = "routerconsole.advanced";
 
-    public static String getNonce() {return _systemNonce;}
+    public static String getNonce() {
+        return _systemNonce;
+    }
 
     public static boolean isAdvanced() {
         RouterContext ctx = ContextHelper.getContext(null);
@@ -40,7 +43,9 @@ public class ConfigRestartBean {
         if (systemNonce.equals(nonce) && (action != null)) {
             // Normal browsers send value, IE sends button label
             if ("shutdownImmediate".equals(action) || _t("Shutdown immediately", ctx).equals(action)) {
-                if (ctx.hasWrapper()) {ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_HARD, false);}
+                if (ctx.hasWrapper()) {
+                    ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_HARD, false);
+                }
                 ctx.router().shutdownGracefully(Router.EXIT_HARD); // give the UI time to respond
             } else if ("cancelShutdown".equals(action) || _t("Cancel shutdown", ctx).equals(action) || _t("Cancel restart", ctx).equals(action)) {
                 ctx.router().cancelGracefulShutdown();
@@ -50,13 +55,19 @@ public class ConfigRestartBean {
                     tcg.cancelDelayedShutdown();
                 }
             } else if ("restartImmediate".equals(action) || _t("Restart immediately", ctx).equals(action)) {
-                if (ctx.hasWrapper()) {ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_HARD_RESTART, false);}
+                if (ctx.hasWrapper()) {
+                    ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_HARD_RESTART, false);
+                }
                 ctx.router().shutdownGracefully(Router.EXIT_HARD_RESTART); // give the UI time to respond
             } else if ("restart".equals(action) || _t("Restart", ctx).equals(action)) {
-                if (ctx.hasWrapper()) {ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_GRACEFUL_RESTART, false);}
+                if (ctx.hasWrapper()) {
+                    ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_GRACEFUL_RESTART, false);
+                }
                 ctx.router().shutdownGracefully(Router.EXIT_GRACEFUL_RESTART);
             } else if ("shutdown".equals(action) || _t("Shutdown", ctx).equals(action)) {
-                if (ctx.hasWrapper()) {ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_GRACEFUL, false);}
+                if (ctx.hasWrapper()) {
+                    ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_GRACEFUL, false);
+                }
                 ctx.router().shutdownGracefully();
             }
         }
@@ -85,43 +96,42 @@ public class ConfigRestartBean {
                     buttons(ctx, buf, urlBase, systemNonce, SET1);
                 }
             }
-        } else if ((shuttingDown || restarting) && timeRemaining <= 45*1000) {
+        } else if ((shuttingDown || restarting) && timeRemaining <= 45 * 1000) {
             buf.append("<h4 id=sb_shutdownStatus class=volatile><span id=imminent><b>");
-            if (restarting) {buf.append(_t("Restart imminent", ctx));}
-            else {buf.append(_t("Shutdown imminent", ctx));}
+            if (restarting) {
+                buf.append(_t("Restart imminent", ctx));
+            } else {
+                buf.append(_t("Shutdown imminent", ctx));
+            }
             buf.append("&hellip; </b></span></h4>");
         } else if (shuttingDown) {
-            buf.append("<h4 id=sb_shutdownStatus class=volatile><span>")
-                .append(_t("Shutdown in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
+            buf.append("<h4 id=sb_shutdownStatus class=volatile><span>").append(_t("Shutdown in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
             if (transit > 0) {
                 if (isAdvanced()) {
-                    buf.append("&hellip; <br>").append(ngettext("{0} transit tunnel still active",
-                                                               "{0} transit tunnels still active", transit, ctx));
+                    buf.append("&hellip; <br>").append(ngettext("{0} transit tunnel still active", "{0} transit tunnels still active", transit, ctx));
                 } else {
-                    buf.append("&hellip; <br>").append(ngettext("Please wait for routing commitment to expire for {0} tunnel",
-                                                     "Please wait for routing commitments to expire for {0} tunnels", transit, ctx));
+                    buf.append("&hellip; <br>").append(ngettext("Please wait for routing commitment to expire for {0} tunnel", "Please wait for routing commitments to expire for {0} tunnels", transit, ctx));
                 }
             }
             buf.append("</span></h4><hr>");
             buttons(ctx, buf, urlBase, systemNonce, SET1);
         } else if (restarting) {
-            buf.append("<h4 id=sb_shutdownStatus class=volatile><span>")
-                .append(_t("Restart in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
+            buf.append("<h4 id=sb_shutdownStatus class=volatile><span>").append(_t("Restart in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
             if (transit > 0) {
                 if (isAdvanced()) {
-                    buf.append("&hellip; <br>").append(ngettext("{0} transit tunnel still active",
-                                                               "{0} transit tunnels still active", transit, ctx));
+                    buf.append("&hellip; <br>").append(ngettext("{0} transit tunnel still active", "{0} transit tunnels still active", transit, ctx));
                 } else {
-                    buf.append("&hellip; <br>").append(ngettext("Please wait for routing commitment to expire for {0} tunnel",
-                                                               "Please wait for routing commitments to expire for {0} tunnels",
-                                                               transit, ctx));
+                    buf.append("&hellip; <br>").append(ngettext("Please wait for routing commitment to expire for {0} tunnel", "Please wait for routing commitments to expire for {0} tunnels", transit, ctx));
                 }
             }
             buf.append("</span></h4><hr>");
             buttons(ctx, buf, urlBase, systemNonce, SET2);
         } else {
-            if (ctx.hasWrapper() || NewsHelper.isExternalRestartPending()) {buttons(ctx, buf, urlBase, systemNonce, SET3);}
-            else {buttons(ctx, buf, urlBase, systemNonce, SET4);}
+            if (ctx.hasWrapper() || NewsHelper.isExternalRestartPending()) {
+                buttons(ctx, buf, urlBase, systemNonce, SET3);
+            } else {
+                buttons(ctx, buf, urlBase, systemNonce, SET4);
+            }
         }
         return buf.toString();
     }
@@ -164,17 +174,9 @@ public class ConfigRestartBean {
 
     /** @param s value,class,label,... triplets */
     private static void buttons(RouterContext ctx, StringBuilder buf, String url, String nonce, String[] s) {
-        buf.append("<form id=sb_routerControl class=\"volatile collapse\" action=\"")
-           .append(url)
-           .append("\" method=POST>\n<input type=hidden name=consoleNonce value=")
-           .append(nonce)
-            .append(">\n");
-        for (int i = 0; i < s.length; i+= 3) {
-            buf.append("<button type=submit name=action value=\"")
-               .append(s[i]).append("\" class=\"")
-               .append(s[i+1]).append("\" title=\"")
-               .append(_t(s[i+2], ctx)).append("\">")
-               .append(_t(s[i+2], ctx)).append("</button>\n");
+        buf.append("<form id=sb_routerControl class=\"volatile collapse\" action=\"").append(url).append("\" method=POST>\n<input type=hidden name=consoleNonce value=").append(nonce).append(">\n");
+        for (int i = 0; i < s.length; i += 3) {
+            buf.append("<button type=submit name=action value=\"").append(s[i]).append("\" class=\"").append(s[i + 1]).append("\" title=\"").append(_t(s[i + 2], ctx)).append("\">").append(_t(s[i + 2], ctx)).append("</button>\n");
         }
         buf.append("</form>\n");
     }
@@ -192,8 +194,10 @@ public class ConfigRestartBean {
     /** this is for sidebar.jsp */
     public static long getRestartTimeRemaining() {
         RouterContext ctx = ContextHelper.getContext(null);
-        if (ctx.router().gracefulShutdownInProgress()) {return ctx.router().getShutdownTimeRemaining();}
-        return Long.MAX_VALUE/2; // sidebar.jsp adds a safety factor so we don't want to overflow...
+        if (ctx.router().gracefulShutdownInProgress()) {
+            return ctx.router().getShutdownTimeRemaining();
+        }
+        return Long.MAX_VALUE / 2; // sidebar.jsp adds a safety factor so we don't want to overflow...
     }
 
     private static String _t(String s, RouterContext ctx) {

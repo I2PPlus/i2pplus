@@ -3,6 +3,7 @@ package net.i2p.router.tunnel.pool;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,7 +21,6 @@ import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
-import java.util.Locale;
 
 /**
  * Throttles incoming tunnel requests earlier than ParticipatingThrottler,
@@ -41,14 +41,14 @@ class RequestThrottler {
     private volatile Set<String> cachedBlockedCountries;
     private volatile long lastFirewallCheckTime;
     private volatile boolean cachedFirewalledStatus;
-    private static final long FIREWALL_CHECK_INTERVAL = 10*60*1000; // Check every 10 minutes
+    private static final long FIREWALL_CHECK_INTERVAL = 10 * 60 * 1000; // Check every 10 minutes
 
     // Cached properties
     private volatile long lastPropertyCheckTime;
     private volatile Boolean cachedShouldThrottle;
     private volatile Boolean cachedShouldDisconnect;
     private volatile Boolean cachedShouldBlockOldRouters;
-    private static final long PROPERTY_CHECK_INTERVAL = 30*1000; // Check every 30 seconds
+    private static final long PROPERTY_CHECK_INTERVAL = 30 * 1000; // Check every 30 seconds
 
     private static final int MIN_LIMIT = 200;
     private static final int MAX_LIMIT = 400;
@@ -67,14 +67,14 @@ class RequestThrottler {
     private final BurstWindowCounter _burstCounter;
     private final Map<Hash, BurstOffenseRecord> _burstOffenses = new java.util.concurrent.ConcurrentHashMap<>();
 
-    private final static boolean DEFAULT_SHOULD_THROTTLE = true;
-    private final static String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
-    private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
-    private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
-    private final static boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
-    private final static String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
-    private final static String PROP_BLOCK_COUNTRIES = "router.blockCountries";
-    private final static String DEFAULT_BLOCK_COUNTRIES = "";
+    private static final boolean DEFAULT_SHOULD_THROTTLE = true;
+    private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
+    private static final boolean DEFAULT_SHOULD_DISCONNECT = false;
+    private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
+    private static final boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
+    private static final String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
+    private static final String PROP_BLOCK_COUNTRIES = "router.blockCountries";
+    private static final String DEFAULT_BLOCK_COUNTRIES = "";
 
     RequestThrottler(RouterContext ctx) {
         this.context = ctx;
@@ -146,12 +146,18 @@ class RequestThrottler {
             int currentBucketCount = _burstCounter.getCurrentBucketCount(h);
             if (currentBucketCount >= BURST_1S_THRESHOLD) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Severe transit request burst detected from Router [" + routerId + "] -> " +
-                              "Requests: " + currentBucketCount + " in 1s (threshold: " + BURST_1S_THRESHOLD + ")");
+                    _log.warn("Severe transit request burst detected from Router [" + routerId + "] -> " + "Requests: "
+                            + currentBucketCount + " in 1s (threshold: " + BURST_1S_THRESHOLD + ")");
                 }
                 String ipPort = getRouterIPPort(ri);
-                _banLogger.logBan(h, ipPort, "Transit request burst (10 in 1s)", 4*60*60*1000L);
-                context.banlist().banlistRouter(h, " <b>➜</b> Transit request burst", null, null, context.clock().now() + 4*60*60*1000);
+                _banLogger.logBan(h, ipPort, "Transit request burst (10 in 1s)", 4 * 60 * 60 * 1000L);
+                context.banlist()
+                        .banlistRouter(
+                                h,
+                                " <b>➜</b> Transit request burst",
+                                null,
+                                null,
+                                context.clock().now() + 4 * 60 * 60 * 1000);
                 if (cachedShouldDisconnect) {
                     context.commSystem().forceDisconnect(h);
                 }
@@ -176,13 +182,18 @@ class RequestThrottler {
                     reason = "Transit request burst";
                 }
                 if (_log.shouldWarn()) {
-                    _log.warn("Transit request burst from Router [" + routerId + "] -> " + reason +
-                              " (ban: " + (banTime/60/60) + "h)");
+                    _log.warn("Transit request burst from Router [" + routerId + "] -> " + reason + " (ban: "
+                            + (banTime / 60 / 60) + "h)");
                 }
                 String ipPort = getRouterIPPort(ri);
                 _banLogger.logBan(h, ipPort, reason, banTime);
-                context.banlist().banlistRouter(h, " <b>➜</b> " + reason, null, null,
-                    context.clock().now() + banTime);
+                context.banlist()
+                        .banlistRouter(
+                                h,
+                                " <b>➜</b> " + reason,
+                                null,
+                                null,
+                                context.clock().now() + banTime);
                 if (cachedShouldDisconnect) {
                     context.commSystem().forceDisconnect(h);
                 }
@@ -214,8 +225,14 @@ class RequestThrottler {
                 _log.warn("Banning and disconnecting from [" + routerId + "] -> Blocked country: " + country);
             }
             String ipPort = getRouterIPPort(ri);
-            _banLogger.logBan(h, ipPort, "Blocked country: " + country, 8*60*60*1000L);
-            context.banlist().banlistRouter(h, " <b>➜</b> Blocked country: " + country, null, null, context.clock().now() + 8*60*60*1000);
+            _banLogger.logBan(h, ipPort, "Blocked country: " + country, 8 * 60 * 60 * 1000L);
+            context.banlist()
+                    .banlistRouter(
+                            h,
+                            " <b>➜</b> Blocked country: " + country,
+                            null,
+                            null,
+                            context.clock().now() + 8 * 60 * 60 * 1000);
             context.commSystem().forceDisconnect(h);
             return true;
         }
@@ -223,8 +240,8 @@ class RequestThrottler {
         // Early return: High system load
         if (highload) {
             if (_log.shouldWarn())
-                _log.warn("Rejecting Tunnel Request from Router [" + routerId + "] -> " +
-                          "CPU is under sustained high load");
+                _log.warn("Rejecting Tunnel Request from Router [" + routerId + "] -> "
+                        + "CPU is under sustained high load");
             return rv;
         }
 
@@ -234,9 +251,14 @@ class RequestThrottler {
                 _log.info("Banning for 1h and disconnecting from [" + routerId + "] -> XG / " + v);
             }
             String ipPort = getRouterIPPort(ri);
-            _banLogger.logBan(h, ipPort, "XG " + (isFF ? "Floodfill " : "Router") + " (" + v + ")", 60*60*1000L);
-            context.banlist().banlistRouter(h, " <b>➜</b> XG " + (isFF ? "Floodfill " : "Router") + " (" + v + ")",
-                                            null, null, context.clock().now() + 60*60*1000);
+            _banLogger.logBan(h, ipPort, "XG " + (isFF ? "Floodfill " : "Router") + " (" + v + ")", 60 * 60 * 1000L);
+            context.banlist()
+                    .banlistRouter(
+                            h,
+                            " <b>➜</b> XG " + (isFF ? "Floodfill " : "Router") + " (" + v + ")",
+                            null,
+                            null,
+                            context.clock().now() + 60 * 60 * 1000);
             context.commSystem().forceDisconnect(h);
             return true;
         }
@@ -247,8 +269,14 @@ class RequestThrottler {
                 _log.info("Banning for 1h and disconnecting from [" + routerId + "] -> Old and slow / " + v);
             }
             String ipPort = getRouterIPPort(ri);
-            _banLogger.logBan(h, ipPort, "Old and slow (" + v + ")", 60*60*1000L);
-            context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + v + ")", null, null, context.clock().now() + 60*60*1000);
+            _banLogger.logBan(h, ipPort, "Old and slow (" + v + ")", 60 * 60 * 1000L);
+            context.banlist()
+                    .banlistRouter(
+                            h,
+                            " <b>➜</b> Old and slow (" + v + ")",
+                            null,
+                            null,
+                            context.clock().now() + 60 * 60 * 1000);
             context.commSystem().forceDisconnect(h);
             return true;
         }
@@ -258,30 +286,35 @@ class RequestThrottler {
             if (_log.shouldInfo()) {
                 _log.info("Dropping all connections from [" + routerId + "] -> Unreachable / Slow / " + v);
             }
-            context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
+            context.simpleTimer2().addEvent(new Disconnector(h), 11 * 60 * 1000);
             return true;
         }
 
         // Handle excessive tunnel requests
         if (rv && enableThrottle) {
-            int bantime = (isLowShare || isUnreachable) ? 60*60*1000 : 30*60*1000;
+            int bantime = (isLowShare || isUnreachable) ? 60 * 60 * 1000 : 30 * 60 * 1000;
             int period = bantime / 60 / 1000;
             if (count == limit + 1) {
                 String ipPort = getRouterIPPort(ri);
                 String banReason = "Excessive tunnel requests";
                 _banLogger.logBan(h, ipPort, banReason, bantime);
-                context.banlist().banlistRouter(h, " <b>➜</b> " + banReason, null, null, context.clock().now() + bantime);
-                context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
+                context.banlist()
+                        .banlistRouter(
+                                h,
+                                " <b>➜</b> " + banReason,
+                                null,
+                                null,
+                                context.clock().now() + bantime);
+                context.simpleTimer2().addEvent(new Disconnector(h), 11 * 60 * 1000);
                 if (_log.shouldWarn()) {
-                    _log.warn("Banning " + (isLowShare || isUnreachable ? "slow or unreachable" : "") +
-                              " Router [" + routerId + "] for " + period + "m" +
-                              "\n* Excessive tunnel requests (Requested: " + count + " / Hard limit " + limit +
-                              " in 165s)");
+                    _log.warn("Banning " + (isLowShare || isUnreachable ? "slow or unreachable" : "") + " Router ["
+                            + routerId + "] for " + period + "m" + "\n* Excessive tunnel requests (Requested: " + count
+                            + " / Hard limit " + limit + " in 165s)");
                 }
             } else {
                 if (_log.shouldInfo())
-                    _log.info("Rejecting Tunnel Requests from temp banned Router [" + routerId + "] -> " +
-                              "(Requested: " + count + " / Hard limit: " + limit + " in 165s)");
+                    _log.info("Rejecting Tunnel Requests from temp banned Router [" + routerId + "] -> "
+                            + "(Requested: " + count + " / Hard limit: " + limit + " in 165s)");
                 context.commSystem().forceDisconnect(h);
             }
         }
@@ -290,13 +323,14 @@ class RequestThrottler {
         if (rv && count >= 3 * limit && enableThrottle) {
             String ipPort = getRouterIPPort(ri);
             String banReason = "Excessive tunnel requests";
-            _banLogger.logBan(h, ipPort, banReason, 30*60*1000L);
-            context.banlist().banlistRouter(h, banReason, null, null, context.clock().now() + 30*60*1000);
+            _banLogger.logBan(h, ipPort, banReason, 30 * 60 * 1000L);
+            context.banlist()
+                    .banlistRouter(h, banReason, null, null, context.clock().now() + 30 * 60 * 1000);
             // drop after any accepted tunnels have expired
-            context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
+            context.simpleTimer2().addEvent(new Disconnector(h), 11 * 60 * 1000);
             if (_log.shouldWarn())
-                _log.warn("Banning Router [" + routerId + "] for 30m -> " +
-                          "Excessive tunnel requests (Requested: " + count + " / Hard limit: " + limit + ")");
+                _log.warn("Banning Router [" + routerId + "] for 30m -> " + "Excessive tunnel requests (Requested: "
+                        + count + " / Hard limit: " + limit + ")");
         }
 
         return rv;
@@ -322,7 +356,8 @@ class RequestThrottler {
         if (blockCountries.isEmpty()) {
             cachedBlockedCountries = Collections.emptySet();
         } else {
-            cachedBlockedCountries = new HashSet<>(Arrays.asList(blockCountries.toLowerCase(Locale.ROOT).split(",")));
+            cachedBlockedCountries = new HashSet<>(
+                    Arrays.asList(blockCountries.toLowerCase(Locale.ROOT).split(",")));
         }
 
         return cachedBlockedCountries;
@@ -333,7 +368,9 @@ class RequestThrottler {
      */
     private class Cleaner implements SimpleTimer.TimedEvent {
         @Override
-        public void timeReached() {RequestThrottler.this.counter.clear();}
+        public void timeReached() {
+            RequestThrottler.this.counter.clear();
+        }
     }
 
     /**
@@ -343,9 +380,15 @@ class RequestThrottler {
      */
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;
-        public Disconnector(Hash h) {this.h = h;}
+
+        public Disconnector(Hash h) {
+            this.h = h;
+        }
+
         @Override
-        public void timeReached() {context.commSystem().forceDisconnect(h);}
+        public void timeReached() {
+            context.commSystem().forceDisconnect(h);
+        }
     }
 
     /**
@@ -360,7 +403,9 @@ class RequestThrottler {
      * @return IP:PORT string or "UNKNOWN" if not available
      */
     private String getRouterIPPort(RouterInfo router) {
-        if (router == null) { return "UNKNOWN"; }
+        if (router == null) {
+            return "UNKNOWN";
+        }
         try {
             // Try getCompatibleIP first - returns IP for our supported protocols
             byte[] ip = CommSystemFacadeImpl.getCompatibleIP(router);
@@ -425,9 +470,9 @@ class RequestThrottler {
     private boolean isLowShare(RouterInfo ri) {
         if (ri == null) return false;
         String caps = ri.getCapabilities();
-        return caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
-               caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
-               caps.indexOf(Router.CAPABILITY_BW64) >= 0;
+        return caps.indexOf(Router.CAPABILITY_BW12) >= 0
+                || caps.indexOf(Router.CAPABILITY_BW32) >= 0
+                || caps.indexOf(Router.CAPABILITY_BW64) >= 0;
     }
 
     /**
@@ -436,9 +481,9 @@ class RequestThrottler {
     private boolean isFast(RouterInfo ri) {
         if (ri == null) return false;
         String caps = ri.getCapabilities();
-        return caps.indexOf(Router.CAPABILITY_BW256) >= 0 ||
-               caps.indexOf(Router.CAPABILITY_BW512) >= 0 ||
-               caps.indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0;
+        return caps.indexOf(Router.CAPABILITY_BW256) >= 0
+                || caps.indexOf(Router.CAPABILITY_BW512) >= 0
+                || caps.indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0;
     }
 
     /**
@@ -447,8 +492,7 @@ class RequestThrottler {
     private boolean isLTier(RouterInfo ri) {
         if (ri == null) return false;
         String caps = ri.getCapabilities();
-        return caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
-               caps.indexOf(Router.CAPABILITY_BW32) >= 0;
+        return caps.indexOf(Router.CAPABILITY_BW12) >= 0 || caps.indexOf(Router.CAPABILITY_BW32) >= 0;
     }
 
     /**
@@ -474,12 +518,12 @@ class RequestThrottler {
         long now = context.clock().now();
         if (now - lastFirewallCheckTime > FIREWALL_CHECK_INTERVAL) {
             net.i2p.router.CommSystemFacade.Status status = context.commSystem().getStatus();
-            cachedFirewalledStatus = status == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
-                                     status == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
-                                     status == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
-                                     status == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
-                                     status == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
-                                     status == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
+            cachedFirewalledStatus = status == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED
+                    || status == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK
+                    || status == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN
+                    || status == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED
+                    || status == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED
+                    || status == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
             lastFirewallCheckTime = now;
         }
         return cachedFirewalledStatus;
@@ -534,8 +578,8 @@ class RequestThrottler {
 
         boolean isBursting(Hash h, int normalLimit) {
             int count = getCount(h);
-            int burstLimit = Math.max(BURST_THRESHOLD_MIN,
-                Math.min(BURST_THRESHOLD_MAX, (int) (normalLimit * BURST_THRESHOLD_PERCENT * 10 / 90)));
+            int burstLimit = Math.max(BURST_THRESHOLD_MIN, Math.min(BURST_THRESHOLD_MAX, (int)
+                    (normalLimit * BURST_THRESHOLD_PERCENT * 10 / 90)));
             return count > burstLimit;
         }
 
@@ -579,5 +623,4 @@ class RequestThrottler {
             return consecutiveOffenses.get();
         }
     }
-
 }

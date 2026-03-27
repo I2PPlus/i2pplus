@@ -11,7 +11,7 @@ public class TestContext extends I2PAppContext {
      *
      * @param ctx Our test context to replace the global context with
      */
-    public static void setGlobalContext(TestContext ctx){
+    public static void setGlobalContext(TestContext ctx) {
         _globalAppContext = ctx;
     }
 }

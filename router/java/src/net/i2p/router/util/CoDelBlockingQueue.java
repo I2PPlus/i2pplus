@@ -1,14 +1,15 @@
 package net.i2p.router.util;
 
-import java.util.Collection;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+
+import java.util.Collection;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * CoDel (Controlled Delay) implementation of Active Queue Management.
@@ -34,18 +35,21 @@ import net.i2p.util.SystemVersion;
 public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<E> {
 
     private static final long serialVersionUID = 1L;
-    private transient final I2PAppContext _context;
-    private transient final Log _log;
+    private final transient I2PAppContext _context;
+    private final transient Log _log;
     private final String _name;
     private final int _capacity;
 
     // following 4 are state variables defined by sample code, locked by this
     /** Time when we'll declare we're above target (0 if below) */
     private long _first_above_time;
+
     /** Time to drop next packet */
     private long _drop_next;
+
     /** Packets dropped since going into drop state */
     private int _count;
+
     /** true if in drop state */
     private boolean _dropping;
 
@@ -54,6 +58,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
 
     /** debugging */
     private static final AtomicLong __id = new AtomicLong();
+
     private final long _id;
 
     private static final long[] CODEL_RATES = RateConstants.SHORT_TERM_RATES;
@@ -70,6 +75,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *
      */
     private static final int DEFAULT_CODEL_TARGET = 5;
+
     private final long _target;
 
     /**
@@ -80,6 +86,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *
      */
     private static final int DEFAULT_CODEL_INTERVAL = 50;
+
     private final long _interval;
     private final String STAT_DROP;
     private final String STAT_DELAY;
@@ -91,13 +98,12 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *  @param name for stats
      */
 
-//    public CoDelBlockingQueue(I2PAppContext ctx, String name, int capacity) {
-//        this(ctx, name, capacity, TARGET, INTERVAL);
-//    }
+    //    public CoDelBlockingQueue(I2PAppContext ctx, String name, int capacity) {
+    //        this(ctx, name, capacity, TARGET, INTERVAL);
+    //    }
 
     public CoDelBlockingQueue(I2PAppContext ctx, String name, int capacity) {
-        this(ctx, name, capacity, ctx.getProperty(PROP_CODEL_TARGET, DEFAULT_CODEL_TARGET),
-                                  ctx.getProperty(PROP_CODEL_INTERVAL, DEFAULT_CODEL_INTERVAL));
+        this(ctx, name, capacity, ctx.getProperty(PROP_CODEL_TARGET, DEFAULT_CODEL_TARGET), ctx.getProperty(PROP_CODEL_INTERVAL, DEFAULT_CODEL_INTERVAL));
     }
 
     /**
@@ -211,11 +217,8 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      */
     public synchronized boolean isBacklogged() {
         E e = peek();
-        if (e == null)
-            return false;
-        return _dropping ||
-               _context.clock().now() - e.getEnqueueTime() >= BACKLOG_TIME ||
-               remainingCapacity() < _capacity / 4;
+        if (e == null) return false;
+        return _dropping || _context.clock().now() - e.getEnqueueTime() >= BACKLOG_TIME || remainingCapacity() < _capacity / 4;
     }
 
     /////// private below here
@@ -260,7 +263,6 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         return codel(rv);
     }
 
-
     /**
      *  @param rv may be null
      *  @return rv or a subequent entry or null if dropped
@@ -300,8 +302,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
                         }
                     }
                 }
-            } else if (ok_to_drop &&
-                       (_now - _drop_next < _interval || _now - _first_above_time >= _interval)) {
+            } else if (ok_to_drop && (_now - _drop_next < _interval || _now - _first_above_time >= _interval)) {
                 // If we get here, then we're not in dropping state. If the sojourn time has been above
                 // target for interval, then we decide whether it's time to enter dropping state.
                 // We do so if we've been either in dropping state recently or above target for a relatively
@@ -318,10 +319,8 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
                 _dropping = true;
                 // If we're in a drop cycle, the drop rate that controlled the queue
                 // on the last cycle is a good starting point to control it now.
-                if (_now - _drop_next < _interval)
-                    _count = _count > 2 ? _count - 2 : 1;
-                else
-                    _count = 1;
+                if (_now - _drop_next < _interval) _count = _count > 2 ? _count - 2 : 1;
+                else _count = 1;
                 control_law(_now);
             }
         }
@@ -331,12 +330,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     private void drop(E entry) {
         long delay = _context.clock().now() - entry.getEnqueueTime();
         _context.statManager().addRateData(STAT_DROP, delay);
-        if (_log.shouldWarn())
-            _log.warn("CDQ #" + _id + ' ' + _name + " dropped item with " + delay + "ms delay \n* " +
-                      DataHelper.formatDuration(_context.clock().now() - _first_above_time) + " since first above, " +
-                      DataHelper.formatDuration(_context.clock().now() - _drop_next) + " since drop next, " +
-                      (_count+1) + " dropped in this phase, " +
-                      size() + " remaining in queue " + entry);
+        if (_log.shouldWarn()) _log.warn("CDQ #" + _id + ' ' + _name + " dropped item with " + delay + "ms delay \n* " + DataHelper.formatDuration(_context.clock().now() - _first_above_time) + " since first above, " + DataHelper.formatDuration(_context.clock().now() - _drop_next) + " since drop next, " + (_count + 1) + " dropped in this phase, " + size() + " remaining in queue " + entry);
         entry.drop();
     }
 

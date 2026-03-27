@@ -1,4 +1,5 @@
 package net.i2p.router.client;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,16 +9,17 @@ package net.i2p.router.client;
  *
  */
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import net.i2p.client.I2PClient;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * Listen for connections on the specified port, and toss them onto the client manager's
@@ -50,7 +52,9 @@ class ClientListenerRunner implements Runnable {
         _bindAllInterfaces = context.getBooleanProperty(BIND_ALL_INTERFACES);
     }
 
-    public boolean isListening() { return _running && _listening; }
+    public boolean isListening() {
+        return _running && _listening;
+    }
 
     /**
      * Get a ServerSocket.
@@ -59,20 +63,19 @@ class ClientListenerRunner implements Runnable {
      */
     protected ServerSocket getServerSocket() throws IOException {
         if (_bindAllInterfaces) {
-            if (_log.shouldInfo())
-                _log.info("Listening on port " + _port + " on all interfaces");
+            if (_log.shouldInfo()) _log.info("Listening on port " + _port + " on all interfaces");
             return new ServerSocket(_port);
         } else {
-            String listenInterface = _context.getProperty(ClientManagerFacadeImpl.PROP_CLIENT_HOST,
-                                                          ClientManagerFacadeImpl.DEFAULT_HOST);
-            if (_log.shouldInfo())
-                _log.info("Listening on port " + _port + " of the specific interface: " + listenInterface);
+            String listenInterface = _context.getProperty(ClientManagerFacadeImpl.PROP_CLIENT_HOST, ClientManagerFacadeImpl.DEFAULT_HOST);
+            if (_log.shouldInfo()) _log.info("Listening on port " + _port + " of the specific interface: " + listenInterface);
             return new ServerSocket(_port, 0, InetAddress.getByName(listenInterface));
         }
     }
 
     @Override
-    public void run() { runServer(); }
+    public void run() {
+        runServer();
+    }
 
     /**
      * Start up the socket listener, listens for connections, and
@@ -84,14 +87,12 @@ class ClientListenerRunner implements Runnable {
     protected void runServer() {
         _running = true;
         int curDelay = 1000;
-        final String portMapperService = (this instanceof SSLClientListenerRunner) ? PortMapper.SVC_I2CP_SSL
-                                                                                   : PortMapper.SVC_I2CP;
+        final String portMapperService = (this instanceof SSLClientListenerRunner) ? PortMapper.SVC_I2CP_SSL : PortMapper.SVC_I2CP;
         while (_running) {
             try {
                 _socket = getServerSocket();
 
-                if (_log.shouldDebug())
-                    _log.debug("ServerSocket created, before accept: " + _socket);
+                if (_log.shouldDebug()) _log.debug("ServerSocket created, before accept: " + _socket);
                 if (_port > 0) {
                     // not for DomainClientListenerRunner
                     _context.portMapper().register(portMapperService, _socket.getInetAddress().getHostAddress(), _port);
@@ -102,30 +103,26 @@ class ClientListenerRunner implements Runnable {
                     try {
                         Socket socket = _socket.accept();
                         if (validate(socket)) {
-                            if (_log.shouldDebug())
-                                _log.debug("Connection received");
+                            if (_log.shouldDebug()) _log.debug("Connection received");
                             socket.setKeepAlive(true);
                             runConnection(socket);
                         } else {
-                            if (_log.shouldWarn())
-                                _log.warn("Refused connection from " + socket.getInetAddress());
+                            if (_log.shouldWarn()) _log.warn("Refused connection from " + socket.getInetAddress());
                             try {
                                 socket.close();
-                            } catch (IOException ioe) {}
+                            } catch (IOException ioe) {
+                            }
                         }
                     } catch (IOException ioe) {
-                        if (isAlive())
-                            _log.error("Server error accepting", ioe);
+                        if (isAlive()) _log.error("Server error accepting", ioe);
                     } catch (Throwable t) {
-                        if (isAlive())
-                            _log.error("Fatal error running client listener - killing the thread!", t);
+                        if (isAlive()) _log.error("Fatal error running client listener - killing the thread!", t);
                         _listening = false;
                         return;
                     }
                 }
             } catch (IOException ioe) {
-                if (isAlive())
-                    _log.error("Error listening on port " + _port, ioe);
+                if (isAlive()) _log.error("Error listening on port " + _port, ioe);
             } finally {
                 if (_port > 0) {
                     // not for DomainClientListenerRunner
@@ -135,22 +132,25 @@ class ClientListenerRunner implements Runnable {
 
             _listening = false;
             if (_socket != null) {
-                try { _socket.close(); } catch (IOException ioe) {}
+                try {
+                    _socket.close();
+                } catch (IOException ioe) {
+                }
                 _socket = null;
             }
 
             if (!isAlive()) break;
 
-            if (curDelay < 60*1000)
-                _log.error("Error listening, waiting " + (curDelay/1000) + "s before we try again");
-            else
-                _log.log(Log.CRIT, "I2CP error listening to port " + _port + " - is another I2P instance running? Resolve conflicts and restart");
-            try { Thread.sleep(curDelay); } catch (InterruptedException ie) {}
-            curDelay = Math.min(curDelay*3, 60*1000);
+            if (curDelay < 60 * 1000) _log.error("Error listening, waiting " + (curDelay / 1000) + "s before we try again");
+            else _log.log(Log.CRIT, "I2CP error listening to port " + _port + " - is another I2P instance running? Resolve conflicts and restart");
+            try {
+                Thread.sleep(curDelay);
+            } catch (InterruptedException ie) {
+            }
+            curDelay = Math.min(curDelay * 3, 60 * 1000);
         }
 
-        if (isAlive())
-            _log.error("CANCELING I2CP LISTEN", new Exception("I2CP Listen cancelled!!!"));
+        if (isAlive()) _log.error("CANCELING I2CP LISTEN", new Exception("I2CP Listen cancelled!!!"));
         _running = false;
     }
 
@@ -164,7 +164,7 @@ class ClientListenerRunner implements Runnable {
     }
 
     /** give the i2cp client 5 seconds to show that they're really i2cp clients */
-    protected final static int CONNECT_TIMEOUT = 5*1000;
+    protected static final int CONNECT_TIMEOUT = 5 * 1000;
 
     /**
      *  Verify the first byte.
@@ -176,9 +176,9 @@ class ClientListenerRunner implements Runnable {
             boolean rv = is.read() == I2PClient.PROTOCOL_BYTE;
             socket.setSoTimeout(0);
             return rv;
-        } catch (IOException ioe) {}
-        if (_log.shouldWarn())
-             _log.warn("Peer did not authenticate themselves as I2CP quickly enough, dropping");
+        } catch (IOException ioe) {
+        }
+        if (_log.shouldWarn()) _log.warn("Peer did not authenticate themselves as I2CP quickly enough, dropping");
         return false;
     }
 
@@ -196,6 +196,7 @@ class ClientListenerRunner implements Runnable {
         if (_socket != null) try {
                 _socket.close();
                 _socket = null;
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) {
+            }
     }
 }

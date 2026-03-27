@@ -25,8 +25,7 @@ public final class DnssecConstants {
     /**
      * Do not allow to instantiate DNSSECConstants
      */
-    private DnssecConstants() {
-    }
+    private DnssecConstants() {}
 
     private static final Map<Byte, SignatureAlgorithm> SIGNATURE_ALGORITHM_LUT = new HashMap<>();
 
@@ -53,7 +52,7 @@ public final class DnssecConstants {
         INDIRECT(252, "Reserved for Indirect Keys"),
         PRIVATEDNS(253, "private algorithm"),
         PRIVATEOID(254, "private algorithm oid"),
-       ;
+        ;
 
         SignatureAlgorithm(int number, String description) {
             if (number < 0 || number > 255) {
@@ -86,7 +85,7 @@ public final class DnssecConstants {
         SHA256(2, "SHA-256"),
         GOST(3, "GOST R 34.11-94"),
         SHA384(4, "SHA-384"),
-       ;
+        ;
 
         DigestAlgorithm(int value, String description) {
             if (value < 0 || value > 255) {

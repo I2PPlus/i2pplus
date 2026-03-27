@@ -1,4 +1,5 @@
 package net.i2p.util;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,15 +9,17 @@ package net.i2p.util;
  *
  */
 
+import junit.framework.TestCase;
+
+import net.i2p.data.DataHelper;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.zip.GZIPOutputStream;
-import junit.framework.TestCase;
-import net.i2p.data.DataHelper;
 
 public class ResettableGZIPInputStreamTest extends TestCase {
-    public void testResettableGZIPInputStream() throws Exception{
-        for (int size = 129; size < 64*1024; size+=100) {
+    public void testResettableGZIPInputStream() throws Exception {
+        for (int size = 129; size < 64 * 1024; size += 100) {
             byte b[] = new byte[size];
             new java.util.Random().nextBytes(b);
 
@@ -32,15 +35,13 @@ public class ResettableGZIPInputStreamTest extends TestCase {
             byte rbuf[] = new byte[512];
             while (true) {
                 int read = in.read(rbuf);
-                if (read == -1)
-                    break;
+                if (read == -1) break;
                 baos2.write(rbuf, 0, read);
             }
             byte rv[] = baos2.toByteArray();
-            assertEquals(rv.length,b.length);
+            assertEquals(rv.length, b.length);
 
             assertTrue(DataHelper.eq(rv, 0, b, 0, b.length));
-
         }
 
         byte orig[] = DataHelper.getASCII("ho ho ho, merry christmas");
@@ -56,10 +57,8 @@ public class ResettableGZIPInputStreamTest extends TestCase {
         i.initialize(new ByteArrayInputStream(compressed));
         byte readBuf[] = new byte[128];
         int read = i.read(readBuf);
-        assertEquals(read,orig.length);
-        for (int j = 0; j < read; j++)
-            assertEquals(readBuf[j],orig[j]);
-        assertEquals(-1,i.read());
-
+        assertEquals(read, orig.length);
+        for (int j = 0; j < read; j++) assertEquals(readBuf[j], orig[j]);
+        assertEquals(-1, i.read());
     }
 }

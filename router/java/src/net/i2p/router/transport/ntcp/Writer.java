@@ -1,14 +1,15 @@
 package net.i2p.router.transport.ntcp;
 
+import net.i2p.router.RouterContext;
+import net.i2p.util.I2PThread;
+import net.i2p.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import net.i2p.router.RouterContext;
-import net.i2p.util.I2PThread;
-import net.i2p.util.Log;
 
 /**
  * Pool of running threads which will transform the next I2NP message into
@@ -26,24 +27,25 @@ class Writer {
 
     public Writer(RouterContext ctx) {
         _log = ctx.logManager().getLog(getClass());
-//        _pendingConnections = new LinkedHashSet<NTCPConnection>(16);
+        //        _pendingConnections = new LinkedHashSet<NTCPConnection>(16);
         _pendingConnections = new LinkedHashSet<NTCPConnection>(128);
-//        _runners = new ArrayList<Runner>(5);
+        //        _runners = new ArrayList<Runner>(5);
         _runners = new ArrayList<Runner>(16);
-//        _liveWrites = new HashSet<NTCPConnection>(5);
+        //        _liveWrites = new HashSet<NTCPConnection>(5);
         _liveWrites = new HashSet<NTCPConnection>(16);
-//        _writeAfterLive = new HashSet<NTCPConnection>(5);
+        //        _writeAfterLive = new HashSet<NTCPConnection>(5);
         _writeAfterLive = new HashSet<NTCPConnection>(16);
     }
 
     public synchronized void startWriting(int numWriters) {
-        for (int i = 1; i <=numWriters; i++) {
+        for (int i = 1; i <= numWriters; i++) {
             Runner r = new Runner();
             I2PThread t = new I2PThread(r, "NTCPWriter " + i + '/' + numWriters, true);
             _runners.add(r);
             t.start();
         }
     }
+
     public synchronized void stopWriting() {
         while (!_runners.isEmpty()) {
             Runner r = _runners.remove(0);
@@ -56,7 +58,7 @@ class Writer {
     }
 
     public void wantsWrite(NTCPConnection con, String source) {
-        //if (con.getCurrentOutbound() != null)
+        // if (con.getCurrentOutbound() != null)
         //    throw new RuntimeException("Current outbound message already in play on " + con);
         boolean already = false;
         boolean pending = false;
@@ -69,8 +71,7 @@ class Writer {
                 _pendingConnections.notifyAll();
             }
         }
-        if (_log.shouldDebug())
-            _log.debug("wantsWrite: " + con + " already live? " + already + " added to pending? " + pending + ": " + source);
+        if (_log.shouldDebug()) _log.debug("wantsWrite: " + con + " already live? " + already + " added to pending? " + pending + ": " + source);
     }
 
     public void connectionClosed(NTCPConnection con) {
@@ -93,7 +94,9 @@ class Writer {
             _prepBuffer = new NTCPConnection.PrepBuffer();
         }
 
-        public void stop() { _stop = true; }
+        public void stop() {
+            _stop = true;
+        }
 
         @Override
         public void run() {
@@ -105,14 +108,12 @@ class Writer {
                         boolean keepWriting = (con != null) && _writeAfterLive.remove(con);
                         if (keepWriting) {
                             // keep on writing the same one
-                            if (_log.shouldDebug())
-                                _log.debug("Keep writing on the same connection: " + con);
+                            if (_log.shouldDebug()) _log.debug("Keep writing on the same connection: " + con);
                         } else {
                             _liveWrites.remove(con);
                             con = null;
                             if (_pendingConnections.isEmpty()) {
-                                if (_log.shouldDebug())
-                                    _log.debug("Done writing, but nothing pending; waiting...");
+                                if (_log.shouldDebug()) _log.debug("Done writing, but nothing pending; waiting...");
                                 _pendingConnections.wait();
                             } else {
                                 Iterator<NTCPConnection> iter = _pendingConnections.iterator();
@@ -123,16 +124,15 @@ class Writer {
                                 } else {
                                     con = null;
                                 }
-                                if (_log.shouldDebug())
-                                    _log.debug("Switch to writing on: " + con);
+                                if (_log.shouldDebug()) _log.debug("Switch to writing on: " + con);
                             }
                         }
                     }
-                } catch (InterruptedException ie) {}
+                } catch (InterruptedException ie) {
+                }
                 if (!_stop && (con != null)) {
                     try {
-                        if (_log.shouldDebug())
-                            _log.debug("Prepare next write on: " + con);
+                        if (_log.shouldDebug()) _log.debug("Prepare next write on: " + con);
                         _prepBuffer.init();
                         con.prepareNextWrite(_prepBuffer);
                     } catch (RuntimeException re) {

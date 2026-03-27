@@ -8,6 +8,8 @@ package net.i2p.socks;
 
 import static net.i2p.socks.SOCKS4Constants.*;
 
+import net.i2p.util.Addresses;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -15,7 +17,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import net.i2p.util.Addresses;
 
 /**
  *  A simple SOCKS 4/4a client.
@@ -46,9 +47,18 @@ public class SOCKS4Client {
             out = sock.getOutputStream();
             connect(in, out, connHostName, connPort);
         } catch (IOException e) {
-            try { sock.close(); } catch (IOException ioe) {}
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
-            if (out != null) try { out.close(); } catch (IOException ioe) {}
+            try {
+                sock.close();
+            } catch (IOException ioe) {
+            }
+            if (in != null) try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
+            if (out != null) try {
+                    out.close();
+                } catch (IOException ioe) {
+                }
             throw e;
         }
     }
@@ -82,7 +92,7 @@ public class SOCKS4Client {
                 isIPv4 = false;
                 out.writeInt(1); // 0.0.0.1
             }
-            out.writeByte(0);    // empty username
+            out.writeByte(0); // empty username
             if (!isIPv4) {
                 byte[] d = connHostName.getBytes("ISO-8859-1");
                 out.write(d);
@@ -92,17 +102,22 @@ public class SOCKS4Client {
 
             // read init reply
             in = new DataInputStream(pin);
-            in.readByte();  // dummy
+            in.readByte(); // dummy
             int reply = in.readByte();
-            if (reply != Reply.SUCCEEDED)
-                throw new SOCKSException("Proxy rejected request (response = " + reply + ")");
+            if (reply != Reply.SUCCEEDED) throw new SOCKSException("Proxy rejected request (response = " + reply + ")");
             // throw away the address in the response
             // todo pass the response through?
             in.readShort(); // port
-            in.readInt();   // IP
+            in.readInt(); // IP
         } catch (IOException e) {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
-            if (out != null) try { out.close(); } catch (IOException ioe) {}
+            if (in != null) try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
+            if (out != null) try {
+                    out.close();
+                } catch (IOException ioe) {
+                }
             throw e;
         }
     }

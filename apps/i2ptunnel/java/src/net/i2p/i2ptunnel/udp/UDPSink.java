@@ -1,10 +1,11 @@
 package net.i2p.i2ptunnel.udp;
 
+import net.i2p.data.Destination;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import net.i2p.data.Destination;
 
 /**
  * UDP sink implementation for streaming data.
@@ -32,7 +33,6 @@ public class UDPSink implements Sink {
         this.remoteHost = host;
         this.remotePort = port;
     }
-
 
     /**
      *  @param socket existing socket

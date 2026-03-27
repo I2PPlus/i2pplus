@@ -65,16 +65,11 @@ public class Curve implements Serializable {
 
     public GroupElement getZero(GroupElement.Representation repr) {
         switch (repr) {
-            case P2:
-                return zeroP2;
-            case P3:
-                return zeroP3;
-            case P3PrecomputedDouble:
-                return zeroP3PrecomputedDouble;
-            case PRECOMP:
-                return zeroPrecomp;
-            default:
-                return null;
+            case P2: return zeroP2;
+            case P3: return zeroP3;
+            case P3PrecomputedDouble: return zeroP3PrecomputedDouble;
+            case PRECOMP: return zeroPrecomp;
+            default: return null;
         }
     }
 
@@ -88,9 +83,7 @@ public class Curve implements Serializable {
      */
     @Override
     public int hashCode() {
-        return f.hashCode() ^
-               d.hashCode() ^
-               I.hashCode();
+        return f.hashCode() ^ d.hashCode() ^ I.hashCode();
     }
 
     /**
@@ -98,13 +91,9 @@ public class Curve implements Serializable {
      */
     @Override
     public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof Curve))
-            return false;
+        if (o == this) return true;
+        if (!(o instanceof Curve)) return false;
         Curve c = (Curve) o;
-        return f.equals(c.getField()) &&
-               d.equals(c.getD()) &&
-               I.equals(c.getI());
+        return f.equals(c.getField()) && d.equals(c.getD()) && I.equals(c.getI());
     }
 }

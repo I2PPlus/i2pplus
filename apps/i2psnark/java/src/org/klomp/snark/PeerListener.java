@@ -6,9 +6,11 @@
 
 package org.klomp.snark;
 
-import java.util.List;
 import net.i2p.data.ByteArray;
+
 import org.klomp.snark.comments.Comment;
+
+import java.util.List;
 
 /** Listener for Peer events. */
 interface PeerListener {

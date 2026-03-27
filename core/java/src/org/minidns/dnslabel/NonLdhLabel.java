@@ -31,5 +31,4 @@ public abstract class NonLdhLabel extends DnsLabel {
 
         return new OtherNonLdhLabel(label);
     }
-
 }

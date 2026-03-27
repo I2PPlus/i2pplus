@@ -1,7 +1,8 @@
 package net.i2p.util;
 
-import java.io.File;
 import net.i2p.I2PAppContext;
+
+import java.io.File;
 
 /**
  *  Prevent systemd from deleting our temp dir or any dirs or files in it.
@@ -24,7 +25,7 @@ public class TempDirScanner extends SimpleTimer2.TimedEvent {
 
     // systemd default is 10 days for /tmp? distro dependent.
     // go a little faster than 1 day just in case
-    private static final long DELAY = 23*60*60*1000L;
+    private static final long DELAY = 23 * 60 * 60 * 1000L;
 
     /**
      *  Schedules itself

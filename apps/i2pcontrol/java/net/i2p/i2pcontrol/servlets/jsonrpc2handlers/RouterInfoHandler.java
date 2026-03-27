@@ -36,7 +36,7 @@ public class RouterInfoHandler implements RequestHandler {
 
     // Reports the method names of the handled requests
     public String[] handledRequests() {
-        return new String[] { "RouterInfo" };
+        return new String[] {"RouterInfo"};
     }
 
     // Processes the requests
@@ -45,22 +45,20 @@ public class RouterInfoHandler implements RequestHandler {
             return process(req);
         } else {
             // Method name not supported
-            return new JSONRPC2Response(JSONRPC2Error.METHOD_NOT_FOUND,
-                                        req.getID());
+            return new JSONRPC2Response(JSONRPC2Error.METHOD_NOT_FOUND, req.getID());
         }
     }
 
     @SuppressWarnings("unchecked")
     private JSONRPC2Response process(JSONRPC2Request req) {
         JSONRPC2Error err = _helper.validateParams(null, req);
-        if (err != null)
-            return new JSONRPC2Response(err, req.getID());
+        if (err != null) return new JSONRPC2Response(err, req.getID());
 
         if (_context == null) {
-            return new JSONRPC2Response(new JSONRPC2Error(
-                                            JSONRPC2Error.INTERNAL_ERROR.getCode(),
-                                            "RouterContext was not initialized. Query failed"),
-                                        req.getID());
+            return new JSONRPC2Response(
+                    new JSONRPC2Error(
+                            JSONRPC2Error.INTERNAL_ERROR.getCode(), "RouterContext was not initialized. Query failed"),
+                    req.getID());
         }
         Map<String, Object> inParams = req.getNamedParams();
         Map outParams = new HashMap();
@@ -71,7 +69,8 @@ public class RouterInfoHandler implements RequestHandler {
                 java.lang.reflect.Field field = rvClass.getDeclaredField("FULL_VERSION");
                 String fullVersion = (String) field.get(new RouterVersion());
                 outParams.put("i2p.router.version", fullVersion);
-            } catch (Exception e) {} // Ignore
+            } catch (Exception e) {
+            } // Ignore
         }
 
         if (inParams.containsKey("i2p.router.uptime")) {
@@ -92,28 +91,36 @@ public class RouterInfoHandler implements RequestHandler {
         }
 
         if (inParams.containsKey("i2p.router.net.bw.inbound.1s")) {
-            outParams.put("i2p.router.net.bw.inbound.1s", _context.bandwidthLimiter().getReceiveBps());
+            outParams.put(
+                    "i2p.router.net.bw.inbound.1s", _context.bandwidthLimiter().getReceiveBps());
         }
 
         if (inParams.containsKey("i2p.router.net.bw.outbound.1s")) {
-            outParams.put("i2p.router.net.bw.outbound.1s", _context.bandwidthLimiter().getSendBps());
+            outParams.put(
+                    "i2p.router.net.bw.outbound.1s", _context.bandwidthLimiter().getSendBps());
         }
 
         if (inParams.containsKey("i2p.router.net.bw.inbound.15s")) {
-            outParams.put("i2p.router.net.bw.inbound.15s", _context.bandwidthLimiter().getReceiveBps15s());
+            outParams.put(
+                    "i2p.router.net.bw.inbound.15s", _context.bandwidthLimiter().getReceiveBps15s());
         }
 
         if (inParams.containsKey("i2p.router.net.bw.outbound.15s")) {
-            outParams.put("i2p.router.net.bw.outbound.15s", _context.bandwidthLimiter().getSendBps15s());
+            outParams.put(
+                    "i2p.router.net.bw.outbound.15s",
+                    _context.bandwidthLimiter().getSendBps15s());
         }
 
         if (inParams.containsKey("i2p.router.net.tunnels.participating")) {
-            outParams.put("i2p.router.net.tunnels.participating", _context.tunnelManager().getParticipatingCount());
+            outParams.put(
+                    "i2p.router.net.tunnels.participating",
+                    _context.tunnelManager().getParticipatingCount());
         }
 
         if (inParams.containsKey("i2p.router.netdb.knownpeers")) {
             // Why max(-1, 0) is used I don't know, it is the implementation used in the router console.
-            outParams.put("i2p.router.netdb.knownpeers", Math.max(_context.netDb().getKnownRouters() - 1, 0));
+            outParams.put(
+                    "i2p.router.netdb.knownpeers", Math.max(_context.netDb().getKnownRouters() - 1, 0));
         }
 
         if (inParams.containsKey("i2p.router.netdb.activepeers")) {
@@ -121,16 +128,21 @@ public class RouterInfoHandler implements RequestHandler {
         }
 
         if (inParams.containsKey("i2p.router.netdb.fastpeers")) {
-            outParams.put("i2p.router.netdb.fastpeers", _context.profileOrganizer().countFastPeers());
+            outParams.put(
+                    "i2p.router.netdb.fastpeers", _context.profileOrganizer().countFastPeers());
         }
 
         if (inParams.containsKey("i2p.router.netdb.highcapacitypeers")) {
-            outParams.put("i2p.router.netdb.highcapacitypeers", _context.profileOrganizer().countHighCapacityPeers());
+            outParams.put(
+                    "i2p.router.netdb.highcapacitypeers",
+                    _context.profileOrganizer().countHighCapacityPeers());
         }
 
         if (inParams.containsKey("i2p.router.netdb.isreseeding")) {
-            outParams.put("i2p.router.netdb.isreseeding",
-                Boolean.valueOf(System.getProperty("net.i2p.router.web.ReseedHandler.reseedInProgress")).booleanValue());
+            outParams.put(
+                    "i2p.router.netdb.isreseeding",
+                    Boolean.valueOf(System.getProperty("net.i2p.router.web.ReseedHandler.reseedInProgress"))
+                            .booleanValue());
         }
         return new JSONRPC2Response(outParams, req.getID());
     }
@@ -157,26 +169,21 @@ public class RouterInfoHandler implements RequestHandler {
     private NETWORK_STATUS getNetworkStatus() {
         if (_context.router().getUptime() > 60 * 1000
                 && (!_context.router().gracefulShutdownInProgress())
-                && !_context.clientManager().isAlive())
-            return (NETWORK_STATUS.ERROR_I2CP);
+                && !_context.clientManager().isAlive()) return (NETWORK_STATUS.ERROR_I2CP);
         long skew = _context.commSystem().getFramedAveragePeerClockSkew(10);
         // Display the actual skew, not the offset
-        if (Math.abs(skew) > 60 * 1000)
-            return NETWORK_STATUS.ERROR_CLOCK_SKEW;
-        if (_context.router().isHidden())
-            return (NETWORK_STATUS.HIDDEN);
+        if (Math.abs(skew) > 60 * 1000) return NETWORK_STATUS.ERROR_CLOCK_SKEW;
+        if (_context.router().isHidden()) return (NETWORK_STATUS.HIDDEN);
 
         int status = _context.commSystem().getStatus().getCode();
         switch (status) {
-
             case CommSystemFacade.STATUS_OK:
             case CommSystemFacade.STATUS_IPV4_OK_IPV6_UNKNOWN:
             case CommSystemFacade.STATUS_IPV4_OK_IPV6_FIREWALLED:
             case CommSystemFacade.STATUS_IPV4_FIREWALLED_IPV6_OK:
             case CommSystemFacade.STATUS_IPV4_DISABLED_IPV6_OK:
                 RouterAddress ra = _context.router().getRouterInfo().getTargetAddress("NTCP2");
-                if (ra == null || TransportUtil.isPubliclyRoutable(ra.getIP(), true))
-                    return NETWORK_STATUS.OK;
+                if (ra == null || TransportUtil.isPubliclyRoutable(ra.getIP(), true)) return NETWORK_STATUS.OK;
                 return NETWORK_STATUS.ERROR_PRIVATE_TCP_ADDRESS;
 
             case CommSystemFacade.STATUS_DIFFERENT:
@@ -189,8 +196,7 @@ public class RouterInfoHandler implements RequestHandler {
             case CommSystemFacade.STATUS_IPV4_DISABLED_IPV6_FIREWALLED:
                 if (_context.router().getRouterInfo().getTargetAddress("NTCP2") != null)
                     return NETWORK_STATUS.WARN_FIREWALLED_WITH_INBOUND_TCP;
-                if (_context.netDb().floodfillEnabled())
-                    return NETWORK_STATUS.WARN_FIREWALLED_AND_FLOODFILL;
+                if (_context.netDb().floodfillEnabled()) return NETWORK_STATUS.WARN_FIREWALLED_AND_FLOODFILL;
                 if (_context.router().getRouterInfo().getCapabilities().indexOf('O') >= 0)
                     return NETWORK_STATUS.WARN_FIREWALLED_AND_FAST;
                 return NETWORK_STATUS.FIREWALLED;
@@ -210,11 +216,10 @@ public class RouterInfoHandler implements RequestHandler {
                 if (ra == null && _context.router().getUptime() > 5 * 60 * 1000) {
                     if (_context.commSystem().countActivePeers() <= 0)
                         return NETWORK_STATUS.ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL;
-                    else if (_context.getProperty(NTCPTransport.PROP_I2NP_NTCP_HOSTNAME) == null ||
-                        _context.getProperty(NTCPTransport.PROP_I2NP_NTCP_PORT) == null)
+                    else if (_context.getProperty(NTCPTransport.PROP_I2NP_NTCP_HOSTNAME) == null
+                            || _context.getProperty(NTCPTransport.PROP_I2NP_NTCP_PORT) == null)
                         return NETWORK_STATUS.ERROR_UDP_DISABLED_AND_TCP_UNSET;
-                    else
-                        return NETWORK_STATUS.WARN_FIREWALLED_WITH_UDP_DISABLED;
+                    else return NETWORK_STATUS.WARN_FIREWALLED_WITH_UDP_DISABLED;
                 }
                 return NETWORK_STATUS.TESTING;
         }

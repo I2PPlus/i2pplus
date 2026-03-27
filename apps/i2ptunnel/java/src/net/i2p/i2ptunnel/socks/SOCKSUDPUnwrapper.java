@@ -1,11 +1,12 @@
 package net.i2p.i2ptunnel.socks;
 
-import java.util.Map;
 import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.I2PSocketAddress;
 import net.i2p.data.Destination;
 import net.i2p.i2ptunnel.udp.*;
 import net.i2p.util.Log;
+
+import java.util.Map;
 
 /**
  * Strip a SOCKS header off a datagram, convert it to a Destination and port

@@ -39,11 +39,11 @@ public class Timestamper implements Runnable {
          * The time has been queried and we have a current value for 'now'
          *
          */
-         /**
-          * Set the current time.
-          * @param now the current time
-          * @param stratum 1-15, 1 being the best (added in 0.7.12)
-          */
+        /**
+         * Set the current time.
+         * @param now the current time
+         * @param stratum 1-15, 1 being the best (added in 0.7.12)
+         */
         public void setNow(long now, int stratum);
     }
 }

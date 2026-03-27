@@ -1,6 +1,5 @@
 package net.i2p.router.networkdb.kademlia;
 
-import java.util.List;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.router.RouterInfo;
@@ -8,6 +7,8 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+
+import java.util.List;
 
 /**
  * Job to flood nearby floodfill routers with our RI.
@@ -30,30 +31,32 @@ class FloodfillRouterInfoFloodJob extends JobImpl {
     }
 
     @Override
-    public String getName() { return "Distribute Local RouterInfo to Floodfills"; }
+    public String getName() {
+        return "Distribute Local RouterInfo to Floodfills";
+    }
 
     @Override
     public void runJob() {
-        FloodfillPeerSelector sel = (FloodfillPeerSelector)_facade.getPeerSelector();
+        FloodfillPeerSelector sel = (FloodfillPeerSelector) _facade.getPeerSelector();
         DatabaseStoreMessage dsm;
         OutNetMessage outMsg;
         RouterInfo nextPeerInfo;
 
         List<Hash> peers = sel.selectFloodfillParticipants(getContext().routerHash(), FLOOD_PEERS, null);
 
-        for (Hash ri: peers) {
+        for (Hash ri : peers) {
             // Iterate through list of nearby (ff) peers
             dsm = new DatabaseStoreMessage(getContext());
-            dsm.setMessageExpiration(getContext().clock().now() + 10*1000);
+            dsm.setMessageExpiration(getContext().clock().now() + 10 * 1000);
             dsm.setEntry(getContext().router().getRouterInfo());
             nextPeerInfo = getContext().netDb().lookupRouterInfoLocally(ri);
             if (nextPeerInfo == null) {
                 continue;
             }
-            outMsg = new OutNetMessage(getContext(), dsm, getContext().clock().now()+10*1000, OutNetMessage.PRIORITY_MY_NETDB_STORE, nextPeerInfo);
+            outMsg = new OutNetMessage(getContext(), dsm, getContext().clock().now() + 10 * 1000, OutNetMessage.PRIORITY_MY_NETDB_STORE, nextPeerInfo);
             getContext().outNetMessagePool().add(outMsg); // Whoosh!
             if (_log.shouldDebug()) {
-                _log.logAlways(Log.DEBUG, "Sending our RouterInfo to [" + nextPeerInfo.getHash().toBase64().substring(0,6) + "]");
+                _log.logAlways(Log.DEBUG, "Sending our RouterInfo to [" + nextPeerInfo.getHash().toBase64().substring(0, 6) + "]");
             }
         }
     }

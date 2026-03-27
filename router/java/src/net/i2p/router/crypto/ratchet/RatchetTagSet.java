@@ -2,7 +2,7 @@ package net.i2p.router.crypto.ratchet;
 
 import com.southernstorm.noise.protocol.DHState;
 import com.southernstorm.noise.protocol.HandshakeState;
-import java.util.concurrent.atomic.AtomicInteger;
+
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.HKDF;
@@ -14,6 +14,8 @@ import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *  Manages session tags and keys for a single ratchet direction with automatic key generation, supporting both inbound lookahead and on-demand outbound operations
@@ -61,8 +63,10 @@ class RatchetTagSet implements TagSetHandle {
     private KeyPair _nextKeys;
     private NextSessionKey _nextKey;
     private boolean _nextKeyAcked;
+
     /** for debugging */
     private static final AtomicInteger __tagSetID = new AtomicInteger();
+
     private final int _tagSetID = __tagSetID.incrementAndGet();
 
     private static final String INFO_1 = "KDFDHRatchetStep";
@@ -88,8 +92,7 @@ class RatchetTagSet implements TagSetHandle {
      *
      *  @param date For outbound: creation time
      */
-    public RatchetTagSet(HKDF hkdf, HandshakeState state, SessionKey rootKey, SessionKey data,
-                         long date) {
+    public RatchetTagSet(HKDF hkdf, HandshakeState state, SessionKey rootKey, SessionKey data, long date) {
         this(hkdf, null, state, null, rootKey, data, date, RatchetSKM.SESSION_PENDING_DURATION_MS, DEBUG_OB_NSR, -2, false, 0, 0);
     }
 
@@ -98,8 +101,7 @@ class RatchetTagSet implements TagSetHandle {
      *
      *  @param date For outbound: creation time
      */
-    public RatchetTagSet(HKDF hkdf, SessionKey rootKey, SessionKey data,
-                         long date, int tagsetid, int keyid) {
+    public RatchetTagSet(HKDF hkdf, SessionKey rootKey, SessionKey data, long date, int tagsetid, int keyid) {
         this(hkdf, null, null, null, rootKey, data, date, RatchetSKM.SESSION_TAG_DURATION_MS, tagsetid, keyid, false, 0, 0);
     }
 
@@ -108,8 +110,7 @@ class RatchetTagSet implements TagSetHandle {
      *
      *  @param date For inbound: creation time
      */
-    public RatchetTagSet(HKDF hkdf, SessionTagListener lsnr, HandshakeState state, SessionKey rootKey, SessionKey data,
-                         long date, int minSize, int maxSize) {
+    public RatchetTagSet(HKDF hkdf, SessionTagListener lsnr, HandshakeState state, SessionKey rootKey, SessionKey data, long date, int minSize, int maxSize) {
         this(hkdf, lsnr, state, null, rootKey, data, date, RatchetSKM.SESSION_PENDING_DURATION_MS, DEBUG_IB_NSR, -2, true, minSize, maxSize);
     }
 
@@ -118,19 +119,14 @@ class RatchetTagSet implements TagSetHandle {
      *
      *  @param date For inbound: creation time
      */
-    public RatchetTagSet(HKDF hkdf, SessionTagListener lsnr,
-                         PublicKey remoteKey, SessionKey rootKey, SessionKey data,
-                         long date, int tagsetid, int keyid, int minSize, int maxSize) {
+    public RatchetTagSet(HKDF hkdf, SessionTagListener lsnr, PublicKey remoteKey, SessionKey rootKey, SessionKey data, long date, int tagsetid, int keyid, int minSize, int maxSize) {
         this(hkdf, lsnr, null, remoteKey, rootKey, data, date, RatchetSKM.SESSION_LIFETIME_MAX_MS, tagsetid, keyid, true, minSize, maxSize);
     }
-
 
     /**
      *  @param date For inbound and outbound: creation time
      */
-    private RatchetTagSet(HKDF hkdf, SessionTagListener lsnr, HandshakeState state,
-                          PublicKey remoteKey, SessionKey rootKey, SessionKey data,
-                          long date, long timeout, int tagsetid, int keyid, boolean isInbound, int minSize, int maxSize) {
+    private RatchetTagSet(HKDF hkdf, SessionTagListener lsnr, HandshakeState state, PublicKey remoteKey, SessionKey rootKey, SessionKey data, long date, long timeout, int tagsetid, int keyid, boolean isInbound, int minSize, int maxSize) {
         _lsnr = lsnr;
         _state = state;
         _remoteKey = remoteKey;
@@ -155,10 +151,8 @@ class RatchetTagSet implements TagSetHandle {
         hkdf.calculate(_sesstag_ck, ZEROLEN, INFO_3, _sesstag_ck, _sesstag_constant, 0);
         if (isInbound) {
             _sessionTags = new SparseArray<RatchetSessionTag>(minSize);
-            if (state == null)
-                _sessionKeys = new SparseArray<byte[]>(INITIAL_KEY_CAPACITY);
-            else
-                _sessionKeys = null;
+            if (state == null) _sessionKeys = new SparseArray<byte[]>(INITIAL_KEY_CAPACITY);
+            else _sessionKeys = null;
             for (int i = 0; i < minSize; i++) {
                 storeNextTag();
             }
@@ -167,8 +161,7 @@ class RatchetTagSet implements TagSetHandle {
             _sessionKeys = null;
         }
         // prevent adjusted expiration and search for matching OB ts
-        if (tagsetid > 0 && tagsetid <= 65535)
-            _acked = true;
+        if (tagsetid > 0 && tagsetid <= 65535) _acked = true;
     }
 
     /**
@@ -201,10 +194,8 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     public void clear() {
-        if (_sessionTags != null)
-            _sessionTags.clear();
-        if (_sessionKeys != null)
-            _sessionKeys.clear();
+        if (_sessionTags != null) _sessionTags.clear();
+        if (_sessionKeys != null) _sessionKeys.clear();
     }
 
     /**
@@ -280,8 +271,7 @@ class RatchetTagSet implements TagSetHandle {
      *  @since 0.9.46
      */
     public synchronized long getExpiration() {
-        if (_acked)
-            return _date + _timeout;
+        if (_acked) return _date + _timeout;
         return _created + Math.min(_timeout, RatchetSKM.SESSION_PENDING_DURATION_MS);
     }
 
@@ -317,8 +307,7 @@ class RatchetTagSet implements TagSetHandle {
      *  @since 0.9.46
      */
     public NextSessionKey getNextKey() {
-        if (_sessionTags != null || _state != null || remaining() > LOW)
-            return null;
+        if (_sessionTags != null || _state != null || remaining() > LOW) return null;
         if (_nextKey == null) {
             boolean isFirst = _id == 0;
             if (isFirst || (_id & 0x01) != 0) {
@@ -361,15 +350,12 @@ class RatchetTagSet implements TagSetHandle {
      *  @return associated SessionKey or null if not found.
      */
     public SessionKeyAndNonce consume(RatchetSessionTag tag) {
-        if (_sessionTags == null)
-            throw new IllegalStateException("Outbound tagset");
+        if (_sessionTags == null) throw new IllegalStateException("Outbound tagset");
         // linear search for tag
         int idx = _sessionTags.indexOfValueByValue(tag);
         if (idx < 0) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(RatchetTagSet.class);
-            if (log.shouldWarn())
-                log.warn("Tag not found " + tag.toBase64() +
-                         " in:\n" + toString(), new Exception());
+            if (log.shouldWarn()) log.warn("Tag not found " + tag.toBase64() + " in:\n" + toString(), new Exception());
             return null;
         }
         _acked = true;
@@ -394,7 +380,7 @@ class RatchetTagSet implements TagSetHandle {
         } else if (tagnum > _lastKey) {
             // if there's any gaps, catch up and store
             for (int i = _lastKey + 1; i < tagnum; i++) {
-                //System.out.println("Fill in key gap at " + i);
+                // System.out.println("Fill in key gap at " + i);
                 _sessionKeys.append(i, consumeNextKey().getData());
             }
             SessionKeyAndNonce rv = consumeNextKey();
@@ -403,9 +389,7 @@ class RatchetTagSet implements TagSetHandle {
         } else {
             // dup or some other error
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(RatchetTagSet.class);
-            if (log.shouldWarn())
-                log.warn("No key found for tag " + tag.toBase64() + " at index " + idx +
-                         " tagnum = " + tagnum + " lastkey = " + _lastKey, new Exception());
+            if (log.shouldWarn()) log.warn("No key found for tag " + tag.toBase64() + " at index " + idx + " tagnum = " + tagnum + " lastkey = " + _lastKey, new Exception());
             return null;
         }
     }
@@ -431,7 +415,7 @@ class RatchetTagSet implements TagSetHandle {
         int remaining = _lastTag - usedTagNumber;
         int toAdd = lookAhead - remaining;
         if (toAdd > 0) {
-            //System.out.println("Extending tags by " + toAdd);
+            // System.out.println("Extending tags by " + toAdd);
             for (int i = 0; i < toAdd; i++) {
                 storeNextTag();
             }
@@ -446,15 +430,12 @@ class RatchetTagSet implements TagSetHandle {
                 if (_sessionKeys != null) {
                     // only for ES tagsets
                     int kidx = _sessionKeys.indexOfKey(tagnum);
-                    if (kidx >= 0)
-                        _sessionKeys.removeAt(kidx);
+                    if (kidx >= 0) _sessionKeys.removeAt(kidx);
                 }
-                if (_lsnr != null)
-                    _lsnr.expireTag(_sessionTags.valueAt(toTrim), this);
+                if (_lsnr != null) _lsnr.expireTag(_sessionTags.valueAt(toTrim), this);
                 toTrim++;
             }
-            if (toTrim > 0)
-                _sessionTags.removeAtRange(0, toTrim);
+            if (toTrim > 0) _sessionTags.removeAtRange(0, toTrim);
         }
     }
 
@@ -463,11 +444,9 @@ class RatchetTagSet implements TagSetHandle {
      */
     private void storeNextTag() {
         RatchetSessionTag tag = consumeNext();
-        if (tag == null)
-            return;
+        if (tag == null) return;
         _sessionTags.append(_lastTag, tag);
-        if (_lsnr != null)
-            _lsnr.addTag(tag, this);
+        if (_lsnr != null) _lsnr.addTag(tag, this);
     }
 
     /**
@@ -477,8 +456,7 @@ class RatchetTagSet implements TagSetHandle {
      *  @return a tag or null if we ran out
      */
     public final RatchetSessionTag consumeNext() {
-        if (_lastTag >= MAX)
-            return null;
+        if (_lastTag >= MAX) return null;
         byte[] tmp = new byte[32];
         hkdf.calculate(_sesstag_ck, _sesstag_constant, INFO_4, _sesstag_ck, tmp, 0);
         _lastTag++;
@@ -493,15 +471,13 @@ class RatchetTagSet implements TagSetHandle {
      */
     public SessionKeyAndNonce consumeNextKey() {
         // NSR
-        if (_state != null)
-            return new SessionKeyAndNonce(_state);
+        if (_state != null) return new SessionKeyAndNonce(_state);
         // ES
         byte[] key = new byte[32];
         hkdf.calculate(_symmkey_ck, _symmkey_constant, INFO_5, _symmkey_ck, key, 0);
         _lastKey++;
         // for outbound, set acked
-        if (_sessionTags == null && _lastKey == 0)
-            _acked = true;
+        if (_sessionTags == null && _lastKey == 0) _acked = true;
         // fill in ID and remoteKey as this may be for inbound
         return new SessionKeyAndNonce(key, _id, _lastKey, _remoteKey);
     }
@@ -510,7 +486,9 @@ class RatchetTagSet implements TagSetHandle {
      *  For inbound, returns true after first consume() call.
      *  For outbound, returns true after first consumeNextKey() call.
      */
-    public boolean getAcked() { return _acked; }
+    public boolean getAcked() {
+        return _acked;
+    }
 
     /**
      * The TagSet ID, starting at 0.
@@ -530,38 +508,24 @@ class RatchetTagSet implements TagSetHandle {
     @Override
     public synchronized String toString() {
         StringBuilder buf = new StringBuilder(256);
-        if (_sessionTags != null)
-            buf.append("Inbound ");
-        else
-            buf.append("Outbound ");
-        if (_state != null)
-            buf.append("NSR ");
-        else
-            buf.append("ES ");
-        buf.append("TagSet #").append(_tagSetID)
-           .append(" ID #").append(_id)
-           .append("\n* Created:  ").append(DataHelper.formatTime(_created))
-           .append("\n* Last used: ").append(DataHelper.formatTime(_date));
+        if (_sessionTags != null) buf.append("Inbound ");
+        else buf.append("Outbound ");
+        if (_state != null) buf.append("NSR ");
+        else buf.append("ES ");
+        buf.append("TagSet #").append(_tagSetID).append(" ID #").append(_id).append("\n* Created:  ").append(DataHelper.formatTime(_created)).append("\n* Last used: ").append(DataHelper.formatTime(_date));
         PublicKey pk = getRemoteKey();
-        if (pk != null)
-            buf.append("\n* Remote Public Key: ").append(pk.toBase64());
+        if (pk != null) buf.append("\n* Remote Public Key: ").append(pk.toBase64());
         buf.append("\n* Root Key: ").append(_key.toBase64());
-        if (_tagsetKey != null)
-            buf.append("\n* Tagset Key: ").append(_tagsetKey.toBase64());
-        if (_nextKey != null)
-            buf.append("\n* Next Key: ").append(_nextKey);
+        if (_tagsetKey != null) buf.append("\n* Tagset Key: ").append(_tagsetKey.toBase64());
+        if (_nextKey != null) buf.append("\n* Next Key: ").append(_nextKey);
         int sz = size();
-        buf.append("\n* Size: ").append(sz)
-           .append("; Original Size: ").append(_originalSize)
-           .append("; Max Size: ").append(_maxSize)
-           .append("; Remaining: ").append(remaining());
+        buf.append("\n* Size: ").append(sz).append("; Original Size: ").append(_originalSize).append("; Max Size: ").append(_maxSize).append("; Remaining: ").append(remaining());
         buf.append("; Acked? ").append(_acked);
         if (_sessionTags != null) {
             for (int i = 0; i < sz; i++) {
                 int n = _sessionTags.keyAt(i);
                 RatchetSessionTag tag = _sessionTags.valueAt(i);
-                if (tag == null)
-                    continue;
+                if (tag == null) continue;
                 buf.append("\n* Session Tag ").append(n).append(": ").append(tag.toBase64());
                 if (_sessionKeys != null) {
                     byte[] key = _sessionKeys.get(n);
@@ -571,7 +535,7 @@ class RatchetTagSet implements TagSetHandle {
                         buf.append("\n* Session Key: TBD");
                         // set DEBUG if you want to see them all
                         if (!DEBUG) {
-                            buf.append(" (").append(sz - (i +1)).append(" more)");
+                            buf.append(" (").append(sz - (i + 1)).append(" more)");
                             break;
                         }
                     }
@@ -586,97 +550,97 @@ class RatchetTagSet implements TagSetHandle {
      *  inbound only
      *  testing only
      */
-/****
-    private RatchetSessionTag getFirstTag() {
-        if (_sessionTags == null)
-            throw new IllegalStateException("Outbound tagset");
-        if (_sessionTags.size() <= 0)
-            return null;
-        return _sessionTags.valueAt(0);
-    }
-****/
+    /****
+     * private RatchetSessionTag getFirstTag() {
+     * if (_sessionTags == null)
+     * throw new IllegalStateException("Outbound tagset");
+     * if (_sessionTags.size() <= 0)
+     * return null;
+     * return _sessionTags.valueAt(0);
+     * }
+     ****/
 
-     /**
+    /**
      *  tags still available
      *  inbound only
      *  testing only
      */
-/****
-    private List<RatchetSessionTag> getTags() {
-        if (_sessionTags == null)
-            return Collections.emptyList();
-        int sz = _sessionTags.size();
-        List<RatchetSessionTag> rv = new ArrayList<RatchetSessionTag>(sz);
-        for (int i = 0; i < sz; i++) {
-            rv.add(_sessionTags.valueAt(i));
-        }
-        return rv;
-    }
-
-    public static void main(String[] args) {
-        SessionKey k1 = new SessionKey(new byte[32]);
-        SessionKey k2 = new SessionKey(new byte[32]);
-        System.out.println("Send test");
-        HKDF hkdf = new HKDF(I2PAppContext.getGlobalContext());
-        RatchetTagSet rts = new RatchetTagSet(hkdf, k1, k2, 0, 0, 0);
-        System.out.println("TAGNUM\tTAG\t\tKEY");
-        for (int i = 0; i < 20; i++) {
-            RatchetSessionTag tag = rts.consumeNext();
-            SessionKey key = rts.consumeNextKey();
-            System.out.println(i + "\t" + tag.toBase64() + '\t' + key.toBase64());
-        }
-        System.out.println("Size now: " + rts.size());
-        System.out.println("");
-        System.out.println("Receive test in-order");
-        rts = new RatchetTagSet(hkdf, null, (PublicKey) null, k1, k2, 0, 0, 0, 10, 50);
-        System.out.println("Size now: " + rts.size());
-        List<RatchetSessionTag> tags = rts.getTags();
-        int j = 0;
-        System.out.println("TAGNUM\tTAG\t\tKEY");
-        for (RatchetSessionTag tag : tags) {
-            SessionKey key = rts.consume(tag);
-            if (key != null)
-                System.out.println(j++ + "\t" + tag.toBase64() + '\t' + key.toBase64());
-            else
-                System.out.println(j++ + "\t" + tag.toBase64() + "\t NOT FOUND");
-        }
-        for (int i = 11; i <= 20; i++) {
-            RatchetSessionTag tag = rts.getFirstTag();
-            SessionKey key = rts.consume(tag);
-            if (key != null)
-                System.out.println(i + "\t" + tag.toBase64() + '\t' + key.toBase64());
-            else
-                System.out.println(i + "\t" + tag.toBase64() + "\t NOT FOUND");
-        }
-        System.out.println("Size now: " + rts.size());
-        System.out.println("");
-        System.out.println("Receive test out of order");
-        rts = new RatchetTagSet(hkdf, null, (PublicKey) null, k1, k2, 0, 0, 0, 10, 50);
-        System.out.println("Size now: " + rts.size());
-        tags = rts.getTags();
-        List<RatchetSessionTag> origtags = new ArrayList<RatchetSessionTag>(tags);
-        Collections.shuffle(tags);
-        System.out.println("TAGNUM\tTAG\t\tKEY");
-        for (RatchetSessionTag tag : tags) {
-            int idx = origtags.indexOf(tag);
-            SessionKey key = rts.consume(tag);
-            if (key != null) {
-                System.out.println(idx + "\t" + Base64.encode(tag.getData()) + '\t' + Base64.encode(key.getData()));
-                //System.out.println("Remaining tags: " + rts.getTags());
-            } else {
-                System.out.println(idx + "\t" + Base64.encode(tag.getData()) + "\t NOT FOUND");
-            }
-        }
-        for (int i = 11; i <= 20; i++) {
-            RatchetSessionTag tag = rts.getFirstTag();
-            SessionKey key = rts.consume(tag);
-            if (key != null)
-                System.out.println(i + "\t" + Base64.encode(tag.getData()) + '\t' + Base64.encode(key.getData()));
-            else
-                System.out.println(i + "\t" + Base64.encode(tag.getData()) + "\t NOT FOUND");
-        }
-        System.out.println("Size now: " + rts.size());
-        System.out.println(rts.toString());
-    }
-****/
+    /****
+     * private List<RatchetSessionTag> getTags() {
+     * if (_sessionTags == null)
+     * return Collections.emptyList();
+     * int sz = _sessionTags.size();
+     * List<RatchetSessionTag> rv = new ArrayList<RatchetSessionTag>(sz);
+     * for (int i = 0; i < sz; i++) {
+     * rv.add(_sessionTags.valueAt(i));
+     * }
+     * return rv;
+     * }
+     *
+     * public static void main(String[] args) {
+     * SessionKey k1 = new SessionKey(new byte[32]);
+     * SessionKey k2 = new SessionKey(new byte[32]);
+     * System.out.println("Send test");
+     * HKDF hkdf = new HKDF(I2PAppContext.getGlobalContext());
+     * RatchetTagSet rts = new RatchetTagSet(hkdf, k1, k2, 0, 0, 0);
+     * System.out.println("TAGNUM\tTAG\t\tKEY");
+     * for (int i = 0; i < 20; i++) {
+     * RatchetSessionTag tag = rts.consumeNext();
+     * SessionKey key = rts.consumeNextKey();
+     * System.out.println(i + "\t" + tag.toBase64() + '\t' + key.toBase64());
+     * }
+     * System.out.println("Size now: " + rts.size());
+     * System.out.println("");
+     * System.out.println("Receive test in-order");
+     * rts = new RatchetTagSet(hkdf, null, (PublicKey) null, k1, k2, 0, 0, 0, 10, 50);
+     * System.out.println("Size now: " + rts.size());
+     * List<RatchetSessionTag> tags = rts.getTags();
+     * int j = 0;
+     * System.out.println("TAGNUM\tTAG\t\tKEY");
+     * for (RatchetSessionTag tag : tags) {
+     * SessionKey key = rts.consume(tag);
+     * if (key != null)
+     * System.out.println(j++ + "\t" + tag.toBase64() + '\t' + key.toBase64());
+     * else
+     * System.out.println(j++ + "\t" + tag.toBase64() + "\t NOT FOUND");
+     * }
+     * for (int i = 11; i <= 20; i++) {
+     * RatchetSessionTag tag = rts.getFirstTag();
+     * SessionKey key = rts.consume(tag);
+     * if (key != null)
+     * System.out.println(i + "\t" + tag.toBase64() + '\t' + key.toBase64());
+     * else
+     * System.out.println(i + "\t" + tag.toBase64() + "\t NOT FOUND");
+     * }
+     * System.out.println("Size now: " + rts.size());
+     * System.out.println("");
+     * System.out.println("Receive test out of order");
+     * rts = new RatchetTagSet(hkdf, null, (PublicKey) null, k1, k2, 0, 0, 0, 10, 50);
+     * System.out.println("Size now: " + rts.size());
+     * tags = rts.getTags();
+     * List<RatchetSessionTag> origtags = new ArrayList<RatchetSessionTag>(tags);
+     * Collections.shuffle(tags);
+     * System.out.println("TAGNUM\tTAG\t\tKEY");
+     * for (RatchetSessionTag tag : tags) {
+     * int idx = origtags.indexOf(tag);
+     * SessionKey key = rts.consume(tag);
+     * if (key != null) {
+     * System.out.println(idx + "\t" + Base64.encode(tag.getData()) + '\t' + Base64.encode(key.getData()));
+     * //System.out.println("Remaining tags: " + rts.getTags());
+     * } else {
+     * System.out.println(idx + "\t" + Base64.encode(tag.getData()) + "\t NOT FOUND");
+     * }
+     * }
+     * for (int i = 11; i <= 20; i++) {
+     * RatchetSessionTag tag = rts.getFirstTag();
+     * SessionKey key = rts.consume(tag);
+     * if (key != null)
+     * System.out.println(i + "\t" + Base64.encode(tag.getData()) + '\t' + Base64.encode(key.getData()));
+     * else
+     * System.out.println(i + "\t" + Base64.encode(tag.getData()) + "\t NOT FOUND");
+     * }
+     * System.out.println("Size now: " + rts.size());
+     * System.out.println(rts.toString());
+     * }
+     ****/
 }

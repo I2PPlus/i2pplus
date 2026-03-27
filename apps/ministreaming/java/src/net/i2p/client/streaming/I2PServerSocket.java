@@ -1,8 +1,9 @@
 package net.i2p.client.streaming;
 
+import net.i2p.I2PException;
+
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
-import net.i2p.I2PException;
 
 /**
  *  Streaming server socket returned by {@link I2PSocketManager#getServerSocket()}.

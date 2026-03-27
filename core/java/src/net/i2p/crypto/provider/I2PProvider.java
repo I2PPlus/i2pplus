@@ -1,7 +1,7 @@
 package net.i2p.crypto.provider;
 
-//import java.security.AccessController;
-//import java.security.PrivilegedAction;
+// import java.security.AccessController;
+// import java.security.PrivilegedAction;
 import java.security.Provider;
 import java.security.Security;
 
@@ -11,8 +11,7 @@ import java.security.Security;
  */
 public final class I2PProvider extends Provider {
     public static final String PROVIDER_NAME = "I2P";
-    private static final String INFO = "I2P Security Provider v0.1, implementing" +
-            "several algorithms used by I2P.";
+    private static final String INFO = "I2P Security Provider v0.1, implementing" + "several algorithms used by I2P.";
     private static boolean _installed;
 
     /**
@@ -25,17 +24,17 @@ public final class I2PProvider extends Provider {
         // replaced by (String,String,String) added in Java 9
         super(PROVIDER_NAME, 0.1, INFO);
 
-/*
-        AccessController.doPrivileged(new PrivilegedAction<Void>() {
-            @Override
-            public Void run() {
-*/
+        /*
+                AccessController.doPrivileged(new PrivilegedAction<Void>() {
+                    @Override
+                    public Void run() {
+        */
         setup();
-/*
-                return null;
-            }
-        });
-*/
+        /*
+                        return null;
+                    }
+                });
+        */
     }
 
     private void setup() {
@@ -49,12 +48,12 @@ public final class I2PProvider extends Provider {
         // you will need to sign your JAR file so that the JCA can authenticate the code at runtime.
         // If you are NOT providing an implementation of this type you can skip this step.
         //
-        //put("Cipher.AES", "net.i2p.crypto.provider.CipherSpi$aesCBC");
-        //put("Cipher.ElGamal", "net.i2p.crypto.provider.CipherSpi$elGamal");
-        //put("Mac.HmacMD5-I2P", "net.i2p.crypto.provider.MacSpi");
+        // put("Cipher.AES", "net.i2p.crypto.provider.CipherSpi$aesCBC");
+        // put("Cipher.ElGamal", "net.i2p.crypto.provider.CipherSpi$elGamal");
+        // put("Mac.HmacMD5-I2P", "net.i2p.crypto.provider.MacSpi");
 
         put("MessageDigest.SHA-1", "net.i2p.crypto.SHA1");
-        //put("Signature.SHA1withDSA", "net.i2p.crypto.provider.SignatureSpi");
+        // put("Signature.SHA1withDSA", "net.i2p.crypto.provider.SignatureSpi");
 
         // EdDSA
         // Key OID: 1.3.101.100; Sig OID: 1.3.101.101

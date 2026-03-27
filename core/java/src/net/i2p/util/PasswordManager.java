@@ -1,12 +1,13 @@
 package net.i2p.util;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SHA256Generator;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.SessionKey;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  *  Manage both plaintext and salted/hashed password storage in
@@ -20,17 +21,22 @@ public class PasswordManager {
     private final I2PAppContext _context;
 
     protected static final int SALT_LENGTH = 16;
+
     /** 48 */
     protected static final int SHASH_LENGTH = SALT_LENGTH + SessionKey.KEYSIZE_BYTES;
 
     /** stored as plain text */
     protected static final String PROP_PW = ".password";
+
     /** stored obfuscated as b64 of the UTF-8 bytes */
     protected static final String PROP_B64 = ".b64";
+
     /** stored as the hex of the MD5 hash of the UTF-8 bytes. Compatible with Jetty. */
     protected static final String PROP_MD5 = ".md5";
+
     /** stored as a Unix crypt string */
     protected static final String PROP_CRYPT = ".crypt";
+
     /** stored as the b64 of the 16 byte salt + the 32 byte hash of the UTF-8 bytes */
     protected static final String PROP_SHASH = ".shash";
 
@@ -47,9 +53,7 @@ public class PasswordManager {
      *  @return if pw verified
      */
     public boolean check(String realm, String user, String pw) {
-        return checkPlain(realm, user, pw) ||
-               checkB64(realm, user, pw) ||
-               checkHash(realm, user, pw);
+        return checkPlain(realm, user, pw) || checkB64(realm, user, pw) || checkHash(realm, user, pw);
     }
 
     /**
@@ -60,8 +64,7 @@ public class PasswordManager {
      */
     public boolean checkPlain(String realm, String user, String pw) {
         String pfx = realm;
-        if (user != null && user.length() > 0)
-            pfx += '.' + user;
+        if (user != null && user.length() > 0) pfx += '.' + user;
         return pw.equals(_context.getProperty(pfx + PROP_PW));
     }
 
@@ -73,11 +76,9 @@ public class PasswordManager {
      */
     public boolean checkB64(String realm, String user, String pw) {
         String pfx = realm;
-        if (user != null && user.length() > 0)
-            pfx += '.' + user;
+        if (user != null && user.length() > 0) pfx += '.' + user;
         String b64 = _context.getProperty(pfx + PROP_B64);
-        if (b64 == null)
-            return false;
+        if (b64 == null) return false;
         return b64.equals(Base64.encode(DataHelper.getUTF8(pw)));
     }
 
@@ -91,11 +92,9 @@ public class PasswordManager {
      */
     public boolean checkHash(String realm, String user, String pw) {
         String pfx = realm;
-        if (user != null && user.length() > 0)
-            pfx += '.' + user;
+        if (user != null && user.length() > 0) pfx += '.' + user;
         String shash = _context.getProperty(pfx + PROP_SHASH);
-        if (shash == null)
-            return false;
+        if (shash == null) return false;
         return checkHash(shash, pw);
     }
 
@@ -109,8 +108,7 @@ public class PasswordManager {
      */
     public boolean checkHash(String shash, String pw) {
         byte[] shashBytes = Base64.decode(shash);
-        if (shashBytes == null || shashBytes.length != SHASH_LENGTH)
-            return false;
+        if (shashBytes == null || shashBytes.length != SHASH_LENGTH) return false;
         byte[] salt = new byte[SALT_LENGTH];
         byte[] hash = new byte[SessionKey.KEYSIZE_BYTES];
         System.arraycopy(shashBytes, 0, salt, 0, SALT_LENGTH);
@@ -145,8 +143,7 @@ public class PasswordManager {
      */
     public String get(String realm, String user) {
         String rv = getPlain(realm, user);
-        if (rv != null)
-            return rv;
+        if (rv != null) return rv;
         return getB64(realm, user);
     }
 
@@ -157,8 +154,7 @@ public class PasswordManager {
      */
     public String getPlain(String realm, String user) {
         String pfx = realm;
-        if (user != null && user.length() > 0)
-            pfx += '.' + user;
+        if (user != null && user.length() > 0) pfx += '.' + user;
         return _context.getProperty(pfx + PROP_PW);
     }
 
@@ -169,11 +165,9 @@ public class PasswordManager {
      */
     public String getB64(String realm, String user) {
         String pfx = realm;
-        if (user != null && user.length() > 0)
-            pfx += '.' + user;
+        if (user != null && user.length() > 0) pfx += '.' + user;
         String b64 = _context.getProperty(pfx + PROP_B64);
-        if (b64 == null)
-            return null;
+        if (b64 == null) return null;
         return Base64.decodeToString(b64);
     }
 
@@ -227,7 +221,8 @@ public class PasswordManager {
             MessageDigest md = MessageDigest.getInstance("MD5");
             md.update(data);
             return md.digest();
-        } catch (NoSuchAlgorithmException nsae) {}
+        } catch (NoSuchAlgorithmException nsae) {
+        }
         return new byte[0];
     }
 
@@ -267,38 +262,38 @@ public class PasswordManager {
      *  speed/comparison test before removing BC version;
      *  JVM was slightly faster
      */
-/*****
-    public static void main(String[] args) {
-        RandomSource rand = RandomSource.getInstance();
-        byte[] d = new byte[1500];
-        MD5Digest md = new MD5Digest();
-        byte[] bc = new byte[16];
-        // warmup and comparison
-        int runs = 25000;
-        for (int i = 0; i < runs; i++) {
-            rand.nextBytes(d);
-            byte[] jvm = md5Sum(d);
-            md.update(d, 0, d.length);
-            md.doFinal(bc, 0);
-            if (!DataHelper.eq(jvm, bc))
-                throw new IllegalStateException();
-            md.reset();
-        }
-
-        // real thing
-        runs = 500000;
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < runs; i++) {
-            md5Sum(d);
-        }
-        System.out.println("JVM " + (System.currentTimeMillis() - start));
-        start = System.currentTimeMillis();
-        for (int i = 0; i < runs; i++) {
-            md.update(d, 0, d.length);
-            md.doFinal(bc, 0);
-            md.reset();
-        }
-        System.out.println("BC " + (System.currentTimeMillis() - start));
-    }
-*****/
+    /*****
+     * public static void main(String[] args) {
+     * RandomSource rand = RandomSource.getInstance();
+     * byte[] d = new byte[1500];
+     * MD5Digest md = new MD5Digest();
+     * byte[] bc = new byte[16];
+     * // warmup and comparison
+     * int runs = 25000;
+     * for (int i = 0; i < runs; i++) {
+     * rand.nextBytes(d);
+     * byte[] jvm = md5Sum(d);
+     * md.update(d, 0, d.length);
+     * md.doFinal(bc, 0);
+     * if (!DataHelper.eq(jvm, bc))
+     * throw new IllegalStateException();
+     * md.reset();
+     * }
+     *
+     * // real thing
+     * runs = 500000;
+     * long start = System.currentTimeMillis();
+     * for (int i = 0; i < runs; i++) {
+     * md5Sum(d);
+     * }
+     * System.out.println("JVM " + (System.currentTimeMillis() - start));
+     * start = System.currentTimeMillis();
+     * for (int i = 0; i < runs; i++) {
+     * md.update(d, 0, d.length);
+     * md.doFinal(bc, 0);
+     * md.reset();
+     * }
+     * System.out.println("BC " + (System.currentTimeMillis() - start));
+     * }
+     *****/
 }

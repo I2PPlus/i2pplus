@@ -1,15 +1,18 @@
 package net.i2p.stat;
 
+import junit.framework.TestCase;
+
+import net.i2p.data.DataHelper;
+
+import org.junit.Test;
+
 import java.io.ByteArrayInputStream;
 import java.util.Properties;
-import junit.framework.TestCase;
-import net.i2p.data.DataHelper;
-import org.junit.Test;
 
 public class RateTest extends TestCase {
 
     @Test
-    public void testRate() throws Exception{
+    public void testRate() throws Exception {
         Rate rate = new Rate(5000);
         // Use deterministic approach - add data without timing dependencies
         for (int i = 0; i < 50; i++) {

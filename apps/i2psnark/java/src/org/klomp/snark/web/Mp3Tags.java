@@ -3,8 +3,10 @@ package org.klomp.snark.web;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
-import java.io.File;
+
 import net.i2p.data.DataHelper;
+
+import java.io.File;
 
 /**
  * Utility class for extracting MP3 metadata tags for display in the I2PSnark web interface.
@@ -33,14 +35,7 @@ public class Mp3Tags {
     public static String getTags(File f) {
         try {
             Mp3File mp3file = new Mp3File(f);
-            String artist = null,
-                    track = null,
-                    title = null,
-                    album = null,
-                    year = null,
-                    composer = null,
-                    genre = null,
-                    original = null;
+            String artist = null, track = null, title = null, album = null, year = null, composer = null, genre = null, original = null;
 
             if (mp3file.hasId3v2Tag()) {
                 ID3v2 id3v2Tag = mp3file.getId3v2Tag();
@@ -133,8 +128,7 @@ public class Mp3Tags {
             */
 
             /*
-                            if (year != null)
-                                buf.append(" (").append(DataHelper.escapeHTML(year)).append(')');
+                            if (year != null) buf.append(" (").append(DataHelper.escapeHTML(year)).append(')');
                             if (track != null)
                                 // ngettext
                                 buf.append(' ').append(_t("track")).append(' ').append(DataHelper.escapeHTML(track));

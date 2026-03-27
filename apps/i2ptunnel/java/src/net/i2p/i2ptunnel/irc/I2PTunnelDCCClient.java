@@ -3,8 +3,6 @@
  */
 package net.i2p.i2ptunnel.irc;
 
-import java.io.IOException;
-import java.net.Socket;
 import net.i2p.I2PException;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketManager;
@@ -15,6 +13,9 @@ import net.i2p.i2ptunnel.I2PTunnelClientBase;
 import net.i2p.i2ptunnel.I2PTunnelRunner;
 import net.i2p.i2ptunnel.Logging;
 import net.i2p.util.EventDispatcher;
+
+import java.io.IOException;
+import java.net.Socket;
 
 /**
  *  A standard client, using an existing socket manager.
@@ -30,8 +31,8 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
     private final int _remotePort;
     private long _expires;
 
-    private static final long INBOUND_EXPIRE = 30*60*1000;
-    private static final long INBOUND_STOP_EXPIRE = 30*60*1000;
+    private static final long INBOUND_EXPIRE = 30 * 60 * 1000;
+    private static final long INBOUND_STOP_EXPIRE = 30 * 60 * 1000;
     public static final String CONNECT_START_EVENT = "connectionStarted";
     public static final String CONNECT_STOP_EVENT = "connectionStopped";
 
@@ -44,9 +45,7 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
      * @throws IllegalArgumentException if the I2PTunnel does not contain
      *                                  valid config to contact the router
      */
-    public I2PTunnelDCCClient(String dest, int localPort, int remotePort, Logging l,
-                           I2PSocketManager sktMgr, EventDispatcher notifyThis,
-                           I2PTunnel tunnel, long clientId) throws IllegalArgumentException {
+    public I2PTunnelDCCClient(String dest, int localPort, int remotePort, Logging l, I2PSocketManager sktMgr, EventDispatcher notifyThis, I2PTunnel tunnel, long clientId) throws IllegalArgumentException {
         super(localPort, l, sktMgr, tunnel, notifyThis, clientId);
         _dest = dest;
         _remotePort = remotePort;
@@ -61,8 +60,7 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
     @Override
     protected void clientConnectionRun(Socket s) {
         I2PSocket i2ps = null;
-        if (_log.shouldInfo())
-            _log.info("Opening DCC connection to " + _dest + ':' + _remotePort);
+        if (_log.shouldInfo()) _log.info("Opening DCC connection to " + _dest + ':' + _remotePort);
         Destination dest = _context.namingService().lookup(_dest);
         if (dest == null) {
             _log.error("Could not find leaseset for DCC connection to " + _dest + ':' + _remotePort);
@@ -78,7 +76,7 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
             i2ps = createI2PSocket(dest, opts);
             Thread t = new Runner(s, i2ps);
             // we are called from an unlimited thread pool, so run inline
-            //t.start();
+            // t.start();
             t.run();
         } catch (IOException ex) {
             _log.error("Could not make DCC connection to " + _dest + ':' + _remotePort, ex);
@@ -90,7 +88,10 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
             // only because we are running it inline
             closeSocket(s);
             if (i2ps != null) {
-                try { i2ps.close(); } catch (IOException ioe) {}
+                try {
+                    i2ps.close();
+                } catch (IOException ioe) {
+                }
             }
         }
         stop();
@@ -134,7 +135,8 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
         open = false;
         try {
             ss.close();
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) {
+        }
     }
 
     /**

@@ -25,6 +25,7 @@ package net.i2p.crypto;
  */
 
 import com.southernstorm.noise.crypto.chacha20.ChaChaCore;
+
 import net.i2p.data.DataHelper;
 
 /**
@@ -48,9 +49,7 @@ public final class ChaCha20 {
      *  @param ciphertextOffset offset in ciphertext
      *  @param length the length to encrypt
      */
-    public static void encrypt(byte[] key, byte[] iv,
-                               byte[] plaintext, int plaintextOffset,
-                               byte[] ciphertext, int ciphertextOffset, int length) {
+    public static void encrypt(byte[] key, byte[] iv, byte[] plaintext, int plaintextOffset, byte[] ciphertext, int ciphertextOffset, int length) {
         encrypt(key, iv, 0, plaintext, plaintextOffset, ciphertext, ciphertextOffset, length);
     }
 
@@ -61,14 +60,12 @@ public final class ChaCha20 {
      * @param iv first 12 bytes starting at ivOffset used as the iv
      * @since 0.9.54
      */
-    public static void encrypt(byte[] key, byte[] iv, int ivOffset,
-                               byte[] plaintext, int plaintextOffset,
-                               byte[] ciphertext, int ciphertextOffset, int length) {
+    public static void encrypt(byte[] key, byte[] iv, int ivOffset, byte[] plaintext, int plaintextOffset, byte[] ciphertext, int ciphertextOffset, int length) {
         int[] input = new int[16];
         int[] output = new int[16];
         ChaChaCore.initKey256(input, key, 0);
-        //System.out.println("initkey");
-        //dumpBlock(input);
+        // System.out.println("initkey");
+        // dumpBlock(input);
         // RFC 7539
         // block counter
         input[12] = 1;
@@ -76,25 +73,29 @@ public final class ChaCha20 {
         // key.  The 13th word is the first 32 bits of the input nonce taken
         // as a little-endian integer, while the 15th word is the last 32
         // bits.
-        //ChaChaCore.initIV(input, iv, counter);
-        //ChaChaCore.initIV(input, iv[4:11], iv[0:3]);
+        // ChaChaCore.initIV(input, iv, counter);
+        // ChaChaCore.initIV(input, iv[4:11], iv[0:3]);
         input[13] = (int) DataHelper.fromLongLE(iv, ivOffset, 4);
         input[14] = (int) DataHelper.fromLongLE(iv, ivOffset + 4, 4);
         input[15] = (int) DataHelper.fromLongLE(iv, ivOffset + 8, 4);
-        //System.out.println("initIV");
-        //dumpBlock(input);
+        // System.out.println("initIV");
+        // dumpBlock(input);
         ChaChaCore.hash(output, input);
-        //int ctr = 1;
-        //System.out.println("hash " + ctr);
-        //dumpBlock(output);
+        // int ctr = 1;
+        // System.out.println("hash " + ctr);
+        // dumpBlock(output);
         while (length > 0) {
             int tempLen = 64;
-            if (tempLen > length) {tempLen = length;}
+            if (tempLen > length) {
+                tempLen = length;
+            }
             ChaChaCore.hash(output, input);
-            //System.out.println("hash " + ++ctr);
-            //dumpBlock(output);
+            // System.out.println("hash " + ++ctr);
+            // dumpBlock(output);
             ChaChaCore.xorBlock(plaintext, plaintextOffset, ciphertext, ciphertextOffset, tempLen, output);
-            if (++(input[12]) == 0) {++(input[13]);}
+            if (++(input[12]) == 0) {
+                ++(input[13]);
+            }
             plaintextOffset += tempLen;
             ciphertextOffset += tempLen;
             length -= tempLen;
@@ -112,9 +113,7 @@ public final class ChaCha20 {
      *  @param plaintextOffset offset in plaintext
      *  @param length the length to decrypt
      */
-    public static void decrypt(byte[] key, byte[] iv,
-                               byte[] ciphertext, int ciphertextOffset,
-                               byte[] plaintext, int plaintextOffset, int length) {
+    public static void decrypt(byte[] key, byte[] iv, byte[] ciphertext, int ciphertextOffset, byte[] plaintext, int plaintextOffset, int length) {
         // it's symmetric!
         encrypt(key, iv, 0, ciphertext, ciphertextOffset, plaintext, plaintextOffset, length);
     }
@@ -131,11 +130,8 @@ public final class ChaCha20 {
      *  @param length the length to decrypt
      *  @since 0.9.54
      */
-    public static void decrypt(byte[] key, byte[] iv, int ivOffset,
-                               byte[] ciphertext, int ciphertextOffset,
-                               byte[] plaintext, int plaintextOffset, int length) {
+    public static void decrypt(byte[] key, byte[] iv, int ivOffset, byte[] ciphertext, int ciphertextOffset, byte[] plaintext, int plaintextOffset, int length) {
         // it's symmetric!
         encrypt(key, iv, ivOffset, ciphertext, ciphertextOffset, plaintext, plaintextOffset, length);
     }
-
 }

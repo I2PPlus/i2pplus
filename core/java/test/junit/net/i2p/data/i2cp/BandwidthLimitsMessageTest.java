@@ -1,4 +1,5 @@
 package net.i2p.data.i2cp;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by str4d in 2012 and released into the public domain
@@ -21,6 +22,9 @@ public class BandwidthLimitsMessageTest extends I2CPTstBase {
         BandwidthLimitsMessage msg = new BandwidthLimitsMessage(10240, 1024);
         return msg;
     }
+
     @Override
-    public I2CPMessageImpl createStructureToRead() { return new BandwidthLimitsMessage(); }
+    public I2CPMessageImpl createStructureToRead() {
+        return new BandwidthLimitsMessage();
+    }
 }

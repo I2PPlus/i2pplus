@@ -1,4 +1,5 @@
 package net.i2p.data.i2np;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,14 +9,15 @@ package net.i2p.data.i2np;
  *
  */
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Certificate;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.DataStructureImpl;
 import net.i2p.util.Log;
+
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Contains one deliverable message encrypted to a router along with instructions
@@ -28,7 +30,7 @@ import net.i2p.util.Log;
 public class GarlicClove extends DataStructureImpl {
 
     private static final long serialVersionUID = 1L;
-    private transient final I2PAppContext _context;
+    private final transient I2PAppContext _context;
     private DeliveryInstructions _instructions;
     private I2NPMessage _msg;
     private long _cloveId;
@@ -40,16 +42,45 @@ public class GarlicClove extends DataStructureImpl {
         _cloveId = -1;
     }
 
-    public DeliveryInstructions getInstructions() { return _instructions; }
-    public void setInstructions(DeliveryInstructions instr) { _instructions = instr; }
-    public I2NPMessage getData() { return _msg; }
-    public void setData(I2NPMessage msg) { _msg = msg; }
-    public long getCloveId() { return _cloveId; }
-    public void setCloveId(long id) { _cloveId = id; }
-    public long getExpiration() { return _expiration; }
-    public void setExpiration(long exp) { _expiration = exp; }
-    public Certificate getCertificate() { return _certificate; }
-    public void setCertificate(Certificate cert) { _certificate = cert; }
+    public DeliveryInstructions getInstructions() {
+        return _instructions;
+    }
+
+    public void setInstructions(DeliveryInstructions instr) {
+        _instructions = instr;
+    }
+
+    public I2NPMessage getData() {
+        return _msg;
+    }
+
+    public void setData(I2NPMessage msg) {
+        _msg = msg;
+    }
+
+    public long getCloveId() {
+        return _cloveId;
+    }
+
+    public void setCloveId(long id) {
+        _cloveId = id;
+    }
+
+    public long getExpiration() {
+        return _expiration;
+    }
+
+    public void setExpiration(long exp) {
+        _expiration = exp;
+    }
+
+    public Certificate getCertificate() {
+        return _certificate;
+    }
+
+    public void setCertificate(Certificate cert) {
+        _certificate = cert;
+    }
 
     /**
      *  @deprecated unused, use byte array method to avoid copying
@@ -157,38 +188,27 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     public int estimateSize() {
-        return _instructions.getSize()
-               + _msg.getMessageSize()
-               + 4 // cloveId
-               + DataHelper.DATE_LENGTH
-               + _certificate.size(); // certificate
+        return _instructions.getSize() + _msg.getMessageSize() + 4 // cloveId
+                + DataHelper.DATE_LENGTH
+                + _certificate.size(); // certificate
     }
 
     @Override
     public boolean equals(Object obj) {
-        if ((obj == null) || !(obj instanceof GarlicClove))
-            return false;
-        GarlicClove clove = (GarlicClove)obj;
-        return DataHelper.eq(_certificate, clove._certificate) &&
-               _cloveId == clove._cloveId &&
-               DataHelper.eq(_msg, clove._msg) &&
-               _expiration == clove._expiration &&
-               DataHelper.eq(_instructions,  clove._instructions);
+        if ((obj == null) || !(obj instanceof GarlicClove)) return false;
+        GarlicClove clove = (GarlicClove) obj;
+        return DataHelper.eq(_certificate, clove._certificate) && _cloveId == clove._cloveId && DataHelper.eq(_msg, clove._msg) && _expiration == clove._expiration && DataHelper.eq(_instructions, clove._instructions);
     }
 
     @Override
     public int hashCode() {
-        return DataHelper.hashCode(_certificate) ^
-               (int) _cloveId ^
-               DataHelper.hashCode(_msg) ^
-               (int) _expiration ^
-               DataHelper.hashCode(_instructions);
+        return DataHelper.hashCode(_certificate) ^ (int) _cloveId ^ DataHelper.hashCode(_msg) ^ (int) _expiration ^ DataHelper.hashCode(_instructions);
     }
 
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation
-//        buf.append("GarlicClove");
+        //        buf.append("GarlicClove");
         buf.append(_instructions);
         buf.append("\n* Expires: ").append(DataHelper.formatTime(_expiration));
         buf.append("\n\tCertificate: ").append(_certificate);

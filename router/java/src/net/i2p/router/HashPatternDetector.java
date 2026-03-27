@@ -1,5 +1,12 @@
 package net.i2p.router;
 
+import net.i2p.data.Hash;
+import net.i2p.data.router.RouterAddress;
+import net.i2p.data.router.RouterInfo;
+import net.i2p.router.transport.CommSystemFacadeImpl;
+import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,13 +20,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
-
-import net.i2p.data.Hash;
-import net.i2p.data.router.RouterAddress;
-import net.i2p.data.router.RouterInfo;
-import net.i2p.router.transport.CommSystemFacadeImpl;
-import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
 
 /**
  * Detects patterns in router hashes to predictively ban algorithmically-generated identities.
@@ -77,10 +77,7 @@ public class HashPatternDetector implements Serializable {
         if (hasSequentialPattern()) {
             Set<String> suspicious = getSuspiciousPrefixes();
             if (_log.shouldWarn()) {
-                _log.warn("WARNING! Algorithmic router identity generation pattern identified!" +
-                         "\n* Automatic predictive banning is now ENABLED" +
-                         "\n* Suspicious prefixes: " + suspicious +
-                         "\n* Future routers matching these patterns will be banned preventively");
+                _log.warn("WARNING! Algorithmic router identity generation pattern identified!" + "\n* Automatic predictive banning is now ENABLED" + "\n* Suspicious prefixes: " + suspicious + "\n* Future routers matching these patterns will be banned preventively");
             }
         }
     }
@@ -113,10 +110,7 @@ public class HashPatternDetector implements Serializable {
             }
 
             // Apply predictive ban
-            context.banlist().banlistRouter(hash,
-                " <b>➜</b> Hash Pattern Detector (" + prefix + ")",
-                null, null,
-                context.clock().now() + PREDICTIVE_BAN_DURATION);
+            context.banlist().banlistRouter(hash, " <b>➜</b> Hash Pattern Detector (" + prefix + ")", null, null, context.clock().now() + PREDICTIVE_BAN_DURATION);
 
             // Log to sessionbans.txt
             if (_banLogger != null) {
@@ -126,9 +120,7 @@ public class HashPatternDetector implements Serializable {
             _predictivelyBanned.add(hashStr);
 
             if (_log.shouldWarn()) {
-                _log.warn("Predictively banning router [" + hash.toBase64().substring(0, 6) +
-                         "] with prefix " + prefix + " (confidence: " +
-                         String.format("%.1f%%", stats.getConfidence() * 100) + ")");
+                _log.warn("Predictively banning router [" + hash.toBase64().substring(0, 6) + "] with prefix " + prefix + " (confidence: " + String.format("%.1f%%", stats.getConfidence() * 100) + ")");
             }
 
             return true;
@@ -161,16 +153,12 @@ public class HashPatternDetector implements Serializable {
         // Log when we first cross the pattern detection threshold
         if (oldConfidence < BAN_THRESHOLD && newConfidence >= BAN_THRESHOLD && newTotal >= MIN_SAMPLES) {
             if (_log.shouldWarn()) {
-                _log.warn("WARNING! Router hash prefix '" + prefix +
-                         "' has reached " + String.format("%.1f%%", newConfidence * 100) +
-                         " confidence (" + newTotal + " samples) " +
-                         "\n* Automatic predictive banning is now ENABLED for this pattern");
+                _log.warn("WARNING! Router hash prefix '" + prefix + "' has reached " + String.format("%.1f%%", newConfidence * 100) + " confidence (" + newTotal + " samples) " + "\n* Automatic predictive banning is now ENABLED for this pattern");
             }
         }
 
         if (_log.shouldDebug()) {
-            _log.debug("Recorded ban for prefix " + prefix + " - confidence now: " +
-                      String.format("%.1f%%", stats.getConfidence() * 100));
+            _log.debug("Recorded ban for prefix " + prefix + " - confidence now: " + String.format("%.1f%%", stats.getConfidence() * 100));
         }
 
         // Periodically save patterns
@@ -213,7 +201,7 @@ public class HashPatternDetector implements Serializable {
     private void savePatterns() {
         File file = new File(_context.getRouterDir(), PATTERN_FILE);
         try (FileOutputStream rawFos = new FileOutputStream(file);
-             ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(rawFos))) {
+                ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(rawFos))) {
             oos.writeObject(new HashMap<>(_prefixStats));
         } catch (IOException e) {
             if (_log.shouldWarn()) {
@@ -248,8 +236,7 @@ public class HashPatternDetector implements Serializable {
         }
 
         if (_log.shouldInfo() && loadedCount > 0) {
-            _log.info("Loaded " + loadedCount + " historical bans for pattern analysis from " +
-                     (1 + (archives != null ? archives.length : 0)) + " files");
+            _log.info("Loaded " + loadedCount + " historical bans for pattern analysis from " + (1 + (archives != null ? archives.length : 0)) + " files");
         }
     }
 
@@ -316,11 +303,7 @@ public class HashPatternDetector implements Serializable {
         }
 
         // Convert prefixes to integers and sort
-        int[] values = _prefixStats.keySet().stream()
-            .filter(p -> !p.equals("0000"))
-            .mapToInt(p -> Integer.parseInt(p.substring(0, Math.min(4, p.length())), 16))
-            .sorted()
-            .toArray();
+        int[] values = _prefixStats.keySet().stream().filter(p -> !p.equals("0000")).mapToInt(p -> Integer.parseInt(p.substring(0, Math.min(4, p.length())), 16)).sorted().toArray();
 
         if (values.length < 5) {
             return false;
@@ -329,7 +312,7 @@ public class HashPatternDetector implements Serializable {
         // Look for sequences where values are close together (within 0x1000 = 4096)
         int sequenceCount = 0;
         for (int i = 1; i < values.length; i++) {
-            int diff = values[i] - values[i-1];
+            int diff = values[i] - values[i - 1];
             if (diff > 0 && diff <= 0x1000) {
                 sequenceCount++;
             }
@@ -370,19 +353,13 @@ public class HashPatternDetector implements Serializable {
     public void startScanner() {
         long frequency = getHashScanFrequency();
         if (frequency <= 0) {
-            if (_log.shouldInfo())
-                _log.info("NetDB hash scanner disabled (router.hashScan.frequency=0)");
+            if (_log.shouldInfo()) _log.info("NetDB hash scanner disabled (router.hashScan.frequency=0)");
             return;
         }
 
-        _context.simpleTimer2().addPeriodicEvent(
-            new NetDbScanTask(),
-            SCAN_STARTUP_DELAY,
-            frequency
-        );
+        _context.simpleTimer2().addPeriodicEvent(new NetDbScanTask(), SCAN_STARTUP_DELAY, frequency);
 
-        if (_log.shouldInfo())
-            _log.info("NetDB hash scanner starting in " + (SCAN_STARTUP_DELAY / 60000) + " minutes, interval: " + formatFrequency(frequency));
+        if (_log.shouldInfo()) _log.info("NetDB hash scanner starting in " + (SCAN_STARTUP_DELAY / 60000) + " minutes, interval: " + formatFrequency(frequency));
     }
 
     /**
@@ -393,8 +370,7 @@ public class HashPatternDetector implements Serializable {
     public void stopScanner() {
         // SimpleTimer2 periodic events are uncancellable via SimpleTimer.TimedEvent
         // The scanner will continue running but will check _scanInProgress flag
-        if (_log.shouldInfo())
-            _log.info("NetDB hash scanner stop requested (events will finish naturally)");
+        if (_log.shouldInfo()) _log.info("NetDB hash scanner stop requested (events will finish naturally)");
     }
 
     /**
@@ -414,8 +390,7 @@ public class HashPatternDetector implements Serializable {
                 return hours * 60L * 60 * 1000L;
             }
         } catch (NumberFormatException e) {
-            if (_log.shouldWarn())
-                _log.warn("Invalid router.hashScan.frequency value: " + prop + ", using default", e);
+            if (_log.shouldWarn()) _log.warn("Invalid router.hashScan.frequency value: " + prop + ", using default", e);
             return DEFAULT_SCAN_FREQUENCY;
         }
     }
@@ -438,8 +413,7 @@ public class HashPatternDetector implements Serializable {
      */
     public void scanNetDBForPatterns() {
         if (!_scanInProgress.compareAndSet(false, true)) {
-            if (_log.shouldWarn())
-                _log.warn("NetDB scan already in progress, skipping");
+            if (_log.shouldWarn()) _log.warn("NetDB scan already in progress, skipping");
             return;
         }
 
@@ -451,14 +425,12 @@ public class HashPatternDetector implements Serializable {
         try {
             Set<RouterInfo> routers = _context.netDb().getRouters();
             if (routers == null) {
-                if (_log.shouldWarn())
-                    _log.warn("NetDB returned null router set");
+                if (_log.shouldWarn()) _log.warn("NetDB returned null router set");
                 return;
             }
 
             int totalRouters = routers.size();
-            if (_log.shouldInfo())
-                _log.info("Starting NetDB hash pattern scan of " + totalRouters + " routers");
+            if (_log.shouldInfo()) _log.info("Starting NetDB hash pattern scan of " + totalRouters + " routers");
 
             int processed = 0;
             for (RouterInfo router : routers) {
@@ -497,15 +469,13 @@ public class HashPatternDetector implements Serializable {
 
                 } catch (Exception e) {
                     errorCount++;
-                    if (_log.shouldError())
-                        _log.error("Error scanning router #" + processed + " in netDB", e);
+                    if (_log.shouldError()) _log.error("Error scanning router #" + processed + " in netDB", e);
                 }
             }
 
             long duration = _context.clock().now() - startTime;
             if (_log.shouldInfo() || bannedCount > 0 || errorCount > 0) {
-                _log.info("HashPatternDetector: NetDB scan complete in " + (duration / 1000) + "s - " +
-                          "banned: " + bannedCount + ", errors: " + errorCount + ", skipped: " + skippedCount);
+                _log.info("HashPatternDetector: NetDB scan complete in " + (duration / 1000) + "s - " + "banned: " + bannedCount + ", errors: " + errorCount + ", skipped: " + skippedCount);
             }
 
         } finally {
@@ -544,13 +514,10 @@ public class HashPatternDetector implements Serializable {
             long expireOn = _context.clock().now() + BAN_DURATION;
             String reason = " <b>➜</b> Auto-banned by HashPatternDetector (netDB scan)";
 
-            boolean wasBanned = _context.banlist().banlistRouter(
-                identityHash, reason, null, null, expireOn
-            );
+            boolean wasBanned = _context.banlist().banlistRouter(identityHash, reason, null, null, expireOn);
 
             if (wasBanned || _context.banlist().isBanlisted(identityHash)) {
-                if (_log.shouldWarn())
-                    _log.warn("Auto-banned router: " + routerHash.substring(0, 12) + "...");
+                if (_log.shouldWarn()) _log.warn("Auto-banned router: " + routerHash.substring(0, 12) + "...");
                 // Extract IP:PORT from router addresses
                 String ipPort = getRouterIPPort(router);
                 // Log to sessionbans.txt via BanLogger
@@ -561,8 +528,7 @@ public class HashPatternDetector implements Serializable {
 
             return false;
         } catch (Exception e) {
-            if (_log.shouldError())
-                _log.error("Failed to ban router: " + routerHash, e);
+            if (_log.shouldError()) _log.error("Failed to ban router: " + routerHash, e);
             return false;
         }
     }
@@ -571,7 +537,9 @@ public class HashPatternDetector implements Serializable {
      * Extract IP address from RouterInfo if available.
      */
     private String getRouterIP(RouterInfo router) {
-        if (router == null) { return ""; }
+        if (router == null) {
+            return "";
+        }
         try {
             for (RouterAddress addr : router.getAddresses()) {
                 if (addr != null && addr.getHost() != null) {
@@ -591,7 +559,9 @@ public class HashPatternDetector implements Serializable {
      * @return IP:PORT string or empty string if not available
      */
     private String getRouterIPPort(RouterInfo router) {
-        if (router == null) { return ""; }
+        if (router == null) {
+            return "";
+        }
         try {
             // Try getCompatibleIP first - returns IP for our supported protocols
             byte[] ip = CommSystemFacadeImpl.getCompatibleIP(router);
@@ -676,15 +646,7 @@ public class HashPatternDetector implements Serializable {
             totalBans++;
 
             // Track specific suspicious patterns
-            if (reason != null && (
-                reason.contains("Unsolicited") ||
-                reason.contains("Hostile") ||
-                reason.contains("Excessive") ||
-                reason.contains("Invalid") ||
-                reason.contains("No version") ||
-                reason.contains("Corrupt") ||
-                reason.contains("Spoofed")
-                )) {
+            if (reason != null && (reason.contains("Unsolicited") || reason.contains("Hostile") || reason.contains("Excessive") || reason.contains("Invalid") || reason.contains("No version") || reason.contains("Corrupt") || reason.contains("Spoofed"))) {
                 suspiciousBans++;
             }
 

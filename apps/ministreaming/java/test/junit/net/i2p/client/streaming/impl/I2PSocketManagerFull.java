@@ -1,15 +1,5 @@
 package net.i2p.client.streaming.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InterruptedIOException;
-import java.net.ConnectException;
-import java.net.NoRouteToHostException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PSession;
@@ -20,6 +10,17 @@ import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.client.streaming.IncomingConnectionFilter;
 import net.i2p.data.Destination;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InterruptedIOException;
+import java.net.ConnectException;
+import java.net.NoRouteToHostException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * Stub for testing I2PSocketManagerFactory.
@@ -40,8 +41,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @param opts may be null
      * @param name non-null
      */
-    public I2PSocketManagerFull(I2PAppContext context, I2PSession session, Properties opts, String name,
-                IncomingConnectionFilter connectionFilter) {
+    public I2PSocketManagerFull(I2PAppContext context, I2PSession session, Properties opts, String name, IncomingConnectionFilter connectionFilter) {
         _session = session;
         _opts = opts;
         _name = name;
@@ -62,8 +62,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     @Override
-    public I2PSession addSubsession(InputStream privateKeyStream,
-            Properties opts) throws I2PSessionException {
+    public I2PSession addSubsession(InputStream privateKeyStream, Properties opts) throws I2PSessionException {
         throw new UnsupportedOperationException();
     }
 
@@ -113,15 +112,12 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     @Override
-    public I2PSocket connect(Destination peer, I2PSocketOptions options)
-            throws I2PException, ConnectException, NoRouteToHostException,
-            InterruptedIOException {
+    public I2PSocket connect(Destination peer, I2PSocketOptions options) throws I2PException, ConnectException, NoRouteToHostException, InterruptedIOException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public I2PSocket connect(Destination peer) throws I2PException,
-            ConnectException, NoRouteToHostException, InterruptedIOException {
+    public I2PSocket connect(Destination peer) throws I2PException, ConnectException, NoRouteToHostException, InterruptedIOException {
         throw new UnsupportedOperationException();
     }
 
@@ -146,14 +142,12 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     @Override
-    public boolean ping(Destination peer, int localPort, int remotePort,
-            long timeoutMs) {
+    public boolean ping(Destination peer, int localPort, int remotePort, long timeoutMs) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public byte[] ping(Destination peer, int localPort, int remotePort,
-            long timeoutMs, byte[] payload) {
+    public byte[] ping(Destination peer, int localPort, int remotePort, long timeoutMs, byte[] payload) {
         throw new UnsupportedOperationException();
     }
 
@@ -183,9 +177,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     @Override
-    public Socket connectToSocket(Destination peer, int timeout)
-            throws IOException {
+    public Socket connectToSocket(Destination peer, int timeout) throws IOException {
         throw new UnsupportedOperationException();
     }
-
 }

@@ -1,12 +1,14 @@
 package net.i2p.data.i2np;
 
 import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
-import java.security.GeneralSecurityException;
-import java.util.Properties;
+
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
+
+import java.security.GeneralSecurityException;
+import java.util.Properties;
 
 /**
  * Class that creates an encrypted tunnel build message record.
@@ -34,11 +36,10 @@ public class BuildResponseRecord {
      * @param responseMessageId unused except for debugging
      * @return a 528-byte response record
      */
-    public static EncryptedBuildRecord create(I2PAppContext ctx, int status, SessionKey replyKey,
-                                              byte replyIV[], long responseMessageId) {
+    public static EncryptedBuildRecord create(I2PAppContext ctx, int status, SessionKey replyKey, byte replyIV[], long responseMessageId) {
         byte rv[] = new byte[TunnelBuildReplyMessage.RECORD_SIZE];
         ctx.random().nextBytes(rv, Hash.HASH_LENGTH, TunnelBuildReplyMessage.RECORD_SIZE - Hash.HASH_LENGTH - 1);
-        rv[TunnelBuildMessage.RECORD_SIZE-1] = (byte) status;
+        rv[TunnelBuildMessage.RECORD_SIZE - 1] = (byte) status;
         // rv = AES(SHA256(padding+status) + padding + status, replyKey, replyIV)
         ctx.sha().calculateHash(rv, Hash.HASH_LENGTH, rv.length - Hash.HASH_LENGTH, rv, 0);
         ctx.aes().encrypt(rv, 0, rv, 0, replyKey, replyIV, rv.length);
@@ -58,8 +59,7 @@ public class BuildResponseRecord {
      * @throws IllegalArgumentException if options too big or on encryption failure
      * @since 0.9.48
      */
-    public static EncryptedBuildRecord create(I2PAppContext ctx, int status, SessionKey replyKey,
-                                              byte replyAD[], Properties options) {
+    public static EncryptedBuildRecord create(I2PAppContext ctx, int status, SessionKey replyKey, byte replyAD[], Properties options) {
         byte rv[] = new byte[TunnelBuildReplyMessage.RECORD_SIZE];
         int off;
         try {
@@ -68,14 +68,11 @@ public class BuildResponseRecord {
             throw new IllegalArgumentException("options", e);
         }
         int sz = TunnelBuildReplyMessage.RECORD_SIZE - off - 1;
-        if (sz > 0)
-            ctx.random().nextBytes(rv, off, sz);
-        else if (sz < 0)
-            throw new IllegalArgumentException("options");
+        if (sz > 0) ctx.random().nextBytes(rv, off, sz);
+        else if (sz < 0) throw new IllegalArgumentException("options");
         rv[TunnelBuildMessage.RECORD_SIZE - 17] = (byte) status;
         boolean ok = encryptAEADBlock(replyAD, rv, replyKey);
-        if (!ok)
-            throw new IllegalArgumentException("encrypt fail");
+        if (!ok) throw new IllegalArgumentException("encrypt fail");
         return new EncryptedBuildRecord(rv);
     }
 
@@ -93,8 +90,7 @@ public class BuildResponseRecord {
      * @throws IllegalArgumentException if options too big or on encryption failure
      * @since 0.9.51
      */
-    public static ShortEncryptedBuildRecord createShort(I2PAppContext ctx, int status, SessionKey replyKey,
-                                                        byte replyAD[], Properties options, int slot) {
+    public static ShortEncryptedBuildRecord createShort(I2PAppContext ctx, int status, SessionKey replyKey, byte replyAD[], Properties options, int slot) {
         byte rv[] = new byte[ShortTunnelBuildMessage.SHORT_RECORD_SIZE];
         int off;
         try {
@@ -103,14 +99,11 @@ public class BuildResponseRecord {
             throw new IllegalArgumentException("options", e);
         }
         int sz = ShortTunnelBuildMessage.SHORT_RECORD_SIZE - off - 1;
-        if (sz > 0)
-            ctx.random().nextBytes(rv, off, sz);
-        else if (sz < 0)
-            throw new IllegalArgumentException("options");
+        if (sz > 0) ctx.random().nextBytes(rv, off, sz);
+        else if (sz < 0) throw new IllegalArgumentException("options");
         rv[ShortTunnelBuildMessage.SHORT_RECORD_SIZE - 17] = (byte) status;
         boolean ok = encryptAEADBlock(replyAD, rv, replyKey, slot);
-        if (!ok)
-            throw new IllegalArgumentException("encrypt fail");
+        if (!ok) throw new IllegalArgumentException("encrypt fail");
         return new ShortEncryptedBuildRecord(rv);
     }
 
@@ -126,8 +119,7 @@ public class BuildResponseRecord {
      * @since 0.9.48
      */
     private static final boolean encryptAEADBlock(byte[] ad, byte data[], SessionKey key) {
-        if (data.length != EncryptedBuildRecord.LENGTH)
-            throw new IllegalArgumentException();
+        if (data.length != EncryptedBuildRecord.LENGTH) throw new IllegalArgumentException();
         ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
         chacha.initializeKey(key.getData(), 0);
         try {
@@ -155,8 +147,7 @@ public class BuildResponseRecord {
      * @since 0.9.48
      */
     public static boolean decrypt(EncryptedBuildRecord rec, SessionKey key, byte[] ad) {
-        if (rec.length() != EncryptedBuildRecord.LENGTH)
-            throw new IllegalArgumentException();
+        if (rec.length() != EncryptedBuildRecord.LENGTH) throw new IllegalArgumentException();
         ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
         chacha.initializeKey(key.getData(), 0);
         try {
@@ -184,8 +175,7 @@ public class BuildResponseRecord {
      * @since 0.9.51
      */
     private static final boolean encryptAEADBlock(byte[] ad, byte data[], SessionKey key, int nonce) {
-        if (data.length != ShortEncryptedBuildRecord.LENGTH || nonce < 0 || nonce > 7)
-            throw new IllegalArgumentException();
+        if (data.length != ShortEncryptedBuildRecord.LENGTH || nonce < 0 || nonce > 7) throw new IllegalArgumentException();
         ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
         chacha.initializeKey(key.getData(), 0);
         chacha.setNonce(nonce);
@@ -215,8 +205,7 @@ public class BuildResponseRecord {
      * @since 0.9.51
      */
     public static boolean decrypt(EncryptedBuildRecord rec, SessionKey key, byte[] ad, int nonce) {
-        if (rec.length() != ShortEncryptedBuildRecord.LENGTH || nonce < 0 || nonce > 7)
-            throw new IllegalArgumentException();
+        if (rec.length() != ShortEncryptedBuildRecord.LENGTH || nonce < 0 || nonce > 7) throw new IllegalArgumentException();
         ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
         chacha.initializeKey(key.getData(), 0);
         chacha.setNonce(nonce);

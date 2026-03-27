@@ -1,4 +1,5 @@
 package net.i2p.router.tasks;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,12 +9,13 @@ package net.i2p.router.tasks;
  *
  */
 
-import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterVersion;
 import net.i2p.router.util.EventLog;
 import net.i2p.util.Log;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Emergency shutdown hook for JVM termination.

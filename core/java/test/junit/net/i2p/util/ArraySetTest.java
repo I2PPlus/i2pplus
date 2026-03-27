@@ -2,10 +2,9 @@ package net.i2p.util;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 import org.junit.Test;
+
+import java.util.Iterator;
 
 public class ArraySetTest {
 

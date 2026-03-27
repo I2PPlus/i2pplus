@@ -10,7 +10,7 @@ import net.i2p.data.DataHelper;
  *  @since 0.9.44
  */
 public class RatchetSessionTag {
-    public final static int LENGTH = 8;
+    public static final int LENGTH = 8;
 
     private final long _data;
 
@@ -22,8 +22,7 @@ public class RatchetSessionTag {
      *  @param val will copy the first 8 bytes. Reference will not be kept.
      */
     public RatchetSessionTag(byte val[]) {
-        if (val.length < LENGTH)
-            throw new IllegalArgumentException();
+        if (val.length < LENGTH) throw new IllegalArgumentException();
         _data = DataHelper.fromLong8(val, 0);
     }
 
@@ -51,7 +50,7 @@ public class RatchetSessionTag {
     /** 12 chars */
     public String toBase64() {
         // for efficiency
-        //return Base64.encode(getData());
+        // return Base64.encode(getData());
         StringBuilder buf = new StringBuilder(12);
         for (int i = 58; i > 0; i -= 6) {
             buf.append(Base64.ALPHABET_I2P.charAt(((int) (_data >> i)) & 0x3f));
@@ -84,13 +83,13 @@ public class RatchetSessionTag {
         return buf.toString();
     }
 
-/****
-    public static void main(String[] args) {
-        // test toBase64()
-        long l = net.i2p.util.RandomSource.getInstance().nextLong();
-        RatchetSessionTag tag = new RatchetSessionTag(l);
-        System.out.println(tag.toBase64());
-        System.out.println(Base64.encode(tag.getData()));
-    }
-****/
+    /****
+     * public static void main(String[] args) {
+     * // test toBase64()
+     * long l = net.i2p.util.RandomSource.getInstance().nextLong();
+     * RatchetSessionTag tag = new RatchetSessionTag(l);
+     * System.out.println(tag.toBase64());
+     * System.out.println(Base64.encode(tag.getData()));
+     * }
+     ****/
 }

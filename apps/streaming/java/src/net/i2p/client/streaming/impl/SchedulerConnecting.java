@@ -38,39 +38,35 @@ class SchedulerConnecting extends SchedulerImpl {
     public boolean accept(Connection con) {
         if (con == null) return false;
         boolean notYetConnected = (con.getIsConnected()) &&
-                                  //(con.getSendStreamId() == null) && // not null on recv
-                                  (con.getLastSendId() >= 0) &&
-                                  (con.getHighestAckedThrough() < 0) &&
-                                  (!con.getResetReceived());
+                        // (con.getSendStreamId() == null) && // not null on recv
+                        (con.getLastSendId() >= 0)
+                        && (con.getHighestAckedThrough() < 0)
+                        && (!con.getResetReceived());
         return notYetConnected;
     }
-@Override
+
+    @Override
     public void eventOccurred(Connection con) {
         long waited = _context.clock().now() - con.getCreatedOn();
-        if ((con.getOptions().getConnectTimeout() > 0) &&
-             (con.getOptions().getConnectTimeout() <= waited)) {
+        if ((con.getOptions().getConnectTimeout() > 0) && (con.getOptions().getConnectTimeout() <= waited)) {
             con.setConnectionError("Timeout waiting for ack (waited " + waited + "ms)");
             con.disconnect(false);
             reschedule(0, con);
-            if (_log.shouldDebug())
-                _log.debug("Waited too long: " + waited);
+            if (_log.shouldDebug()) _log.debug("Waited too long: " + waited);
             return;
         } else {
             // should we be doing a con.sendAvailable here?
-            if (con.getOptions().getConnectTimeout() > 0)
-                reschedule(con.getOptions().getConnectTimeout(), con);
+            if (con.getOptions().getConnectTimeout() > 0) reschedule(con.getOptions().getConnectTimeout(), con);
         }
         /*
         long timeTillSend = con.getNextSendTime() - _context.clock().now();
         if ((timeTillSend <= 0) && (con.getNextSendTime() > 0)) {
-            if (_log.shouldDebug())
-                _log.debug("send next on " + con);
+            if (_log.shouldDebug()) _log.debug("send next on " + con);
             con.sendAvailable();
             con.setNextSendTime(-1);
         } else {
             if (con.getNextSendTime() > 0) {
-                if (_log.shouldDebug())
-                    _log.debug("time till send: " + timeTillSend + " on " + con);
+                if (_log.shouldDebug()) _log.debug("time till send: " + timeTillSend + " on " + con);
                 reschedule(timeTillSend, con);
             }
         }

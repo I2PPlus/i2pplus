@@ -1,11 +1,12 @@
 package net.i2p.i2ptunnel.streamr;
 
-import java.net.InetAddress;
 import net.i2p.i2ptunnel.I2PTunnel;
 import net.i2p.i2ptunnel.Logging;
 import net.i2p.i2ptunnel.udp.*;
 import net.i2p.i2ptunnel.udpTunnel.I2PTunnelUDPClientBase;
 import net.i2p.util.EventDispatcher;
+
+import java.net.InetAddress;
 
 /**
  * Streamr consumer that acts as an I2P client and UDP server,
@@ -27,9 +28,7 @@ public class StreamrConsumer extends I2PTunnelUDPClientBase {
      * @param tunnel the tunnel context
      * @since 0.9.53
      */
-    public StreamrConsumer(InetAddress host, int port, String destination,
-                           Logging l, EventDispatcher notifyThis,
-                           I2PTunnel tunnel) {
+    public StreamrConsumer(InetAddress host, int port, String destination, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
         super(destination, l, notifyThis, tunnel);
 
         // create udp-destination

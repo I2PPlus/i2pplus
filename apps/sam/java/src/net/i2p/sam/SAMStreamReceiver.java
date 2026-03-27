@@ -1,4 +1,5 @@
 package net.i2p.sam;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
@@ -8,14 +9,14 @@ package net.i2p.sam;
  *
  */
 
+import net.i2p.data.Destination;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import net.i2p.data.Destination;
 
 /**
  * Interface for sending streaming data to a SAM client
  */
-
 interface SAMStreamReceiver {
     /**
      * Sends the result of a stream send operation
@@ -40,7 +41,7 @@ interface SAMStreamReceiver {
      * @param dest Destination
      * @throws IOException
      */
-    public void notifyStreamIncomingConnection (int id, Destination dest) throws IOException;
+    public void notifyStreamIncomingConnection(int id, Destination dest) throws IOException;
 
     /**
      * Notify about a new outgoing connection

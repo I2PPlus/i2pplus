@@ -1,13 +1,14 @@
 package net.i2p.i2ptunnel.streamr;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Destination;
 import net.i2p.i2ptunnel.udp.*;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Server-mode subscriber that manages multiple data sources and handles incoming connections
@@ -24,7 +25,7 @@ public class Subscriber implements Sink {
     private volatile boolean timerRunning;
 
     private static final int MAX_SUBSCRIPTIONS = 10;
-    private static final long EXPIRATION = 60*1000;
+    private static final long EXPIRATION = 60 * 1000;
 
     /**
      *  Creates a new subscriber for managing data source connections.
@@ -49,8 +50,7 @@ public class Subscriber implements Sink {
     public void send(Destination dest, int fromPort, int toPort, byte[] data) {
         if (dest == null || data.length < 1) {
             // invalid packet
-            if (log.shouldWarn())
-                log.warn("Bad subscription from " + dest.toBase32() + ':' + fromPort);
+            if (log.shouldWarn()) log.warn("Bad subscription from " + dest.toBase32() + ':' + fromPort);
         } else {
             // swap fromPort and toPort for the replies
             MultiSource.MSink ms = new MultiSource.MSink(dest, toPort, fromPort);
@@ -59,32 +59,26 @@ public class Subscriber implements Sink {
                 if (this.subscriptions.put(ms, Long.valueOf(ctx.clock().now())) == null) {
                     if (subscriptions.size() > MAX_SUBSCRIPTIONS) {
                         subscriptions.remove(ms);
-                        if (log.shouldWarn())
-                            log.warn("Too many subscriptions, denying: " + ms);
+                        if (log.shouldWarn()) log.warn("Too many subscriptions, denying: " + ms);
                         return;
                     }
                     // subscribe
-                    if (log.shouldWarn())
-                        log.warn("Add subscription: " + ms);
+                    if (log.shouldWarn()) log.warn("Add subscription: " + ms);
                     this.multi.add(ms);
                     if (!timerRunning) {
                         timer.reschedule(EXPIRATION);
                         timerRunning = true;
                     }
                 } else {
-                    if (log.shouldInfo())
-                        log.info("Continue subscription: " + ms);
+                    if (log.shouldInfo()) log.info("Continue subscription: " + ms);
                 }
             } else if (ctrl == 1) {
                 // unsubscribe
-                if (log.shouldWarn())
-                    log.warn("Remove subscription: " + ms);
-                if (subscriptions.remove(ms) != null)
-                    multi.remove(ms);
+                if (log.shouldWarn()) log.warn("Remove subscription: " + ms);
+                if (subscriptions.remove(ms) != null) multi.remove(ms);
             } else {
                 // invalid packet
-                if (log.shouldWarn())
-                    log.warn("Bad subscription flag " + ctrl + " from " + ms);
+                if (log.shouldWarn()) log.warn("Bad subscription flag " + ctrl + " from " + ms);
             }
         }
     }
@@ -95,22 +89,22 @@ public class Subscriber implements Sink {
         public Expire() {
             super(ctx.simpleTimer2());
         }
-@Override
+
+        @Override
         public void timeReached() {
             if (subscriptions.isEmpty()) {
                 timerRunning = false;
                 return;
             }
             long exp = ctx.clock().now() - EXPIRATION;
-            for (Iterator<Map.Entry<MultiSource.MSink, Long>> iter = subscriptions.entrySet().iterator(); iter.hasNext();) {
+            for (Iterator<Map.Entry<MultiSource.MSink, Long>> iter = subscriptions.entrySet().iterator(); iter.hasNext(); ) {
                 Map.Entry<MultiSource.MSink, Long> e = iter.next();
                 long then = e.getValue().longValue();
                 if (then < exp) {
                     MultiSource.MSink ms = e.getKey();
                     iter.remove();
                     multi.remove(ms);
-                    if (log.shouldWarn())
-                        log.warn("Expired subscription: " + ms);
+                    if (log.shouldWarn()) log.warn("Expired subscription: " + ms);
                 }
             }
             if (!subscriptions.isEmpty()) {

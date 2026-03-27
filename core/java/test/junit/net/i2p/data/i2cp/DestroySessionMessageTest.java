@@ -1,4 +1,5 @@
 package net.i2p.data.i2cp;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -19,9 +20,12 @@ public class DestroySessionMessageTest extends I2CPTstBase {
     @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
         DestroySessionMessage msg = new DestroySessionMessage();
-        msg.setSessionId((SessionId)(new SessionIdTest()).createDataStructure());
+        msg.setSessionId((SessionId) (new SessionIdTest()).createDataStructure());
         return msg;
     }
+
     @Override
-    public I2CPMessageImpl createStructureToRead() { return new DestroySessionMessage(); }
+    public I2CPMessageImpl createStructureToRead() {
+        return new DestroySessionMessage();
+    }
 }

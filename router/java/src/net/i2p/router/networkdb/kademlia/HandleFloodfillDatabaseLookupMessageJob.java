@@ -1,4 +1,5 @@
 package net.i2p.router.networkdb.kademlia;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,7 +9,6 @@ package net.i2p.router.networkdb.kademlia;
  *
  */
 
-import java.util.Set;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.DatabaseLookupMessage;
@@ -17,6 +17,8 @@ import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.HandleDatabaseLookupMessageJob;
+
+import java.util.Set;
 
 /**
  * Processes database lookup messages received by floodfill routers.

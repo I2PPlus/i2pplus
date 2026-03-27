@@ -57,15 +57,14 @@ public class ElGamalParameterSpec implements AlgorithmParameterSpec {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == null)
-            return false;
+        if (obj == null) return false;
         BigInteger op, og;
         if (obj instanceof ElGamalParameterSpec) {
             ElGamalParameterSpec egps = (ElGamalParameterSpec) obj;
             op = egps.getP();
             og = egps.getG();
-        //} else if (obj.getClass().getName().equals("org.bouncycastle.jce.spec.ElGamalParameterSpec")) {
-            //reflection... no...
+            // } else if (obj.getClass().getName().equals("org.bouncycastle.jce.spec.ElGamalParameterSpec")) {
+            // reflection... no...
         } else {
             return false;
         }

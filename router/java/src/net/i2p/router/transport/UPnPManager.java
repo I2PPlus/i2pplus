@@ -6,6 +6,18 @@ package net.i2p.router.transport;
 
 import static net.i2p.router.transport.Transport.AddressSource.SOURCE_UPNP;
 
+import net.i2p.router.RouterContext;
+import net.i2p.util.Addresses;
+import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer2;
+import net.i2p.util.Translate;
+
+import org.cybergarage.util.Debug;
+import org.freenetproject.DetectedIP;
+import org.freenetproject.ForwardPort;
+import org.freenetproject.ForwardPortCallback;
+import org.freenetproject.ForwardPortStatus;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -13,16 +25,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import net.i2p.router.RouterContext;
-import net.i2p.util.Addresses;
-import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer2;
-import net.i2p.util.Translate;
-import org.cybergarage.util.Debug;
-import org.freenetproject.DetectedIP;
-import org.freenetproject.ForwardPort;
-import org.freenetproject.ForwardPortCallback;
-import org.freenetproject.ForwardPortStatus;
 
 /**
  * Universal Plug and Play (UPnP) manager for NAT traversal and port forwarding.
@@ -84,22 +86,26 @@ class UPnPManager {
     private InetAddress _detectedAddress;
     private final TransportManager _manager;
     private final SimpleTimer2.TimedEvent _rescanner;
+
     /**
      *  This is the TCP HTTP Event listener
      *  We move these so we don't conflict with other users of the same upnp library
      *  UPnP also binds to port 1900 UDP for multicast reception - this cannot be changed.
      */
     private static final String PROP_HTTP_PORT = "i2np.upnp.HTTPPort";
+
     private static final int DEFAULT_HTTP_PORT = 7652;
+
     /** this is the UDP SSDP Search reply listener */
     private static final String PROP_SSDP_PORT = "i2np.upnp.SSDPPort";
+
     private static final int DEFAULT_SSDP_PORT = 7653;
-    private static final long RESCAN_MIN_DELAY = 60*1000;
-    private static final long RESCAN_SHORT_DELAY = 2*60*1000;
+    private static final long RESCAN_MIN_DELAY = 60 * 1000;
+    private static final long RESCAN_SHORT_DELAY = 2 * 60 * 1000;
     // minimum UPnP announce interval is 30 minutes. Let's be faster
     // 30 minutes is also the default "lease time" in cybergarage.
     // It expires after 31 minutes.
-    private static final long RESCAN_LONG_DELAY = 14*60*1000;
+    private static final long RESCAN_LONG_DELAY = 14 * 60 * 1000;
     // make these generic so we don't advertise we're running I2P
     private static final String TCP_PORT_NAME = "TCP";
     private static final String UDP_PORT_NAME = "UDP";
@@ -110,8 +116,7 @@ class UPnPManager {
         _log = _context.logManager().getLog(UPnPManager.class);
         // this controls what sockets UPnP listens on
         // not clear it makes any practical difference though
-        if (!context.getProperty(TransportManager.PROP_ENABLE_UPNP_IPV6, TransportManager.DEFAULT_ENABLE_UPNP_IPV6))
-            org.cybergarage.upnp.UPnP.setEnable(org.cybergarage.upnp.UPnP.USE_ONLY_IPV4_ADDR);
+        if (!context.getProperty(TransportManager.PROP_ENABLE_UPNP_IPV6, TransportManager.DEFAULT_ENABLE_UPNP_IPV6)) org.cybergarage.upnp.UPnP.setEnable(org.cybergarage.upnp.UPnP.USE_ONLY_IPV4_ADDR);
         // set up logging in the UPnP package
         Debug.initialize(context);
         int ssdpPort = _context.getProperty(PROP_SSDP_PORT, DEFAULT_SSDP_PORT);
@@ -122,7 +127,8 @@ class UPnPManager {
             try {
                 InetAddress ia = InetAddress.getByName(addr);
                 ias.add(ia);
-            } catch (UnknownHostException uhe) {}
+            } catch (UnknownHostException uhe) {
+            }
         }
         InetAddress[] binds = ias.toArray(new InetAddress[ias.size()]);
         _upnp = new UPnP(context, ssdpPort, httpPort, binds);
@@ -139,8 +145,7 @@ class UPnPManager {
     public synchronized void start() {
         _shouldBeRunning = true;
         if (!_isRunning && Addresses.isConnected()) {
-            if (_log.shouldDebug())
-                _log.debug("UPnP Start");
+            if (_log.shouldDebug()) _log.debug("UPnP Start");
             long b = _context.clock().now();
             try {
                 // We set these here every time, because ControlPoint auto-decrements on failure,
@@ -152,13 +157,10 @@ class UPnPManager {
                 }
                 _isRunning = _upnp.runPlugin();
                 if (_scannerCallback != null) {
-                    if (_isRunning)
-                        _delayedCallback.reschedule();
-                    else
-                        _scannerCallback.afterScan();
+                    if (_isRunning) _delayedCallback.reschedule();
+                    else _scannerCallback.afterScan();
                 }
-                if (_log.shouldDebug())
-                    _log.info("UPnP runPlugin took " + (_context.clock().now() - b));
+                if (_log.shouldDebug()) _log.info("UPnP runPlugin took " + (_context.clock().now() - b));
             } catch (RuntimeException e) {
                 // NPE in UPnP (ticket #728), can't let it bring us down
                 if (!_errorLogged) {
@@ -191,16 +193,13 @@ class UPnPManager {
      *  Blocking, may take a while, up to 20 seconds
      */
     public synchronized void stop() {
-        if (_log.shouldDebug())
-            _log.debug("UPnP Stop");
+        if (_log.shouldDebug()) _log.debug("UPnP Stop");
         _shouldBeRunning = false;
         _rescanner.cancel();
-        if (_isRunning)
-            _upnp.terminate();
+        if (_isRunning) _upnp.terminate();
         _isRunning = false;
         _detectedAddress = null;
-        if (_log.shouldDebug())
-            _log.debug("UPnP Stop Done");
+        if (_log.shouldDebug()) _log.debug("UPnP Stop Done");
     }
 
     /**
@@ -215,26 +214,20 @@ class UPnPManager {
      *  @since 0.9.18
      */
     public synchronized boolean rescan() {
-        if (!_shouldBeRunning)
-            return false;
-        if (_context.router().gracefulShutdownInProgress())
-            return false;
+        if (!_shouldBeRunning) return false;
+        if (_context.router().gracefulShutdownInProgress()) return false;
         long now = System.currentTimeMillis();
-        if (_lastRescan + RESCAN_MIN_DELAY > now)
-            return false;
+        if (_lastRescan + RESCAN_MIN_DELAY > now) return false;
         _lastRescan = now;
         if (_isRunning) {
-            if (_scannerCallback != null)
-                _scannerCallback.beforeScan();
-            if (_log.shouldDebug())
-                _log.debug("UPnP Rescan", new Exception());
+            if (_scannerCallback != null) _scannerCallback.beforeScan();
+            if (_log.shouldDebug()) _log.debug("UPnP Rescan", new Exception());
             // TODO default search MX (jitter) is 3 seconds... reduce?
             // See also:
             // Adaptive Jitter Control for UPnP M-Search
             // Kevin Mills and Christopher Dabrowski
             _upnp.search();
-            if (_scannerCallback != null)
-                _delayedCallback.reschedule();
+            if (_scannerCallback != null) _delayedCallback.reschedule();
         } else {
             start();
         }
@@ -296,18 +289,16 @@ class UPnPManager {
      * that should be ok.
      */
     public void update(Set<TransportManager.Port> ports) {
-        if (_log.shouldDebug())
-            _log.debug("UPnP Update with " + ports.size() + " ports", new Exception("I did it"));
+        if (_log.shouldDebug()) _log.debug("UPnP Update with " + ports.size() + " ports", new Exception("I did it"));
 
-        //synchronized (this) {
-            // TODO
-            // called too often and may block for too long
-            // may not have started if net was disconnected previously
-            //if (!_isRunning && !ports.isEmpty())
-            //    start();
-        if (!_isRunning)
-                return;
-        //}
+        // synchronized (this) {
+        // TODO
+        // called too often and may block for too long
+        // may not have started if net was disconnected previously
+        // if (!_isRunning && !ports.isEmpty())
+        //    start();
+        if (!_isRunning) return;
+        // }
 
         Set<ForwardPort> forwards = new HashSet<ForwardPort>(ports.size());
         for (TransportManager.Port entry : ports) {
@@ -324,13 +315,10 @@ class UPnPManager {
             } else {
                 continue;
             }
-            if (_log.shouldDebug())
-                _log.debug("Adding: " + style + " " + port);
+            if (_log.shouldDebug()) _log.debug("Adding: " + style + " " + port);
             ForwardPort fp;
-            if (entry.isIPv6)
-                fp = new UPnP.IPv6ForwardPort(name, protocol, port, entry.ip);
-            else
-                fp = new ForwardPort(name, false, protocol, port);
+            if (entry.isIPv6) fp = new UPnP.IPv6ForwardPort(name, protocol, port, entry.ip);
+            else fp = new ForwardPort(name, false, protocol, port);
             forwards.add(fp);
         }
         // non-blocking
@@ -344,9 +332,8 @@ class UPnPManager {
     private class UPnPCallback implements ForwardPortCallback {
 
         /** Called to indicate status on one or more forwarded ports. */
-        public void portForwardStatus(Map<ForwardPort,ForwardPortStatus> statuses) {
-            if (_log.shouldDebug())
-                 _log.debug("UPnP Callback: with " + statuses.size() + " statuses");
+        public void portForwardStatus(Map<ForwardPort, ForwardPortStatus> statuses) {
+            if (_log.shouldDebug()) _log.debug("UPnP Callback: with " + statuses.size() + " statuses");
             // Let's not have two of these running at once.
             // Deadlock reported in ticket #1699
             // and the locking isn't foolproof in UDPTransport.
@@ -357,7 +344,7 @@ class UPnPManager {
             }
         }
 
-        private void locked_PFS(Map<ForwardPort,ForwardPortStatus> statuses) {
+        private void locked_PFS(Map<ForwardPort, ForwardPortStatus> statuses) {
             byte[] ipaddr = null;
             DetectedIP[] ips = _upnp.getAddress();
             if (ips != null && ips.length > 0) {
@@ -365,8 +352,7 @@ class UPnPManager {
                     // store the first public one and tell the transport manager if it changed
                     // Note that getAddress() will actually return a max of one address.
                     if (TransportUtil.isPubliclyRoutable(ip.publicAddress.getAddress(), false)) {
-                        if (_log.shouldDebug())
-                            _log.debug("External address: " + ip.publicAddress + " type: " + ip.natType);
+                        if (_log.shouldDebug()) _log.debug("External address: " + ip.publicAddress + " type: " + ip.natType);
                         if (!ip.publicAddress.equals(_detectedAddress)) {
                             _detectedAddress = ip.publicAddress;
                             // deadlock path 1
@@ -375,36 +361,29 @@ class UPnPManager {
                         ipaddr = ip.publicAddress.getAddress();
                         break;
                     } else {
-                        if (_log.shouldWarn())
-                            _log.warn("Unusable external address: " + ip.publicAddress + " type: " + ip.natType);
+                        if (_log.shouldWarn()) _log.warn("Unusable external address: " + ip.publicAddress + " type: " + ip.natType);
                     }
                 }
             } else {
-                if (_log.shouldDebug())
-                    _log.debug("No external address returned");
+                if (_log.shouldDebug()) _log.debug("No external address returned");
             }
 
             if (statuses.isEmpty()) {
-                if (_log.shouldWarn())
-                    _log.warn("No statuses returned");
+                if (_log.shouldWarn()) _log.warn("No statuses returned");
                 return;
             }
 
             for (Map.Entry<ForwardPort, ForwardPortStatus> entry : statuses.entrySet()) {
                 ForwardPort fp = entry.getKey();
                 ForwardPortStatus fps = entry.getValue();
-                if (_log.shouldDebug())
-                    _log.debug("FPS: " + fp.name + ' ' + fp.protocol + ' ' + fp.portNumber +
-                               (fp.isIP6 ? " IPv6" : " IPv4") +
-                               " status: " + fps.status + " reason: " + fps.reasonString + " ext port: " + fps.externalPort);
+                if (_log.shouldDebug()) _log.debug("FPS: " + fp.name + ' ' + fp.protocol + ' ' + fp.portNumber + (fp.isIP6 ? " IPv6" : " IPv4") + " status: " + fps.status + " reason: " + fps.reasonString + " ext port: " + fps.externalPort);
                 String style;
                 if (fp.protocol == ForwardPort.PROTOCOL_UDP_IPV4) {
                     style = "SSU";
                 } else if (fp.protocol == ForwardPort.PROTOCOL_TCP_IPV4) {
                     style = "NTCP";
                 } else {
-                    if (_log.shouldWarn())
-                        _log.debug("Unknown protocol " + fp.protocol);
+                    if (_log.shouldWarn()) _log.debug("Unknown protocol " + fp.protocol);
                     continue;
                 }
                 boolean success = fps.status >= ForwardPortStatus.MAYBE_SUCCESS;
@@ -413,8 +392,7 @@ class UPnPManager {
                     UPnP.IPv6ForwardPort v6fp = (UPnP.IPv6ForwardPort) fp;
                     String sip = v6fp.getIP();
                     fwdip = Addresses.getIP(sip);
-                    if (fwdip == null)
-                        continue;
+                    if (fwdip == null) continue;
                 } else {
                     fwdip = ipaddr;
                 }
@@ -429,8 +407,7 @@ class UPnPManager {
      *  will take many seconds if it has vanished.
      */
     public String renderStatusHTML() {
-        if (!_isRunning)
-            return "<h3 id=upnp>" + _t("UPnP is not enabled") + "</h3>\n";
+        if (!_isRunning) return "<h3 id=upnp>" + _t("UPnP is not enabled") + "</h3>\n";
         return _upnp.renderStatusHTML();
     }
 
@@ -442,5 +419,4 @@ class UPnPManager {
     private final String _t(String s) {
         return Translate.getString(s, _context, BUNDLE_NAME);
     }
-
 }

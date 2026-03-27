@@ -1,14 +1,15 @@
 package net.i2p.i2ptunnel.irc;
 
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.data.Base32;
 import net.i2p.i2ptunnel.I2PTunnel;
 import net.i2p.i2ptunnel.Logging;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.Log;
+
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *  Start, track, and expire the I2PTunnelDCCClients.
@@ -37,8 +38,10 @@ public class DCCClientManager extends EventReceiver {
 
     /** key is the DCC client's local port */
     private final ConcurrentHashMap<Integer, I2PTunnelDCCClient> _incoming;
+
     /** key is the DCC client's local port */
     private final ConcurrentHashMap<Integer, I2PTunnelDCCClient> _active;
+
     /** key is the DCC client's local port */
     private final ConcurrentHashMap<Integer, I2PTunnelDCCClient> _complete;
 
@@ -47,6 +50,7 @@ public class DCCClientManager extends EventReceiver {
 
     private static final int MAX_INCOMING_PENDING = 10;
     private static final int MAX_INCOMING_ACTIVE = 10;
+
     /**
      * Create a new manager for DCC client tunnels.
      *
@@ -56,8 +60,7 @@ public class DCCClientManager extends EventReceiver {
      * @param tunnel the parent I2PTunnel instance
      * @since 0.8.9
      */
-    public DCCClientManager(I2PSocketManager sktMgr, Logging logging,
-                            EventDispatcher dispatch, I2PTunnel tunnel) {
+    public DCCClientManager(I2PSocketManager sktMgr, Logging logging, EventDispatcher dispatch, I2PTunnel tunnel) {
         sockMgr = sktMgr;
         l = logging;
         _dispatch = dispatch;
@@ -109,29 +112,22 @@ public class DCCClientManager extends EventReceiver {
     private int newIncoming(String b32, int port, String type, int localPort) {
         b32 = b32.toLowerCase(Locale.US);
         // do some basic verification before starting the client
-        if (b32.length() != 60 || !b32.endsWith(".b32.i2p"))
-            return -1;
+        if (b32.length() != 60 || !b32.endsWith(".b32.i2p")) return -1;
         byte[] dec = Base32.decode(b32.substring(0, 52));
-        if (dec == null || dec.length != 32)
-            return -1;
+        if (dec == null || dec.length != 32) return -1;
         expireInbound();
-        if (_incoming.size() >= MAX_INCOMING_PENDING ||
-            _active.size() >= MAX_INCOMING_PENDING) {
-            _log.error("Too many incoming DCC, max is " + MAX_INCOMING_PENDING +
-                       '/' + MAX_INCOMING_ACTIVE + " pending/active");
+        if (_incoming.size() >= MAX_INCOMING_PENDING || _active.size() >= MAX_INCOMING_PENDING) {
+            _log.error("Too many incoming DCC, max is " + MAX_INCOMING_PENDING + '/' + MAX_INCOMING_ACTIVE + " pending/active");
             return -1;
         }
         try {
             // Transparent tunnel used for all types...
             // Do we need to do any filtering for chat?
-            I2PTunnelDCCClient cTunnel = new I2PTunnelDCCClient(b32, localPort, port, l, sockMgr,
-                                                                _dispatch, _tunnel,++_id);
+            I2PTunnelDCCClient cTunnel = new I2PTunnelDCCClient(b32, localPort, port, l, sockMgr, _dispatch, _tunnel, ++_id);
             cTunnel.attachEventDispatcher(this);
             cTunnel.startRunning();
             int lport = cTunnel.getLocalPort();
-            if (_log.shouldWarn())
-                _log.warn("Opened client tunnel at port " + lport +
-                          " pointing to " + b32 + ':' + port);
+            if (_log.shouldWarn()) _log.warn("Opened client tunnel at port " + lport + " pointing to " + b32 + ':' + port);
             _incoming.put(Integer.valueOf(lport), cTunnel);
             return lport;
         } catch (IllegalArgumentException uhe) {
@@ -177,12 +173,10 @@ public class DCCClientManager extends EventReceiver {
     public int acceptIncoming(int port) {
         // do a reverse lookup
         for (I2PTunnelDCCClient tun : _complete.values()) {
-            if (tun.getRemotePort() == port)
-                return newIncoming(tun.getDest(), port, "ACCEPT", tun.getLocalPort());
+            if (tun.getRemotePort() == port) return newIncoming(tun.getDest(), port, "ACCEPT", tun.getLocalPort());
         }
         for (I2PTunnelDCCClient tun : _active.values()) {
-            if (tun.getRemotePort() == port)
-                return newIncoming(tun.getDest(), port, "ACCEPT", tun.getLocalPort());
+            if (tun.getRemotePort() == port) return newIncoming(tun.getDest(), port, "ACCEPT", tun.getLocalPort());
         }
         for (I2PTunnelDCCClient tun : _incoming.values()) {
             if (tun.getRemotePort() == port) {
@@ -208,12 +202,14 @@ public class DCCClientManager extends EventReceiver {
             try {
                 I2PTunnelDCCClient client = (I2PTunnelDCCClient) args;
                 connStarted(client);
-            } catch (ClassCastException cce) {}
+            } catch (ClassCastException cce) {
+            }
         } else if (eventName.equals(I2PTunnelDCCClient.CONNECT_STOP_EVENT)) {
             try {
                 Integer port = (Integer) args;
                 connStopped(port);
-            } catch (ClassCastException cce) {}
+            } catch (ClassCastException cce) {
+            }
         }
     }
 
@@ -229,11 +225,7 @@ public class DCCClientManager extends EventReceiver {
         I2PTunnelDCCClient c = _incoming.remove(lport);
         if (c != null) {
             _active.put(lport, client);
-            if (_log.shouldWarn())
-                _log.warn("Added client tunnel for port " + lport +
-                          " pending count now: " + _incoming.size() +
-                          " active count now: " + _active.size() +
-                          " complete count now: " + _complete.size());
+            if (_log.shouldWarn()) _log.warn("Added client tunnel for port " + lport + " pending count now: " + _incoming.size() + " active count now: " + _active.size() + " complete count now: " + _complete.size());
         }
     }
 
@@ -246,16 +238,10 @@ public class DCCClientManager extends EventReceiver {
      */
     private void connStopped(Integer lport) {
         I2PTunnelDCCClient tun = _incoming.remove(lport);
-        if (tun != null)
-            _complete.put(lport, tun);
+        if (tun != null) _complete.put(lport, tun);
         tun = _active.remove(lport);
-        if (tun != null)
-            _complete.put(lport, tun);
-        if (_log.shouldWarn())
-            _log.warn("Removed client tunnel for port " + lport +
-                      " pending count now: " + _incoming.size() +
-                      " active count now: " + _active.size() +
-                      " complete count now: " + _complete.size());
+        if (tun != null) _complete.put(lport, tun);
+        if (_log.shouldWarn()) _log.warn("Removed client tunnel for port " + lport + " pending count now: " + _incoming.size() + " active count now: " + _active.size() + " complete count now: " + _complete.size());
     }
 
     /**
@@ -265,7 +251,7 @@ public class DCCClientManager extends EventReceiver {
      * @since 0.8.9
      */
     private void expireInbound() {
-        for (Iterator<I2PTunnelDCCClient> iter = _incoming.values().iterator(); iter.hasNext();) {
+        for (Iterator<I2PTunnelDCCClient> iter = _incoming.values().iterator(); iter.hasNext(); ) {
             I2PTunnelDCCClient c = iter.next();
             if (c.getExpires() < _tunnel.getContext().clock().now()) {
                 iter.remove();
@@ -273,7 +259,7 @@ public class DCCClientManager extends EventReceiver {
             }
         }
         // shouldn't need to expire active
-        for (Iterator<I2PTunnelDCCClient> iter = _complete.values().iterator(); iter.hasNext();) {
+        for (Iterator<I2PTunnelDCCClient> iter = _complete.values().iterator(); iter.hasNext(); ) {
             I2PTunnelDCCClient c = iter.next();
             if (c.getExpires() < _tunnel.getContext().clock().now()) {
                 iter.remove();

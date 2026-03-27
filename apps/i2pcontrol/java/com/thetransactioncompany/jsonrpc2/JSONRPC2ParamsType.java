@@ -1,6 +1,5 @@
 package com.thetransactioncompany.jsonrpc2;
 
-
 /**
  * Enumeration of the three parameter types in JSON-RPC 2.0 requests and
  * notifications.
@@ -17,18 +16,15 @@ package com.thetransactioncompany.jsonrpc2;
  */
 public enum JSONRPC2ParamsType {
 
-
     /**
      * No parameters.
      */
     NO_PARAMS,
 
-
     /**
      * Positional parameters, packed as a JSON array.
      */
     ARRAY,
-
 
     /**
      * Named parameters, packed as a JSON object.

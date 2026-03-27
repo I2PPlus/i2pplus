@@ -16,8 +16,7 @@ class AccessCounter {
     /**
      * Create a new access counter.
      */
-    AccessCounter() {
-    }
+    AccessCounter() {}
 
     /**
      * List of timestamps of each connection attempt
@@ -41,19 +40,15 @@ class AccessCounter {
      * @return true if the given threshold has been breached
      */
     boolean isBreached(Threshold threshold, long now) {
-        if (threshold.getConnections() == 0)
-            return !accesses.isEmpty();
-        if (accesses.size() < threshold.getConnections())
-            return false;
+        if (threshold.getConnections() == 0) return !accesses.isEmpty();
+        if (accesses.size() < threshold.getConnections()) return false;
 
         long ignoreOlder = now - threshold.getSeconds() * 1000L;
         for (int i = 0; i <= accesses.size() - threshold.getConnections(); i++) {
             long start = accesses.get(i);
-            if (start < ignoreOlder)
-                continue;
+            if (start < ignoreOlder) continue;
             long end = start + threshold.getSeconds() * 1000L;
-            if (accesses.get(i + threshold.getConnections() -1) <= end)
-                return true;
+            if (accesses.get(i + threshold.getConnections() - 1) <= end) return true;
         }
 
         return false;

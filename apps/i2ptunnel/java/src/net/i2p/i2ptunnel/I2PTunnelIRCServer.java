@@ -1,5 +1,13 @@
 package net.i2p.i2ptunnel;
 
+import net.i2p.client.streaming.I2PSocket;
+import net.i2p.crypto.SHA256Generator;
+import net.i2p.data.Base32;
+import net.i2p.data.DataHelper;
+import net.i2p.data.Destination;
+import net.i2p.data.Hash;
+import net.i2p.util.EventDispatcher;
+
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
@@ -10,13 +18,6 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.Locale;
 import java.util.Properties;
-import net.i2p.client.streaming.I2PSocket;
-import net.i2p.crypto.SHA256Generator;
-import net.i2p.data.Base32;
-import net.i2p.data.DataHelper;
-import net.i2p.data.Destination;
-import net.i2p.data.Hash;
-import net.i2p.util.EventDispatcher;
 
 /**
  * IRC server tunnel that filters registration to pass client destination hash as hostname.
@@ -50,51 +51,34 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
     private final String webircPassword;
     private final String webircSpoofIP;
 
-    public static final String PROP_METHOD="ircserver.method";
-    public static final String PROP_METHOD_DEFAULT="user";
-    public static final String PROP_CLOAK="ircserver.cloakKey";
-    public static final String PROP_WEBIRC_PASSWORD="ircserver.webircPassword";
-    public static final String PROP_WEBIRC_SPOOF_IP="ircserver.webircSpoofIP";
-    public static final String PROP_WEBIRC_SPOOF_IP_DEFAULT="127.0.0.1";
-    public static final String PROP_HOSTNAME="ircserver.fakeHostname";
-    public static final String PROP_HOSTNAME_DEFAULT="%f.b32.i2p";
-    private static final long HEADER_TIMEOUT = 15*1000;
+    public static final String PROP_METHOD = "ircserver.method";
+    public static final String PROP_METHOD_DEFAULT = "user";
+    public static final String PROP_CLOAK = "ircserver.cloakKey";
+    public static final String PROP_WEBIRC_PASSWORD = "ircserver.webircPassword";
+    public static final String PROP_WEBIRC_SPOOF_IP = "ircserver.webircSpoofIP";
+    public static final String PROP_WEBIRC_SPOOF_IP_DEFAULT = "127.0.0.1";
+    public static final String PROP_HOSTNAME = "ircserver.fakeHostname";
+    public static final String PROP_HOSTNAME_DEFAULT = "%f.b32.i2p";
+    private static final long HEADER_TIMEOUT = 15 * 1000;
     private static final long TOTAL_HEADER_TIMEOUT = 2 * HEADER_TIMEOUT;
     private static final int MAX_LINE_LENGTH = 1024;
     // application should ping timeout before this
-    private static final long DEFAULT_IRC_READ_TIMEOUT = 10*60*1000;
+    private static final long DEFAULT_IRC_READ_TIMEOUT = 10 * 60 * 1000;
 
-    private final static String ERR_UNAVAILABLE =
-        ":ircserver.i2p 499 you :" +
-         "This I2P IRC server is unavailable. It may be down or undergoing maintenance. " +
-         "Please try again later." +
-         "\r\n";
+    private static final String ERR_UNAVAILABLE = ":ircserver.i2p 499 you :" + "This I2P IRC server is unavailable. It may be down or undergoing maintenance. " + "Please try again later." + "\r\n";
 
-    private final static String ERR_REGISTRATION =
-        ":ircserver.i2p 499 you :" +
-         "Bad registration." +
-         "\r\n";
+    private static final String ERR_REGISTRATION = ":ircserver.i2p 499 you :" + "Bad registration." + "\r\n";
 
-    private final static String ERR_TIMEOUT =
-        ":ircserver.i2p 499 you :" +
-         "Timeout registering." +
-         "\r\n";
+    private static final String ERR_TIMEOUT = ":ircserver.i2p 499 you :" + "Timeout registering." + "\r\n";
 
-    private final static String ERR_EOF =
-        ":ircserver.i2p 499 you :" +
-         "EOF while registering." +
-         "\r\n";
+    private static final String ERR_EOF = ":ircserver.i2p 499 you :" + "EOF while registering." + "\r\n";
 
-    private static final String[] BAD_PROTOCOLS = {
-        "GET ", "HEAD ", "POST ", "GNUTELLA CONNECT", "\023BitTorrent protocol"
-    };
-
+    private static final String[] BAD_PROTOCOLS = {"GET ", "HEAD ", "POST ", "GNUTELLA CONNECT", "\023BitTorrent protocol"};
 
     /**
      * @throws IllegalArgumentException if the I2PTunnel does not contain
      *                                  valid config to contact the router
      */
-
     public I2PTunnelIRCServer(InetAddress host, int port, File privkey, String privkeyname, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
         super(host, port, privkey, privkeyname, l, notifyThis, tunnel);
 
@@ -129,9 +113,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
 
     @Override
     protected void blockingHandle(I2PSocket socket) {
-        if (_log.shouldInfo())
-            _log.info("Incoming connection to " + toString() + " (port " + socket.getLocalPort() + ")" +
-                      "\n* From: " + socket.getPeerDestination().calculateHash() + " port " + socket.getPort());
+        if (_log.shouldInfo()) _log.info("Incoming connection to " + toString() + " (port " + socket.getLocalPort() + ")" + "\n* From: " + socket.getPeerDestination().calculateHash() + " port " + socket.getPort());
         try {
             String modifiedRegistration;
             if (!this.method.equals("webirc")) {
@@ -150,8 +132,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
                 modifiedRegistration = buf.toString();
             }
             Socket s = getSocket(socket.getPeerDestination().calculateHash(), socket.getLocalPort());
-            Thread t = new I2PTunnelRunner(s, socket, slock, null, DataHelper.getUTF8(modifiedRegistration),
-                                           null, (I2PTunnelRunner.FailCallback) null);
+            Thread t = new I2PTunnelRunner(s, socket, slock, null, DataHelper.getUTF8(modifiedRegistration), null, (I2PTunnelRunner.FailCallback) null);
             // run in the unlimited client pool
             _clientExecutor.execute(t);
         } catch (RegistrationException ex) {
@@ -161,10 +142,12 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
                 socket.getOutputStream().write(ERR_REGISTRATION.getBytes("ISO-8859-1"));
             } catch (IOException ioe) {
             } finally {
-                try { socket.close(); } catch (IOException ioe) {}
+                try {
+                    socket.close();
+                } catch (IOException ioe) {
+                }
             }
-            if (_log.shouldWarn())
-                _log.warn("Error while receiving the new IRC Connection", ex);
+            if (_log.shouldWarn()) _log.warn("Error while receiving the new IRC Connection", ex);
         } catch (EOFException ex) {
             try {
                 // Send a response so the user doesn't just see a disconnect
@@ -172,10 +155,12 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
                 socket.getOutputStream().write(ERR_EOF.getBytes("ISO-8859-1"));
             } catch (IOException ioe) {
             } finally {
-                try { socket.close(); } catch (IOException ioe) {}
+                try {
+                    socket.close();
+                } catch (IOException ioe) {
+                }
             }
-            if (_log.shouldWarn())
-                _log.warn("Error while receiving the new IRC Connection", ex);
+            if (_log.shouldWarn()) _log.warn("Error while receiving the new IRC Connection", ex);
         } catch (SocketTimeoutException ex) {
             try {
                 // Send a response so the user doesn't just see a disconnect
@@ -183,33 +168,36 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
                 socket.getOutputStream().write(ERR_TIMEOUT.getBytes("ISO-8859-1"));
             } catch (IOException ioe) {
             } finally {
-                try { socket.close(); } catch (IOException ioe) {}
+                try {
+                    socket.close();
+                } catch (IOException ioe) {
+                }
             }
-            if (_log.shouldWarn())
-                _log.warn("Error while receiving the new IRC Connection", ex);
+            if (_log.shouldWarn()) _log.warn("Error while receiving the new IRC Connection", ex);
         } catch (SocketException ex) {
             try {
                 // Send a response so the user doesn't just see a disconnect
                 // and blame his router or the network.
                 socket.getOutputStream().write(ERR_UNAVAILABLE.getBytes("ISO-8859-1"));
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) {
+            }
             try {
                 socket.close();
-            } catch (IOException ioe) {}
-            if (_log.shouldError())
-                _log.error("Error connecting to IRC server " + remoteHost + ':' + remotePort, ex);
+            } catch (IOException ioe) {
+            }
+            if (_log.shouldError()) _log.error("Error connecting to IRC server " + remoteHost + ':' + remotePort, ex);
         } catch (IOException ex) {
             try {
                 socket.reset();
-            } catch (IOException ioe) {}
-            if (_log.shouldWarn())
-                _log.warn("Error while receiving the new IRC Connection", ex);
+            } catch (IOException ioe) {
+            }
+            if (_log.shouldWarn()) _log.warn("Error while receiving the new IRC Connection", ex);
         } catch (OutOfMemoryError oom) {
             try {
                 socket.reset();
-            } catch (IOException ioe) {}
-            if (_log.shouldError())
-                _log.error("OOM in IRC server", oom);
+            } catch (IOException ioe) {
+            }
+            if (_log.shouldError()) _log.error("OOM in IRC server", oom);
         }
     }
 
@@ -252,51 +240,44 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
         long expire = System.currentTimeMillis() + TOTAL_HEADER_TIMEOUT;
         while (true) {
             String s = readLine(socket, expire - System.currentTimeMillis());
-            if (s == null)
-                throw new EOFException("EOF reached before the end of the headers");
+            if (s == null) throw new EOFException("EOF reached before the end of the headers");
             if (lineCount == 0) {
                 for (int i = 0; i < BAD_PROTOCOLS.length; i++) {
-                    if (s.startsWith(BAD_PROTOCOLS[i]))
-                        throw new RegistrationException("Bad protocol " + BAD_PROTOCOLS[i]);
+                    if (s.startsWith(BAD_PROTOCOLS[i])) throw new RegistrationException("Bad protocol " + BAD_PROTOCOLS[i]);
                 }
             }
-            if (++lineCount > 10)
-                throw new RegistrationException("Too many lines before USER or SERVER, giving up");
-            if (System.currentTimeMillis() > expire)
-                throw new SocketTimeoutException("Headers took too long");
+            if (++lineCount > 10) throw new RegistrationException("Too many lines before USER or SERVER, giving up");
+            if (System.currentTimeMillis() > expire) throw new SocketTimeoutException("Headers took too long");
             s = s.trim();
-            //if (_log.shouldDebug())
+            // if (_log.shouldDebug())
             //    _log.debug("Received line: " + s);
 
             String field[] = DataHelper.split(s, " ", 5);
             String command;
-            int idx=0;
+            int idx = 0;
 
             try {
-                if (field[0].charAt(0) == ':')
-                    idx++;
+                if (field[0].charAt(0) == ':') idx++;
                 command = field[idx++].toUpperCase(Locale.US);
             } catch (IndexOutOfBoundsException ioobe) {
                 throw new RegistrationException("Dropping defective message: [" + s + ']');
             }
 
             if ("USER".equals(command)) {
-                if (field.length < idx + 4)
-                    throw new RegistrationException("Too few parameters in USER message: " + s);
+                if (field.length < idx + 4) throw new RegistrationException("Too few parameters in USER message: " + s);
                 // USER zzz1 hostname localhost :zzz
                 //  =>
                 // USER zzz1 abcd1234.i2p localhost :zzz
                 // this whole class is for these two lines...
                 buf.append("USER ").append(field[idx]).append(' ').append(newHostname);
                 buf.append(' ');
-                buf.append(field[idx+2]).append(' ').append(field[idx+3]).append("\r\n");
+                buf.append(field[idx + 2]).append(' ').append(field[idx + 3]).append("\r\n");
                 break;
             }
             buf.append(s).append("\r\n");
-            if ("SERVER".equals(command))
-                break;
+            if ("SERVER".equals(command)) break;
         }
-        //if (_log.shouldDebug())
+        // if (_log.shouldDebug())
         //    _log.debug("All done, sending: " + buf.toString());
         return buf.toString();
     }
@@ -317,32 +298,26 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
      */
     private static String readLine(I2PSocket socket, long timeout) throws IOException {
         StringBuilder buf = new StringBuilder(128);
-        if (timeout <= 0)
-            throw new SocketTimeoutException();
+        if (timeout <= 0) throw new SocketTimeoutException();
         long expires = System.currentTimeMillis() + timeout;
         InputStream in = socket.getInputStream();
         int c;
         int i = 0;
         socket.setReadTimeout(timeout);
         while ((c = in.read()) != -1) {
-            if (++i > MAX_LINE_LENGTH)
-                throw new RegistrationException("Line too long - max " + MAX_LINE_LENGTH);
-            if (c == '\n')
-                break;
+            if (++i > MAX_LINE_LENGTH) throw new RegistrationException("Line too long - max " + MAX_LINE_LENGTH);
+            if (c == '\n') break;
             long newTimeout = expires - System.currentTimeMillis();
-            if (newTimeout <= 0)
-                throw new SocketTimeoutException();
-            buf.append((char)c);
+            if (newTimeout <= 0) throw new SocketTimeoutException();
+            buf.append((char) c);
             if (newTimeout != timeout) {
                 timeout = newTimeout;
                 socket.setReadTimeout(timeout);
             }
         }
         if (c == -1) {
-            if (System.currentTimeMillis() >= expires)
-                throw new SocketTimeoutException();
-            else
-                throw new EOFException();
+            if (System.currentTimeMillis() >= expires) throw new SocketTimeoutException();
+            else throw new EOFException();
         }
         return buf.toString();
     }

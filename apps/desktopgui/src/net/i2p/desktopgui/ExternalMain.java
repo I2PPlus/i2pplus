@@ -63,8 +63,7 @@ public class ExternalMain implements ClientApp, NotificationService {
         boolean useSwing = _appContext.getProperty(PROP_SWING, useSwingDefault);
         _trayManager = new ExternalTrayManager(_appContext, useSwing);
         _trayManager.startManager();
-        if (_mgr != null)
-            _mgr.register(this);
+        if (_mgr != null) _mgr.register(this);
     }
 
     /**
@@ -76,11 +75,10 @@ public class ExternalMain implements ClientApp, NotificationService {
         String headless = System.getProperty("java.awt.headless");
         boolean isHeadless = Boolean.parseBoolean(headless);
         if (isHeadless) {
-        	log.warn("Headless environment: not starting desktopgui!");
+            log.warn("Headless environment: not starting desktopgui!");
             return;
         }
-        if (SystemVersion.isMac())
-            setMacTrayIcon();
+        if (SystemVersion.isMac()) setMacTrayIcon();
         launchForeverLoop();
 
         // We'll be doing GUI work, so let's stay in the event dispatcher thread.
@@ -92,9 +90,7 @@ public class ExternalMain implements ClientApp, NotificationService {
                 } catch (Exception e) {
                     log.error("Failed while running desktopgui!", e);
                 }
-
             }
-
         });
     }
 
@@ -119,8 +115,7 @@ public class ExternalMain implements ClientApp, NotificationService {
     @SuppressWarnings("unchecked")
     private void setMacTrayIcon() {
         File f = new File(_appContext.getBaseDir(), "docs/themes/console/images/itoopie_sm.png");
-        if (!f.exists())
-            return;
+        if (!f.exists()) return;
         try {
             Class util = Class.forName("com.apple.eawt.Application");
             Method getApplication = util.getMethod("getApplication", new Class[0]);
@@ -132,8 +127,7 @@ public class ExternalMain implements ClientApp, NotificationService {
             Image image = Toolkit.getDefaultToolkit().getImage(url);
             setDockIconImage.invoke(application, image);
         } catch (Exception e) {
-            if (log.shouldWarn())
-                log.warn("Can't set OSX Dock icon", e);
+            if (log.shouldWarn()) log.warn("Can't set OSX Dock icon", e);
         }
     }
 
@@ -173,8 +167,7 @@ public class ExternalMain implements ClientApp, NotificationService {
      */
     public int notify(String source, String category, int priority, String title, String message, String path) {
         TrayManager tm = _trayManager;
-        if (tm == null)
-            return -1;
+        if (tm == null) return -1;
         return tm.displayMessage(priority, title, message, path);
     }
 
@@ -205,8 +198,7 @@ public class ExternalMain implements ClientApp, NotificationService {
     }
 
     public synchronized void shutdown(String[] args) {
-        if (_trayManager != null)
-            _trayManager.stopManager();
+        if (_trayManager != null) _trayManager.stopManager();
     }
 
     public ClientAppState getState() {

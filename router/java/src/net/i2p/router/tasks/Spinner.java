@@ -50,7 +50,8 @@ public class Spinner extends Thread {
     @Override
     public void run() {
         try {
-            sleep(5*60*1000);
-        } catch (InterruptedException ie) {}
+            sleep(5 * 60 * 1000);
+        } catch (InterruptedException ie) {
+        }
     }
 }

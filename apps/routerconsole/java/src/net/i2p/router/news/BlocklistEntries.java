@@ -1,15 +1,5 @@
 package net.i2p.router.news;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.security.GeneralSecurityException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.List;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.DirKeyRing;
 import net.i2p.crypto.KeyRing;
@@ -22,6 +12,17 @@ import net.i2p.data.Signature;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.util.Log;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.security.GeneralSecurityException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Data structure and management for I2P router blocklist entries.
@@ -46,22 +47,30 @@ public class BlocklistEntries {
      *  Each entry is an IPv4/IPv6 address or base64 router hash.
      */
     public final List<String> entries;
+
     /**  List of entries to unblock. */
     public final List<String> removes;
+
     /**  Signer certificate name. */
     public String signer;
+
     /**  Signature in type:base64 format. */
     public String sig;
+
     /**  Updated timestamp as ISO 3339 date string. */
     public String supdated;
+
     /**  Updated timestamp as milliseconds since epoch. */
     public long updated;
+
     /**  Whether the blocklist signature has been verified. */
     private boolean verified;
+
     /**  Maximum number of entries allowed in a blocklist. */
     public static final int MAX_ENTRIES = 2000;
+
     private static final String CONTENT_ROUTER = "router";
-    public static final long MAX_FUTURE = 2*24*60*60*1000L;
+    public static final long MAX_FUTURE = 2 * 24 * 60 * 60 * 1000L;
 
     /**
      *  Creates a new BlocklistEntries with the specified capacity.
@@ -86,12 +95,9 @@ public class BlocklistEntries {
      *  @return true if signature is valid, false otherwise
      */
     public synchronized boolean verify(I2PAppContext ctx) {
-        if (verified)
-            return true;
-        if (signer == null || sig == null || supdated == null)
-            return false;
-        if (updated > ctx.clock().now() + MAX_FUTURE)
-            return false;
+        if (verified) return true;
+        if (signer == null || sig == null || supdated == null) return false;
+        if (updated > ctx.clock().now() + MAX_FUTURE) return false;
         Log log = ctx.logManager().getLog(BlocklistEntries.class);
         String[] ss = DataHelper.split(sig, ":", 2);
         if (ss.length != 2) {
@@ -136,7 +142,8 @@ public class BlocklistEntries {
             boolean diff = true;
             try {
                 diff = !ctx.getBaseDir().getCanonicalPath().equals(ctx.getConfigDir().getCanonicalPath());
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) {
+            }
             if (diff) {
                 ring = new DirKeyRing(new File(ctx.getConfigDir(), "certificates"));
                 try {
@@ -171,10 +178,8 @@ public class BlocklistEntries {
         }
         byte[] data = DataHelper.getUTF8(buf.toString());
         boolean rv = ctx.dsa().verifySignature(ssig, data, spubkey);
-        if (rv)
-            log.info("blocklist feed sig ok");
-        else
-            log.error("blocklist feed sig verify fail: " + signer);
+        if (rv) log.info("blocklist feed sig ok");
+        else log.error("blocklist feed sig verify fail: " + signer);
         verified = rv;
         return rv;
     }
@@ -216,14 +221,11 @@ public class BlocklistEntries {
             String s = null;
             while ((s = br.readLine()) != null) {
                 int index = s.indexOf('#');
-                if (index == 0)
-                    continue;  // comment
-                if (index > 0)
-                    s = s.substring(0, index);
+                if (index == 0) continue; // comment
+                if (index > 0) s = s.substring(0, index);
                 s = s.trim();
                 if (s.length() < 7) {
-                    if (s.length() > 0)
-                        System.err.println("Bad line: " + s);
+                    if (s.length() > 0) System.err.println("Bad line: " + s);
                     continue;
                 }
                 if (s.startsWith("!")) {
@@ -238,11 +240,14 @@ public class BlocklistEntries {
             ioe.printStackTrace();
             System.exit(1);
         } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) {}
+            if (br != null) try {
+                    br.close();
+                } catch (IOException ioe) {
+                }
         }
         if (elist.isEmpty() && rlist.isEmpty()) {
             System.err.println("Signing empty blocklist");
-            //System.exit(1);
+            // System.exit(1);
         }
         if (elist.size() > MAX_ENTRIES) {
             System.err.println("too many blocks, max is " + MAX_ENTRIES);
@@ -263,8 +268,7 @@ public class BlocklistEntries {
                     System.exit(1);
                 }
                 keypw = keypw.trim();
-                if (keypw.length() > 0 && keypw.length() < 6)
-                    System.out.println("Key password must be at least 6 characters");
+                if (keypw.length() > 0 && keypw.length() < 6) System.out.println("Key password must be at least 6 characters");
             }
             File pkfile = new File(privateKeyFile);
             PrivateKey pk = KeyStoreUtil.getPrivateKey(pkfile, kspass, signerName, keypw);

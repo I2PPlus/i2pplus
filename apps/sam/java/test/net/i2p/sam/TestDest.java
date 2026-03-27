@@ -1,11 +1,12 @@
 package net.i2p.sam;
 
+import net.i2p.data.DataHelper;
+import net.i2p.util.Log;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import net.i2p.data.DataHelper;
-import net.i2p.util.Log;
 
 @SuppressWarnings("PMD.CloseResource")
 public class TestDest {
@@ -34,7 +35,10 @@ public class TestDest {
             line = reader.readLine();
             _log.info("Response from the dest generate: " + line);
             _log.debug("The abouve should be a DEST REPLY");
-            try { Thread.sleep(5*1000); } catch (InterruptedException ie) {}
+            try {
+                Thread.sleep(5 * 1000);
+            } catch (InterruptedException ie) {
+            }
             s.close();
         } catch (Exception e) {
             _log.error("Error testing for valid version", e);
@@ -47,8 +51,7 @@ public class TestDest {
         String conOptions = "i2cp.tcp.host=www.i2p.net i2cp.tcp.port=7765 tunnels.inboundDepth=0"; // "i2cp.tcp.host=localhost i2cp.tcp.port=7654 tunnels.inboundDepth=0";
         if (args.length > 0) {
             conOptions = "";
-            for (int i = 0; i < args.length; i++)
-                conOptions = conOptions + " " + args[i];
+            for (int i = 0; i < args.length; i++) conOptions = conOptions + " " + args[i];
         }
         try {
             TestUtil.startupBridge(6000);
@@ -56,7 +59,10 @@ public class TestDest {
         } catch (Throwable t) {
             _log.error("Error running test", t);
         }
-        try { Thread.sleep(5*1000); } catch (InterruptedException ie) {}
+        try {
+            Thread.sleep(5 * 1000);
+        } catch (InterruptedException ie) {
+        }
         System.exit(0);
     }
 }

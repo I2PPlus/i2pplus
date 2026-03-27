@@ -1,4 +1,5 @@
 package net.i2p.router;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -24,6 +25,7 @@ public interface TunnelInfo {
      *
      */
     public TunnelId getReceiveTunnelId(int hop);
+
     /**
      * retrieve the tunnelId that the given hop sends messages on.
      * the gateway is hop 0.

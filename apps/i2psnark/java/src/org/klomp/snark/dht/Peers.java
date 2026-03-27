@@ -4,8 +4,9 @@ package org.klomp.snark.dht;
  *  From zzzot, modded and relicensed to GPLv2
  */
 
-import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.Hash;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Thread-safe collection of all peers participating in a single torrent.

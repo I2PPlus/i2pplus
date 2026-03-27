@@ -1,4 +1,5 @@
 package net.i2p.router.transport.udp;
+
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Hash;
@@ -24,7 +25,7 @@ class InboundMessageState implements CDQEntry {
     private int _receivedCount;
     private final Object lock = new Object();
 
-    private static final long MAX_RECEIVE_TIME = 10*1000;
+    private static final long MAX_RECEIVE_TIME = 10 * 1000;
     public static final int MAX_FRAGMENTS = 32;
     private static final int MAX_FRAGMENT_SIZE = UDPPacket.MAX_PACKET_SIZE;
     private static final ByteCache _fragmentCache = ByteCache.getInstance(8, MAX_FRAGMENT_SIZE);
@@ -48,16 +49,13 @@ class InboundMessageState implements CDQEntry {
      * Constructs and initializes by receiving one fragment.
      * @throws DataFormatException if fragment is invalid
      */
-    public InboundMessageState(RouterContext ctx, long messageId, Hash from,
-                               byte[] data, int off, int len, int fragmentNum, boolean isLast)
-                               throws DataFormatException {
+    public InboundMessageState(RouterContext ctx, long messageId, Hash from, byte[] data, int off, int len, int fragmentNum, boolean isLast) throws DataFormatException {
         _context = ctx;
         _log = ctx.logManager().getLog(InboundMessageState.class);
         _messageId = messageId;
         _from = from;
         if (isLast) {
-            if (fragmentNum > MAX_FRAGMENTS)
-                throw new DataFormatException("corrupt - too many fragments: " + fragmentNum);
+            if (fragmentNum > MAX_FRAGMENTS) throw new DataFormatException("corrupt - too many fragments: " + fragmentNum);
             int neededSize = fragmentNum + 1;
             _fragments = new ByteArray[Math.min(neededSize, MAX_FRAGMENTS)];
         } else {
@@ -67,8 +65,7 @@ class InboundMessageState implements CDQEntry {
         _completeSize = -1;
         _receivedCount = 0;
         _receiveBegin = ctx.clock().now();
-        if (!receiveFragment(data, off, len, fragmentNum, isLast))
-            throw new DataFormatException("corrupt");
+        if (!receiveFragment(data, off, len, fragmentNum, isLast)) throw new DataFormatException("corrupt");
     }
 
     /**
@@ -80,8 +77,7 @@ class InboundMessageState implements CDQEntry {
             // Grow array if needed, but cap at MAX_FRAGMENTS
             if (fragmentNum >= _fragments.length) {
                 if (fragmentNum >= MAX_FRAGMENTS) {
-                    if (_log.shouldWarn())
-                        _log.warn("Invalid fragment " + fragmentNum + '/' + MAX_FRAGMENTS);
+                    if (_log.shouldWarn()) _log.warn("Invalid fragment " + fragmentNum + '/' + MAX_FRAGMENTS);
                     return false;
                 }
                 // Grow the array to accommodate the fragment
@@ -96,25 +92,17 @@ class InboundMessageState implements CDQEntry {
                 _receivedCount++;
                 if (isLast) {
                     if (_lastFragment >= 0) {
-                        if (_log.shouldWarn())
-                            _log.warn("Multiple last fragments for message " + _messageId + " from " + _from);
+                        if (_log.shouldWarn()) _log.warn("Multiple last fragments for message " + _messageId + " from " + _from);
                         return false;
                     }
                     _lastFragment = fragmentNum;
                 } else if (_lastFragment >= 0 && fragmentNum >= _lastFragment) {
-                    if (_log.shouldWarn())
-                        _log.warn("Non-last fragment " + fragmentNum + " when last is " + _lastFragment + " for message " + _messageId + " from " + _from);
+                    if (_log.shouldWarn()) _log.warn("Non-last fragment " + fragmentNum + " when last is " + _lastFragment + " for message " + _messageId + " from " + _from);
                     return false;
                 }
-                if (_log.shouldDebug())
-                    _log.debug("New fragment " + fragmentNum + " for message " + _messageId
-                               + ", size=" + len
-                               + ", isLast=" + isLast);
+                if (_log.shouldDebug()) _log.debug("New fragment " + fragmentNum + " for message " + _messageId + ", size=" + len + ", isLast=" + isLast);
             } else {
-                if (_log.shouldDebug())
-                    _log.debug("Received fragment " + fragmentNum + " for message " + _messageId
-                               + " again, old size=" + _fragments[fragmentNum].getValid()
-                               + " and new size=" + len);
+                if (_log.shouldDebug()) _log.debug("Received fragment " + fragmentNum + " for message " + _messageId + " again, old size=" + _fragments[fragmentNum].getValid() + " and new size=" + len);
             }
             return true;
         }
@@ -125,8 +113,7 @@ class InboundMessageState implements CDQEntry {
      */
     public boolean hasFragment(int fragmentNum) {
         synchronized (lock) {
-            if (fragmentNum >= _fragments.length)
-                return false;
+            if (fragmentNum >= _fragments.length) return false;
             return _fragments[fragmentNum] != null;
         }
     }
@@ -187,12 +174,16 @@ class InboundMessageState implements CDQEntry {
     /**
      * Returns the Hash of the sender.
      */
-    public Hash getFrom() { return _from; }
+    public Hash getFrom() {
+        return _from;
+    }
 
     /**
      * Returns the message ID.
      */
-    public long getMessageId() { return _messageId; }
+    public long getMessageId() {
+        return _messageId;
+    }
 
     /**
      * Returns the total size of the complete message in bytes.
@@ -201,15 +192,12 @@ class InboundMessageState implements CDQEntry {
     public int getCompleteSize() {
         synchronized (lock) {
             if (_completeSize < 0) {
-                if (_lastFragment < 0)
-                    throw new IllegalStateException("Last fragment not set");
-                if (_released)
-                    throw new IllegalStateException("SSU IMS 2 Use after free");
+                if (_lastFragment < 0) throw new IllegalStateException("Last fragment not set");
+                if (_released) throw new IllegalStateException("SSU IMS 2 Use after free");
                 int size = 0;
                 for (int i = 0; i <= _lastFragment; i++) {
                     ByteArray frag = _fragments[i];
-                    if (frag == null)
-                        throw new IllegalStateException("null fragment " + i + '/' + _lastFragment);
+                    if (frag == null) throw new IllegalStateException("null fragment " + i + '/' + _lastFragment);
                     size += frag.getValid();
                 }
                 _completeSize = size;
@@ -237,8 +225,7 @@ class InboundMessageState implements CDQEntry {
         private final long _fragmentAcks;
 
         public PartialBitfield(long messageId, Object data[], int size) {
-            if (size > MAX_FRAGMENTS)
-                throw new IllegalArgumentException();
+            if (size > MAX_FRAGMENTS) throw new IllegalArgumentException();
             _bitfieldMessageId = messageId;
             int ackCount = 0;
             int highestReceived = -1;
@@ -261,23 +248,35 @@ class InboundMessageState implements CDQEntry {
         }
 
         @Override
-        public int fragmentCount() { return _fragmentCount; }
+        public int fragmentCount() {
+            return _fragmentCount;
+        }
+
         @Override
-        public int ackCount() { return _ackCount; }
+        public int ackCount() {
+            return _ackCount;
+        }
+
         @Override
-        public int highestReceived() { return _highestReceived; }
+        public int highestReceived() {
+            return _highestReceived;
+        }
+
         @Override
-        public long getMessageId() { return _bitfieldMessageId; }
+        public long getMessageId() {
+            return _bitfieldMessageId;
+        }
 
         @Override
         public boolean received(int fragmentNum) {
-            if (fragmentNum < 0 || fragmentNum > _highestReceived)
-                return false;
+            if (fragmentNum < 0 || fragmentNum > _highestReceived) return false;
             return (_fragmentAcks & mask(fragmentNum)) != 0;
         }
 
         @Override
-        public boolean receivedComplete() { return _ackCount == _fragmentCount; }
+        public boolean receivedComplete() {
+            return _ackCount == _fragmentCount;
+        }
 
         @Override
         public String toString() {
@@ -287,8 +286,7 @@ class InboundMessageState implements CDQEntry {
             buf.append("] Highest: ").append(_highestReceived);
             buf.append(" with ").append(_ackCount).append(" ACKs for fragments [");
             for (int i = 0; i <= _highestReceived; i++) {
-                if (received(i))
-                    buf.append(i).append(' ');
+                if (received(i)) buf.append(i).append(' ');
             }
             buf.append(" / ").append(_highestReceived + 1).append("]");
             return buf.toString();
@@ -341,7 +339,7 @@ class InboundMessageState implements CDQEntry {
         synchronized (lock) {
             StringBuilder buf = new StringBuilder(256);
             buf.append("\n* Inbound Message: ").append(_messageId);
-            buf.append(" from [").append(_from.toString().substring(0,6)).append("]");
+            buf.append(" from [").append(_from.toString().substring(0, 6)).append("]");
             if (isComplete()) {
                 buf.append(" completely received with ");
                 buf.append(_completeSize).append(" bytes in ");
@@ -350,10 +348,8 @@ class InboundMessageState implements CDQEntry {
                 for (int i = 0; i <= _lastFragment; i++) {
                     buf.append(" fragment ").append(i);
                     ByteArray ba = _fragments[i];
-                    if (ba != null)
-                        buf.append(": known at size ").append(ba.getValid());
-                    else
-                        buf.append(": unknown");
+                    if (ba != null) buf.append(": known at size ").append(ba.getValid());
+                    else buf.append(": unknown");
                 }
             }
             buf.append(" (Lifetime: ").append(getLifetime()).append("ms)");

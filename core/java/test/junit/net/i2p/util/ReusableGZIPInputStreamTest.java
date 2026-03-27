@@ -1,4 +1,5 @@
 package net.i2p.util;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,15 +9,17 @@ package net.i2p.util;
  *
  */
 
+import junit.framework.TestCase;
+
+import net.i2p.data.DataHelper;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-import junit.framework.TestCase;
-import net.i2p.data.DataHelper;
 
 public class ReusableGZIPInputStreamTest extends TestCase {
-    public void testReusableGZIPInputStream() throws Exception{
+    public void testReusableGZIPInputStream() throws Exception {
         {
             byte b[] = DataHelper.getASCII("hi, how are you today?");
             ByteArrayOutputStream baos = new ByteArrayOutputStream(64);
@@ -34,7 +37,7 @@ public class ReusableGZIPInputStreamTest extends TestCase {
             ReusableGZIPInputStream.release(in);
         }
 
-        for (int size = 0; size < 64*1024; size+=100) {
+        for (int size = 0; size < 64 * 1024; size += 100) {
             byte b[] = new byte[size];
             new java.util.Random().nextBytes(b);
 
@@ -46,17 +49,15 @@ public class ReusableGZIPInputStreamTest extends TestCase {
             ReusableGZIPOutputStream.release(o);
 
             GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(compressed));
-            ByteArrayOutputStream baos2 = new ByteArrayOutputStream(256*1024);
+            ByteArrayOutputStream baos2 = new ByteArrayOutputStream(256 * 1024);
             byte rbuf[] = new byte[128];
             while (true) {
                 int read = in.read(rbuf);
-                if (read == -1)
-                    break;
+                if (read == -1) break;
                 baos2.write(rbuf, 0, read);
             }
             byte rv[] = baos2.toByteArray();
             assertTrue(DataHelper.eq(rv, 0, b, 0, b.length));
         }
-
     }
 }

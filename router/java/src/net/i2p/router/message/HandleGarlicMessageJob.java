@@ -1,4 +1,5 @@
 package net.i2p.router.message;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -53,9 +54,7 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
      * @param msgIDBloomXorRouter  long unique to router/session for XOR with message ID in router-targeted messages
      * @param msgIDBloomXorTunnel  long unique to router/session for XOR with message ID in tunnel-targeted messages
      */
-    public HandleGarlicMessageJob(final RouterContext context, final GarlicMessage msg,
-                                 RouterIdentity from, Hash fromHash,
-                                 final long msgIDBloomXorLocal, final long msgIDBloomXorRouter, final long msgIDBloomXorTunnel) {
+    public HandleGarlicMessageJob(final RouterContext context, final GarlicMessage msg, RouterIdentity from, Hash fromHash, final long msgIDBloomXorLocal, final long msgIDBloomXorRouter, final long msgIDBloomXorTunnel) {
         super(context);
         _log = context.logManager().getLog(HandleGarlicMessageJob.class);
         if (_log.shouldDebug()) {
@@ -100,8 +99,7 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
     @Override
     public void handleClove(final DeliveryInstructions instructions, final I2NPMessage data) {
         switch (instructions.getDeliveryMode()) {
-            case DeliveryInstructions.DELIVERY_MODE_LOCAL:
-                if (_log.shouldDebug()) {
+            case DeliveryInstructions.DELIVERY_MODE_LOCAL: if (_log.shouldDebug()) {
                     _log.debug("Local delivery instructions for clove: " + data);
                 }
                 // Add message to inbound pool with local XOR mask
@@ -111,13 +109,11 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
             case DeliveryInstructions.DELIVERY_MODE_DESTINATION:
                 // Not expected for messages not received down a tunnel - warn for potential bugs
                 if (_log.shouldWarn()) {
-                    _log.warn("Message didn't come down a tunnel, not forwarding to a destination: "
-                            + instructions + "\n" + data);
+                    _log.warn("Message didn't come down a tunnel, not forwarding to a destination: " + instructions + "\n" + data);
                 }
                 return;
 
-            case DeliveryInstructions.DELIVERY_MODE_ROUTER:
-                if (getContext().routerHash().equals(instructions.getRouter())) {
+            case DeliveryInstructions.DELIVERY_MODE_ROUTER: if (getContext().routerHash().equals(instructions.getRouter())) {
                     if (_log.shouldDebug()) {
                         _log.debug("Router delivery instructions targeting us");
                     }
@@ -125,35 +121,27 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
                     getContext().inNetMessagePool().add(data, null, null, _msgIDBloomXorRouter);
                 } else {
                     if (_log.shouldDebug()) {
-                        _log.debug("Router delivery instructions targeting ["
-                                + instructions.getRouter().toBase64().substring(0, 6) + "] for " + data);
+                        _log.debug("Router delivery instructions targeting [" + instructions.getRouter().toBase64().substring(0, 6) + "] for " + data);
                     }
                     // Forward message directly to target router with a 10 second timeout and low priority
-                    SendMessageDirectJob job = new SendMessageDirectJob(getContext(), data,
-                            instructions.getRouter(),
-                            10_000, ROUTER_PRIORITY, _msgIDBloomXorRouter);
+                    SendMessageDirectJob job = new SendMessageDirectJob(getContext(), data, instructions.getRouter(), 10_000, ROUTER_PRIORITY, _msgIDBloomXorRouter);
                     job.runJob();
                 }
                 return;
 
-            case DeliveryInstructions.DELIVERY_MODE_TUNNEL:
-                TunnelGatewayMessage gwMessage = new TunnelGatewayMessage(getContext());
+            case DeliveryInstructions.DELIVERY_MODE_TUNNEL: TunnelGatewayMessage gwMessage = new TunnelGatewayMessage(getContext());
                 gwMessage.setMessage(data);
                 gwMessage.setTunnelId(instructions.getTunnelId());
                 gwMessage.setMessageExpiration(data.getMessageExpiration());
                 if (_log.shouldDebug()) {
-                    _log.debug("Tunnel delivery instructions targeting ["
-                            + instructions.getRouter().toBase64().substring(0, 6) + "] for " + data);
+                    _log.debug("Tunnel delivery instructions targeting [" + instructions.getRouter().toBase64().substring(0, 6) + "] for " + data);
                 }
                 // Forward message wrapped in tunnel gateway message to target router with a 10 second timeout and low priority
-                SendMessageDirectJob tunnelJob = new SendMessageDirectJob(getContext(), gwMessage,
-                        instructions.getRouter(),
-                        10_000, TUNNEL_PRIORITY, _msgIDBloomXorTunnel);
+                SendMessageDirectJob tunnelJob = new SendMessageDirectJob(getContext(), gwMessage, instructions.getRouter(), 10_000, TUNNEL_PRIORITY, _msgIDBloomXorTunnel);
                 tunnelJob.runJob();
                 return;
 
-            default:
-                _log.error("Unknown instruction " + instructions.getDeliveryMode() + ": " + instructions);
+            default: _log.error("Unknown instruction " + instructions.getDeliveryMode() + ": " + instructions);
                 return;
         }
     }
@@ -164,8 +152,6 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
      */
     @Override
     public void dropped() {
-        getContext().messageHistory().messageProcessingError(_message.getUniqueId(),
-                _message.getClass().getName(),
-                "Dropped due to overload");
+        getContext().messageHistory().messageProcessingError(_message.getUniqueId(), _message.getClass().getName(), "Dropped due to overload");
     }
 }

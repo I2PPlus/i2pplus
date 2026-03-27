@@ -13,13 +13,13 @@ package net.i2p.i2ptunnel.socks;
  * conform to SOCKS protocol format, enabling proper delivery
  * to I2P destinations with correct addressing information.
  */
-
-import java.util.Map;
 import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.I2PSocketAddress;
 import net.i2p.data.Destination;
 import net.i2p.i2ptunnel.udp.*;
 import net.i2p.util.Log;
+
+import java.util.Map;
 
 /**
  * Put a SOCKS header on a datagram
@@ -63,15 +63,13 @@ public class SOCKSUDPWrapper implements Source, Sink {
      */
     @Override
     public void send(Destination from, int fromPort, int toPort, byte[] data) {
-        if (this.sink == null)
-            return;
+        if (this.sink == null) return;
         if (from == null) {
             // TODO to handle raw replies, SOCKSUDPWrapper would have to use a unique
             // fromPort for every target or request, and we would lookup the
             // destination by toPort
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(SOCKSUDPWrapper.class);
-            if (log.shouldWarn())
-                log.warn("No support for raw datagrams, from port " + fromPort + " to port " + toPort);
+            if (log.shouldWarn()) log.warn("No support for raw datagrams, from port " + fromPort + " to port " + toPort);
             return;
         }
 

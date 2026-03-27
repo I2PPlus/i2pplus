@@ -1,6 +1,5 @@
 package net.i2p.router.transport.udp;
 
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -67,7 +66,8 @@ class SSU2Payload {
          *  @param off offset in data
          *  @param len length of data to copy
          */
-        public void gotFragment(byte[] data, int off, int len, long messageID, int frag, boolean isLast) throws DataFormatException;
+        public void gotFragment(byte[] data, int off, int len, long messageID, int frag, boolean isLast)
+                throws DataFormatException;
 
         /**
          *  @param ranges null if none
@@ -89,7 +89,8 @@ class SSU2Payload {
          *  @param data is first gzipped and then fragmented
          *  @param isHandshake true only for message 3 part 2
          */
-        public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags);
+        public void gotRIFragment(
+                byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags);
 
         public void gotAddress(byte[] ip, int port);
 
@@ -151,9 +152,15 @@ class SSU2Payload {
      *  @throws DataFormatException on parsing of individual blocks
      *  @throws I2NPMessageException on parsing of I2NP block
      */
-    public static int processPayload(I2PAppContext ctx, PayloadCallback cb,
-                                     byte[] payload, int off, int length, boolean isHandshake, RemoteHostId from)
-                                     throws IOException, DataFormatException, I2NPMessageException {
+    public static int processPayload(
+            I2PAppContext ctx,
+            PayloadCallback cb,
+            byte[] payload,
+            int off,
+            int length,
+            boolean isHandshake,
+            RemoteHostId from)
+            throws IOException, DataFormatException, I2NPMessageException {
         int blocks = 0;
         boolean gotPadding = false;
         boolean gotTermination = false;
@@ -161,8 +168,7 @@ class SSU2Payload {
         final int end = off + length;
         while (i < end) {
             int type = payload[i++] & 0xff;
-            if (gotPadding)
-                throw new IOException("Illegal block after padding: " + type);
+            if (gotPadding) throw new IOException("Illegal block after padding: " + type);
             if (gotTermination && type != BLOCK_PADDING)
                 throw new IOException("Illegal block after termination: " + type);
             if (isHandshake && blocks == 0 && type != BLOCK_DATETIME)
@@ -170,16 +176,15 @@ class SSU2Payload {
             int len = (int) DataHelper.fromLong(payload, i, 2);
             i += 2;
             if (i + len > end) {
-                throw new IOException("Block " + blocks + " type " + type + " length " + len +
-                                      " at offset " + (i - 3 - off) + " runs over frame of size " + length +
-                                      '\n' + net.i2p.util.HexDump.dump(payload, off, length));
+                throw new IOException("Block " + blocks + " type " + type + " length " + len + " at offset "
+                        + (i - 3 - off) + " runs over frame of size " + length + '\n'
+                        + net.i2p.util.HexDump.dump(payload, off, length));
             }
             switch (type) {
                 // don't modify i inside switch
 
                 case BLOCK_DATETIME:
-                    if (len != 4)
-                        throw new IOException("Bad length for DATETIME: " + len);
+                    if (len != 4) throw new IOException("Bad length for DATETIME: " + len);
                     long time = DataHelper.fromLong(payload, i, 4) * 1000;
                     cb.gotDateTime(time);
                     break;
@@ -197,8 +202,7 @@ class SSU2Payload {
                     int frag = payload[i + 1] & 0xff;
                     int fnum = frag >> 4;
                     int ftot = frag & 0x0f;
-                    if (ftot == 0)
-                        throw new IOException("Bad fragment count for ROUTERINFO: " + ftot);
+                    if (ftot == 0) throw new IOException("Bad fragment count for ROUTERINFO: " + ftot);
                     if (fnum == 0 && ftot == 1) {
                         ByteArrayInputStream bais;
                         if (gz) {
@@ -211,11 +215,11 @@ class SSU2Payload {
                                 throw new DataFormatException("RouterInfo too big: " + (len - 2));
                             bais = new ByteArrayInputStream(payload, i + 2, len - 2);
                         }
-                        if (bais.available() >= 3*1024)
-                            flood = false;
+                        if (bais.available() >= 3 * 1024) flood = false;
                         RouterInfo alice = new RouterInfo();
-                        try {alice.readBytes(bais, true);}
-                        catch (DataFormatException dfe) {
+                        try {
+                            alice.readBytes(bais, true);
+                        } catch (DataFormatException dfe) {
                             // alternate verify of signature.
                             // if a badly formatted RI was correctly signed, we do a special callback
                             bais.reset();
@@ -223,7 +227,9 @@ class SSU2Payload {
                             ident.readBytes(bais);
                             SigningPublicKey pub = ident.getSigningPublicKey();
                             SigType st = pub.getType();
-                            if (st == null) {throw dfe;}
+                            if (st == null) {
+                                throw dfe;
+                            }
                             bais.reset();
                             byte[] data = new byte[bais.available() - st.getSigLen()];
                             bais.read(data);
@@ -231,13 +237,18 @@ class SSU2Payload {
                             sig.readBytes(bais);
                             if (DSAEngine.getInstance().verifySignature(sig, data, pub)) {
                                 Log log = ctx.logManager().getLog(SSU2Payload.class);
-                                if (log.shouldDebug()) {log.warn("Error reading RouterInfo", dfe);}
-                                else if (log.shouldWarn()) {log.warn("Error reading RouterInfo -> " + dfe.getMessage());}
+                                if (log.shouldDebug()) {
+                                    log.warn("Error reading RouterInfo", dfe);
+                                } else if (log.shouldWarn()) {
+                                    log.warn("Error reading RouterInfo -> " + dfe.getMessage());
+                                }
                                 // partially filled-in RI, -1 is signal to IES2.gotRI()
                                 alice = new RouterInfo();
                                 alice.setIdentity(ident);
                                 alice.setPublished(-1);
-                            } else {throw dfe;} // bad sig, just throw dfe
+                            } else {
+                                throw dfe;
+                            } // bad sig, just throw dfe
                         }
                         cb.gotRI(alice, isHandshake, flood);
                     } else {
@@ -249,30 +260,24 @@ class SSU2Payload {
                 }
 
                 case BLOCK_I2NP:
-                    if (isHandshake)
-                        throw new IOException("Illegal block in handshake: " + type);
+                    if (isHandshake) throw new IOException("Illegal block in handshake: " + type);
                     I2NPMessage msg = I2NPMessageImpl.fromRawByteArrayNTCP2(ctx, payload, i, len, null);
                     cb.gotI2NP(msg);
                     break;
 
                 case BLOCK_FIRSTFRAG: {
-                    if (isHandshake)
-                        throw new IOException("Illegal block in handshake: " + type);
-                    if (len <= 9)
-                        throw new IOException("Bad length for FIRSTFRAG: " + len);
+                    if (isHandshake) throw new IOException("Illegal block in handshake: " + type);
+                    if (len <= 9) throw new IOException("Bad length for FIRSTFRAG: " + len);
                     long id = DataHelper.fromLong(payload, i + 1, 4);
                     cb.gotFragment(payload, i, len, id, 0, false);
                     break;
                 }
 
                 case BLOCK_FOLLOWONFRAG: {
-                    if (isHandshake)
-                        throw new IOException("Illegal block in handshake: " + type);
-                    if (len <= 5)
-                        throw new IOException("Bad length for FOLLOWON: " + len);
+                    if (isHandshake) throw new IOException("Illegal block in handshake: " + type);
+                    if (len <= 5) throw new IOException("Bad length for FOLLOWON: " + len);
                     int frag = (payload[i] & 0xff) >> 1;
-                    if (frag == 0)
-                        throw new IOException("0 frag for FOLLOWON");
+                    if (frag == 0) throw new IOException("0 frag for FOLLOWON");
                     boolean isLast = (payload[i] & 0x01) != 0;
                     long id = DataHelper.fromLong(payload, i + 1, 4);
                     cb.gotFragment(payload, i + 5, len - 5, id, frag, isLast);
@@ -280,10 +285,8 @@ class SSU2Payload {
                 }
 
                 case BLOCK_ACK: {
-                    if (isHandshake)
-                        throw new IOException("Illegal block in handshake: " + type);
-                    if (len < 5 || (len % 2) != 1)
-                        throw new IOException("Bad length for ACK: " + len);
+                    if (isHandshake) throw new IOException("Illegal block in handshake: " + type);
+                    if (len < 5 || (len % 2) != 1) throw new IOException("Bad length for ACK: " + len);
                     long ack = DataHelper.fromLong(payload, i, 4);
                     int acnt = payload[i + 4] & 0xff;
                     int rcnt = len - 5;
@@ -299,8 +302,7 @@ class SSU2Payload {
                 }
 
                 case BLOCK_ADDRESS:
-                    if (len != 6 && len != 18)
-                        throw new IOException("Bad length for Address: " + len);
+                    if (len != 6 && len != 18) throw new IOException("Bad length for Address: " + len);
                     int port = (int) DataHelper.fromLong(payload, i, 2);
                     byte[] ip = new byte[len - 2];
                     System.arraycopy(payload, i + 2, ip, 0, len - 2);
@@ -312,17 +314,15 @@ class SSU2Payload {
                     break;
 
                 case BLOCK_RELAYTAG:
-                    if (len < 4)
-                        throw new IOException("Bad length for RELAYTAG: " + len);
+                    if (len < 4) throw new IOException("Bad length for RELAYTAG: " + len);
                     long tag = DataHelper.fromLong(payload, i, 4);
                     cb.gotRelayTag(tag);
                     break;
 
                 case BLOCK_RELAYREQ: {
-                    if (isHandshake)
-                        throw new IOException("Illegal block in handshake: " + type);
-                    if (len < 61) // 21 byte data w/ IPv4 + 40 byte DSA sig
-                        throw new IOException("Bad length for RELAYREQ: " + len);
+                    if (isHandshake) throw new IOException("Illegal block in handshake: " + type);
+                    // 21 byte data w/ IPv4 + 40 byte DSA sig
+                    if (len < 61) throw new IOException("Bad length for RELAYREQ: " + len);
                     byte[] data = new byte[len - 1]; // skip flag
                     System.arraycopy(payload, i + 1, data, 0, len - 1);
                     cb.gotRelayRequest(data);
@@ -330,10 +330,9 @@ class SSU2Payload {
                 }
 
                 case BLOCK_RELAYRESP: {
-                    if (isHandshake)
-                        throw new IOException("Illegal block in handshake: " + type);
-                    if (len < 52) // 12 byte data w/o IP or token + 40 byte DSA sig
-                        throw new IOException("Bad length for RELAYRESP: " + len);
+                    if (isHandshake) throw new IOException("Illegal block in handshake: " + type);
+                    // 12 byte data w/o IP or token + 40 byte DSA sig
+                    if (len < 52) throw new IOException("Bad length for RELAYRESP: " + len);
                     int resp = payload[i + 1] & 0xff; // skip flag
                     byte[] data = new byte[len - 2];
                     System.arraycopy(payload, i + 2, data, 0, len - 2);
@@ -342,10 +341,9 @@ class SSU2Payload {
                 }
 
                 case BLOCK_RELAYINTRO: {
-                    if (isHandshake)
-                        throw new IOException("Illegal block in handshake: " + type);
-                    if (len < 93) // 32 byte hash + 21 byte data w/ IPv4 + 40 byte DSA sig
-                        throw new IOException("Bad length for RELAYINTRO: " + len);
+                    if (isHandshake) throw new IOException("Illegal block in handshake: " + type);
+                    // 32 byte hash + 21 byte data w/ IPv4 + 40 byte DSA sig
+                    if (len < 93) throw new IOException("Bad length for RELAYINTRO: " + len);
                     Hash h = Hash.create(payload, i + 1); // skip flag
                     byte[] data = new byte[len - (1 + Hash.HASH_LENGTH)]; // skip flag
                     System.arraycopy(payload, i + 1 + Hash.HASH_LENGTH, data, 0, data.length);
@@ -354,13 +352,11 @@ class SSU2Payload {
                 }
 
                 case BLOCK_PEERTEST: {
-                    if (isHandshake)
-                        throw new IOException("Illegal block in handshake: " + type);
-                    if (len < 19) // 19 byte data w/ IPv4 (hash and sig optional)
-                        throw new IOException("Bad length for PEERTEST: " + len);
+                    if (isHandshake) throw new IOException("Illegal block in handshake: " + type);
+                    // 19 byte data w/ IPv4 (hash and sig optional)
+                    if (len < 19) throw new IOException("Bad length for PEERTEST: " + len);
                     int mnum = payload[i] & 0xff;
-                    if (mnum == 0 || mnum > 7)
-                        throw new DataFormatException("Bad PEERTEST number: " + mnum);
+                    if (mnum == 0 || mnum > 7) throw new DataFormatException("Bad PEERTEST number: " + mnum);
                     int resp = payload[i + 1] & 0xff;
                     int o = i + 3; // skip flag
                     int datalen;
@@ -380,16 +376,14 @@ class SSU2Payload {
                 }
 
                 case BLOCK_NEWTOKEN:
-                    if (len < 12)
-                        throw new IOException("Bad length for NEWTOKEN: " + len);
+                    if (len < 12) throw new IOException("Bad length for NEWTOKEN: " + len);
                     long exp = DataHelper.fromLong(payload, i, 4) * 1000;
                     long token = DataHelper.fromLong8(payload, i + 4);
                     cb.gotToken(token, exp);
                     break;
 
                 case BLOCK_TERMINATION:
-                    if (len < 9)
-                        throw new IOException("Bad length for TERMINATION: " + len);
+                    if (len < 9) throw new IOException("Bad length for TERMINATION: " + len);
                     long last = DataHelper.fromLong8(payload, i);
                     int rsn = payload[i + 8] & 0xff;
                     cb.gotTermination(rsn, last);
@@ -397,16 +391,14 @@ class SSU2Payload {
                     break;
 
                 case BLOCK_PATHCHALLENGE:
-                    if (isHandshake)
-                        throw new IOException("Illegal block in handshake: " + type);
+                    if (isHandshake) throw new IOException("Illegal block in handshake: " + type);
                     byte[] cdata = new byte[len];
                     System.arraycopy(payload, i, cdata, 0, len);
                     cb.gotPathChallenge(from, cdata);
                     break;
 
                 case BLOCK_PATHRESP:
-                    if (isHandshake)
-                        throw new IOException("Illegal block in handshake: " + type);
+                    if (isHandshake) throw new IOException("Illegal block in handshake: " + type);
                     byte[] rdata = new byte[len];
                     System.arraycopy(payload, i, rdata, 0, len);
                     cb.gotPathResponse(from, rdata);
@@ -419,15 +411,14 @@ class SSU2Payload {
                 default:
                     Log log = ctx.logManager().getLog(SSU2Payload.class);
                     if (log.shouldWarn())
-                        log.warn("[SSU] Received UNKNOWN block: Type: " + type + "; Length: " + len + " bytes on " + cb);
+                        log.warn(
+                                "[SSU] Received UNKNOWN block: Type: " + type + "; Length: " + len + " bytes on " + cb);
                     break;
-
             }
             i += len;
             blocks++;
         }
-        if (isHandshake && blocks == 0)
-            throw new IOException("No blocks in handshake");
+        if (isHandshake && blocks == 0) throw new IOException("No blocks in handshake");
         return blocks;
     }
 
@@ -446,7 +437,7 @@ class SSU2Payload {
      *  Base class for blocks to be transmitted.
      *  Not used for receive; we use callbacks instead.
      */
-    public static abstract class Block {
+    public abstract static class Block {
         private final int type;
 
         public Block(int ttype) {
@@ -456,7 +447,9 @@ class SSU2Payload {
         /**
          *  @since 0.9.55
          */
-        public int getType() { return type; }
+        public int getType() {
+            return type;
+        }
 
         /** @return new offset */
         public int write(byte[] tgt, int off) {
@@ -535,11 +528,10 @@ class SSU2Payload {
         @Override
         public int writeData(byte[] tgt, int off) {
             byte b = (byte) (f ? 1 : 0);
-            if (gz)
-                b |= 0x02;
-            tgt[off++] = b;    // flag
+            if (gz) b |= 0x02;
+            tgt[off++] = b; // flag
             b = (byte) ((fr << 4) | frt);
-            tgt[off++] = b;    // frag
+            tgt[off++] = b; // frag
             System.arraycopy(data, doff, tgt, off, dlen);
             return off + dlen;
         }
@@ -599,8 +591,7 @@ class SSU2Payload {
 
         public FollowFragBlock(OutboundMessageState msg, int frag) {
             super(BLOCK_FOLLOWONFRAG);
-            if (frag <= 0)
-                throw new IllegalArgumentException();
+            if (frag <= 0) throw new IllegalArgumentException();
             m = msg;
             f = frag;
         }
@@ -611,8 +602,7 @@ class SSU2Payload {
 
         public int writeData(byte[] tgt, int off) {
             byte b = (byte) (f << 1);
-            if (f == m.getFragmentCount() - 1)
-                b |= (byte) 0x01;
+            if (f == m.getFragmentCount() - 1) b |= (byte) 0x01;
             tgt[off++] = b;
             DataHelper.toLong(tgt, off, 4, m.getMessageId());
             off += 4;
@@ -645,10 +635,8 @@ class SSU2Payload {
         }
 
         public int writeData(byte[] tgt, int off) {
-            if (ctx != null)
-                ctx.random().nextBytes(tgt, off, sz);
-            else
-                Arrays.fill(tgt, off, off + sz, (byte) 0);
+            if (ctx != null) ctx.random().nextBytes(tgt, off, sz);
+            else Arrays.fill(tgt, off, off + sz, (byte) 0);
             return off + sz;
         }
     }
@@ -739,8 +727,7 @@ class SSU2Payload {
          */
         public AckBlock(long thru, int acnt, byte[] ranges, int rangeCount) {
             super(BLOCK_ACK);
-            if (acnt > 255)
-                throw new IllegalArgumentException();
+            if (acnt > 255) throw new IllegalArgumentException();
             t = thru;
             a = acnt;
             r = ranges;
@@ -921,15 +908,14 @@ class SSU2Payload {
 
         public int getDataLength() {
             int rv = 3 + d.length;
-            if (h != null)
-                rv += Hash.HASH_LENGTH;
+            if (h != null) rv += Hash.HASH_LENGTH;
             return rv;
         }
 
         public int writeData(byte[] tgt, int off) {
             tgt[off++] = (byte) n;
             tgt[off++] = (byte) c;
-            tgt[off++] = 0;  // flag
+            tgt[off++] = 0; // flag
             if (h != null) {
                 System.arraycopy(h.getData(), 0, tgt, off, Hash.HASH_LENGTH);
                 off += Hash.HASH_LENGTH;

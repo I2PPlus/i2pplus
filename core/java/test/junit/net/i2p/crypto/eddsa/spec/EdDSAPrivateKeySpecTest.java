@@ -17,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import net.i2p.crypto.eddsa.Utils;
+
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,4 +1,5 @@
 package net.i2p.client.datagram;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,9 +9,8 @@ package net.i2p.client.datagram;
  *
  */
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import junit.framework.TestCase;
+
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PClientFactory;
 import net.i2p.client.I2PSession;
@@ -18,6 +18,9 @@ import net.i2p.crypto.DSAEngine;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 /**
  *
@@ -28,15 +31,14 @@ public class DatagramTest extends TestCase {
     private I2PClient _client;
 
     @Override
-    public void setUp(){
-    }
+    public void setUp() {}
 
     @Override
     protected void tearDown() {
         System.gc();
     }
 
-    public void testDatagram() throws Exception{
+    public void testDatagram() throws Exception {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         I2PClient client = I2PClientFactory.createClient();
         Destination d = client.createDestination(out);
@@ -57,7 +59,7 @@ public class DatagramTest extends TestCase {
         assertEquals(d, dd.extractSender());
     }
 
-    public void testBadagram() throws Exception{
+    public void testBadagram() throws Exception {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         I2PClient client = I2PClientFactory.createClient();
         Destination d = client.createDestination(out);
@@ -74,25 +76,25 @@ public class DatagramTest extends TestCase {
         dd.loadI2PDatagram(data);
 
         boolean error = false;
-        try{
+        try {
             dd.getPayload();
-        }catch (I2PInvalidDatagramException i2pide){
+        } catch (I2PInvalidDatagramException i2pide) {
             error = true;
         }
         assertTrue(error);
 
         error = false;
-        try{
+        try {
             dd.getSender();
-        }catch (I2PInvalidDatagramException i2pide){
+        } catch (I2PInvalidDatagramException i2pide) {
             error = true;
         }
         assertTrue(error);
 
         error = false;
-        try{
+        try {
             dd.getHash();
-        }catch (I2PInvalidDatagramException i2pide){
+        } catch (I2PInvalidDatagramException i2pide) {
             error = true;
         }
         assertTrue(error);

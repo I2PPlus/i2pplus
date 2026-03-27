@@ -9,13 +9,6 @@ package net.i2p.data.router;
  *
  */
 
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SHA256Generator;
 import net.i2p.data.DataHelper;
@@ -24,6 +17,14 @@ import net.i2p.data.RoutingKeyGenerator;
 import net.i2p.util.ConvertToHash;
 import net.i2p.util.HexDump;
 import net.i2p.util.Log;
+
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Generates routing keys from hashes using date-based modification to prevent Sybil attacks.
@@ -107,8 +108,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      *  @since 0.9.10
      */
     private void setCalToPreviousMidnight(long now) {
-        _zdt = Instant.ofEpochMilli(now).atZone(GMT.toZoneId())
-                    .withHour(0).withMinute(0).withSecond(0).withNano(0);
+        _zdt = Instant.ofEpochMilli(now).atZone(GMT.toZoneId()).withHour(0).withMinute(0).withSecond(0).withNano(0);
     }
 
     /**
@@ -120,8 +120,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
         Date today = Date.from(_zdt.toInstant());
 
         String modVal = _fmt.format(today);
-        if (modVal.length() != LENGTH)
-            throw new IllegalStateException();
+        if (modVal.length() != LENGTH) throw new IllegalStateException();
         byte[] mod = DataHelper.getASCII(modVal);
         return mod;
     }
@@ -145,11 +144,9 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
             _currentModData = mod;
             _nextModData = next;
             // ensure version is bumped
-            if (_lastChanged == now)
-                now++;
+            if (_lastChanged == now) now++;
             _lastChanged = now;
-            if (_log.shouldInfo())
-                _log.info("Routing modifier generated: " + HexDump.dump(mod));
+            if (_log.shouldInfo()) _log.info("Routing modifier generated: " + HexDump.dump(mod));
         }
         return changed;
     }
@@ -188,8 +185,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
         synchronized (this) {
             modVal = _fmt.format(time);
         }
-        if (modVal.length() != LENGTH)
-            throw new IllegalStateException();
+        if (modVal.length() != LENGTH) throw new IllegalStateException();
         byte[] mod = DataHelper.getASCII(modVal);
         return getKey(origKey, mod);
     }
@@ -219,18 +215,15 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
         long now = System.currentTimeMillis();
         int st = 0;
         if (args.length > 1 && (args[0].startsWith("+") || args[0].startsWith("-"))) {
-            now += Integer.parseInt(args[0]) * (24*60*60*1000L);
+            now += Integer.parseInt(args[0]) * (24 * 60 * 60 * 1000L);
             st++;
         }
         RouterKeyGenerator rkg = new RouterKeyGenerator(I2PAppContext.getGlobalContext());
-        System.out.println("Date: " + rkg._fmt.format(now) + '\n' +
-                           "Hash                                         Routing Key\n" +
-                           "----                                       -----------");
+        System.out.println("Date: " + rkg._fmt.format(now) + '\n' + "Hash                                         Routing Key\n" + "----                                       -----------");
         for (int i = st; i < args.length; i++) {
             String s = args[i];
             String sp = " ";
-            if (s.length() < 44)
-                sp = "                                            ".substring(0, 45 - s.length());
+            if (s.length() < 44) sp = "                                            ".substring(0, 45 - s.length());
             Hash h = ConvertToHash.getHash(s);
             if (h == null) {
                 System.out.println(s + sp + "Bad hash");

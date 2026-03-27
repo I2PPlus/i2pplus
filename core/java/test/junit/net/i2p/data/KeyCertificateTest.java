@@ -1,4 +1,5 @@
 package net.i2p.data;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by str4d in 2015 and released into the public domain
@@ -13,6 +14,7 @@ import static org.hamcrest.Matchers.*;
 
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
+
 import org.junit.Test;
 
 /**
@@ -20,15 +22,11 @@ import org.junit.Test;
  */
 public class KeyCertificateTest {
     private static final byte[] P256_PAYLOAD = new byte[] {
-        0, (byte) (SigType.ECDSA_SHA256_P256.getCode()),
-        0, (byte) (EncType.EC_P256.getCode())
-    };
+                0, (byte) (SigType.ECDSA_SHA256_P256.getCode()),
+                0, (byte) (EncType.EC_P256.getCode())
+            };
 
-    private static final byte[] P521_PAYLOAD = new byte[] {
-        0, (byte) (SigType.ECDSA_SHA512_P521.getCode()),
-        0, (byte) (EncType.ELGAMAL_2048.getCode()),
-        0, 0, 0, 0
-    };
+    private static final byte[] P521_PAYLOAD = new byte[] {0, (byte) (SigType.ECDSA_SHA512_P521.getCode()), 0, (byte) (EncType.ELGAMAL_2048.getCode()), 0, 0, 0, 0};
 
     @Test
     public void testFromP256Payload() throws DataFormatException {

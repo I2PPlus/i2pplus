@@ -76,15 +76,14 @@ import java.util.Arrays;
  * @author jrandom
  */
 public class Payload extends DataStructureImpl {
-    //private final static Log _log = new Log(Payload.class);
+    // private final static Log _log = new Log(Payload.class);
     private byte[] _encryptedData;
     private byte[] _unencryptedData;
 
     /** So we don't OOM on I2CP protocol errors. Actual max is smaller. */
-    private static final int MAX_LENGTH = 64*1024;
+    private static final int MAX_LENGTH = 64 * 1024;
 
-    public Payload() {
-    }
+    public Payload() {}
 
     /**
      * Retrieve the unencrypted body of the message.
@@ -108,8 +107,7 @@ public class Payload extends DataStructureImpl {
      * @throws IllegalArgumentException if bigger than 64KB
      */
     public void setUnencryptedData(byte[] data) {
-        if (data.length > MAX_LENGTH)
-            throw new IllegalArgumentException();
+        if (data.length > MAX_LENGTH) throw new IllegalArgumentException();
         _unencryptedData = data;
     }
 
@@ -123,18 +121,14 @@ public class Payload extends DataStructureImpl {
      * @throws IllegalArgumentException if bigger than 64KB
      */
     public void setEncryptedData(byte[] data) {
-        if (data.length > MAX_LENGTH)
-            throw new IllegalArgumentException();
+        if (data.length > MAX_LENGTH) throw new IllegalArgumentException();
         _encryptedData = data;
     }
 
     public int getSize() {
-        if (_unencryptedData != null)
-            return _unencryptedData.length;
-        else if (_encryptedData != null)
-            return _encryptedData.length;
-        else
-            return 0;
+        if (_unencryptedData != null) return _unencryptedData.length;
+        else if (_encryptedData != null) return _encryptedData.length;
+        else return 0;
     }
 
     @Override
@@ -144,7 +138,7 @@ public class Payload extends DataStructureImpl {
         _encryptedData = new byte[size];
         int read = read(in, _encryptedData);
         if (read != size) throw new DataFormatException("Incorrect number of bytes read in the payload structure");
-        //if (_log.shouldDebug())
+        // if (_log.shouldDebug())
         //    _log.debug("read payload: " + read + " bytes");
     }
 
@@ -153,15 +147,15 @@ public class Payload extends DataStructureImpl {
         if (_encryptedData == null) throw new DataFormatException("Not yet encrypted.  Please set the encrypted data");
         DataHelper.writeLong(out, 4, _encryptedData.length);
         out.write(_encryptedData);
-        //if (_log.shouldDebug())
+        // if (_log.shouldDebug())
         //    _log.debug("wrote payload: " + _encryptedData.length);
     }
 
     /**
-      *  Writes the encrypted payload to the target array.
-      *
-      *  @return the written length (NOT the new offset)
-      */
+     *  Writes the encrypted payload to the target array.
+     *
+     *  @return the written length (NOT the new offset)
+     */
     public int writeBytes(byte target[], int offset) {
         if (_encryptedData == null) throw new IllegalStateException("Not yet encrypted.  Please set the encrypted data");
         DataHelper.toLong(target, offset, 4, _encryptedData.length);
@@ -175,8 +169,7 @@ public class Payload extends DataStructureImpl {
         if (object == this) return true;
         if ((object == null) || !(object instanceof Payload)) return false;
         Payload p = (Payload) object;
-        return Arrays.equals(_unencryptedData, p.getUnencryptedData())
-               && Arrays.equals(_encryptedData, p.getEncryptedData());
+        return Arrays.equals(_unencryptedData, p.getUnencryptedData()) && Arrays.equals(_encryptedData, p.getEncryptedData());
     }
 
     @Override
@@ -188,10 +181,8 @@ public class Payload extends DataStructureImpl {
     public String toString() {
         StringBuilder buf = new StringBuilder(32); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("Payload: ");
-        if (_encryptedData != null)
-            buf.append(_encryptedData.length).append(" bytes");
-        else
-            buf.append("null");
+        if (_encryptedData != null) buf.append(_encryptedData.length).append(" bytes");
+        else buf.append("null");
         return buf.toString();
     }
 }

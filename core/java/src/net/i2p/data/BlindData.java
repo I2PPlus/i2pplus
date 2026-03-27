@@ -1,9 +1,10 @@
 package net.i2p.data;
 
-import java.time.Instant;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.Blinding;
 import net.i2p.crypto.SigType;
+
+import java.time.Instant;
 
 /**
  * Cache data for EdDSA key blinding as specified in
@@ -77,16 +78,19 @@ public class BlindData {
      * @since 0.9.41
      */
     public static final int AUTH_NONE = 0;
+
     /**
      * bits 3-0 including per-client bit
      * @since 0.9.41
      */
     public static final int AUTH_DH = 1;
+
     /**
      * bits 3-0 including per-client bit
      * @since 0.9.41
      */
     public static final int AUTH_PSK = 3;
+
     /**
      * Enabled, unspecified type
      * @since 0.9.41
@@ -118,8 +122,7 @@ public class BlindData {
      *  @throws IllegalArgumentException on various errors
      *  @since 0.9.41
      */
-    public BlindData(I2PAppContext ctx, Destination dest, SigType blindType, String secret,
-                     int authType, PrivateKey authKey) {
+    public BlindData(I2PAppContext ctx, Destination dest, SigType blindType, String secret, int authType, PrivateKey authKey) {
         this(ctx, dest.getSigningPublicKey(), blindType, secret, authType, authKey);
         _dest = dest;
     }
@@ -144,91 +147,85 @@ public class BlindData {
      *  @throws IllegalArgumentException on various errors
      *  @since 0.9.41
      */
-    public BlindData(I2PAppContext ctx, SigningPublicKey spk, SigType blindType, String secret,
-                     int authType, PrivateKey authKey) {
+    public BlindData(I2PAppContext ctx, SigningPublicKey spk, SigType blindType, String secret, int authType, PrivateKey authKey) {
         _context = ctx;
         _clearSPK = spk;
         _blindType = blindType;
         _secret = secret;
         // fix, previous default was -1
-        if (authType < 0)
-            authType = AUTH_NONE;
-        if ((authType != AUTH_NONE && authKey == null) ||
-            (authType == AUTH_NONE && authKey != null))
-            throw new IllegalArgumentException();
+        if (authType < 0) authType = AUTH_NONE;
+        if ((authType != AUTH_NONE && authKey == null) || (authType == AUTH_NONE && authKey != null)) throw new IllegalArgumentException();
         _authType = authType;
         _authKey = authKey;
-        if (secret != null)
-            _secretRequired = true;
-        if (authKey != null)
-            _authRequired = true;
+        if (secret != null) _secretRequired = true;
+        if (authKey != null) _authRequired = true;
         _date = _context.clock().now();
         // defer until needed
-        //calculate();
+        // calculate();
     }
 
     /**
-      *  Gets the unblinded signing public key.
-      *
-      *  @return The unblinded SPK, non-null
-      */
+     *  Gets the unblinded signing public key.
+     *
+     *  @return The unblinded SPK, non-null
+     */
     public SigningPublicKey getUnblindedPubKey() {
         return _clearSPK;
     }
 
     /**
-      *  Gets the type of the blinded signature.
-      *
-      *  @return The type of the blinded key
-      */
+     *  Gets the type of the blinded signature.
+     *
+     *  @return The type of the blinded key
+     */
     public SigType getBlindedSigType() {
         return _blindType;
     }
 
     /**
-      *  Gets the blinded signing public key for the current day.
-      *
-      *  @return The blinded key for the current day, non-null
-      */
+     *  Gets the blinded signing public key for the current day.
+     *
+     *  @return The blinded key for the current day, non-null
+     */
     public synchronized SigningPublicKey getBlindedPubKey() {
         calculate();
         return _blindSPK;
     }
 
     /**
-      *  Gets the destination hash if known.
-      *
-      *  @return The hash of the destination if known, or null
-      */
+     *  Gets the destination hash if known.
+     *
+     *  @return The hash of the destination if known, or null
+     */
     public synchronized Hash getDestHash() {
         return _dest != null ? _dest.getHash() : null;
     }
 
     /**
-      *  Gets the hash of the blinded key for the current day.
-      *
-      *  @return The hash of the blinded key for the current day
-      */
+     *  Gets the hash of the blinded key for the current day.
+     *
+     *  @return The hash of the blinded key for the current day
+     */
     public synchronized Hash getBlindedHash() {
         calculate();
         return _blindHash;
     }
 
     /**
-      *  Gets the alpha value for the current day.
-      *
-      *  @return Alpha for the current day
-      */
+     *  Gets the alpha value for the current day.
+     *
+     *  @return Alpha for the current day
+     */
     public synchronized SigningPrivateKey getAlpha() {
         calculate();
         return _alpha;
     }
 
     /**
-      *  Gets the destination if known.
-      *
-      *  @return null if unknown
-      */
+     *  Gets the destination if known.
+     *
+     *  @return null if unknown
+     */
     public synchronized Destination getDestination() {
         return _dest;
     }
@@ -241,38 +238,36 @@ public class BlindData {
      */
     public synchronized void setDestination(Destination d) {
         if (_dest != null) {
-            if (!_dest.equals(d))
-                throw new IllegalArgumentException("Dest mismatch");
+            if (!_dest.equals(d)) throw new IllegalArgumentException("Dest mismatch");
             return;
         }
-        if (!d.getSigningPublicKey().equals(_clearSPK))
-            throw new IllegalArgumentException("Dest mismatch");
+        if (!d.getSigningPublicKey().equals(_clearSPK)) throw new IllegalArgumentException("Dest mismatch");
         _dest = d;
     }
 
     /**
-      *  Gets the secret if set.
-      *
-      *  @return null if none
-      */
+     *  Gets the secret if set.
+     *
+     *  @return null if none
+     */
     public String getSecret() {
         return _secret;
     }
 
     /**
-      *  Gets the authentication type.
-      *
-      *  @return 0 for no client auth, 1 for DH, 3 for PSK
-      */
+     *  Gets the authentication type.
+     *
+     *  @return 0 for no client auth, 1 for DH, 3 for PSK
+     */
     public int getAuthType() {
         return _authType;
     }
 
     /**
-      *  Gets the authentication private key.
-      *
-      *  @return null for no client auth
-      */
+     *  Gets the authentication private key.
+     *
+     *  @return null for no client auth
+     */
     public PrivateKey getAuthPrivKey() {
         return _authKey;
     }
@@ -281,8 +276,7 @@ public class BlindData {
         if (_context.isRouterContext()) {
             RoutingKeyGenerator gen = _context.routingKeyGenerator();
             long mod = gen.getLastChanged();
-            if (mod == _routingKeyGenMod)
-                return;
+            if (mod == _routingKeyGenMod) return;
             _routingKeyGenMod = mod;
         }
         // For now, always calculate in app context,
@@ -301,55 +295,54 @@ public class BlindData {
     }
 
     /**
-      *  Encodes the blinded key in b33 format.
-       *
-       *  Encodes the blinded key in b33 format.
-       *
-       * @return the b33 encoded string
-       * @since 0.9.41
-       */
+     *  Encodes the blinded key in b33 format.
+     *
+     *  Encodes the blinded key in b33 format.
+     *
+     * @return the b33 encoded string
+     * @since 0.9.41
+     */
     public synchronized String toBase32() {
-        if (_b32 == null)
-            _b32 = Blinding.encode(_clearSPK, _secretRequired, _authRequired);
+        if (_b32 == null) _b32 = Blinding.encode(_clearSPK, _secretRequired, _authRequired);
         return _b32;
     }
 
     /**
-      *  Marks that a secret is required for this blinded key.
-      *
-      * @since 0.9.41
-      */
+     *  Marks that a secret is required for this blinded key.
+     *
+     * @since 0.9.41
+     */
     public synchronized void setSecretRequired() {
         _secretRequired = true;
         _b32 = null;
     }
 
     /**
-       *  Checks if a secret is required.
-       *
-       * @return true if a secret is required
-       * @since 0.9.41
-       */
+     *  Checks if a secret is required.
+     *
+     * @return true if a secret is required
+     * @since 0.9.41
+     */
     public boolean getSecretRequired() {
         return _secretRequired;
     }
 
     /**
-      *  Marks that authentication is required for this blinded key.
-      *
-      * @since 0.9.41
-      */
+     *  Marks that authentication is required for this blinded key.
+     *
+     * @since 0.9.41
+     */
     public synchronized void setAuthRequired() {
         _authRequired = true;
         _b32 = null;
     }
 
     /**
-       *  Checks if authentication is required.
-       *
-       * @return true if authentication is required
-       * @since 0.9.41
-       */
+     *  Checks if authentication is required.
+     *
+     * @return true if authentication is required
+     * @since 0.9.41
+     */
     public boolean getAuthRequired() {
         return _authRequired;
     }
@@ -404,34 +397,21 @@ public class BlindData {
         buf.append("\n\tAlpha valid for : ").append(Instant.ofEpochMilli(_routingKeyGenMod));
         buf.append("\n\tBlindedPublicKey: ").append(_blindSPK);
         buf.append("\n\tBlinded Hash    : ").append(_blindHash);
-        if (_secret != null)
-            buf.append("\n\tSecret          : \"").append(_secret).append('"');
-        else
-            buf.append("\n\tSecret Required : ").append(_secretRequired);
+        if (_secret != null) buf.append("\n\tSecret          : \"").append(_secret).append('"');
+        else buf.append("\n\tSecret Required : ").append(_secretRequired);
         buf.append("\n\tAuth Type       : ");
-        if (_authType > 0)
-            buf.append(_authType);
-        else
-            buf.append("none");
-        if (_authKey != null)
-            buf.append("\n\tAuth Key        : ").append(_authKey);
-        else
-            buf.append("\n\tAuth Required   : ").append(_authRequired);
-        if (_dest != null)
-            buf.append("\n\tDestination     : ").append(_dest);
-        else
-            buf.append("\n\tDestination     : unknown");
+        if (_authType > 0) buf.append(_authType);
+        else buf.append("none");
+        if (_authKey != null) buf.append("\n\tAuth Key        : ").append(_authKey);
+        else buf.append("\n\tAuth Required   : ").append(_authRequired);
+        if (_dest != null) buf.append("\n\tDestination     : ").append(_dest);
+        else buf.append("\n\tDestination     : unknown");
         buf.append("\n\tB32             : ").append(toBase32());
-        if (!_authRequired)
-            buf.append("\n\t  + auth        : ").append(Blinding.encode(_clearSPK, _secretRequired, true));
-        if (!_secretRequired)
-            buf.append("\n\t  + secret      : ").append(Blinding.encode(_clearSPK, true, _authRequired));
-        if (!(_authRequired || _secretRequired))
-            buf.append("\n\t  + auth,secret : ").append(Blinding.encode(_clearSPK, true, true));
-        if (_date > 0)
-            buf.append("\n\tCreated         : ").append(Instant.ofEpochMilli(_date));
-        if (_expiration > 0)
-            buf.append("\n\tExpires         : ").append(Instant.ofEpochMilli(_expiration));
+        if (!_authRequired) buf.append("\n\t  + auth        : ").append(Blinding.encode(_clearSPK, _secretRequired, true));
+        if (!_secretRequired) buf.append("\n\t  + secret      : ").append(Blinding.encode(_clearSPK, true, _authRequired));
+        if (!(_authRequired || _secretRequired)) buf.append("\n\t  + auth,secret : ").append(Blinding.encode(_clearSPK, true, true));
+        if (_date > 0) buf.append("\n\tCreated         : ").append(Instant.ofEpochMilli(_date));
+        if (_expiration > 0) buf.append("\n\tExpires         : ").append(Instant.ofEpochMilli(_expiration));
         buf.append(']');
         return buf.toString();
     }

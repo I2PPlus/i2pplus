@@ -1,4 +1,5 @@
 package net.i2p.data;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -7,7 +8,6 @@ package net.i2p.data;
  * your children, but it might.  Use at your own risk.
  *
  */
-
 
 /**
  * Test harness for loading / storing Hash objects
@@ -19,13 +19,16 @@ public class DestinationTest extends StructureTest {
     public DataStructure createDataStructure() throws DataFormatException {
         Destination dest = new Destination();
         StructureTest tst = new CertificateTest();
-        dest.setCertificate((Certificate)tst.createDataStructure());
+        dest.setCertificate((Certificate) tst.createDataStructure());
         tst = new PublicKeyTest();
-        dest.setPublicKey((PublicKey)tst.createDataStructure());
+        dest.setPublicKey((PublicKey) tst.createDataStructure());
         tst = new SigningPublicKeyTest();
-        dest.setSigningPublicKey((SigningPublicKey)tst.createDataStructure());
+        dest.setSigningPublicKey((SigningPublicKey) tst.createDataStructure());
         return dest;
     }
+
     @Override
-    public DataStructure createStructureToRead() { return new Destination(); }
+    public DataStructure createStructureToRead() {
+        return new Destination();
+    }
 }

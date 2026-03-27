@@ -77,19 +77,100 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     // https://tools.ietf.org/html/draft-ietf-dnsop-private-use-tld-00
     private static final List<String> locals = Arrays.asList(new String[] {
         "localhost",
-        "in-addr.arpa", "ip6.arpa", "home.arpa",
-        "i2p", "onion",
-        "i2p.arpa", "onion.arpa",
-        "corp", "home", "internal", "intranet", "lan", "local", "private",
-        "dhcp", "localdomain", "bbrouter", "dlink", "ctc", "intra", "loc", "modem", "ip",
-        "test", "example", "invalid",
+        "in-addr.arpa",
+        "ip6.arpa",
+        "home.arpa",
+        "i2p",
+        "onion",
+        "i2p.arpa",
+        "onion.arpa",
+        "corp",
+        "home",
+        "internal",
+        "intranet",
+        "lan",
+        "local",
+        "private",
+        "dhcp",
+        "localdomain",
+        "bbrouter",
+        "dlink",
+        "ctc",
+        "intra",
+        "loc",
+        "modem",
+        "ip",
+        "test",
+        "example",
+        "invalid",
         "alt",
-        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
-        "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h",
+        "i",
+        "j",
+        "k",
+        "l",
+        "m",
+        "n",
+        "o",
+        "p",
+        "q",
+        "r",
+        "s",
+        "t",
+        "u",
+        "v",
+        "w",
+        "x",
+        "y",
+        "z",
         "aa",
-        "qm", "qn", "qo", "qp", "qq", "qr", "qs", "qt", "qu", "qv", "qw", "qx", "qy", "qz",
-        "xa", "xb", "xc", "xd", "xe", "xf", "xg", "xh", "xi", "xj", "xk", "xl", "xm",
-        "xn", "xo", "xp", "xq", "xr", "xs", "xt", "xu", "xv", "xw", "xx", "xy", "xz",
+        "qm",
+        "qn",
+        "qo",
+        "qp",
+        "qq",
+        "qr",
+        "qs",
+        "qt",
+        "qu",
+        "qv",
+        "qw",
+        "qx",
+        "qy",
+        "qz",
+        "xa",
+        "xb",
+        "xc",
+        "xd",
+        "xe",
+        "xf",
+        "xg",
+        "xh",
+        "xi",
+        "xj",
+        "xk",
+        "xl",
+        "xm",
+        "xn",
+        "xo",
+        "xp",
+        "xq",
+        "xr",
+        "xs",
+        "xt",
+        "xu",
+        "xv",
+        "xw",
+        "xx",
+        "xy",
+        "xz",
         "zz"
     });
 
@@ -124,10 +205,10 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
 
     // keep the timeout very short, as we try multiple addresses,
     // and will be falling back to regular DNS.
-    private static final long TIMEOUT = 3*1000;
+    private static final long TIMEOUT = 3 * 1000;
     // total for v4 + v6
-    private static final long OVERALL_TIMEOUT = 10*1000;
-    private static final int MAX_TTL = 24*60*60;
+    private static final long OVERALL_TIMEOUT = 10 * 1000;
+    private static final int MAX_TTL = 24 * 60 * 60;
     // don't use a URL after this many consecutive failures
     private static final int MAX_FAILS = 3;
     // each for v4 and v6
@@ -151,13 +232,20 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
      * DNS query type for IPv4/IPv6 preference.
      * @since 0.9.35
      */
-    public enum Type { V4_ONLY, V6_ONLY, V4_PREFERRED, V6_PREFERRED }
+    public enum Type {
+        V4_ONLY,
+        V6_ONLY,
+        V4_PREFERRED,
+        V6_PREFERRED
+    }
 
     private static class Result {
         public final String ip;
         public final long expires;
+
         public Result(String i, long e) {
-            ip = i; expires = e;
+            ip = i;
+            expires = e;
         }
     }
 
@@ -167,7 +255,8 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
      */
     public String lookup(String host) {
         Set<AddressType> addrs = Addresses.getConnectedAddressTypes();
-        Type type = (addrs.contains(AddressType.IPV4) || !addrs.contains(AddressType.IPV6)) ? Type.V4_ONLY : Type.V6_ONLY;
+        Type type =
+                (addrs.contains(AddressType.IPV4) || !addrs.contains(AddressType.IPV6)) ? Type.V4_ONLY : Type.V6_ONLY;
         return lookup(host, type);
     }
 
@@ -186,39 +275,32 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
      *  @since 0.9.48
      */
     private String lookup(String host, Type type, String url) {
-        if (Addresses.isIPAddress(host))
-            return host;
-        if (host.startsWith("["))
-            return host;
+        if (Addresses.isIPAddress(host)) return host;
+        if (host.startsWith("[")) return host;
         host = host.toLowerCase(Locale.US);
-        if (host.indexOf('.') < 0)
-            return null;
+        if (host.indexOf('.') < 0) return null;
         for (String local : locals) {
-            if (host.equals(local) ||
-                (host.endsWith(local) && host.charAt(host.length() - local.length() - 1) == '.')) {
+            if (host.equals(local)
+                    || (host.endsWith(local) && host.charAt(host.length() - local.length() - 1) == '.')) {
                 return null;
             }
         }
         // don't loop via SSLEepGet
-        if (host.equals("dns.google"))
-            return "8.8.8.8";
+        if (host.equals("dns.google")) return "8.8.8.8";
         if (type == Type.V4_ONLY || type == Type.V4_PREFERRED) {
             // v4 lookup
             String rv = lookup(host, v4Cache);
-            if (rv != null)
-                return rv;
+            if (rv != null) return rv;
         }
         if (type != Type.V4_ONLY) {
             // v6 lookup
             String rv = lookup(host, v6Cache);
-            if (rv != null)
-                return rv;
+            if (rv != null) return rv;
         }
         if (type == Type.V6_PREFERRED) {
             // v4 lookup after v6 lookup
             String rv = lookup(host, v4Cache);
-            if (rv != null)
-                return rv;
+            if (rv != null) return rv;
         }
         return query(host, type, url);
     }
@@ -241,8 +323,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         synchronized (cache) {
             Result r = cache.get(host);
             if (r != null) {
-                if (r.expires >= System.currentTimeMillis())
-                    return r.ip;
+                if (r.expires >= System.currentTimeMillis()) return r.ip;
                 cache.remove(host);
             }
         }
@@ -266,20 +347,17 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         if (type == Type.V4_ONLY || type == Type.V4_PREFERRED) {
             // v4 query
             String rv = query(host, false, toQuery, timeout);
-            if (rv != null)
-                return rv;
+            if (rv != null) return rv;
         }
         if (type != Type.V4_ONLY) {
             // v6 query
             String rv = query(host, true, toQuery, timeout);
-            if (rv != null)
-                return rv;
+            if (rv != null) return rv;
         }
         if (type == Type.V6_PREFERRED) {
             // v4 query after v6 query
             String rv = query(host, false, toQuery, timeout);
-            if (rv != null)
-                return rv;
+            if (rv != null) return rv;
         }
         return null;
     }
@@ -290,12 +368,12 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     private String query(String host, boolean isv6, List<String> toQuery, long timeout) {
         Question q = new Question(host, isv6 ? TYPE.AAAA : TYPE.A);
         DnsMessage msg = DnsMessage.builder()
-                                   .setId(0)
-                                   .setOpcode(DnsMessage.OPCODE.QUERY)
-                                   .setQrFlag(false)
-                                   .setRecursionDesired(true)
-                                   .setQuestion(q)
-                                   .build();
+                .setId(0)
+                .setOpcode(DnsMessage.OPCODE.QUERY)
+                .setQrFlag(false)
+                .setRecursionDesired(true)
+                .setQuestion(q)
+                .build();
         byte[] msgb = msg.toArray();
         String msgb64 = Base64.encode(msgb, true);
         // google (and only google) returns 400 for trailing unescaped '='
@@ -308,14 +386,10 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         int requests = 0;
         final String loopcheck = "https://" + host + '/';
         for (String url : toQuery) {
-            if (requests >= MAX_REQUESTS)
-                break;
-            if (System.currentTimeMillis() >= timeout)
-                break;
-            if (url.startsWith(loopcheck))
-                continue;
-            if (fails.count(url) > MAX_FAILS)
-                continue;
+            if (requests >= MAX_REQUESTS) break;
+            if (System.currentTimeMillis() >= timeout) break;
+            if (url.startsWith(loopcheck)) continue;
+            if (fails.count(url) > MAX_FAILS) continue;
             String furl = url + "?dns=" + msgb64;
             log("Fetching " + furl);
             baos.reset();
@@ -323,17 +397,14 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             eepget.forceDNSOverHTTPS(false);
             eepget.addHeader("User-Agent", UA_CLEARNET);
             eepget.addHeader("Accept", "application/dns-message");
-            if (ctx.isRouterContext())
-                eepget.addStatusListener(this);
-            else
-                fetchStart = System.currentTimeMillis();  // debug
+            if (ctx.isRouterContext()) eepget.addStatusListener(this);
+            else fetchStart = System.currentTimeMillis(); // debug
             String rv = fetch(eepget, host, isv6, q);
             if (rv != null) {
                 fails.clear(url);
                 return rv;
             }
-            if (state == null)
-                state = eepget.getSSLState();
+            if (state == null) state = eepget.getSSLState();
             // we treat all fails the same, whether server responded or not
             requests++;
             fails.increment(url);
@@ -347,8 +418,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
      *  @return null if not found
      */
     private String fetch(SSLEepGet eepget, String host, boolean isv6, Question q) {
-        if (eepget.fetch(TIMEOUT, TIMEOUT, TIMEOUT) &&
-            eepget.getStatusCode() == 200 && baos.size() > 0) {
+        if (eepget.fetch(TIMEOUT, TIMEOUT, TIMEOUT) && eepget.getStatusCode() == 200 && baos.size() > 0) {
             long end = System.currentTimeMillis();
             log("Got response in " + (end - fetchStart) + "ms");
             byte[] b = baos.toByteArray();
@@ -392,23 +462,20 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
                 String data = null;
                 for (Data d : ans) {
                     if (isv6) {
-                        if (d.getType() != TYPE.AAAA)
-                            continue;
+                        if (d.getType() != TYPE.AAAA) continue;
                         AAAA resp = (AAAA) d;
                         byte[] ip = resp.getIp();
                         data = Addresses.toString(ip);
                         break;
                     } else {
-                        if (d.getType() != TYPE.A)
-                            continue;
+                        if (d.getType() != TYPE.A) continue;
                         A resp = (A) d;
                         byte[] ip = resp.getIp();
                         data = Addresses.toString(ip);
                         break;
                     }
                 }
-                if (data == null)
-                    return null;
+                if (data == null) return null;
                 long ttl = msg.getAnswersMinTtl();
                 int ittl = (int) Math.min(ttl, MAX_TTL);
                 long expires = end + (ittl * 1000L);
@@ -433,18 +500,33 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
 
     // EepGet status listeners Reseeder
     @Override
-    public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause) {}
+    public void attemptFailed(
+            String url,
+            long bytesTransferred,
+            long bytesRemaining,
+            int currentAttempt,
+            int numRetries,
+            Exception cause) {}
+
     @Override
-    public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {}
+    public void bytesTransferred(
+            long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {}
+
     @Override
-    public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {}
+    public void transferComplete(
+            long alreadyTransferred,
+            long bytesTransferred,
+            long bytesRemaining,
+            String url,
+            String outputFile,
+            boolean notModified) {}
+
     @Override
     public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {}
 
     @Override
     public void attempting(String url) {
-        if (gotDate < MAX_DATE_SETS)
-            fetchStart = System.currentTimeMillis();
+        if (gotDate < MAX_DATE_SETS) fetchStart = System.currentTimeMillis();
     }
 
     /**
@@ -467,18 +549,14 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
                 long offset = now - ctx.clock().now();
                 if (ctx.clock().getUpdatedSuccessfully()) {
                     // 2nd time better than the first
-                    if (gotDate > 0)
-                        ctx.clock().setNow(now, DEFAULT_STRATUM - 4);
-                    else
-                        ctx.clock().setNow(now, DEFAULT_STRATUM - 3);
-                    log("DNSOverHTTPS adjusting clock by " +
-                        DataHelper.formatDuration(Math.abs(offset)));
+                    if (gotDate > 0) ctx.clock().setNow(now, DEFAULT_STRATUM - 4);
+                    else ctx.clock().setNow(now, DEFAULT_STRATUM - 3);
+                    log("DNSOverHTTPS adjusting clock by " + DataHelper.formatDuration(Math.abs(offset)));
                 } else {
                     // No peers or NTP yet, this is probably better than the peer average will be for a while
                     // default stratum - 1, so the peer average is a worse stratum
                     ctx.clock().setNow(now, DEFAULT_STRATUM - 3);
-                    log("DNSOverHTTPS setting initial clock skew to " +
-                        DataHelper.formatDuration(Math.abs(offset)));
+                    log("DNSOverHTTPS setting initial clock skew to " + DataHelper.formatDuration(Math.abs(offset)));
                 }
                 gotDate++;
             }
@@ -512,28 +590,27 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             String line = null;
             while ((line = in.readLine()) != null) {
                 line = line.trim();
-                if (!line.startsWith("https://"))
-                    continue;
+                if (!line.startsWith("https://")) continue;
                 try {
                     URI uri = new URI(line);
                     String host = uri.getHost();
-                    if (host == null)
-                        continue;
-                    if (!Addresses.isIPv6Address(host))
-                        v4urls.add(line);
-                    if (!Addresses.isIPv4Address(host))
-                        v6urls.add(line);
+                    if (host == null) continue;
+                    if (!Addresses.isIPv6Address(host)) v4urls.add(line);
+                    if (!Addresses.isIPv4Address(host)) v6urls.add(line);
                     count++;
                 } catch (Exception e) {
                     if (DEBUG) e.printStackTrace();
                 }
             }
-            if (DEBUG)
-                System.out.println("Loaded " + count + " DoH server entries from resource");
+            if (DEBUG) System.out.println("Loaded " + count + " DoH server entries from resource");
         } catch (Exception e) {
             if (DEBUG) e.printStackTrace();
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null)
+                try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 
@@ -558,10 +635,8 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
                         break;
 
                     case 'd':
-                        if (decode || process || testall)
-                            error = true;
-                        else
-                            decode = true;
+                        if (decode || process || testall) error = true;
+                        else decode = true;
                         break;
 
                     case 'f':
@@ -569,10 +644,8 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
                         break;
 
                     case 'p':
-                        if (decode || process || testall)
-                            error = true;
-                        else
-                            process = true;
+                        if (decode || process || testall) error = true;
+                        else process = true;
                         break;
 
                     case 's':
@@ -580,17 +653,13 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
                         break;
 
                     case 't':
-                        if (url != null)
-                            error = true;
-                        else
-                            testall = true;
+                        if (url != null) error = true;
+                        else testall = true;
                         break;
 
                     case 'u':
-                        if (testall || url != null)
-                            error = true;
-                        else
-                            url = g.getOptarg();
+                        if (testall || url != null) error = true;
+                        else url = g.getOptarg();
                         break;
 
                     case '?':
@@ -598,7 +667,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
                     default:
                         error = true;
                         break;
-                }  // switch
+                } // switch
             } // while
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -645,23 +714,18 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             }
         } else {
             String result = (new DNSOverHTTPS(I2PAppContext.getGlobalContext())).lookup(hostname, type, url);
-            if (result != null)
-                System.out.println(type + " lookup for " + hostname + " is " + result);
-            else
-                System.err.println(type + " lookup failed for " + hostname);
+            if (result != null) System.out.println(type + " lookup for " + hostname + " is " + result);
+            else System.err.println(type + " lookup failed for " + hostname);
         }
     }
 
     private static void usage() {
-        System.err.println("DNSOverHTTPS [-fstu46] hostname\n" +
-                           "             [-f] (IPv4 preferred)\n" +
-                           "             [-s] (IPv6 preferred)\n" +
-                           "             [-t] (test all servers)\n" +
-                           "             [-u 'https://host/dns-query?...&'] (request from this URL only)\n" +
-                           "             [-4] (IPv4 only) (default)\n" +
-                           "             [-6] (IPv6 only)\n" +
-                           "DNSOverHTTPS -d sdns://... (decode server stamp)\n" +
-                           "DNSOverHTTPS -p doh-resolvers.md (decode all server stamps in file)");
+        System.err.println("DNSOverHTTPS [-fstu46] hostname\n" + "             [-f] (IPv4 preferred)\n"
+                + "             [-s] (IPv6 preferred)\n" + "             [-t] (test all servers)\n"
+                + "             [-u 'https://host/dns-query?...&'] (request from this URL only)\n"
+                + "             [-4] (IPv4 only) (default)\n" + "             [-6] (IPv6 only)\n"
+                + "DNSOverHTTPS -d sdns://... (decode server stamp)\n"
+                + "DNSOverHTTPS -p doh-resolvers.md (decode all server stamps in file)");
     }
 
     /**
@@ -694,7 +758,8 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             if (len > 0) {
                 try {
                     addr = new String(d, 10, len, "ISO-8859-1");
-                } catch (IOException ioe) {}
+                } catch (IOException ioe) {
+                }
             }
             String host = "";
             String path = "/";
@@ -711,46 +776,38 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
                 if (len > 0) {
                     try {
                         host = new String(d, off, len, "ISO-8859-1");
-                    } catch (IOException ioe) {}
+                    } catch (IOException ioe) {
+                    }
                     off += len;
                 }
                 len = d[off++] & 0xff;
                 if (len > 0) {
                     try {
                         path = new String(d, off, len, "ISO-8859-1");
-                    } catch (IOException ioe) {}
+                    } catch (IOException ioe) {
+                    }
                     off += len;
                 }
             }
             String url = (type == 2 && host.length() > 0) ? "https://" + host + path : null;
             if (log) {
-                if (url != null)
-                    System.out.print(url + ' ');
-                if (type == 1)
-                    System.out.print("DNSCrypt");
-                else if (type == 2)
-                    System.out.print("DoH");
-                else if (type == 3)
-                    System.out.print("DNSoverTLS");
-                else if (type == 4)
-                    System.out.print("DNSoverQUIC");
-                else if (type == 5)
-                    System.out.print("oDoH");
-                else if (type == 0x81)
-                    System.out.print("DNSCrypt-relay");
-                else if (type == 0x85)
-                    System.out.print("oDoH-relay");
-                else
-                    System.out.print("unknown-" + type);
-                System.out.println(" logs? " + ((props & 0x01) == 0) +
-                                   " filters? " + ((props & 0x02) == 0) +
-                                   " IP: " + addr);
+                if (url != null) System.out.print(url + ' ');
+                if (type == 1) System.out.print("DNSCrypt");
+                else if (type == 2) System.out.print("DoH");
+                else if (type == 3) System.out.print("DNSoverTLS");
+                else if (type == 4) System.out.print("DNSoverQUIC");
+                else if (type == 5) System.out.print("oDoH");
+                else if (type == 0x81) System.out.print("DNSCrypt-relay");
+                else if (type == 0x85) System.out.print("oDoH-relay");
+                else System.out.print("unknown-" + type);
+                System.out.println(
+                        " logs? " + ((props & 0x01) == 0) + " filters? " + ((props & 0x02) == 0) + " IP: " + addr);
             }
             return url;
         } catch (IndexOutOfBoundsException ioobe) {
             if (log) {
                 System.out.println("Failed: " + ioobe);
-                //ioobe.printStackTrace();
+                // ioobe.printStackTrace();
                 System.out.println(HexDump.dump(d));
             }
             return null;
@@ -771,12 +828,15 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             String line = null;
             while ((line = in.readLine()) != null) {
                 line = line.trim();
-                if (!line.startsWith("sdns://"))
-                    continue;
+                if (!line.startsWith("sdns://")) continue;
                 decodeStamp(line, true);
             }
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null)
+                try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 }

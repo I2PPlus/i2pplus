@@ -117,7 +117,8 @@ public class I2PSocketException extends SocketException {
                 return "Meta lease set";
 
             case MessageStatusMessage.STATUS_SEND_FAILURE_LOOPBACK:
-                return "local loopback denied, set i2cp.disableLoopback=true to test sending to yourself through tunnels";
+                return "local loopback denied, set i2cp.disableLoopback=true to test sending to yourself through"
+                        + " tunnels";
 
             case SendMessageStatusListener.STATUS_CANCELLED:
                 return _x("Local destination shutdown");
@@ -140,8 +141,7 @@ public class I2PSocketException extends SocketException {
     @Override
     public String getLocalizedMessage() {
         String s = getMessage();
-        if (s == null)
-            return null;
+        if (s == null) return null;
         return _t(s);
     }
 

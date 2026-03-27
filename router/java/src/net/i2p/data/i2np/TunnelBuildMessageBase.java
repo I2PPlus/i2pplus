@@ -21,7 +21,9 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
     protected int RECORD_COUNT;
     public static final int MAX_RECORD_COUNT = 8;
 
-    public TunnelBuildMessageBase(I2PAppContext context) {this(context, MAX_RECORD_COUNT);}
+    public TunnelBuildMessageBase(I2PAppContext context) {
+        this(context, MAX_RECORD_COUNT);
+    }
 
     /** @since 0.7.12 */
     protected TunnelBuildMessageBase(I2PAppContext context, int records) {
@@ -36,24 +38,34 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
     /**
      *  @param record may be null
      */
-    public void setRecord(int index, EncryptedBuildRecord record) {_records[index] = record;}
+    public void setRecord(int index, EncryptedBuildRecord record) {
+        _records[index] = record;
+    }
 
     /**
      *  @return may be null
      */
-    public EncryptedBuildRecord getRecord(int index) {return _records[index];}
+    public EncryptedBuildRecord getRecord(int index) {
+        return _records[index];
+    }
 
     /** @since 0.7.12 */
-    public int getRecordCount() {return RECORD_COUNT;}
+    public int getRecordCount() {
+        return RECORD_COUNT;
+    }
 
-    public static final int RECORD_SIZE = 512+16;
+    public static final int RECORD_SIZE = 512 + 16;
 
     @Override
-    protected int calculateWrittenLength() {return RECORD_SIZE * RECORD_COUNT;}
+    protected int calculateWrittenLength() {
+        return RECORD_SIZE * RECORD_COUNT;
+    }
 
     @Override
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
-        if (type != getType()) {throw new I2NPMessageException("Message type is incorrect for this message");}
+        if (type != getType()) {
+            throw new I2NPMessageException("Message type is incorrect for this message");
+        }
         if (dataSize != calculateWrittenLength()) {
             throw new I2NPMessageException("Wrong length (expects " + calculateWrittenLength() + ", recv " + dataSize + ")");
         }

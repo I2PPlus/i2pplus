@@ -1,9 +1,10 @@
 package net.i2p.i2ptunnel.access;
 
+import net.i2p.data.DataHelper;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import net.i2p.data.DataHelper;
 import java.util.Locale;
 
 /**
@@ -13,7 +14,12 @@ import java.util.Locale;
  */
 class DefinitionParser {
 
-    private static enum Rule { DEFAULT, EXPLICIT, FILE, RECORDER }
+    private static enum Rule {
+        DEFAULT,
+        EXPLICIT,
+        FILE,
+        RECORDER
+    }
 
     /**
      * <p>
@@ -131,12 +137,12 @@ class DefinitionParser {
      * @return a FilterDefinition POJO representation for internal use
      * @throws InvalidDefinitionException if the definition is malformed
      */
-    static FilterDefinition parse(String []definition) throws InvalidDefinitionException {
+    static FilterDefinition parse(String[] definition) throws InvalidDefinitionException {
 
         DefinitionBuilder builder = new DefinitionBuilder();
 
         for (String line : definition) {
-            String [] split = DataHelper.split(line,"[ \t]");
+            String[] split = DataHelper.split(line, "[ \t]");
             split[0] = split[0].toLowerCase(Locale.ROOT);
 
             Threshold threshold = parseThreshold(split[0]);
@@ -144,18 +150,14 @@ class DefinitionParser {
 
             File file;
             switch (rule) {
-                case DEFAULT:
-                    builder.setDefaultThreshold(threshold);
+                case DEFAULT: builder.setDefaultThreshold(threshold);
                     break;
-                case EXPLICIT:
-                    builder.addElement(new ExplicitFilterDefinitionElement(split[2], threshold));
+                case EXPLICIT: builder.addElement(new ExplicitFilterDefinitionElement(split[2], threshold));
                     break;
-                case FILE:
-                    file = parseFileName(line, split);
+                case FILE: file = parseFileName(line, split);
                     builder.addElement(new FileFilterDefinitionElement(file, threshold));
                     break;
-                case RECORDER:
-                    file = parseFileName(line, split);
+                case RECORDER: file = parseFileName(line, split);
                     builder.addRecorder(new Recorder(file, threshold));
             }
         }
@@ -164,22 +166,17 @@ class DefinitionParser {
     }
 
     private static Threshold parseThreshold(String s) throws InvalidDefinitionException {
-        if ("allow".equals(s))
-            return Threshold.ALLOW;
-        if ("deny".equals(s))
-            return Threshold.DENY;
+        if ("allow".equals(s)) return Threshold.ALLOW;
+        if ("deny".equals(s)) return Threshold.DENY;
 
-        String [] split = DataHelper.split(s,"/");
-        if (split.length != 2)
-            throw new InvalidDefinitionException("Invalid threshold " + s);
+        String[] split = DataHelper.split(s, "/");
+        if (split.length != 2) throw new InvalidDefinitionException("Invalid threshold " + s);
 
         try {
             int connections = Integer.parseInt(split[0]);
             int seconds = Integer.parseInt(split[1]);
-            if (connections < 0)
-                throw new InvalidDefinitionException("Number of connections cannot be negative " + s);
-            if (seconds < 1)
-                throw new InvalidDefinitionException("Number of seconds must be at least 1 " + s);
+            if (connections < 0) throw new InvalidDefinitionException("Number of connections cannot be negative " + s);
+            if (seconds < 1) throw new InvalidDefinitionException("Number of seconds must be at least 1 " + s);
             return new Threshold(connections, seconds);
         } catch (NumberFormatException bad) {
             throw new InvalidDefinitionException("Invalid threshold", bad);
@@ -187,27 +184,20 @@ class DefinitionParser {
     }
 
     private static Rule parseRule(String s) throws InvalidDefinitionException {
-        if ("default".equals(s))
-            return Rule.DEFAULT;
-        if ("explicit".equals(s))
-            return Rule.EXPLICIT;
-        if ("file".equals(s))
-            return Rule.FILE;
-        if ("record".equals(s))
-            return Rule.RECORDER;
+        if ("default".equals(s)) return Rule.DEFAULT;
+        if ("explicit".equals(s)) return Rule.EXPLICIT;
+        if ("file".equals(s)) return Rule.FILE;
+        if ("record".equals(s)) return Rule.RECORDER;
 
-        throw new InvalidDefinitionException("Unknown rule "+s);
+        throw new InvalidDefinitionException("Unknown rule " + s);
     }
 
     private static File parseFileName(String s, String[] split) throws InvalidDefinitionException {
-        if (split.length < 3)
-            throw new InvalidDefinitionException("invalid definition "+s);
+        if (split.length < 3) throw new InvalidDefinitionException("invalid definition " + s);
         int beginIndex = s.indexOf(split[1]);
-        if (beginIndex < 0)
-            throw new IllegalStateException("shouldn't have gotten here "+s);
+        if (beginIndex < 0) throw new IllegalStateException("shouldn't have gotten here " + s);
         return new File(s.substring(beginIndex + split[1].length()).trim());
     }
-
 
     private static class DefinitionBuilder {
         private Threshold threshold;
@@ -215,8 +205,7 @@ class DefinitionParser {
         private List<Recorder> recorders = new ArrayList<Recorder>();
 
         void setDefaultThreshold(Threshold threshold) throws InvalidDefinitionException {
-            if (this.threshold != null)
-                throw new InvalidDefinitionException("default already set!");
+            if (this.threshold != null) throw new InvalidDefinitionException("default already set!");
             this.threshold = threshold;
         }
 
@@ -229,13 +218,12 @@ class DefinitionParser {
         }
 
         FilterDefinition build() {
-            if (threshold == null)
-                threshold = Threshold.ALLOW;
+            if (threshold == null) threshold = Threshold.ALLOW;
 
-            FilterDefinitionElement [] elArray = new FilterDefinitionElement[elements.size()];
+            FilterDefinitionElement[] elArray = new FilterDefinitionElement[elements.size()];
             elArray = elements.toArray(elArray);
 
-            Recorder [] rArray = new Recorder[recorders.size()];
+            Recorder[] rArray = new Recorder[recorders.size()];
             rArray = recorders.toArray(rArray);
 
             return new FilterDefinition(threshold, elArray, rArray);

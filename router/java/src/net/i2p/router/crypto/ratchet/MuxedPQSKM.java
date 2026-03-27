@@ -33,9 +33,13 @@ public class MuxedPQSKM extends SessionKeyManager {
         _pq = pq;
     }
 
-    public RatchetSKM getECSKM() { return _ec; }
+    public RatchetSKM getECSKM() {
+        return _ec;
+    }
 
-    public RatchetSKM getPQSKM() { return _pq; }
+    public RatchetSKM getPQSKM() {
+        return _pq;
+    }
 
     /**
      *  Should we try the Ratchet slow decrypt before PQ slow decrypt?
@@ -45,9 +49,7 @@ public class MuxedPQSKM extends SessionKeyManager {
     boolean preferRatchet() {
         int ec = _ecCounter.get();
         int pq = _pqCounter.get();
-        if (ec > RESTART_COUNTERS / 10 &&
-            pq > RESTART_COUNTERS / 10 &&
-            ec + pq > RESTART_COUNTERS) {
+        if (ec > RESTART_COUNTERS / 10 && pq > RESTART_COUNTERS / 10 && ec + pq > RESTART_COUNTERS) {
             _ecCounter.set(0);
             _pqCounter.set(0);
             return true;
@@ -63,10 +65,8 @@ public class MuxedPQSKM extends SessionKeyManager {
      */
     void reportDecryptResult(boolean isRatchet, boolean success) {
         if (success) {
-            if (isRatchet)
-                _ecCounter.incrementAndGet();
-            else
-                _pqCounter.incrementAndGet();
+            if (isRatchet) _ecCounter.incrementAndGet();
+            else _pqCounter.incrementAndGet();
         }
 
         // Structured logging for PQ vs EC success/failure ratios
@@ -79,8 +79,10 @@ public class MuxedPQSKM extends SessionKeyManager {
             if (_log.shouldInfo()) {
                 double ecRatio = total > 0 ? (double) ec / total * 100.0 : 0.0;
                 double pqRatio = total > 0 ? (double) pq / total * 100.0 : 0.0;
-                String status = String.format("PQ vs EC decrypt ratios after %d attempts - EC: %d (%.1f%%) PQ: %d (%.1f%%) - Prefer ratchet: %s",
-                                              total, ec, ecRatio, pq, pqRatio, preferRatchet());
+                String status = String.format(
+                        "PQ vs EC decrypt ratios after %d attempts - EC: %d (%.1f%%) PQ: %d (%.1f%%) - Prefer ratchet:"
+                                + " %s",
+                        total, ec, ecRatio, pq, pqRatio, preferRatchet());
 
                 // Add warnings for concerning patterns
                 if (pq == 0 && total >= 50) {
@@ -118,8 +120,7 @@ public class MuxedPQSKM extends SessionKeyManager {
      *  ElG only
      */
     @Override
-    public void createSession(PublicKey target, SessionKey key) {
-    }
+    public void createSession(PublicKey target, SessionKey key) {}
 
     /**
      *  ElG only
@@ -142,17 +143,19 @@ public class MuxedPQSKM extends SessionKeyManager {
      */
     public RatchetEntry consumeNextAvailableTag(PublicKey target) {
         EncType type = target.getType();
-        if (type == EncType.ECIES_X25519)
-            return _ec.consumeNextAvailableTag(target);
-        else
-            return _pq.consumeNextAvailableTag(target);
+        if (type == EncType.ECIES_X25519) return _ec.consumeNextAvailableTag(target);
+        else return _pq.consumeNextAvailableTag(target);
     }
 
     @Override
-    public int getTagsToSend() { return 0; };
+    public int getTagsToSend() {
+        return 0;
+    }
 
     @Override
-    public int getLowThreshold() { return 0; };
+    public int getLowThreshold() {
+        return 0;
+    }
 
     /**
      *  ElG only
@@ -173,19 +176,15 @@ public class MuxedPQSKM extends SessionKeyManager {
     @Override
     public int getAvailableTags(PublicKey target, SessionKey key) {
         EncType type = target.getType();
-        if (type == EncType.ECIES_X25519)
-            return _ec.getAvailableTags(target, key);
-        else
-            return _pq.getAvailableTags(target, key);
+        if (type == EncType.ECIES_X25519) return _ec.getAvailableTags(target, key);
+        else return _pq.getAvailableTags(target, key);
     }
 
     @Override
     public long getAvailableTimeLeft(PublicKey target, SessionKey key) {
         EncType type = target.getType();
-        if (type == EncType.ECIES_X25519)
-            return _ec.getAvailableTimeLeft(target, key);
-        else
-            return _pq.getAvailableTimeLeft(target, key);
+        if (type == EncType.ECIES_X25519) return _ec.getAvailableTimeLeft(target, key);
+        else return _pq.getAvailableTimeLeft(target, key);
     }
 
     /**
@@ -200,15 +199,13 @@ public class MuxedPQSKM extends SessionKeyManager {
      *  ElG only
      */
     @Override
-    public void tagsReceived(SessionKey key, Set<SessionTag> sessionTags) {
-    }
+    public void tagsReceived(SessionKey key, Set<SessionTag> sessionTags) {}
 
     /**
      *  ElG only
      */
     @Override
-    public void tagsReceived(SessionKey key, Set<SessionTag> sessionTags, long expire) {
-    }
+    public void tagsReceived(SessionKey key, Set<SessionTag> sessionTags, long expire) {}
 
     /**
      * EC only.
@@ -247,13 +244,11 @@ public class MuxedPQSKM extends SessionKeyManager {
      *  ElG only
      */
     @Override
-    public void failTags(PublicKey target, SessionKey key, TagSetHandle ts) {
-    }
+    public void failTags(PublicKey target, SessionKey key, TagSetHandle ts) {}
 
     /**
      *  ElG only
      */
     @Override
-    public void tagsAcked(PublicKey target, SessionKey key, TagSetHandle ts) {
-    }
+    public void tagsAcked(PublicKey target, SessionKey key, TagSetHandle ts) {}
 }

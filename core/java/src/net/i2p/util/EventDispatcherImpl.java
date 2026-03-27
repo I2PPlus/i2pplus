@@ -28,7 +28,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * If there is anything in here that doesn't make sense, turn off
  * your computer and go fly a kite - (c) 2004 by jrandom
-
+ *
  * @author human
  * @author jrandom
  */
@@ -99,11 +99,11 @@ public class EventDispatcherImpl implements EventDispatcher {
         do {
             synchronized (_events) {
                 Object val = _events.get(name);
-                if (val != null)
-                    return val;
+                if (val != null) return val;
                 try {
                     _events.wait(5 * 1000);
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {
+                }
             }
         } while (true);
     }

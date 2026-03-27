@@ -17,11 +17,13 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveSpec;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
+
 import org.junit.Test;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Based on the tests in checkparams.py from the Python Ed25519 implementation.
@@ -83,6 +85,6 @@ public class ConstantsTest {
     public void testB() {
         GroupElement B = ed25519.getB();
         assertThat(B.isOnCurve(curve), is(true));
-        //assertThat(B.scalarMultiply(new BigIntegerLittleEndianEncoding().encode(ed25519.getL(), curve.getField().getb()/8)), is(equalTo(P3_ZERO)));
+        // assertThat(B.scalarMultiply(new BigIntegerLittleEndianEncoding().encode(ed25519.getL(), curve.getField().getb()/8)), is(equalTo(P3_ZERO)));
     }
 }

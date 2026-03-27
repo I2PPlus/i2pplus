@@ -21,13 +21,18 @@ class DestReplyMessageHandler extends HandlerImpl {
 
     @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
-        if (_log.shouldDebug()) {_log.debug("Handling " + message);}
+        if (_log.shouldDebug()) {
+            _log.debug("Handling " + message);
+        }
         DestReplyMessage msg = (DestReplyMessage) message;
         Destination d = msg.getDestination();
-        if (d != null) {session.destReceived(d);}
-        else {
+        if (d != null) {
+            session.destReceived(d);
+        } else {
             Hash h = msg.getHash();
-            if (h != null) {session.destLookupFailed(h);}
+            if (h != null) {
+                session.destLookupFailed(h);
+            }
         }
         // else let it time out
     }

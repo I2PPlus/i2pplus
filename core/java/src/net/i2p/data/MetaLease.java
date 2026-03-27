@@ -101,8 +101,7 @@ public class MetaLease extends Lease {
 
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
-        if (_gateway == null)
-            throw new DataFormatException("Not enough data to write out a Lease");
+        if (_gateway == null) throw new DataFormatException("Not enough data to write out a Lease");
         _gateway.writeBytes(out);
         // flags
         DataHelper.writeLong(out, 2, 0);
@@ -116,16 +115,12 @@ public class MetaLease extends Lease {
         if (object == this) return true;
         if ((object == null) || !(object instanceof MetaLease)) return false;
         MetaLease lse = (MetaLease) object;
-        return _end == lse.getEndTime()
-               && _type == lse._type
-               && _cost == lse._cost
-               && DataHelper.eq(_gateway, lse.getGateway());
+        return _end == lse.getEndTime() && _type == lse._type && _cost == lse._cost && DataHelper.eq(_gateway, lse.getGateway());
     }
 
     @Override
     public int hashCode() {
-        return (int) _end ^ DataHelper.hashCode(_gateway)
-               ^ _cost;
+        return (int) _end ^ DataHelper.hashCode(_gateway) ^ _cost;
     }
 
     @Override

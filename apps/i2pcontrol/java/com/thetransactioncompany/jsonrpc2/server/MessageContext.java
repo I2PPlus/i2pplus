@@ -1,10 +1,10 @@
 package com.thetransactioncompany.jsonrpc2.server;
 
-
 import java.net.InetAddress;
 import java.net.URLConnection;
 import java.security.Principal;
 import java.security.cert.X509Certificate;
+
 import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,18 +24,15 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class MessageContext {
 
-
     /**
      * The client hostname, {@code null} if none was specified.
      */
     private String clientHostName = null;
 
-
     /**
      * The client IP address, {@code null} if none was specified.
      */
     private String clientInetAddress = null;
-
 
     /**
      * Indicates whether the request was received over a secure channel
@@ -43,13 +40,11 @@ public class MessageContext {
      */
     private boolean secure = false;
 
-
     /**
      * The authenticated client principals, {@code null} if none were
      * specified.
      */
     private Principal[] principals = null;
-
 
     /**
      * Minimal implementation of the {@link java.security.Principal}
@@ -62,7 +57,6 @@ public class MessageContext {
          */
         private String name;
 
-
         /**
          * Creates a new principal.
          *
@@ -74,12 +68,10 @@ public class MessageContext {
          */
         public BasicPrincipal(final String name) {
 
-            if (name == null || name.trim().isEmpty())
-                throw new IllegalArgumentException("The principal name must be defined");
+            if (name == null || name.trim().isEmpty()) throw new IllegalArgumentException("The principal name must be defined");
 
             this.name = name;
         }
-
 
         /**
          * Checks for equality.
@@ -88,11 +80,8 @@ public class MessageContext {
          */
         public boolean equals(final Object another) {
 
-            return another != null &&
-                   another instanceof Principal &&
-                   ((Principal)another).getName().equals(this.getName());
+            return another != null && another instanceof Principal && ((Principal) another).getName().equals(this.getName());
         }
-
 
         /**
          * Returns a hash code for this principal.
@@ -104,7 +93,6 @@ public class MessageContext {
             return getName().hashCode();
         }
 
-
         /**
          * Returns the principal name.
          *
@@ -115,7 +103,6 @@ public class MessageContext {
             return name;
         }
     }
-
 
     /**
      * Creates a new JSON-RPC 2.0 request / notification context.
@@ -129,10 +116,7 @@ public class MessageContext {
      *                          name, {@code null} if unknown. The name must
      *                          not be an empty or blank string.
      */
-    public MessageContext(final String clientHostName,
-                          final String clientInetAddress,
-                  final boolean secure,
-                  final String principalName) {
+    public MessageContext(final String clientHostName, final String clientInetAddress, final boolean secure, final String principalName) {
 
         this.clientHostName = clientHostName;
         this.clientInetAddress = clientInetAddress;
@@ -143,7 +127,6 @@ public class MessageContext {
             principals[0] = new BasicPrincipal(principalName);
         }
     }
-
 
     /**
      * Creates a new JSON-RPC 2.0 request / notification context.
@@ -157,10 +140,7 @@ public class MessageContext {
      *                          names, {@code null} if unknown. The names
      *                          must not be an empty or blank string.
      */
-    public MessageContext(final String clientHostName,
-                          final String clientInetAddress,
-                  final boolean secure,
-                  final String[] principalNames) {
+    public MessageContext(final String clientHostName, final String clientInetAddress, final boolean secure, final String[] principalNames) {
 
         this.clientHostName = clientHostName;
         this.clientInetAddress = clientInetAddress;
@@ -169,11 +149,9 @@ public class MessageContext {
         if (principalNames != null) {
             principals = new Principal[principalNames.length];
 
-            for (int i=0; i < principals.length; i++)
-                principals[0] = new BasicPrincipal(principalNames[i]);
+            for (int i = 0; i < principals.length; i++) principals[0] = new BasicPrincipal(principalNames[i]);
         }
     }
-
 
     /**
      * Creates a new JSON-RPC 2.0 request / notification context. No
@@ -185,15 +163,12 @@ public class MessageContext {
      *                          unknown.
      * @param secure            Specifies a request received over HTTPS.
      */
-    public MessageContext(final String clientHostName,
-                          final String clientInetAddress,
-                  final boolean secure) {
+    public MessageContext(final String clientHostName, final String clientInetAddress, final boolean secure) {
 
         this.clientHostName = clientHostName;
         this.clientInetAddress = clientInetAddress;
         this.secure = secure;
     }
-
 
     /**
      * Creates a new JSON-RPC 2.0 request / notification context. Indicates
@@ -205,14 +180,12 @@ public class MessageContext {
      * @param clientInetAddress The client IP address, {@code null} if
      *                          unknown.
      */
-    public MessageContext(final String clientHostName,
-                          final String clientInetAddress) {
+    public MessageContext(final String clientHostName, final String clientInetAddress) {
 
         this.clientHostName = clientHostName;
         this.clientInetAddress = clientInetAddress;
         this.secure = false;
     }
-
 
     /**
      * Creates a new JSON-RPC 2.0 request / notification context. Indicates
@@ -223,7 +196,6 @@ public class MessageContext {
 
         this.secure = false;
     }
-
 
     /**
      * Creates a new JSON-RPC 2.0 request / notification context from the
@@ -237,22 +209,19 @@ public class MessageContext {
 
         clientHostName = httpRequest.getRemoteHost();
 
-        if (clientHostName != null && clientHostName.equals(clientInetAddress))
-            clientHostName = null; // not resolved actually
+        if (clientHostName != null && clientHostName.equals(clientInetAddress)) clientHostName = null; // not resolved actually
 
         secure = httpRequest.isSecure();
 
-        X509Certificate[] certs = (X509Certificate[])httpRequest.getAttribute("javax.servlet.request.X509Certificate");
+        X509Certificate[] certs = (X509Certificate[]) httpRequest.getAttribute("javax.servlet.request.X509Certificate");
 
         if (certs != null && certs.length > 0) {
 
             principals = new Principal[certs.length];
 
-            for (int i=0; i < principals.length; i++)
-                principals[i] = certs[i].getSubjectX500Principal();
+            for (int i = 0; i < principals.length; i++) principals[i] = certs[i].getSubjectX500Principal();
         }
     }
-
 
     /**
      * Creates a new JSON-RPC 2.0 request / notification context from the
@@ -282,15 +251,13 @@ public class MessageContext {
             }
         }
 
-        if (ip != null)
-            clientInetAddress = ip.getHostAddress();
-
+        if (ip != null) clientInetAddress = ip.getHostAddress();
 
         if (connection instanceof HttpsURLConnection) {
 
             secure = true;
 
-            HttpsURLConnection httpsConnection = (HttpsURLConnection)connection;
+            HttpsURLConnection httpsConnection = (HttpsURLConnection) connection;
 
             Principal prn = null;
 
@@ -311,7 +278,6 @@ public class MessageContext {
         }
     }
 
-
     /**
      * Gets the host name of the client that sent the request /
      * notification.
@@ -323,7 +289,6 @@ public class MessageContext {
         return clientHostName;
     }
 
-
     /**
      * Gets the IP address of the client that sent the request /
      * notification.
@@ -334,7 +299,6 @@ public class MessageContext {
 
         return clientInetAddress;
     }
-
 
     /**
      * Indicates whether the request / notification was received over a
@@ -348,7 +312,6 @@ public class MessageContext {
         return secure;
     }
 
-
     /**
      * Returns the first authenticated client principal, {@code null} if
      * none.
@@ -357,12 +320,9 @@ public class MessageContext {
      */
     public Principal getPrincipal() {
 
-        if (principals != null)
-            return principals[0];
-        else
-            return null;
+        if (principals != null) return principals[0];
+        else return null;
     }
-
 
     /**
      * Returns the authenticated client principals, {@code null} if
@@ -375,7 +335,6 @@ public class MessageContext {
         return principals;
     }
 
-
     /**
      * Returns the first authenticated client principal name, {@code null}
      * if none.
@@ -384,12 +343,9 @@ public class MessageContext {
      */
     public String getPrincipalName() {
 
-        if (principals != null)
-            return principals[0].getName();
-        else
-            return null;
+        if (principals != null) return principals[0].getName();
+        else return null;
     }
-
 
     /**
      * Returns the authenticated client principal names, {@code null}
@@ -401,12 +357,10 @@ public class MessageContext {
 
         String[] names = new String[principals.length];
 
-        for (int i=0; i < names.length; i++)
-            names[i] = principals[i].getName();
+        for (int i = 0; i < names.length; i++) names[i] = principals[i].getName();
 
         return names;
     }
-
 
     @Override
     public String toString() {
@@ -417,8 +371,7 @@ public class MessageContext {
 
             int i = 0;
 
-            for (Principal p: principals)
-                s += " principal[" + (i++) + "]=" + p;
+            for (Principal p : principals) s += " principal[" + (i++) + "]=" + p;
         }
 
         return s + "]";

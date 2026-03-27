@@ -1,4 +1,5 @@
 package net.i2p.router.startup;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,14 +9,6 @@ package net.i2p.router.startup;
  *
  */
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.security.GeneralSecurityException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyPair;
 import net.i2p.crypto.SigType;
@@ -39,6 +32,15 @@ import net.i2p.router.util.EventLog;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.security.GeneralSecurityException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
 /**
  *  Warning - misnamed. This creates a new RouterIdentity, i.e.
  *  new router keys and hash. It then builds a new RouterInfo
@@ -53,8 +55,10 @@ public class CreateRouterInfoJob extends JobImpl {
     public static final String KEYS_FILENAME = "router.keys";
     public static final String KEYS2_FILENAME = "router.keys.dat";
     static final String PROP_ROUTER_SIGTYPE = "router.sigType";
+
     /** @since 0.9.48 */
     static final String PROP_ROUTER_ENCTYPE = "router.encType";
+
     private static final SigType DEFAULT_SIGTYPE = SigType.EdDSA_SHA512_Ed25519;
     private static final EncType DEFAULT_ENCTYPE = EncType.ECIES_X25519;
     private static final int PADDING_ENTROPY = 32;
@@ -66,7 +70,9 @@ public class CreateRouterInfoJob extends JobImpl {
     }
 
     @Override
-    public String getName() { return "Create New Local Router Info"; }
+    public String getName() {
+        return "Create New Local Router Info";
+    }
 
     @Override
     public void runJob() {
@@ -106,23 +112,22 @@ public class CreateRouterInfoJob extends JobImpl {
         try {
             info.setAddresses(ctx.commSystem().createAddresses());
             // not necessary, in constructor
-            //info.setPeers(new HashSet());
+            // info.setPeers(new HashSet());
             info.setPublished(getCurrentPublishDate(ctx));
             EncType etype = getEncTypeConfig(ctx);
             KeyPair keypair = ctx.keyGenerator().generatePKIKeys(etype);
             PublicKey pubkey = keypair.getPublic();
             PrivateKey privkey = keypair.getPrivate();
             SimpleDataStructure signingKeypair[] = ctx.keyGenerator().generateSigningKeys(type);
-            SigningPublicKey signingPubKey = (SigningPublicKey)signingKeypair[0];
-            SigningPrivateKey signingPrivKey = (SigningPrivateKey)signingKeypair[1];
+            SigningPublicKey signingPubKey = (SigningPublicKey) signingKeypair[0];
+            SigningPrivateKey signingPrivKey = (SigningPrivateKey) signingKeypair[1];
             RouterIdentity ident = new RouterIdentity();
             Certificate cert = createCertificate(ctx, signingPubKey, pubkey);
             ident.setCertificate(cert);
             ident.setPublicKey(pubkey);
             ident.setSigningPublicKey(signingPubKey);
             byte[] padding;
-            int padLen = (SigningPublicKey.KEYSIZE_BYTES - signingPubKey.length()) +
-                         (PublicKey.KEYSIZE_BYTES - pubkey.length());
+            int padLen = (SigningPublicKey.KEYSIZE_BYTES - signingPubKey.length()) + (PublicKey.KEYSIZE_BYTES - pubkey.length());
             if (padLen > 0) {
                 padding = new byte[padLen];
                 if (padLen <= PADDING_ENTROPY) {
@@ -143,8 +148,7 @@ public class CreateRouterInfoJob extends JobImpl {
 
             info.sign(signingPrivKey);
 
-            if (!info.isValid())
-                throw new DataFormatException("RouterInfo we just built is invalid: " + info);
+            if (!info.isValid()) throw new DataFormatException("RouterInfo we just built is invalid: " + info);
 
             // remove router.keys
             (new File(ctx.getRouterDir(), KEYS_FILENAME)).delete();
@@ -156,8 +160,7 @@ public class CreateRouterInfoJob extends JobImpl {
 
             // write router.keys.dat
             File kfile = new File(ctx.getRouterDir(), KEYS2_FILENAME);
-            PrivateKeyFile pkf = new PrivateKeyFile(kfile, pubkey, signingPubKey, cert,
-                                                    privkey, signingPrivKey, padding);
+            PrivateKeyFile pkf = new PrivateKeyFile(kfile, pubkey, signingPubKey, cert, privkey, signingPrivKey, padding);
             pkf.write();
 
             // set or overwrite old random keys
@@ -171,8 +174,7 @@ public class CreateRouterInfoJob extends JobImpl {
 
             ctx.keyManager().setKeys(pubkey, privkey, signingPubKey, signingPrivKey);
 
-            if (_log.shouldInfo())
-                _log.info("Router info created and stored at " + ifile.getAbsolutePath() + " with private keys stored at " + kfile.getAbsolutePath() + " [" + info + "]");
+            if (_log.shouldInfo()) _log.info("Router info created and stored at " + ifile.getAbsolutePath() + " with private keys stored at " + kfile.getAbsolutePath() + " [" + info + "]");
             ctx.router().eventLog().addEvent(EventLog.REKEYED, ident.calculateHash().toBase64());
         } catch (GeneralSecurityException gse) {
             _log.log(Log.CRIT, "Error building the new router information", gse);
@@ -181,7 +183,10 @@ public class CreateRouterInfoJob extends JobImpl {
         } catch (IOException ioe) {
             _log.log(Log.CRIT, "Error writing out the new router information", ioe);
         } finally {
-            if (fos1 != null) try { fos1.close(); } catch (IOException ioe) {}
+            if (fos1 != null) try {
+                    fos1.close();
+                } catch (IOException ioe) {
+                }
         }
         return info;
     }
@@ -195,12 +200,10 @@ public class CreateRouterInfoJob extends JobImpl {
         String sstype = ctx.getProperty(PROP_ROUTER_SIGTYPE);
         if (sstype != null) {
             SigType ntype = SigType.parseSigType(sstype);
-            if (ntype != null)
-                cstype = ntype;
+            if (ntype != null) cstype = ntype;
         }
         // fallback?
-        if (cstype != SigType.DSA_SHA1 && !cstype.isAvailable())
-            cstype = SigType.DSA_SHA1;
+        if (cstype != SigType.DSA_SHA1 && !cstype.isAvailable()) cstype = SigType.DSA_SHA1;
         return cstype;
     }
 
@@ -213,12 +216,10 @@ public class CreateRouterInfoJob extends JobImpl {
         String sstype = ctx.getProperty(PROP_ROUTER_ENCTYPE);
         if (sstype != null) {
             EncType ntype = EncType.parseEncType(sstype);
-            if (ntype != null)
-                cstype = ntype;
+            if (ntype != null) cstype = ntype;
         }
         // fallback?
-        if (cstype != EncType.ELGAMAL_2048 && !cstype.isAvailable())
-            cstype = EncType.ELGAMAL_2048;
+        if (cstype != EncType.ELGAMAL_2048 && !cstype.isAvailable()) cstype = EncType.ELGAMAL_2048;
         return cstype;
     }
 
@@ -228,7 +229,7 @@ public class CreateRouterInfoJob extends JobImpl {
      *
      */
     static long getCurrentPublishDate(RouterContext context) {
-        //_log.info("Setting published date to /now/");
+        // _log.info("Setting published date to /now/");
         return context.clock().now();
     }
 
@@ -243,10 +244,8 @@ public class CreateRouterInfoJob extends JobImpl {
      *  @since 0.9.16 moved from Router
      */
     private static Certificate createCertificate(RouterContext ctx, SigningPublicKey spk, PublicKey pk) {
-        if (spk.getType() != SigType.DSA_SHA1 || pk.getType() != EncType.ELGAMAL_2048)
-            return new KeyCertificate(spk, pk);
-        if (ctx.getBooleanProperty(Router.PROP_HIDDEN))
-            return new Certificate(Certificate.CERTIFICATE_TYPE_HIDDEN, null);
+        if (spk.getType() != SigType.DSA_SHA1 || pk.getType() != EncType.ELGAMAL_2048) return new KeyCertificate(spk, pk);
+        if (ctx.getBooleanProperty(Router.PROP_HIDDEN)) return new Certificate(Certificate.CERTIFICATE_TYPE_HIDDEN, null);
         return Certificate.NULL_CERT;
     }
 }

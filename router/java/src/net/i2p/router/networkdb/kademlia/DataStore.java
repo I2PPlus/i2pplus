@@ -1,4 +1,5 @@
 package net.i2p.router.networkdb.kademlia;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,11 +9,12 @@ package net.i2p.router.networkdb.kademlia;
  *
  */
 
+import net.i2p.data.DatabaseEntry;
+import net.i2p.data.Hash;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-import net.i2p.data.DatabaseEntry;
-import net.i2p.data.Hash;
 
 /**
  * Interface for database storage operations in the network database.
@@ -27,6 +29,7 @@ public interface DataStore {
      * @return true if the store is ready for operations
      */
     public boolean isInitialized();
+
     /**
      * Check if the given key exists in the data store.
      *
@@ -34,6 +37,7 @@ public interface DataStore {
      * @return true if the key is known and stored
      */
     public boolean isKnown(Hash key);
+
     /**
      * Retrieve the database entry for the given key.
      *
@@ -41,6 +45,7 @@ public interface DataStore {
      * @return the database entry, or null if not found
      */
     public DatabaseEntry get(Hash key);
+
     /**
      * Retrieve the database entry for the given key with optional persistence control.
      *
@@ -49,6 +54,7 @@ public interface DataStore {
      * @return the database entry, or null if not found
      */
     public DatabaseEntry get(Hash key, boolean persist);
+
     /**
      * Store a database entry with the given key.
      *
@@ -57,6 +63,7 @@ public interface DataStore {
      * @return true if the store was successful
      */
     public boolean put(Hash key, DatabaseEntry data);
+
     /**
      * Store a database entry with the given key and persistence control.
      *
@@ -84,6 +91,7 @@ public interface DataStore {
      * @return the removed database entry, or null if not found
      */
     public DatabaseEntry remove(Hash key);
+
     /**
      * Remove the entry for the given key with optional persistence control.
      *
@@ -92,24 +100,30 @@ public interface DataStore {
      * @return the removed database entry, or null if not found
      */
     public DatabaseEntry remove(Hash key, boolean persist);
+
     /**
      * Get all keys stored in the data store.
      *
      * @return set of all hash keys
      */
     public Set<Hash> getKeys();
+
     /** @since 0.8.3 */
     public Collection<DatabaseEntry> getEntries();
+
     /** @since 0.8.3 */
     public Set<Map.Entry<Hash, DatabaseEntry>> getMapEntries();
+
     /**
      * Stop the data store and release resources.
      */
     public void stop();
+
     /**
      * Rescan the storage for any changes.
      */
     public void rescan();
+
     /**
      * Count the number of LeaseSet entries in the store.
      *

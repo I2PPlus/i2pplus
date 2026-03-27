@@ -1,8 +1,11 @@
 package net.i2p.i2ptunnel;
 
+import net.i2p.I2PAppContext;
+import net.i2p.util.Log;
+
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,8 +19,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.i2p.I2PAppContext;
-import net.i2p.util.Log;
 
 /**
  * Manages HTTP blocklists for request filtering.
@@ -99,7 +100,9 @@ public class BlocklistManager {
             _blocklistLastModified = currentLastModified;
         }
 
-        if (_regexPattern == null) {return false;}
+        if (_regexPattern == null) {
+            return false;
+        }
 
         String lcCommand = command.toString().toLowerCase(Locale.US);
         Matcher matcher = _regexPattern.matcher(lcCommand);
@@ -117,7 +120,9 @@ public class BlocklistManager {
      * @return the matched blocklist string, or null if no match
      */
     public String getMatchedBlocklistString(StringBuilder command) {
-        if (_regexPattern == null) {return null;}
+        if (_regexPattern == null) {
+            return null;
+        }
         String lcCommand = command.toString().toLowerCase(Locale.US);
         Matcher matcher = _regexPattern.matcher(lcCommand);
         if (matcher.find()) {
@@ -140,18 +145,21 @@ public class BlocklistManager {
     private Pattern compileRegexPattern(File blocklistFile) {
         StringBuilder regexBuilder = new StringBuilder();
         try (FileInputStream fis = new FileInputStream(blocklistFile);
-             BufferedReader reader = new BufferedReader(
-                new InputStreamReader(new BufferedInputStream(fis), StandardCharsets.UTF_8))) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(fis), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
-                if (line.isEmpty() || line.startsWith("#")) {continue;}
+                if (line.isEmpty() || line.startsWith("#")) {
+                    continue;
+                }
 
                 StringBuilder regex = new StringBuilder();
                 regex.append("(?i)");
                 regex.append(Pattern.quote(line));
 
-                if (regexBuilder.length() > 0) {regexBuilder.append("|");}
+                if (regexBuilder.length() > 0) {
+                    regexBuilder.append("|");
+                }
                 regexBuilder.append(regex);
             }
         } catch (IOException e) {
@@ -161,7 +169,9 @@ public class BlocklistManager {
             return null;
         }
 
-        if (regexBuilder.length() == 0) {return null;}
+        if (regexBuilder.length() == 0) {
+            return null;
+        }
 
         try {
             return Pattern.compile(regexBuilder.toString());
@@ -208,8 +218,7 @@ public class BlocklistManager {
                 _clientBlockList.remove(0);
             }
             try (FileOutputStream rawFos = new FileOutputStream(blocklistClients, true);
-                 BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(new BufferedOutputStream(rawFos), StandardCharsets.UTF_8))) {
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new BufferedOutputStream(rawFos), StandardCharsets.UTF_8))) {
                 writer.write(destination);
                 writer.newLine();
             } catch (IOException e) {
@@ -230,8 +239,7 @@ public class BlocklistManager {
         if (currentLastModified != _blocklistClientsLastModified) {
             _clientBlockList.clear();
             try (FileInputStream fis = new FileInputStream(blocklistClients);
-                 BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(new BufferedInputStream(fis), StandardCharsets.UTF_8))) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(fis), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     line = line.trim();
@@ -262,7 +270,9 @@ public class BlocklistManager {
      */
     public synchronized boolean existsInClientBlocklist(String destination) throws IOException {
         File blocklistClients = new File(_configDir, HTTP_BLOCKLIST_CLIENTS);
-        if (!blocklistClients.exists()) {return false;}
+        if (!blocklistClients.exists()) {
+            return false;
+        }
 
         refreshClientBlocklist(blocklistClients);
         return _clientBlockList.contains(destination);

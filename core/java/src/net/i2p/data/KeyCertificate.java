@@ -1,10 +1,11 @@
 package net.i2p.data;
 
+import net.i2p.crypto.EncType;
+import net.i2p.crypto.SigType;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import net.i2p.crypto.EncType;
-import net.i2p.crypto.SigType;
 
 /**
  * Specialized certificate for defining cryptographic key types used in I2P identities.
@@ -73,27 +74,21 @@ public class KeyCertificate extends Certificate {
      *
      * @since 0.9.22 pkg private for Certificate.create()
      */
-    static final byte[] Ed25519_PAYLOAD = new byte[] {
-        0, (byte) SigType.EdDSA_SHA512_Ed25519.getCode(), 0, 0
-    };
+    static final byte[] Ed25519_PAYLOAD = new byte[] {0, (byte) SigType.EdDSA_SHA512_Ed25519.getCode(), 0, 0};
 
     /**
-      * ElG + P256
-      *
-      * @since 0.9.22 pkg private for Certificate.create()
-      */
-    static final byte[] ECDSA256_PAYLOAD = new byte[] {
-        0, (byte) SigType.ECDSA_SHA256_P256.getCode(), 0, 0
-    };
+     * ElG + P256
+     *
+     * @since 0.9.22 pkg private for Certificate.create()
+     */
+    static final byte[] ECDSA256_PAYLOAD = new byte[] {0, (byte) SigType.ECDSA_SHA256_P256.getCode(), 0, 0};
 
     /**
-      * X25519 + Ed25519
-      *
-      * @since 0.9.54
-      */
-    static final byte[] X25519_Ed25519_PAYLOAD = new byte[] {
-        0, (byte) SigType.EdDSA_SHA512_Ed25519.getCode(), 0, (byte) EncType.ECIES_X25519.getCode()
-    };
+     * X25519 + Ed25519
+     *
+     * @since 0.9.54
+     */
+    static final byte[] X25519_Ed25519_PAYLOAD = new byte[] {0, (byte) SigType.EdDSA_SHA512_Ed25519.getCode(), 0, (byte) EncType.ECIES_X25519.getCode()};
 
     /**
      *  An immutable ElG/ECDSA-P256 certificate.
@@ -117,31 +112,30 @@ public class KeyCertificate extends Certificate {
         try {
             kc = new ECDSA256Cert();
         } catch (DataFormatException dfe) {
-            throw new RuntimeException(dfe);  // won't happen
+            throw new RuntimeException(dfe); // won't happen
         }
         ELG_ECDSA256_CERT = kc;
         try {
             kc = new Ed25519Cert();
         } catch (DataFormatException dfe) {
-            throw new RuntimeException(dfe);  // won't happen
+            throw new RuntimeException(dfe); // won't happen
         }
         ELG_Ed25519_CERT = kc;
         try {
             kc = new X25519_Ed25519Cert();
         } catch (DataFormatException dfe) {
-            throw new RuntimeException(dfe);  // won't happen
+            throw new RuntimeException(dfe); // won't happen
         }
         X25519_Ed25519_CERT = kc;
     }
 
     /**
-      *  @param payload 4 bytes minimum if non-null
-      *  @throws DataFormatException if payload is too short
-      */
+     *  @param payload 4 bytes minimum if non-null
+     *  @throws DataFormatException if payload is too short
+     */
     public KeyCertificate(byte[] payload) throws DataFormatException {
         super(CERTIFICATE_TYPE_KEY, payload);
-        if (payload != null && payload.length < HEADER_LENGTH)
-             throw new DataFormatException("data");
+        if (payload != null && payload.length < HEADER_LENGTH) throw new DataFormatException("data");
     }
 
     /**
@@ -153,8 +147,7 @@ public class KeyCertificate extends Certificate {
      */
     public KeyCertificate(SigningPublicKey spk) {
         super(CERTIFICATE_TYPE_KEY, null);
-        if (spk == null || spk.getData() == null)
-             throw new IllegalArgumentException();
+        if (spk == null || spk.getData() == null) throw new IllegalArgumentException();
         SigType type = spk.getType();
         int len = type.getPubkeyLen();
         int extra = Math.max(0, len - 128);
@@ -162,9 +155,8 @@ public class KeyCertificate extends Certificate {
         int code = type.getCode();
         _payload[0] = (byte) (code >> 8);
         _payload[1] = (byte) (code & 0xff);
-         // 2 and 3 always 0, it is the only crypto code for now
-        if (extra > 0)
-             System.arraycopy(spk.getData(), 128, _payload, HEADER_LENGTH, extra);
+        // 2 and 3 always 0, it is the only crypto code for now
+        if (extra > 0) System.arraycopy(spk.getData(), 128, _payload, HEADER_LENGTH, extra);
     }
 
     /**
@@ -179,9 +171,7 @@ public class KeyCertificate extends Certificate {
      */
     public KeyCertificate(SigningPublicKey spk, PublicKey pk) {
         super(CERTIFICATE_TYPE_KEY, null);
-        if (spk == null || spk.getData() == null ||
-             pk == null || pk.getData() == null)
-             throw new IllegalArgumentException();
+        if (spk == null || spk.getData() == null || pk == null || pk.getData() == null) throw new IllegalArgumentException();
         SigType type = spk.getType();
         int len = type.getPubkeyLen();
         int extra = Math.max(0, len - 128);
@@ -192,8 +182,7 @@ public class KeyCertificate extends Certificate {
         code = pk.getType().getCode();
         _payload[2] = (byte) (code >> 8);
         _payload[3] = (byte) (code & 0xff);
-        if (extra > 0)
-             System.arraycopy(spk.getData(), 128, _payload, HEADER_LENGTH, extra);
+        if (extra > 0) System.arraycopy(spk.getData(), 128, _payload, HEADER_LENGTH, extra);
     }
 
     /**
@@ -244,47 +233,44 @@ public class KeyCertificate extends Certificate {
      */
     public KeyCertificate(Certificate cert) throws DataFormatException {
         this(cert.getPayload());
-        if (cert.getCertificateType() != CERTIFICATE_TYPE_KEY)
-            throw new DataFormatException("type");
+        if (cert.getCertificateType() != CERTIFICATE_TYPE_KEY) throw new DataFormatException("type");
     }
 
     /**
-      *  Gets the signature type code from the certificate.
-      *
-      *  @return -1 if unset
-      */
+     *  Gets the signature type code from the certificate.
+     *
+     *  @return -1 if unset
+     */
     public int getSigTypeCode() {
-        if (_payload == null)
-            return -1;
+        if (_payload == null) return -1;
         return ((_payload[0] & 0xff) << 8) | (_payload[1] & 0xff);
     }
 
     /**
-      *  Gets the crypto type code from the certificate.
-      *
-      *  @return -1 if unset
-      */
+     *  Gets the crypto type code from the certificate.
+     *
+     *  @return -1 if unset
+     */
     public int getCryptoTypeCode() {
-        if (_payload == null)
-            return -1;
+        if (_payload == null) return -1;
         return ((_payload[2] & 0xff) << 8) | (_payload[3] & 0xff);
     }
 
     /**
-      *  Gets the signature type from the certificate.
-      *
-      *  @return null if unset or unknown
-      */
+     *  Gets the signature type from the certificate.
+     *
+     *  @return null if unset or unknown
+     */
     public SigType getSigType() {
         return SigType.getByCode(getSigTypeCode());
     }
 
     /**
-      *  Gets the encryption type from the certificate.
-      *
-      *  @return null if unset or unknown
-      *  @since 0.9.42
-      */
+     *  Gets the encryption type from the certificate.
+     *
+     *  @return null if unset or unknown
+     *  @since 0.9.42
+     */
     public EncType getEncType() {
         return EncType.getByCode(getCryptoTypeCode());
     }
@@ -297,13 +283,11 @@ public class KeyCertificate extends Certificate {
      *  @return null if unset or none
      */
     public byte[] getExtraKeyData() {
-        if (_payload == null || _payload.length <= HEADER_LENGTH)
-            return new byte[0];
+        if (_payload == null || _payload.length <= HEADER_LENGTH) return new byte[0];
         byte[] rv = new byte[_payload.length - HEADER_LENGTH];
         System.arraycopy(_payload, HEADER_LENGTH, rv, 0, rv.length);
         return rv;
     }
-
 
     /**
      *  Signing Key extra data, if any.
@@ -313,14 +297,11 @@ public class KeyCertificate extends Certificate {
      */
     public byte[] getExtraSigningKeyData() {
         // we assume no crypto key data
-        if (_payload == null || _payload.length <= HEADER_LENGTH)
-            return new byte[0];
+        if (_payload == null || _payload.length <= HEADER_LENGTH) return new byte[0];
         SigType type = getSigType();
-        if (type == null)
-            throw new UnsupportedOperationException("Unknown signature type");
+        if (type == null) throw new UnsupportedOperationException("Unknown signature type");
         int extra = Math.max(0, type.getPubkeyLen() - 128);
-        if (_payload.length == HEADER_LENGTH + extra)
-            return getExtraKeyData();
+        if (_payload.length == HEADER_LENGTH + extra) return getExtraKeyData();
         byte[] rv = new byte[extra];
         System.arraycopy(_payload, HEADER_LENGTH, rv, 0, extra);
         return rv;
@@ -343,12 +324,8 @@ public class KeyCertificate extends Certificate {
         if (_payload == null) {
             buf.append(" null payload");
         } else {
-            buf.append("\n* Crypto type: ").append(getCryptoTypeCode())
-               .append(" (").append(getEncType()).append(')')
-               .append("\n* Sig type: ").append(getSigTypeCode())
-               .append(" (").append(getSigType()).append(')');
-            if (_payload.length > HEADER_LENGTH)
-                buf.append("\n* Key data: ").append(_payload.length - HEADER_LENGTH).append(" bytes");
+            buf.append("\n* Crypto type: ").append(getCryptoTypeCode()).append(" (").append(getEncType()).append(')').append("\n* Sig type: ").append(getSigTypeCode()).append(" (").append(getSigType()).append(')');
+            if (_payload.length > HEADER_LENGTH) buf.append("\n* Key data: ").append(_payload.length - HEADER_LENGTH).append(" bytes");
         }
         return buf.toString();
     }
@@ -356,10 +333,9 @@ public class KeyCertificate extends Certificate {
     /**
      *  An immutable ElG/ECDSA-256 certificate.
      */
+    @SuppressWarnings("checkstyle:EqualsHashCode")
     private static final class ECDSA256Cert extends KeyCertificate {
-        private static final byte[] ECDSA256_DATA = new byte[] {
-            CERTIFICATE_TYPE_KEY, 0, HEADER_LENGTH, 0, (byte) SigType.ECDSA_SHA256_P256.getCode(), 0, 0
-        };
+        private static final byte[] ECDSA256_DATA = new byte[] {CERTIFICATE_TYPE_KEY, 0, HEADER_LENGTH, 0, (byte) SigType.ECDSA_SHA256_P256.getCode(), 0, 0};
         private static final int ECDSA256_LENGTH = ECDSA256_DATA.length;
         private final int _hashcode;
 
@@ -422,12 +398,9 @@ public class KeyCertificate extends Certificate {
      *  An immutable ElG/Ed25519 certificate.
      *  @since 0.9.22
      */
+    @SuppressWarnings("checkstyle:EqualsHashCode")
     private static final class Ed25519Cert extends KeyCertificate {
-        private static final byte[] ED_DATA = new byte[] { CERTIFICATE_TYPE_KEY,
-                                                           0, HEADER_LENGTH,
-                                                           0, (byte) SigType.EdDSA_SHA512_Ed25519.getCode(),
-                                                           0, 0
-        };
+        private static final byte[] ED_DATA = new byte[] {CERTIFICATE_TYPE_KEY, 0, HEADER_LENGTH, 0, (byte) SigType.EdDSA_SHA512_Ed25519.getCode(), 0, 0};
         private static final int ED_LENGTH = ED_DATA.length;
         private final int _hashcode;
 
@@ -490,12 +463,9 @@ public class KeyCertificate extends Certificate {
      *  An immutable X25519/Ed25519 certificate.
      *  @since 0.9.54
      */
+    @SuppressWarnings("checkstyle:EqualsHashCode")
     private static final class X25519_Ed25519Cert extends KeyCertificate {
-        private static final byte[] ED_DATA = new byte[] { CERTIFICATE_TYPE_KEY,
-                                                           0, HEADER_LENGTH,
-                                                           0, (byte) SigType.EdDSA_SHA512_Ed25519.getCode(),
-                                                           0, (byte) EncType.ECIES_X25519.getCode()
-        };
+        private static final byte[] ED_DATA = new byte[] {CERTIFICATE_TYPE_KEY, 0, HEADER_LENGTH, 0, (byte) SigType.EdDSA_SHA512_Ed25519.getCode(), 0, (byte) EncType.ECIES_X25519.getCode()};
         private static final int ED_LENGTH = ED_DATA.length;
         private final int _hashcode;
 

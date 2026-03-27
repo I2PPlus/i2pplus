@@ -20,20 +20,18 @@ public interface IncomingConnectionFilter {
     /**
      * Utility implementation that allows all incoming connections
      */
-    public static final IncomingConnectionFilter ALLOW =
-        new IncomingConnectionFilter() {
-            public boolean allowDestination(Destination d) {
-                return true;
-            }
-        };
+    public static final IncomingConnectionFilter ALLOW = new IncomingConnectionFilter() {
+        public boolean allowDestination(Destination d) {
+            return true;
+        }
+    };
 
     /**
      * Utility implementation that denies all incoming connections
      */
-    public static final IncomingConnectionFilter DENY =
-        new IncomingConnectionFilter() {
-            public boolean allowDestination(Destination d) {
-                return false;
-            }
-        };
+    public static final IncomingConnectionFilter DENY = new IncomingConnectionFilter() {
+        public boolean allowDestination(Destination d) {
+            return false;
+        }
+    };
 }

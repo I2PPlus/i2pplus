@@ -1,4 +1,5 @@
 package net.i2p.router.startup;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -28,7 +29,9 @@ class BootCommSystemJob extends JobImpl {
     }
 
     @Override
-    public String getName() { return "Boot Communication System"; }
+    public String getName() {
+        return "Boot Communication System";
+    }
 
     @Override
     public void runJob() {
@@ -51,7 +54,7 @@ class BootCommSystemJob extends JobImpl {
 
         if (!SystemVersion.isAndroid()) {
             Job j = new ReadConfigJob(getContext());
-            j.getTiming().setStartAfter(getContext().clock().now() + 2*60*1000);
+            j.getTiming().setStartAfter(getContext().clock().now() + 2 * 60 * 1000);
             getContext().jobQueue().addJob(j);
         }
 

@@ -1,7 +1,8 @@
 package net.i2p.router.tunnel;
 
-import java.util.List;
 import net.i2p.router.RouterContext;
+
+import java.util.List;
 
 /**
  * Minor extension to track fragmentation

@@ -1,9 +1,9 @@
 package net.i2p.crypto;
 
-import java.util.concurrent.TimeUnit;
 import net.i2p.I2PAppContext;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.PublicKey;
+
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -18,6 +18,8 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+
+import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
@@ -58,9 +60,7 @@ public class ElGamalBench {
     }
 
     public static void main(String args[]) throws RunnerException {
-        Options opt = new OptionsBuilder()
-                .include(ElGamalBench.class.getSimpleName())
-                .build();
+        Options opt = new OptionsBuilder().include(ElGamalBench.class.getSimpleName()).build();
 
         new Runner(opt).run();
     }

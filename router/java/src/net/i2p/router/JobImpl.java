@@ -1,4 +1,5 @@
 package net.i2p.router;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -35,7 +36,9 @@ public abstract class JobImpl implements Job {
      * @return the unique job identifier
      */
     @Override
-    public long getJobId() { return _id; }
+    public long getJobId() {
+        return _id;
+    }
 
     /**
      * Get the timing object for this job.
@@ -43,20 +46,23 @@ public abstract class JobImpl implements Job {
      * @return the JobTiming object controlling when this job runs
      */
     @Override
-    public JobTiming getTiming() { return _timing; }
+    public JobTiming getTiming() {
+        return _timing;
+    }
 
     /**
      * Get the router context that this job belongs to.
      *
      * @return the RouterContext for this job
      */
-    public final RouterContext getContext() { return _context; }
+    public final RouterContext getContext() {
+        return _context;
+    }
 
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation
-        buf.append("[Job ").append(_id).append("] ")
-           .append(getClass().getSimpleName());
+        buf.append("[Job ").append(_id).append("] ").append(getClass().getSimpleName());
         return buf.toString();
     }
 
@@ -65,22 +71,27 @@ public abstract class JobImpl implements Job {
      *
      * @return timestamp in milliseconds when job was made ready, or 0 if not yet ready
      */
-    public long getMadeReadyOn() { return _madeReadyOn; }
+    public long getMadeReadyOn() {
+        return _madeReadyOn;
+    }
 
     /**
      *  Deprecated to avoid JobQueue deadlocks
      *  @deprecated use madeReady(long)
      */
     @Deprecated
-    public void madeReady() { _madeReadyOn = _context.clock().now(); }
+    public void madeReady() {
+        _madeReadyOn = _context.clock().now();
+    }
 
     /**
      *  For JobQueue only, not for external use
      *  @param now the current time in milliseconds
      *  @since 0.9.55
      */
-    public void madeReady(long now) { _madeReadyOn = now; }
-
+    public void madeReady(long now) {
+        _madeReadyOn = now;
+    }
 
     /**
      * Default implementation does nothing.

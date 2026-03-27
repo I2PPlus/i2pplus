@@ -1,16 +1,17 @@
 package net.i2p.crypto.elgamal.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.math.BigInteger;
 import net.i2p.crypto.CryptoConstants;
 import net.i2p.crypto.elgamal.spec.ElGamalParameterSpec;
 import net.i2p.crypto.elgamal.spec.ElGamalPublicKeySpec;
+
 import org.junit.Test;
+
+import java.math.BigInteger;
 
 public class ElGamalPublicKeyImplTest {
 

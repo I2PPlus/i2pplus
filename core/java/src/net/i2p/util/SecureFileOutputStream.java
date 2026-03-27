@@ -1,9 +1,10 @@
 package net.i2p.util;
 
+import net.i2p.I2PAppContext;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import net.i2p.I2PAppContext;
 
 /**
  * Same as FileOutputStream but sets the file mode so it can only
@@ -29,7 +30,7 @@ public class SecureFileOutputStream extends FileOutputStream {
      */
     public SecureFileOutputStream(String file, boolean append) throws FileNotFoundException {
         super(file, append);
-        //if (!append)
+        // if (!append)
         setPerms(new File(file));
     }
 
@@ -47,17 +48,15 @@ public class SecureFileOutputStream extends FileOutputStream {
      */
     public SecureFileOutputStream(File file, boolean append) throws FileNotFoundException {
         super(file, append);
-        //if (!append)
+        // if (!append)
         setPerms(file);
     }
 
     /** @since 0.8.2 */
     static boolean canSetPerms() {
-        if (!oneDotSix)
-            return false;
+        if (!oneDotSix) return false;
         I2PAppContext ctx = I2PAppContext.getCurrentContext();
-        if (ctx == null)
-            return true;
+        if (ctx == null) return true;
         return !ctx.getBooleanProperty("i2p.insecureFiles");
     }
 
@@ -66,8 +65,7 @@ public class SecureFileOutputStream extends FileOutputStream {
      *  ignores errors
      */
     public static void setPerms(File f) {
-        if (!canSetPerms())
-            return;
+        if (!canSetPerms()) return;
         try {
             f.setReadable(false, false);
             f.setReadable(true, true);

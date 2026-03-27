@@ -10,9 +10,10 @@
  */
 package org.minidns.edns;
 
+import org.minidns.edns.Edns.OptionCode;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
-import org.minidns.edns.Edns.OptionCode;
 
 /**
  * Abstract base class for EDNS options.
@@ -55,7 +56,7 @@ public abstract class EdnsOption {
     protected EdnsOption(byte[] optionData) {
         this.optionCode = getOptionCode().asInt;
         this.optionLength = optionData.length;
-        this.optionData =  optionData;
+        this.optionData = optionData;
     }
 
     /**
@@ -126,14 +127,11 @@ public abstract class EdnsOption {
         OptionCode optionCode = OptionCode.from(intOptionCode);
         EdnsOption res;
         switch (optionCode) {
-            case NSID:
-                res = new Nsid(optionData);
+            case NSID: res = new Nsid(optionData);
                 break;
-            default:
-                res = new UnknownEdnsOption(intOptionCode, optionData);
+            default: res = new UnknownEdnsOption(intOptionCode, optionData);
                 break;
         }
         return res;
     }
-
 }

@@ -1,7 +1,5 @@
 package net.i2p.router.crypto.ratchet;
 
-import java.math.BigInteger;
-import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.eddsa.math.Curve;
@@ -10,8 +8,11 @@ import net.i2p.crypto.eddsa.math.bigint.BigIntegerLittleEndianEncoding;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveSpec;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
 import net.i2p.data.PublicKey;
-//import net.i2p.router.transport.crypto.X25519KeyFactory;
+// import net.i2p.router.transport.crypto.X25519KeyFactory;
 import net.i2p.util.NativeBigInteger;
+
+import java.math.BigInteger;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  *  Elligator2 encoding and decoding for X25519 public keys to provide cryptographically indistinguishable representations
@@ -128,8 +129,7 @@ class Elligator2 {
      * @since 0.9.45 to add highBits arg
      */
     private static byte[] encode(PublicKey point, boolean alternative, byte highBits) {
-        if (DISABLE)
-            return point.getData();
+        if (DISABLE) return point.getData();
 
         // x
         BigInteger x = ENCODING.toBigInteger(point.getData());
@@ -203,10 +203,8 @@ class Elligator2 {
      * @return x or null on failure
      */
     public static PublicKey decode(AtomicBoolean alternative, byte[] representative) {
-        if (representative.length != REPRESENTATIVE_LENGTH)
-            throw new IllegalArgumentException("must be 32 bytes");
-        if (DISABLE)
-            return new PublicKey(EncType.ECIES_X25519, representative);
+        if (representative.length != REPRESENTATIVE_LENGTH) throw new IllegalArgumentException("must be 32 bytes");
+        if (DISABLE) return new PublicKey(EncType.ECIES_X25519, representative);
 
         // r
         // Mask out two high bits, to get valid 254 bits.
@@ -250,8 +248,7 @@ class Elligator2 {
             x = x.mod(p);
         }
 
-        if (alternative != null)
-            alternative.set(e == 1);
+        if (alternative != null) alternative.set(e == 1);
 
         byte[] dec = ENCODING.encode(x);
         return new PublicKey(EncType.ECIES_X25519, dec);
@@ -259,8 +256,7 @@ class Elligator2 {
 
     private static BigInteger square_root(BigInteger x) {
         // t = x ^ ((p - 1) / 4) (mod p)
-        if (!(x instanceof NativeBigInteger))
-            x = new NativeBigInteger(x);
+        if (!(x instanceof NativeBigInteger)) x = new NativeBigInteger(x);
 
         BigInteger t = x.modPow(divide_minus_p_1_4, p);
 
@@ -292,92 +288,89 @@ class Elligator2 {
      * @return -1/0/1
      */
     private static int legendre(BigInteger a) {
-        if (a.signum() == 0)
-            return 0;
-        if (!(a instanceof NativeBigInteger))
-            a = new NativeBigInteger(a);
+        if (a.signum() == 0) return 0;
+        if (!(a instanceof NativeBigInteger)) a = new NativeBigInteger(a);
         BigInteger mp = a.modPow(divide_minus_p_1_2, p);
         // mp is either 1 or (p - 1) (0x7ffff...fffec)
-        //System.out.println("Legendre value: " + mp.toString(16));
+        // System.out.println("Legendre value: " + mp.toString(16));
         int cmp = mp.compareTo(BigInteger.ONE);
-        if (cmp == 0)
-            return 1;
+        if (cmp == 0) return 1;
         return -1;
     }
 
-/****
-    private static final byte[] TEST1 = new byte[] {
-            0x33, (byte) 0x95, 0x19, 0x64, 0x00, 0x3c, (byte) 0x94, 0x08,
-            0x78, 0x06, 0x3c, (byte) 0xcf, (byte) 0xd0, 0x34, (byte) 0x8a, (byte) 0xf4,
-            0x21, 0x50, (byte) 0xca, 0x16, (byte) 0xd2, 0x64, 0x6f, 0x2c,
-            0x58, 0x56, (byte) 0xe8, 0x33, (byte) 0x83, 0x77, (byte) 0xd8, (byte) 0x80
-        };
-
-    private static final byte[] TEST2 = new byte[] {
-            (byte) 0xe7, 0x35, 0x07, (byte) 0xd3, (byte) 0x8b, (byte) 0xae, 0x63, (byte) 0x99,
-            0x2b, 0x3f, 0x57, (byte) 0xaa, (byte) 0xc4, (byte) 0x8c, 0x0a, (byte) 0xbc,
-            0x14, 0x50, (byte) 0x95, (byte) 0x89, 0x28, (byte) 0x84, 0x57, (byte) 0x99,
-            0x5a, 0x2b, 0x4c, (byte) 0xa3, 0x49, 0x0a, (byte) 0xa2, 0x07
-        };
-
-    public static void main(String[] args) {
-        System.out.println("Test encode:\n" + HexDump.dump(TEST1));
-        PublicKey test = new PublicKey(EncType.ECIES_X25519, TEST1);
-        byte[] repr = encode(test, false);
-        System.out.println("encoded with false:\n" + HexDump.dump(repr));
-        //00000000  28 20 b6 b2 41 e0 f6 8a  6c 4a 7f ee 3d 97 82 28  |(..A...lJ..=..(|
-        //00000010  ef 3a e4 55 33 cd 41 0a  a9 1a 41 53 31 d8 61 2d  |.:.U3.A...AS1.a-|
-        repr = encode(test, true);
-        System.out.println("encoded with true:\n" + HexDump.dump(repr));
-        //00000000  3c fb 87 c4 6c 0b 45 75  ca 81 75 e0 ed 1c 0a e9  |<...l.Eu..u.....|
-        //00000010  da e7 9d b7 8d f8 69 97  c4 84 7b 9f 20 b2 77 18  |......i...{. .w.|
-
-        System.out.println("Test decode:\n" + HexDump.dump(TEST2));
-        PublicKey pk = decode(null, TEST2);
-        System.out.println("decoded:\n" + HexDump.dump(pk.getData()));
-        //00000000  1e 8a ff fe d6 bf 53 fe  27 1a d5 72 47 32 62 de  |......S.'..rG2b.|
-        //00000010  d8 fa ec 68 e5 e6 7e f4  5e bb 82 ee ba 52 60 4f  |...h..~.^....R`O|
-
-        I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        Elligator2 elg2 = new Elligator2(ctx);
-        X25519KeyFactory xkf = new X25519KeyFactory(ctx);
-        for (int i = 0; i < 10; i++) {
-            PublicKey pub;
-            byte[] enc;
-            int j = 0;
-            do {
-                System.out.println("Trying encode "+++j);
-                KeyPair kp = xkf.getKeys();
-                pub = kp.getPublic();
-                enc = elg2.encode(pub);
-            } while (enc == null);
-            System.out.println("Encoded:\n" + HexDump.dump(enc));
-            PublicKey pub2 = decode(enc);
-            if (pub2 == null) {
-                System.out.println("Decode FAIL");
-                continue;
-            }
-            boolean ok = pub.equals(pub2);
-            System.out.println(ok ? "PASS" : "FAIL");
-            if (!ok) {
-                System.out.println("orig: " + pub.toBase64());
-                System.out.println("calc: " + pub2.toBase64());
-            }
-        }
-
-        System.out.println("Random decode test");
-        byte[] enc = new byte[32];
-        int fails = 0;
-        for (int i = 0; i < 1000; i++) {
-            ctx.random().nextBytes(enc);
-            pk = decode(enc);
-            if (pk == null)
-                fails++;
-        }
-        if (fails > 0)
-            System.out.println("FAIL decode " + fails + " / 1000");
-        else
-            System.out.println("PASS");
-    }
-****/
+    /****
+     * private static final byte[] TEST1 = new byte[] {
+     * 0x33, (byte) 0x95, 0x19, 0x64, 0x00, 0x3c, (byte) 0x94, 0x08,
+     * 0x78, 0x06, 0x3c, (byte) 0xcf, (byte) 0xd0, 0x34, (byte) 0x8a, (byte) 0xf4,
+     * 0x21, 0x50, (byte) 0xca, 0x16, (byte) 0xd2, 0x64, 0x6f, 0x2c,
+     * 0x58, 0x56, (byte) 0xe8, 0x33, (byte) 0x83, 0x77, (byte) 0xd8, (byte) 0x80
+     * };
+     *
+     * private static final byte[] TEST2 = new byte[] {
+     * (byte) 0xe7, 0x35, 0x07, (byte) 0xd3, (byte) 0x8b, (byte) 0xae, 0x63, (byte) 0x99,
+     * 0x2b, 0x3f, 0x57, (byte) 0xaa, (byte) 0xc4, (byte) 0x8c, 0x0a, (byte) 0xbc,
+     * 0x14, 0x50, (byte) 0x95, (byte) 0x89, 0x28, (byte) 0x84, 0x57, (byte) 0x99,
+     * 0x5a, 0x2b, 0x4c, (byte) 0xa3, 0x49, 0x0a, (byte) 0xa2, 0x07
+     * };
+     *
+     * public static void main(String[] args) {
+     * System.out.println("Test encode:\n" + HexDump.dump(TEST1));
+     * PublicKey test = new PublicKey(EncType.ECIES_X25519, TEST1);
+     * byte[] repr = encode(test, false);
+     * System.out.println("encoded with false:\n" + HexDump.dump(repr));
+     * //00000000  28 20 b6 b2 41 e0 f6 8a  6c 4a 7f ee 3d 97 82 28  |(..A...lJ..=..(|
+     * //00000010  ef 3a e4 55 33 cd 41 0a  a9 1a 41 53 31 d8 61 2d  |.:.U3.A...AS1.a-|
+     * repr = encode(test, true);
+     * System.out.println("encoded with true:\n" + HexDump.dump(repr));
+     * //00000000  3c fb 87 c4 6c 0b 45 75  ca 81 75 e0 ed 1c 0a e9  |<...l.Eu..u.....|
+     * //00000010  da e7 9d b7 8d f8 69 97  c4 84 7b 9f 20 b2 77 18  |......i...{. .w.|
+     *
+     * System.out.println("Test decode:\n" + HexDump.dump(TEST2));
+     * PublicKey pk = decode(null, TEST2);
+     * System.out.println("decoded:\n" + HexDump.dump(pk.getData()));
+     * //00000000  1e 8a ff fe d6 bf 53 fe  27 1a d5 72 47 32 62 de  |......S.'..rG2b.|
+     * //00000010  d8 fa ec 68 e5 e6 7e f4  5e bb 82 ee ba 52 60 4f  |...h..~.^....R`O|
+     *
+     * I2PAppContext ctx = I2PAppContext.getGlobalContext();
+     * Elligator2 elg2 = new Elligator2(ctx);
+     * X25519KeyFactory xkf = new X25519KeyFactory(ctx);
+     * for (int i = 0; i < 10; i++) {
+     * PublicKey pub;
+     * byte[] enc;
+     * int j = 0;
+     * do {
+     * System.out.println("Trying encode "+++j);
+     * KeyPair kp = xkf.getKeys();
+     * pub = kp.getPublic();
+     * enc = elg2.encode(pub);
+     * } while (enc == null);
+     * System.out.println("Encoded:\n" + HexDump.dump(enc));
+     * PublicKey pub2 = decode(enc);
+     * if (pub2 == null) {
+     * System.out.println("Decode FAIL");
+     * continue;
+     * }
+     * boolean ok = pub.equals(pub2);
+     * System.out.println(ok ? "PASS" : "FAIL");
+     * if (!ok) {
+     * System.out.println("orig: " + pub.toBase64());
+     * System.out.println("calc: " + pub2.toBase64());
+     * }
+     * }
+     *
+     * System.out.println("Random decode test");
+     * byte[] enc = new byte[32];
+     * int fails = 0;
+     * for (int i = 0; i < 1000; i++) {
+     * ctx.random().nextBytes(enc);
+     * pk = decode(enc);
+     * if (pk == null)
+     * fails++;
+     * }
+     * if (fails > 0)
+     * System.out.println("FAIL decode " + fails + " / 1000");
+     * else
+     * System.out.println("PASS");
+     * }
+     ****/
 }

@@ -12,9 +12,9 @@ package org.json.simple;
 
 /** Represents structural entities in JSON.
  * @since 2.0.0 */
-class Yytoken{
+class Yytoken {
     /** Represents the different kinds of tokens. */
-    enum Types{
+    enum Types {
         /** Tokens of this type will always have a value of ":" */
         COLON,
         /** Tokens of this type will always have a value of "," */
@@ -33,39 +33,31 @@ class Yytoken{
         RIGHT_SQUARE;
     }
 
-    private final Types		type;
-    private final Object	value;
+    private final Types type;
+    private final Object value;
 
     /** @param type represents the kind of token the instantiated token will be.
      * @param value represents the value the token is associated with, will be ignored unless type is equal to
      *        Types.DATUM.
      * @see Types */
-    Yytoken(final Types type, final Object value){
+    Yytoken(final Types type, final Object value) {
         /* Sanity check. Make sure the value is ignored for the proper value unless it is a datum token. */
-        switch (type){
-            case COLON:
-                this.value = ":";
+        switch (type) {
+            case COLON: this.value = ":";
                 break;
-            case COMMA:
-                this.value = ",";
+            case COMMA: this.value = ",";
                 break;
-            case END:
-                this.value = "";
+            case END: this.value = "";
                 break;
-            case LEFT_BRACE:
-                this.value = "{";
+            case LEFT_BRACE: this.value = "{";
                 break;
-            case LEFT_SQUARE:
-                this.value = "[";
+            case LEFT_SQUARE: this.value = "[";
                 break;
-            case RIGHT_BRACE:
-                this.value = "}";
+            case RIGHT_BRACE: this.value = "}";
                 break;
-            case RIGHT_SQUARE:
-                this.value = "]";
+            case RIGHT_SQUARE: this.value = "]";
                 break;
-            default:
-                this.value = value;
+            default: this.value = value;
                 break;
         }
         this.type = type;
@@ -73,18 +65,18 @@ class Yytoken{
 
     /** @return which of the Types the token is.
      * @see Types */
-    Types getType(){
+    Types getType() {
         return this.type;
     }
 
     /** @return what the token is.
      * @see Types */
-    Object getValue(){
+    Object getValue() {
         return this.value;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append(this.type.toString()).append("(").append(this.value).append(")");
         return sb.toString();

@@ -1,8 +1,9 @@
 package net.i2p.router.web.helpers;
 
+import net.i2p.router.web.HelperBase;
+
 import java.io.IOException;
 import java.io.StringWriter;
-import net.i2p.router.web.HelperBase;
 
 /**
  * Helper for tunnel peer count page rendering and form processing.
@@ -18,7 +19,7 @@ public class TunnelPeerCountHelper extends HelperBase {
                 renderer.renderPeers(_out);
                 return "";
             } else {
-                StringWriter sw = new StringWriter(1024*1024);
+                StringWriter sw = new StringWriter(1024 * 1024);
                 renderer.renderPeers(sw);
                 return sw.toString();
             }

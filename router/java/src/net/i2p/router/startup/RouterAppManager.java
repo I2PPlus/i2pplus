@@ -45,11 +45,9 @@ public class RouterAppManager extends ClientAppManagerImpl {
      *  @throws IllegalArgumentException if already added
      */
     public boolean addAndStart(ClientApp app, String[] args) {
-        if (_log.shouldInfo())
-            _log.info("Client " + app.getDisplayName() + " ADDED");
+        if (_log.shouldInfo()) _log.info("Client " + app.getDisplayName() + " ADDED");
         String[] old = _clients.putIfAbsent(app, args);
-        if (old != null)
-            throw new IllegalArgumentException("already added");
+        if (old != null) throw new IllegalArgumentException("already added");
         try {
             app.startup();
             return true;
@@ -72,8 +70,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
      */
     public ClientApp getClientApp(String className, String[] args) {
         for (Map.Entry<ClientApp, String[]> e : _clients.entrySet()) {
-            if (e.getKey().getClass().getName().equals(className) &&
-                Arrays.equals(e.getValue(), args))
+            if (e.getKey().getClass().getName().equals(className) && Arrays.equals(e.getValue(), args))
                 return e.getKey();
         }
         // workaround for Jetty stop and restart from i2ptunnel
@@ -91,8 +88,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
                             break;
                         }
                     }
-                    if (match)
-                        return app;
+                    if (match) return app;
                 }
             }
         }
@@ -115,14 +111,12 @@ public class RouterAppManager extends ClientAppManagerImpl {
         switch (state) {
             case UNINITIALIZED:
             case INITIALIZED:
-                if (_log.shouldWarn())
-                    _log.warn("Client " + app.getDisplayName() + " is now " + state);
+                if (_log.shouldWarn()) _log.warn("Client " + app.getDisplayName() + " is now " + state);
                 break;
 
             case STARTING:
             case RUNNING:
-                if (_log.shouldInfo())
-                    _log.info("Client " + app.getDisplayName() + " is now " + state);
+                if (_log.shouldInfo()) _log.info("Client " + app.getDisplayName() + " is now " + state);
                 break;
 
             case FORKED:
@@ -133,11 +127,9 @@ public class RouterAppManager extends ClientAppManagerImpl {
                 if (removed && _log.shouldInfo()) {
                     _log.info("Client " + app.getDisplayName() + " UNREGISTERED AS " + app.getName());
                 }
-                if (message == null)
-                    message = "";
+                if (message == null) message = "";
                 if (_log.shouldInfo())
-                    _log.info("Client " + app.getDisplayName() + " is now " + state +
-                          ' ' + message, e);
+                    _log.info("Client " + app.getDisplayName() + " is now " + state + ' ' + message, e);
                 break;
 
             case CRASHED:
@@ -147,10 +139,8 @@ public class RouterAppManager extends ClientAppManagerImpl {
                 if (removed2 && _log.shouldInfo()) {
                     _log.info("Client " + app.getDisplayName() + " UNREGISTERED AS " + app.getName());
                 }
-                if (message == null)
-                    message = "";
-                _log.log(Log.CRIT, "Client " + app.getDisplayName() + ' ' + state +
-                               ' ' + message, e);
+                if (message == null) message = "";
+                _log.log(Log.CRIT, "Client " + app.getDisplayName() + ' ' + state + ' ' + message, e);
                 break;
         }
     }
@@ -168,12 +158,10 @@ public class RouterAppManager extends ClientAppManagerImpl {
         if (!_clients.containsKey(app)) {
             // Allow registration even if we didn't start it,
             // useful for plugins
-            if (_log.shouldInfo())
-                _log.info("Registering untracked client " + app.getName());
-            //return false;
+            if (_log.shouldInfo()) _log.info("Registering untracked client " + app.getName());
+            // return false;
         }
-        if (_log.shouldInfo())
-            _log.info("Client " + app.getDisplayName() + " REGISTERED AS " + app.getName());
+        if (_log.shouldInfo()) _log.info("Client " + app.getDisplayName() + " REGISTERED AS " + app.getName());
         // TODO if old app in there is not running and != this app, allow replacement
         return super.register(app);
     }
@@ -205,10 +193,10 @@ public class RouterAppManager extends ClientAppManagerImpl {
             ClientAppState state = app.getState();
             if (state == RUNNING || state == STARTING) {
                 try {
-                    if (_log.shouldWarn())
-                        _log.warn("Shutting down client " + app.getDisplayName());
+                    if (_log.shouldWarn()) _log.warn("Shutting down client " + app.getDisplayName());
                     app.shutdown(null);
-                } catch (Throwable t) {}
+                } catch (Throwable t) {
+                }
             }
         }
     }
@@ -251,7 +239,8 @@ public class RouterAppManager extends ClientAppManagerImpl {
         for (Map.Entry<ClientApp, String[]> entry : _clients.entrySet()) {
             ClientApp key = entry.getKey();
             String[] val = entry.getValue();
-            list.add("<b>" + key.getName() + ":</b> " + key.getClass().getName() + ' ' + Arrays.toString(val) + " <i>" + key.getState() + "</i><br>");
+            list.add("<b>" + key.getName() + ":</b> " + key.getClass().getName() + ' ' + Arrays.toString(val) + " <i>"
+                    + key.getState() + "</i><br>");
         }
         Collections.sort(list, Collator.getInstance());
         for (String e : list) {

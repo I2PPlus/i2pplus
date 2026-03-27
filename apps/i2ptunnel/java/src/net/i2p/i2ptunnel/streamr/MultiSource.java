@@ -1,11 +1,12 @@
 package net.i2p.i2ptunnel.streamr;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Destination;
 import net.i2p.i2ptunnel.udp.*;
 import net.i2p.util.Log;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Multi-source data distributor that forwards data to multiple sink destinations
@@ -52,17 +53,15 @@ public class MultiSource implements Source, Sink {
     /**
      *  May throw RuntimeException from underlying sinks
      *  @since 0.9.53 added fromPort and toPort parameters
-     @Override
+     * @Override
      *  @throws RuntimeException
      */
     public void send(Destination ignored_from, int ignored_fromPort, int ignored_toPort, byte[] data) {
         if (sinks.isEmpty()) {
-            if (log.shouldDebug())
-                log.debug("No subscribers to send " + data.length + " bytes to");
+            if (log.shouldDebug()) log.debug("No subscribers to send " + data.length + " bytes to");
             return;
         }
-        if (log.shouldDebug())
-            log.debug("Sending " + data.length + " bytes to " + sinks.size() + " subscribers");
+        if (log.shouldDebug()) log.debug("Sending " + data.length + " bytes to " + sinks.size() + " subscribers");
 
         for (MSink ms : this.sinks) {
             this.sink.send(ms.dest, ms.fromPort, ms.toPort, data);
@@ -92,7 +91,9 @@ public class MultiSource implements Source, Sink {
         public final int fromPort, toPort;
 
         public MSink(Destination dest, int fromPort, int toPort) {
-            this.dest = dest; this.fromPort = fromPort; this.toPort = toPort;
+            this.dest = dest;
+            this.fromPort = fromPort;
+            this.toPort = toPort;
         }
 
         @Override
@@ -102,8 +103,7 @@ public class MultiSource implements Source, Sink {
 
         @Override
         public boolean equals(Object o) {
-            if (!(o instanceof MSink))
-                return false;
+            if (!(o instanceof MSink)) return false;
             MSink s = (MSink) o;
             return dest.equals(s.dest) && fromPort == s.fromPort && toPort == s.toPort;
         }
@@ -111,7 +111,6 @@ public class MultiSource implements Source, Sink {
         @Override
         public String toString() {
             return "from port " + fromPort + " to " + dest.toBase32() + ':' + toPort;
-
         }
     }
 }

@@ -1,4 +1,5 @@
 package net.i2p.sam;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
@@ -36,7 +37,7 @@ import net.i2p.util.Log;
  */
 class SAMUtils {
 
-    private final static Log _log = new Log(SAMUtils.class);
+    private static final Log _log = new Log(SAMUtils.class);
 
     /**
      * Generate a random destination key using DSA_SHA1 signature type.
@@ -59,7 +60,7 @@ class SAMUtils {
      * @since 0.9.14
      */
     public static void genRandomKey(OutputStream priv, OutputStream pub, SigType sigType) {
-        //_log.debug("Generating random keys...");
+        // _log.debug("Generating random keys...");
         try {
             I2PClient c = I2PClientFactory.createClient();
             Destination d = c.createDestination(priv, sigType);
@@ -69,8 +70,11 @@ class SAMUtils {
                 d.writeBytes(pub);
                 pub.flush();
             }
-        } catch (I2PException e) {e.printStackTrace();}
-        catch (IOException e) {e.printStackTrace();}
+        } catch (I2PException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -84,7 +88,9 @@ class SAMUtils {
      */
     public static boolean checkPrivateDestination(String dest) {
         byte[] b = Base64.decode(dest);
-        if (b == null || b.length < 663) {return false;}
+        if (b == null || b.length < 663) {
+            return false;
+        }
         ByteArrayInputStream destKeyStream = new ByteArrayInputStream(b);
         try {
             Destination d = Destination.create(destKeyStream);
@@ -97,7 +103,9 @@ class SAMUtils {
                 DataHelper.readLong(destKeyStream, 4);
                 int itype = (int) DataHelper.readLong(destKeyStream, 2);
                 SigType type = SigType.getByCode(itype);
-                if (type == null) {return false;}
+                if (type == null) {
+                    return false;
+                }
                 SigningPublicKey transientSigningPublicKey = new SigningPublicKey(type);
                 transientSigningPublicKey.readBytes(destKeyStream);
                 Signature offlineSignature = new Signature(dtype);
@@ -106,8 +114,11 @@ class SAMUtils {
                 spk = new SigningPrivateKey(type);
                 spk.readBytes(destKeyStream);
             }
-        } catch (DataFormatException e) {return false;}
-        catch (IOException e) {return false;}
+        } catch (DataFormatException e) {
+            return false;
+        } catch (IOException e) {
+            return false;
+        }
         return destKeyStream.available() == 0;
     }
 
@@ -135,9 +146,13 @@ class SAMUtils {
         Destination d = lookupHost(s);
         if (d == null) {
             String msg;
-            if (s.length() >= 516) {msg = "Bad Base64 destination: ";}
-            else if (s.length() >= 60 && s.endsWith(".b32.i2p")) {msg = "Lease set not found: ";}
-            else {msg = "Host name not found: ";}
+            if (s.length() >= 516) {
+                msg = "Bad Base64 destination: ";
+            } else if (s.length() >= 60 && s.endsWith(".b32.i2p")) {
+                msg = "Lease set not found: ";
+            } else {
+                msg = "Host name not found: ";
+            }
             throw new DataFormatException(msg + s);
         }
         return d;
@@ -218,9 +233,11 @@ class SAMUtils {
                 case '\b':
                 case '\f':
                 case '\t':
-                    // whitespace - if we're in a quoted section, keep this as part of the quote, otherwise use it as a delim
-                    if (isQuoted) {buf.append(c);}
-                    else {
+                    // whitespace - if we're in a quoted section, keep this as part of the quote, otherwise use it as a
+                    // delim
+                    if (isQuoted) {
+                        buf.append(c);
+                    } else {
                         if (key != null) {
                             if (rv.setProperty(key, buf.length() > 0 ? buf.toString() : "true") != null) {
                                 throw new SAMException("Duplicate parameter " + key);
@@ -230,7 +247,7 @@ class SAMUtils {
                             // key without value
                             String k = buf.toString();
                             if (rv.isEmpty()) {
-                                k =  k.toUpperCase(Locale.US);
+                                k = k.toUpperCase(Locale.US);
                                 rv.setProperty(COMMAND, k);
                                 if (k.equals("PING") || k.equals("PONG")) {
                                     // eat the rest of the line
@@ -253,19 +270,26 @@ class SAMUtils {
                     break;
 
                 case '=':
-                    if (isQuoted) {buf.append(c);}
-                    else if (key != null) {buf.append(c);} // '=' in a value
+                    if (isQuoted) {
+                        buf.append(c);
+                    } else if (key != null) {
+                        buf.append(c);
+                    } // '=' in a value
                     else {
-                        if (buf.length() == 0) {throw new SAMException("Empty parameter name");}
+                        if (buf.length() == 0) {
+                            throw new SAMException("Empty parameter name");
+                        }
                         key = buf.toString();
                         buf.setLength(0);
                     }
                     break;
 
                 case '\\':
-                    if (++i >= length) {throw new SAMException("Unterminated escape");}
+                    if (++i >= length) {
+                        throw new SAMException("Unterminated escape");
+                    }
                     c = args.charAt(i);
-                    // fall through...
+                // fall through...
 
                 default:
                     buf.append(c);
@@ -274,8 +298,9 @@ class SAMUtils {
         }
         // Nothing needed here, as we forced a trailing space in the loop
         // unterminated quoted content will be lost
-        if (isQuoted) {throw new SAMException("Unterminated quote");}
+        if (isQuoted) {
+            throw new SAMException("Unterminated quote");
+        }
         return rv;
     }
-
 }

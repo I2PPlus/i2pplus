@@ -1,17 +1,18 @@
 package net.i2p.client.streaming.impl;
 
-import java.util.List;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
-import net.i2p.stat.RateConstants;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.SigningPublicKey;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
+
+import java.util.List;
 
 /**
  * Receive a packet for a particular connection - placing the data onto the
@@ -22,12 +23,12 @@ import net.i2p.util.SystemVersion;
  * One of these is instantiated per-Destination
  * (i.e. per-ConnectionManager, not per-Connection).
  * It doesn't store any state.
-
+ *
  */
 class ConnectionPacketHandler {
     private final I2PAppContext _context;
     private final Log _log;
-    private final ByteCache _cache = ByteCache.getInstance(32, 32*1024);
+    private final ByteCache _cache = ByteCache.getInstance(32, 32 * 1024);
 
     public static final int MAX_SLOW_START_WINDOW = 64;
 
@@ -35,7 +36,7 @@ class ConnectionPacketHandler {
     private static final int IMMEDIATE_ACK_DELAY = SystemVersion.isSlow() ? 100 : 80;
     static final String PROP_IMMEDIATE_ACK_DELAY = "i2p.streaming.immediateAckDelay";
 
-    private static final long[] RATES = new long[] { RateConstants.ONE_MINUTE };
+    private static final long[] RATES = new long[] {RateConstants.ONE_MINUTE};
 
     public ConnectionPacketHandler(I2PAppContext context) {
         _context = context;
@@ -49,7 +50,7 @@ class ConnectionPacketHandler {
         _context.statManager().createRateStat("stream.con.receiveMessageSize", "Size of a message received on a connection", "Stream", RATES);
         _context.statManager().createRateStat("stream.resetReceived", "Number of successful sent messages before receiving a RESET", "Stream", RATES);
         _context.statManager().createRateStat("stream.sendsBeforeAck", "Number of times a message was sent before it was ACKed", "Stream", RATES);
-        //_context.statManager().createRateStat("stream.trend", "What direction the RTT is trending in (with period = windowsize)", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
+        // _context.statManager().createRateStat("stream.trend", "What direction the RTT is trending in (with period = windowsize)", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
     }
 
     /**
@@ -61,31 +62,25 @@ class ConnectionPacketHandler {
         if (!ok) {
             boolean isTooFast = con.getSendStreamId() <= 0;
             // Apparently an i2pd bug... see verifyPacket()
-            if ((!packet.isFlagSet(Packet.FLAG_RESET)) && (!isTooFast) && (_log.shouldWarn()))
-                _log.warn("Received packet that does NOT verify: " + packet + " on " + con);
+            if ((!packet.isFlagSet(Packet.FLAG_RESET)) && (!isTooFast) && (_log.shouldWarn())) _log.warn("Received packet that does NOT verify: " + packet + " on " + con);
             packet.releasePayload();
             return;
         }
 
         final long seqNum = packet.getSequenceNum();
         if (con.getHardDisconnected()) {
-            if ((seqNum > 0) || (packet.getPayloadSize() > 0) ||
-                 (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE | Packet.FLAG_CLOSE))) {
-                if (_log.shouldWarn())
-                    _log.warn("Received a data packet after hard disconnect on " + con + " -> Sending RESET...");
+            if ((seqNum > 0) || (packet.getPayloadSize() > 0) || (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE | Packet.FLAG_CLOSE))) {
+                if (_log.shouldWarn()) _log.warn("Received a data packet after hard disconnect on " + con + " -> Sending RESET...");
                 // the following will send a RESET
                 con.disconnect(false);
             } else {
-                if (_log.shouldWarn())
-                    _log.warn("Ignoring packet received after hard disconnect on " + con);
+                if (_log.shouldWarn()) _log.warn("Ignoring packet received after hard disconnect on " + con);
             }
             return;
         }
 
-        if ((con.getCloseSentOn() > 0) && (con.getUnackedPacketsSent() <= 0) &&
-             (seqNum > 0) && (packet.getPayloadSize() > 0)) {
-            if (_log.shouldInfo())
-                _log.info("Received new data when we've sent them data and all of our data is ACKed on " + con);
+        if ((con.getCloseSentOn() > 0) && (con.getUnackedPacketsSent() <= 0) && (seqNum > 0) && (packet.getPayloadSize() > 0)) {
+            if (_log.shouldInfo()) _log.info("Received new data when we've sent them data and all of our data is ACKed on " + con);
             // this is fine, half-close
             // Major bug before 0.9.9, packets were dropped here and a reset sent
             // If we are fully closed, will handle that in the canAccept test below
@@ -101,18 +96,13 @@ class ConnectionPacketHandler {
                 }
                 int mtu = con.getOptions().getMaxMessageSize();
                 if (size < mtu) {
-                    if (_log.shouldInfo())
-                        _log.info("Reducing MTU to " + size + " bytes from " + mtu);
+                    if (_log.shouldInfo()) _log.info("Reducing MTU to " + size + " bytes from " + mtu);
                     con.getOptions().setMaxMessageSize(size);
                     con.getOutputStream().setBufferSize(size);
                 } else if (size > con.getOptions().getMaxInitialMessageSize()) {
-                    if (size > mtu)
-                        size = mtu;
-                    if (_log.shouldInfo())
-                        _log.info("Increasing MTU to " + size
-                                  + " bytes from " + con.getOptions().getMaxInitialMessageSize());
-                    if (size != mtu)
-                        con.getOptions().setMaxMessageSize(size);
+                    if (size > mtu) size = mtu;
+                    if (_log.shouldInfo()) _log.info("Increasing MTU to " + size + " bytes from " + con.getOptions().getMaxInitialMessageSize());
+                    if (size != mtu) con.getOptions().setMaxMessageSize(size);
                     con.getOutputStream().setBufferSize(size);
                 }
             }
@@ -121,9 +111,7 @@ class ConnectionPacketHandler {
             // specs not clear if this is allowed
             final int size = ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE;
             if (size < con.getOptions().getMaxMessageSize()) {
-                if (_log.shouldInfo())
-                    _log.info("Received SYN ACK without MTU; reducing MTU to " + size
-                              + " bytes (Max: " + con.getOptions().getMaxMessageSize() + ")");
+                if (_log.shouldInfo()) _log.info("Received SYN ACK without MTU; reducing MTU to " + size + " bytes (Max: " + con.getOptions().getMaxMessageSize() + ")");
                 con.getOptions().setMaxMessageSize(size);
                 con.getOutputStream().setBufferSize(size);
             }
@@ -137,9 +125,8 @@ class ConnectionPacketHandler {
             if (packet.getOptionalDelay() >= Packet.MIN_DELAY_CHOKE) {
                 // requested choke
                 choke = true;
-                if (_log.shouldInfo())
-                    _log.info("Received a choke on " + con);
-                //con.getOptions().setRTT(con.getOptions().getRTT() + 10*1000);
+                if (_log.shouldInfo()) _log.info("Received a choke on " + con);
+                // con.getOptions().setRTT(con.getOptions().getRTT() + 10*1000);
             }
             // Only call this if the flag is set
             con.setChoked(choke);
@@ -147,13 +134,10 @@ class ConnectionPacketHandler {
 
         if (!con.getInputStream().canAccept(seqNum, packet.getPayloadSize())) {
             if (con.getInputStream().isLocallyClosed()) {
-                if (_log.shouldInfo())
-                    _log.info("More data received after local close on " + con +
-                              " -> Ignoring packet instead of sending RESET...");
+                if (_log.shouldInfo()) _log.info("More data received after local close on " + con + " -> Ignoring packet instead of sending RESET...");
                 return;
             } else {
-                if (_log.shouldWarn())
-                    _log.warn("Inbound buffer exceeded on " + con + " -> Choking and dropping...");
+                if (_log.shouldWarn()) _log.warn("Inbound buffer exceeded on " + con + " -> Choking and dropping...");
                 con.setChoking(true);
             }
             return;
@@ -168,7 +152,9 @@ class ConnectionPacketHandler {
         // multiple packets before he gets the first ACK back.
         // If we want to limit the number of packets we receive without a
         // SendStreamID, do it in PacketHandler.receiveUnknownCon().
-        if ((!isSYN) && (packet.getReceiveStreamId() <= 0)) {allowAck = false;}
+        if ((!isSYN) && (packet.getReceiveStreamId() <= 0)) {
+            allowAck = false;
+        }
 
         // Receive the message.
         // Note that this is called even for empty packets, including CLOSE packets, so the
@@ -177,7 +163,9 @@ class ConnectionPacketHandler {
         boolean isNew;
         if (seqNum > 0 || isSYN) {
             isNew = con.getInputStream().messageReceived(seqNum, packet.getPayload()) && allowAck;
-        } else {isNew = false;}
+        } else {
+            isNew = false;
+        }
 
         if (isNew && packet.getPayloadSize() > 512) {
             // don't clear choking unless it was new, and a big packet
@@ -189,10 +177,15 @@ class ConnectionPacketHandler {
 
         if (_log.shouldDebug()) {
             String type;
-            if (!allowAck) {type = "Non-SYN before SYN";}
-            else if (isNew) {type = "New";}
-            else if (packet.getPayloadSize() <= 0) {type = "ACK-only";}
-            else {type = "DUP";}
+            if (!allowAck) {
+                type = "Non-SYN before SYN";
+            } else if (isNew) {
+                type = "New";
+            } else if (packet.getPayloadSize() <= 0) {
+                type = "ACK-only";
+            } else {
+                type = "DUP";
+            }
             _log.debug(type + " Inbound packet: " + packet + " on " + con);
         }
 
@@ -203,9 +196,8 @@ class ConnectionPacketHandler {
             con.incrementBytesReceived(packet.getPayloadSize());
 
             if (delayReq && packet.getOptionalDelay() <= 0) {
-                if (_log.shouldDebug())
-                    _log.debug("Scheduling immediate ACK for " + packet);
-                //con.setNextSendTime(_context.clock().now() + con.getOptions().getSendAckDelay());
+                if (_log.shouldDebug()) _log.debug("Scheduling immediate ACK for " + packet);
+                // con.setNextSendTime(_context.clock().now() + con.getOptions().getSendAckDelay());
                 // honor request "almost" immediately
                 // Note: the delay below _may_ be a big limiter in how fast local "loopback" connections
                 // can go, however if it goes too fast then we start choking which causes
@@ -214,13 +206,11 @@ class ConnectionPacketHandler {
                 con.setNextSendTime(_context.clock().now() + Math.min(_context.getProperty(PROP_IMMEDIATE_ACK_DELAY, IMMEDIATE_ACK_DELAY), con.getOptions().getRTT() / 8));
             } else {
                 int delay;
-                if (delayReq) // delayed ACK requested
-                    delay = packet.getOptionalDelay();
-                else
-                    delay = con.getOptions().getSendAckDelay();
+                // delayed ACK requested
+                if (delayReq) delay = packet.getOptionalDelay();
+                else delay = con.getOptions().getSendAckDelay();
                 con.setNextSendTime(delay + _context.clock().now());
-                if (_log.shouldDebug())
-                    _log.debug("Scheduling ACK in " + delay + "ms for received packet " + packet);
+                if (_log.shouldDebug()) _log.debug("Scheduling ACK in " + delay + "ms for received packet " + packet);
             }
         } else {
             if ((seqNum > 0) || (packet.getPayloadSize() > 0) || isSYN) {
@@ -233,23 +223,19 @@ class ConnectionPacketHandler {
                 final int ackDelay = con.getOptions().getSendAckDelay();
                 final long lastSendTime = con.getLastSendTime();
 
-                if (_log.shouldInfo())
-                    _log.info(String.format("%s %n* Congestion: DUP packet %s ACKDelay %d; Last Send: %s ago",
-                                    con, packet, ackDelay, DataHelper.formatDuration(now - lastSendTime)));
+                if (_log.shouldInfo()) _log.info(String.format("%s %n* Congestion: DUP packet %s ACKDelay %d; Last Send: %s ago", con, packet, ackDelay, DataHelper.formatDuration(now - lastSendTime)));
 
                 // If this is longer than his RTO, he will always retransmit, and
                 // will be stuck at a window size of 1 forever. So we take the minimum
                 // of the ackDelay and half our estimated RTT to be sure.
                 final long nextSendTime = lastSendTime + Math.min(ackDelay, con.getOptions().getRTT() / 2);
                 if (nextSendTime <= now) {
-                    if (_log.shouldInfo())
-                        _log.info("Immediate ACK");
+                    if (_log.shouldInfo()) _log.info("Immediate ACK");
                     con.ackImmediately();
                     _context.statManager().updateFrequency("stream.ack.dup.immediate");
                 } else {
                     final long delay = nextSendTime - now;
-                    if (_log.shouldInfo())
-                        _log.info("Scheduling ACK in " + delay);
+                    if (_log.shouldInfo()) _log.info("Scheduling ACK in " + delay);
                     con.schedule(new AckDup(con), delay);
                 }
 
@@ -282,12 +268,10 @@ class ConnectionPacketHandler {
             } else {
                 long timeSinceSend = _context.clock().now() - con.getLastSendTime();
                 if (timeSinceSend >= 2000) {
-                    if (_log.shouldDebug())
-                        _log.debug("Fast ACK for DUP " + packet);
+                    if (_log.shouldDebug()) _log.debug("Fast ACK for DUP " + packet);
                     con.ackImmediately();
                 } else {
-                    if (_log.shouldDebug())
-                        _log.debug("Not fast ACKing DUP " + packet + " since we last sent " + timeSinceSend + "ms ago");
+                    if (_log.shouldDebug()) _log.debug("Not fast ACKing DUP " + packet + " since we last sent " + timeSinceSend + "ms ago");
                 }
             }
         }
@@ -296,8 +280,7 @@ class ConnectionPacketHandler {
         // update the TCB Cache now that we've processed the acks and updated our rtt etc.
         if (packet.isFlagSet(Packet.FLAG_CLOSE) && packet.isFlagSet(Packet.FLAG_SIGNATURE_INCLUDED)) {
             con.closeReceived();
-            if (isNew)
-                con.updateShareOpts();
+            if (isNew) con.updateShareOpts();
         }
 
         if (ackOnly || !isNew) {
@@ -322,21 +305,13 @@ class ConnectionPacketHandler {
         // could actually be acking data (this fixes the buggered up ack of packet 0 problem).
         // this is called after packet verification, which places the stream IDs as necessary if
         // the SYN verifies (so if we're acking w/out stream IDs, no SYN has been received yet)
-        if ((packet != null) && (packet.getSendStreamId() > 0) && (packet.getReceiveStreamId() > 0) &&
-             (con != null) && (con.getSendStreamId() > 0) && (con.getReceiveStreamId() > 0) &&
-             (packet.getSendStreamId() != Packet.STREAM_ID_UNKNOWN) &&
-             (packet.getReceiveStreamId() != Packet.STREAM_ID_UNKNOWN) &&
-             (con.getSendStreamId() != Packet.STREAM_ID_UNKNOWN) &&
-             (con.getReceiveStreamId() != Packet.STREAM_ID_UNKNOWN))
-            acked = con.ackPackets(ackThrough, nacks);
-        else
-            return false;
+        if ((packet != null) && (packet.getSendStreamId() > 0) && (packet.getReceiveStreamId() > 0) && (con != null) && (con.getSendStreamId() > 0) && (con.getReceiveStreamId() > 0) && (packet.getSendStreamId() != Packet.STREAM_ID_UNKNOWN) && (packet.getReceiveStreamId() != Packet.STREAM_ID_UNKNOWN) && (con.getSendStreamId() != Packet.STREAM_ID_UNKNOWN) && (con.getReceiveStreamId() != Packet.STREAM_ID_UNKNOWN)) acked = con.ackPackets(ackThrough, nacks);
+        else return false;
 
         boolean lastPacketAcked = false;
         final boolean receivedAck = con.getOptions().receivedAck();
         if ((acked != null) && (!acked.isEmpty())) {
-            if (_log.shouldDebug())
-                _log.debug(acked.size() + " of our packets ACKed with " + packet);
+            if (_log.shouldDebug()) _log.debug(acked.size() + " of our packets ACKed with " + packet);
             // use the highest RTT, since these would likely be bunched together,
             // and the highest rtt lets us set our resend delay properly
             // RFC 6298 part 3 dictates only use packets that haven't been re-sent.
@@ -347,22 +322,19 @@ class ConnectionPacketHandler {
                 final int numSends = p.getNumSends();
                 final int ackTime = p.getAckTime();
 
-                if (numSends > 1 && receivedAck)
-                    numResends++;
-                else if (ackTime > highestRTT)
-                    highestRTT = ackTime;
+                if (numSends > 1 && receivedAck) numResends++;
+                else if (ackTime > highestRTT) highestRTT = ackTime;
 
                 _context.statManager().addRateData("stream.sendsBeforeAck", numSends, ackTime);
 
                 // ACK the tags we delivered so we can use them
-                //if ((p.getKeyUsed() != null) && (p.getTagsSent() != null)
+                // if ((p.getKeyUsed() != null) && (p.getTagsSent() != null)
                 //      && (p.getTagsSent().size() > 0)) {
                 //    _context.sessionKeyManager().tagsDelivered(p.getTo().getPublicKey(),
                 //                                               p.getKeyUsed(),
                 //                                               p.getTagsSent());
-                //}
-                if (_log.shouldDebug())
-                    _log.debug("Packet ACKed after " + ackTime + "ms: " + p);
+                // }
+                if (_log.shouldDebug()) _log.debug("Packet ACKed after " + ackTime + "ms: " + p);
             }
             if (highestRTT > 0) {
                 if (_log.shouldInfo()) {
@@ -370,28 +342,21 @@ class ConnectionPacketHandler {
                     int oldrto = con.getOptions().getRTO();
                     int olddev = con.getOptions().getRTTDev();
                     con.getOptions().updateRTT(highestRTT);
-                    _log.info("ACKed: " + acked.size() + " [Highest RTT: " + highestRTT +
-                              "; RTT: " + oldrtt + " -> " + con.getOptions().getRTT() +
-                              "; RTO: " + oldrto + " -> " + con.getOptions().getRTO() +
-                              "; Deviance: " + olddev + " -> " + con.getOptions().getRTTDev()+ "]");
+                    _log.info("ACKed: " + acked.size() + " [Highest RTT: " + highestRTT + "; RTT: " + oldrtt + " -> " + con.getOptions().getRTT() + "; RTO: " + oldrto + " -> " + con.getOptions().getRTO() + "; Deviance: " + olddev + " -> " + con.getOptions().getRTTDev() + "]");
                 } else {
                     con.getOptions().updateRTT(highestRTT);
                 }
                 if (firstAck) {
-                    if (con.isInbound())
-                        _context.statManager().addRateData("stream.con.initialRTT.in", highestRTT);
-                    else
-                        _context.statManager().addRateData("stream.con.initialRTT.out", highestRTT);
+                    if (con.isInbound()) _context.statManager().addRateData("stream.con.initialRTT.in", highestRTT);
+                    else _context.statManager().addRateData("stream.con.initialRTT.out", highestRTT);
                 }
             }
             _context.statManager().addRateData("stream.con.packetsAckedPerMessageReceived", acked.size(), highestRTT);
-            if (con.getCloseSentOn() > 0 && con.getUnackedPacketsSent() <= 0)
-                lastPacketAcked = true;
+            if (con.getCloseSentOn() > 0 && con.getUnackedPacketsSent() <= 0) lastPacketAcked = true;
         }
 
         boolean rv = adjustWindow(con, isNew, packet.getSequenceNum(), numResends, (acked != null ? acked.size() : 0), choke);
-        if (lastPacketAcked)
-            con.notifyLastPacketAcked();
+        if (lastPacketAcked) con.notifyLastPacketAcked();
         return rv;
     }
 
@@ -407,8 +372,7 @@ class ConnectionPacketHandler {
     private boolean adjustWindow(Connection con, boolean isNew, long sequenceNum, int numResends, int acked, boolean choke) {
         boolean congested;
         if (choke || (!isNew && sequenceNum > 0) || con.isChoked()) {
-            if (_log.shouldDebug())
-                _log.debug("Congestion on the sending side, not adjusting window...\n* " + con);
+            if (_log.shouldDebug()) _log.debug("Congestion on the sending side, not adjusting window...\n* " + con);
             congested = true;
         } else {
             congested = false;
@@ -425,9 +389,7 @@ class ConnectionPacketHandler {
         // unless we're just sending a single packet now and then.
         // This keeps the window size from going sky-high from  ping traffic alone.
         // Since we don't adjust the window down after idle? (RFC 2581 sec. 4.1)
-        if (lowest >= con.getCongestionWindowEnd() ||
-            acked > 1 ||
-            con.getUnackedPacketsSent() > 0) {
+        if (lowest >= con.getCongestionWindowEnd() || acked > 1 || con.getUnackedPacketsSent() > 0) {
             // new packet that ack'ed uncongested data, or an empty ack
             int oldWindow = con.getOptions().getWindowSize();
             int newWindowSize = oldWindow;
@@ -445,49 +407,36 @@ class ConnectionPacketHandler {
                         // takes quite a while (a minute or more) to recover from,
                         // especially if crypto tags are lost
                         newWindowSize = Math.min(ssthresh, newWindowSize + acked);
-                    } else if (acked < factor)
-                        newWindowSize++;
-                    else
-                        newWindowSize += acked / factor;
-                    if (_log.shouldDebug())
-                        _log.debug("Slow start ACKs = " + acked + " for " + con);
-                // this is too fast since we mostly disabled the CongestionWindowEnd test above
-                //} else if (trend < 0) {
-                //    // rtt is shrinking, so lets increment the cwin
-                //    newWindowSize++;
-                //    if (_log.shouldDebug())
-                //        _log.debug("trend < 0 for " + con);
+                    } else if (acked < factor) newWindowSize++;
+                    else newWindowSize += acked / factor;
+                    if (_log.shouldDebug()) _log.debug("Slow start ACKs = " + acked + " for " + con);
+                    // this is too fast since we mostly disabled the CongestionWindowEnd test above
+                    // } else if (trend < 0) {
+                    //    // rtt is shrinking, so lets increment the cwin
+                    //    newWindowSize++;
+                    //    if (_log.shouldDebug())
+                    //        _log.debug("trend < 0 for " + con);
                 } else {
                     // congestion avoidance
                     // linear growth - increase window 1/N per RTT
                     // we can't use newWindowSize += acked/(oldWindow*N) (where N = the cong. avoid. factor), since we're
                     // integers, so lets use a random distribution instead
-                    int shouldIncrement = _context.random().nextInt(con.getOptions().getCongestionAvoidanceGrowthRateFactor()*newWindowSize);
-                    if (shouldIncrement < acked)
-                        newWindowSize++;
-                    if (_log.shouldDebug())
-                        _log.debug("Congestion Avoidance ACKs = " + acked + " for " + con);
+                    int shouldIncrement = _context.random().nextInt(con.getOptions().getCongestionAvoidanceGrowthRateFactor() * newWindowSize);
+                    if (shouldIncrement < acked) newWindowSize++;
+                    if (_log.shouldDebug()) _log.debug("Congestion Avoidance ACKs = " + acked + " for " + con);
                 }
             } else {
-                if (_log.shouldDebug())
-                    _log.debug("No change to [Window " + con.getOptions().getWindowSize() +
-                               "]\n* Congested? " + congested + "; ACKed: " + acked + "; Resends: " + numResends);
+                if (_log.shouldDebug()) _log.debug("No change to [Window " + con.getOptions().getWindowSize() + "]\n* Congested? " + congested + "; ACKed: " + acked + "; Resends: " + numResends);
             }
 
-            if (newWindowSize <= 0)
-                newWindowSize = 1;
+            if (newWindowSize <= 0) newWindowSize = 1;
 
             con.getOptions().setWindowSize(newWindowSize);
             con.setCongestionWindowEnd(newWindowSize + lowest);
 
-            if (_log.shouldDebug())
-                _log.debug("New window size: " + newWindowSize + "/" + oldWindow + "/" + con.getOptions().getWindowSize() +
-                          " (resends: " + numResends + ") for " + con);
+            if (_log.shouldDebug()) _log.debug("New window size: " + newWindowSize + "/" + oldWindow + "/" + con.getOptions().getWindowSize() + " (resends: " + numResends + ") for " + con);
         } else {
-            if (_log.shouldDebug())
-                _log.debug("No change to [Window " + con.getOptions().getWindowSize() +
-                           "]\n* HighestAckedThrough: " + lowest + "; congestionWindowEnd: " + con.getCongestionWindowEnd() +
-                           "; ACKed: " + acked + "; UnACKed: " + con.getUnackedPacketsSent());
+            if (_log.shouldDebug()) _log.debug("No change to [Window " + con.getOptions().getWindowSize() + "]\n* HighestAckedThrough: " + lowest + "; congestionWindowEnd: " + con.getCongestionWindowEnd() + "; ACKed: " + acked + "; UnACKed: " + con.getUnackedPacketsSent());
         }
 
         con.windowAdjusted();
@@ -524,7 +473,9 @@ class ConnectionPacketHandler {
                     con.setSendStreamId(packet.getReceiveStreamId());
                     Destination dest = packet.getOptionalFrom();
                     if (dest == null) {
-                        if (_log.shouldWarn()) {_log.warn("Received SYN Packet without FROM");}
+                        if (_log.shouldWarn()) {
+                            _log.warn("Received SYN Packet without FROM");
+                        }
                         packet.releasePayload();
                         return false;
                     }
@@ -534,7 +485,9 @@ class ConnectionPacketHandler {
                         con.setRemotePeer(dest);
                     }
                     SigningPublicKey spk = packet.getTransientSPK();
-                    if (spk != null) {con.setRemoteTransientSPK(spk);}
+                    if (spk != null) {
+                        con.setRemoteTransientSPK(spk);
+                    }
                     packet.releasePayload();
                     return true;
                 } else {
@@ -543,7 +496,9 @@ class ConnectionPacketHandler {
                         packet.releasePayload();
                         return true;
                     } else {
-                        if (_log.shouldWarn()) {_log.warn("Received packet without RESET or SYN where we don't know StreamID: " + packet);}
+                        if (_log.shouldWarn()) {
+                            _log.warn("Received packet without RESET or SYN where we don't know StreamID: " + packet);
+                        }
                         packet.releasePayload();
                         return false;
                     }
@@ -551,7 +506,9 @@ class ConnectionPacketHandler {
             } else {
                 // Apparently an i2pd bug...
                 if (con.getSendStreamId() != packet.getReceiveStreamId()) {
-                    if (_log.shouldWarn()) {_log.warn("Received packet with the WRONG reply StreamID \n* " + con + " / " + packet);}
+                    if (_log.shouldWarn()) {
+                        _log.warn("Received packet with the WRONG reply StreamID \n* " + con + " / " + packet);
+                    }
                     packet.releasePayload();
                     return false;
                 } else {
@@ -577,7 +534,9 @@ class ConnectionPacketHandler {
             Destination d1 = con.getRemotePeer();
             Destination d2 = packet.getOptionalFrom();
             if (d1 != null && d2 != null && !d1.equals(d2)) {
-                if (_log.shouldWarn()) {_log.warn("Received RESET packet from WRONG destination -> " + con);}
+                if (_log.shouldWarn()) {
+                    _log.warn("Received RESET packet from WRONG destination -> " + con);
+                }
                 packet.releasePayload();
                 return;
             }
@@ -586,11 +545,15 @@ class ConnectionPacketHandler {
             boolean ok = packet.verifySignature(_context, spk, ba.getData());
             _cache.release(ba);
             if (!ok) {
-                if (_log.shouldWarn()) {_log.warn("Received UNSIGNED or FORGED RESET packet -> " + con);}
+                if (_log.shouldWarn()) {
+                    _log.warn("Received UNSIGNED or FORGED RESET packet -> " + con);
+                }
                 packet.releasePayload();
                 return;
             } else {
-                if (_log.shouldInfo()) {_log.info("Received RESET packet -> " + con);}
+                if (_log.shouldInfo()) {
+                    _log.info("Received RESET packet -> " + con);
+                }
                 // ok, valid RST
                 con.resetReceived();
                 con.eventOccurred();
@@ -600,7 +563,9 @@ class ConnectionPacketHandler {
                 return;
             }
         } else {
-            if (_log.shouldWarn()) {_log.warn("Received RESET packet for the WRONG connection -> " + con);}
+            if (_log.shouldWarn()) {
+                _log.warn("Received RESET packet for the WRONG connection -> " + con);
+            }
             packet.releasePayload();
             return;
         }
@@ -621,8 +586,7 @@ class ConnectionPacketHandler {
             throw new I2PException("Received packet from WRONG destination on " + con);
         }
         // verify the signature if necessary
-        if (con.getOptions().getRequireFullySigned() ||
-            packet.isFlagSet(Packet.FLAG_SYNCHRONIZE | Packet.FLAG_CLOSE | Packet.FLAG_SIGNATURE_INCLUDED)) {
+        if (con.getOptions().getRequireFullySigned() || packet.isFlagSet(Packet.FLAG_SYNCHRONIZE | Packet.FLAG_CLOSE | Packet.FLAG_SIGNATURE_INCLUDED)) {
             // we need a valid signature
             SigningPublicKey spk = con.getRemoteSPK();
             // inbound SYNs are now verifed in ConnectionManager; Packet caches the result
@@ -649,20 +613,17 @@ class ConnectionPacketHandler {
             boolean sent = false;
             if (_con.getLastSendTime() <= _created) {
                 if (_con.getResetReceived() || _con.getResetSent()) {
-                    if (_log.shouldDebug())
-                        _log.debug("ACK DUP on " + _con + ", but we have been reset");
+                    if (_log.shouldDebug()) _log.debug("ACK DUP on " + _con + ", but we have been reset");
                     return;
                 }
 
-                if (_log.shouldDebug())
-                    _log.debug("Last sent was a while ago, and we want to ACK a DUP on " + _con);
+                if (_log.shouldDebug()) _log.debug("Last sent was a while ago, and we want to ACK a DUP on " + _con);
                 // we haven't done anything since receiving the dup, send an
                 // ack now
                 _con.ackImmediately();
                 sent = true;
             } else {
-                if (_log.shouldDebug())
-                    _log.debug("ACK DUP on " + _con + ", but we have sent (" + (_con.getLastSendTime()-_created) + ")");
+                if (_log.shouldDebug()) _log.debug("ACK DUP on " + _con + ", but we have sent (" + (_con.getLastSendTime() - _created) + ")");
             }
             _context.statManager().addRateData("stream.ack.dup.sent", sent ? 1 : 0);
         }

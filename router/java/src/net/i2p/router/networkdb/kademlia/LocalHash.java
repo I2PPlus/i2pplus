@@ -9,13 +9,14 @@ package net.i2p.router.networkdb.kademlia;
  *
  */
 
+import net.i2p.data.DataHelper;
+import net.i2p.data.Hash;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import net.i2p.data.DataHelper;
-import net.i2p.data.Hash;
 
 /**
  * Pull the caching used only by KBucketImpl out of Hash and put it here.
@@ -25,7 +26,7 @@ import net.i2p.data.Hash;
  * @author moved from Hash.java by zzz
  */
 class LocalHash extends Hash {
-    //private final static Log _log = new Log(LocalHash.class);
+    // private final static Log _log = new Log(LocalHash.class);
     private /* FIXME final FIXME */ Map<Hash, byte[]> _xorCache;
 
     private static final int MAX_CACHED_XOR = 1024;
@@ -46,8 +47,7 @@ class LocalHash extends Hash {
      */
     public void prepareCache() {
         synchronized (this) {
-            if (_xorCache == null)
-                _xorCache = new HashMap<Hash, byte[]>(MAX_CACHED_XOR);
+            if (_xorCache == null) _xorCache = new HashMap<Hash, byte[]>(MAX_CACHED_XOR);
         }
     }
 
@@ -61,8 +61,7 @@ class LocalHash extends Hash {
      *                               preparing this object's cache via .prepareCache()
      */
     public byte[] cachedXor(Hash key) throws IllegalStateException {
-        if (_xorCache == null)
-            throw new IllegalStateException("To use the cache, you must first prepare it");
+        if (_xorCache == null) throw new IllegalStateException("To use the cache, you must first prepare it");
         byte[] distance = _xorCache.get(key);
 
         if (distance == null) {
@@ -73,10 +72,8 @@ class LocalHash extends Hash {
                     // this removes essentially random keys - we don't maintain any sort
                     // of LRU or age.  perhaps we should?
                     int removed = 0;
-                    for (Iterator<Hash> iter = _xorCache.keySet().iterator(); iter.hasNext() && removed < toRemove; removed++)
-                        keys.add(iter.next());
-                    for (Iterator<Hash> iter = keys.iterator(); iter.hasNext();)
-                        _xorCache.remove(iter.next());
+                    for (Iterator<Hash> iter = _xorCache.keySet().iterator(); iter.hasNext() && removed < toRemove; removed++) keys.add(iter.next());
+                    for (Iterator<Hash> iter = keys.iterator(); iter.hasNext(); ) _xorCache.remove(iter.next());
                 }
                 distance = DataHelper.xor(key.getData(), getData());
                 _xorCache.put(key, distance);
@@ -90,5 +87,4 @@ class LocalHash extends Hash {
             _xorCache.clear();
         }
     }
-
 }

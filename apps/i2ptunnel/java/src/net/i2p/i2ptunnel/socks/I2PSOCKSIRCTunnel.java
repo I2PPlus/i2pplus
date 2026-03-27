@@ -6,10 +6,6 @@
  */
 package net.i2p.i2ptunnel.socks;
 
-import java.io.IOException;
-import java.net.Socket;
-import java.net.SocketException;
-import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.i2ptunnel.I2PTunnel;
 import net.i2p.i2ptunnel.Logging;
@@ -18,6 +14,11 @@ import net.i2p.i2ptunnel.irc.IrcOutboundFilter;
 import net.i2p.socks.SOCKSException;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PAppThread;
+
+import java.io.IOException;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * SOCKS tunnel specialized for IRC traffic with I2P filtering and security.
@@ -54,34 +55,37 @@ public class I2PSOCKSIRCTunnel extends I2PSOCKSTunnel {
     protected void clientConnectionRun(Socket s) {
         I2PSocket destSock = null;
         try {
-            //_log.error("SOCKS IRC Tunnel Start");
+            // _log.error("SOCKS IRC Tunnel Start");
             try {
                 s.setSoTimeout(INITIAL_SO_TIMEOUT);
-            } catch (SocketException ioe) {}
+            } catch (SocketException ioe) {
+            }
             SOCKSServer serv = SOCKSServerFactory.createSOCKSServer(_context, s, getTunnel().getClientOptions());
             Socket clientSock = serv.getClientSocket();
             try {
                 s.setSoTimeout(0);
-            } catch (SocketException ioe) {}
+            } catch (SocketException ioe) {
+            }
             destSock = serv.getDestinationI2PSocket(this);
             StringBuilder expectedPong = new StringBuilder();
             int id = __clientId.incrementAndGet();
-            Thread in = new I2PAppThread(new IrcInboundFilter(clientSock, destSock, expectedPong, _log),
-                                         "SOCKS IRC Client " + id + " in", true);
+            Thread in = new I2PAppThread(new IrcInboundFilter(clientSock, destSock, expectedPong, _log), "SOCKS IRC Client " + id + " in", true);
             in.start();
-            //Thread out = new I2PAppThread(new IrcOutboundFilter(clientSock, destSock, expectedPong, _log),
+            // Thread out = new I2PAppThread(new IrcOutboundFilter(clientSock, destSock, expectedPong, _log),
             //                              "SOCKS IRC Client " + id + " out", true);
             Runnable out = new IrcOutboundFilter(clientSock, destSock, expectedPong, _log);
             // we are called from an unlimited thread pool, so run inline
-            //out.start();
+            // out.start();
             out.run();
         } catch (SOCKSException e) {
-            if (_log.shouldWarn())
-                _log.warn("Error from SOCKS connection", e);
+            if (_log.shouldWarn()) _log.warn("Error from SOCKS connection", e);
         } finally {
             // only because we are running it inline
             closeSocket(s);
-            if (destSock != null) try { destSock.close(); } catch (IOException ioe) {}
+            if (destSock != null) try {
+                    destSock.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 }

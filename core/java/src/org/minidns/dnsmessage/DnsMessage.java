@@ -10,6 +10,12 @@
  */
 package org.minidns.dnsmessage;
 
+import org.minidns.edns.Edns;
+import org.minidns.record.Data;
+import org.minidns.record.OPT;
+import org.minidns.record.Record;
+import org.minidns.record.Record.TYPE;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -31,11 +37,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.minidns.edns.Edns;
-import org.minidns.record.Data;
-import org.minidns.record.OPT;
-import org.minidns.record.Record;
-import org.minidns.record.Record.TYPE;
 
 /**
  * A DNS message as defined by RFC 1035. The message consists of a header and
@@ -78,7 +79,7 @@ public class DnsMessage {
         BADALG(21),
         BADTRUNC(22),
         BADCOOKIE(23),
-       ;
+        ;
 
         /**
          * Reverse lookup table for response codes.
@@ -127,7 +128,6 @@ public class DnsMessage {
             }
             return INVERSE_LUT.get(value);
         }
-
     }
 
     /**
@@ -144,7 +144,7 @@ public class DnsMessage {
         UNASSIGNED3,
         NOTIFY,
         UPDATE,
-       ;
+        ;
 
         /**
          * Lookup table for for opcode resolution.
@@ -199,7 +199,6 @@ public class DnsMessage {
             }
             return INVERSE_LUT[value];
         }
-
     }
 
     /**
@@ -647,8 +646,7 @@ public class DnsMessage {
      */
     public boolean isDnssecOk() {
         Edns edns = getEdns();
-        if (edns == null)
-            return false;
+        if (edns == null) return false;
 
         return edns.dnssecOk;
     }
@@ -677,11 +675,7 @@ public class DnsMessage {
     public String asTerminalOutput() {
         if (terminalOutputCache != null) return terminalOutputCache;
 
-        StringBuilder sb = new StringBuilder("; ->>HEADER<<-")
-                .append(" opcode: ").append(opcode)
-                .append(", status: ").append(responseCode)
-                .append(", id: ").append(id).append("\n")
-                .append("; flags:");
+        StringBuilder sb = new StringBuilder("; ->>HEADER<<-").append(" opcode: ").append(opcode).append(", status: ").append(responseCode).append(", id: ").append(id).append("\n").append("; flags:");
         if (!qr) sb.append(" qr");
         if (authoritativeAnswer) sb.append(" aa");
         if (truncated) sb.append(" tr");
@@ -689,11 +683,7 @@ public class DnsMessage {
         if (recursionAvailable) sb.append(" ra");
         if (authenticData) sb.append(" ad");
         if (checkingDisabled) sb.append(" cd");
-        sb.append("; QUERY: ").append(questions.size())
-                .append(", ANSWER: ").append(answerSection.size())
-                .append(", AUTHORITY: ").append(authoritySection.size())
-                .append(", ADDITIONAL: ").append(additionalSection.size())
-                .append("\n\n");
+        sb.append("; QUERY: ").append(questions.size()).append(", ANSWER: ").append(answerSection.size()).append(", AUTHORITY: ").append(authoritySection.size()).append(", ADDITIONAL: ").append(additionalSection.size()).append("\n\n");
         for (Record<? extends Data> record : additionalSection) {
             Edns edns = Edns.fromRecord(record);
             if (edns != null) {
@@ -795,11 +785,7 @@ public class DnsMessage {
         if (qr) {
             throw new IllegalStateException();
         }
-        Builder responseBuilder = DnsMessage.builder()
-                .setQrFlag(true)
-                .setResponseCode(responseCode)
-                .setId(id)
-                .setQuestion(getQuestion());
+        Builder responseBuilder = DnsMessage.builder().setQrFlag(true).setResponseCode(responseCode).setId(id).setQuestion(getQuestion());
 
         return responseBuilder;
     }
@@ -824,17 +810,13 @@ public class DnsMessage {
     private <D extends Data> List<Record<D>> filterSectionByType(boolean stopOnFirst, SectionName sectionName, Class<D> type) {
         List<Record<?>> sectionToFilter;
         switch (sectionName) {
-            case answer:
-                sectionToFilter = answerSection;
+            case answer: sectionToFilter = answerSection;
                 break;
-            case authority:
-                sectionToFilter = authoritySection;
+            case authority: sectionToFilter = authoritySection;
                 break;
-            case additional:
-                sectionToFilter = additionalSection;
+            case additional: sectionToFilter = additionalSection;
                 break;
-            default:
-                throw new AssertionError("Unknown section name " + sectionName);
+            default: throw new AssertionError("Unknown section name " + sectionName);
         }
 
         List<Record<D>> res = new ArrayList<>(stopOnFirst ? 1 : sectionToFilter.size());
@@ -919,8 +901,7 @@ public class DnsMessage {
         /**
          * Creates a new empty Builder.
          */
-        private Builder() {
-        }
+        private Builder() {}
 
         /**
          * Creates a Builder initialized from an existing DNS message.
@@ -1223,30 +1204,18 @@ public class DnsMessage {
         }
 
         private void writeToStringBuilder(StringBuilder sb) {
-            sb.append('(')
-                .append(id)
-                .append(' ')
-                .append(opcode)
-                .append(' ')
-                .append(responseCode)
-                .append(' ');
+            sb.append('(').append(id).append(' ').append(opcode).append(' ').append(responseCode).append(' ');
             if (query) {
                 sb.append("resp[qr=1]");
             } else {
                 sb.append("query[qr=0]");
             }
-            if (authoritativeAnswer)
-                sb.append(" aa");
-            if (truncated)
-                sb.append(" tr");
-            if (recursionDesired)
-                sb.append(" rd");
-            if (recursionAvailable)
-                sb.append(" ra");
-            if (authenticData)
-                sb.append(" ad");
-            if (checkingDisabled)
-                sb.append(" cd");
+            if (authoritativeAnswer) sb.append(" aa");
+            if (truncated) sb.append(" tr");
+            if (recursionDesired) sb.append(" rd");
+            if (recursionAvailable) sb.append(" ra");
+            if (authenticData) sb.append(" ad");
+            if (checkingDisabled) sb.append(" cd");
             sb.append(")\n");
             if (questions != null) {
                 for (Question question : questions) {
@@ -1289,5 +1258,4 @@ public class DnsMessage {
             return sb.toString();
         }
     }
-
 }

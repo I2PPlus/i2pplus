@@ -1,4 +1,5 @@
 package net.i2p.kademlia;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,11 +9,13 @@ package net.i2p.kademlia;
  *
  */
 
-import java.util.List;
 import junit.framework.TestCase;
+
 import net.i2p.I2PAppContext;
 import net.i2p.data.Hash;
 import net.i2p.util.Log;
+
+import java.util.List;
 
 /**
  * Test KBucketSet.
@@ -21,8 +24,7 @@ import net.i2p.util.Log;
  * @author comwiz
  * @since 0.9.10 moved from net.i2p.router.networkdb.kademlia
  */
-
-public class KBucketSetTest extends TestCase{
+public class KBucketSetTest extends TestCase {
     private I2PAppContext context;
     private KBucketSet<Hash> set;
     private Hash usHash;
@@ -30,19 +32,19 @@ public class KBucketSetTest extends TestCase{
     private static final int K = 8;
     private static final int B = 1;
 
-    public void setUp(){
+    public void setUp() {
         context = I2PAppContext.getGlobalContext();
         log = context.logManager().getLog(KBucketSet.class);
         byte[] us = new byte[Hash.HASH_LENGTH];
         context.random().nextBytes(us);
         usHash = new Hash(us);
-                // We use the default RandomTrimmer so add() will never fail
+        // We use the default RandomTrimmer so add() will never fail
         set = new KBucketSet<Hash>(context, usHash, K, B);
         // tests may be run in any order so prime it
         addRandom(1000);
     }
 
-    public void testRandom(){
+    public void testRandom() {
         addRandom(1000);
     }
 
@@ -75,16 +77,19 @@ public class KBucketSetTest extends TestCase{
         for (int i = 0; i < n; i++) {
             try {
                 threads[i].join();
-            } catch (InterruptedException ie) {}
+            } catch (InterruptedException ie) {
+            }
         }
     }
 
     /** @since 0.9.10 */
     private class RTester extends Thread {
         private final int _count;
+
         public RTester(int count) {
             _count = count;
         }
+
         public void run() {
             addRandom(_count);
         }
@@ -97,8 +102,7 @@ public class KBucketSetTest extends TestCase{
             for (Hash sds : b.getEntries()) {
                 int range = set.getRange(sds);
                 if (range < b.getRangeBegin() || range > b.getRangeEnd()) {
-                    log.error("Hash " + sds + " with range " + range +
-                              " does not belong in " + b);
+                    log.error("Hash " + sds + " with range " + range + " does not belong in " + b);
                     errors++;
                 }
             }
@@ -119,7 +123,7 @@ public class KBucketSetTest extends TestCase{
             }
             lastEnd = b.getRangeEnd();
         }
-        if (lastEnd != (bits * (1 << (B-1))) - 1) {
+        if (lastEnd != (bits * (1 << (B - 1))) - 1) {
             log.error("Out of order: last=" + lastEnd);
             errors++;
         }

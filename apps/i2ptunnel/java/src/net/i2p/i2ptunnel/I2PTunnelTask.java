@@ -3,10 +3,11 @@
  */
 package net.i2p.i2ptunnel;
 
-import java.util.Properties;
 import net.i2p.client.I2PSession;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.EventDispatcherImpl;
+
+import java.util.Properties;
 
 /**
  * Base class for I2P tunnel servers and clients.
@@ -30,13 +31,33 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
     }
 
     /** for apps that use multiple I2PTunnel instances */
-    public void setTunnel(I2PTunnel pTunnel) {tunnel = pTunnel;}
-    public I2PTunnel getTunnel() {return tunnel;}
-    public int getId() {return this.id;}
-    public boolean isOpen() {return open;}
-    public void setId(int id) {this.id = id;}
-    protected void setName(String name) {this.name = name;}
-    protected void routerDisconnected() {tunnel.routerDisconnected();}
+    public void setTunnel(I2PTunnel pTunnel) {
+        tunnel = pTunnel;
+    }
+
+    public I2PTunnel getTunnel() {
+        return tunnel;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public boolean isOpen() {
+        return open;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    protected void setName(String name) {
+        this.name = name;
+    }
+
+    protected void routerDisconnected() {
+        tunnel.routerDisconnected();
+    }
 
     /**
      *  Note that the tunnel can be reopened after this by calling startRunning().
@@ -60,7 +81,9 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
      *  @return success
      *  @since 0.9.17
      */
-    public boolean destroy() {return close(true);}
+    public boolean destroy() {
+        return close(true);
+    }
 
     /**
      *  Notify the task that I2PTunnel's options have been updated.
@@ -76,7 +99,9 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
      *  For tasks that don't call I2PTunnel.addSession() directly
      *  @since 0.8.13
      */
-    public void connected(I2PSession session) {getTunnel().addSession(session);}
+    public void connected(I2PSession session) {
+        getTunnel().addSession(session);
+    }
 
     /**
      *  Called when a session is disconnected.
@@ -98,7 +123,9 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
     protected boolean getBooleanOption(String opt, boolean dflt) {
         Properties opts = getTunnel().getClientOptions();
         String o = opts.getProperty(opt);
-        if (o != null) {return Boolean.parseBoolean(o);}
+        if (o != null) {
+            return Boolean.parseBoolean(o);
+        }
         return dflt;
     }
 
@@ -113,6 +140,7 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
     public void reportAbuse(I2PSession session, int severity) {}
 
     @Override
-    public String toString() {return name;}
-
+    public String toString() {
+        return name;
+    }
 }

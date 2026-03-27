@@ -15,5 +15,4 @@ public interface StatefulConnectionFilter extends IncomingConnectionFilter {
      * Tells this filter to stop and release any resources
      */
     public void stop();
-
 }

@@ -2,18 +2,20 @@ package net.i2p.crypto.elgamal.impl;
 
 import static net.i2p.crypto.SigUtil.intToASN1;
 
+import net.i2p.crypto.elgamal.ElGamalPublicKey;
+import net.i2p.crypto.elgamal.spec.ElGamalParameterSpec;
+import net.i2p.crypto.elgamal.spec.ElGamalPublicKeySpec;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
+
 import javax.crypto.interfaces.DHPublicKey;
 import javax.crypto.spec.DHParameterSpec;
 import javax.crypto.spec.DHPublicKeySpec;
-import net.i2p.crypto.elgamal.ElGamalPublicKey;
-import net.i2p.crypto.elgamal.spec.ElGamalParameterSpec;
-import net.i2p.crypto.elgamal.spec.ElGamalPublicKeySpec;
 
 /**
  * Implementation of ElGamal public keys.
@@ -23,73 +25,55 @@ import net.i2p.crypto.elgamal.spec.ElGamalPublicKeySpec;
  * value y = g^x mod p and the ElGamal parameters (prime p and generator g), and
  * supports X.509 encoding for standardized key storage and transmission.
  */
-public class ElGamalPublicKeyImpl
-    implements ElGamalPublicKey, DHPublicKey
-{
+public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     private static final long serialVersionUID = 8712728417091216948L;
 
-    private BigInteger              y;
-    private ElGamalParameterSpec    elSpec;
+    private BigInteger y;
+    private ElGamalParameterSpec elSpec;
 
-    public ElGamalPublicKeyImpl(
-        ElGamalPublicKeySpec    spec)
-    {
+    public ElGamalPublicKeyImpl(ElGamalPublicKeySpec spec) {
         this.y = spec.getY();
         this.elSpec = new ElGamalParameterSpec(spec.getParams().getP(), spec.getParams().getG());
     }
 
-    public ElGamalPublicKeyImpl(
-        DHPublicKeySpec    spec)
-    {
+    public ElGamalPublicKeyImpl(DHPublicKeySpec spec) {
         this.y = spec.getY();
         this.elSpec = new ElGamalParameterSpec(spec.getP(), spec.getG());
     }
 
-    public ElGamalPublicKeyImpl(
-        ElGamalPublicKey    key)
-    {
+    public ElGamalPublicKeyImpl(ElGamalPublicKey key) {
         this.y = key.getY();
         this.elSpec = key.getParameters();
     }
 
-    public ElGamalPublicKeyImpl(
-        DHPublicKey    key)
-    {
+    public ElGamalPublicKeyImpl(DHPublicKey key) {
         this.y = key.getY();
         this.elSpec = new ElGamalParameterSpec(key.getParams().getP(), key.getParams().getG());
     }
 
-    public ElGamalPublicKeyImpl(
-        BigInteger              y,
-        ElGamalParameterSpec    elSpec)
-    {
+    public ElGamalPublicKeyImpl(BigInteger y, ElGamalParameterSpec elSpec) {
         this.y = y;
         this.elSpec = elSpec;
     }
 
-    public ElGamalPublicKeyImpl(
-        X509EncodedKeySpec spec) throws InvalidKeySpecException
-    {
+    public ElGamalPublicKeyImpl(X509EncodedKeySpec spec) throws InvalidKeySpecException {
         throw new InvalidKeySpecException("todo");
-        //this.y = y;
-        //this.elSpec = elSpec;
+        // this.y = y;
+        // this.elSpec = elSpec;
     }
 
     @Override
-    public String getAlgorithm()
-    {
+    public String getAlgorithm() {
         return "ElGamal";
     }
 
     @Override
-    public String getFormat()
-    {
+    public String getFormat() {
         return "X.509";
     }
 
     @Override
-    public byte[] getEncoded()
-    {
+    public byte[] getEncoded() {
         byte[] pb = elSpec.getP().toByteArray();
         byte[] gb = elSpec.getG().toByteArray();
         byte[] yb = y.toByteArray();
@@ -150,39 +134,31 @@ public class ElGamalPublicKeyImpl
      */
     static int spaceFor(int val) {
         int rv;
-        if (val > 255)
-            rv = 3;
-        else if (val > 127)
-            rv = 2;
-        else
-            rv = 1;
+        if (val > 255) rv = 3;
+        else if (val > 127) rv = 2;
+        else rv = 1;
         return 1 + rv + val;
     }
 
     @Override
-    public ElGamalParameterSpec getParameters()
-    {
+    public ElGamalParameterSpec getParameters() {
         return elSpec;
     }
 
     @Override
-    public DHParameterSpec getParams()
-    {
+    public DHParameterSpec getParams() {
         return new DHParameterSpec(elSpec.getP(), elSpec.getG());
     }
 
     @Override
-    public BigInteger getY()
-    {
+    public BigInteger getY() {
         return y;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!(obj instanceof ElGamalPublicKeyImpl))
-            return false;
+        if (this == obj) return true;
+        if (!(obj instanceof ElGamalPublicKeyImpl)) return false;
         ElGamalPublicKeyImpl other = (ElGamalPublicKeyImpl) obj;
         return y.equals(other.y) && elSpec.getP().equals(other.elSpec.getP()) && elSpec.getG().equals(other.elSpec.getG());
     }
@@ -192,18 +168,12 @@ public class ElGamalPublicKeyImpl
         return y.hashCode() ^ elSpec.getP().hashCode() ^ elSpec.getG().hashCode();
     }
 
-    private void readObject(
-        ObjectInputStream   in)
-        throws IOException, ClassNotFoundException
-    {
-        this.y = (BigInteger)in.readObject();
-        this.elSpec = new ElGamalParameterSpec((BigInteger)in.readObject(), (BigInteger)in.readObject());
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        this.y = (BigInteger) in.readObject();
+        this.elSpec = new ElGamalParameterSpec((BigInteger) in.readObject(), (BigInteger) in.readObject());
     }
 
-    private void writeObject(
-        ObjectOutputStream  out)
-        throws IOException
-    {
+    private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeObject(this.getY());
         out.writeObject(elSpec.getP());
         out.writeObject(elSpec.getG());

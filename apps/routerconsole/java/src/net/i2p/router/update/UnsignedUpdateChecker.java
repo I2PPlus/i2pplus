@@ -1,7 +1,5 @@
 package net.i2p.router.update;
 
-import java.net.URI;
-import java.util.List;
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.router.web.ConfigUpdateHandler;
@@ -11,6 +9,9 @@ import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
 import net.i2p.util.RFC822Date;
 import net.i2p.util.SystemVersion;
+
+import java.net.URI;
+import java.util.List;
 
 /**
  *  Does a simple EepHead to get the last-modified header.
@@ -33,9 +34,11 @@ class UnsignedUpdateChecker extends UpdateRunner {
     public void run() {
         _isRunning = true;
         boolean success = false;
-        try {success = fetchUnsignedHead();}
-        catch (Throwable t) {_mgr.notifyTaskFailed(this, "", t);}
-        finally {
+        try {
+            success = fetchUnsignedHead();
+        } catch (Throwable t) {
+            _mgr.notifyTaskFailed(this, "", t);
+        } finally {
             _mgr.notifyCheckComplete(this, _unsignedUpdateAvailable, success);
             _isRunning = false;
         }
@@ -46,18 +49,20 @@ class UnsignedUpdateChecker extends UpdateRunner {
      * downloaded, as stored in the properties, then we download it using eepget.
      */
     private boolean fetchUnsignedHead() {
-        if (_urls.isEmpty()) {return false;}
+        if (_urls.isEmpty()) {
+            return false;
+        }
         _currentURI = _urls.get(0);
         String url = _currentURI.toString();
         // assume always proxied for now
-        //boolean shouldProxy = Boolean.valueOf(_context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY)).booleanValue();
+        // boolean shouldProxy = Boolean.valueOf(_context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY)).booleanValue();
         String proxyHost = _context.getProperty(ConfigUpdateHandler.PROP_PROXY_HOST, ConfigUpdateHandler.DEFAULT_PROXY_HOST);
         int proxyPort = _context.getProperty(ConfigUpdateHandler.PROP_PROXY_PORT, ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT);
-        if (proxyPort == ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT &&
-            proxyHost.equals(ConfigUpdateHandler.DEFAULT_PROXY_HOST) &&
-            _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY) < 0) {
+        if (proxyPort == ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT && proxyHost.equals(ConfigUpdateHandler.DEFAULT_PROXY_HOST) && _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY) < 0) {
             String msg = _t("HTTP client proxy tunnel must be running");
-            if (_log.shouldWarn()) {_log.warn("Cannot check for updates -> " + msg);}
+            if (_log.shouldWarn()) {
+                _log.warn("Cannot check for updates -> " + msg);
+            }
             updateStatus("<b>" + msg + "</b>");
             return false;
         }
@@ -73,8 +78,7 @@ class UnsignedUpdateChecker extends UpdateRunner {
                     String newVersion = Long.toString(modtime);
                     if (SystemVersion.isJava7()) {
                         _unsignedUpdateAvailable = true;
-                        _mgr.notifyVersionAvailable(this, _urls.get(0), getType(), "", getMethod(), _urls,
-                                                    newVersion, "");
+                        _mgr.notifyVersionAvailable(this, _urls.get(0), getType(), "", getMethod(), _urls, newVersion, "");
                     } else {
                         String ourJava = System.getProperty("java.version");
                         String msg = _mgr._t("Requires Java version {0} but installed Java version is {1}", "1.8", ourJava);

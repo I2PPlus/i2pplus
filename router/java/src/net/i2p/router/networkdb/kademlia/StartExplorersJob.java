@@ -1,7 +1,5 @@
 package net.i2p.router.networkdb.kademlia;
 
-import java.util.HashSet;
-import java.util.Set;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterInfo;
@@ -12,6 +10,9 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.RandomSource;
 import net.i2p.util.SystemVersion;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This job initiates exploration of the network database by selecting keys to explore
@@ -243,10 +244,7 @@ class StartExplorersJob extends JobImpl {
         final boolean isHidden = ctx.router().isHidden();
         final RouterInfo ri = ctx.router().getRouterInfo();
         final String capabilities = ri != null ? ri.getCapabilities() : "";
-        final boolean isSlow = ri != null && !capabilities.isEmpty() &&
-                (capabilities.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0
-                        || capabilities.indexOf(Router.CAPABILITY_BW12) >= 0
-                        || capabilities.indexOf(Router.CAPABILITY_BW32) >= 0);
+        final boolean isSlow = ri != null && !capabilities.isEmpty() && (capabilities.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || capabilities.indexOf(Router.CAPABILITY_BW12) >= 0 || capabilities.indexOf(Router.CAPABILITY_BW32) >= 0);
 
         final int netDbSize = ctx.netDb().getKnownRouters();
         final long uptime = ctx.router().getUptime();
@@ -255,9 +253,7 @@ class StartExplorersJob extends JobImpl {
         if (exploreDelay == null) {
             if (delaySinceLastExplore > MAX_RERUN_DELAY_MS && !isFloodfill) {
                 return MAX_RERUN_DELAY_MS;
-            } else if (isFloodfill
-                    && (exploreWhenFloodfill == null || "false".equals(exploreWhenFloodfill))
-                    && uptime > STARTUP_TIME || netDbSize > MAX_ROUTERS) {
+            } else if (isFloodfill && (exploreWhenFloodfill == null || "false".equals(exploreWhenFloodfill)) && uptime > STARTUP_TIME || netDbSize > MAX_ROUTERS) {
                 return MAX_RERUN_DELAY_MS * 2; // 30 minutes
             } else if ((uptime < STARTUP_TIME && netDbSize < MIN_ROUTERS) || isHidden || isSlow) {
                 return MIN_RERUN_DELAY_MS;

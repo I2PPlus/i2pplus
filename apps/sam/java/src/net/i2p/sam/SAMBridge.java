@@ -1,4 +1,5 @@
 package net.i2p.sam;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
@@ -54,6 +55,7 @@ public class SAMBridge implements Runnable, ClientApp {
     private volatile Thread _runner;
     private final Object _v3DGServerLock = new Object();
     private SAMv3DatagramServer _v3DGServer;
+
     /**
      * Pluggable "Secure Session Manager" for interactive, GUI-based session
      * confirmation. This will block the SAM Handler Factory at the HELLO phase.
@@ -67,11 +69,13 @@ public class SAMBridge implements Runnable, ClientApp {
      * be stored (and loaded from)
      */
     private final String persistFilename;
+
     /**
      * app designated destination name to the base64 of the I2P formatted
      * destination keys (Destination+PrivateKey+SigningPrivateKey)
      */
     private final Map<String, String> nameToPrivKeys;
+
     private final Set<Handler> _handlers;
 
     private volatile boolean acceptConnections = true;
@@ -118,8 +122,7 @@ public class SAMBridge implements Runnable, ClientApp {
         _listenHost = options.host;
         _listenPort = options.port;
         _useSSL = options.isSSL;
-        if (_useSSL && !SystemVersion.isJava7())
-            throw new IllegalArgumentException("SSL requires Java 7 or higher");
+        if (_useSSL && !SystemVersion.isJava7()) throw new IllegalArgumentException("SSL requires Java 7 or higher");
         persistFilename = options.keyFile;
         _configFile = options.configFile;
         nameToPrivKeys = new HashMap<String, String>(8);
@@ -144,11 +147,14 @@ public class SAMBridge implements Runnable, ClientApp {
      * @param persistFile location to store/load named keys to/from
      * @throws RuntimeException if a server socket can't be opened
      */
-    public SAMBridge(String listenHost, int listenPort, boolean isSSL, Properties i2cpProps,
-                     String persistFile, File configFile) {
-        this(listenHost, listenPort, isSSL, i2cpProps,
-                persistFile, configFile, null);
-
+    public SAMBridge(
+            String listenHost,
+            int listenPort,
+            boolean isSSL,
+            Properties i2cpProps,
+            String persistFile,
+            File configFile) {
+        this(listenHost, listenPort, isSSL, i2cpProps, persistFile, configFile, null);
     }
 
     /**
@@ -172,8 +178,14 @@ public class SAMBridge implements Runnable, ClientApp {
      *
      * @since 1.8.0
      */
-    public SAMBridge(String listenHost, int listenPort, boolean isSSL, Properties i2cpProps,
-            String persistFile, File configFile, SAMSecureSessionInterface secureSession) {
+    public SAMBridge(
+            String listenHost,
+            int listenPort,
+            boolean isSSL,
+            Properties i2cpProps,
+            String persistFile,
+            File configFile,
+            SAMSecureSessionInterface secureSession) {
         _log = I2PAppContext.getGlobalContext().logManager().getLog(SAMBridge.class);
         _mgr = null;
         _listenHost = listenHost;
@@ -181,8 +193,7 @@ public class SAMBridge implements Runnable, ClientApp {
         _useSSL = isSSL;
         _secureSession = secureSession;
 
-        if (_useSSL && !SystemVersion.isJava7())
-            throw new IllegalArgumentException("SSL requires Java 7 or higher");
+        if (_useSSL && !SystemVersion.isJava7()) throw new IllegalArgumentException("SSL requires Java 7 or higher");
         this.i2cpProps = i2cpProps;
         persistFilename = persistFile;
         _configFile = configFile;
@@ -193,9 +204,10 @@ public class SAMBridge implements Runnable, ClientApp {
             openSocket();
         } catch (IOException e) {
             if (_log.shouldError())
-                _log.error("Error starting SAM Bridge on "
-                           + (listenHost == null ? "0.0.0.0" : listenHost)
-                           + ":" + listenPort, e);
+                _log.error(
+                        "Error starting SAM Bridge on " + (listenHost == null ? "0.0.0.0" : listenHost) + ":"
+                                + listenPort,
+                        e);
             throw new RuntimeException(e);
         }
         _state = INITIALIZED;
@@ -205,23 +217,23 @@ public class SAMBridge implements Runnable, ClientApp {
      * @since 0.9.6
      */
     private void openSocket() throws IOException {
-        if (!DEFAULT_TCP_HOST.equals(_listenHost) &&
-            !"localhost".equals(_listenHost) &&
-            !"::1".equals(_listenHost) &&
-            !"0:0:0:0:0:0:0:1".equals(_listenHost) &&
-            !(_useSSL && Boolean.parseBoolean(i2cpProps.getProperty(SAMBridge.PROP_AUTH)))) {
-            String m = "SECURITY WARNING: SAM interface not restricted to localhost, and SSL and Authentication are not enabled." +
-                       "\n* Remote access to local services may be possible -> Please check command line and configuration.";
+        if (!DEFAULT_TCP_HOST.equals(_listenHost)
+                && !"localhost".equals(_listenHost)
+                && !"::1".equals(_listenHost)
+                && !"0:0:0:0:0:0:0:1".equals(_listenHost)
+                && !(_useSSL && Boolean.parseBoolean(i2cpProps.getProperty(SAMBridge.PROP_AUTH)))) {
+            String m = "SECURITY WARNING: SAM interface not restricted to localhost, and SSL and Authentication are not"
+                    + " enabled.\n"
+                    + "* Remote access to local services may be possible -> Please check command line and"
+                    + " configuration.";
             _log.logAlways(Log.WARN, m);
             System.out.println(m);
         }
         if (_useSSL) {
             SSLServerSocketFactory fact = SSLUtil.initializeFactory(i2cpProps);
             InetAddress addr;
-            if (_listenHost != null && !_listenHost.equals("0.0.0.0"))
-                addr = InetAddress.getByName(_listenHost);
-            else
-                addr = null;
+            if (_listenHost != null && !_listenHost.equals("0.0.0.0")) addr = InetAddress.getByName(_listenHost);
+            else addr = null;
             SSLServerSocket sock = (SSLServerSocket) fact.createServerSocket(_listenPort, 0, addr);
             I2PSSLSocketFactory.setProtocolsAndCiphers(sock);
             serverSocket = new SSLServerSocketChannel(sock);
@@ -229,13 +241,10 @@ public class SAMBridge implements Runnable, ClientApp {
             serverSocket = ServerSocketChannel.open();
             if (_listenHost != null && !_listenHost.equals("0.0.0.0")) {
                 serverSocket.socket().bind(new InetSocketAddress(_listenHost, _listenPort));
-                if (_log.shouldDebug())
-                    _log.debug("SAM Bridge listening on "
-                               + _listenHost + ":" + _listenPort);
+                if (_log.shouldDebug()) _log.debug("SAM Bridge listening on " + _listenHost + ":" + _listenPort);
             } else {
                 serverSocket.socket().bind(new InetSocketAddress(_listenPort));
-                if (_log.shouldDebug())
-                    _log.debug("SAM Bridge listening on 0.0.0.0:" + _listenPort);
+                if (_log.shouldDebug()) _log.debug("SAM Bridge listening on 0.0.0.0:" + _listenPort);
             }
         }
     }
@@ -246,22 +255,22 @@ public class SAMBridge implements Runnable, ClientApp {
      * @param name name of the destination
      * @return null if the name does not exist, or if it is improperly formatted
      */
-/****
-    public Destination getDestination(String name) {
-        synchronized (nameToPrivKeys) {
-            String val = nameToPrivKeys.get(name);
-            if (val == null) return null;
-            try {
-                Destination d = new Destination();
-                d.fromBase64(val);
-                return d;
-            } catch (DataFormatException dfe) {
-                _log.error("Error retrieving the destination from " + name, dfe);
-                nameToPrivKeys.remove(name);
-                return null;
-            }
-        }
-    }
+    /****
+     * public Destination getDestination(String name) {
+     * synchronized (nameToPrivKeys) {
+     * String val = nameToPrivKeys.get(name);
+     * if (val == null) return null;
+     * try {
+     * Destination d = new Destination();
+     * d.fromBase64(val);
+     * return d;
+     * } catch (DataFormatException dfe) {
+     * _log.error("Error retrieving the destination from " + name, dfe);
+     * nameToPrivKeys.remove(name);
+     * return null;
+     * }
+     * }
+     * }
      ****/
 
     /**
@@ -275,8 +284,7 @@ public class SAMBridge implements Runnable, ClientApp {
     public String getKeystream(String name) {
         synchronized (nameToPrivKeys) {
             String val = nameToPrivKeys.get(name);
-            if (val == null)
-                return null;
+            if (val == null) return null;
             return val;
         }
     }
@@ -304,11 +312,9 @@ public class SAMBridge implements Runnable, ClientApp {
             File file = new File(persistFilename);
             // now in config dir but check base dir too...
             if (!file.exists()) {
-                if (file.isAbsolute())
-                    return;
+                if (file.isAbsolute()) return;
                 file = new File(I2PAppContext.getGlobalContext().getConfigDir(), persistFilename);
-                if (!file.exists())
-                    return;
+                if (!file.exists()) return;
             }
             try {
                 Properties props = new Properties();
@@ -316,8 +322,7 @@ public class SAMBridge implements Runnable, ClientApp {
                 // unchecked
                 Map foo = props;
                 nameToPrivKeys.putAll(foo);
-                if (_log.shouldInfo())
-                    _log.info("Loaded " + nameToPrivKeys.size() + " private keys from " + file);
+                if (_log.shouldInfo()) _log.info("Loaded " + nameToPrivKeys.size() + " private keys from " + file);
             } catch (IOException ioe) {
                 _log.error("Unable to read the keys from " + file, ioe);
             }
@@ -337,8 +342,7 @@ public class SAMBridge implements Runnable, ClientApp {
                 Properties props = new OrderedProperties();
                 props.putAll(nameToPrivKeys);
                 DataHelper.storeProps(props, file);
-                if (_log.shouldInfo())
-                    _log.info("Saved " + nameToPrivKeys.size() + " private keys to " + file);
+                if (_log.shouldInfo()) _log.info("Saved " + nameToPrivKeys.size() + " private keys to " + file);
             } catch (IOException ioe) {
                 _log.error("Error writing out the SAM keys to " + file, ioe);
             }
@@ -351,8 +355,7 @@ public class SAMBridge implements Runnable, ClientApp {
      * @since 0.9.20
      */
     public void register(Handler handler) {
-        if (_log.shouldDebug())
-            _log.debug("Registered " + handler);
+        if (_log.shouldDebug()) _log.debug("Registered " + handler);
         synchronized (_handlers) {
             _handlers.add(handler);
         }
@@ -364,8 +367,7 @@ public class SAMBridge implements Runnable, ClientApp {
      * @since 0.9.20
      */
     public void unregister(Handler handler) {
-        if (_log.shouldDebug())
-            _log.debug("Unregistered " + handler);
+        if (_log.shouldDebug()) _log.debug("Unregistered " + handler);
         synchronized (_handlers) {
             _handlers.remove(handler);
         }
@@ -386,8 +388,7 @@ public class SAMBridge implements Runnable, ClientApp {
         }
         if (handlers != null) {
             for (Handler handler : handlers) {
-                if (_log.shouldDebug())
-                    _log.debug("Stopping " + handler + "...");
+                if (_log.shouldDebug()) _log.debug("Stopping " + handler + "...");
                 handler.stopHandling();
             }
         }
@@ -432,8 +433,7 @@ public class SAMBridge implements Runnable, ClientApp {
      * @since 0.9.6
      */
     public synchronized void startup() throws IOException {
-        if (_state != INITIALIZED)
-            return;
+        if (_state != INITIALIZED) return;
         changeState(STARTING);
         synchronized (_handlers) {
             _handlers.clear();
@@ -443,9 +443,10 @@ public class SAMBridge implements Runnable, ClientApp {
             openSocket();
         } catch (IOException e) {
             if (_log.shouldError())
-                _log.error("Error starting SAM Bridge on "
-                           + (_listenHost == null ? "0.0.0.0" : _listenHost)
-                           + ":" + _listenPort, e);
+                _log.error(
+                        "Error starting SAM Bridge on " + (_listenHost == null ? "0.0.0.0" : _listenHost) + ":"
+                                + _listenPort,
+                        e);
             changeState(START_FAILED, e);
             throw e;
         }
@@ -458,15 +459,12 @@ public class SAMBridge implements Runnable, ClientApp {
      * @since 0.9.6
      */
     public synchronized void shutdown(String[] args) {
-        if (_state != RUNNING)
-            return;
+        if (_state != RUNNING) return;
         changeState(STOPPING);
         acceptConnections = false;
         stopHandlers();
-        if (_runner != null)
-            _runner.interrupt();
-        else
-            changeState(STOPPED);
+        if (_runner != null) _runner.interrupt();
+        else changeState(STOPPED);
     }
 
     /**
@@ -505,8 +503,7 @@ public class SAMBridge implements Runnable, ClientApp {
      */
     private synchronized void changeState(ClientAppState state, Exception e) {
         _state = state;
-        if (_mgr != null)
-            _mgr.notify(this, state, null, e);
+        if (_mgr != null) _mgr.notify(this, state, null, e);
     }
 
     ////// end ClientApp helpers
@@ -537,8 +534,8 @@ public class SAMBridge implements Runnable, ClientApp {
     public static void main(String args[]) {
         try {
             Options options = getOptions(args);
-            SAMBridge bridge = new SAMBridge(options.host, options.port, options.isSSL, options.opts,
-                                             options.keyFile, options.configFile);
+            SAMBridge bridge = new SAMBridge(
+                    options.host, options.port, options.isSSL, options.opts, options.keyFile, options.configFile);
             bridge.startThread();
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -646,8 +643,7 @@ public class SAMBridge implements Runnable, ClientApp {
         // key host port
         int startOpts;
         for (startOpts = startArgs; startOpts < args.length; startOpts++) {
-            if (args[startOpts].contains("="))
-                break;
+            if (args[startOpts].contains("=")) break;
         }
         int numArgs = startOpts - startArgs;
         switch (numArgs) {
@@ -679,8 +675,7 @@ public class SAMBridge implements Runnable, ClientApp {
 
         String scfile = cfile != null ? cfile : DEFAULT_SAM_CONFIGFILE;
         File file = new File(scfile);
-        if (!file.isAbsolute())
-            file = new File(I2PAppContext.getGlobalContext().getConfigDir(), scfile);
+        if (!file.isAbsolute()) file = new File(I2PAppContext.getGlobalContext().getConfigDir(), scfile);
 
         Properties opts = new Properties();
         if (file.exists()) {
@@ -690,8 +685,7 @@ public class SAMBridge implements Runnable, ClientApp {
             throw new IllegalArgumentException("Config file not found: " + file);
         }
         // command line trumps config file trumps defaults
-        if (host == null)
-            host = opts.getProperty(PROP_TCP_HOST, DEFAULT_TCP_HOST);
+        if (host == null) host = opts.getProperty(PROP_TCP_HOST, DEFAULT_TCP_HOST);
         if (port < 0) {
             try {
                 port = Integer.parseInt(opts.getProperty(PROP_TCP_PORT, DEFAULT_TCP_PORT));
@@ -699,15 +693,12 @@ public class SAMBridge implements Runnable, ClientApp {
                 throw new HelpRequestedException();
             }
         }
-        if (keyfile == null)
-            keyfile = opts.getProperty(PROP_SAM_KEYFILE, DEFAULT_SAM_KEYFILE);
-        if (!isSSL)
-            isSSL = Boolean.parseBoolean(opts.getProperty(PROP_SAM_SSL));
+        if (keyfile == null) keyfile = opts.getProperty(PROP_SAM_KEYFILE, DEFAULT_SAM_KEYFILE);
+        if (!isSSL) isSSL = Boolean.parseBoolean(opts.getProperty(PROP_SAM_SSL));
         if (isSSL) {
             // must do this before we add command line opts since we may be writing them back out
             boolean shouldSave = SSLUtil.verifyKeyStore(opts);
-            if (shouldSave)
-                DataHelper.storeProps(opts, file);
+            if (shouldSave) DataHelper.storeProps(opts, file);
         }
 
         int remaining = args.length - startOpts;
@@ -726,63 +717,65 @@ public class SAMBridge implements Runnable, ClientApp {
     private static void parseOptions(String args[], int startArgs, Properties props) throws HelpRequestedException {
         for (int i = startArgs; i < args.length; i++) {
             int eq = args[i].indexOf('=');
-            if (eq <= 0)
-                throw new HelpRequestedException();
-            if (eq >= args[i].length() - 1)
-                throw new HelpRequestedException();
+            if (eq <= 0) throw new HelpRequestedException();
+            if (eq >= args[i].length() - 1) throw new HelpRequestedException();
             String key = args[i].substring(0, eq);
             String val = args[i].substring(eq + 1);
             key = key.trim();
             val = val.trim();
-            if ((key.length() > 0) && (val.length() > 0))
-                props.setProperty(key, val);
-            else
-                throw new HelpRequestedException();
+            if ((key.length() > 0) && (val.length() > 0)) props.setProperty(key, val);
+            else throw new HelpRequestedException();
         }
     }
 
     private static void usage() {
-        System.err.println("Usage: SAMBridge [-s] [-c sam.config] [keyfile [listenHost] listenPortNum[ name=val]*]\n" +
-                           "or:\n" +
-                           "       SAMBridge [ name=val ]*\n" +
-                           " -s: Use SSL\n" +
-                           " -c sam.config: Specify config file\n" +
-                           " keyfile: location to persist private keys (default sam.keys)\n" +
-                           " listenHost: interface to listen on (0.0.0.0 for all interfaces)\n" +
-                           " listenPort: port to listen for SAM connections on (default 7656)\n" +
-                           " name=val: options to pass when connecting via I2CP, such as \n" +
-                           "           i2cp.host=localhost and i2cp.port=7654\n" +
-                           "\n" +
-                           "Host and ports of the SAM bridge can be specified with the alternate\n" +
-                            "form by specifying options " + SAMBridge.PROP_TCP_HOST + " and/or " +
-                           SAMBridge.PROP_TCP_PORT +
-                           "\n" +
-                           "Options " + SAMBridge.PROP_DATAGRAM_HOST + " and " + SAMBridge.PROP_DATAGRAM_PORT +
-                           " specify the listening ip\n" +
-                           "range and the port of SAM datagram server. This server is\n" +
-                           "only launched after a client creates the first SAM datagram\n" +
-                           "or raw session, after a handshake with SAM version >= 3.0.\n" +
-                           "\n" +
-                           "The option loglevel=[DEBUG|WARN|ERROR|CRIT] can be used\n" +
-                           "for tuning the log verbosity.");
+        System.err.println(
+                "Usage: SAMBridge [-s] [-c sam.config] [keyfile [listenHost] listenPortNum[ name=val]*]\n" + "or:\n"
+                        + "       SAMBridge [ name=val ]*\n"
+                        + " -s: Use SSL\n"
+                        + " -c sam.config: Specify config file\n"
+                        + " keyfile: location to persist private keys (default sam.keys)\n"
+                        + " listenHost: interface to listen on (0.0.0.0 for all interfaces)\n"
+                        + " listenPort: port to listen for SAM connections on (default 7656)\n"
+                        + " name=val: options to pass when connecting via I2CP, such as \n"
+                        + "           i2cp.host=localhost and i2cp.port=7654\n"
+                        + "\n"
+                        + "Host and ports of the SAM bridge can be specified with the alternate\n"
+                        + "form by specifying options "
+                        + SAMBridge.PROP_TCP_HOST
+                        + " and/or "
+                        + SAMBridge.PROP_TCP_PORT
+                        + "\n"
+                        + "Options "
+                        + SAMBridge.PROP_DATAGRAM_HOST
+                        + " and "
+                        + SAMBridge.PROP_DATAGRAM_PORT
+                        + " specify the listening ip\n"
+                        + "range and the port of SAM datagram server. This server is\n"
+                        + "only launched after a client creates the first SAM datagram\n"
+                        + "or raw session, after a handshake with SAM version >= 3.0.\n"
+                        + "\n"
+                        + "The option loglevel=[DEBUG|WARN|ERROR|CRIT] can be used\n"
+                        + "for tuning the log verbosity.");
     }
 
     public void run() {
-        if (serverSocket == null)
-            return;
+        if (serverSocket == null) return;
         changeState(RUNNING);
-        if (_mgr != null)
-            _mgr.register(this);
-        I2PAppContext.getGlobalContext().portMapper().register(_useSSL ? PortMapper.SVC_SAM_SSL : PortMapper.SVC_SAM,
-                                                               _listenHost != null ? _listenHost : "127.0.0.1",
-                                                               _listenPort);
+        if (_mgr != null) _mgr.register(this);
+        I2PAppContext.getGlobalContext()
+                .portMapper()
+                .register(
+                        _useSSL ? PortMapper.SVC_SAM_SSL : PortMapper.SVC_SAM,
+                        _listenHost != null ? _listenHost : "127.0.0.1",
+                        _listenPort);
         try {
             while (acceptConnections) {
                 SocketChannel s = serverSocket.accept();
                 if (_log.shouldDebug())
-                    _log.debug("New connection from "
-                               + s.socket().getInetAddress().toString() + ":"
-                               + s.socket().getPort());
+                    _log.debug(
+                            "New connection from " + s.socket().getInetAddress().toString() + ":"
+                                    + s.socket().getPort());
 
                 class HelloHandler implements Runnable, Handler {
                     private final SocketChannel s;
@@ -798,22 +791,27 @@ public class SAMBridge implements Runnable, ClientApp {
                         try {
                             SAMHandler handler = SAMHandlerFactory.createSAMHandler(s, i2cpProps, parent);
                             if (handler == null) {
-                                if (_log.shouldDebug())
-                                    _log.debug("SAM handler has not been instantiated");
+                                if (_log.shouldDebug()) _log.debug("SAM handler has not been instantiated");
                                 try {
                                     s.close();
-                                } catch (IOException e) {}
+                                } catch (IOException e) {
+                                }
                                 return;
                             }
                             handler.startHandling();
                         } catch (SAMException e) {
-                            if (_log.shouldError())
-                                _log.error("SAM error: " + e.getMessage(), e);
+                            if (_log.shouldError()) _log.error("SAM error: " + e.getMessage(), e);
                             String reply = "HELLO REPLY RESULT=I2P_ERROR MESSAGE=\"" + e.getMessage() + "\"\n";
                             SAMHandler.writeString(reply, s);
-                            try { s.close(); } catch (IOException ioe) {}
+                            try {
+                                s.close();
+                            } catch (IOException ioe) {
+                            }
                         } catch (Exception ee) {
-                            try { s.close(); } catch (IOException ioe) {}
+                            try {
+                                s.close();
+                            } catch (IOException ioe) {
+                            }
                             _log.log(Log.CRIT, "Unexpected error handling SAM connection", ee);
                         } finally {
                             parent.unregister(this);
@@ -822,26 +820,28 @@ public class SAMBridge implements Runnable, ClientApp {
 
                     /** @since 0.9.20 */
                     public void stopHandling() {
-                        try { s.close(); } catch (IOException ioe) {}
+                        try {
+                            s.close();
+                        } catch (IOException ioe) {
+                        }
                     }
                 }
-                new I2PAppThread(new HelloHandler(s,this), "SAM HelloHandler").start();
+                new I2PAppThread(new HelloHandler(s, this), "SAM HelloHandler").start();
             }
             changeState(STOPPING);
         } catch (Exception e) {
-            if (acceptConnections)
-                _log.error("Unexpected error while listening for connections", e);
-            else
-                e = null;
+            if (acceptConnections) _log.error("Unexpected error while listening for connections", e);
+            else e = null;
             changeState(STOPPING, e);
         } finally {
             try {
-                if (_log.shouldDebug())
-                    _log.debug("Shutting down, closing server socket");
-                if (serverSocket != null)
-                    serverSocket.close();
-            } catch (IOException e) {}
-            I2PAppContext.getGlobalContext().portMapper().unregister(_useSSL ? PortMapper.SVC_SAM_SSL : PortMapper.SVC_SAM);
+                if (_log.shouldDebug()) _log.debug("Shutting down, closing server socket");
+                if (serverSocket != null) serverSocket.close();
+            } catch (IOException e) {
+            }
+            I2PAppContext.getGlobalContext()
+                    .portMapper()
+                    .unregister(_useSSL ? PortMapper.SVC_SAM_SSL : PortMapper.SVC_SAM);
             stopHandlers();
             changeState(STOPPED);
         }

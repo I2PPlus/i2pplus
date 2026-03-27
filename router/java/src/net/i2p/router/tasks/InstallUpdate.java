@@ -1,5 +1,11 @@
 package net.i2p.router.tasks;
 
+import net.i2p.router.Router;
+import net.i2p.router.RouterContext;
+import net.i2p.router.RouterVersion;
+import net.i2p.util.FileUtil;
+import net.i2p.util.SystemVersion;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,11 +14,6 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import net.i2p.router.Router;
-import net.i2p.router.RouterContext;
-import net.i2p.router.RouterVersion;
-import net.i2p.util.FileUtil;
-import net.i2p.util.SystemVersion;
 
 /**
  * Automatic I2P router update installer and processor.
@@ -96,8 +97,7 @@ public class InstallUpdate {
             // do a simple permissions test, if it fails leave the file in place and don't restart
             File test = new File(context.getBaseDir(), "history.txt");
             if ((test.exists() && !test.canWrite()) || (!context.getBaseDir().canWrite())) {
-                System.out.println("ERROR: No write permissions on " + context.getBaseDir() +
-                                   " to extract software update file");
+                System.out.println("ERROR: No write permissions on " + context.getBaseDir() + " to extract software update file");
                 // carry on
                 return;
             }
@@ -137,7 +137,7 @@ public class InstallUpdate {
                         System.out.println("Moved update file to " + bad.getAbsolutePath());
                     } else {
                         System.out.println("Deleting file " + updateFile.getAbsolutePath());
-                        ok = true;  // so it will be deleted
+                        ok = true; // so it will be deleted
                     }
                 }
                 if (ok) {
@@ -148,10 +148,8 @@ public class InstallUpdate {
                     }
                 }
                 // exit whether ok or not
-                if (context.hasWrapper())
-                    System.out.println("INFO: Restarting after update...");
-                else
-                    System.out.println("WARNING: Exiting after update (no service manager) -> Restart I2P+ manually!");
+                if (context.hasWrapper()) System.out.println("INFO: Restarting after update...");
+                else System.out.println("WARNING: Exiting after update (no service manager) -> Restart I2P+ manually!");
             } catch (Throwable t) {
                 // hide the NCDFE
                 // hopefully the update file got deleted or we will loop
@@ -232,8 +230,7 @@ public class InstallUpdate {
      */
     private static void deleteListedFiles(RouterContext context) {
         File deleteFile = new File(context.getBaseDir(), DELETE_FILE);
-        if (!deleteFile.exists())
-            return;
+        if (!deleteFile.exists()) return;
         // this is similar to FileUtil.readTextFile() but we can't use any I2P classes here
         FileInputStream fis = null;
         BufferedReader in = null;
@@ -243,22 +240,22 @@ public class InstallUpdate {
             String line;
             while ((line = in.readLine()) != null) {
                 String fl = line.trim();
-                if (fl.contains("..") || fl.startsWith("#") || fl.length() == 0)
-                    continue;
+                if (fl.contains("..") || fl.startsWith("#") || fl.length() == 0) continue;
                 File df = new File(fl);
-                if (df.isAbsolute())
-                    continue;
+                if (df.isAbsolute()) continue;
                 df = new File(context.getBaseDir(), fl);
                 if (df.exists() && df.isFile()) {
-                    if (df.delete())
-                        System.out.println("INFO: File [" + fl + "] deleted");
+                    if (df.delete()) System.out.println("INFO: File [" + fl + "] deleted");
                 }
             }
         } catch (IOException ioe) {
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null) try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
             if (deleteFile.delete()) {
-                //System.out.println("INFO: File [" + DELETE_FILE + "] deleted");
+                // System.out.println("INFO: File [" + DELETE_FILE + "] deleted");
             }
         }
     }

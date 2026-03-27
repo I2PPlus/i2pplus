@@ -29,17 +29,6 @@ package net.i2p.crypto;
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigInteger;
-import java.security.GeneralSecurityException;
-import java.security.Key;
-import java.security.MessageDigest;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.interfaces.DSAKey;
-import java.security.interfaces.ECKey;
-import java.security.interfaces.RSAKey;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.eddsa.EdDSAEngine;
 import net.i2p.crypto.eddsa.EdDSAKey;
@@ -52,6 +41,18 @@ import net.i2p.data.SimpleDataStructure;
 import net.i2p.util.Log;
 import net.i2p.util.NativeBigInteger;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigInteger;
+import java.security.GeneralSecurityException;
+import java.security.Key;
+import java.security.MessageDigest;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.interfaces.DSAKey;
+import java.security.interfaces.ECKey;
+import java.security.interfaces.RSAKey;
+
 /**
  * Digital signature algorithm engine supporting DSA, ECDSA, RSA, and EdDSA.
  * Provides signing and verification operations for all supported signature types.
@@ -62,8 +63,8 @@ public final class DSAEngine {
     private final Log _log;
     private final I2PAppContext _context;
 
-    //private static final boolean _isAndroid = System.getProperty("java.vendor").contains("Android");
-    private static final boolean _useJavaLibs = false;   // = _isAndroid;
+    // private static final boolean _isAndroid = System.getProperty("java.vendor").contains("Android");
+    private static final boolean _useJavaLibs = false; // = _isAndroid;
 
     public DSAEngine(I2PAppContext context) {
         _log = context.logManager().getLog(DSAEngine.class);
@@ -92,35 +93,29 @@ public final class DSAEngine {
     public boolean verifySignature(Signature signature, byte signedData[], int offset, int size, SigningPublicKey verifyingKey) {
         boolean rv;
         SigType type = signature.getType();
-        if (type != verifyingKey.getType())
-            throw new IllegalArgumentException("type mismatch sig=" + signature.getType() + " key=" + verifyingKey.getType());
+        if (type != verifyingKey.getType()) throw new IllegalArgumentException("type mismatch sig=" + signature.getType() + " key=" + verifyingKey.getType());
         if (type != SigType.DSA_SHA1) {
             try {
                 rv = altVerifySig(signature, signedData, offset, size, verifyingKey);
-                if (!rv && _log.shouldWarn())
-                    _log.warn(type + " Signature verification failure");
+                if (!rv && _log.shouldWarn()) _log.warn(type + " Signature verification failure");
                 return rv;
             } catch (GeneralSecurityException gse) {
-                if (_log.shouldWarn())
-                    _log.warn(type + " Signature verification failure", gse);
+                if (_log.shouldWarn()) _log.warn(type + " Signature verification failure", gse);
                 return false;
             }
         }
         if (_useJavaLibs) {
             try {
                 rv = altVerifySigSHA1(signature, signedData, offset, size, verifyingKey);
-                if (!rv && _log.shouldWarn())
-                    _log.warn("Lib DSA Signature verification failure");
+                if (!rv && _log.shouldWarn()) _log.warn("Lib DSA Signature verification failure");
                 return rv;
             } catch (GeneralSecurityException gse) {
-                if (_log.shouldWarn())
-                    _log.warn("Lib DSA Signature verification failure");
+                if (_log.shouldWarn()) _log.warn("Lib DSA Signature verification failure");
                 // now try TheCrypto
             }
         }
         rv = verifySignature(signature, calculateHash(signedData, offset, size), verifyingKey);
-        if (!rv && _log.shouldWarn())
-            _log.warn("TheCrypto DSA Signature verification failure");
+        if (!rv && _log.shouldWarn()) _log.warn("TheCrypto DSA Signature verification failure");
         return rv;
     }
 
@@ -158,18 +153,14 @@ public final class DSAEngine {
      */
     public boolean verifySignature(Signature signature, SimpleDataStructure hash, SigningPublicKey verifyingKey) {
         SigType type = signature.getType();
-        if (type != verifyingKey.getType())
-            throw new IllegalArgumentException("type mismatch sig=" + type + " key=" + verifyingKey.getType());
+        if (type != verifyingKey.getType()) throw new IllegalArgumentException("type mismatch sig=" + type + " key=" + verifyingKey.getType());
         int hashlen = type.getHashLen();
-        if (hash.length() != hashlen)
-            throw new IllegalArgumentException("type mismatch hash=" + hash.getClass() + " sig=" + type);
-        if (type == SigType.DSA_SHA1)
-            return verifySig(signature, hash, verifyingKey);
+        if (hash.length() != hashlen) throw new IllegalArgumentException("type mismatch hash=" + hash.getClass() + " sig=" + type);
+        if (type == SigType.DSA_SHA1) return verifySig(signature, hash, verifyingKey);
         try {
             return altVerifySigRaw(signature, hash, verifyingKey);
         } catch (GeneralSecurityException gse) {
-            if (_log.shouldWarn())
-                _log.warn("Failed to verify signature [" + type + "]", gse);
+            if (_log.shouldWarn()) _log.warn("Failed to verify signature [" + type + "]", gse);
             return false;
         }
     }
@@ -189,8 +180,7 @@ public final class DSAEngine {
         try {
             return altVerifySigRaw(signature, hash, pubKey);
         } catch (GeneralSecurityException gse) {
-            if (_log.shouldWarn())
-                _log.warn("Failed to verify signature [" + signature.getType() + "]", gse);
+            if (_log.shouldWarn()) _log.warn("Failed to verify signature [" + signature.getType() + "]", gse);
             return false;
         }
     }
@@ -201,18 +191,16 @@ public final class DSAEngine {
      *  @since 0.8.3
      */
     private boolean verifySig(Signature signature, SimpleDataStructure hash, SigningPublicKey verifyingKey) {
-        if (signature.getType() != SigType.DSA_SHA1)
-            throw new IllegalArgumentException("Bad signature type " + signature.getType());
-        if (verifyingKey.getType() != SigType.DSA_SHA1)
-            throw new IllegalArgumentException("Bad key type " + verifyingKey.getType());
+        if (signature.getType() != SigType.DSA_SHA1) throw new IllegalArgumentException("Bad signature type " + signature.getType());
+        if (verifyingKey.getType() != SigType.DSA_SHA1) throw new IllegalArgumentException("Bad key type " + verifyingKey.getType());
         long start = _context.clock().now();
 
         try {
             byte[] sigbytes = signature.getData();
             byte rbytes[] = new byte[20];
             byte sbytes[] = new byte[20];
-            //System.arraycopy(sigbytes, 0, rbytes, 0, 20);
-            //System.arraycopy(sigbytes, 20, sbytes, 0, 20);
+            // System.arraycopy(sigbytes, 0, rbytes, 0, 20);
+            // System.arraycopy(sigbytes, 20, sbytes, 0, 20);
             for (int x = 0; x < 40; x++) {
                 if (x < 20) {
                     rbytes[x] = sigbytes[x];
@@ -236,15 +224,14 @@ public final class DSAEngine {
             BigInteger u1 = bi.multiply(w).mod(CryptoConstants.dsaq);
             BigInteger u2 = r.multiply(w).mod(CryptoConstants.dsaq);
             BigInteger modval = CryptoConstants.dsag.modPow(u1, CryptoConstants.dsap);
-            BigInteger modmulval = modval.multiply(y.modPow(u2,CryptoConstants.dsap));
+            BigInteger modmulval = modval.multiply(y.modPow(u2, CryptoConstants.dsap));
             BigInteger v = modmulval.mod(CryptoConstants.dsap).mod(CryptoConstants.dsaq);
 
             boolean ok = v.compareTo(r) == 0;
 
             long diff = _context.clock().now() - start;
             if (diff > 1000) {
-                if (_log.shouldWarn())
-                    _log.warn("Took too long to verify the signature (" + diff + "ms)");
+                if (_log.shouldWarn()) _log.warn("Took too long to verify the signature (" + diff + "ms)");
             }
             return ok;
         } catch (RuntimeException e) {
@@ -275,8 +262,7 @@ public final class DSAEngine {
             try {
                 return altSign(data, offset, length, signingKey);
             } catch (GeneralSecurityException gse) {
-                if (_log.shouldError())
-                    _log.error(type + " Sign Fail", gse);
+                if (_log.shouldError()) _log.error(type + " Sign Fail", gse);
                 return null;
             }
         }
@@ -284,8 +270,7 @@ public final class DSAEngine {
             try {
                 return altSignSHA1(data, offset, length, signingKey);
             } catch (GeneralSecurityException gse) {
-                if (_log.shouldWarn())
-                    _log.warn("Lib Sign Fail, privkey = " + signingKey, gse);
+                if (_log.shouldWarn()) _log.warn("Lib Sign Fail, privkey = " + signingKey, gse);
                 // now try TheCrypto
             }
         }
@@ -338,15 +323,12 @@ public final class DSAEngine {
     public Signature sign(SimpleDataStructure hash, SigningPrivateKey signingKey) {
         SigType type = signingKey.getType();
         int hashlen = type.getHashLen();
-        if (hash.length() != hashlen)
-            throw new IllegalArgumentException("type mismatch hash=" + hash.getClass() + " key=" + type);
-        if (type == SigType.DSA_SHA1)
-            return signIt(hash, signingKey);
+        if (hash.length() != hashlen) throw new IllegalArgumentException("type mismatch hash=" + hash.getClass() + " key=" + type);
+        if (type == SigType.DSA_SHA1) return signIt(hash, signingKey);
         try {
             return altSignRaw(hash, signingKey);
         } catch (GeneralSecurityException gse) {
-            if (_log.shouldWarn())
-                _log.warn(type + " Sign Fail", gse);
+            if (_log.shouldWarn()) _log.warn(type + " Sign Fail", gse);
             return null;
         }
     }
@@ -367,13 +349,11 @@ public final class DSAEngine {
     public Signature sign(SimpleDataStructure hash, PrivateKey privKey, SigType type) {
         String algo = getRawAlgo(privKey);
         String talgo = getRawAlgo(type);
-        if (!algo.equals(talgo))
-            throw new IllegalArgumentException("type mismatch type=" + type + " key=" + privKey.getClass().getSimpleName());
+        if (!algo.equals(talgo)) throw new IllegalArgumentException("type mismatch type=" + type + " key=" + privKey.getClass().getSimpleName());
         try {
             return altSignRaw(algo, hash, privKey, type);
         } catch (GeneralSecurityException gse) {
-            if (_log.shouldWarn())
-                _log.warn(type + " Sign Fail", gse);
+            if (_log.shouldWarn()) _log.warn(type + " Sign Fail", gse);
             return null;
         }
     }
@@ -387,8 +367,7 @@ public final class DSAEngine {
      */
     private Signature signIt(SimpleDataStructure hash, SigningPrivateKey signingKey) {
         if ((signingKey == null) || (hash == null)) return null;
-        if (signingKey.getType() != SigType.DSA_SHA1)
-            throw new IllegalArgumentException("Bad key type " + signingKey.getType());
+        if (signingKey.getType() != SigType.DSA_SHA1) throw new IllegalArgumentException("Bad key type " + signingKey.getType());
         long start = _context.clock().now();
 
         BigInteger k;
@@ -397,7 +376,7 @@ public final class DSAEngine {
             k = new NativeBigInteger(160, _context.random());
             ok = k.compareTo(CryptoConstants.dsaq) != 1;
             ok = ok && !k.equals(BigInteger.ZERO);
-            //System.out.println("K picked (ok? " + ok + "): " + k.bitLength() + ": " + k.toString());
+            // System.out.println("K picked (ok? " + ok + "): " + k.bitLength() + ": " + k.toString());
         } while (!ok);
 
         BigInteger r = CryptoConstants.dsag.modPowCT(k, CryptoConstants.dsap).mod(CryptoConstants.dsaq);
@@ -415,12 +394,12 @@ public final class DSAEngine {
         _context.random().harvester().feedEntropy("DSA.sign", rbytes, 0, rbytes.length);
 
         if (rbytes.length == 20) {
-            //System.arraycopy(rbytes, 0, out, 0, 20);
+            // System.arraycopy(rbytes, 0, out, 0, 20);
             for (int i = 0; i < 20; i++) {
                 out[i] = rbytes[i];
             }
         } else if (rbytes.length == 21) {
-            //System.arraycopy(rbytes, 1, out, 0, 20);
+            // System.arraycopy(rbytes, 1, out, 0, 20);
             for (int i = 0; i < 20; i++) {
                 out[i] = rbytes[i + 1];
             }
@@ -428,18 +407,17 @@ public final class DSAEngine {
             _log.error("Bad R length " + rbytes.length);
             return null;
         } else {
-            //if (_log.shouldDebug()) _log.debug("Using short rbytes.length [" + rbytes.length + "]");
-            //System.arraycopy(rbytes, 0, out, 20 - rbytes.length, rbytes.length);
-            for (int i = 0; i < rbytes.length; i++)
-                out[i + 20 - rbytes.length] = rbytes[i];
+            // if (_log.shouldDebug()) _log.debug("Using short rbytes.length [" + rbytes.length + "]");
+            // System.arraycopy(rbytes, 0, out, 20 - rbytes.length, rbytes.length);
+            for (int i = 0; i < rbytes.length; i++) out[i + 20 - rbytes.length] = rbytes[i];
         }
         if (sbytes.length == 20) {
-            //System.arraycopy(sbytes, 0, out, 20, 20);
+            // System.arraycopy(sbytes, 0, out, 20, 20);
             for (int i = 0; i < 20; i++) {
                 out[i + 20] = sbytes[i];
             }
         } else if (sbytes.length == 21) {
-            //System.arraycopy(sbytes, 1, out, 20, 20);
+            // System.arraycopy(sbytes, 1, out, 20, 20);
             for (int i = 0; i < 20; i++) {
                 out[i + 20] = sbytes[i + 1];
             }
@@ -447,10 +425,9 @@ public final class DSAEngine {
             _log.error("Bad S length " + sbytes.length);
             return null;
         } else {
-            //if (_log.shouldDebug()) _log.debug("Using short sbytes.length [" + sbytes.length + "]");
-            //System.arraycopy(sbytes, 0, out, 40 - sbytes.length, sbytes.length);
-            for (int i = 0; i < sbytes.length; i++)
-                out[i + 20 + 20 - sbytes.length] = sbytes[i];
+            // if (_log.shouldDebug()) _log.debug("Using short sbytes.length [" + sbytes.length + "]");
+            // System.arraycopy(sbytes, 0, out, 40 - sbytes.length, sbytes.length);
+            for (int i = 0; i < sbytes.length; i++) out[i + 20 + 20 - sbytes.length] = sbytes[i];
         }
 
         long diff = _context.clock().now() - start;
@@ -477,8 +454,7 @@ public final class DSAEngine {
                 digest.update(buf, 0, read);
             }
         } catch (IOException ioe) {
-            if (_log.shouldWarn())
-                _log.warn("Unable to hash the stream", ioe);
+            if (_log.shouldWarn()) _log.warn("Unable to hash the stream", ioe);
             return null;
         }
         return new SHA1Hash(digest.digest());
@@ -504,13 +480,10 @@ public final class DSAEngine {
      *  @throws GeneralSecurityException if algorithm unvailable or on other errors
      *  @since 0.9.9 added off/len 0.9.12
      */
-    private boolean altVerifySig(Signature signature, byte[] data, int offset, int len, SigningPublicKey verifyingKey)
-                        throws GeneralSecurityException {
+    private boolean altVerifySig(Signature signature, byte[] data, int offset, int len, SigningPublicKey verifyingKey) throws GeneralSecurityException {
         SigType type = signature.getType();
-        if (type != verifyingKey.getType())
-            throw new IllegalArgumentException("type mismatch sig=" + type + " key=" + verifyingKey.getType());
-        if (type == SigType.DSA_SHA1)
-            return altVerifySigSHA1(signature, data, offset, len, verifyingKey);
+        if (type != verifyingKey.getType()) throw new IllegalArgumentException("type mismatch sig=" + type + " key=" + verifyingKey.getType());
+        if (type == SigType.DSA_SHA1) return altVerifySigSHA1(signature, data, offset, len, verifyingKey);
 
         PublicKey pubKey = SigUtil.toJavaKey(verifyingKey);
         byte[] sigbytes = SigUtil.toJavaSig(signature);
@@ -538,11 +511,9 @@ public final class DSAEngine {
      *  @throws GeneralSecurityException if algorithm unvailable or on other errors
      *  @since 0.9.9
      */
-    private boolean altVerifySigRaw(Signature signature, SimpleDataStructure hash, SigningPublicKey verifyingKey)
-                        throws GeneralSecurityException {
+    private boolean altVerifySigRaw(Signature signature, SimpleDataStructure hash, SigningPublicKey verifyingKey) throws GeneralSecurityException {
         SigType type = signature.getType();
-        if (type != verifyingKey.getType())
-            throw new IllegalArgumentException("type mismatch sig=" + type + " key=" + verifyingKey.getType());
+        if (type != verifyingKey.getType()) throw new IllegalArgumentException("type mismatch sig=" + type + " key=" + verifyingKey.getType());
 
         PublicKey pubKey = SigUtil.toJavaKey(verifyingKey);
         return verifySignature(signature, hash, pubKey);
@@ -559,12 +530,10 @@ public final class DSAEngine {
      *  @param verifyingKey Java key
      *  @since 0.9.9
      */
-    private boolean altVerifySigRaw(Signature signature, SimpleDataStructure hash, PublicKey pubKey)
-                        throws GeneralSecurityException {
+    private boolean altVerifySigRaw(Signature signature, SimpleDataStructure hash, PublicKey pubKey) throws GeneralSecurityException {
         SigType type = signature.getType();
         int hashlen = hash.length();
-        if (type.getHashLen() != hashlen)
-            throw new IllegalArgumentException("type mismatch hash=" + hash.getClass() + " key=" + type);
+        if (type.getHashLen() != hashlen) throw new IllegalArgumentException("type mismatch hash=" + hash.getClass() + " key=" + type);
 
         byte[] sigbytes = SigUtil.toJavaSig(signature);
         boolean rv;
@@ -589,17 +558,16 @@ public final class DSAEngine {
      *  @throws GeneralSecurityException if algorithm unvailable or on other errors
      *  @since 0.8.7 added off/len 0.9.12
      */
-    private boolean altVerifySigSHA1(Signature signature, byte[] data, int offset,
-                                     int len, SigningPublicKey verifyingKey) throws GeneralSecurityException {
+    private boolean altVerifySigSHA1(Signature signature, byte[] data, int offset, int len, SigningPublicKey verifyingKey) throws GeneralSecurityException {
         java.security.Signature jsig = java.security.Signature.getInstance("SHA1withDSA");
         PublicKey pubKey = SigUtil.toJavaDSAKey(verifyingKey);
         jsig.initVerify(pubKey);
         jsig.update(data, offset, len);
         boolean rv = jsig.verify(SigUtil.toJavaSig(signature));
-        //if (!rv) {
+        // if (!rv) {
         //    System.out.println("BAD SIG\n" + net.i2p.util.HexDump.dump(signature.getData()));
         //    System.out.println("BAD SIG\n" + net.i2p.util.HexDump.dump(sigBytesToASN1(signature.getData())));
-        //}
+        // }
         return rv;
     }
 
@@ -609,11 +577,9 @@ public final class DSAEngine {
      *  @throws GeneralSecurityException if algorithm unvailable or on other errors
      *  @since 0.9.9 added off/len 0.9.12
      */
-    private Signature altSign(byte[] data, int offset, int len,
-                              SigningPrivateKey privateKey) throws GeneralSecurityException {
+    private Signature altSign(byte[] data, int offset, int len, SigningPrivateKey privateKey) throws GeneralSecurityException {
         SigType type = privateKey.getType();
-        if (type == SigType.DSA_SHA1)
-            return altSignSHA1(data, offset, len, privateKey);
+        if (type == SigType.DSA_SHA1) return altSignSHA1(data, offset, len, privateKey);
 
         PrivateKey privKey = SigUtil.toJavaKey(privateKey);
         byte[] sigbytes;
@@ -636,8 +602,7 @@ public final class DSAEngine {
                 PublicKey pubKey = SigUtil.toJavaKey(pub);
                 jsig.initVerify(pubKey);
                 jsig.update(data, offset, len);
-                if (!jsig.verify(sigbytes))
-                    throw new GeneralSecurityException("Verify of RSA Signature failed");
+                if (!jsig.verify(sigbytes)) throw new GeneralSecurityException("Verify of RSA Signature failed");
             }
         }
         return SigUtil.fromJavaSig(sigbytes, type);
@@ -669,11 +634,9 @@ public final class DSAEngine {
      *  @throws GeneralSecurityException if algorithm unvailable or on other errors
      *  @since 0.9.9
      */
-    private Signature altSignRaw(String algo, SimpleDataStructure hash, PrivateKey privKey, SigType type)
-                                 throws GeneralSecurityException {
+    private Signature altSignRaw(String algo, SimpleDataStructure hash, PrivateKey privKey, SigType type) throws GeneralSecurityException {
         int hashlen = hash.length();
-        if (type.getHashLen() != hashlen)
-            throw new IllegalArgumentException("type mismatch hash=" + hash.getClass() + " key=" + type);
+        if (type.getHashLen() != hashlen) throw new IllegalArgumentException("type mismatch hash=" + hash.getClass() + " key=" + type);
 
         byte[] sigbytes;
         if (type.getBaseAlgorithm() == SigAlgo.EdDSA) {
@@ -695,8 +658,7 @@ public final class DSAEngine {
                 PublicKey pubKey = SigUtil.toJavaKey(pub);
                 jsig.initVerify(pubKey);
                 jsig.update(hash.getData());
-                if (!jsig.verify(sigbytes))
-                    throw new GeneralSecurityException("Verify of RSA Signature failed");
+                if (!jsig.verify(sigbytes)) throw new GeneralSecurityException("Verify of RSA Signature failed");
             }
         }
         return SigUtil.fromJavaSig(sigbytes, type);
@@ -707,8 +669,7 @@ public final class DSAEngine {
      *  @throws GeneralSecurityException if algorithm unvailable or on other errors
      *  @since 0.8.7 added off/len args 0.9.12
      */
-    private Signature altSignSHA1(byte[] data, int offset, int len,
-                                  SigningPrivateKey privateKey) throws GeneralSecurityException {
+    private Signature altSignSHA1(byte[] data, int offset, int len, SigningPrivateKey privateKey) throws GeneralSecurityException {
         java.security.Signature jsig = java.security.Signature.getInstance("SHA1withDSA");
         PrivateKey privKey = SigUtil.toJavaDSAKey(privateKey);
         jsig.initSign(privKey, _context.random());
@@ -719,30 +680,20 @@ public final class DSAEngine {
     /** @since 0.9.9 */
     private static String getRawAlgo(SigType type) {
         switch (type.getBaseAlgorithm()) {
-            case DSA:
-                return "NONEwithDSA";
-            case EC:
-                return "NONEwithECDSA";
-            case EdDSA:
-                return "NONEwithEdDSA";
-            case RSA:
-                return "NONEwithRSA";
-            default:
-                throw new UnsupportedOperationException("Raw signatures unsupported for " + type);
+            case DSA: return "NONEwithDSA";
+            case EC: return "NONEwithECDSA";
+            case EdDSA: return "NONEwithEdDSA";
+            case RSA: return "NONEwithRSA";
+            default: throw new UnsupportedOperationException("Raw signatures unsupported for " + type);
         }
     }
 
     /** @since 0.9.9 */
     private static String getRawAlgo(Key key) {
-        if (key instanceof DSAKey)
-            return "NONEwithDSA";
-        if (key instanceof ECKey)
-            return "NONEwithECDSA";
-        if (key instanceof EdDSAKey)
-            return "NONEwithEdDSA";
-        if (key instanceof RSAKey)
-            return "NONEwithRSA";
+        if (key instanceof DSAKey) return "NONEwithDSA";
+        if (key instanceof ECKey) return "NONEwithECDSA";
+        if (key instanceof EdDSAKey) return "NONEwithEdDSA";
+        if (key instanceof RSAKey) return "NONEwithRSA";
         throw new UnsupportedOperationException("Raw signatures unsupported for " + key.getClass().getName());
     }
-
 }

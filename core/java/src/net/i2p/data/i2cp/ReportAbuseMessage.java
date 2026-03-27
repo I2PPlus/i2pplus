@@ -9,10 +9,11 @@ package net.i2p.data.i2cp;
  *
  */
 
-import java.io.IOException;
-import java.io.InputStream;
 import net.i2p.data.DataFormatException;
 import net.i2p.util.ByteArrayStream;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Defines the message a client sends to a router when asking the
@@ -21,14 +22,13 @@ import net.i2p.util.ByteArrayStream;
  * @author jrandom
  */
 public class ReportAbuseMessage extends I2CPMessageImpl {
-    public final static int MESSAGE_TYPE = 29;
+    public static final int MESSAGE_TYPE = 29;
     private SessionId _sessionId;
     private AbuseSeverity _severity;
     private AbuseReason _reason;
     private MessageId _messageId;
 
-    public ReportAbuseMessage() {
-    }
+    public ReportAbuseMessage() {}
 
     public SessionId getSessionId() {
         return _sessionId;
@@ -90,12 +90,10 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
 
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
-        if ((_sessionId == null) || (_severity == null) || (_reason == null))
-            throw new I2CPMessageException("Not enough information to construct the message");
+        if ((_sessionId == null) || (_severity == null) || (_reason == null)) throw new I2CPMessageException("Not enough information to construct the message");
         int len = 2 + 1 + 4 + 1;
         String r = _reason.getReason();
-        if (r != null)
-            len += r.length();
+        if (r != null) len += r.length();
         ByteArrayStream os = new ByteArrayStream(len);
         try {
             _sessionId.writeBytes(os);

@@ -1,5 +1,11 @@
 package net.i2p.data;
 
+import net.i2p.I2PAppContext;
+import net.i2p.stat.RateConstants;
+import net.i2p.util.LHMCache;
+import net.i2p.util.SimpleByteCache;
+import net.i2p.util.SystemVersion;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,11 +14,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Map;
-import net.i2p.I2PAppContext;
-import net.i2p.stat.RateConstants;
-import net.i2p.util.LHMCache;
-import net.i2p.util.SimpleByteCache;
-import net.i2p.util.SystemVersion;
 
 /**
  *  A least recently used cache with a max size, for SimpleDataStructures.
@@ -24,43 +25,47 @@ import net.i2p.util.SystemVersion;
  *
  *  Following is sample usage:
  *  <pre>
-
-    private static final SDSCache&lt; Foo&gt; _cache = new SDSCache(Foo.class, LENGTH, 1024);
-
-    public static Foo create(byte[] data) {
-        return _cache.get(data);
-    }
-
-    public static Foo create(byte[] data, int off) {
-        return _cache.get(data, off);
-    }
-
-    public static Foo create(InputStream in) throws IOException {
-        return _cache.get(in);
-    }
-
+ *
+ * private static final SDSCache&lt; Foo&gt; _cache = new SDSCache(Foo.class, LENGTH, 1024);
+ *
+ * public static Foo create(byte[] data) {
+ * return _cache.get(data);
+ * }
+ *
+ * public static Foo create(byte[] data, int off) {
+ * return _cache.get(data, off);
+ * }
+ *
+ * public static Foo create(InputStream in) throws IOException {
+ * return _cache.get(in);
+ * }
+ *
  *  </pre>
  *  @since 0.8.3
  *  @author zzz
  *  @param <V> type of SimpleDataStructure objects cached
  */
 public class SDSCache<V extends SimpleDataStructure> {
-    //private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(SDSCache.class);
+    // private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(SDSCache.class);
 
     private static final double MIN_FACTOR = 0.20;
     private static final double MAX_FACTOR = 5.0;
     private static final double FACTOR;
+
     static {
         long maxMemory = SystemVersion.getMaxMemory();
-        FACTOR = Math.max(MIN_FACTOR, Math.min(MAX_FACTOR, maxMemory / (128*1024*1024d)));
+        FACTOR = Math.max(MIN_FACTOR, Math.min(MAX_FACTOR, maxMemory / (128 * 1024 * 1024d)));
     }
 
     /** the LRU cache */
     private final Map<Integer, WeakReference<V>> _cache;
+
     /** the byte array length for the class we are caching */
     private final int _datalen;
+
     /** the constructor for the class we are caching */
     private final Constructor<V> _rvCon;
+
     private final String _statName;
 
     /**
@@ -79,16 +84,16 @@ public class SDSCache<V extends SimpleDataStructure> {
             throw new RuntimeException("SDSCache init error", e);
         }
         _statName = "SDSCache." + rvClass.getSimpleName();
-        //if (_log.shouldDebug())
+        // if (_log.shouldDebug())
         //    _log.debug("New SDSCache for " + rvClass + " data size: " + len +
         //               " max: " + size + " max mem: " + (len * size));
-        I2PAppContext.getGlobalContext().statManager().createRateStat(_statName, "Hit rate", "Router [SDSCache]", new long[] { RateConstants.TEN_MINUTES });
+        I2PAppContext.getGlobalContext().statManager().createRateStat(_statName, "Hit rate", "Router [SDSCache]", new long[] {RateConstants.TEN_MINUTES});
         I2PAppContext.getGlobalContext().addShutdownTask(new Shutdown());
     }
 
     /**
-      * @since 0.8.8
-      */
+     * @since 0.8.8
+     */
     private class Shutdown implements Runnable {
         @Override
         public void run() {
@@ -115,21 +120,18 @@ public class SDSCache<V extends SimpleDataStructure> {
      *  @param data non-null, the byte array for the SimpleDataStructure
      *  @return the cached value if available, otherwise
      *          makes a new object and returns it
-      *  @throws IllegalArgumentException if data is not the correct number of bytes
-      *  @throws NullPointerException if data is null
-      */
+     *  @throws IllegalArgumentException if data is not the correct number of bytes
+     *  @throws NullPointerException if data is null
+     */
     public V get(byte[] data) {
-        if (data == null)
-            throw new NullPointerException("Don't pull null data from the cache");
+        if (data == null) throw new NullPointerException("Don't pull null data from the cache");
         int found;
         V rv;
         Integer key = hashCodeOf(data);
         synchronized (_cache) {
             WeakReference<V> ref = _cache.get(key);
-            if (ref != null)
-                rv = ref.get();
-            else
-                rv = null;
+            if (ref != null) rv = ref.get();
+            else rv = null;
             if (rv != null && Arrays.equals(data, rv.getData())) {
                 // found it, we don't need the data passed in any more
                 SimpleByteCache.release(data);
@@ -137,7 +139,7 @@ public class SDSCache<V extends SimpleDataStructure> {
             } else {
                 // make a new one
                 try {
-                    rv = _rvCon.newInstance(new Object[] { data });
+                    rv = _rvCon.newInstance(new Object[] {data});
                 } catch (InstantiationException e) {
                     throw new RuntimeException("SDSCache error", e);
                 } catch (IllegalAccessException e) {
@@ -176,8 +178,7 @@ public class SDSCache<V extends SimpleDataStructure> {
     public V get(InputStream in) throws IOException {
         byte[] data = SimpleByteCache.acquire(_datalen);
         int read = DataHelper.read(in, data);
-        if (read != _datalen)
-            throw new EOFException("Not enough bytes to read the data");
+        if (read != _datalen) throw new EOFException("Not enough bytes to read the data");
         return get(data);
     }
 
@@ -186,8 +187,7 @@ public class SDSCache<V extends SimpleDataStructure> {
      */
     private static Integer hashCodeOf(byte[] data) {
         int rv = data[0];
-        for (int i = 1; i < 4; i++)
-            rv ^= (data[i] << (i*8));
+        for (int i = 1; i < 4; i++) rv ^= (data[i] << (i * 8));
         return Integer.valueOf(rv);
     }
 }

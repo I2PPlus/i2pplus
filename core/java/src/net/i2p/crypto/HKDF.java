@@ -1,11 +1,13 @@
 package net.i2p.crypto;
 
+import net.i2p.I2PAppContext;
+import net.i2p.crypto.HMAC256Generator.HMACKey;
+
 import java.security.GeneralSecurityException;
+
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import net.i2p.I2PAppContext;
-import net.i2p.crypto.HMAC256Generator.HMACKey;
 
 /**
  * HMAC-based Key Derivation Function (HKDF) implementation using HMAC-SHA256.
@@ -30,7 +32,7 @@ import net.i2p.crypto.HMAC256Generator.HMACKey;
 public final class HKDF {
 
     private final I2PAppContext _context;
-    private static final byte[] ONE = new byte[] { 1 };
+    private static final byte[] ONE = new byte[] {1};
 
     /**
      *  @param context the app context
@@ -71,7 +73,7 @@ public final class HKDF {
         hmac.calculate(key, data, 0, data.length, out, 0);
         byte[] tmp = new byte[ilen + 1];
         for (int i = 0; i < ilen; i++) {
-            tmp[i] = (byte)info.charAt(i);
+            tmp[i] = (byte) info.charAt(i);
         }
         tmp[ilen] = 1;
         // Expand
@@ -88,8 +90,7 @@ public final class HKDF {
      * @param out2 32 bytes will be copied to here, may be the same as out
      * @param off2 offset for copy to out2
      */
-    public void calculate(byte[] key, byte[] data, byte[] out,
-                          byte[] out2, int off2) {
+    public void calculate(byte[] key, byte[] data, byte[] out, byte[] out2, int off2) {
         calculate(key, data, "", out, out2, off2);
     }
 
@@ -102,12 +103,11 @@ public final class HKDF {
      * @param out2 32 bytes will be copied to here, may be the same as out
      * @param off2 offset for copy to out2
      */
-    public void calculate(byte[] key, byte[] data, String info, byte[] out,
-                          byte[] out2, int off2) {
+    public void calculate(byte[] key, byte[] data, String info, byte[] out, byte[] out2, int off2) {
         int ilen = info.length();
         byte[] tmp = new byte[ilen + 1];
         for (int i = 0; i < ilen; i++) {
-            tmp[i] = (byte)info.charAt(i);
+            tmp[i] = (byte) info.charAt(i);
         }
         tmp[ilen] = 1;
         try {

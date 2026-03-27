@@ -89,7 +89,6 @@ class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry 
             case VariableTunnelBuildReplyMessage.MESSAGE_TYPE:
             default:
                 return 100;
-
         }
     }
 }

@@ -11,6 +11,14 @@
  */
 package net.i2p.crypto.eddsa;
 
+import net.i2p.crypto.eddsa.spec.EdDSAGenParameterSpec;
+import net.i2p.crypto.eddsa.spec.EdDSANamedCurveSpec;
+import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
+import net.i2p.crypto.eddsa.spec.EdDSAParameterSpec;
+import net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec;
+import net.i2p.crypto.eddsa.spec.EdDSAPublicKeySpec;
+import net.i2p.util.RandomSource;
+
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidParameterException;
 import java.security.KeyPair;
@@ -19,13 +27,6 @@ import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.HashMap;
 import java.util.Map;
-import net.i2p.crypto.eddsa.spec.EdDSAGenParameterSpec;
-import net.i2p.crypto.eddsa.spec.EdDSANamedCurveSpec;
-import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
-import net.i2p.crypto.eddsa.spec.EdDSAParameterSpec;
-import net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec;
-import net.i2p.crypto.eddsa.spec.EdDSAPublicKeySpec;
-import net.i2p.util.RandomSource;
 
 /**
  * Key pair generator for EdDSA (Edwards-curve Digital Signature Algorithm) keys.
@@ -62,8 +63,7 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
     @Override
     public void initialize(int keysize, SecureRandom random) {
         AlgorithmParameterSpec edParams = edParameters.get(Integer.valueOf(keysize));
-        if (edParams == null)
-            throw new InvalidParameterException("Unknown key type.");
+        if (edParams == null) throw new InvalidParameterException("Unknown key type.");
         try {
             initialize(edParams, random);
         } catch (InvalidAlgorithmParameterException e) {
@@ -77,8 +77,7 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
             edParams = (EdDSAParameterSpec) params;
         } else if (params instanceof EdDSAGenParameterSpec) {
             edParams = createNamedCurveSpec(((EdDSAGenParameterSpec) params).getName());
-        } else
-            throw new InvalidAlgorithmParameterException("parameter object not a EdDSAParameterSpec");
+        } else throw new InvalidAlgorithmParameterException("parameter object not a EdDSAParameterSpec");
 
         this.random = random;
         initialized = true;
@@ -86,10 +85,9 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
 
     @Override
     public KeyPair generateKeyPair() {
-        if (!initialized)
-            initialize(DEFAULT_KEYSIZE, RandomSource.getInstance());
+        if (!initialized) initialize(DEFAULT_KEYSIZE, RandomSource.getInstance());
 
-        byte[] seed = new byte[edParams.getCurve().getField().getb()/8];
+        byte[] seed = new byte[edParams.getCurve().getField().getb() / 8];
         random.nextBytes(seed);
 
         EdDSAPrivateKeySpec privKey = new EdDSAPrivateKeySpec(seed, edParams);

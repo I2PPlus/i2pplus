@@ -1,11 +1,12 @@
 package net.i2p.client.streaming.impl;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Hash;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.RandomSource;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Count how often we have received an incoming connection
@@ -32,9 +33,7 @@ class ConnThrottler {
         // shorten the initial period by a random amount
         // to prevent correlation across destinations
         // and identification of router startup time
-        timer.addPeriodicEvent(new Cleaner(),
-                               (period / 2) + RandomSource.getInstance().nextLong(period / 2),
-                               period);
+        timer.addPeriodicEvent(new Cleaner(), (period / 2) + RandomSource.getInstance().nextLong(period / 2), period);
     }
 
     /*
@@ -52,10 +51,8 @@ class ConnThrottler {
      */
     boolean shouldThrottle(Hash h) {
         // do this first, so we don't increment total if individual throttled
-        if (_max > 0 && this.counter.increment(h) > _max)
-            return true;
-        if (_totalMax > 0 && _currentTotal.incrementAndGet() > _totalMax)
-            return true;
+        if (_max > 0 && this.counter.increment(h) > _max) return true;
+        if (_totalMax > 0 && _currentTotal.incrementAndGet() > _totalMax) return true;
         return false;
     }
 
@@ -64,8 +61,7 @@ class ConnThrottler {
      *  @since 0.9.3
      */
     boolean isThrottled(Hash h) {
-        if (_max > 0)
-            return this.counter.count(h) > _max;
+        if (_max > 0) return this.counter.count(h) > _max;
         return false;
     }
 
@@ -74,18 +70,15 @@ class ConnThrottler {
      *  @since 0.9.34
      */
     boolean isOverBy(Hash h, int over) {
-        if (_max > 0)
-            return this.counter.count(h) >  _max + over;
+        if (_max > 0) return this.counter.count(h) > _max + over;
         return false;
     }
 
     private class Cleaner implements SimpleTimer.TimedEvent {
         @Override
         public void timeReached() {
-            if (_totalMax > 0)
-                _currentTotal.set(0);
-            if (_max > 0)
-                ConnThrottler.this.counter.clear();
+            if (_totalMax > 0) _currentTotal.set(0);
+            if (_max > 0) ConnThrottler.this.counter.clear();
         }
     }
 }

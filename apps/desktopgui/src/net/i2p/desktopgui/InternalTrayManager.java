@@ -30,13 +30,25 @@ class InternalTrayManager extends TrayManager {
     private final RouterContext _context;
     private final Log log;
     private final Main _main;
-    private MenuItem _statusItem, _browserItem, _configItem, _restartItem, _stopItem,
-                     _restartHardItem, _stopHardItem, _cancelItem;
-    private JMenuItem _jstatusItem, _jbrowserItem, _jconfigItem, _jrestartItem, _jstopItem,
-                      _jrestartHardItem, _jstopHardItem, _jcancelItem;
+    private MenuItem _statusItem,
+            _browserItem,
+            _configItem,
+            _restartItem,
+            _stopItem,
+            _restartHardItem,
+            _stopHardItem,
+            _cancelItem;
+    private JMenuItem _jstatusItem,
+            _jbrowserItem,
+            _jconfigItem,
+            _jrestartItem,
+            _jstopItem,
+            _jrestartHardItem,
+            _jstopHardItem,
+            _jcancelItem;
 
-    private static final boolean CONSOLE_ENABLED = Desktop.isDesktopSupported() &&
-                                                   Desktop.getDesktop().isSupported(Action.BROWSE);
+    private static final boolean CONSOLE_ENABLED =
+            Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Action.BROWSE);
     private static final String CONSOLE_BUNDLE_NAME = "net.i2p.router.web.messages";
 
     public InternalTrayManager(RouterContext ctx, Main main, boolean useSwing) {
@@ -190,11 +202,9 @@ class InternalTrayManager extends TrayManager {
         desktopguiConfigurationLauncher.add(configSubmenu);
         popup.add(desktopguiConfigurationLauncher);
         popup.addSeparator();
-        if (_context.hasWrapper())
-            popup.add(restartItem);
+        if (_context.hasWrapper()) popup.add(restartItem);
         popup.add(stopItem);
-        if (_context.hasWrapper())
-            popup.add(restartItem2);
+        if (_context.hasWrapper()) popup.add(restartItem2);
         popup.add(stopItem2);
         popup.add(cancelItem);
 
@@ -346,11 +356,9 @@ class InternalTrayManager extends TrayManager {
         desktopguiConfigurationLauncher.add(configSubmenu);
         popup.add(desktopguiConfigurationLauncher);
         popup.addSeparator();
-        if (_context.hasWrapper())
-            popup.add(restartItem);
+        if (_context.hasWrapper()) popup.add(restartItem);
         popup.add(stopItem);
-        if (_context.hasWrapper())
-            popup.add(restartItem2);
+        if (_context.hasWrapper()) popup.add(restartItem2);
         popup.add(stopItem2);
         popup.add(cancelItem);
 
@@ -384,55 +392,35 @@ class InternalTrayManager extends TrayManager {
             }
         } else {
             // status translations are in the console bundle
-            status = _t("Network") + ": " +
-                     Translate.getString(RouterManager.getStatus(_context), _context, CONSOLE_BUNDLE_NAME);
+            status = _t("Network") + ": "
+                    + Translate.getString(RouterManager.getStatus(_context), _context, CONSOLE_BUNDLE_NAME);
         }
         PopupMenu awt = trayIcon.getPopupMenu();
         if (awt != null) {
             MenuItem item = awt.getItem(0);
             String oldStatus = item.getLabel();
-            if (!status.equals(oldStatus))
-                item.setLabel(status);
+            if (!status.equals(oldStatus)) item.setLabel(status);
         }
-        if (_browserItem != null)
-            _browserItem.setEnabled(!imminent);
-        if (_configItem != null)
-            _configItem.setEnabled(!imminent);
-        if (_restartItem != null)
-            _restartItem.setEnabled(!x);
-        if (_stopItem != null)
-            _stopItem.setEnabled(!x);
-        if (_restartHardItem != null)
-            _restartHardItem.setEnabled(!imminent);
-        if (_stopHardItem != null)
-            _stopHardItem.setEnabled(!imminent);
-        if (_cancelItem != null)
-            _cancelItem.setEnabled(x && !imminent);
-        if (_notificationItem1 != null)
-            _notificationItem1.setEnabled(_showNotifications);
-        if (_notificationItem2 != null)
-            _notificationItem2.setEnabled(!_showNotifications);
+        if (_browserItem != null) _browserItem.setEnabled(!imminent);
+        if (_configItem != null) _configItem.setEnabled(!imminent);
+        if (_restartItem != null) _restartItem.setEnabled(!x);
+        if (_stopItem != null) _stopItem.setEnabled(!x);
+        if (_restartHardItem != null) _restartHardItem.setEnabled(!imminent);
+        if (_stopHardItem != null) _stopHardItem.setEnabled(!imminent);
+        if (_cancelItem != null) _cancelItem.setEnabled(x && !imminent);
+        if (_notificationItem1 != null) _notificationItem1.setEnabled(_showNotifications);
+        if (_notificationItem2 != null) _notificationItem2.setEnabled(!_showNotifications);
 
-        if (_jstatusItem != null)
-            _jstatusItem.setText(status);
-        if (_jbrowserItem != null)
-            _jbrowserItem.setVisible(!imminent);
-        if (_jconfigItem != null)
-            _jconfigItem.setVisible(!imminent);
-        if (_jrestartItem != null)
-            _jrestartItem.setVisible(!x);
-        if (_jstopItem != null)
-            _jstopItem.setVisible(!x);
-        if (_jrestartHardItem != null)
-            _jrestartHardItem.setVisible(!imminent);
-        if (_jstopHardItem != null)
-            _jstopHardItem.setVisible(!imminent);
-        if (_jcancelItem != null)
-            _jcancelItem.setVisible(x && !imminent);
-        if (_jnotificationItem1 != null)
-            _jnotificationItem1.setVisible(_showNotifications);
-        if (_jnotificationItem2 != null)
-            _jnotificationItem2.setVisible(!_showNotifications);
+        if (_jstatusItem != null) _jstatusItem.setText(status);
+        if (_jbrowserItem != null) _jbrowserItem.setVisible(!imminent);
+        if (_jconfigItem != null) _jconfigItem.setVisible(!imminent);
+        if (_jrestartItem != null) _jrestartItem.setVisible(!x);
+        if (_jstopItem != null) _jstopItem.setVisible(!x);
+        if (_jrestartHardItem != null) _jrestartHardItem.setVisible(!imminent);
+        if (_jstopHardItem != null) _jstopHardItem.setVisible(!imminent);
+        if (_jcancelItem != null) _jcancelItem.setVisible(x && !imminent);
+        if (_jnotificationItem1 != null) _jnotificationItem1.setVisible(_showNotifications);
+        if (_jnotificationItem2 != null) _jnotificationItem2.setVisible(!_showNotifications);
     }
 
     /**
@@ -441,8 +429,7 @@ class InternalTrayManager extends TrayManager {
     private void configureDesktopgui(boolean enable) {
         String property = Main.PROP_ENABLE;
         String value = Boolean.toString(enable);
-        if (!_context.router().saveConfig(property, value))
-            log.error("Error saving config");
+        if (!_context.router().saveConfig(property, value)) log.error("Error saving config");
         if (!enable) {
             // TODO popup that explains how to re-enable in console
             _main.shutdown(null);
@@ -456,8 +443,7 @@ class InternalTrayManager extends TrayManager {
     protected void configureNotifications(boolean enable) {
         _showNotifications = enable;
         String value = Boolean.toString(enable);
-        if (!_context.router().saveConfig(PROP_NOTIFICATIONS, value))
-            log.error("Error saving config");
+        if (!_context.router().saveConfig(PROP_NOTIFICATIONS, value)) log.error("Error saving config");
     }
 
     /**

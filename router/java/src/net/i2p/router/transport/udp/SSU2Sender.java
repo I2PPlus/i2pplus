@@ -1,6 +1,7 @@
 package net.i2p.router.transport.udp;
 
 import com.southernstorm.noise.protocol.CipherState;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
@@ -13,18 +14,32 @@ import java.util.List;
  */
 interface SSU2Sender {
     RemoteHostId getRemoteHostId();
+
     boolean isIPv6();
+
     InetAddress getRemoteIPAddress();
+
     int getRemotePort();
+
     int getMTU();
+
     long getNextPacketNumber() throws IOException;
+
     long getSendConnID();
+
     CipherState getSendCipher();
+
     byte[] getSendHeaderEncryptKey1();
+
     byte[] getSendHeaderEncryptKey2();
+
     void setDestroyReason(int reason);
+
     SSU2Bitfield getReceivedMessages();
+
     SSU2Bitfield getAckedMessages();
+
     void fragmentsSent(long pktNum, int length, List<PacketBuilder.Fragment> fragments);
+
     byte getFlags();
 }

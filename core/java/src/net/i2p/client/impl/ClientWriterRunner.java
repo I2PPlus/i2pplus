@@ -1,5 +1,12 @@
 package net.i2p.client.impl;
 
+import net.i2p.client.I2PSessionException;
+import net.i2p.data.i2cp.I2CPMessage;
+import net.i2p.data.i2cp.I2CPMessageException;
+import net.i2p.internal.PoisonI2CPMessage;
+import net.i2p.util.I2PAppThread;
+import net.i2p.util.SystemVersion;
+
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -7,12 +14,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
-import net.i2p.client.I2PSessionException;
-import net.i2p.data.i2cp.I2CPMessage;
-import net.i2p.data.i2cp.I2CPMessageException;
-import net.i2p.internal.PoisonI2CPMessage;
-import net.i2p.util.I2PAppThread;
-import net.i2p.util.SystemVersion;
 
 /**
  * Copied from net.i2p.router.client
@@ -27,7 +28,7 @@ class ClientWriterRunner implements Runnable {
     private final BlockingQueue<I2CPMessage> _messagesToWrite;
     private static final AtomicLong __Id = new AtomicLong();
     private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 64 : 256;
-    private static final long MAX_SEND_WAIT = SystemVersion.isSlow() ? 10*1000 : 5*1000;
+    private static final long MAX_SEND_WAIT = SystemVersion.isSlow() ? 10 * 1000 : 5 * 1000;
 
     /**
      *  As of 0.9.11 does not start the thread, caller must call startWriting()
@@ -67,21 +68,30 @@ class ClientWriterRunner implements Runnable {
      */
     public void stopWriting() {
         _messagesToWrite.clear();
-        try {_messagesToWrite.put(new PoisonI2CPMessage());}
-        catch (InterruptedException ie) {}
+        try {
+            _messagesToWrite.put(new PoisonI2CPMessage());
+        } catch (InterruptedException ie) {
+        }
     }
 
     @Override
     public void run() {
         I2CPMessage msg;
         while (!_session.isClosed()) {
-            try {msg = _messagesToWrite.take();}
-            catch (InterruptedException ie) {continue;}
-            if (msg.getType() == PoisonI2CPMessage.MESSAGE_TYPE) {break;}
+            try {
+                msg = _messagesToWrite.take();
+            } catch (InterruptedException ie) {
+                continue;
+            }
+            if (msg.getType() == PoisonI2CPMessage.MESSAGE_TYPE) {
+                break;
+            }
             // only thread, we don't need synchronized
             try {
                 msg.writeMessage(_out);
-                if (_messagesToWrite.isEmpty()) {_out.flush();}
+                if (_messagesToWrite.isEmpty()) {
+                    _out.flush();
+                }
             } catch (I2CPMessageException ime) {
                 _session.propagateError("Error writing out the message", ime);
                 _session.disconnect();

@@ -35,9 +35,9 @@ class ContainerHelpers {
             } else if (midVal > value) {
                 hi = mid - 1;
             } else {
-                return mid;  // value found
+                return mid; // value found
             }
         }
-        return ~lo;  // value not present
+        return ~lo; // value not present
     }
 }

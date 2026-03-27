@@ -34,13 +34,19 @@ final class RemoteHostId {
     }
 
     /** @return null if indirect */
-    public byte[] getIP() { return _ip; }
+    public byte[] getIP() {
+        return _ip;
+    }
 
     /** @return 0 if indirect */
-    public int getPort() { return _port; }
+    public int getPort() {
+        return _port;
+    }
 
     /** @return null if direct */
-    public Hash getPeerHash() { return _peerHash; }
+    public Hash getPeerHash() {
+        return _peerHash;
+    }
 
     @Override
     public int hashCode() {
@@ -49,11 +55,9 @@ final class RemoteHostId {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null)
-            return false;
-        if (!(obj instanceof RemoteHostId))
-            return false;
-        RemoteHostId id = (RemoteHostId)obj;
+        if (obj == null) return false;
+        if (!(obj instanceof RemoteHostId)) return false;
+        RemoteHostId id = (RemoteHostId) obj;
         return (_port == id._port) && DataHelper.eq(_ip, id._ip) && DataHelper.eq(_peerHash, id._peerHash);
     }
 

@@ -10,13 +10,14 @@
  */
 package org.minidns.record;
 
+import org.minidns.constants.DnssecConstants.DigestAlgorithm;
+import org.minidns.constants.DnssecConstants.SignatureAlgorithm;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
-import org.minidns.constants.DnssecConstants.DigestAlgorithm;
-import org.minidns.constants.DnssecConstants.SignatureAlgorithm;
 
 /**
  * Abstract base class for DNSSEC delegation records.<br>
@@ -125,11 +126,7 @@ public abstract class DelegatingDnssecRR extends Data {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder()
-                .append(keyTag).append(' ')
-                .append(algorithm).append(' ')
-                .append(digestType).append(' ')
-                .append(new BigInteger(1, digest).toString(16).toUpperCase());
+        StringBuilder sb = new StringBuilder().append(keyTag).append(' ').append(algorithm).append(' ').append(digestType).append(' ').append(new BigInteger(1, digest).toString(16).toUpperCase());
         return sb.toString();
     }
 

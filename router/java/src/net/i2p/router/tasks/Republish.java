@@ -1,4 +1,5 @@
 package net.i2p.router.tasks;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -72,7 +73,9 @@ public class Republish implements SimpleTimer.TimedEvent {
      * @param ctx the router context for accessing router services
      * @since 0.8.12 moved from Router.java
      */
-    public Republish(RouterContext ctx) {_context = ctx;}
+    public Republish(RouterContext ctx) {
+        _context = ctx;
+    }
 
     /**
      * Publish the router's info to the network database.
@@ -89,7 +92,9 @@ public class Republish implements SimpleTimer.TimedEvent {
         RouterInfo ri = null;
         try {
             ri = _context.router().getRouterInfo();
-            if (ri != null) {_context.netDb().publish(ri);}
+            if (ri != null) {
+                _context.netDb().publish(ri);
+            }
         } catch (IllegalArgumentException iae) {
             Log log = _context.logManager().getLog(Router.class);
             // clock skew / shift race?
@@ -97,7 +102,7 @@ public class Republish implements SimpleTimer.TimedEvent {
                 long now = _context.clock().now();
                 long published = ri.getDate();
                 long diff = Math.abs(now - published);
-                if (diff > 60*1000) {
+                if (diff > 60 * 1000) {
                     log.logAlways(Log.WARN, "Large clock shift detected (" + DataHelper.formatDuration(diff) + "), rebuilding local RouterInfo...");
                     _context.router().rebuildRouterInfo(); // let's just try this again and hope for better results
                     return;
@@ -107,5 +112,4 @@ public class Republish implements SimpleTimer.TimedEvent {
             _context.router().rebuildNewIdentity();
         }
     }
-
 }

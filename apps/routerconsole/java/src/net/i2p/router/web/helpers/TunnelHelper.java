@@ -1,8 +1,9 @@
 package net.i2p.router.web.helpers;
 
+import net.i2p.router.web.HelperBase;
+
 import java.io.IOException;
 import java.io.StringWriter;
-import net.i2p.router.web.HelperBase;
 
 /**
  * Helper for tunnel status page rendering and form processing.
@@ -22,7 +23,7 @@ public class TunnelHelper extends HelperBase {
                 renderer.renderGuide(_out);
                 return "";
             } else {
-                StringWriter sw = new StringWriter(32*1024);
+                StringWriter sw = new StringWriter(32 * 1024);
                 renderer.renderStatusHTML(sw);
                 renderer.renderGuide(sw);
                 return sw.toString();

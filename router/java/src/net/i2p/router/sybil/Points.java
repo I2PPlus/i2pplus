@@ -1,9 +1,10 @@
 package net.i2p.router.sybil;
 
+import net.i2p.data.DataHelper;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import net.i2p.data.DataHelper;
 
 /**
  *  A total score and a List of reason Strings
@@ -92,8 +93,7 @@ public class Points implements Comparable<Points> {
      */
     public static Points fromString(String s) {
         String[] ss = DataHelper.split(s, "%");
-        if (ss.length < 2)
-            return null;
+        if (ss.length < 2) return null;
         double d;
         try {
             d = Double.parseDouble(ss[0]);

@@ -1,5 +1,10 @@
 package org.klomp.snark.dht;
 
+import net.i2p.I2PAppContext;
+import net.i2p.data.DataFormatException;
+import net.i2p.util.Log;
+import net.i2p.util.SecureFileOutputStream;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,10 +13,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import net.i2p.I2PAppContext;
-import net.i2p.data.DataFormatException;
-import net.i2p.util.Log;
-import net.i2p.util.SecureFileOutputStream;
 
 /**
  * Retrieve / Store the local DHT in a file
@@ -53,8 +54,7 @@ abstract class PersistDHT {
         } catch (IOException ioe) {
             if (log.shouldWarn() && file.exists()) log.warn("Error reading the DHT File", ioe);
         } finally {
-            if (br != null)
-                try {
+            if (br != null) try {
                     br.close();
                 } catch (IOException ioe) {
                 }
@@ -72,11 +72,7 @@ abstract class PersistDHT {
         long maxAge = saveAll ? 0 : I2PAppContext.getGlobalContext().clock().now() - MAX_AGE;
         PrintWriter out = null;
         try {
-            out =
-                    new PrintWriter(
-                            new BufferedWriter(
-                                    new OutputStreamWriter(
-                                            new SecureFileOutputStream(file), "ISO-8859-1")));
+            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "ISO-8859-1")));
             out.println("# DHT nodes, format is NID:Hash:Destination:port");
             for (NodeInfo ni : nodes.values()) {
                 if (ni.lastSeen() < maxAge) continue;

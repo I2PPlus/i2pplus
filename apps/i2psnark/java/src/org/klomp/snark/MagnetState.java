@@ -1,14 +1,16 @@
 package org.klomp.snark;
 
+import net.i2p.data.DataHelper;
+import net.i2p.util.RandomSource;
+
+import org.klomp.snark.bencode.BDecoder;
+import org.klomp.snark.bencode.BEValue;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import net.i2p.data.DataHelper;
-import net.i2p.util.RandomSource;
-import org.klomp.snark.bencode.BDecoder;
-import org.klomp.snark.bencode.BEValue;
 
 /**
  * Simple state for the download of the metainfo, shared between Peer and ExtensionHandler.
@@ -174,8 +176,7 @@ class MagnetState {
      */
     public byte[] getChunk(int chunk) {
         if (!complete) throw new IllegalArgumentException("Not complete");
-        if (chunk < 0 || chunk >= totalChunks)
-            throw new IllegalArgumentException("Bad chunk number");
+        if (chunk < 0 || chunk >= totalChunks) throw new IllegalArgumentException("Bad chunk number");
         int size = chunkSize(chunk);
         byte[] rv = new byte[size];
         System.arraycopy(metainfoBytes, chunk * CHUNK_SIZE, rv, 0, size);
@@ -197,8 +198,7 @@ class MagnetState {
      */
     public boolean saveChunk(int chunk, byte[] data, int off, int length) throws Exception {
         if (!isInitialized) throw new IllegalArgumentException("Not initialized");
-        if (chunk < 0 || chunk >= totalChunks)
-            throw new IllegalArgumentException("bad chunk number");
+        if (chunk < 0 || chunk >= totalChunks) throw new IllegalArgumentException("bad chunk number");
         if (have.get(chunk)) return false; // shouldn't happen if synced
         int size = chunkSize(chunk);
         if (size != length) throw new IllegalArgumentException("Bad chunk length");

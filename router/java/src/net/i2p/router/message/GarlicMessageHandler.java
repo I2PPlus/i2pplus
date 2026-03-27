@@ -1,4 +1,5 @@
 package net.i2p.router.message;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -48,8 +49,7 @@ public class GarlicMessageHandler implements HandlerJobBuilder {
 
     @Override
     public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {
-        HandleGarlicMessageJob job = new HandleGarlicMessageJob(_context, (GarlicMessage)receivedMessage, from, fromHash, _msgIDBloomXorLocal, _msgIDBloomXorRouter, _msgIDBloomXorTunnel);
+        HandleGarlicMessageJob job = new HandleGarlicMessageJob(_context, (GarlicMessage) receivedMessage, from, fromHash, _msgIDBloomXorLocal, _msgIDBloomXorRouter, _msgIDBloomXorTunnel);
         return job;
     }
-
 }

@@ -39,8 +39,9 @@ class DHTTracker {
     private static final long CLEAN_TIME = 199 * 1000;
 
     /** no guidance in BEP 5; Vuze is 8h */
-    private static final long MAX_EXPIRE_TIME = 10*60*1000;
-    private static final long MIN_EXPIRE_TIME = 5*60*1000;
+    private static final long MAX_EXPIRE_TIME = 10 * 60 * 1000;
+
+    private static final long MIN_EXPIRE_TIME = 5 * 60 * 1000;
     private static final long DELTA_EXPIRE_TIME = 3 * 60 * 1000;
     private static final int MAX_PEERS = 400;
     private static final int MAX_PEERS_PER_TORRENT = 60;
@@ -171,10 +172,10 @@ class DHTTracker {
             int torrentCount = 0;
             int peerCount = 0;
             boolean tooMany = false;
-            for (Iterator<Peers> iter = _torrents.values().iterator(); iter.hasNext();) {
+            for (Iterator<Peers> iter = _torrents.values().iterator(); iter.hasNext(); ) {
                 Peers p = iter.next();
                 int recent = 0;
-                for (Iterator<Peer> iterp = p.values().iterator(); iterp.hasNext();) {
+                for (Iterator<Peer> iterp = p.values().iterator(); iterp.hasNext(); ) {
                     Peer peer = iterp.next();
                     if (peer.lastSeen() < now - _expireTime) iterp.remove();
                     else {
@@ -211,14 +212,8 @@ class DHTTracker {
             else _expireTime = Math.min(_expireTime + DELTA_EXPIRE_TIME, MAX_EXPIRE_TIME);
 
             if (_log.shouldDebug())
-                _log.debug(
-                        "DHT tracker cleaner done, now with "
-                                + torrentCount
-                                + " torrents, "
-                                + peerCount
-                                + " peers, "
-                                + DataHelper.formatDuration(_expireTime)
-                                + " expiration");
+                _log.debug("DHT tracker cleaner done, now with " + torrentCount + " torrents, " + peerCount + " peers, "
+                        + DataHelper.formatDuration(_expireTime) + " expiration");
             _peerCount = peerCount;
             _torrentCount = torrentCount;
             schedule(tooMany ? CLEAN_TIME / 3 : CLEAN_TIME);

@@ -63,9 +63,7 @@ class SubscriptionList implements Iterable<AddressBook> {
      * @param proxyHost proxy hostname
      * @param proxyPort proxy port number
      */
-    public SubscriptionList(File locationsFile, File etagsFile,
-            File lastModifiedFile, File lastFetchedFile, long delay, List<String> defaultSubs, String proxyHost,
-            int proxyPort) {
+    public SubscriptionList(File locationsFile, File etagsFile, File lastModifiedFile, File lastFetchedFile, long delay, List<String> defaultSubs, String proxyHost, int proxyPort) {
         this.subscriptions = new ArrayList<Subscription>(4);
         this.etagsFile = etagsFile;
         this.lastModifiedFile = lastModifiedFile;
@@ -76,8 +74,7 @@ class SubscriptionList implements Iterable<AddressBook> {
         Map<String, String> etags;
         Map<String, String> lastModified;
         Map<String, String> lastFetched;
-        List<String> locations = ConfigParser.parseSubscriptions(locationsFile,
-                defaultSubs);
+        List<String> locations = ConfigParser.parseSubscriptions(locationsFile, defaultSubs);
         try {
             etags = ConfigParser.parse(etagsFile);
         } catch (IOException exp) {
@@ -94,9 +91,7 @@ class SubscriptionList implements Iterable<AddressBook> {
             lastFetched = Collections.<String, String>emptyMap();
         }
         for (String location : locations) {
-            this.subscriptions.add(new Subscription(location, etags.get(location),
-                                   lastModified.get(location),
-                                   lastFetched.get(location)));
+            this.subscriptions.add(new Subscription(location, etags.get(location), lastModified.get(location), lastFetched.get(location)));
         }
     }
 
@@ -126,8 +121,7 @@ class SubscriptionList implements Iterable<AddressBook> {
      */
     @Override
     public SubscriptionIterator iterator() {
-        return new SubscriptionIterator(this.subscriptions, this.delay, this.proxyHost,
-                this.proxyPort);
+        return new SubscriptionIterator(this.subscriptions, this.delay, this.proxyHost, this.proxyPort);
     }
 
     /**
@@ -152,12 +146,15 @@ class SubscriptionList implements Iterable<AddressBook> {
         }
         try {
             ConfigParser.write(etags, this.etagsFile);
-        } catch (IOException exp) {}
+        } catch (IOException exp) {
+        }
         try {
             ConfigParser.write(lastModified, this.lastModifiedFile);
-        } catch (IOException exp) {}
+        } catch (IOException exp) {
+        }
         try {
             ConfigParser.write(lastFetched, this.lastFetchedFile);
-        } catch (IOException exp) {}
+        } catch (IOException exp) {
+        }
     }
 }

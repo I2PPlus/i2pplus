@@ -3,7 +3,6 @@ package net.i2p.sam;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketAddress;
-/* requires Java 7 */
 import java.net.SocketOption;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
@@ -50,29 +49,24 @@ class SSLSocketChannel extends SocketChannel {
         return false;
     }
 
-    /** new in Java 7 */
     public SocketAddress getRemoteAddress() {
         return _socket.getRemoteSocketAddress();
     }
 
-    /** new in Java 7 */
     public SocketChannel shutdownInput() throws IOException {
         _socket.getInputStream().close();
         return this;
     }
 
-    /** new in Java 7 */
     public SocketChannel shutdownOutput() throws IOException {
         _socket.getOutputStream().close();
         return this;
     }
 
-    /** requires Java 7 */
     public <T> SocketChannel setOption(SocketOption<T> name, T value) {
         return this;
     }
 
-    /** requires Java 7 */
     public SocketChannel bind(SocketAddress local) {
         throw new UnsupportedOperationException();
     }
@@ -80,13 +74,11 @@ class SSLSocketChannel extends SocketChannel {
     //// SocketChannel abstract methods
 
     public int read(ByteBuffer src) throws IOException {
-        if (!src.hasArray())
-            throw new UnsupportedOperationException();
+        if (!src.hasArray()) throw new UnsupportedOperationException();
         int pos = src.position();
         int len = src.remaining();
         int read = _socket.getInputStream().read(src.array(), src.arrayOffset() + pos, len);
-        if (read > 0)
-            src.position(pos + read);
+        if (read > 0) src.position(pos + read);
         return read;
     }
 
@@ -95,8 +87,7 @@ class SSLSocketChannel extends SocketChannel {
     }
 
     public int write(ByteBuffer src) throws IOException {
-        if (!src.hasArray())
-            throw new UnsupportedOperationException();
+        if (!src.hasArray()) throw new UnsupportedOperationException();
         int pos = src.position();
         int len = src.remaining();
         _socket.getOutputStream().write(src.array(), src.arrayOffset() + pos, len);
@@ -115,10 +106,8 @@ class SSLSocketChannel extends SocketChannel {
     }
 
     public void implConfigureBlocking(boolean block) throws IOException {
-        if (!block)
-            throw new UnsupportedOperationException();
+        if (!block) throw new UnsupportedOperationException();
     }
-
 
     //// NetworkChannel interface methods
 
@@ -133,7 +122,4 @@ class SSLSocketChannel extends SocketChannel {
     public Set<SocketOption<?>> supportedOptions() {
         return Collections.emptySet();
     }
-
-
-
 }

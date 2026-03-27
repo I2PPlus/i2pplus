@@ -79,14 +79,10 @@ public class IdenticonUtil {
      * @throws Exception
      */
     public static int getIdenticonCode(InetAddress inetAddr) throws Exception {
-        if (inetSalt == null)
-            throw new Exception(
-                    "inetSalt must be set prior to retrieving identicon code");
+        if (inetSalt == null) throw new Exception("inetSalt must be set prior to retrieving identicon code");
 
         byte[] ip = inetAddr.getAddress();
-        int ipInt = (((ip[0] & 0xFF) << 24) | ((ip[1] & 0xFF) << 16)
-                | ((ip[2] & 0xFF) << 8) | (ip[3] & 0xFF))
-                & inetMask;
+        int ipInt = (((ip[0] & 0xFF) << 24) | ((ip[1] & 0xFF) << 16) | ((ip[2] & 0xFF) << 8) | (ip[3] & 0xFF)) & inetMask;
         StringBuilder s = new StringBuilder();
         s.append(ipInt);
         s.append('+');
@@ -94,8 +90,7 @@ public class IdenticonUtil {
         MessageDigest md;
         md = MessageDigest.getInstance("SHA1");
         byte[] hashedIp = md.digest(s.toString().getBytes("UTF-8"));
-        int code = ((hashedIp[0] & 0xFF) << 24) | ((hashedIp[1] & 0xFF) << 16)
-                | ((hashedIp[2] & 0xFF) << 8) | (hashedIp[3] & 0xFF);
+        int code = ((hashedIp[0] & 0xFF) << 24) | ((hashedIp[1] & 0xFF) << 16) | ((hashedIp[2] & 0xFF) << 8) | (hashedIp[3] & 0xFF);
         return code;
     }
 
@@ -125,8 +120,7 @@ public class IdenticonUtil {
             if (codeParam != null) {
                 code = Integer.parseInt(codeParam);
             } else {
-                code = IdenticonUtil.getIdenticonCode(InetAddress
-                        .getByName(remoteAddr));
+                code = IdenticonUtil.getIdenticonCode(InetAddress.getByName(remoteAddr));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,10 +134,8 @@ public class IdenticonUtil {
             String sizeParam = param;
             if (sizeParam != null) {
                 size = Integer.parseInt(sizeParam);
-                if (size < MINIMUM_IDENTICON_SIZE)
-                    size = MINIMUM_IDENTICON_SIZE;
-                else if (size > MAXIMUM_IDENTICON_SIZE)
-                    size = MAXIMUM_IDENTICON_SIZE;
+                if (size < MINIMUM_IDENTICON_SIZE) size = MINIMUM_IDENTICON_SIZE;
+                else if (size > MAXIMUM_IDENTICON_SIZE) size = MAXIMUM_IDENTICON_SIZE;
             }
         } catch (Exception e) {
             e.printStackTrace();

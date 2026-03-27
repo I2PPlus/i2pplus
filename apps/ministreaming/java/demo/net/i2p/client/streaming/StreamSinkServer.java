@@ -1,12 +1,5 @@
 package net.i2p.client.streaming;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
-import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.data.DataFormatException;
@@ -14,6 +7,14 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.util.Properties;
 
 /**
  * Listen to a destination, receiving any sockets and writing anything they
@@ -37,6 +38,7 @@ public class StreamSinkServer {
     public StreamSinkServer(String sinkDir, String ourDestFile) {
         this(sinkDir, ourDestFile, null, -1, 3);
     }
+
     public StreamSinkServer(String sinkDir, String ourDestFile, String i2cpHost, int i2cpPort, int handlers) {
         _sinkDir = sinkDir;
         _destFile = ourDestFile;
@@ -53,13 +55,10 @@ public class StreamSinkServer {
      */
     public void runServer() {
         I2PSocketManager mgr = null;
-        if (_i2cpHost != null)
-            mgr = I2PSocketManagerFactory.createManager(_i2cpHost, _i2cpPort, new Properties());
-        else
-            mgr = I2PSocketManagerFactory.createManager();
+        if (_i2cpHost != null) mgr = I2PSocketManagerFactory.createManager(_i2cpHost, _i2cpPort, new Properties());
+        else mgr = I2PSocketManagerFactory.createManager();
         Destination dest = mgr.getSession().getMyDestination();
-        if (_log.shouldInfo())
-            _log.info("Listening for connections on: " + dest.calculateHash().toBase64());
+        if (_log.shouldInfo()) _log.info("Listening for connections on: " + dest.calculateHash().toBase64());
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(_destFile);
@@ -71,7 +70,10 @@ public class StreamSinkServer {
             _log.error("Error formatting the destination", dfe);
             return;
         } finally {
-            if (fos != null) try { fos.close(); } catch (IOException ioe) {}
+            if (fos != null) try {
+                    fos.close();
+                } catch (IOException ioe) {
+                }
         }
 
         I2PServerSocket sock = mgr.getServerSocket();
@@ -93,16 +95,17 @@ public class StreamSinkServer {
      */
     private class ClientRunner implements Runnable {
         private I2PServerSocket _socket;
+
         public ClientRunner(I2PServerSocket socket) {
             _socket = socket;
         }
+
         @Override
         public void run() {
             while (true) {
                 try {
                     I2PSocket socket = _socket.accept();
-                    if (socket != null)
-                        handle(socket);
+                    if (socket != null) handle(socket);
                 } catch (I2PException ie) {
                     _log.error("Error accepting connection", ie);
                     return;
@@ -119,12 +122,10 @@ public class StreamSinkServer {
             FileOutputStream fos = null;
             try {
                 File sink = new File(_sinkDir);
-                if (!sink.exists())
-                    sink.mkdirs();
+                if (!sink.exists()) sink.mkdirs();
                 File cur = File.createTempFile("clientSink", ".dat", sink);
                 fos = new FileOutputStream(cur);
-                if (_log.shouldDebug())
-                    _log.debug("Writing to " + cur.getAbsolutePath());
+                if (_log.shouldDebug()) _log.debug("Writing to " + cur.getAbsolutePath());
             } catch (IOException ioe) {
                 _log.error("Error creating sink", ioe);
                 return;
@@ -137,10 +138,9 @@ public class StreamSinkServer {
                 long written = 0;
                 int read = 0;
                 while ((read = in.read(buf)) != -1) {
-                    //_fos.write(buf, 0, read);
+                    // _fos.write(buf, 0, read);
                     written += read;
-                    if (_log.shouldDebug())
-                        _log.debug("Read and wrote " + read + " (" + written + ")");
+                    if (_log.shouldDebug()) _log.debug("Read and wrote " + read + " (" + written + ")");
                 }
                 fos.write((DataHelper.getUTF8("written: [" + written + "]\n")));
                 long lifetime = System.currentTimeMillis() - start;
@@ -148,8 +148,14 @@ public class StreamSinkServer {
             } catch (IOException ioe) {
                 _log.error("Error writing the sink", ioe);
             } finally {
-                if (fos != null) try { fos.close(); } catch (IOException ioe) {}
-                if (sock != null) try { sock.close(); } catch (IOException ioe) {}
+                if (fos != null) try {
+                        fos.close();
+                    } catch (IOException ioe) {
+                    }
+                if (sock != null) try {
+                        sock.close();
+                    } catch (IOException ioe) {
+                    }
                 _log.debug("Client socket closed");
             }
         }
@@ -167,19 +173,21 @@ public class StreamSinkServer {
     public static void main(String args[]) {
         StreamSinkServer server = null;
         switch (args.length) {
-            case 0:
-                server = new StreamSinkServer("dataDir", "server.key", "localhost", 7654, 3);
+
+            case 0: server = new StreamSinkServer("dataDir", "server.key", "localhost", 7654, 3);
                 break;
-            case 2:
-                server = new StreamSinkServer(args[0], args[1]);
+
+            case 2: server = new StreamSinkServer(args[0], args[1]);
                 break;
+
             case 4:
             case 5:
                 int handlers = 3;
                 if (args.length == 5) {
                     try {
                         handlers = Integer.parseInt(args[4]);
-                    } catch (NumberFormatException nfe) {}
+                    } catch (NumberFormatException nfe) {
+                    }
                 }
                 try {
                     int port = Integer.parseInt(args[1]);
@@ -188,10 +196,10 @@ public class StreamSinkServer {
                     System.out.println("Usage: StreamSinkServer [i2cpHost i2cpPort] sinkDir ourDestFile [handlers]");
                 }
                 break;
-            default:
-                System.out.println("Usage: StreamSinkServer [i2cpHost i2cpPort] sinkDir ourDestFile [handlers]");
+
+            default: System.out.println("Usage: StreamSinkServer [i2cpHost i2cpPort] sinkDir ourDestFile [handlers]");
+
         }
-        if (server != null)
-            server.runServer();
+        if (server != null) server.runServer();
     }
 }

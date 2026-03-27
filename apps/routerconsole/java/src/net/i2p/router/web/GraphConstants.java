@@ -7,6 +7,7 @@ package net.i2p.router.web;
  */
 public class GraphConstants {
     private GraphConstants() {}
+
     // default
     public static final int DEFAULT_X = 400;
     public static final int DEFAULT_Y = 100;

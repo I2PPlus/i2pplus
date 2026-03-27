@@ -1,10 +1,11 @@
 package net.i2p.i2ptunnel.socks;
 
-import java.util.Map;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Destination;
 import net.i2p.i2ptunnel.udp.*;
 import net.i2p.util.Log;
+
+import java.util.Map;
 
 /**
  * Sends to one of many Sinks based on toPort
@@ -25,7 +26,8 @@ public class MultiSink<S extends Sink> implements Source, Sink {
     /** Don't use this - put sinks in the cache */
     @Override
     public void setSink(Sink sink) {}
-@Override
+
+    @Override
     public void start() {}
 
     /**
@@ -37,7 +39,7 @@ public class MultiSink<S extends Sink> implements Source, Sink {
      *  @param fromPort passed along
      *  @param toPort passed along
      *  @since 0.9.53 added fromPort and toPort parameters
-     @Override
+     * @Override
      *  @throws RuntimeException
      */
     public void send(Destination from, int fromPort, int toPort, byte[] data) {
@@ -49,8 +51,7 @@ public class MultiSink<S extends Sink> implements Source, Sink {
         if (s == null) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(MultiSink.class);
             String frm = (from != null) ? from.toBase32() : "raw";
-            if (log.shouldWarn())
-                log.warn("No where to go for " + frm + " port " + fromPort + " to port " + toPort);
+            if (log.shouldWarn()) log.warn("No where to go for " + frm + " port " + fromPort + " to port " + toPort);
             return;
         }
         s.send(from, fromPort, toPort, data);

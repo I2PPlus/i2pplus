@@ -1,6 +1,5 @@
 package net.i2p.router.networkdb.kademlia;
 
-
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
@@ -31,15 +30,11 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
     private final boolean _isFloodfillPeer;
     private final long _sentOn;
 
-    public SearchUpdateReplyFoundJob(RouterContext context, RouterInfo peer,
-                                     SearchState state, KademliaNetworkDatabaseFacade facade,
-                                     SearchJob job) {
+    public SearchUpdateReplyFoundJob(RouterContext context, RouterInfo peer, SearchState state, KademliaNetworkDatabaseFacade facade, SearchJob job) {
         this(context, peer, state, facade, job, null, null);
     }
 
-    public SearchUpdateReplyFoundJob(RouterContext context, RouterInfo peer,
-                                     SearchState state, KademliaNetworkDatabaseFacade facade,
-                                     SearchJob job, TunnelInfo outTunnel, TunnelInfo replyTunnel) {
+    public SearchUpdateReplyFoundJob(RouterContext context, RouterInfo peer, SearchState state, KademliaNetworkDatabaseFacade facade, SearchJob job, TunnelInfo outTunnel, TunnelInfo replyTunnel) {
         super(context);
         _log = context.logManager().getLog(SearchUpdateReplyFoundJob.class);
         _peer = peer.getIdentity().getHash();
@@ -53,37 +48,34 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
     }
 
     @Override
-    public String getName() { return "Update Kademlia Search Reply Found "; }
+    public String getName() {
+        return "Update Kademlia Search Reply Found ";
+    }
 
     @Override
     public void runJob() {
-        if (_isFloodfillPeer)
-            _job.decrementOutstandingFloodfillSearches();
+        if (_isFloodfillPeer) _job.decrementOutstandingFloodfillSearches();
 
         I2NPMessage message = _message;
-        if (_log.shouldInfo())
-            _log.info("Reply from [" + _peer.toBase64().substring(0,6)
-                      + "] with " + message.getClass().getSimpleName().replace("Database", "Db").replace("Message", "Msg"));
+        if (_log.shouldInfo()) _log.info("Reply from [" + _peer.toBase64().substring(0, 6) + "] with " + message.getClass().getSimpleName().replace("Database", "Db").replace("Message", "Msg"));
 
         long howLong = System.currentTimeMillis() - _sentOn;
         // assume requests are 1KB (they're almost always much smaller, but tunnels have a fixed size)
         int msgSize = 1024;
 
         if (_replyTunnel != null) {
-            for (int i = 0; i < _replyTunnel.getLength(); i++)
-                getContext().profileManager().tunnelDataPushed(_replyTunnel.getPeer(i), howLong, msgSize);
+            for (int i = 0; i < _replyTunnel.getLength(); i++) getContext().profileManager().tunnelDataPushed(_replyTunnel.getPeer(i), howLong, msgSize);
             _replyTunnel.incrementVerifiedBytesTransferred(msgSize);
         }
         if (_outTunnel != null) {
-            for (int i = 0; i < _outTunnel.getLength(); i++)
-                getContext().profileManager().tunnelDataPushed(_outTunnel.getPeer(i), howLong, msgSize);
+            for (int i = 0; i < _outTunnel.getLength(); i++) getContext().profileManager().tunnelDataPushed(_outTunnel.getPeer(i), howLong, msgSize);
             _outTunnel.incrementVerifiedBytesTransferred(msgSize);
         }
 
         int type = message.getType();
         if (type == DatabaseStoreMessage.MESSAGE_TYPE) {
             long timeToReply = _state.dataFound(_peer);
-            DatabaseStoreMessage msg = (DatabaseStoreMessage)message;
+            DatabaseStoreMessage msg = (DatabaseStoreMessage) message;
             DatabaseEntry entry = msg.getEntry();
             getContext().profileManager().dbLookupSuccessful(_peer, timeToReply);
             try {
@@ -102,19 +94,18 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
             } catch (IllegalArgumentException iae) {
                 if (_log.shouldWarn()) {
                     if (iae.getMessage().contains("published over")) {
-                        _log.warn("Received STALE RouterInfo from [" + _peer.toBase64().substring(0,6) + "] \n* " + iae.getMessage());
+                        _log.warn("Received STALE RouterInfo from [" + _peer.toBase64().substring(0, 6) + "] \n* " + iae.getMessage());
                     } else {
-                        _log.warn("Received INVALID data packet from [" + _peer.toBase64().substring(0,6) + "] \n* " + iae.getMessage());
+                        _log.warn("Received INVALID data packet from [" + _peer.toBase64().substring(0, 6) + "] \n* " + iae.getMessage());
                         // blame the peer
                         getContext().profileManager().dbLookupReply(_peer, 0, 0, 1, 0, timeToReply);
                     }
                 }
             }
         } else if (type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
-            _job.replyFound((DatabaseSearchReplyMessage)message, _peer);
+            _job.replyFound((DatabaseSearchReplyMessage) message, _peer);
         } else {
-            if (_log.shouldError())
-                _log.error("[Job" + getJobId() + "] What?! Reply job matched a strange message: " + message);
+            if (_log.shouldError()) _log.error("[Job" + getJobId() + "] What?! Reply job matched a strange message: " + message);
             return;
         }
 
@@ -122,5 +113,7 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
     }
 
     @Override
-    public void setMessage(I2NPMessage message) { _message = message; }
+    public void setMessage(I2NPMessage message) {
+        _message = message;
+    }
 }

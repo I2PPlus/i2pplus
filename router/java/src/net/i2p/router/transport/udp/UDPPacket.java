@@ -1,9 +1,5 @@
 package net.i2p.router.transport.udp;
 
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicReference;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
 import net.i2p.router.util.CDPQEntry;
@@ -11,6 +7,11 @@ import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.TryCache;
+
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * UDP packet wrapper with caching and metadata support.
@@ -108,8 +109,10 @@ class UDPPacket implements CDPQEntry {
      * Size allows for some legacy packet bugs and includes overhead.
      */
     static final int MAX_PACKET_SIZE = 1572;
+
     /** Size of initialization vector in bytes. */
     public static final int IV_SIZE = 16;
+
     /** Size of MAC (Message Authentication Code) in bytes. */
     public static final int MAC_SIZE = 16;
 
@@ -134,16 +137,16 @@ class UDPPacket implements CDPQEntry {
      */
     public static String payloadTypeToString(int type) {
         switch (type) {
-            case PAYLOAD_TYPE_SESSION_REQUEST:    return "Session Request";
-            case PAYLOAD_TYPE_SESSION_CREATED:    return "Session Created";
-            case PAYLOAD_TYPE_SESSION_CONFIRMED:  return "Session Confirmed";
-            case PAYLOAD_TYPE_RELAY_REQUEST:      return "Relay Request";
-            case PAYLOAD_TYPE_RELAY_RESPONSE:     return "Relay Response";
-            case PAYLOAD_TYPE_RELAY_INTRO:        return "Relay Intro";
-            case PAYLOAD_TYPE_DATA:               return "Data";
-            case PAYLOAD_TYPE_TEST:               return "Test";
-            case PAYLOAD_TYPE_SESSION_DESTROY:    return "Session Destroy";
-            default:                              return "Unknown Payload Type: " + type;
+            case PAYLOAD_TYPE_SESSION_REQUEST: return "Session Request";
+            case PAYLOAD_TYPE_SESSION_CREATED: return "Session Created";
+            case PAYLOAD_TYPE_SESSION_CONFIRMED: return "Session Confirmed";
+            case PAYLOAD_TYPE_RELAY_REQUEST: return "Relay Request";
+            case PAYLOAD_TYPE_RELAY_RESPONSE: return "Relay Response";
+            case PAYLOAD_TYPE_RELAY_INTRO: return "Relay Intro";
+            case PAYLOAD_TYPE_DATA: return "Data";
+            case PAYLOAD_TYPE_TEST: return "Test";
+            case PAYLOAD_TYPE_SESSION_DESTROY: return "Session Destroy";
+            default: return "Unknown Payload Type: " + type;
         }
     }
 
@@ -309,7 +312,7 @@ class UDPPacket implements CDPQEntry {
                     if (addr != null) {
                         _remoteHost = new RemoteHostId(addr.getAddress(), _packet.getPort());
                     } else {
-                        _remoteHost = null;  // explicit null
+                        _remoteHost = null; // explicit null
                     }
                 }
                 local = _remoteHost;
@@ -387,12 +390,10 @@ class UDPPacket implements CDPQEntry {
         FIFOBandwidthLimiter.Request br = _bandwidthRequest.getAndSet(null);
         if (br != null) {
             synchronized (br) {
-                if (br.getPendingRequested() > 0)
-                    br.abort();
+                if (br.getPendingRequested() > 0) br.abort();
             }
         }
-        if (CACHE)
-            _packetCache.release(this);
+        if (CACHE) _packetCache.release(this);
     }
 
     /**
@@ -400,8 +401,7 @@ class UDPPacket implements CDPQEntry {
      * Useful to free resources, e.g. on shutdown or restart.
      */
     public static void clearCache() {
-        if (CACHE)
-            _packetCache.clear();
+        if (CACHE) _packetCache.clear();
     }
 
     /**
@@ -435,31 +435,22 @@ class UDPPacket implements CDPQEntry {
      */
     @Override
     public String toString() {
-        if (_released)
-            return "RELEASED PACKET";
+        if (_released) return "RELEASED PACKET";
 
         // Only build detailed string if debug logging is enabled
-        if (!_context.logManager().getLog(UDPPacket.class).shouldDebug())
-            return "UDPPacket[size=" + _packet.getLength() + "]";
+        if (!_context.logManager().getLog(UDPPacket.class).shouldDebug()) return "UDPPacket[size=" + _packet.getLength() + "]";
 
         StringBuilder buf = new StringBuilder(128);
         InetAddress addr = _packet.getAddress();
 
         if (addr != null && addr.getAddress() != null) {
-            buf.append(Addresses.toString(addr.getAddress(), _packet.getPort()))
-               .append("\n* Size: ").append(_packet.getLength()).append(" bytes")
-               .append("; Priority: ").append(_priority);
+            buf.append(Addresses.toString(addr.getAddress(), _packet.getPort())).append("\n* Size: ").append(_packet.getLength()).append(" bytes").append("; Priority: ").append(_priority);
 
-            if (_messageType >= 0)
-                buf.append("; Message Type: ").append(_messageType);
-            if (_markedType >= 0)
-                buf.append("; Mark Type: ").append(_markedType);
-            if (_fragmentCount > 0)
-                buf.append("; Fragment Count: ").append(_fragmentCount);
-            if (_enqueueTime > 0)
-                buf.append("; sinceEnqueued: ").append(_context.clock().now() - _enqueueTime);
-            if (_receivedTime > 0)
-                buf.append("; sinceReceived: ").append(_context.clock().now() - _receivedTime);
+            if (_messageType >= 0) buf.append("; Message Type: ").append(_messageType);
+            if (_markedType >= 0) buf.append("; Mark Type: ").append(_markedType);
+            if (_fragmentCount > 0) buf.append("; Fragment Count: ").append(_fragmentCount);
+            if (_enqueueTime > 0) buf.append("; sinceEnqueued: ").append(_context.clock().now() - _enqueueTime);
+            if (_receivedTime > 0) buf.append("; sinceReceived: ").append(_context.clock().now() - _receivedTime);
         } else {
             buf.append("\n* No address for packet - Router restarting?");
         }
@@ -493,5 +484,4 @@ class UDPPacket implements CDPQEntry {
     public void drop() {
         release();
     }
-
 }

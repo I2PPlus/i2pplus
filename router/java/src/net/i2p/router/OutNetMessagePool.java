@@ -1,4 +1,5 @@
 package net.i2p.router;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -34,13 +35,11 @@ public class OutNetMessagePool {
         MessageSelector selector = msg.getReplySelector();
         boolean valid = validate(msg);
         if (!valid) {
-            if (selector != null)
-                _context.messageRegistry().unregisterPending(msg);
+            if (selector != null) _context.messageRegistry().unregisterPending(msg);
             return;
         }
 
-        if (_log.shouldDebug())
-            _log.debug("Adding message to OutNetMessagePool" + msg);
+        if (_log.shouldDebug()) _log.debug("Adding message to OutNetMessagePool" + msg);
 
         if (selector != null) {
             _context.messageRegistry().registerPending(msg);
@@ -57,8 +56,7 @@ public class OutNetMessagePool {
      */
     private boolean validate(OutNetMessage msg) {
         if (msg.getMessage() == null) {
-            if (_log.shouldWarn())
-                _log.warn("Null message in the OutNetMessage - expired too soon");
+            if (_log.shouldWarn()) _log.warn("Null message in the OutNetMessage - expired too soon");
             return false;
         }
         if (msg.getTarget() == null) {
@@ -70,8 +68,7 @@ public class OutNetMessagePool {
             return false;
         }
         if (msg.getExpiration() <= _context.clock().now()) {
-            if (_log.shouldWarn())
-                _log.warn("Dropping expired Outbound message" + msg, new Exception());
+            if (_log.shouldWarn()) _log.warn("Dropping expired Outbound message" + msg, new Exception());
             return false;
         }
         return true;

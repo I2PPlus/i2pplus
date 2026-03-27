@@ -11,6 +11,9 @@
  */
 package net.i2p.crypto.eddsa;
 
+import net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec;
+import net.i2p.crypto.eddsa.spec.EdDSAPublicKeySpec;
+
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyFactorySpi;
@@ -20,8 +23,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec;
-import net.i2p.crypto.eddsa.spec.EdDSAPublicKeySpec;
 
 /**
  * Java Security Provider KeyFactory implementation for EdDSA (Edwards-curve Digital Signature Algorithm).
@@ -92,8 +93,7 @@ public final class KeyFactory extends KeyFactorySpi {
      * Supports PKCS8EncodedKeySpec since version 0.9.25.
      */
     @Override
-    protected PrivateKey engineGeneratePrivate(KeySpec keySpec)
-            throws InvalidKeySpecException {
+    protected PrivateKey engineGeneratePrivate(KeySpec keySpec) throws InvalidKeySpecException {
         if (keySpec instanceof EdDSAPrivateKeySpec) {
             return new EdDSAPrivateKey((EdDSAPrivateKeySpec) keySpec);
         }
@@ -117,8 +117,7 @@ public final class KeyFactory extends KeyFactorySpi {
      * Supports X509EncodedKeySpec since version 0.9.25.
      */
     @Override
-    protected PublicKey engineGeneratePublic(KeySpec keySpec)
-            throws InvalidKeySpecException {
+    protected PublicKey engineGeneratePublic(KeySpec keySpec) throws InvalidKeySpecException {
         if (keySpec instanceof EdDSAPublicKeySpec) {
             return new EdDSAPublicKey((EdDSAPublicKeySpec) keySpec);
         }
@@ -144,8 +143,7 @@ public final class KeyFactory extends KeyFactorySpi {
      */
     @SuppressWarnings("unchecked")
     @Override
-    protected <T extends KeySpec> T engineGetKeySpec(Key key, Class<T> keySpec)
-            throws InvalidKeySpecException {
+    protected <T extends KeySpec> T engineGetKeySpec(Key key, Class<T> keySpec) throws InvalidKeySpecException {
         if (keySpec.isAssignableFrom(EdDSAPublicKeySpec.class) && key instanceof EdDSAPublicKey) {
             EdDSAPublicKey k = (EdDSAPublicKey) key;
             if (k.getParams() != null) {

@@ -1,8 +1,8 @@
 package com.thetransactioncompany.jsonrpc2;
 
+import org.json.simple.JsonObject;
 
 import java.util.Map;
-import org.json.simple.JsonObject;
 
 /**
  * Represents a JSON-RPC 2.0 response.
@@ -110,24 +110,20 @@ import org.json.simple.JsonObject;
  */
 public class JSONRPC2Response extends JSONRPC2Message {
 
-
     /**
      * The result.
      */
     private Object result = null;
-
 
     /**
      * The error object.
      */
     private JSONRPC2Error error = null;
 
-
     /**
      * The echoed request identifier.
      */
     private Object id = null;
-
 
     /**
      * Parses a JSON-RPC 2.0 response string. This method is thread-safe.
@@ -140,12 +136,10 @@ public class JSONRPC2Response extends JSONRPC2Message {
      * @throws JSONRPC2ParseException With detailed message if parsing
      *                                failed.
      */
-    public static JSONRPC2Response parse(final String jsonString)
-        throws JSONRPC2ParseException {
+    public static JSONRPC2Response parse(final String jsonString) throws JSONRPC2ParseException {
 
         return parse(jsonString, false, false, false);
     }
-
 
     /**
      * Parses a JSON-RPC 2.0 response string. This method is thread-safe.
@@ -160,13 +154,10 @@ public class JSONRPC2Response extends JSONRPC2Message {
      * @throws JSONRPC2ParseException With detailed message if parsing
      *                                failed.
      */
-    public static JSONRPC2Response parse(final String jsonString,
-                                     final boolean preserveOrder)
-        throws JSONRPC2ParseException {
+    public static JSONRPC2Response parse(final String jsonString, final boolean preserveOrder) throws JSONRPC2ParseException {
 
         return parse(jsonString, preserveOrder, false, false);
     }
-
 
     /**
      * Parses a JSON-RPC 2.0 response string. This method is thread-safe.
@@ -184,14 +175,10 @@ public class JSONRPC2Response extends JSONRPC2Message {
      * @throws JSONRPC2ParseException With detailed message if the parsing
      *                                failed.
      */
-    public static JSONRPC2Response parse(final String jsonString,
-                                     final boolean preserveOrder,
-                                     final boolean ignoreVersion)
-        throws JSONRPC2ParseException {
+    public static JSONRPC2Response parse(final String jsonString, final boolean preserveOrder, final boolean ignoreVersion) throws JSONRPC2ParseException {
 
         return parse(jsonString, preserveOrder, ignoreVersion, false);
     }
-
 
     /**
      * Parses a JSON-RPC 2.0 response string. This method is thread-safe.
@@ -212,17 +199,12 @@ public class JSONRPC2Response extends JSONRPC2Message {
      * @throws JSONRPC2ParseException With detailed message if the parsing
      *                                failed.
      */
-    public static JSONRPC2Response parse(final String jsonString,
-                                         final boolean preserveOrder,
-                         final boolean ignoreVersion,
-                         final boolean parseNonStdAttributes)
-        throws JSONRPC2ParseException {
+    public static JSONRPC2Response parse(final String jsonString, final boolean preserveOrder, final boolean ignoreVersion, final boolean parseNonStdAttributes) throws JSONRPC2ParseException {
 
         JSONRPC2Parser parser = new JSONRPC2Parser(preserveOrder, ignoreVersion, parseNonStdAttributes);
 
         return parser.parseJSONRPC2Response(jsonString);
     }
-
 
     /**
      * Creates a new JSON-RPC 2.0 response to a successful request.
@@ -238,7 +220,6 @@ public class JSONRPC2Response extends JSONRPC2Message {
         setID(id);
     }
 
-
     /**
      * Creates a new JSON-RPC 2.0 response to a successful request which
      * result is {@code null}.
@@ -251,7 +232,6 @@ public class JSONRPC2Response extends JSONRPC2Message {
         setResult(null);
         setID(id);
     }
-
 
     /**
      * Creates a new JSON-RPC 2.0 response to a failed request.
@@ -267,7 +247,6 @@ public class JSONRPC2Response extends JSONRPC2Message {
         setError(error);
         setID(id);
     }
-
 
     /**
      * Indicates a successful JSON-RPC 2.0 request and sets the result.
@@ -285,7 +264,6 @@ public class JSONRPC2Response extends JSONRPC2Message {
         this.error = null;
     }
 
-
     /**
      * Gets the result of the request. The returned value has meaning
      * only if the request was successful. Use the
@@ -298,7 +276,6 @@ public class JSONRPC2Response extends JSONRPC2Message {
         return result;
     }
 
-
     /**
      * Indicates a failed JSON-RPC 2.0 request and sets the error details.
      * Note that if the response was previously indicating success this
@@ -310,14 +287,12 @@ public class JSONRPC2Response extends JSONRPC2Message {
      */
     public final void setError(final JSONRPC2Error error) {
 
-        if (error == null)
-            throw new IllegalArgumentException("The error object cannot be null");
+        if (error == null) throw new IllegalArgumentException("The error object cannot be null");
 
         // result and error are mutually exclusive
         this.error = error;
         this.result = null;
     }
-
 
     /**
      * Gets the error object indicating the cause of the request failure.
@@ -332,7 +307,6 @@ public class JSONRPC2Response extends JSONRPC2Message {
         return error;
     }
 
-
     /**
      * A convinience method to check if the response indicates success or
      * failure of the request. Alternatively, you can use the
@@ -346,7 +320,6 @@ public class JSONRPC2Response extends JSONRPC2Message {
         return error == null;
     }
 
-
     /**
      * Sets the request identifier echoed back to the caller.
      *
@@ -356,17 +329,12 @@ public class JSONRPC2Response extends JSONRPC2Message {
      */
     public final void setID(final Object id) {
 
-        if (id == null            ||
-            id instanceof Boolean ||
-            id instanceof Number  ||
-            id instanceof String
-        ) {
+        if (id == null || id instanceof Boolean || id instanceof Number || id instanceof String) {
             this.id = id;
         } else {
             this.id = id.toString();
         }
     }
-
 
     /**
      * Gets the request identifier that is echoed back to the caller.
@@ -380,7 +348,6 @@ public class JSONRPC2Response extends JSONRPC2Message {
         return id;
     }
 
-
     @Override
     public JsonObject toJSONObject() {
 
@@ -389,8 +356,7 @@ public class JSONRPC2Response extends JSONRPC2Message {
         // Result and error are mutually exclusive
         if (error != null) {
             out.put("error", error.toJSONObject());
-        }
-        else {
+        } else {
             out.put("result", result);
         }
 
@@ -398,13 +364,11 @@ public class JSONRPC2Response extends JSONRPC2Message {
 
         out.put("jsonrpc", "2.0");
 
-
-        Map <String,Object> nonStdAttributes = getNonStdAttributes();
+        Map<String, Object> nonStdAttributes = getNonStdAttributes();
 
         if (nonStdAttributes != null) {
 
-            for (final Map.Entry<String,Object> attr: nonStdAttributes.entrySet())
-                out.put(attr.getKey(), attr.getValue());
+            for (final Map.Entry<String, Object> attr : nonStdAttributes.entrySet()) out.put(attr.getKey(), attr.getValue());
         }
 
         return out;

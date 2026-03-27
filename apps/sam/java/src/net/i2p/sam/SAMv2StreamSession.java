@@ -1,4 +1,5 @@
 package net.i2p.sam;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
@@ -36,203 +37,159 @@ import net.i2p.util.Log;
  *
  * @author mkvore
  */
-class SAMv2StreamSession extends SAMStreamSession
-{
-        /**
-         * Create a new SAM STREAM session.
-         *
-         * Caller MUST call start().
-         *
-         * @param dest Base64-encoded destination and private keys (same format as PrivateKeyFile)
-         * @param dir Session direction ("RECEIVE", "CREATE" or "BOTH")
-         * @param props Properties to setup the I2P session
-         * @param recv Object that will receive incoming data
-         * @throws IOException
-         * @throws DataFormatException
-         * @throws SAMException
-         */
-    public SAMv2StreamSession (String dest, String dir, Properties props,
-                                    SAMStreamReceiver recv) throws IOException, DataFormatException, SAMException
-    {
-        super (dest, dir, props, recv);
+class SAMv2StreamSession extends SAMStreamSession {
+    /**
+     * Create a new SAM STREAM session.
+     *
+     * Caller MUST call start().
+     *
+     * @param dest Base64-encoded destination and private keys (same format as PrivateKeyFile)
+     * @param dir Session direction ("RECEIVE", "CREATE" or "BOTH")
+     * @param props Properties to setup the I2P session
+     * @param recv Object that will receive incoming data
+     * @throws IOException
+     * @throws DataFormatException
+     * @throws SAMException
+     */
+    public SAMv2StreamSession(String dest, String dir, Properties props, SAMStreamReceiver recv)
+            throws IOException, DataFormatException, SAMException {
+        super(dest, dir, props, recv);
     }
 
-        /**
-         * Create a new SAM STREAM session.
-         *
-         * Caller MUST call start().
-         *
-         * @param destStream Input stream containing the destination and private keys (same format as PrivateKeyFile)
-         * @param dir Session direction ("RECEIVE", "CREATE" or "BOTH")
-         * @param props Properties to setup the I2P session
-         * @param recv Object that will receive incoming data
-         * @throws IOException
-         * @throws DataFormatException
-         * @throws SAMException
-         */
-    public SAMv2StreamSession (InputStream destStream, String dir,
-                                    Properties props,  SAMStreamReceiver recv) throws IOException, DataFormatException, SAMException
-    {
-        super (destStream, dir, props, recv);
+    /**
+     * Create a new SAM STREAM session.
+     *
+     * Caller MUST call start().
+     *
+     * @param destStream Input stream containing the destination and private keys (same format as PrivateKeyFile)
+     * @param dir Session direction ("RECEIVE", "CREATE" or "BOTH")
+     * @param props Properties to setup the I2P session
+     * @param recv Object that will receive incoming data
+     * @throws IOException
+     * @throws DataFormatException
+     * @throws SAMException
+     */
+    public SAMv2StreamSession(InputStream destStream, String dir, Properties props, SAMStreamReceiver recv)
+            throws IOException, DataFormatException, SAMException {
+        super(destStream, dir, props, recv);
     }
 
-        /**
-         * Connect the SAM STREAM session to the specified Destination
-         *
-         * @param id Unique id for the connection
-         * @param dest Base64-encoded Destination to connect to
-         * @param props Options to be used for connection
-         *
-         * @throws DataFormatException if the destination is not valid
-         * @throws SAMInvalidDirectionException if trying to connect through a
-         *                                      receive-only session
-         * @return true if the communication with the SAM client is ok
-         */
+    /**
+     * Connect the SAM STREAM session to the specified Destination
+     *
+     * @param id Unique id for the connection
+     * @param dest Base64-encoded Destination to connect to
+     * @param props Options to be used for connection
+     *
+     * @throws DataFormatException if the destination is not valid
+     * @throws SAMInvalidDirectionException if trying to connect through a
+     *                                      receive-only session
+     * @return true if the communication with the SAM client is ok
+     */
     @Override
-        public boolean connect (int id, String dest, Properties props)
-                    throws DataFormatException, SAMInvalidDirectionException
-    {
-        if (!canCreate)
-        {
-            if (_log.shouldDebug())
-                    _log.debug ("Trying to create an outgoing connection using a receive-only session");
-            throw new SAMInvalidDirectionException ("Trying to create connections through a receive-only session");
+    public boolean connect(int id, String dest, Properties props)
+            throws DataFormatException, SAMInvalidDirectionException {
+        if (!canCreate) {
+            if (_log.shouldDebug()) _log.debug("Trying to create an outgoing connection using a receive-only session");
+            throw new SAMInvalidDirectionException("Trying to create connections through a receive-only session");
         }
 
-        if (checkSocketHandlerId (id))
-        {
-            if (_log.shouldDebug())
-                    _log.debug ("The specified id (" + id + ") is already in use");
+        if (checkSocketHandlerId(id)) {
+            if (_log.shouldDebug()) _log.debug("The specified id (" + id + ") is already in use");
             return false;
         }
 
         Destination d = SAMUtils.getDest(dest);
-        I2PSocketOptions opts = socketMgr.buildOptions (props);
-        if (props.getProperty (I2PSocketOptions.PROP_CONNECT_TIMEOUT) == null)
-                opts.setConnectTimeout (60 * 1000);
+        I2PSocketOptions opts = socketMgr.buildOptions(props);
+        if (props.getProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT) == null) opts.setConnectTimeout(60 * 1000);
 
-        if (_log.shouldDebug())
-                _log.debug ("Connecting new I2PSocket...");
+        if (_log.shouldDebug()) _log.debug("Connecting new I2PSocket...");
 
-            // non-blocking connection (SAMv2)
-        StreamConnector connector = new StreamConnector (id, d, opts);
-        I2PAppThread connectThread = new I2PAppThread (connector, "StreamConnector" + id);
+        // non-blocking connection (SAMv2)
+        StreamConnector connector = new StreamConnector(id, d, opts);
+        I2PAppThread connectThread = new I2PAppThread(connector, "StreamConnector" + id);
         connectThread.start();
         return true;
     }
 
-        /**
-         * SAM STREAM socket connecter, running in its own thread.
-         *
-         * @author mkvore
-         */
-    private class StreamConnector implements Runnable
-    {
+    /**
+     * SAM STREAM socket connecter, running in its own thread.
+     *
+     * @author mkvore
+     */
+    private class StreamConnector implements Runnable {
         private final int id;
-        private final Destination      dest;
+        private final Destination dest;
         private final I2PSocketOptions opts;
 
-                /**
-                 * Create a new SAM STREAM session socket reader
-                 *
-                 * @param id   Unique id assigned to the handler
-                 * @param dest Destination to reach
-                 * @param opts Socket options (I2PSocketOptions)
-                */
-
-        public StreamConnector (int id, Destination dest, I2PSocketOptions opts)// throws IOException
-        {
-            if (_log.shouldDebug())
-                        _log.debug ("Instantiating new SAM STREAM connector");
-
-            this.id   = id;
+        /**
+         * Create a new SAM STREAM session socket reader
+         *
+         * @param id   Unique id assigned to the handler
+         * @param dest Destination to reach
+         * @param opts Socket options (I2PSocketOptions)
+         */
+        public StreamConnector(int id, Destination dest, I2PSocketOptions opts) {
+            if (_log.shouldDebug()) _log.debug("Instantiating new SAM STREAM connector");
+            this.id = id;
             this.opts = opts;
             this.dest = dest;
         }
 
-        public void run()
-        {
-            if (_log.shouldDebug())
-                        _log.debug ("run() called for socket connector " + id);
+        public void run() {
+            if (_log.shouldDebug()) _log.debug("run() called for socket connector " + id);
 
-            try
-            {
-                try
-                {
-                    I2PSocket i2ps = socketMgr.connect (dest, opts);
+            try {
+                try {
+                    I2PSocket i2ps = socketMgr.connect(dest, opts);
 
-                    createSocketHandler (i2ps, id);
+                    createSocketHandler(i2ps, id);
 
-                    recv.notifyStreamOutgoingConnection (id, "OK", null);
+                    recv.notifyStreamOutgoingConnection(id, "OK", null);
+                } catch (DataFormatException e) {
+                    if (_log.shouldDebug()) _log.debug("Invalid destination in STREAM CONNECT message");
+                    recv.notifyStreamOutgoingConnection(id, "INVALID_KEY", e.getMessage());
+                } catch (ConnectException e) {
+                    if (_log.shouldDebug()) _log.debug("STREAM CONNECT failed", e);
+                    recv.notifyStreamOutgoingConnection(id, "CONNECTION_REFUSED", e.getMessage());
+                } catch (NoRouteToHostException e) {
+                    if (_log.shouldDebug()) _log.debug("STREAM CONNECT failed", e);
+                    recv.notifyStreamOutgoingConnection(id, "CANT_REACH_PEER", e.getMessage());
+                } catch (InterruptedIOException e) {
+                    if (_log.shouldDebug()) _log.debug("STREAM CONNECT failed", e);
+                    recv.notifyStreamOutgoingConnection(id, "TIMEOUT", e.getMessage());
+                } catch (I2PException e) {
+                    if (_log.shouldDebug()) _log.debug("STREAM CONNECT failed", e);
+                    recv.notifyStreamOutgoingConnection(id, "I2P_ERROR", e.getMessage());
                 }
-
-                catch (DataFormatException e)
-                {
-                    if (_log.shouldDebug())
-                                _log.debug ("Invalid destination in STREAM CONNECT message");
-                    recv.notifyStreamOutgoingConnection (id, "INVALID_KEY", e.getMessage());
-                }
-                catch (ConnectException e)
-                {
-                    if (_log.shouldDebug())
-                                _log.debug("STREAM CONNECT failed", e);
-                    recv.notifyStreamOutgoingConnection (id, "CONNECTION_REFUSED", e.getMessage());
-                }
-                catch (NoRouteToHostException e)
-                {
-                    if (_log.shouldDebug())
-                                _log.debug("STREAM CONNECT failed", e);
-                    recv.notifyStreamOutgoingConnection (id, "CANT_REACH_PEER", e.getMessage());
-                }
-                catch (InterruptedIOException e)
-                {
-                    if (_log.shouldDebug())
-                                _log.debug("STREAM CONNECT failed", e);
-                    recv.notifyStreamOutgoingConnection (id, "TIMEOUT", e.getMessage());
-                }
-                catch (I2PException e)
-                {
-                    if (_log.shouldDebug())
-                                _log.debug("STREAM CONNECT failed", e);
-                    recv.notifyStreamOutgoingConnection (id, "I2P_ERROR", e.getMessage());
-                }
-            }
-            catch (IOException e)
-            {
-                if (_log.shouldDebug())
-                            _log.debug ("Error sending disconnection notice for handler "
-                                     + id, e);
+            } catch (IOException e) {
+                if (_log.shouldDebug()) _log.debug("Error sending disconnection notice for handler " + id, e);
             }
 
-            if (_log.shouldDebug())
-                        _log.debug ("Shutting down SAM STREAM session connector " + id);
+            if (_log.shouldDebug()) _log.debug("Shutting down SAM STREAM session connector " + id);
         }
     }
 
-        /**
-         * Lets us push data through the stream without blocking, (even after exceeding
-         * the I2PSocket's buffer)
-         *
-         * @param s I2PSocket
-         * @param id Socket ID
-         * @return v2StreamSender
-         * @throws IOException
-         */
+    /**
+     * Lets us push data through the stream without blocking, (even after exceeding
+     * the I2PSocket's buffer)
+     *
+     * @param s I2PSocket
+     * @param id Socket ID
+     * @return v2StreamSender
+     * @throws IOException
+     */
     @Override
-        protected StreamSender newStreamSender (I2PSocket s, int id) throws IOException
-    {
-        return new V2StreamSender (s, id);
+    protected StreamSender newStreamSender(I2PSocket s, int id) throws IOException {
+        return new V2StreamSender(s, id);
     }
 
     @Override
-        protected SAMStreamSessionSocketReader
-                newSAMStreamSessionSocketReader(I2PSocket s, int id) throws IOException
-    {
-        return new SAMv2StreamSessionSocketReader(s,id);
+    protected SAMStreamSessionSocketReader newSAMStreamSessionSocketReader(I2PSocket s, int id) throws IOException {
+        return new SAMv2StreamSessionSocketReader(s, id);
     }
 
-    private class V2StreamSender extends StreamSender
-    {
+    private class V2StreamSender extends StreamSender {
         private final List<ByteArray> _data;
         private int _dataSize;
         private final ByteCache _cache;
@@ -240,90 +197,71 @@ class SAMv2StreamSession extends SAMStreamSession
         private volatile boolean _stillRunning, _shuttingDownGracefully;
         private final Object runningLock = new Object();
 
-        public V2StreamSender (I2PSocket s, int id) throws IOException
-        {
-            super (s, id);
-            _data = new ArrayList<ByteArray> (1);
-            _cache = ByteCache.getInstance (10, 32 * 1024);
+        public V2StreamSender(I2PSocket s, int id) throws IOException {
+            super(s, id);
+            _data = new ArrayList<ByteArray>(1);
+            _cache = ByteCache.getInstance(10, 32 * 1024);
             _out = s.getOutputStream();
             _stillRunning = true;
         }
 
-                /**
-                 * Send bytes through the SAM STREAM session socket sender
-                 *
-                 * @param in Data stream of data to send
-                 * @param size Count of bytes to send
-                 * @throws IOException if the client didnt provide enough data
-                 */
+        /**
+         * Send bytes through the SAM STREAM session socket sender
+         *
+         * @param in Data stream of data to send
+         * @param size Count of bytes to send
+         * @throws IOException if the client didnt provide enough data
+         */
         @Override
-                public void sendBytes (InputStream in, int size) throws IOException
-        {
-            if (_log.shouldLog (Log.DEBUG))
-                        _log.debug ("Handler " + _id + ": sending " + size + " bytes");
+        public void sendBytes(InputStream in, int size) throws IOException {
+            if (_log.shouldLog(Log.DEBUG)) _log.debug("Handler " + _id + ": sending " + size + " bytes");
 
             ByteArray ba = _cache.acquire();
 
-            int read = DataHelper.read (in, ba.getData(), 0, size);
+            int read = DataHelper.read(in, ba.getData(), 0, size);
 
             if (read != size)
-                        throw new IOException ("Insufficient data from the SAM client (" + read + "/" + size + ")");
+                throw new IOException("Insufficient data from the SAM client (" + read + "/" + size + ")");
 
-            ba.setValid (read);
+            ba.setValid(read);
 
-            synchronized (_data)
-            {
-                if (_dataSize >= SOCKET_HANDLER_BUF_SIZE)
-                {
-                    _cache.release (ba, false);
-                    recv.streamSendAnswer (_id, "FAILED", "BUFFER_FULL");
-                }
-                else
-                {
+            synchronized (_data) {
+                if (_dataSize >= SOCKET_HANDLER_BUF_SIZE) {
+                    _cache.release(ba, false);
+                    recv.streamSendAnswer(_id, "FAILED", "BUFFER_FULL");
+                } else {
                     _dataSize += size;
-                    _data.add (ba);
+                    _data.add(ba);
                     _data.notifyAll();
 
-                    if (_dataSize >= SOCKET_HANDLER_BUF_SIZE)
-                    {
-                        recv.streamSendAnswer (_id, "OK", "BUFFER_FULL");
-                    }
-                    else
-                    {
-                        recv.streamSendAnswer (_id, "OK", "READY");
+                    if (_dataSize >= SOCKET_HANDLER_BUF_SIZE) {
+                        recv.streamSendAnswer(_id, "OK", "BUFFER_FULL");
+                    } else {
+                        recv.streamSendAnswer(_id, "OK", "READY");
                     }
                 }
             }
         }
 
-                /**
-                 * Stop a SAM STREAM session socket sender thread immediately
-                 *
-                 */
+        /**
+         * Stop a SAM STREAM session socket sender thread immediately
+         *
+         */
         @Override
-                public void stopRunning()
-        {
-            if (_log.shouldDebug())
-                        _log.debug ("stopRunning() invoked on socket sender " + _id);
+        public void stopRunning() {
+            if (_log.shouldDebug()) _log.debug("stopRunning() invoked on socket sender " + _id);
 
-            synchronized (runningLock)
-            {
-                if (_stillRunning)
-                {
+            synchronized (runningLock) {
+                if (_stillRunning) {
                     _stillRunning = false;
 
-                    try
-                    {
+                    try {
                         i2pSocket.close();
-                    }
-                    catch (IOException e)
-                    {
-                        if (_log.shouldDebug())
-                                    _log.debug ("Caught IOException", e);
+                    } catch (IOException e) {
+                        if (_log.shouldDebug()) _log.debug("Caught IOException", e);
                     }
 
-                    synchronized (_data)
-                    {
+                    synchronized (_data) {
                         _data.clear();
                         _data.notifyAll();
                     }
@@ -331,239 +269,188 @@ class SAMv2StreamSession extends SAMStreamSession
             }
         }
 
-                /**
-                 * Stop a SAM STREAM session socket sender gracefully: stop the
-                 * sender thread once all pending data has been sent.
-                 */
+        /**
+         * Stop a SAM STREAM session socket sender gracefully: stop the
+         * sender thread once all pending data has been sent.
+         */
         @Override
-                public void shutDownGracefully()
-        {
-            if (_log.shouldDebug())
-                        _log.debug ("shutDownGracefully() invoked on socket sender " + _id);
+        public void shutDownGracefully() {
+            if (_log.shouldDebug()) _log.debug("shutDownGracefully() invoked on socket sender " + _id);
             _shuttingDownGracefully = true;
         }
 
         @Override
-                public void run()
-        {
-            if (_log.shouldDebug())
-                        _log.debug ("run() called for socket sender " + _id);
+        public void run() {
+            if (_log.shouldDebug()) _log.debug("run() called for socket sender " + _id);
             ByteArray data = null;
 
-            while (_stillRunning)
-            {
+            while (_stillRunning) {
                 data = null;
 
-                try
-                {
-                    synchronized (_data)
-                    {
-                        if (!_data.isEmpty())
-                        {
+                try {
+                    synchronized (_data) {
+                        if (!_data.isEmpty()) {
                             int formerSize = _dataSize;
-                            data = _data.remove (0);
+                            data = _data.remove(0);
                             _dataSize -= data.getValid();
 
                             if ((formerSize >= SOCKET_HANDLER_BUF_SIZE) && (_dataSize < SOCKET_HANDLER_BUF_SIZE))
-                                        recv.notifyStreamSendBufferFree (_id);
-                        }
-                        else if (_shuttingDownGracefully)
-                        {
-                                    /* No data left and shutting down gracefully?
-                                    If so, stop the sender. */
+                                recv.notifyStreamSendBufferFree(_id);
+                        } else if (_shuttingDownGracefully) {
+                            /* No data left and shutting down gracefully?
+                            If so, stop the sender. */
                             stopRunning();
                             break;
-                        }
-                        else
-                        {
-                                    /* Wait for data. */
-                            _data.wait (5000);
+                        } else {
+                            /* Wait for data. */
+                            _data.wait(5000);
                         }
                     }
 
-                    if (data != null)
-                    {
-                        try
-                        {
-                            _out.write (data.getData(), 0, data.getValid());
+                    if (data != null) {
+                        try {
+                            _out.write(data.getData(), 0, data.getValid());
 
-                            if (forceFlush)
-                            {
-                                        // I don't like doing this, but it clears the buffer issues
+                            if (forceFlush) {
+                                // I don't like doing this, but it clears the buffer issues
                                 _out.flush();
                             }
-                        }
-                        catch (IOException ioe)
-                        {
-                                    // ok, the stream failed, but the SAM client didn't
+                        } catch (IOException ioe) {
+                            // ok, the stream failed, but the SAM client didn't
 
-                            if (_log.shouldLog (Log.WARN))
-                                        _log.warn ("Stream failed", ioe);
+                            if (_log.shouldLog(Log.WARN)) _log.warn("Stream failed", ioe);
 
-                            removeSocketHandler (_id);
+                            removeSocketHandler(_id);
 
                             stopRunning();
 
-                        }
-                        finally
-                        {
-                            _cache.release (data, false);
+                        } finally {
+                            _cache.release(data, false);
                         }
                     }
+                } catch (InterruptedException ie) {
+                } catch (IOException e) {
                 }
-                catch (InterruptedException ie) {}
-                catch (IOException e) {}}
+            }
 
-            synchronized (_data)
-            {
+            synchronized (_data) {
                 _data.clear();
             }
         }
     }
 
-        /**
-         * Send bytes through a SAM STREAM session.
-         *
-         * @param id Stream ID
-         * @param limit limitation
-         * @param nolimit true to limit
-         * @return True if the data was queued for sending, false otherwise
-        */
+    /**
+     * Send bytes through a SAM STREAM session.
+     *
+     * @param id Stream ID
+     * @param limit limitation
+     * @param nolimit true to limit
+     * @return True if the data was queued for sending, false otherwise
+     */
     @Override
-        public boolean setReceiveLimit (int id, long limit, boolean nolimit)
-    {
-        SAMStreamSessionSocketReader reader = getSocketReader (id);
+    public boolean setReceiveLimit(int id, long limit, boolean nolimit) {
+        SAMStreamSessionSocketReader reader = getSocketReader(id);
 
-        if (reader == null)
-        {
-            if (_log.shouldLog (Log.WARN))
-                    _log.warn ("Trying to set a limit to a nonexistent reader " + id);
+        if (reader == null) {
+            if (_log.shouldLog(Log.WARN)) _log.warn("Trying to set a limit to a nonexistent reader " + id);
 
             return false;
         }
 
-        ((SAMv2StreamSessionSocketReader) reader).setLimit (limit, nolimit);
+        ((SAMv2StreamSessionSocketReader) reader).setLimit(limit, nolimit);
 
         return true;
     }
 
-        /**
-         * SAM STREAM socket reader, running in its own thread.  It forwards
-         * forward data to/from an I2P socket.
-         *
-         * @author human
-        */
+    /**
+     * SAM STREAM socket reader, running in its own thread.  It forwards
+     * forward data to/from an I2P socket.
+     *
+     * @author human
+     */
     @SuppressWarnings("PMD.CloseResource")
-    public class SAMv2StreamSessionSocketReader extends SAMv1StreamSessionSocketReader
-    {
+    public class SAMv2StreamSessionSocketReader extends SAMv1StreamSessionSocketReader {
         protected boolean nolimit;
-        protected long    limit;
-        protected long    totalReceived;
+        protected long limit;
+        protected long totalReceived;
 
-                /**
-                 * Create a new SAM STREAM session socket reader
-                 *
-                 * @param s Socket to be handled
-                 * @param id Unique id assigned to the handler
-                 */
-        public SAMv2StreamSessionSocketReader (I2PSocket s, int id) throws IOException
-        {
-            super (s, id);
+        /**
+         * Create a new SAM STREAM session socket reader
+         *
+         * @param s Socket to be handled
+         * @param id Unique id assigned to the handler
+         */
+        public SAMv2StreamSessionSocketReader(I2PSocket s, int id) throws IOException {
+            super(s, id);
         }
 
-        public void setLimit (long limit, boolean nolimit)
-        {
-            synchronized (runningLock)
-            {
-                this.limit   = limit;
+        public void setLimit(long limit, boolean nolimit) {
+            synchronized (runningLock) {
+                this.limit = limit;
                 this.nolimit = nolimit;
                 runningLock.notifyAll();
             }
             if (_log.shouldDebug())
-                        _log.debug ("new limit set for socket reader " + id + " : " + (nolimit ? "NOLIMIT" : limit + " bytes"));
+                _log.debug("new limit set for socket reader " + id + " : " + (nolimit ? "NOLIMIT" : limit + " bytes"));
         }
 
         @Override
-                public void run()
-        {
-            if (_log.shouldDebug())
-                        _log.debug ("run() called for socket reader " + id);
+        public void run() {
+            if (_log.shouldDebug()) _log.debug("run() called for socket reader " + id);
 
             int read = -1;
             ByteBuffer data = ByteBuffer.allocate(SOCKET_HANDLER_BUF_SIZE);
 
-            try
-            {
+            try {
                 InputStream in = i2pSocket.getInputStream();
 
-                while (stillRunning)
-                {
-                    synchronized (runningLock)
-                    {
-                        while (stillRunning && (!nolimit && totalReceived >= limit))
-                        {
-                            try{
+                while (stillRunning) {
+                    synchronized (runningLock) {
+                        while (stillRunning && (!nolimit && totalReceived >= limit)) {
+                            try {
                                 runningLock.wait();
+                            } catch (InterruptedException ie) {
                             }
-                            catch (InterruptedException ie)
-                            {}
                         }
-                        if (!stillRunning)
-                                    break;
+                        if (!stillRunning) break;
                     }
 
-                            // not ByteBuffer to avoid Java 8/9 issues
-                    ((Buffer)data).clear();
-                    read = Channels.newChannel(in).read (data);
+                    // not ByteBuffer to avoid Java 8/9 issues
+                    ((Buffer) data).clear();
+                    read = Channels.newChannel(in).read(data);
 
-                    if (read == -1)
-                    {
-                        if (_log.shouldDebug())
-                                    _log.debug ("Handler " + id + ": connection closed");
+                    if (read == -1) {
+                        if (_log.shouldDebug()) _log.debug("Handler " + id + ": connection closed");
                         break;
                     }
 
                     totalReceived += read;
-                            // not ByteBuffer to avoid Java 8/9 issues with flip()
-                    ((Buffer)data).flip();
-                    recv.receiveStreamBytes (id, data);
+                    // not ByteBuffer to avoid Java 8/9 issues with flip()
+                    ((Buffer) data).flip();
+                    recv.receiveStreamBytes(id, data);
                 }
-            }
-            catch (IOException e)
-            {
-                if (_log.shouldDebug())
-                            _log.debug ("Caught IOException", e);
+            } catch (IOException e) {
+                if (_log.shouldDebug()) _log.debug("Caught IOException", e);
             }
 
-            try
-            {
+            try {
                 i2pSocket.close();
-            }
-            catch (IOException e)
-            {
-                if (_log.shouldDebug())
-                            _log.debug ("Caught IOException", e);
+            } catch (IOException e) {
+                if (_log.shouldDebug()) _log.debug("Caught IOException", e);
             }
 
-            if (stillRunning)
-            {
-                removeSocketHandler (id);
-                        // FIXME: we need error reporting here!
+            if (stillRunning) {
+                removeSocketHandler(id);
+                // FIXME: we need error reporting here!
 
-                try
-                {
-                    recv.notifyStreamDisconnection (id, "OK", null);
-                }
-                catch (IOException e)
-                {
-                    if (_log.shouldDebug())
-                                _log.debug ("Error sending disconnection notice for handler "
-                                         + id, e);
+                try {
+                    recv.notifyStreamDisconnection(id, "OK", null);
+                } catch (IOException e) {
+                    if (_log.shouldDebug()) _log.debug("Error sending disconnection notice for handler " + id, e);
                 }
             }
 
-            if (_log.shouldDebug())
-                        _log.debug ("Shutting down SAM STREAM session socket handler " + id);
+            if (_log.shouldDebug()) _log.debug("Shutting down SAM STREAM session socket handler " + id);
         }
     }
 }

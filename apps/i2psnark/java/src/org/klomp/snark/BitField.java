@@ -187,9 +187,7 @@ public class BitField {
     public boolean equals(Object o) {
         if (o == null || !(o instanceof BitField)) return false;
         BitField bf = (BitField) o;
-        return count == bf.count()
-                && size == bf.size()
-                && Arrays.equals(bitfield, bf.getFieldBytes());
+        return count == bf.count() && size == bf.size() && Arrays.equals(bitfield, bf.getFieldBytes());
     }
 
     @Override
@@ -197,8 +195,7 @@ public class BitField {
         // Not very efficient
         StringBuilder sb = new StringBuilder("BitField(");
         sb.append(size).append(")[");
-        for (int i = 0; i < size; i++)
-            if (get(i)) {
+        for (int i = 0; i < size; i++) if (get(i)) {
                 sb.append(' ');
                 sb.append(i);
             }

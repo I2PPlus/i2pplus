@@ -10,12 +10,13 @@
  */
 package org.minidns.record;
 
+import org.minidns.record.NSEC3.HashAlgorithm;
+import org.minidns.record.Record.TYPE;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
-import org.minidns.record.NSEC3.HashAlgorithm;
-import org.minidns.record.Record.TYPE;
 
 /**
  * DNS NSEC3PARAM record payload for DNSSEC.<br>
@@ -88,11 +89,7 @@ public class NSEC3PARAM extends Data {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder()
-                .append(hashAlgorithm).append(' ')
-                .append(flags).append(' ')
-                .append(iterations).append(' ')
-                .append(salt.length == 0 ? "-" : new BigInteger(1, salt).toString(16).toUpperCase());
+        StringBuilder sb = new StringBuilder().append(hashAlgorithm).append(' ').append(flags).append(' ').append(iterations).append(' ').append(salt.length == 0 ? "-" : new BigInteger(1, salt).toString(16).toUpperCase());
         return sb.toString();
     }
 

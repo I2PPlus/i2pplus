@@ -32,8 +32,7 @@ public class SecureDirectory extends File {
     @Override
     public boolean mkdir() {
         boolean rv = super.mkdir();
-        if (rv)
-            setPerms();
+        if (rv) setPerms();
         return rv;
     }
 
@@ -44,8 +43,7 @@ public class SecureDirectory extends File {
     @Override
     public boolean mkdirs() {
         boolean rv = super.mkdirs();
-        if (rv)
-            setPerms();
+        if (rv) setPerms();
         return rv;
     }
 
@@ -54,8 +52,7 @@ public class SecureDirectory extends File {
      *  ignores errors
      */
     protected void setPerms() {
-        if (!SecureFileOutputStream.canSetPerms())
-            return;
+        if (!SecureFileOutputStream.canSetPerms()) return;
         try {
             setReadable(false, false);
             setReadable(true, true);

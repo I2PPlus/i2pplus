@@ -9,7 +9,6 @@ package net.i2p.util;
  *
  */
 
-
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -90,9 +89,7 @@ public class I2PThread extends Thread {
                 System.out.println("Check ulimit -u, /etc/security/limits.conf, or /proc/sys/kernel/threads-max");
             }
             oom.printStackTrace();
-            if (!(SystemVersion.isWindows() || SystemVersion.isAndroid()))
-                throw new RuntimeException("Thread could not be started, " +
-                                           "Check ulimit -u, /etc/security/limits.conf, or /proc/sys/kernel/threads-max", oom);
+            if (!(SystemVersion.isWindows() || SystemVersion.isAndroid())) throw new RuntimeException("Thread could not be started, " + "Check ulimit -u, /etc/security/limits.conf, or /proc/sys/kernel/threads-max", oom);
             throw new RuntimeException("Thread could not be started", oom);
         }
     }
@@ -104,14 +101,13 @@ public class I2PThread extends Thread {
         } catch (OutOfMemoryError oom) {
             fireOOM(oom);
         } catch (Throwable t) {
-            System.out.println ("Thread terminated unexpectedly: " + getName());
+            System.out.println("Thread terminated unexpectedly: " + getName());
             t.printStackTrace();
         }
     }
 
     protected void fireOOM(OutOfMemoryError oom) {
-        for (OOMEventListener listener : _listeners)
-            listener.outOfMemory(oom);
+        for (OOMEventListener listener : _listeners) listener.outOfMemory(oom);
     }
 
     /** register a new component that wants notification of OOM events */

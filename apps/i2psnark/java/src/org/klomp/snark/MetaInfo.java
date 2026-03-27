@@ -106,8 +106,7 @@ public class MetaInfo {
         this.created_by = null;
         this.creation_date = 0;
         this.url_list = url_list;
-        this.attributes =
-                null; // TODO BEP 52 hybrid torrent with piece layers, meta version and file tree
+        this.attributes = null; // TODO BEP 52 hybrid torrent with piece layers, meta version and file tree
         this.info_hash = calculateInfoHash();
     }
 
@@ -181,10 +180,9 @@ public class MetaInfo {
         this.announce_list = new_announce_list;
         this.comment = new_comment;
         this.created_by = null;
-        this.creation_date =
-                old.creation_date > 0
-                        ? old.creation_date
-                        : I2PAppContext.getGlobalContext().clock().now();
+        this.creation_date = old.creation_date > 0
+                ? old.creation_date
+                : I2PAppContext.getGlobalContext().clock().now();
         this.url_list = new_url_list;
         this.infoMap = old.infoMap;
         this.infoBytesLength = old.infoBytesLength;
@@ -332,8 +330,7 @@ public class MetaInfo {
             // Transmission does numbers. So does libtorrent.
             // We handle both as of 0.9.9.
             // We switch to storing as number as of 0.9.14.
-            boolean privat =
-                    "1".equals(o) || ((o instanceof Number) && ((Number) o).intValue() == 1);
+            boolean privat = "1".equals(o) || ((o instanceof Number) && ((Number) o).intValue() == 1);
             privateTorrent = privat ? 1 : -1;
         } else {
             privateTorrent = 0;
@@ -354,8 +351,7 @@ public class MetaInfo {
             if (val != null) {
                 int version = val.getInt();
                 if (version != 1) {
-                    throw new InvalidBEncodingException(
-                            "Version " + version + " torrent file not supported");
+                    throw new InvalidBEncodingException("Version " + version + " torrent file not supported");
                 }
             }
             throw new InvalidBEncodingException("Missing piece bytes");
@@ -430,8 +426,7 @@ public class MetaInfo {
                 // quick dup check - case sensitive, etc. - Storage does a better job
                 for (int j = 0; j < i; j++) {
                     if (file.equals(m_files.get(j))) {
-                        throw new InvalidBEncodingException(
-                                "Duplicate file path " + DataHelper.toString(file));
+                        throw new InvalidBEncodingException("Duplicate file path " + DataHelper.toString(file));
                     }
                 }
 
@@ -702,24 +697,9 @@ public class MetaInfo {
 
     @Override
     public String toString() {
-        return "MetaInfo for: "
-                + name
-                + "\n* InfoHash: "
-                + I2PSnarkUtil.toHex(info_hash)
-                + "\n* Announce: "
-                + announce
-                + "\n* Size: "
-                + length
-                + " bytes, "
-                + "Files: "
-                + files
-                + ", "
-                + "Pieces: "
-                + piece_hashes.length / 20
-                + ", "
-                + "Piece Length: "
-                + piece_length
-                + " bytes";
+        return "MetaInfo for: " + name + "\n* InfoHash: " + I2PSnarkUtil.toHex(info_hash) + "\n* Announce: " + announce
+                + "\n* Size: " + length + " bytes, " + "Files: " + files + ", " + "Pieces: " + piece_hashes.length / 20
+                + ", " + "Piece Length: " + piece_length + " bytes";
     }
 
     /**
@@ -925,9 +905,8 @@ public class MetaInfo {
             error = true;
         }
         if (error || args.length - g.getOptind() <= 0) {
-            System.err.println(
-                    "Usage: MetaInfo [-a announceURL] [-c created-by] [-m comment] [-w"
-                        + " webseed-url]* file.torrent [file2.torrent...]");
+            System.err.println("Usage: MetaInfo [-a announceURL] [-c created-by] [-m comment] [-w"
+                    + " webseed-url]* file.torrent [file2.torrent...]");
             System.exit(1);
         }
         for (int i = g.getOptind(); i < args.length; i++) {
@@ -936,18 +915,9 @@ public class MetaInfo {
             try {
                 in = new FileInputStream(args[i]);
                 MetaInfo meta = new MetaInfo(in);
-                System.out.println(
-                        args[i]
-                                + "\nInfoHash:     "
-                                + I2PSnarkUtil.toHex(meta.getInfoHash())
-                                + "\nAnnounce:     "
-                                + meta.getAnnounce()
-                                + "\nWebSeed URLs: "
-                                + meta.getWebSeedURLs()
-                                + "\nCreated By:   "
-                                + meta.getCreatedBy()
-                                + "\nComment:      "
-                                + meta.getComment());
+                System.out.println(args[i] + "\nInfoHash:     " + I2PSnarkUtil.toHex(meta.getInfoHash())
+                        + "\nAnnounce:     " + meta.getAnnounce() + "\nWebSeed URLs: " + meta.getWebSeedURLs()
+                        + "\nCreated By:   " + meta.getCreatedBy() + "\nComment:      " + meta.getComment());
 
                 if (created_by != null || announce != null || url_list != null || comment != null) {
                     String cb = created_by != null ? created_by : meta.getCreatedBy();
@@ -962,18 +932,9 @@ public class MetaInfo {
                         out.write(meta2.getTorrentData());
                         out.close();
                         System.out.println("Modified " + from + " and backed up old file to " + to);
-                        System.out.println(
-                                args[i]
-                                        + "\nInfoHash:     "
-                                        + I2PSnarkUtil.toHex(meta2.getInfoHash())
-                                        + "\nAnnounce:     "
-                                        + meta2.getAnnounce()
-                                        + "\nWebSeed URLs: "
-                                        + meta2.getWebSeedURLs()
-                                        + "\nCreated By:   "
-                                        + meta2.getCreatedBy()
-                                        + "\nComment:      "
-                                        + meta2.getComment());
+                        System.out.println(args[i] + "\nInfoHash:     " + I2PSnarkUtil.toHex(meta2.getInfoHash())
+                                + "\nAnnounce:     " + meta2.getAnnounce() + "\nWebSeed URLs: " + meta2.getWebSeedURLs()
+                                + "\nCreated By:   " + meta2.getCreatedBy() + "\nComment:      " + meta2.getComment());
                     } else {
                         System.out.println("Failed backup of " + from + " to " + to);
                     }

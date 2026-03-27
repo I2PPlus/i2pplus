@@ -1,5 +1,17 @@
 package net.i2p.router.web.helpers;
 
+import net.i2p.data.DataHelper;
+import net.i2p.data.Hash;
+import net.i2p.data.router.RouterAddress;
+import net.i2p.data.router.RouterInfo;
+import net.i2p.router.transport.CommSystemFacadeImpl;
+import net.i2p.router.transport.GeoIP;
+import net.i2p.router.transport.Transport;
+import net.i2p.router.transport.udp.UDPSender;
+import net.i2p.router.transport.udp.UDPTransport;
+import net.i2p.router.web.HelperBase;
+import net.i2p.util.SystemVersion;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -8,17 +20,6 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.SortedMap;
-import net.i2p.data.DataHelper;
-import net.i2p.data.Hash;
-import net.i2p.data.router.RouterAddress;
-import net.i2p.data.router.RouterInfo;
-import net.i2p.router.transport.CommSystemFacadeImpl;
-import net.i2p.router.transport.GeoIP;
-import net.i2p.router.transport.Transport;
-import net.i2p.router.transport.udp.UDPTransport;
-import net.i2p.router.transport.udp.UDPSender;
-import net.i2p.router.web.HelperBase;
-import net.i2p.util.SystemVersion;
 
 /**
  * Helper for router information page rendering and form processing.
@@ -29,7 +30,9 @@ public class InfoHelper extends HelperBase {
 
     public InfoHelper() {}
 
-    public void setFull(String f) {_full = f != null && f.length() > 0;}
+    public void setFull(String f) {
+        _full = f != null && f.length() > 0;
+    }
 
     public String getConsole() {
         try {
@@ -37,7 +40,7 @@ public class InfoHelper extends HelperBase {
                 renderStatusHTML(_out);
                 return "";
             } else {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream(2*1024);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream(2 * 1024);
                 renderStatusHTML(new OutputStreamWriter(baos, StandardCharsets.UTF_8));
                 try {
                     return baos.toString(StandardCharsets.UTF_8.name());
@@ -45,7 +48,9 @@ public class InfoHelper extends HelperBase {
                     return baos.toString(StandardCharsets.UTF_8.name());
                 }
             }
-        } catch (IOException ioe) {return "<b>" + _t("Error displaying the info page.") + "</b>";}
+        } catch (IOException ioe) {
+            return "<b>" + _t("Error displaying the info page.") + "</b>";
+        }
     }
 
     public String getStats() {
@@ -55,7 +60,7 @@ public class InfoHelper extends HelperBase {
                 gen.generateStatsPage(_out, _full);
                 return "";
             } else {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream(32*1024);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream(32 * 1024);
                 gen.generateStatsPage(new OutputStreamWriter(baos, StandardCharsets.UTF_8), _full);
                 try {
                     return baos.toString(StandardCharsets.UTF_8.name());
@@ -63,81 +68,131 @@ public class InfoHelper extends HelperBase {
                     return baos.toString(StandardCharsets.UTF_8.name());
                 }
             }
-        } catch (IOException ioe) {return "<b>" + _t("Error displaying the info page.") + "</b>";}
+        } catch (IOException ioe) {
+            return "<b>" + _t("Error displaying the info page.") + "</b>";
+        }
     }
 
     /** @return host or "unknown" */
     public String getUdpIP() {
         String rv = _context.getProperty(UDPTransport.PROP_IP);
-        if (rv != null) {return rv;}
+        if (rv != null) {
+            return rv;
+        }
         RouterAddress addr = _context.router().getRouterInfo().getTargetAddress("SSU");
         if (addr != null) {
             rv = addr.getHost();
-            if (rv != null) {return rv;}
+            if (rv != null) {
+                return rv;
+            }
         }
         addr = _context.router().getRouterInfo().getTargetAddress("NTCP");
         if (addr != null) {
             rv = addr.getHost();
-            if (rv != null) {return rv;}
+            if (rv != null) {
+                return rv;
+            }
         }
         return _t("unknown");
     }
 
-    public String lastCountry() {return _context.getProperty("i2np.lastCountry");}
-    public String getUdpPort() {return _context.getProperty("i2np.udp.port");}
-    public String firstInstalled() {return _context.getProperty("router.firstInstalled");}
-    public String firstVersion() {return _context.getProperty("router.firstVersion");}
-    public String lastUpdated() {return _context.getProperty("router.updateLastInstalled");}
-    public String updatePolicy() {return _context.getProperty("router.updatePolicy");}
-    public String updateDevSU3() {return _context.getProperty("router.updateDevSU3");}
+    public String lastCountry() {
+        return _context.getProperty("i2np.lastCountry");
+    }
+
+    public String getUdpPort() {
+        return _context.getProperty("i2np.udp.port");
+    }
+
+    public String firstInstalled() {
+        return _context.getProperty("router.firstInstalled");
+    }
+
+    public String firstVersion() {
+        return _context.getProperty("router.firstVersion");
+    }
+
+    public String lastUpdated() {
+        return _context.getProperty("router.updateLastInstalled");
+    }
+
+    public String updatePolicy() {
+        return _context.getProperty("router.updatePolicy");
+    }
+
+    public String updateDevSU3() {
+        return _context.getProperty("router.updateDevSU3");
+    }
 
     public String updateUnsigned() {
         if (_context.getProperty("router.updateUnsigned") != null) {
             return _context.getProperty("router.updateUnsigned");
-        } else {return "true";}
+        } else {
+            return "true";
+        }
     }
 
     public boolean isRouterSlow() {
         return SystemVersion.isSlow();
     }
 
-    public String getCoreCount() {return Integer.toString(SystemVersion.getCores());}
+    public String getCoreCount() {
+        return Integer.toString(SystemVersion.getCores());
+    }
 
     public String bwIn() {
         String in = _context.getProperty("i2np.bandwidth.inboundKBytesPerSecond");
-        if (in != null) {return in;}
-        else {return "1024";}
+        if (in != null) {
+            return in;
+        } else {
+            return "1024";
+        }
     }
 
     public String bwOut() {
         String out = _context.getProperty("i2np.bandwidth.outboundKBytesPerSecond");
-        if (out != null) {return out;}
-        else {return "512";}
+        if (out != null) {
+            return out;
+        } else {
+            return "512";
+        }
     }
 
     public String bwShare() {
         String share = _context.getProperty("router.sharePercentage");
-        if (share != null) {return share;}
-        else {return "80";}
+        if (share != null) {
+            return share;
+        } else {
+            return "80";
+        }
     }
 
     public String codelInterval() {
         String interval = _context.getProperty("router.codelInterval");
-        if (interval != null) {return interval;}
-        else {return Integer.toString(UDPSender.CODEL_INTERVAL);}
+        if (interval != null) {
+            return interval;
+        } else {
+            return Integer.toString(UDPSender.CODEL_INTERVAL);
+        }
     }
 
     public String codelTarget() {
         String target = _context.getProperty("router.codelTarget");
-        if (target != null) {return target;}
-        else {return Integer.toString(UDPSender.CODEL_TARGET);}
+        if (target != null) {
+            return target;
+        } else {
+            return Integer.toString(UDPSender.CODEL_TARGET);
+        }
     }
 
     public String getFamily() {
         RouterInfo ri = _context.router().getRouterInfo();
         String family = ri.getOption("family");
-        if (family != null) {return family;}
-        else {return null;}
+        if (family != null) {
+            return family;
+        } else {
+            return null;
+        }
     }
 
     public String getGeoIPBuildInfo() {
@@ -146,7 +201,7 @@ public class InfoHelper extends HelperBase {
     }
 
     private void renderStatusHTML(Writer out) throws IOException {
-        StringBuilder buf = new StringBuilder(4*1024);
+        StringBuilder buf = new StringBuilder(4 * 1024);
         RouterInfo ri = _context.router().getRouterInfo();
         Hash h = _context.routerHash();
         Instant installDate = Instant.ofEpochMilli(Long.parseLong(firstInstalled()));
@@ -167,9 +222,10 @@ public class InfoHelper extends HelperBase {
         // basic router information
         buf.append("<table>\n");
         if (h != null) {
-            buf.append("<tr><td><b>").append(_t("Identity")).append(":</b></td><td><code><a href=\"/netdb?r=.\" title =\"")
-               .append(_t("Network Database entry")).append("\">").append(h.toBase64()).append("</a></code>");
-            if (getFamily() != null) {buf.append("&ensp; <b>").append(_t("Family")).append(":</b> ").append(getFamily());}
+            buf.append("<tr><td><b>").append(_t("Identity")).append(":</b></td><td><code><a href=\"/netdb?r=.\" title =\"").append(_t("Network Database entry")).append("\">").append(h.toBase64()).append("</a></code>");
+            if (getFamily() != null) {
+                buf.append("&ensp; <b>").append(_t("Family")).append(":</b> ").append(getFamily());
+            }
             buf.append("</td></tr>\n");
         }
         if (getUdpIP() != null && getUdpPort() != null) {
@@ -177,70 +233,62 @@ public class InfoHelper extends HelperBase {
             if (lastCountry() != null) {
                 buf.append(" &ensp; <img width=20 height=15 src=\"/flags.jsp?c=").append(lastCountry()).append("\">");
             }
-            buf.append(" &ensp; <b>").append(_t("UDP Port")).append(":</b> ").append(getUdpPort())
-               .append(" &ensp; <b>").append(_t("Status")).append(":</b> ").append(_t(_context.commSystem().getStatus().toStatusString()))
-               .append(" &ensp; <b>").append(_t("Floodfill Role")).append(":</b> ");
-            if (_context.netDb().floodfillEnabled()) {buf.append(_t("Active"));}
-            else {buf.append(_t("Inactive"));}
+            buf.append(" &ensp; <b>").append(_t("UDP Port")).append(":</b> ").append(getUdpPort()).append(" &ensp; <b>").append(_t("Status")).append(":</b> ").append(_t(_context.commSystem().getStatus().toStatusString())).append(" &ensp; <b>").append(_t("Floodfill Role")).append(":</b> ");
+            if (_context.netDb().floodfillEnabled()) {
+                buf.append(_t("Active"));
+            } else {
+                buf.append(_t("Inactive"));
+            }
             buf.append("&ensp; <a href=\"/configadvanced\">").append(_t("Configure")).append("</a></td></tr>\n");
         }
         if (bwIn() != null && bwOut() != null && bwShare() != null) {
-            buf.append("<tr><td><b>").append(_t("Bandwidth")).append(":</b></td><td class=ajax><b>").append(_t("Inbound")).append(":</b> ")
-               .append(bwIn()).append("KB/s &ensp; <b>").append(_t("Outbound")).append(":</b> ").append(bwOut()).append("KB/s &ensp; <b>")
-               .append(_t("Shared")).append(":</b> ").append(bwShare()).append("% (").append(shareBW).append("KB/s) &ensp; <b>")
-               .append(_t("Tier")).append(":</b> ").append(ri.getBandwidthTier());
+            buf.append("<tr><td><b>").append(_t("Bandwidth")).append(":</b></td><td class=ajax><b>").append(_t("Inbound")).append(":</b> ").append(bwIn()).append("KB/s &ensp; <b>").append(_t("Outbound")).append(":</b> ").append(bwOut()).append("KB/s &ensp; <b>").append(_t("Shared")).append(":</b> ").append(bwShare()).append("% (").append(shareBW).append("KB/s) &ensp; <b>").append(_t("Tier")).append(":</b> ").append(ri.getBandwidthTier());
             if (congestionCap != null && !congestionCap.equals("Unknown")) {
                 buf.append("&ensp; <b>").append(_t("Congestion Cap")).append(":</b> ").append(congestionCap);
-                if (congestionCap.equals("D")) {buf.append(" (").append(_t("Moderate")).append(")");}
-                else if (congestionCap.equals("E")) {buf.append(" (").append(_t("Severe")).append(")");}
-                else if (congestionCap.equals("G")) {buf.append(" (").append(_t("No transit tunnels")).append(")");}
+                if (congestionCap.equals("D")) {
+                    buf.append(" (").append(_t("Moderate")).append(")");
+                } else if (congestionCap.equals("E")) {
+                    buf.append(" (").append(_t("Severe")).append(")");
+                } else if (congestionCap.equals("G")) {
+                    buf.append(" (").append(_t("No transit tunnels")).append(")");
+                }
             }
         }
-        buf.append("&ensp; <a href=\"/config\">").append(_t("Configure")).append("</a></td></tr>\n")
-           .append("<tr><td><b>").append(_t("Performance")).append(":</b></td><td><b>").append(_t("Available CPU Cores")).append(":</b> ")
-           .append(getCoreCount()).append("&ensp; <b>").append(_t("Maximum available RAM")).append(":</b> ").append(maxMemMB).append("MB")
-           .append("&ensp; <b>").append(_t("Classified as slow")).append(":</b>");
-        if (isRouterSlow()) {buf.append(" <span class=\"yes\">").append(_t("Yes")).append("</span>");}
-        else {buf.append(" <span class=\"no\">").append(_t("No")).append("</span>");}
+        buf.append("&ensp; <a href=\"/config\">").append(_t("Configure")).append("</a></td></tr>\n").append("<tr><td><b>").append(_t("Performance")).append(":</b></td><td><b>").append(_t("Available CPU Cores")).append(":</b> ").append(getCoreCount()).append("&ensp; <b>").append(_t("Maximum available RAM")).append(":</b> ").append(maxMemMB).append("MB").append("&ensp; <b>").append(_t("Classified as slow")).append(":</b>");
+        if (isRouterSlow()) {
+            buf.append(" <span class=\"yes\">").append(_t("Yes")).append("</span>");
+        } else {
+            buf.append(" <span class=\"no\">").append(_t("No")).append("</span>");
+        }
         buf.append("</td></tr>\n");
         buf.append("<tr><td><b>").append(_t("GeoIP Db")).append(":</b></td><td>").append(getGeoIPBuildInfo()).append("</td></tr>");
         if (isAdvanced) {
-            buf.append("<tr><td><b>CoDel:</b></td><td><b>").append(_t("Target")).append(":</b> ").append(codelTarget())
-               .append("ms &ensp; <b>").append(_t("Interval")).append(":</b> ").append(codelInterval()).append("ms</td></tr>\n");
+            buf.append("<tr><td><b>CoDel:</b></td><td><b>").append(_t("Target")).append(":</b> ").append(codelTarget()).append("ms &ensp; <b>").append(_t("Interval")).append(":</b> ").append(codelInterval()).append("ms</td></tr>\n");
         }
         if (rdnsEnabled) {
             int rdnsCacheSize = CommSystemFacadeImpl.countRdnsCacheEntries();
             String rdnsFileSize = (_context.router().getUptime() > 5 * 1000 ? CommSystemFacadeImpl.rdnsCacheSize() : _t("initializing") + "&hellip; ");
             String maxRdnsCache;
-            if (maxMem < 512*1024*1024) {
+            if (maxMem < 512 * 1024 * 1024) {
                 maxRdnsCache = "8000";
-            } else if (maxMem < 1024*1024*1024) {
+            } else if (maxMem < 1024 * 1024 * 1024) {
                 maxRdnsCache = "16000";
             } else {
                 maxRdnsCache = "24000";
             }
-            buf.append("<tr><td><b>RDNS Cache:</b></td><td class=ajax>").append(rdnsCacheSize).append(" / ")
-               .append(maxRdnsCache).append(" ").append(_t("entries")).append("&ensp; <b>")
-               .append(_t("Cache file")).append(":</b> ").append(configDir).append("rdnscache.txt (").append(rdnsFileSize).append(")</td></tr>\n");
+            buf.append("<tr><td><b>RDNS Cache:</b></td><td class=ajax>").append(rdnsCacheSize).append(" / ").append(maxRdnsCache).append(" ").append(_t("entries")).append("&ensp; <b>").append(_t("Cache file")).append(":</b> ").append(configDir).append("rdnscache.txt (").append(rdnsFileSize).append(")</td></tr>\n");
         }
         if (firstInstalled() != null && firstVersion() != null && lastUpdated() != null) {
-            buf.append("<tr><td><b>").append(_t("Installed")).append(":</b></td><td>").append(installDate).append(" (")
-               .append(firstVersion()).append(")").append(" &ensp; <span class=nowrap><b>").append(_t("Location")).append(":</b> ")
-               .append(appDir.toString()).append("</span>").append(" &ensp; <span class=nowrap><b>").append(_t("Config Dir"))
-               .append(":</b> ").append(configDir).append("</span></td></tr>\n")
-               .append("<tr><td><b>").append(_t("Updated")).append(":</b></td><td>").append(lastUpdate);
+            buf.append("<tr><td><b>").append(_t("Installed")).append(":</b></td><td>").append(installDate).append(" (").append(firstVersion()).append(")").append(" &ensp; <span class=nowrap><b>").append(_t("Location")).append(":</b> ").append(appDir.toString()).append("</span>").append(" &ensp; <span class=nowrap><b>").append(_t("Config Dir")).append(":</b> ").append(configDir).append("</span></td></tr>\n").append("<tr><td><b>").append(_t("Updated")).append(":</b></td><td>").append(lastUpdate);
             if (updatePolicy() != null) {
                 buf.append(" &ensp; <b>").append(_t("Update Policy")).append(":</b> ").append(updatePolicy());
             }
-            if ((updateUnsigned() != null && updateUnsigned().contains("true")) || (updateDevSU3() !=null && updateDevSU3().contains("true"))) {
+            if ((updateUnsigned() != null && updateUnsigned().contains("true")) || (updateDevSU3() != null && updateDevSU3().contains("true"))) {
                 buf.append(" (").append(_t("Development updates enabled")).append(")");
             }
             buf.append(" &ensp; <a href=\"/configupdate\">").append(_t("Configure")).append("</a></td></tr>\n");
         }
-        buf           .append("<tr><td><b>").append(_t("Started")).append(":</b></td><td class=ajax>").append(Instant.ofEpochMilli(_context.router().getWhenStarted()))
-           .append(" &ensp; <b>").append(_t("Uptime")).append(":</b> ").append(DataHelper.formatDuration(_context.router().getUptime()))
-           .append(" &ensp; <b>").append(_t("Clock Skew")).append(":</b> ").append(_context.clock().getOffset()).append("ms</td></tr>\n")
-           .append("</table>\n");
+        buf.append("<tr><td><b>").append(_t("Started")).append(":</b></td><td class=ajax>").append(Instant.ofEpochMilli(_context.router().getWhenStarted())).append(" &ensp; <b>").append(_t("Uptime")).append(":</b> ").append(DataHelper.formatDuration(_context.router().getUptime())).append(" &ensp; <b>").append(_t("Clock Skew")).append(":</b> ").append(_context.clock().getOffset()).append("ms</td></tr>\n").append("</table>\n");
 
         buf.append("<h3 id=transports>").append(_t("Router Transport Addresses")).append("</h3>\n<pre id=activetransports class=ajax>\n");
         SortedMap<String, Transport> transports = _context.commSystem().getTransports();
@@ -250,14 +298,17 @@ public class InfoHelper extends HelperBase {
                     for (RouterAddress ra : t.getCurrentAddresses()) {
                         buf.append(ra.toString()).append("\n\n");
                     }
-                } else {buf.append(_t("{0} is used for outbound connections only", t.getStyle())).append("\n\n");}
+                } else {
+                    buf.append(_t("{0} is used for outbound connections only", t.getStyle())).append("\n\n");
+                }
             }
-        } else {buf.append(_t("none"));}
+        } else {
+            buf.append(_t("none"));
+        }
         buf.append("</pre>\n");
         out.append(buf);
         // UPnP Status
         _context.commSystem().renderStatusHTML(_out);
         out.flush();
     }
-
 }

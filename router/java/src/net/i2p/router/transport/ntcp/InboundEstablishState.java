@@ -5,14 +5,7 @@ import static net.i2p.router.transport.ntcp.OutboundNTCP2State.*;
 import com.southernstorm.noise.protocol.CipherState;
 import com.southernstorm.noise.protocol.CipherStatePair;
 import com.southernstorm.noise.protocol.HandshakeState;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.security.GeneralSecurityException;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
+
 import net.i2p.data.Base64;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataFormatException;
@@ -36,6 +29,15 @@ import net.i2p.util.SimpleByteCache;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.security.GeneralSecurityException;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * NTCP 2 inbound connection establishment state machine.
@@ -68,59 +70,76 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     /** Current encrypted block we are reading (IB only) or an IV buf used at the end for OB */
     private byte _curEncrypted[];
+
     /** Size of Alice's RouterIdentity in bytes */
     private int _aliceIdentSize;
+
     /** Alice's RouterIdentity, set after gotRI() validation succeeds */
     private RouterIdentity _aliceIdent;
+
     /** Buffer for accumulating decrypted message 3 payload (aliceIndexSize + aliceIdent + tsA + padding + aliceSig) */
     private final ByteArrayOutputStream _sz_aliceIdent_tsA_padding_aliceSig;
+
     /** Expected size of _sz_aliceIdent_tsA_padding_aliceSig when complete */
     private int _sz_aliceIdent_tsA_padding_aliceSigSize;
+
     /** Flag to ensure releaseBufs() is called only once */
     private boolean _released;
 
     //// NTCP2 things
     /** Noise protocol handshake state for XK pattern */
     private HandshakeState _handshakeState;
+
     /** Length of padding specified in message 1 options, used for probing resistance */
     private int _padlen1;
+
     /** Length of message 3 part 2 (RI + signature) */
     private int _msg3p2len;
+
     /** Reason code for handshake failure; negative means success, non-negative is failure reason */
     private int _msg3p2FailReason = -1;
+
     /** Temporary buffer for receiving message 3 */
     private ByteArray _msg3tmp;
+
     /** Cached payload buffer for message 3 processing to reduce pool overhead */
     private ByteArray _payloadTmp;
+
     /** Alice's negotiated options from message 3 */
     private NTCP2Options _hisPadding;
+
     /** Reusable options array for message 1 processing to eliminate per-call allocation */
     private final byte[] _options1 = new byte[OPTIONS1_SIZE];
 
     /** Buffer size for reading data phase packets (16 KB), same as I2PTunnelRunner */
-    private static final int BUFFER_SIZE = 16*1024;
+    private static final int BUFFER_SIZE = 16 * 1024;
+
     /** Maximum number of read buffers to cache (32 on slow devices, 64 otherwise) */
     private static final int MAX_DATA_READ_BUFS = SystemVersion.isSlow() ? 32 : 64;
+
     /** Cache for read buffers */
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
 
     /** Maximum padding length in message 1 (223 bytes: 287 - 64) */
     private static final int PADDING1_MAX = TOTAL1_MAX - MSG1_SIZE;
+
     /** Maximum padding for probing resistance strategy (128 bytes) */
     private static final int PADDING1_FAIL_MAX = 128;
+
     /** Maximum padding length in message 2 (64 bytes) */
     private static final int PADDING2_MAX = 64;
+
     /** Minimum RouterInfo size: DSA signature (40) + overhead (8+1+1+2+387) */
     private static final int RI_MIN = 387 + 8 + 1 + 1 + 2 + 40;
+
     /** Minimum message 3 part 2 size: header (1+2+1) + RI_MIN + MAC (16) */
     private static final int MSG3P2_MIN = 1 + 2 + 1 + RI_MIN + MAC_SIZE;
+
     /** Maximum message 3 part 2 size (6000 bytes, less than full buffer) */
     private static final int MSG3P2_MAX = 6000;
 
     /** Set of states that are part of NTCP 2 protocol processing */
-    private static final Set<State> STATES_NTCP2 =
-        EnumSet.of(State.IB_NTCP2_INIT, State.IB_NTCP2_GOT_X, State.IB_NTCP2_GOT_PADDING,
-                   State.IB_NTCP2_SENT_Y, State.IB_NTCP2_GOT_RI, State.IB_NTCP2_READ_RANDOM);
+    private static final Set<State> STATES_NTCP2 = EnumSet.of(State.IB_NTCP2_INIT, State.IB_NTCP2_GOT_X, State.IB_NTCP2_GOT_PADDING, State.IB_NTCP2_SENT_Y, State.IB_NTCP2_GOT_RI, State.IB_NTCP2_READ_RANDOM);
 
     private BanLogger _banLogger;
 
@@ -142,7 +161,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @return IP:PORT string or empty string if not available
      */
     private String getRouterIPPort(RouterInfo router) {
-        if (router == null) { return ""; }
+        if (router == null) {
+            return "";
+        }
         try {
             // Try getCompatibleIP first - returns IP for our supported protocols
             byte[] ip = CommSystemFacadeImpl.getCompatibleIP(router);
@@ -212,7 +233,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     @Override
     public synchronized void receive(ByteBuffer src) {
         super.receive(src);
-        if (!src.hasRemaining()) {return;} // nothing to receive
+        if (!src.hasRemaining()) {
+            return;
+        } // nothing to receive
         receiveInbound(src);
     }
 
@@ -223,7 +246,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @since 0.9.35
      */
     @Override
-    public int getVersion() {return 2;}
+    public int getVersion() {
+        return 2;
+    }
 
     /**
      * Receives bytes as part of an inbound connection (Bob's perspective).
@@ -298,17 +323,16 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         byte[] ip = _con.getRemoteIP();
         if (_context.banlist().isBanlistedForever(aliceHash)) {
             if (_log.shouldWarn()) {
-                _log.warn("[NTCP] Dropping Inbound connection from " + (_context.banlist().isBanlistedForever(aliceHash) ?
-                          "permanently" : "") + " banlisted peer at " + Addresses.toString(ip) +
-                          " [" + aliceHash.toBase64().substring(0,6) + "]");
+                _log.warn("[NTCP] Dropping Inbound connection from " + (_context.banlist().isBanlistedForever(aliceHash) ? "permanently" : "") + " banlisted peer at " + Addresses.toString(ip) + " [" + aliceHash.toBase64().substring(0, 6) + "]");
             }
             // So next time we will not accept the con from this IP, rather than doing the whole handshake
-            if (ip != null) {_context.blocklist().add(ip);}
+            if (ip != null) {
+                _context.blocklist().add(ip);
+            }
             if (getVersion() < 2) {
-                fail("Banlisting incompatible Router [" + aliceHash.toBase64().substring(0,6) + "] -> No NTCP2 support");
+                fail("Banlisting incompatible Router [" + aliceHash.toBase64().substring(0, 6) + "] -> No NTCP2 support");
             } else if (_log.shouldInfo()) {
-                _log.info("Router is banlisted " + (_context.banlist().isBanlistedForever(aliceHash) ? "forever" : "") +
-                          " [" + aliceHash.toBase64().substring(0,6) + "]");
+                _log.info("Router is banlisted " + (_context.banlist().isBanlistedForever(aliceHash) ? "forever" : "") + " [" + aliceHash.toBase64().substring(0, 6) + "]");
             }
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             return false;
@@ -316,20 +340,23 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             _context.commSystem().mayDisconnect(aliceHash);
             boolean isHostile = _context.banlist().isBanlistedHostile(aliceHash);
             if (_log.shouldInfo()) {
-                _log.info("Router [" + aliceHash.toBase64().substring(0,6) + "] is temp banned" +
-                          (isHostile ? " and tagged as hostile" : "") + ", not validating");
+                _log.info("Router [" + aliceHash.toBase64().substring(0, 6) + "] is temp banned" + (isHostile ? " and tagged as hostile" : "") + ", not validating");
             }
             return false;
         }
 
-        if (ip != null) {_transport.setIP(aliceHash, ip);}
-        if (_log.shouldDebug()) {_log.debug(prefix() + "verification successful for " + _con);}
+        if (ip != null) {
+            _transport.setIP(aliceHash, ip);
+        }
+        if (_log.shouldDebug()) {
+            _log.debug(prefix() + "verification successful for " + _con);
+        }
 
         // Adjust skew calculation now that we know RTT
         // rtt from receiving #1 to receiving #3
         long rtt = _context.clock().now() - _con.getCreated();
         _peerSkew -= ((rtt / 2) + 500) / 1000;
-        long diff = 1000*Math.abs(_peerSkew);
+        long diff = 1000 * Math.abs(_peerSkew);
         boolean skewOK = diff < Router.CLOCK_FUDGE_FACTOR;
         if (skewOK && !_context.clock().getUpdatedSuccessfully()) {
             /*
@@ -341,24 +368,22 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             _context.clock().setOffset(1000 * (0 - _peerSkew), true);
             _peerSkew = 0;
             if (diff != 0) {
-                _log.logAlways(Log.WARN, "NTP failure, NTCP adjusted clock by " + DataHelper.formatDuration(diff) +
-                                         " -> Source Router [" + aliceHash.toBase64().substring(0,6) + "]");
+                _log.logAlways(Log.WARN, "NTP failure, NTCP adjusted clock by " + DataHelper.formatDuration(diff) + " -> Source Router [" + aliceHash.toBase64().substring(0, 6) + "]");
             }
         } else if (!skewOK) {
             // Only banlist if we know what time it is
             int port = _con.getRemotePort();
             String ipPort = ip != null ? formatIPPort(ip, port) : "UNKNOWN";
             _banLogger.logBan(aliceHash, ipPort, "Excessive clock skew: " + DataHelper.formatDuration(diff), 0);
-            _context.banlist().banlistRouter(DataHelper.formatDuration(diff), aliceHash,
-                                             " <b>➜</b> " + _x("Excessive clock skew ({0})"));
+            _context.banlist().banlistRouter(DataHelper.formatDuration(diff), aliceHash, " <b>➜</b> " + _x("Excessive clock skew ({0})"));
             _transport.setLastBadSkew(_peerSkew);
             if (_log.shouldWarn()) {
-                _log.warn("Excessive clock skew (" + diff + "ms) from [" + aliceHash.toBase64().substring(0,6) + "]");
+                _log.warn("Excessive clock skew (" + diff + "ms) from [" + aliceHash.toBase64().substring(0, 6) + "]");
             }
             _msg3p2FailReason = NTCPConnection.REASON_SKEW;
             return false;
         } else if (_log.shouldDebug()) {
-            _log.debug(prefix() + "Clock skew (" + diff + "ms) from [" + aliceHash.toBase64().substring(0,6) + "]");
+            _log.debug(prefix() + "Clock skew (" + diff + "ms) from [" + aliceHash.toBase64().substring(0, 6) + "]");
         }
         return true;
     }
@@ -390,7 +415,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             }
             // So next time we will not accept the con from this IP, rather than doing the whole handshake
             byte[] ip = _con.getRemoteIP();
-            if (ip != null) {_context.blocklist().add(ip);}
+            if (ip != null) {
+                _context.blocklist().add(ip);
+            }
             _transport.markUnreachable(aliceHash);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
         }
@@ -420,7 +447,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      */
     private void receiveInboundNTCP2(ByteBuffer src) {
         if (_state == State.IB_NTCP2_INIT) {
-            if (!src.hasRemaining()) {return;}
+            if (!src.hasRemaining()) {
+                return;
+            }
             // use _X for the buffer
             int toGet = Math.min(src.remaining(), MSG1_SIZE - _received);
             src.get(_X, _received, toGet);
@@ -451,8 +480,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 _padlen1 = _context.random().nextInt(PADDING1_FAIL_MAX) - src.remaining();
                 if (_padlen1 > 0) {
                     if (_log.shouldWarn()) {
-                        _log.warn("[NTCP] Bad PK msg 1, X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
-                                  " more bytes, waiting for " + _padlen1 + " more bytes");
+                        _log.warn("[NTCP] Bad PK msg 1, X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() + " more bytes, waiting for " + _padlen1 + " more bytes");
                     }
                     changeState(State.IB_NTCP2_READ_RANDOM);
                 } else {
@@ -461,13 +489,18 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 return;
             }
 
-            try {_handshakeState = new HandshakeState(HandshakeState.PATTERN_ID_XK, HandshakeState.RESPONDER, _transport.getXDHFactory());}
-            catch (GeneralSecurityException gse) {throw new IllegalStateException("Bad protocol", gse);}
-            _handshakeState.getLocalKeyPair().setKeys(_transport.getNTCP2StaticPrivkey(), 0,
-                                                      _transport.getNTCP2StaticPubkey(), 0);
+            try {
+                _handshakeState = new HandshakeState(HandshakeState.PATTERN_ID_XK, HandshakeState.RESPONDER, _transport.getXDHFactory());
+            } catch (GeneralSecurityException gse) {
+                throw new IllegalStateException("Bad protocol", gse);
+            }
+            _handshakeState .getLocalKeyPair() .setKeys( _transport.getNTCP2StaticPrivkey(), 0,
+                            _transport.getNTCP2StaticPubkey(), 0);
             try {
                 _handshakeState.start();
-                if (_log.shouldDebug()) {_log.debug("After start: " + _handshakeState.toString());}
+                if (_log.shouldDebug()) {
+                    _log.debug("After start: " + _handshakeState.toString());
+                }
                 _handshakeState.readMessage(_X, 0, MSG1_SIZE, _options1, 0);
             } catch (GeneralSecurityException gse) {
                 boolean gseNotNull = gse.getMessage() != null && !"null".equals(gse.getMessage());
@@ -477,12 +510,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                     // Delayed fail for probing resistance - need more bytes before failure
                     if (verifyInbound(h)) {
                         if (_log.shouldDebug()) {
-                            _log.warn("[NTCP] BAD Establishment handshake message #1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
-                                      " more bytes, waiting for " + _padlen1 + " more bytes", gse);
+                            _log.warn("[NTCP] BAD Establishment handshake message #1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() + " more bytes, waiting for " + _padlen1 + " more bytes", gse);
                         } else if (_log.shouldWarn()) {
-                            _log.warn("[NTCP] BAD Establishment handshake message #1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
-                                      " more bytes, waiting for " + _padlen1 + " more bytes" +
-                                      (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
+                            _log.warn("[NTCP] BAD Establishment handshake message #1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() + " more bytes, waiting for " + _padlen1 + " more bytes" + (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
                         }
                     }
                     changeState(State.IB_NTCP2_READ_RANDOM);
@@ -524,11 +554,10 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             // Will be adjusted for RTT in verifyInbound()
             _peerSkew = (now - (tsA * 1000) + 500) / 1000;
             if (_peerSkew > MAX_SKEW || _peerSkew < 0 - MAX_SKEW) {
-                long diff = 1000*Math.abs(_peerSkew);
+                long diff = 1000 * Math.abs(_peerSkew);
                 _context.statManager().addRateData("ntcp.invalidInboundSkew", diff);
                 _transport.setLastBadSkew(_peerSkew);
-                if (_log.shouldWarn())
-                    _log.warn("Clock Skew: " + _peerSkew + "ms on " + this);
+                if (_log.shouldWarn()) _log.warn("Clock Skew: " + _peerSkew + "ms on " + this);
                 /*
                  * Do them a favor, keep going with msg 2 so they get our timestamp.
                  * They should disconnect after that.
@@ -547,19 +576,22 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 if (src.hasRemaining()) {
                     // Inbound conn can never have extra data after message #1
                     fail("Extra data (" + src.remaining() + " bytes) after Establishment handshake message #1");
-                } else {prepareOutbound2();} // Write msg 2
+                } else {
+                    prepareOutbound2();
+                } // Write msg 2
                 return;
             }
         }
 
         // Delayed fail for probing resistance
         if (_state == State.IB_NTCP2_READ_RANDOM) {
-            if (!src.hasRemaining()) {return;}
+            if (!src.hasRemaining()) {
+                return;
+            }
             _received += src.remaining(); // Read more bytes before failing
             if (_received < _padlen1) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[NTCP] BAD Establishment handshake message #1: Received " + src.remaining() +
-                              " more bytes, waiting for " + (_padlen1 - _received) + " more bytes");
+                    _log.warn("[NTCP] BAD Establishment handshake message #1: Received " + src.remaining() + " more bytes, waiting for " + (_padlen1 - _received) + " more bytes");
                 }
             } else {
                 fail("BAD Establishment handshake message #1: Failure with " + src.remaining() + " more bytes remaining");
@@ -568,12 +600,16 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         }
 
         if (_state == State.IB_NTCP2_GOT_X) {
-            if (!src.hasRemaining()) {return;}
+            if (!src.hasRemaining()) {
+                return;
+            }
             // Skip this if _padlen1 == 0; use _X for the buffer
             int toGet = Math.min(src.remaining(), _padlen1 - _received);
             src.get(_X, _received, toGet);
             _received += toGet;
-            if (_received < _padlen1) {return;}
+            if (_received < _padlen1) {
+                return;
+            }
             changeState(State.IB_NTCP2_GOT_PADDING);
             _handshakeState.mixHash(_X, 0, _padlen1);
             if (_log.shouldDebug()) {
@@ -583,26 +619,37 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             if (src.hasRemaining()) {
                 // Inbound conn can never have extra data after msg 1
                 fail("Extra data after Establishment handshake message #1: " + src.remaining());
-            } else {prepareOutbound2();} // write msg 2
+            } else {
+                prepareOutbound2();
+            } // write msg 2
             return;
         }
 
         if (_state == State.IB_NTCP2_SENT_Y) {
-            if (!src.hasRemaining()) {return;}
+            if (!src.hasRemaining()) {
+                return;
+            }
             int msg3tot = MSG3P1_SIZE + _msg3p2len;
-            if (_msg3tmp == null) {_msg3tmp = _dataReadBufs.acquire();}
+            if (_msg3tmp == null) {
+                _msg3tmp = _dataReadBufs.acquire();
+            }
             // use _X for the buffer FIXME too small
             byte[] tmp = _msg3tmp.getData();
             int toGet = Math.min(src.remaining(), msg3tot - _received);
             src.get(tmp, _received, toGet);
             _received += toGet;
-            if (_received < msg3tot) {return;}
+            if (_received < msg3tot) {
+                return;
+            }
             changeState(State.IB_NTCP2_GOT_RI);
             _received = 0;
-            if (_payloadTmp == null) {_payloadTmp = _dataReadBufs.acquire();}
+            if (_payloadTmp == null) {
+                _payloadTmp = _dataReadBufs.acquire();
+            }
             byte[] payload = _payloadTmp.getData();
-            try {_handshakeState.readMessage(tmp, 0, msg3tot, payload, 0);}
-            catch (GeneralSecurityException gse) {
+            try {
+                _handshakeState.readMessage(tmp, 0, msg3tot, payload, 0);
+            } catch (GeneralSecurityException gse) {
                 // TODO delayed failure per spec, as in NTCPConnection.delayedClose()
                 fail("BAD Establishment handshake message #3, part 1 is:\n" + net.i2p.util.HexDump.dump(tmp, 0, MSG3P1_SIZE), gse);
                 return;
@@ -622,7 +669,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 }
                 // probably payload frame/block problems
                 // setDataPhase() will send termination
-                if (_msg3p2FailReason < 0) {_msg3p2FailReason = NTCPConnection.REASON_FRAMING;}
+                if (_msg3p2FailReason < 0) {
+                    _msg3p2FailReason = NTCPConnection.REASON_FRAMING;
+                }
             } catch (DataFormatException dfe) {
                 if (_log.shouldInfo()) {
                     _log.info("BAD Establishment handshake message #3 payload -> " + dfe.getMessage());
@@ -633,7 +682,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                     // Buggy/forked and very persistent i2pd
                     // So next time we will not accept the con from this IP, rather than doing the whole handshake
                     byte[] ip = _con.getRemoteIP();
-                    if (ip != null) {_context.blocklist().add(ip);}
+                    if (ip != null) {
+                        _context.blocklist().add(ip);
+                    }
                 }
                 _context.statManager().addRateData("ntcp.invalidInboundSignature", 1);
             } catch (I2NPMessageException ime) {
@@ -642,7 +693,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                     _log.info("BAD Establishment handshake message #3 payload -> " + ime.getMessage());
                 }
                 // setDataPhase() will send termination
-                if (_msg3p2FailReason < 0) {_msg3p2FailReason = 0;}
+                if (_msg3p2FailReason < 0) {
+                    _msg3p2FailReason = 0;
+                }
             } finally {
                 // Keep _payloadTmp for reuse - it will be released in releaseBufs()
             }
@@ -677,7 +730,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         DataHelper.toLong(tmp, KEY_SIZE + 2, 2, padlen2); // write options directly to tmp with 32 byte offset
         long now = (_context.clock().now() + 500) / 1000;
         DataHelper.toLong(tmp, KEY_SIZE + 8, 4, now);
-        try {_handshakeState.writeMessage(tmp, 0, tmp, KEY_SIZE, OPTIONS2_SIZE);} // encrypt in-place
+        try {
+            _handshakeState.writeMessage(tmp, 0, tmp, KEY_SIZE, OPTIONS2_SIZE);
+        } // encrypt in-place
         catch (GeneralSecurityException gse) { // buffer length error
             boolean gseNotNull = gse.getMessage() != null && !"null".equals(gse.getMessage());
             if (!_log.shouldWarn()) {
@@ -762,9 +817,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             changeState(State.CORRUPT);
         } else {
             if (_log.shouldDebug()) {
-                _log.debug("Finished Establishment for " + this +
-                          "\n* Generated SipHash key for A -> B: " + Base64.encode(sip_ab) +
-                          "\n* Generated SipHash key for B -> A: " + Base64.encode(sip_ba));
+                _log.debug("Finished Establishment for " + this + "\n* Generated SipHash key for A -> B: " + Base64.encode(sip_ab) + "\n* Generated SipHash key for B -> A: " + Base64.encode(sip_ba));
             }
             // skew in seconds
             _con.finishInboundEstablishment(sender, rcvr, sip_ba, sip_ab, _peerSkew, _hisPadding);
@@ -832,18 +885,25 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         byte[] realIP = _con.getRemoteIP();
         for (RouterAddress addr : addrs) {
             String v = addr.getOption("v");
-            if (v == null ||
-                (!v.equals(NTCPTransport.NTCP2_VERSION) && !v.startsWith(NTCPTransport.NTCP2_VERSION_ALT))) {
+            if (v == null || (!v.equals(NTCPTransport.NTCP2_VERSION) && !v.startsWith(NTCPTransport.NTCP2_VERSION_ALT))) {
                 continue;
             }
-            if (s == null) {s = addr.getOption("s");}
+            if (s == null) {
+                s = addr.getOption("s");
+            }
             if (realIP != null) {
                 byte[] infoIP = addr.getIP();
                 if (infoIP != null && infoIP.length == realIP.length) {
                     if (infoIP.length == 16) {
-                        if ((((int) infoIP[0]) & 0xfe) == 0x02) {continue;} // ygg
-                        if (DataHelper.eq(realIP, 0, infoIP, 0, 8)) {continue;}
-                    } else if (DataHelper.eq(realIP, infoIP)) {continue;}
+                        if ((((int) infoIP[0]) & 0xfe) == 0x02) {
+                            continue;
+                        } // ygg
+                        if (DataHelper.eq(realIP, 0, infoIP, 0, 8)) {
+                            continue;
+                        }
+                    } else if (DataHelper.eq(realIP, infoIP)) {
+                        continue;
+                    }
                     // We will ban and throw below after checking s
                     mismatchMessage = new StringBuilder("IP address mismatch -> Actual IP: ").append(Addresses.toString(realIP)).append("; RI publishes: ").toString(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
                 }
@@ -870,24 +930,22 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         Hash h = _aliceIdent.calculateHash();
         // this sets the reason
         boolean ok = verifyInbound(h);
-        if (!ok) {throw new DataFormatException("NTCP2 verifyInbound() fail");}
+        if (!ok) {
+            throw new DataFormatException("NTCP2 verifyInbound() fail");
+        }
 
-        boolean isBanned = _context.banlist().isBanlisted(h) ||
-                           _context.banlist().isBanlistedHostile(h) ||
-                           _context.banlist().isBanlistedForever(h);
+        boolean isBanned = _context.banlist().isBanlisted(h) || _context.banlist().isBanlistedHostile(h) || _context.banlist().isBanlistedForever(h);
 
         // s is verified, we may now ban the hash
         if (mismatchMessage != null) {
             byte[] ip = _con.getRemoteIP();
             int port = _con.getRemotePort();
             String ipPort = ip != null ? formatIPPort(ip, port) : "UNKNOWN";
-            _banLogger.logBan(h, ipPort, "Invalid NTCP address", 4*60*60*1000);
-            _context.banlist().banlistRouter(h, " <b>➜</b> Invalid NTCP address",
-                                             null, null, _context.clock().now() + 4*60*60*1000);
+            _banLogger.logBan(h, ipPort, "Invalid NTCP address", 4 * 60 * 60 * 1000);
+            _context.banlist().banlistRouter(h, " <b>➜</b> Invalid NTCP address", null, null, _context.clock().now() + 4 * 60 * 60 * 1000);
             _context.commSystem().forceDisconnect(h);
             if (_log.shouldWarn() && !isBanned) {
-                _log.warn("[NTCP] Banning for 4h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
-                          " -> Invalid address");
+                _log.warn("[NTCP] Banning for 4h and disconnecting from Router [" + h.toBase64().substring(0, 6) + "]" + " -> Invalid address");
             }
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             throw new DataFormatException(mismatchMessage + ri);
@@ -898,8 +956,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         String ipPort = getRouterIPPort(ri);
         boolean reachable = cap != null && cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
         boolean unreachable = cap != null && cap.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
-        boolean isSlow = (cap != null && !cap.equals("")) && bw.equals("K") ||
-                          bw.equals("L") || bw.equals("M") || bw.equals("N");
+        boolean isSlow = (cap != null && !cap.equals("")) && bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N");
         boolean isLTier = (cap != null && bw.equals("L"));
         String version = ri.getVersion();
         boolean isOld = VersionComparator.comp(version, "0.9.67") < 0;
@@ -908,53 +965,44 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         String reason = "";
 
         if (isInvalidVersion) {
-            reason = " <b>➜</b> Invalid Router version (" + version + " / " + bw +
-                      (unreachable ? "U" : reachable ? "R" : "") + ")";
-            _banLogger.logBan(h, ipPort, reason, now + 24*60*60*1000);
-            _context.banlist().banlistRouter(h, reason, null, null, now + 24*60*60*1000);
+            reason = " <b>➜</b> Invalid Router version (" + version + " / " + bw + (unreachable ? "U" : reachable ? "R" : "") + ")";
+            _banLogger.logBan(h, ipPort, reason, now + 24 * 60 * 60 * 1000);
+            _context.banlist().banlistRouter(h, reason, null, null, now + 24 * 60 * 60 * 1000);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
-            if (_log.shouldWarn() && !isBanned)
-                _log.warn("[NTCP] Banning for 24h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
-                          " -> Invalid version " + version + " / " + bw + (unreachable ? "U" : ""));
+            if (_log.shouldWarn() && !isBanned) _log.warn("[NTCP] Banning for 24h and disconnecting from Router [" + h.toBase64().substring(0, 6) + "]" + " -> Invalid version " + version + " / " + bw + (unreachable ? "U" : ""));
             _context.commSystem().forceDisconnect(h);
             throw new DataFormatException("Invalid Router version " + version + ": " + h);
         }
 
         if (!reachable && isSlow && isOld) {
             reason = " <b>➜</b> Old and slow (" + version + " / " + bw + "U)";
-            _banLogger.logBan(h, ipPort, reason, now + 60*60*1000);
-            _context.banlist().banlistRouter(h, reason, null, null, now + 60*60*1000);
+            _banLogger.logBan(h, ipPort, reason, now + 60 * 60 * 1000);
+            _context.banlist().banlistRouter(h, reason, null, null, now + 60 * 60 * 1000);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
-            if (_log.shouldInfo() && !isBanned)
-                _log.info("[NTCP] Banning for 1h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
-                          " -> " + version + " / " + bw + (unreachable ? "U" : ""));
+            if (_log.shouldInfo() && !isBanned) _log.info("[NTCP] Banning for 1h and disconnecting from Router [" + h.toBase64().substring(0, 6) + "]" + " -> " + version + " / " + bw + (unreachable ? "U" : ""));
             _context.commSystem().forceDisconnect(h);
             throw new DataFormatException("Old and slow: " + h);
         }
 
         // temporary fix for network flood (LU)
         // set i2np.ntcp.blockLU=false in router.config to disable
-        if (_context.getBooleanPropertyDefaultTrue(NTCPTransport.PROP_BLOCK_LU) &&
-                !reachable && isLTier) {
+        if (_context.getBooleanPropertyDefaultTrue(NTCPTransport.PROP_BLOCK_LU) && !reachable && isLTier) {
             reason = " <b>➜</b> LU Router (" + version + ")";
-            _banLogger.logBan(h, ipPort, "LU Router (" + version + ")", now + 60*60*1000);
-            _context.banlist().banlistRouter(h, reason, null, null, now + 60*60*1000);
+            _banLogger.logBan(h, ipPort, "LU Router (" + version + ")", now + 60 * 60 * 1000);
+            _context.banlist().banlistRouter(h, reason, null, null, now + 60 * 60 * 1000);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
-            if (_log.shouldInfo() && !isBanned)
-                _log.info("[NTCP] Banning for 1h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
-                          " -> " + version + " / " + bw + (unreachable ? "U" : ""));
+            if (_log.shouldInfo() && !isBanned) _log.info("[NTCP] Banning for 1h and disconnecting from Router [" + h.toBase64().substring(0, 6) + "]" + " -> " + version + " / " + bw + (unreachable ? "U" : ""));
             _context.commSystem().forceDisconnect(h);
             throw new DataFormatException("LU Router: " + h);
         }
 
         if (reachable && unreachable) {
             reason = " <b>➜</b> Invalid published capabilities (RU)";
-            _banLogger.logBan(h, ipPort, reason, now + 24*60*60*1000);
-            _context.banlist().banlistRouter(h, reason, null, null, now + 24*60*60*1000);
+            _banLogger.logBan(h, ipPort, reason, now + 24 * 60 * 60 * 1000);
+            _context.banlist().banlistRouter(h, reason, null, null, now + 24 * 60 * 60 * 1000);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             if (_log.shouldWarn() && !isBanned) {
-                _log.warn("[NTCP] Banning for 24h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
-                          " -> Publishing both R and U caps");
+                _log.warn("[NTCP] Banning for 24h and disconnecting from Router [" + h.toBase64().substring(0, 6) + "]" + " -> Publishing both R and U caps");
             }
             _context.commSystem().forceDisconnect(h);
             throw new DataFormatException("Invalid caps (RU): " + h);
@@ -966,20 +1014,24 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 FloodfillNetworkDatabaseFacade fndf = (FloodfillNetworkDatabaseFacade) _context.netDb();
                 if (fndf.floodConditional(ri)) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Flooded RouterInfo [" + h.toBase64().substring(0,6) + "]");
+                        _log.debug("Flooded RouterInfo [" + h.toBase64().substring(0, 6) + "]");
                     }
                 } else {
                     if (_log.shouldInfo()) {
-                        _log.info("Flood request declined for RouterInfo [" + h.toBase64().substring(0,6) + "]");
+                        _log.info("Flood request declined for RouterInfo [" + h.toBase64().substring(0, 6) + "]");
                     }
                 }
             }
         } catch (IllegalArgumentException iae) {
             // Sets _msg3p2FailReason
             ok = verifyInboundNetworkID(ri);
-            if (!ok) {throw new DataFormatException("NTCP2 network ID mismatch");}
+            if (!ok) {
+                throw new DataFormatException("NTCP2 network ID mismatch");
+            }
             // Generally expired/future RI - don't change reason if already set as clock skew
-            if (_msg3p2FailReason <= 0) {_msg3p2FailReason = NTCPConnection.REASON_MSG3;}
+            if (_msg3p2FailReason <= 0) {
+                _msg3p2FailReason = NTCPConnection.REASON_MSG3;
+            }
             throw new DataFormatException("RouterInfo store fail: " + ri, iae);
         }
         _con.setRemotePeer(_aliceIdent);
@@ -1033,6 +1085,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      */
     @Override
     public void gotTermination(int reason, long lastReceived) {}
+
     /**
      * Illegal during handshake - unknown payload types should not appear.
      *
@@ -1042,6 +1095,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      */
     @Override
     public void gotUnknown(int type, int len) {}
+
     /**
      * Illegal during handshake - date/time is only in the options, not a separate payload.
      *
@@ -1050,6 +1104,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      */
     @Override
     public void gotDateTime(long time) {}
+
     /**
      * Illegal during handshake - I2NP messages are only in the data phase.
      *
@@ -1099,12 +1154,16 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      */
     @Override
     protected void releaseBufs(boolean isVerified) {
-        if (_released) {return;}
+        if (_released) {
+            return;
+        }
         _released = true;
         super.releaseBufs(isVerified);
         // Do not release _curEncrypted if verified, it is passed to
         // NTCPConnection to use as the IV
-        if (!isVerified) {SimpleByteCache.release(_curEncrypted);}
+        if (!isVerified) {
+            SimpleByteCache.release(_curEncrypted);
+        }
         Arrays.fill(_X, (byte) 0);
         SimpleByteCache.release(_X);
         if (_msg3tmp != null) {
@@ -1119,9 +1178,15 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;
-        public Disconnector(Hash h) { this.h = h; }
+
+        public Disconnector(Hash h) {
+            this.h = h;
+        }
+
         @Override
-        public void timeReached() {_context.commSystem().forceDisconnect(h);}
+        public void timeReached() {
+            _context.commSystem().forceDisconnect(h);
+        }
     }
 
     /**
@@ -1161,5 +1226,4 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             default: return "Unknown error";
         }
     }
-
 }

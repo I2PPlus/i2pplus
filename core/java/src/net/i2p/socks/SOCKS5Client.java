@@ -8,6 +8,8 @@ package net.i2p.socks;
 
 import static net.i2p.socks.SOCKS5Constants.*;
 
+import net.i2p.util.Addresses;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -15,7 +17,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import net.i2p.util.Addresses;
 
 /**
  *  A simple SOCKS 5 client.
@@ -62,9 +63,18 @@ public class SOCKS5Client {
             out = sock.getOutputStream();
             connect(in, out, connHostName, connPort, configUser, configPW);
         } catch (IOException e) {
-            try { sock.close(); } catch (IOException ioe) {}
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
-            if (out != null) try { out.close(); } catch (IOException ioe) {}
+            try {
+                sock.close();
+            } catch (IOException ioe) {
+            }
+            if (in != null) try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
+            if (out != null) try {
+                    out.close();
+                } catch (IOException ioe) {
+                }
             throw e;
         }
     }
@@ -120,9 +130,8 @@ public class SOCKS5Client {
             in = new DataInputStream(pin);
             // is this right or should we not try to do 5-to-4 conversion?
             int hisVersion = in.readByte();
-            if (hisVersion != SOCKS_VERSION_5 /* && addrtype == AddressType.DOMAINNAME */)
-                throw new SOCKSException("SOCKS proxy is not Version 5");
-            //else if (hisVersion != 4)
+            if (hisVersion != SOCKS_VERSION_5 /* && addrtype == AddressType.DOMAINNAME */) throw new SOCKSException("SOCKS proxy is not Version 5");
+            // else if (hisVersion != 4)
             //    throw new SOCKSException("Unsupported SOCKS Proxy Version");
 
             int method = in.readByte();
@@ -140,10 +149,8 @@ public class SOCKS5Client {
                     out.write(pw);
                     out.flush();
                     // read the auth reply
-                    if (in.readByte() != AUTH_VERSION)
-                        throw new SOCKSException("Bad auth version from proxy");
-                    if (in.readByte() != AUTH_SUCCESS)
-                        throw new SOCKSException("Proxy authorization failure");
+                    if (in.readByte() != AUTH_VERSION) throw new SOCKSException("Bad auth version from proxy");
+                    if (in.readByte() != AUTH_SUCCESS) throw new SOCKSException("Proxy authorization failure");
                 } else {
                     throw new SOCKSException("Proxy requires authorization, please configure username/password");
                 }
@@ -152,12 +159,9 @@ public class SOCKS5Client {
             }
 
             int addressType;
-            if (Addresses.isIPv4Address(connHostName))
-                addressType = AddressType.IPV4;
-            else if (Addresses.isIPv6Address(connHostName))
-                addressType = AddressType.IPV6;
-            else
-                addressType = AddressType.DOMAINNAME;
+            if (Addresses.isIPv4Address(connHostName)) addressType = AddressType.IPV4;
+            else if (Addresses.isIPv6Address(connHostName)) addressType = AddressType.IPV6;
+            else addressType = AddressType.DOMAINNAME;
 
             // send the connect command
             out.writeByte(SOCKS_VERSION_5);
@@ -176,10 +180,9 @@ public class SOCKS5Client {
 
             // read the connect reply
             hisVersion = in.readByte();
-            if (hisVersion != SOCKS_VERSION_5)
-                throw new SOCKSException("Proxy response is not Version 5");
+            if (hisVersion != SOCKS_VERSION_5) throw new SOCKSException("Proxy response is not Version 5");
             int reply = in.readByte();
-            in.readByte();  // reserved
+            in.readByte(); // reserved
             int type = in.readByte();
             int count = 0;
             if (type == AddressType.IPV4) {
@@ -192,15 +195,20 @@ public class SOCKS5Client {
                 throw new SOCKSException("Unsupported address type in proxy response");
             }
             byte[] addr = new byte[count];
-            in.readFully(addr);  // address
-            in.readUnsignedShort();  // port
-            if (reply != Reply.SUCCEEDED)
-                throw new SOCKSException("Proxy rejected request (response = " + reply + ")");
+            in.readFully(addr); // address
+            in.readUnsignedShort(); // port
+            if (reply != Reply.SUCCEEDED) throw new SOCKSException("Proxy rejected request (response = " + reply + ")");
             // throw away the address in the response
             // todo pass the response through?
         } catch (IOException e) {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
-            if (out != null) try { out.close(); } catch (IOException ioe) {}
+            if (in != null) try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
+            if (out != null) try {
+                    out.close();
+                } catch (IOException ioe) {
+                }
             throw e;
         }
     }

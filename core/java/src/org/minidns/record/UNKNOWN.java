@@ -10,10 +10,11 @@
  */
 package org.minidns.record;
 
+import org.minidns.record.Record.TYPE;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import org.minidns.record.Record.TYPE;
 
 /**
  * DNS record payload for unknown or unsupported record types.<br>
@@ -41,9 +42,7 @@ public final class UNKNOWN extends Data {
         dos.write(data);
     }
 
-    public static UNKNOWN parse(DataInputStream dis, int payloadLength, TYPE type)
-            throws IOException {
+    public static UNKNOWN parse(DataInputStream dis, int payloadLength, TYPE type) throws IOException {
         return new UNKNOWN(dis, payloadLength, type);
     }
-
 }

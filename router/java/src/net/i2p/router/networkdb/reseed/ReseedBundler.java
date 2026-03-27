@@ -1,4 +1,5 @@
 package net.i2p.router.networkdb.reseed;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -7,6 +8,13 @@ package net.i2p.router.networkdb.reseed;
  * your children, but it might.  Use at your own risk.
  *
  */
+
+import net.i2p.data.DataFormatException;
+import net.i2p.data.Hash;
+import net.i2p.data.router.RouterAddress;
+import net.i2p.data.router.RouterInfo;
+import net.i2p.router.RouterContext;
+import net.i2p.util.VersionComparator;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,12 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import net.i2p.data.DataFormatException;
-import net.i2p.data.Hash;
-import net.i2p.data.router.RouterAddress;
-import net.i2p.data.router.RouterInfo;
-import net.i2p.router.RouterContext;
-import net.i2p.util.VersionComparator;
 
 /**
  *  Copy a random selection of 'count' router infos from configDir/netDb
@@ -42,15 +44,14 @@ import net.i2p.util.VersionComparator;
 public class ReseedBundler {
 
     private final RouterContext _context;
-    private final static String ROUTERINFO_PREFIX = "routerInfo-";
-    private final static String ROUTERINFO_SUFFIX = ".dat";
+    private static final String ROUTERINFO_PREFIX = "routerInfo-";
+    private static final String ROUTERINFO_SUFFIX = ".dat";
     private static final int MINIMUM = 200;
     private static final String MIN_VERSION = "0.9.64";
 
     public ReseedBundler(RouterContext ctx) {
         _context = ctx;
     }
-
 
     /**
      *  Create a zip file with
@@ -64,37 +65,28 @@ public class ReseedBundler {
         Hash me = _context.routerHash();
         int routerCount = 0;
         int copied = 0;
-        long tooOld = System.currentTimeMillis() - 8*60*60*1000L; // 8 hours
+        long tooOld = System.currentTimeMillis() - 8 * 60 * 60 * 1000L; // 8 hours
         List<RouterInfo> infos = new ArrayList<RouterInfo>(_context.netDb().getRouters());
         // IP to router hash
         Map<String, Hash> ipMap = new HashMap<String, Hash>(count);
         List<RouterInfo> toWrite = new ArrayList<RouterInfo>(count);
         Collections.shuffle(infos);
         for (RouterInfo ri : infos) {
-            if (copied >= count)
-                break;
+            if (copied >= count) break;
             Hash key = ri.getIdentity().calculateHash();
             if (key.equals(me)) {
                 continue;
             }
 
-            if (ri.getPublished() > tooOld)
-                continue;
-            if (ri.getCapabilities().contains("U"))
-                continue;
-            if (ri.getCapabilities().contains("K"))
-                continue;
-            if (ri.getCapabilities().contains("L"))
-                continue;
-            if (ri.getCapabilities().contains("H"))
-                continue;
-            if (!ri.getCapabilities().contains("R"))
-                continue;
-            if (VersionComparator.comp(ri.getVersion(), MIN_VERSION) < 0)
-                continue;
+            if (ri.getPublished() > tooOld) continue;
+            if (ri.getCapabilities().contains("U")) continue;
+            if (ri.getCapabilities().contains("K")) continue;
+            if (ri.getCapabilities().contains("L")) continue;
+            if (ri.getCapabilities().contains("H")) continue;
+            if (!ri.getCapabilities().contains("R")) continue;
+            if (VersionComparator.comp(ri.getVersion(), MIN_VERSION) < 0) continue;
             Collection<RouterAddress> addrs = ri.getAddresses();
-            if (addrs.isEmpty())
-                continue;
+            if (addrs.isEmpty()) continue;
 
             String name = getRouterInfoName(key);
             boolean hasIntro = false;
@@ -116,24 +108,17 @@ public class ReseedBundler {
                     }
                 }
             }
-            if (dupIP)
-                continue;
-            if (hasIntro)
-                continue;
-            if (!hasIPv4)
-                continue;
-            if (_context.commSystem().isInStrictCountry(ri))
-                continue;
+            if (dupIP) continue;
+            if (hasIntro) continue;
+            if (!hasIPv4) continue;
+            if (_context.commSystem().isInStrictCountry(ri)) continue;
 
             toWrite.add(ri);
             copied++;
         }
 
-        if (toWrite.isEmpty())
-            throw new IOException("No router infos to include. Reseed yourself first.");
-        if (toWrite.size() < Math.min(count, MINIMUM))
-            throw new IOException("Not enough RouterInfos to include -> Wanted " + count +
-                                  " but only found " + toWrite.size() + " valid RouterInfos. Please try again later.");
+        if (toWrite.isEmpty()) throw new IOException("No router infos to include. Reseed yourself first.");
+        if (toWrite.size() < Math.min(count, MINIMUM)) throw new IOException("Not enough RouterInfos to include -> Wanted " + count + " but only found " + toWrite.size() + " valid RouterInfos. Please try again later.");
 
         File rv = new File(_context.getTempDir(), "genreseed-" + _context.random().nextInt() + ".zip");
         ZipOutputStream zip = null;

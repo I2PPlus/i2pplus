@@ -1,8 +1,9 @@
 package net.i2p.crypto;
 
+import net.i2p.util.NativeBigInteger;
+
 import java.math.BigInteger;
 import java.security.spec.RSAKeyGenParameterSpec;
-import net.i2p.util.NativeBigInteger;
 
 /**
  * Constants for RSA

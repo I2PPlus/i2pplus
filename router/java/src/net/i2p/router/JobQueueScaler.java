@@ -102,8 +102,7 @@ class JobQueueScaler implements Runnable {
         final long usedMemory;
         final int runnersAdded;
 
-        PreScaleSnapshot(int runnerCount, int readyJobs, long maxLag, long avgLag,
-                        long usedMemory, int runnersAdded) {
+        PreScaleSnapshot(int runnerCount, int readyJobs, long maxLag, long avgLag, long usedMemory, int runnersAdded) {
             this.timestamp = System.currentTimeMillis();
             this.runnerCount = runnerCount;
             this.readyJobs = readyJobs;
@@ -140,21 +139,11 @@ class JobQueueScaler implements Runnable {
         _currentMaxRunners = calculateMaxRunnersBasedOnRAM(_configuredMaxRunners);
 
         // Register rate stats
-        context.statManager().createRateStat("jobQueue.runnerScaleUp",
-            "Number of runners added in scale-up events", "JobQueue",
-            new long[] { RateConstants.ONE_MINUTE });
-        context.statManager().createRateStat("jobQueue.runnerScaleDown",
-            "Number of runners removed in scale-down events", "JobQueue",
-            new long[] { RateConstants.ONE_MINUTE });
-        context.statManager().createRateStat("jobQueue.runnerCount",
-            "Current number of active job runners", "JobQueue",
-            new long[] { RateConstants.ONE_MINUTE });
-        context.statManager().createRateStat("jobQueue.scaleRollback",
-            "Number of rollback events (scale up made things worse)", "JobQueue",
-            new long[] { RateConstants.ONE_MINUTE });
-        context.statManager().createRateStat("jobQueue.memoryUsedPercent",
-            "Percentage of max memory used", "JobQueue",
-            new long[] { RateConstants.ONE_MINUTE });
+        context.statManager().createRateStat("jobQueue.runnerScaleUp", "Number of runners added in scale-up events", "JobQueue", new long[] {RateConstants.ONE_MINUTE});
+        context.statManager().createRateStat("jobQueue.runnerScaleDown", "Number of runners removed in scale-down events", "JobQueue", new long[] {RateConstants.ONE_MINUTE});
+        context.statManager().createRateStat("jobQueue.runnerCount", "Current number of active job runners", "JobQueue", new long[] {RateConstants.ONE_MINUTE});
+        context.statManager().createRateStat("jobQueue.scaleRollback", "Number of rollback events (scale up made things worse)", "JobQueue", new long[] {RateConstants.ONE_MINUTE});
+        context.statManager().createRateStat("jobQueue.memoryUsedPercent", "Percentage of max memory used", "JobQueue", new long[] {RateConstants.ONE_MINUTE});
     }
 
     /**
@@ -182,10 +171,7 @@ class JobQueueScaler implements Runnable {
         finalMax = Math.max(getMinRunnersDynamic(), finalMax);
 
         if (_log.shouldInfo()) {
-            _log.info("Max runners calculation: configured=" + configuredMax +
-                     ", target=" + targetMax + ", ramBased=" + ramBasedMax +
-                     ", freeMemBased=" + freeMemoryBasedMax + ", final=" + finalMax +
-                     " (maxMemory=" + (maxMemory/MB) + "MB, used=" + (usedMemory/MB) + "MB)");
+            _log.info("Max runners calculation: configured=" + configuredMax + ", target=" + targetMax + ", ramBased=" + ramBasedMax + ", freeMemBased=" + freeMemoryBasedMax + ", final=" + finalMax + " (maxMemory=" + (maxMemory / MB) + "MB, used=" + (usedMemory / MB) + "MB)");
         }
 
         return finalMax;
@@ -199,8 +185,7 @@ class JobQueueScaler implements Runnable {
         int newMax = calculateMaxRunnersBasedOnRAM(_configuredMaxRunners);
         if (newMax != _currentMaxRunners) {
             if (_log.shouldInfo()) {
-                _log.info("Adjusting max runners from " + _currentMaxRunners + " to " + newMax +
-                         " based on current memory conditions");
+                _log.info("Adjusting max runners from " + _currentMaxRunners + " to " + newMax + " based on current memory conditions");
             }
             _currentMaxRunners = newMax;
         }
@@ -241,9 +226,7 @@ class JobQueueScaler implements Runnable {
         scalerThread.start();
 
         if (_log.shouldInfo()) {
-            _log.info("JobQueueScaler started. Min runners: " + getMinRunnersDynamic() +
-                     ", Max runners: " + _currentMaxRunners +
-                     ", Feedback enabled: " + isFeedbackEnabled());
+            _log.info("JobQueueScaler started. Min runners: " + getMinRunnersDynamic() + ", Max runners: " + _currentMaxRunners + ", Feedback enabled: " + isFeedbackEnabled());
         }
     }
 
@@ -278,12 +261,12 @@ class JobQueueScaler implements Runnable {
         // On startup (first 3 minutes), use more runners to handle startup load
         long uptime = _context.router().getUptime();
         if (uptime < 3 * 60 * 1000) {
-            return Math.max(baseMin, 8);  // At least 8 runners during startup
+            return Math.max(baseMin, 8); // At least 8 runners during startup
         }
         // If there are many untested tunnels, increase min runners to allow more concurrent tests
         int untestedCount = TestJob.countUntestedTunnels(_context);
         if (untestedCount > 4) {
-            return Math.max(baseMin, 8);  // At least 8 runners to test tunnels faster
+            return Math.max(baseMin, 8); // At least 8 runners to test tunnels faster
         }
         return baseMin;
     }
@@ -407,12 +390,7 @@ class JobQueueScaler implements Runnable {
 
         // Debug logging every 10 seconds to trace scaler decisions
         if (_log.shouldDebug() && (_checksSinceLastScale % 10 == 0)) {
-            _log.debug("JobQueueScaler check: runners=" + activeRunners + "/" + maxRunners +
-                      ", readyJobs=" + readyJobs + ", maxLag=" + maxLag + "ms, avgLag=" + avgLag + "ms, " +
-                      "activeJobMaxDuration=" + activeJobMaxDuration + "ms, " +
-                      "inCooldown=" + inCooldown + ", timeSinceLastScale=" + timeSinceLastScale + "ms, " +
-                      "scalingDisabled=" + _scalingUpDisabled + ", extendedCooldown=" + _isInExtendedCooldown +
-                      ", preScaleSnapshot=" + (_preScaleSnapshot != null));
+            _log.debug("JobQueueScaler check: runners=" + activeRunners + "/" + maxRunners + ", readyJobs=" + readyJobs + ", maxLag=" + maxLag + "ms, avgLag=" + avgLag + "ms, " + "activeJobMaxDuration=" + activeJobMaxDuration + "ms, " + "inCooldown=" + inCooldown + ", timeSinceLastScale=" + timeSinceLastScale + "ms, " + "scalingDisabled=" + _scalingUpDisabled + ", extendedCooldown=" + _isInExtendedCooldown + ", preScaleSnapshot=" + (_preScaleSnapshot != null));
         }
 
         // Check if we need to evaluate feedback from last scale-up
@@ -451,8 +429,7 @@ class JobQueueScaler implements Runnable {
                 _consecutiveFailedScaleUps = 0;
                 _isInExtendedCooldown = false;
                 if (_log.shouldInfo()) {
-                    _log.info("CIRCUIT BREAKER RESET: Conditions improved or cooldown expired (lag=" + maxLag +
-                              "ms, ready=" + readyJobs + ", cooldown=" + (timeSinceLastScale/1000) + "s)");
+                    _log.info("CIRCUIT BREAKER RESET: Conditions improved or cooldown expired (lag=" + maxLag + "ms, ready=" + readyJobs + ", cooldown=" + (timeSinceLastScale / 1000) + "s)");
                 }
             } else {
                 if (_log.shouldInfo()) {
@@ -485,10 +462,7 @@ class JobQueueScaler implements Runnable {
                     shouldScaleUp = true;
                     if (criticalLag || criticalSlowJobs) {
                         if (_log.shouldInfo()) {
-                            _log.info((criticalLag ? "Queue lag=" + maxLag + "ms" : "") +
-                                      (criticalSlowJobs ? " Active job duration=" + activeJobMaxDuration + "ms" : "") +
-                                      " > threshold=" + lagThreshold + "ms. Scaling immediately. Runners: " +
-                                      activeRunners + "/" + maxRunners + ", Ready jobs: " + readyJobs);
+                            _log.info((criticalLag ? "Queue lag=" + maxLag + "ms" : "") + (criticalSlowJobs ? " Active job duration=" + activeJobMaxDuration + "ms" : "") + " > threshold=" + lagThreshold + "ms. Scaling immediately. Runners: " + activeRunners + "/" + maxRunners + ", Ready jobs: " + readyJobs);
                         }
                     }
                 }
@@ -521,8 +495,7 @@ class JobQueueScaler implements Runnable {
     /**
      * Check if we should scale down.
      */
-    private void checkScaleDown(int activeRunners, int readyJobs, long maxLag, long avgLag,
-                                int minRunners, boolean inCooldown) {
+    private void checkScaleDown(int activeRunners, int readyJobs, long maxLag, long avgLag, int minRunners, boolean inCooldown) {
         if (!inCooldown && activeRunners > minRunners) {
             float lagThreshold = getScaleDownLagThreshold();
 
@@ -546,8 +519,7 @@ class JobQueueScaler implements Runnable {
      * Evaluate whether the last scale-up actually helped.
      * If lag increased or ready jobs increased (worse performance), roll back.
      */
-    private void evaluateScalingFeedback(int currentRunners, int currentReadyJobs,
-                                        long currentMaxLag, long currentAvgLag) {
+    private void evaluateScalingFeedback(int currentRunners, int currentReadyJobs, long currentMaxLag, long currentAvgLag) {
         if (_preScaleSnapshot == null) return;
 
         PreScaleSnapshot snapshot = _preScaleSnapshot;
@@ -567,9 +539,7 @@ class JobQueueScaler implements Runnable {
             _consecutiveFailedScaleUps++;
 
             if (_log.shouldInfo()) {
-                _log.info("SCALE-UP FAILED: Rolling back " + snapshot.runnersAdded + " runners. " +
-                          "Lag " + snapshot.avgLag + "ms->" + currentAvgLag + "ms, Ready " + snapshot.readyJobs + "->" + currentReadyJobs +
-                          " (" + _consecutiveFailedScaleUps + "/" + MAX_CONSECUTIVE_FAILED_SCALES + ")");
+                _log.info("SCALE-UP FAILED: Rolling back " + snapshot.runnersAdded + " runners. " + "Lag " + snapshot.avgLag + "ms->" + currentAvgLag + "ms, Ready " + snapshot.readyJobs + "->" + currentReadyJobs + " (" + _consecutiveFailedScaleUps + "/" + MAX_CONSECUTIVE_FAILED_SCALES + ")");
             }
 
             // Rollback: remove the runners we just added
@@ -590,8 +560,7 @@ class JobQueueScaler implements Runnable {
             if (_consecutiveFailedScaleUps >= MAX_CONSECUTIVE_FAILED_SCALES) {
                 _scalingUpDisabled = true;
                 if (_log.shouldInfo()) {
-                    _log.info("CIRCUIT BREAKER OPEN: Scaling up disabled due to " +
-                              _consecutiveFailedScaleUps + " failed attempts. Jobs may be CPU-bound. Retrying in " + (cooldown / 1000) + "s.");
+                    _log.info("CIRCUIT BREAKER OPEN: Scaling up disabled due to " + _consecutiveFailedScaleUps + " failed attempts. Jobs may be CPU-bound. Retrying in " + (cooldown / 1000) + "s.");
                 }
             }
         } else {
@@ -619,16 +588,12 @@ class JobQueueScaler implements Runnable {
         int activeRunners = _jobQueue.getActiveRunnerCount();
 
         if (_log.shouldInfo()) {
-            _log.info("Scaling up: Adding " + count + " runners -> " +
-                     "Ready jobs: " + readyJobs + ", Max lag: " + maxLag + "ms, Avg lag: " + avgLag + "ms");
+            _log.info("Scaling up: Adding " + count + " runners -> " + "Ready jobs: " + readyJobs + ", Max lag: " + maxLag + "ms, Avg lag: " + avgLag + "ms");
         }
 
         // Capture pre-scale snapshot for feedback
         if (isFeedbackEnabled()) {
-            _preScaleSnapshot = new PreScaleSnapshot(
-                activeRunners, readyJobs, maxLag, avgLag,
-                getUsedMemory(), count
-            );
+            _preScaleSnapshot = new PreScaleSnapshot(activeRunners, readyJobs, maxLag, avgLag, getUsedMemory(), count);
         }
 
         _jobQueue.addRunners(count);
@@ -650,8 +615,7 @@ class JobQueueScaler implements Runnable {
         }
 
         if (_log.shouldInfo()) {
-            _log.info("Scaling down: Removing " + count + " runners -> " +
-                     "Ready jobs: " + readyJobs + ", Max lag: " + maxLag + "ms");
+            _log.info("Scaling down: Removing " + count + " runners -> " + "Ready jobs: " + readyJobs + ", Max lag: " + maxLag + "ms");
         }
 
         int removed = _jobQueue.removeIdleRunners(count);

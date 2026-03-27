@@ -1,16 +1,17 @@
 package net.i2p.client.streaming;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PClientFactory;
 import net.i2p.data.Destination;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Sit around on a destination, receiving lots of data and sending lots of
@@ -73,7 +74,6 @@ public class TestSwarm {
         connectWithPeers();
     }
 
-
     private void connectWithPeers() {
         if (_peerDestFiles != null) {
             for (int i = 0; i < _peerDestFiles.length; i++) {
@@ -82,7 +82,7 @@ public class TestSwarm {
                     Destination dest = new Destination();
                     dest.readBytes(fin);
 
-                    I2PThread flooder = new I2PThread(new Flooder(dest), "Flooder+" + dest.calculateHash().toBase64().substring(0,4));
+                    I2PThread flooder = new I2PThread(new Flooder(dest), "Flooder+" + dest.calculateHash().toBase64().substring(0, 4));
                     flooder.start();
                 } catch (Exception e) {
                     _log.error("Unable to read the peer from " + _peerDestFiles[i], e);
@@ -98,7 +98,7 @@ public class TestSwarm {
                 I2PServerSocket ss = _manager.getServerSocket();
                 I2PSocket s = null;
                 while ((s = ss.accept()) != null) {
-                    I2PThread flooder = new I2PThread(new Flooder(s), "Flooder-" + s.getPeerDestination().calculateHash().toBase64().substring(0,4));
+                    I2PThread flooder = new I2PThread(new Flooder(s), "Flooder-" + s.getPeerDestination().calculateHash().toBase64().substring(0, 4));
                     flooder.start();
                 }
             } catch (Exception e) {
@@ -108,6 +108,7 @@ public class TestSwarm {
     }
 
     private static volatile long __conId = 0;
+
     private class Flooder implements Runnable {
         private Destination _remoteDestination;
         private I2PSocket _socket;
@@ -122,36 +123,42 @@ public class TestSwarm {
         public Flooder(Destination dest) {
             _socket = null;
             _remoteDestination = dest;
-            _connectionId =++__conId;
+            _connectionId = ++__conId;
             _closed = false;
             _lastReceived = -1;
             _lastReceivedOn = _context.clock().now();
             _context.statManager().createRateStat("swarm." + _connectionId + ".totalReceived", "Data size received", "swarm", RateConstants.SHORT_TERM_RATES);
             _context.statManager().createRateStat("swarm." + _connectionId + ".totalSent", "Data size sent", "swarm", RateConstants.SHORT_TERM_RATES);
-            _context.statManager().createRateStat("swarm." + _connectionId + ".started", "When we start", "swarm", new long[] { RateConstants.ONE_MINUTE });
-            _context.statManager().createRateStat("swarm." + _connectionId + ".lifetime", "How long we talk to a peer", "swarm", new long[] { RateConstants.ONE_MINUTE });
+            _context.statManager().createRateStat("swarm." + _connectionId + ".started", "When we start", "swarm", new long[] {RateConstants.ONE_MINUTE});
+            _context.statManager().createRateStat("swarm." + _connectionId + ".lifetime", "How long we talk to a peer", "swarm", new long[] {RateConstants.ONE_MINUTE});
         }
 
         public Flooder(I2PSocket socket) {
             _socket = socket;
             _remoteDestination = socket.getPeerDestination();
-            _connectionId =++__conId;
+            _connectionId = ++__conId;
             _closed = false;
             _lastReceived = -1;
             _lastReceivedOn = _context.clock().now();
             _context.statManager().createRateStat("swarm." + _connectionId + ".totalReceived", "Data size received", "swarm", RateConstants.SHORT_TERM_RATES);
             _context.statManager().createRateStat("swarm." + _connectionId + ".totalSent", "Data size sent", "swarm", RateConstants.SHORT_TERM_RATES);
-            _context.statManager().createRateStat("swarm." + _connectionId + ".started", "When we start", "swarm", new long[] { RateConstants.ONE_MINUTE });
-            _context.statManager().createRateStat("swarm." + _connectionId + ".lifetime", "How long we talk to a peer", "swarm", new long[] { RateConstants.ONE_MINUTE });
+            _context.statManager().createRateStat("swarm." + _connectionId + ".started", "When we start", "swarm", new long[] {RateConstants.ONE_MINUTE});
+            _context.statManager().createRateStat("swarm." + _connectionId + ".lifetime", "How long we talk to a peer", "swarm", new long[] {RateConstants.ONE_MINUTE});
         }
 
-        public long getConnectionId() { return _connectionId; }
-        public Destination getDestination() { return _remoteDestination; }
-@Override
+        public long getConnectionId() {
+            return _connectionId;
+        }
+
+        public Destination getDestination() {
+            return _remoteDestination;
+        }
+
+        @Override
         public void run() {
             _started = _context.clock().now();
             _context.statManager().addRateData("swarm." + _connectionId + ".started", 1, 0);
-            byte data[] = new byte[4*1024];
+            byte data[] = new byte[4 * 1024];
             _context.random().nextBytes(data);
             long value = 0;
             long lastSend = _context.clock().now();
@@ -159,7 +166,7 @@ public class TestSwarm {
                 try {
                     _socket = _manager.connect(_remoteDestination);
                 } catch (Exception e) {
-                    _log.error("Error connecting to " + _remoteDestination.calculateHash().toBase64().substring(0,6));
+                    _log.error("Error connecting to " + _remoteDestination.calculateHash().toBase64().substring(0, 6));
                     return;
                 }
             }
@@ -175,19 +182,23 @@ public class TestSwarm {
                         // out.flush();
                         _totalSent += data.length;
                         _context.statManager().addRateData("swarm." + _connectionId + ".totalSent", _totalSent, 0);
-                        //try { Thread.sleep(100); } catch (InterruptedException ie) {}
+                        // try { Thread.sleep(100); } catch (InterruptedException ie) {}
                         long now = _context.clock().now();
-                        //_log.debug("Sending " + _connectionId + " after " + (now-lastSend));
+                        // _log.debug("Sending " + _connectionId + " after " + (now-lastSend));
                         lastSend = now;
-                        //try { Thread.sleep(20); } catch (InterruptedException ie) {}
+                        // try { Thread.sleep(20); } catch (InterruptedException ie) {}
                     } else {
-                        try { Thread.sleep(5000); } catch (InterruptedException ie) {}
+                        try {
+                            Thread.sleep(5000);
+                        } catch (InterruptedException ie) {
+                        }
                     }
                 }
             } catch (Exception e) {
                 _log.error("Error sending", e);
             }
         }
+
         private class FloodListener implements Runnable {
             @Override
             public void run() {
@@ -195,13 +206,13 @@ public class TestSwarm {
                 long now = lastRead;
                 try {
                     InputStream in = _socket.getInputStream();
-                    byte buf[] = new byte[8*1024];
+                    byte buf[] = new byte[8 * 1024];
                     int read = 0;
                     while ((read = in.read(buf)) != -1) {
                         now = System.currentTimeMillis();
                         _totalReceived += read;
                         _context.statManager().addRateData("swarm." + getConnectionId() + ".totalReceived", _totalReceived, 0);
-                        //_log.debug("Receiving " + _connectionId + " with " + read + " after " + (now-lastRead));
+                        // _log.debug("Receiving " + _connectionId + " with " + read + " after " + (now-lastRead));
                         lastRead = now;
                     }
                 } catch (Exception e) {

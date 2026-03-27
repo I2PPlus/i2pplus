@@ -64,9 +64,7 @@ public class I2PSinkAnywhere implements Sink {
 
         // send message
         try {
-            this.sess.sendMessage(to, payload,
-                                  (this.raw ? I2PSession.PROTO_DATAGRAM_RAW : I2PSession.PROTO_DATAGRAM),
-                                  fromPort, toPort);
+            this.sess.sendMessage(to, payload, (this.raw ? I2PSession.PROTO_DATAGRAM_RAW : I2PSession.PROTO_DATAGRAM), fromPort, toPort);
         } catch (I2PSessionException ise) {
             throw new RuntimeException("failed to send data", ise);
         }

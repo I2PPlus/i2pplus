@@ -5,6 +5,7 @@ package org.klomp.snark.dht;
  */
 
 import net.i2p.crypto.SHA1Hash;
+
 import org.klomp.snark.I2PSnarkUtil;
 
 /**

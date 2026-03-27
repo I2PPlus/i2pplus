@@ -1,7 +1,8 @@
 package net.i2p.router.sybil;
 
-import java.math.BigInteger;
 import net.i2p.data.router.RouterInfo;
+
+import java.math.BigInteger;
 
 /**
  *  A pair of routers and the distance between them.
@@ -13,7 +14,9 @@ public class Pair implements Comparable<Pair> {
     public final BigInteger dist;
 
     public Pair(RouterInfo ri1, RouterInfo ri2, BigInteger distance) {
-        r1 = ri1; r2 = ri2; dist = distance;
+        r1 = ri1;
+        r2 = ri2;
+        dist = distance;
     }
 
     @Override

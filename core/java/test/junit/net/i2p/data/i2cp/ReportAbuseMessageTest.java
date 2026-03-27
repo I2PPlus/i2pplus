@@ -1,4 +1,5 @@
 package net.i2p.data.i2cp;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -19,12 +20,15 @@ public class ReportAbuseMessageTest extends I2CPTstBase {
     @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
         ReportAbuseMessage msg = new ReportAbuseMessage();
-        msg.setMessageId((MessageId)(new MessageIdTest()).createDataStructure());
-        msg.setReason((AbuseReason)(new AbuseReasonTest()).createDataStructure());
-        msg.setSessionId((SessionId)(new SessionIdTest()).createDataStructure());
-        msg.setSeverity((AbuseSeverity)(new AbuseSeverityTest()).createDataStructure());
+        msg.setMessageId((MessageId) (new MessageIdTest()).createDataStructure());
+        msg.setReason((AbuseReason) (new AbuseReasonTest()).createDataStructure());
+        msg.setSessionId((SessionId) (new SessionIdTest()).createDataStructure());
+        msg.setSeverity((AbuseSeverity) (new AbuseSeverityTest()).createDataStructure());
         return msg;
     }
+
     @Override
-    public I2CPMessageImpl createStructureToRead() { return new ReportAbuseMessage(); }
+    public I2CPMessageImpl createStructureToRead() {
+        return new ReportAbuseMessage();
+    }
 }

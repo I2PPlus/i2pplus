@@ -14,6 +14,4 @@ package net.i2p.router.util;
  *
  * @since 0.9.3
  */
-public interface CDPQEntry extends CDQEntry, PQEntry {
-
-}
+public interface CDPQEntry extends CDQEntry, PQEntry {}

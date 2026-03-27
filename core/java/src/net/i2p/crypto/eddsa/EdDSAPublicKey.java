@@ -11,14 +11,15 @@
  */
 package net.i2p.crypto.eddsa;
 
-import java.security.PublicKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Arrays;
 import net.i2p.crypto.eddsa.math.GroupElement;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
 import net.i2p.crypto.eddsa.spec.EdDSAParameterSpec;
 import net.i2p.crypto.eddsa.spec.EdDSAPublicKeySpec;
+
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Arrays;
 
 /**
  * An EdDSA public key.
@@ -56,8 +57,7 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
      *  @since 0.9.25
      */
     public EdDSAPublicKey(X509EncodedKeySpec spec) throws InvalidKeySpecException {
-        this(new EdDSAPublicKeySpec(decode(spec.getEncoded()),
-                                    EdDSANamedCurveTable.ED_25519_CURVE_SPEC));
+        this(new EdDSAPublicKeySpec(decode(spec.getEncoded()), EdDSANamedCurveTable.ED_25519_CURVE_SPEC));
     }
 
     @Override
@@ -112,8 +112,7 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
      */
     @Override
     public byte[] getEncoded() {
-        if (!edDsaSpec.equals(EdDSANamedCurveTable.ED_25519_CURVE_SPEC))
-            return new byte[0];
+        if (!edDsaSpec.equals(EdDSANamedCurveTable.ED_25519_CURVE_SPEC)) return new byte[0];
         int totlen = 12 + Abyte.length;
         byte[] rv = new byte[totlen];
         int idx = 0;
@@ -189,22 +188,13 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
             // Decoding
             //
             int idx = 0;
-            if (d[idx++] != 0x30 ||
-                d[idx++] != (totlen - 2) ||
-                d[idx++] != 0x30 ||
-                d[idx++] != idlen ||
-                d[idx++] != 0x06 ||
-                d[idx++] != 3 ||
-                d[idx++] != (1 * 40) + 3 ||
-                d[idx++] != 101) {
+            if (d[idx++] != 0x30 || d[idx++] != (totlen - 2) || d[idx++] != 0x30 || d[idx++] != idlen || d[idx++] != 0x06 || d[idx++] != 3 || d[idx++] != (1 * 40) + 3 || d[idx++] != 101) {
                 throw new InvalidKeySpecException("unsupported key spec");
             }
             idx++; // OID, checked above
             // parameters only with old OID
             if (doid == OID_OLD) {
-                if (d[idx++] != 0x0a ||
-                    d[idx++] != 1 ||
-                    d[idx++] != 1) {
+                if (d[idx++] != 0x0a || d[idx++] != 1 || d[idx++] != 1) {
                     throw new InvalidKeySpecException("unsupported key spec");
                 }
             } else {
@@ -223,15 +213,12 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
                 // Java's default keystore puts it in (when decoding as PKCS8 and then
                 // re-encoding to pass on), so we must accept it.
                 if (idlen == 7) {
-                    if (d[idx++] != 0x05 ||
-                        d[idx++] != 0) {
+                    if (d[idx++] != 0x05 || d[idx++] != 0) {
                         throw new InvalidKeySpecException("unsupported key spec");
                     }
                 }
             }
-            if (d[idx++] != 0x03 ||
-                d[idx++] != 33 ||
-                d[idx++] != 0) {
+            if (d[idx++] != 0x03 || d[idx++] != 33 || d[idx++] != 0) {
                 throw new InvalidKeySpecException("unsupported key spec");
             }
             byte[] rv = new byte[32];
@@ -279,12 +266,9 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
      */
     @Override
     public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof EdDSAPublicKey))
-            return false;
+        if (o == this) return true;
+        if (!(o instanceof EdDSAPublicKey)) return false;
         EdDSAPublicKey pk = (EdDSAPublicKey) o;
-        return Arrays.equals(Abyte, pk.getAbyte()) &&
-               edDsaSpec.equals(pk.getParams());
+        return Arrays.equals(Abyte, pk.getAbyte()) && edDsaSpec.equals(pk.getParams());
     }
 }

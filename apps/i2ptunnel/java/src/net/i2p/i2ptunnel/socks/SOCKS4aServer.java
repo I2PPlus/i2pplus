@@ -7,15 +7,6 @@ package net.i2p.i2ptunnel.socks;
 
 import static net.i2p.socks.SOCKS4Constants.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.util.List;
-import java.util.Locale;
-import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.app.Outproxy;
@@ -26,6 +17,16 @@ import net.i2p.data.DataFormatException;
 import net.i2p.data.Destination;
 import net.i2p.socks.SOCKSException;
 import net.i2p.util.HexDump;
+
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
 
 /**
  * SOCKS4a server implementation for handling SOCKS version 4/4a connections.
@@ -66,7 +67,9 @@ class SOCKS4aServer extends SOCKSServer {
     }
 
     protected void setupServer() throws SOCKSException {
-        if (setupCompleted) { return; }
+        if (setupCompleted) {
+            return;
+        }
 
         DataInputStream in;
         DataOutputStream out;
@@ -91,14 +94,11 @@ class SOCKS4aServer extends SOCKSServer {
 
         int command = in.readByte() & 0xff;
         switch (command) {
-            case Command.CONNECT:
-                break;
-            case Command.BIND:
-                _log.debug("BIND command is not supported!");
+            case Command.CONNECT: break;
+            case Command.BIND: _log.debug("BIND command is not supported!");
                 sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
                 throw new SOCKSException("BIND command not supported");
-            default:
-                _log.debug("Unknown command in request (" + Integer.toHexString(command) + ")");
+            default: _log.debug("Unknown command in request (" + Integer.toHexString(command) + ")");
                 sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
                 throw new SOCKSException("Invalid command in request");
         }
@@ -136,15 +136,13 @@ class SOCKS4aServer extends SOCKSServer {
         readString(in);
 
         // SOCKS 4a
-        if (connHostName.startsWith("0.0.0.") && !connHostName.equals("0.0.0.0"))
-            connHostName = readString(in);
+        if (connHostName.startsWith("0.0.0.") && !connHostName.equals("0.0.0.0")) connHostName = readString(in);
     }
 
     private String readString(DataInputStream in) throws IOException {
         StringBuilder sb = new StringBuilder(16); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         char c;
-        while ((c = (char) (in.readByte() & 0xff)) != 0)
-            sb.append(c);
+        while ((c = (char) (in.readByte() & 0xff)) != 0) sb.append(c);
         return sb.toString();
     }
 
@@ -164,8 +162,7 @@ class SOCKS4aServer extends SOCKSServer {
      * one of inetAddr or domainName can be null, depending on
      * addressType.
      */
-    private void sendRequestReply(int replyCode, InetAddress inetAddr,
-                                  int bindPort, DataOutputStream out) throws IOException {
+    private void sendRequestReply(int replyCode, InetAddress inetAddr, int bindPort, DataOutputStream out) throws IOException {
         ByteArrayOutputStream reps = new ByteArrayOutputStream(64);
         DataOutputStream dreps = new DataOutputStream(reps);
 
@@ -221,36 +218,35 @@ class SOCKS4aServer extends SOCKSServer {
                 if (dest == null) {
                     try {
                         sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-                    } catch (IOException ioe) {}
+                    } catch (IOException ioe) {
+                    }
                     throw new SOCKSException("Host not found");
                 }
-                if (_log.shouldDebug())
-                    _log.debug("Connecting to " + connHostName + "...");
+                if (_log.shouldDebug()) _log.debug("Connecting to " + connHostName + "...");
                 Properties overrides = new Properties();
                 I2PSocketOptions sktOpts = t.buildOptions(overrides);
                 sktOpts.setPort(connPort);
                 destSock = t.createI2PSocket(dest, sktOpts);
-            } else if ("localhost".equals(hostLowerCase) || "127.0.0.1".equals(connHostName) ||
-                       hostLowerCase.endsWith(".localhost") ||
-                       connHostName.startsWith("192.168.") || connHostName.equals("[::1]")) {
+            } else if ("localhost".equals(hostLowerCase) || "127.0.0.1".equals(connHostName) || hostLowerCase.endsWith(".localhost") || connHostName.startsWith("192.168.") || connHostName.equals("[::1]")) {
                 String err = "No localhost accesses allowed through the Socks Proxy";
                 _log.error(err);
                 try {
                     sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-                } catch (IOException ioe) {}
+                } catch (IOException ioe) {
+                }
                 throw new SOCKSException(err);
-          /****
-            } else if (connPort == 80) {
-                // rewrite GET line to include hostname??? or add Host: line???
-                // or forward to local eepProxy (but that's a Socket not an I2PSocket)
-                // use eepProxy configured outproxies?
-                String err = "No handler for HTTP outproxy implemented - to: " + connHostName;
-                _log.error(err);
-                try {
-                    sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-                } catch (IOException ioe) {}
-                throw new SOCKSException(err);
-           ****/
+                /****
+                 * } else if (connPort == 80) {
+                 * // rewrite GET line to include hostname??? or add Host: line???
+                 * // or forward to local eepProxy (but that's a Socket not an I2PSocket)
+                 * // use eepProxy configured outproxies?
+                 * String err = "No handler for HTTP outproxy implemented - to: " + connHostName;
+                 * _log.error(err);
+                 * try {
+                 * sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
+                 * } catch (IOException ioe) {}
+                 * throw new SOCKSException(err);
+                 ****/
             } else {
                 Outproxy outproxy = getOutproxyPlugin();
                 if (outproxy != null) {
@@ -259,7 +255,8 @@ class SOCKS4aServer extends SOCKSServer {
                     } catch (IOException ioe) {
                         try {
                             sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-                        } catch (IOException ioe2) {}
+                        } catch (IOException ioe2) {
+                        }
                         throw new SOCKSException("connect failed via outproxy plugin", ioe);
                     }
                 } else {
@@ -269,7 +266,8 @@ class SOCKS4aServer extends SOCKSServer {
                         _log.error(err);
                         try {
                             sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-                        } catch (IOException ioe) {}
+                        } catch (IOException ioe) {
+                        }
                         throw new SOCKSException(err);
                     }
                     int p = _context.random().nextInt(proxies.size());
@@ -278,11 +276,11 @@ class SOCKS4aServer extends SOCKSServer {
                     if (dest == null) {
                         try {
                             sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-                        } catch (IOException ioe) {}
+                        } catch (IOException ioe) {
+                        }
                         throw new SOCKSException("Outproxy not found");
                     }
-                    if (_log.shouldDebug())
-                        _log.debug("Connecting to port " + connPort + " proxy " + proxy + " for " + connHostName + "...");
+                    if (_log.shouldDebug()) _log.debug("Connecting to port " + connPort + " proxy " + proxy + " for " + connHostName + "...");
                     // this isn't going to work, these need to be socks outproxies so we need
                     // to do a socks session to them?
                     destSock = t.createI2PSocket(dest);
@@ -293,17 +291,20 @@ class SOCKS4aServer extends SOCKSServer {
         } catch (DataFormatException e) {
             try {
                 sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) {
+            }
             throw new SOCKSException("Error in destination format: " + e.getMessage());
         } catch (IOException e) {
             try {
                 sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) {
+            }
             throw new SOCKSException("Error connecting: " + e.getMessage());
         } catch (I2PException e) {
             try {
                 sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) {
+            }
             throw new SOCKSException("Error connecting: " + e.getMessage());
         }
 

@@ -32,14 +32,17 @@ public class Field implements Serializable {
 
     private final int b;
     private final FieldElement q;
+
     /**
      * q-2
      */
     private final FieldElement qm2;
+
     /**
      * (q-5) / 8
      */
     private final FieldElement qm5d8;
+
     private final Encoding enc;
 
     public Field(int b, byte[] q, Encoding enc) {
@@ -82,7 +85,7 @@ public class Field implements Serializable {
         return qm5d8;
     }
 
-    public Encoding getEncoding(){
+    public Encoding getEncoding() {
         return enc;
     }
 
@@ -93,8 +96,7 @@ public class Field implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Field))
-            return false;
+        if (!(obj instanceof Field)) return false;
         Field f = (Field) obj;
         return b == f.b && q.equals(f.q);
     }

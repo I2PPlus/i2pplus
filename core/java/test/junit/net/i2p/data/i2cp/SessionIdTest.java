@@ -1,4 +1,5 @@
 package net.i2p.data.i2cp;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -25,8 +26,11 @@ public class SessionIdTest extends StructureTest {
         id.setSessionId(7);
         return id;
     }
+
     @Override
-    public DataStructure createStructureToRead() { return new SessionIdStructure(); }
+    public DataStructure createStructureToRead() {
+        return new SessionIdStructure();
+    }
 
     /**
      * so we can test it as a structure
@@ -34,14 +38,24 @@ public class SessionIdTest extends StructureTest {
      */
     private static class SessionIdStructure extends SessionId implements DataStructure {
         @Override
-        public Hash calculateHash() { return null; }
+        public Hash calculateHash() {
+            return null;
+        }
+
         @Override
         public void fromByteArray(byte[] in) {}
+
         @Override
-        public byte[] toByteArray() { return null; }
+        public byte[] toByteArray() {
+            return null;
+        }
+
         @Override
         public void fromBase64(String in) {}
+
         @Override
-        public String toBase64() { return null; }
+        public String toBase64() {
+            return null;
+        }
     }
 }

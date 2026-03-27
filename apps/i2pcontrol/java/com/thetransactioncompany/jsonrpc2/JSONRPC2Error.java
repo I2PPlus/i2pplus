@@ -1,6 +1,5 @@
 package com.thetransactioncompany.jsonrpc2;
 
-
 import org.json.simple.JsonObject;
 
 /**
@@ -52,54 +51,45 @@ import org.json.simple.JsonObject;
  */
 public class JSONRPC2Error extends Exception {
 
-
     /**
      * Serial version UID.
      */
     private static final long serialVersionUID = 4682571044532698806L;
-
 
     /**
      * JSON parse error (-32700).
      */
     public static final JSONRPC2Error PARSE_ERROR = new JSONRPC2Error(-32700, "JSON parse error");
 
-
     /**
      * Invalid JSON-RPC 2.0 request error (-32600).
      */
     public static final JSONRPC2Error INVALID_REQUEST = new JSONRPC2Error(-32600, "Invalid request");
-
 
     /**
      * Method not found error (-32601).
      */
     public static final JSONRPC2Error METHOD_NOT_FOUND = new JSONRPC2Error(-32601, "Method not found");
 
-
     /**
      * Invalid parameters error (-32602).
      */
     public static final JSONRPC2Error INVALID_PARAMS = new JSONRPC2Error(-32602, "Invalid parameters");
-
 
     /**
      * Internal JSON-RPC 2.0 error (-32603).
      */
     public static final JSONRPC2Error INTERNAL_ERROR = new JSONRPC2Error(-32603, "Internal error");
 
-
     /**
      * The error code.
      */
     private final int code;
 
-
     /**
      * The optional error data.
      */
     private final Object data;
-
 
     /**
      * Appends the specified string to the message of a JSON-RPC 2.0 error.
@@ -114,7 +104,6 @@ public class JSONRPC2Error extends Exception {
 
         return new JSONRPC2Error(err.getCode(), err.getMessage() + apx, err.getData());
     }
-
 
     /**
      * Sets the specified data to a JSON-RPC 2.0 error.
@@ -132,7 +121,6 @@ public class JSONRPC2Error extends Exception {
         return new JSONRPC2Error(err.getCode(), err.getMessage(), data);
     }
 
-
     /**
      * Creates a new JSON-RPC 2.0 error with the specified code and
      * message. The optional data is omitted.
@@ -145,7 +133,6 @@ public class JSONRPC2Error extends Exception {
 
         this(code, message, null);
     }
-
 
     /**
      * Creates a new JSON-RPC 2.0 error with the specified code,
@@ -164,7 +151,6 @@ public class JSONRPC2Error extends Exception {
         this.data = data;
     }
 
-
     /**
      * Gets the JSON-RPC 2.0 error code.
      *
@@ -175,7 +161,6 @@ public class JSONRPC2Error extends Exception {
         return code;
     }
 
-
     /**
      * Gets the JSON-RPC 2.0 error data.
      *
@@ -185,7 +170,6 @@ public class JSONRPC2Error extends Exception {
 
         return data;
     }
-
 
     /**
      * Sets the specified data to a JSON-RPC 2.0 error.
@@ -200,7 +184,6 @@ public class JSONRPC2Error extends Exception {
         return new JSONRPC2Error(code, getMessage(), data);
     }
 
-
     /**
      * Appends the specified string to the message of this JSON-RPC 2.0
      * error.
@@ -214,7 +197,6 @@ public class JSONRPC2Error extends Exception {
         return new JSONRPC2Error(code, getMessage() + apx, data);
     }
 
-
     /**
      * @see #toJSONObject
      */
@@ -223,7 +205,6 @@ public class JSONRPC2Error extends Exception {
 
         return toJSONObject();
     }
-
 
     /**
      * Returns a JSON object representation of this JSON-RPC 2.0 error.
@@ -236,12 +217,10 @@ public class JSONRPC2Error extends Exception {
 
         out.put("code", code);
         out.put("message", super.getMessage());
-        if (data != null)
-            out.put("data", data);
+        if (data != null) out.put("data", data);
 
         return out;
     }
-
 
     /**
      * Serialises the error object to a JSON string.
@@ -254,25 +233,22 @@ public class JSONRPC2Error extends Exception {
         return toJSON().toString();
     }
 
-
     /**
-         * Overrides {@code Object.equals()}.
-         *
-         * @param object The object to compare to.
-         *
-         * @return {@code true} if both objects are instances if this class and
+     * Overrides {@code Object.equals()}.
+     *
+     * @param object The object to compare to.
+     *
+     * @return {@code true} if both objects are instances if this class and
      *         their error codes are identical, {@code false} if not.
-         */
+     */
     @Override
-        public boolean equals(Object object) {
+    public boolean equals(Object object) {
 
-        return object != null &&
-                       object instanceof JSONRPC2Error &&
-                       code == ((JSONRPC2Error)object).getCode();
+        return object != null && object instanceof JSONRPC2Error && code == ((JSONRPC2Error) object).getCode();
     }
 
     @Override
-        public int hashCode() {
+    public int hashCode() {
         return Integer.hashCode(code);
     }
 }

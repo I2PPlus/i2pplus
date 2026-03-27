@@ -1,5 +1,10 @@
 package net.i2p.util;
 
+import junit.framework.TestCase;
+
+import net.i2p.I2PAppContext;
+import net.i2p.data.DataHelper;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
@@ -9,15 +14,11 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.PrintStream;
 import java.util.Properties;
-import junit.framework.TestCase;
-import net.i2p.I2PAppContext;
-import net.i2p.data.DataHelper;
 
 /**
  * @author Comwiz
  */
 public class LogSettingsTest extends TestCase {
-
 
     private Properties p;
     private Log log;
@@ -26,7 +27,6 @@ public class LogSettingsTest extends TestCase {
 
     private String origMinimumOnScreenLevel;
     private String origLogSettings;
-
 
     /**
      * Sets up the test fixture.
@@ -39,7 +39,7 @@ public class LogSettingsTest extends TestCase {
         log = _context.logManager().getLog(LogSettingsTest.class);
         p = new Properties();
         f = new File("logger.config");
-        if (!f.exists()){
+        if (!f.exists()) {
             FileWriter temp = new FileWriter(f);
             temp.close();
         }
@@ -48,7 +48,7 @@ public class LogSettingsTest extends TestCase {
         origLogSettings = p.getProperty("logger.minimumOnScreenLevel", Log.STR_CRIT);
     }
 
-    protected void tearDown() throws IOException{
+    protected void tearDown() throws IOException {
         p.setProperty("logger.record.net.i2p.util.LogSettingsTest", origMinimumOnScreenLevel);
         p.setProperty("logger.minimumOnScreenLevel", origLogSettings);
         DataHelper.storeProps(p, f);
@@ -60,8 +60,7 @@ public class LogSettingsTest extends TestCase {
      * Read up to nLines lines from the pipe, scanning for expected patterns.
      * Returns true if all expected messages were found.
      */
-    private boolean scanForPatterns(BufferedReader in, int nLines, String... patterns)
-            throws IOException {
+    private boolean scanForPatterns(BufferedReader in, int nLines, String... patterns) throws IOException {
         boolean[] found = new boolean[patterns.length];
         int totalFound = 0;
         // Read nLines + 5 extra to drain any interleaved log output
@@ -104,15 +103,14 @@ public class LogSettingsTest extends TestCase {
             log.log(Log.CRIT, "DEBUG" + ": crit");
             _context.logManager().flush();
 
-            try { Thread.sleep(1500); } catch (InterruptedException ie) {}
-            for (int i = 0; i < 10; i++)
-                 pout.println("");
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException ie) {
+            }
+            for (int i = 0; i < 10; i++) pout.println("");
             pout.flush();
 
-            assertTrue("Not all DEBUG messages found",
-                scanForPatterns(in, 15,
-                    "DEBUG: debug", "DEBUG: info", "DEBUG: warn",
-                    "DEBUG: error", "DEBUG: crit"));
+            assertTrue("Not all DEBUG messages found", scanForPatterns(in, 15, "DEBUG: debug", "DEBUG: info", "DEBUG: warn", "DEBUG: error", "DEBUG: crit"));
         } finally {
             System.setOut(systemOut);
             pout.close();
@@ -123,7 +121,7 @@ public class LogSettingsTest extends TestCase {
         p.setProperty("logger.record.net.i2p.util.LogSettingsTest", Log.toLevelString(Log.INFO));
         p.setProperty("logger.minimumOnScreenLevel", Log.toLevelString(Log.DEBUG));
 
-    	DataHelper.storeProps(p, f);
+        DataHelper.storeProps(p, f);
         _context.logManager().rereadConfig();
 
         PipedInputStream pin = new PipedInputStream(8192);
@@ -142,14 +140,14 @@ public class LogSettingsTest extends TestCase {
             log.log(Log.CRIT, "INFO" + ": crit");
             _context.logManager().flush();
 
-            try { Thread.sleep(1500); } catch (InterruptedException ie) {}
-            for (int i = 0; i < 10; i++)
-                 pout.println("");
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException ie) {
+            }
+            for (int i = 0; i < 10; i++) pout.println("");
             pout.flush();
 
-            assertTrue("Not all INFO messages found",
-                scanForPatterns(in, 14,
-                    "INFO: info", "INFO: warn", "INFO: error", "INFO: crit"));
+            assertTrue("Not all INFO messages found", scanForPatterns(in, 14, "INFO: info", "INFO: warn", "INFO: error", "INFO: crit"));
         } finally {
             System.setOut(systemOut);
             pout.close();
@@ -160,7 +158,7 @@ public class LogSettingsTest extends TestCase {
         p.setProperty("logger.record.net.i2p.util.LogSettingsTest", Log.toLevelString(Log.WARN));
         p.setProperty("logger.minimumOnScreenLevel", Log.toLevelString(Log.DEBUG));
 
-    	DataHelper.storeProps(p, f);
+        DataHelper.storeProps(p, f);
         _context.logManager().rereadConfig();
 
         PipedInputStream pin = new PipedInputStream(8192);
@@ -179,25 +177,25 @@ public class LogSettingsTest extends TestCase {
             log.log(Log.CRIT, "WARN" + ": crit");
             _context.logManager().flush();
 
-            try { Thread.sleep(1500); } catch (InterruptedException ie) {}
-            for (int i = 0; i < 10; i++)
-                 pout.println("");
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException ie) {
+            }
+            for (int i = 0; i < 10; i++) pout.println("");
             pout.flush();
 
-            assertTrue("Not all WARN messages found",
-                scanForPatterns(in, 13,
-                    "WARN: warn", "WARN: error", "WARN: crit"));
+            assertTrue("Not all WARN messages found", scanForPatterns(in, 13, "WARN: warn", "WARN: error", "WARN: crit"));
         } finally {
             System.setOut(systemOut);
             pout.close();
         }
     }
 
-    public void testError() throws IOException{
+    public void testError() throws IOException {
         p.setProperty("logger.record.net.i2p.util.LogSettingsTest", Log.toLevelString(Log.ERROR));
         p.setProperty("logger.minimumOnScreenLevel", Log.toLevelString(Log.DEBUG));
 
-    	DataHelper.storeProps(p, f);
+        DataHelper.storeProps(p, f);
         _context.logManager().rereadConfig();
 
         PipedInputStream pin = new PipedInputStream(8192);
@@ -216,14 +214,14 @@ public class LogSettingsTest extends TestCase {
             log.log(Log.CRIT, "ERROR" + ": crit");
             _context.logManager().flush();
 
-            try { Thread.sleep(1500); } catch (InterruptedException ie) {}
-            for (int i = 0; i < 10; i++)
-                 pout.println("");
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException ie) {
+            }
+            for (int i = 0; i < 10; i++) pout.println("");
             pout.flush();
 
-            assertTrue("Not all ERROR messages found",
-                scanForPatterns(in, 12,
-                    "ERROR: error", "ERROR: crit"));
+            assertTrue("Not all ERROR messages found", scanForPatterns(in, 12, "ERROR: error", "ERROR: crit"));
         } finally {
             System.setOut(systemOut);
             pout.close();
@@ -234,7 +232,7 @@ public class LogSettingsTest extends TestCase {
         p.setProperty("logger.record.net.i2p.util.LogSettingsTest", Log.toLevelString(Log.CRIT));
         p.setProperty("logger.minimumOnScreenLevel", Log.toLevelString(Log.DEBUG));
 
-    	DataHelper.storeProps(p, f);
+        DataHelper.storeProps(p, f);
         _context.logManager().rereadConfig();
 
         PipedInputStream pin = new PipedInputStream(8192);
@@ -253,18 +251,17 @@ public class LogSettingsTest extends TestCase {
             log.log(Log.CRIT, "CRIT" + ": crit");
             _context.logManager().flush();
 
-            try { Thread.sleep(1500); } catch (InterruptedException ie) {}
-            for (int i = 0; i < 10; i++)
-                 pout.println("");
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException ie) {
+            }
+            for (int i = 0; i < 10; i++) pout.println("");
             pout.flush();
 
-            assertTrue("Not all CRIT messages found",
-                scanForPatterns(in, 11, "CRIT: crit"));
+            assertTrue("Not all CRIT messages found", scanForPatterns(in, 11, "CRIT: crit"));
         } finally {
             System.setOut(systemOut);
             pout.close();
         }
     }
-
-
 }

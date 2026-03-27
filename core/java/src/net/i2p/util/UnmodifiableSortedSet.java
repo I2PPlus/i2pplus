@@ -45,8 +45,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
         super(c, c.size());
         comp = comparator;
         int sz = size();
-        if (sz > 1)
-            Arrays.sort((E[]) _entries, 0, sz, comp);
+        if (sz > 1) Arrays.sort((E[]) _entries, 0, sz, comp);
         initialized = true;
     }
 
@@ -65,19 +64,19 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
         super(c, c.size());
         comp = comparator;
         int sz = size();
-        if (sz > 1)
-            Arrays.sort((E[]) _entries, 0, sz, comp);
+        if (sz > 1) Arrays.sort((E[]) _entries, 0, sz, comp);
         initialized = true;
     }
 
     @Override
-    public Comparator<? super E> comparator() { return comp; }
+    public Comparator<? super E> comparator() {
+        return comp;
+    }
 
     @Override
     @SuppressWarnings("unchecked")
     public E first() {
-        if (isEmpty())
-            throw new NoSuchElementException();
+        if (isEmpty()) throw new NoSuchElementException();
         return (E) _entries[0];
     }
 
@@ -85,8 +84,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     @SuppressWarnings("unchecked")
     public E last() {
         int sz = size();
-        if (sz <= 0)
-            throw new NoSuchElementException();
+        if (sz <= 0) throw new NoSuchElementException();
         return (E) _entries[sz - 1];
     }
 
@@ -119,8 +117,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
      */
     @Override
     public boolean add(E o) {
-        if (initialized)
-            throw new UnsupportedOperationException();
+        if (initialized) throw new UnsupportedOperationException();
         // for Collection constructor via addAll()
         return super.add(o);
     }
@@ -130,8 +127,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
      */
     @Override
     public void addUnique(E o) {
-        if (initialized)
-            throw new UnsupportedOperationException();
+        if (initialized) throw new UnsupportedOperationException();
         // for Collection constructor via addAll()
         super.addUnique(o);
     }
@@ -159,25 +155,23 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     @SuppressWarnings("unchecked")
     protected int indexOf(Object o) {
         // don't do this if comp is not initialized and array is not sorted
-        if (! initialized)
-            return super.indexOf(o);
+        if (!initialized) return super.indexOf(o);
         if (o != null) {
             int rv = Arrays.binarySearch((E[]) _entries, 0, size(), (E) o, comp);
-            if (rv >= 0)
-                return rv;
+            if (rv >= 0) return rv;
         }
         return -1;
     }
 
-/*
-    public static void main(String[] args) {
-        String[] test = new String[] {"foo", "bar", "baz", "bar", "baf", "bar", "boo", "foo", "a" };
-        java.util.List<String> list = Arrays.asList(test);
-        Set<String> set = new UnmodifiableSortedSet(list);
-        System.out.println(set.toString());
-        Set<String> set2 = new java.util.HashSet<String>(list);
-        set = new UnmodifiableSortedSet(set2);
-        System.out.println(set.toString());
-    }
-*/
+    /*
+        public static void main(String[] args) {
+            String[] test = new String[] {"foo", "bar", "baz", "bar", "baf", "bar", "boo", "foo", "a" };
+            java.util.List<String> list = Arrays.asList(test);
+            Set<String> set = new UnmodifiableSortedSet(list);
+            System.out.println(set.toString());
+            Set<String> set2 = new java.util.HashSet<String>(list);
+            set = new UnmodifiableSortedSet(set2);
+            System.out.println(set.toString());
+        }
+    */
 }

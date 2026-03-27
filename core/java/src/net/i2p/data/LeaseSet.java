@@ -9,13 +9,6 @@ package net.i2p.data;
  *
  */
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
@@ -23,6 +16,14 @@ import net.i2p.util.ByteArrayStream;
 import net.i2p.util.Clock;
 import net.i2p.util.Log;
 import net.i2p.util.RandomSource;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Defines the set of leases that a destination currently has available for routing messages.
@@ -132,35 +133,47 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-      * Same as getEarliestLeaseDate()
-      */
+     * Same as getEarliestLeaseDate()
+     */
     @Override
-    public long getDate() {return getEarliestLeaseDate();}
+    public long getDate() {
+        return getEarliestLeaseDate();
+    }
 
     @Override
-    public KeysAndCert getKeysAndCert() {return _destination;}
+    public KeysAndCert getKeysAndCert() {
+        return _destination;
+    }
 
     @Override
-    public int getType() {return KEY_TYPE_LEASESET;}
+    public int getType() {
+        return KEY_TYPE_LEASESET;
+    }
 
     /**
      *  Warning - will be null for LS2 EncryptedLeaseSets if not decrypted
      *
      *  @return Destination or null
      */
-    public Destination getDestination() {return _destination;}
+    public Destination getDestination() {
+        return _destination;
+    }
 
     /**
-      *  Sets the destination for this leaseset.
-      *
-      * @throws IllegalStateException if already signed
-      */
+     *  Sets the destination for this leaseset.
+     *
+     * @throws IllegalStateException if already signed
+     */
     public void setDestination(Destination dest) {
-        if (_signature != null) {throw new IllegalStateException();}
+        if (_signature != null) {
+            throw new IllegalStateException();
+        }
         _destination = dest;
     }
 
-    public PublicKey getEncryptionKey() {return _encryptionKey;}
+    public PublicKey getEncryptionKey() {
+        return _encryptionKey;
+    }
 
     /**
      *  If more than one key, return the first supported one.
@@ -171,17 +184,21 @@ public class LeaseSet extends DatabaseEntry {
      *  @since 0.9.44
      */
     public PublicKey getEncryptionKey(Set<EncType> supported) {
-        if (supported.contains(EncType.ELGAMAL_2048)) {return _encryptionKey;}
+        if (supported.contains(EncType.ELGAMAL_2048)) {
+            return _encryptionKey;
+        }
         return null;
     }
 
     /**
-      *  Sets the encryption key for this leaseset.
-      *
-      * @throws IllegalStateException if already signed
-      */
+     *  Sets the encryption key for this leaseset.
+     *
+     * @throws IllegalStateException if already signed
+     */
     public void setEncryptionKey(PublicKey encryptionKey) {
-        if (_signature != null) {throw new IllegalStateException();}
+        if (_signature != null) {
+            throw new IllegalStateException();
+        }
         _encryptionKey = encryptionKey; // subclasses may set an ECIES key
     }
 
@@ -190,7 +207,9 @@ public class LeaseSet extends DatabaseEntry {
      *  Undeprecated as of 0.9.38, used for the blinded key in EncryptedLeaseSet.
      *  @return the revocation key for LS1, null for LS2 except blinded key for encrypted LS2
      */
-    public SigningPublicKey getSigningKey() {return _signingKey;}
+    public SigningPublicKey getSigningKey() {
+        return _signingKey;
+    }
 
     /**
      *  The revocation key. Unused except for encrypted LS2.
@@ -205,51 +224,63 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-      * As of 0.9.65, no longer sets receivedAsReply to true
-      * @param localClient may be null
-      * @since 0.9.47
-      */
+     * As of 0.9.65, no longer sets receivedAsReply to true
+     * @param localClient may be null
+     * @since 0.9.47
+     */
     @Override
     public void setReceivedBy(Hash localClient) {
         super.setReceivedBy(localClient);
-        //setReceivedAsReply();
+        // setReceivedAsReply();
     }
 
     /**
-      *  Adds a lease to this leaseset.
-      *
-      * @throws IllegalStateException if already signed
-      */
+     *  Adds a lease to this leaseset.
+     *
+     * @throws IllegalStateException if already signed
+     */
     public void addLease(Lease lease) {
         if (lease == null) throw new IllegalArgumentException("Error:! Null lease!");
         if (lease.getGateway() == null) throw new IllegalArgumentException("Error: Lease has no gateway!");
         if (getType() != KEY_TYPE_META_LS2 && lease.getTunnelId() == null) {
             throw new IllegalArgumentException("Error: Lease has no tunnel!");
         }
-        if (_signature != null) {throw new IllegalStateException();}
+        if (_signature != null) {
+            throw new IllegalStateException();
+        }
         if (_leases.size() >= MAX_LEASES) {
             throw new IllegalArgumentException("Error: Too many leases! -> Maximum permitted is " + MAX_LEASES);
         }
         _leases.add(lease);
         long expire = lease.getEndTime();
-        if (expire < _firstExpiration) {_firstExpiration = expire;}
-        if (expire > _lastExpiration) {_lastExpiration = expire;}
+        if (expire < _firstExpiration) {
+            _firstExpiration = expire;
+        }
+        if (expire > _lastExpiration) {
+            _lastExpiration = expire;
+        }
     }
 
     /**
-      *  Gets the number of leases in this leaseset.
-      *
-      *  @return 0-16
-      *  A LeaseSet with no leases is revoked.
-      */
+     *  Gets the number of leases in this leaseset.
+     *
+     *  @return 0-16
+     *  A LeaseSet with no leases is revoked.
+     */
     public int getLeaseCount() {
-        if (isEncrypted()) {return _leases.size() - 1;}
-        else {return _leases.size();}
+        if (isEncrypted()) {
+            return _leases.size() - 1;
+        } else {
+            return _leases.size();
+        }
     }
 
     public Lease getLease(int index) {
-        if (isEncrypted()) {return _decryptedLeases.get(index);}
-        else {return _leases.get(index);}
+        if (isEncrypted()) {
+            return _decryptedLeases.get(index);
+        } else {
+            return _leases.get(index);
+        }
     }
 
     /**
@@ -264,7 +295,9 @@ public class LeaseSet extends DatabaseEntry {
      * @return earliest end date of any lease in the set, or -1 if there are no leases
      */
     public long getEarliestLeaseDate() {
-        if (_leases.isEmpty()) {return -1;}
+        if (_leases.isEmpty()) {
+            return -1;
+        }
         return _firstExpiration;
     }
 
@@ -275,7 +308,9 @@ public class LeaseSet extends DatabaseEntry {
      * @return latest end date of any lease in the set, or 0 if there are no leases
      * @since 0.9.7
      */
-    public long getLatestLeaseDate() {return _lastExpiration;}
+    public long getLatestLeaseDate() {
+        return _lastExpiration;
+    }
 
     /**
      * Verify that the signature matches the leaseset's destination's signing public key.
@@ -284,7 +319,9 @@ public class LeaseSet extends DatabaseEntry {
      * @return true only if the signature matches
      */
     @Override
-    public boolean verifySignature() {return super.verifySignature();} // Revocation unused (see above)
+    public boolean verifySignature() {
+        return super.verifySignature();
+    } // Revocation unused (see above)
 
     /**
      * Verify that the signature matches the leaseset's destination's signing public key.
@@ -294,7 +331,9 @@ public class LeaseSet extends DatabaseEntry {
      * @return true only if the signature matches
      */
     @Deprecated
-    public boolean verifySignature(SigningPublicKey signingKey) {return super.verifySignature();} // Revocation unused (see above)
+    public boolean verifySignature(SigningPublicKey signingKey) {
+        return super.verifySignature();
+    } // Revocation unused (see above)
 
     /**
      * Determine whether ANY lease is currently valid, at least within a given
@@ -311,8 +350,12 @@ public class LeaseSet extends DatabaseEntry {
     /** without sig! */
     @Override
     protected byte[] getBytes() {
-        if (_byteified != null) {return _byteified;}
-        if ((_destination == null) || (_encryptionKey == null) || (_signingKey == null)) {return new byte[0];}
+        if (_byteified != null) {
+            return _byteified;
+        }
+        if ((_destination == null) || (_encryptionKey == null) || (_signingKey == null)) {
+            return new byte[0];
+        }
         int len = size();
         ByteArrayStream out = new ByteArrayStream(len);
         try {
@@ -320,29 +363,40 @@ public class LeaseSet extends DatabaseEntry {
             _encryptionKey.writeBytes(out);
             _signingKey.writeBytes(out);
             out.write((byte) _leases.size());
-            for (Lease lease : _leases) {lease.writeBytes(out);}
-        } catch (IOException ioe) {return new byte[0];}
-        catch (DataFormatException dfe) {return new byte[0];}
+            for (Lease lease : _leases) {
+                lease.writeBytes(out);
+            }
+        } catch (IOException ioe) {
+            return new byte[0];
+        } catch (DataFormatException dfe) {
+            return new byte[0];
+        }
         byte rv[] = out.toByteArray();
-        if (getReceivedAsPublished()) {_byteified = rv;} // if we are floodfill and this was published to us
+        if (getReceivedAsPublished()) {
+            _byteified = rv;
+        } // if we are floodfill and this was published to us
         return rv;
     }
 
     /**
-      *  This does NOT validate the signature
-      *
-      *  @throws IllegalStateException if called more than once or Destination already set
-      */
+     *  This does NOT validate the signature
+     *
+     *  @throws IllegalStateException if called more than once or Destination already set
+     */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
-        if (_destination != null) {throw new IllegalStateException();}
+        if (_destination != null) {
+            throw new IllegalStateException();
+        }
         _destination = Destination.create(in);
         _encryptionKey = PublicKey.create(in);
         // revocation signing key must be same type as the destination signing key
         SigType type = _destination.getSigningPublicKey().getType();
         // Even if not verifying, we have to construct a Signature object
         // below, which will fail for null type.
-        if (type == null) {throw new DataFormatException("Unknown Signature Type");}
+        if (type == null) {
+            throw new DataFormatException("Unknown Signature Type");
+        }
         _signingKey = new SigningPublicKey(type);
         // EOF will be thrown in signature read below
         _signingKey.readBytes(in);
@@ -350,7 +404,7 @@ public class LeaseSet extends DatabaseEntry {
         if (numLeases > MAX_LEASES) {
             throw new DataFormatException("Error: Too many leases (" + numLeases + ") -> Maximum permitted is " + MAX_LEASES);
         }
-        //_version = DataHelper.readLong(in, 4);
+        // _version = DataHelper.readLong(in, 4);
         for (int i = 0; i < numLeases; i++) {
             Lease lease = new Lease();
             lease.readBytes(in);
@@ -362,19 +416,20 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-      *  This does NOT validate the signature
-      */
+     *  This does NOT validate the signature
+     */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
-        if ((_destination == null) || (_encryptionKey == null) || (_signingKey == null)
-            || (_signature == null)) {
+        if ((_destination == null) || (_encryptionKey == null) || (_signingKey == null) || (_signature == null)) {
             throw new DataFormatException("Not enough data to write out a LeaseSet");
         }
         _destination.writeBytes(out);
         _encryptionKey.writeBytes(out);
         _signingKey.writeBytes(out);
         out.write((byte) _leases.size());
-        for (Lease lease : _leases) {lease.writeBytes(out);}
+        for (Lease lease : _leases) {
+            lease.writeBytes(out);
+        }
         _signature.writeBytes(out);
     }
 
@@ -382,30 +437,30 @@ public class LeaseSet extends DatabaseEntry {
      *  Number of bytes, NOT including signature
      */
     public int size() {
-        return _destination.size()
-             + PublicKey.KEYSIZE_BYTES // encryptionKey
-             + _signingKey.length() // signingKey
-             + 1 // number of leases
-             + _leases.size() * 44;
+        return _destination.size() + PublicKey.KEYSIZE_BYTES // encryptionKey
+                + _signingKey.length() // signingKey
+                + 1 // number of leases
+                + _leases.size() * 44;
     }
 
     @Override
     public boolean equals(Object object) {
-        if (object == this) {return true;}
-        if ((object == null) || !(object instanceof LeaseSet)) {return false;}
+        if (object == this) {
+            return true;
+        }
+        if ((object == null) || !(object instanceof LeaseSet)) {
+            return false;
+        }
         LeaseSet ls = (LeaseSet) object;
-        return
-               DataHelper.eq(_signature, ls.getSignature())
-               && DataHelper.eq(_leases, ls._leases)
-               && DataHelper.eq(getEncryptionKey(), ls.getEncryptionKey())
-               && DataHelper.eq(_signingKey, ls.getSigningKey())
-               && DataHelper.eq(_destination, ls.getDestination());
+        return DataHelper.eq(_signature, ls.getSignature()) && DataHelper.eq(_leases, ls._leases) && DataHelper.eq(getEncryptionKey(), ls.getEncryptionKey()) && DataHelper.eq(_signingKey, ls.getSigningKey()) && DataHelper.eq(_destination, ls.getDestination());
     }
 
     /** the destination has enough randomness in it to use it by itself for speed */
     @Override
     public int hashCode() {
-        if (_destination == null) {return 0;}
+        if (_destination == null) {
+            return 0;
+        }
         return _destination.hashCode();
     }
 
@@ -415,11 +470,19 @@ public class LeaseSet extends DatabaseEntry {
         if (_destination != null) {
             buf.append("\n* Destination: ").append(_destination.toBase32());
         }
-        if (_encryptionKey != null) {buf.append("\n* EncryptionKey: ").append(_encryptionKey);}
-        if (_signingKey != null) {buf.append("\n* Signing Key: ").append(_signingKey);}
-        if (_signature != null) {buf.append("\n* Signature: ").append(_signature);}
+        if (_encryptionKey != null) {
+            buf.append("\n* EncryptionKey: ").append(_encryptionKey);
+        }
+        if (_signingKey != null) {
+            buf.append("\n* Signing Key: ").append(_signingKey);
+        }
+        if (_signature != null) {
+            buf.append("\n* Signature: ").append(_signature);
+        }
         buf.append("\n* Leases: ").append(getLeaseCount());
-        for (int i = 0; i < getLeaseCount(); i++) {buf.append(getLease(i));}
+        for (int i = 0; i < getLeaseCount(); i++) {
+            buf.append(getLease(i));
+        }
         return buf.toString();
     }
 
@@ -455,7 +518,7 @@ public class LeaseSet extends DatabaseEntry {
      */
     private void encryp(SessionKey key) throws DataFormatException, IOException {
         int size = _leases.size();
-        if (size < 1 || size > MAX_LEASES-1) {
+        if (size < 1 || size > MAX_LEASES - 1) {
             throw new IllegalArgumentException("Bad number of leases (" + size + ") for encrypted LeaseSet");
         }
         int datalen = ((DATA_LEN * size / 16) + 1) * 16;
@@ -483,7 +546,7 @@ public class LeaseSet extends DatabaseEntry {
         _leases.add(padLease);
         // ...and replace all the gateways and tunnel ids
         ByteArrayInputStream bais = new ByteArrayInputStream(enc);
-        for (int i = 0; i < size+1; i++) {
+        for (int i = 0; i < size + 1; i++) {
             Hash h = new Hash();
             h.readBytes(bais);
             _leases.get(i).setGateway(h);
@@ -502,8 +565,7 @@ public class LeaseSet extends DatabaseEntry {
     private void decrypt(SessionKey key) throws DataFormatException, IOException {
         int size = _leases.size();
         if (size < 2) {
-            throw new DataFormatException("Bad number of leases (" + size + ") decrypting " + _destination.toBase32() +
-                                          " -> Is this destination encrypted?");
+            throw new DataFormatException("Bad number of leases (" + size + ") decrypting " + _destination.toBase32() + " -> Is this destination encrypted?");
         }
         int datalen = DATA_LEN * size;
         ByteArrayStream baos = new ByteArrayStream(datalen);
@@ -520,7 +582,7 @@ public class LeaseSet extends DatabaseEntry {
         I2PAppContext.getGlobalContext().aes().decrypt(enc, 0, dec, 0, key, iv, enclen);
         ByteArrayInputStream bais = new ByteArrayInputStream(dec);
         _decryptedLeases = new ArrayList<Lease>(size - 1);
-        for (int i = 0; i < size-1; i++) {
+        for (int i = 0; i < size - 1; i++) {
             Lease l = new Lease();
             Hash h = new Hash();
             h.readBytes(bais);
@@ -538,12 +600,16 @@ public class LeaseSet extends DatabaseEntry {
      * Decrypts on first call.
      */
     private synchronized boolean isEncrypted() {
-        if (_decrypted) {return true;}
+        if (_decrypted) {
+            return true;
+        }
         // If the encryption key is not set yet, it can't have been encrypted yet.
         // Router-side I2CP sets the destination (but not the encryption key)
         // on an unsigned LS which is pending signature (and possibly encryption)
         // by the client, and we don't want to attempt 'decryption' on it.
-        if (_checked || _encryptionKey == null || _destination == null) {return false;}
+        if (_checked || _encryptionKey == null || _destination == null) {
+            return false;
+        }
         SessionKey key = I2PAppContext.getGlobalContext().keyRing().get(_destination.calculateHash());
         if (key != null) {
             try {
@@ -551,16 +617,13 @@ public class LeaseSet extends DatabaseEntry {
                 _decrypted = true;
             } catch (DataFormatException dfe) {
                 Log log = I2PAppContext.getGlobalContext().logManager().getLog(LeaseSet.class);
-                log.error("Error decrypting " + _destination.toBase32() +
-                          " -> Is this destination encrypted?", dfe);
+                log.error("Error decrypting " + _destination.toBase32() + " -> Is this destination encrypted?", dfe);
             } catch (IOException ioe) {
                 Log log = I2PAppContext.getGlobalContext().logManager().getLog(LeaseSet.class);
-                log.error("Error decrypting " + _destination.toBase32() +
-                          " -> Is this destination encrypted?", ioe);
+                log.error("Error decrypting " + _destination.toBase32() + " -> Is this destination encrypted?", ioe);
             }
         }
         _checked = true;
         return _decrypted;
     }
-
 }

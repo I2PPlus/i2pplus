@@ -23,8 +23,7 @@ class HostReplyMessageHandler extends HandlerImpl {
 
     @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
-        if (_log.shouldDebug())
-            _log.debug("Handling " + message);
+        if (_log.shouldDebug()) _log.debug("Handling " + message);
         HostReplyMessage msg = (HostReplyMessage) message;
         Destination d = msg.getDestination();
         long id = msg.getReqID();

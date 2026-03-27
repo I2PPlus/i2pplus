@@ -1,4 +1,5 @@
 package net.i2p.data;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -7,7 +8,6 @@ package net.i2p.data;
  * your children, but it might.  Use at your own risk.
  *
  */
-
 
 /**
  * Test harness for loading / storing Signature objects
@@ -19,11 +19,13 @@ public class SignatureTest extends StructureTest {
     public DataStructure createDataStructure() throws DataFormatException {
         Signature sig = new Signature();
         byte data[] = new byte[Signature.SIGNATURE_BYTES];
-        for (int i = 0; i < data.length; i++)
-            data[i] = (byte)(i%16);
+        for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 16);
         sig.setData(data);
         return sig;
     }
+
     @Override
-    public DataStructure createStructureToRead() { return new Signature(); }
+    public DataStructure createStructureToRead() {
+        return new Signature();
+    }
 }

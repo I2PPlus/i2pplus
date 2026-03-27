@@ -1,4 +1,5 @@
 package net.i2p.router.message;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -167,15 +168,13 @@ public class GarlicMessageReceiver {
             }
         } else {
             if (debug) {
-                final boolean isUs = _clientDestination == null || (_clientDestination != null &&
-                        _context.routerHash().toBase32().startsWith(_clientDestination.toBase32().substring(0, 6)));
+                final boolean isUs = _clientDestination == null || (_clientDestination != null && _context.routerHash().toBase32().startsWith(_clientDestination.toBase32().substring(0, 6)));
                 final String d = (_clientDestination != null && !isUs) ? nick : "Our Router";
                 final String keysUsed = (decryptionKey2 != null) ? "both ElGamal and ECIES keys" : decryptionKey.getType().toString();
                 _log.warn("Failed to decrypt " + message + " with " + keysUsed + " -> Target: " + d);
             }
             _context.statManager().addRateData("crypto.garlic.decryptFail", 1);
-            _context.messageHistory().messageProcessingError(message.getUniqueId(), message.getClass().getName(),
-                    "Garlic could not be decrypted");
+            _context.messageHistory().messageProcessingError(message.getUniqueId(), message.getClass().getName(), "Garlic could not be decrypted");
         }
     }
 
@@ -215,15 +214,11 @@ public class GarlicMessageReceiver {
         if (!valid) {
             final String howLongAgo = DataHelper.formatDuration(_context.clock().now() - clove.getExpiration());
             if (_log.shouldDebug()) {
-                _log.debug("Clove [" + clove.getCloveId() + "] is NOT valid -> Expired " + howLongAgo + " ago",
-                        new Exception("Invalid clove expiration"));
+                _log.debug("Clove [" + clove.getCloveId() + "] is NOT valid -> Expired " + howLongAgo + " ago", new Exception("Invalid clove expiration"));
             } else if (_log.shouldWarn()) {
-                _log.warn("Clove [" + clove.getCloveId() + "] is NOT valid -> Expired " + howLongAgo + " ago: "
-                        + invalidReason + ": " + clove);
+                _log.warn("Clove [" + clove.getCloveId() + "] is NOT valid -> Expired " + howLongAgo + " ago: " + invalidReason + ": " + clove);
             }
-            _context.messageHistory().messageProcessingError(clove.getCloveId(),
-                    clove.getData().getClass().getSimpleName(),
-                    "Clove is not valid (expired " + howLongAgo + " ago)");
+            _context.messageHistory().messageProcessingError(clove.getCloveId(), clove.getData().getClass().getSimpleName(), "Clove is not valid (expired " + howLongAgo + " ago)");
         }
 
         return valid;

@@ -23,14 +23,12 @@ public interface KeyRing {
      *  @param scope a domain identifier, indicating router update, reseed, etc.
      *  @return null if none
      */
-    public PublicKey getKey(String keyName, String scope, SigType type)
-                            throws GeneralSecurityException, IOException;
+    public PublicKey getKey(String keyName, String scope, SigType type) throws GeneralSecurityException, IOException;
 
     /**
      *  Store a key.
      *  Throws on all errors.
      *  @param scope a domain identifier, indicating router update, reseed, etc.
      */
-    public void setKey(String keyName, String scope, PublicKey key)
-                            throws GeneralSecurityException, IOException;
+    public void setKey(String keyName, String scope, PublicKey key) throws GeneralSecurityException, IOException;
 }

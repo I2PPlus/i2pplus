@@ -1,4 +1,5 @@
 package net.i2p.router.client;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -29,8 +30,7 @@ class ReportAbuseJob extends JobImpl {
     private final String _reason;
     private final int _severity;
 
-    public ReportAbuseJob(RouterContext context, ClientConnectionRunner runner,
-                          Destination dest, String reason, int severity) {
+    public ReportAbuseJob(RouterContext context, ClientConnectionRunner runner, Destination dest, String reason, int severity) {
         super(context);
         _log = context.logManager().getLog(ReportAbuseJob.class);
         _runner = runner;
@@ -40,7 +40,9 @@ class ReportAbuseJob extends JobImpl {
     }
 
     @Override
-    public String getName() { return "Report Abuse to Client"; }
+    public String getName() {
+        return "Report Abuse to Client";
+    }
 
     @Override
     public void runJob() {
@@ -52,8 +54,7 @@ class ReportAbuseJob extends JobImpl {
         ReportAbuseMessage msg = new ReportAbuseMessage();
         msg.setReason(res);
         SessionId id = _runner.getSessionId(_dest.calculateHash());
-        if (id == null)
-            return;
+        if (id == null) return;
         msg.setSessionId(id);
         msg.setSeverity(sev);
         try {

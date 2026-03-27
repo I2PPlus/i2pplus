@@ -15,5 +15,4 @@ public interface IdnaTransformator {
     String toASCII(String input);
 
     String toUnicode(String input);
-
 }

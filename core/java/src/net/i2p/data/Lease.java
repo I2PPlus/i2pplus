@@ -9,12 +9,13 @@ package net.i2p.data;
  *
  */
 
+import net.i2p.util.Clock;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.Instant;
 import java.util.Date;
-import net.i2p.util.Clock;
 
 /**
  * Authorization grant proving a router/tunnel may receive messages for a destination.
@@ -94,51 +95,69 @@ public class Lease extends DataStructureImpl {
     /** Retrieve the router at which the destination can be contacted
      * @return identity of the router acting as a gateway
      */
-    public Hash getGateway() {return _gateway;}
+    public Hash getGateway() {
+        return _gateway;
+    }
 
     /** Configure the router at which the destination can be contacted
      * @param ident router acting as the gateway
      */
-    public void setGateway(Hash ident) {_gateway = ident;}
+    public void setGateway(Hash ident) {
+        _gateway = ident;
+    }
 
     /** Tunnel on the gateway to communicate with
      * @return tunnel ID
      */
-    public TunnelId getTunnelId() {return _tunnelId;}
+    public TunnelId getTunnelId() {
+        return _tunnelId;
+    }
 
     /** Configure the tunnel on the gateway to communicate with
      * @param id tunnel ID
      */
-    public void setTunnelId(TunnelId id) {_tunnelId = id;}
+    public void setTunnelId(TunnelId id) {
+        _tunnelId = id;
+    }
 
     /**
      * @deprecated use getEndTime()
      */
     @Deprecated
-    public Date getEndDate() {return Date.from(Instant.ofEpochMilli(_end));}
+    public Date getEndDate() {
+        return Date.from(Instant.ofEpochMilli(_end));
+    }
 
     /**
      * @deprecated use setEndDate(long)
      */
     @Deprecated
-    public void setEndDate(Date date) {_end = date.getTime();}
+    public void setEndDate(Date date) {
+        _end = date.getTime();
+    }
 
     /**
-      *  Gets the lease end time.
-      *
-      * @since 0.9.48
-      */
-    public long getEndTime() {return _end;}
+     *  Gets the lease end time.
+     *
+     * @since 0.9.48
+     */
+    public long getEndTime() {
+        return _end;
+    }
 
     /**
-      *  Sets the lease end date.
-      *
-      * @since 0.9.48
-      */
-    public void setEndDate(long date) {_end = date;}
+     *  Sets the lease end date.
+     *
+     * @since 0.9.48
+     */
+    public void setEndDate(long date) {
+        _end = date;
+    }
 
     /** has this lease already expired? */
-    public boolean isExpired() {return isExpired(0);}
+    public boolean isExpired() {
+        return isExpired(0);
+    }
 
     /** has this lease already expired (giving allowing up the fudgeFactor milliseconds for clock skew)? */
     public boolean isExpired(long fudgeFactor) {
@@ -147,8 +166,8 @@ public class Lease extends DataStructureImpl {
 
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
-        //_gateway = new Hash();
-        //_gateway.readBytes(in);
+        // _gateway = new Hash();
+        // _gateway.readBytes(in);
         _gateway = Hash.create(in);
         _tunnelId = new TunnelId();
         _tunnelId.readBytes(in);
@@ -167,13 +186,14 @@ public class Lease extends DataStructureImpl {
 
     @Override
     public boolean equals(Object object) {
-        if (object == this) {return true;}
-        if ((object == null) || !(object instanceof Lease)) {return false;}
+        if (object == this) {
+            return true;
+        }
+        if ((object == null) || !(object instanceof Lease)) {
+            return false;
+        }
         Lease lse = (Lease) object;
-        return _end == lse.getEndTime() &&
-                       DataHelper.eq(_tunnelId, lse.getTunnelId()) &&
-                       DataHelper.eq(_gateway, lse.getGateway());
-
+        return _end == lse.getEndTime() && DataHelper.eq(_tunnelId, lse.getTunnelId()) && DataHelper.eq(_gateway, lse.getGateway());
     }
 
     @Override
@@ -184,10 +204,9 @@ public class Lease extends DataStructureImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation
-        buf.append("\n* Gateway: [").append(_gateway.toBase64().substring(0,6)).append("]");
+        buf.append("\n* Gateway: [").append(_gateway.toBase64().substring(0, 6)).append("]");
         buf.append(" -> Expires: ").append(DataHelper.formatTime(_end));
         buf.append(" [TunnelID ").append(_tunnelId).append("]");
         return buf.toString();
     }
-
 }

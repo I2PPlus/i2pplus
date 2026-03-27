@@ -1,4 +1,5 @@
 package net.i2p.data.i2cp;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -21,11 +22,14 @@ public class MessageStatusMessageTest extends I2CPTstBase {
         MessageStatusMessage msg = new MessageStatusMessage();
         msg.setSessionId(42);
         msg.setMessageId(41);
-        msg.setSize(1024*1024*42L);
+        msg.setSize(1024 * 1024 * 42L);
         msg.setStatus(MessageStatusMessage.STATUS_AVAILABLE);
         msg.setNonce(1);
         return msg;
     }
+
     @Override
-    public I2CPMessageImpl createStructureToRead() { return new MessageStatusMessage(); }
+    public I2CPMessageImpl createStructureToRead() {
+        return new MessageStatusMessage();
+    }
 }

@@ -1,11 +1,12 @@
 package net.i2p.desktopgui.router;
 
-import java.io.IOException;
 import net.i2p.I2PAppContext;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
-//import net.i2p.router.web.ConfigServiceHandler;
+// import net.i2p.router.web.ConfigServiceHandler;
 import net.i2p.util.Log;
+
+import java.io.IOException;
 
 /**
  * Handle communications with the router instance.
@@ -32,10 +33,10 @@ public class RouterManager {
      */
     public static void start() {
         try {
-            //TODO: set/get PID
+            // TODO: set/get PID
             String separator = System.getProperty("file.separator");
             String location = getAppContext().getBaseDir().getAbsolutePath();
-            String[] args = new String[] { location + separator + "i2psvc", location + separator + "wrapper.config" };
+            String[] args = new String[] {location + separator + "i2psvc", location + separator + "wrapper.config"};
             Runtime.getRuntime().exec(args);
         } catch (IOException e) {
             Log log = getAppContext().logManager().getLog(RouterManager.class);
@@ -47,7 +48,7 @@ public class RouterManager {
      * Restart the running I2P instance.
      */
     public static void restart(RouterContext ctx) {
-        //if (ctx.hasWrapper())
+        // if (ctx.hasWrapper())
         //    ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_HARD_RESTART, false);
         ctx.router().shutdownGracefully(Router.EXIT_HARD_RESTART);
     }
@@ -56,7 +57,7 @@ public class RouterManager {
      * Stop the running I2P instance.
      */
     public static void shutDown(RouterContext ctx) {
-        //if (ctx.hasWrapper())
+        // if (ctx.hasWrapper())
         //    ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_HARD, false);
         ctx.router().shutdownGracefully(Router.EXIT_HARD);
     }
@@ -66,7 +67,7 @@ public class RouterManager {
      * @since 0.9.26
      */
     public static void restartGracefully(RouterContext ctx) {
-        //if (ctx.hasWrapper())
+        // if (ctx.hasWrapper())
         //    ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_GRACEFUL_RESTART, false);
         ctx.router().shutdownGracefully(Router.EXIT_GRACEFUL_RESTART);
     }
@@ -76,7 +77,7 @@ public class RouterManager {
      * @since 0.9.26
      */
     public static void shutDownGracefully(RouterContext ctx) {
-        //if (ctx.hasWrapper())
+        // if (ctx.hasWrapper())
         //    ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_GRACEFUL, false);
         ctx.router().shutdownGracefully();
     }

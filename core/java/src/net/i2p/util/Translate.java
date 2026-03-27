@@ -1,6 +1,9 @@
 package net.i2p.util;
 
 import gnu.gettext.GettextResource;
+
+import net.i2p.I2PAppContext;
+
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Locale;
@@ -9,7 +12,6 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import net.i2p.I2PAppContext;
 
 /**
  * Translate strings efficiently.
@@ -26,16 +28,22 @@ import net.i2p.I2PAppContext;
  */
 public abstract class Translate {
     public static final String PROP_LANG = "routerconsole.lang";
+
     /** @since 0.9.10 */
     public static final String PROP_COUNTRY = "routerconsole.country";
+
     /** non-null, two- or three-letter lower case, may be "" */
     private static final String _localeLang = Locale.getDefault().getLanguage();
+
     /** non-null, two-letter upper case, may be "" */
     private static final String _localeCountry = Locale.getDefault().getCountry();
+
     private static final Map<String, ResourceBundle> _bundles = new ConcurrentHashMap<String, ResourceBundle>(16);
     private static final Set<String> _missing = new ConcurrentHashSet<String>(16);
+
     /** use to look for untagged strings */
     private static final String TEST_LANG = "xx";
+
     private static final String TEST_STRING = "XXXX";
 
     /** lang in routerconsole.lang property, else current locale */
@@ -45,16 +53,12 @@ public abstract class Translate {
             return "";
         }
         String lang = getLanguage(ctx);
-        if (lang.equals("en"))
-            return key;
-        else if (lang.equals(TEST_LANG))
-            return TEST_STRING;
+        if (lang.equals("en")) return key;
+        else if (lang.equals(TEST_LANG)) return TEST_STRING;
         // Shouldn't happen but don't dump the po headers if it does
-        if (key.equals(""))
-            return key;
+        if (key.equals("")) return key;
         ResourceBundle bundle = findBundle(bun, lang, getCountry(ctx));
-        if (bundle == null)
-            return key;
+        if (bundle == null) return key;
         try {
             return bundle.getString(key);
         } catch (MissingResourceException e) {
@@ -90,17 +94,13 @@ public abstract class Translate {
      */
     public static String getString(String s, I2PAppContext ctx, String bun, Object... oArray) {
         String lang = getLanguage(ctx);
-        if (lang.equals(TEST_LANG))
-            return TEST_STRING + Arrays.toString(oArray) + TEST_STRING;
+        if (lang.equals(TEST_LANG)) return TEST_STRING + Arrays.toString(oArray) + TEST_STRING;
         String x = getString(s, ctx, bun);
         try {
             MessageFormat fmt = new MessageFormat(x, new Locale(lang));
             return fmt.format(oArray, new StringBuffer(), null).toString();
         } catch (IllegalArgumentException iae) {
-            System.err.println("Bad format: orig: \"" + s +
-                               "\" trans: \"" + x +
-                               "\" params: " + Arrays.toString(oArray) +
-                               " lang: " + lang);
+            System.err.println("Bad format: orig: \"" + s + "\" trans: \"" + x + "\" params: " + Arrays.toString(oArray) + " lang: " + lang);
             return "FIXME: " + x + ' ' + Arrays.toString(oArray);
         }
     }
@@ -116,25 +116,19 @@ public abstract class Translate {
      */
     public static String getString(int n, String s, String p, I2PAppContext ctx, String bun) {
         String lang = getLanguage(ctx);
-        if (lang.equals(TEST_LANG))
-            return TEST_STRING + '(' + n + ')' + TEST_STRING;
+        if (lang.equals(TEST_LANG)) return TEST_STRING + '(' + n + ')' + TEST_STRING;
         ResourceBundle bundle = null;
-        if (!lang.equals("en"))
-            bundle = findBundle(bun, lang, getCountry(ctx));
+        if (!lang.equals("en")) bundle = findBundle(bun, lang, getCountry(ctx));
         String x;
-        if (bundle == null)
-            x = n == 1 ? s : p;
-        else
-            x = GettextResource.ngettext(bundle, s, p, n);
+        if (bundle == null) x = n == 1 ? s : p;
+        else x = GettextResource.ngettext(bundle, s, p, n);
         Object[] oArray = new Object[1];
         oArray[0] = Integer.valueOf(n);
         try {
             MessageFormat fmt = new MessageFormat(x, new Locale(lang));
             return fmt.format(oArray, new StringBuffer(), null).toString();
         } catch (IllegalArgumentException iae) {
-            System.err.println("Bad format: sing: \"" + s +
-                               "\" plural: \"" + p +
-                               "\" lang: " + lang);
+            System.err.println("Bad format: sing: \"" + s + "\" plural: \"" + p + "\" lang: " + lang);
             return "FIXME: " + s + ' ' + p + ',' + n;
         }
     }
@@ -145,8 +139,7 @@ public abstract class Translate {
      */
     public static String getLanguage(I2PAppContext ctx) {
         String lang = ctx.getProperty(PROP_LANG);
-        if (lang == null || lang.length() <= 0)
-            lang = _localeLang;
+        if (lang == null || lang.length() <= 0) lang = _localeLang;
         return lang;
     }
 
@@ -190,14 +183,10 @@ public abstract class Translate {
      *  @since 0.9.27
      */
     public static void setLanguage(String lang, String country) {
-        if (lang != null)
-            System.setProperty(PROP_LANG, lang);
-        else
-            System.clearProperty(PROP_LANG);
-        if (country != null)
-            System.setProperty(PROP_COUNTRY, country);
-        else
-            System.clearProperty(PROP_COUNTRY);
+        if (lang != null) System.setProperty(PROP_LANG, lang);
+        else System.clearProperty(PROP_LANG);
+        if (country != null) System.setProperty(PROP_COUNTRY, country);
+        else System.clearProperty(PROP_COUNTRY);
     }
 
     /**
@@ -216,14 +205,11 @@ public abstract class Translate {
             }
             try {
                 Locale loc;
-                if ("".equals(country))
-                    loc = new Locale(lang);
-                else
-                    loc = new Locale(lang, country);
+                if ("".equals(country)) loc = new Locale(lang);
+                else loc = new Locale(lang, country);
                 // We must specify the class loader so that a webapp can find the bundle in the .war
                 rv = ResourceBundle.getBundle(bun, loc, Thread.currentThread().getContextClassLoader());
-                if (rv != null)
-                    _bundles.put(key, rv);
+                if (rv != null) _bundles.put(key, rv);
             } catch (MissingResourceException e) {
                 _missing.add(key);
             }
@@ -244,12 +230,10 @@ public abstract class Translate {
         String curLang = getLanguage(ctx);
         if (!"en".equals(curLang)) {
             String rv = getString(dflt, ctx, bun);
-            if (!rv.equals(dflt))
-                return rv;
+            if (!rv.equals(dflt)) return rv;
             Locale curLocale = new Locale(curLang);
             rv = (new Locale(langCode)).getDisplayLanguage(curLocale);
-            if (rv.length() > 0 && !rv.equals(langCode))
-                return rv;
+            if (rv.length() > 0 && !rv.equals(langCode)) return rv;
         }
         return dflt;
     }

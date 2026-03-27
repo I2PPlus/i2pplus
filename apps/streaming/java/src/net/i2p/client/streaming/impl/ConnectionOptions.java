@@ -1,15 +1,16 @@
 package net.i2p.client.streaming.impl;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
-import java.util.StringTokenizer;
 import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.data.Hash;
 import net.i2p.util.ConvertToHash;
 import net.i2p.util.Log;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 /**
  * Define the current options for the con (and allow custom tweaking midstream)
@@ -72,8 +73,10 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /** on inactivity timeout, do nothing */
     public static final int INACTIVITY_ACTION_NOOP = 0;
+
     /** on inactivity timeout, close the connection */
     public static final int INACTIVITY_ACTION_DISCONNECT = 1;
+
     /** on inactivity timeout, send a payload message */
     public static final int INACTIVITY_ACTION_SEND = 2;
 
@@ -81,8 +84,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * These values are specified in RFC 6298
      * Do not change unless you know what you're doing
      */
-    private static final float TCP_ALPHA = 1.0f/8;
-    private static final float TCP_BETA = 1.0f/4;
+    private static final float TCP_ALPHA = 1.0f / 8;
+    private static final float TCP_BETA = 1.0f / 4;
     private static final float TCP_KAPPA = 4;
 
     private static final String PROP_INITIAL_RTO = "i2p.streaming.initialRTO";
@@ -95,73 +98,94 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static final String PROP_INITIAL_RESEND_DELAY = "i2p.streaming.initialResendDelay";
     public static final String PROP_INITIAL_ACK_DELAY = "i2p.streaming.initialAckDelay";
     public static final String PROP_INITIAL_WINDOW_SIZE = "i2p.streaming.initialWindowSize";
+
     /** unused */
     public static final String PROP_INITIAL_RECEIVE_WINDOW = "i2p.streaming.initialReceiveWindow";
+
     public static final String PROP_INACTIVITY_TIMEOUT = "i2p.streaming.inactivityTimeout";
     public static final String PROP_INACTIVITY_ACTION = "i2p.streaming.inactivityAction";
     public static final String PROP_MAX_WINDOW_SIZE = "i2p.streaming.maxWindowSize";
     public static final String PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR = "i2p.streaming.congestionAvoidanceGrowthRateFactor";
     public static final String PROP_SLOW_START_GROWTH_RATE_FACTOR = "i2p.streaming.slowStartGrowthRateFactor";
     public static final String PROP_ANSWER_PINGS = "i2p.streaming.answerPings";
+
     /** all of these are @since 0.7.13 */
     public static final String PROP_ENABLE_ACCESS_LIST = "i2cp.enableAccessList";
+
     public static final String PROP_ENABLE_BLACKLIST = "i2cp.enableBlackList";
     public static final String PROP_ACCESS_LIST = "i2cp.accessList";
+
     /** all of these are @since 0.7.14 */
     public static final String PROP_MAX_CONNS_MIN = "i2p.streaming.maxConnsPerMinute";
+
     public static final String PROP_MAX_CONNS_HOUR = "i2p.streaming.maxConnsPerHour";
     public static final String PROP_MAX_CONNS_DAY = "i2p.streaming.maxConnsPerDay";
     public static final String PROP_MAX_TOTAL_CONNS_MIN = "i2p.streaming.maxTotalConnsPerMinute";
     public static final String PROP_MAX_TOTAL_CONNS_HOUR = "i2p.streaming.maxTotalConnsPerHour";
     public static final String PROP_MAX_TOTAL_CONNS_DAY = "i2p.streaming.maxTotalConnsPerDay";
+
     /** @since 0.9.1 */
     public static final String PROP_ENFORCE_PROTO = "i2p.streaming.enforceProtocol";
+
     /**
      *  how many streams will we allow at once?
      *  @since 0.9.3 moved from I2PSocketManagerFull
      */
     public static final String PROP_MAX_STREAMS = "i2p.streaming.maxConcurrentStreams";
+
     /** @since 0.9.4  default false */
     public static final String PROP_DISABLE_REJ_LOG = "i2p.streaming.disableRejectLogging";
+
     /** @since 0.9.34 reset,drop,http, or custom string,  default reset */
     public static final String PROP_LIMIT_ACTION = "i2p.streaming.limitAction";
+
     /** @since 0.9.34 */
     public static final String PROP_TAGS_TO_SEND = "crypto.tagsToSend";
+
     /** @since 0.9.34 */
     public static final String PROP_TAG_THRESHOLD = "crypto.lowTagThreshold";
+
     /**
      * RFC 6928 recommends 10 segments for better initial throughput.
      * Increased to 16 for I2P's high-latency environment to improve initial bandwidth utilization.
      */
     static final int INITIAL_WINDOW_SIZE = 16;
+
     static final int DEFAULT_MAX_SENDS = 3;
+
     /**
      *  Initial RTT estimate for new connections before first measurement.
      *  I2P typically has 2-10 second RTT, so 8 seconds provides a conservative
      *  starting point that adapts quickly via updateRTT().
      */
-    public static final int DEFAULT_INITIAL_RTT = 8*1000;
+    public static final int DEFAULT_INITIAL_RTT = 8 * 1000;
+
     /**
      *  Maximum RTT to prevent pathological cases from breaking RTO calculations.
      *  I2P typically has 2-10 second RTT, so 60 seconds provides a safe upper bound
      *  while preventing excessively high timeout values after network disturbances.
      */
-    private static final int MAX_RTT = 60*1000;
+    private static final int MAX_RTT = 60 * 1000;
+
     /**
      * Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
      * Reduced from 100ms to 30ms to reduce latency while maintaining reasonable ACK aggregation.
      */
     private static final int DEFAULT_INITIAL_ACK_DELAY = 30;
+
     static final int MIN_WINDOW_SIZE = 1;
     private static final boolean DEFAULT_ANSWER_PINGS = true;
-    private static final int DEFAULT_INACTIVITY_TIMEOUT = 90*1000;
+    private static final int DEFAULT_INACTIVITY_TIMEOUT = 90 * 1000;
     private static final int DEFAULT_INACTIVITY_ACTION = INACTIVITY_ACTION_SEND;
     private static final int DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR = 1;
     private static final int DEFAULT_SLOW_START_GROWTH_RATE_FACTOR = 1;
+
     /** @since 0.9.34 */
     private static final String DEFAULT_LIMIT_ACTION = "reset";
+
     /** @since 0.9.34 */
     public static final int DEFAULT_TAGS_TO_SEND = 40;
+
     /** @since 0.9.34 */
     public static final int DEFAULT_TAG_THRESHOLD = 30;
 
@@ -308,7 +332,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *
      */
     public static final int DEFAULT_MAX_MESSAGE_SIZE = 1730;
+
     public static final int MIN_MESSAGE_SIZE = 512;
+
     /**
      *
      *  See analysis in proposal 144
@@ -358,7 +384,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         super(opts);
         _rtt = DEFAULT_INITIAL_RTT;
         cinit(System.getProperties());
-        if (opts != null) {update(opts);}
+        if (opts != null) {
+            update(opts);
+        }
     }
 
     /**
@@ -438,15 +466,12 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
         // Validate buffer size is sufficient for window size
         if (_inboundBufferSize < minRequiredBufferSize) {
-            _log.warn("Inbound buffer size (" + _inboundBufferSize + ") is too small for window size (" +
-                     getMaxWindowSize() + "). Adjusting to " + minRequiredBufferSize + " bytes");
+            _log.warn("Inbound buffer size (" + _inboundBufferSize + ") is too small for window size (" + getMaxWindowSize() + "). Adjusting to " + minRequiredBufferSize + " bytes");
             setInboundBufferSize(minRequiredBufferSize);
         }
 
-        setCongestionAvoidanceGrowthRateFactor(getInt(opts, PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR,
-                                                      DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR));
-        setSlowStartGrowthRateFactor(getInt(opts, PROP_SLOW_START_GROWTH_RATE_FACTOR,
-                                            DEFAULT_SLOW_START_GROWTH_RATE_FACTOR));
+        setCongestionAvoidanceGrowthRateFactor(getInt(opts, PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR, DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR));
+        setSlowStartGrowthRateFactor(getInt(opts, PROP_SLOW_START_GROWTH_RATE_FACTOR, DEFAULT_SLOW_START_GROWTH_RATE_FACTOR));
         setAnswerPings(getBool(opts, PROP_ANSWER_PINGS, DEFAULT_ANSWER_PINGS));
         setEnforceProtocol(getBool(opts, PROP_ENFORCE_PROTO, DEFAULT_ENFORCE_PROTO));
         setDisableRejectLogging(getBool(opts, PROP_DISABLE_REJ_LOG, false));
@@ -458,8 +483,11 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         _maxTotalConnsPerHour = getInt(opts, PROP_MAX_TOTAL_CONNS_HOUR, 0);
         _maxTotalConnsPerDay = getInt(opts, PROP_MAX_TOTAL_CONNS_DAY, 0);
         _maxConns = getInt(opts, PROP_MAX_STREAMS, 0);
-        if (opts != null) {        _limitAction = opts.getProperty(PROP_LIMIT_ACTION, DEFAULT_LIMIT_ACTION);}
-        else {_limitAction = DEFAULT_LIMIT_ACTION;}
+        if (opts != null) {
+            _limitAction = opts.getProperty(PROP_LIMIT_ACTION, DEFAULT_LIMIT_ACTION);
+        } else {
+            _limitAction = DEFAULT_LIMIT_ACTION;
+        }
 
         synchronized (this) {
             _rto = getInt(opts, PROP_INITIAL_RTO, INITIAL_RTO);
@@ -476,7 +504,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     @Override
     public void setProperties(Properties opts) {
         super.setProperties(opts);
-        if (opts == null) {return;}
+        if (opts == null) {
+            return;
+        }
         if (opts.getProperty(PROP_MAX_WINDOW_SIZE) != null) {
             setMaxWindowSize(getInt(opts, PROP_MAX_WINDOW_SIZE, Connection.MAX_WINDOW_SIZE));
         }
@@ -518,18 +548,15 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
         // Validate buffer size is sufficient for window size
         if (_inboundBufferSize < minRequiredBufferSize) {
-            _log.warn("Inbound buffer size (" + _inboundBufferSize + ") is too small for window size (" +
-                     getMaxWindowSize() + "). Adjusting to " + minRequiredBufferSize + " bytes");
+            _log.warn("Inbound buffer size (" + _inboundBufferSize + ") is too small for window size (" + getMaxWindowSize() + "). Adjusting to " + minRequiredBufferSize + " bytes");
             setInboundBufferSize(minRequiredBufferSize);
         }
 
         if (opts.getProperty(PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR) != null) {
-            setCongestionAvoidanceGrowthRateFactor(getInt(opts, PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR,
-                                                          DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR));
+            setCongestionAvoidanceGrowthRateFactor(getInt(opts, PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR, DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR));
         }
         if (opts.getProperty(PROP_SLOW_START_GROWTH_RATE_FACTOR) != null) {
-            setSlowStartGrowthRateFactor(getInt(opts, PROP_SLOW_START_GROWTH_RATE_FACTOR,
-                                                DEFAULT_SLOW_START_GROWTH_RATE_FACTOR));
+            setSlowStartGrowthRateFactor(getInt(opts, PROP_SLOW_START_GROWTH_RATE_FACTOR, DEFAULT_SLOW_START_GROWTH_RATE_FACTOR));
         }
         if (opts.getProperty(PROP_CONNECT_TIMEOUT) != null) {
             // overrides default in super()
@@ -590,8 +617,13 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *
      * @return how long to wait before actually attempting to connect
      */
-    public int getConnectDelay() {return _connectDelay;}
-    public void setConnectDelay(int delayMs) {_connectDelay = delayMs;}
+    public int getConnectDelay() {
+        return _connectDelay;
+    }
+
+    public void setConnectDelay(int delayMs) {
+        _connectDelay = delayMs;
+    }
 
     /**
      * Do we want all packets in both directions to be signed,
@@ -603,17 +635,27 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *
      * @return if we want signatures on all packets.
      */
-    public boolean getRequireFullySigned() {return _fullySigned;}
+    public boolean getRequireFullySigned() {
+        return _fullySigned;
+    }
+
     /** unused, see above */
-    public void setRequireFullySigned(boolean sign) {_fullySigned = sign;}
+    public void setRequireFullySigned(boolean sign) {
+        _fullySigned = sign;
+    }
 
     /**
      * Do we respond to a ping?
      *
      * @return if we do
      */
-    public boolean getAnswerPings() {return _answerPings;}
-    public void setAnswerPings(boolean yes) {_answerPings = yes;}
+    public boolean getAnswerPings() {
+        return _answerPings;
+    }
+
+    public void setAnswerPings(boolean yes) {
+        _answerPings = yes;
+    }
 
     /**
      * Do we receive all traffic, or only traffic marked with I2PSession.PROTO_STREAMING (6) ?
@@ -625,8 +667,13 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * @return if we do
      * @since 0.9.1
      */
-    public boolean getEnforceProtocol() {return _enforceProto;}
-    public void setEnforceProtocol(boolean yes) {_enforceProto = yes;}
+    public boolean getEnforceProtocol() {
+        return _enforceProto;
+    }
+
+    public void setEnforceProtocol(boolean yes) {
+        _enforceProto = yes;
+    }
 
     /**
      * Do we disable connection rejected logging? Default false.
@@ -634,22 +681,36 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * @return if we do
      * @since 0.9.4
      */
-    public boolean getDisableRejectLogging() {return _disableRejectLog;}
-    public void setDisableRejectLogging(boolean yes) {_disableRejectLog = yes;}
+    public boolean getDisableRejectLogging() {
+        return _disableRejectLog;
+    }
+
+    public void setDisableRejectLogging(boolean yes) {
+        _disableRejectLog = yes;
+    }
 
     /**
      * How many messages will we send before waiting for an ACK?
      *
      * @return Maximum amount of messages that can be in-flight
      */
-    public int getWindowSize() {return _windowSize;}
+    public int getWindowSize() {
+        return _windowSize;
+    }
+
     public void setWindowSize(int numMsgs) {
-        if (numMsgs <= 0) {numMsgs = 1;}
-        if (numMsgs < MIN_WINDOW_SIZE) {numMsgs = MIN_WINDOW_SIZE;}
+        if (numMsgs <= 0) {
+            numMsgs = 1;
+        }
+        if (numMsgs < MIN_WINDOW_SIZE) {
+            numMsgs = MIN_WINDOW_SIZE;
+        }
         // the stream's max window size may be less than the min window size, for
         // instance, with interactive streams of cwin=1.  This is why we test it here
         // after checking MIN_WINDOW_SIZE
-        if (numMsgs > _maxWindowSize) {numMsgs = _maxWindowSize;}
+        if (numMsgs > _maxWindowSize) {
+            numMsgs = _maxWindowSize;
+        }
         _windowSize = numMsgs;
     }
 
@@ -658,21 +719,29 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * @return receive window size.
      */
     @Deprecated
-    public int getReceiveWindow() {return _receiveWindow;}
-    public void setReceiveWindow(int numMsgs) {_receiveWindow = numMsgs;}
+    public int getReceiveWindow() {
+        return _receiveWindow;
+    }
+
+    public void setReceiveWindow(int numMsgs) {
+        _receiveWindow = numMsgs;
+    }
 
     /**
      * What to set the round trip time estimate to (in milliseconds)
      * @return round trip time estimate in ms
      */
-    public synchronized int getRTT() {return _rtt;}
+    public synchronized int getRTT() {
+        return _rtt;
+    }
 
     /**
      * @return minimum RTT observed over the life of the connection, greater than zero
      * @since 0.9.46
      */
-    public synchronized int getMinRTT() {return _minRtt;}
-
+    public synchronized int getMinRTT() {
+        return _minRtt;
+    }
 
     /**
      *  not public, use updateRTT()
@@ -680,19 +749,27 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private void setRTT(int ms) {
         synchronized (this) {
             _rtt = ms;
-            if (_rtt > MAX_RTT) {_rtt = MAX_RTT;}
+            if (_rtt > MAX_RTT) {
+                _rtt = MAX_RTT;
+            }
         }
     }
 
     /**
      *  @return Connection.MIN_RESEND_DELAY to Connection.MAX_RESEND_DELAY
      */
-    public synchronized int getRTO() {return _rto;}
+    public synchronized int getRTO() {
+        return _rto;
+    }
 
     /** used in TCB @since 0.9.8 */
-    synchronized int getRTTDev() {return _rttDev;}
+    synchronized int getRTTDev() {
+        return _rttDev;
+    }
 
-    private synchronized void setRTTDev(int rttDev) {_rttDev = rttDev;}
+    private synchronized void setRTTDev(int rttDev) {
+        _rttDev = rttDev;
+    }
 
     /**
      * Loads options from TCB cache.
@@ -710,18 +787,18 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     private synchronized void computeRTO() {
         switch (_initState) {
-            case INIT :
-                throw new IllegalStateException();
-            case FIRST :
-                _rto = _rtt + _rtt / 2;
+            case INIT: throw new IllegalStateException();
+            case FIRST: _rto = _rtt + _rtt / 2;
                 break;
-            case STEADY :
-                _rto = _rtt + (int) (_rttDev * TCP_KAPPA);
+            case STEADY: _rto = _rtt + (int) (_rttDev * TCP_KAPPA);
                 break;
         }
 
-        if (_rto < Connection.MIN_RESEND_DELAY) {_rto = Connection.MIN_RESEND_DELAY;}
-        else if (_rto > Connection.MAX_RESEND_DELAY) {_rto = Connection.MAX_RESEND_DELAY;}
+        if (_rto < Connection.MIN_RESEND_DELAY) {
+            _rto = Connection.MIN_RESEND_DELAY;
+        } else if (_rto > Connection.MAX_RESEND_DELAY) {
+            _rto = Connection.MAX_RESEND_DELAY;
+        }
     }
 
     /**
@@ -734,7 +811,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     synchronized int doubleRTO() {
         // we don't need to switch on _initState, _rto is set in constructor
         _rto *= 2;
-        if (_rto > MAX_RTO) {_rto = MAX_RTO;}
+        if (_rto > MAX_RTO) {
+            _rto = MAX_RTO;
+        }
         return _rto;
     }
 
@@ -744,29 +823,34 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public synchronized void updateRTT(int measuredValue) {
         _minRtt = Math.min(_minRtt, measuredValue);
         switch (_initState) {
-            case INIT:
-                _initState = AckInit.FIRST;
+            case INIT: _initState = AckInit.FIRST;
                 setRTT(measuredValue); // no smoothing first sample
                 _rttDev = _rtt / 2;
                 break;
-            case FIRST:
-                _initState = AckInit.STEADY; // fall through
+            case FIRST: _initState = AckInit.STEADY; // fall through
             case STEADY:
-            // calculation matches that recommended in RFC 6298
-                _rttDev = (int) ((1-TCP_BETA) *_rttDev  + TCP_BETA * Math.abs(measuredValue-_rtt));
-                int smoothed = (int)((1-TCP_ALPHA)*_rtt + TCP_ALPHA*measuredValue);
+                // calculation matches that recommended in RFC 6298
+                _rttDev = (int) ((1 - TCP_BETA) * _rttDev + TCP_BETA * Math.abs(measuredValue - _rtt));
+                int smoothed = (int) ((1 - TCP_ALPHA) * _rtt + TCP_ALPHA * measuredValue);
                 setRTT(smoothed);
         }
         computeRTO();
     }
 
-    public synchronized boolean receivedAck() {return _initState != AckInit.INIT;}
+    public synchronized boolean receivedAck() {
+        return _initState != AckInit.INIT;
+    }
 
     /** How long after sending a packet will we wait before resending?
      * @return delay for a retransmission in ms
      */
-    public int getResendDelay() {return _resendDelay;}
-    public void setResendDelay(int ms) {_resendDelay = Math.min(ms, 100);}
+    public int getResendDelay() {
+        return _resendDelay;
+    }
+
+    public void setResendDelay(int ms) {
+        _resendDelay = Math.min(ms, 100);
+    }
 
     /**
      * if there are packets we haven't ACKed yet and we don't
@@ -778,7 +862,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *
      * @return ACK delay in ms
      */
-    public int getSendAckDelay() {return _sendAckDelay;}
+    public int getSendAckDelay() {
+        return _sendAckDelay;
+    }
 
     /**
      *  Unused except here, so expect the default initial delay of DEFAULT_INITIAL_ACK_DELAY unless set by the user
@@ -788,12 +874,17 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *  Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
      *
      */
-    public void setSendAckDelay(int delayMs) {_sendAckDelay = Math.min(delayMs, 100);}
+    public void setSendAckDelay(int delayMs) {
+        _sendAckDelay = Math.min(delayMs, 100);
+    }
 
     /** What is the largest message we want to send or receive?
      * @return Maximum message size (MTU/MRU)
      */
-    public int getMaxMessageSize() {return _maxMessageSize;}
+    public int getMaxMessageSize() {
+        return _maxMessageSize;
+    }
+
     public void setMaxMessageSize(int bytes) {
         _maxMessageSize = Math.max(bytes, MIN_MESSAGE_SIZE);
         _maxInitialMessageSize = Math.min(_maxMessageSize, DEFAULT_MAX_MESSAGE_SIZE);
@@ -804,7 +895,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *  @return the max
      *  @since 0.9.47
      */
-    public int getMaxInitialMessageSize() {return _maxInitialMessageSize;}
+    public int getMaxInitialMessageSize() {
+        return _maxInitialMessageSize;
+    }
 
     /**
      *  What is the largest message to send in the SYN from Alice to Bob?
@@ -819,7 +912,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * TODO: Only bulk is supported so far.
      * @return the profile of the connection.
      */
-    public int getProfile() {return _profile;}
+    public int getProfile() {
+        return _profile;
+    }
 
     /**
      * Set the profile for this connection.
@@ -827,34 +922,57 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * As of API 0.9.64, all values are saved.
      * Warning: unused.
      */
-    public void setProfile(int profile) {_profile = profile;}
+    public void setProfile(int profile) {
+        _profile = profile;
+    }
 
     /**
      * How many times will we try to send a message before giving up?
      *
      * @return Maximum retrys before failing a sent message.
      */
-    public int getMaxResends() {return _maxResends;}
-    public void setMaxResends(int numSends) {_maxResends = Math.max(numSends, 0);}
+    public int getMaxResends() {
+        return _maxResends;
+    }
+
+    public void setMaxResends(int numSends) {
+        _maxResends = Math.max(numSends, 0);
+    }
 
     /**
      * What period of inactivity qualifies as "too long"?
      *
      * @return period of inactivity qualifies as "too long"
      */
-    public int getInactivityTimeout() {return _inactivityTimeout;}
-    public void setInactivityTimeout(int timeout) {_inactivityTimeout = timeout;}
+    public int getInactivityTimeout() {
+        return _inactivityTimeout;
+    }
 
-    public int getInactivityAction() {return _inactivityAction;}
-    public void setInactivityAction(int action) {_inactivityAction = action;}
+    public void setInactivityTimeout(int timeout) {
+        _inactivityTimeout = timeout;
+    }
 
-    public int getMaxWindowSize() {return _maxWindowSize;}
+    public int getInactivityAction() {
+        return _inactivityAction;
+    }
+
+    public void setInactivityAction(int action) {
+        _inactivityAction = action;
+    }
+
+    public int getMaxWindowSize() {
+        return _maxWindowSize;
+    }
 
     public final void setMaxWindowSize(int msgs) {
         _maxWindowSize = 1;
-        if (msgs > 2 * Connection.MAX_WINDOW_SIZE) {_maxWindowSize = 2 * Connection.MAX_WINDOW_SIZE;}
-        else if (msgs < 2) {_maxWindowSize = 2;}
-        else {_maxWindowSize = msgs;}
+        if (msgs > 2 * Connection.MAX_WINDOW_SIZE) {
+            _maxWindowSize = 2 * Connection.MAX_WINDOW_SIZE;
+        } else if (msgs < 2) {
+            _maxWindowSize = 2;
+        } else {
+            _maxWindowSize = msgs;
+        }
     }
 
     /**
@@ -862,8 +980,13 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *
      * @return size of the buffer used to accept data
      */
-    public int getInboundBufferSize() {return _inboundBufferSize;}
-    public void setInboundBufferSize(int bytes) {_inboundBufferSize = bytes;}
+    public int getInboundBufferSize() {
+        return _inboundBufferSize;
+    }
+
+    public void setInboundBufferSize(int bytes) {
+        _inboundBufferSize = bytes;
+    }
 
     /**
      * What is the maximum number of packets to buffer regardless of byte size?
@@ -871,7 +994,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *
      * @return maximum number of packets to buffer
      */
-    public int getMaxPacketCount() {return 1024;} // Fixed value for optimal performance
+    public int getMaxPacketCount() {
+        return 1024;
+    } // Fixed value for optimal performance
 
     /**
      * When we're in congestion avoidance, we grow the window size at the rate
@@ -880,8 +1005,13 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * mimics TCP, but using a smaller factor helps grow a little more rapidly.
      * @return window size to grow by to attempt to avoid congestion.
      */
-    public int getCongestionAvoidanceGrowthRateFactor() {return _congestionAvoidanceGrowthRateFactor;}
-    public void setCongestionAvoidanceGrowthRateFactor(int factor) {_congestionAvoidanceGrowthRateFactor = factor;}
+    public int getCongestionAvoidanceGrowthRateFactor() {
+        return _congestionAvoidanceGrowthRateFactor;
+    }
+
+    public void setCongestionAvoidanceGrowthRateFactor(int factor) {
+        _congestionAvoidanceGrowthRateFactor = factor;
+    }
 
     /**
      * When we're in slow start, we grow the window size at the rate
@@ -890,23 +1020,59 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * mimics TCP, but using a smaller factor helps grow a little more rapidly.
      * @return slow start window size to grow by to attempt to avoid sending many small packets.
      */
-    public int getSlowStartGrowthRateFactor() {return _slowStartGrowthRateFactor;}
-    public void setSlowStartGrowthRateFactor(int factor) {_slowStartGrowthRateFactor = factor;}
+    public int getSlowStartGrowthRateFactor() {
+        return _slowStartGrowthRateFactor;
+    }
+
+    public void setSlowStartGrowthRateFactor(int factor) {
+        _slowStartGrowthRateFactor = factor;
+    }
 
     /** all of these are @since 0.7.14; no public setters */
-    public int getMaxConnsPerMinute() {return _maxConnsPerMinute;}
-    public int getMaxConnsPerHour() {return _maxConnsPerHour;}
-    public int getMaxConnsPerDay() {return _maxConnsPerDay;}
-    public int getMaxTotalConnsPerMinute() {return _maxTotalConnsPerMinute;}
-    public int getMaxTotalConnsPerHour() {return _maxTotalConnsPerHour;}
-    public int getMaxTotalConnsPerDay() {return _maxTotalConnsPerDay;}
-    /** @since 0.9.3; no public setter */
-    public int getMaxConns() {return _maxConns;}
+    public int getMaxConnsPerMinute() {
+        return _maxConnsPerMinute;
+    }
 
-    public boolean isAccessListEnabled() {return _accessListEnabled;}
-    public boolean isBlacklistEnabled() {return _blackListEnabled;}
-    public Set<Hash> getAccessList() {return _accessList;}
-    public Set<Hash> getBlacklist() {return _blackList;}
+    public int getMaxConnsPerHour() {
+        return _maxConnsPerHour;
+    }
+
+    public int getMaxConnsPerDay() {
+        return _maxConnsPerDay;
+    }
+
+    public int getMaxTotalConnsPerMinute() {
+        return _maxTotalConnsPerMinute;
+    }
+
+    public int getMaxTotalConnsPerHour() {
+        return _maxTotalConnsPerHour;
+    }
+
+    public int getMaxTotalConnsPerDay() {
+        return _maxTotalConnsPerDay;
+    }
+
+    /** @since 0.9.3; no public setter */
+    public int getMaxConns() {
+        return _maxConns;
+    }
+
+    public boolean isAccessListEnabled() {
+        return _accessListEnabled;
+    }
+
+    public boolean isBlacklistEnabled() {
+        return _blackListEnabled;
+    }
+
+    public Set<Hash> getAccessList() {
+        return _accessList;
+    }
+
+    public Set<Hash> getBlacklist() {
+        return _blackList;
+    }
 
     /**
      * "reset", "drop", "http", or custom string.
@@ -914,7 +1080,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *
      * @since 0.9.34
      */
-    public String getLimitAction() {return _limitAction;}
+    public String getLimitAction() {
+        return _limitAction;
+    }
 
     /**
      * This option is mostly handled on the router side,
@@ -923,7 +1091,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *
      * @since 0.9.34
      */
-    public int getTagsToSend() {return _tagsToSend;}
+    public int getTagsToSend() {
+        return _tagsToSend;
+    }
 
     /**
      * This option is mostly handled on the router side,
@@ -932,7 +1102,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *
      * @since 0.9.34
      */
-    public int getTagThreshold() {return _tagThreshold;}
+    public int getTagThreshold() {
+        return _tagThreshold;
+    }
 
     private void initLists(ConnectionOptions opts) {
         _accessList = opts.getAccessList();
@@ -947,20 +1119,32 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         // Don't think these would ever be accessed simultaneously,
         // but avoid concurrent modification just in case
         Set<Hash> accessList, blackList;
-        if (accessListEnabled) {accessList = new HashSet<Hash>();}
-        else {accessList = Collections.emptySet();}
-        if (blackListEnabled) {blackList = new HashSet<Hash>();}
-        else {blackList = Collections.emptySet();}
+        if (accessListEnabled) {
+            accessList = new HashSet<Hash>();
+        } else {
+            accessList = Collections.emptySet();
+        }
+        if (blackListEnabled) {
+            blackList = new HashSet<Hash>();
+        } else {
+            blackList = Collections.emptySet();
+        }
         if (accessListEnabled || blackListEnabled) {
             String hashes = opts.getProperty(PROP_ACCESS_LIST);
-            if (hashes == null) {return;}
+            if (hashes == null) {
+                return;
+            }
             StringTokenizer tok = new StringTokenizer(hashes, ",; ");
             while (tok.hasMoreTokens()) {
                 String hashstr = tok.nextToken();
                 Hash h = ConvertToHash.getHash(hashstr);
-                if (h == null) {error("Invalid entry in access list: " + hashstr);}
-                else if (blackListEnabled) {blackList.add(h);}
-                else {accessList.add(h);}
+                if (h == null) {
+                    error("Invalid entry in access list: " + hashstr);
+                } else if (blackListEnabled) {
+                    blackList.add(h);
+                } else {
+                    accessList.add(h);
+                }
             }
         }
         _accessList = accessList;
@@ -985,7 +1169,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
         buf.append("\n*");
-        if (_connectDelay > 0) {buf.append(" conDelay=").append(_connectDelay);}
+        if (_connectDelay > 0) {
+            buf.append(" conDelay=").append(_connectDelay);
+        }
         buf.append(" maxSize=").append(_maxMessageSize);
         buf.append(" rtt=").append(_rtt);
         buf.append(" rwin=").append(_receiveWindow);
@@ -995,29 +1181,27 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         buf.append(" maxResends=").append(_maxResends);
         buf.append("\n* writeTimeout=").append(getWriteTimeout());
         buf.append(" readTimeout=").append(getReadTimeout());
-        if (_inactivityTimeout > 0) {buf.append(" inactivityTimeout=").append(_inactivityTimeout);}
+        if (_inactivityTimeout > 0) {
+            buf.append(" inactivityTimeout=").append(_inactivityTimeout);
+        }
         buf.append(" inboundBuffer=").append(_inboundBufferSize);
         buf.append(" maxWindowSize=").append(_maxWindowSize);
 
-/** Unresolved NPE
-        if (_blackListEnabled && !_blackList.isEmpty() || _accessList.size() > 0 || (_maxConnsPerMinute > 0
-                                   || _maxConnsPerHour > 0 || _maxConnsPerDay > 0)
-                                   || (_maxTotalConnsPerMinute > 0 || _maxTotalConnsPerHour > 0 || _maxTotalConnsPerDay > 0))
-            buf.append("\n*");
-        if (_blackListEnabled && !_blackList.isEmpty())
-            buf.append(" blacklistSize=").append(_blackList.size());
-        if (_accessListEnabled && !_accessList.isEmpty())
-            buf.append(" whitelistSize=").append(_accessList.size());
-**/
+        /** Unresolved NPE
+         * if (_blackListEnabled && !_blackList.isEmpty() || _accessList.size() > 0 || (_maxConnsPerMinute > 0
+         * || _maxConnsPerHour > 0 || _maxConnsPerDay > 0)
+         * || (_maxTotalConnsPerMinute > 0 || _maxTotalConnsPerHour > 0 || _maxTotalConnsPerDay > 0))
+         * buf.append("\n*");
+         * if (_blackListEnabled && !_blackList.isEmpty())
+         * buf.append(" blacklistSize=").append(_blackList.size());
+         * if (_accessListEnabled && !_accessList.isEmpty())
+         * buf.append(" whitelistSize=").append(_accessList.size());
+         **/
         if (_maxConnsPerMinute > 0 || _maxConnsPerHour > 0 || _maxConnsPerDay > 0) {
-            buf.append(" maxConns=").append(_maxConnsPerMinute).append('/')
-                                    .append(_maxConnsPerHour).append('/')
-                                    .append(_maxConnsPerDay);
+            buf.append(" maxConns=").append(_maxConnsPerMinute).append('/').append(_maxConnsPerHour).append('/').append(_maxConnsPerDay);
         }
         if (_maxTotalConnsPerMinute > 0 || _maxTotalConnsPerHour > 0 || _maxTotalConnsPerDay > 0) {
-            buf.append(" maxTotalConns=").append(_maxTotalConnsPerMinute).append('/')
-                                         .append(_maxTotalConnsPerHour).append('/')
-                                         .append(_maxTotalConnsPerDay);
+            buf.append(" maxTotalConns=").append(_maxTotalConnsPerMinute).append('/').append(_maxTotalConnsPerHour).append('/').append(_maxTotalConnsPerDay);
         }
         return buf.toString();
     }
@@ -1025,8 +1209,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private static boolean getBool(Properties opts, String name, boolean defaultVal) {
         if (opts == null) return defaultVal;
         String val = opts.getProperty(name);
-        if (val == null)  return defaultVal;
+        if (val == null) return defaultVal;
         return Boolean.parseBoolean(val);
     }
-
 }

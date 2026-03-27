@@ -1,5 +1,9 @@
 package net.i2p.router.web.helpers;
 
+import net.i2p.router.web.HelperBase;
+import net.i2p.router.web.Messages;
+import net.i2p.router.web.PluginStarter;
+
 import java.io.IOException;
 import java.text.Collator;
 import java.util.ArrayList;
@@ -7,9 +11,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import net.i2p.router.web.HelperBase;
-import net.i2p.router.web.Messages;
-import net.i2p.router.web.PluginStarter;
 
 /**
  * Render the configuration menu at the top of all the config pages.
@@ -19,23 +20,17 @@ import net.i2p.router.web.PluginStarter;
 public class HelpSectionHelper extends HelperBase {
 
     /** help-X.jsp */
-    private static final String pages[] =
-        {"", "configuration", "sidebar", "reseeding", "advancedsettings",
-            "faq", "reachability", "reseed", "jsonrpc", "legal" };
+    private static final String pages[] = {"", "configuration", "sidebar", "reseeding", "advancedsettings", "faq", "reachability", "reseed", "jsonrpc", "legal"};
 
-    private static final String titles[] =
-        {_x("Overview"),
-                                           _x("Configuration"),
-                                           _x("Sidebar"),
-                                           _x("Reseeding"),
-                                           _x("FAQ"),
-                                           _x("JSON-RPC API") };
+    private static final String titles[] = {_x("Overview"), _x("Configuration"), _x("Sidebar"), _x("Reseeding"), _x("FAQ"), _x("JSON-RPC API")};
 
     /** @since 0.9.19 */
     private static class Tab {
         public final String page, title;
+
         public Tab(String p, String t) {
-            page = p; title = t;
+            page = p;
+            title = t;
         }
     }
 
@@ -62,19 +57,19 @@ public class HelpSectionHelper extends HelperBase {
         StringBuilder buf = new StringBuilder(1024);
         List<Tab> tabs = new ArrayList<Tab>(pages.length);
         boolean hidePlugins = !PluginStarter.pluginsEnabled(_context);
-        for (int i = 0; i < pages.length; i++) {tabs.add(new Tab(pages[i], _t(titles[i])));}
+        for (int i = 0; i < pages.length; i++) {
+            tabs.add(new Tab(pages[i], _t(titles[i])));
+        }
         Collections.sort(tabs, new TabComparator());
         for (int i = 0; i < tabs.size(); i++) {
             String page = "help-" + tabs.get(i).page;
             if (requestURI.endsWith(page) || requestURI.endsWith(page + ".jsp")) {
                 buf.append("<span class=tab2>").append(tabs.get(i).title); // we are there
             } else { // we are not there, make a link
-                buf.append("<span class=tab>").append("<a href=\"").append(page).append("\">")
-                   .append(tabs.get(i).title).append("</a>");
+                buf.append("<span class=tab>").append("<a href=\"").append(page).append("\">").append(tabs.get(i).title).append("</a>");
             }
             buf.append("</span>\n");
         }
         _out.append(buf);
     }
-
 }

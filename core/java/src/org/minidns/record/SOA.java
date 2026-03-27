@@ -10,11 +10,12 @@
  */
 package org.minidns.record;
 
+import org.minidns.dnsname.DnsName;
+import org.minidns.record.Record.TYPE;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import org.minidns.dnsname.DnsName;
-import org.minidns.record.Record.TYPE;
 
 /**
  * DNS SOA (Start of Authority) record payload.<br>
@@ -60,8 +61,7 @@ public class SOA extends Data {
      */
     public final long /* unsigned int */ minimum;
 
-    public static SOA parse(DataInputStream dis, byte[] data)
-            throws IOException {
+    public static SOA parse(DataInputStream dis, byte[] data) throws IOException {
         DnsName mname = DnsName.parse(dis, data);
         DnsName rname = DnsName.parse(dis, data);
         long serial = dis.readInt() & 0xFFFFFFFFL;
@@ -104,14 +104,7 @@ public class SOA extends Data {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder()
-                .append(mname).append(". ")
-                .append(rname).append(". ")
-                .append(serial).append(' ')
-                .append(refresh).append(' ')
-                .append(retry).append(' ')
-                .append(expire).append(' ')
-                .append(minimum);
+        StringBuilder sb = new StringBuilder().append(mname).append(". ").append(rname).append(". ").append(serial).append(' ').append(refresh).append(' ').append(retry).append(' ').append(expire).append(' ').append(minimum);
         return sb.toString();
     }
 }

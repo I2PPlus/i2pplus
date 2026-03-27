@@ -16,7 +16,7 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
     private final HopConfig _config;
     private RouterInfo _target;
 
-    private static final long MAX_LOOKUP_TIME = 15*1000;
+    private static final long MAX_LOOKUP_TIME = 15 * 1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_PARTICIPATING;
 
     public InboundGatewayReceiver(RouterContext ctx, HopConfig cfg) {
@@ -30,28 +30,24 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
     }
 
     public long receiveEncrypted(byte[] encrypted, boolean alreadySearched) {
-        if (!alreadySearched)
-            _config.incrementProcessedMessages();
+        if (!alreadySearched) _config.incrementProcessedMessages();
         if (_target == null) {
             _target = _context.netDb().lookupRouterInfoLocally(_config.getSendTo());
             if (_target == null) {
                 // It should be rare to forget the router info for the next peer
                 ReceiveJob j = null;
-                if (alreadySearched)
-                    _context.statManager().addRateData("tunnel.inboundLookupSuccess", 0);
-                else
-                    j = new ReceiveJob(_context, encrypted);
+                if (alreadySearched) _context.statManager().addRateData("tunnel.inboundLookupSuccess", 0);
+                else j = new ReceiveJob(_context, encrypted);
                 _context.netDb().lookupRouterInfo(_config.getSendTo(), j, j, MAX_LOOKUP_TIME);
                 return -1;
             }
         }
-        if (alreadySearched)
-            _context.statManager().addRateData("tunnel.inboundLookupSuccess", 1);
+        if (alreadySearched) _context.statManager().addRateData("tunnel.inboundLookupSuccess", 1);
 
         // We do this before the preprocessor now (i.e. before fragmentation)
-        //if (_context.tunnelDispatcher().shouldDropParticipatingMessage("IBGW", encrypted.length))
+        // if (_context.tunnelDispatcher().shouldDropParticipatingMessage("IBGW", encrypted.length))
         //    return -1;
-        //_config.incrementSentMessages();
+        // _config.incrementSentMessages();
         TunnelDataMessage msg = new TunnelDataMessage(_context);
         msg.setData(encrypted);
         msg.setTunnelId(_config.getSendTunnel());
@@ -78,7 +74,9 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
             _encrypted = data;
         }
 
-        public String getName() { return "Lookup IBGW First Hop"; }
+        public String getName() {
+            return "Lookup IBGW First Hop";
+        }
 
         public void runJob() {
             receiveEncrypted(_encrypted, true);

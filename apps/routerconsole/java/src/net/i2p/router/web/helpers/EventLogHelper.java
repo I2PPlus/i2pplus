@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
@@ -14,7 +15,6 @@ import net.i2p.router.util.EventLog;
 import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.FormHandler;
 import net.i2p.router.web.HelperBase;
-import java.util.Locale;
 
 /**
  * Helper for router event log display and filtering.
@@ -24,7 +24,7 @@ import java.util.Locale;
  */
 public class EventLogHelper extends FormHandler {
     private long _from, _age;
-    //private long _to = Long.MAX_VALUE;
+    // private long _to = Long.MAX_VALUE;
     private String _event = ALL;
     // EventLog name to translated display string
     private final Map<String, String> _xevents;
@@ -57,8 +57,8 @@ public class EventLogHelper extends FormHandler {
         EventLog.WATCHDOG, _x("Watchdog warning")
     };
     // in seconds
-    private static final long DAY = 24*60*60L;
-    private static final long[] _times = { 0, DAY, 7*DAY, 30*DAY, 90*DAY, 365*DAY };
+    private static final long DAY = 24 * 60 * 60L;
+    private static final long[] _times = {0, DAY, 7 * DAY, 30 * DAY, 90 * DAY, 365 * DAY};
 
     public EventLogHelper() {
         super();
@@ -80,10 +80,8 @@ public class EventLogHelper extends FormHandler {
     public void setFrom(String s) {
         try {
             _age = Long.parseLong(s) * 1000;
-            if (_age > 0)
-                _from = _context.clock().now() - _age;
-            else
-                _from = 0;
+            if (_age > 0) _from = _context.clock().now() - _age;
+            else _from = 0;
         } catch (NumberFormatException nfe) {
             _age = 0;
             _from = 0;
@@ -101,9 +99,8 @@ public class EventLogHelper extends FormHandler {
         String nonce = CSSHelper.getNonce();
         try {
             _out.write("<br><div class=logwrap>\n<h3 id=displayevents>" + _t("Display Events") + "</h3>");
-            _out.write("<form action=/events method=post>\n" +
-                       "<input type=hidden name=action value=Save>\n" +
-                       "<input type=hidden name=nonce value=\"" + nonce + "\">\n<b>");
+            _out.write("<form action=/events method=post>\n" + "<input type=hidden name=action value=Save>\n"
+                    + "<input type=hidden name=nonce value=\"" + nonce + "\">\n<b>");
             _out.write(_t("Events since") + ":</b> <select name=from>");
             for (int i = 0; i < _times.length; i++) {
                 writeOption(_times[i]);
@@ -119,8 +116,8 @@ public class EventLogHelper extends FormHandler {
             for (Map.Entry<String, String> e : events.entrySet()) {
                 writeOption(e.getKey(), e.getValue());
             }
-            _out.write("</select>" +
-                       "&nbsp; <input type=submit class=accept value=\"" + _t("Filter events") + "\"></form>\n");
+            _out.write("</select>" + "&nbsp; <input type=submit class=accept value=\"" + _t("Filter events")
+                    + "\"></form>\n");
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -131,8 +128,7 @@ public class EventLogHelper extends FormHandler {
         _out.write("<option value=\"");
         _out.write(val);
         _out.write("\"");
-        if (val.equals(_event))
-             _out.write(HelperBase.SELECTED);
+        if (val.equals(_event)) _out.write(HelperBase.SELECTED);
         _out.write(">");
         _out.write(key);
         _out.write("</option>\n");
@@ -145,13 +141,10 @@ public class EventLogHelper extends FormHandler {
         _out.write("<option value=\"");
         _out.write(Long.toString(age));
         _out.write("\"");
-        if (age == _age / 1000)
-             _out.write(HelperBase.SELECTED);
+        if (age == _age / 1000) _out.write(HelperBase.SELECTED);
         _out.write(">");
-        if (age == 0)
-             _out.write(_t("All events"));
-        else
-             _out.write(DataHelper.formatDuration2(age * 1000));
+        if (age == 0) _out.write(_t("All events"));
+        else _out.write(DataHelper.formatDuration2(age * 1000));
         _out.write("</option>\n");
     }
 
@@ -160,26 +153,30 @@ public class EventLogHelper extends FormHandler {
         // oldest first
         Map<Long, String> events;
         boolean isAll = ALL.equals(_event);
-        if (isAll)
-            events = ev.getEvents(_from);
-        else
-            events = ev.getEvents(_event, _from);
+        if (isAll) events = ev.getEvents(_from);
+        else events = ev.getEvents(_event, _from);
         String xev = _xevents.get(_event);
-        if (xev == null)
-            xev = _event;
+        if (xev == null) xev = _event;
         xev = DataHelper.escapeHTML(xev);
         if (events.isEmpty()) {
             if (isAll) {
                 if (_age == 0)
-                    return ("<table id=eventlog>\n<tr><td class=infohelp>") + _t("No events found") + ("</td></tr></table>");
-                return ("<table id=eventlog><tr><td>") + _t("No events found in previous {0}", DataHelper.formatDuration2(_age)) + ("</td></tr></table>\n");
+                    return ("<table id=eventlog>\n<tr><td class=infohelp>")
+                            + _t("No events found")
+                            + ("</td></tr></table>");
+                return ("<table id=eventlog><tr><td>")
+                        + _t("No events found in previous {0}", DataHelper.formatDuration2(_age))
+                        + ("</td></tr></table>\n");
             }
             if (_age == 0)
-                return ("<table id=eventlog>\n<tr><td  class=infohelp>") + _t("No \"{0}\" events found", xev) + ("</td></tr></table>\n");
-            return ("<table id=eventlog>\n<tr><td class=infohelp>") +
-                    _t("No \"{0}\" events found in previous {1}", xev, DataHelper.formatDuration2(_age)) + ("</td></tr></table>\n");
+                return ("<table id=eventlog>\n<tr><td  class=infohelp>")
+                        + _t("No \"{0}\" events found", xev)
+                        + ("</td></tr></table>\n");
+            return ("<table id=eventlog>\n<tr><td class=infohelp>")
+                    + _t("No \"{0}\" events found in previous {1}", xev, DataHelper.formatDuration2(_age))
+                    + ("</td></tr></table>\n");
         }
-        StringBuilder buf = new StringBuilder(16*1024);
+        StringBuilder buf = new StringBuilder(16 * 1024);
         buf.append("<table id=eventlog><thead><tr><th>");
         buf.append(_t("Time"));
         buf.append("</th><th>");
@@ -202,7 +199,9 @@ public class EventLogHelper extends FormHandler {
                 type = type + (' ');
             }
             // create a class from truncated event type so we can style the tr's by event severity
-            type = DIGITS.matcher(SPACE_THEN_CHARS.matcher(type.substring(0,8)).replaceAll("")).replaceAll("").toLowerCase(Locale.ROOT);
+            type = DIGITS.matcher(SPACE_THEN_CHARS.matcher(type.substring(0, 8)).replaceAll(""))
+                    .replaceAll("")
+                    .toLowerCase(Locale.ROOT);
             if (isAll) {
                 buf.append("<tr class=\"").append(type).append(" lazy\">");
             } else {
@@ -214,12 +213,10 @@ public class EventLogHelper extends FormHandler {
             if (isAll) {
                 String[] s = DataHelper.split(event, " ", 2);
                 String xs = _xevents.get(s[0]);
-                if (xs == null)
-                     xs = s[0];
+                if (xs == null) xs = s[0];
                 buf.append(xs);
                 buf.append("</td><td>");
-                if (s.length > 1)
-                     buf.append(s[1]);
+                if (s.length > 1) buf.append(s[1]);
             } else {
                 buf.append(event);
             }

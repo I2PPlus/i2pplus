@@ -10,18 +10,15 @@ import net.i2p.data.DataHelper;
  * @since 0.9.40
  */
 public enum SigContext {
-
-    SC_NONE     (null),
-    SC_DATAGRAM ("sign_datagramI2P"),
-    SC_I2CP     ("I2CP_SessionConf"),
-    SC_NETDB    ("network_database"),
-    SC_NTCP     ("NTCP_1_handshake"),
-    SC_SSU      ("SSUHandshakeSign"),
+    SC_NONE(null),
+    SC_DATAGRAM("sign_datagramI2P"),
+    SC_I2CP("I2CP_SessionConf"),
+    SC_NETDB("network_database"),
+    SC_NTCP("NTCP_1_handshake"),
+    SC_SSU("SSUHandshakeSign"),
     SC_STREAMING("streaming_i2psig"),
-    SC_SU3      ("i2pSU3FileFormat"),
-    SC_TEST     ("test1234test5678"),
-
-;
+    SC_SU3("i2pSU3FileFormat"),
+    SC_TEST("test1234test5678");
 
     private final SigContextSpec spec;
 
@@ -37,7 +34,9 @@ public enum SigContext {
      * Pass this as an argument in setParameter()
      * to the Blake sign/verify engines.
      */
-    public SigContextSpec getSpec() { return spec; }
+    public SigContextSpec getSpec() {
+        return spec;
+    }
 
     /**
      * Algorithm parameter specification for personalized hash contexts in digital signatures.
@@ -105,7 +104,8 @@ public enum SigContext {
             if (context != null) {
                 b = DataHelper.getASCII(context);
                 if (b.length != 16)
-                    throw new IllegalArgumentException("Context string must be exactly 16 characters, got: " + b.length);
+                    throw new IllegalArgumentException(
+                            "Context string must be exactly 16 characters, got: " + b.length);
             } else {
                 b = null;
             }
@@ -118,6 +118,8 @@ public enum SigContext {
          *
          * @return the 16-byte context data as a byte array, or null if no context is set
          */
-        public byte[] getData() { return b; }
+        public byte[] getData() {
+            return b;
+        }
     }
 }

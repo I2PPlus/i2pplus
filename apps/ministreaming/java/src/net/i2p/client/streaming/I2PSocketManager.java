@@ -4,6 +4,11 @@
  */
 package net.i2p.client.streaming;
 
+import net.i2p.I2PException;
+import net.i2p.client.I2PSession;
+import net.i2p.client.I2PSessionException;
+import net.i2p.data.Destination;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
@@ -14,11 +19,6 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import net.i2p.I2PAppContext;
-import net.i2p.I2PException;
-import net.i2p.client.I2PSession;
-import net.i2p.client.I2PSessionException;
-import net.i2p.data.Destination;
 
 /**
  * Centralize the coordination and multiplexing of the local client's streaming.
@@ -66,6 +66,7 @@ public interface I2PSocketManager {
      * @param ms milliseconds to wait, maximum
      */
     public void setAcceptTimeout(long ms);
+
     public long getAcceptTimeout();
 
     /**
@@ -117,9 +118,7 @@ public interface I2PSocketManager {
      * @throws InterruptedIOException if the connection timeouts
      * @throws I2PException if there is some other I2P-related problem
      */
-    public I2PSocket connect(Destination peer, I2PSocketOptions options)
-                             throws I2PException, ConnectException,
-                             NoRouteToHostException, InterruptedIOException;
+    public I2PSocket connect(Destination peer, I2PSocketOptions options) throws I2PException, ConnectException, NoRouteToHostException, InterruptedIOException;
 
     /**
      * Create a new connected socket (block until the socket is created)
@@ -132,8 +131,7 @@ public interface I2PSocketManager {
      * @throws InterruptedIOException if the connection timeouts
      * @throws I2PException if there is some other I2P-related problem
      */
-    public I2PSocket connect(Destination peer) throws I2PException, ConnectException,
-                                               NoRouteToHostException, InterruptedIOException;
+    public I2PSocket connect(Destination peer) throws I2PException, ConnectException, NoRouteToHostException, InterruptedIOException;
 
     /**
      * Destroy the socket manager, freeing all the associated resources.  This
@@ -214,6 +212,7 @@ public interface I2PSocketManager {
     public void setName(String name);
 
     public void addDisconnectListener(DisconnectListener lsnr);
+
     public void removeDisconnectListener(DisconnectListener lsnr);
 
     /** Listener for notification when an I2P session is disconnected */

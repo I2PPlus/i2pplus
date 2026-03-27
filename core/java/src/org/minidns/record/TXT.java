@@ -10,6 +10,8 @@
  */
 package org.minidns.record;
 
+import org.minidns.record.Record.TYPE;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -19,7 +21,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import org.minidns.record.Record.TYPE;
 
 /**
  * DNS TXT record payload for arbitrary text data.<br>
@@ -106,5 +107,4 @@ public class TXT extends Data {
     public String toString() {
         return "\"" + getText() + "\"";
     }
-
 }

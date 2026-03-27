@@ -7,10 +7,15 @@ package net.i2p.router.tunnel;
  */
 class DummyValidator implements IVValidator {
     private static final DummyValidator _instance = new DummyValidator();
-    public static DummyValidator getInstance() { return _instance; }
+
+    public static DummyValidator getInstance() {
+        return _instance;
+    }
+
     private DummyValidator() {}
 
     @Override
-    public boolean receiveIV(byte ivData[], int ivOffset, byte payload[], int payloadOffset) { return true; }
-
+    public boolean receiveIV(byte ivData[], int ivOffset, byte payload[], int payloadOffset) {
+        return true;
+    }
 }

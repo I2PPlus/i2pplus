@@ -6,7 +6,6 @@ package net.i2p.crypto;
  * @since 0.9.9
  */
 public enum SigAlgo {
-
     DSA("DSA"),
     EC("EC"),
     EdDSA("EdDSA"),
@@ -26,5 +25,7 @@ public enum SigAlgo {
         this.name = name;
     }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 }

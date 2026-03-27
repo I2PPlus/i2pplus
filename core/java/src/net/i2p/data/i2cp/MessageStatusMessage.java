@@ -9,11 +9,12 @@ package net.i2p.data.i2cp;
  *
  */
 
+import net.i2p.data.DataFormatException;
+import net.i2p.data.DataHelper;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import net.i2p.data.DataFormatException;
-import net.i2p.data.DataHelper;
 
 /**
  * Defines the message a router sends to a client about a single message.
@@ -23,7 +24,7 @@ import net.i2p.data.DataHelper;
  * @author jrandom
  */
 public class MessageStatusMessage extends I2CPMessageImpl {
-    public final static int MESSAGE_TYPE = 22;
+    public static final int MESSAGE_TYPE = 22;
     private int _sessionId;
     private long _messageId;
     private long _nonce;
@@ -33,72 +34,73 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     /**
      *  For incoming messages. All the rest are for outgoing.
      */
-    public final static int STATUS_AVAILABLE = 0;
-    public final static int STATUS_SEND_ACCEPTED = 1;
+    public static final int STATUS_AVAILABLE = 0;
+
+    public static final int STATUS_SEND_ACCEPTED = 1;
 
     /** unused */
-    public final static int STATUS_SEND_BEST_EFFORT_SUCCESS = 2;
+    public static final int STATUS_SEND_BEST_EFFORT_SUCCESS = 2;
 
     /**
      *  A probable failure, but we don't know for sure.
      */
-    public final static int STATUS_SEND_BEST_EFFORT_FAILURE = 3;
+    public static final int STATUS_SEND_BEST_EFFORT_FAILURE = 3;
 
     /**
      *  Generic success.
      *  May not really be guaranteed, as the best-effort
      *  success code is unused.
      */
-    public final static int STATUS_SEND_GUARANTEED_SUCCESS = 4;
+    public static final int STATUS_SEND_GUARANTEED_SUCCESS = 4;
 
     /**
      *  Generic failure, specific cause unknown.
      *  May not really be a guaranteed failure, as the best-effort
      *  failure code is unused.
      */
-    public final static int STATUS_SEND_GUARANTEED_FAILURE = 5;
+    public static final int STATUS_SEND_GUARANTEED_FAILURE = 5;
 
     /**
      *  The far-end destination is local and we are pretty darn sure
      *  the delivery succeeded.
      *  @since 0.9.5
      */
-    public final static int STATUS_SEND_SUCCESS_LOCAL = 6;
+    public static final int STATUS_SEND_SUCCESS_LOCAL = 6;
 
     /**
      *  The far-end destination is local but delivery failed for some reason.
      *  This is a guaranteed failure.
      *  @since 0.9.5
      */
-    public final static int STATUS_SEND_FAILURE_LOCAL = 7;
+    public static final int STATUS_SEND_FAILURE_LOCAL = 7;
 
     /**
      *  The router is not ready, has shut down, or has major problems.
      *  This is a guaranteed failure.
      *  @since 0.9.5
      */
-    public final static int STATUS_SEND_FAILURE_ROUTER = 8;
+    public static final int STATUS_SEND_FAILURE_ROUTER = 8;
 
     /**
      *  The PC apparently has no network connectivity at all.
      *  This is a guaranteed failure.
      *  @since 0.9.5
      */
-    public final static int STATUS_SEND_FAILURE_NETWORK = 9;
+    public static final int STATUS_SEND_FAILURE_NETWORK = 9;
 
     /**
      *  The session is invalid or closed.
      *  This is a guaranteed failure.
      *  @since 0.9.5
      */
-    public final static int STATUS_SEND_FAILURE_BAD_SESSION = 10;
+    public static final int STATUS_SEND_FAILURE_BAD_SESSION = 10;
 
     /**
      *  The message payload is invalid or zero-length or too big.
      *  This is a guaranteed failure.
      *  @since 0.9.5
      */
-    public final static int STATUS_SEND_FAILURE_BAD_MESSAGE = 11;
+    public static final int STATUS_SEND_FAILURE_BAD_MESSAGE = 11;
 
     /**
      *  Something is invalid in the message options, or the expiration
@@ -106,21 +108,21 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  This is a guaranteed failure.
      *  @since 0.9.5
      */
-    public final static int STATUS_SEND_FAILURE_BAD_OPTIONS = 12;
+    public static final int STATUS_SEND_FAILURE_BAD_OPTIONS = 12;
 
     /**
      *  Some queue or buffer in the router is full and the message was dropped.
      *  This is a guaranteed failure.
      *  @since 0.9.5
      */
-    public final static int STATUS_SEND_FAILURE_OVERFLOW = 13;
+    public static final int STATUS_SEND_FAILURE_OVERFLOW = 13;
 
     /**
      *  Message expired before it could be sent.
      *  This is a guaranteed failure.
      *  @since 0.9.5
      */
-    public final static int STATUS_SEND_FAILURE_EXPIRED = 14;
+    public static final int STATUS_SEND_FAILURE_EXPIRED = 14;
 
     /**
      *  Local leaseset problems. The client has not yet signed
@@ -129,7 +131,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  This is a guaranteed failure.
      *  @since 0.9.5
      */
-    public final static int STATUS_SEND_FAILURE_LOCAL_LEASESET = 15;
+    public static final int STATUS_SEND_FAILURE_LOCAL_LEASESET = 15;
 
     /**
      *  Local problems - no outbound tunnel to send through,
@@ -137,7 +139,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  This is a guaranteed failure.
      *  @since 0.9.5
      */
-    public final static int STATUS_SEND_FAILURE_NO_TUNNELS = 16;
+    public static final int STATUS_SEND_FAILURE_NO_TUNNELS = 16;
 
     /**
      *  The certs or options in the destination or leaseset indicate that
@@ -145,7 +147,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  This is a guaranteed failure.
      *  @since 0.9.5
      */
-    public final static int STATUS_SEND_FAILURE_UNSUPPORTED_ENCRYPTION = 17;
+    public static final int STATUS_SEND_FAILURE_UNSUPPORTED_ENCRYPTION = 17;
 
     /**
      *  Something strange is wrong with the far-end destination.
@@ -153,7 +155,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  This is a guaranteed failure.
      *  @since 0.9.5
      */
-    public final static int STATUS_SEND_FAILURE_DESTINATION = 18;
+    public static final int STATUS_SEND_FAILURE_DESTINATION = 18;
 
     /**
      *  We got the far-end leaseset but something strange is wrong with it.
@@ -161,14 +163,14 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  This is a guaranteed failure.
      *  @since 0.9.5
      */
-    public final static int STATUS_SEND_FAILURE_BAD_LEASESET = 19;
+    public static final int STATUS_SEND_FAILURE_BAD_LEASESET = 19;
 
     /**
      *  We got the far-end leaseset but it's expired and can't get a new one.
      *  This is a guaranteed failure.
      *  @since 0.9.5
      */
-    public final static int STATUS_SEND_FAILURE_EXPIRED_LEASESET = 20;
+    public static final int STATUS_SEND_FAILURE_EXPIRED_LEASESET = 20;
 
     /**
      *  Could not find the far-end destination's lease set.
@@ -176,7 +178,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  This is a guaranteed failure.
      *  @since 0.9.5
      */
-    public final static int STATUS_SEND_FAILURE_NO_LEASESET = 21;
+    public static final int STATUS_SEND_FAILURE_NO_LEASESET = 21;
 
     /**
      *  The far-end destination's lease set was a meta lease set,
@@ -186,14 +188,14 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  This is a guaranteed failure.
      *  @since 0.9.41
      */
-    public final static int STATUS_SEND_FAILURE_META_LEASESET = 22;
+    public static final int STATUS_SEND_FAILURE_META_LEASESET = 22;
 
     /**
      *  Message was attempted to be sent to the same Destination.
      *  This is a guaranteed failure.
      *  @since 0.9.62
      */
-    public final static int STATUS_SEND_FAILURE_LOOPBACK = 23;
+    public static final int STATUS_SEND_FAILURE_LOOPBACK = 23;
 
     /**
      * NOTE: Add any new status codes to handlers in:
@@ -204,7 +206,6 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *   net.i2p.i2ptunnel.I2PTunnelHTTPClientBase
      *   and update http://i2p-projekt.i2p/spec/i2cp
      */
-
     public MessageStatusMessage() {
         _sessionId = -1;
         _status = -1;
@@ -228,10 +229,10 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-      *  Sets the session ID.
-      *
-      * @param id 0-65535
-      */
+     *  Sets the session ID.
+     *
+     * @param id 0-65535
+     */
     public void setSessionId(long id) {
         _sessionId = (int) id;
     }
@@ -241,10 +242,10 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-      *  Sets the status code.
-      *
-      * @param status 0-255
-      */
+     *  Sets the status code.
+     *
+     * @param status 0-255
+     */
     public void setStatus(int status) {
         _status = status;
     }
@@ -262,11 +263,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  @since 0.9.5
      */
     public static boolean isSuccessful(int status) {
-        return status == STATUS_SEND_GUARANTEED_SUCCESS ||
-               status == STATUS_SEND_BEST_EFFORT_SUCCESS ||
-               status == STATUS_SEND_SUCCESS_LOCAL ||
-               status == STATUS_SEND_ACCEPTED ||
-               status == STATUS_AVAILABLE;
+        return status == STATUS_SEND_GUARANTEED_SUCCESS || status == STATUS_SEND_BEST_EFFORT_SUCCESS || status == STATUS_SEND_SUCCESS_LOCAL || status == STATUS_SEND_ACCEPTED || status == STATUS_AVAILABLE;
     }
 
     /**
@@ -307,24 +304,15 @@ public class MessageStatusMessage extends I2CPMessageImpl {
 
     public static final String getStatusString(int status) {
         switch (status) {
-            case STATUS_AVAILABLE:
-                return "AVAILABLE";
-            case STATUS_SEND_ACCEPTED:
-                return "SEND ACCEPTED";
-            case STATUS_SEND_BEST_EFFORT_SUCCESS:
-                return "BEST EFFORT SUCCESS";
-            case STATUS_SEND_GUARANTEED_SUCCESS:
-                return "GUARANTEED SUCCESS";
-            case STATUS_SEND_SUCCESS_LOCAL:
-                return "LOCAL SUCCESS";
-            case STATUS_SEND_BEST_EFFORT_FAILURE:
-                return "PROBABLE FAILURE";
-            case STATUS_SEND_FAILURE_NO_TUNNELS:
-                return "NO LOCAL TUNNELS";
-            case STATUS_SEND_FAILURE_NO_LEASESET:
-                return "LEASESET NOT FOUND";
-            default:
-                return "SEND FAILURE CODE: " + status;
+            case STATUS_AVAILABLE: return "AVAILABLE";
+            case STATUS_SEND_ACCEPTED: return "SEND ACCEPTED";
+            case STATUS_SEND_BEST_EFFORT_SUCCESS: return "BEST EFFORT SUCCESS";
+            case STATUS_SEND_GUARANTEED_SUCCESS: return "GUARANTEED SUCCESS";
+            case STATUS_SEND_SUCCESS_LOCAL: return "LOCAL SUCCESS";
+            case STATUS_SEND_BEST_EFFORT_FAILURE: return "PROBABLE FAILURE";
+            case STATUS_SEND_FAILURE_NO_TUNNELS: return "NO LOCAL TUNNELS";
+            case STATUS_SEND_FAILURE_NO_LEASESET: return "LEASESET NOT FOUND";
+            default: return "SEND FAILURE CODE: " + status;
         }
     }
 
@@ -342,7 +330,6 @@ public class MessageStatusMessage extends I2CPMessageImpl {
         }
     }
 
-
     /**
      * Override to reduce mem churn
      * @throws IOException
@@ -350,10 +337,10 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     @Override
     public void writeMessage(OutputStream out) throws I2CPMessageException, IOException {
         int len = 2 + // sessionId
-                  4 + // messageId
-                  1 + // status
-                  4 + // size
-                  4; // nonce
+                        4 + // messageId
+                        1 + // status
+                        4 + // size
+                        4; // nonce
 
         try {
             DataHelper.writeLong(out, 4, len);
@@ -385,7 +372,9 @@ public class MessageStatusMessage extends I2CPMessageImpl {
         buf.append(" [MsgID ").append(_messageId).append("] -> ").append(getStatusString(_status));
         buf.append("\n* SessionID: ").append(_sessionId);
         buf.append("; Nonce: ").append(_nonce);
-        if (_size > 0) {buf.append("; Size: ").append(_size).append(" bytes");}
+        if (_size > 0) {
+            buf.append("; Size: ").append(_size).append(" bytes");
+        }
         return buf.toString();
     }
 }

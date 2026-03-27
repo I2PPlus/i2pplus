@@ -9,10 +9,11 @@ package net.i2p.data;
  *
  */
 
+import net.i2p.crypto.EncType;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import net.i2p.crypto.EncType;
 
 /**
  * Cryptographic public key for asymmetric encryption in I2P.
@@ -89,7 +90,7 @@ import net.i2p.crypto.EncType;
  */
 public class PublicKey extends SimpleDataStructure {
     private static final EncType DEF_TYPE = EncType.ELGAMAL_2048;
-    public final static int KEYSIZE_BYTES = DEF_TYPE.getPubkeyLen();
+    public static final int KEYSIZE_BYTES = DEF_TYPE.getPubkeyLen();
     private static final int CACHE_SIZE = 1024;
     private static final SDSCache<PublicKey> _cache = new SDSCache<PublicKey>(PublicKey.class, KEYSIZE_BYTES, CACHE_SIZE);
     private final EncType _type;
@@ -103,16 +104,22 @@ public class PublicKey extends SimpleDataStructure {
      * @throws DataFormatException if not enough bytes
      * @since 0.8.3
      */
-    public static PublicKey create(byte[] data, int off) {return _cache.get(data, off);}
+    public static PublicKey create(byte[] data, int off) {
+        return _cache.get(data, off);
+    }
 
     /**
      * Pull from cache or return new.
      * ELGAMAL_2048 only!
      * @since 0.8.3
      */
-    public static PublicKey create(InputStream in) throws IOException {return _cache.get(in);}
+    public static PublicKey create(InputStream in) throws IOException {
+        return _cache.get(in);
+    }
 
-    public PublicKey() {this(DEF_TYPE);}
+    public PublicKey() {
+        this(DEF_TYPE);
+    }
 
     /**
      *  @param type if null, type is unknown
@@ -125,7 +132,9 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /** @param data must be non-null */
-    public PublicKey(byte data[]) {this(DEF_TYPE, data);}
+    public PublicKey(byte data[]) {
+        this(DEF_TYPE, data);
+    }
 
     /**
      *  @param type if null, type is unknown
@@ -134,7 +143,9 @@ public class PublicKey extends SimpleDataStructure {
      */
     public PublicKey(EncType type, byte data[]) {
         this(type);
-        if (data == null) {throw new IllegalArgumentException("Data must be specified");}
+        if (data == null) {
+            throw new IllegalArgumentException("Data must be specified");
+        }
         setData(data);
     }
 
@@ -146,9 +157,13 @@ public class PublicKey extends SimpleDataStructure {
      */
     public PublicKey(int typeCode, byte data[]) {
         _type = null;
-        if (data == null) {throw new IllegalArgumentException("Data must be specified");}
+        if (data == null) {
+            throw new IllegalArgumentException("Data must be specified");
+        }
         _data = data;
-        if (typeCode <= 0 || typeCode > 255) {throw new IllegalArgumentException();}
+        if (typeCode <= 0 || typeCode > 255) {
+            throw new IllegalArgumentException();
+        }
         _unknownTypeCode = typeCode;
     }
 
@@ -157,33 +172,41 @@ public class PublicKey extends SimpleDataStructure {
      * @param base64Data a string of base64 data (the output of .toBase64() called
      * on a prior instance of PublicKey
      */
-    public PublicKey(String base64Data)  throws DataFormatException {
+    public PublicKey(String base64Data) throws DataFormatException {
         this(DEF_TYPE);
         fromBase64(base64Data);
     }
 
     @Override
     public int length() {
-        if (_type != null) {return _type.getPubkeyLen();}
-        if (_data != null) {return _data.length;}
+        if (_type != null) {
+            return _type.getPubkeyLen();
+        }
+        if (_data != null) {
+            return _data.length;
+        }
         return KEYSIZE_BYTES;
     }
 
     /**
-      *  Gets the encryption type of this public key.
-      *
-      *  @return null if unknown
-      *  @since 0.9.38
-      */
-    public EncType getType() {return _type;}
+     *  Gets the encryption type of this public key.
+     *
+     *  @return null if unknown
+     *  @since 0.9.38
+     */
+    public EncType getType() {
+        return _type;
+    }
 
     /**
-      *  Gets the type code for unknown encryption types.
-      *
-      *  Only valid if getType() returns null
-      *  @since 0.9.38
-      */
-    public int getUnknownTypeCode() {return _unknownTypeCode;}
+     *  Gets the type code for unknown encryption types.
+     *
+     *  Only valid if getType() returns null
+     *  @since 0.9.38
+     */
+    public int getUnknownTypeCode() {
+        return _unknownTypeCode;
+    }
 
     /**
      *  Up-convert this from an untyped (type 0) PK to a typed PK based on the Key Cert given.
@@ -193,16 +216,30 @@ public class PublicKey extends SimpleDataStructure {
      *  @since 0.9.42
      */
     PublicKey toTypedKey(KeyCertificate kcert) {
-        if (_data == null) {throw new IllegalStateException();}
+        if (_data == null) {
+            throw new IllegalStateException();
+        }
         EncType newType = kcert.getEncType();
-        if (_type == newType) {return this;}
-        if (_type != EncType.ELGAMAL_2048) {throw new IllegalArgumentException("Cannot convert " + _type + " to " + newType);}
-        if (newType == null) {return new PublicKey(null, _data);} // unknown type, keep the 256 bytes of data
+        if (_type == newType) {
+            return this;
+        }
+        if (_type != EncType.ELGAMAL_2048) {
+            throw new IllegalArgumentException("Cannot convert " + _type + " to " + newType);
+        }
+        if (newType == null) {
+            return new PublicKey(null, _data);
+        } // unknown type, keep the 256 bytes of data
         int newLen = newType.getPubkeyLen();
-        if (newLen == KEYSIZE_BYTES) {return new PublicKey(newType, _data);}
+        if (newLen == KEYSIZE_BYTES) {
+            return new PublicKey(newType, _data);
+        }
         byte[] newData = new byte[newLen];
-        if (newLen < KEYSIZE_BYTES) {System.arraycopy(_data, 0, newData, 0, newLen);} // LEFT justified, padding at end
-        else {throw new IllegalArgumentException("TODO");} // full 256 bytes + fragment in kcert
+        if (newLen < KEYSIZE_BYTES) {
+            System.arraycopy(_data, 0, newData, 0, newLen);
+        } // LEFT justified, padding at end
+        else {
+            throw new IllegalArgumentException("TODO");
+        } // full 256 bytes + fragment in kcert
         return new PublicKey(newType, newData);
     }
 
@@ -215,12 +252,20 @@ public class PublicKey extends SimpleDataStructure {
      *  @since 0.9.42
      */
     public byte[] getPadding(KeyCertificate kcert) {
-        if (_data == null) {throw new IllegalStateException();}
+        if (_data == null) {
+            throw new IllegalStateException();
+        }
         EncType newType = kcert.getEncType();
-        if (_type == newType || newType == null) {return new byte[0];}
-        if (_type != EncType.ELGAMAL_2048) {throw new IllegalStateException("Cannot convert " + _type + " to " + newType);}
+        if (_type == newType || newType == null) {
+            return new byte[0];
+        }
+        if (_type != EncType.ELGAMAL_2048) {
+            throw new IllegalStateException("Cannot convert " + _type + " to " + newType);
+        }
         int newLen = newType.getPubkeyLen();
-        if (newLen >= KEYSIZE_BYTES) {return new byte[0];}
+        if (newLen >= KEYSIZE_BYTES) {
+            return new byte[0];
+        }
         int padLen = KEYSIZE_BYTES - newLen;
         byte[] pad = new byte[padLen];
         System.arraycopy(_data, _data.length - padLen, pad, 0, padLen);
@@ -228,11 +273,13 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-      *  Clears the public key cache.
-      *
-      *  @since 0.9.17
-      */
-    public static void clearCache() {_cache.clear();}
+     *  Clears the public key cache.
+     *
+     *  @since 0.9.17
+     */
+    public static void clearCache() {
+        _cache.clear();
+    }
 
     /**
      *  @since 0.9.38
@@ -243,8 +290,11 @@ public class PublicKey extends SimpleDataStructure {
         buf.append((_type != null) ? "[" + _type.toString() + "]" : "[Unknown type: " + _unknownTypeCode).append("] -> ");
         if (_data != null) {
             int length = length();
-            if (length <= 32) {buf.append("[").append(toBase64()).append("]");}
-            else {buf.append("Size: ").append(length).append(" bytes");}
+            if (length <= 32) {
+                buf.append("[").append(toBase64()).append("]");
+            } else {
+                buf.append("Size: ").append(length).append(" bytes");
+            }
         }
         return buf.toString();
     }
@@ -253,15 +303,21 @@ public class PublicKey extends SimpleDataStructure {
      *  @since 0.9.42
      */
     @Override
-    public int hashCode() {return DataHelper.hashCode(_type) ^ super.hashCode();}
+    public int hashCode() {
+        return DataHelper.hashCode(_type) ^ super.hashCode();
+    }
 
     /**
      *  @since 0.9.42
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {return true;}
-        if (obj == null || !(obj instanceof PublicKey)) {return false;}
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || !(obj instanceof PublicKey)) {
+            return false;
+        }
         PublicKey s = (PublicKey) obj;
         return _type == s._type && Arrays.equals(_data, s._data);
     }

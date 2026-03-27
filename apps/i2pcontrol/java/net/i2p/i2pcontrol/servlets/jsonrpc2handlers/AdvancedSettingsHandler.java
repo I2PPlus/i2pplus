@@ -5,13 +5,15 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 import com.thetransactioncompany.jsonrpc2.server.MessageContext;
 import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
+
+import net.i2p.I2PAppContext;
+import net.i2p.router.RouterContext;
+import net.i2p.util.Log;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import net.i2p.I2PAppContext;
-import net.i2p.router.RouterContext;
-import net.i2p.util.Log;
 
 /**
  * JSON-RPC handler for advanced router settings.
@@ -31,10 +33,8 @@ public class AdvancedSettingsHandler implements RequestHandler {
     public AdvancedSettingsHandler(RouterContext ctx, JSONRPC2Helper helper) {
         _helper = helper;
         _context = ctx;
-        if (ctx != null)
-            _log = ctx.logManager().getLog(AdvancedSettingsHandler.class);
-        else
-            _log = I2PAppContext.getGlobalContext().logManager().getLog(AdvancedSettingsHandler.class);
+        if (ctx != null) _log = ctx.logManager().getLog(AdvancedSettingsHandler.class);
+        else _log = I2PAppContext.getGlobalContext().logManager().getLog(AdvancedSettingsHandler.class);
     }
 
     // Reports the method names of the handled requests
@@ -52,10 +52,7 @@ public class AdvancedSettingsHandler implements RequestHandler {
             }
 
             if (_context == null) {
-                return new JSONRPC2Response(new JSONRPC2Error(
-                                                JSONRPC2Error.INTERNAL_ERROR.getCode(),
-                                                "RouterContext was not initialized. Query failed"),
-                                            req.getID());
+                return new JSONRPC2Response(new JSONRPC2Error(JSONRPC2Error.INTERNAL_ERROR.getCode(), "RouterContext was not initialized. Query failed"), req.getID());
             }
 
             @SuppressWarnings("rawtypes")
@@ -65,33 +62,27 @@ public class AdvancedSettingsHandler implements RequestHandler {
             if (inParams.containsKey("setAll")) {
                 Object obj = inParams.get("setAll");
                 if (!(obj instanceof Map)) {
-                    JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(),
-                            "Value of \"setAll\" is not a Map");
+                    JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(), "Value of \"setAll\" is not a Map");
                     return new JSONRPC2Response(rpcErr, req.getID());
                 }
 
                 @SuppressWarnings("rawtypes")
                 Map objMap = (Map) inParams.get("setAll");
-                if (objMap.size() > 0)
-                {
-                    if (!(objMap.keySet().toArray()[0] instanceof String) &&
-                            !(objMap.values().toArray()[0] instanceof String)) {
-                        JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(),
-                                "Map of settings does not contain String keys and values");
+                if (objMap.size() > 0) {
+                    if (!(objMap.keySet().toArray()[0] instanceof String) && !(objMap.values().toArray()[0] instanceof String)) {
+                        JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(), "Map of settings does not contain String keys and values");
                         return new JSONRPC2Response(rpcErr, req.getID());
                     }
 
                     if (!checkTypes(objMap)) {
-                        JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INTERNAL_ERROR.getCode(),
-                                "Some of the supplied values are not strings");
+                        JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INTERNAL_ERROR.getCode(), "Some of the supplied values are not strings");
                         return new JSONRPC2Response(rpcErr, req.getID());
                     }
 
                     Map<String, String> allSettings = (Map<String, String>) objMap;
                     boolean success = setAdvancedSettings(allSettings, true);
                     if (!success) {
-                        JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INTERNAL_ERROR.getCode(),
-                                "Failed to save new config");
+                        JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INTERNAL_ERROR.getCode(), "Failed to save new config");
                         return new JSONRPC2Response(rpcErr, req.getID());
                     }
 
@@ -99,8 +90,7 @@ public class AdvancedSettingsHandler implements RequestHandler {
                     // Empty list of settings submitted
                     boolean success = setAdvancedSettings(null, true);
                     if (!success) {
-                        JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INTERNAL_ERROR.getCode(),
-                                "Failed to save new config");
+                        JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INTERNAL_ERROR.getCode(), "Failed to save new config");
                         return new JSONRPC2Response(rpcErr, req.getID());
                     }
                 }
@@ -113,39 +103,32 @@ public class AdvancedSettingsHandler implements RequestHandler {
             if (inParams.containsKey("set")) {
                 Object obj = inParams.get("set");
                 if (!(obj instanceof Map)) {
-                    JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(),
-                            "Value of \"set\" is not a Map");
+                    JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(), "Value of \"set\" is not a Map");
                     return new JSONRPC2Response(rpcErr, req.getID());
                 }
 
                 Map objMap = (Map) inParams.get("set");
-                if (objMap.size() > 0)
-                {
-                    if (!(objMap.keySet().toArray()[0] instanceof String) &&
-                            !(objMap.values().toArray()[0] instanceof String)) {
-                        JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(),
-                                "Map of settings does not contain String keys and values");
+                if (objMap.size() > 0) {
+                    if (!(objMap.keySet().toArray()[0] instanceof String) && !(objMap.values().toArray()[0] instanceof String)) {
+                        JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(), "Map of settings does not contain String keys and values");
                         return new JSONRPC2Response(rpcErr, req.getID());
                     }
 
                     if (!checkTypes(objMap)) {
-                        JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INTERNAL_ERROR.getCode(),
-                                "Some of the supplied values are not strings");
+                        JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INTERNAL_ERROR.getCode(), "Some of the supplied values are not strings");
                         return new JSONRPC2Response(rpcErr, req.getID());
                     }
 
                     Map<String, String> allSettings = (Map<String, String>) objMap;
                     boolean success = setAdvancedSettings(allSettings, false);
                     if (!success) {
-                        JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INTERNAL_ERROR.getCode(),
-                                "Failed to save new config");
+                        JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INTERNAL_ERROR.getCode(), "Failed to save new config");
                         return new JSONRPC2Response(rpcErr, req.getID());
                     }
 
                 } else {
                     // Empty list of settings submitted
-                    JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(),
-                            "Map of settings does not contain any entries");
+                    JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(), "Map of settings does not contain any entries");
                     return new JSONRPC2Response(rpcErr, req.getID());
                 }
             }
@@ -153,8 +136,7 @@ public class AdvancedSettingsHandler implements RequestHandler {
             if (inParams.containsKey("get")) {
                 Object obj = inParams.get("get");
                 if (!(obj instanceof String)) {
-                    JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(),
-                            "Value of \"get\" is not a string");
+                    JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(), "Value of \"get\" is not a string");
                     return new JSONRPC2Response(rpcErr, req.getID());
                 }
                 String getStr = (String) obj;
@@ -174,7 +156,6 @@ public class AdvancedSettingsHandler implements RequestHandler {
     private String getAdvancedSetting(String key) {
         return _context.router().getConfigSetting(key);
     }
-
 
     private Map<String, String> getAdvancedSettings() {
         return _context.router().getConfigMap();

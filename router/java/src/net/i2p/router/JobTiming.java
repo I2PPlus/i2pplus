@@ -1,4 +1,5 @@
 package net.i2p.router;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -29,7 +30,9 @@ public class JobTiming implements Clock.ClockUpdateListener {
     /**
      * # of milliseconds after the epoch to start the job
      */
-    public long getStartAfter() { return _start; }
+    public long getStartAfter() {
+        return _start;
+    }
 
     /**
      * WARNING - this does not force a resort of the job queue any more...
@@ -42,24 +45,38 @@ public class JobTiming implements Clock.ClockUpdateListener {
     /**
      * Get the actual start time when the job began execution.
      */
-    public long getActualStart() { return _actualStart; }
+    public long getActualStart() {
+        return _actualStart;
+    }
 
     /**
      * Set the actual start time when the job began execution.
      */
-    public void setActualStart(long actualStartTime) { _actualStart = actualStartTime; }
-    public void start() { _actualStart = _context.clock().now(); }
+    public void setActualStart(long actualStartTime) {
+        _actualStart = actualStartTime;
+    }
+
+    public void start() {
+        _actualStart = _context.clock().now();
+    }
 
     /**
      * Get the actual end time when the job finished execution.
      */
-    public long getActualEnd() { return _actualEnd; }
+    public long getActualEnd() {
+        return _actualEnd;
+    }
 
     /**
      * Set the actual end time when the job finished execution.
      */
-    public void setActualEnd(long actualEndTime) { _actualEnd = actualEndTime; }
-    public void end() { _actualEnd = _context.clock().now(); }
+    public void setActualEnd(long actualEndTime) {
+        _actualEnd = actualEndTime;
+    }
+
+    public void end() {
+        _actualEnd = _context.clock().now();
+    }
 
     /**
      * Adjust all timing values by the specified delta

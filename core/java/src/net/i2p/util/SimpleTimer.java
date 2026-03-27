@@ -1,11 +1,12 @@
 package net.i2p.util;
 
+import net.i2p.I2PAppContext;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import net.i2p.I2PAppContext;
 
 /**
  * Simple event scheduler - toss an event on the queue and it gets fired at the
@@ -27,10 +28,13 @@ public class SimpleTimer {
     }
 
     private final Log _log;
+
     /** event time (Long) to event (TimedEvent) mapping */
     private final TreeMap<Long, TimedEvent> _events;
+
     /** event (TimedEvent) to event time (Long) mapping */
     private final Map<TimedEvent, Long> _eventTimes;
+
     private final List<TimedEvent> _readyEvents;
     private SimpleStore runn;
     private static final int MIN_THREADS = 2;
@@ -63,7 +67,7 @@ public class SimpleTimer {
         runner.setDaemon(true);
         runner.start();
         long maxMemory = SystemVersion.getMaxMemory();
-        int threads = (int) Math.max(MIN_THREADS, Math.min(MAX_THREADS, 1 + (maxMemory / (32*1024*1024))));
+        int threads = (int) Math.max(MIN_THREADS, Math.min(MAX_THREADS, 1 + (maxMemory / (32 * 1024 * 1024))));
         for (int i = 1; i <= threads; i++) {
             I2PThread executor = new I2PThread(new Executor(context, _log, _readyEvents, runn));
             executor.setName(name + "Executor " + i + '/' + threads);
@@ -74,8 +78,8 @@ public class SimpleTimer {
     }
 
     /**
-      * @since 0.8.8
-      */
+     * @since 0.8.8
+     */
     private class Shutdown implements Runnable {
         @Override
         public void run() {
@@ -118,7 +122,9 @@ public class SimpleTimer {
      * @param event the event to schedule
      * @param timeoutMs the delay in milliseconds before the event should fire
      */
-    public void addEvent(TimedEvent event, long timeoutMs) { addEvent(event, timeoutMs, true); }
+    public void addEvent(TimedEvent event, long timeoutMs) {
+        addEvent(event, timeoutMs, true);
+    }
 
     /**
      * Queue up the given event to be fired no sooner than timeoutMs from now.
@@ -154,8 +160,7 @@ public class SimpleTimer {
                 }
             }
             // FIXME if you plan to use this class again
-            while (_events.containsKey(time))
-                time = Long.valueOf(time.longValue() + 1);
+            while (_events.containsKey(time)) time = Long.valueOf(time.longValue() + 1);
             _events.put(time, event);
             _eventTimes.put(event, time);
 
@@ -174,24 +179,19 @@ public class SimpleTimer {
             _events.notifyAll();
         }
         if (time.longValue() > eventTime + 100) {
-            if (_log.shouldWarn())
-                _log.warn("Lots of timer congestion, had to push " + event + " back "
-                           + (time.longValue()-eventTime) + "ms (# events: " + totalEvents + ")");
+            if (_log.shouldWarn()) _log.warn("Lots of timer congestion, had to push " + event + " back " + (time.longValue() - eventTime) + "ms (# events: " + totalEvents + ")");
         }
         long timeToAdd = System.currentTimeMillis() - now;
         if (timeToAdd > 50) {
-            if (_log.shouldWarn())
-                _log.warn("timer contention: took " + timeToAdd + "ms to add a job with " + totalEvents + " queued");
+            if (_log.shouldWarn()) _log.warn("timer contention: took " + timeToAdd + "ms to add a job with " + totalEvents + " queued");
         }
-
     }
 
     public boolean removeEvent(TimedEvent evt) {
         if (evt == null) return false;
         synchronized (_events) {
             Long when = _eventTimes.remove(evt);
-            if (when != null)
-                _events.remove(when);
+            if (when != null) _events.remove(when);
             return null != when;
         }
     }
@@ -211,6 +211,7 @@ public class SimpleTimer {
 
     private long _occurredTime;
     private long _occurredEventCount;
+
     // not used
     //  private TimedEvent _recentEvents[] = new TimedEvent[5];
     private class SimpleTimerRunner implements Runnable {
@@ -220,9 +221,9 @@ public class SimpleTimer {
             while (runn.getAnswer()) {
                 try {
                     synchronized (_events) {
-                        //if (_events.size() <= 0)
+                        // if (_events.size() <= 0)
                         //    _events.wait();
-                        //if (_events.size() > 100)
+                        // if (_events.size() > 100)
                         //    _log.warn("> 100 events!  " + _events.values());
                         long now = System.currentTimeMillis();
                         long nextEventDelay = -1;
@@ -246,8 +247,7 @@ public class SimpleTimer {
                         }
                         if (eventsToFire.isEmpty()) {
                             if (nextEventDelay != -1) {
-                                if (_log.shouldDebug())
-                                    _log.debug("Next event in " + nextEventDelay + ": " + nextEvent);
+                                if (_log.shouldDebug()) _log.debug("Next event in " + nextEventDelay + ": " + nextEvent);
                                 _events.wait(nextEventDelay);
                             } else {
                                 _events.wait();
@@ -274,8 +274,7 @@ public class SimpleTimer {
                 now = now - (now % 1000);
 
                 synchronized (_readyEvents) {
-                    for (int i = 0; i < eventsToFire.size(); i++)
-                        _readyEvents.add(eventsToFire.get(i));
+                    for (int i = 0; i < eventsToFire.size(); i++) _readyEvents.add(eventsToFire.get(i));
                     _readyEvents.notifyAll();
                 }
 

@@ -73,11 +73,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     private final Snark snark;
 
     // package local for access by CheckDownLoadersTask
-    static final long CHECK_PERIOD =
-            5 * 1000; // update download speed in UI and choke/unchoke tests
+    static final long CHECK_PERIOD = 5 * 1000; // update download speed in UI and choke/unchoke tests
     static final int MAX_UPLOADERS = 16;
-    public static final long MAX_INACTIVE =
-            5 * 60 * 1000; // how long before we disconnect from an inactive peer
+    public static final long MAX_INACTIVE = 5 * 60 * 1000; // how long before we disconnect from an inactive peer
     public static final long MAX_SEED_INACTIVE = 3 * 60 * 1000;
 
     /**
@@ -208,8 +206,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
         // we don't store the last-requested time, so just delay a random amount
         _commentsLastRequested.set(
-                util.getContext().clock().now()
-                        - (COMMENT_REQ_INTERVAL - _random.nextLong(COMMENT_REQ_DELAY)));
+                util.getContext().clock().now() - (COMMENT_REQ_INTERVAL - _random.nextLong(COMMENT_REQ_DELAY)));
     }
 
     /**
@@ -434,9 +431,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     // Just let the timer run when scheduled, do not pull it in
                     // to prevent thrashing
                     if (_log.shouldInfo()) {
-                        _log.info(
-                                "Now unthrottled, but not rescheduling rerequest timer to prevent"
-                                    + " thrashing");
+                        _log.info("Now unthrottled, but not rescheduling rerequest timer to prevent" + " thrashing");
                     }
                 } else {
                     // Schedule the timer
@@ -633,10 +628,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
         long bwl = getDownBWLimit();
         if (bwl < 32 * 1024) {
-            max =
-                    Math.min(
-                            max,
-                            Math.max(6, (int) (I2PSnarkUtil.MAX_CONNECTIONS * bwl / (32 * 1024))));
+            max = Math.min(max, Math.max(6, (int) (I2PSnarkUtil.MAX_CONNECTIONS * bwl / (32 * 1024))));
         }
         return max;
     }
@@ -703,14 +695,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             if (old != null && old.getInactiveTime() > old.getMaxInactiveTime()) {
                 // idle for 8 minutes, kill the old con (32KB/8min = 68B/sec minimum for one block)
                 if (_log.shouldWarn()) {
-                    _log.warn(
-                            "Removing old peer ["
-                                    + peer
-                                    + "] - ["
-                                    + old
-                                    + "] inactive for "
-                                    + old.getInactiveTime()
-                                    + "ms");
+                    _log.warn("Removing old peer [" + peer + "] - [" + old + "] inactive for " + old.getInactiveTime()
+                            + "ms");
                 }
                 peers.remove(old);
                 toDisconnect = old;
@@ -718,14 +704,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             }
             if (old != null) {
                 if (_log.shouldWarn()) {
-                    _log.warn(
-                            "Already connected to ["
-                                    + peer
-                                    + "] - ["
-                                    + old
-                                    + "] inactive for "
-                                    + old.getInactiveTime()
-                                    + "ms");
+                    _log.warn("Already connected to [" + peer + "] - [" + old + "] inactive for "
+                            + old.getInactiveTime() + "ms");
                 }
                 // toDisconnect = peer to get out of synchronized (peers)
                 peer.disconnect(false); // Don't deregister this connection/peer.
@@ -818,9 +798,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 } else {
                     name = metainfo.getName();
                 }
-                _log.debug(
-                        "Adding peer [" + peer.getPeerID().toString() + "] for " + name,
-                        new Exception("add/run"));
+                _log.debug("Adding peer [" + peer.getPeerID().toString() + "] for " + name, new Exception("add/run"));
             }
 
             // Run the peer with us as listener and the current bitfield.
@@ -832,29 +810,16 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 bitfield = null;
             }
             if (!peer.isIncoming() && wantedBytes == 0 && _log.shouldInfo()) {
-                _log.info(
-                        "Checking for new comments for: "
-                                + snark.getBaseName()
-                                + " from ["
-                                + peer
-                                + "]");
+                _log.info("Checking for new comments for: " + snark.getBaseName() + " from [" + peer + "]");
             }
 
             // if we aren't a seed but we don't want any more
-            final boolean partialComplete =
-                    wantedBytes == 0 && bitfield != null && !bitfield.complete();
-            Runnable r =
-                    new Runnable() {
-                        public void run() {
-                            peer.runConnection(
-                                    _util,
-                                    listener,
-                                    PeerCoordinator.this,
-                                    bitfield,
-                                    magnetState,
-                                    partialComplete);
-                        }
-                    };
+            final boolean partialComplete = wantedBytes == 0 && bitfield != null && !bitfield.complete();
+            Runnable r = new Runnable() {
+                public void run() {
+                    peer.runConnection(_util, listener, PeerCoordinator.this, bitfield, magnetState, partialComplete);
+                }
+            };
 
             String threadName = "Snark peer " + peer.toString();
             new I2PAppThread(r, threadName).start();
@@ -865,15 +830,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             if (peer.isConnected()) {
                 _log.debug("Add peer already connected [" + peer + "]");
             } else {
-                _log.debug(
-                        "Not accepting extra peer ["
-                                + peer
-                                + "] ("
-                                + "Connections: "
-                                + peersize
-                                + "/"
-                                + getMaxConnections()
-                                + ")");
+                _log.debug("Not accepting extra peer [" + peer + "] (" + "Connections: " + peersize + "/"
+                        + getMaxConnections() + ")");
             }
         }
         return false;
@@ -1008,12 +966,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     for (PartialPiece pp : partialPieces) {
                         if (pp.getPiece() == p.getId()) {
                             if (_log.shouldDebug()) {
-                                _log.debug(
-                                        "wantPiece() skipping partial for ["
-                                                + peer
-                                                + "] [Piece "
-                                                + pp
-                                                + "]");
+                                _log.debug("wantPiece() skipping partial for [" + peer + "] [Piece " + pp + "]");
                             }
                             hasPartial = true;
                             break;
@@ -1038,12 +991,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 // when the seeder is super-slow and all the peers are "caught up"
                 if (wantedSize > END_GAME_THRESHOLD) {
                     if (_log.shouldInfo()) {
-                        _log.info(
-                                "Nothing to request, "
-                                        + requested.size()
-                                        + " being requested and "
-                                        + wantedSize
-                                        + " still wanted");
+                        _log.info("Nothing to request, " + requested.size() + " being requested and " + wantedSize
+                                + " still wanted");
                     }
                     return null; // nothing to request and not in end game
                 }
@@ -1068,11 +1017,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
                 if (piece == null) {
                     if (_log.shouldInfo()) {
-                        _log.info(
-                                "Nothing to even rerequest from ["
-                                        + peer
-                                        + "] - requested = "
-                                        + requested);
+                        _log.info("Nothing to even rerequest from [" + peer + "] - requested = " + requested);
                     }
                     return null; // If we still can't find a piece we want, so be it.
                 } else {
@@ -1081,12 +1026,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     // This is where the flaws of the snark data model are really exposed.
                     // Could also randomize within the duplicate set rather than strict rarest-first
                     if (_log.shouldInfo()) {
-                        _log.info(
-                                "Parallel request (end game?) for ["
-                                        + peer
-                                        + "] [Piece "
-                                        + piece
-                                        + "]");
+                        _log.info("Parallel request (end game?) for [" + peer + "] [Piece " + piece + "]");
                     }
                 }
             }
@@ -1094,14 +1034,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             if (record) {
                 if (_log.shouldInfo()) {
                     if (piece.getPriority() > 0) {
-                        _log.info(
-                                "Requesting piece ["
-                                        + piece
-                                        + "] from ["
-                                        + peer
-                                        + "] (Priority: "
-                                        + piece.getPriority()
-                                        + ")");
+                        _log.info("Requesting piece [" + piece + "] from [" + peer + "] (Priority: "
+                                + piece.getPriority() + ")");
                     } else {
                         _log.info("Requesting piece [" + piece + "] from [" + peer + "]");
                     }
@@ -1159,7 +1093,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             }
 
             // Now set the new priorities and remove newly unwanted pieces
-            for (Iterator<Piece> iter = wantedPieces.iterator(); iter.hasNext();) {
+            for (Iterator<Piece> iter = wantedPieces.iterator(); iter.hasNext(); ) {
                 Piece p = iter.next();
                 int priority = pri[p.getId()];
                 if (priority >= 0) {
@@ -1213,13 +1147,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             return storage.getPiece(piece, off, len);
         } catch (IOException ioe) {
             snark.stopTorrent();
-            String msg =
-                    "Error reading the storage (piece "
-                            + piece
-                            + ") for "
-                            + metainfo.getName()
-                            + ": "
-                            + ioe;
+            String msg = "Error reading the storage (piece " + piece + ") for " + metainfo.getName() + ": " + ioe;
             _log.error(msg, ioe);
             if (listener != null) {
                 listener.addMessage(msg);
@@ -1248,15 +1176,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 Piece p = new Piece(piece);
                 if (!wantedPieces.contains(p)) {
                     if (_log.shouldDebug()) {
-                        _log.debug(
-                                "Received unwanted piece ["
-                                        + piece
-                                        + "/"
-                                        + metainfo.getPieces()
-                                        + "] from ["
-                                        + peer
-                                        + "] for "
-                                        + metainfo.getName());
+                        _log.debug("Received unwanted piece [" + piece + "/" + metainfo.getPieces() + "] from [" + peer
+                                + "] for " + metainfo.getName());
                     }
 
                     // No need to announce have piece to peers.
@@ -1273,15 +1194,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 // this takes forever if complete, as it rechecks
                 if (storage.putPiece(pp)) {
                     if (_log.shouldDebug()) {
-                        _log.debug(
-                                "Received valid piece ["
-                                        + piece
-                                        + "/"
-                                        + metainfo.getPieces()
-                                        + "] from ["
-                                        + peer
-                                        + "] for "
-                                        + metainfo.getName());
+                        _log.debug("Received valid piece [" + piece + "/" + metainfo.getPieces() + "] from [" + peer
+                                + "] for " + metainfo.getName());
                     }
                 } else {
                     // so we will try again
@@ -1298,15 +1212,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                         }
                     }
                     if (_log.shouldDebug()) {
-                        _log.debug(
-                                "Received BAD piece ["
-                                        + piece
-                                        + "/"
-                                        + metainfo.getPieces()
-                                        + "] from ["
-                                        + peer
-                                        + "] for "
-                                        + metainfo.getName());
+                        _log.debug("Received BAD piece [" + piece + "/" + metainfo.getPieces() + "] from [" + peer
+                                + "] for " + metainfo.getName());
                     }
                     return false; // No need to announce BAD piece to peers.
                 }
@@ -1497,7 +1404,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         synchronized (wantedPieces) {
             // sorts by preference, highest first
             Collections.sort(partialPieces);
-            for (Iterator<PartialPiece> iter = partialPieces.iterator(); iter.hasNext();) {
+            for (Iterator<PartialPiece> iter = partialPieces.iterator(); iter.hasNext(); ) {
                 PartialPiece pp = iter.next();
                 int savedPiece = pp.getPiece();
                 if (havePieces.get(savedPiece)) {
@@ -1545,23 +1452,15 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                             iter.remove();
                             piece.setRequested(peer, true);
                             if (_log.shouldInfo()) {
-                                _log.info(
-                                        "Restoring orphaned partial piece "
-                                                + pp
-                                                + " to "
-                                                + peer
-                                                + " -> Partial list size now: "
-                                                + partialPieces.size());
+                                _log.info("Restoring orphaned partial piece " + pp + " to " + peer
+                                        + " -> Partial list size now: " + partialPieces.size());
                             }
                             return pp;
                         }
                     }
                     if (_log.shouldDebug()) {
                         if (skipped) {
-                            _log.debug(
-                                    "Partial piece "
-                                            + pp
-                                            + " with multiple peers skipped for seeder");
+                            _log.debug("Partial piece " + pp + " with multiple peers skipped for seeder");
                         } else {
                             _log.debug("Partial piece " + pp + " NOT in wantedPieces??");
                         }
@@ -1576,8 +1475,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         Piece piece = wantPiece(peer, havePieces, true);
         if (piece != null) {
             // TODO padding
-            return new PartialPiece(
-                    piece, metainfo.getPieceLength(piece.getId()), _util.getTempDir());
+            return new PartialPiece(piece, metainfo.getPieceLength(piece.getId()), _util.getTempDir());
         }
         if (_log.shouldDebug()) {
             _log.debug("We have no partial piece to return");
@@ -1620,7 +1518,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      */
     private void removePartialPiece(int piece) {
         synchronized (wantedPieces) {
-            for (Iterator<PartialPiece> iter = partialPieces.iterator(); iter.hasNext();) {
+            for (Iterator<PartialPiece> iter = partialPieces.iterator(); iter.hasNext(); ) {
                 PartialPiece pp = iter.next();
                 if (pp.getPiece() == piece) {
                     iter.remove();
@@ -1749,16 +1647,14 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     void sendCommentReq(Peer peer) {
         Map<String, BEValue> handshake = peer.getHandshakeMap();
         if (handshake == null) {
-            if (wantedBytes == 0
-                    && _commentsNotRequested.incrementAndGet() >= MAX_COMMENT_NOT_REQ) {
+            if (wantedBytes == 0 && _commentsNotRequested.incrementAndGet() >= MAX_COMMENT_NOT_REQ) {
                 _commentsLastRequested.set(_util.getContext().clock().now());
             }
             return;
         }
         BEValue bev = handshake.get("m");
         if (bev == null) {
-            if (wantedBytes == 0
-                    && _commentsNotRequested.incrementAndGet() >= MAX_COMMENT_NOT_REQ) {
+            if (wantedBytes == 0 && _commentsNotRequested.incrementAndGet() >= MAX_COMMENT_NOT_REQ) {
                 _commentsLastRequested.set(_util.getContext().clock().now());
             }
             return;
@@ -1784,8 +1680,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             } else {
                 // failsafe to prevent seed excessively connecting out to a swarm for comments
                 // when nobody in the swarm supports comments
-                if (wantedBytes == 0
-                        && _commentsNotRequested.incrementAndGet() >= MAX_COMMENT_NOT_REQ) {
+                if (wantedBytes == 0 && _commentsNotRequested.incrementAndGet() >= MAX_COMMENT_NOT_REQ) {
                     _commentsLastRequested.set(_util.getContext().clock().now());
                 }
             }

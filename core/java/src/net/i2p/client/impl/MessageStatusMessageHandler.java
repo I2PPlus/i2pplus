@@ -28,34 +28,35 @@ class MessageStatusMessageHandler extends HandlerImpl {
 
     @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
-        if (_log.shouldDebug()) {_log.debug("Handling " + message);}
+        if (_log.shouldDebug()) {
+            _log.debug("Handling " + message);
+        }
         MessageStatusMessage msg = (MessageStatusMessage) message;
         int status = msg.getStatus();
         long id = msg.getMessageId();
         switch (status) {
-            case MessageStatusMessage.STATUS_AVAILABLE:
-                ReceiveMessageBeginMessage m = new ReceiveMessageBeginMessage();
+            case MessageStatusMessage.STATUS_AVAILABLE: ReceiveMessageBeginMessage m = new ReceiveMessageBeginMessage();
                 m.setMessageId(id);
                 m.setSessionId(msg.getSessionId());
-                try {session.sendMessage(m);}
-                catch (I2PSessionException ise) {_log.error("Error asking for the message", ise);}
+                try {
+                    session.sendMessage(m);
+                } catch (I2PSessionException ise) {
+                    _log.error("Error asking for the message", ise);
+                }
                 return;
 
-            case MessageStatusMessage.STATUS_SEND_ACCEPTED:
-                session.receiveStatus((int)id, msg.getNonce(), status);
+            case MessageStatusMessage.STATUS_SEND_ACCEPTED: session.receiveStatus((int) id, msg.getNonce(), status);
                 return; // noop
 
-            default:
-                if (msg.isSuccessful()) {
-                    if (_log.shouldDebug()) {_log.debug("Message delivery succeeded for [MsgID " + id + "]");}
+            default: if (msg.isSuccessful()) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Message delivery succeeded for [MsgID " + id + "]");
+                    }
                 } else {
-                    if (_log.shouldDebug())
-                        _log.debug("Message delivery FAILED for [MsgID " + id + "] -> " +
-                                   MessageStatusMessage.getStatusString(status));
+                    if (_log.shouldDebug()) _log.debug("Message delivery FAILED for [MsgID " + id + "] -> " + MessageStatusMessage.getStatusString(status));
                 }
-                session.receiveStatus((int)id, msg.getNonce(), status); //if (!skipStatus)
+                session.receiveStatus((int) id, msg.getNonce(), status); // if (!skipStatus)
                 return;
         }
     }
-
 }

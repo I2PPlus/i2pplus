@@ -36,17 +36,13 @@ class SchedulerClosing extends SchedulerImpl {
 
     @Override
     public boolean accept(Connection con) {
-        if (con == null)
-            return false;
+        if (con == null) return false;
         long timeSinceClose = _context.clock().now() - con.getCloseSentOn();
-        boolean ok = (!con.getResetSent()) &&
-                     (!con.getResetReceived()) &&
-                     ((con.getCloseSentOn() > 0) || (con.getCloseReceivedOn() > 0)) &&
-                     (timeSinceClose < Connection.DISCONNECT_TIMEOUT) &&
-                     ((con.getUnackedPacketsReceived() > 0) || (con.getUnackedPacketsSent() > 0));
+        boolean ok = (!con.getResetSent()) && (!con.getResetReceived()) && ((con.getCloseSentOn() > 0) || (con.getCloseReceivedOn() > 0)) && (timeSinceClose < Connection.DISCONNECT_TIMEOUT) && ((con.getUnackedPacketsReceived() > 0) || (con.getUnackedPacketsSent() > 0));
         return ok;
     }
-@Override
+
+    @Override
     public void eventOccurred(Connection con) {
         long nextSend = con.getNextSendTime();
         long now = _context.clock().now();
@@ -58,19 +54,18 @@ class SchedulerClosing extends SchedulerImpl {
         } else {
             remaining = nextSend - now;
         }
-        if (_log.shouldDebug())
-            _log.debug("Event occurred with " + remaining + "ms remaining\n* " + con); // ms?
+        if (_log.shouldDebug()) _log.debug("Event occurred with " + remaining + "ms remaining\n* " + con); // ms?
         if (remaining <= 0) {
             if (con.getCloseSentOn() <= 0) {
                 con.sendAvailable();
             } else {
-                //con.ackImmediately();
+                // con.ackImmediately();
             }
             con.setNextSendTime(now + con.getOptions().getSendAckDelay());
         } else {
-            //if (remaining < 5*1000)
+            // if (remaining < 5*1000)
             //    remaining = 5*1000;
-            //con.setNextSendTime(when
+            // con.setNextSendTime(when
             reschedule(remaining, con);
         }
     }

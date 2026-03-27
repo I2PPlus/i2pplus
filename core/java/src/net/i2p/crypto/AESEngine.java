@@ -34,6 +34,7 @@ import net.i2p.util.SimpleByteCache;
 public class AESEngine {
     /** Logger instance */
     protected final Log _log;
+
     /** I2P application context */
     protected final I2PAppContext _context;
 
@@ -44,8 +45,7 @@ public class AESEngine {
     protected AESEngine(I2PAppContext ctx) {
         _context = ctx;
         _log = _context.logManager().getLog(getClass());
-        if (getClass().equals(AESEngine.class))
-            _log.logAlways(Log.WARN, "AES is disabled");
+        if (getClass().equals(AESEngine.class)) _log.logAlways(Log.WARN, "AES is disabled");
     }
 
     /** Encrypt the payload with the session key
@@ -61,7 +61,7 @@ public class AESEngine {
         encrypt(payload, payloadIndex, out, outIndex, sessionKey, iv, 0, length);
     }
 
-/**
+    /**
      * Encrypt payload with session key.
      * This just copies payload to out, see extension for the real thing.
      *
@@ -79,7 +79,7 @@ public class AESEngine {
         _log.logAlways(Log.WARN, "AES is disabled");
     }
 
-/**
+    /**
      * Encrypt SHA-256 Hash of IV, 4 byte length, and payload,
      * with random padding up to paddedSize, rounded up to next multiple of 16.
      *
@@ -94,9 +94,8 @@ public class AESEngine {
     public byte[] safeEncrypt(byte payload[], SessionKey sessionKey, byte iv[], int paddedSize) {
         if ((iv == null) || (payload == null) || (sessionKey == null) || (iv.length != 16)) return new byte[0];
 
-        int size = Hash.HASH_LENGTH
-                 + 4 // sizeof(payload)
-                 + payload.length;
+        int size = Hash.HASH_LENGTH + 4 // sizeof(payload)
+                        + payload.length;
         int padding = getPaddingSize(size, paddedSize);
 
         byte data[] = new byte[size + padding];
@@ -136,8 +135,7 @@ public class AESEngine {
         boolean eq = DataHelper.eq(decr, 0, h, 0, Hash.HASH_LENGTH);
         SimpleByteCache.release(h);
         if (!eq) {
-            _log.error("Hash does not match [key=" + sessionKey + " / iv =" + DataHelper.toString(iv, iv.length)
-                           + "]", new Exception("Hash error"));
+            _log.error("Hash does not match [key=" + sessionKey + " / iv =" + DataHelper.toString(iv, iv.length) + "]", new Exception("Hash error"));
             return new byte[0];
         }
         int cur = Hash.HASH_LENGTH;
@@ -150,8 +148,8 @@ public class AESEngine {
             return new byte[0];
         }
 
-        byte data[] = new byte[(int)len];
-        System.arraycopy(decr, cur, data, 0, (int)len);
+        byte data[] = new byte[(int) len];
+        System.arraycopy(decr, cur, data, 0, (int) len);
         return data;
     }
 
@@ -225,7 +223,7 @@ public class AESEngine {
      * @return padding bytes
      * @since 0.9.38 moved from ElGamalAESEngine
      */
-    public final static byte[] getPadding(I2PAppContext context, int curSize, long minPaddedSize) {
+    public static final byte[] getPadding(I2PAppContext context, int curSize, long minPaddedSize) {
         int size = getPaddingSize(curSize, minPaddedSize);
         byte rv[] = new byte[size];
         context.random().nextBytes(rv);
@@ -244,7 +242,7 @@ public class AESEngine {
      * @return padding size required
      * @since 0.9.38 moved from ElGamalAESEngine
      */
-    public final static int getPaddingSize(int curSize, long minPaddedSize) {
+    public static final int getPaddingSize(int curSize, long minPaddedSize) {
         int diff = 0;
         if (curSize < minPaddedSize) {
             diff = (int) minPaddedSize - curSize;
@@ -255,29 +253,28 @@ public class AESEngine {
         return numPadding;
     }
 
-
     /*
-     * Test code
-     *
-    public static void main(String args[]) {
-        I2PAppContext ctx = new I2PAppContext();
-        SessionKey key = ctx.keyGenerator().generateSessionKey();
-        byte iv[] = new byte[16];
-        RandomSource.getInstance().nextBytes(iv);
+         * Test code
+         *
+        public static void main(String args[]) {
+            I2PAppContext ctx = new I2PAppContext();
+            SessionKey key = ctx.keyGenerator().generateSessionKey();
+            byte iv[] = new byte[16];
+            RandomSource.getInstance().nextBytes(iv);
 
-        byte sbuf[] = new byte[16];
-        RandomSource.getInstance().nextBytes(sbuf);
-        byte se[] = new byte[16];
-        ctx.aes().encrypt(sbuf, 0, se, 0, key, iv, sbuf.length);
-        byte sd[] = new byte[16];
-        ctx.aes().decrypt(se, 0, sd, 0, key, iv, se.length);
-        ctx.logManager().getLog(AESEngine.class).debug("Short test: " + DataHelper.eq(sd, sbuf));
+            byte sbuf[] = new byte[16];
+            RandomSource.getInstance().nextBytes(sbuf);
+            byte se[] = new byte[16];
+            ctx.aes().encrypt(sbuf, 0, se, 0, key, iv, sbuf.length);
+            byte sd[] = new byte[16];
+            ctx.aes().decrypt(se, 0, sd, 0, key, iv, se.length);
+            ctx.logManager().getLog(AESEngine.class).debug("Short test: " + DataHelper.eq(sd, sbuf));
 
-        byte lbuf[] = new byte[1024];
-        RandomSource.getInstance().nextBytes(sbuf);
-        byte le[] = ctx.aes().safeEncrypt(lbuf, key, iv, 2048);
-        byte ld[] = ctx.aes().safeDecrypt(le, key, iv);
-        ctx.logManager().getLog(AESEngine.class).debug("Long test: " + DataHelper.eq(ld, lbuf));
-    }
-******/
+            byte lbuf[] = new byte[1024];
+            RandomSource.getInstance().nextBytes(sbuf);
+            byte le[] = ctx.aes().safeEncrypt(lbuf, key, iv, 2048);
+            byte ld[] = ctx.aes().safeDecrypt(le, key, iv);
+            ctx.logManager().getLog(AESEngine.class).debug("Long test: " + DataHelper.eq(ld, lbuf));
+        }
+    ******/
 }

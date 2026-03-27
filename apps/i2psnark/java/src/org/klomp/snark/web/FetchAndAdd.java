@@ -84,19 +84,16 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
     public void run() {
         _mgr.addMessageNoEscape(_t("Requesting torrent file: {0}", urlify(_url)));
         File file = get();
-        if (!_isRunning) // stopped?
-            return;
+        // stopped?
+        if (!_isRunning) return;
         _isRunning = false;
         if (file != null && file.exists() && file.length() > 0) {
             // remove this in snarks
             _mgr.deleteMagnet(this);
             add(file);
         } else {
-            _mgr.addMessageNoEscape(
-                    _t("Failed to retrieve torrent file: {0}", urlify(_url))
-                            + ((_failCause != null)
-                                    ? (": " + DataHelper.stripHTML(_failCause))
-                                    : ""));
+            _mgr.addMessageNoEscape(_t("Failed to retrieve torrent file: {0}", urlify(_url))
+                    + ((_failCause != null) ? (": " + DataHelper.stripHTML(_failCause)) : ""));
         }
         if (file != null) file.delete();
     }
@@ -129,8 +126,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         _eepGet.addStatusListener(this);
         _eepGet.addHeader("User-Agent", I2PSnarkUtil.EEPGET_USER_AGENT);
         if (_eepGet.fetch()) {
-            if (_log.shouldInfo())
-                _log.info("Transfer successful: " + _url + " (Size:" + out.length() + " bytes)");
+            if (_log.shouldInfo()) _log.info("Transfer successful: " + _url + " (Size:" + out.length() + " bytes)");
             return out;
         } else {
             if (_log.shouldInfo()) _log.info("Transfer failed: " + _url);
@@ -156,10 +152,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
             }
             Snark snark = _mgr.getTorrentByInfoHash(fileInfoHash);
             if (snark != null) {
-                _mgr.addMessage(
-                        _t(
-                                "Torrent with this info hash is already running: {0}",
-                                snark.getBaseName()));
+                _mgr.addMessage(_t("Torrent with this info hash is already running: {0}", snark.getBaseName()));
                 return;
             }
 
@@ -170,8 +163,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
             String canonical = torrentFile.getCanonicalPath();
 
             if (torrentFile.exists()) {
-                if (_mgr.getTorrent(canonical) != null)
-                    _mgr.addMessage(_t("Torrent already running: {0}", name));
+                if (_mgr.getTorrent(canonical) != null) _mgr.addMessage(_t("Torrent already running: {0}", name));
                 else _mgr.addMessage(_t("Torrent already in the queue: {0}", name));
             } else {
                 // This may take a LONG time to create the storage.
@@ -183,14 +175,10 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
             }
         } catch (IOException ioe) {
             _mgr.addMessageNoEscape(
-                    _t("Torrent at {0} was not valid", urlify(_url))
-                            + ": "
-                            + DataHelper.stripHTML(ioe.getMessage()));
+                    _t("Torrent at {0} was not valid", urlify(_url)) + ": " + DataHelper.stripHTML(ioe.getMessage()));
         } catch (OutOfMemoryError oom) {
-            _mgr.addMessageNoEscape(
-                    _t("ERROR - Out of memory, cannot create torrent from {0}", urlify(_url))
-                            + ": "
-                            + DataHelper.stripHTML(oom.getMessage()));
+            _mgr.addMessageNoEscape(_t("ERROR - Out of memory, cannot create torrent from {0}", urlify(_url)) + ": "
+                    + DataHelper.stripHTML(oom.getMessage()));
         } finally {
             try {
                 if (in != null) in.close();
@@ -319,11 +307,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
     }
 
     public void bytesTransferred(
-            long alreadyTransferred,
-            int currentWrite,
-            long bytesTransferred,
-            long bytesRemaining,
-            String url) {
+            long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {
         if (bytesRemaining >= 0) {
             _remaining = bytesRemaining;
             _total = bytesRemaining + currentWrite + alreadyTransferred;
@@ -347,8 +331,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         _active = false;
     }
 
-    public void transferFailed(
-            String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {
+    public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {
         if (bytesRemaining >= 0) {
             _remaining = bytesRemaining;
         }

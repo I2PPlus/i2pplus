@@ -61,13 +61,14 @@ class Log {
             String timestamp = Instant.now().toString();
             bw.write(timestamp + "-- " + entry);
             bw.newLine();
-        } catch (IOException exp) {}
-        finally {
+        } catch (IOException exp) {
+        } finally {
             if (bw != null) {
-                try {bw.close();}
-                catch (IOException ioe) {}
+                try {
+                    bw.close();
+                } catch (IOException ioe) {
+                }
             }
         }
     }
-
 }

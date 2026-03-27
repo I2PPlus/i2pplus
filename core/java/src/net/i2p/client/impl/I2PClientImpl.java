@@ -9,11 +9,6 @@ package net.i2p.client.impl;
  *
  */
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.GeneralSecurityException;
-import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PClient;
@@ -30,6 +25,12 @@ import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.data.SimpleDataStructure;
 import net.i2p.util.RandomSource;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.GeneralSecurityException;
+import java.util.Properties;
 
 /**
  * Base client implementation.
@@ -72,8 +73,11 @@ public class I2PClientImpl implements I2PClient {
     @Override
     public Destination createDestination(OutputStream destKeyStream, SigType type) throws I2PException, IOException {
         Certificate cert;
-        if (type == SigType.DSA_SHA1) {cert = Certificate.NULL_CERT;}
-        else {cert = new KeyCertificate(type);}
+        if (type == SigType.DSA_SHA1) {
+            cert = Certificate.NULL_CERT;
+        } else {
+            cert = new KeyCertificate(type);
+        }
         return createDestination(destKeyStream, cert);
     }
 
@@ -112,9 +116,14 @@ public class I2PClientImpl implements I2PClient {
         if (cert.getCertificateType() == Certificate.CERTIFICATE_TYPE_KEY) {
             KeyCertificate kcert = cert.toKeyCertificate();
             SigType type = kcert.getSigType();
-            try {signingKeys = KeyGenerator.getInstance().generateSigningKeys(type);}
-            catch (GeneralSecurityException gse) {throw new I2PException("Keygen failure", gse);}
-        } else {signingKeys = KeyGenerator.getInstance().generateSigningKeys();}
+            try {
+                signingKeys = KeyGenerator.getInstance().generateSigningKeys(type);
+            } catch (GeneralSecurityException gse) {
+                throw new I2PException("Keygen failure", gse);
+            }
+        } else {
+            signingKeys = KeyGenerator.getInstance().generateSigningKeys();
+        }
         SigningPublicKey signingPubKey = (SigningPublicKey) signingKeys[0];
         SigningPrivateKey signingPrivKey = (SigningPrivateKey) signingKeys[1];
         d.setPublicKey(publicKey);
@@ -167,5 +176,4 @@ public class I2PClientImpl implements I2PClient {
     public I2PSession createSession(I2PAppContext context, InputStream destKeyStream, Properties options) throws I2PSessionException {
         return new I2PSessionMuxedImpl(context, destKeyStream, options); // thread safe and muxed
     }
-
 }

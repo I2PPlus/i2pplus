@@ -20,7 +20,5 @@ public interface Checker {
      *  @param maxTime how long you have
      *  @return active task or null if unable to check
      */
-    public UpdateTask check(UpdateType type, UpdateMethod method,
-                            String id, String currentVersion, long maxTime);
-
+    public UpdateTask check(UpdateType type, UpdateMethod method, String id, String currentVersion, long maxTime);
 }

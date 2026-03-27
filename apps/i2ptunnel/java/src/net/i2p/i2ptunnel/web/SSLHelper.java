@@ -23,11 +23,9 @@ public class SSLHelper {
             char c = args.charAt(j);
             switch (c) {
                 case '\'':
-                case '"':
-                    if (isQuoted) {
+                case '"': if (isQuoted) {
                         String str = buf.toString().trim();
-                        if (str.length() > 0)
-                            argList.add(str);
+                        if (str.length() > 0) argList.add(str);
                         buf.setLength(0);
                     }
                     isQuoted = !isQuoted;
@@ -40,20 +38,17 @@ public class SSLHelper {
                         buf.append(c);
                     } else {
                         String str = buf.toString().trim();
-                        if (str.length() > 0)
-                            argList.add(str);
+                        if (str.length() > 0) argList.add(str);
                         buf.setLength(0);
                     }
                     break;
-                default:
-                    buf.append(c);
+                default: buf.append(c);
                     break;
             }
         }
         if (buf.length() > 0) {
             String str = buf.toString().trim();
-            if (str.length() > 0)
-                argList.add(str);
+            if (str.length() > 0) argList.add(str);
         }
         return argList;
     }

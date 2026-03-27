@@ -1,11 +1,12 @@
 package net.i2p.data;
 
+import net.i2p.crypto.SigType;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.Instant;
 import java.util.Map;
-import net.i2p.crypto.SigType;
 
 /**
  * Implementation of MetaLeaseSet as specified in
@@ -37,12 +38,16 @@ import net.i2p.crypto.SigType;
  */
 public class MetaLeaseSet extends LeaseSet2 {
 
-    public MetaLeaseSet() {super();}
+    public MetaLeaseSet() {
+        super();
+    }
 
     ///// overrides below here
 
     @Override
-    public int getType() {return KEY_TYPE_META_LS2;}
+    public int getType() {
+        return KEY_TYPE_META_LS2;
+    }
 
     /**
      *  @throws UnsupportedOperationException always
@@ -67,7 +72,9 @@ public class MetaLeaseSet extends LeaseSet2 {
      */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
-        if (_destination != null) {throw new IllegalStateException();}
+        if (_destination != null) {
+            throw new IllegalStateException();
+        }
         readHeader(in); // LS2 header
         _options = DataHelper.readProperties(in, null); // Meta LS2 part - null arg to get an EmptyProperties back
         int numLeases = in.read();
@@ -77,7 +84,9 @@ public class MetaLeaseSet extends LeaseSet2 {
             super.addLease(lease); // super to bypass overwrite of _expiration
         }
         int numRevokes = in.read();
-        for (int i = 0; i < numRevokes; i++) {DataHelper.skip(in, 32);} // TODO
+        for (int i = 0; i < numRevokes; i++) {
+            DataHelper.skip(in, 32);
+        } // TODO
         // signature type depends on offline or not
         SigType type = isOffline() ? _transientSigningPublicKey.getType() : _destination.getSigningPublicKey().getType();
         _signature = new Signature(type);
@@ -94,10 +103,15 @@ public class MetaLeaseSet extends LeaseSet2 {
         }
         writeHeader(out); // LS2 header
         // Meta LS2 part
-        if (_options != null && !_options.isEmpty()) {DataHelper.writeProperties(out, _options);}
-        else {DataHelper.writeLong(out, 2, 0);}
+        if (_options != null && !_options.isEmpty()) {
+            DataHelper.writeProperties(out, _options);
+        } else {
+            DataHelper.writeLong(out, 2, 0);
+        }
         out.write(_leases.size());
-        for (Lease lease : _leases) {lease.writeBytes(out);}
+        for (Lease lease : _leases) {
+            lease.writeBytes(out);
+        }
         // revocations
         out.write(0);
     }
@@ -108,11 +122,18 @@ public class MetaLeaseSet extends LeaseSet2 {
     @Override
     public int size() {
         int rv = _destination.size() + 10 + (_leases.size() * MetaLease.LENGTH);
-        if (isOffline()) {rv += 6 + _transientSigningPublicKey.length() + _offlineSignature.length();}
+        if (isOffline()) {
+            rv += 6 + _transientSigningPublicKey.length() + _offlineSignature.length();
+        }
         if (_options != null && !_options.isEmpty()) {
-            try {rv += DataHelper.toProperties(_options).length;}
-            catch (DataFormatException dfe) {throw new IllegalStateException("Bad options", dfe);}
-        } else {rv += 2;}
+            try {
+                rv += DataHelper.toProperties(_options).length;
+            } catch (DataFormatException dfe) {
+                throw new IllegalStateException("Bad options", dfe);
+            }
+        } else {
+            rv += 2;
+        }
         return rv;
     }
 
@@ -122,7 +143,9 @@ public class MetaLeaseSet extends LeaseSet2 {
      */
     @Override
     public void addLease(Lease lease) {
-        if (!(lease instanceof MetaLease)) {throw new IllegalArgumentException();}
+        if (!(lease instanceof MetaLease)) {
+            throw new IllegalArgumentException();
+        }
         super.addLease(lease);
         _expires = _lastExpiration;
     }
@@ -133,14 +156,14 @@ public class MetaLeaseSet extends LeaseSet2 {
         if ((object == null) || !(object instanceof MetaLeaseSet)) return false;
         MetaLeaseSet ls = (MetaLeaseSet) object;
 
-        return DataHelper.eq(_signature, ls.getSignature()) &&
-               DataHelper.eq(_leases, ls._leases) &&
-               DataHelper.eq(_destination, ls.getDestination());
+        return DataHelper.eq(_signature, ls.getSignature()) && DataHelper.eq(_leases, ls._leases) && DataHelper.eq(_destination, ls.getDestination());
     }
 
     /** the destination has enough randomness in it to use it by itself for speed */
     @Override
-    public int hashCode() {return super.hashCode();}
+    public int hashCode() {
+        return super.hashCode();
+    }
 
     @Override
     public String toString() {
@@ -148,9 +171,7 @@ public class MetaLeaseSet extends LeaseSet2 {
         buf.append("\nMetaLeaseSet: ");
         buf.append("\n* Destination: ").append(_destination.toBase32());
         if (isOffline()) {
-            buf.append("\n* Transient Key: ").append(_transientSigningPublicKey)
-               .append("\n* Transient Expiry: ").append(Instant.ofEpochMilli(_transientExpires))
-               .append("\n* Offline Signature: ").append(_offlineSignature);
+            buf.append("\n* Transient Key: ").append(_transientSigningPublicKey).append("\n* Transient Expiry: ").append(Instant.ofEpochMilli(_transientExpires)).append("\n* Offline Signature: ").append(_offlineSignature);
         }
         if (_options != null && _options.size() > 0) {
             buf.append("\nOptions: ").append(_options.size());
@@ -160,13 +181,10 @@ public class MetaLeaseSet extends LeaseSet2 {
                 buf.append("\n* ").append(key).append(": ").append(val);
             }
         }
-        buf.append("\n* Published: ").append(!isUnpublished())
-           .append("\n* Signature: ").append(_signature)
-           .append("\n* Published: ").append(Instant.ofEpochMilli(_published))
-           .append("\n* Expires: ").append(Instant.ofEpochMilli(_expires))
-           .append("\n* Leases: ").append(getLeaseCount());
-        for (int i = 0; i < getLeaseCount(); i++) {buf.append(getLease(i));}
+        buf.append("\n* Published: ").append(!isUnpublished()).append("\n* Signature: ").append(_signature).append("\n* Published: ").append(Instant.ofEpochMilli(_published)).append("\n* Expires: ").append(Instant.ofEpochMilli(_expires)).append("\n* Leases: ").append(getLeaseCount());
+        for (int i = 0; i < getLeaseCount(); i++) {
+            buf.append(getLease(i));
+        }
         return buf.toString();
     }
-
 }

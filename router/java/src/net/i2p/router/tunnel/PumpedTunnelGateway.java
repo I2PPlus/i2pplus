@@ -1,8 +1,5 @@
 package net.i2p.router.tunnel;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.BlockingQueue;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.I2NPMessage;
@@ -11,6 +8,10 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.util.CoDelBlockingQueue;
 import net.i2p.router.util.CoDelPriorityBlockingQueue;
 import net.i2p.util.SystemVersion;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * This class represents a tunnel gateway with multiple hops that accepts messages,
@@ -85,19 +86,16 @@ class PumpedTunnelGateway extends TunnelGateway {
      * @param receiver Receiver that consumes encrypted messages for forwarding
      * @param pumper TunnelGatewayPumper managing pumping threads
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public PumpedTunnelGateway(RouterContext context, QueuePreprocessor preprocessor,
-                               Sender sender, Receiver receiver, TunnelGatewayPumper pumper) {
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public PumpedTunnelGateway(RouterContext context, QueuePreprocessor preprocessor, Sender sender, Receiver receiver, TunnelGatewayPumper pumper) {
         super(context, preprocessor, sender, receiver);
         if (getClass() == PumpedTunnelGateway.class) {
             // Outbound gateway uses priority queue
-            _prequeue = new CoDelPriorityBlockingQueue(context, "OBGW",
-                    context.getProperty(PROP_INITIAL_OB_QUEUE, INITIAL_OB_QUEUE));
+            _prequeue = new CoDelPriorityBlockingQueue(context, "OBGW", context.getProperty(PROP_INITIAL_OB_QUEUE, INITIAL_OB_QUEUE));
             _isInbound = false;
         } else {
             // Inbound gateway uses bounded blocking queue
-            _prequeue = new CoDelBlockingQueue<PendingGatewayMessage>(context, "IBGW",
-                    context.getProperty(PROP_MAX_IB_QUEUE, MAX_IB_QUEUE));
+            _prequeue = new CoDelBlockingQueue<PendingGatewayMessage>(context, "IBGW", context.getProperty(PROP_MAX_IB_QUEUE, MAX_IB_QUEUE));
             _isInbound = true;
         }
         _nextHop = receiver.getSendTo();
@@ -155,16 +153,13 @@ class PumpedTunnelGateway extends TunnelGateway {
         long lag = _context.jobQueue().getMaxLag();
 
         if (backlogged && _log.shouldInfo()) {
-            _log.info("PumpedTunnelGateway backlogged, queued to " + _nextHop + " : "
-                      + _prequeue.size() + " inbound? " + _isInbound);
+            _log.info("PumpedTunnelGateway backlogged, queued to " + _nextHop + " : " + _prequeue.size() + " inbound? " + _isInbound);
         }
 
         if (backlogged) {
             max = _isInbound ? 1 : 2;
         } else {
-            max = _isInbound
-                    ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, MAX_IB_MSGS_PER_PUMP)
-                    : _context.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, MAX_OB_MSGS_PER_PUMP);
+            max = _isInbound ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, MAX_IB_MSGS_PER_PUMP) : _context.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, MAX_OB_MSGS_PER_PUMP);
         }
 
         _prequeue.drainTo(queueBuf, max);
@@ -201,8 +196,7 @@ class PumpedTunnelGateway extends TunnelGateway {
         }
 
         if (moreMessagesExist && _log.shouldInfo()) {
-            _log.info("PumpedTunnelGateway remaining to [" + _nextHop.toBase64().substring(0, 6) + "] -> Pre-queue: "
-                      + _prequeue.size() + " inbound? " + _isInbound + " backlogged? " + backlogged);
+            _log.info("PumpedTunnelGateway remaining to [" + _nextHop.toBase64().substring(0, 6) + "] -> Pre-queue: " + _prequeue.size() + " inbound? " + _isInbound + " backlogged? " + backlogged);
         }
 
         return moreMessagesExist;

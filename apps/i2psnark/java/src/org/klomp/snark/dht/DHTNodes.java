@@ -4,17 +4,18 @@ package org.klomp.snark.dht;
  *  From zzzot, modded and relicensed to GPLv2
  */
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SHA1Hash;
 import net.i2p.data.DataHelper;
 import net.i2p.kademlia.KBucketSet;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * All the nodes we know about, stored as a mapping from node ID to a Destination and Port.
@@ -38,12 +39,14 @@ class DHTNodes {
 
     /** how long since last heard from do we delete - BEP 5 says 15 minutes */
     private static final long MAX_EXPIRE_TIME = 10 * 60 * 1000;
+
     private static final long MIN_EXPIRE_TIME = 8 * 60 * 1000;
     private static final long DELTA_EXPIRE_TIME = 3 * 60 * 1000;
     private static final int MAX_PEERS = 500;
 
     /** Buckets older than this are refreshed - BEP 5 says 15 minutes */
     private static final long MAX_BUCKET_AGE = 15 * 60 * 1000;
+
     private static final int KAD_K = 8;
     private static final int KAD_B = 1;
 
@@ -148,7 +151,7 @@ class DHTNodes {
             if (!_isRunning) return;
             long now = _context.clock().now();
             int peerCount = 0;
-            for (Iterator<NodeInfo> iter = DHTNodes.this.values().iterator(); iter.hasNext();) {
+            for (Iterator<NodeInfo> iter = DHTNodes.this.values().iterator(); iter.hasNext(); ) {
                 NodeInfo peer = iter.next();
                 if (peer.lastSeen() < now - _expireTime) {
                     iter.remove();
@@ -158,19 +161,10 @@ class DHTNodes {
                 }
             }
 
-            if (peerCount > MAX_PEERS)
-                _expireTime = Math.max(_expireTime - DELTA_EXPIRE_TIME, MIN_EXPIRE_TIME);
+            if (peerCount > MAX_PEERS) _expireTime = Math.max(_expireTime - DELTA_EXPIRE_TIME, MIN_EXPIRE_TIME);
             else _expireTime = Math.min(_expireTime + DELTA_EXPIRE_TIME, MAX_EXPIRE_TIME);
 
-            if (_log.shouldDebug())
-                _log.debug(
-                        "DHT storage cleaner done - now with "
-                                + peerCount
-                                + " / "
-                                + MAX_PEERS
-                                + " peers, "
-                                + DataHelper.formatDuration(_expireTime)
-                                + " expiration");
+            if (_log.shouldDebug()) _log.debug("DHT storage cleaner done - now with " + peerCount + " / " + MAX_PEERS + " peers, " + DataHelper.formatDuration(_expireTime) + " expiration");
 
             schedule(CLEAN_TIME);
         }

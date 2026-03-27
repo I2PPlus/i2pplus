@@ -1,16 +1,17 @@
 package net.i2p.sam.client;
 
+import net.i2p.I2PAppContext;
+import net.i2p.client.I2PSession;
+import net.i2p.data.DataHelper;
+import net.i2p.util.I2PAppThread;
+import net.i2p.util.Log;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicInteger;
-import net.i2p.I2PAppContext;
-import net.i2p.client.I2PSession;
-import net.i2p.data.DataHelper;
-import net.i2p.util.I2PAppThread;
-import net.i2p.util.Log;
 
 /**
  * Read from a socket, producing events for any SAM message read
@@ -31,8 +32,7 @@ public class SAMReader {
     }
 
     public synchronized void startReading() {
-        if (_live)
-            throw new IllegalStateException();
+        if (_live) throw new IllegalStateException();
         _live = true;
         I2PAppThread t = new I2PAppThread(new Runner(), "SAM reader " + _count.incrementAndGet());
         t.start();
@@ -44,7 +44,10 @@ public class SAMReader {
         if (_thread != null) {
             _thread.interrupt();
             _thread = null;
-            try { _inRaw.close(); } catch (IOException ioe) {}
+            try {
+                _inRaw.close();
+            } catch (IOException ioe) {
+            }
         }
     }
 
@@ -75,16 +78,27 @@ public class SAMReader {
         public static final String NAMING_REPLY_KEY_NOT_FOUND = "KEY_NOT_FOUND";
 
         public void helloReplyReceived(boolean ok, String version);
+
         public void sessionStatusReceived(String result, String destination, String message);
+
         public void streamStatusReceived(String result, String id, String message);
+
         public void streamConnectedReceived(String remoteDestination, String id);
+
         public void streamClosedReceived(String result, String id, String message);
+
         public void streamDataReceived(String id, byte data[], int offset, int length);
+
         public void namingReplyReceived(String name, String result, String value, String message);
+
         public void destReplyReceived(String publicKey, String privateKey);
+
         public void datagramReceived(String dest, byte[] data, int offset, int length, int fromPort, int toPort);
+
         public void rawReceived(byte[] data, int offset, int length, int fromPort, int toPort, int protocol);
+
         public void pingReceived(String data);
+
         public void pongReceived(String data);
 
         public void unknownMessageReceived(String major, String minor, Properties params);
@@ -116,8 +130,7 @@ public class SAMReader {
                 String line = DataHelper.getUTF8(baos.toByteArray());
                 baos.reset();
 
-                if (_log.shouldDebug())
-                    _log.debug("Line read from the SAM Bridge: " + line);
+                if (_log.shouldDebug()) _log.debug("Line read from the SAM Bridge: " + line);
 
                 StringTokenizer tok = new StringTokenizer(line);
 
@@ -135,15 +148,13 @@ public class SAMReader {
                     int eq = pair.indexOf('=');
                     if ((eq > 0) && (eq < pair.length() - 1)) {
                         String name = pair.substring(0, eq);
-                        String val = pair.substring(eq+1);
+                        String val = pair.substring(eq + 1);
                         if (val.length() <= 0) {
                             _log.error("Empty value for " + name);
                             continue;
                         }
-                        while ((val.charAt(0) == '\"') && (val.length() > 0))
-                            val = val.substring(1);
-                        while ((val.length() > 0) && (val.charAt(val.length()-1) == '\"'))
-                            val = val.substring(0, val.length()-1);
+                        while ((val.charAt(0) == '\"') && (val.length() > 0)) val = val.substring(1);
+                        while ((val.length() > 0) && (val.charAt(val.length() - 1) == '\"')) val = val.substring(0, val.length() - 1);
                         params.setProperty(name, val);
                     }
                 }
@@ -151,8 +162,7 @@ public class SAMReader {
                 processEvent(major, minor, params);
             }
             _live = false;
-            if (_log.shouldWarn())
-                _log.warn("SAMReader exiting");
+            if (_log.shouldWarn()) _log.warn("SAMReader exiting");
         }
     }
 
@@ -165,11 +175,9 @@ public class SAMReader {
         if ("HELLO".equals(major)) {
             if ("REPLY".equals(minor)) {
                 String result = params.getProperty("RESULT");
-                String version= params.getProperty("VERSION");
-                if ("OK".equals(result) && version != null)
-                    _listener.helloReplyReceived(true, version);
-                else
-                    _listener.helloReplyReceived(false, version);
+                String version = params.getProperty("VERSION");
+                if ("OK".equals(result) && version != null) _listener.helloReplyReceived(true, version);
+                else _listener.helloReplyReceived(false, version);
             } else {
                 _listener.unknownMessageReceived(major, minor, params);
             }
@@ -188,11 +196,11 @@ public class SAMReader {
                 String id = params.getProperty("ID");
                 String msg = params.getProperty("MESSAGE");
                 // id is null in v3, so pass it through regardless
-                //if (id != null) {
+                // if (id != null) {
                 _listener.streamStatusReceived(result, id, msg);
-                //} else {
+                // } else {
                 //    _listener.unknownMessageReceived(major, minor, params);
-                //}
+                // }
             } else if ("CONNECTED".equals(minor)) {
                 String dest = params.getProperty("DESTINATION");
                 String id = params.getProperty("ID");
@@ -246,10 +254,8 @@ public class SAMReader {
                 int toPort = 0;
                 if (dest != null) {
                     try {
-                        if (fp != null)
-                            fromPort = Integer.parseInt(fp);
-                        if (tp != null)
-                            toPort = Integer.parseInt(tp);
+                        if (fp != null) fromPort = Integer.parseInt(fp);
+                        if (tp != null) toPort = Integer.parseInt(tp);
                         int sizeVal = Integer.parseInt(size);
                         byte data[] = new byte[sizeVal];
                         int read = DataHelper.read(_inRaw, data);
@@ -280,12 +286,9 @@ public class SAMReader {
                 int toPort = 0;
                 int protocol = I2PSession.PROTO_DATAGRAM_RAW;
                 try {
-                    if (fp != null)
-                        fromPort = Integer.parseInt(fp);
-                    if (tp != null)
-                        toPort = Integer.parseInt(tp);
-                    if (pr != null)
-                        protocol = Integer.parseInt(pr);
+                    if (fp != null) fromPort = Integer.parseInt(fp);
+                    if (tp != null) toPort = Integer.parseInt(tp);
+                    if (pr != null) protocol = Integer.parseInt(pr);
                     int sizeVal = Integer.parseInt(size);
                     byte data[] = new byte[sizeVal];
                     int read = DataHelper.read(_inRaw, data);

@@ -1,7 +1,8 @@
 package net.i2p.router.web;
 
-import java.io.Writer;
 import net.i2p.router.RouterContext;
+
+import java.io.Writer;
 
 /**
  *  Base helper class for JSP helper beans.
@@ -11,6 +12,7 @@ import net.i2p.router.RouterContext;
 public abstract class HelperBase {
     /** the router context */
     protected RouterContext _context;
+
     /** the writer for output */
     protected Writer _out;
 
@@ -19,10 +21,12 @@ public abstract class HelperBase {
      *  @since public since 0.9.33, was package private
      */
     public static final String PROP_ADVANCED = "routerconsole.advanced";
+
     /**  Checked attribute for HTML checkboxes.
      *  @since public since 0.9.33, was package private
      */
     public static final String CHECKED = " checked ";
+
     /**  Selected attribute for HTML select options.
      *  @since 0.9.43
      */
@@ -35,8 +39,11 @@ public abstract class HelperBase {
      *                  the first one we come across.
      */
     public void setContextId(String contextId) {
-        try {_context = ContextHelper.getContext(contextId);}
-        catch (Throwable t) {t.printStackTrace();}
+        try {
+            _context = ContextHelper.getContext(contextId);
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
     }
 
     /**
@@ -49,8 +56,7 @@ public abstract class HelperBase {
     }
 
     /** might be useful in the jsp's */
-    //public RouterContext getContext() { return _context; }
-
+    // public RouterContext getContext() { return _context; }
 
     /**
      *  Store the writer for output.
@@ -59,7 +65,9 @@ public abstract class HelperBase {
      *  @param out the writer to store
      *  @since 0.8.2
      */
-    public void storeWriter(Writer out) { _out = out; }
+    public void storeWriter(Writer out) {
+        _out = out;
+    }
 
     /**
      *  Get the checked attribute for a boolean property.
@@ -68,7 +76,9 @@ public abstract class HelperBase {
      *  @since 0.9.24 consolidated from various helpers
      */
     protected String getChecked(String prop) {
-        if (_context.getBooleanProperty(prop)) {return CHECKED;}
+        if (_context.getBooleanProperty(prop)) {
+            return CHECKED;
+        }
         return "";
     }
 

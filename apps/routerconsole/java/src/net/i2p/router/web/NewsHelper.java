@@ -2,10 +2,11 @@ package net.i2p.router.web;
 
 import static net.i2p.update.UpdateType.*;
 
-import java.io.File;
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.router.update.ConsoleUpdateManager;
+
+import java.io.File;
 
 /**
  *  If news file does not exist, use file from the initialNews directory
@@ -16,21 +17,28 @@ import net.i2p.router.update.ConsoleUpdateManager;
 public class NewsHelper extends ContentHelper {
 
     public static final String PROP_LAST_UPDATE_TIME = "router.updateLastDownloaded";
+
     /** @since 0.8.12 */
     private static final String PROP_LAST_HIDDEN = "routerconsole.newsLastHidden";
+
     /** @since 0.9.4 */
     public static final String PROP_LAST_CHECKED = "routerconsole.newsLastChecked";
+
     /** @since 0.9.4 */
     public static final String PROP_LAST_UPDATED = "routerconsole.newsLastUpdated";
+
     /** @since 0.9.55 */
     public static final String PROP_LAST_NEW_ENTRY = "routerconsole.newsLastNewEntry";
+
     /** @since 0.9.62 */
     public static final String PROP_LAST_LANG = "routerconsole.newsLastLanguage";
+
     /**
      * Default true
      * @since 0.9.21
      */
     public static final String PROP_TRANSLATE = "routerconsole.newsTranslate";
+
     public static final String NEWS_FILE = "docs/news.xml";
 
     /**
@@ -51,11 +59,7 @@ public class NewsHelper extends ContentHelper {
     public static boolean isUpdateInProgress() {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
         if (mgr == null) return false;
-        return mgr.isUpdateInProgress(ROUTER_SIGNED) ||
-               mgr.isUpdateInProgress(ROUTER_SIGNED_SU3) ||
-               mgr.isUpdateInProgress(ROUTER_UNSIGNED) ||
-               mgr.isUpdateInProgress(ROUTER_DEV_SU3) ||
-               mgr.isUpdateInProgress(TYPE_DUMMY);
+        return mgr.isUpdateInProgress(ROUTER_SIGNED) || mgr.isUpdateInProgress(ROUTER_SIGNED_SU3) || mgr.isUpdateInProgress(ROUTER_UNSIGNED) || mgr.isUpdateInProgress(ROUTER_DEV_SU3) || mgr.isUpdateInProgress(TYPE_DUMMY);
     }
 
     /**
@@ -65,11 +69,10 @@ public class NewsHelper extends ContentHelper {
      */
     public static boolean isUpdateAvailable() {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
-/*
-        if (mgr == null) return false;
-        return mgr.getUpdateAvailable(ROUTER_SIGNED) != null ||
-               mgr.getUpdateAvailable(ROUTER_SIGNED_SU3) != null;
-*/
+        /*
+                if (mgr == null) return false;
+                return mgr.getUpdateAvailable(ROUTER_SIGNED) != null || mgr.getUpdateAvailable(ROUTER_SIGNED_SU3) != null;
+        */
         return false;
     }
 
@@ -92,14 +95,13 @@ public class NewsHelper extends ContentHelper {
      *  @since 0.9.4 moved from NewsFetcher
      */
     public static String updateVersion() {
-/*
-        ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
-        if (mgr == null) return null;
-        String rv = mgr.getUpdateAvailable(ROUTER_SIGNED_SU3);
-        if (rv != null)
-            return rv;
-        return mgr.getUpdateAvailable(ROUTER_SIGNED);
-*/
+        /*
+                ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
+                if (mgr == null) return null;
+                String rv = mgr.getUpdateAvailable(ROUTER_SIGNED_SU3);
+                if (rv != null) return rv;
+                return mgr.getUpdateAvailable(ROUTER_SIGNED);
+        */
         return null;
     }
 
@@ -147,8 +149,7 @@ public class NewsHelper extends ContentHelper {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
         if (mgr == null) return null;
         String rv = mgr.getUpdateDownloaded(ROUTER_SIGNED_SU3);
-        if (rv != null)
-            return rv;
+        if (rv != null) return rv;
         return mgr.getUpdateDownloaded(ROUTER_SIGNED);
     }
 
@@ -159,8 +160,7 @@ public class NewsHelper extends ContentHelper {
     public static boolean isUnsignedUpdateAvailable(RouterContext ctx) {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
         if (mgr == null) return false;
-        return mgr.getUpdateAvailable(ROUTER_UNSIGNED) != null &&
-               ctx.getBooleanProperty(ConfigUpdateHandler.PROP_UPDATE_UNSIGNED);
+        return mgr.getUpdateAvailable(ROUTER_UNSIGNED) != null && ctx.getBooleanProperty(ConfigUpdateHandler.PROP_UPDATE_UNSIGNED);
     }
 
     /**
@@ -191,8 +191,7 @@ public class NewsHelper extends ContentHelper {
     public static boolean isDevSU3UpdateAvailable(RouterContext ctx) {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
         if (mgr == null) return false;
-        return mgr.getUpdateAvailable(ROUTER_DEV_SU3) != null &&
-               ctx.getBooleanProperty(ConfigUpdateHandler.PROP_UPDATE_DEV_SU3);
+        return mgr.getUpdateAvailable(ROUTER_DEV_SU3) != null && ctx.getBooleanProperty(ConfigUpdateHandler.PROP_UPDATE_DEV_SU3);
     }
 
     /**
@@ -227,7 +226,8 @@ public class NewsHelper extends ContentHelper {
             try {
                 long modtime = Long.parseLong(ver);
                 return DataHelper.formatTime(modtime);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) {
+            }
         }
         return null;
     }
@@ -248,7 +248,7 @@ public class NewsHelper extends ContentHelper {
     @Override
     public String getContent() {
         // show a min of 1, max of 3, none older than 60 days over min
-        return NewsFeedHelper.getEntries(_context, 0, 3, 60*24*60*60*1000L);
+        return NewsFeedHelper.getEntries(_context, 0, 3, 60 * 24 * 60 * 60 * 1000L);
     }
 
     /**
@@ -264,8 +264,7 @@ public class NewsHelper extends ContentHelper {
      */
     public static boolean shouldShowNews(RouterContext ctx) {
         long lastUpdated = lastNewEntry(ctx);
-        if (lastUpdated <= 0)
-            return true;
+        if (lastUpdated <= 0) return true;
         long last = ctx.getProperty(PROP_LAST_HIDDEN, 0L);
         return lastUpdated > last;
     }
@@ -306,15 +305,10 @@ public class NewsHelper extends ContentHelper {
         long lastUpdated = lastUpdated(ctx);
         long lastFetch = lastChecked(ctx);
         if (lastUpdated > 0) {
-            buf.append(Messages.getString("News last updated {0} ago.",
-                                           DataHelper.formatDuration2(now - lastUpdated),
-                                           ctx))
-                .append('\n');
+            buf.append(Messages.getString("News last updated {0} ago.", DataHelper.formatDuration2(now - lastUpdated), ctx)).append('\n');
         }
         if (lastFetch > lastUpdated) {
-            buf.append(Messages.getString("News last checked {0} ago.",
-                                           DataHelper.formatDuration2(now - lastFetch),
-                                           ctx));
+            buf.append(Messages.getString("News last checked {0} ago.", DataHelper.formatDuration2(now - lastFetch), ctx));
         }
         String unsignedUpdateURL = ctx.getProperty("router.updateUnsignedURL");
         boolean isPlus = unsignedUpdateURL == null || unsignedUpdateURL.contains("skank.i2p");
@@ -335,15 +329,11 @@ public class NewsHelper extends ContentHelper {
         String consoleNonce = CSSHelper.getNonce();
         if (lastUpdated > 0 && consoleNonce != null) {
             if (shouldShowNews(ctx)) {
-                buf.append(" <a href=\"/home?news=0&amp;consoleNonce=").append(consoleNonce).append("\">")
-                    .append(Messages.getString("Hide news", ctx));
+                buf.append(" <a href=\"/home?news=0&amp;consoleNonce=").append(consoleNonce).append("\">").append(Messages.getString("Hide news", ctx));
             } else {
-                buf.append(" <a href=\"/home?news=1&amp;consoleNonce=").append(consoleNonce).append("\">")
-                    .append(Messages.getString("Show news", ctx));
+                buf.append(" <a href=\"/home?news=1&amp;consoleNonce=").append(consoleNonce).append("\">").append(Messages.getString("Show news", ctx));
             }
-            buf.append("</a> | <a href=\"/news\">")
-                .append(Messages.getString("Show all news", ctx))
-                .append("</a></span>");
+            buf.append("</a> | <a href=\"/news\">").append(Messages.getString("Show all news", ctx)).append("</a></span>");
         }
         return buf.toString();
     }
@@ -384,8 +374,7 @@ public class NewsHelper extends ContentHelper {
      */
     public static long lastUpdated(RouterContext ctx) {
         long rv = ctx.getProperty(PROP_LAST_UPDATED, 0L);
-        if (rv > 0)
-            return rv;
+        if (rv > 0) return rv;
         File newsFile = new File(ctx.getRouterDir(), NEWS_FILE);
         rv = newsFile.lastModified();
         ctx.router().saveConfig(PROP_LAST_UPDATED, Long.toString(rv));
@@ -398,11 +387,9 @@ public class NewsHelper extends ContentHelper {
      */
     private static long lastNewEntry(RouterContext ctx) {
         long rv = ctx.getProperty(PROP_LAST_NEW_ENTRY, 0L);
-        if (rv > 0)
-            return rv;
+        if (rv > 0) return rv;
         rv = lastUpdated(ctx);
         ctx.router().saveConfig(PROP_LAST_NEW_ENTRY, Long.toString(rv));
         return rv;
     }
-
 }

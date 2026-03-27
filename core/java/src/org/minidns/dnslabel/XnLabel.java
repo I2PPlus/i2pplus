@@ -10,8 +10,9 @@
  */
 package org.minidns.dnslabel;
 
-import java.util.Locale;
 import org.minidns.idna.MiniDnsIdna;
+
+import java.util.Locale;
 
 /**
  * A label that begins with "xn--" and follows the LDH rule.

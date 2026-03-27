@@ -32,11 +32,11 @@ import net.i2p.data.SimpleDataStructure;
  * @since 0.8.1
  * @author zzz
  */
-@SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
+@SuppressWarnings({"PMD.OverrideBothEqualsAndHashcode", "checkstyle:EqualsHashCode"})
 public class SHA1Hash extends SimpleDataStructure {
     private int _cachedHashCode;
 
-    public final static int HASH_LENGTH = SHA1.HASH_LENGTH;
+    public static final int HASH_LENGTH = SHA1.HASH_LENGTH;
 
     /** @since 0.9.9 */
     public SHA1Hash() {

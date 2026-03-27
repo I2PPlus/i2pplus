@@ -1,4 +1,5 @@
 package net.i2p.router.time;
+
 /*
  * Copyright (c) 2004, Adam Buckley
  * All rights reserved.
@@ -29,12 +30,13 @@ package net.i2p.router.time;
  *
  */
 
+import net.i2p.util.RandomSource;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Date;
-import net.i2p.util.RandomSource;
 import java.util.Locale;
 
 /**
@@ -119,7 +121,6 @@ class NtpMessage {
      */
     public byte leapIndicator = 0;
 
-
     /**
      * This value indicates the NTP/SNTP version number.  The version number
      * is 3 for Version 3 (IPv4 only) and 4 for Version 4 (IPv4, IPv6 and OSI).
@@ -127,7 +128,6 @@ class NtpMessage {
      * encapsulating context must be inspected.
      */
     public byte version = 3;
-
 
     /**
      * This value indicates the mode, with values defined as follows:
@@ -149,7 +149,6 @@ class NtpMessage {
      */
     public final byte mode;
 
-
     /**
      * This value indicates the stratum level of the local clock, with values
      * defined as follows:
@@ -163,7 +162,6 @@ class NtpMessage {
      */
     public short stratum = 0;
 
-
     /**
      * This value indicates the maximum interval between successive messages,
      * in seconds to the nearest power of two. The values that can appear in
@@ -172,7 +170,6 @@ class NtpMessage {
      */
     public byte pollInterval = 0;
 
-
     /**
      * This value indicates the precision of the local clock, in seconds to
      * the nearest power of two.  The values that normally appear in this field
@@ -180,7 +177,6 @@ class NtpMessage {
      * found in some workstations.
      */
     public byte precision = 0;
-
 
     /**
      * This value indicates the total roundtrip delay to the primary reference
@@ -192,14 +188,12 @@ class NtpMessage {
      */
     public double rootDelay = 0;
 
-
     /**
      * This value indicates the nominal error relative to the primary reference
      * source, in seconds.  The values  that normally appear in this field
      * range from 0 to several hundred milliseconds.
      */
     public double rootDispersion = 0;
-
 
     /**
      * This is a 4-byte array identifying the particular reference source.
@@ -237,13 +231,11 @@ class NtpMessage {
      */
     public final byte[] referenceIdentifier = {0, 0, 0, 0};
 
-
     /**
      * This is the time at which the local clock was last set or corrected, in
      * seconds since 00:00 1-Jan-1900.
      */
     public double referenceTimestamp = 0;
-
 
     /**
      * This is the time at which the request departed the client for the
@@ -251,21 +243,17 @@ class NtpMessage {
      */
     public double originateTimestamp = 0;
 
-
     /**
      * This is the time at which the request arrived at the server, in seconds
      * since 00:00 1-Jan-1900.
      */
     public double receiveTimestamp = 0;
 
-
     /**
      * This is the time at which the reply departed the server for the client,
      * in seconds since 00:00 1-Jan-1900.
      */
     public final double transmitTimestamp;
-
-
 
     /**
      * Constructs a new NtpMessage from an array of bytes.
@@ -281,15 +269,9 @@ class NtpMessage {
         pollInterval = array[2];
         precision = array[3];
 
-        rootDelay = (array[4] * 256.0) +
-                    unsignedByteToShort(array[5]) +
-                    (unsignedByteToShort(array[6]) / 256.0) +
-                    (unsignedByteToShort(array[7]) / 65536.0);
+        rootDelay = (array[4] * 256.0) + unsignedByteToShort(array[5]) + (unsignedByteToShort(array[6]) / 256.0) + (unsignedByteToShort(array[7]) / 65536.0);
 
-        rootDispersion = (unsignedByteToShort(array[8]) * 256.0) +
-                         unsignedByteToShort(array[9]) +
-                         (unsignedByteToShort(array[10]) / 256.0) +
-                         (unsignedByteToShort(array[11]) / 65536.0);
+        rootDispersion = (unsignedByteToShort(array[8]) * 256.0) + unsignedByteToShort(array[9]) + (unsignedByteToShort(array[10]) / 256.0) + (unsignedByteToShort(array[11]) / 65536.0);
 
         referenceIdentifier[0] = array[12];
         referenceIdentifier[1] = array[13];
@@ -302,8 +284,6 @@ class NtpMessage {
         transmitTimestamp = decodeTimestamp(array, 40);
     }
 
-
-
     /**
      * Constructs a new NtpMessage in client -&gt; server mode, and sets the
      * transmit timestamp to the current time.
@@ -312,10 +292,8 @@ class NtpMessage {
         // Note that all the other member variables are already set with
         // appropriate default values.
         this.mode = 3;
-        this.transmitTimestamp = (System.currentTimeMillis()/1000.0) + NtpClient.SECONDS_1900_TO_EPOCH;
+        this.transmitTimestamp = (System.currentTimeMillis() / 1000.0) + NtpClient.SECONDS_1900_TO_EPOCH;
     }
-
-
 
     /**
      * This method constructs the data bytes of a raw NTP packet.
@@ -359,8 +337,6 @@ class NtpMessage {
         return p;
     }
 
-
-
     /**
      * Returns a string representation of a NtpMessage
      */
@@ -368,35 +344,17 @@ class NtpMessage {
     public String toString() {
         String precisionStr = new DecimalFormat("0.#E0").format(Math.pow(2, precision));
 
-        return "Leap indicator: " + leapIndicator + "\n" +
-               "Version: " + version + "\n" +
-               "Mode: " + mode + "\n" +
-               "Stratum: " + stratum + "\n" +
-               "Poll: " + pollInterval + "\n" +
-               "Precision: " + precision + " (" + precisionStr + " seconds)\n" +
-               "Root delay: " + new DecimalFormat("0.00").format(rootDelay*1000) + " ms\n" +
-               "Root dispersion: " + new DecimalFormat("0.00").format(rootDispersion*1000) + " ms\n" +
-               "Reference identifier: " + referenceIdentifierToString() + "\n" +
-               "Reference timestamp: " + timestampToString(referenceTimestamp) + "\n" +
-               "Originate timestamp: " + timestampToString(originateTimestamp) + "\n" +
-               "Receive timestamp:   " + timestampToString(receiveTimestamp) + "\n" +
-               "Transmit timestamp:  " + timestampToString(transmitTimestamp);
+        return "Leap indicator: " + leapIndicator + "\n" + "Version: " + version + "\n" + "Mode: " + mode + "\n" + "Stratum: " + stratum + "\n" + "Poll: " + pollInterval + "\n" + "Precision: " + precision + " (" + precisionStr + " seconds)\n" + "Root delay: " + new DecimalFormat("0.00").format(rootDelay * 1000) + " ms\n" + "Root dispersion: " + new DecimalFormat("0.00").format(rootDispersion * 1000) + " ms\n" + "Reference identifier: " + referenceIdentifierToString() + "\n" + "Reference timestamp: " + timestampToString(referenceTimestamp) + "\n" + "Originate timestamp: " + timestampToString(originateTimestamp) + "\n" + "Receive timestamp:   " + timestampToString(receiveTimestamp) + "\n" + "Transmit timestamp:  " + timestampToString(transmitTimestamp);
     }
-
-
 
     /**
      * Converts an unsigned byte to a short.  By default, Java assumes that
      * a byte is signed.
      */
     private static short unsignedByteToShort(byte b) {
-        if ((b & 0x80)==0x80)
-            return (short) (128 + (b & 0x7f));
-        else
-            return b;
+        if ((b & 0x80) == 0x80) return (short) (128 + (b & 0x7f));
+        else return b;
     }
-
-
 
     /**
      * Will read 8 bytes of a message beginning at <code>pointer</code>
@@ -412,16 +370,13 @@ class NtpMessage {
     private static double decodeTimestamp(byte[] array, int pointer) {
         double r = 0.0;
 
-        for (int i=0; i<8; i++) {
-            r += unsignedByteToShort(array[pointer+i]) * Math.pow(2, (3-i)*8);
+        for (int i = 0; i < 8; i++) {
+            r += unsignedByteToShort(array[pointer + i]) * Math.pow(2, (3 - i) * 8);
         }
         // 2036-compliance
-        if (r < SECONDS_PIVOT && r > 0d)
-            r += SECONDS_ERA;
+        if (r < SECONDS_PIVOT && r > 0d) r += SECONDS_ERA;
         return r;
     }
-
-
 
     /**
      * Encodes a timestamp in the specified position in the message.
@@ -450,21 +405,20 @@ class NtpMessage {
         } else if (timestamp >= SECONDS_ERA) {
             timestamp -= SECONDS_ERA;
             // 0 is special, don't send 0
-            if (timestamp == 0d)
-                timestamp = .001d;
+            if (timestamp == 0d) timestamp = .001d;
         }
 
         // Converts a double into a 64-bit fixed point
         // 6 bytes of real data
-        for (int i=0; i<7; i++) {
+        for (int i = 0; i < 7; i++) {
             // 2^24, 2^16, 2^8, .. 2^-32
-            double base = Math.pow(2, (3-i)*8);
+            double base = Math.pow(2, (3 - i) * 8);
 
             // Capture byte value
-            array[pointer+i] = (byte) (timestamp / base);
+            array[pointer + i] = (byte) (timestamp / base);
 
             // Subtract captured value from remaining total
-            timestamp = timestamp - (unsignedByteToShort(array[pointer+i]) * base);
+            timestamp = timestamp - (unsignedByteToShort(array[pointer + i]) * base);
         }
 
         // From RFC 2030: It is advisable to fill the non-significant
@@ -475,14 +429,12 @@ class NtpMessage {
         RandomSource.getInstance().nextBytes(array, pointer + 6, 2);
     }
 
-
-
     /**
      * Returns a timestamp (number of seconds since 00:00 1-Jan-1900) as a
      * formatted date/time string.
      */
     private static String timestampToString(double timestamp) {
-        if (timestamp==0) return "0";
+        if (timestamp == 0) return "0";
 
         // timestamp is relative to 1900, utc is used by Java and is relative
         // to 1970
@@ -519,11 +471,10 @@ class NtpMessage {
         // In the case of NTP Version 3 or Version 4 stratum-0 (unspecified)
         // or stratum-1 (primary) servers, this is a four-character ASCII
         // string, left justified and zero padded to 32 bits.
-        if (stratum==0 || stratum==1) {
+        if (stratum == 0 || stratum == 1) {
             StringBuilder buf = new StringBuilder(4);
             for (int i = 0; i < 4; i++) {
-                if (ref[i] == 0)
-                    break;
+                if (ref[i] == 0) break;
                 buf.append((char) (ref[i] & 0xff));
             }
             return buf.toString();
@@ -531,64 +482,56 @@ class NtpMessage {
 
         // In NTP Version 3 secondary servers, this is the 32-bit IPv4
         // address of the reference source.
-        else if (version==3) {
-            return unsignedByteToShort(ref[0]) + "." +
-                   unsignedByteToShort(ref[1]) + "." +
-                   unsignedByteToShort(ref[2]) + "." +
-                   unsignedByteToShort(ref[3]);
+        else if (version == 3) {
+            return unsignedByteToShort(ref[0]) + "." + unsignedByteToShort(ref[1]) + "." + unsignedByteToShort(ref[2]) + "." + unsignedByteToShort(ref[3]);
         }
 
         // In NTP Version 4 secondary servers, this is the low order 32 bits
         // of the latest transmit timestamp of the reference source.
-        else if (version==4) {
+        else if (version == 4) {
             // Unimplemented RFC 4330:
             // For IPv6 and OSI secondary servers, the value is the first 32 bits of
             // the MD5 hash of the IPv6 or NSAP address of the synchronization
             // source.
-            return "" + ((unsignedByteToShort(ref[0]) / 256.0) +
-                   (unsignedByteToShort(ref[1]) / 65536.0) +
-                   (unsignedByteToShort(ref[2]) / 16777216.0) +
-                   (unsignedByteToShort(ref[3]) / 4294967296.0));
+            return "" + ((unsignedByteToShort(ref[0]) / 256.0) + (unsignedByteToShort(ref[1]) / 65536.0) + (unsignedByteToShort(ref[2]) / 16777216.0) + (unsignedByteToShort(ref[3]) / 4294967296.0));
         }
 
         return "";
     }
 
-/*
-    // Test 2036 rollover
-    public static void main(String[] args) {
-        byte[] x = new byte[8];
-        byte[] y = new byte[8];
-        test(x, y);
-        x[0] = (byte) 0x80;
-        test(x, y);
-        x[0] = (byte) 0x81;
-        test(x, y);
-        x[0] = (byte) 0xff;
-        test(x, y);
-        Arrays.fill(x, 1, 6, (byte) 0xff);
-        test(x, y);
-        x[0] = 0x40;
-        Arrays.fill(x, 1, 6, (byte) 0);
-        test(x, y);
-        x[0] = 0x7f;
-        test(x, y);
-        Arrays.fill(x, 1, 6, (byte) 0xff);
-        test(x, y);
-    }
+    /*
+        // Test 2036 rollover
+        public static void main(String[] args) {
+            byte[] x = new byte[8];
+            byte[] y = new byte[8];
+            test(x, y);
+            x[0] = (byte) 0x80;
+            test(x, y);
+            x[0] = (byte) 0x81;
+            test(x, y);
+            x[0] = (byte) 0xff;
+            test(x, y);
+            Arrays.fill(x, 1, 6, (byte) 0xff);
+            test(x, y);
+            x[0] = 0x40;
+            Arrays.fill(x, 1, 6, (byte) 0);
+            test(x, y);
+            x[0] = 0x7f;
+            test(x, y);
+            Arrays.fill(x, 1, 6, (byte) 0xff);
+            test(x, y);
+        }
 
-    private static void test(byte[] x, byte[] y) {
-        double d = decodeTimestamp(x, 0);
-        encodeTimestamp(y, 0, d);
-        System.out.println(net.i2p.util.HexDump.dump(x));
-        System.out.println(net.i2p.util.HexDump.dump(y));
-        System.out.println("Date: " + timestampToString(d));
-        // skip 2 random bytes at end
-        if (net.i2p.data.DataHelper.eq(x, 0, y, 0, 6))
-            System.out.println("PASS\n");
-        else
-            System.out.println("FAIL\n");
+        private static void test(byte[] x, byte[] y) {
+            double d = decodeTimestamp(x, 0);
+            encodeTimestamp(y, 0, d);
+            System.out.println(net.i2p.util.HexDump.dump(x));
+            System.out.println(net.i2p.util.HexDump.dump(y));
+            System.out.println("Date: " + timestampToString(d));
+            // skip 2 random bytes at end
+            if (net.i2p.data.DataHelper.eq(x, 0, y, 0, 6)) System.out.println("PASS\n");
+            else System.out.println("FAIL\n");
 
-    }
-*/
+        }
+    */
 }

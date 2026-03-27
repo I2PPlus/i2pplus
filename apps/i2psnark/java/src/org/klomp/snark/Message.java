@@ -6,10 +6,11 @@
 
 package org.klomp.snark;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import net.i2p.data.ByteArray;
 import net.i2p.util.ByteCache;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * Represents a BitTorrent protocol message for peer communication.
@@ -158,15 +159,7 @@ class Message {
     /**
      * @since 0.9.32
      */
-    private Message(
-            byte type,
-            int piece,
-            int begin,
-            int length,
-            byte[] data,
-            int off,
-            int len,
-            DataLoader loader) {
+    private Message(byte type, int piece, int begin, int length, byte[] data, int off, int len, DataLoader loader) {
         this.type = type;
         this.piece = piece;
         this.begin = begin;
@@ -201,13 +194,7 @@ class Message {
         int datalen = 1;
 
         // piece is 4 bytes.
-        if (type == HAVE
-                || type == REQUEST
-                || type == PIECE
-                || type == CANCEL
-                || type == SUGGEST
-                || type == REJECT
-                || type == ALLOWED_FAST) datalen += 4;
+        if (type == HAVE || type == REQUEST || type == PIECE || type == CANCEL || type == SUGGEST || type == REJECT || type == ALLOWED_FAST) datalen += 4;
 
         // begin/offset is 4 bytes
         if (type == REQUEST || type == PIECE || type == CANCEL || type == REJECT) datalen += 4;
@@ -227,17 +214,10 @@ class Message {
         dos.writeByte(type & 0xFF);
 
         // Send additional info (piece number)
-        if (type == HAVE
-                || type == REQUEST
-                || type == PIECE
-                || type == CANCEL
-                || type == SUGGEST
-                || type == REJECT
-                || type == ALLOWED_FAST) dos.writeInt(piece);
+        if (type == HAVE || type == REQUEST || type == PIECE || type == CANCEL || type == SUGGEST || type == REJECT || type == ALLOWED_FAST) dos.writeInt(piece);
 
         // Send additional info (begin/offset)
-        if (type == REQUEST || type == PIECE || type == CANCEL || type == REJECT)
-            dos.writeInt(begin);
+        if (type == REQUEST || type == PIECE || type == CANCEL || type == REJECT) dos.writeInt(begin);
 
         // Send additional info (length); for PIECE this is implicit.
         if (type == REQUEST || type == CANCEL || type == REJECT) dos.writeInt(length);
@@ -254,50 +234,29 @@ class Message {
     @Override
     public String toString() {
         switch (type) {
-            case KEEP_ALIVE:
-                return "KEEP_ALIVE";
-            case CHOKE:
-                return "CHOKE";
-            case UNCHOKE:
-                return "UNCHOKE";
-            case INTERESTED:
-                return "INTERESTED";
-            case UNINTERESTED:
-                return "UNINTERESTED";
-            case HAVE:
-                return "HAVE(" + piece + ')';
-            case BITFIELD:
-                return "BITFIELD";
-            case REQUEST:
-                return "REQUEST(" + piece + ',' + begin + ',' + length + ')';
-            case PIECE:
-                return "PIECE(" + piece + ',' + begin + ',' + length + ')';
-            case CANCEL:
-                return "CANCEL(" + piece + ',' + begin + ',' + length + ')';
-            case PORT:
-                return "PORT(" + piece + ')';
-            case EXTENSION:
-                return "EXTENSION(" + piece + ',' + data.length + ')';
+            case KEEP_ALIVE: return "KEEP_ALIVE";
+            case CHOKE: return "CHOKE";
+            case UNCHOKE: return "UNCHOKE";
+            case INTERESTED: return "INTERESTED";
+            case UNINTERESTED: return "UNINTERESTED";
+            case HAVE: return "HAVE(" + piece + ')';
+            case BITFIELD: return "BITFIELD";
+            case REQUEST: return "REQUEST(" + piece + ',' + begin + ',' + length + ')';
+            case PIECE: return "PIECE(" + piece + ',' + begin + ',' + length + ')';
+            case CANCEL: return "CANCEL(" + piece + ',' + begin + ',' + length + ')';
+            case PORT: return "PORT(" + piece + ')';
+            case EXTENSION: return "EXTENSION(" + piece + ',' + data.length + ')';
             // fast extensions below here
-            case SUGGEST:
-                return "SUGGEST(" + piece + ')';
-            case HAVE_ALL:
-                return "HAVE_ALL";
-            case HAVE_NONE:
-                return "HAVE_NONE";
-            case REJECT:
-                return "REJECT(" + piece + ',' + begin + ',' + length + ')';
-            case ALLOWED_FAST:
-                return "ALLOWED_FAST(" + piece + ')';
+            case SUGGEST: return "SUGGEST(" + piece + ')';
+            case HAVE_ALL: return "HAVE_ALL";
+            case HAVE_NONE: return "HAVE_NONE";
+            case REJECT: return "REJECT(" + piece + ',' + begin + ',' + length + ')';
+            case ALLOWED_FAST: return "ALLOWED_FAST(" + piece + ')';
             // BEP 52 below here
-            case HASH_REQUEST:
-                return "HASH_REQUEST";
-            case HASHES:
-                return "HASHES";
-            case HASH_REJECT:
-                return "HASH_REJECT";
-            default:
-                return "UNKNOWN (" + type + ')';
+            case HASH_REQUEST: return "HASH_REQUEST";
+            case HASHES: return "HASHES";
+            case HASH_REJECT: return "HASH_REJECT";
+            default: return "UNKNOWN (" + type + ')';
         }
     }
 }

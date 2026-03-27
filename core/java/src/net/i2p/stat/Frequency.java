@@ -64,9 +64,9 @@ public class Frequency {
      * Use getStrictAverageInterval() for the real lifetime average.
      */
     public synchronized double getAverageEventsPerPeriod() {
-    	if (_avgInterval > 0) return _period / _avgInterval;
+        if (_avgInterval > 0) return _period / _avgInterval;
 
-    	return 0;
+        return 0;
     }
 
     /**
@@ -74,9 +74,9 @@ public class Frequency {
      * Use getStrictAverageEventsPerPeriod() for the real lifetime average.
      */
     public synchronized double getMaxAverageEventsPerPeriod() {
-    	if (_minAverageInterval > 0 && _minAverageInterval <= _period) return _period / _minAverageInterval;
+        if (_minAverageInterval > 0 && _minAverageInterval <= _period) return _period / _minAverageInterval;
 
-    	return 0;
+        return 0;
     }
 
     /**
@@ -125,8 +125,7 @@ public class Frequency {
             // This calculates something of a rolling average interval.
             long now = now();
             long interval = now - _lastEvent;
-            if (interval > _period)
-                interval = _period;
+            if (interval > _period) interval = _period;
             else if (interval <= 0) interval = 1;
 
             if (interval >= _period && !eventOccurred) {
@@ -149,7 +148,7 @@ public class Frequency {
         }
     }
 
-    private final static long now() {
+    private static final long now() {
         return System.currentTimeMillis();
     }
 

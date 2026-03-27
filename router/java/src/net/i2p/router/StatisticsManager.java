@@ -1,4 +1,5 @@
 package net.i2p.router;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,12 +9,6 @@ package net.i2p.router;
  *
  */
 
-import java.io.Writer;
-import java.security.GeneralSecurityException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
-import java.util.Properties;
 import net.i2p.CoreVersion;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -24,6 +19,13 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 
+import java.io.Writer;
+import java.security.GeneralSecurityException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+import java.util.Properties;
+
 /**
  * Collects and publishes router performance statistics to the network database. Provides bandwidth, tunnel, and peer metrics for router capability advertising.
  *
@@ -33,11 +35,13 @@ public class StatisticsManager {
     private final RouterContext _context;
     private final String _networkID;
 
-    public final static String PROP_PUBLISH_RANKINGS = "router.publishPeerRankings";
-    //private static final String PROP_CONTACT_NAME = "netdb.contact";
+    public static final String PROP_PUBLISH_RANKINGS = "router.publishPeerRankings";
+
+    // private static final String PROP_CONTACT_NAME = "netdb.contact";
     /** enhance anonymity by only including build stats one out of this many times */
-//    private static final int RANDOM_INCLUDE_STATS = 16;
+    //    private static final int RANDOM_INCLUDE_STATS = 16;
     private static final int RANDOM_INCLUDE_STATS = 1024;
+
     private static final boolean SIMPLE_STATS = true;
 
     private final DecimalFormat _fmt;
@@ -45,8 +49,7 @@ public class StatisticsManager {
 
     public StatisticsManager(RouterContext context) {
         _context = context;
-        _fmt = SIMPLE_STATS ? new DecimalFormat("0.00") :
-                              new DecimalFormat("###,##0.00", new DecimalFormatSymbols(Locale.UK));
+        _fmt = SIMPLE_STATS ? new DecimalFormat("0.00") : new DecimalFormat("###,##0.00", new DecimalFormatSymbols(Locale.UK));
         _pct = new DecimalFormat("#0.00%", new DecimalFormatSymbols(Locale.UK));
         _log = context.logManager().getLog(StatisticsManager.class);
         // null for some tests
@@ -80,23 +83,17 @@ public class StatisticsManager {
         boolean isFF = caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0;
         stats.setProperty(RouterInfo.PROP_CAPABILITIES, caps);
 
-        if (_context.getBooleanPropertyDefaultTrue(PROP_PUBLISH_RANKINGS) &&
-            _context.random().nextInt(RANDOM_INCLUDE_STATS) == 0 &&
-            _context.router().getUptime() > 62*60*1000) {
-            includeRate("tunnel.participatingTunnels", stats, new long[] { 60*60*1000 }, true);
-            long rate = 60*60*1000;
+        if (_context.getBooleanPropertyDefaultTrue(PROP_PUBLISH_RANKINGS) && _context.random().nextInt(RANDOM_INCLUDE_STATS) == 0 && _context.router().getUptime() > 62 * 60 * 1000) {
+            includeRate("tunnel.participatingTunnels", stats, new long[] {60 * 60 * 1000}, true);
+            long rate = 60 * 60 * 1000;
             includeTunnelRates("Exploratory", stats, rate);
         }
 
         if (isFF) {
             long uptime = _context.router().getUptime();
-            int ri = uptime > 30*60*1000 ?
-                     _context.netDb().getKnownRouters() :
-                     3000 + _context.random().nextInt(1000); // so it isn't obvious we restarted
+            int ri = uptime > 30 * 60 * 1000 ? _context.netDb().getKnownRouters() : 3000 + _context.random().nextInt(1000); // so it isn't obvious we restarted
             stats.setProperty("netdb.knownRouters", String.valueOf(ri));
-            int ls = uptime > 4*60*60*1000 ? (250 + _context.random().nextInt(100)) :
-                     uptime > 30*60*1000 ? (200 + _context.random().nextInt(150)) :
-                     (250 + _context.random().nextInt(100));
+            int ls = uptime > 4 * 60 * 60 * 1000 ? (250 + _context.random().nextInt(100)) : uptime > 30 * 60 * 1000 ? (200 + _context.random().nextInt(150)) : (250 + _context.random().nextInt(100));
             stats.setProperty("netdb.knownLeaseSets", String.valueOf(ls));
         }
 
@@ -147,8 +144,7 @@ public class StatisticsManager {
      *                      publish, so we're kludge the quantity (allowing the fairly safe
      *                      publication of the average values
      */
-    private void includeRate(String rateName, Properties stats, long selectedPeriods[],
-                             boolean fudgeQuantity) {
+    private void includeRate(String rateName, Properties stats, long selectedPeriods[], boolean fudgeQuantity) {
         RateStat rate = _context.statManager().getRate(rateName);
         if (rate == null) return;
         long periods[] = rate.getPeriods();
@@ -189,8 +185,7 @@ public class StatisticsManager {
      *</pre>
      */
     private String renderRate(Rate rate, boolean fudgeQuantity) {
-        if (SIMPLE_STATS)
-            return num(rate.getAverageValue());
+        if (SIMPLE_STATS) return num(rate.getAverageValue());
         StringBuilder buf = new StringBuilder(128);
         buf.append(num(rate.getAverageValue())).append(';');
         buf.append(num(rate.getExtremeAverageValue())).append(';');
@@ -210,7 +205,7 @@ public class StatisticsManager {
         } else {
             buf.append(num(rate.getLastEventCount())).append(';');
             if (numPeriods > 0) {
-                double avgFrequency = rate.getLifetimeEventCount() / (double)numPeriods;
+                double avgFrequency = rate.getLifetimeEventCount() / (double) numPeriods;
                 buf.append(num(avgFrequency)).append(';');
                 buf.append(num(rate.getExtremeEventCount())).append(';');
                 buf.append(num(rate.getLifetimeEventCount())).append(';');
@@ -219,7 +214,7 @@ public class StatisticsManager {
         return buf.toString();
     }
 
-    private static final String[] tunnelStats = { "Expire", "Reject", "Success" };
+    private static final String[] tunnelStats = {"Expire", "Reject", "Success"};
 
     /**
      *  Add tunnel build rates with some mods to hide absolute quantities
@@ -235,8 +230,7 @@ public class StatisticsManager {
             if (curRate == null) continue;
             totalEvents += curRate.getLastEventCount();
         }
-        if (totalEvents <= 0)
-            return;
+        if (totalEvents <= 0) return;
         for (String tunnelStat : tunnelStats) {
             String rateName = "tunnel.build" + tunnelType + tunnelStat;
             RateStat stat = _context.statManager().getRate(rateName);
@@ -257,8 +251,7 @@ public class StatisticsManager {
      *  Previous format: see above
      */
     private String renderRate(Rate rate, double fudgeQuantity) {
-        if (SIMPLE_STATS)
-            return "0; 0; 0; " + num(fudgeQuantity);
+        if (SIMPLE_STATS) return "0; 0; 0; " + num(fudgeQuantity);
         StringBuilder buf = new StringBuilder(128);
         buf.append(num(rate.getAverageValue())).append(';');
         buf.append(num(rate.getExtremeAverageValue())).append(';');
@@ -271,17 +264,23 @@ public class StatisticsManager {
         return buf.toString();
     }
 
-    private static String getPeriod(Rate rate) { return DataHelper.formatDuration(rate.getPeriod()); }
+    private static String getPeriod(Rate rate) {
+        return DataHelper.formatDuration(rate.getPeriod());
+    }
 
     private final String num(double num) {
         if (num < 0) num = 0;
-        synchronized (_fmt) { return _fmt.format(num); }
+        synchronized (_fmt) {
+            return _fmt.format(num);
+        }
     }
 
     private final String pct(double num) {
         if (num < 0) num = 0;
-        synchronized (_pct) { return _pct.format(num); }
+        synchronized (_pct) {
+            return _pct.format(num);
+        }
     }
 
-    public void renderStatusHTML(Writer out) { }
+    public void renderStatusHTML(Writer out) {}
 }

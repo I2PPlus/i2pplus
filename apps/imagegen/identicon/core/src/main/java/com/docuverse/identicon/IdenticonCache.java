@@ -3,7 +3,6 @@ package com.docuverse.identicon;
 /**
  * Represents a I2P identiconcache.
  */
-
 public interface IdenticonCache {
     public byte[] get(String key);
 

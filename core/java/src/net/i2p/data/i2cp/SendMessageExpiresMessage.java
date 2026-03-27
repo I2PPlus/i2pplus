@@ -9,15 +9,16 @@ package net.i2p.data.i2cp;
  *
  */
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Date;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.DateAndFlags;
 import net.i2p.data.Destination;
 import net.i2p.data.Payload;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Date;
 
 /**
  * Same as SendMessageMessage, but with an expiration to be passed to the router
@@ -27,7 +28,7 @@ import net.i2p.data.Payload;
  * @author zzz
  */
 public class SendMessageExpiresMessage extends SendMessageMessage {
-    public final static int MESSAGE_TYPE = 36;
+    public static final int MESSAGE_TYPE = 36;
     private final DateAndFlags _daf;
 
     /**
@@ -92,37 +93,37 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-      *  Sets the message expiration time.
-      *
-      * @since 0.8.4
-      */
+     *  Sets the message expiration time.
+     *
+     * @since 0.8.4
+     */
     public void setExpiration(long d) {
         _daf.setDate(d);
     }
 
     /**
-      *  Gets the message flags.
-      *
-      * @since 0.8.4
-      */
+     *  Gets the message flags.
+     *
+     * @since 0.8.4
+     */
     public int getFlags() {
         return _daf.getFlags();
     }
 
     /**
-      *  Sets the message flags.
-      *
-      * @since 0.8.4
-      */
+     *  Sets the message flags.
+     *
+     * @since 0.8.4
+     */
     public void setFlags(int f) {
         _daf.setFlags(f);
     }
 
     /**
-      * Read the body into the data structures
-      *
-      * @throws IOException if there's an error reading from the stream
-      */
+     * Read the body into the data structures
+     *
+     * @throws IOException if there's an error reading from the stream
+     */
     @Override
     public synchronized void readMessage(InputStream in, int length, int type) throws I2CPMessageException, IOException {
         super.readMessage(in, length, type);
@@ -135,21 +136,17 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-      * Write out the full message to the stream, including the 4 byte size and 1
-      * byte type header.  Override the parent so we can be more mem efficient
-      *
-      * @throws IOException if there's an error writing to the stream
-      */
+     * Write out the full message to the stream, including the 4 byte size and 1
+     * byte type header.  Override the parent so we can be more mem efficient
+     *
+     * @throws IOException if there's an error writing to the stream
+     */
     @Override
     public synchronized void writeMessage(OutputStream out) throws I2CPMessageException, IOException {
-        if (_sessionId == null)
-            throw new I2CPMessageException("No session ID");
-        if (_destination == null)
-            throw new I2CPMessageException("No dest");
-        if (_payload == null)
-            throw new I2CPMessageException("No payload");
-        if (_nonce < 0)
-            throw new I2CPMessageException("No nonce");
+        if (_sessionId == null) throw new I2CPMessageException("No session ID");
+        if (_destination == null) throw new I2CPMessageException("No dest");
+        if (_payload == null) throw new I2CPMessageException("No payload");
+        if (_nonce < 0) throw new I2CPMessageException("No nonce");
         int len = 2 + _destination.size() + _payload.getSize() + 4 + 4 + DataHelper.DATE_LENGTH;
 
         try {

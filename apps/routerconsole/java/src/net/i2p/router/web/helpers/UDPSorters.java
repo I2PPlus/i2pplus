@@ -19,7 +19,7 @@ class UDPSorters {
     static final int FLAG_RATE_IN = 3;
     static final int FLAG_RATE_OUT = 4;
     static final int FLAG_SKEW = 5;
-    static final int FLAG_CWND= 6;
+    static final int FLAG_CWND = 6;
     static final int FLAG_SSTHRESH = 7;
     static final int FLAG_RTT = 8;
     // static final int FLAG_DEV = 9;
@@ -62,7 +62,7 @@ class UDPSorters {
             case FLAG_RTT:
                 rv = new RTTComparator();
                 break;
-            //case FLAG_DEV:
+            // case FLAG_DEV:
             //    rv = new DevComparator();
             //    break;
             case FLAG_RTO:
@@ -88,7 +88,9 @@ class UDPSorters {
                 rv = new AlphaComparator();
                 break;
         }
-        if (sortFlags < 0) {rv = Collections.reverseOrder(rv);}
+        if (sortFlags < 0) {
+            rv = Collections.reverseOrder(rv);
+        }
         return rv;
     }
 
@@ -110,8 +112,12 @@ class UDPSorters {
         @Override
         public int compare(PeerState l, PeerState r) {
             long rv = r.getLastReceiveTime() - l.getLastReceiveTime();
-            if (rv == 0) {return super.compare(l, r);} // fallback on alpha
-            else {return (int)rv;}
+            if (rv == 0) {
+                return super.compare(l, r);
+            } // fallback on alpha
+            else {
+                return (int) rv;
+            }
         }
     }
 
@@ -127,8 +133,12 @@ class UDPSorters {
         @Override
         public int compare(PeerState l, PeerState r) {
             long rv = r.getLastSendTime() - l.getLastSendTime();
-            if (rv == 0) {return super.compare(l, r);} // fallback on alpha
-            else {return (int)rv;}
+            if (rv == 0) {
+                return super.compare(l, r);
+            } // fallback on alpha
+            else {
+                return (int) rv;
+            }
         }
     }
 
@@ -146,8 +156,12 @@ class UDPSorters {
         @Override
         public int compare(PeerState l, PeerState r) {
             int rv = l.getReceiveBps(now) - r.getReceiveBps(now);
-            if (rv == 0) {return super.compare(l, r);} // fallback on alpha
-            else {return rv;}
+            if (rv == 0) {
+                return super.compare(l, r);
+            } // fallback on alpha
+            else {
+                return rv;
+            }
         }
     }
 
@@ -165,8 +179,12 @@ class UDPSorters {
         @Override
         public int compare(PeerState l, PeerState r) {
             int rv = l.getSendBps(now) - r.getSendBps(now);
-            if (rv == 0) {return super.compare(l, r);} // fallback on alpha
-            else {return rv;}
+            if (rv == 0) {
+                return super.compare(l, r);
+            } // fallback on alpha
+            else {
+                return rv;
+            }
         }
     }
 
@@ -178,8 +196,12 @@ class UDPSorters {
         @Override
         public int compare(PeerState l, PeerState r) {
             long rv = r.getKeyEstablishedTime() - l.getKeyEstablishedTime();
-            if (rv == 0) {return super.compare(l, r);} // fallback on alpha
-            else {return (int)rv;}
+            if (rv == 0) {
+                return super.compare(l, r);
+            } // fallback on alpha
+            else {
+                return (int) rv;
+            }
         }
     }
 
@@ -191,8 +213,12 @@ class UDPSorters {
         @Override
         public int compare(PeerState l, PeerState r) {
             long rv = l.getClockSkew() - r.getClockSkew();
-            if (rv == 0) {return super.compare(l, r);} // fallback on alpha
-            else {return (int)rv;}
+            if (rv == 0) {
+                return super.compare(l, r);
+            } // fallback on alpha
+            else {
+                return (int) rv;
+            }
         }
     }
 
@@ -204,8 +230,12 @@ class UDPSorters {
         @Override
         public int compare(PeerState l, PeerState r) {
             int rv = l.getSendWindowBytes() - r.getSendWindowBytes();
-            if (rv == 0) {return super.compare(l, r);} // fallback on alpha
-            else {return rv;}
+            if (rv == 0) {
+                return super.compare(l, r);
+            } // fallback on alpha
+            else {
+                return rv;
+            }
         }
     }
 
@@ -217,8 +247,12 @@ class UDPSorters {
         @Override
         public int compare(PeerState l, PeerState r) {
             int rv = l.getSlowStartThreshold() - r.getSlowStartThreshold();
-            if (rv == 0) {return super.compare(l, r);} // fallback on alpha
-            else {return rv;}
+            if (rv == 0) {
+                return super.compare(l, r);
+            } // fallback on alpha
+            else {
+                return rv;
+            }
         }
     }
 
@@ -230,8 +264,12 @@ class UDPSorters {
         @Override
         public int compare(PeerState l, PeerState r) {
             int rv = l.getRTT() - r.getRTT();
-            if (rv == 0) {return super.compare(l, r);} // fallback on alpha
-            else {return rv;}
+            if (rv == 0) {
+                return super.compare(l, r);
+            } // fallback on alpha
+            else {
+                return rv;
+            }
         }
     }
 
@@ -243,8 +281,12 @@ class UDPSorters {
         @Override
         public int compare(PeerState l, PeerState r) {
             int rv = l.getRTO() - r.getRTO();
-            if (rv == 0) {return super.compare(l, r);} // fallback on alpha
-            else {return rv;}
+            if (rv == 0) {
+                return super.compare(l, r);
+            } // fallback on alpha
+            else {
+                return rv;
+            }
         }
     }
 
@@ -258,7 +300,9 @@ class UDPSorters {
             int rv = l.getMTU() - r.getMTU();
             if (rv == 0) {
                 rv = l.getReceiveMTU() - r.getReceiveMTU();
-                if (rv == 0) {return super.compare(l, r);} // fallback on alpha
+                if (rv == 0) {
+                    return super.compare(l, r);
+                } // fallback on alpha
             }
             return rv;
         }
@@ -272,8 +316,12 @@ class UDPSorters {
         @Override
         public int compare(PeerState l, PeerState r) {
             long rv = l.getMessagesSent() - r.getMessagesSent();
-            if (rv == 0) {return super.compare(l, r);} // fallback on alpha
-            else {return (int)rv;}
+            if (rv == 0) {
+                return super.compare(l, r);
+            } // fallback on alpha
+            else {
+                return (int) rv;
+            }
         }
     }
 
@@ -285,8 +333,12 @@ class UDPSorters {
         @Override
         public int compare(PeerState l, PeerState r) {
             long rv = l.getMessagesReceived() - r.getMessagesReceived();
-            if (rv == 0) {return super.compare(l, r);} // fallback on alpha
-            else {return (int)rv;}
+            if (rv == 0) {
+                return super.compare(l, r);
+            } // fallback on alpha
+            else {
+                return (int) rv;
+            }
         }
     }
 
@@ -298,8 +350,12 @@ class UDPSorters {
         @Override
         public int compare(PeerState l, PeerState r) {
             long rv = l.getPacketsRetransmitted() - r.getPacketsRetransmitted();
-            if (rv == 0) {return super.compare(l, r);} // fallback on alpha
-            else {return (int)rv;}
+            if (rv == 0) {
+                return super.compare(l, r);
+            } // fallback on alpha
+            else {
+                return (int) rv;
+            }
         }
     }
 
@@ -311,8 +367,12 @@ class UDPSorters {
         @Override
         public int compare(PeerState l, PeerState r) {
             long rv = l.getPacketsReceivedDuplicate() - r.getPacketsReceivedDuplicate();
-            if (rv == 0) {return super.compare(l, r);} // fallback on alpha
-            else {return (int)rv;}
+            if (rv == 0) {
+                return super.compare(l, r);
+            } // fallback on alpha
+            else {
+                return (int) rv;
+            }
         }
     }
 
@@ -329,22 +389,46 @@ class UDPSorters {
 
     static void appendSortLinks(StringBuilder buf, String urlBase, int sortFlags, String descr, int ascending) {
         if (ascending == FLAG_ALPHA) { // 0
-            buf.append("<span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=0\" title=\"")
-               .append(descr).append("\"><img src=/themes/console/images/inbound.svg alt=\"V\"></a></span>");
+            buf.append("<span class=\"sortdown\"><a href=\"")
+                    .append(urlBase)
+                    .append("?transport=ssu&amp;sort=0\" title=\"")
+                    .append(descr)
+                    .append("\"><img src=/themes/console/images/inbound.svg alt=\"V\"></a></span>");
         } else if (sortFlags == ascending) {
-            buf.append(" <span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=").append(0-ascending)
-               .append("\" title=\"").append(descr).append("\"><img src=/themes/console/images/inbound.svg alt=\"V\"></a></span>")
-               .append("<span class=\"sortupactive\"><b><img src=/themes/console/images/outbound.svg alt=\"^\"></b></span>");
+            buf.append(" <span class=\"sortdown\"><a href=\"")
+                    .append(urlBase)
+                    .append("?transport=ssu&amp;sort=")
+                    .append(0 - ascending)
+                    .append("\" title=\"")
+                    .append(descr)
+                    .append("\"><img src=/themes/console/images/inbound.svg alt=\"V\"></a></span>")
+                    .append("<span class=\"sortupactive\"><b><img src=/themes/console/images/outbound.svg"
+                            + " alt=\"^\"></b></span>");
         } else if (sortFlags == 0 - ascending) {
-            buf.append(" <span class=\"sortdownactive\"><b><img src=/themes/console/images/inbound.svg alt=\"V\"></b></span>")
-               .append("<span class=\"sortup\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=").append(ascending)
-               .append("\" title=\"").append(descr).append("\"><img src=/themes/console/images/outbound.svg alt=\"^\"></a></span>");
+            buf.append(" <span class=\"sortdownactive\"><b><img src=/themes/console/images/inbound.svg"
+                            + " alt=\"V\"></b></span>")
+                    .append("<span class=\"sortup\"><a href=\"")
+                    .append(urlBase)
+                    .append("?transport=ssu&amp;sort=")
+                    .append(ascending)
+                    .append("\" title=\"")
+                    .append(descr)
+                    .append("\"><img src=/themes/console/images/outbound.svg alt=\"^\"></a></span>");
         } else {
-            buf.append(" <span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=").append(0-ascending)
-               .append("\" title=\"").append(descr).append("\"><img src=/themes/console/images/inbound.svg alt=\"V\"></a></span>")
-               .append("<span class=\"sortup\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=").append(ascending)
-               .append("\" title=\"").append(descr).append("\"><img src=/themes/console/images/outbound.svg alt=\"^\"></a></span>");
+            buf.append(" <span class=\"sortdown\"><a href=\"")
+                    .append(urlBase)
+                    .append("?transport=ssu&amp;sort=")
+                    .append(0 - ascending)
+                    .append("\" title=\"")
+                    .append(descr)
+                    .append("\"><img src=/themes/console/images/inbound.svg alt=\"V\"></a></span>")
+                    .append("<span class=\"sortup\"><a href=\"")
+                    .append(urlBase)
+                    .append("?transport=ssu&amp;sort=")
+                    .append(ascending)
+                    .append("\" title=\"")
+                    .append(descr)
+                    .append("\"><img src=/themes/console/images/outbound.svg alt=\"^\"></a></span>");
         }
     }
-
 }

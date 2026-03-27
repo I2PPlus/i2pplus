@@ -1,8 +1,9 @@
 package net.i2p.router.peermanager;
 
+import net.i2p.data.DataHelper;
+
 import java.io.Serializable;
 import java.util.Comparator;
-import net.i2p.data.DataHelper;
 
 /**
  * Order profiles by their capacity, but backwards (highest capacity / value first).

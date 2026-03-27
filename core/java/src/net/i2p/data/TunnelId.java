@@ -1,4 +1,5 @@
 package net.i2p.data;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -88,17 +89,18 @@ public class TunnelId {
         setTunnelId(id);
     }
 
-    public long getTunnelId() { return _tunnelId; }
+    public long getTunnelId() {
+        return _tunnelId;
+    }
 
     /**
-      *  Sets the tunnel ID for this lease.
-      *
-      *  @param id 1 to 0xffffffff
-      *  @throws IllegalArgumentException if less than or equal to zero or greater than max value
-      */
+     *  Sets the tunnel ID for this lease.
+     *
+     *  @param id 1 to 0xffffffff
+     *  @throws IllegalArgumentException if less than or equal to zero or greater than max value
+     */
     public final void setTunnelId(long id) {
-        if (id <= 0 || id > MAX_ID_VALUE)
-            throw new IllegalArgumentException("Bad Id " + id);
+        if (id <= 0 || id > MAX_ID_VALUE) throw new IllegalArgumentException("Bad Id " + id);
         _tunnelId = id;
     }
 
@@ -108,23 +110,24 @@ public class TunnelId {
 
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         // writeLong() will throw DFE on negative value
-        //if (_tunnelId < 0) throw new DataFormatException("Invalid tunnel ID: " + _tunnelId);
+        // if (_tunnelId < 0) throw new DataFormatException("Invalid tunnel ID: " + _tunnelId);
         DataHelper.writeLong(out, 4, _tunnelId);
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
-        if ((obj == null) || !(obj instanceof TunnelId))
-            return false;
-        return _tunnelId == ((TunnelId)obj)._tunnelId;
+        if ((obj == null) || !(obj instanceof TunnelId)) return false;
+        return _tunnelId == ((TunnelId) obj)._tunnelId;
     }
 
     @Override
     public int hashCode() {
-        return (int)_tunnelId;
+        return (int) _tunnelId;
     }
 
     @Override
-    public String toString() { return String.valueOf(_tunnelId); }
+    public String toString() {
+        return String.valueOf(_tunnelId);
+    }
 }

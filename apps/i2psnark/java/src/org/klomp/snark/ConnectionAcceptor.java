@@ -6,11 +6,6 @@
 
 package org.klomp.snark;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.ConnectException;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.streaming.I2PServerSocket;
@@ -21,6 +16,12 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer2;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ConnectException;
 
 /**
  * Accepts incoming I2P connections and routes them to the appropriate PeerAcceptor.
@@ -47,8 +48,7 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.1.0
  */
 class ConnectionAcceptor implements Runnable {
-    private final Log _log =
-            I2PAppContext.getGlobalContext().logManager().getLog(ConnectionAcceptor.class);
+    private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(ConnectionAcceptor.class);
     private final PeerAcceptor peeracceptor;
     private Thread thread;
     private final I2PSnarkUtil _util;
@@ -69,9 +69,7 @@ class ConnectionAcceptor implements Runnable {
     public synchronized void startAccepting() {
         stop = false;
         if (_log.shouldWarn()) {
-            _log.warn(
-                    "[I2PSnark] ConnectionAcceptor: Start accepting new thread? "
-                            + (thread == null));
+            _log.warn("[I2PSnark] ConnectionAcceptor: Start accepting new thread? " + (thread == null));
         }
         if (thread == null) {
             thread = new I2PAppThread(this, "I2PSnark acceptor");
@@ -181,10 +179,7 @@ class ConnectionAcceptor implements Runnable {
                     if (socket.getLocalPort() == 80) {
                         _badCounter.increment(h);
                         if (_log.shouldWarn()) {
-                            _log.warn(
-                                    "[I2PSnark] Dropping incoming HTTP connection from client ["
-                                            + h.toBase32().substring(0, 8)
-                                            + "]");
+                            _log.warn("[I2PSnark] Dropping incoming HTTP connection from client [" + h.toBase32().substring(0, 8) + "]");
                         }
                         try {
                             socket.close();
@@ -195,14 +190,7 @@ class ConnectionAcceptor implements Runnable {
                     int bad = _badCounter.count(h);
                     if (bad >= MAX_BAD) {
                         if (_log.shouldWarn()) {
-                            _log.warn(
-                                    "[I2PSnark] Rejecting incoming connection from client ["
-                                            + h.toBase32().substring(0, 8)
-                                            + "] after "
-                                            + bad
-                                            + " failures (Max is "
-                                            + MAX_BAD
-                                            + ")");
+                            _log.warn("[I2PSnark] Rejecting incoming connection from client [" + h.toBase32().substring(0, 8) + "] after " + bad + " failures (Max is " + MAX_BAD + ")");
                         }
                         try {
                             socket.close();
@@ -210,8 +198,7 @@ class ConnectionAcceptor implements Runnable {
                         }
                         continue;
                     }
-                    Thread t =
-                            new I2PAppThread(new Handler(socket), "I2PSnark incoming connection");
+                    Thread t = new I2PAppThread(new Handler(socket), "I2PSnark incoming connection");
                     t.start();
                 }
             } catch (RouterRestartException rre) {
@@ -305,20 +292,13 @@ class ConnectionAcceptor implements Runnable {
                 // this is for the readahead in PeerAcceptor.connection()
                 in = new BufferedInputStream(in);
                 if (_log.shouldDebug()) {
-                    _log.debug(
-                            "[I2PSnark] Handling socket from ["
-                                    + _socket.getPeerDestination().calculateHash()
-                                    + "]");
+                    _log.debug("[I2PSnark] Handling socket from [" + _socket.getPeerDestination().calculateHash() + "]");
                 }
                 peeracceptor.connection(_socket, in, out);
             } catch (PeerAcceptor.ProtocolException ihe) {
                 _badCounter.increment(_socket.getPeerDestination().calculateHash());
                 if (_log.shouldInfo()) {
-                    _log.info(
-                            "[I2PSnark] Protocol error from ["
-                                    + _socket.getPeerDestination().calculateHash()
-                                    + "]",
-                            ihe);
+                    _log.info("[I2PSnark] Protocol error from [" + _socket.getPeerDestination().calculateHash() + "]", ihe);
                 }
                 try {
                     _socket.close();
@@ -326,11 +306,7 @@ class ConnectionAcceptor implements Runnable {
                 }
             } catch (IOException ioe) {
                 if (_log.shouldDebug()) {
-                    _log.debug(
-                            "[I2PSnark] Error handling connection from ["
-                                    + _socket.getPeerDestination().calculateHash()
-                                    + "]",
-                            ioe);
+                    _log.debug("[I2PSnark] Error handling connection from [" + _socket.getPeerDestination().calculateHash() + "]", ioe);
                 }
                 try {
                     _socket.close();

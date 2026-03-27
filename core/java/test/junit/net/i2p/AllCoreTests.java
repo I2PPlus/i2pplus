@@ -1,4 +1,5 @@
 package net.i2p;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -22,5 +23,4 @@ import org.junit.runners.Suite;
     net.i2p.stat.StatTestSuite.class,
     net.i2p.util.UtilTestSuite.class,
 })
-public class AllCoreTests {
-}
+public class AllCoreTests {}

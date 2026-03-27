@@ -2,6 +2,8 @@ package net.i2p.data;
 
 import static org.junit.Assert.*;
 
+import org.junit.Test;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,7 +11,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 import java.util.TimeZone;
-import org.junit.Test;
 
 /**
  * basic unit tests for the DataHelper
@@ -22,19 +23,15 @@ public class DataHelperTest {
      * well as some 8 byte values.
      */
     @Test
-    public void testLong() throws Exception{
-        for (int i = 0; i <= 0xFF; i+=4)
-            checkLong(1, i);
-        for (long i = 0; i <= 0xFFFF; i+=16)
-            checkLong(2, i);
-        for (long i = 0; i <= 0xFFFFFF; i +=128)
-            checkLong(3, i);
-        for (long i = 0; i <= 0xFFFFFFFFl; i+=512)
-            checkLong(4, i);
+    public void testLong() throws Exception {
+        for (int i = 0; i <= 0xFF; i += 4) checkLong(1, i);
+        for (long i = 0; i <= 0xFFFF; i += 16) checkLong(2, i);
+        for (long i = 0; i <= 0xFFFFFF; i += 128) checkLong(3, i);
+        for (long i = 0; i <= 0xFFFFFFFFl; i += 512) checkLong(4, i);
         // i know, doesnt test (2^63)-(2^64-1)
-        for (long i = Long.MAX_VALUE - 0xFFFFFFl; i < Long.MAX_VALUE; i++)
-            checkLong(8, i);
+        for (long i = Long.MAX_VALUE - 0xFFFFFFl; i < Long.MAX_VALUE; i++) checkLong(8, i);
     }
+
     private static void checkLong(int numBytes, long value) throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream(numBytes);
         DataHelper.writeLong(baos, numBytes, value);
@@ -54,11 +51,10 @@ public class DataHelperTest {
         assertTrue(read == value);
         read = DataHelper.fromLong(written, 0, numBytes);
         assertTrue(read == value);
-
     }
 
     @Test
-    public void testDate() throws Exception{
+    public void testDate() throws Exception {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         cal.set(Calendar.YEAR, 1970);
@@ -91,7 +87,7 @@ public class DataHelperTest {
         cal.setTimeInMillis(System.currentTimeMillis());
         checkDate(cal.getTime());
 
-        cal.set(Calendar.SECOND, cal.get(Calendar.SECOND)+10);
+        cal.set(Calendar.SECOND, cal.get(Calendar.SECOND) + 10);
         checkDate(cal.getTime());
 
         cal.set(Calendar.YEAR, 1969);
@@ -101,16 +97,16 @@ public class DataHelperTest {
         cal.set(Calendar.MINUTE, 59);
         cal.set(Calendar.SECOND, 59);
         boolean error = false;
-        try{
+        try {
             checkDate(cal.getTime());
-        }catch (Exception e){
+        } catch (Exception e) {
             error = true;
         }
         assertTrue(error);
     }
 
     @SuppressWarnings("deprecation")
-    private void checkDate(Date when) throws Exception{
+    private void checkDate(Date when) throws Exception {
         byte buf[] = new byte[DataHelper.DATE_LENGTH];
         DataHelper.toDate(buf, 0, when.getTime());
         byte tbuf[] = DataHelper.toDate(when);
@@ -120,10 +116,10 @@ public class DataHelperTest {
     }
 
     @Test
-    public void testCompress() throws Exception{
+    public void testCompress() throws Exception {
         Random r = new Random();
-        for (int size = 0; size < 32*1024; size+=32){   // Original had size++, changed value because
-                                                        // speed was a problem. -Comwiz
+        for (int size = 0; size < 32 * 1024; size += 32) { // Original had size++, changed value because
+            // speed was a problem. -Comwiz
             byte data[] = new byte[size];
             r.nextBytes(data);
             byte compressed[] = DataHelper.compress(data);
@@ -140,14 +136,16 @@ public class DataHelperTest {
         try {
             DataHelper.skip(tis, 1);
             fail();
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) {
+        }
 
         DataHelper.skip(tis, 0);
 
         try {
             DataHelper.skip(tis, -1);
             fail("skipped negative?");
-        } catch (IllegalArgumentException expected) {}
+        } catch (IllegalArgumentException expected) {
+        }
     }
 
     private static class TestInputStream extends ByteArrayInputStream {

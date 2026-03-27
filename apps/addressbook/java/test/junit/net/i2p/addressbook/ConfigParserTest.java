@@ -2,6 +2,10 @@ package net.i2p.addressbook;
 
 import static org.junit.Assert.*;
 
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,14 +13,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 public class ConfigParserTest {
 
-    @Rule
-    public TemporaryFolder tmpDir = new TemporaryFolder();
+    @Rule public TemporaryFolder tmpDir = new TemporaryFolder();
 
     // --- stripComments tests ---
 

@@ -37,14 +37,20 @@ import java.io.IOException;
  */
 public interface RandomAccessInterface extends Closeable {
     public long getFilePointer() throws IOException;
+
     public long length() throws IOException;
+
     public int read() throws IOException;
+
     public int read(byte[] b) throws IOException;
+
     public int read(byte[] b, int off, int len) throws IOException;
+
     public void seek(long pos) throws IOException;
+
     public void setLength(long newLength) throws IOException;
 
-/**
+    /**
      *  Is the file writable? (I2P)
      *  Only valid if the File constructor was used, not the RAF constructor
      *  @since 0.8.8
@@ -56,36 +62,64 @@ public interface RandomAccessInterface extends Closeable {
 
     // DataInput Methods
     public boolean readBoolean() throws IOException;
+
     public byte readByte() throws IOException;
+
     public char readChar() throws IOException;
+
     public double readDouble() throws IOException;
+
     public float readFloat() throws IOException;
+
     public void readFully(byte[] b) throws IOException;
+
     public void readFully(byte[] b, int off, int len) throws IOException;
+
     public int readInt() throws IOException;
+
     public String readLine() throws IOException;
+
     public long readLong() throws IOException;
+
     public short readShort() throws IOException;
+
     public int readUnsignedByte() throws IOException;
+
     public int readUnsignedShort() throws IOException;
+
     // I2P
     public int readUnsignedInt() throws IOException;
+
     public String readUTF() throws IOException;
+
     public int skipBytes(int n) throws IOException;
 
     // DataOutput Methods
     public void write(int b) throws IOException;
+
     public void write(byte[] b) throws IOException;
+
     public void write(byte[] b, int off, int len) throws IOException;
+
     public void writeBoolean(boolean v) throws IOException;
+
     public void writeByte(int v) throws IOException;
+
     public void writeShort(int v) throws IOException;
+
     public void writeChar(int v) throws IOException;
+
     public void writeInt(int v) throws IOException;
+
     public void writeLong(long v) throws IOException;
+
     public void writeFloat(float v) throws IOException;
+
     public void writeDouble(double v) throws IOException;
+
     public void writeBytes(String s) throws IOException;
+
     public void writeChars(String s) throws IOException;
+
     public void writeUTF(String str) throws IOException;
 }

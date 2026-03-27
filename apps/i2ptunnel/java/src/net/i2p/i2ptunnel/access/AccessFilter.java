@@ -76,6 +76,7 @@ class AccessFilter implements StatefulConnectionFilter {
      * Trackers for known destinations defined in access lists
      */
     private final Map<Hash, DestTracker> knownDests = new HashMap<Hash, DestTracker>();
+
     /**
      * Trackers for unknown destinations not defined in access lists
      */
@@ -151,7 +152,8 @@ class AccessFilter implements StatefulConnectionFilter {
                 if (tracker == null) {
                     tracker = new DestTracker(hash, definition.getDefaultThreshold());
                     if (unknownDests.size() >= MAX_STORED_DESTS) {
-                        Iterator<Map.Entry<Hash, DestTracker>> iter = unknownDests.entrySet().iterator();
+                        Iterator<Map.Entry<Hash, DestTracker>> iter =
+                                unknownDests.entrySet().iterator();
                         if (iter.hasNext()) {
                             iter.next();
                             iter.remove();
@@ -175,12 +177,10 @@ class AccessFilter implements StatefulConnectionFilter {
             knownDests.keySet().retainAll(tmp.keySet());
             for (Map.Entry<Hash, DestTracker> e : tmp.entrySet()) {
                 Hash newHash = e.getKey();
-                if (knownDests.containsKey(newHash))
-                    continue;
+                if (knownDests.containsKey(newHash)) continue;
                 knownDests.put(newHash, e.getValue());
             }
         }
-
     }
 
     private void record() throws IOException {
@@ -194,39 +194,45 @@ class AccessFilter implements StatefulConnectionFilter {
             if (file.exists() && file.isFile()) {
                 BufferedReader reader = null;
                 try {
-                    reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
+                    reader = new BufferedReader(
+                            new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
                     String b32;
                     while ((b32 = reader.readLine()) != null) {
                         breached.add(b32);
                     }
                 } finally {
-                    if (reader != null) try { reader.close(); } catch (IOException ignored) {}
+                    if (reader != null)
+                        try {
+                            reader.close();
+                        } catch (IOException ignored) {
+                        }
                 }
             }
 
             boolean newBreaches = false;
             synchronized (unknownDests) {
                 for (DestTracker tracker : unknownDests.values()) {
-                    if (!tracker.getCounter().isBreached(threshold, now))
-                        continue;
+                    if (!tracker.getCounter().isBreached(threshold, now)) continue;
                     newBreaches |= breached.add(tracker.getHash().toBase32());
                 }
             }
 
-            if (breached.isEmpty() || !newBreaches)
-                continue;
+            if (breached.isEmpty() || !newBreaches) continue;
 
             BufferedWriter writer = null;
             try {
                 writer = new BufferedWriter(
-                    new OutputStreamWriter(
-                        new SecureFileOutputStream(file), StandardCharsets.UTF_8));
+                        new OutputStreamWriter(new SecureFileOutputStream(file), StandardCharsets.UTF_8));
                 for (String b32 : breached) {
                     writer.write(b32);
                     writer.newLine();
                 }
             } finally {
-                if (writer != null) try { writer.close(); } catch (IOException ignored) {}
+                if (writer != null)
+                    try {
+                        writer.close();
+                    } catch (IOException ignored) {
+                    }
             }
         }
     }
@@ -241,11 +247,11 @@ class AccessFilter implements StatefulConnectionFilter {
         }
 
         synchronized (unknownDests) {
-            for (Iterator<Map.Entry<Hash,DestTracker>> iter = unknownDests.entrySet().iterator();
-                    iter.hasNext();) {
-                Map.Entry<Hash,DestTracker> entry = iter.next();
-                if (entry.getValue().purge(olderThan))
-                    iter.remove();
+            for (Iterator<Map.Entry<Hash, DestTracker>> iter =
+                            unknownDests.entrySet().iterator();
+                    iter.hasNext(); ) {
+                Map.Entry<Hash, DestTracker> entry = iter.next();
+                if (entry.getValue().purge(olderThan)) iter.remove();
             }
         }
     }
@@ -290,8 +296,7 @@ class AccessFilter implements StatefulConnectionFilter {
          */
         @Override
         public void timeReached() {
-            if (!timersRunning.get())
-                return;
+            if (!timersRunning.get()) return;
             DISK_WRITER.submit(new Runnable() {
                 @Override
                 public void run() {
@@ -299,8 +304,7 @@ class AccessFilter implements StatefulConnectionFilter {
                         record();
                         reload();
                         Syncer syncer = AccessFilter.this.syncer;
-                        if (syncer != null)
-                            syncer.schedule(SYNC_INTERVAL);
+                        if (syncer != null) syncer.schedule(SYNC_INTERVAL);
                     } catch (IOException bad) {
                         Log log = context.logManager().getLog(AccessFilter.class);
                         log.log(Log.CRIT, "Syncing access list for Tunnel Filter failed", bad);

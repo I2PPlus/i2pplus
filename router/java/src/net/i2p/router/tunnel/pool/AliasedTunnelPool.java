@@ -1,6 +1,5 @@
 package net.i2p.router.tunnel.pool;
 
-import java.util.List;
 import net.i2p.data.Hash;
 import net.i2p.data.Lease;
 import net.i2p.data.LeaseSet;
@@ -9,6 +8,8 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
+
+import java.util.List;
 
 /**
  *  A tunnel pool with its own settings and Destination,
@@ -30,25 +31,21 @@ public class AliasedTunnelPool extends TunnelPool {
      */
     AliasedTunnelPool(RouterContext ctx, TunnelPoolManager mgr, TunnelPoolSettings settings, TunnelPool aliasOf) {
         super(ctx, mgr, settings, null);
-        if (settings.isExploratory())
-            throw new IllegalArgumentException();
-        if (settings.getAliasOf() == null)
-            throw new IllegalArgumentException();
+        if (settings.isExploratory()) throw new IllegalArgumentException();
+        if (settings.getAliasOf() == null) throw new IllegalArgumentException();
         _aliasOf = aliasOf;
     }
 
     @Override
     synchronized void startup() {
-        if (_log.shouldInfo())
-            _log.info(toString() + ": Startup() called, was already alive? " + _alive, new Exception());
+        if (_log.shouldInfo()) _log.info(toString() + ": Startup() called, was already alive? " + _alive, new Exception());
         _alive = true;
         super.refreshLeaseSet();
     }
 
     @Override
     synchronized void shutdown() {
-        if (_log.shouldInfo())
-            _log.info(toString() + ": Shutdown called");
+        if (_log.shouldInfo()) _log.info(toString() + ": Shutdown called");
         _alive = false;
     }
 
@@ -123,11 +120,10 @@ public class AliasedTunnelPool extends TunnelPool {
     @Override
     protected LeaseSet locked_buildNewLeaseSet() {
         Hash primary = _aliasOf.getSettings().getDestination();
-        FloodfillNetworkDatabaseFacade db =  (FloodfillNetworkDatabaseFacade) _context.clientNetDb(primary);
-        LeaseSet ls =  db.lookupLeaseSetLocally(primary);
+        FloodfillNetworkDatabaseFacade db = (FloodfillNetworkDatabaseFacade) _context.clientNetDb(primary);
+        LeaseSet ls = db.lookupLeaseSetLocally(primary);
         if (ls == null) {
-            if (_log.shouldWarn())
-                _log.warn("No primary LeaseSet " + primary + " to copy for " + getSettings().getDestination() + " in Db " + db);
+            if (_log.shouldWarn()) _log.warn("No primary LeaseSet " + primary + " to copy for " + getSettings().getDestination() + " in Db " + db);
             return null;
         }
         // copy everything so it isn't corrupted

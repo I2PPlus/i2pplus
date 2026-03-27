@@ -1,4 +1,5 @@
 package net.i2p.router;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -25,12 +26,13 @@ public class ClientMessage {
     private final Payload _payload;
     private final Destination _destination;
     private final Destination _fromDestination;
-    //private MessageReceptionInfo _receptionInfo;
+    // private MessageReceptionInfo _receptionInfo;
     private final SessionConfig _senderConfig;
     private final Hash _destinationHash;
     private final MessageId _messageId;
     private final long _messageNonce;
     private final long _expiration;
+
     /** only for outbound messages */
     private final int _flags;
 
@@ -40,8 +42,7 @@ public class ClientMessage {
      *  @param messageNonce the client's ID for this message
      *  @since 0.9.9
      */
-    public ClientMessage(Destination toDest, Payload payload, SessionConfig config, Destination fromDest,
-                         MessageId msgID, long messageNonce, long expiration, int flags) {
+    public ClientMessage(Destination toDest, Payload payload, SessionConfig config, Destination fromDest, MessageId msgID, long messageNonce, long expiration, int flags) {
         _destination = toDest;
         _destinationHash = null;
         _payload = payload;
@@ -73,37 +74,49 @@ public class ClientMessage {
      * Retrieve the payload of the message.  All ClientMessage objects should have
      * a payload
      */
-    public Payload getPayload() { return _payload; }
+    public Payload getPayload() {
+        return _payload;
+    }
 
     /**
      * Retrieve the destination to which this message is directed.
      * Valid for outbound; null for inbound.
      * If null, use getDestinationHash()
      */
-    public Destination getDestination() { return _destination; }
+    public Destination getDestination() {
+        return _destination;
+    }
 
     /**
      * Valid for outbound; null for inbound.
      */
-    public Destination getFromDestination() { return _fromDestination; }
+    public Destination getFromDestination() {
+        return _fromDestination;
+    }
 
     /**
      * Retrieve the destination to which this message is directed.
      * Valid for inbound; null for outbound.
      * If null, use getDestination()
      */
-    public Hash getDestinationHash() { return _destinationHash; }
+    public Hash getDestinationHash() {
+        return _destinationHash;
+    }
 
     /**
      * Valid for outbound; null for inbound.
      */
-    public MessageId getMessageId() { return _messageId; }
+    public MessageId getMessageId() {
+        return _messageId;
+    }
 
     /**
      * Valid for outbound; 0 for inbound.
      * @since 0.9.14
      */
-    public long getMessageNonce() { return _messageNonce; }
+    public long getMessageNonce() {
+        return _messageNonce;
+    }
 
     /**
      * Retrieve the information regarding how the router received this message.  Only
@@ -111,20 +124,24 @@ public class ClientMessage {
      * originated ones.
      *
      */
-    //public MessageReceptionInfo getReceptionInfo() { return _receptionInfo; }
-    //public void setReceptionInfo(MessageReceptionInfo info) { _receptionInfo = info; }
+    // public MessageReceptionInfo getReceptionInfo() { return _receptionInfo; }
+    // public void setReceptionInfo(MessageReceptionInfo info) { _receptionInfo = info; }
 
     /**
      * Retrieve the session config of the client that sent the message.  This will only be available
      * if the client was local
      */
-    public SessionConfig getSenderConfig() { return _senderConfig; }
+    public SessionConfig getSenderConfig() {
+        return _senderConfig;
+    }
 
     /**
      * Expiration requested by the client that sent the message.  This will only be available
      * for locally originated messages.
      */
-    public long getExpiration() { return _expiration; }
+    public long getExpiration() {
+        return _expiration;
+    }
 
     /**
      * Flags requested by the client that sent the message.  This will only be available
@@ -132,5 +149,7 @@ public class ClientMessage {
      *
      * @since 0.8.4
      */
-    public int getFlags() { return _flags; }
+    public int getFlags() {
+        return _flags;
+    }
 }

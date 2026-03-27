@@ -1,8 +1,5 @@
 package net.i2p.client.streaming.impl;
 
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.Date;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.data.ByteArray;
@@ -10,6 +7,10 @@ import net.i2p.data.Destination;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
+
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -53,12 +54,10 @@ class PacketHandler {
         Connection con = (sendId > 0) ? manager.getConnectionByInboundId(sendId) : null;
 
         if (con != null) {
-            if (log.shouldDebug())
-                displayPacket(packet, "RECV", "WSIZE " + con.getOptions().getWindowSize() + "; RTO " + con.getOptions().getRTO());
+            if (log.shouldDebug()) displayPacket(packet, "RECV", "WSIZE " + con.getOptions().getWindowSize() + "; RTO " + con.getOptions().getRTO());
             receiveKnownConnection(con, packet);
         } else {
-            if (log.shouldDebug())
-                displayPacket(packet, "UNKN", null);
+            if (log.shouldDebug()) displayPacket(packet, "UNKN", null);
             receiveUnknownConnection(packet, sendId, queueIfNoConn);
         }
     }
@@ -89,8 +88,7 @@ class PacketHandler {
      * @param packet the packet to process
      */
     private void receiveKnownConnection(Connection con, Packet packet) {
-        if (I2PSocketManagerFull.pcapWriter != null &&
-            context.getBooleanProperty(I2PSocketManagerFull.PROP_PCAP)) {
+        if (I2PSocketManagerFull.pcapWriter != null && context.getBooleanProperty(I2PSocketManagerFull.PROP_PCAP)) {
             packet.logTCPDump(con);
         }
 
@@ -103,8 +101,7 @@ class PacketHandler {
             try {
                 con.getPacketHandler().receivePacket(packet, con);
             } catch (I2PException ie) {
-                if (log.shouldWarn())
-                    log.warn("Received forged packet for " + con, ie);
+                if (log.shouldWarn()) log.warn("Received forged packet for " + con, ie);
             }
             return;
         }
@@ -113,8 +110,7 @@ class PacketHandler {
             try {
                 con.getPacketHandler().receivePacket(packet, con);
             } catch (I2PException ie) {
-                if (log.shouldWarn())
-                    log.warn("Received forged reset for " + con, ie);
+                if (log.shouldWarn()) log.warn("Received forged reset for " + con, ie);
             }
             return;
         }
@@ -126,14 +122,18 @@ class PacketHandler {
      * Handles echo packets on known connections.
      */
     private void handleEchoPacket(Connection con, Packet packet) {
-        if (packet == null || con == null) {return;}
+        if (packet == null || con == null) {
+            return;
+        }
         if (packet.getSendStreamId() > 0) {
-            if (con.getOptions().getAnswerPings()) {receivePing(con, packet);}
-            else if (log.shouldWarn()) {
+            if (con.getOptions().getAnswerPings()) {
+                receivePing(con, packet);
+            } else if (log.shouldWarn()) {
                 log.warn("Dropping ECHO packet for [" + con + "] -> " + packet);
             }
-        } else if (packet.getReceiveStreamId() > 0) {receivePong(packet);}
-        else if (log.shouldWarn()) {
+        } else if (packet.getReceiveStreamId() > 0) {
+            receivePong(packet);
+        } else if (log.shouldWarn()) {
             log.warn("Received ECHO packet " + " with no StreamIDs for [" + con + "] -> " + packet);
         }
         packet.releasePayload();
@@ -143,12 +143,12 @@ class PacketHandler {
      * Handles a packet that appears on a known connection, but with stream ID mismatches or other anomalies.
      */
     private void handleMisroutedPacket(Connection con, Packet packet) {
-        if (packet == null || con == null) {return;}
+        if (packet == null || con == null) {
+            return;
+        }
         long oldId = con.getSendStreamId();
 
-        if ((con.getSendStreamId() <= 0) ||
-            (con.getSendStreamId() == packet.getReceiveStreamId()) ||
-            (packet.getSequenceNum() <= ConnectionOptions.MIN_WINDOW_SIZE)) {
+        if ((con.getSendStreamId() <= 0) || (con.getSendStreamId() == packet.getReceiveStreamId()) || (packet.getSequenceNum() <= ConnectionOptions.MIN_WINDOW_SIZE)) {
 
             if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                 if (oldId <= 0) {
@@ -156,14 +156,11 @@ class PacketHandler {
                     // this fixes the race condition where verifyPacket() would also try to setRemotePeer()
                     con.setSendStreamId(packet.getReceiveStreamId());
                     Destination dest = packet.getOptionalFrom();
-                    if (dest != null && con.getRemotePeer() == null)
-                        con.setRemotePeer(dest);
+                    if (dest != null && con.getRemotePeer() == null) con.setRemotePeer(dest);
                     SigningPublicKey spk = packet.getTransientSPK();
-                    if (spk != null)
-                        con.setRemoteTransientSPK(spk);
+                    if (spk != null) con.setRemoteTransientSPK(spk);
                 } else if (oldId != packet.getReceiveStreamId()) {
-                    if (log.shouldWarn())
-                        log.warn("Received SYN packet with wrong IDs for [" + con + "]");
+                    if (log.shouldWarn()) log.warn("Received SYN packet with wrong IDs for [" + con + "]");
                     sendReset(packet);
                     packet.releasePayload();
                     return;
@@ -181,16 +178,14 @@ class PacketHandler {
                 }
             }
         } else if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
-            if (log.shouldWarn())
-                log.warn("Received SYN packet with wrong IDs -> Sending RESET...");
+            if (log.shouldWarn()) log.warn("Received SYN packet with wrong IDs -> Sending RESET...");
             sendReset(packet);
             packet.releasePayload();
         } else {
             if (!con.getResetSent()) {
                 if (log.shouldWarn()) {
                     StringBuilder buf = new StringBuilder(512);
-                    buf.append("Received packet on the wrong stream: ").append(packet).append("\nConnection:\n").append(con)
-                       .append("\nAll connections:");
+                    buf.append("Received packet on the wrong stream: ").append(packet).append("\nConnection:\n").append(con).append("\nAll connections:");
                     for (Connection c : manager.listConnections()) {
                         buf.append('\n').append(c);
                     }
@@ -207,17 +202,20 @@ class PacketHandler {
      * @param packet the packet to respond to with a reset
      */
     private void sendReset(Packet packet) {
-        if (packet == null) {return;}
+        if (packet == null) {
+            return;
+        }
         Destination from = packet.getOptionalFrom();
-        if (from == null) {return;}
+        if (from == null) {
+            return;
+        }
 
         ByteArray ba = cache.acquire();
         boolean verified = packet.verifySignature(context, ba.getData());
         cache.release(ba);
 
         if (!verified) {
-            if (log.shouldWarn())
-                log.warn("Cannot send reset due to spoofed packet -> " + packet);
+            if (log.shouldWarn()) log.warn("Cannot send reset due to spoofed packet -> " + packet);
             return;
         }
         sendResetUnverified(packet);
@@ -263,8 +261,7 @@ class PacketHandler {
             Connection con = manager.getConnectionByOutboundId(packet.getReceiveStreamId());
             if (con != null) {
                 if ((con.getHighestAckedThrough() <= 5) && (packet.getSequenceNum() <= 5)) {
-                    if (log.shouldInfo())
-                        log.info("Received additional packet without SendStreamID after the SYN -> " + packet + "\n* " + con);
+                    if (log.shouldInfo()) log.info("Received additional packet without SendStreamID after the SYN -> " + packet + "\n* " + con);
                 } else if (log.shouldWarn()) {
                     log.warn("Received while ACK of SYN was in flight\n* " + con + ": " + packet + " ACKed: " + con.getAckedPackets());
                 }
@@ -283,8 +280,7 @@ class PacketHandler {
         if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
             manager.getConnectionHandler().receiveNewSyn(packet);
         } else if (queueIfNoConn) {
-            if (log.shouldWarn())
-                log.warn("Packet " + packet + " belongs to no connections, putting on SYN queue...");
+            if (log.shouldWarn()) log.warn("Packet " + packet + " belongs to no connections, putting on SYN queue...");
             if (log.shouldDebug()) {
                 StringBuilder buf = new StringBuilder(128);
                 for (Connection c : manager.listConnections()) {
@@ -294,8 +290,7 @@ class PacketHandler {
             }
             manager.getConnectionHandler().receiveNewSyn(packet);
         } else {
-            if (I2PSocketManagerFull.pcapWriter != null &&
-                context.getBooleanProperty(I2PSocketManagerFull.PROP_PCAP)) {
+            if (I2PSocketManagerFull.pcapWriter != null && context.getBooleanProperty(I2PSocketManagerFull.PROP_PCAP)) {
                 packet.logTCPDump(null);
             }
             sendReset(packet);
@@ -336,8 +331,7 @@ class PacketHandler {
         cache.release(ba);
 
         if (!verified) {
-            if (log.shouldWarn())
-                log.warn("BAD ping: Signature verification failed -> Dropping" + (packet != null ? " " + packet : "..."));
+            if (log.shouldWarn()) log.warn("BAD ping: Signature verification failed -> Dropping" + (packet != null ? " " + packet : "..."));
             return;
         }
 

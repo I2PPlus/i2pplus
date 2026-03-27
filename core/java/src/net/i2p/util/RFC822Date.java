@@ -22,16 +22,7 @@ public abstract class RFC822Date {
      * Apparently public domain
      * Probably don't need all of these...
      */
-    private static final SimpleDateFormat rfc822DateFormats[] = new SimpleDateFormat[] {
-        new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US),
-        new SimpleDateFormat("d MMM yy HH:mm:ss z", Locale.US),
-        new SimpleDateFormat("EEE, d MMM yy HH:mm z", Locale.US),
-        new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US),
-        new SimpleDateFormat("EEE, d MMM yyyy HH:mm z", Locale.US),
-        new SimpleDateFormat("d MMM yy HH:mm z", Locale.US),
-        new SimpleDateFormat("d MMM yy HH:mm:ss z", Locale.US),
-        new SimpleDateFormat("d MMM yyyy HH:mm z", Locale.US)
-    };
+    private static final SimpleDateFormat rfc822DateFormats[] = new SimpleDateFormat[] {new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US), new SimpleDateFormat("d MMM yy HH:mm:ss z", Locale.US), new SimpleDateFormat("EEE, d MMM yy HH:mm z", Locale.US), new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US), new SimpleDateFormat("EEE, d MMM yyyy HH:mm z", Locale.US), new SimpleDateFormat("d MMM yy HH:mm z", Locale.US), new SimpleDateFormat("d MMM yy HH:mm:ss z", Locale.US), new SimpleDateFormat("d MMM yyyy HH:mm z", Locale.US)};
 
     //
     // The router JVM is forced to UTC but do this just in case
@@ -49,13 +40,13 @@ public abstract class RFC822Date {
      * @param s non-null
      * @return -1 on failure
      */
-    public synchronized static long parse822Date(String s) {
+    public static synchronized long parse822Date(String s) {
         for (int i = 0; i < rfc822DateFormats.length; i++) {
             try {
                 Date date = rfc822DateFormats[i].parse(s);
-                if (date != null)
-                    return date.getTime();
-            } catch (ParseException pe) {}
+                if (date != null) return date.getTime();
+            } catch (ParseException pe) {
+            }
         }
         return -1;
     }
@@ -65,7 +56,7 @@ public abstract class RFC822Date {
      *
      * @since 0.8.2
      */
-    public synchronized static String to822Date(long t) {
+    public static synchronized String to822Date(long t) {
         return OUTPUT_FORMAT.get().format(Date.from(Instant.ofEpochMilli(t)));
     }
 
@@ -79,18 +70,17 @@ public abstract class RFC822Date {
             }
         } else if (args.length == 0) {
             long t = System.currentTimeMillis();
-            System.out.println("Current Time: " + (t/1000));
+            System.out.println("Current Time: " + (t / 1000));
             System.out.println(to822Date(t));
         } else {
             StringBuilder buf = new StringBuilder();
             for (int i = 0; i < args.length; i++) {
                 buf.append(args[i]);
-                if (i < args.length - 1)
-                    buf.append(' ');
+                if (i < args.length - 1) buf.append(' ');
             }
             long t = parse822Date(buf.toString());
             if (t >= 0) {
-                System.out.println(Long.toString(t/1000));
+                System.out.println(Long.toString(t / 1000));
             } else {
                 System.out.println("Invalid date");
                 System.out.println("Usage: RFC822Date [numericDate|textualDate]");

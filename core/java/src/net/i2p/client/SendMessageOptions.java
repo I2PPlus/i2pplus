@@ -33,6 +33,7 @@ public class SendMessageOptions extends DateAndFlags {
      *  see below for possible values
      */
     private static final int TAGS_SEND_MASK = 0x000f;
+
     /**
      *  Possible values. Configured values will be rounded down.
      *  Note that ElGamalAESEngine enforces a max of 200 on receive.
@@ -40,24 +41,30 @@ public class SendMessageOptions extends DateAndFlags {
     private static final int[] TAGS_SEND = {
         0, 2, 4, 6, 8, 12, 16, 24,
         32, 40, 51, 64, 80, 100, 125, 160
-        };
+    };
 
     /**
      *  Tags threshold field:
      *  see below for possible values
      */
     private static final int TAGS_REQD_MASK = 0x00f0;
+
     /** Possible values. Configured values will be rounded down. */
     private static final int[] TAGS_REQD = {
         0, 2, 3, 6, 9, 14, 20, 27,
         35, 45, 57, 72, 92, 117, 147, 192
-        };
+    };
 
     /**
      *  Reliability bits 9-10
      *  @since 0.9.14
      */
-    public enum Reliability { DEFAULT, BEST_EFFORT, GUARANTEED, UNDEFINED }
+    public enum Reliability {
+        DEFAULT,
+        BEST_EFFORT,
+        GUARANTEED,
+        UNDEFINED
+    }
 
     private static final int BEST_EFFORT_MASK = 0x0200;
     private static final int GUARANTEED_MASK = 0x0400;
@@ -65,10 +72,8 @@ public class SendMessageOptions extends DateAndFlags {
 
     /** default true */
     public void setSendLeaseSet(boolean yes) {
-        if (yes)
-            _flags &= ~LS_MASK;
-        else
-            _flags |= LS_MASK;
+        if (yes) _flags &= ~LS_MASK;
+        else _flags |= LS_MASK;
     }
 
     /** default true */
@@ -88,8 +93,7 @@ public class SendMessageOptions extends DateAndFlags {
      *  @param tags 0 or 2 to 128
      */
     public void setTagsToSend(int tags) {
-        if (tags < 0)
-            throw new IllegalArgumentException();
+        if (tags < 0) throw new IllegalArgumentException();
         _flags &= ~TAGS_SEND_MASK;
         _flags |= valToCode(tags, TAGS_SEND);
     }
@@ -118,8 +122,7 @@ public class SendMessageOptions extends DateAndFlags {
      *  @param tags 0 to 90
      */
     public void setTagThreshold(int tags) {
-        if (tags < 0)
-            throw new IllegalArgumentException();
+        if (tags < 0) throw new IllegalArgumentException();
         _flags &= ~TAGS_REQD_MASK;
         _flags |= valToCode(tags, TAGS_REQD) << 4;
     }
@@ -144,11 +147,9 @@ public class SendMessageOptions extends DateAndFlags {
     /** rounds down */
     private static int valToCode(int val, int[] codes) {
         // special case, round up so we don't turn it into default
-        if (val > 0 && val <= codes[1])
-            return 1;
+        if (val > 0 && val <= codes[1]) return 1;
         for (int i = 1; i < codes.length; i++) {
-            if (val < codes[i])
-                return i - 1;
+            if (val < codes[i]) return i - 1;
         }
         return codes.length - 1;
     }
@@ -217,7 +218,11 @@ public class SendMessageOptions extends DateAndFlags {
      *
      *  @since 0.9.36
      */
-    public enum GzipOption { DEFAULT, GZIP_OFF, GZIP_ON }
+    public enum GzipOption {
+        DEFAULT,
+        GZIP_OFF,
+        GZIP_ON
+    }
 
     /**
      *  Overrides i2cp.gzip session option and size threshold
@@ -237,6 +242,6 @@ public class SendMessageOptions extends DateAndFlags {
      *  @since 0.9.36
      */
     public void setGzip(boolean yes) {
-        _gzip = yes? GzipOption.GZIP_ON : GzipOption.GZIP_OFF;
+        _gzip = yes ? GzipOption.GZIP_ON : GzipOption.GZIP_OFF;
     }
 }

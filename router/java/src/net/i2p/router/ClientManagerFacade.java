@@ -1,4 +1,5 @@
 package net.i2p.router;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,10 +9,6 @@ package net.i2p.router;
  *
  */
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Collections;
-import java.util.Set;
 import net.i2p.client.I2PSessionException;
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.data.Destination;
@@ -20,6 +17,11 @@ import net.i2p.data.LeaseSet;
 import net.i2p.data.i2cp.MessageId;
 import net.i2p.data.i2cp.SessionConfig;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * Manages client connections and LeaseSet operations for I2P applications. Handles client registration, lease authorization, and session management for local services.
@@ -55,6 +57,7 @@ public abstract class ClientManagerFacade implements Service {
      * @param severity How severe the abuse is, with 0 being not severe and 255 is the max
      */
     public abstract void reportAbuse(Destination dest, String reason, int severity);
+
     /**
      * Determine if the destination specified is managed locally.  This call
      * DOES block.
@@ -62,6 +65,7 @@ public abstract class ClientManagerFacade implements Service {
      * @param dest Destination to be checked
      */
     public abstract boolean isLocal(Destination dest);
+
     /**
      * Determine if the destination hash specified is managed locally.  This call
      * DOES block.
@@ -75,34 +79,44 @@ public abstract class ClientManagerFacade implements Service {
      *  @param messageNonce the client's ID for this message
      *  @param status see I2CP MessageStatusMessage for success/failure codes
      */
-    public abstract void messageDeliveryStatusUpdate(Destination fromDest, MessageId id,
-                                                     long messageNonce, int status);
+    public abstract void messageDeliveryStatusUpdate(Destination fromDest, MessageId id, long messageNonce, int status);
 
     public abstract void messageReceived(ClientMessage msg);
 
-    public boolean verifyClientLiveliness() { return true; }
-    public boolean isAlive() { return true; }
+    public boolean verifyClientLiveliness() {
+        return true;
+    }
+
+    public boolean isAlive() {
+        return true;
+    }
+
     /**
      * Does the client specified want their leaseSet published?
      */
-    public boolean shouldPublishLeaseSet(Hash destinationHash) { return true; }
-
+    public boolean shouldPublishLeaseSet(Hash destinationHash) {
+        return true;
+    }
 
     /**
      * Return the list of locally connected clients
      *
      * @return set of Destination objects
      */
-    public Set<Destination> listClients() { return Collections.emptySet(); }
+    public Set<Destination> listClients() {
+        return Collections.emptySet();
+    }
 
     /**
      * Return the client's current config, or null if not connected
      *
      */
     public abstract SessionConfig getClientSessionConfig(Destination dest);
+
     public abstract SessionKeyManager getClientSessionKeyManager(Hash dest);
+
     @Override
-    public void renderStatusHTML(Writer out) throws IOException { }
+    public void renderStatusHTML(Writer out) throws IOException {}
 
     /** @since 0.8.8 */
     public abstract void shutdown(String msg);

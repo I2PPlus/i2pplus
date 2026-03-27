@@ -19,9 +19,6 @@ package net.i2p.i2ptunnel.socks;
  * handling shared concerns like security restrictions, error handling,
  * and integration with I2P naming and outproxy services.
  */
-
-import java.net.Socket;
-import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppManager;
@@ -30,6 +27,9 @@ import net.i2p.client.streaming.I2PSocket;
 import net.i2p.i2ptunnel.I2PTunnelHTTPClientBase;
 import net.i2p.socks.SOCKSException;
 import net.i2p.util.Log;
+
+import java.net.Socket;
+import java.util.Properties;
 
 /**
  * Abstract base class used by all SOCKS servers.
@@ -67,8 +67,7 @@ abstract class SOCKSServer {
      * @since 0.9.5
      */
     protected String getMappedDomainNameForIP(String ip) {
-        if (props.containsKey(PROP_MAPPING_PREFIX + ip))
-            return props.getProperty(PROP_MAPPING_PREFIX + ip);
+        if (props.containsKey(PROP_MAPPING_PREFIX + ip)) return props.getProperty(PROP_MAPPING_PREFIX + ip);
         return null;
     }
 
@@ -115,8 +114,7 @@ abstract class SOCKSServer {
             ClientAppManager mgr = _context.clientAppManager();
             if (mgr != null) {
                 ClientApp op = mgr.getRegisteredApp(Outproxy.NAME);
-                if (op != null)
-                    return (Outproxy) op;
+                if (op != null) return (Outproxy) op;
             }
         }
         return null;

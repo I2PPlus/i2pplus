@@ -1,4 +1,5 @@
 package net.i2p.router;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,9 +9,10 @@ package net.i2p.router;
  *
  */
 
+import net.i2p.data.Hash;
+
 import java.util.Map;
 import java.util.Properties;
-import net.i2p.data.Hash;
 
 /**
  * Wrap up the client settings specifying their tunnel criteria
@@ -25,10 +27,16 @@ public class ClientTunnelSettings {
         _outboundSettings = new TunnelPoolSettings(dest, false);
     }
 
-    public TunnelPoolSettings getInboundSettings() { return _inboundSettings; }
-    //public void setInboundSettings(TunnelPoolSettings settings) { _inboundSettings = settings; }
-    public TunnelPoolSettings getOutboundSettings() { return _outboundSettings; }
-    //public void setOutboundSettings(TunnelPoolSettings settings) { _outboundSettings = settings; }
+    public TunnelPoolSettings getInboundSettings() {
+        return _inboundSettings;
+    }
+
+    // public void setInboundSettings(TunnelPoolSettings settings) { _inboundSettings = settings; }
+    public TunnelPoolSettings getOutboundSettings() {
+        return _outboundSettings;
+    }
+
+    // public void setOutboundSettings(TunnelPoolSettings settings) { _outboundSettings = settings; }
 
     public void readFromProperties(Properties props) {
         _inboundSettings.readFromProperties("inbound.", props);
@@ -49,7 +57,7 @@ public class ClientTunnelSettings {
         buf.append("\n* Client tunnel settings:");
         for (Map.Entry<Object, Object> entry : p.entrySet()) {
             String name = (String) entry.getKey();
-            String val  = (String) entry.getValue();
+            String val = (String) entry.getValue();
             buf.append("\n* ").append(name).append(" = ").append(val);
         }
         return buf.toString();

@@ -1,9 +1,9 @@
 package com.thetransactioncompany.jsonrpc2;
 
+import org.json.simple.JsonObject;
 
 import java.util.List;
 import java.util.Map;
-import org.json.simple.JsonObject;
 
 /**
  * Represents a JSON-RPC 2.0 request.
@@ -85,30 +85,25 @@ import org.json.simple.JsonObject;
  */
 public class JSONRPC2Request extends JSONRPC2Message {
 
-
     /**
      * The method name.
      */
     private String method;
-
 
     /**
      * The positional parameters, {@code null} if none.
      */
     private List<Object> positionalParams;
 
-
     /**
      * The named parameters, {@code null} if none.
      */
-    private Map<String,Object> namedParams;
-
+    private Map<String, Object> namedParams;
 
     /**
      * The request identifier.
      */
     private Object id;
-
 
     /**
      * Parses a JSON-RPC 2.0 request string. This method is thread-safe.
@@ -121,12 +116,10 @@ public class JSONRPC2Request extends JSONRPC2Message {
      * @throws JSONRPC2ParseException With detailed message if parsing
      *                                failed.
      */
-    public static JSONRPC2Request parse(final String jsonString)
-        throws JSONRPC2ParseException {
+    public static JSONRPC2Request parse(final String jsonString) throws JSONRPC2ParseException {
 
         return parse(jsonString, false, false, false);
     }
-
 
     /**
      * Parses a JSON-RPC 2.0 request string. This method is thread-safe.
@@ -141,13 +134,10 @@ public class JSONRPC2Request extends JSONRPC2Message {
      * @throws JSONRPC2ParseException With detailed message if parsing
      *                                failed.
      */
-    public static JSONRPC2Request parse(final String jsonString,
-                                    final boolean preserveOrder)
-        throws JSONRPC2ParseException {
+    public static JSONRPC2Request parse(final String jsonString, final boolean preserveOrder) throws JSONRPC2ParseException {
 
         return parse(jsonString, preserveOrder, false, false);
     }
-
 
     /**
      * Parses a JSON-RPC 2.0 request string. This method is thread-safe.
@@ -165,14 +155,10 @@ public class JSONRPC2Request extends JSONRPC2Message {
      * @throws JSONRPC2ParseException With detailed message if parsing
      *                                failed.
      */
-    public static JSONRPC2Request parse(final String jsonString,
-                                    final boolean preserveOrder,
-                                    final boolean ignoreVersion)
-        throws JSONRPC2ParseException {
+    public static JSONRPC2Request parse(final String jsonString, final boolean preserveOrder, final boolean ignoreVersion) throws JSONRPC2ParseException {
 
         return parse(jsonString, preserveOrder, ignoreVersion, false);
     }
-
 
     /**
      * Parses a JSON-RPC 2.0 request string. This method is thread-safe.
@@ -193,19 +179,12 @@ public class JSONRPC2Request extends JSONRPC2Message {
      * @throws JSONRPC2ParseException With detailed message if parsing
      *                                failed.
      */
-    public static JSONRPC2Request parse(final String jsonString,
-                                        final boolean preserveOrder,
-                        final boolean ignoreVersion,
-                        final boolean parseNonStdAttributes)
-        throws JSONRPC2ParseException {
+    public static JSONRPC2Request parse(final String jsonString, final boolean preserveOrder, final boolean ignoreVersion, final boolean parseNonStdAttributes) throws JSONRPC2ParseException {
 
-        JSONRPC2Parser parser = new JSONRPC2Parser(preserveOrder,
-                                               ignoreVersion,
-                                               parseNonStdAttributes);
+        JSONRPC2Parser parser = new JSONRPC2Parser(preserveOrder, ignoreVersion, parseNonStdAttributes);
 
         return parser.parseJSONRPC2Request(jsonString);
     }
-
 
     /**
      * Constructs a new JSON-RPC 2.0 request with no parameters.
@@ -223,7 +202,6 @@ public class JSONRPC2Request extends JSONRPC2Message {
         setID(id);
     }
 
-
     /**
      * Constructs a new JSON-RPC 2.0 request with positional (JSON array)
      * parameters.
@@ -237,15 +215,12 @@ public class JSONRPC2Request extends JSONRPC2Message {
      *                         to a JSON scalar ({@code null} and
      *                         fractions, however, should be avoided).
      */
-    public JSONRPC2Request(final String method,
-                       final List<Object> positionalParams,
-                       final Object id) {
+    public JSONRPC2Request(final String method, final List<Object> positionalParams, final Object id) {
 
         setMethod(method);
         setPositionalParams(positionalParams);
         setID(id);
     }
-
 
     /**
      * Constructs a new JSON-RPC 2.0 request with named (JSON object)
@@ -259,15 +234,12 @@ public class JSONRPC2Request extends JSONRPC2Message {
      *                    scalar ({@code null} and fractions, however,
      *                    should be avoided).
      */
-    public JSONRPC2Request(final String method,
-                       final Map <String,Object> namedParams,
-                       final Object id) {
+    public JSONRPC2Request(final String method, final Map<String, Object> namedParams, final Object id) {
 
         setMethod(method);
         setNamedParams(namedParams);
         setID(id);
     }
-
 
     /**
      * Gets the name of the requested method.
@@ -279,7 +251,6 @@ public class JSONRPC2Request extends JSONRPC2Message {
         return method;
     }
 
-
     /**
      * Sets the name of the requested method.
      *
@@ -288,12 +259,10 @@ public class JSONRPC2Request extends JSONRPC2Message {
     public final void setMethod(final String method) {
 
         // The method name is mandatory
-        if (method == null)
-            throw new IllegalArgumentException("The method name must not be null");
+        if (method == null) throw new IllegalArgumentException("The method name must not be null");
 
         this.method = method;
     }
-
 
     /**
      * Gets the parameters type ({@link JSONRPC2ParamsType#ARRAY positional},
@@ -304,19 +273,13 @@ public class JSONRPC2Request extends JSONRPC2Message {
      */
     public JSONRPC2ParamsType getParamsType() {
 
-        if (positionalParams == null && namedParams == null)
-            return JSONRPC2ParamsType.NO_PARAMS;
+        if (positionalParams == null && namedParams == null) return JSONRPC2ParamsType.NO_PARAMS;
 
-        if (positionalParams != null)
-            return JSONRPC2ParamsType.ARRAY;
+        if (positionalParams != null) return JSONRPC2ParamsType.ARRAY;
 
-        if (namedParams != null)
-            return JSONRPC2ParamsType.OBJECT;
-
-        else
-            return JSONRPC2ParamsType.NO_PARAMS;
+        if (namedParams != null) return JSONRPC2ParamsType.OBJECT;
+        else return JSONRPC2ParamsType.NO_PARAMS;
     }
-
 
     /**
      * Gets the request parameters.
@@ -332,18 +295,13 @@ public class JSONRPC2Request extends JSONRPC2Message {
     public Object getParams() {
 
         switch (getParamsType()) {
+            case ARRAY: return positionalParams;
 
-            case ARRAY:
-                return positionalParams;
+            case OBJECT: return namedParams;
 
-            case OBJECT:
-                return namedParams;
-
-            default:
-                return null;
+            default: return null;
         }
     }
-
 
     /**
      * Gets the positional (JSON array) parameters.
@@ -358,7 +316,6 @@ public class JSONRPC2Request extends JSONRPC2Message {
         return positionalParams;
     }
 
-
     /**
      * Gets the named parameters.
      *
@@ -367,11 +324,10 @@ public class JSONRPC2Request extends JSONRPC2Message {
      * @return The named (JSON object) parameters, {@code null} if none or
      *         positional.
      */
-    public Map<String,Object> getNamedParams() {
+    public Map<String, Object> getNamedParams() {
 
         return namedParams;
     }
-
 
     /**
      * Sets the request parameters.
@@ -400,7 +356,6 @@ public class JSONRPC2Request extends JSONRPC2Message {
         }
     }
 
-
     /**
      * Sets the positional (JSON array) request parameters.
      *
@@ -411,12 +366,10 @@ public class JSONRPC2Request extends JSONRPC2Message {
      */
     public final void setPositionalParams(final List<Object> positionalParams) {
 
-        if (positionalParams == null)
-            return;
+        if (positionalParams == null) return;
 
         this.positionalParams = positionalParams;
     }
-
 
     /**
      * Sets the named (JSON object) request parameters.
@@ -426,14 +379,12 @@ public class JSONRPC2Request extends JSONRPC2Message {
      * @param namedParams The named (JSON object) request parameters,
      *                    {@code null} if none.
      */
-    public final void setNamedParams(final Map<String,Object> namedParams) {
+    public final void setNamedParams(final Map<String, Object> namedParams) {
 
-        if (namedParams == null)
-            return;
+        if (namedParams == null) return;
 
         this.namedParams = namedParams;
     }
-
 
     /**
      * Gets the request identifier.
@@ -446,7 +397,6 @@ public class JSONRPC2Request extends JSONRPC2Message {
         return id;
     }
 
-
     /**
      * Sets the request identifier (ID).
      *
@@ -457,17 +407,12 @@ public class JSONRPC2Request extends JSONRPC2Message {
      */
     public final void setID(final Object id) {
 
-        if (id == null            ||
-            id instanceof Boolean ||
-            id instanceof Number  ||
-            id instanceof String
-        ) {
-    		this.id = id;
+        if (id == null || id instanceof Boolean || id instanceof Number || id instanceof String) {
+            this.id = id;
         } else {
             this.id = id.toString();
         }
     }
-
 
     @Override
     public JsonObject toJSONObject() {
@@ -478,13 +423,10 @@ public class JSONRPC2Request extends JSONRPC2Message {
 
         // The params can be omitted if none
         switch (getParamsType()) {
-
-            case ARRAY:
-                req.put("params", positionalParams);
+            case ARRAY: req.put("params", positionalParams);
                 break;
 
-            case OBJECT:
-                req.put("params", namedParams);
+            case OBJECT: req.put("params", namedParams);
                 break;
         }
 
@@ -492,12 +434,11 @@ public class JSONRPC2Request extends JSONRPC2Message {
 
         req.put("jsonrpc", "2.0");
 
-        Map <String,Object> nonStdAttributes = getNonStdAttributes();
+        Map<String, Object> nonStdAttributes = getNonStdAttributes();
 
         if (nonStdAttributes != null) {
 
-            for (final Map.Entry<String,Object> attr: nonStdAttributes.entrySet())
-                req.put(attr.getKey(), attr.getValue());
+            for (final Map.Entry<String, Object> attr : nonStdAttributes.entrySet()) req.put(attr.getKey(), attr.getValue());
         }
 
         return req;

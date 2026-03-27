@@ -9,13 +9,14 @@ package net.i2p.data.i2cp;
  *
  */
 
-import java.io.IOException;
-import java.io.InputStream;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.util.ByteArrayStream;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Defines the message a client sends to a router when authorizing
@@ -24,14 +25,13 @@ import net.i2p.util.ByteArrayStream;
  * @author jrandom
  */
 public class CreateLeaseSetMessage extends I2CPMessageImpl {
-    public final static int MESSAGE_TYPE = 4;
+    public static final int MESSAGE_TYPE = 4;
     protected SessionId _sessionId;
     protected LeaseSet _leaseSet;
     private SigningPrivateKey _signingPrivateKey;
     protected PrivateKey _privateKey;
 
-    public CreateLeaseSetMessage() {
-    }
+    public CreateLeaseSetMessage() {}
 
     public SessionId getSessionId() {
         return _sessionId;
@@ -98,12 +98,11 @@ public class CreateLeaseSetMessage extends I2CPMessageImpl {
 
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
-        if ((_sessionId == null) || (_signingPrivateKey == null) || (_privateKey == null) || (_leaseSet == null))
-            throw new I2CPMessageException("Unable to write out the message as there is not enough data");
+        if ((_sessionId == null) || (_signingPrivateKey == null) || (_privateKey == null) || (_leaseSet == null)) throw new I2CPMessageException("Unable to write out the message as there is not enough data");
         int size = 4 // sessionId
-                 + _signingPrivateKey.length()
-                 + PrivateKey.KEYSIZE_BYTES
-                 + _leaseSet.size();
+                        + _signingPrivateKey.length()
+                        + PrivateKey.KEYSIZE_BYTES
+                        + _leaseSet.size();
         ByteArrayStream os = new ByteArrayStream(size);
         try {
             _sessionId.writeBytes(os);

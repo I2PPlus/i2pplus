@@ -15,5 +15,4 @@ public interface Outproxy {
      *
      */
     public Socket connect(String host, int port) throws IOException;
-
 }

@@ -1,9 +1,10 @@
 package net.i2p.router.client;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
 import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.internal.I2CPMessageQueue;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Contains the methods to talk to a router or client via I2CP,
@@ -29,7 +30,9 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
      *  @return success (false if no space available)
      */
     @Override
-    public boolean offer(I2CPMessage msg) {return _out.offer(msg);}
+    public boolean offer(I2CPMessage msg) {
+        return _out.offer(msg);
+    }
 
     /**
      *  Send a message, blocking.
@@ -47,19 +50,24 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
      *  @return message or null if none available
      */
     @Override
-    public I2CPMessage poll() {return _in.poll();}
+    public I2CPMessage poll() {
+        return _in.poll();
+    }
 
     /**
      *  Send a message, blocking until space is available
      */
     @Override
-    public void put(I2CPMessage msg) throws InterruptedException {_out.put(msg);}
+    public void put(I2CPMessage msg) throws InterruptedException {
+        _out.put(msg);
+    }
 
     /**
      *  Receive a message, blocking until one is available
      *  @return message
      */
     @Override
-    public I2CPMessage take() throws InterruptedException {return _in.take();}
-
+    public I2CPMessage take() throws InterruptedException {
+        return _in.take();
+    }
 }

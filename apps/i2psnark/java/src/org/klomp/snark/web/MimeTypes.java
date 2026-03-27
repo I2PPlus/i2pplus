@@ -14,6 +14,9 @@
 
 package org.klomp.snark.web;
 
+import net.i2p.data.DataHelper;
+import net.i2p.util.SystemVersion;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,8 +27,6 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
-import net.i2p.data.DataHelper;
-import net.i2p.util.SystemVersion;
 
 /*------------------------------------------------------------ */
 /**
@@ -48,9 +49,7 @@ class MimeTypes {
 
     public MimeTypes() {
         _mimeMap = new ConcurrentHashMap<String, String>();
-        if (!(SystemVersion.isWindows()
-                || SystemVersion.isMac()
-                || SystemVersion.getMaxMemory() < 100 * 1024 * 1024L)) loadSystemMimeTypes();
+        if (!(SystemVersion.isWindows() || SystemVersion.isMac() || SystemVersion.getMaxMemory() < 100 * 1024 * 1024L)) loadSystemMimeTypes();
     }
 
     /*------------------------------------------------------------ */
@@ -75,11 +74,7 @@ class MimeTypes {
                 // http://wiki.eclipse.org/Jetty/Reference/Jetty_Classloading
                 // System.out.println("No mime types loaded from " + resourcePath + ", trying system
                 // classloader");
-                mime =
-                        ResourceBundle.getBundle(
-                                resourcePath,
-                                Locale.getDefault(),
-                                ClassLoader.getSystemClassLoader());
+                mime = ResourceBundle.getBundle(resourcePath, Locale.getDefault(), ClassLoader.getSystemClassLoader());
             }
             Enumeration<String> i = mime.getKeys();
             while (i.hasMoreElements()) {
@@ -101,10 +96,7 @@ class MimeTypes {
     private void loadSystemMimeTypes() {
         BufferedReader in = null;
         try {
-            in =
-                    new BufferedReader(
-                            new InputStreamReader(
-                                    new FileInputStream("/etc/mime.types"), "ISO-8859-1"));
+            in = new BufferedReader(new InputStreamReader(new FileInputStream("/etc/mime.types"), "ISO-8859-1"));
             while (true) {
                 String line = in.readLine();
                 if (line == null) break;
@@ -119,8 +111,7 @@ class MimeTypes {
             // System.out.println("Loaded " + _mimeMap.size() + " mime types from /etc/mime.types");
         } catch (IOException ioe) {
         } finally {
-            if (in != null)
-                try {
+            if (in != null) try {
                     in.close();
                 } catch (IOException ioe) {
                 }

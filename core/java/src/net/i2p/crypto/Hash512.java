@@ -26,7 +26,7 @@ import net.i2p.data.SimpleDataStructure;
  */
 public class Hash512 extends SimpleDataStructure {
 
-    public final static int HASH_LENGTH = 64;
+    public static final int HASH_LENGTH = 64;
 
     public Hash512() {
         super();

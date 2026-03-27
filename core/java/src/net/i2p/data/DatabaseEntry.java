@@ -9,7 +9,6 @@ package net.i2p.data;
  *
  */
 
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.DSAEngine;
 import net.i2p.crypto.SigAlgo;
@@ -87,23 +86,29 @@ import net.i2p.crypto.SigType;
  */
 public abstract class DatabaseEntry extends DataStructureImpl {
     /** these are the same as in i2np's DatabaseStoreMessage */
-    public final static int KEY_TYPE_ROUTERINFO = 0;
-    public final static int KEY_TYPE_LEASESET = 1;
+    public static final int KEY_TYPE_ROUTERINFO = 0;
+
+    public static final int KEY_TYPE_LEASESET = 1;
+
     /** LeaseSet 2 type.
-      * @since 0.9.38 */
-    public final static int KEY_TYPE_LS2 = 3;
+     * @since 0.9.38 */
+    public static final int KEY_TYPE_LS2 = 3;
+
     /** Encrypted LeaseSet 2 type.
-      * @since 0.9.38 */
-    public final static int KEY_TYPE_ENCRYPTED_LS2 = 5;
+     * @since 0.9.38 */
+    public static final int KEY_TYPE_ENCRYPTED_LS2 = 5;
+
     /** Meta LeaseSet 2 type.
-      * @since 0.9.38 */
-    public final static int KEY_TYPE_META_LS2 = 7;
+     * @since 0.9.38 */
+    public static final int KEY_TYPE_META_LS2 = 7;
+
     /** Service record type.
-      * @since 0.9.38 */
-    public final static int KEY_TYPE_SERVICE_RECORD = 9;
+     * @since 0.9.38 */
+    public static final int KEY_TYPE_SERVICE_RECORD = 9;
+
     /** Service list type.
-      * @since 0.9.38 */
-    public final static int KEY_TYPE_SERVICE_LIST = 11;
+     * @since 0.9.38 */
+    public static final int KEY_TYPE_SERVICE_LIST = 11;
 
     protected volatile Signature _signature;
     // synch: this
@@ -128,10 +133,10 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     }
 
     /**
-      *  Sets the local client that received this entry.
-      *
-      * @since 0.9.61
-      */
+     *  Sets the local client that received this entry.
+     *
+     * @since 0.9.61
+     */
     public void setReceivedBy(Hash receivedBy) {
         this._receivedBy = receivedBy;
     }
@@ -168,8 +173,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      */
     public Hash getHash() {
         KeysAndCert kac = getKeysAndCert();
-        if (kac == null)
-            return null;
+        if (kac == null) return null;
         return kac.getHash();
     }
 
@@ -199,10 +203,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      * @since 0.9.38
      */
     public static boolean isLeaseSet(int type) {
-        return type == KEY_TYPE_LEASESET ||
-               type == KEY_TYPE_LS2 ||
-               type == KEY_TYPE_ENCRYPTED_LS2 ||
-               type == KEY_TYPE_META_LS2;
+        return type == KEY_TYPE_LEASESET || type == KEY_TYPE_LS2 || type == KEY_TYPE_ENCRYPTED_LS2 || type == KEY_TYPE_META_LS2;
     }
 
     /**
@@ -233,8 +234,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      */
     public Hash getRoutingKey() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        if (!ctx.isRouterContext())
-            throw new IllegalStateException("Not in router context");
+        if (!ctx.isRouterContext()) throw new IllegalStateException("Not in router context");
         RoutingKeyGenerator gen = ctx.routingKeyGenerator();
         long mod = gen.getLastChanged();
         synchronized (this) {
@@ -247,14 +247,13 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     }
 
     /**
-      *  Validates the routing key for this entry.
-      *
-      * @throws IllegalStateException if not in RouterContext
-      */
+     *  Validates the routing key for this entry.
+     *
+     * @throws IllegalStateException if not in RouterContext
+     */
     public boolean validateRoutingKey() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        if (!ctx.isRouterContext())
-            throw new IllegalStateException("Not in router context");
+        if (!ctx.isRouterContext()) throw new IllegalStateException("Not in router context");
         RoutingKeyGenerator gen = ctx.routingKeyGenerator();
         Hash destKey = getHash();
         Hash rk = gen.getRoutingKey(destKey);
@@ -275,8 +274,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      * @throws IllegalStateException if already signed
      */
     public void setSignature(Signature signature) {
-        if (_signature != null)
-            throw new IllegalStateException();
+        if (_signature != null) throw new IllegalStateException();
         _signature = signature;
     }
 
@@ -286,16 +284,13 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      * @throws IllegalStateException if already signed
      */
     public void sign(SigningPrivateKey key) throws DataFormatException {
-        if (_signature != null)
-            throw new IllegalStateException();
+        if (_signature != null) throw new IllegalStateException();
         byte[] bytes = getBytes();
         if (bytes == null) throw new DataFormatException("Not enough data to sign");
-        if (key == null)
-            throw new DataFormatException("No signing key");
+        if (key == null) throw new DataFormatException("No signing key");
         // now sign with the key
         _signature = DSAEngine.getInstance().sign(bytes, key);
-        if (_signature == null)
-            throw new DataFormatException("Signature failed with " + key.getType() + " key");
+        if (_signature == null) throw new DataFormatException("Signature failed with " + key.getType() + " key");
     }
 
     /**
@@ -307,8 +302,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      */
     protected SigningPublicKey getSigningPublicKey() {
         KeysAndCert kac = getKeysAndCert();
-        if (kac == null)
-            return null;
+        if (kac == null) return null;
         return kac.getSigningPublicKey();
     }
 
@@ -319,23 +313,20 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      * @since public since 0.9.47, was protected
      */
     public boolean verifySignature() {
-        if (_signature == null)
-            return false;
+        if (_signature == null) return false;
         byte data[];
         try {
             data = getBytes();
         } catch (DataFormatException dfe) {
             return false;
         }
-        if (data == null)
-            return false;
+        if (data == null) return false;
         // if the data is non-null the SPK will be non-null
         SigningPublicKey spk = getSigningPublicKey();
         SigType type = spk.getType();
         // As of 0.9.28, disallow RSA as it's so slow it could be
         // used as a DoS
-        if (type == null || type.getBaseAlgorithm() == SigAlgo.RSA)
-            return false;
+        if (type == null || type.getBaseAlgorithm() == SigAlgo.RSA) return false;
         return DSAEngine.getInstance().verifySignature(_signature, data, spk);
     }
 
@@ -351,14 +342,14 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     }
 
     /**
-      *  Marks this entry as received via published mode.
-      *
-      * @since 0.9.58 moved up from LeaseSet
-      *
-      * use this carefully, when updating the flags make sure the old and new
-      * leaseSet are actually equivalent, or simply copy over the reply value,
-      * see KademliaNetworkDatabaseFacade.java line 997 for more information.
-      */
+     *  Marks this entry as received via published mode.
+     *
+     * @since 0.9.58 moved up from LeaseSet
+     *
+     * use this carefully, when updating the flags make sure the old and new
+     * leaseSet are actually equivalent, or simply copy over the reply value,
+     * see KademliaNetworkDatabaseFacade.java line 997 for more information.
+     */
     public void setReceivedAsPublished() {
         _receivedAsPublished = true;
     }

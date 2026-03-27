@@ -2,10 +2,10 @@ package net.i2p.crypto;
 
 import static org.junit.Assert.*;
 
+import org.junit.Test;
+
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
-import java.security.SignatureException;
-import org.junit.Test;
 
 public class SigUtilTest {
 

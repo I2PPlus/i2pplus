@@ -9,9 +9,10 @@ package net.i2p.util;
  *
  */
 
-import java.util.Queue;
 import net.i2p.app.ClientAppManager;
 import net.i2p.app.NotificationService;
+
+import java.util.Queue;
 
 /**
  * Log writer thread that pulls log records from the LogManager and writes them to
@@ -22,11 +23,12 @@ import net.i2p.app.NotificationService;
  */
 abstract class LogWriter implements Runnable {
     /** every 10 seconds? why? Just have the gui force a reread after a change?? */
-    private final static long CONFIG_READ_INTERVAL = 50 * 1000;
-//    final static long FLUSH_INTERVAL = 29 * 1000;
-    final static long FLUSH_INTERVAL = 15 * 1000; // ajax refresh interval
-    private final static long MIN_FLUSH_INTERVAL = 2*1000;
-    private final static long MAX_FLUSH_INTERVAL = 5*60*1000;
+    private static final long CONFIG_READ_INTERVAL = 50 * 1000;
+
+    //    final static long FLUSH_INTERVAL = 29 * 1000;
+    static final long FLUSH_INTERVAL = 15 * 1000; // ajax refresh interval
+    private static final long MIN_FLUSH_INTERVAL = 2 * 1000;
+    private static final long MAX_FLUSH_INTERVAL = 5 * 60 * 1000;
     // true for newest first on /logs page; false for oldest first
     private static final boolean BUFFER_DISPLAYED_REVERSE = true;
     private long _lastReadConfig;
@@ -55,13 +57,16 @@ abstract class LogWriter implements Runnable {
      * @param formatted a String pre-formatted from rec, may be ignored.
      */
     protected abstract void writeRecord(LogRecord rec, String formatted);
+
     /**
      * Write a single String verbatim to the writer.
      * @param priority the level to log the line at.
      * @param line the String to write.
      */
     protected abstract void writeRecord(int priority, String line);
+
     protected abstract void flushWriter();
+
     protected abstract void closeWriter();
 
     public void stopWriting() {
@@ -85,8 +90,7 @@ abstract class LogWriter implements Runnable {
         try {
             while (_write) {
                 flushRecords();
-                if (_write && shouldReadConfig)
-                    rereadConfig();
+                if (_write && shouldReadConfig) rereadConfig();
             }
         } catch (RuntimeException e) {
             System.err.println("Error writing the log: " + e);
@@ -95,7 +99,9 @@ abstract class LogWriter implements Runnable {
         closeWriter();
     }
 
-    public void flushRecords() { flushRecords(true); }
+    public void flushRecords() {
+        flushRecords(true);
+    }
 
     public void flushRecords(boolean shouldWait) {
         try {
@@ -103,8 +109,7 @@ abstract class LogWriter implements Runnable {
             Queue<LogRecord> records = _manager.getQueue();
             if (records == null) return;
             if (!records.isEmpty()) {
-                if (_last != null && _firstTimestamp < _manager.getContext().clock().now() - 30*60*1000)
-                    _last = null;
+                if (_last != null && _firstTimestamp < _manager.getContext().clock().now() - 30 * 60 * 1000) _last = null;
                 LogRecord rec;
                 int dupCount = 0;
                 while ((rec = records.poll()) != null) {
@@ -146,13 +151,11 @@ abstract class LogWriter implements Runnable {
     private void writeDupMessage(int dupCount, LogRecord lastRecord) {
         String dmsg = dupMessage(dupCount, lastRecord, false, false);
         writeRecord(lastRecord.getPriority(), dmsg);
-        if (_manager.getDisplayOnScreenLevel() <= lastRecord.getPriority() && _manager.displayOnScreen())
-            System.out.print(dmsg);
+        if (_manager.getDisplayOnScreenLevel() <= lastRecord.getPriority() && _manager.displayOnScreen()) System.out.print(dmsg);
         dmsg = dupMessage(dupCount, lastRecord, BUFFER_DISPLAYED_REVERSE, true);
         _manager.getBuffer().add(dmsg);
-//        if (lastRecord.getPriority() >= Log.CRIT)
-        if (lastRecord.getPriority() >= Log.ERROR)
-            _manager.getBuffer().addCritical(dmsg);
+        //        if (lastRecord.getPriority() >= Log.CRIT)
+        if (lastRecord.getPriority() >= Log.ERROR) _manager.getBuffer().addCritical(dmsg);
     }
 
     /**
@@ -161,11 +164,8 @@ abstract class LogWriter implements Runnable {
      */
     private String dupMessage(int dupCount, LogRecord lastRecord, boolean reverse, boolean html) {
         boolean nohtml = !html || SystemVersion.isAndroid();
-        String arrows = reverse ? (nohtml ? "vvv" : "&darr; &darr; &darr; ")
-                                : (nohtml ? "^^^" : "&uarr; &uarr; &uarr; ");
-        return LogRecordFormatter.getWhen(_manager, lastRecord) + " | " + arrows + ' ' +
-               ngettext("{0} similar message omitted", "{0} similar messages omitted", dupCount) +
-               LogRecordFormatter.NL;
+        String arrows = reverse ? (nohtml ? "vvv" : "&darr; &darr; &darr; ") : (nohtml ? "^^^" : "&uarr; &uarr; &uarr; ");
+        return LogRecordFormatter.getWhen(_manager, lastRecord) + " | " + arrows + ' ' + ngettext("{0} similar message omitted", "{0} similar messages omitted", dupCount) + LogRecordFormatter.NL;
     }
 
     private static final String BUNDLE_NAME = "net.i2p.util.messages";
@@ -194,17 +194,14 @@ abstract class LogWriter implements Runnable {
         // we always add to the console buffer, but only sometimes write to stdout
         _manager.getBuffer().add(val);
         int priority = rec.getPriority();
-//        if (priority >= Log.CRIT)
-        if (priority >= Log.ERROR)
-            _manager.getBuffer().addCritical(val);
+        //        if (priority >= Log.CRIT)
+        if (priority >= Log.ERROR) _manager.getBuffer().addCritical(val);
         // Default is CRIT
         if (_manager.getDisplayOnScreenLevel() <= priority) {
             if (_manager.displayOnScreen()) {
                 // wrapper and android logs already do time stamps, so reformat without the date
-                if (_manager.getContext().hasWrapper() || SystemVersion.isAndroid())
-                    System.out.print(LogRecordFormatter.formatRecord(_manager, rec, false));
-                else
-                    System.out.print(val);
+                if (_manager.getContext().hasWrapper() || SystemVersion.isAndroid()) System.out.print(LogRecordFormatter.formatRecord(_manager, rec, false));
+                else System.out.print(val);
 
                 //
                 //  Display a popup on DTG
@@ -224,8 +221,7 @@ abstract class LogWriter implements Runnable {
                                 name = cls.getSimpleName();
                             } else {
                                 name = rec.getSourceName();
-                                if (name == null)
-                                    name = "I2P";
+                                if (name == null) name = "I2P";
                             }
                             // the class name usually won't be translated,
                             // but it will be for "Router"

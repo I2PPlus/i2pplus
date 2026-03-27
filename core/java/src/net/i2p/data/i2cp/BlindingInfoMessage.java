@@ -1,8 +1,5 @@
 package net.i2p.data.i2cp;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
@@ -13,6 +10,10 @@ import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.SigningPublicKey;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Advise the router that the endpoint is blinded.
@@ -27,7 +28,7 @@ import net.i2p.data.SigningPublicKey;
  */
 public class BlindingInfoMessage extends I2CPMessageImpl {
     /** The message type */
-    public final static int MESSAGE_TYPE = 42;
+    public static final int MESSAGE_TYPE = 42;
 
     private SessionId _sessionId;
     private int _endpointType;
@@ -47,10 +48,13 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
 
     /** Endpoint type for hash */
     public static final int TYPE_HASH = 0;
+
     /** Endpoint type for hostname */
     public static final int TYPE_HOST = 1;
+
     /** Endpoint type for destination */
     public static final int TYPE_DEST = 2;
+
     /** Endpoint type for key */
     public static final int TYPE_KEY = 3;
 
@@ -96,13 +100,9 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
      * @deprecated unimplemented on router side
      */
     @Deprecated
-    public BlindingInfoMessage(Hash h,
-                               SessionId id, int expiration,
-                               int authType, SigType blindType,
-                               PrivateKey privKey, String secret) {
+    public BlindingInfoMessage(Hash h, SessionId id, int expiration, int authType, SigType blindType, PrivateKey privKey, String secret) {
         this(id, expiration, authType, blindType, privKey, secret);
-        if (h == null || h.getData() == null)
-            throw new IllegalArgumentException();
+        if (h == null || h.getData() == null) throw new IllegalArgumentException();
         _hash = h;
         _endpointType = TYPE_HASH;
     }
@@ -121,13 +121,9 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
      * @deprecated unimplemented on router side
      */
     @Deprecated
-    public BlindingInfoMessage(String h,
-                               SessionId id, int expiration,
-                               int authType, SigType blindType,
-                               PrivateKey privKey, String secret) {
+    public BlindingInfoMessage(String h, SessionId id, int expiration, int authType, SigType blindType, PrivateKey privKey, String secret) {
         this(id, expiration, authType, blindType, privKey, secret);
-        if (h == null)
-            throw new IllegalArgumentException();
+        if (h == null) throw new IllegalArgumentException();
         _host = h;
         _endpointType = TYPE_HOST;
     }
@@ -144,13 +140,9 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
      * @param secret may be null, 255 UTF-8 bytes max
      * @throws IllegalArgumentException on invalid inputs
      */
-    public BlindingInfoMessage(Destination d,
-                               SessionId id, int expiration,
-                               int authType, SigType blindType,
-                               PrivateKey privKey, String secret) {
+    public BlindingInfoMessage(Destination d, SessionId id, int expiration, int authType, SigType blindType, PrivateKey privKey, String secret) {
         this(id, expiration, authType, blindType, privKey, secret);
-        if (d == null || d.getSigningPublicKey() == null)
-            throw new IllegalArgumentException();
+        if (d == null || d.getSigningPublicKey() == null) throw new IllegalArgumentException();
         _dest = d;
         _hash = d.calculateHash();
         _pubkey = d.getSigningPublicKey();
@@ -169,36 +161,24 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
      * @param secret may be null, 255 UTF-8 bytes max
      * @throws IllegalArgumentException on invalid inputs
      */
-    public BlindingInfoMessage(SigningPublicKey s,
-                               SessionId id, int expiration,
-                               int authType, SigType blindType,
-                               PrivateKey privKey, String secret) {
+    public BlindingInfoMessage(SigningPublicKey s, SessionId id, int expiration, int authType, SigType blindType, PrivateKey privKey, String secret) {
         this(id, expiration, authType, blindType, privKey, secret);
-        if (s == null || s.getData() == null)
-            throw new IllegalArgumentException();
+        if (s == null || s.getData() == null) throw new IllegalArgumentException();
         _pubkey = s;
         _endpointType = TYPE_KEY;
     }
 
-    private BlindingInfoMessage(SessionId id, long expiration, int authType, SigType blindType,
-                                PrivateKey privKey, String secret) {
-        if (id == null || blindType == null)
-            throw new IllegalArgumentException();
-        if (authType != BlindData.AUTH_NONE && authType != BlindData.AUTH_DH &&
-            authType != BlindData.AUTH_PSK)
-            throw new IllegalArgumentException("Bad auth type");
-        if (authType == BlindData.AUTH_NONE && privKey != null)
-            throw new IllegalArgumentException("no key required");
-        if (authType != BlindData.AUTH_NONE && privKey == null)
-            throw new IllegalArgumentException("key required");
-        if (privKey != null && privKey.getType() != EncType.ECIES_X25519)
-            throw new IllegalArgumentException("Bad privkey type");
+    private BlindingInfoMessage(SessionId id, long expiration, int authType, SigType blindType, PrivateKey privKey, String secret) {
+        if (id == null || blindType == null) throw new IllegalArgumentException();
+        if (authType != BlindData.AUTH_NONE && authType != BlindData.AUTH_DH && authType != BlindData.AUTH_PSK) throw new IllegalArgumentException("Bad auth type");
+        if (authType == BlindData.AUTH_NONE && privKey != null) throw new IllegalArgumentException("no key required");
+        if (authType != BlindData.AUTH_NONE && privKey == null) throw new IllegalArgumentException("key required");
+        if (privKey != null && privKey.getType() != EncType.ECIES_X25519) throw new IllegalArgumentException("Bad privkey type");
         _sessionId = id;
         _authType = authType;
         _blindType = blindType;
         _expiration = expiration;
-        if (expiration > 0 && expiration < Integer.MAX_VALUE)
-            _expiration += I2PAppContext.getGlobalContext().clock().now();
+        if (expiration > 0 && expiration < Integer.MAX_VALUE) _expiration += I2PAppContext.getGlobalContext().clock().now();
         _privkey = privKey;
         _secret = secret;
     }
@@ -220,98 +200,95 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     }
 
     /**
-      *  Gets the timeout for the blinding info.
-      *
-      *  @return ms 1 to 2**32 - 1
-      */
+     *  Gets the timeout for the blinding info.
+     *
+     *  @return ms 1 to 2**32 - 1
+     */
     public long getTimeout() {
         return _expiration;
     }
 
     /**
-      *  Gets the authentication type.
-      *
-      *  @return 0 (none), 1 (DH), 3 (PSK)
-      */
+     *  Gets the authentication type.
+     *
+     *  @return 0 (none), 1 (DH), 3 (PSK)
+     */
     public int getAuthType() {
         return _authType;
     }
 
     /**
-      *  Gets the endpoint type.
-      *
-      *  @return 0 (hash) or 1 (host) or 2 (dest) or 3 (key)
-      */
+     *  Gets the endpoint type.
+     *
+     *  @return 0 (hash) or 1 (host) or 2 (dest) or 3 (key)
+     */
     public int getEndpointType() {
         return _endpointType;
     }
 
     /**
-      *  Gets the hash for hash-type endpoints.
-      *
-      *  @return only valid if endpoint type == 0 or 2
-      */
+     *  Gets the hash for hash-type endpoints.
+     *
+     *  @return only valid if endpoint type == 0 or 2
+     */
     public Hash getHash() {
         return _hash;
     }
 
     /**
-      *  Gets the hostname for host-type endpoints.
-      *
-      *  @return only valid if endpoint type == 1
-      */
+     *  Gets the hostname for host-type endpoints.
+     *
+     *  @return only valid if endpoint type == 1
+     */
     public String getHostname() {
         return _host;
     }
 
     /**
-      *  Gets the destination for dest-type endpoints.
-      *
-      *  @return only valid if endpoint type == 2
-      */
+     *  Gets the destination for dest-type endpoints.
+     *
+     *  @return only valid if endpoint type == 2
+     */
     public String getDestination() {
         return _host;
     }
 
     /**
-      *  Gets the signing public key for key-type endpoints.
-      *
-      *  @return only valid if endpoint type == 2 or 3
-      */
+     *  Gets the signing public key for key-type endpoints.
+     *
+     *  @return only valid if endpoint type == 2 or 3
+     */
     public SigningPublicKey getSigningPublicKey() {
         return _pubkey;
     }
 
     /**
-      *  Gets the private key for key-type endpoints.
-      *
-      *  @return private key or null
-      */
+     *  Gets the private key for key-type endpoints.
+     *
+     *  @return private key or null
+     */
     public PrivateKey getPrivateKey() {
         return _privkey;
     }
 
     /**
-      *  Gets the secret for PSK authentication.
-      *
-      *  @return secret or null
-      */
+     *  Gets the secret for PSK authentication.
+     *
+     *  @return secret or null
+     */
     public String getSecret() {
         return _secret;
     }
 
     /**
-      *  Gets the computed blind data.
-      *
-      *  @return blind data or null if not enough info
-      */
+     *  Gets the computed blind data.
+     *
+     *  @return blind data or null if not enough info
+     */
     public BlindData getBlindData() {
-        if (_blindData != null)
-            return _blindData;
-        if (_endpointType == TYPE_DEST)
-            _blindData = new BlindData(I2PAppContext.getGlobalContext(), _dest, _blindType, _secret, _authType, _privkey);
-        else if (_endpointType == TYPE_KEY)
-            _blindData = new BlindData(I2PAppContext.getGlobalContext(), _pubkey, _blindType, _secret, _authType, _privkey);
+        if (_blindData != null) return _blindData;
+        if (_endpointType == TYPE_DEST) _blindData = new BlindData(I2PAppContext.getGlobalContext(), _dest, _blindType, _secret, _authType, _privkey);
+        else if (_endpointType == TYPE_KEY) _blindData = new BlindData(I2PAppContext.getGlobalContext(), _pubkey, _blindType, _secret, _authType, _privkey);
         if (_blindData != null) {
             _blindData.setDate(I2PAppContext.getGlobalContext().clock().now());
             _blindData.setExpiration(_expiration);
@@ -331,22 +308,19 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
             _endpointType = in.read();
             int bt = (int) DataHelper.readLong(in, 2);
             _blindType = SigType.getByCode(bt);
-            if (_blindType == null)
-                throw new I2CPMessageException("Unsupported signature type " + bt);
+            if (_blindType == null) throw new I2CPMessageException("Unsupported signature type " + bt);
             _expiration = DataHelper.readLong(in, 4) * 1000;
             if (_endpointType == TYPE_HASH) {
                 _hash = Hash.create(in);
             } else if (_endpointType == TYPE_HOST) {
                 _host = DataHelper.readString(in);
-                if (_host.length() == 0)
-                    throw new I2CPMessageException("Bad host");
+                if (_host.length() == 0) throw new I2CPMessageException("Bad host");
             } else if (_endpointType == TYPE_DEST) {
                 _dest = Destination.create(in);
             } else if (_endpointType == TYPE_KEY) {
                 int st = (int) DataHelper.readLong(in, 2);
                 SigType sigt = SigType.getByCode(st);
-                if (sigt == null)
-                    throw new I2CPMessageException("Unsupported signature type " + st);
+                if (sigt == null) throw new I2CPMessageException("Unsupported signature type " + st);
                 int len = sigt.getPubkeyLen();
                 byte[] key = new byte[len];
                 DataHelper.read(in, key);
@@ -361,8 +335,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
             } else if (_authType != BlindData.AUTH_NONE) {
                 throw new I2CPMessageException("Bad auth type " + _authType);
             }
-            if (hasSecret)
-                _secret = DataHelper.readString(in);
+            if (hasSecret) _secret = DataHelper.readString(in);
         } catch (DataFormatException dfe) {
             throw new I2CPMessageException("Bad data", dfe);
         }
@@ -371,17 +344,13 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         if (_endpointType == TYPE_HASH) {
-            if (_hash == null)
-                throw new I2CPMessageException("Unable to write out the message as there is not enough data");
+            if (_hash == null) throw new I2CPMessageException("Unable to write out the message as there is not enough data");
         } else if (_endpointType == TYPE_HOST) {
-            if (_host == null)
-                throw new I2CPMessageException("Unable to write out the message as there is not enough data");
+            if (_host == null) throw new I2CPMessageException("Unable to write out the message as there is not enough data");
         } else if (_endpointType == TYPE_DEST) {
-            if (_dest == null)
-                throw new I2CPMessageException("Unable to write out the message as there is not enough data");
+            if (_dest == null) throw new I2CPMessageException("Unable to write out the message as there is not enough data");
         } else if (_endpointType == TYPE_KEY) {
-            if (_pubkey == null)
-                throw new I2CPMessageException("Unable to write out the message as there is not enough data");
+            if (_pubkey == null) throw new I2CPMessageException("Unable to write out the message as there is not enough data");
         } else {
             throw new I2CPMessageException("Bad type");
         }
@@ -389,8 +358,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
         try {
             _sessionId.writeBytes(os);
             byte flags = (byte) (_authType & FLAG_AUTH);
-            if (_secret != null)
-                flags |= FLAG_SECRET;
+            if (_secret != null) flags |= FLAG_SECRET;
             os.write(flags);
             os.write((byte) _endpointType);
             DataHelper.writeLong(os, 2, _blindType.getCode());
@@ -401,15 +369,14 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
                 DataHelper.writeString(os, _host);
             } else if (_endpointType == TYPE_DEST) {
                 _dest.writeBytes(os);
-            } else {  // TYPE_KEY
+            } else { // TYPE_KEY
                 DataHelper.writeLong(os, 2, _pubkey.getType().getCode());
                 os.write(_pubkey.getData());
             }
             if (_privkey != null) {
                 os.write(_privkey.getData());
             }
-            if (_secret != null)
-                DataHelper.writeString(os, _secret);
+            if (_secret != null) DataHelper.writeString(os, _secret);
         } catch (DataFormatException dfe) {
             throw new I2CPMessageException("bad data", dfe);
         }
@@ -428,18 +395,12 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
         buf.append("\n\tSession: ").append(_sessionId);
         buf.append("\n\tTimeout: ").append(_expiration);
         buf.append("\n\tAuthTyp: ").append(_authType);
-        if (_endpointType == TYPE_HASH)
-            buf.append("\n\tHash: ").append(_hash.toBase32());
-        else if (_endpointType == TYPE_HOST)
-            buf.append("\n\tHost: ").append(_host);
-        else if (_endpointType == TYPE_DEST)
-            buf.append("\n\tDest: ").append(_dest);
-        else if (_endpointType == TYPE_KEY)
-            buf.append("\n\tKey: ").append(_pubkey);
-        if (_privkey != null)
-            buf.append("\n\tPriv Key: ").append(_privkey);
-        if (_secret != null)
-            buf.append("\n\tSecret: ").append(_secret);
+        if (_endpointType == TYPE_HASH) buf.append("\n\tHash: ").append(_hash.toBase32());
+        else if (_endpointType == TYPE_HOST) buf.append("\n\tHost: ").append(_host);
+        else if (_endpointType == TYPE_DEST) buf.append("\n\tDest: ").append(_dest);
+        else if (_endpointType == TYPE_KEY) buf.append("\n\tKey: ").append(_pubkey);
+        if (_privkey != null) buf.append("\n\tPriv Key: ").append(_privkey);
+        if (_secret != null) buf.append("\n\tSecret: ").append(_secret);
         buf.append("]");
         return buf.toString();
     }

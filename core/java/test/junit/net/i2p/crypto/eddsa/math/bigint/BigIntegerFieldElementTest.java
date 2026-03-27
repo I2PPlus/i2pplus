@@ -14,14 +14,16 @@ package net.i2p.crypto.eddsa.math.bigint;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-import java.math.BigInteger;
-import java.util.Random;
 import net.i2p.crypto.eddsa.Utils;
 import net.i2p.crypto.eddsa.math.AbstractFieldElementTest;
 import net.i2p.crypto.eddsa.math.Field;
 import net.i2p.crypto.eddsa.math.FieldElement;
 import net.i2p.crypto.eddsa.math.MathUtils;
+
 import org.junit.Test;
+
+import java.math.BigInteger;
+import java.util.Random;
 
 /**
  * @author str4d
@@ -32,10 +34,9 @@ public class BigIntegerFieldElementTest extends AbstractFieldElementTest {
     static final byte[] BYTES_ONE = Utils.hexToBytes("0100000000000000000000000000000000000000000000000000000000000000");
     static final byte[] BYTES_TEN = Utils.hexToBytes("0a00000000000000000000000000000000000000000000000000000000000000");
 
-    static final Field ed25519Field = new Field(
-            256, // b
-            Utils.hexToBytes("edffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f"), // q
-            new BigIntegerLittleEndianEncoding());
+    static final Field ed25519Field = new Field( 256, // b
+                    Utils.hexToBytes("edffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f"), // q
+                    new BigIntegerLittleEndianEncoding());
 
     static final FieldElement ZERO = new BigIntegerFieldElement(ed25519Field, BigInteger.ZERO);
     static final FieldElement ONE = new BigIntegerFieldElement(ed25519Field, BigInteger.ONE);
@@ -53,7 +54,7 @@ public class BigIntegerFieldElementTest extends AbstractFieldElementTest {
 
     @Override
     protected BigInteger toBigInteger(FieldElement f) {
-        return ((BigIntegerFieldElement)f).bi;
+        return ((BigIntegerFieldElement) f).bi;
     }
 
     @Override
@@ -117,5 +118,4 @@ public class BigIntegerFieldElementTest extends AbstractFieldElementTest {
         assertThat(new BigIntegerFieldElement(ed25519Field, BigInteger.valueOf(1000)), is(equalTo(new BigIntegerFieldElement(ed25519Field, BigInteger.valueOf(1000)))));
         assertThat(ONE, is(not(equalTo(TWO))));
     }
-
 }

@@ -5,13 +5,14 @@ package net.i2p.data.i2cp;
  * with no warranty of any kind, either expressed or implied.
  */
 
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.util.ByteArrayStream;
+
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Request the router look up the dest for a hash
@@ -20,7 +21,7 @@ import net.i2p.util.ByteArrayStream;
  * @since 0.9.11; do not send to routers older than 0.9.11.
  */
 public class HostLookupMessage extends I2CPMessageImpl {
-    public final static int MESSAGE_TYPE = 38;
+    public static final int MESSAGE_TYPE = 38;
 
     private long _reqID;
     private long _timeout;
@@ -41,12 +42,9 @@ public class HostLookupMessage extends I2CPMessageImpl {
      *  @param timeout ms 1 to 2**32 - 1
      */
     public HostLookupMessage(SessionId id, Hash h, long reqID, long timeout) {
-        if (id == null || h == null)
-            throw new IllegalArgumentException();
-        if (reqID < 0 || reqID > MAX_INT)
-            throw new IllegalArgumentException();
-        if (timeout <= 0 || timeout > MAX_INT)
-            throw new IllegalArgumentException();
+        if (id == null || h == null) throw new IllegalArgumentException();
+        if (reqID < 0 || reqID > MAX_INT) throw new IllegalArgumentException();
+        if (timeout <= 0 || timeout > MAX_INT) throw new IllegalArgumentException();
         _sessionId = id;
         _hash = h;
         _reqID = reqID;
@@ -59,12 +57,9 @@ public class HostLookupMessage extends I2CPMessageImpl {
      *  @param timeout ms 1 to 2**32 - 1
      */
     public HostLookupMessage(SessionId id, String host, long reqID, long timeout) {
-        if (id == null || host == null)
-            throw new IllegalArgumentException();
-        if (reqID < 0 || reqID > MAX_INT)
-            throw new IllegalArgumentException();
-        if (timeout <= 0 || timeout > MAX_INT)
-            throw new IllegalArgumentException();
+        if (id == null || host == null) throw new IllegalArgumentException();
+        if (reqID < 0 || reqID > MAX_INT) throw new IllegalArgumentException();
+        if (timeout <= 0 || timeout > MAX_INT) throw new IllegalArgumentException();
         _sessionId = id;
         _host = host;
         _reqID = reqID;
@@ -87,46 +82,46 @@ public class HostLookupMessage extends I2CPMessageImpl {
     }
 
     /**
-      *  Gets the request ID.
-      *
-      *  @return 0 to 2**32 - 1
-      */
+     *  Gets the request ID.
+     *
+     *  @return 0 to 2**32 - 1
+     */
     public long getReqID() {
         return _reqID;
     }
 
     /**
-      *  Gets the lookup timeout.
-      *
-      *  @return ms 1 to 2**32 - 1
-      */
+     *  Gets the lookup timeout.
+     *
+     *  @return ms 1 to 2**32 - 1
+     */
     public long getTimeout() {
         return _timeout;
     }
 
     /**
-      *  Gets the lookup type.
-      *
-      *  @return 0 (hash) or 1 (host)
-      */
+     *  Gets the lookup type.
+     *
+     *  @return 0 (hash) or 1 (host)
+     */
     public int getLookupType() {
         return _lookupType;
     }
 
     /**
-      *  Gets the hash for hash-type lookups.
-      *
-      *  @return only valid if lookup type == 0
-      */
+     *  Gets the hash for hash-type lookups.
+     *
+     *  @return only valid if lookup type == 0
+     */
     public Hash getHash() {
         return _hash;
     }
 
     /**
-      *  Gets the hostname for host-type lookups.
-      *
-      *  @return only valid if lookup type == 1
-      */
+     *  Gets the hostname for host-type lookups.
+     *
+     *  @return only valid if lookup type == 1
+     */
     public String getHostname() {
         return _host;
     }
@@ -139,14 +134,12 @@ public class HostLookupMessage extends I2CPMessageImpl {
             _reqID = DataHelper.readLong(in, 4);
             _timeout = DataHelper.readLong(in, 4);
             _lookupType = in.read();
-            if (_lookupType < 0)
-                throw new EOFException();
+            if (_lookupType < 0) throw new EOFException();
             if (_lookupType == LOOKUP_HASH) {
                 _hash = Hash.create(in);
             } else if (_lookupType == LOOKUP_HOST) {
                 _host = DataHelper.readString(in);
-                if (_host.length() == 0)
-                    throw new I2CPMessageException("Bad host");
+                if (_host.length() == 0) throw new I2CPMessageException("Bad host");
             } else {
                 throw new I2CPMessageException("Bad type");
             }
@@ -159,12 +152,10 @@ public class HostLookupMessage extends I2CPMessageImpl {
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         int len;
         if (_lookupType == LOOKUP_HASH) {
-            if (_hash == null)
-                throw new I2CPMessageException("Unable to write out the message as there is not enough data");
+            if (_hash == null) throw new I2CPMessageException("Unable to write out the message as there is not enough data");
             len = 11 + Hash.HASH_LENGTH;
         } else if (_lookupType == LOOKUP_HOST) {
-            if (_host == null)
-                throw new I2CPMessageException("Unable to write out the message as there is not enough data");
+            if (_host == null) throw new I2CPMessageException("Unable to write out the message as there is not enough data");
             len = 12 + _host.length();
         } else {
             throw new I2CPMessageException("Bad type");
@@ -198,10 +189,8 @@ public class HostLookupMessage extends I2CPMessageImpl {
         buf.append("\n\t").append(_sessionId);
         buf.append("\n\tReqID: ").append(_reqID);
         buf.append("\n\tTimeout: ").append(_timeout);
-        if (_lookupType == LOOKUP_HASH)
-            buf.append("\n\tHash: ").append(_hash);
-        else if (_lookupType == LOOKUP_HOST)
-            buf.append("\n\tHost: ").append(_host);
+        if (_lookupType == LOOKUP_HASH) buf.append("\n\tHash: ").append(_hash);
+        else if (_lookupType == LOOKUP_HOST) buf.append("\n\tHost: ").append(_host);
         buf.append("]");
         return buf.toString();
     }

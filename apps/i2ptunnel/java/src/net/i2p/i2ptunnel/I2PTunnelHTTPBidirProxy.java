@@ -17,7 +17,6 @@ import net.i2p.util.EventDispatcher;
  */
 public class I2PTunnelHTTPBidirProxy extends I2PTunnelHTTPClient implements Runnable {
 
-
     /**
      *  As of 0.9.20 this is fast, and does NOT connect the manager to the router,
      *  or open the local socket. You MUST call startRunning() for that.

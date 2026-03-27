@@ -1,4 +1,5 @@
 package net.i2p.router;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -65,6 +66,7 @@ public class ClientMessagePool {
     public void add(ClientMessage msg) {
         add(msg, false);
     }
+
     /**
      * Add a new client message with knowledge of whether it's remote.
      *
@@ -76,15 +78,11 @@ public class ClientMessagePool {
      * @param isDefinitelyRemote true if we know for sure that the target is not local
      */
     public void add(ClientMessage msg, boolean isDefinitelyRemote) {
-        if (!isDefinitelyRemote &&
-            (_context.clientManager().isLocal(msg.getDestination()) ||
-             _context.clientManager().isLocal(msg.getDestinationHash()))) {
-            if (_log.shouldDebug())
-                _log.debug("Adding message for local delivery");
+        if (!isDefinitelyRemote && (_context.clientManager().isLocal(msg.getDestination()) || _context.clientManager().isLocal(msg.getDestinationHash()))) {
+            if (_log.shouldDebug()) _log.debug("Adding message for local delivery");
             _context.clientManager().messageReceived(msg);
         } else {
-            if (_log.shouldDebug())
-                _log.debug("Adding message for remote delivery");
+            if (_log.shouldDebug()) _log.debug("Adding message for remote delivery");
             OutboundClientMessageOneShotJob j = new OutboundClientMessageOneShotJob(_context, _cache, msg);
             j.runJob();
         }

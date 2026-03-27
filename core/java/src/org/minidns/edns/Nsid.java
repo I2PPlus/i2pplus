@@ -10,9 +10,10 @@
  */
 package org.minidns.edns;
 
-import java.nio.charset.StandardCharsets;
 import org.minidns.edns.Edns.OptionCode;
 import org.minidns.util.Hex;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * EDNS NSID (Name Server Identifier) option.
@@ -58,5 +59,4 @@ public class Nsid extends EdnsOption {
     protected CharSequence asTerminalOutputInternal() {
         return Hex.from(optionData);
     }
-
 }

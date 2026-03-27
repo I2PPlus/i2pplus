@@ -48,46 +48,46 @@ final class MatrixUtil {
 
     // From Appendix E. Table 1, JIS0510X:2004 (p 71). The table was double-checked by komatsu.
     private static final int[][] POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE = {
-        {-1, -1, -1, -1,  -1,  -1,  -1},  // Version 1
-        { 6, 18, -1, -1,  -1,  -1,  -1},  // Version 2
-        { 6, 22, -1, -1,  -1,  -1,  -1},  // Version 3
-        { 6, 26, -1, -1,  -1,  -1,  -1},  // Version 4
-        { 6, 30, -1, -1,  -1,  -1,  -1},  // Version 5
-        { 6, 34, -1, -1,  -1,  -1,  -1},  // Version 6
-        { 6, 22, 38, -1,  -1,  -1,  -1},  // Version 7
-        { 6, 24, 42, -1,  -1,  -1,  -1},  // Version 8
-        { 6, 26, 46, -1,  -1,  -1,  -1},  // Version 9
-        { 6, 28, 50, -1,  -1,  -1,  -1},  // Version 10
-        { 6, 30, 54, -1,  -1,  -1,  -1},  // Version 11
-        { 6, 32, 58, -1,  -1,  -1,  -1},  // Version 12
-        { 6, 34, 62, -1,  -1,  -1,  -1},  // Version 13
-        { 6, 26, 46, 66,  -1,  -1,  -1},  // Version 14
-        { 6, 26, 48, 70,  -1,  -1,  -1},  // Version 15
-        { 6, 26, 50, 74,  -1,  -1,  -1},  // Version 16
-        { 6, 30, 54, 78,  -1,  -1,  -1},  // Version 17
-        { 6, 30, 56, 82,  -1,  -1,  -1},  // Version 18
-        { 6, 30, 58, 86,  -1,  -1,  -1},  // Version 19
-        { 6, 34, 62, 90,  -1,  -1,  -1},  // Version 20
-        { 6, 28, 50, 72,  94,  -1,  -1},  // Version 21
-        { 6, 26, 50, 74,  98,  -1,  -1},  // Version 22
-        { 6, 30, 54, 78, 102,  -1,  -1},  // Version 23
-        { 6, 28, 54, 80, 106,  -1,  -1},  // Version 24
-        { 6, 32, 58, 84, 110,  -1,  -1},  // Version 25
-        { 6, 30, 58, 86, 114,  -1,  -1},  // Version 26
-        { 6, 34, 62, 90, 118,  -1,  -1},  // Version 27
-        { 6, 26, 50, 74,  98, 122,  -1},  // Version 28
-        { 6, 30, 54, 78, 102, 126,  -1},  // Version 29
-        { 6, 26, 52, 78, 104, 130,  -1},  // Version 30
-        { 6, 30, 56, 82, 108, 134,  -1},  // Version 31
-        { 6, 34, 60, 86, 112, 138,  -1},  // Version 32
-        { 6, 30, 58, 86, 114, 142,  -1},  // Version 33
-        { 6, 34, 62, 90, 118, 146,  -1},  // Version 34
-        { 6, 30, 54, 78, 102, 126, 150},  // Version 35
-        { 6, 24, 50, 76, 102, 128, 154},  // Version 36
-        { 6, 28, 54, 80, 106, 132, 158},  // Version 37
-        { 6, 32, 58, 84, 110, 136, 162},  // Version 38
-        { 6, 26, 54, 82, 110, 138, 166},  // Version 39
-        { 6, 30, 58, 86, 114, 142, 170},  // Version 40
+        {-1, -1, -1, -1, -1, -1, -1}, // Version 1
+        {6, 18, -1, -1, -1, -1, -1}, // Version 2
+        {6, 22, -1, -1, -1, -1, -1}, // Version 3
+        {6, 26, -1, -1, -1, -1, -1}, // Version 4
+        {6, 30, -1, -1, -1, -1, -1}, // Version 5
+        {6, 34, -1, -1, -1, -1, -1}, // Version 6
+        {6, 22, 38, -1, -1, -1, -1}, // Version 7
+        {6, 24, 42, -1, -1, -1, -1}, // Version 8
+        {6, 26, 46, -1, -1, -1, -1}, // Version 9
+        {6, 28, 50, -1, -1, -1, -1}, // Version 10
+        {6, 30, 54, -1, -1, -1, -1}, // Version 11
+        {6, 32, 58, -1, -1, -1, -1}, // Version 12
+        {6, 34, 62, -1, -1, -1, -1}, // Version 13
+        {6, 26, 46, 66, -1, -1, -1}, // Version 14
+        {6, 26, 48, 70, -1, -1, -1}, // Version 15
+        {6, 26, 50, 74, -1, -1, -1}, // Version 16
+        {6, 30, 54, 78, -1, -1, -1}, // Version 17
+        {6, 30, 56, 82, -1, -1, -1}, // Version 18
+        {6, 30, 58, 86, -1, -1, -1}, // Version 19
+        {6, 34, 62, 90, -1, -1, -1}, // Version 20
+        {6, 28, 50, 72, 94, -1, -1}, // Version 21
+        {6, 26, 50, 74, 98, -1, -1}, // Version 22
+        {6, 30, 54, 78, 102, -1, -1}, // Version 23
+        {6, 28, 54, 80, 106, -1, -1}, // Version 24
+        {6, 32, 58, 84, 110, -1, -1}, // Version 25
+        {6, 30, 58, 86, 114, -1, -1}, // Version 26
+        {6, 34, 62, 90, 118, -1, -1}, // Version 27
+        {6, 26, 50, 74, 98, 122, -1}, // Version 28
+        {6, 30, 54, 78, 102, 126, -1}, // Version 29
+        {6, 26, 52, 78, 104, 130, -1}, // Version 30
+        {6, 30, 56, 82, 108, 134, -1}, // Version 31
+        {6, 34, 60, 86, 112, 138, -1}, // Version 32
+        {6, 30, 58, 86, 114, 142, -1}, // Version 33
+        {6, 34, 62, 90, 118, 146, -1}, // Version 34
+        {6, 30, 54, 78, 102, 126, 150}, // Version 35
+        {6, 24, 50, 76, 102, 128, 154}, // Version 36
+        {6, 28, 54, 80, 106, 132, 158}, // Version 37
+        {6, 32, 58, 84, 110, 136, 162}, // Version 38
+        {6, 26, 54, 82, 110, 138, 166}, // Version 39
+        {6, 30, 58, 86, 114, 142, 170}, // Version 40
     };
 
     // Type info cells at the left top corner.
@@ -110,14 +110,14 @@ final class MatrixUtil {
     };
 
     // From Appendix D in JISX0510:2004 (p. 67)
-    private static final int VERSION_INFO_POLY = 0x1f25;  // 1 1111 0010 0101
+    private static final int VERSION_INFO_POLY = 0x1f25; // 1 1111 0010 0101
 
     // From Appendix C in JISX0510:2004 (p.65).
     private static final int TYPE_INFO_POLY = 0x537;
     private static final int TYPE_INFO_MASK_PATTERN = 0x5412;
 
     private MatrixUtil() {
-      // do nothing
+        // do nothing
     }
 
     // Set all cells to -1.  -1 means that the cell is empty (not set yet).
@@ -130,11 +130,7 @@ final class MatrixUtil {
 
     // Build 2D matrix of QR Code from "dataBits" with "ecLevel", "version" and "getMaskPattern". On
     // success, store the result in "matrix" and return true.
-    static void buildMatrix(BitArray dataBits,
-                          ErrorCorrectionLevel ecLevel,
-                          Version version,
-                          int maskPattern,
-                          ByteMatrix matrix) throws WriterException {
+    static void buildMatrix(BitArray dataBits, ErrorCorrectionLevel ecLevel, Version version, int maskPattern, ByteMatrix matrix) throws WriterException {
         clearMatrix(matrix);
         embedBasicPatterns(version, matrix);
         // Type information appear with any version.
@@ -164,8 +160,7 @@ final class MatrixUtil {
     }
 
     // Embed type information. On success, modify the matrix.
-    static void embedTypeInfo(ErrorCorrectionLevel ecLevel, int maskPattern, ByteMatrix matrix)
-        throws WriterException {
+    static void embedTypeInfo(ErrorCorrectionLevel ecLevel, int maskPattern, ByteMatrix matrix) throws WriterException {
         BitArray typeInfoBits = new BitArray();
         makeTypeInfoBits(ecLevel, maskPattern, typeInfoBits);
 
@@ -198,13 +193,13 @@ final class MatrixUtil {
     // Embed version information if need be. On success, modify the matrix and return true.
     // See 8.10 of JISX0510:2004 (p.47) for how to embed version information.
     static void maybeEmbedVersionInfo(Version version, ByteMatrix matrix) throws WriterException {
-        if (version.getVersionNumber() < 7) {  // Version info is necessary if version >= 7.
-            return;  // Don't need version info.
+        if (version.getVersionNumber() < 7) { // Version info is necessary if version >= 7.
+            return; // Don't need version info.
         }
         BitArray versionInfoBits = new BitArray();
         makeVersionInfoBits(version, versionInfoBits);
 
-        int bitIndex = 6 * 3 - 1;  // It will decrease from 17 to 0.
+        int bitIndex = 6 * 3 - 1; // It will decrease from 17 to 0.
         for (int i = 0; i < 6; ++i) {
             for (int j = 0; j < 3; ++j) {
                 // Place bits in LSB (least significant bit) to MSB order.
@@ -221,8 +216,7 @@ final class MatrixUtil {
     // Embed "dataBits" using "getMaskPattern". On success, modify the matrix and return true.
     // For debugging purposes, it skips masking process if "getMaskPattern" is -1.
     // See 8.7 of JISX0510:2004 (p.38) for how to embed data bits.
-    static void embedDataBits(BitArray dataBits, int maskPattern, ByteMatrix matrix)
-        throws WriterException {
+    static void embedDataBits(BitArray dataBits, int maskPattern, ByteMatrix matrix) throws WriterException {
         int bitIndex = 0;
         int direction = -1;
         // Start from the right bottom cell.
@@ -258,9 +252,9 @@ final class MatrixUtil {
                 }
                 y += direction;
             }
-            direction = -direction;  // Reverse the direction.
+            direction = -direction; // Reverse the direction.
             y += direction;
-            x -= 2;  // Move to the left.
+            x -= 2; // Move to the left.
         }
         // All bits should be consumed.
         if (bitIndex != dataBits.getSize()) {
@@ -268,11 +262,11 @@ final class MatrixUtil {
         }
     }
 
-  // Return the position of the most significant bit set (to one) in the "value". The most
-  // significant bit is position 32. If there is no bit set, return 0. Examples:
-  // - findMSBSet(0) => 0
-  // - findMSBSet(1) => 1
-  // - findMSBSet(255) => 8
+    // Return the position of the most significant bit set (to one) in the "value". The most
+    // significant bit is position 32. If there is no bit set, return 0. Examples:
+    // - findMSBSet(0) => 0
+    // - findMSBSet(1) => 1
+    // - findMSBSet(255) => 8
     static int findMSBSet(int value) {
         return 32 - Integer.numberOfLeadingZeros(value);
     }
@@ -325,8 +319,7 @@ final class MatrixUtil {
      * Encode error correction level and mask pattern. See 8.9 of
      * JISX0510:2004 (p.45) for details.
      */
-    static void makeTypeInfoBits(ErrorCorrectionLevel ecLevel, int maskPattern, BitArray bits)
-        throws WriterException {
+    static void makeTypeInfoBits(ErrorCorrectionLevel ecLevel, int maskPattern, BitArray bits) throws WriterException {
         if (!QRCode.isValidMaskPattern(maskPattern)) {
             throw new WriterException("Invalid mask pattern");
         }
@@ -340,7 +333,7 @@ final class MatrixUtil {
         maskBits.appendBits(TYPE_INFO_MASK_PATTERN, 15);
         bits.xor(maskBits);
 
-        if (bits.getSize() != 15) {  // Just in case.
+        if (bits.getSize() != 15) { // Just in case.
             throw new WriterException("should not happen but we got: " + bits.getSize());
         }
     }
@@ -352,7 +345,7 @@ final class MatrixUtil {
         int bchCode = calculateBCHCode(version.getVersionNumber(), VERSION_INFO_POLY);
         bits.appendBits(bchCode, 12);
 
-        if (bits.getSize() != 18) {  // Just in case.
+        if (bits.getSize() != 18) { // Just in case.
             throw new WriterException("should not happen but we got: " + bits.getSize());
         }
     }
@@ -386,9 +379,7 @@ final class MatrixUtil {
         matrix.set(8, matrix.getHeight() - 8, 1);
     }
 
-    private static void embedHorizontalSeparationPattern(int xStart,
-                                                       int yStart,
-                                                       ByteMatrix matrix) throws WriterException {
+    private static void embedHorizontalSeparationPattern(int xStart, int yStart, ByteMatrix matrix) throws WriterException {
         for (int x = 0; x < 8; ++x) {
             if (!isEmpty(matrix.get(xStart + x, yStart))) {
                 throw new WriterException();
@@ -397,9 +388,7 @@ final class MatrixUtil {
         }
     }
 
-    private static void embedVerticalSeparationPattern(int xStart,
-                                                     int yStart,
-                                                     ByteMatrix matrix) throws WriterException {
+    private static void embedVerticalSeparationPattern(int xStart, int yStart, ByteMatrix matrix) throws WriterException {
         for (int y = 0; y < 7; ++y) {
             if (!isEmpty(matrix.get(xStart, yStart + y))) {
                 throw new WriterException();
@@ -442,8 +431,7 @@ final class MatrixUtil {
         // Left top corner.
         embedHorizontalSeparationPattern(0, hspWidth - 1, matrix);
         // Right top corner.
-        embedHorizontalSeparationPattern(matrix.getWidth() - hspWidth,
-            hspWidth - 1, matrix);
+        embedHorizontalSeparationPattern(matrix.getWidth() - hspWidth, hspWidth - 1, matrix);
         // Left bottom corner.
         embedHorizontalSeparationPattern(0, matrix.getWidth() - hspWidth, matrix);
 
@@ -454,13 +442,12 @@ final class MatrixUtil {
         // Right top corner.
         embedVerticalSeparationPattern(matrix.getHeight() - vspSize - 1, 0, matrix);
         // Left bottom corner.
-        embedVerticalSeparationPattern(vspSize, matrix.getHeight() - vspSize,
-            matrix);
+        embedVerticalSeparationPattern(vspSize, matrix.getHeight() - vspSize, matrix);
     }
 
     // Embed position adjustment patterns if need be.
     private static void maybeEmbedPositionAdjustmentPatterns(Version version, ByteMatrix matrix) {
-        if (version.getVersionNumber() < 2) {  // The patterns appear if version >= 2
+        if (version.getVersionNumber() < 2) { // The patterns appear if version >= 2
             return;
         }
         int index = version.getVersionNumber() - 1;
@@ -478,5 +465,4 @@ final class MatrixUtil {
             }
         }
     }
-
 }

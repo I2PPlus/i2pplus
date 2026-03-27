@@ -1,7 +1,8 @@
 package net.i2p.util;
 
-import java.util.List;
 import net.i2p.I2PAppContext;
+
+import java.util.List;
 
 /**
  * Offer a glimpse into the last few console messages generated.

@@ -9,14 +9,15 @@ package net.i2p.client;
  *
  */
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Properties;
 import net.i2p.I2PException;
 import net.i2p.crypto.SigType;
 import net.i2p.data.Certificate;
 import net.i2p.data.Destination;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Properties;
 
 /**
  * Define the standard means of interacting with the I2P system
@@ -28,20 +29,26 @@ import net.i2p.data.Destination;
  */
 public interface I2PClient {
     /** Standard host property, defaulting to localhost if not specified */
-    public final static String PROP_TCP_HOST = "i2cp.tcp.host";
+    public static final String PROP_TCP_HOST = "i2cp.tcp.host";
+
     /** Standard port number property */
-    public final static String PROP_TCP_PORT = "i2cp.tcp.port";
+    public static final String PROP_TCP_PORT = "i2cp.tcp.port";
+
     /** Reliability property */
-    public final static String PROP_RELIABILITY = "i2cp.messageReliability";
+    public static final String PROP_RELIABILITY = "i2cp.messageReliability";
+
     /** Reliability value: best effort */
-    public final static String PROP_RELIABILITY_BEST_EFFORT = "BestEffort";
+    public static final String PROP_RELIABILITY_BEST_EFFORT = "BestEffort";
+
     /** Reliability value: guaranteed */
-    public final static String PROP_RELIABILITY_GUARANTEED = "Guaranteed";
+    public static final String PROP_RELIABILITY_GUARANTEED = "Guaranteed";
+
     /** Reliability value: none. @since 0.8.1 */
-    public final static String PROP_RELIABILITY_NONE = "none";
+    public static final String PROP_RELIABILITY_NONE = "none";
 
     /** Destination signature type property. @since 0.9.12 */
     public static final String PROP_SIGTYPE = "i2cp.destination.sigType";
+
     /** Default signature type. @since 0.9.12 */
     public static final SigType DEFAULT_SIGTYPE = SigType.EdDSA_SHA512_Ed25519;
 
@@ -61,14 +68,17 @@ public interface I2PClient {
      *
      * @since 0.9.4
      */
-    public final static String PROP_FAST_RECEIVE = "i2cp.fastReceive";
+    public static final String PROP_FAST_RECEIVE = "i2cp.fastReceive";
 
     /** Enable SSL for I2CP connection. @since 0.9.44, was protected in I2PSessionImpl */
     public static final String PROP_ENABLE_SSL = "i2cp.SSL";
+
     /** Username for I2CP authentication. @since 0.9.44, was protected in I2PSessionImpl */
     public static final String PROP_USER = "i2cp.username";
+
     /** Password for I2CP authentication. @since 0.9.44, was protected in I2PSessionImpl */
     public static final String PROP_PW = "i2cp.password";
+
     /** Enable gzip compression for I2CP messages. @since 0.9.46 */
     public static final String PROP_GZIP = "i2cp.gzip";
 
@@ -79,7 +89,7 @@ public interface I2PClient {
     public static final int DEFAULT_LISTEN_PORT = 7654;
 
     /** protocol flag that must be sent when opening the i2cp connection to the router */
-    public final static int PROTOCOL_BYTE = 0x2A;
+    public static final int PROTOCOL_BYTE = 0x2A;
 
     /**
      * Create a new client session for the Destination stored at the destKeyStream

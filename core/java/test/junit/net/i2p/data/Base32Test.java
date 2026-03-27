@@ -2,8 +2,9 @@ package net.i2p.data;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
 import org.junit.Test;
+
+import java.util.Arrays;
 
 public class Base32Test {
 

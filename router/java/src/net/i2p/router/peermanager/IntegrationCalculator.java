@@ -13,7 +13,7 @@ class IntegrationCalculator {
         long val = 0;
         if (profile.getIsExpandedDB()) {
             // give more weight to recent counts
-            val =  profile.getDbIntroduction().getRate(RateConstants.ONE_DAY).getLastEventCount();
+            val = profile.getDbIntroduction().getRate(RateConstants.ONE_DAY).getLastEventCount();
             val += profile.getDbIntroduction().getRate(RateConstants.ONE_DAY).getCurrentEventCount() * 2;
             val += 24 * profile.getDbIntroduction().getRate(RateConstants.ONE_HOUR).getLastEventCount();
             val += 24 * profile.getDbIntroduction().getRate(RateConstants.ONE_HOUR).getCurrentEventCount() * 2;

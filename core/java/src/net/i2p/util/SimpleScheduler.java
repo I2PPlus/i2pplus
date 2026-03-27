@@ -1,11 +1,12 @@
 package net.i2p.util;
 
+import net.i2p.I2PAppContext;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import net.i2p.I2PAppContext;
 
 /**
  * Simple event scheduler - toss an event on the queue and it gets fired at the
@@ -67,7 +68,7 @@ public class SimpleScheduler {
         _log = context.logManager().getLog(SimpleScheduler.class);
         _name = name;
         long maxMemory = SystemVersion.getMaxMemory();
-        _threads = (int) Math.max(MIN_THREADS, Math.min(MAX_THREADS, 1 + (maxMemory / (32*1024*1024))));
+        _threads = (int) Math.max(MIN_THREADS, Math.min(MAX_THREADS, 1 + (maxMemory / (32 * 1024 * 1024))));
         _executor = new ScheduledThreadPoolExecutor(_threads, new CustomThreadFactory());
         _executor.prestartAllCoreThreads();
         // don't bother saving ref to remove hook if somebody else calls stop
@@ -75,8 +76,8 @@ public class SimpleScheduler {
     }
 
     /**
-      * @since 0.8.8
-      */
+     * @since 0.8.8
+     */
     private class Shutdown implements Runnable {
         @Override
         public void run() {
@@ -100,8 +101,7 @@ public class SimpleScheduler {
      * @param timeoutMs the delay in milliseconds before the event should fire
      */
     public void addEvent(SimpleTimer.TimedEvent event, long timeoutMs) {
-        if (event == null)
-            throw new IllegalArgumentException("addEvent null");
+        if (event == null) throw new IllegalArgumentException("addEvent null");
         RunnableEvent re = new RunnableEvent(event, timeoutMs);
         re.schedule();
     }
@@ -129,8 +129,7 @@ public class SimpleScheduler {
      * @param timeoutMs the period in milliseconds between executions
      */
     public void addPeriodicEvent(SimpleTimer.TimedEvent event, long initialDelay, long timeoutMs) {
-        if (event == null)
-            throw new IllegalArgumentException("addEvent null");
+        if (event == null) throw new IllegalArgumentException("addEvent null");
         RunnableEvent re = new PeriodicRunnableEvent(event, initialDelay, timeoutMs);
         re.schedule();
     }
@@ -139,7 +138,7 @@ public class SimpleScheduler {
         @Override
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
-            rv.setName(_name +  ' ' + ++_count + '/' + _threads);
+            rv.setName(_name + ' ' + ++_count + '/' + _threads);
             rv.setDaemon(true);
             return rv;
         }
@@ -153,37 +152,33 @@ public class SimpleScheduler {
         protected long _scheduled;
 
         public RunnableEvent(SimpleTimer.TimedEvent t, long timeoutMs) {
-            if (_log.shouldDebug())
-                _log.debug("Creating with delay of " + timeoutMs + " : " + t);
+            if (_log.shouldDebug()) _log.debug("Creating with delay of " + timeoutMs + " : " + t);
             _timedEvent = t;
             _scheduled = timeoutMs + System.currentTimeMillis();
         }
+
         public void schedule() {
             _executor.schedule(this, _scheduled - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
         }
+
         @Override
         public void run() {
-            if (_log.shouldDebug())
-                _log.debug("Running: " + _timedEvent);
+            if (_log.shouldDebug()) _log.debug("Running: " + _timedEvent);
             long before = System.currentTimeMillis();
-            if (_log.shouldWarn() && before < _scheduled - 100)
-                _log.warn(_name + " early execution " + (_scheduled - before) + ": " + _timedEvent);
-            else if (_log.shouldWarn() && before > _scheduled + 1000)
-                _log.warn("Late execution (" + (before - _scheduled) + "ms): " + _timedEvent + debug());
+            if (_log.shouldWarn() && before < _scheduled - 100) _log.warn(_name + " early execution " + (_scheduled - before) + ": " + _timedEvent);
+            else if (_log.shouldWarn() && before > _scheduled + 1000) _log.warn("Late execution (" + (before - _scheduled) + "ms): " + _timedEvent + debug());
             try {
                 _timedEvent.timeReached();
             } catch (Throwable t) {
                 _log.log(Log.CRIT, _name + ": Scheduled task " + _timedEvent + " exited unexpectedly, please report", t);
             }
             long time = System.currentTimeMillis() - before;
-            if (time > 1000 && _log.shouldWarn())
-                _log.warn(_name + " event execution took " + time + "ms: " + _timedEvent);
+            if (time > 1000 && _log.shouldWarn()) _log.warn(_name + " event execution took " + time + "ms: " + _timedEvent);
             if (_log.shouldInfo()) {
-                 // this call is slow - iterates through a HashMap -
-                 // would be better to have a local AtomicLong if we care
+                // this call is slow - iterates through a HashMap -
+                // would be better to have a local AtomicLong if we care
                 long completed = _executor.getCompletedTaskCount();
-                if (completed % 250 == 0)
-                     _log.info(debug());
+                if (completed % 250 == 0) _log.info(debug());
             }
         }
     }
@@ -192,16 +187,19 @@ public class SimpleScheduler {
     private class PeriodicRunnableEvent extends RunnableEvent {
         private final long _timeoutMs;
         private final long _initialDelay;
+
         public PeriodicRunnableEvent(SimpleTimer.TimedEvent t, long initialDelay, long timeoutMs) {
             super(t, timeoutMs);
             _initialDelay = initialDelay;
             _timeoutMs = timeoutMs;
             _scheduled = initialDelay + System.currentTimeMillis();
         }
+
         @Override
         public void schedule() {
             _executor.scheduleWithFixedDelay(this, _initialDelay, _timeoutMs, TimeUnit.MILLISECONDS);
         }
+
         @Override
         public void run() {
             super.run();
@@ -210,10 +208,6 @@ public class SimpleScheduler {
     }
 
     private String debug() {
-        return
-            "\n* Pool: " + _name +
-            "; Active: " + _executor.getActiveCount() + '/' + _executor.getPoolSize() +
-            "; Completed: " + _executor.getCompletedTaskCount() +
-            "; Queued: " + _executor.getQueue().size();
+        return "\n* Pool: " + _name + "; Active: " + _executor.getActiveCount() + '/' + _executor.getPoolSize() + "; Completed: " + _executor.getCompletedTaskCount() + "; Queued: " + _executor.getQueue().size();
     }
 }

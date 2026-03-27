@@ -1,10 +1,5 @@
 package net.i2p.router.networkdb.kademlia;
 
-import java.time.Instant;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Set;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
@@ -15,6 +10,12 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.VersionComparator;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -32,8 +33,8 @@ class RefreshRoutersJob extends JobImpl {
     private List<Hash> _routers;
 
     private static final long EXPIRE = 7 * 24 * 60 * 60 * 1000L; // 7 days
-    private static final long OLDER = 2 * 60 * 60 * 1000L;       // 2 hours
-    private static long RESTART_DELAY_MS = 60 * 1000;            // Default restart delay 1 min
+    private static final long OLDER = 2 * 60 * 60 * 1000L; // 2 hours
+    private static long RESTART_DELAY_MS = 60 * 1000; // Default restart delay 1 min
 
     private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
     private static final boolean DEFAULT_SHOULD_DISCONNECT = false;
@@ -82,10 +83,7 @@ class RefreshRoutersJob extends JobImpl {
      */
     private boolean shouldRunJob() {
         RouterContext ctx = getContext();
-        return _facade.isInitialized()
-            && ctx.jobQueue().getMaxLag() < 500
-            && ctx.commSystem().getStatus() != Status.DISCONNECTED
-            && ctx.router().getUptime() > 60 * 1000;
+        return _facade.isInitialized() && ctx.jobQueue().getMaxLag() < 500 && ctx.commSystem().getStatus() != Status.DISCONNECTED && ctx.router().getUptime() > 60 * 1000;
     }
 
     /**
@@ -93,10 +91,8 @@ class RefreshRoutersJob extends JobImpl {
      */
     private void logSuspendedReason() {
         RouterContext ctx = getContext();
-        if (ctx.jobQueue().getMaxLag() > 500)
-            _log.info("Job lag over 500ms, suspending Refresh Routers job...");
-        else if (ctx.commSystem().getStatus() == Status.DISCONNECTED)
-            _log.info("Network disconnected, suspending Refresh Routers job...");
+        if (ctx.jobQueue().getMaxLag() > 500) _log.info("Job lag over 500ms, suspending Refresh Routers job...");
+        else if (ctx.commSystem().getStatus() == Status.DISCONNECTED) _log.info("Network disconnected, suspending Refresh Routers job...");
     }
 
     /**
@@ -113,8 +109,7 @@ class RefreshRoutersJob extends JobImpl {
             _routers.addAll(allRouters);
 
             if (_log.shouldInfo()) {
-                _log.info("To check: " + floodfills.size()
-                    + " Floodfills and " + allRouters.size() + " non-Floodfills");
+                _log.info("To check: " + floodfills.size() + " Floodfills and " + allRouters.size() + " non-Floodfills");
             }
         }
     }
@@ -140,11 +135,9 @@ class RefreshRoutersJob extends JobImpl {
     private void logRefreshCompletion() {
         int netDbCount = getContext().netDb().getKnownRouters();
         if (netDbCount > 10000) {
-            _log.info(String.format("Finished refreshing NetDb; over 5000 known routers, job will rerun in %dm",
-                (RESTART_DELAY_MS / 1000 / 60)));
+            _log.info(String.format("Finished refreshing NetDb; over 5000 known routers, job will rerun in %dm", (RESTART_DELAY_MS / 1000 / 60)));
         } else {
-            _log.info(String.format("Finished refreshing NetDb routers; job will rerun in %ds",
-                (RESTART_DELAY_MS / 1000)));
+            _log.info(String.format("Finished refreshing NetDb routers; job will rerun in %ds", (RESTART_DELAY_MS / 1000)));
         }
     }
 
@@ -193,14 +186,7 @@ class RefreshRoutersJob extends JobImpl {
         boolean isHidden = ctx.router().isHidden();
 
         // Uninteresting routers filter
-        boolean uninteresting = (ri.getCapabilities().contains(Character.toString(Router.CAPABILITY_UNREACHABLE))
-                                || ri.getCapabilities().contains(Character.toString(Router.CAPABILITY_BW12))
-                                || ri.getCapabilities().contains(Character.toString(Router.CAPABILITY_BW32))
-                                || VersionComparator.comp(version, "0.9.64") < 0)
-                                && netDbCount > 5000
-                                && uptime > 15 * 60 * 1000
-                                && !isHidden
-                                && !isUs;
+        boolean uninteresting = (ri.getCapabilities().contains(Character.toString(Router.CAPABILITY_UNREACHABLE)) || ri.getCapabilities().contains(Character.toString(Router.CAPABILITY_BW12)) || ri.getCapabilities().contains(Character.toString(Router.CAPABILITY_BW32)) || VersionComparator.comp(version, "0.9.64") < 0) && netDbCount > 5000 && uptime > 15 * 60 * 1000 && !isHidden && !isUs;
 
         boolean refreshUninteresting = ctx.getBooleanProperty("router.refreshUninteresting");
         int routerAgeThreshold = getRouterAgeThreshold(uninteresting, refreshUninteresting, netDbCount, uptime, isFloodfill);
@@ -211,8 +197,7 @@ class RefreshRoutersJob extends JobImpl {
     /**
      * Returns the router age threshold in milliseconds for refresh decision.
      */
-    private int getRouterAgeThreshold(boolean uninteresting, boolean refreshUninteresting, int netDbCount,
-                                      long uptime, boolean isFloodfill) {
+    private int getRouterAgeThreshold(boolean uninteresting, boolean refreshUninteresting, int netDbCount, long uptime, boolean isFloodfill) {
         final int FIFTEEN_MINUTES = 15 * 60 * 1000;
         final int RAPID_SCAN = 10 * 60 * 1000;
 
@@ -244,9 +229,13 @@ class RefreshRoutersJob extends JobImpl {
         if (refreshTimeoutProp != null) {
             refreshTimeoutSeconds = Integer.parseInt(refreshTimeoutProp);
         } else {
-            if (uptime < 60 * 60 * 1000) {refreshTimeoutSeconds = 20;}
-            else if (uptime < 8 * 60 * 60 * 1000) {refreshTimeoutSeconds = 15;}
-            else {refreshTimeoutSeconds = 10;}
+            if (uptime < 60 * 60 * 1000) {
+                refreshTimeoutSeconds = 20;
+            } else if (uptime < 8 * 60 * 60 * 1000) {
+                refreshTimeoutSeconds = 15;
+            } else {
+                refreshTimeoutSeconds = 10;
+            }
         }
 
         // Reverse DNS lookup leveraging CommSystemFacadeImpl cache
@@ -271,8 +260,7 @@ class RefreshRoutersJob extends JobImpl {
         }
 
         if (_log.shouldInfo()) {
-            _log.info(String.format("Refreshing Router [%s] - %ds timeout%n* Published: %s",
-                routerHash.toBase64().substring(0, 6), refreshTimeoutSeconds, Instant.ofEpochMilli(ri.getPublished())));
+            _log.info(String.format("Refreshing Router [%s] - %ds timeout%n* Published: %s", routerHash.toBase64().substring(0, 6), refreshTimeoutSeconds, Instant.ofEpochMilli(ri.getPublished())));
         }
 
         _facade.search(routerHash, null, null, refreshTimeoutSeconds * 1000L, false);
@@ -286,10 +274,7 @@ class RefreshRoutersJob extends JobImpl {
         RouterContext ctx = getContext();
         int netDbCount = ctx.netDb().getKnownRouters();
 
-        int baseDelay = (1500 * (ThreadLocalRandom.current().nextInt(3) + 1))
-                + ThreadLocalRandom.current().nextInt(1000)
-                + ThreadLocalRandom.current().nextInt(1000)
-                + (ThreadLocalRandom.current().nextInt(1000) * (ThreadLocalRandom.current().nextInt(3) + 1));
+        int baseDelay = (1500 * (ThreadLocalRandom.current().nextInt(3) + 1)) + ThreadLocalRandom.current().nextInt(1000) + ThreadLocalRandom.current().nextInt(1000) + (ThreadLocalRandom.current().nextInt(1000) * (ThreadLocalRandom.current().nextInt(3) + 1));
 
         String refreshProp = ctx.getProperty("router.refreshRouterDelay");
 
@@ -307,11 +292,9 @@ class RefreshRoutersJob extends JobImpl {
             if (ctx.jobQueue().getMaxLag() > 150 || ctx.throttle().getMessageDelay() > 750) {
                 baseDelay *= (ThreadLocalRandom.current().nextInt(3) + 1);
             } else if (netDbCount < 500 || ctx.router().getUptime() < 30 * 60 * 1000) {
-                baseDelay = Math.max(Math.min(baseDelay - 6000, baseDelay - ThreadLocalRandom.current().nextInt(7000)),
-                                     300 + ThreadLocalRandom.current().nextInt(150));
+                baseDelay = Math.max(Math.min(baseDelay - 6000, baseDelay - ThreadLocalRandom.current().nextInt(7000)), 300 + ThreadLocalRandom.current().nextInt(150));
             } else if (netDbCount < 1000) {
-                baseDelay = Math.max(baseDelay - ThreadLocalRandom.current().nextInt(1250) - ThreadLocalRandom.current().nextInt(1250),
-                                     400 + ThreadLocalRandom.current().nextInt(150));
+                baseDelay = Math.max(baseDelay - ThreadLocalRandom.current().nextInt(1250) - ThreadLocalRandom.current().nextInt(1250), 400 + ThreadLocalRandom.current().nextInt(150));
             } else if (netDbCount < 2000) {
                 baseDelay -= ThreadLocalRandom.current().nextInt(750) / (ThreadLocalRandom.current().nextInt(3) + 1);
             } else {
@@ -332,9 +315,14 @@ class RefreshRoutersJob extends JobImpl {
 
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;
-        public Disconnector(Hash h) {this.h = h;}
-        @Override
-        public void timeReached() {getContext().commSystem().forceDisconnect(h);}
-    }
 
+        public Disconnector(Hash h) {
+            this.h = h;
+        }
+
+        @Override
+        public void timeReached() {
+            getContext().commSystem().forceDisconnect(h);
+        }
+    }
 }

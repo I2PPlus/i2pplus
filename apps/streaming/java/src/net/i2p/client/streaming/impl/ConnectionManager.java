@@ -1,5 +1,21 @@
 package net.i2p.client.streaming.impl;
 
+import net.i2p.I2PAppContext;
+import net.i2p.I2PException;
+import net.i2p.client.I2PSession;
+import net.i2p.client.streaming.IncomingConnectionFilter;
+import net.i2p.data.ByteArray;
+import net.i2p.data.DataHelper;
+import net.i2p.data.Destination;
+import net.i2p.data.Hash;
+import net.i2p.stat.RateConstants;
+import net.i2p.util.ByteCache;
+import net.i2p.util.ConcurrentHashSet;
+import net.i2p.util.ConvertToHash;
+import net.i2p.util.LHMCache;
+import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer2;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -7,21 +23,6 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import net.i2p.I2PAppContext;
-import net.i2p.I2PException;
-import net.i2p.client.I2PSession;
-import net.i2p.stat.RateConstants;
-import net.i2p.client.streaming.IncomingConnectionFilter;
-import net.i2p.data.ByteArray;
-import net.i2p.data.DataHelper;
-import net.i2p.data.Destination;
-import net.i2p.data.Hash;
-import net.i2p.util.ByteCache;
-import net.i2p.util.ConcurrentHashSet;
-import net.i2p.util.ConvertToHash;
-import net.i2p.util.LHMCache;
-import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer2;
 
 /**
  * Coordinate all of the connections for a single local destination.
@@ -40,10 +41,13 @@ class ConnectionManager {
     private final ConnectionPacketHandler _conPacketHandler;
     private final TCBShare _tcbShare;
     private final IncomingConnectionFilter _connectionFilter;
+
     /** Inbound stream ID (Long) to Connection map */
     private final ConcurrentHashMap<Long, Connection> _connectionByInboundId;
+
     /** Ping ID (Long) to PingRequest */
     private final ConcurrentHashMap<Long, PingRequest> _pendingPings;
+
     private volatile boolean _throttlersInitialized;
     private final ConnectionOptions _defaultOptions;
     private final AtomicInteger _numWaiting = new AtomicInteger();
@@ -51,25 +55,30 @@ class ConnectionManager {
     private volatile ConnThrottler _minuteThrottler;
     private volatile ConnThrottler _hourThrottler;
     private volatile ConnThrottler _dayThrottler;
+
     /** since 0.9, each manager instantiates its own timer */
     private final SimpleTimer2 _timer;
+
     private final Map<Long, Object> _recentlyClosed;
-    private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
+    private final ByteCache _cache = ByteCache.getInstance(32, 4 * 1024);
     private static final Object DUMMY = new Object();
 
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     /** cache of the property to detect changes */
     private static volatile String _currentBlacklist = "";
+
     private static final Set<Hash> _globalBlacklist = new ConcurrentHashSet<Hash>();
 
     /** @since 0.9.3 */
     public static final String PROP_BLACKLIST = "i2p.streaming.blacklist";
-//    private static final long MAX_PING_TIMEOUT = 5*60*1000;
-    private static final long MAX_PING_TIMEOUT = 3*60*1000;
+
+    //    private static final long MAX_PING_TIMEOUT = 5*60*1000;
+    private static final long MAX_PING_TIMEOUT = 3 * 60 * 1000;
     private static final int MAX_PONG_PAYLOAD = 32;
+
     /** once over throttle limits, respond this many times before just dropping */
-//    private static final int DROP_OVER_LIMIT = 3;
+    //    private static final int DROP_OVER_LIMIT = 3;
     private static final int DROP_OVER_LIMIT = 2;
 
     /* @since 0.9.54+ */
@@ -81,42 +90,26 @@ class ConnectionManager {
     // https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers
     // RFC 6585
 
-    private static final String LIMIT_HTTP_RESPONSE =
-         "HTTP/1.1 429 Too Many Requests\r\n" +
-         "Content-Type: text/html; charset=iso-8859-1\r\n" +
-         "Retry-After: 600\r\n" +
-         "Cache-Control: no-cache\r\n" +
-         "Connection: close\r\n" +
-         "\r\n" +
-         "<html>\n" +
-         "<head><title>429 Too Many Requests</title></head>\n" +
-         "<body>\n" +
-         "<center><h1>429 Too Many Requests</h1></center>\n" +
-         "<hr>\n" +
-         "</body>\n" +
-         "</html>";
+    private static final String LIMIT_HTTP_RESPONSE = "HTTP/1.1 429 Too Many Requests\r\n" + "Content-Type: text/html; charset=iso-8859-1\r\n" + "Retry-After: 600\r\n" + "Cache-Control: no-cache\r\n" + "Connection: close\r\n" + "\r\n" + "<html>\n" + "<head><title>429 Too Many Requests</title></head>\n" + "<body>\n" + "<center><h1>429 Too Many Requests</h1></center>\n" + "<hr>\n" + "</body>\n" + "</html>";
+
     /**
      *  Manage all conns for this session
      *
      *  @param session the primary session, packets may come in on subsessions also
      */
-    public ConnectionManager(I2PAppContext context,
-                             I2PSession session,
-                             ConnectionOptions defaultOptions,
-                             IncomingConnectionFilter connectionFilter) {
+    public ConnectionManager(I2PAppContext context, I2PSession session, ConnectionOptions defaultOptions, IncomingConnectionFilter connectionFilter) {
         _context = context;
         _session = session;
         _defaultOptions = defaultOptions;
         _connectionFilter = connectionFilter;
         _log = _context.logManager().getLog(ConnectionManager.class);
-        _connectionByInboundId = new ConcurrentHashMap<Long,Connection>(32);
-        _pendingPings = new ConcurrentHashMap<Long,PingRequest>(4);
+        _connectionByInboundId = new ConcurrentHashMap<Long, Connection>(32);
+        _pendingPings = new ConcurrentHashMap<Long, PingRequest>(4);
         _messageHandler = new MessageHandler(_context, this);
         _packetHandler = new PacketHandler(_context, this);
         _schedulerChooser = new SchedulerChooser(_context);
         _conPacketHandler = new ConnectionPacketHandler(_context);
-        _timer = new RetransmissionTimer(_context, "Streaming Timer " +
-                                         session.getMyDestination().calculateHash().toBase64().substring(0, 4));
+        _timer = new RetransmissionTimer(_context, "Streaming Timer " + session.getMyDestination().calculateHash().toBase64().substring(0, 4));
         _connectionHandler = new ConnectionHandler(_context, this, _timer);
         _tcbShare = new TCBShare(_context, _timer);
         // PROTO_ANY is for backward compatibility (pre-0.7.1)
@@ -146,7 +139,7 @@ class ConnectionManager {
         _context.statManager().createRateStat("stream.connectionReceived", "Number of stream connections received", "Stream", RATES);
         _context.statManager().createRateStat("stream.chokeSizeBegin", "Number of outstanding messages when we started to choke", "Stream", RATES);
         _context.statManager().createRateStat("stream.chokeSizeEnd", "Number of outstanding messages when we stopped being choked", "Stream", RATES);
-        _context.statManager().createRateStat("stream.fastRetransmit", "How long a packet has been around for if it has been resent per the fast retransmit timer", "Stream", new long[] { RateConstants.TEN_MINUTES });
+        _context.statManager().createRateStat("stream.fastRetransmit", "How long a packet has been around for if it has been resent per the fast retransmit timer", "Stream", new long[] {RateConstants.TEN_MINUTES});
         // Stats for PacketQueue
         _context.statManager().createRateStat("stream.con.sendMessageSize", "Size of a message sent on a connection", "Stream", RATES);
         _context.statManager().createRateStat("stream.con.sendDuplicateSize", "Size of a message resent on a connection", "Stream", RATES);
@@ -162,8 +155,7 @@ class ConnectionManager {
      */
     Connection getConnectionByOutboundId(long id) {
         for (Connection con : _connectionByInboundId.values()) {
-            if (con.getSendStreamId() == id)
-                    return con;
+            if (con.getSendStreamId() == id) return con;
         }
         return null;
     }
@@ -213,27 +205,21 @@ class ConnectionManager {
      * @since 0.9.3
      */
     public synchronized void updateOptions() {
-        if ((_defaultOptions.getMaxConnsPerMinute() > 0 || _defaultOptions.getMaxTotalConnsPerMinute() > 0) &&
-                _minuteThrottler == null) {
+        if ((_defaultOptions.getMaxConnsPerMinute() > 0 || _defaultOptions.getMaxTotalConnsPerMinute() > 0) && _minuteThrottler == null) {
             _context.statManager().createRateStat("stream.con.throttledMinute", "Dropped for conn limit", "Stream", RATES);
-            _minuteThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerMinute(), _defaultOptions.getMaxTotalConnsPerMinute(),
-                                                    60*1000, _timer);
+            _minuteThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerMinute(), _defaultOptions.getMaxTotalConnsPerMinute(), 60 * 1000, _timer);
         } else if (_minuteThrottler != null) {
             _minuteThrottler.updateLimits(_defaultOptions.getMaxConnsPerMinute(), _defaultOptions.getMaxTotalConnsPerMinute());
         }
-        if ((_defaultOptions.getMaxConnsPerHour() > 0 || _defaultOptions.getMaxTotalConnsPerHour() > 0) &&
-                _hourThrottler == null) {
+        if ((_defaultOptions.getMaxConnsPerHour() > 0 || _defaultOptions.getMaxTotalConnsPerHour() > 0) && _hourThrottler == null) {
             _context.statManager().createRateStat("stream.con.throttledHour", "Dropped for conn limit", "Stream", RATES);
-            _hourThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerHour(), _defaultOptions.getMaxTotalConnsPerHour(),
-                                                  60*60*1000, _timer);
+            _hourThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerHour(), _defaultOptions.getMaxTotalConnsPerHour(), 60 * 60 * 1000, _timer);
         } else if (_hourThrottler != null) {
             _hourThrottler.updateLimits(_defaultOptions.getMaxConnsPerHour(), _defaultOptions.getMaxTotalConnsPerHour());
         }
-        if ((_defaultOptions.getMaxConnsPerDay() > 0 || _defaultOptions.getMaxTotalConnsPerDay() > 0) &&
-                _dayThrottler == null) {
+        if ((_defaultOptions.getMaxConnsPerDay() > 0 || _defaultOptions.getMaxTotalConnsPerDay() > 0) && _dayThrottler == null) {
             _context.statManager().createRateStat("stream.con.throttledDay", "Dropped for conn limit", "Stream", RATES);
-            _dayThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerDay(), _defaultOptions.getMaxTotalConnsPerDay(),
-                                                 24*60*60*1000, _timer);
+            _dayThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerDay(), _defaultOptions.getMaxTotalConnsPerDay(), 24 * 60 * 60 * 1000, _timer);
         } else if (_dayThrottler != null) {
             _dayThrottler.updateLimits(_defaultOptions.getMaxConnsPerDay(), _defaultOptions.getMaxTotalConnsPerDay());
         }
@@ -255,8 +241,7 @@ class ConnectionManager {
     public Connection receiveConnection(Packet synPacket) {
         Destination from = synPacket.getOptionalFrom();
         if (from == null) {
-            if (_log.shouldWarn())
-                _log.warn("Received a SYN packet without FROM: " + synPacket);
+            if (_log.shouldWarn()) _log.warn("Received a SYN packet without FROM: " + synPacket);
             return null;
         }
         ByteArray ba = _cache.acquire();
@@ -277,20 +262,17 @@ class ConnectionManager {
                                 DataHelper.toLong(g, j << 2, 4, nacks[j]);
                             }
                             Hash ghash = new Hash(g);
-                            if (_log.shouldWarn())
-                                _log.warn("Signature passed but hash failed \n* Expected: " + hash.toBase32() + "\n* Received: " + ghash.toBase32());
+                            if (_log.shouldWarn()) _log.warn("Signature passed but hash failed \n* Expected: " + hash.toBase32() + "\n* Received: " + ghash.toBase32());
                         }
                         sigOk = false;
                         break;
                     }
                 }
-                if (sigOk && _log.shouldInfo())
-                    _log.info("Validated SYN NACKS from: " + from.toBase32());
+                if (sigOk && _log.shouldInfo()) _log.info("Validated SYN NACKS from: " + from.toBase32());
             }
         }
         if (!sigOk) {
-            if (_log.shouldWarn())
-                _log.warn("Received UNSIGNED / FORGED SYN packet apparently from " + from.toBase32() + ": " + synPacket);
+            if (_log.shouldWarn()) _log.warn("Received UNSIGNED / FORGED SYN packet apparently from " + from.toBase32() + ": " + synPacket);
             return null;
         }
 
@@ -298,17 +280,14 @@ class ConnectionManager {
         int retryAfter = 0;
 
         if (locked_tooManyStreams()) {
-            if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldWarn())
-                    _log.warn("Refusing connection -> Maximum " + _defaultOptions.getMaxConns() + " concurrent streams exceeded");
+            if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldWarn()) _log.warn("Refusing connection -> Maximum " + _defaultOptions.getMaxConns() + " concurrent streams exceeded");
             reject = true;
             retryAfter = 120;
         } else {
-                // this may not be right if more than one is enabled
+            // this may not be right if more than one is enabled
             Reason why = shouldRejectConnection(synPacket);
             if (why != null) {
-                if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldWarn())
-                        _log.warn("Refusing connection -> " + why +
-                           (synPacket.getOptionalFrom() == null ? "" : "\n* Client: " + synPacket.getOptionalFrom().toBase32()));
+                if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldWarn()) _log.warn("Refusing connection -> " + why + (synPacket.getOptionalFrom() == null ? "" : "\n* Client: " + synPacket.getOptionalFrom().toBase32()));
                 reject = true;
                 retryAfter = why.getSeconds();
             }
@@ -328,28 +307,22 @@ class ConnectionManager {
                 return null;
             }
 
-            if ((_minuteThrottler != null && _minuteThrottler.isOverBy(h, DROP_OVER_LIMIT)) ||
-                (_hourThrottler != null && _hourThrottler.isOverBy(h, DROP_OVER_LIMIT)) ||
-                (_dayThrottler != null && _dayThrottler.isOverBy(h, DROP_OVER_LIMIT))) {
+            if ((_minuteThrottler != null && _minuteThrottler.isOverBy(h, DROP_OVER_LIMIT)) || (_hourThrottler != null && _hourThrottler.isOverBy(h, DROP_OVER_LIMIT)) || (_dayThrottler != null && _dayThrottler.isOverBy(h, DROP_OVER_LIMIT))) {
                 // A signed RST/close packet + ElGamal + session tags is fairly expensive, so
                 // once a limit is significantly exceeded for a particular peer, don't even send it.
                 // This is a tradeoff, because it will keep retransmitting the SYN for a while,
                 // thus more inbound, but let's not spend several KB on the outbound.
-                if (_log.shouldInfo())
-                    _log.info("Dropping limit response to " + from.toBase32());
+                if (_log.shouldInfo()) _log.info("Dropping limit response to " + from.toBase32());
                 return null;
             }
 
-            boolean reset = resp == null || resp.equals("reset") || resp.length() <= 0 ||
-                            synPacket.getLocalPort() == 443;
+            boolean reset = resp == null || resp.equals("reset") || resp.length() <= 0 || synPacket.getLocalPort() == 443;
             boolean http = !reset && "http".equals(resp);
             boolean custom = !(reset || http);
             String sendResponse;
             if (http) {
-                if (retryAfter > 0)
-                    sendResponse = LIMIT_HTTP_RESPONSE.replace("900", Integer.toString(retryAfter));
-                else
-                    sendResponse = LIMIT_HTTP_RESPONSE.replace("Retry-After: 900\r\n", "");
+                if (retryAfter > 0) sendResponse = LIMIT_HTTP_RESPONSE.replace("900", Integer.toString(retryAfter));
+                else sendResponse = LIMIT_HTTP_RESPONSE.replace("Retry-After: 900\r\n", "");
             } else if (custom) {
                 sendResponse = resp.replace("\\r", "\r").replace("\\n", "\n");
             } else {
@@ -373,7 +346,7 @@ class ConnectionManager {
             reply.setLocalPort(synPacket.getLocalPort());
             reply.setRemotePort(synPacket.getRemotePort());
             if (_log.shouldInfo())
-                //_log.info("Over limit, sending " + (sendResponse != null ? "configured response" : "reset") + " to " + from.toBase32());
+                // _log.info("Over limit, sending " + (sendResponse != null ? "configured response" : "reset") + " to " + from.toBase32());
                 _log.info("Over limit, sending " + reply + " to " + from.toBase32());
             // this just sends the packet - no retries or whatnot
             _outboundQueue.enqueue(reply);
@@ -398,31 +371,24 @@ class ConnectionManager {
         }
         int mtu = opts.getMaxMessageSize();
         if (size < mtu) {
-            if (_log.shouldInfo())
-                _log.info("Reducing MTU for Inbound connection to " + size
-                          + " bytes from " + mtu);
+            if (_log.shouldInfo()) _log.info("Reducing MTU for Inbound connection to " + size + " bytes from " + mtu);
             opts.setMaxMessageSize(size);
             opts.setMaxInitialMessageSize(size);
         } else if (size > opts.getMaxInitialMessageSize()) {
-            if (size > mtu)
-                size = mtu;
+            if (size > mtu) size = mtu;
             if (size != mtu) {
                 opts.setMaxMessageSize(size);
-                if (_log.shouldInfo())
-                    _log.info("Increasing MTU for Inbound connection to " + size + " bytes from " + mtu);
+                if (_log.shouldInfo()) _log.info("Increasing MTU for Inbound connection to " + size + " bytes from " + mtu);
             }
             opts.setMaxInitialMessageSize(size);
         }
 
-        Connection con = new Connection(_context, this, synPacket.getSession(), _schedulerChooser,
-                                        _timer, _outboundQueue, _conPacketHandler, opts, true);
+        Connection con = new Connection(_context, this, synPacket.getSession(), _schedulerChooser, _timer, _outboundQueue, _conPacketHandler, opts, true);
         _tcbShare.updateOptsFromShare(con);
         assignReceiveStreamId(con);
 
         // finally, we know enough that we can log the packet with the conn filled in
-        if (I2PSocketManagerFull.pcapWriter != null &&
-            _context.getBooleanProperty(I2PSocketManagerFull.PROP_PCAP))
-            synPacket.logTCPDump(con);
+        if (I2PSocketManagerFull.pcapWriter != null && _context.getBooleanProperty(I2PSocketManagerFull.PROP_PCAP)) synPacket.logTCPDump(con);
         try {
             // This validates the packet, and sets the con's SendStreamID and RemotePeer
             con.getPacketHandler().receivePacket(synPacket, con);
@@ -446,21 +412,18 @@ class ConnectionManager {
      */
     public boolean receivePing(Connection con, Packet ping) {
         Destination dest = ping.getOptionalFrom();
-        if (dest == null)
-            return false;
+        if (dest == null) return false;
         if (con == null) {
             // Use the same throttling as for connections
             Reason why = shouldRejectConnection(ping);
             if (why != null) {
-                if ((!_defaultOptions.getDisableRejectLogging()) || _log.shouldWarn())
-                    _log.logAlways(Log.WARN, "Dropping ping: " + why + "\n* From: " + dest.toBase32());
+                if ((!_defaultOptions.getDisableRejectLogging()) || _log.shouldWarn()) _log.logAlways(Log.WARN, "Dropping ping: " + why + "\n* From: " + dest.toBase32());
                 return false;
             }
         } else {
             // in-connection ping to a 3rd party ???
             if (!dest.equals(con.getRemotePeer())) {
-                _log.logAlways(Log.WARN, "Dropping ping to 3rd party from: " + con.getRemotePeer().toBase32() +
-                                         "\n* Target: " + dest.toBase32());
+                _log.logAlways(Log.WARN, "Dropping ping to 3rd party from: " + con.getRemotePeer().toBase32() + "\n* Target: " + dest.toBase32());
                 return false;
             }
         }
@@ -472,8 +435,7 @@ class ConnectionManager {
         // as of 0.9.18, return the payload
         ByteArray payload = ping.getPayload();
         if (payload != null) {
-            if (payload.getValid() > MAX_PONG_PAYLOAD)
-                payload.setValid(MAX_PONG_PAYLOAD);
+            if (payload.getValid() > MAX_PONG_PAYLOAD) payload.setValid(MAX_PONG_PAYLOAD);
             pong.setPayload(payload);
         }
 
@@ -481,12 +443,13 @@ class ConnectionManager {
         int randomDelay = _context.random().nextInt(pongDelay);
         boolean enableDelay = _context.getProperty(PROP_ENABLE_PONG_DELAY, DEFAULT_ENABLE_PONG_DELAY);
         if (enableDelay) {
-            try { Thread.sleep(randomDelay); } catch (InterruptedException ie) {}
-            if (_log.shouldInfo())
-                _log.info("Sending pong to: " + dest.toBase32() + " with random delay of " + randomDelay + "ms");
+            try {
+                Thread.sleep(randomDelay);
+            } catch (InterruptedException ie) {
+            }
+            if (_log.shouldInfo()) _log.info("Sending pong to: " + dest.toBase32() + " with random delay of " + randomDelay + "ms");
         } else {
-            if (_log.shouldInfo())
-                _log.info("Sending pong to: " + dest.toBase32());
+            if (_log.shouldInfo()) _log.info("Sending pong to: " + dest.toBase32());
         }
         _outboundQueue.enqueue(pong);
         return true;
@@ -503,11 +466,9 @@ class ConnectionManager {
         synchronized (_recentlyClosed) {
             Long rcvID;
             do {
-                receiveId = _context.random().nextLong(Packet.MAX_STREAM_ID-1)+1;
+                receiveId = _context.random().nextLong(Packet.MAX_STREAM_ID - 1) + 1;
                 rcvID = Long.valueOf(receiveId);
-            } while (_recentlyClosed.containsKey(rcvID) ||
-                     _pendingPings.containsKey(rcvID) ||
-                     _connectionByInboundId.putIfAbsent(rcvID, con) != null);
+            } while (_recentlyClosed.containsKey(rcvID) || _pendingPings.containsKey(rcvID) || _connectionByInboundId.putIfAbsent(rcvID, con) != null);
         }
         con.setReceiveStreamId(receiveId);
     }
@@ -523,11 +484,9 @@ class ConnectionManager {
         synchronized (_recentlyClosed) {
             Long rcvID;
             do {
-                receiveId = _context.random().nextLong(Packet.MAX_STREAM_ID-1)+1;
+                receiveId = _context.random().nextLong(Packet.MAX_STREAM_ID - 1) + 1;
                 rcvID = Long.valueOf(receiveId);
-            } while (_recentlyClosed.containsKey(rcvID) ||
-                     _connectionByInboundId.containsKey(rcvID) ||
-                     _pendingPings.putIfAbsent(rcvID, req) != null);
+            } while (_recentlyClosed.containsKey(rcvID) || _connectionByInboundId.containsKey(rcvID) || _pendingPings.putIfAbsent(rcvID, req) != null);
         }
         return receiveId;
     }
@@ -543,16 +502,15 @@ class ConnectionManager {
         synchronized (_recentlyClosed) {
             Long rcvID;
             do {
-                receiveId = _context.random().nextLong(Packet.MAX_STREAM_ID-1)+1;
+                receiveId = _context.random().nextLong(Packet.MAX_STREAM_ID - 1) + 1;
                 rcvID = Long.valueOf(receiveId);
-            } while (_recentlyClosed.containsKey(rcvID) ||
-                     _connectionByInboundId.containsKey(rcvID));
+            } while (_recentlyClosed.containsKey(rcvID) || _connectionByInboundId.containsKey(rcvID));
             _recentlyClosed.put(rcvID, DUMMY);
         }
         return receiveId;
     }
 
-    private static final long DEFAULT_STREAM_DELAY_MAX = 10*1000;
+    private static final long DEFAULT_STREAM_DELAY_MAX = 10 * 1000;
 
     /**
      * Build a new connection to the given peer.  This blocks if there is no
@@ -564,13 +522,18 @@ class ConnectionManager {
      * @return new connection, or null if we have exceeded our limit
      */
     public Connection connect(Destination peer, ConnectionOptions opts, I2PSession session) {
-        if (peer == null) {throw new NullPointerException();}
+        if (peer == null) {
+            throw new NullPointerException();
+        }
         Connection con = null;
         long expiration = _context.clock().now();
         long tmout = opts.getConnectTimeout();
         int max = _defaultOptions.getMaxConns();
-        if (tmout <= 0) {expiration += DEFAULT_STREAM_DELAY_MAX;}
-        else {expiration += tmout;}
+        if (tmout <= 0) {
+            expiration += DEFAULT_STREAM_DELAY_MAX;
+        } else {
+            expiration += tmout;
+        }
         _numWaiting.incrementAndGet();
         while (true) {
             long remaining = expiration - _context.clock().now();
@@ -583,8 +546,7 @@ class ConnectionManager {
             if (locked_tooManyStreams()) {
                 // allow a full buffer of pending/waiting streams
                 if (_numWaiting.get() > max) {
-                    _log.logAlways(Log.WARN, "Refusing connection -> Maximum " + max + " concurrent streams exceeded, with " +
-                                             _numWaiting + " queued");
+                    _log.logAlways(Log.WARN, "Refusing connection -> Maximum " + max + " concurrent streams exceeded, with " + _numWaiting + " queued");
                     _numWaiting.decrementAndGet();
                     return null;
                 }
@@ -592,10 +554,12 @@ class ConnectionManager {
                 // no remaining streams, let's wait a bit
                 // got rid of the lock, so just sleep (fixme?)
                 // try { _connectionLock.wait(remaining); } catch (InterruptedException ie) {}
-                try { Thread.sleep(remaining/4); } catch (InterruptedException ie) {}
+                try {
+                    Thread.sleep(remaining / 4);
+                } catch (InterruptedException ie) {
+                }
             } else {
-                con = new Connection(_context, this, session, _schedulerChooser, _timer,
-                                     _outboundQueue, _conPacketHandler, opts, false);
+                con = new Connection(_context, this, session, _schedulerChooser, _timer, _outboundQueue, _conPacketHandler, opts, false);
                 con.setRemotePeer(peer);
                 assignReceiveStreamId(con);
                 break; // stop looping as a psuedo-wait
@@ -605,18 +569,15 @@ class ConnectionManager {
         // ok we're in...
         con.eventOccurred();
 
-        if (_log.shouldDebug())
-            _log.debug("Connect() conDelay = " + opts.getConnectDelay());
+        if (_log.shouldDebug()) _log.debug("Connect() conDelay = " + opts.getConnectDelay());
         if (opts.getConnectDelay() <= 0) {
             con.waitForConnect();
         }
         // safe decrement
-        for (;;) {
+        for (; ; ) {
             int n = _numWaiting.get();
-            if (n <= 0)
-                break;
-            if (_numWaiting.compareAndSet(n, n - 1))
-                break;
+            if (n <= 0) break;
+            if (_numWaiting.compareAndSet(n, n - 1)) break;
         }
 
         _context.statManager().addRateData("stream.connectionCreated", 1);
@@ -638,17 +599,14 @@ class ConnectionManager {
         int maxInactive = size - max;
         for (Connection con : _connectionByInboundId.values()) {
             // ticket #1039
-            if (con.getIsConnected() &&
-                !(con.getCloseSentOn() > 0 && con.getCloseReceivedOn() > 0)) {
-                if (++active >= max)
-                    return true;
+            if (con.getIsConnected() && !(con.getCloseSentOn() > 0 && con.getCloseReceivedOn() > 0)) {
+                if (++active >= max) return true;
             } else {
-                if (++inactive > maxInactive)
-                    return false;
+                if (++inactive > maxInactive) return false;
             }
         }
 
-        //if ((_connectionByInboundId.size() > 100) && (_log.shouldInfo()))
+        // if ((_connectionByInboundId.size() > 100) && (_log.shouldInfo()))
         //    _log.info("More than 100 connections!  " + active
         //              + " total: " + _connectionByInboundId.size());
 
@@ -663,17 +621,21 @@ class ConnectionManager {
         private final int seconds;
 
         public Reason(String text, int secs) {
-            txt = text; seconds = secs;
+            txt = text;
+            seconds = secs;
         }
 
         @Override
-        public String toString() { return txt; }
+        public String toString() {
+            return txt;
+        }
 
-        public int getSeconds() { return seconds; }
+        public int getSeconds() {
+            return seconds;
+        }
     }
 
     private static final int MAX_TIME = 9999999;
-
 
     /**
      *  Reason time is in seconds for Retry-After header; MAX_TIME for drop, 0 if unknown
@@ -683,8 +645,7 @@ class ConnectionManager {
         // unfortunately we don't have access to the router client manager here,
         // so we can't whitelist local access
         Destination from = syn.getOptionalFrom();
-        if (from == null)
-            return new Reason("null", MAX_TIME);
+        if (from == null) return new Reason("null", MAX_TIME);
         Hash h = from.calculateHash();
 
         // As of 0.9.9, run the blacklist checks BEFORE the port counters,
@@ -702,10 +663,8 @@ class ConnectionManager {
                     while (tok.hasMoreTokens()) {
                         String hashstr = tok.nextToken();
                         Hash hh = ConvertToHash.getHash(hashstr);
-                        if (hh != null)
-                            newSet.add(hh);
-                        else
-                            _log.error("Bad blacklist entry: " + hashstr);
+                        if (hh != null) newSet.add(hh);
+                        else _log.error("Bad blacklist entry: " + hashstr);
                     }
                     _globalBlacklist.addAll(newSet);
                     _globalBlacklist.retainAll(newSet);
@@ -716,54 +675,28 @@ class ConnectionManager {
                 }
             }
         }
-        if (hashes.length() > 0 && _globalBlacklist.contains(h))
-            return new Reason("Blacklisted globally", MAX_TIME);
+        if (hashes.length() > 0 && _globalBlacklist.contains(h)) return new Reason("Blacklisted globally", MAX_TIME);
 
-        if (_defaultOptions.isAccessListEnabled() &&
-            !_defaultOptions.getAccessList().contains(h))
-            return new Reason("not whitelisted", MAX_TIME);
-        if (_defaultOptions.isBlacklistEnabled() &&
-            _defaultOptions.getBlacklist().contains(h))
-            return new Reason("blacklisted", MAX_TIME);
+        if (_defaultOptions.isAccessListEnabled() && !_defaultOptions.getAccessList().contains(h)) return new Reason("not whitelisted", MAX_TIME);
+        if (_defaultOptions.isBlacklistEnabled() && _defaultOptions.getBlacklist().contains(h)) return new Reason("blacklisted", MAX_TIME);
 
         if (_dayThrottler != null && _dayThrottler.shouldThrottle(h)) {
             _context.statManager().addRateData("stream.con.throttledDay", 1);
-            if (_defaultOptions.getMaxConnsPerDay() <= 0)
-                return new Reason("Total daily limit of " + _defaultOptions.getMaxTotalConnsPerDay() +
-                        " connections reached", 86400);
-            else if (_defaultOptions.getMaxTotalConnsPerDay() <= 0)
-                return new Reason("Per-peer daily limit of " + _defaultOptions.getMaxConnsPerDay() +
-                        " connections reached", 86400);
-            else
-                return new Reason("Per-peer limit of " + _defaultOptions.getMaxConnsPerDay() +
-                        " or total daily limit of " + _defaultOptions.getMaxTotalConnsPerDay() +
-                        " connections reached", 86400);
+            if (_defaultOptions.getMaxConnsPerDay() <= 0) return new Reason("Total daily limit of " + _defaultOptions.getMaxTotalConnsPerDay() + " connections reached", 86400);
+            else if (_defaultOptions.getMaxTotalConnsPerDay() <= 0) return new Reason("Per-peer daily limit of " + _defaultOptions.getMaxConnsPerDay() + " connections reached", 86400);
+            else return new Reason("Per-peer limit of " + _defaultOptions.getMaxConnsPerDay() + " or total daily limit of " + _defaultOptions.getMaxTotalConnsPerDay() + " connections reached", 86400);
         }
         if (_hourThrottler != null && _hourThrottler.shouldThrottle(h)) {
             _context.statManager().addRateData("stream.con.throttledHour", 1);
-            if (_defaultOptions.getMaxConnsPerHour() <= 0)
-                return new Reason("total hourly limit of " + _defaultOptions.getMaxTotalConnsPerHour() +
-                        " reached", 3600);
-            else if (_defaultOptions.getMaxTotalConnsPerHour() <= 0)
-                return new Reason("Per-peer hourly limit of " + _defaultOptions.getMaxConnsPerHour() +
-                        " connections", 3600);
-            else
-                return new Reason("Per-peer hourly limit of " + _defaultOptions.getMaxConnsPerHour() +
-                        " or total hourly limit of " + _defaultOptions.getMaxTotalConnsPerHour() +
-                        " connections reached", 3600);
+            if (_defaultOptions.getMaxConnsPerHour() <= 0) return new Reason("total hourly limit of " + _defaultOptions.getMaxTotalConnsPerHour() + " reached", 3600);
+            else if (_defaultOptions.getMaxTotalConnsPerHour() <= 0) return new Reason("Per-peer hourly limit of " + _defaultOptions.getMaxConnsPerHour() + " connections", 3600);
+            else return new Reason("Per-peer hourly limit of " + _defaultOptions.getMaxConnsPerHour() + " or total hourly limit of " + _defaultOptions.getMaxTotalConnsPerHour() + " connections reached", 3600);
         }
         if (_minuteThrottler != null && _minuteThrottler.shouldThrottle(h)) {
             _context.statManager().addRateData("stream.con.throttledMinute", 1);
-            if (_defaultOptions.getMaxConnsPerMinute() <= 0)
-                return new Reason("Total limit of " + _defaultOptions.getMaxTotalConnsPerMinute() +
-                        " connections per minute reached", 60);
-            else if (_defaultOptions.getMaxTotalConnsPerMinute() <= 0)
-                return new Reason("Per-peer limit of " + _defaultOptions.getMaxConnsPerMinute() +
-                        " connections per minute reached", 60);
-            else
-                return new Reason("Per-peer limit of " + _defaultOptions.getMaxConnsPerMinute() +
-                        " connections per minute or total limit of " + _defaultOptions.getMaxTotalConnsPerMinute() +
-                        " connections per minute reached", 60);
+            if (_defaultOptions.getMaxConnsPerMinute() <= 0) return new Reason("Total limit of " + _defaultOptions.getMaxTotalConnsPerMinute() + " connections per minute reached", 60);
+            else if (_defaultOptions.getMaxTotalConnsPerMinute() <= 0) return new Reason("Per-peer limit of " + _defaultOptions.getMaxConnsPerMinute() + " connections per minute reached", 60);
+            else return new Reason("Per-peer limit of " + _defaultOptions.getMaxConnsPerMinute() + " connections per minute or total limit of " + _defaultOptions.getMaxTotalConnsPerMinute() + " connections per minute reached", 60);
         }
 
         if (!_connectionFilter.allowDestination(from)) {
@@ -773,23 +706,43 @@ class ConnectionManager {
         return null;
     }
 
+    public MessageHandler getMessageHandler() {
+        return _messageHandler;
+    }
 
-    public MessageHandler getMessageHandler() { return _messageHandler; }
-    public PacketHandler getPacketHandler() { return _packetHandler; }
+    public PacketHandler getPacketHandler() {
+        return _packetHandler;
+    }
 
     /**
      * This is the primary session only
      */
-    public I2PSession getSession() { return _session; }
+    public I2PSession getSession() {
+        return _session;
+    }
 
-    public void updateOptsFromShare(Connection con) { _tcbShare.updateOptsFromShare(con); }
-    public void updateShareOpts(Connection con) { _tcbShare.updateShareOpts(con); }
+    public void updateOptsFromShare(Connection con) {
+        _tcbShare.updateOptsFromShare(con);
+    }
+
+    public void updateShareOpts(Connection con) {
+        _tcbShare.updateShareOpts(con);
+    }
+
     // Both of these methods are
     // exporting non-public type through public API, this is a potential bug.
-    public ConnectionHandler getConnectionHandler() { return _connectionHandler; }
-    public PacketQueue getPacketQueue() { return _outboundQueue; }
+    public ConnectionHandler getConnectionHandler() {
+        return _connectionHandler;
+    }
+
+    public PacketQueue getPacketQueue() {
+        return _outboundQueue;
+    }
+
     /** do we respond to pings that aren't on an existing connection? */
-    public boolean answerPings() { return _defaultOptions.getAnswerPings(); }
+    public boolean answerPings() {
+        return _defaultOptions.getAnswerPings();
+    }
 
     /**
      * Something b0rked hard, so kill all of our connections without mercy.
@@ -800,9 +753,9 @@ class ConnectionManager {
      * CAN continue to use the manager.
      */
     public void disconnectAllHard() {
-        //if (_log.shouldInfo())
+        // if (_log.shouldInfo())
         //    _log.info("ConnMan hard disconnect", new Exception("I did it"));
-        for (Iterator<Connection> iter = _connectionByInboundId.values().iterator(); iter.hasNext();) {
+        for (Iterator<Connection> iter = _connectionByInboundId.values().iterator(); iter.hasNext(); ) {
             Connection con = iter.next();
             con.disconnect(false, false);
             iter.remove();
@@ -828,7 +781,7 @@ class ConnectionManager {
      * @since 0.9.7
      */
     public void shutdown() {
-        //if (_log.shouldInfo())
+        // if (_log.shouldInfo())
         //    _log.info("ConnMan shutdown", new Exception("I did it"));
         disconnectAllHard();
         _tcbShare.stop();
@@ -851,19 +804,15 @@ class ConnectionManager {
 
         Object o = _connectionByInboundId.remove(Long.valueOf(con.getReceiveStreamId()));
         boolean removed = (o == con);
-        if (_log.shouldDebug())
-                _log.debug("Connection removed? " + removed + " Remaining: "
-                           + _connectionByInboundId.size() + "\n " + con);
-        if (!removed && _log.shouldDebug())
-                _log.debug("Failed to remove " + con + "\n" + _connectionByInboundId.values());
+        if (_log.shouldDebug()) _log.debug("Connection removed? " + removed + " Remaining: " + _connectionByInboundId.size() + "\n " + con);
+        if (!removed && _log.shouldDebug()) _log.debug("Failed to remove " + con + "\n" + _connectionByInboundId.values());
 
         if (removed) {
-            _context.statManager().addRateData("stream.con.lifetimeMessagesSent", 1+con.getLastSendId(), con.getLifetime());
+            _context.statManager().addRateData("stream.con.lifetimeMessagesSent", 1 + con.getLastSendId(), con.getLifetime());
             MessageInputStream stream = con.getInputStream();
             long rcvd = 1 + stream.getHighestBlockId();
             long nacks[] = stream.getNacks();
-            if (nacks != null)
-                    rcvd -= nacks.length;
+            if (nacks != null) rcvd -= nacks.length;
             _context.statManager().addRateData("stream.con.lifetimeMessagesReceived", rcvd, con.getLifetime());
             _context.statManager().addRateData("stream.con.lifetimeBytesSent", con.getLifetimeBytesSent(), con.getLifetime());
             _context.statManager().addRateData("stream.con.lifetimeBytesReceived", con.getLifetimeBytesReceived(), con.getLifetime());
@@ -871,8 +820,7 @@ class ConnectionManager {
             _context.statManager().addRateData("stream.con.lifetimeDupMessagesReceived", con.getLifetimeDupMessagesReceived(), con.getLifetime());
             _context.statManager().addRateData("stream.con.lifetimeRTT", con.getOptions().getRTT(), con.getLifetime());
             _context.statManager().addRateData("stream.con.lifetimeSendWindowSize", con.getOptions().getWindowSize(), con.getLifetime());
-            if (I2PSocketManagerFull.pcapWriter != null)
-                I2PSocketManagerFull.pcapWriter.flush();
+            if (I2PSocketManagerFull.pcapWriter != null) I2PSocketManagerFull.pcapWriter.flush();
         }
     }
 
@@ -919,23 +867,18 @@ class ConnectionManager {
      *  @return true if blocking and pong received
      *  @since 0.9.12 added port args
      */
-    public boolean ping(Destination peer, int fromPort, int toPort, long timeoutMs,
-                        boolean blocking, PingNotifier notifier) {
+    public boolean ping(Destination peer, int fromPort, int toPort, long timeoutMs, boolean blocking, PingNotifier notifier) {
         PingRequest req = new PingRequest(notifier);
         long id = assignPingId(req);
         PacketLocal packet = new PacketLocal(_context, peer, _session);
         packet.setSendStreamId(id);
-        packet.setFlag(Packet.FLAG_ECHO |
-                       Packet.FLAG_NO_ACK |
-                       Packet.FLAG_SIGNATURE_INCLUDED);
+        packet.setFlag(Packet.FLAG_ECHO | Packet.FLAG_NO_ACK | Packet.FLAG_SIGNATURE_INCLUDED);
         packet.setOptionalFrom();
         packet.setLocalPort(fromPort);
         packet.setRemotePort(toPort);
-        if (timeoutMs > MAX_PING_TIMEOUT)
-            timeoutMs = MAX_PING_TIMEOUT;
+        if (timeoutMs > MAX_PING_TIMEOUT) timeoutMs = MAX_PING_TIMEOUT;
         if (_log.shouldInfo()) {
-            _log.info(String.format("About to ping %s port %d from port %d timeout=%d blocking=%b",
-                      peer.calculateHash().toString(), toPort, fromPort, timeoutMs, blocking));
+            _log.info(String.format("About to ping %s port %d from port %d timeout=%d blocking=%b", peer.calculateHash().toString(), toPort, fromPort, timeoutMs, blocking));
         }
 
         _outboundQueue.enqueue(packet);
@@ -943,8 +886,10 @@ class ConnectionManager {
 
         if (blocking) {
             synchronized (req) {
-                if (!req.pongReceived())
-                    try { req.wait(timeoutMs); } catch (InterruptedException ie) {}
+                if (!req.pongReceived()) try {
+                        req.wait(timeoutMs);
+                    } catch (InterruptedException ie) {
+                    }
             }
             _pendingPings.remove(id);
         } else {
@@ -965,41 +910,36 @@ class ConnectionManager {
      *  @return the payload received in the pong, zero-length if none, null on failure or timeout
      *  @since 0.9.18
      */
-    public byte[] ping(Destination peer, int fromPort, int toPort, long timeoutMs,
-                        byte[] payload) {
+    public byte[] ping(Destination peer, int fromPort, int toPort, long timeoutMs, byte[] payload) {
         PingRequest req = new PingRequest(null);
         long id = assignPingId(req);
         PacketLocal packet = new PacketLocal(_context, peer, _session);
         packet.setSendStreamId(id);
-        packet.setFlag(Packet.FLAG_ECHO |
-                       Packet.FLAG_NO_ACK |
-                       Packet.FLAG_SIGNATURE_INCLUDED);
+        packet.setFlag(Packet.FLAG_ECHO | Packet.FLAG_NO_ACK | Packet.FLAG_SIGNATURE_INCLUDED);
         packet.setOptionalFrom();
         packet.setLocalPort(fromPort);
         packet.setRemotePort(toPort);
         packet.setPayload(new ByteArray(payload));
-        if (timeoutMs > MAX_PING_TIMEOUT)
-            timeoutMs = MAX_PING_TIMEOUT;
+        if (timeoutMs > MAX_PING_TIMEOUT) timeoutMs = MAX_PING_TIMEOUT;
         if (_log.shouldInfo()) {
-            _log.info(String.format("About to ping %s port %d from port %d timeout=%d payload=%d",
-                      peer.calculateHash().toString(), toPort, fromPort, timeoutMs, payload.length));
+            _log.info(String.format("About to ping %s port %d from port %d timeout=%d payload=%d", peer.calculateHash().toString(), toPort, fromPort, timeoutMs, payload.length));
         }
 
         _outboundQueue.enqueue(packet);
         packet.releasePayload();
 
         synchronized (req) {
-            if (!req.pongReceived())
-                try { req.wait(timeoutMs); } catch (InterruptedException ie) {}
+            if (!req.pongReceived()) try {
+                    req.wait(timeoutMs);
+                } catch (InterruptedException ie) {
+                }
         }
         _pendingPings.remove(id);
 
         boolean ok = req.pongReceived();
-        if (!ok)
-            return new byte[0];
+        if (!ok) return new byte[0];
         ByteArray ba = req.getPayload();
-        if (ba == null)
-            return new byte[0];
+        if (ba == null) return new byte[0];
         byte[] rv = new byte[ba.getValid()];
         System.arraycopy(ba, ba.getOffset(), rv, 0, ba.getValid());
         return rv;
@@ -1030,10 +970,8 @@ class ConnectionManager {
         public void timeReached() {
             PingRequest pr = _pendingPings.remove(_id);
             if (pr != null) {
-                if (_notifier != null)
-                    _notifier.pingComplete(false);
-                if (_log.shouldInfo())
-                    _log.info("Ping failed");
+                if (_notifier != null) _notifier.pingComplete(false);
+                if (_log.shouldInfo()) _log.info("Ping failed");
             }
         }
     }
@@ -1053,24 +991,27 @@ class ConnectionManager {
          */
         public void pong(ByteArray payload) {
             // static, no log
-            //_log.debug("Ping successful");
-            //_context.sessionKeyManager().tagsDelivered(_peer.getPublicKey(), _packet.getKeyUsed(), _packet.getTagsSent());
+            // _log.debug("Ping successful");
+            // _context.sessionKeyManager().tagsDelivered(_peer.getPublicKey(), _packet.getKeyUsed(), _packet.getTagsSent());
             synchronized (this) {
                 _ponged = true;
                 _payload = payload;
                 notifyAll();
             }
-            if (_notifier != null)
-                _notifier.pingComplete(true);
+            if (_notifier != null) _notifier.pingComplete(true);
         }
 
-        public synchronized boolean pongReceived() { return _ponged; }
+        public synchronized boolean pongReceived() {
+            return _ponged;
+        }
 
         /**
          *  @return null if no payload or no pong received
          *  @since 0.9.18
          */
-        public synchronized ByteArray getPayload() { return _payload; }
+        public synchronized ByteArray getPayload() {
+            return _payload;
+        }
     }
 
     /**
@@ -1078,8 +1019,7 @@ class ConnectionManager {
      */
     void receivePong(long pingId, ByteArray payload) {
         PingRequest req = _pendingPings.remove(Long.valueOf(pingId));
-        if (req != null)
-            req.pong(payload);
+        if (req != null) req.pong(payload);
     }
 
     /**

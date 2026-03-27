@@ -28,8 +28,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package net.metanotion.io.data;
 
-import java.io.UnsupportedEncodingException;
 import net.metanotion.io.Serializer;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * String serializer using UTF-8 encoding.
@@ -49,12 +50,16 @@ public class UTF8StringBytes implements Serializer<String> {
     public byte[] getBytes(String o) {
         try {
             return o.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException uee) { throw new Error("Unsupported Encoding"); }
+        } catch (UnsupportedEncodingException uee) {
+            throw new Error("Unsupported Encoding");
+        }
     }
 
     public String construct(byte[] b) {
         try {
             return new String(b, "UTF-8");
-        } catch (UnsupportedEncodingException uee) { throw new Error("Unsupported Encoding"); }
+        } catch (UnsupportedEncodingException uee) {
+            throw new Error("Unsupported Encoding");
+        }
     }
 }

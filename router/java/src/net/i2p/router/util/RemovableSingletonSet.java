@@ -25,8 +25,7 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
     private E _elem;
 
     public RemovableSingletonSet(E element) {
-        if (element == null)
-            throw new NullPointerException();
+        if (element == null) throw new NullPointerException();
         _elem = element;
     }
 
@@ -48,8 +47,7 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
     @Override
     public boolean remove(Object o) {
         boolean rv = o.equals(_elem);
-        if (rv)
-            _elem = null;
+        if (rv) _elem = null;
         return rv;
     }
 
@@ -73,16 +71,14 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
 
         @Override
         public E next() {
-            if (!hasNext())
-                throw new NoSuchElementException();
+            if (!hasNext()) throw new NoSuchElementException();
             done = true;
             return _elem;
         }
 
         @Override
         public void remove() {
-            if (_elem == null || !done)
-                throw new IllegalStateException();
+            if (_elem == null || !done) throw new IllegalStateException();
             _elem = null;
         }
     }

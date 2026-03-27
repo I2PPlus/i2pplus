@@ -6,7 +6,8 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.util.SystemVersion;
-//import net.i2p.util.Log;
+
+// import net.i2p.util.Log;
 
 /**
  * Performs targeted followup lookups for RouterInfo entries from search replies.
@@ -25,19 +26,19 @@ import net.i2p.util.SystemVersion;
  * to prevent resource exhaustion during high-volume search responses.
  */
 class SingleLookupJob extends JobImpl {
-    //private final Log _log;
+    // private final Log _log;
     private final DatabaseSearchReplyMessage _dsrm;
 
     /**
      *  I2NP spec allows 255, max actually sent (in ../HDLMJ) is 3,
      *  so just to prevent trouble, we don't want to queue 255 jobs at once
      */
-//    public static final int MAX_TO_FOLLOW = 8;
+    //    public static final int MAX_TO_FOLLOW = 8;
     public static final int MAX_TO_FOLLOW = SystemVersion.isSlow() || SystemVersion.getCPULoadAvg() > 90 ? 6 : 12;
 
     public SingleLookupJob(RouterContext ctx, DatabaseSearchReplyMessage dsrm) {
         super(ctx);
-        //_log = ctx.logManager().getLog(getClass());
+        // _log = ctx.logManager().getLog(getClass());
         _dsrm = dsrm;
     }
 
@@ -47,19 +48,20 @@ class SingleLookupJob extends JobImpl {
         int limit = Math.min(_dsrm.getNumReplies(), MAX_TO_FOLLOW);
         for (int i = 0; i < limit; i++) {
             Hash peer = _dsrm.getReply(i);
-            if (peer.equals(getContext().routerHash())) // us
-                continue;
-            if (peer.equals(from)) // unusual?
-                continue;
+            // us
+            if (peer.equals(getContext().routerHash())) continue;
+            // unusual?
+            if (peer.equals(from)) continue;
             RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(peer);
-            if (ri == null)
-                getContext().jobQueue().addJob(new SingleSearchJob(getContext(), peer, from));
-            else if (ri.getPublished() < getContext().clock().now() - 60*60*1000 ||
-                     !FloodfillNetworkDatabaseFacade.isFloodfill(ri))
+            if (ri == null) getContext().jobQueue().addJob(new SingleSearchJob(getContext(), peer, from));
+            else if (ri.getPublished() < getContext().clock().now() - 60 * 60 * 1000
+                    || !FloodfillNetworkDatabaseFacade.isFloodfill(ri))
                 getContext().jobQueue().addJob(new SingleSearchJob(getContext(), peer, peer));
         }
     }
 
     @Override
-    public String getName() { return "Process DbStoreReplyMsg"; }
+    public String getName() {
+        return "Process DbStoreReplyMsg";
+    }
 }

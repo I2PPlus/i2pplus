@@ -1,11 +1,12 @@
 package net.i2p.client.streaming;
 
+import net.i2p.data.Destination;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.SelectableChannel;
-import net.i2p.data.Destination;
 
 /**
  *  Streaming socket returned by {@link I2PSocketManager#connect(Destination)}.
@@ -68,6 +69,7 @@ public interface I2PSocket extends Closeable {
      * @return socket's configuration
      */
     public I2PSocketOptions getOptions();
+
     /**
      * Configure the socket
      * @param options I2PSocketOptions to set

@@ -1,4 +1,5 @@
 package net.i2p.router.client;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -35,8 +36,7 @@ class MessageReceivedJob extends JobImpl {
      *  @param toDest non-null, required to pick session
      *  @param fromDest ignored, generally null
      */
-    public MessageReceivedJob(RouterContext ctx, ClientConnectionRunner runner, Destination toDest,
-                              Destination fromDest, Payload payload, boolean sendDirect) {
+    public MessageReceivedJob(RouterContext ctx, ClientConnectionRunner runner, Destination toDest, Destination fromDest, Payload payload, boolean sendDirect) {
         super(ctx);
         _log = ctx.logManager().getLog(MessageReceivedJob.class);
         _runner = runner;
@@ -46,7 +46,9 @@ class MessageReceivedJob extends JobImpl {
     }
 
     @Override
-    public String getName() { return "Deliver New Message"; }
+    public String getName() {
+        return "Deliver New Message";
+    }
 
     @Override
     public void runJob() {
@@ -59,8 +61,7 @@ class MessageReceivedJob extends JobImpl {
      *  @since 0.9.29
      */
     public boolean receiveMessage() {
-        if (_runner.isDead())
-            return false;
+        if (_runner.isDead()) return false;
         MessageId id = null;
         try {
             long nextID = _runner.getNextMessageId();
@@ -74,12 +75,9 @@ class MessageReceivedJob extends JobImpl {
             return true;
         } catch (I2CPMessageException ime) {
             String msg = "Error sending data to client " + _runner.getDestHash().toBase32();
-            if (_log.shouldWarn())
-                _log.warn(msg, ime);
-            else
-                _log.logAlways(Log.WARN, msg);
-            if (id != null && !_sendDirect)
-                _runner.removePayload(id);
+            if (_log.shouldWarn()) _log.warn(msg, ime);
+            else _log.logAlways(Log.WARN, msg);
+            if (id != null && !_sendDirect) _runner.removePayload(id);
             return false;
         }
     }
@@ -88,15 +86,14 @@ class MessageReceivedJob extends JobImpl {
      * Deliver notification to the client that the given message is available.
      */
     private void messageAvailable(MessageId id, long size) throws I2CPMessageException {
-        //if (_log.shouldDebug())
+        // if (_log.shouldDebug())
         //    _log.debug("Sending message available: " + id + " to sessionId " + _runner.getSessionId()
         //               + " (with nonce=1)", new Exception("available"));
         MessageStatusMessage msg = new MessageStatusMessage();
         msg.setMessageId(id.getMessageId());
         SessionId sid = _runner.getSessionId(_toDest.calculateHash());
         if (sid == null) {
-            if (_log.shouldWarn())
-                _log.warn("No session for " + _toDest.toBase32());
+            if (_log.shouldWarn()) _log.warn("No session for " + _toDest.toBase32());
             return;
         }
         msg.setSessionId(sid.getSessionId());
@@ -114,8 +111,7 @@ class MessageReceivedJob extends JobImpl {
     private void sendMessage(long id) throws I2CPMessageException {
         SessionId sid = _runner.getSessionId(_toDest.calculateHash());
         if (sid == null) {
-            if (_log.shouldWarn())
-                _log.warn("No session for " + _toDest.toBase32());
+            if (_log.shouldWarn()) _log.warn("No session for " + _toDest.toBase32());
             return;
         }
         MessagePayloadMessage msg = new MessagePayloadMessage(sid.getSessionId(), id, _payload);

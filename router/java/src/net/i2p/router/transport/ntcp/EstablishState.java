@@ -59,5 +59,4 @@ interface EstablishState {
      *  @since 0.9.16
      */
     public void close(String reason, Exception e);
-
 }

@@ -42,13 +42,17 @@ public class LkupResult implements LookupResult {
      * @return zero for success, nonzero for failure
      */
     @Override
-    public int getResultCode() {return _code;}
+    public int getResultCode() {
+        return _code;
+    }
 
     /**
      * @return Destination on success, null on failure
      */
     @Override
-    public Destination getDestination() {return _dest;}
+    public Destination getDestination() {
+        return _dest;
+    }
 
     /**
      * For async calls only. Nonce will be non-zero.
@@ -57,6 +61,7 @@ public class LkupResult implements LookupResult {
      * @since 0.9.67
      */
     @Override
-    public int getNonce() {return _nonce;}
-
+    public int getNonce() {
+        return _nonce;
+    }
 }

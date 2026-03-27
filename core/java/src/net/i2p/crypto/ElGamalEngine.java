@@ -29,7 +29,6 @@ package net.i2p.crypto;
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.math.BigInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
@@ -40,6 +39,8 @@ import net.i2p.util.Log;
 import net.i2p.util.NativeBigInteger;
 import net.i2p.util.SimpleByteCache;
 import net.i2p.util.SystemVersion;
+
+import java.math.BigInteger;
 
 /**
  * ElGamal cryptographic engine for I2P encryption and signature operations.
@@ -76,7 +77,6 @@ public final class ElGamalEngine {
     private static final int ELG_ENCRYPTED_LENGTH = 514;
     private static final int ELG_HALF_LENGTH = ELG_ENCRYPTED_LENGTH / 2;
 
-
     /**
      * The ElGamal engine should only be constructed and accessed through the
      * application context.  This constructor should only be used by the
@@ -85,12 +85,8 @@ public final class ElGamalEngine {
      * Starts the YK precalc thread if context is RouterContext or Android.
      */
     public ElGamalEngine(I2PAppContext context) {
-        context.statManager().createRateStat("crypto.elGamal.encrypt",
-                                             "Time for ElGamal encryption (ms)", "Encryption",
-                                             new long[] { 60 * 60 * 1000});
-        context.statManager().createRateStat("crypto.elGamal.decrypt",
-                                             "Time for ElGamal decryption (ms)", "Encryption",
-                                             new long[] { 60 * 60 * 1000});
+        context.statManager().createRateStat("crypto.elGamal.encrypt", "Time for ElGamal encryption (ms)", "Encryption", new long[] {60 * 60 * 1000});
+        context.statManager().createRateStat("crypto.elGamal.decrypt", "Time for ElGamal decryption (ms)", "Encryption", new long[] {60 * 60 * 1000});
         _context = context;
         _log = context.logManager().getLog(ElGamalEngine.class);
         _ykgen = new YKGenerator(context);
@@ -98,8 +94,7 @@ public final class ElGamalEngine {
         // benchmarks, or unit tests.
         // YKgen still works, it just won't precalc.
         // Known external users are Bote and Syndie.
-        if (context.isRouterContext() || SystemVersion.isAndroid())
-            _ykgen.start();
+        if (context.isRouterContext() || SystemVersion.isAndroid()) _ykgen.start();
     }
 
     /**
@@ -115,8 +110,7 @@ public final class ElGamalEngine {
      *  This is now a noop. Cannot be restarted.
      *  @since 0.8.8
      */
-    public void restart() {
-    }
+    public void restart() {}
 
     private BigInteger[] getNextYK() {
         return _ykgen.getNextYK();
@@ -136,50 +130,45 @@ public final class ElGamalEngine {
      *         the cleartext to 222 bytes with random data.
      */
     public byte[] encrypt(byte data[], PublicKey publicKey) {
-        if ((data == null) || (data.length > ELG_CLEARTEXT_LENGTH))
-            throw new IllegalArgumentException("Data to encrypt must be <= 222 bytes");
+        if ((data == null) || (data.length > ELG_CLEARTEXT_LENGTH)) throw new IllegalArgumentException("Data to encrypt must be <= 222 bytes");
         if (publicKey == null) throw new IllegalArgumentException("Null public key specified");
         EncType type = publicKey.getType();
-        if (type != EncType.ELGAMAL_2048)
-            throw new IllegalArgumentException("Bad public key type " + type);
+        if (type != EncType.ELGAMAL_2048) throw new IllegalArgumentException("Bad public key type " + type);
 
         long start = _context.clock().now();
 
-        byte d2[] = new byte[1+Hash.HASH_LENGTH+data.length];
+        byte d2[] = new byte[1 + Hash.HASH_LENGTH + data.length];
         // random nonzero byte
         do {
             _context.random().nextBytes(d2, 0, 1);
         } while (d2[0] == 0);
         _context.sha().calculateHash(data, 0, data.length, d2, 1);
-        System.arraycopy(data, 0, d2, 1+Hash.HASH_LENGTH, data.length);
+        System.arraycopy(data, 0, d2, 1 + Hash.HASH_LENGTH, data.length);
 
-        //long t0 = _context.clock().now();
+        // long t0 = _context.clock().now();
         BigInteger m = new NativeBigInteger(1, d2);
-        //long t1 = _context.clock().now();
-        if (m.compareTo(CryptoConstants.elgp) >= 0)
-            throw new IllegalArgumentException("ARGH.  Data cannot be larger than the ElGamal prime.  FIXME");
-        //long t2 = _context.clock().now();
+        // long t1 = _context.clock().now();
+        if (m.compareTo(CryptoConstants.elgp) >= 0) throw new IllegalArgumentException("ARGH.  Data cannot be larger than the ElGamal prime.  FIXME");
+        // long t2 = _context.clock().now();
         BigInteger aalpha = new NativeBigInteger(1, publicKey.getData());
-        //long t3 = _context.clock().now();
+        // long t3 = _context.clock().now();
         BigInteger yk[] = getNextYK();
         BigInteger k = yk[1];
         BigInteger y = yk[0];
 
-        //long t7 = _context.clock().now();
+        // long t7 = _context.clock().now();
         BigInteger d = aalpha.modPow(k, CryptoConstants.elgp);
-        //long t8 = _context.clock().now();
+        // long t8 = _context.clock().now();
         d = d.multiply(m);
-        //long t9 = _context.clock().now();
+        // long t9 = _context.clock().now();
         d = d.mod(CryptoConstants.elgp);
-        //long t10 = _context.clock().now();
+        // long t10 = _context.clock().now();
 
         byte[] ybytes = y.toByteArray();
         byte[] dbytes = d.toByteArray();
         byte[] out = new byte[ELG_ENCRYPTED_LENGTH];
-        System.arraycopy(ybytes, 0, out, (ybytes.length < ELG_HALF_LENGTH ? ELG_HALF_LENGTH - ybytes.length : 0),
-                         (ybytes.length > ELG_HALF_LENGTH ? ELG_HALF_LENGTH : ybytes.length));
-        System.arraycopy(dbytes, 0, out, (dbytes.length < ELG_HALF_LENGTH ? ELG_ENCRYPTED_LENGTH - dbytes.length : ELG_HALF_LENGTH),
-                         (dbytes.length > ELG_HALF_LENGTH ? ELG_HALF_LENGTH : dbytes.length));
+        System.arraycopy(ybytes, 0, out, (ybytes.length < ELG_HALF_LENGTH ? ELG_HALF_LENGTH - ybytes.length : 0), (ybytes.length > ELG_HALF_LENGTH ? ELG_HALF_LENGTH : ybytes.length));
+        System.arraycopy(dbytes, 0, out, (dbytes.length < ELG_HALF_LENGTH ? ELG_ENCRYPTED_LENGTH - dbytes.length : ELG_HALF_LENGTH), (dbytes.length > ELG_HALF_LENGTH ? ELG_HALF_LENGTH : dbytes.length));
         /*
         StringBuilder buf = new StringBuilder(1024);
         buf.append("Timing\n");
@@ -206,7 +195,6 @@ public final class ElGamalEngine {
         return out;
     }
 
-
     /** Decrypt the data
      * @param encrypted encrypted data, must be exactly 514 bytes
      *         Contains the two-part encrypted data starting at bytes 0 and 257.
@@ -217,10 +205,8 @@ public final class ElGamalEngine {
      */
     public byte[] decrypt(byte encrypted[], PrivateKey privateKey) {
         EncType type = privateKey.getType();
-        if (type != EncType.ELGAMAL_2048)
-            throw new IllegalArgumentException("Bad private key type " + type);
-        if ((encrypted == null) || (encrypted.length != ELG_ENCRYPTED_LENGTH))
-            throw new IllegalArgumentException("Data to decrypt must be exactly ELG_ENCRYPTED_LENGTH bytes");
+        if (type != EncType.ELGAMAL_2048) throw new IllegalArgumentException("Bad private key type " + type);
+        if ((encrypted == null) || (encrypted.length != ELG_ENCRYPTED_LENGTH)) throw new IllegalArgumentException("Data to decrypt must be exactly ELG_ENCRYPTED_LENGTH bytes");
         long start = _context.clock().now();
 
         BigInteger a = new NativeBigInteger(1, privateKey.getData());
@@ -242,16 +228,15 @@ public final class ElGamalEngine {
 
         int payloadLen = val.length - i - 1 - Hash.HASH_LENGTH;
         if (payloadLen < 0) {
-            if (_log.shouldError())
-                _log.error("Decrypted data is too small (" + (val.length - i)+ ")");
+            if (_log.shouldError()) _log.error("Decrypted data is too small (" + (val.length - i) + ")");
             return new byte[0];
         }
 
-        //ByteArrayInputStream bais = new ByteArrayInputStream(val, i, val.length - i);
-        //byte hashData[] = new byte[Hash.HASH_LENGTH];
-        //System.arraycopy(val, i + 1, hashData, 0, Hash.HASH_LENGTH);
-        //Hash hash = new Hash(hashData);
-        //Hash hash = Hash.create(val, i + 1);
+        // ByteArrayInputStream bais = new ByteArrayInputStream(val, i, val.length - i);
+        // byte hashData[] = new byte[Hash.HASH_LENGTH];
+        // System.arraycopy(val, i + 1, hashData, 0, Hash.HASH_LENGTH);
+        // Hash hash = new Hash(hashData);
+        // Hash hash = Hash.create(val, i + 1);
         byte rv[] = new byte[payloadLen];
         System.arraycopy(val, i + 1 + Hash.HASH_LENGTH, rv, 0, rv.length);
 
@@ -263,21 +248,18 @@ public final class ElGamalEngine {
         long end = _context.clock().now();
 
         long diff = end - start;
-//        if (diff > 1000) {
+        //        if (diff > 1000) {
         if (diff > 1500) {
-            if (_log.shouldWarn())
-                _log.warn("Took too long (" + diff + "ms) to decrypt and verify ElGamal block");
+            if (_log.shouldWarn()) _log.warn("Took too long (" + diff + "ms) to decrypt and verify ElGamal block");
         }
 
         _context.statManager().addRateData("crypto.elGamal.decrypt", diff);
 
         if (ok) {
-            //_log.debug("Hash matches: " + DataHelper.toString(hash.getData(), hash.getData().length));
+            // _log.debug("Hash matches: " + DataHelper.toString(hash.getData(), hash.getData().length));
             return rv;
         }
-        if (_log.shouldDebug())
-            _log.debug("Doesn't match hash data = "
-                       + Base64.encode(rv), new Exception("Doesn't match"));
+        if (_log.shouldDebug()) _log.debug("Doesn't match hash data = " + Base64.encode(rv), new Exception("Doesn't match"));
         return new byte[0];
     }
 }

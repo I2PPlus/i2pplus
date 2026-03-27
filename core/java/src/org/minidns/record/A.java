@@ -10,11 +10,12 @@
  */
 package org.minidns.record;
 
+import org.minidns.record.Record.TYPE;
+import org.minidns.util.InetAddressUtil;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Inet4Address;
-import org.minidns.record.Record.TYPE;
-import org.minidns.util.InetAddressUtil;
 
 /**
  * DNS A record payload representing an IPv4 address.<br>
@@ -44,7 +45,7 @@ public class A extends InternetAddressRR<Inet4Address> {
      * @param q4 fourth octet
      */
     public A(int q1, int q2, int q3, int q4) {
-        super(new byte[] { (byte) q1, (byte) q2, (byte) q3, (byte) q4 });
+        super(new byte[] {(byte) q1, (byte) q2, (byte) q3, (byte) q4});
         if (q1 < 0 || q1 > 255 || q2 < 0 || q2 > 255 || q3 < 0 || q3 > 255 || q4 < 0 || q4 > 255) {
             throw new IllegalArgumentException();
         }
@@ -75,8 +76,7 @@ public class A extends InternetAddressRR<Inet4Address> {
      * @return parsed A record
      * @throws java.io.IOException if I/O error occurs
      */
-    public static A parse(DataInputStream dis)
-            throws IOException {
+    public static A parse(DataInputStream dis) throws IOException {
         byte[] ip = new byte[4];
         dis.readFully(ip);
         return new A(ip);
@@ -84,10 +84,6 @@ public class A extends InternetAddressRR<Inet4Address> {
 
     @Override
     public String toString() {
-        return Integer.toString(ip[0] & 0xff) + "." +
-               Integer.toString(ip[1] & 0xff) + "." +
-               Integer.toString(ip[2] & 0xff) + "." +
-               Integer.toString(ip[3] & 0xff);
+        return Integer.toString(ip[0] & 0xff) + "." + Integer.toString(ip[1] & 0xff) + "." + Integer.toString(ip[2] & 0xff) + "." + Integer.toString(ip[3] & 0xff);
     }
-
 }

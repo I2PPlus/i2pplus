@@ -40,21 +40,28 @@ public class LogsHelper extends HelperBase {
         Pattern.compile("\\|.*\\[.*Queue.*\\].*?:")
     };
 
-    public void setContext(RouterContext context) {this._context = context;}
+    public void setContext(RouterContext context) {
+        this._context = context;
+    }
+
     private static final String _jstlVersion = jstlVersion();
     private static final int MAX_WRAPPER_LINES = 320;
     private static final String PROP_LAST_WRAPPER = "routerconsole.lastWrapperLogEntry";
-    private final StringBuilder _msgBuf = new StringBuilder(12*1024);
+    private final StringBuilder _msgBuf = new StringBuilder(12 * 1024);
 
     /** @since 0.8.12 */
-    public String getJettyVersion() {return RouterConsoleRunner.jettyVersion();}
+    public String getJettyVersion() {
+        return RouterConsoleRunner.jettyVersion();
+    }
 
     /** @since 0.9.15 */
     public String getUnavailableCrypto() {
         StringBuilder buf = new StringBuilder(128);
         for (SigType t : SigType.values()) {
             if (!t.isAvailable()) {
-                buf.append("<tr><td><b>Crypto:</b></td><td>").append(t.toString()).append(" unavailable</td></tr>");
+                buf.append("<tr><td><b>Crypto:</b></td><td>")
+                        .append(t.toString())
+                        .append(" unavailable</td></tr>");
             }
         }
         return buf.toString();
@@ -64,7 +71,9 @@ public class LogsHelper extends HelperBase {
      * @return non-null, "n/a" on failure
      * @since 0.9.26
      */
-    public String getJstlVersion() {return _jstlVersion;}
+    public String getJstlVersion() {
+        return _jstlVersion;
+    }
 
     /**
      * @return non-null, "n/a" on failure
@@ -73,12 +82,14 @@ public class LogsHelper extends HelperBase {
     private static String jstlVersion() {
         String rv = "n/a";
         try {
-            Class<?> cls = Class.forName("org.apache.taglibs.standard.Version", true, ClassLoader.getSystemClassLoader());
+            Class<?> cls =
+                    Class.forName("org.apache.taglibs.standard.Version", true, ClassLoader.getSystemClassLoader());
             Method getVersion = cls.getMethod("getVersion");
             // returns "standard-taglib 1.2.0"
             Object version = getVersion.invoke(null, (Object[]) null);
             rv = (String) version;
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         return rv;
     }
 
@@ -88,10 +99,10 @@ public class LogsHelper extends HelperBase {
     public String getLogs() {
         String str = formatMessages(_context.logManager().getBuffer().getMostRecentMessages());
         boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
-        return "<p>" + _t("File location") + ": <a href=/router.log target=_blank>" +
-                DataHelper.escapeHTML(_context.logManager().currentFile()) + "</a></p>" +
-                "<span id=refreshPeriod style=display:none title=\"" + _t("Refresh interval (seconds)") +
-                "\"><input type=number id=logRefreshInterval></span>" + str;
+        return "<p>" + _t("File location") + ": <a href=/router.log target=_blank>"
+                + DataHelper.escapeHTML(_context.logManager().currentFile()) + "</a></p>"
+                + "<span id=refreshPeriod style=display:none title=\"" + _t("Refresh interval (seconds)")
+                + "\"><input type=number id=logRefreshInterval></span>" + str;
     }
 
     /**
@@ -121,7 +132,9 @@ public class LogsHelper extends HelperBase {
      */
     public int getLastMessageNumber() {
         UIMessages msgs = _context.logManager().getBuffer().getUIMessages();
-        if (msgs.isEmpty()) {return -1;}
+        if (msgs.isEmpty()) {
+            return -1;
+        }
         return msgs.getLastMessageID();
     }
 
@@ -135,7 +148,9 @@ public class LogsHelper extends HelperBase {
     public int getLastCriticalMessageNumber() {
         _context.logManager().flush();
         UIMessages msgs = _context.logManager().getBuffer().getCriticalUIMessages();
-        if (msgs.isEmpty()) {return -1;}
+        if (msgs.isEmpty()) {
+            return -1;
+        }
         return msgs.getLastMessageID();
     }
 
@@ -146,8 +161,12 @@ public class LogsHelper extends HelperBase {
      *  @since 0.9.46
      */
     public void clearThrough(int n, int crit, long wn, long wts, String wf, String consoleNonce) {
-        if (!CSSHelper.getNonce().equals(consoleNonce)) {return;}
-        if (n >= 0) {_context.logManager().getBuffer().getUIMessages().clearThrough(n);}
+        if (!CSSHelper.getNonce().equals(consoleNonce)) {
+            return;
+        }
+        if (n >= 0) {
+            _context.logManager().getBuffer().getUIMessages().clearThrough(n);
+        }
         if (crit >= 0) {
             _context.logManager().getBuffer().getCriticalUIMessages().clearThrough(crit);
             _context.logManager().flush(); // Force a refresh of the message list
@@ -166,7 +185,6 @@ public class LogsHelper extends HelperBase {
      *  @param obuf out parameter
      *  @return Long timestamp, Long last line number, String filename (escaped)
      */
-
     public Object[] getServiceLogs(StringBuilder obuf) {
         File f = ConfigServiceHandler.wrapperLogFile(_context);
         String str;
@@ -180,9 +198,17 @@ public class LogsHelper extends HelperBase {
             String[] vals = DataHelper.split(prop, ",", 3);
             if (vals.length == 3) {
                 if (vals[2].equals(f.getName())) {
-                    try { lastMod = Long.parseLong(vals[0]); } catch (NumberFormatException nfe) {}
-                    try { toSkip = Long.parseLong(vals[1]); } catch (NumberFormatException nfe) {}
-                } else {lastMod = 0;} // file rotated
+                    try {
+                        lastMod = Long.parseLong(vals[0]);
+                    } catch (NumberFormatException nfe) {
+                    }
+                    try {
+                        toSkip = Long.parseLong(vals[1]);
+                    } catch (NumberFormatException nfe) {
+                    }
+                } else {
+                    lastMod = 0;
+                } // file rotated
             }
         }
         if (lastMod > 0 && flastMod <= lastMod) {
@@ -194,29 +220,36 @@ public class LogsHelper extends HelperBase {
             StringBuilder buf = new StringBuilder(MAX_WRAPPER_LINES * 80);
             long ntoSkip = readTextFile(f, utf8, MAX_WRAPPER_LINES, toSkip, buf);
             if (ntoSkip < toSkip) {
-                if (ntoSkip < 0) {str = null;} // error
-                else {str = "";} // truncated?
-                if (prop != null) {_context.router().saveConfig(PROP_LAST_WRAPPER, null);} // remove old setting
+                if (ntoSkip < 0) {
+                    str = null;
+                } // error
+                else {
+                    str = "";
+                } // truncated?
+                if (prop != null) {
+                    _context.router().saveConfig(PROP_LAST_WRAPPER, null);
+                } // remove old setting
             } else {
-                str = buf.toString().replace("| |", "|")
-                                    .replace("| INFO   | INFO:", "| INFO   |")
-                                    .replace("| INFO   | CRIT ", "| CRIT   |")
-                                    .replace("| INFO   | ERROR", "| ERROR  |")
-                                    .replace("| INFO   | Error", "| ERROR  | Error")
-                                    .replace("| INFO   | java.lang", "| ERROR  | java.lang")
-                                    .replace("| INFO   | \tat", "| ERROR  | \tat")
-                                    .replace("| ERROR  | [Reseed     ] ....reseed.Reseeder:", "| WARN   |")
-                                    .replace(" |[", " | [")
-                                    .replace("INFO   | WARN:", "WARN   |")
-                                    .replace("INFO   | WARNING:", "WARN   |")
-                                    .replace("   |", " |")
-                                    .replace("| ERROR  |", "| ERR  |")
-                                    .replace("| INFO | # V  [", "| INFO | # Source: [")
-                                    .replace("->", "➜")
-                                    .replace("| LOCAL LeaseSet for", "| WARN | LOCAL LeaseSet for")
-                                    .replace("| Initiating graceful restart", "| INFO | Initiating graceful restart")
-                                    .replace("| Graceful shutdown", "| INFO | Graceful shutdown")
-                                    .replace("| I2P+ update downloaded", "| INFO | I2P+ update downloaded");
+                str = buf.toString()
+                        .replace("| |", "|")
+                        .replace("| INFO   | INFO:", "| INFO   |")
+                        .replace("| INFO   | CRIT ", "| CRIT   |")
+                        .replace("| INFO   | ERROR", "| ERROR  |")
+                        .replace("| INFO   | Error", "| ERROR  | Error")
+                        .replace("| INFO   | java.lang", "| ERROR  | java.lang")
+                        .replace("| INFO   | \tat", "| ERROR  | \tat")
+                        .replace("| ERROR  | [Reseed     ] ....reseed.Reseeder:", "| WARN   |")
+                        .replace(" |[", " | [")
+                        .replace("INFO   | WARN:", "WARN   |")
+                        .replace("INFO   | WARNING:", "WARN   |")
+                        .replace("   |", " |")
+                        .replace("| ERROR  |", "| ERR  |")
+                        .replace("| INFO | # V  [", "| INFO | # Source: [")
+                        .replace("->", "➜")
+                        .replace("| LOCAL LeaseSet for", "| WARN | LOCAL LeaseSet for")
+                        .replace("| Initiating graceful restart", "| INFO | Initiating graceful restart")
+                        .replace("| Graceful shutdown", "| INFO | Graceful shutdown")
+                        .replace("| I2P+ update downloaded", "| INFO | I2P+ update downloaded");
                 for (Pattern p : FILTER_PATTERNS) {
                     str = p.matcher(str).replaceAll("|");
                 }
@@ -228,32 +261,32 @@ public class LogsHelper extends HelperBase {
                     String line = str.substring(start, end);
                     start = end + 1;
                     // Fast path: skip lines with common unwanted substrings
-                    if (line.indexOf("Copyright") >= 0 ||
-                        line.indexOf("tanukisoftware") >= 0 ||
-                        line.indexOf("STATUS") >= 0 ||
-                        line.indexOf("If you would like to submit a bug report") >= 0 ||
-                        line.indexOf("Problematic frame:") >= 0 ||
-                        line.indexOf("INFO | #   Unknown") >= 0 ||
-                        line.indexOf("Unable to build") >= 0 ||
-                        line.indexOf("HTTPServer") >= 0 ||
-                        line.indexOf("Incrementing failed invocation") >= 0 ||
-                        line.indexOf("than the successful invocation time") >= 0 ||
-                        line.indexOf("Disconnect Message received") >= 0 ||
-                        line.indexOf("Cannot send to TunnelGateway") >= 0 ||
-                        line.indexOf("Unable to connect to I2P") >= 0 ||
-                        line.indexOf("Unable to add torrent") >= 0 ||
-                        line.indexOf("Error creating session") >= 0 ||
-                        line.indexOf("ContextHandler") >= 0 ||
-                        line.indexOf("AbstractConnector") >= 0 ||
-                        line.indexOf("I2PSessionException") >= 0 ||
-                        line.indexOf("LOCAL LeaseSet for") >= 0 ||
-                        line.indexOf("info_hash") >= 0 ||
-                        line.contains("at net.i2p") ||
-                        line.contains("at java.base") ||
-                        line.contains("at org.eclipse.jetty") ||
-                        line.contains("at javax.servlet.http") ||
-                        line.endsWith("java.lang.IllegalStateException") ||
-                        line.contains("  \n")) {
+                    if (line.indexOf("Copyright") >= 0
+                            || line.indexOf("tanukisoftware") >= 0
+                            || line.indexOf("STATUS") >= 0
+                            || line.indexOf("If you would like to submit a bug report") >= 0
+                            || line.indexOf("Problematic frame:") >= 0
+                            || line.indexOf("INFO | #   Unknown") >= 0
+                            || line.indexOf("Unable to build") >= 0
+                            || line.indexOf("HTTPServer") >= 0
+                            || line.indexOf("Incrementing failed invocation") >= 0
+                            || line.indexOf("than the successful invocation time") >= 0
+                            || line.indexOf("Disconnect Message received") >= 0
+                            || line.indexOf("Cannot send to TunnelGateway") >= 0
+                            || line.indexOf("Unable to connect to I2P") >= 0
+                            || line.indexOf("Unable to add torrent") >= 0
+                            || line.indexOf("Error creating session") >= 0
+                            || line.indexOf("ContextHandler") >= 0
+                            || line.indexOf("AbstractConnector") >= 0
+                            || line.indexOf("I2PSessionException") >= 0
+                            || line.indexOf("LOCAL LeaseSet for") >= 0
+                            || line.indexOf("info_hash") >= 0
+                            || line.contains("at net.i2p")
+                            || line.contains("at java.base")
+                            || line.contains("at org.eclipse.jetty")
+                            || line.contains("at javax.servlet.http")
+                            || line.endsWith("java.lang.IllegalStateException")
+                            || line.contains("  \n")) {
                         continue;
                     }
                     // Skip empty lines and certain patterns
@@ -270,24 +303,36 @@ public class LogsHelper extends HelperBase {
                     String[] aParts = a.split(" ");
                     String[] bParts = b.split(" ");
                     int result = aParts[0].compareTo(bParts[0]); // Sort by timestamp
-                    if (result == 0) {result = a.compareTo(b);} // If timestamps are equal, sort by content
+                    if (result == 0) {
+                        result = a.compareTo(b);
+                    } // If timestamps are equal, sort by content
                     return result;
                 });
 
                 // Reuse filtered StringBuilder and append in reverse order
                 filtered.setLength(0);
-                for (int i = len - 1; i >= 0; i--) {filtered.append(lines[i]).append("\n");}
+                for (int i = len - 1; i >= 0; i--) {
+                    filtered.append(lines[i]).append("\n");
+                }
                 str = filtered.toString();
             }
             toSkip = ntoSkip;
         }
         String loc = DataHelper.escapeHTML(f.getAbsolutePath());
         if (str == null) {
-            obuf.append("<p>").append(_t("File not found")).append(": <b><code>").append(loc).append("</code></b></p>");
+            obuf.append("<p>")
+                    .append(_t("File not found"))
+                    .append(": <b><code>")
+                    .append(loc)
+                    .append("</code></b></p>");
             toSkip = -1;
         } else {
-            obuf.append("<p>").append(_t("File location")).append(": <a href=\"/wrapper.log\" target=_blank>")
-                .append(loc).append("</a>").append("</p></td></tr>\n<tr><td>");
+            obuf.append("<p>")
+                    .append(_t("File location"))
+                    .append(": <a href=\"/wrapper.log\" target=_blank>")
+                    .append(loc)
+                    .append("</a>")
+                    .append("</p></td></tr>\n<tr><td>");
             if (str.length() > 0) {
                 str = str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
                 obuf.append("<pre id=service_logs>").append(str).append("</pre>");
@@ -311,7 +356,9 @@ public class LogsHelper extends HelperBase {
         Attributes att = FileDumpHelper.attributes(f);
         if (att != null) {
             String s = FileDumpHelper.getAtt(att, "Built-By");
-            if (s != null) {return s;}
+            if (s != null) {
+                return s;
+            }
         }
         return "Undefined";
     }
@@ -328,18 +375,23 @@ public class LogsHelper extends HelperBase {
             String date = FileDumpHelper.getAtt(att, "Build-Date");
             String by = FileDumpHelper.getAtt(att, "Built-By");
             if (rev != null && by.contains("|z3d")) {
-                return "<a id=revision target=_blank rel=\"noreferrer\" href=\"http://git.skank.i2p/i2pplus/I2P.Plus/src/commit/" +
-                        rev + "\">" + rev + "</a> (Build date: " + date + ")";
-            } else {return rev + " (Build date: " + date + ")";}
+                return "<a id=revision target=_blank rel=\"noreferrer\""
+                        + " href=\"http://git.skank.i2p/i2pplus/I2P.Plus/src/commit/"
+                        + rev + "\">" + rev + "</a> (Build date: " + date + ")";
+            } else {
+                return rev + " (Build date: " + date + ")";
+            }
         }
         return "";
     }
 
-    private final static String NL = System.getProperty("line.separator");
+    private static final String NL = System.getProperty("line.separator");
 
     /** formats in forward order */
     private String formatMessages(List<String> msgs) {
-        if (msgs.isEmpty()) {return "</td></tr><tr><td><p class=nologs><i>" + _t("No log messages") + "</i></p>";}
+        if (msgs.isEmpty()) {
+            return "</td></tr><tr><td><p class=nologs><i>" + _t("No log messages") + "</i></p>";
+        }
         boolean colorize = _context.getBooleanPropertyDefaultTrue("routerconsole.logs.color");
         StringBuilder buf = _msgBuf;
         buf.setLength(0);
@@ -349,11 +401,14 @@ public class LogsHelper extends HelperBase {
         for (int i = msgs.size() - 1; i >= 0; i--) {
             String msg = msgs.get(i);
             // don't display the dup message if it is first
-            if (!displayed && msg.contains("&uarr;") || !displayed && msg.contains("&darr;")) {continue;}
+            if (!displayed && msg.contains("&uarr;") || !displayed && msg.contains("&darr;")) {
+                continue;
+            }
             displayed = true;
             msg = msg.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
-            msg = msg.replace("&amp;darr;", "&darr;");  // hack - undo the damage (LogWriter) BUFFER_DISPLAYED_REVERSE = true;
-            msg = msg.replace("&amp;uarr;", "&uarr;");  // hack - undo the damage (LogWriter)
+            msg = msg.replace(
+                    "&amp;darr;", "&darr;"); // hack - undo the damage (LogWriter) BUFFER_DISPLAYED_REVERSE = true;
+            msg = msg.replace("&amp;uarr;", "&uarr;"); // hack - undo the damage (LogWriter)
             msg = msg.replace("&amp;#10140;", "&#10140;");
             msg = msg.replace("--&gt;", " &#10140;");
             msg = msg.replace(" -&gt;", " &#10140;");
@@ -382,7 +437,8 @@ public class LogsHelper extends HelperBase {
             msg = msg.replace("[IRC Client] Inbound message", "[IRC Client] &#11167;");
             msg = msg.replace("[IRC Client] Outbound message", "[IRC Client] &#11165;");
             msg = msg.replace("not publishing old one: RouterInfo:", "not publishing old one:");
-            msg = msg.replace("Publishing our RouterInfo after delay: RouterInfo:", "Publishing our RouterInfo after delay:");
+            msg = msg.replace(
+                    "Publishing our RouterInfo after delay: RouterInfo:", "Publishing our RouterInfo after delay:");
             msg = msg.replace(":  ", ": ");
             // Use regex for bullet replacements
             Matcher nm = NEWLINE_STAR_PATTERN.matcher(msg);
@@ -401,24 +457,43 @@ public class LogsHelper extends HelperBase {
                 String level = m.group(1);
                 msg = m.replaceFirst("| <span class=log_level>" + level + "</span> ");
             }
-            if (msg.contains("| &darr; &darr; &darr;")) {msg = msg.replace("| &darr;darr;&darr;", " <span class=log_omitted>&darr;&darr;&darr;</span> ");} // LogWriter BUFFER_DISPLAYED_REVERSE = true;
-            if (msg.contains("| &uarr;&uarr;&uarr;")) {msg = msg.replace("| &uarr;&uarr;&uarr;", " <span class=log_omitted>&uarr;&uarr;&uarr;</span> ");}
+            if (msg.contains("| &darr; &darr; &darr;")) {
+                msg = msg.replace("| &darr;darr;&darr;", " <span class=log_omitted>&darr;&darr;&darr;</span> ");
+            } // LogWriter BUFFER_DISPLAYED_REVERSE = true;
+            if (msg.contains("| &uarr;&uarr;&uarr;")) {
+                msg = msg.replace("| &uarr;&uarr;&uarr;", " <span class=log_omitted>&uarr;&uarr;&uarr;</span> ");
+            }
             // remove  last \n that LogRecordFormatter added
-            if (msg.endsWith(NL)) {msg = msg.substring(0, msg.length() - NL.length());}
+            if (msg.endsWith(NL)) {
+                msg = msg.substring(0, msg.length() - NL.length());
+            }
             // replace \n so that exception stack traces will format correctly and will paste nicely into pastebin
             msg = msg.replace("\n", "<br>&nbsp;&nbsp;\n");
-            if (msg.contains("Sending client")) {msg = msg.replace("<br>&nbsp; &nbsp; \n", "");} // SAM client
-            if (msg.contains("org.eclipse.jetty") && msg.contains(_c("WARN"))) {continue;} // hide jetty warn level logging
+            if (msg.contains("Sending client")) {
+                msg = msg.replace("<br>&nbsp; &nbsp; \n", "");
+            } // SAM client
+            if (msg.contains("org.eclipse.jetty") && msg.contains(_c("WARN"))) {
+                continue;
+            } // hide jetty warn level logging
             String level;
             String color;
-            if (msg.contains(_c("CRIT"))) {level = "log_critical";}
-            else if (msg.contains(_c("ERROR"))) {level = "log_error";}
-            else if (msg.contains(_c("WARN"))) {level = "log_warn";}
-            else if (msg.contains(_c("INFO"))) {level = "log_info";}
-            else if (msg.contains("&darr;") || msg.contains("&uarr;"))  {level = "log_omitted";}
-            else {level = "log_debug";}
+            if (msg.contains(_c("CRIT"))) {
+                level = "log_critical";
+            } else if (msg.contains(_c("ERROR"))) {
+                level = "log_error";
+            } else if (msg.contains(_c("WARN"))) {
+                level = "log_warn";
+            } else if (msg.contains(_c("INFO"))) {
+                level = "log_info";
+            } else if (msg.contains("&darr;") || msg.contains("&uarr;")) {
+                level = "log_omitted";
+            } else {
+                level = "log_debug";
+            }
             buf.append("<li class=\"").append(level);
-            if (colorize) {buf.append(" colorize");}
+            if (colorize) {
+                buf.append(" colorize");
+            }
             buf.append("\">").append(msg).append("</li>\n");
         }
         buf.append("</ul>\n");
@@ -446,7 +521,9 @@ public class LogsHelper extends HelperBase {
      * @since 0.9.11 modded from FileUtil.readTextFile()
      */
     private static long readTextFile(File f, boolean utf8, int maxNumLines, long skipLines, StringBuilder buf) {
-        if (!f.exists()) {return -1;}
+        if (!f.exists()) {
+            return -1;
+        }
         BufferedReader in = null;
         try {
             in = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8));
@@ -456,7 +533,9 @@ public class LogsHelper extends HelperBase {
                 int c;
                 do {
                     c = in.read();
-                    if (c < 0) {return i;} // truncated
+                    if (c < 0) {
+                        return i;
+                    } // truncated
                 } while (c != '\n');
                 i++;
             }
@@ -465,17 +544,24 @@ public class LogsHelper extends HelperBase {
                 String line = null;
                 while ((line = in.readLine()) != null) {
                     i++;
-                    if (lines.size() >= maxNumLines) {lines.poll();}
+                    if (lines.size() >= maxNumLines) {
+                        lines.poll();
+                    }
                     lines.offer(line);
                 }
-                for (String ln : lines) {buf.append(ln).append('\n');}
+                for (String ln : lines) {
+                    buf.append(ln).append('\n');
+                }
             }
             return i;
-        } catch (IOException ioe) {return -1;}
-        finally {
+        } catch (IOException ioe) {
+            return -1;
+        } finally {
             if (in != null) {
-                try {in.close();}
-                catch (IOException ioe) {}
+                try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
             }
         }
     }

@@ -1,4 +1,5 @@
 package net.i2p.router.networkdb.kademlia;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,9 +9,6 @@ package net.i2p.router.networkdb.kademlia;
  *
  */
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import net.i2p.crypto.EncType;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
@@ -22,6 +20,10 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.kademlia.KBucketSet;
 import net.i2p.router.RouterContext;
 import net.i2p.util.SystemVersion;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Represents an exploratory search job for a particular key in the Kademlia network database.
@@ -129,8 +131,7 @@ public class ExploreJob extends SearchJob {
 
         if (_log.shouldDebug()) {
             StringBuilder buf = new StringBuilder();
-            buf.append("Excluding ").append(dontIncludePeers.size() - 1)
-               .append(" closest peers from exploration\n* Excluded: ");
+            buf.append("Excluding ").append(dontIncludePeers.size() - 1).append(" closest peers from exploration\n* Excluded: ");
             for (Hash h : dontIncludePeers) {
                 buf.append("[").append(h.toBase64().substring(0, 6)).append("] ");
             }
@@ -146,8 +147,7 @@ public class ExploreJob extends SearchJob {
         // Cache hash snippet for logging only when logging is enabled to save computation cost.
         final String hash = (_log.shouldInfo() || _log.shouldDebug()) ? ident.calculateHash().toBase64().substring(0, 6) : "";
 
-        if (replyTunnelId != null &&
-            ((encryptElG && type == EncType.ELGAMAL_2048) || (type == EncType.ECIES_X25519 && DatabaseLookupMessage.USE_ECIES_FF))) {
+        if (replyTunnelId != null && ((encryptElG && type == EncType.ELGAMAL_2048) || (type == EncType.ECIES_X25519 && DatabaseLookupMessage.USE_ECIES_FF))) {
 
             EncType ourType = ctx.keyManager().getPublicKey().getType();
             boolean ratchet1 = ourType.equals(EncType.ECIES_X25519);
@@ -171,15 +171,16 @@ public class ExploreJob extends SearchJob {
                         msg.setReplySession(sess.key, sess.rtag);
                     }
                 } else {
-                    if (_log.shouldWarn()) {_log.warn("Failed encrypt to " + peer);}
+                    if (_log.shouldWarn()) {
+                        _log.warn("Failed encrypt to " + peer);
+                    }
                     // Client may have become unreachable, send anyway
                 }
             }
             outMsg = MessageWrapper.wrap(ctx, msg, peer);
 
             if (_log.shouldDebug()) {
-                _log.debug("Encrypted Exploratory DbLookupMessage for [" + getState().getTarget().toBase64().substring(0, 6) +
-                           "] sent to [" + hash + "]");
+                _log.debug("Encrypted Exploratory DbLookupMessage for [" + getState().getTarget().toBase64().substring(0, 6) + "] sent to [" + hash + "]");
             }
         } else {
             if (_log.shouldDebug()) {
@@ -198,7 +199,9 @@ public class ExploreJob extends SearchJob {
      * @return maximum concurrent exploratory searches (bredth)
      */
     @Override
-    protected int getBredth() {return _bredth;}
+    protected int getBredth() {
+        return _bredth;
+    }
 
     /**
      * Computes the concurrency level (bredth) for exploratory searches based on
@@ -250,7 +253,9 @@ public class ExploreJob extends SearchJob {
         if (_log.shouldInfo()) {
             if (numNewPeers > 0) {
                 _log.info("Found " + numNewPeers + " new peer" + (numNewPeers == 1 ? "" : "s") + " via Exploratory Search");
-            } else {_log.info("Found no new peers via Exploratory Search");}
+            } else {
+                _log.info("Found no new peers via Exploratory Search");
+            }
         }
         _facade.setLastExploreNewDate(getContext().clock().now());
     }
@@ -263,6 +268,7 @@ public class ExploreJob extends SearchJob {
         _lastReplyFrom = peer;
         super.replyFound(message, peer); // This starts a SearchReplyJob
     }
+
     /**
      * This is called from SearchReplyJob
      * @return true if peer was new
@@ -276,7 +282,9 @@ public class ExploreJob extends SearchJob {
             if (ctx.commSystem().isEstablished(from)) {
                 RouterInfo ri = _facade.lookupRouterInfoLocally(from);
                 if (ri != null) {
-                    if (_log.shouldDebug()) {_log.debug("Direct followup to " + from + " for " + peer);}
+                    if (_log.shouldDebug()) {
+                        _log.debug("Direct followup to " + from + " for " + peer);
+                    }
                     DirectLookupJob j = new DirectLookupJob(getContext(), (FloodfillNetworkDatabaseFacade) _facade, peer, ri, null, null);
                     j.runJob(); // inline (SearchReplyJob thread)
                     return true;
@@ -292,6 +300,7 @@ public class ExploreJob extends SearchJob {
      */
 
     @Override
-    public String getName() {return "Explore Kademlia NetDb";}
-
+    public String getName() {
+        return "Explore Kademlia NetDb";
+    }
 }

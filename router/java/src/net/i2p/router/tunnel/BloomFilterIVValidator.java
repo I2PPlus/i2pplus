@@ -25,21 +25,24 @@ class BloomFilterIVValidator implements IVValidator {
      * higher than it needs to be.
      *
      */
-    private static final int HALFLIFE_MS = 10*60*1000;
+    private static final int HALFLIFE_MS = 10 * 60 * 1000;
+
     private static final int MIN_SHARE_KBPS_TO_USE_BLOOM = 64;
     private static final int MIN_SHARE_KBPS_FOR_BIG_BLOOM = 512;
     private static final int MIN_SHARE_KBPS_FOR_HUGE_BLOOM = 1536;
     private static final int MIN_SHARE_KBPS_FOR_HUGE2_BLOOM = 4096;
     private static final int MIN_SHARE_KBPS_FOR_HUGE3_BLOOM = 8192;
     private static final int MIN_SHARE_KBPS_FOR_HUGE4_BLOOM = 16384;
-    private static final long MIN_MEM_TO_USE_BLOOM = 64*1024*1024L;
-    private static final long MIN_MEM_FOR_BIG_BLOOM = 128*1024*1024L;
-    private static final long MIN_MEM_FOR_HUGE_BLOOM = 256*1024*1024L;
-    private static final long MIN_MEM_FOR_HUGE2_BLOOM = 384*1024*1024L;
-    private static final long MIN_MEM_FOR_HUGE3_BLOOM = 512*1024*1024L;
-    private static final long MIN_MEM_FOR_HUGE4_BLOOM = 1024*1024*1024L;
+    private static final long MIN_MEM_TO_USE_BLOOM = 64 * 1024 * 1024L;
+    private static final long MIN_MEM_FOR_BIG_BLOOM = 128 * 1024 * 1024L;
+    private static final long MIN_MEM_FOR_HUGE_BLOOM = 256 * 1024 * 1024L;
+    private static final long MIN_MEM_FOR_HUGE2_BLOOM = 384 * 1024 * 1024L;
+    private static final long MIN_MEM_FOR_HUGE3_BLOOM = 512 * 1024 * 1024L;
+    private static final long MIN_MEM_FOR_HUGE4_BLOOM = 1024 * 1024 * 1024L;
+
     /** for testing */
     private static final String PROP_FORCE = "router.forceDecayingBloomFilter";
+
     /** for testing */
     private static final String PROP_DISABLE = "router.disableDecayingBloomFilter";
 
@@ -54,7 +57,7 @@ class BloomFilterIVValidator implements IVValidator {
         // See DBF, BloomSHA1, and KeySelector for details.
         long maxMemory = SystemVersion.getMaxMemory();
         if (_context.getBooleanProperty(PROP_FORCE)) {
-            _filter = new DecayingBloomFilter(ctx, HALFLIFE_MS, 16, "TunnelIVV");  // 2MB fixed
+            _filter = new DecayingBloomFilter(ctx, HALFLIFE_MS, 16, "TunnelIVV"); // 2MB fixed
         } else if (_context.getBooleanProperty(PROP_DISABLE)) {
             _filter = null;
         } else if (KBps < MIN_SHARE_KBPS_TO_USE_BLOOM || maxMemory < MIN_MEM_TO_USE_BLOOM) {
@@ -62,34 +65,36 @@ class BloomFilterIVValidator implements IVValidator {
                 warn(maxMemory, KBps, MIN_MEM_TO_USE_BLOOM, MIN_SHARE_KBPS_TO_USE_BLOOM);
             _filter = new DecayingHashSet(ctx, HALFLIFE_MS, 16, "TunnelIVV"); // appx. 4MB max
         } else if (KBps >= MIN_SHARE_KBPS_FOR_HUGE4_BLOOM && maxMemory >= MIN_MEM_FOR_HUGE4_BLOOM) {
-            _filter = new DecayingBloomFilter(ctx, HALFLIFE_MS, 16, "TunnelIVV", 28);  // 64MB fixed
+            _filter = new DecayingBloomFilter(ctx, HALFLIFE_MS, 16, "TunnelIVV", 28); // 64MB fixed
         } else if (KBps >= MIN_SHARE_KBPS_FOR_HUGE3_BLOOM && maxMemory >= MIN_MEM_FOR_HUGE3_BLOOM) {
-            _filter = new DecayingBloomFilter(ctx, HALFLIFE_MS, 16, "TunnelIVV", 27);  // 32MB fixed
+            _filter = new DecayingBloomFilter(ctx, HALFLIFE_MS, 16, "TunnelIVV", 27); // 32MB fixed
         } else if (KBps >= MIN_SHARE_KBPS_FOR_HUGE2_BLOOM && maxMemory >= MIN_MEM_FOR_HUGE2_BLOOM) {
-            _filter = new DecayingBloomFilter(ctx, HALFLIFE_MS, 16, "TunnelIVV", 26);  // 16MB fixed
+            _filter = new DecayingBloomFilter(ctx, HALFLIFE_MS, 16, "TunnelIVV", 26); // 16MB fixed
             if (KBps >= MIN_SHARE_KBPS_FOR_HUGE3_BLOOM)
                 warn(maxMemory, KBps, MIN_MEM_FOR_HUGE3_BLOOM, MIN_SHARE_KBPS_FOR_HUGE3_BLOOM);
         } else if (KBps >= MIN_SHARE_KBPS_FOR_HUGE_BLOOM && maxMemory >= MIN_MEM_FOR_HUGE_BLOOM) {
             if (KBps >= MIN_SHARE_KBPS_FOR_HUGE2_BLOOM)
                 warn(maxMemory, KBps, MIN_MEM_FOR_HUGE2_BLOOM, MIN_SHARE_KBPS_FOR_HUGE2_BLOOM);
-            _filter = new DecayingBloomFilter(ctx, HALFLIFE_MS, 16, "TunnelIVV", 25);  // 8MB fixed
+            _filter = new DecayingBloomFilter(ctx, HALFLIFE_MS, 16, "TunnelIVV", 25); // 8MB fixed
         } else if (KBps >= MIN_SHARE_KBPS_FOR_BIG_BLOOM && maxMemory >= MIN_MEM_FOR_BIG_BLOOM) {
             if (KBps >= MIN_SHARE_KBPS_FOR_HUGE_BLOOM)
                 warn(maxMemory, KBps, MIN_MEM_FOR_HUGE_BLOOM, MIN_SHARE_KBPS_FOR_HUGE_BLOOM);
-            _filter = new DecayingBloomFilter(ctx, HALFLIFE_MS, 16, "TunnelIVV", 24);  // 4MB fixed
+            _filter = new DecayingBloomFilter(ctx, HALFLIFE_MS, 16, "TunnelIVV", 24); // 4MB fixed
         } else {
             if (KBps >= MIN_SHARE_KBPS_FOR_BIG_BLOOM)
                 warn(maxMemory, KBps, MIN_MEM_FOR_BIG_BLOOM, MIN_SHARE_KBPS_FOR_BIG_BLOOM);
-            _filter = new DecayingBloomFilter(ctx, HALFLIFE_MS, 16, "TunnelIVV");  // 2MB fixed
+            _filter = new DecayingBloomFilter(ctx, HALFLIFE_MS, 16, "TunnelIVV"); // 2MB fixed
         }
-        ctx.statManager().createRateStat("tunnel.duplicateIV", "Note that a duplicate IV was received", "Tunnels",
-                                         new long[] { 60*1000, 60*60*1000L });
+        ctx.statManager()
+                .createRateStat("tunnel.duplicateIV", "Note that a duplicate IV was received", "Tunnels", new long[] {
+                    60 * 1000, 60 * 60 * 1000L
+                });
     }
 
     @Override
     public boolean receiveIV(byte ivData[], int ivOffset, byte payload[], int payloadOffset) {
-        if (_filter == null)  // testing only
-            return true;
+        // testing only
+        if (_filter == null) return true;
         byte[] buf = SimpleByteCache.acquire(HopProcessor.IV_LENGTH);
         DataHelper.xor(ivData, ivOffset, payload, payloadOffset, buf, 0, HopProcessor.IV_LENGTH);
         boolean dup = _filter.add(buf);
@@ -99,33 +104,27 @@ class BloomFilterIVValidator implements IVValidator {
     }
 
     public void destroy() {
-        if (_filter != null)
-            _filter.stopDecaying();
+        if (_filter != null) _filter.stopDecaying();
     }
 
     /** @since 0.9.20 */
     private void warn(long maxMemory, int KBps, long recMaxMem, int threshKBps) {
-        if (SystemVersion.isAndroid())
-            return;
+        if (SystemVersion.isAndroid()) return;
         String path = OOMListener.getWrapperConfigPath(_context);
-        String msg =
-            "Configured for " + DataHelper.formatSize(KBps *1024L) +
-            "Bps share bandwidth but only " +
-            DataHelper.formatSize(maxMemory) + "B available memory.";
+        String msg = "Configured for " + DataHelper.formatSize(KBps * 1024L) + "Bps share bandwidth but only "
+                + DataHelper.formatSize(maxMemory) + "B available memory.";
         if (_context.hasWrapper()) {
-            msg += "\nRecommend increasing wrapper.java.maxmemory in " +
-                   path;
+            msg += "\nRecommend increasing wrapper.java.maxmemory in " + path;
         } else if (!SystemVersion.isWindows()) {
-            msg += "\nRecommend increasing MAXMEMOPT in " +
-                   _context.getBaseDir() + File.separatorChar + "runplain.sh or /usr/bin/i2prouter-nowrapper";
+            msg += "\nRecommend increasing MAXMEMOPT in " + _context.getBaseDir() + File.separatorChar
+                    + "runplain.sh or /usr/bin/i2prouter-nowrapper";
         } else {
-            msg += "\nRecommend running the restartable version of I2P, and increasing wrapper.java.maxmemory in " +
-                   path;
+            msg += "\nRecommend running the restartable version of I2P, and increasing wrapper.java.maxmemory in "
+                    + path;
         }
         // getMaxMemory() returns significantly lower than wrapper config, so add 10%
-        msg += " to at least " + (recMaxMem * 11 / 10 / (1024*1024)) + " (MB)" +
-               " if the actual share bandwidth exceeds " +
-               DataHelper.formatSize(threshKBps * 1024L) + "Bps.";
+        msg += " to at least " + (recMaxMem * 11 / 10 / (1024 * 1024)) + " (MB)"
+                + " if the actual share bandwidth exceeds " + DataHelper.formatSize(threshKBps * 1024L) + "Bps.";
         System.out.println("WARN: " + msg);
         _context.logManager().getLog(BloomFilterIVValidator.class).logAlways(Log.WARN, msg);
     }

@@ -1,4 +1,5 @@
 package net.i2p.router;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,16 +9,6 @@ package net.i2p.router;
  *
  */
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataStructure;
@@ -32,6 +23,17 @@ import net.i2p.util.Log;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * Manages all router cryptographic key pairs including persistent storage of router keys and in-memory management of LeaseSet keys for secure communications.
  *
@@ -45,12 +47,12 @@ public class KeyManager {
     private SigningPublicKey _signingPublicKey;
     private final Map<Hash, LeaseSetKeys> _leaseSetKeys; // Destination--> LeaseSetKeys
 
-    public final static String PROP_KEYDIR = "router.keyBackupDir";
-    public final static String DEFAULT_KEYDIR = "keyBackup";
-    public final static String KEYFILE_PRIVATE_ENC = "privateEncryption.key";
-    public final static String KEYFILE_PUBLIC_ENC = "publicEncryption.key";
-    public final static String KEYFILE_PRIVATE_SIGNING = "privateSigning.key";
-    public final static String KEYFILE_PUBLIC_SIGNING = "publicSigning.key";
+    public static final String PROP_KEYDIR = "router.keyBackupDir";
+    public static final String DEFAULT_KEYDIR = "keyBackup";
+    public static final String KEYFILE_PRIVATE_ENC = "privateEncryption.key";
+    public static final String KEYFILE_PUBLIC_ENC = "publicEncryption.key";
+    public static final String KEYFILE_PRIVATE_SIGNING = "privateSigning.key";
+    public static final String KEYFILE_PUBLIC_SIGNING = "publicSigning.key";
 
     public KeyManager(RouterContext context) {
         _context = context;
@@ -86,25 +88,33 @@ public class KeyManager {
      * Router key
      * @return will be null on error or before startup() or setKeys() is called
      */
-    public synchronized PrivateKey getPrivateKey() { return _privateKey; }
+    public synchronized PrivateKey getPrivateKey() {
+        return _privateKey;
+    }
 
     /**
      * Router key
      * @return will be null on error or before startup() or setKeys() is called
      */
-    public synchronized PublicKey getPublicKey() { return _publicKey; }
+    public synchronized PublicKey getPublicKey() {
+        return _publicKey;
+    }
 
     /**
      * Router key
      * @return will be null on error or before startup() or setKeys() is called
      */
-    public synchronized SigningPrivateKey getSigningPrivateKey() { return _signingPrivateKey; }
+    public synchronized SigningPrivateKey getSigningPrivateKey() {
+        return _signingPrivateKey;
+    }
 
     /**
      * Router key
      * @return will be null on error or before startup() or setKeys() is called
      */
-    public synchronized SigningPublicKey getSigningPublicKey() { return _signingPublicKey; }
+    public synchronized SigningPublicKey getSigningPublicKey() {
+        return _signingPublicKey;
+    }
 
     /**
      *  Client with a single key
@@ -112,8 +122,7 @@ public class KeyManager {
      *  @param leaseRevocationPrivateKey unused, may be null
      */
     public void registerKeys(Destination dest, SigningPrivateKey leaseRevocationPrivateKey, PrivateKey endpointDecryptionKey) {
-        if (_log.shouldInfo())
-            _log.info("Registering keys for destination " + dest.toBase32());
+        if (_log.shouldInfo()) _log.info("Registering keys for destination " + dest.toBase32());
         LeaseSetKeys keys = new LeaseSetKeys(dest, leaseRevocationPrivateKey, endpointDecryptionKey);
         _leaseSetKeys.put(dest.calculateHash(), keys);
     }
@@ -125,8 +134,7 @@ public class KeyManager {
      *  @since 0.9.44
      */
     public void registerKeys(Destination dest, SigningPrivateKey leaseRevocationPrivateKey, List<PrivateKey> endpointDecryptionKeys) {
-        if (_log.shouldInfo())
-            _log.info("Registering keys for destination " + dest.toBase32());
+        if (_log.shouldInfo()) _log.info("Registering keys for destination " + dest.toBase32());
         LeaseSetKeys keys = new LeaseSetKeys(dest, leaseRevocationPrivateKey, endpointDecryptionKeys);
         _leaseSetKeys.put(dest.calculateHash(), keys);
     }
@@ -147,8 +155,7 @@ public class KeyManager {
      * @return the LeaseSetKeys that were removed, or null if not found
      */
     public LeaseSetKeys unregisterKeys(Destination dest) {
-        if (_log.shouldInfo())
-            _log.info("Unregistering keys for destination " + dest.calculateHash().toBase64());
+        if (_log.shouldInfo()) _log.info("Unregistering keys for destination " + dest.calculateHash().toBase64());
         return _leaseSetKeys.remove(dest.calculateHash());
     }
 
@@ -183,8 +190,7 @@ public class KeyManager {
         public void runJob() {
             String keyDir = getContext().getProperty(PROP_KEYDIR, DEFAULT_KEYDIR);
             File dir = new SecureDirectory(getContext().getRouterDir(), keyDir);
-            if (!dir.exists())
-                dir.mkdirs();
+            if (!dir.exists()) dir.mkdirs();
             if (dir.exists() && dir.isDirectory() && dir.canRead() && dir.canWrite()) {
                 synchronized (KeyManager.this) {
                     syncKeys(dir);
@@ -206,26 +212,20 @@ public class KeyManager {
             DataStructure ds;
             File keyFile = new File(keyDir, KEYFILE_PRIVATE_ENC);
             boolean exists = (_privateKey != null);
-            if (exists)
-                ds = _privateKey;
-            else
-                ds = new PrivateKey();
+            if (exists) ds = _privateKey;
+            else ds = new PrivateKey();
             DataStructure readin = syncKey(keyFile, ds, exists);
-            if (readin != null && !exists)
-                _privateKey = (PrivateKey) readin;
+            if (readin != null && !exists) _privateKey = (PrivateKey) readin;
         }
 
         private void syncPublicKey(File keyDir) {
             DataStructure ds;
             File keyFile = new File(keyDir, KEYFILE_PUBLIC_ENC);
             boolean exists = (_publicKey != null);
-            if (exists)
-                ds = _publicKey;
-            else
-                ds = new PublicKey();
+            if (exists) ds = _publicKey;
+            else ds = new PublicKey();
             DataStructure readin = syncKey(keyFile, ds, exists);
-            if (readin != null && !exists)
-                _publicKey = (PublicKey) readin;
+            if (readin != null && !exists) _publicKey = (PublicKey) readin;
         }
 
         /**
@@ -235,13 +235,10 @@ public class KeyManager {
             DataStructure ds;
             File keyFile = new File(keyDir, KEYFILE_PRIVATE_SIGNING);
             boolean exists = (_signingPrivateKey != null);
-            if (exists)
-                ds = _signingPrivateKey;
-            else
-                ds = new SigningPrivateKey(type);
+            if (exists) ds = _signingPrivateKey;
+            else ds = new SigningPrivateKey(type);
             DataStructure readin = syncKey(keyFile, ds, exists);
-            if (readin != null && !exists)
-                _signingPrivateKey = (SigningPrivateKey) readin;
+            if (readin != null && !exists) _signingPrivateKey = (SigningPrivateKey) readin;
         }
 
         /**
@@ -251,13 +248,10 @@ public class KeyManager {
             DataStructure ds;
             File keyFile = new File(keyDir, KEYFILE_PUBLIC_SIGNING);
             boolean exists = (_signingPublicKey != null);
-            if (exists)
-                ds = _signingPublicKey;
-            else
-                ds = new SigningPublicKey(type);
+            if (exists) ds = _signingPublicKey;
+            else ds = new SigningPublicKey(type);
             DataStructure readin = syncKey(keyFile, ds, exists);
-            if (readin != null && !exists)
-                _signingPublicKey  = (SigningPublicKey) readin;
+            if (readin != null && !exists) _signingPublicKey = (SigningPublicKey) readin;
         }
 
         /**
@@ -288,16 +282,22 @@ public class KeyManager {
             } catch (DataFormatException dfe) {
                 _log.error("Error syncing the structure with " + keyFile.getAbsolutePath(), dfe);
             } finally {
-                if (out != null) try { out.close(); } catch (IOException ioe) {}
-                if (in != null) try { in.close(); } catch (IOException ioe) {}
+                if (out != null) try {
+                        out.close();
+                    } catch (IOException ioe) {
+                    }
+                if (in != null) try {
+                        in.close();
+                    } catch (IOException ioe) {
+                    }
             }
 
-            if (exists)
-                return structure;
-            else
-                return null;
+            if (exists) return structure;
+            else return null;
         }
 
-        public String getName() { return "Synchronize Keys to Disk"; }
+        public String getName() {
+            return "Synchronize Keys to Disk";
+        }
     }
 }

@@ -1,16 +1,5 @@
 package net.i2p.router.networkdb.kademlia;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.crypto.Blinding;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
@@ -25,6 +14,18 @@ import net.i2p.data.SigningPublicKey;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Cache for blinding data as specified in I2P proposal 123.
@@ -63,8 +64,7 @@ class BlindCache {
      *  May be restarted by calling startup() again.
      */
     public synchronized void shutdown() {
-        if (_changed)
-            store();
+        if (_changed) store();
         _context.statManager().addRateData("netdb.blindCache.size", _cache.size());
         _cache.clear();
         _reverseCache.clear();
@@ -100,8 +100,7 @@ class BlindCache {
      */
     public Hash getHash(Destination dest) {
         Hash rv = getBlindedHash(dest);
-        if (rv != null)
-            return rv;
+        if (rv != null) return rv;
         return dest.getHash();
     }
 
@@ -115,8 +114,7 @@ class BlindCache {
      */
     public Hash getHash(Hash h) {
         BlindData bd = _hashCache.get(h);
-        if (bd != null)
-            return bd.getBlindedHash();
+        if (bd != null) return bd.getBlindedHash();
         return h;
     }
 
@@ -130,8 +128,7 @@ class BlindCache {
      */
     public Hash getBlindedHash(Destination dest) {
         BlindData bd = _cache.get(dest.getSigningPublicKey());
-        if (bd != null)
-            return bd.getBlindedHash();
+        if (bd != null) return bd.getBlindedHash();
         return null;
     }
 
@@ -146,8 +143,7 @@ class BlindCache {
      */
     public Hash getBlindedHash(SigningPublicKey spk) {
         BlindData bd = _cache.get(spk);
-        if (bd == null)
-            bd = new BlindData(_context, spk, Blinding.getDefaultBlindedType(spk.getType()), null);
+        if (bd == null) bd = new BlindData(_context, spk, Blinding.getDefaultBlindedType(spk.getType()), null);
         addToCache(bd);
         return bd.getBlindedHash();
     }
@@ -166,8 +162,7 @@ class BlindCache {
         if (bd != null) {
             bd.setDestination(dest);
         } else {
-            if (blindedType == null)
-                blindedType = Blinding.getDefaultBlindedType(spk.getType());
+            if (blindedType == null) blindedType = Blinding.getDefaultBlindedType(spk.getType());
             bd = new BlindData(_context, dest, blindedType, secret);
             bd.setDestination(dest);
             addToCache(bd);
@@ -198,7 +193,9 @@ class BlindCache {
         if (bd.getSecret() != null || bd.getAuthPrivKey() != null) {
             store();
         } else {
-            synchronized (this) { _changed = true; }
+            synchronized (this) {
+                _changed = true;
+            }
         }
         enforceMaxSize();
     }
@@ -210,8 +207,7 @@ class BlindCache {
         _cache.put(bd.getUnblindedPubKey(), bd);
         _reverseCache.put(bd.getBlindedPubKey(), bd);
         Destination dest = bd.getDestination();
-        if (dest != null)
-            _hashCache.put(dest.getHash(), bd);
+        if (dest != null) _hashCache.put(dest.getHash(), bd);
     }
 
     /**
@@ -221,10 +217,8 @@ class BlindCache {
         BlindData rv = getData(dest.getSigningPublicKey());
         if (rv != null) {
             Destination d = rv.getDestination();
-            if (d == null)
-                rv.setDestination(dest);
-            else if (!dest.equals(d))
-                rv = null; // mismatch ???
+            if (d == null) rv.setDestination(dest);
+            else if (!dest.equals(d)) rv = null; // mismatch ???
         }
         return rv;
     }
@@ -236,9 +230,7 @@ class BlindCache {
      */
     public BlindData getData(SigningPublicKey spk) {
         SigType type = spk.getType();
-        if (type != SigType.EdDSA_SHA512_Ed25519 &&
-            type != SigType.RedDSA_SHA512_Ed25519)
-            return null;
+        if (type != SigType.EdDSA_SHA512_Ed25519 && type != SigType.RedDSA_SHA512_Ed25519) return null;
         return _cache.get(spk);
     }
 
@@ -249,8 +241,7 @@ class BlindCache {
      */
     public BlindData getReverseData(SigningPublicKey spk) {
         SigType type = spk.getType();
-        if (type != SigType.RedDSA_SHA512_Ed25519)
-            return null;
+        if (type != SigType.RedDSA_SHA512_Ed25519) return null;
         return _reverseCache.get(spk);
     }
 
@@ -291,8 +282,7 @@ class BlindCache {
             rv = true;
             _reverseCache.remove(bd.getBlindedPubKey());
             Hash h = bd.getDestHash();
-            if (h != null)
-                _hashCache.remove(h);
+            if (h != null) _hashCache.remove(h);
             store();
         }
         return rv;
@@ -308,51 +298,45 @@ class BlindCache {
      */
     private synchronized void load() {
         File file = new File(_context.getConfigDir(), PERSIST_FILE);
-        if (!file.exists())
-            return;
+        if (!file.exists()) return;
         Log log = _context.logManager().getLog(BlindCache.class);
         long now = _context.clock().now();
         int count = 0;
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new InputStreamReader(
-            		new FileInputStream(file), "ISO-8859-1"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "ISO-8859-1"));
             String line = null;
             while ((line = br.readLine()) != null) {
-                if (line.startsWith("#"))
-                    continue;
+                if (line.startsWith("#")) continue;
                 try {
                     BlindData bd = fromPersistentString(line);
                     long exp = bd.getExpiration();
                     if (exp > 0 && exp < now) {
-                        if (log.shouldInfo())
-                            log.info("Skipping expired entry " + bd);
+                        if (log.shouldInfo()) log.info("Skipping expired entry " + bd);
                         continue;
                     }
                     storeInCache(bd);
                     count++;
                 } catch (IllegalArgumentException iae) {
-                    if (log.shouldWarn())
-                        log.warn("Error reading cache entry: " + line, iae);
+                    if (log.shouldWarn()) log.warn("Error reading cache entry: " + line, iae);
                 } catch (DataFormatException dfe) {
-                    if (log.shouldWarn())
-                        log.warn("Error reading cache entry: " + line, dfe);
+                    if (log.shouldWarn()) log.warn("Error reading cache entry: " + line, dfe);
                 }
             }
             _changed = false;
         } catch (IOException ioe) {
-            if (log.shouldWarn() && file.exists())
-                log.warn("Error reading the blinding cache file", ioe);
+            if (log.shouldWarn() && file.exists()) log.warn("Error reading the blinding cache file", ioe);
         } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) {}
+            if (br != null) try {
+                    br.close();
+                } catch (IOException ioe) {
+                }
         }
-        if (log.shouldInfo())
-            log.info("Loaded " + count + " entries from " + file);
+        if (log.shouldInfo()) log.info("Loaded " + count + " entries from " + file);
     }
 
     private synchronized void store() {
-        if (_cache.isEmpty())
-            return;
+        if (_cache.isEmpty()) return;
         Log log = _context.logManager().getLog(BlindCache.class);
         int count = 0;
         File file = new File(_context.getConfigDir(), PERSIST_FILE);
@@ -364,17 +348,14 @@ class BlindCache {
                 out.println(toPersistentString(bd));
                 count++;
             }
-            if (out.checkError())
-                throw new IOException("Failed write to " + file);
+            if (out.checkError()) throw new IOException("Failed write to " + file);
             _changed = false;
         } catch (IOException ioe) {
-            if (log.shouldWarn())
-                log.warn("Error writing the blinding cache File", ioe);
+            if (log.shouldWarn()) log.warn("Error writing the blinding cache File", ioe);
         } finally {
             if (out != null) out.close();
         }
-        if (log.shouldInfo())
-            log.info("Stored " + count + " entries to " + file);
+        if (log.shouldInfo()) log.info("Stored " + count + " entries to " + file);
     }
 
     /**
@@ -386,8 +367,7 @@ class BlindCache {
      */
     private BlindData fromPersistentString(String line) throws DataFormatException {
         String[] ss = DataHelper.split(line, ",", 8);
-        if (ss.length != 8)
-            throw new DataFormatException("Bad format");
+        if (ss.length != 8) throw new DataFormatException("Bad format");
         int ist1, ist2, auth;
         long time;
         try {
@@ -400,15 +380,13 @@ class BlindCache {
         }
         SigType st1 = SigType.getByCode(ist1);
         SigType st2 = SigType.getByCode(ist2);
-        if (st1 == null || !st1.isAvailable() || st2 == null || !st2.isAvailable())
-            throw new DataFormatException("Bad codes");
+        if (st1 == null || !st1.isAvailable() || st2 == null || !st2.isAvailable()) throw new DataFormatException("Bad codes");
         SigningPublicKey spk = new SigningPublicKey(st1);
         spk.fromBase64(ss[4]);
         String secret;
         if (ss[5].length() > 0) {
             byte[] b = Base64.decode(ss[5]);
-            if (b == null)
-                throw new DataFormatException("Bad secret");
+            if (b == null) throw new DataFormatException("Bad secret");
             secret = DataHelper.getUTF8(b);
         } else {
             secret = null;
@@ -416,8 +394,7 @@ class BlindCache {
         PrivateKey privkey;
         if (ss[6].length() > 0) {
             byte[] b = Base64.decode(ss[6]);
-            if (b == null)
-                throw new DataFormatException("Bad privkey");
+            if (b == null) throw new DataFormatException("Bad privkey");
             privkey = new PrivateKey(EncType.ECIES_X25519, b);
         } else {
             privkey = null;
@@ -425,8 +402,7 @@ class BlindCache {
         BlindData rv;
         if (ss[7].length() > 0) {
             Destination dest = new Destination(ss[7]);
-            if (!spk.equals(dest.getSigningPublicKey()))
-                throw new DataFormatException("SigningPublickKey mismatch");
+            if (!spk.equals(dest.getSigningPublicKey())) throw new DataFormatException("SigningPublickKey mismatch");
             rv = new BlindData(_context, dest, st2, secret, auth, privkey);
         } else {
             rv = new BlindData(_context, spk, st2, secret, auth, privkey);
@@ -454,23 +430,18 @@ class BlindCache {
         buf.append(bd.getBlindedSigType().getCode()).append(',');
         buf.append(bd.getAuthType()).append(',');
         long time = bd.getExpiration();
-        if (time > 0)
-            time = 0 - time;
-        else
-            time = bd.getDate();
+        if (time > 0) time = 0 - time;
+        else time = bd.getDate();
         buf.append(time).append(',');
         buf.append(spk.toBase64()).append(',');
         String secret = bd.getSecret();
-        if (secret != null && secret.length() > 0)
-            buf.append(Base64.encode(secret));
+        if (secret != null && secret.length() > 0) buf.append(Base64.encode(secret));
         buf.append(',');
         PrivateKey pk = bd.getAuthPrivKey();
-        if (pk != null)
-            buf.append(pk.toBase64());
+        if (pk != null) buf.append(pk.toBase64());
         buf.append(',');
         Destination dest = bd.getDestination();
-        if (dest != null)
-            buf.append(dest.toBase64());
+        if (dest != null) buf.append(dest.toBase64());
         return buf.toString();
     }
 }

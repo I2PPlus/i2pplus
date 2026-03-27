@@ -1,10 +1,11 @@
 package net.i2p.router.startup;
 
-import java.io.*;
-import java.util.Properties;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
+
+import java.io.*;
+import java.util.Properties;
 
 /**
  * Get a relative working directory for i2p based upon properties by parent process.
@@ -50,10 +51,12 @@ import net.i2p.util.SystemVersion;
 @SuppressWarnings("PMD.CloseResource")
 public class PortableWorkingDir {
 
-    private final static String PROP_BASE_DIR = "i2p.dir.base";
-    private final static String PROP_WORKING_DIR = "i2p.dir.config";
+    private static final String PROP_BASE_DIR = "i2p.dir.base";
+    private static final String PROP_WORKING_DIR = "i2p.dir.config";
+
     /** we do a couple of things differently if this is the username */
     private static final String PROP_WRAPPER_LOG = "wrapper.logfile";
+
     private static final String DEFAULT_WRAPPER_LOG = "wrapper.log";
 
     /**
@@ -64,19 +67,15 @@ public class PortableWorkingDir {
      */
     public static String getWorkingDir(Properties envProps) {
         String dir = null;
-        if (envProps != null)
-            dir = envProps.getProperty(PROP_WORKING_DIR);
-        if (dir == null)
-            dir = System.getProperty(PROP_WORKING_DIR);
+        if (envProps != null) dir = envProps.getProperty(PROP_WORKING_DIR);
+        if (dir == null) dir = System.getProperty(PROP_WORKING_DIR);
 
         // where we are now
         String cwd = null;
-        if (envProps != null)
-            cwd = envProps.getProperty(PROP_BASE_DIR);
+        if (envProps != null) cwd = envProps.getProperty(PROP_BASE_DIR);
         if (cwd == null) {
             cwd = System.getProperty(PROP_BASE_DIR);
-            if (cwd == null)
-                cwd = System.getProperty("user.dir");
+            if (cwd == null) cwd = System.getProperty("user.dir");
         }
 
         File dirf = new SecureDirectory(dir);
@@ -86,8 +85,7 @@ public class PortableWorkingDir {
         File test = new File(oldDirf, "hosts.txt");
         if (!test.exists()) {
             setupSystemOut(cwd);
-            System.err.println("ERROR - Cannot find I2P installation in " + cwd +
-                  " - Will probably be just a router with no apps or console at all!");
+            System.err.println("ERROR - Cannot find I2P installation in " + cwd + " - Will probably be just a router with no apps or console at all!");
             // we are probably doomed...
             return cwd;
         }
@@ -122,10 +120,8 @@ public class PortableWorkingDir {
      *  @since 0.8.13
      */
     private static void setupSystemOut(String dir) {
-        if (SystemVersion.hasWrapper())
-            return;
-        if (System.getProperty("I2P_DISABLE_OUTPUT_OVERRIDE") != null)
-            return;
+        if (SystemVersion.hasWrapper()) return;
+        if (System.getProperty("I2P_DISABLE_OUTPUT_OVERRIDE") != null) return;
         String path = System.getProperty(PROP_WRAPPER_LOG);
         File logfile;
         if (path != null) {
@@ -133,8 +129,7 @@ public class PortableWorkingDir {
         } else {
             logfile = new File(DEFAULT_WRAPPER_LOG);
             if (!logfile.exists()) {
-                if (dir == null)
-                    dir = System.getProperty("java.io.tmpdir");
+                if (dir == null) dir = System.getProperty("java.io.tmpdir");
                 logfile = new File(dir, DEFAULT_WRAPPER_LOG);
             }
         }
@@ -147,6 +142,4 @@ public class PortableWorkingDir {
             ioe.printStackTrace();
         }
     }
-
-
 }

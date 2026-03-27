@@ -38,7 +38,7 @@ public class I2PProperties extends Properties {
     @Override
     public Object setProperty(String key, String value) {
         Object returnValue = super.setProperty(key, value);
-        for (I2PPropertyCallback callback: _callbacks) {
+        for (I2PPropertyCallback callback : _callbacks) {
             callback.propertyChanged(key, value);
         }
         return returnValue;
@@ -51,7 +51,5 @@ public class I2PProperties extends Properties {
     public interface I2PPropertyCallback {
 
         public void propertyChanged(String key, String value);
-
     }
-
 }

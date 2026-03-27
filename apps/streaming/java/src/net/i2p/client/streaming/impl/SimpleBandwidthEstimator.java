@@ -65,15 +65,13 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
             _bK_ns_est = bkdt;
             _acked = 0;
             _tAck = now;
-            if (_log.shouldDebug())
-                _log.debug("first sample packets: " + acked + " deltaT: " + deltaT + ' ' + this);
+            if (_log.shouldDebug()) _log.debug("first sample packets: " + acked + " deltaT: " + deltaT + ' ' + this);
         } else {
             _acked += acked;
             // anti-aliasing filter
             // As in kernel tcp_westwood.c
             // and the Westwood+ paper
-            if (now - _tAck >= Math.max(_opts.getRTT(), WESTWOOD_RTT_MIN))
-                computeBWE(now);
+            if (now - _tAck >= Math.max(_opts.getRTT(), WESTWOOD_RTT_MIN)) computeBWE(now);
         }
     }
 
@@ -86,14 +84,12 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
         // anti-aliasing filter
         // As in kernel tcp_westwood.c
         // and the Westwood+ paper
-        if (now - _tAck >= Math.max(_opts.getRTT(), WESTWOOD_RTT_MIN))
-            return computeBWE(now);
+        if (now - _tAck >= Math.max(_opts.getRTT(), WESTWOOD_RTT_MIN)) return computeBWE(now);
         return _bKFiltered;
     }
 
     private synchronized float computeBWE(final long now) {
-        if (_acked < 0)
-            return 0.0f; // nothing ever sampled
+        if (_acked < 0) return 0.0f; // nothing ever sampled
         updateBK(now, _acked);
         _acked = 0;
         return _bKFiltered;
@@ -125,8 +121,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
                 decay();
             }
             deltaT -= (long) numrtts * rtt;
-            if (_log.shouldDebug())
-                _log.debug("decayed " + numrtts + " times, new _bK_ns_est: " + _bK_ns_est + ' ' + this);
+            if (_log.shouldDebug()) _log.debug("decayed " + numrtts + " times, new _bK_ns_est: " + _bK_ns_est + ' ' + this);
         }
         float bkdt;
         if (packets > 0) {
@@ -139,9 +134,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
             decay();
         }
         _tAck = time;
-        if (_log.shouldDebug())
-            _log.debug("computeBWE packets: " + packets + " deltaT: " + deltaT +
-                       " bk/deltaT: " + bkdt + " _bK_ns_est: " + _bK_ns_est + ' ' + this);
+        if (_log.shouldDebug()) _log.debug("computeBWE packets: " + packets + " deltaT: " + deltaT + " bk/deltaT: " + bkdt + " _bK_ns_est: " + _bK_ns_est + ' ' + this);
     }
 
     /**
@@ -153,10 +146,6 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
 
     @Override
     public synchronized String toString() {
-        return "\n* SimpleBandwidthEstimator: " +
-                " _bKFiltered " + _bKFiltered +
-                " _tAck " + _tAck + "; " +
-                DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000 * _opts.getMaxMessageSize()), false) +
-                "Bps";
+        return "\n* SimpleBandwidthEstimator: " + " _bKFiltered " + _bKFiltered + " _tAck " + _tAck + "; " + DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000 * _opts.getMaxMessageSize()), false) + "Bps";
     }
 }

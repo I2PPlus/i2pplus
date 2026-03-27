@@ -5,9 +5,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.math.BigInteger;
 import net.i2p.crypto.CryptoConstants;
+
 import org.junit.Test;
+
+import java.math.BigInteger;
 
 public class ElGamalParameterSpecTest {
 

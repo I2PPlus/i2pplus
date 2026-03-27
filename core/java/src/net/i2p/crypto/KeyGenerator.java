@@ -101,12 +101,11 @@ public final class KeyGenerator {
      *  Warning - SLOW
      */
     public SessionKey generateSessionKey(byte salt[], byte passphrase[]) {
-        byte salted[] = new byte[16+passphrase.length];
+        byte salted[] = new byte[16 + passphrase.length];
         System.arraycopy(salt, 0, salted, 0, Math.min(salt.length, 16));
         System.arraycopy(passphrase, 0, salted, 16, passphrase.length);
         byte h[] = _context.sha().calculateHash(salted).getData();
-        for (int i = 1; i < PBE_ROUNDS; i++)
-            _context.sha().calculateHash(h, 0, Hash.HASH_LENGTH, h, 0);
+        for (int i = 1; i < PBE_ROUNDS; i++) _context.sha().calculateHash(h, 0, Hash.HASH_LENGTH, h, 0);
         return new SessionKey(h);
     }
 
@@ -124,16 +123,14 @@ public final class KeyGenerator {
     private static final int PUBKEY_EXPONENT_SIZE_SHORT = 226;
 
     /** @since 0.9.8 */
-    private static final boolean DEFAULT_USE_LONG_EXPONENT =
-                                                   !SystemVersion.isSlow();
+    private static final boolean DEFAULT_USE_LONG_EXPONENT = !SystemVersion.isSlow();
 
     /**
      *  @deprecated use getElGamalExponentSize() which allows override in the properties
      */
     @Deprecated
-    public static final int PUBKEY_EXPONENT_SIZE = DEFAULT_USE_LONG_EXPONENT ?
-                                                   PUBKEY_EXPONENT_SIZE_FULL :
-                                                   PUBKEY_EXPONENT_SIZE_SHORT;
+    public static final int PUBKEY_EXPONENT_SIZE =
+            DEFAULT_USE_LONG_EXPONENT ? PUBKEY_EXPONENT_SIZE_FULL : PUBKEY_EXPONENT_SIZE_SHORT;
 
     private static final String PROP_LONG_EXPONENT = "crypto.elGamal.useLongKey";
 
@@ -148,9 +145,7 @@ public final class KeyGenerator {
      *  @since 0.9.8
      */
     public int getElGamalExponentSize() {
-        return useLongElGamalExponent() ?
-               PUBKEY_EXPONENT_SIZE_FULL :
-               PUBKEY_EXPONENT_SIZE_SHORT;
+        return useLongElGamalExponent() ? PUBKEY_EXPONENT_SIZE_FULL : PUBKEY_EXPONENT_SIZE_SHORT;
     }
 
     /**
@@ -182,9 +177,7 @@ public final class KeyGenerator {
         try {
             PublicKey pub = new PublicKey(SigUtil.rectify(aalpha, PublicKey.KEYSIZE_BYTES));
             keys[0] = pub;
-            keys[1] = new PrivateKey(EncType.ELGAMAL_2048,
-                                     SigUtil.rectify(a, PrivateKey.KEYSIZE_BYTES),
-                                     pub);
+            keys[1] = new PrivateKey(EncType.ELGAMAL_2048, SigUtil.rectify(a, PrivateKey.KEYSIZE_BYTES), pub);
         } catch (InvalidKeyException ike) {
             throw new IllegalArgumentException(ike);
         }
@@ -213,8 +206,8 @@ public final class KeyGenerator {
                 byte[] bpriv = new byte[32];
                 do {
                     _context.random().nextBytes(bpriv);
-                // little endian, loop if too small
-                // worth doing?
+                    // little endian, loop if too small
+                    // worth doing?
                 } while (bpriv[31] == 0);
                 byte[] bpub = new byte[32];
                 Curve25519.eval(bpub, 0, bpriv, null);
@@ -224,7 +217,6 @@ public final class KeyGenerator {
 
             default:
                 throw new IllegalArgumentException("Unsupported algorithm");
-
         }
         return new KeyPair(pub, priv);
     }
@@ -261,7 +253,6 @@ public final class KeyGenerator {
 
             default:
                 throw new IllegalArgumentException("Unsupported algorithm");
-
         }
         PublicKey pub = new PublicKey(type, data);
         return pub;
@@ -309,49 +300,44 @@ public final class KeyGenerator {
      *  @since 0.9.9
      */
     public SimpleDataStructure[] generateSigningKeys(SigType type) throws GeneralSecurityException {
-        if (type == SigType.DSA_SHA1)
-            return generateSigningKeys();
+        if (type == SigType.DSA_SHA1) return generateSigningKeys();
         java.security.KeyPair kp;
         if (type.getBaseAlgorithm() == SigAlgo.EdDSA) {
             net.i2p.crypto.eddsa.KeyPairGenerator kpg;
-            if (type == SigType.RedDSA_SHA512_Ed25519)
-                kpg = new RedKeyPairGenerator();
-            else
-                kpg = new net.i2p.crypto.eddsa.KeyPairGenerator();
+            if (type == SigType.RedDSA_SHA512_Ed25519) kpg = new RedKeyPairGenerator();
+            else kpg = new net.i2p.crypto.eddsa.KeyPairGenerator();
             kpg.initialize(type.getParams(), _context.random());
             kp = kpg.generateKeyPair();
         } else {
-            KeyPairGenerator kpg = KeyPairGenerator.getInstance(type.getBaseAlgorithm().getName());
+            KeyPairGenerator kpg =
+                    KeyPairGenerator.getInstance(type.getBaseAlgorithm().getName());
             try {
                 kpg.initialize(type.getParams(), _context.random());
                 kp = kpg.generateKeyPair();
             } catch (ProviderException pe) {
-                // java.security.ProviderException: sun.security.pkcs11.wrapper.PKCS11Exception: CKR_DOMAIN_PARAMS_INVALID
+                // java.security.ProviderException: sun.security.pkcs11.wrapper.PKCS11Exception:
+                // CKR_DOMAIN_PARAMS_INVALID
                 // This is a RuntimeException, thx Sun
                 // Fails for P-192 only, on Ubuntu
                 Log log = _context.logManager().getLog(KeyGenerator.class);
                 String pname = kpg.getProvider().getName();
                 if ("BC".equals(pname)) {
-                    if (log.shouldWarn())
-                        log.warn("BC KPG failed for " + type, pe);
+                    if (log.shouldWarn()) log.warn("BC KPG failed for " + type, pe);
                     throw new GeneralSecurityException("BC KPG for " + type, pe);
                 }
                 if (!ECConstants.isBCAvailable())
                     throw new GeneralSecurityException(pname + " KPG failed for " + type, pe);
-                if (log.shouldWarn())
-                    log.warn(pname + " KPG failed for " + type + ", trying BC"  /*, pe */);
+                if (log.shouldWarn()) log.warn(pname + " KPG failed for " + type + ", trying BC" /*, pe */);
                 try {
                     kpg = KeyPairGenerator.getInstance(type.getBaseAlgorithm().getName(), "BC");
                     kpg.initialize(type.getParams(), _context.random());
                     kp = kpg.generateKeyPair();
                 } catch (ProviderException pe2) {
-                    if (log.shouldWarn())
-                        log.warn("BC KPG failed for " + type + " also", pe2);
+                    if (log.shouldWarn()) log.warn("BC KPG failed for " + type + " also", pe2);
                     // throw original exception
                     throw new GeneralSecurityException(pname + " KPG for " + type, pe);
                 } catch (GeneralSecurityException gse) {
-                    if (log.shouldWarn())
-                        log.warn("BC KPG failed for " + type + " also", gse);
+                    if (log.shouldWarn()) log.warn("BC KPG failed for " + type + " also", gse);
                     // throw original exception
                     throw new GeneralSecurityException(pname + " KPG for " + type, pe);
                 }
@@ -375,8 +361,7 @@ public final class KeyGenerator {
      */
     public static SigningPublicKey getSigningPublicKey(SigningPrivateKey priv) {
         SigType type = priv.getType();
-        if (type == null)
-            throw new IllegalArgumentException("Unknown type");
+        if (type == null) throw new IllegalArgumentException("Unknown type");
         try {
             switch (type.getBaseAlgorithm()) {
                 case DSA:
@@ -400,7 +385,7 @@ public final class KeyGenerator {
 
                 case RSA:
                     RSAPrivateKey rsapriv = SigUtil.toJavaRSAKey(priv);
-                    BigInteger exp = ((RSAKeyGenParameterSpec)type.getParams()).getPublicExponent();
+                    BigInteger exp = ((RSAKeyGenParameterSpec) type.getParams()).getPublicExponent();
                     RSAPublicKeySpec rsaks = new RSAPublicKeySpec(rsapriv.getModulus(), exp);
                     KeyFactory rsakf = KeyFactory.getInstance("RSA");
                     RSAPublicKey rsapub = (RSAPublicKey) rsakf.generatePublic(rsaks);
@@ -435,7 +420,9 @@ public final class KeyGenerator {
      */
     private static void main2(String args[]) {
         RandomSource.getInstance().nextBoolean();
-        try { Thread.sleep(1000); } catch (InterruptedException ie) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ie) {
             // interrupted during warmup
         }
         int runs = 200; // warmup
@@ -444,10 +431,8 @@ public final class KeyGenerator {
             toTest = new ArrayList<SigType>();
             for (int i = 0; i < args.length; i++) {
                 SigType type = SigType.parseSigType(args[i]);
-                if (type != null)
-                    toTest.add(type);
-                else
-                    System.out.println("Unknown type: " + args[i]);
+                if (type != null) toTest.add(type);
+                else System.out.println("Unknown type: " + args[i]);
             }
             if (toTest.isEmpty()) {
                 System.out.println("No types to test");
@@ -487,17 +472,15 @@ public final class KeyGenerator {
             keys = KeyGenerator.getInstance().generateSigningKeys(type);
         }
         long en = System.nanoTime();
-        gtime = ((en - st) / (1000*1000d)) / genruns;
+        gtime = ((en - st) / (1000 * 1000d)) / genruns;
         System.out.println(type + " key gen " + genruns + " times: " + gtime + " ms each");
         SigningPublicKey pubkey = (SigningPublicKey) keys[0];
         SigningPrivateKey privkey = (SigningPrivateKey) keys[1];
         SigningPublicKey pubkey2 = getSigningPublicKey(privkey);
-        if (pubkey.equals(pubkey2))
-            System.out.println(type + " private-to-public test PASSED");
-        else
-            System.out.println(type + " private-to-public test FAILED");
+        if (pubkey.equals(pubkey2)) System.out.println(type + " private-to-public test PASSED");
+        else System.out.println(type + " private-to-public test FAILED");
 
-        //System.out.println("privkey " + keys[1]);
+        // System.out.println("privkey " + keys[1]);
         MessageDigest md = type.getDigestInstance();
         for (int i = 0; i < runs; i++) {
             RandomSource.getInstance().nextBytes(src);
@@ -508,29 +491,23 @@ public final class KeyGenerator {
             long start = System.nanoTime();
             Signature sig = DSAEngine.getInstance().sign(src, privkey);
             Signature sig2 = DSAEngine.getInstance().sign(hash, privkey);
-            if (sig == null)
-                throw new GeneralSecurityException("signature generation failed");
-            if (sig2 == null)
-                throw new GeneralSecurityException("signature generation (H) failed");
+            if (sig == null) throw new GeneralSecurityException("signature generation failed");
+            if (sig2 == null) throw new GeneralSecurityException("signature generation (H) failed");
             long mid = System.nanoTime();
             boolean ok = DSAEngine.getInstance().verifySignature(sig, src, pubkey);
             boolean ok2 = DSAEngine.getInstance().verifySignature(sig2, hash, pubkey);
             long end = System.nanoTime();
             stime += mid - start;
             vtime += end - mid;
-            if (!ok)
-                throw new GeneralSecurityException(type + " V(S(data)) fail on run " + i);
-            if (!ok2)
-                throw new GeneralSecurityException(type + " V(S(H(data))) fail on run" + i);
+            if (!ok) throw new GeneralSecurityException(type + " V(S(data)) fail on run " + i);
+            if (!ok2) throw new GeneralSecurityException(type + " V(S(H(data))) fail on run" + i);
         }
-        stime /= 1000*1000;
-        vtime /= 1000*1000;
+        stime /= 1000 * 1000;
+        vtime /= 1000 * 1000;
         // we do two of each per run above
         int runs2 = runs * 2;
-        System.out.println(type + " sign/verify " + runs + " times: " + (vtime+stime) + " ms = " +
-                           (((double) stime) / runs2) + " each sign, " +
-                           (((double) vtime) / runs2) + " each verify, " +
-                           (((double) (stime + vtime)) / runs2) + " s+v");
+        System.out.println(type + " sign/verify " + runs + " times: " + (vtime + stime) + " ms = "
+                + (((double) stime) / runs2) + " each sign, " + (((double) vtime) / runs2) + " each verify, "
+                + (((double) (stime + vtime)) / runs2) + " s+v");
     }
-
 }

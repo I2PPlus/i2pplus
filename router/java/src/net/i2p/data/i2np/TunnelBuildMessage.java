@@ -19,8 +19,12 @@ public class TunnelBuildMessage extends TunnelBuildMessageBase {
     }
 
     @Override
-    public int getType() {return MESSAGE_TYPE;}
+    public int getType() {
+        return MESSAGE_TYPE;
+    }
 
     @Override
-    public String toString() {return "[TunnelBuildMessage]";}
+    public String toString() {
+        return "[TunnelBuildMessage]";
+    }
 }

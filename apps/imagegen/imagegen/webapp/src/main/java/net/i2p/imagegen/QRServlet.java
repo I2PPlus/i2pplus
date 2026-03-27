@@ -28,6 +28,9 @@ import com.google.zxing.client.j2se.MatrixToImageConfig;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+
+import net.i2p.util.SystemVersion;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -35,13 +38,13 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.i2p.util.SystemVersion;
 
 /**
  * This servlet generates QR code images.
@@ -60,8 +63,7 @@ public class QRServlet extends HttpServlet {
     private static final String IDENTICON_IMAGE_FORMAT = "PNG";
     private static final String IDENTICON_IMAGE_MIMETYPE = "image/png";
     private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * 60 * 1000;
-    private static final String DEFAULT_FONT_NAME = SystemVersion.isWindows() ?
-                                                    "Lucida Sans Typewriter" : Font.MONOSPACED;
+    private static final String DEFAULT_FONT_NAME = SystemVersion.isWindows() ? "Lucida Sans Typewriter" : Font.MONOSPACED;
     private static final Font DEFAULT_LARGE_FONT = new Font(DEFAULT_FONT_NAME, Font.BOLD, 16);
 
     private int version = 1;
@@ -76,9 +78,7 @@ public class QRServlet extends HttpServlet {
         // used in ETag to force identicons to be updated as needed.
         // Change version whenever rendering codes changes result in
         // visual changes.
-        if (cfg.getInitParameter(INIT_PARAM_VERSION) != null)
-            this.version = Integer.parseInt(cfg
-                    .getInitParameter(INIT_PARAM_VERSION));
+        if (cfg.getInitParameter(INIT_PARAM_VERSION) != null) this.version = Integer.parseInt(cfg.getInitParameter(INIT_PARAM_VERSION));
 
         String cacheProvider = cfg.getInitParameter(INIT_PARAM_CACHE_PROVIDER);
         if (cacheProvider != null) {
@@ -92,10 +92,11 @@ public class QRServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        if (request.getCharacterEncoding() == null) {request.setCharacterEncoding("UTF-8");}
+        if (request.getCharacterEncoding() == null) {
+            request.setCharacterEncoding("UTF-8");
+        }
         String codeParam = request.getParameter(PARAM_IDENTICON_CODE_SHORT);
         boolean codeSpecified = codeParam != null && codeParam.length() > 0;
         if (!codeSpecified) {
@@ -113,9 +114,13 @@ public class QRServlet extends HttpServlet {
         if (sizeParam != null) {
             try {
                 size = Integer.parseInt(sizeParam);
-                if (size < 40) {size = 40;}
-                else if (size > 1024) {size = 1024;}
-            } catch (NumberFormatException nfe) {}
+                if (size < 40) {
+                    size = 40;
+                } else if (size > 1024) {
+                    size = 1024;
+                }
+            } catch (NumberFormatException nfe) {
+            }
         }
 
         String identiconETag = IdenticonUtil.getIdenticonETag(codeParam.hashCode(), size, version);
@@ -131,14 +136,16 @@ public class QRServlet extends HttpServlet {
                 ByteArrayOutputStream byteOut = new ByteArrayOutputStream(4096);
                 QRCodeWriter qrcw = new QRCodeWriter();
                 BitMatrix matrix;
-                try {matrix = qrcw.encode(codeParam, BarcodeFormat.QR_CODE, size, size);}
-                catch (WriterException we) {throw new IOException("encode failed", we);}
+                try {
+                    matrix = qrcw.encode(codeParam, BarcodeFormat.QR_CODE, size, size);
+                } catch (WriterException we) {
+                    throw new IOException("encode failed", we);
+                }
                 String text = request.getParameter(PARAM_IDENTICON_TEXT_SHORT);
                 if (text != null) {
                     // add 1 so it generates RGB instead of 1 bit,
                     // so text anti-aliasing works
-                    MatrixToImageConfig cfg = new MatrixToImageConfig(MatrixToImageConfig.BLACK + 1,
-                                                                      MatrixToImageConfig.WHITE);
+                    MatrixToImageConfig cfg = new MatrixToImageConfig(MatrixToImageConfig.BLACK + 1, MatrixToImageConfig.WHITE);
                     BufferedImage bi = MatrixToImageWriter.toBufferedImage(matrix, cfg);
                     Graphics2D g = bi.createGraphics();
                     // anti-aliasing and hinting for the text
@@ -150,9 +157,13 @@ public class QRServlet extends HttpServlet {
                     int width = bi.getWidth();
                     int height = bi.getHeight();
                     float shrink = Math.min(1.0f, 14.0f / text.length());
-                    if (width >= 256) {shrink = Math.min(1.0f, 16.0f / text.length());}
+                    if (width >= 256) {
+                        shrink = Math.min(1.0f, 16.0f / text.length());
+                    }
                     int pts = Math.round(shrink * 16.0f * size / 160);
-                    if (width >= 256) {pts = Math.round(shrink * 16.0f * size / 180);}
+                    if (width >= 256) {
+                        pts = Math.round(shrink * 16.0f * size / 180);
+                    }
                     Font font = new Font(DEFAULT_FONT_NAME, Font.BOLD, pts);
                     g.setFont(font);
                     Color color = Color.BLACK;
@@ -160,15 +171,18 @@ public class QRServlet extends HttpServlet {
                     double swidth = font.getStringBounds(text, 0, text.length(), g.getFontRenderContext()).getBounds().getWidth();
                     int x = (width - (int) swidth) / 2;
                     int y = height - 10;
-                    if (height >= 256) {y = height - ((height / 50) + 10);}
+                    if (height >= 256) {
+                        y = height - ((height / 50) + 10);
+                    }
                     g.drawString(text, x, y);
-                    if (!ImageIO.write(bi, IDENTICON_IMAGE_FORMAT, byteOut))
-                        throw new IOException("ImageIO.write() fail");
+                    if (!ImageIO.write(bi, IDENTICON_IMAGE_FORMAT, byteOut)) throw new IOException("ImageIO.write() fail");
                 } else {
                     MatrixToImageWriter.writeToStream(matrix, IDENTICON_IMAGE_FORMAT, byteOut);
                 }
                 imageBytes = byteOut.toByteArray();
-                if (cache != null) {cache.add(identiconETag, imageBytes);}
+                if (cache != null) {
+                    cache.add(identiconETag, imageBytes);
+                }
             } else {
                 response.setStatus(404);
                 return;

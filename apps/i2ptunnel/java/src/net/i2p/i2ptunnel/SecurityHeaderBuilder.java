@@ -1,8 +1,8 @@
 package net.i2p.i2ptunnel;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Builds and manages HTTP security headers for server responses.
@@ -75,9 +75,10 @@ public class SecurityHeaderBuilder {
      * @param mimeType the response MIME type
      */
     private static void addReferrerPolicyHeader(Map<String, List<String>> headers, String mimeType) {
-        if (!MimeTypeDetector.isCustomWhitelist(mimeType)) {return;}
-        boolean hasReferrerPolicy = headers.keySet().stream()
-            .anyMatch(key -> key.equalsIgnoreCase("Referrer-Policy"));
+        if (!MimeTypeDetector.isCustomWhitelist(mimeType)) {
+            return;
+        }
+        boolean hasReferrerPolicy = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("Referrer-Policy"));
         if (!hasReferrerPolicy) {
             I2PTunnelHTTPServer.setEntry(headers, "Referrer-Policy", "same-origin");
         }
@@ -96,9 +97,10 @@ public class SecurityHeaderBuilder {
      * @param mimeType the response MIME type
      */
     private static void addAllowHeader(Map<String, List<String>> headers, String mimeType) {
-        if (!MimeTypeDetector.isCustomWhitelist(mimeType)) {return;}
-        boolean hasAllow = headers.keySet().stream()
-            .anyMatch(key -> key.equalsIgnoreCase("Allow"));
+        if (!MimeTypeDetector.isCustomWhitelist(mimeType)) {
+            return;
+        }
+        boolean hasAllow = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("Allow"));
         if (!hasAllow) {
             I2PTunnelHTTPServer.setEntry(headers, "Allow", "GET, POST, HEAD");
         }
@@ -125,8 +127,7 @@ public class SecurityHeaderBuilder {
      * @param mimeType the response MIME type
      */
     private static void addCacheControlHeader(Map<String, List<String>> headers, String mimeType) {
-        boolean hasCacheControl = headers.keySet().stream()
-            .anyMatch(key -> key.equalsIgnoreCase("Cache-Control"));
+        boolean hasCacheControl = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("Cache-Control"));
         List<String> cacheControlList = headers.get("Cache-Control");
 
         if (cacheControlList != null && cacheControlList.contains("none".toLowerCase(Locale.ROOT))) {
@@ -156,8 +157,8 @@ public class SecurityHeaderBuilder {
             boolean hasNoCache = hasCacheControl && cacheControlList.contains("no-cache".toLowerCase(Locale.ROOT));
             if (hasNoCache && immutableCache) {
                 headers.remove("Cache-Control");
-                I2PTunnelHTTPServer.setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");}
-            else if (immutableCache && !hasCacheControl) {
+                I2PTunnelHTTPServer.setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");
+            } else if (immutableCache && !hasCacheControl) {
                 I2PTunnelHTTPServer.setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");
             } else if (!hasCacheControl) {
                 I2PTunnelHTTPServer.setEntry(headers, "Cache-Control", "private, no-cache, max-age=604800");
@@ -181,8 +182,7 @@ public class SecurityHeaderBuilder {
      * @param headers the HTTP response headers map
      */
     private static void addXSSProtectionHeader(Map<String, List<String>> headers) {
-        boolean hasXSS = headers.keySet().stream()
-            .anyMatch(key -> key.equalsIgnoreCase("X-XSS-Protection"));
+        boolean hasXSS = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("X-XSS-Protection"));
         if (!hasXSS) {
             I2PTunnelHTTPServer.setEntry(headers, "X-XSS-Protection", "1; mode=block");
         }
@@ -201,8 +201,7 @@ public class SecurityHeaderBuilder {
      * @param headers the HTTP response headers map
      */
     private static void addNoSniffHeader(Map<String, List<String>> headers) {
-        boolean hasNoSniff = headers.keySet().stream()
-            .anyMatch(key -> key.equalsIgnoreCase("X-Content-Type-Options"));
+        boolean hasNoSniff = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("X-Content-Type-Options"));
         if (!hasNoSniff) {
             I2PTunnelHTTPServer.setEntry(headers, "X-Content-Type-Options", "nosniff");
         }
@@ -220,7 +219,9 @@ public class SecurityHeaderBuilder {
      */
     public static void filterSetCookieHeaders(Map<String, List<String>> headers) {
         List<String> setCookieList = headers.get("Set-Cookie");
-        if (setCookieList == null || setCookieList.isEmpty()) {return;}
+        if (setCookieList == null || setCookieList.isEmpty()) {
+            return;
+        }
 
         List<String> newSetCookieList = new java.util.ArrayList<>();
         for (String setCookie : setCookieList) {
@@ -231,7 +232,9 @@ public class SecurityHeaderBuilder {
                     break;
                 }
             }
-            if (!containsString) {newSetCookieList.add(setCookie);}
+            if (!containsString) {
+                newSetCookieList.add(setCookie);
+            }
         }
 
         if (newSetCookieList.isEmpty()) {
@@ -253,7 +256,9 @@ public class SecurityHeaderBuilder {
      */
     public static void filterCacheControlHeaders(Map<String, List<String>> headers) {
         List<String> cacheControlList = headers.get("Cache-Control");
-        if (cacheControlList == null) {return;}
+        if (cacheControlList == null) {
+            return;
+        }
 
         boolean hasNone = cacheControlList.stream().anyMatch(s -> s.toLowerCase(Locale.ROOT).equals("none"));
         boolean hasPostCheck = cacheControlList.stream().anyMatch(s -> s.toLowerCase(Locale.ROOT).equals("post-check"));

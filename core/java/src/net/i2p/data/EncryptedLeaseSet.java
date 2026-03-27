@@ -1,14 +1,5 @@
 package net.i2p.data;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.time.Instant;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.Blinding;
 import net.i2p.crypto.ChaCha20;
@@ -22,6 +13,16 @@ import net.i2p.crypto.x25519.X25519DH;
 import net.i2p.util.ByteArrayStream;
 import net.i2p.util.Clock;
 import net.i2p.util.Log;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.time.Instant;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of EncryptedLeaseSet as specified in
@@ -114,9 +115,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      */
     public void setSecret(String secret) {
         if (_signingKey != null && !DataHelper.eq(secret, _secret)) {
-            if (_log.shouldWarn())
-                _log.warn("setSecret() after setSigningKey()" +
-                          " was: " + _secret + " now: " + secret);
+            if (_log.shouldWarn()) _log.warn("setSecret() after setSigningKey()" + " was: " + _secret + " now: " + secret);
         }
         _secret = secret;
     }
@@ -161,8 +160,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      */
     @Override
     public List<PublicKey> getEncryptionKeys() {
-        if (_decryptedLS2 != null)
-            return _decryptedLS2.getEncryptionKeys();
+        if (_decryptedLS2 != null) return _decryptedLS2.getEncryptionKeys();
         return super.getEncryptionKeys();
     }
 
@@ -175,8 +173,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      */
     @Override
     public PublicKey getEncryptionKey(Set<EncType> supported) {
-        if (_decryptedLS2 != null)
-            return _decryptedLS2.getEncryptionKey(supported);
+        if (_decryptedLS2 != null) return _decryptedLS2.getEncryptionKey(supported);
         return super.getEncryptionKey(supported);
     }
 
@@ -191,8 +188,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     @Override
     public void setDestination(Destination dest) {
         if (_signature != null && _destination != null) {
-            if (!dest.equals(_destination))
-                throw new IllegalStateException();
+            if (!dest.equals(_destination)) throw new IllegalStateException();
         } else {
             _destination = dest;
         }
@@ -212,22 +208,15 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     @Override
     public void setSigningKey(SigningPublicKey spk) {
         SigType type = spk.getType();
-        if (type != SigType.EdDSA_SHA512_Ed25519 &&
-            type != SigType.RedDSA_SHA512_Ed25519)
-            throw new IllegalArgumentException();
+        if (type != SigType.EdDSA_SHA512_Ed25519 && type != SigType.RedDSA_SHA512_Ed25519) throw new IllegalArgumentException();
         if (_unblindedSPK != null) {
-            if (!_unblindedSPK.equals(spk))
-                throw new IllegalArgumentException("Unblinded pubkey mismatch");
+            if (!_unblindedSPK.equals(spk)) throw new IllegalArgumentException("Unblinded pubkey mismatch");
         } else {
             _unblindedSPK = spk;
         }
         SigningPublicKey bpk = blind(spk);
-        if (_signingKey == null)
-            _signingKey = bpk;
-        else if (!_signingKey.equals(bpk))
-            throw new IllegalArgumentException("Blinded pubkey mismatch:" +
-                                               "\nas received:   " + _signingKey +
-                                               "\nas calculated: " + bpk);
+        if (_signingKey == null) _signingKey = bpk;
+        else if (!_signingKey.equals(bpk)) throw new IllegalArgumentException("Blinded pubkey mismatch:" + "\nas received:   " + _signingKey + "\nas calculated: " + bpk);
     }
 
     /**
@@ -238,17 +227,10 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      */
     private SigningPublicKey blind(SigningPublicKey spk) {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        if (_published <= 0)
-            _alpha = Blinding.generateAlpha(ctx, spk, _secret);
-        else
-            _alpha = Blinding.generateAlpha(ctx, spk, _secret, _published);
+        if (_published <= 0) _alpha = Blinding.generateAlpha(ctx, spk, _secret);
+        else _alpha = Blinding.generateAlpha(ctx, spk, _secret, _published);
         SigningPublicKey rv = Blinding.blind(spk, _alpha);
-        if (_log.shouldDebug())
-            _log.debug("Blind:" +
-                       "\norig:    " + spk +
-                       "\nsecret:  " + _secret +
-                       "\nalpha:   " + _alpha +
-                       "\nblinded: " + rv);
+        if (_log.shouldDebug()) _log.debug("Blind:" + "\norig:    " + spk + "\nsecret:  " + _secret + "\nalpha:   " + _alpha + "\nblinded: " + rv);
         return rv;
     }
 
@@ -269,15 +251,12 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
-        if (_signingKey != null)
-            throw new IllegalStateException();
+        if (_signingKey != null) throw new IllegalStateException();
         // LS2 header
         readHeader(in);
         // Encrypted LS2 part
         int encryptedSize = (int) DataHelper.readLong(in, 2);
-        if (encryptedSize < MIN_ENCRYPTED_SIZE ||
-            encryptedSize > MAX_ENCRYPTED_SIZE)
-            throw new DataFormatException("BAD LeaseSet size: " + encryptedSize);
+        if (encryptedSize < MIN_ENCRYPTED_SIZE || encryptedSize > MAX_ENCRYPTED_SIZE) throw new DataFormatException("BAD LeaseSet size: " + encryptedSize);
         _encryptedData = new byte[encryptedSize];
         DataHelper.read(in, _encryptedData);
         // signature type depends on offline or not
@@ -293,8 +272,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      */
     @Override
     protected void writeBytesWithoutSig(OutputStream out) throws DataFormatException, IOException {
-        if (_signingKey == null)
-            throw new DataFormatException("Not enough data to write out a LeaseSet");
+        if (_signingKey == null) throw new DataFormatException("Not enough data to write out a LeaseSet");
         if (_encryptedData == null) {
             super.writeHeader(out);
             writeBody(out);
@@ -323,15 +301,13 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     protected void readHeader(InputStream in) throws DataFormatException, IOException {
         int stype = (int) DataHelper.readLong(in, 2);
         SigType type = SigType.getByCode(stype);
-        if (type == null)
-            throw new DataFormatException("Unknown key type " + stype);
+        if (type == null) throw new DataFormatException("Unknown key type " + stype);
         _signingKey = new SigningPublicKey(type);
         _signingKey.readBytes(in);
         _published = DataHelper.readLong(in, 4) * 1000;
         _expires = _published + (DataHelper.readLong(in, 2) * 1000);
         _flags = (int) DataHelper.readLong(in, 2);
-        if (isOffline())
-            readOfflineBytes(in);
+        if (isOffline()) readOfflineBytes(in);
     }
 
     /**
@@ -341,13 +317,11 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     protected void writeHeader(OutputStream out) throws DataFormatException, IOException {
         DataHelper.writeLong(out, 2, _signingKey.getType().getCode());
         _signingKey.writeBytes(out);
-        if (_published <= 0)
-            setPublished(Clock.getInstance().now());
+        if (_published <= 0) setPublished(Clock.getInstance().now());
         DataHelper.writeLong(out, 4, _published / 1000);
         DataHelper.writeLong(out, 2, (_expires - _published) / 1000);
         DataHelper.writeLong(out, 2, _flags);
-        if (isOffline())
-            writeOfflineBytes(out);
+        if (isOffline()) writeOfflineBytes(out);
     }
 
     /**
@@ -358,8 +332,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         _transientExpires = DataHelper.readLong(in, 4) * 1000;
         int itype = (int) DataHelper.readLong(in, 2);
         SigType type = SigType.getByCode(itype);
-        if (type == null)
-            throw new DataFormatException("Unknown signature type " + itype);
+        if (type == null) throw new DataFormatException("Unknown signature type " + itype);
         _transientSigningPublicKey = new SigningPublicKey(type);
         _transientSigningPublicKey.readBytes(in);
         SigType stype = _signingKey.getType();
@@ -372,8 +345,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      */
     @Override
     protected void writeOfflineBytes(OutputStream out) throws DataFormatException, IOException {
-        if (_transientSigningPublicKey == null || _offlineSignature == null)
-            throw new DataFormatException("No offline key/sig");
+        if (_transientSigningPublicKey == null || _offlineSignature == null) throw new DataFormatException("No offline key/sig");
         DataHelper.writeLong(out, 4, _transientExpires / 1000);
         DataHelper.writeLong(out, 2, _signingKey.getType().getCode());
         _transientSigningPublicKey.writeBytes(out);
@@ -385,14 +357,10 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      */
     @Override
     public int size() {
-        int rv = _signingKey.length()
-             + 12;
-        if (_encryptedData != null)
-            rv += _encryptedData.length;
-        else
-            rv += 99; // TODO
-        if (isOffline())
-            rv += 6 + _transientSigningPublicKey.length() + _offlineSignature.length();
+        int rv = _signingKey.length() + 12;
+        if (_encryptedData != null) rv += _encryptedData.length;
+        else rv += 99; // TODO
+        if (isOffline()) rv += 6 + _transientSigningPublicKey.length() + _offlineSignature.length();
         return rv;
     }
 
@@ -408,8 +376,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     @Override
     public Hash getHash() {
         if (__calculatedHash == null) {
-            if (_signingKey == null)
-                throw new IllegalStateException();
+            if (_signingKey == null) throw new IllegalStateException();
             int len = _signingKey.length();
             byte[] b = new byte[2 + len];
             DataHelper.toLong(b, 0, 2, _signingKey.getType().getCode());
@@ -439,10 +406,8 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      *  @throws IllegalStateException
      */
     public void encrypt(int authType, List<? extends SimpleDataStructure> clientKeys) {
-        if (_encryptedData != null)
-            throw new IllegalStateException("already encrypted");
-        if (_signature == null)
-            throw new IllegalStateException("not signed");
+        if (_encryptedData != null) throw new IllegalStateException("already encrypted");
+        if (_signature == null) throw new IllegalStateException("not signed");
         ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
         try {
             // Inner layer - type - data covered by sig
@@ -465,14 +430,12 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         // use first 12 bytes only
         byte[] iv = new byte[32];
         int authLen;
-        _authType = authType;  // debug
+        _authType = authType; // debug
         if (authType == BlindData.AUTH_NONE) {
             authLen = 1;
-        } else if (authType == BlindData.AUTH_DH ||
-                   authType == BlindData.AUTH_PSK) {
-            if (clientKeys == null || clientKeys.isEmpty())
-                throw new IllegalArgumentException("No client keys provided");
-            _numKeys = clientKeys.size();  // debug
+        } else if (authType == BlindData.AUTH_DH || authType == BlindData.AUTH_PSK) {
+            if (clientKeys == null || clientKeys.isEmpty()) throw new IllegalArgumentException("No client keys provided");
+            _numKeys = clientKeys.size(); // debug
             authLen = 1 + SALT_LEN + 2 + (clientKeys.size() * CLIENT_LEN);
         } else {
             throw new IllegalArgumentException("BAD auth type " + authType);
@@ -485,16 +448,12 @@ public class EncryptedLeaseSet extends LeaseSet2 {
             authcookie = new byte[32];
             ctx.random().nextBytes(authcookie);
             if (_log.shouldDebug()) {
-                _log.debug("Auth Cookie:\n" +
-                           net.i2p.util.HexDump.dump(authcookie));
+                _log.debug("Auth Cookie:\n" + net.i2p.util.HexDump.dump(authcookie));
             }
             authInput = getHKDFInput(ctx, authcookie);
         }
         if (_log.shouldDebug()) {
-            _log.debug("Inner HKDF salt:\n" +
-                       net.i2p.util.HexDump.dump(salt) +
-                       "Inner HKDF input:\n" +
-                       net.i2p.util.HexDump.dump(authInput));
+            _log.debug("Inner HKDF salt:\n" + net.i2p.util.HexDump.dump(salt) + "Inner HKDF input:\n" + net.i2p.util.HexDump.dump(authInput));
         }
         hkdf.calculate(salt, authInput, ELS2L2K, key, iv, 0);
         byte[] plaintext = baos.toByteArray();
@@ -507,8 +466,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         } else {
             // Flag
             ciphertext[0] = (byte) (authType & 0x0f);
-            if (clientKeys.size() > 1)
-                Collections.shuffle(clientKeys);
+            if (clientKeys.size() > 1) Collections.shuffle(clientKeys);
             if (authType == BlindData.AUTH_DH) {
                 // DH
                 KeyPair encKeys = ctx.keyGenerator().generatePKIKeys(EncType.ECIES_X25519);
@@ -526,11 +484,9 @@ public class EncryptedLeaseSet extends LeaseSet2 {
                 byte[] clientKey = new byte[32];
                 byte[] clientIVandID = new byte[32];
                 for (SimpleDataStructure sds : clientKeys) {
-                    if (!(sds instanceof PublicKey))
-                        throw new IllegalArgumentException("BAD DH client key type: " + sds);
+                    if (!(sds instanceof PublicKey)) throw new IllegalArgumentException("BAD DH client key type: " + sds);
                     PublicKey cpk = (PublicKey) sds;
-                    if (cpk.getType() != EncType.ECIES_X25519)
-                        throw new IllegalArgumentException("BAD DH client key type: " + cpk);
+                    if (cpk.getType() != EncType.ECIES_X25519) throw new IllegalArgumentException("BAD DH client key type: " + cpk);
                     SessionKey dh = X25519DH.dh(esk, cpk);
                     System.arraycopy(dh.getData(), 0, clientAuthInput, 0, 32);
                     System.arraycopy(cpk.getData(), 0, clientAuthInput, 32, 32);
@@ -539,11 +495,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
                     off += ID_LEN;
                     ChaCha20.encrypt(clientKey, clientIVandID, authcookie, 0, ciphertext, off, authcookie.length);
                     if (_log.shouldDebug()) {
-                        _log.debug("DH: Added client ID/enc.cookie:\n" +
-                                   net.i2p.util.HexDump.dump(clientIVandID, IV_LEN, ID_LEN) +
-                                   net.i2p.util.HexDump.dump(ciphertext, off, COOKIE_LEN) +
-                                   "for client key:\n" +
-                                   net.i2p.util.HexDump.dump(clientKey));
+                        _log.debug("DH: Added client ID/enc.cookie:\n" + net.i2p.util.HexDump.dump(clientIVandID, IV_LEN, ID_LEN) + net.i2p.util.HexDump.dump(ciphertext, off, COOKIE_LEN) + "for client key:\n" + net.i2p.util.HexDump.dump(clientKey));
                     }
                     off += COOKIE_LEN;
                 }
@@ -558,11 +510,9 @@ public class EncryptedLeaseSet extends LeaseSet2 {
                 byte[] clientKey = new byte[32];
                 byte[] clientIVandID = new byte[32];
                 for (SimpleDataStructure sds : clientKeys) {
-                    if (!(sds instanceof PrivateKey))
-                        throw new IllegalArgumentException("BAD PrivateSigningKey client key type: " + sds);
+                    if (!(sds instanceof PrivateKey)) throw new IllegalArgumentException("BAD PrivateSigningKey client key type: " + sds);
                     PrivateKey csk = (PrivateKey) sds;
-                    if (csk.getType() != EncType.ECIES_X25519)
-                        throw new IllegalArgumentException("BAD PrivateSigningKey client key type: " + csk);
+                    if (csk.getType() != EncType.ECIES_X25519) throw new IllegalArgumentException("BAD PrivateSigningKey client key type: " + csk);
                     // HKDF input is 68 bytes                        `
                     // we reuse authInput from above, just replace the first 32 bytes.
                     // subcredential and timestamp remain unchanged
@@ -572,14 +522,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
                     off += ID_LEN;
                     ChaCha20.encrypt(clientKey, clientIVandID, authcookie, 0, ciphertext, off, authcookie.length);
                     if (_log.shouldDebug()) {
-                        _log.debug("PSK: Added client key:\n" +
-                                   net.i2p.util.HexDump.dump(clientKey) +
-                                   "client IV:\n:" +
-                                   net.i2p.util.HexDump.dump(clientIVandID, 0, IV_LEN) +
-                                   "client ID:\n:" +
-                                   net.i2p.util.HexDump.dump(clientIVandID, IV_LEN, ID_LEN) +
-                                   "client cookie:\n:" +
-                                   net.i2p.util.HexDump.dump(ciphertext, off, COOKIE_LEN));
+                        _log.debug("PSK: Added client key:\n" + net.i2p.util.HexDump.dump(clientKey) + "client IV:\n:" + net.i2p.util.HexDump.dump(clientIVandID, 0, IV_LEN) + "client ID:\n:" + net.i2p.util.HexDump.dump(clientIVandID, IV_LEN, ID_LEN) + "client cookie:\n:" + net.i2p.util.HexDump.dump(ciphertext, off, COOKIE_LEN));
                     }
                     off += COOKIE_LEN;
                 }
@@ -611,8 +554,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
             _log.debug("Encrypt: ChaCha20 IV:\n" + net.i2p.util.HexDump.dump(iv));
         }
         ChaCha20.encrypt(key, iv, plaintext, 0, ciphertext, SALT_LEN, plaintext.length);
-        if (_log.shouldDebug())
-            _log.debug("Encrypt: outer ciphertext:\n" + net.i2p.util.HexDump.dump(ciphertext));
+        if (_log.shouldDebug()) _log.debug("Encrypt: outer ciphertext:\n" + net.i2p.util.HexDump.dump(ciphertext));
         _encryptedData = ciphertext;
     }
 
@@ -637,10 +579,8 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      *  @throws IllegalStateException
      */
     private void x_decrypt(PrivateKey csk) throws DataFormatException, IOException {
-        if (_encryptedData == null)
-            throw new IllegalStateException("Not encrypted");
-        if (_decryptedLS2 != null)
-            return;
+        if (_encryptedData == null) throw new IllegalStateException("Not encrypted");
+        if (_decryptedLS2 != null) return;
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         byte[] authInput = getHKDFInput(ctx);
 
@@ -664,27 +604,22 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         }
 
         int authType = plaintext[0] & 0x0f;
-        _authType = authType;  // debug
+        _authType = authType; // debug
         int authLen;
         if (authType == BlindData.AUTH_NONE) {
             authLen = 1;
         } else {
-            if (csk == null)
-                throw new DataFormatException("Per-client auth but no key");
-            if (authType != BlindData.AUTH_DH && authType != BlindData.AUTH_PSK)
-                throw new DataFormatException("Per-client auth unsupported type: " + authType);
-            if (csk.getType() != EncType.ECIES_X25519)
-                throw new DataFormatException("BAD PrivateSigningKey client key type: " + csk);
+            if (csk == null) throw new DataFormatException("Per-client auth but no key");
+            if (authType != BlindData.AUTH_DH && authType != BlindData.AUTH_PSK) throw new DataFormatException("Per-client auth unsupported type: " + authType);
+            if (csk.getType() != EncType.ECIES_X25519) throw new DataFormatException("BAD PrivateSigningKey client key type: " + csk);
             byte[] seed = new byte[32];
             System.arraycopy(plaintext, 1, seed, 0, 32);
             int count = (int) DataHelper.fromLong(plaintext, 33, 2);
-            _numKeys = count;  // debug
-            if (count == 0)
-                throw new DataFormatException("No client entries");
+            _numKeys = count; // debug
+            if (count == 0) throw new DataFormatException("No client entries");
             authLen = 1 + SALT_LEN + 2 + (count * CLIENT_LEN);
             if (_log.shouldDebug()) {
-                _log.debug("Auth type " + authType + ", found " + count + " client entries, authsalt is:\n" +
-                            net.i2p.util.HexDump.dump(seed));
+                _log.debug("Auth type " + authType + ", found " + count + " client entries, authsalt is:\n" + net.i2p.util.HexDump.dump(seed));
             }
             byte[] clientKey = new byte[32];
             byte[] clientIVandID = new byte[32];
@@ -715,10 +650,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
                 hkdf.calculate(seed, clientAuthInput, ELS2_PSK, clientKey, clientIVandID, 0);
             }
             if (_log.shouldDebug()) {
-                _log.debug("Looking for client ID:\n" +
-                            net.i2p.util.HexDump.dump(clientIVandID, IV_LEN, ID_LEN) +
-                            "for client key:\n" +
-                            net.i2p.util.HexDump.dump(clientKey));
+                _log.debug("Looking for client ID:\n" + net.i2p.util.HexDump.dump(clientIVandID, IV_LEN, ID_LEN) + "for client key:\n" + net.i2p.util.HexDump.dump(clientKey));
             }
             int off = 35;
             byte[] clientCookie = null;
@@ -730,11 +662,9 @@ public class EncryptedLeaseSet extends LeaseSet2 {
                 }
                 off += CLIENT_LEN;
             }
-            if (clientCookie == null)
-                throw new DataFormatException("Our client auth entry not found");
+            if (clientCookie == null) throw new DataFormatException("Our client auth entry not found");
             if (_log.shouldDebug()) {
-                _log.debug("Found client cookie:\n" +
-                            net.i2p.util.HexDump.dump(clientCookie));
+                _log.debug("Found client cookie:\n" + net.i2p.util.HexDump.dump(clientCookie));
             }
             byte[] clientAuthInput = new byte[32 + authInput.length];
             // we copy over end of authInput from above
@@ -743,8 +673,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
             // decrypt clientCookie to clientAuthInput
             ChaCha20.decrypt(clientKey, clientIVandID, clientCookie, 0, clientAuthInput, 0, 32);
             if (_log.shouldDebug()) {
-                _log.debug("Decrypted client cookie:\n" +
-                            net.i2p.util.HexDump.dump(clientAuthInput, 0, 32));
+                _log.debug("Decrypted client cookie:\n" + net.i2p.util.HexDump.dump(clientAuthInput, 0, 32));
             }
             authInput = clientAuthInput;
         }
@@ -752,28 +681,21 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         // layer 2 (inner) decryption
         // reuse input (because there's no authcookie), get new salt/key/iv
         ciphertext = plaintext;
-        plaintext = new byte[ciphertext.length  - (authLen + SALT_LEN)];
+        plaintext = new byte[ciphertext.length - (authLen + SALT_LEN)];
         byte[] salt = new byte[SALT_LEN];
         System.arraycopy(ciphertext, authLen, salt, 0, SALT_LEN);
         if (_log.shouldDebug()) {
-            _log.debug("Inner HKDF salt:\n" +
-                       net.i2p.util.HexDump.dump(salt) +
-                       "Inner HKDF input:\n" +
-                       net.i2p.util.HexDump.dump(authInput));
+            _log.debug("Inner HKDF salt:\n" + net.i2p.util.HexDump.dump(salt) + "Inner HKDF input:\n" + net.i2p.util.HexDump.dump(authInput));
         }
         hkdf.calculate(salt, authInput, ELS2L2K, key, iv, 0);
         ChaCha20.decrypt(key, iv, ciphertext, authLen + SALT_LEN, plaintext, 0, plaintext.length);
-        if (_log.shouldDebug())
-            _log.debug("Decrypt: inner plaintext:\n" + net.i2p.util.HexDump.dump(plaintext));
+        if (_log.shouldDebug()) _log.debug("Decrypt: inner plaintext:\n" + net.i2p.util.HexDump.dump(plaintext));
         ByteArrayInputStream bais = new ByteArrayInputStream(plaintext);
         int type = bais.read();
         LeaseSet2 innerLS2;
-        if (type == KEY_TYPE_LS2)
-            innerLS2 = new LeaseSet2();
-        else if (type == KEY_TYPE_META_LS2)
-            innerLS2 = new MetaLeaseSet();
-        else
-            throw new DataFormatException("BAD decryption or unsupported LeaseSet type: " + type);
+        if (type == KEY_TYPE_LS2) innerLS2 = new LeaseSet2();
+        else if (type == KEY_TYPE_META_LS2) innerLS2 = new MetaLeaseSet();
+        else throw new DataFormatException("BAD decryption or unsupported LeaseSet type: " + type);
         innerLS2.readBytes(bais);
         _decryptedLS2 = innerLS2;
     }
@@ -816,8 +738,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      *  @since 0.9.39
      */
     private byte[] getSubcredential(I2PAppContext ctx) {
-        if (_unblindedSPK == null)
-            throw new IllegalStateException("No known SigningPrivateKey to decrypt with");
+        if (_unblindedSPK == null) throw new IllegalStateException("No known SigningPrivateKey to decrypt with");
         int spklen = _unblindedSPK.length();
         byte[] in = new byte[spklen + 4];
         // SHA256("credential" || spk || sigtypein || sigtypeout)
@@ -897,8 +818,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         byte data[] = out.toByteArray();
         // now sign outer with the blinded key
         _signature = DSAEngine.getInstance().sign(data, bkey);
-        if (_signature == null)
-            throw new DataFormatException("Signature failed with " + key.getType() + " key");
+        if (_signature == null) throw new DataFormatException("Signature failed with " + key.getType() + " key");
         if (_log.shouldDebug()) {
             _log.debug("Sign outer with key: " + bkey.getType() + ' ' + bkey.toBase64());
             _log.debug("Corresponding pubkey: " + bkey.toPublic());
@@ -930,7 +850,9 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      */
     public boolean verifySignature(PrivateKey clientKey) {
         // TODO use fields in super
-        if (_decryptedLS2 != null) {return _decryptedLS2.verifySignature();}
+        if (_decryptedLS2 != null) {
+            return _decryptedLS2.verifySignature();
+        }
         if (_log.shouldDebug()) {
             _log.debug("Signature verify outer with key: " + _signingKey.getType() + ' ' + _signingKey.toBase64());
             _log.debug("Outer signature: " + _signature.getType() + ' ' + _signature.toBase64());
@@ -942,7 +864,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         _log.info("Encrypted LeaseSet2 outer signature verification succeeded");
         if (_unblindedSPK == null) {
             if (_log.shouldWarn())
-                //_log.warn("Encrypted LeaseSet2 no destination / SigningPrivateKey to decrypt with", new Exception("I did it"));
+                // _log.warn("Encrypted LeaseSet2 no destination / SigningPrivateKey to decrypt with", new Exception("I did it"));
                 _log.warn("Encrypted LeaseSet2 -> No destination / SigningPrivateKey to decrypt with");
             return true;
         }
@@ -957,32 +879,29 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         }
         if (_log.shouldDebug()) {
             _log.debug("Decrypted inner LS2:\n" + _decryptedLS2);
-            _log.debug("Sig verify inner with key: " + _decryptedLS2.getDestination().getSigningPublicKey().getType() + ' ' +
-                                                       _decryptedLS2.getDestination().getSigningPublicKey().toBase64());
+            _log.debug("Sig verify inner with key: " + _decryptedLS2.getDestination().getSigningPublicKey().getType() + ' ' + _decryptedLS2.getDestination().getSigningPublicKey().toBase64());
             _log.debug("Inner sig: " + _decryptedLS2.getSignature().getType() + ' ' + _decryptedLS2.getSignature().toBase64());
         }
         boolean rv = _decryptedLS2.verifySignature();
-        if (!rv)
-            _log.warn("Encrypted LeaseSet2 inner signature verification failed");
-        else
-            _log.info("Encrypted LeaseSet2 inner signature verification succeeded");
+        if (!rv) _log.warn("Encrypted LeaseSet2 inner signature verification failed");
+        else _log.info("Encrypted LeaseSet2 inner signature verification succeeded");
         return rv;
     }
-
 
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
         if ((object == null) || !(object instanceof EncryptedLeaseSet)) return false;
         EncryptedLeaseSet ls = (EncryptedLeaseSet) object;
-        return DataHelper.eq(_signature, ls.getSignature()) &&
-               DataHelper.eq(_signingKey, ls.getSigningKey());
+        return DataHelper.eq(_signature, ls.getSignature()) && DataHelper.eq(_signingKey, ls.getSigningKey());
     }
 
     /** the destination has enough randomness in it to use it by itself for speed */
     @Override
     public int hashCode() {
-        if (_encryptionKey == null) {return 0;}
+        if (_encryptionKey == null) {
+            return 0;
+        }
         return _encryptionKey.hashCode();
     }
 
@@ -993,37 +912,30 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         buf.append("Encrypted LeaseSet: ");
         if (_signingKey != null) {
             Hash h = getHash();
-            buf.append("\n* Blinded Key: ").append(_signingKey)
-               .append("\n* Hash: ").append(h)
-               .append("\n* B32: ").append(h.toBase32())
-               .append(!(_log.shouldInfo() && _log.shouldDebug()) && !decrypted ? "\n* Status: Not decrypted" : "");
+            buf.append("\n* Blinded Key: ").append(_signingKey).append("\n* Hash: ").append(h).append("\n* B32: ").append(h.toBase32()).append(!(_log.shouldInfo() && _log.shouldDebug()) && !decrypted ? "\n* Status: Not decrypted" : "");
         }
         if (_log.shouldInfo()) {
             if (isOffline()) {
-                buf.append("\n* Transient Key: ").append(_transientSigningPublicKey)
-                   .append("\n* Transient Expires: ").append(Instant.ofEpochMilli(_transientExpires))
-                   .append("\n* Offline Signature: ").append(_offlineSignature);
+                buf.append("\n* Transient Key: ").append(_transientSigningPublicKey).append("\n* Transient Expires: ").append(Instant.ofEpochMilli(_transientExpires)).append("\n* Offline Signature: ").append(_offlineSignature);
             }
-            buf.append("\n* Published: ").append(!isUnpublished())
-               .append("\n* Length: ").append(_encryptedData.length)
-               .append("\n* Signature: ").append(_signature)
-               .append("\n* Published: ").append(Instant.ofEpochMilli(_published))
-               .append("\n* Expires: ").append(Instant.ofEpochMilli(_expires))
-               .append("\n* Auth Type: ").append(_authType)
-               .append("\n* Client Keys: ").append(_numKeys);
+            buf.append("\n* Published: ").append(!isUnpublished()).append("\n* Length: ").append(_encryptedData.length).append("\n* Signature: ").append(_signature).append("\n* Published: ").append(Instant.ofEpochMilli(_published)).append("\n* Expires: ").append(Instant.ofEpochMilli(_expires)).append("\n* Auth Type: ").append(_authType).append("\n* Client Keys: ").append(_numKeys);
             if (_decryptedLS2 != null) {
-                if (_secret != null) {buf.append("\n* Secret: ").append(_secret);}
+                if (_secret != null) {
+                    buf.append("\n* Secret: ").append(_secret);
+                }
                 if (_clientPrivateKey != null) {
                     buf.append("\n* Client Private Key: ").append(_clientPrivateKey.toBase64());
                 }
                 buf.append("\n* Decrypted LS:\n").append(_decryptedLS2);
             } else if (_destination != null) {
-                buf.append("\n* Destination: ").append(_destination)
-                   .append("\n* Leases: ").append(getLeaseCount());
-                for (int i = 0; i < getLeaseCount(); i++) {buf.append(getLease(i));}
-            } else {buf.append("\n* Status: Not decrypted");}
+                buf.append("\n* Destination: ").append(_destination).append("\n* Leases: ").append(getLeaseCount());
+                for (int i = 0; i < getLeaseCount(); i++) {
+                    buf.append(getLease(i));
+                }
+            } else {
+                buf.append("\n* Status: Not decrypted");
+            }
         }
         return buf.toString();
     }
-
 }

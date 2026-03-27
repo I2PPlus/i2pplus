@@ -1,14 +1,15 @@
 package net.i2p.router.web.helpers;
 
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-import java.util.TreeSet;
 import net.i2p.data.DataHelper;
 import net.i2p.router.web.HelperBase;
 import net.i2p.util.Log;
 import net.i2p.util.LogManager;
 import net.i2p.util.Translate;
+
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Helper for logging configuration page rendering and form processing.
@@ -48,7 +49,7 @@ public class ConfigLoggingHelper extends HelperBase {
     }
 
     public String getLogLevelTable() {
-        StringBuilder buf = new StringBuilder(32*1024);
+        StringBuilder buf = new StringBuilder(32 * 1024);
         Properties limits = _mgr.getLimits();
         TreeSet<String> sortedLogs = new TreeSet<String>();
         for (String prefix : limits.stringPropertyNames()) {
@@ -61,29 +62,26 @@ public class ConfigLoggingHelper extends HelperBase {
             buf.append(prefix).append('=').append(level).append('\n');
         }
         buf.append("</textarea><br>\n<p>");
-        buf.append(_t("Add additional logging statements above (e.g. {0}).", "<b>net.i2p.router.tunnel=WARN</b>"))
-           .append("<br>")
-           .append(_t("Valid log levels are {0}.", "<b>DEBUG, INFO, WARN, ERROR, CRIT</b>"))
-            .append("</p>\n");
+        buf.append(_t("Add additional logging statements above (e.g. {0}).", "<b>net.i2p.router.tunnel=WARN</b>")).append("<br>").append(_t("Valid log levels are {0}.", "<b>DEBUG, INFO, WARN, ERROR, CRIT</b>")).append("</p>\n");
 
-      /****
-        // this is too big and ugly
-        if (limits.size() <= 0)
-            return "";
-        buf.append("<table>");
-        for (String prefix : sortedLogs) {
-            buf.append("<tr><td>").append(prefix).append("</td><td>");
-            String level = limits.getProperty(prefix);
-            buf.append(getLogLevelBox("level-" + prefix, level, true)).append("</td></tr>");
-        }
-        buf.append("</table>");
-       ****/
+        /****
+         * // this is too big and ugly
+         * if (limits.size() <= 0)
+         * return "";
+         * buf.append("<table>");
+         * for (String prefix : sortedLogs) {
+         * buf.append("<tr><td>").append(prefix).append("</td><td>");
+         * String level = limits.getProperty(prefix);
+         * buf.append(getLogLevelBox("level-" + prefix, level, true)).append("</td></tr>");
+         * }
+         * buf.append("</table>");
+         ****/
 
         return buf.toString();
     }
 
     /** these are translated in the core bundle */
-    private static final String[] levels = { "CRIT", "ERROR", "WARN", "INFO", "DEBUG" };
+    private static final String[] levels = {"CRIT", "ERROR", "WARN", "INFO", "DEBUG"};
 
     public String getDefaultLogLevelBox() {
         StringBuilder buf = new StringBuilder(128);
@@ -98,12 +96,11 @@ public class ConfigLoggingHelper extends HelperBase {
         for (int i = 0; i < levels.length; i++) {
             String l = levels[i];
             buf.append("<option value=\"").append(l).append('\"');
-            if (l.equals(cur))
-                buf.append(SELECTED);
+            if (l.equals(cur)) buf.append(SELECTED);
             buf.append('>').append(_c(l)).append("</option>\n");
         }
 
-        //if (showRemove)
+        // if (showRemove)
         //    buf.append("<option value=\"remove\">").append(_t("Remove")).append("</option>");
         buf.append("</select>\n");
     }
@@ -121,10 +118,8 @@ public class ConfigLoggingHelper extends HelperBase {
         for (Log log : logs) {
             String name = log.getName();
             // skip inner classes, the $ gets caught by the XSS filter
-            if (name.contains("$"))
-                continue;
-            if (!limits.contains(name))
-                sortedLogs.add(name);
+            if (name.contains("$")) continue;
+            if (!limits.contains(name)) sortedLogs.add(name);
 
             // add higher classes of length 3 or more
             int dots = 0;
@@ -141,33 +136,25 @@ public class ConfigLoggingHelper extends HelperBase {
         }
 
         StringBuilder buf = new StringBuilder(65536);
-        buf.append("<select name=\"newlogclass\">\n" +
-                   "<option value=\"\" selected>")
-           .append(_t("Select a class to add"))
-            .append("</option>\n");
+        buf.append("<select name=\"newlogclass\">\n" + "<option value=\"\" selected>").append(_t("Select a class to add")).append("</option>\n");
 
         int groups = 0;
         for (String l : sortedLogs) {
             String d;
             // replace package marker
             if (l.endsWith(".")) {
-                if (groups++ > 0)
-                    buf.append("</optgroup>\n");
+                if (groups++ > 0) buf.append("</optgroup>\n");
                 l = l.substring(0, l.length() - 1);
                 buf.append("<optgroup label=\"").append(l).append("\">\n");
                 d = _t("All classes in {0}", l);
             } else {
                 int last = l.lastIndexOf(".");
-                if (last > 0)
-                    d = l.substring(last + 1);
-                else
-                    d = l;
+                if (last > 0) d = l.substring(last + 1);
+                else d = l;
             }
-            buf.append("<option value=\"").append(l).append("\">")
-               .append(d).append("</option>\n");
+            buf.append("<option value=\"").append(l).append("\">").append(d).append("</option>\n");
         }
-        if (groups > 0)
-            buf.append("</optgroup>\n");
+        if (groups > 0) buf.append("</optgroup>\n");
 
         buf.append("</select>\n");
         getLogLevelBox(buf, "newloglevel", "WARN", false);

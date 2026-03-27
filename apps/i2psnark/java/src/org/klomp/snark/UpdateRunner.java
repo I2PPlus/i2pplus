@@ -1,15 +1,17 @@
 package org.klomp.snark;
 
-import java.io.File;
-import java.net.URI;
-import java.util.List;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.TrustedUpdate;
 import net.i2p.data.DataHelper;
 import net.i2p.update.*;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
+
 import org.klomp.snark.comments.CommentSet;
+
+import java.io.File;
+import java.net.URI;
+import java.util.List;
 
 /**
  * The downloader for router signed updates.
@@ -35,13 +37,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     private static final long COMPLETE_TIMEOUT = 12 * 60 * 60 * 1000;
     private static final long CHECK_INTERVAL = 3 * 60 * 1000;
 
-    public UpdateRunner(
-            I2PAppContext ctx,
-            UpdateManager umgr,
-            SnarkManager smgr,
-            UpdateType type,
-            List<URI> uris,
-            String newVersion) {
+    public UpdateRunner(I2PAppContext ctx, UpdateManager umgr, SnarkManager smgr, UpdateType type, List<URI> uris, String newVersion) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
         _umgr = umgr;
@@ -114,20 +110,14 @@ class UpdateRunner implements UpdateTask, CompleteListener {
                 }
                 String name = magnet.getName();
                 String trackerURL = magnet.getTrackerURL();
-                if (trackerURL == null
-                        && !_smgr.util().shouldUseDHT()
-                        && !_smgr.util().shouldUseOpenTrackers()) {
+                if (trackerURL == null && !_smgr.util().shouldUseDHT() && !_smgr.util().shouldUseOpenTrackers()) {
                     // but won't we use OT as a failsafe even if disabled?
                     _umgr.notifyAttemptFailed(this, "No tracker, no DHT, no OT", null);
                     continue;
                 }
                 _snark = _smgr.addMagnet(name, ih, trackerURL, true, true, null, this);
                 if (_snark != null) {
-                    updateStatus(
-                            "<b>"
-                                    + _smgr.util()
-                                            .getString("Updating from {0}", linkify(updateURL))
-                                    + "</b>");
+                    updateStatus("<b>" + _smgr.util().getString("Updating from {0}", linkify(updateURL)) + "</b>");
                     new Timeout();
                     break;
                 }
@@ -172,8 +162,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
         }
 
         public void timeReached() {
-            if (_hasMetaInfo && _snark.getRemainingLength() == 0 && !_isComplete)
-                processComplete(_snark);
+            if (_hasMetaInfo && _snark.getRemainingLength() == 0 && !_isComplete) processComplete(_snark);
             if (_isComplete || !_isRunning) return;
             if (_context.clock().now() - _start >= METAINFO_TIMEOUT && !_hasMetaInfo) {
                 fatal("Metainfo timeout");
@@ -333,10 +322,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     //////// end CompleteListener methods
 
     private static String linkify(String url) {
-        String durl =
-                url.length() <= 28
-                        ? DataHelper.escapeHTML(url)
-                        : DataHelper.escapeHTML(url.substring(0, 25)) + "&hellip; ";
+        String durl = url.length() <= 28 ? DataHelper.escapeHTML(url) : DataHelper.escapeHTML(url.substring(0, 25)) + "&hellip; ";
         // TODO urlEncode instead
         return "<a target=_blank href=\"" + DataHelper.escapeHTML(url) + "\"/>" + durl + "</a>";
     }
@@ -347,14 +333,6 @@ class UpdateRunner implements UpdateTask, CompleteListener {
 
     @Override
     public String toString() {
-        return getClass().getName()
-                + ' '
-                + getType()
-                + ' '
-                + getID()
-                + ' '
-                + getMethod()
-                + ' '
-                + getURI();
+        return getClass().getName() + ' ' + getType() + ' ' + getID() + ' ' + getMethod() + ' ' + getURI();
     }
 }

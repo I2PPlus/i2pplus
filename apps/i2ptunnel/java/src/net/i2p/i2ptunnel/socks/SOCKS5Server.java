@@ -64,6 +64,7 @@ class SOCKS5Server extends SOCKSServer {
 
     private boolean setupCompleted;
     private final boolean authRequired;
+
     /**
      * torsocks support
      * Cache of fake IPv4 255.x.x.x (as returned from RESOLVE) to hostname
@@ -72,6 +73,7 @@ class SOCKS5Server extends SOCKSServer {
      * The IPs will change at restart, but torsocks doesn't appear to do any caching.
      */
     private static final Map<String, String> _torCache = new LHMCache<String, String>(256);
+
     private static final String[] _skipHeaders = new String[0];
 
     /**
@@ -87,8 +89,7 @@ class SOCKS5Server extends SOCKSServer {
      */
     public SOCKS5Server(I2PAppContext ctx, Socket clientSock, Properties props) {
         super(ctx, clientSock, props);
-        this.authRequired =
-                    Boolean.parseBoolean(props.getProperty(I2PTunnelHTTPClientBase.PROP_AUTH));
+        this.authRequired = Boolean.parseBoolean(props.getProperty(I2PTunnelHTTPClientBase.PROP_AUTH));
     }
 
     public Socket getClientSocket() throws SOCKSException {
@@ -98,7 +99,9 @@ class SOCKS5Server extends SOCKSServer {
     }
 
     protected void setupServer() throws SOCKSException {
-        if (setupCompleted) { return; }
+        if (setupCompleted) {
+            return;
+        }
 
         DataInputStream in;
         DataOutputStream out;
@@ -107,8 +110,7 @@ class SOCKS5Server extends SOCKSServer {
             out = new DataOutputStream(clientSock.getOutputStream());
 
             init(in, out, clientSock.getInetAddress());
-            if (manageRequest(in, out) == Command.UDP_ASSOCIATE)
-                handleUDP(in, out);
+            if (manageRequest(in, out) == Command.UDP_ASSOCIATE) handleUDP(in, out);
         } catch (IOException e) {
             throw new SOCKSException("Connection error", e);
         }
@@ -126,10 +128,9 @@ class SOCKS5Server extends SOCKSServer {
 
         for (int i = 0; i < nMethods; ++i) {
             int meth = in.readUnsignedByte();
-            if (((!authRequired) && meth == Method.NO_AUTH_REQUIRED) ||
-                meth == Method.USERNAME_PASSWORD) {
+            if (((!authRequired) && meth == Method.NO_AUTH_REQUIRED) || meth == Method.USERNAME_PASSWORD) {
                 // That's fine, we do support this method
-                method  = meth;
+                method = meth;
                 break;
             }
         }
@@ -181,8 +182,9 @@ class SOCKS5Server extends SOCKSServer {
         if (authRequired) {
             // Hopefully these are in UTF-8, since that's what our config file is in
             String p = DataHelper.getUTF8(pw);
-            String psha256 = I2PTunnelHTTPClientBase.PROP_PROXY_DIGEST_PREFIX + u +
-                             I2PTunnelHTTPClientBase.PROP_PROXY_DIGEST_SHA256_SUFFIX;
+            String psha256 = I2PTunnelHTTPClientBase.PROP_PROXY_DIGEST_PREFIX
+                    + u
+                    + I2PTunnelHTTPClientBase.PROP_PROXY_DIGEST_SHA256_SUFFIX;
             String configPW = props.getProperty(psha256);
             String hex = PasswordManager.sha256Hex(I2PSOCKSTunnel.AUTH_REALM, u, p);
             if (configPW == null || !configPW.equals(hex)) {
@@ -195,7 +197,7 @@ class SOCKS5Server extends SOCKSServer {
             _log.info("SOCKS authorization success -> User: " + u + " on " + client);
             // torsocks -i
             // user "torsocks-77673:1668695377" pw "0"
-            //_log.info("PW: \"" + DataHelper.getUTF8(pw) + '"');
+            // _log.info("PW: \"" + DataHelper.getUTF8(pw) + '"');
         }
         sendAuthReply(AUTH_SUCCESS, out);
     }
@@ -209,8 +211,7 @@ class SOCKS5Server extends SOCKSServer {
     private int manageRequest(DataInputStream in, DataOutputStream out) throws IOException {
         int socksVer = in.readUnsignedByte();
         if (socksVer != SOCKS_VERSION_5) {
-            if (_log.shouldDebug())
-                _log.debug("Error in SOCKS5 request (protocol != 5?)");
+            if (_log.shouldDebug()) _log.debug("Error in SOCKS5 request (protocol != 5?)");
             throw new SOCKSException("Invalid protocol version in request: " + socksVer);
         }
 
@@ -220,35 +221,32 @@ class SOCKS5Server extends SOCKSServer {
                 break;
 
             case Command.BIND:
-                if (_log.shouldDebug())
-                    _log.debug("BIND command is not supported!");
+                if (_log.shouldDebug()) _log.debug("BIND command is not supported!");
                 sendRequestReply(Reply.COMMAND_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
                 throw new SOCKSException("BIND command not supported");
 
             case Command.UDP_ASSOCIATE:
-          /*** if (!Boolean.parseBoolean(tunnel.getOptions().getProperty("i2ptunnel.socks.allowUDP"))) {
-            _log.debug("UDP ASSOCIATE command is not supported!");
-            sendRequestReply(Reply.COMMAND_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-            throw new SOCKSException("UDP ASSOCIATE command not supported");
-           ***/
+                /*** if (!Boolean.parseBoolean(tunnel.getOptions().getProperty("i2ptunnel.socks.allowUDP"))) {
+                 * _log.debug("UDP ASSOCIATE command is not supported!");
+                 * sendRequestReply(Reply.COMMAND_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
+                 * throw new SOCKSException("UDP ASSOCIATE command not supported");
+                 ***/
                 break;
 
             case Command.TOR_RESOLVE:
-            // https://github.com/torproject/torspec/blob/main/socks-extensions.txt
-            // reply will be sent below
+                // https://github.com/torproject/torspec/blob/main/socks-extensions.txt
+                // reply will be sent below
                 break;
 
             case Command.TOR_RESOLVE_PTR:
             case Command.TOR_CONNECT_DIR:
-            // https://github.com/torproject/torspec/blob/main/socks-extensions.txt
-                if (_log.shouldDebug())
-                    _log.debug("Tor command unsupported (" + Integer.toHexString(command) + ")");
+                // https://github.com/torproject/torspec/blob/main/socks-extensions.txt
+                if (_log.shouldDebug()) _log.debug("Tor command unsupported (" + Integer.toHexString(command) + ")");
                 sendRequestReply(Reply.COMMAND_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
                 throw new SOCKSException("Unsupported command in request");
 
             default:
-                if (_log.shouldDebug())
-                    _log.debug("Unknown command in request (" + Integer.toHexString(command) + ")");
+                if (_log.shouldDebug()) _log.debug("Unknown command in request (" + Integer.toHexString(command) + ")");
                 sendRequestReply(Reply.COMMAND_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
                 throw new SOCKSException("Unsupported command in request");
         }
@@ -276,11 +274,10 @@ class SOCKS5Server extends SOCKSServer {
                 break;
             }
 
-            case AddressType.DOMAINNAME: {
+            case AddressType.DOMAINNAME:
                 int addrLen = in.readUnsignedByte();
                 if (addrLen == 0) {
-                    if (_log.shouldDebug())
-                        _log.debug("0-sized address length?");
+                    if (_log.shouldDebug()) _log.debug("0-sized address length?");
                     throw new SOCKSException("Illegal DOMAINNAME length");
                 }
                 byte addr[] = new byte[addrLen];
@@ -298,41 +295,36 @@ class SOCKS5Server extends SOCKSServer {
                         old = _torCache.put(fakeIP, host);
                     }
                     if (old != null && !old.equals(host)) {
-                        if (_log.shouldWarn())
-                            _log.warn("Hash collision " + old + " and " + host);
+                        if (_log.shouldWarn()) _log.warn("Hash collision " + old + " and " + host);
                     }
-                    if (_log.shouldDebug())
-                        _log.debug("Cached host " + host + " at address " + fakeIP);
+                    if (_log.shouldDebug()) _log.debug("Cached host " + host + " at address " + fakeIP);
                     sendRequestReply(Reply.SUCCEEDED, AddressType.IPV4, InetAddress.getByName(fakeIP), null, 1, out);
                     throw new SOCKSException("ignore");
                 }
-                //if (host.startsWith("4fff:")) {
+                // if (host.startsWith("4fff:")) {
                 if (host.startsWith("255.")) {
-                // For Tor, where hostname was sent previously in the RESOLVE
+                    // For Tor, where hostname was sent previously in the RESOLVE
                     synchronized (_torCache) {
                         connHostName = _torCache.get(host);
                     }
                     if (connHostName == null) {
-                        sendRequestReply(Reply.ADDRESS_TYPE_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
+                        sendRequestReply(
+                                Reply.ADDRESS_TYPE_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
                         throw new SOCKSException("No cache entry found for Tor IP " + host);
                     }
-                    if (_log.shouldDebug())
-                        _log.debug("Using hostname from previous RESOLVE: " + connHostName);
+                    if (_log.shouldDebug()) _log.debug("Using hostname from previous RESOLVE: " + connHostName);
                 } else {
                     connHostName = host;
                 }
-            }
-                if (_log.shouldDebug())
-                    _log.debug("DOMAINNAME address type in request: " + connHostName);
-            break;
+                if (_log.shouldDebug()) _log.debug("DOMAINNAME address type in request: " + connHostName);
+                break;
 
             case AddressType.IPV6:
                 if (command != Command.UDP_ASSOCIATE) {
                     byte[] ip = new byte[16];
                     in.readFully(ip);
                     connHostName = Addresses.toString(ip);
-                    if (_log.shouldWarn())
-                        _log.warn("IPV6 address type in request! Is your client secure?");
+                    if (_log.shouldWarn()) _log.warn("IPV6 address type in request! Is your client secure?");
                 }
                 break;
 
@@ -345,8 +337,7 @@ class SOCKS5Server extends SOCKSServer {
 
         connPort = in.readUnsignedShort();
         if (connPort == 0) {
-            if (_log.shouldDebug())
-                _log.debug("Trying to connect to TCP port 0?  Dropping!");
+            if (_log.shouldDebug()) _log.debug("Trying to connect to TCP port 0?  Dropping!");
             sendRequestReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
             throw new SOCKSException("Invalid port number in request");
         }
@@ -371,8 +362,7 @@ class SOCKS5Server extends SOCKSServer {
         byte[] reply = new byte[2];
         reply[0] = SOCKS_VERSION_5;
         reply[1] = (byte) replyCode;
-        if (_log.shouldDebug())
-            _log.debug("Sending init reply:\n" + HexDump.dump(reply));
+        if (_log.shouldDebug()) _log.debug("Sending init reply:\n" + HexDump.dump(reply));
         out.write(reply);
     }
 
@@ -384,8 +374,7 @@ class SOCKS5Server extends SOCKSServer {
         byte[] reply = new byte[2];
         reply[0] = AUTH_VERSION;
         reply[1] = (byte) replyCode;
-        if (_log.shouldDebug())
-            _log.debug("Sending auth reply:\n" + HexDump.dump(reply));
+        if (_log.shouldDebug()) _log.debug("Sending auth reply:\n" + HexDump.dump(reply));
         out.write(reply);
     }
 
@@ -394,8 +383,9 @@ class SOCKS5Server extends SOCKSServer {
      * one of inetAddr or domainName can be null, depending on
      * addressType.
      */
-    private void sendRequestReply(int replyCode, int addressType, InetAddress inetAddr, String domainName,
-                                  int bindPort, DataOutputStream out) throws IOException {
+    private void sendRequestReply(
+            int replyCode, int addressType, InetAddress inetAddr, String domainName, int bindPort, DataOutputStream out)
+            throws IOException {
         ByteArrayOutputStream reps = new ByteArrayOutputStream(64);
         DataOutputStream dreps = new DataOutputStream(reps);
 
@@ -468,42 +458,46 @@ class SOCKS5Server extends SOCKSServer {
             String hostLowerCase = connHostName.toLowerCase(Locale.US);
             if (NamingService.isI2PHost(hostLowerCase)) {
                 // Let's not do a new Dest for every request, huh?
-                //I2PSocketManager sm = I2PSocketManagerFactory.createManager();
-                //destSock = sm.connect(I2PTunnel.destFromName(connHostName), null);
+                // I2PSocketManager sm = I2PSocketManagerFactory.createManager();
+                // destSock = sm.connect(I2PTunnel.destFromName(connHostName), null);
                 Destination dest = _context.namingService().lookup(connHostName);
                 if (dest == null) {
                     try {
                         sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-                    } catch (IOException ioe) {}
+                    } catch (IOException ioe) {
+                    }
                     throw new SOCKSException("Host not found");
                 }
-                if (_log.shouldDebug())
-                    _log.debug("Connecting to " + connHostName + "...");
+                if (_log.shouldDebug()) _log.debug("Connecting to " + connHostName + "...");
                 Properties overrides = new Properties();
                 I2PSocketOptions sktOpts = t.buildOptions(overrides);
                 sktOpts.setPort(connPort);
                 destSock = t.createI2PSocket(dest, sktOpts);
-            } else if (hostLowerCase.equals("localhost") || connHostName.equals("127.0.0.1") ||
-                       hostLowerCase.endsWith(".localhost") ||
-                       connHostName.startsWith("192.168.") || connHostName.equals("[::1]")) {
+            } else if (hostLowerCase.equals("localhost")
+                    || connHostName.equals("127.0.0.1")
+                    || hostLowerCase.endsWith(".localhost")
+                    || connHostName.startsWith("192.168.")
+                    || connHostName.equals("[::1]")) {
                 String err = "No localhost accesses allowed through the Socks Proxy";
                 _log.error(err);
                 try {
-                    sendRequestReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-                } catch (IOException ioe) {}
+                    sendRequestReply(
+                            Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
+                } catch (IOException ioe) {
+                }
                 throw new SOCKSException(err);
-          /****
-            } else if (connPort == 80) {
-                // rewrite GET line to include hostname??? or add Host: line???
-                // or forward to local eepProxy (but that's a Socket not an I2PSocket)
-                // use eepProxy configured outproxies?
-                String err = "No handler for HTTP outproxy implemented";
-                _log.error(err);
-                try {
-                    sendRequestReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-                } catch (IOException ioe) {}
-                throw new SOCKSException(err);
-           ****/
+                /****
+                 * } else if (connPort == 80) {
+                 * // rewrite GET line to include hostname??? or add Host: line???
+                 * // or forward to local eepProxy (but that's a Socket not an I2PSocket)
+                 * // use eepProxy configured outproxies?
+                 * String err = "No handler for HTTP outproxy implemented";
+                 * _log.error(err);
+                 * try {
+                 * sendRequestReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
+                 * } catch (IOException ioe) {}
+                 * throw new SOCKSException(err);
+                 ****/
             } else {
                 Outproxy outproxy = getOutproxyPlugin();
                 if (outproxy != null) {
@@ -514,17 +508,26 @@ class SOCKS5Server extends SOCKSServer {
                     } catch (IOException ioe) {
                         try {
                             sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-                        } catch (IOException ioe2) {}
+                        } catch (IOException ioe2) {
+                        }
                         throw new SOCKSException("connect failed via outproxy plugin", ioe);
                     }
                 } else {
                     List<String> proxies = t.getProxies(connPort);
                     if (proxies == null || proxies.isEmpty()) {
-                        String err = "No outproxy configured for port " + connPort + " and no default configured either";
+                        String err =
+                                "No outproxy configured for port " + connPort + " and no default configured either";
                         _log.error(err);
                         try {
-                            sendRequestReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-                        } catch (IOException ioe) {}
+                            sendRequestReply(
+                                    Reply.CONNECTION_NOT_ALLOWED_BY_RULESET,
+                                    AddressType.DOMAINNAME,
+                                    null,
+                                    "0.0.0.0",
+                                    0,
+                                    out);
+                        } catch (IOException ioe) {
+                        }
                         throw new SOCKSException(err);
                     }
                     // TODO sticky proxy selection like in HTTP client
@@ -535,7 +538,8 @@ class SOCKS5Server extends SOCKSServer {
                     } catch (SOCKSException se) {
                         try {
                             sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-                        } catch (IOException ioe) {}
+                        } catch (IOException ioe) {
+                        }
                         throw se;
                     }
                 }
@@ -543,25 +547,25 @@ class SOCKS5Server extends SOCKSServer {
             confirmConnection();
             _log.debug("Connection confirmed - exchanging data...");
         } catch (DataFormatException e) {
-            if (_log.shouldWarn())
-                _log.warn("SOCKS error", e);
+            if (_log.shouldWarn()) _log.warn("SOCKS error", e);
             try {
                 sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) {
+            }
             throw new SOCKSException("Error in destination format");
         } catch (IOException e) {
-            if (_log.shouldWarn())
-                _log.warn("socks error", e);
+            if (_log.shouldWarn()) _log.warn("socks error", e);
             try {
                 sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) {
+            }
             throw new SOCKSException("Connection error", e);
         } catch (I2PException e) {
-            if (_log.shouldWarn())
-                _log.warn("socks error", e);
+            if (_log.shouldWarn()) _log.warn("socks error", e);
             try {
                 sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) {
+            }
             throw new SOCKSException("Connection error", e);
         }
 
@@ -577,7 +581,7 @@ class SOCKS5Server extends SOCKSServer {
      */
     private I2PSocket outproxyConnect(I2PSOCKSTunnel tun, String proxy) throws IOException, I2PException {
         Properties overrides = new Properties();
-//        overrides.setProperty("option.i2p.streaming.connectDelay", "200");
+        //        overrides.setProperty("option.i2p.streaming.connectDelay", "200");
         overrides.setProperty("option.i2p.streaming.connectDelay", "150");
         I2PSocketOptions proxyOpts = tun.buildOptions(overrides);
         int proxyPort = 0;
@@ -585,33 +589,33 @@ class SOCKS5Server extends SOCKSServer {
         if (colon > 0) {
             try {
                 proxyPort = Integer.parseInt(proxy.substring(colon + 1));
-                if (proxyPort > 0)
-                    proxyOpts.setPort(proxyPort);
-            } catch (NumberFormatException nfe) {}
+                if (proxyPort > 0) proxyOpts.setPort(proxyPort);
+            } catch (NumberFormatException nfe) {
+            }
             proxy = proxy.substring(0, colon);
         }
         Destination dest = _context.namingService().lookup(proxy);
-        if (dest == null)
-            throw new SOCKSException("Outproxy not found");
+        if (dest == null) throw new SOCKSException("Outproxy not found");
         I2PSocket destSock = tun.createI2PSocket(dest, proxyOpts);
         OutputStream out = null;
         InputStream in = null;
         try {
             out = destSock.getOutputStream();
             boolean authAvail = Boolean.parseBoolean(props.getProperty(I2PTunnelHTTPClientBase.PROP_OUTPROXY_AUTH));
-            String configUser =  null;
+            String configUser = null;
             String configPW = null;
             if (authAvail) {
-                configUser =  props.getProperty(I2PTunnelHTTPClientBase.PROP_OUTPROXY_USER_PREFIX + proxy);
+                configUser = props.getProperty(I2PTunnelHTTPClientBase.PROP_OUTPROXY_USER_PREFIX + proxy);
                 configPW = props.getProperty(I2PTunnelHTTPClientBase.PROP_OUTPROXY_PW_PREFIX + proxy);
                 if (configUser == null || configPW == null) {
-                    configUser =  props.getProperty(I2PTunnelHTTPClientBase.PROP_OUTPROXY_USER);
+                    configUser = props.getProperty(I2PTunnelHTTPClientBase.PROP_OUTPROXY_USER);
                     configPW = props.getProperty(I2PTunnelHTTPClientBase.PROP_OUTPROXY_PW);
                 }
             }
             boolean https = "connect".equals(props.getProperty(I2PSOCKSTunnel.PROP_OUTPROXY_TYPE));
             if (_log.shouldDebug())
-                _log.debug("Connecting to " + (https ? "HTTPS" : "SOCKS") + " outproxy " + proxy + " -> " + connHostName + ":" + connPort);
+                _log.debug("Connecting to " + (https ? "HTTPS" : "SOCKS") + " outproxy " + proxy + " -> " + connHostName
+                        + ":" + connPort);
 
             if (https) {
                 httpsConnect(destSock, out, connHostName, connPort, configUser, configPW);
@@ -620,9 +624,20 @@ class SOCKS5Server extends SOCKSServer {
                 SOCKS5Client.connect(in, out, connHostName, connPort, configUser, configPW);
             }
         } catch (IOException e) {
-            try { destSock.close(); } catch (IOException ioe) {}
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
-            if (out != null) try { out.close(); } catch (IOException ioe) {}
+            try {
+                destSock.close();
+            } catch (IOException ioe) {
+            }
+            if (in != null)
+                try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
+            if (out != null)
+                try {
+                    out.close();
+                } catch (IOException ioe) {
+                }
             throw e;
         }
         // that's it, caller will send confirmation to our client
@@ -643,33 +658,33 @@ class SOCKS5Server extends SOCKSServer {
      *  @param configPW password unsupported
      *  @since 0.9.57
      */
-    public void httpsConnect(I2PSocket destSock, OutputStream pout, String connHostName,
-                             int connPort, String configUser, String configPW) throws IOException {
+    public void httpsConnect(
+            I2PSocket destSock,
+            OutputStream pout,
+            String connHostName,
+            int connPort,
+            String configUser,
+            String configPW)
+            throws IOException {
         StringBuilder buf = new StringBuilder(64);
         buf.append("CONNECT ");
         boolean v6 = connHostName.contains(":");
-        if (v6)
-            buf.append('[');
+        if (v6) buf.append('[');
         buf.append(connHostName);
-        if (v6)
-            buf.append(']');
+        if (v6) buf.append(']');
         buf.append(':');
         buf.append(connPort);
         buf.append(" HTTP/1.1\r\n\r\n");
-        if (_log.shouldDebug())
-            _log.debug("Request to outproxy: " + buf);
+        if (_log.shouldDebug()) _log.debug("Request to outproxy: " + buf);
         pout.write(DataHelper.getASCII(buf.toString()));
         pout.flush();
         // eat the response and headers
         buf.setLength(0);
-        I2PTunnelHTTPServer.readHeaders(destSock, null, buf, _skipHeaders, _context, 30*1000);
+        I2PTunnelHTTPServer.readHeaders(destSock, null, buf, _skipHeaders, _context, 30 * 1000);
         String[] f = DataHelper.split(buf.toString(), " ", 2);
-        if (f.length < 2)
-            throw new IOException("Bad response from SOCKS5 proxy");
-        if (!f[1].startsWith("200 "))
-            throw new IOException("Error from SOCKS5 proxy: " + f[1]);
-        if (_log.shouldDebug())
-            _log.debug("Response from SOCKS5 proxy: " + buf);
+        if (f.length < 2) throw new IOException("Bad response from SOCKS5 proxy");
+        if (!f[1].startsWith("200 ")) throw new IOException("Error from SOCKS5 proxy: " + f[1]);
+        if (_log.shouldDebug()) _log.debug("Response from SOCKS5 proxy: " + buf);
     }
 
     // This isn't really the right place for this, we can't stop the tunnel once it starts.
@@ -699,24 +714,28 @@ class SOCKS5Server extends SOCKSServer {
             InetAddress ia = null;
             try {
                 ia = InetAddress.getByAddress(connHostName, dummyIP);
-            } catch (UnknownHostException uhe) {} // won't happen, no resolving done here
+            } catch (UnknownHostException uhe) {
+            } // won't happen, no resolving done here
             int myPort = _tunnel.add(ia, connPort);
             ports.add(Integer.valueOf(myPort));
             try {
-                sendRequestReply(Reply.SUCCEEDED, AddressType.IPV4, InetAddress.getByName("127.0.0.1"), null, myPort, out);
-            } catch (IOException ioe) { break; }
+                sendRequestReply(
+                        Reply.SUCCEEDED, AddressType.IPV4, InetAddress.getByName("127.0.0.1"), null, myPort, out);
+            } catch (IOException ioe) {
+                break;
+            }
 
             // wait for more ???
             try {
                 int command = manageRequest(in, out);
                 // don't do this...
-                if (command != Command.UDP_ASSOCIATE)
-                    break;
-            } catch (IOException ioe) { break; }
+                if (command != Command.UDP_ASSOCIATE) break;
+            } catch (IOException ioe) {
+                break;
+            }
         }
 
-        for (Integer i : ports)
-            _tunnel.remove(i);
+        for (Integer i : ports) _tunnel.remove(i);
 
         // Prevent I2PSocksTunnel from calling getDestinationI2PSocket() above
         // to create a streaming lib connection...

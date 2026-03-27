@@ -1,4 +1,5 @@
 package net.i2p.router.transport;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,15 +9,16 @@ package net.i2p.router.transport;
  *
  */
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.regex.Pattern;
 import net.i2p.I2PAppContext;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.router.RouterContext;
 import net.i2p.util.AddressType;
 import net.i2p.util.Log;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Utility class providing common transport operations and configurations.
@@ -58,16 +60,20 @@ public abstract class TransportUtil {
     public static final String NTCP_IPV6_CONFIG = "i2np.ntcp.ipv6";
     public static final String SSU_IPV6_CONFIG = "i2np.udp.ipv6";
     public static final String PROP_IPV4_FIREWALLED = "i2np.ipv4.firewalled";
+
     /** @since 0.9.28 */
     public static final String PROP_IPV6_FIREWALLED = "i2np.ipv6.firewalled";
+
     private static final String PROP_PORT_PFX = "i2np.";
     private static final String PROP_MIN_PORT_SFX = ".minPort";
     private static final String PROP_MAX_PORT_SFX = ".maxPort";
+
     /**
      * 8998 is monotone, and 31000 is the wrapper outbound, so let's stay between those
      * Was 9111, increase to skip Tor browser at 9050
      */
     private static final int MIN_RANDOM_PORT = 9151;
+
     private static final int MAX_RANDOM_PORT = 30777;
 
     private static final Pattern YGGDRASIL_PATTERN = Pattern.compile("^[2-3][0-9a-fA-F]{2}:[0-9a-fA-F:]*");
@@ -116,21 +122,16 @@ public abstract class TransportUtil {
 
     public static IPv6Config getIPv6Config(RouterContext ctx, String transportStyle) {
         String cfg;
-        if (transportStyle.equals("NTCP"))
-            cfg = ctx.getProperty(NTCP_IPV6_CONFIG);
-        else if (transportStyle.equals("SSU"))
-            cfg = ctx.getProperty(SSU_IPV6_CONFIG);
-        else
-            return DEFAULT_IPV6_CONFIG;
+        if (transportStyle.equals("NTCP")) cfg = ctx.getProperty(NTCP_IPV6_CONFIG);
+        else if (transportStyle.equals("SSU")) cfg = ctx.getProperty(SSU_IPV6_CONFIG);
+        else return DEFAULT_IPV6_CONFIG;
         return getIPv6Config(cfg);
     }
 
     public static IPv6Config getIPv6Config(String cfg) {
-        if (cfg == null)
-            return DEFAULT_IPV6_CONFIG;
+        if (cfg == null) return DEFAULT_IPV6_CONFIG;
         IPv6Config c = BY_NAME.get(cfg);
-        if (c != null)
-            return c;
+        if (c != null) return c;
         return DEFAULT_IPV6_CONFIG;
     }
 
@@ -163,8 +164,7 @@ public abstract class TransportUtil {
     public static boolean isIPv6(RouterAddress addr) {
         // do this the fast way, without calling getIP() to parse the host string
         String host = addr.getHost();
-        if (host != null)
-            return host.contains(":");
+        if (host != null) return host.contains(":");
         String caps = addr.getOption("caps");
         return caps != null && caps.contains(TransportImpl.CAP_IPV6) && !caps.contains(TransportImpl.CAP_IPV4);
     }
@@ -192,15 +192,11 @@ public abstract class TransportUtil {
      *  @since 0.9.54
      */
     public static AddressType getType(String host) {
-        if (host == null)
-            return null;
-        if (net.i2p.util.Addresses.isIPv4Address(host))
-            return AddressType.IPV4;
+        if (host == null) return null;
+        if (net.i2p.util.Addresses.isIPv4Address(host)) return AddressType.IPV4;
         if (host.indexOf(':') >= 0) {
-            if (YGGDRASIL_PATTERN.matcher(host).matches())
-                return AddressType.YGG;
-            if (net.i2p.util.Addresses.isIPv6Address(host))
-                return AddressType.IPV6;
+            if (YGGDRASIL_PATTERN.matcher(host).matches()) return AddressType.YGG;
+            if (net.i2p.util.Addresses.isIPv6Address(host)) return AddressType.IPV6;
         }
         return null;
     }
@@ -210,13 +206,10 @@ public abstract class TransportUtil {
      *  @since 0.9.54
      */
     public static AddressType getType(byte[] ip) {
-        if (ip == null)
-            return null;
-        if (ip.length == 4)
-            return AddressType.IPV4;
+        if (ip == null) return null;
+        if (ip.length == 4) return AddressType.IPV4;
         if (ip.length == 16) {
-            if (ip[0] == 2 || ip[0] == 3)
-                return AddressType.YGG;
+            if (ip[0] == 2 || ip[0] == 3) return AddressType.YGG;
             return AddressType.IPV6;
         }
         return null;
@@ -237,17 +230,15 @@ public abstract class TransportUtil {
      *  @since IPv6
      */
     public static boolean isPubliclyRoutable(byte addr[], boolean allowIPv4, boolean allowIPv6) {
-        if (I2PAppContext.getGlobalContext().getBooleanProperty("i2np.allowLocal"))
-            return true;
+        if (I2PAppContext.getGlobalContext().getBooleanProperty("i2np.allowLocal")) return true;
         if (addr.length == 4) {
-            if (!allowIPv4)
-                return false;
+            if (!allowIPv4) return false;
             int a0 = addr[0] & 0xFF;
             // please keep sorted by IP
             if (a0 == 0) return false;
             if (a0 == 10) return false;
             // 5/8 allocated to RIPE (30 November 2010)
-            //if ((addr[0]&0xFF) == 5) return false;  // Hamachi
+            // if ((addr[0]&0xFF) == 5) return false;  // Hamachi
             // Hamachi moved to 25/8 Nov. 2012
             // Assigned to UK Ministry of Defence
             // http://blog.logmein.com/products/changes-to-hamachi-on-november-19th
@@ -284,27 +275,22 @@ public abstract class TransportUtil {
                 int a0 = addr[0] & 0xFF;
                 if (a0 == 0x20) {
                     // disallow 2002::/16 (6to4 RFC 3056)
-                    if (addr[1] == 0x02)
-                        return false;
+                    if (addr[1] == 0x02) return false;
                     if (addr[1] == 0x01) {
                         // disallow 2001:0::/32 (Teredo RFC 4380)
-                        if (addr[2] == 0x00 && addr[3] == 0x00)
-                            return false;
+                        if (addr[2] == 0x00 && addr[3] == 0x00) return false;
                         // Documenation (example) RFC 3849
-                        if (addr[2] == 0x0d && (addr[3] & 0xff) == 0xb8)
-                            return false;
+                        if (addr[2] == 0x0d && (addr[3] & 0xff) == 0xb8) return false;
                     }
                     return true;
                 } else if (a0 == 0x26) {
                     // Hamachi IPv6
-                    if (addr[1] == 0x20 && addr[2] == 0x00 && (addr[3] & 0xff) == 0x9b)
-                        return false;
+                    if (addr[1] == 0x20 && addr[2] == 0x00 && (addr[3] & 0xff) == 0x9b) return false;
                     return true;
                 } else {
                     // https://www.iana.org/assignments/ipv6-address-space/ipv6-address-space.xhtml
                     // Global unicast
-                    if (a0 >= 0x20 && a0 <= 0x3f)
-                        return true;
+                    if (a0 >= 0x20 && a0 <= 0x3f) return true;
                     // 00-1f and 40-ff
                     // loopback, broadcast,
                     // IPv4 compat ::xxxx:xxxx
@@ -333,33 +319,54 @@ public abstract class TransportUtil {
     public static boolean isValidPort(int port) {
         // update log message below if you update this list
         // do the fast check first
-        return (port >= MIN_RANDOM_PORT && port <= MAX_RANDOM_PORT) || (
-               port >= 1024 &&
-               port <= 65535 &&
-               port != 1900 &&  // UPnP SSDP
-               port != 1719 &&  // H.323
-               port != 1720 &&  // H.323
-               port != 2049 &&  // NFS
-               port != 2827 &&  // BOB
-               port != 3659 &&  // Apple-sasl
-               port != 4045 &&  // lockd
-               port != 4444 &&  // HTTP
-               port != 4445 &&  // HTTPS
-               port != 5060 &&  // SIP https://groups.google.com/a/chromium.org/g/blink-dev/c/tTGznHWRB9U
-               port != 5061 &&  // SIP https://groups.google.com/a/chromium.org/g/blink-dev/c/tTGznHWRB9U
-               port != 6000 &&  // lockd
-               (!(port >= 6665 && port <= 6669)) && // IRC and alternates
-               port != 6697 &&  // IRC+TLS
-               (!(port >= 7650 && port <= 7668)) && // standard I2P range
-               port != 7070 &&  // i2pd console
-               port != 8080 &&  // web server
-               port != 9001 &&  // Tor
-               port != 9030 &&  // Tor
-               port != 9050 &&  // Tor
-               port != 9100 &&  // network printer
-               port != 9150 &&  // Tor browser
-               port != 31000 && // Wrapper
-               port != 32000);   // Wrapper
+        return (port >= MIN_RANDOM_PORT && port <= MAX_RANDOM_PORT) || (port >= 1024 && port <= 65535
+                        && port != 1900
+                        && // UPnP SSDP
+                        port != 1719
+                        && // H.323
+                        port != 1720
+                        && // H.323
+                        port != 2049
+                        && // NFS
+                        port != 2827
+                        && // BOB
+                        port != 3659
+                        && // Apple-sasl
+                        port != 4045
+                        && // lockd
+                        port != 4444
+                        && // HTTP
+                        port != 4445
+                        && // HTTPS
+                        port != 5060
+                        && // SIP https://groups.google.com/a/chromium.org/g/blink-dev/c/tTGznHWRB9U
+                        port != 5061
+                        && // SIP https://groups.google.com/a/chromium.org/g/blink-dev/c/tTGznHWRB9U
+                        port != 6000
+                        && // lockd
+                        (!(port >= 6665 && port <= 6669))
+                        && // IRC and alternates
+                        port != 6697
+                        && // IRC+TLS
+                        (!(port >= 7650 && port <= 7668))
+                        && // standard I2P range
+                        port != 7070
+                        && // i2pd console
+                        port != 8080
+                        && // web server
+                        port != 9001
+                        && // Tor
+                        port != 9030
+                        && // Tor
+                        port != 9050
+                        && // Tor
+                        port != 9100
+                        && // network printer
+                        port != 9150
+                        && // Tor browser
+                        port != 31000
+                        && // Wrapper
+                        port != 32000); // Wrapper
     }
 
     /**
@@ -376,10 +383,8 @@ public abstract class TransportUtil {
      *  @since IPv6, moved from UDPEndpoint in 0.9.39 to support NTCP also
      */
     public static int selectRandomPort(RouterContext ctx, String transportStyle) {
-        if (transportStyle.equals("SSU"))
-            transportStyle = "udp";
-        else
-            transportStyle = transportStyle.toLowerCase(Locale.US);
+        if (transportStyle.equals("SSU")) transportStyle = "udp";
+        else transportStyle = transportStyle.toLowerCase(Locale.US);
         String minprop = PROP_PORT_PFX + transportStyle + PROP_MIN_PORT_SFX;
         String maxprop = PROP_PORT_PFX + transportStyle + PROP_MAX_PORT_SFX;
         int minPort = Math.min(65535, Math.max(1, ctx.getProperty(minprop, MIN_RANDOM_PORT)));
@@ -387,15 +392,15 @@ public abstract class TransportUtil {
         return minPort + ctx.random().nextInt(1 + maxPort - minPort);
     }
 
-/*
-    public static void main(String[] args) {
-        java.util.Set<String> addrs = net.i2p.util.Addresses.getAddresses(true, true, true, true);
-        net.i2p.util.OrderedProperties props = new net.i2p.util.OrderedProperties();
-        RouterAddress ra = new RouterAddress("foo", props, 10);
-        for (String a : addrs) {
-            props.setProperty("host", a);
-            System.out.println(a + " - " + isYggdrasil(ra));
+    /*
+        public static void main(String[] args) {
+            java.util.Set<String> addrs = net.i2p.util.Addresses.getAddresses(true, true, true, true);
+            net.i2p.util.OrderedProperties props = new net.i2p.util.OrderedProperties();
+            RouterAddress ra = new RouterAddress("foo", props, 10);
+            for (String a : addrs) {
+                props.setProperty("host", a);
+                System.out.println(a + " - " + isYggdrasil(ra));
+            }
         }
-    }
-*/
+    */
 }

@@ -77,7 +77,7 @@ public class Ed25519LittleEndianEncoding extends Encoding {
      */
     @Override
     public byte[] encode(FieldElement x) {
-        int[] h = ((Ed25519FieldElement)x).t;
+        int[] h = ((Ed25519FieldElement) x).t;
         int h0 = h[0];
         int h1 = h[1];
         int h2 = h[2];
@@ -118,16 +118,35 @@ public class Ed25519LittleEndianEncoding extends Encoding {
         // First add 19 * q then discard the bit 255
         h0 += 19 * q;
 
-        carry0 = h0 >> 26; h1 += carry0; h0 -= carry0 << 26;
-        carry1 = h1 >> 25; h2 += carry1; h1 -= carry1 << 25;
-        carry2 = h2 >> 26; h3 += carry2; h2 -= carry2 << 26;
-        carry3 = h3 >> 25; h4 += carry3; h3 -= carry3 << 25;
-        carry4 = h4 >> 26; h5 += carry4; h4 -= carry4 << 26;
-        carry5 = h5 >> 25; h6 += carry5; h5 -= carry5 << 25;
-        carry6 = h6 >> 26; h7 += carry6; h6 -= carry6 << 26;
-        carry7 = h7 >> 25; h8 += carry7; h7 -= carry7 << 25;
-        carry8 = h8 >> 26; h9 += carry8; h8 -= carry8 << 26;
-        carry9 = h9 >> 25;               h9 -= carry9 << 25;
+        carry0 = h0 >> 26;
+        h1 += carry0;
+        h0 -= carry0 << 26;
+        carry1 = h1 >> 25;
+        h2 += carry1;
+        h1 -= carry1 << 25;
+        carry2 = h2 >> 26;
+        h3 += carry2;
+        h2 -= carry2 << 26;
+        carry3 = h3 >> 25;
+        h4 += carry3;
+        h3 -= carry3 << 25;
+        carry4 = h4 >> 26;
+        h5 += carry4;
+        h4 -= carry4 << 26;
+        carry5 = h5 >> 25;
+        h6 += carry5;
+        h5 -= carry5 << 25;
+        carry6 = h6 >> 26;
+        h7 += carry6;
+        h6 -= carry6 << 26;
+        carry7 = h7 >> 25;
+        h8 += carry7;
+        h7 -= carry7 << 25;
+        carry8 = h8 >> 26;
+        h9 += carry8;
+        h8 -= carry8 << 26;
+        carry9 = h9 >> 25;
+        h9 -= carry9 << 25;
 
         // Step 2 (straight forward conversion):
         byte[] s = new byte[32];
@@ -178,7 +197,7 @@ public class Ed25519LittleEndianEncoding extends Encoding {
         result |= (in[offset++] & 0xff) << 8;
         result |= (in[offset++] & 0xff) << 16;
         result |= in[offset] << 24;
-        return ((long)result) & 0xffffffffL;
+        return ((long) result) & 0xffffffffL;
     }
 
     /**
@@ -211,17 +230,37 @@ public class Ed25519LittleEndianEncoding extends Encoding {
         long carry9;
 
         // Remember: 2^255 congruent 19 modulo p
-        carry9 = (h9 + (long) (1<<24)) >> 25; h0 += carry9 * 19; h9 -= carry9 << 25;
-        carry1 = (h1 + (long) (1<<24)) >> 25; h2 += carry1; h1 -= carry1 << 25;
-        carry3 = (h3 + (long) (1<<24)) >> 25; h4 += carry3; h3 -= carry3 << 25;
-        carry5 = (h5 + (long) (1<<24)) >> 25; h6 += carry5; h5 -= carry5 << 25;
-        carry7 = (h7 + (long) (1<<24)) >> 25; h8 += carry7; h7 -= carry7 << 25;
+        carry9 = (h9 + (long) (1 << 24)) >> 25;
+        h0 += carry9 * 19;
+        h9 -= carry9 << 25;
+        carry1 = (h1 + (long) (1 << 24)) >> 25;
+        h2 += carry1;
+        h1 -= carry1 << 25;
+        carry3 = (h3 + (long) (1 << 24)) >> 25;
+        h4 += carry3;
+        h3 -= carry3 << 25;
+        carry5 = (h5 + (long) (1 << 24)) >> 25;
+        h6 += carry5;
+        h5 -= carry5 << 25;
+        carry7 = (h7 + (long) (1 << 24)) >> 25;
+        h8 += carry7;
+        h7 -= carry7 << 25;
 
-        carry0 = (h0 + (long) (1<<25)) >> 26; h1 += carry0; h0 -= carry0 << 26;
-        carry2 = (h2 + (long) (1<<25)) >> 26; h3 += carry2; h2 -= carry2 << 26;
-        carry4 = (h4 + (long) (1<<25)) >> 26; h5 += carry4; h4 -= carry4 << 26;
-        carry6 = (h6 + (long) (1<<25)) >> 26; h7 += carry6; h6 -= carry6 << 26;
-        carry8 = (h8 + (long) (1<<25)) >> 26; h9 += carry8; h8 -= carry8 << 26;
+        carry0 = (h0 + (long) (1 << 25)) >> 26;
+        h1 += carry0;
+        h0 -= carry0 << 26;
+        carry2 = (h2 + (long) (1 << 25)) >> 26;
+        h3 += carry2;
+        h2 -= carry2 << 26;
+        carry4 = (h4 + (long) (1 << 25)) >> 26;
+        h5 += carry4;
+        h4 -= carry4 << 26;
+        carry6 = (h6 + (long) (1 << 25)) >> 26;
+        h7 += carry6;
+        h6 -= carry6 << 26;
+        carry8 = (h8 + (long) (1 << 25)) >> 26;
+        h9 += carry8;
+        h8 -= carry8 << 26;
 
         int[] h = new int[10];
         h[0] = (int) h0;
@@ -255,5 +294,4 @@ public class Ed25519LittleEndianEncoding extends Encoding {
         byte[] s = encode(x);
         return (s[0] & 1) != 0;
     }
-
 }

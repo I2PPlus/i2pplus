@@ -49,17 +49,19 @@ public class SingleFileNamingService extends NamingService {
 
     private final File _file;
     private final ReentrantReadWriteLock _fileLock;
+
     /** cached number of entries */
     private volatile int _size;
+
     /** last write time */
     private long _lastWrite;
+
     private volatile boolean _isClosed;
 
     public SingleFileNamingService(I2PAppContext context, String filename) {
         super(context);
         File file = new File(filename);
-        if (!file.isAbsolute())
-            file = new File(context.getRouterDir(), filename);
+        if (!file.isAbsolute()) file = new File(context.getRouterDir(), filename);
         _file = file;
         _fileLock = new ReentrantReadWriteLock(true);
     }
@@ -89,13 +91,10 @@ public class SingleFileNamingService extends NamingService {
             String key = getKey(hostname);
             if (key == null && hostname.startsWith("www.") && hostname.length() > 7)
                 key = getKey(hostname.substring(4));
-            if (key != null)
-                return lookupBase64(key);
+            if (key != null) return lookupBase64(key);
         } catch (IOException ioe) {
-            if (_file.exists())
-                _log.error("Error loading hosts file " + _file, ioe);
-            else if (_log.shouldWarn())
-                _log.warn("Error loading hosts file " + _file, ioe);
+            if (_file.exists()) _log.error("Error loading hosts file " + _file, ioe);
+            else if (_log.shouldWarn()) _log.warn("Error loading hosts file " + _file, ioe);
         }
         return null;
     }
@@ -109,28 +108,26 @@ public class SingleFileNamingService extends NamingService {
         BufferedReader in = null;
         getReadLock();
         try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16*1024);
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
             String line = null;
             while ((line = in.readLine()) != null) {
-                if (line.startsWith("#"))
-                    continue;
-                if (line.indexOf('#') > 0)  // trim off any end of line comment
-                    line = line.substring(0, line.indexOf('#')).trim();
+                if (line.startsWith("#")) continue;
+                if (line.indexOf('#') > 0) line = line.substring(0, line.indexOf('#')).trim(); // trim off any end of line comment
                 int split = line.indexOf('=');
-                if (split <= 0)
-                    continue;
-                if (destkey.equals(line.substring(split + 1)))
-                    return line.substring(0, split);
+                if (split <= 0) continue;
+                if (destkey.equals(line.substring(split + 1))) return line.substring(0, split);
             }
             return null;
         } catch (IOException ioe) {
-            if (_file.exists())
-                _log.error("Error loading hosts file " + _file, ioe);
-            else if (_log.shouldWarn())
-                _log.warn("Error loading hosts file " + _file, ioe);
+            if (_file.exists()) _log.error("Error loading hosts file " + _file, ioe);
+            else if (_log.shouldWarn()) _log.warn("Error loading hosts file " + _file, ioe);
             return null;
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null)
+                try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
             releaseReadLock();
         }
     }
@@ -146,19 +143,21 @@ public class SingleFileNamingService extends NamingService {
         BufferedReader in = null;
         getReadLock();
         try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16*1024);
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
             String line = null;
             String search = host + '=';
             while ((line = in.readLine()) != null) {
-                if (!line.startsWith(search))
-                    continue;
-                if (line.indexOf('#') > 0)  // trim off any end of line comment
-                    line = line.substring(0, line.indexOf('#')).trim();
+                if (!line.startsWith(search)) continue;
+                if (line.indexOf('#') > 0) line = line.substring(0, line.indexOf('#')).trim(); // trim off any end of line comment
                 int split = line.indexOf('=');
-                return line.substring(split+1);   //.trim() ??????????????
+                return line.substring(split + 1); // .trim() ??????????????
             }
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null)
+                try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
             releaseReadLock();
         }
         return null;
@@ -172,24 +171,21 @@ public class SingleFileNamingService extends NamingService {
     @Override
     public boolean put(String hostname, Destination d, Properties options) {
         // try easy way first, most adds are not replaces
-        if (putIfAbsent(hostname, d, options))
-            return true;
-        if (!getWriteLock())
-            return false;
+        if (putIfAbsent(hostname, d, options)) return true;
+        if (!getWriteLock()) return false;
         BufferedReader in = null;
         BufferedWriter out = null;
         try {
-            if (_isClosed)
-                return false;
-            File tmp = SecureFile.createTempFile("temp-", ".tmp", _file.getAbsoluteFile().getParentFile());
+            if (_isClosed) return false;
+            File tmp = SecureFile.createTempFile(
+                    "temp-", ".tmp", _file.getAbsoluteFile().getParentFile());
             out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(tmp), "UTF-8"));
             if (_file.exists()) {
-                in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16*1024);
+                in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
                 String line = null;
                 String search = hostname + '=';
                 while ((line = in.readLine()) != null) {
-                    if (line.startsWith(search))
-                        continue;
+                    if (line.startsWith(search)) continue;
                     out.write(line);
                     out.newLine();
                 }
@@ -199,8 +195,7 @@ public class SingleFileNamingService extends NamingService {
             out.write('=');
             out.write(d.toBase64());
             // subscription options
-            if (options != null)
-                writeOptions(options, out);
+            if (options != null) writeOptions(options, out);
             out.newLine();
             out.close();
             boolean success = FileUtil.rename(tmp, _file);
@@ -214,8 +209,16 @@ public class SingleFileNamingService extends NamingService {
             _log.error("Error adding " + hostname, ioe);
             return false;
         } finally {
-            if (in != null) try { in.close(); } catch (IOException e) {}
-            if (out != null) try { out.close(); } catch (IOException e) {}
+            if (in != null)
+                try {
+                    in.close();
+                } catch (IOException e) {
+                }
+            if (out != null)
+                try {
+                    out.close();
+                } catch (IOException e) {
+                }
             releaseWriteLock();
         }
     }
@@ -228,15 +231,12 @@ public class SingleFileNamingService extends NamingService {
     @Override
     public boolean putIfAbsent(String hostname, Destination d, Properties options) {
         BufferedWriter out = null;
-        if (!getWriteLock())
-            return false;
+        if (!getWriteLock()) return false;
         try {
-            if (_isClosed)
-                return false;
+            if (_isClosed) return false;
             // simply check if present, and if not, append
             try {
-                if (getKey(hostname) != null)
-                    return false;
+                if (getKey(hostname) != null) return false;
             } catch (IOException ioe) {
                 if (_file.exists()) {
                     _log.error("Error adding " + hostname, ioe);
@@ -250,8 +250,7 @@ public class SingleFileNamingService extends NamingService {
             out.write('=');
             out.write(d.toBase64());
             // subscription options
-            if (options != null)
-                writeOptions(options, out);
+            if (options != null) writeOptions(options, out);
             out.write('\n');
             for (NamingServiceListener nsl : _listeners) {
                 nsl.entryAdded(this, hostname, d, options);
@@ -261,7 +260,11 @@ public class SingleFileNamingService extends NamingService {
             _log.error("Error adding " + hostname, ioe);
             return false;
         } finally {
-            if (out != null) try { out.close(); } catch (IOException e) {}
+            if (out != null)
+                try {
+                    out.close();
+                } catch (IOException e) {
+                }
             releaseWriteLock();
         }
     }
@@ -278,8 +281,7 @@ public class SingleFileNamingService extends NamingService {
         boolean started = false;
         for (Map.Entry<Object, Object> e : options.entrySet()) {
             String k = (String) e.getKey();
-            if (!k.startsWith("="))
-                continue;
+            if (!k.startsWith("=")) continue;
             k = k.substring(1);
             String v = (String) e.getValue();
             if (started) {
@@ -302,15 +304,13 @@ public class SingleFileNamingService extends NamingService {
     public boolean remove(String hostname, Properties options) {
         BufferedReader in = null;
         BufferedWriter out = null;
-        if (!getWriteLock())
-            return false;
+        if (!getWriteLock()) return false;
         try {
-            if (!_file.exists())
-                return false;
-            if (_isClosed)
-                return false;
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16*1024);
-            File tmp = SecureFile.createTempFile("temp-", ".tmp", _file.getAbsoluteFile().getParentFile());
+            if (!_file.exists()) return false;
+            if (_isClosed) return false;
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
+            File tmp = SecureFile.createTempFile(
+                    "temp-", ".tmp", _file.getAbsoluteFile().getParentFile());
             out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(tmp), "UTF-8"));
             String line = null;
             String search = hostname + '=';
@@ -340,8 +340,16 @@ public class SingleFileNamingService extends NamingService {
             _log.error("Error removing " + hostname, ioe);
             return false;
         } finally {
-            if (in != null) try { in.close(); } catch (IOException e) {}
-            if (out != null) try { out.close(); } catch (IOException e) {}
+            if (in != null)
+                try {
+                    in.close();
+                } catch (IOException e) {
+                }
+            if (out != null)
+                try {
+                    out.close();
+                } catch (IOException e) {
+                }
             releaseWriteLock();
         }
     }
@@ -354,8 +362,7 @@ public class SingleFileNamingService extends NamingService {
      */
     @Override
     public Map<String, Destination> getEntries(Properties options) {
-        if (!_file.exists())
-            return Collections.emptyMap();
+        if (!_file.exists()) return Collections.emptyMap();
         String searchOpt = null;
         String startsWith = null;
         if (options != null) {
@@ -367,35 +374,30 @@ public class SingleFileNamingService extends NamingService {
         BufferedReader in = null;
         getReadLock();
         try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16*1024);
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
             String line = null;
             Map<String, Destination> rv = new HashMap<String, Destination>();
             while ((line = in.readLine()) != null) {
-                if (line.length() <= 0)
-                    continue;
+                if (line.length() <= 0) continue;
                 if (startsWith != null) {
                     if (startsWith.equals("[0-9]")) {
-                        if (line.charAt(0) < '0' || line.charAt(0) > '9')
-                            continue;
+                        if (line.charAt(0) < '0' || line.charAt(0) > '9') continue;
                     } else if (!line.startsWith(startsWith)) {
                         continue;
                     }
                 }
-                if (line.startsWith("#"))
-                    continue;
-                if (line.indexOf('#') > 0)  // trim off any end of line comment
-                    line = line.substring(0, line.indexOf('#')).trim();
+                if (line.startsWith("#")) continue;
+                if (line.indexOf('#') > 0) line = line.substring(0, line.indexOf('#')).trim(); // trim off any end of line comment
                 int split = line.indexOf('=');
-                if (split <= 0)
-                    continue;
+                if (split <= 0) continue;
                 String key = line.substring(0, split);
-                if (searchOpt != null && key.indexOf(searchOpt) < 0)
-                    continue;
-                String b64 = line.substring(split+1);   //.trim() ??????????????
+                if (searchOpt != null && key.indexOf(searchOpt) < 0) continue;
+                String b64 = line.substring(split + 1); // .trim() ??????????????
                 try {
                     Destination dest = new Destination(b64);
                     rv.put(key, dest);
-                } catch (DataFormatException dfe) {}
+                } catch (DataFormatException dfe) {
+                }
             }
             if (searchOpt == null && startsWith == null) {
                 _lastWrite = _file.lastModified();
@@ -406,7 +408,11 @@ public class SingleFileNamingService extends NamingService {
             _log.error("getEntries error", ioe);
             return Collections.emptyMap();
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null)
+                try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
             releaseReadLock();
         }
     }
@@ -425,8 +431,7 @@ public class SingleFileNamingService extends NamingService {
      */
     @Override
     public Map<String, String> getBase64Entries(Properties options) {
-        if (!_file.exists())
-            return Collections.emptyMap();
+        if (!_file.exists()) return Collections.emptyMap();
         String searchOpt = null;
         String startsWith = null;
         if (options != null) {
@@ -436,33 +441,26 @@ public class SingleFileNamingService extends NamingService {
         BufferedReader in = null;
         getReadLock();
         try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16*1024);
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
             String line = null;
             Map<String, String> rv = new HashMap<String, String>();
             while ((line = in.readLine()) != null) {
-                if (line.length() <= 0)
-                    continue;
+                if (line.length() <= 0) continue;
                 if (startsWith != null) {
                     if (startsWith.equals("[0-9]")) {
-                        if (line.charAt(0) < '0' || line.charAt(0) > '9')
-                            continue;
+                        if (line.charAt(0) < '0' || line.charAt(0) > '9') continue;
                     } else if (!line.startsWith(startsWith)) {
                         continue;
                     }
                 }
-                if (line.startsWith("#"))
-                    continue;
-                if (line.indexOf('#') > 0)  // trim off any end of line comment
-                    line = line.substring(0, line.indexOf('#')).trim();
+                if (line.startsWith("#")) continue;
+                if (line.indexOf('#') > 0) line = line.substring(0, line.indexOf('#')).trim(); // trim off any end of line comment
                 int split = line.indexOf('=');
-                if (split <= 0)
-                    continue;
+                if (split <= 0) continue;
                 String key = line.substring(0, split);
-                if (searchOpt != null && key.indexOf(searchOpt) < 0)
-                    continue;
-                String b64 = line.substring(split+1);   //.trim() ??????????????
-                if (b64.length() < 387)
-                    continue;
+                if (searchOpt != null && key.indexOf(searchOpt) < 0) continue;
+                String b64 = line.substring(split + 1); // .trim() ??????????????
+                if (b64.length() < 387) continue;
                 rv.put(key, b64);
             }
             if (searchOpt == null && startsWith == null) {
@@ -474,7 +472,11 @@ public class SingleFileNamingService extends NamingService {
             _log.error("getEntries error", ioe);
             return Collections.emptyMap();
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null)
+                try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
             releaseReadLock();
         }
     }
@@ -498,14 +500,18 @@ public class SingleFileNamingService extends NamingService {
         BufferedReader in = null;
         getReadLock();
         try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16*1024);
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
             String line = null;
             while ((line = in.readLine()) != null) {
                 out.write(line);
                 out.write(nl);
             }
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null)
+                try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
             releaseReadLock();
         }
     }
@@ -516,22 +522,18 @@ public class SingleFileNamingService extends NamingService {
      */
     @Override
     public Set<String> getNames(Properties options) {
-        if (!_file.exists())
-            return Collections.emptySet();
+        if (!_file.exists()) return Collections.emptySet();
         BufferedReader in = null;
         getReadLock();
         try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16*1024);
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
             String line = null;
             Set<String> rv = new HashSet<String>();
             while ((line = in.readLine()) != null) {
-                if (line.length() <= 0)
-                    continue;
-                if (line.startsWith("#"))
-                    continue;
+                if (line.length() <= 0) continue;
+                if (line.startsWith("#")) continue;
                 int split = line.indexOf('=');
-                if (split <= 0)
-                    continue;
+                if (split <= 0) continue;
                 String key = line.substring(0, split);
                 rv.add(key);
             }
@@ -540,7 +542,11 @@ public class SingleFileNamingService extends NamingService {
             _log.error("getNames error", ioe);
             return Collections.emptySet();
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null)
+                try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
             releaseReadLock();
         }
     }
@@ -550,19 +556,16 @@ public class SingleFileNamingService extends NamingService {
      */
     @Override
     public int size(Properties options) {
-        if (!_file.exists())
-            return 0;
+        if (!_file.exists()) return 0;
         BufferedReader in = null;
         getReadLock();
         try {
-            if (_file.lastModified() <= _lastWrite)
-                return _size;
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16*1024);
+            if (_file.lastModified() <= _lastWrite) return _size;
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
             String line = null;
             int rv = 0;
             while ((line = in.readLine()) != null) {
-                if (line.startsWith("#") || line.length() <= 0)
-                    continue;
+                if (line.startsWith("#") || line.length() <= 0) continue;
                 rv++;
             }
             _lastWrite = _file.lastModified();
@@ -572,15 +575,18 @@ public class SingleFileNamingService extends NamingService {
             _log.error("size() error", ioe);
             return -1;
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null)
+                try {
+                    in.close();
+                } catch (IOException ioe) {
+                }
             releaseReadLock();
         }
     }
 
     @Override
     public void shutdown() {
-        if (!getWriteLock())
-            return;
+        if (!getWriteLock()) return;
         try {
             _isClosed = true;
         } finally {
@@ -603,7 +609,8 @@ public class SingleFileNamingService extends NamingService {
             if ((!rv) && _log.shouldWarn())
                 _log.warn("no lock, size is: " + _fileLock.getQueueLength(), new Exception("rats"));
             return rv;
-        } catch (InterruptedException ie) {}
+        } catch (InterruptedException ie) {
+        }
         return false;
     }
 
@@ -611,25 +618,25 @@ public class SingleFileNamingService extends NamingService {
         _fileLock.writeLock().unlock();
     }
 
-/****
-    public static void main(String[] args) {
-        NamingService ns = new SingleFileNamingService(I2PAppContext.getGlobalContext(), "hosts.txt");
-        Destination d = new Destination();
-        try {
-            d.readBytes(new byte[387], 0);
-        } catch (DataFormatException dfe) {}
-        boolean b = ns.put("aaaaa", d);
-        System.out.println("Test 1 pass? " + b);
-        b = ns.put("bbbbb", d);
-        System.out.println("Test 2 pass? " + b);
-        b = ns.remove("aaaaa");
-        System.out.println("Test 3 pass? " + b);
-        b = ns.lookup("aaaaa") == null;
-        System.out.println("Test 4 pass? " + b);
-        b = ns.lookup("bbbbb") != null;
-        System.out.println("Test 5 pass? " + b);
-        b = !ns.putIfAbsent("bbbbb", d);
-        System.out.println("Test 6 pass? " + b);
-    }
-****/
+    /****
+     * public static void main(String[] args) {
+     * NamingService ns = new SingleFileNamingService(I2PAppContext.getGlobalContext(), "hosts.txt");
+     * Destination d = new Destination();
+     * try {
+     * d.readBytes(new byte[387], 0);
+     * } catch (DataFormatException dfe) {}
+     * boolean b = ns.put("aaaaa", d);
+     * System.out.println("Test 1 pass? " + b);
+     * b = ns.put("bbbbb", d);
+     * System.out.println("Test 2 pass? " + b);
+     * b = ns.remove("aaaaa");
+     * System.out.println("Test 3 pass? " + b);
+     * b = ns.lookup("aaaaa") == null;
+     * System.out.println("Test 4 pass? " + b);
+     * b = ns.lookup("bbbbb") != null;
+     * System.out.println("Test 5 pass? " + b);
+     * b = !ns.putIfAbsent("bbbbb", d);
+     * System.out.println("Test 6 pass? " + b);
+     * }
+     ****/
 }

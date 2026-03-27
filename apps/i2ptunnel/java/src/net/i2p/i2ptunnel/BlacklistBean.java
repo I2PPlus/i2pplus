@@ -11,8 +11,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.regex.Pattern;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 /**
  * Simple blacklist checker for HTTP proxy.
@@ -22,23 +22,18 @@ import java.util.Locale;
 @SuppressWarnings("PMD.CloseResource")
 public class BlacklistBean {
     private String content;
-    private static final Pattern I2P_ADDRESS_PATTERN = Pattern.compile(
-        "^[a-zA-Z0-9.-]+\\.i2p$|" +                    // hostname.i2p
-        "^[a-zA-Z2-7]{52,53}\\.b32\\.i2p$|" +          // b32 addresses (52-53 chars)
-        "^[a-zA-Z0-9+/]{387}={0,2}\\.b64\\.i2p$"       // b64 addresses (387+ chars)
-    );
+    private static final Pattern I2P_ADDRESS_PATTERN = Pattern.compile( "^[a-zA-Z0-9.-]+\\.i2p$|" + // hostname.i2p
+                            "^[a-zA-Z2-7]{52,53}\\.b32\\.i2p$|"
+                            + // b32 addresses (52-53 chars)
+                            "^[a-zA-Z0-9+/]{387}={0,2}\\.b64\\.i2p$" // b64 addresses (387+ chars)
+                    );
 
     /**
      * Get blacklist file - look for it in typical I2P locations
      */
     private File blacklistFile() {
         // Try common router directory locations
-        String[] possiblePaths = {
-            System.getProperty("user.home") + "/.i2p/addressbook/blacklist.txt",
-            System.getProperty("user.home") + "/i2p/addressbook/blacklist.txt",
-            "addressbook/blacklist.txt",
-            "../addressbook/blacklist.txt"
-        };
+        String[] possiblePaths = {System.getProperty("user.home") + "/.i2p/addressbook/blacklist.txt", System.getProperty("user.home") + "/i2p/addressbook/blacklist.txt", "addressbook/blacklist.txt", "../addressbook/blacklist.txt"};
 
         for (String path : possiblePaths) {
             File file = new File(path);
@@ -69,11 +64,12 @@ public class BlacklistBean {
             } catch (IOException e) {
                 System.err.println("[BlacklistBean] Error loading blacklist: " + e.getMessage());
                 content = "";
-            }
-            finally {
+            } finally {
                 if (br != null) {
-                    try {br.close();}
-                    catch (IOException ioe) {}
+                    try {
+                        br.close();
+                    } catch (IOException ioe) {
+                    }
                 }
             }
         } else {

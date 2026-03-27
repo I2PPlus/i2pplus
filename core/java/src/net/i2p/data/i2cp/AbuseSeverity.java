@@ -9,12 +9,13 @@ package net.i2p.data.i2cp;
  *
  */
 
+import net.i2p.data.DataFormatException;
+import net.i2p.data.DataStructureImpl;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import net.i2p.data.DataFormatException;
-import net.i2p.data.DataStructureImpl;
 
 /**
  * Provides a severity level (larger numbers are more severe) in association with
@@ -54,8 +55,7 @@ public class AbuseSeverity extends DataStructureImpl {
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         _severityId = in.read();
-        if (_severityId < 0)
-            throw new EOFException();
+        if (_severityId < 0) throw new EOFException();
     }
 
     @Override

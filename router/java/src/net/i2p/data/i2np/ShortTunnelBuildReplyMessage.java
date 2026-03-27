@@ -14,6 +14,7 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
      *  Impossible value, more than 1 byte
      */
     public static final int MESSAGE_TYPE = 999;
+
     public static final int SHORT_RECORD_SIZE = ShortTunnelBuildMessage.SHORT_RECORD_SIZE;
 
     public ShortTunnelBuildReplyMessage(I2PAppContext context, int records) {
@@ -25,16 +26,19 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
      */
     @Override
     public void setRecord(int index, EncryptedBuildRecord record) {
-        if (record != null && record.length() != SHORT_RECORD_SIZE)
-            throw new IllegalArgumentException();
+        if (record != null && record.length() != SHORT_RECORD_SIZE) throw new IllegalArgumentException();
         super.setRecord(index, record);
     }
 
     @Override
-    protected int calculateWrittenLength() { return 0; }
+    protected int calculateWrittenLength() {
+        return 0;
+    }
 
     @Override
-    public int getType() { return MESSAGE_TYPE; }
+    public int getType() {
+        return MESSAGE_TYPE;
+    }
 
     /**
      *  @throws UnsupportedOperationException always
@@ -55,10 +59,7 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64); // NOPMD - AvoidUnnecessaryStringBuilderCreation
-        buf.append("[ShortTunnelBuildReplyMessage: " +
-                   "\n\tID: ").append(getUniqueId())
-           .append("\n\tRecords: ").append(getRecordCount())
-           .append(']');
+        buf.append("[ShortTunnelBuildReplyMessage: " + "\n\tID: ").append(getUniqueId()).append("\n\tRecords: ").append(getRecordCount()).append(']');
         return buf.toString();
     }
 }

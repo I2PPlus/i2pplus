@@ -3,10 +3,11 @@ package net.i2p.addressbook;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -25,7 +26,6 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.nio.charset.StandardCharsets;
 import net.i2p.I2PAppContext;
 import net.i2p.client.naming.NamingService;
 import net.i2p.client.streaming.I2PSocketManager;
@@ -96,7 +96,8 @@ public class HostChecker {
         }
 
         Properties config = new Properties();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(configFile), StandardCharsets.UTF_8))) {
+        try (BufferedReader reader =
+                new BufferedReader(new InputStreamReader(new FileInputStream(configFile), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -111,33 +112,38 @@ public class HostChecker {
                     if (PROP_PING_INTERVAL.equals(key)) {
                         try {
                             String rawValue = value;
-                            boolean isMinutes = rawValue.toUpperCase(Locale.ROOT).endsWith("M");
+                            boolean isMinutes =
+                                    rawValue.toUpperCase(Locale.ROOT).endsWith("M");
                             if (isMinutes) {
-                                rawValue = rawValue.substring(0, rawValue.length() - 1).trim();
+                                rawValue = rawValue.substring(0, rawValue.length() - 1)
+                                        .trim();
                             }
                             long intervalValue = Long.parseLong(rawValue);
                             if (isMinutes) {
                                 _pingInterval = intervalValue * 60 * 1000L;
                                 if (_log.shouldInfo()) {
-                                    _log.info("Loaded ping interval from config: " + value + " (" + intervalValue + " minutes)");
+                                    _log.info("Loaded ping interval from config: " + value + " (" + intervalValue
+                                            + " minutes)");
                                 }
                             } else {
                                 _pingInterval = intervalValue * 60 * 60 * 1000L;
                                 if (_log.shouldInfo()) {
-                                    _log.info("Loaded ping interval from config: " + value + (intervalValue > 1 ? " hours" : " hour"));
+                                    _log.info("Loaded ping interval from config: " + value
+                                            + (intervalValue > 1 ? " hours" : " hour"));
                                 }
                             }
                         } catch (NumberFormatException e) {
                             if (_log.shouldWarn()) {
-                                _log.warn("Invalid ping interval in config: " + value + ", using default " +
-                                           (DEFAULT_PING_INTERVAL / (60 * 60 * 1000L)) + " hours");
+                                _log.warn("Invalid ping interval in config: " + value + ", using default "
+                                        + (DEFAULT_PING_INTERVAL / (60 * 60 * 1000L)) + " hours");
                             }
                         }
                     } else if (PROP_MAX_CONCURRENT.equals(key)) {
                         try {
                             int concurrentValue = Integer.parseInt(value);
                             if (concurrentValue > 160) {
-                                _log.warn("Configured concurrency " + concurrentValue + " is higher than permitted maximum -> Setting to 160");
+                                _log.warn("Configured concurrency " + concurrentValue
+                                        + " is higher than permitted maximum -> Setting to 160");
                                 concurrentValue = 160;
                             }
                             _maxConcurrent = concurrentValue;
@@ -146,7 +152,8 @@ public class HostChecker {
                             }
                         } catch (NumberFormatException e) {
                             if (_log.shouldWarn()) {
-                                _log.warn("Invalid max concurrent in config: " + value + ", using default " + DEFAULT_MAX_CONCURRENT);
+                                _log.warn("Invalid max concurrent in config: " + value + ", using default "
+                                        + DEFAULT_MAX_CONCURRENT);
                             }
                         }
                     }
@@ -186,12 +193,16 @@ public class HostChecker {
     public static class PingResult {
         /** true if the host was reachable via LeaseSet lookup, ping, or HTTP HEAD */
         public final boolean reachable;
+
         /** timestamp of when this result was recorded (Java time) */
         public final long timestamp;
+
         /** response time in milliseconds, or -1 if not available */
         public final long responseTime;
+
         /** the host category from categories.txt, or null */
         public final String category;
+
         /** LeaseSet encryption types as a string like "[6,4]", or null */
         public final String leaseSetTypes;
 
@@ -255,8 +266,7 @@ public class HostChecker {
         _useLeaseSetCheck = (_context instanceof RouterContext);
 
         if (_log.shouldInfo()) {
-            _log.info("HostChecker initialized with LeaseSet checking " +
-                     (_useLeaseSetCheck ? "enabled" : "disabled"));
+            _log.info("HostChecker initialized with LeaseSet checking " + (_useLeaseSetCheck ? "enabled" : "disabled"));
         }
 
         // Use config directory/addressbook for hosts_check.txt
@@ -309,7 +319,7 @@ public class HostChecker {
         _running.set(true);
 
         if (_log.shouldInfo()) {
-            _log.info("Starting HostChecker with a " + (_pingInterval/1000/60) + " minute interval...");
+            _log.info("Starting HostChecker with a " + (_pingInterval / 1000 / 60) + " minute interval...");
         }
 
         // Start category download in a separate thread with delay
@@ -331,7 +341,8 @@ public class HostChecker {
                     for (int i = 0; i < 300; i++) {
                         if (_categoriesDownloaded.get()) {
                             _log.info("Categories downloaded successfully from notbob.i2p -> Starting ping cycle...");
-                            _scheduler.scheduleAtFixedRate(new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
+                            _scheduler.scheduleAtFixedRate(
+                                    new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
                             return;
                         }
                         Thread.sleep(1000); // Wait 1 second
@@ -339,7 +350,8 @@ public class HostChecker {
 
                     // Timeout reached - start ping cycle anyway
                     _log.warn("Categories failed to download from notbob.i2p (timeout) -> Starting ping cycle...");
-                    _scheduler.scheduleAtFixedRate(new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
+                    _scheduler.scheduleAtFixedRate(
+                            new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
                 } catch (InterruptedException e) {
                     if (_log.shouldWarn()) {
                         _log.warn("Category download waiter interrupted");
@@ -425,13 +437,16 @@ public class HostChecker {
                 // Only save if we have a previous result to preserve
                 if (existingResponseTime > -1) {
                     synchronized (_pingResults) {
-                        _pingResults.put(hostname, createPingResult(reachable, startTime, existingResponseTime, hostname, leaseSetTypes));
+                        _pingResults.put(
+                                hostname,
+                                createPingResult(reachable, startTime, existingResponseTime, hostname, leaseSetTypes));
                     }
                 }
 
                 if (_log.shouldInfo()) {
                     if (!reachable) {
-                        _log.info("HostChecker lset [FAILURE] -> Found expired LeaseSet " + leaseSetTypes + " for " + hostname);
+                        _log.info("HostChecker lset [FAILURE] -> Found expired LeaseSet " + leaseSetTypes + " for "
+                                + hostname);
                     }
                 }
 
@@ -489,7 +504,8 @@ public class HostChecker {
             }
 
             if (_log.shouldInfo()) {
-                _log.info("HostChecker lset [SUCCESS] -> LeaseSet " + leaseSetResult.leaseSetTypes + " found for " + hostname + ", continuing with ping...");
+                _log.info("HostChecker lset [SUCCESS] -> LeaseSet " + leaseSetResult.leaseSetTypes + " found for "
+                        + hostname + ", continuing with ping...");
             }
 
             PingResult pingResult = pingDestination(hostname, destination, leaseSetResult.leaseSetTypes, false);
@@ -497,7 +513,8 @@ public class HostChecker {
                 return pingResult;
             }
 
-            PingResult eepHeadResult = fallbackToEepHead(hostname, pingResult.timestamp, leaseSetResult.leaseSetTypes, false);
+            PingResult eepHeadResult =
+                    fallbackToEepHead(hostname, pingResult.timestamp, leaseSetResult.leaseSetTypes, false);
             if (eepHeadResult.reachable) {
                 return eepHeadResult;
             }
@@ -516,8 +533,8 @@ public class HostChecker {
      * Perform remote LeaseSet lookup via floodfill network
      * Always returns responseTime of -1 (we measure host response, not lookup time)
      */
-    private PingResult lookupLeaseSetRemotely(String hostname, Destination destination,
-                                           Hash destHash, long startTime, long existingResponseTime) {
+    private PingResult lookupLeaseSetRemotely(
+            String hostname, Destination destination, Hash destHash, long startTime, long existingResponseTime) {
         try {
             RouterContext routerContext = (RouterContext) _context;
             NetworkDatabaseFacade netDb = routerContext.netDb();
@@ -527,9 +544,18 @@ public class HostChecker {
             final Exception[] lookupError = {null};
 
             Job onSuccess = new Job() {
-                public String getName() { return "LeaseSet lookup success"; }
-                public long getJobId() { return System.currentTimeMillis(); }
-                public JobTiming getTiming() { return new JobTiming(routerContext); }
+                public String getName() {
+                    return "LeaseSet lookup success";
+                }
+
+                public long getJobId() {
+                    return System.currentTimeMillis();
+                }
+
+                public JobTiming getTiming() {
+                    return new JobTiming(routerContext);
+                }
+
                 public void runJob() {
                     lookupResult[0] = true;
                     lookupComplete[0] = true;
@@ -537,6 +563,7 @@ public class HostChecker {
                         lookupComplete.notifyAll();
                     }
                 }
+
                 public void dropped() {
                     lookupResult[0] = false;
                     lookupComplete[0] = true;
@@ -547,9 +574,18 @@ public class HostChecker {
             };
 
             Job onFailure = new Job() {
-                public String getName() { return "LeaseSet lookup failure"; }
-                public long getJobId() { return System.currentTimeMillis(); }
-                public JobTiming getTiming() { return new JobTiming(routerContext); }
+                public String getName() {
+                    return "LeaseSet lookup failure";
+                }
+
+                public long getJobId() {
+                    return System.currentTimeMillis();
+                }
+
+                public JobTiming getTiming() {
+                    return new JobTiming(routerContext);
+                }
+
                 public void runJob() {
                     lookupResult[0] = false;
                     lookupComplete[0] = true;
@@ -557,6 +593,7 @@ public class HostChecker {
                         lookupComplete.notifyAll();
                     }
                 }
+
                 public void dropped() {
                     lookupResult[0] = false;
                     lookupComplete[0] = true;
@@ -583,7 +620,8 @@ public class HostChecker {
                 }
 
                 if (existingResponseTime > -1) {
-                    PingResult result = createPingResult(true, startTime, existingResponseTime, hostname, leaseSetTypes);
+                    PingResult result =
+                            createPingResult(true, startTime, existingResponseTime, hostname, leaseSetTypes);
                     synchronized (_pingResults) {
                         _pingResults.put(hostname, result);
                     }
@@ -646,11 +684,14 @@ public class HostChecker {
      * Falls back to EepHead HTTP HEAD request if ping fails, accepts leaseSetTypes parameter
      * @param saveResult whether to save the result to _pingResults (false when LeaseSet lookup already succeeded)
      */
-    private PingResult pingDestination(String hostname, Destination destination, String leaseSetTypes, boolean saveResult) {
+    private PingResult pingDestination(
+            String hostname, Destination destination, String leaseSetTypes, boolean saveResult) {
         long startTime = System.currentTimeMillis();
         I2PSocketManager pingSocketManager = null;
         String displayHostname = hostname;
-        if (hostname.length() > 30) {displayHostname = hostname.substring(0,29) + "&hellip; ";}
+        if (hostname.length() > 30) {
+            displayHostname = hostname.substring(0, 29) + "&hellip; ";
+        }
 
         if (leaseSetTypes == null) {
             leaseSetTypes = "[]";
@@ -677,12 +718,14 @@ public class HostChecker {
                 if (_log.shouldWarn()) {
                     _log.warn("Failed to create SocketManager for HostChecker ping -> " + displayHostname + " [6,4]");
                 }
-                return createPingResult(false, startTime, System.currentTimeMillis() - startTime, hostname, leaseSetTypes);
+                return createPingResult(
+                        false, startTime, System.currentTimeMillis() - startTime, hostname, leaseSetTypes);
             }
 
             long tunnelBuildTime = System.currentTimeMillis() - tunnelBuildStart;
             if (_log.shouldDebug()) {
-                _log.debug("SocketManager ready for HostChecker ping in " + tunnelBuildTime + "ms -> " + displayHostname + " [6,4]");
+                _log.debug("SocketManager ready for HostChecker ping in " + tunnelBuildTime + "ms -> " + displayHostname
+                        + " [6,4]");
             }
 
             long tunnelReadyTimeout = System.currentTimeMillis() + 30000;
@@ -694,9 +737,12 @@ public class HostChecker {
                             if (_useLeaseSetCheck && _context instanceof RouterContext) {
                                 RouterContext routerContext = (RouterContext) _context;
                                 net.i2p.data.Hash destHash = destination.calculateHash();
-                                net.i2p.data.LeaseSet ls = routerContext.clientNetDb(destHash).lookupLeaseSetLocally(destHash);
-                                if (ls != null && routerContext.tunnelManager().getOutboundClientTunnelCount(destHash) > 0) {
-                                    long timeToExpire = ls.getEarliestLeaseDate() - _context.clock().now();
+                                net.i2p.data.LeaseSet ls =
+                                        routerContext.clientNetDb(destHash).lookupLeaseSetLocally(destHash);
+                                if (ls != null
+                                        && routerContext.tunnelManager().getOutboundClientTunnelCount(destHash) > 0) {
+                                    long timeToExpire = ls.getEarliestLeaseDate()
+                                            - _context.clock().now();
                                     if ((timeToExpire >= 0) && ls.isCurrent(0)) {
                                         break;
                                     }
@@ -727,7 +773,8 @@ public class HostChecker {
                         _pingResults.put(hostname, result);
                     }
                     if (_log.shouldInfo()) {
-                        _log.info("HostChecker ping [SUCCESS] -> Received response from " + displayHostname + " " + leaseSetTypes + " in " + pingTime + "ms");
+                        _log.info("HostChecker ping [SUCCESS] -> Received response from " + displayHostname + " "
+                                + leaseSetTypes + " in " + pingTime + "ms");
                     }
                     savePingResults();
                 } else {
@@ -745,7 +792,8 @@ public class HostChecker {
                     }
                     savePingResults();
                     if (_log.shouldInfo()) {
-                        _log.info("HostChecker ping [FAILURE] -> No response from " + displayHostname + " " + leaseSetTypes + ", trying eephead...");
+                        _log.info("HostChecker ping [FAILURE] -> No response from " + displayHostname + " "
+                                + leaseSetTypes + ", trying eephead...");
                     }
                     return fallbackToEepHead(hostname, startTime, leaseSetTypes, saveResult);
                 }
@@ -773,7 +821,8 @@ public class HostChecker {
                     }
                 } catch (Exception e) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Error destroying SocketManager HostChecker for " + displayHostname + ": " + e.getMessage());
+                        _log.warn("Error destroying SocketManager HostChecker for " + displayHostname + ": "
+                                + e.getMessage());
                     }
                 }
             }
@@ -820,9 +869,12 @@ public class HostChecker {
                         net.i2p.router.ClientManagerFacade cm = routerContext.clientManager();
                         for (net.i2p.data.Destination clientDest : cm.listClients()) {
                             net.i2p.data.Hash clientHash = clientDest.calculateHash();
-                            net.i2p.data.LeaseSet ls = routerContext.clientNetDb(clientHash).lookupLeaseSetLocally(clientHash);
-                            if (ls != null && routerContext.tunnelManager().getOutboundClientTunnelCount(clientHash) > 0) {
-                                long timeToExpire = ls.getEarliestLeaseDate() - _context.clock().now();
+                            net.i2p.data.LeaseSet ls =
+                                    routerContext.clientNetDb(clientHash).lookupLeaseSetLocally(clientHash);
+                            if (ls != null
+                                    && routerContext.tunnelManager().getOutboundClientTunnelCount(clientHash) > 0) {
+                                long timeToExpire = ls.getEarliestLeaseDate()
+                                        - _context.clock().now();
                                 if ((timeToExpire >= 0) && ls.isCurrent(0)) {
                                     httpProxyReady = true;
                                     break;
@@ -862,7 +914,8 @@ public class HostChecker {
 
                 if (_log.shouldInfo()) {
                     if (success) {
-                        _log.info("HostChecker head [SUCCESS] -> Received response from " + hostname + " " + leaseSetTypes + " in " + responseTime + "ms");
+                        _log.info("HostChecker head [SUCCESS] -> Received response from " + hostname + " "
+                                + leaseSetTypes + " in " + responseTime + "ms");
                     } else {
                         _log.info("HostChecker head [FAILURE] -> No response from " + hostname + " " + leaseSetTypes);
                     }
@@ -877,7 +930,8 @@ public class HostChecker {
                 _log.info("HostChecker eephead probe error for " + hostname + " -> " + e.getMessage());
             }
 
-            PingResult result = createPingResult(false, startTime, -1, hostname, leaseSetTypes != null ? leaseSetTypes : "[]");
+            PingResult result =
+                    createPingResult(false, startTime, -1, hostname, leaseSetTypes != null ? leaseSetTypes : "[]");
             if (saveResult) {
                 synchronized (_pingResults) {
                     _pingResults.put(hostname, result);
@@ -947,7 +1001,8 @@ public class HostChecker {
         List<String> validLines = new ArrayList<>();
         boolean hasInvalidLines = false;
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(_hostsCheckFile), StandardCharsets.UTF_8))) {
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(new FileInputStream(_hostsCheckFile), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -969,7 +1024,8 @@ public class HostChecker {
                             String category = parts.length > 3 ? parts[3] : null;
                             long responseTime = parts.length > 4 ? Long.parseLong(parts[4]) : -1;
                             String leaseSetTypes = parts.length > 5 ? parts[5] : null;
-                            PingResult result = new PingResult(reachable, timestamp, responseTime, category, leaseSetTypes);
+                            PingResult result =
+                                    new PingResult(reachable, timestamp, responseTime, category, leaseSetTypes);
                             _pingResults.put(hostname, result);
                             isValid = true;
                         } catch (NumberFormatException e) {
@@ -1041,31 +1097,40 @@ public class HostChecker {
             content.append("# Format: timestamp,host,reachable,category,responseTime,leaseSetTypes\n");
             content.append("# Generated: ").append(Instant.now()).append("\n\n");
 
-            java.util.List<Map.Entry<String, PingResult>> sortedEntries = new java.util.ArrayList<>(_pingResults.entrySet());
+            java.util.List<Map.Entry<String, PingResult>> sortedEntries =
+                    new java.util.ArrayList<>(_pingResults.entrySet());
             sortedEntries.sort(java.util.Comparator.comparingLong(e -> e.getValue().timestamp));
 
             for (Map.Entry<String, PingResult> entry : sortedEntries) {
                 String hostname = entry.getKey();
                 PingResult result = entry.getValue();
-                content.append(result.timestamp).append(",").append(hostname)
-                       .append(",").append(result.reachable ? "y" : "n")
-                       .append(",").append(result.category != null ? result.category : "unknown")
-                       .append(",").append(result.responseTime)
-                       .append(",").append(result.leaseSetTypes != null ? result.leaseSetTypes : "[]")
-                       .append("\n");
+                content.append(result.timestamp)
+                        .append(",")
+                        .append(hostname)
+                        .append(",")
+                        .append(result.reachable ? "y" : "n")
+                        .append(",")
+                        .append(result.category != null ? result.category : "unknown")
+                        .append(",")
+                        .append(result.responseTime)
+                        .append(",")
+                        .append(result.leaseSetTypes != null ? result.leaseSetTypes : "[]")
+                        .append("\n");
             }
 
             // Write using Files.write with explicit options
             java.nio.file.Path path = java.nio.file.Paths.get(absolutePath);
-            java.nio.file.Files.write(path, content.toString().getBytes(),
-                java.nio.file.StandardOpenOption.CREATE,
-                java.nio.file.StandardOpenOption.TRUNCATE_EXISTING,
-                java.nio.file.StandardOpenOption.WRITE);
+            java.nio.file.Files.write(
+                    path,
+                    content.toString().getBytes(),
+                    java.nio.file.StandardOpenOption.CREATE,
+                    java.nio.file.StandardOpenOption.TRUNCATE_EXISTING,
+                    java.nio.file.StandardOpenOption.WRITE);
 
         } catch (java.io.IOException e) {
             if (_log.shouldError()) {
-                _log.error("IOException saving HostChecker results: " + e.getMessage() +
-                           "\n* File path: " + _hostsCheckFile.getAbsolutePath());
+                _log.error("IOException saving HostChecker results: " + e.getMessage() + "\n* File path: "
+                        + _hostsCheckFile.getAbsolutePath());
             }
         } catch (Exception e) {
             _log.error("Unexpected error saving HostChecker results: " + e.getMessage(), e);
@@ -1169,7 +1234,8 @@ public class HostChecker {
 
             // Wait for HTTP proxy to be ready
             if (_log.shouldInfo()) {
-                _log.info("Waiting " + (CATEGORY_DOWNLOAD_DELAY_MS/1000) + "s before downloading categories from " + categoryUrl + "...");
+                _log.info("Waiting " + (CATEGORY_DOWNLOAD_DELAY_MS / 1000) + "s before downloading categories from "
+                        + categoryUrl + "...");
             }
             Thread.sleep(CATEGORY_DOWNLOAD_DELAY_MS);
 
@@ -1184,7 +1250,8 @@ public class HostChecker {
 
             EepGet get = new EepGet(_context, "127.0.0.1", 4444, 3, tempFile.getAbsolutePath(), categoryUrl);
             get.addHeader("User-Agent", "I2P+ HostChecker");
-            boolean fetchSuccess = get.fetch(CATEGORY_CONNECT_TIMEOUT, CATEGORY_TOTAL_TIMEOUT, CATEGORY_INACTIVITY_TIMEOUT);
+            boolean fetchSuccess =
+                    get.fetch(CATEGORY_CONNECT_TIMEOUT, CATEGORY_TOTAL_TIMEOUT, CATEGORY_INACTIVITY_TIMEOUT);
 
             if (fetchSuccess && tempFile.exists() && tempFile.length() > 0) {
                 if (_log.shouldInfo()) {
@@ -1194,7 +1261,8 @@ public class HostChecker {
                 // Read the downloaded content to verify it's valid
                 List<String> downloadedLines = new ArrayList<>();
                 int dataLineCount = 0;
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(tempFile), StandardCharsets.UTF_8))) {
+                try (BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(new FileInputStream(tempFile), StandardCharsets.UTF_8))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         downloadedLines.add(line);
@@ -1217,7 +1285,9 @@ public class HostChecker {
                         writer.newLine();
                         writer.write("# Source: http://notbob.i2p/graphs/cats.txt");
                         writer.newLine();
-                        writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(Date.from(Instant.now())));
+                        writer.write("# Generated: "
+                                + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US)
+                                        .format(Date.from(Instant.now())));
                         writer.newLine();
                         writer.newLine();
 
@@ -1242,8 +1312,8 @@ public class HostChecker {
                     downloadSuccess = true;
 
                     if (_log.shouldInfo()) {
-                        _log.info("Successfully downloaded categories to " + _categoriesFile.getAbsolutePath() +
-                                 " (" + _categoriesFile.length() + " bytes, was " + existingSize + " bytes)");
+                        _log.info("Successfully downloaded categories to " + _categoriesFile.getAbsolutePath() + " ("
+                                + _categoriesFile.length() + " bytes, was " + existingSize + " bytes)");
                     }
                 } else {
                     if (_log.shouldWarn()) {
@@ -1288,7 +1358,8 @@ public class HostChecker {
             // Read current content
             List<String> lines = new ArrayList<>();
             if (_categoriesFile.exists()) {
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(_categoriesFile), StandardCharsets.UTF_8))) {
+                try (BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(new FileInputStream(_categoriesFile), StandardCharsets.UTF_8))) {
                     String line;
                     int lineCount = 0;
                     while ((line = reader.readLine()) != null) {
@@ -1320,7 +1391,9 @@ public class HostChecker {
                 writer.newLine();
                 writer.write("# Source: http://notbob.i2p/graphs/cats.txt");
                 writer.newLine();
-                writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(Date.from(Instant.now())));
+                writer.write("# Generated: "
+                        + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US)
+                                .format(Date.from(Instant.now())));
                 writer.newLine();
                 writer.newLine();
 
@@ -1374,7 +1447,8 @@ public class HostChecker {
         List<String> validLines = new ArrayList<>();
         boolean hasEmptyLines = false;
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(_categoriesFile), StandardCharsets.UTF_8))) {
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(new FileInputStream(_categoriesFile), StandardCharsets.UTF_8))) {
             String line;
             int lineCount = 0;
             int entryCount = 0;
@@ -1402,7 +1476,8 @@ public class HostChecker {
             }
 
             if (_log.shouldInfo()) {
-                _log.info("Loaded " + entryCount + " host categories from " + _categoriesFile.getName() + " (total lines: " + lineCount + ")");
+                _log.info("Loaded " + entryCount + " host categories from " + _categoriesFile.getName()
+                        + " (total lines: " + lineCount + ")");
             }
 
             // Clean up the file if we found empty lines
@@ -1445,34 +1520,62 @@ public class HostChecker {
             category = "unknown";
         }
         switch (category) {
-            case "cryptocoin": return _t("Cryptocurrency related services");
-            case "drugs": return _t("Controlled substances marketplaces");
-            case "ebook": return _t("E-book libraries and publishing");
-            case "filehost": return _t("File hosting and storage services");
-            case "fileshare": return _t("Peer-to-peer file sharing");
-            case "forum": return _t("Discussion forums and message boards");
-            case "gallery": return _t("Image galleries and photo sharing");
-            case "game": return _t("Gaming servers and communities");
-            case "git": return _t("Git repositories and code hosting");
-            case "help": return _t("Help and support resources");
-            case "humanrights": return _t("Human rights and civil liberties");
-            case "i2p": return _t("Official I2P infrastructure services");
-            case "news": return _t("News and media outlets");
-            case "pastebin": return _t("Text/code paste services");
-            case "personal": return _t("Personal websites and blogs");
-            case "radio": return _t("Internet radio and streaming");
-            case "search": return _t("Search engines and directories");
-            case "software": return _t("Software repositories and downloads");
-            case "stats": return _t("Statistics and analytics");
-            case "tool": return _t("Utilities and web tools");
-            case "tracker": return _t("Torrent and content trackers");
-            case "uhoh": return _t("Conspiracy / Religious content");
-            case "unknown": return _t("Unclassified or pending review");
-            case "untested": return _t("Not yet categorized");
-            case "video": return _t("Video streaming and media");
-            case "wiki": return _t("Wiki and collaborative documentation");
-            case "wip": return _t("Work in progress / development");
-            default: return category;
+            case "cryptocoin":
+                return _t("Cryptocurrency related services");
+            case "drugs":
+                return _t("Controlled substances marketplaces");
+            case "ebook":
+                return _t("E-book libraries and publishing");
+            case "filehost":
+                return _t("File hosting and storage services");
+            case "fileshare":
+                return _t("Peer-to-peer file sharing");
+            case "forum":
+                return _t("Discussion forums and message boards");
+            case "gallery":
+                return _t("Image galleries and photo sharing");
+            case "game":
+                return _t("Gaming servers and communities");
+            case "git":
+                return _t("Git repositories and code hosting");
+            case "help":
+                return _t("Help and support resources");
+            case "humanrights":
+                return _t("Human rights and civil liberties");
+            case "i2p":
+                return _t("Official I2P infrastructure services");
+            case "news":
+                return _t("News and media outlets");
+            case "pastebin":
+                return _t("Text/code paste services");
+            case "personal":
+                return _t("Personal websites and blogs");
+            case "radio":
+                return _t("Internet radio and streaming");
+            case "search":
+                return _t("Search engines and directories");
+            case "software":
+                return _t("Software repositories and downloads");
+            case "stats":
+                return _t("Statistics and analytics");
+            case "tool":
+                return _t("Utilities and web tools");
+            case "tracker":
+                return _t("Torrent and content trackers");
+            case "uhoh":
+                return _t("Conspiracy / Religious content");
+            case "unknown":
+                return _t("Unclassified or pending review");
+            case "untested":
+                return _t("Not yet categorized");
+            case "video":
+                return _t("Video streaming and media");
+            case "wiki":
+                return _t("Wiki and collaborative documentation");
+            case "wip":
+                return _t("Work in progress / development");
+            default:
+                return category;
         }
     }
 
@@ -1487,7 +1590,8 @@ public class HostChecker {
     /**
      * Helper method to create PingResult with category and leaseSetTypes
      */
-    private PingResult createPingResult(boolean reachable, long timestamp, long responseTime, String hostname, String leaseSetTypes) {
+    private PingResult createPingResult(
+            boolean reachable, long timestamp, long responseTime, String hostname, String leaseSetTypes) {
         String category = _hostCategories.get(hostname);
 
         PingResult existing = _pingResults.get(hostname);
@@ -1511,8 +1615,8 @@ public class HostChecker {
      * Schedule periodic category download retries
      */
     private void scheduleCategoryRetries() {
-        _scheduler.scheduleWithFixedDelay(new CategoryRetryTask(),
-            CATEGORY_RETRY_INTERVAL, CATEGORY_RETRY_INTERVAL, TimeUnit.MILLISECONDS);
+        _scheduler.scheduleWithFixedDelay(
+                new CategoryRetryTask(), CATEGORY_RETRY_INTERVAL, CATEGORY_RETRY_INTERVAL, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -1554,8 +1658,8 @@ public class HostChecker {
                     updateHostsWithCategories();
 
                     if (_log.shouldInfo()) {
-                        _log.info("Category download successful on retry " + _categoryRetryCount +
-                                 ", updated hosts_check.txt with categories");
+                        _log.info("Category download successful on retry " + _categoryRetryCount
+                                + ", updated hosts_check.txt with categories");
                     }
                 } else {
                     if (_log.shouldInfo()) {
@@ -1588,13 +1692,15 @@ public class HostChecker {
 
             EepGet get = new EepGet(_context, "127.0.0.1", 4444, 3, tempFile.getAbsolutePath(), categoryUrl);
             get.addHeader("User-Agent", "I2P+ HostChecker");
-            boolean fetchSuccess = get.fetch(CATEGORY_CONNECT_TIMEOUT, CATEGORY_TOTAL_TIMEOUT, CATEGORY_INACTIVITY_TIMEOUT);
+            boolean fetchSuccess =
+                    get.fetch(CATEGORY_CONNECT_TIMEOUT, CATEGORY_TOTAL_TIMEOUT, CATEGORY_INACTIVITY_TIMEOUT);
 
             if (fetchSuccess && tempFile.exists() && tempFile.length() > 0) {
                 // Read the downloaded content to verify it's valid
                 List<String> downloadedLines = new ArrayList<>();
                 int dataLineCount = 0;
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(tempFile), StandardCharsets.UTF_8))) {
+                try (BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(new FileInputStream(tempFile), StandardCharsets.UTF_8))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         downloadedLines.add(line);
@@ -1613,7 +1719,9 @@ public class HostChecker {
                         writer.newLine();
                         writer.write("# Source: http://notbob.i2p/graphs/cats.txt");
                         writer.newLine();
-                        writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(Date.from(Instant.now())));
+                        writer.write("# Generated: "
+                                + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US)
+                                        .format(Date.from(Instant.now())));
                         writer.newLine();
                         writer.newLine();
 
@@ -1630,8 +1738,8 @@ public class HostChecker {
                     tempFile.delete();
 
                     if (_log.shouldInfo()) {
-                        _log.info("Successfully downloaded categories on retry to " + _categoriesFile.getAbsolutePath() +
-                                 " (" + dataLineCount + " entries)");
+                        _log.info("Successfully downloaded categories on retry to " + _categoriesFile.getAbsolutePath()
+                                + " (" + dataLineCount + " entries)");
                     }
                     return true;
                 } else {
@@ -1684,13 +1792,15 @@ public class HostChecker {
 
             EepGet get = new EepGet(_context, "127.0.0.1", 4444, 1, tempFile.getAbsolutePath(), categoryUrl);
             get.addHeader("User-Agent", "I2P+ HostChecker");
-            boolean fetchSuccess = get.fetch(CATEGORY_CONNECT_TIMEOUT, CATEGORY_TOTAL_TIMEOUT, CATEGORY_INACTIVITY_TIMEOUT);
+            boolean fetchSuccess =
+                    get.fetch(CATEGORY_CONNECT_TIMEOUT, CATEGORY_TOTAL_TIMEOUT, CATEGORY_INACTIVITY_TIMEOUT);
 
             if (fetchSuccess && tempFile.exists() && tempFile.length() > 0) {
                 // Read the downloaded content to verify it's valid
                 List<String> downloadedLines = new ArrayList<>();
                 int dataLineCount = 0;
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(tempFile), StandardCharsets.UTF_8))) {
+                try (BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(new FileInputStream(tempFile), StandardCharsets.UTF_8))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         downloadedLines.add(line);
@@ -1709,7 +1819,9 @@ public class HostChecker {
                         writer.newLine();
                         writer.write("# Source: http://notbob.i2p/graphs/cats.txt");
                         writer.newLine();
-                        writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(Date.from(Instant.now())));
+                        writer.write("# Generated: "
+                                + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US)
+                                        .format(Date.from(Instant.now())));
                         writer.newLine();
                         writer.newLine();
 
@@ -1771,11 +1883,12 @@ public class HostChecker {
                 String category = _hostCategories.get(hostname);
 
                 if (category != null && !category.equals(existingResult.category)) {
-                    PingResult updatedResult = new PingResult(existingResult.reachable,
-                                                           existingResult.timestamp,
-                                                           existingResult.responseTime,
-                                                           category,
-                                                           existingResult.leaseSetTypes);
+                    PingResult updatedResult = new PingResult(
+                            existingResult.reachable,
+                            existingResult.timestamp,
+                            existingResult.responseTime,
+                            category,
+                            existingResult.leaseSetTypes);
                     _pingResults.put(hostname, updatedResult);
                     updatedCount++;
 
@@ -1875,25 +1988,27 @@ public class HostChecker {
                 int skipped = 0;
 
                 // Create a list of ping tasks to run concurrently
-                java.util.List<java.util.concurrent.Future<Void>> futures = new java.util.ArrayList<java.util.concurrent.Future<Void>>();
+                java.util.List<java.util.concurrent.Future<Void>> futures =
+                        new java.util.ArrayList<java.util.concurrent.Future<Void>>();
 
                 for (String hostname : allHostnames) {
                     if (!_running.get()) {
                         break;
                     }
 
-
                     // Check if router is shutting down or restarting
                     if (_context instanceof RouterContext) {
                         RouterContext routerContext = (RouterContext) _context;
                         Router router = routerContext.router();
-                        boolean isShuttingDown = router.gracefulShutdownInProgress() || router.isFinalShutdownInProgress();
+                        boolean isShuttingDown =
+                                router.gracefulShutdownInProgress() || router.isFinalShutdownInProgress();
                         boolean isRestarting = router.isRestarting();
 
                         // Check for graceful shutdown in progress
                         if (isShuttingDown || isRestarting) {
                             if (_log.shouldInfo()) {
-                                _log.info("HostChecker stopping -> Router is " + (isShuttingDown ? "shutting down" : "restarting") + "...");
+                                _log.info("HostChecker stopping -> Router is "
+                                        + (isShuttingDown ? "shutting down" : "restarting") + "...");
                             }
                             break;
                         }
@@ -1906,29 +2021,31 @@ public class HostChecker {
                         total++;
 
                         // Submit ping task for concurrent execution with semaphore limit
-                        java.util.concurrent.Future<Void> future = _scheduler.submit(new java.util.concurrent.Callable<Void>() {
-                            @Override
-                            public Void call() throws Exception {
-                                try {
-                                    // Acquire semaphore permit to limit concurrent pings
-                                    _pingSemaphore.acquire();
+                        java.util.concurrent.Future<Void> future =
+                                _scheduler.submit(new java.util.concurrent.Callable<Void>() {
+                                    @Override
+                                    public Void call() throws Exception {
+                                        try {
+                                            // Acquire semaphore permit to limit concurrent pings
+                                            _pingSemaphore.acquire();
 
-                                    // Then add random delay (up to 5s)
-                                    int randomDelay = 2000 + _context.random().nextInt(3000);
-                                    Thread.sleep(randomDelay);
+                                            // Then add random delay (up to 5s)
+                                            int randomDelay =
+                                                    2000 + _context.random().nextInt(3000);
+                                            Thread.sleep(randomDelay);
 
-                                    if (_log.shouldInfo()) {
-                                        _log.info("Starting HostChecker for " + hostname + "...");
+                                            if (_log.shouldInfo()) {
+                                                _log.info("Starting HostChecker for " + hostname + "...");
+                                            }
+
+                                            testDestination(hostname);
+                                            return null;
+                                        } finally {
+                                            // Always release semaphore permit
+                                            _pingSemaphore.release();
+                                        }
                                     }
-
-                                    testDestination(hostname);
-                                    return null;
-                                } finally {
-                                    // Always release semaphore permit
-                                    _pingSemaphore.release();
-                                }
-                            }
-                        });
+                                });
                         futures.add(future);
                     } else {
                         skipped++;
@@ -1971,10 +2088,10 @@ public class HostChecker {
 
                 if (_log.shouldInfo()) {
                     String durationStr = cycleDurationMinutes > 0
-                        ? cycleDurationMinutes + "m " + cycleDurationSeconds + "s"
-                        : cycleDurationSeconds + "s";
-                    _log.info("HostChecker cycle completed in " + durationStr + ": " +
-                              success + " / " + total + " reachable (" + skipped + " blacklisted hosts skipped)");
+                            ? cycleDurationMinutes + "m " + cycleDurationSeconds + "s"
+                            : cycleDurationSeconds + "s";
+                    _log.info("HostChecker cycle completed in " + durationStr + ": " + success + " / " + total
+                            + " reachable (" + skipped + " blacklisted hosts skipped)");
                 }
 
                 // Adjust interval if cycle takes too long
@@ -1985,8 +2102,9 @@ public class HostChecker {
                     if (cycleDurationMinutes > configuredIntervalMinutes) {
                         long newInterval = cycleDuration + (bufferMinutes * 60000);
                         if (_log.shouldWarn()) {
-                            _log.warn("HostChecker cycle took " + cycleDurationMinutes + " minutes, which exceeds configured interval of " +
-                                      configuredIntervalMinutes + " minutes -> Adjusting interval to " + (newInterval / 60000) + " minutes");
+                            _log.warn("HostChecker cycle took " + cycleDurationMinutes
+                                    + " minutes, which exceeds configured interval of " + configuredIntervalMinutes
+                                    + " minutes -> Adjusting interval to " + (newInterval / 60000) + " minutes");
                         }
                         _pingInterval = newInterval;
                     }
@@ -2071,7 +2189,8 @@ public class HostChecker {
             try {
                 java.lang.reflect.Method getEncryptionKeys = leaseSet.getClass().getMethod("getEncryptionKeys");
                 @SuppressWarnings("unchecked")
-                java.util.List<net.i2p.data.PublicKey> keys = (java.util.List<net.i2p.data.PublicKey>) getEncryptionKeys.invoke(leaseSet);
+                java.util.List<net.i2p.data.PublicKey> keys =
+                        (java.util.List<net.i2p.data.PublicKey>) getEncryptionKeys.invoke(leaseSet);
 
                 if (keys != null && !keys.isEmpty()) {
                     for (net.i2p.data.PublicKey key : keys) {
@@ -2123,15 +2242,20 @@ public class HostChecker {
         return "[" + sb.toString() + "]";
     }
 
+    /** translate */
+    private static String _t(String s) {
+        return Messages.getString(s);
+    }
 
     /** translate */
-    private static String _t(String s) {return Messages.getString(s);}
+    private static String _t(String s, Object o) {
+        return Messages.getString(s, o);
+    }
 
     /** translate */
-    private static String _t(String s, Object o) {return Messages.getString(s, o);}
-
-    /** translate */
-    private static String _t(String s, Object o, Object o2) {return Messages.getString(s, o, o2);}
+    private static String _t(String s, Object o, Object o2) {
+        return Messages.getString(s, o, o2);
+    }
 
     /**
      * Test method
@@ -2155,5 +2279,4 @@ public class HostChecker {
             log.info(entry.getKey() + ": " + result + (result.reachable ? " (" + result.responseTime + "ms)" : ""));
         }
     }
-
 }

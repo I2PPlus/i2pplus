@@ -28,12 +28,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package net.metanotion.io.block.index;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.util.HashMap;
 import net.metanotion.io.Serializer;
 import net.metanotion.io.block.BlockFile;
 import net.metanotion.util.skiplist.*;
+
+import java.io.Closeable;
+import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * On-disk SkipList implementation for persistent key-value storage.
@@ -57,15 +58,20 @@ import net.metanotion.util.skiplist.*;
  * @param <V> type of mapped values
  */
 public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V> implements Closeable {
-    private static final long MAGIC = 0x536b69704c697374L;  // "SkipList"
+    private static final long MAGIC = 0x536b69704c697374L; // "SkipList"
+
     /** Page number of the first span */
     public int firstSpanPage = 0;
+
     /** Page number of the first level */
     public int firstLevelPage = 0;
+
     /** Page number of this skiplist header */
     public int skipPage = 0;
+
     /** Reference to the BlockFile */
     public final BlockFile bf;
+
     /** Whether this skiplist is closed */
     private boolean isClosed;
 
@@ -100,29 +106,28 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
      *  @throws IOException if an I/O error occurs
      */
     public BSkipList(int spanSize, BlockFile bf, int skipPage, Serializer<K> key, Serializer<V> val, boolean fileOnly) throws IOException {
-        if (spanSize < 1) { throw new RuntimeException("Span size too small"); }
+        if (spanSize < 1) {
+            throw new RuntimeException("Span size too small");
+        }
 
         this.skipPage = skipPage;
         this.bf = bf;
 
         BlockFile.pageSeek(bf.file, skipPage);
         long magic = bf.file.readLong();
-        if (magic != MAGIC)
-            throw new IOException("Bad SkipList magic number 0x" + Long.toHexString(magic) + " on page " + skipPage);
+        if (magic != MAGIC) throw new IOException("Bad SkipList magic number 0x" + Long.toHexString(magic) + " on page " + skipPage);
         firstSpanPage = bf.file.readUnsignedInt();
         firstLevelPage = bf.file.readUnsignedInt();
         size = bf.file.readUnsignedInt();
         int spans = bf.file.readInt();
         int levelCount = bf.file.readInt();
-                // two byte spansize as of version 1.2, ignore for now
-                // int ss = bf.file.readUnsignedShort(); if (ss > 0) ...
-        //System.out.println(size + " " + spans);
+        // two byte spansize as of version 1.2, ignore for now
+        // int ss = bf.file.readUnsignedShort(); if (ss > 0) ...
+        // System.out.println(size + " " + spans);
 
         this.fileOnly = fileOnly;
-        if (fileOnly)
-            first = new IBSkipSpan<K, V>(bf, this, firstSpanPage, key, val);
-        else
-            first = new BSkipSpan<K, V>(bf, this, firstSpanPage, key, val);
+        if (fileOnly) first = new IBSkipSpan<K, V>(bf, this, firstSpanPage, key, val);
+        else first = new BSkipSpan<K, V>(bf, this, firstSpanPage, key, val);
         BSkipLevels<K, V> bstack = new BSkipLevels<K, V>(bf, firstLevelPage, this);
         bstack.initializeLevels();
         stack = bstack;
@@ -130,24 +135,20 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
         for (BSkipSpan ss : spanHash.values()) {
             total += ss.nKeys;
         }
-        if (bf.log.shouldDebug())
-            bf.log.debug("Loaded " + this + " cached " + levelHash.size() + " levels and " + spanHash.size() + " spans with " + total + " entries");
-        if (bf.file.canWrite() &&
-            (levelCount != levelHash.size() || spans != spanHash.size() || size != total)) {
-            if (bf.log.shouldWarn())
-                bf.log.warn("On-disk counts were " + levelCount + " levels / " + spans +
-                            " spans / " +  size + " entries, correcting to " + total + " entries");
+        if (bf.log.shouldDebug()) bf.log.debug("Loaded " + this + " cached " + levelHash.size() + " levels and " + spanHash.size() + " spans with " + total + " entries");
+        if (bf.file.canWrite() && (levelCount != levelHash.size() || spans != spanHash.size() || size != total)) {
+            if (bf.log.shouldWarn()) bf.log.warn("On-disk counts were " + levelCount + " levels / " + spans + " spans / " + size + " entries, correcting to " + total + " entries");
             size = total;
             flush();
         }
-        //rng = new Random(System.currentTimeMillis());
+        // rng = new Random(System.currentTimeMillis());
     }
 
     /**
      *  Close this skiplist and flush all data to disk.
      */
     public void close() {
-        //System.out.println("Closing index " + size + " and " + spans);
+        // System.out.println("Closing index " + size + " and " + spans);
         flush();
         spanHash.clear();
         levelHash.clear();
@@ -159,8 +160,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
      */
     @Override
     public void flush() {
-        if (!bf.file.canWrite())
-                    return;
+        if (!bf.file.canWrite()) return;
         if (isClosed) {
             bf.log.error("Already closed!! " + this, new Exception());
             return;
@@ -174,7 +174,9 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
             bf.file.writeInt(spanHash.size());
             bf.file.writeInt(levelHash.size());
 
-        } catch (IOException ioe) { throw new RuntimeException("Error writing to database", ioe); }
+        } catch (IOException ioe) {
+            throw new RuntimeException("Error writing to database", ioe);
+        }
     }
 
     /**
@@ -226,7 +228,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
         bf.file.writeInt(0);
         bf.file.writeInt(1);
         bf.file.writeInt(1);
-                // added in version 1.2
+        // added in version 1.2
         bf.file.writeShort(spanSize);
         BSkipSpan.init(bf, firstSpan, spanSize);
         BSkipLevels.init(bf, firstLevel, firstSpan, 4);
@@ -247,7 +249,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
         }
         int max = Math.max(hob, super.maxLevels());
         // 252
-        //int cells = (BlockFile.PAGESIZE - BSkipLevels.HEADER_LEN) / 4;
+        // int cells = (BlockFile.PAGESIZE - BSkipLevels.HEADER_LEN) / 4;
         return Math.min(BSkipLevels.MAX_SIZE, max);
     }
 
@@ -258,25 +260,24 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
      */
     @Override
     public SkipIterator<K, V> iterator() {
-        if (!this.fileOnly)
-            return super.iterator();
+        if (!this.fileOnly) return super.iterator();
         return new IBSkipIterator<K, V>(first, 0);
     }
 
-/****
-    //@Override
-    public SkipIterator<K, V> min() {
-        return iterator();
-    }
-
-    //@Override
-    public SkipIterator<K, V> max() {
-        if (!this.fileOnly)
-            return super.max();
-        SkipSpan<K, V> ss = stack.getEnd();
-        return new IBSkipIterator<K, V>(ss, ss.nKeys - 1);
-    }
-****/
+    /****
+     * //@Override
+     * public SkipIterator<K, V> min() {
+     * return iterator();
+     * }
+     *
+     * //@Override
+     * public SkipIterator<K, V> max() {
+     * if (!this.fileOnly)
+     * return super.max();
+     * SkipSpan<K, V> ss = stack.getEnd();
+     * return new IBSkipIterator<K, V>(ss, ss.nKeys - 1);
+     * }
+     ****/
 
     /**
      *  Find the entry with the given key.
@@ -286,11 +287,12 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
      */
     @Override
     public SkipIterator<K, V> find(K key) {
-        if (!this.fileOnly)
-            return super.find(key);
+        if (!this.fileOnly) return super.find(key);
         int[] search = new int[1];
         SkipSpan<K, V> ss = stack.getSpan(stack.levels.length - 1, key, search);
-        if (search[0] < 0) { search[0] = -1 * (search[0] + 1); }
+        if (search[0] < 0) {
+            search[0] = -1 * (search[0] + 1);
+        }
         return new IBSkipIterator<K, V>(ss, search[0]);
     }
 
@@ -309,27 +311,27 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
         bf.log.info("    firstSpanPage " + this.firstSpanPage);
         bf.log.info("    firstLevelPage " + this.firstLevelPage);
         bf.log.info("    maxLevels " + this.maxLevels());
-        //printSL();
-        //print();
-        //bf.log.info("*** Lvlck() ***");
+        // printSL();
+        // print();
+        // bf.log.info("*** Lvlck() ***");
         boolean rv = stack.blvlck(fix);
-         /****
-        int items = 0;
-        for (SkipIterator iter = this.iterator(); iter.hasNext();) {
-            String key = (String) iter.nextKey();
-            if (isMeta) {
-                int sz = ((Integer) iter.next()).intValue();
-                bf.log.info("        Item " + key.toString() + " page " + sz);
-            } else {
-                String cls= iter.next().getClass().getSimpleName();
-                bf.log.info("        Item " + key.toString() + " class " + cls);
-            }
-            items++;
-        }
-        bf.log.warn("    actual size " + items);
-        if (items != this.size)
-            bf.log.warn("****** size mismatch, header = " + this.size + " actual = " + items);
-              ****/
+        /****
+         * int items = 0;
+         * for (SkipIterator iter = this.iterator(); iter.hasNext();) {
+         * String key = (String) iter.nextKey();
+         * if (isMeta) {
+         * int sz = ((Integer) iter.next()).intValue();
+         * bf.log.info("        Item " + key.toString() + " page " + sz);
+         * } else {
+         * String cls= iter.next().getClass().getSimpleName();
+         * bf.log.info("        Item " + key.toString() + " class " + cls);
+         * }
+         * items++;
+         * }
+         * bf.log.warn("    actual size " + items);
+         * if (items != this.size)
+         * bf.log.warn("****** size mismatch, header = " + this.size + " actual = " + items);
+         ****/
         return rv;
     }
 
@@ -341,8 +343,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
     @Override
     public String toString() {
         String rv = getClass().getSimpleName() + " page " + skipPage;
-        if (isClosed)
-            rv += " CLOSED";
+        if (isClosed) rv += " CLOSED";
         return rv;
     }
 }

@@ -36,5 +36,6 @@ package net.metanotion.io;
  */
 public interface Serializer<T> {
     public byte[] getBytes(T o);
+
     public T construct(byte[] b);
 }

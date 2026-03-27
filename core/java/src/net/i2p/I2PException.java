@@ -1,4 +1,5 @@
 package net.i2p;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -7,8 +8,6 @@ package net.i2p;
  * your children, but it might.  Use at your own risk.
  *
  */
-
-
 
 /**
  * Base class of I2P exceptions

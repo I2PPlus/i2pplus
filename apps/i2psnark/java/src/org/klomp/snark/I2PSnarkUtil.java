@@ -129,15 +129,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     public static final boolean DEFAULT_USE_DHT = true;
     public static final String EEPGET_USER_AGENT = "I2PSnark";
     private static final boolean ENABLE_UDP_TRACKER = true;
-    private static final List<String> HIDDEN_I2CP_OPTS =
-            Arrays.asList(
-                    new String[] {
-                        PROP_MAX_BW,
-                        "inbound.length",
-                        "outbound.length",
-                        "inbound.quantity",
-                        "outbound.quantity"
-                    });
+    private static final List<String> HIDDEN_I2CP_OPTS = Arrays.asList(
+            new String[] {PROP_MAX_BW, "inbound.length", "outbound.length", "inbound.quantity", "outbound.quantity"});
 
     public I2PSnarkUtil(I2PAppContext ctx) {
         this(ctx, "i2psnark", null);
@@ -175,7 +168,8 @@ public class I2PSnarkUtil implements DisconnectListener {
         // available
         // even if not connected to I2CP.
         // So much for multiple instances...
-        _tmpDir = new SecureDirectory(ctx.getTempDir(), baseName + '-' + ctx.random().nextInt());
+        _tmpDir = new SecureDirectory(
+                ctx.getTempDir(), baseName + '-' + ctx.random().nextInt());
         _tmpDir.mkdirs();
     }
 
@@ -212,7 +206,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         if (opts != null) {
             synchronized (_opts) {
                 // removed options...
-                for (Iterator<String> iter = _opts.keySet().iterator(); iter.hasNext();) {
+                for (Iterator<String> iter = _opts.keySet().iterator(); iter.hasNext(); ) {
                     String k = iter.next();
                     if (!HIDDEN_I2CP_OPTS.contains(k) && !opts.containsKey(k)) {
                         iter.remove();
@@ -361,7 +355,6 @@ public class I2PSnarkUtil implements DisconnectListener {
     public String getAPITarget() {
         return _apiTarget;
     }
-;
 
     /**
      * @since 0.9.67
@@ -369,7 +362,6 @@ public class I2PSnarkUtil implements DisconnectListener {
     public String getAPIKey() {
         return _apiKey;
     }
-;
 
     /**
      * @since 0.9.67
@@ -383,10 +375,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @since 0.9.67
      */
     public boolean hasAPIKey() {
-        return _apiTarget != null
-                && _apiTarget.length() > 0
-                && _apiKey != null
-                && _apiKey.length() > 0;
+        return _apiTarget != null && _apiTarget.length() > 0 && _apiKey != null && _apiKey.length() > 0;
     }
 
     /**
@@ -511,9 +500,7 @@ public class I2PSnarkUtil implements DisconnectListener {
                 opts.setProperty("i2p.streaming.answerPings", "false");
             }
             if (opts.getProperty(I2PSocketOptions.PROP_PROFILE) == null) {
-                opts.setProperty(
-                        I2PSocketOptions.PROP_PROFILE,
-                        Integer.toString(I2PSocketOptions.PROFILE_BULK));
+                opts.setProperty(I2PSocketOptions.PROP_PROFILE, Integer.toString(I2PSocketOptions.PROFILE_BULK));
             }
             if (opts.getProperty(I2PClient.PROP_SIGTYPE) == null) {
                 opts.setProperty(I2PClient.PROP_SIGTYPE, "EdDSA_SHA512_Ed25519");
@@ -622,9 +609,7 @@ public class I2PSnarkUtil implements DisconnectListener {
             }
             mgr.destroySocketManager();
         }
-        FileUtil.rmdir(
-                _tmpDir,
-                false); // this will delete a .torrent file d/l in progress so don't do that...
+        FileUtil.rmdir(_tmpDir, false); // this will delete a .torrent file d/l in progress so don't do that...
         _tmpDir.mkdirs(); // in case the user will d/l a .torrent file next...
     }
 
@@ -654,9 +639,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         Hash dest = addr.calculateHash();
         if (_banlist.contains(dest)) {
             throw new IOException(
-                    "Not trying to contact banlisted peer ["
-                            + dest.toBase64().substring(0, 6)
-                            + "]");
+                    "Not trying to contact banlisted peer [" + dest.toBase64().substring(0, 6) + "]");
         }
         try {
             // TODO opts.setPort(xxx); connect(addr, opts)
@@ -712,15 +695,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public File get(String url, boolean rewrite, int retries) {
         if (_log.shouldDebug()) {
-            _log.debug(
-                    "Fetching ["
-                            + url
-                            + "] proxy="
-                            + _proxyHost
-                            + ":"
-                            + _proxyPort
-                            + ": "
-                            + _shouldProxy);
+            _log.debug("Fetching [" + url + "] proxy=" + _proxyHost + ":" + _proxyPort + ": " + _shouldProxy);
         }
         File out = null;
         try {
@@ -732,7 +707,7 @@ public class I2PSnarkUtil implements DisconnectListener {
             if (out != null) {
                 out.delete();
             }
-            return null;  // NOPMD - ReturnEmptyCollectionRatherThanNull (byte[] is not a Collection)
+            return null; // NOPMD - ReturnEmptyCollectionRatherThanNull (byte[] is not a Collection)
         }
         out.deleteOnExit();
         String fetchURL = url;
@@ -755,47 +730,34 @@ public class I2PSnarkUtil implements DisconnectListener {
                 }
             }
         }
-        EepGet get =
-                new I2PSocketEepGet(_context, _manager, retries, out.getAbsolutePath(), fetchURL);
+        EepGet get = new I2PSocketEepGet(_context, _manager, retries, out.getAbsolutePath(), fetchURL);
         get.addHeader("User-Agent", EEPGET_USER_AGENT);
         int truncate = url.indexOf("&");
-        String convertedurl =
-                url.replace(
-                                "ahsplxkbhemefwvvml7qovzl5a2b5xo5i7lyai7ntdunvcyfdtna.b32.i2p",
-                                "tracker2.postman.i2p")
-                        .replace(
-                                "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA.i2p",
-                                "tracker2.postman.i2p")
-                        .replace(
-                                "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p",
-                                "opentracker.dg2.i2p")
-                        .replace(
-                                "afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p",
-                                "lyoko.i2p")
-                        .replace(
-                                "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p",
-                                "tracker.thebland.i2p")
-                        .replace(
-                                "nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p",
-                                "torrfreedom.i2p")
-                        .replace("http://", "");
+        String convertedurl = url.replace(
+                        "ahsplxkbhemefwvvml7qovzl5a2b5xo5i7lyai7ntdunvcyfdtna.b32.i2p", "tracker2.postman.i2p")
+                .replace(
+                        "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA.i2p",
+                        "tracker2.postman.i2p")
+                .replace("w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p", "opentracker.dg2.i2p")
+                .replace("afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p", "lyoko.i2p")
+                .replace("s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p", "tracker.thebland.i2p")
+                .replace("nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p", "torrfreedom.i2p")
+                .replace("http://", "");
         if (get.fetch(timeout)) {
             if (_log.shouldDebug())
-                _log.debug(
-                        "Request successful ["
-                                + convertedurl.substring(0, truncate)
-                                + "...] (Size: "
-                                + out.length()
-                                + " bytes)");
+                _log.debug("Request successful ["
+                        + convertedurl.substring(0, truncate)
+                        + "...] (Size: "
+                        + out.length()
+                        + " bytes)");
             return out;
         } else {
             if (_log.shouldWarn())
-                _log.warn(
-                        "Timeout ("
-                                + timeout / 1000
-                                + "s) requesting ["
-                                + convertedurl.substring(0, truncate)
-                                + "...]");
+                _log.warn("Timeout ("
+                        + timeout / 1000
+                        + "s) requesting ["
+                        + convertedurl.substring(0, truncate)
+                        + "...]");
             out.delete();
             return null;
         }
@@ -821,7 +783,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         int timeout;
         if (retries < 0) {
             if (!connected()) {
-                return null;  // NOPMD - ReturnEmptyCollectionRatherThanNull (byte[] is not a Collection)
+                return null; // NOPMD - ReturnEmptyCollectionRatherThanNull (byte[] is not a Collection)
             }
             timeout = EEPGET_CONNECT_TIMEOUT_SHORT;
             retries = 0;
@@ -829,52 +791,39 @@ public class I2PSnarkUtil implements DisconnectListener {
             timeout = EEPGET_CONNECT_TIMEOUT;
             if (!connected()) {
                 if (!connect()) {
-                    return null;  // NOPMD - ReturnEmptyCollectionRatherThanNull (byte[] is not a Collection)
+                    return null; // NOPMD - ReturnEmptyCollectionRatherThanNull (byte[] is not a Collection)
                 }
             }
         }
         ByteArrayOutputStream out = new ByteArrayOutputStream(initialSize);
-        EepGet get =
-                new I2PSocketEepGet(_context, _manager, retries, -1, maxSize, null, out, fetchURL);
+        EepGet get = new I2PSocketEepGet(_context, _manager, retries, -1, maxSize, null, out, fetchURL);
         get.addHeader("User-Agent", EEPGET_USER_AGENT);
         int truncate = url.indexOf("&");
-        String convertedurl =
-                url.replace(
-                                "ahsplxkbhemefwvvml7qovzl5a2b5xo5i7lyai7ntdunvcyfdtna.b32.i2p",
-                                "tracker2.postman.i2p")
-                        .replace(
-                                "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA.i2p",
-                                "tracker2.postman.i2p")
-                        .replace(
-                                "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p",
-                                "opentracker.dg2.i2p")
-                        .replace(
-                                "afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p",
-                                "lyoko.i2p")
-                        .replace(
-                                "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p",
-                                "tracker.thebland.i2p")
-                        .replace(
-                                "nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p",
-                                "torrfreedom.i2p")
-                        .replace("http://", "");
+        String convertedurl = url.replace(
+                        "ahsplxkbhemefwvvml7qovzl5a2b5xo5i7lyai7ntdunvcyfdtna.b32.i2p", "tracker2.postman.i2p")
+                .replace(
+                        "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA.i2p",
+                        "tracker2.postman.i2p")
+                .replace("w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p", "opentracker.dg2.i2p")
+                .replace("afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p", "lyoko.i2p")
+                .replace("s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p", "tracker.thebland.i2p")
+                .replace("nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p", "torrfreedom.i2p")
+                .replace("http://", "");
         if (get.fetch(timeout)) {
             if (_log.shouldDebug())
-                _log.debug(
-                        "Request successful ["
-                                + convertedurl.substring(0, truncate)
-                                + "...] (Size: "
-                                + out.size()
-                                + " bytes)");
+                _log.debug("Request successful ["
+                        + convertedurl.substring(0, truncate)
+                        + "...] (Size: "
+                        + out.size()
+                        + " bytes)");
             return out.toByteArray();
         } else {
             if (_log.shouldWarn())
-                _log.warn(
-                        "Timeout ("
-                                + timeout / 1000
-                                + "s) requesting ["
-                                + convertedurl.substring(0, truncate)
-                                + "...]");
+                _log.warn("Timeout ("
+                        + timeout / 1000
+                        + "s) requesting ["
+                        + convertedurl.substring(0, truncate)
+                        + "...]");
             return null;
         }
     }
@@ -943,9 +892,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         if (ip == null) return null;
         if (ip.endsWith(".i2p")) {
             if (ip.length() < 520) { // key + ".i2p"
-                if (_manager != null
-                        && ip.length() == BASE32_HASH_LENGTH + 8
-                        && ip.endsWith(".b32.i2p")) {
+                if (_manager != null && ip.length() == BASE32_HASH_LENGTH + 8 && ip.endsWith(".b32.i2p")) {
                     // Use existing I2PSession for b32 lookups if we have it
                     // This is much more efficient than using the naming service
                     I2PSession sess = _manager.getSession();
@@ -954,8 +901,7 @@ public class I2PSnarkUtil implements DisconnectListener {
                         if (b != null) {
                             // Hash h = new Hash(b);
                             Hash h = Hash.create(b);
-                            if (_log.shouldDebug())
-                                _log.debug("Using existing session for lookup of [" + ip + "]");
+                            if (_log.shouldDebug()) _log.debug("Using existing session for lookup of [" + ip + "]");
                             try {
                                 return sess.lookupDest(h, 15 * 1000);
                             } catch (I2PSessionException ise) {
@@ -1008,10 +954,7 @@ public class I2PSnarkUtil implements DisconnectListener {
             return origAnnounce;
         }
         int pathStart = origAnnounce.indexOf('/', destEnd);
-        String rv =
-                "http://i2p/"
-                        + origAnnounce.substring(destStart, destEnd)
-                        + origAnnounce.substring(pathStart);
+        String rv = "http://i2p/" + origAnnounce.substring(destStart, destEnd) + origAnnounce.substring(pathStart);
         // _log.debug("Rewriting [" + origAnnounce + "] as [" + rv + "]");
         return rv;
     }
@@ -1284,8 +1227,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         return Translate.getString(n, s, p, _context, BUNDLE_NAME);
     }
 
-    private static final boolean SHOULD_SYNC =
-            !(SystemVersion.isAndroid() || SystemVersion.isARM());
+    private static final boolean SHOULD_SYNC = !(SystemVersion.isAndroid() || SystemVersion.isARM());
     private static final Pattern ILLEGAL_KEY = Pattern.compile("[#=\\r\\n; ]");
     private static final Pattern ILLEGAL_VALUE = Pattern.compile("[\\r\\n]");
 
@@ -1349,25 +1291,15 @@ public class I2PSnarkUtil implements DisconnectListener {
                 String val = (String) entry.getValue();
                 if (ILLEGAL_KEY.matcher(name).find()) {
                     if (ioe == null) {
-                        ioe =
-                                new IOException(
-                                        "Invalid character (one of \"#; =\\r\\n\") in key: \""
-                                                + name
-                                                + "\" = \""
-                                                + val
-                                                + '\"');
+                        ioe = new IOException(
+                                "Invalid character (one of \"#; =\\r\\n\") in key: \"" + name + "\" = \"" + val + '\"');
                     }
                     continue;
                 }
                 if (ILLEGAL_VALUE.matcher(val).find()) {
                     if (ioe == null) {
-                        ioe =
-                                new IOException(
-                                        "Invalid character (one of \"\\r\\n\") in value: \""
-                                                + name
-                                                + "\" = \""
-                                                + val
-                                                + '\"');
+                        ioe = new IOException(
+                                "Invalid character (one of \"\\r\\n\") in value: \"" + name + "\" = \"" + val + '\"');
                     }
                     continue;
                 }
@@ -1384,8 +1316,7 @@ public class I2PSnarkUtil implements DisconnectListener {
                 throw new IOException("Failed to write properties to " + tmpFile);
             }
             out = null;
-            if (!FileUtil.rename(tmpFile, file))
-                throw new IOException("Failed rename from " + tmpFile + " to " + file);
+            if (!FileUtil.rename(tmpFile, file)) throw new IOException("Failed rename from " + tmpFile + " to " + file);
         } finally {
             if (out != null) out.close();
             if (fos != null)

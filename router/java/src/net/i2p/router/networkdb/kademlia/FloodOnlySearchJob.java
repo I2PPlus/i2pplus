@@ -1,12 +1,13 @@
 package net.i2p.router.networkdb.kademlia;
 
-import java.util.HashSet;
 import net.i2p.data.Hash;
 import net.i2p.router.Job;
 import net.i2p.router.MessageSelector;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.ReplyJob;
 import net.i2p.router.RouterContext;
+
+import java.util.HashSet;
 
 /**
  * Flood-only search implementation for network database lookups.
@@ -24,12 +25,13 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
 
     /** this is a marker to register with the MessageRegistry, it is never sent */
     private OutNetMessage _out;
+
     protected final MessageSelector _replySelector;
     protected final ReplyJob _onReply;
     protected final Job _onTimeout;
 
     private static final int MIN_FOR_NO_DSRM = 4;
-    private static final long SINGLE_SEARCH_MSG_TIME = 10*1000;
+    private static final long SINGLE_SEARCH_MSG_TIME = 10 * 1000;
 
     public FloodOnlySearchJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade, Hash key, Job onFind, Job onFailed, int timeoutMs, boolean isLease) {
         super(ctx, facade, key, onFind, onFailed, timeoutMs, isLease);
@@ -57,7 +59,9 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
         _onTimeout = new FloodOnlyLookupTimeoutJob(ctx, this);
     }
 
-    public boolean shouldProcessDSRM() { return _shouldProcessDSRM; }
+    public boolean shouldProcessDSRM() {
+        return _shouldProcessDSRM;
+    }
 
     @Override
     public void runJob() {
@@ -65,7 +69,9 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
     }
 
     @Override
-    public String getName() { return "Start NetDb Search for Floodfill"; }
+    public String getName() {
+        return "Start NetDb Search for Floodfill";
+    }
 
     /**
      *  Note that we heard from the peer
@@ -88,12 +94,11 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
         getContext().messageRegistry().unregisterPending(_out);
         long time = System.currentTimeMillis() - _created;
         if (_log.shouldInfo()) {
-            int timeRemaining = (int)(_expiration - getContext().clock().now());
+            int timeRemaining = (int) (_expiration - getContext().clock().now());
             _log.info("Floodfill search for " + _key + " failed with " + timeRemaining + " remaining after " + time);
         }
         synchronized (_unheardFrom) {
-            for (Hash h : _unheardFrom)
-                getContext().profileManager().dbLookupFailed(h);
+            for (Hash h : _unheardFrom) getContext().profileManager().dbLookupFailed(h);
         }
         _facade.complete(_key);
         getContext().statManager().addRateData("netDb.failedTime", time);
@@ -110,8 +115,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
             _dead = true;
             super.success();
         }
-        if (_log.shouldInfo())
-            _log.info("Floodfill search for " + _key + " successful");
+        if (_log.shouldInfo()) _log.info("Floodfill search for " + _key + " successful");
         /**
          *   Sadly, we don't know which of the two replied, unless the first one sent a DSRM
          *   before the second one sent the answer, which isn't that likely.

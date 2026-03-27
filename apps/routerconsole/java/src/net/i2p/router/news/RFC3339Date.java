@@ -32,6 +32,7 @@ public abstract class RFC3339Date {
     private static final SimpleDateFormat OUTPUT_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
 
     private static final String TZF1, TZF2;
+
     static {
         // Android's SimpleDateFormat doesn't support XXX at any API
         if (SystemVersion.isJava7() && !SystemVersion.isAndroid()) {
@@ -54,14 +55,14 @@ public abstract class RFC3339Date {
      */
     private static final SimpleDateFormat rfc3339DateFormats[] = new SimpleDateFormat[] {
         OUTPUT_FORMAT,
-                 // .S or .SS will get the milliseconds wrong,
-                 // e.g. .1 will become 1 ms, .11 will become 11 ms
-                 // This is NOT fixed below
+        // .S or .SS will get the milliseconds wrong,
+        // e.g. .1 will become 1 ms, .11 will become 11 ms
+        // This is NOT fixed below
         new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US),
         new SimpleDateFormat(TZF1, Locale.US),
         new SimpleDateFormat(TZF2, Locale.US),
         new SimpleDateFormat("yyyy-MM-dd", Locale.US),
-                 // old school for backward compatibility
+        // old school for backward compatibility
         new SimpleDateFormat("yyyy/MM/dd", Locale.US)
     };
 
@@ -81,23 +82,23 @@ public abstract class RFC3339Date {
      * @param s non-null
      * @return -1 on failure
      */
-    public synchronized static long parse3339Date(String s) {
+    public static synchronized long parse3339Date(String s) {
         s = s.trim();
         // strip the ':' out of the time zone, if present,
         // for Java 6 where we don't have the 'X' format
         int len = s.length();
-        if ((!SystemVersion.isJava7() || SystemVersion.isAndroid()) &&
-            s.charAt(len - 1) != 'Z' &&
-            s.charAt(len - 3) == ':' &&
-            (s.charAt(len - 6) == '+' || s.charAt(len - 6) == '-')) {
+        if ((!SystemVersion.isJava7() || SystemVersion.isAndroid())
+                && s.charAt(len - 1) != 'Z'
+                && s.charAt(len - 3) == ':'
+                && (s.charAt(len - 6) == '+' || s.charAt(len - 6) == '-')) {
             s = s.substring(0, len - 3) + s.substring(len - 2);
         }
         for (int i = 0; i < rfc3339DateFormats.length; i++) {
             try {
                 Date date = rfc3339DateFormats[i].parse(s);
-                if (date != null)
-                    return date.getTime();
-            } catch (ParseException pe) {}
+                if (date != null) return date.getTime();
+            } catch (ParseException pe) {
+            }
         }
         return -1;
     }
@@ -105,21 +106,21 @@ public abstract class RFC3339Date {
     /**
      * Format is "yyyy-MM-ddTHH:mm:ssZ"
      */
-    public synchronized static String to3339Date(long t) {
+    public static synchronized String to3339Date(long t) {
         return OUTPUT_FORMAT.format(Date.from(Instant.ofEpochMilli(t)));
     }
 
-/****
-    public static void main(String[] args) {
-        if (args.length == 1) {
-            try {
-                System.out.println(to3339Date(Long.parseLong(args[0])));
-            } catch (NumberFormatException nfe) {
-                System.out.println(parse3339Date(args[0]));
-            }
-        } else {
-            System.out.println("Usage: RFC3339Date numericDate|stringDate");
-        }
-    }
-****/
+    /****
+     * public static void main(String[] args) {
+     * if (args.length == 1) {
+     * try {
+     * System.out.println(to3339Date(Long.parseLong(args[0])));
+     * } catch (NumberFormatException nfe) {
+     * System.out.println(parse3339Date(args[0]));
+     * }
+     * } else {
+     * System.out.println("Usage: RFC3339Date numericDate|stringDate");
+     * }
+     * }
+     ****/
 }

@@ -1,9 +1,10 @@
 package net.i2p.data;
 
+import net.i2p.util.OrderedProperties;
+
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.Map;
-import net.i2p.util.OrderedProperties;
 
 /**
  * Immutable OrderedProperties, to reduce object churn

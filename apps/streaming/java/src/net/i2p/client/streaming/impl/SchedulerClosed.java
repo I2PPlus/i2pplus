@@ -35,21 +35,20 @@ class SchedulerClosed extends SchedulerImpl {
     public boolean accept(Connection con) {
         if (con == null) return false;
         long timeSinceClose = _context.clock().now() - con.getCloseSentOn();
-        boolean ok = (con.getCloseSentOn() > 0) &&
-                     (con.getCloseReceivedOn() > 0) &&
-                     //(con.getUnackedPacketsReceived() <= 0) &&
-                     (con.getUnackedPacketsSent() <= 0) &&
-                     (!con.getResetReceived()) &&
-                     (timeSinceClose < Connection.DISCONNECT_TIMEOUT);
-        boolean conTimeout = (con.getOptions().getConnectTimeout() < con.getLifetime()) &&
-                             con.getSendStreamId() <= 0 &&
-                             con.getLifetime() < Connection.DISCONNECT_TIMEOUT;
+        boolean ok = (con.getCloseSentOn() > 0) && (con.getCloseReceivedOn() > 0)
+                        &&
+                        // (con.getUnackedPacketsReceived() <= 0) &&
+                        (con.getUnackedPacketsSent() <= 0)
+                        && (!con.getResetReceived())
+                        && (timeSinceClose < Connection.DISCONNECT_TIMEOUT);
+        boolean conTimeout = (con.getOptions().getConnectTimeout() < con.getLifetime()) && con.getSendStreamId() <= 0 && con.getLifetime() < Connection.DISCONNECT_TIMEOUT;
         return (ok || conTimeout);
     }
-@Override
+
+    @Override
     public void eventOccurred(Connection con) {
         // noop.  we do the timeout through the simpleTimer anyway
-        //long timeLeft = con.getCloseSentOn() + Connection.DISCONNECT_TIMEOUT - _context.clock().now();
-        //reschedule(timeLeft, con);
+        // long timeLeft = con.getCloseSentOn() + Connection.DISCONNECT_TIMEOUT - _context.clock().now();
+        // reschedule(timeLeft, con);
     }
 }

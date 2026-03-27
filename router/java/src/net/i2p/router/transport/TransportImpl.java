@@ -1,4 +1,5 @@
 package net.i2p.router.transport;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -39,7 +40,6 @@ package net.i2p.router.transport;
  * synchronization to handle multiple threads accessing
  * transport state simultaneously.
  */
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
@@ -89,12 +89,15 @@ public abstract class TransportImpl implements Transport {
     // Only used by NTCP. SSU does not use. See send() below.
     private final BlockingQueue<OutNetMessage> _sendPool;
     protected final RouterContext _context;
+
     /** map from routerIdentHash to timestamp (Long) that the peer was last unreachable */
-    private final Map<Hash, Long>  _unreachableEntries;
+    private final Map<Hash, Long> _unreachableEntries;
+
     private final Map<Hash, Long> _wasUnreachableEntries;
     // one-entry cache for reachable check
     private volatile Hash _lastReachablePeer;
     private final Set<InetAddress> _localAddresses;
+
     /** global router ident -> IP */
     private static final Map<Hash, byte[]> _IPMap;
 
@@ -103,8 +106,10 @@ public abstract class TransportImpl implements Transport {
 
     /** @since 0.9.50 */
     public static final String CAP_IPV4 = "4";
+
     /** @since 0.9.50 */
     public static final String CAP_IPV6 = "6";
+
     /** @since 0.9.50 */
     public static final String CAP_IPV4_IPV6 = CAP_IPV4 + CAP_IPV6;
 
@@ -121,12 +126,13 @@ public abstract class TransportImpl implements Transport {
         long min = 512;
         long max = 8192;
         // 1024 nominal for 128 MB
-        int size = (int) Math.max(min, Math.min(max, 1 + (maxMemory / (128*1024))));
+        int size = (int) Math.max(min, Math.min(max, 1 + (maxMemory / (128 * 1024))));
         _IPMap = new LHMCache<Hash, byte[]>(size);
     }
 
     /** 50/100/150/250/450/550/700 for BW Tiers K/L/M/N/O/P/X */
     private static final int MAX_CONNECTION_FACTOR = 100;
+
     // see constructor
     private final boolean REBALANCE_NTCP;
     private static final int SEND_POOL_CAPACITY = SystemVersion.isSlow() ? 32 : 64;
@@ -139,36 +145,65 @@ public abstract class TransportImpl implements Transport {
         _context = context;
         _log = _context.logManager().getLog(getClass());
 
-        _context.statManager().createRateStat("transport.expiredOnQueueLifetime", "Time to process message expired in outbound queue (ms)", "Transport", RATES);
-        _context.statManager().createRateStat("transport.receiveMessageTimeSlow", "Time to read a received message (over 1s)", "Transport", RATES);
-        _context.statManager().createRateStat("transport.receiveMessageTime", "Time to read a received message (ms)", "Transport", RATES);
-        _context.statManager().createRateStat("transport.sendMessageFailureLifetime", "Lifetime of failed sent messages", "Transport", RATES);
-        _context.statManager().createRequiredRateStat("transport.receiveMessageSize", "Size of received messages (bytes)", "Transport", RATES);
-        _context.statManager().createRequiredRateStat("transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", RATES);
-        _context.statManager().createRequiredRateStat("transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", RATES);
-        //_context.statManager().createRequiredRateStat("transport.sendProcessingTime." + getStyle(), "Time to process and send a message (ms)", "Transport", RATES);
+        _context.statManager()
+                .createRateStat(
+                        "transport.expiredOnQueueLifetime",
+                        "Time to process message expired in outbound queue (ms)",
+                        "Transport",
+                        RATES);
+        _context.statManager()
+                .createRateStat(
+                        "transport.receiveMessageTimeSlow",
+                        "Time to read a received message (over 1s)",
+                        "Transport",
+                        RATES);
+        _context.statManager()
+                .createRateStat(
+                        "transport.receiveMessageTime", "Time to read a received message (ms)", "Transport", RATES);
+        _context.statManager()
+                .createRateStat(
+                        "transport.sendMessageFailureLifetime", "Lifetime of failed sent messages", "Transport", RATES);
+        _context.statManager()
+                .createRequiredRateStat(
+                        "transport.receiveMessageSize", "Size of received messages (bytes)", "Transport", RATES);
+        _context.statManager()
+                .createRequiredRateStat(
+                        "transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", RATES);
+        _context.statManager()
+                .createRequiredRateStat(
+                        "transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", RATES);
+        // _context.statManager().createRequiredRateStat("transport.sendProcessingTime." + getStyle(), "Time to process
+        // and send a message (ms)", "Transport", RATES);
 
         _currentAddresses = new ArrayList<RouterAddress>(3);
-        if (getStyle().equals("NTCP")) {_sendPool = new ArrayBlockingQueue<OutNetMessage>(SEND_POOL_CAPACITY);}
-        else {_sendPool = null;}
+        if (getStyle().equals("NTCP")) {
+            _sendPool = new ArrayBlockingQueue<OutNetMessage>(SEND_POOL_CAPACITY);
+        } else {
+            _sendPool = null;
+        }
         _unreachableEntries = new ConcurrentHashMap<Hash, Long>(32);
         _wasUnreachableEntries = new ConcurrentHashMap<Hash, Long>(32);
         _localAddresses = new ConcurrentHashSet<InetAddress>(4);
         if (allowLocal()) {
             // don't ban for a long time in testnet, or else everybody is excluded by
             // ProfileOrganizer.selectPeersLocallyUnreachable() at startup for half an hour
-            UNREACHABLE_PERIOD = 60*1000;
-            WAS_UNREACHABLE_PERIOD = 60*1000;
+            UNREACHABLE_PERIOD = 60 * 1000;
+            WAS_UNREACHABLE_PERIOD = 60 * 1000;
         } else {
-            UNREACHABLE_PERIOD = 5*60*1000;
-            WAS_UNREACHABLE_PERIOD = 30*60*1000;
+            UNREACHABLE_PERIOD = 5 * 60 * 1000;
+            WAS_UNREACHABLE_PERIOD = 30 * 60 * 1000;
         }
-        _context.simpleTimer2().addPeriodicEvent(new CleanupUnreachable(), 2 * UNREACHABLE_PERIOD, UNREACHABLE_PERIOD / 2);
+        _context.simpleTimer2()
+                .addPeriodicEvent(new CleanupUnreachable(), 2 * UNREACHABLE_PERIOD, UNREACHABLE_PERIOD / 2);
         // if the router is slow, or we have the i2prouter script on linux that bumps the ulimit,
         // allow more NTCP2 and less SSU. See getMaxConnections() below.
         String installed = _context.getProperty("router.firstVersion");
-        REBALANCE_NTCP = SystemVersion.isSlow() || (!SystemVersion.isMac() && !SystemVersion.isWindows() &&
-                         SystemVersion.hasWrapper() && installed != null && VersionComparator.comp(installed, "0.9.33") >= 0);
+        REBALANCE_NTCP = SystemVersion.isSlow()
+                || (!SystemVersion.isMac()
+                        && !SystemVersion.isWindows()
+                        && SystemVersion.hasWrapper()
+                        && installed != null
+                        && VersionComparator.comp(installed, "0.9.33") >= 0);
     }
 
     /**
@@ -191,13 +226,19 @@ public abstract class TransportImpl implements Transport {
 
     /** Per-transport connection limit */
     public int getMaxConnections() {
-        if (_context.commSystem().isDummy()) {return 0;} // testing
+        if (_context.commSystem().isDummy()) {
+            return 0;
+        } // testing
 
         String style = getStyle();
         String maxProp;
-        if (style.equals("SSU")) {maxProp = "i2np.udp.maxConnections";}
-        else if (style.equals("NTCP")) {maxProp = "i2np.ntcp.maxConnections";}
-        else {maxProp = "i2np." + style.toLowerCase(Locale.US) + ".maxConnections";} // shouldn't happen
+        if (style.equals("SSU")) {
+            maxProp = "i2np.udp.maxConnections";
+        } else if (style.equals("NTCP")) {
+            maxProp = "i2np.ntcp.maxConnections";
+        } else {
+            maxProp = "i2np." + style.toLowerCase(Locale.US) + ".maxConnections";
+        } // shouldn't happen
 
         int def = MAX_CONNECTION_FACTOR;
         char bw = _context.router().getBandwidthClass();
@@ -231,22 +272,32 @@ public abstract class TransportImpl implements Transport {
 
         if (style.equals("SSU")) {
             def *= 3;
-            if (def > 4000) {def = 4000;}
+            if (def > 4000) {
+                def = 4000;
+            }
         } else if (style.equals("NTCP")) {
             def *= 3;
-            if (def > 4000) {def = 4000;}
+            if (def > 4000) {
+                def = 4000;
+            }
         }
 
         return _context.getProperty(maxProp, def);
     }
 
     public static int getTransportMaxConnections(RouterContext ctx, String style) {
-        if (ctx.commSystem().isDummy()) {return 0;} // testing
+        if (ctx.commSystem().isDummy()) {
+            return 0;
+        } // testing
 
         String maxProp;
-        if (style.equals("SSU")) {maxProp = "i2np.udp.maxConnections";}
-        else if (style.equals("NTCP")) {maxProp = "i2np.ntcp.maxConnections";}
-        else {maxProp = "i2np." + style.toLowerCase(Locale.US) + ".maxConnections";} // shouldn't happen
+        if (style.equals("SSU")) {
+            maxProp = "i2np.udp.maxConnections";
+        } else if (style.equals("NTCP")) {
+            maxProp = "i2np.ntcp.maxConnections";
+        } else {
+            maxProp = "i2np." + style.toLowerCase(Locale.US) + ".maxConnections";
+        } // shouldn't happen
 
         int def = MAX_CONNECTION_FACTOR;
         char bw = ctx.router().getBandwidthClass();
@@ -280,10 +331,14 @@ public abstract class TransportImpl implements Transport {
 
         if (style.equals("SSU")) {
             def *= 3;
-            if (def > 4000) {def = 4000;}
+            if (def > 4000) {
+                def = 4000;
+            }
         } else if (style.equals("NTCP")) {
             def *= 3;
-            if (def > 4000) {def = 4000;}
+            if (def > 4000) {
+                def = 4000;
+            }
         }
 
         return ctx.getProperty(maxProp, def);
@@ -308,9 +363,13 @@ public abstract class TransportImpl implements Transport {
      * List composed of Long, each element representing a peer skew in seconds.
      * Dummy version. Transports override it.
      */
-    public List<Long> getClockSkews() {return Collections.emptyList();}
+    public List<Long> getClockSkews() {
+        return Collections.emptyList();
+    }
 
-    public List<String> getMostRecentErrorMessages() {return Collections.emptyList();}
+    public List<String> getMostRecentErrorMessages() {
+        return Collections.emptyList();
+    }
 
     /**
      * Nonblocking call to pull the next outbound message
@@ -322,7 +381,9 @@ public abstract class TransportImpl implements Transport {
      */
     protected OutNetMessage getNextMessage() {
         OutNetMessage msg = _sendPool.poll();
-        if (msg != null) {msg.beginSend();}
+        if (msg != null) {
+            msg.beginSend();
+        }
         return msg;
     }
 
@@ -371,8 +432,9 @@ public abstract class TransportImpl implements Transport {
         if (msg.getTarget() == null) return; // early exit if no target
 
         final boolean debug = _log.shouldDebug();
-        String peerHash = msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6);
-        String routerHash = _context.routerHash().toBase64().substring(0,6);
+        String peerHash =
+                msg.getTarget().getIdentity().calculateHash().toBase64().substring(0, 6);
+        String routerHash = _context.routerHash().toBase64().substring(0, 6);
         String style = getStyle();
         long now = _context.clock().now();
 
@@ -384,23 +446,42 @@ public abstract class TransportImpl implements Transport {
         }
 
         if (msToSend > 1500 && debug) {
-            _log.debug("[" + style + "] afterSend slow: " + (sendSuccessful ? "Success! " : "FAIL! ") +
-                       String.format("%n* %d byte %s[MsgID %d] to [%s] took %d ms", msg.getMessageSize(),
-                       msg.getMessageType(), msg.getMessageId(), peerHash, msToSend));
+            _log.debug("[" + style + "] afterSend slow: " + (sendSuccessful ? "Success! " : "FAIL! ")
+                    + String.format(
+                            "%n* %d byte %s[MsgID %d] to [%s] took %d ms",
+                            msg.getMessageSize(), msg.getMessageType(), msg.getMessageId(), peerHash, msToSend));
         }
 
         long lifetime = msg.getLifetime();
         if (lifetime > 3000) {
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.log(Log.DEBUG, String.format("[%s] afterSend slow: %s(Lifetime: %dms / Time taken: %dms)%n* %d byte %s [MsgID %d] from [%s] to [%s]: %s",
-                                                 style, (sendSuccessful ? "Success! " : "FAIL! "), lifetime, msToSend,
-                                                 msg.getMessageSize(), msg.getMessageType(), msg.getMessageId(),
-                                                 routerHash, peerHash, msg));
+                _log.log(
+                        Log.DEBUG,
+                        String.format(
+                                "[%s] afterSend slow: %s(Lifetime: %dms / Time taken: %dms)%n* %d byte %s [MsgID %d]"
+                                        + " from [%s] to [%s]: %s",
+                                style,
+                                (sendSuccessful ? "Success! " : "FAIL! "),
+                                lifetime,
+                                msToSend,
+                                msg.getMessageSize(),
+                                msg.getMessageType(),
+                                msg.getMessageId(),
+                                routerHash,
+                                peerHash,
+                                msg));
             }
         } else if (debug) {
-            _log.debug(String.format("[%s] afterSend: %s%n* %d byte %s [MsgID %d] from [%s] to [%s] %s",
-                      style, (sendSuccessful ? "Success! " : "FAIL! "), msg.getMessageSize(), msg.getMessageType(),
-                      msg.getMessageId(), routerHash, peerHash, msg));
+            _log.debug(String.format(
+                    "[%s] afterSend: %s%n* %d byte %s [MsgID %d] from [%s] to [%s] %s",
+                    style,
+                    (sendSuccessful ? "Success! " : "FAIL! "),
+                    msg.getMessageSize(),
+                    msg.getMessageType(),
+                    msg.getMessageId(),
+                    routerHash,
+                    peerHash,
+                    msg));
         }
 
         if (sendSuccessful) {
@@ -411,17 +492,21 @@ public abstract class TransportImpl implements Transport {
             msg.discardData();
         } else {
             if (debug) {
-                _log.debug(String.format("[%s] Failed to send %s to [%s] %s", style, msg.getMessageType(), peerHash, msg));
+                _log.debug(
+                        String.format("[%s] Failed to send %s to [%s] %s", style, msg.getMessageType(), peerHash, msg));
             }
             if (msg.getExpiration() < now) {
                 _context.statManager().addRateData("transport.expiredOnQueueLifetime", lifetime);
             }
-            if (allowRequeue && ((msg.getExpiration() <= 0) || (msg.getExpiration() > now)) && (msg.getMessage() != null)) {
+            if (allowRequeue
+                    && ((msg.getExpiration() <= 0) || (msg.getExpiration() > now))
+                    && (msg.getMessage() != null)) {
                 _context.outNetMessagePool().add(msg);
             } else {
                 if (debug) {
-                    _log.debug(String.format("[%s] Failed to send the %s (out of time) Expired: %s",
-                              style, msg.getMessageType(), Instant.ofEpochMilli(msg.getExpiration())));
+                    _log.debug(String.format(
+                            "[%s] Failed to send the %s (out of time) Expired: %s",
+                            style, msg.getMessageType(), Instant.ofEpochMilli(msg.getExpiration())));
                 }
                 addJobIfPresent(msg.getOnFailedSendJob());
                 unregisterAndDiscard(msg);
@@ -432,25 +517,39 @@ public abstract class TransportImpl implements Transport {
         long sendTime = now - msg.getSendBegin();
         long allTime = now - msg.getCreated();
         if (allTime > 5000 && debug) {
-            _log.debug(String.format("Took too long (%d ms) from preparation to afterSend (ok? %b)%n* Sent: %s after failing on %s%s",
-                      allTime, sendSuccessful, Instant.ofEpochMilli(sendTime), msg.getFailedTransports(),
-                      (sendSuccessful ? " and succeeding on " + style : "")));
+            _log.debug(String.format(
+                    "Took too long (%d ms) from preparation to afterSend (ok? %b)%n* Sent: %s after failing on %s%s",
+                    allTime,
+                    sendSuccessful,
+                    Instant.ofEpochMilli(sendTime),
+                    msg.getFailedTransports(),
+                    (sendSuccessful ? " and succeeding on " + style : "")));
         }
         if (allTime > 60000 && sendSuccessful && _log.shouldWarn()) {
-            _log.warn(String.format("Severe latency? More than a minute slow?%n* %s of [MsgID %d]\n* Send began: %s\n* Message created: %s%s",
-                    msg.getMessageType(), msg.getMessageId(), Instant.ofEpochMilli(msg.getSendBegin()), Instant.ofEpochMilli(msg.getCreated()), msg));
-            _context.messageHistory().messageProcessingError(msg.getMessageId(), msg.getMessageType(),
-                                                             "Took too long to send [" + allTime + "ms]");
+            _log.warn(String.format(
+                    "Severe latency? More than a minute slow?%n* %s of [MsgID %d]\n"
+                            + "* Send began: %s\n"
+                            + "* Message created: %s%s",
+                    msg.getMessageType(),
+                    msg.getMessageId(),
+                    Instant.ofEpochMilli(msg.getSendBegin()),
+                    Instant.ofEpochMilli(msg.getCreated()),
+                    msg));
+            _context.messageHistory()
+                    .messageProcessingError(
+                            msg.getMessageId(), msg.getMessageType(), "Took too long to send [" + allTime + "ms]");
         }
 
         if (sendSuccessful) {
             _context.statManager().addRateData("transport.sendProcessingTime", lifetime);
             if (msg.getTarget() != null && msg.getTarget().getIdentity() != null)
-                _context.profileManager().messageSent(msg.getTarget().getIdentity().getHash(), style, sendTime, msg.getMessageSize());
+                _context.profileManager()
+                        .messageSent(msg.getTarget().getIdentity().getHash(), style, sendTime, msg.getMessageSize());
             _context.statManager().addRateData("transport.sendMessageSize", msg.getMessageSize(), sendTime);
         } else {
             if (msg.getTarget() != null && msg.getTarget().getIdentity() != null)
-                _context.profileManager().messageFailed(msg.getTarget().getIdentity().getHash(), style);
+                _context.profileManager()
+                        .messageFailed(msg.getTarget().getIdentity().getHash(), style);
             _context.statManager().addRateData("transport.sendMessageFailureLifetime", lifetime);
         }
     }
@@ -489,9 +588,12 @@ public abstract class TransportImpl implements Transport {
             }
             return;
         }
-        try {_sendPool.put(msg);}
-        catch (InterruptedException ie) {
-            if (_log.shouldError()) {_log.error("Interrupted during send " + msg);}
+        try {
+            _sendPool.put(msg);
+        } catch (InterruptedException ie) {
+            if (_log.shouldError()) {
+                _log.error("Interrupted during send " + msg);
+            }
             return;
         }
         outboundMessageReady();
@@ -512,20 +614,36 @@ public abstract class TransportImpl implements Transport {
      * @param remoteIdent may be null
      * @param remoteIdentHash may be null, calculated from remoteIdent if null
      */
-    public void messageReceived(I2NPMessage inMsg, RouterIdentity remoteIdent, Hash remoteIdentHash, long msToReceive, int bytesReceived) {
+    public void messageReceived(
+            I2NPMessage inMsg, RouterIdentity remoteIdent, Hash remoteIdentHash, long msToReceive, int bytesReceived) {
         int level = Log.DEBUG;
         if (_log.shouldLog(level)) {
             StringBuilder buf = new StringBuilder(128);
-            buf.append("Received ").append(inMsg.getClass().getSimpleName()).append(" [MsgID ").append(inMsg.getUniqueId()).append("]")
-               .append(" (").append(bytesReceived).append(" bytes)").append(" in ").append(msToReceive).append("ms")
-               .append(" from [");
-            if (remoteIdentHash != null) {buf.append(remoteIdentHash.toBase64().substring(0,6)).append("]");}
-            else if (remoteIdent != null) {buf.append(remoteIdent.getHash().toBase64().substring(0,6)).append("]");}
-            else {buf.append("unknown]");}
+            buf.append("Received ")
+                    .append(inMsg.getClass().getSimpleName())
+                    .append(" [MsgID ")
+                    .append(inMsg.getUniqueId())
+                    .append("]")
+                    .append(" (")
+                    .append(bytesReceived)
+                    .append(" bytes)")
+                    .append(" in ")
+                    .append(msToReceive)
+                    .append("ms")
+                    .append(" from [");
+            if (remoteIdentHash != null) {
+                buf.append(remoteIdentHash.toBase64().substring(0, 6)).append("]");
+            } else if (remoteIdent != null) {
+                buf.append(remoteIdent.getHash().toBase64().substring(0, 6)).append("]");
+            } else {
+                buf.append("unknown]");
+            }
             _log.log(level, buf.toString());
         }
 
-        if (remoteIdent != null) {remoteIdentHash = remoteIdent.getHash();}
+        if (remoteIdent != null) {
+            remoteIdentHash = remoteIdent.getHash();
+        }
         if (remoteIdentHash != null) {
             _context.profileManager().messageReceived(remoteIdentHash, getStyle(), msToReceive, bytesReceived);
             _context.statManager().addRateData("transport.receiveMessageSize", bytesReceived, msToReceive);
@@ -536,14 +654,16 @@ public abstract class TransportImpl implements Transport {
             _context.statManager().addRateData("transport.receiveMessageTimeSlow", msToReceive);
         }
 
-        if (_listener != null) {_listener.messageReceived(inMsg, remoteIdent, remoteIdentHash);}
-        else if (_log.shouldError()) {
+        if (_listener != null) {
+            _listener.messageReceived(inMsg, remoteIdent, remoteIdentHash);
+        } else if (_log.shouldError()) {
             _log.error("Null listener! this = " + toString(), new Exception("Null listener"));
         }
     }
 
     /** Do we increase the advertised cost when approaching conn limits? */
     protected static final boolean ADJUST_COST = true;
+
     /** TODO change to 2 */
     protected static final int CONGESTION_COST_ADJUSTMENT = 1;
 
@@ -572,7 +692,9 @@ public abstract class TransportImpl implements Transport {
     public RouterAddress getCurrentAddress(boolean ipv6) {
         synchronized (_currentAddresses) {
             for (RouterAddress ra : _currentAddresses) {
-                if (ipv6 == TransportUtil.isIPv6(ra)) {return ra;}
+                if (ipv6 == TransportUtil.isIPv6(ra)) {
+                    return ra;
+                }
             }
         }
         return null;
@@ -583,7 +705,9 @@ public abstract class TransportImpl implements Transport {
      *  @since IPv6
      */
     public boolean hasCurrentAddress() {
-        synchronized (_currentAddresses) {return !_currentAddresses.isEmpty();}
+        synchronized (_currentAddresses) {
+            return !_currentAddresses.isEmpty();
+        }
     }
 
     /**
@@ -593,7 +717,9 @@ public abstract class TransportImpl implements Transport {
      * @since 0.7.12
      */
     public List<RouterAddress> updateAddress() {
-        synchronized (_currentAddresses) {return new ArrayList<RouterAddress>(_currentAddresses);}
+        synchronized (_currentAddresses) {
+            return new ArrayList<RouterAddress>(_currentAddresses);
+        }
     }
 
     /**
@@ -612,16 +738,20 @@ public abstract class TransportImpl implements Transport {
             if (_log.shouldWarn()) {
                 _log.warn("Replacing  IPv" + (isIPv6 ? '6' : '4') + " address with " + address);
             }
-        } else {isIPv6 = false;}
+        } else {
+            isIPv6 = false;
+        }
         int sz;
         synchronized (_currentAddresses) {
             if (address == null) {
                 _currentAddresses.clear();
                 sz = 0;
             } else {
-                for (Iterator<RouterAddress> iter = _currentAddresses.iterator(); iter.hasNext();) {
+                for (Iterator<RouterAddress> iter = _currentAddresses.iterator(); iter.hasNext(); ) {
                     RouterAddress ra = iter.next();
-                    if (isIPv6 == TransportUtil.isIPv6(ra)) {iter.remove();}
+                    if (isIPv6 == TransportUtil.isIPv6(ra)) {
+                        iter.remove();
+                    }
                 }
                 _currentAddresses.add(address);
                 sz = _currentAddresses.size();
@@ -630,7 +760,9 @@ public abstract class TransportImpl implements Transport {
         if (_log.shouldWarn()) {
             _log.warn("[" + getStyle() + "] now has " + sz + " addresses");
         }
-        if (_listener != null) {_listener.transportAddressChanged();}
+        if (_listener != null) {
+            _listener.transportAddressChanged();
+        }
     }
 
     /**
@@ -642,7 +774,9 @@ public abstract class TransportImpl implements Transport {
      *  @since 0.9.20
      */
     protected void removeAddress(RouterAddress address) {
-        if (_log.shouldWarn()) {_log.warn("Removing exisiting address\n* " + address);}
+        if (_log.shouldWarn()) {
+            _log.warn("Removing exisiting address\n* " + address);
+        }
         boolean changed;
         int sz;
         synchronized (_currentAddresses) {
@@ -650,9 +784,15 @@ public abstract class TransportImpl implements Transport {
             sz = _currentAddresses.size();
         }
         if (changed) {
-            if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] now has " + sz + " addresses");}
-            if (_listener != null) {_listener.transportAddressChanged();}
-        } else if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] No addresses removed");}
+            if (_log.shouldWarn()) {
+                _log.warn("[" + getStyle() + "] now has " + sz + " addresses");
+            }
+            if (_listener != null) {
+                _listener.transportAddressChanged();
+            }
+        } else if (_log.shouldWarn()) {
+            _log.warn("[" + getStyle() + "] No addresses removed");
+        }
     }
 
     /**
@@ -664,11 +804,13 @@ public abstract class TransportImpl implements Transport {
      *  @since 0.9.20
      */
     protected void removeAddress(boolean ipv6) {
-        if (_log.shouldWarn()) {_log.warn("Removing addresses, ipv6? " + ipv6);}
+        if (_log.shouldWarn()) {
+            _log.warn("Removing addresses, ipv6? " + ipv6);
+        }
         boolean changed = false;
         int sz;
         synchronized (_currentAddresses) {
-            for (Iterator<RouterAddress> iter = _currentAddresses.iterator(); iter.hasNext();) {
+            for (Iterator<RouterAddress> iter = _currentAddresses.iterator(); iter.hasNext(); ) {
                 RouterAddress ra = iter.next();
                 if (ipv6 == TransportUtil.isIPv6(ra)) {
                     iter.remove();
@@ -678,9 +820,15 @@ public abstract class TransportImpl implements Transport {
             sz = _currentAddresses.size();
         }
         if (changed) {
-            if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] now has " + sz + " addresses");}
-            if (_listener != null) {_listener.transportAddressChanged();}
-        } else if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] No addresses removed");}
+            if (_log.shouldWarn()) {
+                _log.warn("[" + getStyle() + "] now has " + sz + " addresses");
+            }
+            if (_listener != null) {
+                _listener.transportAddressChanged();
+            }
+        } else if (_log.shouldWarn()) {
+            _log.warn("[" + getStyle() + "] No addresses removed");
+        }
     }
 
     /**
@@ -712,10 +860,8 @@ public abstract class TransportImpl implements Transport {
     public List<RouterAddress> getTargetAddresses(RouterInfo target) {
         List<RouterAddress> rv;
         String alt = getAltStyle();
-        if (alt != null)
-            rv = target.getTargetAddresses(getStyle(), alt);
-        else
-            rv = target.getTargetAddresses(getStyle());
+        if (alt != null) rv = target.getTargetAddresses(getStyle(), alt);
+        else rv = target.getTargetAddresses(getStyle());
         if (rv.size() > 1) {
             // Shuffle so everybody doesn't use the first one
             Collections.shuffle(rv, _context.random());
@@ -723,20 +869,25 @@ public abstract class TransportImpl implements Transport {
             int adj;
             switch (config) {
                 case IPV6_DISABLED:
-                    adj = 10; break;
+                    adj = 10;
+                    break;
 
                 case IPV6_NOT_PREFERRED:
-                    adj = 1; break;
+                    adj = 1;
+                    break;
 
                 default:
                 case IPV6_ENABLED:
-                    adj = 0; break;
+                    adj = 0;
+                    break;
 
                 case IPV6_PREFERRED:
-                    adj = -1; break;
+                    adj = -1;
+                    break;
 
                 case IPV6_ONLY:
-                    adj = -10; break;
+                    adj = -10;
+                    break;
             }
             Collections.sort(rv, new AddrComparator(adj));
         }
@@ -750,18 +901,32 @@ public abstract class TransportImpl implements Transport {
      */
     private static class AddrComparator implements Comparator<RouterAddress>, Serializable {
         private final int adj;
-        public AddrComparator(int ipv6Adjustment) {adj = ipv6Adjustment;}
+
+        public AddrComparator(int ipv6Adjustment) {
+            adj = ipv6Adjustment;
+        }
+
         public int compare(RouterAddress l, RouterAddress r) {
             int lc = l.getCost();
             int rc = r.getCost();
             byte[] lip = l.getIP();
             byte[] rip = r.getIP();
-            if (lip == null) {lc += 20;}
-            else if (lip.length == 16) {lc += adj;}
-            if (rip == null) {rc += 20;}
-            else if (rip.length == 16) {rc += adj;}
-            if (lc > rc) {return 1;}
-            if (lc < rc) {return -1;}
+            if (lip == null) {
+                lc += 20;
+            } else if (lip.length == 16) {
+                lc += adj;
+            }
+            if (rip == null) {
+                rc += 20;
+            } else if (rip.length == 16) {
+                rc += adj;
+            }
+            if (lc > rc) {
+                return 1;
+            }
+            if (lc < rc) {
+                return -1;
+            }
             return 0;
         }
     }
@@ -821,13 +986,21 @@ public abstract class TransportImpl implements Transport {
      *
      * @return port or -1 for none or 0 for any
      */
-    public int getRequestedPort() {return -1;}
+    public int getRequestedPort() {
+        return -1;
+    }
 
     /** Who to notify on message availability */
-    public void setListener(TransportEventListener listener) {_listener = listener;}
+    public void setListener(TransportEventListener listener) {
+        _listener = listener;
+    }
+
     /** Make this stuff pretty */
     public void renderStatusHTML(Writer out) throws IOException {}
-    public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {renderStatusHTML(out);}
+
+    public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {
+        renderStatusHTML(out);
+    }
 
     /**
      *  Previously returned short, now enum as of 0.9.20
@@ -858,8 +1031,13 @@ public abstract class TransportImpl implements Transport {
         return TransportUtil.isIPv6Firewalled(_context, getStyle());
     }
 
-    public boolean isBacklogged(Hash peer) {return false;}
-    public boolean isEstablished(Hash peer) {return false;}
+    public boolean isBacklogged(Hash peer) {
+        return false;
+    }
+
+    public boolean isEstablished(Hash peer) {
+        return false;
+    }
 
     /**
      * Tell the transport that we may disconnect from this peer.
@@ -870,7 +1048,9 @@ public abstract class TransportImpl implements Transport {
     public void mayDisconnect(Hash peer) {}
 
     public boolean isUnreachable(Hash peer) {
-        if (peer == _lastReachablePeer) {return false;}
+        if (peer == _lastReachablePeer) {
+            return false;
+        }
         boolean rv;
         Long when = _unreachableEntries.get(peer);
         if ((rv = when != null)) {
@@ -880,17 +1060,23 @@ public abstract class TransportImpl implements Transport {
                 _lastReachablePeer = peer;
                 _unreachableEntries.remove(peer);
             }
-        } else {_lastReachablePeer = peer;}
+        } else {
+            _lastReachablePeer = peer;
+        }
         return rv;
     }
 
     /** called when we can't reach a peer */
     public void markUnreachable(Hash peer) {
         Status status = _context.commSystem().getStatus();
-        if (status == Status.DISCONNECTED || status == Status.HOSED) {return;}
+        if (status == Status.DISCONNECTED || status == Status.HOSED) {
+            return;
+        }
         Long now = Long.valueOf(_context.clock().now());
         _unreachableEntries.put(peer, now); // This isn't very useful since it is cleared when they contact us
-        if (peer == _lastReachablePeer) {_lastReachablePeer = null;}
+        if (peer == _lastReachablePeer) {
+            _lastReachablePeer = null;
+        }
         markWasUnreachable(peer, true); // This is not cleared when they contact us
     }
 
@@ -907,28 +1093,28 @@ public abstract class TransportImpl implements Transport {
          */
         if (_context.banlist().isBanlistedForever(peer)) {
             if (_log.shouldWarn()) {
-                _log.warn("Unbanning [" + peer.toBase64().substring(0,6) + "] -> Peer is now reachable");
+                _log.warn("Unbanning [" + peer.toBase64().substring(0, 6) + "] -> Peer is now reachable");
             }
             _context.banlist().unbanlistRouter(peer);
         }
         _unreachableEntries.remove(peer);
-        if (!isInbound) {markWasUnreachable(peer, false);}
+        if (!isInbound) {
+            markWasUnreachable(peer, false);
+        }
     }
 
     private class CleanupUnreachable implements SimpleTimer.TimedEvent {
         public void timeReached() {
             long now = _context.clock().now();
             long limit = now - UNREACHABLE_PERIOD;
-            for (Iterator<Long> iter = _unreachableEntries.values().iterator(); iter.hasNext();) {
+            for (Iterator<Long> iter = _unreachableEntries.values().iterator(); iter.hasNext(); ) {
                 Long when = iter.next();
-                if (when.longValue() < limit)
-                    iter.remove();
+                if (when.longValue() < limit) iter.remove();
             }
             limit = now - WAS_UNREACHABLE_PERIOD;
-            for (Iterator<Long> iter = _wasUnreachableEntries.values().iterator(); iter.hasNext();) {
+            for (Iterator<Long> iter = _wasUnreachableEntries.values().iterator(); iter.hasNext(); ) {
                 Long when = iter.next();
-                if (when.longValue() < limit)
-                    iter.remove();
+                if (when.longValue() < limit) iter.remove();
             }
         }
     }
@@ -944,7 +1130,9 @@ public abstract class TransportImpl implements Transport {
             if (when.longValue() + WAS_UNREACHABLE_PERIOD < now) {
                 _unreachableEntries.remove(peer);
                 return false;
-            } else {return true;}
+            } else {
+                return true;
+            }
         }
         return false;
     }
@@ -956,9 +1144,12 @@ public abstract class TransportImpl implements Transport {
         if (yes) {
             Long now = Long.valueOf(_context.clock().now());
             _wasUnreachableEntries.put(peer, now);
-        } else {_wasUnreachableEntries.remove(peer);}
+        } else {
+            _wasUnreachableEntries.remove(peer);
+        }
         if (_log.shouldDebug()) {
-            _log.debug("[" +  this.getStyle() + "] Adding [" + peer.toBase64().substring(0,6) +  "] to Unreachable list");
+            _log.debug(
+                    "[" + this.getStyle() + "] Adding [" + peer.toBase64().substring(0, 6) + "] to Unreachable list");
         }
     }
 
@@ -967,7 +1158,9 @@ public abstract class TransportImpl implements Transport {
      *
      * @since 0.9.28 moved from UDPTransport
      */
-    public final boolean allowLocal() {return _context.getBooleanProperty("i2np.allowLocal");}
+    public final boolean allowLocal() {
+        return _context.getBooleanProperty("i2np.allowLocal");
+    }
 
     /**
      * IP of the peer from the last connection (in or out, any transport).
@@ -976,8 +1169,12 @@ public abstract class TransportImpl implements Transport {
      */
     public void setIP(Hash peer, byte[] ip) {
         byte[] old;
-        synchronized (_IPMap) {old = _IPMap.put(peer, ip);}
-        if (!DataHelper.eq(old, ip)) {_context.commSystem().queueLookup(ip);}
+        synchronized (_IPMap) {
+            old = _IPMap.put(peer, ip);
+        }
+        if (!DataHelper.eq(old, ip)) {
+            _context.commSystem().queueLookup(ip);
+        }
     }
 
     /**
@@ -986,7 +1183,9 @@ public abstract class TransportImpl implements Transport {
      * @return IPv4 or IPv6 or null
      */
     public static byte[] getIP(Hash peer) {
-        synchronized (_IPMap) {return _IPMap.get(peer);}
+        synchronized (_IPMap) {
+            return _IPMap.get(peer);
+        }
     }
 
     /**
@@ -994,13 +1193,17 @@ public abstract class TransportImpl implements Transport {
      * @return null, override to add support
      * @since 0.9.35
      */
-    public String getAltStyle() {return null;}
+    public String getAltStyle() {
+        return null;
+    }
 
     /**
      *  @since 0.9.3
      */
     static void clearCaches() {
-        synchronized (_IPMap) {_IPMap.clear();}
+        synchronized (_IPMap) {
+            _IPMap.clear();
+        }
     }
 
     /**
@@ -1017,9 +1220,8 @@ public abstract class TransportImpl implements Transport {
      */
     protected boolean isPubliclyRoutable(byte addr[]) {
         TransportUtil.IPv6Config cfg = getIPv6Config();
-        return TransportUtil.isPubliclyRoutable(addr,
-                                                cfg != TransportUtil.IPv6Config.IPV6_ONLY,
-                                                cfg != TransportUtil.IPv6Config.IPV6_DISABLED);
+        return TransportUtil.isPubliclyRoutable(
+                addr, cfg != TransportUtil.IPv6Config.IPV6_ONLY, cfg != TransportUtil.IPv6Config.IPV6_DISABLED);
     }
 
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
@@ -1028,17 +1230,23 @@ public abstract class TransportImpl implements Transport {
      *  Translate
      *  @since 0.9.8 moved from transports
      */
-    protected String _t(String s) {return Translate.getString(s, _context, BUNDLE_NAME);}
+    protected String _t(String s) {
+        return Translate.getString(s, _context, BUNDLE_NAME);
+    }
 
     /**
      *  Translate
      *  @since 0.9.8 moved from transports
      */
-    protected String _t(String s, Object o) {return Translate.getString(s, o, _context, BUNDLE_NAME);}
+    protected String _t(String s, Object o) {
+        return Translate.getString(s, o, _context, BUNDLE_NAME);
+    }
 
     /**
      *  Translate
      *  @since 0.9.8
      */
-    protected String ngettext(String s, String p, int n) {return Translate.getString(n, s, p, _context, BUNDLE_NAME);}
+    protected String ngettext(String s, String p, int n) {
+        return Translate.getString(n, s, p, _context, BUNDLE_NAME);
+    }
 }

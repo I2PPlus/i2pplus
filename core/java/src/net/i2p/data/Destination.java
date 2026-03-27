@@ -9,11 +9,12 @@ package net.i2p.data;
  *
  */
 
+import net.i2p.util.LHMCache;
+import net.i2p.util.SystemVersion;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
-import net.i2p.util.LHMCache;
-import net.i2p.util.SystemVersion;
 
 /**
  * Defines an endpoint in the I2P network that can receive messages.
@@ -95,14 +96,15 @@ public class Destination extends KeysAndCert {
 
     private String _cachedB64;
 
-    //private static final boolean STATS = true;
+    // private static final boolean STATS = true;
     private static final int CACHE_SIZE;
     private static final int MIN_CACHE_SIZE = 32;
     private static final int MAX_CACHE_SIZE = 512;
+
     static {
         long maxMemory = SystemVersion.getMaxMemory();
-        CACHE_SIZE = (int) Math.min(MAX_CACHE_SIZE, Math.max(MIN_CACHE_SIZE, maxMemory / 512*1024));
-        //if (STATS)
+        CACHE_SIZE = (int) Math.min(MAX_CACHE_SIZE, Math.max(MIN_CACHE_SIZE, maxMemory / 512 * 1024));
+        // if (STATS)
         //    I2PAppContext.getGlobalContext().statManager().createRateStat("DestCache", "Hit rate", "Router", new long[] { RateConstants.TEN_MINUTES });
     }
 
@@ -133,13 +135,12 @@ public class Destination extends KeysAndCert {
         Destination rv;
         synchronized (_cache) {
             rv = _cache.get(sk);
-            if (rv != null && rv.getPublicKey().equals(pk) && rv.getCertificate().equals(c) &&
-                DataHelper.eq(rv.getPadding(), padding)) {
-                //if (STATS)
+            if (rv != null && rv.getPublicKey().equals(pk) && rv.getCertificate().equals(c) && DataHelper.eq(rv.getPadding(), padding)) {
+                // if (STATS)
                 //    I2PAppContext.getGlobalContext().statManager().addRateData("DestCache", 1);
                 return rv;
             }
-            //if (STATS)
+            // if (STATS)
             //    I2PAppContext.getGlobalContext().statManager().addRateData("DestCache", 0);
             rv = new Destination(pk, sk, c, padding);
             _cache.put(sk, rv);
@@ -163,8 +164,7 @@ public class Destination extends KeysAndCert {
     private Destination(PublicKey pk, SigningPublicKey sk, Certificate c, byte[] padding) {
         if (padding != null) {
             int sz = pk.length() + sk.length() + padding.length;
-            if (sz != 384)
-                throw new IllegalArgumentException("Bad total length " + sz);
+            if (sz != 384) throw new IllegalArgumentException("Bad total length " + sz);
         }
         _publicKey = pk;
         _signingKey = sk;
@@ -190,19 +190,17 @@ public class Destination extends KeysAndCert {
     }
 
     /**
-      * deprecated was used only by Packet.java in streaming, now unused
-      * Warning - used by i2p-bote. Does NOT support alternate key types. DSA-SHA1 only.
-      *
-      * @deprecated This method does not support alternate key types.
-      * @throws IllegalStateException if data already set
-      */
+     * deprecated was used only by Packet.java in streaming, now unused
+     * Warning - used by i2p-bote. Does NOT support alternate key types. DSA-SHA1 only.
+     *
+     * @deprecated This method does not support alternate key types.
+     * @throws IllegalStateException if data already set
+     */
     @Deprecated
     public int readBytes(byte source[], int offset) throws DataFormatException {
         if (source == null) throw new DataFormatException("Null source");
-        if (source.length <= offset + PublicKey.KEYSIZE_BYTES + SigningPublicKey.KEYSIZE_BYTES)
-            throw new DataFormatException("Not enough data (len=" + source.length + " off=" + offset + ")");
-        if (_publicKey != null || _signingKey != null || _certificate != null)
-            throw new IllegalStateException();
+        if (source.length <= offset + PublicKey.KEYSIZE_BYTES + SigningPublicKey.KEYSIZE_BYTES) throw new DataFormatException("Not enough data (len=" + source.length + " off=" + offset + ")");
+        if (_publicKey != null || _signingKey != null || _certificate != null) throw new IllegalStateException();
         int cur = offset;
 
         _publicKey = PublicKey.create(source, cur);
@@ -226,8 +224,7 @@ public class Destination extends KeysAndCert {
                 rv += 32 * _paddingBlocks;
             } else {
                 byte[] padding = getPadding();
-                if (padding != null)
-                    rv += padding.length;
+                if (padding != null) rv += padding.length;
             }
         } else {
             rv += _certificate.size();
@@ -242,8 +239,7 @@ public class Destination extends KeysAndCert {
      */
     @Override
     public String toBase64() {
-        if (_cachedB64 == null)
-            _cachedB64 = super.toBase64();
+        if (_cachedB64 == null) _cachedB64 = super.toBase64();
         return _cachedB64;
     }
 

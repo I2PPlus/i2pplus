@@ -1,8 +1,9 @@
 package net.i2p.router.web;
 
+import net.i2p.util.FileUtil;
+
 import java.io.File;
 import java.util.Locale;
-import net.i2p.util.FileUtil;
 
 /**
  * Helper for including static content files in router console pages.
@@ -17,31 +18,35 @@ public class ContentHelper extends HelperBase {
     /**
      * Caution, use absolute paths only, do not assume files are in CWD
      */
-    public void setPage(String page) { _page = page; }
+    public void setPage(String page) {
+        _page = page;
+    }
+
     public void setStartAtBeginning(String moo) {
         _startAtBeginning = Boolean.parseBoolean(moo);
     }
-    public void setLang(String l) {
-/*****
-        if ((_lang == null || !_lang.equals(l)) && (l != null)) {
-            //Set language for router console
-            _lang = l;
- TODO - Temporary for 0.8.4
-        Needed for desktopgui. But there's no nonce protection.
-        Move the following to CSSHelper setLang(), or disable completely,
-        See comments in CSSHelper
-            if (_context == null) {
-                setContextId(null);
-            }
 
-            if (_context.getBooleanProperty("desktopgui.enabled")) {
-                //Set language persistently throughout I2P
-                _context.router().setConfigSetting(Messages.PROP_LANG, _lang);
-                _context.router().saveConfig();
-                _context.setProperty(Messages.PROP_LANG, _lang);
-            }
-        }
-*****/
+    public void setLang(String l) {
+        /*****
+         * if ((_lang == null || !_lang.equals(l)) && (l != null)) {
+         * //Set language for router console
+         * _lang = l;
+         * TODO - Temporary for 0.8.4
+         * Needed for desktopgui. But there's no nonce protection.
+         * Move the following to CSSHelper setLang(), or disable completely,
+         * See comments in CSSHelper
+         * if (_context == null) {
+         * setContextId(null);
+         * }
+         *
+         * if (_context.getBooleanProperty("desktopgui.enabled")) {
+         * //Set language persistently throughout I2P
+         * _context.router().setConfigSetting(Messages.PROP_LANG, _lang);
+         * _context.router().saveConfig();
+         * _context.setProperty(Messages.PROP_LANG, _lang);
+         * }
+         * }
+         *****/
     }
 
     public void setMaxLines(String lines) {
@@ -55,27 +60,30 @@ public class ContentHelper extends HelperBase {
             _maxLines = -1;
         }
     }
+
     public String getContent() {
         String str = FileUtil.readTextFile(filename(), _maxLines, _startAtBeginning);
-        if (str == null)
-            return "";
-        else
-            return str;
+        if (str == null) return "";
+        else return str;
     }
+
     public String getTextContent() {
         String str = FileUtil.readTextFile(filename(), _maxLines, _startAtBeginning);
-        if (str == null)
-            return "";
+        if (str == null) return "";
         else {
-            StringBuilder sb = new StringBuilder(str.length()+11);
+            StringBuilder sb = new StringBuilder(str.length() + 11);
             sb.append("<pre>");
-            for (int i=0; i < str.length(); i++) {
+            for (int i = 0; i < str.length(); i++) {
                 char c = str.charAt(i);
                 switch (str.charAt(i)) {
-                    case '<': sb.append("&lt;"); break;
-                    case '>': sb.append("&gt;"); break;
-                    case '&': sb.append("&amp;"); break;
-                    default: sb.append(c); break;
+                    case '<': sb.append("&lt;");
+                        break;
+                    case '>': sb.append("&gt;");
+                        break;
+                    case '&': sb.append("&amp;");
+                        break;
+                    default: sb.append(c);
+                        break;
                 }
             }
             return sb.append("</pre>").toString();
@@ -89,24 +97,19 @@ public class ContentHelper extends HelperBase {
      */
     private String filename() {
         int lastdot = _page.lastIndexOf('.');
-        if (lastdot <= 0)
-            return _page;
+        if (lastdot <= 0) return _page;
         String lang = _lang;
         if (lang == null || lang.length() <= 0) {
-            if (_context != null)
-                lang = _context.getProperty(Messages.PROP_LANG);
+            if (_context != null) lang = _context.getProperty(Messages.PROP_LANG);
             if (lang == null || lang.length() <= 0) {
                 lang = Locale.getDefault().getLanguage();
-                if (lang == null || lang.length() <= 0)
-                    return _page;
+                if (lang == null || lang.length() <= 0) return _page;
             }
         }
-        if (lang.equals("en"))
-            return _page;
+        if (lang.equals("en")) return _page;
         String newname = _page.substring(0, lastdot) + '_' + lang + _page.substring(lastdot);
         File newfile = new File(newname);
-        if (newfile.exists())
-            return newname;
+        if (newfile.exists()) return newname;
         return _page;
     }
 }

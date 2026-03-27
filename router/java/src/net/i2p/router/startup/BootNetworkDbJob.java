@@ -1,4 +1,5 @@
 package net.i2p.router.startup;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -19,7 +20,9 @@ class BootNetworkDbJob extends JobImpl {
     }
 
     @Override
-    public String getName() { return "Boot NetDb"; }
+    public String getName() {
+        return "Boot NetDb";
+    }
 
     @Override
     public void runJob() {

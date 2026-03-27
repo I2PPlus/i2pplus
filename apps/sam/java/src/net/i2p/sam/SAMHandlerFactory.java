@@ -1,4 +1,5 @@
 package net.i2p.sam;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
@@ -8,14 +9,15 @@ package net.i2p.sam;
  *
  */
 
+import net.i2p.I2PAppContext;
+import net.i2p.util.Log;
+import net.i2p.util.VersionComparator;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.nio.channels.SocketChannel;
 import java.util.Properties;
-import net.i2p.I2PAppContext;
-import net.i2p.util.Log;
-import net.i2p.util.VersionComparator;
 
 /**
  * SAM handler factory class.
@@ -34,8 +36,7 @@ class SAMHandlerFactory {
      * @throws SAMException if the connection handshake (HELLO message) was malformed
      * @return A SAM protocol handler, or null if the client closed before the handshake
      */
-    public static SAMHandler createSAMHandler(SocketChannel s, Properties i2cpProps,
-                                              SAMBridge parent) throws SAMException {
+    public static SAMHandler createSAMHandler(SocketChannel s, Properties i2cpProps, SAMBridge parent) throws SAMException {
         String line = null;
         Log log = I2PAppContext.getGlobalContext().logManager().getLog(SAMHandlerFactory.class);
         SAMSecureSessionInterface secureSession = parent.secureSession();
@@ -48,32 +49,43 @@ class SAMHandlerFactory {
             sock.setSoTimeout(0);
             line = buf.toString();
         } catch (SocketTimeoutException e) {
-            if (log.shouldWarn()) {log.warn("Timeout (75s) waiting for \'HELLO VERSION\' from remote client");}
-            //throw new SAMException("Timeout (60s) waiting for HELLO VERSION" + "\n* Error: " + e.getMessage());
+            if (log.shouldWarn()) {
+                log.warn("Timeout (75s) waiting for \'HELLO VERSION\' from remote client");
+            }
+            // throw new SAMException("Timeout (60s) waiting for HELLO VERSION" + "\n* Error: " + e.getMessage());
         } catch (IOException e) {
-            if (log.shouldWarn()) {log.warn("IO Error reading from socket" + " -> " + e.getMessage());}
-            //throw new SAMException("Error reading from socket" + "\n* Error: " + e.getMessage());
+            if (log.shouldWarn()) {
+                log.warn("IO Error reading from socket" + " -> " + e.getMessage());
+            }
+            // throw new SAMException("Error reading from socket" + "\n* Error: " + e.getMessage());
         } catch (RuntimeException e) {
-            if (log.shouldError()) {log.error("Unexpected runtime error in SAM protocol handler -> " + e.getMessage());}
-            //throw new SAMException("Unexpected error" + "\n* Error: " + e.getMessage());
+            if (log.shouldError()) {
+                log.error("Unexpected runtime error in SAM protocol handler -> " + e.getMessage());
+            }
+            // throw new SAMException("Unexpected error" + "\n* Error: " + e.getMessage());
         }
-        if (log.shouldInfo() && line != null) {log.info("New message received: [" + line + ']');}
+        if (log.shouldInfo() && line != null) {
+            log.info("New message received: [" + line + ']');
+        }
 
         // Message format: HELLO VERSION [MIN=v1] [MAX=v2]
         Properties props = SAMUtils.parseParams(line);
-        if (!"HELLO".equals(props.remove(SAMUtils.COMMAND)) ||
-            !"VERSION".equals(props.remove(SAMUtils.OPCODE))) {
+        if (!"HELLO".equals(props.remove(SAMUtils.COMMAND)) || !"VERSION".equals(props.remove(SAMUtils.OPCODE))) {
             if (log.shouldWarn()) {
                 log.warn("Malformed SAM handshake received from remote client -> Must start with \'HELLO VERSION\'");
             }
-            //throw new SAMException("Must start with HELLO VERSION");
+            // throw new SAMException("Must start with HELLO VERSION");
         }
 
         String minVer = props.getProperty("MIN");
-        if (minVer == null) {minVer = "1";} // MIN optional as of 0.9.14
+        if (minVer == null) {
+            minVer = "1";
+        } // MIN optional as of 0.9.14
 
         String maxVer = props.getProperty("MAX");
-        if (maxVer == null) {maxVer = "99.99";} // MAX optional as of 0.9.14
+        if (maxVer == null) {
+            maxVer = "99.99";
+        } // MAX optional as of 0.9.14
 
         String ver = chooseBestVersion(minVer, maxVer);
 
@@ -85,8 +97,10 @@ class SAMHandlerFactory {
         if (secureSession != null) {
             boolean approval = secureSession.approveOrDenySecureSession(i2cpProps, props);
             if (!approval) {
-                if (log.shouldWarn()) {log.warn("SAM connection cancelled by user request");}
-                //throw new SAMException("SAM connection cancelled by user request");
+                if (log.shouldWarn()) {
+                    log.warn("SAM connection cancelled by user request");
+                }
+                // throw new SAMException("SAM connection cancelled by user request");
             }
         }
 
@@ -102,17 +116,13 @@ class SAMHandlerFactory {
 
         try {
             switch (verMajor) {
-                case 1:
-                    handler = new SAMv1Handler(s, verMajor, verMinor, i2cpProps, parent);
+                case 1: handler = new SAMv1Handler(s, verMajor, verMinor, i2cpProps, parent);
                     break;
-                case 2:
-                    handler = new SAMv2Handler(s, verMajor, verMinor, i2cpProps, parent);
+                case 2: handler = new SAMv2Handler(s, verMajor, verMinor, i2cpProps, parent);
                     break;
-                case 3:
-                    handler = new SAMv3Handler(s, verMajor, verMinor, i2cpProps, parent);
+                case 3: handler = new SAMv3Handler(s, verMajor, verMinor, i2cpProps, parent);
                     break;
-                default:
-                    log.error("BUG! Trying to initialize the wrong SAM version!");
+                default: log.error("BUG! Trying to initialize the wrong SAM version!");
                     throw new SAMException("BUG! (in handler instantiation)");
             }
         } catch (IOException e) {
@@ -126,47 +136,48 @@ class SAMHandlerFactory {
      * @return "x.y" the best version we can use, or null on failure
      */
     private static String chooseBestVersion(String minVer, String maxVer) {
-        if (VersionComparator.comp(VERSION, minVer) >= 0 &&
-            VersionComparator.comp(VERSION, maxVer) <= 0)
-            return VERSION;
-        if (VersionComparator.comp("3.2", minVer) >= 0 &&
-            VersionComparator.comp("3.2", maxVer) <= 0)
-            return "3.2";
-        if (VersionComparator.comp("3.1", minVer) >= 0 &&
-            VersionComparator.comp("3.1", maxVer) <= 0)
-            return "3.1";
+        if (VersionComparator.comp(VERSION, minVer) >= 0 && VersionComparator.comp(VERSION, maxVer) <= 0) return VERSION;
+        if (VersionComparator.comp("3.2", minVer) >= 0 && VersionComparator.comp("3.2", maxVer) <= 0) return "3.2";
+        if (VersionComparator.comp("3.1", minVer) >= 0 && VersionComparator.comp("3.1", maxVer) <= 0) return "3.1";
         // in VersionComparator, "3" < "3.0" so
         // use comparisons carefully
-        if (VersionComparator.comp("3.0", minVer) >= 0 &&
-            VersionComparator.comp("3", maxVer) <= 0)
-            return "3.0";
-        if (VersionComparator.comp("2.0", minVer) >= 0 &&
-            VersionComparator.comp("2", maxVer) <= 0)
-            return "2.0";
-        if (VersionComparator.comp("1.0", minVer) >= 0 &&
-            VersionComparator.comp("1", maxVer) <= 0)
-            return "1.0";
+        if (VersionComparator.comp("3.0", minVer) >= 0 && VersionComparator.comp("3", maxVer) <= 0) return "3.0";
+        if (VersionComparator.comp("2.0", minVer) >= 0 && VersionComparator.comp("2", maxVer) <= 0) return "2.0";
+        if (VersionComparator.comp("1.0", minVer) >= 0 && VersionComparator.comp("1", maxVer) <= 0) return "1.0";
         return null;
     }
 
     /* Get the major protocol version from a string, or -1 */
     private static int getMajor(String ver) {
-        if (ver == null) {return -1;}
+        if (ver == null) {
+            return -1;
+        }
         int dot = ver.indexOf('.');
-        if (dot == 0) {return -1;}
-        if (dot > 0) {ver = ver.substring(0, dot);}
-        try {return Integer.parseInt(ver);}
-        catch (NumberFormatException e) {return -1;}
+        if (dot == 0) {
+            return -1;
+        }
+        if (dot > 0) {
+            ver = ver.substring(0, dot);
+        }
+        try {
+            return Integer.parseInt(ver);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 
     /* Get the minor protocol version from a string, or -1 */
     private static int getMinor(String ver) {
-        if ((ver == null) || (ver.indexOf('.') < 0)) {return -1;}
+        if ((ver == null) || (ver.indexOf('.') < 0)) {
+            return -1;
+        }
         try {
             String major = ver.substring(ver.indexOf('.') + 1);
             return Integer.parseInt(major);
-        } catch (NumberFormatException e) {return -1;}
-        catch (ArrayIndexOutOfBoundsException e) {return -1;}
+        } catch (NumberFormatException e) {
+            return -1;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return -1;
+        }
     }
-
 }

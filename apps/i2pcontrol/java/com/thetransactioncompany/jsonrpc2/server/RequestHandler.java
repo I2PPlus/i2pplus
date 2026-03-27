@@ -1,6 +1,5 @@
 package com.thetransactioncompany.jsonrpc2.server;
 
-
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 
@@ -11,14 +10,12 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
  */
 public interface RequestHandler {
 
-
     /**
      * Gets the names of the handled JSON-RPC 2.0 request methods.
      *
      * @return The names of the handled JSON-RPC 2.0 request methods.
      */
     public String[] handledRequests();
-
 
     /**
      * Processes a JSON-RPC 2.0 request.

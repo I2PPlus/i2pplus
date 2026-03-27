@@ -31,5 +31,4 @@ import org.junit.runners.Suite;
     SessionStatusMessageTest.class,
     SetDateMessageTest.class,
 })
-public class I2CPTestSuite {
-}
+public class I2CPTestSuite {}

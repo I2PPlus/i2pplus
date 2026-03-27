@@ -1,4 +1,5 @@
 package net.i2p.data.i2cp;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -22,6 +23,9 @@ public class DisconnectMessageTest extends I2CPTstBase {
         msg.setReason("Because I say so");
         return msg;
     }
+
     @Override
-    public I2CPMessageImpl createStructureToRead() { return new DisconnectMessage(); }
+    public I2CPMessageImpl createStructureToRead() {
+        return new DisconnectMessage();
+    }
 }

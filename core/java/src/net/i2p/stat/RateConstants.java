@@ -19,9 +19,9 @@ public final class RateConstants {
      * medium-term trends, and long-term peer reputation tracking.
      */
     public static final long[] STANDARD_RATES = {
-        60*1000L,        // 1 minute - baseline for graphs
-        60*60*1000L,     // 1 hour - for trend analysis
-        24*60*60*1000L   // 24 hours - for peer reputation and capacity calculations
+        60 * 1000L, // 1 minute - baseline for graphs
+        60 * 60 * 1000L, // 1 hour - for trend analysis
+        24 * 60 * 60 * 1000L // 24 hours - for peer reputation and capacity calculations
     };
 
     /**
@@ -29,10 +29,10 @@ public final class RateConstants {
      * Used only where user interface specifically requires 5-minute averages.
      */
     public static final long[] SIDEBAR_RATES = {
-        60*1000L,        // 1 minute
-        5*60*1000L,      // 5 minutes - for sidebar bandwidth display
-        60*60*1000L,     // 1 hour
-        24*60*60*1000L   // 24 hours - for peer reputation
+        60 * 1000L, // 1 minute
+        5 * 60 * 1000L, // 5 minutes - for sidebar bandwidth display
+        60 * 60 * 1000L, // 1 hour
+        24 * 60 * 60 * 1000L // 24 hours - for peer reputation
     };
 
     /**
@@ -41,8 +41,8 @@ public final class RateConstants {
      * longer-term comparison is needed to detect performance degradation.
      */
     public static final long[] TUNNEL_TEST_RATES = {
-        60*1000L,        // 1 minute
-        60*60*1000L      // 1 hour
+        60 * 1000L, // 1 minute
+        60 * 60 * 1000L // 1 hour
     };
 
     /**
@@ -51,9 +51,9 @@ public final class RateConstants {
      * where 10-minute trends are useful but 24-hour is excessive.
      */
     public static final long[] TUNNEL_VERIFY_RATES = {
-        60*1000L,        // 1 minute
-        10*60*1000L,     //10 minutes - for verification performance
-        60*60*1000L      // 1 hour
+        60 * 1000L, // 1 minute
+        10 * 60 * 1000L, // 10 minutes - for verification performance
+        60 * 60 * 1000L // 1 hour
     };
 
     /**
@@ -61,10 +61,10 @@ public final class RateConstants {
      * Used only where tunnel monitoring specifically requires 10-minute windows.
      */
     public static final long[] TUNNEL_RATES = {
-        60*1000L,        // 1 minute
-        10*60*1000L,     // 10 minutes - for tunnel build success rates
-        60*60*1000L,     // 1 hour
-        24*60*60*1000L   // 24 hours - for tunnel capacity and reputation
+        60 * 1000L, // 1 minute
+        10 * 60 * 1000L, // 10 minutes - for tunnel build success rates
+        60 * 60 * 1000L, // 1 hour
+        24 * 60 * 60 * 1000L // 24 hours - for tunnel capacity and reputation
     };
 
     /**
@@ -72,8 +72,8 @@ public final class RateConstants {
      * Used where only basic rate tracking is needed.
      */
     public static final long[] BASIC_RATES = {
-        60*1000L,        // 1 minute
-        60*60*1000L      // 1 hour
+        60 * 1000L, // 1 minute
+        60 * 60 * 1000L // 1 hour
     };
 
     /**
@@ -82,8 +82,8 @@ public final class RateConstants {
      * where long-term trends are not needed.
      */
     public static final long[] SHORT_TERM_RATES = {
-        60*1000L,        // 1 minute
-        10*60*1000L      // 10 minutes
+        60 * 1000L, // 1 minute
+        10 * 60 * 1000L // 10 minutes
     };
 
     /**
@@ -91,16 +91,16 @@ public final class RateConstants {
      * Maintains existing 3-period structure for bandwidth management.
      */
     public static final long[] BANDWIDTH_RATES = {
-        60*1000L,        // 1 minute
-        10*60*1000L,     // 10 minutes
-        60*60*1000L      // 1 hour
+        60 * 1000L, // 1 minute
+        10 * 60 * 1000L, // 10 minutes
+        60 * 60 * 1000L // 1 hour
     };
 
     // Convenience constants for individual periods
-    public static final long ONE_MINUTE = 60*1000L;
-    public static final long FIVE_MINUTES = 5*60*1000L;
-    public static final long TEN_MINUTES = 10*60*1000L;
-    public static final long THIRTY_MINUTES = 30*60*1000L;
-    public static final long ONE_HOUR = 60*60*1000L;
-    public static final long ONE_DAY = 24*60*60*1000L;
+    public static final long ONE_MINUTE = 60 * 1000L;
+    public static final long FIVE_MINUTES = 5 * 60 * 1000L;
+    public static final long TEN_MINUTES = 10 * 60 * 1000L;
+    public static final long THIRTY_MINUTES = 30 * 60 * 1000L;
+    public static final long ONE_HOUR = 60 * 60 * 1000L;
+    public static final long ONE_DAY = 24 * 60 * 60 * 1000L;
 }

@@ -25,7 +25,9 @@ public abstract class LimitOutputStream extends FilterOutputStream {
     protected boolean _isDone;
 
     /** Callback interface for notification when a limited output stream completes */
-    public interface DoneCallback { public void streamDone(); }
+    public interface DoneCallback {
+        public void streamDone();
+    }
 
     /**
      *  @param done non-null
@@ -38,7 +40,7 @@ public abstract class LimitOutputStream extends FilterOutputStream {
 
     @Override
     public void write(int c) throws IOException {
-        _buf1[0] = (byte)c;
+        _buf1[0] = (byte) c;
         write(_buf1, 0, 1);
     }
 
@@ -52,15 +54,15 @@ public abstract class LimitOutputStream extends FilterOutputStream {
         out.write(buf, off, len);
     }
 
-
-    protected boolean isDone() { return _isDone; }
+    protected boolean isDone() {
+        return _isDone;
+    }
 
     /**
      *  flush(), call the callback, and set _isDone
      */
     protected void setDone() throws IOException {
-        if (_isDone)
-            throw new IllegalStateException("already done");
+        if (_isDone) throw new IllegalStateException("already done");
         flush();
         _callback.streamDone();
         _isDone = true;

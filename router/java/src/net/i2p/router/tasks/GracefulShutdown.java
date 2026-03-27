@@ -37,17 +37,12 @@ public class GracefulShutdown implements Runnable {
             if (shutdownInProgress) {
                 int exitCode = _context.router().scheduledGracefulExitCode();
 
-                if (exitCode == Router.EXIT_HARD || exitCode == Router.EXIT_HARD_RESTART ||
-                    (_context.tunnelManager().getParticipatingCount() <= 0 &&
-                     !net.i2p.i2ptunnel.TunnelControllerGroup.isDelayedShutdownInProgress())) {
+                if (exitCode == Router.EXIT_HARD || exitCode == Router.EXIT_HARD_RESTART || (_context.tunnelManager().getParticipatingCount() <= 0 && !net.i2p.i2ptunnel.TunnelControllerGroup.isDelayedShutdownInProgress())) {
 
                     if (log.shouldWarn()) {
-                        if (exitCode == Router.EXIT_HARD)
-                            log.warn("Shutting down after a brief delay...");
-                        else if (exitCode == Router.EXIT_HARD_RESTART)
-                            log.warn("Restarting after a brief delay...");
-                        else
-                            log.warn("Graceful shutdown progress: No more tunnels, starting final shutdown...");
+                        if (exitCode == Router.EXIT_HARD) log.warn("Shutting down after a brief delay...");
+                        else if (exitCode == Router.EXIT_HARD_RESTART) log.warn("Restarting after a brief delay...");
+                        else log.warn("Graceful shutdown progress: No more tunnels, starting final shutdown...");
                     }
 
                     // Brief pause for UI/state cleanup, then finalize shutdown/restart

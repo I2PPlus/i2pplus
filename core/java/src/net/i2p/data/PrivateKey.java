@@ -9,11 +9,13 @@ package net.i2p.data;
  *
  */
 
-import java.util.Arrays;
-import javax.security.auth.Destroyable;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyGenerator;
 import net.i2p.util.SimpleByteCache;
+
+import java.util.Arrays;
+
+import javax.security.auth.Destroyable;
 
 /**
  * Cryptographic private key for asymmetric encryption in I2P.
@@ -83,7 +85,7 @@ import net.i2p.util.SimpleByteCache;
  */
 public class PrivateKey extends SimpleDataStructure implements Destroyable {
     private static final EncType DEF_TYPE = EncType.ELGAMAL_2048;
-    public final static int KEYSIZE_BYTES = DEF_TYPE.getPrivkeyLen();
+    public static final int KEYSIZE_BYTES = DEF_TYPE.getPrivkeyLen();
 
     private final EncType _type;
     // cache
@@ -113,8 +115,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
      */
     public PrivateKey(EncType type, byte data[]) {
         this(type);
-        if (data == null)
-            throw new IllegalArgumentException("Data must be specified");
+        if (data == null) throw new IllegalArgumentException("Data must be specified");
         setData(data);
     }
 
@@ -126,8 +127,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
      */
     public PrivateKey(EncType type, byte data[], PublicKey pubKey) {
         this(type, data);
-        if (type != pubKey.getType())
-            throw new IllegalArgumentException("Pubkey mismatch");
+        if (type != pubKey.getType()) throw new IllegalArgumentException("Pubkey mismatch");
         _pubKey = pubKey;
     }
 
@@ -146,11 +146,11 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     }
 
     /**
-      *  Gets the encryption type of this private key.
-      *
-      *  @return non-null
-      *  @since 0.9.38
-      */
+     *  Gets the encryption type of this private key.
+     *
+     *  @return non-null
+     *  @since 0.9.38
+     */
     public EncType getType() {
         return _type;
     }
@@ -164,8 +164,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
      * @throws IllegalArgumentException on bad key
      */
     public PublicKey toPublic() {
-        if (_pubKey == null)
-            _pubKey = KeyGenerator.getPublicKey(this);
+        if (_pubKey == null) _pubKey = KeyGenerator.getPublicKey(this);
         return _pubKey;
     }
 
@@ -173,7 +172,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
      *  javax.security.auth.Destroyable interface
      *
      *  @since 0.9.40
-      */
+     */
     @Override
     public void destroy() {
         byte[] data = _data;
@@ -189,7 +188,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
      *  javax.security.auth.Destroyable interface
      *
      *  @since 0.9.40
-      */
+     */
     @Override
     public boolean isDestroyed() {
         return _data == null;
@@ -206,10 +205,8 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
             buf.append("null");
         } else {
             int length = length();
-            if (length <= 32)
-                buf.append(toBase64());
-            else
-                buf.append("Size: ").append(length);
+            if (length <= 32) buf.append(toBase64());
+            else buf.append("Size: ").append(length);
         }
         buf.append(']');
         return buf.toString();
@@ -221,13 +218,10 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
      */
     @Override
     public int hashCode() {
-        if (_data == null)
-            return 0;
-        if (_type != DEF_TYPE)
-            return DataHelper.hashCode(_data);
+        if (_data == null) return 0;
+        if (_type != DEF_TYPE) return DataHelper.hashCode(_data);
         int rv = _data[KEYSIZE_BYTES - 4];
-        for (int i = 1; i < 4; i++)
-            rv ^= (_data[i + (KEYSIZE_BYTES - 4)] << (i*8));
+        for (int i = 1; i < 4; i++) rv ^= (_data[i + (KEYSIZE_BYTES - 4)] << (i * 8));
         return rv;
     }
 

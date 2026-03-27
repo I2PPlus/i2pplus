@@ -1,10 +1,10 @@
 package com.thetransactioncompany.jsonrpc2;
 
+import org.json.simple.DeserializationException;
+import org.json.simple.Jsoner;
 
 import java.util.List;
 import java.util.Map;
-import org.json.simple.DeserializationException;
-import org.json.simple.Jsoner;
 
 /**
  * Parses JSON-RPC 2.0 request, notification and response messages.
@@ -52,13 +52,11 @@ import org.json.simple.Jsoner;
  */
 public class JSONRPC2Parser {
 
-
     /**
      * If {@code true} the order of the parsed JSON object members must be
      * preserved.
      */
     private boolean preserveOrder;
-
 
     /**
      * If {@code true} the {@code "jsonrpc":"2.0"} version attribute in the
@@ -66,13 +64,11 @@ public class JSONRPC2Parser {
      */
     private boolean ignoreVersion;
 
-
     /**
      * If {@code true} non-standard JSON-RPC 2.0 message attributes must be
      * parsed too.
      */
     private boolean parseNonStdAttributes;
-
 
     /**
      * Creates a new JSON-RPC 2.0 message parser.
@@ -87,7 +83,6 @@ public class JSONRPC2Parser {
 
         this(false, false, false);
     }
-
 
     /**
      * Creates a new JSON-RPC 2.0 message parser.
@@ -104,7 +99,6 @@ public class JSONRPC2Parser {
         this(preserveOrder, false, false);
     }
 
-
     /**
      * Creates a new JSON-RPC 2.0 message parser.
      *
@@ -117,12 +111,10 @@ public class JSONRPC2Parser {
      *                      version attribute in the JSON-RPC 2.0 message
      *                      will not be checked.
      */
-    public JSONRPC2Parser(final boolean preserveOrder,
-                      final boolean ignoreVersion) {
+    public JSONRPC2Parser(final boolean preserveOrder, final boolean ignoreVersion) {
 
         this(preserveOrder, ignoreVersion, false);
     }
-
 
     /**
      * Creates a new JSON-RPC 2.0 message parser.
@@ -141,15 +133,12 @@ public class JSONRPC2Parser {
      *                              found in the JSON-RPC 2.0 messages will
      *                              be parsed too.
      */
-    public JSONRPC2Parser(final boolean preserveOrder,
-                      final boolean ignoreVersion,
-                      final boolean parseNonStdAttributes) {
+    public JSONRPC2Parser(final boolean preserveOrder, final boolean ignoreVersion, final boolean parseNonStdAttributes) {
 
         this.preserveOrder = preserveOrder;
         this.ignoreVersion = ignoreVersion;
         this.parseNonStdAttributes = parseNonStdAttributes;
     }
-
 
     /**
      * Parses a JSON object string. Provides the initial parsing of
@@ -165,13 +154,9 @@ public class JSONRPC2Parser {
      *                                failed.
      */
     @SuppressWarnings("unchecked")
-    private Map<String,Object> parseJSONObject(final String jsonString)
-        throws JSONRPC2ParseException {
+    private Map<String, Object> parseJSONObject(final String jsonString) throws JSONRPC2ParseException {
 
-        if (jsonString.trim().isEmpty())
-            throw new JSONRPC2ParseException("Invalid JSON: Empty string",
-                                         JSONRPC2ParseException.JSON,
-                                         jsonString);
+        if (jsonString.trim().isEmpty()) throw new JSONRPC2ParseException("Invalid JSON: Empty string", JSONRPC2ParseException.JSON, jsonString);
 
         Object json;
 
@@ -182,20 +167,15 @@ public class JSONRPC2Parser {
         } catch (DeserializationException e) {
 
             // Terse message, do not include full parse exception message
-            throw new JSONRPC2ParseException("Invalid JSON",
-                                         JSONRPC2ParseException.JSON,
-                                         jsonString);
+            throw new JSONRPC2ParseException("Invalid JSON", JSONRPC2ParseException.JSON, jsonString);
         }
 
-        if (json instanceof List)
-            throw new JSONRPC2ParseException("JSON-RPC 2.0 batch requests/notifications not supported", jsonString);
+        if (json instanceof List) throw new JSONRPC2ParseException("JSON-RPC 2.0 batch requests/notifications not supported", jsonString);
 
-        if (! (json instanceof Map))
-            throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 message: Message must be a JSON object", jsonString);
+        if (!(json instanceof Map)) throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 message: Message must be a JSON object", jsonString);
 
-        return (Map<String,Object>)json;
+        return (Map<String, Object>) json;
     }
-
 
     /**
      * Ensures the specified parameter is a {@code String} object set to
@@ -208,19 +188,12 @@ public class JSONRPC2Parser {
      * @throws JSONRPC2ParseException If the parameter is not a string that
      *                                equals "2.0".
      */
-    private static void ensureVersion2(final Object version, final String jsonString)
-        throws JSONRPC2ParseException {
+    private static void ensureVersion2(final Object version, final String jsonString) throws JSONRPC2ParseException {
 
-        if (version == null)
-            throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0: Version string missing", jsonString);
-
-        else if (! (version instanceof String))
-            throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0: Version not a JSON string", jsonString);
-
-        else if (! version.equals("2.0"))
-            throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0: Version must be \"2.0\"", jsonString);
+        if (version == null) throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0: Version string missing", jsonString);
+        else if (!(version instanceof String)) throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0: Version not a JSON string", jsonString);
+        else if (!version.equals("2.0")) throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0: Version must be \"2.0\"", jsonString);
     }
-
 
     /**
      * Provides common parsing of JSON-RPC 2.0 requests, notifications
@@ -242,8 +215,7 @@ public class JSONRPC2Parser {
      * @throws JSONRPC2ParseException With detailed message if the parsing
      *                                failed.
      */
-    public JSONRPC2Message parseJSONRPC2Message(final String jsonString)
-        throws JSONRPC2ParseException {
+    public JSONRPC2Message parseJSONRPC2Message(final String jsonString) throws JSONRPC2ParseException {
 
         // Try each of the parsers until one succeeds (or all fail)
 
@@ -253,8 +225,7 @@ public class JSONRPC2Parser {
         } catch (JSONRPC2ParseException e) {
 
             // throw on JSON error, ignore on protocol error
-            if (e.getCauseType() == JSONRPC2ParseException.JSON)
-                throw e;
+            if (e.getCauseType() == JSONRPC2ParseException.JSON) throw e;
         }
 
         try {
@@ -263,8 +234,7 @@ public class JSONRPC2Parser {
         } catch (JSONRPC2ParseException e) {
 
             // throw on JSON error, ignore on protocol error
-            if (e.getCauseType() == JSONRPC2ParseException.JSON)
-                throw e;
+            if (e.getCauseType() == JSONRPC2ParseException.JSON) throw e;
         }
 
         try {
@@ -273,15 +243,11 @@ public class JSONRPC2Parser {
         } catch (JSONRPC2ParseException e) {
 
             // throw on JSON error, ignore on protocol error
-            if (e.getCauseType() == JSONRPC2ParseException.JSON)
-                throw e;
+            if (e.getCauseType() == JSONRPC2ParseException.JSON) throw e;
         }
 
-        throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 message",
-                                     JSONRPC2ParseException.PROTOCOL,
-                                     jsonString);
+        throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 message", JSONRPC2ParseException.PROTOCOL, jsonString);
     }
-
 
     /**
      * Parses a JSON-RPC 2.0 request string.
@@ -295,69 +261,44 @@ public class JSONRPC2Parser {
      *                                failed.
      */
     @SuppressWarnings("unchecked")
-    public JSONRPC2Request parseJSONRPC2Request(final String jsonString)
-        throws JSONRPC2ParseException {
+    public JSONRPC2Request parseJSONRPC2Request(final String jsonString) throws JSONRPC2ParseException {
 
         // Initial JSON object parsing
-        Map<String,Object> jsonObject = parseJSONObject(jsonString);
-
+        Map<String, Object> jsonObject = parseJSONObject(jsonString);
 
         // Check for JSON-RPC version "2.0"
         Object version = jsonObject.remove("jsonrpc");
 
-        if (! ignoreVersion)
-            ensureVersion2(version, jsonString);
-
+        if (!ignoreVersion) ensureVersion2(version, jsonString);
 
         // Extract method name
         Object method = jsonObject.remove("method");
 
-        if (method == null)
-            throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 request: Method name missing", jsonString);
-
-        else if (! (method instanceof String))
-            throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 request: Method name not a JSON string", jsonString);
-
-        else if (((String)method).length() == 0)
-            throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 request: Method name is an empty string", jsonString);
-
+        if (method == null) throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 request: Method name missing", jsonString);
+        else if (!(method instanceof String)) throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 request: Method name not a JSON string", jsonString);
+        else if (((String) method).length() == 0) throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 request: Method name is an empty string", jsonString);
 
         // Extract ID
-        if (! jsonObject.containsKey("id"))
-            throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 request: Missing identifier", jsonString);
+        if (!jsonObject.containsKey("id")) throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 request: Missing identifier", jsonString);
 
         Object id = jsonObject.remove("id");
 
-        if (  id != null             &&
-            !(id instanceof Number) &&
-            !(id instanceof Boolean) &&
-            !(id instanceof String)    )
-            throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 request: Identifier not a JSON scalar", jsonString);
-
+        if (id != null && !(id instanceof Number) && !(id instanceof Boolean) && !(id instanceof String)) throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 request: Identifier not a JSON scalar", jsonString);
 
         // Extract params
         Object params = jsonObject.remove("params");
 
-
         JSONRPC2Request request;
 
-        if (params == null)
-            request = new JSONRPC2Request((String)method, id);
-
-        else if (params instanceof List)
-            request = new JSONRPC2Request((String)method, (List<Object>)params, id);
-
-        else if (params instanceof Map)
-            request = new JSONRPC2Request((String)method, (Map<String,Object>)params, id);
-
-        else
-            throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 request: Method parameters have unexpected JSON type", jsonString);
-
+        if (params == null) request = new JSONRPC2Request((String) method, id);
+        else if (params instanceof List) request = new JSONRPC2Request((String) method, (List<Object>) params, id);
+        else if (params instanceof Map) request = new JSONRPC2Request((String) method, (Map<String, Object>) params, id);
+        else throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 request: Method parameters have unexpected JSON type", jsonString);
 
         // Extract remaining non-std params?
         if (parseNonStdAttributes) {
 
-            for (Map.Entry<String,Object> entry: jsonObject.entrySet()) {
+            for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
 
                 request.appendNonStdAttribute(entry.getKey(), entry.getValue());
             }
@@ -365,7 +306,6 @@ public class JSONRPC2Parser {
 
         return request;
     }
-
 
     /**
      * Parses a JSON-RPC 2.0 notification string.
@@ -379,53 +319,37 @@ public class JSONRPC2Parser {
      *                                failed.
      */
     @SuppressWarnings("unchecked")
-    public JSONRPC2Notification parseJSONRPC2Notification(final String jsonString)
-        throws JSONRPC2ParseException {
+    public JSONRPC2Notification parseJSONRPC2Notification(final String jsonString) throws JSONRPC2ParseException {
 
         // Initial JSON object parsing
-        Map<String,Object> jsonObject = parseJSONObject(jsonString);
-
+        Map<String, Object> jsonObject = parseJSONObject(jsonString);
 
         // Check for JSON-RPC version "2.0"
         Object version = jsonObject.remove("jsonrpc");
 
-        if (! ignoreVersion)
-            ensureVersion2(version, jsonString);
-
+        if (!ignoreVersion) ensureVersion2(version, jsonString);
 
         // Extract method name
         Object method = jsonObject.remove("method");
 
-        if (method == null)
-            throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 notification: Method name missing", jsonString);
-
-        else if (! (method instanceof String))
-            throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 notification: Method name not a JSON string", jsonString);
-
-        else if (((String)method).length() == 0)
-            throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 notification: Method name is an empty string", jsonString);
-
+        if (method == null) throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 notification: Method name missing", jsonString);
+        else if (!(method instanceof String)) throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 notification: Method name not a JSON string", jsonString);
+        else if (((String) method).length() == 0) throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 notification: Method name is an empty string", jsonString);
 
         // Extract params
         Object params = jsonObject.get("params");
 
         JSONRPC2Notification notification;
 
-        if (params == null)
-            notification = new JSONRPC2Notification((String)method);
-
-        else if (params instanceof List)
-            notification = new JSONRPC2Notification((String)method, (List<Object>)params);
-
-        else if (params instanceof Map)
-            notification = new JSONRPC2Notification((String)method, (Map<String,Object>)params);
-        else
-            throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 notification: Method parameters have unexpected JSON type", jsonString);
+        if (params == null) notification = new JSONRPC2Notification((String) method);
+        else if (params instanceof List) notification = new JSONRPC2Notification((String) method, (List<Object>) params);
+        else if (params instanceof Map) notification = new JSONRPC2Notification((String) method, (Map<String, Object>) params);
+        else throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 notification: Method parameters have unexpected JSON type", jsonString);
 
         // Extract remaining non-std params?
         if (parseNonStdAttributes) {
 
-            for (Map.Entry<String,Object> entry: jsonObject.entrySet()) {
+            for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
 
                 notification.appendNonStdAttribute(entry.getKey(), entry.getValue());
             }
@@ -433,7 +357,6 @@ public class JSONRPC2Parser {
 
         return notification;
     }
-
 
     /**
      * Parses a JSON-RPC 2.0 response string.
@@ -447,62 +370,48 @@ public class JSONRPC2Parser {
      *                                failed.
      */
     @SuppressWarnings("unchecked")
-    public JSONRPC2Response parseJSONRPC2Response(final String jsonString)
-        throws JSONRPC2ParseException {
+    public JSONRPC2Response parseJSONRPC2Response(final String jsonString) throws JSONRPC2ParseException {
 
         // Initial JSON object parsing
-        Map<String,Object> jsonObject = parseJSONObject(jsonString);
+        Map<String, Object> jsonObject = parseJSONObject(jsonString);
 
         // Check for JSON-RPC version "2.0"
         Object version = jsonObject.remove("jsonrpc");
 
-        if (! ignoreVersion)
-            ensureVersion2(version, jsonString);
-
+        if (!ignoreVersion) ensureVersion2(version, jsonString);
 
         // Extract request ID
         Object id = jsonObject.remove("id");
 
-        if (   id != null             &&
-            ! (id instanceof Boolean) &&
-            ! (id instanceof Number) &&
-            ! (id instanceof String)    )
-            throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 response: Identifier not a JSON scalar", jsonString);
-
+        if (id != null && !(id instanceof Boolean) && !(id instanceof Number) && !(id instanceof String)) throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 response: Identifier not a JSON scalar", jsonString);
 
         // Extract result/error and create response object
         // Note: result and error are mutually exclusive
 
         JSONRPC2Response response;
 
-        if (jsonObject.containsKey("result") && ! jsonObject.containsKey("error")) {
+        if (jsonObject.containsKey("result") && !jsonObject.containsKey("error")) {
 
             // Success
             Object res = jsonObject.remove("result");
 
             response = new JSONRPC2Response(res, id);
 
-        }
-        else if (! jsonObject.containsKey("result") && jsonObject.containsKey("error")) {
+        } else if (!jsonObject.containsKey("result") && jsonObject.containsKey("error")) {
 
             // Error JSON object
             Object errorJSON = jsonObject.remove("error");
 
-            if (errorJSON == null)
-                throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 response: Missing error object", jsonString);
+            if (errorJSON == null) throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 response: Missing error object", jsonString);
 
+            if (!(errorJSON instanceof Map)) throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 response: Error object not a JSON object");
 
-            if (! (errorJSON instanceof Map))
-                throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 response: Error object not a JSON object");
-
-
-            Map<String,Object> error = (Map<String,Object>)errorJSON;
-
+            Map<String, Object> error = (Map<String, Object>) errorJSON;
 
             int errorCode;
 
             try {
-                errorCode = ((Number)error.get("code")).intValue();
+                errorCode = ((Number) error.get("code")).intValue();
 
             } catch (Exception e) {
 
@@ -512,7 +421,7 @@ public class JSONRPC2Parser {
             String errorMessage;
 
             try {
-                errorMessage = (String)error.get("message");
+                errorMessage = (String) error.get("message");
 
             } catch (Exception e) {
 
@@ -523,26 +432,22 @@ public class JSONRPC2Parser {
 
             response = new JSONRPC2Response(new JSONRPC2Error(errorCode, errorMessage, errorData), id);
 
-        }
-        else if (jsonObject.containsKey("result") && jsonObject.containsKey("error")) {
+        } else if (jsonObject.containsKey("result") && jsonObject.containsKey("error")) {
 
             // Invalid response
             throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 response: You cannot have result and error at the same time", jsonString);
-        }
-        else if (! jsonObject.containsKey("result") && ! jsonObject.containsKey("error")){
+        } else if (!jsonObject.containsKey("result") && !jsonObject.containsKey("error")) {
 
             // Invalid response
             throw new JSONRPC2ParseException("Invalid JSON-RPC 2.0 response: Neither result nor error specified", jsonString);
-        }
-        else {
+        } else {
             throw new AssertionError();
         }
-
 
         // Extract remaining non-std params?
         if (parseNonStdAttributes) {
 
-            for (Map.Entry<String,Object> entry: jsonObject.entrySet()) {
+            for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
 
                 response.appendNonStdAttribute(entry.getKey(), entry.getValue());
             }
@@ -550,7 +455,6 @@ public class JSONRPC2Parser {
 
         return response;
     }
-
 
     /**
      * Controls the preservation of JSON object member order in parsed
@@ -564,7 +468,6 @@ public class JSONRPC2Parser {
         this.preserveOrder = preserveOrder;
     }
 
-
     /**
      * Returns {@code true} if the order of JSON object members in parsed
      * JSON-RPC 2.0 messages is preserved, else {@code false}.
@@ -575,7 +478,6 @@ public class JSONRPC2Parser {
 
         return preserveOrder;
     }
-
 
     /**
      * Specifies whether to ignore the {@code "jsonrpc":"2.0"} version
@@ -595,7 +497,6 @@ public class JSONRPC2Parser {
         ignoreVersion = ignore;
     }
 
-
     /**
      * Returns {@code true} if the {@code "jsonrpc":"2.0"} version
      * attribute in parsed JSON-RPC 2.0 messages is ignored, else
@@ -610,7 +511,6 @@ public class JSONRPC2Parser {
         return ignoreVersion;
     }
 
-
     /**
      * Specifies whether to parse non-standard attributes found in JSON-RPC
      * 2.0 messages.
@@ -622,7 +522,6 @@ public class JSONRPC2Parser {
 
         parseNonStdAttributes = enable;
     }
-
 
     /**
      * Returns {@code true} if non-standard attributes in JSON-RPC 2.0

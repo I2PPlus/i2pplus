@@ -1,11 +1,12 @@
 package net.i2p.i2ptunnel.irc;
 
+import net.i2p.data.DataHelper;
+import net.i2p.util.Log;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-import net.i2p.data.DataHelper;
-import net.i2p.util.Log;
 
 /**
  * Static methods to filter individual lines.
@@ -17,18 +18,20 @@ abstract class IRCFilter {
 
     private static final boolean ALLOW_ALL_DCC_IN = false;
     private static final boolean ALLOW_ALL_DCC_OUT = false;
+
     /** does not override DCC handling */
     private static final boolean ALLOW_ALL_CTCP_IN = false;
+
     /** does not override DCC handling */
     private static final boolean ALLOW_ALL_CTCP_OUT = false;
 
     private static final Set<String> _allowedInbound;
+
     static {
-        final String[] allowedCommands =
-        {
-                // "NOTICE", // can contain CTCP
+        final String[] allowedCommands = {
+            // "NOTICE", // can contain CTCP
             "PING",
-                //"PONG",
+            // "PONG",
             "MODE",
             "JOIN",
             "NICK",
@@ -40,12 +43,12 @@ abstract class IRCFilter {
             "H", // "hide operator status" (after kicking an op)
             "TOPIC",
             "AUTHENTICATE", // SASL, also requires CAP below
-                // http://tools.ietf.org/html/draft-mitchell-irc-capabilities-01
+            // http://tools.ietf.org/html/draft-mitchell-irc-capabilities-01
             "CAP",
             "PROTOCTL",
             "AWAY",
-            "ACCOUNT",  // https://ircv3.net/specs/extensions/account-notify
-            "CHGHOST"   // https://ircv3.net/specs/extensions/chghost
+            "ACCOUNT", // https://ircv3.net/specs/extensions/account-notify
+            "CHGHOST" // https://ircv3.net/specs/extensions/chghost
         };
         _allowedInbound = new HashSet<String>(Arrays.asList(allowedCommands));
     }
@@ -61,31 +64,28 @@ abstract class IRCFilter {
 
         String field[] = DataHelper.split(s, " ", 5);
         String command;
-        int idx=0;
-
+        int idx = 0;
 
         try {
             // https://www.unrealircd.org/docs/Message_tags
             // https://ircv3.net/specs/extensions/message-tags.html
-            if (field[0].charAt(0) == '@')
-                idx++;
-            if (field[idx].charAt(0) == ':')
-                idx++;
+            if (field[0].charAt(0) == '@') idx++;
+            if (field[idx].charAt(0) == ':') idx++;
             command = field[idx++].toUpperCase(Locale.US);
         } catch (IndexOutOfBoundsException ioobe) {
             // server sent borked command?
-           //_log.warn("Dropping defective message: index out of bounds while extracting command.");
+            // _log.warn("Dropping defective message: index out of bounds while extracting command.");
             return null;
         }
 
-        idx++; //skip victim
+        idx++; // skip victim
 
         // Allow numerical responses
         try {
             Integer.parseInt(command);
             return s;
-        } catch (NumberFormatException nfe){}
-
+        } catch (NumberFormatException nfe) {
+        }
 
         if ("PONG".equals(command)) {
             // Turn the received ":irc.freshcoffee.i2p PONG irc.freshcoffee.i2p :127.0.0.1"
@@ -108,12 +108,10 @@ abstract class IRCFilter {
         }
 
         // Allow PRIVMSG, but block CTCP.
-        if ("PRIVMSG".equals(command) || "NOTICE".equals(command))
-        {
+        if ("PRIVMSG".equals(command) || "NOTICE".equals(command)) {
             String msg;
             msg = field[idx++];
-            if (idx < field.length)
-                msg += ' ' + field[idx];
+            if (idx < field.length) msg += ' ' + field[idx];
 
             if (msg.indexOf(0x01) >= 0) // CTCP marker ^A can be anywhere, not just immediately after the ':'
             {
@@ -122,13 +120,11 @@ abstract class IRCFilter {
                 // don't even try to parse multiple CTCP in the same message
                 int count = 0;
                 for (int i = 0; i < msg.length(); i++) {
-                    if (msg.charAt(i) == 0x01)
-                        count++;
+                    if (msg.charAt(i) == 0x01) count++;
                 }
-                if (count != 2)
-                    return null;
+                if (count != 2) return null;
 
-                msg=msg.substring(2);
+                msg = msg.substring(2);
                 if (msg.startsWith("ACTION ")) {
                     // /me says hello
                     return s;
@@ -143,10 +139,8 @@ abstract class IRCFilter {
                 }
                 // XDCC looks safe, ip/port happens over regular DCC
                 // http://en.wikipedia.org/wiki/XDCC
-                if (msg.toUpperCase(Locale.US).startsWith("XDCC ") && helper != null && helper.isEnabled())
-                    return s;
-                if (ALLOW_ALL_CTCP_IN)
-                    return s;
+                if (msg.toUpperCase(Locale.US).startsWith("XDCC ") && helper != null && helper.isEnabled()) return s;
+                if (ALLOW_ALL_CTCP_IN) return s;
                 return null; // Block all other ctcp
             }
             return s;
@@ -157,23 +151,24 @@ abstract class IRCFilter {
     }
 
     private static final Set<String> _allowedOutbound;
+
     static {
-        final String[] allowedCommands =
-        {
-                // Commands that regular users might use
+        final String[] allowedCommands = {
+            // Commands that regular users might use
             "ACCEPT", // Inspircd's m_callerid.so module
             "ADMIN",
             "AUTHENTICATE", // SASL, also requires CAP below
-            "AWAY",    // should be harmless
-            "CAP",     // http://tools.ietf.org/html/draft-mitchell-irc-capabilities-01
+            "AWAY", // should be harmless
+            "CAP", // http://tools.ietf.org/html/draft-mitchell-irc-capabilities-01
             "COMMANDS",
             "CYCLE",
             "DCCALLOW",
             "DEVOICE",
             "FPART",
-            "HELPME", "HELPOP",  // helpop is what unrealircd uses by default
+            "HELPME",
+            "HELPOP", // helpop is what unrealircd uses by default
             "INVITE",
-            "ISON",    // jIRCii uses this for a ping (response is 303)
+            "ISON", // jIRCii uses this for a ping (response is 303)
             "JOIN",
             "KICK",
             "KNOCK",
@@ -185,14 +180,14 @@ abstract class IRCFilter {
             "MOTD",
             "NAMES",
             "NICK",
-                // "NOTICE", // can contain CTCP
+            // "NOTICE", // can contain CTCP
             "OPER",
-                // "PART", // replace with filtered PART to hide client part messages
+            // "PART", // replace with filtered PART to hide client part messages
             "PASS",
-                // "PING",
+            // "PING",
             "PONG",
             "PROTOCTL",
-                // "QUIT", // replace with a filtered QUIT to hide client quit messages
+            // "QUIT", // replace with a filtered QUIT to hide client quit messages
             "RULES",
             "SETNAME",
             "SILENCE",
@@ -210,16 +205,22 @@ abstract class IRCFilter {
             "WHO",
             "WHOIS",
             "WHOWAS",
-                // the next few are default aliases on unreal (+ anope)
-            "BOTSERV", "BS",
-            "CHANSERV", "CS",
+            // the next few are default aliases on unreal (+ anope)
+            "BOTSERV",
+            "BS",
+            "CHANSERV",
+            "CS",
             "HELPSERV",
-            "HOSTSERV", "HS",
-            "MEMOSERV", "MS",
-            "NICKSERV", "NS",
-            "OPERSERV", "OS",
+            "HOSTSERV",
+            "HS",
+            "MEMOSERV",
+            "MS",
+            "NICKSERV",
+            "NS",
+            "OPERSERV",
+            "OS",
             "STATSERV",
-                // IRCop commands
+            // IRCop commands
             "ADCHAT",
             "ADDMOTD",
             "ADDOMOTD",
@@ -287,18 +288,14 @@ abstract class IRCFilter {
 
         String field[] = DataHelper.split(s, " ", 4);
 
-        if (field[0].length()==0)
-            return null; // W T F?
+        if (field[0].length() == 0) return null; // W T F?
 
-
-        if (field[0].charAt(0)==':')
-            return null; // ???
+        if (field[0].charAt(0) == ':') return null; // ???
 
         int idx = 0;
         // https://www.unrealircd.org/docs/Message_tags
         // https://ircv3.net/specs/extensions/message-tags.html
-        if (field[0].charAt(0) == '@')
-            idx++;
+        if (field[0].charAt(0) == '@') idx++;
         String command = field[idx++].toUpperCase(Locale.US);
 
         if ("PING".equals(command)) {
@@ -327,68 +324,56 @@ abstract class IRCFilter {
                 rv = "PING " + field[idx];
                 expectedPong.append("PONG ").append(field[idx + 1]).append(" :").append(field[idx]); // PONG serverLocation nonce
             } else {
-                //if (_log.shouldError())
+                // if (_log.shouldError())
                 //    _log.error("IRC client sent a PING we don't understand, filtering it (\"" + s + "\")");
                 rv = null;
             }
 
-            //if (_log.shouldWarn())
+            // if (_log.shouldWarn())
             //    _log.warn("sending ping [" + rv + "], waiting for [" + expectedPong + "] orig was [" + s  + "]");
 
             return rv;
         }
 
         // Allow all allowedCommands
-        if (_allowedOutbound.contains(command))
-            return s;
+        if (_allowedOutbound.contains(command)) return s;
 
         // mIRC sends "NOTICE user :DCC Send file (IP)"
         // in addition to the CTCP version
-        if ("NOTICE".equals(command))
-        {
-            if (field.length < idx + 2)
-                return s;  // invalid, allow server response
+        if ("NOTICE".equals(command)) {
+            if (field.length < idx + 2) return s; // invalid, allow server response
             String msg = field[idx + 1];
-            if (msg.startsWith(":DCC "))
-                return filterDCCOut(field[idx - 1] + ' ' + field[idx] + " :DCC ", msg.substring(5), helper);
+            if (msg.startsWith(":DCC ")) return filterDCCOut(field[idx - 1] + ' ' + field[idx] + " :DCC ", msg.substring(5), helper);
             // fall through
         }
 
         // Allow PRIVMSG, but block CTCP (except ACTION).
-        if ("PRIVMSG".equals(command) || "NOTICE".equals(command))
-        {
-            if (field.length < idx + 2)
-                return s;  // invalid, allow server response
+        if ("PRIVMSG".equals(command) || "NOTICE".equals(command)) {
+            if (field.length < idx + 2) return s; // invalid, allow server response
             String msg = field[idx + 1];
-            if (idx + 2 < field.length)
-                msg += ' ' + field[idx + 2];
+            if (idx + 2 < field.length) msg += ' ' + field[idx + 2];
 
             if (msg.indexOf(0x01) >= 0) // CTCP marker ^A can be anywhere, not just immediately after the ':'
             {
-                    // CTCP
+                // CTCP
 
                 // don't even try to parse multiple CTCP in the same message
                 int count = 0;
                 for (int i = 0; i < msg.length(); i++) {
-                    if (msg.charAt(i) == 0x01)
-                        count++;
+                    if (msg.charAt(i) == 0x01) count++;
                 }
-                if (count != 2)
-                    return null;
+                if (count != 2) return null;
 
-                msg=msg.substring(2);
+                msg = msg.substring(2);
                 if (msg.startsWith("ACTION ")) {
                     // /me says hello
                     return s;
                 }
-                if (msg.startsWith("DCC "))
-                    return filterDCCOut(field[idx - 1] + ' ' + field[idx] + " :\001DCC ", msg.substring(4), helper);
+                if (msg.startsWith("DCC ")) return filterDCCOut(field[idx - 1] + ' ' + field[idx] + " :\001DCC ", msg.substring(4), helper);
                 // XDCC looks safe, ip/port happens over regular DCC
                 // http://en.wikipedia.org/wiki/XDCC
-                if (msg.toUpperCase(Locale.US).startsWith("XDCC ") && helper != null && helper.isEnabled())
-                    return s;
-                if (ALLOW_ALL_CTCP_OUT)
-                    return s;
+                if (msg.toUpperCase(Locale.US).startsWith("XDCC ") && helper != null && helper.isEnabled()) return s;
+                if (ALLOW_ALL_CTCP_OUT) return s;
                 return null; // Block all other ctcp
             }
             return s;
@@ -398,8 +383,7 @@ abstract class IRCFilter {
             // USER <username> <hostname> <servername> <realname> (RFC 1459)
             // USER <user> <mode> <unused> <realname> (RFC 2812)
             // <realname> may contain spaces, and thus must be prefixed with a colon.
-            if (field.length < idx + 3)
-                return s;  // invalid, allow server response
+            if (field.length < idx + 3) return s; // invalid, allow server response
             // Replace hostname/servername; pass numeric mode and unused '*' through unchanged
             String hostname = field[idx + 1];
             try {
@@ -411,16 +395,12 @@ abstract class IRCFilter {
             // Warning: max field size is 4, so servername or unused is combined with realname
             // in field[idx + 2]
             String servername;
-            if (field[idx + 2].startsWith("* "))
-                servername = "*";
-            else
-                servername = "localhost";
+            if (field[idx + 2].startsWith("* ")) servername = "*";
+            else servername = "localhost";
             String realname;
             int cidx = field[idx + 2].lastIndexOf(':');
-            if (cidx < 0)
-                realname = "realname";
-            else
-                realname = field[idx + 2].substring(cidx + 1);
+            if (cidx < 0) realname = "realname";
+            else realname = field[idx + 2].substring(cidx + 1);
             String ret = "USER " + field[idx] + ' ' + hostname + ' ' + servername + " :" + realname;
             return ret;
         }
@@ -456,11 +436,9 @@ abstract class IRCFilter {
     private static String filterDCCIn(String pfx, String msg, DCCHelper helper) {
         // strip trailing ctcp (other one is in pfx)
         int ctcp = msg.indexOf(0x01);
-        if (ctcp > 0)
-            msg = msg.substring(0, ctcp);
+        if (ctcp > 0) msg = msg.substring(0, ctcp);
         String[] args = DataHelper.split(msg, " ", 5);
-        if (args.length <= 0)
-            return null;
+        if (args.length <= 0) return null;
         String type = args[0];
         boolean haveIP = true;
         // no IP in these, replace port only
@@ -468,23 +446,18 @@ abstract class IRCFilter {
             haveIP = false;
         } else if (!(type.equals("CHAT") || type.equals("SEND"))) {
             if (ALLOW_ALL_DCC_IN) {
-                if (ctcp > 0)
-                    return pfx + msg + (char) 0x01;
+                if (ctcp > 0) return pfx + msg + (char) 0x01;
                 return pfx + msg;
             }
             return null;
         }
-        if (helper == null || !helper.isEnabled())
-            return null;
-        if (args.length < 3)
-            return null;
-        if (haveIP && args.length < 4)
-            return null;
+        if (helper == null || !helper.isEnabled()) return null;
+        if (args.length < 3) return null;
+        if (haveIP && args.length < 4) return null;
         String arg = args[1];
         int nextArg = 2;
         String b32 = null;
-        if (haveIP)
-            b32 = args[nextArg++];
+        if (haveIP) b32 = args[nextArg++];
         int cPort;
         try {
             String cp = args[nextArg++];
@@ -492,13 +465,11 @@ abstract class IRCFilter {
         } catch (NumberFormatException nfe) {
             return null;
         }
-        if (cPort < 0 || cPort > 65535)
-            return null;
+        if (cPort < 0 || cPort > 65535) return null;
 
         int port = -1;
         if (haveIP) {
-            if (cPort > 0)
-                port = helper.newIncoming(b32, cPort, type);
+            if (cPort > 0) port = helper.newIncoming(b32, cPort, type);
             else
                 // "reverse/firewall DCC" - send it through without tracking
                 port = cPort;
@@ -507,11 +478,9 @@ abstract class IRCFilter {
         } else if (type.equals("RESUME")) {
             port = helper.resumeIncoming(cPort);
         }
-        if (port < 0)
-            return null;
+        if (port < 0) return null;
         StringBuilder buf = new StringBuilder(256);
-        buf.append(pfx)
-           .append(type).append(' ').append(arg).append(' ');
+        buf.append(pfx).append(type).append(' ').append(arg).append(' ');
         if (haveIP) {
             if (port > 0) {
                 byte[] myIP = helper.getLocalAddress();
@@ -525,8 +494,7 @@ abstract class IRCFilter {
         while (args.length > nextArg) {
             buf.append(' ').append(args[nextArg++]);
         }
-        if (pfx.indexOf(0x01) >= 0)
-            buf.append((char) 0x01);
+        if (pfx.indexOf(0x01) >= 0) buf.append((char) 0x01);
         return buf.toString();
     }
 
@@ -548,11 +516,9 @@ abstract class IRCFilter {
     private static String filterDCCOut(String pfx, String msg, DCCHelper helper) {
         // strip trailing ctcp (other one is in pfx)
         int ctcp = msg.indexOf(0x01);
-        if (ctcp > 0)
-            msg = msg.substring(0, ctcp);
+        if (ctcp > 0) msg = msg.substring(0, ctcp);
         String[] args = DataHelper.split(msg, " ", 5);
-        if (args.length <= 0)
-            return null;
+        if (args.length <= 0) return null;
         String type = args[0];
         boolean haveIP = true;
         // no IP in these, replace port only
@@ -560,17 +526,13 @@ abstract class IRCFilter {
             haveIP = false;
         } else if (!(type.equals("CHAT") || type.equals("SEND"))) {
             if (ALLOW_ALL_DCC_OUT) {
-                if (ctcp > 0)
-                    return pfx + msg + (char) 0x01;
+                if (ctcp > 0) return pfx + msg + (char) 0x01;
                 return pfx + msg;
             }
         }
-        if (helper == null || !helper.isEnabled())
-            return null;
-        if (args.length < 3)
-            return null;
-        if (haveIP && args.length < 4)
-            return null;
+        if (helper == null || !helper.isEnabled()) return null;
+        if (args.length < 3) return null;
+        if (haveIP && args.length < 4) return null;
         String arg = args[1];
         byte[] ip = null;
         int nextArg = 2;
@@ -584,7 +546,7 @@ abstract class IRCFilter {
                     // xchat sends an IP of 199 and a port of 0
                     Log log = new Log(IRCFilter.class);
                     log.logAlways(Log.WARN, "Reverse / Firewall DCC, IP = 0x" + Long.toHexString(ipl));
-                    //return null;
+                    // return null;
                 }
                 ip = DataHelper.toLong(4, ipl);
             } catch (NumberFormatException nfe) {
@@ -598,15 +560,13 @@ abstract class IRCFilter {
         } catch (NumberFormatException nfe) {
             return null;
         }
-        if (cPort < 0 || cPort > 65535)
-            return null;
+        if (cPort < 0 || cPort > 65535) return null;
 
         int port = -1;
         if (haveIP) {
             if (cPort > 0) {
                 // nonzero port but bogus IP? hmm. Fix IP and hope.
-                if (ip[0] == 0)
-                    ip = new byte[] {127, 0, 0, 1};
+                if (ip[0] == 0) ip = new byte[] {127, 0, 0, 1};
                 port = helper.newOutgoing(ip, cPort, type);
             } else {
                 // "reverse/firewall DCC" - send it through without tracking
@@ -619,14 +579,11 @@ abstract class IRCFilter {
         } else if (type.equals("RESUME")) {
             port = helper.resumeOutgoing(cPort);
         }
-        if (port < 0)
-            return null;
+        if (port < 0) return null;
         StringBuilder buf = new StringBuilder(256);
-        buf.append(pfx)
-           .append(type).append(' ').append(arg).append(' ');
+        buf.append(pfx).append(type).append(' ').append(arg).append(' ');
         if (haveIP) {
-            if (port > 0)
-                buf.append(helper.getB32Hostname()).append(' ');
+            if (port > 0) buf.append(helper.getB32Hostname()).append(' ');
             else
                 // "reverse/firewall DCC" - set dummy IP and send it through
                 buf.append("0 ");
@@ -635,8 +592,7 @@ abstract class IRCFilter {
         while (args.length > nextArg) {
             buf.append(' ').append(args[nextArg++]);
         }
-        if (pfx.indexOf(0x01) >= 0)
-            buf.append((char) 0x01);
+        if (pfx.indexOf(0x01) >= 0) buf.append((char) 0x01);
         return buf.toString();
     }
 }

@@ -7,18 +7,21 @@ package net.i2p.crypto;
 
 import freenet.support.CPUInformation.CPUID;
 import freenet.support.CPUInformation.UnknownCPUException;
-import java.security.GeneralSecurityException;
-import java.security.InvalidKeyException;
-import java.util.concurrent.LinkedBlockingQueue;
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
+
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.data.SessionKey;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleByteCache;
 import net.i2p.util.SystemVersion;
+
+import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * AES encryption engine using Cryptix's Rijndael implementation with CBC mode.
@@ -30,7 +33,7 @@ public final class CryptixAESEngine extends AESEngine {
     private final LinkedBlockingQueue<Cipher> _ciphers;
 
     // keys are now cached in the SessionKey objects
-    //private CryptixAESKeyCache _cache;
+    // private CryptixAESKeyCache _cache;
 
     private static final int MIN_SYSTEM_AES_LENGTH = 640;
     private static final boolean USE_SYSTEM_AES = hasAESNI() && CryptoCheck.isUnlimited();
@@ -45,8 +48,7 @@ public final class CryptixAESEngine extends AESEngine {
      * @since 0.9.14
      */
     private static boolean hasAESNI() {
-        if (SystemVersion.isX86() && SystemVersion.is64Bit() && SystemVersion.isJava7() &&
-            !SystemVersion.isApache() && !SystemVersion.isGNU()) {
+        if (SystemVersion.isX86() && SystemVersion.is64Bit() && SystemVersion.isJava7() && !SystemVersion.isApache() && !SystemVersion.isGNU()) {
             try {
                 return CPUID.getInfo().hasAES();
             } catch (UnknownCPUException e) {
@@ -61,9 +63,9 @@ public final class CryptixAESEngine extends AESEngine {
     public CryptixAESEngine(I2PAppContext context) {
         super(context);
         // testing
-        //_ciphers = new LinkedBlockingQueue<Cipher>(CACHE_SIZE);
+        // _ciphers = new LinkedBlockingQueue<Cipher>(CACHE_SIZE);
         _ciphers = USE_SYSTEM_AES ? new LinkedBlockingQueue<Cipher>(CACHE_SIZE) : null;
-        //_cache = new CryptixAESKeyCache();
+        // _cache = new CryptixAESKeyCache();
     }
 
     /**
@@ -81,22 +83,14 @@ public final class CryptixAESEngine extends AESEngine {
      */
     @Override
     public void encrypt(byte payload[], int payloadIndex, byte out[], int outIndex, SessionKey sessionKey, byte iv[], int ivOffset, int length) {
-        if (payload == null)
-            throw new NullPointerException("invalid args to aes - payload");
-        if (out == null)
-            throw new NullPointerException("invalid args to aes - out");
-        if (sessionKey == null)
-            throw new NullPointerException("invalid args to aes - sessionKey");
-        if (iv == null)
-            throw new NullPointerException("invalid args to aes - iv");
-        if (payload.length < payloadIndex + length)
-            throw new IllegalArgumentException("Payload is too short");
-        if (out.length < outIndex + length)
-            throw new IllegalArgumentException("Output is too short");
-        if (length <= 0)
-            throw new IllegalArgumentException("Length is too small");
-        if (length % 16 != 0)
-            throw new IllegalArgumentException("Only lengths mod 16 are supported here");
+        if (payload == null) throw new NullPointerException("invalid args to aes - payload");
+        if (out == null) throw new NullPointerException("invalid args to aes - out");
+        if (sessionKey == null) throw new NullPointerException("invalid args to aes - sessionKey");
+        if (iv == null) throw new NullPointerException("invalid args to aes - iv");
+        if (payload.length < payloadIndex + length) throw new IllegalArgumentException("Payload is too short");
+        if (out.length < outIndex + length) throw new IllegalArgumentException("Output is too short");
+        if (length <= 0) throw new IllegalArgumentException("Length is too small");
+        if (length % 16 != 0) throw new IllegalArgumentException("Only lengths mod 16 are supported here");
 
         if (USE_SYSTEM_AES && length >= MIN_SYSTEM_AES_LENGTH) {
             try {
@@ -108,8 +102,7 @@ public final class CryptixAESEngine extends AESEngine {
                 release(cipher);
                 return;
             } catch (GeneralSecurityException gse) {
-                if (_log.shouldWarn())
-                    _log.warn("Java encrypt fail", gse);
+                if (_log.shouldWarn()) _log.warn("Java encrypt fail", gse);
             }
         }
 
@@ -137,13 +130,9 @@ public final class CryptixAESEngine extends AESEngine {
      */
     @Override
     public void decrypt(byte payload[], int payloadIndex, byte out[], int outIndex, SessionKey sessionKey, byte iv[], int ivOffset, int length) {
-        if ((iv== null) || (payload == null) || (payload.length <= 0) || (sessionKey == null))
-            throw new IllegalArgumentException("Bad setup");
-        else if (out == null)
-            throw new IllegalArgumentException("Out is null");
-        else if (out.length - outIndex < length)
-            throw new IllegalArgumentException("Out is too small (out.length=" + out.length
-                                               + " outIndex=" + outIndex + " length=" + length);
+        if ((iv == null) || (payload == null) || (payload.length <= 0) || (sessionKey == null)) throw new IllegalArgumentException("Bad setup");
+        else if (out == null) throw new IllegalArgumentException("Out is null");
+        else if (out.length - outIndex < length) throw new IllegalArgumentException("Out is too small (out.length=" + out.length + " outIndex=" + outIndex + " length=" + length);
 
         if (USE_SYSTEM_AES && length >= MIN_SYSTEM_AES_LENGTH) {
             try {
@@ -155,8 +144,7 @@ public final class CryptixAESEngine extends AESEngine {
                 release(cipher);
                 return;
             } catch (GeneralSecurityException gse) {
-                if (_log.shouldWarn())
-                    _log.warn("Java decrypt fail", gse);
+                if (_log.shouldWarn()) _log.warn("Java decrypt fail", gse);
             }
         }
 
@@ -164,8 +152,7 @@ public final class CryptixAESEngine extends AESEngine {
         if (length % 16 != 0) {
             // may not work, it will overrun payload length and could AIOOBE
             numblock++;
-            if (_log.shouldWarn())
-                _log.warn("Not %16 " + length, new Exception());
+            if (_log.shouldWarn()) _log.warn("Not %16 " + length, new Exception());
         }
 
         byte prev[] = SimpleByteCache.acquire(16);
@@ -176,7 +163,7 @@ public final class CryptixAESEngine extends AESEngine {
             System.arraycopy(payload, payloadIndex, cur, 0, 16);
             decryptBlock(payload, payloadIndex, sessionKey, out, outIndex);
             payloadIndex += 16;
-            //DataHelper.xor(out, outIndex + x * 16, prev, 0, out, outIndex + x * 16, 16);
+            // DataHelper.xor(out, outIndex + x * 16, prev, 0, out, outIndex + x * 16, 16);
             for (int i = 0; i < 16; i++) {
                 out[outIndex++] ^= prev[i];
             }
@@ -227,9 +214,9 @@ public final class CryptixAESEngine extends AESEngine {
     @Override
     public final void decryptBlock(byte payload[], int inIndex, SessionKey sessionKey, byte rv[], int outIndex) {
         // just let it throw NPE or IAE later for speed, you'll figure it out
-        //if ((payload == null) || (rv == null))
+        // if ((payload == null) || (rv == null))
         //    throw new IllegalArgumentException("null block args");
-        //if (payload.length - inIndex > rv.length - outIndex)
+        // if (payload.length - inIndex > rv.length - outIndex)
         //    throw new IllegalArgumentException("Bad block args [payload.len=" + payload.length
         //                                       + " inIndex=" + inIndex + " rv.len=" + rv.length
         //                                       + " outIndex="+outIndex);
@@ -279,7 +266,6 @@ public final class CryptixAESEngine extends AESEngine {
         }
     }
 
-
     /**
      *  Test results 10K timing runs.
      *  July 2011 eeepc.
@@ -309,161 +295,161 @@ public final class CryptixAESEngine extends AESEngine {
      *
      * Cryptix is faster for data smaller than 704 bytes.
      */
-/*******
-    public static void main(String args[]) {
-        final int MATCH_RUNS = 11000;
-        final int TIMING_RUNS = 100000;
-        I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        try {
-            boolean canTestSystem = USE_SYSTEM_AES;
-            if (!canTestSystem)
-                System.out.println("System AES 256 not available, testing Cryptix only");
-            testEDBlock(ctx);
-            testEDBlock2(ctx);
-            testED2(ctx);
-            if (canTestSystem) {
-                System.out.println("Start Cryptix vs. System verification run of " + MATCH_RUNS);
-                for (int i = 0; i < MATCH_RUNS; i++) {
-                    testED(ctx, false, true, 1024);
-                    testED(ctx, true, false, 1024);
-                }
-            }
-            for (int len = 512; len <= 1024; len += 32) {
-                System.out.println("Start Cryptix run of " + TIMING_RUNS + " length " + len);
-                long start = System.currentTimeMillis();
-                for (int i = 0; i < TIMING_RUNS; i++) {
-                    testED(ctx, false, false, len);
-                }
-                long cryptix = System.currentTimeMillis() - start;
-                System.out.println("Cryptix took " + cryptix);
-                if (canTestSystem) {
-                    System.out.println("Start System run of " + TIMING_RUNS + " length " + len);
-                    start = System.currentTimeMillis();
-                    for (int i = 0; i < TIMING_RUNS; i++) {
-                        testED(ctx, true, true, len);
-                    }
-                    long system = System.currentTimeMillis() - start;
-                    System.out.println("System took " + system);
-                    if (system < cryptix)
-                        System.out.println("***System is " + (100 - (system * 100 / cryptix)) + "% better");
-                    else
-                        System.out.println("***System is " + ((system * 100 / cryptix) - 100) + "% worse");
-                }
-            }
-            //testFake(ctx);
-            //testNull(ctx);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //try { Thread.sleep(5*1000); } catch (InterruptedException ie) {}
-    }
-
-    private static final byte[] _iv = new byte[16];
-    private static byte[] _orig = new byte[1024];
-    private static byte[] _encrypted = new byte[1024];
-    private static byte[] _decrypted = new byte[1024];
-
-    private static void testED(I2PAppContext ctx, boolean systemEnc, boolean systemDec, int len) {
-        SessionKey key = ctx.keyGenerator().generateSessionKey();
-        ctx.random().nextBytes(_iv);
-        ctx.random().nextBytes(_orig);
-        CryptixAESEngine aes = new CryptixAESEngine(ctx);
-        USE_SYSTEM_AES = systemEnc;
-        aes.encrypt(_orig, 0, _encrypted, 0, key, _iv, len);
-        USE_SYSTEM_AES = systemDec;
-        aes.decrypt(_encrypted, 0, _decrypted, 0, key, _iv, len);
-        if (!DataHelper.eq(_decrypted, 0, _orig, 0, len))
-            throw new RuntimeException("full D(E(orig)) != orig");
-        //else
-        //    System.out.println("full D(E(orig)) == orig");
-    }
-
-    // this verifies decryption in-place
-    private static void testED2(I2PAppContext ctx) {
-        SessionKey key = ctx.keyGenerator().generateSessionKey();
-        byte iv[] = new byte[16];
-        byte orig[] = new byte[128];
-        byte data[] = new byte[128];
-        ctx.random().nextBytes(iv);
-        ctx.random().nextBytes(orig);
-        CryptixAESEngine aes = new CryptixAESEngine(ctx);
-        aes.encrypt(orig, 0, data, 0, key, iv, data.length);
-        aes.decrypt(data, 0, data, 0, key, iv, data.length);
-        if (!DataHelper.eq(data,orig))
-            throw new RuntimeException("full D(E(orig)) != orig");
-        else
-            System.out.println("full D(E(orig)) == orig");
-    }
-
-    private static void testFake(I2PAppContext ctx) {
-        SessionKey key = ctx.keyGenerator().generateSessionKey();
-        SessionKey wrongKey = ctx.keyGenerator().generateSessionKey();
-        byte iv[] = new byte[16];
-        byte orig[] = new byte[128];
-        byte encrypted[] = new byte[128];
-        byte decrypted[] = new byte[128];
-        ctx.random().nextBytes(iv);
-        ctx.random().nextBytes(orig);
-        CryptixAESEngine aes = new CryptixAESEngine(ctx);
-        aes.encrypt(orig, 0, encrypted, 0, key, iv, orig.length);
-        aes.decrypt(encrypted, 0, decrypted, 0, wrongKey, iv, encrypted.length);
-        if (DataHelper.eq(decrypted,orig))
-            throw new RuntimeException("full D(E(orig)) == orig when we used the wrong key!");
-        else
-            System.out.println("full D(E(orig)) != orig when we used the wrong key");
-    }
-
-    private static void testNull(I2PAppContext ctx) {
-        SessionKey key = ctx.keyGenerator().generateSessionKey();
-        SessionKey wrongKey = ctx.keyGenerator().generateSessionKey();
-        byte iv[] = new byte[16];
-        byte orig[] = new byte[128];
-        byte encrypted[] = new byte[128];
-        byte decrypted[] = new byte[128];
-        ctx.random().nextBytes(iv);
-        ctx.random().nextBytes(orig);
-        CryptixAESEngine aes = new CryptixAESEngine(ctx);
-        aes.encrypt(orig, 0, encrypted, 0, key, iv, orig.length);
-        try {
-            aes.decrypt(null, 0, null, 0, wrongKey, iv, encrypted.length);
-        } catch (IllegalArgumentException iae) {
-            return;
-        }
-
-        throw new RuntimeException("full D(E(orig)) didn't fail when we used null!");
-    }
-
-    private static void testEDBlock(I2PAppContext ctx) {
-        SessionKey key = ctx.keyGenerator().generateSessionKey();
-        byte iv[] = new byte[16];
-        byte orig[] = new byte[16];
-        byte encrypted[] = new byte[16];
-        byte decrypted[] = new byte[16];
-        ctx.random().nextBytes(iv);
-        ctx.random().nextBytes(orig);
-        CryptixAESEngine aes = new CryptixAESEngine(ctx);
-        aes.encryptBlock(orig, 0, key, encrypted, 0);
-        aes.decryptBlock(encrypted, 0, key, decrypted, 0);
-        if (!DataHelper.eq(decrypted,orig))
-            throw new RuntimeException("block D(E(orig)) != orig");
-        else
-            System.out.println("block D(E(orig)) == orig");
-    }
-
-    private static void testEDBlock2(I2PAppContext ctx) {
-        SessionKey key = ctx.keyGenerator().generateSessionKey();
-        byte iv[] = new byte[16];
-        byte orig[] = new byte[16];
-        byte data[] = new byte[16];
-        ctx.random().nextBytes(iv);
-        ctx.random().nextBytes(orig);
-        CryptixAESEngine aes = new CryptixAESEngine(ctx);
-        aes.encryptBlock(orig, 0, key, data, 0);
-        aes.decryptBlock(data, 0, key, data, 0);
-        if (!DataHelper.eq(data,orig))
-            throw new RuntimeException("block D(E(orig)) != orig");
-        else
-            System.out.println("block D(E(orig)) == orig");
-    }
-*******/
+    /*******
+     * public static void main(String args[]) {
+     * final int MATCH_RUNS = 11000;
+     * final int TIMING_RUNS = 100000;
+     * I2PAppContext ctx = I2PAppContext.getGlobalContext();
+     * try {
+     * boolean canTestSystem = USE_SYSTEM_AES;
+     * if (!canTestSystem)
+     * System.out.println("System AES 256 not available, testing Cryptix only");
+     * testEDBlock(ctx);
+     * testEDBlock2(ctx);
+     * testED2(ctx);
+     * if (canTestSystem) {
+     * System.out.println("Start Cryptix vs. System verification run of " + MATCH_RUNS);
+     * for (int i = 0; i < MATCH_RUNS; i++) {
+     * testED(ctx, false, true, 1024);
+     * testED(ctx, true, false, 1024);
+     * }
+     * }
+     * for (int len = 512; len <= 1024; len += 32) {
+     * System.out.println("Start Cryptix run of " + TIMING_RUNS + " length " + len);
+     * long start = System.currentTimeMillis();
+     * for (int i = 0; i < TIMING_RUNS; i++) {
+     * testED(ctx, false, false, len);
+     * }
+     * long cryptix = System.currentTimeMillis() - start;
+     * System.out.println("Cryptix took " + cryptix);
+     * if (canTestSystem) {
+     * System.out.println("Start System run of " + TIMING_RUNS + " length " + len);
+     * start = System.currentTimeMillis();
+     * for (int i = 0; i < TIMING_RUNS; i++) {
+     * testED(ctx, true, true, len);
+     * }
+     * long system = System.currentTimeMillis() - start;
+     * System.out.println("System took " + system);
+     * if (system < cryptix)
+     * System.out.println("***System is " + (100 - (system * 100 / cryptix)) + "% better");
+     * else
+     * System.out.println("***System is " + ((system * 100 / cryptix) - 100) + "% worse");
+     * }
+     * }
+     * //testFake(ctx);
+     * //testNull(ctx);
+     * } catch (Exception e) {
+     * e.printStackTrace();
+     * }
+     * //try { Thread.sleep(5*1000); } catch (InterruptedException ie) {}
+     * }
+     *
+     * private static final byte[] _iv = new byte[16];
+     * private static byte[] _orig = new byte[1024];
+     * private static byte[] _encrypted = new byte[1024];
+     * private static byte[] _decrypted = new byte[1024];
+     *
+     * private static void testED(I2PAppContext ctx, boolean systemEnc, boolean systemDec, int len) {
+     * SessionKey key = ctx.keyGenerator().generateSessionKey();
+     * ctx.random().nextBytes(_iv);
+     * ctx.random().nextBytes(_orig);
+     * CryptixAESEngine aes = new CryptixAESEngine(ctx);
+     * USE_SYSTEM_AES = systemEnc;
+     * aes.encrypt(_orig, 0, _encrypted, 0, key, _iv, len);
+     * USE_SYSTEM_AES = systemDec;
+     * aes.decrypt(_encrypted, 0, _decrypted, 0, key, _iv, len);
+     * if (!DataHelper.eq(_decrypted, 0, _orig, 0, len))
+     * throw new RuntimeException("full D(E(orig)) != orig");
+     * //else
+     * //    System.out.println("full D(E(orig)) == orig");
+     * }
+     *
+     * // this verifies decryption in-place
+     * private static void testED2(I2PAppContext ctx) {
+     * SessionKey key = ctx.keyGenerator().generateSessionKey();
+     * byte iv[] = new byte[16];
+     * byte orig[] = new byte[128];
+     * byte data[] = new byte[128];
+     * ctx.random().nextBytes(iv);
+     * ctx.random().nextBytes(orig);
+     * CryptixAESEngine aes = new CryptixAESEngine(ctx);
+     * aes.encrypt(orig, 0, data, 0, key, iv, data.length);
+     * aes.decrypt(data, 0, data, 0, key, iv, data.length);
+     * if (!DataHelper.eq(data,orig))
+     * throw new RuntimeException("full D(E(orig)) != orig");
+     * else
+     * System.out.println("full D(E(orig)) == orig");
+     * }
+     *
+     * private static void testFake(I2PAppContext ctx) {
+     * SessionKey key = ctx.keyGenerator().generateSessionKey();
+     * SessionKey wrongKey = ctx.keyGenerator().generateSessionKey();
+     * byte iv[] = new byte[16];
+     * byte orig[] = new byte[128];
+     * byte encrypted[] = new byte[128];
+     * byte decrypted[] = new byte[128];
+     * ctx.random().nextBytes(iv);
+     * ctx.random().nextBytes(orig);
+     * CryptixAESEngine aes = new CryptixAESEngine(ctx);
+     * aes.encrypt(orig, 0, encrypted, 0, key, iv, orig.length);
+     * aes.decrypt(encrypted, 0, decrypted, 0, wrongKey, iv, encrypted.length);
+     * if (DataHelper.eq(decrypted,orig))
+     * throw new RuntimeException("full D(E(orig)) == orig when we used the wrong key!");
+     * else
+     * System.out.println("full D(E(orig)) != orig when we used the wrong key");
+     * }
+     *
+     * private static void testNull(I2PAppContext ctx) {
+     * SessionKey key = ctx.keyGenerator().generateSessionKey();
+     * SessionKey wrongKey = ctx.keyGenerator().generateSessionKey();
+     * byte iv[] = new byte[16];
+     * byte orig[] = new byte[128];
+     * byte encrypted[] = new byte[128];
+     * byte decrypted[] = new byte[128];
+     * ctx.random().nextBytes(iv);
+     * ctx.random().nextBytes(orig);
+     * CryptixAESEngine aes = new CryptixAESEngine(ctx);
+     * aes.encrypt(orig, 0, encrypted, 0, key, iv, orig.length);
+     * try {
+     * aes.decrypt(null, 0, null, 0, wrongKey, iv, encrypted.length);
+     * } catch (IllegalArgumentException iae) {
+     * return;
+     * }
+     *
+     * throw new RuntimeException("full D(E(orig)) didn't fail when we used null!");
+     * }
+     *
+     * private static void testEDBlock(I2PAppContext ctx) {
+     * SessionKey key = ctx.keyGenerator().generateSessionKey();
+     * byte iv[] = new byte[16];
+     * byte orig[] = new byte[16];
+     * byte encrypted[] = new byte[16];
+     * byte decrypted[] = new byte[16];
+     * ctx.random().nextBytes(iv);
+     * ctx.random().nextBytes(orig);
+     * CryptixAESEngine aes = new CryptixAESEngine(ctx);
+     * aes.encryptBlock(orig, 0, key, encrypted, 0);
+     * aes.decryptBlock(encrypted, 0, key, decrypted, 0);
+     * if (!DataHelper.eq(decrypted,orig))
+     * throw new RuntimeException("block D(E(orig)) != orig");
+     * else
+     * System.out.println("block D(E(orig)) == orig");
+     * }
+     *
+     * private static void testEDBlock2(I2PAppContext ctx) {
+     * SessionKey key = ctx.keyGenerator().generateSessionKey();
+     * byte iv[] = new byte[16];
+     * byte orig[] = new byte[16];
+     * byte data[] = new byte[16];
+     * ctx.random().nextBytes(iv);
+     * ctx.random().nextBytes(orig);
+     * CryptixAESEngine aes = new CryptixAESEngine(ctx);
+     * aes.encryptBlock(orig, 0, key, data, 0);
+     * aes.decryptBlock(data, 0, key, data, 0);
+     * if (!DataHelper.eq(data,orig))
+     * throw new RuntimeException("block D(E(orig)) != orig");
+     * else
+     * System.out.println("block D(E(orig)) == orig");
+     * }
+     *******/
 }

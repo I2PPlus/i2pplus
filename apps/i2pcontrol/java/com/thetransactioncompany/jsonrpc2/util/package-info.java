@@ -40,5 +40,3 @@
  * @author Vladimir Dzhuvinov
  */
 package com.thetransactioncompany.jsonrpc2.util;
-
-

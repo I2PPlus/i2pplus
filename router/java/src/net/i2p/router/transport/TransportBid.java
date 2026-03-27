@@ -1,4 +1,5 @@
 package net.i2p.router.transport;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -18,19 +19,32 @@ public class TransportBid {
     private int _latencyMs;
     private Transport _transport;
     public static final int TRANSIENT_FAIL = 999999;
-    public TransportBid() {_latencyMs = -1;}
+
+    public TransportBid() {
+        _latencyMs = -1;
+    }
 
     /**
      * How long this transport thinks it would take to send the message
      * This is the actual bid value, lower is better, and it doesn't really have
      * anything to do with latency.
      */
-    public int getLatencyMs() {return _latencyMs;}
-    public void setLatencyMs(int milliseconds) {_latencyMs = milliseconds;}
+    public int getLatencyMs() {
+        return _latencyMs;
+    }
+
+    public void setLatencyMs(int milliseconds) {
+        _latencyMs = milliseconds;
+    }
 
     /**
      * Specifies the transport that offered this bid
      */
-    public Transport getTransport() {return _transport;}
-    public void setTransport(Transport transport) {_transport = transport;}
+    public Transport getTransport() {
+        return _transport;
+    }
+
+    public void setTransport(Transport transport) {
+        _transport = transport;
+    }
 }

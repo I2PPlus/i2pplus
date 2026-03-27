@@ -14,6 +14,12 @@ package net.i2p.i2ptunnel;
  * Handles destination resolution, connection management, and data forwarding
  * between local client socket and remote I2P destination.
  */
+import net.i2p.I2PException;
+import net.i2p.client.streaming.I2PSocket;
+import net.i2p.client.streaming.I2PSocketAddress;
+import net.i2p.data.Destination;
+import net.i2p.util.EventDispatcher;
+import net.i2p.util.PortMapper;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -22,12 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import net.i2p.I2PException;
-import net.i2p.client.streaming.I2PSocket;
-import net.i2p.client.streaming.I2PSocketAddress;
-import net.i2p.data.Destination;
-import net.i2p.util.EventDispatcher;
-import net.i2p.util.PortMapper;
 
 /** Standard I2P tunnel client for connecting to I2P destinations */
 public class I2PTunnelClient extends I2PTunnelClientBase {
@@ -36,13 +36,13 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      * list of Destination objects that we point at
      * @deprecated why protected? Is anybody using out-of-tree? Protected from the beginning (2004)
      */
-    @Deprecated
-    protected List<Destination> dests;
+    @Deprecated protected List<Destination> dests;
 
     /**
      * replacement for dests
      */
     private final List<I2PSocketAddress> _addrs;
+
     // We don't know what protocol, so we assume the application has its own timeout mechanism
     private static final long DEFAULT_READ_TIMEOUT = -1;
     protected long readTimeout = DEFAULT_READ_TIMEOUT;
@@ -56,12 +56,8 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      * @throws IllegalArgumentException if the I2PTunnel does not contain
      *                                  valid config to contact the router
      */
-    public I2PTunnelClient(int localPort, String destinations, Logging l,
-                           boolean ownDest, EventDispatcher notifyThis,
-                           I2PTunnel tunnel, String pkf) throws IllegalArgumentException {
-        super(localPort, ownDest, l, notifyThis,
-              "Standard client on " + tunnel.listenHost + ':' + localPort,
-              tunnel, pkf);
+    public I2PTunnelClient(int localPort, String destinations, Logging l, boolean ownDest, EventDispatcher notifyThis, I2PTunnel tunnel, String pkf) throws IllegalArgumentException {
+        super(localPort, ownDest, l, notifyThis, "Standard client on " + tunnel.listenHost + ':' + localPort, tunnel, pkf);
 
         _addrs = new ArrayList<I2PSocketAddress>(1);
         dests = new ArrayList<Destination>(1);
@@ -76,10 +72,10 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
 
             // Don't close() here, because it does a removeSession() and then
             // TunnelController can't acquire() it to release() it.
-            //close(true);
+            // close(true);
             // Unfortunately, super() built the whole tunnel before we get here.
             throw new IllegalArgumentException("No valid target destinations found");
-            //return;
+            // return;
         }
 
         setName(getLocalPort() + " -> " + destinations);
@@ -88,8 +84,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
 
     /** @since 0.9.9 moved from constructor */
     private void buildAddresses(String destinations) {
-        if (destinations == null)
-            return;
+        if (destinations == null) return;
         StringTokenizer tok = new StringTokenizer(destinations, ", ");
         synchronized (_addrs) {
             _addrs.clear();
@@ -103,12 +98,8 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
                     _addrs.add(addr);
                     if (addr.isUnresolved()) {
                         String name = addr.getHostName();
-                        if (name.length() == 60 && name.endsWith(".b32.i2p"))
-                            l.log("▲ Warning - Could not resolve " + name +
-                                  ", perhaps it is not up, will retry when connecting.");
-                        else
-                            l.log("▲ Warning - Could not resolve " + name +
-                                  ", you must add it to your addressbook for it to work.");
+                        if (name.length() == 60 && name.endsWith(".b32.i2p")) l.log("▲ Warning - Could not resolve " + name + ", perhaps it is not up, will retry when connecting.");
+                        else l.log("▲ Warning - Could not resolve " + name + ", you must add it to your addressbook for it to work.");
                     } else {
                         dests.add(addr.getAddress());
                     }
@@ -135,7 +126,9 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      *
      *  @param ms in ms
      */
-    public void setReadTimeout(long ms) { readTimeout = ms; }
+    public void setReadTimeout(long ms) {
+        readTimeout = ms;
+    }
 
     /**
      *  Get the read idle timeout for newly-created connections (in
@@ -149,7 +142,9 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      *
      *  @return in ms
      */
-    public long getReadTimeout() { return readTimeout; }
+    public long getReadTimeout() {
+        return readTimeout;
+    }
 
     /**
      * Execute a runnable task, running inline when called from an unlimited thread pool
@@ -168,27 +163,38 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
         I2PSocket i2ps = null;
         try {
             I2PSocketAddress addr = pickDestination();
-            if (addr == null) {throw new UnknownHostException("No valid destination configured");}
+            if (addr == null) {
+                throw new UnknownHostException("No valid destination configured");
+            }
             Destination clientDest = addr.getAddress();
-            if (clientDest == null) {throw new UnknownHostException("Could not resolve " + addr.getHostName());}
+            if (clientDest == null) {
+                throw new UnknownHostException("Could not resolve " + addr.getHostName());
+            }
             int port = addr.getPort();
             i2ps = createI2PSocket(clientDest, port);
             i2ps.setReadTimeout(readTimeout);
-            I2PTunnelRunner t = new I2PTunnelRunner(s, i2ps, sockLock, null, null, mySockets,
-                                (I2PTunnelRunner.FailCallback) null);
+            I2PTunnelRunner t = new I2PTunnelRunner(s, i2ps, sockLock, null, null, mySockets, (I2PTunnelRunner.FailCallback) null);
             // Execute task (inline when called from unlimited thread pool)
             executeTask(t);
         } catch (IOException ex) {
-            if (_log.shouldWarn()) {_log.warn("Error connecting: " + ex.getMessage());}
+            if (_log.shouldWarn()) {
+                _log.warn("Error connecting: " + ex.getMessage());
+            }
         } catch (I2PException ex) {
-            if (_log.shouldWarn()) {_log.warn("Error connecting: " + ex.getMessage());}
+            if (_log.shouldWarn()) {
+                _log.warn("Error connecting: " + ex.getMessage());
+            }
         } finally {
             // only because we are running it inline
             closeSocket(s);
             if (i2ps != null) {
-                try {i2ps.close();}
-                catch (IOException ioe) {}
-                synchronized (sockLock) {mySockets.remove(i2ps);}
+                try {
+                    i2ps.close();
+                } catch (IOException ioe) {
+                }
+                synchronized (sockLock) {
+                    mySockets.remove(i2ps);
+                }
             }
         }
     }
@@ -197,10 +203,14 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
         synchronized (_addrs) {
             int size = _addrs.size();
             if (size <= 0) {
-                if (_log.shouldError()) {_log.error("No client targets?!");}
+                if (_log.shouldError()) {
+                    _log.error("No client targets?!");
+                }
                 return null;
             }
-            if (size == 1) {return _addrs.get(0);}  // skip the rand in the most common case
+            if (size == 1) {
+                return _addrs.get(0);
+            } // skip the rand in the most common case
             int index = _context.random().nextInt(size);
             return _addrs.get(index);
         }
@@ -213,7 +223,9 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      */
     @Override
     public void optionsUpdated(I2PTunnel tunnel) {
-        if (getTunnel() != tunnel) {return;}
+        if (getTunnel() != tunnel) {
+            return;
+        }
         Properties props = tunnel.getClientOptions();
         // see TunnelController.setSessionOptions()
         String targets = props.getProperty("targetDestination");
@@ -235,8 +247,11 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
             if (addr != null) {
                 String svc = null;
                 String hostname = addr.getHostName();
-                if ("smtp.postman.i2p".equals(hostname)) {svc = PortMapper.SVC_SMTP;}
-                else if ("pop.postman.i2p".equals(hostname)) {svc = PortMapper.SVC_POP;}
+                if ("smtp.postman.i2p".equals(hostname)) {
+                    svc = PortMapper.SVC_SMTP;
+                } else if ("pop.postman.i2p".equals(hostname)) {
+                    svc = PortMapper.SVC_POP;
+                }
                 if (svc != null) {
                     _isr = new InternalSocketRunner(this);
                     _isr.start();

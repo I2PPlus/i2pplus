@@ -1,9 +1,10 @@
 package org.klomp.snark;
 
-import java.net.URI;
-import java.util.List;
 import net.i2p.I2PAppContext;
 import net.i2p.update.*;
+
+import java.net.URI;
+import java.util.List;
 
 /**
  * Handles the request to update the router by firing up a magnet. {@link net.i2p.util.EepGet} calls
@@ -34,18 +35,9 @@ class UpdateHandler implements Updater {
      * @param maxTime how long you have
      * @return active task or null if unable to download
      */
-    public UpdateTask update(
-            UpdateType type,
-            UpdateMethod method,
-            List<URI> updateSources,
-            String id,
-            String newVersion,
-            long maxTime) {
-        if ((type != UpdateType.ROUTER_SIGNED && type != UpdateType.ROUTER_SIGNED_SU3)
-                || method != UpdateMethod.TORRENT
-                || updateSources.isEmpty()) return null;
-        UpdateRunner update =
-                new UpdateRunner(_context, _umgr, _smgr, type, updateSources, newVersion);
+    public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources, String id, String newVersion, long maxTime) {
+        if ((type != UpdateType.ROUTER_SIGNED && type != UpdateType.ROUTER_SIGNED_SU3) || method != UpdateMethod.TORRENT || updateSources.isEmpty()) return null;
+        UpdateRunner update = new UpdateRunner(_context, _umgr, _smgr, type, updateSources, newVersion);
         _umgr.notifyProgress(update, "<b>" + _smgr.util().getString("Updating") + "</b>");
         return update;
     }

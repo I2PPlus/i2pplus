@@ -1,7 +1,8 @@
 package net.i2p.util;
 
-import java.util.List;
 import net.i2p.I2PAppContext;
+
+import java.util.List;
 
 /**
  *  Deprecated - used only by SimpleTimer
@@ -24,10 +25,11 @@ class Executor implements Runnable {
         while (runn.getAnswer()) {
             SimpleTimer.TimedEvent evt = null;
             synchronized (_readyEvents) {
-                if (_readyEvents.isEmpty())
-                    try { _readyEvents.wait(); } catch (InterruptedException ie) {}
-                if (!_readyEvents.isEmpty())
-                    evt = _readyEvents.remove(0);
+                if (_readyEvents.isEmpty()) try {
+                        _readyEvents.wait();
+                    } catch (InterruptedException ie) {
+                    }
+                if (!_readyEvents.isEmpty()) evt = _readyEvents.remove(0);
             }
 
             if (evt != null) {
@@ -38,8 +40,7 @@ class Executor implements Runnable {
                     _log.error("Executing task " + evt + " exited unexpectedly, please report", t);
                 }
                 long time = _context.clock().now() - before;
-                if ((time > 1000) && (_log.shouldWarn()))
-                    _log.warn("event execution took " + time + "ms: " + evt);
+                if ((time > 1000) && (_log.shouldWarn())) _log.warn("event execution took " + time + "ms: " + evt);
             }
         }
     }

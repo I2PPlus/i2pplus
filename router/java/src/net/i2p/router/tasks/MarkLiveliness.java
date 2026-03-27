@@ -1,4 +1,5 @@
 package net.i2p.router.tasks;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,14 +9,15 @@ package net.i2p.router.tasks;
  *
  */
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import net.i2p.data.DataHelper;
 import net.i2p.router.Router;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SimpleTimer;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Router instance liveliness marker for multi-instance detection.
@@ -77,10 +79,8 @@ public class MarkLiveliness implements SimpleTimer.TimedEvent {
      */
     @Override
     public void timeReached() {
-        if (_router.isAlive())
-            ping();
-        else
-            _pingFile.delete();
+        if (_router.isAlive()) ping();
+        else _pingFile.delete();
     }
 
     private void ping() {
@@ -95,7 +95,10 @@ public class MarkLiveliness implements SimpleTimer.TimedEvent {
                 _errorLogged = true;
             }
         } finally {
-            if (fos != null) try { fos.close(); } catch (IOException ioe) {}
+            if (fos != null) try {
+                    fos.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 }

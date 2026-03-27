@@ -10,11 +10,13 @@ package net.i2p.util;
  */
 
 import gnu.crypto.prng.AsyncFortunaStandalone;
-import java.io.IOException;
-import java.security.SecureRandom;
+
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EntropyHarvester;
 import net.i2p.data.DataHelper;
+
+import java.io.IOException;
+import java.security.SecureRandom;
 
 /**
  * Wrapper around GNU-Crypto's Fortuna PRNG.  This seeds from /dev/urandom and
@@ -50,7 +52,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
                 // Absolute last resort - use system time as seed
                 long timeSeed = System.currentTimeMillis() ^ Runtime.getRuntime().freeMemory();
                 for (int i = 0; i < seed.length; i++) {
-                    seed[i] = (byte)(timeSeed & 0xFF);
+                    seed[i] = (byte) (timeSeed & 0xFF);
                     timeSeed >>= 8;
                 }
                 _fortuna.seed(seed);
@@ -95,8 +97,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     public int nextInt(int n) {
         if (n == 1 || n == 0) return 0;
         int rv = signedNextInt(n);
-        if (rv < 0)
-            rv = 0 - rv;
+        if (rv < 0) rv = 0 - rv;
         rv %= n;
         return rv;
     }
@@ -121,22 +122,17 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
      * Implementation from Sun's java.util.Random javadocs
      */
     private int signedNextInt(int n) {
-        if (n<=0)
-            throw new IllegalArgumentException("n must be positive");
+        if (n <= 0) throw new IllegalArgumentException("n must be positive");
 
         boolean isPowerOfTwo = (n & (n - 1)) == 0;
         // get at least 4 extra bits if possible for better
         // distribution after the %
         // No extra needed if power of two.
         int numBits;
-        if (n > 0x1000000 || (n > 0x100000 && !isPowerOfTwo))
-            numBits = 31;
-        else if (n > 0x10000 || (n > 0x1000 && !isPowerOfTwo))
-            numBits = 24;
-        else if (n > 0x100 || (n > 0x10 && !isPowerOfTwo))
-            numBits = 16;
-        else
-            numBits = 8;
+        if (n > 0x1000000 || (n > 0x100000 && !isPowerOfTwo)) numBits = 31;
+        else if (n > 0x10000 || (n > 0x1000 && !isPowerOfTwo)) numBits = 24;
+        else if (n > 0x100 || (n > 0x10 && !isPowerOfTwo)) numBits = 16;
+        else numBits = 8;
         int rv;
         synchronized (_fortuna) {
             rv = nextBits(numBits);
@@ -157,8 +153,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     public long nextLong(long n) {
         if (n == 1 || n == 0) return 0;
         long rv = nextLong();
-        if (rv < 0)
-            rv = 0 - rv;
+        if (rv < 0) rv = 0 - rv;
         rv %= n;
         return rv;
     }
@@ -219,9 +214,9 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     public double nextDouble() {
         long d;
         synchronized (_fortuna) {
-            d = ((long)nextBits(26) << 27) + nextBits(27);
+            d = ((long) nextBits(26) << 27) + nextBits(27);
         }
-        return d / (double)(1L << 53);
+        return d / (double) (1L << 53);
     }
 
     /**
@@ -233,7 +228,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
         synchronized (_fortuna) {
             d = nextBits(24);
         }
-        return d / ((float)(1 << 24));
+        return d / ((float) (1 << 24));
     }
 
     /**
@@ -248,11 +243,11 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
             }
             double v1, v2, s;
             do {
-                v1 = 2 * nextDouble() - 1;   // between -1.0 and 1.0
-                v2 = 2 * nextDouble() - 1;   // between -1.0 and 1.0
+                v1 = 2 * nextDouble() - 1; // between -1.0 and 1.0
+                v2 = 2 * nextDouble() - 1; // between -1.0 and 1.0
                 s = v1 * v1 + v2 * v2;
             } while (s >= 1 || s == 0);
-            double multiplier = Math.sqrt(-2 * Math.log(s)/s);
+            double multiplier = Math.sqrt(-2 * Math.log(s) / s);
             _nextGaussian = v2 * multiplier;
             _haveNextGaussian = true;
             return v1 * multiplier;
@@ -268,21 +263,19 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     protected int nextBits(int numBits) {
         long rv = 0;
         int bytes = (numBits + 7) / 8;
-        for (int i = 0; i < bytes; i++)
-            rv += ((_fortuna.nextByte() & 0xFF) << i*8);
-        //rv >>>= (64-numBits);
-        if (rv < 0)
-            rv = 0 - rv;
-        int off = 8*bytes - numBits;
+        for (int i = 0; i < bytes; i++) rv += ((_fortuna.nextByte() & 0xFF) << i * 8);
+        // rv >>>= (64-numBits);
+        if (rv < 0) rv = 0 - rv;
+        int off = 8 * bytes - numBits;
         rv >>>= off;
-        return (int)rv;
+        return (int) rv;
     }
 
     /** reseed the fortuna */
     @Override
     public void feedEntropy(String source, long data, int bitoffset, int bits) {
         synchronized (_fortuna) {
-            _fortuna.addRandomByte((byte)(data & 0xFF));
+            _fortuna.addRandomByte((byte) (data & 0xFF));
         }
     }
 
@@ -317,6 +310,8 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
                 rand.nextBytes(buf);
                 System.out.write(buf);
             }
-        } catch (IOException e) { e.printStackTrace(); }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,4 +1,5 @@
 package net.i2p.router.tasks;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,10 +9,11 @@ package net.i2p.router.tasks;
  *
  */
 
-import java.io.File;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+
+import java.io.File;
 
 /**
  * Simply read the router config periodically,
@@ -27,8 +29,8 @@ import net.i2p.util.Log;
  * to set routerconsole.advanced=true without restarting.
  */
 public class ReadConfigJob extends JobImpl {
-//    private final static long DELAY = 30*1000; // reread every 30 seconds
-    private final static long DELAY = 60*1000; // reread every minute
+    //    private final static long DELAY = 30*1000; // reread every 30 seconds
+    private static final long DELAY = 60 * 1000; // reread every minute
     private volatile long _lastRead;
     private static final String PROP_ADVANCED = "routerconsole.advanced";
 
@@ -57,7 +59,9 @@ public class ReadConfigJob extends JobImpl {
      * @return job name for logging and identification
      */
     @Override
-    public String getName() { return "Read Router Configuration"; }
+    public String getName() {
+        return "Read Router Configuration";
+    }
 
     /**
      * Check for and reload router configuration if file has changed.
@@ -82,18 +86,15 @@ public class ReadConfigJob extends JobImpl {
             getContext().router().readConfig();
             _lastRead = getContext().clock().now();
             Log log = getContext().logManager().getLog(ReadConfigJob.class);
-            if (log.shouldDebug())
-                log.debug("Reloaded " + configFile);
+            if (log.shouldDebug()) log.debug("Reloaded " + configFile);
         }
-        if (!isAdvanced())
-            requeue(DELAY);
-        else
-            requeue(DELAY / 2 * 3); // 90 seconds
+        if (!isAdvanced()) requeue(DELAY);
+        else requeue(DELAY / 2 * 3); // 90 seconds
     }
 
     private boolean shouldReread(File configFile) {
         // lastModified() returns 0 if not found
-        //if (!configFile.exists()) return false;
+        // if (!configFile.exists()) return false;
         return configFile.lastModified() > _lastRead;
     }
 }

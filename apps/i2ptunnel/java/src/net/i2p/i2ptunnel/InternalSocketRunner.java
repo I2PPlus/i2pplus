@@ -1,11 +1,12 @@
 package net.i2p.i2ptunnel;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.InternalServerSocket;
 import net.i2p.util.Log;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * Listens for in-JVM connections on internal socket.
@@ -52,7 +53,8 @@ class InternalSocketRunner extends I2PAppThread {
             this.open = false;
             try {
                 this.ss.close();
-            } catch (IOException ex) {}
+            } catch (IOException ex) {
+            }
         }
     }
 }

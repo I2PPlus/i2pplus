@@ -1,5 +1,9 @@
 package net.i2p.router.web.helpers;
 
+import net.i2p.data.DataHelper;
+import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
+import net.i2p.router.web.FormHandler;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.HashSet;
@@ -7,9 +11,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import net.i2p.data.DataHelper;
-import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
-import net.i2p.router.web.FormHandler;
 
 /**
  * Handles form submissions from the advanced configuration page.
@@ -24,21 +25,33 @@ public class ConfigAdvancedHandler extends FormHandler {
     @Override
     protected void processForm() {
         if (_shouldSave) {
-            if ("ff".equals(_action) && _ff != null) {saveFF();}
-            else if (isAdvanced()) {saveChanges();}
-            else {addFormError(_t("Save disabled, edit the router.config file to make changes"), true);}
+            if ("ff".equals(_action) && _ff != null) {
+                saveFF();
+            } else if (isAdvanced()) {
+                saveChanges();
+            } else {
+                addFormError(_t("Save disabled, edit the router.config file to make changes"), true);
+            }
         }
     }
 
-    public void setShouldsave(String moo) { _shouldSave = true; }
+    public void setShouldsave(String moo) {
+        _shouldSave = true;
+    }
 
     /** @since 0.9.20 */
-    public void setFf(String ff) {_ff = ff;}
+    public void setFf(String ff) {
+        _ff = ff;
+    }
 
-    public void setNofilter_config(String val) {_config = val;}
+    public void setNofilter_config(String val) {
+        _config = val;
+    }
 
     /** @since 0.9.33 */
-    public void setNofilter_oldConfig(String val) {_oldConfig = val;}
+    public void setNofilter_oldConfig(String val) {
+        _oldConfig = val;
+    }
 
     /**
      * The user made changes to the config and wants to save them, so
@@ -66,7 +79,7 @@ public class ConfigAdvancedHandler extends FormHandler {
             Set<String> keysToRemove = new HashSet<>(oldProps.stringPropertyNames());
 
             // Iterate through the entries in props
-            for (Iterator<Map.Entry<Object, Object>> iter = props.entrySet().iterator(); iter.hasNext();) {
+            for (Iterator<Map.Entry<Object, Object>> iter = props.entrySet().iterator(); iter.hasNext(); ) {
                 Map.Entry<Object, Object> e = iter.next();
                 String key = (String) e.getKey();
                 String newValue = (String) e.getValue();
@@ -76,7 +89,9 @@ public class ConfigAdvancedHandler extends FormHandler {
                 keysToRemove.remove(key);
 
                 // If the value has not changed, remove the entry from props
-                if (newValue.equals(oldValue)) {iter.remove();}
+                if (newValue.equals(oldValue)) {
+                    iter.remove();
+                }
             }
 
             // Check if there are any changes left
@@ -89,8 +104,7 @@ public class ConfigAdvancedHandler extends FormHandler {
             if (noChange) {
                 addFormNotice(_t("No changes made to the configuration"), true);
             } else if (saved) {
-                addFormNoticeNoEscape(_t("Configuration saved successfully") + "<br>" +
-                                      _t("Note") + ": " + _t("Some changes may require a restart to take effect."), true);
+                addFormNoticeNoEscape(_t("Configuration saved successfully") + "<br>" + _t("Note") + ": " + _t("Some changes may require a restart to take effect."), true);
             } else {
                 addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);
             }
@@ -106,8 +120,10 @@ public class ConfigAdvancedHandler extends FormHandler {
             // this will rebuild the RI, log in the event log, etc.
             fndf.setFloodfillEnabled(isFF);
         }
-        if (saved) {addFormNotice(_t("Configuration saved successfully"), true);}
-        else {addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);}
+        if (saved) {
+            addFormNotice(_t("Configuration saved successfully"), true);
+        } else {
+            addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);
+        }
     }
-
 }

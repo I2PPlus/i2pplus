@@ -1,4 +1,5 @@
 package net.i2p.data;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -10,10 +11,11 @@ package net.i2p.data;
 
 import static org.junit.Assert.*;
 
+import org.junit.Test;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
-import org.junit.Test;
 
 /**
  * Test harness for loading / storing PublicKey objects
@@ -26,20 +28,21 @@ public class PublicKeyTest extends StructureTest {
     public DataStructure createDataStructure() throws DataFormatException {
         PublicKey publicKey = new PublicKey();
         byte data[] = new byte[PublicKey.KEYSIZE_BYTES];
-        for (int i = 0; i < data.length; i++)
-            data[i] = (byte)(i%16);
+        for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 16);
         publicKey.setData(data);
         return publicKey;
     }
+
     @Override
-    public DataStructure createStructureToRead() { return new PublicKey(); }
+    public DataStructure createStructureToRead() {
+        return new PublicKey();
+    }
 
     @Test
-    public void testBase64Constructor() throws Exception{
+    public void testBase64Constructor() throws Exception {
         PublicKey publicKey = new PublicKey();
         byte data[] = new byte[PublicKey.KEYSIZE_BYTES];
-        for (int i = 0; i < data.length; i++)
-            data[i] = (byte)(i%56);
+        for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 56);
         publicKey.setData(data);
 
         PublicKey key2 = new PublicKey(publicKey.toBase64());
@@ -47,18 +50,17 @@ public class PublicKeyTest extends StructureTest {
     }
 
     @Test
-    public void testNullEquals(){
+    public void testNullEquals() {
         PublicKey publicKey = new PublicKey();
         byte data[] = new byte[PublicKey.KEYSIZE_BYTES];
-        for (int i = 0; i < data.length; i++)
-            data[i] = (byte)(i%56);
+        for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 56);
         publicKey.setData(data);
 
         assertFalse(publicKey.equals(null));
     }
 
     @Test
-    public void testNullData() throws Exception{
+    public void testNullData() throws Exception {
         PublicKey publicKey = new PublicKey();
         assertNotNull(publicKey.toString());
 
@@ -71,11 +73,10 @@ public class PublicKeyTest extends StructureTest {
     }
 
     @Test
-    public void testShortData() throws Exception{
+    public void testShortData() throws Exception {
         PublicKey publicKey = new PublicKey();
         byte data[] = new byte[56];
-        for (int i = 0; i < data.length; i++)
-            data[i] = (byte)(i);
+        for (int i = 0; i < data.length; i++) data[i] = (byte) (i);
 
         try {
             publicKey.setData(data);
@@ -87,7 +88,7 @@ public class PublicKeyTest extends StructureTest {
     }
 
     @Test
-    public void testShortRead() throws Exception{
+    public void testShortRead() throws Exception {
         PublicKey publicKey = new PublicKey();
         ByteArrayInputStream in = new ByteArrayInputStream(DataHelper.getASCII("six times nine equals forty-two"));
 

@@ -1,5 +1,9 @@
 package net.i2p.client.streaming.impl;
 
+import net.i2p.client.streaming.I2PSocket;
+import net.i2p.client.streaming.I2PSocketAddress;
+import net.i2p.client.streaming.I2PSocketOptions;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -8,9 +12,6 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.nio.channels.SocketChannel;
-import net.i2p.client.streaming.I2PSocket;
-import net.i2p.client.streaming.I2PSocketAddress;
-import net.i2p.client.streaming.I2PSocketOptions;
 
 /**
  * Bridge to I2PSocket.
@@ -46,8 +47,7 @@ class StandardSocket extends Socket {
 
     @Override
     public void close() throws IOException {
-        if (_socket.isClosed())
-            throw new IOException("Already closed");
+        if (_socket.isClosed()) throw new IOException("Already closed");
         _socket.close();
     }
 
@@ -72,7 +72,7 @@ class StandardSocket extends Socket {
      */
     @Override
     public SocketChannel getChannel() {
-        //return _socket.getChannel();
+        // return _socket.getChannel();
         return null;
     }
 
@@ -87,16 +87,14 @@ class StandardSocket extends Socket {
     @Override
     public InputStream getInputStream() throws IOException {
         InputStream rv = _socket.getInputStream();
-        if (rv != null)
-            return rv;
+        if (rv != null) return rv;
         throw new IOException("No stream");
     }
 
     @Override
     public boolean getKeepAlive() {
         ConnectionOptions opts = (ConnectionOptions) _socket.getOptions();
-        if (opts == null)
-            return false;
+        if (opts == null) return false;
         return opts.getInactivityAction() == ConnectionOptions.INACTIVITY_ACTION_SEND;
     }
 
@@ -136,8 +134,7 @@ class StandardSocket extends Socket {
     @Override
     public OutputStream getOutputStream() throws IOException {
         OutputStream rv = _socket.getOutputStream();
-        if (rv != null)
-            return rv;
+        if (rv != null) return rv;
         throw new IOException("No stream");
     }
 
@@ -152,8 +149,7 @@ class StandardSocket extends Socket {
     @Override
     public int getReceiveBufferSize() {
         ConnectionOptions opts = (ConnectionOptions) _socket.getOptions();
-        if (opts == null)
-            return 64*1024;
+        if (opts == null) return 64 * 1024;
         return opts.getInboundBufferSize();
     }
 
@@ -177,32 +173,26 @@ class StandardSocket extends Socket {
     @Override
     public int getSendBufferSize() {
         ConnectionOptions opts = (ConnectionOptions) _socket.getOptions();
-        if (opts == null)
-            return 64*1024;
+        if (opts == null) return 64 * 1024;
         return opts.getInboundBufferSize();
     }
 
     @Override
     public int getSoLinger() {
         I2PSocketOptions opts = _socket.getOptions();
-        if (opts == null)
-            return -1;
-        return -1;  // fixme really?
+        if (opts == null) return -1;
+        return -1; // fixme really?
     }
 
     @Override
     public int getSoTimeout() {
         I2PSocketOptions opts = _socket.getOptions();
-        if (opts == null)
-            return 0;
+        if (opts == null) return 0;
         long rv = opts.getReadTimeout();
         // Java Socket: 0 is forever, and we don't exactly have nonblocking
-        if (rv > Integer.MAX_VALUE)
-            rv = Integer.MAX_VALUE;
-        else if (rv < 0)
-            rv = 0;
-        else if (rv == 0)
-            rv = 1;
+        if (rv > Integer.MAX_VALUE) rv = Integer.MAX_VALUE;
+        else if (rv < 0) rv = 0;
+        else if (rv == 0) rv = 1;
         return (int) rv;
     }
 
@@ -262,12 +252,9 @@ class StandardSocket extends Socket {
     @Override
     public void setKeepAlive(boolean on) {
         ConnectionOptions opts = (ConnectionOptions) _socket.getOptions();
-        if (opts == null)
-            return;
-        if (on)
-            opts.setInactivityAction(ConnectionOptions.INACTIVITY_ACTION_SEND);
-        else
-            opts.setInactivityAction(ConnectionOptions.INACTIVITY_ACTION_NOOP);  // DISCONNECT?
+        if (opts == null) return;
+        if (on) opts.setInactivityAction(ConnectionOptions.INACTIVITY_ACTION_SEND);
+        else opts.setInactivityAction(ConnectionOptions.INACTIVITY_ACTION_NOOP); // DISCONNECT?
     }
 
     /**
@@ -275,53 +262,45 @@ class StandardSocket extends Socket {
      */
     @Override
     public void setOOBInline(boolean on) {
-        if (on)
-            throw new UnsupportedOperationException();
+        if (on) throw new UnsupportedOperationException();
     }
 
     /**
      *  Does nothing.
      */
     @Override
-    public void setPerformancePreferences(int connectionTime, int latency, int bandwidth) {
-    }
+    public void setPerformancePreferences(int connectionTime, int latency, int bandwidth) {}
 
     /**
      *  Does nothing.
      */
     @Override
-    public void setReceiveBufferSize(int size) {
-    }
+    public void setReceiveBufferSize(int size) {}
 
     /**
      *  Does nothing.
      */
     @Override
-    public void setReuseAddress(boolean on) {
-    }
+    public void setReuseAddress(boolean on) {}
 
     /**
      *  Does nothing.
      */
     @Override
-    public void setSendBufferSize(int size) {
-    }
+    public void setSendBufferSize(int size) {}
 
     /**
      *  Does nothing.
      */
     @Override
-    public void setSoLinger(boolean on, int linger) {
-    }
+    public void setSoLinger(boolean on, int linger) {}
 
     @Override
     public void setSoTimeout(int timeout) throws SocketException {
         I2PSocketOptions opts = _socket.getOptions();
-        if (opts == null)
-            throw new SocketException("No options");
+        if (opts == null) throw new SocketException("No options");
         // Java Socket: 0 is forever
-        if (timeout == 0)
-            timeout = -1;
+        if (timeout == 0) timeout = -1;
         opts.setReadTimeout(timeout);
     }
 
@@ -329,15 +308,13 @@ class StandardSocket extends Socket {
      *  Does nothing.
      */
     @Override
-    public void setTcpNoDelay(boolean on) {
-    }
+    public void setTcpNoDelay(boolean on) {}
 
     /**
      *  Does nothing.
      */
     @Override
-    public void setTrafficClass(int tc) {
-    }
+    public void setTrafficClass(int tc) {}
 
     @Override
     public void shutdownInput() throws IOException {

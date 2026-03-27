@@ -1,5 +1,9 @@
 package net.i2p.router.tunnel.pool;
 
+import net.i2p.router.JobImpl;
+import net.i2p.router.Router;
+import net.i2p.router.RouterContext;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -7,10 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import net.i2p.router.JobImpl;
-import net.i2p.router.Router;
-import net.i2p.router.RouterContext;
 
 /**
  * Handles tunnel expiration in two phases for graceful shutdown.
@@ -30,7 +30,7 @@ class ExpireJob extends JobImpl {
     private volatile boolean _phase1Complete = false;
 
     private static final long BATCH_WINDOW = 5 * 1000;
-    private static final long OB_EARLY_EXPIRE = 30*1000;
+    private static final long OB_EARLY_EXPIRE = 30 * 1000;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
     private static final long MAX_ENTRY_LIFETIME = 15 * 60 * 1000L;
     private static final int MAX_ITERATE_PER_RUN = 2000;
@@ -53,7 +53,9 @@ class ExpireJob extends JobImpl {
     }
 
     @Override
-    public String getName() {return "Expire Local Tunnels";}
+    public String getName() {
+        return "Expire Local Tunnels";
+    }
 
     /**
      * Schedule a tunnel for batched expiration.

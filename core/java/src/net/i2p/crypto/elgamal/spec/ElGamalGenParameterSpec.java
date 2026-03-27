@@ -10,9 +10,7 @@ import java.security.spec.AlgorithmParameterSpec;
  * the security level of the generated keys, with larger sizes providing stronger
  * cryptographic security at the cost of computational performance.
  */
-public class ElGamalGenParameterSpec
-    implements AlgorithmParameterSpec
-{
+public class ElGamalGenParameterSpec implements AlgorithmParameterSpec {
     private final int primeSize;
 
     /*

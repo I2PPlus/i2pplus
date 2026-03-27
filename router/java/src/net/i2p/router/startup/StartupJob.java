@@ -1,4 +1,5 @@
 package net.i2p.router.startup;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -7,7 +8,6 @@ package net.i2p.router.startup;
  * your children, but it might.  Use at your own risk.
  *
  */
-
 
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
@@ -33,11 +33,13 @@ public class StartupJob extends JobImpl {
     }
 
     @Override
-    public String getName() { return "Boot Router"; }
+    public String getName() {
+        return "Boot Router";
+    }
+
     @Override
     public void runJob() {
-        if (!SystemVersion.isAndroid())
-            getContext().jobQueue().addJob(new LoadClientAppsJob(getContext()));
+        if (!SystemVersion.isAndroid()) getContext().jobQueue().addJob(new LoadClientAppsJob(getContext()));
         getContext().jobQueue().addJob(new LoadRouterInfoJob(getContext()));
     }
 }

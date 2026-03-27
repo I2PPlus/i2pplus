@@ -59,7 +59,7 @@ public class BDecoder {
      * @return the SHA-1 digest of the special map bytes, or null if there was no special map
      */
     public byte[] get_special_map_digest() {
-        if (sha_digest == null) return null;  // NOPMD - ReturnEmptyCollectionRatherThanNull (byte[] is not a Collection)
+        if (sha_digest == null) return null; // NOPMD - ReturnEmptyCollectionRatherThanNull (byte[] is not a Collection)
         byte[] result = sha_digest.digest();
         return result;
     }
@@ -155,8 +155,7 @@ public class BDecoder {
     public BEValue bdecodeBytes() throws IOException {
         int c = getNextIndicator();
         int num = c - '0';
-        if (num < 0 || num > 9)
-            throw new InvalidBEncodingException("Number expected, not '" + (char) c + "'");
+        if (num < 0 || num > 9) throw new InvalidBEncodingException("Number expected, not '" + (char) c + "'");
         indicator = 0;
 
         c = read();
@@ -190,9 +189,7 @@ public class BDecoder {
         if (c == '0') {
             c = read();
             if (c == 'e') return new BEValue(Integer.valueOf(0));
-            else
-                throw new InvalidBEncodingException(
-                        "'e' expected after zero," + " not '" + (char) c + "'");
+            else throw new InvalidBEncodingException("'e' expected after zero," + " not '" + (char) c + "'");
         }
 
         // XXX - We don't support more the 255 char big integers
@@ -203,8 +200,7 @@ public class BDecoder {
             c = read();
         }
 
-        if (c < '1' || c > '9')
-            throw new InvalidBEncodingException("Invalid Integer start '" + (char) c + "'");
+        if (c < '1' || c > '9') throw new InvalidBEncodingException("Invalid Integer start '" + (char) c + "'");
         chars.append((char) c);
 
         c = read();
@@ -260,11 +256,8 @@ public class BDecoder {
      */
     public BEValue bdecodeMap() throws IOException {
         int c = getNextIndicator();
-        if (c == '<')
-            throw new InvalidBEncodingException(
-                    "Expected a .torrent metainfo file but found HTML? Check URL or file!");
-        else if (c != 'd')
-            throw new InvalidBEncodingException("Expected 'd', not '" + (char) c + "'");
+        if (c == '<') throw new InvalidBEncodingException("Expected a .torrent metainfo file but found HTML? Check URL or file!");
+        else if (c != 'd') throw new InvalidBEncodingException("Expected 'd', not '" + (char) c + "'");
         indicator = 0;
 
         Map<String, BEValue> result = new HashMap<String, BEValue>();

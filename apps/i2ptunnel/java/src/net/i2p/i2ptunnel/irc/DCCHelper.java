@@ -73,5 +73,4 @@ public interface DCCHelper {
      *  @return local DCC client tunnel port or -1 on error
      */
     public int acceptIncoming(int port);
-
 }

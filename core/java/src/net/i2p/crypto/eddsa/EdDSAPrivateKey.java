@@ -11,14 +11,15 @@
  */
 package net.i2p.crypto.eddsa;
 
-import java.security.PrivateKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.Arrays;
 import net.i2p.crypto.eddsa.math.GroupElement;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
 import net.i2p.crypto.eddsa.spec.EdDSAParameterSpec;
 import net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec;
+
+import java.security.PrivateKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.Arrays;
 
 /**
  * An EdDSA private key.
@@ -61,8 +62,7 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
      *  @since 0.9.25
      */
     public EdDSAPrivateKey(PKCS8EncodedKeySpec spec) throws InvalidKeySpecException {
-        this(new EdDSAPrivateKeySpec(decode(spec.getEncoded()),
-                                     EdDSANamedCurveTable.ED_25519_CURVE_SPEC));
+        this(new EdDSAPrivateKeySpec(decode(spec.getEncoded()), EdDSANamedCurveTable.ED_25519_CURVE_SPEC));
     }
 
     @Override
@@ -136,10 +136,8 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
      */
     @Override
     public byte[] getEncoded() {
-        if (!edDsaSpec.equals(EdDSANamedCurveTable.ED_25519_CURVE_SPEC))
-            return new byte[0];
-        if (seed == null)
-            return new byte[0];
+        if (!edDsaSpec.equals(EdDSANamedCurveTable.ED_25519_CURVE_SPEC)) return new byte[0];
+        if (seed == null) return new byte[0];
         int totlen = 16 + seed.length;
         byte[] rv = new byte[totlen];
         int idx = 0;
@@ -164,10 +162,10 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
         rv[idx++] = (byte) OID_ED25519;
         // params - absent
         // PrivateKey
-        rv[idx++] = 0x04;  // octet string
+        rv[idx++] = 0x04; // octet string
         rv[idx++] = (byte) (2 + seed.length);
         // CurvePrivateKey
-        rv[idx++] = 0x04;  // octet string
+        rv[idx++] = 0x04; // octet string
         rv[idx++] = (byte) seed.length;
         // the key
         System.arraycopy(seed, 0, rv, idx, seed.length);
@@ -223,25 +221,13 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
             // Decoding
             //
             int idx = 0;
-            if (d[idx++] != 0x30 ||
-                d[idx++] != (totlen - 2) ||
-                d[idx++] != 0x02 ||
-                d[idx++] != 1 ||
-                d[idx++] != 0 ||
-                d[idx++] != 0x30 ||
-                d[idx++] != idlen ||
-                d[idx++] != 0x06 ||
-                d[idx++] != 3 ||
-                d[idx++] != (1 * 40) + 3 ||
-                d[idx++] != 101) {
+            if (d[idx++] != 0x30 || d[idx++] != (totlen - 2) || d[idx++] != 0x02 || d[idx++] != 1 || d[idx++] != 0 || d[idx++] != 0x30 || d[idx++] != idlen || d[idx++] != 0x06 || d[idx++] != 3 || d[idx++] != (1 * 40) + 3 || d[idx++] != 101) {
                 throw new InvalidKeySpecException("unsupported key spec");
             }
             idx++; // OID, checked above
             // parameters only with old OID
             if (doid == OID_OLD) {
-                if (d[idx++] != 0x0a ||
-                    d[idx++] != 1 ||
-                    d[idx++] != 1) {
+                if (d[idx++] != 0x0a || d[idx++] != 1 || d[idx++] != 1) {
                     throw new InvalidKeySpecException("unsupported key spec");
                 }
             } else {
@@ -260,19 +246,16 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
                 // Java's default keystore puts it in (when decoding as PKCS8 and then
                 // re-encoding to pass on), so we must accept it.
                 if (idlen == 7) {
-                    if (d[idx++] != 0x05 ||
-                        d[idx++] != 0) {
+                    if (d[idx++] != 0x05 || d[idx++] != 0) {
                         throw new InvalidKeySpecException("unsupported key spec");
                     }
                 }
                 // PrivateKey wrapping the CurvePrivateKey
-                if (d[idx++] != 0x04 ||
-                    d[idx++] != 34) {
+                if (d[idx++] != 0x04 || d[idx++] != 34) {
                     throw new InvalidKeySpecException("unsupported key spec");
                 }
             }
-            if (d[idx++] != 0x04 ||
-                d[idx++] != 32) {
+            if (d[idx++] != 0x04 || d[idx++] != 32) {
                 throw new InvalidKeySpecException("unsupported key spec");
             }
             byte[] rv = new byte[32];
@@ -337,12 +320,9 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
      */
     @Override
     public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof EdDSAPrivateKey))
-            return false;
+        if (o == this) return true;
+        if (!(o instanceof EdDSAPrivateKey)) return false;
         EdDSAPrivateKey pk = (EdDSAPrivateKey) o;
-        return Arrays.equals(seed, pk.getSeed()) &&
-               edDsaSpec.equals(pk.getParams());
+        return Arrays.equals(seed, pk.getSeed()) && edDsaSpec.equals(pk.getParams());
     }
 }

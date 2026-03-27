@@ -1,6 +1,5 @@
 package net.i2p.router.networkdb.kademlia;
 
-import java.util.List;
 import net.i2p.crypto.SigType;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
@@ -21,6 +20,8 @@ import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
+import java.util.List;
+
 /**
  * Simple job to monitor the floodfill pool.
  * If we are class N or O, and meet some other criteria,
@@ -34,9 +35,9 @@ class FloodfillMonitorJob extends JobImpl {
     private long _lastChanged;
     private boolean _deferredFlood;
 
-    private static final int REQUEUE_DELAY = 15*60*1000;
-    private static final long MIN_UPTIME = 2*60*60*1000;
-    private static final long MIN_CHANGE_DELAY = 3*60*60*1000;
+    private static final int REQUEUE_DELAY = 15 * 60 * 1000;
+    private static final long MIN_UPTIME = 2 * 60 * 60 * 1000;
+    private static final long MIN_CHANGE_DELAY = 3 * 60 * 60 * 1000;
 
     private static final int MIN_FF = 2000;
     private static final int MAX_FF = 999999;
@@ -49,7 +50,9 @@ class FloodfillMonitorJob extends JobImpl {
     }
 
     @Override
-    public String getName() {return "Monitor Floodfill Pool";}
+    public String getName() {
+        return "Monitor Floodfill Pool";
+    }
 
     @Override
     public synchronized void runJob() {
@@ -63,23 +66,26 @@ class FloodfillMonitorJob extends JobImpl {
         }
         boolean wasFF = _facade.floodfillEnabled();
         boolean ff = shouldBeFloodfill(wasFF);
-        if (wasFF) {autoff = false;}
+        if (wasFF) {
+            autoff = false;
+        }
         _facade.setFloodfillEnabledFromMonitor(ff);
         if (ff != wasFF) {
             if (ff) {
-                if (!(getContext().getBooleanProperty(FloodfillNetworkDatabaseFacade.PROP_FLOODFILL_PARTICIPANT) &&
-                      getContext().router().getUptime() < 3*60*1000)) {
+                if (!(getContext().getBooleanProperty(FloodfillNetworkDatabaseFacade.PROP_FLOODFILL_PARTICIPANT) && getContext().router().getUptime() < 3 * 60 * 1000)) {
                     getContext().router().eventLog().addEvent(EventLog.BECAME_FLOODFILL);
                 }
-            } else {getContext().router().eventLog().addEvent(EventLog.NOT_FLOODFILL);}
+            } else {
+                getContext().router().eventLog().addEvent(EventLog.NOT_FLOODFILL);
+            }
             getContext().router().rebuildRouterInfo(true);
             Job routerInfoFlood = new FloodfillRouterInfoFloodJob(getContext(), _facade);
-            if (getContext().router().getUptime() < 5*60*1000) {
+            if (getContext().router().getUptime() < 5 * 60 * 1000) {
                 if (!_deferredFlood) {
                     // Needed to prevent race if router.floodfillParticipant=true (not auto)
                     // Don't queue multiples
                     _deferredFlood = true;
-                    routerInfoFlood.getTiming().setStartAfter(getContext().clock().now() + 5*60*1000);
+                    routerInfoFlood.getTiming().setStartAfter(getContext().clock().now() + 5 * 60 * 1000);
                     getContext().jobQueue().addJob(routerInfoFlood);
                     if (_log.shouldDebug()) {
                         _log.logAlways(Log.DEBUG, "Deferred our FloodfillRouterInfoFloodJob run because of low uptime.");
@@ -87,16 +93,23 @@ class FloodfillMonitorJob extends JobImpl {
                 }
             } else {
                 routerInfoFlood.runJob();
-                if (_log.shouldDebug()) {_log.logAlways(Log.DEBUG, "Running FloodfillRouterInfoFloodJob...");}
+                if (_log.shouldDebug()) {
+                    _log.logAlways(Log.DEBUG, "Running FloodfillRouterInfoFloodJob...");
+                }
             }
         }
-        if (autoff && _log.shouldInfo()) {_log.info("Should we be a Floodfill? " + ff);}
+        if (autoff && _log.shouldInfo()) {
+            _log.info("Should we be a Floodfill? " + ff);
+        }
         int delay = (REQUEUE_DELAY / 2) + getContext().random().nextInt(REQUEUE_DELAY);
         // there's a lot of eligible non-floodfills, keep them from all jumping in at once
         // TODO: somehow assess the size of the network to make this adaptive?
 
-        if (!ff) {delay *= 4;}
-        else {delay *= 10;} // slow down check if we're already a floodfill
+        if (!ff) {
+            delay *= 4;
+        } else {
+            delay *= 10;
+        } // slow down check if we're already a floodfill
         requeue(delay);
     }
 
@@ -110,13 +123,19 @@ class FloodfillMonitorJob extends JobImpl {
         }
 
         String enabled = getContext().getProperty(FloodfillNetworkDatabaseFacade.PROP_FLOODFILL_PARTICIPANT, "auto");
-        if ("true".equals(enabled)) {return true;}
-        if ("false".equals(enabled)) {return false;}
+        if ("true".equals(enabled)) {
+            return true;
+        }
+        if ("false".equals(enabled)) {
+            return false;
+        }
 
         // auto from here down
 
         // Don't change while shutting down...
-        if (getContext().router().gracefulShutdownInProgress()) {return wasFF;}
+        if (getContext().router().gracefulShutdownInProgress()) {
+            return wasFF;
+        }
 
         // ARM ElG decrypt is too slow
         if (SystemVersion.isSlow()) {
@@ -151,8 +170,7 @@ class FloodfillMonitorJob extends JobImpl {
             return false;
         }
 
-        if (getContext().commSystem().isInStrictCountry())
-            return false;
+        if (getContext().commSystem().isInStrictCountry()) return false;
         String country = getContext().commSystem().getOurCountry();
         // anonymous proxy, satellite provider (not in bad country list)
         if ("a1".equals(country) || "a2".equals(country)) {
@@ -175,7 +193,9 @@ class FloodfillMonitorJob extends JobImpl {
             // remove the config
             getContext().router().saveConfig(FloodfillNetworkDatabaseFacade.PROP_FLOODFILL_AT_RESTART, null);
             long down = getContext().router().getEstimatedDowntime();
-            if (down == 0 || down > 20*60*1000) {return false;}
+            if (down == 0 || down > 20 * 60 * 1000) {
+                return false;
+            }
             afterRestart = true;
         }
 
@@ -197,8 +217,7 @@ class FloodfillMonitorJob extends JobImpl {
 
         char bw = ri.getBandwidthTier().charAt(0);
         // Only if class N, O, P, X
-        if (bw != Router.CAPABILITY_BW128 && bw != Router.CAPABILITY_BW256 &&
-            bw != Router.CAPABILITY_BW512 && bw != Router.CAPABILITY_BW_UNLIMITED) {
+        if (bw != Router.CAPABILITY_BW128 && bw != Router.CAPABILITY_BW256 && bw != Router.CAPABILITY_BW512 && bw != Router.CAPABILITY_BW_UNLIMITED) {
             if (autoff && _log.shouldInfo()) {
                 _log.info("Not enough upstream bandwidth allocated to automatically enroll as a floodfill");
             }
@@ -219,7 +238,9 @@ class FloodfillMonitorJob extends JobImpl {
         }
 
         // Only change status every so often
-        if (_lastChanged + MIN_CHANGE_DELAY > now) {return wasFF;}
+        if (_lastChanged + MIN_CHANGE_DELAY > now) {
+            return wasFF;
+        }
 
         /*
          * This is similar to the qualification we do in FloodOnlySearchJob.runJob().
@@ -236,16 +257,15 @@ class FloodfillMonitorJob extends JobImpl {
          */
         int ffcount = floodfillPeers.size();
         int failcount = 0;
-        long before = now - 60*60*1000;
+        long before = now - 60 * 60 * 1000;
         for (Hash peer : floodfillPeers) {
             PeerProfile profile = getContext().profileOrganizer().getProfile(peer);
-            if (profile == null || profile.getLastHeardFrom() < before ||
-                getContext().banlist().isBanlisted(peer) ||
-                getContext().commSystem().wasUnreachable(peer))
-                failcount++;
+            if (profile == null || profile.getLastHeardFrom() < before || getContext().banlist().isBanlisted(peer) || getContext().commSystem().wasUnreachable(peer)) failcount++;
         }
 
-        if (wasFF) {ffcount++;}
+        if (wasFF) {
+            ffcount++;
+        }
         int good = ffcount - failcount;
         boolean happy = getContext().router().getRouterInfo().getCapabilities().indexOf('R') >= 0;
 
@@ -255,26 +275,33 @@ class FloodfillMonitorJob extends JobImpl {
         RateStat lagStat = getContext().statManager().getRate("jobQueue.jobLag");
         if (lagStat != null) {
             Rate rate = lagStat.getRate(RateConstants.ONE_HOUR);
-            if (rate != null) {happy = happy && rate.getAvgOrLifetimeAvg() < 25;}
+            if (rate != null) {
+                happy = happy && rate.getAvgOrLifetimeAvg() < 25;
+            }
         }
         RateStat queueStat = getContext().statManager().getRate("router.tunnelBacklog");
         if (queueStat != null) {
             Rate rate = queueStat.getRate(RateConstants.ONE_HOUR);
-            if (rate != null) {happy = happy && rate.getAvgOrLifetimeAvg() < 5;}
+            if (rate != null) {
+                happy = happy && rate.getAvgOrLifetimeAvg() < 5;
+            }
         }
 
         if (!afterRestart) {
             happy = happy && _facade.getKnownRouters() >= 500; // Only if we're pretty well integrated...
             happy = happy && getContext().commSystem().countActivePeers() >= 50;
             happy = happy && getContext().tunnelManager().getParticipatingCount() >= 250;
-            happy = happy && Math.abs(getContext().clock().getOffset()) < 10*1000;
+            happy = happy && Math.abs(getContext().clock().getOffset()) < 10 * 1000;
         }
 
         // We need an address and no introducers
         if (happy) {
             RouterAddress ra = getContext().router().getRouterInfo().getTargetAddress("SSU2");
-            if (ra == null) {happy = false;}
-            else if (ra.getOption("itag0") != null) {happy = false;}
+            if (ra == null) {
+                happy = false;
+            } else if (ra.getOption("itag0") != null) {
+                happy = false;
+            }
         }
 
         double elG = 0;
@@ -291,21 +318,9 @@ class FloodfillMonitorJob extends JobImpl {
             final RouterContext rc = getContext();
             RouterAddress ra = getContext().router().getRouterInfo().getTargetAddress("SSU2");
             String ssu2 = ra != null ? ra.toString() : "none";
-            final String log = String.format(
-                    "Floodfill criteria breakdown: happy=%b, capabilities=%s, maxLag=%d, known=%d, " +
-                    "active=%d, participating=%d, offset=%d, ssuAddr=%s ElG=%f",
-                    happy,
-                    rc.router().getRouterInfo().getCapabilities(),
-                    rc.jobQueue().getMaxLag(),
-                    _facade.getKnownRouters(),
-                    rc.commSystem().countActivePeers(),
-                    rc.tunnelManager().getParticipatingCount(),
-                    Math.abs(rc.clock().getOffset()),
-                    ssu2,
-                    elG);
+            final String log = String.format("Floodfill criteria breakdown: happy=%b, capabilities=%s, maxLag=%d, known=%d, " + "active=%d, participating=%d, offset=%d, ssuAddr=%s ElG=%f", happy, rc.router().getRouterInfo().getCapabilities(), rc.jobQueue().getMaxLag(), _facade.getKnownRouters(), rc.commSystem().countActivePeers(), rc.tunnelManager().getParticipatingCount(), Math.abs(rc.clock().getOffset()), ssu2, elG);
             _log.debug(log);
         }
-
 
         // Too few, and we're reachable, let's volunteer
         if (good < MIN_FF && happy) {
@@ -320,8 +335,7 @@ class FloodfillMonitorJob extends JobImpl {
         if (good > MAX_FF || (good > MIN_FF && !happy)) {
             if (wasFF && happy) {
                 _lastChanged = now;
-                _log.logAlways(Log.INFO, "We already have " + good + " good floodfill peers and we need only " + MIN_FF + " to " + MAX_FF +
-                               ", disabling floodfill role...");
+                _log.logAlways(Log.INFO, "We already have " + good + " good floodfill peers and we need only " + MIN_FF + " to " + MAX_FF + ", disabling floodfill role...");
             } else if (wasFF && !happy) {
                 _log.logAlways(Log.INFO, "We are no longer reachable, disabling floodfill role...");
             }
@@ -333,5 +347,4 @@ class FloodfillMonitorJob extends JobImpl {
         }
         return wasFF;
     }
-
 }

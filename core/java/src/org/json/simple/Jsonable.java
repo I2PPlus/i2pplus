@@ -16,7 +16,7 @@ import java.io.Writer;
 /** Jsonables can be serialized in java script object notation (JSON). Deserializing a String produced by a Jsonable
  * should represent the Jsonable in JSON form.
  * @since 2.0.0 */
-public interface Jsonable{
+public interface Jsonable {
     /** Serialize to a JSON formatted string.
      * @return a string, formatted in JSON, that represents the Jsonable. */
     public String toJson();

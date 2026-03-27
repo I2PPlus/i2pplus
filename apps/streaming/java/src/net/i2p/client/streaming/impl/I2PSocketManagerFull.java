@@ -1,20 +1,5 @@
 package net.i2p.client.streaming.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.ConnectException;
-import java.net.NoRouteToHostException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
-import java.security.GeneralSecurityException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PClient;
@@ -38,6 +23,22 @@ import net.i2p.util.ByteArrayStream;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.ConvertToHash;
 import net.i2p.util.Log;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.ConnectException;
+import java.net.NoRouteToHostException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.security.GeneralSecurityException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Centralize the coordination and multiplexing of the local client's streaming.
@@ -68,6 +69,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *  @since 0.9.21
      */
     private static final Set<Hash> _ecUnsupported = new HashSet<Hash>(16);
+
     private static final String[] EC_UNSUPPORTED_HASHES = {
         // list from http://zzz.i2p/topics/1682?page=1#p8414
         // bzr.welterde.i2p
@@ -105,6 +107,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *  @since 0.9.23
      */
     private static final Set<Hash> _edUnsupported = new HashSet<Hash>(16);
+
     private static final String[] ED_UNSUPPORTED_HASHES = {
         // list from http://zzz.i2p/topics/1682?page=1#p8414
         // minus those tested to support Ed
@@ -137,23 +140,20 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         for (int i = 0; i < EC_UNSUPPORTED_HASHES.length; i++) {
             String s = EC_UNSUPPORTED_HASHES[i];
             Hash h = ConvertToHash.getHash(s);
-            if (h != null)
-                _ecUnsupported.add(h);
-            else
-                System.out.println("Bad hash " + s);
+            if (h != null) _ecUnsupported.add(h);
+            else System.out.println("Bad hash " + s);
         }
         for (int i = 0; i < ED_UNSUPPORTED_HASHES.length; i++) {
             String s = ED_UNSUPPORTED_HASHES[i];
             Hash h = ConvertToHash.getHash(s);
-            if (h != null)
-                _edUnsupported.add(h);
-            else
-                System.out.println("Bad hash " + s);
+            if (h != null) _edUnsupported.add(h);
+            else System.out.println("Bad hash " + s);
         }
     }
 
     /** cache of the property to detect changes */
     private static volatile String _userDsaList = "";
+
     private static final Set<Hash> _userDsaOnly = new ConcurrentHashSet<Hash>(4);
     private static final String PROP_DSALIST = "i2p.streaming.dsalist";
 
@@ -161,8 +161,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * How long to wait for the client app to accept() before sending back CLOSE?
      * This includes the time waiting in the queue.  Currently set to 5 seconds.
      */
-//    private static final long ACCEPT_TIMEOUT_DEFAULT = 5*1000;
-    private static final long ACCEPT_TIMEOUT_DEFAULT = 10*1000;
+    //    private static final long ACCEPT_TIMEOUT_DEFAULT = 5*1000;
+    private static final long ACCEPT_TIMEOUT_DEFAULT = 10 * 1000;
 
     /**
      * This is what I2PSocketManagerFactory.createManager() returns.
@@ -173,8 +173,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @param opts may be null
      * @param name non-null
      */
-    public I2PSocketManagerFull(I2PAppContext context, I2PSession session, Properties opts, String name,
-                IncomingConnectionFilter connectionFilter) {
+    public I2PSocketManagerFull(I2PAppContext context, I2PSession session, Properties opts, String name, IncomingConnectionFilter connectionFilter) {
         _context = context;
         _session = session;
         _subsessions = new ConcurrentHashSet<I2PSession>(4);
@@ -199,8 +198,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
                 }
                 if (has4) {
                     _defaultOptions.setMaxMessageSize(ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE_RATCHET);
-                    if (!has0)
-                        _defaultOptions.setMaxInitialMessageSize(ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE_RATCHET);
+                    if (!has0) _defaultOptions.setMaxInitialMessageSize(ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE_RATCHET);
                 }
             }
         }
@@ -209,10 +207,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
         if (_log.shouldInfo()) {
             StringBuilder buf = new StringBuilder(256);
-            buf.append("Socket manager created.\n* Default Options:\n\t")
-               .append(_defaultOptions.toString().replace(" ", "\n\t").replace("=", " = "))
-               .append("\n* Original Properties:\n\t")
-                .append(opts.toString().replace(",", "\n\t").replace("{", "").replace("}", "").replace("=", " = "));
+            buf.append("Socket manager created.\n* Default Options:\n\t").append(_defaultOptions.toString().replace(" ", "\n\t").replace("=", " = ")).append("\n* Original Properties:\n\t").append(opts.toString().replace(",", "\n\t").replace("{", "").replace("}", "").replace("=", " = "));
             _log.info(buf.toString());
         }
         debugInit(context);
@@ -222,7 +217,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *  Create a copy of the current options, to be used in a setDefaultOptions() call.
      */
     @Override
-    public I2PSocketOptions buildOptions() { return buildOptions(null); }
+    public I2PSocketOptions buildOptions() {
+        return buildOptions(null);
+    }
 
     /**
      *  Create a modified copy of the current options, to be used in a setDefaultOptions() call.
@@ -298,8 +295,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         ConnectionOptions defaultOptions = new ConnectionOptions(opts);
         int protocol = defaultOptions.getEnforceProtocol() ? I2PSession.PROTO_STREAMING : I2PSession.PROTO_ANY;
         rv.addMuxedSessionListener(_connectionManager.getMessageHandler(), protocol, defaultOptions.getLocalPort());
-        if (_log.shouldWarn())
-            _log.warn("Added subsession: " + rv);
+        if (_log.shouldWarn()) _log.warn("Added subsession: " + rv);
         return rv;
     }
 
@@ -312,12 +308,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
             String st = opts.getProperty(I2PClient.PROP_SIGTYPE);
             if (st != null) {
                 SigType rv = SigType.parseSigType(st);
-                if (rv != null && rv.isAvailable())
-                    return rv;
-                if (rv != null)
-                    st = rv.toString();
-                _log.logAlways(Log.WARN, "Tunnel configuration error: Unsupported sig type " + st +
-                                         ", reverting to " + I2PClient.DEFAULT_SIGTYPE);
+                if (rv != null && rv.isAvailable()) return rv;
+                if (rv != null) st = rv.toString();
+                _log.logAlways(Log.WARN, "Tunnel configuration error: Unsupported sig type " + st + ", reverting to " + I2PClient.DEFAULT_SIGTYPE);
                 // TODO throw instead?
             }
         }
@@ -329,16 +322,14 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *
      *  @since 0.9.21
      */
-     @Override
+    @Override
     public void removeSubsession(I2PSession session) {
         _session.removeSubsession(session);
         boolean removed = _subsessions.remove(session);
         if (removed) {
-            if (_log.shouldWarn())
-                _log.warn("Removed subsession " + session);
+            if (_log.shouldWarn()) _log.warn("Removed subsession " + session);
         } else {
-            if (_log.shouldWarn())
-                _log.warn("Subsession not found to remove " + session);
+            if (_log.shouldWarn()) _log.warn("Subsession not found to remove " + session);
         }
     }
 
@@ -390,10 +381,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      */
     @Override
     public boolean ping(Destination peer, long timeoutMs) {
-        if (timeoutMs <= 0)
-            throw new IllegalArgumentException("Bad timeout");
-        return _connectionManager.ping(peer, _defaultOptions.getLocalPort(),
-                                       _defaultOptions.getPort(), timeoutMs);
+        if (timeoutMs <= 0) throw new IllegalArgumentException("Bad timeout");
+        return _connectionManager.ping(peer, _defaultOptions.getLocalPort(), _defaultOptions.getPort(), timeoutMs);
     }
 
     /**
@@ -414,11 +403,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      */
     @Override
     public boolean ping(Destination peer, int localPort, int remotePort, long timeoutMs) {
-        if (localPort < 0 || localPort > 65535 ||
-            remotePort < 0 || remotePort > 65535)
-            throw new IllegalArgumentException("Bad port");
-        if (timeoutMs <= 0)
-            throw new IllegalArgumentException("Bad timeout");
+        if (localPort < 0 || localPort > 65535 || remotePort < 0 || remotePort > 65535) throw new IllegalArgumentException("Bad port");
+        if (timeoutMs <= 0) throw new IllegalArgumentException("Bad timeout");
         return _connectionManager.ping(peer, localPort, remotePort, timeoutMs);
     }
 
@@ -441,11 +427,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      */
     @Override
     public byte[] ping(Destination peer, int localPort, int remotePort, long timeoutMs, byte[] payload) {
-        if (localPort < 0 || localPort > 65535 ||
-            remotePort < 0 || remotePort > 65535)
-            throw new IllegalArgumentException("Bad port");
-        if (timeoutMs <= 0)
-            throw new IllegalArgumentException("Bad timeout");
+        if (localPort < 0 || localPort > 65535 || remotePort < 0 || remotePort > 65535) throw new IllegalArgumentException("Bad port");
+        if (timeoutMs <= 0) throw new IllegalArgumentException("Bad timeout");
         return _connectionManager.ping(peer, localPort, remotePort, timeoutMs, payload);
     }
 
@@ -455,9 +438,13 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *
      * @param ms milliseconds to wait, maximum
      */
-    public void setAcceptTimeout(long ms) { _acceptTimeout = ms; }
-    public long getAcceptTimeout() { return _acceptTimeout; }
+    public void setAcceptTimeout(long ms) {
+        _acceptTimeout = ms;
+    }
 
+    public long getAcceptTimeout() {
+        return _acceptTimeout;
+    }
 
     /**
      *  Update the options on a running socket manager.
@@ -471,10 +458,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      */
     @Override
     public void setDefaultOptions(I2PSocketOptions options) {
-        if (!(options instanceof ConnectionOptions))
-            throw new IllegalArgumentException();
-        if (_log.shouldWarn())
-            _log.warn("Changing options from:\n " + _defaultOptions + "\nto:\n " + options);
+        if (!(options instanceof ConnectionOptions)) throw new IllegalArgumentException();
+        if (_log.shouldWarn()) _log.warn("Changing options from:\n " + _defaultOptions + "\nto:\n " + options);
         _defaultOptions.updateAll((ConnectionOptions) options);
         _connectionManager.updateOptions();
     }
@@ -514,13 +499,10 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *  @since 0.8.4
      */
     public synchronized ServerSocket getStandardServerSocket() throws IOException {
-        if (_realServerSocket == null)
-            _realServerSocket = new StandardServerSocket(_serverSocket);
+        if (_realServerSocket == null) _realServerSocket = new StandardServerSocket(_serverSocket);
         _connectionManager.setAllowIncomingConnections(true);
         return _realServerSocket;
     }
-
-
 
     /**
      * @throws I2PException if session is closed; as of 0.9.61, this is an I2PSessionException which extends I2PException
@@ -531,10 +513,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /** @since 0.9.21 */
     private void verifySession(I2PSession session) throws I2PException {
-        if (_isDestroyed.get())
-            throw new I2PSessionException("Session was closed");
-        if (!session.isClosed())
-            return;
+        if (_isDestroyed.get()) throw new I2PSessionException("Session was closed");
+        if (!session.isClosed()) return;
         session.connect();
     }
 
@@ -553,30 +533,21 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @throws I2PException if there is some other I2P-related problem
      */
     @Override
-    public I2PSocket connect(Destination peer, I2PSocketOptions options)
-                             throws I2PException, NoRouteToHostException {
-        if (peer == null)
-            throw new NullPointerException();
-        if (options == null)
-            options = _defaultOptions;
+    public I2PSocket connect(Destination peer, I2PSocketOptions options) throws I2PException, NoRouteToHostException {
+        if (peer == null) throw new NullPointerException();
+        if (options == null) options = _defaultOptions;
         ConnectionOptions opts = null;
-        if (options instanceof ConnectionOptions)
-            opts = new ConnectionOptions((ConnectionOptions)options);
-        else
-            opts = new ConnectionOptions(options);
+        if (options instanceof ConnectionOptions) opts = new ConnectionOptions((ConnectionOptions) options);
+        else opts = new ConnectionOptions(options);
 
-        if (_log.shouldInfo())
-            _log.info("Connecting to [" + peer.calculateHash().toBase64().substring(0,6)
-                      + "]\nOptions: " + opts);
+        if (_log.shouldInfo()) _log.info("Connecting to [" + peer.calculateHash().toBase64().substring(0, 6) + "]\nOptions: " + opts);
         // pick the subsession here
         I2PSession session = _session;
         if (!_subsessions.isEmpty()) {
             updateUserDsaList();
             Hash h = peer.calculateHash();
             SigAlgo myAlgo = session.getMyDestination().getSigType().getBaseAlgorithm();
-            if ((myAlgo == SigAlgo.EC && _ecUnsupported.contains(h)) ||
-                (myAlgo == SigAlgo.EdDSA && _edUnsupported.contains(h)) ||
-                (!_userDsaOnly.isEmpty() && _userDsaOnly.contains(h))) {
+            if ((myAlgo == SigAlgo.EC && _ecUnsupported.contains(h)) || (myAlgo == SigAlgo.EdDSA && _edUnsupported.contains(h)) || (!_userDsaOnly.isEmpty() && _userDsaOnly.contains(h))) {
                 // FIXME just taking the first one for now
                 for (I2PSession sess : _subsessions) {
                     if (sess.getMyDestination().getSigType() == SigType.DSA_SHA1) {
@@ -589,9 +560,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         verifySession(session);
         // the following blocks unless connect delay > 0
         Connection con = _connectionManager.connect(peer, opts, session);
-        if (con == null)
-            throw new TooManyStreamsException("Too many streams, max " + _defaultOptions.getMaxConns());
-        I2PSocketFull socket = new I2PSocketFull(con,_context);
+        if (con == null) throw new TooManyStreamsException("Too many streams, max " + _defaultOptions.getMaxConns());
+        I2PSocketFull socket = new I2PSocketFull(con, _context);
         con.setSocket(socket);
         if (con.getConnectionError() != null) {
             con.disconnect(false);
@@ -618,10 +588,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
                     while (tok.hasMoreTokens()) {
                         String hashstr = tok.nextToken();
                         Hash hh = ConvertToHash.getHash(hashstr);
-                        if (hh != null)
-                            newSet.add(hh);
-                        else
-                            _log.error("Bad " + PROP_DSALIST + " entry: " + hashstr);
+                        if (hh != null) newSet.add(hh);
+                        else _log.error("Bad " + PROP_DSALIST + " entry: " + hashstr);
                     }
                     _userDsaOnly.addAll(newSet);
                     _userDsaOnly.retainAll(newSet);
@@ -670,8 +638,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     public Socket connectToSocket(Destination peer, int timeout) throws IOException {
         ConnectionOptions opts = new ConnectionOptions(_defaultOptions);
         opts.setConnectTimeout(timeout);
-        if (timeout > 0)
-            opts.setConnectDelay(-1);
+        if (timeout > 0) opts.setConnectDelay(-1);
         return connectToSocket(peer, opts);
     }
 
@@ -699,7 +666,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * CANNOT be restarted.
      */
     public void destroySocketManager() {
-        if (!_isDestroyed.compareAndSet(false,true)) {
+        if (!_isDestroyed.compareAndSet(false, true)) {
             // shouldn't happen, log a stack trace to find out why it happened
             _log.logCloseLoop("I2PSocketManager", getName());
             return;
@@ -724,8 +691,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
             synchronized (_pcapInitLock) {
                 pcap = pcapWriter;
             }
-            if (pcap != null)
-                pcap.flush();
+            if (pcap != null) pcap.flush();
         }
     }
 
@@ -748,8 +714,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         Set<Connection> connections = _connectionManager.listConnections();
         Set<I2PSocket> rv = new HashSet<I2PSocket>(connections.size());
         for (Connection con : connections) {
-            if (con.getSocket() != null)
-                rv.add(con.getSocket());
+            if (con.getSocket() != null) rv.add(con.getSocket());
         }
         return rv;
     }
@@ -757,17 +722,21 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     /**
      *  For logging / diagnostics only
      */
-    public String getName() { return _name; }
+    public String getName() {
+        return _name;
+    }
 
     /**
      *  For logging / diagnostics only
      */
-    public void setName(String name) { _name = name; }
-
+    public void setName(String name) {
+        _name = name;
+    }
 
     public void addDisconnectListener(I2PSocketManager.DisconnectListener lsnr) {
         _connectionManager.getMessageHandler().addDisconnectListener(lsnr);
     }
+
     public void removeDisconnectListener(I2PSocketManager.DisconnectListener lsnr) {
         _connectionManager.getMessageHandler().removeDisconnectListener(lsnr);
     }
@@ -779,8 +748,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     private static final String PCAP_FILE = "streaming.pcap";
 
     private static void debugInit(I2PAppContext ctx) {
-        if (!ctx.getBooleanProperty(PROP_PCAP))
-            return;
+        if (!ctx.getBooleanProperty(PROP_PCAP)) return;
         synchronized (_pcapInitLock) {
             if (!_pcapInitialized) {
                 try {

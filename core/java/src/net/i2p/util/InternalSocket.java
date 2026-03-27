@@ -1,5 +1,7 @@
 package net.i2p.util;
 
+import net.i2p.I2PAppContext;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -7,7 +9,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
-import net.i2p.I2PAppContext;
 
 /**
  *  A simple in-JVM Socket using Piped Streams.
@@ -33,8 +34,7 @@ public class InternalSocket extends Socket {
      *  @param port &gt; 0
      */
     public InternalSocket(int port) throws IOException {
-        if (port <= 0)
-             throw new IOException("Bad port number");
+        if (port <= 0) throw new IOException("Bad port number");
         _port = port;
         InternalServerSocket.internalConnect(port, this);
     }
@@ -44,11 +44,11 @@ public class InternalSocket extends Socket {
      *  @param port &gt; 0
      */
     public static Socket getSocket(String host, int port) throws IOException {
-        if (I2PAppContext.getGlobalContext().isRouterContext() &&
-            (host.equals("127.0.0.1") || host.equals("localhost"))) {
+        if (I2PAppContext.getGlobalContext().isRouterContext() && (host.equals("127.0.0.1") || host.equals("localhost"))) {
             try {
                 return new InternalSocket(port);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) {
+            }
             // guess it wasn't really internal...
         }
         return new Socket(host, port);
@@ -79,13 +79,15 @@ public class InternalSocket extends Socket {
                 _is.close();
                 _is = null;
             }
-        } catch (IOException ie) {}
+        } catch (IOException ie) {
+        }
         try {
             if (_os != null) {
                 _os.close();
                 _os = null;
             }
-        } catch (IOException ie) {}
+        } catch (IOException ie) {
+        }
     }
 
     @Override
@@ -105,8 +107,7 @@ public class InternalSocket extends Socket {
      */
     @Override
     public synchronized void setSoTimeout(int timeout) {
-        if (_is != null && _is instanceof TimeoutPipedInputStream)
-            ((TimeoutPipedInputStream) _is).setReadTimeout(timeout);
+        if (_is != null && _is instanceof TimeoutPipedInputStream) ((TimeoutPipedInputStream) _is).setReadTimeout(timeout);
     }
 
     // ignored stuff
@@ -115,7 +116,7 @@ public class InternalSocket extends Socket {
      *  Always returns 0, even if setSoTimeout() was called.
      */
     @Override
-    public int getSoTimeout () {
+    public int getSoTimeout() {
         return 0;
     }
 
@@ -127,36 +128,42 @@ public class InternalSocket extends Socket {
     public void bind(SocketAddress endpoint) {
         throw new UnsupportedOperationException();
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
     public void connect(SocketAddress endpoint) {
         throw new UnsupportedOperationException();
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
     public void connect(SocketAddress endpoint, int timeout) {
         throw new UnsupportedOperationException();
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
     public SocketChannel getChannel() {
         throw new UnsupportedOperationException();
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
     public InetAddress getInetAddress() {
         throw new UnsupportedOperationException();
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
     public boolean getKeepAlive() {
         throw new UnsupportedOperationException();
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
@@ -179,6 +186,7 @@ public class InternalSocket extends Socket {
     public SocketAddress getLocalSocketAddress() {
         throw new UnsupportedOperationException();
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
@@ -194,24 +202,28 @@ public class InternalSocket extends Socket {
     public int getPort() {
         return isConnected() ? _port : 0;
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
     public int getReceiveBufferSize() {
         throw new UnsupportedOperationException();
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
     public SocketAddress getRemoteSocketAddress() {
         throw new UnsupportedOperationException();
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
     public boolean getReuseAddress() {
         throw new UnsupportedOperationException();
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
@@ -234,12 +246,14 @@ public class InternalSocket extends Socket {
     public boolean getTcpNoDelay() {
         throw new UnsupportedOperationException();
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
     public int getTrafficClass() {
         throw new UnsupportedOperationException();
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
@@ -277,30 +291,35 @@ public class InternalSocket extends Socket {
     public void sendUrgentData(int data) {
         throw new UnsupportedOperationException();
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
     public void setKeepAlive(boolean on) {
         throw new UnsupportedOperationException();
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
     public void setOOBInline(boolean on) {
         throw new UnsupportedOperationException();
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
     public void setReceiveBufferSize(int size) {
         throw new UnsupportedOperationException();
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
     public void setReuseAddress(boolean on) {
         throw new UnsupportedOperationException();
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
@@ -320,6 +339,7 @@ public class InternalSocket extends Socket {
     public void setTcpNoDelay(boolean on) {
         throw new UnsupportedOperationException();
     }
+
     /** @deprecated unsupported */
     @Deprecated
     @Override
@@ -348,8 +368,7 @@ public class InternalSocket extends Socket {
         synchronized (this) {
             out = _os;
         }
-        if (out == null)
-            return;
+        if (out == null) return;
         // PipedOutputStream may not flush on close, not clear from javadocs
         try {
             out.flush();

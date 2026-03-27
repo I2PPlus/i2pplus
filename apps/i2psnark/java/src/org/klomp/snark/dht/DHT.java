@@ -4,9 +4,10 @@ package org.klomp.snark.dht;
  *  GPLv2
  */
 
-import java.util.Collection;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
+
+import java.util.Collection;
 
 /**
  * Stub for KRPC
@@ -46,14 +47,7 @@ public interface DHT {
      * @param noSeeds true if we do not want seeds in the result
      * @return possibly empty (never null)
      */
-    public Collection<Hash> getPeersAndAnnounce(
-            byte[] ih,
-            int max,
-            long maxWait,
-            int annMax,
-            long annMaxWait,
-            boolean isSeed,
-            boolean noSeeds);
+    public Collection<Hash> getPeersAndAnnounce(byte[] ih, int max, long maxWait, int annMax, long annMaxWait, boolean isSeed, boolean noSeeds);
 
     /**
      * Announce to ourselves. Non-blocking.

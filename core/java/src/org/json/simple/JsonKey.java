@@ -2,7 +2,7 @@ package org.json.simple;
 
 /** Should be implemented by Enums so that keys are easily maintained.
  * @since 2.3.0 */
-public interface JsonKey{
+public interface JsonKey {
     /** The json-simple library uses a String for its keys.
      * @return a String representing the JsonKey. */
     public String getKey();

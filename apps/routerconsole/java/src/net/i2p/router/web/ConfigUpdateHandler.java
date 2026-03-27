@@ -2,15 +2,16 @@ package net.i2p.router.web;
 
 import static net.i2p.update.UpdateType.*;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.TrustedUpdate;
 import net.i2p.data.DataHelper;
 import net.i2p.router.update.ConsoleUpdateManager;
 import net.i2p.util.FileUtil;
 import net.i2p.util.PortMapper;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Handler for router update configuration.
@@ -31,6 +32,7 @@ public class ConfigUpdateHandler extends FormHandler {
     private String _devSU3URL;
 
     public static final String PROP_NEWS_URL = "router.newsURL";
+
     /**
      *  current default, i2pnews.i2p, run by echelon
      *
@@ -38,27 +40,35 @@ public class ConfigUpdateHandler extends FormHandler {
      *  app/src/main/java/net/i2p/android/apps/NewsFetcher.java
      */
     public static final String DEFAULT_NEWS_URL_SU3 = "http://tc73n4kivdroccekirco7rhgxdg5f3cjvbaapabupeyzrqwv5guq.b32.i2p/news.su3";
+
     public static final String PROP_REFRESH_FREQUENCY = "router.newsRefreshFrequency";
-    public static final long DEFAULT_REFRESH_FREQ = 36*60*60*1000L;
+    public static final long DEFAULT_REFRESH_FREQ = 36 * 60 * 60 * 1000L;
     public static final String DEFAULT_REFRESH_FREQUENCY = Long.toString(DEFAULT_REFRESH_FREQ);
     public static final String PROP_UPDATE_POLICY = "router.updatePolicy";
     public static final String DEFAULT_UPDATE_POLICY = "notify";
     public static final String PROP_SHOULD_PROXY = "router.updateThroughProxy";
     public static final boolean DEFAULT_SHOULD_PROXY = true;
+
     /** @since 0.9.9 */
     public static final String PROP_SHOULD_PROXY_NEWS = "router.fetchNewsThroughProxy";
+
     /** @since 0.9.9 */
     public static final boolean DEFAULT_SHOULD_PROXY_NEWS = true;
+
     public static final String PROP_PROXY_HOST = "router.updateProxyHost";
     public static final String DEFAULT_PROXY_HOST = "127.0.0.1";
     public static final String PROP_PROXY_PORT = "router.updateProxyPort";
     public static final int DEFAULT_PROXY_PORT_INT = 4444;
     public static final String DEFAULT_PROXY_PORT = Integer.toString(DEFAULT_PROXY_PORT_INT);
+
     /** default false */
     public static final boolean DEFAULT_UPDATE_UNSIGNED = true;
+
     public static final String PROP_UPDATE_UNSIGNED = "router.updateUnsigned";
+
     /** default false - use for distros */
     public static final String PROP_UPDATE_DISABLED = "router.updateDisabled";
+
     /** no default */
     public static final String PROP_ZIP_URL = "router.updateUnsignedURL";
 
@@ -69,6 +79,7 @@ public class ConfigUpdateHandler extends FormHandler {
      *  @since 0.9.20
      */
     public static final String PROP_UPDATE_DEV_SU3 = "router.updateDevSU3";
+
     /**
      *  no default
      *  @since 0.9.20
@@ -83,6 +94,7 @@ public class ConfigUpdateHandler extends FormHandler {
      *  These versions have not been released since 0.9.22, 2015.
      */
     private static final String PACK200_URLS = "";
+
     private static final String NO_PACK200_URLS = "";
 
     /**
@@ -90,9 +102,13 @@ public class ConfigUpdateHandler extends FormHandler {
      *  Do NOT use this for .su3
      */
     public static final String DEFAULT_UPDATE_URL;
+
     static {
-        if (FileUtil.isPack200Supported()) {DEFAULT_UPDATE_URL = PACK200_URLS;}
-        else {DEFAULT_UPDATE_URL = NO_PACK200_URLS;}
+        if (FileUtil.isPack200Supported()) {
+            DEFAULT_UPDATE_URL = PACK200_URLS;
+        } else {
+            DEFAULT_UPDATE_URL = NO_PACK200_URLS;
+        }
     }
 
     private static final String SU3_CERT_DIR = "certificates/router";
@@ -102,6 +118,7 @@ public class ConfigUpdateHandler extends FormHandler {
      *  @since 0.9.9
      */
     public static final boolean USE_SU3_UPDATE;
+
     static {
         String[] files = (new File(I2PAppContext.getGlobalContext().getBaseDir(), SU3_CERT_DIR)).list();
         USE_SU3_UPDATE = files != null && files.length > 0;
@@ -115,8 +132,7 @@ public class ConfigUpdateHandler extends FormHandler {
      *  @since 0.8.13
      */
     public static int proxyPort(I2PAppContext ctx) {
-        return ctx.getProperty(PROP_PROXY_PORT,
-                               ctx.portMapper().getPort(PortMapper.SVC_HTTP_PROXY, DEFAULT_PROXY_PORT_INT));
+        return ctx.getProperty(PROP_PROXY_PORT, ctx.portMapper().getPort(PortMapper.SVC_HTTP_PROXY, DEFAULT_PROXY_PORT_INT));
     }
 
     @Override
@@ -135,38 +151,41 @@ public class ConfigUpdateHandler extends FormHandler {
             boolean shouldProxy = _context.getProperty(PROP_SHOULD_PROXY_NEWS, DEFAULT_SHOULD_PROXY_NEWS);
             String proxyHost = _context.getProperty(PROP_PROXY_HOST, DEFAULT_PROXY_HOST);
             int proxyPort = proxyPort(_context);
-            if (shouldProxy && proxyPort == ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT &&
-                proxyHost.equals(ConfigUpdateHandler.DEFAULT_PROXY_HOST) &&
-                !_context.portMapper().isRegistered(PortMapper.SVC_HTTP_PROXY)) {
+            if (shouldProxy && proxyPort == ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT && proxyHost.equals(ConfigUpdateHandler.DEFAULT_PROXY_HOST) && !_context.portMapper().isRegistered(PortMapper.SVC_HTTP_PROXY)) {
                 addFormError(_t("HTTP client proxy tunnel must be running"));
                 return;
             }
 
-            boolean a1 = mgr.checkAvailable(NEWS, 40*1000) != null;
+            boolean a1 = mgr.checkAvailable(NEWS, 40 * 1000) != null;
             boolean a2 = false;
-//            boolean a3 = false;
+            //            boolean a3 = false;
             boolean a3 = true;
             if ((!a1) && _updateDevSU3 && _devSU3URL != null && _devSU3URL.length() > 0) {
-                a2 = mgr.checkAvailable(ROUTER_DEV_SU3, 40*1000) != null;
+                a2 = mgr.checkAvailable(ROUTER_DEV_SU3, 40 * 1000) != null;
             }
             if ((!a2) && _updateUnsigned && _zipURL != null && _zipURL.length() > 0) {
-                a3 = mgr.checkAvailable(ROUTER_UNSIGNED, 40*1000) != null;
+                a3 = mgr.checkAvailable(ROUTER_UNSIGNED, 40 * 1000) != null;
             }
             if (a1 || a2 || a3) {
                 if ((_updatePolicy == null) || (!_updatePolicy.equals("notify"))) {
                     addFormNotice(_t("Update available, attempting to download now") + "...");
-                } else {addFormNotice(_t("Update available, click button on left to download"));}
-            } else {addFormNotice(_t("No update available"));}
+                } else {
+                    addFormNotice(_t("Update available, click button on left to download"));
+                }
+            } else {
+                addFormNotice(_t("No update available"));
+            }
             return;
         }
 
-        if (!_action.equals(_t("Save"))) {return;}
+        if (!_action.equals(_t("Save"))) {
+            return;
+        }
 
         Map<String, String> changes = new HashMap<String, String>();
 
         if ((_newsURL != null) && (_newsURL.length() > 0)) {
-            if (_newsURL.startsWith("https"))
-                _newsThroughProxy = false;
+            if (_newsURL.startsWith("https")) _newsThroughProxy = false;
             String oldURL = ConfigUpdateHelper.getNewsURL(_context);
             if ((oldURL == null) || (!_newsURL.equals(oldURL))) {
                 if (isAdvanced()) {
@@ -174,7 +193,9 @@ public class ConfigUpdateHandler extends FormHandler {
                     // this invalidates the news
                     changes.put(NewsHelper.PROP_LAST_CHECKED, "0");
                     addFormNotice(_t("Updating news URL to {0}", _newsURL));
-                } else {addFormError("Changing news URL disabled");}
+                } else {
+                    addFormError("Changing news URL disabled");
+                }
             }
         }
 
@@ -208,11 +229,13 @@ public class ConfigUpdateHandler extends FormHandler {
 
         String oldFreqStr = _context.getProperty(PROP_REFRESH_FREQUENCY, DEFAULT_REFRESH_FREQUENCY);
         long oldFreq = DEFAULT_REFRESH_FREQ;
-        try {oldFreq = Long.parseLong(oldFreqStr);} catch (NumberFormatException nfe) {}
+        try {
+            oldFreq = Long.parseLong(oldFreqStr);
+        } catch (NumberFormatException nfe) {
+        }
         if (_refreshFrequency != oldFreq) {
             changes.put(PROP_REFRESH_FREQUENCY, Long.toString(_refreshFrequency));
-            addFormNoticeNoEscape(_t("Updating refresh frequency to {0}",
-                            _refreshFrequency <= 0 ? _t("Never") : DataHelper.formatDuration2(_refreshFrequency)));
+            addFormNoticeNoEscape(_t("Updating refresh frequency to {0}", _refreshFrequency <= 0 ? _t("Never") : DataHelper.formatDuration2(_refreshFrequency)));
         }
 
         if ((_updatePolicy != null) && (_updatePolicy.length() > 0)) {
@@ -241,7 +264,9 @@ public class ConfigUpdateHandler extends FormHandler {
                 if (isAdvanced()) {
                     changes.put(PROP_TRUSTED_KEYS, _trustedKeys);
                     addFormNotice(_t("Updating trusted keys."));
-                } else {addFormError("Changing trusted keys disabled");}
+                } else {
+                    addFormError("Changing trusted keys disabled");
+                }
             }
         }
 
@@ -264,24 +289,61 @@ public class ConfigUpdateHandler extends FormHandler {
         _context.router().saveConfig(changes, null);
     }
 
-    public void setNewsURL(String url) {_newsURL = url;}
-    public void setRefreshFrequency(String freq) {
-        try {_refreshFrequency = Long.parseLong(freq);}
-        catch (NumberFormatException nfe) {}
+    public void setNewsURL(String url) {
+        _newsURL = url;
     }
-    public void setUpdateURL(String url) {_updateURL = url;}
-    public void setUpdatePolicy(String policy) {_updatePolicy = policy;}
-    public void setTrustedKeys(String keys) {_trustedKeys = keys;}
-    public void setUpdateThroughProxy(String foo) {_updateThroughProxy = true;}
-    public void setProxyHost(String host) {_proxyHost = host;}
-    public void setProxyPort(String port) {_proxyPort = port;}
-    public void setUpdateUnsigned(String foo) {_updateUnsigned = true;}
-    public void setZipURL(String url) {_zipURL = url;}
-     /** @since 0.9.9 */
-    public void setNewsThroughProxy(String foo) {_newsThroughProxy = true;}
-    /** @since 0.9.20 */
-    public void setUpdateDevSU3(String foo) {_updateDevSU3  = true;}
-    /** @since 0.9.20 */
-    public void setDevSU3URL(String url) {_devSU3URL = url;}
 
+    public void setRefreshFrequency(String freq) {
+        try {
+            _refreshFrequency = Long.parseLong(freq);
+        } catch (NumberFormatException nfe) {
+        }
+    }
+
+    public void setUpdateURL(String url) {
+        _updateURL = url;
+    }
+
+    public void setUpdatePolicy(String policy) {
+        _updatePolicy = policy;
+    }
+
+    public void setTrustedKeys(String keys) {
+        _trustedKeys = keys;
+    }
+
+    public void setUpdateThroughProxy(String foo) {
+        _updateThroughProxy = true;
+    }
+
+    public void setProxyHost(String host) {
+        _proxyHost = host;
+    }
+
+    public void setProxyPort(String port) {
+        _proxyPort = port;
+    }
+
+    public void setUpdateUnsigned(String foo) {
+        _updateUnsigned = true;
+    }
+
+    public void setZipURL(String url) {
+        _zipURL = url;
+    }
+
+    /** @since 0.9.9 */
+    public void setNewsThroughProxy(String foo) {
+        _newsThroughProxy = true;
+    }
+
+    /** @since 0.9.20 */
+    public void setUpdateDevSU3(String foo) {
+        _updateDevSU3 = true;
+    }
+
+    /** @since 0.9.20 */
+    public void setDevSU3URL(String url) {
+        _devSU3URL = url;
+    }
 }

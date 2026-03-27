@@ -36,8 +36,27 @@ public class GunzipOutputStream extends InflaterOutputStream {
     private long _bytesReceived;
     private long _bytesReceivedAtCompletion;
 
-    private enum HeaderState { MB1, MB2, CF, MT0, MT1, MT2, MT3, EF, OS, FLAGS,
-                               EH1, EH2, EHDATA, NAME, COMMENT, CRC1, CRC2, DONE }
+    private enum HeaderState {
+        MB1,
+        MB2,
+        CF,
+        MT0,
+        MT1,
+        MT2,
+        MT3,
+        EF,
+        OS,
+        FLAGS,
+        EH1,
+        EH2,
+        EHDATA,
+        NAME,
+        COMMENT,
+        CRC1,
+        CRC2,
+        DONE
+    }
+
     private HeaderState _state = HeaderState.MB1;
     private int _flags;
     private int _extHdrToRead;
@@ -77,8 +96,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
             // shortcircuit so the inflater doesn't try to refill
             // with the footer's data (which would fail, causing ZLIB err)
             IOException ioe = new EOFException("Extra data written to gunzipper");
-            if (_log.shouldWarn())
-                _log.warn("EOF: " + ioe.getMessage());
+            if (_log.shouldWarn()) _log.warn("EOF: " + ioe.getMessage());
             throw ioe;
         }
         boolean isFinished = inf.finished();
@@ -107,13 +125,11 @@ public class GunzipOutputStream extends InflaterOutputStream {
                         verifyFooter();
                         _complete = true;
                         _validated = true;
-                        if (_callback != null)
-                            _callback.streamDone();
+                        if (_callback != null) _callback.streamDone();
                         return;
                     } catch (IOException ioe) {
                         // failed at 7, retry at 8
-                        if (footerSize == FOOTER_SIZE - 1 && i < off + len - 1)
-                            continue;
+                        if (footerSize == FOOTER_SIZE - 1 && i < off + len - 1) continue;
                         _complete = true;
                         throw ioe;
                     }
@@ -171,7 +187,9 @@ public class GunzipOutputStream extends InflaterOutputStream {
 
     @Override
     public void close() throws IOException {
-        if (_log.shouldInfo()) {_log.info("Closing " + this);}
+        if (_log.shouldInfo()) {
+            _log.info("Closing " + this);
+        }
         _complete = true;
         _state = HeaderState.DONE;
         super.close();
@@ -179,10 +197,9 @@ public class GunzipOutputStream extends InflaterOutputStream {
 
     @Override
     public String toString() {
-        return "GunzipOutputStream...\n* Read: " + getTotalRead() + "B (" + getTotalExpanded() + "B expanded) with " +
-               getRemaining() + "B remaining and " + getFinished() + "B completed" +
-               "\n* Footer " + (_complete ? "complete" : "incomplete") +
-               (_validated ? " and validated" : " but not validated");
+        return "GunzipOutputStream...\n* Read: " + getTotalRead() + "B (" + getTotalExpanded() + "B expanded) with "
+                + getRemaining() + "B remaining and " + getFinished() + "B completed" + "\n* Footer "
+                + (_complete ? "complete" : "incomplete") + (_validated ? " and validated" : " but not validated");
     }
 
     /**
@@ -208,8 +225,8 @@ public class GunzipOutputStream extends InflaterOutputStream {
         long actualCRC = ((CRC32OutputStream) out).getValue();
         long expectedCRC = DataHelper.fromLongLE(footer, 0, 4);
         if (expectedCRC != actualCRC)
-            throw new IOException("Gunzip CRC fail expected 0x" + Long.toHexString(expectedCRC) +
-                                  ", got 0x" + Long.toHexString(actualCRC));
+            throw new IOException("Gunzip CRC fail expected 0x" + Long.toHexString(expectedCRC) + ", got 0x"
+                    + Long.toHexString(actualCRC));
     }
 
     /**
@@ -268,16 +285,11 @@ public class GunzipOutputStream extends InflaterOutputStream {
 
             case OS:
                 // ignore
-                if (0 != (_flags & (1<<5)))
-                    _state = HeaderState.EH1;
-                else if (0 != (_flags & (1<<4)))
-                    _state = HeaderState.NAME;
-                else if (0 != (_flags & (1<<3)))
-                    _state = HeaderState.COMMENT;
-                else if (0 != (_flags & (1<<6)))
-                    _state = HeaderState.CRC1;
-                else
-                    _state = HeaderState.DONE;
+                if (0 != (_flags & (1 << 5))) _state = HeaderState.EH1;
+                else if (0 != (_flags & (1 << 4))) _state = HeaderState.NAME;
+                else if (0 != (_flags & (1 << 3))) _state = HeaderState.COMMENT;
+                else if (0 != (_flags & (1 << 6))) _state = HeaderState.CRC1;
+                else _state = HeaderState.DONE;
                 break;
 
             case EH1:
@@ -287,51 +299,37 @@ public class GunzipOutputStream extends InflaterOutputStream {
 
             case EH2:
                 _extHdrToRead += (c << 8);
-                if (_extHdrToRead > 0)
-                    _state = HeaderState.EHDATA;
-                else if (0 != (_flags & (1<<4)))
-                    _state = HeaderState.NAME;
-                if (0 != (_flags & (1<<3)))
-                    _state = HeaderState.COMMENT;
-                else if (0 != (_flags & (1<<6)))
-                    _state = HeaderState.CRC1;
-                else
-                    _state = HeaderState.DONE;
+                if (_extHdrToRead > 0) _state = HeaderState.EHDATA;
+                else if (0 != (_flags & (1 << 4))) _state = HeaderState.NAME;
+                if (0 != (_flags & (1 << 3))) _state = HeaderState.COMMENT;
+                else if (0 != (_flags & (1 << 6))) _state = HeaderState.CRC1;
+                else _state = HeaderState.DONE;
                 break;
 
             case EHDATA:
                 // ignore
                 if (--_extHdrToRead <= 0) {
-                    if (0 != (_flags & (1<<4)))
-                        _state = HeaderState.NAME;
-                    if (0 != (_flags & (1<<3)))
-                        _state = HeaderState.COMMENT;
-                    else if (0 != (_flags & (1<<6)))
-                        _state = HeaderState.CRC1;
-                    else
-                        _state = HeaderState.DONE;
+                    if (0 != (_flags & (1 << 4))) _state = HeaderState.NAME;
+                    if (0 != (_flags & (1 << 3))) _state = HeaderState.COMMENT;
+                    else if (0 != (_flags & (1 << 6))) _state = HeaderState.CRC1;
+                    else _state = HeaderState.DONE;
                 }
                 break;
 
             case NAME:
                 // ignore
                 if (c == 0) {
-                    if (0 != (_flags & (1<<3)))
-                        _state = HeaderState.COMMENT;
-                    else if (0 != (_flags & (1<<6)))
-                        _state = HeaderState.CRC1;
-                    else
-                        _state = HeaderState.DONE;
+                    if (0 != (_flags & (1 << 3))) _state = HeaderState.COMMENT;
+                    else if (0 != (_flags & (1 << 6))) _state = HeaderState.CRC1;
+                    else _state = HeaderState.DONE;
                 }
                 break;
 
             case COMMENT:
                 // ignore
                 if (c == 0) {
-                    if (0 != (_flags & (1<<6)))
-                        _state = HeaderState.CRC1;
-                    else
-                        _state = HeaderState.DONE;
+                    if (0 != (_flags & (1 << 6))) _state = HeaderState.CRC1;
+                    else _state = HeaderState.DONE;
                 }
                 break;
 
@@ -381,49 +379,49 @@ public class GunzipOutputStream extends InflaterOutputStream {
         }
     }
 
-/****
-    public static void main(String args[]) {
-        java.util.Random r = new java.util.Random();
-        for (int i = 0; i < 1050; i++) {
-            byte[] b = new byte[i];
-            r.nextBytes(b);
-            if (!test(b)) return;
-        }
-        for (int i = 1; i < 64*1024; i+= 29) {
-            byte[] b = new byte[i];
-            r.nextBytes(b);
-            if (!test(b)) return;
-        }
-    }
-
-    private static boolean test(byte[] b) {
-        int size = b.length;
-        try {
-            java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(size);
-            java.util.zip.GZIPOutputStream o = new java.util.zip.GZIPOutputStream(baos);
-            o.write(b);
-            o.finish();
-            o.flush();
-            byte compressed[] = baos.toByteArray();
-
-            java.io.ByteArrayOutputStream baos2 = new java.io.ByteArrayOutputStream(size);
-            GunzipOutputStream out = new GunzipOutputStream(baos2);
-            out.write(compressed);
-            byte rv[] = baos2.toByteArray();
-            if (rv.length != b.length)
-                throw new RuntimeException("read length: " + rv.length + " expected: " + b.length);
-
-            if (!net.i2p.data.DataHelper.eq(rv, 0, b, 0, b.length)) {
-                throw new RuntimeException("foo, read=" + rv.length);
-            } else {
-                System.out.println("match, w00t @ " + size);
-                return true;
-            }
-        } catch (Exception e) {
-            System.out.println("Error dealing with size=" + size + ": " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-    }
-****/
+    /****
+     * public static void main(String args[]) {
+     * java.util.Random r = new java.util.Random();
+     * for (int i = 0; i < 1050; i++) {
+     * byte[] b = new byte[i];
+     * r.nextBytes(b);
+     * if (!test(b)) return;
+     * }
+     * for (int i = 1; i < 64*1024; i+= 29) {
+     * byte[] b = new byte[i];
+     * r.nextBytes(b);
+     * if (!test(b)) return;
+     * }
+     * }
+     *
+     * private static boolean test(byte[] b) {
+     * int size = b.length;
+     * try {
+     * java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(size);
+     * java.util.zip.GZIPOutputStream o = new java.util.zip.GZIPOutputStream(baos);
+     * o.write(b);
+     * o.finish();
+     * o.flush();
+     * byte compressed[] = baos.toByteArray();
+     *
+     * java.io.ByteArrayOutputStream baos2 = new java.io.ByteArrayOutputStream(size);
+     * GunzipOutputStream out = new GunzipOutputStream(baos2);
+     * out.write(compressed);
+     * byte rv[] = baos2.toByteArray();
+     * if (rv.length != b.length)
+     * throw new RuntimeException("read length: " + rv.length + " expected: " + b.length);
+     *
+     * if (!net.i2p.data.DataHelper.eq(rv, 0, b, 0, b.length)) {
+     * throw new RuntimeException("foo, read=" + rv.length);
+     * } else {
+     * System.out.println("match, w00t @ " + size);
+     * return true;
+     * }
+     * } catch (Exception e) {
+     * System.out.println("Error dealing with size=" + size + ": " + e.getMessage());
+     * e.printStackTrace();
+     * return false;
+     * }
+     * }
+     ****/
 }

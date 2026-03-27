@@ -10,9 +10,10 @@
  */
 package org.minidns.record;
 
+import org.minidns.dnsname.DnsName;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
-import org.minidns.dnsname.DnsName;
 
 /**
  * Abstract base class for DNS resource records that point to a target domain name.<br>
@@ -26,8 +27,7 @@ public abstract class RRWithTarget extends Data {
      * The target of this resource record.
      * @deprecated {@link #target} instead.
      */
-    @Deprecated
-    public final DnsName name;
+    @Deprecated public final DnsName name;
 
     @Override
     public void serialize(DataOutputStream dos) throws IOException {

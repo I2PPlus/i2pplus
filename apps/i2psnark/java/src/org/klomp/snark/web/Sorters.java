@@ -19,13 +19,7 @@ import org.klomp.snark.Storage;
 class Sorters {
 
     /** See below */
-    private static final Pattern PATTERN_DE,
-            PATTERN_EN,
-            PATTERN_ES,
-            PATTERN_FR,
-            PATTERN_IT,
-            PATTERN_NL,
-            PATTERN_PT;
+    private static final Pattern PATTERN_DE, PATTERN_EN, PATTERN_ES, PATTERN_FR, PATTERN_IT, PATTERN_NL, PATTERN_PT;
 
     /**
      * Negative is reverse
@@ -225,14 +219,10 @@ class Sorters {
             if (rv != 0) {
                 return rv;
             } else if ((getStatus(l) == STATUS_SEEDING_IDLE && getStatus(r) == STATUS_SEEDING_IDLE)
-                    || (getStatus(l) == STATUS_SEEDING_INACTIVE
-                            && getStatus(r) == STATUS_SEEDING_INACTIVE)
+                    || (getStatus(l) == STATUS_SEEDING_INACTIVE && getStatus(r) == STATUS_SEEDING_INACTIVE)
                     || (getStatus(l) == STATUS_MAGNET && getStatus(r) == STATUS_MAGNET)
-                    || (getStatus(l) == STATUS_NO_ACTIVE_PEERS
-                            && getStatus(r) == STATUS_NO_ACTIVE_PEERS)) {
-                return compLong(
-                        r.getTrackerSeenPeers(),
-                        l.getTrackerSeenPeers()); // first tie break by swarm size
+                    || (getStatus(l) == STATUS_NO_ACTIVE_PEERS && getStatus(r) == STATUS_NO_ACTIVE_PEERS)) {
+                return compLong(r.getTrackerSeenPeers(), l.getTrackerSeenPeers()); // first tie break by swarm size
             } else {
                 return compLong(r.getPeerCount(), l.getPeerCount());
             } // tie break by active peer count
@@ -321,8 +311,7 @@ class Sorters {
         }
 
         public int compareIt(Snark l, Snark r) {
-            return compLong(
-                    eta(l), eta(r)); // TODO For completed torrents, sort by date of completion
+            return compLong(eta(l), eta(r)); // TODO For completed torrents, sort by date of completion
         }
 
         private static long eta(Snark snark) {
@@ -506,8 +495,7 @@ class Sorters {
          * @param storage may be null
          * @param remainingArray precomputed, non-null iff storage is non-null
          */
-        public FileAndIndex(
-                File file, Storage storage, long[] remainingArray, long[] previewArray) {
+        public FileAndIndex(File file, Storage storage, long[] remainingArray, long[] previewArray) {
             this.file = file;
             index = storage != null ? storage.indexOf(file) : -1;
             if (index >= 0) {
@@ -692,28 +680,15 @@ class Sorters {
      *  http://www.loc.gov/marc/bibliographic/bdapndxf.html
      */
     static {
-        PATTERN_DE =
-                Pattern.compile(
-                        "^((der|die|das|des|dem|den|ein|eine|einer|eines|einem|einen)[\\s\\._]+).*",
-                        Pattern.CASE_INSENSITIVE);
+        PATTERN_DE = Pattern.compile(
+                "^((der|die|das|des|dem|den|ein|eine|einer|eines|einem|einen)[\\s\\._]+).*", Pattern.CASE_INSENSITIVE);
         PATTERN_EN = Pattern.compile("^((a|an|the)[\\s\\._]+).*", Pattern.CASE_INSENSITIVE);
-        PATTERN_ES =
-                Pattern.compile(
-                        "^((el|la|lo|los|las|un|una|unos|unas)[\\s\\._]+).*",
-                        Pattern.CASE_INSENSITIVE);
-        PATTERN_FR =
-                Pattern.compile(
-                        "^(l'|((le|la|les|un|une|des)[\\s\\._]+)).*", Pattern.CASE_INSENSITIVE);
+        PATTERN_ES = Pattern.compile("^((el|la|lo|los|las|un|una|unos|unas)[\\s\\._]+).*", Pattern.CASE_INSENSITIVE);
+        PATTERN_FR = Pattern.compile("^(l'|((le|la|les|un|une|des)[\\s\\._]+)).*", Pattern.CASE_INSENSITIVE);
         PATTERN_IT =
-                Pattern.compile(
-                        "^(l'|un'|((il|lo|la|i|gli|le|uno|una|un)[\\s\\._]+)).*",
-                        Pattern.CASE_INSENSITIVE);
-        PATTERN_NL =
-                Pattern.compile(
-                        "^((de|het|het'n|een|een'n)[\\s\\._]+).*", Pattern.CASE_INSENSITIVE);
-        PATTERN_PT =
-                Pattern.compile(
-                        "^((o|a|os|as|um|uma|uns|umas)[\\s\\._]+).*", Pattern.CASE_INSENSITIVE);
+                Pattern.compile("^(l'|un'|((il|lo|la|i|gli|le|uno|una|un)[\\s\\._]+)).*", Pattern.CASE_INSENSITIVE);
+        PATTERN_NL = Pattern.compile("^((de|het|het'n|een|een'n)[\\s\\._]+).*", Pattern.CASE_INSENSITIVE);
+        PATTERN_PT = Pattern.compile("^((o|a|os|as|um|uma|uns|umas)[\\s\\._]+).*", Pattern.CASE_INSENSITIVE);
     }
 
     /**

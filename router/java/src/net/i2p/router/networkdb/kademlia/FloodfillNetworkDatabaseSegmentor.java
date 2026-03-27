@@ -42,7 +42,7 @@ import net.i2p.util.Log;
 public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseFacade {
     private final Log _log;
     private final RouterContext _context;
-    //private static final String PROP_NETDB_ISOLATION = "router.netdb.isolation";
+    // private static final String PROP_NETDB_ISOLATION = "router.netdb.isolation";
     public static final Hash MAIN_DBID = null;
     private final FloodfillNetworkDatabaseFacade _mainDbid;
 
@@ -75,17 +75,15 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
         return _context.clientManager().getClientFloodfillNetworkDatabaseFacade(id);
     }
 
-
     /**
      * If we are floodfill, turn it off and tell everybody for the _mainDbid
-    *
+     *
      * @since 0.9.61
-    *
-    */
+     *
+     */
     @Override
     public synchronized void shutdown() {
-        if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Shutdown called from FNDS, shutting down main and multihome db");
+        if (_log.shouldLog(Log.DEBUG)) _log.debug("Shutdown called from FNDS, shutting down main and multihome db");
         _mainDbid.shutdown();
     }
 
@@ -97,8 +95,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      */
     @Override
     public synchronized void startup() {
-        if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Startup called from FNDS, starting up main and multihome db");
+        if (_log.shouldLog(Log.DEBUG)) _log.debug("Startup called from FNDS, starting up main and multihome db");
         _mainDbid.startup();
     }
 
@@ -123,12 +120,10 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      */
     @Override
     public NetworkDatabaseFacade clientNetDB(Hash id) {
-        if (_log.shouldDebug())
-            _log.debug("Looked up ClientNetDB: " + id);
-        if (id != null){
+        if (_log.shouldDebug()) _log.debug("Looked up ClientNetDB: " + id);
+        if (id != null) {
             NetworkDatabaseFacade fndf = getSubNetDB(id);
-            if (fndf != null)
-                return fndf;
+            if (fndf != null) return fndf;
         }
         return mainNetDB();
     }

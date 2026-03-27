@@ -1,13 +1,5 @@
 package net.i2p.router.startup;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
@@ -17,6 +9,15 @@ import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.OrderedProperties;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SystemVersion;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * Contains a really simple ClientApp "structure" and some static methods
@@ -69,9 +70,10 @@ import net.i2p.util.SystemVersion;
  */
 public class ClientAppConfig {
     /** wait 20s before starting up client apps */
-    private final static long DEFAULT_STARTUP_DELAY = 20*1000;
+    private static final long DEFAULT_STARTUP_DELAY = 20 * 1000;
+
     /** speed up i2ptunnel without rewriting clients.config */
-    private final static long I2PTUNNEL_STARTUP_DELAY = -1000;
+    private static final long I2PTUNNEL_STARTUP_DELAY = -1000;
 
     private static final String PROP_CLIENT_CONFIG_FILENAME = "router.clientConfigFile";
     private static final String DEFAULT_CLIENT_CONFIG_FILENAME = "clients.config";
@@ -85,12 +87,16 @@ public class ClientAppConfig {
     public String args;
     public boolean disabled;
     public final long delay;
+
     /** @since 0.7.12 */
     public final String classpath;
+
     /** @since 0.7.12 */
     public final String stopargs;
+
     /** @since 0.7.12 */
     public final String uninstallargs;
+
     /** @since 0.9.42 */
     File configFile;
 
@@ -115,7 +121,7 @@ public class ClientAppConfig {
      * Only valid after getClientApps(ctx) has been called.
      * @since 0.9.42
      */
-    public synchronized static boolean isSplitConfig(I2PAppContext ctx) {
+    public static synchronized boolean isSplitConfig(I2PAppContext ctx) {
         File dir = new File(ctx.getConfigDir(), CLIENT_CONFIG_DIR);
         return dir.exists() && !configFile(ctx).exists();
     }
@@ -126,8 +132,7 @@ public class ClientAppConfig {
     public static File configFile(I2PAppContext ctx) {
         String clientConfigFile = ctx.getProperty(PROP_CLIENT_CONFIG_FILENAME, DEFAULT_CLIENT_CONFIG_FILENAME);
         File cfgFile = new File(clientConfigFile);
-        if (!cfgFile.isAbsolute())
-            cfgFile = new File(ctx.getConfigDir(), clientConfigFile);
+        if (!cfgFile.isAbsolute()) cfgFile = new File(ctx.getConfigDir(), clientConfigFile);
         return cfgFile;
     }
 
@@ -143,7 +148,7 @@ public class ClientAppConfig {
      * Go through the files, and return a List of ClientAppConfig structures
      * This is for the router.
      */
-    public synchronized static List<ClientAppConfig> getClientApps(RouterContext ctx) {
+    public static synchronized List<ClientAppConfig> getClientApps(RouterContext ctx) {
         File dir = new SecureDirectory(ctx.getConfigDir(), CLIENT_CONFIG_DIR);
         // clients.config
         List<ClientAppConfig> rv = new ArrayList<ClientAppConfig>(8);
@@ -152,12 +157,10 @@ public class ClientAppConfig {
             List<ClientAppConfig> cacs = getClientApps(cf);
             if (!cacs.isEmpty()) {
                 // Jetty 5/6/7/8 to 9 migration
-                if (!SystemVersion.isAndroid())
-                    MigrateJetty.migrate(ctx, cacs);
+                if (!SystemVersion.isAndroid()) MigrateJetty.migrate(ctx, cacs);
                 // clients.config to clients.config.d migration
                 boolean ok = migrate(ctx, cacs, cf, dir);
-                if (!ok)
-                    rv.addAll(cacs);
+                if (!ok) rv.addAll(cacs);
             }
         } catch (IOException ioe) {
             ctx.logManager().getLog(ClientAppConfig.class).error("Error loading the client app properties from " + cf, ioe);
@@ -170,10 +173,8 @@ public class ClientAppConfig {
                 // sort so the returned order is consistent
                 Arrays.sort(files);
                 for (File f : files) {
-                    if (!f.getName().endsWith(".config"))
-                        continue;
-                    if (!f.isFile())
-                        continue;
+                    if (!f.getName().endsWith(".config")) continue;
+                    if (!f.isFile()) continue;
                     try {
                         List<ClientAppConfig> cacs = getClientApps(f);
                         if (!cacs.isEmpty()) {
@@ -201,12 +202,11 @@ public class ClientAppConfig {
      *
      * @since 0.7.12
      */
-    public synchronized static List<ClientAppConfig> getClientApps(File cfgFile) throws IOException {
-        if (!cfgFile.isFile())
-            return new ArrayList<ClientAppConfig>();
+    public static synchronized List<ClientAppConfig> getClientApps(File cfgFile) throws IOException {
+        if (!cfgFile.isFile()) return new ArrayList<ClientAppConfig>();
         Properties clientApps = new Properties();
         DataHelper.loadProps(clientApps, cfgFile);
-        List<ClientAppConfig> rv =  getClientApps(clientApps);
+        List<ClientAppConfig> rv = getClientApps(clientApps);
         for (ClientAppConfig cac : rv) {
             cac.configFile = cfgFile;
         }
@@ -221,21 +221,18 @@ public class ClientAppConfig {
      */
     private static boolean migrate(I2PAppContext ctx, List<ClientAppConfig> apps, File from, File dir) {
         // don't migrate Android
-        if (SystemVersion.isAndroid())
-            return false;
+        if (SystemVersion.isAndroid()) return false;
         // don't migrate portable
         try {
-            if (ctx.getConfigDir().getCanonicalPath().equals(ctx.getBaseDir().getCanonicalPath()))
-                return false;
-        } catch (IOException ioe) {}
-        if (!dir.isDirectory() && !dir.mkdirs())
-            return false;
+            if (ctx.getConfigDir().getCanonicalPath().equals(ctx.getBaseDir().getCanonicalPath())) return false;
+        } catch (IOException ioe) {
+        }
+        if (!dir.isDirectory() && !dir.mkdirs()) return false;
         boolean ok = true;
         for (int i = 0; i < apps.size(); i++) {
             ClientAppConfig cac = apps.get(i);
             String name = i + "-" + cac.className + "-clients.config";
-            if (i < 10)
-                name = '0' + name;
+            if (i < 10) name = '0' + name;
             File f = new File(dir, name);
             cac.configFile = f;
             try {
@@ -248,8 +245,7 @@ public class ClientAppConfig {
             }
         }
         if (ok) {
-            if (!FileUtil.rename(from, new File(from.getAbsolutePath() + ".bak")))
-                from.delete();
+            if (!FileUtil.rename(from, new File(from.getAbsolutePath() + ".bak"))) from.delete();
         }
         return ok;
     }
@@ -264,8 +260,7 @@ public class ClientAppConfig {
         int i = 0;
         while (true) {
             ClientAppConfig cac = getClientApp(clientApps, PREFIX + i);
-            if (cac == null)
-                break;
+            if (cac == null) break;
             i++;
             rv.add(cac);
         }
@@ -281,8 +276,7 @@ public class ClientAppConfig {
      */
     private static ClientAppConfig getClientApp(Properties clientApps, String prefix) {
         String className = clientApps.getProperty(prefix + ".main");
-        if (className == null)
-                return null;
+        if (className == null) return null;
         String clientName = clientApps.getProperty(prefix + ".name");
         String args = clientApps.getProperty(prefix + ".args");
         String delayStr = clientApps.getProperty(prefix + ".delay");
@@ -294,22 +288,22 @@ public class ClientAppConfig {
         boolean dis = disabled != null && "false".equals(disabled);
 
         boolean onStartup = false;
-        if (onBoot != null)
-                onStartup = "true".equals(onBoot) || "yes".equals(onBoot);
+        if (onBoot != null) onStartup = "true".equals(onBoot) || "yes".equals(onBoot);
 
         long delay;
         if (onStartup) {
             delay = 0;
         } else if (className.equals("net.i2p.i2ptunnel.TunnelControllerGroup")) {
-                // speed up the start of i2ptunnel for everybody without rewriting clients.config
+            // speed up the start of i2ptunnel for everybody without rewriting clients.config
             delay = I2PTUNNEL_STARTUP_DELAY;
         } else {
             delay = DEFAULT_STARTUP_DELAY;
-            if (delayStr != null)
-                try { delay = 1000L *Integer.parseInt(delayStr); } catch (NumberFormatException nfe) {}
+            if (delayStr != null) try {
+                    delay = 1000L * Integer.parseInt(delayStr);
+                } catch (NumberFormatException nfe) {
+                }
         }
-        return new ClientAppConfig(className, clientName, args, delay, dis,
-                                       classpath, stopargs, uninstallargs);
+        return new ClientAppConfig(className, clientName, args, delay, dis, classpath, stopargs, uninstallargs);
     }
 
     /**
@@ -320,20 +314,17 @@ public class ClientAppConfig {
      *
      * @since 0.9.42
      */
-    public synchronized static void writeClientAppConfig(I2PAppContext ctx, ClientAppConfig app) throws IOException {
+    public static synchronized void writeClientAppConfig(I2PAppContext ctx, ClientAppConfig app) throws IOException {
         if (app.configFile == null) {
             File dir = new SecureDirectory(ctx.getConfigDir(), CLIENT_CONFIG_DIR);
-            if (!dir.isDirectory() && !dir.mkdirs())
-                throw new IOException("Can't create " + dir);
+            if (!dir.isDirectory() && !dir.mkdirs()) throw new IOException("Can't create " + dir);
             int i = 0;
             String[] files = dir.list();
-            if (files != null)
-                i = files.length;
+            if (files != null) i = files.length;
             File f;
             do {
                 String name = i + "-" + app.className + "-clients.config";
-                if (i < 10)
-                    name = '0' + name;
+                if (i < 10) name = '0' + name;
                 f = new File(dir, name);
                 i++;
             } while (f.exists());
@@ -350,13 +341,12 @@ public class ClientAppConfig {
      *
      * @since 0.9.42 split out from above
      */
-    public synchronized static void writeClientAppConfig(I2PAppContext ctx, List<ClientAppConfig> apps) throws IOException {
+    public static synchronized void writeClientAppConfig(I2PAppContext ctx, List<ClientAppConfig> apps) throws IOException {
         // Gather the set of config files
         ObjectCounterUnsafe<File> counter = new ObjectCounterUnsafe<File>();
         for (ClientAppConfig cac : apps) {
             File f = cac.configFile;
-            if (f == null)
-                throw new IllegalArgumentException("No file for " + cac.className);
+            if (f == null) throw new IllegalArgumentException("No file for " + cac.className);
             counter.increment(f);
         }
         IOException e = null;
@@ -367,18 +357,15 @@ public class ClientAppConfig {
             // Gather configs for this file
             List<ClientAppConfig> cacs = new ArrayList<ClientAppConfig>(8);
             for (ClientAppConfig cac : apps) {
-                if (cac.configFile.equals(f))
-                    cacs.add(cac);
+                if (cac.configFile.equals(f)) cacs.add(cac);
             }
             try {
                 writeClientAppConfig(cacs, f);
             } catch (IOException ioe) {
-                if (e == null)
-                    e = ioe;
+                if (e == null) e = ioe;
             }
         }
-        if (e != null)
-            throw e;
+        if (e != null) throw e;
     }
 
     /**
@@ -388,16 +375,14 @@ public class ClientAppConfig {
      * @since 0.9.42 split out from above
      */
     private static void writeClientAppConfig(List<ClientAppConfig> apps, File cfgFile) throws IOException {
-        if (cfgFile == null)
-            throw new IllegalArgumentException("No file");
+        if (cfgFile == null) throw new IllegalArgumentException("No file");
         Properties props = new OrderedProperties();
         for (int i = 0; i < apps.size(); i++) {
             ClientAppConfig app = apps.get(i);
             String pfx = PREFIX + i;
             props.setProperty(pfx + ".main", app.className);
             props.setProperty(pfx + ".name", app.clientName);
-            if (app.args != null)
-                props.setProperty(pfx + ".args", app.args);
+            if (app.args != null) props.setProperty(pfx + ".args", app.args);
             props.setProperty(pfx + ".delay", Long.toString(app.delay / 1000));
             props.setProperty(pfx + ".startOnLoad", Boolean.toString(!app.disabled));
         }
@@ -413,14 +398,12 @@ public class ClientAppConfig {
      * @throws IllegalArgumentException if cac has a null configfile
      * @since 0.9.42
      */
-    public synchronized static boolean deleteClientAppConfig(ClientAppConfig cac) throws IOException {
+    public static synchronized boolean deleteClientAppConfig(ClientAppConfig cac) throws IOException {
         File f = cac.configFile;
-        if (f == null)
-            throw new IllegalArgumentException("No file for " + cac.className);
+        if (f == null) throw new IllegalArgumentException("No file for " + cac.className);
         List<ClientAppConfig> cacs = getClientApps(f);
         if (cacs.remove(cac)) {
-            if (cacs.isEmpty())
-                return f.delete();
+            if (cacs.isEmpty()) return f.delete();
             writeClientAppConfig(cacs, f);
             return true;
         }
@@ -445,9 +428,7 @@ public class ClientAppConfig {
         if (o == null) return false;
         if (o instanceof ClientAppConfig) {
             ClientAppConfig cac = (ClientAppConfig) o;
-            return DataHelper.eq(className, cac.className) &&
-                   DataHelper.eq(clientName, cac.clientName) &&
-                   DataHelper.eq(args, cac.args);
+            return DataHelper.eq(className, cac.className) && DataHelper.eq(clientName, cac.clientName) && DataHelper.eq(args, cac.args);
         }
         return false;
     }

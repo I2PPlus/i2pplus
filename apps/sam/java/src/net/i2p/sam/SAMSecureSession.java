@@ -1,9 +1,10 @@
 package net.i2p.sam;
 
-import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 import net.i2p.util.PasswordManager;
+
+import java.util.Properties;
 
 /**
  *
@@ -27,10 +28,8 @@ public class SAMSecureSession implements SAMSecureSessionInterface {
         String user = props.getProperty("USER");
         String pw = props.getProperty("PASSWORD");
         if (user == null || pw == null) {
-            if (user == null)
-                log.logAlways(Log.WARN, "SAM authentication failed");
-            else
-                log.logAlways(Log.WARN, "SAM authentication failed, user: " + user);
+            if (user == null) log.logAlways(Log.WARN, "SAM authentication failed");
+            else log.logAlways(Log.WARN, "SAM authentication failed, user: " + user);
             throw new SAMException("USER and PASSWORD required");
         }
         String savedPW = i2cpProps.getProperty(SAMBridge.PROP_PW_PREFIX + user + SAMBridge.PROP_PW_SUFFIX);

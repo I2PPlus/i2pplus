@@ -1,8 +1,5 @@
 package net.i2p.router.peermanager;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import net.i2p.data.Hash;
 import net.i2p.router.CommSystemFacade;
 import net.i2p.router.RouterContext;
@@ -10,6 +7,10 @@ import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Copied from http://www.i2p2.i2p/how_peerselection.html
@@ -28,7 +29,6 @@ import net.i2p.util.SystemVersion;
  * TODO most of the methods should be synchronized.
  *
  */
-
 public class PeerProfile {
     private final Log _log;
     private final RouterContext _context;
@@ -44,8 +44,8 @@ public class PeerProfile {
     private float _tunnelTestResponseTimeAvg;
     private float _peerTestResponseTimeAvg;
     // periodic rates
-    //private RateStat _sendSuccessSize = null;
-    //private RateStat _receiveSize = null;
+    // private RateStat _sendSuccessSize = null;
+    // private RateStat _receiveSize = null;
     private RateStat _dbResponseTime;
     private RateStat _tunnelCreateResponseTime;
     // unused
@@ -74,23 +74,28 @@ public class PeerProfile {
     // does this peer profile contain expanded data, or just the basics?
     private boolean _expanded;
     private boolean _expandedDB;
-    //private int _consecutiveBanlists;
+    // private int _consecutiveBanlists;
     private final int _distance;
 
     /** keep track of the fastest 8 throughputs unless slow, then 4 */
     private static final int THROUGHPUT_COUNT = SystemVersion.isSlow() ? 4 : 8;
+
     /**
      * fastest 1 minute throughput, in bytes per minute, ordered with fastest
      * first.  this is not synchronized, as we don't *need* perfection, and we only
      * reorder/insert values on coalesce
      */
     private final float _peakThroughput[] = new float[THROUGHPUT_COUNT];
+
     private volatile long _peakThroughputCurrentTotal;
     private final float _peakTunnelThroughput[] = new float[THROUGHPUT_COUNT];
+
     /** total number of bytes pushed through a single tunnel in a 1 minute period */
     private final float _peakTunnel1mThroughput[] = new float[THROUGHPUT_COUNT];
+
     /** periodically cut the measured throughput values */
     private static final int DEGRADES_PER_DAY = 4;
+
     // one in this many times, ~= 61
     private static final int DEGRADE_PROBABILITY = PeerManager.REORGANIZES_PER_DAY / DEGRADES_PER_DAY;
     private static final double TOTAL_DEGRADE_PER_DAY = 0.5d;
@@ -109,7 +114,7 @@ public class PeerProfile {
     private static final Set<String> _bigCountries = new HashSet<String>();
 
     static {
-        String[] big = new String[] { "fr", "de", "ru", "au", "us", "ca", "gb", "jp", "nl", "ir", "se" };
+        String[] big = new String[] {"fr", "de", "ru", "au", "us", "ca", "gb", "jp", "nl", "ir", "se"};
         _bigCountries.addAll(Arrays.asList(big));
     }
 
@@ -118,7 +123,9 @@ public class PeerProfile {
      *
      *  @param peer non-null
      */
-    public PeerProfile(RouterContext context, Hash peer) {this(context, peer, true);}
+    public PeerProfile(RouterContext context, Hash peer) {
+        this(context, peer, true);
+    }
 
     /**
      *  Caller should call setLastHeardAbout() and setFirstHeardAbout()
@@ -127,21 +134,30 @@ public class PeerProfile {
      *  @param expand must be true (see below)
      */
     private PeerProfile(RouterContext context, Hash peer, boolean expand) {
-        if (peer == null) {throw new NullPointerException();}
+        if (peer == null) {
+            throw new NullPointerException();
+        }
         _context = context;
         _log = _context.logManager().getLog(PeerProfile.class);
         _peer = peer;
         _firstHeardAbout = _context.clock().now();
         // this is always true, and there are several places in the router that will NPE
         // if it is false, so all need to be fixed before we can have non-expanded profiles
-        if (expand) {expandProfile();}
+        if (expand) {
+            expandProfile();
+        }
         Hash us = _context.routerHash();
-        if (us != null) {_distance = ((_peer.getData()[0] & 0xff) ^ (us.getData()[0] & 0xff)) - 127;}
-        else {_distance = 0;}
+        if (us != null) {
+            _distance = ((_peer.getData()[0] & 0xff) ^ (us.getData()[0] & 0xff)) - 127;
+        } else {
+            _distance = 0;
+        }
     }
 
     /** what peer is being profiled, non-null */
-    public Hash getPeer() {return _peer;}
+    public Hash getPeer() {
+        return _peer;
+    }
 
     /**
      * are we keeping an expanded profile on the peer, or just the bare minimum.
@@ -149,15 +165,20 @@ public class PeerProfile {
      * TunnelHistory and DBHistory will not be available.
      *
      */
-    public boolean getIsExpanded() {return _expanded;}
-    public boolean getIsExpandedDB() {return _expandedDB;}
+    public boolean getIsExpanded() {
+        return _expanded;
+    }
+
+    public boolean getIsExpandedDB() {
+        return _expandedDB;
+    }
 
     /**
      * Is this peer active at the moment (sending/receiving messages within the last
      * 10 minutes)
      */
     public boolean getIsActive() {
-        return getIsActive(10*60*1000, _context.clock().now());
+        return getIsActive(10 * 60 * 1000, _context.clock().now());
     }
 
     /**
@@ -166,14 +187,16 @@ public class PeerProfile {
      * @since 0.9.58
      */
     public boolean getIsActive(long now) {
-        return getIsActive(10*60*1000, now);
+        return getIsActive(10 * 60 * 1000, now);
     }
 
     /** @since 0.8.11 */
     boolean isEstablished() {
         // null for tests
         CommSystemFacade cs = _context.commSystem();
-        if (cs == null) {return false;}
+        if (cs == null) {
+            return false;
+        }
         return cs.isEstablished(_peer);
     }
 
@@ -181,7 +204,9 @@ public class PeerProfile {
     public boolean wasUnreachable() {
         // null for tests
         CommSystemFacade cs = _context.commSystem();
-        if (cs == null) {return false;}
+        if (cs == null) {
+            return false;
+        }
         return cs.wasUnreachable(_peer);
     }
 
@@ -189,11 +214,11 @@ public class PeerProfile {
     boolean isSameCountry() {
         // null for tests
         CommSystemFacade cs = _context.commSystem();
-        if (cs == null) {return false;}
+        if (cs == null) {
+            return false;
+        }
         String us = cs.getOurCountry();
-        return us != null && (_bigCountries.contains(us) ||
-                     _context.getProperty(CapacityCalculator.PROP_COUNTRY_BONUS) != null) &&
-                     us.equals(cs.getCountry(_peer));
+        return us != null && (_bigCountries.contains(us) || _context.getProperty(CapacityCalculator.PROP_COUNTRY_BONUS) != null) && us.equals(cs.getCountry(_peer));
     }
 
     /**
@@ -201,7 +226,9 @@ public class PeerProfile {
      *  @return -127 to +128, lower is closer
      *  @since 0.8.11
      */
-    int getXORDistance() {return _distance;}
+    int getXORDistance() {
+        return _distance;
+    }
 
     /**
      * Is this peer active at the moment (sending/receiving messages within the
@@ -224,66 +251,104 @@ public class PeerProfile {
         return getLastHeardFrom() < before || getLastSendSuccessful() < before || isEstablished();
     }
 
-
     /**
      *  When did we first hear about this peer?
      *  @return greater than zero, set to now in constructor
      */
-    public synchronized long getFirstHeardAbout() {return _firstHeardAbout;}
+    public synchronized long getFirstHeardAbout() {
+        return _firstHeardAbout;
+    }
 
     /**
      *  Set when did we first heard about this peer, only if older.
      *  Package private, only set by profile management subsystem.
      */
     synchronized void setFirstHeardAbout(long when) {
-        if (when < _firstHeardAbout) {_firstHeardAbout = when;}
+        if (when < _firstHeardAbout) {
+            _firstHeardAbout = when;
+        }
     }
 
     /**
      *  when did we last hear about this peer?
      *  @return 0 if unset
      */
-    public synchronized long getLastHeardAbout() {return _lastHeardAbout;}
+    public synchronized long getLastHeardAbout() {
+        return _lastHeardAbout;
+    }
 
     /**
      *  Set when did we last hear about this peer, only if unset or newer
      *  Also sets FirstHeardAbout if earlier
      */
     public synchronized void setLastHeardAbout(long when) {
-        if (when > _lastHeardAbout) {_lastHeardAbout = when;}
+        if (when > _lastHeardAbout) {
+            _lastHeardAbout = when;
+        }
         // this is called by netdb PersistentDataStore, so fixup first heard
-        if (when < _firstHeardAbout) {_firstHeardAbout = when;}
+        if (when < _firstHeardAbout) {
+            _firstHeardAbout = when;
+        }
     }
 
     /** when did we last send to this peer successfully? */
-    public long getLastSendSuccessful() {return _lastSentToSuccessfully;}
-    public void setLastSendSuccessful(long when) {_lastSentToSuccessfully = when;}
+    public long getLastSendSuccessful() {
+        return _lastSentToSuccessfully;
+    }
+
+    public void setLastSendSuccessful(long when) {
+        _lastSentToSuccessfully = when;
+    }
 
     /** when did we last have a problem sending to this peer? */
-    public long getLastSendFailed() {return _lastFailedSend;}
-    public void setLastSendFailed(long when) {_lastFailedSend = when;}
+    public long getLastSendFailed() {
+        return _lastFailedSend;
+    }
+
+    public void setLastSendFailed(long when) {
+        _lastFailedSend = when;
+    }
 
     /** when did we last hear from the peer? */
-    public long getLastHeardFrom() {return _lastHeardFrom;}
-    public void setLastHeardFrom(long when) {_lastHeardFrom = when;}
+    public long getLastHeardFrom() {
+        return _lastHeardFrom;
+    }
+
+    public void setLastHeardFrom(long when) {
+        _lastHeardFrom = when;
+    }
 
     /** history of tunnel activity with the peer
-        Warning - may return null if !getIsExpanded() */
-    public synchronized TunnelHistory getTunnelHistory() {return _tunnelHistory;}
-    public synchronized void setTunnelHistory(TunnelHistory history) {_tunnelHistory = history;}
+     * Warning - may return null if !getIsExpanded() */
+    public synchronized TunnelHistory getTunnelHistory() {
+        return _tunnelHistory;
+    }
+
+    public synchronized void setTunnelHistory(TunnelHistory history) {
+        _tunnelHistory = history;
+    }
 
     /** history of db activity with the peer
-        Warning - may return null if !getIsExpandedDB() */
-    public synchronized DBHistory getDBHistory() {return _dbHistory;}
-    public synchronized void setDBHistory(DBHistory hist) {_dbHistory = hist;}
+     * Warning - may return null if !getIsExpandedDB() */
+    public synchronized DBHistory getDBHistory() {
+        return _dbHistory;
+    }
+
+    public synchronized void setDBHistory(DBHistory hist) {
+        _dbHistory = hist;
+    }
 
     /** how long it takes to get a db response from the peer (in milliseconds), calculated over a 1 minute, 1 hour, and 1 day period
-        Warning - may return null if !getIsExpandedDB() */
-    public synchronized RateStat getDbResponseTime() {return _dbResponseTime;}
+     * Warning - may return null if !getIsExpandedDB() */
+    public synchronized RateStat getDbResponseTime() {
+        return _dbResponseTime;
+    }
 
     /** how long it takes to get a tunnel create response from the peer (in milliseconds), calculated over a 1 minute, 1 hour, and 1 day period
-        Warning - may return null if !getIsExpanded() */
-    public synchronized RateStat getTunnelCreateResponseTime() {return _tunnelCreateResponseTime;}
+     * Warning - may return null if !getIsExpanded() */
+    public synchronized RateStat getTunnelCreateResponseTime() {
+        return _tunnelCreateResponseTime;
+    }
 
     /**
      *  How long it takes to successfully test a tunnel this peer participates in (in milliseconds),
@@ -294,38 +359,59 @@ public class PeerProfile {
      *  @return null always
      */
     @Deprecated
-    public RateStat getTunnelTestResponseTime() {return _tunnelTestResponseTime;}
+    public RateStat getTunnelTestResponseTime() {
+        return _tunnelTestResponseTime;
+    }
 
     /** how long it takes for a peer to respond to a direct test (ms) */
-    public RateStat getPeerTestResponseTime() {return _peerTestResponseTime;}
+    public RateStat getPeerTestResponseTime() {
+        return _peerTestResponseTime;
+    }
 
     /** how many new peers we get from dbSearchReplyMessages or dbStore messages, calculated over a 1 hour, 1 day, and 1 week period
-        Warning - may return null if !getIsExpandedDB() */
-    public synchronized RateStat getDbIntroduction() {return _dbIntroduction;}
+     * Warning - may return null if !getIsExpandedDB() */
+    public synchronized RateStat getDbIntroduction() {
+        return _dbIntroduction;
+    }
 
     /**
      * extra factor added to the speed ranking - this can be updated in the profile
      * written to disk to affect how the algorithm ranks speed.  Negative values are
      * penalties
      */
-    public int getSpeedBonus() {return _speedBonus;}
-    public void setSpeedBonus(int bonus) {_speedBonus = bonus;}
+    public int getSpeedBonus() {
+        return _speedBonus;
+    }
+
+    public void setSpeedBonus(int bonus) {
+        _speedBonus = bonus;
+    }
 
     /**
      * extra factor added to the capacity ranking - this can be updated in the profile
      * written to disk to affect how the algorithm ranks capacity.  Negative values are
      * penalties
      */
-    public int getCapacityBonus() {return _capacityBonus;}
-    public void setCapacityBonus(int bonus) {_capacityBonus = bonus;}
+    public int getCapacityBonus() {
+        return _capacityBonus;
+    }
+
+    public void setCapacityBonus(int bonus) {
+        _capacityBonus = bonus;
+    }
 
     /**
      * extra factor added to the integration ranking - this can be updated in the profile
      * written to disk to affect how the algorithm ranks integration.  Negative values are
      * penalties
      */
-    public int getIntegrationBonus() {return _integrationBonus;}
-    public void setIntegrationBonus(int bonus) {_integrationBonus = bonus;}
+    public int getIntegrationBonus() {
+        return _integrationBonus;
+    }
+
+    public void setIntegrationBonus(int bonus) {
+        _integrationBonus = bonus;
+    }
 
     /**
      * How fast is the peer, taking into consideration both throughput and latency.
@@ -333,24 +419,35 @@ public class PeerProfile {
      * (or measured) max rates, allowing this speed to reflect the speed /available/.
      *
      */
-    public float getSpeedValue() {return _speedValue;}
+    public float getSpeedValue() {
+        return _speedValue;
+    }
+
     /**
      * How many tunnels do we think this peer can handle over the next hour?
      *
      */
-    public float getCapacityValue() {return _capacityValue;}
+    public float getCapacityValue() {
+        return _capacityValue;
+    }
+
     /**
      * How well integrated into the network is this peer (as measured by how much they've
      * told us that we didn't already know).  Higher numbers means better integrated
      *
      */
-    public float getIntegrationValue() {return _integrationValue;}
+    public float getIntegrationValue() {
+        return _integrationValue;
+    }
+
     /**
      * is this peer actively failing (aka not worth touching)?
      * @deprecated - unused - always false
      */
     @Deprecated
-    public boolean getIsFailing() {return false;}
+    public boolean getIsFailing() {
+        return false;
+    }
 
     /**
      *  @deprecated unused
@@ -358,14 +455,18 @@ public class PeerProfile {
      */
     @Deprecated
     @SuppressWarnings("deprecation")
-    public float getTunnelTestTimeAverage() {return _tunnelTestResponseTimeAvg;}
+    public float getTunnelTestTimeAverage() {
+        return _tunnelTestResponseTimeAvg;
+    }
 
     /**
      *  @deprecated unused
      */
     @Deprecated
     @SuppressWarnings("deprecation")
-    void setTunnelTestTimeAverage(float avg) {_tunnelTestResponseTimeAvg = avg;}
+    void setTunnelTestTimeAverage(float avg) {
+        _tunnelTestResponseTimeAvg = avg;
+    }
 
     /**
      *  @deprecated unused
@@ -374,33 +475,47 @@ public class PeerProfile {
     @SuppressWarnings("deprecation")
     void updateTunnelTestTimeAverage(float ms) {
 
-        if (_tunnelTestResponseTimeAvg <= 0) {_tunnelTestResponseTimeAvg = ms;} // should we instead start at $ms?
+        if (_tunnelTestResponseTimeAvg <= 0) {
+            _tunnelTestResponseTimeAvg = ms;
+        } // should we instead start at $ms?
 
         // weighted since we want to let the average grow quickly and shrink slowly
-        if (ms < _tunnelTestResponseTimeAvg) {_tunnelTestResponseTimeAvg = 0.95f * _tunnelTestResponseTimeAvg + .05f * ms;}
-        else {_tunnelTestResponseTimeAvg = 0.75f * _tunnelTestResponseTimeAvg + .25f * ms;}
+        if (ms < _tunnelTestResponseTimeAvg) {
+            _tunnelTestResponseTimeAvg = 0.95f * _tunnelTestResponseTimeAvg + .05f * ms;
+        } else {
+            _tunnelTestResponseTimeAvg = 0.75f * _tunnelTestResponseTimeAvg + .25f * ms;
+        }
 
         if (_log.shouldInfo()) {
-            _log.info("Timed tunnel test for [" + _peer.toBase64().substring(0,6) +
-                      "] updated to " + (_tunnelTestResponseTimeAvg / 1000) + "s");
+            _log.info("Timed tunnel test for [" + _peer.toBase64().substring(0, 6) + "] updated to " + (_tunnelTestResponseTimeAvg / 1000) + "s");
         }
     }
 
-    public float getPeerTestTimeAverage() {return _peerTestResponseTimeAvg;}
-    void setPeerTestTimeAverage(float testAvg) {_peerTestResponseTimeAvg = testAvg;}
+    public float getPeerTestTimeAverage() {
+        return _peerTestResponseTimeAvg;
+    }
+
+    void setPeerTestTimeAverage(float testAvg) {
+        _peerTestResponseTimeAvg = testAvg;
+    }
 
     void updatePeerTestTimeAverage(float ms) {
-        if (_peerTestResponseTimeAvg <= 0) {_peerTestResponseTimeAvg = ms;} // default timeout * 2
-        else {_peerTestResponseTimeAvg = 0.75f * _peerTestResponseTimeAvg + .25f * ms;}
+        if (_peerTestResponseTimeAvg <= 0) {
+            _peerTestResponseTimeAvg = ms;
+        } // default timeout * 2
+        else {
+            _peerTestResponseTimeAvg = 0.75f * _peerTestResponseTimeAvg + .25f * ms;
+        }
         if (_log.shouldInfo()) {
-            _log.info("Timed peer test average for [" + _peer.toBase64().substring(0,6) +
-                      "] updated to " + (_peerTestResponseTimeAvg) + "ms");
+            _log.info("Timed peer test average for [" + _peer.toBase64().substring(0, 6) + "] updated to " + (_peerTestResponseTimeAvg) + "ms");
         }
     }
 
     public float getPeakThroughputKBps() {
         float rv = 0;
-        for (int i = 0; i < THROUGHPUT_COUNT; i++) {rv += _peakThroughput[i];}
+        for (int i = 0; i < THROUGHPUT_COUNT; i++) {
+            rv += _peakThroughput[i];
+        }
         rv /= (60 * 1024 * THROUGHPUT_COUNT);
         return rv;
     }
@@ -411,20 +526,23 @@ public class PeerProfile {
     void setPeakThroughputKBps(float kBps) {
         // Set all so the average remains the same
         float speed = kBps * (60 * 1024);
-        for (int i = 0; i < THROUGHPUT_COUNT; i++) {_peakThroughput[i] = speed;}
+        for (int i = 0; i < THROUGHPUT_COUNT; i++) {
+            _peakThroughput[i] = speed;
+        }
     }
 
-    void dataPushed(int size) {_peakThroughputCurrentTotal += size;}
+    void dataPushed(int size) {
+        _peakThroughputCurrentTotal += size;
+    }
 
     /** the tunnel pushed that much data in its lifetime */
     void tunnelDataTransferred(long tunnelByteLifetime) {
-        float lowPeak = _peakTunnelThroughput[THROUGHPUT_COUNT-1];
+        float lowPeak = _peakTunnelThroughput[THROUGHPUT_COUNT - 1];
         if (tunnelByteLifetime > lowPeak) {
             synchronized (_peakTunnelThroughput) {
                 for (int i = 0; i < THROUGHPUT_COUNT; i++) {
                     if (tunnelByteLifetime > _peakTunnelThroughput[i]) {
-                        for (int j = THROUGHPUT_COUNT-1; j > i; j--)
-                            _peakTunnelThroughput[j] = _peakTunnelThroughput[j-1];
+                        for (int j = THROUGHPUT_COUNT - 1; j > i; j--) _peakTunnelThroughput[j] = _peakTunnelThroughput[j - 1];
                         _peakTunnelThroughput[i] = tunnelByteLifetime;
                         break;
                     }
@@ -435,7 +553,9 @@ public class PeerProfile {
 
     public float getPeakTunnelThroughputKBps() {
         float rv = 0;
-        for (int i = 0; i < THROUGHPUT_COUNT; i++) {rv += _peakTunnelThroughput[i];}
+        for (int i = 0; i < THROUGHPUT_COUNT; i++) {
+            rv += _peakTunnelThroughput[i];
+        }
         rv /= (10 * 60 * 1024 * THROUGHPUT_COUNT);
         return rv;
     }
@@ -446,18 +566,19 @@ public class PeerProfile {
     void setPeakTunnelThroughputKBps(float kBps) {
         // Set all so the average remains the same
         float speed = kBps * (60 * 10 * 1024);
-        for (int i = 0; i < THROUGHPUT_COUNT; i++) {_peakTunnelThroughput[i] = speed;}
+        for (int i = 0; i < THROUGHPUT_COUNT; i++) {
+            _peakTunnelThroughput[i] = speed;
+        }
     }
 
     /** the tunnel pushed that much data in a 1 minute period */
     void dataPushed1m(int size) {
-        float lowPeak = _peakTunnel1mThroughput[THROUGHPUT_COUNT-1];
+        float lowPeak = _peakTunnel1mThroughput[THROUGHPUT_COUNT - 1];
         if (size > lowPeak) {
             synchronized (_peakTunnel1mThroughput) {
                 for (int i = 0; i < THROUGHPUT_COUNT; i++) {
                     if (size > _peakTunnel1mThroughput[i]) {
-                        for (int j = THROUGHPUT_COUNT-1; j > i; j--)
-                            _peakTunnel1mThroughput[j] = _peakTunnel1mThroughput[j-1];
+                        for (int j = THROUGHPUT_COUNT - 1; j > i; j--) _peakTunnel1mThroughput[j] = _peakTunnel1mThroughput[j - 1];
                         _peakTunnel1mThroughput[i] = size;
                         break;
                     }
@@ -467,7 +588,7 @@ public class PeerProfile {
             if (_log.shouldDebug()) {
                 StringBuilder buf = new StringBuilder(128);
                 buf.append("1 minute throughput for [");
-                buf.append(_peer.toBase64().substring(0,6));
+                buf.append(_peer.toBase64().substring(0, 6));
                 buf.append("] updated after ").append(size).append(" bytes sent \n* Measured: ");
                 for (int i = 0; i < THROUGHPUT_COUNT; i++) {
                     buf.append(_peakTunnel1mThroughput[i]).append(" ");
@@ -486,7 +607,9 @@ public class PeerProfile {
      */
     public float getPeakTunnel1mThroughputKBps() {
         float rv = 0;
-        for (int i = 0; i < THROUGHPUT_COUNT; i++) {rv += _peakTunnel1mThroughput[i];}
+        for (int i = 0; i < THROUGHPUT_COUNT; i++) {
+            rv += _peakTunnel1mThroughput[i];
+        }
         rv /= (60 * 1024 * THROUGHPUT_COUNT);
         return rv;
     }
@@ -497,7 +620,9 @@ public class PeerProfile {
     void setPeakTunnel1mThroughputKBps(float kBps) {
         // Set all so the average remains the same
         float speed = kBps * (60 * 1024);
-        for (int i = 0; i < THROUGHPUT_COUNT; i++) {_peakTunnel1mThroughput[i] = speed;}
+        for (int i = 0; i < THROUGHPUT_COUNT; i++) {
+            _peakTunnel1mThroughput[i] = speed;
+        }
     }
 
     /**
@@ -508,7 +633,7 @@ public class PeerProfile {
      *
      */
     public final synchronized void expandProfile() {
-        String group = (null == _peer ? "profileUnknown" : _peer.toBase64().substring(0,6));
+        String group = (null == _peer ? "profileUnknown" : _peer.toBase64().substring(0, 6));
 
         if (_tunnelCreateResponseTime == null) {
             _tunnelCreateResponseTime = new RateStat("tunnelCreateResponseTime", "Time for tunnel create response from peer (ms)", group, RATES);
@@ -516,7 +641,9 @@ public class PeerProfile {
         if (ENABLE_TUNNEL_TEST_RESPONSE_TIME && _tunnelTestResponseTime == null) {
             _tunnelTestResponseTime = new RateStat("tunnelTestResponseTime", "Time to test a tunnel this peer participates in (ms)", group, RATES);
         }
-        if (_tunnelHistory == null) {_tunnelHistory = new TunnelHistory(_context, group);}
+        if (_tunnelHistory == null) {
+            _tunnelHistory = new TunnelHistory(_context, group);
+        }
         _expanded = true;
     }
 
@@ -524,7 +651,7 @@ public class PeerProfile {
      * For floodfills
      */
     public synchronized void expandDBProfile() {
-        String group = (null == _peer ? "profileUnknown" : _peer.toBase64().substring(0,6));
+        String group = (null == _peer ? "profileUnknown" : _peer.toBase64().substring(0, 6));
         if (_dbResponseTime == null) {
             _dbResponseTime = new RateStat("dbResponseTime", "Time for NetDb response from peer (ms)", group, RATES);
         }
@@ -540,22 +667,26 @@ public class PeerProfile {
     private void coalesceThroughput(boolean decay) {
         long now = System.currentTimeMillis();
         long measuredPeriod = now - _lastCoalesceDate;
-        if (measuredPeriod >= 60*1000) {
+        if (measuredPeriod >= 60 * 1000) {
             // so we don't call random() twice
-            boolean shouldDecay =  decay && _context.random().nextInt(DEGRADE_PROBABILITY) <= 0;
+            boolean shouldDecay = decay && _context.random().nextInt(DEGRADE_PROBABILITY) <= 0;
             long tot = _peakThroughputCurrentTotal;
-            float lowPeak = _peakThroughput[THROUGHPUT_COUNT-1];
+            float lowPeak = _peakThroughput[THROUGHPUT_COUNT - 1];
             if (tot > lowPeak) {
                 for (int i = 0; i < THROUGHPUT_COUNT; i++) {
                     if (tot > _peakThroughput[i]) {
-                        for (int j = THROUGHPUT_COUNT-1; j > i; j--) {_peakThroughput[j] = _peakThroughput[j-1];}
+                        for (int j = THROUGHPUT_COUNT - 1; j > i; j--) {
+                            _peakThroughput[j] = _peakThroughput[j - 1];
+                        }
                         _peakThroughput[i] = tot;
                         break;
                     }
                 }
             } else {
                 if (shouldDecay) {
-                    for (int i = 0; i < THROUGHPUT_COUNT; i++) {_peakThroughput[i] *= DEGRADE_FACTOR;}
+                    for (int i = 0; i < THROUGHPUT_COUNT; i++) {
+                        _peakThroughput[i] *= DEGRADE_FACTOR;
+                    }
                 }
             }
 
@@ -576,7 +707,9 @@ public class PeerProfile {
      * @since 0.9.4
      */
     public synchronized void updateValues() {
-        if (!_coalescing) {coalesceOnly(false);} // can happen
+        if (!_coalescing) {
+            coalesceOnly(false);
+        } // can happen
         _coalescing = false;
         _speedValue = _speedValueNew;
         _capacityValue = _capacityValueNew;
@@ -596,17 +729,29 @@ public class PeerProfile {
      */
     synchronized void coalesceOnly(boolean shouldDecay) {
         _coalescing = true;
-        if (_tunnelCreateResponseTime != null) {_tunnelCreateResponseTime.coalesceStats();}
+        if (_tunnelCreateResponseTime != null) {
+            _tunnelCreateResponseTime.coalesceStats();
+        }
 
-        if (_tunnelTestResponseTime != null) {_tunnelTestResponseTime.coalesceStats();}
-        if (_peerTestResponseTime != null) {_peerTestResponseTime.coalesceStats();}
+        if (_tunnelTestResponseTime != null) {
+            _tunnelTestResponseTime.coalesceStats();
+        }
+        if (_peerTestResponseTime != null) {
+            _peerTestResponseTime.coalesceStats();
+        }
 
         _tunnelHistory.coalesceStats();
 
         if (_expandedDB) {
-            if (_dbIntroduction != null) {_dbIntroduction.coalesceStats();}
-            if (_dbResponseTime != null) {_dbResponseTime.coalesceStats();}
-            if (_dbHistory != null) {_dbHistory.coalesceStats();}
+            if (_dbIntroduction != null) {
+                _dbIntroduction.coalesceStats();
+            }
+            if (_dbResponseTime != null) {
+                _dbResponseTime.coalesceStats();
+            }
+            if (_dbHistory != null) {
+                _dbHistory.coalesceStats();
+            }
         }
 
         coalesceThroughput(shouldDecay);
@@ -617,11 +762,17 @@ public class PeerProfile {
         _integrationValue = calculateIntegration();
     }
 
+    private float calculateSpeed() {
+        return (float) SpeedCalculator.calc(this);
+    }
 
+    private float calculateCapacity() {
+        return (float) CapacityCalculator.calc(this);
+    }
 
-    private float calculateSpeed() {return (float) SpeedCalculator.calc(this);}
-    private float calculateCapacity() {return (float) CapacityCalculator.calc(this);}
-    private float calculateIntegration() {return (float) IntegrationCalculator.calc(this);}
+    private float calculateIntegration() {
+        return (float) IntegrationCalculator.calc(this);
+    }
 
     /**
      * @deprecated - unused - always false
@@ -633,20 +784,28 @@ public class PeerProfile {
      *  Helper for calculators
      *  @since 0.9.2
      */
-    RouterContext getContext() {return _context;}
+    RouterContext getContext() {
+        return _context;
+    }
 
     @Override
-    public int hashCode() {return _peer.hashCode();}
+    public int hashCode() {
+        return _peer.hashCode();
+    }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof PeerProfile)) {return false;}
-        PeerProfile prof = (PeerProfile)obj;
+        if (obj == null || !(obj instanceof PeerProfile)) {
+            return false;
+        }
+        PeerProfile prof = (PeerProfile) obj;
         return _peer.equals(prof._peer);
     }
 
     @Override
-    public String toString() {return "Profile: " + _peer;}
+    public String toString() {
+        return "Profile: " + _peer;
+    }
 
     /**
      * New measurement is 12KB per expanded profile. (2009-03 zzz)
@@ -677,5 +836,4 @@ public class PeerProfile {
      * for an expanded profile, and ~212 bytes for a compacted one.
      *
      */
-
 }

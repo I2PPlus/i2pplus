@@ -10,6 +10,9 @@
  */
 package org.minidns.dnsname;
 
+import org.minidns.dnslabel.DnsLabel;
+import org.minidns.idna.MiniDnsIdna;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -19,8 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
-import org.minidns.dnslabel.DnsLabel;
-import org.minidns.idna.MiniDnsIdna;
 
 /**
  * A DNS name, also called "domain name". A DNS name consists of multiple 'labels' and is subject to certain restrictions (see
@@ -153,7 +154,7 @@ public final class DnsName implements CharSequence, Serializable, Comparable<Dns
         }
 
         rawAce = labelsToString(rawLabels, size);
-        ace    = labelsToString(labels,    size);
+        ace = labelsToString(labels, size);
 
         // The following condition is deliberately designed that VALIDATE=false causes the validation to be skipped even
         // if validateMaxDnsnameLength is set to true. There is no need to validate even if this constructor is called
@@ -206,8 +207,7 @@ public final class DnsName implements CharSequence, Serializable, Comparable<Dns
     }
 
     private void setBytesIfRequired() {
-        if (bytes != null)
-            return;
+        if (bytes != null) return;
 
         setLabelsIfRequired();
         bytes = toBytes(labels);
@@ -261,8 +261,7 @@ public final class DnsName implements CharSequence, Serializable, Comparable<Dns
     }
 
     public String asIdn() {
-        if (idn != null)
-            return idn;
+        if (idn != null) return idn;
 
         idn = MiniDnsIdna.toUnicode(ace);
         return idn;
@@ -418,8 +417,7 @@ public final class DnsName implements CharSequence, Serializable, Comparable<Dns
      * @return The domain name string.
      * @throws IOException Should never happen.
      */
-    public static DnsName parse(DataInputStream dis, byte[] data)
-            throws IOException {
+    public static DnsName parse(DataInputStream dis, byte[] data) throws IOException {
         int c = dis.readUnsignedByte();
         if ((c & 0xc0) == 0xc0) {
             c = ((c & 0x3f) << 8) + dis.readUnsignedByte();
@@ -449,8 +447,7 @@ public final class DnsName implements CharSequence, Serializable, Comparable<Dns
      * @return The parsed domain name.
      * @throws IllegalStateException on cycles.
      */
-    private static DnsName parse(byte[] data, int offset, HashSet<Integer> jumps)
-            throws IllegalStateException {
+    private static DnsName parse(byte[] data, int offset, HashSet<Integer> jumps) throws IllegalStateException {
         int c = data[offset] & 0xff;
         if ((c & 0xc0) == 0xc0) {
             c = ((c & 0x3f) << 8) + (data[offset + 1] & 0xff);
@@ -504,12 +501,10 @@ public final class DnsName implements CharSequence, Serializable, Comparable<Dns
         parent.setLabelsIfRequired();
         int parentLabelsCount = parent.labels.length;
 
-        if (labels.length - 1 != parentLabelsCount)
-            return false;
+        if (labels.length - 1 != parentLabelsCount) return false;
 
         for (int i = 0; i < parent.labels.length; i++) {
-            if (!labels[i].equals(parent.labels[i]))
-                return false;
+            if (!labels[i].equals(parent.labels[i])) return false;
         }
 
         return true;
@@ -519,12 +514,10 @@ public final class DnsName implements CharSequence, Serializable, Comparable<Dns
         setLabelsIfRequired();
         parent.setLabelsIfRequired();
 
-        if (labels.length < parent.labels.length)
-            return false;
+        if (labels.length < parent.labels.length) return false;
 
         for (int i = 0; i < parent.labels.length; i++) {
-            if (!labels[i].equals(parent.labels[i]))
-                return false;
+            if (!labels[i].equals(parent.labels[i])) return false;
         }
 
         return true;
@@ -545,7 +538,6 @@ public final class DnsName implements CharSequence, Serializable, Comparable<Dns
         setLabelsIfRequired();
         return labels.clone();
     }
-
 
     public DnsLabel getLabel(int labelNum) {
         setLabelsIfRequired();

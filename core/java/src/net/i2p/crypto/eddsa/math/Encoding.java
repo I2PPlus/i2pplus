@@ -25,8 +25,7 @@ public abstract class Encoding implements Serializable {
     protected Field f;
 
     public synchronized void setField(Field f) {
-        if (this.f != null)
-            throw new IllegalStateException("already set");
+        if (this.f != null) throw new IllegalStateException("already set");
         this.f = f;
     }
 

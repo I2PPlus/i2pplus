@@ -36,6 +36,7 @@ class TunnelParticipant {
             return bps + "B/s";
         }
     }
+
     private final InboundEndpointProcessor _inboundEndpointProcessor;
     private final InboundMessageDistributor _inboundDistributor;
     private final FragmentHandler _handler;
@@ -66,8 +67,7 @@ class TunnelParticipant {
     /**
      * Internal constructor shared by all variants.
      */
-    private TunnelParticipant(RouterContext ctx, HopConfig config, HopProcessor processor,
-                              InboundEndpointProcessor inEndProc) {
+    private TunnelParticipant(RouterContext ctx, HopConfig config, HopProcessor processor, InboundEndpointProcessor inEndProc) {
         _context = ctx;
         _log = ctx.logManager().getLog(TunnelParticipant.class);
         _config = config;
@@ -89,17 +89,14 @@ class TunnelParticipant {
             int max = oldAllocated;
             int shareKBps = TunnelDispatcher.getShareBandwidth(ctx);
             if (_log.shouldInfo()) {
-                _log.info("TunnelParticipant init - Allocated: " + formatBandwidth(oldAllocated) +
-                          " DEFAULT: " + formatBandwidth(DEFAULT_BW_PER_TUNNEL_ESTIMATE) +
-                          " Share: " + formatBandwidth(shareKBps * 1000));
+                _log.info("TunnelParticipant init - Allocated: " + formatBandwidth(oldAllocated) + " DEFAULT: " + formatBandwidth(DEFAULT_BW_PER_TUNNEL_ESTIMATE) + " Share: " + formatBandwidth(shareKBps * 1000));
             }
             int shareBps = 1000 * shareKBps;
             int reasonableMax = shareBps / 2;
             if (oldAllocated <= DEFAULT_BW_PER_TUNNEL_ESTIMATE || oldAllocated < reasonableMax / 10) {
                 max = ctx.tunnelDispatcher().getMaxPerTunnelBandwidth(TunnelDispatcher.Location.PARTICIPANT);
                 config.setAllocatedBW(max);
-                if (_log.shouldInfo())
-                    _log.info("Updated tunnel bandwidth from " + formatBandwidth(oldAllocated) + " to: " + formatBandwidth(max));
+                if (_log.shouldInfo()) _log.info("Updated tunnel bandwidth from " + formatBandwidth(oldAllocated) + " to: " + formatBandwidth(max));
             }
             // Dynamic RED thresholds scaled to bandwidth - handle bursts without drops
             int minThreshold = Math.max(2048, max / 4);
@@ -168,20 +165,13 @@ class TunnelParticipant {
             if (ri != null) {
                 send(_config, msg, ri);
                 if (_log.shouldDebug()) {
-                    _log.debug("Dispatched " + msg + " directly to next hop [" +
-                               _config.getSendTo().toBase64().substring(0, 6) + "]");
+                    _log.debug("Dispatched " + msg + " directly to next hop [" + _config.getSendTo().toBase64().substring(0, 6) + "]");
                 }
             } else {
                 ri = _context.netDb().lookupRouterInfoLocally(_config.getSendTo());
-                _context.netDb().lookupRouterInfo(
-                    _config.getSendTo(),
-                    new SendJob(_context, msg),
-                    new TimeoutJob(_context, msg),
-                    MAX_LOOKUP_TIME
-                );
+                _context.netDb().lookupRouterInfo(_config.getSendTo(), new SendJob(_context, msg), new TimeoutJob(_context, msg), MAX_LOOKUP_TIME);
                 if (_log.shouldInfo()) {
-                    _log.info("Looking up next hop [" +
-                              _config.getSendTo().toBase64().substring(0, 6) + "] for " + msg);
+                    _log.info("Looking up next hop [" + _config.getSendTo().toBase64().substring(0, 6) + "] for " + msg);
                 }
             }
         } else {
@@ -198,12 +188,9 @@ class TunnelParticipant {
 
     private void logDispatchFailure(TunnelDataMessage msg) {
         if (_log.shouldInfo()) {
-            _log.warn("Failed to dispatch " + msg +
-                      "\n* Processor: " + _processor +
-                      "\n* Inbound Endpoint: " + _inboundEndpointProcessor);
+            _log.warn("Failed to dispatch " + msg + "\n* Processor: " + _processor + "\n* Inbound Endpoint: " + _inboundEndpointProcessor);
         } else if (_log.shouldWarn()) {
-            _log.warn("Failed to dispatch " + msg + " via " +
-                      (_processor != null ? _processor : "NULL tunnel"));
+            _log.warn("Failed to dispatch " + msg + " via " + (_processor != null ? _processor : "NULL tunnel"));
         }
     }
 
@@ -214,8 +201,7 @@ class TunnelParticipant {
             for (int i = 0; i < lenm1; i++) {
                 Hash h = cfg.getPeer(i);
                 if (_log.shouldWarn()) {
-                    _log.warn("Tunnel from " + toString() + " failed -> Blaming [" +
-                              h.toBase64().substring(0, 6) + "] -> " + pct + '%');
+                    _log.warn("Tunnel from " + toString() + " failed -> Blaming [" + h.toBase64().substring(0, 6) + "] -> " + pct + '%');
                 }
                 _context.profileManager().tunnelFailed(h, pct);
             }
@@ -248,9 +234,7 @@ class TunnelParticipant {
      * Unconditionally resets TTL to 10s unless the message is more than 60s stale.
      */
     private void send(HopConfig config, TunnelDataMessage msg, RouterInfo ri) {
-        if (_context.tunnelDispatcher().shouldDropParticipatingMessage(
-                TunnelDispatcher.Location.PARTICIPANT,
-                TunnelDataMessage.MESSAGE_TYPE, 1024, _partBWE)) {
+        if (_context.tunnelDispatcher().shouldDropParticipatingMessage(TunnelDispatcher.Location.PARTICIPANT, TunnelDataMessage.MESSAGE_TYPE, 1024, _partBWE)) {
             return;
         }
 
@@ -321,8 +305,7 @@ class TunnelParticipant {
                     stat = 1;
                 } else {
                     if (_log.shouldWarn()) {
-                        _log.warn("Lookup of next hop [" + _config.getSendTo().toBase64().substring(0, 6) +
-                                  "] failed! Where do we go for " + _config + "? -> Message dropped: " + _msg);
+                        _log.warn("Lookup of next hop [" + _config.getSendTo().toBase64().substring(0, 6) + "] failed! Where do we go for " + _config + "? -> Message dropped: " + _msg);
                     }
                     stat = 0;
                 }
@@ -355,13 +338,11 @@ class TunnelParticipant {
             if (ri != null) {
                 _nextHopCache = ri;
                 if (_log.shouldWarn()) {
-                    _log.warn("Lookup of next hop [" + _config.getSendTo().toBase64().substring(0, 6) +
-                              "] failed, but we found it!! -> " + _msg + " dropped");
+                    _log.warn("Lookup of next hop [" + _config.getSendTo().toBase64().substring(0, 6) + "] failed, but we found it!! -> " + _msg + " dropped");
                 }
             } else {
                 if (_log.shouldWarn()) {
-                    _log.warn("Lookup of next hop [" + _config.getSendTo().toBase64().substring(0, 6) +
-                              "] failed! -> " + _msg + " dropped");
+                    _log.warn("Lookup of next hop [" + _config.getSendTo().toBase64().substring(0, 6) + "] failed! -> " + _msg + " dropped");
                 }
             }
             _context.statManager().addRateData("tunnel.participantLookupSuccess", 0);

@@ -1,4 +1,5 @@
 package net.i2p.router.message;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -21,8 +22,7 @@ import net.i2p.data.i2np.I2NPMessage;
 public class PayloadGarlicConfig extends GarlicConfig {
     private final I2NPMessage _payload;
 
-    public PayloadGarlicConfig(Certificate cert, long id, long expiration,
-                               DeliveryInstructions di, I2NPMessage message) {
+    public PayloadGarlicConfig(Certificate cert, long id, long expiration, DeliveryInstructions di, I2NPMessage message) {
         super(null, cert, id, expiration, di);
         _payload = message;
     }
@@ -31,7 +31,9 @@ public class PayloadGarlicConfig extends GarlicConfig {
      * Specify the I2NP message to be sent - if this is set, no other cloves can be included
      * in this block
      */
-    public I2NPMessage getPayload() { return _payload; }
+    public I2NPMessage getPayload() {
+        return _payload;
+    }
 
     @Override
     protected String getSubData() {
@@ -54,7 +56,9 @@ public class PayloadGarlicConfig extends GarlicConfig {
      *  @since 0.9.12
      */
     @Override
-    public int getCloveCount() { return 0; }
+    public int getCloveCount() {
+        return 0;
+    }
 
     /**
      *  @since 0.9.12
@@ -69,5 +73,5 @@ public class PayloadGarlicConfig extends GarlicConfig {
      *  @since 0.9.12
      */
     @Override
-    public void clearCloves() { }
+    public void clearCloves() {}
 }

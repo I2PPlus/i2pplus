@@ -1,9 +1,10 @@
 package net.i2p.router.tunnel.pool;
 
+import net.i2p.data.Hash;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
-import net.i2p.data.Hash;
 
 /**
  *  A Set of Hashes that automatically adds to the
@@ -23,7 +24,9 @@ abstract class ExcluderBase implements Set<Hash> {
      *
      *  @param set not copied, contents will be modified by all methods
      */
-    protected ExcluderBase(Set<Hash> set) {s = set;}
+    protected ExcluderBase(Set<Hash> set) {
+        s = set;
+    }
 
     /**
      *  Automatically check if peer is allowed
@@ -34,38 +37,79 @@ abstract class ExcluderBase implements Set<Hash> {
      */
     @Override
     public abstract boolean contains(Object o);
+
     @Override
-    public boolean add(Hash h) {return s.add(h);}
+    public boolean add(Hash h) {
+        return s.add(h);
+    }
+
     @Override
-    public boolean addAll(Collection<? extends Hash> c) {return s.addAll(c);}
+    public boolean addAll(Collection<? extends Hash> c) {
+        return s.addAll(c);
+    }
+
     @Override
-    public void clear() {s.clear();}
+    public void clear() {
+        s.clear();
+    }
+
     @Override
-    public boolean containsAll(Collection<?> c) {return s.containsAll(c);}
+    public boolean containsAll(Collection<?> c) {
+        return s.containsAll(c);
+    }
+
     @Override
-    public boolean equals(Object o) {return s.equals(o);}
+    public boolean equals(Object o) {
+        return s.equals(o);
+    }
+
     @Override
-    public int hashCode() {return s.hashCode();}
+    public int hashCode() {
+        return s.hashCode();
+    }
+
     @Override
-    public boolean isEmpty() {return s.isEmpty();}
+    public boolean isEmpty() {
+        return s.isEmpty();
+    }
+
     @Override
-    public Iterator<Hash> iterator() {return s.iterator();}
+    public Iterator<Hash> iterator() {
+        return s.iterator();
+    }
+
     @Override
-    public boolean remove(Object o) {return s.remove(o);}
+    public boolean remove(Object o) {
+        return s.remove(o);
+    }
+
     @Override
-    public boolean removeAll(Collection<?> c) {return s.removeAll(c);}
+    public boolean removeAll(Collection<?> c) {
+        return s.removeAll(c);
+    }
+
     @Override
-    public boolean retainAll(Collection<?> c) {return s.retainAll(c);}
+    public boolean retainAll(Collection<?> c) {
+        return s.retainAll(c);
+    }
+
     @Override
-    public int size() {return s.size();}
+    public int size() {
+        return s.size();
+    }
+
     @Override
-    public Object[] toArray() {return s.toArray();}
+    public Object[] toArray() {
+        return s.toArray();
+    }
+
     @Override
-    public <Hash> Hash[] toArray(Hash[] a) {return s.toArray(a);}
+    public <Hash> Hash[] toArray(Hash[] a) {
+        return s.toArray(a);
+    }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + " (" + s.size() + ") " + (s.size() <= 10 ? s.toString() : "");
     }
-
 }

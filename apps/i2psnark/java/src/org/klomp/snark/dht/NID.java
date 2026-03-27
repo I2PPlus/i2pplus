@@ -93,6 +93,6 @@ public class NID extends SHA1Hash {
      * @return true if the node has exceeded the maximum allowed failures, false otherwise
      */
     public boolean timeout() {
-        return++fails > MAX_FAILS;
+        return ++fails > MAX_FAILS;
     }
 }

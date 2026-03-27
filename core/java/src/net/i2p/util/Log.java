@@ -9,8 +9,9 @@ package net.i2p.util;
  *
  */
 
-import java.util.Locale;
 import net.i2p.I2PAppContext;
+
+import java.util.Locale;
 
 /**
  * Wrapper class for whatever logging system I2P uses.  This class should be
@@ -29,17 +30,17 @@ public class Log {
     private final LogScope _scope;
     private final LogManager _manager;
 
-    public final static int DEBUG = 10;
-    public final static int INFO = 20;
-    public final static int WARN = 30;
-    public final static int ERROR = 40;
-    public final static int CRIT = 50;
+    public static final int DEBUG = 10;
+    public static final int INFO = 20;
+    public static final int WARN = 30;
+    public static final int ERROR = 40;
+    public static final int CRIT = 50;
 
-    public final static String STR_DEBUG = "DEBUG";
-    public final static String STR_INFO = "INFO";
-    public final static String STR_WARN = "WARN";
-    public final static String STR_ERROR = "ERROR";
-    public final static String STR_CRIT = "CRIT";
+    public static final String STR_DEBUG = "DEBUG";
+    public static final String STR_INFO = "INFO";
+    public static final String STR_WARN = "WARN";
+    public static final String STR_ERROR = "ERROR";
+    public static final String STR_CRIT = "CRIT";
 
     public static int getLevel(String level) {
         if (level == null) return ERROR;
@@ -54,16 +55,11 @@ public class Log {
 
     public static String toLevelString(int level) {
         switch (level) {
-            case DEBUG:
-                return STR_DEBUG;
-            case INFO:
-                return STR_INFO;
-            case WARN:
-                return STR_WARN;
-            case ERROR:
-                return STR_ERROR;
-            case CRIT:
-                return STR_CRIT;
+            case DEBUG: return STR_DEBUG;
+            case INFO: return STR_INFO;
+            case WARN: return STR_WARN;
+            case ERROR: return STR_ERROR;
+            case CRIT: return STR_CRIT;
         }
         return (level > CRIT ? STR_CRIT : STR_DEBUG);
     }
@@ -105,17 +101,13 @@ public class Log {
 
     public void log(int priority, String msg) {
         if (priority >= _minPriority) {
-            _manager.addRecord(new LogRecord(_class, _name,
-                                             Thread.currentThread().getName(), priority,
-                                             msg, null));
+            _manager.addRecord(new LogRecord(_class, _name, Thread.currentThread().getName(), priority, msg, null));
         }
     }
 
     public void log(int priority, String msg, Throwable t) {
         if (priority >= _minPriority) {
-            _manager.addRecord(new LogRecord(_class, _name,
-                                             Thread.currentThread().getName(), priority,
-                                             msg, t));
+            _manager.addRecord(new LogRecord(_class, _name, Thread.currentThread().getName(), priority, msg, t));
         }
     }
 
@@ -125,9 +117,7 @@ public class Log {
      *  @since 0.8.2
      */
     public void logAlways(int priority, String msg) {
-        _manager.addRecord(new LogRecord(_class, _name,
-                                             Thread.currentThread().getName(), priority,
-                                             msg, null));
+        _manager.addRecord(new LogRecord(_class, _name, Thread.currentThread().getName(), priority, msg, null));
     }
 
     public void debug(String msg) {
@@ -228,7 +218,9 @@ public class Log {
      * @since 0.9.8
      */
     public void logCloseLoop(int level, Object... desc) {
-        if (!shouldLog(level)) {return;}
+        if (!shouldLog(level)) {
+            return;
+        }
         // catenate all toString()s
         StringBuilder builder = new StringBuilder();
         builder.append("close() loop in");
@@ -237,11 +229,13 @@ public class Log {
             builder.append(String.valueOf(o));
         }
         Exception e = new Exception("check stack trace");
-        log(level,builder.toString(),e);
+        log(level, builder.toString(), e);
     }
 
     public String getName() {
-        if (_className != null) {return _className;}
+        if (_className != null) {
+            return _className;
+        }
         return _name;
     }
 
@@ -249,27 +243,43 @@ public class Log {
      * Returns the LogScope (private class).
      * @return the LogScope
      */
-    public Object getScope() { return _scope; }
+    public Object getScope() {
+        return _scope;
+    }
 
     static String getScope(String name, Class<?> cls) {
-        if ((name == null) && (cls == null)) {return "f00";}
-        if (cls == null) {return name;}
-        if (name == null) {return cls.getName();}
+        if ((name == null) && (cls == null)) {
+            return "f00";
+        }
+        if (cls == null) {
+            return name;
+        }
+        if (name == null) {
+            return cls.getName();
+        }
         return name + "" + cls.getName();
     }
 
     private static final class LogScope {
         private final String _scopeCache;
 
-        public LogScope(String name, Class<?> cls) {_scopeCache = getScope(name, cls);}
+        public LogScope(String name, Class<?> cls) {
+            _scopeCache = getScope(name, cls);
+        }
 
         @Override
-        public int hashCode() {return _scopeCache.hashCode();}
+        public int hashCode() {
+            return _scopeCache.hashCode();
+        }
 
         @Override
         public boolean equals(Object obj) {
-            if (this == obj) {return true;}
-            if (obj == null || getClass() != obj.getClass()) {return false;}
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
             LogScope other = (LogScope) obj;
             return _scopeCache.equals(other._scopeCache);
         }

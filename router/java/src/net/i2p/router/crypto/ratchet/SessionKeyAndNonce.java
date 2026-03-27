@@ -1,6 +1,7 @@
 package net.i2p.router.crypto.ratchet;
 
 import com.southernstorm.noise.protocol.HandshakeState;
+
 import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
 
@@ -83,8 +84,7 @@ class SessionKeyAndNonce extends SessionKey {
     public String toString() {
         StringBuilder buf = new StringBuilder(64); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("[SessionKeyAndNonce: ");
-        if (_data != null)
-            buf.append(toBase64());
+        if (_data != null) buf.append(toBase64());
         buf.append(_state != null ? " NSR" : " ES");
         buf.append(" nonce: ").append(_nonce);
         buf.append(']');

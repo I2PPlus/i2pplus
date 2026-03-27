@@ -26,26 +26,25 @@ import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.peermanager.PeerProfile;
+import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.util.ArraySet;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
-import net.i2p.router.peermanager.ProfileOrganizer;
-
 /**
  * Coordinate the selection of peers to go into a tunnel for one particular pool.
  */
 public abstract class TunnelPeerSelector extends ConnectChecker {
 
-    private static final String DEFAULT_EXCLUDE_CAPS = String.valueOf(Router.CAPABILITY_BW12) +
-                                                       String.valueOf(Router.CAPABILITY_BW32) +
-                                                       String.valueOf(Router.CAPABILITY_BW64) +
-                                                       String.valueOf(Router.CAPABILITY_UNREACHABLE) +
-                                                       String.valueOf(Router.CAPABILITY_CONGESTION_MODERATE) +
-                                                       String.valueOf(Router.CAPABILITY_CONGESTION_SEVERE) +
-                                                       String.valueOf(Router.CAPABILITY_NO_TUNNELS);
+    private static final String DEFAULT_EXCLUDE_CAPS = String.valueOf(Router.CAPABILITY_BW12)
+            + String.valueOf(Router.CAPABILITY_BW32)
+            + String.valueOf(Router.CAPABILITY_BW64)
+            + String.valueOf(Router.CAPABILITY_UNREACHABLE)
+            + String.valueOf(Router.CAPABILITY_CONGESTION_MODERATE)
+            + String.valueOf(Router.CAPABILITY_CONGESTION_SEVERE)
+            + String.valueOf(Router.CAPABILITY_NO_TUNNELS);
 
     protected static final double ATTACK_THRESHOLD = ProfileOrganizer.ATTACK_THRESHOLD;
     protected static final long STARTUP_WARNING_SUPPRESS_MS = 15 * 60 * 1000;
@@ -75,21 +74,16 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             length = override;
         } else if (settings.getLengthVariance() != 0) {
             int skew = settings.getLengthVariance();
-            if (skew > 0)
-                length += ctx.random().nextInt(skew+1);
+            if (skew > 0) length += ctx.random().nextInt(skew + 1);
             else {
                 skew = 1 - skew;
                 int off = ctx.random().nextInt(skew);
-                if (ctx.random().nextBoolean())
-                    length += off;
-                else
-                    length -= off;
+                if (ctx.random().nextBoolean()) length += off;
+                else length -= off;
             }
         }
-        if (length < 0)
-            length = 0;
-        else if (length > 7) // as documented in tunnel.html
-            length = 7;
+        if (length < 0) length = 0;
+        else if (length > 7) length = 7;
 
         // Enforce max 3 hops under network stress (< 40% build success)
         if (length > 3) {
@@ -110,15 +104,13 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     protected boolean shouldSelectExplicit(TunnelPoolSettings settings) {
         if (settings.isExploratory()) return false;
         // To test IB or OB only
-        //if (settings.isInbound()) return false;
-        //if (!settings.isInbound()) return false;
+        // if (settings.isInbound()) return false;
+        // if (!settings.isInbound()) return false;
         Properties opts = settings.getUnknownOptions();
         String peers = opts.getProperty("explicitPeers");
-        if (peers == null)
-            peers = ctx.getProperty("explicitPeers");
+        if (peers == null) peers = ctx.getProperty("explicitPeers");
         // only one out of 4 times so we don't break completely if peer doesn't build one
-        if (peers != null && ctx.random().nextInt(4) == 0)
-            return true;
+        if (peers != null && ctx.random().nextInt(4) == 0) return true;
         return false;
     }
 
@@ -135,8 +127,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         Properties opts = settings.getUnknownOptions();
         peers = opts.getProperty("explicitPeers");
 
-        if (peers == null)
-            peers = ctx.getProperty("explicitPeers");
+        if (peers == null) peers = ctx.getProperty("explicitPeers");
 
         List<Hash> rv = new ArrayList<Hash>();
         StringTokenizer tok = new StringTokenizer(peers, ",");
@@ -149,12 +140,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 if (ctx.profileOrganizer().isSelectable(peer)) {
                     rv.add(peer);
                 } else {
-                    if (log.shouldWarn())
-                        log.warn("Explicit peer [" + peerStr + "] is not selectable");
+                    if (log.shouldWarn()) log.warn("Explicit peer [" + peerStr + "] is not selectable");
                 }
             } catch (DataFormatException dfe) {
-                if (log.shouldError())
-                    log.error("Explicit peer [" + peerStr + "] is improperly formatted", dfe);
+                if (log.shouldError()) log.error("Explicit peer [" + peerStr + "] is improperly formatted", dfe);
             }
         }
 
@@ -184,26 +173,25 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             if (settings.getDestinationNickname() != null)
                 buf.append("peers for ").append(settings.getDestinationNickname());
             else if (settings.getDestination() != null)
-                buf.append("peers for [").append(settings.getDestination().toBase64(), 0, 6).append("]");
-            else
-                buf.append("peers for Exploratory ");
-            if (settings.isInbound())
-                buf.append(" Inbound");
-            else
-                buf.append(" Outbound");
+                buf.append("peers for [")
+                        .append(settings.getDestination().toBase64(), 0, 6)
+                        .append("]");
+            else buf.append("peers for Exploratory ");
+            if (settings.isInbound()) buf.append(" Inbound");
+            else buf.append(" Outbound");
             buf.append(" peers: ");
             for (int i = 0; i < rv.size(); i++) {
-                if (i > 0) {buf.append(", ");}
+                if (i > 0) {
+                    buf.append(", ");
+                }
                 buf.append("[").append(rv.get(i).toBase64(), 0, 6).append("]");
             }
             buf.append(", out of ").append(sz).append(" (not including us)");
             log.info(buf.toString());
         }
 
-        if (settings.isInbound())
-            rv.add(0, ctx.routerHash());
-        else
-            rv.add(ctx.routerHash());
+        if (settings.isInbound()) rv.add(0, ctx.routerHash());
+        else rv.add(ctx.routerHash());
 
         return rv;
     }
@@ -259,7 +247,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
         RouterInfo routerInfo = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(peerHash);
         if (routerInfo == null) {
-            return false;  // Allow peers with incomplete RouterInfo - build will fail naturally if unreachable
+            return false; // Allow peers with incomplete RouterInfo - build will fail naturally if unreachable
         }
 
         if (shouldExcludeFloodfillPeer(isExploratory, routerInfo)) {
@@ -344,8 +332,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         if (!cap.contains(Character.toString(Router.CAPABILITY_UNREACHABLE))) {
             return true;
         }
-        if (cap.contains("M") || cap.contains("N") || cap.contains("O") ||
-            cap.contains("P") || cap.contains("X")) {
+        if (cap.contains("M") || cap.contains("N") || cap.contains("O") || cap.contains("P") || cap.contains("X")) {
             double buildSuccess = 0;
             try {
                 buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
@@ -367,7 +354,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             return false;
         }
         String capabilities = routerInfo.getCapabilities();
-        boolean isFloodfill = capabilities.contains(Character.toString(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL));
+        boolean isFloodfill =
+                capabilities.contains(Character.toString(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL));
         // Randomly exclude most exploratory floodfill peers to reduce load (approximate 15/16 exclusion)
         return isFloodfill && ctx.random().nextInt(16) != 0;
     }
@@ -393,8 +381,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     protected boolean allowAsOBEP(Hash h) {
         RouterInfo ri = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
-        if (ri == null)
-            return true;
+        if (ri == null) return true;
         return canConnect(ri, ANY_V4);
     }
 
@@ -410,10 +397,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     protected boolean allowAsIBGW(Hash h) {
         RouterInfo ri = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
-        if (ri == null)
-            return true;
-        if (ri.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0)
-            return false;
+        if (ri == null) return true;
+        if (ri.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0) return false;
         return canConnect(ANY_V4, ri);
     }
 
@@ -512,9 +497,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             // During network stress, allow E cap with 1/6 chance
             if (cap.contains("E") && buildSuccess < ATTACK_THRESHOLD) {
                 if (ctx.random().nextInt(6) != 0) {
-                    return true;  // Exclude (5/6 chance)
+                    return true; // Exclude (5/6 chance)
                 }
-                return false;  // Allow (1/6 chance)
+                return false; // Allow (1/6 chance)
             }
             return true;
         }
@@ -523,8 +508,13 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         int knownCaps = 0;
         if (cap.contains("F")) knownCaps++;
         if (cap.contains("R")) knownCaps++;
-        if (cap.contains("L") || cap.contains("M") || cap.contains("N") || cap.contains("O") ||
-            cap.contains("P") || cap.contains("Q") || cap.contains("X")) knownCaps++;
+        if (cap.contains("L")
+                || cap.contains("M")
+                || cap.contains("N")
+                || cap.contains("O")
+                || cap.contains("P")
+                || cap.contains("Q")
+                || cap.contains("X")) knownCaps++;
 
         // Relax single-capability restriction when peer count is low
         int fastPeerCount = ctx.profileOrganizer().countFastPeers();
@@ -546,9 +536,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         return false;
     }
 
-    private static final String PROP_OUTBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE = "router.outboundExploratoryExcludeUnreachable";
+    private static final String PROP_OUTBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE =
+            "router.outboundExploratoryExcludeUnreachable";
     private static final String PROP_OUTBOUND_CLIENT_EXCLUDE_UNREACHABLE = "router.outboundClientExcludeUnreachable";
-    private static final String PROP_INBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE = "router.inboundExploratoryExcludeUnreachable";
+    private static final String PROP_INBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE =
+            "router.inboundExploratoryExcludeUnreachable";
     private static final String PROP_INBOUND_CLIENT_EXCLUDE_UNREACHABLE = "router.inboundClientExcludeUnreachable";
     private static final boolean DEFAULT_OUTBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE = true;
     private static final boolean DEFAULT_OUTBOUND_CLIENT_EXCLUDE_UNREACHABLE = true;
@@ -561,23 +553,25 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @return true if yes
      */
     private boolean filterUnreachable(boolean isInbound, boolean isExploratory) {
-        if (SystemVersion.isSlow() || ctx.router().getUptime() < 65*60*1000)
-            return true;
+        if (SystemVersion.isSlow() || ctx.router().getUptime() < 65 * 60 * 1000) return true;
         if (isExploratory) {
             if (isInbound) {
-                if (ctx.router().isHidden())
-                    return true;
-                return ctx.getProperty(PROP_INBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE, DEFAULT_INBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE);
+                if (ctx.router().isHidden()) return true;
+                return ctx.getProperty(
+                        PROP_INBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE, DEFAULT_INBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE);
             } else {
-                return ctx.getProperty(PROP_OUTBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE, DEFAULT_OUTBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE);
+                return ctx.getProperty(
+                        PROP_OUTBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE,
+                        DEFAULT_OUTBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE);
             }
         } else {
             if (isInbound) {
-                if (ctx.router().isHidden())
-                    return true;
-                return ctx.getProperty(PROP_INBOUND_CLIENT_EXCLUDE_UNREACHABLE, DEFAULT_INBOUND_CLIENT_EXCLUDE_UNREACHABLE);
+                if (ctx.router().isHidden()) return true;
+                return ctx.getProperty(
+                        PROP_INBOUND_CLIENT_EXCLUDE_UNREACHABLE, DEFAULT_INBOUND_CLIENT_EXCLUDE_UNREACHABLE);
             } else {
-                return ctx.getProperty(PROP_OUTBOUND_CLIENT_EXCLUDE_UNREACHABLE, DEFAULT_OUTBOUND_CLIENT_EXCLUDE_UNREACHABLE);
+                return ctx.getProperty(
+                        PROP_OUTBOUND_CLIENT_EXCLUDE_UNREACHABLE, DEFAULT_OUTBOUND_CLIENT_EXCLUDE_UNREACHABLE);
             }
         }
     }
@@ -593,17 +587,25 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     protected boolean filterSlow(boolean isInbound, boolean isExploratory) {
         if (isExploratory) {
-            if (isInbound) {return ctx.getProperty(PROP_INBOUND_EXPLORATORY_EXCLUDE_SLOW, true);}
-            else {return ctx.getProperty(PROP_OUTBOUND_EXPLORATORY_EXCLUDE_SLOW, true);}
+            if (isInbound) {
+                return ctx.getProperty(PROP_INBOUND_EXPLORATORY_EXCLUDE_SLOW, true);
+            } else {
+                return ctx.getProperty(PROP_OUTBOUND_EXPLORATORY_EXCLUDE_SLOW, true);
+            }
         } else {
-            if (isInbound) {return ctx.getProperty(PROP_INBOUND_CLIENT_EXCLUDE_SLOW, true);}
-            else {return ctx.getProperty(PROP_OUTBOUND_CLIENT_EXCLUDE_SLOW, true);}
+            if (isInbound) {
+                return ctx.getProperty(PROP_INBOUND_CLIENT_EXCLUDE_SLOW, true);
+            } else {
+                return ctx.getProperty(PROP_OUTBOUND_CLIENT_EXCLUDE_SLOW, true);
+            }
         }
     }
 
     /** see HashComparator */
     protected void orderPeers(List<Hash> rv, SessionKey key) {
-        if (rv.size() > 1) {Collections.sort(rv, new HashComparator(key));}
+        if (rv.size() > 1) {
+            Collections.sort(rv, new HashComparator(key));
+        }
     }
 
     /**
@@ -616,21 +618,30 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @since 0.9.68+
      */
     protected boolean isDuplicateSequence(TunnelPoolSettings settings, List<Hash> newPeers) {
-        if (newPeers == null || newPeers.isEmpty()) {return false;}
+        if (newPeers == null || newPeers.isEmpty()) {
+            return false;
+        }
 
         Hash dest = settings.getDestination();
-        if (dest == null) {return false;}
+        if (dest == null) {
+            return false;
+        }
 
         TunnelManagerFacade tmf = ctx.tunnelManager();
-        TunnelPool pool = settings.isInbound() ? tmf.getInboundPool(dest)
-                                                : tmf.getOutboundPool(dest);
-        if (pool == null) {return false;}
+        TunnelPool pool = settings.isInbound() ? tmf.getInboundPool(dest) : tmf.getOutboundPool(dest);
+        if (pool == null) {
+            return false;
+        }
 
         List<TunnelInfo> existingTunnels = pool.listTunnels();
-        if (existingTunnels == null || existingTunnels.isEmpty()) {return false;}
+        if (existingTunnels == null || existingTunnels.isEmpty()) {
+            return false;
+        }
 
         for (TunnelInfo existing : existingTunnels) {
-            if (existing.getLength() != newPeers.size() + 1) {continue;}
+            if (existing.getLength() != newPeers.size() + 1) {
+                continue;
+            }
 
             boolean match = true;
             for (int i = 0; i < newPeers.size(); i++) {
@@ -660,7 +671,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @since 0.9.68+
      */
     protected List<Hash> regeneratePeers(TunnelPoolSettings settings, List<Hash> peers) {
-        if (peers == null || peers.isEmpty()) {return peers;}
+        if (peers == null || peers.isEmpty()) {
+            return peers;
+        }
 
         SessionKey randomKey = settings.getRandomKey();
         if (randomKey != null && peers.size() > 1) {
@@ -709,8 +722,12 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         public int compare(Hash l, Hash r) {
             long lh = SipHashInline.hash24(k0, k1, l.getData());
             long rh = SipHashInline.hash24(k0, k1, r.getData());
-            if (lh > rh) {return 1;}
-            if (lh < rh) {return -1;}
+            if (lh > rh) {
+                return 1;
+            }
+            if (lh < rh) {
+                return -1;
+            }
             return 0;
         }
     }
@@ -727,14 +744,19 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @since 0.9.34
      */
     protected boolean checkTunnel(boolean isInbound, boolean isExploratory, List<Hash> tunnel) {
-        if (!checkTunnel(tunnel)) {return false;}
+        if (!checkTunnel(tunnel)) {
+            return false;
+        }
         // client OBEP/IBGW checks now in CPS
-        if (!isExploratory) {return true;}
+        if (!isExploratory) {
+            return true;
+        }
         if (isInbound) {
             Hash h = tunnel.get(tunnel.size() - 1);
             if (!allowAsIBGW(h)) {
                 if (log.shouldWarn()) {
-                    log.warn("Selected IPv6-only or unreachable peer for Inbound Gateway [" + h.toBase64().substring(0,6) + "]");
+                    log.warn("Selected IPv6-only or unreachable peer for Inbound Gateway ["
+                            + h.toBase64().substring(0, 6) + "]");
                 }
                 // treat as a timeout in the profile
                 // tunnelRejected() would set the last heard from time
@@ -745,7 +767,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             Hash h = tunnel.get(0);
             if (!allowAsOBEP(h)) {
                 if (log.shouldWarn()) {
-                    log.warn("Selected IPv6-only peer for Outbound Endpoint [" + h.toBase64().substring(0,6) + "]");
+                    log.warn("Selected IPv6-only peer for Outbound Endpoint ["
+                            + h.toBase64().substring(0, 6) + "]");
                 }
                 // treat as a timeout in the profile
                 // tunnelRejected() would set the last heard from time
@@ -768,24 +791,23 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         boolean rv = true;
         for (int i = 0; i < tunnel.size() - 1; i++) {
             // order is backwards!
-            Hash hf = tunnel.get(i+1);
+            Hash hf = tunnel.get(i + 1);
             Hash ht = tunnel.get(i);
             StringBuilder buf = new StringBuilder();
             for (Hash h : tunnel) {
-                buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
+                buf.append("[").append(h.toBase64().substring(0, 6)).append("]");
+                buf.append(" ");
             }
             if (!canConnect(hf, ht)) {
                 if (log.shouldWarn())
-                    log.warn("Connection check failed at hop [" + (i+1) + " -> " + i +
-                             "] in tunnel (Gateway -> Endpoint)\n* Tunnel: " + buf.toString());
+                    log.warn("Connection check failed at hop [" + (i + 1) + " -> " + i
+                            + "] in tunnel (Gateway -> Endpoint)\n* Tunnel: " + buf.toString());
                 // Blame them both
                 // treat as a timeout in the profile
                 // tunnelRejected() would set the last heard from time
                 Hash us = ctx.routerHash();
-                if (!hf.equals(us))
-                    ctx.profileManager().tunnelTimedOut(hf);
-                if (!ht.equals(us))
-                    ctx.profileManager().tunnelTimedOut(ht);
+                if (!hf.equals(us)) ctx.profileManager().tunnelTimedOut(hf);
+                if (!ht.equals(us)) ctx.profileManager().tunnelTimedOut(ht);
                 rv = false;
                 break;
             }
@@ -805,8 +827,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
          *  Automatically adds selectPeersInTooManyTunnels(), unless i2np.allowLocal.
          */
         public Excluder(boolean isInbound, boolean isExploratory) {
-            super(ctx.getBooleanProperty("i2np.allowLocal") ? new HashSet<Hash>()
-                                                            : ctx.tunnelManager().selectPeersInTooManyTunnels());
+            super(
+                    ctx.getBooleanProperty("i2np.allowLocal")
+                            ? new HashSet<Hash>()
+                            : ctx.tunnelManager().selectPeersInTooManyTunnels());
             _isIn = isInbound;
             _isExpl = isExploratory;
         }
@@ -823,16 +847,18 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             _isExpl = isExploratory;
         }
 
-    /**
-     * Check if a peer should be excluded.
-     * Automatically adds to the set if excluded.
-     *
-     * @param o a Hash object to check
-     * @return true if peer should be excluded (and added to set)
-     */
+        /**
+         * Check if a peer should be excluded.
+         * Automatically adds to the set if excluded.
+         *
+         * @param o a Hash object to check
+         * @return true if peer should be excluded (and added to set)
+         */
         @Override
-    public boolean contains(Object o) {
-            if (s.contains(o)) {return true;}
+        public boolean contains(Object o) {
+            if (s.contains(o)) {
+                return true;
+            }
             Hash h = (Hash) o;
             if (shouldExclude(h, _isIn, _isExpl)) {
                 s.add(h);
@@ -864,8 +890,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             super(set);
             isIn = isInbound;
             RouterInfo ri = ctx.router().getRouterInfo();
-            if (ri != null) {ourMask = isInbound ? getInboundMask(ri) : getOutboundMask(ri);}
-            else {ourMask = 0xff;}
+            if (ri != null) {
+                ourMask = isInbound ? getInboundMask(ri) : getOutboundMask(ri);
+            } else {
+                ourMask = 0xff;
+            }
         }
 
         /**
@@ -877,17 +906,26 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
          */
         @Override
         public boolean contains(Object o) {
-            if (s.contains(o)) {return true;}
+            if (s.contains(o)) {
+                return true;
+            }
             Hash h = (Hash) o;
-            if (ctx.commSystem().isEstablished(h)) {return false;}
+            if (ctx.commSystem().isEstablished(h)) {
+                return false;
+            }
             boolean canConnect;
             RouterInfo peer = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
-            if (peer == null) {canConnect = false;}
-            else if (isIn) {canConnect = canConnect(peer, ourMask);}
-            else {canConnect = canConnect(ourMask, peer);}
-            if (!canConnect) {s.add(h);}
+            if (peer == null) {
+                canConnect = false;
+            } else if (isIn) {
+                canConnect = canConnect(peer, ourMask);
+            } else {
+                canConnect = canConnect(ourMask, peer);
+            }
+            if (!canConnect) {
+                s.add(h);
+            }
             return !canConnect;
         }
     }
-
 }

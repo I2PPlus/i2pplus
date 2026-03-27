@@ -1,11 +1,12 @@
 package net.i2p.router.web.helpers;
 
+import net.i2p.router.networkdb.reseed.Reseeder;
+import net.i2p.router.web.HelperBase;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
-import net.i2p.router.networkdb.reseed.Reseeder;
-import net.i2p.router.web.HelperBase;
 
 /**
  * Helper for reseed configuration page rendering and form processing.
@@ -52,25 +53,17 @@ public class ConfigReseedHelper extends HelperBase {
     }
 
     public String modeChecked(int mode) {
-        boolean required =  _context.getBooleanPropertyDefaultTrue(Reseeder.PROP_SSL_REQUIRED);
-        boolean disabled =  _context.getBooleanProperty(Reseeder.PROP_SSL_DISABLE);
-        if ((mode == 0 && (!disabled) && (!required)) ||
-            (mode == 1 && (!disabled) && required) ||
-            (mode == 2 && disabled))
-            return CHECKED;
+        boolean required = _context.getBooleanPropertyDefaultTrue(Reseeder.PROP_SSL_REQUIRED);
+        boolean disabled = _context.getBooleanProperty(Reseeder.PROP_SSL_DISABLE);
+        if ((mode == 0 && (!disabled) && (!required)) || (mode == 1 && (!disabled) && required) || (mode == 2 && disabled)) return CHECKED;
         return "";
     }
 
     /** @since 0.9.33 */
     public String pmodeChecked(int mode) {
-        String c =  _context.getProperty(Reseeder.PROP_SPROXY_TYPE, "HTTP");
-        boolean disabled =  !_context.getBooleanProperty(Reseeder.PROP_SPROXY_ENABLE);
-        if ((mode == 0 && disabled) ||
-            (mode == 1 && !disabled && c.equals("HTTP")) ||
-            (mode == 2 && !disabled && c.equals("SOCKS4")) ||
-            (mode == 3 && !disabled && c.equals("SOCKS5")) ||
-            (mode == 4 && !disabled && c.equals("INTERNAL")))
-            return CHECKED;
+        String c = _context.getProperty(Reseeder.PROP_SPROXY_TYPE, "HTTP");
+        boolean disabled = !_context.getBooleanProperty(Reseeder.PROP_SPROXY_ENABLE);
+        if ((mode == 0 && disabled) || (mode == 1 && !disabled && c.equals("HTTP")) || (mode == 2 && !disabled && c.equals("SOCKS4")) || (mode == 3 && !disabled && c.equals("SOCKS5")) || (mode == 4 && !disabled && c.equals("INTERNAL"))) return CHECKED;
         return "";
     }
 
@@ -83,11 +76,11 @@ public class ConfigReseedHelper extends HelperBase {
         return getChecked(Reseeder.PROP_PROXY_AUTH_ENABLE);
     }
 
-/****
-    public String getSenable() {
-        return getChecked(Reseeder.PROP_SPROXY_ENABLE);
-    }
-****/
+    /****
+     * public String getSenable() {
+     * return getChecked(Reseeder.PROP_SPROXY_ENABLE);
+     * }
+     ****/
 
     /** @since 0.8.9 */
     public String getSauth() {
@@ -100,8 +93,7 @@ public class ConfigReseedHelper extends HelperBase {
         List<String> URLList = new ArrayList<String>(16);
         while (tok.hasMoreTokens()) {
             String s = tok.nextToken().trim();
-            if (s.length() > 0)
-                URLList.add(s);
+            if (s.length() > 0) URLList.add(s);
         }
         return URLList;
     }
@@ -111,8 +103,7 @@ public class ConfigReseedHelper extends HelperBase {
         Collections.sort(URLList);
         StringBuilder buf = new StringBuilder();
         for (String s : URLList) {
-            if (buf.length() > 0)
-                 buf.append('\n');
+            if (buf.length() > 0) buf.append('\n');
             buf.append(s);
         }
         return buf.toString();
@@ -127,12 +118,10 @@ public class ConfigReseedHelper extends HelperBase {
         boolean https = false;
         for (String u : reseedList()) {
             if (u.startsWith("https://")) {
-                if (http)
-                    return true;
+                if (http) return true;
                 https = true;
             } else if (u.startsWith("http://")) {
-                if (https)
-                    return true;
+                if (https) return true;
                 http = true;
             }
         }
@@ -145,8 +134,7 @@ public class ConfigReseedHelper extends HelperBase {
      */
     public boolean shouldShowHTTPProxy() {
         for (String u : reseedList()) {
-            if (u.startsWith("http://"))
-                return true;
+            if (u.startsWith("http://")) return true;
         }
         return false;
     }
@@ -157,8 +145,7 @@ public class ConfigReseedHelper extends HelperBase {
      */
     public boolean shouldShowHTTPSProxy() {
         for (String u : reseedList()) {
-            if (u.startsWith("https://"))
-                return true;
+            if (u.startsWith("https://")) return true;
         }
         return false;
     }

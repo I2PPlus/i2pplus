@@ -1,12 +1,13 @@
 package net.i2p.router.transport.udp;
 
+import net.i2p.data.DataHelper;
+import net.i2p.data.Hash;
+import net.i2p.data.SessionKey;
+
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import net.i2p.data.DataHelper;
-import net.i2p.data.Hash;
-import net.i2p.data.SessionKey;
 
 /**
  *  Track the state of a peer test.
@@ -50,7 +51,11 @@ class PeerTestState {
      * Roles for peer testing scenarios.
      * Defines the participant's role in connectivity testing.
      */
-    public enum Role {ALICE, BOB, CHARLIE};
+    public enum Role {
+        ALICE,
+        BOB,
+        CHARLIE
+    };
 
     /**
      * @param bob null if role is BOB
@@ -64,22 +69,30 @@ class PeerTestState {
         _previousCharlies = role == Role.BOB ? new ArrayList<Hash>(8) : null;
     }
 
-    public long getNonce() { return _testNonce; }
+    public long getNonce() {
+        return _testNonce;
+    }
 
     /** Are we Alice, bob, or Charlie. */
-    public Role getOurRole() { return _ourRole; }
+    public Role getOurRole() {
+        return _ourRole;
+    }
 
     /**
      * @return null if we are bob
      * @since 0.9.54
      */
-    public PeerState getBob() { return _bob; }
+    public PeerState getBob() {
+        return _bob;
+    }
 
     /**
      * Is this an IPv6 test?
      * @since 0.9.27
      */
-    public boolean isIPv6() { return _isIPv6; }
+    public boolean isIPv6() {
+        return _isIPv6;
+    }
 
     /**
      * If we are Alice, this will contain the IP that Bob says we
@@ -87,12 +100,18 @@ class PeerTestState {
      * at is _aliceIPFromCharlie
      *
      */
-    public InetAddress getAliceIP() { return _aliceIP; }
+    public InetAddress getAliceIP() {
+        return _aliceIP;
+    }
+
     /**
      * SSU2 only
      * @since 0.9.54
      */
-    public PeerState2 getAlice() { return _alice; }
+    public PeerState2 getAlice() {
+        return _alice;
+    }
+
     /**
      * SSU2 only
      * @since 0.9.54
@@ -100,6 +119,7 @@ class PeerTestState {
     public void setAlice(PeerState2 alice) {
         _alice = alice;
     }
+
     /**
      * @param hash SSU2 only, null for SSU1
      * @since 0.9.54
@@ -109,14 +129,22 @@ class PeerTestState {
         _alicePort = port;
         _aliceHash = hash;
     }
-    public InetAddress getBobIP() { return _bob.getRemoteIPAddress(); }
-    public InetAddress getCharlieIP() { return _charlieIP; }
+
+    public InetAddress getBobIP() {
+        return _bob.getRemoteIPAddress();
+    }
+
+    public InetAddress getCharlieIP() {
+        return _charlieIP;
+    }
 
     /**
      * SSU2 only, null for SSU1.
      * @since 0.9.57
      */
-    public Hash getCharlieHash() { return _charlieHash; }
+    public Hash getCharlieHash() {
+        return _charlieHash;
+    }
 
     /**
      * @param hash SSU2 only, null for SSU1
@@ -125,8 +153,7 @@ class PeerTestState {
     public void setCharlie(InetAddress ip, int port, Hash hash) {
         _charlieIP = ip;
         _charliePort = port;
-        if (_charlieHash != null && _previousCharlies != null && !_charlieHash.equals(hash))
-            _previousCharlies.add(_charlieHash);
+        if (_charlieHash != null && _previousCharlies != null && !_charlieHash.equals(hash)) _previousCharlies.add(_charlieHash);
         _charlieHash = hash;
     }
 
@@ -135,36 +162,69 @@ class PeerTestState {
      * Does not include current charlie.
      * @since 0.9.57
      */
-    public List<Hash> getPreviousCharlies() { return _previousCharlies; }
+    public List<Hash> getPreviousCharlies() {
+        return _previousCharlies;
+    }
 
-    public InetAddress getAliceIPFromCharlie() { return _aliceIPFromCharlie; }
-    public void setAliceIPFromCharlie(InetAddress ip) { _aliceIPFromCharlie = ip; }
+    public InetAddress getAliceIPFromCharlie() {
+        return _aliceIPFromCharlie;
+    }
+
+    public void setAliceIPFromCharlie(InetAddress ip) {
+        _aliceIPFromCharlie = ip;
+    }
+
     /**
      * If we are Alice, this will contain the port that Bob says we
      * can be reached at - the port Charlie says we can be reached
      * at is _alicePortFromCharlie
      *
      */
-    public int getAlicePort() { return _alicePort; }
-    public int getBobPort() { return _bob.getRemotePort(); }
-    public int getCharliePort() { return _charliePort; }
-    public void setCharliePort(int charliePort) { _charliePort = charliePort; }
+    public int getAlicePort() {
+        return _alicePort;
+    }
 
-    public int getAlicePortFromCharlie() { return _alicePortFromCharlie; }
-    public void setAlicePortFromCharlie(int alicePortFromCharlie) { _alicePortFromCharlie = alicePortFromCharlie; }
+    public int getBobPort() {
+        return _bob.getRemotePort();
+    }
 
-    public SessionKey getAliceIntroKey() { return _aliceIntroKey; }
-    public void setAliceIntroKey(SessionKey key) { _aliceIntroKey = key; }
+    public int getCharliePort() {
+        return _charliePort;
+    }
+
+    public void setCharliePort(int charliePort) {
+        _charliePort = charliePort;
+    }
+
+    public int getAlicePortFromCharlie() {
+        return _alicePortFromCharlie;
+    }
+
+    public void setAlicePortFromCharlie(int alicePortFromCharlie) {
+        _alicePortFromCharlie = alicePortFromCharlie;
+    }
+
+    public SessionKey getAliceIntroKey() {
+        return _aliceIntroKey;
+    }
+
+    public void setAliceIntroKey(SessionKey key) {
+        _aliceIntroKey = key;
+    }
 
     /**
      *  @since 0.9.52
      */
-    public SessionKey getAliceCipherKey() { return _aliceCipherKey; }
+    public SessionKey getAliceCipherKey() {
+        return _aliceCipherKey;
+    }
 
     /**
      *  @since 0.9.52
      */
-    public SessionKey getAliceMACKey() { return _aliceMACKey; }
+    public SessionKey getAliceMACKey() {
+        return _aliceMACKey;
+    }
 
     /**
      *  @param ck cipher key
@@ -176,127 +236,154 @@ class PeerTestState {
         _aliceMACKey = mk;
     }
 
-    public SessionKey getCharlieIntroKey() { return _charlieIntroKey; }
-    public void setCharlieIntroKey(SessionKey key) { _charlieIntroKey = key; }
+    public SessionKey getCharlieIntroKey() {
+        return _charlieIntroKey;
+    }
+
+    public void setCharlieIntroKey(SessionKey key) {
+        _charlieIntroKey = key;
+    }
 
     /** when did this test begin? */
-    public long getBeginTime() { return _beginTime; }
+    public long getBeginTime() {
+        return _beginTime;
+    }
 
     /** when did we last send out a packet? */
-    public long getLastSendTime() { return _lastSendTime; }
-    public void setLastSendTime(long when) { _lastSendTime = when; }
+    public long getLastSendTime() {
+        return _lastSendTime;
+    }
+
+    public void setLastSendTime(long when) {
+        _lastSendTime = when;
+    }
 
     /**
      * when did we last hear from alice?
      */
-    public long getReceiveAliceTime() { return _receiveAliceTime; }
-    public void setReceiveAliceTime(long when) { _receiveAliceTime = when; }
+    public long getReceiveAliceTime() {
+        return _receiveAliceTime;
+    }
+
+    public void setReceiveAliceTime(long when) {
+        _receiveAliceTime = when;
+    }
 
     /** when did we last hear from bob? */
-    public long getReceiveBobTime() { return _receiveBobTime; }
-    public void setReceiveBobTime(long when) { _receiveBobTime = when; }
+    public long getReceiveBobTime() {
+        return _receiveBobTime;
+    }
+
+    public void setReceiveBobTime(long when) {
+        _receiveBobTime = when;
+    }
 
     /** when did we last hear from charlie? */
-    public long getReceiveCharlieTime() { return _receiveCharlieTime; }
-    public void setReceiveCharlieTime(long when) { _receiveCharlieTime = when; }
+    public long getReceiveCharlieTime() {
+        return _receiveCharlieTime;
+    }
+
+    public void setReceiveCharlieTime(long when) {
+        _receiveCharlieTime = when;
+    }
 
     /**
      * when did we send to alice, SSU2 Bob only
      * @since 0.9.57
      */
-    public long getSendAliceTime() { return _sendAliceTime; }
+    public long getSendAliceTime() {
+        return _sendAliceTime;
+    }
 
     /**
      * when did we send to alice, SSU2 Bob only
      * @since 0.9.57
      */
-    public void setSendAliceTime(long when) { _sendAliceTime = when; }
+    public void setSendAliceTime(long when) {
+        _sendAliceTime = when;
+    }
 
     /**
      * when did we send to Charlie, SSU2 Alice only
      * @since 0.9.57
      */
-    public long getSendCharlieTime() { return _sendCharlieTime; }
+    public long getSendCharlieTime() {
+        return _sendCharlieTime;
+    }
 
     /**
      * when did we send to Charlie, SSU2 Alice only
      * @since 0.9.57
      */
-    public void setSendCharlieTime(long when) { _sendCharlieTime = when; }
+    public void setSendCharlieTime(long when) {
+        _sendCharlieTime = when;
+    }
 
     /**
      * what code did we send to alice, SSU2 Bob only
      * @since 0.9.57
      */
-    public int getStatus() { return _status; }
+    public int getStatus() {
+        return _status;
+    }
 
     /**
      * what code did we send to alice, SSU2 Bob only
      * @since 0.9.57
      */
-    public void setStatus(int status) { _status = status; }
+    public void setStatus(int status) {
+        _status = status;
+    }
 
     /**
      *  Get for retransmission.
      *  SSU2 only, we are Alice, Bob or Charlie
      *  @since 0.9.57
      */
-    public byte[] getTestData() { return _testData; }
+    public byte[] getTestData() {
+        return _testData;
+    }
 
     /**
      *  Save for retransmission.
      *  SSU2 only, we are Alice, Bob or Charlie
      *  @since 0.9.57
      */
-    public void setTestData(byte[] data) { _testData = data; }
+    public void setTestData(byte[] data) {
+        _testData = data;
+    }
 
     /** @return new value */
-    public int incrementPacketsRelayed() { return _packetsRelayed.incrementAndGet(); }
+    public int incrementPacketsRelayed() {
+        return _packetsRelayed.incrementAndGet();
+    }
 
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append("\n* PeerTest ").append(_testNonce)
-           .append(_isIPv6 ? " [IPv6]" : " [IPv4]")
-           .append(" started ").append(DataHelper.formatTime(_beginTime))
-           .append(" as ").append(_ourRole.toString());
+        buf.append("\n* PeerTest ").append(_testNonce).append(_isIPv6 ? " [IPv6]" : " [IPv4]").append(" started ").append(DataHelper.formatTime(_beginTime)).append(" as ").append(_ourRole.toString());
         if (_aliceIP != null) {
             buf.append(" [Alice: ");
-            if (_ourRole == Role.ALICE)
-                buf.append(" LOCAL: ");
+            if (_ourRole == Role.ALICE) buf.append(" LOCAL: ");
             buf.append(_aliceIP).append(':').append(_alicePort).append("]");
-            if (_aliceHash != null)
-                buf.append(' ').append(_aliceHash.toBase64().substring(0, 6));
+            if (_aliceHash != null) buf.append(' ').append(_aliceHash.toBase64().substring(0, 6));
         }
-        if (_aliceIPFromCharlie != null)
-            buf.append(" [from Charlie: ").append(_aliceIPFromCharlie).append(':').append(_alicePortFromCharlie).append("]");
-        if (_bob != null)
-            buf.append(" [Bob: ").append(_bob.toString()).append("]");
-        else
-            buf.append(" [Bob: LOCAL]");
+        if (_aliceIPFromCharlie != null) buf.append(" [from Charlie: ").append(_aliceIPFromCharlie).append(':').append(_alicePortFromCharlie).append("]");
+        if (_bob != null) buf.append(" [Bob: ").append(_bob.toString()).append("]");
+        else buf.append(" [Bob: LOCAL]");
         if (_charlieIP != null) {
             buf.append(" [Charlie: ");
-            if (_ourRole == Role.CHARLIE)
-                buf.append("LOCAL]");
-            else
-                buf.append(_charlieIP).append(':').append(_charliePort).append("]");
-            if (_charlieHash != null)
-                    buf.append(' ').append(_charlieHash.toBase64().substring(0, 6));
-            if (_previousCharlies != null && !_previousCharlies.isEmpty())
-                buf.append(" previous: ").append(_previousCharlies);
+            if (_ourRole == Role.CHARLIE) buf.append("LOCAL]");
+            else buf.append(_charlieIP).append(':').append(_charliePort).append("]");
+            if (_charlieHash != null) buf.append(' ').append(_charlieHash.toBase64().substring(0, 6));
+            if (_previousCharlies != null && !_previousCharlies.isEmpty()) buf.append(" previous: ").append(_previousCharlies);
         }
-        if (_lastSendTime > 0)
-            buf.append("\n* Last send after ").append(_lastSendTime - _beginTime);
-        if (_sendAliceTime > 0)
-            buf.append("; Last send to Alice ").append(DataHelper.formatTime(_sendAliceTime));
-        if (_receiveAliceTime > 0)
-            buf.append("; Received from Alice after ").append(_receiveAliceTime - _beginTime);
-        if (_receiveBobTime > 0)
-            buf.append("; Received from Bob after ").append(_receiveBobTime - _beginTime);
-        if (_sendCharlieTime > 0)
-            buf.append("; Last send to Charlie ").append(DataHelper.formatTime(_sendCharlieTime));
-        if (_receiveCharlieTime > 0)
-            buf.append("; Received from Charlie after ").append(_receiveCharlieTime - _beginTime);
+        if (_lastSendTime > 0) buf.append("\n* Last send after ").append(_lastSendTime - _beginTime);
+        if (_sendAliceTime > 0) buf.append("; Last send to Alice ").append(DataHelper.formatTime(_sendAliceTime));
+        if (_receiveAliceTime > 0) buf.append("; Received from Alice after ").append(_receiveAliceTime - _beginTime);
+        if (_receiveBobTime > 0) buf.append("; Received from Bob after ").append(_receiveBobTime - _beginTime);
+        if (_sendCharlieTime > 0) buf.append("; Last send to Charlie ").append(DataHelper.formatTime(_sendCharlieTime));
+        if (_receiveCharlieTime > 0) buf.append("; Received from Charlie after ").append(_receiveCharlieTime - _beginTime);
         buf.append("; Packets relayed: ").append(_packetsRelayed.get());
         return buf.toString();
     }

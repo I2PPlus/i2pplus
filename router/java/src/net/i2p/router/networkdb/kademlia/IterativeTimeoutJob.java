@@ -38,7 +38,9 @@ class IterativeTimeoutJob extends JobImpl {
     }
 
     @Override
-    public String getName() { return "Timeout Iterative Search"; }
+    public String getName() {
+        return "Timeout Iterative Search";
+    }
 
     /**
      * Called when the job is dropped due to router overload.

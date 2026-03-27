@@ -4,11 +4,12 @@ package net.i2p.data;
  * Public domain
  */
 
+import net.i2p.crypto.SHA256Generator;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
-import net.i2p.crypto.SHA256Generator;
 
 /**
  * Base class for I2P data structures containing a single fixed-length byte array.
@@ -93,8 +94,7 @@ public abstract class SimpleDataStructure implements DataStructure {
     protected byte[] _data;
 
     /** A new instance with the data set to null. Call readBytes(), setData(), or fromByteArray() after this to set the data */
-    public SimpleDataStructure() {
-    }
+    public SimpleDataStructure() {}
 
     /** @throws IllegalArgumentException if data is not the legal number of bytes (but null is ok) */
     public SimpleDataStructure(byte data[]) {
@@ -105,7 +105,7 @@ public abstract class SimpleDataStructure implements DataStructure {
      * The legal length of the byte array in this data structure
      * @since 0.8.2
      */
-    abstract public int length();
+    public abstract int length();
 
     /**
      * Get the data reference (not a copy)
@@ -122,22 +122,19 @@ public abstract class SimpleDataStructure implements DataStructure {
      * @throws RuntimeException if data already set.
      */
     public void setData(byte[] data) {
-        if (_data != null)
-            throw new RuntimeException("Data already set");
-        if (data != null && data.length != length())
-            throw new IllegalArgumentException("Bad data length: " + data.length + "; required: " + length());
+        if (_data != null) throw new RuntimeException("Data already set");
+        if (data != null && data.length != length()) throw new IllegalArgumentException("Bad data length: " + data.length + "; required: " + length());
         _data = data;
     }
 
     /**
      * Sets the data.
-      * @param in the stream to read
-      * @throws RuntimeException if data already set.
-      */
+     * @param in the stream to read
+     * @throws RuntimeException if data already set.
+     */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
-        if (_data != null)
-            throw new RuntimeException("Data already set");
+        if (_data != null) throw new RuntimeException("Data already set");
         int length = length();
         _data = new byte[length];
         // Throws on incomplete read
@@ -162,8 +159,7 @@ public abstract class SimpleDataStructure implements DataStructure {
 
     @Override
     public String toBase64() {
-        if (_data == null)
-            return null;
+        if (_data == null) return null;
         return Base64.encode(_data);
     }
 
@@ -176,10 +172,8 @@ public abstract class SimpleDataStructure implements DataStructure {
     public void fromBase64(String data) throws DataFormatException {
         if (data == null) throw new DataFormatException("Null data passed in");
         byte[] d = Base64.decode(data);
-        if (d == null)
-            throw new DataFormatException("Bad Base64 encoded data");
-        if (d.length != length())
-            throw new DataFormatException("Bad decoded data length, expected " + length() + " got " + d.length);
+        if (d == null) throw new DataFormatException("Bad Base64 encoded data");
+        if (d.length != length()) throw new DataFormatException("Bad decoded data length, expected " + length() + " got " + d.length);
         // call setData() instead of _data = data in case overridden
         setData(d);
     }
@@ -208,8 +202,7 @@ public abstract class SimpleDataStructure implements DataStructure {
     @Override
     public void fromByteArray(byte data[]) throws DataFormatException {
         if (data == null) throw new DataFormatException("Null data passed in");
-        if (data.length != length())
-            throw new DataFormatException("Bad data length: " + data.length + "; required: " + length());
+        if (data.length != length()) throw new DataFormatException("Bad data length: " + data.length + "; required: " + length());
         // call setData() instead of _data = data in case overridden
         setData(data);
     }
@@ -234,11 +227,9 @@ public abstract class SimpleDataStructure implements DataStructure {
      */
     @Override
     public int hashCode() {
-        if (_data == null)
-            return 0;
+        if (_data == null) return 0;
         int rv = _data[0];
-        for (int i = 1; i < 4; i++)
-            rv ^= (_data[i] << (i*8));
+        for (int i = 1; i < 4; i++) rv ^= (_data[i] << (i * 8));
         return rv;
     }
 

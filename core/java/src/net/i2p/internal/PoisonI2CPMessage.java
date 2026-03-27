@@ -1,8 +1,9 @@
 package net.i2p.internal;
 
-import java.io.InputStream;
 import net.i2p.data.i2cp.I2CPMessageException;
 import net.i2p.data.i2cp.I2CPMessageImpl;
+
+import java.io.InputStream;
 
 /**
  * For marking end-of-queues in a standard manner.
@@ -12,7 +13,7 @@ import net.i2p.data.i2cp.I2CPMessageImpl;
  * @since 0.8.3
  */
 public class PoisonI2CPMessage extends I2CPMessageImpl {
-    public final static int MESSAGE_TYPE = 999999;
+    public static final int MESSAGE_TYPE = 999999;
 
     public PoisonI2CPMessage() {
         super();

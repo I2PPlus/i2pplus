@@ -31,8 +31,7 @@ public class SecureFile extends SecureDirectory {
     @Override
     public boolean createNewFile() throws IOException {
         boolean rv = super.createNewFile();
-        if (rv)
-            setPerms();
+        if (rv) setPerms();
         return rv;
     }
 
@@ -62,8 +61,7 @@ public class SecureFile extends SecureDirectory {
      */
     @Override
     protected void setPerms() {
-        if (!SecureFileOutputStream.canSetPerms())
-            return;
+        if (!SecureFileOutputStream.canSetPerms()) return;
         try {
             setReadable(false, false);
             setReadable(true, true);

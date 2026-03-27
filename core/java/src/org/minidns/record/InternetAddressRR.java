@@ -26,7 +26,6 @@ import java.net.UnknownHostException;
  */
 public abstract class InternetAddressRR<IA extends InetAddress> extends Data {
 
-
     /**
      * Target IP.
      */

@@ -9,10 +9,11 @@ package net.i2p.util;
  *
  */
 
+import net.i2p.data.DataHelper;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import net.i2p.data.DataHelper;
 
 /**
  * Hexdump class (well, it's actually a namespace with some functions,
@@ -132,12 +133,12 @@ public class HexDump {
     /**
      *  @since 0.9.21
      */
-/****
-    public static void main(String[] args) {
-        byte[] b = new byte[9993];
-        RandomSource.getInstance().nextBytes(b);
-        System.out.println(dump(b));
-        System.out.println(dump("test test test abcde xyz !!!".getBytes()));
-    }
-****/
+    /****
+     * public static void main(String[] args) {
+     * byte[] b = new byte[9993];
+     * RandomSource.getInstance().nextBytes(b);
+     * System.out.println(dump(b));
+     * System.out.println(dump("test test test abcde xyz !!!".getBytes()));
+     * }
+     ****/
 }

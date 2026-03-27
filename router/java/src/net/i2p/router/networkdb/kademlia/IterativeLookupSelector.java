@@ -33,7 +33,9 @@ class IterativeLookupSelector implements MessageSelector {
     }
 
     @Override
-    public long getExpiration() { return (_matchFound ? -1 : _search.getExpiration()); }
+    public long getExpiration() {
+        return (_matchFound ? -1 : _search.getExpiration());
+    }
 
     /**
      *  This only returns true for DSMs, not for DSRMs.
@@ -43,22 +45,20 @@ class IterativeLookupSelector implements MessageSelector {
         if (message == null) return false;
         int type = message.getType();
         if (type == DatabaseStoreMessage.MESSAGE_TYPE) {
-            DatabaseStoreMessage dsm = (DatabaseStoreMessage)message;
+            DatabaseStoreMessage dsm = (DatabaseStoreMessage) message;
             // is it worth making sure the reply came in on the right tunnel?
             if (_search.getKey().equals(dsm.getKey())) {
                 _matchFound = true;
-                if (_log.shouldDebug())
-                    _log.debug("[Job " + _search.getJobId() + "] DbStoreMsg match \n* Message: " + this);
+                if (_log.shouldDebug()) _log.debug("[Job " + _search.getJobId() + "] DbStoreMsg match \n* Message: " + this);
                 return true;
             }
         } else if (type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
-            DatabaseSearchReplyMessage dsrm = (DatabaseSearchReplyMessage)message;
+            DatabaseSearchReplyMessage dsrm = (DatabaseSearchReplyMessage) message;
             if (_search.getKey().equals(dsrm.getSearchKey())) {
                 // Got a netDb reply pointing us at other floodfills...
                 if (_log.shouldDebug()) {
                     Hash from = dsrm.getFromHash();
-                    _log.info("[Job " + _search.getJobId() + "] Processing DbSearchReplyMsg via IterativeLookup from [" +
-                              from.toBase64().substring(0,6) + "] \n* Reply: " + this);
+                    _log.info("[Job " + _search.getJobId() + "] Processing DbSearchReplyMsg via IterativeLookup from [" + from.toBase64().substring(0, 6) + "] \n* Reply: " + this);
                 }
 
                 // was inline, now in IterativeLookupJob due to deadlocks

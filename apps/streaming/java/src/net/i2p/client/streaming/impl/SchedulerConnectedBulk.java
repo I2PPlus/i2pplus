@@ -39,22 +39,18 @@ class SchedulerConnectedBulk extends SchedulerImpl {
 
     @Override
     public boolean accept(Connection con) {
-        boolean ok = (con != null) &&
-                     (con.getHighestAckedThrough() >= 0) &&
-                     (con.getOptions().getProfile() == ConnectionOptions.PROFILE_BULK) &&
-                     (!con.getResetReceived()) &&
-                     ((con.getCloseSentOn() <= 0) || (con.getCloseReceivedOn() <= 0));
+        boolean ok = (con != null) && (con.getHighestAckedThrough() >= 0) && (con.getOptions().getProfile() == ConnectionOptions.PROFILE_BULK) && (!con.getResetReceived()) && ((con.getCloseSentOn() <= 0) || (con.getCloseReceivedOn() <= 0));
         if (!ok) {
-            //if (_log.shouldDebug())
+            // if (_log.shouldDebug())
             //    _log.debug("con: " + con + " closeSentOn: " + con.getCloseSentOn()
             //               + " closeReceivedOn: " + con.getCloseReceivedOn());
         }
         return ok;
     }
-@Override
+
+    @Override
     public void eventOccurred(Connection con) {
-        if (con.getNextSendTime() <= 0)
-            return;
+        if (con.getNextSendTime() <= 0) return;
 
         long timeTillSend = con.getNextSendTime() - _context.clock().now();
 

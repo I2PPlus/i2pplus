@@ -24,14 +24,10 @@ public class CRLEntry {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null)
-            return false;
-        if (!(o instanceof CRLEntry))
-            return false;
+        if (o == null) return false;
+        if (!(o instanceof CRLEntry)) return false;
         CRLEntry e = (CRLEntry) o;
-        return updated == e.updated &&
-               DataHelper.eq(id, e.id) &&
-               DataHelper.eq(data, e.data);
+        return updated == e.updated && DataHelper.eq(id, e.id) && DataHelper.eq(data, e.data);
     }
 
     @Override

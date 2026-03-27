@@ -41,8 +41,7 @@ public class ObjectCounter<K> implements Serializable {
      */
     public int increment(K h) {
         AtomicInteger i = this.map.putIfAbsent(h, new AtomicInteger(1));
-        if (i != null)
-            return i.incrementAndGet();
+        if (i != null) return i.incrementAndGet();
         return 1;
     }
 
@@ -59,8 +58,7 @@ public class ObjectCounter<K> implements Serializable {
      */
     public int count(K h) {
         AtomicInteger i = this.map.get(h);
-        if (i != null)
-            return i.get();
+        if (i != null) return i.get();
         return 0;
     }
 

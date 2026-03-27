@@ -35,14 +35,12 @@ class SchedulerDead extends SchedulerImpl {
     public boolean accept(Connection con) {
         if (con == null) return false;
         long timeSinceClose = _context.clock().now() - con.getDisconnectScheduledOn();
-        boolean nothingLeftToDo = (con.getDisconnectScheduledOn() > 0) &&
-                                  (timeSinceClose >= Connection.DISCONNECT_TIMEOUT);
-        boolean timedOut = (con.getOptions().getConnectTimeout() < con.getLifetime()) &&
-                           con.getSendStreamId() <= 0 &&
-                           con.getLifetime() >= Connection.DISCONNECT_TIMEOUT;
+        boolean nothingLeftToDo = (con.getDisconnectScheduledOn() > 0) && (timeSinceClose >= Connection.DISCONNECT_TIMEOUT);
+        boolean timedOut = (con.getOptions().getConnectTimeout() < con.getLifetime()) && con.getSendStreamId() <= 0 && con.getLifetime() >= Connection.DISCONNECT_TIMEOUT;
         return nothingLeftToDo || timedOut;
     }
-@Override
+
+    @Override
     public void eventOccurred(Connection con) {
         con.disconnectComplete();
     }

@@ -25,7 +25,9 @@ public class UpdateHandler {
     private String _action;
     private String _nonce;
 
-    public UpdateHandler() {this(ContextHelper.getContext(null));}
+    public UpdateHandler() {
+        this(ContextHelper.getContext(null));
+    }
 
     public UpdateHandler(RouterContext ctx) {
         _context = ctx;
@@ -38,7 +40,9 @@ public class UpdateHandler {
      */
     public static ConsoleUpdateManager updateManager(RouterContext ctx) {
         ClientAppManager cmgr = ctx.clientAppManager();
-        if (cmgr == null) {return null;}
+        if (cmgr == null) {
+            return null;
+        }
         return (ConsoleUpdateManager) cmgr.getRegisteredApp(UpdateManager.APP_NAME);
     }
 
@@ -52,7 +56,9 @@ public class UpdateHandler {
         try {
             _context = ContextHelper.getContext(contextId);
             _log = _context.logManager().getLog(UpdateHandler.class);
-        } catch (Throwable t) {t.printStackTrace();}
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
     }
 
     /** These two can be set in either order, so call checkUpdateAction() twice */
@@ -67,21 +73,26 @@ public class UpdateHandler {
     }
 
     private void checkUpdateAction() {
-        if (_action == null) {return;}
-        else if (_action.contains("Unsigned")) {update(ROUTER_UNSIGNED);}
-        else if (_action.contains("DevSU3")) {update(ROUTER_DEV_SU3);}
-        else if (ConfigUpdateHandler.USE_SU3_UPDATE) {update(ROUTER_SIGNED_SU3);}
+        if (_action == null) {
+            return;
+        } else if (_action.contains("Unsigned")) {
+            update(ROUTER_UNSIGNED);
+        } else if (_action.contains("DevSU3")) {
+            update(ROUTER_DEV_SU3);
+        } else if (ConfigUpdateHandler.USE_SU3_UPDATE) {
+            update(ROUTER_SIGNED_SU3);
+        }
     }
 
     private void update(UpdateType type) {
         ConsoleUpdateManager mgr = updateManager(_context);
-        if (mgr == null) {return;}
-        if (mgr.isUpdateInProgress(ROUTER_SIGNED) || mgr.isUpdateInProgress(ROUTER_UNSIGNED) ||
-            mgr.isUpdateInProgress(ROUTER_SIGNED_SU3) || mgr.isUpdateInProgress(ROUTER_DEV_SU3)) {
+        if (mgr == null) {
+            return;
+        }
+        if (mgr.isUpdateInProgress(ROUTER_SIGNED) || mgr.isUpdateInProgress(ROUTER_UNSIGNED) || mgr.isUpdateInProgress(ROUTER_SIGNED_SU3) || mgr.isUpdateInProgress(ROUTER_DEV_SU3)) {
             _log.warn("Router update is already running...");
             return;
         }
         mgr.update(type);
     }
-
 }

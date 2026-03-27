@@ -9,13 +9,14 @@ package net.i2p.data.i2cp;
  *
  */
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Payload;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Defines the message a client sends to a router to ask it to deliver
@@ -24,7 +25,7 @@ import net.i2p.data.Payload;
  * @author jrandom
  */
 public class SendMessageMessage extends I2CPMessageImpl {
-    public final static int MESSAGE_TYPE = 5;
+    public static final int MESSAGE_TYPE = 5;
     protected SessionId _sessionId;
     protected Destination _destination;
     protected Payload _payload;
@@ -34,8 +35,7 @@ public class SendMessageMessage extends I2CPMessageImpl {
      *  For reading.
      *  Deprecated for writing, use 4-arg constructor
      */
-    public SendMessageMessage() {
-    }
+    public SendMessageMessage() {}
 
     /**
      *  For writing
@@ -98,10 +98,10 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
-      *  Gets the message nonce.
-      *
-      * @return 0 to 0xffffffff
-      */
+     *  Gets the message nonce.
+     *
+     * @return 0 to 0xffffffff
+     */
     public synchronized long getNonce() {
         return _nonce;
     }
@@ -121,15 +121,13 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
-      * Read the body into the data structures
-      *
-      * @throws IOException if there's an error reading from the stream
-      */
+     * Read the body into the data structures
+     *
+     * @throws IOException if there's an error reading from the stream
+     */
     @Override
     public synchronized void readMessage(InputStream in, int length, int type) throws I2CPMessageException, IOException {
-        if (type != getType())
-            throw new I2CPMessageException("Invalid message type (found: " + type + " supported: " + getType()
-                                           + " class: " + getClass().getName() + ")");
+        if (type != getType()) throw new I2CPMessageException("Invalid message type (found: " + type + " supported: " + getType() + " class: " + getClass().getName() + ")");
         if (length < 0) throw new IOException("Negative payload size");
 
         try {
@@ -153,21 +151,17 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
-      * Write out the full message to the stream, including the 4 byte size and 1
-      * byte type header.  Override the parent so we can be more mem efficient
-      *
-      * @throws IOException if there's an error writing to the stream
-      */
+     * Write out the full message to the stream, including the 4 byte size and 1
+     * byte type header.  Override the parent so we can be more mem efficient
+     *
+     * @throws IOException if there's an error writing to the stream
+     */
     @Override
     public synchronized void writeMessage(OutputStream out) throws I2CPMessageException, IOException {
-        if (_sessionId == null)
-            throw new I2CPMessageException("No session ID");
-        if (_destination == null)
-            throw new I2CPMessageException("No dest");
-        if (_payload == null)
-            throw new I2CPMessageException("No payload");
-        if (_nonce < 0)
-            throw new I2CPMessageException("No nonce");
+        if (_sessionId == null) throw new I2CPMessageException("No session ID");
+        if (_destination == null) throw new I2CPMessageException("No dest");
+        if (_payload == null) throw new I2CPMessageException("No payload");
+        if (_nonce < 0) throw new I2CPMessageException("No nonce");
         int len = 2 + _destination.size() + _payload.getSize() + 4 + 4;
 
         try {

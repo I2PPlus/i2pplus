@@ -75,13 +75,11 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
             _acked = 0;
             _tAck = now;
             if (_log.shouldDebug()) {
-                _log.debug(String.format("Initial sample: %d bytes over %d ms → %.4f B/ms (%s/s)",
-                                         acked, deltaT, _bKFiltered, formatRate(_bKFiltered * 1000)));
+                _log.debug(String.format("Initial sample: %d bytes over %d ms → %.4f B/ms (%s/s)", acked, deltaT, _bKFiltered, formatRate(_bKFiltered * 1000)));
             }
         } else {
             _acked += acked;
-            if (now - _tAck >= Math.max(rtt, WESTWOOD_RTT_MIN))
-                computeBWE(now, rtt);
+            if (now - _tAck >= Math.max(rtt, WESTWOOD_RTT_MIN)) computeBWE(now, rtt);
         }
     }
 
@@ -105,8 +103,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
     public float getBandwidthEstimate(long now) {
         int rtt = _state.getRTT();
         synchronized (this) {
-            if (now - _tAck >= Math.max(rtt, WESTWOOD_RTT_MIN))
-                return computeBWE(now, rtt);
+            if (now - _tAck >= Math.max(rtt, WESTWOOD_RTT_MIN)) return computeBWE(now, rtt);
             return _bKFiltered;
         }
     }
@@ -119,8 +116,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
      * @return updated bandwidth estimate
      */
     private synchronized float computeBWE(final long now, final int rtt) {
-        if (_acked < 0)
-            return 0.0f; // nothing ever sampled
+        if (_acked < 0) return 0.0f; // nothing ever sampled
         updateBK(now, _acked, rtt);
         _acked = 0;
         return _bKFiltered;
@@ -144,8 +140,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
      */
     private void updateBK(long time, int packets, int rtt) {
         long deltaT = time - _tAck;
-        if (rtt < WESTWOOD_RTT_MIN)
-            rtt = WESTWOOD_RTT_MIN;
+        if (rtt < WESTWOOD_RTT_MIN) rtt = WESTWOOD_RTT_MIN;
         if (deltaT > 2 * rtt) {
             int numrtts = Math.min((int) ((deltaT / rtt) - 1), 2 * DECAY_FACTOR);
             for (int i = 0; i < numrtts; i++) {

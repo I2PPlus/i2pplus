@@ -29,14 +29,15 @@ import net.i2p.util.Log;
  *
  * @since 0.9.25
  */
-class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, SAMRawReceiver,
-                                                          SAMMessageSess, I2PSessionMuxedListener {
+class MasterSession extends SAMv3StreamSession
+        implements SAMDatagramReceiver, SAMRawReceiver, SAMMessageSess, I2PSessionMuxedListener {
     private final SAMv3Handler handler;
     private final SAMv3DatagramServer dgs;
     private final Map<String, SAMMessageSess> sessions;
     private final StreamAcceptor streamAcceptor;
-    private static final String[] INVALID_OPTS = { "PORT", "HOST", "FROM_PORT", "TO_PORT",
-                                                   "PROTOCOL", "LISTEN_PORT", "LISTEN_PROTOCOL" };
+    private static final String[] INVALID_OPTS = {
+        "PORT", "HOST", "FROM_PORT", "TO_PORT", "PROTOCOL", "LISTEN_PORT", "LISTEN_PROTOCOL"
+    };
 
     /**
      * Build a Session according to information
@@ -53,8 +54,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
         super(nick);
         for (int i = 0; i < INVALID_OPTS.length; i++) {
             String p = INVALID_OPTS[i];
-            if (props.containsKey(p))
-                throw new SAMException("Illegal option " + p + " specificied in MASTER session");
+            if (props.containsKey(p)) throw new SAMException("Illegal option " + p + " specificied in MASTER session");
         }
         dgs = dgServer;
         sessions = new ConcurrentHashMap<String, SAMMessageSess>(4);
@@ -80,20 +80,16 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      *  @return null for success, or error message
      */
     public synchronized String add(String nick, String style, Properties props) {
-        if (props.containsKey("DESTINATION"))
-            return "SESSION ADD may not contain DESTINATION";
+        if (props.containsKey("DESTINATION")) return "SESSION ADD may not contain DESTINATION";
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
-        if (rec != null || sessions.containsKey(nick))
-            return "Duplicate ID " + nick;
+        if (rec != null || sessions.containsKey(nick)) return "Duplicate ID " + nick;
         int listenPort = I2PSession.PORT_ANY;
         String slp = (String) props.remove("LISTEN_PORT");
-        if (slp == null)
-                    slp = props.getProperty("FROM_PORT");
+        if (slp == null) slp = props.getProperty("FROM_PORT");
         if (slp != null) {
             try {
                 listenPort = Integer.parseInt(slp);
-                if (listenPort < 0 || listenPort > 65535)
-                    return "Invalid LISTEN_PORT " + slp;
+                if (listenPort < 0 || listenPort > 65535) return "Invalid LISTEN_PORT " + slp;
                 // TODO enforce streaming listen port must be 0 or from port
             } catch (NumberFormatException nfe) {
                 return "Invalid LISTEN_PORT " + slp;
@@ -104,32 +100,29 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
         SAMv3Handler subhandler;
         try {
             I2PSession isess = socketMgr.getSession();
-            subhandler = new SAMv3Handler(handler.getClientSocket(), handler.verMajor,
-                                          handler.verMinor, handler.getBridge());
+            subhandler = new SAMv3Handler(
+                    handler.getClientSocket(), handler.verMajor, handler.verMinor, handler.getBridge());
             if (style.equals("RAW")) {
-                if (!props.containsKey("PORT"))
-                    return "RAW subsession must specify PORT";
+                if (!props.containsKey("PORT")) return "RAW subsession must specify PORT";
                 listenProtocol = I2PSession.PROTO_DATAGRAM_RAW;
                 String spr = (String) props.remove("LISTEN_PROTOCOL");
-                if (spr == null)
-                                spr = props.getProperty("PROTOCOL");
+                if (spr == null) spr = props.getProperty("PROTOCOL");
                 if (spr != null) {
                     try {
                         listenProtocol = Integer.parseInt(spr);
                         // RAW can't listen on streaming protocol
-                        if (listenProtocol < 0 || listenProtocol > 255 ||
-                            listenProtocol == I2PSession.PROTO_STREAMING)
+                        if (listenProtocol < 0 || listenProtocol > 255 || listenProtocol == I2PSession.PROTO_STREAMING)
                             return "Bad RAW LISTEN_PPROTOCOL " + spr;
                     } catch (NumberFormatException nfe) {
                         return "Bad LISTEN_PROTOCOL " + spr;
                     }
                 }
-                SAMv3RawSession ssess = new SAMv3RawSession(nick, props, handler, isess, listenProtocol, listenPort, dgs);
+                SAMv3RawSession ssess =
+                        new SAMv3RawSession(nick, props, handler, isess, listenProtocol, listenPort, dgs);
                 subhandler.setSession(ssess);
                 sess = ssess;
             } else if (style.equals("DATAGRAM")) {
-                if (!props.containsKey("PORT"))
-                    return "DATAGRAM subsession must specify PORT";
+                if (!props.containsKey("PORT")) return "DATAGRAM subsession must specify PORT";
                 listenProtocol = I2PSession.PROTO_DATAGRAM;
                 SAMv3DatagramSession ssess = new SAMv3DatagramSession(nick, props, handler, isess, listenPort, dgs);
                 subhandler.setSession(ssess);
@@ -154,8 +147,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
         }
 
         for (SAMMessageSess s : sessions.values()) {
-            if (listenProtocol == s.getListenProtocol() &&
-                listenPort == s.getListenPort())
+            if (listenProtocol == s.getListenProtocol() && listenPort == s.getListenPort())
                 return "Duplicate protocol " + listenProtocol + " and port " + listenPort;
         }
 
@@ -166,8 +158,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
         } catch (SessionsDB.ExistingIdException e) {
             return "Duplicate ID " + nick;
         }
-        if (_log.shouldWarn())
-            _log.warn("added " + style + " proto " + listenProtocol + " port " + listenPort);
+        if (_log.shouldWarn()) _log.warn("added " + style + " proto " + listenProtocol + " port " + listenPort);
 
         sess.start();
         // all ok
@@ -191,8 +182,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
         } else {
             ok = false;
         }
-        if (!ok)
-            return "ID " + nick + " not found";
+        if (!ok) return "ID " + nick + " not found";
         // all ok
         return null;
     }
@@ -200,8 +190,8 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     /**
      *  @throws IOException always
      */
-    public void receiveDatagramBytes(Destination sender, byte[] data, int proto,
-                                     int fromPort, int toPort) throws IOException {
+    public void receiveDatagramBytes(Destination sender, byte[] data, int proto, int fromPort, int toPort)
+            throws IOException {
         throw new IOException("master session");
     }
 
@@ -221,8 +211,6 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      *  Does nothing.
      */
     public void stopRawReceiving() {}
-
-
 
     /////// stream session overrides
 
@@ -247,7 +235,6 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     /** does nothing */
     @Override
     public void stopForwardingIncoming() {}
-
 
     ///// SAMMessageSess interface
 
@@ -279,30 +266,30 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     // I2PSessionMuxedImpl interface
 
     public void disconnected(I2PSession session) {
-        if (_log.shouldDebug())
-                _log.debug("I2P session disconnected");
+        if (_log.shouldDebug()) _log.debug("I2P session disconnected");
         close();
     }
 
-    public void errorOccurred(I2PSession session, String message,
-                                  Throwable error) {
-        if (_log.shouldDebug())
-                _log.debug("I2P error: " + message, error);
+    public void errorOccurred(I2PSession session, String message, Throwable error) {
+        if (_log.shouldDebug()) _log.debug("I2P error: " + message, error);
         close();
     }
 
     public void messageAvailable(I2PSession session, int msgId, long size) {
-        messageAvailable(session, msgId, size, I2PSession.PROTO_UNSPECIFIED,
-                             I2PSession.PORT_UNSPECIFIED, I2PSession.PORT_UNSPECIFIED);
+        messageAvailable(
+                session,
+                msgId,
+                size,
+                I2PSession.PROTO_UNSPECIFIED,
+                I2PSession.PORT_UNSPECIFIED,
+                I2PSession.PORT_UNSPECIFIED);
     }
 
-        /** @since 0.9.24 */
-    public void messageAvailable(I2PSession session, int msgId, long size,
-                                     int proto, int fromPort, int toPort) {
+    /** @since 0.9.24 */
+    public void messageAvailable(I2PSession session, int msgId, long size, int proto, int fromPort, int toPort) {
         try {
             byte msg[] = session.receiveMessage(msgId);
-            if (msg == null)
-                    return;
+            if (msg == null) return;
             messageReceived(msg, proto, fromPort, toPort);
         } catch (I2PSessionException e) {
             _log.error("Error fetching I2P message", e);
@@ -317,48 +304,47 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
 
     private void messageReceived(byte[] msg, int proto, int fromPort, int toPort) {
         if (_log.shouldWarn())
-            _log.warn("Unhandled message received, length = " + msg.length +
-                " protocol: " + proto + " from port: " + fromPort + " to port: " + toPort);
+            _log.warn("Unhandled message received, length = " + msg.length + " protocol: " + proto + " from port: "
+                    + fromPort + " to port: " + toPort);
     }
 
     private class StreamAcceptor implements Runnable {
 
         private volatile boolean stop;
 
-        public StreamAcceptor() {
-        }
+        public StreamAcceptor() {}
 
         public void stopRunning() {
             stop = true;
         }
 
         public void run() {
-            if (_log.shouldWarn())
-                _log.warn("Stream acceptor started");
+            if (_log.shouldWarn()) _log.warn("Stream acceptor started");
             final I2PServerSocket i2pss = socketMgr.getServerSocket();
             while (!stop) {
                 // wait and accept a connection from I2P side
                 I2PSocket i2ps;
                 try {
                     i2ps = i2pss.accept();
-                    if (i2ps == null)  // never null as of 0.9.17
-                        continue;
+                    // never null as of 0.9.17
+                    if (i2ps == null) continue;
                 } catch (SocketTimeoutException ste) {
                     continue;
                 } catch (ConnectException ce) {
-                    if (_log.shouldWarn())
-                        _log.warn("Error accepting", ce);
-                    try { Thread.sleep(50); } catch (InterruptedException ie) {}
+                    if (_log.shouldWarn()) _log.warn("Error accepting", ce);
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ie) {
+                    }
                     continue;
                 } catch (I2PException ipe) {
-                    if (_log.shouldWarn())
-                        _log.warn("Error accepting", ipe);
+                    if (_log.shouldWarn()) _log.warn("Error accepting", ipe);
                     break;
                 }
                 int port = i2ps.getLocalPort();
                 SAMMessageSess foundSess = null;
                 Collection<SAMMessageSess> all = sessions.values();
-                for (Iterator<SAMMessageSess> iter = all.iterator(); iter.hasNext();) {
+                for (Iterator<SAMMessageSess> iter = all.iterator(); iter.hasNext(); ) {
                     SAMMessageSess sess = iter.next();
                     if (sess.getListenProtocol() != I2PSession.PROTO_STREAMING) {
                         // remove as we may be going around again below
@@ -387,15 +373,17 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                     boolean ok = ssess.queueSocket(i2ps);
                     if (!ok) {
                         _log.logAlways(Log.WARN, "Accept queue overflow for " + ssess);
-                        try { i2ps.reset(); } catch (IOException ioe) {}
+                        try {
+                            i2ps.reset();
+                        } catch (IOException ioe) {
+                        }
                     }
                 } else {
                     if (_log.shouldWarn())
                         _log.warn("No subsession found for incoming streaming connection on port " + port);
                 }
             }
-            if (_log.shouldWarn())
-                _log.warn("Stream acceptor stopped");
+            if (_log.shouldWarn()) _log.warn("Stream acceptor stopped");
         }
     }
 }

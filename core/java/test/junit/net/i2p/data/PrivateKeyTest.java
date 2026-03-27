@@ -1,4 +1,5 @@
 package net.i2p.data;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the Private domain
@@ -10,10 +11,11 @@ package net.i2p.data;
 
 import static org.junit.Assert.*;
 
+import org.junit.Test;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
-import org.junit.Test;
 
 /**
  * Test harness for loading / storing PrivateKey objects
@@ -26,20 +28,21 @@ public class PrivateKeyTest extends StructureTest {
     public DataStructure createDataStructure() throws DataFormatException {
         PrivateKey privateKey = new PrivateKey();
         byte data[] = new byte[PrivateKey.KEYSIZE_BYTES];
-        for (int i = 0; i < data.length; i++)
-            data[i] = (byte)(i%16);
+        for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 16);
         privateKey.setData(data);
         return privateKey;
     }
+
     @Override
-    public DataStructure createStructureToRead() { return new PrivateKey(); }
+    public DataStructure createStructureToRead() {
+        return new PrivateKey();
+    }
 
     @Test
-    public void testBase64Constructor() throws Exception{
+    public void testBase64Constructor() throws Exception {
         PrivateKey privateKey = new PrivateKey();
         byte data[] = new byte[PrivateKey.KEYSIZE_BYTES];
-        for (int i = 0; i < data.length; i++)
-            data[i] = (byte)(i%56);
+        for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 56);
         privateKey.setData(data);
 
         PrivateKey key2 = new PrivateKey(privateKey.toBase64());
@@ -47,18 +50,17 @@ public class PrivateKeyTest extends StructureTest {
     }
 
     @Test
-    public void testNullEquals(){
+    public void testNullEquals() {
         PrivateKey privateKey = new PrivateKey();
         byte data[] = new byte[PrivateKey.KEYSIZE_BYTES];
-        for (int i = 0; i < data.length; i++)
-            data[i] = (byte)(i%56);
+        for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 56);
         privateKey.setData(data);
 
         assertFalse(privateKey.equals(null));
     }
 
     @Test
-    public void testNullData() throws Exception{
+    public void testNullData() throws Exception {
         PrivateKey privateKey = new PrivateKey();
         assertNotNull(privateKey.toString());
 
@@ -71,11 +73,10 @@ public class PrivateKeyTest extends StructureTest {
     }
 
     @Test
-    public void testShortData() throws Exception{
+    public void testShortData() throws Exception {
         PrivateKey privateKey = new PrivateKey();
         byte data[] = new byte[56];
-        for (int i = 0; i < data.length; i++)
-            data[i] = (byte)(i);
+        for (int i = 0; i < data.length; i++) data[i] = (byte) (i);
 
         try {
             privateKey.setData(data);
@@ -86,7 +87,7 @@ public class PrivateKeyTest extends StructureTest {
     }
 
     @Test
-    public void testShortRead() throws Exception{
+    public void testShortRead() throws Exception {
         PrivateKey privateKey = new PrivateKey();
         ByteArrayInputStream in = new ByteArrayInputStream(DataHelper.getASCII("six times nine equals forty-two"));
 

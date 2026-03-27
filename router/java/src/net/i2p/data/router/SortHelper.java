@@ -9,13 +9,14 @@ package net.i2p.data.router;
  *
  */
 
+import net.i2p.data.DataStructure;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import net.i2p.data.DataStructure;
 
 /**
  * Utility class for sorting DataStructure objects by their hash.
@@ -43,14 +44,14 @@ class SortHelper {
         // Note that the Base64 sort order is NOT the same as the raw byte sort order,
         // despite what you may read elsewhere.
 
-        //ArrayList<DataStructure> rv = new ArrayList(dataStructures.size());
-        //TreeMap<String, DataStructure> tm = new TreeMap();
-        //for (DataStructure struct : dataStructures) {
+        // ArrayList<DataStructure> rv = new ArrayList(dataStructures.size());
+        // TreeMap<String, DataStructure> tm = new TreeMap();
+        // for (DataStructure struct : dataStructures) {
         //    tm.put(struct.calculateHash().toString(), struct);
-        //}
-        //for (DataStructure struct : tm.values()) {
+        // }
+        // for (DataStructure struct : tm.values()) {
         //    rv.add(struct);
-        //}
+        // }
         ArrayList<T> rv = new ArrayList<T>(dataStructures);
         sortStructureList(rv);
         return rv;

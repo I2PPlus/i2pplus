@@ -1,6 +1,5 @@
 package net.i2p.router.transport.udp;
 
-
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.DecayingBloomFilter;
 import net.i2p.router.util.DecayingHashSet;
@@ -15,23 +14,25 @@ import net.i2p.util.Log;
  * basic line of defense here).
  *
  */
-class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
+class InboundMessageFragments /*implements UDPTransport.PartialACKSource */ {
     private final RouterContext _context;
     private final Log _log;
+
     /** list of message IDs recently received, so we can ignore in flight dups */
     private DecayingBloomFilter _recentlyCompletedMessages;
+
     private final OutboundMessageFragments _outbound;
     private final UDPTransport _transport;
     private final MessageReceiver _messageReceiver;
     private volatile boolean _alive;
 
     /** decay the recently completed every 10 seconds */
-    private static final int DECAY_PERIOD = 10*1000;
+    private static final int DECAY_PERIOD = 10 * 1000;
 
     public InboundMessageFragments(RouterContext ctx, OutboundMessageFragments outbound, UDPTransport transport) {
         _context = ctx;
         _log = ctx.logManager().getLog(InboundMessageFragments.class);
-        //_inboundMessages = new HashMap(64);
+        // _inboundMessages = new HashMap(64);
         _outbound = outbound;
         _transport = transport;
         _messageReceiver = new MessageReceiver(_context, _transport);
@@ -50,12 +51,16 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
 
     public synchronized void shutdown() {
         _alive = false;
-        if (_recentlyCompletedMessages != null) {_recentlyCompletedMessages.stopDecaying();}
+        if (_recentlyCompletedMessages != null) {
+            _recentlyCompletedMessages.stopDecaying();
+        }
         _recentlyCompletedMessages = null;
         _messageReceiver.shutdown();
     }
 
-    public boolean isAlive() {return _alive;}
+    public boolean isAlive() {
+        return _alive;
+    }
 
     /**
      * This message was received - SSU 2 only.
@@ -64,7 +69,6 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
      * @return true if this message was a duplicate
      * @since 0.9.54
      */
-
     public boolean messageReceived(long messageID) {
         return _recentlyCompletedMessages.add(messageID);
     }
@@ -76,7 +80,6 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
      * @return true if this message was recently received.
      * @since 0.9.54
      */
-
     public boolean wasRecentlyReceived(long messageID) {
         return _recentlyCompletedMessages.isKnown(messageID);
     }
@@ -87,6 +90,9 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
      */
     public static class ModifiableLong {
         public long value;
-        public ModifiableLong(long val) { value = val; }
+
+        public ModifiableLong(long val) {
+            value = val;
+        }
     }
 }

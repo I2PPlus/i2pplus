@@ -1,12 +1,13 @@
 package net.i2p.router.web.helpers;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.Set;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Hash;
 import net.i2p.router.web.HelperBase;
 import net.i2p.servlet.util.WriterOutputStream;
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.Set;
 
 /**
  * Helper for statistics page rendering and form processing.

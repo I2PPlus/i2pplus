@@ -1,4 +1,5 @@
 package net.i2p.router.startup;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -19,7 +20,9 @@ class StartAcceptingClientsJob extends JobImpl {
     }
 
     @Override
-    public String getName() { return "Start Accepting Clients"; }
+    public String getName() {
+        return "Start Accepting Clients";
+    }
 
     @Override
     public void runJob() {
@@ -27,6 +30,6 @@ class StartAcceptingClientsJob extends JobImpl {
         getContext().clientManager().startup();
 
         // pointless
-        //getContext().jobQueue().addJob(new RebuildRouterInfoJob(getContext()));
+        // getContext().jobQueue().addJob(new RebuildRouterInfoJob(getContext()));
     }
 }

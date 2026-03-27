@@ -1,10 +1,11 @@
 package net.i2p.util;
 
+import net.i2p.data.Hash;
+import net.i2p.data.SessionKey;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.concurrent.ConcurrentHashMap;
-import net.i2p.data.Hash;
-import net.i2p.data.SessionKey;
 
 /**
  * Simple key ring for storing session keys by hash.

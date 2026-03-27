@@ -80,14 +80,14 @@ class RatchetPayload {
         public void gotUnknown(int type, int len);
     }
 
-/**
- * Ratchet payload generation and parsing utilities supporting datetime, options, garlic, next key, acknowledgment, and padding blocks for ECIES+AEAD messages
- *
- *  @since 0.9.44 adapted from NTCP2Payload
- */
-    public static int processPayload(I2PAppContext ctx, PayloadCallback cb,
-                                     byte[] payload, int off, int length, boolean isHandshake)
-                                     throws IOException, DataFormatException, I2NPMessageException {
+    /**
+     * Ratchet payload generation and parsing utilities supporting datetime, options, garlic, next key, acknowledgment, and padding blocks for ECIES+AEAD messages
+     *
+     *  @since 0.9.44 adapted from NTCP2Payload
+     */
+    public static int processPayload(
+            I2PAppContext ctx, PayloadCallback cb, byte[] payload, int off, int length, boolean isHandshake)
+            throws IOException, DataFormatException, I2NPMessageException {
         int blocks = 0;
         boolean gotPadding = false;
         boolean gotTermination = false;
@@ -95,23 +95,21 @@ class RatchetPayload {
         final int end = off + length;
         while (i < end) {
             int type = payload[i++] & 0xff;
-            if (gotPadding)
-                throw new IOException("Illegal block after padding: " + type);
+            if (gotPadding) throw new IOException("Illegal block after padding: " + type);
             if (gotTermination && type != BLOCK_PADDING)
                 throw new IOException("Illegal block after termination: " + type);
             int len = (int) DataHelper.fromLong(payload, i, 2);
             i += 2;
             if (i + len > end) {
-                throw new IOException("Block " + blocks + " type " + type + " length " + len +
-                                      " at offset " + (i - 3 - off) + " runs over frame of size " + length +
-                                      '\n' + net.i2p.util.HexDump.dump(payload, off, length));
+                throw new IOException("Block " + blocks + " type " + type + " length " + len + " at offset "
+                        + (i - 3 - off) + " runs over frame of size " + length + '\n'
+                        + net.i2p.util.HexDump.dump(payload, off, length));
             }
             switch (type) {
                 // don't modify i inside switch
 
                 case BLOCK_DATETIME:
-                    if (len != 4)
-                        throw new IOException("Bad length for DATETIME: " + len);
+                    if (len != 4) throw new IOException("Bad length for DATETIME: " + len);
                     long time = DataHelper.fromLong(payload, i, 4) * 1000;
                     cb.gotDateTime(time);
                     break;
@@ -129,9 +127,7 @@ class RatchetPayload {
                     break;
 
                 case BLOCK_NEXTKEY:
-                {
-                    if (len != 3 && len != 35)
-                        throw new IOException("Bad length for NEXTKEY: " + len);
+                    if (len != 3 && len != 35) throw new IOException("Bad length for NEXTKEY: " + len);
                     boolean hasKey = (payload[i] & 0x01) != 0;
                     boolean isReverse = (payload[i] & 0x02) != 0;
                     boolean isRequest = (payload[i] & 0x04) != 0;
@@ -145,42 +141,33 @@ class RatchetPayload {
                         nsk = new NextSessionKey(id, isReverse, isRequest);
                     }
                     cb.gotNextKey(nsk);
-                }
                     break;
 
                 case BLOCK_ACK:
-                {
-                    if (len < 4 || (len % 4) != 0)
-                        throw new IOException("Bad length for ACK: " + len);
+                    if (len < 4 || (len % 4) != 0) throw new IOException("Bad length for ACK: " + len);
                     for (int j = i; j < i + len; j += 4) {
-                        int id = (int) DataHelper.fromLong(payload, j, 2);
+                        id = (int) DataHelper.fromLong(payload, j, 2);
                         int n = (int) DataHelper.fromLong(payload, j + 2, 2);
                         cb.gotAck(id, n);
                     }
-                }
                     break;
 
                 case BLOCK_ACKREQ:
-                    if (len < 1)
-                        throw new IOException("Bad length for ACKREQ: " + len);
+                    if (len < 1) throw new IOException("Bad length for ACKREQ: " + len);
                     cb.gotAckRequest();
                     break;
 
                 case BLOCK_TERMINATION:
-                    if (isHandshake)
-                        throw new IOException("Illegal block in handshake: " + type);
-                    if (len < 1)
-                        throw new IOException("Bad length for TERMINATION: " + len);
+                    if (isHandshake) throw new IOException("Illegal block in handshake: " + type);
+                    if (len < 1) throw new IOException("Bad length for TERMINATION: " + len);
                     int rsn = payload[i] & 0xff;
                     cb.gotTermination(rsn);
                     gotTermination = true;
                     break;
 
                 case BLOCK_MSGNUM:
-                    if (isHandshake)
-                        throw new IOException("Illegal block in handshake: " + type);
-                    if (len < 2)
-                        throw new IOException("Bad length for PN: " + len);
+                    if (isHandshake) throw new IOException("Illegal block in handshake: " + type);
+                    if (len < 2) throw new IOException("Bad length for PN: " + len);
                     int pn = (int) DataHelper.fromLong(payload, i, 2);
                     cb.gotPN(pn);
                     break;
@@ -191,17 +178,14 @@ class RatchetPayload {
                     break;
 
                 default:
-                    if (isHandshake)
-                        throw new IOException("Illegal block in handshake: " + type);
+                    if (isHandshake) throw new IOException("Illegal block in handshake: " + type);
                     cb.gotUnknown(type, len);
                     break;
-
             }
             i += len;
             blocks++;
         }
-        if (isHandshake && blocks == 0)
-            throw new IOException("No blocks in handshake");
+        if (isHandshake && blocks == 0) throw new IOException("No blocks in handshake");
         return blocks;
     }
 
@@ -220,7 +204,7 @@ class RatchetPayload {
      *  Base class for blocks to be transmitted.
      *  Not used for receive; we use callbacks instead.
      */
-    public static abstract class Block {
+    public abstract static class Block {
         private final int type;
 
         public Block(int ttype) {
@@ -304,10 +288,8 @@ class RatchetPayload {
 
         @Override
         public int writeData(byte[] tgt, int off) {
-            if (ctx != null)
-                ctx.random().nextBytes(tgt, off, sz);
-            else
-                Arrays.fill(tgt, off, off + sz, (byte) 0);
+            if (ctx != null) ctx.random().nextBytes(tgt, off, sz);
+            else Arrays.fill(tgt, off, off + sz, (byte) 0);
             return off + sz;
         }
     }
@@ -370,12 +352,9 @@ class RatchetPayload {
 
         @Override
         public int writeData(byte[] tgt, int off) {
-            if (next.getData() != null)
-                tgt[off] = 0x01;
-            if (next.isReverse())
-                tgt[off] |= 0x02;
-            if (next.isRequest())
-                tgt[off] |= 0x04;
+            if (next.getData() != null) tgt[off] = 0x01;
+            if (next.isReverse()) tgt[off] |= 0x02;
+            if (next.isRequest()) tgt[off] |= 0x04;
             DataHelper.toLong(tgt, off + 1, 2, next.getID());
             if (next.getData() != null) {
                 System.arraycopy(next.getData(), 0, tgt, off + 3, 32);

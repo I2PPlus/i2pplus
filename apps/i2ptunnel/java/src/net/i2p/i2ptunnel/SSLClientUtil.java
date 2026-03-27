@@ -1,5 +1,10 @@
 package net.i2p.i2ptunnel;
 
+import net.i2p.I2PAppContext;
+import net.i2p.crypto.KeyStoreUtil;
+import net.i2p.util.Log;
+import net.i2p.util.SecureDirectory;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,13 +13,10 @@ import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.util.Properties;
 import java.util.Set;
+
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocketFactory;
-import net.i2p.I2PAppContext;
-import net.i2p.crypto.KeyStoreUtil;
-import net.i2p.util.Log;
-import net.i2p.util.SecureDirectory;
 
 /**
  * SSL server socket utilities for I2PTunnel clients.
@@ -86,17 +88,14 @@ public class SSLClientUtil {
             ks = new File(I2PAppContext.getGlobalContext().getConfigDir(), KS_DIR);
             ks = new File(ks, ksname);
         }
-        if (ks.exists())
-            return false;
+        if (ks.exists()) return false;
         File dir = ks.getParentFile();
         if (!dir.exists()) {
             File sdir = new SecureDirectory(dir.getAbsolutePath());
-            if (!sdir.mkdirs())
-                throw new IOException("Unable to create keystore " + ks);
+            if (!sdir.mkdirs()) throw new IOException("Unable to create keystore " + ks);
         }
         boolean rv = createKeyStore(ks, name, opts, optPfx, altNames);
-        if (!rv)
-            throw new IOException("Unable to create keystore " + ks);
+        if (!rv) throw new IOException("Unable to create keystore " + ks);
 
         // Now read it back out of the new keystore and save it in ascii form
         // where the clients can get to it.
@@ -104,7 +103,6 @@ public class SSLClientUtil {
         exportCert(ks, name, opts, optPfx);
         return true;
     }
-
 
     /**
      *  Create a new keystore with a keypair in it.
@@ -131,14 +129,9 @@ public class SSLClientUtil {
             }
         }
         if (success) {
-            logAlways("Created self-signed certificate for " + cname + " in keystore: " + ks.getAbsolutePath() + "\n" +
-                      "The certificate was generated randomly.\n" +
-                      "Unless you have changed the default settings, the certificate is not associated with your " +
-                           "IP address, host name, router identity, or destination keys.");
+            logAlways("Created self-signed certificate for " + cname + " in keystore: " + ks.getAbsolutePath() + "\n" + "The certificate was generated randomly.\n" + "Unless you have changed the default settings, the certificate is not associated with your " + "IP address, host name, router identity, or destination keys.");
         } else {
-            error("Failed to create I2PTunnel SSL keystore.\n" +
-                       "If you create the keystore manually, you must add " + optPfx + PROP_KEYSTORE_PASSWORD + " and " + optPfx + PROP_KEY_PASSWORD +
-                       " to " + (new File(I2PAppContext.getGlobalContext().getConfigDir(), "i2ptunnel.config")).getAbsolutePath());
+            error("Failed to create I2PTunnel SSL keystore.\n" + "If you create the keystore manually, you must add " + optPfx + PROP_KEYSTORE_PASSWORD + " and " + optPfx + PROP_KEY_PASSWORD + " to " + (new File(I2PAppContext.getGlobalContext().getConfigDir(), "i2ptunnel.config")).getAbsolutePath());
         }
         return success;
     }
@@ -158,8 +151,7 @@ public class SSLClientUtil {
             String ksPass = opts.getProperty(optPfx + PROP_KEYSTORE_PASSWORD, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD);
             File out = new File(sdir, PREFIX + name + ASCII_KEYFILE_SUFFIX);
             boolean success = KeyStoreUtil.exportCert(ks, ksPass, keyAlias, out);
-            if (!success)
-                error("Error getting SSL cert to save as ASCII");
+            if (!success) error("Error getting SSL cert to save as ASCII");
         } else {
             error("Error saving ASCII SSL keys");
         }
@@ -176,13 +168,11 @@ public class SSLClientUtil {
         String ksPass = opts.getProperty(PROP_KEYSTORE_PASSWORD, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD);
         String keyPass = opts.getProperty(PROP_KEY_PASSWORD);
         if (keyPass == null) {
-            throw new IOException("No key password, set " + PROP_KEY_PASSWORD + " in " +
-                       (new File(I2PAppContext.getGlobalContext().getConfigDir(), "i2ptunnel.config")).getAbsolutePath());
+            throw new IOException("No key password, set " + PROP_KEY_PASSWORD + " in " + (new File(I2PAppContext.getGlobalContext().getConfigDir(), "i2ptunnel.config")).getAbsolutePath());
         }
         String ksname = opts.getProperty(PROP_KS_NAME);
         if (ksname == null) {
-            throw new IOException("No keystore, set " + PROP_KS_NAME + " in " +
-                       (new File(I2PAppContext.getGlobalContext().getConfigDir(), "i2ptunnel.config")).getAbsolutePath());
+            throw new IOException("No keystore, set " + PROP_KS_NAME + " in " + (new File(I2PAppContext.getGlobalContext().getConfigDir(), "i2ptunnel.config")).getAbsolutePath());
         }
         File ks = new File(ksname);
         if (!ks.isAbsolute()) {
@@ -196,7 +186,7 @@ public class SSLClientUtil {
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             fis = new FileInputStream(ks);
             keyStore.load(fis, ksPass.toCharArray());
-            KeyStoreUtil.logCertExpiration(keyStore, ks.getAbsolutePath(), 180*24*60*60*1000L);
+            KeyStoreUtil.logCertExpiration(keyStore, ks.getAbsolutePath(), 180 * 24 * 60 * 60 * 1000L);
             KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
             kmf.init(keyStore, keyPass.toCharArray());
             sslc.init(kmf.getKeyManagers(), null, I2PAppContext.getGlobalContext().random());
@@ -206,7 +196,10 @@ public class SSLClientUtil {
             ioe.initCause(gse);
             throw ioe;
         } finally {
-            if (fis != null) try { fis.close(); } catch (IOException ioe) {}
+            if (fis != null) try {
+                    fis.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 

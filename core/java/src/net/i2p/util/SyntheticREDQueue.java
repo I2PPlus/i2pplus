@@ -1,8 +1,9 @@
 package net.i2p.util;
 
-import java.util.Random;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
+
+import java.util.Random;
 
 /**
  * A "synthetic" queue that does not store data but estimates the average queue size
@@ -66,9 +67,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * @param bwBps nominal output bandwidth in bytes per second
      */
     public SyntheticREDQueue(I2PAppContext ctx, int bwBps) {
-        this(ctx, bwBps,
-             Math.max(1, (int)(bwBps / DEFAULT_LOW_THRESHOLD_DIV)),
-             Math.max(1, (int)(bwBps / DEFAULT_HIGH_THRESHOLD_DIV)));
+        this(ctx, bwBps, Math.max(1, (int) (bwBps / DEFAULT_LOW_THRESHOLD_DIV)), Math.max(1, (int) (bwBps / DEFAULT_HIGH_THRESHOLD_DIV)));
     }
 
     /**
@@ -159,12 +158,12 @@ public class SyntheticREDQueue implements BandwidthEstimator {
         if (_bytesAcked < 0) {
             long deltaT = Math.max(now - _lastAckTime, WESTWOOD_RTT_MIN);
             float bkdt = (float) bytes / deltaT; // Initial bandwidth estimate in bytes per millisecond
-            _bKFiltered = bkdt;                  // Smoothed bandwidth estimate (filtered)
-            _bKNonSmoothed = bkdt;               // Raw bandwidth estimate (non-smoothed)
-            _bytesAcked = 0;                     // Total bytes acknowledged so far initialized to zero
-            _lastAckTime = now;                  // Timestamp of last acknowledged sample
-            _lastQueueUpdateTime = now;          // Timestamp of last queue size update
-            _newDataSize = bytes;                // Pending new data size to accumulate
+            _bKFiltered = bkdt; // Smoothed bandwidth estimate (filtered)
+            _bKNonSmoothed = bkdt; // Raw bandwidth estimate (non-smoothed)
+            _bytesAcked = 0; // Total bytes acknowledged so far initialized to zero
+            _lastAckTime = now; // Timestamp of last acknowledged sample
+            _lastQueueUpdateTime = now; // Timestamp of last queue size update
+            _newDataSize = bytes; // Pending new data size to accumulate
             if (_log.shouldDebug()) {
                 _log.debug("First sample bytes: " + bytes + " deltaT: " + deltaT + " " + this);
             }
@@ -184,13 +183,13 @@ public class SyntheticREDQueue implements BandwidthEstimator {
                 if (_log.shouldWarn()) {
                     _log.warn("Dropping bytes (queue size exceeded max): " + bytes + " " + this);
                 }
-                _dropCount = 0;  // Reset consecutive drop counter
-                return false;    // Drop this sample (bytes rejected)
+                _dropCount = 0; // Reset consecutive drop counter
+                return false; // Drop this sample (bytes rejected)
             }
 
             // If average queue size is above min threshold but below max, probabilistically drop bytes
             if (_avgQueueSize > _minThresholdBytes) {
-                _dropCount++;  // Increment count of consecutive drop attempts
+                _dropCount++; // Increment count of consecutive drop attempts
 
                 // Compute base drop probability proportional to bytes size, factor, max drop probability, and queue size above min threshold
                 float pb = (bytes / 1024f) * factor * MAX_DROP_PROBABILITY * (_avgQueueSize - _minThresholdBytes) / (_maxThresholdBytes - _minThresholdBytes);
@@ -209,8 +208,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
                 float rand = _random.nextFloat(); // Random float
                 if (rand < pa) {
                     if (_log.shouldWarn()) {
-                        _log.warn(String.format("Dropping bytes (probabilistic): %d; Factor: %.2f; Probability: %.4f; deltaTQueue: %d %s",
-                                                bytes, factor, pa, deltaTQueue, this));
+                        _log.warn(String.format("Dropping bytes (probabilistic): %d; Factor: %.2f; Probability: %.4f; deltaTQueue: %d %s", bytes, factor, pa, deltaTQueue, this));
                     }
                     _dropCount = 0;
                     return false;
@@ -378,8 +376,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
         _lastQueueUpdateTime = time;
 
         if (_log.shouldDebug()) {
-            _log.debug("Queue update - deltaT: " + originalDeltaT + " newData: " + originalNewDataSize +
-                       " newQueueSize: " + newQueueSize + " queueSizeEstimate: " + _queueSizeEstimate + " " + this);
+            _log.debug("Queue update - deltaT: " + originalDeltaT + " newData: " + originalNewDataSize + " newQueueSize: " + newQueueSize + " queueSizeEstimate: " + _queueSizeEstimate + " " + this);
         }
     }
 
@@ -395,7 +392,6 @@ public class SyntheticREDQueue implements BandwidthEstimator {
         return (((DECAY_FACTOR - 1) * oldVal) + newVal) / DECAY_FACTOR;
     }
 
-
     /**
      * Returns a human-readable string displaying the current bandwidth and queue size estimates,
      * formatted for debugging or informational output.
@@ -404,10 +400,6 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      */
     @Override
     public synchronized String toString() {
-        return "\n* " +
-               (_bKFiltered > 0 ? "Bandwidth: " + DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false) + "Bytes/s " : "") +
-               (_avgQueueSize > 0 ? "Average Queue Size / " : "") +
-               (_avgQueueSize > 0 ? DataHelper.formatSize2((long) _avgQueueSize, false) + "B / " : "") +
-               "Limit: " + DataHelper.formatSize2Decimal((long) _bandwidthBps, false) + "Bytes/s";
+        return "\n* " + (_bKFiltered > 0 ? "Bandwidth: " + DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false) + "Bytes/s " : "") + (_avgQueueSize > 0 ? "Average Queue Size / " : "") + (_avgQueueSize > 0 ? DataHelper.formatSize2((long) _avgQueueSize, false) + "B / " : "") + "Limit: " + DataHelper.formatSize2Decimal((long) _bandwidthBps, false) + "Bytes/s";
     }
 }

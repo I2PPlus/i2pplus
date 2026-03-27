@@ -9,10 +9,6 @@ package net.i2p.client;
  *
  */
 
-import java.io.InputStream;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
 import net.i2p.data.BlindData;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
@@ -22,6 +18,11 @@ import net.i2p.data.SessionTag;
 import net.i2p.data.Signature;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;
+
+import java.io.InputStream;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * <p>Define the standard means of sending and receiving messages on the
@@ -136,8 +137,7 @@ public interface I2PSession {
      * @return success
      * @since 0.7.1
      */
-    public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent,
-                               int proto, int fromPort, int toPort) throws I2PSessionException;
+    public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, int proto, int fromPort, int toPort) throws I2PSessionException;
 
     /**
      * See I2PSessionMuxedImpl for proto/port details.
@@ -155,8 +155,7 @@ public interface I2PSession {
      * @return success
      * @since 0.7.1
      */
-    public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire,
-                               int proto, int fromPort, int toPort) throws I2PSessionException;
+    public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire, int proto, int fromPort, int toPort) throws I2PSessionException;
 
     /**
      * See I2PSessionMuxedImpl for proto/port details.
@@ -174,8 +173,7 @@ public interface I2PSession {
      * @return success
      * @since 0.8.4
      */
-    public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire,
-                               int proto, int fromPort, int toPort, int flags) throws I2PSessionException;
+    public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire, int proto, int fromPort, int toPort, int flags) throws I2PSessionException;
 
     /**
      * See I2PSessionMuxedImpl for proto/port details.
@@ -192,8 +190,7 @@ public interface I2PSession {
      * @return success
      * @since 0.9.2
      */
-    public boolean sendMessage(Destination dest, byte[] payload, int offset, int size,
-                               int proto, int fromPort, int toPort, SendMessageOptions options) throws I2PSessionException;
+    public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, int proto, int fromPort, int toPort, SendMessageOptions options) throws I2PSessionException;
 
     /**
      * Send a message and request an asynchronous notification of delivery status.
@@ -215,9 +212,7 @@ public interface I2PSession {
      * @throws I2PSessionException on all errors
      * @since 0.9.14
      */
-    public long sendMessage(Destination dest, byte[] payload, int offset, int size,
-                               int proto, int fromPort, int toPort,
-                               SendMessageOptions options, SendMessageStatusListener listener) throws I2PSessionException;
+    public long sendMessage(Destination dest, byte[] payload, int offset, int size, int proto, int fromPort, int toPort, SendMessageOptions options, SendMessageStatusListener listener) throws I2PSessionException;
 
     /** Receive a message that the router has notified the client about, returning
      * the payload.
@@ -434,6 +429,7 @@ public interface I2PSession {
      *  @since 0.9.67
      */
     public LookupResult lookupDest(Hash h, long maxWait, LookupCallback callback) throws I2PSessionException;
+
     /**
      *  Lookup a Destination by hash.
      *  Non-blocking.

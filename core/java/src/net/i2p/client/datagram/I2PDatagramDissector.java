@@ -1,4 +1,5 @@
 package net.i2p.client.datagram;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
@@ -8,8 +9,6 @@ package net.i2p.client.datagram;
  *
  */
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import net.i2p.crypto.DSAEngine;
 import net.i2p.crypto.SHA256Generator;
 import net.i2p.crypto.SigType;
@@ -18,6 +17,9 @@ import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.Signature;
 import net.i2p.data.SigningPublicKey;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 /**
  * Class for dissecting I2P repliable datagrams, checking the authenticity of
@@ -68,8 +70,7 @@ public final class I2PDatagramDissector {
     public void loadI2PDatagram(byte[] dgram) throws DataFormatException {
         // set invalid(very important!)
         this.valid = false;
-        if (dgram.length < MIN_DGRAM_SIZE)
-            throw new DataFormatException("repliable datagram too small: " + dgram.length);
+        if (dgram.length < MIN_DGRAM_SIZE) throw new DataFormatException("repliable datagram too small: " + dgram.length);
 
         ByteArrayInputStream dgStream = new ByteArrayInputStream(dgram);
 
@@ -77,8 +78,7 @@ public final class I2PDatagramDissector {
             // read destination
             rxDest = Destination.create(dgStream);
             SigType type = rxDest.getSigningPublicKey().getType();
-            if (type == null)
-                throw new DataFormatException("Unsupported signature type");
+            if (type == null) throw new DataFormatException("Unsupported signature type");
             rxSign = new Signature(type);
             // read signature
             rxSign.readBytes(dgStream);
@@ -88,25 +88,24 @@ public final class I2PDatagramDissector {
 
             // calculate the hash of the payload
             if (type == SigType.DSA_SHA1) {
-                if (rxHash == null)
-                    rxHash = new byte[Hash.HASH_LENGTH];
+                if (rxHash == null) rxHash = new byte[Hash.HASH_LENGTH];
                 // non-caching
                 hashGen.calculateHash(rxPayload, 0, rxPayloadLen, rxHash, 0);
-                //assert this.hashGen.calculateHash(this.extractPayload()).equals(this.rxHash);
+                // assert this.hashGen.calculateHash(this.extractPayload()).equals(this.rxHash);
             } else {
                 rxHash = null;
             }
         } catch (IOException e) {
             // let the application do the logging
-            //Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PDatagramDissector.class);
-            //log.error("Error loading datagram", e);
+            // Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PDatagramDissector.class);
+            // log.error("Error loading datagram", e);
             throw new DataFormatException("Error loading datagram", e);
-        //} catch (AssertionError e) {
-        //    Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PDatagramDissector.class);
-        //    log.error("Assertion failed!", e);
+            // } catch (AssertionError e) {
+            //    Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PDatagramDissector.class);
+            //    log.error("Assertion failed!", e);
         }
 
-        //_log.debug("Datagram payload size: " + rxPayloadLen + "; content:\n"
+        // _log.debug("Datagram payload size: " + rxPayloadLen + "; content:\n"
         //           + HexDump.dump(rxPayload, 0, rxPayloadLen));
     }
 
@@ -175,20 +174,20 @@ public final class I2PDatagramDissector {
      * @return The Destination of the I2P repliable datagram sender
      */
     public Destination extractSender() {
-      /****
-        if (this.rxDest == null)
-            return null;
-        Destination retDest = new Destination();
-        try {
-            retDest.fromByteArray(this.rxDest.toByteArray());
-        } catch (DataFormatException e) {
-            Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PDatagramDissector.class);
-            log.error("Caught DataFormatException", e);
-            return null;
-        }
-
-        return retDest;
-      ****/
+        /****
+         * if (this.rxDest == null)
+         * return null;
+         * Destination retDest = new Destination();
+         * try {
+         * retDest.fromByteArray(this.rxDest.toByteArray());
+         * } catch (DataFormatException e) {
+         * Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PDatagramDissector.class);
+         * log.error("Caught DataFormatException", e);
+         * return null;
+         * }
+         *
+         * return retDest;
+         ****/
         // dests are no longer modifiable
         return rxDest;
     }
@@ -203,8 +202,7 @@ public final class I2PDatagramDissector {
      * @return The hash of the payload of the I2P repliable datagram
      */
     public Hash extractHash() {
-        if (rxHash == null)
-            return null;
+        if (rxHash == null) return null;
         // make a copy as we will reuse rxHash
         byte[] hash = new byte[Hash.HASH_LENGTH];
         System.arraycopy(rxHash, 0, hash, 0, Hash.HASH_LENGTH);
@@ -218,23 +216,18 @@ public final class I2PDatagramDissector {
      */
     public void verifySignature() throws I2PInvalidDatagramException {
         // first check if it already got validated
-        if (this.valid)
-            return;
+        if (this.valid) return;
 
-        if (rxSign == null || rxSign.getData() == null || rxDest == null)
-            throw new I2PInvalidDatagramException("Datagram not yet read");
+        if (rxSign == null || rxSign.getData() == null || rxDest == null) throw new I2PInvalidDatagramException("Datagram not yet read");
 
         // now validate
         SigningPublicKey spk = rxDest.getSigningPublicKey();
         SigType type = spk.getType();
-        if (type == null)
-            throw new I2PInvalidDatagramException("Unsupported signature type");
+        if (type == null) throw new I2PInvalidDatagramException("Unsupported signature type");
         if (type == SigType.DSA_SHA1) {
-            if (!this.dsaEng.verifySignature(rxSign, rxHash, spk))
-                throw new I2PInvalidDatagramException("Incorrect I2P repliable datagram signature");
+            if (!this.dsaEng.verifySignature(rxSign, rxHash, spk)) throw new I2PInvalidDatagramException("Incorrect I2P repliable datagram signature");
         } else {
-            if (!this.dsaEng.verifySignature(rxSign, rxPayload, 0, rxPayloadLen, spk))
-                throw new I2PInvalidDatagramException("Incorrect I2P repliable datagram signature");
+            if (!this.dsaEng.verifySignature(rxSign, rxPayload, 0, rxPayloadLen, spk)) throw new I2PInvalidDatagramException("Incorrect I2P repliable datagram signature");
         }
 
         // set validated

@@ -1,4 +1,5 @@
 package net.i2p.router.startup;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -24,13 +25,15 @@ class BuildTrustedLinksJob extends JobImpl {
     }
 
     @Override
-    public String getName() { return "Build Trusted Links with Peers"; }
+    public String getName() {
+        return "Build Trusted Links with Peers";
+    }
 
     @Override
     public void runJob() {
         // create trusted links with peers
 
-        //try { Thread.sleep(5000); } catch (InterruptedException ie) {}
+        // try { Thread.sleep(5000); } catch (InterruptedException ie) {}
 
         getContext().jobQueue().addJob(_next);
     }

@@ -1,5 +1,13 @@
 package net.i2p.router.web;
 
+import net.i2p.I2PAppContext;
+import net.i2p.util.FileSuffixFilter;
+
+import org.apache.tomcat.SimpleInstanceManager;
+import org.eclipse.jetty.webapp.Configuration;
+import org.eclipse.jetty.webapp.WebAppClassLoader;
+import org.eclipse.jetty.webapp.WebAppContext;
+
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -9,12 +17,6 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
-import net.i2p.I2PAppContext;
-import net.i2p.util.FileSuffixFilter;
-import org.apache.tomcat.SimpleInstanceManager;
-import org.eclipse.jetty.webapp.Configuration;
-import org.eclipse.jetty.webapp.WebAppClassLoader;
-import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
  *  Add to the webapp classpath as specified in webapps.config.
@@ -49,55 +51,53 @@ public class WebAppConfiguration implements Configuration {
      */
     private void configureClassPath(WebAppContext wac) throws Exception {
         String ctxPath = wac.getContextPath();
-        //System.err.println("Configure Class Path " + ctxPath);
-        if (ctxPath.equals("/"))
-            return;
+        // System.err.println("Configure Class Path " + ctxPath);
+        if (ctxPath.equals("/")) return;
         String appName = ctxPath.substring(1);
 
-/****
-        if (ctxPath.equals("/susimail")) {
-            // allow certain Jetty classes, restricted as of Jetty 7
-            // See http://wiki.eclipse.org/Jetty/Reference/Jetty_Classloading
-            //System.err.println("Allowing Jetty utils in classpath for " + appName);
-            //System.err.println("System classes before: " + Arrays.toString(wac.getSystemClasses()));
-            //System.err.println("Server classes before: " + Arrays.toString(wac.getServerClasses()));
-            wac.addSystemClass("org.eclipse.jetty.http.");
-            wac.addSystemClass("org.eclipse.jetty.io.");
-            wac.addSystemClass("org.eclipse.jetty.util.");
-            // org.eclipse.jetty.webapp.ClasspathPattern looks in-order, and
-            // WebAppContext doesn't provide a remove method, so we must
-            // convert to a list, remove the wildcard entry, add ours, then
-            // add the wildcard back, then reset.
-            List<String> classes = new ArrayList<String>(16);
-            classes.addAll(Arrays.asList(wac.getServerClasses()));
-            classes.remove("org.eclipse.jetty.");
-            classes.add("-org.eclipse.jetty.http.");
-            classes.add("-org.eclipse.jetty.io.");
-            classes.add("-org.eclipse.jetty.util.");
-            classes.add("org.eclipse.jetty.");
-            wac.setServerClasses(classes.toArray(new String[classes.size()]));
-            //System.err.println("System classes after:  " + Arrays.toString(wac.getSystemClasses()));
-            //System.err.println("Server classes after:  " + Arrays.toString(wac.getServerClasses()));
-        }
-****/
+        /****
+         * if (ctxPath.equals("/susimail")) {
+         * // allow certain Jetty classes, restricted as of Jetty 7
+         * // See http://wiki.eclipse.org/Jetty/Reference/Jetty_Classloading
+         * //System.err.println("Allowing Jetty utils in classpath for " + appName);
+         * //System.err.println("System classes before: " + Arrays.toString(wac.getSystemClasses()));
+         * //System.err.println("Server classes before: " + Arrays.toString(wac.getServerClasses()));
+         * wac.addSystemClass("org.eclipse.jetty.http.");
+         * wac.addSystemClass("org.eclipse.jetty.io.");
+         * wac.addSystemClass("org.eclipse.jetty.util.");
+         * // org.eclipse.jetty.webapp.ClasspathPattern looks in-order, and
+         * // WebAppContext doesn't provide a remove method, so we must
+         * // convert to a list, remove the wildcard entry, add ours, then
+         * // add the wildcard back, then reset.
+         * List<String> classes = new ArrayList<String>(16);
+         * classes.addAll(Arrays.asList(wac.getServerClasses()));
+         * classes.remove("org.eclipse.jetty.");
+         * classes.add("-org.eclipse.jetty.http.");
+         * classes.add("-org.eclipse.jetty.io.");
+         * classes.add("-org.eclipse.jetty.util.");
+         * classes.add("org.eclipse.jetty.");
+         * wac.setServerClasses(classes.toArray(new String[classes.size()]));
+         * //System.err.println("System classes after:  " + Arrays.toString(wac.getSystemClasses()));
+         * //System.err.println("Server classes after:  " + Arrays.toString(wac.getServerClasses()));
+         * }
+         ****/
 
         I2PAppContext i2pContext = I2PAppContext.getGlobalContext();
         File libDir = i2pContext.getLibDir();
         // Get the plugin name that WebAppStarter stuck in here for us
         String pluginName = wac.getInitParameter(WebAppStarter.PARAM_PLUGIN_NAME);
-        if (pluginName == null)
-            pluginName = ctxPath;
+        if (pluginName == null) pluginName = ctxPath;
         File pluginDir = new File(i2pContext.getConfigDir(), PluginStarter.PLUGIN_DIR);
         pluginDir = new File(pluginDir, pluginName);
 
         File dir = libDir;
         String cp;
-/****
-        if (ctxPath.equals("/susimail")) {
-            // Ticket #957... don't know why...
-            // Only really required if started manually, but we don't know that from here
-            cp = "jetty-util.jar";
-****/
+        /****
+         * if (ctxPath.equals("/susimail")) {
+         * // Ticket #957... don't know why...
+         * // Only really required if started manually, but we don't know that from here
+         * cp = "jetty-util.jar";
+         ****/
         if (ctxPath.equals("/susidns")) {
             // Old installs don't have this in their wrapper.config classpath
             cp = "addressbook.jar";
@@ -112,22 +112,17 @@ public class WebAppConfiguration implements Configuration {
             Properties props = RouterConsoleRunner.webAppProperties(i2pContext);
             cp = props.getProperty(RouterConsoleRunner.PREFIX + appName + CLASSPATH);
         }
-        if (cp == null)
-            return;
+        if (cp == null) return;
         StringTokenizer tok = new StringTokenizer(cp, ",");
         StringBuilder buf = new StringBuilder();
         Set<URI> systemCP = getSystemClassPath(i2pContext);
         while (tok.hasMoreTokens()) {
-            if (buf.length() > 0)
-                buf.append(',');
+            if (buf.length() > 0) buf.append(',');
             String elem = tok.nextToken().trim();
             String path;
-            if (elem.startsWith("$I2P"))
-                path = i2pContext.getBaseDir().getAbsolutePath() + elem.substring(4);
-            else if (elem.startsWith("$PLUGIN"))
-                path = dir.getAbsolutePath() + elem.substring(7);
-            else
-                path = dir.getAbsolutePath() + '/' + elem;
+            if (elem.startsWith("$I2P")) path = i2pContext.getBaseDir().getAbsolutePath() + elem.substring(4);
+            else if (elem.startsWith("$PLUGIN")) path = dir.getAbsolutePath() + elem.substring(7);
+            else path = dir.getAbsolutePath() + '/' + elem;
             // As of Jetty 6, we can't add dups to the class path, or
             // else it screws up statics
             // This is not a complete solution because the Windows no-wrapper classpath is set
@@ -135,18 +130,15 @@ public class WebAppConfiguration implements Configuration {
             // TODO: Add a classpath to the command line in i2pstandalone.xml?
             File jfile = new File(path);
             File jdir = jfile.getParentFile();
-            if (systemCP.contains(jfile.toURI()) ||
-                (jdir != null && systemCP.contains(jdir.toURI()))) {
-                //System.err.println("Not adding " + path + " to classpath for " + appName + ", already in system classpath");
+            if (systemCP.contains(jfile.toURI()) || (jdir != null && systemCP.contains(jdir.toURI()))) {
+                // System.err.println("Not adding " + path + " to classpath for " + appName + ", already in system classpath");
                 // Ticket #957... don't know why...
-                if (!ctxPath.equals("/susimail"))
-                    continue;
+                if (!ctxPath.equals("/susimail")) continue;
             }
-            //System.err.println("Adding " + path + " to classpath for " + appName);
+            // System.err.println("Adding " + path + " to classpath for " + appName);
             buf.append(path);
         }
-        if (buf.length() <= 0)
-            return;
+        if (buf.length() <= 0) return;
         ClassLoader cl = wac.getClassLoader();
         if (cl != null && cl instanceof WebAppClassLoader) {
             WebAppClassLoader wacl = (WebAppClassLoader) cl;
@@ -175,7 +167,8 @@ public class WebAppConfiguration implements Configuration {
             for (int i = 0; i < urls.length; i++) {
                 try {
                     rv.add(urls[i].toURI());
-                } catch (URISyntaxException use) {}
+                } catch (URISyntaxException use) {
+                }
             }
         } else {
             // Java 9 - assume everything in lib/ is in the classpath
@@ -185,8 +178,7 @@ public class WebAppConfiguration implements Configuration {
             if (files != null) {
                 for (int i = 0; i < files.length; i++) {
                     String name = files[i].getName();
-                    if (!name.equals("addressbook.jar"))
-                        rv.add(files[i].toURI());
+                    if (!name.equals("addressbook.jar")) rv.add(files[i].toURI());
                 }
             }
         }

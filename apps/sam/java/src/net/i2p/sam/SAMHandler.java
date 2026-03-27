@@ -1,4 +1,5 @@
 package net.i2p.sam;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
@@ -8,14 +9,15 @@ package net.i2p.sam;
  *
  */
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
-import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
+import java.util.Properties;
 
 /**
  * Base class for SAM protocol handlers.  It implements common
@@ -52,8 +54,7 @@ abstract class SAMHandler implements Runnable, Handler {
      * @param i2cpProps properties to configure the I2CP connection (host, port, etc)
      * @throws IOException
      */
-    protected SAMHandler(SocketChannel s, int verMajor, int verMinor,
-                         Properties i2cpProps, SAMBridge parent) throws IOException {
+    protected SAMHandler(SocketChannel s, int verMajor, int verMinor, Properties i2cpProps, SAMBridge parent) throws IOException {
         _log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
         socket = s;
 
@@ -115,7 +116,9 @@ abstract class SAMHandler implements Runnable, Handler {
      *
      * @return socket Write lock object
      */
-    protected Object getWriteLock() { return socketWLock; }
+    protected Object getWriteLock() {
+        return socketWLock;
+    }
 
     /**
      * Write a string to the handler's socket.  This method must
@@ -128,8 +131,7 @@ abstract class SAMHandler implements Runnable, Handler {
      */
     protected final boolean writeString(String str) {
         synchronized (socketWLock) {
-            if (_log.shouldInfo())
-                _log.info("Sending client: [" + str + "]");
+            if (_log.shouldInfo()) _log.info("Sending client: [" + str + "]");
             return writeString(str, socket);
         }
     }
@@ -142,7 +144,7 @@ abstract class SAMHandler implements Runnable, Handler {
         try {
             writeBytes(ByteBuffer.wrap(DataHelper.getUTF8(str)), out);
         } catch (IOException e) {
-            //_log.debug("Caught IOException", e);
+            // _log.debug("Caught IOException", e);
             return false;
         }
         return true;
@@ -162,16 +164,16 @@ abstract class SAMHandler implements Runnable, Handler {
      * unregister with the bridge.
      */
     public void stopHandling() {
-//        if (_log.shouldInfo())
-//            _log.info("Stopping: " + this, new Exception("I did it"));
-        if (_log.shouldWarn())
-            _log.warn("Stopping SAM client: " + this);
+        //        if (_log.shouldInfo())
+        //            _log.info("Stopping: " + this, new Exception("I did it"));
+        if (_log.shouldWarn()) _log.warn("Stopping SAM client: " + this);
         synchronized (stopLock) {
             stopHandler = true;
         }
         try {
             closeClientSocket();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
         bridge.unregister(this);
     }
 
@@ -193,11 +195,7 @@ abstract class SAMHandler implements Runnable, Handler {
      */
     @Override
     public final String toString() {
-        return (this.getClass().getSimpleName()
-                + " [Version " + verMajor + "." + verMinor
-                + " - Client: "
-                + this.socket.socket().getInetAddress().toString() + ":"
-                + this.socket.socket().getPort() + "]");
+        return (this.getClass().getSimpleName() + " [Version " + verMajor + "." + verMinor + " - Client: " + this.socket.socket().getInetAddress().toString() + ":" + this.socket.socket().getPort() + "]");
     }
 
     /**

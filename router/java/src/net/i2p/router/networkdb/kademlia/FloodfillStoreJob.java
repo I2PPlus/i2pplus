@@ -1,4 +1,5 @@
 package net.i2p.router.networkdb.kademlia;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,13 +9,14 @@ package net.i2p.router.networkdb.kademlia;
  *
  */
 
-import java.util.Set;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.LeaseSet2;
 import net.i2p.router.Job;
 import net.i2p.router.RouterContext;
+
+import java.util.Set;
 
 /**
  * This class extends StoreJob to fire off a FloodfillVerifyStoreJob after a successful store.
@@ -27,6 +29,7 @@ class FloodfillStoreJob extends StoreJob {
 
     /** Length of Base32 key prefix for logging */
     private static final int LOG_KEY_B32_LENGTH = 8;
+
     /** Length of Base64 key prefix for logging */
     private static final int LOG_KEY_B64_LENGTH = 6;
 
@@ -35,8 +38,7 @@ class FloodfillStoreJob extends StoreJob {
     /**
      * Create a new FloodfillStoreJob to send data to floodfills.
      */
-    public FloodfillStoreJob(RouterContext context, FloodfillNetworkDatabaseFacade facade,
-                             Hash key, DatabaseEntry data, Job onSuccess, Job onFailure, long timeoutMs) {
+    public FloodfillStoreJob(RouterContext context, FloodfillNetworkDatabaseFacade facade, Hash key, DatabaseEntry data, Job onSuccess, Job onFailure, long timeoutMs) {
         this(context, facade, key, data, onSuccess, onFailure, timeoutMs, null);
     }
 
@@ -45,18 +47,20 @@ class FloodfillStoreJob extends StoreJob {
      *
      * @param toSkip set of peer hashes to skip (e.g., already have the data), may be null
      */
-    public FloodfillStoreJob(RouterContext context, FloodfillNetworkDatabaseFacade facade,
-                             Hash key, DatabaseEntry data, Job onSuccess, Job onFailure,
-                             long timeoutMs, Set<Hash> toSkip) {
+    public FloodfillStoreJob(RouterContext context, FloodfillNetworkDatabaseFacade facade, Hash key, DatabaseEntry data, Job onSuccess, Job onFailure, long timeoutMs, Set<Hash> toSkip) {
         super(context, facade, key, data, onSuccess, onFailure, timeoutMs, toSkip);
         _facade = facade;
     }
 
     @Override
-    protected int getParallelization() {return 1;}
+    protected int getParallelization() {
+        return 1;
+    }
 
     @Override
-    protected int getRedundancy() {return 1;}
+    protected int getRedundancy() {
+        return 1;
+    }
 
     @Override
     protected void succeed() {
@@ -67,11 +71,15 @@ class FloodfillStoreJob extends StoreJob {
         final String keyB64 = key.toBase64().substring(0, LOG_KEY_B64_LENGTH);
         final boolean shouldLog = _log.shouldInfo();
 
-        if (shouldSkipVerify(key, keyB64, shouldLog)) {return;}
+        if (shouldSkipVerify(key, keyB64, shouldLog)) {
+            return;
+        }
 
         RouterContext ctx = getContext();
 
-        if (shouldSkipVerifyForStartup(ctx, keyB64)) {return;}
+        if (shouldSkipVerifyForStartup(ctx, keyB64)) {
+            return;
+        }
 
         DatabaseEntry data = _state.getData();
         if (data == null) {
@@ -85,8 +93,7 @@ class FloodfillStoreJob extends StoreJob {
         final boolean isRouterInfo = type == DatabaseEntry.KEY_TYPE_ROUTERINFO;
 
         // Skip verify if router info and condition met
-        if (isRouterInfo && !ctx.getBooleanProperty(PROP_RI_VERIFY)
-            && ctx.router().getUptime() > RI_VERIFY_STARTUP_TIME) {
+        if (isRouterInfo && !ctx.getBooleanProperty(PROP_RI_VERIFY) && ctx.router().getUptime() > RI_VERIFY_STARTUP_TIME) {
             _facade.routerInfoPublishSuccessful();
             return;
         }
@@ -105,7 +112,9 @@ class FloodfillStoreJob extends StoreJob {
         Set<Hash> attempted = _state.getAttempted();
         Job verifyJob = new FloodfillVerifyStoreJob(ctx, key, client, published, type, sentTo, attempted, _facade);
 
-        if (shouldLog) {_log.info("Succeeded sending key [" + keyB32 + "] -> Queueing Verify Store Job...");}
+        if (shouldLog) {
+            _log.info("Succeeded sending key [" + keyB32 + "] -> Queueing Verify Store Job...");
+        }
 
         ctx.jobQueue().addJob(verifyJob);
     }
@@ -115,13 +124,17 @@ class FloodfillStoreJob extends StoreJob {
      */
     private boolean shouldSkipVerify(Hash key, String keyB64, boolean shouldLog) {
         if (_facade.isVerifyInProgress(key)) {
-            if (shouldLog) {_log.info("Skipping verify, one already in progress for: [" + keyB64 + "]");}
+            if (shouldLog) {
+                _log.info("Skipping verify, one already in progress for: [" + keyB64 + "]");
+            }
             return true;
         }
 
         RouterContext ctx = getContext();
         if (ctx.router().gracefulShutdownInProgress()) {
-            if (shouldLog) {_log.info("Skipping verify of [" + keyB64 + "] -> Shutdown/Restart in progress...");}
+            if (shouldLog) {
+                _log.info("Skipping verify of [" + keyB64 + "] -> Shutdown/Restart in progress...");
+            }
             return true;
         }
 
@@ -133,7 +146,9 @@ class FloodfillStoreJob extends StoreJob {
      */
     private boolean shouldSkipVerifyForStartup(RouterContext ctx, String keyB64) {
         if (!ctx.getBooleanProperty(PROP_RI_VERIFY) && ctx.router().getUptime() > RI_VERIFY_STARTUP_TIME) {
-            if (_log.shouldInfo()) {_log.info("Skipping verify of [" + keyB64 + "] -> Startup period not yet complete.");}
+            if (_log.shouldInfo()) {
+                _log.info("Skipping verify of [" + keyB64 + "] -> Startup period not yet complete.");
+            }
             return true;
         }
         return false;
@@ -143,8 +158,11 @@ class FloodfillStoreJob extends StoreJob {
      * Get the published timestamp from the data.
      */
     private long getPublishedTimestamp(DatabaseEntry data) {
-        if (data instanceof LeaseSet2) {return ((LeaseSet2) data).getPublished();}
-        else {return data.getDate();}
+        if (data instanceof LeaseSet2) {
+            return ((LeaseSet2) data).getPublished();
+        } else {
+            return data.getDate();
+        }
     }
 
     /**
@@ -159,6 +177,7 @@ class FloodfillStoreJob extends StoreJob {
     }
 
     @Override
-    public String getName() {return "Verify Floodfill Store";}
-
+    public String getName() {
+        return "Verify Floodfill Store";
+    }
 }

@@ -1,16 +1,17 @@
 package net.i2p.router.web;
 
-import java.text.DateFormat;
-import java.util.Collections;
-import java.time.Instant;
-import java.util.Date;
-import java.util.List;
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientAppManager;
 import net.i2p.data.DataHelper;
 import net.i2p.router.news.NewsEntry;
 import net.i2p.router.news.NewsManager;
 import net.i2p.util.SystemVersion;
+
+import java.text.DateFormat;
+import java.time.Instant;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 /**
  *  HTML-formatted full news entries
@@ -25,9 +26,17 @@ public class NewsFeedHelper extends HelperBase {
     /**
      *  @param limit less than or equal to zero means all
      */
-    public void setLimit(int limit) {_limit = limit;}
-    public void setStart(int start) {_start = start;}
-    public String getEntries() {return getEntries(_context, _start, _limit, 0);}
+    public void setLimit(int limit) {
+        _limit = limit;
+    }
+
+    public void setStart(int start) {
+        _start = start;
+    }
+
+    public String getEntries() {
+        return getEntries(_context, _start, _limit, 0);
+    }
 
     /**
      *  @param max less than or equal to zero means all
@@ -35,7 +44,9 @@ public class NewsFeedHelper extends HelperBase {
      *  @return non-null, "" if none
      */
     static String getEntries(I2PAppContext ctx, int start, int max, long ageLimit) {
-        if (max <= 0) {max = Integer.MAX_VALUE;}
+        if (max <= 0) {
+            max = Integer.MAX_VALUE;
+        }
         StringBuilder buf = new StringBuilder(512);
         List<NewsEntry> entries = Collections.emptyList();
         ClientAppManager cmgr = ctx.clientAppManager();
@@ -47,8 +58,12 @@ public class NewsFeedHelper extends HelperBase {
                 if (init != null) {
                     // crude check to see if it's already in there
                     if (entries.size() != 1 || !DataHelper.eq(entries.get(0).title, init.title)) {
-                        if (entries.isEmpty()) {entries = Collections.singletonList(init);} // in case of empty list
-                        else {entries.add(init);}
+                        if (entries.isEmpty()) {
+                            entries = Collections.singletonList(init);
+                        } // in case of empty list
+                        else {
+                            entries.add(init);
+                        }
                     }
                 }
             }
@@ -59,8 +74,12 @@ public class NewsFeedHelper extends HelperBase {
             fmt.setTimeZone(SystemVersion.getSystemTimeZone(ctx));
             int i = 0;
             for (NewsEntry entry : entries) {
-                if (i < start) {continue;}
-                if (i > start && entry.updated > 0 && ageLimit > 0 && entry.updated < ctx.clock().now() - ageLimit) {break;}
+                if (i < start) {
+                    continue;
+                }
+                if (i > start && entry.updated > 0 && ageLimit > 0 && entry.updated < ctx.clock().now() - ageLimit) {
+                    break;
+                }
                 buf.append("<div class=\"newsentry lazy\">\n<h3>");
                 if (entry.updated > 0) {
                     Date date = Date.from(Instant.ofEpochMilli(entry.updated));
@@ -70,18 +89,18 @@ public class NewsFeedHelper extends HelperBase {
                     buf.append("<a href=\"").append(DataHelper.escapeHTML(entry.link)).append("\" target=_blank>");
                 }
                 buf.append(entry.title);
-                if (entry.link != null) {buf.append("</a>");}
-                if (entry.authorName != null) {
-                    buf.append(" <span class=\"newsAuthor\" title=\"Post author\"><i>")
-                       .append(DataHelper.escapeHTML(entry.authorName)).append("</i></span>\n");
+                if (entry.link != null) {
+                    buf.append("</a>");
                 }
-                buf.append("</h3>\n<div class=\"newscontent\">\n")
-                   .append(entry.content.replace("<a href", "<a target=_blank href").replace("target=_blank>", ">"))
-                    .append("\n</div>\n</div>\n");
-                if (++i >= start + max) {break;}
+                if (entry.authorName != null) {
+                    buf.append(" <span class=\"newsAuthor\" title=\"Post author\"><i>").append(DataHelper.escapeHTML(entry.authorName)).append("</i></span>\n");
+                }
+                buf.append("</h3>\n<div class=\"newscontent\">\n").append(entry.content.replace("<a href", "<a target=_blank href").replace("target=_blank>", ">")).append("\n</div>\n</div>\n");
+                if (++i >= start + max) {
+                    break;
+                }
             }
         }
         return buf.toString();
     }
-
 }

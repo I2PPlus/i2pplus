@@ -1,12 +1,14 @@
 package net.i2p.crypto.x25519;
 
+import static org.junit.Assert.*;
+
 import net.i2p.crypto.EncType;
 import net.i2p.data.DataHelper;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
+
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 public class X25519DHTest {
 
@@ -18,16 +20,14 @@ public class X25519DHTest {
 
     private static PrivateKey priv(String hex) {
         byte[] data = hex(hex);
-        if (data.length == 33)
-            data = java.util.Arrays.copyOfRange(data, 1, 33);
+        if (data.length == 33) data = java.util.Arrays.copyOfRange(data, 1, 33);
         assertEquals(32, data.length);
         return new PrivateKey(TYPE, data);
     }
 
     private static PublicKey pub(String hex) {
         byte[] data = hex(hex);
-        if (data.length == 33)
-            data = java.util.Arrays.copyOfRange(data, 1, 33);
+        if (data.length == 33) data = java.util.Arrays.copyOfRange(data, 1, 33);
         assertEquals(32, data.length);
         // RFC 7748: mask high bit
         data[31] &= 0x7f;

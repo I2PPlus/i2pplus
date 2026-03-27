@@ -1,6 +1,7 @@
 package net.i2p.crypto;
 
 import java.security.GeneralSecurityException;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 

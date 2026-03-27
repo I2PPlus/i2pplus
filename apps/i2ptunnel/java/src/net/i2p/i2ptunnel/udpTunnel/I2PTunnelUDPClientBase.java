@@ -3,9 +3,6 @@
  */
 package net.i2p.i2ptunnel.udpTunnel;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PClientFactory;
@@ -20,28 +17,32 @@ import net.i2p.i2ptunnel.Logging;
 import net.i2p.i2ptunnel.udp.*;
 import net.i2p.util.EventDispatcher;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
-     * Base client class that sets up an I2P Datagram client destination.
-     * The UDP side is not implemented here, as there are at least
-     * two possibilities:
-     *
-     * 1) UDP side is a "server"
-     *    Example: Streamr Consumer
-     *    - Configure a destination host and port
-     *    - External application sends no data
-     *    - Extending class must have a constructor with host and port arguments
-     *
-     * 2) UDP side is a client/server
-     *    Example: SOCKS UDP (DNS requests?)
-     *    - configure an inbound port and a destination host and port
-     *    - External application sends and receives data
-     *    - Extending class must have a constructor with host and 2 port arguments
-     *
-     * So the implementing class must create a UDPSource and/or UDPSink,
-     * and must call setSink().
-     *
-     * @author zzz with portions from welterde's streamr
-     */
+ * Base client class that sets up an I2P Datagram client destination.
+ * The UDP side is not implemented here, as there are at least
+ * two possibilities:
+ *
+ * 1) UDP side is a "server"
+ *    Example: Streamr Consumer
+ *    - Configure a destination host and port
+ *    - External application sends no data
+ *    - Extending class must have a constructor with host and port arguments
+ *
+ * 2) UDP side is a client/server
+ *    Example: SOCKS UDP (DNS requests?)
+ *    - configure an inbound port and a destination host and port
+ *    - External application sends and receives data
+ *    - Extending class must have a constructor with host and 2 port arguments
+ *
+ * So the implementing class must create a UDPSource and/or UDPSink,
+ * and must call setSink().
+ *
+ * @author zzz with portions from welterde's streamr
+ */
 public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements Source, Sink {
 
     protected I2PAppContext _context;
@@ -62,8 +63,7 @@ public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements So
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
      *                                  badly that we cant create a socketManager
      */
-    public I2PTunnelUDPClientBase(String destination, Logging l, EventDispatcher notifyThis,
-                                  I2PTunnel tunnel) throws IllegalArgumentException {
+    public I2PTunnelUDPClientBase(String destination, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) throws IllegalArgumentException {
         super("UDPServer", notifyThis, tunnel);
         _clientId = __clientId.incrementAndGet();
         this.l = l;
@@ -81,10 +81,8 @@ public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements So
             String st = tunnel.getClientOptions().getProperty(I2PClient.PROP_SIGTYPE);
             if (st != null) {
                 SigType type = SigType.parseSigType(st);
-                if (type != null)
-                    stype = type;
-                else
-                    l.log("Unsupported sig type " + st);
+                if (type != null) stype = type;
+                else l.log("Unsupported sig type " + st);
             }
             client.createDestination(out, stype);
             key = out.toByteArray();
@@ -151,7 +149,8 @@ public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements So
         if (_session != null) {
             try {
                 _session.destroySession();
-            } catch (I2PSessionException ise) {}
+            } catch (I2PSessionException ise) {
+            }
         }
         l.log("Closing client " + toString());
         open = false;
@@ -172,7 +171,7 @@ public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements So
     /**
      *  Starts the I2P source to begin receiving datagrams.
      *
-     @Override
+     * @Override
      *  @since 0.9.53
      */
     public void start() {
@@ -184,7 +183,7 @@ public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements So
      *
      * @param to - ignored if configured for a single destination
      *             (we use the dest specified in the constructor)
-     @Override
+     * @Override
      * @since 0.9.53 added fromPort and toPort parameters
      * @throws RuntimeException if session is closed
      */

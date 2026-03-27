@@ -6,6 +6,12 @@
 
 package org.klomp.snark;
 
+import net.i2p.data.Hash;
+
+import org.klomp.snark.bencode.BDecoder;
+import org.klomp.snark.bencode.BEValue;
+import org.klomp.snark.bencode.InvalidBEncodingException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
@@ -13,10 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import net.i2p.data.Hash;
-import org.klomp.snark.bencode.BDecoder;
-import org.klomp.snark.bencode.BEValue;
-import org.klomp.snark.bencode.InvalidBEncodingException;
 
 /**
  * The data structure for the tracker response. Handles both traditional and compact formats.
@@ -33,25 +35,15 @@ class TrackerInfo {
     /**
      * @param metainfo may be null
      */
-    public TrackerInfo(
-            InputStream in, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util)
-            throws IOException {
+    public TrackerInfo(InputStream in, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util) throws IOException {
         this(new BDecoder(in), my_id, infohash, metainfo, util);
     }
 
-    private TrackerInfo(
-            BDecoder be, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util)
-            throws IOException {
+    private TrackerInfo(BDecoder be, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util) throws IOException {
         this(be.bdecodeMap().getMap(), my_id, infohash, metainfo, util);
     }
 
-    private TrackerInfo(
-            Map<String, BEValue> m,
-            byte[] my_id,
-            byte[] infohash,
-            MetaInfo metainfo,
-            I2PSnarkUtil util)
-            throws IOException {
+    private TrackerInfo(Map<String, BEValue> m, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util) throws IOException {
         BEValue reason = m.get("failure reason");
         if (reason != null) {
             failure_reason = reason.getString();
@@ -93,8 +85,7 @@ class TrackerInfo {
             }
 
             bev = m.get("incomplete");
-            if (bev != null)
-                try {
+            if (bev != null) try {
                     incomplete = bev.getInt();
                     if (incomplete < 0) {
                         incomplete = 0;
@@ -111,16 +102,7 @@ class TrackerInfo {
      * @param error may be null
      * @since 0.9.14
      */
-    public TrackerInfo(
-            Set<Hash> hashes,
-            int interval,
-            int complete,
-            int incomplete,
-            String error,
-            byte[] my_id,
-            byte[] infohash,
-            MetaInfo metainfo,
-            I2PSnarkUtil util) {
+    public TrackerInfo(Set<Hash> hashes, int interval, int complete, int incomplete, String error, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util) {
         peers = getPeers(hashes, my_id, infohash, metainfo, util);
         this.interval = interval;
         this.complete = complete;
@@ -129,9 +111,7 @@ class TrackerInfo {
     }
 
     /** List of Dictionaries or List of Strings */
-    private static Set<Peer> getPeers(
-            List<BEValue> l, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util)
-            throws IOException {
+    private static Set<Peer> getPeers(List<BEValue> l, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util) throws IOException {
         Set<Peer> peers = new HashSet<Peer>(l.size());
 
         for (BEValue bev : l) {
@@ -162,9 +142,7 @@ class TrackerInfo {
      *
      * @since 0.8.1
      */
-    private static Set<Peer> getPeers(
-            byte[] l, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util)
-            throws IOException {
+    private static Set<Peer> getPeers(byte[] l, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util) throws IOException {
         int count = l.length / HASH_LENGTH;
         Set<Peer> peers = new HashSet<Peer>(count);
 
@@ -189,8 +167,7 @@ class TrackerInfo {
      *
      * @since 0.9.14
      */
-    private static Set<Peer> getPeers(
-            Set<Hash> hashes, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util) {
+    private static Set<Peer> getPeers(Set<Hash> hashes, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util) {
         if (hashes == null) {
             return Collections.emptySet();
         }
@@ -240,19 +217,9 @@ class TrackerInfo {
         if (failure_reason != null) {
             return "TrackerInfo [FAILED: " + failure_reason + "]";
         } else if (getPeers().size() > 0) {
-            return "\n* TrackerInfo: Interval: "
-                    + interval / 60
-                    + " min"
-                    + (complete > 0 ? (", Seeding: " + complete) : "")
-                    + (incomplete > 0 ? (", Downloading: " + incomplete) : "")
-                    + "\n* Peers: "
-                    + peers;
+            return "\n* TrackerInfo: Interval: " + interval / 60 + " min" + (complete > 0 ? (", Seeding: " + complete) : "") + (incomplete > 0 ? (", Downloading: " + incomplete) : "") + "\n* Peers: " + peers;
         } else {
-            return "\n* TrackerInfo: Interval: "
-                    + interval / 60
-                    + " min"
-                    + (complete > 0 ? (", Seeding: " + complete) : "")
-                    + (incomplete > 0 ? (", Downloading: " + incomplete) : "");
+            return "\n* TrackerInfo: Interval: " + interval / 60 + " min" + (complete > 0 ? (", Seeding: " + complete) : "") + (incomplete > 0 ? (", Downloading: " + incomplete) : "");
         }
     }
 }

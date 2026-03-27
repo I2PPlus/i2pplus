@@ -1,7 +1,8 @@
 package net.i2p.crypto.eddsa;
 
-import java.security.MessageDigest;
 import net.i2p.util.RandomSource;
+
+import java.security.MessageDigest;
 
 /**
  * Signing and verification for REdDSA using SHA-512 and the Ed25519 curve.

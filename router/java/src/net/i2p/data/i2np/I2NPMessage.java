@@ -1,4 +1,5 @@
 package net.i2p.data.i2np;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -7,8 +8,6 @@ package net.i2p.data.i2np;
  * your children, but it might.  Use at your own risk.
  *
  */
-
-
 
 /**
  * Base interface for all I2NP messages
@@ -28,7 +27,7 @@ public interface I2NPMessage {
      * various overhead and limitations in encryption,
      * fragmentation, and the transports.
      */
-    public static final int MAX_SIZE = 64*1024;
+    public static final int MAX_SIZE = 64 * 1024;
 
     /**
      * Read the body into the data structures, after the initial type byte, using
@@ -74,6 +73,7 @@ public interface I2NPMessage {
      *          that this class can read.
      */
     public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException;
+
     public void readMessage(byte data[], int offset, int dataSize, int type, I2NPMessageHandler handler) throws I2NPMessageException;
 
     /**
@@ -90,7 +90,9 @@ public interface I2NPMessage {
      * passing 0 use the no-arg version.
      */
     public long getUniqueId(long msgIDBloomXor);
+
     public long getUniqueId();
+
     public void setUniqueId(long id);
 
     /**
@@ -98,8 +100,8 @@ public interface I2NPMessage {
      *
      */
     public long getMessageExpiration();
-    public void setMessageExpiration(long exp);
 
+    public void setMessageExpiration(long exp);
 
     /** How large the message is, including any checksums, i.e. full 16 byte header */
     public int getMessageSize();

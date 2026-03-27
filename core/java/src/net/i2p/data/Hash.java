@@ -80,13 +80,13 @@ import java.io.InputStream;
  *
  * @author jrandom
  */
-@SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
+@SuppressWarnings({"PMD.OverrideBothEqualsAndHashcode", "checkstyle:EqualsHashCode"})
 public class Hash extends SimpleDataStructure {
     private volatile String _base64ed;
     private volatile int _cachedHashCode;
 
-    public final static int HASH_LENGTH = 32;
-    public final static Hash FAKE_HASH = new Hash(new byte[HASH_LENGTH]);
+    public static final int HASH_LENGTH = 32;
+    public static final Hash FAKE_HASH = new Hash(new byte[HASH_LENGTH]);
     private static final int CACHE_SIZE = 2048;
 
     private static final SDSCache<Hash> _cache = new SDSCache<Hash>(Hash.class, HASH_LENGTH, CACHE_SIZE);
@@ -175,8 +175,7 @@ public class Hash extends SimpleDataStructure {
      *  @since 0.9.25
      */
     public String toBase32() {
-        if (_data == null)
-            return null;
+        if (_data == null) return null;
         return Base32.encode(_data) + ".b32.i2p";
     }
 

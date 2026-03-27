@@ -28,11 +28,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package net.metanotion.io.block.index;
 
-import java.io.IOException;
 import net.metanotion.io.Serializer;
 import net.metanotion.io.block.BlockFile;
 import net.metanotion.util.skiplist.SkipList;
 import net.metanotion.util.skiplist.SkipSpan;
+
+import java.io.IOException;
 
 /**
  * SkipList span implementation with in-memory key-value storage.
@@ -65,32 +66,42 @@ import net.metanotion.util.skiplist.SkipSpan;
  */
 public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V> {
     /** Magic number for span pages ("Span") */
-    protected static final int MAGIC = 0x5370616e;  // "Span"
+    protected static final int MAGIC = 0x5370616e; // "Span"
+
     /** Fixed header length in bytes */
     protected static final int HEADER_LEN = 20;
+
     /** Continuation page header length in bytes */
     public static final int CONT_HEADER_LEN = 8;
+
     /** Reference to the BlockFile */
     protected final BlockFile bf;
+
     /** Reference to the BSkipList */
     private final BSkipList<K, V> bsl;
+
     /** Page number of this span */
     protected int page;
+
     /** Overflow page number */
     protected int overflowPage;
 
     /** Previous page number */
     protected int prevPage;
+
     /** Next page number */
     protected int nextPage = 0;
+
     /** Key serializer */
     protected Serializer<K> keySer;
+
     /** Value serializer */
     protected Serializer<V> valSer;
 
     // I2P
     /** Number of keys this span can hold */
     protected int spanSize;
+
     /** Whether this span has been killed/deleted */
     protected boolean isKilled;
 
@@ -124,7 +135,9 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
             int newPage = bf.allocPage();
             init(bf, newPage, bf.spanSize);
             return new BSkipSpan<K, V>(bf, (BSkipList<K, V>) sl, newPage, keySer, valSer);
-        } catch (IOException ioe) { throw new RuntimeException("Error creating database page", ioe); }
+        } catch (IOException ioe) {
+            throw new RuntimeException("Error creating database page", ioe);
+        }
     }
 
     /**
@@ -136,8 +149,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
             bf.log.error("Already killed!! " + this, new Exception());
             return;
         }
-        if (bf.log.shouldDebug())
-            bf.log.debug("Killing " + this);
+        if (bf.log.shouldDebug()) bf.log.debug("Killing " + this);
         isKilled = true;
         try {
             int curPage = overflowPage;
@@ -159,8 +171,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
         while (curPage > 0) {
             BlockFile.pageSeek(bf.file, curPage);
             int magic = bf.file.readInt();
-            if (magic != BlockFile.MAGIC_CONT)
-                throw new IOException("Bad SkipSpan magic number 0x" + Integer.toHexString(magic) + " on page " + curPage);
+            if (magic != BlockFile.MAGIC_CONT) throw new IOException("Bad SkipSpan magic number 0x" + Integer.toHexString(magic) + " on page " + curPage);
             int next = bf.file.readUnsignedInt();
             bf.freePage(curPage);
             curPage = next;
@@ -194,12 +205,10 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
             bf.file.writeInt(prevPage);
             bf.file.writeInt(nextPage);
             // if keys is null, we are (hopefully) just updating the prev/next pages on an unloaded span
-            if (keys == null)
-                return;
+            if (keys == null) return;
             bf.file.writeShort((short) keys.length);
             bf.file.writeShort((short) nKeys);
-            if (nKeys <= 0 && prev != null)
-                bf.log.error("Flushing with no entries?" + this, new Exception());
+            if (nKeys <= 0 && prev != null) bf.log.error("Flushing with no entries?" + this, new Exception());
 
             int curPage = this.page;
             int[] curNextPage = new int[1];
@@ -209,7 +218,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
             byte[] keyData;
             byte[] valData;
 
-            for (int i=0; i<nKeys; i++) {
+            for (int i = 0; i < nKeys; i++) {
                 if ((pageCounter[0] + 4) > BlockFile.PAGESIZE) {
                     if (curNextPage[0] == 0) {
                         curNextPage[0] = bf.allocPage();
@@ -217,19 +226,18 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
                         bf.file.writeInt(BlockFile.MAGIC_CONT);
                         bf.file.writeInt(0);
                         BlockFile.pageSeek(bf.file, curPage);
-                        bf.file.skipBytes(4);  // skip magic
+                        bf.file.skipBytes(4); // skip magic
                         bf.file.writeInt(curNextPage[0]);
                     }
                     BlockFile.pageSeek(bf.file, curNextPage[0]);
                     curPage = curNextPage[0];
-                    bf.file.skipBytes(4);  // skip magic
+                    bf.file.skipBytes(4); // skip magic
                     curNextPage[0] = bf.file.readUnsignedInt();
                     pageCounter[0] = CONT_HEADER_LEN;
                 }
                 // Drop bad entry without throwing exception
                 if (keys[i] == null || vals[i] == null) {
-                    bf.log.error("Dropping null data in entry " + i + " page " + curPage +
-                                        " key=" + this.keys[i] + " val=" + this.vals[i]);
+                    bf.log.error("Dropping null data in entry " + i + " page " + curPage + " key=" + this.keys[i] + " val=" + this.vals[i]);
                     nKeys--;
                     i--;
                     continue;
@@ -238,8 +246,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
                 valData = this.valSer.getBytes(vals[i]);
                 // Drop bad entry without throwing exception
                 if (keyData.length > 65535 || valData.length > 65535) {
-                    bf.log.error("Dropping huge data in entry " + i + " page " + curPage +
-                                        " keylen=" + keyData.length + " vallen=" + valData.length);
+                    bf.log.error("Dropping huge data in entry " + i + " page " + curPage + " keylen=" + keyData.length + " vallen=" + valData.length);
                     nKeys--;
                     i--;
                     continue;
@@ -251,27 +258,27 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
                 curPage = bf.writeMultiPageData(valData, curPage, pageCounter, curNextPage);
             }
             BlockFile.pageSeek(bf.file, this.page);
-            bf.file.skipBytes(4);  // skip magic
+            bf.file.skipBytes(4); // skip magic
             this.overflowPage = bf.file.readUnsignedInt();
             if (curNextPage[0] != 0) {
                 // free extra continuation pages
                 BlockFile.pageSeek(bf.file, curPage);
-                bf.file.skipBytes(4);  // skip magic
+                bf.file.skipBytes(4); // skip magic
                 bf.file.writeInt(0);
-                if (curPage == this.page)
-                    this.overflowPage = 0;
+                if (curPage == this.page) this.overflowPage = 0;
                 try {
                     int freed = freeContinuationPages(curNextPage[0]);
-                    if (bf.log.shouldDebug())
-                        bf.log.debug("Freed " + freed + " continuation pages");
+                    if (bf.log.shouldDebug()) bf.log.debug("Freed " + freed + " continuation pages");
                 } catch (IOException ioe) {
                     bf.log.error("Error freeing " + this, ioe);
                 }
             }
-        } catch (IOException ioe) { throw new RuntimeException("Error writing to database", ioe); }
+        } catch (IOException ioe) {
+            throw new RuntimeException("Error writing to database", ioe);
+        }
         // FIXME can't get there from here
-        //bsl.size -= fail;
-        //bsl.flush();
+        // bsl.size -= fail;
+        // bsl.flush();
     }
 
     /**
@@ -287,8 +294,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
      *  @param val the value serializer
      *  @throws IOException if an I/O error occurs
      */
-    private static <X extends Comparable<? super X>, Y> void load(BSkipSpan<X, Y> bss, BlockFile bf, BSkipList<X, Y> bsl,
-                                                       int spanPage, Serializer<X> key, Serializer<Y> val) throws IOException {
+    private static <X extends Comparable<? super X>, Y> void load(BSkipSpan<X, Y> bss, BlockFile bf, BSkipList<X, Y> bsl, int spanPage, Serializer<X> key, Serializer<Y> val) throws IOException {
         loadInit(bss, bf, bsl, spanPage, key, val);
         bss.loadData();
     }
@@ -307,10 +313,8 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
      *  @param val the value serializer
      *  @throws IOException if an I/O error occurs
      */
-    protected static <X extends Comparable<? super X>, Y> void loadInit(BSkipSpan<X, Y> bss, BlockFile bf, BSkipList<X, Y> bsl,
-                                                             int spanPage, Serializer<X> key, Serializer<Y> val) throws IOException {
-        if (bss.isKilled)
-            throw new IOException("Already killed!! " + bss);
+    protected static <X extends Comparable<? super X>, Y> void loadInit(BSkipSpan<X, Y> bss, BlockFile bf, BSkipList<X, Y> bsl, int spanPage, Serializer<X> key, Serializer<Y> val) throws IOException {
+        if (bss.isKilled) throw new IOException("Already killed!! " + bss);
         bss.page = spanPage;
         bss.keySer = key;
         bss.valSer = val;
@@ -320,15 +324,14 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
         BlockFile.pageSeek(bf.file, spanPage);
 
         int magic = bf.file.readInt();
-        if (magic != MAGIC)
-            throw new IOException("Bad SkipSpan magic number 0x" + Integer.toHexString(magic) + " on page " + spanPage);
+        if (magic != MAGIC) throw new IOException("Bad SkipSpan magic number 0x" + Integer.toHexString(magic) + " on page " + spanPage);
         bss.overflowPage = bf.file.readUnsignedInt();
         bss.prevPage = bf.file.readUnsignedInt();
         bss.nextPage = bf.file.readUnsignedInt();
         bss.spanSize = bf.file.readUnsignedShort();
         bss.nKeys = bf.file.readUnsignedShort();
         if (bss.spanSize < 1 || bss.spanSize > SkipSpan.MAX_SIZE || bss.nKeys > bss.spanSize) {
-            bf.log.error("Invalid span size " + bss.nKeys + " / "+  bss.spanSize);
+            bf.log.error("Invalid span size " + bss.nKeys + " / " + bss.spanSize);
             bss.nKeys = 0;
             bss.spanSize = bf.spanSize;
         }
@@ -351,8 +354,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
      */
     @SuppressWarnings("unchecked")
     protected void loadData(boolean flushOnError) throws IOException {
-        if (isKilled)
-            throw new IOException("Already killed!! " + this);
+        if (isKilled) throw new IOException("Already killed!! " + this);
         this.keys = (K[]) new Comparable[this.spanSize];
         this.vals = (V[]) new Object[this.spanSize];
 
@@ -362,9 +364,9 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
         curNextPage[0] = this.overflowPage;
         int[] pageCounter = new int[1];
         pageCounter[0] = HEADER_LEN;
-//        System.out.println("Span Load " + sz + " nKeys " + nKeys + " page " + curPage);
+        //        System.out.println("Span Load " + sz + " nKeys " + nKeys + " page " + curPage);
         int fail = 0;
-        for (int i=0; i<this.nKeys; i++) {
+        for (int i = 0; i < this.nKeys; i++) {
             if ((pageCounter[0] + 4) > BlockFile.PAGESIZE) {
                 BlockFile.pageSeek(this.bf.file, curNextPage[0]);
                 int magic = bf.file.readInt();
@@ -379,7 +381,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
             }
             ksz = this.bf.file.readUnsignedShort();
             vsz = this.bf.file.readUnsignedShort();
-            pageCounter[0] +=4;
+            pageCounter[0] += 4;
             byte[] k = new byte[ksz];
             byte[] v = new byte[vsz];
             int lastGood = curPage;
@@ -400,15 +402,12 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
                  * Ideally, the value deserializers should not throw unchecked exceptions, and always return null,
                  * but Destination can throw some IllegalArgumentExceptions.
                  */
-                if (this.keys[i] != null)
-                    bf.log.error("Error loading key "  + this.keys[i], e);
-                else
-                    bf.log.error("Error loading entry "  + i, e);
+                if (this.keys[i] != null) bf.log.error("Error loading key " + this.keys[i], e);
+                else bf.log.error("Error loading entry " + i, e);
             }
             // Drop bad entry without throwing exception
             if (this.keys[i] == null || this.vals[i] == null) {
-                bf.log.error("Null deserialized data in entry " + i + " page " + curPage +
-                                    " key=" + this.keys[i] + " val=" + this.vals[i]);
+                bf.log.error("Null deserialized data in entry " + i + " page " + curPage + " key=" + this.keys[i] + " val=" + this.vals[i]);
                 fail++;
                 nKeys--;
                 i--;
@@ -418,11 +417,10 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
         // free any excess overflow pages?
         if (fail > 0) {
             bf.log.error("Repairing corruption of " + fail + " entries");
-            if (flushOnError)
-                fflush();
+            if (flushOnError) fflush();
             // FIXME can't get there from here
-            //bsl.size -= fail;
-            //bsl.flush();
+            // bsl.size -= fail;
+            // bsl.flush();
         }
     }
 
@@ -441,7 +439,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
             this.nKeys = firstBadEntry;
             // zero overflow page pointer
             BlockFile.pageSeek(this.bf.file, lastGoodPage);
-            bf.file.skipBytes(4);  // skip magic
+            bf.file.skipBytes(4); // skip magic
             bf.file.writeInt(0);
             // write new number of keys
             if (lastGoodPage != this.page) {
@@ -529,8 +527,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
     @Override
     public String toString() {
         String rv = "BSS page: " + page + " key: \"" + firstKey() + '"';
-        if (isKilled)
-            rv += " KILLED";
+        if (isKilled) rv += " KILLED";
         return rv;
     }
 }

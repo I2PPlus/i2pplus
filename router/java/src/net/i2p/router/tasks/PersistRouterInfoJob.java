@@ -1,4 +1,5 @@
 package net.i2p.router.tasks;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,9 +9,6 @@ package net.i2p.router.tasks;
  *
  */
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
@@ -18,6 +16,10 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.startup.CreateRouterInfoJob;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Router information persistence and synchronization job.
@@ -77,7 +79,9 @@ public class PersistRouterInfoJob extends JobImpl {
      * @return job name for logging and identification
      */
     @Override
-    public String getName() { return "Store Updated Router Information"; }
+    public String getName() {
+        return "Store Updated Router Information";
+    }
 
     /**
      * Save the current router information to disk.
@@ -93,8 +97,7 @@ public class PersistRouterInfoJob extends JobImpl {
     @Override
     public void runJob() {
         Log _log = getContext().logManager().getLog(PersistRouterInfoJob.class);
-        if (_log.shouldDebug())
-            _log.debug("Saving our updated RouterInfo file to disk");
+        if (_log.shouldDebug()) _log.debug("Saving our updated RouterInfo file to disk");
 
         File infoFile = new File(getContext().getRouterDir(), CreateRouterInfoJob.INFO_FILENAME);
 
@@ -110,7 +113,10 @@ public class PersistRouterInfoJob extends JobImpl {
             } catch (IOException ioe) {
                 _log.error("Error saving our updated RouterInfo file", ioe);
             } finally {
-                if (fos != null) try { fos.close(); } catch (IOException ioe) {}
+                if (fos != null) try {
+                        fos.close();
+                    } catch (IOException ioe) {
+                    }
             }
         }
     }

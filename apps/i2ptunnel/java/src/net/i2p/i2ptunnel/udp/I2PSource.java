@@ -25,7 +25,11 @@ public class I2PSource implements Source {
      *  Protocol enum for I2P source handling.
      *  @since 0.9.53
      */
-    public enum Protocol { REPLIABLE, RAW, BOTH }
+    public enum Protocol {
+        REPLIABLE,
+        RAW,
+        BOTH
+    }
 
     /**
      *  Handles both REPLIABLE and RAW on any port
@@ -87,10 +91,8 @@ public class I2PSource implements Source {
     public void start() {
         // create listener
         Listener l = new Listener();
-        if (protocol != Protocol.RAW)
-            sess.addMuxedSessionListener(l, I2PSession.PROTO_DATAGRAM, port);
-        if (protocol != Protocol.REPLIABLE)
-            sess.addMuxedSessionListener(l, I2PSession.PROTO_DATAGRAM_RAW, port);
+        if (protocol != Protocol.RAW) sess.addMuxedSessionListener(l, I2PSession.PROTO_DATAGRAM, port);
+        if (protocol != Protocol.REPLIABLE) sess.addMuxedSessionListener(l, I2PSession.PROTO_DATAGRAM_RAW, port);
     }
 
     protected class Listener implements I2PSessionMuxedListener {
@@ -103,8 +105,7 @@ public class I2PSource implements Source {
          *  @since 0.9.53
          */
         public void messageAvailable(I2PSession session, int id, long size, int proto, int fromPort, int toPort) {
-            if (log.shouldDebug())
-                log.debug("Got " + size + " bytes, proto: " + proto + " from port: " + fromPort + " to port: " + toPort);
+            if (log.shouldDebug()) log.debug("Got " + size + " bytes, proto: " + proto + " from port: " + fromPort + " to port: " + toPort);
             try {
                 // receive message
                 byte[] msg = session.receiveMessage(id);
@@ -116,13 +117,11 @@ public class I2PSource implements Source {
                 } else if (proto == I2PSession.PROTO_DATAGRAM_RAW) {
                     sink.send(null, fromPort, toPort, msg);
                 } else {
-                    if (log.shouldWarn())
-                        log.warn("dropping message with unknown protocol " + proto);
+                    if (log.shouldWarn()) log.warn("dropping message with unknown protocol " + proto);
                 }
-                //System.out.print("r");
+                // System.out.print("r");
             } catch (Exception e) {
-                if (log.shouldWarn())
-                    log.warn("error receiving datagram", e);
+                if (log.shouldWarn()) log.warn("error receiving datagram", e);
             }
         }
 
@@ -130,12 +129,10 @@ public class I2PSource implements Source {
             // ignore
         }
 
-        public void disconnected(I2PSession arg0) {
-        }
+        public void disconnected(I2PSession arg0) {}
 
         public void errorOccurred(I2PSession arg0, String arg1, Throwable arg2) {
             log.error(arg1, arg2);
         }
-
     }
 }

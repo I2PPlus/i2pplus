@@ -1,4 +1,5 @@
 package net.i2p.i2pcontrol.security;
+
 /*
  *  Copyright 2011 hottuna (dev@robertfoss.se)
  *
@@ -16,10 +17,6 @@ package net.i2p.i2pcontrol.security;
  *
  */
 
-import java.nio.charset.StandardCharsets;
-import java.security.KeyStore;
-import java.util.HashMap;
-import java.util.Iterator;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SHA256Generator;
 import net.i2p.data.Base64;
@@ -27,13 +24,19 @@ import net.i2p.data.DataHelper;
 import net.i2p.i2pcontrol.servlets.configuration.ConfigurationManager;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
+
 import org.mindrot.jbcrypt.BCrypt;
+
+import java.nio.charset.StandardCharsets;
+import java.security.KeyStore;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Manage the password storing for I2PControl.
  */
 public class SecurityManager {
-    public final static String DEFAULT_AUTH_PASSWORD = "itoopie";
+    public static final String DEFAULT_AUTH_PASSWORD = "itoopie";
     private final HashMap<String, AuthToken> authTokens;
     private final SimpleTimer2.TimedEvent timer;
     private final KeyStore _ks;
@@ -66,32 +69,30 @@ public class SecurityManager {
      * Return the X509Certificate of the server as a Base64 encoded string.
      * @return base64 encode of X509Certificate
      */
-/****  unused and incorrectly uses I2P Base64. Switch to CertUtil.exportCert() if needed.
-    public String getBase64Cert() {
-        X509Certificate caCert = KeyStoreProvider.readCert(_ks,
-                                 KeyStoreProvider.DEFAULT_CERTIFICATE_ALIAS,
-                                 KeyStoreProvider.DEFAULT_KEYSTORE_PASSWORD);
-        return getBase64FromCert(caCert);
-    }
-****/
+    /****  unused and incorrectly uses I2P Base64. Switch to CertUtil.exportCert() if needed.
+     * public String getBase64Cert() {
+     * X509Certificate caCert = KeyStoreProvider.readCert(_ks,
+     * KeyStoreProvider.DEFAULT_CERTIFICATE_ALIAS,
+     * KeyStoreProvider.DEFAULT_KEYSTORE_PASSWORD);
+     * return getBase64FromCert(caCert);
+     * }
+     ****/
 
     /**
      * Return the X509Certificate as a base64 encoded string.
      * @param cert
      * @return base64 encode of X509Certificate
      */
-/****  unused and incorrectly uses I2P Base64. Switch to CertUtil.exportCert() if needed.
-    private static String getBase64FromCert(X509Certificate cert) {
-        try {
-            return Base64.encode(cert.getEncoded());
-        } catch (CertificateEncodingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-****/
-
-
+    /****  unused and incorrectly uses I2P Base64. Switch to CertUtil.exportCert() if needed.
+     * private static String getBase64FromCert(X509Certificate cert) {
+     * try {
+     * return Base64.encode(cert.getEncoded());
+     * } catch (CertificateEncodingException e) {
+     * e.printStackTrace();
+     * }
+     * return null;
+     * }
+     ****/
 
     /**
      * Hash pwd with using BCrypt with the default salt.
@@ -208,8 +209,7 @@ public class SecurityManager {
     public void verifyToken(String tokenID) throws InvalidAuthTokenException, ExpiredAuthTokenException {
         synchronized (authTokens) {
             AuthToken token = authTokens.get(tokenID);
-            if (token == null)
-                throw new InvalidAuthTokenException("AuthToken with ID: " + tokenID + " couldn't be found.");
+            if (token == null) throw new InvalidAuthTokenException("AuthToken with ID: " + tokenID + " couldn't be found.");
             if (!token.isValid()) {
                 authTokens.remove(tokenID);
                 throw new ExpiredAuthTokenException("AuthToken with ID: " + tokenID + " expired " + token.getExpiryTime(), token.getExpiryTime());
@@ -226,20 +226,19 @@ public class SecurityManager {
     private class Sweeper extends SimpleTimer2.TimedEvent {
         // Start running periodic task after 1 day, run periodically every 30 minutes.
         public Sweeper() {
-            super(_context.simpleTimer2(), AuthToken.VALIDITY_TIME * 24*60*60*1000L);
+            super(_context.simpleTimer2(), AuthToken.VALIDITY_TIME * 24 * 60 * 60 * 1000L);
         }
 
         public void timeReached() {
             _log.debug("Starting cleanup job..");
             synchronized (authTokens) {
-                for (Iterator<AuthToken> iter = authTokens.values().iterator(); iter.hasNext();) {
+                for (Iterator<AuthToken> iter = authTokens.values().iterator(); iter.hasNext(); ) {
                     AuthToken token = iter.next();
-                    if (!token.isValid())
-                        iter.remove();
+                    if (!token.isValid()) iter.remove();
                 }
             }
             _log.debug("Cleanup job done.");
-            schedule(30*60*1000L);
+            schedule(30 * 60 * 1000L);
         }
     }
 }

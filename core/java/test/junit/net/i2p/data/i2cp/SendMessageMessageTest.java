@@ -1,4 +1,5 @@
 package net.i2p.data.i2cp;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -19,19 +20,20 @@ import net.i2p.data.PayloadTest;
  *
  * @author jrandom
  */
-
 public class SendMessageMessageTest extends I2CPTstBase {
 
     @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
         SendMessageMessage msg = new SendMessageMessage();
-        msg.setDestination((Destination)(new DestinationTest()).createDataStructure());
-        msg.setPayload((Payload)(new PayloadTest()).createDataStructure());
-        msg.setSessionId((SessionId)(new SessionIdTest()).createDataStructure());
+        msg.setDestination((Destination) (new DestinationTest()).createDataStructure());
+        msg.setPayload((Payload) (new PayloadTest()).createDataStructure());
+        msg.setSessionId((SessionId) (new SessionIdTest()).createDataStructure());
         msg.setNonce(1);
         return msg;
     }
-    @Override
-    public I2CPMessageImpl createStructureToRead() { return new SendMessageMessage(); }
 
+    @Override
+    public I2CPMessageImpl createStructureToRead() {
+        return new SendMessageMessage();
+    }
 }

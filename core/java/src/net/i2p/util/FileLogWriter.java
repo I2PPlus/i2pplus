@@ -9,6 +9,8 @@ package net.i2p.util;
  *
  */
 
+import net.i2p.data.DataHelper;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
@@ -20,7 +22,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.zip.GZIPOutputStream;
-import net.i2p.data.DataHelper;
 
 /**
  * File-based log writer thread that pulls log records from the LogManager,
@@ -48,8 +49,7 @@ class FileLogWriter extends LogWriter {
      */
     @Override
     public synchronized String currentFile() {
-        if (_currentFile != null)
-            return _currentFile.getAbsolutePath();
+        if (_currentFile != null) return _currentFile.getAbsolutePath();
         String rv = getNextFile().getAbsolutePath();
         // so it doesn't increment every time we call this
         _rotationNum = -1;
@@ -58,7 +58,7 @@ class FileLogWriter extends LogWriter {
 
     @Override
     protected synchronized void writeRecord(LogRecord rec, String formatted) {
-     	writeRecord(rec.getPriority(), formatted);
+        writeRecord(rec.getPriority(), formatted);
     }
 
     @Override
@@ -66,8 +66,7 @@ class FileLogWriter extends LogWriter {
         if (val == null) return;
         if (_currentOut == null) {
             rotateFile();
-            if (_currentOut == null)
-                return; // hosed
+            if (_currentOut == null) return; // hosed
         }
 
         try {
@@ -75,11 +74,9 @@ class FileLogWriter extends LogWriter {
             // may be a little off if a lot of multi-byte chars, but unlikely
             _numBytesInCurrentFile += val.length();
         } catch (Throwable t) {
-            if (!_write)
-                return;
-            if (++_diskFullMessageCount < MAX_DISKFULL_MESSAGES)
-                System.err.println("Error writing log, disk full? " + t);
-            //t.printStackTrace();
+            if (!_write) return;
+            if (++_diskFullMessageCount < MAX_DISKFULL_MESSAGES) System.err.println("Error writing log, disk full? " + t);
+            // t.printStackTrace();
         }
         if (_numBytesInCurrentFile >= _manager.getFileSize() - 1024) {
             rotateFile();
@@ -92,11 +89,9 @@ class FileLogWriter extends LogWriter {
     @Override
     protected void flushWriter() {
         try {
-            if (_currentOut != null)
-                _currentOut.flush();
+            if (_currentOut != null) _currentOut.flush();
         } catch (IOException ioe) {
-            if (_write &&++_diskFullMessageCount < MAX_DISKFULL_MESSAGES)
-                System.err.println("Error writing the router log - disk full? " + ioe);
+            if (_write && ++_diskFullMessageCount < MAX_DISKFULL_MESSAGES) System.err.println("Error writing the router log - disk full? " + ioe);
         }
     }
 
@@ -119,15 +114,16 @@ class FileLogWriter extends LogWriter {
         if (out != null) {
             try {
                 out.close();
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) {
+            }
         }
         if (_manager.shouldGzip() && currentFile != null && currentFile.length() >= _manager.getMinGzipSize()) {
             Gzipper gzipper = new Gzipper(currentFile);
             if (threadGzipper) {
                 gzipper.setPriority(Thread.MIN_PRIORITY);
-                gzipper.start();  // rotate asynchronously
+                gzipper.start(); // rotate asynchronously
             } else {
-                gzipper.compress();  // shutdown synchronously
+                gzipper.compress(); // shutdown synchronously
             }
         }
     }
@@ -149,22 +145,20 @@ class FileLogWriter extends LogWriter {
                 boolean ok = sd.mkdirs();
                 if (!ok) {
                     System.err.println("Unable to create the parent directory: " + parent.getAbsolutePath());
-                    //System.exit(0);
+                    // System.exit(0);
                 }
             }
             if (!parent.isDirectory()) {
                 System.err.println("Cannot put the logs in a subdirectory of a plain file: " + f.getAbsolutePath());
-                //System.exit(0);
+                // System.exit(0);
             }
         }
         closeWriter(old, true);
-        if (_manager.shouldGzip())
-            (new File(f.getPath() + ".gz")).delete();
+        if (_manager.shouldGzip()) (new File(f.getPath() + ".gz")).delete();
         try {
             _currentOut = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(f), "UTF-8"));
         } catch (IOException ioe) {
-            if (++_diskFullMessageCount < MAX_DISKFULL_MESSAGES)
-                System.err.println("Error creating log file [" + f.getAbsolutePath() + "]" + ioe);
+            if (++_diskFullMessageCount < MAX_DISKFULL_MESSAGES) System.err.println("Error creating log file [" + f.getAbsolutePath() + "]" + ioe);
         }
     }
 
@@ -177,14 +171,11 @@ class FileLogWriter extends LogWriter {
         String pattern = _manager.getBaseLogfilename();
         File f = new File(pattern);
         File base = null;
-        if (!f.isAbsolute())
-            base = _manager.getContext().getLogDir();
+        if (!f.isAbsolute()) base = _manager.getContext().getLogDir();
 
         if ((pattern.indexOf('#') < 0) && (pattern.indexOf('@') <= 0)) {
-            if (base != null)
-                return new File(base, pattern);
-            else
-                return f;
+            if (base != null) return new File(base, pattern);
+            else return f;
         }
 
         int max = _manager.getRotationLimit();
@@ -197,8 +188,7 @@ class FileLogWriter extends LogWriter {
         if (_rotationNum > max) _rotationNum = 0;
 
         String newf = replace(pattern, _rotationNum);
-        if (base != null)
-            return new File(base, newf);
+        if (base != null) return new File(base, newf);
         return new File(newf);
     }
 
@@ -210,10 +200,8 @@ class FileLogWriter extends LogWriter {
     private File getFirstFile(File base, String pattern, int max) {
         for (int i = 0; i < max; i++) {
             File f;
-            if (base != null)
-                f = new File(base, replace(pattern, i));
-            else
-                f = new File(replace(pattern, i));
+            if (base != null) f = new File(base, replace(pattern, i));
+            else f = new File(replace(pattern, i));
             // check for file or file.gz
             if (!f.exists() && !(_manager.shouldGzip() && (new File(f.getPath() + ".gz").exists()))) {
                 _rotationNum = i;
@@ -225,23 +213,17 @@ class FileLogWriter extends LogWriter {
         File oldest = null;
         for (int i = 0; i < max; i++) {
             File f;
-            if (base != null)
-                f = new File(base, replace(pattern, i));
-            else
-                f = new File(replace(pattern, i));
+            if (base != null) f = new File(base, replace(pattern, i));
+            else f = new File(replace(pattern, i));
             if (oldest == null) {
                 oldest = f;
             } else {
                 // set file or file.gz for last mod check
                 File ff, oo;
-                if (!_manager.shouldGzip() || f.exists())
-                    ff = f;
-                else
-                    ff = new File(f.getPath() + ".gz");
-                if (!_manager.shouldGzip() || oldest.exists())
-                    oo = oldest;
-                else
-                    oo = new File(oldest.getPath() + ".gz");
+                if (!_manager.shouldGzip() || f.exists()) ff = f;
+                else ff = new File(f.getPath() + ".gz");
+                if (!_manager.shouldGzip() || oldest.exists()) oo = oldest;
+                else oo = new File(oldest.getPath() + ".gz");
 
                 if (ff.lastModified() < oo.lastModified()) {
                     _rotationNum = i;
@@ -257,10 +239,8 @@ class FileLogWriter extends LogWriter {
         StringBuilder buf = new StringBuilder(len + 1);
         for (int i = 0; i < len; i++) {
             char c = pattern.charAt(i);
-            if ((c != '#') && (c != '@'))
-                buf.append(c);
-            else
-                buf.append(num);
+            if ((c != '#') && (c != '@')) buf.append(c);
+            else buf.append(num);
         }
         return buf.toString();
     }
@@ -292,8 +272,14 @@ class FileLogWriter extends LogWriter {
             } catch (IOException ioe) {
                 System.out.println("Error compressing log file " + _f);
             } finally {
-                if (in != null) try { in.close(); } catch (IOException ioe) {}
-                if (out != null) try { out.close(); } catch (IOException ioe) {}
+                if (in != null) try {
+                        in.close();
+                    } catch (IOException ioe) {
+                    }
+                if (out != null) try {
+                        out.close();
+                    } catch (IOException ioe) {
+                    }
                 to.setLastModified(_f.lastModified());
                 _f.delete();
             }

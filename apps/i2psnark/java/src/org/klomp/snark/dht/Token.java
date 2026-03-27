@@ -4,9 +4,10 @@ package org.klomp.snark.dht;
  *  GPLv2
  */
 
-import java.time.Instant;
 import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
+
+import java.time.Instant;
 
 /**
  * DHT token management for secure peer verification.

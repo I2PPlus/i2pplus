@@ -12,7 +12,7 @@ package net.i2p.data.i2np;
  */
 public class ShortEncryptedBuildRecord extends EncryptedBuildRecord {
 
-    public final static int LENGTH = ShortTunnelBuildMessage.SHORT_RECORD_SIZE;
+    public static final int LENGTH = ShortTunnelBuildMessage.SHORT_RECORD_SIZE;
 
     /** @throws IllegalArgumentException if data is not correct length (null is ok) */
     public ShortEncryptedBuildRecord(byte data[]) {

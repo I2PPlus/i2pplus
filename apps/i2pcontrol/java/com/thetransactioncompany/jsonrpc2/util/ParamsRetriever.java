@@ -1,6 +1,5 @@
 package com.thetransactioncompany.jsonrpc2.util;
 
-
 /**
  * The base abstract class for the JSON-RPC 2.0 parameter retrievers.
  *
@@ -8,14 +7,12 @@ package com.thetransactioncompany.jsonrpc2.util;
  */
 public abstract class ParamsRetriever {
 
-
     /**
      * Returns the parameter count.
      *
      * @return The parameters count.
      */
     public abstract int size();
-
 
     /**
      * Matches a string against an array of acceptable values.
@@ -28,25 +25,19 @@ public abstract class ParamsRetriever {
      * @return The matching string value, {@code null} if no match was
      *         found.
      */
-    protected static String getEnumStringMatch(final String input,
-                                           final String[] enumStrings,
-                                           final boolean ignoreCase) {
+    protected static String getEnumStringMatch(final String input, final String[] enumStrings, final boolean ignoreCase) {
 
-        for (final String en: enumStrings) {
+        for (final String en : enumStrings) {
 
             if (ignoreCase) {
-                if (en.equalsIgnoreCase(input))
-                    return en;
-            }
-            else {
-                if (en.equals(input))
-                    return en;
+                if (en.equalsIgnoreCase(input)) return en;
+            } else {
+                if (en.equals(input)) return en;
             }
         }
 
         return null;
     }
-
 
     /**
      * Matches a string against an enumeration of acceptable values.
@@ -59,19 +50,14 @@ public abstract class ParamsRetriever {
      * @return The matching enumeration constant, {@code null} if no match
      *         was found.
      */
-    protected static <T extends Enum<T>> T getEnumStringMatch(final String input,
-                                                          final Class<T> enumClass,
-                                                          final boolean ignoreCase) {
+    protected static <T extends Enum<T>> T getEnumStringMatch(final String input, final Class<T> enumClass, final boolean ignoreCase) {
 
-        for (T en: enumClass.getEnumConstants()) {
+        for (T en : enumClass.getEnumConstants()) {
 
             if (ignoreCase) {
-                if (en.toString().equalsIgnoreCase(input))
-                    return en;
-            }
-            else {
-                if (en.toString().equals(input))
-                    return en;
+                if (en.toString().equalsIgnoreCase(input)) return en;
+            } else {
+                if (en.toString().equals(input)) return en;
             }
         }
 

@@ -1,10 +1,12 @@
 package net.i2p.router.web;
 
-import java.util.Collections;
-import java.util.List;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+
 import org.eclipse.jetty.server.Server;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  *  Stop all plugins that are installed and running
@@ -38,16 +40,13 @@ class PluginStopper extends PluginStarter {
         for (String app : pl) {
             if (isPluginRunning(app, _context, _server)) {
                 try {
-                    if (log.shouldInfo())
-                        log.info("Stopping plugin: " + app);
+                    if (log.shouldInfo()) log.info("Stopping plugin: " + app);
                     stopPlugin(_context, _server, app);
                 } catch (Throwable e) {
-                    if (log.shouldWarn())
-                        log.warn("Failed to stop plugin: " + app, e);
+                    if (log.shouldWarn()) log.warn("Failed to stop plugin: " + app, e);
                 }
             } else {
-                if (log.shouldInfo())
-                    log.info("Plugin not running: " + app);
+                if (log.shouldInfo()) log.info("Plugin not running: " + app);
             }
         }
     }

@@ -14,12 +14,12 @@ package net.i2p.i2ptunnel.socks;
  * ensures proper reply routing and maintains port mappings for
  * session tracking.
  */
+import net.i2p.i2ptunnel.I2PTunnel;
+import net.i2p.i2ptunnel.udpTunnel.I2PTunnelUDPClientBase;
 
 import java.net.InetAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import net.i2p.i2ptunnel.I2PTunnel;
-import net.i2p.i2ptunnel.udpTunnel.I2PTunnelUDPClientBase;
 
 /**
  * A Datagram Tunnel that can have multiple bidirectional ports on the UDP side.
@@ -56,7 +56,6 @@ public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
         setSink(this.demuxer);
     }
 
-
     /**
      *  Adds a new UDP port to the tunnel for bidirectional SOCKS UDP communication.
      *
@@ -81,8 +80,7 @@ public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
      */
     public void remove(Integer port) {
         SOCKSUDPPort sup = this.ports.remove(port);
-        if (sup != null)
-            sup.stop();
+        if (sup != null) sup.stop();
     }
 
     /**
@@ -112,8 +110,7 @@ public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
     }
 
     /** you should really add() after startRunning() */
-    private void startall() {
-    }
+    private void startall() {}
 
     private void stopall() {
         for (SOCKSUDPPort sup : this.ports.values()) {

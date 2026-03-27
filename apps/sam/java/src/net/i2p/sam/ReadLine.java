@@ -14,7 +14,7 @@ import java.net.SocketTimeoutException;
  */
 class ReadLine {
 
-    private static final int MAX_LINE_LENGTH = 8*1024;
+    private static final int MAX_LINE_LENGTH = 8 * 1024;
 
     /**
      *  Read a line terminated by newline, with a total read timeout.
@@ -42,28 +42,23 @@ class ReadLine {
         }
         final Reader reader = new UTF8Reader(socket.getInputStream());
         while ((c = reader.read()) != -1) {
-            if (++i > MAX_LINE_LENGTH)
-                throw new LineTooLongException("Line too long - max " + MAX_LINE_LENGTH);
-            if (c == '\n')
-                break;
+            if (++i > MAX_LINE_LENGTH) throw new LineTooLongException("Line too long - max " + MAX_LINE_LENGTH);
+            if (c == '\n') break;
             if (origTimeout > 0) {
                 int newTimeout = (int) (expires - System.currentTimeMillis());
-                if (newTimeout <= 0)
-                    throw new SocketTimeoutException();
-                buf.append((char)c);
+                if (newTimeout <= 0) throw new SocketTimeoutException();
+                buf.append((char) c);
                 if (newTimeout != timeout) {
                     timeout = newTimeout;
                     socket.setSoTimeout(timeout);
                 }
             } else {
-                buf.append((char)c);
+                buf.append((char) c);
             }
         }
         if (c == -1) {
-            if (origTimeout > 0 && System.currentTimeMillis() >= expires)
-                throw new SocketTimeoutException();
-            else
-                throw new EOFException();
+            if (origTimeout > 0 && System.currentTimeMillis() >= expires) throw new SocketTimeoutException();
+            else throw new EOFException();
         }
     }
 

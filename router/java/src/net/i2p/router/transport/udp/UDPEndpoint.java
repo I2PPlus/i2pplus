@@ -1,5 +1,10 @@
 package net.i2p.router.transport.udp;
 
+import net.i2p.router.RouterContext;
+import net.i2p.router.transport.TransportUtil;
+import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
+
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.Inet4Address;
@@ -7,10 +12,6 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.concurrent.atomic.AtomicInteger;
-import net.i2p.router.RouterContext;
-import net.i2p.router.transport.TransportUtil;
-import net.i2p.util.Log;
-import net.i2p.util.SystemVersion;
 
 /**
  * Coordinate the low-level datagram socket, creating and managing the UDPSender and
@@ -28,7 +29,7 @@ class UDPEndpoint implements SocketListener {
     private final boolean _isIPv4, _isIPv6;
     private static final AtomicInteger _counter = new AtomicInteger();
 
-    private static final int MIN_SOCKET_BUFFER = 256*1024;
+    private static final int MIN_SOCKET_BUFFER = 256 * 1024;
 
     /**
      *  @param transport may be null for unit testing ONLY
@@ -51,8 +52,7 @@ class UDPEndpoint implements SocketListener {
      *  Can be restarted.
      */
     public synchronized void startup() throws SocketException {
-        if (_log.shouldDebug())
-            _log.debug("Starting up the UDP endpoint");
+        if (_log.shouldDebug()) _log.debug("Starting up the UDP endpoint");
         shutdown();
         _socket = getSocket();
         if (_socket == null) {
@@ -78,7 +78,10 @@ class UDPEndpoint implements SocketListener {
         }
     }
 
-    public void setListenPort(int newPort) { _listenPort = newPort; }
+    public void setListenPort(int newPort) {
+        _listenPort = newPort;
+    }
+
     private static final int MAX_PORT_RETRIES = 20;
 
     /**
@@ -97,44 +100,41 @@ class UDPEndpoint implements SocketListener {
 
         for (int i = 0; i < MAX_PORT_RETRIES; i++) {
             if (port <= 0) {
-                 // try random ports rather than just do new DatagramSocket()
-                 // so we stay out of the way of other I2P stuff
+                // try random ports rather than just do new DatagramSocket()
+                // so we stay out of the way of other I2P stuff
                 port = TransportUtil.selectRandomPort(_context, UDPTransport.STYLE);
             }
             try {
-                if (_bindAddress == null)
-                     socket = new DatagramSocket(port);
-                else
-                     socket = new DatagramSocket(port, _bindAddress);
+                if (_bindAddress == null) socket = new DatagramSocket(port);
+                else socket = new DatagramSocket(port, _bindAddress);
                 if (!SystemVersion.isAndroid()) {
-                    if (socket.getSendBufferSize() < MIN_SOCKET_BUFFER)
-                         socket.setSendBufferSize(MIN_SOCKET_BUFFER);
-                    if (socket.getReceiveBufferSize() < MIN_SOCKET_BUFFER)
-                         socket.setReceiveBufferSize(MIN_SOCKET_BUFFER);
+                    if (socket.getSendBufferSize() < MIN_SOCKET_BUFFER) socket.setSendBufferSize(MIN_SOCKET_BUFFER);
+                    if (socket.getReceiveBufferSize() < MIN_SOCKET_BUFFER) socket.setReceiveBufferSize(MIN_SOCKET_BUFFER);
                 }
                 break;
             } catch (SocketException se) {
-                if (_log.shouldWarn())
-                     _log.warn("Binding to port " + port + " failed", se);
+                if (_log.shouldWarn()) _log.warn("Binding to port " + port + " failed", se);
             }
             port = -1;
         }
         if (socket == null) {
             _log.log(Log.CRIT, "[SSU] Unable to bind to a port on: " + _bindAddress);
         } else if (port != _listenPort) {
-            if (_listenPort > 0)
-                _log.error("[SSU] Unable to bind to requested port " + _listenPort + ", using random port: " + port);
-            else
-                _log.logAlways(Log.INFO, "UDP random port selected: " + port);
+            if (_listenPort > 0) _log.error("[SSU] Unable to bind to requested port " + _listenPort + ", using random port: " + port);
+            else _log.logAlways(Log.INFO, "UDP random port selected: " + port);
         }
         _listenPort = port;
         return socket;
     }
 
-
     /** call after startup() to get actual port or -1 on startup failure */
-    public int getListenPort() { return _listenPort; }
-    public UDPSender getSender() { return _sender; }
+    public int getListenPort() {
+        return _listenPort;
+    }
+
+    public UDPSender getSender() {
+        return _sender;
+    }
 
     /**
      * Add the packet to the outobund queue to be sent ASAP (as allowed by
@@ -169,8 +169,7 @@ class UDPEndpoint implements SocketListener {
      *  @since 0.9.2
      */
     public void clearOutbound() {
-        if (_sender != null)
-            _sender.clear();
+        if (_sender != null) _sender.clear();
     }
 
     /**
@@ -205,8 +204,7 @@ class UDPEndpoint implements SocketListener {
     public String toString() {
         StringBuilder buf = new StringBuilder(64); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("UDP Socket ");
-        if (_bindAddress != null)
-            buf.append(_bindAddress.toString()).append(' ');
+        if (_bindAddress != null) buf.append(_bindAddress.toString()).append(' ');
         buf.append("port ").append(_listenPort);
         return buf.toString();
     }

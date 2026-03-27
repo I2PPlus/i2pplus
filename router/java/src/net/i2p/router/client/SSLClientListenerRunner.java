@@ -1,5 +1,12 @@
 package net.i2p.router.client;
 
+import net.i2p.client.I2PClient;
+import net.i2p.crypto.KeyStoreUtil;
+import net.i2p.router.RouterContext;
+import net.i2p.util.I2PSSLSocketFactory;
+import net.i2p.util.Log;
+import net.i2p.util.SecureDirectory;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,16 +18,11 @@ import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
-import net.i2p.client.I2PClient;
-import net.i2p.crypto.KeyStoreUtil;
-import net.i2p.router.RouterContext;
-import net.i2p.util.I2PSSLSocketFactory;
-import net.i2p.util.Log;
-import net.i2p.util.SecureDirectory;
 
 /**
  * SSL version of ClientListenerRunner
@@ -47,27 +49,22 @@ class SSLClientListenerRunner extends ClientListenerRunner {
     private boolean verifyKeyStore(File ks) {
         if (ks.exists()) {
             boolean rv = _context.getProperty(PROP_KEY_PASSWORD) != null;
-            if (!rv)
-                _log.error("I2CP SSL error, must set " + PROP_KEY_PASSWORD + " in " +
-                           (new File(_context.getConfigDir(), "router.config")).getAbsolutePath());
+            if (!rv) _log.error("I2CP SSL error, must set " + PROP_KEY_PASSWORD + " in " + (new File(_context.getConfigDir(), "router.config")).getAbsolutePath());
             return rv;
         }
         File dir = ks.getParentFile();
         if (!dir.exists()) {
             File sdir = new SecureDirectory(dir.getAbsolutePath());
-            if (!sdir.mkdir())
-                return false;
+            if (!sdir.mkdir()) return false;
         }
         boolean rv = createKeyStore(ks);
 
         // Now read it back out of the new keystore and save it in ascii form
         // where the clients can get to it.
         // Failure of this part is not fatal.
-        if (rv)
-            exportCert(ks);
+        if (rv) exportCert(ks);
         return rv;
     }
-
 
     /**
      * Call out to keytool to create a new keystore with a keypair in it.
@@ -93,14 +90,9 @@ class SSLClientListenerRunner extends ClientListenerRunner {
             }
         }
         if (success) {
-            _log.logAlways(Log.INFO, "Created self-signed certificate for " + cname + " in keystore: " + ks.getAbsolutePath() + "\n" +
-                           "The certificate was generated randomly, and is not associated with your " +
-                           "IP address, host name, router identity, or destination keys.");
+            _log.logAlways(Log.INFO, "Created self-signed certificate for " + cname + " in keystore: " + ks.getAbsolutePath() + "\n" + "The certificate was generated randomly, and is not associated with your " + "IP address, host name, router identity, or destination keys.");
         } else {
-            _log.error("Failed to create I2CP SSL keystore.\n" +
-                       "This is for the Sun/Oracle keytool, others may be incompatible.\n" +
-                       "If you create the keystore manually, you must add " + PROP_KEYSTORE_PASSWORD + " and " + PROP_KEY_PASSWORD +
-                       " to " + (new File(_context.getConfigDir(), "router.config")).getAbsolutePath());
+            _log.error("Failed to create I2CP SSL keystore.\n" + "This is for the Sun/Oracle keytool, others may be incompatible.\n" + "If you create the keystore manually, you must add " + PROP_KEYSTORE_PASSWORD + " and " + PROP_KEY_PASSWORD + " to " + (new File(_context.getConfigDir(), "router.config")).getAbsolutePath());
         }
         return success;
     }
@@ -115,8 +107,7 @@ class SSLClientListenerRunner extends ClientListenerRunner {
             String ksPass = _context.getProperty(PROP_KEYSTORE_PASSWORD, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD);
             File out = new File(sdir, ASCII_KEYFILE);
             boolean success = KeyStoreUtil.exportCert(ks, ksPass, KEY_ALIAS, out);
-            if (!success)
-                _log.error("Error getting SSL cert to save as ASCII");
+            if (!success) _log.error("Error getting SSL cert to save as ASCII");
         } else {
             _log.error("Error saving ASCII SSL keys");
         }
@@ -130,8 +121,7 @@ class SSLClientListenerRunner extends ClientListenerRunner {
         String ksPass = _context.getProperty(PROP_KEYSTORE_PASSWORD, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD);
         String keyPass = _context.getProperty(PROP_KEY_PASSWORD);
         if (keyPass == null) {
-            _log.error("No key password, set " + PROP_KEY_PASSWORD +
-                       " in " + (new File(_context.getConfigDir(), "router.config")).getAbsolutePath());
+            _log.error("No key password, set " + PROP_KEY_PASSWORD + " in " + (new File(_context.getConfigDir(), "router.config")).getAbsolutePath());
             return false;
         }
         InputStream fis = null;
@@ -140,7 +130,7 @@ class SSLClientListenerRunner extends ClientListenerRunner {
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             fis = new FileInputStream(ks);
             keyStore.load(fis, ksPass.toCharArray());
-            KeyStoreUtil.logCertExpiration(keyStore, ks.getAbsolutePath(), 180*24*60*60*1000L);
+            KeyStoreUtil.logCertExpiration(keyStore, ks.getAbsolutePath(), 180 * 24 * 60 * 60 * 1000L);
             KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
             kmf.init(keyStore, keyPass.toCharArray());
             sslc.init(kmf.getKeyManagers(), null, _context.random());
@@ -151,7 +141,10 @@ class SSLClientListenerRunner extends ClientListenerRunner {
         } catch (IOException ioe) {
             _log.error("Error loading SSL keys", ioe);
         } finally {
-            if (fis != null) try { fis.close(); } catch (IOException ioe) {}
+            if (fis != null) try {
+                    fis.close();
+                } catch (IOException ioe) {
+                }
         }
         return false;
     }
@@ -163,14 +156,11 @@ class SSLClientListenerRunner extends ClientListenerRunner {
     protected ServerSocket getServerSocket() throws IOException {
         ServerSocket rv;
         if (_bindAllInterfaces) {
-            if (_log.shouldInfo())
-                _log.info("Listening on port " + _port + " on all interfaces");
+            if (_log.shouldInfo()) _log.info("Listening on port " + _port + " on all interfaces");
             rv = _factory.createServerSocket(_port);
         } else {
-            String listenInterface = _context.getProperty(ClientManagerFacadeImpl.PROP_CLIENT_HOST,
-                                                          ClientManagerFacadeImpl.DEFAULT_HOST);
-            if (_log.shouldInfo())
-                _log.info("Listening on port " + _port + " of the specific interface: " + listenInterface);
+            String listenInterface = _context.getProperty(ClientManagerFacadeImpl.PROP_CLIENT_HOST, ClientManagerFacadeImpl.DEFAULT_HOST);
+            if (_log.shouldInfo()) _log.info("Listening on port " + _port + " of the specific interface: " + listenInterface);
             rv = _factory.createServerSocket(_port, 0, InetAddress.getByName(listenInterface));
         }
         I2PSSLSocketFactory.setProtocolsAndCiphers((SSLServerSocket) rv);
@@ -204,9 +194,9 @@ class SSLClientListenerRunner extends ClientListenerRunner {
             boolean rv = is.read() == I2PClient.PROTOCOL_BYTE;
             socket.setSoTimeout(oldTimeout);
             return rv;
-        } catch (IOException ioe) {}
-        if (_log.shouldWarn())
-             _log.warn("Peer did not authenticate themselves as I2CP quickly enough, dropping");
+        } catch (IOException ioe) {
+        }
+        if (_log.shouldWarn()) _log.warn("Peer did not authenticate themselves as I2CP quickly enough, dropping");
         return false;
     }
 }

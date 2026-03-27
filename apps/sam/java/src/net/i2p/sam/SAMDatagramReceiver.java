@@ -1,4 +1,5 @@
 package net.i2p.sam;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
@@ -8,8 +9,9 @@ package net.i2p.sam;
  *
  */
 
-import java.io.IOException;
 import net.i2p.data.Destination;
+
+import java.io.IOException;
 
 /**
  * Interface for sending raw data to a SAM client

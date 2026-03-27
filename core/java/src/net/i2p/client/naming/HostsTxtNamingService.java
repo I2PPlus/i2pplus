@@ -7,6 +7,9 @@
  */
 package net.i2p.client.naming;
 
+import net.i2p.I2PAppContext;
+import net.i2p.data.Destination;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,8 +17,6 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
-import net.i2p.I2PAppContext;
-import net.i2p.data.Destination;
 
 /**
  * A naming service based on multiple "hosts.txt" files.
@@ -42,26 +43,23 @@ public class HostsTxtNamingService extends MetaNamingService {
      * If this system property is specified, the tunnel will read the
      * given file for hostname=destKey values when resolving names
      */
-    public final static String PROP_HOSTS_FILE = "i2p.hostsfilelist";
+    public static final String PROP_HOSTS_FILE = "i2p.hostsfilelist";
 
     /** default hosts.txt filenames */
-    public final static String DEFAULT_HOSTS_FILE =
-        "privatehosts.txt,userhosts.txt,hosts.txt";
+    public static final String DEFAULT_HOSTS_FILE = "privatehosts.txt,userhosts.txt,hosts.txt";
 
     private List<String> getFilenames() {
         String list = _context.getProperty(PROP_HOSTS_FILE, DEFAULT_HOSTS_FILE);
         StringTokenizer tok = new StringTokenizer(list, ",");
         List<String> rv = new ArrayList<String>(tok.countTokens());
-        while (tok.hasMoreTokens())
-            rv.add(tok.nextToken());
+        while (tok.hasMoreTokens()) rv.add(tok.nextToken());
         return rv;
     }
 
     @Override
     public Destination lookup(String hostname, Properties lookupOptions, Properties storedOptions) {
         // If it's long, assume it's a key.
-        if (hostname.length() >= DEST_SIZE)
-            return lookupBase64(hostname);
+        if (hostname.length() >= DEST_SIZE) return lookupBase64(hostname);
         return super.lookup(hostname.toLowerCase(Locale.US), lookupOptions, storedOptions);
     }
 
@@ -87,14 +85,11 @@ public class HostsTxtNamingService extends MetaNamingService {
     @Override
     public Set<String> getNames(Properties options) {
         String file = null;
-        if (options != null)
-            file = options.getProperty("file");
-        if (file == null)
-            return super.getNames(options);
+        if (options != null) file = options.getProperty("file");
+        if (file == null) return super.getNames(options);
         for (NamingService ns : _services) {
             String name = ns.getName();
-            if (name.equals(file) || name.endsWith('/' + file) || name.endsWith('\\' + file))
-                 return ns.getNames(options);
+            if (name.equals(file) || name.endsWith('/' + file) || name.endsWith('\\' + file)) return ns.getNames(options);
         }
         return new HashSet<String>(0);
     }

@@ -1,14 +1,5 @@
 package net.i2p.client.streaming;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.UnknownHostException;
-import java.util.Locale;
-import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PSession;
@@ -20,6 +11,16 @@ import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.util.EepGet;
 import net.i2p.util.SocketTimeout;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
+import java.util.Locale;
+import java.util.Properties;
 
 /**
  *  Fetch a URL using a socket from the supplied I2PSocketManager.
@@ -48,19 +49,20 @@ import net.i2p.util.SocketTimeout;
  */
 public class I2PSocketEepGet extends EepGet {
     private final I2PSocketManager _socketManager;
+
     /** this replaces _proxy in the superclass. Sadly, I2PSocket does not extend Socket. */
     private I2PSocket _socket;
 
     /** from ConnectionOptions */
     private static final String PROP_CONNECT_DELAY = "i2p.streaming.connectDelay";
+
     private static final String CONNECT_DELAY = "500";
 
     public I2PSocketEepGet(I2PAppContext ctx, I2PSocketManager mgr, int numRetries, String outputFile, String url) {
         this(ctx, mgr, numRetries, -1, -1, outputFile, null, url);
     }
 
-    public I2PSocketEepGet(I2PAppContext ctx, I2PSocketManager mgr, int numRetries, long minSize, long maxSize,
-                           String outputFile, OutputStream outputStream, String url) {
+    public I2PSocketEepGet(I2PAppContext ctx, I2PSocketManager mgr, int numRetries, long minSize, long maxSize, String outputFile, OutputStream outputStream, String url) {
         // we're using this constructor:
         // public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort, int numRetries, long minSize, long maxSize, String outputFile, OutputStream outputStream, String url, boolean allowCaching, String etag, String postData) {
         super(ctx, false, null, -1, numRetries, minSize, maxSize, outputFile, outputStream, url, true, null, null);
@@ -77,7 +79,8 @@ public class I2PSocketEepGet extends EepGet {
             try {
                 _socket.close();
                 _socket = null;
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) {
+            }
         }
         return rv;
     }
@@ -105,13 +108,21 @@ public class I2PSocketEepGet extends EepGet {
     protected void sendRequest(SocketTimeout timeout) throws IOException {
         if (_outputStream == null) {
             File outFile = new File(_outputFile);
-            if (outFile.exists())
-                _alreadyTransferred = outFile.length();
+            if (outFile.exists()) _alreadyTransferred = outFile.length();
         }
 
-        if (_proxyIn != null) try { _proxyIn.close(); } catch (IOException ioe) {}
-        if (_proxyOut != null) try { _proxyOut.close(); } catch (IOException ioe) {}
-        if (_socket != null) try { _socket.close(); } catch (IOException ioe) {}
+        if (_proxyIn != null) try {
+                _proxyIn.close();
+            } catch (IOException ioe) {
+            }
+        if (_proxyOut != null) try {
+                _proxyOut.close();
+            } catch (IOException ioe) {
+            }
+        if (_socket != null) try {
+                _socket.close();
+            } catch (IOException ioe) {
+            }
 
         try {
             URI url = new URI(_actualURL);
@@ -127,20 +138,18 @@ public class I2PSocketEepGet extends EepGet {
                         int slash = ann.indexOf('/');
                         if (slash >= 516) {
                             ann = ann.substring(0, slash);
-                            if (ann.endsWith(".i2p"))
-                                ann = ann.substring(0, ann.length() - 4);
+                            if (ann.endsWith(".i2p")) ann = ann.substring(0, ann.length() - 4);
                             try {
                                 dest = new Destination(ann);
-                            } catch (DataFormatException dfe) {}
+                            } catch (DataFormatException dfe) {
+                            }
                         }
                     }
-                    if (dest == null)
-                        throw new MalformedURLException("no hostname: " + _actualURL);
+                    if (dest == null) throw new MalformedURLException("no hostname: " + _actualURL);
                     // won't pick up the port either, but the path will be OK
                 }
                 int port = url.getPort();
-                if (port <= 0 || port > 65535)
-                    port = 80;
+                if (port <= 0 || port > 65535) port = 80;
 
                 // HTTP Proxy compatibility http://i2p/B64KEY/blah
                 // Rewrite the url to strip out the /i2p/,
@@ -152,8 +161,7 @@ public class I2PSocketEepGet extends EepGet {
                         host = file.substring(1, slash);
                         _actualURL = "http://" + host + file.substring(slash);
                         String query = url.getRawQuery();
-                        if (query != null)
-                            _actualURL = _actualURL + '?' + query;
+                        if (query != null) _actualURL = _actualURL + '?' + query;
                     } catch (IndexOutOfBoundsException ioobe) {
                         throw new MalformedURLException("Bad /i2p/ format: " + _actualURL);
                     }
@@ -169,14 +177,14 @@ public class I2PSocketEepGet extends EepGet {
                                 byte[] b = Base32.decode(host.substring(0, 52));
                                 if (b != null) {
                                     Hash h = Hash.create(b);
-//                                    dest = sess.lookupDest(h, 20*1000);
-                                    dest = sess.lookupDest(h, 30*1000);
+                                    //                                    dest = sess.lookupDest(h, 20*1000);
+                                    dest = sess.lookupDest(h, 30 * 1000);
                                 } else {
                                     dest = null;
                                 }
                             } else {
-//                                dest = sess.lookupDest(host, 20*1000);
-                                dest = sess.lookupDest(host, 30*1000);
+                                //                                dest = sess.lookupDest(host, 20*1000);
+                                dest = sess.lookupDest(host, 30 * 1000);
                             }
                         } catch (I2PSessionException ise) {
                             dest = null;
@@ -184,8 +192,7 @@ public class I2PSocketEepGet extends EepGet {
                     } else {
                         dest = _context.namingService().lookup(host);
                     }
-                    if (dest == null)
-                        throw new UnknownHostException("Unknown or non-i2p host: " + host);
+                    if (dest == null) throw new UnknownHostException("Unknown or non-i2p host: " + host);
                 }
 
                 // Set the timeouts, using the other existing options in the socket manager
@@ -217,7 +224,7 @@ public class I2PSocketEepGet extends EepGet {
 
         // SocketTimeout doesn't take an I2PSocket, but no matter, because we
         // always close our socket in fetch() above.
-        //timeout.setSocket(_socket);
+        // timeout.setSocket(_socket);
 
         String req = getRequest();
         _proxyOut.write(DataHelper.getUTF8(req));
@@ -241,37 +248,28 @@ public class I2PSocketEepGet extends EepGet {
             ioe.initCause(use);
             throw ioe;
         }
-        //String host = url.getHost();
+        // String host = url.getHost();
         String path = url.getRawPath();
         String query = url.getRawQuery();
-        if (query != null)
-            path = path + '?' + query;
-        if (!path.startsWith("/"))
-            path = '/' + path;
-        buf.append("GET ").append(path).append(" HTTP/1.1\r\n" +
-                   "Host: ").append(url.getHost()).append("\r\n");
+        if (query != null) path = path + '?' + query;
+        if (!path.startsWith("/")) path = '/' + path;
+        buf.append("GET ").append(path).append(" HTTP/1.1\r\n" + "Host: ").append(url.getHost()).append("\r\n");
         if (_alreadyTransferred > 0) {
             buf.append("Range: bytes=");
             buf.append(_alreadyTransferred);
             buf.append("-\r\n");
         }
-        buf.append("Accept-Encoding: \r\n" +
-                   "Cache-Control: no-cache\r\n" +
-                   "Pragma: no-cache\r\n" +
-                   "Connection: close\r\n");
+        buf.append("Accept-Encoding: \r\n" + "Cache-Control: no-cache\r\n" + "Pragma: no-cache\r\n" + "Connection: close\r\n");
         boolean uaOverridden = false;
         if (_extraHeaders != null) {
             for (String hdr : _extraHeaders) {
-                if (hdr.toLowerCase(Locale.US).startsWith("user-agent: "))
-                    uaOverridden = true;
+                if (hdr.toLowerCase(Locale.US).startsWith("user-agent: ")) uaOverridden = true;
                 buf.append(hdr).append("\r\n");
             }
         }
-        if (!uaOverridden)
-            buf.append("User-Agent: ").append(USER_AGENT).append("\r\n");
+        if (!uaOverridden) buf.append("User-Agent: ").append(USER_AGENT).append("\r\n");
         buf.append("\r\n");
-        if (_log.shouldDebug())
-            _log.debug("Request: [" + buf.toString() + "]");
+        if (_log.shouldDebug()) _log.debug("Request: [" + buf.toString() + "]");
         return buf.toString();
     }
 
@@ -284,60 +282,60 @@ public class I2PSocketEepGet extends EepGet {
      * Real command line apps should use EepGet.main(),
      * which has more options, and you don't have to wait for tunnels to be built.
      */
-/****
-    public static void main(String args[]) {
-        int numRetries = 0;
-        long inactivityTimeout = INACTIVITY_TIMEOUT;
-        String url = null;
-        try {
-            for (int i = 0; i < args.length; i++) {
-                if (args[i].equals("-n")) {
-                    numRetries = Integer.parseInt(args[i+1]);
-                    i++;
-                } else if (args[i].equals("-t")) {
-                    inactivityTimeout = 1000 * Integer.parseInt(args[i+1]);
-                    i++;
-                } else if (args[i].startsWith("-")) {
-                    usage();
-                    return;
-                } else {
-                    url = args[i];
-                }
-            }
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            usage();
-            return;
-        }
-
-        if (url == null) {
-            usage();
-            return;
-        }
-
-        Properties opts = new Properties();
-        opts.setProperty("i2cp.dontPublishLeaseSet", "true");
-        opts.setProperty("inbound.quantity", "1");
-        opts.setProperty("outbound.quantity", "1");
-        opts.setProperty("inbound.backupQuantity", "0");
-        opts.setProperty("outbound.backupQuantity", "0");
-        opts.setProperty("inbound.length", "1");
-        opts.setProperty("outbound.length", "1");
-        opts.setProperty("inbound.nickname", "I2PSocketEepGet");
-        I2PSocketManager mgr = I2PSocketManagerFactory.createManager(opts);
-        if (mgr == null) {
-            System.err.println("Error creating the socket manager");
-            return;
-        }
-        I2PSocketEepGet get = new I2PSocketEepGet(I2PAppContext.getGlobalContext(),
-                                                  mgr, numRetries, suggestName(url), url);
-        get.addStatusListener(get.new CLIStatusListener(1024, 40));
-        get.fetch(inactivityTimeout, -1, inactivityTimeout);
-        mgr.destroySocketManager();
-    }
-
-    private static void usage() {
-        System.err.println("I2PSocketEepGet [-n #retries] [-t timeout] url");
-    }
-****/
+    /****
+     * public static void main(String args[]) {
+     * int numRetries = 0;
+     * long inactivityTimeout = INACTIVITY_TIMEOUT;
+     * String url = null;
+     * try {
+     * for (int i = 0; i < args.length; i++) {
+     * if (args[i].equals("-n")) {
+     * numRetries = Integer.parseInt(args[i+1]);
+     * i++;
+     * } else if (args[i].equals("-t")) {
+     * inactivityTimeout = 1000 * Integer.parseInt(args[i+1]);
+     * i++;
+     * } else if (args[i].startsWith("-")) {
+     * usage();
+     * return;
+     * } else {
+     * url = args[i];
+     * }
+     * }
+     * } catch (RuntimeException e) {
+     * e.printStackTrace();
+     * usage();
+     * return;
+     * }
+     *
+     * if (url == null) {
+     * usage();
+     * return;
+     * }
+     *
+     * Properties opts = new Properties();
+     * opts.setProperty("i2cp.dontPublishLeaseSet", "true");
+     * opts.setProperty("inbound.quantity", "1");
+     * opts.setProperty("outbound.quantity", "1");
+     * opts.setProperty("inbound.backupQuantity", "0");
+     * opts.setProperty("outbound.backupQuantity", "0");
+     * opts.setProperty("inbound.length", "1");
+     * opts.setProperty("outbound.length", "1");
+     * opts.setProperty("inbound.nickname", "I2PSocketEepGet");
+     * I2PSocketManager mgr = I2PSocketManagerFactory.createManager(opts);
+     * if (mgr == null) {
+     * System.err.println("Error creating the socket manager");
+     * return;
+     * }
+     * I2PSocketEepGet get = new I2PSocketEepGet(I2PAppContext.getGlobalContext(),
+     * mgr, numRetries, suggestName(url), url);
+     * get.addStatusListener(get.new CLIStatusListener(1024, 40));
+     * get.fetch(inactivityTimeout, -1, inactivityTimeout);
+     * mgr.destroySocketManager();
+     * }
+     *
+     * private static void usage() {
+     * System.err.println("I2PSocketEepGet [-n #retries] [-t timeout] url");
+     * }
+     ****/
 }

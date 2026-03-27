@@ -18,7 +18,7 @@ package net.i2p;
 public class CoreVersion {
 
     /** deprecated */
-    public final static String ID = "Git";
+    public static final String ID = "Git";
 
     /**
      *  The version used when checking for router updates, and exchanged between
@@ -29,7 +29,7 @@ public class CoreVersion {
      *
      *  RouterVersion.FULL_VERSION is suggested for display to the user.
      */
-    public final static String VERSION = "2.11.0";
+    public static final String VERSION = "2.11.0";
 
     /**
      *  The version published in the netdb via StatisticsManager. This is the API version.
@@ -44,18 +44,19 @@ public class CoreVersion {
      *
      *  @since 0.9.46
      */
-    public final static String PUBLISHED_VERSION = "0.9.68";
+    public static final String PUBLISHED_VERSION = "0.9.68";
 
     /**
      *  For Vuze.
      *  @return VERSION
      *  @since 0.9.19
      */
-    public static String getVersion() {return VERSION;}
+    public static String getVersion() {
+        return VERSION;
+    }
 
     public static void main(String args[]) {
         System.out.println("I2P+ Core version: " + VERSION);
         System.out.println("I2P+ API version: " + PUBLISHED_VERSION);
     }
-
 }

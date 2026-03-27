@@ -44,27 +44,100 @@ public class NewsXMLParser {
     private XHTMLMode _mode;
 
     private static final Set<String> xhtmlWhitelist = new HashSet<String>(Arrays.asList(new String[] {
-        "a", "b", "br", "div", "i", "p", "span", "font", "blockquote", "hr",
-        "del", "ins", "em", "strong", "mark", "sub", "sup", "tt", "code", "strike", "s", "u",
-        "h4", "h5", "h6",
-        "ol", "ul", "li", "dl", "dt", "dd",
-        "table", "tr", "td", "th",
+        "a",
+        "b",
+        "br",
+        "div",
+        "i",
+        "p",
+        "span",
+        "font",
+        "blockquote",
+        "hr",
+        "del",
+        "ins",
+        "em",
+        "strong",
+        "mark",
+        "sub",
+        "sup",
+        "tt",
+        "code",
+        "strike",
+        "s",
+        "u",
+        "h4",
+        "h5",
+        "h6",
+        "ol",
+        "ul",
+        "li",
+        "dl",
+        "dt",
+        "dd",
+        "table",
+        "tr",
+        "td",
+        "th",
         // put in by parser
         XMLParser.TEXT_NAME
     }));
 
     // http://www.w3.org/TR/html-markup/global-attributes.html#common.attrs.event-handler
     private static final Set<String> attributeBlacklist = new HashSet<String>(Arrays.asList(new String[] {
-        "onabort", "onblur", "oncanplay", "oncanplaythrough", "onchange", "onclick",
-        "oncontextmenu", "ondblclick", "ondrag", "ondragend", "ondragenter", "ondragleave",
-        "ondragover", "ondragstart", "ondrop", "ondurationchange", "onemptied",
-        "onended", "onerror", "onfocus", "oninput", "onivalid", "onkeydown", "onkeypress",
-        "onkeyup", "onload", "onloadeddata", "onloadedmetadata", "onloadstart",
-        "onmousedown", "onmousemove", "onmouseout", "onmouseover", "onmouseup",
-        "onmousewheel", "onpause", "onplay", "onplaying", "onprogress", "onratechange",
-        "onreadystatechange", "onreset", "onscroll", "onseeked", "onseeking", "onselect",
-        "onshow", "onstalled", "onsubmit", "onsuspend",
-        "ontimeupdate", "onvolumechange", "onwaiting"
+        "onabort",
+        "onblur",
+        "oncanplay",
+        "oncanplaythrough",
+        "onchange",
+        "onclick",
+        "oncontextmenu",
+        "ondblclick",
+        "ondrag",
+        "ondragend",
+        "ondragenter",
+        "ondragleave",
+        "ondragover",
+        "ondragstart",
+        "ondrop",
+        "ondurationchange",
+        "onemptied",
+        "onended",
+        "onerror",
+        "onfocus",
+        "oninput",
+        "onivalid",
+        "onkeydown",
+        "onkeypress",
+        "onkeyup",
+        "onload",
+        "onloadeddata",
+        "onloadedmetadata",
+        "onloadstart",
+        "onmousedown",
+        "onmousemove",
+        "onmouseout",
+        "onmouseover",
+        "onmouseup",
+        "onmousewheel",
+        "onpause",
+        "onplay",
+        "onplaying",
+        "onprogress",
+        "onratechange",
+        "onreadystatechange",
+        "onreset",
+        "onscroll",
+        "onseeked",
+        "onseeking",
+        "onselect",
+        "onshow",
+        "onstalled",
+        "onsubmit",
+        "onsuspend",
+        "ontimeupdate",
+        "onvolumechange",
+        "onwaiting"
     }));
 
     /**
@@ -176,8 +249,7 @@ public class NewsXMLParser {
     }
 
     private void extract(Node root) throws I2PParserException {
-        if (!root.getName().equals("feed"))
-            throw new I2PParserException("no feed in XML");
+        if (!root.getName().equals("feed")) throw new I2PParserException("no feed in XML");
         _metadata = extractNewsMetadata(root);
         _entries = extractNewsEntries(root);
         _crlEntries = extractCRLEntries(root);
@@ -189,70 +261,58 @@ public class NewsXMLParser {
         Node n = feed.getNode("title");
         if (n != null) {
             rv.feedTitle = n.getValue();
-            if (rv.feedTitle != null)
-                rv.feedTitle = rv.feedTitle.trim();
+            if (rv.feedTitle != null) rv.feedTitle = rv.feedTitle.trim();
         }
         n = feed.getNode("subtitle");
         if (n != null) {
             rv.feedSubtitle = n.getValue();
-            if (rv.feedSubtitle != null)
-                rv.feedSubtitle = rv.feedTitle.trim();
+            if (rv.feedSubtitle != null) rv.feedSubtitle = rv.feedTitle.trim();
         }
         n = feed.getNode("id");
         if (n != null) {
             rv.feedID = n.getValue();
-            if (rv.feedTitle != null)
-                rv.feedTitle = rv.feedTitle.trim();
+            if (rv.feedTitle != null) rv.feedTitle = rv.feedTitle.trim();
         }
         n = feed.getNode("updated");
         if (n != null) {
             String v = n.getValue();
             if (v != null) {
                 long time = RFC3339Date.parse3339Date(v.trim());
-                if (time > 0)
-                    rv.feedUpdated = time;
+                if (time > 0) rv.feedUpdated = time;
             }
         }
 
         List<NewsMetadata.Release> releases = new ArrayList<NewsMetadata.Release>();
         List<Node> releaseNodes = getNodes(feed, "i2p:release");
-        if (releaseNodes.size() == 0)
-            throw new I2PParserException("no release data in XML");
+        if (releaseNodes.size() == 0) throw new I2PParserException("no release data in XML");
         for (Node r : releaseNodes) {
             NewsMetadata.Release release = new NewsMetadata.Release();
             // release attributes
             String a = r.getAttributeValue("date");
             if (a.length() > 0) {
                 long time = RFC3339Date.parse3339Date(a.trim());
-                if (time > 0)
-                    release.date = time;
+                if (time > 0) release.date = time;
             }
             a = r.getAttributeValue("minVersion");
-            if (a.length() > 0)
-                release.minVersion = a.trim();
+            if (a.length() > 0) release.minVersion = a.trim();
             a = r.getAttributeValue("minJavaVersion");
-            if (a.length() > 0)
-                release.minJavaVersion = a.trim();
+            if (a.length() > 0) release.minJavaVersion = a.trim();
             // release nodes
             n = r.getNode("i2p:version");
             if (n != null) {
                 release.i2pVersion = n.getValue();
-                if (release.i2pVersion != null)
-                    release.i2pVersion = release.i2pVersion.trim();
+                if (release.i2pVersion != null) release.i2pVersion = release.i2pVersion.trim();
             }
 
             List<NewsMetadata.Update> updates = new ArrayList<NewsMetadata.Update>();
             List<Node> updateNodes = getNodes(r, "i2p:update");
-            if (updateNodes.size() == 0)
-                throw new I2PParserException("no updates in release");
+            if (updateNodes.size() == 0) throw new I2PParserException("no updates in release");
             Set<String> types = new HashSet<String>();
             for (Node u : updateNodes) {
                 // returns "" for none
                 String type = u.getAttributeValue("type");
-                if (type.isEmpty())
-                    throw new I2PParserException("update with no type");
-                if (types.contains(type))
-                    throw new I2PParserException("update with duplicate type");
+                if (type.isEmpty()) throw new I2PParserException("update with no type");
+                if (types.contains(type)) throw new I2PParserException("update with duplicate type");
                 NewsMetadata.Update update = new NewsMetadata.Update();
                 update.type = type.trim();
                 types.add(type);
@@ -271,8 +331,7 @@ public class NewsXMLParser {
                 for (Node n1 : urlNodes) {
                     String href = n1.getAttributeValue("href");
                     if (href.length() > 0) {
-                        if (update.clearnet == null)
-                            update.clearnet = new ArrayList<String>(4);
+                        if (update.clearnet == null) update.clearnet = new ArrayList<String>(4);
                         update.clearnet.add(href.trim());
                         totalSources++;
                     }
@@ -281,8 +340,7 @@ public class NewsXMLParser {
                 for (Node n2 : urlNodes) {
                     String href = n2.getAttributeValue("href");
                     if (href.length() > 0) {
-                        if (update.ssl == null)
-                            update.ssl = new ArrayList<String>(4);
+                        if (update.ssl == null) update.ssl = new ArrayList<String>(4);
                         update.ssl.add(href.trim());
                         totalSources++;
                     }
@@ -291,15 +349,13 @@ public class NewsXMLParser {
                 for (Node n3 : urlNodes) {
                     String href = n3.getAttributeValue("href");
                     if (href.length() > 0) {
-                        if (update.i2pnet == null)
-                            update.i2pnet = new ArrayList<String>(4);
+                        if (update.i2pnet == null) update.i2pnet = new ArrayList<String>(4);
                         update.i2pnet.add(href.trim());
                         totalSources++;
                     }
                 }
 
-                if (totalSources == 0)
-                    throw new I2PParserException("no sources for update type " + type);
+                if (totalSources == 0) throw new I2PParserException("no sources for update type " + type);
                 updates.add(update);
             }
             Collections.sort(updates);
@@ -324,50 +380,43 @@ public class NewsXMLParser {
             Node n = entry.getNode("title");
             if (n != null) {
                 e.title = n.getValue();
-                if (e.title != null)
-                    e.title = e.title.trim();
+                if (e.title != null) e.title = e.title.trim();
             }
             n = entry.getNode("link");
             if (n != null) {
                 String a = n.getAttributeValue("href");
-                if (a.length() > 0)
-                    e.link = a.trim();
+                if (a.length() > 0) e.link = a.trim();
             }
             n = entry.getNode("id");
             if (n != null) {
                 e.id = n.getValue();
-                if (e.id != null)
-                    e.id = e.id.trim();
+                if (e.id != null) e.id = e.id.trim();
             }
             n = entry.getNode("updated");
             if (n != null) {
                 String v = n.getValue();
                 if (v != null) {
                     long time = RFC3339Date.parse3339Date(v.trim());
-                    if (time > 0)
-                        e.updated = time;
+                    if (time > 0) e.updated = time;
                 }
             }
             n = entry.getNode("summary");
             if (n != null) {
                 e.summary = n.getValue();
-                if (e.summary != null)
-                    e.summary = e.summary.trim();
+                if (e.summary != null) e.summary = e.summary.trim();
             }
             n = entry.getNode("author");
             if (n != null) {
                 n = n.getNode("name");
                 if (n != null) {
                     e.authorName = n.getValue();
-                    if (e.authorName != null)
-                        e.authorName = e.authorName.trim();
+                    if (e.authorName != null) e.authorName = e.authorName.trim();
                 }
             }
             n = entry.getNode("content");
             if (n != null) {
                 String a = n.getAttributeValue("type");
-                if (a.length() > 0)
-                    e.contentType = a;
+                if (a.length() > 0) e.contentType = a;
                 // now recursively sanitize
                 // and convert everything in the content to string
                 StringBuilder buf = new StringBuilder(256);
@@ -384,26 +433,22 @@ public class NewsXMLParser {
                             case ABORT:
                                 throw ipe;
                             case SKIP_ENTRY:
-                                if (_log.shouldWarn())
-                                    _log.warn("Skipping entry", ipe);
+                                if (_log.shouldWarn()) _log.warn("Skipping entry", ipe);
                                 e = null;
                                 break;
                             case REMOVE_ATTRIBUTE:
                             case REMOVE_ELEMENT:
-                                if (_log.shouldWarn())
-                                    _log.warn("Removing element", ipe);
+                                if (_log.shouldWarn()) _log.warn("Removing element", ipe);
                                 continue;
                             case ALLOW_ALL:
                             default:
                                 break;
                         }
                     }
-                    if (e == null)
-                        break;
+                    if (e == null) break;
                     XMLParser.toString(buf, sn);
                 }
-                if (e == null)
-                    continue;
+                if (e == null) continue;
                 e.content = buf.toString();
             }
             rv.add(e);
@@ -421,26 +466,21 @@ public class NewsXMLParser {
      */
     private static List<CRLEntry> extractCRLEntries(Node feed) throws I2PParserException {
         Node rev = feed.getNode("i2p:revocations");
-        if (rev == null)
-            return Collections.emptyList();
+        if (rev == null) return Collections.emptyList();
         List<Node> entries = getNodes(rev, "i2p:crl");
-        if (entries.isEmpty())
-            return Collections.emptyList();
+        if (entries.isEmpty()) return Collections.emptyList();
         List<CRLEntry> rv = new ArrayList<CRLEntry>(entries.size());
         for (Node entry : entries) {
             CRLEntry e = new CRLEntry();
             String a = entry.getAttributeValue("id");
-            if (a.length() > 0)
-                e.id = a;
+            if (a.length() > 0) e.id = a;
             a = entry.getAttributeValue("updated");
             if (a.length() > 0) {
                 long time = RFC3339Date.parse3339Date(a.trim());
-                if (time > 0)
-                    e.updated = time;
+                if (time > 0) e.updated = time;
             }
             a = entry.getValue();
-            if (a != null)
-                e.data = a.trim();
+            if (a != null) e.data = a.trim();
             rv.add(e);
         }
         return rv;
@@ -456,26 +496,22 @@ public class NewsXMLParser {
      */
     private BlocklistEntries extractBlocklistEntries(Node feed) throws I2PParserException {
         Node bl = feed.getNode("i2p:blocklist");
-        if (bl == null)
-            return null;
+        if (bl == null) return null;
         List<Node> entries = getNodes(bl, "i2p:block");
         BlocklistEntries rv = new BlocklistEntries(entries.size());
         String a = bl.getAttributeValue("signer");
-        if (a.length() > 0)
-            rv.signer = a;
+        if (a.length() > 0) rv.signer = a;
         a = bl.getAttributeValue("sig");
         if (a.length() > 0) {
             rv.sig = a;
         }
-        Node n =  bl.getNode("updated");
-        if (n == null)
-            return null;
+        Node n = bl.getNode("updated");
+        if (n == null) return null;
         a = n.getValue();
         if (a != null) {
             rv.supdated = a;
             long time = RFC3339Date.parse3339Date(a.trim());
-            if (time > 0)
-                rv.updated = time;
+            if (time > 0) rv.updated = time;
         }
         for (Node entry : entries) {
             a = entry.getValue();
@@ -484,8 +520,7 @@ public class NewsXMLParser {
             }
         }
         List<Node> rentries = getNodes(bl, "i2p:unblock");
-        if (entries.isEmpty() && rentries.isEmpty())
-            return null;
+        if (entries.isEmpty() && rentries.isEmpty()) return null;
         for (Node entry : rentries) {
             a = entry.getValue();
             if (a != null) {
@@ -506,8 +541,7 @@ public class NewsXMLParser {
         int count = node.getNNodes();
         for (int i = 0; i < count; i++) {
             Node n = node.getNode(i);
-            if (n.getName().equals(name))
-                rv.add(n);
+            if (n.getName().equals(name)) rv.add(n);
         }
         return rv;
     }
@@ -518,7 +552,7 @@ public class NewsXMLParser {
      */
     private boolean validate(Node node) throws I2PParserException {
         String name = node.getName();
-        //if (_log.shouldDebug())
+        // if (_log.shouldDebug())
         //    _log.debug("Validating element: " + name);
         if (!xhtmlWhitelist.contains(name.toLowerCase(Locale.US))) {
             switch (_mode) {
@@ -527,13 +561,11 @@ public class NewsXMLParser {
                     throw new I2PParserException("Invalid XHTML element \"" + name + '"');
                 case REMOVE_ATTRIBUTE:
                 case REMOVE_ELEMENT:
-                    if (_log.shouldWarn())
-                        _log.warn("Removing element: " + node);
+                    if (_log.shouldWarn()) _log.warn("Removing element: " + node);
                     node.getParentNode().removeNode(node);
                     return true;
                 case ALLOW_ALL:
-                    if (_log.shouldWarn())
-                        _log.warn("Allowing non-whitelisted element by configuration: " + node);
+                    if (_log.shouldWarn()) _log.warn("Allowing non-whitelisted element by configuration: " + node);
                     break;
             }
         }
@@ -544,22 +576,19 @@ public class NewsXMLParser {
                 switch (_mode) {
                     case ABORT:
                     case SKIP_ENTRY:
-                        throw new I2PParserException("Invalid XHTML element \"" + name + "\" due to attribute " + aname);
+                        throw new I2PParserException(
+                                "Invalid XHTML element \"" + name + "\" due to attribute " + aname);
                     case REMOVE_ELEMENT:
-                        if (_log.shouldWarn())
-                            _log.warn("Removing element: " + node + " due to attribute " + aname);
+                        if (_log.shouldWarn()) _log.warn("Removing element: " + node + " due to attribute " + aname);
                         node.getParentNode().removeNode(node);
                         return true;
                     case REMOVE_ATTRIBUTE:
-                        if (_log.shouldWarn())
-                            _log.warn("Removing attribute: " + aname + " from " + node);
-                    // sadly, no removeAttribute(int)
-                        if (node.removeAttribute(attr))
-                            i--;
+                        if (_log.shouldWarn()) _log.warn("Removing attribute: " + aname + " from " + node);
+                        // sadly, no removeAttribute(int)
+                        if (node.removeAttribute(attr)) i--;
                         break;
                     case ALLOW_ALL:
-                        if (_log.shouldWarn())
-                            _log.warn("Allowing blacklisted attribute by configuration: " + node);
+                        if (_log.shouldWarn()) _log.warn("Allowing blacklisted attribute by configuration: " + node);
                         break;
                 }
             }
@@ -567,8 +596,7 @@ public class NewsXMLParser {
         int count = node.getNNodes();
         for (int i = 0; i < node.getNNodes(); i++) {
             boolean removed = validate(node.getNode(i));
-            if (removed)
-                i--;
+            if (removed) i--;
         }
         return false;
     }
@@ -612,19 +640,13 @@ public class NewsXMLParser {
             Set<String> uuids = new HashSet<String>(entries.size());
             for (int i = 0; i < entries.size(); i++) {
                 NewsEntry e = entries.get(i);
-                System.out.println("\n****** News #" + (i+1) + ": " + e.title + '\n' + e.content);
-                if (e.id == null)
-                    throw new IOException("missing ID");
-                if (e.title == null)
-                    throw new IOException("missing title");
-                if (e.content == null)
-                    throw new IOException("missing content");
-                if (e.authorName == null)
-                    throw new IOException("missing author");
-                if (e.updated == 0)
-                    throw new IOException("missing updated");
-                if (!uuids.add(e.id))
-                    throw new IOException("duplicate ID");
+                System.out.println("\n****** News #" + (i + 1) + ": " + e.title + '\n' + e.content);
+                if (e.id == null) throw new IOException("missing ID");
+                if (e.title == null) throw new IOException("missing title");
+                if (e.content == null) throw new IOException("missing content");
+                if (e.authorName == null) throw new IOException("missing author");
+                if (e.updated == 0) throw new IOException("missing updated");
+                if (!uuids.add(e.id)) throw new IOException("duplicate ID");
             }
         } catch (IOException ioe) {
             ioe.printStackTrace();

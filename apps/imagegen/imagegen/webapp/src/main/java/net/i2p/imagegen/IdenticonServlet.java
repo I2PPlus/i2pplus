@@ -4,20 +4,23 @@ import com.docuverse.identicon.IdenticonCache;
 import com.docuverse.identicon.IdenticonRenderer;
 import com.docuverse.identicon.IdenticonUtil;
 import com.docuverse.identicon.NineBlockIdenticonRenderer2;
+
+import net.i2p.I2PAppContext;
+import net.i2p.data.Hash;
+import net.i2p.util.ConvertToHash;
+import net.i2p.util.Log;
+
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
+
 import javax.imageio.ImageIO;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.i2p.I2PAppContext;
-import net.i2p.data.Hash;
-import net.i2p.util.ConvertToHash;
-import net.i2p.util.Log;
 
 /**
  * This servlet generates <i>identicon</i> (visual identifier) images ranging
@@ -78,9 +81,7 @@ public class IdenticonServlet extends HttpServlet {
         // used in ETag to force identicons to be updated as needed.
         // Change version whenever rendering codes changes result in
         // visual changes.
-        if (cfg.getInitParameter(INIT_PARAM_VERSION) != null)
-            this.version = Integer.parseInt(cfg
-                    .getInitParameter(INIT_PARAM_VERSION));
+        if (cfg.getInitParameter(INIT_PARAM_VERSION) != null) this.version = Integer.parseInt(cfg.getInitParameter(INIT_PARAM_VERSION));
 
         String cacheProvider = cfg.getInitParameter(INIT_PARAM_CACHE_PROVIDER);
         if (cacheProvider != null) {
@@ -94,11 +95,9 @@ public class IdenticonServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        if (request.getCharacterEncoding() == null)
-            request.setCharacterEncoding("UTF-8");
+        if (request.getCharacterEncoding() == null) request.setCharacterEncoding("UTF-8");
         String codeParam = request.getParameter(PARAM_IDENTICON_CODE_SHORT);
         boolean codeSpecified = codeParam != null && codeParam.length() > 0;
         if (!codeSpecified) {
@@ -110,15 +109,13 @@ public class IdenticonServlet extends HttpServlet {
         if (sizeParam != null) {
             try {
                 size = Integer.parseInt(sizeParam);
-                if (size < 16)
-                    size = 16;
-                else if (size > 1024)
-                    size = 1024;
-            } catch (NumberFormatException nfe) {}
+                if (size < 16) size = 16;
+                else if (size > 1024) size = 1024;
+            } catch (NumberFormatException nfe) {
+            }
         }
 
-        String identiconETag = IdenticonUtil.getIdenticonETag(codeParam.hashCode(), size,
-                version);
+        String identiconETag = IdenticonUtil.getIdenticonETag(codeParam.hashCode(), size, version);
         String requestETag = request.getHeader("If-None-Match");
 
         if (requestETag != null && requestETag.equals(identiconETag)) {
@@ -133,16 +130,13 @@ public class IdenticonServlet extends HttpServlet {
                 code = Integer.parseInt(codeParam);
             } catch (NumberFormatException nfe) {
                 Hash h = ConvertToHash.getHash(codeParam);
-                if (h != null)
-                    code = Arrays.hashCode(h.getData());
-                else
-                    code = codeParam.hashCode();
+                if (h != null) code = Arrays.hashCode(h.getData());
+                else code = codeParam.hashCode();
             }
             byte[] imageBytes = null;
 
             // retrieve image bytes from either cache or renderer
-            if (cache == null
-                    || (imageBytes = cache.get(identiconETag)) == null) {
+            if (cache == null || (imageBytes = cache.get(identiconETag)) == null) {
                 ByteArrayOutputStream byteOut = new ByteArrayOutputStream(4096);
                 RenderedImage image;
                 try {
@@ -156,8 +150,7 @@ public class IdenticonServlet extends HttpServlet {
                 }
                 ImageIO.write(image, IDENTICON_IMAGE_FORMAT, byteOut);
                 imageBytes = byteOut.toByteArray();
-                if (cache != null)
-                    cache.add(identiconETag, imageBytes);
+                if (cache != null) cache.add(identiconETag, imageBytes);
             } else {
                 // FIXME this sends 403 if cached
                 response.setStatus(404);
@@ -167,8 +160,7 @@ public class IdenticonServlet extends HttpServlet {
             // set ETag and, if code was provided, Expires header
             response.setHeader("ETag", identiconETag);
             if (codeSpecified) {
-                long expires = System.currentTimeMillis()
-                        + identiconExpiresInMillis;
+                long expires = System.currentTimeMillis() + identiconExpiresInMillis;
                 response.addDateHeader("Expires", expires);
             }
 

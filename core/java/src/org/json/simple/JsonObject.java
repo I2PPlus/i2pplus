@@ -28,7 +28,7 @@ import java.util.Set;
  * its contents are valid JSON.
  * @see Jsoner
  * @since 2.0.0 */
-public class JsonObject extends HashMap<String, Object> implements Jsonable{
+public class JsonObject extends HashMap<String, Object> implements Jsonable {
     /** The serialization version this class is compatible
      * with. This value doesn't need to be incremented if and only if the only changes to occur were updating comments,
      * updating javadocs, adding new
@@ -37,14 +37,14 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
     private static final long serialVersionUID = 2L;
 
     /** Instantiates an empty JsonObject. */
-    public JsonObject(){
+    public JsonObject() {
         super();
     }
 
     /** Instantiate a new JsonObject by accepting a map's entries, which could lead to de/serialization issues of the
      * resulting JsonObject since the entry values aren't validated as JSON values.
      * @param map represents the mappings to produce the JsonObject with. */
-    public JsonObject(final Map<String, ?> map){
+    public JsonObject(final Map<String, ?> map) {
         super(map);
     }
 
@@ -52,18 +52,18 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @param keys represents the keys that must be present.
      * @throws NoSuchElementException if any of the given keys are missing.
      * @since 2.3.0 to ensure critical keys are in the JsonObject. */
-    public void requireKeys(final JsonKey... keys){
+    public void requireKeys(final JsonKey... keys) {
         /* Track all of the missing keys. */
         final Set<JsonKey> missing = new HashSet<>();
-        for (final JsonKey k : keys){
-            if (!this.containsKey(k.getKey())){
+        for (final JsonKey k : keys) {
+            if (!this.containsKey(k.getKey())) {
                 missing.add(k);
             }
         }
-        if (!missing.isEmpty()){
+        if (!missing.isEmpty()) {
             /* Report any missing keys in the exception. */
             final StringBuilder sb = new StringBuilder();
-            for (final JsonKey k : missing){
+            for (final JsonKey k : missing) {
                 sb.append(k.getKey()).append(", ");
             }
             sb.setLength(sb.length() - 2);
@@ -84,18 +84,18 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#toString()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
-    public BigDecimal getBigDecimal(final JsonKey key){
+    public BigDecimal getBigDecimal(final JsonKey key) {
         Object returnable = this.get(key.getKey());
-        if (returnable instanceof BigDecimal){
+        if (returnable instanceof BigDecimal) {
             /* Success there was a BigDecimal or it defaulted. */
-        }else if (returnable instanceof Number){
+        } else if (returnable instanceof Number) {
             /* A number can be used to construct a BigDecimal */
             returnable = new BigDecimal(returnable.toString());
-        }else if (returnable instanceof String){
+        } else if (returnable instanceof String) {
             /* A number can be used to construct a BigDecimal */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return (BigDecimal)returnable;
+        return (BigDecimal) returnable;
     }
 
     /** A convenience method that assumes there is a BigDecimal, Number, or String at the given key. If a Number is
@@ -110,18 +110,18 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#toString()
      * @deprecated 2.3.0 in favor of {@link #getBigDecimal(JsonKey)} */
     @Deprecated
-    public BigDecimal getBigDecimal(final String key){
+    public BigDecimal getBigDecimal(final String key) {
         Object returnable = this.get(key);
-        if (returnable instanceof BigDecimal){
+        if (returnable instanceof BigDecimal) {
             /* Success there was a BigDecimal or it defaulted. */
-        }else if (returnable instanceof Number){
+        } else if (returnable instanceof Number) {
             /* A number can be used to construct a BigDecimal */
             returnable = new BigDecimal(returnable.toString());
-        }else if (returnable instanceof String){
+        } else if (returnable instanceof String) {
             /* A number can be used to construct a BigDecimal */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return (BigDecimal)returnable;
+        return (BigDecimal) returnable;
     }
 
     /** A convenience method that assumes there is a BigDecimal, Number, or String at the given key. If a Number is
@@ -136,23 +136,23 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#toString()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
-    public BigDecimal getBigDecimalOrDefault(final JsonKey key){
+    public BigDecimal getBigDecimalOrDefault(final JsonKey key) {
         Object returnable;
-        if (this.containsKey(key.getKey())){
+        if (this.containsKey(key.getKey())) {
             returnable = this.get(key.getKey());
-        }else{
+        } else {
             returnable = key.getValue();
         }
-        if (returnable instanceof BigDecimal){
+        if (returnable instanceof BigDecimal) {
             /* Success there was a BigDecimal or it defaulted. */
-        }else if (returnable instanceof Number){
+        } else if (returnable instanceof Number) {
             /* A number can be used to construct a BigDecimal */
             returnable = new BigDecimal(returnable.toString());
-        }else if (returnable instanceof String){
+        } else if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return (BigDecimal)returnable;
+        return (BigDecimal) returnable;
     }
 
     /** A convenience method that assumes there is a BigDecimal, Number, or String at the given key. If a Number is
@@ -168,23 +168,23 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#toString()
      * @deprecated 2.3.0 in favor of {@link #getBigDecimalOrDefault(JsonKey)} */
     @Deprecated
-    public BigDecimal getBigDecimalOrDefault(final String key, final BigDecimal defaultValue){
+    public BigDecimal getBigDecimalOrDefault(final String key, final BigDecimal defaultValue) {
         Object returnable;
-        if (this.containsKey(key)){
+        if (this.containsKey(key)) {
             returnable = this.get(key);
-        }else{
+        } else {
             return defaultValue;
         }
-        if (returnable instanceof BigDecimal){
+        if (returnable instanceof BigDecimal) {
             /* Success there was a BigDecimal or it defaulted. */
-        }else if (returnable instanceof Number){
+        } else if (returnable instanceof Number) {
             /* A number can be used to construct a BigDecimal */
             returnable = new BigDecimal(returnable.toString());
-        }else if (returnable instanceof String){
+        } else if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return (BigDecimal)returnable;
+        return (BigDecimal) returnable;
     }
 
     /** A convenience method that assumes there is a Boolean or String value at the given key.
@@ -193,12 +193,12 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
-    public Boolean getBoolean(final JsonKey key){
+    public Boolean getBoolean(final JsonKey key) {
         Object returnable = this.get(key.getKey());
-        if (returnable instanceof String){
-            returnable = Boolean.valueOf((String)returnable);
+        if (returnable instanceof String) {
+            returnable = Boolean.valueOf((String) returnable);
         }
-        return (Boolean)returnable;
+        return (Boolean) returnable;
     }
 
     /** A convenience method that assumes there is a Boolean or String value at the given key.
@@ -207,12 +207,12 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @deprecated 2.3.0 in favor of {@link #getBoolean(JsonKey)} */
     @Deprecated
-    public Boolean getBoolean(final String key){
+    public Boolean getBoolean(final String key) {
         Object returnable = this.get(key);
-        if (returnable instanceof String){
-            returnable = Boolean.valueOf((String)returnable);
+        if (returnable instanceof String) {
+            returnable = Boolean.valueOf((String) returnable);
         }
-        return (Boolean)returnable;
+        return (Boolean) returnable;
     }
 
     /** A convenience method that assumes there is a Boolean or String value at the given key.
@@ -221,17 +221,17 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
-    public Boolean getBooleanOrDefault(final JsonKey key){
+    public Boolean getBooleanOrDefault(final JsonKey key) {
         Object returnable;
-        if (this.containsKey(key.getKey())){
+        if (this.containsKey(key.getKey())) {
             returnable = this.get(key.getKey());
-        }else{
+        } else {
             returnable = key.getValue();
         }
-        if (returnable instanceof String){
-            returnable = Boolean.valueOf((String)returnable);
+        if (returnable instanceof String) {
+            returnable = Boolean.valueOf((String) returnable);
         }
-        return (Boolean)returnable;
+        return (Boolean) returnable;
     }
 
     /** A convenience method that assumes there is a Boolean or String value at the given key.
@@ -241,17 +241,17 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @throws ClassCastException if there was a value but didn't match the assumed return type.
      * @deprecated 2.3.0 in favor of {@link #getBooleanOrDefault(JsonKey)} */
     @Deprecated
-    public Boolean getBooleanOrDefault(final String key, final boolean defaultValue){
+    public Boolean getBooleanOrDefault(final String key, final boolean defaultValue) {
         Object returnable;
-        if (this.containsKey(key)){
+        if (this.containsKey(key)) {
             returnable = this.get(key);
-        }else{
+        } else {
             return defaultValue;
         }
-        if (returnable instanceof String){
-            returnable = Boolean.valueOf((String)returnable);
+        if (returnable instanceof String) {
+            returnable = Boolean.valueOf((String) returnable);
         }
-        return (Boolean)returnable;
+        return (Boolean) returnable;
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -263,16 +263,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#byteValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
-    public Byte getByte(final JsonKey key){
+    public Byte getByte(final JsonKey key) {
         Object returnable = this.get(key.getKey());
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).byteValue();
+        return ((Number) returnable).byteValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -284,16 +284,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#byteValue()
      * @deprecated 2.3.0 in favor of {@link #getByte(JsonKey)} */
     @Deprecated
-    public Byte getByte(final String key){
+    public Byte getByte(final String key) {
         Object returnable = this.get(key);
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).byteValue();
+        return ((Number) returnable).byteValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -306,21 +306,21 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#byteValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
-    public Byte getByteOrDefault(final JsonKey key){
+    public Byte getByteOrDefault(final JsonKey key) {
         Object returnable;
-        if (this.containsKey(key.getKey())){
+        if (this.containsKey(key.getKey())) {
             returnable = this.get(key.getKey());
-        }else{
+        } else {
             returnable = key.getValue();
         }
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).byteValue();
+        return ((Number) returnable).byteValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -334,21 +334,21 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#byteValue()
      * @deprecated 2.3.0 in favor of {@link #getByteOrDefault(JsonKey)} */
     @Deprecated
-    public Byte getByteOrDefault(final String key, final byte defaultValue){
+    public Byte getByteOrDefault(final String key, final byte defaultValue) {
         Object returnable;
-        if (this.containsKey(key)){
+        if (this.containsKey(key)) {
             returnable = this.get(key);
-        }else{
+        } else {
             return defaultValue;
         }
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).byteValue();
+        return ((Number) returnable).byteValue();
     }
 
     /** A convenience method that assumes there is a Collection at the given key.
@@ -360,10 +360,10 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
     @SuppressWarnings("unchecked")
-    public <T extends Collection<?>> T getCollection(final JsonKey key){
+    public <T extends Collection<?>> T getCollection(final JsonKey key) {
         /* The unchecked warning is suppressed because there is no way of guaranteeing at compile time the cast will
          * work. */
-        return (T)this.get(key.getKey());
+        return (T) this.get(key.getKey());
     }
 
     /** A convenience method that assumes there is a Collection at the given key.
@@ -375,10 +375,10 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @deprecated 2.3.0 in favor of {@link #getCollection(JsonKey)} */
     @Deprecated
     @SuppressWarnings("unchecked")
-    public <T extends Collection<?>> T getCollection(final String key){
+    public <T extends Collection<?>> T getCollection(final String key) {
         /* The unchecked warning is suppressed because there is no way of guaranteeing at compile time the cast will
          * work. */
-        return (T)this.get(key);
+        return (T) this.get(key);
     }
 
     /** A convenience method that assumes there is a Collection at the given key.
@@ -390,16 +390,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
     @SuppressWarnings("unchecked")
-    public <T extends Collection<?>> T getCollectionOrDefault(final JsonKey key){
+    public <T extends Collection<?>> T getCollectionOrDefault(final JsonKey key) {
         /* The unchecked warning is suppressed because there is no way of guaranteeing at compile time the cast will
          * work. */
         Object returnable;
-        if (this.containsKey(key.getKey())){
+        if (this.containsKey(key.getKey())) {
             returnable = this.get(key.getKey());
-        }else{
+        } else {
             returnable = key.getValue();
         }
-        return (T)returnable;
+        return (T) returnable;
     }
 
     /** A convenience method that assumes there is a Collection at the given key.
@@ -412,16 +412,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @deprecated 2.3.0 in favor of {@link #getCollectionOrDefault(JsonKey)} */
     @Deprecated
     @SuppressWarnings("unchecked")
-    public <T extends Collection<?>> T getCollectionOrDefault(final String key, final T defaultValue){
+    public <T extends Collection<?>> T getCollectionOrDefault(final String key, final T defaultValue) {
         /* The unchecked warning is suppressed because there is no way of guaranteeing at compile time the cast will
          * work. */
         Object returnable;
-        if (this.containsKey(key)){
+        if (this.containsKey(key)) {
             returnable = this.get(key);
-        }else{
+        } else {
             return defaultValue;
         }
-        return (T)returnable;
+        return (T) returnable;
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -433,16 +433,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#doubleValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
-    public Double getDouble(final JsonKey key){
+    public Double getDouble(final JsonKey key) {
         Object returnable = this.get(key.getKey());
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).doubleValue();
+        return ((Number) returnable).doubleValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -454,16 +454,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#doubleValue()
      * @deprecated 2.3.0 in favor of {@link #getDouble(JsonKey)} */
     @Deprecated
-    public Double getDouble(final String key){
+    public Double getDouble(final String key) {
         Object returnable = this.get(key);
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).doubleValue();
+        return ((Number) returnable).doubleValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -476,21 +476,21 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#doubleValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
-    public Double getDoubleOrDefault(final JsonKey key){
+    public Double getDoubleOrDefault(final JsonKey key) {
         Object returnable;
-        if (this.containsKey(key.getKey())){
+        if (this.containsKey(key.getKey())) {
             returnable = this.get(key.getKey());
-        }else{
+        } else {
             returnable = key.getValue();
         }
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).doubleValue();
+        return ((Number) returnable).doubleValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -504,21 +504,21 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#doubleValue()
      * @deprecated 2.3.0 in favor of {@link #getDoubleOrDefault(JsonKey)} */
     @Deprecated
-    public Double getDoubleOrDefault(final String key, final double defaultValue){
+    public Double getDoubleOrDefault(final String key, final double defaultValue) {
         Object returnable;
-        if (this.containsKey(key)){
+        if (this.containsKey(key)) {
             returnable = this.get(key);
-        }else{
+        } else {
             return defaultValue;
         }
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).doubleValue();
+        return ((Number) returnable).doubleValue();
     }
 
     /** A convenience method that assumes there is a String value at the given key representing a fully qualified name
@@ -538,7 +538,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @deprecated 2.3.0 Jsoner deprecated automatically serializing enums as Strings. */
     @Deprecated
     @SuppressWarnings("unchecked")
-    public <T extends Enum<T>> T getEnum(final JsonKey key) throws ClassNotFoundException{
+    public <T extends Enum<T>> T getEnum(final JsonKey key) throws ClassNotFoundException {
         /* Supressing the unchecked warning because the returnType is dynamically identified and could lead to a
          * ClassCastException when returnType is cast to Class<T>, which is acceptable by the method's contract. */
         T returnable;
@@ -550,7 +550,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
         final Class<T> returnType;
         /* Make sure the value at the key is a String. */
         value = this.getString(key);
-        if (value == null){
+        if (value == null) {
             return null;
         }
         /* Get the package, class, and enum names. */
@@ -558,16 +558,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
         numberOfSplitValues = splitValues.length;
         returnTypeName = new StringBuilder();
         enumName = new StringBuilder();
-        for (int i = 0; i < numberOfSplitValues; i++){
-            if (i == (numberOfSplitValues - 1)){
+        for (int i = 0; i < numberOfSplitValues; i++) {
+            if (i == (numberOfSplitValues - 1)) {
                 /* If it is the last split value then it should be the name of the Enum since dots are not allowed
                  * in enum names. */
                 enumName.append(splitValues[i]);
-            }else if (i == (numberOfSplitValues - 2)){
+            } else if (i == (numberOfSplitValues - 2)) {
                 /* If it is the penultimate split value then it should be the end of the package/enum type and not
                  * need a dot appended to it. */
                 returnTypeName.append(splitValues[i]);
-            }else{
+            } else {
                 /* Must be part of the package/enum type and will need a dot appended to it since they got removed
                  * in the split. */
                 returnTypeName.append(splitValues[i]);
@@ -575,7 +575,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
             }
         }
         /* Use the package/class and enum names to get the Enum<T>. */
-        returnType = (Class<T>)Class.forName(returnTypeName.toString());
+        returnType = (Class<T>) Class.forName(returnTypeName.toString());
         returnable = Enum.valueOf(returnType, enumName.toString());
         return returnable;
     }
@@ -595,7 +595,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @deprecated 2.3.0 in favor of {@link #getEnum(JsonKey)} */
     @Deprecated
     @SuppressWarnings("unchecked")
-    public <T extends Enum<T>> T getEnum(final String key) throws ClassNotFoundException{
+    public <T extends Enum<T>> T getEnum(final String key) throws ClassNotFoundException {
         /* Supressing the unchecked warning because the returnType is dynamically identified and could lead to a
          * ClassCastException when returnType is cast to Class<T>, which is expected by the method's contract. */
         T returnable;
@@ -607,7 +607,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
         final Class<T> returnType;
         /* Make sure the value at the key is a String. */
         value = this.getStringOrDefault(key, "");
-        if (value == null){
+        if (value == null) {
             return null;
         }
         /* Get the package, class, and enum names. */
@@ -615,16 +615,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
         numberOfSplitValues = splitValues.length;
         returnTypeName = new StringBuilder();
         enumName = new StringBuilder();
-        for (int i = 0; i < numberOfSplitValues; i++){
-            if (i == (numberOfSplitValues - 1)){
+        for (int i = 0; i < numberOfSplitValues; i++) {
+            if (i == (numberOfSplitValues - 1)) {
                 /* If it is the last split value then it should be the name of the Enum since dots are not allowed
                  * in enum names. */
                 enumName.append(splitValues[i]);
-            }else if (i == (numberOfSplitValues - 2)){
+            } else if (i == (numberOfSplitValues - 2)) {
                 /* If it is the penultimate split value then it should be the end of the package/enum type and not
                  * need a dot appended to it. */
                 returnTypeName.append(splitValues[i]);
-            }else{
+            } else {
                 /* Must be part of the package/enum type and will need a dot appended to it since they got removed
                  * in the split. */
                 returnTypeName.append(splitValues[i]);
@@ -632,7 +632,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
             }
         }
         /* Use the package/class and enum names to get the Enum<T>. */
-        returnType = (Class<T>)Class.forName(returnTypeName.toString());
+        returnType = (Class<T>) Class.forName(returnTypeName.toString());
         returnable = Enum.valueOf(returnType, enumName.toString());
         return returnable;
     }
@@ -654,7 +654,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @deprecated 2.3.0 Jsoner deprecated automatically serializing enums as Strings. */
     @Deprecated
     @SuppressWarnings({"unchecked", "CollectionIncompatibleType"})
-    public <T extends Enum<T>> T getEnumOrDefault(final JsonKey key) throws ClassNotFoundException{
+    public <T extends Enum<T>> T getEnumOrDefault(final JsonKey key) throws ClassNotFoundException {
         /* Supressing the unchecked warning because the returnType is dynamically identified and could lead to a
          * ClassCastException when returnType is cast to Class<T>, which is acceptable by the method's contract. */
         T returnable;
@@ -665,10 +665,10 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
         final StringBuilder enumName;
         final Class<T> returnType;
         /* Check to make sure the key is there. */
-        if (this.containsKey(key)){
+        if (this.containsKey(key)) {
             /* Make sure the value at the key is a String. */
             value = this.getStringOrDefault(key.getKey(), "");
-            if (value == null){
+            if (value == null) {
                 return null;
             }
             /* Get the package, class, and enum names. */
@@ -676,16 +676,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
             numberOfSplitValues = splitValues.length;
             returnTypeName = new StringBuilder();
             enumName = new StringBuilder();
-            for (int i = 0; i < numberOfSplitValues; i++){
-                if (i == (numberOfSplitValues - 1)){
+            for (int i = 0; i < numberOfSplitValues; i++) {
+                if (i == (numberOfSplitValues - 1)) {
                     /* If it is the last split value then it should be the name of the Enum since dots are not allowed
                      * in enum names. */
                     enumName.append(splitValues[i]);
-                }else if (i == (numberOfSplitValues - 2)){
+                } else if (i == (numberOfSplitValues - 2)) {
                     /* If it is the penultimate split value then it should be the end of the package/enum type and not
                      * need a dot appended to it. */
                     returnTypeName.append(splitValues[i]);
-                }else{
+                } else {
                     /* Must be part of the package/enum type and will need a dot appended to it since they got removed
                      * in the split. */
                     returnTypeName.append(splitValues[i]);
@@ -693,11 +693,11 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
                 }
             }
             /* Use the package/class and enum names to get the Enum<T>. */
-            returnType = (Class<T>)Class.forName(returnTypeName.toString());
+            returnType = (Class<T>) Class.forName(returnTypeName.toString());
             returnable = Enum.valueOf(returnType, enumName.toString());
-        }else{
+        } else {
             /* It wasn't there and according to the method's contract we return the default value. */
-            returnable = (T)key.getValue();
+            returnable = (T) key.getValue();
         }
         return returnable;
     }
@@ -719,7 +719,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @deprecated 2.3.0 in favor of {@link #getEnumOrDefault(JsonKey)} */
     @Deprecated
     @SuppressWarnings("unchecked")
-    public <T extends Enum<T>> T getEnumOrDefault(final String key, final T defaultValue) throws ClassNotFoundException{
+    public <T extends Enum<T>> T getEnumOrDefault(final String key, final T defaultValue) throws ClassNotFoundException {
         /* Supressing the unchecked warning because the returnType is dynamically identified and could lead to a
          * ClassCastException when returnType is cast to Class<T>, which is expected by the method's contract. */
         T returnable;
@@ -731,10 +731,10 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
         final Class<T> returnType;
         /* Check to make sure the key wasn't actually there and wasn't coincidentally the defaulted String as its
          * value. */
-        if (this.containsKey(key)){
+        if (this.containsKey(key)) {
             /* Make sure the value at the key is a String. */
             value = this.getStringOrDefault(key, "");
-            if (value == null){
+            if (value == null) {
                 return null;
             }
             /* Get the package, class, and enum names. */
@@ -742,16 +742,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
             numberOfSplitValues = splitValues.length;
             returnTypeName = new StringBuilder();
             enumName = new StringBuilder();
-            for (int i = 0; i < numberOfSplitValues; i++){
-                if (i == (numberOfSplitValues - 1)){
+            for (int i = 0; i < numberOfSplitValues; i++) {
+                if (i == (numberOfSplitValues - 1)) {
                     /* If it is the last split value then it should be the name of the Enum since dots are not allowed
                      * in enum names. */
                     enumName.append(splitValues[i]);
-                }else if (i == (numberOfSplitValues - 2)){
+                } else if (i == (numberOfSplitValues - 2)) {
                     /* If it is the penultimate split value then it should be the end of the package/enum type and not
                      * need a dot appended to it. */
                     returnTypeName.append(splitValues[i]);
-                }else{
+                } else {
                     /* Must be part of the package/enum type and will need a dot appended to it since they got removed
                      * in the split. */
                     returnTypeName.append(splitValues[i]);
@@ -759,9 +759,9 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
                 }
             }
             /* Use the package/class and enum names to get the Enum<T>. */
-            returnType = (Class<T>)Class.forName(returnTypeName.toString());
+            returnType = (Class<T>) Class.forName(returnTypeName.toString());
             returnable = Enum.valueOf(returnType, enumName.toString());
-        }else{
+        } else {
             /* It wasn't there and according to the method's contract we return the default value. */
             return defaultValue;
         }
@@ -777,16 +777,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#floatValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
-    public Float getFloat(final JsonKey key){
+    public Float getFloat(final JsonKey key) {
         Object returnable = this.get(key.getKey());
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).floatValue();
+        return ((Number) returnable).floatValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -798,16 +798,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#floatValue()
      * @deprecated 2.3.0 in favor of {@link #getFloat(JsonKey)} */
     @Deprecated
-    public Float getFloat(final String key){
+    public Float getFloat(final String key) {
         Object returnable = this.get(key);
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).floatValue();
+        return ((Number) returnable).floatValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -820,21 +820,21 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#floatValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
-    public Float getFloatOrDefault(final JsonKey key){
+    public Float getFloatOrDefault(final JsonKey key) {
         Object returnable;
-        if (this.containsKey(key.getKey())){
+        if (this.containsKey(key.getKey())) {
             returnable = this.get(key.getKey());
-        }else{
+        } else {
             returnable = key.getValue();
         }
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).floatValue();
+        return ((Number) returnable).floatValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -848,21 +848,21 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#floatValue()
      * @deprecated 2.3.0 in favor of {@link #getFloatOrDefault(JsonKey)} */
     @Deprecated
-    public Float getFloatOrDefault(final String key, final float defaultValue){
+    public Float getFloatOrDefault(final String key, final float defaultValue) {
         Object returnable;
-        if (this.containsKey(key)){
+        if (this.containsKey(key)) {
             returnable = this.get(key);
-        }else{
+        } else {
             return defaultValue;
         }
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).floatValue();
+        return ((Number) returnable).floatValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -874,16 +874,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#intValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
-    public Integer getInteger(final JsonKey key){
+    public Integer getInteger(final JsonKey key) {
         Object returnable = this.get(key.getKey());
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).intValue();
+        return ((Number) returnable).intValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -895,16 +895,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#intValue()
      * @deprecated 2.3.0 in favor of {@link #getInteger(JsonKey)} */
     @Deprecated
-    public Integer getInteger(final String key){
+    public Integer getInteger(final String key) {
         Object returnable = this.get(key);
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).intValue();
+        return ((Number) returnable).intValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -917,21 +917,21 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#intValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
-    public Integer getIntegerOrDefault(final JsonKey key){
+    public Integer getIntegerOrDefault(final JsonKey key) {
         Object returnable;
-        if (this.containsKey(key.getKey())){
+        if (this.containsKey(key.getKey())) {
             returnable = this.get(key.getKey());
-        }else{
+        } else {
             returnable = key.getValue();
         }
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).intValue();
+        return ((Number) returnable).intValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -945,21 +945,21 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#intValue()
      * @deprecated 2.3.0 in favor of {@link #getIntegerOrDefault(JsonKey)} */
     @Deprecated
-    public Integer getIntegerOrDefault(final String key, final int defaultValue){
+    public Integer getIntegerOrDefault(final String key, final int defaultValue) {
         Object returnable;
-        if (this.containsKey(key)){
+        if (this.containsKey(key)) {
             returnable = this.get(key);
-        }else{
+        } else {
             return defaultValue;
         }
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).intValue();
+        return ((Number) returnable).intValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -971,16 +971,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#longValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
-    public Long getLong(final JsonKey key){
+    public Long getLong(final JsonKey key) {
         Object returnable = this.get(key.getKey());
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).longValue();
+        return ((Number) returnable).longValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -992,16 +992,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#longValue()
      * @deprecated 2.3.0 in favor of {@link #getLong(JsonKey)} */
     @Deprecated
-    public Long getLong(final String key){
+    public Long getLong(final String key) {
         Object returnable = this.get(key);
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).longValue();
+        return ((Number) returnable).longValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -1014,21 +1014,21 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#longValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
-    public Long getLongOrDefault(final JsonKey key){
+    public Long getLongOrDefault(final JsonKey key) {
         Object returnable;
-        if (this.containsKey(key.getKey())){
+        if (this.containsKey(key.getKey())) {
             returnable = this.get(key.getKey());
-        }else{
+        } else {
             returnable = key.getValue();
         }
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).longValue();
+        return ((Number) returnable).longValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -1042,21 +1042,21 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#longValue()
      * @deprecated 2.3.0 in favor of {@link #getLongOrDefault(JsonKey)} */
     @Deprecated
-    public Long getLongOrDefault(final String key, final long defaultValue){
+    public Long getLongOrDefault(final String key, final long defaultValue) {
         Object returnable;
-        if (this.containsKey(key)){
+        if (this.containsKey(key)) {
             returnable = this.get(key);
-        }else{
+        } else {
             return defaultValue;
         }
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).longValue();
+        return ((Number) returnable).longValue();
     }
 
     /** A convenience method that assumes there is a Map at the given key.
@@ -1067,10 +1067,10 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
     @SuppressWarnings("unchecked")
-    public <T extends Map<?, ?>> T getMap(final JsonKey key){
+    public <T extends Map<?, ?>> T getMap(final JsonKey key) {
         /* The unchecked warning is suppressed because there is no way of guaranteeing at compile time the cast will
          * work. */
-        return (T)this.get(key.getKey());
+        return (T) this.get(key.getKey());
     }
 
     /** A convenience method that assumes there is a Map at the given key.
@@ -1081,10 +1081,10 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @deprecated 2.3.0 in favor of {@link #getMap(JsonKey)} */
     @Deprecated
     @SuppressWarnings("unchecked")
-    public <T extends Map<?, ?>> T getMap(final String key){
+    public <T extends Map<?, ?>> T getMap(final String key) {
         /* The unchecked warning is suppressed because there is no way of guaranteeing at compile time the cast will
          * work. */
-        return (T)this.get(key);
+        return (T) this.get(key);
     }
 
     /** A convenience method that assumes there is a Map at the given key.
@@ -1095,16 +1095,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
     @SuppressWarnings("unchecked")
-    public <T extends Map<?, ?>> T getMapOrDefault(final JsonKey key){
+    public <T extends Map<?, ?>> T getMapOrDefault(final JsonKey key) {
         /* The unchecked warning is suppressed because there is no way of guaranteeing at compile time the cast will
          * work. */
         Object returnable;
-        if (this.containsKey(key.getKey())){
+        if (this.containsKey(key.getKey())) {
             returnable = this.get(key.getKey());
-        }else{
+        } else {
             returnable = key.getValue();
         }
-        return (T)returnable;
+        return (T) returnable;
     }
 
     /** A convenience method that assumes there is a Map at the given key.
@@ -1116,16 +1116,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @deprecated 2.3.0 in favor of {@link #getMapOrDefault(JsonKey)} */
     @Deprecated
     @SuppressWarnings("unchecked")
-    public <T extends Map<?, ?>> T getMapOrDefault(final String key, final T defaultValue){
+    public <T extends Map<?, ?>> T getMapOrDefault(final String key, final T defaultValue) {
         /* The unchecked warning is suppressed because there is no way of guaranteeing at compile time the cast will
          * work. */
         Object returnable;
-        if (this.containsKey(key)){
+        if (this.containsKey(key)) {
             returnable = this.get(key);
-        }else{
+        } else {
             returnable = defaultValue;
         }
-        return (T)returnable;
+        return (T) returnable;
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -1137,16 +1137,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#shortValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
-    public Short getShort(final JsonKey key){
+    public Short getShort(final JsonKey key) {
         Object returnable = this.get(key.getKey());
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).shortValue();
+        return ((Number) returnable).shortValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -1158,16 +1158,16 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#shortValue()
      * @deprecated 2.3.0 in favor of {@link #getShort(JsonKey)} */
     @Deprecated
-    public Short getShort(final String key){
+    public Short getShort(final String key) {
         Object returnable = this.get(key);
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).shortValue();
+        return ((Number) returnable).shortValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -1180,21 +1180,21 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#shortValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
-    public Short getShortOrDefault(final JsonKey key){
+    public Short getShortOrDefault(final JsonKey key) {
         Object returnable;
-        if (this.containsKey(key.getKey())){
+        if (this.containsKey(key.getKey())) {
             returnable = this.get(key.getKey());
-        }else{
+        } else {
             returnable = key.getValue();
         }
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).shortValue();
+        return ((Number) returnable).shortValue();
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
@@ -1208,21 +1208,21 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @see Number#shortValue()
      * @deprecated 2.3.0 in favor of {@link #getShortOrDefault(JsonKey)} */
     @Deprecated
-    public Short getShortOrDefault(final String key, final short defaultValue){
+    public Short getShortOrDefault(final String key, final short defaultValue) {
         Object returnable;
-        if (this.containsKey(key)){
+        if (this.containsKey(key)) {
             returnable = this.get(key);
-        }else{
+        } else {
             return defaultValue;
         }
-        if (returnable == null){
+        if (returnable == null) {
             return null;
         }
-        if (returnable instanceof String){
+        if (returnable instanceof String) {
             /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String)returnable);
+            returnable = new BigDecimal((String) returnable);
         }
-        return ((Number)returnable).shortValue();
+        return ((Number) returnable).shortValue();
     }
 
     /** A convenience method that assumes there is a Boolean, Number, or String value at the given key.
@@ -1231,14 +1231,14 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
-    public String getString(final JsonKey key){
+    public String getString(final JsonKey key) {
         Object returnable = this.get(key.getKey());
-        if (returnable instanceof Boolean){
+        if (returnable instanceof Boolean) {
             returnable = returnable.toString();
-        }else if (returnable instanceof Number){
+        } else if (returnable instanceof Number) {
             returnable = returnable.toString();
         }
-        return (String)returnable;
+        return (String) returnable;
     }
 
     /** A convenience method that assumes there is a Boolean, Number, or String value at the given key.
@@ -1247,14 +1247,14 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @deprecated 2.3.0 in favor of {@link #getString(JsonKey)} */
     @Deprecated
-    public String getString(final String key){
+    public String getString(final String key) {
         Object returnable = this.get(key);
-        if (returnable instanceof Boolean){
+        if (returnable instanceof Boolean) {
             returnable = returnable.toString();
-        }else if (returnable instanceof Number){
+        } else if (returnable instanceof Number) {
             returnable = returnable.toString();
         }
-        return (String)returnable;
+        return (String) returnable;
     }
 
     /** A convenience method that assumes there is a Boolean, Number, or String value at the given key.
@@ -1263,19 +1263,19 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
-    public String getStringOrDefault(final JsonKey key){
+    public String getStringOrDefault(final JsonKey key) {
         Object returnable;
-        if (this.containsKey(key.getKey())){
+        if (this.containsKey(key.getKey())) {
             returnable = this.get(key.getKey());
-        }else{
+        } else {
             returnable = key.getValue();
         }
-        if (returnable instanceof Boolean){
+        if (returnable instanceof Boolean) {
             returnable = returnable.toString();
-        }else if (returnable instanceof Number){
+        } else if (returnable instanceof Number) {
             returnable = returnable.toString();
         }
-        return (String)returnable;
+        return (String) returnable;
     }
 
     /** A convenience method that assumes there is a Boolean, Number, or String value at the given key.
@@ -1285,29 +1285,29 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
      * @throws ClassCastException if there was a value but didn't match the assumed return type.
      * @deprecated 2.3.0 in favor of {@link #getStringOrDefault(JsonKey)} */
     @Deprecated
-    public String getStringOrDefault(final String key, final String defaultValue){
+    public String getStringOrDefault(final String key, final String defaultValue) {
         Object returnable;
-        if (this.containsKey(key)){
+        if (this.containsKey(key)) {
             returnable = this.get(key);
-        }else{
+        } else {
             return defaultValue;
         }
-        if (returnable instanceof Boolean){
+        if (returnable instanceof Boolean) {
             returnable = returnable.toString();
-        }else if (returnable instanceof Number){
+        } else if (returnable instanceof Number) {
             returnable = returnable.toString();
         }
-        return (String)returnable;
+        return (String) returnable;
     }
 
     /* (non-Javadoc)
      * @see org.json.simple.Jsonable#asJsonString() */
     @Override
-    public String toJson(){
+    public String toJson() {
         final StringWriter writable = new StringWriter();
-        try{
+        try {
             this.toJson(writable);
-        }catch (final IOException caught){
+        } catch (final IOException caught) {
             /* See java.io.StringWriter. */
         }
         return writable.toString();
@@ -1316,15 +1316,15 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
     /* (non-Javadoc)
      * @see org.json.simple.Jsonable#toJsonString(java.io.Writer) */
     @Override
-    public void toJson(final Writer writable) throws IOException{
+    public void toJson(final Writer writable) throws IOException {
         /* Writes the map in JSON object format. */
         boolean isFirstEntry = true;
         final Iterator<Map.Entry<String, Object>> entries = this.entrySet().iterator();
         writable.write('{');
-        while (entries.hasNext()){
-            if (isFirstEntry){
+        while (entries.hasNext()) {
+            if (isFirstEntry) {
                 isFirstEntry = false;
-            }else{
+            } else {
                 writable.write(',');
             }
             final Map.Entry<String, Object> entry = entries.next();

@@ -6,6 +6,10 @@
 
 package org.klomp.snark;
 
+import net.i2p.I2PAppContext;
+import net.i2p.util.I2PAppThread;
+import net.i2p.util.Log;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -14,9 +18,6 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicLong;
-import net.i2p.I2PAppContext;
-import net.i2p.util.I2PAppThread;
-import net.i2p.util.Log;
 
 // import net.i2p.util.SimpleTimer;
 
@@ -29,8 +30,7 @@ import net.i2p.util.Log;
  * @since 0.1
  */
 class PeerConnectionOut implements Runnable {
-    private final Log _log =
-            I2PAppContext.getGlobalContext().logManager().getLog(PeerConnectionOut.class);
+    private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(PeerConnectionOut.class);
     private final Peer peer;
     private final DataOutputStream dout;
     private Thread thread;
@@ -77,9 +77,7 @@ class PeerConnectionOut implements Runnable {
                 }
 
                 synchronized (sendQueue) {
-                    while (!quit
-                            && peer.isConnected()
-                            && (shouldThrottleRequests || sendQueue.isEmpty())) {
+                    while (!quit && peer.isConnected() && (shouldThrottleRequests || sendQueue.isEmpty())) {
                         try {
                             sendQueue.wait(shouldThrottleRequests ? 5000 : 60 * 1000);
                         } // Wait till more data arrives.
@@ -97,20 +95,14 @@ class PeerConnectionOut implements Runnable {
                         // being sent even if we get unchoked a little later (since we will resend
                         // them anyway in that case).
                         // And remove piece messages if we are choking.
-                        Iterator<Message> it =
-                                sendQueue.iterator(); // this should get fixed for starvation
+                        Iterator<Message> it = sendQueue.iterator(); // this should get fixed for starvation
                         while (m == null && it.hasNext()) {
                             Message nm = it.next();
                             if (nm.type == Message.PIECE) {
                                 if (state.choking) {
                                     it.remove();
                                     if (peer.supportsFast()) {
-                                        Message r =
-                                                new Message(
-                                                        Message.REJECT,
-                                                        nm.piece,
-                                                        nm.begin,
-                                                        nm.length);
+                                        Message r = new Message(Message.REJECT, nm.piece, nm.begin, nm.length);
                                         if (_log.shouldDebug()) {
                                             _log.debug("Sending [" + peer + "]: " + r);
                                         }
@@ -376,10 +368,7 @@ class PeerConnectionOut implements Runnable {
             Iterator<Message> it = sendQueue.iterator();
             while (it.hasNext()) {
                 Message m = it.next();
-                if (m.type == Message.REQUEST
-                        && m.piece == req.getPiece()
-                        && m.begin == req.off
-                        && m.length == req.len) {
+                if (m.type == Message.REQUEST && m.piece == req.getPiece() && m.begin == req.off && m.length == req.len) {
                     if (_log.shouldDebug()) {
                         _log.debug("Discarding duplicate request " + req + " to [" + peer + "]");
                     }
@@ -426,10 +415,7 @@ class PeerConnectionOut implements Runnable {
             Iterator<Message> it = sendQueue.iterator();
             while (it.hasNext()) {
                 Message m = it.next();
-                if (m.type == Message.REQUEST
-                        && m.piece == req.getPiece()
-                        && m.begin == req.off
-                        && m.length == req.len) {
+                if (m.type == Message.REQUEST && m.piece == req.getPiece() && m.begin == req.off && m.length == req.len) {
                     it.remove();
                 }
             }
@@ -447,7 +433,7 @@ class PeerConnectionOut implements Runnable {
      */
     void cancelRequestMessages() {
         synchronized (sendQueue) {
-            for (Iterator<Message> it = sendQueue.iterator(); it.hasNext();) {
+            for (Iterator<Message> it = sendQueue.iterator(); it.hasNext(); ) {
                 if (it.next().type == Message.REQUEST) {
                     it.remove();
                 }
@@ -464,10 +450,7 @@ class PeerConnectionOut implements Runnable {
             Iterator<Message> it = sendQueue.iterator();
             while (it.hasNext()) {
                 Message m = it.next();
-                if (m.type == Message.PIECE
-                        && m.piece == piece
-                        && m.begin == begin
-                        && m.length == length) {
+                if (m.type == Message.PIECE && m.piece == piece && m.begin == begin && m.length == length) {
                     it.remove();
                 }
             }

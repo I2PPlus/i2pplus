@@ -9,11 +9,12 @@ package net.i2p.data.i2cp;
  *
  */
 
+import net.i2p.data.DataFormatException;
+import net.i2p.util.ByteArrayStream;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
-import net.i2p.data.DataFormatException;
-import net.i2p.util.ByteArrayStream;
 
 /**
  * Defines the message a router sends to a client indicating the
@@ -22,26 +23,32 @@ import net.i2p.util.ByteArrayStream;
  * @author jrandom
  */
 public class SessionStatusMessage extends I2CPMessageImpl {
-    public final static int MESSAGE_TYPE = 20;
+    public static final int MESSAGE_TYPE = 20;
     private SessionId _sessionId;
     private int _status;
 
-    public final static int STATUS_DESTROYED = 0;
-    public final static int STATUS_CREATED = 1;
-    public final static int STATUS_UPDATED = 2;
-    public final static int STATUS_INVALID = 3;
+    public static final int STATUS_DESTROYED = 0;
+    public static final int STATUS_CREATED = 1;
+    public static final int STATUS_UPDATED = 2;
+    public static final int STATUS_INVALID = 3;
+
     /** Session refused status.
-      * @since 0.9.12 */
-    public final static int STATUS_REFUSED = 4;
+     * @since 0.9.12 */
+    public static final int STATUS_REFUSED = 4;
+
     /**
      *  Used internally, not in spec, will be remapped to STATUS_INVALID before being sent.
      *  @since 0.9.44
      */
-    public final static int STATUS_DUP_DEST = 5;
+    public static final int STATUS_DUP_DEST = 5;
 
-    public SessionStatusMessage() {setStatus(STATUS_INVALID);}
+    public SessionStatusMessage() {
+        setStatus(STATUS_INVALID);
+    }
 
-    public SessionId getSessionId() {return _sessionId;}
+    public SessionId getSessionId() {
+        return _sessionId;
+    }
 
     /**
      * Return the SessionId for this message.
@@ -49,13 +56,21 @@ public class SessionStatusMessage extends I2CPMessageImpl {
      * @since 0.9.21
      */
     @Override
-    public SessionId sessionId() {return _sessionId;}
+    public SessionId sessionId() {
+        return _sessionId;
+    }
 
-    public void setSessionId(SessionId id) {_sessionId = id;}
+    public void setSessionId(SessionId id) {
+        _sessionId = id;
+    }
 
-    public int getStatus() {return _status;}
+    public int getStatus() {
+        return _status;
+    }
 
-    public final void setStatus(int status) {_status = status;}
+    public final void setStatus(int status) {
+        _status = status;
+    }
 
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
@@ -63,7 +78,9 @@ public class SessionStatusMessage extends I2CPMessageImpl {
             _sessionId = new SessionId();
             _sessionId.readBytes(in);
             _status = in.read();
-            if (_status < 0) {throw new EOFException();}
+            if (_status < 0) {
+                throw new EOFException();
+            }
         } catch (DataFormatException dfe) {
             throw new I2CPMessageException("Unable to load the message data", dfe);
         }
@@ -85,14 +102,14 @@ public class SessionStatusMessage extends I2CPMessageImpl {
     }
 
     @Override
-    public int getType() {return MESSAGE_TYPE;}
+    public int getType() {
+        return MESSAGE_TYPE;
+    }
 
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
-        buf.append(getSessionId()).append(" SessionStatusMessage: ")
-           .append(" [Status: ").append(getStatus() + "]");
+        buf.append(getSessionId()).append(" SessionStatusMessage: ").append(" [Status: ").append(getStatus() + "]");
         return buf.toString();
     }
-
 }

@@ -7,15 +7,10 @@ import java.math.BigInteger;
  *
  * @see ElGamalPrivateKeySpec
  */
-public class ElGamalPublicKeySpec
-    extends ElGamalKeySpec
-{
+public class ElGamalPublicKeySpec extends ElGamalKeySpec {
     private final BigInteger y;
 
-    public ElGamalPublicKeySpec(
-        BigInteger              y,
-        ElGamalParameterSpec    spec)
-    {
+    public ElGamalPublicKeySpec(BigInteger y, ElGamalParameterSpec spec) {
         super(spec);
 
         this.y = y;
@@ -26,8 +21,7 @@ public class ElGamalPublicKeySpec
      *
      * @return the public value <code>y</code>
      */
-    public BigInteger getY()
-    {
+    public BigInteger getY() {
         return y;
     }
 }

@@ -2,19 +2,23 @@ package net.i2p.stat;
 
 import static java.util.Arrays.*;
 
+import net.i2p.data.DataHelper;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Properties;
-import net.i2p.data.DataHelper;
 
 /** coordinate a moving rate over various periods */
 public class RateStat {
     /** unique name of the statistic */
     private final String _statName;
+
     /** grouping under which the stat is kept */
     private final String _groupName;
+
     /** describe the stat */
     private final String _description;
+
     /** actual rate objects for this statistic */
     protected final Rate[] _rates;
 
@@ -22,10 +26,9 @@ public class RateStat {
         _statName = name;
         _description = description;
         _groupName = group;
-        if (periods.length == 0)
-            throw new IllegalArgumentException();
+        if (periods.length == 0) throw new IllegalArgumentException();
 
-        long [] periodsCopy = new long[periods.length];
+        long[] periodsCopy = new long[periods.length];
         System.arraycopy(periods, 0, periodsCopy, 0, periods.length);
         sort(periodsCopy);
 
@@ -41,8 +44,7 @@ public class RateStat {
      * update all of the rates for the various periods with the given value.
      */
     public void addData(long value, long eventDuration) {
-        for (Rate r: _rates)
-            r.addData(value, eventDuration);
+        for (Rate r : _rates) r.addData(value, eventDuration);
     }
 
     /**
@@ -51,14 +53,12 @@ public class RateStat {
      * @since 0.8.10
      */
     public void addData(long value) {
-        for (Rate r: _rates)
-            r.addData(value);
+        for (Rate r : _rates) r.addData(value);
     }
 
     /** coalesce all the stats */
     public void coalesceStats() {
-        for (Rate r: _rates)
-            r.coalesce();
+        for (Rate r : _rates) r.coalesce();
     }
 
     public String getName() {
@@ -74,15 +74,15 @@ public class RateStat {
     }
 
     public long[] getPeriods() {
-        long [] rv = new long[_rates.length];
-        for (int i = 0; i < _rates.length; i++)
-            rv[i] = _rates[i].getPeriod();
+        long[] rv = new long[_rates.length];
+        for (int i = 0; i < _rates.length; i++) rv[i] = _rates[i].getPeriod();
         return rv;
     }
 
     public double getLifetimeAverageValue() {
         return _rates[0].getLifetimeAverageValue();
     }
+
     public long getLifetimeEventCount() {
         return _rates[0].getLifetimeEventCount();
     }
@@ -95,8 +95,7 @@ public class RateStat {
      */
     public Rate getRate(long period) {
         for (Rate r : _rates) {
-            if (r.getPeriod() == period)
-                return r;
+            if (r.getPeriod() == period) return r;
         }
 
         return null;
@@ -138,8 +137,8 @@ public class RateStat {
         return _statName.hashCode();
     }
 
-    private final static String NL = System.getProperty("line.separator");
-    private final static String HR = "#----------------------------------------------------------------------------------------";
+    private static final String NL = System.getProperty("line.separator");
+    private static final String HR = "#----------------------------------------------------------------------------------------";
 
     @Override
     public String toString() {
@@ -159,18 +158,15 @@ public class RateStat {
     @Override
     public boolean equals(Object obj) {
         if ((obj == null) || !(obj instanceof RateStat)) return false;
-        if (obj == this)
-            return true;
+        if (obj == this) return true;
         RateStat rs = (RateStat) obj;
-        if (nameGroupDescEquals(rs))
-            return deepEquals(this._rates, rs._rates);
+        if (nameGroupDescEquals(rs)) return deepEquals(this._rates, rs._rates);
 
         return false;
     }
 
     boolean nameGroupDescEquals(RateStat rs) {
-        return DataHelper.eq(getGroupName(), rs.getGroupName()) && DataHelper.eq(getDescription(), rs.getDescription())
-                && DataHelper.eq(getName(), rs.getName());
+        return DataHelper.eq(getGroupName(), rs.getGroupName()) && DataHelper.eq(getDescription(), rs.getDescription()) && DataHelper.eq(getName(), rs.getName());
     }
 
     /**
@@ -181,11 +177,11 @@ public class RateStat {
     }
 
     /**
-      *  Stores the rate statistics to an output stream.
-      *
-      * @param addComments add comment lines to the output
-      * @since 0.9.41
-      */
+     *  Stores the rate statistics to an output stream.
+     *
+     * @param addComments add comment lines to the output
+     * @since 0.9.41
+     */
     public void store(OutputStream out, String prefix, boolean addComments) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
         if (addComments) {
@@ -196,7 +192,7 @@ public class RateStat {
             out.write(buf.toString().getBytes("UTF-8"));
             buf.setLength(0);
         }
-        for (Rate r: _rates) {
+        for (Rate r : _rates) {
             if (addComments) {
                 buf.append(NL);
                 buf.append("# Period: ").append(DataHelper.formatDuration(r.getPeriod())).append(" [").append(_statName).append("]").append(NL);
@@ -231,45 +227,45 @@ public class RateStat {
         }
     }
 
-/*********
-    public static void main(String args[]) {
-        RateStat rs = new RateStat("moo", "moo moo moo", "cow trueisms", new long[] { 60 * 1000, 60 * 60 * 1000,
-                                                                                     24 * 60 * 60 * 1000});
-
-        for (int i = 0; i < 500; i++) {
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException ie) { // nop
-            }
-            rs.addData(i * 100, 20);
-        }
-
-        rs.coalesceStats();
-
-        java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(2048);
-        try {
-            rs.store(baos, "rateStat.test");
-            byte data[] = baos.toByteArray();
-            _log.error("Stored rateStat: size = " + data.length + "\n" + new String(data));
-
-            Properties props = new Properties();
-            props.load(new java.io.ByteArrayInputStream(data));
-
-            //_log.error("Properties loaded: \n" + props);
-
-            RateStat loadedRs = new RateStat("moo", "moo moo moo", "cow trueisms", new long[] { 60 * 1000,
-                                                                                               60 * 60 * 1000,
-                                                                                               24 * 60 * 60 * 1000});
-            loadedRs.load(props, "rateStat.test", true);
-
-            _log.error("Comparison after store/load: " + rs.equals(loadedRs));
-        } catch (Throwable t) {
-            _log.error("b0rk", t);
-        }
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException ie) { // nop
-        }
-    }
-*********/
+    /*********
+     * public static void main(String args[]) {
+     * RateStat rs = new RateStat("moo", "moo moo moo", "cow trueisms", new long[] { 60 * 1000, 60 * 60 * 1000,
+     * 24 * 60 * 60 * 1000});
+     *
+     * for (int i = 0; i < 500; i++) {
+     * try {
+     * Thread.sleep(20);
+     * } catch (InterruptedException ie) { // nop
+     * }
+     * rs.addData(i * 100, 20);
+     * }
+     *
+     * rs.coalesceStats();
+     *
+     * java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(2048);
+     * try {
+     * rs.store(baos, "rateStat.test");
+     * byte data[] = baos.toByteArray();
+     * _log.error("Stored rateStat: size = " + data.length + "\n" + new String(data));
+     *
+     * Properties props = new Properties();
+     * props.load(new java.io.ByteArrayInputStream(data));
+     *
+     * //_log.error("Properties loaded: \n" + props);
+     *
+     * RateStat loadedRs = new RateStat("moo", "moo moo moo", "cow trueisms", new long[] { 60 * 1000,
+     * 60 * 60 * 1000,
+     * 24 * 60 * 60 * 1000});
+     * loadedRs.load(props, "rateStat.test", true);
+     *
+     * _log.error("Comparison after store/load: " + rs.equals(loadedRs));
+     * } catch (Throwable t) {
+     * _log.error("b0rk", t);
+     * }
+     * try {
+     * Thread.sleep(5000);
+     * } catch (InterruptedException ie) { // nop
+     * }
+     * }
+     *********/
 }

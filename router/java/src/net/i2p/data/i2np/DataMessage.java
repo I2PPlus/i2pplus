@@ -1,4 +1,5 @@
 package net.i2p.data.i2np;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -20,7 +21,7 @@ import net.i2p.data.DataHelper;
  * @author jrandom
  */
 public class DataMessage extends FastI2NPMessageImpl {
-    public final static int MESSAGE_TYPE = 20;
+    public static final int MESSAGE_TYPE = 20;
     private byte _data[];
 
     public DataMessage(I2PAppContext context) {
@@ -35,8 +36,7 @@ public class DataMessage extends FastI2NPMessageImpl {
      *  @throws IllegalStateException if data previously set, to protect saved checksum
      */
     public void setData(byte[] data) {
-        if (_data != null)
-            throw new IllegalStateException();
+        if (_data != null) throw new IllegalStateException();
         _data = data;
     }
 
@@ -50,19 +50,16 @@ public class DataMessage extends FastI2NPMessageImpl {
         int curIndex = offset;
         long size = DataHelper.fromLong(data, curIndex, 4);
         curIndex += 4;
-        if (size > MAX_SIZE)
-            throw new I2NPMessageException("Message is too big (" + size + " bytes)");
-        _data = new byte[(int)size];
-        System.arraycopy(data, curIndex, _data, 0, (int)size);
+        if (size > MAX_SIZE) throw new I2NPMessageException("Message is too big (" + size + " bytes)");
+        _data = new byte[(int) size];
+        System.arraycopy(data, curIndex, _data, 0, (int) size);
     }
 
     /** calculate the message body's length (not including the header and footer */
     @Override
     protected int calculateWrittenLength() {
-        if (_data == null)
-            return 4;
-        else
-            return 4 + _data.length;
+        if (_data == null) return 4;
+        else return 4 + _data.length;
     }
 
     /** write the message body to the output array, starting at the given index */
@@ -83,7 +80,9 @@ public class DataMessage extends FastI2NPMessageImpl {
     }
 
     @Override
-    public int getType() { return MESSAGE_TYPE; }
+    public int getType() {
+        return MESSAGE_TYPE;
+    }
 
     @Override
     public int hashCode() {
@@ -93,7 +92,7 @@ public class DataMessage extends FastI2NPMessageImpl {
     @Override
     public boolean equals(Object object) {
         if ((object != null) && (object instanceof DataMessage)) {
-            DataMessage msg = (DataMessage)object;
+            DataMessage msg = (DataMessage) object;
             return DataHelper.eq(_data, msg._data);
         } else {
             return false;
@@ -107,8 +106,7 @@ public class DataMessage extends FastI2NPMessageImpl {
         buf.append("\n* Data: ");
         if (_data != null) {
             buf.append(_data.length).append(" bytes");
-            if (_data.length <= 64)
-                buf.append("\n* Payload: ").append(Base64.encode(_data));
+            if (_data.length <= 64) buf.append("\n* Payload: ").append(Base64.encode(_data));
         } else {
             buf.append("null");
         }

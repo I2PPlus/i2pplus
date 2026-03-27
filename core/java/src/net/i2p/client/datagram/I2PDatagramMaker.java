@@ -1,4 +1,5 @@
 package net.i2p.client.datagram;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
@@ -8,8 +9,6 @@ package net.i2p.client.datagram;
  *
  */
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.crypto.DSAEngine;
@@ -21,6 +20,9 @@ import net.i2p.data.Signature;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleByteCache;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * Class for creating I2P repliable datagrams.  Note that objects of this class
@@ -68,8 +70,7 @@ public final class I2PDatagramMaker {
      * @throws IllegalArgumentException if session has offline keys
      */
     public void setI2PDatagramMaker(I2PSession session) {
-        if (session.isOffline())
-            throw new IllegalArgumentException("Offline keys unsupported");
+        if (session.isOffline()) throw new IllegalArgumentException("Offline keys unsupported");
         sxPrivKey = session.getPrivateKey();
         sxDestBytes = session.getMyDestination().toByteArray();
     }
@@ -103,8 +104,7 @@ public final class I2PDatagramMaker {
         try {
             sxDGram.write(sxDestBytes);
             SigType type = sxPrivKey.getType();
-            if (type == null)
-                throw new IllegalStateException("Unsupported signature type");
+            if (type == null) throw new IllegalStateException("Unsupported signature type");
 
             Signature sig;
             if (type == SigType.DSA_SHA1) {
@@ -118,8 +118,7 @@ public final class I2PDatagramMaker {
             }
             sig.writeBytes(sxDGram);
             sxDGram.write(payload);
-            if (sxDGram.size() > DGRAM_BUFSIZE)
-                throw new IllegalArgumentException("Too big");
+            if (sxDGram.size() > DGRAM_BUFSIZE) throw new IllegalArgumentException("Too big");
             return sxDGram.toByteArray();
         } catch (IOException e) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PDatagramMaker.class);

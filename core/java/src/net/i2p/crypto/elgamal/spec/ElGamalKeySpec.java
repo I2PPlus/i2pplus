@@ -10,7 +10,7 @@ import java.security.spec.KeySpec;
  * more specific key specifications used in key generation and conversion operations.
  */
 public class ElGamalKeySpec implements KeySpec {
-    private final ElGamalParameterSpec  spec;
+    private final ElGamalParameterSpec spec;
 
     public ElGamalKeySpec(ElGamalParameterSpec spec) {
         this.spec = spec;

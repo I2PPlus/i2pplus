@@ -17,8 +17,7 @@ public class TorrentCreateFilter implements java.io.Serializable {
     public final String filterType;
     public final boolean isDefault;
 
-    public TorrentCreateFilter(
-            String name, String filterPattern, String filterType, boolean isDefault) {
+    public TorrentCreateFilter(String name, String filterPattern, String filterType, boolean isDefault) {
         this.name = name;
         this.filterPattern = filterPattern;
         this.filterType = filterType;

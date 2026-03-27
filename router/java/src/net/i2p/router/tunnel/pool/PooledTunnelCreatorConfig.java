@@ -1,10 +1,11 @@
 package net.i2p.router.tunnel.pool;
 
-import java.util.Properties;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
+
+import java.util.Properties;
 
 /**
  *  Data about a tunnel we created
@@ -26,7 +27,9 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     }
 
     /** called from TestJob */
-    public void testJobSuccessful(int ms) {testSuccessful(ms);}
+    public void testJobSuccessful(int ms) {
+        testSuccessful(ms);
+    }
 
     /**
      * The tunnel failed a test, so (maybe) stop using it
@@ -54,7 +57,9 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      * @since 0.9.53
      */
     public void tunnelFailedFirstHop() {
-        if (isInbound() || getLength() <= 1) {return;}
+        if (isInbound() || getLength() <= 1) {
+            return;
+        }
         tunnelFailedCompletely();
         _pool.tunnelFailed(this, getPeer(1));
     }
@@ -63,12 +68,16 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      *  @return non-null
      */
     @Override
-    public Properties getOptions() {return _pool.getSettings().getUnknownOptions();}
+    public Properties getOptions() {
+        return _pool.getSettings().getUnknownOptions();
+    }
 
     /**
      *  @return non-null
      */
-    public TunnelPool getTunnelPool() {return _pool;}
+    public TunnelPool getTunnelPool() {
+        return _pool;
+    }
 
     /**
      *  The ID of the gateway of the paired tunnel used to send/receive the build request
@@ -76,7 +85,9 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      *  @param gw for paired inbound, the GW rcv tunnel ID; for paired outbound, the GW send tunnel ID.
      *  @since 0.9.53
      */
-    public void setPairedGW(TunnelId gw) {_pairedGW = gw;}
+    public void setPairedGW(TunnelId gw) {
+        _pairedGW = gw;
+    }
 
     /**
      *  The ID of the gateway of the paired tunnel used to send/receive the build request
@@ -85,6 +96,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      *          null if not previously set
      *  @since 0.9.53
      */
-    public TunnelId getPairedGW() {return _pairedGW;}
-
+    public TunnelId getPairedGW() {
+        return _pairedGW;
+    }
 }

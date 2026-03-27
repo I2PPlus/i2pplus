@@ -1,4 +1,5 @@
 package net.i2p.router.startup;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,12 +9,6 @@ package net.i2p.router.startup;
  *
  */
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyGenerator;
 import net.i2p.crypto.SigType;
@@ -27,12 +22,19 @@ import net.i2p.data.SigningPublicKey;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.data.router.RouterPrivateKeyFile;
+import net.i2p.router.BanLogger;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
-import net.i2p.router.BanLogger;
 import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.networkdb.kademlia.PersistentDataStore;
 import net.i2p.util.Log;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  *  Run once or twice at startup by StartupJob,
@@ -53,7 +55,9 @@ class LoadRouterInfoJob extends JobImpl {
         _banLogger.initialize(ctx);
     }
 
-    public String getName() { return "Load Local RouterInfo"; }
+    public String getName() {
+        return "Load Local RouterInfo";
+    }
 
     public void runJob() {
         synchronized (getContext().router().routerInfoFileLock) {
@@ -99,10 +103,8 @@ class LoadRouterInfoJob extends JobImpl {
                 info = new RouterInfo();
                 info.readBytes(fis1);
                 // Catch this here before it all gets worse
-                if (!info.isValid())
-                    throw new DataFormatException("Our RouterInfo has a bad signature");
-                if (_log.shouldDebug())
-                    _log.debug("Reading in RouterInfo from " + rif.getAbsolutePath() + " and it has " + info.getAddresses().size() + " addresses");
+                if (!info.isValid()) throw new DataFormatException("Our RouterInfo has a bad signature");
+                if (_log.shouldDebug()) _log.debug("Reading in RouterInfo from " + rif.getAbsolutePath() + " and it has " + info.getAddresses().size() + " addresses");
                 // don't reuse if family name changed
                 String oldFamily = info.getOption(FamilyKeyCrypto.OPT_NAME);
                 if (oldFamily == null) {
@@ -120,24 +122,33 @@ class LoadRouterInfoJob extends JobImpl {
                     } else {
                         _log.logAlways(Log.WARN, "NetDb family keys are invalid");
                         // close and delete so we don't infinite loop
-                        try { fis1.close(); } catch (IOException ioe2) {}
+                        try {
+                            fis1.close();
+                        } catch (IOException ioe2) {
+                        }
                         fis1 = null;
                         rif.delete();
                     }
                 } else {
                     _log.logAlways(Log.WARN, "NetDb family name changed");
                     // close and delete so we don't infinite loop
-                    try { fis1.close(); } catch (IOException ioe2) {}
+                    try {
+                        fis1.close();
+                    } catch (IOException ioe2) {
+                    }
                     fis1 = null;
                     rif.delete();
                 }
                 if (_us != null) {
                     long now = getContext().clock().now();
                     long riTime = _us.getPublished();
-                    if (riTime > now || now - riTime > 45*60*1000) {
+                    if (riTime > now || now - riTime > 45 * 60 * 1000) {
                         // prevent netdb store failure and rekey
                         _us = null;
-                        try { fis1.close(); } catch (IOException ioe2) {}
+                        try {
+                            fis1.close();
+                        } catch (IOException ioe2) {
+                        }
                         fis1 = null;
                         rif.delete();
                     }
@@ -158,22 +169,20 @@ class LoadRouterInfoJob extends JobImpl {
                 boolean sigTypeChanged = stype != cstype;
                 EncType cetype = CreateRouterInfoJob.getEncTypeConfig(getContext());
                 boolean encTypeChanged = etype != cetype;
-                if ((sigTypeChanged && getContext().getProperty(CreateRouterInfoJob.PROP_ROUTER_SIGTYPE) == null) ||
-                    (encTypeChanged && getContext().getProperty(CreateRouterInfoJob.PROP_ROUTER_ENCTYPE) == null)) {
+                if ((sigTypeChanged && getContext().getProperty(CreateRouterInfoJob.PROP_ROUTER_SIGTYPE) == null) || (encTypeChanged && getContext().getProperty(CreateRouterInfoJob.PROP_ROUTER_ENCTYPE) == null)) {
                     // Not explicitly configured, and default has changed
                     // Give a chance of rekeying for each restart
                     if (getContext().random().nextInt(REKEY_PROBABILITY) > 0) {
                         sigTypeChanged = false;
                         encTypeChanged = false;
-                        if (_log.shouldWarn())
-                            _log.warn("Deferred RouterInfo rekey from " + stype + '/' + etype + " to " + cstype + '/' + cetype);
+                        if (_log.shouldWarn()) _log.warn("Deferred RouterInfo rekey from " + stype + '/' + etype + " to " + cstype + '/' + cetype);
                     }
                 }
 
                 if (sigTypeChanged || encTypeChanged || shouldRebuild(privkey)) {
                     if (_us != null) {
                         Hash h = _us.getIdentity().getHash();
-                        _log.logAlways(Log.WARN, "Deleting old Router Identity [" + h.toBase64().substring(0,6) + "]");
+                        _log.logAlways(Log.WARN, "Deleting old Router Identity [" + h.toBase64().substring(0, 6) + "]");
                         // the netdb hasn't started yet, but we want to delete the RI
                         File f = PersistentDataStore.getRouterInfoFile(getContext(), h);
                         f.delete();
@@ -182,13 +191,14 @@ class LoadRouterInfoJob extends JobImpl {
                         _banLogger.logBanForever(h, getContext(), "Our previous identity");
                         _us = null;
                     }
-                    if (sigTypeChanged)
-                        _log.logAlways(Log.WARN, "Rebuilding RouterInfo with new signature type " + cstype);
-                    if (encTypeChanged)
-                        _log.logAlways(Log.WARN, "Rebuilding RouterInfo with new encryption type " + cetype);
+                    if (sigTypeChanged) _log.logAlways(Log.WARN, "Rebuilding RouterInfo with new signature type " + cstype);
+                    if (encTypeChanged) _log.logAlways(Log.WARN, "Rebuilding RouterInfo with new encryption type " + cetype);
                     // windows... close before deleting
                     if (fis1 != null) {
-                        try { fis1.close(); } catch (IOException ioe) {}
+                        try {
+                            fis1.close();
+                        } catch (IOException ioe) {
+                        }
                         fis1 = null;
                     }
                     rif.delete();
@@ -204,7 +214,10 @@ class LoadRouterInfoJob extends JobImpl {
             _us = null;
             // windows... close before deleting
             if (fis1 != null) {
-                try { fis1.close(); } catch (IOException ioe2) {}
+                try {
+                    fis1.close();
+                } catch (IOException ioe2) {
+                }
                 fis1 = null;
             }
             rif.delete();
@@ -215,14 +228,20 @@ class LoadRouterInfoJob extends JobImpl {
             _us = null;
             // windows... close before deleting
             if (fis1 != null) {
-                try { fis1.close(); } catch (IOException ioe) {}
+                try {
+                    fis1.close();
+                } catch (IOException ioe) {
+                }
                 fis1 = null;
             }
             rif.delete();
             rkf.delete();
             rkf2.delete();
         } finally {
-            if (fis1 != null) try { fis1.close(); } catch (IOException ioe) {}
+            if (fis1 != null) try {
+                    fis1.close();
+                } catch (IOException ioe) {
+                }
         }
     }
 
@@ -232,13 +251,11 @@ class LoadRouterInfoJob extends JobImpl {
      *  @since 0.9.8
      */
     private boolean shouldRebuild(PrivateKey privkey) {
-        if (privkey.getType() != EncType.ELGAMAL_2048)
-            return false;
+        if (privkey.getType() != EncType.ELGAMAL_2048) return false;
         // Prevent returning true more than once, ever.
         // If we are called a second time, it's probably because we failed
         // to delete router.keys for some reason.
-        if (!_keyLengthChecked.compareAndSet(false, true))
-            return false;
+        if (!_keyLengthChecked.compareAndSet(false, true)) return false;
         byte[] pkd = privkey.getData();
         boolean haslong = false;
         for (int i = 0; i < 8; i++) {
@@ -249,12 +266,10 @@ class LoadRouterInfoJob extends JobImpl {
         }
         boolean uselong = getContext().keyGenerator().useLongElGamalExponent();
         // transition to a longer key (update to 0.9.8)
-        if (uselong && !haslong)
-            _log.logAlways(Log.WARN, "Rebuilding RouterInfo with longer key");
+        if (uselong && !haslong) _log.logAlways(Log.WARN, "Rebuilding RouterInfo with longer key");
         // transition to a shorter key, should be rare (copy files to different hardware,
         // jbigi broke, user overrides in advanced config, ...)
-        if (!uselong && haslong)
-            _log.logAlways(Log.WARN, "Rebuilding RouterInfo with faster key");
+        if (!uselong && haslong) _log.logAlways(Log.WARN, "Rebuilding RouterInfo with faster key");
         return uselong != haslong;
     }
 
@@ -284,8 +299,7 @@ class LoadRouterInfoJob extends JobImpl {
         if (rkf2.exists()) {
             RouterPrivateKeyFile pkf = new RouterPrivateKeyFile(rkf2);
             ri = pkf.getRouterIdentity();
-            if (!pkf.validateKeyPairs())
-                throw new DataFormatException("Key pairs invalid");
+            if (!pkf.validateKeyPairs()) throw new DataFormatException("Key pairs invalid");
             privkey = pkf.getPrivKey();
             signingPrivKey = pkf.getSigningPrivKey();
         } else {
@@ -303,10 +317,8 @@ class LoadRouterInfoJob extends JobImpl {
 
                 // validate
                 try {
-                    if (!pubkey.equals(KeyGenerator.getPublicKey(privkey)))
-                        throw new DataFormatException("Key pairs invalid");
-                    if (!signingPubKey.equals(KeyGenerator.getSigningPublicKey(signingPrivKey)))
-                        throw new DataFormatException("Key pairs invalid");
+                    if (!pubkey.equals(KeyGenerator.getPublicKey(privkey))) throw new DataFormatException("Key pairs invalid");
+                    if (!signingPubKey.equals(KeyGenerator.getSigningPublicKey(signingPrivKey))) throw new DataFormatException("Key pairs invalid");
                 } catch (IllegalArgumentException iae) {
                     throw new DataFormatException("Key pairs invalid", iae);
                 }
@@ -316,7 +328,10 @@ class LoadRouterInfoJob extends JobImpl {
                 ri.setSigningPublicKey(signingPubKey);
                 ri.setCertificate(Certificate.NULL_CERT);
             } finally {
-                if (fis != null) try { fis.close(); } catch (IOException ioe) {}
+                if (fis != null) try {
+                        fis.close();
+                    } catch (IOException ioe) {
+                    }
             }
         }
         return new KeyData(ri, privkey, signingPrivKey);

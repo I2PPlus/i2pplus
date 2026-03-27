@@ -29,9 +29,7 @@ final class MuxedEngine {
      * @return decrypted data or null on failure
      */
     public CloveSet decrypt(byte data[], PrivateKey elgKey, PrivateKey ecKey, MuxedSKM keyManager) throws DataFormatException {
-        if (elgKey.getType() != EncType.ELGAMAL_2048 ||
-            ecKey.getType() != EncType.ECIES_X25519)
-            throw new IllegalArgumentException();
+        if (elgKey.getType() != EncType.ELGAMAL_2048 || ecKey.getType() != EncType.ECIES_X25519) throw new IllegalArgumentException();
         final boolean debug = _log.shouldDebug();
         CloveSet rv = null;
         // Try in-order from fastest to slowest
@@ -39,10 +37,8 @@ final class MuxedEngine {
         if (preferRatchet) {
             // Ratchet Tag
             rv = _context.eciesEngine().decryptFast(data, ecKey, keyManager.getECSKM());
-            if (rv != null)
-                return rv;
-            if (debug)
-                _log.debug("Ratchet tag not found before AES");
+            if (rv != null) return rv;
+            if (debug) _log.debug("Ratchet tag not found before AES");
         }
         // AES Tag
         if (data.length >= 128 && (data.length & 0x0f) == 0) {
@@ -50,25 +46,20 @@ final class MuxedEngine {
             if (dec != null) {
                 try {
                     rv = _context.garlicMessageParser().readCloveSet(dec, 0);
-                    if (rv == null && _log.shouldInfo())
-                        _log.info("AES cloveset error after AES? " + preferRatchet);
+                    if (rv == null && _log.shouldInfo()) _log.info("AES cloveset error after AES? " + preferRatchet);
                 } catch (DataFormatException dfe) {
-                    if (_log.shouldInfo())
-                        _log.info("AES cloveset error after AES? " + preferRatchet, dfe);
+                    if (_log.shouldInfo()) _log.info("AES cloveset error after AES? " + preferRatchet, dfe);
                 }
                 return rv;
             } else {
-                if (debug)
-                    _log.debug("AES tag not found after Ratchet? " + preferRatchet);
+                if (debug) _log.debug("AES tag not found after Ratchet? " + preferRatchet);
             }
         }
         if (!preferRatchet) {
             // Ratchet Tag
             rv = _context.eciesEngine().decryptFast(data, ecKey, keyManager.getECSKM());
-            if (rv != null)
-                return rv;
-            if (debug)
-                _log.debug("Ratchet tag not found after AES");
+            if (rv != null) return rv;
+            if (debug) _log.debug("Ratchet tag not found after AES");
         }
 
         if (preferRatchet) {
@@ -76,10 +67,8 @@ final class MuxedEngine {
             rv = _context.eciesEngine().decryptSlow(data, ecKey, keyManager.getECSKM());
             boolean ok = rv != null;
             keyManager.reportDecryptResult(true, ok);
-            if (ok)
-                return rv;
-            if (debug)
-                _log.debug("Ratchet NextSession decrypt failed before ElGamal");
+            if (ok) return rv;
+            if (debug) _log.debug("Ratchet NextSession decrypt failed before ElGamal");
         }
         // ElG DH
         if (data.length >= 514 && (data.length & 0x0f) == 2) {
@@ -89,17 +78,13 @@ final class MuxedEngine {
                     rv = _context.garlicMessageParser().readCloveSet(dec, 0);
                     boolean ok = rv != null;
                     keyManager.reportDecryptResult(false, ok);
-                    if (ok)
-                        return rv;
-                    if (_log.shouldInfo())
-                        _log.info("ElGamal cloveset error after Ratchet? " + preferRatchet);
+                    if (ok) return rv;
+                    if (_log.shouldInfo()) _log.info("ElGamal cloveset error after Ratchet? " + preferRatchet);
                 } catch (DataFormatException dfe) {
-                    if (_log.shouldInfo())
-                        _log.info("ElGamal cloveset error after Ratchet? " + preferRatchet, dfe);
+                    if (_log.shouldInfo()) _log.info("ElGamal cloveset error after Ratchet? " + preferRatchet, dfe);
                 }
             } else {
-                if (_log.shouldInfo())
-                    _log.info("ElGamal decrypt failed after Ratchet? " + preferRatchet);
+                if (_log.shouldInfo()) _log.info("ElGamal decrypt failed after Ratchet? " + preferRatchet);
             }
             keyManager.reportDecryptResult(false, false);
         }
@@ -108,8 +93,7 @@ final class MuxedEngine {
             rv = _context.eciesEngine().decryptSlow(data, ecKey, keyManager.getECSKM());
             boolean ok = rv != null;
             keyManager.reportDecryptResult(true, ok);
-            if (!ok && debug)
-                _log.debug("Ratchet NextSession decrypt failed after ElGamal");
+            if (!ok && debug) _log.debug("Ratchet NextSession decrypt failed after ElGamal");
         }
         return rv;
     }

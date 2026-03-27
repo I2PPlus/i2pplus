@@ -1,4 +1,5 @@
 package net.i2p.util;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,14 +9,16 @@ package net.i2p.util;
  *
  */
 
+import junit.framework.TestCase;
+
+import net.i2p.data.DataHelper;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.zip.GZIPInputStream;
-import junit.framework.TestCase;
-import net.i2p.data.DataHelper;
 
 public class ResettableGZIPOutputStreamTest extends TestCase {
-    public void testResettableGZIPOutputStream() throws Exception{
+    public void testResettableGZIPOutputStream() throws Exception {
         byte b[] = DataHelper.getASCII("hi, how are you today?");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ResettableGZIPOutputStream o = new ResettableGZIPOutputStream(baos);
@@ -37,6 +40,5 @@ public class ResettableGZIPOutputStreamTest extends TestCase {
         byte rv[] = new byte[128];
         int read = in.read(rv);
         assertTrue(DataHelper.eq(rv, 0, b, 0, b.length));
-
     }
 }

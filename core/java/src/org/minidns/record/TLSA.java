@@ -28,7 +28,6 @@ public class TLSA extends Data {
     private static final Map<Byte, CertUsage> CERT_USAGE_LUT = new HashMap<>();
 
     public enum CertUsage {
-
         caConstraint((byte) 0),
         serviceCertificateConstraint((byte) 1),
         trustAnchorAssertion((byte) 2),
@@ -146,11 +145,7 @@ public class TLSA extends Data {
 
     @Override
     public String toString() {
-        return new StringBuilder()
-                .append(certUsageByte).append(' ')
-                .append(selectorByte).append(' ')
-                .append(matchingTypeByte).append(' ')
-                .append(new BigInteger(1, certificateAssociation).toString(16)).toString();
+        return new StringBuilder().append(certUsageByte).append(' ').append(selectorByte).append(' ').append(matchingTypeByte).append(' ').append(new BigInteger(1, certificateAssociation).toString(16)).toString();
     }
 
     public byte[] getCertificateAssociation() {

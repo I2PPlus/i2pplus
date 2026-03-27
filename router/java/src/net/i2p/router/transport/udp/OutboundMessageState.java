@@ -1,13 +1,14 @@
 package net.i2p.router.transport.udp;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.transport.udp.PacketBuilder.Fragment;
 import net.i2p.router.util.CDPQEntry;
 import net.i2p.util.Log;
+
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Maintain the outbound fragmentation for resending, for a single message.
@@ -18,31 +19,42 @@ import net.i2p.util.Log;
 class OutboundMessageState implements CDPQEntry {
     private final I2PAppContext _context;
     private final Log _log;
+
     /** may be null if we are part of the establishment */
     private final OutNetMessage _message;
+
     private final I2NPMessage _i2npMessage;
+
     /** will be null, unless we are part of the establishment */
     private final PeerState _peer;
+
     private final long _expiration;
     private final byte[] _messageBuf;
+
     /** fixed fragment size across the message */
     private final int _fragmentSize;
+
     /** bitmask, 0 if acked, all 0 = complete */
     private long _fragmentAcks;
+
     private final int _numFragments;
+
     /** sends for each fragment, or null if only one fragment */
     private final byte _fragmentSends[];
+
     private final long _startedOn;
     private int _pushCount;
     private int _maxSends;
     // we can't use the ones in _message since it is null for injections
     private long _enqueueTime;
     private volatile long _seqNum;
+
     /** how many bytes push() is allowed to send */
     private int _allowedSendBytes;
+
     private final AtomicInteger _nacks = new AtomicInteger();
     public static final int MAX_MSG_SIZE = 32 * 1024;
-    private static final long EXPIRATION = 60*1000;
+    private static final long EXPIRATION = 60 * 1000;
 
     /**
      *  "injected" message from the establisher.
@@ -70,8 +82,7 @@ class OutboundMessageState implements CDPQEntry {
      *  @throws IllegalArgumentException if too big or if msg or peer is null
      */
     private OutboundMessageState(I2PAppContext context, OutNetMessage m, I2NPMessage msg, PeerState peer) {
-        if (msg == null || peer == null)
-            throw new IllegalArgumentException();
+        if (msg == null || peer == null) throw new IllegalArgumentException();
         _context = context;
         _log = _context.logManager().getLog(OutboundMessageState.class);
         _message = m;
@@ -79,35 +90,27 @@ class OutboundMessageState implements CDPQEntry {
         _peer = peer;
         _startedOn = _context.clock().now();
         _expiration = _startedOn + EXPIRATION;
-        //_expiration = msg.getExpiration();
+        // _expiration = msg.getExpiration();
 
         // now "fragment" it
         int totalSize;
-        if (_peer.getVersion() == 2)
-            totalSize = _i2npMessage.getMessageSize() - 7;  // NTCP2 style, 9 byte header
-        else
-            totalSize = _i2npMessage.getRawMessageSize();
-        if (totalSize > MAX_MSG_SIZE)
-            throw new IllegalArgumentException("Size too large! " + totalSize);
+        if (_peer.getVersion() == 2) totalSize = _i2npMessage.getMessageSize() - 7; // NTCP2 style, 9 byte header
+        else totalSize = _i2npMessage.getRawMessageSize();
+        if (totalSize > MAX_MSG_SIZE) throw new IllegalArgumentException("Size too large! " + totalSize);
         _messageBuf = new byte[totalSize];
-        if (_peer.getVersion() == 2)
-            _i2npMessage.toRawByteArrayNTCP2(_messageBuf, 0);  // NTCP2 style, 9 byte header
-        else
-            _i2npMessage.toRawByteArray(_messageBuf);
+        if (_peer.getVersion() == 2) _i2npMessage.toRawByteArrayNTCP2(_messageBuf, 0); // NTCP2 style, 9 byte header
+        else _i2npMessage.toRawByteArray(_messageBuf);
         _fragmentSize = _peer.fragmentSize();
         // SSU2 first frag can be 5 bytes bigger
         int first = _fragmentSize;
-        if (peer.getVersion() > 1)
-            first += SSU2Util.DATA_FOLLOWON_EXTRA_SIZE;
+        if (peer.getVersion() > 1) first += SSU2Util.DATA_FOLLOWON_EXTRA_SIZE;
         int numFragments = 1;
         if (first < totalSize) {
             numFragments += (totalSize - first) / _fragmentSize;
-            if (first + ((numFragments - 1) * _fragmentSize) < totalSize)
-                numFragments++;
+            if (first + ((numFragments - 1) * _fragmentSize) < totalSize) numFragments++;
         }
         // This should never happen, as 534 bytes * 64 fragments > 32KB, and we won't bid on > 32KB
-        if (numFragments > InboundMessageState.MAX_FRAGMENTS)
-            throw new IllegalArgumentException("Fragmenting a " + totalSize + " message into " + numFragments + " fragments - too many!");
+        if (numFragments > InboundMessageState.MAX_FRAGMENTS) throw new IllegalArgumentException("Fragmenting a " + totalSize + " message into " + numFragments + " fragments - too many!");
         _numFragments = numFragments;
         // all 1's where we care
         _fragmentAcks = _numFragments < 64 ? mask(_numFragments) - 1L : -1L;
@@ -117,7 +120,9 @@ class OutboundMessageState implements CDPQEntry {
     /**
      * @since 0.9.54
      */
-    public int getVersion() { return _peer.getVersion(); }
+    public int getVersion() {
+        return _peer.getVersion();
+    }
 
     /**
      *  @param fragment 0-63
@@ -126,27 +131,39 @@ class OutboundMessageState implements CDPQEntry {
         return 1L << fragment;
     }
 
-    public OutNetMessage getMessage() { return _message; }
+    public OutNetMessage getMessage() {
+        return _message;
+    }
 
-    public long getMessageId() { return _i2npMessage.getUniqueId(); }
+    public long getMessageId() {
+        return _i2npMessage.getUniqueId();
+    }
 
     /**
      * @return new value
      * @since 0.9.49
      */
-    public int incrementNACKs() { return _nacks.incrementAndGet(); }
+    public int incrementNACKs() {
+        return _nacks.incrementAndGet();
+    }
 
     /**
      * @since 0.9.49
      */
-    public int getNACKs() { return _nacks.get(); }
+    public int getNACKs() {
+        return _nacks.get();
+    }
 
     /**
      * @since 0.9.49
      */
-    public void clearNACKs() { _nacks.set(0); }
+    public void clearNACKs() {
+        _nacks.set(0);
+    }
 
-    public PeerState getPeer() { return _peer; }
+    public PeerState getPeer() {
+        return _peer;
+    }
 
     public boolean isExpired() {
         return _expiration < _context.clock().now();
@@ -168,18 +185,14 @@ class OutboundMessageState implements CDPQEntry {
      */
     public synchronized int getUnackedSize() {
         int rv = 0;
-        if (isComplete())
-            return rv;
+        if (isComplete()) return rv;
         int lastSize = _messageBuf.length % _fragmentSize;
-        if (lastSize == 0)
-            lastSize = _fragmentSize;
+        if (lastSize == 0) lastSize = _fragmentSize;
         int overhead = _peer.fragmentOverhead();
         for (int i = 0; i < _numFragments; i++) {
             if (needsSending(i)) {
-                if (i + 1 == _numFragments)
-                    rv += lastSize;
-                else
-                    rv += _fragmentSize;
+                if (i + 1 == _numFragments) rv += lastSize;
+                else rv += _fragmentSize;
                 rv += overhead;
             }
         }
@@ -191,14 +204,11 @@ class OutboundMessageState implements CDPQEntry {
      * @since 0.9.49
      */
     public synchronized int getUnackedFragments() {
-        if (isComplete())
-            return 0;
-        if (_numFragments == 1)
-            return 1;
+        if (isComplete()) return 0;
+        if (_numFragments == 1) return 1;
         int rv = 0;
         for (int i = 0; i < _numFragments; i++) {
-            if (needsSending(i))
-                rv++;
+            if (needsSending(i)) rv++;
         }
         return rv;
     }
@@ -209,13 +219,10 @@ class OutboundMessageState implements CDPQEntry {
      *  @since 0.9.49
      */
     public synchronized boolean hasUnsentFragments() {
-        if (isComplete())
-            return false;
-        if (_numFragments == 1)
-            return _maxSends == 0;
+        if (isComplete()) return false;
+        if (_numFragments == 1) return _maxSends == 0;
         for (int i = _numFragments - 1; i >= 0; i--) {
-            if (_fragmentSends[i] == 0)
-                return true;
+            if (_fragmentSends[i] == 0) return true;
         }
         return false;
     }
@@ -232,8 +239,7 @@ class OutboundMessageState implements CDPQEntry {
         for (int i = 0; i < _numFragments; i++) {
             if (needsSending(i)) {
                 int count = _fragmentSends[i];
-                if (count < rv)
-                    rv = count;
+                if (count < rv) rv = count;
             }
         }
         return rv;
@@ -247,13 +253,10 @@ class OutboundMessageState implements CDPQEntry {
      *  @since 0.9.49
      */
     public synchronized int getMinSendSize() {
-        if (isComplete())
-            return 0;
+        if (isComplete()) return 0;
         int overhead = _peer.fragmentOverhead();
-        if (_numFragments == 1)
-            return _messageBuf.length + overhead;
-        if (_pushCount == 0)
-            return fragmentSize(_numFragments - 1) + overhead;
+        if (_numFragments == 1) return _messageBuf.length + overhead;
+        if (_pushCount == 0) return fragmentSize(_numFragments - 1) + overhead;
         int minSendCount = getMinSendCount();
         int rv = _fragmentSize;
         for (int i = 0; i < _numFragments; i++) {
@@ -280,8 +283,7 @@ class OutboundMessageState implements CDPQEntry {
      *  @since 0.9.49
      */
     public synchronized int getSendSize(int max) {
-        if (isComplete())
-            return 0;
+        if (isComplete()) return 0;
         int overhead = _peer.fragmentOverhead();
         if (_numFragments == 1) {
             int rv = _messageBuf.length + overhead;
@@ -299,13 +301,11 @@ class OutboundMessageState implements CDPQEntry {
                 if (tot <= max) {
                     rv = tot;
                 } else {
-                    if (_log.shouldInfo())
-                        _log.info("Send window limited to " + (max - rv) + " -> Not sending fragment " + i + toString());
+                    if (_log.shouldInfo()) _log.info("Send window limited to " + (max - rv) + " -> Not sending fragment " + i + toString());
                 }
             }
         }
-        if (rv > 0)
-            _allowedSendBytes = rv;
+        if (rv > 0) _allowedSendBytes = rv;
         return rv;
     }
 
@@ -316,7 +316,9 @@ class OutboundMessageState implements CDPQEntry {
         return (_fragmentAcks & mask(fragment)) != 0;
     }
 
-    public long getLifetime() { return _context.clock().now() - _startedOn; }
+    public long getLifetime() {
+        return _context.clock().now() - _startedOn;
+    }
 
     /**
      * Ack all the fragments in the ack list.
@@ -327,8 +329,7 @@ class OutboundMessageState implements CDPQEntry {
         // stupid brute force, but the cardinality should be trivial
         int highest = bitfield.highestReceived();
         for (int i = 0; i <= highest && i < _numFragments; i++) {
-            if (bitfield.received(i))
-                _fragmentAcks &= ~mask(i);
+            if (bitfield.received(i)) _fragmentAcks &= ~mask(i);
         }
         return isComplete();
     }
@@ -349,13 +350,17 @@ class OutboundMessageState implements CDPQEntry {
      *  The max number of sends for any fragment.
      *  As of 0.9.49, may be less than getPushCount() if we pushed only some fragments
      */
-    public synchronized int getMaxSends() { return _maxSends; }
+    public synchronized int getMaxSends() {
+        return _maxSends;
+    }
 
     /**
      *  The number of times we've pushed some fragments.
      *  As of 0.9.49, may be greater than getMaxSends() if we pushed only some fragments.
      */
-    public synchronized int getPushCount() { return _pushCount; }
+    public synchronized int getPushCount() {
+        return _pushCount;
+    }
 
     /**
      *  Add fragments up to the number of bytes allowed by setAllowedSendBytes()
@@ -379,13 +384,11 @@ class OutboundMessageState implements CDPQEntry {
                     rv++;
                     if (_fragmentSends != null) {
                         _fragmentSends[i]++;
-                        if (_fragmentSends[i] > _maxSends)
-                            _maxSends = _fragmentSends[i];
+                        if (_fragmentSends[i] > _maxSends) _maxSends = _fragmentSends[i];
                     }
                 }
             }
-            if (_fragmentSends == null)
-                _maxSends++;
+            if (_fragmentSends == null) _maxSends++;
         } else {
             // hard way.
             // send the fragments we've sent the least, up to the max size
@@ -408,10 +411,8 @@ class OutboundMessageState implements CDPQEntry {
                             toSend.add(new Fragment(this, i));
                             rv++;
                             _fragmentSends[i]++;
-                            if (_fragmentSends[i] > _maxSends)
-                                _maxSends = _fragmentSends[i];
-                            if (_allowedSendBytes - sent <= overhead)
-                                break;
+                            if (_fragmentSends[i] > _maxSends) _maxSends = _fragmentSends[i];
+                            if (_allowedSendBytes - sent <= overhead) break;
                         }
                     }
                 }
@@ -419,11 +420,9 @@ class OutboundMessageState implements CDPQEntry {
         }
         if (rv > 0) {
             _pushCount++;
-            if (_log.shouldDebug())
-                _log.debug("Pushed " + rv + " fragments for " + toString());
+            if (_log.shouldDebug()) _log.debug("Pushed " + rv + " fragments for " + toString());
         } else {
-            if (_log.shouldDebug())
-                _log.debug("Nothing pushed??? allowedSendBytes=" + _allowedSendBytes + " for " + toString());
+            if (_log.shouldDebug()) _log.debug("Nothing pushed??? allowedSendBytes=" + _allowedSendBytes + " for " + toString());
         }
         _allowedSendBytes = 0;
         return rv;
@@ -439,7 +438,9 @@ class OutboundMessageState implements CDPQEntry {
     /**
      * The size of the I2NP message. Does not include any SSU overhead.
      */
-    public int getMessageSize() { return _messageBuf.length; }
+    public int getMessageSize() {
+        return _messageBuf.length;
+    }
 
     /**
      * The size in bytes of the fragment.
@@ -452,13 +453,11 @@ class OutboundMessageState implements CDPQEntry {
         if (fragmentNum == 0) {
             // SSU2 first frag is 5 bytes bigger
             int fs = _fragmentSize;
-            if (_peer.getVersion() > 1)
-                fs += SSU2Util.DATA_FOLLOWON_EXTRA_SIZE;
+            if (_peer.getVersion() > 1) fs += SSU2Util.DATA_FOLLOWON_EXTRA_SIZE;
             return Math.min(_messageBuf.length, fs);
         } else if (fragmentNum + 1 == _numFragments) {
             int last = _messageBuf.length - (fragmentNum * _fragmentSize);
-            if (_peer.getVersion() > 1)
-                last -= SSU2Util.DATA_FOLLOWON_EXTRA_SIZE;
+            if (_peer.getVersion() > 1) last -= SSU2Util.DATA_FOLLOWON_EXTRA_SIZE;
             return last;
         } else {
             return _fragmentSize;
@@ -476,16 +475,14 @@ class OutboundMessageState implements CDPQEntry {
     public int writeFragment(byte out[], int outOffset, int fragmentNum) {
         int start = _fragmentSize * fragmentNum;
         // SSU2 first frag is 5 bytes bigger
-        if (fragmentNum > 0 && _peer.getVersion() > 1)
-            start += SSU2Util.DATA_FOLLOWON_EXTRA_SIZE;
+        if (fragmentNum > 0 && _peer.getVersion() > 1) start += SSU2Util.DATA_FOLLOWON_EXTRA_SIZE;
         int toSend = fragmentSize(fragmentNum);
         int end = start + toSend;
         if (end <= _messageBuf.length && outOffset + toSend <= out.length) {
             System.arraycopy(_messageBuf, start, out, outOffset, toSend);
             return toSend;
         } else {
-            if (_log.shouldWarn())
-                _log.warn("Error: " + start + '/' + end + '/' + outOffset + '/' + out.length);
+            if (_log.shouldWarn()) _log.warn("Error: " + start + '/' + end + '/' + outOffset + '/' + out.length);
         }
         return -1;
     }
@@ -552,18 +549,15 @@ class OutboundMessageState implements CDPQEntry {
         buf.append("] Seq: ").append(_seqNum);
         buf.append("; Type: ").append(_i2npMessage.getType());
         buf.append("; Size: ").append(_messageBuf.length).append(" bytes");
-        if (_numFragments > 1)
-            buf.append("; Fragments: ").append(_numFragments);
+        if (_numFragments > 1) buf.append("; Fragments: ").append(_numFragments);
         buf.append("; Volleys: ").append(_maxSends);
         buf.append("; Lifetime: ").append(getLifetime()).append("ms");
         if (!isComplete()) {
-            if (_nacks.get() > 0)
-                buf.append("; NACKs: ").append(_nacks);
+            if (_nacks.get() > 0) buf.append("; NACKs: ").append(_nacks);
             if (_fragmentSends != null) {
                 buf.append("\n* UnACKed fragments: [ ");
                 for (int i = 0; i < _numFragments; i++) {
-                    if (needsSending(i))
-                        buf.append(i).append(' ');
+                    if (needsSending(i)) buf.append(i).append(' ');
                 }
                 buf.append("]; Sizes (bytes): [ ");
                 for (int i = 0; i < _numFragments; i++) {
@@ -578,7 +572,7 @@ class OutboundMessageState implements CDPQEntry {
                 buf.append(" (UnACKed)");
             }
         }
-        //buf.append(" to: ").append(_peer.toString());
+        // buf.append(" to: ").append(_peer.toString());
         return buf.toString();
     }
 }

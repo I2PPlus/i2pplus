@@ -40,16 +40,11 @@ final class MuxedPQEngine {
      */
     private static int getMinNSSize(EncType type) {
         switch (type) {
-            case ECIES_X25519:
-                return MIN_NS_SIZE;
-            case MLKEM512_X25519:
-                return MIN_NS_MLKEM512_SIZE;
-            case MLKEM768_X25519:
-                return MIN_NS_MLKEM768_SIZE;
-            case MLKEM1024_X25519:
-                return MIN_NS_MLKEM1024_SIZE;
-            default:
-                return MIN_NS_SIZE;
+            case ECIES_X25519: return MIN_NS_SIZE;
+            case MLKEM512_X25519: return MIN_NS_MLKEM512_SIZE;
+            case MLKEM768_X25519: return MIN_NS_MLKEM768_SIZE;
+            case MLKEM1024_X25519: return MIN_NS_MLKEM1024_SIZE;
+            default: return MIN_NS_SIZE;
         }
     }
 
@@ -61,14 +56,11 @@ final class MuxedPQEngine {
      * @return decrypted data or null on failure
      */
     public CloveSet decrypt(byte data[], PrivateKey ecKey, PrivateKey pqKey, MuxedPQSKM keyManager) throws DataFormatException {
-        if (ecKey.getType() != EncType.ECIES_X25519 ||
-            pqKey.getType().getBaseAlgorithm() != EncAlgo.ECIES_MLKEM) {
+        if (ecKey.getType() != EncType.ECIES_X25519 || pqKey.getType().getBaseAlgorithm() != EncAlgo.ECIES_MLKEM) {
             if (_log.shouldWarn()) {
-                _log.warn("Invalid key types for PQ decrypt - EC: " + ecKey.getType() +
-                         " PQ: " + pqKey.getType() + " Base: " + pqKey.getType().getBaseAlgorithm());
+                _log.warn("Invalid key types for PQ decrypt - EC: " + ecKey.getType() + " PQ: " + pqKey.getType() + " Base: " + pqKey.getType().getBaseAlgorithm());
             }
-            throw new IllegalArgumentException("Invalid key types - EC: " + ecKey.getType() +
-                                           " PQ: " + pqKey.getType());
+            throw new IllegalArgumentException("Invalid key types - EC: " + ecKey.getType() + " PQ: " + pqKey.getType());
         }
         final boolean debug = _log.shouldDebug();
         final boolean warn = _log.shouldWarn();
@@ -80,34 +72,28 @@ final class MuxedPQEngine {
             // Ratchet Tag
             rv = _context.eciesEngine().decryptFast(data, ecKey, keyManager.getECSKM());
             if (rv != null) {
-                if (debug)
-                    _log.debug("Ratchet tag decryption successful");
+                if (debug) _log.debug("Ratchet tag decryption successful");
                 return rv;
             }
-            if (debug)
-                _log.debug("Ratchet tag not found before PQ -> Attempting to use PQ tag...");
+            if (debug) _log.debug("Ratchet tag not found before PQ -> Attempting to use PQ tag...");
         }
 
         // PQ Tag
         rv = _context.eciesEngine().decryptFast(data, pqKey, keyManager.getPQSKM());
         if (rv != null) {
-            if (debug)
-                _log.debug("PQ tag decryption successful");
+            if (debug) _log.debug("PQ tag decryption successful");
             return rv;
         }
-        if (debug)
-            _log.debug("PQ tag not found -> Attempting fallback to ratchet tag...");
+        if (debug) _log.debug("PQ tag not found -> Attempting fallback to ratchet tag...");
 
         if (!preferRatchet) {
             // Ratchet Tag
             rv = _context.eciesEngine().decryptFast(data, ecKey, keyManager.getECSKM());
             if (rv != null) {
-                if (debug)
-                    _log.debug("Fallback to ratchet tag decryption successful");
+                if (debug) _log.debug("Fallback to ratchet tag decryption successful");
                 return rv;
             }
-            if (debug)
-                _log.debug("Fallback ratchet tag not found -> Attempting to create a new session...");
+            if (debug) _log.debug("Fallback ratchet tag not found -> Attempting to create a new session...");
         }
 
         // New Session attempts
@@ -117,12 +103,10 @@ final class MuxedPQEngine {
             boolean ok = rv != null;
             keyManager.reportDecryptResult(true, ok);
             if (ok) {
-                if (debug)
-                    _log.debug("Ratchet new session decryption successful");
+                if (debug) _log.debug("Ratchet new session decryption successful");
                 return rv;
             }
-            if (debug)
-                _log.debug("Ratchet new session decryption failed before PQ - attempting PQ new session");
+            if (debug) _log.debug("Ratchet new session decryption failed before PQ - attempting PQ new session");
         }
 
         // PQ DH
@@ -131,8 +115,7 @@ final class MuxedPQEngine {
         boolean isok = rv != null;
         keyManager.reportDecryptResult(false, isok);
         if (isok) {
-            if (debug)
-                _log.debug("PQ new session decryption successful!");
+            if (debug) _log.debug("PQ new session decryption successful!");
             return rv;
         }
         if (debug || warn) {
@@ -155,8 +138,7 @@ final class MuxedPQEngine {
             rv = _context.eciesEngine().decryptSlow(data, ecKey, keyManager.getECSKM());
             boolean ok = rv != null;
             keyManager.reportDecryptResult(true, ok);
-            if (!ok && debug)
-                _log.debug("Fallback ratchet new session decryption failed after PQ");
+            if (!ok && debug) _log.debug("Fallback ratchet new session decryption failed after PQ");
         }
         return rv;
     }

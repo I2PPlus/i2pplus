@@ -1,17 +1,18 @@
 package net.i2p.i2pcontrol.servlets.configuration;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 
 /**
  * Manage the configuration of I2PControl.
@@ -26,14 +27,12 @@ public class ConfigurationManager {
     private final Log _log;
     private boolean _changed;
 
-    //Configurations with a String as value
+    // Configurations with a String as value
     private final Map<String, String> stringConfigurations = new HashMap<String, String>();
-    //Configurations with a Boolean as value
+    // Configurations with a Boolean as value
     private final Map<String, Boolean> booleanConfigurations = new HashMap<String, Boolean>();
-    //Configurations with an Integer as value
+    // Configurations with an Integer as value
     private final Map<String, Integer> integerConfigurations = new HashMap<String, Integer>();
-
-
 
     public ConfigurationManager(I2PAppContext ctx, File dir, boolean isPlugin) {
         _log = ctx.logManager().getLog(ConfigurationManager.class);
@@ -55,16 +54,16 @@ public class ConfigurationManager {
      * to determine user parameters.
      * @param settingNames Command line arguments to the application
      */
-/****
-    public void loadArguments(String[] settingNames) {
-        for (int i = 0; i < settingNames.length; i++) {
-            String settingName = settingNames[i];
-            if (settingName.startsWith("--")) {
-                parseConfigStr(settingName.substring(2));
-            }
-        }
-    }
-****/
+    /****
+     * public void loadArguments(String[] settingNames) {
+     * for (int i = 0; i < settingNames.length; i++) {
+     * String settingName = settingNames[i];
+     * if (settingName.startsWith("--")) {
+     * parseConfigStr(settingName.substring(2));
+     * }
+     * }
+     * }
+     ****/
 
     /**
      * Reads configuration from file, every line is parsed as key=value.
@@ -77,8 +76,7 @@ public class ConfigurationManager {
             parseConfigStr(input);
             _changed = false;
         } catch (FileNotFoundException e) {
-            if (_log.shouldInfo())
-                _log.info("Unable to find config file, " + configLocation);
+            if (_log.shouldInfo()) _log.info("Unable to find config file, " + configLocation);
         } catch (IOException e) {
             _log.error("Unable to read from config file, " + configLocation, e);
         }
@@ -89,8 +87,7 @@ public class ConfigurationManager {
      * As of 0.12, doesn't actually write unless something changed.
      */
     public synchronized void writeConfFile() {
-        if (!_changed)
-            return;
+        if (!_changed) return;
         Properties tree = new OrderedProperties();
         tree.putAll(stringConfigurations);
         for (Entry<String, Integer> e : integerConfigurations.entrySet()) {
@@ -116,13 +113,14 @@ public class ConfigurationManager {
         for (Entry<Object, Object> entry : input.entrySet()) {
             String key = (String) entry.getKey();
             String value = (String) entry.getValue();
-            //Try parse as integer.
+            // Try parse as integer.
             try {
                 int i = Integer.parseInt(value);
                 integerConfigurations.put(key, i);
                 continue;
-            } catch (NumberFormatException e) {}
-            //Check if value is a bool
+            } catch (NumberFormatException e) {
+            }
+            // Check if value is a bool
             if (value.toLowerCase(Locale.ROOT).equals("true")) {
                 booleanConfigurations.put(key, Boolean.TRUE);
                 continue;
@@ -133,7 +131,6 @@ public class ConfigurationManager {
             stringConfigurations.put(key, value);
         }
     }
-
 
     /**
      * Check if a specific boolean configuration exists.
@@ -151,7 +148,6 @@ public class ConfigurationManager {
             return defaultValue;
         }
     }
-
 
     /**
      * Check if a specific boolean configuration exists.

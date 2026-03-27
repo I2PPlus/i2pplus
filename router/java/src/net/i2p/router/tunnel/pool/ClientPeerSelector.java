@@ -2,12 +2,6 @@ package net.i2p.router.tunnel.pool;
 
 import static net.i2p.router.peermanager.ProfileOrganizer.Slice.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
-
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.router.RouterContext;
@@ -16,7 +10,13 @@ import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.util.MaskedIPSet;
 import net.i2p.util.ArraySet;
+
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Pick peers randomly out of the fast pool, and put them into tunnels
@@ -31,7 +31,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
     private static final double SEVERE_STRESS_THRESHOLD = 0.30;
 
     private static String formatExcludedPeers(Set<Hash> peers) {
-        if (peers == null || peers.isEmpty()) {return "[no exclusions]";}
+        if (peers == null || peers.isEmpty()) {
+            return "[no exclusions]";
+        }
         StringBuilder sb = new StringBuilder(peers.size() * 10);
         int count = 0;
         for (Hash h : peers) {
@@ -80,9 +82,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             // for these cases, check the closest hop up front,
             // otherwise, will be done in checkTunnel() at the end
             boolean checkClosestHop = v6Only || ntcpDisabled || ssuDisabled;
-            boolean hidden = ctx.router().isHidden() ||
-                             ctx.router().getRouterInfo().getAddressCount() <= 0 ||
-                             !ctx.commSystem().haveInboundCapacity(95);
+            boolean hidden = ctx.router().isHidden() || ctx.router().getRouterInfo().getAddressCount() <= 0 || !ctx.commSystem().haveInboundCapacity(95);
             boolean hiddenInbound = hidden && isInbound;
             boolean hiddenOutbound = hidden && !isInbound;
             int ipRestriction = settings.getIPRestriction();
@@ -92,10 +92,14 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     ipRestriction = Math.min(ipRestriction + 1, 16);
                 }
             }
-            if (ctx.getBooleanProperty("i2np.allowLocal") || length <= 1) {ipRestriction = 0;}
+            if (ctx.getBooleanProperty("i2np.allowLocal") || length <= 1) {
+                ipRestriction = 0;
+            }
             MaskedIPSet ipSet = ipRestriction > 0 ? new MaskedIPSet(ipRestriction) : null;
 
-            if (shouldSelectExplicit(settings)) {return selectExplicit(settings, length);}
+            if (shouldSelectExplicit(settings)) {
+                return selectExplicit(settings, length);
+            }
 
             // Create a copy of exclude set to avoid mutating caller's set
             Set<Hash> exclude = new HashSet<Hash>(getExclude(isInbound, false));
@@ -113,9 +117,14 @@ class ClientPeerSelector extends TunnelPeerSelector {
             ArraySet<Hash> matches = new ArraySet<Hash>(length);
             if (length == 1) {
                 // closest-hop restrictions
-                if (checkClosestHop) {exclude = getClosestHopExclude(isInbound, exclude);}
-                if (isInbound) {exclude = new IBGWExcluder(exclude);}
-                else {exclude = new OBEPExcluder(exclude);}
+                if (checkClosestHop) {
+                    exclude = getClosestHopExclude(isInbound, exclude);
+                }
+                if (isInbound) {
+                    exclude = new IBGWExcluder(exclude);
+                } else {
+                    exclude = new OBEPExcluder(exclude);
+                }
                 // 1-hop, IP restrictions not required here
                 if (hiddenInbound) {
                     // TODO this doesn't pick from fast
@@ -127,10 +136,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     // Suppress warnings during startup
                     long now = ctx.clock().now();
                     long uptime = ctx.router() != null ? ctx.router().getUptime() : 0;
-                    if (log.shouldWarn() && uptime > STARTUP_WARNING_SUPPRESS_MS
-                            && _lastFallbackWarn.getAndSet(now) < now - WARNING_THROTTLE_MS) {
-                        log.warn("No eligible non-failing peers available for " + (isInbound ? "Inbound" : "Outbound") +
-                                 " connection -> Falling back to fast pool...");
+                    if (log.shouldWarn() && uptime > STARTUP_WARNING_SUPPRESS_MS && _lastFallbackWarn.getAndSet(now) < now - WARNING_THROTTLE_MS) {
+                        log.warn("No eligible non-failing peers available for " + (isInbound ? "Inbound" : "Outbound") + " connection -> Falling back to fast pool...");
                     }
                     ctx.profileOrganizer().selectFastPeers(length, exclude, matches);
                     if (matches.isEmpty()) {
@@ -155,13 +162,17 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         // exclude existing OBEPs to get some diversity ?
                         // closest-hop restrictions
                         lastHopExclude = getClosestHopExclude(true, exclude);
-                    } else {lastHopExclude = exclude;}
+                    } else {
+                        lastHopExclude = exclude;
+                    }
                     if (log.shouldInfo()) {
                         log.info("Selecting fast peer for closest Inbound, excluding: " + formatExcludedPeers(lastHopExclude));
                     }
                 } else {
                     lastHopExclude = new OBEPExcluder(exclude);
-                    if (log.shouldInfo()) {log.info("Selecting fast peer for OutboundEndpoint, excluding: " + formatExcludedPeers(lastHopExclude));}
+                    if (log.shouldInfo()) {
+                        log.info("Selecting fast peer for OutboundEndpoint, excluding: " + formatExcludedPeers(lastHopExclude));
+                    }
                 }
                 if (hiddenInbound) {
                     // IB closest hop
@@ -192,8 +203,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         pickFurthest = true;
                         TunnelPoolSettings tps = tp.getSettings();
                         int len = tps.getLength();
-                        if (len <= 0 || tps.getLengthOverride() == 0 ||
-                            len + tps.getLengthVariance() <= 0) {} // leave it true
+                        if (len <= 0 || tps.getLengthOverride() == 0 || len + tps.getLengthVariance() <= 0) {
+                        } // leave it true
                         else {
                             List<TunnelInfo> tunnels = tp.listTunnels();
                             if (!tunnels.isEmpty()) {
@@ -209,9 +220,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                 tp = tmf.getInboundExploratoryPool();
                                 tps = tp.getSettings();
                                 len = tps.getLength();
-                                if (len <= 0 ||
-                                    tps.getLengthOverride() == 0 ||
-                                    len + tps.getLengthVariance() <= 0) {
+                                if (len <= 0 || tps.getLengthOverride() == 0 || len + tps.getLengthVariance() <= 0) {
                                     // leave it true
                                 } else {
                                     tunnels = tp.listTunnels();
@@ -226,7 +235,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                 }
                             }
                         }
-                    } else {pickFurthest = false;} // shouldn't happen
+                    } else {
+                        pickFurthest = false;
+                    } // shouldn't happen
                     if (pickFurthest) {
                         if (log.shouldInfo()) {
                             log.info("Selecting non-failing peer for OutboundEndpoint... " + lastHopExclude);
@@ -252,8 +263,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     }
                 } else {
                     // TODO exclude IPv6-only at OBEP? Caught in checkTunnel() below
-                    ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, randomKey, length == 2 ? SLICE_0_1 : SLICE_0,
-                                                           ipRestriction, ipSet);
+                    ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, randomKey, length == 2 ? SLICE_0_1 : SLICE_0, ipRestriction, ipSet);
                     if (matches.isEmpty()) {
                         // Fallback: try not-failing peers if fast peers are empty
                         ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches);
@@ -271,7 +281,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 if (length > 2) {
                     // middle hop(s)
                     // group 2 or 3
-                    if (log.shouldInfo()) {log.info("Selecting fast peer for middle hop, excluding: " + formatExcludedPeers(exclude));}
+                    if (log.shouldInfo()) {
+                        log.info("Selecting fast peer for middle hop, excluding: " + formatExcludedPeers(exclude));
+                    }
                     ctx.profileOrganizer().selectFastPeers(length - 2, exclude, matches, randomKey, SLICE_2_3, ipRestriction, ipSet);
                     matches.remove(ctx.routerHash());
                     if (matches.size() > 1) {
@@ -279,7 +291,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         List<Hash> ordered = new ArrayList<Hash>(matches);
                         orderPeers(ordered, randomKey);
                         rv.addAll(ordered);
-                    } else {rv.addAll(matches);}
+                    } else {
+                        rv.addAll(matches);
+                    }
                     exclude.addAll(matches);
                     matches.clear();
                 }
@@ -288,12 +302,18 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 // group 2 or 3 if two hops, otherwise group 1
                 if (isInbound) {
                     exclude = new IBGWExcluder(exclude);
-                    if (log.shouldInfo()) {log.info("Selecting fast peer for InboundGateway, excluding: " + formatExcludedPeers(exclude));}
+                    if (log.shouldInfo()) {
+                        log.info("Selecting fast peer for InboundGateway, excluding: " + formatExcludedPeers(exclude));
+                    }
                 } else {
                     // exclude existing IBGWs to get some diversity ?
                     // OB closest-hop restrictions
-                    if (checkClosestHop) {exclude = getClosestHopExclude(false, exclude);}
-                    if (log.shouldInfo()) {log.info("Selecting fast peer for closest Outbound, excluding: " + formatExcludedPeers(exclude));}
+                    if (checkClosestHop) {
+                        exclude = getClosestHopExclude(false, exclude);
+                    }
+                    if (log.shouldInfo()) {
+                        log.info("Selecting fast peer for closest Outbound, excluding: " + formatExcludedPeers(exclude));
+                    }
                 }
                 // TODO exclude IPv6-only at IBGW? Caught in checkTunnel() below
                 ctx.profileOrganizer().selectFastPeers(1, exclude, matches, randomKey, length == 2 ? SLICE_2_3 : SLICE_1, ipRestriction, ipSet);
@@ -313,11 +333,13 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 }
                 int min = settings.getLength();
                 int skew = settings.getLengthVariance();
-                if (skew < 0) {min += skew;}
+                if (skew < 0) {
+                    min += skew;
+                }
 
                 // not enough peers to build the minimum size
                 if (rv.size() < min) {
-                // For firewalled routers with very few peers, allow shorter tunnels as fallback
+                    // For firewalled routers with very few peers, allow shorter tunnels as fallback
                     if (hidden && rv.size() > 0) {
                         if (log.shouldInfo()) {
                             log.info("Firewalled router: allowing shorter tunnel (" + rv.size() + " hops) instead of requested " + length + " hops");
@@ -330,7 +352,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         if (isUnderStress && rv.size() > 0) {
                             // Network stress detected: try fallback with relaxed restrictions
                             if (log.shouldInfo()) {
-                                log.info("Network stress (" + (int)(buildSuccess * 100) + "% success) -> Trying relaxed fallback peer selection...");
+                                log.info("Network stress (" + (int) (buildSuccess * 100) + "% success) -> Trying relaxed fallback peer selection...");
                             }
 
                             // First try active (connected) peers
@@ -364,7 +386,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                             // If still not enough, try with even more relaxed criteria (allow failing peers)
                             if (rv.size() < min && buildSuccess < SEVERE_STRESS_THRESHOLD && rv.isEmpty()) {
                                 if (log.shouldWarn()) {
-                                    log.warn("Severe network stress (" + (int)(buildSuccess * 100) + "% success) -> Trying any peer fallback...");
+                                    log.warn("Severe network stress (" + (int) (buildSuccess * 100) + "% success) -> Trying any peer fallback...");
                                 }
                                 ArraySet<Hash> relaxedFallback = new ArraySet<Hash>(min);
                                 ctx.profileOrganizer().selectAllNotFailingPeers(min, exclude, relaxedFallback, false);
@@ -395,11 +417,18 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     }
                 }
             }
-            if (rv.isEmpty()) {return Collections.emptyList();}
-        } else {rv = new ArrayList<Hash>(1);}
+            if (rv.isEmpty()) {
+                return Collections.emptyList();
+            }
+        } else {
+            rv = new ArrayList<Hash>(1);
+        }
 
-        if (isInbound) {rv.add(0, ctx.routerHash());}
-        else {rv.add(ctx.routerHash());}
+        if (isInbound) {
+            rv.add(0, ctx.routerHash());
+        } else {
+            rv.add(ctx.routerHash());
+        }
 
         // Filter out ghost peers before returning
         rv = filterGhostPeers(rv);
@@ -423,9 +452,13 @@ class ClientPeerSelector extends TunnelPeerSelector {
         }
 
         if (rv.size() > 1) {
-            if (!checkTunnel(isInbound, false, rv)) {rv = null;}
+            if (!checkTunnel(isInbound, false, rv)) {
+                rv = null;
+            }
         }
-        if (isInbound && rv != null && rv.size() > 1) {ctx.commSystem().exemptIncoming(rv.get(1));}
+        if (isInbound && rv != null && rv.size() > 1) {
+            ctx.commSystem().exemptIncoming(rv.get(1));
+        }
         return rv;
     }
 
@@ -437,11 +470,15 @@ class ClientPeerSelector extends TunnelPeerSelector {
      * @return filtered list without ghost peers
      */
     private List<Hash> filterGhostPeers(List<Hash> peers) {
-        if (peers == null || peers.isEmpty()) {return peers;}
+        if (peers == null || peers.isEmpty()) {
+            return peers;
+        }
 
         TunnelManagerFacade tmf = ctx.tunnelManager();
         GhostPeerManager ghostManager = tmf.getGhostPeerManager();
-        if (ghostManager == null) {return peers;}
+        if (ghostManager == null) {
+            return peers;
+        }
 
         List<Hash> filtered = new ArrayList<Hash>(peers.size());
         for (Hash peer : peers) {
@@ -480,24 +517,28 @@ class ClientPeerSelector extends TunnelPeerSelector {
          *
          *  @param set not copied, contents will be modified by all methods
          */
-        public IBGWExcluder(Set<Hash> set) {super(set);}
+        public IBGWExcluder(Set<Hash> set) {
+            super(set);
+        }
 
         /**
          *  Automatically check if peer is connected
          *  and add the Hash to the set if not.
          *
          *  @param o a Hash
-          *  @return true if peer should be excluded
-          */
+         *  @return true if peer should be excluded
+         */
         @Override
         public boolean contains(Object o) {
-            if (s.contains(o)) {return true;}
+            if (s.contains(o)) {
+                return true;
+            }
             Hash h = (Hash) o;
             boolean rv = !allowAsIBGW(h);
             if (rv) {
                 s.add(h);
                 if (log.shouldDebug()) {
-                    log.debug("InboundGateway exclude [" + h.toBase64().substring(0,6) + "]");
+                    log.debug("InboundGateway exclude [" + h.toBase64().substring(0, 6) + "]");
                 }
             }
             return rv;
@@ -520,28 +561,31 @@ class ClientPeerSelector extends TunnelPeerSelector {
          *
          *  @param set not copied, contents will be modified by all methods
          */
-        public OBEPExcluder(Set<Hash> set) {super(set);}
+        public OBEPExcluder(Set<Hash> set) {
+            super(set);
+        }
 
         /**
          *  Automatically check if peer is connected
          *  and add the Hash to the set if not.
          *
          *  @param o a Hash
-          *  @return true if peer should be excluded
-          */
+         *  @return true if peer should be excluded
+         */
         @Override
         public boolean contains(Object o) {
-            if (s.contains(o)) {return true;}
+            if (s.contains(o)) {
+                return true;
+            }
             Hash h = (Hash) o;
             boolean rv = !allowAsOBEP(h);
             if (rv) {
                 s.add(h);
                 if (log.shouldDebug()) {
-                    log.debug("OutboundEndpoint exclude [" + h.toBase64().substring(0,6) + "]");
+                    log.debug("OutboundEndpoint exclude [" + h.toBase64().substring(0, 6) + "]");
                 }
             }
             return rv;
         }
     }
-
 }

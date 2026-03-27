@@ -1,4 +1,5 @@
 package net.i2p.data.i2cp;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,11 +9,12 @@ package net.i2p.data.i2cp;
  *
  */
 
-import java.util.Date;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.data.TunnelIdTest;
+
+import java.util.Date;
 
 /**
  * Test harness for loading / storing RequestLeaseSetMessage objects
@@ -23,12 +25,15 @@ public class RequestLeaseSetMessageTest extends I2CPTstBase {
     @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
         RequestLeaseSetMessage msg = new RequestLeaseSetMessage();
-        msg.setSessionId((SessionId)(new SessionIdTest()).createDataStructure());
-        msg.setEndDate(new Date(1000*60*60*12));
+        msg.setSessionId((SessionId) (new SessionIdTest()).createDataStructure());
+        msg.setEndDate(new Date(1000 * 60 * 60 * 12));
         byte h[] = new byte[Hash.HASH_LENGTH];
-        msg.addEndpoint(new Hash(h), (TunnelId)(new TunnelIdTest()).createDataStructure());
+        msg.addEndpoint(new Hash(h), (TunnelId) (new TunnelIdTest()).createDataStructure());
         return msg;
     }
+
     @Override
-    public I2CPMessageImpl createStructureToRead() { return new RequestLeaseSetMessage(); }
+    public I2CPMessageImpl createStructureToRead() {
+        return new RequestLeaseSetMessage();
+    }
 }

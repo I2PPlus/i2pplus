@@ -37,8 +37,7 @@ class OutboundTunnelEndpoint {
         int allocated = oldAllocated;
         int shareBps = 1000 * TunnelDispatcher.getShareBandwidth(_context);
         int reasonableMax = shareBps / 2;
-        if (oldAllocated <= TunnelParticipant.DEFAULT_BW_PER_TUNNEL_ESTIMATE ||
-            oldAllocated < reasonableMax / 10) {
+        if (oldAllocated <= TunnelParticipant.DEFAULT_BW_PER_TUNNEL_ESTIMATE || oldAllocated < reasonableMax / 10) {
             allocated = _context.tunnelDispatcher().getMaxPerTunnelBandwidth(TunnelDispatcher.Location.OBEP);
             _config.setAllocatedBW(allocated);
         }
@@ -59,8 +58,7 @@ class OutboundTunnelEndpoint {
             // invalid IV
             // If we pass it on to the handler, it will fail
             // If we don't, the data buf won't get released from the cache... that's ok
-            if (_log.shouldInfo())
-                _log.info("Invalid IV, dropping at Outbound Endpoint... " + _config);
+            if (_log.shouldInfo()) _log.info("Invalid IV, dropping at Outbound Endpoint... " + _config);
             return;
         }
         ok = _handler.receiveTunnelMessage(data, 0, data.length);
@@ -68,8 +66,7 @@ class OutboundTunnelEndpoint {
             // blame previous hop
             Hash h = _config.getReceiveFrom();
             if (h != null) {
-                if (_log.shouldWarn())
-                    _log.warn("Tunnel from " + toString() + " failed -> Blaming [" + h.toBase64().substring(0,6) + "] -> 50%");
+                if (_log.shouldWarn()) _log.warn("Tunnel from " + toString() + " failed -> Blaming [" + h.toBase64().substring(0, 6) + "] -> 50%");
                 _context.profileManager().tunnelFailed(h, 50);
             }
         }
@@ -88,8 +85,7 @@ class OutboundTunnelEndpoint {
                 // Delivery type LOCAL is not supported at the OBEP
                 // We don't have any use for it yet.
                 // Don't send to OutboundMessageDistributor.distribute() which will NPE or fail
-                if (_log.shouldWarn())
-                    _log.warn("Dropping messsage at Outbound Endpoint -> Unsupported delivery instruction type (LOCAL)");
+                if (_log.shouldWarn()) _log.warn("Dropping messsage at Outbound Endpoint -> Unsupported delivery instruction type (LOCAL)");
                 return;
             }
 
@@ -102,8 +98,7 @@ class OutboundTunnelEndpoint {
                         UnknownI2NPMessage umsg = (UnknownI2NPMessage) msg;
                         msg = umsg.convert();
                     } catch (I2NPMessageException ime) {
-                        if (_log.shouldInfo())
-                            _log.info("Unable to convert to standard message class at zero-hop Inbound Gateway \n* " + ime.getMessage());
+                        if (_log.shouldInfo()) _log.info("Unable to convert to standard message class at zero-hop Inbound Gateway \n* " + ime.getMessage());
                         return;
                     }
                 }
@@ -112,18 +107,14 @@ class OutboundTunnelEndpoint {
                 if (entry.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
                     long now = _context.clock().now();
                     long date = entry.getDate();
-                    if (date < now - 60*60*1000L) {
+                    if (date < now - 60 * 60 * 1000L) {
                         if (_log.shouldWarn()) {
-                            _log.warn("Dropping " + (toTunnel == null ? "DIRECT" : "") +
-                                      " DbStoreMsg of stale RouterInfo [" + dsm.getKey().toBase64().substring(0,6) +
-                                      "] at Outbound Endpoint to Router [" + toRouter.toBase64().substring(0,6) + "]");
+                            _log.warn("Dropping " + (toTunnel == null ? "DIRECT" : "") + " DbStoreMsg of stale RouterInfo [" + dsm.getKey().toBase64().substring(0, 6) + "] at Outbound Endpoint to Router [" + toRouter.toBase64().substring(0, 6) + "]");
                         }
                         return;
-                    } else if (date > now + 2*60*1000L) {
+                    } else if (date > now + 2 * 60 * 1000L) {
                         if (_log.shouldWarn()) {
-                            _log.warn("Dropping " + (toTunnel == null ? "DIRECT" : "") +
-                                      " DbStoreMsg of future RouterInfo [" + dsm.getKey().toBase64().substring(0,6) +
-                                      "] at Outbound Endpoint to Router [" + toRouter.toBase64().substring(0,6) + "]");
+                            _log.warn("Dropping " + (toTunnel == null ? "DIRECT" : "") + " DbStoreMsg of future RouterInfo [" + dsm.getKey().toBase64().substring(0, 6) + "] at Outbound Endpoint to Router [" + toRouter.toBase64().substring(0, 6) + "]");
                         }
                         return;
                     }
@@ -131,33 +122,23 @@ class OutboundTunnelEndpoint {
             }
 
             if (_log.shouldInfo()) {
-                _log.info("Full message received from Outbound tunnel " + _config + "\n* " + msg +
-                          " to be forwarded to [" + toRouter.toBase64().substring(0,6) + "]" +
-                          (toTunnel != null ? ":" + toTunnel.getTunnelId() : ""));
+                _log.info("Full message received from Outbound tunnel " + _config + "\n* " + msg + " to be forwarded to [" + toRouter.toBase64().substring(0, 6) + "]" + (toTunnel != null ? ":" + toTunnel.getTunnelId() : ""));
             }
             if (toTunnel == null) {
                 int msgtype = msg.getType();
                 if (msgtype == DatabaseStoreMessage.MESSAGE_TYPE) {
-                    DatabaseStoreMessage dsm = (DatabaseStoreMessage)msg;
+                    DatabaseStoreMessage dsm = (DatabaseStoreMessage) msg;
                     if (!dsm.getEntry().isLeaseSet()) {
                         _ridsm++;
                         _context.statManager().addRateData("tunnel.outboundTunnelEndpointFwdRIDSM", 1);
-                        if (_log.shouldLog(Log.INFO))
-                            _log.info("OutboundEndpoint RouterInfo DbStoreMsg (Count: " +
-                                      _ridsm + "/" + _totalmsg + ") from [TunnelId " + _config.getReceiveTunnelId() + "] " +
-                                      "to Router [" + toRouter.toBase64().substring(0,6) + "]\n* " + dsm);
+                        if (_log.shouldLog(Log.INFO)) _log.info("OutboundEndpoint RouterInfo DbStoreMsg (Count: " + _ridsm + "/" + _totalmsg + ") from [TunnelId " + _config.getReceiveTunnelId() + "] " + "to Router [" + toRouter.toBase64().substring(0, 6) + "]\n* " + dsm);
                     } else {
                         _lsdsm++;
-                        if (_log.shouldLog(Log.INFO))
-                            _log.info("OutboundEndpoint LeaseSet DbStoreMsg (Count: " + _lsdsm + "/" + _totalmsg + ") " +
-                                      "from [TunnelId " + _config.getReceiveTunnelId() + "] to Router " +
-                                      toRouter.toBase64().substring(0,6) + "]\n* " + dsm);
+                        if (_log.shouldLog(Log.INFO)) _log.info("OutboundEndpoint LeaseSet DbStoreMsg (Count: " + _lsdsm + "/" + _totalmsg + ") " + "from [TunnelId " + _config.getReceiveTunnelId() + "] to Router " + toRouter.toBase64().substring(0, 6) + "]\n* " + dsm);
                     }
                 } else {
                     _i2npmsg++;
-                    if (_log.shouldLog(Log.INFO))
-                        _log.info("OutboundEndpoint I2NP Message (Count: " + _i2npmsg + "/" + _totalmsg + ") from [TunnelId " +
-                                  _config.getReceiveTunnelId() + "] to Router [" + toRouter.toBase64().substring(0,6) + "]\n* " + msg);
+                    if (_log.shouldLog(Log.INFO)) _log.info("OutboundEndpoint I2NP Message (Count: " + _i2npmsg + "/" + _totalmsg + ") from [TunnelId " + _config.getReceiveTunnelId() + "] to Router [" + toRouter.toBase64().substring(0, 6) + "]\n* " + msg);
                 }
             }
             int size = msg.getMessageSize();
@@ -169,8 +150,8 @@ class OutboundTunnelEndpoint {
                 }
             }
             // this overstates the stat somewhat, but ok for now
-            //int kb = (size + 1023) / 1024;
-            //for (int i = 0; i < kb; i++)
+            // int kb = (size + 1023) / 1024;
+            // for (int i = 0; i < kb; i++)
             //    _config.incrementSentMessages();
             _outDistributor.distribute(msg, toRouter, toTunnel);
         }

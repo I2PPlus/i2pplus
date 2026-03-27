@@ -9,24 +9,21 @@ package net.i2p.crypto;
  *
  */
 
-
 import junit.framework.TestCase;
+
 import net.i2p.data.DataHelper;
 
 public class CryptixRijndael_AlgorithmTest extends TestCase {
-    public void testCRA() throws Exception{
-        int[] sizes = {16,24,32};
-        for (int j = 0; j < sizes.length; j++){
+    public void testCRA() throws Exception {
+        int[] sizes = {16, 24, 32};
+        for (int j = 0; j < sizes.length; j++) {
 
             byte[] kb = new byte[sizes[j]];
             byte[] pt = new byte[16];
             int i;
 
-            for (i = 0; i < sizes[j]; i++)
-                kb[i] = (byte) i;
-            for (i = 0; i < 16; i++)
-                pt[i] = (byte) i;
-
+            for (i = 0; i < sizes[j]; i++) kb[i] = (byte) i;
+            for (i = 0; i < 16; i++) pt[i] = (byte) i;
 
             Object key = CryptixRijndael_Algorithm.makeKey(kb, 16);
 

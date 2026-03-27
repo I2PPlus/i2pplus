@@ -1,9 +1,10 @@
 package net.i2p.client.streaming;
 
-import java.net.SocketAddress;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
+
+import java.net.SocketAddress;
 
 /**
  *  A SocketAddress (Destination + port) so we can have SocketChannels.
@@ -35,8 +36,7 @@ public class I2PSocketAddress extends SocketAddress {
             try {
                 port = Integer.parseInt(host.substring(colon + 1));
                 host = host.substring(0, colon);
-                if (port < 0 || port > 65535)
-                    throw new IllegalArgumentException("Bad port " + port);
+                if (port < 0 || port > 65535) throw new IllegalArgumentException("Bad port " + port);
             } catch (IndexOutOfBoundsException ioobe) {
                 throw new IllegalArgumentException("Bad port " + host);
             } catch (NumberFormatException nfe) {
@@ -53,10 +53,8 @@ public class I2PSocketAddress extends SocketAddress {
      *  @throws IllegalArgumentException for port &lt; 0 or port &gt; 65535
      */
     public I2PSocketAddress(Destination dest, int port) {
-        if (dest == null)
-            throw new NullPointerException();
-        if (port < 0 || port > 65535)
-            throw new IllegalArgumentException("Bad port " + port);
+        if (dest == null) throw new NullPointerException();
+        if (port < 0 || port > 65535) throw new IllegalArgumentException("Bad port " + port);
         _port = port;
         _dest = dest;
         _host = null;
@@ -68,8 +66,7 @@ public class I2PSocketAddress extends SocketAddress {
      *  @throws IllegalArgumentException for port &lt; 0 or port &gt; 65535
      */
     public I2PSocketAddress(String host, int port) {
-        if (port < 0 || port > 65535)
-            throw new IllegalArgumentException("Bad port " + port);
+        if (port < 0 || port > 65535) throw new IllegalArgumentException("Bad port " + port);
         _port = port;
         _dest = I2PAppContext.getGlobalContext().namingService().lookup(host);
         _host = host;
@@ -84,8 +81,7 @@ public class I2PSocketAddress extends SocketAddress {
 
     /** unresolved */
     private I2PSocketAddress(int port, String host) {
-        if (port < 0 || port > 65535)
-            throw new IllegalArgumentException("Bad port " + port);
+        if (port < 0 || port > 65535) throw new IllegalArgumentException("Bad port " + port);
         _port = port;
         _dest = null;
         _host = host;
@@ -101,8 +97,7 @@ public class I2PSocketAddress extends SocketAddress {
      *  If unresolved, this may take several seconds for b32.
      */
     public synchronized Destination getAddress() {
-        if (_dest == null)
-            _dest = I2PAppContext.getGlobalContext().namingService().lookup(_host);
+        if (_dest == null) _dest = I2PAppContext.getGlobalContext().namingService().lookup(_host);
         return _dest;
     }
 
@@ -120,10 +115,8 @@ public class I2PSocketAddress extends SocketAddress {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
-        if (_dest != null)
-            buf.append(_dest.calculateHash().toString());
-        else
-            buf.append(_host);
+        if (_dest != null) buf.append(_dest.calculateHash().toString());
+        else buf.append(_host);
         buf.append(':');
         buf.append(_port);
         return buf.toString();
@@ -131,17 +124,12 @@ public class I2PSocketAddress extends SocketAddress {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof I2PSocketAddress))
-            return false;
+        if (obj == null || !(obj instanceof I2PSocketAddress)) return false;
         I2PSocketAddress o = (I2PSocketAddress) obj;
-        if (_port != o._port)
-            return false;
-        if (_dest != null)
-            return _dest.equals(o._dest);
-        if (o._dest != null)
-            return false;
-        if (_host != null)
-            return _host.equals(o._host);
+        if (_port != o._port) return false;
+        if (_dest != null) return _dest.equals(o._dest);
+        if (o._dest != null) return false;
+        if (_host != null) return _host.equals(o._host);
         return o._host == null;
     }
 

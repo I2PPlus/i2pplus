@@ -1,7 +1,8 @@
 package net.i2p.app;
 
-import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.I2PAppContext;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *  A simple ClientAppManager that supports register/unregister only,

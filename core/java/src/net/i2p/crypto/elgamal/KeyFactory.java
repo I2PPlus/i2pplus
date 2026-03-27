@@ -1,5 +1,11 @@
 package net.i2p.crypto.elgamal;
 
+import net.i2p.crypto.elgamal.impl.ElGamalPrivateKeyImpl;
+import net.i2p.crypto.elgamal.impl.ElGamalPublicKeyImpl;
+import net.i2p.crypto.elgamal.spec.ElGamalParameterSpec;
+import net.i2p.crypto.elgamal.spec.ElGamalPrivateKeySpec;
+import net.i2p.crypto.elgamal.spec.ElGamalPublicKeySpec;
+
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyFactorySpi;
@@ -9,11 +15,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import net.i2p.crypto.elgamal.impl.ElGamalPrivateKeyImpl;
-import net.i2p.crypto.elgamal.impl.ElGamalPublicKeyImpl;
-import net.i2p.crypto.elgamal.spec.ElGamalParameterSpec;
-import net.i2p.crypto.elgamal.spec.ElGamalPrivateKeySpec;
-import net.i2p.crypto.elgamal.spec.ElGamalPublicKeySpec;
 
 /**
  * Java Security Provider KeyFactory implementation for ElGamal public-key cryptosystem.
@@ -83,8 +84,7 @@ public final class KeyFactory extends KeyFactorySpi {
      * @since 0.9.25
      */
     @Override
-    protected PrivateKey engineGeneratePrivate(KeySpec keySpec)
-            throws InvalidKeySpecException {
+    protected PrivateKey engineGeneratePrivate(KeySpec keySpec) throws InvalidKeySpecException {
         if (keySpec instanceof ElGamalPrivateKeySpec) {
             return new ElGamalPrivateKeyImpl((ElGamalPrivateKeySpec) keySpec);
         }
@@ -106,8 +106,7 @@ public final class KeyFactory extends KeyFactorySpi {
      * @since 0.9.25
      */
     @Override
-    protected PublicKey engineGeneratePublic(KeySpec keySpec)
-            throws InvalidKeySpecException {
+    protected PublicKey engineGeneratePublic(KeySpec keySpec) throws InvalidKeySpecException {
         if (keySpec instanceof ElGamalPublicKeySpec) {
             return new ElGamalPublicKeyImpl((ElGamalPublicKeySpec) keySpec);
         }
@@ -133,8 +132,7 @@ public final class KeyFactory extends KeyFactorySpi {
      */
     @SuppressWarnings("unchecked")
     @Override
-    protected <T extends KeySpec> T engineGetKeySpec(Key key, Class<T> keySpec)
-            throws InvalidKeySpecException {
+    protected <T extends KeySpec> T engineGetKeySpec(Key key, Class<T> keySpec) throws InvalidKeySpecException {
         if (keySpec.isAssignableFrom(ElGamalPublicKeySpec.class) && key instanceof ElGamalPublicKey) {
             ElGamalPublicKey k = (ElGamalPublicKey) key;
             ElGamalParameterSpec egp = k.getParameters();
