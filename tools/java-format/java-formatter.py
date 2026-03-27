@@ -226,6 +226,13 @@ def join_continuation_lines(lines):
             i += 1
             continue
 
+        # Don't join if current line contains a // comment — joining would
+        # turn subsequent code into a comment
+        if "//" in line and not line.strip().startswith("//"):
+            result.append(line)
+            i += 1
+            continue
+
         # Check if next line is a continuation (deeper indent, not a new statement)
         if i + 1 >= len(lines):
             result.append(line)
@@ -276,14 +283,39 @@ def join_continuation_lines(lines):
     return result
 
 
-def post_edit(content):
-    """Apply I2P-style post-edits to google-java-format output."""
-    lines = content.split("\n")
-    # Run twice to handle multi-line continuations (e.g. 3+ line arg lists)
-    lines = join_continuation_lines(lines)
-    lines = join_continuation_lines(lines)
-    return "\n".join(lines)
+def normalize_indentation(content):
+    """Normalize indentation to 4-space multiples, preserving comment blocks."""
+    lines_out = []
+    in_block_comment = False
+    for line in content.split("\n"):
+        stripped = line.lstrip(" \t")
+        if in_block_comment:
+            lines_out.append(line)
+            if "*/" in line:
+                in_block_comment = False
+            continue
+        if stripped.startswith("/*") or stripped.startswith("*"):
+            lines_out.append(line)
+            if "*/" not in stripped:
+                in_block_comment = True
+            continue
+        if not stripped:
+            lines_out.append(line)
+            continue
+        leading = line[:len(line) - len(stripped)]
+        spaces = leading.replace("\t", "    ")
+        indent = len(spaces)
+        normalized = indent // 4 * 4
+        lines_out.append(" " * normalized + stripped)
+    return "\n".join(lines_out)
 
+
+def post_edit(content):
+    """Apply I2P-style post-edits: join continuations and normalize indentation."""
+    lines = content.split("\n")
+    lines = join_continuation_lines(lines)
+    lines = join_continuation_lines(lines)
+    return normalize_indentation("\n".join(lines))
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
@@ -297,20 +329,11 @@ def format_file(filepath, args):
         print(f"Warning: cannot read {filepath}: {e}", file=sys.stderr)
         return None, None
 
-    formatted = run_formatter(
-        filepath,
-        imports_only=args.imports_only,
-        lines=args.lines,
-        column_limit=getattr(args, 'column_limit', None),
-    )
+    cleaned = run_formatter(filepath)
+    if cleaned is None:
+        cleaned = original
 
-    if formatted is None:
-        return None, None
-
-    # Apply post-edits unless imports-only mode
-    if not args.imports_only:
-        formatted = post_edit(formatted)
-
+    formatted = post_edit(cleaned)
     return original, formatted
 
 

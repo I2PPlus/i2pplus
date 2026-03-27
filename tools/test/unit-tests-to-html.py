@@ -96,7 +96,9 @@ def system_info():
         first_line = java_version.split("\n")[0]
         m = re.search(r'"([^"]+)"', first_line)
         if m:
-            info["java"] = m.group(1)
+            ver = m.group(1)
+            ver = re.sub(r'-ea$', '', ver)
+            info["java"] = ver
     except Exception:
         pass
     return info
@@ -239,7 +241,7 @@ def emit_test_row(o, r):
 
     has_cases = r.get("all_cases")
     if has_cases:
-        o(f'<tr{cls} onclick="toggleDetail(\'{row_id}\')" style="cursor:pointer">')
+        o(f'<tr{cls} data-toggle="{row_id}" style="cursor:pointer">')
     else:
         o(f'<tr{cls}>')
     o(f'<td>{escape(r["name"])}</td>')
@@ -416,11 +418,11 @@ def main():
 
         # Column header sort buttons
         col_headers = (
-            f'<th onclick="sortTable(\'{mid}\',0)" class="sortable">Test</th>'
-            f'<th onclick="sortTable(\'{mid}\',1)" class="sortable">Passed</th>'
-            f'<th onclick="sortTable(\'{mid}\',2)" class="sortable">Failed</th>'
-            f'<th onclick="sortTable(\'{mid}\',3)" class="sortable">Errors</th>'
-            f'<th onclick="sortTable(\'{mid}\',4)" class="sortable">Time</th>'
+            f'<th data-sort-table="{mid}" data-sort-col="0" class="sortable">Test</th>'
+            f'<th data-sort-table="{mid}" data-sort-col="1" class="sortable">Passed</th>'
+            f'<th data-sort-table="{mid}" data-sort-col="2" class="sortable">Failed</th>'
+            f'<th data-sort-table="{mid}" data-sort-col="3" class="sortable">Errors</th>'
+            f'<th data-sort-table="{mid}" data-sort-col="4" class="sortable">Time</th>'
         )
 
         if len(pkg_groups) <= 1:

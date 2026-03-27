@@ -331,6 +331,23 @@ def parse_spotbugs(xml_file):
     return results
 
 
+def _to_relative(file_path):
+    """Convert an absolute path to relative (from cwd, i.e. repo root)."""
+    if os.path.isabs(file_path):
+        try:
+            return os.path.relpath(file_path).replace("\\", "/")
+        except ValueError:
+            pass
+    return file_path
+
+
+def _file_link(abs_path, editor):
+    """Build editor/file link href for local mode."""
+    if editor:
+        return f"{editor}://file/{abs_path.lstrip('/')}"
+    return f"file://{abs_path}"
+
+
 def main():
     parser = argparse.ArgumentParser(description="Combine analysis results into a single HTML report")
     parser.add_argument("--pmd", help="PMD XML file")
@@ -338,7 +355,21 @@ def main():
     parser.add_argument("--codeql", help="CodeQL SARIF file")
     parser.add_argument("--spotbugs", help="SpotBugs XML file")
     parser.add_argument("-o", "--output", required=True, help="Output HTML file")
+    parser.add_argument("--local", action="store_true",
+                        help="Show absolute paths with editor links (for local use)")
     args = parser.parse_args()
+
+    local = args.local
+    editor = ""
+    if local:
+        cfg_file = os.path.join(TEMPLATE_DIR, "config.txt")
+        try:
+            for line in open(cfg_file):
+                line = line.strip()
+                if line.startswith("editor="):
+                    editor = line.split("=", 1)[1].strip()
+        except FileNotFoundError:
+            pass
 
     all_results = []
 
@@ -363,6 +394,13 @@ def main():
 
     # Sort by file then line
     all_results.sort(key=lambda r: (r["file"], r["line"]))
+
+    # Normalize paths: relative by default, absolute for --local
+    for r in all_results:
+        if not local:
+            r["file"] = _to_relative(r["file"])
+        else:
+            r["_abs"] = r["file"] if os.path.isabs(r["file"]) else os.path.abspath(r["file"])
 
     # Derive sub-system for each result
     for r in all_results:
@@ -454,7 +492,11 @@ def main():
             for r in sub_results + [None]:
                 if r is None or r["file"] != current_file:
                     if current_file and file_results:
-                        w(f'<h3><span class="path">{escape(current_file)}</span> <span class="badge">{len(file_results)}</span></h3>')
+                        path_html = f'<span class="path">{escape(current_file)}</span>'
+                        if local:
+                            abs_p = file_results[0].get("_abs", os.path.abspath(current_file))
+                            path_html = f'<a href="{escape(_file_link(abs_p, editor))}" class="file-link">{path_html}</a>'
+                        w(f'<h3>{path_html} <span class="badge">{len(file_results)}</span></h3>')
                         w('<table class="warningtable">')
                         w('<tr><th class="line">Line</th><th>Source</th><th>Rule</th><th>Message</th><th class="rule-category">Category</th><th class="rule-doc">Doc</th></tr>')
                         for fr in file_results:

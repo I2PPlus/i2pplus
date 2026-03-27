@@ -180,6 +180,7 @@
     <echo message="  spotbugs                                     Run SpotBugs static analysis on Java sources &#10140; dist/spotbugs.html"/>
     <echo message="  report-all-java                              Run all Java analysis tools and combine into single report &#10140; dist/report-all-java.html"/>
     <echo message="  report-all-java-quick                        Compile combined report from existing results (no re-analysis) &#10140; dist/report-all-java.html"/>
+    <echo message="  report-all-java-local                        Combined report from existing results with clickable file links &#10140; dist/report-all-java-local.html"/>
     <echo message=""/>
     <echo message=" === Testing ==="/>
     <echo message="  bench                                        Build benchmarks"/>
@@ -1436,7 +1437,7 @@
     <loadfile srcfile="core/java/src/net/i2p/CoreVersion.java" property="release.number">
       <filterchain>
         <linecontains>
-          <contains value="public final static String VERSION"/>
+          <contains value="public static final String VERSION"/>
         </linecontains>
         <tokenfilter>
           <replaceregex pattern='.*"([^"]+)";' replace="\1" flags="gi"/>
@@ -1448,7 +1449,7 @@
     <loadfile srcfile="core/java/src/net/i2p/CoreVersion.java" property="api.version">
       <filterchain>
         <linecontains>
-          <contains value="public final static String PUBLISHED_VERSION"/>
+          <contains value="public static final String PUBLISHED_VERSION"/>
         </linecontains>
         <tokenfilter>
           <replaceregex pattern='.*"([^"]+)";' replace="\1" flags="gi"/>
@@ -1486,7 +1487,7 @@
     <loadfile srcfile="router/java/src/net/i2p/router/RouterVersion.java" property="i2p.build.number">
       <filterchain>
         <linecontains>
-          <contains value="public final static long BUILD"/>
+          <contains value="public static final long BUILD"/>
         </linecontains>
         <tokenfilter>
           <replaceregex pattern=".*=\s+([0-9]+);" replace="\1" flags="gi"/>
@@ -1498,7 +1499,7 @@
     <loadfile srcfile="router/java/src/net/i2p/router/RouterVersion.java" property="build.extra">
       <filterchain>
         <linecontains>
-          <contains value="public final static String EXTRA"/>
+          <contains value="public static final String EXTRA"/>
         </linecontains>
         <tokenfilter>
           <replaceregex pattern='.*"(.*)";' replace="\1" flags="gi"/>
@@ -3371,7 +3372,7 @@
     <exec executable="ant" dir="${basedir}" output="/dev/null" error="/dev/null">
       <arg value="build"/>
     </exec>
-    <echo message="Running Checkstyle analysis (local)..."/>
+    <echo message="Running Checkstyle analysis (with local link generation)..."/>
     <mkdir dir="dist"/>
     <exec executable="java" failonerror="false" outputproperty="cs.result">
       <arg value="-Xmx4g"/>
@@ -3800,6 +3801,25 @@
       <arg value="dist/report-all-java.html"/>
     </exec>
     <echo message="Report: dist/report-all-java.html"/>
+  </target>
+
+  <target name="report-all-java-local">
+    <echo message="Combining existing Java analysis results with file links (no re-analysis)..."/>
+    <exec executable="python3" failonerror="true">
+      <arg value="tools/template/report-all-java.py"/>
+      <arg value="--pmd"/>
+      <arg value="dist/pmd-java.xml"/>
+      <arg value="--checkstyle"/>
+      <arg value="dist/checkstyle.xml"/>
+      <arg value="--codeql"/>
+      <arg value="dist/codeql-java.sarif"/>
+      <arg value="--spotbugs"/>
+      <arg value="dist/spotbugs.xml"/>
+      <arg value="--local"/>
+      <arg value="-o"/>
+      <arg value="dist/report-all-java-local.html"/>
+    </exec>
+    <echo message="Report: dist/report-all-java-local.html"/>
   </target>
 
   <target name="checkstyle-fix-errors" depends="checkstyle-setup,checkstyle-download,checkstyle-download-skip">

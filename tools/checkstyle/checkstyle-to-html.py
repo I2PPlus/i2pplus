@@ -67,6 +67,26 @@ def main():
     xml_file, html_file = sys.argv[1], sys.argv[2]
     local = "--local" in sys.argv
 
+    # Editor protocol from config (e.g. vscodium, code)
+    editor = ""
+    if local:
+        cfg_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.txt")
+        try:
+            for line in open(cfg_file):
+                line = line.strip()
+                if line.startswith("editor="):
+                    editor = line.split("=", 1)[1].strip()
+        except FileNotFoundError:
+            pass
+
+    def file_link(path):
+        """Build file link href for local mode."""
+        if not local:
+            return ""
+        if editor:
+            return f"{editor}://file/{path.lstrip('/')}"
+        return f"file://{path}"
+
     # Handle truncated XML
     with open(xml_file) as f:
         content = f.read()
@@ -181,6 +201,7 @@ def main():
         # Inject Checkstyle-specific JS
         cs_js = f'''
 var LOCAL_MODE={"true" if local else "false"};
+var EDITOR="{editor}";
 var CHECK_DATA={check_data_json};
 document.addEventListener("click",function(e){{
   var s=e.target.closest("summary");
@@ -213,7 +234,7 @@ function showCheck(check){{
     var f=d[i][0], x=d[i][1];
     if(f!==curFile){{curFile=f;
       var pathHtml='<span class="path">'+esc(f)+'</span>';
-      if(LOCAL_MODE) pathHtml='<a href="file://'+f+'" class="file-link">'+pathHtml+'</a>';
+      if(LOCAL_MODE){{var p=EDITOR?f.replace(/^\\//,''):f;pathHtml='<a href="'+(EDITOR?EDITOR+'://file/':'file://')+p+'" class="file-link">'+pathHtml+'</a>';}}
       h+='<h3>'+pathHtml+'</h3>';
       h+='<table class="warningtable"><tr><th class="line">Line</th><th>Message</th><th class="rule-category">Severity</th><th class="rule-doc">Doc</th></tr>';}}
     var sevCls=x.severity==="error"?"p1":"p2";
@@ -281,10 +302,10 @@ function hideCheck(){{
             w(f'<details id="sub-{escape(sub)}">')
             w(f'<summary><div class="tabletitle"><a name="sub-{escape(sub)}">{escape(sub)}</a>&#32;<span class="badge">{count} / {nfiles}</span></div></summary>')
             for fname, violations in sub_files[sub]:
+                abs_path = os.path.abspath(fname) if local else fname
                 path_html = f'<span class="path">{escape(fname)}</span>'
                 if local:
-                    abs_path = os.path.abspath(fname)
-                    path_html = f'<a href="file://{escape(abs_path)}" class="file-link">{path_html}</a>'
+                    path_html = f'<a href="{escape(file_link(abs_path))}" class="file-link">{path_html}</a>'
                 w(f'<h3>{path_html} <span class="badge">{len(violations)}</span></h3>')
                 w('<table class="warningtable">')
                 w('<tr><th class="line">Line</th><th>Check</th><th>Message</th><th class="rule-category">Severity</th><th class="rule-doc">Doc</th></tr>')
