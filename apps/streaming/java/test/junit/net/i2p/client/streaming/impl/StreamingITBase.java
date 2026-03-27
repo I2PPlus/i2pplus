@@ -1,14 +1,16 @@
 package net.i2p.client.streaming.impl;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.Properties;
 import junit.framework.TestCase;
+
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PClientFactory;
 import net.i2p.client.I2PSession;
 import net.i2p.util.Log;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.Properties;
 
 abstract class StreamingITBase extends TestCase {
 
@@ -30,7 +32,7 @@ abstract class StreamingITBase extends TestCase {
     protected abstract Runnable getClient(I2PAppContext ctx, I2PSession session);
 
     protected final Thread runClient(I2PAppContext ctx, I2PSession session) {
-        Thread t = new Thread(getClient(ctx,session));
+        Thread t = new Thread(getClient(ctx, session));
         t.setName("client");
         t.setDaemon(true);
         t.start();
@@ -53,7 +55,7 @@ abstract class StreamingITBase extends TestCase {
     protected abstract Runnable getServer(I2PAppContext ctx, I2PSession session);
 
     protected final Thread runServer(I2PAppContext ctx, I2PSession session) {
-        Thread t = new Thread(getServer(ctx,session));
+        Thread t = new Thread(getServer(ctx, session));
         t.setName("servert");
         t.setDaemon(true);
         t.start();

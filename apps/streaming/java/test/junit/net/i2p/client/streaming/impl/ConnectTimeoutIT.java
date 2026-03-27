@@ -1,7 +1,5 @@
 package net.i2p.client.streaming.impl;
 
-import java.io.ByteArrayOutputStream;
-import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PClientFactory;
 import net.i2p.client.I2PSession;
@@ -9,13 +7,17 @@ import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.I2PSocketManagerFactory;
 import net.i2p.data.Destination;
 import net.i2p.util.Log;
+
 import org.junit.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.util.Properties;
 
 /**
  * Try to connect to a new nonexistant peer and, of course,
  * timeout.
  */
-public class ConnectTimeoutIT  extends StreamingITBase {
+public class ConnectTimeoutIT extends StreamingITBase {
     private Log _log;
     private I2PSession _client;
     private Destination _serverDest;
@@ -33,19 +35,18 @@ public class ConnectTimeoutIT  extends StreamingITBase {
     }
 
     protected Runnable getClient(I2PAppContext ctx, I2PSession session) {
-        return new ClientRunner(ctx,session);
+        return new ClientRunner(ctx, session);
     }
 
     private class ClientRunner extends RunnerBase {
         public ClientRunner(I2PAppContext ctx, I2PSession session) {
-            super(ctx,session);
+            super(ctx, session);
         }
 
         public void run() {
             I2PSocketManager mgr = I2PSocketManagerFactory.createManager("localhost", 10001, getProperties());
             assertNull(mgr);
         }
-
     }
 
     @Override
@@ -59,7 +60,7 @@ public class ConnectTimeoutIT  extends StreamingITBase {
         p.setProperty(I2PSocketManagerFactory.PROP_MANAGER, I2PSocketManagerFull.class.getName());
         p.setProperty("tunnels.depthInbound", "0");
         p.setProperty(ConnectionOptions.PROP_CONNECT_TIMEOUT, "30000");
-        //p.setProperty(ConnectionOptions.PROP_CONNECT_DELAY, "10000");
+        // p.setProperty(ConnectionOptions.PROP_CONNECT_DELAY, "10000");
         p.setProperty(ConnectionOptions.PROP_CONNECT_DELAY, "0");
         return p;
     }

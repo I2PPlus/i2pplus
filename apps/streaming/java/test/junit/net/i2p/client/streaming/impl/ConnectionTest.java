@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 
 import net.i2p.client.I2PSession;
 import net.i2p.util.SimpleTimer2;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -14,8 +15,7 @@ import org.mockito.junit.MockitoRule;
 
 public class ConnectionTest {
 
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
+    @Rule public MockitoRule rule = MockitoJUnit.rule();
 
     @Mock private ConnectionManager manager;
     @Mock private I2PSession session;
@@ -27,6 +27,6 @@ public class ConnectionTest {
 
     @Test
     public void test() {
-        //Connection conn = new Connection(I2PAppContext.getGlobalContext(), manager, session, chooser, timer, queue, handler, opts, false);
+        // Connection conn = new Connection(I2PAppContext.getGlobalContext(), manager, session, chooser, timer, queue, handler, opts, false);
     }
 }

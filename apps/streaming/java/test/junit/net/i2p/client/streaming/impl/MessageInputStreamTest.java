@@ -4,13 +4,11 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -19,13 +17,16 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+
 /**
  * Stress test the MessageInputStream
  */
 public class MessageInputStreamTest {
 
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
+    @Rule public MockitoRule rule = MockitoJUnit.rule();
 
     private I2PAppContext _context;
     private Log _log;
@@ -40,8 +41,7 @@ public class MessageInputStreamTest {
         _log = _context.logManager().getLog(MessageInputStreamTest.class);
         _options = new ConnectionOptions();
 
-        in = new MessageInputStream(_context, _options.getMaxMessageSize(),
-                _options.getMaxWindowSize(), _options.getInboundBufferSize(), _options.getMaxPacketCount());
+        in = new MessageInputStream(_context, _options.getMaxMessageSize(), _options.getMaxWindowSize(), _options.getInboundBufferSize(), _options.getMaxPacketCount());
     }
 
     @After
@@ -100,12 +100,12 @@ public class MessageInputStreamTest {
         _context.random().nextBytes(orig);
         for (int i = 0; i < numMsgs - 1; i++) {
             byte msg[] = new byte[_options.getMaxMessageSize()];
-            System.arraycopy(orig, i*_options.getMaxMessageSize(), msg, 0, _options.getMaxMessageSize());
+            System.arraycopy(orig, i * _options.getMaxMessageSize(), msg, 0, _options.getMaxMessageSize());
             in.messageReceived(i, new ByteArray(msg));
         }
         assertTrue(in.canAccept(numMsgs, 1));
         byte msg[] = new byte[_options.getMaxMessageSize()];
-        System.arraycopy(orig, (numMsgs-1)*_options.getMaxMessageSize(), msg, 0, _options.getMaxMessageSize());
+        System.arraycopy(orig, (numMsgs - 1) * _options.getMaxMessageSize(), msg, 0, _options.getMaxMessageSize());
         in.messageReceived(numMsgs - 1, new ByteArray(msg));
         assertFalse(in.canAccept(numMsgs, 1));
     }
@@ -114,16 +114,16 @@ public class MessageInputStreamTest {
     public void testCanAccept_smallerMsgsWithMaxSizeCount() {
         // Fill the buffer to one message under count that would reach limit with max-size msgs
         int numMsgs = _options.getInboundBufferSize() / _options.getMaxMessageSize();
-        byte orig[] = new byte[numMsgs*1024];
+        byte orig[] = new byte[numMsgs * 1024];
         _context.random().nextBytes(orig);
         for (int i = 0; i < numMsgs - 1; i++) {
             byte msg[] = new byte[1024];
-            System.arraycopy(orig, i*1024, msg, 0, 1024);
+            System.arraycopy(orig, i * 1024, msg, 0, 1024);
             in.messageReceived(i, new ByteArray(msg));
         }
         assertTrue(in.canAccept(numMsgs, 1));
         byte msg[] = new byte[1024];
-        System.arraycopy(orig, (numMsgs-1)*1024, msg, 0, 1024);
+        System.arraycopy(orig, (numMsgs - 1) * 1024, msg, 0, 1024);
         in.messageReceived(numMsgs - 1, new ByteArray(msg));
         assertTrue(in.canAccept(numMsgs, 1));
     }
@@ -136,13 +136,13 @@ public class MessageInputStreamTest {
         _context.random().nextBytes(orig);
         for (int i = 0; i < numMsgs; i++) {
             byte msg[] = new byte[_options.getMaxMessageSize()];
-            System.arraycopy(orig, i*_options.getMaxMessageSize(), msg, 0, _options.getMaxMessageSize());
+            System.arraycopy(orig, i * _options.getMaxMessageSize(), msg, 0, _options.getMaxMessageSize());
             in.messageReceived(i, new ByteArray(msg));
         }
         // Check that new messages won't be accepted
         assertFalse(in.canAccept(numMsgs, 1));
         // Check that duplicate messages will be accepted
-        assertTrue(in.canAccept(numMsgs-1, 1));
+        assertTrue(in.canAccept(numMsgs - 1, 1));
     }
 
     @Test
@@ -153,11 +153,9 @@ public class MessageInputStreamTest {
         _context.random().nextBytes(orig);
         for (int i = 0; i < numMsgs; i++) {
             byte msg[] = new byte[_options.getMaxMessageSize()];
-            System.arraycopy(orig, i*_options.getMaxMessageSize(), msg, 0, _options.getMaxMessageSize());
-            if (i == numMsgs-1)
-                in.messageReceived(numMsgs, new ByteArray(msg));
-            else
-                in.messageReceived(i, new ByteArray(msg));
+            System.arraycopy(orig, i * _options.getMaxMessageSize(), msg, 0, _options.getMaxMessageSize());
+            if (i == numMsgs - 1) in.messageReceived(numMsgs, new ByteArray(msg));
+            else in.messageReceived(i, new ByteArray(msg));
         }
         // Check that duplicate notReady messages will be accepted
         assertTrue(in.canAccept(numMsgs, 1));
@@ -171,17 +169,17 @@ public class MessageInputStreamTest {
         _context.random().nextBytes(orig);
         for (int i = 0; i < numMsgs - 2; i++) {
             byte msg[] = new byte[_options.getMaxMessageSize()];
-            System.arraycopy(orig, i*_options.getMaxMessageSize(), msg, 0, _options.getMaxMessageSize());
+            System.arraycopy(orig, i * _options.getMaxMessageSize(), msg, 0, _options.getMaxMessageSize());
             in.messageReceived(i, new ByteArray(msg));
         }
         // Add two half-size messages (to get past shortcut)
-        byte msg[] = new byte[_options.getMaxMessageSize()/2];
-        System.arraycopy(orig, (numMsgs-1)*_options.getMaxMessageSize(), msg, 0, _options.getMaxMessageSize()/2);
+        byte msg[] = new byte[_options.getMaxMessageSize() / 2];
+        System.arraycopy(orig, (numMsgs - 1) * _options.getMaxMessageSize(), msg, 0, _options.getMaxMessageSize() / 2);
         in.messageReceived(numMsgs - 2, new ByteArray(msg));
         in.messageReceived(numMsgs - 1, new ByteArray(msg));
         // Check that it predicts only one more msgId will be accepted
         assertTrue(in.canAccept(numMsgs, 1));
-        assertFalse(in.canAccept(numMsgs+1, 1));
+        assertFalse(in.canAccept(numMsgs + 1, 1));
     }
 
     @Test
@@ -198,7 +196,7 @@ public class MessageInputStreamTest {
         assertTrue(in.canAccept(numMsgs, 1));
         // Trip DoS protection
         byte msg[] = new byte[1];
-        System.arraycopy(orig, (numMsgs-1), msg, 0, 1);
+        System.arraycopy(orig, (numMsgs - 1), msg, 0, 1);
         in.messageReceived(numMsgs - 1, new ByteArray(msg));
         assertFalse(in.canAccept(numMsgs, 1));
     }
@@ -253,66 +251,60 @@ public class MessageInputStreamTest {
 
     @Test
     public void testInOrder() throws IOException {
-        byte orig[] = new byte[256*1024];
+        byte orig[] = new byte[256 * 1024];
         _context.random().nextBytes(orig);
 
         for (int i = 0; i < orig.length / 1024; i++) {
             byte msg[] = new byte[1024];
-            System.arraycopy(orig, i*1024, msg, 0, 1024);
+            System.arraycopy(orig, i * 1024, msg, 0, 1024);
             in.messageReceived(i, new ByteArray(msg));
         }
 
         byte read[] = new byte[orig.length];
         int howMany = DataHelper.read(in, read);
-        if (howMany != orig.length)
-            fail("not enough bytes read [" + howMany + "]");
-        if (!DataHelper.eq(orig, read))
-            fail("data read is not equal");
+        if (howMany != orig.length) fail("not enough bytes read [" + howMany + "]");
+        if (!DataHelper.eq(orig, read)) fail("data read is not equal");
 
         _log.info("Passed test: in order");
     }
 
     @Test
     public void testRandomOrder() throws IOException {
-        byte orig[] = new byte[256*1024];
+        byte orig[] = new byte[256 * 1024];
         _context.random().nextBytes(orig);
 
         ArrayList<Integer> order = new ArrayList<Integer>(32);
-        for (int i = 0; i < orig.length / 1024; i++)
-            order.add(Integer.valueOf(i));
+        for (int i = 0; i < orig.length / 1024; i++) order.add(Integer.valueOf(i));
         Collections.shuffle(order);
         for (int i = 0; i < orig.length / 1024; i++) {
             byte msg[] = new byte[1024];
-            Integer cur = (Integer)order.get(i);
-            System.arraycopy(orig, cur.intValue()*1024, msg, 0, 1024);
+            Integer cur = (Integer) order.get(i);
+            System.arraycopy(orig, cur.intValue() * 1024, msg, 0, 1024);
             in.messageReceived(cur.intValue(), new ByteArray(msg));
             _log.debug("Injecting " + cur);
         }
 
         byte read[] = new byte[orig.length];
         int howMany = DataHelper.read(in, read);
-        if (howMany != orig.length)
-            fail("not enough bytes read [" + howMany + "]");
-        if (!DataHelper.eq(orig, read))
-            fail("data read is not equal");
+        if (howMany != orig.length) fail("not enough bytes read [" + howMany + "]");
+        if (!DataHelper.eq(orig, read)) fail("data read is not equal");
 
         _log.info("Passed test: random order");
     }
 
     @Test
     public void testRandomDups() throws IOException {
-        byte orig[] = new byte[256*1024];
+        byte orig[] = new byte[256 * 1024];
         _context.random().nextBytes(orig);
 
         for (int n = 0; n < 3; n++) {
             ArrayList<Integer> order = new ArrayList<Integer>(32);
-            for (int i = 0; i < orig.length / 1024; i++)
-                order.add(Integer.valueOf(i));
+            for (int i = 0; i < orig.length / 1024; i++) order.add(Integer.valueOf(i));
             Collections.shuffle(order);
             for (int i = 0; i < orig.length / 1024; i++) {
                 byte msg[] = new byte[1024];
-                Integer cur = (Integer)order.get(i);
-                System.arraycopy(orig, cur.intValue()*1024, msg, 0, 1024);
+                Integer cur = (Integer) order.get(i);
+                System.arraycopy(orig, cur.intValue() * 1024, msg, 0, 1024);
                 in.messageReceived(cur.intValue(), new ByteArray(msg));
                 _log.debug("Injecting " + cur);
             }
@@ -320,45 +312,39 @@ public class MessageInputStreamTest {
 
         byte read[] = new byte[orig.length];
         int howMany = DataHelper.read(in, read);
-        if (howMany != orig.length)
-            fail("not enough bytes read [" + howMany + "]");
-        if (!DataHelper.eq(orig, read))
-            fail("data read is not equal");
+        if (howMany != orig.length) fail("not enough bytes read [" + howMany + "]");
+        if (!DataHelper.eq(orig, read)) fail("data read is not equal");
 
         _log.info("Passed test: random dups");
     }
 
     @Test
     public void testStaggered() throws IOException {
-        byte orig[] = new byte[256*1024];
+        byte orig[] = new byte[256 * 1024];
         byte read[] = new byte[orig.length];
         _context.random().nextBytes(orig);
 
         ArrayList<Integer> order = new ArrayList<Integer>(32);
-        for (int i = 0; i < orig.length / 1024; i++)
-            order.add(Integer.valueOf(i));
+        for (int i = 0; i < orig.length / 1024; i++) order.add(Integer.valueOf(i));
         Collections.shuffle(order);
 
         int offset = 0;
         for (int i = 0; i < orig.length / 1024; i++) {
             byte msg[] = new byte[1024];
-            Integer cur = (Integer)order.get(i);
-            System.arraycopy(orig, cur.intValue()*1024, msg, 0, 1024);
+            Integer cur = (Integer) order.get(i);
+            System.arraycopy(orig, cur.intValue() * 1024, msg, 0, 1024);
             in.messageReceived(cur.intValue(), new ByteArray(msg));
             _log.debug("Injecting " + cur);
 
             if (in.available() > 0) {
-                int curRead = in.read(read, offset, read.length-offset);
+                int curRead = in.read(read, offset, read.length - offset);
                 _log.debug("read " + curRead);
-                if (curRead == -1)
-                    fail("EOF with offset " + offset);
-                else
-                    offset += curRead;
+                if (curRead == -1) fail("EOF with offset " + offset);
+                else offset += curRead;
             }
         }
 
-        if (!DataHelper.eq(orig, read))
-            fail("data read is not equal");
+        if (!DataHelper.eq(orig, read)) fail("data read is not equal");
 
         _log.info("Passed test: staggered");
     }

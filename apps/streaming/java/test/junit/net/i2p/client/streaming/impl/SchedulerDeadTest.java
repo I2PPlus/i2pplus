@@ -26,19 +26,19 @@ public class SchedulerDeadTest extends TaskSchedulerTestBase {
 
     @Test
     public void testAccept_nothingLeftToDo() {
-        setMocks(10*60*1000, 9*60*1000 - Connection.DISCONNECT_TIMEOUT, 0, 0, 0);
+        setMocks(10 * 60 * 1000, 9 * 60 * 1000 - Connection.DISCONNECT_TIMEOUT, 0, 0, 0);
         assertTrue(scheduler.accept(con));
     }
 
     @Test
     public void testAccept_noDisconnectScheduled() {
-        setMocks(10*60*1000, 0, 0, 0, 0);
+        setMocks(10 * 60 * 1000, 0, 0, 0, 0);
         assertFalse(scheduler.accept(con));
     }
 
     @Test
     public void testAccept_timedOut() {
-        setMocks(0, 0, Connection.DISCONNECT_TIMEOUT/2, Connection.DISCONNECT_TIMEOUT, 0);
+        setMocks(0, 0, Connection.DISCONNECT_TIMEOUT / 2, Connection.DISCONNECT_TIMEOUT, 0);
         assertTrue(scheduler.accept(con));
     }
 

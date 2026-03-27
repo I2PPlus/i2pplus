@@ -1,8 +1,5 @@
 package net.i2p.client.streaming.impl;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.client.streaming.I2PServerSocket;
@@ -11,7 +8,12 @@ import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.IncomingConnectionFilter;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
+
 import org.junit.Test;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Properties;
 
 /**
  *
@@ -36,8 +38,6 @@ public class EchoIT extends StreamingITBase {
         runClient(context, _client);
     }
 
-
-
     @Override
     protected Properties getProperties() {
         return new Properties();
@@ -45,26 +45,23 @@ public class EchoIT extends StreamingITBase {
 
     @Override
     protected Runnable getClient(I2PAppContext ctx, I2PSession session) {
-        return new ClientRunner(ctx,session);
+        return new ClientRunner(ctx, session);
     }
 
     @Override
     protected Runnable getServer(I2PAppContext ctx, I2PSession session) {
-        return new ServerRunner(ctx,session);
+        return new ServerRunner(ctx, session);
     }
-
-
 
     private class ServerRunner extends RunnerBase {
         public ServerRunner(I2PAppContext ctx, I2PSession session) {
-            super(ctx,session);
+            super(ctx, session);
         }
 
         public void run() {
             try {
                 Properties opts = new Properties();
-                I2PSocketManager mgr = new I2PSocketManagerFull(
-                    _context, _session, opts, "client", IncomingConnectionFilter.ALLOW);
+                I2PSocketManager mgr = new I2PSocketManagerFull(_context, _session, opts, "client", IncomingConnectionFilter.ALLOW);
                 _log.debug("I2P Socket Manager created");
                 I2PServerSocket ssocket = mgr.getServerSocket();
                 _log.debug("Server socket created");
@@ -82,7 +79,7 @@ public class EchoIT extends StreamingITBase {
                                 buf = null;
                                 break;
                             } else {
-                                buf[i] = (byte)(c & 0xFF);
+                                buf[i] = (byte) (c & 0xFF);
                             }
                         }
                         if (buf != null) {
@@ -91,27 +88,24 @@ public class EchoIT extends StreamingITBase {
                             out.flush();
                         }
                     }
-                    if (_log.shouldDebug())
-                        _log.debug("Closing the received server socket");
+                    if (_log.shouldDebug()) _log.debug("Closing the received server socket");
                     socket.close();
                 }
             } catch (Exception e) {
                 _log.error("error running", e);
             }
         }
-
     }
 
     private class ClientRunner extends RunnerBase {
         public ClientRunner(I2PAppContext ctx, I2PSession session) {
-            super(ctx,session);
+            super(ctx, session);
         }
 
         public void run() {
             try {
                 Properties opts = new Properties();
-                I2PSocketManager mgr = new I2PSocketManagerFull(
-                    _context, _session, opts, "client", IncomingConnectionFilter.ALLOW);
+                I2PSocketManager mgr = new I2PSocketManagerFull(_context, _session, opts, "client", IncomingConnectionFilter.ALLOW);
                 _log.debug("I2P Socket Manager created");
                 I2PSocket socket = mgr.connect(_server.getMyDestination());
                 _log.debug("Socket created");
@@ -130,25 +124,23 @@ public class EchoIT extends StreamingITBase {
                             buf = null;
                             break;
                         } else {
-                            //_log.debug("client read: " + ((char)c));
-                            buf[j] = (byte)(c & 0xFF);
+                            // _log.debug("client read: " + ((char)c));
+                            buf[j] = (byte) (c & 0xFF);
                         }
                     }
                     if (buf != null) {
                         _log.debug("* client read: " + new String(buf));
                     }
                 }
-                if (_log.shouldDebug())
-                    _log.debug("Closing the client socket");
+                if (_log.shouldDebug()) _log.debug("Closing the client socket");
                 socket.close();
                 _log.debug("Socket closed");
 
-                Thread.sleep(5*1000);
+                Thread.sleep(5 * 1000);
                 System.exit(0);
             } catch (Exception e) {
                 _log.error("Error running", e);
             }
         }
-
     }
 }
