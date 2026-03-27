@@ -1,4 +1,5 @@
 package net.i2p.router.tunnel;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,7 +9,6 @@ package net.i2p.router.tunnel;
  *
  */
 
-
 import static junit.framework.TestCase.*;
 
 /**
@@ -16,7 +16,6 @@ import static junit.framework.TestCase.*;
  * operation
  */
 public class InboundGatewayIT extends GatewayITBase {
-
 
     @Override
     protected void setupSenderAndReceiver() {
@@ -36,10 +35,10 @@ public class InboundGatewayIT extends GatewayITBase {
 
         @Override
         @SuppressWarnings("deprecation")
-        protected void handleAtEndpoint(byte []encrypted) {
+        protected void handleAtEndpoint(byte[] encrypted) {
             // now handle it at the endpoint
             InboundEndpointProcessor end = new InboundEndpointProcessor(_context, _config);
-            assertTrue(end.retrievePreprocessedData(encrypted, 0, encrypted.length, _config.getPeer(_config.getLength()-2)));
+            assertTrue(end.retrievePreprocessedData(encrypted, 0, encrypted.length, _config.getPeer(_config.getLength() - 2)));
         }
     }
 }

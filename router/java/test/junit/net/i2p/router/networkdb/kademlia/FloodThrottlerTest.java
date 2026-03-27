@@ -3,6 +3,7 @@ package net.i2p.router.networkdb.kademlia;
 import static org.junit.Assert.*;
 
 import net.i2p.data.Hash;
+
 import org.junit.Test;
 
 public class FloodThrottlerTest {

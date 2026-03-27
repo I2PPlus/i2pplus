@@ -1,4 +1,5 @@
 package net.i2p.router.tunnel;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -10,10 +11,12 @@ package net.i2p.router.tunnel;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import net.i2p.router.RouterContext;
+
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 /**
  * Test the batching behavior of the preprocessor with one, two, or three
@@ -57,7 +60,10 @@ public class BatchedFragmentTest extends FragmentTest {
         while (keepGoing) {
             keepGoing = pre.preprocessQueue(messages, new SenderImpl(), receiver);
             if (keepGoing) {
-                try { Thread.sleep(150); } catch (InterruptedException ie) {}
+                try {
+                    Thread.sleep(150);
+                } catch (InterruptedException ie) {
+                }
 
                 if (!alreadyAdded) {
                     messages.add(pending2);
@@ -89,8 +95,10 @@ public class BatchedFragmentTest extends FragmentTest {
         boolean keepGoing = true;
         while (keepGoing) {
             keepGoing = pre.preprocessQueue(messages, new SenderImpl(), receiver);
-            if (keepGoing)
-                try { Thread.sleep(100); } catch (InterruptedException ie) {}
+            if (keepGoing) try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ie) {
+                }
         }
         assertTrue(handleReceiver.receivedOk());
     }
@@ -115,12 +123,13 @@ public class BatchedFragmentTest extends FragmentTest {
         boolean keepGoing = true;
         while (keepGoing) {
             keepGoing = pre.preprocessQueue(messages, new SenderImpl(), receiver);
-            if (keepGoing)
-                try { Thread.sleep(100); } catch (InterruptedException ie) {}
+            if (keepGoing) try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ie) {
+                }
         }
         assertTrue(handleReceiver.receivedOk());
     }
-
 
     /**
      * Send a small message, wait a second, then send a large message, pushing
@@ -129,7 +138,7 @@ public class BatchedFragmentTest extends FragmentTest {
      *
      */
     public void runBatches() {
-        //success += testBatched(1, false, false, 1024, false, false);
+        // success += testBatched(1, false, false, 1024, false, false);
         // this takes a long long time
         for (int i = 1; i <= 1024; i++) {
             testBatched(i, false, false, 1024, false, false, 1024, false, false);
@@ -164,9 +173,7 @@ public class BatchedFragmentTest extends FragmentTest {
         }
     }
 
-    private void testBatched(int firstSize, boolean firstRouter, boolean firstTunnel,
-                            int secondSize, boolean secondRouter, boolean secondTunnel,
-                            int thirdSize, boolean thirdRouter, boolean thirdTunnel) {
+    private void testBatched(int firstSize, boolean firstRouter, boolean firstTunnel, int secondSize, boolean secondRouter, boolean secondTunnel, int thirdSize, boolean thirdRouter, boolean thirdTunnel) {
         PendingGatewayMessage pending1 = createPending(firstSize, firstRouter, firstTunnel);
         PendingGatewayMessage pending2 = createPending(secondSize, secondRouter, secondTunnel);
         PendingGatewayMessage pending3 = createPending(thirdSize, thirdRouter, thirdTunnel);
@@ -190,7 +197,10 @@ public class BatchedFragmentTest extends FragmentTest {
         while (keepGoing) {
             keepGoing = pre.preprocessQueue(messages, new SenderImpl(), receiver);
             if ((keepGoing) || ((messages.size() == 0) && (added < 2))) {
-                try { Thread.sleep(150); } catch (InterruptedException ie) {}
+                try {
+                    Thread.sleep(150);
+                } catch (InterruptedException ie) {
+                }
 
                 if (added == 0) {
                     messages.add(pending2);

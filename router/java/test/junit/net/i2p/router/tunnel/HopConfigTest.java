@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.data.TunnelId;
+
 import org.junit.Test;
 
 /**

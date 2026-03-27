@@ -1,4 +1,5 @@
 package net.i2p.data.i2np;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -18,6 +19,7 @@ import net.i2p.data.StructureTest;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.data.router.RouterInfoTest;
 import net.i2p.util.Clock;
+
 import org.junit.Test;
 
 /**
@@ -29,7 +31,7 @@ public class DatabaseStoreMessageTest extends StructureTest {
 
     public DataStructure createDataStructure() throws DataFormatException {
         DSMStructure msg = new DSMStructure(I2PAppContext.getGlobalContext());
-        RouterInfo info = (RouterInfo)new RouterInfoTest().createDataStructure();
+        RouterInfo info = (RouterInfo) new RouterInfoTest().createDataStructure();
         msg.setMessageExpiration(Clock.getInstance().now());
         msg.setUniqueId(666);
         msg.setEntry(info);
@@ -37,7 +39,7 @@ public class DatabaseStoreMessageTest extends StructureTest {
     }
 
     public DataStructure createStructureToRead() {
-    	return new DSMStructure(I2PAppContext.getGlobalContext());
+        return new DSMStructure(I2PAppContext.getGlobalContext());
     }
 
     @Override
@@ -46,14 +48,25 @@ public class DatabaseStoreMessageTest extends StructureTest {
         try {
             super.testStructure();
             fail("no exception thrown");
-        } catch (UnsupportedOperationException expected) {}
+        } catch (UnsupportedOperationException expected) {
+        }
     }
 
     private static class DSMStructure extends DatabaseStoreMessage implements DataStructure {
-        public DSMStructure(I2PAppContext ctx) { super(ctx); }
-        public Hash calculateHash() { return null; }
+        public DSMStructure(I2PAppContext ctx) {
+            super(ctx);
+        }
+
+        public Hash calculateHash() {
+            return null;
+        }
+
         public void fromByteArray(byte[] b) {}
+
         public void fromBase64(String s) {}
-        public String toBase64() { return null; }
+
+        public String toBase64() {
+            return null;
+        }
     }
 }

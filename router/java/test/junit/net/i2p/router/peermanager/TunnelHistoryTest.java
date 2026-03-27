@@ -3,8 +3,8 @@ package net.i2p.router.peermanager;
 import static org.junit.Assert.*;
 
 import net.i2p.router.RouterContext;
+
 import org.junit.Assume;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

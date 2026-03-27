@@ -1,4 +1,5 @@
 package net.i2p.router.crypto;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,9 +9,8 @@ package net.i2p.router.crypto;
  *
  */
 
-import java.util.HashSet;
-import java.util.Set;
 import junit.framework.TestCase;
+
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.KeyGenerator;
 import net.i2p.crypto.SessionKeyManager;
@@ -21,15 +21,18 @@ import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  *
  * session key management unit tests:
  *
  */
-public class SessionEncryptionTest extends TestCase{
+public class SessionEncryptionTest extends TestCase {
     private I2PAppContext _context;
 
-    protected void setUp(){
+    protected void setUp() {
         _context = I2PAppContext.getGlobalContext();
     }
 
@@ -37,11 +40,10 @@ public class SessionEncryptionTest extends TestCase{
         System.gc();
     }
 
-
-    public void testNoSessions1() throws Exception{
+    public void testNoSessions1() throws Exception {
         Object keys[] = KeyGenerator.getInstance().generatePKIKeypair();
-        PublicKey pubKey = (PublicKey)keys[0];
-        PrivateKey privKey = (PrivateKey)keys[1];
+        PublicKey pubKey = (PublicKey) keys[0];
+        PrivateKey privKey = (PrivateKey) keys[1];
         SessionKeyManager skm = new TransientSessionKeyManager(_context);
         SessionKey curKey = skm.createSession(pubKey);
 
@@ -53,10 +55,10 @@ public class SessionEncryptionTest extends TestCase{
         assertTrue(DataHelper.eq(dmsg, msg));
     }
 
-    public void testNoSessions2() throws Exception{
+    public void testNoSessions2() throws Exception {
         Object keys[] = KeyGenerator.getInstance().generatePKIKeypair();
-        PublicKey pubKey = (PublicKey)keys[0];
-        PrivateKey privKey = (PrivateKey)keys[1];
+        PublicKey pubKey = (PublicKey) keys[0];
+        PrivateKey privKey = (PrivateKey) keys[1];
         SessionKeyManager skm = new TransientSessionKeyManager(_context);
         SessionKey curKey = skm.createSession(pubKey);
 
@@ -76,10 +78,10 @@ public class SessionEncryptionTest extends TestCase{
      *  4       no              yes     no
      *  5       no              yes     no
      */
-    public void testSessions() throws Exception{
+    public void testSessions() throws Exception {
         Object keys[] = KeyGenerator.getInstance().generatePKIKeypair();
-        PublicKey pubKey = (PublicKey)keys[0];
-        PrivateKey privKey = (PrivateKey)keys[1];
+        PublicKey pubKey = (PublicKey) keys[0];
+        PrivateKey privKey = (PrivateKey) keys[1];
         SessionKeyManager skm = new TransientSessionKeyManager(_context);
         SessionKey curKey = skm.createSession(pubKey);
 
@@ -108,8 +110,6 @@ public class SessionEncryptionTest extends TestCase{
         byte dmsg1[] = e.decrypt(emsg1, privKey, skm);
         assertTrue(DataHelper.eq(dmsg1, msg1));
 
-
-
         TagSetHandle tsh = skm.tagsDelivered(pubKey, curKey, firstTags);
         skm.tagsAcked(pubKey, curKey, tsh);
 
@@ -123,9 +123,6 @@ public class SessionEncryptionTest extends TestCase{
         byte dmsg2[] = e.decrypt(emsg2, privKey, skm);
         assertTrue(DataHelper.eq(dmsg2, msg2));
 
-
-
-
         curKey = skm.getCurrentKey(pubKey);
         curTag = skm.consumeNextAvailableTag(pubKey, curKey);
 
@@ -136,8 +133,6 @@ public class SessionEncryptionTest extends TestCase{
 
         byte dmsg3[] = e.decrypt(emsg3, privKey, skm);
         assertTrue(DataHelper.eq(dmsg3, msg3));
-
-
 
         tsh = skm.tagsDelivered(pubKey, curKey, secondTags);
         skm.tagsAcked(pubKey, curKey, tsh);
@@ -153,7 +148,6 @@ public class SessionEncryptionTest extends TestCase{
         byte dmsg4[] = e.decrypt(emsg4, privKey, skm);
         assertTrue(DataHelper.eq(dmsg4, msg4));
 
-
         curKey = skm.getCurrentKey(pubKey);
         curTag = skm.consumeNextAvailableTag(pubKey, curKey);
 
@@ -164,8 +158,6 @@ public class SessionEncryptionTest extends TestCase{
 
         byte dmsg5[] = e.decrypt(emsg5, privKey, skm);
         assertTrue(DataHelper.eq(dmsg5, msg5));
-
-
     }
 
     /**
@@ -176,10 +168,10 @@ public class SessionEncryptionTest extends TestCase{
      *  4   no              yes     no
      *  5   no              yes     no
      */
-    public void testRekeying() throws Exception{
+    public void testRekeying() throws Exception {
         Object keys[] = KeyGenerator.getInstance().generatePKIKeypair();
-        PublicKey pubKey = (PublicKey)keys[0];
-        PrivateKey privKey = (PrivateKey)keys[1];
+        PublicKey pubKey = (PublicKey) keys[0];
+        PrivateKey privKey = (PrivateKey) keys[1];
         SessionKeyManager skm = new TransientSessionKeyManager(_context);
         SessionKey curKey = skm.createSession(pubKey);
         SessionKey nextKey = KeyGenerator.getInstance().generateSessionKey();
@@ -209,8 +201,6 @@ public class SessionEncryptionTest extends TestCase{
         byte dmsg1[] = e.decrypt(emsg1, privKey, skm);
         assertTrue(DataHelper.eq(dmsg1, msg1));
 
-
-
         TagSetHandle tsh = skm.tagsDelivered(pubKey, curKey, firstTags);
         skm.tagsAcked(pubKey, curKey, tsh);
 
@@ -224,8 +214,6 @@ public class SessionEncryptionTest extends TestCase{
         byte dmsg2[] = e.decrypt(emsg2, privKey, skm);
         assertTrue(DataHelper.eq(dmsg2, msg2));
 
-
-
         curKey = skm.getCurrentKey(pubKey);
         curTag = skm.consumeNextAvailableTag(pubKey, curKey);
 
@@ -236,8 +224,6 @@ public class SessionEncryptionTest extends TestCase{
 
         byte dmsg3[] = e.decrypt(emsg3, privKey, skm);
         assertTrue(DataHelper.eq(dmsg3, msg3));
-
-
 
         tsh = skm.tagsDelivered(pubKey, nextKey, secondTags); // note nextKey not curKey
         skm.tagsAcked(pubKey, nextKey, tsh);
@@ -253,8 +239,6 @@ public class SessionEncryptionTest extends TestCase{
         byte dmsg4[] = e.decrypt(emsg4, privKey, skm);
         assertTrue(DataHelper.eq(dmsg4, msg4));
 
-
-
         curKey = skm.getCurrentKey(pubKey);
         curTag = skm.consumeNextAvailableTag(pubKey, curKey);
 
@@ -265,19 +249,15 @@ public class SessionEncryptionTest extends TestCase{
 
         byte dmsg5[] = e.decrypt(emsg5, privKey, skm);
         assertTrue(DataHelper.eq(dmsg5, msg5));
-
-
-
     }
-
 
     /**
      *  20 tags every 10 messages, rekey every 50
      */
-    public void testLongSession() throws Exception{
+    public void testLongSession() throws Exception {
         Object keys[] = KeyGenerator.getInstance().generatePKIKeypair();
-        PublicKey pubKey = (PublicKey)keys[0];
-        PrivateKey privKey = (PrivateKey)keys[1];
+        PublicKey pubKey = (PublicKey) keys[0];
+        PrivateKey privKey = (PrivateKey) keys[1];
         SessionKeyManager skm = new TransientSessionKeyManager(_context);
         SessionKey curKey = skm.createSession(pubKey);
 
@@ -292,8 +272,7 @@ public class SessionEncryptionTest extends TestCase{
             if ((availTags < 1)) {
                 tags = generateNewTags(50);
             }
-            if (i % 50 == 0)
-                nextKey = KeyGenerator.getInstance().generateSessionKey();
+            if (i % 50 == 0) nextKey = KeyGenerator.getInstance().generateSessionKey();
 
             byte[] msg = DataHelper.getASCII("msg " + i);
 
@@ -316,8 +295,7 @@ public class SessionEncryptionTest extends TestCase{
 
     private Set<SessionTag> generateNewTags(int numTags) {
         Set<SessionTag> tags = new HashSet<SessionTag>(numTags);
-        for (int i = 0; i < numTags; i++)
-            tags.add(new SessionTag(true));
+        for (int i = 0; i < numTags; i++) tags.add(new SessionTag(true));
         return tags;
     }
 }

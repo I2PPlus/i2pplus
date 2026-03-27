@@ -7,6 +7,7 @@ import net.i2p.data.LeaseSet;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterTestHelper;
+
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;

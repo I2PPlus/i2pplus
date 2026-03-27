@@ -1,4 +1,5 @@
 package net.i2p.data.i2np;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -14,6 +15,7 @@ import net.i2p.data.DataStructure;
 import net.i2p.data.Hash;
 import net.i2p.data.StructureTest;
 import net.i2p.data.TunnelId;
+
 import org.junit.Test;
 
 /**
@@ -28,7 +30,7 @@ public class DeliveryInstructionsTest extends StructureTest {
      */
     @Override
     @Test
-    public void testStructure() throws Exception{
+    public void testStructure() throws Exception {
         DeliveryInstructions orig = (DeliveryInstructions) createDataStructure();
         byte[] temp = new byte[100];
         int len = orig.writeBytes(temp, 0);
@@ -43,21 +45,20 @@ public class DeliveryInstructionsTest extends StructureTest {
 
     public DataStructure createDataStructure() throws DataFormatException {
         DeliveryInstructions instructions = new DeliveryInstructions();
-        //instructions.setDelayRequested(true);
-        //instructions.setDelaySeconds(42);
+        // instructions.setDelayRequested(true);
+        // instructions.setDelaySeconds(42);
         instructions.setDeliveryMode(DeliveryInstructions.DELIVERY_MODE_TUNNEL);
-                // encryption key read/write disabled
-        //instructions.setEncrypted(true);
-        //SessionKey key = new SessionKey();
-        //byte keyData[] = new byte[SessionKey.KEYSIZE_BYTES];
-        //for (int i = 0; i < keyData.length; i++)
+        // encryption key read/write disabled
+        // instructions.setEncrypted(true);
+        // SessionKey key = new SessionKey();
+        // byte keyData[] = new byte[SessionKey.KEYSIZE_BYTES];
+        // for (int i = 0; i < keyData.length; i++)
         //    keyData[i] = (byte)i;
-        //key.setData(keyData);
-        //instructions.setEncryptionKey(key);
+        // key.setData(keyData);
+        // instructions.setEncryptionKey(key);
         Hash hash = new Hash();
         byte hashData[] = new byte[32];
-        for (int i = 0; i < hashData.length; i++)
-            hashData[i] = (byte)(i%32);
+        for (int i = 0; i < hashData.length; i++) hashData[i] = (byte) (i % 32);
         hash.setData(hashData);
         instructions.setRouter(hash);
         TunnelId id = new TunnelId();
@@ -66,5 +67,8 @@ public class DeliveryInstructionsTest extends StructureTest {
 
         return instructions;
     }
-    public DataStructure createStructureToRead() { return new DeliveryInstructions(); }
+
+    public DataStructure createStructureToRead() {
+        return new DeliveryInstructions();
+    }
 }

@@ -6,6 +6,7 @@ import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterTestHelper;
+
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -83,8 +84,7 @@ public class NegativeLookupCacheTest {
         Hash h = randomHash();
         Destination dest = new Destination();
         _cache.failPermanently(dest);
-        assertTrue("Permanently failed destination should be cached",
-                _cache.isCached(dest.calculateHash()));
+        assertTrue("Permanently failed destination should be cached", _cache.isCached(dest.calculateHash()));
     }
 
     @Test
@@ -117,8 +117,7 @@ public class NegativeLookupCacheTest {
         _cache.failPermanently(dest);
         assertNotNull(_cache.getBadDest(dest.calculateHash()));
         _cache.clear();
-        assertNull("After clear, bad dest should be gone",
-                _cache.getBadDest(dest.calculateHash()));
+        assertNull("After clear, bad dest should be gone", _cache.getBadDest(dest.calculateHash()));
     }
 
     @Test

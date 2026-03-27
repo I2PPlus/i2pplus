@@ -2,8 +2,9 @@ package net.i2p.router.sybil;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
 import org.junit.Test;
+
+import java.util.List;
 
 /**
  * Tests for Points scoring, reason tracking, comparison, and persistence.

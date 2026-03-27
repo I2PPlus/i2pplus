@@ -1,13 +1,15 @@
 package net.i2p.router.transport.udp;
 
-import java.util.ArrayList;
-import java.util.List;
 import net.i2p.data.i2np.DataMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.util.I2PThread;
+
+import java.util.ArrayList;
+import java.util.List;
+
 // import net.i2p.util.Log;
 
 /**
@@ -32,16 +34,16 @@ class UDPFlooder implements Runnable {
 
     public void addPeer(PeerState peer) {
         synchronized (_peers) {
-            if (!_peers.contains(peer))
-                _peers.add(peer);
+            if (!_peers.contains(peer)) _peers.add(peer);
             _peers.notifyAll();
         }
     }
+
     @SuppressWarnings("empty-statement")
     public void removePeer(PeerState peer) {
         synchronized (_peers) {
             while (_peers.remove(peer)) // can this be written better?
-  ; // loops until its empty
+                ; // loops until its empty
             _peers.notifyAll();
         }
     }
@@ -66,10 +68,10 @@ class UDPFlooder implements Runnable {
         while (_alive) {
             try {
                 synchronized (_peers) {
-                    if (_peers.isEmpty())
-                        _peers.wait();
+                    if (_peers.isEmpty()) _peers.wait();
                 }
-            } catch (InterruptedException ie) {}
+            } catch (InterruptedException ie) {
+            }
 
             long now = _context.clock().now();
             if (now >= nextSend) {
@@ -78,17 +80,16 @@ class UDPFlooder implements Runnable {
                     PeerState peer = _peers.get(i);
                     DataMessage m = new DataMessage(_context);
                     byte data[] = _floodData; // new byte[4096];
-                    //_context.random().nextBytes(data);
+                    // _context.random().nextBytes(data);
                     m.setData(data);
-                    m.setMessageExpiration(_context.clock().now() + 10*1000);
+                    m.setMessageExpiration(_context.clock().now() + 10 * 1000);
                     m.setUniqueId(_context.random().nextLong(I2NPMessage.MAX_ID_VALUE));
                     if (true) {
                         RouterInfo to = _context.netDb().lookupRouterInfoLocally(peer.getRemotePeer());
-                        if (to == null)
-                            continue;
+                        if (to == null) continue;
                         OutNetMessage msg = new OutNetMessage(_context, m, m.getMessageExpiration(), 500, to);
                         // warning, getStatLog() can be null
-                        //_context.statManager().getStatLog().addData(peer.getRemotePeer().toBase64().substring(0,6), "udp.floodDataSent", 1, 0);
+                        // _context.statManager().getStatLog().addData(peer.getRemotePeer().toBase64().substring(0,6), "udp.floodDataSent", 1, 0);
 
                         _transport.send(msg);
                     } else {
@@ -100,14 +101,17 @@ class UDPFlooder implements Runnable {
 
             long delay = nextSend - now;
             if (delay > 0) {
-                if (delay > 10*1000) {
+                if (delay > 10 * 1000) {
                     long fd = calcFloodDelay();
                     if (delay > fd) {
                         nextSend = now + fd;
                         delay = fd;
                     }
                 }
-                try { Thread.sleep(delay); } catch (InterruptedException ie) {}
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException ie) {
+                }
             }
         }
     }
@@ -116,7 +120,7 @@ class UDPFlooder implements Runnable {
         try {
             return Long.parseLong(_context.getProperty("udp.floodDelay", "300000"));
         } catch (Exception e) {
-            return 5*60*1000;
+            return 5 * 60 * 1000;
         }
     }
 }

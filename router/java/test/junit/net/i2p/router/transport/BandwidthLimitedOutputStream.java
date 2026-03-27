@@ -1,4 +1,5 @@
 package net.i2p.router.transport;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,12 +9,13 @@ package net.i2p.router.transport;
  *
  */
 
-import java.io.FilterOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+
+import java.io.FilterOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 public class BandwidthLimitedOutputStream extends FilterOutputStream {
     private RouterIdentity _peer;
@@ -26,42 +28,39 @@ public class BandwidthLimitedOutputStream extends FilterOutputStream {
         super(source);
         _context = context;
         _peer = peer;
-        if (peer != null)
-            _peerTarget = peer.getHash().toBase64();
-        else
-            _peerTarget = "unknown";
+        if (peer != null) _peerTarget = peer.getHash().toBase64();
+        else _peerTarget = "unknown";
         _log = context.logManager().getLog(BandwidthLimitedOutputStream.class);
         _currentRequest = null;
     }
 
-    public FIFOBandwidthLimiter.Request getCurrentRequest() { return _currentRequest; }
+    public FIFOBandwidthLimiter.Request getCurrentRequest() {
+        return _currentRequest;
+    }
 
     @Override
     public void write(int val) throws IOException {
-        if (_log.shouldDebug())
-            _log.debug("Writing a single byte!", new Exception("Single byte from..."));
+        if (_log.shouldDebug()) _log.debug("Writing a single byte!", new Exception("Single byte from..."));
         long before = _context.clock().now();
         FIFOBandwidthLimiter.Request req = _context.bandwidthLimiter().requestOutbound(1, 0, _peerTarget);
         // only a single byte, no need to loop
         req.waitForNextAllocation();
         long waited = _context.clock().now() - before;
-        if ((waited > 1000) && (_log.shouldWarn()))
-            _log.warn("Waiting to write a byte took too long [" + waited + "ms");
+        if ((waited > 1000) && (_log.shouldWarn())) _log.warn("Waiting to write a byte took too long [" + waited + "ms");
         out.write(val);
     }
+
     @Override
     public void write(byte src[]) throws IOException {
         write(src, 0, src.length);
     }
+
     @Override
     public void write(byte src[], int off, int len) throws IOException {
-        if (_log.shouldDebug())
-            _log.debug("Writing " + len + " bytes");
+        if (_log.shouldDebug()) _log.debug("Writing " + len + " bytes");
         if (src == null) return;
         if (len <= 0) return;
-        if (len + off > src.length)
-            throw new IllegalArgumentException("what are you thinking?  len=" + len
-                                               + ", off=" + off + ", data=" + src.length);
+        if (len + off > src.length) throw new IllegalArgumentException("what are you thinking?  len=" + len + ", off=" + off + ", data=" + src.length);
         _currentRequest = _context.bandwidthLimiter().requestOutbound(len, 0, _peerTarget);
 
         int written = 0;
@@ -88,8 +87,7 @@ public class BandwidthLimitedOutputStream extends FilterOutputStream {
     @Override
     public void close() throws IOException {
         synchronized (this) {
-            if (_currentRequest != null)
-                _currentRequest.abort();
+            if (_currentRequest != null) _currentRequest.abort();
         }
         super.close();
     }

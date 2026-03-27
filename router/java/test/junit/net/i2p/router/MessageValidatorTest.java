@@ -81,8 +81,7 @@ public class MessageValidatorTest {
     public void testBoundaryExpiration() {
         long now = _context.clock().now();
         long borderline = now - Router.CLOCK_FUDGE_FACTOR;
-        assertNull("Borderline expiration should be accepted",
-                _validator.validateMessage(borderline));
+        assertNull("Borderline expiration should be accepted", _validator.validateMessage(borderline));
     }
 
     @Test
@@ -94,7 +93,6 @@ public class MessageValidatorTest {
         _validator.shutdown();
         _validator.startup();
 
-        assertNull("After restart, old messages should not be duplicates",
-                _validator.validateMessage(1L, expiry));
+        assertNull("After restart, old messages should not be duplicates", _validator.validateMessage(1L, expiry));
     }
 }

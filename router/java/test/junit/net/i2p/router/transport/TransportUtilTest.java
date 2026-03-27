@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import net.i2p.data.router.RouterAddress;
 import net.i2p.util.AddressType;
+
 import org.junit.Test;
 
 public class TransportUtilTest {
@@ -18,10 +19,8 @@ public class TransportUtilTest {
 
     private RouterAddress makeAddressWithCaps(String caps, String host) {
         net.i2p.util.OrderedProperties props = new net.i2p.util.OrderedProperties();
-        if (host != null)
-            props.setProperty("host", host);
-        if (caps != null)
-            props.setProperty("caps", caps);
+        if (host != null) props.setProperty("host", host);
+        if (caps != null) props.setProperty("caps", caps);
         return new RouterAddress("test", props, 10);
     }
 

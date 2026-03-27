@@ -1,6 +1,5 @@
 package net.i2p.router.client;
 
-import java.net.Socket;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.Lease;
@@ -12,6 +11,8 @@ import net.i2p.data.i2cp.MessageStatusMessage;
 import net.i2p.data.i2cp.RequestVariableLeaseSetMessage;
 import net.i2p.router.Job;
 import net.i2p.router.RouterContext;
+
+import java.net.Socket;
 
 /**
  *  For testing
@@ -60,8 +61,7 @@ class LocalClientConnectionRunner extends ClientConnectionRunner {
      */
     @Override
     void updateMessageDeliveryStatus(Destination dest, MessageId id, long messageNonce, int status) {
-        if (messageNonce <= 0)
-            return;
+        if (messageNonce <= 0) return;
         MessageStatusMessage msg = new MessageStatusMessage();
         msg.setMessageId(id.getMessageId());
         msg.setSessionId(getSessionId(dest.calculateHash()).getSessionId());
@@ -81,8 +81,7 @@ class LocalClientConnectionRunner extends ClientConnectionRunner {
      */
     public Destination localLookup(Hash h) {
         for (Destination d : _manager.getRunnerDestinations()) {
-            if (d.calculateHash().equals(h))
-                return d;
+            if (d.calculateHash().equals(h)) return d;
         }
         return null;
     }

@@ -1,4 +1,5 @@
 package net.i2p.router.client;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,7 +9,6 @@ package net.i2p.router.client;
  *
  */
 
-import java.util.Locale;
 import net.i2p.data.Base32;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
@@ -27,6 +27,8 @@ import net.i2p.data.i2cp.SessionConfig;
 import net.i2p.data.i2cp.SessionId;
 import net.i2p.router.RouterContext;
 
+import java.util.Locale;
+
 /**
  *  For testing
  *
@@ -43,7 +45,7 @@ class LocalClientMessageEventListener extends ClientMessageEventListener {
      */
     @Override
     protected void startCreateSessionJob(SessionConfig config) {
-        long exp = _context.clock().now() + 10*60*1000;
+        long exp = _context.clock().now() + 10 * 60 * 1000;
         LeaseSet ls = new LeaseSet();
         Lease lease = new Lease();
         lease.setGateway(Hash.FAKE_HASH);
@@ -69,11 +71,9 @@ class LocalClientMessageEventListener extends ClientMessageEventListener {
     protected void handleDestLookup(DestLookupMessage message) {
         Hash h = message.getHash();
         DestReplyMessage msg;
-        Destination d = ((LocalClientConnectionRunner)_runner).localLookup(h);
-        if (d != null)
-            msg = new DestReplyMessage(d);
-        else
-            msg = new DestReplyMessage(h);
+        Destination d = ((LocalClientConnectionRunner) _runner).localLookup(h);
+        if (d != null) msg = new DestReplyMessage(d);
+        else msg = new DestReplyMessage(h);
         try {
             _runner.doSend(msg);
         } catch (I2CPMessageException ime) {
@@ -101,13 +101,10 @@ class LocalClientMessageEventListener extends ClientMessageEventListener {
             }
         }
         Destination d = null;
-        if (h != null)
-            d = ((LocalClientConnectionRunner)_runner).localLookup(h);
+        if (h != null) d = ((LocalClientConnectionRunner) _runner).localLookup(h);
         HostReplyMessage msg;
-        if (d != null)
-            msg = new HostReplyMessage(sessID, d, reqID);
-        else
-            msg = new HostReplyMessage(sessID, HostReplyMessage.RESULT_FAILURE, reqID);
+        if (d != null) msg = new HostReplyMessage(sessID, d, reqID);
+        else msg = new HostReplyMessage(sessID, HostReplyMessage.RESULT_FAILURE, reqID);
         try {
             _runner.doSend(msg);
         } catch (I2CPMessageException ime) {
@@ -120,7 +117,7 @@ class LocalClientMessageEventListener extends ClientMessageEventListener {
      */
     @Override
     protected void handleGetBWLimits(GetBandwidthLimitsMessage message) {
-        int limit = 1024*1024;
+        int limit = 1024 * 1024;
         BandwidthLimitsMessage msg = new BandwidthLimitsMessage(limit, limit);
         try {
             _runner.doSend(msg);

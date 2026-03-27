@@ -44,9 +44,7 @@ public class StrictCountriesTest {
     @Test
     public void testContainsKnownCount() {
         // Verify some specific strict countries
-        String[] strict = {"AE", "AF", "AZ", "BH", "BY", "CN", "CU", "EG", "ER",
-                           "IR", "KP", "KZ", "LA", "MM", "PK", "SA", "SY",
-                           "TD", "TM", "TR", "UZ", "VE", "VN", "YE"};
+        String[] strict = {"AE", "AF", "AZ", "BH", "BY", "CN", "CU", "EG", "ER", "IR", "KP", "KZ", "LA", "MM", "PK", "SA", "SY", "TD", "TM", "TR", "UZ", "VE", "VN", "YE"};
         for (String c : strict) {
             assertTrue(c + " should be strict", StrictCountries.contains(c));
         }

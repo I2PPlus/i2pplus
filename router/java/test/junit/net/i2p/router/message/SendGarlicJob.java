@@ -1,4 +1,5 @@
 package net.i2p.router.message;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,8 +9,6 @@ package net.i2p.router.message;
  *
  */
 
-import java.util.HashSet;
-import java.util.Set;
 import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
 import net.i2p.data.i2np.GarlicMessage;
@@ -21,13 +20,16 @@ import net.i2p.router.ReplyJob;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Build a garlic message from config, encrypt it, and enqueue it for delivery.
  *
  */
 public class SendGarlicJob extends JobImpl {
     private Log _log;
-    //private RouterInfo _target;
+    // private RouterInfo _target;
     private GarlicConfig _config;
     private Job _onSend;
     private Job _onSendFailed;
@@ -54,12 +56,13 @@ public class SendGarlicJob extends JobImpl {
     public SendGarlicJob(RouterContext ctx, GarlicConfig config, Job onSend, Job onSendFailed, ReplyJob onReply, Job onReplyFailed, long timeoutMs, int priority, MessageSelector replySelector) {
         this(ctx, config, onSend, onSendFailed, onReply, onReplyFailed, timeoutMs, priority, replySelector, new SessionKey(), new HashSet<SessionTag>());
     }
+
     public SendGarlicJob(RouterContext ctx, GarlicConfig config, Job onSend, Job onSendFailed, ReplyJob onReply, Job onReplyFailed, long timeoutMs, int priority, MessageSelector replySelector, SessionKey wrappedKey, Set<SessionTag> wrappedTags) {
         super(ctx);
         _log = ctx.logManager().getLog(SendGarlicJob.class);
         if (config == null) throw new IllegalArgumentException("No config specified");
         if (config.getRecipient() == null) throw new IllegalArgumentException("No recipient in the config");
-        //_target = target;
+        // _target = target;
         _config = config;
         _onSend = onSend;
         _onSendFailed = onSendFailed;
@@ -73,19 +76,18 @@ public class SendGarlicJob extends JobImpl {
         _wrappedTags = wrappedTags;
     }
 
-    public String getName() { return "Build Garlic Message"; }
+    public String getName() {
+        return "Build Garlic Message";
+    }
 
     public void runJob() {
         long before = getContext().clock().now();
-        _message = GarlicMessageBuilder.buildMessage(getContext(), _config, _wrappedKey, _wrappedTags,
-                                                     getContext().sessionKeyManager());
+        _message = GarlicMessageBuilder.buildMessage(getContext(), _config, _wrappedKey, _wrappedTags, getContext().sessionKeyManager());
         long after = getContext().clock().now();
         if ((after - before) > 1000) {
-            if (_log.shouldWarn())
-                _log.warn("Building the garlic took too long [" + (after-before)+" ms]");
+            if (_log.shouldWarn()) _log.warn("Building the garlic took too long [" + (after - before) + " ms]");
         } else {
-            if (_log.shouldDebug())
-                _log.debug("Building the garlic was fast! " + (after - before) + " ms");
+            if (_log.shouldDebug()) _log.debug("Building the garlic was fast! " + (after - before) + " ms");
         }
         getContext().jobQueue().addJob(new SendJob(getContext()));
     }
@@ -94,12 +96,14 @@ public class SendGarlicJob extends JobImpl {
         public SendJob(RouterContext enclosingContext) {
             super(enclosingContext);
         }
-        public String getName() { return "Send Built Garlic Message"; }
+
+        public String getName() {
+            return "Send Built Garlic Message";
+        }
+
         public void runJob() {
-            if (_config.getRecipient() != null)
-                _log.info("sending garlic to recipient " + _config.getRecipient().getIdentity().getHash().toBase64());
-            else
-                _log.info("sending garlic to public key " + _config.getRecipientPublicKey());
+            if (_config.getRecipient() != null) _log.info("sending garlic to recipient " + _config.getRecipient().getIdentity().getHash().toBase64());
+            else _log.info("sending garlic to public key " + _config.getRecipientPublicKey());
             sendGarlic();
         }
     }
@@ -112,9 +116,9 @@ public class SendGarlicJob extends JobImpl {
         msg.setOnReplyJob(_onReply);
         msg.setOnSendJob(_onSend);
         msg.setReplySelector(_replySelector);
-        //_log.info("Sending garlic message to [" + _config.getRecipient() + "] encrypted with " + _config.getRecipientPublicKey() + " or " + _config.getRecipient().getIdentity().getPublicKey());
-        //_log.debug("Garlic config data:\n" + _config);
-        //msg.setTarget(_target);
+        // _log.info("Sending garlic message to [" + _config.getRecipient() + "] encrypted with " + _config.getRecipientPublicKey() + " or " + _config.getRecipient().getIdentity().getPublicKey());
+        // _log.debug("Garlic config data:\n" + _config);
+        // msg.setTarget(_target);
         getContext().outNetMessagePool().add(msg);
         _log.debug("Garlic message added to outbound network message pool");
     }

@@ -2,13 +2,15 @@ package net.i2p.data.router;
 
 import static org.junit.Assert.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataStructure;
 import net.i2p.data.StructureTest;
 import net.i2p.util.OrderedProperties;
+
 import org.junit.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * Test harness for loading / storing RouterAddress objects.
@@ -79,10 +81,7 @@ public class RouterAddressTest extends StructureTest {
         options.setProperty("portnum", "1234");
         RouterAddress addr = new RouterAddress("Blah", options, 42);
 
-        String expected = "Blah:\n" +
-                          "\t* hostname: localhost\n" +
-                          "\t* portnum: 1234\n" +
-                          "\t* cost: 42";
+        String expected = "Blah:\n" + "\t* hostname: localhost\n" + "\t* portnum: 1234\n" + "\t* cost: 42";
 
         assertEquals(expected, addr.toString());
     }

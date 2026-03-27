@@ -2,13 +2,13 @@ package net.i2p.router.crypto.ratchet;
 
 import static org.junit.Assert.*;
 
+import net.i2p.I2PAppContext;
+import net.i2p.data.DataHelper;
+
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.List;
-import net.i2p.I2PAppContext;
-import net.i2p.data.DataFormatException;
-import net.i2p.data.DataHelper;
-import net.i2p.data.i2np.I2NPMessageException;
-import org.junit.Test;
 
 /**
  *  Tests for RatchetPayload block serialization and deserialization.
@@ -188,7 +188,9 @@ public class RatchetPayloadBlockTest {
         byte[] buf = new byte[10];
         buf[0] = 0; // BLOCK_DATETIME type
         DataHelper.toLong(buf, 1, 2, 3); // wrong length (should be 4)
-        buf[3] = 0; buf[4] = 0; buf[5] = 0;
+        buf[3] = 0;
+        buf[4] = 0;
+        buf[5] = 0;
         TestCallback cb = new TestCallback();
         RatchetPayload.processPayload(I2PAppContext.getGlobalContext(), cb, buf, 0, 6, false);
     }
@@ -206,15 +208,41 @@ public class RatchetPayloadBlockTest {
         boolean gotAckRequest;
         int paddingLength = -1;
 
-        public void gotDateTime(long time) { dateTime = time; }
+        public void gotDateTime(long time) {
+            dateTime = time;
+        }
+
         public void gotGarlic(net.i2p.data.i2np.GarlicClove clove) {}
-        public void gotOptions(byte[] options, boolean isHandshake) { this.options = options; }
-        public void gotTermination(int reason) { terminationReason = reason; }
-        public void gotPN(int pn) { this.pn = pn; }
-        public void gotNextKey(NextSessionKey nextKey) { this.nextKey = nextKey; }
-        public void gotAck(int id, int n) { ackId = id; ackN = n; }
-        public void gotAckRequest() { gotAckRequest = true; }
-        public void gotPadding(int paddingLength, int frameLength) { this.paddingLength = paddingLength; }
+
+        public void gotOptions(byte[] options, boolean isHandshake) {
+            this.options = options;
+        }
+
+        public void gotTermination(int reason) {
+            terminationReason = reason;
+        }
+
+        public void gotPN(int pn) {
+            this.pn = pn;
+        }
+
+        public void gotNextKey(NextSessionKey nextKey) {
+            this.nextKey = nextKey;
+        }
+
+        public void gotAck(int id, int n) {
+            ackId = id;
+            ackN = n;
+        }
+
+        public void gotAckRequest() {
+            gotAckRequest = true;
+        }
+
+        public void gotPadding(int paddingLength, int frameLength) {
+            this.paddingLength = paddingLength;
+        }
+
         public void gotUnknown(int type, int len) {}
     }
 }

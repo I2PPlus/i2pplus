@@ -6,6 +6,7 @@ import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+
 import org.junit.BeforeClass;
 
 /**
@@ -20,7 +21,7 @@ public abstract class RouterITBase {
 
     @BeforeClass
     public static void routerClassSetup() {
-     // order of these matters
+        // order of these matters
         Router r = new Router();
         _context = new RouterContext(r);
         _context.initAll();
@@ -49,12 +50,11 @@ public abstract class RouterITBase {
             cfg.setExpiration(_context.clock().now() + 60000);
             cfg.setIVKey(_context.keyGenerator().generateSessionKey());
             cfg.setLayerKey(_context.keyGenerator().generateSessionKey());
-            if (i > 0)
-                cfg.setReceiveFrom(peers[i-1]);
+            if (i > 0) cfg.setReceiveFrom(peers[i - 1]);
             cfg.setReceiveTunnelId(tunnelIds[i]);
             if (i < numHops - 1) {
-                cfg.setSendTo(peers[i+1]);
-                cfg.setSendTunnelId(tunnelIds[i+1]);
+                cfg.setSendTo(peers[i + 1]);
+                cfg.setSendTunnelId(tunnelIds[i + 1]);
             }
         }
         return config;

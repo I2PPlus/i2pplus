@@ -3,6 +3,7 @@ package net.i2p.router;
 import static org.junit.Assert.*;
 
 import net.i2p.data.Hash;
+
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -100,8 +101,7 @@ public class BanlistTest {
 
     @Test
     public void testCannotBanSelf() {
-        assertFalse("Should not ban own router",
-                _banlist.banlistRouter(_context.routerHash(), "self ban"));
+        assertFalse("Should not ban own router", _banlist.banlistRouter(_context.routerHash(), "self ban"));
     }
 
     @Test
@@ -136,18 +136,14 @@ public class BanlistTest {
     @Test
     public void testBanExpiredNotBanlisted() {
         Hash peer = randomHash();
-        _banlist.banlistRouter(peer, "test", null, null,
-                _context.clock().now() - 1000);
-        assertFalse("Expired ban should not be active",
-                _banlist.getEntries().containsKey(peer));
+        _banlist.banlistRouter(peer, "test", null, null, _context.clock().now() - 1000);
+        assertFalse("Expired ban should not be active", _banlist.getEntries().containsKey(peer));
     }
 
     @Test
     public void testBanWithExpiredTimeReturnsFalse() {
         Hash peer = randomHash();
-        assertFalse("Ban with past expiration should return false",
-                _banlist.banlistRouter(peer, "test", null, null,
-                        _context.clock().now() - 1000));
+        assertFalse("Ban with past expiration should return false", _banlist.banlistRouter(peer, "test", null, null, _context.clock().now() - 1000));
     }
 
     @Test
@@ -160,8 +156,7 @@ public class BanlistTest {
 
     @Test
     public void testBanlistForeverDurationExceedsThreshold() {
-        assertTrue("Forever duration should exceed threshold",
-                Banlist.BANLIST_DURATION_FOREVER > 24 * 60 * 60 * 1000L);
+        assertTrue("Forever duration should exceed threshold", Banlist.BANLIST_DURATION_FOREVER > 24 * 60 * 60 * 1000L);
     }
 
     @Test

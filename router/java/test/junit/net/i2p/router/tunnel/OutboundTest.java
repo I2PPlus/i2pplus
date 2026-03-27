@@ -1,4 +1,5 @@
 package net.i2p.router.tunnel;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -9,6 +10,7 @@ package net.i2p.router.tunnel;
  */
 
 import junit.framework.TestCase;
+
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
@@ -19,7 +21,7 @@ import net.i2p.router.RouterContext;
  * operation
  *
  */
-public class OutboundTest extends TestCase{
+public class OutboundTest extends TestCase {
     private RouterContext _context;
 
     public void setUp() {
@@ -65,17 +67,16 @@ public class OutboundTest extends TestCase{
 
         TunnelCreatorConfig config = new TCConfig(_context, numHops, false);
         for (int i = 0; i < numHops; i++) {
-        	config.setPeer(i, peers[i]);
+            config.setPeer(i, peers[i]);
             HopConfig cfg = config.getConfig(i);
             cfg.setExpiration(_context.clock().now() + 60000);
             cfg.setIVKey(_context.keyGenerator().generateSessionKey());
             cfg.setLayerKey(_context.keyGenerator().generateSessionKey());
-            if (i > 0)
-                cfg.setReceiveFrom(peers[i-1]);
+            if (i > 0) cfg.setReceiveFrom(peers[i - 1]);
             cfg.setReceiveTunnelId(tunnelIds[i]);
             if (i < numHops - 1) {
-                cfg.setSendTo(peers[i+1]);
-                cfg.setSendTunnelId(tunnelIds[i+1]);
+                cfg.setSendTo(peers[i + 1]);
+                cfg.setSendTunnelId(tunnelIds[i + 1]);
             }
         }
         return config;

@@ -1,6 +1,7 @@
 package net.i2p.router.crypto.ratchet;
 
 import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,13 +1,14 @@
 package net.i2p.router.transport.udp;
 
-import java.net.SocketException;
-import java.util.Properties;
-import java.util.Set;
 import net.i2p.data.ByteArray;
 import net.i2p.router.RouterContext;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
+
+import java.net.SocketException;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  *
@@ -29,7 +30,7 @@ public class UDPEndpointTestStandalone {
     }
 
     public void runTest(int numPeers) {
-        _log.debug("Run test("+numPeers+")");
+        _log.debug("Run test(" + numPeers + ")");
         _endpoints = new UDPEndpoint[numPeers];
         int base = 44000 + _context.random().nextInt(10000);
         for (int i = 0; i < numPeers; i++) {
@@ -44,9 +45,9 @@ public class UDPEndpointTestStandalone {
             }
             I2PThread read = new I2PThread(new TestRead(endpoint), "Test read " + i);
             I2PThread write = new I2PThread(new TestWrite(endpoint), "Test write " + i);
-            //read.setDaemon(true);
+            // read.setDaemon(true);
             read.start();
-            //write.setDaemon(true);
+            // write.setDaemon(true);
             write.start();
         }
         _beginTest = true;
@@ -55,12 +56,17 @@ public class UDPEndpointTestStandalone {
 
     private class TestRead implements Runnable {
         private final UDPEndpoint _endpoint;
+
         public TestRead(UDPEndpoint peer) {
             _endpoint = peer;
         }
+
         public void run() {
             while (!_beginTest) {
-                try { Thread.sleep(1000); } catch (InterruptedException ie) {}
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ie) {
+                }
             }
             _log.debug("Beginning to read");
             long start = System.currentTimeMillis();
@@ -87,73 +93,75 @@ public class UDPEndpointTestStandalone {
 
     private class TestWrite implements Runnable {
         private final UDPEndpoint _endpoint;
+
         public TestWrite(UDPEndpoint peer) {
             _endpoint = peer;
         }
+
         public void run() {
             System.out.println("Rewrite me for SSU2!");
             throw new UnsupportedOperationException("Rewrite me for SSU2!");
-/*
-            while (!_beginTest) {
-                try { Thread.sleep(2000); } catch (InterruptedException ie) {}
-            }
-                try { Thread.sleep(2000); } catch (InterruptedException ie) {}
-            PacketBuilder builder = new PacketBuilder(_context, null);
-            InetAddress localhost = null;
-            try {
-                localhost = InetAddress.getLocalHost();
-            } catch (UnknownHostException uhe) {
-                _log.error("die", uhe);
-                System.exit(0);
-            }
-            int MIN = 1 + UDPPacket.MAC_SIZE + UDPPacket.IV_SIZE;
-            int MAX = PeerState.LARGE_MTU - PacketBuilder.IP_HEADER_SIZE;
-            _log.debug("Beginning to write");
-            for (int curPacket = 0; curPacket < 2000; curPacket++) {
-                int sz = MIN + _context.random().nextInt(MAX - MIN - 1);
-                byte data[] = new byte[sz];
-                _context.random().nextBytes(data);
-                int curPeer = (curPacket % _endpoints.length);
-                if (_endpoints[curPeer] == _endpoint)
-                    curPeer++;
-                if (curPeer >= _endpoints.length)
-                    curPeer = 0;
-                UDPPacket packet = builder.buildPacket(data, localhost, _endpoints[curPeer].getListenPort());
-                int outstanding = _sentNotReceived.size() + 1;
-                _sentNotReceived.add(new ByteArray(data));
-                _log.debug("Sending test packet: " + curPacket + " with " + sz + " byte payload, outstanding " + outstanding);
-                try {
-                    _endpoint.send(packet);
-                } catch (Exception e) {
-                    _log.error("die", e);
-                    break;
-                }
-                int batch = 32 + _context.random().nextInt(32);
-                if (curPacket % batch == 0 || _sentNotReceived.size() > 100) {
-                    try { Thread.sleep(3); } catch (InterruptedException ie) {}
-                }
-                //if (_log.shouldDebug())
-                //    _log.debug("Sent to " + _endpoints[curPeer].getListenPort() + " from " + _endpoint.getListenPort());
-            }
-            _log.debug("Done sending packets");
-            for (int i = 0; i < 20; i++) {
-                if (_sentNotReceived.isEmpty())
-                    break;
-                try { Thread.sleep(500); } catch (InterruptedException e) {}
-            }
-            if (_sentNotReceived.isEmpty()) {
-                _log.info("Test passed");
-                System.exit(0);
-            } else {
-                _log.error("Test failed, " + _sentNotReceived.size() + " not received");
-                System.exit(1);
-            }
-*/
+            /*
+                        while (!_beginTest) {
+                            try { Thread.sleep(2000); } catch (InterruptedException ie) {}
+                        }
+                            try { Thread.sleep(2000); } catch (InterruptedException ie) {}
+                        PacketBuilder builder = new PacketBuilder(_context, null);
+                        InetAddress localhost = null;
+                        try {
+                            localhost = InetAddress.getLocalHost();
+                        } catch (UnknownHostException uhe) {
+                            _log.error("die", uhe);
+                            System.exit(0);
+                        }
+                        int MIN = 1 + UDPPacket.MAC_SIZE + UDPPacket.IV_SIZE;
+                        int MAX = PeerState.LARGE_MTU - PacketBuilder.IP_HEADER_SIZE;
+                        _log.debug("Beginning to write");
+                        for (int curPacket = 0; curPacket < 2000; curPacket++) {
+                            int sz = MIN + _context.random().nextInt(MAX - MIN - 1);
+                            byte data[] = new byte[sz];
+                            _context.random().nextBytes(data);
+                            int curPeer = (curPacket % _endpoints.length);
+                            if (_endpoints[curPeer] == _endpoint) curPeer++;
+                            if (curPeer >= _endpoints.length) curPeer = 0;
+                            UDPPacket packet = builder.buildPacket(data, localhost, _endpoints[curPeer].getListenPort());
+                            int outstanding = _sentNotReceived.size() + 1;
+                            _sentNotReceived.add(new ByteArray(data));
+                            _log.debug("Sending test packet: " + curPacket + " with " + sz + " byte payload, outstanding " + outstanding);
+                            try {
+                                _endpoint.send(packet);
+                            } catch (Exception e) {
+                                _log.error("die", e);
+                                break;
+                            }
+                            int batch = 32 + _context.random().nextInt(32);
+                            if (curPacket % batch == 0 || _sentNotReceived.size() > 100) {
+                                try { Thread.sleep(3); } catch (InterruptedException ie) {}
+                            }
+                            //if (_log.shouldDebug())
+                            //    _log.debug("Sent to " + _endpoints[curPeer].getListenPort() + " from " + _endpoint.getListenPort());
+                        }
+                        _log.debug("Done sending packets");
+                        for (int i = 0; i < 20; i++) {
+                            if (_sentNotReceived.isEmpty()) break;
+                            try { Thread.sleep(500); } catch (InterruptedException e) {}
+                        }
+                        if (_sentNotReceived.isEmpty()) {
+                            _log.info("Test passed");
+                            System.exit(0);
+                        } else {
+                            _log.error("Test failed, " + _sentNotReceived.size() + " not received");
+                            System.exit(1);
+                        }
+            */
         }
     }
 
     public static void main(String args[]) {
-        try { System.out.println("Current dir: " + new java.io.File(".").getCanonicalPath()); } catch (Exception e) {}
+        try {
+            System.out.println("Current dir: " + new java.io.File(".").getCanonicalPath());
+        } catch (Exception e) {
+        }
         new java.io.File("udpEndpointTest.stats").delete();
         Properties props = new Properties();
         props.setProperty("stat.logFile", "udpEndpointTest.stats");

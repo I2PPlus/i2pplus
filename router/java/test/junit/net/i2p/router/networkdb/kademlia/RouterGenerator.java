@@ -1,4 +1,5 @@
 package net.i2p.router.networkdb.kademlia;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,11 +9,6 @@ package net.i2p.router.networkdb.kademlia;
  *
  */
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.math.BigInteger;
-import java.util.HashSet;
-import java.util.Set;
 import net.i2p.crypto.KeyGenerator;
 import net.i2p.data.Certificate;
 import net.i2p.data.PrivateKey;
@@ -25,26 +21,32 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.util.Clock;
 import net.i2p.util.OrderedProperties;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.math.BigInteger;
+import java.util.HashSet;
+import java.util.Set;
+
 public class RouterGenerator {
     public static void main(String args[]) {
         RouterGenerator gen = new RouterGenerator();
         switch (args.length) {
-            case 0:
-                gen.createRouters(10000, "dummyRouters");
+            case 0: gen.createRouters(10000, "dummyRouters");
                 break;
-            case 1:
-                gen.createRouters(10000, args[0]);
+            case 1: gen.createRouters(10000, args[0]);
                 break;
-            case 2:
-                try { gen.createRouters(Integer.parseInt(args[1]), args[0]); } catch (NumberFormatException nfe) { nfe.printStackTrace(); }
+            case 2: try {
+                    gen.createRouters(Integer.parseInt(args[1]), args[0]);
+                } catch (NumberFormatException nfe) {
+                    nfe.printStackTrace();
+                }
                 break;
         }
     }
 
     private void createRouters(int numRouters, String outDir) {
         File dir = new File(outDir);
-        if (!dir.exists())
-            dir.mkdirs();
+        if (!dir.exists()) dir.mkdirs();
         int numSuccess = 0;
         for (int i = 1; numSuccess < numRouters; i++) {
             RouterInfo ri = createRouterInfo(i);
@@ -67,7 +69,10 @@ public class RouterGenerator {
                 e.printStackTrace();
                 return;
             } finally {
-                if (fos != null) try { fos.close(); } catch (Exception e) {}
+                if (fos != null) try {
+                        fos.close();
+                    } catch (Exception e) {
+                    }
             }
         }
     }
@@ -80,23 +85,22 @@ public class RouterGenerator {
     private static Object signingKeypair[] = KeyGenerator.getInstance().generateSigningKeypair();
 
     static {
-        pubkey = (PublicKey)keypair[0];
-        privkey = (PrivateKey)keypair[1];
-        signingPubKey = (SigningPublicKey)signingKeypair[0];
-        signingPrivKey = (SigningPrivateKey)signingKeypair[1];
+        pubkey = (PublicKey) keypair[0];
+        privkey = (PrivateKey) keypair[1];
+        signingPubKey = (SigningPublicKey) signingKeypair[0];
+        signingPrivKey = (SigningPrivateKey) signingKeypair[1];
     }
-
 
     static RouterInfo createRouterInfo(int num) {
         RouterInfo info = new RouterInfo();
         try {
             info.setAddresses(createAddresses(num));
             // not necessary, in constructor
-        //info.setOptions(new Properties());
-        //info.setPeers(new HashSet());
+            // info.setOptions(new Properties());
+            // info.setPeers(new HashSet());
             info.setPublished(Clock.getInstance().now());
             RouterIdentity ident = new RouterIdentity();
-            BigInteger bv = new BigInteger(""+num);
+            BigInteger bv = new BigInteger("" + num);
             Certificate cert = new Certificate(Certificate.CERTIFICATE_TYPE_NULL, bv.toByteArray());
             ident.setCertificate(cert);
             ident.setPublicKey(pubkey);
@@ -114,19 +118,17 @@ public class RouterGenerator {
     static Set<RouterAddress> createAddresses(int num) {
         Set<RouterAddress> addresses = new HashSet<RouterAddress>();
         RouterAddress addr = createTCPAddress(num);
-        if (addr != null)
-            addresses.add(addr);
+        if (addr != null) addresses.add(addr);
         return addresses;
     }
 
     private static RouterAddress createTCPAddress(int num) {
         OrderedProperties props = new OrderedProperties();
         String name = "blah.random.host.org";
-        String port = "" + (1024+num);
+        String port = "" + (1024 + num);
         props.setProperty("host", name);
         props.setProperty("port", port);
         RouterAddress addr = new RouterAddress("TCP", props, 10);
         return addr;
     }
-
 }

@@ -2,12 +2,13 @@ package net.i2p.router.startup;
 
 import static org.junit.Assert.*;
 
+import org.junit.Test;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
-import org.junit.Test;
 
 /**
  * Tests for ClientAppConfig construction, fields, parsing, equals, and hashCode.
@@ -29,8 +30,7 @@ public class ClientAppConfigTest {
 
     @Test
     public void testFullConstructor() {
-        ClientAppConfig cac = new ClientAppConfig("com.example.Bar", "Bar App", "a b c", 5000L, true,
-                "/lib/ext.jar", "stop", "remove");
+        ClientAppConfig cac = new ClientAppConfig("com.example.Bar", "Bar App", "a b c", 5000L, true, "/lib/ext.jar", "stop", "remove");
         assertEquals("com.example.Bar", cac.className);
         assertEquals("Bar App", cac.clientName);
         assertEquals("a b c", cac.args);

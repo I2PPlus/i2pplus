@@ -37,8 +37,7 @@ public class MTUTest {
     public void testRectifyIPv4Mod12() {
         for (int mtu = 620; mtu <= 1500; mtu += 7) {
             int result = MTU.rectify(false, mtu);
-            assertTrue("MTU " + mtu + " -> " + result + " mod 16 = " + (result % 16),
-                       result % 16 == 12);
+            assertTrue("MTU " + mtu + " -> " + result + " mod 16 = " + (result % 16), result % 16 == 12);
         }
     }
 
@@ -66,8 +65,7 @@ public class MTUTest {
     public void testRectifyIPv6ModZero() {
         for (int mtu = 1280; mtu <= 1500; mtu += 7) {
             int result = MTU.rectify(true, mtu);
-            assertTrue("MTU " + mtu + " -> " + result + " mod 16 = " + (result % 16),
-                       result % 16 == 0);
+            assertTrue("MTU " + mtu + " -> " + result + " mod 16 = " + (result % 16), result % 16 == 0);
         }
     }
 

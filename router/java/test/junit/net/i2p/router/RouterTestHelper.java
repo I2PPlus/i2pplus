@@ -1,8 +1,9 @@
 package net.i2p.router;
 
+import org.junit.Assume;
+
 import java.util.List;
 import java.util.Properties;
-import org.junit.Assume;
 
 /**
  * Shared utility for router tests that may need a RouterContext.

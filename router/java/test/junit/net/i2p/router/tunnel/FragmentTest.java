@@ -1,4 +1,5 @@
 package net.i2p.router.tunnel;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -11,17 +12,19 @@ package net.i2p.router.tunnel;
 import static org.junit.Assert.*;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.List;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.DataMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.RouterContext;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Simple test to see if the fragmentation is working, testing the preprocessor,
@@ -40,7 +43,7 @@ public class FragmentTest {
     @Before
     public void set() {
         _context.random().nextBoolean();
-        FragmentHandler.MAX_DEFRAGMENT_TIME = 10*1000;
+        FragmentHandler.MAX_DEFRAGMENT_TIME = 10 * 1000;
     }
 
     protected TunnelGateway.QueuePreprocessor createPreprocessor(RouterContext ctx) {
@@ -65,8 +68,8 @@ public class FragmentTest {
         try {
             pre.preprocessQueue(messages, new SenderImpl(), receiver);
             fail("should have thrown UOE");
-        } catch (UnsupportedOperationException expected){
-             // Expected exception - test passes
+        } catch (UnsupportedOperationException expected) {
+            // Expected exception - test passes
         }
     }
 
@@ -88,8 +91,8 @@ public class FragmentTest {
         try {
             pre.preprocessQueue(messages, new SenderImpl(), receiver);
             fail("should have thrown UOE");
-        } catch (UnsupportedOperationException expected){
-             // Expected exception - test passes
+        } catch (UnsupportedOperationException expected) {
+            // Expected exception - test passes
         }
     }
 
@@ -104,13 +107,17 @@ public class FragmentTest {
         messages.add(pending);
         TunnelGateway.QueuePreprocessor pre = createPreprocessor(_context);
         FragmentHandler handler = new FragmentHandler(_context, new DefragmentedReceiverImpl(pending.getData()));
-        ReceiverImpl receiver = new ReceiverImpl(handler, 11*1000);
+        ReceiverImpl receiver = new ReceiverImpl(handler, 11 * 1000);
 
         boolean keepGoing = true;
         while (keepGoing) {
             keepGoing = pre.preprocessQueue(messages, new SenderImpl(), receiver);
             if (keepGoing) {
-                try { Thread.sleep(100); } catch (InterruptedException ie) {  fail(ie.getMessage()); }
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ie) {
+                    fail(ie.getMessage());
+                }
             }
         }
     }
@@ -137,7 +144,11 @@ public class FragmentTest {
         while (keepGoing) {
             keepGoing = pre.preprocessQueue(messages, new SenderImpl(), receiver);
             if (keepGoing) {
-                try { Thread.sleep(100); } catch (InterruptedException ie) { fail(ie.getMessage()); }
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ie) {
+                    fail(ie.getMessage());
+                }
             }
         }
 
@@ -150,7 +161,7 @@ public class FragmentTest {
         _context.random().nextBytes(data);
         m.setData(data);
         m.setUniqueId(_context.random().nextLong(I2NPMessage.MAX_ID_VALUE));
-        m.setMessageExpiration(_context.clock().now() + 60*1000);
+        m.setMessageExpiration(_context.clock().now() + 60 * 1000);
 
         Hash toRouter = null;
         TunnelId toTunnel = null;
@@ -169,18 +180,26 @@ public class FragmentTest {
             return receiver.receiveEncrypted(preprocessed);
         }
     }
+
     protected class ReceiverImpl implements TunnelGateway.Receiver {
         private FragmentHandler _handler;
         private int _delay;
+
         public ReceiverImpl(FragmentHandler handler, int delay) {
             _handler = handler;
             _delay = delay;
         }
+
         public long receiveEncrypted(byte[] encrypted) {
             _handler.receiveTunnelMessage(encrypted, 0, encrypted.length);
-            try { Thread.sleep(_delay); } catch (Exception e) { fail(e.getMessage()); }
+            try {
+                Thread.sleep(_delay);
+            } catch (Exception e) {
+                fail(e.getMessage());
+            }
             return -1; // or do we need to return the real message ID?
         }
+
         @Override
         public Hash getSendTo() {
             // TODO Auto-generated method stub
@@ -193,18 +212,22 @@ public class FragmentTest {
         private byte _expected2[];
         private byte _expected3[];
         private int _received;
+
         public DefragmentedReceiverImpl(byte expected[]) {
             this(expected, null);
         }
+
         public DefragmentedReceiverImpl(byte expected[], byte expected2[]) {
             this(expected, expected2, null);
         }
+
         public DefragmentedReceiverImpl(byte expected[], byte expected2[], byte expected3[]) {
             _expected = expected;
             _expected2 = expected2;
             _expected3 = expected3;
             _received = 0;
         }
+
         public void receiveComplete(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
             boolean ok = false;
             byte m[] = msg.toByteArray();
@@ -220,7 +243,7 @@ public class FragmentTest {
             if (ok) {
                 _received++;
             }
-            //_log.info("** equal? " + ok);
+            // _log.info("** equal? " + ok);
         }
 
         public boolean receivedOk() {

@@ -1,4 +1,5 @@
 package net.i2p.router.message;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -8,8 +9,6 @@ package net.i2p.router.message;
  *
  */
 
-import java.util.HashSet;
-import java.util.Set;
 import net.i2p.data.Certificate;
 import net.i2p.data.Hash;
 import net.i2p.data.PublicKey;
@@ -27,6 +26,9 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.util.Log;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Build a test message that will be sent to the target to make sure they're alive.
@@ -53,8 +55,7 @@ public class BuildTestMessageJob extends JobImpl {
      * @param timeoutMs how long to wait before timing out
      * @param priority how high priority to send this test
      */
-    public BuildTestMessageJob(RouterContext ctx, RouterInfo target, Hash replyTo,
-                               Job onSendJob, Job onSendFailedJob, long timeoutMs, int priority) {
+    public BuildTestMessageJob(RouterContext ctx, RouterInfo target, Hash replyTo, Job onSendJob, Job onSendFailedJob, long timeoutMs, int priority) {
         super(ctx);
         _log = ctx.logManager().getLog(BuildTestMessageJob.class);
         _target = target;
@@ -66,7 +67,9 @@ public class BuildTestMessageJob extends JobImpl {
         _testMessageKey = -1;
     }
 
-    public String getName() { return "Build Test Message"; }
+    public String getName() {
+        return "Build Test Message";
+    }
 
     public void runJob() {
         if (alreadyKnownReachable()) {
@@ -76,8 +79,7 @@ public class BuildTestMessageJob extends JobImpl {
 
         // This is a test message - build a garlic with a DeliveryStatusMessage that
         // first goes to the peer then back to us.
-        if (_log.shouldDebug())
-            _log.debug("Building garlic message to test " + _target.getIdentity().getHash().toBase64());
+        if (_log.shouldDebug()) _log.debug("Building garlic message to test " + _target.getIdentity().getHash().toBase64());
         GarlicConfig config = buildGarlicCloveConfig();
         // TODO: make the last params on this specify the correct sessionKey and tags used
         ReplyJob replyJob = new JobReplyJob(getContext(), _onSend, config.getRecipient().getIdentity().getPublicKey(), config.getId(), null, new HashSet<SessionTag>());
@@ -88,10 +90,8 @@ public class BuildTestMessageJob extends JobImpl {
 
     private boolean alreadyKnownReachable() {
         PeerProfile profile = getContext().profileOrganizer().getProfile(_target.getIdentity().getHash());
-        if ((profile == null) || (!profile.getIsActive()))
-            return false;
-        else
-            return true;
+        if ((profile == null) || (!profile.getIsActive())) return false;
+        else return true;
     }
 
     private MessageSelector buildMessageSelector() {
@@ -100,18 +100,14 @@ public class BuildTestMessageJob extends JobImpl {
 
     private GarlicConfig buildGarlicCloveConfig() {
         _testMessageKey = getContext().random().nextLong(I2NPMessage.MAX_ID_VALUE);
-        if (_log.shouldInfo())
-            _log.info("Test message key: " + _testMessageKey);
+        if (_log.shouldInfo()) _log.info("Test message key: " + _testMessageKey);
 
         DeliveryInstructions instructions = new DeliveryInstructions();
         instructions.setDeliveryMode(DeliveryInstructions.DELIVERY_MODE_ROUTER);
         instructions.setRouter(_target.getIdentity().getHash());
         instructions.setTunnelId(null);
 
-        GarlicConfig config = new GarlicConfig(new Certificate(Certificate.CERTIFICATE_TYPE_NULL, null),
-                                               getContext().random().nextLong(I2NPMessage.MAX_ID_VALUE),
-                                               _timeoutMs+getContext().clock().now()+2*Router.CLOCK_FUDGE_FACTOR,
-                                               instructions);
+        GarlicConfig config = new GarlicConfig(new Certificate(Certificate.CERTIFICATE_TYPE_NULL, null), getContext().random().nextLong(I2NPMessage.MAX_ID_VALUE), _timeoutMs + getContext().clock().now() + 2 * Router.CLOCK_FUDGE_FACTOR, instructions);
 
         PayloadGarlicConfig ackClove = buildAckClove();
         config.addClove(ackClove);
@@ -133,14 +129,9 @@ public class BuildTestMessageJob extends JobImpl {
         DeliveryStatusMessage msg = new DeliveryStatusMessage(getContext());
         msg.setArrival(getContext().clock().now());
         msg.setMessageId(_testMessageKey);
-        if (_log.shouldDebug())
-            _log.debug("Delivery status message key: " + _testMessageKey + " arrival: " + msg.getArrival());
+        if (_log.shouldDebug()) _log.debug("Delivery status message key: " + _testMessageKey + " arrival: " + msg.getArrival());
 
-        PayloadGarlicConfig ackClove = new PayloadGarlicConfig(new Certificate(Certificate.CERTIFICATE_TYPE_NULL, null),
-                                                               getContext().random().nextLong(I2NPMessage.MAX_ID_VALUE),
-                                                               _timeoutMs+getContext().clock().now(),
-                                                               ackInstructions,
-                                                               msg);
+        PayloadGarlicConfig ackClove = new PayloadGarlicConfig(new Certificate(Certificate.CERTIFICATE_TYPE_NULL, null), getContext().random().nextLong(I2NPMessage.MAX_ID_VALUE), _timeoutMs + getContext().clock().now(), ackInstructions, msg);
         ackClove.setRecipient(_target);
 
         return ackClove;
@@ -149,18 +140,26 @@ public class BuildTestMessageJob extends JobImpl {
     /**
      * Search inbound messages for delivery status messages with our key
      */
-    private final static class TestMessageSelector implements MessageSelector {
+    private static final class TestMessageSelector implements MessageSelector {
         private long _testMessageKey;
         private long _timeout;
+
         public TestMessageSelector(long key, long timeout) {
             _testMessageKey = key;
             _timeout = timeout;
         }
-        public boolean continueMatching() { return false; }
-        public long getExpiration() { return _timeout; }
+
+        public boolean continueMatching() {
+            return false;
+        }
+
+        public long getExpiration() {
+            return _timeout;
+        }
+
         public boolean isMatch(I2NPMessage inMsg) {
             if (inMsg.getType() == DeliveryStatusMessage.MESSAGE_TYPE) {
-                return ((DeliveryStatusMessage)inMsg).getMessageId() == _testMessageKey;
+                return ((DeliveryStatusMessage) inMsg).getMessageId() == _testMessageKey;
             } else {
                 return false;
             }
@@ -177,6 +176,7 @@ public class BuildTestMessageJob extends JobImpl {
         private long _msgId;
         private Set<SessionTag> _sessionTagsDelivered;
         private SessionKey _keyDelivered;
+
         public JobReplyJob(RouterContext ctx, Job job, PublicKey target, long msgId, SessionKey keyUsed, Set<SessionTag> tagsDelivered) {
             super(ctx);
             _job = job;
@@ -185,12 +185,13 @@ public class BuildTestMessageJob extends JobImpl {
             _keyDelivered = keyUsed;
             _sessionTagsDelivered = tagsDelivered;
         }
-        public String getName() { return "Reply to Test Message Received"; }
+
+        public String getName() {
+            return "Reply to Test Message Received";
+        }
+
         public void runJob() {
-            if ((_keyDelivered != null) &&
-                 (_sessionTagsDelivered != null) &&
-                 (_sessionTagsDelivered.size() > 0))
-                getContext().sessionKeyManager().tagsDelivered(_target, _keyDelivered, _sessionTagsDelivered);
+            if ((_keyDelivered != null) && (_sessionTagsDelivered != null) && (_sessionTagsDelivered.size() > 0)) getContext().sessionKeyManager().tagsDelivered(_target, _keyDelivered, _sessionTagsDelivered);
 
             getContext().jobQueue().addJob(_job);
         }
@@ -198,6 +199,5 @@ public class BuildTestMessageJob extends JobImpl {
         public void setMessage(I2NPMessage message) {
             // ignored, this is just a ping
         }
-
     }
 }

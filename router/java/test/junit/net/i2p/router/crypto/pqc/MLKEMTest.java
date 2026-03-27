@@ -1,23 +1,22 @@
 package net.i2p.router.crypto.pqc;
 
-import java.security.GeneralSecurityException;
+import static org.junit.Assert.*;
+
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyPair;
 import net.i2p.data.DataHelper;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.PublicKey;
+
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.security.GeneralSecurityException;
 
 public class MLKEMTest {
 
-    private static final EncType[] INTERNAL_TYPES = {
-        EncType.MLKEM512_X25519_INT,
-        EncType.MLKEM768_X25519_INT,
-        EncType.MLKEM1024_X25519_INT
-    };
+    private static final EncType[] INTERNAL_TYPES = {EncType.MLKEM512_X25519_INT, EncType.MLKEM768_X25519_INT, EncType.MLKEM1024_X25519_INT};
 
     @Before
     public void setUp() {
@@ -154,8 +153,7 @@ public class MLKEMTest {
             for (int i = 0; i < 5; i++) {
                 byte[][] bob = MLKEM.encaps(type, keys[0]);
                 byte[] sharedAlice = MLKEM.decaps(type, bob[0], keys[1]);
-                assertTrue("Shared key mismatch on run " + i + " for " + type,
-                           DataHelper.eq(bob[1], sharedAlice));
+                assertTrue("Shared key mismatch on run " + i + " for " + type, DataHelper.eq(bob[1], sharedAlice));
             }
         }
     }

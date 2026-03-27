@@ -2,10 +2,11 @@ package net.i2p.router.startup;
 
 import static org.junit.Assert.*;
 
+import org.junit.Test;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import org.junit.Test;
 
 /**
  * Tests for WorkingDir static utility methods.

@@ -7,6 +7,7 @@ import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyGenerator;
 import net.i2p.crypto.KeyPair;
 import net.i2p.data.PublicKey;
+
 import org.junit.Test;
 
 /**

@@ -1,4 +1,5 @@
 package net.i2p.router.tunnel;
+
 /*
  * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
@@ -11,10 +12,12 @@ package net.i2p.router.tunnel;
 import static org.junit.Assert.assertTrue;
 
 import junit.framework.TestCase;
+
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.router.RouterContext;
+
 import org.junit.Test;
 
 /**
@@ -32,7 +35,7 @@ public class InboundTest extends TestCase {
     @Test
     @SuppressWarnings("deprecation")
     public void testInbound() {
-    	int numHops = 8;
+        int numHops = 8;
         TunnelCreatorConfig config = prepareConfig(numHops);
 
         byte orig[] = new byte[128];
@@ -43,14 +46,14 @@ public class InboundTest extends TestCase {
         InboundGatewayProcessor p = new InboundGatewayProcessor(_context, config.getConfig(0));
         p.process(message, 0, message.length, null);
 
-        for (int i = 1; i < numHops-1; i++) {
+        for (int i = 1; i < numHops - 1; i++) {
             HopProcessor hop = new HopProcessor(_context, config.getConfig(i));
             Hash prev = config.getConfig(i).getReceiveFrom();
             assertTrue(hop.process(message, 0, message.length, prev));
         }
 
         InboundEndpointProcessor end = new InboundEndpointProcessor(_context, config);
-        assertTrue(end.retrievePreprocessedData(message, 0, message.length, config.getPeer(numHops-2)));
+        assertTrue(end.retrievePreprocessedData(message, 0, message.length, config.getPeer(numHops - 2)));
 
         assertTrue(DataHelper.eq(orig, 16, message, 16, orig.length - 16));
     }
@@ -72,12 +75,11 @@ public class InboundTest extends TestCase {
             cfg.setExpiration(_context.clock().now() + 60000);
             cfg.setIVKey(_context.keyGenerator().generateSessionKey());
             cfg.setLayerKey(_context.keyGenerator().generateSessionKey());
-            if (i > 0)
-                cfg.setReceiveFrom(peers[i-1]);
+            if (i > 0) cfg.setReceiveFrom(peers[i - 1]);
             cfg.setReceiveTunnelId(tunnelIds[i]);
             if (i < numHops - 1) {
-                cfg.setSendTo(peers[i+1]);
-                cfg.setSendTunnelId(tunnelIds[i+1]);
+                cfg.setSendTo(peers[i + 1]);
+                cfg.setSendTunnelId(tunnelIds[i + 1]);
             }
         }
         return config;
