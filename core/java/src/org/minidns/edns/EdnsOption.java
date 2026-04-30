@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 the original author or authors
+ * Copyright 2015-2024 the original author or authors
  *
  * This software is licensed under the Apache License, Version 2.0,
  * the GNU Lesser General Public License version 2 or later ("LGPL")
@@ -47,12 +47,7 @@ public abstract class EdnsOption {
         this.optionData = optionData;
     }
 
-    /**
-     * Creates a new EDNS option with the specified data.
-     * The option code is derived from the concrete implementation.
-     *
-     * @param optionData the option data
-     */
+    @SuppressWarnings("this-escape")
     protected EdnsOption(byte[] optionData) {
         this.optionCode = getOptionCode().asInt;
         this.optionLength = optionData.length;

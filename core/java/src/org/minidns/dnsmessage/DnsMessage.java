@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 the original author or authors
+ * Copyright 2015-2024 the original author or authors
  *
  * This software is licensed under the Apache License, Version 2.0,
  * the GNU Lesser General Public License version 2 or later ("LGPL")
@@ -169,6 +169,7 @@ public class DnsMessage {
          * Create a new opcode for a given byte value.
          *
          */
+        @SuppressWarnings("EnumOrdinal")
         OPCODE() {
             this.value = (byte) this.ordinal();
         }
@@ -674,7 +675,8 @@ public class DnsMessage {
      *
      * @return This message as a String suitable for terminal output.
      */
-    public String asTerminalOutput() {
+     @SuppressWarnings("JavaUtilDate")
+     public String asTerminalOutput() {
         if (terminalOutputCache != null) return terminalOutputCache;
 
         StringBuilder sb = new StringBuilder("; ->>HEADER<<-").append(" opcode: ").append(opcode).append(", status: ").append(responseCode).append(", id: ").append(id).append("\n").append("; flags:");
@@ -1183,7 +1185,7 @@ public class DnsMessage {
         }
 
         /**
-         * Get the @{link EDNS} builder. If no builder has been set so far, then a new one will be created.
+         * Get the {@link Edns} builder. If no builder has been set so far, then a new one will be created.
          * <p>
          * The EDNS record can be used to announce the supported size of UDP payload as well as additional flags.
          * </p>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 the original author or authors
+ * Copyright 2015-2024 the original author or authors
  *
  * This software is licensed under the Apache License, Version 2.0,
  * the GNU Lesser General Public License version 2 or later ("LGPL")
@@ -17,6 +17,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Locale;
 
 /**
  * DNS NSEC3PARAM record payload for DNSSEC.<br>
@@ -89,7 +90,11 @@ public class NSEC3PARAM extends Data {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder().append(hashAlgorithm).append(' ').append(flags).append(' ').append(iterations).append(' ').append(salt.length == 0 ? "-" : new BigInteger(1, salt).toString(16).toUpperCase());
+        StringBuilder sb = new StringBuilder()
+                .append(hashAlgorithm).append(' ')
+                .append(flags).append(' ')
+                .append(iterations).append(' ')
+                .append(salt.length == 0 ? "-" : new BigInteger(1, salt).toString(16).toUpperCase(Locale.ROOT));
         return sb.toString();
     }
 
