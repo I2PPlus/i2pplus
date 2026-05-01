@@ -49,9 +49,7 @@ public class MetaInfo {
     private final String announce;
     private final byte[] info_hash;
     private final String name;
-    private final String name_utf8;
     private final List<List<String>> files;
-    private final List<List<String>> files_utf8;
     private final List<String> attributes;
     private final List<Long> lengths;
     private final int piece_length;
@@ -69,6 +67,7 @@ public class MetaInfo {
     /**
      * Called by Storage when creating a new torrent from local data
      *
+     * @param name_utf8 ignored
      * @param announce may be null
      * @param files null for single-file torrent
      * @param lengths null for single-file torrent
@@ -93,9 +92,7 @@ public class MetaInfo {
             String comment) {
         this.announce = announce;
         this.name = name;
-        this.name_utf8 = name_utf8;
         this.files = files == null ? null : Collections.unmodifiableList(files);
-        this.files_utf8 = null;
         this.lengths = lengths == null ? null : Collections.unmodifiableList(lengths);
         this.piece_length = piece_length;
         this.piece_hashes = piece_hashes;
@@ -114,6 +111,7 @@ public class MetaInfo {
     /**
      * Preserves privateTorrent int value, for main()
      *
+     * @param name_utf8 ignored
      * @since 0.9.62
      */
     public MetaInfo(
@@ -132,9 +130,7 @@ public class MetaInfo {
             String comment) {
         this.announce = announce;
         this.name = name;
-        this.name_utf8 = name_utf8;
         this.files = files == null ? null : Collections.unmodifiableList(files);
-        this.files_utf8 = null;
         this.lengths = lengths == null ? null : Collections.unmodifiableList(lengths);
         this.piece_length = piece_length;
         this.piece_hashes = piece_hashes;
@@ -169,9 +165,7 @@ public class MetaInfo {
         this.announce = new_announce;
         this.info_hash = old.info_hash;
         this.name = old.name;
-        this.name_utf8 = old.name_utf8;
         this.files = old.files;
-        this.files_utf8 = old.files_utf8;
         this.attributes = old.attributes;
         this.lengths = old.lengths;
         this.piece_length = old.piece_length;
@@ -316,13 +310,6 @@ public class MetaInfo {
             throw new InvalidBEncodingException("Invalid name containing '/' " + name);
         }
 
-        val = info.get("name.utf-8");
-        if (val != null) {
-            name_utf8 = val.getString();
-        } else {
-            name_utf8 = null;
-        }
-
         // BEP 27
         val = info.get("private");
         if (val != null) {
@@ -367,7 +354,6 @@ public class MetaInfo {
             // Single file case.
             length = val.getLong();
             files = null;
-            files_utf8 = null;
             lengths = null;
             attributes = null;
         } else {
@@ -384,7 +370,6 @@ public class MetaInfo {
             }
 
             List<List<String>> m_files = new ArrayList<List<String>>(size);
-            List<List<String>> m_files_utf8 = null;
             List<Long> m_lengths = new ArrayList<Long>(size);
             List<String> m_attributes = null;
             long l = 0;
@@ -437,21 +422,6 @@ public class MetaInfo {
 
                 m_files.add(Collections.unmodifiableList(file));
 
-                val = desc.get("path.utf-8");
-                if (val != null) {
-                    m_files_utf8 = new ArrayList<List<String>>(size);
-                    path_list = val.getList();
-                    path_length = path_list.size();
-                    if (path_length > 0) {
-                        file = new ArrayList<String>(path_length);
-                        it = path_list.iterator();
-                        while (it.hasNext()) {
-                            file.add(it.next().getString());
-                        }
-                        m_files_utf8.add(Collections.unmodifiableList(file));
-                    }
-                }
-
                 // BEP 47
                 val = desc.get("attr");
                 if (val != null) {
@@ -470,7 +440,6 @@ public class MetaInfo {
                 }
             }
             files = Collections.unmodifiableList(m_files);
-            files_utf8 = m_files_utf8 != null ? Collections.unmodifiableList(m_files_utf8) : null;
             lengths = Collections.unmodifiableList(m_lengths);
             length = l;
             attributes = m_attributes;
@@ -810,9 +779,6 @@ public class MetaInfo {
         // otherwise we must create it
         Map<String, BEValue> info = new HashMap<String, BEValue>();
         info.put("name", new BEValue(DataHelper.getUTF8(name)));
-        if (name_utf8 != null) {
-            info.put("name.utf-8", new BEValue(DataHelper.getUTF8(name_utf8)));
-        }
         // BEP 27
         if (privateTorrent != 0) {
             // switched to number in 0.9.14
@@ -834,14 +800,6 @@ public class MetaInfo {
                     befiles.add(new BEValue(DataHelper.getUTF8(fi.get(j))));
                 }
                 file.put("path", new BEValue(befiles));
-                if ((files_utf8 != null) && (files_utf8.size() > i)) {
-                    List<String> fiu = files_utf8.get(i);
-                    List<BEValue> beufiles = new ArrayList<BEValue>(fiu.size());
-                    for (int j = 0; j < fiu.size(); j++) {
-                        beufiles.add(new BEValue(DataHelper.getUTF8(fiu.get(j))));
-                    }
-                    file.put("path.utf-8", new BEValue(beufiles));
-                }
                 file.put("length", new BEValue(lengths.get(i)));
                 String attr = null;
                 if (attributes != null) {
@@ -855,6 +813,11 @@ public class MetaInfo {
             info.put("files", new BEValue(l));
         }
 
+        // TODO BEP 52 meta version and file tree
+
+        // TODO if we add the ability for other keys in the first constructor
+        //if (otherInfo != null)
+        //    info.putAll(otherInfo);
         infoMap = info;
         return Collections.unmodifiableMap(infoMap);
     }
