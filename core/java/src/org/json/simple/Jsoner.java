@@ -560,216 +560,231 @@ public class Jsoner {
         Jsoner.serialize(jsonSerializable, writableDestination, EnumSet.of(SerializationOptions.ALLOW_JSONABLES, SerializationOptions.ALLOW_FULLY_QUALIFIED_ENUMERATIONS));
     }
 
-    /** Serialize values to JSON and write them to the provided writer based on behavior flags.
-     * @param jsonSerializable represents the object that should be serialized to a string in JSON format.
-     * @param writableDestination represents where the resulting JSON text is written to.
-     * @param replacement represents what is serialized instead of a non-JSON value when replacements are allowed.
-     * @param flags represents the allowances and restrictions on serialization.
-     * @throws IOException if the writableDestination encounters an I/O problem.
-     * @throws IllegalArgumentException if the jsonSerializable isn't serializable in JSON.
-     * @see SerializationOptions */
-    private static void serialize(final Object jsonSerializable, final Writer writableDestination, final Set<SerializationOptions> flags) throws IOException {
-        if (jsonSerializable == null) {
-            /* When a null is passed in the word null is supported in JSON. */
-            writableDestination.write("null");
-        } else if (((jsonSerializable instanceof Jsonable) && flags.contains(SerializationOptions.ALLOW_JSONABLES))) {
-            /* Writes the writable as defined by the writable. */
-            writableDestination.write(((Jsonable) jsonSerializable).toJson());
-        } else if ((jsonSerializable instanceof Enum) && flags.contains(SerializationOptions.ALLOW_FULLY_QUALIFIED_ENUMERATIONS)) {
-            /* Writes the enum as a special case of string. All enums (unless they implement Jsonable) will be the
-             * string literal "${DECLARING_CLASS_NAME}.${ENUM_NAME}" as their value. */
-            @SuppressWarnings("rawtypes")
-            final Enum e = (Enum) jsonSerializable;
-            writableDestination.write('"');
-            writableDestination.write(e.getDeclaringClass().getName());
-            writableDestination.write('.');
-            writableDestination.write(e.name());
-            writableDestination.write('"');
-        } else if (jsonSerializable instanceof String) {
-            /* Make sure the string is properly escaped. */
-            writableDestination.write('"');
-            writableDestination.write(Jsoner.escape((String) jsonSerializable));
-            writableDestination.write('"');
-        } else if (jsonSerializable instanceof Double) {
-            if (((Double) jsonSerializable).isInfinite() || ((Double) jsonSerializable).isNaN()) {
-                /* Infinite and not a number are not supported by the JSON specification, so null is used instead. */
-                writableDestination.write("null");
-            } else {
-                writableDestination.write(jsonSerializable.toString());
-            }
-        } else if (jsonSerializable instanceof Float) {
-            if (((Float) jsonSerializable).isInfinite() || ((Float) jsonSerializable).isNaN()) {
-                /* Infinite and not a number are not supported by the JSON specification, so null is used instead. */
-                writableDestination.write("null");
-            } else {
-                writableDestination.write(jsonSerializable.toString());
-            }
-        } else if (jsonSerializable instanceof Number) {
-            writableDestination.write(jsonSerializable.toString());
-        } else if (jsonSerializable instanceof Boolean) {
-            writableDestination.write(jsonSerializable.toString());
-        } else if (jsonSerializable instanceof Map) {
-            /* Writes the map in JSON object format. */
-            boolean isFirstEntry = true;
-            @SuppressWarnings("rawtypes")
-            final Iterator entries = ((Map) jsonSerializable).entrySet().iterator();
-            writableDestination.write('{');
-            while (entries.hasNext()) {
-                if (isFirstEntry) {
-                    isFirstEntry = false;
-                } else {
-                    writableDestination.write(',');
-                }
-                @SuppressWarnings("rawtypes")
-                final Map.Entry entry = (Map.Entry) entries.next();
-                Jsoner.serialize(entry.getKey(), writableDestination, flags);
-                writableDestination.write(':');
-                Jsoner.serialize(entry.getValue(), writableDestination, flags);
-            }
-            writableDestination.write('}');
-        } else if (jsonSerializable instanceof Collection) {
-            /* Writes the collection in JSON array format. */
-            boolean isFirstElement = true;
-            @SuppressWarnings("rawtypes")
-            final Iterator elements = ((Collection) jsonSerializable).iterator();
-            writableDestination.write('[');
-            while (elements.hasNext()) {
-                if (isFirstElement) {
-                    isFirstElement = false;
-                } else {
-                    writableDestination.write(',');
-                }
-                Jsoner.serialize(elements.next(), writableDestination, flags);
-            }
-            writableDestination.write(']');
-        } else if (jsonSerializable instanceof byte[]) {
-            /* Writes the array in JSON array format. */
-            final byte[] writableArray = (byte[]) jsonSerializable;
-            final int numberOfElements = writableArray.length;
-            writableDestination.write('[');
-            for (int i = 1; i <= numberOfElements; i++) {
-                if (i == numberOfElements) {
-                    Jsoner.serialize(writableArray[i], writableDestination, flags);
-                } else {
-                    Jsoner.serialize(writableArray[i], writableDestination, flags);
-                    writableDestination.write(',');
-                }
-            }
-            writableDestination.write(']');
-        } else if (jsonSerializable instanceof short[]) {
-            /* Writes the array in JSON array format. */
-            final short[] writableArray = (short[]) jsonSerializable;
-            final int numberOfElements = writableArray.length;
-            writableDestination.write('[');
-            for (int i = 1; i <= numberOfElements; i++) {
-                if (i == numberOfElements) {
-                    Jsoner.serialize(writableArray[i], writableDestination, flags);
-                } else {
-                    Jsoner.serialize(writableArray[i], writableDestination, flags);
-                    writableDestination.write(',');
-                }
-            }
-            writableDestination.write(']');
-        } else if (jsonSerializable instanceof int[]) {
-            /* Writes the array in JSON array format. */
-            final int[] writableArray = (int[]) jsonSerializable;
-            final int numberOfElements = writableArray.length;
-            writableDestination.write('[');
-            for (int i = 1; i <= numberOfElements; i++) {
-                if (i == numberOfElements) {
-                    Jsoner.serialize(writableArray[i], writableDestination, flags);
-                } else {
-                    Jsoner.serialize(writableArray[i], writableDestination, flags);
-                    writableDestination.write(',');
-                }
-            }
-            writableDestination.write(']');
-        } else if (jsonSerializable instanceof long[]) {
-            /* Writes the array in JSON array format. */
-            final long[] writableArray = (long[]) jsonSerializable;
-            final int numberOfElements = writableArray.length;
-            writableDestination.write('[');
-            for (int i = 1; i <= numberOfElements; i++) {
-                if (i == numberOfElements) {
-                    Jsoner.serialize(writableArray[i], writableDestination, flags);
-                } else {
-                    Jsoner.serialize(writableArray[i], writableDestination, flags);
-                    writableDestination.write(',');
-                }
-            }
-            writableDestination.write(']');
-        } else if (jsonSerializable instanceof float[]) {
-            /* Writes the array in JSON array format. */
-            final float[] writableArray = (float[]) jsonSerializable;
-            final int numberOfElements = writableArray.length;
-            writableDestination.write('[');
-            for (int i = 0; i < numberOfElements; i++) {
-                if (i > 0) {
-                    writableDestination.write(',');
-                }
-                Jsoner.serialize(writableArray[i], writableDestination, flags);
-            }
-            writableDestination.write(']');
-        } else if (jsonSerializable instanceof double[]) {
-            /* Writes the array in JSON array format. */
-            final double[] writableArray = (double[]) jsonSerializable;
-            final int numberOfElements = writableArray.length;
-            writableDestination.write('[');
-            for (int i = 0; i < numberOfElements; i++) {
-                if (i > 0) {
-                    writableDestination.write(',');
-                }
-                Jsoner.serialize(writableArray[i], writableDestination, flags);
-            }
-            writableDestination.write(']');
-        } else if (jsonSerializable instanceof boolean[]) {
-            /* Writes the array in JSON array format. */
-            final boolean[] writableArray = (boolean[]) jsonSerializable;
-            final int numberOfElements = writableArray.length;
-            writableDestination.write('[');
-            for (int i = 0; i < numberOfElements; i++) {
-                if (i > 0) {
-                    writableDestination.write(',');
-                }
-                Jsoner.serialize(writableArray[i], writableDestination, flags);
-            }
-            writableDestination.write(']');
-        } else if (jsonSerializable instanceof char[]) {
-            /* Writes the array in JSON array format. */
-            final char[] writableArray = (char[]) jsonSerializable;
-            final int numberOfElements = writableArray.length;
-            writableDestination.write("[\"");
-            for (int i = 0; i < numberOfElements; i++) {
-                if (i > 0) {
-                    writableDestination.write("\",\"");
-                }
-                Jsoner.serialize(writableArray[i], writableDestination, flags);
-            }
-            writableDestination.write("\"]");
-        } else if (jsonSerializable instanceof Object[]) {
-            /* Writes the array in JSON array format. */
-            final Object[] writableArray = (Object[]) jsonSerializable;
-            final int numberOfElements = writableArray.length;
-            writableDestination.write('[');
-            for (int i = 0; i < numberOfElements; i++) {
-                if (i > 0) {
-                    writableDestination.write(",");
-                }
-                Jsoner.serialize(writableArray[i], writableDestination, flags);
-            }
-            writableDestination.write(']');
-        } else {
-            /* It cannot by any measure be safely serialized according to specification. */
-            if (flags.contains(SerializationOptions.ALLOW_INVALIDS)) {
-                /* Can be helpful for debugging how it isn't valid. */
-                writableDestination.write(jsonSerializable.toString());
-            } else {
-                /* Notify the caller the cause of failure for the serialization. */
-                throw new IllegalArgumentException("Encountered a: " + jsonSerializable.getClass().getName() + " as: " + jsonSerializable.toString() + "  that isn't JSON serializable.\n  Try:\n    1) Implementing the Jsonable interface for the object to return valid JSON. If it already does it probably has a bug.\n    2) If you cannot edit the source of the object or couple it with this library consider wrapping it in a class that does implement the Jsonable interface.\n    3) Otherwise convert it to a boolean, null, number, JsonArray, JsonObject, or String value before serializing it.\n    4) If you feel it should have serialized you could use a more tolerant serialization for debugging purposes.");
-            }
-        }
-        // System.out.println(writableDestination.toString());
-    }
+	/** Serialize values to JSON and write them to the provided writer based on behavior flags.
+	 * @param jsonSerializable represents the object that should be serialized to a string in JSON format.
+	 * @param writableDestination represents where the resulting JSON text is written to.
+	 * @param replacement represents what is serialized instead of a non-JSON value when replacements are allowed.
+	 * @param flags represents the allowances and restrictions on serialization.
+	 * @throws IOException if the writableDestination encounters an I/O problem.
+	 * @throws IllegalArgumentException if the jsonSerializable isn't serializable in JSON.
+	 * @see SerializationOptions */
+	private static void serialize(final Object jsonSerializable, final Writer writableDestination, final Set<SerializationOptions> flags) throws IOException{
+		if(jsonSerializable == null){
+			/* When a null is passed in the word null is supported in JSON. */
+			writableDestination.write("null");
+		}else if(((jsonSerializable instanceof Jsonable) && flags.contains(SerializationOptions.ALLOW_JSONABLES))){
+			/* Writes the writable as defined by the writable. */
+			writableDestination.write(((Jsonable)jsonSerializable).toJson());
+		}else if((jsonSerializable instanceof Enum) && flags.contains(SerializationOptions.ALLOW_FULLY_QUALIFIED_ENUMERATIONS)){
+			/* Writes the enum as a special case of string. All enums (unless they implement Jsonable) will be the
+			 * string literal "${DECLARING_CLASS_NAME}.${ENUM_NAME}" as their value. */
+			@SuppressWarnings("rawtypes")
+			final Enum e = (Enum)jsonSerializable;
+			writableDestination.write('"');
+			writableDestination.write(e.getDeclaringClass().getName());
+			writableDestination.write('.');
+			writableDestination.write(e.name());
+			writableDestination.write('"');
+		}else if(jsonSerializable instanceof String){
+			/* Make sure the string is properly escaped. */
+			writableDestination.write('"');
+			writableDestination.write(Jsoner.escape((String)jsonSerializable));
+			writableDestination.write('"');
+		}else if(jsonSerializable instanceof Character){
+			/* Make sure the string is properly escaped. */
+			//writableDestination.write('"');
+			writableDestination.write(Jsoner.escape(jsonSerializable.toString()));
+			//writableDestination.write('"');
+		}else if(jsonSerializable instanceof Double){
+			if(((Double)jsonSerializable).isInfinite() || ((Double)jsonSerializable).isNaN()){
+				/* Infinite and not a number are not supported by the JSON specification, so null is used instead. */
+				writableDestination.write("null");
+			}else{
+				writableDestination.write(jsonSerializable.toString());
+			}
+		}else if(jsonSerializable instanceof Float){
+			if(((Float)jsonSerializable).isInfinite() || ((Float)jsonSerializable).isNaN()){
+				/* Infinite and not a number are not supported by the JSON specification, so null is used instead. */
+				writableDestination.write("null");
+			}else{
+				writableDestination.write(jsonSerializable.toString());
+			}
+		}else if(jsonSerializable instanceof Number){
+			writableDestination.write(jsonSerializable.toString());
+		}else if(jsonSerializable instanceof Boolean){
+			writableDestination.write(jsonSerializable.toString());
+		}else if(jsonSerializable instanceof Map){
+			/* Writes the map in JSON object format. */
+			boolean isFirstEntry = true;
+			@SuppressWarnings("rawtypes")
+			final Iterator entries = ((Map)jsonSerializable).entrySet().iterator();
+			writableDestination.write('{');
+			while(entries.hasNext()){
+				if(isFirstEntry){
+					isFirstEntry = false;
+				}else{
+					writableDestination.write(',');
+				}
+				@SuppressWarnings("rawtypes")
+				final Map.Entry entry = (Map.Entry)entries.next();
+				Jsoner.serialize(entry.getKey(), writableDestination, flags);
+				writableDestination.write(':');
+				Jsoner.serialize(entry.getValue(), writableDestination, flags);
+			}
+			writableDestination.write('}');
+		}else if(jsonSerializable instanceof Collection){
+			/* Writes the collection in JSON array format. */
+			boolean isFirstElement = true;
+			@SuppressWarnings("rawtypes")
+			final Iterator elements = ((Collection)jsonSerializable).iterator();
+			writableDestination.write('[');
+			while(elements.hasNext()){
+				if(isFirstElement){
+					isFirstElement = false;
+				}else{
+					writableDestination.write(',');
+				}
+				Jsoner.serialize(elements.next(), writableDestination, flags);
+			}
+			writableDestination.write(']');
+		}else if(jsonSerializable instanceof byte[]){
+			/* Writes the array in JSON array format. */
+			final byte[] writableArray = (byte[])jsonSerializable;
+			final int numberOfElements = writableArray.length;
+			writableDestination.write('[');
+			for(int i = 0; i < numberOfElements; i++){
+				if(i == (numberOfElements - 1)){
+					Jsoner.serialize(writableArray[i], writableDestination, flags);
+				}else{
+					Jsoner.serialize(writableArray[i], writableDestination, flags);
+					writableDestination.write(',');
+				}
+			}
+			writableDestination.write(']');
+		}else if(jsonSerializable instanceof short[]){
+			/* Writes the array in JSON array format. */
+			final short[] writableArray = (short[])jsonSerializable;
+			final int numberOfElements = writableArray.length;
+			writableDestination.write('[');
+			for(int i = 0; i < numberOfElements; i++){
+				if(i == (numberOfElements - 1)){
+					Jsoner.serialize(writableArray[i], writableDestination, flags);
+				}else{
+					Jsoner.serialize(writableArray[i], writableDestination, flags);
+					writableDestination.write(',');
+				}
+			}
+			writableDestination.write(']');
+		}else if(jsonSerializable instanceof int[]){
+			/* Writes the array in JSON array format. */
+			final int[] writableArray = (int[])jsonSerializable;
+			final int numberOfElements = writableArray.length;
+			writableDestination.write('[');
+			for(int i = 0; i < numberOfElements; i++){
+				if(i == (numberOfElements - 1)){
+					Jsoner.serialize(writableArray[i], writableDestination, flags);
+				}else{
+					Jsoner.serialize(writableArray[i], writableDestination, flags);
+					writableDestination.write(',');
+				}
+			}
+			writableDestination.write(']');
+		}else if(jsonSerializable instanceof long[]){
+			/* Writes the array in JSON array format. */
+			final long[] writableArray = (long[])jsonSerializable;
+			final int numberOfElements = writableArray.length;
+			writableDestination.write('[');
+			for(int i = 0; i < numberOfElements; i++){
+				if(i == (numberOfElements - 1)){
+					Jsoner.serialize(writableArray[i], writableDestination, flags);
+				}else{
+					Jsoner.serialize(writableArray[i], writableDestination, flags);
+					writableDestination.write(',');
+				}
+			}
+			writableDestination.write(']');
+		}else if(jsonSerializable instanceof float[]){
+			/* Writes the array in JSON array format. */
+			final float[] writableArray = (float[])jsonSerializable;
+			final int numberOfElements = writableArray.length;
+			writableDestination.write('[');
+			for(int i = 0; i < numberOfElements; i++){
+				if(i == (numberOfElements - 1)){
+					Jsoner.serialize(writableArray[i], writableDestination, flags);
+				}else{
+					Jsoner.serialize(writableArray[i], writableDestination, flags);
+					writableDestination.write(',');
+				}
+			}
+			writableDestination.write(']');
+		}else if(jsonSerializable instanceof double[]){
+			/* Writes the array in JSON array format. */
+			final double[] writableArray = (double[])jsonSerializable;
+			final int numberOfElements = writableArray.length;
+			writableDestination.write('[');
+			for(int i = 0; i < numberOfElements; i++){
+				if(i == (numberOfElements - 1)){
+					Jsoner.serialize(writableArray[i], writableDestination, flags);
+				}else{
+					Jsoner.serialize(writableArray[i], writableDestination, flags);
+					writableDestination.write(',');
+				}
+			}
+			writableDestination.write(']');
+		}else if(jsonSerializable instanceof boolean[]){
+			/* Writes the array in JSON array format. */
+			final boolean[] writableArray = (boolean[])jsonSerializable;
+			final int numberOfElements = writableArray.length;
+			writableDestination.write('[');
+			for(int i = 0; i < numberOfElements; i++){
+				if(i == (numberOfElements - 1)){
+					Jsoner.serialize(writableArray[i], writableDestination, flags);
+				}else{
+					Jsoner.serialize(writableArray[i], writableDestination, flags);
+					writableDestination.write(',');
+				}
+			}
+			writableDestination.write(']');
+		}else if(jsonSerializable instanceof char[]){
+			/* Writes the array in JSON array format. */
+			final char[] writableArray = (char[])jsonSerializable;
+			final int numberOfElements = writableArray.length;
+			writableDestination.write("[\"");
+			for(int i = 0; i < numberOfElements; i++){
+				if(i == (numberOfElements - 1)){
+					Jsoner.serialize(writableArray[i], writableDestination, flags);
+				}else{
+					Jsoner.serialize(writableArray[i], writableDestination, flags);
+					writableDestination.write("\",\"");
+				}
+			}
+			writableDestination.write("\"]");
+		}else if(jsonSerializable instanceof Object[]){
+			/* Writes the array in JSON array format. */
+			final Object[] writableArray = (Object[])jsonSerializable;
+			final int numberOfElements = writableArray.length;
+			writableDestination.write('[');
+			for(int i = 0; i < numberOfElements; i++){
+				if(i == (numberOfElements - 1)){
+					Jsoner.serialize(writableArray[i], writableDestination, flags);
+				}else{
+					Jsoner.serialize(writableArray[i], writableDestination, flags);
+					writableDestination.write(",");
+				}
+			}
+			writableDestination.write(']');
+		}else{
+			/* It cannot by any measure be safely serialized according to specification. */
+			if(flags.contains(SerializationOptions.ALLOW_INVALIDS)){
+				/* Can be helpful for debugging how it isn't valid. */
+				writableDestination.write(jsonSerializable.toString());
+			}else{
+				/* Notify the caller the cause of failure for the serialization. */
+				throw new IllegalArgumentException("Encountered a: " + jsonSerializable.getClass().getName() + " as: " + jsonSerializable.toString() + "  that isn't JSON serializable.\n  Try:\n    1) Implementing the Jsonable interface for the object to return valid JSON. If it already does it probably has a bug.\n    2) If you cannot edit the source of the object or couple it with this library consider wrapping it in a class that does implement the Jsonable interface.\n    3) Otherwise convert it to a boolean, null, number, JsonArray, JsonObject, or String value before serializing it.\n    4) If you feel it should have serialized you could use a more tolerant serialization for debugging purposes.");
+			}
+		}
+		//System.out.println(writableDestination.toString());
+	}
 
     /** Serializes like the first version of this library.
      * It has been adapted to use Jsonable for serializing custom objects, but otherwise works like the old JSON string
