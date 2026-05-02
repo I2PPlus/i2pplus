@@ -1,3 +1,11 @@
+2026-05-01 zzz
+ * Transport: Fix PQ SSU2 I2NP block header
+
+2026-04-30 zzz
+ * Util:
+   - Update minidns to 1.1.1
+   - Update json-simple to 2.3.1
+
 2026-04-25 2.12+ (API 0.9.69) released
 
 2026-04-21 dr|z3d
