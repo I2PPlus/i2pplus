@@ -649,6 +649,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             long startTime = System.currentTimeMillis();
             boolean didRemove = false;
             try {
+                // Prune excess tunnels to stay within budget (configuration quantity)
+                // This ensures we don't accumulate way more tunnels than configured
+                _mgr.pruneAllPools();
                 didRemove = _mgr.replaceSlowTunnels();
             } catch (Exception e) {
                 if (_mgr._log.shouldWarn())
@@ -960,6 +963,29 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             }
         }
         return didRemove;
+    }
+
+    /**
+     * Prune excess tunnels from all pools to stay within budget.
+     * Called periodically from RemoveSlowTunnelsJob to ensure we don't exceed
+     * the configured tunnel quantity for any pool.
+     * @since 0.9.69+
+     */
+    public void pruneAllPools() {
+        List<TunnelPool> pools = new ArrayList<TunnelPool>();
+        listPools(pools);
+        for (TunnelPool pool : pools) {
+            if (pool == null || !pool.isAlive()) continue;
+            try {
+                int pruned = pool.pruneExcessTunnels();
+                if (pruned > 0 && _log.shouldInfo()) {
+                    _log.info("Pruned " + pruned + " excess tunnels from " + pool);
+                }
+            } catch (Exception e) {
+                if (_log.shouldWarn())
+                    _log.warn("Error pruning tunnels from pool", e);
+            }
+        }
     }
 
     /**
