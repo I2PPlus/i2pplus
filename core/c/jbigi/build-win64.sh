@@ -25,17 +25,11 @@ zen|amd|znver1
 skylake|intel|skylake
 coreisbr|intel|corei7-avx
 coreihwl|intel|core-avx2
-coreibwl|intel|broadwell
-core2|intel|core2
-k10|amd|amdfam10
 bulldozer|amd|bdver1
 piledriver|amd|bdver2
 steamroller|amd|bdver3
 excavator|amd|bdver4
 bobcat|amd|btver1
-jaguar|amd|btver2
-silvermont|intel|slm
-goldmont|intel|goldmont
 atom|intel|atom
 athlon64|amd|k8-sse3
 none|generic|
@@ -171,12 +165,15 @@ check_cpu_target() {
         return 0
     fi
 
-    echo "int main(){return 0;}" > /tmp/cpu_test.c
-    if $CC -march=$MARCH -c /tmp/cpu_test.c -o /tmp/cpu_test.o 2>/dev/null; then
-        rm -f /tmp/cpu_test.c /tmp/cpu_test.o
+    # NC7: Use mktemp instead of predictable /tmp paths
+    CPU_TEST=$(mktemp /tmp/cpu_test.XXXXXX.c)
+    CPU_OUT=$(mktemp /tmp/cpu_test.XXXXXX.o)
+    echo "int main(){return 0;}" > "$CPU_TEST"
+    if $CC -march="$MARCH" -c "$CPU_TEST" -o "$CPU_OUT" 2>/dev/null; then
+        rm -f "$CPU_TEST" "$CPU_OUT"
         return 0
     else
-        rm -f /tmp/cpu_test.c /tmp/cpu_test.o
+        rm -f "$CPU_TEST" "$CPU_OUT"
         return 1
     fi
 }

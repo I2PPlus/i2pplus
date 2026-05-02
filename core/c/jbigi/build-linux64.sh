@@ -29,19 +29,12 @@ zen|amd|znver1
 skylake|intel|skylake
 coreisbr|intel|corei7-avx
 coreihwl|intel|core-avx2
-coreibwl|intel|broadwell
-core2|intel|core2
-k10|amd|amdfam10
 bulldozer|amd|bdver1
 piledriver|amd|bdver2
 steamroller|amd|bdver3
 excavator|amd|bdver4
 bobcat|amd|btver1
-jaguar|amd|btver2
-silvermont|intel|slm
-goldmont|intel|goldmont
 atom|intel|atom
-athlon64|amd|k8-sse3
 none|generic|
 "
 
@@ -173,12 +166,15 @@ check_cpu_target() {
         return 0
     fi
 
-    echo "int main(){return 0;}" > /tmp/cpu_test.c
-    if $CC -march=$MARCH -c /tmp/cpu_test.c -o /tmp/cpu_test.o 2>/dev/null; then
-        rm -f /tmp/cpu_test.c /tmp/cpu_test.o
+    # NC7: Use mktemp instead of predictable /tmp paths
+    CPU_TEST=$(mktemp /tmp/cpu_test.XXXXXX.c)
+    CPU_OUT=$(mktemp /tmp/cpu_test.XXXXXX.o)
+    echo "int main(){return 0;}" > "$CPU_TEST"
+    if $CC -march="$MARCH" -c "$CPU_TEST" -o "$CPU_OUT" 2>/dev/null; then
+        rm -f "$CPU_TEST" "$CPU_OUT"
         return 0
     else
-        rm -f /tmp/cpu_test.c /tmp/cpu_test.o
+        rm -f "$CPU_TEST" "$CPU_OUT"
         return 1
     fi
 }
@@ -207,10 +203,12 @@ build_gmp() {
     MARCH="$1"
     GMP_BUILD="${2:-$GMP_DIR}"
     if [ -n "$MARCH" ]; then
-        export CFLAGS="-march=$MARCH -fPIC"
+        # Optimization + security hardening + LTO for GMP
+        export CFLAGS="-O2 -flto -march=$MARCH -fPIC -fstack-protector-strong -D_FORTIFY_SOURCE=2"
     else
-        export CFLAGS="-fPIC"
+        export CFLAGS="-O2 -flto -fPIC -fstack-protector-strong -D_FORTIFY_SOURCE=2"
     fi
+    export LDFLAGS="-flto"
     cd "$GMP_BUILD"
     ./configure --with-pic > /dev/null 2>&1
     make -j$(nproc) > /dev/null 2>&1
@@ -230,8 +228,23 @@ build_jbigi() {
         MARCH_FLAG=""
     fi
 
-    $CC -c -fPIC -Wall $MARCH_FLAG -I. -I./include -I./include/linux-x86_64 -I"$GMP_BUILD" -o jbigi.o src/jbigi.c
-    $CC -shared -fPIC -Wall $MARCH_FLAG -I. -I./include -I./include/linux-x86_64 -I"$GMP_BUILD" -o libjbigi.so jbigi.o "$GMP_BUILD/.libs/libgmp.a" -Wl,-soname,libjbigi.so
+    # Add AES-NI/PCLMUL flags for modern CPUs if supported
+    if [ -n "$MARCH" ]; then
+        case "$MARCH" in
+            znver3|znver2|skylake|corei7-avx|core-avx2|broadwell)
+                SIMD_FLAGS="-maes -mpclmul"
+                ;;
+            *) SIMD_FLAGS=""
+                ;;
+        esac
+    else
+        SIMD_FLAGS=""
+    fi
+
+    # Compile with optimization + security hardening + LTO
+    $CC -c -O2 -flto -fPIC -fstack-protector-strong -D_FORTIFY_SOURCE=2 $MARCH_FLAG $SIMD_FLAGS -I. -I./include -I./include/linux-x86_64 -I"$GMP_BUILD" -o jbigi.o src/jbigi.c
+    # Link with RELRO + LTO
+    $CC -shared -O2 -flto -fPIC -fstack-protector-strong $MARCH_FLAG $SIMD_FLAGS -I. -I./include -I./include/linux-x86_64 -I"$GMP_BUILD" -o libjbigi.so jbigi.o "$GMP_BUILD/.libs/libgmp.a" -Wl,-z,relro,-z,now,-soname,libjbigi.so
 
     cp libjbigi.so "$OUTPUT_DIR/libjbigi-linux-${CPU_NAME}${SUFFIX}.so"
 

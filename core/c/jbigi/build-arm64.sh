@@ -188,10 +188,12 @@ build_gmp() {
     MARCH="$1"
     GMP_BUILD="${2:-$GMP_DIR}"
     if [ -n "$MARCH" ]; then
-        export CFLAGS="-march=$MARCH -fPIC"
+        # Optimization + security hardening + LTO for GMP
+        export CFLAGS="-O2 -flto -march=$MARCH -fPIC -fstack-protector-strong -D_FORTIFY_SOURCE=2"
     else
-        export CFLAGS="-fPIC"
+        export CFLAGS="-O2 -flto -fPIC -fstack-protector-strong -D_FORTIFY_SOURCE=2"
     fi
+    export LDFLAGS="-flto"
     cd "$GMP_BUILD"
     ./configure --host=$HOST --with-pic > /dev/null 2>&1
     make -j$(nproc) > /dev/null 2>&1
@@ -211,8 +213,23 @@ build_jbigi() {
         MARCH_FLAG=""
     fi
 
-    $CC -c -fPIC -Wall $MARCH_FLAG -I. -I./include -I./include/linux-aarch64 -I"$GMP_BUILD" -o jbigi.o src/jbigi.c
-    $CC -shared -fPIC -Wall $MARCH_FLAG -I. -I./include -I./include/linux-aarch64 -I"$GMP_BUILD" -o libjbigi.so jbigi.o "$GMP_BUILD/.libs/libgmp.a" -Wl,-soname,libjbigi.so
+    # Add crypto extensions for ARM64 CPUs that support them
+    if [ -n "$MARCH" ]; then
+        case "$MARCH" in
+            armv8.2-a|armv8.3-a|armv8.4-a|armv8.5-a|armv8.6-a|armv8.7-a|armv8.8-a|cortex-a72|cortex-a76|cortex-a77|cortex-a78|cortex-x1)
+                SIMD_FLAGS="-march=armv8.2-a+crypto"
+                ;;
+            *) SIMD_FLAGS=""
+                ;;
+        esac
+    else
+        SIMD_FLAGS=""
+    fi
+
+    # Compile with optimization + security hardening + LTO
+    $CC -c -O2 -flto -fPIC -fstack-protector-strong -D_FORTIFY_SOURCE=2 $MARCH_FLAG $SIMD_FLAGS -I. -I./include -I./include/linux-aarch64 -I"$GMP_BUILD" -o jbigi.o src/jbigi.c
+    # Link with RELRO + LTO
+    $CC -shared -O2 -flto -fPIC -fstack-protector-strong $MARCH_FLAG $SIMD_FLAGS -I. -I./include -I./include/linux-aarch64 -I"$GMP_BUILD" -o libjbigi.so jbigi.o "$GMP_BUILD/.libs/libgmp.a" -Wl,-z,relro,-z,now,-soname,libjbigi.so
 
     cp libjbigi.so "$OUTPUT_DIR/libjbigi-linux-${CPU_NAME}${SUFFIX}.so"
 
