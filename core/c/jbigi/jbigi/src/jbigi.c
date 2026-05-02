@@ -8,6 +8,22 @@
 void convert_j2mp(JNIEnv* env, jbyteArray jvalue, mpz_t* mvalue);
 void convert_mp2j(JNIEnv* env, mpz_t mvalue, jbyteArray* jvalue);
 
+/* NC4: helper for JNI null/empty checks */
+static int check_byte_array(JNIEnv* env, jbyteArray arr, const char* name) {
+    if (arr == NULL) {
+        jclass exc = (*env)->FindClass(env, "java/lang/NullPointerException");
+        (*env)->ThrowNew(env, exc, name);
+        return -1;
+    }
+    jsize len = (*env)->GetArrayLength(env, arr);
+    if (len == 0) {
+        jclass exc = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
+        (*env)->ThrowNew(env, exc, name);
+        return -1;
+    }
+    return 0;
+}
+
 /*
  * Versions:
  *
@@ -45,28 +61,48 @@ JNIEXPORT jint JNICALL Java_net_i2p_util_NativeBigInteger_nativeJbigiVersion
 }
 
 /* since version 3, fixed for dynamic builds in version 4 */
+/* NC5 fix: handle multi-digit version numbers (GMP 10+) */
 JNIEXPORT jint JNICALL Java_net_i2p_util_NativeBigInteger_nativeGMPMajorVersion
         (JNIEnv* env, jclass cls) {
-    int v = gmp_version[0] - '0';
-    return (jint) v;
-}
-
-/* since version 3, fixed for dynamic builds in version 4 */
-JNIEXPORT jint JNICALL Java_net_i2p_util_NativeBigInteger_nativeGMPMinorVersion
-        (JNIEnv* env, jclass cls) {
     int v = 0;
-    if (strlen(gmp_version) > 2) {
-        v = gmp_version[2] - '0';
+    const char* p = gmp_version;
+    while (*p && *p >= '0' && *p <= '9') {
+        v = v * 10 + (*p - '0');
+        p++;
     }
     return (jint) v;
 }
 
 /* since version 3, fixed for dynamic builds in version 4 */
+/* NC5 fix: handle multi-digit version numbers (GMP 10+) */
+JNIEXPORT jint JNICALL Java_net_i2p_util_NativeBigInteger_nativeGMPMinorVersion
+        (JNIEnv* env, jclass cls) {
+    int v = 0;
+    const char* p = gmp_version;
+    while (*p && (*p < '0' || *p > '9')) p++;
+    while (*p && *p >= '0' && *p <= '9') p++;
+    while (*p && (*p < '0' || *p > '9')) p++;
+    while (*p && *p >= '0' && *p <= '9') {
+        v = v * 10 + (*p - '0');
+        p++;
+    }
+    return (jint) v;
+}
+
+/* since version 3, fixed for dynamic builds in version 4 */
+/* NC5 fix: handle multi-digit version numbers (GMP 10+) */
 JNIEXPORT jint JNICALL Java_net_i2p_util_NativeBigInteger_nativeGMPPatchVersion
         (JNIEnv* env, jclass cls) {
     int v = 0;
-    if (strlen(gmp_version) > 4) {
-        v = gmp_version[4] - '0';
+    const char* p = gmp_version;
+    while (*p && (*p < '0' || *p > '9')) p++;
+    while (*p && *p >= '0' && *p <= '9') p++;
+    while (*p && (*p < '0' || *p > '9')) p++;
+    while (*p && *p >= '0' && *p <= '9') p++;
+    while (*p && (*p < '0' || *p > '9')) p++;
+    while (*p && *p >= '0' && *p <= '9') {
+        v = v * 10 + (*p - '0');
+        p++;
     }
     return (jint) v;
 }
@@ -95,6 +131,11 @@ JNIEXPORT jint JNICALL Java_net_i2p_util_NativeBigInteger_nativeGMPPatchVersion
 
 JNIEXPORT jbyteArray JNICALL Java_net_i2p_util_NativeBigInteger_nativeModPow
         (JNIEnv* env, jclass cls, jbyteArray jbase, jbyteArray jexp, jbyteArray jmod) {
+        /* NC4: add null/empty checks */
+        if (check_byte_array(env, jbase, "base") != 0) return NULL;
+        if (check_byte_array(env, jexp, "exponent") != 0) return NULL;
+        if (check_byte_array(env, jmod, "modulus") != 0) return NULL;
+
         /* 1) Convert base, exponent, modulus into the format libgmp understands
          * 2) Call libgmp's modPow.
          * 3) Convert libgmp's result into a big endian twos complement number.
@@ -160,6 +201,10 @@ JNIEXPORT jbyteArray JNICALL Java_net_i2p_util_NativeBigInteger_nativeModPow
 
 JNIEXPORT jbyteArray JNICALL Java_net_i2p_util_NativeBigInteger_nativeModPowCT
         (JNIEnv* env, jclass cls, jbyteArray jbase, jbyteArray jexp, jbyteArray jmod) {
+        /* NC4: add null/empty checks */
+        if (check_byte_array(env, jbase, "base") != 0) return NULL;
+        if (check_byte_array(env, jexp, "exponent") != 0) return NULL;
+        if (check_byte_array(env, jmod, "modulus") != 0) return NULL;
 
         mpz_t mbase;
         mpz_t mexp;
@@ -221,6 +266,9 @@ JNIEXPORT jbyteArray JNICALL Java_net_i2p_util_NativeBigInteger_nativeModPowCT
 
 JNIEXPORT jbyteArray JNICALL Java_net_i2p_util_NativeBigInteger_nativeModInverse
         (JNIEnv* env, jclass cls, jbyteArray jbase, jbyteArray jmod) {
+        /* NC4: add null/empty checks */
+        if (check_byte_array(env, jbase, "base") != 0) return NULL;
+        if (check_byte_array(env, jmod, "modulus") != 0) return NULL;
 
         mpz_t mbase;
         mpz_t mexp;
