@@ -432,30 +432,36 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 } catch (I2PSessionException ise) {
                     // Check if session actually connected despite exception
                     // This prevents false error messages when connection succeeds after exception
-                    if (!sockMgr.getSession().isClosed()) {
-                        synchronized(I2PTunnelClientBase.class) {
-                            if (sockMgr == socketManager) {_socketManagerState = SocketManagerState.CONNECTED;}
-                        }
-                        break;  // exit retry loop - connection succeeded
-                    }
-                    // Shadows instance _log
-                    Log _log = getTunnel().getContext().logManager().getLog(I2PTunnelClientBase.class);
-                    Logging log = this.l;
-                    // Try to make this error sensible as it will happen...
+                    // Declare variables early so they're available in both branches
                     String host = getTunnel().host;
                     String portNum = getTunnel().port;
                     if (portNum == null) {portNum = Integer.toString(I2PClient.DEFAULT_LISTEN_PORT);}
                     String hostAndPort = host + ":" + portNum;
-                    String msg;
-                    if (getTunnel().getContext().isRouterContext()) {msg = "✖ Unable to build tunnels for client at " + hostAndPort;}
-                    else {msg = "✖ Cannot build client tunnels: No connection to router at " + hostAndPort;}
+                    Logging log = this.l;
+
+                    if (!sockMgr.getSession().isClosed()) {
+                        synchronized(I2PTunnelClientBase.class) {
+                            if (sockMgr == socketManager) {_socketManagerState = SocketManagerState.CONNECTED;}
+                        }
+                        // Log successful startup - no scary error messages during initial build phase
+                        String startMsg = "✔ Tunnel started for client at " + hostAndPort;
+                        if (log != null) {log.log(startMsg);}
+                        break;  // exit retry loop - connection succeeded
+                    }
+                    // Shadows instance _log
+                    Log _log = getTunnel().getContext().logManager().getLog(I2PTunnelClientBase.class);
                     String exmsg = ise.getMessage();
                     boolean fail = !_buildingTunnels || (exmsg != null && exmsg.toLowerCase().contains("session limit exceeded"));
                     if (!fail && ++retries < MAX_RETRIES) {
-                        String retryMsg = msg + " -> Retrying in " + (RETRY_DELAY / 1000) + "s [" + retries + " / " + MAX_RETRIES + "]";
-                        if (log != null) {log.log(retryMsg);}
-                        if (_log.shouldWarn()) {_log.warn(retryMsg);}
+                        // Only log after multiple consecutive failures (3+) to avoid noise during normal startup
+                        // Users don't need to see "retrying" messages - they'll see "Tunnel started" on success
+                        if (retries >= 3 && log != null) {
+                            log.log("Tunnel build struggling (" + retries + "/" + MAX_RETRIES + "), continuing...");
+                        }
                     } else {
+                        String msg;
+                        if (getTunnel().getContext().isRouterContext()) {msg = "✖ Unable to build tunnels for client at " + hostAndPort;}
+                        else {msg = "✖ Cannot build client tunnels: No connection to router at " + hostAndPort;}
                         String failMsg = msg + " -> All attempts failed";
                         if (log != null) {log.log(failMsg);}
                         _log.log(Log.CRIT, failMsg, ise);
