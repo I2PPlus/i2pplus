@@ -430,6 +430,14 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                         if (sockMgr == socketManager) {_socketManagerState = SocketManagerState.CONNECTED;}
                     }
                 } catch (I2PSessionException ise) {
+                    // Check if session actually connected despite exception
+                    // This prevents false error messages when connection succeeds after exception
+                    if (!sockMgr.getSession().isClosed()) {
+                        synchronized(I2PTunnelClientBase.class) {
+                            if (sockMgr == socketManager) {_socketManagerState = SocketManagerState.CONNECTED;}
+                        }
+                        break;  // exit retry loop - connection succeeded
+                    }
                     // Shadows instance _log
                     Log _log = getTunnel().getContext().logManager().getLog(I2PTunnelClientBase.class);
                     Logging log = this.l;
