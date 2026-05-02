@@ -64,6 +64,10 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
     }
     public RouterInfo lookupRouterInfoLocally(Hash key) { return _routers.get(key); }
 
+    public RouterInfo lookupRouterInfoWithTimeout(Hash key, long timeoutMs) {
+        return lookupRouterInfoLocally(key);
+    }
+
     public void publish(LeaseSet localLeaseSet) {}
     public void publish(RouterInfo localRouterInfo) {}
 

@@ -57,7 +57,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private static final String PROP_SLOW_TUNNEL_INTERVAL = "router.tunnel.slowTunnelInterval";
     private static final String PROP_PRUNE_EARLY_EXPIRY = "router.tunnel.pruneEarlyExpiryDelay";
     private static final long DEFAULT_PRUNE_EARLY_EXPIRY = 30*1000; // 30 seconds
-    private static final int DEFAULT_SLOW_THRESHOLD_MS = 0; // 0 means use 1.5x average
+    private static final int DEFAULT_SLOW_THRESHOLD_MS = 0; // 0 means use avg latency with min
+    private static final int DEFAULT_MIN_SLOW_THRESHOLD = 3000; // 3s minimum threshold if not configured
     private static final int DEFAULT_RUN_INTERVAL_MS = 90*1000; // 90s default
     private static final long REFRESH_DELAY_AFTER_REMOVAL = 15*1000; // wait for new tunnels to build
     private static final double MAX_SHARE_RATIO = 100000d;
@@ -798,7 +799,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         listPools(pools);
         boolean didRemove = false;
 
-        // First pass: calculate global average and minimum latency
+        // First pass: calculate global average and minimum latency using average of last 3 tests
         long totalLatency = 0;
         int latencyCount = 0;
         int minLatency = Integer.MAX_VALUE;
@@ -806,7 +807,18 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             if (pool == null) continue;
             try {
                 for (TunnelInfo info : pool.listTunnels()) {
-                    int lat = info.getLastLatency();
+                    // Use average latency when available (requires 3+ tests), fall back to last latency
+                    int lat = -1;
+                    if (info instanceof PooledTunnelCreatorConfig) {
+                        PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
+                        if (cfg.hasEnoughLatencyTests()) {
+                            lat = cfg.getAverageLatency();
+                        } else {
+                            lat = cfg.getLastLatency();
+                        }
+                    } else {
+                        lat = info.getLastLatency();
+                    }
                     if (lat > 0) {
                         totalLatency += lat;
                         latencyCount++;
@@ -837,8 +849,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (configuredThreshold > 0) {
             threshold = configuredThreshold;
         } else {
-            // Use Math.max(minLatency, 1000ms) - keep at least the best tunnel's latency or 1s, whichever is larger
-            threshold = Math.max(minLatency, 1000);
+            // Use avg latency as threshold, but minimum DEFAULT_MIN_SLOW_THRESHOLD (2000ms)
+            threshold = Math.max(avg, DEFAULT_MIN_SLOW_THRESHOLD);
         }
         if (_log.shouldDebug()) {
             _log.debug("Using threshold: " + String.format("%.0f", threshold) + "ms");
@@ -886,9 +898,19 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                         found++;
                         continue;
                     }
-                    if (info.getLastLatency() > threshold) {
-                        toRemove.add(info);
-                        found++;
+                    // Use average latency, require at least 3 tests before removal
+                    if (info instanceof PooledTunnelCreatorConfig) {
+                        PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
+                        if (cfg.hasEnoughLatencyTests()) {
+                            int avgLatency = cfg.getAverageLatency();
+                            if (avgLatency > threshold) {
+                                toRemove.add(info);
+                                found++;
+                            }
+                        } else if (cfg.getLastLatency() > threshold * 1.5) {
+                            // Only mark for expedited test if significantly over threshold AND no 3 tests yet
+                            cfg.requestExpeditedTest();
+                        }
                     }
                 }
             } // Lock released

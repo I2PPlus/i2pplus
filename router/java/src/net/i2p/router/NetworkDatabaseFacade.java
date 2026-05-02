@@ -64,6 +64,17 @@ public abstract class NetworkDatabaseFacade implements Service {
     public abstract RouterInfo lookupRouterInfoLocally(Hash key);
 
     /**
+     *  Blocking lookup with timeout. Attempts local lookup first, then remote.
+     *  Returns null on timeout - async lookup is fired to populate local cache.
+     *
+     *  @param key the router hash to lookup
+     *  @param timeoutMs max time to wait for remote lookup (e.g. 5000)
+     *  @return RouterInfo if found within timeout, null otherwise
+     *  @since 0.9.69
+     */
+    public abstract RouterInfo lookupRouterInfoWithTimeout(Hash key, long timeoutMs);
+
+    /**
      *  Unconditionally lookup using the client's tunnels.
      *  No success or failed jobs, no local lookup, no checks.
      *  Use this to refresh a leaseset before expiration.

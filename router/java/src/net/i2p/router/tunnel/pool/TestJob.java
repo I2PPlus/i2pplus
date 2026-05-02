@@ -51,28 +51,28 @@ public class TestJob extends JobImpl {
      * Prevents overwhelming the router with too many simultaneous tunnel tests.
      * This value can be adjusted based on system capacity.
      */
-    private static final int MAX_CONCURRENT_TESTS = SystemVersion.isSlow() ? 8 : 16;
+    private static final int MAX_CONCURRENT_TESTS = SystemVersion.isSlow() ? 10 : 20;
 
     // Adaptive testing frequency constants
-    private static final int BASE_TEST_DELAY = 90 * 1000; // 90s base
-    private static final int MIN_TEST_DELAY = 60 * 1000; // 60s minimum
+    private static final int BASE_TEST_DELAY = 60 * 1000; // 60s base
+    private static final int MIN_TEST_DELAY = 45 * 1000; // 45s minimum
     private static final int MAX_TEST_DELAY = 180 * 1000; // 180s maximum
     private static final int SUCCESS_HISTORY_SIZE = 3; // Track last 3 results
-    private static final int MIN_TEST_JOBS_PER_RUNNER = 8;
-    private static final int MAX_LAG_FOR_SCHEDULE = 50;
+    private static final int MIN_TEST_JOBS_PER_RUNNER = 12;
+    private static final int MAX_LAG_FOR_SCHEDULE = 150;
     private static final double POOL_COVERAGE_THRESHOLD = 0.9; // 90% of maxQueuedTests
-    private static final int MAX_EXPLORATORY_PER_POOL = 4;
-    private static final int MAX_CLIENT_PER_POOL = 8;
+    private static final int MAX_EXPLORATORY_PER_POOL = 6;
+    private static final int MAX_CLIENT_PER_POOL = 12;
     private static final float DEFAULT_SUCCESS_RATE = 0.5f; // 50% for new tunnels
-    private static final int LAG_SEVERE_MAX = 2000;
-    private static final int LAG_SEVERE_AVG = 10;
-    private static final int MAX_LAG_RESCHEDULE = 10;
+    private static final int LAG_SEVERE_MAX = 2500;
+    private static final int LAG_SEVERE_AVG = 15;
+    private static final int MAX_LAG_RESCHEDULE = 200;
 
     /**
      * Maximum number of TestJob instances that should be queued before deferring new ones.
      * Prevents job queue saturation from too many waiting tunnel tests.
      */
-    private static final int MAX_QUEUED_TESTS = SystemVersion.isSlow() ? 16 : 32;
+    private static final int MAX_QUEUED_TESTS = SystemVersion.isSlow() ? 20 : 40;
     public static volatile int maxQueuedTests = MAX_QUEUED_TESTS;
 
     /**
@@ -80,7 +80,7 @@ public class TestJob extends JobImpl {
      * Above this threshold, no new tests are scheduled until count decreases.
      * Prevents ever-increasing backlogs that could cause job lag.
      */
-    public static final int HARD_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 64 : 128;
+    public static final int HARD_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 80 : 160;
 
     /**
      * Static counter tracking the number of currently active tunnel tests.
@@ -192,18 +192,22 @@ public class TestJob extends JobImpl {
         }
 
         // Check if job queue is overloaded - skip scheduling if queue is backing up
-        int readyCount = ctx.jobQueue().getReadyCount();
+int readyCount = ctx.jobQueue().getReadyCount();
         long maxLag = ctx.jobQueue().getMaxLag();
         // Limit TestJobs to max 1/6 of available runners to leave resources for other jobs
         int activeRunners = ctx.jobQueue().getActiveRunnerCount();
         int maxTestJobs = Math.max(MIN_TEST_JOBS_PER_RUNNER, activeRunners / 6);
         int currentTestJobs = getTotalTestJobCount();
-        // If queue has ANY lag, don't add more test jobs - prevents cascade
-        if (readyCount > 0 || maxLag > MAX_LAG_FOR_SCHEDULE || currentTestJobs >= maxTestJobs) {
+        // Allow expedited tests to bypass some lag limits (they need to run to gather avg faster)
+        boolean isExpedited = cfg.needsExpeditedTest();
+        long expeditedLagLimit = isExpedited ? MAX_LAG_FOR_SCHEDULE * 2 : MAX_LAG_FOR_SCHEDULE;
+        int expeditedJobLimit = isExpedited ? maxTestJobs * 2 : maxTestJobs;
+        // If queue has ANY lag, don't add more test jobs - prevents cascade (but expedited can handle more)
+        if (readyCount > 0 || maxLag > expeditedLagLimit || currentTestJobs >= expeditedJobLimit) {
             Log log = ctx.logManager().getLog(TestJob.class);
             if (log.shouldInfo()) {
                 log.info("Job queue lagging or too many test jobs (" + readyCount + " ready jobs, maxLag=" + maxLag +
-                         "ms, testJobs=" + currentTestJobs + "/" + maxTestJobs + ") -> Not scheduling test for " + cfg);
+                         "ms, testJobs=" + currentTestJobs + "/" + maxTestJobs + ", expedited=" + isExpedited + ") -> Not scheduling test for " + cfg);
             }
             return false;
         }
@@ -441,7 +445,7 @@ public class TestJob extends JobImpl {
                     _log.info("Skipping exploratory tunnel test due to severe job lag (Max: " + maxLag + " / Avg: " + avgLag + "ms) -> " + _cfg);
                 }
                 ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
-                if (!scheduleRetest(false)) {
+                if (!scheduleRetest(_cfg.needsExpeditedTest())) {
                     cleanupTunnelTracking();
                     decrementTotalJobs();
                 }
@@ -503,7 +507,7 @@ public class TestJob extends JobImpl {
                     _log.info("TestJob queue saturated -> Deprioritizing Exploratory tunnel test (" + totalCount + " >= " + maxQueuedTests + ")");
                 }
                 ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
-                if (!scheduleRetest(false)) {
+                if (!scheduleRetest(_cfg.needsExpeditedTest())) {
                     cleanupTunnelTracking();
                     decrementTotalJobs();
                 }
@@ -546,7 +550,7 @@ public class TestJob extends JobImpl {
                               " (Queued: " + totalCount + ")");
                 }
                 ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
-                if (!scheduleRetest(false)) {
+                if (!scheduleRetest(_cfg.needsExpeditedTest())) {
                     cleanupTunnelTracking();
                     decrementTotalJobs();
                 }
@@ -609,7 +613,7 @@ public class TestJob extends JobImpl {
             CONCURRENT_TESTS.decrementAndGet();
             cleanupTunnelTracking();
             // Try to reschedule - if it fails, clean up total counter
-            if (!scheduleRetest(false)) {
+            if (!scheduleRetest(_cfg.needsExpeditedTest())) {
                 decrementTotalJobs();
             }
             return;
@@ -715,6 +719,7 @@ public class TestJob extends JobImpl {
         noteSuccess(ms, _replyTunnel);
 
         _cfg.testJobSuccessful(ms);
+        _cfg.clearExpeditedTest();
 
         if (_log.shouldDebug()) {
             _log.debug("Tunnel Test [#" + _id + "] succeeded in " + ms + "ms → " + _cfg + " (Success rate: " +
@@ -723,7 +728,9 @@ public class TestJob extends JobImpl {
 
         // Clean up session tags
         clearTestTags();
-        if (!scheduleRetest(false)) {
+        // Use expedited scheduling if tunnel needs faster retesting
+        boolean needsExpedited = _cfg.needsExpeditedTest();
+        if (!scheduleRetest(needsExpedited)) {
             cleanupTunnelTracking();
             decrementTotalJobs(); // Clean up if couldn't reschedule
         }
@@ -819,6 +826,7 @@ public class TestJob extends JobImpl {
         // Only fail the tunnel under test — do NOT blame _otherTunnel
         // Increment the tunnel's global failure count and check if we should continue
         boolean keepGoing = _cfg.tunnelFailed(); // This increments the counter and returns true if < MAX_CONSECUTIVE_TEST_FAILURES
+        _cfg.clearExpeditedTest();
 
         // Update test status for UI display
         _cfg.setTestFailed();
@@ -828,7 +836,7 @@ public class TestJob extends JobImpl {
         }
 
         if (keepGoing) {
-            if (!scheduleRetest(false)) {
+            if (!scheduleRetest(_cfg.needsExpeditedTest())) {
                 cleanupTunnelTracking();
                 decrementTotalJobs(); // Clean up if couldn't reschedule
             }
@@ -886,16 +894,19 @@ public class TestJob extends JobImpl {
         final RouterContext ctx = getContext();
 
         // Check if job queue is overloaded - skip rescheduling if queue is backing up
-        // Don't reschedule ANY test jobs when there's ANY lag to prevent cascade
+        // Allow expedited tests to bypass some lag limits
         int readyCount = ctx.jobQueue().getReadyCount();
         long maxLag = ctx.jobQueue().getMaxLag();
         int activeRunners = ctx.jobQueue().getActiveRunnerCount();
         int maxTestJobs = Math.max(MIN_TEST_JOBS_PER_RUNNER, activeRunners / 6);
         int totalCount = getTotalTestJobCount();
-        if (readyCount > MAX_LAG_RESCHEDULE || maxLag > MAX_LAG_RESCHEDULE || totalCount >= maxTestJobs) {
+        boolean isExpedited = _cfg.needsExpeditedTest();
+        long rescheduleLagLimit = isExpedited ? MAX_LAG_RESCHEDULE * 3 : MAX_LAG_RESCHEDULE;
+        int rescheduleJobLimit = isExpedited ? maxTestJobs * 2 : maxTestJobs;
+        if (readyCount > MAX_LAG_RESCHEDULE || maxLag > rescheduleLagLimit || totalCount >= rescheduleJobLimit) {
             if (_log.shouldInfo()) {
                 _log.info("Job queue lagging or too many test jobs (" + readyCount + " ready jobs, maxLag=" + maxLag +
-                         "ms, testJobs=" + totalCount + "/" + maxTestJobs + ") -> Skipping retest for " + _cfg);
+                         "ms, testJobs=" + totalCount + "/" + maxTestJobs + ", expedited=" + isExpedited + ") -> Skipping retest for " + _cfg);
             }
             return false;
         }

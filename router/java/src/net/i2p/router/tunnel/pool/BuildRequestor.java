@@ -523,9 +523,9 @@ abstract class BuildRequestor {
 
             if (!BuildMessageGenerator.isBlank(cfg, hopIndex)) {
                 Hash peer = cfg.getPeer(hopIndex);
-                RouterInfo peerInfo = ctx.netDb().lookupRouterInfoLocally(peer);
+                RouterInfo peerInfo = ctx.netDb().lookupRouterInfoWithTimeout(peer, 8000);
                 if (peerInfo == null) {
-                    log.warn("Peer not found locally for hop " + hopIndex + ": " + peer + " in " + cfg);
+                    log.warn("Peer not found for hop " + hopIndex + ": " + peer + " in " + cfg);
                     return null;
                 }
                 key = peerInfo.getIdentity().getPublicKey();

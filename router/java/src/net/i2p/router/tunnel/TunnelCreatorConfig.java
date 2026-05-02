@@ -61,7 +61,12 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     // Make configurable? - but can't easily get to pool options from here
     private static final int MAX_CONSECUTIVE_TEST_FAILURES = 3;
+    private static final int LATENCY_SAMPLE_SIZE = 3;
     private volatile int _lastLatency = -1;
+    private final int[] _latencyHistory = new int[LATENCY_SAMPLE_SIZE];
+    private int _latencyIdx = 0;
+    private int _latencyCount = 0;
+    private volatile boolean _needsExpeditedTest = false;
 
     /**
      * For exploratory only (null destination)
@@ -301,7 +306,9 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *  @param ms latency in milliseconds
      *  @since 0.9.68+
      */
-    public void setLastLatency(int ms) {_lastLatency = ms;}
+    public void setLastLatency(int ms) {
+        addLatencySample(ms);
+    }
 
     /**
      * @return latency in milliseconds, or -1 if not available
@@ -310,6 +317,56 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public int getLastLatency() {
         return _lastLatency;
     }
+
+    /**
+     * Add a latency sample from a test result.
+     * @param ms latency in milliseconds
+     * @since 0.9.69+
+     */
+    public void addLatencySample(int ms) {
+        _latencyHistory[_latencyIdx] = ms;
+        _latencyIdx = (_latencyIdx + 1) % LATENCY_SAMPLE_SIZE;
+        if (_latencyCount < LATENCY_SAMPLE_SIZE) _latencyCount++;
+        _lastLatency = ms;
+    }
+
+    /**
+     * Get average latency from last 3 tests.
+     * @return average latency in ms, or -1 if no tests yet
+     * @since 0.9.69+
+     */
+    public int getAverageLatency() {
+        if (_latencyCount == 0) return -1;
+        int sum = 0;
+        for (int i = 0; i < _latencyCount; i++) sum += _latencyHistory[i];
+        return sum / _latencyCount;
+    }
+
+    /**
+     * @return true if we have at least 3 latency samples
+     * @since 0.9.69+
+     */
+    public boolean hasEnoughLatencyTests() {
+        return _latencyCount >= LATENCY_SAMPLE_SIZE;
+    }
+
+    /**
+     * @return true if tunnel needs an expedited test due to slow detection
+     * @since 0.9.69+
+     */
+    public boolean needsExpeditedTest() { return _needsExpeditedTest; }
+
+    /**
+     * Clear the expedited test flag after running the expedited test.
+     * @since 0.9.69+
+     */
+    public void clearExpeditedTest() { _needsExpeditedTest = false; }
+
+    /**
+     * Set expedited test flag - called when tunnel appears slow.
+     * @since 0.9.69+
+     */
+    public void requestExpeditedTest() { _needsExpeditedTest = true; }
 
     /**
      * Get the current test status of this tunnel for UI display.
