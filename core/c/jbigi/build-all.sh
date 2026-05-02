@@ -54,7 +54,7 @@ TRANSLATE_NAME_aarch64="armv8"
 # As of GMP 6.0.0, libgmp 3,
 # Note: zen4 and zen5 are not supported by GMP 6.3.0 (requires GMP 6.4+ or manual patching)
 #       Zen5 has known power/heat issues with GMP's tight MULX loops per gmplib.org
-X86_64_PLATFORMS="zen3 zen2 zen silvermont goldmont skylake coreisbr coreihwl coreibwl bobcat jaguar bulldozer piledriver steamroller excavator atom athlon64 core2 corei nano pentium4 k10 x86_64"
+X86_64_PLATFORMS="zen3 zen2 zen silvermont skylake coreisbr coreihwl coreibwl bobcat jaguar bulldozer piledriver steamroller excavator atom athlon64 corei nano pentium4 x86_64"
 TRANSLATE_NAME_x86_64="none" # Rename x86_64 to none_64, since that is what NativeBigInteger refers to it as
 
 # Note! these are 32bit _ONLY_ (after the 64 bit ones)

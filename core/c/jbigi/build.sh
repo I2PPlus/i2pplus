@@ -98,7 +98,7 @@ case "$ACTION" in
             BITS=${BITS:-64}
             UNAME="$(uname -m)"
             
-            X86_64_PLATFORMS="zen3 zen2 zen silvermont goldmont skylake coreisbr coreihwl coreibwl bobcat jaguar bulldozer piledriver steamroller excavator atom athlon64 core2 corei nano pentium4 k10 x86_64"
+            X86_64_PLATFORMS="zen3 zen2 zen silvermont skylake coreisbr coreihwl coreibwl bobcat jaguar bulldozer piledriver steamroller excavator atom athlon64 corei nano pentium4 x86_64"
             X86_PLATFORMS="pentium pentiummmx pentium2 pentium3 pentiumm k6 k62 k63 athlon geode viac3 viac32 i386"
             ARM_PLATFORMS="armv5 armv6 armv7a armcortex8 armcortex9 armcortex15"
             
