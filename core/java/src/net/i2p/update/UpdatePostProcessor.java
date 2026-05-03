@@ -46,5 +46,5 @@ public interface UpdatePostProcessor {
      *  @param file in the temp directory, as extracted from the validated su3 file
      *  @throws IOException on all errors, message will be displayed to the user
      */
-    public void updateDownloadedandVerified(UpdateType type, int fileType, String version, File file) throws IOException;
+    public void updateDownloadedAndVerified(UpdateType type, int fileType, String version, File file) throws IOException;
 }

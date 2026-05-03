@@ -1253,7 +1253,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                             Integer key = Integer.valueOf(updateType.toString().hashCode() ^ ftype);
                             UpdatePostProcessor upp = _registeredPostProcessors.get(key);
                             if (upp != null) {
-                                upp.updateDownloadedandVerified(updateType, ftype, actualVersion, temp);
+                                upp.updateDownloadedAndVerified(updateType, ftype, actualVersion, temp);
                                 _externalRestartPending = true;
                             } else {err = "Unsupported su3 file type " + ftype + " " + key;}
                         } else {err = "Unsupported su3 file type " + ftype;}
