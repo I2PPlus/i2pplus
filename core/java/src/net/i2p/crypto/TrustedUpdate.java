@@ -35,33 +35,8 @@ import java.util.StringTokenizer;
  */
 @SuppressWarnings("PMD.CloseResource")
 public class TrustedUpdate {
-
-    /**
-     * Default trusted key for update verification.
-     */
-    /*
-    -----BEGIN PGP SIGNED MESSAGE-----
-    Hash: SHA1
-
-    */
-    private static final String DEFAULT_TRUSTED_KEY = "W4kJbnv9KSVwbnapV7SaNW2kMIZKs~hwL0ro9pZXFo1xTwqz45nykCp1H" + "M7sAKYDZay5z1HvYYOl9CNVz00xF03KPU9RUCVxhDZ1YXhZIskPKjUPUs" + "CIpE~Z1C~N9KSEV6~2stDlBNH10VZ4T0X1TrcXwb3IBXliWo2y2GAx~Ow=";
-
-    /*
-    -----BEGIN PGP SIGNATURE-----
-    Version: GnuPG v1.2.4 (GNU/Linux)
-
-    iD8DBQFCZ38IWYfZ3rPnHH0RAgOHAJ4wNgmfO2AkL8IXiGnPtWrTlXcVogCfQ79z
-    jP69nPbh4KLGhF+SD0+0bW4=
-    =npPe
-    -----END PGP SIGNATURE-----
-    */
-    /*
-    -----BEGIN PGP SIGNED MESSAGE-----
-    Hash: SHA1
-
-    */
     /* zzz's key */
-    private static final String DEFAULT_TRUSTED_KEY2 = "lT54eq3SH0TWWwQ1wgH6XPelIno7wH7UfiZOpQg-ZuxdNhc4UjjrohKdK" + "Zqfswt1ANPnmOlMewLGBESl7kJB9c5sByz~IOlNyz5BMLRC~R~ZC9QI4W" + "XwUBYW8BhYO2mkvtdOrcy690lDkwzdf5xLxlCBpQlTaLYzQVjVWBcvbCA=";
+    private static final String DEFAULT_TRUSTED_KEY = "lT54eq3SH0TWWwQ1wgH6XPelIno7wH7UfiZOpQg-ZuxdNhc4UjjrohKdK" + "Zqfswt1ANPnmOlMewLGBESl7kJB9c5sByz~IOlNyz5BMLRC~R~ZC9QI4W" + "XwUBYW8BhYO2mkvtdOrcy690lDkwzdf5xLxlCBpQlTaLYzQVjVWBcvbCA=";
     /*
     -----BEGIN PGP SIGNATURE-----
     Version: GnuPG v1.4.6 (GNU/Linux)
@@ -74,54 +49,6 @@ public class TrustedUpdate {
     /*
     -----BEGIN PGP SIGNED MESSAGE-----
     Hash: SHA1
-
-    */
-    /* Complication's key */
-    private static final String DEFAULT_TRUSTED_KEY3 = "JHFA0yXUgKtmhajXFZH9Nk62OPRHbvvQHTi8EANV-D~3tjLjaz9p9cs6F" + "s8W3FSLfUwsQeFg7dfVSQQZga~1jMjboo94vIcm3j6XbW4mbcorVQ74uP" + "jd8EA1AQhJ6bBTxDAFk~6fVDOdhHT0Wo5CcUn7v8bAYY3x3UWiL8Remx0=";
-    /*
-    -----BEGIN PGP SIGNATURE-----
-    Version: GnuPG v1.4.6 (GNU/Linux)
-
-    iD8DBQFHphOV+h38a3n8zjMRAll+AJ9KA6WiDJcTN4qfrslSemUMr+FBrwCeM8pF
-    D8usM7Dxp5yrDrCYZ5AIijc=
-    =SrXI
-    -----END PGP SIGNATURE-----
-    */
-    /*
-    -----BEGIN PGP SIGNED MESSAGE-----
-    Hash: SHA1
-
-    */
-    /* HungryHobo's key */
-    private static final String DEFAULT_TRUSTED_KEY4 = "l3G6um9nB9EDLkT9cUusz5fX-GxXSWE5zaj2~V8lUL~XsGuFf8gKqzJLK" + "NkAw0CgDIDsLRHHuUaF7ZHo5Z7HG~9JJU9Il4G2jyNYtg5S8AzG0UxkEt" + "-JeBEqIxv5GDn6OFKr~wTI0UafJbegEWokl-8m-GPWf0vW-yPMjL7y5MI=";
-    /*
-    -----BEGIN PGP SIGNATURE-----
-    Version: GnuPG v1.4.10 (GNU/Linux)
-
-    iEYEARECAAYFAkysnNIACgkQHix7YXbc3BJVfwCeNGUHaWSqZUbWN9L8VyQLpwxI
-    JXQAnA28vDmMMMH/WPbC5ixmJeGGNUiR
-    =3oMC
-    -----END PGP SIGNATURE-----
-    */
-    /*
-    -----BEGIN PGP SIGNED MESSAGE-----
-    Hash: SHA1
-
-    */
-    /* KillYourTV's key */
-    private static final String DEFAULT_TRUSTED_KEY5 = "DAVvT6zMcRuzJi3V8DKKV6o0GjXoQsEwnJsFMaVG1Se-KPQjfP8PbgKJD" + "crFe0zNJfh3yPdsocA~A~s9U6pvimlCXH2pnJGlNNojtFCZC3DleROl5-" + "4EkYw~UKAg940o5yg1OCBVlRZBSrRAQIIjFGkxxPQc12dA~cfpryNk7Dc=";
-    /*
-    -----BEGIN PGP SIGNATURE-----
-    Version: GnuPG v1.4.11 (GNU/Linux)
-
-    iQEcBAEBAgAGBQJO7TSnAAoJEKvgwxnfCgoaJVIIAJbJNdwgqCHkmgPeBEWZbtaM
-    EkmIL4UC75wVD8yiYReKreX7tJCL7NaeJvnNMNItgy4qJpr+bY0TkJ/LcFoq9ugE
-    ABBRJD2XDPFjPWYQ0nTiFj3IpWdbxLZAAXXFttyFLDdw52aWUH7nd6TdxFHh1Ssi
-    pU0yyu77FP5iq3dSTPZUEpA8NB/T6ImbqKQqRltst+TdnbzEwwFB23cihA286cJX
-    rcoh8CyklYiT3wr46epmHEetseEffxktvn+iCbtRpkA0oLXdVQ0d8cNuB00YUEyB
-    riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
-    =8ix/
-    -----END PGP SIGNATURE-----
     */
 
     private static final int VERSION_BYTES = 16;
@@ -140,11 +67,7 @@ public class TrustedUpdate {
     private static final Map<String, String> DEFAULT_KEYS = new HashMap<String, String>(4);
 
     static {
-        // DEFAULT_KEYS.put(DEFAULT_TRUSTED_KEY, "jrandom@mail.i2p");
-        DEFAULT_KEYS.put(DEFAULT_TRUSTED_KEY2, "zzz@mail.i2p");
-        // DEFAULT_KEYS.put(DEFAULT_TRUSTED_KEY3, "complication@mail.i2p");
-        DEFAULT_KEYS.put(DEFAULT_TRUSTED_KEY4, "HungryHobo@mail.i2p");
-        DEFAULT_KEYS.put(DEFAULT_TRUSTED_KEY5, "killyourtv@mail.i2p");
+        DEFAULT_KEYS.put(DEFAULT_TRUSTED_KEY, "zzz@mail.i2p");
     }
 
     /**
