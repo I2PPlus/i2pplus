@@ -79,7 +79,7 @@ static int check_byte_array(JNIEnv *env, jbyteArray arr, const char *name) {
 }
 
 /* See README.md for full version history */
-#define JBIGI_VERSION 4
+#define JBIGI_VERSION 5
 
 /* Native method implementations */
 

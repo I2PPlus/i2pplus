@@ -78,7 +78,7 @@ extract_tar()
   if [ ! -z $PATCH_GMP ]; then
     cd ${GMP_DIR}
     for p in ../patches/*.diff; do
-      # NC7: Use proper quoting and avoid cat piping
+      # Use proper quoting and avoid cat piping
       [ -f "$p" ] || continue
       echo "Applying patch: $p"
       if ! patch -p1 --dry-run -s < "$p" 2>/dev/null; then

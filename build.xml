@@ -1009,6 +1009,7 @@
   </target>
 
   <target name="buildJbigi" description="Build all jbigi native libraries (Win64 + Linux64 + ARM64), copy to installer/lib/jbigi/">
+    <echo message="Building JBigI v5..."/>
     <parallel>
       <antcall target="buildJbigi-win64"/>
       <antcall target="buildJbigi-linux64"/>

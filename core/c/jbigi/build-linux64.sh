@@ -166,7 +166,7 @@ check_cpu_target() {
         return 0
     fi
 
-    # NC7: Use mktemp instead of predictable /tmp paths
+    # Use mktemp instead of predictable /tmp paths
     CPU_TEST=$(mktemp /tmp/cpu_test.XXXXXX.c)
     CPU_OUT=$(mktemp /tmp/cpu_test.XXXXXX.o)
     echo "int main(){return 0;}" > "$CPU_TEST"

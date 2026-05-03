@@ -4,28 +4,8 @@
 
 JBIGI is a native JNI library wrapping GNU Multiple Precision Arithmetic Library (GMP) to accelerate cryptographic operations (modPow, modPowCT, modInverse) in I2P.
 
-- **JBIGI Version**: 4 (reported by `nativeJbigiVersion()`)
+- **JBIGI Version**: 5 (reported by `nativeJbigiVersion()`)
 - **GMP Version**: 6.3.0
-
-## Version History
-
-| Version       | I2P Release   | Changes                                                                                                                                              |
-| ------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1             | 0.8.7         | Original with nativeModPow() and nativeDoubleValue()                                                                                                 |
-| 2             | 0.8.7         | Removed nativeDoubleValue()                                                                                                                          |
-| 3             | 0.9.26        | Added nativeJbigiVersion(), nativeGMPVersion(), nativeModInverse(), nativeModPowCT(), negative base support, ArithmeticException on bad args         |
-| 4             | 0.9.27        | Fixed GMP version functions for shared library builds                                                                                                |
-| **4+ (I2P+)** | —             | **NC4**: JNI null/empty array validation, **NC5**: GMP version parser (GMP 10+), convert_mp2j loop fix, removed dead code (nativeNeg), **NC8**: cached exception classes + thread-safe init, **NC10**: JNI_OnUnload cleanup, **NC12**: convert_j2mp return value for error handling |
-
-### I2P+ Changes (NC4/NC5/NC8/NC10/NC12)
-
-- **NC4**: Added `check_byte_array()` helper for null and empty array checks - prevents JVM crashes on invalid inputs
-- **NC5**: Fixed GMP version parser for multi-digit versions (GMP 10+). Original parser only checked single digit at positions 0/2/4 and failed on "10.2.0"
-- **convert_mp2j**: Fixed loop to start at i=1 (preserves sign byte padding), instead of i=0 (corrupts negative number output)
-- **NC8**: Exception class caching with thread-safe lazy initialization (`__sync_bool_compare_and_swap`) — avoids repeated FindClass() calls
-- **NC10**: Added `JNI_OnUnload()` to clean up global refs on JVM shutdown — prevents memory leaks
-- **NC12**: `convert_j2mp()` now returns int (1 success, 0 failure) with proper error propagation — callers check return value
-- Removed unused `nativeNeg()` function (was for testing only)
 
 ## Requirements
 
@@ -222,3 +202,11 @@ GMP 6.3.0 fails with GCC 15+ due to stricter C99 compliance (`void g()` no longe
 - Pre-built libraries are included in `installer/lib/jbigi/` — only rebuild for specific CPU optimizations.
 - The `none`/`none_64` builds are generic fallback options.
 - Ant `distclean` does not remove pre-built binaries (tracked in git).
+
+## Version History
+
+- **1** (0.8.7): Original with nativeModPow() and nativeDoubleValue()
+- **2** (0.8.7): Removed nativeDoubleValue()
+- **3** (0.9.26): Added nativeJbigiVersion(), nativeGMPVersion(), nativeModInverse(), nativeModPowCT(), negative base support, ArithmeticException on bad args
+- **4** (0.9.27): Fixed GMP version functions for shared library builds
+- **5** (0.9.69): JNI null/empty array validation, GMP version parser (GMP 10+), convert_mp2j loop fix, removed dead code (nativeNeg), cached exception classes + thread-safe init, JNI_OnUnload cleanup, convert_j2mp return value for error handling
