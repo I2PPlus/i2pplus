@@ -46,7 +46,7 @@ class IPThrottler {
     private static Integer hashCode(byte ip[]) {
         int rv = 0;
         for (int i = 0; i < 8; i++) {
-            rv ^= ip[i] << (i * 4);
+            rv ^= (ip[i] & 0xff) << (i * 4);
         }
         return Integer.valueOf(rv);
     }
