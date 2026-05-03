@@ -2,7 +2,7 @@
     String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
     request.setAttribute("cspNonce", cspNonce);
     if (request.getCharacterEncoding() == null) { request.setCharacterEncoding("UTF-8"); }
-    response.setHeader("Content-Security-Policy", "default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'nonce-" + cspNonce + "'; object-src 'none'; media-src 'none'");
+    response.setHeader("Content-Security-Policy", "default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'nonce-" + cspNonce + "'; object-src 'none'; media-src 'none'; form-action 'self'");
     response.setHeader("X-XSS-Protection", "1; mode=block");
     response.setHeader("X-Content-Type-Options", "nosniff");
     response.setHeader("Referrer-Policy", "no-referrer");

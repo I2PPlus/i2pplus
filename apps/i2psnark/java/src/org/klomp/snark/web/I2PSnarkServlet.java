@@ -647,7 +647,7 @@ public class I2PSnarkServlet extends BasicServlet {
                          "img-src 'self' blob: data:; " +
                          "script-src-elem 'self' '" + nonceString + "'; " +
                          "script-src 'self' '" + nonceString + "'; " +
-                         "object-src 'none'; media-src '" + (allowMedia ? "self" : "none") + "'";
+                         "object-src 'none'; media-src '" + (allowMedia ? "self" : "none") + "'; form-action 'self'";
             resp.setHeader("Content-Security-Policy", csp);
             resp.setHeader("Permissions-Policy", "fullscreen=(self)");
             resp.setHeader("Referrer-Policy", "same-origin");

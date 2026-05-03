@@ -33,7 +33,11 @@ public class CSSHelper extends HelperBase {
     /** @since 0.9.59+ */
     public static final String PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
     public static final boolean DEFAULT_ENABLE_SORA_FONT = false;
-    private static final String _consoleNonce = Long.toString(RandomSource.getInstance().nextLong());
+    /** Rotating nonce for CSRF protection, rotates every 5 minutes */
+    private static String _currentNonce;
+    private static final String[] _recentNonces = new String[2];
+    private static long _lastRotation;
+    private static final long NONCE_ROTATION_MS = 5 * 60 * 1000; // 5 minutes
     /** @since 0.9.67+ */
     public static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
     public static final boolean DEFAULT_UNIFIED_SIDEBAR = false;
@@ -42,10 +46,36 @@ public class CSSHelper extends HelperBase {
     public static final boolean DEFAULT_STICKY_SIDEBAR = true;
 
     /**
-     *  formerly stored in System.getProperty("router.consoleNonce")
+     *  Get current CSRF nonce, rotating every 5 minutes.
+     *  Keeps 2 previous nonces for backward compatibility (multi-tab, slow clients).
      *  @since 0.9.4
      */
-    public static String getNonce() {return _consoleNonce;}
+    public static String getNonce() {
+        if (_currentNonce == null) {
+            _currentNonce = Long.toString(RandomSource.getInstance().nextLong());
+            _lastRotation = System.currentTimeMillis();
+        } else if (System.currentTimeMillis() - _lastRotation > NONCE_ROTATION_MS) {
+            // Rotate: shift current to recent[0], recent[0] to recent[1], generate new
+            _recentNonces[1] = _recentNonces[0];
+            _recentNonces[0] = _currentNonce;
+            _currentNonce = Long.toString(RandomSource.getInstance().nextLong());
+            _lastRotation = System.currentTimeMillis();
+        }
+        return _currentNonce;
+    }
+
+    /**
+     *  Get recent nonce for backward compatibility.
+     *  @param index 0 for most recent, 1 for second most recent
+     *  @return nonce or null if not available
+     *  @since 2.x.x
+     */
+    public static String getRecentNonce(int index) {
+        if (index >= 0 && index < 2) {
+            return _recentNonces[index];
+        }
+        return null;
+    }
 
     public String getTheme(String userAgent) {
         String url = BASE_THEME_PATH;

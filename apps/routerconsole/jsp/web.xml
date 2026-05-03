@@ -60,6 +60,7 @@
     <session-timeout>30</session-timeout>
     <cookie-config>
       <http-only>true</http-only>
+      <same-site>Lax</same-site>
     </cookie-config>
   </session-config>
 
