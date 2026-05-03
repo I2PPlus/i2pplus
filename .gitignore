@@ -236,6 +236,7 @@ installer/lib/wrapper/win64/console.ico
 installer/build/
 installer/bin/
 installer/java/build/
+installer/lib/izpack/patches.jar
 
 # Session bans
 router/sessionbans/
