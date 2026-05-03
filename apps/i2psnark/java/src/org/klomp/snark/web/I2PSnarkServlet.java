@@ -106,7 +106,11 @@ public class I2PSnarkServlet extends BasicServlet {
     private String _contextPath; /** generally "/i2psnark" */
     private String _contextName; /** generally "i2psnark" */
     private transient SnarkManager _manager;
-    private long _nonce;
+    /** Rotating CSRF nonce, rotates every 5 minutes */
+    private long _currentNonce;
+    private final long[] _recentNonces = new long[2];
+    private long _lastRotation;
+    private static final long NONCE_ROTATION_MS = 5 * 60 * 1000; // 5 minutes
     private String _themePath;
     private String _resourcePath;
     private String _imgPath;
@@ -123,13 +127,46 @@ public class I2PSnarkServlet extends BasicServlet {
     String cspNonce = Integer.toHexString(_context.random().nextInt());
     public I2PSnarkServlet() {super();}
 
+    /**
+     *  Get current CSRF nonce, rotating every 5 minutes.
+     *  @since 2.x.x
+     */
+    private synchronized long getNonce() {
+        if (_currentNonce == 0) {
+            _currentNonce = _context.random().nextLong();
+            _lastRotation = System.currentTimeMillis();
+        } else if (System.currentTimeMillis() - _lastRotation > NONCE_ROTATION_MS) {
+            // Rotate: shift current to recent[0], recent[0] to recent[1], generate new
+            _recentNonces[1] = _recentNonces[0];
+            _recentNonces[0] = _currentNonce;
+            _currentNonce = _context.random().nextLong();
+            _lastRotation = System.currentTimeMillis();
+        }
+        return _currentNonce;
+    }
+
+    /**
+     *  Validate nonce against current and recent nonces (backward compatibility).
+     *  @param nonce the nonce to validate
+     *  @return true if valid
+     *  @since 2.x.x
+     */
+    private synchronized boolean isValidNonce(String nonce) {
+        if (nonce == null) {return false;}
+        long current = getNonce();
+        if (String.valueOf(current).equals(nonce)) {return true;}
+        if (_recentNonces[0] != 0 && String.valueOf(_recentNonces[0]).equals(nonce)) {return true;}
+        if (_recentNonces[1] != 0 && String.valueOf(_recentNonces[1]).equals(nonce)) {return true;}
+        return false;
+    }
+
     @Override
     public void init(ServletConfig cfg) throws ServletException {
         super.init(cfg);
         String cpath = getServletContext().getContextPath();
         _contextPath = cpath.equals("") || cpath.isEmpty() ? "/" : cpath;
         _contextName = cpath.equals("") || cpath.isEmpty() ? DEFAULT_NAME : cpath.substring(1).replace("/", "_");
-        _nonce = _context.random().nextLong();
+        getNonce(); // Initialize the nonce
         // Limited protection against overwriting other config files or directories
         // in case you named your war "router.war"
         // We don't handle bad characters in the context path. Don't do that.
@@ -335,7 +372,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String nonce = req.getParameter("nonce");
         if (nonce != null) {
             if (( "POST".equals(method) || "Clear".equals(req.getParameter("action"))) &&
-                nonce.equals(String.valueOf(_nonce))) {
+                isValidNonce(nonce)) {
                 processRequest(req);
             } else {
                 _manager.addMessage("Please retry form submission (bad nonce)");
@@ -711,7 +748,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String x = _t("Expand");
             String s = _t("Shrink");
             buf.append("action=Clear&amp;id=").append(lastID)
-               .append("&amp;nonce=").append(_nonce).append("\">");
+               .append("&amp;nonce=").append(getNonce()).append("\">");
             appendIcon(buf, "delete", tx, tx, true, true);
             buf.append("</a>\n<a class=script id=expand hidden>");
             appendIcon(buf, "expand", x, x, true, true);
@@ -1547,7 +1584,7 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     private void writeHiddenInputs(StringBuilder buf, HttpServletRequest req, String action) {
         Map<String, String> params = new HashMap<>();
-        params.put("nonce", String.valueOf(_nonce));
+        params.put("nonce", String.valueOf(getNonce()));
         params.put("p", req.getParameter("p"));
         params.put("st", req.getParameter("st"));
         params.put("sort", req.getParameter("sort"));
@@ -4413,7 +4450,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String[] val = postParams.get("nonce");
             if (val != null) {
                 String nonce = val[0];
-                if (String.valueOf(_nonce).equals(nonce)) {
+                if (isValidNonce(nonce)) {
                     if (postParams.get("savepri") != null) {savePriorities(snark, postParams);}
                     else if (postParams.get("addComment") != null) {saveComments(snark, postParams);}
                     else if (postParams.get("deleteComments") != null) {deleteComments(snark, postParams);}
@@ -4505,7 +4542,7 @@ public class I2PSnarkServlet extends BasicServlet {
         final boolean includeForm = showStopStart || showPriority || er || ec;
         if (includeForm) {
             buf.append("<form action=\"").append(base).append("\" method=POST>\n")
-               .append("<input type=hidden name=nonce value=\"").append(_nonce).append("\">\n");
+               .append("<input type=hidden name=nonce value=\"").append(getNonce()).append("\">\n");
             if (sortParam != null) {
                 buf.append("<input type=hidden name=sort value=\"").append(DataHelper.stripHTML(sortParam)).append("\">\n");
             }
