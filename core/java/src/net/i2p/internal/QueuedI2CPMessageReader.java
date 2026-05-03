@@ -56,17 +56,17 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
                             _listener.messageReceived(QueuedI2CPMessageReader.this, msg);
                         }
                     } catch (InterruptedException ie) {
-                        // hint that we probably should check the continue running flag
+                        Thread.currentThread().interrupt();
+                        break;
                     }
                 }
-                // ??? unused
                 if (_stayAlive && !_doRun) {
-                    // pause .5 secs when we're paused
+                    // pause with interruptible sleep when we're paused
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException ie) {
-                        _listener.disconnected(QueuedI2CPMessageReader.this);
-                        cancelRunner();
+                        Thread.currentThread().interrupt();
+                        break;
                     }
                 }
             }
