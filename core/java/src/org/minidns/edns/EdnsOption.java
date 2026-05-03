@@ -78,12 +78,16 @@ public abstract class EdnsOption {
      */
     public abstract OptionCode getOptionCode();
 
-    private String toStringCache;
+    private volatile String toStringCache;
 
     @Override
     public final String toString() {
         if (toStringCache == null) {
-            toStringCache = toStringInternal().toString();
+            synchronized (this) {
+                if (toStringCache == null) {
+                    toStringCache = toStringInternal().toString();
+                }
+            }
         }
         return toStringCache;
     }
