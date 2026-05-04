@@ -15,6 +15,41 @@
 <jsp:setProperty name="subs" property="*"/>
 <%
     subs.storeMethod(request.getMethod());
+    // CSRF: Validate Origin header for POST requests
+    if ("POST".equals(request.getMethod())) {
+        String origin = request.getHeader("Origin");
+        String host = request.getHeader("Host");
+        boolean allowed = true;
+        if (origin != null && !origin.isEmpty() && !"null".equalsIgnoreCase(origin)) {
+            allowed = false;
+            try {
+                String originHost; int originPort;
+                if (origin.startsWith("http://")) {
+                    String rest = origin.substring(7);
+                    int colon = rest.indexOf(':');
+                    originHost = colon > 0 ? rest.substring(0, colon) : rest;
+                    originPort = colon > 0 ? Integer.parseInt(rest.substring(colon + 1)) : 80;
+                } else if (origin.startsWith("https://")) {
+                    String rest = origin.substring(8);
+                    int colon = rest.indexOf(':');
+                    originHost = colon > 0 ? rest.substring(0, colon) : rest;
+                    originPort = colon > 0 ? Integer.parseInt(rest.substring(colon + 1)) : 443;
+                } else {
+                    allowed = true; originHost = null; originPort = 0;
+                }
+                if (allowed && host != null) {
+                    int colon = host.indexOf(':');
+                    String reqHost = colon > 0 ? host.substring(0, colon) : host;
+                    int reqPort = colon > 0 ? Integer.parseInt(host.substring(colon + 1)) : (request.isSecure() ? 443 : 80);
+                    allowed = originHost != null && originHost.equals(reqHost) && originPort == reqPort;
+                }
+            } catch (Exception e) { allowed = true; }
+        }
+        if (!allowed) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid Origin header for POST request");
+            return;
+        }
+    }
     boolean overrideCssActive = base.isOverrideCssActive();
     String theme = base.getTheme().replace("/themes/susidns/", "").replace("/", "");
     theme = "\"" + theme + "\"";
