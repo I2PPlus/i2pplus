@@ -1014,6 +1014,16 @@ public class TunnelPool {
      * @param force if true, bypass throttle (for critical refresh when below minimum or near expiry)
      */
     void refreshLeaseSet(boolean force) {
+        // Skip LeaseSet refresh for ping tunnels - they're short-lived and don't publish LeaseSets
+        String nickname = _settings.getDestinationNickname();
+        if (nickname != null && (nickname.equals("I2Ping") ||
+            (nickname.startsWith("Ping") && nickname.contains("[")))) {
+            if (_log.shouldDebug()) {
+                _log.debug(toString() + "\n* Skipping LeaseSet refresh - ping tunnel");
+            }
+            return;
+        }
+
         if (_settings.isInbound() && !_settings.isExploratory()) {
             long now = _context.clock().now();
 
