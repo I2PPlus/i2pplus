@@ -325,3 +325,6 @@ wrapper.ntservice.interactive=false
 
 #  Set to true to debug browser opening in another account
 #  wrapper.ntservice.interactive=true
+
+# Security: disable test methods (default TRUE in 3.6.5+)
+wrapper.disable_tests=TRUE

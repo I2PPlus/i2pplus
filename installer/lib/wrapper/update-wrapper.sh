@@ -98,32 +98,50 @@ cp "${LIB}/wrapper.jar" "${WRAPPER_DIR}/win-all/wrapper.jar"
 echo "Updating platform binaries..."
 
 declare -A MAPPINGS=(
-    ["libwrapper-linux-x86-32.so"]="linux"
-    ["libwrapper-linux-x86-64.so"]="linux64"
-    ["libwrapper-linux-arm-64.so"]="linux64-armv8"
-    ["libwrapper-linux-armel-32.so"]="linux-armv5"
-    ["libwrapper-linux-armhf-32.so"]="linux-armv7"
-    ["libwrapper-freebsd-x86-32.so"]="freebsd"
-    ["libwrapper-freebsd-x86-64.so"]="freebsd64"
-    ["libwrapper-freebsd-arm-64.so"]="freebsd-arm64"
+    ["libwrapper-linux-x86-32.so"]="linux:wrapper-linux-x86-32"
+    ["libwrapper-linux-x86-64.so"]="linux64:wrapper-linux-x86-64"
+    ["libwrapper-linux-arm-64.so"]="linux64-armv8:wrapper-linux-arm-64"
+    ["libwrapper-linux-armel-32.so"]="linux-armv5:wrapper-linux-armel-32"
+    ["libwrapper-linux-armhf-32.so"]="linux-armv7:wrapper-linux-armhf-32"
+    ["libwrapper-freebsd-x86-32.so"]="freebsd:wrapper-freebsd-x86-32"
+    ["libwrapper-freebsd-x86-64.so"]="freebsd64:wrapper-freebsd-x86-64"
+    ["libwrapper-freebsd-arm-64.so"]="freebsd-arm64:wrapper-freebsd-arm-64"
 )
 
 for lib in "${!MAPPINGS[@]}"; do
-    target="${MAPPINGS[$lib]}"
+    target_dir="${MAPPINGS[$lib]%:*}"
+    bin_name="${MAPPINGS[$lib]#*:}"
     if [ -f "${LIB}/${lib}" ]; then
-        cp "${LIB}/${lib}" "${WRAPPER_DIR}/${target}/libwrapper.so"
-        if [ -f "${BIN}/${lib%.so}" ]; then
-            cp "${BIN}/${lib%.so}" "${WRAPPER_DIR}/${target}/i2psvc"
-            chmod -x "${WRAPPER_DIR}/${target}/i2psvc"
-            strip "${WRAPPER_DIR}/${target}/i2psvc" 2>/dev/null || true
+        cp "${LIB}/${lib}" "${WRAPPER_DIR}/${target_dir}/libwrapper.so"
+        if [ -f "${BIN}/${bin_name}" ]; then
+            cp "${BIN}/${bin_name}" "${WRAPPER_DIR}/${target_dir}/i2psvc"
+            chmod -x "${WRAPPER_DIR}/${target_dir}/i2psvc"
+            strip "${WRAPPER_DIR}/${target_dir}/i2psvc" 2>/dev/null || true
         fi
-        chmod -x "${WRAPPER_DIR}/${target}/libwrapper.so"
-        strip "${WRAPPER_DIR}/${target}/libwrapper.so" 2>/dev/null || true
+        chmod -x "${WRAPPER_DIR}/${target_dir}/libwrapper.so"
+        strip "${WRAPPER_DIR}/${target_dir}/libwrapper.so" 2>/dev/null || true
     fi
 done
 
+echo "Updating macOS binaries..."
 cp "${LIB}/libwrapper-macosx-universal-64.jnilib" "${WRAPPER_DIR}/macosx/" 2>/dev/null || true
+cp "${LIB}/libwrapper-macosx-universal-32.jnilib" "${WRAPPER_DIR}/macosx/" 2>/dev/null || true
 cp "${LIB}/libwrapper-macosx-arm-64.dylib" "${WRAPPER_DIR}/macosx-arm64/" 2>/dev/null || true
+if [ -f "${BIN}/wrapper-macosx-universal-64" ]; then
+    cp "${BIN}/wrapper-macosx-universal-64" "${WRAPPER_DIR}/macosx/i2psvc-macosx-universal-64"
+    chmod +x "${WRAPPER_DIR}/macosx/i2psvc-macosx-universal-64"
+    strip "${WRAPPER_DIR}/macosx/i2psvc-macosx-universal-64" 2>/dev/null || true
+fi
+if [ -f "${BIN}/wrapper-macosx-universal-32" ]; then
+    cp "${BIN}/wrapper-macosx-universal-32" "${WRAPPER_DIR}/macosx/i2psvc-macosx-universal-32"
+    chmod +x "${WRAPPER_DIR}/macosx/i2psvc-macosx-universal-32"
+    strip "${WRAPPER_DIR}/macosx/i2psvc-macosx-universal-32" 2>/dev/null || true
+fi
+if [ -f "${BIN}/wrapper-macosx-arm-64" ]; then
+    cp "${BIN}/wrapper-macosx-arm-64" "${WRAPPER_DIR}/macosx-arm64/i2psvc-macosx-arm-64"
+    chmod +x "${WRAPPER_DIR}/macosx-arm64/i2psvc-macosx-arm-64"
+    strip "${WRAPPER_DIR}/macosx-arm64/i2psvc-macosx-arm-64" 2>/dev/null || true
+fi
 
 echo "Updating Windows 32-bit binaries..."
 if [ -f "${BIN}/wrapper-windows-x86-32.exe" ]; then
