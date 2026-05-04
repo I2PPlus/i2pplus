@@ -89,6 +89,7 @@ BIN="${DELTA_DIR}/wrapper-delta-pack-${VERSION}/bin"
 
 echo "Updating wrapper.jar..."
 cp "${LIB}/wrapper.jar" "${WRAPPER_DIR}/all/wrapper.jar"
+cp "${LIB}/wrapper.jar" "${WRAPPER_DIR}/win-all/wrapper.jar"
 
 echo "Updating platform binaries..."
 

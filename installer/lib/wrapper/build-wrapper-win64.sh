@@ -42,9 +42,12 @@ SRC_DIR="${WORK_DIR}/wrapper_${VERSION}_src"
 
 echo "Checking wrapper ${VERSION} win64..."
 
-if [ -f "${WRAPPER_DIR}/win64/I2Psvc.exe" ] && [ -f "${WRAPPER_DIR}/win64/wrapper.dll" ]; then
-    echo "Nothing to do, all win64 wrapper files are up to date."
-    exit 0
+if [ -f "${WRAPPER_DIR}/win64/I2Psvc.exe" ] && [ -f "${WRAPPER_DIR}/win-all/wrapper.jar" ]; then
+    local jar_ver=$(unzip -p "${WRAPPER_DIR}/win-all/wrapper.jar" META-INF/MANIFEST.MF 2>/dev/null | grep "Implementation-Version" | cut -d' ' -f2 | tr -d '\r')
+    if [ "${jar_ver}" = "${VERSION}" ]; then
+        echo "Nothing to do, all win64 wrapper files are up to date."
+        exit 0
+    fi
 fi
 
 for f in "${CACHE_DIR}"/wrapper_*_src; do
@@ -190,6 +193,11 @@ fi
 mkdir -p "${INSTALL_DIR}/${WIN_DIR}"
 cp "${SRC_DIR}/src/bin/wrapper.exe" "${INSTALL_DIR}/${WIN_DIR}/I2Psvc.exe"
 ${HOST}-strip -s "${INSTALL_DIR}/${WIN_DIR}/I2Psvc.exe"
+
+echo "Syncing wrapper.jar to win-all..."
+if [ -f "${INSTALL_DIR}/all/wrapper.jar" ]; then
+    cp "${INSTALL_DIR}/all/wrapper.jar" "${INSTALL_DIR}/win-all/wrapper.jar"
+fi
 
 echo ""
 echo "=== Built ==="
