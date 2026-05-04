@@ -98,6 +98,7 @@ sed -i 's/#include <errno.h>/#include <errno.h>\ntypedef int socklen_t;/' wrappe
 sed -i 's/const char\* inet_ntop(/const char* wrapper_inet_ntop(/g' wrapper.c
 sed -i 's/const char\* inet_pton(/const char* wrapper_inet_pton(/g' wrapper.c
 sed -i 's/Iphlpapi\.h/iphlpapi.h/g' wrapperjni_win.c
+sed -i '1s/^/#include <ws2tcpip.h>\n/' wrapper.c wrapper_win.c
 [ ! -f wrapperinfo.c ] && [ -f wrapperinfo.c.in ] && cp wrapperinfo.c.in wrapperinfo.c
 
 python3 - << 'PYEND'
