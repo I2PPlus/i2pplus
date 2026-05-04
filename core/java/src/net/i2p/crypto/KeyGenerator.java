@@ -94,20 +94,52 @@ public final class KeyGenerator {
         return key;
     }
 
-    private static final int PBE_ROUNDS = 1000;
+    /** New rounds (1M) - OWASP compliant */
+    private static final int PBE_ROUNDS = 1000000;
+    /** Legacy rounds (1K) - for migration */
+    private static final int PBE_ROUNDS_LEGACY = 1000;
 
     /**
      *  PBE the passphrase with the salt.
      *  Warning - SLOW
+     *  @since 0.7.1
      */
     public SessionKey generateSessionKey(byte salt[], byte passphrase[]) {
+        return generateSessionKey(salt, passphrase, PBE_ROUNDS);
+    }
+
+    /**
+     *  PBE the passphrase with the salt using specified rounds.
+     *  Warning - SLOW
+     *
+     *  @param salt 16 bytes
+     *  @param passphrase the password
+     *  @param rounds iteration count (1000 for legacy, 1000000 for current)
+     *  @return derived key
+     *  @since 2.x.x
+     */
+    public SessionKey generateSessionKey(byte salt[], byte passphrase[], int rounds) {
         byte salted[] = new byte[16 + passphrase.length];
         System.arraycopy(salt, 0, salted, 0, Math.min(salt.length, 16));
         System.arraycopy(passphrase, 0, salted, 16, passphrase.length);
         byte h[] = _context.sha().calculateHash(salted).getData();
-        for (int i = 1; i < PBE_ROUNDS; i++) _context.sha().calculateHash(h, 0, Hash.HASH_LENGTH, h, 0);
+        for (int i = 1; i < rounds; i++) _context.sha().calculateHash(h, 0, Hash.HASH_LENGTH, h, 0);
         return new SessionKey(h);
     }
+
+    /**
+     *  Get current rounds for new encryptions.
+     *  @return 1000000
+     *  @since 2.x.x
+     */
+    public int getPBERT() { return PBE_ROUNDS; }
+
+    /**
+     *  Get legacy rounds for migration.
+     *  @return 1000
+     *  @since 2.x.x
+     */
+    public int getPBERTLegacy() { return PBE_ROUNDS_LEGACY; }
 
     /** standard exponent size */
     private static final int PUBKEY_EXPONENT_SIZE_FULL = 2048;
