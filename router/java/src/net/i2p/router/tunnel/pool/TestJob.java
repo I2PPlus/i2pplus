@@ -910,6 +910,23 @@ int readyCount = ctx.jobQueue().getReadyCount();
     private boolean scheduleRetest(boolean asap) {
         if (_pool == null || !_pool.isAlive()) return false;
 
+        // Skip retest if tunnel doesn't have valid IDs anymore (may have been rebuilt/replaced)
+        try {
+            long recvId = _cfg.getReceiveTunnelId(0).getTunnelId();
+            long sendId = _cfg.getSendTunnelId(0).getTunnelId();
+            if (recvId == 0 || sendId == 0) {
+                if (_log.shouldDebug()) {
+                    _log.debug("Skipping retest - tunnel IDs no longer valid: recv=" + recvId + ", send=" + sendId);
+                }
+                return false;
+            }
+        } catch (Exception e) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping retest - tunnel no longer accessible: " + _cfg, e);
+            }
+            return false;
+        }
+
         final RouterContext ctx = getContext();
 
         // Check if job queue is overloaded - skip rescheduling if queue is backing up
