@@ -167,6 +167,25 @@ public class TestJob extends JobImpl {
      * @return true if the job should be created and scheduled, false otherwise
      */
     public static boolean shouldSchedule(RouterContext ctx, PooledTunnelCreatorConfig cfg) {
+        // Skip testing if tunnel doesn't have valid IDs yet (not fully built)
+        try {
+            long recvId = cfg.getReceiveTunnelId(0).getTunnelId();
+            long sendId = cfg.getSendTunnelId(0).getTunnelId();
+            if (recvId == 0 || sendId == 0) {
+                Log log = ctx.logManager().getLog(TestJob.class);
+                if (log.shouldDebug()) {
+                    log.debug("Skipping test - tunnel IDs not yet available: recv=" + recvId + ", send=" + sendId);
+                }
+                return false;
+            }
+        } catch (Exception e) {
+            Log log = ctx.logManager().getLog(TestJob.class);
+            if (log.shouldDebug()) {
+                log.debug("Skipping test - tunnel not ready: " + cfg, e);
+            }
+            return false;
+        }
+
         // Skip tunnel testing for ping tunnels - they're short-lived and don't need testing
         TunnelPool pool = cfg.getTunnelPool();
         if (pool != null) {
