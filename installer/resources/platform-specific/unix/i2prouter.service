@@ -14,8 +14,8 @@ ExecStart=@INSTALL_PATH@/i2prouter start
 ExecStop=@INSTALL_PATH@/i2prouter stop
 ExecReload=@INSTALL_PATH@/i2prouter restart
 PIDFile=@I2P_CONFIG_DIR@/i2p.pid
-TimeoutStartSec=180
-TimeoutStopSec=180
+TimeoutStartSec=300
+TimeoutStopSec=300
 #USER_LINE@
 
 [Install]

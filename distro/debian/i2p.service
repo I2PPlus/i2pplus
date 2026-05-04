@@ -26,6 +26,8 @@ EnvironmentFile=/etc/default/i2p
 RuntimeDirectory=i2p
 RuntimeDirectoryMode=750
 PIDFile=/run/i2p/i2p.pid
+TimeoutStartSec=300
+TimeoutStopSec=300
 Environment="I2P_ARGS=/etc/i2p/wrapper.config \
  wrapper.java.additional.1=-DloggerFilenameOverride=/var/log/i2p/log-router-@.txt \
  wrapper.java.additional.10=-Dwrapper.logfile=/var/log/i2p/wrapper.log \
