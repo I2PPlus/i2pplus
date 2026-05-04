@@ -99,6 +99,19 @@ public class HostCheckHandler extends GzipHandler
             return;
         }
 
+        // Validate Origin header for POST requests to prevent CSRF
+        if ("POST".equalsIgnoreCase(httpRequest.getMethod())) {
+            if (!allowOrigin(httpRequest)) {
+                Log log = _context.logManager().getLog(HostCheckHandler.class);
+                String origin = httpRequest.getHeader("Origin");
+                String reqHost = httpRequest.getHeader("Host");
+                log.logAlways(Log.WARN, "POST request denied due to invalid Origin header: " + origin + " (expected matching host: " + reqHost + ")");
+                httpResponse.sendError(403, "Invalid Origin header for POST request");
+                baseRequest.setHandled(true);
+                return;
+            }
+        }
+
         // redirect HTTP to HTTPS if available, AND:
         // either 1) PROP_REDIRECT is set to true;
         // or 2) PROP_REDIRECT is unset and the Upgrade-Insecure-Requests request header is set
@@ -168,6 +181,113 @@ public class HostCheckHandler extends GzipHandler
                 host = host.substring(0, colon);
         }
         return host;
+    }
+
+    /**
+     *  Validate Origin header for POST requests.
+     *  Allows requests with matching Origin (same-origin), or no Origin header.
+     *  Rejects cross-origin POST requests to prevent CSRF attacks.
+     *
+     *  @param request the HTTP request
+     *  @return true if allowed
+     */
+    private boolean allowOrigin(HttpServletRequest request) {
+        String origin = request.getHeader("Origin");
+        String host = request.getHeader("Host");
+
+        // Allow if no Origin header (same-origin form POST without Origin)
+        if (origin == null || origin.isEmpty()) {
+            return true;
+        }
+
+        // Allow if Origin: null (from file://, sandbox, or detached context)
+        if ("null".equalsIgnoreCase(origin)) {
+            return true;
+        }
+
+        // Extract origin host:port
+        String originHost;
+        int originPort;
+        try {
+            // Origin format: "https://host:port" or "http://host:port"
+            if (origin.startsWith("http://")) {
+                String rest = origin.substring(7);
+                int colon = rest.indexOf(':');
+                if (colon > 0) {
+                    originHost = rest.substring(0, colon);
+                    originPort = Integer.parseInt(rest.substring(colon + 1));
+                } else {
+                    originHost = rest;
+                    originPort = 80;
+                }
+            } else if (origin.startsWith("https://")) {
+                String rest = origin.substring(8);
+                int colon = rest.indexOf(':');
+                if (colon > 0) {
+                    originHost = rest.substring(0, colon);
+                    originPort = Integer.parseInt(rest.substring(colon + 1));
+                } else {
+                    originHost = rest;
+                    originPort = 443;
+                }
+            } else {
+                // Unknown format, allow for now
+                return true;
+            }
+        } catch (Exception e) {
+            // Parse error, allow
+            return true;
+        }
+
+        // Extract request host:port
+        String requestHost;
+        int requestPort;
+        try {
+            if (host == null) {
+                return true;
+            }
+            if (host.startsWith("[")) {
+                int brack = host.indexOf(']');
+                if (brack > 0) {
+                    requestHost = host.substring(1, brack);
+                    String rest = host.substring(brack + 1);
+                    if (rest.startsWith(":")) {
+                        requestPort = Integer.parseInt(rest.substring(1));
+                    } else {
+                        requestPort = request.isSecure() ? 443 : 80;
+                    }
+                } else {
+                    requestHost = host;
+                    requestPort = request.isSecure() ? 443 : 80;
+                }
+            } else {
+                int colon = host.indexOf(':');
+                if (colon > 0) {
+                    requestHost = host.substring(0, colon);
+                    requestPort = Integer.parseInt(host.substring(colon + 1));
+                } else {
+                    requestHost = host;
+                    requestPort = request.isSecure() ? 443 : 80;
+                }
+            }
+        } catch (Exception e) {
+            // Parse error, allow
+            return true;
+        }
+
+        // Allow if origin matches request host
+        if (originHost.equalsIgnoreCase(requestHost) && originPort == requestPort) {
+            return true;
+        }
+
+        // Also allow localhost variants
+        if ((originHost.equals("127.0.0.1") || originHost.equals("localhost") || originHost.equals("::1")) &&
+            (requestHost.equals("127.0.0.1") || requestHost.equals("localhost") || requestHost.equals("::1"))) {
+            return true;
+        }
+
+        // Reject cross-origin POST
+        return false;
     }
 
     /**
