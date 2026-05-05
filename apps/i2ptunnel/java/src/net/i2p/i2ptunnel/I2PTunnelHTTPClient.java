@@ -1387,6 +1387,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // Syndie can't handle a redirect of a POST
             if (ahelperPresent && !"POST".equals(method) && !"PUT".equals(method)) {
                 String uri = targetRequest;
+                // Validate redirect is internal (no CRLF injection / open redirect)
+                if (uri == null || uri.indexOf('\n') >= 0 || uri.indexOf('\r') >= 0 ||
+                    (uri.startsWith("http://") && !uri.contains(".i2p")) ||
+                    (uri.startsWith("https://") && !uri.contains(".i2p"))) {
+                    if (_log.shouldWarn()) {_log.warn("[HTTPClient] Blocked redirect to: " + uri);}
+                    return;
+                }
                 if (_log.shouldDebug()) {_log.debug("[HTTPClient] Auto redirecting to " + uri);}
                 try {
                     out.write(("HTTP/1.1 301 Address Helper Accepted\r\n" +

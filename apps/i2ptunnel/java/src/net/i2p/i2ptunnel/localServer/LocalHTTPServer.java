@@ -122,19 +122,30 @@ public abstract class LocalHTTPServer {
             return;
         }
         if ((method.equals("GET") || method.equals("HEAD")) &&
-            targetRequest.startsWith("/themes/") &&
-            !targetRequest.contains("..")) {
+            targetRequest.startsWith("/themes/")) {
             String filename = null;
             try {
                 filename = targetRequest.substring(8); // "/themes/".length
             } catch (IndexOutOfBoundsException ioobe) {
                  return;
             }
-            // theme hack
+            // Basic check first - reject obvious path traversal
+            if (filename.contains("..") || filename.contains("//") || filename.startsWith("/"))
+                return;
+            // theme hack before file creation
             if (filename.startsWith("console/default/"))
                 filename = filename.replaceFirst("default", context.getProperty("routerconsole.theme", "dark"));
             File themesDir = new File(context.getBaseDir(), "docs/themes");
             File file = new File(themesDir, filename);
+            // Validate canonical path to prevent traversal
+            try {
+                String canonical = file.getCanonicalPath();
+                String themesCanonical = themesDir.getCanonicalPath();
+                if (!canonical.startsWith(themesCanonical + File.separator))
+                    return;
+            } catch (IOException ioe) {
+                return;
+            }
             if (file.exists() && !file.isDirectory()) {
                 String type;
                 if (filename.endsWith(".css"))
