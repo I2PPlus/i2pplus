@@ -278,7 +278,7 @@ public class I2PControlController implements RouterApp {
         SslContextFactory sslFactory = new SslContextFactory(_ksp.getKeyStoreLocation());
         sslFactory.setKeyStorePassword(KeyStoreProvider.DEFAULT_KEYSTORE_PASSWORD);
         // the X.509 cert password (if not present, verifyKeyStore() returned false)
-        sslFactory.setKeyManagerPassword(KeyStoreProvider.DEFAULT_CERTIFICATE_PASSWORD);
+        sslFactory.setKeyManagerPassword(KeyStoreProvider.getCertificatePassword());
         sslFactory.addExcludeProtocols(I2PSSLSocketFactory.EXCLUDE_PROTOCOLS.toArray(
                                        new String[I2PSSLSocketFactory.EXCLUDE_PROTOCOLS.size()]));
         sslFactory.addExcludeCipherSuites(I2PSSLSocketFactory.EXCLUDE_CIPHERS.toArray(

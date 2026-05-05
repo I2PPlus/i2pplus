@@ -21,7 +21,25 @@ public class KeyStoreProvider {
     public final static String DEFAULT_CERTIFICATE_ALIAS = "I2PControl CA";
     public static final String DEFAULT_KEYSTORE_NAME = "i2pcontrol.ks";
     public static final String DEFAULT_KEYSTORE_PASSWORD = KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD;
-    public static final String DEFAULT_CERTIFICATE_PASSWORD = "nut'nfancy";
+    private static String DEFAULT_CERTIFICATE_PASSWORD;
+
+    static {
+        // Generate a random secure password on class load
+        StringBuilder sb = new StringBuilder(16);
+        java.security.SecureRandom r = new java.security.SecureRandom();
+        String chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
+        for (int i = 0; i < 16; i++)
+            sb.append(chars.charAt(r.nextInt(chars.length())));
+        DEFAULT_CERTIFICATE_PASSWORD = sb.toString();
+    }
+
+    /**
+     * Get the dynamically generated certificate password.
+     * @since 0.9.70
+     */
+    public static String getCertificatePassword() {
+        return DEFAULT_CERTIFICATE_PASSWORD;
+    }
     private final String _pluginDir;
     private KeyStore _keystore;
 
