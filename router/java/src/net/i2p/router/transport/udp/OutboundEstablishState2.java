@@ -4,6 +4,7 @@ import static net.i2p.router.transport.udp.SSU2Util.*;
 
 import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
 import com.southernstorm.noise.protocol.HandshakeState;
+import com.southernstorm.noise.protocol.NoiseInit;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -266,7 +267,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         if (publicKey.length != 32)
             throw new IllegalArgumentException("BAD SSU2 S length");
         try {
-            _handshakeState = new HandshakeState(HandshakeState.PATTERN_ID_XK_SSU2, HandshakeState.INITIATOR, _transport.getXDHFactory());
+            _handshakeState = new HandshakeState(NoiseInit.PatternID.XK_SSU2, HandshakeState.INITIATOR, _transport.getXDHFactory());
         } catch (GeneralSecurityException gse) {
             throw new IllegalStateException("BAD proto", gse);
         }

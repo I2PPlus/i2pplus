@@ -5,6 +5,7 @@ import static net.i2p.router.transport.ntcp.OutboundNTCP2State.*;
 import com.southernstorm.noise.protocol.CipherState;
 import com.southernstorm.noise.protocol.CipherStatePair;
 import com.southernstorm.noise.protocol.HandshakeState;
+import com.southernstorm.noise.protocol.NoiseInit;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -488,22 +489,22 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     private synchronized void receiveInboundNTCP2(ByteBuffer src) {
         if (_state == State.IB_NTCP2_GOT_X && src.hasRemaining()) {
             int extralen = 0;
-            String pattern;
+            NoiseInit.PatternID pattern;
             try {
                 switch (_version) {
                     case 2:
-                        pattern = HandshakeState.PATTERN_ID_XK;
+                        pattern = NoiseInit.PatternID.XK;
                         break;
                     case 3:
-                        pattern = HandshakeState.PATTERN_ID_XKHFS_512;
+                        pattern = NoiseInit.PatternID.XKHFS_512;
                         extralen = MAC_SIZE + EncType.MLKEM512_X25519_INT.getPubkeyLen();
                         break;
                     case 4:
-                        pattern = HandshakeState.PATTERN_ID_XKHFS_768;
+                        pattern = NoiseInit.PatternID.XKHFS_768;
                         extralen = MAC_SIZE + EncType.MLKEM768_X25519_INT.getPubkeyLen();
                         break;
                     case 5:
-                        pattern = HandshakeState.PATTERN_ID_XKHFS_1024;
+                        pattern = NoiseInit.PatternID.XKHFS_1024;
                         extralen = MAC_SIZE + EncType.MLKEM1024_X25519_INT.getPubkeyLen();
                         break;
                     default:

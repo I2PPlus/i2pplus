@@ -13,6 +13,7 @@ import com.southernstorm.noise.protocol.CipherState;
 import com.southernstorm.noise.protocol.CipherStatePair;
 import com.southernstorm.noise.protocol.DHState;
 import com.southernstorm.noise.protocol.HandshakeState;
+import com.southernstorm.noise.protocol.NoiseInit;
 
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.HKDF;
@@ -407,16 +408,16 @@ public final class ECIESAEADEngine {
     /**
      * @since 0.9.67
      */
-    private static String getNoisePattern(EncType type) {
+    private static NoiseInit.PatternID getNoisePattern(EncType type) {
         switch(type) {
           case ECIES_X25519:
-              return HandshakeState.PATTERN_ID_IK;
+              return NoiseInit.PatternID.IK;
           case MLKEM512_X25519:
-              return HandshakeState.PATTERN_ID_IKHFS_512;
+              return NoiseInit.PatternID.IKHFS_512;
           case MLKEM768_X25519:
-              return HandshakeState.PATTERN_ID_IKHFS_768;
+              return NoiseInit.PatternID.IKHFS_768;
           case MLKEM1024_X25519:
-              return HandshakeState.PATTERN_ID_IKHFS_1024;
+              return NoiseInit.PatternID.IKHFS_1024;
           default:
               throw new IllegalArgumentException("No pattern for " + type);
         }
@@ -547,7 +548,7 @@ public final class ECIESAEADEngine {
 
         HandshakeState state;
         EncType type = targetPrivateKey.getType();
-        String pattern = null;
+        NoiseInit.PatternID pattern = null;
         try {
             pattern = getNoisePattern(type);
             // Bob does not need a key factory
@@ -695,7 +696,7 @@ public final class ECIESAEADEngine {
 
         HandshakeState state;
         try {
-            state = new HandshakeState(HandshakeState.PATTERN_ID_N_NO_RESPONSE, HandshakeState.RESPONDER, _context.commSystem().getXDHFactory());
+            state = new HandshakeState(NoiseInit.PatternID.N_NO_RESPONSE, HandshakeState.RESPONDER, _context.commSystem().getXDHFactory());
         } catch (GeneralSecurityException gse) {
             throw new IllegalStateException("Bad protocol", gse);
         }
@@ -1172,7 +1173,7 @@ public final class ECIESAEADEngine {
         HandshakeState state;
 
         try {
-            String pattern = getNoisePattern(target.getType());
+            NoiseInit.PatternID pattern = getNoisePattern(target.getType());
             state = new HandshakeState(pattern, HandshakeState.INITIATOR, _edhThread, getHybridKeyFactory(type));
         } catch (GeneralSecurityException gse) {
             throw new IllegalStateException("Bad protocol", gse);
@@ -1238,7 +1239,7 @@ public final class ECIESAEADEngine {
     private byte[] encryptNewSession(CloveSet cloves, PublicKey target) {
         HandshakeState state;
         try {
-            state = new HandshakeState(HandshakeState.PATTERN_ID_N_NO_RESPONSE, HandshakeState.INITIATOR, _context.commSystem().getXDHFactory());
+            state = new HandshakeState(NoiseInit.PatternID.N_NO_RESPONSE, HandshakeState.INITIATOR, _context.commSystem().getXDHFactory());
         } catch (GeneralSecurityException gse) {
             throw new IllegalStateException("Bad protocol", gse);
         }

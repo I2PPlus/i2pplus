@@ -4,6 +4,7 @@ import static net.i2p.router.transport.udp.SSU2Util.*;
 
 import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
 import com.southernstorm.noise.protocol.HandshakeState;
+import com.southernstorm.noise.protocol.NoiseInit;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetSocketAddress;
@@ -80,7 +81,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         _banLogger.initialize(ctx);
         DatagramPacket pkt = packet.getPacket();
         _aliceSocketAddress = (InetSocketAddress) pkt.getSocketAddress();
-        _handshakeState = new HandshakeState(HandshakeState.PATTERN_ID_XK_SSU2, HandshakeState.RESPONDER, transport.getXDHFactory());
+        _handshakeState = new HandshakeState(NoiseInit.PatternID.XK_SSU2, HandshakeState.RESPONDER, transport.getXDHFactory());
         _handshakeState.getLocalKeyPair().setKeys(transport.getSSU2StaticPrivKey(), 0,
                                                   transport.getSSU2StaticPubKey(), 0);
         byte[] introKey = transport.getSSU2StaticIntroKey();
