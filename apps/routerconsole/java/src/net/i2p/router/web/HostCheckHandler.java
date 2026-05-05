@@ -309,10 +309,9 @@ public class HostCheckHandler extends GzipHandler
         buf.append(':').append(httpsPort)
            .append(httpRequest.getRequestURI());
         String q = httpRequest.getQueryString();
-        if (q != null)
+        if (q != null && q.indexOf('\n') < 0 && q.indexOf('\r') < 0)
             buf.append('?').append(q);
         httpResponse.setHeader("Location", buf.toString());
-        // https://w3c.github.io/webappsec-upgrade-insecure-requests/
         httpResponse.setHeader("Vary", "Upgrade-Insecure-Requests");
         httpResponse.setStatus(307);
         httpResponse.getOutputStream().close();

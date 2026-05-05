@@ -2473,7 +2473,7 @@ public class WebMail extends HttpServlet {
         if (qq >= 0)
             url = url.substring(0, qq);
         buf.append(url);
-        if (q != null && q.length() > 0)
+        if (q != null && q.length() > 0 && q.indexOf('\n') < 0 && q.indexOf('\r') < 0)
             buf.append(q.replace("&amp;", "&"));  // no you don't html escape the redirect header
         resp.setHeader("Location", buf.toString());
         resp.setStatus(303);
