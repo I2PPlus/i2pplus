@@ -4,6 +4,9 @@ Utility scripts for I2P+ development and administration.
 
 ## Build & Release
 
+- **`build-deb.sh`** — Build a self-contained Debian package.
+  Run from project root.
+
 - **`ant-java.sh`** — Run ant with a specific Java version.
   `ant-java.sh [21|24|25] [ant-options]`
 
