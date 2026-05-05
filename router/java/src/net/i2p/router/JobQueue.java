@@ -643,20 +643,33 @@ public class JobQueue {
      * @since 0.9.68+
      */
     synchronized void addRunners(int count) {
-        if (!_allowParallelOperation || !_alive) return;
+        if (!_allowParallelOperation || !_alive) {
+            if (_log.shouldDebug())
+                _log.debug("addRunners BLOCKED: allowParallel=" + _allowParallelOperation + ", alive=" + _alive);
+            return;
+        }
 
-        int currentSize = _queueRunners.size();
-        int targetSize = currentSize + count;
+        int startKey = -1;
+        for (int i = 0; i < 10000; i++) {
+            if (!_queueRunners.containsKey(Integer.valueOf(i))) {
+                startKey = i;
+                break;
+            }
+        }
+        if (startKey < 0) startKey = _queueRunners.size();
 
-        for (int i = currentSize; i < targetSize; i++) {
-            JobQueueRunner runner = new JobQueueRunner(_context, i);
-            _queueRunners.put(Integer.valueOf(i), runner);
-            runner.setName("JobQueue " + _runnerId.incrementAndGet() + '/' + targetSize + " (scaled)");
+        for (int i = 0; i < count; i++) {
+            int key = startKey + i;
+            JobQueueRunner runner = new JobQueueRunner(_context, key);
+            _queueRunners.put(Integer.valueOf(key), runner);
+            runner.setName("JobQueue " + _runnerId.incrementAndGet() + '/' + (startKey + count) + " (scaled)");
+            if (_log.shouldDebug())
+                _log.debug("Starting runner " + key + " total now " + _queueRunners.size());
             runner.start();
         }
 
         if (_log.shouldInfo()) {
-            _log.info("Added " + count + " runners. Total: " + _queueRunners.size());
+            _log.info("Added " + count + " runners. Total: " + _queueRunners.size() + " after start");
         }
     }
 

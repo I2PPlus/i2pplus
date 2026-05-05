@@ -71,7 +71,8 @@ class JobQueueScaler implements Runnable {
     private static final boolean DEFAULT_DYNAMIC_SCALING = true;
     private static final long DEFAULT_SCALE_CHECK_INTERVAL = 1000; // 1 second (very responsive for sub-μs targets)
     private static final long DEFAULT_SCALE_COOLDOWN = 5000; // 5 seconds (quick recovery)
-    private static final int DEFAULT_SCALE_UP_LAG_THRESHOLD = 1; // 1ms = 1000μs (scale up if lag exceeds 1ms)
+    private static final int DEFAULT_SCALE_UP_LAG_THRESHOLD = 1; // 1ms = 1000μs (scale up if job lag exceeds 1ms)
+    private static final int DEFAULT_SCALE_UP_MESSAGE_DELAY_THRESHOLD = 200; // 200ms (scale up if message delay exceeds 200ms)
     private static final int DEFAULT_SCALE_DOWN_LAG_THRESHOLD = 1; // 1ms (scale down when lag is low)
     private static final double DEFAULT_SCALE_UP_JOBS_RATIO = 1.2; // 1.2x (very aggressive - any backlog triggers scale)
     private static final int DEFAULT_SCALE_UP_STEP = 1; // Add 1 at a time (very conservative to avoid disruption)
@@ -309,6 +310,13 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
+     * Get the message delay threshold for scaling up.
+     */
+    private int getScaleUpMessageDelayThreshold() {
+        return DEFAULT_SCALE_UP_MESSAGE_DELAY_THRESHOLD;
+    }
+
+    /**
      * Get the lag threshold for scaling down.
      */
     private int getScaleDownLagThreshold() {
@@ -450,18 +458,18 @@ class JobQueueScaler implements Runnable {
             int lagThreshold = getScaleUpLagThreshold();
             double ratioThreshold = getScaleUpJobsRatio();
 
-            // Check both queue lag AND active job duration AND message delay
-            // Use Math.min to scale based on whichever metric shows more congestion
-            // (job lag vs message delay - they're the same stat but different views)
+            // Check job lag (microseconds) vs message delay (milliseconds) with separate thresholds
+            int msgDelayThreshold = getScaleUpMessageDelayThreshold();
             long effectiveDelay = Math.max(maxLag, messageDelay);
-            boolean highLag = effectiveDelay > lagThreshold;
-            boolean highAvgLag = Math.max(avgLag, messageDelay) >= lagThreshold;
+            boolean highLag = maxLag > lagThreshold;
+            boolean highMessageDelay = messageDelay > msgDelayThreshold;
+            boolean highAvgLag = avgLag >= lagThreshold;
             boolean highBacklog = readyJobs > 0 && jobsRatio > ratioThreshold;
-            boolean criticalLag = effectiveDelay > lagThreshold * 10; // 10x threshold = critical
+            boolean criticalLag = maxLag > lagThreshold * 10 || messageDelay > msgDelayThreshold * 10; // 10x threshold = critical
             boolean slowActiveJobs = activeJobMaxDuration > lagThreshold * 50; // Jobs running >50ms (very slow)
             boolean criticalSlowJobs = activeJobMaxDuration > lagThreshold * 100; // Jobs running >100ms (critical)
 
-            if (highBacklog || highLag || highAvgLag || slowActiveJobs) {
+            if (highBacklog || highLag || highMessageDelay || highAvgLag || slowActiveJobs) {
                 _consecutiveScaleUpChecks++;
                 if (_consecutiveScaleUpChecks >= SUSTAINED_CHECKS_REQUIRED || criticalLag || criticalSlowJobs) {
                     shouldScaleUp = true;
