@@ -166,6 +166,7 @@ class SOCKS5Server extends SOCKSServer {
         c = in.readUnsignedByte();
         if (c <= 0) {
             _log.logAlways(Log.WARN, "SOCKS proxy authentication failed");
+            try { Thread.sleep(5000); } catch (InterruptedException ie) {}
             throw new SOCKSException("Bad authentication");
         }
         byte[] user = new byte[c];
@@ -174,6 +175,7 @@ class SOCKS5Server extends SOCKSServer {
         c = in.readUnsignedByte();
         if (c <= 0) {
             _log.logAlways(Log.WARN, "SOCKS proxy authentication failed -> User: " + u + " on " + client);
+            try { Thread.sleep(5000); } catch (InterruptedException ie) {}
             throw new SOCKSException("Bad authentication");
         }
         byte[] pw = new byte[c];
@@ -187,6 +189,7 @@ class SOCKS5Server extends SOCKSServer {
             String hex = PasswordManager.sha256Hex(I2PSOCKSTunnel.AUTH_REALM, u, p);
             if (configPW == null || !configPW.equals(hex)) {
                 _log.logAlways(Log.WARN, "SOCKS proxy authentication failed -> User: " + u + " on " + client);
+                try { Thread.sleep(5000); } catch (InterruptedException ie) {}
                 sendAuthReply(AUTH_FAILURE, out);
                 throw new SOCKSException("SOCKS authorization failure");
             }
