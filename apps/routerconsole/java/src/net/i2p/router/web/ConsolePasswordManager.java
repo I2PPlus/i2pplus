@@ -5,6 +5,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.RouterPasswordManager;
 
@@ -22,6 +27,8 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     // migrate these to hash
     private static final String PROP_CONSOLE_OLD = "consolePassword";
     private static final String CONSOLE_USER = "admin";
+    private static final String PROP_PBKDF2 = ".pbkdf2";
+    private static final int PBKDF2_ITERATIONS = 1000000;
 
     public ConsolePasswordManager(RouterContext ctx) {
         super(ctx);
@@ -48,7 +55,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     }
 ****/
 
-    /**
+/**
      *  Straight MD5. Compatible with Jetty.
      *
      *  @param realm e.g. i2cp, routerconsole, etc.
@@ -56,14 +63,61 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      *  @param pw plain text, already trimmed
      *  @return if pw verified
      */
-    public boolean checkMD5(String realm, String subrealm, String user, String pw) {
+ public boolean checkMD5(String realm, String subrealm, String user, String pw) {
+     // Check PBKDF2 first (new format)
+     if (checkPBKDF2(realm, user, pw))
+         return true;
+     // Fall back to MD5 for backward compatibility
+     String pfx = realm;
+     if (user != null && user.length() > 0)
+         pfx += '.' + user;
+     String hex = _context.getProperty(pfx + PROP_MD5);
+     if (hex == null)
+         return false;
+     return hex.equals(md5Hex(subrealm, user, pw));
+ }
+
+    /**
+     *  PBKDF2 hash for password storage.
+     *  Backward compatible - checks PBKDF2 first, falls back to MD5.
+     *
+     *  @param realm e.g. i2cp, routerconsole, etc.
+     *  @param user null or "" for no user, already trimmed
+     *  @param pw plain text, already trimmed
+     *  @return if pw verified
+     *  @since 0.9.70
+     */
+    private boolean checkPBKDF2(String realm, String user, String pw) {
         String pfx = realm;
         if (user != null && user.length() > 0)
             pfx += '.' + user;
-        String hex = _context.getProperty(pfx + PROP_MD5);
-        if (hex == null)
+        String stored = _context.getProperty(pfx + PROP_PBKDF2);
+        if (stored == null)
             return false;
-        return hex.equals(md5Hex(subrealm, user, pw));
+        try {
+            String[] parts = stored.split(":");
+            if (parts.length != 3)
+                return false;
+            int iterations = Integer.parseInt(parts[0]);
+            byte[] salt = HexDecode(parts[1]);
+            byte[] hash = HexDecode(parts[2]);
+            PBEKeySpec spec = new PBEKeySpec(pw.toCharArray(), salt, iterations, hash.length * 8);
+            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+            byte[] computed = skf.generateSecret(spec).getEncoded();
+            return MessageDigest.isEqual(hash, computed);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            return false;
+        }
+    }
+
+    private static byte[] HexDecode(String hex) {
+        int len = hex.length();
+        byte[] out = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            out[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
+                                 + Character.digit(hex.charAt(i + 1), 16));
+        }
+        return out;
     }
 
     /**
@@ -153,19 +207,51 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      *  @return if pw verified
      */
     public boolean saveMD5(String realm, String subrealm, String user, String pw) {
+        // Upgrade to PBKDF2 on save
+        return savePBKDF2(realm, subrealm, user, pw);
+    }
+
+    /**
+     *  Save password as PBKDF2 hash.
+     *  Backward compatible - saves new PBKDF2, keeps old MD5 for migration.
+     *
+     *  @param realm The full realm
+     *  @param subrealm unused for PBKDF2
+     *  @param user non-null, non-empty
+     *  @param pw plain text
+     *  @return if saved
+     *  @since 0.9.70
+     */
+    private boolean savePBKDF2(String realm, String subrealm, String user, String pw) {
         String pfx = realm;
         if (user != null && user.length() > 0)
             pfx += '.' + user;
-        String hex = md5Hex(subrealm, user, pw);
-        if (hex == null)
+        try {
+            byte[] salt = new byte[16];
+            java.security.SecureRandom sr = new java.security.SecureRandom();
+            sr.nextBytes(salt);
+            PBEKeySpec spec = new PBEKeySpec(pw.toCharArray(), salt, PBKDF2_ITERATIONS, 256);
+            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+            byte[] hash = skf.generateSecret(spec).getEncoded();
+            String stored = PBKDF2_ITERATIONS + ":" + HexEncode(salt) + ":" + HexEncode(hash);
+            Map<String, String> toAdd = Collections.singletonMap(pfx + PROP_PBKDF2, stored);
+            List<String> toDel = new ArrayList<String>(4);
+            toDel.add(pfx + PROP_PW);
+            toDel.add(pfx + PROP_B64);
+            toDel.add(pfx + PROP_CRYPT);
+            toDel.add(pfx + PROP_SHASH);
+            return _context.router().saveConfig(toAdd, toDel);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             return false;
-        Map<String, String> toAdd = Collections.singletonMap(pfx + PROP_MD5, hex);
-        List<String> toDel = new ArrayList<String>(4);
-        toDel.add(pfx + PROP_PW);
-        toDel.add(pfx + PROP_B64);
-        toDel.add(pfx + PROP_CRYPT);
-        toDel.add(pfx + PROP_SHASH);
-        return _context.router().saveConfig(toAdd, toDel);
+        }
+    }
+
+    private static String HexEncode(byte[] data) {
+        StringBuilder sb = new StringBuilder(data.length * 2);
+        for (byte b : data) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
     }
 
 /****
