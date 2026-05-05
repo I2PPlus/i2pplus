@@ -137,6 +137,7 @@ public abstract class FormHandler {
     /**
      * setSettings() must have been called previously
      * Curses Jetty for returning arrays.
+     * For nofilter_ prefixed params, validates for XSS patterns.
      *
      * @since 0.9.4 consolidated from numerous FormHandlers
      * @return trimmed string or null
@@ -145,7 +146,23 @@ public abstract class FormHandler {
         if (_settings == null) {return null;}
         String[] arr = (String[]) _settings.get(key);
         if (arr == null) {return null;}
-        return arr[0].trim();
+        String val = arr[0].trim();
+        // Validate nofilter_ and nf_ prefixed params for XSS
+        if ((key.startsWith("nofilter_") || key.startsWith("nf_")) && containsXSS(val)) {
+            return null;
+        }
+        return val;
+    }
+
+    /** Check for common XSS patterns @since 0.9.70+ */
+    private boolean containsXSS(String val) {
+        if (val == null || val.isEmpty()) return false;
+        String lower = val.toLowerCase();
+        return lower.contains("<script") || lower.contains("javascript:") ||
+               lower.contains("onerror=") || lower.contains("onload=") ||
+               lower.contains("onclick=") || lower.contains("<iframe") ||
+               lower.contains("alert(") || lower.contains("eval(") ||
+               lower.contains("expression(") || lower.contains("vbscript:");
     }
 
     /**

@@ -85,7 +85,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      *  @param user null or "" for no user, already trimmed
      *  @param pw plain text, already trimmed
      *  @return if pw verified
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     private boolean checkPBKDF2(String realm, String user, String pw) {
         String pfx = realm;
@@ -220,7 +220,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      *  @param user non-null, non-empty
      *  @param pw plain text
      *  @return if saved
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     private boolean savePBKDF2(String realm, String subrealm, String user, String pw) {
         String pfx = realm;
