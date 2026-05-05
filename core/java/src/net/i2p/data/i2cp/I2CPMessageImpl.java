@@ -43,6 +43,8 @@ public abstract class I2CPMessageImpl implements I2CPMessage {
         }
         if (length > I2CPMessageHandler.MAX_LENGTH)
             throw new I2CPMessageException("Invalid message length specified");
+        if (length < 0)
+            throw new I2CPMessageException("Negative message length");
         int type = in.read();
         if (type < 0) {
             throw new EOFException();

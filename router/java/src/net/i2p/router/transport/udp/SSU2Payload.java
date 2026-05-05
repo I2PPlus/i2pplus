@@ -251,6 +251,8 @@ class SSU2Payload {
                 case BLOCK_I2NP:
                     if (isHandshake)
                         throw new IOException("Illegal block in handshake: " + type);
+                    if (len < 9)
+                        throw new IOException("I2NP block too short: " + len);
                     I2NPMessage msg = I2NPMessageImpl.fromRawByteArrayNTCP2(ctx, payload, i, len, null);
                     cb.gotI2NP(msg);
                     break;
