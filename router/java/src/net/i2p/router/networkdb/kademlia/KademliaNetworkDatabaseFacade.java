@@ -823,6 +823,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (shouldBanlistBasedOnCountry(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
         else if (shouldBanlistXG(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
         else if (shouldBanlistLU(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
+        else if (shouldBanlistByCapability(ri)) {handleCustomCapabilityBan(ri, key, onFailedLookupJob);}
         else if (isPermanentlyBlocklisted(key)) {handlePermanentBlocklist(ri, key, onFailedLookupJob);}
         else if (isHostileBlocklisted(key)) {handleHostileBlocklist(ri, key, onFailedLookupJob);}
         else if (isNegativeCached(key)) {handleNegativeCache(ri, key, onFailedLookupJob);}
@@ -879,6 +880,38 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         boolean isUnreachable = containsCapability(ri, Router.CAPABILITY_UNREACHABLE) ||
                                 !containsCapability(ri, Router.CAPABILITY_REACHABLE);
         return !isUs && isLTier && isUnreachable;
+    }
+
+    /**
+     * Determine whether the given router should be banlisted based on
+     * custom capability patterns configured by the user.
+     *
+     * @param ri the router info to evaluate
+     * @return true if the router matches any custom capability ban pattern
+     * @since 0.9.70
+     */
+    private boolean shouldBanlistByCapability(RouterInfo ri) {
+        String caps = ri.getCapabilities();
+        if (caps == null || caps.isEmpty()) return false;
+        return _context.banlist().shouldBanlistByCapability(caps);
+    }
+
+    /**
+     * Handle banning a router that matches custom capability ban patterns.
+     * @since 0.9.70
+     */
+    private void handleCustomCapabilityBan(RouterInfo ri, Hash key, Job onFailedLookupJob) {
+        String caps = ri.getCapabilities();
+        String routerId = key.toBase64().substring(0,6);
+        long banDuration = _context.banlist().getBadPacketDuration();
+        if (_log.shouldWarn()) {
+            _log.warn("Banning by custom capability: " + caps + " [" + routerId + "] for " + (banDuration/60000) + " min");
+        }
+        _context.banlist().banlistRouter(key, "Custom ban: " + caps, null, null,
+                                         _context.clock().now() + banDuration);
+        if (onFailedLookupJob != null) {
+            _context.jobQueue().addJob(onFailedLookupJob);
+        }
     }
 
     private boolean isPermanentlyBlocklisted(Hash key) {

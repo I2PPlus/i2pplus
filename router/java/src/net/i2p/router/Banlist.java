@@ -50,12 +50,59 @@ public class Banlist {
     private final ConcurrentHashMap<String, long[]> _corruptConnectionIPs;
     // Key: IP address (String), Value: {timestamp, count}
     private final ConcurrentHashMap<String, long[]> _portHoppingIPs;
-    // Global threshold: number of offenses before temp ban
-    private static final int MAX_OFFENSES = 3;
-    // Time window: offenses within this period count toward threshold (ms)
-    private static final long OFFENSE_WINDOW = 15*60*1000; // 15 minutes
-    // Startup grace period: don't track offenses in first 3 minutes after startup
-    private static final long STARTUP_GRACE = 3*60*1000; // 3 minutes
+    // Global threshold: number of offenses before temp ban (configurable)
+    private static final String PROP_MAX_OFFENSES = "router.banlist.maxOffenses";
+    private static final int MAX_OFFENSES_DEFAULT = 3;
+    private int _maxOffenses;
+    // Time window: offenses within this period count toward threshold (ms): 15 minutes (configurable)
+    private static final String PROP_OFFENSE_WINDOW = "router.banlist.offenseWindow";
+    private static final long OFFENSE_WINDOW_DEFAULT = 15*60*1000;
+    private long _offenseWindow;
+    // Startup grace period: don't track offenses in first 3 minutes after startup (configurable)
+    private static final String PROP_STARTUP_GRACE = "router.banlist.startupGrace";
+    private static final long STARTUP_GRACE_DEFAULT = 3*60*1000;
+    private long _startupGrace;
+    // Default ban duration for bad packet offenders (configurable)
+    private static final String PROP_BAD_PACKET_DURATION = "router.banlist.badPacketDuration";
+    private static final long BANLIST_DURATION_BAD_PACKETS_DEFAULT = 60*60*1000;
+    private long _badPacketDuration;
+    // Enable/disable auto-banning features (configurable)
+    private static final String PROP_ENABLE_BAD_PACKET_BAN = "router.banlist.enableBadPacketBan";
+    private static final boolean ENABLE_BAD_PACKET_BAN_DEFAULT = true;
+    private boolean _enableBadPacketBan;
+    private static final String PROP_ENABLE_CORRUPT_CONNECTION_BAN = "router.banlist.enableCorruptConnectionBan";
+    private static final boolean ENABLE_CORRUPT_CONNECTION_BAN_DEFAULT = true;
+    private boolean _enableCorruptConnectionBan;
+    private static final String PROP_ENABLE_PORT_HOPPING_BAN = "router.banlist.enablePortHoppingBan";
+    private static final boolean ENABLE_PORT_HOPPING_BAN_DEFAULT = true;
+    private boolean _enablePortHoppingBan;
+    private static final String PROP_ENABLE_DBSEARCH_BAN = "router.banlist.enableDbSearchBan";
+    private static final boolean ENABLE_DBSEARCH_BAN_DEFAULT = true;
+    private boolean _enableDbSearchBan;
+    // Blocklist enable (maps to router.blocklist.enable)
+    private static final String PROP_ENABLE_BLOCKLIST = "router.blocklist.enable";
+    private static final boolean ENABLE_BLOCKLIST_DEFAULT = true;
+    private boolean _enableBlocklist;
+    // Tor blocklist enable (maps to router.blocklistTor.enable)
+    private static final String PROP_ENABLE_TOR_BLOCKLIST = "router.blocklistTor.enable";
+    private static final boolean ENABLE_TOR_BLOCKLIST_DEFAULT = true;
+    private boolean _enableTorBlocklist;
+    // Country blocklist enable (maps to router.blocklistCountries.enable)
+    private static final String PROP_ENABLE_COUNTRY_BAN = "router.blocklistCountries.enable";
+    private static final boolean ENABLE_COUNTRY_BAN_DEFAULT = false;
+    private boolean _enableCountryBan;
+    // XG router ban (unlimited bandwidth, no transit tunnels)
+    private static final String PROP_ENABLE_XG_BAN = "router.banlistXG";
+    private static final boolean ENABLE_XG_BAN_DEFAULT = false;
+    private boolean _enableXgBan;
+    // LU router ban (low bandwidth tier, unreachable/firewalled)
+    private static final String PROP_ENABLE_LU_BAN = "router.banlistLU";
+    private static final boolean ENABLE_LU_BAN_DEFAULT = true;
+    private boolean _enableLuBan;
+    // Custom capability bans (e.g., "LG", "XfU", "DGU")
+    private static final String PROP_CUSTOM_CAPABILITY_BANS = "router.banlistCapabilities";
+    private String _customCapabilityBans;
+    // Country ban duration - uses existing router.blockCountries property (session-based)
 
     /**
      *  hash of 387 zeros
@@ -140,6 +187,152 @@ public class Banlist {
         _context.jobQueue().addJob(new Cleanup(_context));
         banlistRouterForever(Hash.FAKE_HASH, "" + "Invalid Hash"); // i2pd bug?
         banlistRouterForever(HASH_ZERORI, "" + "Invalid Hash (All zeros)");
+        initConfig();
+    }
+
+    /**
+     *  Initialize configurable properties.
+     *  Reads from router config, falls back to defaults.
+     */
+    private void initConfig() {
+        _maxOffenses = _context.getProperty(PROP_MAX_OFFENSES, MAX_OFFENSES_DEFAULT);
+        _offenseWindow = _context.getProperty(PROP_OFFENSE_WINDOW, OFFENSE_WINDOW_DEFAULT);
+        _startupGrace = _context.getProperty(PROP_STARTUP_GRACE, STARTUP_GRACE_DEFAULT);
+        _badPacketDuration = _context.getProperty(PROP_BAD_PACKET_DURATION, BANLIST_DURATION_BAD_PACKETS_DEFAULT);
+        _enableBadPacketBan = "true".equals(_context.getProperty(PROP_ENABLE_BAD_PACKET_BAN, String.valueOf(ENABLE_BAD_PACKET_BAN_DEFAULT)));
+        _enableCorruptConnectionBan = "true".equals(_context.getProperty(PROP_ENABLE_CORRUPT_CONNECTION_BAN, String.valueOf(ENABLE_CORRUPT_CONNECTION_BAN_DEFAULT)));
+        _enablePortHoppingBan = "true".equals(_context.getProperty(PROP_ENABLE_PORT_HOPPING_BAN, String.valueOf(ENABLE_PORT_HOPPING_BAN_DEFAULT)));
+        _enableDbSearchBan = "true".equals(_context.getProperty(PROP_ENABLE_DBSEARCH_BAN, String.valueOf(ENABLE_DBSEARCH_BAN_DEFAULT)));
+        _enableBlocklist = "true".equals(_context.getProperty(PROP_ENABLE_BLOCKLIST, String.valueOf(ENABLE_BLOCKLIST_DEFAULT)));
+        _enableTorBlocklist = "true".equals(_context.getProperty(PROP_ENABLE_TOR_BLOCKLIST, String.valueOf(ENABLE_TOR_BLOCKLIST_DEFAULT)));
+        _enableCountryBan = "true".equals(_context.getProperty(PROP_ENABLE_COUNTRY_BAN, String.valueOf(ENABLE_COUNTRY_BAN_DEFAULT)));
+        _enableXgBan = "true".equals(_context.getProperty(PROP_ENABLE_XG_BAN, String.valueOf(ENABLE_XG_BAN_DEFAULT)));
+        _enableLuBan = "true".equals(_context.getProperty(PROP_ENABLE_LU_BAN, String.valueOf(ENABLE_LU_BAN_DEFAULT)));
+        _customCapabilityBans = _context.getProperty(PROP_CUSTOM_CAPABILITY_BANS, "");
+    }
+
+    /**
+     *  Reload configuration from properties.
+     *  Called when settings are changed in the console.
+     *  @since 0.9.70
+     */
+    public void reloadConfig() {
+        initConfig();
+    }
+
+    /**
+     *  Get the current max offenses setting.
+     *  @since 0.9.70
+     */
+    public int getMaxOffenses() { return _maxOffenses; }
+
+    /**
+     *  Get the current offense window setting in ms.
+     *  @since 0.9.70
+     */
+    public long getOffenseWindow() { return _offenseWindow; }
+
+    /**
+     *  Get the current startup grace period in ms.
+     *  @since 0.9.70
+     */
+    public long getStartupGrace() { return _startupGrace; }
+
+    /**
+     *  Get the current bad packet ban duration in ms.
+     *  @since 0.9.70
+     */
+    public long getBadPacketDuration() { return _badPacketDuration; }
+
+    /**
+     *  Check if bad packet auto-ban is enabled.
+     *  @since 0.9.70
+     */
+    public boolean isBadPacketBanEnabled() { return _enableBadPacketBan; }
+
+    /**
+     *  Check if corrupt connection auto-ban is enabled.
+     *  @since 0.9.70
+     */
+    public boolean isCorruptConnectionBanEnabled() { return _enableCorruptConnectionBan; }
+
+    /**
+     *  Check if port hopping auto-ban is enabled.
+     *  @since 0.9.70
+     */
+    public boolean isPortHoppingBanEnabled() { return _enablePortHoppingBan; }
+
+    /**
+     *  Check if unsolicited DB search reply auto-ban is enabled.
+     *  @since 0.9.70
+     */
+    public boolean isDbSearchBanEnabled() { return _enableDbSearchBan; }
+
+    /**
+     *  Check if IP blocklist is enabled.
+     *  @since 0.9.70
+     */
+    public boolean isBlocklistEnabled() { return _enableBlocklist; }
+
+    /**
+     *  Check if Tor exit node blocklist is enabled.
+     *  @since 0.9.70
+     */
+    public boolean isTorBlocklistEnabled() { return _enableTorBlocklist; }
+
+    /**
+     *  Check if country-based bans are enabled.
+     *  @since 0.9.70
+     */
+    public boolean isCountryBanEnabled() { return _enableCountryBan; }
+
+    /**
+     *  Check if XG router bans are enabled.
+     *  XG = unlimited bandwidth (X), no transit tunnels (G) - often botnet indicators
+     *  @since 0.9.70
+     */
+    public boolean isXgBanEnabled() { return _enableXgBan; }
+
+/**
+     *  Check if LU router bans are enabled.
+     *  LU = low bandwidth tier (L) + unreachable/firewalled (U)
+     *  @since 0.9.70
+     */
+    public boolean isLuBanEnabled() { return _enableLuBan; }
+
+    /**
+     *  Get custom capability ban pattern.
+     *  Format: string of capability letters (e.g., "DG", "UX")
+     *  @since 0.9.70
+     */
+    public String getCustomCapabilityBans() { return _customCapabilityBans != null ? _customCapabilityBans : ""; }
+
+    /**
+     *  Check if router capabilities match any of the custom ban patterns.
+     *  @param capabilities router capabilities string (e.g., "XfP")
+     *  @return true if the router should be banned based on custom capability patterns
+     *  @since 0.9.70
+     */
+    public boolean shouldBanlistByCapability(String capabilities) {
+        if (_customCapabilityBans == null || _customCapabilityBans.isEmpty() || capabilities == null) {
+            return false;
+        }
+        String caps = capabilities.toUpperCase();
+        String[] patterns = _customCapabilityBans.split("[,\\s]+");
+        for (String pattern : patterns) {
+            pattern = pattern.trim().toUpperCase();
+            if (pattern.isEmpty()) continue;
+            boolean matches = true;
+            for (int i = 0; i < pattern.length(); i++) {
+                char c = pattern.charAt(i);
+                if (caps.indexOf(c) < 0) {
+                    matches = false;
+                    break;
+                }
+            }
+            if (matches) return true;
+        }
+        return false;
     }
 
     private class Cleanup extends JobImpl {
@@ -189,15 +382,16 @@ public class Banlist {
         }
     }
 
-    /**
-     * Record a bad packet from an IP.
-     * If threshold exceeded, ban the IP.
-     * @param ip IP address (format: "1.2.3.4" or "1.2.3.4:port")
-     * @param version router version info (may be null)
-     */
+/**
+      * Record a bad packet from an IP.
+      * If threshold exceeded, ban the IP.
+      * @param ip IP address (format: "1.2.3.4" or "1.2.3.4:port")
+      * @param version router version info (may be null)
+      */
     public void badPacket(String ip, String version) {
         if (ip == null) return;
-        if (_context.router().getUptime() < STARTUP_GRACE) return;
+        if (!_enableBadPacketBan) return;
+        if (_context.router().getUptime() < _startupGrace) return;
         long now = _context.clock().now();
 
         long[] data = _badPacketIPs.get(ip);
@@ -209,7 +403,7 @@ public class Banlist {
         }
 
         // Check if within window
-        if (now - data[0] > OFFENSE_WINDOW) {
+        if (now - data[0] > _offenseWindow) {
             // Window expired, reset count
             data[0] = now;
             data[1] = 1;
@@ -218,7 +412,7 @@ public class Banlist {
             data[1]++;
         }
 
-        if (data[1] >= MAX_OFFENSES) {
+        if (data[1] >= _maxOffenses) {
             // Ban the IP
             String reason = "Sending bad packets";
             if (version != null) {
@@ -226,12 +420,12 @@ public class Banlist {
             }
 
             if (_log.shouldWarn()) {
-                _log.warn("Bad packet limit exceeded for " + ip + ": banning for " + BANLIST_DURATION_BAD_PACKETS/60000 + " min");
+                _log.warn("Bad packet limit exceeded for " + ip + ": banning for " + _badPacketDuration/60000 + " min");
             }
 
             BanLogger banLogger = new BanLogger();
             banLogger.initialize(_context);
-            banLogger.logBanIPOnly(ip, reason, BANLIST_DURATION_BAD_PACKETS);
+            banLogger.logBanIPOnly(ip, reason, _badPacketDuration);
 
             _context.blocklist().add(ip, reason);
 
@@ -248,7 +442,8 @@ public class Banlist {
      */
     public void corruptConnection(String ip, String version) {
         if (ip == null) return;
-        if (_context.router().getUptime() < STARTUP_GRACE) return;
+        if (!_enableCorruptConnectionBan) return;
+        if (_context.router().getUptime() < _startupGrace) return;
         long now = _context.clock().now();
 
         long[] data = _corruptConnectionIPs.get(ip);
@@ -258,26 +453,26 @@ public class Banlist {
             return;
         }
 
-        if (now - data[0] > OFFENSE_WINDOW) {
+        if (now - data[0] > _offenseWindow) {
             data[0] = now;
             data[1] = 1;
         } else {
             data[1]++;
         }
 
-        if (data[1] >= MAX_OFFENSES) {
+        if (data[1] >= _maxOffenses) {
             String reason = "Corrupt connection (no data)";
             if (version != null) {
                 reason += " (" + version + ")";
             }
 
             if (_log.shouldWarn()) {
-                _log.warn("Corrupt connection limit exceeded for " + ip + ": banning for " + BANLIST_DURATION_BAD_PACKETS/60000 + " min");
+                _log.warn("Corrupt connection limit exceeded for " + ip + ": banning for " + _badPacketDuration/60000 + " min");
             }
 
             BanLogger banLogger = new BanLogger();
             banLogger.initialize(_context);
-            banLogger.logBanIPOnly(ip, reason, BANLIST_DURATION_BAD_PACKETS);
+            banLogger.logBanIPOnly(ip, reason, _badPacketDuration);
 
             _context.blocklist().add(ip, reason);
 
@@ -292,7 +487,8 @@ public class Banlist {
      */
     public void portHopping(String ip) {
         if (ip == null) return;
-        if (_context.router().getUptime() < STARTUP_GRACE) return;
+        if (!_enablePortHoppingBan) return;
+        if (_context.router().getUptime() < _startupGrace) return;
         long now = _context.clock().now();
 
         long[] data = _portHoppingIPs.get(ip);
@@ -302,23 +498,23 @@ public class Banlist {
             return;
         }
 
-        if (now - data[0] > OFFENSE_WINDOW) {
+        if (now - data[0] > _offenseWindow) {
             data[0] = now;
             data[1] = 1;
         } else {
             data[1]++;
         }
 
-        if (data[1] >= MAX_OFFENSES) {
+        if (data[1] >= _maxOffenses) {
             String reason = "Port hopping";
 
             if (_log.shouldWarn()) {
-                _log.warn("Port hopping limit exceeded for " + ip + ": banning for " + BANLIST_DURATION_BAD_PACKETS/60000 + " min");
+                _log.warn("Port hopping limit exceeded for " + ip + ": banning for " + _badPacketDuration/60000 + " min");
             }
 
             BanLogger banLogger = new BanLogger();
             banLogger.initialize(_context);
-            banLogger.logBanIPOnly(ip, reason, BANLIST_DURATION_BAD_PACKETS);
+            banLogger.logBanIPOnly(ip, reason, _badPacketDuration);
 
             _context.blocklist().add(ip, reason);
 
@@ -334,7 +530,8 @@ public class Banlist {
      */
     public void unsolicitedDBSearchReply(Hash routerHash, String version) {
         if (routerHash == null) return;
-        if (_context.router().getUptime() < STARTUP_GRACE) return;
+        if (!_enableDbSearchBan) return;
+        if (_context.router().getUptime() < _startupGrace) return;
         long now = _context.clock().now();
 
         long[] data = _unsolicitedDBSearch.get(routerHash);
@@ -359,13 +556,13 @@ public class Banlist {
 
             if (_log.shouldWarn()) {
                 String hashStr = routerHash.toBase64().substring(0, 6);
-                _log.warn("Unsolicited DbSearchReply limit exceeded for [" + hashStr + "]: banning for " + BANLIST_DURATION_BAD_PACKETS/60000 + " min");
+                _log.warn("Unsolicited DbSearchReply limit exceeded for [" + hashStr + "]: banning for " + _badPacketDuration/60000 + " min");
             }
 
             BanLogger banLogger = new BanLogger();
             banLogger.initialize(_context);
-            banLogger.logBan(routerHash, _context, reason, BANLIST_DURATION_BAD_PACKETS);
-            banlistRouter(routerHash, reason, null, null, _context.clock().now() + BANLIST_DURATION_BAD_PACKETS);
+            banLogger.logBan(routerHash, _context, reason, _badPacketDuration);
+            banlistRouter(routerHash, reason, null, null, _context.clock().now() + _badPacketDuration);
             _unsolicitedDBSearch.remove(routerHash);
         }
     }
