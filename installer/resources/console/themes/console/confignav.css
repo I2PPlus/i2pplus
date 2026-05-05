@@ -8,6 +8,8 @@
 .tab:active::before{transform:scale(.95)}
 .tab2::before{filter:drop-shadow(1px 1px #0006)}
 #nav_advanced::before{background:var(--configure)}
+#nav_ban{display:none!important}
+#nav_ban::before{background:var(--ban)}
 #nav_bandwidth::before{background:var(--speed)}
 #nav_clients::before{background:url(/themes/console/images/editclient.svg)}
 #nav_home::before{background:url(/themes/console/images/home.svg)}
