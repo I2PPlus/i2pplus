@@ -8,6 +8,7 @@ import com.sun.management.OperatingSystemMXBean;
 
 import net.i2p.I2PAppContext;
 import net.i2p.stat.Rate;
+import net.i2p.stat.RateStat;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.StatManager;
 
@@ -741,6 +742,11 @@ public abstract class SystemVersion {
         return threadMXBean.getThreadCount();
     }
 
+    private static Rate getStatRate(StatManager sm, String name, int duration) {
+        RateStat rateStat = sm.getRate(name);
+        return rateStat != null ? rateStat.getRate(duration) : null;
+    }
+
     /**
      * Retrieve Tunnel build success as a percentage.
      * @since 0.9.58+
@@ -752,12 +758,16 @@ public abstract class SystemVersion {
             return 0;
         }
         int RATE = 10 * 60 * 1000;
-        Rate explSuccess = sm.getRate("tunnel.buildExploratorySuccess").getRate(RATE);
-        Rate explReject = sm.getRate("tunnel.buildExploratoryReject").getRate(RATE);
-        Rate explExpire = sm.getRate("tunnel.buildExploratoryExpire").getRate(RATE);
-        Rate clientSuccess = sm.getRate("tunnel.buildClientSuccess").getRate(RATE);
-        Rate clientReject = sm.getRate("tunnel.buildClientReject").getRate(RATE);
-        Rate clientExpire = sm.getRate("tunnel.buildClientExpire").getRate(RATE);
+        Rate explSuccess = getStatRate(sm, "tunnel.buildExploratorySuccess", RATE);
+        Rate explReject = getStatRate(sm, "tunnel.buildExploratoryReject", RATE);
+        Rate explExpire = getStatRate(sm, "tunnel.buildExploratoryExpire", RATE);
+        Rate clientSuccess = getStatRate(sm, "tunnel.buildClientSuccess", RATE);
+        Rate clientReject = getStatRate(sm, "tunnel.buildClientReject", RATE);
+        Rate clientExpire = getStatRate(sm, "tunnel.buildClientExpire", RATE);
+        if (explSuccess == null || explReject == null || explExpire == null ||
+            clientSuccess == null || clientReject == null || clientExpire == null) {
+            return 0;
+        }
         int success = (int) explSuccess.getLastEventCount() + (int) clientSuccess.getLastEventCount();
         int reject = (int) explReject.getLastEventCount() + (int) clientReject.getLastEventCount();
         int expire = (int) explExpire.getLastEventCount() + (int) clientExpire.getLastEventCount();
