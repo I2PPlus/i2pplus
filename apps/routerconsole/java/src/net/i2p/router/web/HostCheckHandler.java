@@ -212,24 +212,12 @@ public class HostCheckHandler extends GzipHandler
             // Origin format: "https://host:port" or "http://host:port"
             if (origin.startsWith("http://")) {
                 String rest = origin.substring(7);
-                int colon = rest.indexOf(':');
-                if (colon > 0) {
-                    originHost = rest.substring(0, colon);
-                    originPort = Integer.parseInt(rest.substring(colon + 1));
-                } else {
-                    originHost = rest;
-                    originPort = 80;
-                }
+                originHost = extractHost(rest);
+                originPort = extractPort(rest, 80);
             } else if (origin.startsWith("https://")) {
                 String rest = origin.substring(8);
-                int colon = rest.indexOf(':');
-                if (colon > 0) {
-                    originHost = rest.substring(0, colon);
-                    originPort = Integer.parseInt(rest.substring(colon + 1));
-                } else {
-                    originHost = rest;
-                    originPort = 443;
-                }
+                originHost = extractHost(rest);
+                originPort = extractPort(rest, 443);
             } else {
                 // Unknown format, allow for now
                 return true;
@@ -239,6 +227,9 @@ public class HostCheckHandler extends GzipHandler
             return true;
         }
 
+        // Normalize IPv6 for comparison
+        originHost = normalizeIP(originHost);
+
         // Extract request host:port
         String requestHost;
         int requestPort;
@@ -246,48 +237,97 @@ public class HostCheckHandler extends GzipHandler
             if (host == null) {
                 return true;
             }
-            if (host.startsWith("[")) {
-                int brack = host.indexOf(']');
-                if (brack > 0) {
-                    requestHost = host.substring(1, brack);
-                    String rest = host.substring(brack + 1);
-                    if (rest.startsWith(":")) {
-                        requestPort = Integer.parseInt(rest.substring(1));
-                    } else {
-                        requestPort = request.isSecure() ? 443 : 80;
-                    }
-                } else {
-                    requestHost = host;
-                    requestPort = request.isSecure() ? 443 : 80;
-                }
-            } else {
-                int colon = host.indexOf(':');
-                if (colon > 0) {
-                    requestHost = host.substring(0, colon);
-                    requestPort = Integer.parseInt(host.substring(colon + 1));
-                } else {
-                    requestHost = host;
-                    requestPort = request.isSecure() ? 443 : 80;
-                }
-            }
+            requestHost = extractHost(host);
+            requestPort = extractPort(host, request.isSecure() ? 443 : 80);
         } catch (Exception e) {
             // Parse error, allow
             return true;
         }
 
+        // Normalize IPv6 for comparison
+        requestHost = normalizeIP(requestHost);
+
         // Allow if origin matches request host
-        if (originHost.equalsIgnoreCase(requestHost) && originPort == requestPort) {
+        if (originHost != null && requestHost != null &&
+            originHost.equalsIgnoreCase(requestHost) && originPort == requestPort) {
             return true;
         }
 
-        // Also allow localhost variants
-        if ((originHost.equals("127.0.0.1") || originHost.equals("localhost") || originHost.equals("::1")) &&
-            (requestHost.equals("127.0.0.1") || requestHost.equals("localhost") || requestHost.equals("::1"))) {
+        // Also allow localhost variants (127.x.x.x, localhost, ::1, and equivalent)
+        if (isLocalhost(originHost) && isLocalhost(requestHost)) {
             return true;
         }
 
         // Reject cross-origin POST
         return false;
+    }
+
+    /**
+     *  Extract host from "host:port" or "[ipv6]:port"
+     */
+    private static String extractHost(String hostPort) {
+        if (hostPort.startsWith("[")) {
+            int brack = hostPort.indexOf(']');
+            if (brack > 0) {
+                return hostPort.substring(1, brack);
+            }
+        }
+        int colon = hostPort.indexOf(':');
+        if (colon > 0) {
+            return hostPort.substring(0, colon);
+        }
+        return hostPort;
+    }
+
+    /**
+     *  Extract port from "host:port" or "[ipv6]:port", default to defaultPort if not found
+     */
+    private static int extractPort(String hostPort, int defaultPort) {
+        if (hostPort.startsWith("[")) {
+            int brack = hostPort.indexOf(']');
+            if (brack > 0) {
+                String rest = hostPort.substring(brack + 1);
+                if (rest.startsWith(":")) {
+                    return Integer.parseInt(rest.substring(1));
+                }
+                return defaultPort;
+            }
+        }
+        int colon = hostPort.indexOf(':');
+        if (colon > 0) {
+            return Integer.parseInt(hostPort.substring(colon + 1));
+        }
+        return defaultPort;
+    }
+
+    /**
+     *  Normalize IPv6 address to canonical form
+     */
+    private static String normalizeIP(String host) {
+        if (host == null) return null;
+        try {
+            java.net.InetAddress addr = java.net.InetAddress.getByName(host);
+            return addr.getHostAddress();
+        } catch (Exception e) {
+            return host;
+        }
+    }
+
+    /**
+     *  Check if host is localhost/loopback
+     */
+    private static boolean isLocalhost(String host) {
+        if (host == null) return false;
+        String normalized = normalizeIP(host);
+        // 127.x.x.x, localhost, ::1, 0:0:0:0:0:0:0:1, etc.
+        return normalized != null && (
+            normalized.equals("127.0.0.1") ||
+            normalized.equals("localhost") ||
+            normalized.startsWith("127.") ||
+            normalized.equals("::1") ||
+            normalized.equals("0:0:0:0:0:0:0:1") ||
+            normalized.equals("::")
+        );
     }
 
     /**
