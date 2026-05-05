@@ -14,7 +14,8 @@
 <%@include file="formhandler.jsi"%>
 <form method=POST>
 <input type=hidden name=nonce value="<%=pageNonce%>">
-<input type=hidden name=action value=blah >
+<input type=hidden name=action value=blah>
+<h3 class=tabletitle><%=intl._t("Custom Router Ban Policies")%></h3>
 <table id=banconfig class=configtable>
 <tr><td><b class=suboption><%=intl._t("IP Blocklists")%></b><br>
 <div class=optionlist>
@@ -24,8 +25,8 @@
 </td></tr>
 <tr><td><b class=suboption><%=intl._t("Country Bans")%></b><br>
 <div class=optionlist>
-<label title="<%=intl._t("Ban routers from specified countries until router restart")%>"><input type=checkbox class="optbox slider" name=enableCountryBan value=true <jsp:getProperty name="banhelper" property="countryBanChecked"/>><%=intl._t("Enable country-based bans")%></label>
-<label><%=intl._t("Country codes")%>: <input name=customCountryCodes type=text size=30 value="<jsp:getProperty name="banhelper" property="customCountryCodes"/>"></label>
+<label title="<%=intl._t("Ban routers from specified countries until router restart")%>"><input type=checkbox class="optbox slider" name=enableCountryBan value=true <jsp:getProperty name="banhelper" property="countryBanChecked"/>><%=intl._t("Enable country-based bans")%></label><br>
+<label><span class=nowrap><%=intl._t("Country codes")%>:</span> <input title="<%=intl._t("Add county codes, separated by spaces or commas e.g. cn,de")%>" name=customCountryCodes type=text size=30 value="<jsp:getProperty name="banhelper" property="customCountryCodes"/>"></label>
 </div>
 </td></tr>
 <tr><td><b class=suboption><%=intl._t("Network Abuse")%></b><br>
@@ -35,25 +36,24 @@
 <label title="<%=intl._t("Ban peers that rapidly change their ports")%>"><input type=checkbox class="optbox slider" name=enablePortHoppingBan value=true <jsp:getProperty name="banhelper" property="portHoppingBanChecked"/>><%=intl._t("Ban peers attempting port hopping")%></label><br>
 <label title="<%=intl._t("Ban peers sending excessive unsolicited search replies")%>"><input type=checkbox class="optbox slider" name=enableDbSearchBan value=true <jsp:getProperty name="banhelper" property="dbSearchBanChecked"/>><%=intl._t("Ban peers sending fake/slow search replies")%></label>
 </div>
-</td></tr>
-<tr><td>
-<b class=suboption><%=intl._t("Thresholds")%></b><br>
+<b class=suboption><%=intl._t("Abuse Thresholds")%></b><br>
 <div class=optionlist>
-<label><%=intl._t("Max offenses")%>: <input name=maxOffenses type=text size=3 maxlength=3 value="<jsp:getProperty name="banhelper" property="maxOffenses"/>"></label><br>
-<label><%=intl._t("Offense window (minutes)")%>: <input name=offenseWindow type=text size=4 maxlength=4 value="<jsp:getProperty name="banhelper" property="offenseWindow"/>"></label><br>
-<label><%=intl._t("Startup grace period (minutes)")%>: <input name=startupGrace type=text size=3 maxlength=3 value="<jsp:getProperty name="banhelper" property="startupGrace"/>"></label><br>
-<label><%=intl._t("Ban duration (minutes)")%>: <input name=badPacketDuration type=text size=5 maxlength=5 value="<jsp:getProperty name="banhelper" property="badPacketDuration"/>"></label>
+<label><span class=nowrap><%=intl._t("Startup grace period")%>:</span> <input name=startupGrace type=number size=3 maxlength=3 value="<jsp:getProperty name="banhelper" property="startupGrace"/>"><%=intl._t("minutes")%></label><br>
+<label><span class=nowrap><%=intl._t("Ban duration")%>:</span> <input name=badPacketDuration type=number size=5 maxlength=5 value="<jsp:getProperty name="banhelper" property="badPacketDuration"/>"><%=intl._t("minutes")%></label><br>
+<label><span class=nowrap><%=intl._t("Max offenses")%>:</span> <input name=maxOffenses type=number size=3 maxlength=3 value="<jsp:getProperty name="banhelper" property="maxOffenses"/>"></label><br>
+<label title="<%=intl._t("Period during which offenses are counted")%>"><span class=nowrap><%=intl._t("Offense window")%>:</span> <input name=offenseWindow type=number size=4 maxlength=4 value="<jsp:getProperty name="banhelper" property="offenseWindow"/>"><%=intl._t("minutes")%></label>
 </div>
 </td></tr>
 <tr><td><b class=suboption><%=intl._t("Bans by Capability")%></b><br>
 <div class=optionlist>
-<label title="<%=intl._t("Ban XG tier routers - unlimited bandwidth but not hosting transit tunnels")%>"><input type=checkbox class="optbox slider" name=enableXgBan value=true <jsp:getProperty name="banhelper" property="xgBanChecked"/>><%=intl._t("Ban XG routers")%></label><br>
+<label title="<%=intl._t("Ban XG tier routers - unlimited bandwidth but not hosting transit tunnels (probably botnet participant)")%>"><input type=checkbox class="optbox slider" name=enableXgBan value=true <jsp:getProperty name="banhelper" property="xgBanChecked"/>><%=intl._t("Ban XG routers")%></label><br>
 <label title="<%=intl._t("Ban LU tier routers - low bandwidth and unreachable/firewalled")%>"><input type=checkbox class="optbox slider" name=enableLuBan value=true <jsp:getProperty name="banhelper" property="luBanChecked"/>><%=intl._t("Ban LU routers")%></label>
 </div>
 </td></tr>
-<tr><td><b class=suboption><%=intl._t("Custom Capabilities")%></b><br>
+<tr><td>
+<b class=suboption><%=intl._t("Custom Capabilities")%></b><br>
 <div class=optionlist>
-<label><input name=customCapabilityBans type=text size=30 value="<jsp:getProperty name="banhelper" property="customCapabilityBans"/>"></label>
+<label><span class=nowrap><%=intl._t("Additional Router Caps")%>:</span> <input title="<%=intl._t("Add caps groups, separated by spaces or commas e.g. LUf,PUG")%>" name=customCapabilityBans type=text size=30 value="<jsp:getProperty name="banhelper" property="customCapabilityBans"/>"></label>
 </div>
 </td></tr>
 <tr><td class=optionsave><input type=reset class=cancel value="<%=intl._t("Cancel")%>"><input type=submit class=accept name=save value="<%=intl._t("Save changes")%>"></td></tr>

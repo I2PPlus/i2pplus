@@ -66,3 +66,20 @@
 #totaljobstats a{float:right}
 #tunnelconfig .tunnelName{margin-right:6px;min-width:240px;display:inline-block}
 #jobstats #statCount #init td{padding:24px;display:table-cell;font-size:0;box-shadow:none;background:var(--update) no-repeat center center/20px;transform:rotate(0);animation:linear spin 3s forwards infinite}
+
+#nav_ban{display:none!important}
+#banconfig input[type="number"]{width:64px}
+#banconfig input[type="text"]{width:240px}
+#banconfig label{margin:8px}
+#banconfig label::before{margin:0 0 0 8px;height:50px;display:inline-block;vertical-align:middle;content:""}
+#banconfig input,#banconfig .slider{margin:8px 8px 8px 4px}#banconfig .suboption{min-width:160px;text-align:center}
+#banconfig td{padding:8px}
+#banconfig .optionlist{padding:0;columns:2 500px}
+#banconfig .optionlist+.suboption{margin-top:8px}
+#banconfig .suboption{padding:3px 8px 4px}
+#banconfig .nowrap{margin:0 4px 0 0;min-width:160px;display:inline-block;text-align:right}
+
+@media (max-width:1199px){
+  #banconfig label::before{margin:0 0 0 -4px;height:32px}
+  #banconfig .nowrap{min-width:0;margin-left:8px}
+}
