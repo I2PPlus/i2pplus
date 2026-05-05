@@ -9,6 +9,21 @@
 
 import { initToggleInfo } from "/i2ptunnel/js/toggleTunnelInfo.js";
 
+// Notify parent to reload after action completes
+window.addEventListener('message', (e) => {
+  if (e.data === 'actionComplete') {
+    window.parent.location.reload();
+  }
+});
+
+// If this page was loaded in iframe after an action, notify parent to reload
+if (window.self !== window.top) {
+  const params = new URLSearchParams(window.location.search);
+  if (params.has('action') && params.get('action') !== 'list') {
+    window.parent.postMessage('actionComplete', '*');
+  }
+}
+
 /** @type {HTMLElement|null} */
 const container = document.querySelector('#page');
 /** @type {HTMLElement|null} */
@@ -105,16 +120,13 @@ function handleDownState() {
   const viewportHeight = window.innerHeight;
   if (!document.body.classList.contains("isDown") && !document.getElementById("down")) {
     document.body.classList.add("isDown");
-    container.style.height = `${viewportHeight}px`;
+    container.style.height = "100%";
+    container.style.minHeight = `${viewportHeight}px`;
     container.style.overflow = 'hidden';
     const downElement = document.createElement("div");
     downElement.id = "down";
     downElement.className = "notReady";
     downElement.innerHTML = "<b><span>Router is down</span></b>";
-    downElement.style.position = "absolute";
-    downElement.style.top = "50%";
-    downElement.style.left = "50%";
-    downElement.style.transform = "translate(-50%, -50%)";
     downElement.style.zIndex = "9999";
     document.body.appendChild(downElement);
     if (!tempStylesheet) {
@@ -122,9 +134,9 @@ function handleDownState() {
       styleSheet.id = "isDownOverlay";
       const bg = (theme === "light" || theme === "classic" ? "#f2f2ff" : "#000");
       const styles =
-        ".isDown::after{width:calc(100% + 16px);height:100vh;display:block;position:fixed;top:0;right:0;bottom:0;left:0;z-index:999;background:" + bg +
-        ";overflow:hidden;contain:paint;content:''}" +
-        ".isDown #page{display:inline-block;max-height:600px}";
+        "body.isDown{display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}" +
+        "body.isDown::after{position:fixed;top:0;right:0;bottom:0;left:0;z-index:998;background:" + bg + ";content:''}" +
+        "body.isDown #page{display:none}";
       styleSheet.appendChild(document.createTextNode(styles));
       document.head.appendChild(styleSheet);
     }
@@ -232,6 +244,7 @@ function updateLog(responseDoc) {
  */
 function refreshPanels(responseDoc) {
   updateLog(responseDoc);
+  updateNonceLinks(responseDoc);
   ["serverTunnels", "clientTunnels"].forEach(id => {
     const element = document.getElementById(id);
     const responseElement = responseDoc.getElementById(id);
@@ -250,6 +263,7 @@ function refreshPanels(responseDoc) {
 function refreshAll(responseDoc) {
   const tunnelIndexResponse = responseDoc?.getElementById("page");
   updateElementContent(tunnelIndex, tunnelIndexResponse);
+  updateNonceLinks(responseDoc);
   initTunnelControl();
   bindToggle();
   countServices();
@@ -262,6 +276,26 @@ function refreshAll(responseDoc) {
  * @returns {void}
  */
 function reloadPage() {location.reload(true);}
+
+/**
+ * Updates nonce values in all action links from the response document.
+ * Parses new nonce from first link and updates all links in DOM.
+ * @function updateNonceLinks
+ * @param {Document} responseDoc - The parsed HTML document from fetch response
+ * @returns {void}
+ */
+function updateNonceLinks(responseDoc) {
+  const firstLink = responseDoc.querySelector('a[href*="nonce="]');
+  if (!firstLink) { return; }
+  const url = new URL(firstLink.href, window.location.origin);
+  const newNonce = url.searchParams.get("nonce");
+  if (!newNonce) { return; }
+  document.querySelectorAll('a[href*="nonce="]').forEach(link => {
+    const linkUrl = new URL(link.href, window.location.origin);
+    linkUrl.searchParams.set("nonce", newNonce);
+    link.href = linkUrl.toString();
+  });
+}
 
 /**
  * Binds the toggle info click handler if not already attached.
@@ -298,12 +332,12 @@ function refreshIndex() {
  */
 function initTunnelControl() {
   if (!tunnelIndex.classList.contains("listener")) {
+    tunnelIndex.classList.add("listener");
     tunnelIndex.addEventListener("click", async event => {
       const target = event.target;
-      if (target.classList.contains("control") && !target.classList.contains("create")) {
+      if (target.classList.contains("control") && !target.classList.contains("create") && !target.classList.contains("preview")) {
         event.preventDefault();
         await tunnelControl(target.href, target);
-        tunnelIndex.classList.add("listener");
       }
     });
   }
@@ -361,15 +395,17 @@ if (control) { initTunnelControl(); }
 /** @type {number} */
 setInterval(refreshIndex, 5000);
 
+// Preload image immediately for isDown display (before router potentially goes down)
+if (theme === "dark") {
+  preloadImage("/themes/console/dark/images/tunnelmanager.webp");
+}
+
 /**
- * DOMContentLoaded handler that initializes service counting and preloads dark theme images.
+ * DOMContentLoaded handler that initializes service counting.
  * @listens DOMContentLoaded
  */
 document.addEventListener("DOMContentLoaded", () => {
   countServices();
-  if (theme === "dark") {
-    preloadImage("/themes/console/dark/images/tunnelmanager.webp");
-  }
 });
 
 /**

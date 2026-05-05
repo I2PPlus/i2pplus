@@ -168,12 +168,10 @@ public class IndexBean {
         if ((_action == null) || (_action.trim().length() <= 0) || ("Cancel".equals(_action))) {return "";}
         if (_group == null) {return _t("Error - tunnels are not initialized yet");}
 
-/**     // Disabled for now, doesn't work correctly with js auto-refresh
-        // If passwords are turned on, all is assumed good
-        if (!_context.getBooleanProperty(PROP_PW_ENABLE) && !haveNonce(_curNonce))
+        // Always validate nonce - parent page reloads after action completes
+        if (!haveNonce(_curNonce))
             return "• " + _t("Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit.") +
                    ' ' + _t("If the problem persists, verify that you have cookies enabled in your browser.");
-**/
 
         /* For any of these that call getMessage(msgs), we return "", as getMessage() will add them to the returned string. */
         if ("Stop all".equals(_action)) {stopAll();}
@@ -189,7 +187,7 @@ public class IndexBean {
             else if ("stop".equals(_action)) {return stop();}
             else if ("start".equals(_action)) {return start();}
             else if ("restart".equals(_action)) {return restart();}
-            
+
             else if ("Modify".equals(_action)) {return modifyDestination();}
             else if ("Generate".equals(_action)) {return generateNewEncryptionKey();}
             else {return "Action " + _action + " unknown";}
@@ -1582,7 +1580,7 @@ public class IndexBean {
             case Certificate.CERTIFICATE_TYPE_HIDDEN:
                 pkf.setCertType(_certType);
                 break;
-            
+
             case Certificate.CERTIFICATE_TYPE_SIGNED:
                 if (_certSigner == null || _certSigner.trim().length() <= 0) {
                     return "No signing destination specified";
