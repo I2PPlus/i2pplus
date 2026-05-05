@@ -451,26 +451,26 @@ class JobQueueScaler implements Runnable {
             double ratioThreshold = getScaleUpJobsRatio();
 
             // Check both queue lag AND active job duration AND message delay
-            // When all runners are busy with slow jobs, queue lag is 0 but active job duration is high
-            boolean highLag = maxLag > lagThreshold;
-            boolean highAvgLag = avgLag >= lagThreshold;
+            // Use Math.min to scale based on whichever metric shows more congestion
+            // (job lag vs message delay - they're the same stat but different views)
+            long effectiveDelay = Math.max(maxLag, messageDelay);
+            boolean highLag = effectiveDelay > lagThreshold;
+            boolean highAvgLag = Math.max(avgLag, messageDelay) >= lagThreshold;
             boolean highBacklog = readyJobs > 0 && jobsRatio > ratioThreshold;
-            boolean criticalLag = maxLag > lagThreshold * 10; // 10x threshold = critical
+            boolean criticalLag = effectiveDelay > lagThreshold * 10; // 10x threshold = critical
             boolean slowActiveJobs = activeJobMaxDuration > lagThreshold * 50; // Jobs running >50ms (very slow)
             boolean criticalSlowJobs = activeJobMaxDuration > lagThreshold * 100; // Jobs running >100ms (critical)
 
-            // Message delay trigger - scale up immediately if message delay > 200ms
-            boolean highMessageDelay = messageDelay > 200;
-
             if (highBacklog || highLag || highAvgLag || slowActiveJobs) {
                 _consecutiveScaleUpChecks++;
-                if (_consecutiveScaleUpChecks >= SUSTAINED_CHECKS_REQUIRED || criticalLag || criticalSlowJobs || highMessageDelay) {
+                if (_consecutiveScaleUpChecks >= SUSTAINED_CHECKS_REQUIRED || criticalLag || criticalSlowJobs) {
                     shouldScaleUp = true;
-                    if (criticalLag || criticalSlowJobs || highMessageDelay) {
+                    if (criticalLag || criticalSlowJobs) {
                         if (_log.shouldInfo()) {
-                            _log.info((criticalLag ? "Queue lag=" + maxLag + "ms" : "") +
+                            String delayInfo = (maxLag > lagThreshold || messageDelay > lagThreshold) ?
+                                " (lag=" + maxLag + ", msgDelay=" + messageDelay + ")" : "";
+                            _log.info((criticalLag ? "Effective delay=" + effectiveDelay + delayInfo : "") +
                                       (criticalSlowJobs ? " Active job duration=" + activeJobMaxDuration + "ms" : "") +
-                                      (highMessageDelay ? " Message delay=" + messageDelay + "ms" : "") +
                                       " > threshold=" + lagThreshold + "ms. Scaling immediately. Runners: " +
                                       activeRunners + "/" + maxRunners + ", Ready jobs: " + readyJobs);
                         }
