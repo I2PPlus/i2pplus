@@ -131,6 +131,8 @@ certificates/ssl/user.mx24.eu.crt
 certificates/ssl/us.reseed.i2p2.no.crt
 certificates/ssl/webpack.de.crt
 # I2P+
+# clean up old incorrectly nested themes directory
+docs/themes/themes/
 eepsite-jetty9/resources/*
 eepsite-jetty9/resources/
 lib/jfreesvg.jar

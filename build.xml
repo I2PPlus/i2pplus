@@ -2392,8 +2392,9 @@
   </target>
 
   <target name="prepthemeupdates">
+    <delete dir="pkg-temp/docs/themes/" quiet="true"/>
     <copy quiet="true" todir="pkg-temp/docs/themes/">
-      <fileset dir="installer/resources/console/">
+      <fileset dir="installer/resources/console/themes/">
         <exclude name="**/*.*~"/>
       </fileset>
     </copy>
