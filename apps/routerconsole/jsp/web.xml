@@ -5,6 +5,15 @@
          version="3.1">
 
   <filter>
+    <filter-name>SameSiteCookieFilter</filter-name>
+    <filter-class>net.i2p.servlet.filters.SameSiteCookieFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>SameSiteCookieFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter>
     <filter-name>XSSFilter</filter-name>
     <filter-class>net.i2p.servlet.filters.XSSFilter</filter-class>
   </filter>

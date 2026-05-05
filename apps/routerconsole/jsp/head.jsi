@@ -11,11 +11,13 @@ boolean isConfigPage = uri.contains("config") && !uri.contains("/help/");
 boolean isHelpPage = uri.contains("/help/") && !uri.endsWith("/");
 boolean isWizardPage = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
 boolean viewProfile = uri.contains("viewprofile");
+String csrfMetaToken = net.i2p.router.web.CSSHelper.getNonce();
 %>
 <html lang="<%=lang%>" class="<%=isAdvancedMode ? "advmode " : ""%><%=useUnifiedSidebar ? "unified " : ""%><%=useSoraFont ? "sora" : "opensans"%>" <%=theme.equals("dark") || theme.equals("midnight") ? "style=\"background:var(--bodybg,#000)\"" : ""%>>
 <head>
 <script src=/js/progressx.js></script>
 <meta charset=utf-8>
+<meta name="csrf-token" content="<%=csrfMetaToken%>">
 <meta name=viewport content="width=device-width, initial-scale=1">
 <link rel=modulepreload href=/js/refreshSidebar.js>
 <link rel=modulepreload href=/js/sectionToggle.js>
@@ -48,6 +50,7 @@ else if (lang.equals("bo")) {%> <link rel=stylesheet href="<%=themePath%>console
   window.theme = "<%=theme%>";
   window.stickySidebarEnabled = <%=useStickySidebar%>;
   progressx.show(theme);progressx.progress(0.1);
+  document.cookie = "csrfToken=<%=csrfMetaToken%>; Path=/; SameSite=Lax";
 </script>
 <% if (!isWizardPage) {%> <script src=/js/refreshSidebar.js type=module></script> <% } %>
 <script src=/js/detectPageZoom.js></script>

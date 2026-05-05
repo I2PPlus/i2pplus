@@ -22,14 +22,14 @@ public class ConfigNavHelper extends HelperBase {
     private static final String pages[] =
                                           {"", "net", "ui", "sidebar", "home", "service", "update", "tunnels",
                                            "clients", "peer", "keyring", "logging", "stats",
-                                           "i2cp", "plugins", "webapps",  "reseed", "advanced", "family"};
+                                           "i2cp", "plugins", "webapps",  "reseed", "advanced", "family", "ban"};
 
     private static final String titles[] =
                                           {_x("Bandwidth"), _x("Network"), _x("UI"), _x("Sidebar"), _x("Home Page"),
                                            _x("Service"), _x("Update"), _x("Tunnels"),
                                            _x("Clients"), _x("Peers"), _x("Keyring"), _x("Logging"), _x("Stats"),
                                            _x("I2CP"), _x("Plugins"), _x("Web Apps"),
-                                           _x("Reseeding"), _x("Advanced"), _x("Router Family") };
+                                           _x("Reseeding"), _x("Advanced"), _x("Router Family"), _x("Bans") };
 
     /** @since 0.9.19 */
     private static class Tab {

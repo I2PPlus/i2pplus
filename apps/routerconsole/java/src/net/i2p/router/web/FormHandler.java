@@ -3,8 +3,11 @@ package net.i2p.router.web;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.servlet.RequestWrapper;
@@ -37,6 +40,56 @@ public abstract class FormHandler {
     private boolean _processed;
     private boolean _valid;
     protected Writer _out;
+
+    /** Rate limiter for form submissions - prevents brute-force attacks */
+    private static final int RATE_LIMIT_WINDOW_MS = 60000; // 1 minute
+    private static final int RATE_LIMIT_MAX_POSTS = 30; // max POSTs per minute per IP
+    private static final ConcurrentHashMap<String, RateLimitEntry> RATE_LIMIT_MAP = new ConcurrentHashMap<>();
+
+    private static class RateLimitEntry {
+        final AtomicInteger count = new AtomicInteger(1);
+        final long windowStart = System.currentTimeMillis();
+    }
+
+    /** Check and record rate limit for an IP. Returns true if allowed. */
+    private static boolean checkRateLimit(String ip) {
+        if (ip == null || ip.isEmpty()) return true;
+        long now = System.currentTimeMillis();
+        RateLimitEntry entry = RATE_LIMIT_MAP.get(ip);
+        if (entry == null) {
+            RATE_LIMIT_MAP.put(ip, new RateLimitEntry());
+            return true;
+        }
+        // Reset if window expired
+        if (now - entry.windowStart > RATE_LIMIT_WINDOW_MS) {
+            entry.count.set(1);
+            return true;
+        }
+        // Check limit
+        if (entry.count.incrementAndGet() > RATE_LIMIT_MAX_POSTS) {
+            return false;
+        }
+        return true;
+    }
+
+    /** Clean up old entries periodically */
+    static {
+        Thread cleanupThread = new Thread(() -> {
+            while (true) {
+                try { Thread.sleep(120000); } catch (InterruptedException ie) { break; }
+                long now = System.currentTimeMillis();
+                Iterator<Map.Entry<String, RateLimitEntry>> it = RATE_LIMIT_MAP.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry<String, RateLimitEntry> e = it.next();
+                    if (now - e.getValue().windowStart > RATE_LIMIT_WINDOW_MS * 2) {
+                        it.remove();
+                    }
+                }
+            }
+        }, "FormHandler-rate-limit-cleanup");
+        cleanupThread.setDaemon(true);
+        cleanupThread.start();
+    }
 
     public FormHandler() {
         _errors = new ArrayList<>();
@@ -276,11 +329,16 @@ public abstract class FormHandler {
             _valid = false;
             return;
         }
-        // If passwords are turned on, all is assumed good
-        if (_context.getBooleanProperty(RouterConsoleRunner.PROP_PW_ENABLE)) {
-            _valid = true;
-            return;
+        // Rate limiting for form submissions - prevent brute-force nonce guessing
+        if (_method != null && "POST".equals(_method)) {
+            if (!checkRateLimit("global")) {
+                addFormError(_t("Too many form submissions, please try again later"), true);
+                _valid = false;
+                return;
+            }
         }
+        // CSRF validation is done at the handler level in HostCheckHandler
+        // Always validate nonce - don't skip based on console password
         if (_nonce == null) {
             //addFormError("You trying to mess with me?  Huh?  Are you?");
             _valid = false;
