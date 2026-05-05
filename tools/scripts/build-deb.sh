@@ -4,10 +4,17 @@
 
 set -e
 
-# Detect project root - works both via ant (pwd is basedir) and direct invocation
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-BASEDIR="${PROJECT_ROOT}"
+# Use ant's basedir if set, otherwise detect from script location
+if [ -n "$ANT_BASEDIR" ]; then
+    BASEDIR="$ANT_BASEDIR"
+elif [ -n "$1" ]; then
+    # If called with a version arg, we're likely being called from ant
+    # Use current directory as basedir
+    BASEDIR="$(pwd)"
+else
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    BASEDIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+fi
 cd "$BASEDIR"
 
 VERSION="${1:-}"
