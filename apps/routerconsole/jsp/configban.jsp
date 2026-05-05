@@ -19,8 +19,8 @@
 <table id=banconfig class=configtable>
 <tr><td><b class=suboption><%=intl._t("IP Blocklists")%></b><br>
 <div class=optionlist>
-<label title="<%=intl._t("Ban IP addresses from blocklist.txt")%>"><input type=checkbox class="optbox slider" name=enableBlocklist value=true <jsp:getProperty name="banhelper" property="blocklistChecked"/>><%=intl._t("Enable IP blocklist (blocklist.txt)")%></label><br>
-<label title="<%=intl._t("Ban Tor exit node IPs from blocklist_tor.txt")%>"><input type=checkbox class="optbox slider" name=enableTorBlocklist value=true <jsp:getProperty name="banhelper" property="torBlocklistChecked"/>><%=intl._t("Enable Tor exit node blocklist (blocklist_tor.txt)")%></label>
+<label title="<%=intl._t("Ban IP addresses from blocklist.txt")%>"><input type=checkbox class="optbox slider" name=enableBlocklist value=true <jsp:getProperty name="banhelper" property="blocklistChecked"/>><%=intl._t("Enable IP blocklist")%></label><br>
+<label title="<%=intl._t("Ban Tor exit node IPs from blocklist_tor.txt")%>"><input type=checkbox class="optbox slider" name=enableTorBlocklist value=true <jsp:getProperty name="banhelper" property="torBlocklistChecked"/>><%=intl._t("Enable Tor exit node blocklist")%></label>
 </div>
 </td></tr>
 <tr><td><b class=suboption><%=intl._t("Country Bans")%></b><br>
