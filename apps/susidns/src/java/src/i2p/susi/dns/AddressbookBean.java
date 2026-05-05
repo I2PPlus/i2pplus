@@ -428,7 +428,7 @@ public class AddressbookBean extends BaseBean {
         String message = ""; // Loading config and addressbook moved into getLoadBookMessages()
         boolean fail = false;
         if (action != null) {
-            if ("POST".equals(method) && (_context.getBooleanProperty(PROP_PW_ENABLE) || (serial != null && serial.equals(lastSerial)))) {
+            if (serial != null && serial.equals(lastSerial)) {
                 boolean changed = false;
                 if (action.equals(_t("Add")) || action.equals(_t("Replace"))) {
                     if (addressbook != null && hostname != null && destination != null) {

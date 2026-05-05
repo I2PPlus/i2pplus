@@ -351,8 +351,7 @@ public class NamingServiceBean extends AddressbookBean {
             Properties nsOptions = new Properties();
             // only blockfile needs this
             nsOptions.setProperty("list", getFileName());
-            if ("POST".equals(method) && (_context.getBooleanProperty(PROP_PW_ENABLE) ||
-                (serial != null && serial.equals(lastSerial)))) {
+            if (serial != null && serial.equals(lastSerial)) {
                 boolean changed = false;
                 if (action.equals(_t("Add")) || action.equals(_t("Replace")) || action.equals(_t("Add Alternate"))) {
                     if (hostname != null && destination != null) {

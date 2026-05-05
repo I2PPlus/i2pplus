@@ -327,7 +327,7 @@ public class BlacklistBean extends BaseBean {
     public String getMessages() {
         String message = "";
         if (action != null) {
-            if ("POST".equals(method) && (_context.getBooleanProperty(PROP_PW_ENABLE) || (serial != null && serial.equals(lastSerial)))) {
+            if (serial != null && serial.equals(lastSerial)) {
                 if (action.equals(_t("Save"))) {
                     save();
                     message = _t("Blacklist saved.");
