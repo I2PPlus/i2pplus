@@ -88,6 +88,16 @@ public class FamilyKeyCrypto {
                 _fname.contains("..") || (new File(_fname)).isAbsolute() ||
                 _fname.length() <= 0)
                 throw new GeneralSecurityException("Illegal family name: " + _fname);
+            // Normalize the family name to prevent traversal
+            try {
+                File test = new File(new File(_context.getConfigDir(), "certificates"), _fname);
+                String canonical = test.getCanonicalPath();
+                String base = _context.getConfigDir().getCanonicalPath();
+                if (!canonical.startsWith(base + File.separator))
+                    throw new GeneralSecurityException("Illegal family name: " + _fname);
+            } catch (IOException ioe) {
+                throw new GeneralSecurityException("IO error: " + ioe);
+            }
         }
         _privkey = (_fname != null) ? initialize() : null;
         _pubkey = (_privkey != null) ? _privkey.toPublic() : null;

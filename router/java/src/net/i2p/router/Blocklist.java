@@ -82,11 +82,15 @@ public class Blocklist {
     private Entry _wrapSave;
     private final Set<Hash> _inProcess = new HashSet<Hash>(4);
     private final File _blocklistFeedFile;
-    private final boolean _haveIPv6;
+    private boolean _haveIPv6;
     private boolean _started;
     private long _lastExpired = 0;
     // temp
     private final Map<Hash, String> _peerBlocklist = new HashMap<Hash, String>(4);
+    // Configurable properties
+    private boolean _blocklistEnabled;
+    private boolean _blocklistTorEnabled;
+    private boolean _blocklistCountryEnabled;
 
     private static final String PROP_BLOCKLIST_ENABLED = "router.blocklist.enable";
     private static final String PROP_BLOCKLIST_FEEDLIST_ENABLED = "router.blocklistFeed.enable";
@@ -154,8 +158,48 @@ public class Blocklist {
         _blocklistFeedFile = new File(context.getConfigDir(), BLOCKLIST_FEED_FILE);
         _haveIPv6 = TransportUtil.getIPv6Config(_context, "SSU") != TransportUtil.IPv6Config.IPV6_DISABLED &&
                     Addresses.isConnectedIPv6();
+        _haveIPv6 = TransportUtil.getIPv6Config(_context, "SSU") != TransportUtil.IPv6Config.IPV6_DISABLED &&
+                    Addresses.isConnectedIPv6();
         _singleIPv6Blocklist = _haveIPv6 ? new LHMCache<BigInteger, Object>(MAX_IPV6_SINGLES) : null;
+        initConfig();
     }
+
+    /**
+     *  Initialize configurable properties.
+     *  @since 0.9.70
+     */
+    private void initConfig() {
+        _blocklistEnabled = _context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_ENABLED);
+        _blocklistTorEnabled = _blocklistEnabled && _context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_TOR_ENABLED);
+        _blocklistCountryEnabled = _blocklistEnabled && _context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_COUNTRIES_ENABLED);
+    }
+
+    /**
+     *  Reload configuration from properties.
+     *  Called when settings are changed in the console.
+     *  @since 0.9.70
+     */
+    public void reloadConfig() {
+        initConfig();
+    }
+
+    /**
+     *  Check if blocklist is enabled.
+     *  @since 0.9.70
+     */
+    public boolean isBlocklistEnabled() { return _blocklistEnabled; }
+
+    /**
+     *  Check if Tor blocklist is enabled.
+     *  @since 0.9.70
+     */
+    public boolean isTorBlocklistEnabled() { return _blocklistTorEnabled; }
+
+    /**
+     *  Check if country blocklist is enabled.
+     *  @since 0.9.70
+     */
+    public boolean isCountryBlocklistEnabled() { return _blocklistCountryEnabled; }
 
     /** only for testing with main() */
     private Blocklist() {
@@ -646,11 +690,22 @@ public class Blocklist {
         try {
             String sip = buf.substring(start1, end1);
             sip = sip.replace(';', ':'); // IPv6
-            InetAddress pi = InetAddress.getByName(sip);
-            if (pi == null) {return null;}
-            ip1 = pi.getAddress();
+            if (net.i2p.util.Addresses.isIPAddress(sip)) {
+                InetAddress pi = InetAddress.getByName(sip);
+                ip1 = pi.getAddress();
+            } else {
+                // Hostname - will leak IP via DNS lookup. User's choice if they use hostnames.
+                InetAddress pi = InetAddress.getByName(sip);
+                ip1 = pi.getAddress();
+            }
             if (start2 >= 0) {
-                pi = InetAddress.getByName(buf.substring(start2));
+                String sip2 = buf.substring(start2);
+                InetAddress pi;
+                if (net.i2p.util.Addresses.isIPAddress(sip2)) {
+                    pi = InetAddress.getByName(sip2);
+                } else {
+                    pi = InetAddress.getByName(sip2);
+                }
                 if (pi == null) {return null;}
                 ip2 = pi.getAddress();
                 if (ip2.length != 4) {throw new UnknownHostException();}
