@@ -384,6 +384,9 @@ class JobQueueScaler implements Runnable {
         long avgLag = (long) _context.statManager().getRate("jobQueue.jobLag").getRate(RateConstants.ONE_MINUTE).getAverageValue();
         long now = _context.clock().now();
 
+        // Get message delay from throttle (how backed up we are processing messages)
+        long messageDelay = _context.throttle().getMessageDelay();
+
         // Record memory usage stat
         _context.statManager().addRateData("jobQueue.memoryUsedPercent", (long) getMemoryUsagePercent());
 
@@ -404,7 +407,7 @@ class JobQueueScaler implements Runnable {
         if (_log.shouldDebug() && (_checksSinceLastScale % 10 == 0)) {
             _log.debug("JobQueueScaler check: runners=" + activeRunners + "/" + maxRunners +
                       ", readyJobs=" + readyJobs + ", maxLag=" + maxLag + "ms, avgLag=" + avgLag + "ms, " +
-                      "activeJobMaxDuration=" + activeJobMaxDuration + "ms, " +
+                      "messageDelay=" + messageDelay + "ms, activeJobMaxDuration=" + activeJobMaxDuration + "ms, " +
                       "inCooldown=" + inCooldown + ", timeSinceLastScale=" + timeSinceLastScale + "ms, " +
                       "scalingDisabled=" + _scalingUpDisabled + ", extendedCooldown=" + _isInExtendedCooldown +
                       ", preScaleSnapshot=" + (_preScaleSnapshot != null));
@@ -447,7 +450,7 @@ class JobQueueScaler implements Runnable {
             int lagThreshold = getScaleUpLagThreshold();
             double ratioThreshold = getScaleUpJobsRatio();
 
-            // Check both queue lag AND active job duration
+            // Check both queue lag AND active job duration AND message delay
             // When all runners are busy with slow jobs, queue lag is 0 but active job duration is high
             boolean highLag = maxLag > lagThreshold;
             boolean highAvgLag = avgLag >= lagThreshold;
@@ -456,14 +459,18 @@ class JobQueueScaler implements Runnable {
             boolean slowActiveJobs = activeJobMaxDuration > lagThreshold * 50; // Jobs running >50ms (very slow)
             boolean criticalSlowJobs = activeJobMaxDuration > lagThreshold * 100; // Jobs running >100ms (critical)
 
+            // Message delay trigger - scale up immediately if message delay > 200ms
+            boolean highMessageDelay = messageDelay > 200;
+
             if (highBacklog || highLag || highAvgLag || slowActiveJobs) {
                 _consecutiveScaleUpChecks++;
-                if (_consecutiveScaleUpChecks >= SUSTAINED_CHECKS_REQUIRED || criticalLag || criticalSlowJobs) {
+                if (_consecutiveScaleUpChecks >= SUSTAINED_CHECKS_REQUIRED || criticalLag || criticalSlowJobs || highMessageDelay) {
                     shouldScaleUp = true;
-                    if (criticalLag || criticalSlowJobs) {
+                    if (criticalLag || criticalSlowJobs || highMessageDelay) {
                         if (_log.shouldInfo()) {
                             _log.info((criticalLag ? "Queue lag=" + maxLag + "ms" : "") +
                                       (criticalSlowJobs ? " Active job duration=" + activeJobMaxDuration + "ms" : "") +
+                                      (highMessageDelay ? " Message delay=" + messageDelay + "ms" : "") +
                                       " > threshold=" + lagThreshold + "ms. Scaling immediately. Runners: " +
                                       activeRunners + "/" + maxRunners + ", Ready jobs: " + readyJobs);
                         }
