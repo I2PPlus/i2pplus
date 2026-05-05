@@ -972,6 +972,7 @@ public class SidebarHelper extends HelperBase {
         RateStat rs = _context.statManager().getRate("jobQueue.jobLag");
         if (rs == null) {return "0";}
         Rate lagRate = rs.getRate(RateConstants.ONE_MINUTE);
+        if (lagRate == null) {return "0";}
         long maxLag = _context.jobQueue().getMaxLag();
         if (!isAdvanced() || maxLag < (double)30) {
             if (lagRate.getAverageValue() < 1) {
@@ -1019,6 +1020,7 @@ public class SidebarHelper extends HelperBase {
         if (_context == null) {return "0 / 0";}
         RateStat cb = _context.statManager().getRate("tunnel.concurrentBuilds");
         RateStat brt = _context.statManager().getRate("tunnel.buildRequestTime");
+        if (cb == null || brt == null) {return "0 / 0";}
         Rate concurrentBuilds = cb.getRate(RateConstants.ONE_MINUTE);
         Rate buildRequestTime = brt.getRate(RateConstants.ONE_MINUTE);
         double cbavg = concurrentBuilds.getAvgOrLifetimeAvg();
@@ -1044,9 +1046,11 @@ public class SidebarHelper extends HelperBase {
     public int getAvgPeerTestTime() {
         if (_context == null) {return 0;}
         RateStat ok = _context.statManager().getRate("peer.testOK");
-        Rate rok = ok.getRate(RateConstants.ONE_HOUR);
         RateStat tooslow = _context.statManager().getRate("peer.testTooSlow");
+        if (ok == null || tooslow == null) {return 0;}
+        Rate rok = ok.getRate(RateConstants.ONE_HOUR);
         Rate rtooslow = tooslow.getRate(RateConstants.ONE_HOUR);
+        if (rok == null || rtooslow == null) {return 0;}
         int avgTestTime = (int) rok.getLifetimeAverageValue() + (int) rtooslow.getLifetimeAverageValue();
         return avgTestTime;
     }
@@ -1055,7 +1059,9 @@ public class SidebarHelper extends HelperBase {
     public int getAvgPeerTestTimeGood() {
         if (_context == null) {return 0;}
         RateStat ok = _context.statManager().getRate("peer.testOK");
+        if (ok == null) {return 0;}
         Rate rok = ok.getRate(RateConstants.ONE_HOUR);
+        if (rok == null) {return 0;}
         int avgTestTimeGood = (int) rok.getLifetimeAverageValue();
         return avgTestTimeGood;
     }
