@@ -68,7 +68,9 @@ public class LocaleWebAppHandler extends HandlerWrapper
         } else if ((pathInContext.indexOf('/', 1) < 0) &&
                    (!pathInContext.endsWith(".jsp")) &&
                    (!pathInContext.endsWith(".log")) &&
-                   (!pathInContext.endsWith(".txt"))) {
+                   (!pathInContext.endsWith(".txt")) &&
+                   (!pathInContext.equals("/login")) &&
+                   (!pathInContext.equals("/logout"))) {
             // add .jsp to pages at top level
             pathInContext += ".jsp";
         }

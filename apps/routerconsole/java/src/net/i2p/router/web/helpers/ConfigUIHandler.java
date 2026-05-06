@@ -1,5 +1,8 @@
 package net.i2p.router.web.helpers;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +70,10 @@ public class ConfigUIHandler extends FormHandler {
 
         boolean ok = _context.router().saveConfig(changes, removes);
         if (ok) {
-            if (!oldTheme.equals(_config)) {addFormNoticeNoEscape(_t("Theme change saved."), true);}
+            if (!oldTheme.equals(_config)) {
+                addFormNoticeNoEscape(_t("Theme change saved."), true);
+                updateLoginTheme(_config);
+            }
             if (oldForceMobileConsole != _forceMobileConsole) {addFormNoticeNoEscape(_t("Mobile console option saved."), true);}
         } else {
             addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs."), true);
@@ -126,6 +132,18 @@ public class ConfigUIHandler extends FormHandler {
             }
         }
         if (success) {addFormError(_t("Restart required to take effect"), true);}
+    }
+
+    private void updateLoginTheme(String theme) {
+        File themeFile = new File(_context.getBaseDir(), "docs/themes/login/theme.txt");
+        try {
+            themeFile.getParentFile().mkdirs();
+            try (FileWriter fw = new FileWriter(themeFile)) {
+                fw.write(theme);
+            }
+        } catch (IOException e) {
+            _log.error("Failed to update login theme file", e);
+        }
     }
 
 }

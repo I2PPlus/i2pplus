@@ -1,0 +1,61 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+a {
+  text-decoration: none;
+}
+.login-container {
+  padding: 2rem;
+  border-radius: 6px;
+  width: 100%;
+  max-width: 400px;
+}
+.login-container h1 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+.notice{
+  line-height: 1.4;
+}
+.form-group {
+  margin-bottom: 1rem;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+.form-group input, .form-group select  {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+.form-group input:focus {
+  outline: none;
+}
+.form-group input::placeholder {
+  opacity: .5;
+}
+.form-group input:focus::placeholder {
+  opacity: 0;
+}
+.error, .notice {
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+button, select {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+}

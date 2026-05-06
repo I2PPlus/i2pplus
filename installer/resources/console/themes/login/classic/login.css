@@ -1,0 +1,73 @@
+body {
+  background: #3c3cba;
+}
+.login-container {
+  background: linear-gradient(180deg,#f4f4ff,#eef);
+  box-shadow: 0 0 0 1px #bbc, 0 0 0 2px #99a, 0 0 0 3px #223, 0 4px 20px #0002;
+  transform-origin: center center;
+  transform: scale(.85);
+}
+.login-container h1 {
+  color: #0000;
+  display: inline-block;
+  width: calc(100% + 40px);
+  height: 70px;
+  margin: -6px -20px 20px;
+  background: url(../light/logo.svg) no-repeat center center / contain;
+}
+.form-group label {
+  color: #444;
+}
+.form-group input {
+  background: #fff;
+  border: 1px solid #999;
+  color: #333;
+}
+.form-group input:focus {
+  border-color: #007;
+}
+.form-group select {
+  width: 100%;
+  padding: 0.75rem 24px 0.75rem 0.75rem;
+  border: 1px solid #999;
+  border-radius: 4px;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat right 10px center/10px;
+  color: #333;
+  font-size: 1rem;
+  appearance: none;
+  cursor: pointer;
+}
+.form-group select:focus {
+  border-color: #007;
+  outline: none;
+}
+.form-group select option {
+  background: #fff;
+  color: #333;
+}
+.error, .notice {
+  background: #fdd;
+  color: #900;
+  border: 1px solid #d88;
+}
+.notice {
+  background: #e8e8ec;
+  color: #333;
+  border: 1px solid #999;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  text-align: center;
+}
+.notice a {
+  color: #007;
+  font-weight: 700;
+}
+button {
+  background: #446;
+  color: #fff;
+  border: 1px outset #668;
+}
+button:hover {
+  background: #557;
+}

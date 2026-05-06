@@ -68,6 +68,9 @@
 <tr class=config><th>routerconsole.unifiedSidebar={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]")%></td></tr>
 
+<tr class=config><th>routerconsole.enforceLogin={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]")%></td></tr>
+
 <tr class=section><th>router</th></tr>
 
 <tr class=config><th>router.blocklist.enable={true|false}</th></tr>

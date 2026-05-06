@@ -143,6 +143,27 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     }
 
     /**
+     *  Get all users with PBKDF2 passwords.
+     *
+     *  @param realm e.g. routerconsole.auth.i2prouter
+     *  @return Map of usernames to PBKDF2 hashes
+     */
+    public Map<String, String> getPBKDF2(String realm) {
+        String pfx = realm + '.';
+        Map<String, String> rv = new HashMap<String, String>(4);
+        for (Map.Entry<String, String> e : _context.router().getConfigMap().entrySet()) {
+            String prop = e.getKey();
+            if (prop.startsWith(pfx) && prop.endsWith(PROP_PBKDF2)) {
+                String user = prop.substring(0, prop.length() - PROP_PBKDF2.length()).substring(pfx.length());
+                String hash = e.getValue();
+                if (user.length() > 0 && hash != null && !hash.isEmpty())
+                    rv.put(user, hash);
+            }
+        }
+        return rv;
+    }
+
+    /**
      *  Migrate from plaintext to MD5 hash
      *  Ref: RFC 2617
      *

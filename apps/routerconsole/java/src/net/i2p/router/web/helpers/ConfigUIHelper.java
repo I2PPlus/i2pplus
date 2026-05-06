@@ -308,9 +308,12 @@ public class ConfigUIHelper extends HelperBase {
         StringBuilder buf = new StringBuilder(512);
         ConsolePasswordManager mgr = new ConsolePasswordManager(_context);
         Map<String, String> userpw = mgr.getMD5(RouterConsoleRunner.PROP_CONSOLE_PW);
-        Properties config = net.i2p.I2PAppContext.getGlobalContext().getProperties();
-        // only show delete user button if user(s) configured
-        if (!config.toString().contains("routerconsole.auth.i2prouter"))
+        Map<String, String> pbkdf2 = mgr.getPBKDF2(RouterConsoleRunner.PROP_CONSOLE_PW);
+        for (String user : pbkdf2.keySet()) {
+            if (!userpw.containsKey(user))
+                userpw.put(user, pbkdf2.get(user));
+        }
+        if (userpw.isEmpty() && pbkdf2.isEmpty())
             buf.append("<style>#consolepass .delete{display:none!important)</style>\n");
         buf.append("<table id=consolepass>\n");
         if (userpw.isEmpty()) {
