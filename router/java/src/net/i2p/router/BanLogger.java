@@ -317,8 +317,8 @@ public class BanLogger {
         writeLog(hashStr, ip, reason, durationStr);
     }
 
-    /**
-     * Log a ban by IP only (no router hash available).
+/**
+     * Log a ban by IP only (ignores hash).
      *
      * @param ip IP address with port (format: "1.2.3.4:5678" or "ipv6:port")
      * @param reason Reason for the ban
@@ -332,7 +332,6 @@ public class BanLogger {
      * Log a ban by IP only (no router hash available).
      * Uses "UNKNOWN" for the hash column.
      *
-     * @param hash This parameter is ignored, hash will always be "UNKNOWN"
      * @param ip IP address with port (format: "1.2.3.4:5678" or "ipv6:port")
      * @param reason Reason for the ban
      * @param durationMs Ban duration in milliseconds, or 0 for permanent
