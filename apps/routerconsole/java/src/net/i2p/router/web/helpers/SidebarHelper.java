@@ -495,9 +495,11 @@ public class SidebarHelper extends HelperBase {
         stat = _context.statManager().getRate("tunnel.buildClientExpire");
         if (stat != null) clientExpire1 = stat.getRate(RateConstants.ONE_MINUTE);
 
-        // Return 0 if no stats available yet
+        // Return 0 if no stats available yet (check both 10m and 1m rates)
         if (explSuccess10 == null && explReject10 == null && explExpire10 == null &&
-            clientSuccess10 == null && clientReject10 == null && clientExpire10 == null) {return 0;}
+            clientSuccess10 == null && clientReject10 == null && clientExpire10 == null &&
+            explSuccess1 == null && explReject1 == null && explExpire1 == null &&
+            clientSuccess1 == null && clientReject1 == null && clientExpire1 == null) {return 0;}
 
         // Calculate 10-minute percentage
         int success10 = 0, reject10 = 0, expire10 = 0;
@@ -507,10 +509,11 @@ public class SidebarHelper extends HelperBase {
         if (clientReject10 != null) reject10 += (int)clientReject10.getLastEventCount();
         if (explExpire10 != null) expire10 = (int)explExpire10.getLastEventCount();
         if (clientExpire10 != null) expire10 += (int)clientExpire10.getLastEventCount();
+        int total10 = success10 + reject10 + expire10;
         int percentage10 = 0;
-        if (success10 > 0 || reject10 > 0 || expire10 > 0) {
+        if (total10 > 0) {
             if (success10 < 1) {success10 = 1;}
-            percentage10 = (100 * success10) / (success10 + reject10 + expire10);
+            percentage10 = (100 * success10) / total10;
         }
 
         // Calculate 1-minute percentage
@@ -521,16 +524,18 @@ public class SidebarHelper extends HelperBase {
         if (clientReject1 != null) reject1 += (int)clientReject1.getLastEventCount();
         if (explExpire1 != null) expire1 = (int)explExpire1.getLastEventCount();
         if (clientExpire1 != null) expire1 += (int)clientExpire1.getLastEventCount();
+        int total1 = success1 + reject1 + expire1;
         int percentage1 = 0;
-        if (success1 > 0 || reject1 > 0 || expire1 > 0) {
+        if (total1 > 0) {
             if (success1 < 1) {success1 = 1;}
-            percentage1 = (100 * success1) / (success1 + reject1 + expire1);
+            percentage1 = (100 * success1) / total1;
         }
 
         // Return the higher of the two
         int percentage = Math.max(percentage10, percentage1);
-        if (percentage == 100 || percentage == 0) {return 0;}
-        else {return percentage;}
+        // Only hide 100% (unrealistic to display perfect success), but show actual low percentages
+        if (percentage == 100) {return 0;}
+        return percentage;
     }
 
     /**
