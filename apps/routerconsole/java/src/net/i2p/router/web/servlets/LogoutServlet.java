@@ -46,7 +46,7 @@ public class LogoutServlet extends HttpServlet {
         resp.setDateHeader("Expires", 0);
 
         resp.setContentType("text/html");
-        resp.getWriter().write("<!DOCTYPE html><html><head><script>history.replaceState(null, '', '/login');</script><meta http-equiv=\"refresh\" content=\"0;url=/login\"></head><body></body></html>");
+        resp.getWriter().write("<!DOCTYPE html><html><head><script>location.replace('/login');</script><noscript><meta http-equiv=refresh content=\"0;url=/login\"></noscript></head><body><noscript>Redirecting to <a href=\"/login\">login page</a>...</noscript></body></html>");
     }
 
     private String getSessionCookie(HttpServletRequest req) {
