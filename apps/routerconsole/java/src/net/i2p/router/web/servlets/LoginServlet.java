@@ -69,6 +69,14 @@ public class LoginServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/");
             return;
         }
+
+        String error = req.getParameter("error");
+        if ("session_expired".equals(error)) {
+            req.setAttribute("error", "Session expired. Please try again.");
+        } else if ("csrf_invalid".equals(error)) {
+            req.setAttribute("error", "Invalid request. Please try again.");
+        }
+
         req.setAttribute("theme", theme);
         req.setAttribute("setupMode", !hasPasswords);
         if (!hasPasswords) {
@@ -146,17 +154,13 @@ public class LoginServlet extends HttpServlet {
         javax.servlet.http.HttpSession session = req.getSession(false);
         if (session == null) {
             _log.warn("No session for login request");
-            req.setAttribute("error", "Session expired. Please try again.");
-            req.setAttribute("theme", getLoginTheme());
-            req.getRequestDispatcher("/login.jsp").forward(req, resp);
+            resp.sendRedirect(req.getContextPath() + "/login?error=session_expired");
             return;
         }
         String sessionCSRF = (String) session.getAttribute("loginCSRF");
         if (sessionCSRF == null || csrfToken == null || !csrfToken.equals(sessionCSRF)) {
             _log.warn("CSRF validation failed");
-            req.setAttribute("error", "Invalid request. Please try again.");
-            req.setAttribute("theme", getLoginTheme());
-            req.getRequestDispatcher("/login.jsp").forward(req, resp);
+            resp.sendRedirect(req.getContextPath() + "/login?error=csrf_invalid");
             return;
         }
         session.removeAttribute("loginCSRF");

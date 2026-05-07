@@ -4504,6 +4504,7 @@ public class I2PSnarkServlet extends BasicServlet {
         "<script src=/js/iframeResizer/updatedEvent.js type=module></script>\n" +
         "<script src=/js/setupIframe.js type=module></script>\n" +
         "<script src=/js/detectPageZoom.js type=module></script>\n" +
+        "<script src=/js/autologout.js></script>\n" +
         "<link rel=stylesheet href=/i2psnark/.res/snarkAlert.css>\n" +
         "</body>\n</html>";
     private static final String FOOTER_STANDALONE = "</div>\n" +

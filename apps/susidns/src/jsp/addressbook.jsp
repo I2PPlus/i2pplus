@@ -422,6 +422,7 @@
 <script src=/js/setupIframe.js></script>
 <script src=/js/iframeResizer/iframeResizer.contentWindow.js></script>
 <script src=/js/iframeResizer/updatedEvent.js></script>
+<script src=/js/autologout.js></script>
 <script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/clickToClose.js?<%=net.i2p.CoreVersion.VERSION%>"></script>

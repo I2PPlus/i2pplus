@@ -30,6 +30,7 @@
 <%  if (overrideCssActive) { %><link rel=stylesheet href="<%=base.getTheme()%>override.css"><% } %>
 <script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src=/js/autologout.js></script>
 <style>body{display:none;pointer-events:none}</style>
 <script nonce="<%=cspNonce%>">const theme = <%=theme%>;</script>
 </head>

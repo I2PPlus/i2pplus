@@ -53,5 +53,6 @@ else if (lang.equals("bo")) {%> <link rel=stylesheet href="<%=themePath%>console
   document.cookie = "csrfToken=<%=csrfMetaToken%>; Path=/; SameSite=Lax";
 </script>
 <% if (!isWizardPage) {%> <script src=/js/refreshSidebar.js type=module></script> <% } %>
+<script src=/js/autologout.js></script>
 <script src=/js/detectPageZoom.js></script>
 <noscript><style>.script{display:none!important}</style></noscript>

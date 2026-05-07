@@ -200,6 +200,7 @@
 <style>body{display:block!important;pointer-events:auto!important}</style>
 <script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src=/js/autologout.js></script>
 <script src="/js/textareaResize.js"></script>
 <script nonce="<%=cspNonce%>">
 window.jdenticon_config = { padding: 0, saturation: {color: 1, grayscale: 0} };

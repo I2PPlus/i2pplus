@@ -2252,6 +2252,7 @@ public class WebMail extends HttpServlet {
                .append("<script src=\"/susimail/js/notifications.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                .append("<script nonce=").append(cspNonce).append(">const theme = \"" + theme + "\";</script>\n")
                .append("<script src=/js/detectPageZoom.js type=module></script>\n")
+               .append("<script src=/js/autologout.js></script>\n")
                .append("<style>body{display:none;pointer-events:none}</style>\n")
                .append("</head>\n");
 
