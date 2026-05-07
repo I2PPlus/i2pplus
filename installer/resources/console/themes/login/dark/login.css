@@ -95,19 +95,52 @@ button:not(.dropbtn):hover {
 .notice a, .notice a:hover {
   color: #900;
 }
+img[src^="/flags"] {
+  border-radius: 2px;
+}
 #topbar {
   background: linear-gradient(180deg,#001800,#000);
   border-bottom: 1px solid #131;
   box-shadow: 0 2px 2px #0008;
+  z-index: 999;
 }
 button.dropbtn {
   border-left: 1px solid #131;
+  position: relative;
+  z-index: 999;
+  background: linear-gradient(180deg,#001800,#000);
 }
 .dropdown-content {
   border: 1px solid #131;
   top: 36px;
+  z-index: -1;
+  animation: fadein .1s ease .1s both;
 }
 #themeselect .dropdown-content {
   right: -9px;
   min-width: 50px;
+  animation: slide .4s ease 0s both;
+}
+#themeselect .dropdown-content a {
+  border-bottom-color: #131;
+}
+.dropdown-content a:hover,
+.dropdown-content a:focus {
+  background: #030;
+  border-radius: 0;
+}
+.dropdown-content a:active {
+  box-shadow: 3px 3px 3px #0008 inset;
+}
+
+.dropdown-content a:active img {
+  transform: scale(0.9);
+}
+@keyframes slide {
+  from{transform: translateY(-200px);opacity:0}
+  to{transform:translateY(0);opacity:1}
+}
+@keyframes fadein {
+  from{opacity:0}
+  to{opacity:1}
 }

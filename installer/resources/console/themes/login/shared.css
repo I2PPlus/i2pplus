@@ -115,7 +115,15 @@ button.dropbtn {
   width: 24px;
   height: 24px;
   vertical-align: middle;
-  margin: 0 -9px 0 0;
+  margin: 0 -8px 0 0;
+  filter: saturate(.7);
+}
+.dropbtn:hover img,.dropdown-content a:hover img {
+  transform: scale(1.2);
+  filter: saturate(1.2);
+}
+#themeselect .dropdown-content a:hover img {
+  transform-origin: center top;
 }
 .dropbtn img[src^="/flags"] {
   margin: 3px 0;
@@ -155,22 +163,20 @@ button.dropbtn {
 }
 .dropdown-content a[data-param="lang"] {
   display: inline-block;
-  max-width: 32px;
+  max-width: 40px;
+  max-height: 30px;
   border: 0;
-  padding: 3px 4px 4px;
-  border-radius: 3px;
+  padding: 4px 0 6px;
+  margin: 0 -4px;
 }
 .dropdown-content a:hover {
-  background: rgba(255,255,255,0.1);
+  background: #fff1;
 }
 .dropdown-content img[src^="/flags"] {
   width: 20px;
   height: 15px;
   vertical-align: middle;
   display: inline-block;
-}
-.dropdown-content a:hover img {
-  transform: scale(1.2);
 }
 .dropdown:hover .dropdown-content {
   display: block;

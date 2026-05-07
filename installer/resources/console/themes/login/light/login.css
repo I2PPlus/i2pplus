@@ -132,3 +132,22 @@ button:not(.dropbtn):active {
   background-blend-mode: luminosity;
   transition: none;
 }
+button.dropbtn {
+  border-left: 1px solid #bbe;
+}
+button.dropbtn img, .dropdown-content img {
+  filter: drop-shadow(0 0 1px #0006);
+}
+#langselect button.dropbtn img,
+#langselect .dropdown-content img {
+  border-radius: 2px;
+}
+.dropdown-content {
+  background: #eef;
+}
+.dropdown-content img {
+}
+#topbar {
+  background: linear-gradient(180deg,#f4f4ff,#eef);
+  border-color: #bbe;
+}
