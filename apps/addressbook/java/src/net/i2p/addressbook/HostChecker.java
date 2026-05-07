@@ -38,6 +38,7 @@ import net.i2p.data.LeaseSet;
 import net.i2p.router.Job;
 import net.i2p.router.JobTiming;
 import net.i2p.router.NetworkDatabaseFacade;
+import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.util.EepGet;
@@ -439,7 +440,9 @@ public class HostChecker {
                 if (reachable && existingResponseTime > -1) {
                     savePingResults();
                 }
-                return createPingResult(reachable, startTime, existingResponseTime, hostname, leaseSetTypes);
+                PingResult result = createPingResult(reachable, startTime, existingResponseTime, hostname, leaseSetTypes);
+                removeFromClientTracking(destHash);
+                return result;
             } else {
                 return lookupLeaseSetRemotely(hostname, destination, destHash, startTime, existingResponseTime);
             }
@@ -458,6 +461,7 @@ public class HostChecker {
             }
 
             savePingResults();
+            removeFromClientTracking(destHash);
             return result;
         }
     }
@@ -589,6 +593,7 @@ public class HostChecker {
                         _pingResults.put(hostname, result);
                     }
                     savePingResults();
+                    removeFromClientTracking(destHash);
                     return result;
                 }
 
@@ -596,6 +601,7 @@ public class HostChecker {
                 synchronized (_pingResults) {
                     _pingResults.put(hostname, result);
                 }
+                removeFromClientTracking(destHash);
                 return result;
             } else {
                 PingResult result = createPingResult(false, startTime, -1, hostname, leaseSetTypes);
@@ -608,6 +614,7 @@ public class HostChecker {
                 }
 
                 savePingResults();
+                removeFromClientTracking(destHash);
                 return result;
             }
 
@@ -622,7 +629,29 @@ public class HostChecker {
             }
 
             savePingResults();
+            removeFromClientTracking(destHash);
             return result;
+        }
+    }
+
+    /**
+     * Remove LeaseSet from client refresh tracking after HostChecker is done with it.
+     * This prevents unnecessary refreshes of LeaseSets that were only looked up for ping checking.
+     */
+    private void removeFromClientTracking(Hash destHash) {
+        if (destHash == null || !(_context instanceof RouterContext)) return;
+        try {
+            RouterContext routerContext = (RouterContext) _context;
+            for (Destination client : routerContext.clientManager().listClients()) {
+                NetworkDatabaseFacade clientNetDb = routerContext.clientNetDb(client.calculateHash());
+                if (clientNetDb instanceof KademliaNetworkDatabaseFacade) {
+                    ((KademliaNetworkDatabaseFacade) clientNetDb).removeLeaseSetFromTracking(destHash);
+                }
+            }
+        } catch (Exception e) {
+            if (_log.shouldDebug()) {
+                _log.debug("Error removing LeaseSet from client tracking", e);
+            }
         }
     }
 

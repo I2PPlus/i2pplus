@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -2660,18 +2661,44 @@ _context.commSystem().forceDisconnect(h, "Blocked country: " + country);
                 .sorted(Comparator.comparingLong(e -> e.getValue()))
                 .limit(toRemove)
                 .forEach(e -> _clientLeaseSetAccessTime.remove(e.getKey()));
+            if (_log.shouldWarn()) {
+                _log.warn("Pruned " + toRemove + " stale entries from client LeaseSet tracking, " +
+                          "current size: " + _clientLeaseSetAccessTime.size());
+            }
         }
 
         NamingService ns = _context.namingService();
         if (ns == null) return;
 
-        for (Hash key : _clientLeaseSetAccessTime.keySet()) {
-            Long lastAccess = _clientLeaseSetAccessTime.get(key);
-            if (lastAccess == null) continue;
+        Iterator<Map.Entry<Hash, Long>> iter = _clientLeaseSetAccessTime.entrySet().iterator();
+        int processed = 0;
+        int removed = 0;
+        while (iter.hasNext()) {
+            Map.Entry<Hash, Long> entry = iter.next();
+            Hash key = entry.getKey();
+            Long lastAccess = entry.getValue();
+            if (lastAccess == null) {
+                iter.remove();
+                removed++;
+                continue;
+            }
+
+            // First check: do we still have tunnels to this destination?
+            // If not, remove from tracking - no point refreshing what we're not using
+            if (_context.tunnelManager().getOutboundPool(key) == null) {
+                iter.remove();
+                removed++;
+                if (_log.shouldDebug()) {
+                    _log.debug("Removing client LeaseSet - no tunnels: " +
+                              (ns != null ? ns.reverseLookup(key) : key.toBase32().substring(0, 6)));
+                }
+                continue;
+            }
 
             String hostname = ns.reverseLookup(key);
             if (hostname == null) {
-                _clientLeaseSetAccessTime.remove(key);
+                iter.remove();
+                removed++;
                 continue;
             }
 
@@ -2684,37 +2711,35 @@ _context.commSystem().forceDisconnect(h, "Blocked country: " + country);
                 long timeToExpiry = expires - now;
                 if (timeToExpiry > 0 && timeToExpiry < PROACTIVE_REFRESH_THRESHOLD) {
                     // Proactive refresh - LeaseSet expiring soon
-                    // Only refresh if we have tunnels built to this destination
-                    if (_context.tunnelManager().getOutboundPool(key) == null) {
-                        _clientLeaseSetAccessTime.remove(key);
-                        continue;
-                    }
                     _clientLeaseSetAccessTime.put(key, now);
                     lookupLeaseSetRemotely(key, null);
                     if (_log.shouldDebug()) {
                         _log.debug("Proactive refresh for " + hostname + " (expires in " + (timeToExpiry/1000) + "s)");
                     }
+                    processed++;
                     continue;
                 }
             }
 
             if (lastAccess < inactiveThreshold) {
-                _clientLeaseSetAccessTime.remove(key);
+                iter.remove();
+                removed++;
                 if (_log.shouldDebug()) {
                     _log.debug("Removing stale client LeaseSet: " + hostname);
                 }
             } else if (lastAccess < refreshThreshold) {
-                // Only refresh if we have tunnels built to this destination
-                if (_context.tunnelManager().getOutboundPool(key) == null) {
-                    _clientLeaseSetAccessTime.remove(key);
-                    continue;
-                }
+                // Only refresh if we have tunnels built to this destination (already checked above)
                 _clientLeaseSetAccessTime.remove(key);
                 lookupLeaseSetRemotely(key, null);
                 if (_log.shouldDebug()) {
                     _log.debug("Refreshing client LeaseSet: " + hostname);
                 }
+                processed++;
             }
+        }
+        if (_log.shouldInfo() && (removed > 0 || processed > 0)) {
+            _log.info("Client LeaseSet refresh: processed " + processed + ", removed " + removed +
+                      ", remaining " + _clientLeaseSetAccessTime.size());
         }
     }
 
