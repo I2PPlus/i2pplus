@@ -25,9 +25,7 @@ body {
 .form-group label {
   color: #8b8;
 }
-button,
-input,
-select {
+button, input, select {
   line-height: 1;
   border-radius: 0;
 }
@@ -96,4 +94,20 @@ button:not(.dropbtn):hover {
 }
 .notice a, .notice a:hover {
   color: #900;
+}
+#topbar {
+  background: linear-gradient(180deg,#001800,#000);
+  border-bottom: 1px solid #131;
+  box-shadow: 0 2px 2px #0008;
+}
+button.dropbtn {
+  border-left: 1px solid #131;
+}
+.dropdown-content {
+  border: 1px solid #131;
+  top: 36px;
+}
+#themeselect .dropdown-content {
+  right: -9px;
+  min-width: 50px;
 }

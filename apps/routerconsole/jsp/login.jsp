@@ -39,7 +39,7 @@
     java.util.Map langToCountry = new java.util.HashMap();
     langToCountry.put("bo", "xt");
     langToCountry.put("uk", "ua");
-    langToCountry.put("ar", "az");
+    langToCountry.put("ar", "lang_arabic");
     langToCountry.put("az", "az");
     langToCountry.put("cs", "cz");
     langToCountry.put("zh", "cn");
@@ -85,7 +85,7 @@
 <span id=langselect class=dropdown data-open>
 <button class=dropbtn title="<%= intl._t("Select display language") %>"><img src="/flags.jsp?c=<%= currentCountry %>" alt="<%= lang %>"></button>
 <div class=dropdown-content>
-<a href="#" data-param="lang" data-value="ar" title="Arabic"><img src="/flags.jsp?c=az"></a>
+<a href="#" data-param="lang" data-value="ar" title="Arabic"><img src="/flags.jsp?c=lang_arabic"></a>
 <a href="#" data-param="lang" data-value="az" title="Azerbaijani"><img src="/flags.jsp?c=az"></a>
 <a href="#" data-param="lang" data-value="cs" title="Cestina"><img src="/flags.jsp?c=cz"></a>
 <a href="#" data-param="lang" data-value="zh" title="Chinese"><img src="/flags.jsp?c=cn"></a>
