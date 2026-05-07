@@ -2684,6 +2684,11 @@ _context.commSystem().forceDisconnect(h, "Blocked country: " + country);
                 long timeToExpiry = expires - now;
                 if (timeToExpiry > 0 && timeToExpiry < PROACTIVE_REFRESH_THRESHOLD) {
                     // Proactive refresh - LeaseSet expiring soon
+                    // Only refresh if we have tunnels built to this destination
+                    if (_context.tunnelManager().getOutboundPool(key) == null) {
+                        _clientLeaseSetAccessTime.remove(key);
+                        continue;
+                    }
                     _clientLeaseSetAccessTime.put(key, now);
                     lookupLeaseSetRemotely(key, null);
                     if (_log.shouldDebug()) {
@@ -2699,6 +2704,11 @@ _context.commSystem().forceDisconnect(h, "Blocked country: " + country);
                     _log.debug("Removing stale client LeaseSet: " + hostname);
                 }
             } else if (lastAccess < refreshThreshold) {
+                // Only refresh if we have tunnels built to this destination
+                if (_context.tunnelManager().getOutboundPool(key) == null) {
+                    _clientLeaseSetAccessTime.remove(key);
+                    continue;
+                }
                 _clientLeaseSetAccessTime.remove(key);
                 lookupLeaseSetRemotely(key, null);
                 if (_log.shouldDebug()) {
