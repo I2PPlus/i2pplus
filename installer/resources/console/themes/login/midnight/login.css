@@ -5,15 +5,31 @@ body {
   background: #1a1a2e;
   box-shadow: 0 4px 20px rgba(0,0,0,0.6);
 }
+.login-container {
+  background: #080822;
+  box-shadow: 0 0 0 2px #000, 0 0 0 2px #000 inset, 0 0 0 3px #337 inset, 0 4px 20px rgba(0,0,0,0.5);
+  border-radius: 4px;
+  border: 4px solid #113;
+  transform-origin: center center;
+  transform: scale(.85);
+}
 .login-container h1 {
-  color: #a4a;
+  color: #0000;
+  display: inline-block;
+  width: calc(100% + 40px);
+  height: 70px;
+  margin: -6px -20px 20px;
+  background: url(logo.svg) no-repeat center center / contain;
 }
 .form-group label {
-  color: #98a;
+  color: #7f81f9;
+}
+input,select,button {
+ font-weight: 700;
 }
 .form-group input {
-  background: #111;
-  border: 1px solid #334;
+  background: #001;
+  border: 1px solid #113;
   color: #abc;
 }
 .form-group input:focus {
@@ -22,13 +38,18 @@ body {
 .form-group select {
   width: 100%;
   padding: 0.75rem 24px 0.75rem 0.75rem;
-  border: 1px solid #334;
+  border: 1px solid #113;
   border-radius: 4px;
-  background: #111 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a4a' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat right 10px center/10px;
-  color: #abc;
+  background: #001 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23339' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat right 12px center/14px;
+  color: #339;
   font-size: 1rem;
   appearance: none;
   cursor: pointer;
+}
+.form-group select:hover,
+.form-group select:focus {
+  color: #a4a;
+  background: #001 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a4a' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat right 12px center/14px;
 }
 .form-group select:focus {
   border-color: #a4a;
@@ -56,12 +77,17 @@ body {
   color: #a4a;
   font-weight: 700;
 }
-button {
-  background: linear-gradient(180deg, #223,#112);
-  color: #a4a;
-  box-shadow: inset 0 0 0 1px #334;
+button:not(.dropbtn) {
+  background: linear-gradient(180deg, #113,#000);
+  color: #339;
+  box-shadow: inset 0 0 0 1px #113;
 }
-button:hover {
-  background: linear-gradient(180deg,#334,#223);
-  box-shadow: inset 0 0 2px 1px #a4a;
+button:not(.dropbtn):hover, button:not(.dropbtn):focus {
+  color: #a4a;
+  background: linear-gradient(180deg,#224,#001);
+  box-shadow: inset 0 0 0 1px #113, inset 0 0 0 2px #a4a;
+}
+button:not(.dropbtn):active {
+  box-shadow: inset 0 0 0 1px #113, inset 0 0 0 2px #a4a, inset 6px 6px 6px #000a;
+  background: linear-gradient(180deg,#001,#224);
 }

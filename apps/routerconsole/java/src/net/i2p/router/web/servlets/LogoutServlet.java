@@ -41,7 +41,12 @@ public class LogoutServlet extends HttpServlet {
         sessionCookie.setMaxAge(0);
         resp.addCookie(sessionCookie);
 
-        resp.sendRedirect(req.getContextPath() + "/login");
+        resp.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+        resp.setHeader("Pragma", "no-cache");
+        resp.setDateHeader("Expires", 0);
+
+        resp.setContentType("text/html");
+        resp.getWriter().write("<!DOCTYPE html><html><head><script>history.replaceState(null, '', '/login');</script><meta http-equiv=\"refresh\" content=\"0;url=/login\"></head><body></body></html>");
     }
 
     private String getSessionCookie(HttpServletRequest req) {

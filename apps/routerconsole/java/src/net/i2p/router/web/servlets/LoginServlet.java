@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.i2p.I2PAppContext;
 import net.i2p.router.Router;
+import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.ConsolePasswordManager;
 import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.servlet.filters.SessionManager;
@@ -32,8 +33,9 @@ public class LoginServlet extends HttpServlet {
     private static final String PARAM_PASSWORD = "password";
     private static final String REALM = "i2prouter";
     private static final String DEFAULT_THEME = "dark";
-    private static final String ACTIVE_THEME_CONFIG = "docs/themes/login/theme.txt";
     private static final String PROP_PERSISTED_SESSIONS = "routerconsole.persistedSessions";
+    private static final String PROP_THEME = "routerconsole.theme";
+    private static final String PROP_LANG = "routerconsole.lang";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -106,15 +108,10 @@ public class LoginServlet extends HttpServlet {
 
     private String getLoginTheme() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        File themeFile = new File(ctx.getBaseDir(), ACTIVE_THEME_CONFIG);
-        if (themeFile.exists()) {
-            try (BufferedReader br = new BufferedReader(new FileReader(themeFile))) {
-                String theme = br.readLine();
-                if (theme != null && !theme.trim().isEmpty()) {
-                    return theme.trim();
-                }
-            } catch (IOException e) {
-                _log.warn("Error reading login theme file", e);
+        if (ctx instanceof net.i2p.router.RouterContext) {
+            String theme = ((net.i2p.router.RouterContext) ctx).getProperty(CSSHelper.PROP_THEME_NAME, CSSHelper.DEFAULT_THEME);
+            if (theme != null && !theme.isEmpty()) {
+                return theme;
             }
         }
         return DEFAULT_THEME;
@@ -123,6 +120,22 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        String theme = req.getParameter("theme");
+        String lang = req.getParameter("lang");
+
+        if (theme != null && lang == null) {
+            updatePreference("routerconsole.theme", theme);
+            resp.setContentType("application/json");
+            resp.getWriter().write("{\"success\":true,\"theme\":\"" + theme + "\"}");
+            return;
+        }
+        if (lang != null) {
+            updatePreference("routerconsole.lang", lang);
+            resp.setContentType("application/json");
+            resp.getWriter().write("{\"success\":true,\"lang\":\"" + lang + "\"}");
+            return;
+        }
+
         try {
         String username = req.getParameter(PARAM_USERNAME);
         String password = req.getParameter(PARAM_PASSWORD);
@@ -379,7 +392,7 @@ boolean result = mgr.checkMD5(RouterConsoleRunner.PROP_CONSOLE_PW, REALM, userna
         router.saveConfig(PROP_PERSISTED_SESSIONS, sb.toString());
     }
 
-    private void loadPersistedSessions() {
+private void loadPersistedSessions() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         if (!(ctx instanceof net.i2p.router.RouterContext)) return;
         net.i2p.router.RouterContext rctx = (net.i2p.router.RouterContext) ctx;
@@ -394,6 +407,7 @@ boolean result = mgr.checkMD5(RouterConsoleRunner.PROP_CONSOLE_PW, REALM, userna
             if (eq <= 0) continue;
             String token = entry.substring(0, eq);
             String data = entry.substring(eq + 1);
+
             int colon = data.indexOf(':');
             if (colon <= 0) continue;
             String username = data.substring(0, colon);
@@ -406,5 +420,14 @@ boolean result = mgr.checkMD5(RouterConsoleRunner.PROP_CONSOLE_PW, REALM, userna
                 _log.warn("Invalid persisted session data: " + data);
             }
         }
+    }
+
+    private void updatePreference(String key, String value) {
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        if (!(ctx instanceof net.i2p.router.RouterContext)) return;
+        net.i2p.router.RouterContext rctx = (net.i2p.router.RouterContext) ctx;
+        Router router = rctx.router();
+        router.saveConfig(key, value);
+        _log.info("Preference updated: " + key + "=" + value);
     }
 }

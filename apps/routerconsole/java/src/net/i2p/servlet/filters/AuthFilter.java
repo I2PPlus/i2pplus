@@ -16,6 +16,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.i2p.I2PAppContext;
+import net.i2p.router.web.CSSHelper;
 import net.i2p.util.Log;
 
 /**
@@ -28,7 +29,6 @@ public class AuthFilter implements Filter {
     private static final String AUTH_TYPE_CUSTOM = "custom";
     private static final String PROP_PW_ENABLE = "routerconsole.auth.enable";
     private static final String PROP_ENFORCE_LOGIN = "routerconsole.enforceLogin";
-    private static final String ACTIVE_THEME_CONFIG = "docs/themes/login/theme.txt";
     private static final String DEFAULT_THEME = "dark";
 
     private static final Set<String> PUBLIC_PATHS = new HashSet<String>();
@@ -36,10 +36,17 @@ public class AuthFilter implements Filter {
     static {
         PUBLIC_PATHS.add("/index.jsp");
         PUBLIC_PATHS.add("/login");
+        PUBLIC_PATHS.add("/prefs");
         PUBLIC_PATHS.add("/themes/login/");
         PUBLIC_PATHS.add("/js/");
+        PUBLIC_PATHS.add("/flags.jsp");
         PUBLIC_FILES.add("/themes/console/{theme}/images/favicon.svg");
         PUBLIC_FILES.add("/themes/console/{theme}/images/i2plogo.png");
+        PUBLIC_FILES.add("/themes/console/classic/images/thumbnail.png");
+        PUBLIC_FILES.add("/themes/console/dark/images/thumbnail.png");
+        PUBLIC_FILES.add("/themes/console/light/images/thumbnail.png");
+        PUBLIC_FILES.add("/themes/console/midnight/images/thumbnail.png");
+        PUBLIC_FILES.add("/themes/console/{theme}/images/thumbnail.png");
     }
 
     @Override
@@ -59,17 +66,7 @@ public class AuthFilter implements Filter {
         boolean hasPasswords = hasAnyPassword(ctx);
         boolean enforceLogin = !ctx.getBooleanPropertyDefaultTrue(PROP_ENFORCE_LOGIN);
 
-        if (!AUTH_TYPE_CUSTOM.equals(authType)) {
-            chain.doFilter(request, response);
-            return;
-        }
-
-        if (!enforceLogin && !hasPasswords) {
-            chain.doFilter(request, response);
-            return;
-        }
-
-        if (!authEnabled && !hasPasswords) {
+if (!AUTH_TYPE_CUSTOM.equals(authType)) {
             chain.doFilter(request, response);
             return;
         }
@@ -77,6 +74,16 @@ public class AuthFilter implements Filter {
         String path = req.getRequestURI();
         if (path == null) {
             path = "";
+        }
+
+if ("/prefs".equals(path)) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        if (!enforceLogin && !hasPasswords) {
+            chain.doFilter(request, response);
+            return;
         }
 
         if (isPublicPath(path)) {
@@ -127,15 +134,10 @@ public class AuthFilter implements Filter {
 
     private String getActiveTheme() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        File themeFile = new File(ctx.getBaseDir(), ACTIVE_THEME_CONFIG);
-        if (themeFile.exists()) {
-            try (BufferedReader br = new BufferedReader(new FileReader(themeFile))) {
-                String theme = br.readLine();
-                if (theme != null && !theme.trim().isEmpty()) {
-                    return theme.trim();
-                }
-            } catch (IOException e) {
-                _log.warn("Error reading login theme file", e);
+        if (ctx instanceof net.i2p.router.RouterContext) {
+            String theme = ((net.i2p.router.RouterContext) ctx).getProperty(CSSHelper.PROP_THEME_NAME, CSSHelper.DEFAULT_THEME);
+            if (theme != null && !theme.isEmpty()) {
+                return theme;
             }
         }
         return DEFAULT_THEME;

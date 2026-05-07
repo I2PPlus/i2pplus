@@ -9,11 +9,20 @@ body {
 a {
   text-decoration: none;
 }
+button, select {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+}
 .login-container {
   padding: 2rem;
   border-radius: 6px;
   width: 100%;
   max-width: 400px;
+  margin-top: 20px;
 }
 .login-container h1 {
   margin-bottom: 1.5rem;
@@ -22,6 +31,9 @@ a {
 }
 .notice{
   line-height: 1.4;
+}
+.notice.startup {
+  margin-bottom: -6px;
 }
 .form-group {
   margin-bottom: 1rem;
@@ -50,12 +62,116 @@ a {
   padding: 0.75rem;
   border-radius: 4px;
   margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 700;
 }
-button, select {
+.notice.startup {
+  margin-bottom: -4px;
+}
+#topbar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
   width: 100%;
-  padding: 0.75rem;
+  padding: 0;
+  z-index: 100;
+  background: #0004;
+  border-bottom: 3px solid #0002;
+}
+#topbar img {
+  max-height: 24px;
+}
+
+#topbar-right {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+}
+button.dropbtn {
+  margin: -1px 0;
+  background: none;
+  padding: 6px 8px;
   border: none;
-  border-radius: 4px;
-  font-size: 1rem;
   cursor: pointer;
+  font-size: 0;
+  margin: 0;
+  box-shadow: none;
+  border-left: 1px solid #0004;
+  border-radius: 0;
+  filter: none;
+  text-align: center;
+  width: auto;
+}
+#themeselect button.dropbtn {
+  padding: 6px 12px;
+}
+.dropbtn img {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+  margin: 0 -9px 0 0;
+}
+.dropbtn img[src^="/flags"] {
+  margin: 3px 0;
+  width: 24px;
+  height: 18px;
+  vertical-align: middle;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 38px;
+  right: 0;
+  background: linear-gradient(180deg,#0000 1px,#0006 1px);
+  min-width: 52px;
+  border-radius: 0;
+  box-shadow: 0 2px 8px #0004;
+  z-index: 101;
+}
+#langselect .dropdown-content {
+  min-width: 160px;
+  padding: 8px;
+}
+#themeselect .dropdown-content {
+  right: -10px;
+}
+.dropdown-content a {
+  display: block;
+  padding: 3px 1px;
+  color: inherit;
+  vertical-align: middle;
+  border-top: 1px solid #0002;
+  border-bottom: 1px solid #fff1;
+  width: 100%;
+}
+.dropdown-content a:last-of-type {
+  border-bottom: 0;
+}
+.dropdown-content a[data-param="lang"] {
+  display: inline-block;
+  max-width: 32px;
+  border: 0;
+  padding: 3px 4px 4px;
+  border-radius: 3px;
+}
+.dropdown-content a:hover {
+  background: rgba(255,255,255,0.1);
+}
+.dropdown-content img[src^="/flags"] {
+  width: 20px;
+  height: 15px;
+  vertical-align: middle;
+  display: inline-block;
+}
+.dropdown-content a:hover img {
+  transform: scale(1.2);
+}
+.dropdown:hover .dropdown-content {
+  display: block;
 }
