@@ -187,8 +187,8 @@ public class LoginServlet extends HttpServlet {
                 req.getRequestDispatcher("/login.jsp").forward(req, resp);
                 return;
             }
-            if (password.length() < 4) {
-                req.setAttribute("error", "Password must be at least 4 characters");
+            if (password.length() < 8) {
+                req.setAttribute("error", "Password must be at least 8 characters");
                 req.setAttribute("theme", getLoginTheme());
                 req.setAttribute("setupMode", true);
                 req.setAttribute("setupTitle", "Set Up Console Access");
@@ -238,6 +238,13 @@ public class LoginServlet extends HttpServlet {
             req.setAttribute("error", "Too many failed attempts. Please try again later.");
             req.setAttribute("theme", getLoginTheme());
             req.getRequestDispatcher("/login.jsp").forward(req, resp);
+            return;
+        }
+
+        if (password.length() < 8) {
+            req.setAttribute("error", "Password must be at least 8 characters");
+            req.setAttribute("theme", getLoginTheme());
+            resp.sendRedirect(req.getContextPath() + "/login?error=password_short");
             return;
         }
 

@@ -6,7 +6,8 @@
 <jsp:setProperty name="intl" property="contextId" value="<%=i2pcontextId%>" />
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
+    String lang = request.getParameter("lang");
+    if (lang == null) lang = ctx.getProperty("routerconsole.lang", "en");
     String theme = (String) request.getAttribute("theme");
     if (theme == null) theme = "dark";
     String themeCSS = "/themes/login/" + theme + "/login.css";
@@ -39,7 +40,7 @@
     java.util.Map langToCountry = new java.util.HashMap();
     langToCountry.put("bo", "xt");
     langToCountry.put("uk", "ua");
-    langToCountry.put("ar", "lang_arabic");
+    langToCountry.put("ar", "lang_ar");
     langToCountry.put("az", "az");
     langToCountry.put("cs", "cz");
     langToCountry.put("zh", "cn");
@@ -85,7 +86,7 @@
 <span id=langselect class=dropdown data-open>
 <button class=dropbtn title="<%= intl._t("Select display language") %>"><img src="/flags.jsp?c=<%= currentCountry %>" alt="<%= lang %>"></button>
 <div class=dropdown-content>
-<a href="#" data-param="lang" data-value="ar" title="Arabic"><img src="/flags.jsp?c=lang_arabic"></a>
+<a href="#" data-param="lang" data-value="ar" title="Arabic"><img src="/flags.jsp?c=lang_ar"></a>
 <a href="#" data-param="lang" data-value="az" title="Azerbaijani"><img src="/flags.jsp?c=az"></a>
 <a href="#" data-param="lang" data-value="cs" title="Cestina"><img src="/flags.jsp?c=cz"></a>
 <a href="#" data-param="lang" data-value="zh" title="Chinese"><img src="/flags.jsp?c=cn"></a>
@@ -158,12 +159,12 @@ if (csrfToken != null) {
 </div>
 <div class=form-group>
 <label for="password"><%= intl._t("Password") %></label>
-<input type=password id=password name=password required <% if (setupMode) { %> autocomplete="new-password" <% } else { %> autocomplete="current-password" <% } %> maxlength=128>
+<input type=password id=password name=password required minlength=8 <% if (setupMode) { %> autocomplete="new-password" <% } else { %> autocomplete="current-password" <% } %> maxlength=128>
 </div>
 <% if (setupMode) { %>
 <div class=form-group>
 <label for="confirmPassword"><%= intl._t("Confirm Password") %></label>
-<input type=password id=confirmPassword name=confirmPassword required autocomplete="new-password" maxlength=128>
+<input type=password id=confirmPassword name=confirmPassword required minlength=8 autocomplete="new-password" maxlength=128>
 </div>
 <% } else { %>
 <div class=form-group>

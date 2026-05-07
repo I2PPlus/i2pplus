@@ -338,8 +338,8 @@ public class ConfigUIHelper extends HelperBase {
         buf.append("<tr><td id=pw_adduser colspan=3>")
            .append("<b>").append(_t("Username")).append(":</b> ").append("<input type=text name=name title=\"")
            .append(_t("Please supply a username")).append("\"><b>").append(_t("Password")).append(":</b> ")
-           .append("<input type=password size=40 name=nofilter_pw title=\"")
-           .append(_t("Please supply a password")).append("\">").append("</td></tr>\n</table>\n");
+           .append("<input type=password size=40 name=nofilter_pw minlength=8 title=\"")
+           .append(_t("Please supply a password (minimum 8 characters)")).append("\">").append("</td></tr>\n</table>\n");
         return buf.toString();
     }
 }

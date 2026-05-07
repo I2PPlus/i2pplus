@@ -202,6 +202,7 @@ tools/java-format-errors.txt
 
 # Local documentation etc
 WIP/
+wip/
 
 # Native JNI libraries
 *.so

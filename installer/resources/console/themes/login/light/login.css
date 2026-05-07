@@ -1,28 +1,7 @@
-:root {
-  --a: #4d5f80;
-  --border_input: 1px solid #b6b6c9;
-  --btn: linear-gradient(180deg,#fff,#efefff);
-  --btn_shadow: 0 2px 0 rgba(255,255,255,.85) inset,0 0 10px rgba(0,0,0,.08) inset,0 1px 1px rgba(0,0,0,.05),0 7px 4px -4px rgba(0,0,0,.08);
-  --btn_shadow_hover: inset 0 0 0 1px #fff,inset 0 -8px 3px 8px rgba(255,96,0,.02),inset 0 0 10px rgba(255,96,0,.05),0 0 1px rgba(255,96,0,.1),0 7px 4px -4px rgba(0,0,0,.1);
-  --btn_hover: linear-gradient(180deg,#eee,#fff);
-  --highlight: inset 0 0 0 1px #fff;
-  --hover: #f60;
-  --ink: #5b5b71;
-  --ink_dark: #444455;
-  --ink_light: #66667f;
-  --ink_active: #4c526f;
-  --txtinput: linear-gradient(180deg,#f2f2ff,#fff);
-  --input_shadow: inset 1px 1px 1px rgba(0,0,0,.15);
-  --txtinput_shadow_focus: 0 0 0 1px var(--hover) inset,0 0 0 2px #fff inset,3px 3px 3px #0006 inset;
-  --dropdown: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%2366667f' d='M5 8L1 4h8z'/%3E%3C/svg%3E");
-  --dropdown_hover: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%23444455' d='M5 8L1 4h8z'/%3E%3C/svg%3E");
-  --filter_shadow: drop-shadow(0 0 1px rgba(220,220,255,.7));
-}
-
 body {
   background: #3c3cba;
   color: #66667f;
-  font-weight: 18px;
+  font-size: 18px;
 }
 .login-container {
   background: linear-gradient(180deg,#f4f4ff,#eef);
@@ -65,6 +44,7 @@ body {
   width: 100%;
   padding: 6px 24px 6px 8px;
   min-width: 120px;
+  font-weight: 700;
   border: 1px solid #b6b6c9;
   border-radius: 2px;
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset,0 0 10px rgba(0,0,0,.08) inset,0 1px 1px rgba(0,0,0,.05),0 7px 4px -4px rgba(0,0,0,.08);
@@ -135,6 +115,9 @@ button:not(.dropbtn):active {
 button.dropbtn {
   border-left: 1px solid #bbe;
 }
+button.dropbtn:hover {
+  background: none;
+}
 button.dropbtn img, .dropdown-content img {
   filter: drop-shadow(0 0 1px #0006);
 }
@@ -144,8 +127,6 @@ button.dropbtn img, .dropdown-content img {
 }
 .dropdown-content {
   background: #eef;
-}
-.dropdown-content img {
 }
 #topbar {
   background: linear-gradient(180deg,#f4f4ff,#eef);

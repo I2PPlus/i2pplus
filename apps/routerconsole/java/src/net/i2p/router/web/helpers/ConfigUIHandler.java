@@ -102,6 +102,10 @@ public class ConfigUIHandler extends FormHandler {
             addFormError(_t("No password entered"), true);
             return;
         }
+        if (pw.length() < 8) {
+            addFormError(_t("Password must be at least 8 characters"), true);
+            return;
+        }
         ConsolePasswordManager mgr = new ConsolePasswordManager(_context);
         // rfc 2617
         if (mgr.saveMD5(RouterConsoleRunner.PROP_CONSOLE_PW, RouterConsoleRunner.JETTY_REALM, name, pw)) {
