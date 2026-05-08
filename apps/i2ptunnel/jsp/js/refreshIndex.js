@@ -11,6 +11,7 @@ import { initToggleInfo } from "/i2ptunnel/js/toggleTunnelInfo.js";
 
 // Notify parent to reload after action completes
 window.addEventListener('message', (e) => {
+  if (e.origin !== parentOrigin) return;
   if (e.data === 'actionComplete') {
     window.parent.location.reload();
   }
@@ -20,7 +21,7 @@ window.addEventListener('message', (e) => {
 if (window.self !== window.top) {
   const params = new URLSearchParams(window.location.search);
   if (params.has('action') && params.get('action') !== 'list') {
-    window.parent.postMessage('actionComplete', '*');
+    window.parent.postMessage('actionComplete', parentOrigin);
   }
 }
 
@@ -33,7 +34,14 @@ const countClient = document.getElementById("countClient");
 /** @type {HTMLElement|null} */
 const countServer = document.getElementById("countServer");
 /** @type {HTMLIFrameElement|null} */
-const iframe = window.parent.document.querySelector(".main#tunnelmgr");
+let iframe = null;
+try {
+  if (window.self !== window.top) {
+    iframe = window.parent.document.querySelector(".main#tunnelmgr");
+  }
+} catch (e) {
+  console.warn('[refreshIndex] Cannot access parent document:', e);
+}
 /** @type {HTMLElement|null} */
 const isDownElement = document.getElementById("down");
 /** @type {HTMLElement|null} */
@@ -48,11 +56,19 @@ const toggle = document.getElementById("toggleInfo");
 const tunnelIndex = document.getElementById("page");
 /** @type {string} */
 const url = window.location.pathname;
+/** @type {string} */
+const safeTheme = typeof theme !== 'undefined' ? theme : 'dark';
+/** @type {string} */
+const parentOrigin = window.parent?.location?.origin || location.origin;
+/** @type {WeakSet} */
+const boundToggles = new WeakSet();
 
 /** @type {boolean} */
 let isDownClassAdded = false;
 /** @type {number|undefined} */
 let isDownTimeoutId;
+/** @type {boolean} */
+let tunnelControlListenerAttached = false;
 
 /**
  * Updates element content if it differs from the response element.
@@ -62,7 +78,7 @@ let isDownTimeoutId;
  * @returns {void}
  */
 function updateElementContent(element, responseElement) {
-  if (responseElement && element.innerHTML !== responseElement.innerHTML) {
+  if (element && responseElement && element.innerHTML !== responseElement.innerHTML) {
     element.innerHTML = responseElement.innerHTML;
   }
 }
@@ -77,7 +93,7 @@ function updateElementContent(element, responseElement) {
  */
 async function refreshTunnelStatus() {
   try {
-    const response = await fetch(url, { method: "GET", headers: { "Cache-Control": "no-cache" } });
+    const response = await fetch(url, { method: "GET", headers: { "Cache-Control": "no-cache" }, credentials: 'same-origin' });
     if (response.ok) {
       clearTimeout(isDownTimeoutId);
       if (isDownElement) { isDownElement.remove(); }
@@ -89,14 +105,17 @@ async function refreshTunnelStatus() {
 
       if (isDownClassAdded && doc.getElementById("globalTunnelControl")) { reloadPage(); }
       document.body.classList.remove("isDown");
-      container.style = "";
-      iframe.style.padding = "";
+      if (container) { container.style = ""; }
+      if (iframe) { iframe.style.padding = ""; }
 
-      if (notReady) {
+      if (notReady || doc.getElementById("notReady")) {
         const notReadyResponse = doc.getElementById("notReady");
         if (notReadyResponse) { refreshAll(doc); }
         else { reloadPage(); }
-      } else { updateVolatile(doc); }
+      } else {
+        updateNonceLinks(doc);
+        updateVolatile(doc);
+      }
 
       countServices();
       resizeIframe();
@@ -120,9 +139,11 @@ function handleDownState() {
   const viewportHeight = window.innerHeight;
   if (!document.body.classList.contains("isDown") && !document.getElementById("down")) {
     document.body.classList.add("isDown");
-    container.style.height = "100%";
-    container.style.minHeight = `${viewportHeight}px`;
-    container.style.overflow = 'hidden';
+    if (container) {
+      container.style.height = "100%";
+      container.style.minHeight = `${viewportHeight}px`;
+      container.style.overflow = 'hidden';
+    }
     const downElement = document.createElement("div");
     downElement.id = "down";
     downElement.className = "notReady";
@@ -132,7 +153,7 @@ function handleDownState() {
     if (!tempStylesheet) {
       const styleSheet = document.createElement("style");
       styleSheet.id = "isDownOverlay";
-      const bg = (theme === "light" || theme === "classic" ? "#f2f2ff" : "#000");
+      const bg = (safeTheme === "light" || safeTheme === "classic" ? "#f2f2ff" : "#000");
       const styles =
         "body.isDown{display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}" +
         "body.isDown::after{position:fixed;top:0;right:0;bottom:0;left:0;z-index:998;background:" + bg + ";content:''}" +
@@ -186,6 +207,7 @@ function countServices() {
    * @returns {void}
    */
   const updateCount = (element, selector, status) => {
+    if (!element) return;
     const elements = document.querySelectorAll(selector);
     element.textContent = elements.length > 0 ? ` x ${elements.length}` : "";
 
@@ -197,8 +219,12 @@ function countServices() {
 
   if (control) {
     statuses.forEach(({ clientSelector, serverSelector, status }) => {
-      updateCount(countClient.querySelector(`.${status}`), clientSelector, status);
-      updateCount(countServer.querySelector(`.${status}`), serverSelector, status);
+      if (countClient) {
+        updateCount(countClient.querySelector(`.${status}`), clientSelector, status);
+      }
+      if (countServer) {
+        updateCount(countServer.querySelector(`.${status}`), serverSelector, status);
+      }
     });
   }
 }
@@ -214,11 +240,14 @@ function updateVolatile(responseDoc) {
   const updating = document.querySelectorAll(".tunnelProperties .volatile");
   const updatingResponse = responseDoc.querySelectorAll(".tunnelProperties .volatile");
   updateLog(responseDoc);
-  if (updating.length !== updatingResponse.length) {refreshPanels(responseDoc);}
-  else {
+  if (updating.length !== updatingResponse.length) {
+    refreshPanels(responseDoc);
+  } else {
     updating.forEach((el, i) => {
       const responseEl = updatingResponse[i];
-      if (el.textContent.trim() !== responseEl.textContent.trim()) {updateElementContent(el, responseEl);}
+      if (el.textContent.trim() !== responseEl.textContent.trim()) {
+        updateElementContent(el, responseEl);
+      }
     });
   }
 }
@@ -278,22 +307,21 @@ function refreshAll(responseDoc) {
 function reloadPage() {location.reload(true);}
 
 /**
- * Updates nonce values in all action links from the response document.
- * Parses new nonce from first link and updates all links in DOM.
+ * Updates nonce values in all action forms from the response document.
+ * Parses new nonce from first form input and updates all form nonce inputs in DOM.
  * @function updateNonceLinks
  * @param {Document} responseDoc - The parsed HTML document from fetch response
  * @returns {void}
  */
 function updateNonceLinks(responseDoc) {
-  const firstLink = responseDoc.querySelector('a[href*="nonce="]');
-  if (!firstLink) { return; }
-  const url = new URL(firstLink.href, window.location.origin);
-  const newNonce = url.searchParams.get("nonce");
-  if (!newNonce) { return; }
-  document.querySelectorAll('a[href*="nonce="]').forEach(link => {
-    const linkUrl = new URL(link.href, window.location.origin);
-    linkUrl.searchParams.set("nonce", newNonce);
-    link.href = linkUrl.toString();
+  const firstForm = responseDoc.querySelector('form[id] input[name="nonce"]');
+  if (!firstForm) { console.warn('[refreshIndex] No nonce form found in response'); return; }
+  const newNonce = firstForm.value;
+  if (!newNonce) { console.warn('[refreshIndex] Empty nonce value in response'); return; }
+  document.querySelectorAll('form[id] input[name="nonce"]').forEach(input => {
+    if (input.value !== newNonce) {
+      input.value = newNonce;
+    }
   });
 }
 
@@ -304,9 +332,9 @@ function updateNonceLinks(responseDoc) {
  * @returns {void}
  */
 function bindToggle() {
-  if (toggle && !control.classList.contains("listener")) {
+  if (toggle && !boundToggles.has(toggle)) {
     toggle.addEventListener("click", initToggleInfo);
-    control.classList.add("listener");
+    boundToggles.add(toggle);
   }
 }
 
@@ -321,7 +349,7 @@ function refreshIndex() {
   refreshTunnelStatus();
   if (!control) { setTimeout(refreshIndex, 500); return; }
   bindToggle();
-  if (!tunnelIndex.classList.contains("listener")) {initTunnelControl();}
+  if (tunnelIndex && !tunnelIndex.classList.contains("listener")) {initTunnelControl();}
 }
 
 /**
@@ -331,34 +359,102 @@ function refreshIndex() {
  * @returns {void}
  */
 function initTunnelControl() {
-  if (!tunnelIndex.classList.contains("listener")) {
-    tunnelIndex.classList.add("listener");
-    tunnelIndex.addEventListener("click", async event => {
-      const target = event.target;
-      if (target.classList.contains("control") && !target.classList.contains("create") && !target.classList.contains("preview")) {
-        event.preventDefault();
-        await tunnelControl(target.href, target);
-      }
-    });
-  }
+  if (!tunnelIndex || tunnelControlListenerAttached) return;
+  tunnelControlListenerAttached = true;
 
-  /**
-   * Executes a tunnel control action by fetching the URL and updating the UI.
-   * @async
-   * @function tunnelControl
-   * @param {string} url - The control action URL to fetch
-   * @param {HTMLElement} target - The clicked control element
-   * @returns {Promise<void>}
-   */
-  async function tunnelControl(url, target) {
-    try {
-      const response = await fetch(url, { method: "GET", headers: { "Cache-Control": "no-cache" } });
-      if (response.ok) {
-        const doc = new DOMParser().parseFromString(await response.text(), "text/html");
-        countServices();
-        updateVolatile(doc);
+  tunnelIndex.addEventListener("click", async event => {
+    const target = event.target.closest("button[form]");
+    if (target && target.classList.contains("control") && !target.classList.contains("create") && !target.classList.contains("preview")) {
+      event.preventDefault();
+      const formId = target.getAttribute("form");
+      const form = document.getElementById(formId);
+      if (!form) {
+        console.warn(`[refreshIndex] Form not found: ${formId}`);
+        if (messages) messages.innerHTML = `<li class="error">Error: Form "${formId}" not found</li>`;
+        return;
       }
-    } catch {}
+      await tunnelControl(form);
+    }
+  });
+}
+
+/**
+ * Executes a tunnel control action via POST and updates the UI.
+ * @async
+ * @function tunnelControl
+ * @param {HTMLFormElement} form - The form element containing action parameters
+ * @returns {Promise<void>}
+ */
+async function tunnelControl(form) {
+  try {
+    const url = new URL(form.getAttribute("action"), window.location.href).href;
+    const formParams = new URLSearchParams(new FormData(form));
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Cache-Control": "no-cache" },
+      credentials: 'same-origin',
+      body: formParams
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => '');
+      console.error(`[refreshIndex] Action failed: ${response.status} ${response.statusText}`, errorText);
+      if (messages) {
+        messages.innerHTML = `<li class="error">Server error ${response.status}: ${response.statusText}</li>`;
+      }
+      return;
+    }
+
+    const doc = new DOMParser().parseFromString(await response.text(), "text/html");
+    const errorEl = doc.querySelector(".error");
+    const messagesEl = doc.getElementById("tunnelMessages");
+
+    if (errorEl && messages) {
+      messages.innerHTML = errorEl.outerHTML;
+    }
+    if (messagesEl && messages) {
+      messages.innerHTML = messagesEl.innerHTML;
+    }
+
+    if (errorEl && errorEl.textContent.includes("Invalid form submission")) {
+      await refreshTunnelStatus();
+      const freshForm = document.getElementById(form.id);
+      if (!freshForm) {
+        console.warn(`[refreshIndex] Fresh form not found after refresh: ${form.id}`);
+        return;
+      }
+      const retryParams = new URLSearchParams(new FormData(freshForm));
+      const retryResponse = await fetch(url, {
+        method: "POST",
+        headers: { "Cache-Control": "no-cache" },
+        credentials: 'same-origin',
+        body: retryParams
+      });
+
+      if (!retryResponse.ok) {
+        if (messages) {
+          messages.innerHTML = `<li class="error">Retry failed: ${retryResponse.status}</li>`;
+        }
+        return;
+      }
+
+      const retryDoc = new DOMParser().parseFromString(await retryResponse.text(), "text/html");
+      updateNonceLinks(retryDoc);
+      countServices();
+      updateVolatile(retryDoc);
+      return;
+    }
+
+    updateNonceLinks(doc);
+    countServices();
+    updateVolatile(doc);
+
+  } catch (e) {
+    console.error(e);
+    if (messages) {
+      messages.innerHTML = `<li class="error">Action failed: ${e.message || e}</li>`;
+    }
   }
 }
 
@@ -372,7 +468,7 @@ function resizeIframe() {
   const isIframed = document.documentElement.classList.contains("iframed") || window.self !== window.top;
   if (isIframed) {
     setTimeout(() => {
-      parent.postMessage({ action: 'resize', iframeId: 'i2ptunnelframe' }, location.origin);
+      parent.postMessage({ action: 'resize', iframeId: 'i2ptunnelframe' }, parentOrigin);
     }, 100);
   }
 }
@@ -390,22 +486,22 @@ function preloadImage(url) {
   img.src = url;
 }
 
-if (toggle) { bindToggle(); }
-if (control) { initTunnelControl(); }
-/** @type {number} */
-setInterval(refreshIndex, 5000);
-
 // Preload image immediately for isDown display (before router potentially goes down)
-if (theme === "dark") {
+if (safeTheme === "dark") {
   preloadImage("/themes/console/dark/images/tunnelmanager.webp");
 }
 
 /**
- * DOMContentLoaded handler that initializes service counting.
+ * DOMContentLoaded handler that initializes service counting and bindings.
  * @listens DOMContentLoaded
  */
 document.addEventListener("DOMContentLoaded", () => {
   countServices();
+  if (toggle) { bindToggle(); }
+  if (control) { initTunnelControl(); }
+
+  setInterval(refreshIndex, 5000);
+  refreshIndex();
 });
 
 /**

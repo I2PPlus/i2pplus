@@ -47,7 +47,7 @@
 <h2 id=screenlog><%=intl._t("Status Messages")%>
 <%      if (isInitialized) { %>
 <span>
-<a class="control clearlog iconize script" target=processForm href="list?action=Clear&amp;msgid=<%=lastID%>&amp;nonce=<%=nextNonce%>"><%=intl._t("Clear")%></a>
+<button class="control clearlog iconize script" form="formClear" type=submit><%=intl._t("Clear")%></button>
 </span>
 <%      } /* isInitialized */ %>
 </h2>
@@ -61,9 +61,9 @@
 <tr id=screenlog_buttons hidden>
 
 <td class=buttons>
-<a class="control refresh iconize" target=processForm href="list"><%=intl._t("Refresh")%></a>
+<button class="control refresh iconize" form="formRefresh" type=submit><%=intl._t("Refresh")%></button>
 <%      if (isInitialized) { %>
-<a class="control clearlog iconize" target=processForm href="list?action=Clear&amp;msgid=<%=lastID%>&amp;nonce=<%=nextNonce%>"><%=intl._t("Clear")%></a>
+<button class="control clearlog iconize" form="formClear" type=submit><%=intl._t("Clear")%></button>
 <%      } /* isInitialized */ %>
 </td>
 </tr>
@@ -79,11 +79,11 @@
 
 <td class=buttons>
 <%  if (!isAdvanced) { %><a class="control wizard iconize" href="wizard"><%=intl._t("Tunnel Wizard")%></a><% } %>
-<a class="control stopall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Stop%20all"><%=intl._t("Stop All")%></a>
-<a class="control startall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Start%20all"><%=intl._t("Start All")%></a>
-<a class="control restartall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Restart%20all" title="<%=intl._t("Restart all running tunnels")%>"><%=intl._t("Restart All")%></a>
-<a class="control restartall servers iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Restart%20all%20servers" title="<%=intl._t("Restart all running server tunnels")%>"><%=intl._t("Restart All Servers")%></a>
-<a class="control restartall clients iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Restart%20all%20clients" title="<%=intl._t("Restart all running client tunnels")%>"><%=intl._t("Restart All Clients")%></a>
+<button class="control stopall iconize" form="formStopAll" type=submit><%=intl._t("Stop All")%></button>
+<button class="control startall iconize" form="formStartAll" type=submit><%=intl._t("Start All")%></button>
+<button class="control restartall iconize" form="formRestartAll" type=submit title="<%=intl._t("Restart all running tunnels")%>"><%=intl._t("Restart All")%></button>
+<button class="control restartall servers iconize" form="formRestartServers" type=submit title="<%=intl._t("Restart all running server tunnels")%>"><%=intl._t("Restart All Servers")%></button>
+<button class="control restartall clients iconize" form="formRestartClients" type=submit title="<%=intl._t("Restart all running client tunnels")%>"><%=intl._t("Restart All Clients")%></button>
 </td>
 </tr>
 </table>
@@ -211,14 +211,14 @@ SSL
 <td class="tunnelControl volatile">
 <%          switch (indexBean.getTunnelStatus(curServer)) {
                 case IndexBean.STARTING:
-%><a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
+%><button class="control stop iconize" form="formS<%=curServer%>Stop" type=submit title="<%=intl._t("Stop this Tunnel")%>"><%=intl._t("Stop")%></button>
 <%              break;
                 case IndexBean.RUNNING:
-%><a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
-<a class="control restart iconize" title="<%=intl._t("Restart this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=restart&amp;tunnel=<%=curServer%>"><%=intl._t("Restart")%></a>
+%><button class="control stop iconize" form="formS<%=curServer%>Stop" type=submit title="<%=intl._t("Stop this Tunnel")%>"><%=intl._t("Stop")%></button>
+<button class="control restart iconize" form="formS<%=curServer%>Restart" type=submit title="<%=intl._t("Restart this Tunnel")%>"><%=intl._t("Restart")%></button>
 <%              break;
                 case IndexBean.NOT_RUNNING:
-%><a class="control start iconize" title="<%=intl._t("Start this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=start&amp;tunnel=<%=curServer%>"><%=intl._t("Start")%></a>
+%><button class="control start iconize" form="formS<%=curServer%>Start" type=submit title="<%=intl._t("Start this Tunnel")%>"><%=intl._t("Start")%></button>
 <%              break;
             }
 %>
@@ -411,38 +411,34 @@ SSL
 <td class="tunnelStatus volatile">
 <%          switch (indexBean.getTunnelStatus(curClient)) {
                 case IndexBean.STARTING:
-%>
-<div class="statusStarting cli"><span class=tooltip hidden><b><%=intl._t("Starting...")%></b></span><%=intl._t("Starting...")%></div>
+%><div class="statusStarting cli"><span class=tooltip hidden><b><%=intl._t("Starting...")%></b></span><%=intl._t("Starting...")%></div>
 </td>
 
 <td class="tunnelControl volatile">
-<a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
+<button class="control stop iconize" form="formC<%=curClient%>Stop" type=submit title="<%=intl._t("Stop this Tunnel")%>"><%=intl._t("Stop")%></button>
 <%              break;
                 case IndexBean.STANDBY:
-%>
-<div class="statusStandby cli"><span class=tooltip hidden><b><%=intl._t("Standby")%></b></span><%=intl._t("Standby")%></div>
+%><div class="statusStandby cli"><span class=tooltip hidden><b><%=intl._t("Standby")%></b></span><%=intl._t("Standby")%></div>
 </td>
 
 <td class="tunnelControl volatile">
-<a class="control stop iconize" title="Stop this Tunnel" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
-<a class="control restart iconize" title="Restart this Tunnel" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=restart&amp;tunnel=<%=curClient%>"><%=intl._t("Restart")%></a>
+<button class="control stop iconize" form="formC<%=curClient%>Stop" type=submit title="Stop this Tunnel"><%=intl._t("Stop")%></button>
+<button class="control restart iconize" form="formC<%=curClient%>Restart" type=submit title="Restart this Tunnel"><%=intl._t("Restart")%></button>
 <%              break;
                 case IndexBean.RUNNING:
-%>
-<div class="statusRunning cli"><span class=tooltip hidden><b><%=intl._t("Running")%></b><hr><%=intl._t("Hops")%>: <%=editBean.getTunnelDepth(curClient, 3)%><br><%=intl._t("Count")%>: <%=editBean.getTunnelQuantity(curClient,2)%><br><%=intl._t("Variance")%>: <%=editBean.getTunnelVariance(curClient,0)%></span><%=intl._t("Running")%></div>
+%><div class="statusRunning cli"><span class=tooltip hidden><b><%=intl._t("Running")%></b><hr><%=intl._t("Hops")%>: <%=editBean.getTunnelDepth(curClient, 3)%><br><%=intl._t("Count")%>: <%=editBean.getTunnelQuantity(curClient,2)%><br><%=intl._t("Variance")%>: <%=editBean.getTunnelVariance(curClient,0)%></span><%=intl._t("Running")%></div>
 </td>
 
 <td class="tunnelControl volatile">
-<a class="control stop iconize" title="Stop this Tunnel" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
-<a class="control restart iconize" title="Restart this Tunnel" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=restart&amp;tunnel=<%=curClient%>"><%=intl._t("Restart")%></a>
+<button class="control stop iconize" form="formC<%=curClient%>Stop" type=submit title="Stop this Tunnel"><%=intl._t("Stop")%></button>
+<button class="control restart iconize" form="formC<%=curClient%>Restart" type=submit title="Restart this Tunnel"><%=intl._t("Restart")%></button>
 <%              break;
                 case IndexBean.NOT_RUNNING:
-%>
-<div class="statusNotRunning cli"><span class=tooltip hidden><b><%=intl._t("Stopped")%></b></span><%=intl._t("Stopped")%></div>
+%><div class="statusNotRunning cli"><span class=tooltip hidden><b><%=intl._t("Stopped")%></b></span><%=intl._t("Stopped")%></div>
 </td>
 
 <td class="tunnelControl volatile">
-<a class="control start iconize" title="<%=intl._t("Start this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=start&amp;tunnel=<%=curClient%>"><%=intl._t("Start")%></a>
+<button class="control start iconize" form="formC<%=curClient%>Start" type=submit title="<%=intl._t("Start this Tunnel")%>"><%=intl._t("Start")%></button>
 <%              break;
             }
 %>
@@ -542,16 +538,16 @@ SSL
 <tr>
 
 <td class=newTunnel colspan=7>
-<form id=addNewClientTunnelForm action="edit">
+<form id=addNewClientTunnelForm action=edit>
 <b><%=intl._t("New client tunnel")%>:</b>&nbsp;
-<select name="type">
-<option value="client"><%=intl._t("Standard")%></option>
-<option value="httpclient">HTTP/CONNECT</option>
-<option value="ircclient">IRC</option>
-<option value="sockstunnel">SOCKS 4/4a/5</option>
-<option value="socksirctunnel">SOCKS IRC</option>
-<option value="connectclient">CONNECT</option>
-<option value="streamrclient">Streamr</option>
+<select name=type>
+<option value=client><%=intl._t("Standard")%></option>
+<option value=httpclient>HTTP/CONNECT</option>
+<option value=ircclient>IRC</option>
+<option value=sockstunnel>SOCKS 4/4a/5</option>
+<option value=socksirctunnel>SOCKS IRC</option>
+<option value=connectclient>CONNECT</option>
+<option value=streamrclient>Streamr</option>
 </select>
 <input class="control create iconize" type=submit value="<%=intl._t("Create")%>">
 </form>
@@ -568,6 +564,66 @@ SSL
 </div>
 <%  } /* !isInitialized() */ %>
 </div>
+<form id=formRefresh class=volatile action="list" method=post target=processForm></form>
+<form id=formClear class=volatile action="list" method=post target=processForm>
+<input type=hidden name=nonce value="<%=nextNonce%>">
+<input type=hidden name=action value="Clear">
+<input type=hidden name=msgid value="<%=lastID%>">
+</form>
+<form id=formStopAll class=volatile action="list" method=post target=processForm>
+<input type=hidden name=nonce value="<%=nextNonce%>">
+<input type=hidden name=action value="Stop%20all">
+</form>
+<form id=formStartAll class=volatile action="list" method=post target=processForm>
+<input type=hidden name=nonce value="<%=nextNonce%>">
+<input type=hidden name=action value="Start%20all">
+</form>
+<form id=formRestartAll class=volatile action="list" method=post target=processForm>
+<input type=hidden name=nonce value="<%=nextNonce%>">
+<input type=hidden name=action value="Restart%20all">
+</form>
+<form id=formRestartServers class=volatile action="list" method=post target=processForm>
+<input type=hidden name=nonce value="<%=nextNonce%>">
+<input type=hidden name=action value="Restart%20all%20servers">
+</form>
+<form id=formRestartClients class=volatile action="list" method=post target=processForm>
+<input type=hidden name=nonce value="<%=nextNonce%>">
+<input type=hidden name=action value="Restart%20all%20clients">
+</form>
+<%  for (int curServer : indexBean.getControllerNumbers(false)) { %>
+<form id="formS<%=curServer%>Stop" class=volatile action="list" method=post target=processForm>
+<input type=hidden name=nonce value="<%=nextNonce%>">
+<input type=hidden name=action value="stop">
+<input type=hidden name=tunnel value="<%=curServer%>">
+</form>
+<form id="formS<%=curServer%>Restart" class=volatile action="list" method=post target=processForm>
+<input type=hidden name=nonce value="<%=nextNonce%>">
+<input type=hidden name=action value="restart">
+<input type=hidden name=tunnel value="<%=curServer%>">
+</form>
+<form id="formS<%=curServer%>Start" class=volatile action="list" method=post target=processForm>
+<input type=hidden name=nonce value="<%=nextNonce%>">
+<input type=hidden name=action value="start">
+<input type=hidden name=tunnel value="<%=curServer%>">
+</form>
+<%  } %>
+<%  for (int curClient : indexBean.getControllerNumbers(true)) { %>
+<form id="formC<%=curClient%>Stop" class=volatile action="list" method=post target=processForm>
+<input type=hidden name=nonce value="<%=nextNonce%>">
+<input type=hidden name=action value="stop">
+<input type=hidden name=tunnel value="<%=curClient%>">
+</form>
+<form id="formC<%=curClient%>Restart" class=volatile action="list" method=post target=processForm>
+<input type=hidden name=nonce value="<%=nextNonce%>">
+<input type=hidden name=action value="restart">
+<input type=hidden name=tunnel value="<%=curClient%>">
+</form>
+<form id="formC<%=curClient%>Start" class=volatile action="list" method=post target=processForm>
+<input type=hidden name=nonce value="<%=nextNonce%>">
+<input type=hidden name=action value="start">
+<input type=hidden name=tunnel value="<%=curClient%>">
+</form>
+<%  } %>
 <span data-iframe-height></span>
 <script src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
 <script src="js/filterTunnels.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
