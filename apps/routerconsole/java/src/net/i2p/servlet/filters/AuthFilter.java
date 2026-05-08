@@ -40,12 +40,14 @@ public class AuthFilter implements Filter {
         PUBLIC_PATHS.add("/themes/login/");
         PUBLIC_PATHS.add("/js/");
         PUBLIC_PATHS.add("/flags.jsp");
-        PUBLIC_FILES.add("/themes/console/{theme}/images/favicon.svg");
-        PUBLIC_FILES.add("/themes/console/{theme}/images/i2plogo.png");
+        PUBLIC_FILES.add("/themes/console/images/bug.svg");
+        PUBLIC_FILES.add("/themes/console/images/plus.svg");
         PUBLIC_FILES.add("/themes/console/classic/images/thumbnail.png");
         PUBLIC_FILES.add("/themes/console/dark/images/thumbnail.png");
         PUBLIC_FILES.add("/themes/console/light/images/thumbnail.png");
         PUBLIC_FILES.add("/themes/console/midnight/images/thumbnail.png");
+        PUBLIC_FILES.add("/themes/console/{theme}/images/favicon.svg");
+        PUBLIC_FILES.add("/themes/console/{theme}/images/i2plogo.png");
         PUBLIC_FILES.add("/themes/console/{theme}/images/thumbnail.png");
     }
 

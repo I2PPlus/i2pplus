@@ -181,3 +181,28 @@ button.dropbtn {
 .dropdown:hover .dropdown-content {
   display: block;
 }
+#footer {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+#footer a {
+  margin: 4px;
+  width: 22px;
+  height: 22px;
+  display: inline-block;
+}
+#footer a[href$="issues"] {
+  margin-left: 2px;
+}
+#footer img {
+  width: 20px;
+  height: 22px;
+  transition: ease all .15s;
+}
+#footer img:hover {
+  transform: scale(1.2);
+  transition: ease all .15s;
+}

@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
-<% String i2pcontextId = request.getParameter("i2p.contextId"); %>
+<% String i2pcontextId = request.getParameter("i2p.contextId");%>
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="intl" scope="request" />
 <jsp:setProperty name="intl" property="contextId" value="<%=i2pcontextId%>" />
 <%
@@ -26,16 +26,16 @@
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width, initial-scale=1">
-<title><%= setupMode ? intl._t("Setup") : intl._t("Login") %> - <%= intl._t("I2P+ Router Console") %></title>
+<title><%=setupMode ? intl._t("Setup") : intl._t("Login")%> - <%=intl._t("I2P+ Router Console")%></title>
 <link rel=icon href="/themes/console/<%=theme%>/images/favicon.svg">
 <link rel=stylesheet href="/themes/login/shared.css">
 <link rel=stylesheet href="<%=themeCSS%>">
 <script src=/themes/login/login.js></script>
-<% if (routerStarting) { %>
+<% if (routerStarting) {%>
 <meta http-equiv=refresh content=3>
-<% } %>
+<% }%>
 </head>
-<% if (!routerStarting) { %>
+<% if (!routerStarting) {%>
 <%
     java.util.Map langToCountry = new java.util.HashMap();
     langToCountry.put("bo", "xt");
@@ -75,16 +75,16 @@
 <div id=topbar>
 <div id=topbar-right>
 <span id=themeselect class=dropdown data-open>
-<button class=dropbtn title="<%= intl._t("Select theme") %>"><img src="/themes/console/<%= theme %>/images/thumbnail.png" alt="<%= theme %>"></button>
+<button class=dropbtn title="<%=intl._t("Select theme")%>"><img src="/themes/console/<%=theme%>/images/thumbnail.png" alt="<%=theme%>"></button>
 <div class=dropdown-content>
-<a href="#" data-param="theme" data-value="classic" title="<%= intl._t("Classic") %>"><img src="/themes/console/classic/images/thumbnail.png"></a>
-<a href="#" data-param="theme" data-value="dark" title="<%= intl._t("Dark") %>"><img src="/themes/console/dark/images/thumbnail.png"></a>
-<a href="#" data-param="theme" data-value="light" title="<%= intl._t("Light") %>"><img src="/themes/console/light/images/thumbnail.png"></a>
-<a href="#" data-param="theme" data-value="midnight" title="<%= intl._t("Midnight") %>"><img src="/themes/console/midnight/images/thumbnail.png"></a>
+<a href="#" data-param="theme" data-value="classic" title="<%=intl._t("Classic")%>"><img src="/themes/console/classic/images/thumbnail.png"></a>
+<a href="#" data-param="theme" data-value="dark" title="<%=intl._t("Dark")%>"><img src="/themes/console/dark/images/thumbnail.png"></a>
+<a href="#" data-param="theme" data-value="light" title="<%=intl._t("Light")%>"><img src="/themes/console/light/images/thumbnail.png"></a>
+<a href="#" data-param="theme" data-value="midnight" title="<%=intl._t("Midnight")%>"><img src="/themes/console/midnight/images/thumbnail.png"></a>
 </div>
 </span>
 <span id=langselect class=dropdown data-open>
-<button class=dropbtn title="<%= intl._t("Select display language") %>"><img src="/flags.jsp?c=<%= currentCountry %>" alt="<%= lang %>"></button>
+<button class=dropbtn title="<%=intl._t("Select display language")%>"><img src="/flags.jsp?c=<%=currentCountry%>" alt="<%=lang%>"></button>
 <div class=dropdown-content>
 <a href="#" data-param="lang" data-value="ar" title="Arabic"><img src="/flags.jsp?c=lang_ar"></a>
 <a href="#" data-param="lang" data-value="az" title="Azerbaijani"><img src="/flags.jsp?c=az"></a>
@@ -121,67 +121,72 @@
 </span>
 </div>
 </div>
-<% } %>
+<% }%>
 <body>
 <div class=login-container>
-<h1><%= intl._t("I2P+ Router Console") %></h1>
-<% if (routerStarting) { %>
+<h1><%=intl._t("I2P+ Router Console")%></h1>
+<% if (routerStarting) {%>
 <div class="notice startup">
-<p><%= intl._t("Router is starting up...") %></p>
-<p><%= intl._t("This page will refresh automatically") %></p>
+<p><%=intl._t("Router is starting up...")%></p>
+<p><%=intl._t("This page will refresh automatically")%></p>
 </div>
-<% } else { %>
-<% if (request.getAttribute("error") != null) { %>
-<div class=error><%= request.getAttribute("error") %></div>
-<% } %>
-<% if (success != null) { %>
-<div class="success notice"><%= success %></div>
-<% } %>
-<% if (setupMode) { %>
-<div class=notice><%= intl._t(setupMessage) %></div>
-<% } %>
-<form method=post action="<%= request.getContextPath() %>/login">
+<% } else {%>
+<% if (request.getAttribute("error") != null) {%>
+<div class=error><%=request.getAttribute("error")%></div>
+<% }%>
+<% if (success != null) {%>
+<div class="success notice"><%=success%></div>
+<% }%>
+<% if (setupMode) {%>
+<div class=notice><%=intl._t(setupMessage)%></div>
+<% }%>
+<form method=post action="<%=request.getContextPath()%>/login">
 <%
 String redirectParam = request.getParameter("redirect");
 if (redirectParam != null && !redirectParam.isEmpty()) {
 %>
-<input type=hidden name=redirect value="<%= redirectParam %>">
-<% } %>
+<input type=hidden name=redirect value="<%=redirectParam%>">
+<% }%>
 <%
 String csrfToken = (String) request.getAttribute("I2P+CSRFTOKEN");
 if (csrfToken != null) {
 %>
-<input type=hidden name=I2P+CSRFTOKEN value="<%= csrfToken %>">
-<% } %>
+<input type=hidden name=I2P+CSRFTOKEN value="<%=csrfToken%>">
+<% }%>
 <div class=form-group>
-<label for="username"><%= intl._t("Username") %></label>
+<label for="username"><%=intl._t("Username")%></label>
 <input type=text id=username name=username required autocomplete="username" maxlength=64>
 </div>
 <div class=form-group>
-<label for="password"><%= intl._t("Password") %></label>
-<input type=password id=password name=password required minlength=8 <% if (setupMode) { %> autocomplete="new-password" <% } else { %> autocomplete="current-password" <% } %> maxlength=128>
+<label for="password"><%=intl._t("Password")%></label>
+<input type=password id=password name=password required minlength=8 <% if (setupMode) {%> autocomplete="new-password" <% } else {%> autocomplete="current-password" <% }%> maxlength=128>
 </div>
-<% if (setupMode) { %>
+<% if (setupMode) {%>
 <div class=form-group>
-<label for="confirmPassword"><%= intl._t("Confirm Password") %></label>
+<label for="confirmPassword"><%=intl._t("Confirm Password")%></label>
 <input type=password id=confirmPassword name=confirmPassword required minlength=8 autocomplete="new-password" maxlength=128>
 </div>
-<% } else { %>
+<% } else {%>
 <div class=form-group>
-<label for="duration"><%= intl._t("Session Duration") %></label>
+<label for="duration"><%=intl._t("Session Duration")%></label>
 <select id=duration name=duration>
-<option value=15m><%= intl._t("15 minutes") %></option>
-<option value=1h selected><%= intl._t("1 hour") %></option>
-<option value=4h><%= intl._t("4 hours") %></option>
-<option value=8h><%= intl._t("8 hours") %></option>
-<option value=1d><%= intl._t("1 day") %></option>
-<option value=forever><%= intl._t("Forever") %></option>
+<option value=15m><%=intl._t("15 minutes")%></option>
+<option value=1h selected><%=intl._t("1 hour")%></option>
+<option value=4h><%=intl._t("4 hours")%></option>
+<option value=8h><%=intl._t("8 hours")%></option>
+<option value=1d><%=intl._t("1 day")%></option>
+<option value=forever><%=intl._t("Forever")%></option>
 </select>
 </div>
-<% } %>
-<button type=submit><%= setupMode ? intl._t("Set Password") : intl._t("Login") %></button>
+<% }%>
+<button type=submit><%=setupMode ? intl._t("Set Password") : intl._t("Login")%></button>
 </form>
-<% } %>
+<% }%>
+</div>
+<div id=footer hidden>
+<a href="https://i2pplus.github.io/"><img src="/themes/console/images/plus.svg"></a></a>
+<a href="https://github.com/I2PPlus/i2pplus"><img src="/themes/login/<%=theme%>/github.svg"></a>
+<a href="https://github.com/I2PPlus/i2pplus/issues"><img src="/themes/console/images/bug.svg"></a>
 </div>
 <noscript><style>#topbar{display:none!important}</style></noscript>
 </body>

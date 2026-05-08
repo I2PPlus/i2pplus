@@ -13,6 +13,7 @@ body {
   border: 4px solid #131;
   transform-origin: center center;
   transform: scale(.85);
+  margin-top: 10px;
 }
 .login-container h1 {
   color: #0000;
@@ -155,6 +156,12 @@ button.dropbtn {
 }
 #password {
   background: #111 url(password.webp) no-repeat left center / contain;
+}
+#footer {
+  display: block;
+  text-align: center;
+  border-top: 1px solid #131;
+  background: #000;
 }
 @keyframes slide {
   from{transform: translateY(-200px);opacity:0}
