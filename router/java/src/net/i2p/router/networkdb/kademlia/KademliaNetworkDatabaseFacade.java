@@ -54,6 +54,7 @@ import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.crypto.FamilyKeyCrypto;
+import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.router.networkdb.reseed.ReseedChecker;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.transport.CommSystemFacadeImpl;
@@ -742,7 +743,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public void accessLeaseSet(Hash key) {
         if (!isClientDb() || key == null) return;
         // Only track if we have tunnels built to this destination
-        if (_context.tunnelManager().getOutboundPool(key) == null) return;
+        TunnelPool pool = _context.tunnelManager().getOutboundPool(key);
+        if (pool == null || pool.getValidTunnelCount() == 0) return;
         // Only track if there's a hostname (excludes HostChecker lookups)
         NamingService ns = _context.namingService();
         if (ns == null) return;
@@ -2685,11 +2687,13 @@ _context.commSystem().forceDisconnect(h, "Blocked country: " + country);
 
             // First check: do we still have tunnels to this destination?
             // If not, remove from tracking - no point refreshing what we're not using
-            if (_context.tunnelManager().getOutboundPool(key) == null) {
+            // Must check for valid tunnels, not just pool existence
+            TunnelPool pool = _context.tunnelManager().getOutboundPool(key);
+            if (pool == null || pool.getValidTunnelCount() == 0) {
                 iter.remove();
                 removed++;
                 if (_log.shouldDebug()) {
-                    _log.debug("Removing client LeaseSet - no tunnels: " +
+                    _log.debug("Removing client LeaseSet - no valid tunnels: " +
                               (ns != null ? ns.reverseLookup(key) : key.toBase32().substring(0, 6)));
                 }
                 continue;
