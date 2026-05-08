@@ -184,9 +184,9 @@ if (csrfToken != null) {
 <% }%>
 </div>
 <div id=footer hidden>
-<a href="https://i2pplus.github.io/"><img src="/themes/console/images/plus.svg"></a></a>
-<a href="https://github.com/I2PPlus/i2pplus"><img src="/themes/login/<%=theme%>/github.svg"></a>
-<a href="https://github.com/I2PPlus/i2pplus/issues"><img src="/themes/console/images/bug.svg"></a>
+<a href="https://i2pplus.github.io/" target=_blank><img src="/themes/console/images/plus.svg"></a></a>
+<a href="https://github.com/I2PPlus/i2pplus" target=_blank><img src="/themes/login/<%=theme%>/github.svg"></a>
+<a href="https://github.com/I2PPlus/i2pplus/issues" target=_blank><img src="/themes/console/images/bug.svg"></a>
 </div>
 <noscript><style>#topbar{display:none!important}</style></noscript>
 </body>
