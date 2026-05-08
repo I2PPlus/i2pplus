@@ -81,30 +81,28 @@ button:not(.dropbtn):active {
   box-shadow: 0 0 0 1px #151 inset, 0 0 0 2px #000 inset, 0 0 2px 2px #070 inset, 5px 5px 5px #000 inset, 0 0 0 2px #373;
 }
 .error, .notice {
-  background: #300;
-  color: #c66;
+  padding: 8px 8px 12px;
+  line-height: 1.1;
+  border-radius: 0;
+  box-shadow: var(--highlight), 0 0 0 3px #0004 inset, 0 0 0 1px #000;
+}
+.error {
+  color: #900;
   border: 1px solid #500;
+  background: #000;
 }
 .notice {
-  background: #000;
-  color: #900;
-  border: 1px solid #900;
-  padding: 0.5rem;
   margin-bottom: 1rem;
-  border-radius: 4px;
   text-align: center;
   font-weight: 700;
+  color: #ee9;
+  border: 1px solid #ee9;
+  box-shadow: var(--highlight), 0 0 0 3px #0004 inset, 0 0 0 1px #000, 0 0 0 2px #252;
+  background: linear-gradient(180deg, #020, #010);
   opacity: .75;
 }
-.notice.startup {
-  border-color: #ee9;
-  color: #ee9;
-  background: #020;
-  border-radius: 0;
-  padding: 8px 8px 10px;
-}
 .notice a, .notice a:hover {
-  color: #900;
+  color: #ee9;
 }
 img[src^="/flags"] {
   border-radius: 2px;

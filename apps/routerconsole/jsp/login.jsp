@@ -18,7 +18,7 @@
     String setupTitle = (String) request.getAttribute("setupTitle");
     if (setupTitle == null) setupTitle = "Set Up Console Access";
     String setupMessage = (String) request.getAttribute("setupMessage");
-    if (setupMessage == null) setupMessage = "Create a username and password to access the router console.";
+    if (setupMessage == null) setupMessage = "Create a username and password to access the router console &amp; webapps.";
     String success = (String) request.getAttribute("success");
 %>
 <!DOCTYPE html>
