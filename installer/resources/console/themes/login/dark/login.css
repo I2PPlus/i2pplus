@@ -99,6 +99,8 @@ button:not(.dropbtn):active {
   border-color: #ee9;
   color: #ee9;
   background: #020;
+  border-radius: 0;
+  padding: 8px 8px 10px;
 }
 .notice a, .notice a:hover {
   color: #900;
@@ -143,6 +145,16 @@ button.dropbtn {
 
 .dropdown-content a:active img {
   transform: scale(0.9);
+}
+#username, #password {
+  padding-left: 60px;
+  font-weight: 700;
+}
+#username {
+  background: #111 url(user.webp) no-repeat left center / contain;
+}
+#password {
+  background: #111 url(password.webp) no-repeat left center / contain;
 }
 @keyframes slide {
   from{transform: translateY(-200px);opacity:0}

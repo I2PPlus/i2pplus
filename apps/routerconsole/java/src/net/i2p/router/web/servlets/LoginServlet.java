@@ -84,7 +84,7 @@ public class LoginServlet extends HttpServlet {
             req.setAttribute("setupMessage", "Create a username and password to access the router console.");
         }
         String csrfToken = Long.toString(System.currentTimeMillis()) + "-" + java.util.UUID.randomUUID().toString();
-        req.setAttribute("csrfToken", csrfToken);
+        req.setAttribute("I2P+CSRFTOKEN", csrfToken);
         req.getSession(true).setAttribute("loginCSRF", csrfToken);
         req.getRequestDispatcher("/login.jsp").forward(req, resp);
     }
@@ -149,7 +149,7 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter(PARAM_PASSWORD);
         String confirmPassword = req.getParameter("confirmPassword");
         String duration = req.getParameter("duration");
-        String csrfToken = req.getParameter("csrfToken");
+        String csrfToken = req.getParameter("I2P+CSRFTOKEN");
 
         javax.servlet.http.HttpSession session = req.getSession(false);
         if (session == null) {
@@ -205,7 +205,7 @@ public class LoginServlet extends HttpServlet {
                     req.setAttribute("success", "Password set successfully. Please log in.");
                     req.setAttribute("theme", getLoginTheme());
                     String newCsrfToken = Long.toString(System.currentTimeMillis()) + "-" + java.util.UUID.randomUUID().toString();
-                    req.setAttribute("csrfToken", newCsrfToken);
+                    req.setAttribute("I2P+CSRFTOKEN", newCsrfToken);
                     req.getSession(true).setAttribute("loginCSRF", newCsrfToken);
                     req.getRequestDispatcher("/login.jsp").forward(req, resp);
                     return;

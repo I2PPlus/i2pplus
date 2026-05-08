@@ -148,10 +148,10 @@ if (redirectParam != null && !redirectParam.isEmpty()) {
 <input type=hidden name=redirect value="<%= redirectParam %>">
 <% } %>
 <%
-String csrfToken = (String) request.getAttribute("csrfToken");
+String csrfToken = (String) request.getAttribute("I2P+CSRFTOKEN");
 if (csrfToken != null) {
 %>
-<input type=hidden name=csrfToken value="<%= csrfToken %>">
+<input type=hidden name=I2P+CSRFTOKEN value="<%= csrfToken %>">
 <% } %>
 <div class=form-group>
 <label for="username"><%= intl._t("Username") %></label>

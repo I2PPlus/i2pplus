@@ -674,7 +674,7 @@ h3[id*="jobs"]{clear:both;margin-top:25px}
 #routerjobqueue .toggle:hover .dropdown::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 #routerjobqueue .toggle.expanded .dropdown::after{background:var(--dropdown);content:"";transform:none}
 #routerjobqueue .toggle.expanded:hover .dropdown::after{background:var(--dropdown_hover);content:"";transform:none}
-#routerjobqueue .toggle.nojobs:hover{cursor:default;pointer-events:none}
+#routerjobqueue .toggle.nojobs{cursor:default;pointer-events:none}
 #routerjobqueue .toggle.nojobs .dropdown{opacity:.5;pointer-events:none;cursor:pointer}
 
 /* job queue stats */

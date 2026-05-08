@@ -28,7 +28,7 @@ public class SessionManager {
     private static final long FAILURE_WINDOW_MS = 5 * 60 * 1000; // 5 minutes
     private static final long FAILURE_LOCKOUT_MS = 15 * 60 * 1000; // 15 minutes
 
-    public static final String SESSION_COOKIE_NAME = "I2P_CONSOLE_SESSION";
+    public static final String SESSION_COOKIE_NAME = "I2P+AUTH";
     public static final String SESSION_ATTR_USER = "user";
 
     private SessionManager() {

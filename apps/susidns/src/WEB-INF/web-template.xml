@@ -123,6 +123,7 @@
   <session-config>
     <session-timeout>30</session-timeout>
     <cookie-config>
+      <name>I2P+SESSIONID</name>
       <http-only>true</http-only>
       <same-site>Lax</same-site>
     </cookie-config>

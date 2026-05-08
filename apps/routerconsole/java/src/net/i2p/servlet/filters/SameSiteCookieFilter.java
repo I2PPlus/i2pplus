@@ -7,15 +7,14 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 
 /**
- * Adds SameSite=Lax to JSESSIONID cookies in Set-Cookie headers.
- * Jetty 9.3 doesn't support SameSite in web.xml session-config for programmatic session handlers.
+ * Adds SameSite=Lax to all cookies in Set-Cookie headers as defense-in-depth.
+ * Primary SameSite is set in web.xml session-config.
  */
 public class SameSiteCookieFilter implements Filter {
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(SameSiteCookieFilter.class);
@@ -33,8 +32,9 @@ public class SameSiteCookieFilter implements Filter {
             @Override
             public void addHeader(String name, String value) {
                 if (name != null && name.equalsIgnoreCase("Set-Cookie")) {
+                    String lower = value.toLowerCase();
                     _log.debug("Set-Cookie header: " + value);
-                    if (value.toLowerCase().contains("jsessionid") && !value.toLowerCase().contains("samesite")) {
+                    if (!lower.contains("samesite")) {
                         value = value + "; SameSite=Lax";
                         _log.debug("Added SameSite to: " + value);
                     }
@@ -45,21 +45,14 @@ public class SameSiteCookieFilter implements Filter {
             @Override
             public void setHeader(String name, String value) {
                 if (name != null && name.equalsIgnoreCase("Set-Cookie")) {
+                    String lower = value.toLowerCase();
                     _log.debug("Set-Cookie header (set): " + value);
-                    if (value.toLowerCase().contains("jsessionid") && !value.toLowerCase().contains("samesite")) {
+                    if (!lower.contains("samesite")) {
                         value = value + "; SameSite=Lax";
                         _log.debug("Added SameSite to: " + value);
                     }
                 }
                 super.setHeader(name, value);
-            }
-
-            @Override
-            public void addCookie(Cookie cookie) {
-                if (cookie != null && "JSESSIONID".equals(cookie.getName())) {
-                    _log.debug("Setting SameSite on JSESSIONID via addCookie");
-                }
-                super.addCookie(cookie);
             }
         };
 
