@@ -147,14 +147,14 @@ button.dropbtn {
 .dropdown-content a:active img {
   transform: scale(0.9);
 }
-#username, #password {
+#username, #password, #confirmPassword {
   padding-left: 60px;
   font-weight: 700;
 }
 #username {
   background: #111 url(user.webp) no-repeat left center / contain;
 }
-#password {
+#password, #confirmPassword {
   background: #111 url(password.webp) no-repeat left center / contain;
 }
 #footer {
