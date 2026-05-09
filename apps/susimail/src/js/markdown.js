@@ -5,8 +5,6 @@
  * Supports: CommonMark + GFM (tables, strikethrough, task lists, fenced code lang).
  * Self-contained, no external dependencies.
  *
- * Loosely based on the original markdown parser by zzz.
- *
  * Security model:
  *   - Renderer emits only a fixed set of whitelisted HTML tags.
  *   - All link URLs pass through scheme allowlist (http:, https:, mailto:).

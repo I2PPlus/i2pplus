@@ -13,7 +13,7 @@
     response.addHeader("Cache-Control", "private, no-cache, max-age=86400");
 
     java.io.File base = net.i2p.I2PAppContext.getGlobalContext().getBaseDir();
-    String name = "docs/LICENSE.md";
+    String name = "docs/LICENSES.md";
     java.io.File file = new java.io.File(base, name);
 
     if (!file.exists()) {
@@ -44,7 +44,7 @@
         if (!response.isCommitted()) {
             response.sendError(403, ioe.toString());
         } else {
-            net.i2p.I2PAppContext.getGlobalContext().logManager().getLog(getClass()).warn("Error serving licenses/LICENSE.md", ioe);
+            net.i2p.I2PAppContext.getGlobalContext().logManager().getLog(getClass()).warn("Error serving docs/LICENSES.md -> " + ioe.getMessage());
             throw ioe;
         }
     }
