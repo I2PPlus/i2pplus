@@ -413,6 +413,24 @@ tr.pagenavcontrols:hover .pagenavcontrols td,.topbuttons td,.topbuttons:hover td
 #viewmail .moveto{margin-left:0}
 #viewmail{position:relative}
 
+/* markdown */
+.mailbody[data-markdown]{font-family:var(--bodyfont)}
+.mailbody[data-markdown] h1{font-size:140%}
+.mailbody[data-markdown] h2{font-size:130%}
+.mailbody[data-markdown] h3{font-size:120%}
+.mailbody[data-markdown] h4{font-size:110%}
+.mailbody[data-markdown] h1,.mailbody[data-markdown] h2,.mailbody[data-markdown] h3,.mailbody[data-markdown] h4,.mailbody[data-markdown] h5{margin-top:15px;padding-bottom:10px;border-bottom:1px dotted #ee94}
+.mailbody[data-markdown] h1,.mailbody[data-markdown] h2,.mailbody[data-markdown] h3,.mailbody[data-markdown] h4,.mailbody[data-markdown] h5,.mailbody[data-markdown] .codeblock,.mailbody[data-markdown] p{margin-left:0;margin-right:0;padding-left:16px;padding-right:16px;width:calc(100% - 32px);display:block;line-height:1.4}
+.mailbody[data-markdown] table,.mailbody[data-markdown] th,.mailbody[data-markdown] td{background:#000;border:var(--border)}
+.mailbody[data-markdown] table{margin:10px auto;width:calc(100% - 32px);border-collapse:collapse}
+.mailbody[data-markdown] th,.mailbody[data-markdown] td,.iframed .mailbody[data-markdown] td{padding:4px 8px;width:auto}
+.mailbody[data-markdown] th{font-size:80%;background:var(--th)}
+.mailbody[data-markdown] td{padding:6px 8px}
+.mailbody[data-markdown] tr:nth-child(odd) td{background:#010}
+.mailbody[data-markdown] .codeblock{margin:10px auto;padding:10px 16px;width:calc(100% - 64px);white-space:pre-wrap;box-shadow:0 0 0 1px #2724,0 0 0 1px #000 inset;border-radius:4px;background:#0304}
+.mailbody[data-markdown] .codeblock code{margin-top:-16px;padding:0;display:block;line-height:1.5;color:#4a4}
+.mailbody[data-markdown] .paragraph{text-align:left;word-break:break-word;line-height:1.5}
+
 /* mail preview */
 #mail-preview-popup {margin-right:6px;font-family:var(--monospaced);font-weight:600;border:var(--border)!important;box-shadow:var(--highlight),0 0 4px 4px #0004 inset,0 0 0 2px #000!important;background:var(--glow_bottom),var(--badge)!important}
 

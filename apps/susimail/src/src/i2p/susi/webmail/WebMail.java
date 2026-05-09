@@ -568,7 +568,13 @@ public class WebMail extends HttpServlet {
                    .append((showBlockedImages ? " showBlockedImages" : "")).append("\"></iframe>\n").append("</td></tr>\n")
                    .append("<tr class=mailbody><td colspan=2>");
             } else if (showBody) {
-                if (html) {buf.append("<p class=mailbody>");}
+                String mdName = mailPart.filename;
+                if (mdName == null) {mdName = mailPart.name;}
+                boolean isMarkdown = mdName != null &&
+                    (mdName.endsWith(".md") || mdName.endsWith(".markdown"));
+                if (html) {buf.append("<p class=mailbody" + (isMarkdown ? " data-markdown" : "") + ">");}
+                else if (isMarkdown) {buf.append("<tr class=mailbody data-markdown><td colspan=2>");}
+                else {buf.append("<tr class=mailbody><td colspan=2>");}
                 String charset = mailPart.charset;
                 if (charset == null) {charset = "UTF-8";}
                 try {
@@ -637,7 +643,7 @@ public class WebMail extends HttpServlet {
                 }
                 else {buf.append(_t("Attachment ({0}).", ident));}
             }
-            if (html) {buf.append("</td></tr>\n");}
+            buf.append("</td></tr>\n");
         }
 
         out.print(buf.toString());
@@ -2235,9 +2241,7 @@ public class WebMail extends HttpServlet {
             } else if (state == State.LOADING) {
                 buf.append("<noscript><meta http-equiv=refresh content=\"5;url=").append(myself).append("\"></noscript>\n");
             } else if (state == State.SHOW) {
-                buf.append("<script src=\"/susimail/js/markdown.js?").append(CoreVersion.VERSION).append("\"></script>\n")
-                   .append("<script src=\"/susimail/js/Markdown.Converter.js?").append(CoreVersion.VERSION).append("\"></script>\n")
-                   .append("<script src=\"/js/iframeResizer/iframeResizer.js?").append(CoreVersion.VERSION).append("\"></script>\n")
+                buf.append("<script src=\"/js/iframeResizer/iframeResizer.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                    .append("<script nonce='").append(cspNonce).append("'>\n")
                    .append("  document.addEventListener('DOMContentLoaded', function(event) {\n")
                    .append("    const htmlView = iFrameResize({interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#iframeSusiHtmlView');\n")
@@ -2341,8 +2345,7 @@ public class WebMail extends HttpServlet {
                 showMessage(out, sessionObject, mc, showUIDL, buttonPressed(request, DELETE), allowHTML);
                 buf.append("<script src=\"/susimail/js/toggleHeaders.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                    .append("<script src=/susimail/js/htmlView.js></script>\n")
-                   .append("<script src=\"/susimail/js/markdown.js?").append(CoreVersion.VERSION).append("\"></script>\n")
-                   .append("<script src=\"/susimail/js/Markdown.Converter.js?").append(CoreVersion.VERSION).append("\"></script>\n");
+                   .append("<script src=\"/susimail/js/markdown.js?").append(CoreVersion.VERSION).append("\"></script>\n");
             } else if (state == State.NEW) {showCompose(out, sessionObject, request);}
             else if (state == State.CONFIG) {showConfig(out, folder);}
 
