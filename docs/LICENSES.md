@@ -35,97 +35,32 @@ THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDI
 THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 **ElGamal and DSA code**
-Copyright (c) 2003, TheCrypto. All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-- Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-- Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-- Neither the name of the TheCrypto may be used to endorse or promote products derived from this software without specific prior written permission.
-
-See Standard License Disclaimer above.
+BSD-style. Copyright (c) 2003 TheCrypto.
 
 **Bouncy Castle (ElGamal / AES / SSU HMAC)**
-Copyright (c) 2000-2023 The Legion Of The Bouncy Castle Inc. (https://www.bouncycastle.org)
-
-Permission is granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-See Standard License Disclaimer above.
+MIT-style. Copyright (c) 2000-2023 The Legion Of The Bouncy Castle Inc.
 
 **AES code (Cryptix)**
-Cryptix General License. Copyright (c) 1995-2005 The Cryptix Foundation Limited. All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-1. Redistributions of source code must retain the copyright notice, this list of conditions and the following disclaimer.
-2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY THE CRYPTIX FOUNDATION LIMITED AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE CRYPTIX FOUNDATION LIMITED OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING OUT OF OR IN CONNECTION WITH THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+Cryptix General License. Copyright (c) 1995-2005 The Cryptix Foundation Limited.
 
 **Crypto filters (I2P Project BSD)**
-Copyright (c) 2009, The I2P Project. All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-- Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-- Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-- Neither the name of the I2P nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-See Standard License Disclaimer above.
+BSD-style. Copyright (c) 2009 The I2P Project.
 
 **SNTP code**
-Copyright (c) 2004, Adam Buckley. All rights reserved.
-
-I hereby authorize my NtpClient.java and NtpMessage.java code to be redistributed under the BSD license for the purpose of integration with the I2P project, providing that I am credited as the original author of the code.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-- Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-- Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-- Neither the name of Adam Buckley nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-See Standard License Disclaimer above.
+BSD-style. Copyright (c) 2004 Adam Buckley.
 
 **HashCash code**
-Copyright 2006 Gregory Rubin grrubin@gmail.com
-
-Permission is given to use, modify, and or distribute this code so long as this message remains attached.
+Copyright 2006 Gregory Rubin.
 
 **SSLEepGet (InstallCert)**
-Copyright 2006 Sun Microsystems, Inc. All Rights Reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-- Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-- Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-- Neither the name of Sun Microsystems nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-See Standard License Disclaimer above.
+BSD-style. Copyright 2006 Sun Microsystems.
 
 **sbt-wrapper**
-Copyright (c) 2011, Paul Phillips. All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-- Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-- Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-- Neither the name of the author nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-See Standard License Disclaimer above.
+BSD-style. Copyright (c) 2011 Paul Phillips.
 
 ## JAVA SERVICE WRAPPER
 
-**Tanuki Software Wrapper**
-Tanuki Software, Ltd. Community Software License Agreement Version 1.3.
-
-IMPORTANT-READ CAREFULLY: This license agreement is a legal agreement between you ("Licensee") and Tanuki Software, Ltd. ("TSI"), which includes computer software, associated media, printed materials, and may include online or electronic documentation ("Software"). PLEASE READ THIS AGREEMENT CAREFULLY BEFORE YOU INSTALL, COPY, DOWNLOAD OR USE THE SOFTWARE ACCOMPANYING THIS PACKAGE.
-
-Section 1 - Grant of License: Community editions of the Software are made available on the GNU General Public License, Version 2 ("GPLv2") or Version 3 ("GPLv3"), included in Sections 4 and 5 of this license document. All sections of the Community Software License Agreement must be complied with in addition to those of either the GPLv2 or GPLv3. This license allows the Software Program to be used with Products that are released under either GPLv2 or GPLv3.
-
-Section 2 - Definitions:
-- "Community Edition" shall mean versions of the Software Program distributed in source form under this license agreement.
-- "Product" shall mean the computer programs that contain both the Software Program as a component of the Product.
-- "End User" shall mean the customers of the Licensee or any recipient of the Product.
-
-Section 3 - Licensee Obligations:
-- A copy of this license must be distributed in full with the Product in a location that is obvious to any End User.
-- The full source code of all components of the Product must be made available to any and all End Users.
-- Licensee may extend and/or modify the Software Program and distribute under the terms of this agreement provided that the copyright notice and license information displayed in the console and log files are not obfuscated or obstructed in any way.
+GPLv2/GPLv3. Tanuki Software Wrapper. Community Software License Agreement v1.3. Source and license must be distributed with product. https://wrapper.tanukisoftware.com/doc/english/licenseCommunity.html#text
 
 ## JBIGI LIBRARIES (jbigi.jar)
 
@@ -141,32 +76,16 @@ For GPL-licensed components, source code is available from https://github.com/I2
 ## APPLICATIONS
 
 **Addressbook**
-Copyright (c) 2004 Ragnarok.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-See MIT Standard Disclaimer above.
+MIT License. Copyright (c) 2004 Ragnarok.
 
 **Desktopgui**
-Desktop GUI: provides a simple GUI for I2P. Copyright (C) 2009 Mathias De Maré.
-
-This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; only version 2 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+GPLv2. Copyright (C) 2009 Mathias De Maré.
 
 **I2PTunnel**
-I2PTunnel. Copyright (c) 2003 - 2004 mihi.
-
-This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program; see the file COPYING. If not, write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-
-In addition, as a special exception, mihi gives permission to link the code of this program with the proprietary Java implementation provided by Sun (or other vendors as well), and distribute linked combinations including the two. You must obey the GNU General Public License in all respects for all of the code used other than the proprietary Java implementation. If you modify this file, you may extend this exception to your version of the file, but you are not obligated to do so. If you do not wish to do so, delete this exception statement from your version.
+GPLv2+. Copyright (c) 2003-2004 mihi. With special exception for proprietary Java linking.
 
 **Imagegen - Identicon**
-MIT License. Copyright (c) 2007-2014 Don Park <donpark@docuverse.com>. Contributor 2014-2014 Paulo Miguel Almeida Rodenas <paulo.ubuntu@gmail.com>.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-See MIT Standard Disclaimer above.
+MIT License. Copyright (c) 2007-2014 Don Park. Contributor 2014 Paulo Miguel Almeida Rodenas.
 
 **Ministreaming Lib**
 The i2p/apps/ministreaming module is the root of the ministreaming library, and everything within it is released according to the terms of the I2P license policy. That means everything contained within the i2p/apps/ministreaming module is released under a BSD license unless otherwise marked. Alternate licenses that may be used include Cryptix, MIT, as well as code granted into the public domain.
@@ -205,7 +124,7 @@ This product includes software developed at The Apache Software Foundation (http
 
 ## SPOTBUGS
 
-SpotBugs is licensed under the GNU Lesser General Public License v2.1. Bundled dependencies include ASM (BSD 3-Clause), Apache Commons (Apache 2.0), DocBook XSL (MIT), Dom4j (BSD-style), Error Prone (Apache 2.0), Gson (Apache 2.0), Jaxen (Apache-style), JCIP Annotations (Apache 2.0), JSR 305 (BSD), Log4j (Apache 2.0), Logback (EPL 1.0/LGPL 2.1), Saxon-HE (MPL 2.0), SLF4J (MIT), and XML Resolver (Apache 2.0).
+LGPLv2.1. Bundled dependencies: ASM (BSD 3-Clause), Commons, DocBook XSL, Dom4j, Error Prone, Gson, Jaxen, JCIP, JSR305, Log4j, Logback (EPL/LGPL), Saxon-HE, SLF4J, XML Resolver (various licenses).
 
 ## JAVASCRIPT LIBRARIES
 
