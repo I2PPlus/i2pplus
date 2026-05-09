@@ -572,23 +572,23 @@ SSL
 </form>
 <form id=formStopAll class=volatile action="list" method=post target=processForm>
 <input type=hidden name=nonce value="<%=nextNonce%>">
-<input type=hidden name=action value="Stop%20all">
+<input type=hidden name=action value="Stop all">
 </form>
 <form id=formStartAll class=volatile action="list" method=post target=processForm>
 <input type=hidden name=nonce value="<%=nextNonce%>">
-<input type=hidden name=action value="Start%20all">
+<input type=hidden name=action value="Start all">
 </form>
 <form id=formRestartAll class=volatile action="list" method=post target=processForm>
 <input type=hidden name=nonce value="<%=nextNonce%>">
-<input type=hidden name=action value="Restart%20all">
+<input type=hidden name=action value="Restart all">
 </form>
 <form id=formRestartServers class=volatile action="list" method=post target=processForm>
 <input type=hidden name=nonce value="<%=nextNonce%>">
-<input type=hidden name=action value="Restart%20all%20servers">
+<input type=hidden name=action value="Restart all servers">
 </form>
 <form id=formRestartClients class=volatile action="list" method=post target=processForm>
 <input type=hidden name=nonce value="<%=nextNonce%>">
-<input type=hidden name=action value="Restart%20all%20clients">
+<input type=hidden name=action value="Restart all clients">
 </form>
 <%  for (int curServer : indexBean.getControllerNumbers(false)) { %>
 <form id="formS<%=curServer%>" class=volatile action="list" method=post target=processForm>
