@@ -363,7 +363,7 @@ function initTunnelControl() {
   tunnelControlListenerAttached = true;
 
   tunnelIndex.addEventListener("click", async event => {
-    const target = event.target.closest("button[form]");
+    const target = event.target.closest("button[name='action']");
     if (target && target.classList.contains("control") && !target.classList.contains("create") && !target.classList.contains("preview")) {
       event.preventDefault();
       const formId = target.getAttribute("form");
@@ -373,7 +373,7 @@ function initTunnelControl() {
         if (messages) messages.innerHTML = `<li class="error">Error: Form "${formId}" not found</li>`;
         return;
       }
-      await tunnelControl(form);
+      await tunnelControl(form, target.value);
     }
   });
 }
@@ -383,12 +383,16 @@ function initTunnelControl() {
  * @async
  * @function tunnelControl
  * @param {HTMLFormElement} form - The form element containing action parameters
+ * @param {string} action - The action value from the clicked button
  * @returns {Promise<void>}
  */
-async function tunnelControl(form) {
+async function tunnelControl(form, action) {
   try {
     const url = new URL(form.getAttribute("action"), window.location.href).href;
-    const formParams = new URLSearchParams(new FormData(form));
+    const formParams = new URLSearchParams();
+    formParams.set('nonce', form.querySelector('input[name="nonce"]').value);
+    formParams.set('tunnel', form.querySelector('input[name="tunnel"]').value);
+    formParams.set('action', action);
 
     const response = await fetch(url, {
       method: "POST",
