@@ -3,6 +3,9 @@ package net.i2p.router.web;
 import static net.i2p.update.UpdateType.*;
 
 import java.io.File;
+
+import javax.servlet.http.HttpSession;
+
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.router.update.ConsoleUpdateManager;
@@ -300,52 +303,58 @@ public class NewsHelper extends ContentHelper {
      *  @since 0.9.4 moved from NewsFetcher
      */
     public static String status(RouterContext ctx) {
-         StringBuilder buf = new StringBuilder(128);
-         long now = ctx.clock().now();
-         buf.append("<span id=newsStatus><i>");
-         long lastUpdated = lastUpdated(ctx);
-         long lastFetch = lastChecked(ctx);
-         if (lastUpdated > 0) {
-             buf.append(Messages.getString("News last updated {0} ago.",
-                                           DataHelper.formatDuration2(now - lastUpdated),
-                                           ctx))
-                .append('\n');
-         }
-         if (lastFetch > lastUpdated) {
-             buf.append(Messages.getString("News last checked {0} ago.",
-                                           DataHelper.formatDuration2(now - lastFetch),
-                                           ctx));
-         }
-         String unsignedUpdateURL = ctx.getProperty("router.updateUnsignedURL");
-         boolean isPlus = unsignedUpdateURL == null || unsignedUpdateURL.contains("skank.i2p");
-         if (isDevSU3UpdateAvailable(ctx)) {
-             buf.append("\nSigned development update available (").append(updateVersion()).append(")");
-         } else if (isUnsignedUpdateAvailable(ctx) && isPlus) {
-             buf.append("\nI2P+ update available (").append(unsignedUpdateVersion()).append(")");
-         } else if (isPlus && unsignedVersionDownloaded() != null) {
-             buf.append("\nI2P+ update downloaded (").append(unsignedVersionDownloaded()).append(") - restart to install.");
-         } else if (isUnsignedUpdateAvailable(ctx)) {
+        return status(ctx, null);
+    }
+
+    /**
+     *  @return HTML
+     *  @since 0.9.69
+     */
+    public static String status(RouterContext ctx, HttpSession session) {
+        StringBuilder buf = new StringBuilder(128);
+        long now = ctx.clock().now();
+        buf.append("<span id=newsStatus><i>");
+        long lastUpdated = lastUpdated(ctx);
+        long lastFetch = lastChecked(ctx);
+        if (lastUpdated > 0) {
+            buf.append(Messages.getString("News last updated {0} ago.",
+                DataHelper.formatDuration2(now - lastUpdated),ctx)).append('\n');
+        }
+        if (lastFetch > lastUpdated) {
+            buf.append(Messages.getString("News last checked {0} ago.",
+                                          DataHelper.formatDuration2(now - lastFetch),
+                                          ctx));
+        }
+        String unsignedUpdateURL = ctx.getProperty("router.updateUnsignedURL");
+        boolean isPlus = unsignedUpdateURL == null || unsignedUpdateURL.contains("skank.i2p");
+        if (isDevSU3UpdateAvailable(ctx)) {
+            buf.append("\nSigned development update available (").append(updateVersion()).append(")");
+        } else if (isUnsignedUpdateAvailable(ctx) && isPlus) {
+            buf.append("\nI2P+ update available (").append(unsignedUpdateVersion()).append(")");
+        } else if (isPlus && unsignedVersionDownloaded() != null) {
+            buf.append("\nI2P+ update downloaded (").append(unsignedVersionDownloaded()).append(") - restart to install.");
+        } else if (isUnsignedUpdateAvailable(ctx)) {
              buf.append("\nUnsigned update available (").append(unsignedUpdateVersion()).append(")");
-         } else if (unsignedVersionDownloaded() != null) {
+        } else if (unsignedVersionDownloaded() != null) {
              buf.append("\nUnsigned update downloaded (").append(unsignedVersionDownloaded()).append(") - restart to install.");
-         } else {
+        } else {
              buf.append("\nNo update currently available.");
-         }
-         buf.append("</i></span><span id=newsDisplay>");
-         String consoleNonce = CSSHelper.getNonce();
-         if (lastUpdated > 0 && consoleNonce != null) {
-             if (shouldShowNews(ctx)) {
-                 buf.append(" <a href=\"/home?news=0&amp;consoleNonce=").append(consoleNonce).append("\">")
-                    .append(Messages.getString("Hide news", ctx));
-             } else {
-                 buf.append(" <a href=\"/home?news=1&amp;consoleNonce=").append(consoleNonce).append("\">")
-                    .append(Messages.getString("Show news", ctx));
-             }
-             buf.append("</a> | <a href=\"/news\">")
-                .append(Messages.getString("Show all news", ctx))
-                .append("</a></span>");
-         }
-         return buf.toString();
+        }
+        buf.append("</i></span><span id=newsDisplay>");
+        String consoleNonce = (session != null) ? CSSHelper.getNonce(session) : CSSHelper.getNonce();
+        if (lastUpdated > 0 && consoleNonce != null) {
+            if (shouldShowNews(ctx)) {
+                buf.append(" <a href=\"/home?news=0&amp;consoleNonce=").append(consoleNonce).append("\">")
+                   .append(Messages.getString("Hide news", ctx));
+            } else {
+                buf.append(" <a href=\"/home?news=1&amp;consoleNonce=").append(consoleNonce).append("\">")
+                   .append(Messages.getString("Show news", ctx));
+            }
+            buf.append("</a> | <a href=\"/news\">")
+               .append(Messages.getString("Show all news", ctx))
+               .append("</a></span>");
+        }
+        return buf.toString();
     }
 
     /**

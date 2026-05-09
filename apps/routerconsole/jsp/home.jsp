@@ -1,12 +1,13 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="80kb"%>
 <!DOCTYPE HTML>
-<%  String consoleNonce = net.i2p.router.web.CSSHelper.getNonce(); %>
+<%  String consoleNonce = net.i2p.router.web.CSSHelper.getNonce(session); %>
 <%@include file="head.jsi"%>
 <%=intl.title("home")%>
 <link rel=prefetch href=/netdb>
 </head>
 <body id=homepage>
 <jsp:useBean class="net.i2p.router.web.ConfigUpdateHelper" id="updatehelper" scope="request"/>
+<% updatehelper.storeSession(session); %>
 <jsp:setProperty name="updatehelper" property="contextId" value="<%=i2pcontextId%>"/>
 <%@include file="sidebar.jsi"%>
 <h1 class=home><%=intl._t("Router Console")%> <a href=/logout title="Log out"><span id=logout></span></a></h1>

@@ -13,6 +13,9 @@ import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.jar.Attributes;
 import java.util.regex.*;
+
+import javax.servlet.http.HttpSession;
+
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
@@ -145,8 +148,13 @@ public class LogsHelper extends HelperBase {
      *  @param consoleNonce must match
      *  @since 0.9.46
      */
-    public void clearThrough(int n, int crit, long wn, long wts, String wf, String consoleNonce) {
-        if (!CSSHelper.getNonce().equals(consoleNonce)) {return;}
+    public void clearThrough(int n, int crit, long wn, long wts, String wf, HttpSession session, String consoleNonce) {
+        if (session != null) {
+            if (!CSSHelper.validateNonce(session, consoleNonce)) {return;}
+        } else {
+            // Fallback for backward compatibility
+            if (!CSSHelper.getNonce().equals(consoleNonce)) {return;}
+        }
         if (n >= 0) {_context.logManager().getBuffer().getUIMessages().clearThrough(n);}
         if (crit >= 0) {
             _context.logManager().getBuffer().getCriticalUIMessages().clearThrough(crit);

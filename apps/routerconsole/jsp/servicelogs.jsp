@@ -4,20 +4,22 @@
    String contextId = request.getParameter("i2p.contextId");
    if (contextId == null) {contextId = (String) session.getAttribute("i2p.contextId");}
    logsHelper.setContextId(contextId);
-   final String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
+   final String consoleNonce = net.i2p.router.web.CSSHelper.getNonce(session);
    final String svcParam = request.getParameter("svc");
    final String svctParam = request.getParameter("svct");
    final String svcfParam = request.getParameter("svcf");
    final String nonceParam = request.getParameter("consoleNonce");
    if (svcParam != null && svctParam != null && svcfParam != null && nonceParam != null) {
-        try {
-            long svc = Long.parseLong(svcParam);
-            long svct = Long.parseLong(svctParam);
-            String svcf = svcfParam;
-            logsHelper.clearThrough(-1, -1, svc, svct, svcf, nonceParam);
-            response.sendRedirect("servicelogs");
-            return;
-        } catch (NumberFormatException nfe) {}
+        if (net.i2p.router.web.CSSHelper.validateNonce(session, nonceParam)) {
+            try {
+                long svc = Long.parseLong(svcParam);
+                long svct = Long.parseLong(svctParam);
+                String svcf = svcfParam;
+                logsHelper.clearThrough(-1, -1, svc, svct, svcf, session, nonceParam);
+                response.sendRedirect("servicelogs");
+                return;
+            } catch (NumberFormatException nfe) {}
+        }
    }
    StringBuilder buf = new StringBuilder(24*1024);
    Object[] vals = logsHelper.getServiceLogs(buf);

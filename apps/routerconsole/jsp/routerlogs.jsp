@@ -4,17 +4,19 @@
    String contextId = request.getParameter("i2p.contextId");
    if (contextId == null) {contextId = (String) session.getAttribute("i2p.contextId");}
    logsHelper.setContextId(contextId);
-   final String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
+   final String consoleNonce = net.i2p.router.web.CSSHelper.getNonce(session);
    final String clearParam = request.getParameter("clear");
    final String nonceParam = request.getParameter("consoleNonce");
    int last = logsHelper.getLastMessageNumber();
-   if (clearParam != null && nonceParam != null && consoleNonce.equals(nonceParam)) {
-        int iclear = -1;
-        try {iclear = Integer.parseInt(clearParam);}
-        catch (NumberFormatException nfe) {}
-        logsHelper.clearThrough(iclear, -1, -1, -1, null, nonceParam);
-        response.sendRedirect("routerlogs");
-        return;
+   if (clearParam != null && nonceParam != null) {
+        if (net.i2p.router.web.CSSHelper.validateNonce(session, nonceParam)) {
+            int iclear = -1;
+            try {iclear = Integer.parseInt(clearParam);}
+            catch (NumberFormatException nfe) {}
+            logsHelper.clearThrough(iclear, -1, -1, -1, null, session, nonceParam);
+            response.sendRedirect("routerlogs");
+            return;
+        }
    }
 %>
 <!DOCTYPE HTML>

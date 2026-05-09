@@ -401,7 +401,7 @@ public class GraphHelper extends FormHandler {
         boolean hideLegend = _context.getProperty(PROP_HIDE_LEGEND, DEFAULT_HIDE_LEGEND);
         boolean persistent = _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT);
 
-        String nonce = CSSHelper.getNonce();
+        String nonce = _session != null ? CSSHelper.getNonce(_session) : CSSHelper.getNonce();
 
         StringBuilder buf = new StringBuilder(3 * 1024);
         buf.append("<br><input type=checkbox id=toggleSettings hidden><label for=toggleSettings><h3 id=graphdisplay tabindex=0>")

@@ -11,6 +11,7 @@
 <jsp:useBean class="net.i2p.router.web.ConfigUpdateHandler" id="formhandler" scope="request"/>
 <%@include file="formhandler.jsi"%>
 <jsp:useBean class="net.i2p.router.web.ConfigUpdateHelper" id="updatehelper" scope="request"/>
+<% updatehelper.storeSession(session); %>
 <jsp:setProperty name="updatehelper" property="contextId" value="<%=i2pcontextId%>"/>
 <%  boolean canInstall = updatehelper.canInstall();
     boolean isAdvanced = updatehelper.isAdvanced();

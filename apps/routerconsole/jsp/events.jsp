@@ -11,7 +11,8 @@
 <jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>"/>
 <% /* GraphHelper sets the defaults in setContextId, so setting the properties must be after the context */%>
 <jsp:setProperty name="eventHelper" property="*"/>
-<%  eventHelper.storeWriter(out);
+<%  eventHelper.storeSession(session);
+    eventHelper.storeWriter(out);
     eventHelper.storeMethod(request.getMethod());
     int errorCount = logsHelper.getCriticalLogCount();
 %>

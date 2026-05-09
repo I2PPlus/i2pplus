@@ -9,14 +9,17 @@
 String reqURI = request.getRequestURI();
 if (reqURI.contains("/xhr1")) {reqURI = request.getParameter("requestURI");}
 helper.setRequestURI(reqURI);
+helper.storeSession(session);
 helper.storeWriter(out);
 helper.storeNewsHelper(newshelper);
 %>
 <% /* The following is required for the reseed button to work, although we probably only need the reseedNonce property. */%>
 <jsp:useBean class="net.i2p.router.web.helpers.ReseedHandler" id="reseed" scope="request" />
+<% reseed.storeSession(session); %>
 <jsp:setProperty name="reseed" property="*" />
 <% /* The following is required for the update buttons to work, although we probably only need the updateNonce property. */%>
 <jsp:useBean class="net.i2p.router.web.UpdateHandler" id="update" scope="request" />
+<% update.storeSession(session); %>
 <jsp:setProperty name="update" property="*" />
 <jsp:setProperty name="update" property="contextId" value="<%=i2pcontextId%>" />
 <% helper.renderSummaryBar();%>

@@ -93,7 +93,7 @@ public class EventLogHelper extends FormHandler {
         // too hard to use the standard formhandler.jsi / FormHandler.java session nonces
         // since graphs.jsp needs the refresh value in its <head>.
         // So just use the "shared/console nonce".
-        String nonce = CSSHelper.getNonce();
+        String nonce = _session != null ? CSSHelper.getNonce(_session) : CSSHelper.getNonce();
         try {
             _out.write("<br><div class=logwrap>\n<h3 id=displayevents>" + _t("Display Events") + "</h3>");
             _out.write("<form action=/events method=post>\n" +

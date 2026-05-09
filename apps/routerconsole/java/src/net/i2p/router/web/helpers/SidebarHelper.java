@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
+
+import javax.servlet.http.HttpSession;
+
 import net.i2p.app.ClientAppManager;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
@@ -49,6 +52,14 @@ import net.i2p.util.SystemVersion;
  * For the full summary bar use renderSummaryBar()
  */
 public class SidebarHelper extends HelperBase {
+
+    private HttpSession _session;
+
+    /**
+     *  For form validation and session-bound nonce generation
+     *  @since 0.9.69
+     */
+    public void storeSession(HttpSession session) { _session = session; }
 
     static final String THINSP = " / ";
     private static final char S = ',';
@@ -1205,18 +1216,24 @@ public class SidebarHelper extends HelperBase {
             getAction() == null && getUpdateNonce() == null) {
                 if (needSpace) {buf.append("<hr>");}
                 // else {needSpace = true;} // needed ?
-                long nonce = _context.random().nextLong();
-                String prev = System.getProperty("net.i2p.router.web.UpdateHandler.nonce");
-                if (prev != null) {
-                    System.setProperty("net.i2p.router.web.UpdateHandler.noncePrev", prev);
+                String nonce;
+                if (_session != null) {
+                    nonce = CSSHelper.getNonce(_session);
+                } else {
+                    // Fallback: generate nonce and store in System properties for backward compatibility
+                    nonce = Long.toString(_context.random().nextLong());
+                    String prev = System.getProperty("net.i2p.router.web.UpdateHandler.nonce");
+                    if (prev != null) {
+                        System.setProperty("net.i2p.router.web.UpdateHandler.noncePrev", prev);
+                    }
+                    System.setProperty("net.i2p.router.web.UpdateHandler.nonce", nonce);
                 }
-                System.setProperty("net.i2p.router.web.UpdateHandler.nonce", nonce + "");
                 String uri = getRequestURI();
                 buf.append("<form id=sb_updateform action=\"")
                    .append(uri)
-                   .append("\" method=POST class=volatile>\n<input type=hidden name=updateNonce value=")
+                   .append("\" method=POST class=volatile>\n<input type=hidden name=updateNonce value=\"")
                    .append(nonce)
-                   .append(">\n");
+                   .append("\">\n");
 /*
                 if (avail) {
                     buf.append("<span id=updateAvailable class=volatile>").append(_t("Release update available")).append("<br><i>")
@@ -1260,7 +1277,8 @@ public class SidebarHelper extends HelperBase {
      *  @since 0.8.13 moved from SidebarRenderer
      */
     public String getRestartStatus() {
-        return ConfigRestartBean.renderStatus(getRequestURI(), getAction(), getConsoleNonce());
+        String nextNonce = _session != null ? CSSHelper.getNonce(_session) : CSSHelper.getNonce();
+        return ConfigRestartBean.renderStatus(getRequestURI(), getAction(), _session, nextNonce, getConsoleNonce());
     }
 
     /**
@@ -1303,13 +1321,19 @@ public class SidebarHelper extends HelperBase {
             // If showing the reseed link is allowed
             if (allowReseed()) {
                 // While no reseed occurring, show reseed link
-                long nonce = _context.random().nextLong();
-                String prev = System.getProperty("net.i2p.router.web.ReseedHandler.nonce");
-                if (prev != null) System.setProperty("net.i2p.router.web.ReseedHandler.noncePrev", prev);
-                System.setProperty("net.i2p.router.web.ReseedHandler.nonce", nonce+"");
+                String nonce;
+                if (_session != null) {
+                    nonce = CSSHelper.getNonce(_session);
+                } else {
+                    // Fallback: generate nonce and store in System properties for backward compatibility
+                    nonce = Long.toString(_context.random().nextLong());
+                    String prev = System.getProperty("net.i2p.router.web.ReseedHandler.nonce");
+                    if (prev != null) System.setProperty("net.i2p.router.web.ReseedHandler.noncePrev", prev);
+                    System.setProperty("net.i2p.router.web.ReseedHandler.nonce", nonce);
+                }
                 String uri = getRequestURI();
                 buf.append("<p class=volatile><form action=\"").append(uri).append("\" method=POST>\n");
-                buf.append("<input type=hidden name=reseedNonce value=").append(nonce).append(">\n");
+                buf.append("<input type=hidden name=reseedNonce value=\"").append(nonce).append("\">\n");
                 buf.append("<button type=submit title=\"").append(_t("Attempt to download router reference files (if automatic reseed has failed)"));
                 buf.append("\" id=sb_manualReseed class=reload value=Reseed>").append(_t("Reseed")).append("</button></form></p>\n");
             }

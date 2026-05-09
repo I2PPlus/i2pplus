@@ -1,14 +1,16 @@
 package net.i2p.router.web.helpers;
 
+import javax.servlet.http.HttpSession;
+
 import net.i2p.data.DataHelper;
 import net.i2p.i2ptunnel.TunnelControllerGroup;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.ConfigServiceHandler;
 import net.i2p.router.web.ContextHelper;
 import net.i2p.router.web.Messages;
 import net.i2p.router.web.NewsHelper;
-import net.i2p.util.RandomSource;
 
 /**
  * simple helper to control restarts/shutdowns in the left hand nav
@@ -23,21 +25,23 @@ public class ConfigRestartBean {
     private static final String[] SET3 = {"restart", "reload", "Restart", "shutdown", "stop", "Shutdown"};
     private static final String[] SET4 = {"shutdown", "stop", "Shutdown"};
 
-    private static final String _systemNonce = Long.toString(RandomSource.getInstance().nextLong());
     private static final String PROP_ADVANCED = "routerconsole.advanced";
-
-    public static String getNonce() {return _systemNonce;}
 
     public static boolean isAdvanced() {
         RouterContext ctx = ContextHelper.getContext(null);
         return ctx.getBooleanProperty(PROP_ADVANCED);
     }
 
-    /** this also initiates the restart/shutdown based on action */
-    public static String renderStatus(String urlBase, String action, String nonce) {
+    /**
+     * this also initiates the restart/shutdown based on action
+     *
+     * @param nextNonce the next nonce to output in the form
+     * @param nonce the nonce to be validated for actions
+     * @since 0.9.69
+     */
+    public static String renderStatus(String urlBase, String action, HttpSession session, String nextNonce, String nonce) {
         RouterContext ctx = ContextHelper.getContext(null);
-        String systemNonce = getNonce();
-        if ( (nonce != null) && (systemNonce.equals(nonce)) && (action != null) ) {
+        if (action != null && CSSHelper.validateNonce(session, nonce)) {
             // Normal browsers send value, IE sends button label
             if ("shutdownImmediate".equals(action) || _t("Shutdown immediately", ctx).equals(action)) {
                 if (ctx.hasWrapper()) {ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_HARD, false);}
@@ -80,9 +84,9 @@ public class ConfigRestartBean {
                 buf.append("</b></span></h4><hr>");
                 // Show cancel buttons for deferred shutdown
                 if (restarting) {
-                    buttons(ctx, buf, urlBase, systemNonce, SET2);
+                    buttons(ctx, buf, urlBase, nextNonce, SET2);
                 } else {
-                    buttons(ctx, buf, urlBase, systemNonce, SET1);
+                    buttons(ctx, buf, urlBase, nextNonce, SET1);
                 }
             }
         } else if ((shuttingDown || restarting) && timeRemaining <= 45*1000) {
@@ -103,7 +107,7 @@ public class ConfigRestartBean {
                 }
             }
             buf.append("</span></h4><hr>");
-            buttons(ctx, buf, urlBase, systemNonce, SET1);
+            buttons(ctx, buf, urlBase, nextNonce, SET1);
         } else if (restarting) {
             buf.append("<h4 id=sb_shutdownStatus class=volatile><span>")
                .append(_t("Restart in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
@@ -118,10 +122,10 @@ public class ConfigRestartBean {
                 }
             }
             buf.append("</span></h4><hr>");
-            buttons(ctx, buf, urlBase, systemNonce, SET2);
+            buttons(ctx, buf, urlBase, nextNonce, SET2);
         } else {
-            if (ctx.hasWrapper() || NewsHelper.isExternalRestartPending()) {buttons(ctx, buf, urlBase, systemNonce, SET3);}
-            else {buttons(ctx, buf, urlBase, systemNonce, SET4);}
+            if (ctx.hasWrapper() || NewsHelper.isExternalRestartPending()) {buttons(ctx, buf, urlBase, nextNonce, SET3);}
+            else {buttons(ctx, buf, urlBase, nextNonce, SET4);}
         }
         return buf.toString();
     }

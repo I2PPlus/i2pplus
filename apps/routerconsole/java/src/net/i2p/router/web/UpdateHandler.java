@@ -2,6 +2,8 @@ package net.i2p.router.web;
 
 import static net.i2p.update.UpdateType.*;
 
+import javax.servlet.http.HttpSession;
+
 import net.i2p.app.ClientAppManager;
 import net.i2p.router.RouterContext;
 import net.i2p.router.update.ConsoleUpdateManager;
@@ -24,6 +26,13 @@ public class UpdateHandler {
     protected Log _log;
     private String _action;
     private String _nonce;
+    private HttpSession _session;
+
+    /**
+     *  For form validation
+     *  @since 0.9.69
+     */
+    public void storeSession(HttpSession session) { _session = session; }
 
     public UpdateHandler() {this(ContextHelper.getContext(null));}
 
@@ -66,11 +75,37 @@ public class UpdateHandler {
         checkUpdateAction();
     }
 
+    /**
+     *  Alias for setUpdateNonce for session-based nonce support
+     *  @since 0.9.69
+     */
+    public void setConsoleNonce(String nonce) {
+        _nonce = nonce;
+        checkUpdateAction();
+    }
+
+    /**
+     *  these two can be set in either order, so call checkUpdateAction() twice
+     *  storeSession() MUST be called first
+     */
     private void checkUpdateAction() {
-        if (_action == null) {return;}
-        else if (_action.contains("Unsigned")) {update(ROUTER_UNSIGNED);}
-        else if (_action.contains("DevSU3")) {update(ROUTER_DEV_SU3);}
-        else if (ConfigUpdateHandler.USE_SU3_UPDATE) {update(ROUTER_SIGNED_SU3);}
+        if (_action == null || _nonce == null) {return;}
+
+        // Try session-based validation first
+        if (_session != null && CSSHelper.validateNonce(_session, _nonce)) {
+            if (_action.contains("Unsigned")) {update(ROUTER_UNSIGNED);}
+            else if (_action.contains("DevSU3")) {update(ROUTER_DEV_SU3);}
+            else if (ConfigUpdateHandler.USE_SU3_UPDATE) {update(ROUTER_SIGNED_SU3);}
+            return;
+        }
+
+        // Fallback: check System properties for backward compatibility
+        if (_nonce.equals(System.getProperty("net.i2p.router.web.UpdateHandler.nonce")) ||
+            _nonce.equals(System.getProperty("net.i2p.router.web.UpdateHandler.noncePrev"))) {
+            if (_action.contains("Unsigned")) {update(ROUTER_UNSIGNED);}
+            else if (_action.contains("DevSU3")) {update(ROUTER_DEV_SU3);}
+            else if (ConfigUpdateHandler.USE_SU3_UPDATE) {update(ROUTER_SIGNED_SU3);}
+        }
     }
 
     private void update(UpdateType type) {

@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.servlet.http.HttpSession;
+
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.servlet.RequestWrapper;
@@ -40,6 +43,7 @@ public abstract class FormHandler {
     private boolean _processed;
     private boolean _valid;
     protected Writer _out;
+    protected HttpSession _session;
 
     /** Rate limiter for form submissions - prevents brute-force attacks */
     private static final int RATE_LIMIT_WINDOW_MS = 60000; // 1 minute
@@ -96,6 +100,12 @@ public abstract class FormHandler {
         _notices = new ArrayList<>();
         _valid = true;
     }
+
+    /**
+     *  For nonce validation
+     *  @since 0.9.69
+     */
+    public void storeSession(HttpSession session) { _session = session; }
 
     /**
      * Configure this bean to query a particular router context
@@ -362,6 +372,12 @@ public abstract class FormHandler {
             return;
         }
 
+        // Try session-based validation first (new method)
+        if (_session != null && CSSHelper.validateNonce(_session, _nonce)) {
+            return;
+        }
+
+        // Fallback to static nonce for backward compatibility
         String sharedNonce = CSSHelper.getNonce();
         if (sharedNonce.equals(_nonce)) {return;}
 

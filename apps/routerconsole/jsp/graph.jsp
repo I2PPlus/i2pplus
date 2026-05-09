@@ -5,7 +5,8 @@
 <jsp:useBean class="net.i2p.router.web.helpers.GraphHelper" id="graphHelper" scope="request"/>
 <jsp:setProperty name="graphHelper" property="contextId" value="<%=i2pcontextId%>"/>
 <jsp:setProperty name="graphHelper" property="*"/>
-<%  graphHelper.storeWriter(out);
+<%  graphHelper.storeSession(session);
+    graphHelper.storeWriter(out);
     graphHelper.storeMethod(request.getMethod());
     boolean allowRefresh = intl.allowIFrame(request.getHeader("User-Agent"));
     if (allowRefresh) {out.print(graphHelper.getRefreshMeta());}

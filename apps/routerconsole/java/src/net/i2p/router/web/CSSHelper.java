@@ -1,9 +1,14 @@
 package net.i2p.router.web;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import javax.servlet.http.HttpSession;
+
+import net.i2p.I2PAppContext;
 import net.i2p.servlet.util.ServletUtil;
 import net.i2p.util.RandomSource;
 import net.i2p.util.SystemVersion;
@@ -44,6 +49,78 @@ public class CSSHelper extends HelperBase {
     /** @since 0.9.68+ */
     public static final String PROP_STICKY_SIDEBAR = "routerconsole.stickySidebar";
     public static final boolean DEFAULT_STICKY_SIDEBAR = true;
+
+    /** Session-bound nonce for CSRF protection, replaces static nonces @since 0.9.69 */
+    private static final String SESSION_CONSOLE_NONCE = "__router.console.nonce.queue__";
+    private static final int NONCE_QUEUE_SIZE = 10;
+
+    /**
+     *  Session-bound nonce generation - replaces static consoleNonce, updateNonce, reseedNonce, systemNonce
+     *  @param session returns an invalid nonce if null
+     *  @return a new nonce for each call
+     *  @since 0.9.69
+     */
+    @SuppressWarnings("unchecked")
+    public static String getNonce(HttpSession session) {
+        if (session == null) {
+            return "FAIL_SESSION_NOT_SET";
+        }
+        String rv;
+        synchronized(session) {
+            LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_CONSOLE_NONCE);
+            if (nonces == null) {
+                nonces = new LinkedList<String>();
+                session.setAttribute(SESSION_CONSOLE_NONCE, nonces);
+            }
+            rv = "CN" + RandomSource.getInstance().nextLong();
+            nonces.offer(rv);
+            if (nonces.size() > NONCE_QUEUE_SIZE)
+                nonces.poll();
+        }
+        return rv;
+    }
+
+    /**
+     *  Session-bound nonce validation - replaces static nonce validation
+     *  @param nonce returns false if null
+     *  @param session returns false if null
+     *  @return true if valid
+     *  @since 0.9.69
+     */
+    public static boolean validateNonce(HttpSession session, String nonce) {
+        return validateNonce(session, nonce, false);
+    }
+
+    /**
+     *  Session-bound nonce validation with preserve option
+     *  @param nonce returns false if null
+     *  @param session returns false if null
+     *  @param preserve if true, do not delete the nonce. Use for early checks in jsps.
+     *  @return true if valid
+     *  @since 0.9.69
+     */
+    @SuppressWarnings("unchecked")
+    public static boolean validateNonce(HttpSession session, String nonce, boolean preserve) {
+        if (nonce == null) {
+            return false;
+        }
+        if (session == null) {
+            return false;
+        }
+        boolean rv;
+        synchronized(session) {
+            LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_CONSOLE_NONCE);
+            if (nonces != null) {
+                if (preserve)
+                    rv = nonces.lastIndexOf(nonce) >= 0;
+                else
+                    rv = nonces.removeLastOccurrence(nonce);
+            } else {
+                rv = false;
+            }
+        }
+        return rv;
+    }
 
     /**
      *  Get current CSRF nonce, rotating every 5 minutes.
