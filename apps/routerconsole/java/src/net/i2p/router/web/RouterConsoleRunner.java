@@ -105,7 +105,8 @@ public class RouterConsoleRunner implements RouterApp {
     private static final DigestAuthenticator authenticator = new DigestAuthenticator();
     static {
         // default changed from 0 (forever) in Jetty 6 to 60*1000 ms in Jetty 7
-        authenticator.setMaxNonceAge(7*24*60*60*1000L);
+        // reduced from 7 days to 1 hour for security (reported by bottomlineit.za)
+        authenticator.setMaxNonceAge(60*60*1000L);
     }
     private static final String NAME = "console";
     public static final String JETTY_REALM = "i2prouter";
