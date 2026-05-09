@@ -125,11 +125,20 @@ public class IndexBean {
     /** Session for nonce storage @since 0.9.69 */
     private HttpSession _session;
 
+    /** Request method for P-R-G @since 0.9.69 */
+    private String _method;
+
     /**
      *  For session-bound nonce generation and validation
      *  @since 0.9.69
      */
     public void setSession(HttpSession session) { _session = session; }
+
+    /**
+     *  Store request method for P-R-G pattern
+     *  @since 0.9.69
+     */
+    public void storeMethod(String method) { _method = method; }
 
     /**
      *  @since 0.9.4
@@ -216,6 +225,15 @@ public class IndexBean {
         return rv;
     }
 
+    /**
+     *  Validate the current nonce from the session-bound queue
+     *  @return true if valid and removed from queue
+     *  @since 0.9.69
+     */
+    private boolean validateNonce() {
+        return haveNonce(_curNonce, _session);
+    }
+
     public void setAction(String action) {
         if ((action == null) || (action.trim().length() <= 0)) return;
         _action = action;
@@ -239,10 +257,18 @@ public class IndexBean {
         if ((_action == null) || (_action.trim().length() <= 0) || ("Cancel".equals(_action))) {return "";}
         if (_group == null) {return _t("Error - tunnels are not initialized yet");}
 
-        // Always validate nonce - parent page reloads after action completes
-        if (!haveNonce(_curNonce, _session))
-            return "• " + _t("Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit.") +
-                   ' ' + _t("If the problem persists, verify that you have cookies enabled in your browser.");
+        // Enforce POST for P-R-G pattern, with backward compatibility fallback
+        String nonceError = "• " + _t("Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit.") +
+                            ' ' + _t("If the problem persists, verify that you have cookies enabled in your browser.");
+        boolean nonceValid;
+        if ("POST".equals(_method)) {
+            nonceValid = validateNonce();
+        } else {
+            // Backward compatibility: also accept GET but validate with session nonce
+            nonceValid = haveNonce(_curNonce, _session);
+        }
+        if (!nonceValid)
+            return nonceError;
 
         /* For any of these that call getMessage(msgs), we return "", as getMessage() will add them to the returned string. */
         if ("Stop all".equals(_action)) {stopAll();}

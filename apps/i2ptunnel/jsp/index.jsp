@@ -4,7 +4,17 @@
 <jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request"/>
 <jsp:setProperty name="indexBean" property="tunnel"/><%-- must be set before key1-4 --%>
 <jsp:setProperty name="indexBean" property="*"/>
-<% indexBean.setSession(session); %>
+<% indexBean.setSession(session);
+   indexBean.storeMethod(request.getMethod());
+   // P-R-G redirect after POST
+   if ("POST".equals(request.getMethod())) {
+       indexBean.getMessages();
+       response.setStatus(303);
+       response.setHeader("Location", request.getRequestURI());
+       response.getOutputStream().close();
+       return;
+   }
+%>
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request"/>
 <%  String activeTheme = indexBean.getTheme();
     String themeName = indexBean.getThemeName();
