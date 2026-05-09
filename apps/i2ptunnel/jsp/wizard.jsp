@@ -4,6 +4,7 @@
 <jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request"/>
 <jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request"/>
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request"/>
+<% indexBean.setSession(session); %>
 <% String themeName = indexBean.getThemeName();
    String pageStr = request.getParameter("page");
    /* Get the number of the page we came from */
@@ -94,7 +95,7 @@
 <%              } %>
 <input type=hidden name="page" value="<%=curPage%>">
 <input type=hidden name="tunnel" value="null">
-<input type=hidden name=nonce value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>">
+<input type=hidden name=nonce value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce(session)%>">
 <table>
 <% /* Page 1 - Whether to make a client or server tunnel */
             if (curPage == 1) {

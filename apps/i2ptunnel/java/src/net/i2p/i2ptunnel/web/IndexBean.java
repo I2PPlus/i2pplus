@@ -20,11 +20,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
+import javax.servlet.http.HttpSession;
+
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.app.ClientAppManager;
@@ -79,6 +83,11 @@ public class IndexBean {
     private static final int MAX_NONCES = 8;
     /** store nonces in a static FIFO instead of in System Properties @since 0.8.1 */
     private static final List<String> _nonces = new ArrayList<String>(MAX_NONCES + 1);
+
+    /** Session-bound nonce for CSRF protection, replaces static nonces @since 0.9.69 */
+    private static final String SESSION_NONCE = "__i2ptunnel.nonce.queue__";
+    private static final int SESSION_NONCE_QUEUE_SIZE = 10;
+
     private static final int MAX_FORM_KEYS = 100;
     private static final Map<Integer, SessionKey> _formKeys = new HashMap<Integer, SessionKey>();
     private static final UIMessages _messages = new UIMessages(100);
@@ -113,6 +122,15 @@ public class IndexBean {
         _config = new TunnelConfig();
     }
 
+    /** Session for nonce storage @since 0.9.69 */
+    private HttpSession _session;
+
+    /**
+     *  For session-bound nonce generation and validation
+     *  @since 0.9.69
+     */
+    public void setSession(HttpSession session) { _session = session; }
+
     /**
      *  @since 0.9.4
      */
@@ -145,6 +163,59 @@ public class IndexBean {
         synchronized (_nonces) {return _nonces.contains(nonce);}
     }
 
+    /**
+     *  Session-bound nonce generation - replaces static nonce when session available
+     *  @param session returns static nonce if null
+     *  @return a new nonce for each call
+     *  @since 0.9.69
+     */
+    @SuppressWarnings("unchecked")
+    public static String getNextNonce(HttpSession session) {
+        if (session == null) {
+            return getNextNonce();
+        }
+        String rv;
+        synchronized(session) {
+            LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_NONCE);
+            if (nonces == null) {
+                nonces = new LinkedList<String>();
+                session.setAttribute(SESSION_NONCE, nonces);
+            }
+            rv = "IT" + Long.toString(I2PAppContext.getGlobalContext().random().nextLong());
+            nonces.offer(rv);
+            if (nonces.size() > SESSION_NONCE_QUEUE_SIZE)
+                nonces.poll();
+        }
+        return rv;
+    }
+
+    /**
+     *  Session-bound nonce validation
+     *  @param nonce returns false if null
+     *  @param session returns static nonce check if null
+     *  @return true if valid
+     *  @since 0.9.69
+     */
+    @SuppressWarnings("unchecked")
+    public static boolean haveNonce(String nonce, HttpSession session) {
+        if (nonce == null) {
+            return false;
+        }
+        if (session == null) {
+            return haveNonce(nonce);
+        }
+        boolean rv;
+        synchronized(session) {
+            LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_NONCE);
+            if (nonces != null) {
+                rv = nonces.removeLastOccurrence(nonce);
+            } else {
+                rv = false;
+            }
+        }
+        return rv;
+    }
+
     public void setAction(String action) {
         if ((action == null) || (action.trim().length() <= 0)) return;
         _action = action;
@@ -169,7 +240,7 @@ public class IndexBean {
         if (_group == null) {return _t("Error - tunnels are not initialized yet");}
 
         // Always validate nonce - parent page reloads after action completes
-        if (!haveNonce(_curNonce))
+        if (!haveNonce(_curNonce, _session))
             return "• " + _t("Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit.") +
                    ' ' + _t("If the problem persists, verify that you have cookies enabled in your browser.");
 

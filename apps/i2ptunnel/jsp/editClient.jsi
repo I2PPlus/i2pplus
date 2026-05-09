@@ -27,7 +27,7 @@
 <h2><%=intl._t("New Client Configuration")%>&nbsp;<span style="float:right;font-size:80%">Type: <%=tunnelTypeName%></span></h2>
 <%  } %>
 <input type=hidden name="tunnel" value="<%=curTunnel%>">
-<input type=hidden name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>">
+<input type=hidden name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce(session)%>">
 <input type=hidden name="type" value="<%=tunnelType%>">
 <%  /*
      * These are four keys that are generated automatically on first save, and we want to persist
@@ -221,9 +221,9 @@
 <tr>
 <td class=buttons colspan=2>
 <%            if (indexBean.getTunnelStatus(curTunnel) != indexBean.NOT_RUNNING) { %>
-<a style=display:none class="control stop" title="Stop this Tunnel" href="list?tunnel=<%=curTunnel%>&amp;nonce=<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>&amp;action=stop&amp;tunnel=<%=curTunnel%>"><%=intl._t("Stop")%></a>
+<a style=display:none class="control stop" title="Stop this Tunnel" href="list?tunnel=<%=curTunnel%>&amp;nonce=<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce(session)%>&amp;action=stop&amp;tunnel=<%=curTunnel%>"><%=intl._t("Stop")%></a>
 <%            } else { %>
-<a style=display:none class="control start" title="<%=intl._t("Start this Tunnel")%>" href="list?tunnel=<%=curTunnel%>&amp;nonce=<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>&amp;action=start&amp;tunnel=<%=curTunnel%>"><%=intl._t("Start")%></a>
+<a style=display:none class="control start" title="<%=intl._t("Start this Tunnel")%>" href="list?tunnel=<%=curTunnel%>&amp;nonce=<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce(session)%>&amp;action=start&amp;tunnel=<%=curTunnel%>"><%=intl._t("Start")%></a>
 <%            } %>
 <input type=hidden value="true" name="removeConfirm">
 <button id=controlCancel class=control type=submit name="action" value=""><%=intl._t("Cancel")%></button>
@@ -556,9 +556,9 @@ minutes</span>
 <tr>
 <td class=buttons colspan=2>
 <%        if (indexBean.getTunnelStatus(curTunnel) != indexBean.NOT_RUNNING) { %>
-<a style=display:none class="control stop" title="Stop this Tunnel" href="list?tunnel=<%=curTunnel%>&amp;nonce=<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>&amp;action=stop&amp;tunnel=<%=curTunnel%>"><%=intl._t("Stop")%></a>
+<a style=display:none class="control stop" title="Stop this Tunnel" href="list?tunnel=<%=curTunnel%>&amp;nonce=<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce(session)%>&amp;action=stop&amp;tunnel=<%=curTunnel%>"><%=intl._t("Stop")%></a>
 <%        } else { %>
-<a style=display:none class="control start" title="<%=intl._t("Start this Tunnel")%>" href="list?tunnel=<%=curTunnel%>&amp;nonce=<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>&amp;action=start&amp;tunnel=<%=curTunnel%>"><%=intl._t("Start")%></a>
+<a style=display:none class="control start" title="<%=intl._t("Start this Tunnel")%>" href="list?tunnel=<%=curTunnel%>&amp;nonce=<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce(session)%>&amp;action=start&amp;tunnel=<%=curTunnel%>"><%=intl._t("Start")%></a>
 <%        } %>
 <input type=hidden value="true" name="removeConfirm">
 <button id=controlCancel class=control type=submit name="action" value=""><%=intl._t("Cancel")%></button>

@@ -14,7 +14,7 @@
 <h2><%=intl._t("New Server Configuration")%>&nbsp;<span style="float: right; font-size: 80%">Type: <%=tunnelTypeName%></span></h2>
 <%  } %>
 <input type=hidden name="tunnel" value="<%=curTunnel%>">
-<input type=hidden name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>">
+<input type=hidden name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce(session)%>">
 <input type=hidden name="type" value="<%=tunnelType%>">
 
 <%  String checked = " checked ";

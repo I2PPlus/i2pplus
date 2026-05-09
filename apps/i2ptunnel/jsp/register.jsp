@@ -9,6 +9,7 @@
 <jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request"/>
 <jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request"/>
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request"/>
+<% indexBean.setSession(session); %>
 <% String themeName = indexBean.getThemeName();
    RequestWrapper wrequest = new RequestWrapper(request);
    String tun = wrequest.getParameter("tunnel");
@@ -68,7 +69,7 @@ if (curTunnel >= 0) {
         name = net.i2p.data.DataHelper.escapeHTML(editBean.getTunnelName(curTunnel));
 %>
 <input type=hidden name="tunnel" value="<%=curTunnel%>">
-<input type=hidden name=nonce value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>">
+<input type=hidden name=nonce value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce(session)%>">
 <input type=hidden name="type" value="<%=tunnelType%>">
 <input type=submit class=default name=action value="Save changes">
 <%

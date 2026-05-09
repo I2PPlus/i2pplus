@@ -8,6 +8,7 @@
 <jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request"/>
 <jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request"/>
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request"/>
+<% indexBean.setSession(session); %>
 <% String themeName = indexBean.getThemeName();
    String tun = request.getParameter("tunnel");
    int curTunnel = -1;
@@ -150,7 +151,7 @@ if (name == null || name.equals(""))
             } else {
                 kspw = KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD;
             }
-            if (!net.i2p.i2ptunnel.web.IndexBean.haveNonce(nonce)) {
+            if (!net.i2p.i2ptunnel.web.IndexBean.haveNonce(nonce, session)) {
                 msgs.append(intl._t("Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."))
                     .append('\n')
                     .append(intl._t("If the problem persists, verify that you have cookies enabled in your browser."))
@@ -492,7 +493,7 @@ if (name == null || name.equals(""))
 <h2><%=intl._t("SSL Wizard")%> (<%=net.i2p.data.DataHelper.escapeHTML(editBean.getTunnelName(curTunnel))%>)</h2>
 <form method=POST action="ssl" accept-charset=utf-8>
 <input type=hidden name="tunnel" value="<%=curTunnel%>"/>
-<input type=hidden name=nonce value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>"/>
+<input type=hidden name=nonce value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce(session)%>"/>
 <input type=hidden name="type" value="<%=tunnelType%>"/>
 <input type=submit class=default name=action value="Save changes"/>
 <table>

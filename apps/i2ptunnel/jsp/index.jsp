@@ -4,13 +4,14 @@
 <jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request"/>
 <jsp:setProperty name="indexBean" property="tunnel"/><%-- must be set before key1-4 --%>
 <jsp:setProperty name="indexBean" property="*"/>
+<% indexBean.setSession(session); %>
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request"/>
 <%  String activeTheme = indexBean.getTheme();
     String themeName = indexBean.getThemeName();
     boolean isAdvanced = editBean.isAdvanced();
     boolean isDarkTheme = activeTheme.contains("dark") || activeTheme.contains("midnight");
     boolean isInitialized = indexBean.isInitialized();
-    String nextNonce = isInitialized ? net.i2p.i2ptunnel.web.IndexBean.getNextNonce() : null;
+    String nextNonce = isInitialized ? net.i2p.i2ptunnel.web.IndexBean.getNextNonce(session) : null;
     int lastID = indexBean.getLastMessageID(); // not synced, oh well
     String msgs = indexBean.getMessages();
     String overrideURL = activeTheme + "override.css";
