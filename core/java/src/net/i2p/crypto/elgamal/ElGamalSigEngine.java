@@ -80,7 +80,7 @@ public final class ElGamalSigEngine extends Signature {
     protected byte[] engineSign() throws SignatureException {
         BigInteger elgp = key.getParams().getP();
         BigInteger pm1 = elgp.subtract(BigInteger.ONE);
-        BigInteger elgg = key.getParams().getG();
+        NativeBigInteger elgg = new NativeBigInteger(key.getParams().getG());
         BigInteger x = ((ElGamalPrivateKey) key).getX();
         if (!(x instanceof NativeBigInteger)) x = new NativeBigInteger(x);
         byte[] data = digest.digest();
@@ -94,7 +94,7 @@ public final class ElGamalSigEngine extends Signature {
             ok = ok && k.gcd(pm1).equals(BigInteger.ONE);
         } while (!ok);
 
-        BigInteger r = elgg.modPow(k, elgp);
+        BigInteger r = elgg.modPowCT(k, elgp);
         BigInteger kinv = k.modInverse(pm1);
         BigInteger h = new NativeBigInteger(1, data);
         BigInteger s = (kinv.multiply(h.subtract(x.multiply(r)))).mod(pm1);

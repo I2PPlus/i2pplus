@@ -151,7 +151,7 @@ final class YKGenerator {
             BigInteger kPlus2 = k.add(TWO);
             if (kPlus2.compareTo(CryptoConstants.elgp) > 0) k = null;
         }
-        y = CryptoConstants.elgg.modPow(k, CryptoConstants.elgp);
+        y = CryptoConstants.elgg.modPowCT(k, CryptoConstants.elgp);
 
         BigInteger yk[] = new BigInteger[2];
         yk[0] = y;
