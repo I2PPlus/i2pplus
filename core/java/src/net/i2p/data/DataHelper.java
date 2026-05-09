@@ -1309,6 +1309,27 @@ public class DataHelper {
     }
 
     /**
+     *  Constant time string comparison.
+     *  Null-safe. Different lengths handled in constant time.
+     *  @since 0.9.69
+     */
+    public static final boolean eqCT(String lhs, String rhs) {
+        if (lhs == null || rhs == null) {
+            return false;
+        }
+        int lenL = lhs.length();
+        int lenR = rhs.length();
+        int maxLen = Math.max(lenL, lenR);
+        int r = 0;
+        for (int i = 0; i < maxLen; i++) {
+            char cL = i < lenL ? lhs.charAt(i) : 0;
+            char cR = i < lenR ? rhs.charAt(i) : 0;
+            r |= cL ^ cR;
+        }
+        return r == 0;
+    }
+
+    /**
      *  Big endian compare, treats bytes as unsigned.
      *  Shorter arg is lesser.
      *  Args may be null, null is less than non-null.

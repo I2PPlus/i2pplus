@@ -161,9 +161,9 @@ public class I2PSnarkServlet extends BasicServlet {
     private synchronized boolean isValidNonce(String nonce) {
         if (nonce == null) {return false;}
         long current = getNonce();
-        if (String.valueOf(current).equals(nonce)) {return true;}
-        if (_recentNonces[0] != 0 && String.valueOf(_recentNonces[0]).equals(nonce)) {return true;}
-        if (_recentNonces[1] != 0 && String.valueOf(_recentNonces[1]).equals(nonce)) {return true;}
+        if (DataHelper.eqCT(String.valueOf(current), nonce)) {return true;}
+        if (_recentNonces[0] != 0 && DataHelper.eqCT(String.valueOf(_recentNonces[0]), nonce)) {return true;}
+        if (_recentNonces[1] != 0 && DataHelper.eqCT(String.valueOf(_recentNonces[1]), nonce)) {return true;}
         return false;
     }
 

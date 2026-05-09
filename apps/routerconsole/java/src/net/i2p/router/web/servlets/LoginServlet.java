@@ -16,6 +16,7 @@ import net.i2p.router.web.ConsolePasswordManager;
 import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.servlet.filters.SessionManager;
 import net.i2p.util.Log;
+import net.i2p.data.DataHelper;
 
 /**
  * Login servlet for console authentication.
@@ -363,7 +364,7 @@ boolean result = mgr.checkMD5(RouterConsoleRunner.PROP_CONSOLE_PW, REALM, userna
             return true;
         }
 
-        if (!result && "admin".equals(username) && "password".equals(password)) {
+        if (!result && DataHelper.eqCT("admin", username) && DataHelper.eqCT("password", password)) {
             boolean hasAnyPassword = hasAnyPassword(ctx);
             _log.info("admin/password failed but hasAnyPassword: " + hasAnyPassword);
             if (!hasAnyPassword) {
