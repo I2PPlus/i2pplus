@@ -112,17 +112,10 @@ public class ConfigClientsHelper extends HelperBase {
     }
 
     public void setEdit(String edit) {
-         if (edit == null)
-             return;
-        String xStart = _t("Edit");
-        if (edit.startsWith(xStart + "<span class=hide> ") &&
-            edit.endsWith("</span>")) {
-            // IE sucks
-            _edit = edit.substring(xStart.length() + 18, edit.length() - 7);
-        } else if (edit.startsWith("Edit ")) {
+        if (edit == null)
+            return;
+        if (edit.startsWith("Edit ")) {
             _edit = edit.substring(5);
-        } else if (edit.startsWith(xStart + ' ')) {
-            _edit = edit.substring(xStart.length() + 1);
         } else if ((_t("Add Client")).equals(edit)) {
             _edit = "new";
         }

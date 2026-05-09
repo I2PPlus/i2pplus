@@ -221,34 +221,6 @@ public class ConfigClientsHandler extends FormHandler {
             return;
         }
 
-        // label (IE)
-        String xStart = _t("Start");
-        if (_action.toLowerCase(Locale.US).startsWith(xStart + "<span class=hide> ") &&
-                   _action.toLowerCase(Locale.US).endsWith("</span>")) {
-            // IE sucks
-            String app = _action.substring(xStart.length() + 18, _action.length() - 7);
-            app = DataHelper.stripHTML(app);
-            int appnum = -1;
-            try {
-                appnum = Integer.parseInt(app);
-            } catch (NumberFormatException nfe) {}
-            if (appnum >= 0) {
-                startClient(appnum);
-            } else {
-                List<String> plugins = PluginStarter.getPlugins();
-                if (plugins.contains(app)) {
-                    if (pluginsEnabled)
-                        startPlugin(app);
-                    else
-                        addFormError(_t("Plugins disabled"), true);
-                } else {
-                    startWebApp(app);
-                }
-            }
-        } else {
-            //addFormError(_t("Unsupported") + ' ' + _action + '.');
-        }
-
     }
 
     private void saveClientChanges() {
