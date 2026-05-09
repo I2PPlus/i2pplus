@@ -400,6 +400,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                     }
                 }
             } catch (I2PSessionException ise) {
+                if (!open) return;
                 if (!warnedAboutConnection) {
                     // try to make this error sensible as it will happen...
                     String portNum = getTunnel().port;
