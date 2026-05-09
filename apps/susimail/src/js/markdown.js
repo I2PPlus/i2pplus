@@ -69,6 +69,8 @@ const _ALLOWED_SCHEMES = Object.freeze(["http:", "https:", "mailto:"]);
 const _ESCAPE_CHARS = "\\`*{}[]()>#+.!-_|";
 /** @type {RegExp} Trailing double-space for hard line break */
 const _BR_REGEX = /  $/;
+/** @type {string} Placeholder for <br> to avoid early escaping */
+const _BR_PLACEHOLDER = "\x02BR\x02";
 
 /** @type {Object<string, RegExp>} Regular expressions for parsing */
 const RE_BLANK = /^\s*$/;
@@ -123,8 +125,15 @@ const _ent = (str) => str
 const _safeUrl = (url) => {
   const trimmed = url.trim();
   if (trimmed.startsWith("//")) return false;
+  if (trimmed.length !== trimmed.replace(/[\x00-\x1f\x7f]/g, "").length) return false;
+  if (/%[0-9a-f]{2}/i.test(trimmed)) {
+    try {
+      const decoded = decodeURIComponent(trimmed);
+      if (/[<>"\s]/.test(decoded)) return false;
+    } catch (e) { return false; }
+  }
   const m = trimmed.match(RE_SCHEME);
-  if (!m) return true;
+  if (!m) return /^[a-zA-Z][a-zA-Z0-9.+-]*:/i.test(trimmed) === false;
   return _ALLOWED_SCHEMES.includes(m[1].toLowerCase());
 };
 
@@ -186,7 +195,9 @@ const _findEm = (src, start, len, close) => {
 
 const _a = (href, text, cls) => {
   const safeHref = _safeUrl(href) ? _esc(href) : "#blocked";
-  return `<a class="${cls}" href="${safeHref}">${text}</a>`;
+  const isExternal = /^https?:/i.test(href);
+  const rel = isExternal ? ' rel="noopener noreferrer"' : "";
+  return `<a class="${cls}" href="${safeHref}"${rel}>${text}</a>`;
 };
 
 /**
@@ -397,11 +408,11 @@ const _renderTable = (b) => {
  * @returns {string[]} Array of cell contents
  */
 const _splitCells = (row) => {
-  const escaped = row.replace(/\\\|/g, "\x00").replace(/\|\|/g, "\x01");
+  let escaped = row.replace(/\|\|/g, "\x01").replace(/\\\|/g, "\x00");
   let cells = escaped.split("|");
   if (cells.length > 0 && cells[0].trim() === "") cells.shift();
   if (cells.length > 0 && cells[cells.length - 1].trim() === "") cells.pop();
-  return cells.map((c) => c.replace(/^\s+|\s+$/g, "").replace(/\x00/g, "|").replace(/\x01/g, "|"));
+  return cells.map((c) => c.replace(/^\s+|\s+$/g, "").replace(/^\x01|\x01$/g, "").replace(/\x00/g, "|").replace(/\x01/g, "|"));
 };
 
 /**
@@ -410,7 +421,11 @@ const _splitCells = (row) => {
  * @param {Object} defs - Link reference definitions
  * @returns {string} Rendered HTML
  */
-const _inline = (text, defs = {}) => _inlines(text.replace(_BR_REGEX, "<br>"), defs);
+const _inline = (text, defs = {}) => {
+  const withPlaceholder = text.replace(_BR_REGEX, _BR_PLACEHOLDER);
+  const rendered = _inlines(withPlaceholder, defs);
+  return rendered.replace(new RegExp(_BR_PLACEHOLDER, "g"), "<br>");
+};
 
 /**
  * Attempts to convert a paragraph into a numbered list.
@@ -484,8 +499,8 @@ const _parseBlocks = (lines, start, end, refdefs = {}) => {
     const trimmed = text.replace(/\s+$/, "");
 
     if (inFence) {
-      const closeMatch = trimmed.match(/^(`{3,}|~{3,})/);
-      if (closeMatch) {
+      const closeMatch = trimmed.match(/^([`~])\1{2,}/);
+      if (closeMatch && closeMatch[1] === fenceEnd[0] && closeMatch[0].length >= fenceLen) {
         inFence = false;
         fenceEnd = null;
         fenceLen = 0;
@@ -777,15 +792,28 @@ const _render = (blocks) => {
 };
 
 /**
- * Normalizes whitespace in markdown text (decodes entities).
+ * Normalizes whitespace in markdown text.
  * @param {string} text - Raw markdown text
  * @returns {string} Normalized text
  */
 const _normalize = (text) => {
-  const textarea = document.createElement("textarea");
-  textarea.innerHTML = text;
-  const decoded = textarea.value;
-  return decoded.replace(/[\u2000-\u200B\u202F\u205F\u3000]/g, " ");
+  return text.replace(/[\u2000-\u200B\u202F\u205F\u3000]/g, " ");
+};
+
+const _sanitize = (html) => {
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
+    .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, "")
+    .replace(/<embed\b[^>]*>/gi, "")
+    .replace(/<svg[^>]*>[\s\S]*?<\/svg>/gi, "")
+    .replace(/<math[^>]*>[\s\S]*?<\/math>/gi, "")
+    .replace(/\s+on\w+="[^"]*"/gi, "")
+    .replace(/\s+on\w+='[^']*'/gi, "")
+    .replace(/javascript:/gi, "")
+    .replace(/data:/gi, "")
+    .replace(/\s+style="[^"]*"/gi, "")
+    .replace(/\s+style='[^']*'/gi, "");
 };
 
 /**
@@ -802,7 +830,8 @@ const makeHtml = (text) => {
     const lines = rawLines.map(_tab2space);
     const blocks = _parseBlocks(lines, 0, lines.length);
     const grouped = _groupBlocks(blocks);
-    return _render(grouped);
+    const rendered = _render(grouped);
+    return _sanitize(rendered);
   } catch (e) {
     console.warn("Markdown parse error:", e);
     return `<pre class="md-error">${_ent(text)}</pre>`;
