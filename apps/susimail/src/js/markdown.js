@@ -35,7 +35,10 @@
  * @property {boolean} [taskChecked] - Task list checked state
  */
 
-/** @type {Object<string, string|function(number):string>} */
+/**
+ * CSS class names for rendered elements.
+ * @type {Object<string, string|function(number):string>}
+ */
 const CLS = Object.freeze({
   LINK:       "md link",
   AUTOLINK:   "md link autolink",
@@ -60,44 +63,63 @@ const CLS = Object.freeze({
   HEADING:    (level) => `md heading h${level}`,
 });
 
+/** @type {string[]} Allowed URL schemes for links */
 const _ALLOWED_SCHEMES = Object.freeze(["http:", "https:", "mailto:"]);
+/** @type {string} Characters that need escaping in markdown */
 const _ESCAPE_CHARS = "\\`*{}[]()>#+.!-_|";
+/** @type {RegExp} Trailing double-space for hard line break */
 const _BR_REGEX = /  $/;
 
+/** @type {Object<string, RegExp>} Regular expressions for parsing */
 const RE_BLANK = /^\s*$/;
-const RE_HR = /^(?:[*\-+_]\s*){3,}(\s+[\d.]+)?\s*$/;
-const RE_ATX_H = /^(#{1,6})\s+(.*)$/;
-const RE_SETEXT_A = /^(.+)\n\s*=+\s*$/;
-const RE_SETEXT_B = /^(.+)\n\s*-+\s*$/;
-const RE_FENCED = /^(`{3,}|~{3,})\s*(\S*)/;
-const RE_CODE_INDENT = /^(?: {1,4}|\t)([^\n]+)/;
-const RE_LIST_U = /^([*+-])((?:\s+[^\n]*)?)$/;
-const RE_LIST_O = /^(\d+\.)((?:\s+[^\n]*)?)$/;
-const RE_LIST_LAZY = /^([*+-]|\d+\.)\s+/;
-const RE_DEF = /^\[([^\]]+)\]:\s+(<[^>]+>|[^\s]+)(.*)/;
-const RE_TASK = /^\s*\[([xX\*\-])\]\s+(.*)/;
-const RE_TABLE_ROW = /^(\|[^\n]+\|)\s*$/;
-const RE_MARKDOWN_INDICATOR = /^[*_#`>\[\]|+-]/;
-const RE_BLOCKQUOTE = /^>/;
-const RE_TABLE_SEP = /^\|[\s*:=-]+(\|[\s*:=-]+)+\|\s*$/;
-const RE_IMG = /!\[([^\]]*)\]\(([^)]+)\)/;
-const RE_LINK = /\[([^\]]+)\]\(([^)]+)\)/;
-const RE_LINK_REF = /\[([^\]]+)\]\[([^\]]*)\]/;
-const RE_LINK_REF_EMPTY = /\[([^\]]+)\]\[\s*\]/;
-const RE_AUTO_LINK = /<(https?:\/\/[^>]+)>/;
-const RE_SCHEME = /^([a-z][a-z0-9+.-]*):/i;
+const RE_HR = /^(?:[*\-+_]\s*){3,}(\s+[\d.]+)?\s*$/;         // Horizontal rule
+const RE_ATX_H = /^(#{1,6})\s+(.*)$/;                        // Atx heading
+const RE_SETEXT_A = /^(.+)\n\s*=+\s*$/;                      // Setext h1
+const RE_SETEXT_B = /^(.+)\n\s*-+\s*$/;                      // Setext h2
+const RE_FENCED = /^(`{3,}|~{3,})\s*(\S*)/;                  // Fenced code
+const RE_CODE_INDENT = /^(?: {1,4}|\t)([^\n]+)/;             // Indented code
+const RE_LIST_U = /^([*+-])((?:\s+[^\n]*)?)$/;               // Unordered list
+const RE_LIST_O = /^(\d+\.)((?:\s+[^\n]*)?)$/;               // Ordered list
+const RE_LIST_LAZY = /^([*+-]|\d+\.)\s+/;                    // Lazy list cont
+const RE_DEF = /^\[([^\]]+)\]:\s+(<[^>]+>|[^\s]+)(.*)/;      // Link def
+const RE_TASK = /^\s*\[([xX\*\-])\]\s+(.*)/;                 // Task list
+const RE_TABLE_ROW = /^(\|[^\n]+\|)\s*$/;                    // Table row
+const RE_MARKDOWN_INDICATOR = /^[*_#`>\[\]|+-]/;             // MD indicator
+const RE_BLOCKQUOTE = /^>/;                                  // Blockquote
+const RE_TABLE_SEP = /^\|[\s*:=-]+(\|[\s*:=-]+)+\|\s*$/;     // Table sep
+const RE_IMG = /!\[([^\]]*)\]\(([^)]+)\)/;                   // Image
+const RE_LINK = /\[([^\]]+)\]\(([^)]+)\)/;                   // Link
+const RE_LINK_REF = /\[([^\]]+)\]\[([^\]]*)\]/;              // Link ref
+const RE_LINK_REF_EMPTY = /\[([^\]]+)\]\[\s*\]/;             // Link ref empty
+const RE_AUTO_LINK = /<(https?:\/\/[^>]+)>/;                 // Autolink
+const RE_SCHEME = /^([a-z][a-z0-9+.-]*):/i;                  // URL scheme
 
+/**
+ * HTML-escapes a string for attribute values.
+ * @param {string} str - Input string
+ * @returns {string} Escaped string
+ */
 const _esc = (str) => str
   .replace(/&/g, "&amp;")
   .replace(/</g, "&lt;")
   .replace(/>/g, "&gt;")
   .replace(/"/g, "&quot;");
 
+/**
+ * HTML-escapes a string for element content.
+ * @param {string} str - Input string
+ * @returns {string} Escaped string
+ */
 const _ent = (str) => str
   .replace(/&/g, "&amp;")
   .replace(/</g, "&lt;")
   .replace(/>/g, "&gt;");
 
+/**
+ * Checks if a URL uses an allowed scheme.
+ * @param {string} url - URL to check
+ * @returns {boolean} True if URL is safe
+ */
 const _safeUrl = (url) => {
   const trimmed = url.trim();
   if (trimmed.startsWith("//")) return false;
@@ -106,6 +128,11 @@ const _safeUrl = (url) => {
   return _ALLOWED_SCHEMES.includes(m[1].toLowerCase());
 };
 
+/**
+ * Converts tabs to spaces (4-column tab stops).
+ * @param {string} line - Input line
+ * @returns {string} Line with tabs replaced
+ */
 const _tab2space = (line) => {
   const out = [];
   let ti = 0;
@@ -122,6 +149,11 @@ const _tab2space = (line) => {
   return out.join("");
 };
 
+/**
+ * Skips leading whitespace, returns indent and text.
+ * @param {string} line - Input line
+ * @returns {{indent: number, text: string}} Indent and trimmed text
+ */
 const _skip = (line) => {
   let i = 0;
   const len = line.length;
@@ -129,6 +161,14 @@ const _skip = (line) => {
   return { indent: i, text: line.substring(i) };
 };
 
+/**
+ * Finds closing delimiter for emphasis (bold/italic).
+ * @param {string} src - Source text
+ * @param {number} start - Start position
+ * @param {number} len - Source length
+ * @param {string} close - Closing character
+ * @returns {number} Position of closing delimiter, or -1
+ */
 const _findEm = (src, start, len, close) => {
   for (let i = start; i < len; i++) {
     const c = src[i];
@@ -149,11 +189,23 @@ const _a = (href, text, cls) => {
   return `<a class="${cls}" href="${safeHref}">${text}</a>`;
 };
 
+/**
+ * Creates an image element with URL safety check.
+ * @param {string} src - Image source URL
+ * @param {string} alt - Alt text
+ * @returns {string} Image HTML
+ */
 const _img = (src, alt) => {
   const safeSrc = _safeUrl(src) ? _esc(src) : "";
   return `<img class="${CLS.IMAGE}" src="${safeSrc}" alt="${_esc(alt)}" />`;
 };
 
+/**
+ * Parses inline markdown elements and returns HTML.
+ * @param {string} src - Source text
+ * @param {Object} defs - Link reference definitions
+ * @returns {string} Rendered HTML
+ */
 const _inlines = (src, defs) => {
   const out = [];
   let pos = 0;
@@ -265,6 +317,11 @@ const _inlines = (src, defs) => {
   return out.join("");
 };
 
+/**
+ * Renders a single block to HTML.
+ * @param {Block} b - Block object
+ * @returns {string} Rendered HTML
+ */
 const _renderBlock = (b) => {
   switch (b.type) {
     case "heading":
@@ -300,6 +357,11 @@ const _renderBlock = (b) => {
   }
 };
 
+/**
+ * Renders a table block to HTML.
+ * @param {Block} b - Table block object
+ * @returns {string} Table HTML
+ */
 const _renderTable = (b) => {
   const { rows } = b;
   if (rows.length === 0) return "";
@@ -329,6 +391,11 @@ const _renderTable = (b) => {
   return html;
 };
 
+/**
+ * Splits a table row into cells, handling escaped pipes.
+ * @param {string} row - Table row string
+ * @returns {string[]} Array of cell contents
+ */
 const _splitCells = (row) => {
   const escaped = row.replace(/\\\|/g, "\x00").replace(/\|\|/g, "\x01");
   let cells = escaped.split("|");
@@ -337,8 +404,19 @@ const _splitCells = (row) => {
   return cells.map((c) => c.replace(/^\s+|\s+$/g, "").replace(/\x00/g, "|").replace(/\x01/g, "|"));
 };
 
+/**
+ * Wrapper for _inlines that handles trailing double-space as br.
+ * @param {string} text - Source text
+ * @param {Object} defs - Link reference definitions
+ * @returns {string} Rendered HTML
+ */
 const _inline = (text, defs = {}) => _inlines(text.replace(_BR_REGEX, "<br>"), defs);
 
+/**
+ * Attempts to convert a paragraph into a numbered list.
+ * @param {string} text - Paragraph text
+ * @returns {string[]|null} Array of list items, or null
+ */
 const _tryConvertParagraphToList = (text) => {
   if (!text || text.length < 10) return null;
   if (!/^1\.\s/.test(text)) return null;
@@ -358,6 +436,12 @@ const _tryConvertParagraphToList = (text) => {
   return result.length >= 3 ? result : null;
 };
 
+/**
+ * Finalizes a pending block, converting paragraphs to lists if detected.
+ * @param {Object} pending - Pending block object
+ * @param {Object} defs - Link reference definitions
+ * @returns {Object|null} Finalized block
+ */
 const _processPendingBlock = (pending, defs) => {
   if (!pending) return null;
   if (pending.type === "paragraph" && pending.rawContent !== undefined) {
@@ -378,6 +462,14 @@ const _processPendingBlock = (pending, defs) => {
   return pending;
 };
 
+/**
+ * Parses markdown text into block structure.
+ * @param {string[]} lines - Input lines
+ * @param {number} start - Start line index
+ * @param {number} end - End line index
+ * @param {Object} refdefs - Link reference definitions
+ * @returns {Block[]} Array of blocks
+ */
 const _parseBlocks = (lines, start, end, refdefs = {}) => {
   const blocks = [];
   let inFence = false;
@@ -617,6 +709,11 @@ const _parseBlocks = (lines, start, end, refdefs = {}) => {
   return blocks;
 };
 
+/**
+ * Groups consecutive list items into list blocks.
+ * @param {Block[]} blocks - Array of blocks
+ * @returns {Block[]} Grouped blocks
+ */
 const _groupBlocks = (blocks) => {
   const out = [];
   let i = 0;
@@ -661,6 +758,11 @@ const _groupBlocks = (blocks) => {
   return out;
 };
 
+/**
+ * Renders blocks to HTML string.
+ * @param {Block[]} blocks - Array of blocks
+ * @returns {string} Rendered HTML
+ */
 const _render = (blocks) => {
   const out = [];
   for (const b of blocks) {
@@ -674,6 +776,11 @@ const _render = (blocks) => {
   return out.join("");
 };
 
+/**
+ * Normalizes whitespace in markdown text (decodes entities).
+ * @param {string} text - Raw markdown text
+ * @returns {string} Normalized text
+ */
 const _normalize = (text) => {
   const textarea = document.createElement("textarea");
   textarea.innerHTML = text;
@@ -681,6 +788,11 @@ const _normalize = (text) => {
   return decoded.replace(/[\u2000-\u200B\u202F\u205F\u3000]/g, " ");
 };
 
+/**
+ * Main entry point: converts markdown to HTML.
+ * @param {string} text - Markdown source text
+ * @returns {string} Rendered HTML
+ */
 const makeHtml = (text) => {
   if (typeof text !== "string") return "";
   if (!text || !text.trim() || text.length > 1000000) return "";
@@ -697,6 +809,11 @@ const makeHtml = (text) => {
   }
 };
 
+/**
+ * Initializes markdown rendering for all mailbody elements
+ * with data-markdown attribute. Called on DOMContentLoaded.
+ * @returns {void}
+ */
 const initMarkdown = () => {
   const mailbodies = document.querySelectorAll(".mailbody[data-markdown]");
   for (const mailbody of mailbodies) {
