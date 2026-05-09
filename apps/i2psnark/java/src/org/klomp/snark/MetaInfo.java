@@ -405,10 +405,7 @@ public class MetaInfo {
                 Iterator<BEValue> it = path_list.iterator();
                 while (it.hasNext()) {
                     String s = it.next().getString();
-                    // We could throw an IBEE, but just silently replace instead.
-                    if (s.indexOf('/') >= 0) {
-                        s = s.replace("/", "_");
-                    }
+                    s = Storage.filterName(s);
                     file.add(s);
                 }
 
