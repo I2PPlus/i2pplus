@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -111,6 +112,12 @@ public class I2PSnarkServlet extends BasicServlet {
     private final long[] _recentNonces = new long[2];
     private long _lastRotation;
     private static final long NONCE_ROTATION_MS = 5 * 60 * 1000; // 5 minutes
+
+    /** Session-bound nonce for CSRF protection @since 0.9.69 */
+    private static final String SESSION_NONCE_OUTER = "__i2psnark.nonce.outer__";
+    private static final String SESSION_NONCE_INNER = "__i2psnark.nonce.inner__";
+    private static final int SESSION_NONCE_QUEUE_SIZE = 10;
+
     private String _themePath;
     private String _resourcePath;
     private String _imgPath;
@@ -158,6 +165,106 @@ public class I2PSnarkServlet extends BasicServlet {
         if (_recentNonces[0] != 0 && String.valueOf(_recentNonces[0]).equals(nonce)) {return true;}
         if (_recentNonces[1] != 0 && String.valueOf(_recentNonces[1]).equals(nonce)) {return true;}
         return false;
+    }
+
+    /**
+     *  Session-bound nonce for outer section (main page, details, config)
+     *  @param session returns static nonce if null
+     *  @return a new nonce for each call
+     *  @since 0.9.69
+     */
+    @SuppressWarnings("unchecked")
+    private static String getNonce(javax.servlet.http.HttpSession session) {
+        if (session == null) {
+            return null;
+        }
+        String rv;
+        synchronized(session) {
+            LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_NONCE_OUTER);
+            if (nonces == null) {
+                nonces = new LinkedList<String>();
+                session.setAttribute(SESSION_NONCE_OUTER, nonces);
+            }
+            rv = "SN" + Long.toString(I2PAppContext.getGlobalContext().random().nextLong());
+            nonces.offer(rv);
+            if (nonces.size() > SESSION_NONCE_QUEUE_SIZE)
+                nonces.poll();
+        }
+        return rv;
+    }
+
+    /**
+     *  Session-bound nonce for inner section (XHR requests)
+     *  @param session returns static nonce if null
+     *  @return a new nonce for each call
+     *  @since 0.9.69
+     */
+    @SuppressWarnings("unchecked")
+    private static String getInnerNonce(javax.servlet.http.HttpSession session) {
+        if (session == null) {
+            return null;
+        }
+        String rv;
+        synchronized(session) {
+            LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_NONCE_INNER);
+            if (nonces == null) {
+                nonces = new LinkedList<String>();
+                session.setAttribute(SESSION_NONCE_INNER, nonces);
+            }
+            rv = "SI" + Long.toString(I2PAppContext.getGlobalContext().random().nextLong());
+            nonces.offer(rv);
+            if (nonces.size() > SESSION_NONCE_QUEUE_SIZE)
+                nonces.poll();
+        }
+        return rv;
+    }
+
+    /**
+     *  Validate session-bound nonce (outer)
+     *  @param nonce the nonce to validate
+     *  @param session session containing nonce queue
+     *  @return true if valid
+     *  @since 0.9.69
+     */
+    @SuppressWarnings("unchecked")
+    private static boolean isValidNonce(String nonce, javax.servlet.http.HttpSession session) {
+        if (nonce == null || session == null) {
+            return false;
+        }
+        boolean rv;
+        synchronized(session) {
+            LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_NONCE_OUTER);
+            if (nonces != null) {
+                rv = nonces.removeLastOccurrence(nonce);
+            } else {
+                rv = false;
+            }
+        }
+        return rv;
+    }
+
+    /**
+     *  Validate session-bound nonce (inner/XHR)
+     *  @param nonce the nonce to validate
+     *  @param session session containing nonce queue
+     *  @return true if valid
+     *  @since 0.9.69
+     */
+    @SuppressWarnings("unchecked")
+    private static boolean isValidInnerNonce(String nonce, javax.servlet.http.HttpSession session) {
+        if (nonce == null || session == null) {
+            return false;
+        }
+        boolean rv;
+        synchronized(session) {
+            LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_NONCE_INNER);
+            if (nonces != null) {
+                rv = nonces.removeLastOccurrence(nonce);
+            } else {
+                rv = false;
+            }
+        }
+        return rv;
     }
 
     /**
