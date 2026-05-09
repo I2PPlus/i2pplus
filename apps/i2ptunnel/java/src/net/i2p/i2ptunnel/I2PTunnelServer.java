@@ -417,7 +417,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                     if (!fail && ++retries < MAX_RETRIES) {
                         msg += " -> Retrying in " + (RETRY_DELAY / 1000) + " seconds...";
                         this.l.log(msg);
-                        _log.error(msg);
+                        _log.warn(msg);
                     } else {
                         msg += " -> Giving up (maximum retries exceeded)";
                         this.l.log(msg);
