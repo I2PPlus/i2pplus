@@ -44,15 +44,7 @@ Redistribution and use in source and binary forms, with or without modification,
 
 See Standard License Disclaimer above.
 
-**ElGamal / AES / SSU HMAC**
-Copyright (c) 2000 - 2004 The Legion Of The Bouncy Castle (http://www.bouncycastle.org)
-
-Permission is granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-See Standard License Disclaimer above.
-
-**Bouncy Castle**
+**Bouncy Castle (ElGamal / AES / SSU HMAC)**
 Copyright (c) 2000-2023 The Legion Of The Bouncy Castle Inc. (https://www.bouncycastle.org)
 
 Permission is granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -189,21 +181,6 @@ Copyright (c) 2003 University of Chicago. All rights reserved. The Web100 Networ
 6. WARRANTY DISCLAIMER. THE SOFTWARE IS SUPPLIED "AS IS" WITHOUT WARRANTY OF ANY KIND.
 7. LIMITATION OF LIABILITY. IN NO EVENT WILL THE COPYRIGHT HOLDER, THE UNITED STATES, THE UNITED STATES DEPARTMENT OF ENERGY, OR THEIR EMPLOYEES BE LIABLE FOR ANY INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL OR PUNITIVE DAMAGES.
 
-**SusiMail Markdown**
-Custom Markdown renderer for SusiMail. Converts Markdown-formatted mail bodies into HTML with CommonMark + GFM support (tables, strikethrough, task lists, fenced code). Self-contained, no external dependencies.
-
-Copyright (c) 2024-2026 dr|z3d.
-
-See MIT Standard Disclaimer above.
-
-**forked-subprocess.swift**
-The MIT License (MIT). Copyright (c) 2015 Marco Conti.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-See MIT Standard Disclaimer above.
-
 ## PUBLIC DOMAIN COMPONENTS
 
 The following components are in the public domain:
@@ -272,7 +249,7 @@ The following custom JavaScript scripts were written by dr|z3d for I2P+. License
 
 **SusiDNS**: togglePanels, toggleAllHosts, refreshStatus, deleteHosts, clearSearch
 
-**SusiMail**: toggleHeaders, sanitizeHTML, refreshInbox, previewMail, notifications, htmlView, folder, deleteMail, compose
+**SusiMail**: toggleHeaders, sanitizeHTML, refreshInbox, previewMail, notifications, htmlView, folder, deleteMail, compose, markdown
 
 ## RRD4J (jrobin.jar)
 
