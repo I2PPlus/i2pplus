@@ -481,15 +481,12 @@ public class IndexBean {
         List<TunnelController> controllers = _group.getControllers();
         if (_tunnel >= controllers.size()) {return "✖ " + _t("Error: Invalid tunnel");}
 
-        boolean sentMessage = false;
         TunnelController controller = controllers.get(_tunnel);
-        controller.stopTunnel();
-        controller.startTunnelBackground();
-        if (!sentMessage) {
-            String msg = "‣ " + _t("Restarting tunnel") + ": " + getTunnelName(_tunnel) + "...";
-            _timestampedMessages.add(new TimestampedMessage(msg));
-            sentMessage = true;
-        }
+        String msg = "‣ " + _t("Restarting tunnel") + ": " + getTunnelName(_tunnel) + "...";
+        _timestampedMessages.add(new TimestampedMessage(msg));
+        controller.suppressLog();
+        controller.restartTunnel();
+        controller.restoreLog();
         return "";
     }
 

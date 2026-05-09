@@ -61,6 +61,8 @@ public class TunnelController implements Logging {
     private volatile SimpleTimer2.TimedEvent _pkfc;
     private volatile Thread _pendingStartupThread;
     private volatile long _startupDelayEndTime;
+    /** Suppress log messages during tunnel restart @since 0.9.69+ */
+    private boolean _suppressLog;
 
     /** @since 0.9.19 */
     public enum TunnelState {
@@ -1563,6 +1565,7 @@ public class TunnelController implements Logging {
      *
      */
     public void log(String s) {
+        if (_suppressLog) {return;}
         synchronized (_messages) {
             _messages.add(s);
             while (_messages.size() > 10)
@@ -1571,6 +1574,12 @@ public class TunnelController implements Logging {
         if (_log.shouldInfo())
             _log.info(s);
     }
+
+    /** Suppress log messages during restart @since 0.9.69+ */
+    public void suppressLog() { _suppressLog = true; }
+
+    /** Restore log messages after restart @since 0.9.69+ */
+    public void restoreLog() { _suppressLog = false; }
 
     /**
      * Pull off any messages that the I2PTunnel has produced
