@@ -2345,6 +2345,7 @@ public class WebMail extends HttpServlet {
                 showMessage(out, sessionObject, mc, showUIDL, buttonPressed(request, DELETE), allowHTML);
                 buf.append("<script src=\"/susimail/js/toggleHeaders.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                    .append("<script src=/susimail/js/htmlView.js></script>\n")
+                   .append("<script src=\"/susimail/js/HtmlSanitizer.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                    .append("<script src=\"/susimail/js/markdown.js?").append(CoreVersion.VERSION).append("\"></script>\n");
             } else if (state == State.NEW) {showCompose(out, sessionObject, request);}
             else if (state == State.CONFIG) {showConfig(out, folder);}

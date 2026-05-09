@@ -800,22 +800,6 @@ const _normalize = (text) => {
   return text.replace(/[\u2000-\u200B\u202F\u205F\u3000]/g, " ");
 };
 
-const _sanitize = (html) => {
-  return html
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
-    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
-    .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, "")
-    .replace(/<embed\b[^>]*>/gi, "")
-    .replace(/<svg[^>]*>[\s\S]*?<\/svg>/gi, "")
-    .replace(/<math[^>]*>[\s\S]*?<\/math>/gi, "")
-    .replace(/\s+on\w+="[^"]*"/gi, "")
-    .replace(/\s+on\w+='[^']*'/gi, "")
-    .replace(/javascript:/gi, "")
-    .replace(/data:/gi, "")
-    .replace(/\s+style="[^"]*"/gi, "")
-    .replace(/\s+style='[^']*'/gi, "");
-};
-
 /**
  * Main entry point: converts markdown to HTML.
  * @param {string} text - Markdown source text
@@ -831,7 +815,7 @@ const makeHtml = (text) => {
     const blocks = _parseBlocks(lines, 0, lines.length);
     const grouped = _groupBlocks(blocks);
     const rendered = _render(grouped);
-    return _sanitize(rendered);
+    return HtmlSanitizer.SanitizeHtml(rendered);
   } catch (e) {
     console.warn("Markdown parse error:", e);
     return `<pre class="md-error">${_ent(text)}</pre>`;
