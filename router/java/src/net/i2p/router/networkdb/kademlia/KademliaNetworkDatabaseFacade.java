@@ -115,7 +115,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private final ConcurrentMap<Hash, Set<RepublishLeaseSetJob>> _publishingLeaseSets =
         new ConcurrentHashMap<>(8);
 
-    private static final long LOCAL_LEASESET_REFRESH_INTERVAL = 3*60*1000;  // 3 mintes
+    private static final long LOCAL_LEASESET_REFRESH_INTERVAL = 3*60*1000;  // 3 minutes
 
     /** Singleton job to refresh client LeaseSets - only one instance exists */
     private volatile RefreshClientLeaseSetsJob _refreshClientLeaseSetsJob;
@@ -125,6 +125,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Used to refresh remote LeaseSets we're actively accessing and remove after 90s inactivity.
      */
     private final ConcurrentHashMap<Hash, Long> _clientLeaseSetAccessTime = new ConcurrentHashMap<>(32);
+
+    /** Cached set of blocked countries - lazily initialized */
+    private volatile Set<String> _blockedCountries;
 
     /**
      * Hash of the key currently being searched for, pointing the SearchJob that
@@ -344,7 +347,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     public void queueForExploration(Collection<Hash> keys) {
-        String exploreQueue = _context.getProperty("router.exploreQueue");
         boolean upLongEnough = _context.router().getUptime() > 15*60*1000;
         if (!upLongEnough) {
             long down = _context.router().getEstimatedDowntime();
@@ -354,7 +356,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (_log.shouldInfo() && !_initialized) {_log.info("Datastore not initialized -> Cannot queue keys for exploration...");}
             return;
         }
-        // TODO: make sure exploreQueue isn't null before assigning
+        // MAX_EXPLORE_QUEUE enforced in loop below
         for (Iterator<Hash> iter = keys.iterator(); iter.hasNext() && _exploreKeys.size() < MAX_EXPLORE_QUEUE;) {
             _exploreKeys.add(iter.next());
          }
@@ -378,7 +380,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (_ds != null) {_ds.stop();}
         if (_exploreKeys != null) {_exploreKeys.clear();}
         if (_negativeCache != null) {_negativeCache.stop();}
-        if (!isClientDb()) {blindCache().shutdown();}
+        if (!isClientDb()) {
+            BlindCache bc = blindCache();
+            if (bc != null) {bc.shutdown();}
+        }
     }
 
     /**
@@ -751,10 +756,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String hostname = ns.reverseLookup(key);
         if (hostname == null) return;
         long now = _context.clock().now();
-        Long lastUpdate = _clientLeaseSetAccessTime.get(key);
-        if (lastUpdate == null || now - lastUpdate > LOCAL_LEASESET_REFRESH_INTERVAL) {
-            _clientLeaseSetAccessTime.put(key, now);
-        }
+        // Use compute for atomic check-and-update
+        _clientLeaseSetAccessTime.compute(key, (k, lastUpdate) -> {
+            if (lastUpdate == null || now - lastUpdate > LOCAL_LEASESET_REFRESH_INTERVAL) {
+                return now;
+            }
+            return lastUpdate;
+        });
     }
 
     /**
@@ -1063,6 +1071,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         private final long[] values;
         private int idx = 0;
         private int count = 0;
+        private long runningSum = 0;
 
         MovingAverage(int size) {
             this.size = size;
@@ -1070,16 +1079,20 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
 
         void add(long value) {
+            long oldValue = values[idx];
             values[idx] = value;
             idx = (idx + 1) % size;
-            if (count < size) {count++;}
+            if (count < size) {
+                runningSum += value;
+                count++;
+            } else {
+                runningSum = runningSum - oldValue + value;
+            }
         }
 
         double getAverage() {
             if (count == 0) {return 0;}
-            long sum = 0;
-            for (int i = 0; i < count; i++) {sum += values[i];}
-            return (double) sum / count;
+            return (double) runningSum / count;
         }
     }
 
@@ -1521,10 +1534,16 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @since 0.9.64
      */
     public static boolean isNewer(LeaseSet a, LeaseSet b) {
-        if (a.getType() != DatabaseEntry.KEY_TYPE_LEASESET &&
-            b.getType() != DatabaseEntry.KEY_TYPE_LEASESET) {
+        boolean aIsLS2 = a.getType() != DatabaseEntry.KEY_TYPE_LEASESET;
+        boolean bIsLS2 = b.getType() != DatabaseEntry.KEY_TYPE_LEASESET;
+        if (aIsLS2 && bIsLS2) {
             return ((LeaseSet2) a).getPublished() > ((LeaseSet2) b).getPublished();
-        } else {return a.getEarliestLeaseDate() > b.getEarliestLeaseDate();}
+        } else if (aIsLS2) {
+            return ((LeaseSet2) a).getPublished() > b.getEarliestLeaseDate();
+        } else if (bIsLS2) {
+            return a.getEarliestLeaseDate() > ((LeaseSet2) b).getPublished();
+        }
+        return a.getEarliestLeaseDate() > b.getEarliestLeaseDate();
     }
 
     private static final int MIN_ROUTERS = 2000;
@@ -1800,20 +1819,20 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
             return true;
         }
-        if (blockedCountries.contains(country) && !isBanned) {
+if (blockedCountries.contains(country) && !isBanned) {
             String ipPort = getRouterIPPort(routerInfo);
             if (_log.shouldWarn()) {
                 _log.warn("Banning [" + routerId + "] -> Blocked country: " + country);
             }
             _banLogger.logBan(h, ipPort, "Blocked country: " + country, 8*60*60*1000L);
             _context.banlist().banlistRouter(h, "Blocked country: " + country, null, null, _context.clock().now() + 8*60*60*1000);
-_context.commSystem().forceDisconnect(h, "Blocked country: " + country);
+            _context.commSystem().forceDisconnect(h, "Blocked country: " + country);
             return true;
         }
-        return false;
+return false;
     }
 
-     private boolean checkXG(RouterInfo routerInfo, String caps, String routerId, Hash h) {
+    private boolean checkXG(RouterInfo routerInfo, String caps, String routerId, Hash h) {
         if (isRouterXG(routerInfo, h.equals(_context.routerHash()))) {
             if (!_context.banlist().isBanlisted(h)) {
                 boolean isFF = caps != null && caps.contains("f");
@@ -1825,7 +1844,7 @@ _context.commSystem().forceDisconnect(h, "Blocked country: " + country);
                 _context.banlist().banlistRouter(h, "XG " + (isFF ? "Floodfill" : "Router"), null, null, _context.clock().now() + 60*60*1000);
             }
             return true;
-}
+        }
         return false;
     }
 
@@ -2262,16 +2281,16 @@ _context.commSystem().forceDisconnect(h, "Blocked country: " + country);
         /*
          * We always drop failed leaseSets (timed out), regardless of how many routers we have.
          * This is called on a lease if it has expired *or* its tunnels are failing and we want
-         * to see if there are any updates.
+* to see if there are any updates.
          */
         if (_log.shouldInfo()) {
             _log.info("Dropping LeaseSet [" + dbEntry.toBase32().substring(0,8) + "] -> Lookup / tunnel failure");
         }
 
-       if (knownLeaseSetsCount.get() <= 0 && _log.shouldInfo()) {
-           _log.warn("Attempted to decrement LeaseSet count when already at " + knownLeaseSetsCount.get());
+        int oldCount = knownLeaseSetsCount.updateAndGet(v -> Math.max(0, v - 1));
+        if (oldCount == 0 && _log.shouldInfo()) {
+            _log.warn("LeaseSet count already at 0 before decrement");
         }
-        knownLeaseSetsCount.decrementAndGet();
 
         if (!isClientDb()) {_ds.remove(dbEntry, false);}
         /* If this happens, it's because we're a TransientDataStore instead,
@@ -2313,8 +2332,8 @@ _context.commSystem().forceDisconnect(h, "Blocked country: " + country);
         DatabaseEntry data = _ds.remove(h);
 
         if (data == null) {
-            knownLeaseSetsCount.decrementAndGet();
-            if (_log.shouldWarn()) {
+            int old = knownLeaseSetsCount.updateAndGet(v -> Math.max(0, v - 1));
+            if (old == 0 && _log.shouldWarn()) {
                 _log.warn("Unpublishing UNKNOWN LOCAL LeaseSet [" + h.toBase32().substring(0,8) + "]");
             }
             if (_log.shouldInfo() && knownLeaseSetsCount.get() <= 0) {
@@ -2339,7 +2358,7 @@ _context.commSystem().forceDisconnect(h, "Blocked country: " + country);
             // Only remove remote LeaseSets, not our own local ones
             if (!_context.clientManager().isLocal(hash)) {
                 _ds.remove(hash);
-                knownLeaseSetsCount.decrementAndGet();
+                knownLeaseSetsCount.updateAndGet(v -> Math.max(0, v - 1));
                 if (_log.shouldDebug()) {
                     _log.debug("Removed remote LeaseSet from cache: " + hash.toBase32().substring(0, 8));
                 }
@@ -2612,13 +2631,20 @@ _context.commSystem().forceDisconnect(h, "Blocked country: " + country);
         return "ClientNetDb [" + _dbid.toBase32().substring(0,8) + "]";
     }
 
-    /** @since 0.9.65+ */
-    private Set<String> getBlockedCountries() {
+/** @since 0.9.65+ */
+    private synchronized Set<String> getBlockedCountries() {
+        Set<String> cached = _blockedCountries;
+        if (cached != null) return cached;
         String blockCountries = _context.getProperty(PROP_BLOCK_COUNTRIES, DEFAULT_BLOCK_COUNTRIES);
-        if (blockCountries.isEmpty()) {return Collections.emptySet();}
-        return Arrays.stream(blockCountries.trim().toLowerCase().split("\\s*,\\s*"))
-                     .filter(s -> !s.isEmpty())
-                     .collect(Collectors.toSet());
+        if (blockCountries.isEmpty()) {
+            cached = Collections.emptySet();
+        } else {
+            cached = Arrays.stream(blockCountries.trim().toLowerCase().split("\\s*,\\s*"))
+                         .filter(s -> !s.isEmpty())
+                         .collect(Collectors.toSet());
+        }
+        _blockedCountries = cached;
+        return cached;
     }
 
     /**
@@ -2659,12 +2685,16 @@ _context.commSystem().forceDisconnect(h, "Blocked country: " + country);
         final int MAX_ENTRIES = 1024;
         if (_clientLeaseSetAccessTime.size() > MAX_ENTRIES) {
             int toRemove = MAX_ENTRIES / 4;
-            _clientLeaseSetAccessTime.entrySet().stream()
-                .sorted(Comparator.comparingLong(e -> e.getValue()))
-                .limit(toRemove)
-                .forEach(e -> _clientLeaseSetAccessTime.remove(e.getKey()));
+            // O(N) eviction - reduce map size to prevent unbounded growth
+            Iterator<Map.Entry<Hash, Long>> evictIter = _clientLeaseSetAccessTime.entrySet().iterator();
+            int evicted = 0;
+            while (evictIter.hasNext() && evicted < toRemove) {
+                evictIter.next();
+                evictIter.remove();
+                evicted++;
+            }
             if (_log.shouldWarn()) {
-                _log.warn("Pruned " + toRemove + " stale entries from client LeaseSet tracking, " +
+                _log.warn("Pruned " + evicted + " stale entries from client LeaseSet tracking, " +
                           "current size: " + _clientLeaseSetAccessTime.size());
             }
         }
@@ -2706,6 +2736,17 @@ _context.commSystem().forceDisconnect(h, "Blocked country: " + country);
                 continue;
             }
 
+            // Skip LeaseSets we publish (our own local destinations or floodfill)
+            // We shouldn't refresh our own LeaseSets - that would be redundant
+            if (_context.clientManager().isLocal(key)) {
+                iter.remove();
+                removed++;
+                if (_log.shouldDebug()) {
+                    _log.debug("Skipping refresh - we publish this LeaseSet: " + hostname);
+                }
+                continue;
+            }
+
             // Check if LeaseSet is expiring soon - proactive refresh before expiry
             // Use raw lookup to get LeaseSet even if expired
             DatabaseEntry ds = _ds.get(key);
@@ -2733,7 +2774,8 @@ _context.commSystem().forceDisconnect(h, "Blocked country: " + country);
                 }
             } else if (lastAccess < refreshThreshold) {
                 // Only refresh if we have tunnels built to this destination (already checked above)
-                _clientLeaseSetAccessTime.remove(key);
+                // Update access time instead of removing - keeps entry for periodic refresh
+                _clientLeaseSetAccessTime.put(key, now);
                 lookupLeaseSetRemotely(key, null);
                 if (_log.shouldDebug()) {
                     _log.debug("Refreshing client LeaseSet: " + hostname);
