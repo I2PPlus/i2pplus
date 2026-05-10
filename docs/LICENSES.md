@@ -24,28 +24,15 @@ The following standard licenses are incorporated by reference:
 
 ## CORE API (i2p.jar)
 
-Public domain except as listed below.
+Public domain except as listed below:
 
-**ElGamal and DSA code**
-BSD-style. Copyright (c) 2003 TheCrypto.
-
-**Bouncy Castle (ElGamal / AES / SSU HMAC)**
-MIT-style. Copyright (c) 2000-2023 The Legion Of The Bouncy Castle Inc.
-
-**AES code (Cryptix)**
-Cryptix General License. Copyright (c) 1995-2005 The Cryptix Foundation Limited.
-
-**Crypto filters (I2P Project BSD)**
-BSD-style. Copyright (c) 2009 The I2P Project.
-
-**SNTP code**
-BSD-style. Copyright (c) 2004 Adam Buckley.
-
-**SSLEepGet (InstallCert)**
-BSD-style. Copyright 2006 Sun Microsystems.
-
-**BlockFile**
-BSD-3-Clause. Copyright (c) 2006 Matthew Estes. https://metanotion.net/software/sandbox/block.html
+- **AES code (Cryptix)** — Cryptix General License. Copyright (c) 1995-2005 The Cryptix Foundation Limited.
+- **BlockFile** — BSD-3-Clause. Copyright (c) 2006 Matthew Estes. https://metanotion.net/software/sandbox/block.html
+- **Bouncy Castle (ElGamal / AES / SSU HMAC)** — MIT-style. Copyright (c) 2000-2023 The Legion Of The Bouncy Castle Inc.
+- **Crypto filters (I2P Project BSD)** — BSD-style. Copyright (c) 2009 The I2P Project.
+- **ElGamal and DSA code** — BSD-style. Copyright (c) 2003 TheCrypto.
+- **SNTP code** — BSD-style. Copyright (c) 2004 Adam Buckley.
+- **SSLEepGet (InstallCert)** — BSD-style. Copyright 2006 Sun Microsystems.
 
 ## JAVA SERVICE WRAPPER
 
@@ -53,9 +40,8 @@ GPLv2/GPLv3. Tanuki Software Wrapper. Community Software License Agreement v1.3.
 
 ## JBIGI LIBRARIES (jbigi.jar)
 
-JNI code: public domain.
-
-GMP 6.3.0: LGPL 3.0 or GPL 2.0 (dual licensed)
+- **JNI code** — Public Domain
+- **GMP 6.3.0** — LGPL 3.0 or GPL 2.0 (dual licensed)
 
 ## SOURCE CODE
 
@@ -91,17 +77,16 @@ Copyright (c) 2003 University of Chicago. All rights reserved. The Web100 Networ
 ## PUBLIC DOMAIN COMPONENTS
 
 The following components are in the public domain:
-- Proxyscript (i2pProxy.pac)
-- Router console (routerconsole.jar, routerconsole.war)
-- SAM (sam.jar)
-- Streaming Lib (streaming.jar)
-- Systray (systray.jar)
+- **Proxyscript** (i2pProxy.pac)
+- **Router Console** (routerconsole.jar, routerconsole.war)
+- **SAM** (sam.jar)
+- **Streaming Lib** (streaming.jar)
+- **Systray** (systray.jar)
 
 ## GEOIP DATABASE
 
-**GeoLite2 Country (db-ip)** - CC BY-SA 4.0 - https://db-ip.com/db/
-
-**countries.txt** - CC BY-SA 3.0 (MaxMind GeoLite Country, discontinued)
+- **GeoLite2 Country (db-ip)** — CC BY-SA 4.0 - https://db-ip.com/db/
+- **countries.txt** — CC BY-SA 3.0 (MaxMind GeoLite Country, discontinued)
 
 ## JETTY
 
@@ -123,51 +108,28 @@ LGPLv2.1. Bundled dependencies: ASM (BSD 3-Clause), Commons, DocBook XSL, Dom4j,
 
 The following third-party JavaScript libraries are bundled:
 
-**jdenticon** (v3.3.0)
-MIT License. https://jdenticon.com
-
-**morphdom**
-MIT License. https://github.com/patrick-steele-idem/morphdom
-
-**iframe-resizer**
-GPL-2.0. https://github.com/davidjbradshaw/iframe-resizer
-
-**snowflakes**
-MIT License. https://github.com/hcodes/snowflakes/
-
-**progressx**
-MIT License. https://github.com/ryadpasha/progressx
-
-**Markdown.Converter**
-MIT License. Based on Showdown.
-
-**lightbox**
-MIT License. Based on jsOnlyLightbox (https://github.com/felixhagspiel/jsOnlyLightbox)
-
-**HtmlSanitizer**
-MIT License. Copyright (c) 2016-2024 Alexander Yumashev, Jitbit Software. https://github.com/jitbit/HtmlSanitizer
+- **HtmlSanitizer** — MIT License. Copyright (c) 2016-2024 Alexander Yumashev, Jitbit Software. https://github.com/jitbit/HtmlSanitizer
+- **iframe-resizer** — GPL-2.0. https://github.com/davidjbradshaw/iframe-resizer
+- **jdenticon** (v3.3.0) — MIT License. https://jdenticon.com
+- **lightbox** — MIT License. Based on jsOnlyLightbox (https://github.com/felixhagspiel/jsOnlyLightbox)
+- **morphdom** — MIT License. https://github.com/patrick-steele-idem/morphdom
+- **progressx** — MIT License. https://github.com/ryadpasha/progressx
+- **snowflakes** — MIT License. https://github.com/hcodes/snowflakes/
 
 ## CUSTOM JAVASCRIPT
 
 The following custom JavaScript scripts were written by dr|z3d for I2P+. Licensed under AGPL-3.0 or later.
 
-**Console**: geomap (based on CartoSVG mercator example), initResizer, updatedEvent, viewprofile, tunnels, tunnelpeercount, translationReport, transitsummary, transit, transitfast, toggleElements, tableSectionToggler, stickySidebar, stats, sortWorker, sectionToggle, searchLS, refreshSidebar, refreshOnClick, refreshLogs, refreshElements, profiles, peers, onVisible, ok, newHosts, netdbLookup, netdb, miniGraph, lsDebug, lsCompact, lazyload, jobs, graphs, graphSingle, formsubmit, fetchWorker, detectPageZoom, convertKBtoMB, configtunnels, configstats, clickToClose, changelog, advconfig
-
-**I2PSnark**: tunnelCounter, toggleVaryTunnelLength, togglePriorities, toggleLinks, toggleDebug, textView, snarkWork, snarkSort, snarkAlert, setFilterQuery, refreshTorrents, pageNav, getImgDimensions, filterBar, convertTooltips, click
-
-**I2PTunnel**: toggleThrottler, refreshIndex, filterTunnels
-
-**ImageGen**: imagegen
-
-**SusiDNS**: togglePanels, toggleAllHosts, refreshStatus, deleteHosts, clearSearch
-
-**SusiMail**: toggleHeaders, sanitizeHTML, refreshInbox, previewMail, notifications, htmlView, folder, deleteMail, compose, markdown
+- **Console**: geomap (based on CartoSVG mercator example), initResizer, updatedEvent, viewprofile, tunnels, tunnelpeercount, translationReport, transitsummary, transit, transitfast, toggleElements, tableSectionToggler, stickySidebar, stats, sortWorker, sectionToggle, searchLS, refreshSidebar, refreshOnClick, refreshLogs, refreshElements, profiles, peers, onVisible, ok, newHosts, netdbLookup, netdb, miniGraph, lsDebug, lsCompact, lazyload, jobs, graphs, graphSingle, formsubmit, fetchWorker, detectPageZoom, convertKBtoMB, configtunnels, configstats, clickToClose, changelog, advconfig
+- **I2PSnark**: tunnelCounter, toggleVaryTunnelLength, togglePriorities, toggleLinks, toggleDebug, textView, snarkWork, snarkSort, snarkAlert, setFilterQuery, refreshTorrents, pageNav, getImgDimensions, filterBar, convertTooltips, click
+- **I2PTunnel**: toggleThrottler, refreshIndex, filterTunnels
+- **ImageGen**: imagegen
+- **SusiDNS**: togglePanels, toggleAllHosts, refreshStatus, deleteHosts, clearSearch
+- **SusiMail**: toggleHeaders, sanitizeHTML, refreshInbox, previewMail, notifications, htmlView, folder, deleteMail, compose, markdown
 
 ## RRD4J (jrobin.jar)
 
-RRD4J is a high performance data logging and graphing system for time series data. Used for router statistics graphs in the console.
-
-Apache License 2.0. https://github.com/rrd4j/rrd4j
+RRD4J is a high performance data logging and graphing system — Apache License 2.0. https://github.com/rrd4j/rrd4j
 
 ## CONSOLE / WEBAPPS THEMES & GRAPHICS
 
