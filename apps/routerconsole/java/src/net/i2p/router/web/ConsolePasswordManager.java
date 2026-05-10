@@ -49,7 +49,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
         String pfx = realm;
         if (user != null && user.length() > 0)
             pfx += '.' + user;
-        String cr = _context.getProperty(pfx + PROP_CRYPT);
+        cr = _context.getProperty(pfx + ".crypt");
         if (cr == null)
             return false;
         return cr.equals(UnixCrypt.crypt(pw, cr));
@@ -208,7 +208,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
             pfx += '.' + user;
         String salt = user != null ? user : "";
         String crypt = UnixCrypt.crypt(pw, salt);
-        Map<String, String> toAdd = Collections.singletonMap(pfx + PROP_CRYPT, crypt);
+        Map<String, String> toAdd = Collections.singletonMap(pfx + ".crypt", crypt);
         List<String> toDel = new ArrayList(4);
         toDel.add(pfx + PROP_PW);
         toDel.add(pfx + PROP_B64);
@@ -260,7 +260,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
             List<String> toDel = new ArrayList<String>(4);
             toDel.add(pfx + PROP_PW);
             toDel.add(pfx + PROP_B64);
-            toDel.add(pfx + PROP_CRYPT);
+            toDel.add(pfx + ".crypt");
             toDel.add(pfx + PROP_SHASH);
             return _context.router().saveConfig(toAdd, toDel);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {

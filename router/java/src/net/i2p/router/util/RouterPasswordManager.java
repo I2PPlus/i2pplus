@@ -127,7 +127,7 @@ public class RouterPasswordManager extends PasswordManager {
         List<String> toDel = new ArrayList<String>(4);
         toDel.add(pfx + PROP_B64);
         toDel.add(pfx + PROP_MD5);
-        toDel.add(pfx + PROP_CRYPT);
+        toDel.add(pfx + ".crypt");
         toDel.add(pfx + PROP_SHASH);
         return _context.router().saveConfig(toAdd, toDel);
     }
@@ -151,7 +151,7 @@ public class RouterPasswordManager extends PasswordManager {
         List<String> toDel = new ArrayList<String>(4);
         toDel.add(pfx + PROP_PW);
         toDel.add(pfx + PROP_MD5);
-        toDel.add(pfx + PROP_CRYPT);
+        toDel.add(pfx + ".crypt");
         toDel.add(pfx + PROP_SHASH);
         return _context.router().saveConfig(toAdd, toDel);
     }
@@ -175,7 +175,7 @@ public class RouterPasswordManager extends PasswordManager {
         toDel.add(pfx + PROP_PW);
         toDel.add(pfx + PROP_B64);
         toDel.add(pfx + PROP_MD5);
-        toDel.add(pfx + PROP_CRYPT);
+        toDel.add(pfx + ".crypt");
         return _context.router().saveConfig(toAdd, toDel);
     }
 
@@ -194,7 +194,7 @@ public class RouterPasswordManager extends PasswordManager {
         toDel.add(pfx + PROP_PW);
         toDel.add(pfx + PROP_B64);
         toDel.add(pfx + PROP_MD5);
-        toDel.add(pfx + PROP_CRYPT);
+        toDel.add(pfx + ".crypt");
         toDel.add(pfx + PROP_SHASH);
         return _context.router().saveConfig(null, toDel);
     }

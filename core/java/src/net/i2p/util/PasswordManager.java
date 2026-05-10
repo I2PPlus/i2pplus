@@ -35,9 +35,8 @@ public class PasswordManager {
     protected static final String PROP_MD5 = ".md5";
 
     /** stored as a Unix crypt string */
-    protected static final String PROP_CRYPT = ".crypt";
-
-    /** stored as the b64 of the 16 byte salt + the 32 byte hash of the UTF-8 bytes */
+    /**
+     *  Stored as the b64 of the 16 byte salt + the 32 byte hash of the UTF-8 bytes */
     protected static final String PROP_SHASH = ".shash";
 
     public PasswordManager(I2PAppContext ctx) {
