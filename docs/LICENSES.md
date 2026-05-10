@@ -49,9 +49,6 @@ BSD-style. Copyright (c) 2009 The I2P Project.
 **SNTP code**
 BSD-style. Copyright (c) 2004 Adam Buckley.
 
-**HashCash code**
-Copyright 2006 Gregory Rubin.
-
 **SSLEepGet (InstallCert)**
 BSD-style. Copyright 2006 Sun Microsystems.
 
@@ -60,18 +57,17 @@ BSD-3-Clause. Copyright (c) 2006 Matthew Estes. https://metanotion.net/software/
 
 ## JAVA SERVICE WRAPPER
 
-GPLv2/GPLv3. Tanuki Software Wrapper. Community Software License Agreement v1.3. Source and license must be distributed with product. https://wrapper.tanukisoftware.com/doc/english/licenseCommunity.html#text
+GPLv2/GPLv3. Tanuki Software Wrapper. Community Software License Agreement v1.3. https://wrapper.tanukisoftware.com/doc/english/licenseCommunity.html#text
 
 ## JBIGI LIBRARIES (jbigi.jar)
 
 JNI code: public domain.
 
-GMP 4.3.2 / 5.0.2: GNU Lesser General Public License 3.0
-GMP 6.0.0 / 6.1.2 / 6.2.0: GNU General Public License 2.0
+GMP 6.3.0: LGPL 3.0 or GPL 2.0 (dual licensed)
 
 ## SOURCE CODE
 
-For GPL-licensed components, source code is available from https://github.com/I2PPlus/i2pplus
+Source code available at https://github.com/I2PPlus/i2pplus
 
 ## APPLICATIONS
 
