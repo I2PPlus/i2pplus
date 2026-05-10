@@ -112,7 +112,7 @@ Báo lỗi: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues hoặc https://githu
 
 I2P+ được cấp phép theo AGPL v.3.
 
-Để xem giấy phép của các thành phần phụ, xem: [README.md](docs/LICENSE.md)
+Để xem giấy phép của các thành phần phụ, xem: [README.md](docs/LICENSES.md)
 
 ## Xem thêm
 
@@ -124,7 +124,7 @@ I2P+ được cấp phép theo AGPL v.3.
 - [docs/HACKING.md](docs/HACKING.md) - Hướng dẫn phát triển và hệ thống build
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Bố trí cây mã nguồn và nơi tìm thứ
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Quản lý lệnh cấm session I2P với nftables
-- [docs/LICENSE.md](docs/LICENSE.md) - Giấy phép third-party
+- [docs/LICENSES.md](docs/LICENSES.md) - Giấy phép third-party
 - [docs/history.txt](docs/history.txt) - Lịch sử thay đổi đầy đủ
 
 ### Sub-projects

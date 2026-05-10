@@ -109,7 +109,7 @@ Bug reports: https://github.com/I2PPlus/i2pplus/issues
 
 I2P+ is licensed under the AGPL v.3.
 
-For the various sub-component licenses, see: [README.md](docs/LICENSE.md)
+For the various sub-component licenses, see: [README.md](docs/LICENSES.md)
 
 ## See also
 
@@ -120,7 +120,7 @@ For the various sub-component licenses, see: [README.md](docs/LICENSE.md)
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Headless (console mode) installation
 - [docs/HACKING.md](docs/HACKING.md) - Developer guide and build systems
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Source tree layout and where to find things
-- [docs/LICENSE.md](docs/LICENSE.md) - Third-party licenses
+- [docs/LICENSES.md](docs/LICENSES.md) - Third-party licenses
 - [docs/history.txt](docs/history.txt) - Full changelog
 
 ### Sub-projects

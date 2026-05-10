@@ -112,7 +112,7 @@ Docker에서 I2P를 실행하는 방법에 대한 자세한 내용은 [docker/RE
 
 I2P+는 AGPL v.3으로 라이선스됩니다.
 
-various 하위 구성 요소 라이선스는 다음을 참조하세요: [README.md](docs/LICENSE.md)
+various 하위 구성 요소 라이선스는 다음을 참조하세요: [README.md](docs/LICENSES.md)
 
 ## 참고하세요
 
@@ -123,7 +123,7 @@ various 하위 구성 요소 라이선스는 다음을 참조하세요: [README.
 - [docs/HACKING.md](docs/HACKING.md) - 개발자 가이드 및 빌드 시스템
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - 소스 트리 레이아웃
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - nftables로 I2P 세션 금지 관리
-- [docs/LICENSE.md](docs/LICENSE.md) - 서드파티 라이선스
+- [docs/LICENSES.md](docs/LICENSES.md) - 서드파티 라이선스
 - [docs/history.txt](docs/history.txt) - 전체 변경 로그
 
 ### 하위 프로젝트

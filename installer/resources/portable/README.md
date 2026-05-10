@@ -31,7 +31,7 @@ The base I2P router and SDK make use of the following non-public domain code:
 Also included in this distribution are various third party
 client applications, with various licensing terms.
 
-For more information see LICENSE.txt in the install directory,
+For more information see LICENSES.md in the install directory,
 or visit: https://geti2p.net/licenses
 
 Source code is available at: https://github.com/I2PPlus/i2pplus

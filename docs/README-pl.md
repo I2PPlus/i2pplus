@@ -113,7 +113,7 @@ Raporty o błędach: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues lub https:/
 
 I2P+ jest licencjonowany na podstawie AGPL w wersji 3.
 
-W przypadku różnych subkomponentów zobacz: [README.md](docs/LICENSE.md)
+W przypadku różnych subkomponentów zobacz: [README.md](docs/LICENSES.md)
 
 ## Zobacz również
 
@@ -125,7 +125,7 @@ W przypadku różnych subkomponentów zobacz: [README.md](docs/LICENSE.md)
 - [docs/HACKING.md](docs/HACKING.md) - Przewodnik programisty i systemy budowania
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Układ drzewa źródłowego
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Zarządzanie blokadami sesji I2P za pomocą nftables
-- [docs/LICENSE.md](docs/LICENSE.md) - Licencje stron trzecich
+- [docs/LICENSES.md](docs/LICENSES.md) - Licencje stron trzecich
 - [docs/history.txt](docs/history.txt) - Pełny dziennik zmian
 
 ### Sub-projects

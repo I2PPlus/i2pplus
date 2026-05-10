@@ -112,7 +112,7 @@ Hibajelentések: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues vagy https://gi
 
 Az I2P+ az AGPL v.3 licenciával rendelkezik.
 
-A különböző alkomponensek licenciájáért lásd: [README.md](docs/LICENSE.md)
+A különböző alkomponensek licenciájáért lásd: [README.md](docs/LICENSES.md)
 
 ## Lásd még
 
@@ -124,7 +124,7 @@ A különböző alkomponensek licenciájáért lásd: [README.md](docs/LICENSE.m
 - [docs/HACKING.md](docs/HACKING.md) - Fejlesztői útmutató és build rendszerek
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Forrásfa elrendezés és hol mi található
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - I2P session tiltások kezelése nftables-szel
-- [docs/LICENSE.md](docs/LICENSE.md) - Harmadik fél licenciák
+- [docs/LICENSES.md](docs/LICENSES.md) - Harmadik fél licenciák
 - [docs/history.txt](docs/history.txt) - Teljes változtatási napló
 
 ### Alprojektek

@@ -80,7 +80,7 @@ mv wrapper.config wrapper.config.new
 install -d $PKG/usr/bin
 install -d $PKG/usr/doc/$NAME-$VERSION
 install -d $PKG/etc/rc.d
-mv $I2PSRC/docs/licenses/LICENSE.txt $I2PSRC/docs/licenses/LICENSE.md -t $PKG/usr/doc/$NAME-$VERSION
+cp $I2PSRC/docs/LICENSES.md $PKG/usr/doc/$NAME-$VERSION/
 cp -a $I2PSRC/docs/licenses $PKG/usr/doc/$NAME-$VERSION/licenses
 
 # runplain.sh will live in the installation directory. eepget and i2prouter will go to /usr/bin

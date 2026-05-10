@@ -14,7 +14,7 @@ end_of_line = crlf
 [**/*.css]
 indent_size = 2
 
-[{docs/history.txt,docs/licenses/LICENSE.txt}]
+[{docs/history.txt}]
 indent_size = 3
 
 [core/java/src/gnu/**/*.java]

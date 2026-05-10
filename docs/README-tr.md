@@ -116,7 +116,7 @@ Hata raporları: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues veya https://gi
 
 I2P+, AGPL v.3 altında lisanslanmıştır.
 
-Çeşitli alt bileşen lisansları için bkz: [README.md](docs/LICENSE.md)
+Çeşitli alt bileşen lisansları için bkz: [README.md](docs/LICENSES.md)
 
 ## Ayrıca Bkz
 
@@ -128,7 +128,7 @@ I2P+, AGPL v.3 altında lisanslanmıştır.
 - [docs/HACKING.md](docs/HACKING.md) - Geliştirici kılavuzu ve derleme sistemleri
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Kaynak ağacı düzeni
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - nftables ile I2P oturum yasaklarını yönetme
-- [docs/LICENSE.md](docs/LICENSE.md) - Üçüncü taraf lisansları
+- [docs/LICENSES.md](docs/LICENSES.md) - Üçüncü taraf lisansları
 - [docs/history.txt](docs/history.txt) - Tam değişiklik günlüğü
 
 ### Alt Projeler

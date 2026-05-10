@@ -113,7 +113,7 @@ Nahlašování chyb: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues nebo https:
 
 I2P+ je licencováno pod AGPL v.3.
 
-Pro licence různých subkomponent viz: [README.md](docs/LICENSE.md)
+Pro licence různých subkomponent viz: [README.md](docs/LICENSES.md)
 
 ## Viz také
 
@@ -125,7 +125,7 @@ Pro licence různých subkomponent viz: [README.md](docs/LICENSE.md)
 - [docs/HACKING.md](docs/HACKING.md) - Průvodce pro vývojáře a build systémy
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Rozložení zdrojového stromu
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Správa zákazů relací I2P pomocí nftables
-- [docs/LICENSE.md](docs/LICENSE.md) - Licence třetích stran
+- [docs/LICENSES.md](docs/LICENSES.md) - Licence třetích stran
 - [docs/history.txt](docs/history.txt) - Úplný seznam změn
 
 ### Sub-projekty

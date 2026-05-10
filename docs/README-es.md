@@ -113,7 +113,7 @@ Informes de errores: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues o https://g
 
 I2P+ está licenciado bajo AGPL v.3.
 
-Para las licencias de los subcomponentes, ver: [README.md](docs/LICENSE.md)
+Para las licencias de los subcomponentes, ver: [README.md](docs/LICENSES.md)
 
 ## Ver también
 
@@ -124,7 +124,7 @@ Para las licencias de los subcomponentes, ver: [README.md](docs/LICENSE.md)
 - [docs/HACKING.md](docs/HACKING.md) - Guía para desarrolladores y sistemas de compilación
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Diseño del árbol de código fuente
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Gestión de prohibiciones de sesión I2P con nftables
-- [docs/LICENSE.md](docs/LICENSE.md) - Licencias de terceros
+- [docs/LICENSES.md](docs/LICENSES.md) - Licencias de terceros
 - [docs/history.txt](docs/history.txt) - Registro de cambios completo
 
 ### Sub-projects

@@ -113,7 +113,7 @@ Bug-rapporten: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues of https://github
 
 I2P+ is gelicentieerd onder AGPL v.3.
 
-Voor de verschillende sub-component licenties, zie: [README.md](docs/LICENSE.md)
+Voor de verschillende sub-component licenties, zie: [README.md](docs/LICENSES.md)
 
 ## Zie ook
 
@@ -125,7 +125,7 @@ Voor de verschillende sub-component licenties, zie: [README.md](docs/LICENSE.md)
 - [docs/HACKING.md](docs/HACKING.md) - Ontwikkelaarsgids en build-systemen
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Bronboom-layout en waar dingen te vinden
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - I2P-sessieverboden beheren met nftables
-- [docs/LICENSE.md](docs/LICENSE.md) - Licenties van derden
+- [docs/LICENSES.md](docs/LICENSES.md) - Licenties van derden
 - [docs/history.txt](docs/history.txt) - Volledige wijzigingslog
 
 ### Sub-projects

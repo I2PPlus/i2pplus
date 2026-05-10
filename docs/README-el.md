@@ -117,7 +117,7 @@ API: https://i2pplus.github.io/javadoc/
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
-Για τις άδειες των διάφορων υποσυστατικών, δείτε: [README.md](docs/LICENSE.md)
+Για τις άδειες των διάφορων υποσυστατικών, δείτε: [README.md](docs/LICENSES.md)
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
@@ -160,7 +160,7 @@ API: https://i2pplus.github.io/javadoc/
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [docs/LICENSE.md](docs/LICENSE.md) - Άδειες τρίτων μερών
+- [docs/LICENSES.md](docs/LICENSES.md) - Άδειες τρίτων μερών
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες

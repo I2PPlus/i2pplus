@@ -182,7 +182,7 @@ createcopyright:
 	@/bin/echo -e "\nI2P is tracked upstream using the Monotone VCS" >> $(CURDIR)/debian/copyright
 	@/bin/echo -e "Complete information on fetching the source with monotone can be found" >> $(CURDIR)/debian/copyright
 	@/bin/echo -e "at https://geti2p.net/newdevelopers#getting-the-i2p-code\n\n\n" >> $(CURDIR)/debian/copyright
-	@/bin/cat $(CURDIR)/LICENSE.txt >> $(CURDIR)/debian/copyright
+	@/bin/cat $(CURDIR)/LICENSES.md >> $(CURDIR)/debian/copyright
 	@/bin/echo -e "\n\n The debian packaging has been released into the public domain." >> $(CURDIR)/debian/copyright
 
 override_dh_compress:

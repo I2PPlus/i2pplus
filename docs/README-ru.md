@@ -100,7 +100,7 @@ ant buildDeb
 
 I2P+ лицензирована по AGPL v.3.
 
-Для различных подкомпонентов лицензии см.: [README.md](docs/LICENSE.md)
+Для различных подкомпонентов лицензии см.: [README.md](docs/LICENSES.md)
 
 ## См. также
 
@@ -112,7 +112,7 @@ I2P+ лицензирована по AGPL v.3.
 - [docs/HACKING.md](docs/HACKING.md) - Руководство разработчика и системы сборки
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Структура исходного кода
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Управление bans сессий I2P через nftables
-- [docs/LICENSE.md](docs/LICENSE.md) - Лицензии третьих сторон
+- [docs/LICENSES.md](docs/LICENSES.md) - Лицензии третьих сторон
 - [docs/history.txt](docs/history.txt) - Полный список изменений
 
 ### Sub-projects

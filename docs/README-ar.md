@@ -132,7 +132,7 @@ ant buildAppImage
 
 ## معلومات الاتصال
 ## التراخيص
-للتراخيص الفرعية للمكونات المختلفة، انظر: [README.md](docs/LICENSE.md)
+للتراخيص الفرعية للمكونات المختلفة، انظر: [README.md](docs/LICENSES.md)
 
 ## معلومات الاتصال
 ## التراخيص
@@ -185,7 +185,7 @@ ant buildAppImage
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [docs/LICENSE.md](docs/LICENSE.md) - تراخيص الأطراف الثالثة
+- [docs/LICENSES.md](docs/LICENSES.md) - تراخيص الأطراف الثالثة
 
 ## معلومات الاتصال
 ## التراخيص
