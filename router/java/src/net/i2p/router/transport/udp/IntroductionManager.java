@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -44,6 +46,8 @@ class IntroductionManager {
     private final Map<Long, PeerState> _inbound;
     /** map of relay nonce to alice PeerState who requested it */
     private final ConcurrentHashMap<Long, PeerState2> _nonceToAlice;
+    private final Set<Long> _recentHolePunches;
+    private long _lastHolePunchClean;
     private final Map<Long, Object> _recentRelaysAsBob;
     private static final Object DUMMY = new Object();
 
@@ -62,6 +66,8 @@ class IntroductionManager {
     private static final long INTRODUCER_EXPIRATION = 80*60*1000L;
     private static final String MIN_IPV6_INTRODUCER_VERSION = "0.9.50";
     private static final long MAX_SKEW = 2*60*1000;
+    private static final long PUNCH_CLEAN_TIME = 5*1000;
+    private static final int MAX_PUNCHES = 20;
 
     public IntroductionManager(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
@@ -70,6 +76,7 @@ class IntroductionManager {
         _builder2 = transport.getBuilder2();
         _outbound = new ConcurrentHashMap<Long, PeerState>(MAX_OUTBOUND);
         _inbound = new ConcurrentHashMap<Long, PeerState>(MAX_INBOUND);
+        _recentHolePunches = new HashSet<Long>(16);
         _nonceToAlice = new ConcurrentHashMap<Long, PeerState2>(MAX_INBOUND);
         _recentRelaysAsBob = new LHMCache<Long, Object>(64);
         ctx.statManager().createRateStat("udp.relayBadIP", "Received IP or port was bad", "Transport [UDP]", UDPTransport.RATES);
@@ -579,7 +586,65 @@ class IntroductionManager {
      * @since 0.9.55 Method introduced for handling relay introduction messages in SSU 2
      */
     void receiveRelayIntro(PeerState2 bob, Hash alice, byte[] data) {
+        long key;
+        int iplen = data[13] & 0xff;
+        if (iplen == 6)
+            key = DataHelper.fromLong(data, 16, 4);
+        else if (iplen == 18)
+            key = DataHelper.fromLong8(data, 16);
+        else
+            return;
+        boolean tooMany = false;
+        boolean already = false;
+        long now = _context.clock().now();
+        synchronized (_recentHolePunches) {
+            if (now > _lastHolePunchClean + PUNCH_CLEAN_TIME) {
+                _recentHolePunches.clear();
+                _lastHolePunchClean = now;
+                _recentHolePunches.add(Long.valueOf(key));
+            } else {
+                tooMany = _recentHolePunches.size() >= MAX_PUNCHES;
+                if (!tooMany)
+                    already = !_recentHolePunches.add(Long.valueOf(key));
+            }
+        }
+        if (tooMany) {
+            if (_log.shouldLog(Log.WARN))
+                _log.warn("Rejecting - too many - RelayIntro for " + alice);
+            sendRelayRejectLimit(bob, data);
+            return;
+        }
+        if (already) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Rejecting dup RelayIntro for " + alice);
+            sendRelayRejectLimit(bob, data);
+            return;
+        }
+        if (!_transport.haveCapacity(95)) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Rejecting RelayIntro, near conn limits for " + alice);
+            sendRelayRejectLimit(bob, data);
+            return;
+        }
         receiveRelayIntro(bob, alice, data, 0);
+    }
+
+    private void sendRelayRejectLimit(PeerState2 bob, byte[] data) {
+        long nonce = DataHelper.fromLong(data, 0, 4);
+        int rcode = SSU2Util.RELAY_REJECT_CHARLIE_LIMIT;
+        SigningPrivateKey spk = _context.keyManager().getSigningPrivateKey();
+        byte[] rdata = SSU2Util.createRelayResponseData(_context, bob.getRemotePeer(), rcode,
+                                                        nonce, null, 0, spk, 0);
+        if (rdata == null)
+            return;
+        try {
+            UDPPacket packet = _builder2.buildRelayResponse(rdata, bob);
+            if (_log.shouldInfo())
+                _log.info("Send relay limit response " + rcode + " as charlie nonce " + nonce + " to bob " + bob);
+            _transport.send(packet);
+            bob.setLastSendTime(_context.clock().now());
+        } catch (IOException ioe) {
+        }
     }
 
     /**
