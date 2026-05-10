@@ -15,7 +15,7 @@ By default, builds for the current machine's architecture. Use `BITS=32` or `BIT
 
 ### Windows (Visual Studio)
 
-See [msvc/IMPORTANT.txt](msvc/IMPORTANT.txt) for Visual Studio build instructions.
+See [msvc/README.md](msvc/README.md) for Visual Studio build instructions.
 
 ## Output
 
