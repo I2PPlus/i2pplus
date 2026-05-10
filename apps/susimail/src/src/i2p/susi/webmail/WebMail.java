@@ -245,6 +245,10 @@ public class WebMail extends HttpServlet {
         int newMails = -1; // Set by threaded connector. -1 if nothing to report, 0 or more after fetch complete
         String user, pass, host, error = "", info = "";
         String draftUIDL; // Just convenience to pass from PSCB to P-R-G
+        /** Local password verification for session protection @since 0.9.70+ */
+        private String _sessionSalt;
+        /** @since 0.9.70+ */
+        private String _sessionKey;
         public ArrayList<Attachment> attachments; // TODO Map of UIDL to List
         public boolean reallyDelete; // This is only for multi-delete. Single-message delete is handled with P-R-G
         String themePath, imgPath;
@@ -264,6 +268,49 @@ public class WebMail extends HttpServlet {
             if (dbg != null) {
                 boolean release = !Boolean.parseBoolean(dbg);
                 log.setMinimumPriority(release ? Log.ERROR : Log.DEBUG);
+            }
+        }
+
+        /**
+         *  Set local password for session protection
+         *  @since 0.9.70+
+         */
+        public void setLocalPassword(String password) {
+            if (password == null || password.isEmpty()) return;
+            _sessionSalt = Long.toHexString(I2PAppContext.getGlobalContext().random().nextLong());
+            _sessionKey = hashPassword(password, _sessionSalt);
+        }
+
+        /**
+         *  Verify password against stored session key
+         *  @return true if password matches
+         *  @since 0.9.70+
+         */
+        public boolean verifyLocalPassword(String password) {
+            if (_sessionSalt == null || _sessionKey == null || password == null) {
+                return false;
+            }
+            String hash = hashPassword(password, _sessionSalt);
+            return hash.equals(_sessionKey);
+        }
+
+        /**
+         *  PBKDF2 hash for password verification with high iteration count
+         *  @since 0.9.70+
+         */
+        private static String hashPassword(String password, String salt) {
+            try {
+                javax.crypto.SecretKeyFactory factory = javax.crypto.SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+                javax.crypto.spec.PBEKeySpec spec = new javax.crypto.spec.PBEKeySpec(
+                    password.toCharArray(), salt.getBytes("UTF-8"), 1000000, 256);
+                byte[] hash = factory.generateSecret(spec).getEncoded();
+                StringBuilder sb = new StringBuilder(hash.length * 2);
+                for (byte b : hash) {
+                    sb.append(String.format("%02x", b));
+                }
+                return sb.toString();
+            } catch (Exception e) {
+                return "";
             }
         }
 
@@ -805,6 +852,8 @@ public class WebMail extends HttpServlet {
         sessionObject.pass = pass;
         sessionObject.host = host;
         sessionObject.reallyDelete = false;
+        // Store local password hash for session protection @since 0.9.70+
+        sessionObject.setLocalPassword(pass);
 
         // Thread the loading and the server connection - either could finish first.
         // We only load the inbox here. Others are loaded on-demand in processRequest()
@@ -973,6 +1022,7 @@ public class WebMail extends HttpServlet {
 
         state = processLogout(sessionObject, request, isPOST, state);
         if (state == State.AUTH) {return state;}
+
         // if loading, we can't get to states LIST/SHOW or it will block
         for (MailCache mc : sessionObject.caches.values()) {
             if (mc.isLoading()) {return State.LOADING;}
@@ -1969,6 +2019,12 @@ public class WebMail extends HttpServlet {
             //// Start state determination and button processing
 
             State state = null;
+            // If mailbox is null but we have a user, this means session expired or auth failed
+            // (e.g., password changed on server). Clear local password to force re-login. @since 0.9.70+
+            if (sessionObject.mailbox == null && sessionObject.user != null) {
+                sessionObject._sessionSalt = null;
+                sessionObject._sessionKey = null;
+            }
             if (sessionObject.mailbox == null) {state = State.AUTH;}
             else if (isPOST) {
                 // This must be called to add the attachment before processStateChangeButtons() sends the message
@@ -3774,8 +3830,11 @@ public class WebMail extends HttpServlet {
             rep.remove('<' + sessionObject.user + '@' + Config.getProperty(CONFIG_SENDER_DOMAIN, "mail.i2p") + '>');
             if (!rep.isEmpty()) {buf.append(button(REPLYALL, _t("Reply All")));}
             buf.append(button(FORWARD, _t("Forward"))).append(button(SAVE_AS, _t("Save As")));
-            if (sessionObject.reallyDelete) {buf.append(button2(DELETE, _t("Delete")));}
-            else {buf.append(button(DELETE, _t("Delete")));}
+            if (sessionObject.reallyDelete) {
+                buf.append(button2(DELETE, _t("Delete")));
+            } else {
+                buf.append(button(DELETE, _t("Delete")));
+            }
         }
         buf.append(button(LOGOUT, _t("Logout")));
 
