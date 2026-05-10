@@ -1,3 +1,37 @@
+2026-05-10 dr|z3d
+  * Router/NetDB: Fix counter race conditions, thread safety, and performance
+  * Addressbook: Drop LeaseSet from cache after HostChecker use
+  * Security: Add constant-time password comparison, query sanitization
+  * SusiMail: Add local password hash for session protection (WIP))
+  * Core: Cleanup JBigi/JCpuID build scripts, add VS 2022 support
+
+2026-05-09 dr|z3d
+  * Console: Add login page with authentication, session-bound nonces
+  * I2PTunnel/I2PSnark: Refactor nonces to session-bound, consolidate forms
+  * SusiMail: Add custom markdown renderer, XSS protection
+  * Crypto: Use constant-time modular exponentiation for private key operations
+
+2026-05-08 dr|z3d
+  * Security: Reduce digest auth nonce lifetime to 1 hour
+  * I2PSnark: Fix torrent file path sanitization
+  * Console: Fix XSS sanitization in ConfigClients
+
+2026-05-07 zzz
+  * Security: Fix multiple upstream security issues (constant-time crypto, I2NP length checks)
+
+2026-05-06 zzz
+  * Crypto: Fix Noise protocol implementation, reduce message padding
+  * Router: Scale job runners dynamically based on message delay
+
+2026-05-05 dr|z3d
+  * Router: Fix client LeaseSet tracking to not grow unbounded
+  * Console: Fix tunnel build success showing 0%
+
+2026-05-04 dr|z3d
+  * Router: Fix NPE in tunnel build stats, forceExplore property
+  * Transport: Fix IPv6 bugs in Origin header CSRF check
+  * Tools: Add auth failure delays to slow repeat attempts
+
 2026-05-01 zzz
  * Transport: Fix PQ SSU2 I2NP block header
 
