@@ -160,13 +160,13 @@ class Reader {
             }
 
             if (est.isComplete()) {
-                // why is it complete yet !con.isEstablished?
-                if (_log.shouldWarn()) {
-                    _log.warn("Establishment state [" + est + "] is complete, yet the connection isn't established? " +
-                               con.isEstablished() + " (inbound? " + con.isInbound() + " " + con + ")");
+                synchronized(con) {
+                    if (con.isEstablished()) {
+                        EventPumper.releaseBuf(buf);
+                        break;
+                    }
                 }
-                EventPumper.releaseBuf(buf);
-                break;
+                continue;
             }
             // FIXME call est.isCorrupt() before also? throws ISE here... see above
             try {
