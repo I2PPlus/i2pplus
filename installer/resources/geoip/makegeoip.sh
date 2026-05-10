@@ -1,7 +1,10 @@
 #!/bin/sh
 #
-# Fetch the latest file from db-ip.com
+# Fetch the latest GeoIP database from db-ip.com
 # Run this from installer/resources/geoip/
+#
+# Note: Set HTTP_PROXY if using a proxy, or remove the proxy settings
+# to download directly.
 
 VER=`date +%Y-%m`
 DL=dbip-country-lite-${VER}.mmdb.gz

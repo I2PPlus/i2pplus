@@ -55,9 +55,6 @@ Copyright 2006 Gregory Rubin.
 **SSLEepGet (InstallCert)**
 BSD-style. Copyright 2006 Sun Microsystems.
 
-**sbt-wrapper**
-BSD-style. Copyright (c) 2011 Paul Phillips.
-
 ## JAVA SERVICE WRAPPER
 
 GPLv2/GPLv3. Tanuki Software Wrapper. Community Software License Agreement v1.3. Source and license must be distributed with product. https://wrapper.tanukisoftware.com/doc/english/licenseCommunity.html#text
@@ -109,6 +106,12 @@ The following components are in the public domain:
 - Streaming Lib (streaming.jar)
 - Systray (systray.jar)
 - BlockFile: Copyright (c) 2006, Matthew Estes (all rights reserved)
+
+## GEOIP DATABASE
+
+**GeoLite2 Country (db-ip)** - CC BY-SA 4.0 - https://db-ip.com/db/
+
+**countries.txt** - CC BY-SA 3.0 (MaxMind GeoLite Country, discontinued)
 
 ## JETTY
 
