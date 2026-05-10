@@ -1,6 +1,8 @@
 package net.i2p.internal;
 
+import net.i2p.I2PAppContext;
 import net.i2p.data.i2cp.I2CPMessage;
+import net.i2p.util.Log;
 
 import java.io.Closeable;
 
@@ -57,6 +59,9 @@ public abstract class I2CPMessageQueue implements Closeable {
      */
     @Override
     public void close() {
-        offer(new PoisonI2CPMessage());
+        if (!offer(new PoisonI2CPMessage())) {
+            Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2CPMessageQueue.class);
+            log.warn("Failed to send close message - queue full");
+        }
     }
 }
