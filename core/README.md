@@ -58,4 +58,4 @@ The `c/` directory contains JNI libraries that accelerate performance-critical o
 
 ## License
 
-Public domain unless otherwise marked. Some components use BSD (DSA, ElGamal, SHA256 implementations), Cryptix (AES), or MIT licenses. See `doc/readme.license.txt`.
+Public domain unless otherwise marked. Some components use BSD (DSA, ElGamal, SHA256 implementations), Cryptix (AES), or MIT licenses. See [docs/LICENSES.md](../docs/LICENSES.md).
