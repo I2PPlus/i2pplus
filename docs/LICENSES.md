@@ -55,6 +55,9 @@ Copyright 2006 Gregory Rubin.
 **SSLEepGet (InstallCert)**
 BSD-style. Copyright 2006 Sun Microsystems.
 
+**BlockFile**
+BSD-3-Clause. Copyright (c) 2006 Matthew Estes. https://metanotion.net/software/sandbox/block.html
+
 ## JAVA SERVICE WRAPPER
 
 GPLv2/GPLv3. Tanuki Software Wrapper. Community Software License Agreement v1.3. Source and license must be distributed with product. https://wrapper.tanukisoftware.com/doc/english/licenseCommunity.html#text
@@ -105,7 +108,6 @@ The following components are in the public domain:
 - SAM (sam.jar)
 - Streaming Lib (streaming.jar)
 - Systray (systray.jar)
-- BlockFile: Copyright (c) 2006, Matthew Estes (all rights reserved)
 
 ## GEOIP DATABASE
 
