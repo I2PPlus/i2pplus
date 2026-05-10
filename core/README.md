@@ -53,7 +53,7 @@ Translations are compiled from `.po` files into Java resource bundles automatica
 
 The `c/` directory contains JNI libraries that accelerate performance-critical operations:
 
-- **JBIGI** (`c/jbigi/`) - Wraps GMP for hardware-optimized `modPow` / `modInverse`. See [`c/jbigi/docs/README.md`](c/jbigi/docs/README.md) for build instructions.
+- **JBIGI** (`c/jbigi/`) - Wraps GMP for hardware-optimized `modPow` / `modInverse`. See [`c/jbigi/README.md`](c/jbigi/README.md) for build instructions.
 - **JCPUID** (`c/jcpuid/`) - Detects CPU features (AES-NI, etc.) at runtime. See [`c/jcpuid/README.md`](c/jcpuid/README.md) for build instructions.
 
 ## License

@@ -144,7 +144,7 @@ variousسابقہ اجزا کے لائسنسز کے لیے دیکھیں: [README
 - [apps/susidns/README.md](apps/susidns/README.md) - ڈی این ایس سرور
 - [apps/susimail/README.md](apps/susimail/README.md) - I2P ای میل کلائنٹ
 - [apps/systray/README.md](apps/systray/README.md) - سسٹرے ایپلی کیشن
-- [core/c/jbigi/docs/README.md](core/c/jbigi/docs/README.md) - نیٹیو بگ انٹیجر لائبریری (GMP)
+- [core/c/jbigi/README.md](core/c/jbigi/README.md) - نیٹیو بگ انٹیجر لائبریری (GMP)
 - [core/c/jcpuid/README.md](core/c/jcpuid/README.md) - سی پی یو ڈیٹیکشن نیٹیو لائبریری
 - [core/README.md](core/README.md) - کور لائبریری دستاویزات
 - [docker/README.md](docker/README.md) - ڈاکر میں I2P+ چلانا

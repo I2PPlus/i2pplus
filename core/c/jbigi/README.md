@@ -74,74 +74,17 @@ ant listJbigi           # List built libraries in installer/lib/jbigi/
 ant testJbigi           # Benchmark native vs Java (modPow/modInverse)
 ```
 
-### Legacy Scripts
+### ARM Native Build
+
+Cross-compile using the ARM64 build script:
 
 ```bash
 cd core/c/jbigi
-./build.sh dynamic     # Links against system GMP (faster, current machine)
-./build.sh local       # Statically links GMP (portable, recommended)
-./build.sh all         # Multi-architecture build
-BITS=32 ./build.sh     # 32-bit on 64-bit system
+./build-arm64.sh -a        # All CPU targets
+./build-arm64.sh -g        # Generic only
 ```
 
-See `build-all.sh` for the full list of supported platforms.
-
-## Building ARM Binaries (Docker/QEMU)
-
-Due to Ubuntu's package repository changes, ARM cross-compilation requires Docker with QEMU emulation.
-
-### Prerequisites
-
-```bash
-# Install Docker and QEMU
-sudo apt-get install docker.io qemu-user-static
-
-# Enable multi-arch support
-docker run --rm --privileged multiarch/qemu-user-static --setup -p yes
-```
-
-### Using the Docker Setup Script
-
-```bash
-# Copy and run the setup script
-cp core/c/jbigi/setup-docker-env.sh /tmp/
-sudo bash /tmp/setup-docker-env.sh aarch64
-```
-
-This will:
-1. Pull an ARM-native Ubuntu image
-2. Set up the build environment
-3. Create build scripts
-
-### Manual Docker Build
-
-```bash
-# For ARM64 (aarch64)
-docker run --rm -it \
-  -v $(pwd)/core/c/jbigi:/build/jbigi-src \
-  -v $(pwd)/core/c/jbigi/lib:/build/output \
-  ubuntu:plucky \
-  bash -c '
-    apt-get update
-    apt-get install -y build-essential autoconf automake libtool m4 openjdk-17-jdk
-    export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-arm64
-    cd /build/jbigi-src
-    ./build.sh notest
-  '
-
-# For ARM32 (armhf)
-docker run --rm -it \
-  -v $(pwd)/core/c/jbigi:/build/jbigi-src \
-  -v $(pwd)/core/c/jbigi/lib:/build/output \
-  arm32v7/ubuntu:plucky \
-  bash -c '
-    apt-get update
-    apt-get install -y build-essential autoconf automake libtool m4 openjdk-17-jdk
-    export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-armhf
-    cd /build/jbigi-src
-    ./build.sh notest
-  '
-```
+---
 
 ## Testing
 
@@ -190,8 +133,6 @@ GMP 6.3.0 fails with GCC 15+ due to stricter C99 compliance (`void g()` no longe
 ## Troubleshooting
 
 **"Cannot find jni.h"** — Set `JAVA_HOME`: `export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64`
-
-**"Unable to detect default setting for BITS variable"** — Specify manually: `BITS=64 ./build.sh`
 
 **"GMP download failed"** — Manual download: `wget https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.bz2` in `core/c/jbigi/`
 

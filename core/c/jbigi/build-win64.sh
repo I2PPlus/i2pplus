@@ -312,6 +312,6 @@ export SONAME_FLAG="-Wl,--kill-at" OUTPUT_PREFIX="jbigi-windows"
 export STRIP_CMD="x86_64-w64-mingw32-strip" HOST="$HOST"
 
 echo "$SUPPORTED" | tr ' ' '\n' | grep -v '^$' | \
-    xargs -P "$MAX_JOBS" -I {} "$SCRIPT_DIR/build_one.sh" {}
+    xargs -P "$MAX_JOBS" -I {} "$SCRIPT_DIR/build-cpu.sh" {}
 
 "$SCRIPT_DIR/list-jbigi.sh"

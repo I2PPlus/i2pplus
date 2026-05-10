@@ -2,7 +2,7 @@
 
 > Note: For the latest information, see:
 > - `history.txt` for changelog entries
-> - `core/c/jbigi/README` for build instructions
+> - `core/c/jbigi/README.md` for build instructions
 > - `NativeBigInteger.java` and `CPUID.java` for technical details
 
 ---
@@ -19,10 +19,10 @@ JBIGI provides native JNI bindings for the **GNU Multiple Precision Arithmetic L
 
 ## Current Version (March 2026)
 
-| Component | Version |
-|-----------|---------|
-| GMP       | 6.3.0   |
-| JBIGI     | 4       |
+| Component   | Version   |
+| ----------- | --------- |
+| GMP         | 6.3.0     |
+| JBIGI       | 4         |
 
 The JBIGI version can be queried at runtime via `nativeJbigiVersion()`.
 
@@ -113,16 +113,18 @@ Same architectures as Linux
 To rebuild jbigi for your specific architecture:
 
 ```bash
-# Quick build (current machine only)
+# Linux 64-bit
 cd core/c/jbigi
-./build.sh
+./build-linux64.sh -a
 
-# Full build (all architectures)
-cd core/c/jbigi
-./mbuild-all.sh
+# Windows 64-bit (cross-compile with MinGW)
+./build-win64.sh -a
+
+# ARM64 (cross-compile with aarch64-linux-gnu-gcc)
+./build-arm64.sh -a
 ```
 
-For more options, see `core/c/jbigi/README`.
+For more options, see `core/c/jbigi/README.md`.
 
 ---
 
@@ -130,11 +132,11 @@ For more options, see `core/c/jbigi/README`.
 
 The library naming follows `{lib}jbigi-{OS}-{CPU}.{ext}`:
 
-| OS      | Prefix   | Extension |
-|---------|----------|-----------|
-| Linux   | libjbigi | .so       |
-| FreeBSD | libjbigi | .so       |
-| macOS   | libjbigi | .jnilib   |
-| Windows | jbigi    | .dll      |
+| OS        | Prefix     | Extension   |
+| --------- | ---------- | ----------- |
+| Linux     | libjbigi   | .so         |
+| FreeBSD   | libjbigi   | .so         |
+| macOS     | libjbigi   | .jnilib     |
+| Windows   | jbigi      | .dll        |
 
 The `CPUID` library at runtime selects the optimal binary for your CPU based on detected features.

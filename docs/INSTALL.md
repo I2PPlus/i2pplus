@@ -39,7 +39,7 @@ This produces:
 
 JBIGI provides hardware-optimised modular exponentiation via GMP. Pre-built
 binaries for common architectures are included in the installer. To rebuild
-for your specific CPU, see [`core/c/jbigi/docs/README.md`](../core/c/jbigi/docs/README.md).
+for your specific CPU, see [`core/c/jbigi/README.md`](../core/c/jbigi/README.md).
 
 ## Installing
 

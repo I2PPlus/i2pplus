@@ -2,7 +2,6 @@
 #
 # Helper for parallel jbigi builds.
 # Called by build-linux64.sh, build-win64.sh, build-arm64.sh via xargs.
-#
 # Env vars: SCRIPT_DIR, GMP_VER, JBIGI_DIR, OUTPUT_DIR, CC, HOST, SUFFIX,
 #           BUILD_ROOT, INCLUDE_DIR, LIB_EXT, SONAME_FLAG, STRIP_CMD, OUTPUT_PREFIX
 # Args: $1 = ENTRY (cpu_name|family|march)

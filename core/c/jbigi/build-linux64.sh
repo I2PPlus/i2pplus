@@ -330,6 +330,6 @@ export SONAME_FLAG="-Wl,-soname,libjbigi.so" OUTPUT_PREFIX="libjbigi-linux"
 export STRIP_CMD="$STRIP" HOST=""
 
 echo "$SUPPORTED" | tr ' ' '\n' | grep -v '^$' | \
-    xargs -P "$MAX_JOBS" -I {} "$SCRIPT_DIR/build_one.sh" {}
+    xargs -P "$MAX_JOBS" -I {} "$SCRIPT_DIR/build-cpu.sh" {}
 
 "$SCRIPT_DIR/list-jbigi.sh"
