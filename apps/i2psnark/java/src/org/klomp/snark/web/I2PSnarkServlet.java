@@ -574,9 +574,14 @@ public class I2PSnarkServlet extends BasicServlet {
             if (( "POST".equals(method) || "Clear".equals(req.getParameter("action"))) &&
                 isValidNonce(nonce)) {
                 processRequest(req);
+            } else if (!(method.equals("POST") || "Clear".equals(req.getParameter("action")))) {
+                // Lynx bug?
+                _manager.addMessage("Bad form method, POST required");
             } else {
+                // nonce is constant, shouldn't happen
                 _manager.addMessage("Please retry form submission (bad nonce)");
             }
+            // P-R-G (or G-R-G to hide the params from the address bar)
             sendRedirect(req, resp, peerString);
             return;
         }
