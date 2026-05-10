@@ -771,15 +771,10 @@ public abstract class SystemVersion {
         int success = (int) explSuccess.getLastEventCount() + (int) clientSuccess.getLastEventCount();
         int reject = (int) explReject.getLastEventCount() + (int) clientReject.getLastEventCount();
         int expire = (int) explExpire.getLastEventCount() + (int) clientExpire.getLastEventCount();
-        int percentage;
-        if (success < 1) {
-            success = 1;
-        }
-        percentage = (100 * success) / (success + reject + expire);
-        if (percentage == 100 || percentage == 0) {
+        int total = success + reject + expire;
+        if (total <= 0) {
             return 0;
-        } else {
-            return percentage;
         }
+        return (100 * success) / total;
     }
 }

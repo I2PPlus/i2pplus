@@ -523,7 +523,6 @@ public class SidebarHelper extends HelperBase {
         int total10 = success10 + reject10 + expire10;
         int percentage10 = 0;
         if (total10 > 0) {
-            if (success10 < 1) {success10 = 1;}
             percentage10 = (100 * success10) / total10;
         }
 
@@ -538,15 +537,11 @@ public class SidebarHelper extends HelperBase {
         int total1 = success1 + reject1 + expire1;
         int percentage1 = 0;
         if (total1 > 0) {
-            if (success1 < 1) {success1 = 1;}
             percentage1 = (100 * success1) / total1;
         }
 
         // Return the higher of the two
-        int percentage = Math.max(percentage10, percentage1);
-        // Only hide 100% (unrealistic to display perfect success), but show actual low percentages
-        if (percentage == 100) {return 0;}
-        return percentage;
+        return Math.max(percentage10, percentage1);
     }
 
     /**
