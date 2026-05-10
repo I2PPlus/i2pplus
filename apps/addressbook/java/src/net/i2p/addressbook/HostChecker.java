@@ -648,6 +648,7 @@ public class HostChecker {
                     ((KademliaNetworkDatabaseFacade) clientNetDb).removeLeaseSetFromTracking(destHash);
                 }
             }
+            ((KademliaNetworkDatabaseFacade) routerContext.netDb()).removeFromCache(destHash);
         } catch (Exception e) {
             if (_log.shouldDebug()) {
                 _log.debug("Error removing LeaseSet from client tracking", e);
