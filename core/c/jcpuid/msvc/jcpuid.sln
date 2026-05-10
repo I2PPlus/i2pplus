@@ -1,24 +1,27 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 17 2022
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jcpuid", "jcpuid.vcxproj", "{161B6AD9-3825-4BA5-893D-D90B09846849}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
+		Debug|x64 = Debug|x64
 		Release|x86 = Release|x86
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{161B6AD9-3825-4BA5-893D-D90B09846849}.Debug|x86.ActiveCfg = Debug|Win32
 		{161B6AD9-3825-4BA5-893D-D90B09846849}.Debug|x86.Build.0 = Debug|Win32
+		{161B6AD9-3825-4BA5-893D-D90B09846849}.Debug|x64.ActiveCfg = Debug|x64
+		{161B6AD9-3825-4BA5-893D-D90B09846849}.Debug|x64.Build.0 = Debug|x64
 		{161B6AD9-3825-4BA5-893D-D90B09846849}.Release|x86.ActiveCfg = Release|Win32
 		{161B6AD9-3825-4BA5-893D-D90B09846849}.Release|x86.Build.0 = Release|Win32
+		{161B6AD9-3825-4BA5-893D-D90B09846849}.Release|x64.ActiveCfg = Release|x64
+		{161B6AD9-3825-4BA5-893D-D90B09846849}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
-		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
 	EndGlobalSection
 EndGlobal

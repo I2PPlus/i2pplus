@@ -1,2 +1,13 @@
-You will need to rename the 'cpuinformation' par of the output folder '..\lib\freenet\support\cpuinformation' to 'CPUInformation' before importing the files to a .jar.
-Unfortunately MSVC doesn't respect the casing of the entered output folder.
+Building with Visual Studio
+===========================
+
+1. Open jcpuid.sln in Visual Studio 2022 or later.
+2. Set JAVA_HOME environment variable to your JDK path (e.g., C:\Program Files\Java\jdk-17).
+3. Select platform: Win32 (x86) or x64.
+4. Build > Build Solution.
+
+Output files are placed in ..\lib\freenet\support\CPUInformation\
+
+Note: MSVC may not preserve the casing of the output folder path.
+If the folder appears as "cpuinformation" instead of "CPUInformation",
+rename it before packaging to ensure the router can load the library.

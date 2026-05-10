@@ -4,12 +4,18 @@ JCPUID is a JNI library that detects CPU features at runtime (AES-NI, etc.) so t
 
 ## Building
 
+### Linux / macOS
+
 ```bash
 cd core/c/jcpuid
 ./build.sh
 ```
 
 By default, builds for the current machine's architecture. Use `BITS=32` or `BITS=64` to override.
+
+### Windows (Visual Studio)
+
+See [msvc/IMPORTANT.txt](msvc/IMPORTANT.txt) for Visual Studio build instructions.
 
 ## Output
 
