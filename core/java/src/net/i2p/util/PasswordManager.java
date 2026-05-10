@@ -65,7 +65,10 @@ public class PasswordManager {
     public boolean checkPlain(String realm, String user, String pw) {
         String pfx = realm;
         if (user != null && user.length() > 0) pfx += '.' + user;
-        return pw.equals(_context.getProperty(pfx + PROP_PW));
+        String s = _context.getProperty(pfx + PROP_PW);
+        if (s == null)
+            return false;
+        return DataHelper.eqCT(pw, s);
     }
 
     /**
@@ -79,7 +82,7 @@ public class PasswordManager {
         if (user != null && user.length() > 0) pfx += '.' + user;
         String b64 = _context.getProperty(pfx + PROP_B64);
         if (b64 == null) return false;
-        return b64.equals(Base64.encode(DataHelper.getUTF8(pw)));
+        return DataHelper.eqCT(Base64.encode(DataHelper.getUTF8(pw)), b64);
     }
 
     /**

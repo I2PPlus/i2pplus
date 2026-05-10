@@ -12,6 +12,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.RouterPasswordManager;
+import net.i2p.data.DataHelper;
 
 //import org.eclipse.jetty.util.security.UnixCrypt;
 
@@ -74,7 +75,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      String hex = _context.getProperty(pfx + PROP_MD5);
      if (hex == null)
          return false;
-     return hex.equals(md5Hex(subrealm, user, pw));
+     return DataHelper.eqCT(md5Hex(subrealm, user, pw), hex);
  }
 
     /**
