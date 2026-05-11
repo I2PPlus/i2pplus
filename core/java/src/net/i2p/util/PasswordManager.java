@@ -217,6 +217,22 @@ public class PasswordManager {
     }
 
     /**
+     *  Standard SHA-256 checksum
+     *
+     *  @param data non-null
+     *  @return 32 bytes, or empty on error
+     */
+    public static byte[] sha256Sum(byte[] data) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(data);
+            return md.digest();
+        } catch (NoSuchAlgorithmException nsae) {
+        }
+        return new byte[0];
+    }
+
+    /**
      *  Standard MD5 checksum
      *
      *  @param data non-null

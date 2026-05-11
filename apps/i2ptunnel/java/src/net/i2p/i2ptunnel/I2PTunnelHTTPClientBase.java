@@ -69,9 +69,9 @@ import net.i2p.util.TranslateReader;
 public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implements Runnable {
 
     private static final int PROXYNONCE_BYTES = 8;
-    private static final int MD5_BYTES = 16;
-    /** 24 */
-    private static final int NONCE_BYTES = DataHelper.DATE_LENGTH + MD5_BYTES;
+    private static final int SHA256_BYTES = 32;
+    /** 40 */
+    private static final int NONCE_BYTES = DataHelper.DATE_LENGTH + SHA256_BYTES;
     private static final long MAX_NONCE_AGE = 60*60*1000L;
     private static final int MAX_NONCE_COUNT = 1024;
     /** @since 0.9.11, moved to Base in 0.9.29 */
@@ -605,7 +605,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     }
 
     /**
-     *  The Base 64 of 24 bytes: (now, md5 of (now, proxy nonce))
+     *  The Base 64 of 40 bytes: (now, sha256 of (now, proxy nonce))
      *  @since 0.9.4
      */
     private String getNonce() {
@@ -615,15 +615,15 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         DataHelper.toLong(b, 0, DataHelper.DATE_LENGTH, now);
         System.arraycopy(_proxyNonce, 0, b, DataHelper.DATE_LENGTH, PROXYNONCE_BYTES);
         System.arraycopy(b, 0, n, 0, DataHelper.DATE_LENGTH);
-        byte[] md5 = PasswordManager.md5Sum(b);
-        System.arraycopy(md5, 0, n, DataHelper.DATE_LENGTH, MD5_BYTES);
+        byte[] sha256 = PasswordManager.sha256Sum(b);
+        System.arraycopy(sha256, 0, n, DataHelper.DATE_LENGTH, SHA256_BYTES);
         String rv = Base64.encode(n);
         _nonces.putIfAbsent(rv, new NonceInfo(now + MAX_NONCE_AGE));
         return rv;
     }
 
     /**
-     *  Verify the Base 64 of 24 bytes: (now, md5 of (now, proxy nonce))
+     *  Verify the Base 64 of 40 bytes: (now, sha256 of (now, proxy nonce))
      *  and the nonce count.
      *  @param b64 nonce non-null
      *  @param ncs nonce count string non-null
@@ -644,8 +644,8 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         byte[] b = new byte[DataHelper.DATE_LENGTH + PROXYNONCE_BYTES];
         System.arraycopy(n, 0, b, 0, DataHelper.DATE_LENGTH);
         System.arraycopy(_proxyNonce, 0, b, DataHelper.DATE_LENGTH, PROXYNONCE_BYTES);
-        byte[] md5 = PasswordManager.md5Sum(b);
-        if (!DataHelper.eq(md5, 0, n, DataHelper.DATE_LENGTH, MD5_BYTES)) {
+        byte[] sha256 = PasswordManager.sha256Sum(b);
+        if (!DataHelper.eq(sha256, 0, n, DataHelper.DATE_LENGTH, SHA256_BYTES)) {
             return AuthResult.AUTH_BAD;
         }
         try {
