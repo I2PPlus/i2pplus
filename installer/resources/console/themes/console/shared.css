@@ -22,6 +22,17 @@
 #advconf .newKey:empty:not(:focus)::before{width:12px;height:12px;display:inline-block;vertical-align:middle;background:var(--star) no-repeat center center/12px;content:""}
 #advconf .value{word-break:break-all}
 #advancedconfig{position:relative}
+#banconfig input[type="number"]{width:64px}
+#banconfig input[type="text"]{width:240px}
+#banconfig label,#banconfig .nowrap{display:inline-block}
+#banconfig label{margin:-4px 8px}
+#banconfig label::before{margin:0 0 0 8px;height:50px;display:inline-block;vertical-align:middle;content:""}
+#banconfig input,#banconfig .slider{margin:8px 8px 8px 4px}#banconfig .suboption{min-width:160px;text-align:center}
+#banconfig td{padding:8px}
+#banconfig .optionlist{padding:8px 0;columns:3 420px}
+#banconfig .optionlist+.suboption{margin-top:8px}
+#banconfig .suboption{padding:3px 8px 4px}
+#banconfig .nowrap{margin:0 4px 0 0;min-width:160px;text-align:right}
 #banSummary ul:empty{display:none}
 #compactLookup{margin:-12px auto 16px;width:50%;min-width:500px}
 #compactLookup{margin-top:15px;position:sticky !important;top:-1px;z-index:999;box-shadow:var(--border_table)}
@@ -66,19 +77,6 @@
 #totaljobstats a{float:right}
 #tunnelconfig .tunnelName{margin-right:6px;min-width:240px;display:inline-block}
 #jobstats #statCount #init td{padding:24px;display:table-cell;font-size:0;box-shadow:none;background:var(--update) no-repeat center center/20px;transform:rotate(0);animation:linear spin 3s forwards infinite}
-
-#nav_ban{display:none!important}
-#banconfig input[type="number"]{width:64px}
-#banconfig input[type="text"]{width:240px}
-#banconfig label,#banconfig .nowrap{display:inline-block}
-#banconfig label{margin:-4px 8px}
-#banconfig label::before{margin:0 0 0 8px;height:50px;display:inline-block;vertical-align:middle;content:""}
-#banconfig input,#banconfig .slider{margin:8px 8px 8px 4px}#banconfig .suboption{min-width:160px;text-align:center}
-#banconfig td{padding:8px}
-#banconfig .optionlist{padding:8px 0;columns:3 420px}
-#banconfig .optionlist+.suboption{margin-top:8px}
-#banconfig .suboption{padding:3px 8px 4px}
-#banconfig .nowrap{margin:0 4px 0 0;min-width:160px;text-align:right}
 
 @media (max-width:1199px){
   #banconfig label::before{margin:0 0 0 -4px;height:32px}
