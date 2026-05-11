@@ -165,7 +165,7 @@ class OutboundNTCP2State implements EstablishState {
             throw new IllegalArgumentException("No NTCP2 IV");
         _bobIV = Base64.decode(s);
         if (_bobIV == null || _bobIV.length != IV_SIZE ||
-            DataHelper.eq(_bobIV, 0, ZEROKEY, 0, IV_SIZE))
+            DataHelper.eqCT(_bobIV, 0, ZEROKEY, 0, IV_SIZE))
             throw new IllegalArgumentException("Bad NTCP2 IV");
     }
 
@@ -274,7 +274,7 @@ class OutboundNTCP2State implements EstablishState {
         byte[] bk = Base64.decode(s);
         if (bk == null || bk.length != KEY_SIZE ||
             (bk[KEY_SIZE - 1] & 0x80) != 0 ||
-            DataHelper.eq(bk, 0, ZEROKEY, 0, KEY_SIZE)) {
+            DataHelper.eqCT(bk, 0, ZEROKEY, 0, KEY_SIZE)) {
             fail("\n* Bad NTCP2 S: " + s);
             return;
         }

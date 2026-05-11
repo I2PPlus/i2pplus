@@ -941,8 +941,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 if (infoIP != null && infoIP.length == realIP.length) {
                     if (infoIP.length == 16) {
                         if ((((int) infoIP[0]) & 0xfe) == 0x02) {continue;} // ygg
-                        if (DataHelper.eq(realIP, 0, infoIP, 0, 8)) {continue;}
-                    } else if (DataHelper.eq(realIP, infoIP)) {continue;}
+                        if (DataHelper.eqCT(realIP, 0, infoIP, 0, 8)) {continue;}
+                    } else if (DataHelper.eqCT(realIP, 0, infoIP, 0, realIP.length)) {continue;}
                     // We will ban and throw below after checking s
                     mismatchMessage = "IP address mismatch -> Actual IP: " + Addresses.toString(realIP) + "; RI publishes: ";
                 }

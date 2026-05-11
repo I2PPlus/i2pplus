@@ -1311,7 +1311,7 @@ public class DataHelper {
     /**
      *  Constant time string comparison.
      *  Null-safe. Different lengths handled in constant time.
-     *  @since 0.9.69
+     *  @since 0.9.70+
      */
     public static final boolean eqCT(String lhs, String rhs) {
         if (lhs == null || rhs == null) {

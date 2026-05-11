@@ -288,7 +288,7 @@ public class NTCPTransport extends TransportImpl {
                 iv = new byte[NTCP2_IV_LEN];
                 do {
                     ctx.random().nextBytes(iv);
-                } while (DataHelper.eq(iv, 0, OutboundNTCP2State.ZEROKEY, 0, NTCP2_IV_LEN));
+                } while (DataHelper.eqCT(iv, 0, OutboundNTCP2State.ZEROKEY, 0, NTCP2_IV_LEN));
                 shouldSave = true;
             }
             if (shouldSave) {
