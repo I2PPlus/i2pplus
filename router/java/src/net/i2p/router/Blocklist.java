@@ -184,6 +184,18 @@ public class Blocklist {
     }
 
     /**
+     *  Clear all blocked IPs and peers.
+     *  @since 0.9.70
+     */
+    public void clearAll() {
+        _peerBlocklist.clear();
+        _singleIPBlocklist.clear();
+        if (_singleIPv6Blocklist != null) {
+            _singleIPv6Blocklist.clear();
+        }
+    }
+
+    /**
      *  Check if blocklist is enabled.
      *  @since 0.9.70
      */

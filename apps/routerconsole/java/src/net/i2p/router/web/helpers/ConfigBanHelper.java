@@ -23,6 +23,7 @@ public class ConfigBanHelper extends HelperBase {
     private static final String PROP_ENABLE_COUNTRY_BAN = "router.blocklistCountries.enable";
     private static final String PROP_ENABLE_XG_BAN = "router.banlistXG";
     private static final String PROP_ENABLE_LU_BAN = "router.banlistLU";
+    private static final String PROP_ENABLE_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
     private static final String PROP_CUSTOM_CAPABILITY_BANS = "router.banlistCapabilities";
     private static final String PROP_COUNTRY_CODES = "router.blockCountries";
 
@@ -87,6 +88,11 @@ public class ConfigBanHelper extends HelperBase {
 
     public String getLuBanChecked() {
         boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_LU_BAN, "true"));
+        return enabled ? "checked" : "";
+    }
+
+    public String getBlockMyCountryChecked() {
+        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_BLOCK_MY_COUNTRY, "false"));
         return enabled ? "checked" : "";
     }
 

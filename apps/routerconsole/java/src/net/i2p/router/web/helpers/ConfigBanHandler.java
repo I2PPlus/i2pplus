@@ -3,6 +3,7 @@ package net.i2p.router.web.helpers;
 import java.util.HashMap;
 import java.util.Map;
 import net.i2p.router.Banlist;
+import net.i2p.router.Blocklist;
 import net.i2p.router.web.FormHandler;
 
 /**
@@ -23,6 +24,7 @@ public class ConfigBanHandler extends FormHandler {
     private boolean _enableCountryBan;
     private boolean _enableXgBan;
     private boolean _enableLuBan;
+    private boolean _enableBlockMyCountry;
     private String _customCapabilityBans;
     private String _customCountryCodes;
 
@@ -39,6 +41,7 @@ public class ConfigBanHandler extends FormHandler {
     private static final String PROP_ENABLE_COUNTRY_BAN = "router.blocklistCountries.enable";
     private static final String PROP_ENABLE_XG_BAN = "router.banlistXG";
     private static final String PROP_ENABLE_LU_BAN = "router.banlistLU";
+    private static final String PROP_ENABLE_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
     private static final String PROP_CUSTOM_CAPABILITY_BANS = "router.banlistCapabilities";
     private static final String PROP_COUNTRY_CODES = "router.blockCountries";
 
@@ -46,7 +49,41 @@ public class ConfigBanHandler extends FormHandler {
     protected void processForm() {
         if (_action != null && _action.equals("blah")) {
             saveChanges();
+        } else if (_action != null && _action.equals("clearBans")) {
+            clearAllBans();
+        } else if (_action != null && _action.equals("resetDefaults")) {
+            resetToDefaults();
         }
+    }
+
+    private void clearAllBans() {
+        _context.banlist().clearSessionBans();
+        _context.blocklist().clearAll();
+        addFormNotice(_t("All session bans and blocklists cleared"), true);
+    }
+
+    private void resetToDefaults() {
+        Map<String, String> defaults = new HashMap<String, String>();
+        defaults.put(PROP_MAX_OFFENSES, "3");
+        defaults.put(PROP_OFFENSE_WINDOW, String.valueOf(15*60*1000));
+        defaults.put(PROP_STARTUP_GRACE, String.valueOf(3*60*1000));
+        defaults.put(PROP_BAD_PACKET_DURATION, String.valueOf(60*60*1000));
+        defaults.put(PROP_ENABLE_BAD_PACKET_BAN, "true");
+        defaults.put(PROP_ENABLE_CORRUPT_CONNECTION_BAN, "true");
+        defaults.put(PROP_ENABLE_PORT_HOPPING_BAN, "true");
+        defaults.put(PROP_ENABLE_DBSEARCH_BAN, "true");
+        defaults.put(PROP_ENABLE_BLOCKLIST, "true");
+        defaults.put(PROP_ENABLE_TOR_BLOCKLIST, "true");
+        defaults.put(PROP_ENABLE_COUNTRY_BAN, "false");
+        defaults.put(PROP_ENABLE_XG_BAN, "false");
+        defaults.put(PROP_ENABLE_LU_BAN, "true");
+        defaults.put(PROP_ENABLE_BLOCK_MY_COUNTRY, "false");
+        defaults.put(PROP_CUSTOM_CAPABILITY_BANS, "");
+        defaults.put(PROP_COUNTRY_CODES, "");
+        _context.router().saveConfig(defaults, null);
+        _context.banlist().reloadConfig();
+        _context.blocklist().reloadConfig();
+        addFormNotice(_t("Ban settings reset to defaults"), true);
     }
 
     public void setMaxOffenses(String val) { _maxOffenses = val; }
@@ -62,6 +99,7 @@ public class ConfigBanHandler extends FormHandler {
     public void setEnableCountryBan(String val) { _enableCountryBan = true; }
     public void setEnableXgBan(String val) { _enableXgBan = true; }
     public void setEnableLuBan(String val) { _enableLuBan = true; }
+    public void setEnableBlockMyCountry(String val) { _enableBlockMyCountry = true; }
     public void setCustomCapabilityBans(String val) { _customCapabilityBans = val != null ? val.trim() : ""; }
     public void setCustomCountryCodes(String val) { _customCountryCodes = val != null ? val.trim().toLowerCase() : ""; }
 
@@ -111,11 +149,19 @@ public class ConfigBanHandler extends FormHandler {
         changes.put(PROP_ENABLE_CORRUPT_CONNECTION_BAN, Boolean.toString(_enableCorruptConnectionBan));
         changes.put(PROP_ENABLE_PORT_HOPPING_BAN, Boolean.toString(_enablePortHoppingBan));
         changes.put(PROP_ENABLE_DBSEARCH_BAN, Boolean.toString(_enableDbSearchBan));
+
+        boolean blocklistWasEnabled = "true".equals(_context.getProperty(PROP_ENABLE_BLOCKLIST, "true"));
+        boolean torBlocklistWasEnabled = "true".equals(_context.getProperty(PROP_ENABLE_TOR_BLOCKLIST, "true"));
         changes.put(PROP_ENABLE_BLOCKLIST, Boolean.toString(_enableBlocklist));
         changes.put(PROP_ENABLE_TOR_BLOCKLIST, Boolean.toString(_enableTorBlocklist));
         changes.put(PROP_ENABLE_COUNTRY_BAN, Boolean.toString(_enableCountryBan));
         changes.put(PROP_ENABLE_XG_BAN, Boolean.toString(_enableXgBan));
         changes.put(PROP_ENABLE_LU_BAN, Boolean.toString(_enableLuBan));
+        changes.put(PROP_ENABLE_BLOCK_MY_COUNTRY, Boolean.toString(_enableBlockMyCountry));
+
+        if ((blocklistWasEnabled && !_enableBlocklist) || (torBlocklistWasEnabled && !_enableTorBlocklist)) {
+            _context.blocklist().clearAll();
+        }
 
         // Validate and save custom capability bans
         if (_customCapabilityBans != null && !_customCapabilityBans.isEmpty()) {

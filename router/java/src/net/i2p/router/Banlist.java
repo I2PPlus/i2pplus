@@ -221,6 +221,18 @@ public class Banlist {
     }
 
     /**
+     *  Clear all session-based bans.
+     *  @since 0.9.70
+     */
+    public void clearSessionBans() {
+        _entries.clear();
+        _unsolicitedDBSearch.clear();
+        _badPacketIPs.clear();
+        _corruptConnectionIPs.clear();
+        _portHoppingIPs.clear();
+    }
+
+    /**
      *  Get the current max offenses setting.
      *  @since 0.9.70
      */

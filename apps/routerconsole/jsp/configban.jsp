@@ -19,14 +19,15 @@
 <table id=banconfig class=configtable>
 <tr><td><b class=suboption><%=intl._t("IP Blocklists")%></b><br>
 <div class=optionlist>
-<label title="<%=intl._t("Ban IP addresses from blocklist.txt")%>"><input type=checkbox class="optbox slider" name=enableBlocklist value=true <jsp:getProperty name="banhelper" property="blocklistChecked"/>><%=intl._t("Enable IP blocklist")%></label><br>
-<label title="<%=intl._t("Ban Tor exit node IPs from blocklist_tor.txt")%>"><input type=checkbox class="optbox slider" name=enableTorBlocklist value=true <jsp:getProperty name="banhelper" property="torBlocklistChecked"/>><%=intl._t("Enable Tor exit node blocklist")%></label>
+<label title="<%=intl._t("Ban IP addresses from blocklist.txt. Disabling will purge all blocked IPs.")%>"><input type=checkbox class="optbox slider" name=enableBlocklist value=true <jsp:getProperty name="banhelper" property="blocklistChecked"/>><%=intl._t("Enable IP blocklist")%></label><br>
+<label title="<%=intl._t("Ban Tor exit node IPs from blocklist_tor.txt. Disabling will purge all blocked IPs.")%>"><input type=checkbox class="optbox slider" name=enableTorBlocklist value=true <jsp:getProperty name="banhelper" property="torBlocklistChecked"/>><%=intl._t("Enable Tor exit node blocklist")%></label>
 </div>
 </td></tr>
 <tr><td><b class=suboption><%=intl._t("Country Bans")%></b><br>
 <div class=optionlist>
 <label title="<%=intl._t("Ban routers from specified countries until router restart")%>"><input type=checkbox class="optbox slider" name=enableCountryBan value=true <jsp:getProperty name="banhelper" property="countryBanChecked"/>><%=intl._t("Enable country-based bans")%></label><br>
-<label><span class=nowrap><%=intl._t("Country codes")%>:</span> <input title="<%=intl._t("Add county codes, separated by spaces or commas e.g. cn,de")%>" name=customCountryCodes type=text size=30 value="<jsp:getProperty name="banhelper" property="customCountryCodes"/>"></label>
+<label title="<%=intl._t("Ban routers from your own country until router restart")%>"><input type=checkbox class="optbox slider" name=enableBlockMyCountry value=true <jsp:getProperty name="banhelper" property="blockMyCountryChecked"/>><%=intl._t("Ban peers in my country")%></label><br>
+<label id=ccodes><span class=nowrap><%=intl._t("Country codes")%>:</span> <input title="<%=intl._t("Add county codes, separated by spaces or commas e.g. cn,de")%>" name=customCountryCodes type=text size=30 value="<jsp:getProperty name="banhelper" property="customCountryCodes"/>"></label>
 </div>
 </td></tr>
 <tr><td><b class=suboption><%=intl._t("Network Abuse")%></b><br>
@@ -47,16 +48,15 @@
 <tr><td><b class=suboption><%=intl._t("Bans by Capability")%></b><br>
 <div class=optionlist>
 <label title="<%=intl._t("Ban XG tier routers - unlimited bandwidth but not hosting transit tunnels (probably botnet participant)")%>"><input type=checkbox class="optbox slider" name=enableXgBan value=true <jsp:getProperty name="banhelper" property="xgBanChecked"/>><%=intl._t("Ban XG routers")%></label><br>
-<label title="<%=intl._t("Ban LU tier routers - low bandwidth and unreachable/firewalled")%>"><input type=checkbox class="optbox slider" name=enableLuBan value=true <jsp:getProperty name="banhelper" property="luBanChecked"/>><%=intl._t("Ban LU routers")%></label>
-</div>
-</td></tr>
-<tr><td>
-<b class=suboption><%=intl._t("Custom Capabilities")%></b><br>
-<div class=optionlist>
+<label title="<%=intl._t("Ban LU tier routers - low bandwidth and unreachable/firewalled")%>"><input type=checkbox class="optbox slider" name=enableLuBan value=true <jsp:getProperty name="banhelper" property="luBanChecked"/>><%=intl._t("Ban LU routers")%></label></br>
 <label><span class=nowrap><%=intl._t("Additional Router Caps")%>:</span> <input title="<%=intl._t("Add caps groups, separated by spaces or commas e.g. LUf,PUG")%>" name=customCapabilityBans type=text size=30 value="<jsp:getProperty name="banhelper" property="customCapabilityBans"/>"></label>
 </div>
 </td></tr>
-<tr><td class=optionsave><input type=reset class=cancel value="<%=intl._t("Cancel")%>"><input type=submit class=accept name=save value="<%=intl._t("Save changes")%>"></td></tr>
+<tr><td class=optionsave>
+<input style=float:left type=submit class=cancel name=action value="<%=intl._t("Clear all bans")%>">
+<input type=submit class=cancel name=action value="<%=intl._t("Reset to defaults")%>">
+<input type=submit class=accept name=save value="<%=intl._t("Save changes")%>">
+</td></tr>
 </table>
 </form>
 </div>
