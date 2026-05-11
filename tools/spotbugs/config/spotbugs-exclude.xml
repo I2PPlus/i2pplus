@@ -115,6 +115,31 @@
         <Class name="~io\.pack200.*" />
     </Match>
 
+    <!-- Exclude DM_DEFAULT_ENCODING - I2P uses UTF-8 throughout, hits are false positives -->
+    <Match>
+        <Bug pattern="DM_DEFAULT" />
+    </Match>
+
+    <!-- Exclude EI_EXPOSE_REP - exposing internal representation, standard JavaBean pattern -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP" />
+    </Match>
+
+    <!-- Exclude EI_EXPOSE_REP2 - same as above -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP2" />
+    </Match>
+
+    <!-- Exclude SF_SWITCH_NO_DEFAULT - intentional explicit case handling -->
+    <Match>
+        <Bug pattern="SF_SWITCH_NO_DEFAULT" />
+    </Match>
+
+    <!-- Exclude PA_PUBLIC_PRIMITIVE_ATTRIBUTE - serialization requires public fields -->
+    <Match>
+        <Bug pattern="PA_PUBLIC_PRIMITIVE_ATTRIBUTE" />
+    </Match>
+
     <!-- Include only I2P-specific packages - remove these matches to allow analysis -->
     <!-- The following are commented out to allow analysis of I2P code -->
     <!--
