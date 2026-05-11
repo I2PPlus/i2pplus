@@ -25,8 +25,8 @@
 </td></tr>
 <tr><td><b class=suboption><%=intl._t("Country Bans")%></b><br>
 <div class=optionlist>
-<label title="<%=intl._t("Ban routers from specified countries until router restart")%>"><input type=checkbox class="optbox slider" name=enableCountryBan value=true <jsp:getProperty name="banhelper" property="countryBanChecked"/>><%=intl._t("Enable country-based bans")%></label><br>
 <label title="<%=intl._t("Ban routers from your own country until router restart")%>"><input type=checkbox class="optbox slider" name=enableBlockMyCountry value=true <jsp:getProperty name="banhelper" property="blockMyCountryChecked"/>><%=intl._t("Ban peers in my country")%></label><br>
+<label title="<%=intl._t("Ban routers from specified countries until router restart")%>"><input type=checkbox class="optbox slider" name=enableCountryBan value=true <jsp:getProperty name="banhelper" property="countryBanChecked"/>><%=intl._t("Enable country-based bans")%></label><br>
 <label id=ccodes><span class=nowrap><%=intl._t("Country codes")%>:</span> <input title="<%=intl._t("Add county codes, separated by spaces or commas e.g. cn,de")%>" name=customCountryCodes type=text size=30 value="<jsp:getProperty name="banhelper" property="customCountryCodes"/>"></label>
 </div>
 </td></tr>
