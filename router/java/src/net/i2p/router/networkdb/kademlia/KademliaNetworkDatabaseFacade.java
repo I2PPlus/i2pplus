@@ -2681,6 +2681,15 @@ return false;
         long inactiveThreshold = now - LOCAL_LEASESET_REFRESH_INTERVAL;          // 90s
         long refreshThreshold = now - LOCAL_LEASESET_REFRESH_INTERVAL * 3 / 2;   // 135s
 
+        // If client doesn't have active tunnels, skip refresh entirely
+        TunnelPool clientPool = _context.tunnelManager().getOutboundPool(_dbid);
+        if (clientPool == null || clientPool.getValidTunnelCount() == 0) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping LeaseSet refresh - no client tunnels");
+            }
+            return;
+        }
+
         // Limit size to prevent unbounded growth
         final int MAX_ENTRIES = 1024;
         if (_clientLeaseSetAccessTime.size() > MAX_ENTRIES) {
@@ -2776,9 +2785,11 @@ return false;
                 // Only refresh if we have tunnels built to this destination (already checked above)
                 // Update access time instead of removing - keeps entry for periodic refresh
                 _clientLeaseSetAccessTime.put(key, now);
-                lookupLeaseSetRemotely(key, null);
+                // 50/50 weighted random: use client tunnels or exploratory for distribution
+                Hash fromDest = _context.random().nextBoolean() ? _dbid : null;
+                lookupLeaseSetRemotely(key, fromDest);
                 if (_log.shouldDebug()) {
-                    _log.debug("Refreshing client LeaseSet: " + hostname);
+                    _log.debug("Refreshing client LeaseSet: " + hostname + (fromDest != null ? " (client tunnels)" : " (exploratory)"));
                 }
                 processed++;
             }
