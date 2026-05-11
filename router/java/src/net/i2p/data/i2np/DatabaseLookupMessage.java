@@ -343,6 +343,11 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
+        // Validate we have enough data for minimum required fields
+        // (2 Hash + flags + numPeers)
+        if (dataSize < 2*Hash.HASH_LENGTH + 1 + 2)
+            throw new I2NPMessageException("Data too short for DatabaseLookupMessage");
+        int endIndex = offset + dataSize;
 
         //byte keyData[] = new byte[Hash.HASH_LENGTH];
         //System.arraycopy(data, curIndex, keyData, 0, Hash.HASH_LENGTH);
@@ -379,15 +384,22 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         curIndex++;
 
         if (tunnelSpecified) {
+            if (curIndex + 4 > endIndex)
+                throw new I2NPMessageException("Data too short for tunnel ID");
             _replyTunnel = new TunnelId(DataHelper.fromLong(data, curIndex, 4));
             curIndex += 4;
         }
 
+        if (curIndex + 2 > endIndex)
+            throw new I2NPMessageException("Data too short for peer count");
         int numPeers = (int)DataHelper.fromLong(data, curIndex, 2);
         curIndex += 2;
 
         if ( (numPeers < 0) || (numPeers > MAX_NUM_PEERS) )
             throw new I2NPMessageException("Invalid number of peers - " + numPeers);
+        // Check bounds before reading peers
+        if (numPeers > 0 && curIndex + numPeers * Hash.HASH_LENGTH > endIndex)
+            throw new I2NPMessageException("Data too short for peer list");
         List<Hash> peers = numPeers > 0 ? new ArrayList<Hash>(numPeers) : null;
         for (int i = 0; i < numPeers; i++) {
             //byte peer[] = new byte[Hash.HASH_LENGTH];
@@ -398,6 +410,9 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         }
         _dontIncludePeers = peers;
         if (replyKeySpecified || ratchetSpecified) {
+            // Check we have enough data for the key
+            if (curIndex + SessionKey.KEYSIZE_BYTES > endIndex)
+                throw new I2NPMessageException("Data too short for reply key");
             // all 3 flavors are 32 bytes
             byte[] rk = new byte[SessionKey.KEYSIZE_BYTES];
             System.arraycopy(data, curIndex, rk, 0, SessionKey.KEYSIZE_BYTES);
@@ -408,12 +423,18 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
             curIndex += SessionKey.KEYSIZE_BYTES;
             if (!(replyKeySpecified && ratchetSpecified)) {
                 // number of tags, assume always 1 for now
+                if (curIndex + 1 > endIndex)
+                    throw new I2NPMessageException("Data too short for tag count");
                 curIndex++;
                 if (replyKeySpecified) {
+                    if (curIndex + SessionTag.BYTE_LENGTH > endIndex)
+                        throw new I2NPMessageException("Data too short for reply tag");
                     byte[] rt = new byte[SessionTag.BYTE_LENGTH];
                     System.arraycopy(data, curIndex, rt, 0, SessionTag.BYTE_LENGTH);
                     _replyTag = new SessionTag(rt);
                 } else {
+                    if (curIndex + RatchetSessionTag.LENGTH > endIndex)
+                        throw new I2NPMessageException("Data too short for ratchet tag");
                     byte[] rt = new byte[RatchetSessionTag.LENGTH];
                     System.arraycopy(data, curIndex, rt, 0, RatchetSessionTag.LENGTH);
                     _ratchetReplyTag = new RatchetSessionTag(rt);

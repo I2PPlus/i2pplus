@@ -407,6 +407,10 @@ public class LeaseSet2 extends LeaseSet {
         for (int i = 0; i < numKeys; i++) {
             int encType = (int) DataHelper.readLong(in, 2);
             int encLen = (int) DataHelper.readLong(in, 2);
+            // Reject unreasonably large encryption keys to prevent memory exhaustion
+            if (encLen <= 0 || encLen > 8192) {
+                throw new DataFormatException("Bad encryption key length: " + encLen);
+            }
             // TODO
             if (encType == 0) {_encryptionKey = PublicKey.create(in);}
             else {
