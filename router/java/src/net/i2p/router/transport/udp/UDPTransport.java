@@ -172,6 +172,7 @@ public class UDPTransport extends TransportImpl {
 
     /** Last report from a peer of our IP */
     private Hash _lastFromv4, _lastFromv6;
+    private byte[] _lastFromIPv4, _lastFromIPv6;
     private byte[] _lastOurIPv4, _lastOurIPv6;
     private int _lastOurPortv4, _lastOurPortv6;
     private boolean _haveUPnP;
@@ -1358,10 +1359,11 @@ public class UDPTransport extends TransportImpl {
      *   - This gets harder if and when we publish multiple addresses, or IPv6
      *
      * @param from Hash of inbound destination
+     * @param hisIP the IP of the peer telling us
      * @param ourIP publicly routable IPv4 or IPv6 only, non-null
      * @param ourPort &gt;= 1024
      */
-    void externalAddressReceived(Hash from, byte ourIP[], int ourPort) {
+    void externalAddressReceived(Hash from, byte[] hisIP, byte ourIP[], int ourPort) {
         boolean isValid = isValid(ourIP) &&
                           TransportUtil.isValidPort(ourPort);
         boolean explicitSpecified = explicitAddressSpecified();
@@ -1412,48 +1414,49 @@ public class UDPTransport extends TransportImpl {
             return;
         }
 
-        // Still could be the same IP/port, we don't check until changeAddress() below.
         boolean changeIt = false;
         Hash lastFrom = null;
         synchronized(this) {
             if (!isIPv6) {
-                if (from.equals(_lastFromv4) || !eq(_lastOurIPv4, _lastOurPortv4, ourIP, ourPort)) {
+                if (from.equals(_lastFromv4))
+                    return;
+                if (!eq(_lastOurIPv4, _lastOurPortv4, ourIP, ourPort)) {
                     if (_log.shouldInfo())
-                        _log.info("[" + from.toBase64().substring(0,6) + "] told us we have a new IP address or port: "
-                                  + Addresses.toString(ourIP, ourPort) + "; awaiting confirmation from another peer");
+                        _log.info("The router " + from + " at IP " + Addresses.toString(hisIP) + " told us we have a new IP/port - " 
+                                  + Addresses.toString(ourIP, ourPort) + ".  Wait until somebody else tells us the same thing.");
                 } else {
-                    changeIt = true;
+                    if (!DataHelper.eq(_lastFromIPv4, 0, hisIP, 0, 2)) {
+                        changeIt = true;
                         lastFrom = _lastFromv4;
+                    }
                 }
                 _lastFromv4 = from;
+                _lastFromIPv4 = hisIP;
                 _lastOurIPv4 = ourIP;
                 _lastOurPortv4 = ourPort;
-                } else {
-                if (from.equals(_lastFromv6) || !eq(_lastOurIPv6, _lastOurPortv6, ourIP, ourPort)) {
+            } else {
+                if (from.equals(_lastFromv6))
+                    return;
+                if (!eq(_lastOurIPv6, _lastOurPortv6, ourIP, ourPort)) {
                     if (_log.shouldInfo())
-                        _log.info("[" + from.toBase64().substring(0,6) + "] told us we have a new IP address or port: "
-                                  + Addresses.toString(ourIP, ourPort) + "; awaiting confirmation from another peer");
+                        _log.info("The router " + from + " at IP " + Addresses.toString(hisIP) + " told us we have a new IP/port - " 
+                                  + Addresses.toString(ourIP, ourPort) + ".  Wait until somebody else tells us the same thing.");
                 } else {
-                    changeIt = true;
+                    if (!DataHelper.eq(_lastFromIPv6, 0, hisIP, 0, 4)) {
+                        changeIt = true;
                         lastFrom = _lastFromv6;
+                    }
                 }
                 _lastFromv6 = from;
+                _lastFromIPv6 = hisIP;
                 _lastOurIPv6 = ourIP;
                 _lastOurPortv6 = ourPort;
             }
         }
         if (changeIt) {
-            // TODO: NT3 - add network diversity check to prevent colluding peers on same network
-            // from falsely confirming our IP address. Verify confirming peer is on different
-            // network type (private vs public) than first peer using TransportUtil.isPubliclyRoutable().
-            if (_log.shouldWarn())
-                _log.warn("[" + from.toBase64().substring(0,6) + "] and [" + lastFrom.toBase64().substring(0,6) + "] agree we have a new IP address: "
-                          + Addresses.toString(ourIP, ourPort) + " - WARNING: network diversity not verified");
             if (_log.shouldInfo())
-                _log.info("[" + from.toBase64().substring(0,6) + "] and [" + lastFrom.toBase64().substring(0,6) + "] agree we have a new IP address: "
-                          + Addresses.toString(ourIP, ourPort) + " -> Updating...");
-            // Never change port for IPv6 or if we have UPnP
-            if (_haveUPnP || ourIP.length == 16)
+                _log.info(from + " at IP " + Addresses.toString(hisIP) + " and " + lastFrom + " agree our address is " + Addresses.toString(ourIP, ourPort));
+            if (_haveUPnP || isIPv6)
                 ourPort = 0;
             changeAddress(ourIP, ourPort);
         }
