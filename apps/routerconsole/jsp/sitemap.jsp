@@ -95,7 +95,7 @@
   LinkEntry[] configLinks = new LinkEntry[]{
     new LinkEntry("/configadvanced", "Advanced Router Configuration", "/themes/console/images/configure.svg", "Advanced", false),
     new LinkEntry("/config", "Configure router bandwidth allocation", "/themes/console/images/speedometer.svg", "Bandwidth", false),
-    new LinkEntry("/confiban", "Configure peer banning policies", "/themes/console/images/banned.svg", "Ban Policies", false),
+    new LinkEntry("/configban", "Configure peer banning policies", "/themes/console/images/banned.svg", "Ban Policies", false),
     new LinkEntry("/configclients", "Start or stop Router clients", "/themes/console/images/editclient.svg", "Clients", false),
     new LinkEntry("/confighome", "Customize homepage", "/themes/console/images/home.svg", "Homepage", false),
     new LinkEntry("/configi2cp", "Configure I2P Client Control Interface", "/themes/console/images/i2cp.svg", "I2CP", false),
