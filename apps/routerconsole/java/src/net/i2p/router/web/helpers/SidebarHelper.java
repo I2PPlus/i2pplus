@@ -557,16 +557,13 @@ public class SidebarHelper extends HelperBase {
      * Should we warn about a possible firewall problem?
      */
     public boolean showFirewallWarning() {
-        return _context != null &&
-               _context.netDb().isInitialized() &&
-               _context.router().getUptime() > 2*60*1000 &&
-               (!_context.commSystem().isDummy()) &&
-               _context.commSystem().countActivePeers() <= 0 &&
-               _context.netDb().getKnownRouters() > 5 ||
-               _context.netDb().isInitialized() &&
-               _context.router().getUptime() > 2*60*1000 &&
-               (!_context.commSystem().isDummy()) &&
-               _context.commSystem().countActivePeers() <= 0;
+        if (_context == null) { return false; }
+        boolean netDbReady = _context.netDb().isInitialized();
+        long uptime = _context.router().getUptime();
+        boolean hasPeers = _context.commSystem().countActivePeers() > 0;
+        boolean isDummy = _context.commSystem().isDummy();
+        boolean enoughRouters = _context.netDb().getKnownRouters() > 5;
+        return netDbReady && uptime > 2*60*1000 && !isDummy && !hasPeers && enoughRouters;
     }
 
     /**
