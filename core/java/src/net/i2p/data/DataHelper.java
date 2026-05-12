@@ -1248,33 +1248,6 @@ public class DataHelper {
     }
 
     /**
-     * Compare two integers, really just for consistency.
-     * @deprecated inefficient
-     */
-    @Deprecated
-    public static final boolean eq(int lhs, int rhs) {
-        return lhs == rhs;
-    }
-
-    /**
-     * Compare two longs, really just for consistency.
-     * @deprecated inefficient
-     */
-    @Deprecated
-    public static final boolean eq(long lhs, long rhs) {
-        return lhs == rhs;
-    }
-
-    /**
-     * Compare two bytes, really just for consistency.
-     * @deprecated inefficient
-     */
-    @Deprecated
-    public static final boolean eq(byte lhs, byte rhs) {
-        return lhs == rhs;
-    }
-
-    /**
      *  Unlike eq(byte[], byte[]), this returns false if either lhs or rhs is null.
      *  Variable time.
      *
