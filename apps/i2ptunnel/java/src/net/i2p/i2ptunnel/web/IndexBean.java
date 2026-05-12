@@ -183,14 +183,14 @@ public class IndexBean {
         if (session == null) {
             return getNextNonce();
         }
-        String rv;
+        // add a prefix to distinguish from other nonces for debugging
+        String rv = "HSM" + I2PAppContext.getGlobalContext().random().nextLong();
         synchronized(session) {
             LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_NONCE);
             if (nonces == null) {
                 nonces = new LinkedList<String>();
                 session.setAttribute(SESSION_NONCE, nonces);
             }
-            rv = "IT" + Long.toString(I2PAppContext.getGlobalContext().random().nextLong());
             nonces.offer(rv);
             if (nonces.size() > SESSION_NONCE_QUEUE_SIZE)
                 nonces.poll();

@@ -65,14 +65,14 @@ public class CSSHelper extends HelperBase {
         if (session == null) {
             return "FAIL_SESSION_NOT_SET";
         }
-        String rv;
+        // add a prefix to distinguish from other nonces for debugging
+        String rv = "CN" + RandomSource.getInstance().nextLong();
         synchronized(session) {
             LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_CONSOLE_NONCE);
             if (nonces == null) {
                 nonces = new LinkedList<String>();
                 session.setAttribute(SESSION_CONSOLE_NONCE, nonces);
             }
-            rv = "CN" + RandomSource.getInstance().nextLong();
             nonces.offer(rv);
             if (nonces.size() > NONCE_QUEUE_SIZE)
                 nonces.poll();

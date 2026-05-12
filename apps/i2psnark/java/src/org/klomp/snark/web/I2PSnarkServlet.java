@@ -174,18 +174,18 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.69
      */
     @SuppressWarnings("unchecked")
-    private static String getNonce(javax.servlet.http.HttpSession session) {
+    private String getNonce(javax.servlet.http.HttpSession session, boolean xhr) {
         if (session == null) {
             return null;
         }
-        String rv;
+        // add a prefix to distinguish from other nonces for debugging
+        String rv = "SN" + (xhr ? 'B' : 'A') + _context.random().nextLong();
         synchronized(session) {
             LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_NONCE_OUTER);
             if (nonces == null) {
                 nonces = new LinkedList<String>();
                 session.setAttribute(SESSION_NONCE_OUTER, nonces);
             }
-            rv = "SN" + Long.toString(I2PAppContext.getGlobalContext().random().nextLong());
             nonces.offer(rv);
             if (nonces.size() > SESSION_NONCE_QUEUE_SIZE)
                 nonces.poll();
@@ -193,25 +193,19 @@ public class I2PSnarkServlet extends BasicServlet {
         return rv;
     }
 
-    /**
-     *  Session-bound nonce for inner section (XHR requests)
-     *  @param session returns static nonce if null
-     *  @return a new nonce for each call
-     *  @since 0.9.69
-     */
     @SuppressWarnings("unchecked")
-    private static String getInnerNonce(javax.servlet.http.HttpSession session) {
+    private String getInnerNonce(javax.servlet.http.HttpSession session) {
         if (session == null) {
             return null;
         }
-        String rv;
+        // add a prefix to distinguish from other nonces for debugging
+        String rv = "SI" + _context.random().nextLong();
         synchronized(session) {
             LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_NONCE_INNER);
             if (nonces == null) {
                 nonces = new LinkedList<String>();
                 session.setAttribute(SESSION_NONCE_INNER, nonces);
             }
-            rv = "SI" + Long.toString(I2PAppContext.getGlobalContext().random().nextLong());
             nonces.offer(rv);
             if (nonces.size() > SESSION_NONCE_QUEUE_SIZE)
                 nonces.poll();
