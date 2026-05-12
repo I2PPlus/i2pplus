@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -37,6 +38,7 @@ public class LoginServlet extends HttpServlet {
     private static final String PROP_PERSISTED_SESSIONS = "routerconsole.persistedSessions";
     private static final String PROP_THEME = "routerconsole.theme";
     private static final String PROP_LANG = "routerconsole.lang";
+    private static final SecureRandom CSRF_RANDOM = new SecureRandom();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -84,7 +86,7 @@ public class LoginServlet extends HttpServlet {
             req.setAttribute("setupTitle", "Set Up Console Access");
             req.setAttribute("setupMessage", "Create a username and password to access the router console.");
         }
-        String csrfToken = Long.toString(System.currentTimeMillis()) + "-" + java.util.UUID.randomUUID().toString();
+        String csrfToken = generateCSRFToken();
         req.setAttribute("I2P+CSRFTOKEN", csrfToken);
         req.getSession(true).setAttribute("loginCSRF", csrfToken);
         req.getRequestDispatcher("/login.jsp").forward(req, resp);
@@ -126,22 +128,47 @@ public class LoginServlet extends HttpServlet {
         return DEFAULT_THEME;
     }
 
+    private static final java.util.Set<String> ALLOWED_THEMES =
+            java.util.Collections.unmodifiableSet(
+                new java.util.HashSet<>(java.util.Arrays.asList("dark", "classic", "light", "midnight")));
+    private static final java.util.Set<String> ALLOWED_LANGS =
+            java.util.Collections.unmodifiableSet(
+                new java.util.HashSet<>(java.util.Arrays.asList(
+                    "ar", "az", "cs", "zh", "da", "de", "et", "en",
+                    "es", "fi", "fr", "el", "hi", "hu", "in", "it",
+                    "ja", "ko", "nl", "nb", "fa", "pl", "pt", "ro",
+                    "ru", "sl", "sv", "bo", "tr", "vi")));
+
+    private static String sanitizeTheme(String theme) {
+        if (theme != null && ALLOWED_THEMES.contains(theme)) return theme;
+        return "dark";
+    }
+
+    private static String sanitizeLang(String lang) {
+        if (lang != null && ALLOWED_LANGS.contains(lang)) return lang;
+        return "en";
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        String theme = req.getParameter("theme");
-        String lang = req.getParameter("lang");
+        String themeRaw = req.getParameter("theme");
+        String langRaw = req.getParameter("lang");
 
-        if (theme != null && lang == null) {
+        if (themeRaw != null && langRaw == null) {
+            String theme = sanitizeTheme(themeRaw);
             updatePreference("routerconsole.theme", theme);
             resp.setContentType("application/json");
-            resp.getWriter().write("{\"success\":true,\"theme\":\"" + theme + "\"}");
+            resp.getWriter().write("{\"success\":true,\"theme\":\"" +
+                net.i2p.data.DataHelper.escapeHTML(theme) + "\"}");
             return;
         }
-        if (lang != null) {
+        if (langRaw != null) {
+            String lang = sanitizeLang(langRaw);
             updatePreference("routerconsole.lang", lang);
             resp.setContentType("application/json");
-            resp.getWriter().write("{\"success\":true,\"lang\":\"" + lang + "\"}");
+            resp.getWriter().write("{\"success\":true,\"lang\":\"" +
+                net.i2p.data.DataHelper.escapeHTML(lang) + "\"}");
             return;
         }
 
@@ -263,8 +290,22 @@ public class LoginServlet extends HttpServlet {
             if (expiryMs > 0) cookieHeader += "; Max-Age=" + (expiryMs / 1000);
             resp.addHeader("Set-Cookie", cookieHeader);
             String redirect = req.getParameter("redirect");
-            if (redirect != null && !redirect.isEmpty() && redirect.startsWith("/") && !redirect.startsWith("//") && !redirect.contains("://")) {
-                resp.sendRedirect(req.getContextPath() + redirect);
+            if (redirect != null && !redirect.isEmpty()) {
+                // URL-decode to defeat encoding tricks, then validate
+                String decoded;
+                try {
+                    decoded = java.net.URLDecoder.decode(redirect, "UTF-8");
+                } catch (Exception e) {
+                    decoded = redirect;
+                }
+                if (!decoded.contains("\r") && !decoded.contains("\n")
+                    && decoded.startsWith("/")
+                    && !decoded.startsWith("//")
+                    && !decoded.contains("://")) {
+                    resp.sendRedirect(req.getContextPath() + decoded);
+                } else {
+                    resp.sendRedirect(req.getContextPath() + "/");
+                }
             } else {
                 resp.sendRedirect(req.getContextPath() + "/");
             }
@@ -432,6 +473,12 @@ private void loadPersistedSessions() {
                 _log.warn("Invalid persisted session data: " + data);
             }
         }
+    }
+
+    private String generateCSRFToken() {
+        byte[] randomBytes = new byte[24];
+        CSRF_RANDOM.nextBytes(randomBytes);
+        return net.i2p.data.DataHelper.toHexString(randomBytes);
     }
 
     private void updatePreference(String key, String value) {
