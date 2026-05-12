@@ -11,7 +11,12 @@
     if (graphGen == null) { response.sendError(403, "Graphs disabled"); return; }
 
     String stat = request.getParameter("stat");
-    if (stat == null || stat.contains("\n") || stat.contains("\r")) { response.sendError(403, "Invalid stat parameter"); return; }
+    if (stat == null || stat.isEmpty()
+            || stat.contains("\n") || stat.contains("\r")
+            || stat.contains("\0") || stat.contains("/")
+            || stat.contains("\\") || stat.contains("\"")) {
+        response.sendError(403, "Invalid stat parameter"); return;
+    }
 
     boolean fakeBw = "bw.combined".equals(stat);
     RateStat rateStat = ctx.statManager().getRate(stat);

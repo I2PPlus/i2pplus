@@ -132,10 +132,10 @@
 </div>
 <% } else {%>
 <% if (request.getAttribute("error") != null) {%>
-<div class=error><%=request.getAttribute("error")%></div>
+<div class=error><%=net.i2p.data.DataHelper.escapeHTML((String)request.getAttribute("error"))%></div>
 <% }%>
 <% if (success != null) {%>
-<div class="success notice"><%=success%></div>
+<div class="success notice"><%=net.i2p.data.DataHelper.escapeHTML(success)%></div>
 <% }%>
 <% if (setupMode) {%>
 <div class=notice><%=intl._t(setupMessage)%></div>
@@ -145,7 +145,7 @@
 String redirectParam = request.getParameter("redirect");
 if (redirectParam != null && !redirectParam.isEmpty()) {
 %>
-<input type=hidden name=redirect value="<%=redirectParam%>">
+<input type=hidden name=redirect value="<%=net.i2p.data.DataHelper.escapeHTML(redirectParam)%>">
 <% }%>
 <%
 String csrfToken = (String) request.getAttribute("I2P+CSRFTOKEN");

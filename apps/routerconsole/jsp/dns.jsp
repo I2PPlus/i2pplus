@@ -7,18 +7,28 @@
 %>
 <jsp:setProperty name="tester" property="contextId" value="<%=i2pcontextId1%>"/>
 <%
-    // take /dns query params and pass to the iframe
-    String requestURL;
-    String query = request.getQueryString();
-    if (query != null) {
-        if (query.contains("subscriptions")) {requestURL = "/susidns/subscriptions";}
-        else if (query.contains("config")) {requestURL = "/susidns/config";}
-        else if (query.contains("help")) {requestURL = "/susidns/";}
-        else if (query.contains("logs")) {requestURL = "/susidns/log.jsp";}
-        else if (query.contains("blacklist")) {requestURL = "/susidns/blacklist.jsp";}
-        else if (query.contains("details")) {requestURL = "/susidns/details?" + query;}
-        else {requestURL = "/susidns/addressbook?" + query;}
-    } else {requestURL = "/susidns/addressbook?book=router&amp;filter=none";}
+     // take /dns query params and pass to the iframe
+     String requestURL;
+     String query = request.getQueryString();
+     if (query != null) {
+         // Validate query to prevent injection (CR/LF, null bytes)
+         if (query.contains("\r") || query.contains("\n") || query.indexOf('\0') != -1) {
+             query = null;
+         }
+     }
+     if (query != null) {
+         if (query.contains("subscriptions")) {requestURL = "/susidns/subscriptions";}
+         else if (query.contains("config")) {requestURL = "/susidns/config";}
+         else if (query.contains("help")) {requestURL = "/susidns/";}
+         else if (query.contains("logs")) {requestURL = "/susidns/log.jsp";}
+         else if (query.contains("blacklist")) {requestURL = "/susidns/blacklist.jsp";}
+         else if (query.contains("details")) {requestURL = "/susidns/details?" + query;}
+         else {requestURL = "/susidns/addressbook?" + query;}
+     } else {requestURL = "/susidns/addressbook?book=router&amp;filter=none";}
+     // Sanitize for use in href/src attributes
+     if (requestURL.indexOf('\0') != -1) {
+         requestURL = "/susidns/addressbook";
+     }
 
     // CSSHelper is also pulled in by head.jsi below...
     boolean testIFrame = tester.allowIFrame(request.getHeader("User-Agent"));
