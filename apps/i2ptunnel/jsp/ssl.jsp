@@ -170,8 +170,27 @@ if (name == null || name.equals(""))
                 msgs.append("No target port set - go back and configure\n");
             } else {
                 boolean ok = true;
-
-                if (action.equals("Generate")) {
+                // Validate paths are safe and canonicalize
+                try {
+                    File ksFile = new File(ksPath);
+                    String ksCanonical = ksFile.getCanonicalPath();
+                    File baseDir = ctx.getConfigDir();
+                    String baseCanonical = baseDir.getCanonicalPath();
+                    if (!ksCanonical.startsWith(baseCanonical + File.separator) && !ksCanonical.equals(baseCanonical)) {
+                        msgs.append("Invalid keystore path\n");
+                        ok = false;
+                    }
+                    File sslFile = new File(jettySSLConfigPath);
+                    String sslCanonical = sslFile.getCanonicalPath();
+                    if (!sslCanonical.startsWith(baseCanonical + File.separator) && !sslCanonical.equals(baseCanonical)) {
+                        msgs.append("Invalid SSL config path\n");
+                        ok = false;
+                    }
+                } catch (java.io.IOException ioe) {
+                    msgs.append("Path validation failed\n");
+                    ok = false;
+                }
+                if (ok && action.equals("Generate")) {
                     // generate self-signed cert
                     java.util.Set<String> altNames = new java.util.HashSet<String>(4);
                     altNames.add(b32);
@@ -283,11 +302,23 @@ if (name == null || name.equals(""))
                     File f;
                     if (configfile == null || configfile.equals("clients.config")) {
                         f = new File(ctx.getConfigDir(), "clients.config");
-                    } else if (configfile.contains("/") || configfile.contains("\\")) {
+                    } else if (configfile.contains("/") || configfile.contains("\\")
+                            || configfile.contains("..") || configfile.indexOf('\0') != -1) {
                         throw new IllegalArgumentException();
                     } else {
                         f = new File(ctx.getConfigDir(), "clients.config.d");
                         f = new File(f, configfile);
+                        // Canonicalize and verify the result is inside the allowed directory
+                        try {
+                            String canonicalPath = f.getCanonicalPath();
+                            String canonicalBase = new File(ctx.getConfigDir(), "clients.config.d").getCanonicalPath();
+                            if (!canonicalPath.startsWith(canonicalBase + File.separator)
+                                    && !canonicalPath.equals(canonicalBase)) {
+                                throw new IllegalArgumentException();
+                            }
+                        } catch (java.io.IOException ioe) {
+                            throw new IllegalArgumentException();
+                        }
                     }
                     java.util.Properties p = new net.i2p.util.OrderedProperties();
                     try {
