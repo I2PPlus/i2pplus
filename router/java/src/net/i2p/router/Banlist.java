@@ -313,6 +313,16 @@ public class Banlist {
     public boolean isLuBanEnabled() { return _enableLuBan; }
 
     /**
+     *  Check if a retroactive NetDb purge sweep is needed.
+     *  True if LU/XG bans or custom capability bans are enabled.
+     *  @since 0.9.70
+     */
+    public boolean shouldPurgeExistingRouters() {
+        return _enableLuBan || _enableXgBan ||
+               (_customCapabilityBans != null && !_customCapabilityBans.isEmpty());
+    }
+
+    /**
      *  Get custom capability ban pattern.
      *  Format: string of capability letters (e.g., "DG", "UX")
      *  @since 0.9.70
@@ -322,12 +332,12 @@ public class Banlist {
     /**
      *  Check if router capabilities match any of the custom ban patterns.
      *  @param capabilities router capabilities string (e.g., "XfP")
-     *  @return true if the router should be banned based on custom capability patterns
+     *  @return the matched pattern (e.g., "G") or null if no match
      *  @since 0.9.70
      */
-    public boolean shouldBanlistByCapability(String capabilities) {
+    public String shouldBanlistByCapability(String capabilities) {
         if (_customCapabilityBans == null || _customCapabilityBans.isEmpty() || capabilities == null) {
-            return false;
+            return null;
         }
         String caps = capabilities.toUpperCase();
         String[] patterns = _customCapabilityBans.split("[,\\s]+");
@@ -342,9 +352,9 @@ public class Banlist {
                     break;
                 }
             }
-            if (matches) return true;
+            if (matches) return pattern;
         }
-        return false;
+        return null;
     }
 
     private class Cleanup extends JobImpl {

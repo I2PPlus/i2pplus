@@ -904,7 +904,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private boolean shouldBanlistByCapability(RouterInfo ri) {
         String caps = ri.getCapabilities();
         if (caps == null || caps.isEmpty()) return false;
-        return _context.banlist().shouldBanlistByCapability(caps);
+        return _context.banlist().shouldBanlistByCapability(caps) != null;
     }
 
     /**
@@ -915,13 +915,82 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String caps = ri.getCapabilities();
         String routerId = key.toBase64().substring(0,6);
         long banDuration = _context.banlist().getBadPacketDuration();
+        String matchedCap = _context.banlist().shouldBanlistByCapability(caps);
+        String reason = "Custom ban: " + matchedCap + " Router (" + caps + ")";
         if (_log.shouldWarn()) {
             _log.warn("Banning by custom capability: " + caps + " [" + routerId + "] for " + (banDuration/60000) + " min");
         }
-        _context.banlist().banlistRouter(key, "Custom ban: " + caps, null, null,
+        _context.banlist().banlistRouter(key, reason, null, null,
                                          _context.clock().now() + banDuration);
+        String ipPort = getRouterIPPort(ri);
+        _banLogger.logBan(key, ipPort, reason, banDuration);
+        removeFromNetDb(key);
         if (onFailedLookupJob != null) {
             _context.jobQueue().addJob(onFailedLookupJob);
+        }
+    }
+
+    /**
+     *  Remove a router from the NetDb without banning it.
+     *  Used internally by purge sweep and handleBanlistAndRemove.
+     *  @since 0.9.70
+     */
+    private void removeFromNetDb(Hash key) {
+        if (!_initialized || key == null) return;
+        DatabaseEntry data = _ds.get(key);
+        if (data != null && data.isRouterInfo()) {
+            _ds.remove(key);
+            if (_log.shouldDebug()) {
+                _log.debug("Removed from NetDb: " + key.toBase32().substring(0, 8));
+            }
+        }
+    }
+
+    /**
+     *  Trigger a retroactive purge sweep of the NetDb.
+     *  Bans and removes all routers matching enabled LU/XG/custom-cap bans.
+     *  Only call this on config change, not on startup or disable.
+     *  @since 0.9.70
+     */
+    public void purgeMatchingRouters() {
+        if (!_initialized) return;
+        _context.jobQueue().addJob(new PurgeMatchingRoutersJob());
+    }
+
+    /**
+     *  Job to asynchronously purge all routers from NetDb matching enabled ban rules.
+     *  @since 0.9.70
+     */
+    private class PurgeMatchingRoutersJob extends JobImpl {
+        private final Set<Hash> _toCheck;
+        private final Iterator<Hash> _iter;
+        private int _purged;
+
+        public PurgeMatchingRoutersJob() {
+            super(KademliaNetworkDatabaseFacade.this._context);
+            _toCheck = getAllRouters();
+            _iter = _toCheck.iterator();
+            _purged = 0;
+        }
+
+        public String getName() { return "NetDb capability purge"; }
+
+        public void runJob() {
+            if (!_initialized) return;
+            while (_iter.hasNext()) {
+                Hash key = _iter.next();
+                if (key.equals(_context.routerHash())) continue;
+                if (_context.banlist().isBanlisted(key)) continue;
+                DatabaseEntry data = _ds.get(key);
+                if (data == null || !data.isRouterInfo()) continue;
+                RouterInfo ri = (RouterInfo) data;
+                if (shouldBanlistLU(ri, key) || shouldBanlistXG(ri, key) || shouldBanlistByCapability(ri)) {
+                    handleBanlistAndRemove(ri, key, null);
+                    _purged++;
+                }
+            }
+            if (_purged > 0 && _log.shouldWarn())
+                _log.warn("NetDb purge complete: purged " + _purged + " routers");
         }
     }
 
@@ -2191,6 +2260,10 @@ return false;
         String err = validate(key, routerInfo);
         if (err != null) {
             throw new IllegalArgumentException("Invalid NetDbStore attempt - " + err);
+        }
+        if (shouldBanlistByCapability(routerInfo)) {
+            handleCustomCapabilityBan(routerInfo, key, null);
+            return null;
         }
         _context.peerManager().setCapabilities(key, routerInfo.getCapabilities());
         _ds.put(key, routerInfo, persist);

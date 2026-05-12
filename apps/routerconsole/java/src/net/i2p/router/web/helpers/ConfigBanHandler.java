@@ -163,26 +163,22 @@ public class ConfigBanHandler extends FormHandler {
             _context.blocklist().clearAll();
         }
 
-        // Validate and save custom capability bans
-        if (_customCapabilityBans != null && !_customCapabilityBans.isEmpty()) {
-            String validated = validateCapabilityBans(_customCapabilityBans);
-            if (validated != null) {
-                changes.put(PROP_CUSTOM_CAPABILITY_BANS, validated);
-            }
-        } else {
-            changes.put(PROP_CUSTOM_CAPABILITY_BANS, "");
-        }
+        // Check if retroactive NetDb purge is needed (LU/XG enabled or custom caps added)
+        boolean xgWasEnabled = "true".equals(_context.getProperty(PROP_ENABLE_XG_BAN, "false"));
+        boolean luWasEnabled = "true".equals(_context.getProperty(PROP_ENABLE_LU_BAN, "true"));
+        boolean capsWereEmpty = _context.getProperty(PROP_CUSTOM_CAPABILITY_BANS, "").isEmpty();
 
-        // Save custom country codes (uses existing router.blockCountries property, session-based)
-        if (_customCountryCodes != null) {
-            String validated = validateCountryCodes(_customCountryCodes);
-            changes.put(PROP_COUNTRY_CODES, validated);
-        }
+        boolean purgeNeeded = (_enableXgBan && !xgWasEnabled) ||
+                              (_enableLuBan && !luWasEnabled) ||
+                              (!_customCapabilityBans.isEmpty() && capsWereEmpty);
 
         if (!changes.isEmpty()) {
             _context.router().saveConfig(changes, null);
             _context.banlist().reloadConfig();
             _context.blocklist().reloadConfig();
+            if (purgeNeeded) {
+                _context.netDb().purgeMatchingRouters();
+            }
             addFormNotice(_t("Ban configuration updated"), true);
         }
     }

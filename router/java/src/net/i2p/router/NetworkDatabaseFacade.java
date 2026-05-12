@@ -251,4 +251,11 @@ public abstract class NetworkDatabaseFacade implements Service {
      *  @since 0.9.50
      */
     public void routingKeyChanged() {}
+
+    /**
+     *  Trigger a retroactive purge sweep of the NetDb.
+     *  Bans and removes all routers matching enabled LU/XG/custom-cap bans.
+     *  @since 0.9.70
+     */
+    public void purgeMatchingRouters() {}
 }
