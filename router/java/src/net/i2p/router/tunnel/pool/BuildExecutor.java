@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
@@ -50,10 +51,10 @@ class BuildExecutor implements Runnable {
     private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _recentlyBuildingMap; // indexed by ptcc.getReplyMessageId()
     private volatile boolean _isRunning;
     private boolean _repoll;
-    private volatile int _buildSuccessCount;
-    private volatile int _buildFailureCount;
-    private volatile int _firstHopSuccessCount;
-    private volatile int _firstHopFailureCount;
+    private final AtomicInteger _buildSuccessCount = new AtomicInteger();
+    private final AtomicInteger _buildFailureCount = new AtomicInteger();
+    private final AtomicInteger _firstHopSuccessCount = new AtomicInteger();
+    private final AtomicInteger _firstHopFailureCount = new AtomicInteger();
     private volatile long _adaptiveTimeout = BuildRequestor.REQUEST_TIMEOUT;
     private volatile long _adaptiveFirstHopTimeout = BuildRequestor.FIRST_HOP_TIMEOUT;
     /**
@@ -145,17 +146,17 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
      */
     private void updateBuildStats(boolean success) {
         if (success) {
-            _buildSuccessCount++;
+            _buildSuccessCount.incrementAndGet();
         } else {
-            _buildFailureCount++;
+            _buildFailureCount.incrementAndGet();
         }
         // Every 50 builds, recalculate adaptive timeout
-        int total = _buildSuccessCount + _buildFailureCount;
+        int total = _buildSuccessCount.get() + _buildFailureCount.get();
         if (total >= 50) {
             calculateAdaptiveTimeoutFromSuccess();
             // Reset counters periodically to favor recent behavior
-            _buildSuccessCount = Math.max(1, _buildSuccessCount / 2);
-            _buildFailureCount = Math.max(1, _buildFailureCount / 2);
+            _buildSuccessCount.set(Math.max(1, _buildSuccessCount.get() / 2));
+            _buildFailureCount.set(Math.max(1, _buildFailureCount.get() / 2));
         }
     }
 
@@ -163,10 +164,10 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
      * Calculate adaptive timeout based on build success/failure ratio
      */
     private void calculateAdaptiveTimeoutFromSuccess() {
-        int total = _buildSuccessCount + _buildFailureCount;
+        int total = _buildSuccessCount.get() + _buildFailureCount.get();
         if (total < 10) { return; }
 
-        double successRate = (double) _buildSuccessCount / total;
+        double successRate = (double) _buildSuccessCount.get() / total;
         double failureRate = 1.0 - successRate;
 
         // Base timeout from 20s, up to 30s max
@@ -188,9 +189,9 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
          _adaptiveTimeout = Math.min(baseTimeout, 20 * 1000);
 
         // Also calculate adaptive first-hop timeout based on first-hop success rate
-        int firstHopTotal = _firstHopSuccessCount + _firstHopFailureCount;
+        int firstHopTotal = _firstHopSuccessCount.get() + _firstHopFailureCount.get();
         if (firstHopTotal >= 10) {
-            double firstHopSuccessRate = (double) _firstHopSuccessCount / firstHopTotal;
+            double firstHopSuccessRate = (double) _firstHopSuccessCount.get() / firstHopTotal;
             double firstHopFailureRate = 1.0 - firstHopSuccessRate;
 
             // Base first-hop timeout from 8s, up to 15s max
@@ -206,14 +207,14 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
 
             if (_log.shouldDebug()) {
                 _log.debug("Adaptive first-hop timeout: " + (_adaptiveFirstHopTimeout / 1000) + "s (success: " +
-                           (int)(firstHopSuccessRate * 100) + "%, failures: " + _firstHopFailureCount +
+                           (int)(firstHopSuccessRate * 100) + "%, failures: " + _firstHopFailureCount.get() +
                            "/" + firstHopTotal + ")");
             }
         }
 
         if (_log.shouldDebug()) {
             _log.debug("Adaptive timeout: " + (_adaptiveTimeout / 1000) + "s (success: " +
-                       (int)(successRate * 100) + "%, failures: " + _buildFailureCount +
+                       (int)(successRate * 100) + "%, failures: " + _buildFailureCount.get() +
                        "/" + total + ")");
         }
     }
@@ -682,9 +683,9 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
 
         // Track first-hop success/failure
         if (result == Result.SUCCESS) {
-            _firstHopSuccessCount++;
+            _firstHopSuccessCount.incrementAndGet();
         } else if (result == Result.TIMEOUT || result == Result.BAD_RESPONSE) {
-            _firstHopFailureCount++;
+            _firstHopFailureCount.incrementAndGet();
         }
         // Only wake up the build thread if it took a reasonable amount of time -
         // this prevents high CPU usage when there is no network connection

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.TreeSet;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
@@ -42,7 +43,7 @@ class SearchState {
     private final Map<Hash, LeaseSet> _leaseSetResponses;
     private long _firstLeaseSetTime;
 
-    private volatile int _initialResponseCount;
+    private final AtomicInteger _initialResponseCount = new AtomicInteger();
     private volatile long _initialResponseStart;
     private static final int INITIAL_RESPONSE_TARGET = 3;
     private static final long INITIAL_RESPONSE_TIMEOUT = 3 * 1000;
@@ -232,7 +233,7 @@ class SearchState {
             if (_initialResponseStart <= 0) {
                 _initialResponseStart = now;
             }
-            _initialResponseCount++;
+            _initialResponseCount.incrementAndGet();
             if (_log.shouldInfo()) {
                 _log.info("Initial LeaseSet response " + _initialResponseCount + " from [" + peer.toBase64().substring(0,6)
                           + "] with latest lease date: " + ls.getLatestLeaseDate());
@@ -247,7 +248,7 @@ class SearchState {
             return false;
         }
         long now = _context.clock().now();
-        return _initialResponseCount >= INITIAL_RESPONSE_TARGET
+        return _initialResponseCount.get() >= INITIAL_RESPONSE_TARGET
                || (now - _initialResponseStart) >= INITIAL_RESPONSE_TIMEOUT;
     }
 
@@ -276,7 +277,7 @@ class SearchState {
     public void clearInitialTracking() {
         synchronized (_leaseSetResponses) {
             _initialResponseStart = -1;
-            _initialResponseCount = -1;
+            _initialResponseCount.set(-1);
         }
     }
 

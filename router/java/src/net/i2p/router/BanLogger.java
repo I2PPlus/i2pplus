@@ -16,6 +16,7 @@ import java.util.TimeZone;
 import java.util.Map;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
@@ -36,7 +37,7 @@ public class BanLogger {
     private Log _log;
     private File _logFile;
     private SimpleDateFormat _dateFormat;
-    private volatile int _banCount;
+    private AtomicInteger _banCount;
     private long _startTime;
     private final Object _writeLock = new Object();
     private static HashPatternDetector _patternDetector;
@@ -58,6 +59,7 @@ public class BanLogger {
     public BanLogger() {
         _dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         _dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        _banCount = new AtomicInteger();
     }
 
     public BanLogger(RouterContext context) {
@@ -218,13 +220,13 @@ public class BanLogger {
      */
     public void archiveIfNeeded() {
         if (!_logFile.exists()) {return;}
-        if (_banCount <= 0) {return;}
+        if (_banCount.get() <= 0) {return;}
         String timestamp = _dateFormat.format(new Date(_startTime));
         String safeTimestamp = timestamp.replace(':', '-').replace('T', '_');
         String archiveName = ARCHIVE_PREFIX + safeTimestamp + ".txt";
         File archiveFile = new File(_logFile.getParentFile(), archiveName);
         if (_logFile.renameTo(archiveFile)) {
-            _banCount = 0;
+            _banCount.set(0);
             cleanupOldArchives();
             if (_log != null && _log.shouldLog(Log.INFO))
                 _log.info("Archived ban log: " + archiveFile.getName());
@@ -501,7 +503,7 @@ public class BanLogger {
             if (_writer != null) {
                 _writer.println(entry);
                 _writer.flush();
-                _banCount++;
+                _banCount.incrementAndGet();
             }
         }
 

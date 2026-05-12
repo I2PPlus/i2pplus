@@ -3,6 +3,7 @@ package net.i2p.router;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -38,7 +39,7 @@ public class JobStats {
     private final int _maxRecentEntries;
     private final RecentExecution[] _recentExecutions;
     private volatile int _recentIndex = 0;
-    private volatile int _recentCount = 0;
+    private final AtomicInteger _recentCount = new AtomicInteger();
 
     private static class RecentExecution {
         final long timestamp;
@@ -120,8 +121,8 @@ public class JobStats {
             int idx = _recentIndex;
             _recentExecutions[idx] = new RecentExecution(now, runTime, lag);
             _recentIndex = (idx + 1) % _maxRecentEntries;
-            if (_recentCount < _maxRecentEntries) {
-                _recentCount++;
+            if (_recentCount.get() < _maxRecentEntries) {
+                _recentCount.incrementAndGet();
             }
         }
     }
@@ -237,7 +238,7 @@ public class JobStats {
         long recentMaxPending = -1;
         long recentMinPending = -1;
 
-        int count = _recentCount;
+        int count = _recentCount.get();
         int idx = _recentIndex;
 
         for (int i = 0; i < count; i++) {
