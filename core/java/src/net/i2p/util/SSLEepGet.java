@@ -627,8 +627,8 @@ public class SSLEepGet extends EepGet {
         if (_redirectLocation != null) {
             if (!_redirectLocation.startsWith("https://"))
                 throw new IOException("Server redirect to " + _redirectLocation + " not allowed");
-            _redirects++;
-            if (_redirects > 5) {
+            _redirects.incrementAndGet();
+            if (_redirects.get() > 5) {
                 String redirectURL = _redirectLocation;
                 if (redirectURL.startsWith("http://")) {
                     redirectURL = redirectURL.substring(7, redirectURL.length());

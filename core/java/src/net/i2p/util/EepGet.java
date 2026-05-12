@@ -22,6 +22,7 @@ import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
@@ -106,7 +107,7 @@ public class EepGet {
     protected volatile int _fetchHeaderTimeout;
     protected volatile int _fetchTotalTimeout;
     protected volatile int _fetchInactivityTimeout;
-    protected volatile int _redirects;
+    protected AtomicInteger _redirects;
     protected String _redirectLocation;
     protected boolean _isGzippedResponse;
     protected IOException _decompressException;
@@ -197,6 +198,7 @@ public class EepGet {
         _lastModified = lastModified;
         _etagOrig = etag;
         _lastModifiedOrig = lastModified;
+        _redirects = new AtomicInteger();
     }
 
     /**
@@ -814,7 +816,7 @@ public class EepGet {
                 (_alreadyTransferred == 0 && _currentAttempt > MAX_COMPLETE_FAILS) ||
                 !_keepFetching)
                 break;
-            _redirects = 0;
+            _redirects.set(0);
             try {
                 long delay = _context.random().nextInt(60*1000);
                 Thread.sleep(5*1000+delay);
@@ -1002,8 +1004,8 @@ public class EepGet {
                 if (_log.shouldInfo()) _log.info("Adding auth");
                 // actually happens in getRequest()
             } else {
-                _redirects++;
-                if (_redirects > 5) {
+                _redirects.incrementAndGet();
+                if (_redirects.get() > 5) {
                     String redirectURL = _redirectLocation;
                     if (redirectURL.startsWith("http://")) {redirectURL = redirectURL.substring(7, redirectURL.length());}
                     if (redirectURL.contains("b32.i2p")) {redirectURL = redirectURL.substring(0,32) + "...";}

@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 
 /**
@@ -266,8 +267,8 @@ public class EepHead extends EepGet {
                 if (_log.shouldInfo()) _log.info("Adding auth");
                 // actually happens in getRequest()
             } else {
-                _redirects++;
-                if (_redirects > 5) {
+                _redirects.incrementAndGet();
+                if (_redirects.get() > 5) {
                     String redirectURL = _redirectLocation;
                     if (redirectURL.startsWith("http://")) {
                         redirectURL = redirectURL.substring(7, redirectURL.length());
