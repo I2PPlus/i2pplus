@@ -1016,7 +1016,7 @@ public class Getopt extends Object
         if (endparse == true)
             return (-1);
 
-        if ((nextchar == null) || (nextchar.equals("")))
+        if ((nextchar == null) || (nextchar.isEmpty()))
         {
       // If we have just processed some options following some non-options,
       //  exchange them so that the options come first.
@@ -1036,7 +1036,7 @@ public class Getopt extends Object
 
           // Skip any additional non-options
           // and extend the range of non-options previously skipped.
-                while ((optind < argv.length) && (argv[optind].equals("") ||
+                while ((optind < argv.length) && (argv[optind].isEmpty() ||
                     (argv[optind].charAt(0) != '-') || argv[optind].equals("-")))
                 {
                     optind++;
@@ -1077,7 +1077,7 @@ public class Getopt extends Object
 
       // If we have come to a non-option and did not permute it,
       // either stop the scan or describe it to the caller and pass it by.
-            if (argv[optind].equals("") || (argv[optind].charAt(0) != '-') ||
+            if (argv[optind].isEmpty() || (argv[optind].charAt(0) != '-') ||
                 argv[optind].equals("-"))
             {
                 if (ordering == REQUIRE_ORDER)
@@ -1164,7 +1164,7 @@ public class Getopt extends Object
         if (optstring.indexOf(c) != -1)
             temp = optstring.substring(optstring.indexOf(c));
 
-        if (nextchar.equals(""))
+        if (nextchar.isEmpty())
           ++optind;
 
         if ((temp == null) || (c == ':'))
@@ -1196,7 +1196,7 @@ public class Getopt extends Object
   // Convenience. Treat POSIX -W foo same as long option --foo
         if ((temp.charAt(0) == 'W') && (temp.length() > 1) && (temp.charAt(1) == ';'))
         {
-            if (!nextchar.equals(""))
+            if (!nextchar.isEmpty())
             {
                 optarg = nextchar;
             }
@@ -1244,7 +1244,7 @@ public class Getopt extends Object
             if ((temp.length() > 2) && (temp.charAt(2) == ':'))
         // This is an option that accepts and argument optionally
             {
-                if (!nextchar.equals(""))
+                if (!nextchar.isEmpty())
                 {
                     optarg = nextchar;
                   ++optind;
@@ -1258,7 +1258,7 @@ public class Getopt extends Object
             }
             else
             {
-                if (!nextchar.equals(""))
+                if (!nextchar.isEmpty())
                 {
                     optarg = nextchar;
                   ++optind;

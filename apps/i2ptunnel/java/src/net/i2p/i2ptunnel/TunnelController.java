@@ -689,7 +689,7 @@ public class TunnelController implements Logging {
                     }
                     group.release(this, s);
                     if (_log.shouldInfo()) {
-                        _log.info("Closing tunnels for: " + getName() + (!idleTimeout.equals("") ? " -> No activity detected for " + idleTimeout : ""));
+                        _log.info("Closing tunnels for: " + getName() + (idleTimeout != null && !idleTimeout.isEmpty() ? " -> No activity detected for " + idleTimeout : ""));
                     }
                 }
             }

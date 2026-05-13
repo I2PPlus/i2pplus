@@ -236,6 +236,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                     _log.warn(getPrefix() + "The `-nogui' option of I2PTunnel is deprecated.\n"
                           + "Use `-cli', `-nocli' (aka `-wait') or `-die' instead.");
 
+            // fall through
             case 'c':  // -c, -cli, --cli
                 gui = false;
                 cli = true;

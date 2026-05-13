@@ -173,7 +173,7 @@ class ParticipatingThrottler {
 
         String version = ri != null ? ri.getVersion() : "";
 
-        if (version.equals("0") || version.equals("")) {
+        if (version.equals("0") || version.isEmpty()) {
             handleNoVersion(shouldDisconnect, h, isBanned, caps, bantime, ri, "none");
             return Result.DROP;
         }
@@ -378,7 +378,7 @@ class ParticipatingThrottler {
     /** Logs debug information for accepted tunnel requests. */
     private void _logAcceptRequest(String caps, int count) {
         if (_log.shouldDebug()) {
-            _log.debug("Accepting Tunnel Request from " + (!caps.isEmpty() || !caps.equals("") ? caps : "") +
+            _log.debug("Accepting Tunnel Request from " + (!caps.isEmpty() || !caps.isEmpty() ? caps : "") +
                        " Router -> Count: " + count + " in 90s");
         }
     }

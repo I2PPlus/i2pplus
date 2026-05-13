@@ -440,7 +440,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             String referer = null;
             URI origRequestURI = null;
             boolean preserveConnectionHeader = false;
-//            boolean allowGzip = false;
             boolean allowGzip = true;
 
             while((line = reader.readLine(method)) != null) {
@@ -652,7 +651,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             if (helperStrings != null &&
                                     !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_DISABLE_HELPER))) {
                                 query = helperStrings[0];
-                                if (query.equals("")) {
+                                if (query.isEmpty()) {
                                     query = null;
                                 }
                                 try {

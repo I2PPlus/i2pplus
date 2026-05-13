@@ -224,7 +224,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             boolean uninteresting = caps != null && (caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                     caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                     caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                    (v.equals("") || VersionComparator.comp(v, MIN_VERSION) < 0)) &&
+                                    (v.isEmpty() || VersionComparator.comp(v, MIN_VERSION) < 0)) &&
                                     !isHidden && getContext().netDb().getKnownRouters() > 1000;
 
             if (enableReverseLookups) {

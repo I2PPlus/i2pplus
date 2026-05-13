@@ -2,10 +2,14 @@ package net.i2p.router;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
@@ -112,7 +116,7 @@ public class BanLogger {
     private void loadActiveIPs() {
         if (_logFile == null || !_logFile.exists()) {return;}
         long now = System.currentTimeMillis();
-        try (BufferedReader reader = new BufferedReader(new FileReader(_logFile))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(_logFile), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) continue;
@@ -143,7 +147,7 @@ public class BanLogger {
             return false;
         }
         long now = System.currentTimeMillis();
-        try (BufferedReader reader = new BufferedReader(new FileReader(_logFile))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(_logFile), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) continue;

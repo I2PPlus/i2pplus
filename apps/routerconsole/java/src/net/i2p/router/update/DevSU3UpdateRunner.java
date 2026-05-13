@@ -66,7 +66,7 @@ class DevSU3UpdateRunner extends UpdateRunner {
         // which will be done later.
         // Only gets 16 bytes max since we aren't using the SU3 version extraction.
         String version = TrustedUpdate.getVersionString(tmp);
-        if (version.equals(""))
+        if (version.isEmpty())
             version = "unknown";
         if (_mgr.notifyComplete(this, version, tmp))
             this.done = true;

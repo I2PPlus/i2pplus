@@ -754,7 +754,7 @@ public class SU3File {
             SU3File file = new SU3File(signedFile);
             file.setVerifySignature(false);
             String versionString = file.getVersionString();
-            if (versionString.equals("")) System.out.println("No version string found in file '" + signedFile + "'");
+            if (versionString.isEmpty()) System.out.println("No version string found in file '" + signedFile + "'");
             else {
                 long ver = 0;
                 try {
@@ -766,7 +766,7 @@ public class SU3File {
                 else System.out.println("Version:  " + versionString);
             }
             String signerString = file.getSignerString();
-            if (signerString.equals("")) System.out.println("No signer string found in file '" + signedFile + "'");
+            if (signerString.isEmpty()) System.out.println("No signer string found in file '" + signedFile + "'");
             else System.out.println("Signer:   " + signerString);
             if (file._sigType != null) System.out.println("SigType:  " + file._sigType);
             if (file._contentType != null) System.out.println("Content:  " + file._contentType);
@@ -779,7 +779,7 @@ public class SU3File {
             else if (file._fileType == TYPE_EXE) ftype = "EXE";
             else ftype = Integer.toString(file._fileType);
             System.out.println("FileType: " + ftype);
-            return !versionString.equals("");
+            return !versionString.isEmpty();
         } catch (IOException ioe) {
             ioe.printStackTrace();
             return false;

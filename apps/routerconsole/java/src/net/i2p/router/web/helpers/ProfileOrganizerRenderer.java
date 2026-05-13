@@ -393,8 +393,8 @@ class ProfileOrganizerRenderer {
                 int displayed = 0;
                 boolean isResponding = prof.getDbResponseTime() != null;
                 boolean isGood = prof.getLastSendSuccessful() > 0 && isResponding &&
-                                 (dbh != null && dbh.getLastStoreSuccessful() > 0 ||
-                                 dbh.getLastLookupSuccessful() > 0);
+                                 (dbh != null && (dbh.getLastStoreSuccessful() > 0 ||
+                                 dbh.getLastLookupSuccessful() > 0));
                 //if (dbh != null && isFF && !isUnreachable && !isBanned && isGood) {
                 if (dbh != null && isFF && !isUnreachable && !isBanned && prof.getLastHeardFrom() > 0) {
                     displayed++;

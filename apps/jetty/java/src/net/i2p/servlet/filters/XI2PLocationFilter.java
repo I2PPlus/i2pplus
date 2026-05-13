@@ -43,7 +43,7 @@ public class XI2PLocationFilter extends HandlerWrapper {
             return;
         if (xi2plocation == null)
             return;
-        if (xi2plocation.equals(""))
+        if (xi2plocation.isEmpty())
             return;
         X_I2P_Location = xi2plocation;
         if (_log.shouldInfo())
@@ -142,7 +142,7 @@ public class XI2PLocationFilter extends HandlerWrapper {
             if (query == null)
                 query = "";
             try {
-                if (query.equals("")) {
+                if (query.isEmpty()) {
                     URI uri = new URI(scheme, X_I2P_Location, path, null);
                     String encodedURL = uri.toASCIIString();
                     return encodedURL;

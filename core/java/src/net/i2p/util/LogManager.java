@@ -544,7 +544,7 @@ public class LogManager implements Flushable {
 
         try {
             SimpleDateFormat fmt = (SimpleDateFormat) DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
-            if (!format.equals("")) {
+            if (!format.isEmpty()) {
                 fmt.applyPattern(format);
             }
             // the router sets the JVM time zone to UTC but saves the original here so we can get it

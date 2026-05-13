@@ -279,7 +279,7 @@ class PluginUpdateRunner extends UpdateRunner {
             // Allow "" as the previously-known signer
             boolean ok = up.verify(f, spk);
             String signingKeyName = up.getKeys().get(spk);
-            if ((!ok) || !(signer.equals(signingKeyName) || "".equals(signingKeyName))) {
+            if ((!ok) || !(signer.equals(signingKeyName) || signingKeyName != null && signingKeyName.isEmpty())) {
                 f.delete();
                 to.delete();
                 if (signingKeyName == null)

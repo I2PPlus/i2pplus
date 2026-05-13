@@ -240,7 +240,7 @@ public class UrlLauncher implements ClientApp {
                     String[] splitLine = line.split("  ");
                     kb.close();
                     String finalValue = splitLine[splitLine.length - 1].trim();
-                    if (!finalValue.equals("")) {
+                    if (!finalValue.isEmpty()) {
                         return finalValue;
                     }
                 }
@@ -284,7 +284,7 @@ public class UrlLauncher implements ClientApp {
         String hkeyquery = "HKEY_CLASSES_ROOT\\"+progid+"\\shell\\open\\command";
         String finalValue = registryQuery(hkeyquery, "(Default)");
         if (finalValue != null) {
-            if (!finalValue.equals(""))
+            if (!finalValue.isEmpty())
                 return finalValue;
         }
         return null;
@@ -300,12 +300,12 @@ public class UrlLauncher implements ClientApp {
     private String getDefaultOutOfRegistry(String hkeyquery) {
         String defaultValue = registryQuery(hkeyquery, "Default");
         if (defaultValue != null) {
-            if (!defaultValue.equals(""))
+            if (!defaultValue.isEmpty())
                 return defaultValue;
         }else{
             defaultValue = followUserConfiguredBrowserToCommand(hkeyquery);
             if (defaultValue != null) {
-                if (!defaultValue.equals(""))
+                if (!defaultValue.isEmpty())
                     return defaultValue;
             }
         }

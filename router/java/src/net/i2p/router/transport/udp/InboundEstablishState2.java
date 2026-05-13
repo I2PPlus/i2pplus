@@ -445,7 +445,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         String cap = ri.getCapabilities();
         String bw = ri.getBandwidthTier();
         boolean reachable = cap != null && cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
-        boolean isSlow = (cap != null && !cap.equals("")) &&
+        boolean isSlow = (cap != null && !cap.isEmpty()) &&
                          (bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N"));
         String version = ri.getVersion();
         boolean isOld = VersionComparator.comp(version, "0.9.66") < 0;

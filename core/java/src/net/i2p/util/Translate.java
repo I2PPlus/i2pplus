@@ -56,7 +56,7 @@ public abstract class Translate {
         if (lang.equals("en")) return key;
         else if (lang.equals(TEST_LANG)) return TEST_STRING;
         // Shouldn't happen but don't dump the po headers if it does
-        if (key.equals("")) return key;
+        if (key.isEmpty()) return key;
         ResourceBundle bundle = findBundle(bun, lang, getCountry(ctx));
         if (bundle == null) return key;
         try {

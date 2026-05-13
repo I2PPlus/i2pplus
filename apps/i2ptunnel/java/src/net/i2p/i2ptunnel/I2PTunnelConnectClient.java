@@ -103,7 +103,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
     /**
      * Execute a runnable task, running inline when called from an unlimited thread pool
      * to avoid creating unnecessary threads, otherwise start a new thread.
-     * 
+     *
      * @param task Thread task to execute
      */
     private void executeTask(Thread task) {

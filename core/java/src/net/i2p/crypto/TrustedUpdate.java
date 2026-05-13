@@ -137,11 +137,11 @@ public class TrustedUpdate {
         String oldName = _trustedKeys.get(signingPublicKey);
         // already there?
         if (name.equals(oldName)) return true;
-        if (oldName != null && !oldName.equals("")) {
+        if (oldName != null && !oldName.isEmpty()) {
             _log.error("Key for " + name + " already stored for different name " + oldName + " : " + key);
             return false;
         }
-        if ((!name.equals("")) && _trustedKeys.containsValue(name)) {
+        if ((!name.isEmpty()) && _trustedKeys.containsValue(name)) {
             _log.error("Key mismatch for " + name + ", spoof attempt? : " + key);
             return false;
         }
@@ -268,9 +268,9 @@ public class TrustedUpdate {
     private static final boolean showVersionCLI(String signedFile) {
         String versionString = getVersionString(new File(signedFile));
 
-        if (versionString.equals("")) System.out.println("No version string found in file '" + signedFile + "'");
+        if (versionString.isEmpty()) System.out.println("No version string found in file '" + signedFile + "'");
         else System.out.println("Version: " + versionString);
-        return !versionString.equals("");
+        return !versionString.isEmpty();
     }
 
     /** @return success */

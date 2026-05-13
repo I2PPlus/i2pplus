@@ -352,8 +352,8 @@ public class I2PSnarkServlet extends BasicServlet {
     public void init(ServletConfig cfg) throws ServletException {
         super.init(cfg);
         String cpath = getServletContext().getContextPath();
-        _contextPath = cpath.equals("") || cpath.isEmpty() ? "/" : cpath;
-        _contextName = cpath.equals("") || cpath.isEmpty() ? DEFAULT_NAME : cpath.substring(1).replace("/", "_");
+        _contextPath = cpath.isEmpty() ? "/" : cpath;
+        _contextName = cpath.isEmpty() ? DEFAULT_NAME : cpath.substring(1).replace("/", "_");
         getNonce(); // Initialize the nonce
         // Limited protection against overwriting other config files or directories
         // in case you named your war "router.war"
@@ -650,7 +650,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // Render search form when multiple torrents exist
         if (_manager.getTorrents().size() > 1) {
             String s = req.getParameter("search");
-            boolean searchActive = (s != null && !s.equals(""));
+            boolean searchActive = (s != null && !s.isEmpty());
             buf.append("<form id=snarkSearch action=\"").append(_contextPath).append("\" method=GET hidden>\n")
                .append("<span id=searchwrap><input id=searchInput type=search required name=search size=20 placeholder=\"")
                .append(_t("Search torrents")).append("\"");
@@ -5897,7 +5897,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.16
      */
     private static String getQueryString(String so) {
-        if (so != null && !so.equals("")) {return "?sort=" + DataHelper.stripHTML(so);}
+        if (so != null && !so.isEmpty()) {return "?sort=" + DataHelper.stripHTML(so);}
         return "";
     }
 
@@ -6350,7 +6350,7 @@ public class I2PSnarkServlet extends BasicServlet {
             newAnnList = Collections.singletonList(aalist);
             if (!aalist.contains(thePrimary)) {thePrimary = aalist.get(0);}
         }
-        if (newComment.equals("")) {newComment = null;}
+        if (newComment.isEmpty()) {newComment = null;}
         newCreatedBy = null;
         MetaInfo newMeta = new MetaInfo(meta, thePrimary, newAnnList, newComment, newCreatedBy, meta.getWebSeedURLs());
         File f = new File(_manager.util().getTempDir(), "edit-" + _manager.util().getContext().random().nextLong() + ".torrent");

@@ -177,7 +177,7 @@ public class HTTP {
                 uri = url.getPath();
                 if (withParam == true) {
                     String queryStr = url.getQuery();
-                    if (!queryStr.equals("")) {
+                    if (!queryStr.isEmpty()) {
                         uri += "?" + queryStr;
                     }
                 }

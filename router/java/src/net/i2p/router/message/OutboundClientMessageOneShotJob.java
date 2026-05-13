@@ -946,7 +946,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             default: statusToString = "Unknown status"; // handle unknown status
         }
         if (_log.shouldWarn()) {
-            if (!statusToString.equals("") && !statusToString.equals("Unknown status")) {
+            if (!statusToString.isEmpty() && !statusToString.equals("Unknown status")) {
                 _log.warn("Sending of " + _clientMessageId + " to " + _toString +
                           " failed after " + sendTime + "ms -> " + statusToString);
             } else {

@@ -336,6 +336,7 @@ public class SidebarHelper extends HelperBase {
             case UNKNOWN:
                 state = NetworkState.TESTING;
 
+            // fall through
             case IPV4_UNKNOWN_IPV6_FIREWALLED:
             case IPV4_DISABLED_IPV6_UNKNOWN:
             default:

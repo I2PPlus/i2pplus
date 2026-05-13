@@ -49,8 +49,7 @@ class RouterDoSThrottle extends RouterThrottleImpl {
                     }
                 }
                 int rand = _context.random().nextInt(cnt);
-                if (rand > LOOKUP_THROTTLE_MAX) {return false;}
-                else {return true;}
+                return rand <= LOOKUP_THROTTLE_MAX;
             } else {return true;} // no DoS, at least, not yet
         } else {
             // on to the next period, reset counter, no DoS

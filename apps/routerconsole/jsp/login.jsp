@@ -5,24 +5,25 @@
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="intl" scope="request" />
 <jsp:setProperty name="intl" property="contextId" value="<%=i2pcontextId%>" />
 <%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = request.getParameter("lang");
-    if (lang == null) lang = ctx.getProperty("routerconsole.lang", "en");
-    String theme = (String) request.getAttribute("theme");
-    if (theme == null) theme = "dark";
-    String themeCSS = "/themes/login/" + theme + "/login.css";
-    Boolean routerStarting = (Boolean) request.getAttribute("routerStarting");
-    if (routerStarting == null) routerStarting = false;
-    Boolean setupMode = (Boolean) request.getAttribute("setupMode");
-    if (setupMode == null) setupMode = false;
-    String setupTitle = (String) request.getAttribute("setupTitle");
-    if (setupTitle == null) setupTitle = "Set Up Console Access";
-    String setupMessage = (String) request.getAttribute("setupMessage");
-    if (setupMessage == null) setupMessage = "Create a username and password to access the router console &amp; webapps.";
-    String success = (String) request.getAttribute("success");
-%>
+     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+     String lang = request.getParameter("lang");
+     if (lang == null) lang = ctx.getProperty("routerconsole.lang", "en");
+     String theme = (String) request.getAttribute("theme");
+     if (theme == null) theme = "dark";
+     String themeCSS = "/themes/login/" + theme + "/login.css";
+     Boolean routerStarting = (Boolean) request.getAttribute("routerStarting");
+     if (routerStarting == null) routerStarting = false;
+     Boolean setupMode = (Boolean) request.getAttribute("setupMode");
+     if (setupMode == null) setupMode = false;
+     String setupTitle = (String) request.getAttribute("setupTitle");
+     if (setupTitle == null) setupTitle = "Set Up Console Access";
+     String setupMessage = (String) request.getAttribute("setupMessage");
+     if (setupMessage == null) setupMessage = "Create a username and password to access the router console &amp; webapps.";
+     String success = (String) request.getAttribute("success");
+     String safeLang = net.i2p.data.DataHelper.escapeHTML(lang);
+ %>
 <!DOCTYPE html>
-<html lang="<%=lang%>">
+<html lang="<%=safeLang%>">
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width, initial-scale=1">
@@ -84,7 +85,7 @@
 </div>
 </span>
 <span id=langselect class=dropdown data-open>
-<button class=dropbtn title="<%=intl._t("Select display language")%>"><img src="/flags.jsp?c=<%=currentCountry%>" alt="<%=lang%>"></button>
+<button class=dropbtn title="<%=intl._t("Select display language")%>"><img src="/flags.jsp?c=<%=currentCountry%>" alt="<%=safeLang%>"></button>
 <div class=dropdown-content>
 <a href="#" data-param="lang" data-value="ar" title="Arabic"><img src="/flags.jsp?c=lang_ar"></a>
 <a href="#" data-param="lang" data-value="az" title="Azerbaijani"><img src="/flags.jsp?c=az"></a>

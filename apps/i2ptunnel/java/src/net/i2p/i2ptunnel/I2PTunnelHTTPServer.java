@@ -377,33 +377,25 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeaderAllow() {
         Properties opts = getTunnel().getClientOptions();
-        boolean addAllowHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_ALLOW));
-        if (!addAllowHeader) {return false;}
-        else {return true;}
+        return Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_ALLOW));
     }
 
     /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeaderCacheControl() {
         Properties opts = getTunnel().getClientOptions();
-        boolean addCacheControlHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL));
-        if (!addCacheControlHeader) {return false;}
-        else {return true;}
+        return Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL));
     }
 
     /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeaderReferrerPolicy() {
         Properties opts = getTunnel().getClientOptions();
-        boolean addReferrerPolicyHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_REFERRER_POLICY));
-        if (!addReferrerPolicyHeader) {return false;}
-        else {return true;}
+        return Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_REFERRER_POLICY));
     }
 
     /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeaderNoSniff() {
         Properties opts = getTunnel().getClientOptions();
-        boolean addNoSniffPolicyHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_NOSNIFF));
-        if (!addNoSniffPolicyHeader) {return false;}
-        else {return true;}
+        return Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_NOSNIFF));
     }
 
     /** @since 0.9.9 */
@@ -1021,9 +1013,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (host != null && host.contains("b32.i2p")) {host = host.substring(0, 12) + "...b32.i2p";}
                 req = host != null ? host : "Unknown request";
 
-                boolean isHead = _headers.startsWith("HEAD ");
-                boolean isGet = _headers.startsWith("GET ");
-                boolean isPost = _headers.startsWith("POST ");
+                boolean isHead = _headers != null && _headers.startsWith("HEAD ");
+                boolean isGet = _headers != null && _headers.startsWith("GET ");
+                boolean isPost = _headers != null && _headers.startsWith("POST ");
                 if (!(isGet || isHead) || _upgrade || browserin.available() > 0) {  // just in case
                     // Unless this is POST, set a huge
                     // timeout and rely on the server to do the actual timeout
@@ -1066,16 +1058,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     compressedout = new CompressedResponseOutputStream(browserout, _keepalive);
                     compressedout.write(DataHelper.getUTF8(modifiedHeaders));
                     s = new Sender(compressedout, serverin, "Server -> Client (Gzip) " +
-                                   (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""), _log);
+                                   (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""), _log);
                     browserout = compressedout;
                 } else {
                     browserout.write(DataHelper.getUTF8(modifiedHeaders));
                     s = new Sender(browserout, serverin, "Server -> Client " +
-                                   (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""), _log);
+                                   (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""), _log);
                 }
                 if (_log.shouldDebug())
                     _log.debug("[HTTPServer] Running server-to-browser Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
-                               (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
+                               (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                 s.run(); // same thread
             } catch (SSLException she) {
                 if (_log.shouldError()) {_log.error("[HTTPServer] SSL error", she);}
@@ -1090,7 +1082,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             } catch (IOException ioe) {
                 if (_log.shouldWarn()) {
                     _log.warn("[HTTPServer] Error compressing -> " + ioe.getMessage()  +
-                              (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
+                              (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                 }
                 ioex = ioe;
                 _keepalive = false;
@@ -1110,7 +1102,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         if (i2pReset) {
                             if (_log.shouldDebug()) {
                                 _log.warn("[HTTPServer] Received I2P RESET -> Resetting socket..." +
-                                          (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
+                                          (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                             }
                             try {_webserver.setSoLinger(true, 0);}
                             catch (IOException ioe) {}
@@ -1122,7 +1114,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         if (sockReset) {
                             if (_log.shouldDebug()) {
                                 _log.warn("[HTTPServer] Received socket RESET ->  Resetting I2P socket..." +
-                                          (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
+                                          (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                             }
                             try {_browser.reset();}
                             catch (IOException ioe) {}
@@ -1145,7 +1137,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (!_keepalive) try { _browser.close(); } catch (IOException ioe) {}
                 if (_log.shouldDebug()) {
                     _log.debug("Finished server-to-browser: Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
-                               (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
+                               (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                 }
             }
         }

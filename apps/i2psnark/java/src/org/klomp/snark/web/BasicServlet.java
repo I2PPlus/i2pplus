@@ -503,7 +503,7 @@ class BasicServlet extends HttpServlet {
         public long getLastModified() {
             String cpath = getServletContext().getContextPath();
             String cname =
-                    "".equals(cpath)
+                    cpath.isEmpty()
                             ? "i2psnark"
                             : cpath.substring(1)
                                     .replace("/", "_"); // This won't work if we aren't at top level

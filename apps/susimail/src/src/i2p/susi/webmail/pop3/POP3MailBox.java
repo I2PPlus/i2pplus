@@ -596,7 +596,7 @@ public class POP3MailBox implements NewMailListener {
                         backgroundChecker = new BackgroundChecker(this);
                     if (ok && idleCloser == null) {idleCloser = new IdleCloser(this);}
                 } else {
-                    if (lastError.equals("")) {lastError = _t("Error connecting to server");}
+                    if (lastError.isEmpty()) {lastError = _t("Error connecting to server");}
                     if (ok && !loginOK) {
                         lastError += '\n' + _t("Mail server login failed, wrong username or password.") +
                                      '\n' + _t("Logout and then login again with the correct username and password.");

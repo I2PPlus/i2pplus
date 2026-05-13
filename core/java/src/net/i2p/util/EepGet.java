@@ -386,7 +386,7 @@ public class EepGet {
         Pattern slashes = Pattern.compile("/+");
         Matcher matcher = slashes.matcher(path);
         // if empty path or just /'s - nameURL lets multiple /'s through
-        if (path.equals("") || matcher.matches()) {
+        if (path.isEmpty() || matcher.matches()) {
             name = sanitize(nameURL.getAuthority());
         // if path specified
         } else {

@@ -61,6 +61,7 @@
                     response.addHeader("Cache-Control", "private, no-cache, max-age=14400");
                     response.setHeader("Accept-Ranges", "none");
                     response.setHeader("Connection", "Close");
+                    response.setHeader("X-Content-Type-Options", "nosniff");
                     rendered = fakeBw
                         ? graphGen.renderRatePng(stream, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit)
                         : graphGen.renderPng(rate, stream, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);

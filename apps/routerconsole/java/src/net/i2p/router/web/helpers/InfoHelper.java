@@ -98,8 +98,7 @@ public class InfoHelper extends HelperBase {
     }
 
     public boolean isRouterSlow() {
-        if (SystemVersion.isSlow()) {return true;}
-        else {return false;}
+        return SystemVersion.isSlow();
     }
 
     public String getCoreCount() {return Integer.toString(SystemVersion.getCores());}

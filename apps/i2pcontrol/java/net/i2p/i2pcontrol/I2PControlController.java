@@ -246,7 +246,7 @@ public class I2PControlController implements RouterApp {
             listenHosts.add("::1");
             listenHosts.add("0:0:0:0:0:0:0:1");
             String allowed = _conf.getConf(PROP_ALLOWED_HOSTS, "");
-            if (!allowed.equals("")) {
+            if (!allowed.isEmpty()) {
                 StringTokenizer tok = new StringTokenizer(allowed, " ,");
                 while (tok.hasMoreTokens()) {
                     listenHosts.add(tok.nextToken());

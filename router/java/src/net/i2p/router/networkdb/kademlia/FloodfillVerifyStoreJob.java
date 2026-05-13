@@ -229,7 +229,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
         if (_log.shouldInfo()) {
             LeaseSet ls = _facade.lookupLeaseSetLocally(_key);
             String tunnelName = ls != null ? _facade.getTunnelName(ls.getDestination()) : "";
-            String name = !tunnelName.equals("") ? " of \'" + tunnelName + "\'" : " of key";
+            String name = !tunnelName.isEmpty() ? " of \'" + tunnelName + "\'" : " of key";
             _log.info("Verifying Floodfill store" + name + " [" + _key.toBase32().substring(0,8) + "] sent to [" +
                       _sentTo.toBase64().substring(0,6) + "] -> Querying: [" + _target.toBase64().substring(0,6) + "]");
         }
@@ -335,7 +335,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             final int type = _message.getType();
             LeaseSet ls = _facade.lookupLeaseSetLocally(_key);
             String tunnelName = ls != null ? _facade.getTunnelName(ls.getDestination()) : "";
-            String name = !tunnelName.equals("") ? " for \'" + tunnelName + "\'" : " for key";
+            String name = !tunnelName.isEmpty() ? " for \'" + tunnelName + "\'" : " for key";
             if (type == DatabaseStoreMessage.MESSAGE_TYPE) {
                 // Verify it's as recent as the one we sent
                 DatabaseStoreMessage dsm = (DatabaseStoreMessage)_message;
@@ -426,7 +426,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             long newDate;
             LeaseSet ls = _facade.lookupLeaseSetLocally(_key);
             String tunnelName = ls != null ? _facade.getTunnelName(ls.getDestination()) : "";
-            String name = !tunnelName.equals("") ? " for \'" + tunnelName + "\'" : " for key";
+            String name = !tunnelName.isEmpty() ? " for \'" + tunnelName + "\'" : " for key";
 
             if (_isLS2 &&
                 ds.getType() != DatabaseEntry.KEY_TYPE_ROUTERINFO &&
@@ -463,7 +463,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             if (_log.shouldWarn()) {
                 LeaseSet ls = _facade.lookupLeaseSetLocally(_key);
                 String tunnelName = ls != null ? _facade.getTunnelName(ls.getDestination()) : "";
-                String name = !tunnelName.equals("") ? " for \'" + tunnelName + "\'" : " for key";
+                String name = !tunnelName.isEmpty() ? " for \'" + tunnelName + "\'" : " for key";
                 _log.warn("Floodfill Verify timed out" + name + " [" + _key.toBase32().substring(0,8) + "] -> " +
                           "Ignoring [" + _target.toBase64().substring(0,6) + "] and selecting a new peer...");
             }

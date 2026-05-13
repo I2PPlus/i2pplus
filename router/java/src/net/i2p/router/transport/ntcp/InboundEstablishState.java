@@ -997,7 +997,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         String ipPort = getRouterIPPort(ri);
         boolean reachable = cap != null && cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
         boolean unreachable = cap != null && cap.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
-        boolean isSlow = (cap != null && !cap.equals("")) && bw.equals("K") ||
+        boolean isSlow = (cap != null && !cap.isEmpty()) && bw.equals("K") ||
                           bw.equals("L") || bw.equals("M") || bw.equals("N");
         String version = ri.getVersion();
         boolean isOld = VersionComparator.comp(version, "0.9.67") < 0;

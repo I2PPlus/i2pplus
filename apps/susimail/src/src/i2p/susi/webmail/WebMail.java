@@ -3633,8 +3633,11 @@ public class WebMail extends HttpServlet {
      * @since 0.9.68+
      */
     private static String renderDateCell(Mail mail, String jslink) {
-        String dateOnly = (mail != null && mail.dateOnly != null) ? mail.dateOnly : "";
-        String formatted = mail != null ? mail.localFormattedDate : "";
+        if (mail == null) {
+            return "";
+        }
+        String dateOnly = (mail.dateOnly != null) ? mail.dateOnly : "";
+        String formatted = mail.localFormattedDate;
         formatted = formatted.replace(",", "")
                              .replace("/", "</span>&#8239;/&#8239;<span>")
                              .replace(":", "&#8239;:&#8239;")

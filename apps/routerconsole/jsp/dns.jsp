@@ -25,16 +25,19 @@
          else if (query.contains("details")) {requestURL = "/susidns/details?" + query;}
          else {requestURL = "/susidns/addressbook?" + query;}
      } else {requestURL = "/susidns/addressbook?book=router&amp;filter=none";}
-     // Sanitize for use in href/src attributes
-     if (requestURL.indexOf('\0') != -1) {
-         requestURL = "/susidns/addressbook";
-     }
+
+    // Sanitize for use in href/src attributes
+    if (requestURL.indexOf('\0') != -1) {
+        requestURL = "/susidns/addressbook";
+    }
+    // Escape for HTML attribute context
+    String safeRequestURL = net.i2p.data.DataHelper.escapeHTML(requestURL);
 
     // CSSHelper is also pulled in by head.jsi below...
     boolean testIFrame = tester.allowIFrame(request.getHeader("User-Agent"));
     if (!testIFrame) {
         response.setStatus(301);
-        response.setHeader("Location", requestURL);
+        response.setHeader("Location", safeRequestURL);
         // force commitment
         response.getOutputStream().close();
         return;
@@ -47,11 +50,11 @@
 </head>
 <body>
 <%@include file="sidebar.jsi"%>
-<h1 class=addbook><%=intl._t("Addressbook")%> <a href="<%=requestURL%>" target=_blank title="<%=intl._t("Open in new tab")%>"><span id=newtab><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>../images/newtab.svg" alt="<%=intl._t("Open in new tab")%>"></span></a></h1>
+<h1 class=addbook><%=intl._t("Addressbook")%> <a href="<%=safeRequestURL%>" target=_blank title="<%=intl._t("Open in new tab")%>"><span id=newtab><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>../images/newtab.svg" alt="<%=intl._t("Open in new tab")%>"></span></a></h1>
 <div class=main id=dns>
-<noscript><p class=infohelp id=jsRequired style=margin:10px>Javascript is required to view <a href="<%=requestURL%>" target=_blank rel=noreferrer>the Addressbook</a> in embedded mode.</p></noscript>
-<iframe id=susidnsframe class=embed src="<%=requestURL%>" title="I2P+ <%=intl._t("addressbook")%>" width=100% scrolling=no frameborder=0 border=0 name="susidnsframe" allowtransparency=true>
-<%=intl._t("Your browser does not support iFrames.")%>&nbsp;<a href="src="<%=requestURL%>"><%=intl._t("Click here to continue.")%></a>
+<noscript><p class=infohelp id=jsRequired style=margin:10px>Javascript is required to view <a href="<%=safeRequestURL%>" target=_blank rel=noreferrer>the Addressbook</a> in embedded mode.</p></noscript>
+<iframe id=susidnsframe class=embed src="<%=safeRequestURL%>" title="I2P+ <%=intl._t("addressbook")%>" width=100% scrolling=no frameborder=0 border=0 name="susidnsframe" allowtransparency=true>
+<%=intl._t("Your browser does not support iFrames.")%>&nbsp;<a href="src="<%=safeRequestURL%>"><%=intl._t("Click here to continue.")%></a>
 </iframe>
 </div>
 <script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>

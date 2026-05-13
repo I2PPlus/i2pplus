@@ -183,7 +183,7 @@ public class EepHead extends EepGet {
             x = get.getContentEncoding();
             if (x != null) System.out.println(" • Content-Encoding: " + x);
             x = get.getContentLanguage();
-            if (x != null && !x.equals("")) System.out.println(" • Content-Language: " + x);
+            if (x != null && !x.isEmpty()) System.out.println(" • Content-Language: " + x);
             if (lm != null) System.out.println(" • Last-Modified: " + lm);
             if (et != null) System.out.println(" • Etag: " + et);
             if (cc != null) System.out.println(" • Cache-Control: " + cc);

@@ -102,7 +102,7 @@ public class SecurityManager {
         String salt;
         synchronized(_conf) {
             salt = _conf.getConf("auth.salt", "");
-            if (salt.equals("")) {
+            if (salt.isEmpty()) {
                 salt = BCrypt.gensalt(10, _context.random());
                 _conf.setConf("auth.salt", salt);
                 _conf.writeConfFile();
@@ -120,7 +120,7 @@ public class SecurityManager {
         String pw;
         synchronized(_conf) {
             pw = _conf.getConf("auth.password", "");
-            if (pw.equals("")) {
+            if (pw.isEmpty()) {
                 pw = getPasswdHash(DEFAULT_AUTH_PASSWORD);
                 _conf.setConf("auth.password", pw);
                 _conf.writeConfFile();

@@ -151,7 +151,7 @@ public class NewsManager implements ClientApp {
     private List<NewsEntry> parseOldNews() {
         File file = new File(_context.getConfigDir(), "docs/news.xml");
         String newsContent = FileUtil.readTextFile(file.toString(), -1, true);
-        if (newsContent == null || newsContent.equals("")) {return Collections.emptyList();}
+        if (newsContent == null || newsContent.isEmpty()) {return Collections.emptyList();}
         return parseNews(newsContent, false);
     }
 
