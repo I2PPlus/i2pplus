@@ -111,6 +111,7 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
     /**
      *  The refiller thread
      */
+    @Override
     public void run() {
         while (_isRunning) {
             AsyncBuffer aBuff = null;

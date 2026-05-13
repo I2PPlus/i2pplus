@@ -52,6 +52,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
      * Records an arriving ack.
      * @param acked how many packets were acked with this ack
      */
+    @Override
     public synchronized void addSample(int acked) {
         long now = _context.clock().now();
         if (_acked < 0) {
@@ -79,6 +80,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
     /**
      * @return the current bandwidth estimate in packets/ms.
      */
+    @Override
     public synchronized float getBandwidthEstimate() {
         long now = _context.clock().now();
         // anti-aliasing filter

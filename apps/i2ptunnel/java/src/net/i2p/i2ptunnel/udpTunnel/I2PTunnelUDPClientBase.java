@@ -145,6 +145,7 @@ import net.i2p.util.EventDispatcher;
      *  @return true if closed successfully
      *  @since 0.9.53
      */
+    @Override
     public boolean close(boolean forced) {
         if (!open) return true;
         if (_session != null) {
@@ -164,6 +165,7 @@ import net.i2p.util.EventDispatcher;
      *  @param s the sink to receive incoming datagrams
      *  @since 0.9.53
      */
+    @Override
     public void setSink(Sink s) {
         _i2pSource.setSink(s);
     }
@@ -173,6 +175,7 @@ import net.i2p.util.EventDispatcher;
      *
      *  @since 0.9.53
      */
+    @Override
     public void start() {
         _i2pSource.start();
     }

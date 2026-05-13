@@ -34,6 +34,7 @@ class I2PServerSocketFull implements I2PServerSocket {
      *         Not actually thrown through 0.9.16; thrown as of 0.9.17
      * @throws SocketTimeoutException if a timeout was previously set with setSoTimeout and the timeout has been reached.
      */
+    @Override
     public I2PSocket accept() throws I2PException, ConnectException, SocketTimeoutException {
         return _socketManager.receiveSocket();
     }
@@ -46,10 +47,12 @@ class I2PServerSocketFull implements I2PServerSocket {
      *  @since 0.8.11
      */
     @Deprecated
+    @Override
     public synchronized AcceptingChannel getChannel() {
         return null;
     }
 
+    @Override
     public long getSoTimeout() {
         return _socketManager.getConnectionManager().getSoTimeout();
     }

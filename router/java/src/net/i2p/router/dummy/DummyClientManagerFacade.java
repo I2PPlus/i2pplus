@@ -32,17 +32,21 @@ public class DummyClientManagerFacade extends ClientManagerFacade {
     public DummyClientManagerFacade(RouterContext ctx) {
         _context = ctx;
     }
+    @Override
     public boolean isLocal(Hash destHash) { return true; }
     public boolean isLocal(Destination dest) { return true; }
     public void reportAbuse(Destination dest, String reason, int severity) { }
+    @Override
     public void messageReceived(ClientMessage msg) {}
     public void requestLeaseSet(Destination dest, LeaseSet set, long timeout,
                                 Job onCreateJob, Job onFailedJob) {
         _context.jobQueue().addJob(onFailedJob);
     }
+    @Override
     public void startup() {}
     public void stopAcceptingClients() { }
     public void shutdown() {}
+    @Override
     public void shutdown(String msg) {}
     public void restart() {}
 

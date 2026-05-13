@@ -57,6 +57,7 @@ class TransientDataStore implements DataStore {
         _banLogger.initialize(ctx);
     }
 
+    @Override
     public boolean isInitialized() {return true;}
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
@@ -67,11 +68,13 @@ class TransientDataStore implements DataStore {
      *  @return total size (RI and LS)
      *  @since 0.8.8
      */
+    @Override
     public int size() {return _data.size();}
 
     /**
      *  @return Unmodifiable view, not a copy
      */
+    @Override
     public Set<Hash> getKeys() {
         return Collections.unmodifiableSet(_data.keySet());
     }
@@ -80,6 +83,7 @@ class TransientDataStore implements DataStore {
      *  @return Unmodifiable view, not a copy
      *  @since 0.8.3
      */
+    @Override
     public Collection<DatabaseEntry> getEntries() {
         return Collections.unmodifiableCollection(_data.values());
     }
@@ -95,6 +99,7 @@ class TransientDataStore implements DataStore {
     /** for PersistentDataStore only - don't use here
       * @throws UnsupportedOperationException always
       */
+    @Override
     public DatabaseEntry get(Hash key, boolean persist) {
         throw new UnsupportedOperationException();
     }
@@ -104,6 +109,7 @@ class TransientDataStore implements DataStore {
         else {return null;}
     }
 
+    @Override
     public boolean isKnown(Hash key) {
         return _data.containsKey(key);
     }

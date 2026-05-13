@@ -128,6 +128,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         }
     }
 
+    @Override
     protected void clientConnectionRun(Socket s) {
         if (_log.shouldInfo())
             _log.info("[IRC Client] New connection - local address is: " + s.getLocalAddress() +
@@ -258,6 +259,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             _localAddr = new byte[] {127, 0, 0, 1};
     }
 
+    @Override
     public boolean isEnabled() {
         return _dccEnabled;
     }
@@ -270,6 +272,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         return _localAddr;
     }
 
+    @Override
     public int newOutgoing(byte[] ip, int port, String type) {
         I2PTunnelDCCServer server;
         synchronized(this) {
@@ -288,6 +291,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         return rv;
     }
 
+    @Override
     public int newIncoming(String b32, int port, String type) {
         DCCClientManager tracker;
         synchronized(this) {
@@ -305,6 +309,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         return rv;
     }
 
+    @Override
     public int resumeOutgoing(int port) {
         DCCClientManager tracker = _DCCClientManager;
         if (tracker != null)

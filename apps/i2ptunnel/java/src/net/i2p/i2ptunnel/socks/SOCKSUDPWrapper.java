@@ -41,6 +41,7 @@ public class SOCKSUDPWrapper implements Source, Sink {
      *  @param sink the sink to receive SOCKS-wrapped datagrams
      *  @since 0.9.53
      */
+    @Override
     public void setSink(Sink sink) {
         this.sink = sink;
     }

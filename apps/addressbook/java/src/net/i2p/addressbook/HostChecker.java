@@ -532,6 +532,7 @@ public class HostChecker {
             final Exception[] lookupError = {null};
 
             Job onSuccess = new Job() {
+                @Override
                 public String getName() { return "LeaseSet lookup success"; }
                 public long getJobId() { return System.currentTimeMillis(); }
                 public JobTiming getTiming() { return new JobTiming(routerContext); }
@@ -542,6 +543,7 @@ public class HostChecker {
                         lookupComplete.notify();
                     }
                 }
+                @Override
                 public void dropped() {
                     lookupResult[0] = false;
                     lookupComplete[0] = true;
@@ -552,6 +554,7 @@ public class HostChecker {
             };
 
             Job onFailure = new Job() {
+                @Override
                 public String getName() { return "LeaseSet lookup failure"; }
                 public long getJobId() { return System.currentTimeMillis(); }
                 public JobTiming getTiming() { return new JobTiming(routerContext); }

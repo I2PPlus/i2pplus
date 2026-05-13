@@ -39,6 +39,11 @@ CONFIG = _load_config()
 
 # ── Exclusion patterns (third-party/generated code) ──────────────────────────
 
+# Rules to exclude from all reports
+EXCLUDED_RULES = [
+    "java/missing-override-annotation",  # Added manually, not a real issue
+]
+
 EXCLUDE_PATTERNS = [
     "org/cybergarage/",
     "org/apache/",
@@ -72,8 +77,10 @@ EXCLUDE_PATTERNS = [
 ]
 
 
-def is_excluded(uri):
-    """Check if a file URI matches any exclusion pattern."""
+def is_excluded(uri, rule_id=None):
+    """Check if a file URI matches any exclusion pattern, or rule is excluded."""
+    if rule_id and rule_id in EXCLUDED_RULES:
+        return True
     return any(p in uri for p in EXCLUDE_PATTERNS)
 
 

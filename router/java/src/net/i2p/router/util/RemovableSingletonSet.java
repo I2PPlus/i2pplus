@@ -53,6 +53,7 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
         return rv;
     }
 
+    @Override
     public int size() {
         return _elem != null ? 1 : 0;
     }
@@ -64,6 +65,7 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
     private class RSSIterator implements Iterator<E> {
         boolean done;
 
+        @Override
         public boolean hasNext() {
             return _elem != null && !done;
         }

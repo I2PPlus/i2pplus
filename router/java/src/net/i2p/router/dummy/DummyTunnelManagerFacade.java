@@ -29,28 +29,38 @@ import net.i2p.router.tunnel.pool.TunnelPool;
 public class DummyTunnelManagerFacade implements TunnelManagerFacade {
 
     /** @deprecated unused */
+    @Override
     public TunnelInfo selectInboundTunnel() { return null; }
     public TunnelInfo selectInboundTunnel(Hash destination) { return null; }
+    @Override
     public TunnelInfo selectOutboundTunnel() { return null; }
     public TunnelInfo selectOutboundTunnel(Hash destination) { return null; }
+    @Override
     public TunnelInfo selectInboundExploratoryTunnel(Hash closestTo) { return null; }
     public TunnelInfo selectInboundTunnel(Hash destination, Hash closestTo) { return null; }
+    @Override
     public TunnelInfo selectOutboundExploratoryTunnel(Hash closestTo) { return null; }
     public TunnelInfo selectOutboundTunnel(Hash destination, Hash closestTo) { return null; }
 
+    @Override
     public boolean isValidTunnel(Hash client, TunnelInfo tunnel) { return false; }
     public int getParticipatingCount() { return 0; }
+    @Override
     public int getFreeTunnelCount() { return 0; }
     public int getOutboundTunnelCount() { return 0; }
+    @Override
     public int getInboundClientTunnelCount() { return 0; }
     public double getShareRatio() { return 0d; }
+    @Override
     public int getOutboundClientTunnelCount() { return 0; }
     public int getOutboundClientTunnelCount(Hash destination) { return 0; }
     public int getInboundClientTunnelCount(Hash destination) { return 0; }
     public long getLastParticipatingExpiration() { return -1; }
     public void buildTunnels(Destination client, ClientTunnelSettings settings) {}
+    @Override
     public void removeTunnels(Destination client) {}
     public boolean addAlias(Destination dest, ClientTunnelSettings settings, Destination existingClient) { return false; }
+    @Override
     public void removeAlias(Destination dest) {}
     public TunnelPoolSettings getInboundSettings() { return null; }
     public TunnelPoolSettings getOutboundSettings() { return null; }

@@ -53,6 +53,7 @@ class DevSU3UpdateHandler implements Checker, Updater {
      *  @param currentVersion ignored, we use current router version
      *  @return active task or null if unable to check
      */
+    @Override
     public UpdateTask check(UpdateType type, UpdateMethod method,
                             String id, String currentVersion, long maxTime) {
         if (type != UpdateType.ROUTER_DEV_SU3 || method != UpdateMethod.HTTP)
@@ -82,6 +83,7 @@ class DevSU3UpdateHandler implements Checker, Updater {
      *  @param maxTime how long you have
      *  @return active task or null if unable to download
      */
+    @Override
     public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources,
                              String id, String newVersion, long maxTime) {
         if (type != ROUTER_DEV_SU3 || method != HTTP || updateSources.isEmpty())

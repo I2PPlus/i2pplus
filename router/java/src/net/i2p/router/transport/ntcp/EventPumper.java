@@ -96,6 +96,7 @@ class EventPumper implements Runnable {
     private static final int BUF_SIZE = 8 * 1024;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
+        @Override
         public ByteBuffer newInstance() {
             if (_useDirect) {
                 return ByteBuffer.allocateDirect(BUF_SIZE);

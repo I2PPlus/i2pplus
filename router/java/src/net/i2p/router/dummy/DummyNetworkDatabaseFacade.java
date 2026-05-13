@@ -35,8 +35,10 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
         _context = ctx;
     }
 
+    @Override
     public void restart() {}
     public void shutdown() {}
+    @Override
     public void startup() {
         RouterInfo info = _context.router().getRouterInfo();
         _routers.put(info.getIdentity().getHash(), info);
@@ -44,17 +46,22 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
 
     public DatabaseEntry lookupLocally(Hash key) { return null; }
     public DatabaseEntry lookupLocallyWithoutValidation(Hash key) { return null; }
+    @Override
     public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {}
     public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, Hash fromLocalDest) {}
     public LeaseSet lookupLeaseSetLocally(Hash key) { return null; }
     public void lookupLeaseSetRemotely(Hash key, Hash fromLocalDest) {}
+    @Override
     public void lookupLeaseSetRemotely(Hash key, Job onFindJob, Job onFailedLookupJob,
                                        long timeoutMs, Hash fromLocalDest) {}
 
+    @Override
     public void lookupDestination(Hash key, Job onFinishedJob, long timeoutMs, Hash fromLocalDest) {}
 
+    @Override
     public Destination lookupDestinationLocally(Hash key) { return null; }
 
+    @Override
     public void lookupRouterInfo(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {
         RouterInfo info = lookupRouterInfoLocally(key);
         if (info == null)
@@ -62,6 +69,7 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
         else
             _context.jobQueue().addJob(onFindJob);
     }
+    @Override
     public RouterInfo lookupRouterInfoLocally(Hash key) { return _routers.get(key); }
 
     public RouterInfo lookupRouterInfoWithTimeout(Hash key, long timeoutMs) {

@@ -70,6 +70,7 @@ public class I2PSource implements Source {
      *  @param sink the sink to receive datagrams
      *  @since 0.9.53
      */
+    @Override
     public void setSink(Sink sink) {
         this.sink = sink;
     }
@@ -84,6 +85,7 @@ public class I2PSource implements Source {
      *
      *  @since 0.9.53
      */
+    @Override
     public void start() {
         // create listener
         Listener l = new Listener();
@@ -126,6 +128,7 @@ public class I2PSource implements Source {
             }
         }
 
+        @Override
         public void reportAbuse(I2PSession arg0, int arg1) {
             // ignore
         }

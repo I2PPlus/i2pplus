@@ -49,6 +49,7 @@ class InternalTrayManager extends TrayManager {
     /**
      *  @since 0.9.53
      */
+    @Override
     public void startManager() throws AWTException {
         super.startManager();
         displayMessage(Log.INFO, _t("Starting"), _t("I2P is starting!"), null);
@@ -210,6 +211,7 @@ class InternalTrayManager extends TrayManager {
         return popup;
     }
 
+    @Override
     public synchronized JPopupMenu getSwingMainMenu() {
         JPopupMenu popup = new JPopupMenu();
 

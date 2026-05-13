@@ -238,6 +238,7 @@ public class KeySelector {
           * @param length number of bytes to process
           * @param bitOffset output array of length k to store calculated bit offsets
           */
+         @Override
          public void getBitSelectors(byte[] b, int offset, int length, int[] bitOffset) {
             int curBit = 8 * offset;
             int curByte;
@@ -334,6 +335,7 @@ public class KeySelector {
          * @param length number of bytes to process
          * @param wordOffset output array of length k to store calculated word offsets
          */
+        @Override
         public void getWordSelectors(byte[] b, int offset, int length, int[] wordOffset) {
             int stride = m - 5;
             //assert true: stride<16;

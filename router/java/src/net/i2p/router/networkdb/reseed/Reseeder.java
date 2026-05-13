@@ -429,6 +429,7 @@ public class Reseeder {
             }
         }
 
+        @Override
         public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {}
         public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {}
         public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {}
@@ -470,6 +471,7 @@ public class Reseeder {
         }
 
         /** save the start time */
+        @Override
         public void attempting(String url) {
             if (_gotDate < MAX_DATE_SETS)
                 _attemptStarted = System.currentTimeMillis();

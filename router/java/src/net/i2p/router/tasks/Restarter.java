@@ -38,6 +38,7 @@ public class Restarter implements Runnable {
      * The restart process is designed to minimize downtime and maintain
      * network connectivity where possible.
      */
+    @Override
     public void run() {
         Long start = System.currentTimeMillis();
         _context.router().eventLog().addEvent(EventLog.SOFT_RESTART);

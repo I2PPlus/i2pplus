@@ -1564,6 +1564,7 @@ public class TunnelController implements Logging {
     /**
      *
      */
+    @Override
     public void log(String s) {
         if (_suppressLog) {return;}
         synchronized (_messages) {

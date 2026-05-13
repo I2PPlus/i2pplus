@@ -20,6 +20,7 @@ import net.i2p.router.PeerManagerFacade;
  *
  */
 public class DummyPeerManagerFacade implements PeerManagerFacade {
+    @Override
     public void shutdown() {}
     public void startup() {}
     public void restart() {}

@@ -309,6 +309,7 @@ class RequestThrottler {
      * Periodic timer event that clears the request counts to reset throttling.
      */
     private class Cleaner implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {RequestThrottler.this.counter.clear();}
     }
 

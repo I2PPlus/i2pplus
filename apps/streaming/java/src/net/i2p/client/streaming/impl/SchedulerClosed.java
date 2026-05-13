@@ -46,6 +46,7 @@ class SchedulerClosed extends SchedulerImpl {
         return (ok || conTimeout);
     }
 
+    @Override
     public void eventOccurred(Connection con) {
         // noop.  we do the timeout through the simpleTimer anyway
         //long timeLeft = con.getCloseSentOn() + Connection.DISCONNECT_TIMEOUT - _context.clock().now();

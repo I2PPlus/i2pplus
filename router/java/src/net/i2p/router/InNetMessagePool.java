@@ -419,6 +419,7 @@ public class InNetMessagePool implements Service {
     /**
      * Shutdown the message pool, stopping all dispatchers and clearing queued messages.
      */
+    @Override
     public synchronized void shutdown() {
         _alive.set(false);
         if (!DISPATCH_DIRECT) {

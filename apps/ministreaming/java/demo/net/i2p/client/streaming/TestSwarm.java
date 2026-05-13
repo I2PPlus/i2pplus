@@ -92,6 +92,7 @@ public class TestSwarm {
     }
 
     private class Listener implements Runnable {
+        @Override
         public void run() {
             try {
                 I2PServerSocket ss = _manager.getServerSocket();
@@ -131,6 +132,7 @@ public class TestSwarm {
             _context.statManager().createRateStat("swarm." + _connectionId + ".lifetime", "How long we talk to a peer", "swarm", new long[] { RateConstants.ONE_MINUTE });
         }
 
+        @Override
         public Flooder(I2PSocket socket) {
             _socket = socket;
             _remoteDestination = socket.getPeerDestination();

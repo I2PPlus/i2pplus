@@ -918,6 +918,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      *                              key mismatch, IP mismatch, banned, etc.)
      * @since 0.9.36
      */
+    @Override
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException {
         // Validate Alice static key
         // find address with matching version
@@ -1085,6 +1086,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @param isHandshake always true; indicates this is during handshake processing
      * @since 0.9.36
      */
+    @Override
     public synchronized void gotOptions(byte[] options, boolean isHandshake) {
         NTCP2Options hisPadding = NTCP2Options.fromByteArray(options);
         if (hisPadding == null) {
@@ -1106,6 +1108,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @param frameLength the total length of the frame including padding
      * @since 0.9.36
      */
+    @Override
     public void gotPadding(int paddingLength, int frameLength) {}
 
     // These payload types are illegal during the NTCP 2 handshake
@@ -1119,6 +1122,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @param lastReceived the number of bytes received when termination occurred
      * @since 0.9.36
      */
+    @Override
     public void gotTermination(int reason, long lastReceived) {}
     /**
      * Illegal during handshake - unknown payload types should not appear.

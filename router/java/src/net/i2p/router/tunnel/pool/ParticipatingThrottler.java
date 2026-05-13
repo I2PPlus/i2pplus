@@ -387,6 +387,7 @@ class ParticipatingThrottler {
      * Periodic timer event that clears the participation counts to reset throttling.
      */
     private class Cleaner implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {counter.clear();}
     }
 

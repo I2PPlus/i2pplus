@@ -261,6 +261,7 @@ class AccessFilter implements StatefulConnectionFilter {
          *
          * @since 0.9.40
          */
+        @Override
         public void timeReached() {
             if (!timersRunning.get()) {
                 synchronized(knownDests) {
@@ -287,6 +288,7 @@ class AccessFilter implements StatefulConnectionFilter {
          *
          * @since 0.9.40
          */
+        @Override
         public void timeReached() {
             if (!timersRunning.get())
                 return;

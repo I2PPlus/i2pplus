@@ -221,6 +221,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     // begin payload callbacks
     /////////////////////////////////////////////////////////
 
+    @Override
     public void gotDateTime(long time) {
         _timeReceived = time;
     }
@@ -466,6 +467,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         }
     }
 
+    @Override
     public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
         if (_log.shouldDebug()) {
             _log.debug("[SSU] Received RouterInfo fragment [" + frag + " / " + totalFrags + "]");
@@ -474,6 +476,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         throw new IllegalStateException("Fragmented RouterInfo");
     }
 
+    @Override
     public void gotAddress(byte[] ip, int port) {
         if (_log.shouldDebug()) {_log.debug("[SSU] Received IP address: " + Addresses.toString(ip, port));}
         _bobIP = ip;
@@ -481,11 +484,13 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         //_bobPort = port;
     }
 
+    @Override
     public void gotRelayTagRequest() {
         if (_log.shouldDebug()) {_log.debug("[SSU] Received RelayTagRequest on " + this);}
         _introductionRequested = true;
     }
 
+    @Override
     public void gotRelayTag(long tag) {} // shouldn't happen for inbound
 
     public void gotRelayRequest(byte[] data) {
@@ -494,12 +499,14 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         }
     }
 
+    @Override
     public void gotRelayResponse(int status, byte[] data) {
         if (_receivedConfirmedIdentity == null) {
             throw new IllegalStateException("RouterInfo must be sent first");
         }
     }
 
+    @Override
     public void gotRelayIntro(Hash aliceHash, byte[] data) {
         if (_receivedConfirmedIdentity == null) {
             throw new IllegalStateException("RouterInfo must be sent first");
@@ -513,6 +520,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         _transport.getPeerTestManager().receiveTest(_remoteHostId, _pstate, msg, status, h, data);
     }
 
+    @Override
     public void gotToken(long token, long expires) {
         if (_log.shouldDebug()) {
             _log.debug("[SSU] Received Token: " + token + " expires " + DataHelper.formatTime(expires) + " on " + this);
@@ -523,6 +531,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         _transport.getEstablisher().addOutboundToken(_remoteHostId, token, expires);
     }
 
+    @Override
     public void gotI2NP(I2NPMessage msg) {
         if (_log.shouldDebug()) {_log.debug("[SSU] Received I2NP block: " + msg);}
         if (getState() != InboundState.IB_STATE_CREATED_SENT) {
@@ -535,6 +544,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         _pstate.gotI2NP(msg);
     }
 
+    @Override
     public void gotFragment(byte[] data, int off, int len, long messageID, int frag, boolean isLast) throws DataFormatException {
         if (_log.shouldDebug()) {_log.debug("[SSU] Received FRAGMENT block: " + messageID);}
         if (getState() != InboundState.IB_STATE_CREATED_SENT) {

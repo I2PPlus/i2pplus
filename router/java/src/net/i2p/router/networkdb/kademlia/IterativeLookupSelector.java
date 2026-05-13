@@ -26,6 +26,7 @@ class IterativeLookupSelector implements MessageSelector {
         _log = ctx.logManager().getLog(getClass());
     }
 
+    @Override
     public boolean continueMatching() {
         // don't use remaining searches count
         return (!_matchFound) && _context.clock().now() < getExpiration();
@@ -68,6 +69,7 @@ class IterativeLookupSelector implements MessageSelector {
     }
 
     /** @since 0.9.12 */
+    @Override
     public String toString() {
         return "IterativeLookupSelector for " + _search.getKey();
     }

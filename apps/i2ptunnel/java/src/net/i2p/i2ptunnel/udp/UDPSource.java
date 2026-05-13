@@ -47,6 +47,7 @@ public class UDPSource implements Source, Runnable {
      *  @param sink the sink to receive processed datagrams
      *  @since 0.9.53
      */
+    @Override
     public void setSink(Sink sink) {
         this.sink = sink;
     }

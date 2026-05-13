@@ -29,6 +29,7 @@ public class MemoryBuffer implements Buffer {
 	/**
 	 * @return new ByteArrayInputStream
 	 */
+	@Override
 	public synchronized InputStream getInputStream() throws IOException {
 		if (content == null)
 			throw new IOException("no data");
@@ -38,12 +39,14 @@ public class MemoryBuffer implements Buffer {
 	/**
 	 * @return new or existing ByteArrayOutputStream
 	 */
+	@Override
 	public synchronized OutputStream getOutputStream() {
 		if (_baos == null)
 			_baos = new ByteArrayOutputStream(_size);
 		return _baos;
 	}
 
+	@Override
 	public void readComplete(boolean success) {}
 
 	/**
@@ -62,6 +65,7 @@ public class MemoryBuffer implements Buffer {
 	/**
 	 * Current size.
 	 */
+	@Override
 	public synchronized int getLength() {
 		if (content != null)
 			return content.length;

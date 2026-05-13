@@ -103,6 +103,7 @@ public class ConfigTunnelsHelper extends HelperBase {
      */
     private class TPComparator implements Comparator<TunnelPoolSettings> {
          private final Collator _comp = Collator.getInstance();
+         @Override
          public int compare(TunnelPoolSettings l, TunnelPoolSettings r) {
              int rv = _comp.compare(getTunnelName(l), getTunnelName(r));
              if (rv != 0) {return rv;}

@@ -185,6 +185,7 @@ public class GeoIP {
     private class LookupJob implements Runnable {
         private static final int CLEAR = 8;
 
+        @Override
         public void run() {
             synchronized(this) {
                 runit();

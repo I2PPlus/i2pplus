@@ -34,6 +34,7 @@ class SchedulerClosing extends SchedulerImpl {
         super(ctx);
     }
 
+    @Override
     public boolean accept(Connection con) {
         if (con == null)
             return false;

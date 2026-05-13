@@ -532,6 +532,7 @@ public class GraphHelper extends FormHandler {
     }
 
     private static class AlphaComparator implements Comparator<GraphListener>, Serializable {
+        @Override
         public int compare(GraphListener l, GraphListener r) {
             // sort by group name
             String lGName = l.getRate().getRateStat().getGroupName();

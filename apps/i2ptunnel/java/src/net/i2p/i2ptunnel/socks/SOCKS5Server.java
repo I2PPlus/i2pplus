@@ -356,6 +356,7 @@ class SOCKS5Server extends SOCKSServer {
         return command;
     }
 
+    @Override
     protected void confirmConnection() throws SOCKSException {
         DataOutputStream out;
         try {

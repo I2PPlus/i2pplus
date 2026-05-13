@@ -23,6 +23,7 @@ import net.i2p.util.EventDispatcher;
  */
 public abstract class EventReceiver implements EventDispatcher {
 
+    @Override
     public EventDispatcher getEventDispatcher() {
         return this;
     }
@@ -30,6 +31,7 @@ public abstract class EventReceiver implements EventDispatcher {
     /**
      *  @throws UnsupportedOperationException always
      */
+    @Override
     public void attachEventDispatcher(EventDispatcher ev) {
         throw new UnsupportedOperationException();
     }
@@ -37,15 +39,18 @@ public abstract class EventReceiver implements EventDispatcher {
     /**
      *  @throws UnsupportedOperationException always
      */
+    @Override
     public void detachEventDispatcher(EventDispatcher ev) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public abstract void notifyEvent(String eventName, Object args);
 
     /**
      *  @throws UnsupportedOperationException always
      */
+    @Override
     public Object getEventValue(String name) {
         throw new UnsupportedOperationException();
     }

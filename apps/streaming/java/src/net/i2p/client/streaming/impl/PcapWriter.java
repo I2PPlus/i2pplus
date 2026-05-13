@@ -88,6 +88,7 @@ public class PcapWriter implements Closeable, Flushable {
         //}
     }
 
+    @Override
     public void close() {
             try {
                 _fos.close();

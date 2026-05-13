@@ -69,6 +69,7 @@ class SearchMessageSelector implements MessageSelector {
         }
     }
 
+    @Override
     public long getExpiration() { return _exp; }
 
     public boolean isMatch(I2NPMessage message) {

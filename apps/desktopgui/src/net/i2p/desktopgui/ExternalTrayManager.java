@@ -53,6 +53,7 @@ class ExternalTrayManager extends TrayManager {
         return popup;
     }
 
+    @Override
     public JPopupMenu getSwingMainMenu() {
         JPopupMenu popup = new JPopupMenu();
 /*
@@ -90,6 +91,7 @@ class ExternalTrayManager extends TrayManager {
      * Update the menu
      * @since 0.9.26
      */
+    @Override
     protected void updateMenu() {
         if (_notificationItem1 != null)
             _notificationItem1.setEnabled(_showNotifications);

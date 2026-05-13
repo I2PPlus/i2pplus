@@ -257,6 +257,7 @@ public class MTU {
 
     /** @since 0.9.57 */
     private static class IAComparator implements Comparator<InetAddress> {
+        @Override
         public int compare(InetAddress l, InetAddress r) {
              return (l.getHostAddress()).compareTo((r.getHostAddress()));
         }

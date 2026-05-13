@@ -131,6 +131,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      *
      * @return milliseconds to wait, or -1 if we will wait indefinitely
      */
+    @Override
     public long getConnectTimeout() {
         return _connectTimeout;
     }
@@ -142,6 +143,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * and it also interprets &lt;= 0 as default.
      *
      */
+    @Override
     public void setConnectTimeout(long ms) {
         _connectTimeout = ms;
     }
@@ -156,6 +158,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      *
      * @return timeout in ms, 0 for nonblocking, -1 for forever
      */
+    @Override
     public long getReadTimeout() {
         return _readTimeout;
     }
@@ -170,6 +173,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      *
      * @param ms timeout in ms, 0 for nonblocking, -1 for forever
      */
+    @Override
     public void setReadTimeout(long ms) {
         _readTimeout = ms;
     }
@@ -184,6 +188,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      *
      * @return buffer size limit, in bytes
      */
+    @Override
     public int getMaxBufferSize() {
         return _maxBufferSize;
     }
@@ -197,6 +202,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * Default 64 KB
      *
      */
+    @Override
     public void setMaxBufferSize(int numBytes) {
         _maxBufferSize = numBytes;
     }
@@ -209,6 +215,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      *
      * Default -1 (unlimited)
      */
+    @Override
     public long getWriteTimeout() {
         return _writeTimeout;
     }
@@ -221,6 +228,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      *
      * Default -1 (unlimited)
      */
+    @Override
     public void setWriteTimeout(long ms) {
         _writeTimeout = ms;
     }
@@ -240,6 +248,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      *  @throws IllegalArgumentException
      *  @since 0.8.9
      */
+    @Override
     public void setPort(int port) {
         if (port < 0 || port > 65535)
             throw new IllegalArgumentException("Bad port");

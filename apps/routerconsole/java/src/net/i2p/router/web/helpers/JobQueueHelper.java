@@ -654,6 +654,7 @@ public class JobQueueHelper extends HelperBase {
     private static class JobStatsComparator implements Comparator<JobStats>, Serializable {
          private final Collator coll = Collator.getInstance();
 
+         @Override
          public int compare(JobStats l, JobStats r) {
              return coll.compare(l.getName(), r.getName());
         }
@@ -686,6 +687,7 @@ public class JobQueueHelper extends HelperBase {
             this.jobs = jobs;
         }
 
+        @Override
         public int compareTo(JobTimeEntry other) {
             // Sort by time (lowest delay first)
             if (this.time < other.time) return -1;

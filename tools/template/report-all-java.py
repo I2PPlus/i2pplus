@@ -81,10 +81,13 @@ def parse_pmd(xml_file):
         for vnode in fnode.findall("pmd:violation", ns):
             v = vnode.attrib
             msg = (vnode.text or "").strip()
+            rule = v.get("rule", "?")
+            if is_excluded(fname, rule):
+                continue
             results.append({
                 "file": fname,
                 "line": int(v.get("beginline", 0) or 0),
-                "rule": v.get("rule", "?"),
+                "rule": rule,
                 "message": msg,
                 "severity": f'p{v.get("priority", "3")}',
                 "source": "PMD",
@@ -174,7 +177,7 @@ def parse_codeql(sarif_file):
             region = loc.get("region", {})
             line = region.get("startLine", 0)
 
-            if is_excluded(artifact):
+            if is_excluded(artifact, rule_id):
                 continue
 
             short_msg = rule.get("shortDescription", {}).get("text", message[:120])

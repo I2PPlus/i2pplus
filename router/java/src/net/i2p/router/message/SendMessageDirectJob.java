@@ -114,6 +114,7 @@ public class SendMessageDirectJob extends JobImpl {
             throw new IllegalArgumentException("Attempt to send a message to a null peer");
     }
 
+    @Override
     public String getName() { return "Send Direct Message"; }
 
     public void runJob() {

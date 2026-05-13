@@ -171,6 +171,7 @@ public class ExternalMain implements ClientApp, NotificationService {
      *  @param path unsupported
      *  @return 0, or -1 on failure
      */
+    @Override
     public int notify(String source, String category, int priority, String title, String message, String path) {
         TrayManager tm = _trayManager;
         if (tm == null)
@@ -184,6 +185,7 @@ public class ExternalMain implements ClientApp, NotificationService {
      *
      *  @return false always
      */
+    @Override
     public boolean cancel(int id) {
         return false;
     }
@@ -194,12 +196,14 @@ public class ExternalMain implements ClientApp, NotificationService {
      *
      *  @return false always
      */
+    @Override
     public boolean update(int id, String title, String message, String path) {
         return false;
     }
 
     /////// ClientApp methods
 
+    @Override
     public synchronized void startup() {
         beginStartup(null);
     }

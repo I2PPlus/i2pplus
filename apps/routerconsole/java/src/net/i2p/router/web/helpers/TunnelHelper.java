@@ -33,6 +33,7 @@ public class TunnelHelper extends HelperBase {
         }
     }
 
+    @Override
     public boolean isAdvanced() {
         return _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
     }

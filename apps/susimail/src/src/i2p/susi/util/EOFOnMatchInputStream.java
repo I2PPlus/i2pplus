@@ -55,6 +55,7 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
      *  (not necessarily starting at 0) minus the buffered/matched count.
      *  Otherwise returns 0.
      */
+    @Override
     public long getRead() {
         if (cis != null)
         	return cis.getRead() - (size - pos);

@@ -23,6 +23,7 @@ class DummyHandler implements Checker, Updater {
     /**
      *  Spins off an UpdateTask that sleeps
      */
+    @Override
     public UpdateTask check(UpdateType type, UpdateMethod method,
                             String id, String currentVersion, long maxTime) {
         if (type != UpdateType.TYPE_DUMMY)

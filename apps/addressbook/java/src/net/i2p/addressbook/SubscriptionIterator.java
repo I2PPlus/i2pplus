@@ -62,6 +62,7 @@ class SubscriptionIterator implements Iterator<AddressBook> {
     /* (non-Javadoc)
      * @see java.util.Iterator#hasNext()
      */
+    @Override
     public boolean hasNext() {
         return this.subIterator.hasNext();
     }
@@ -95,6 +96,7 @@ class SubscriptionIterator implements Iterator<AddressBook> {
     /* (non-Javadoc)
      * @see java.util.Iterator#remove()
      */
+    @Override
     public void remove() {
         throw new UnsupportedOperationException();
     }

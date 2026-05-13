@@ -42,6 +42,7 @@ class MessageHandler implements I2PSessionMuxedListener {
      * @param msgId message number available
      * @param size size of the message
      */
+    @Override
     public void messageAvailable(I2PSession session, int msgId, long size) {
         messageAvailable(session, msgId, size, I2PSession.PROTO_UNSPECIFIED,
                          I2PSession.PORT_UNSPECIFIED, I2PSession.PORT_UNSPECIFIED);
@@ -96,6 +97,7 @@ class MessageHandler implements I2PSessionMuxedListener {
      * @param session session to report abuse to
      * @param severity how bad the abuse is
      */
+    @Override
     public void reportAbuse(I2PSession session, int severity) {
         if (_log.shouldError()) {
             _log.error("Abuse reported with severity " + severity);

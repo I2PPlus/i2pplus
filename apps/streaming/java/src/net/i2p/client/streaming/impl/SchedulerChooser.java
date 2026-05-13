@@ -50,6 +50,7 @@ class SchedulerChooser {
 
     private class NullScheduler implements TaskScheduler {
 
+        @Override
         public void eventOccurred(Connection con) {
             if (_log.shouldInfo())
                 _log.info("Yell at jrandom: Event occurred on " + con, new Exception("source"));

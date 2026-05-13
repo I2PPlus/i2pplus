@@ -24,6 +24,7 @@ class DevRandom implements IRandomStandalone {
         return (new File(F)).canRead();
     }
 
+    @Override
     public String name() { return F; }
 
     public void init(Map<String, byte[]> attributes) {
@@ -59,6 +60,7 @@ class DevRandom implements IRandomStandalone {
         }
     }
 
+    @Override
     public void addRandomByte(byte b) {}
     public void addRandomBytes(byte[] in) {}
     public void addRandomBytes(byte[] in, int offset, int length) {}

@@ -172,6 +172,7 @@ public class JettyStart implements ClientApp {
         }
     }
 
+    @Override
     public synchronized void startup() {
         if (_state != INITIALIZED && _state != STOPPED && _state != START_FAILED)
             return;
@@ -252,6 +253,7 @@ public class JettyStart implements ClientApp {
         }
     }
 
+    @Override
     public synchronized void shutdown(String[] args) {
         if (_state != RUNNING)
             return;
@@ -293,6 +295,7 @@ public class JettyStart implements ClientApp {
         }
     }
 
+    @Override
     public ClientAppState getState() {
         return _state;
     }

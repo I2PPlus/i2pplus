@@ -275,6 +275,7 @@ public class RouterAddress extends DataStructureImpl {
      *  Restored as of 0.9.12, wait several more releases before using.
      *  @throws IllegalStateException if was already read in
      */
+    @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         if (_transportStyle != null)
             throw new IllegalStateException();

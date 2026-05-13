@@ -92,6 +92,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      * Handle an incoming message and dispatch it to the appropriate handler
      *
      */
+    @Override
     public void messageReceived(I2CPMessageReader reader, I2CPMessage message) {
         if (_runner.isDead()) {
             if (_log.shouldWarn()) {_log.warn("Received but runner dead: \n" + message);}
@@ -165,6 +166,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      * Handle notification that there was an error
      *
      */
+    @Override
     public void readError(I2CPMessageReader reader, Exception error) {
         if (_runner.isDead()) {return;}
         if (_log.shouldWarn()) {_log.warn("Unclassified error occurred \n* Error: " + error.getMessage());}

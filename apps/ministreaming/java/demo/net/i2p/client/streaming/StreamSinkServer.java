@@ -93,6 +93,7 @@ public class StreamSinkServer {
      */
     private class ClientRunner implements Runnable {
         private I2PServerSocket _socket;
+        @Override
         public ClientRunner(I2PServerSocket socket) {
             _socket = socket;
         }

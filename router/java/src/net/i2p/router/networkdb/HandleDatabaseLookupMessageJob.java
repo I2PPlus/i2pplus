@@ -330,6 +330,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         }
     }
 
+    @Override
     public String getName() {return "Handle Database Lookup Message";}
 
     @Override

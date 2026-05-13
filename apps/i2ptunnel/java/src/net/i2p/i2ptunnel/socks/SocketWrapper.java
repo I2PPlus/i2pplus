@@ -57,6 +57,7 @@ class SocketWrapper implements I2PSocket {
     /**
      * @return the destination of the peer.
      */
+    @Override
     public Destination getPeerDestination() {
         return DUMMY_DEST;
     }
@@ -67,6 +68,7 @@ class SocketWrapper implements I2PSocket {
      * @return the socket's input stream
      * @throws IOException if the socket is closed
      */
+    @Override
     public InputStream getInputStream() throws IOException {
         return socket.getInputStream();
     }
@@ -77,6 +79,7 @@ class SocketWrapper implements I2PSocket {
      * @return the socket's output stream
      * @throws IOException if the socket is closed
      */
+    @Override
     public OutputStream getOutputStream() throws IOException {
         return socket.getOutputStream();
     }
@@ -85,6 +88,7 @@ class SocketWrapper implements I2PSocket {
      *  @return null always
      */
     @Deprecated
+    @Override
     public SelectableChannel getChannel() {
         return null;
     }
@@ -92,6 +96,7 @@ class SocketWrapper implements I2PSocket {
     /**
      *  @return null always
      */
+    @Override
     public I2PSocketOptions getOptions() {
         return null;
     }
@@ -99,12 +104,14 @@ class SocketWrapper implements I2PSocket {
     /**
      * Does nothing
      */
+    @Override
     public void setOptions(I2PSocketOptions options) {}
 
     public long getReadTimeout() {
         return -1;
     }
 
+    @Override
     public void setReadTimeout(long ms) {}
 
     public void close() throws IOException {
@@ -115,6 +122,7 @@ class SocketWrapper implements I2PSocket {
      * Just calls close()
      * @since 0.9.30
      */
+    @Override
     public void reset() throws IOException {
         close();
     }

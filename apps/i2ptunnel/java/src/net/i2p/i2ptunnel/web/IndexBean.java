@@ -658,6 +658,7 @@ public class IndexBean {
      */
     private class TCComparator implements Comparator<Integer> {
          private final Collator _comp = Collator.getInstance();
+         @Override
          public int compare(Integer l, Integer r) {
              int rv = _comp.compare(getTunnelName(l), getTunnelName(r));
              if (rv != 0) {return rv;}

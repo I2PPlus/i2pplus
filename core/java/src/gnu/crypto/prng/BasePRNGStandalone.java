@@ -88,10 +88,12 @@ public abstract class BasePRNGStandalone implements IRandomStandalone, Serializa
 
    // IRandomStandalone interface implementation ----------------------------------------
 
+    @Override
     public String name() {
         return name;
     }
 
+    @Override
     public void init(Map<String, byte[]> attributes) {
         this.setup(attributes);
 
@@ -142,6 +144,7 @@ public abstract class BasePRNGStandalone implements IRandomStandalone, Serializa
         }
     }
 
+    @Override
     public void addRandomByte(byte b) {
         throw new UnsupportedOperationException("random state is non-modifiable");
     }

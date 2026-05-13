@@ -25,6 +25,7 @@ public class MultiSink<S extends Sink> implements Source, Sink {
     /** Don't use this - put sinks in the cache */
     public void setSink(Sink sink) {}
 
+    @Override
     public void start() {}
 
     /**

@@ -196,6 +196,7 @@ class SOCKS4aServer extends SOCKSServer {
      *
      * @return an I2PSocket connected with the destination
      */
+    @Override
     public I2PSocket getDestinationI2PSocket(I2PSOCKSTunnel t) throws SOCKSException {
         setupServer();
 

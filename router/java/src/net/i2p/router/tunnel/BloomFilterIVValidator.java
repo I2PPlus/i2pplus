@@ -86,6 +86,7 @@ class BloomFilterIVValidator implements IVValidator {
                                          new long[] { 60*1000, 60*60*1000L });
     }
 
+    @Override
     public boolean receiveIV(byte ivData[], int ivOffset, byte payload[], int payloadOffset) {
         if (_filter == null)  // testing only
             return true;

@@ -30,6 +30,7 @@ public class MultiSource implements Source, Sink {
      *  @param sink the sink to receive distributed data
      *  @since 0.9.53
      */
+    @Override
     public void setSink(Sink sink) {
         this.sink = sink;
     }
@@ -38,6 +39,7 @@ public class MultiSource implements Source, Sink {
      *  Initializes the multi-source. No-op for this implementation.
      *  @since 0.9.53
      */
+    @Override
     public void start() {}
 
     /**

@@ -219,6 +219,7 @@ public class Main implements RouterApp, NotificationService {
      *  @param path unsupported
      *  @return 0, or -1 on failure
      */
+    @Override
     public int notify(String source, String category, int priority, String title, String message, String path) {
         TrayManager tm = _trayManager;
         if (tm == null)
@@ -232,6 +233,7 @@ public class Main implements RouterApp, NotificationService {
      *
      *  @return false always
      */
+    @Override
     public boolean cancel(int id) {
         return false;
     }
@@ -242,6 +244,7 @@ public class Main implements RouterApp, NotificationService {
      *
      *  @return false always
      */
+    @Override
     public boolean update(int id, String title, String message, String path) {
         return false;
     }
@@ -249,11 +252,13 @@ public class Main implements RouterApp, NotificationService {
     /////// ClientApp methods
 
     /** @since 0.9.26 */
+    @Override
     public synchronized void startup() {
         beginStartup(null);
     }
 
     /** @since 0.9.26 */
+    @Override
     public synchronized void shutdown(String[] args) {
         if (_state == STOPPED)
             return;

@@ -49,6 +49,7 @@ public class ReadBuffer implements Buffer {
 	 * @return new ByteArrayInputStream over the content
 	 * @since 0.9.34
 	 */
+	@Override
 	public InputStream getInputStream() {
 		return new ByteArrayInputStream(content, offset, length);
 	}
@@ -57,6 +58,7 @@ public class ReadBuffer implements Buffer {
 	 * @throws IllegalStateException always
 	 * @since 0.9.34
 	 */
+	@Override
 	public OutputStream getOutputStream() {
 		throw new IllegalStateException();
 	}
@@ -65,6 +67,7 @@ public class ReadBuffer implements Buffer {
 	 * Does nothing
 	 * @since 0.9.34
 	 */
+	@Override
 	public void readComplete(boolean success) {}
 
 	/**

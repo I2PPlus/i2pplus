@@ -52,6 +52,7 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
         _sentOn = System.currentTimeMillis();
     }
 
+    @Override
     public String getName() { return "Update Kademlia Search Reply Found "; }
 
     public void runJob() {
@@ -132,5 +133,6 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
         _job.searchNext();
     }
 
+    @Override
     public void setMessage(I2NPMessage message) { _message = message; }
 }

@@ -30,6 +30,7 @@ public class SOCKSUDPUnwrapper implements Source, Sink {
      *  @param sink the sink to receive unwrapped datagrams
      *  @since 0.9.53
      */
+    @Override
     public void setSink(Sink sink) {
         this.sink = sink;
     }
@@ -39,6 +40,7 @@ public class SOCKSUDPUnwrapper implements Source, Sink {
      *
      *  @since 0.9.53
      */
+    @Override
     public void start() {}
 
     /**

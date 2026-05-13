@@ -222,6 +222,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
      * Handle a clove removed from the garlic message
      *
      */
+    @Override
     public void handleClove(DeliveryInstructions instructions, I2NPMessage data) {
         int type = data.getType();
         switch (instructions.getDeliveryMode()) {

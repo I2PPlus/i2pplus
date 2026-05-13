@@ -66,6 +66,7 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
      * @return non-null
      * @since 0.9.3
      */
+    @Override
     public Hash getSendTo() {
         return _config.getSendTo();
     }

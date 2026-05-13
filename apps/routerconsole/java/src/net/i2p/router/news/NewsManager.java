@@ -124,6 +124,7 @@ public class NewsManager implements ClientApp {
     /**
      *  ClientApp interface
      */
+    @Override
     public synchronized void startup() {
         changeState(STARTING);
         _currentNews = PersistNews.load(_context);

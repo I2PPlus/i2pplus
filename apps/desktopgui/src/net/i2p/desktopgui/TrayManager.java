@@ -110,10 +110,12 @@ abstract class TrayManager {
         frame.add(menu);
         TrayIcon ti = new TrayIcon(getTrayImage(), tooltip, null);
         ti.addMouseListener(new MouseListener() {
+            @Override
             public void mouseClicked(MouseEvent e)  {}
             public void mouseEntered(MouseEvent e)  {}
             public void mouseExited(MouseEvent e)   {}
             public void mousePressed(MouseEvent e)  { handle(e); }
+            @Override
             public void mouseReleased(MouseEvent e) { handle(e); }
             private void handle(MouseEvent e) {
                 //System.out.println("Button " + e.getButton() + " Frame was visible? " +
@@ -130,6 +132,7 @@ abstract class TrayManager {
             }
         });
         menu.addPopupMenuListener(new PopupMenuListener() {
+            @Override
             public void popupMenuCanceled(PopupMenuEvent e)            { /* frame.setVisible(false); */ }
             public void popupMenuWillBecomeInvisible(PopupMenuEvent e) { frame.setVisible(false); }
             public void popupMenuWillBecomeVisible(PopupMenuEvent e)   {}

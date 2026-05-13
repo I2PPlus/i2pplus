@@ -167,6 +167,7 @@ public class DecayingBloomFilter {
      * @since 0.8.8
      */
     private class Shutdown implements Runnable {
+        @Override
         public void run() {
            clear();
         }
@@ -351,6 +352,7 @@ public class DecayingBloomFilter {
             super(_context.simpleTimer2());
         }
 
+        @Override
         public void timeReached() {
             if (_keepDecaying) {
                 decay();

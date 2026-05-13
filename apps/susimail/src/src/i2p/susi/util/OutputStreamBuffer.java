@@ -20,6 +20,7 @@ public class OutputStreamBuffer implements Buffer {
 	/**
 	 * @throws UnsupportedOperationException
 	 */
+	@Override
 	public InputStream getInputStream() {
 		throw new UnsupportedOperationException();
 	}
@@ -27,6 +28,7 @@ public class OutputStreamBuffer implements Buffer {
 	/**
 	 * @return the OutputStream
 	 */
+	@Override
 	public OutputStream getOutputStream() {
 		return _out;
 	}
@@ -34,6 +36,7 @@ public class OutputStreamBuffer implements Buffer {
 	/**
 	 * Does nothing
 	 */
+	@Override
 	public void readComplete(boolean success) {}
 
 	/**
