@@ -1270,7 +1270,13 @@ public class SidebarHelper extends HelperBase {
      *  @since 0.8.13 moved from SidebarRenderer
      */
     public String getRestartStatus() {
-        String nextNonce = _session != null ? CSSHelper.getNonce(_session) : CSSHelper.getNonce();
+        String nextNonce = null;
+        if (_request != null) {
+            nextNonce = (String) _request.getAttribute("pageConsoleNonce");
+        }
+        if (nextNonce == null) {
+            nextNonce = _session != null ? CSSHelper.getNonce(_session) : CSSHelper.getNonce();
+        }
         return ConfigRestartBean.renderStatus(getRequestURI(), getAction(), _session, nextNonce, getConsoleNonce());
     }
 
@@ -1387,6 +1393,9 @@ public class SidebarHelper extends HelperBase {
 
     private String _requestURI;
     public void setRequestURI(String s) {_requestURI = s == null ? null : DataHelper.stripHTML(s);}
+
+    private javax.servlet.http.HttpServletRequest _request;
+    public void setRequest(javax.servlet.http.HttpServletRequest s) {_request = s;}
 
     /**
      * @return non-null; "/home" if (strangely) not set by jsp

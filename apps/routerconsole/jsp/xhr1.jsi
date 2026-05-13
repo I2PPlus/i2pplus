@@ -9,6 +9,7 @@
 String reqURI = request.getRequestURI();
 if (reqURI.contains("/xhr1")) {reqURI = request.getParameter("requestURI");}
 helper.setRequestURI(reqURI);
+helper.setRequest(request);
 helper.storeSession(session);
 helper.storeWriter(out);
 helper.storeNewsHelper(newshelper);

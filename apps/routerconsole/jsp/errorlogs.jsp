@@ -5,6 +5,9 @@
    if (contextId == null) {contextId = (String) session.getAttribute("i2p.contextId");}
    logsHelper.setContextId(contextId);
    final String consoleNonce = net.i2p.router.web.CSSHelper.getNonce(session);
+   request.setAttribute("pageConsoleNonce", consoleNonce);
+   // Also pass to sidebar helper via request attribute
+   request.setAttribute("consoleNonce", consoleNonce);
    final String critParam = request.getParameter("crit");
    final String nonceParam = request.getParameter("consoleNonce");
    int last = logsHelper.getLastCriticalMessageNumber();

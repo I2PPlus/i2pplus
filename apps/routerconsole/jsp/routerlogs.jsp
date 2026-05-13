@@ -5,6 +5,7 @@
    if (contextId == null) {contextId = (String) session.getAttribute("i2p.contextId");}
    logsHelper.setContextId(contextId);
    final String consoleNonce = net.i2p.router.web.CSSHelper.getNonce(session);
+   request.setAttribute("pageConsoleNonce", consoleNonce);
    final String clearParam = request.getParameter("clear");
    final String nonceParam = request.getParameter("consoleNonce");
    int last = logsHelper.getLastMessageNumber();

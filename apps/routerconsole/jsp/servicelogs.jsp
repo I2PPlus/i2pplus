@@ -5,6 +5,7 @@
    if (contextId == null) {contextId = (String) session.getAttribute("i2p.contextId");}
    logsHelper.setContextId(contextId);
    final String consoleNonce = net.i2p.router.web.CSSHelper.getNonce(session);
+   request.setAttribute("pageConsoleNonce", consoleNonce);
    final String svcParam = request.getParameter("svc");
    final String svctParam = request.getParameter("svct");
    final String svcfParam = request.getParameter("svcf");
