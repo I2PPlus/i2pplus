@@ -2829,24 +2829,25 @@ return false;
                 continue;
             }
 
-            // Check if LeaseSet is expiring soon - proactive refresh before expiry
-            // Use raw lookup to get LeaseSet even if expired
-            DatabaseEntry ds = _ds.get(key);
-            if (ds != null && ds.isLeaseSet()) {
-                LeaseSet ls = (LeaseSet) ds;
-                long expires = ls.getLatestLeaseDate();
-                long timeToExpiry = expires - now;
-                if (timeToExpiry > 0 && timeToExpiry < PROACTIVE_REFRESH_THRESHOLD) {
-                    // Proactive refresh - LeaseSet expiring soon
-                    _clientLeaseSetAccessTime.put(key, now);
-                    lookupLeaseSetRemotely(key, null);
-                    if (_log.shouldDebug()) {
-                        _log.debug("Proactive refresh for " + hostname + " (expires in " + (timeToExpiry/1000) + "s)");
+// Check if LeaseSet is expiring soon - proactive refresh before expiry
+                // Use raw lookup to get LeaseSet even if expired
+                DatabaseEntry ds = _ds.get(key);
+                if (ds != null && ds.isLeaseSet()) {
+                    LeaseSet ls = (LeaseSet) ds;
+                    long expires = ls.getLatestLeaseDate();
+                    long timeToExpiry = expires - now;
+                    if (timeToExpiry > 0 && timeToExpiry < PROACTIVE_REFRESH_THRESHOLD) {
+                        // Proactive refresh - LeaseSet expiring soon
+                        // Always use client tunnels for client subDb refresh
+                        _clientLeaseSetAccessTime.put(key, now);
+                        lookupLeaseSetRemotely(key, _dbid);
+                        if (_log.shouldDebug()) {
+                            _log.debug("Proactive refresh for " + hostname + " (expires in " + (timeToExpiry/1000) + "s)");
+                        }
+                        processed++;
+                        continue;
                     }
-                    processed++;
-                    continue;
                 }
-            }
 
             if (lastAccess < inactiveThreshold) {
                 iter.remove();
@@ -2857,12 +2858,11 @@ return false;
             } else if (lastAccess < refreshThreshold) {
                 // Only refresh if we have tunnels built to this destination (already checked above)
                 // Update access time instead of removing - keeps entry for periodic refresh
+                // Always use client tunnels for client subDb - exploratory tunnels won't work
                 _clientLeaseSetAccessTime.put(key, now);
-                // 50/50 weighted random: use client tunnels or exploratory for distribution
-                Hash fromDest = _context.random().nextBoolean() ? _dbid : null;
-                lookupLeaseSetRemotely(key, fromDest);
+                lookupLeaseSetRemotely(key, _dbid);
                 if (_log.shouldDebug()) {
-                    _log.debug("Refreshing client LeaseSet: " + hostname + (fromDest != null ? " (client tunnels)" : " (exploratory)"));
+                    _log.debug("Refreshing client LeaseSet: " + hostname);
                 }
                 processed++;
             }
