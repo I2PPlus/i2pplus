@@ -489,7 +489,7 @@ class EstablishmentManager {
                                     _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Invalid MTU");
                                 }
                             }
-                        } else if (!ipAddress.isEmpty() && !ipAddress.isEmpty()) {
+                        } else if (!ipAddress.isEmpty()) {
                             if (_log.shouldWarn()) {
                                 _log.warn("[SSU] Router has invalid MTU (too small): " + ipAddress + ":" + maybePort);
                             }
@@ -514,7 +514,7 @@ class EstablishmentManager {
                                 _log.warn("[SSU] Banning [" + truncHash + "] for 1h -> No Introduction key");
                             }
                         }
-                    } else if (!ipAddress.isEmpty() && !ipAddress.isEmpty()) {
+                    } else if (!ipAddress.isEmpty()) {
                         if (_log.shouldWarn()) {
                                 _log.warn("[SSU] Received no Introduction key from: " + ipAddress + ":" + maybePort);
                         }
@@ -535,7 +535,7 @@ class EstablishmentManager {
                                 _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Bad Introduction key");
                             }
                         }
-                    } else if (!ipAddress.isEmpty() && !ipAddress.isEmpty()) {
+                    } else if (!ipAddress.isEmpty()) {
                         if (_log.shouldWarn()) {
                             _log.warn("[SSU] Received Bad Introduction key from: " + ipAddress + ":" + maybePort);
                         }
