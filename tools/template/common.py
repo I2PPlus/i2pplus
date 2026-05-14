@@ -41,25 +41,32 @@ CONFIG = _load_config()
 
 # Rules to exclude from all reports (low value / high noise)
 EXCLUDED_RULES = [
-    # Done: Added manually, not a real issue
+    # CodeQL: Added manually, not a real issue
     "java/missing-override-annotation",
-    # Complex analysis required, low value
+    # CodeQL: Complex analysis required, low value
     "java/useless-null-check",
-    # Unused variables - common in I2P codebase patterns
+    # CodeQL: Unused variables - common in I2P codebase patterns
     "java/unused-parameter",
     "java/local-variable-is-never-read",
-    # Deprecated/old API usage - often intentional
+    # CodeQL: Deprecated/old API usage - often intentional
     "java/deprecated-call",
     "java/ignored-error-status-of-call",
     "java/constant-comparison",
-    # Documentation noise
+    # CodeQL: Documentation noise
     "java/unknown-javadoc-parameter",
-    # Style issues, not bugs
+    # CodeQL: Style issues, not bugs
     "java/call-to-object-tostring",
     "java/non-sync-override",
     "java/misleading-indentation",
     "java/missing-case-in-switch",
     "java/sleep-with-lock-held",
+    # SpotBugs: High noise, intentional patterns
+    "DE_MIGHT_IGNORE",
+    "RV_RETURN_VALUE_IGNORED_BAD_PRACTICE",
+    "IS2_INCONSISTENT_SYNC",
+    "REC_CATCH_EXCEPTION",
+    "VA_FORMAT_STRING_USES_NEWLINE",
+    "SWL_SLEEP_WITH_LOCK_HELD",
 ]
 
 EXCLUDE_PATTERNS = [

@@ -311,13 +311,16 @@ def parse_spotbugs(xml_file):
         src = bug.find("SourceLine")
         if src is not None:
             sourcepath = src.attrib.get("sourcepath", "?")
-            if is_excluded(sourcepath):
+            if is_excluded(sourcepath, type_name):
                 continue
             fname = resolve_source_path(sourcepath)
             start = int(src.attrib.get("start", 0) or 0)
         else:
             fname = "?"
             start = 0
+
+        if is_excluded(fname, type_name):
+            continue
 
         url = f"https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#{type_name.lower()}"
 
