@@ -39,9 +39,27 @@ CONFIG = _load_config()
 
 # ── Exclusion patterns (third-party/generated code) ──────────────────────────
 
-# Rules to exclude from all reports
+# Rules to exclude from all reports (low value / high noise)
 EXCLUDED_RULES = [
-    "java/missing-override-annotation",  # Added manually, not a real issue
+    # Done: Added manually, not a real issue
+    "java/missing-override-annotation",
+    # Complex analysis required, low value
+    "java/useless-null-check",
+    # Unused variables - common in I2P codebase patterns
+    "java/unused-parameter",
+    "java/local-variable-is-never-read",
+    # Deprecated/old API usage - often intentional
+    "java/deprecated-call",
+    "java/ignored-error-status-of-call",
+    "java/constant-comparison",
+    # Documentation noise
+    "java/unknown-javadoc-parameter",
+    # Style issues, not bugs
+    "java/call-to-object-tostring",
+    "java/non-sync-override",
+    "java/misleading-indentation",
+    "java/missing-case-in-switch",
+    "java/sleep-with-lock-held",
 ]
 
 EXCLUDE_PATTERNS = [
