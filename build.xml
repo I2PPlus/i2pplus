@@ -3584,12 +3584,12 @@
       <arg value="codeql/java-queries:codeql-suites/java-security-and-quality.qls"/>
     </exec>
     <exec executable="python3" failonerror="false">
-      <arg value="tools/codeql/codeql-to-html.py/codeql-to-html.py"/>
+      <arg value="tools/codeql/codeql-to-html.py"/>
       <arg value="dist/codeql-java.sarif"/>
       <arg value="dist/codeql-java.html"/>
     </exec>
     <exec executable="python3" failonerror="false">
-      <arg value="tools/codeql/codeql-to-html.py/codeql-to-html.py"/>
+      <arg value="tools/codeql/codeql-to-html.py"/>
       <arg value="dist/codeql-java.sarif"/>
       <arg value="dist/codeql-java-local.html"/>
       <arg value="--local"/>
@@ -3623,7 +3623,7 @@
       <arg value="codeql/javascript-queries:codeql-suites/javascript-security-and-quality.qls"/>
     </exec>
     <exec executable="python3" failonerror="false">
-      <arg value="tools/codeql/codeql-to-html.py/codeql-to-html.py"/>
+      <arg value="tools/codeql/codeql-to-html.py"/>
       <arg value="dist/codeql-js.sarif"/>
       <arg value="dist/codeql-js.html"/>
     </exec>
@@ -3638,13 +3638,13 @@
   <target name="codeql-jsp">
     <echo message="Filtering JSP results from Java SARIF..."/>
     <exec executable="python3" failonerror="false" outputproperty="cq.jsp.count">
-      <arg value="tools/codeql/codeql-to-html.py/sarif-filter.py"/>
+      <arg value="tools/codeql/filter-sarif.py"/>
       <arg value="dist/codeql-java.sarif"/>
       <arg value="dist/codeql-jsp.sarif"/>
       <arg value="_jsp.java"/>
     </exec>
     <exec executable="python3" failonerror="false">
-      <arg value="tools/codeql/codeql-to-html.py/codeql-to-html.py"/>
+      <arg value="tools/codeql/codeql-to-html.py"/>
       <arg value="--no-exclude"/>
       <arg value="dist/codeql-jsp.sarif"/>
       <arg value="dist/codeql-jsp.html"/>

@@ -74,7 +74,7 @@ def main():
             line = region.get("startLine", "?")
             end_line = region.get("endLine", line)
 
-            if not no_exclude and is_excluded(artifact):
+            if not no_exclude and is_excluded(artifact, rule_id):
                 continue
 
             help_url = get_doc_url(rule_id)
