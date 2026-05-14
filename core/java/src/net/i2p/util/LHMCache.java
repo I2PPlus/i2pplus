@@ -11,6 +11,7 @@ import java.util.Map;
  *  @param <K> type of keys in this cache
  *  @param <V> type of values in this cache
  */
+@SuppressWarnings("java:S2975")
 public class LHMCache<K, V> extends LinkedHashMap<K, V> {
     private final int _max;
 

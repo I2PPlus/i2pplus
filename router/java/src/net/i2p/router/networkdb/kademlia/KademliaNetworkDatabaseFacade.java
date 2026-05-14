@@ -1282,9 +1282,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         job.getTiming().setStartAfter(Math.max(now, nextTime));
 
-        if (job instanceof JobImpl) {
-            ((JobImpl) job).madeReady(now);
-        }
+        ((JobImpl) job).madeReady(now);
         _context.jobQueue().addJobToTop(job);
     }
 

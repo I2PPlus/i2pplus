@@ -11,6 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Mathiasdm
  *
  */
+@SuppressWarnings("java:S2975")
 public class I2PProperties extends Properties {
 
     /**

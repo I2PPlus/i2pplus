@@ -27,6 +27,7 @@ import java.util.NoSuchElementException;
  * @since 0.9.4 moved from net.i2p.util in 0.9.24
  * @author zab
  */
+@SuppressWarnings("java:S2975")
 public class CachedIteratorArrayList<E> extends ArrayList<E> {
 
     private static final long serialVersionUID = 4863212596318574111L;

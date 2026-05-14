@@ -3,6 +3,7 @@ package net.i2p.router;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -301,7 +302,7 @@ public class BanLogger {
     private void openWriter() {
         synchronized (_writeLock) {
             try {
-                _writer = new PrintWriter(new FileWriter(_logFile, true), true);
+                _writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(_logFile, true), StandardCharsets.UTF_8), true);
             } catch (IOException e) {
                 if (_log != null && _log.shouldLog(Log.WARN))
                     _log.warn("Failed to open ban log file: " + _logFile, e);

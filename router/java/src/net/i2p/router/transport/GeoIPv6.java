@@ -312,7 +312,7 @@ public class GeoIPv6 {
         }
 
         @Override
-        public int hashCode() { return (((int) from) ^ ((int) to)); }
+        public int hashCode() { return (((int) from) ^ ((int) to)) ^ (cc != null ? cc.hashCode() : 0); }
 
         @Override
         public boolean equals(Object o) { return (o instanceof V6Entry) && compareTo((V6Entry)o) == 0; }

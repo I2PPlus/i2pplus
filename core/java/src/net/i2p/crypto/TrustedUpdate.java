@@ -464,7 +464,7 @@ public class TrustedUpdate {
     public String migrateVerified(String currentVersion, File signedFile, File outputFile) {
         if (!signedFile.exists()) return "File not found: " + signedFile.getAbsolutePath();
         if (!isUpdatedVersion(currentVersion, signedFile)) {
-            if ("".equals(_newVersion)) return "Truncated or corrupt file: " + signedFile.getAbsolutePath();
+            if (_newVersion.isEmpty()) return "Truncated or corrupt file: " + signedFile.getAbsolutePath();
             else return "Downloaded version is not greater than current version";
         }
 

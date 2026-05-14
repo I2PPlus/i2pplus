@@ -10,9 +10,12 @@ package net.i2p.router.web.helpers;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -77,7 +80,7 @@ class BanlistRenderer {
             if (!logFile.exists()) {
             return ipMap;
         }
-            try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
+try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) continue;
@@ -111,7 +114,7 @@ class BanlistRenderer {
         if (!logFile.exists()) {
             return hostnameMap;
         }
-        try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) continue;
@@ -147,7 +150,7 @@ class BanlistRenderer {
             return ipBans;
         }
         long now = _context.clock().now();
-        try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) continue;

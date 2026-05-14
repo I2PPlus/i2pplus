@@ -20,6 +20,7 @@ import net.i2p.util.SystemVersion;
  *   addRandomByte(), addRandomBytes(), nextByte(), nextBytes(), seed()
  *
  */
+@SuppressWarnings("java:S2975")
 public class AsyncFortunaStandalone extends FortunaStandalone implements Runnable {
     /**
      * This is set to 2 to minimize memory usage for standalone apps.

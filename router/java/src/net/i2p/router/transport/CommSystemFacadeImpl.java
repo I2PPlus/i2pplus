@@ -888,6 +888,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     // LRU Cache implemented with LinkedHashMap with access order
+    @SuppressWarnings("java:S2975")
     private static class LRUCache<K, V> extends LinkedHashMap<K, V> {
         private final int maxEntries;
 
@@ -1941,7 +1942,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         if (isStrict || isHidden || blockMyCountry) {
             String myCountry = _context.getProperty(PROP_IP_COUNTRY);
-            if (myCountry != null && myCountry == country) {
+            if (myCountry != null && myCountry.equals(country)) {
                 _geoIP.banCountry(_context, country);
             }
         }

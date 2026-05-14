@@ -50,6 +50,7 @@ class TunnelRenderer {
     /**
      *  A bounded LRU cache extending LinkedHashMap with computeIfAbsent support.
      */
+    @SuppressWarnings("java:S2975")
     private static class BoundedCache<K, V> extends LinkedHashMap<K, V> {
         private final int _maxSize;
 

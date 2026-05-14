@@ -93,6 +93,7 @@ import net.i2p.crypto.SHA256Generator;
  *
  * NOTE: As of 0.8.8, uses the java.security.MessageDigest instead of GNU Sha256Standalone
  */
+@SuppressWarnings("java:S2975")
 public class FortunaStandalone extends BasePRNGStandalone implements Serializable {
     private static final long serialVersionUID = 0xFACADE;
     private static final int SEED_FILE_SIZE = 64;
@@ -175,6 +176,7 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
      * right; Fortuna itself is basically a wrapper around this generator
      * that manages reseeding in a secure way.
      */
+    @SuppressWarnings("java:S2975")
     private static class Generator extends BasePRNGStandalone implements Cloneable {
         private static final int LIMIT = 1 << 20;
         private final MessageDigest hash;

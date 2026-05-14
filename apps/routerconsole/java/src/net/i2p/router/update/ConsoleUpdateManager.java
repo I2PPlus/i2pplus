@@ -1517,7 +1517,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
         @Override
         public String toString() {
-            if ("".equals(id)) {return type.toString();}
+            if (id.isEmpty()) {return type.toString();}
             return type.toString() + ' ' + id;
         }
     }
