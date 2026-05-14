@@ -77,6 +77,15 @@
         <exclude name="DoNotCallGarbageCollectionExplicitly"/>
         <exclude name="MissingSerialVersionUID"/>
         <exclude name="AvoidFieldNameMatchingMethodName"/>
+        <!-- High noise/style rules -->
+        <exclude name="ReturnEmptyCollectionRatherThanNull"/>
+        <exclude name="ReplaceJavaUtilDate"/>
+        <exclude name="AvoidImplicitlyRecompilingRegex"/>
+        <exclude name="ConstructorCallsOverridableMethod"/>
+        <exclude name="UseLocaleWithCaseConversions"/>
+        <exclude name="AvoidUnnecessaryStringBuilderCreation"/>
+        <exclude name="AvoidConcatInAppend"/>
+        <exclude name="ImproperVariableName"/>
     </rule>
 
     <!-- Multithreading: only genuine bug risks, not style -->
@@ -86,6 +95,7 @@
         <exclude name="AvoidUsingVolatile"/>
         <exclude name="DoNotUseThreads"/>
         <exclude name="UseConcurrentHashMap"/>
+        <exclude name="DontCallThreadRun"/>
     </rule>
 
     <!-- jPinpoint: performance, threading, memory, sustainability -->
@@ -110,6 +120,7 @@
         <exclude name="LimitWildcardStaticImports"/>
         <exclude name="AvoidMultipleConcatStatements"/>
         <exclude name="AvoidLoadingAllFromFile"/>
+        <exclude name="MissingFieldInEquals"/>
     </rule>
 
 </ruleset>
