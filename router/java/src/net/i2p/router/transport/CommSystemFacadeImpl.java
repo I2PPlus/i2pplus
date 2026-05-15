@@ -55,6 +55,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.net.SocketFactory;
 import net.i2p.I2PAppContext;
@@ -151,6 +152,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
     private static final String COUNTRY_BUNDLE_NAME = "net.i2p.router.countries.messages";
     private static final Object DUMMY = Integer.valueOf(0);
+    private static final Pattern NEWLINE_SPLIT = Pattern.compile("\\r?\\n");
+    private static final Pattern WHOIS_PAREN = Pattern.compile("\\([^)]*\\)");
+    private static final Pattern CAPACITY_PATTERN = Pattern.compile("[DEG]");
 
     public CommSystemFacadeImpl(RouterContext context) {
         _context = context;
@@ -1691,7 +1695,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         String fallback = null; // For netname, descr, etc.
 
-        for (String line : whoisData.split("\\r?\\n")) {
+        for (String line : NEWLINE_SPLIT.split(whoisData)) {
             line = line.trim();
             String lower = line.toLowerCase();
 
@@ -1739,7 +1743,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             }
         }
 
-        return (fallback != null) ? fallback.replaceAll("\\(.*?\\)", "").trim() : _t("unknown");
+        return (fallback != null) ? WHOIS_PAREN.matcher(fallback).replaceAll("").trim() : _t("unknown");
     }
 
     /**
@@ -2269,7 +2273,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             buf.append("\" title=\"").append(_t("Show all routers with this capability in the NetDb")).append("\">");
 
             // Remove first occurrence of D, E, or G character from capacity string
-            String visibleCapacity = capacity.replaceFirst("[DEG]", "");
+            String visibleCapacity = CAPACITY_PATTERN.matcher(capacity).replaceFirst("");
             buf.append(visibleCapacity);
 
             buf.append("</a></td>");

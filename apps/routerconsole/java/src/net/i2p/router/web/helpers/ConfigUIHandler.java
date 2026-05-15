@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import net.i2p.data.DataHelper;
 import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.ConsolePasswordManager;
@@ -23,6 +24,7 @@ import net.i2p.router.web.RouterConsoleRunner;
  * for the router console interface.
  */
 public class ConfigUIHandler extends FormHandler {
+    private static final Pattern CONFIG_PATTERN = Pattern.compile("[a-zA-Z0-9_-]");
     private boolean _shouldSave;
     private boolean _universalTheming;
     private boolean _forceMobileConsole;
@@ -47,7 +49,7 @@ public class ConfigUIHandler extends FormHandler {
     /** Note - lang change is handled in CSSHelper but we still need to save it here */
     private void saveChanges() {
         if (_config == null || _config.length() <= 0) {return;}
-        if (_config.replaceAll("[a-zA-Z0-9_-]", "").length() != 0) {
+        if (CONFIG_PATTERN.matcher(_config).replaceAll("").length() != 0) {
             addFormError(_t("Cannot save theme choice, theme name has illegal characters"), true);
             return;
         }

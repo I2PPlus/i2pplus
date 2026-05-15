@@ -22,6 +22,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 import net.i2p.data.DataHelper;
 
 /**
@@ -31,6 +32,7 @@ public class LogBean extends BaseBean
 {
     private String logName, logged;
     private static final String LOG_FILE = "log.txt";
+    private static final Pattern DASH_SPLIT = Pattern.compile("\\s*--\\s*");
 
     /**
      * Get the log file path.
@@ -68,7 +70,7 @@ public class LogBean extends BaseBean
 
                 for (int i = lines.size() - 1; i >= 0; i--) { // Reverse order, most recent first
                     if (!lines.get(i).contains("Bad hostname")) {
-                        String[] parts = lines.get(i).split("\\s*--\\s*");
+                        String[] parts = DASH_SPLIT.split(lines.get(i));
                         if (parts.length < 2) {continue;}
                         String date = formatDate(parts[0]);
                         String message = parts[1];
@@ -142,7 +144,7 @@ public class LogBean extends BaseBean
                 String line;
                 while ((line = br.readLine()) != null) {
                     if (!line.contains("Bad hostname")) {
-                        String[] parts = line.split("\\s*--\\s*");
+                        String[] parts = DASH_SPLIT.split(line);
                         if (parts.length < 2) {continue;}
                         String date = parts[0].replace("GMT", "UTC");
                         if (isToday(date)) {

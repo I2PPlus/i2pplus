@@ -54,6 +54,7 @@ public class BlocklistManager {
     private List<String> _clientBlockList = new ArrayList<>();
     private static long _blocklistClientsLastModified;
     private static int _cachedClientBlockListSize = -1;
+    private static Pattern _cachedBlocklistPattern;
     private int _clientLimit;
 
     /**
@@ -135,6 +136,7 @@ public class BlocklistManager {
      * @param blocklistFile the blocklist file to read
      * @return compiled Pattern, or null on error
      */
+    @SuppressWarnings("PMD.AvoidRecompilingPatterns")
     private Pattern compileRegexPattern(File blocklistFile) {
         StringBuilder regexBuilder = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(

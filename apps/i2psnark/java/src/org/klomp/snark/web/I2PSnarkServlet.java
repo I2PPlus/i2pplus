@@ -117,6 +117,14 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String SESSION_NONCE_OUTER = "__i2psnark.nonce.outer__";
     private static final String SESSION_NONCE_INNER = "__i2psnark.nonce.inner__";
     private static final int SESSION_NONCE_QUEUE_SIZE = 10;
+    private static final Pattern INFOHASH_PAREN = Pattern.compile(" \\(");
+    private static final Pattern HEX_PATTERN = Pattern.compile("[a-fA-F0-9]+");
+    private static final Pattern BASE32_PATTERN = Pattern.compile("[a-zA-Z2-7]+");
+    private static final Pattern NUMBER_PATTERN = Pattern.compile("\\d+");
+    private static final Pattern DEST_PATTERN = Pattern.compile("^[A-Za-z0-9~\\-]+$");
+    private static final Pattern B32_PATTERN = Pattern.compile("^[a-z2-7]+$");
+    private static final Pattern HOSTNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9\\-]+$");
+    private static final Pattern COUNTRY_CODE_PATTERN = Pattern.compile("[a-z][a-z]");
 
     private String _themePath;
     private String _resourcePath;
@@ -966,7 +974,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 String msg = msgs.get(i).message
                                         .replace("Adding Magnet ", "Magnet added: " + "<span class=infohash>")
                                         .replace("Starting torrent: Magnet", "Starting torrent: <span class=infohash>");
-                if (msg.contains("class=infohash")) {msg = msg.replaceFirst(" \\(", "</span> (");} // does this fix the display snafu?
+                if (msg.contains("class=infohash")) {msg = msg.replaceFirst(INFOHASH_PAREN.pattern(), "</span> (");} // does this fix the display snafu?
                 if (msg.contains(_t("Warning - No I2P"))) {msg = msg.replace("</span>", "");}
                 buf.append("<li class=msg>").append(msg).append("</li>\n");
             }
@@ -2192,21 +2200,21 @@ public class I2PSnarkServlet extends BasicServlet {
      * Validates if a string is a valid 40-hex character info hash.
      */
     private boolean isValidHexInfoHash(String s) {
-        return s.length() == 40 && s.matches("[a-fA-F0-9]+");
+        return s.length() == 40 && HEX_PATTERN.matcher(s).matches();
     }
 
     /**
      * Validates if a string is a valid 32-base32 character info hash.
      */
     private boolean isValidBase32InfoHash(String s) {
-        return s.length() == 32 && s.matches("[a-zA-Z2-7]+");
+        return s.length() == 32 && BASE32_PATTERN.matcher(s).matches();
     }
 
     /**
      * Validates if string is version 2 hex multihash (68 characters starting with "1220").
      */
     private boolean isValidV2InfoHash(String s) {
-        return s.length() == 68 && s.startsWith("1220") && s.matches("[a-fA-F0-9]+");
+        return s.length() == 68 && s.startsWith("1220") && HEX_PATTERN.matcher(s).matches();
     }
 
     /**
@@ -2754,7 +2762,7 @@ public class I2PSnarkServlet extends BasicServlet {
             // Check that decodedP only contains digits and optional query characters
             // Example: if p is query string starting with '?', allow appropriate format
             // For strict numeric only:
-            if (!decodedP.matches("\\d+")) {
+            if (!NUMBER_PATTERN.matcher(decodedP).matches()) {
                 // Invalid redirect parameter, reject request
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid redirect parameter");
                 return;

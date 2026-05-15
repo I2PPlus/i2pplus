@@ -44,6 +44,12 @@ import net.i2p.util.Addresses;
 class BanlistRenderer {
     private final RouterContext _context;
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
+    private static final Pattern IP_HOSTNAME_NORMALIZE = Pattern.compile("[.:]");
+    private static final Pattern PIPE_SPLIT = Pattern.compile("\\s*\\|\\s*");
+    private static final Pattern VERSION_LU_SUFFIX = Pattern.compile("\\s*\\(0\\.9\\.\\d+(?:\\.\\d+)?(?:-\\d+)?\\s*/\\s*LU\\)\\s*$");
+    private static final Pattern VERSION_SUFFIX = Pattern.compile("\\s*\\(0\\.9\\.\\d+(?:\\.\\d+)?(?:-\\d+)?\\)\\s*$");
+    private static final Pattern VERSION_PREFIX = Pattern.compile("\\s*/\\s*0\\.9\\.\\d+(?:\\.\\d+)?(?:-\\d+)?\\s*$");
+    private static final Pattern VERSION_EXTRACT = Pattern.compile("(?:^|\\()(\\d+\\.\\d+(?:\\.\\d+)?(?:-\\d+)?)");
 
     public BanlistRenderer(RouterContext context) {
         _context = context;
@@ -61,8 +67,8 @@ class BanlistRenderer {
             return null;
         }
         // Check if the hostname is just the IP in different form
-        String normalizedIp = ip.toLowerCase().replaceAll("[.:]", "");
-        String normalizedHostname = hostname.toLowerCase().replaceAll("[.:]", "");
+        String normalizedIp = IP_HOSTNAME_NORMALIZE.matcher(ip.toLowerCase()).replaceAll("");
+        String normalizedHostname = IP_HOSTNAME_NORMALIZE.matcher(hostname.toLowerCase()).replaceAll("");
         if (normalizedHostname.equals(normalizedIp) || normalizedHostname.contains(normalizedIp)) {
             return null;
         }
@@ -84,7 +90,7 @@ try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileIn
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) continue;
-                String[] parts = line.split("\\s*\\|\\s*");
+                String[] parts = PIPE_SPLIT.split(line);
                 if (parts.length >= 3) {
                     String hash = parts[1].trim();
                     String ipField = parts[2].trim();
@@ -118,7 +124,7 @@ try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileIn
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) continue;
-                String[] parts = line.split("\\s*\\|\\s*");
+                String[] parts = PIPE_SPLIT.split(line);
                 if (parts.length >= 3) {
                     String hash = parts[1].trim();
                     String ipField = parts[2].trim();
@@ -154,7 +160,7 @@ try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileIn
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) continue;
-                String[] parts = line.split("\\s*\\|\\s*");
+                String[] parts = PIPE_SPLIT.split(line);
                 if (parts.length >= 4) {
                     String hash = parts[1].trim();
                     String ipField = parts[2].trim();
@@ -571,8 +577,7 @@ try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileIn
         }
         // Fallback: extract from reason string (e.g., "LU Router (0.9.56)" or "0.9.57 / LU")
         if (reason != null && !reason.isEmpty()) {
-            Pattern p = Pattern.compile("(?:^|\\()(\\d+\\.\\d+(?:\\.\\d+)?(?:-\\d+)?)");
-            Matcher m = p.matcher(reason);
+            Matcher m = VERSION_EXTRACT.matcher(reason);
             if (m.find()) {
                 return m.group(1);
             }
@@ -586,10 +591,9 @@ try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileIn
         }
         String cleaned = reason;
         // First, try to remove version patterns like "(0.9.57 / LU)" or "(0.9.57)"
-        cleaned = cleaned.replaceAll("\\s*\\(0\\.9\\.\\d+(?:\\.\\d+)?(?:-\\d+)?\\s*/\\s*LU\\)\\s*$", "");
-        cleaned = cleaned.replaceAll("\\s*\\(0\\.9\\.\\d+(?:\\.\\d+)?(?:-\\d+)?\\)\\s*$", "");
-        // Also try removing "/ version" at end (e.g., "Old / 0.9.57")
-        cleaned = cleaned.replaceAll("\\s*/\\s*0\\.9\\.\\d+(?:\\.\\d+)?(?:-\\d+)?\\s*$", "");
+cleaned = VERSION_LU_SUFFIX.matcher(cleaned).replaceAll("");
+        cleaned = VERSION_SUFFIX.matcher(cleaned).replaceAll("");
+        cleaned = VERSION_PREFIX.matcher(cleaned).replaceAll("");
         // If we have routerVersion from NetDB, use that too
         if (routerVersion != null) {
             cleaned = cleaned.replaceAll("\\s*\\(" + Pattern.quote(routerVersion) + "\\)\\s*$", "");

@@ -2,6 +2,7 @@ package net.i2p.router.web.helpers;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 import net.i2p.router.Banlist;
 import net.i2p.router.Blocklist;
 import net.i2p.router.web.FormHandler;
@@ -36,6 +37,8 @@ public class ConfigBanHandler extends FormHandler {
     private static final String PROP_ENABLE_CORRUPT_CONNECTION_BAN = "router.banlist.enableCorruptConnectionBan";
     private static final String PROP_ENABLE_PORT_HOPPING_BAN = "router.banlist.enablePortHoppingBan";
     private static final String PROP_ENABLE_DBSEARCH_BAN = "router.banlist.enableDbSearchBan";
+    private static final Pattern COMMA_SPLIT = Pattern.compile("[,\\s]+");
+    private static final Pattern COUNTRY_CODE = Pattern.compile("[a-z][a-z]");
     private static final String PROP_ENABLE_BLOCKLIST = "router.blocklist.enable";
     private static final String PROP_ENABLE_TOR_BLOCKLIST = "router.blocklistTor.enable";
     private static final String PROP_ENABLE_COUNTRY_BAN = "router.blocklistCountries.enable";
@@ -193,7 +196,7 @@ public class ConfigBanHandler extends FormHandler {
         if (input == null || input.isEmpty()) return "";
         String validChars = "KLMNOPXFGDEUR";
         StringBuilder result = new StringBuilder();
-        String[] patterns = input.split("[,\\s]+");
+        String[] patterns = COMMA_SPLIT.split(input);
         for (String pattern : patterns) {
             pattern = pattern.trim().toUpperCase();
             if (pattern.isEmpty()) continue;
@@ -224,10 +227,10 @@ public class ConfigBanHandler extends FormHandler {
     private String validateCountryCodes(String input) {
         if (input == null || input.isEmpty()) return "";
         StringBuilder result = new StringBuilder();
-        String[] codes = input.split("[,\\s]+");
+        String[] codes = COMMA_SPLIT.split(input);
         for (String code : codes) {
             code = code.trim().toLowerCase();
-            if (code.length() == 2 && code.matches("[a-z][a-z]")) {
+            if (code.length() == 2 && COUNTRY_CODE.matcher(code).matches()) {
                 if (result.length() > 0) result.append(",");
                 result.append(code);
             }

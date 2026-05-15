@@ -9,6 +9,7 @@ import java.net.URLClassLoader;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +29,7 @@ import net.i2p.util.SystemVersion;
  *  @since 0.8.13
  */
 public class FileDumpHelper extends HelperBase {
+    private static final Pattern DUMP_DASH = Pattern.compile("-.*? ");
 
     private static final boolean isWindows = SystemVersion.isWindows();
     private static final String LINK = "http://git.skank.i2p/i2pplus/I2P.Plus/src/commit/";
@@ -143,7 +145,7 @@ public class FileDumpHelper extends HelperBase {
         buf.append("</td><td>");
         s = getAtt(att, "Created-By");
         if (s != null) {
-            buf.append(s.replaceAll("-.*? ", "")
+            buf.append(DUMP_DASH.matcher(s).replaceAll("")
                         .replace("Amazon.com Inc.", "Amazon")
                         .replace("Apache Maven", "Maven")
                         .replace("(Oracle Corporation)", "(Oracle)")

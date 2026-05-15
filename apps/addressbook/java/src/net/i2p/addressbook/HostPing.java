@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSessionException;
@@ -33,6 +34,9 @@ public class HostPing {
     private static final int DEFAULT_COUNT = 10;
     private static final int DEFAULT_TIMEOUT = 8000;
     private static final String DEFAULT_LEASESET_TYPE = "6,4";
+    private static final Pattern DEST_PATTERN = Pattern.compile("^[A-Za-z0-9~\\-]+$");
+    private static final Pattern B32_PATTERN = Pattern.compile("^[a-z2-7]+$");
+    private static final Pattern HOSTNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9\\-]+$");
 
     private int _count = DEFAULT_COUNT;
     private int _timeout = DEFAULT_TIMEOUT;
@@ -330,19 +334,19 @@ public class HostPing {
         // Accept any long string without dots that looks like B64
         if (dest.length() >= 400 && dest.length() <= 800 && !dest.contains(".")) {
             // Basic check for Base64 characters only
-            return dest.matches("^[A-Za-z0-9~\\-]+$");
+            return DEST_PATTERN.matcher(dest).matches();
         }
 
         // B32 format (52 characters + .b32.i2p)
         if (dest.endsWith(".b32.i2p") && dest.length() >= 50 && dest.length() <= 70) {
             String b32Part = dest.substring(0, dest.length() - 8); // Remove .b32.i2p
-            return b32Part.matches("^[a-z2-7]+$"); // B32 uses a-z2-7
+            return B32_PATTERN.matcher(b32Part).matches(); // B32 uses a-z2-7
         }
 
         // .i2p hostname (can contain letters, numbers, hyphens)
         if (dest.endsWith(".i2p") && !dest.equals(".i2p")) {
             String hostname = dest.substring(0, dest.length() - 4); // Remove .i2p
-            return hostname.length() >= 1 && hostname.matches("^[a-zA-Z0-9\\-]+$");
+            return hostname.length() >= 1 && HOSTNAME_PATTERN.matcher(hostname).matches();
         }
 
         return false;

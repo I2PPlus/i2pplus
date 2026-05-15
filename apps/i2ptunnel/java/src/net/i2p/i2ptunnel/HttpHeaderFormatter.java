@@ -2,6 +2,7 @@ package net.i2p.i2ptunnel;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Utility class for formatting HTTP headers.
@@ -14,6 +15,7 @@ import java.util.Map;
  * @since 0.10.0
  */
 public class HttpHeaderFormatter {
+    private static final Pattern NEWLINE_SPLIT = Pattern.compile("\r\n");
 
     /**
      * Formats headers into an HTTP request/response string.
@@ -118,7 +120,7 @@ public class HttpHeaderFormatter {
      * @return the hostname from the Host header, or null if not found
      */
     public static String getHostFromHeaders(String headers) {
-        String[] headerLines = headers.split("\r\n");
+        String[] headerLines = NEWLINE_SPLIT.split(headers);
         for (String headerLine : headerLines) {
             if (headerLine.startsWith("Host:")) {
                 String hostHeader = headerLine.substring(6).trim();

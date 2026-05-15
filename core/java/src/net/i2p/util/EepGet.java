@@ -383,8 +383,7 @@ public class EepGet {
         String path = nameURL.getRawPath();  // discard any URI queries
 
         // if no file specified, eepget scrapes webpage - use domain as name
-        Pattern slashes = Pattern.compile("/+");
-        Matcher matcher = slashes.matcher(path);
+        Matcher matcher = MULTI_SLASHES.matcher(path);
         // if empty path or just /'s - nameURL lets multiple /'s through
         if (path.isEmpty() || matcher.matches()) {
             name = sanitize(nameURL.getAuthority());
@@ -414,6 +413,7 @@ public class EepGet {
 
 /* Blacklist borrowed from snark */
 
+    private static final Pattern MULTI_SLASHES = Pattern.compile("/+");
     private static final char[] ILLEGAL = new char[] {
         '<', '>', ':', '"', '/', '\\', '|', '?', '*',
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,

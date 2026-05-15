@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import javax.imageio.stream.ImageOutputStream;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
@@ -91,6 +92,7 @@ class GraphRenderer {
     private static final long[] RATES = RateConstants.BASIC_RATES;
     private static final Stroke GRID_STROKE =
             new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[] {1, 1}, 0);
+    private static final Pattern CAMEL_CASE_PATTERN = Pattern.compile("(?<=[a-z])([A-Z])");
 
     GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
     String[] sysfonts = e.getAvailableFontFamilyNames();
@@ -357,96 +359,96 @@ class GraphRenderer {
             String name = _listener.getRate().getRateStat().getName();
             String graphTitle = name;
             if (name.startsWith("tunnel.participatingTunnels")) {
-                graphTitle = graphTitle.replaceAll("tunnel.participatingTunnels", "[Transit] Tunnel Count");
+                graphTitle = graphTitle.replace("tunnel.participatingTunnels", "[Transit] Tunnel Count");
             }
             if (name.startsWith("tunnel.participatingMessage")) {
-                graphTitle = graphTitle.replaceAll("tunnel.participatingMessage", "[Transit] Message");
+                graphTitle = graphTitle.replace("tunnel.participatingMessage", "[Transit] Message");
             } else if (name.startsWith("tunnel.participating")) {
-                graphTitle = graphTitle.replaceAll("tunnel.participating", "[Transit]");
+                graphTitle = graphTitle.replace("tunnel.participating", "[Transit]");
             } else if (name.startsWith("Tunnel.participating")) {
-                graphTitle = graphTitle.replaceAll("Tunnel.participating", "[Transit]");
+                graphTitle = graphTitle.replace("Tunnel.participating", "[Transit]");
             }
             if (name.startsWith("router.")) {
-                graphTitle = graphTitle.replaceAll("router.", "[Router] ");
+                graphTitle = graphTitle.replace("router.", "[Router] ");
             }
             if (name.startsWith("bw.")) {
-                graphTitle = graphTitle.replaceAll("bw.", "[Router] ");
+                graphTitle = graphTitle.replace("bw.", "[Router] ");
             }
             if (name.startsWith("Bandwidth usage")) {
-                graphTitle = graphTitle.replaceAll("Bandwidth usage", "[Router] Bandwidth Usage");
+                graphTitle = graphTitle.replace("Bandwidth usage", "[Router] Bandwidth Usage");
             }
             if (name.startsWith("tunnel.buildRatio.exploratory.")) {
-                graphTitle = graphTitle.replaceAll("tunnel.buildRatio.exploratory.", "[Exploratory] Build Ratio");
+                graphTitle = graphTitle.replace("tunnel.buildRatio.exploratory.", "[Exploratory] Build Ratio");
             }
             if (name.startsWith("tunnel.buildExploratory")) {
-                graphTitle = graphTitle.replaceAll("tunnel.buildExploratory", "[Exploratory] Build");
+                graphTitle = graphTitle.replace("tunnel.buildExploratory", "[Exploratory] Build");
             }
             if (name.startsWith("tunnel.buildClient")) {
-                graphTitle = graphTitle.replaceAll("tunnel.buildClient", "[Tunnel] BuildClient");
+                graphTitle = graphTitle.replace("tunnel.buildClient", "[Tunnel] BuildClient");
             } else if (name.startsWith("tunnel.build")) {
-                graphTitle = graphTitle.replaceAll("tunnel.build", "[Tunnel] Build");
+                graphTitle = graphTitle.replace("tunnel.build", "[Tunnel] Build");
             } else if (name.startsWith("tunnel.")) {
-                graphTitle = graphTitle.replaceAll("tunnel.", "[Tunnel] ");
+                graphTitle = graphTitle.replace("tunnel.", "[Tunnel] ");
             }
             if (name.contains("MessageCountAvg")) {
-                graphTitle = graphTitle.replaceAll("MessageCountAvg", "Messsage Count Average");
+                graphTitle = graphTitle.replace("MessageCountAvg", "Messsage Count Average");
             }
             if (name.startsWith("netDb.")) {
-                graphTitle = graphTitle.replaceAll("netDb.", "[NetDb] ");
+                graphTitle = graphTitle.replace("netDb.", "[NetDb] ");
             }
             if (name.startsWith("jobQueue.")) {
-                graphTitle = graphTitle.replaceAll("jobQueue.", "[JobQueue] ");
+                graphTitle = graphTitle.replace("jobQueue.", "[JobQueue] ");
             }
             if (name.startsWith("udp.")) {
-                graphTitle = graphTitle.replaceAll("udp.", "[UDP] ");
+                graphTitle = graphTitle.replace("udp.", "[UDP] ");
             }
             if (name.startsWith("ntcp.")) {
-                graphTitle = graphTitle.replaceAll("ntcp.", "[NTCP] ");
+                graphTitle = graphTitle.replace("ntcp.", "[NTCP] ");
             }
             if (name.startsWith("transport.")) {
-                graphTitle = graphTitle.replaceAll("transport.", "[Transport] ");
+                graphTitle = graphTitle.replace("transport.", "[Transport] ");
             }
             if (name.startsWith("client.")) {
-                graphTitle = graphTitle.replaceAll("client.", "[Client] ");
+                graphTitle = graphTitle.replace("client.", "[Client] ");
             }
             if (name.startsWith("peer.")) {
-                graphTitle = graphTitle.replaceAll("peer.", "[Peer] ");
+                graphTitle = graphTitle.replace("peer.", "[Peer] ");
             }
             if (name.startsWith("prng.")) {
-                graphTitle = graphTitle.replaceAll("prng.", "[Crypto] pnrg.");
+                graphTitle = graphTitle.replace("prng.", "[Crypto] pnrg.");
             }
             if (name.startsWith("crypto.")) {
-                graphTitle = graphTitle.replaceAll("crypto.", "[Crypto] ");
+                graphTitle = graphTitle.replace("crypto.", "[Crypto] ");
             }
             if (name.startsWith("bwLimiter.")) {
-                graphTitle = graphTitle.replaceAll("bwLimiter.", "[BWLimiter] ");
+                graphTitle = graphTitle.replace("bwLimiter.", "[BWLimiter] ");
             }
             if (name.startsWith("pbq.")) {
-                graphTitle = graphTitle.replaceAll("pbq.", "[Router] PBQ.");
+                graphTitle = graphTitle.replace("pbq.", "[Router] PBQ.");
             }
             if (name.startsWith("codel.")) {
-                graphTitle = graphTitle.replaceAll("codel.", "[Router] CODEL.");
+                graphTitle = graphTitle.replace("codel.", "[Router] CODEL.");
             }
             if (name.startsWith("SDSCache.")) {
-                graphTitle = graphTitle.replaceAll("SDSCache.", "[Router] SDSCache.");
+                graphTitle = graphTitle.replace("SDSCache.", "[Router] SDSCache.");
             }
             if (name.startsWith("byteCache.memory.")) {
-                graphTitle = graphTitle.replaceAll("byteCache.memory.", "[Router] ByteCache:");
+                graphTitle = graphTitle.replace("byteCache.memory.", "[Router] ByteCache:");
             }
             if (name.startsWith("stream.")) {
-                graphTitle = graphTitle.replaceAll("stream.", "[Stream] ");
+                graphTitle = graphTitle.replace("stream.", "[Stream] ");
             }
             if (name.equals("clock.skew")) {
-                graphTitle = graphTitle.replaceAll("clock.skew", "[Router] Clock Skew");
+                graphTitle = graphTitle.replace("clock.skew", "[Router] Clock Skew");
             }
             if (name.endsWith("InBps")) {
-                graphTitle = graphTitle.replaceAll("InBps", "Inbound B/s");
+                graphTitle = graphTitle.replace("InBps", "Inbound B/s");
             }
             if (name.endsWith("OutBps")) {
-                graphTitle = graphTitle.replaceAll("OutBps", "Outbound B/s");
+                graphTitle = graphTitle.replace("OutBps", "Outbound B/s");
             }
             if (name.endsWith("Bps")) {
-                graphTitle = graphTitle.replaceAll("Bps", "B/s");
+                graphTitle = graphTitle.replace("Bps", "B/s");
             }
 
             boolean singleDecimalPlace = true;
@@ -488,7 +490,7 @@ class GraphRenderer {
                 if (showEvents) {
                     title = graphTitle + ' ' + _t("events in {0}", p);
                 }
-                title = graphTitle.replaceAll("(?<=[a-z])([A-Z])", " $1");
+                title = CAMEL_CASE_PATTERN.matcher(graphTitle).replaceAll(" $1");
                 title = title.substring(0, 1).toUpperCase() + title.substring(1);
                 title = title.replace("[Tunnel] [Tunnel]", "[Tunnel]")
                         .replace("Uild Success Avg", "Build Success Average")

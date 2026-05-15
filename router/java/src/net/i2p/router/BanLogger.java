@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
@@ -52,6 +53,7 @@ public class BanLogger {
     private static final String LOG_FILENAME = "sessionbans.txt";
     private static final String ARCHIVE_PREFIX = "sessionbans-";
     private static final String PROP_MAX_ARCHIVES = "router.banlogger.maxArchives";
+    private static final Pattern PIPE_SPLIT = Pattern.compile("\\s*\\|\\s*");
     private static final int DEFAULT_MAX_ARCHIVES = 10;
     private static volatile PrintWriter _writer;
     private static volatile boolean _initialized = false;
@@ -121,7 +123,7 @@ public class BanLogger {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) continue;
-                String[] parts = line.split("\\s*\\|\\s*");
+                String[] parts = PIPE_SPLIT.split(line);
                 if (parts.length >= 5) {
                     String hash = parts[1].trim();
                     String ip = parts[2].trim();
@@ -152,7 +154,7 @@ public class BanLogger {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) continue;
-                String[] parts = line.split("\\s*\\|\\s*");
+                String[] parts = PIPE_SPLIT.split(line);
                 if (parts.length >= 5) {
                     String hash = parts[1].trim();
                     String loggedIP = parts[2].trim();

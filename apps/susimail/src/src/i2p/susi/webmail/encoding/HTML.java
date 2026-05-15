@@ -30,7 +30,7 @@ public class HTML extends Encoding {
     return  str.replace("&", "&amp;")  // must be first
                .replace( "<", "&lt;" )
                .replace( ">", "&gt;" )
-               .replaceAll( "\r{0,1}\n", "<br>\r\n" );
+               .replace( "\r\n", "<br>\r\n" ).replace( "\n", "<br>\r\n" );
   }
 
   public void decode(InputStream in, Buffer out) throws DecodingException {

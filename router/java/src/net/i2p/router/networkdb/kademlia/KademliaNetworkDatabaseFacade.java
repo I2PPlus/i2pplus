@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import net.i2p.crypto.SigAlgo;
 import net.i2p.crypto.SigType;
@@ -74,6 +75,7 @@ import java.util.Comparator;
  * Never instantiated directly; see FloodfillNetworkDatabaseFacade.
  */
 public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacade {
+    private static final Pattern COMMA_SPLIT = Pattern.compile("\\s*,\\s*");
     protected final Log _log;
     private BanLogger _banLogger;
     private KBucketSet<Hash> _kb; // peer hashes sorted into kbuckets, but within kbuckets, unsorted
@@ -2710,7 +2712,7 @@ return false;
         if (blockCountries.isEmpty()) {
             cached = Collections.emptySet();
         } else {
-            cached = Arrays.stream(blockCountries.trim().toLowerCase().split("\\s*,\\s*"))
+            cached = Arrays.stream(COMMA_SPLIT.split(blockCountries.trim().toLowerCase()))
                          .filter(s -> !s.isEmpty())
                          .collect(Collectors.toSet());
         }

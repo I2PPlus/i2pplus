@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -101,6 +102,7 @@ public class Banlist {
     private boolean _enableLuBan;
     // Custom capability bans (e.g., "LG", "XfU", "DGU")
     private static final String PROP_CUSTOM_CAPABILITY_BANS = "router.banlistCapabilities";
+    private static final Pattern COMMA_SPLIT = Pattern.compile("[,\\s]+");
     private String _customCapabilityBans;
     // Country ban duration - uses existing router.blockCountries property (session-based)
 
@@ -340,7 +342,7 @@ public class Banlist {
             return null;
         }
         String caps = capabilities.toUpperCase();
-        String[] patterns = _customCapabilityBans.split("[,\\s]+");
+        String[] patterns = COMMA_SPLIT.split(_customCapabilityBans);
         for (String pattern : patterns) {
             pattern = pattern.trim().toUpperCase();
             if (pattern.isEmpty()) continue;

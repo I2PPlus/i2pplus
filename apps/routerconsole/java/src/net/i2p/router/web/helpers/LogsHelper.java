@@ -33,6 +33,13 @@ public class LogsHelper extends HelperBase {
     private static final Pattern AMP_DARR_PATTERN = Pattern.compile("&amp;(darr|uarr|#10140|hellip;)");
     private static final Pattern BRACKET_CLEANUP_PATTERN = Pattern.compile("\\[\\[(&#10004;|&#10008;)\\]\\]");
     private static final Pattern NEWLINE_STAR_PATTERN = Pattern.compile("\n(\\t)?\\* ");
+    private static final Pattern LOG_HUTD = Pattern.compile("\\|.*\\[.*hutd.*\\].*?:");
+    private static final Pattern LOG_DATE = Pattern.compile("\\|.*\\[.*date.*\\].*?:");
+    private static final Pattern LOG_CONNECTION = Pattern.compile("\\|.*\\[.*-Connection].*?:");
+    private static final Pattern LOG_RESTART = Pattern.compile("\\|.*\\[.*Restart].*?:");
+    private static final Pattern LOG_READ = Pattern.compile("\\|.*\\[.*Read.*\\].*?:");
+    private static final Pattern LOG_DIRMON = Pattern.compile("\\|.*\\[.*DirMon.*\\].*?:");
+    private static final Pattern LOG_QUEUE = Pattern.compile("\\|.*\\[.*Queue.*\\].*?:");
     private static final Pattern[] FILTER_PATTERNS = {
         Pattern.compile("\\|.*\\[.*hutd.*\\].*?:"),
         Pattern.compile("\\|.*\\[.*date.*\\].*?:"),
@@ -225,13 +232,13 @@ public class LogsHelper extends HelperBase {
                                     .replace("| Initiating graceful restart", "| INFO | Initiating graceful restart")
                                     .replace("| Graceful shutdown", "| INFO | Graceful shutdown")
                                     .replace("| I2P+ update downloaded", "| INFO | I2P+ update downloaded")
-                                    .replaceAll("\\|.*\\[.*hutd.*\\].*?:", "|")
-                                    .replaceAll("\\|.*\\[.*date.*\\].*?:", "|")
-                                    .replaceAll("\\|.*\\[.*-Connection].*?:", "|")
-                                    .replaceAll("\\|.*\\[.*Restart].*?:", "|")
-                                    .replaceAll("\\|.*\\[.*Read.*\\].*?:", "|")
-                                    .replaceAll("\\|.*\\[.*DirMon.*\\].*?:", "|")
-                                    .replaceAll("\\|.*\\[.*Queue.*\\].*?:", "|");
+                                    .replaceAll(LOG_HUTD.pattern(), "|")
+                                    .replaceAll(LOG_DATE.pattern(), "|")
+                                    .replaceAll(LOG_CONNECTION.pattern(), "|")
+                                    .replaceAll(LOG_RESTART.pattern(), "|")
+                                    .replaceAll(LOG_READ.pattern(), "|")
+                                    .replaceAll(LOG_DIRMON.pattern(), "|")
+                                    .replaceAll(LOG_QUEUE.pattern(), "|");
                 // Remove lines containing unwanted strings - process line by line to avoid array allocation
                 StringBuilder filtered = new StringBuilder(str.length());
                 int start = 0;

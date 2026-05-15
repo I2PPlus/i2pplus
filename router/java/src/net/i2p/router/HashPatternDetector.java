@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
@@ -53,6 +54,7 @@ public class HashPatternDetector implements Serializable {
 
     // NetDB Scanner Configuration
     private static final String PROP_HASH_SCAN_FREQUENCY = "router.hashScan.frequency";
+    private static final Pattern PIPE_SPLIT = Pattern.compile("\\s*\\|\\s*");
     private static final long DEFAULT_SCAN_FREQUENCY = 0; // Disabled by default (set to 1h to enable)
     private static final long SCAN_STARTUP_DELAY = 5 * 60 * 1000L; // 5 minutes - wait for netdb init
     private static final long BAN_DURATION = 24 * 60 * 60 * 1000L; // 24 hours for auto-bans
@@ -262,7 +264,7 @@ public class HashPatternDetector implements Serializable {
             String line;
             while ((line = reader.readLine()) != null) {
                 // Parse format: TIMESTAMP | HASH | IP:PORT | REASON | DURATION
-                String[] parts = line.split("\\s*\\|\\s*");
+                String[] parts = PIPE_SPLIT.split(line);
                 if (parts.length >= 5) {
                     String hashStr = parts[1].trim();
                     String reason = parts[3].trim();

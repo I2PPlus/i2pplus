@@ -121,6 +121,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     // https://httpoxy.org
     private static final String PROXY_HEADER = "proxy";
+    private static final Pattern NEWLINE_SPLIT = Pattern.compile("\r\n");
 
     static {
         CLIENT_SKIPHEADERS.add(HASH_HEADER.toLowerCase(Locale.US));
@@ -985,7 +986,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // beware interference with Shoutcast, etc.?
 
                 if (_headers != null && !_headers.isEmpty()) {
-                    String[] requestLines = _headers.split("\r\n");
+                    String[] requestLines = NEWLINE_SPLIT.split(_headers);
                     if (requestLines.length > 0) {
                         String requestLine = requestLines[0];
                         String[] requestParts = requestLine.split(" ");

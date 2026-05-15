@@ -30,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * A simple log with automatic time stamping.
@@ -40,6 +41,7 @@ import java.util.List;
 class Log {
 
     private static final int MAX_LINES = 600;
+    private static final Pattern DATE_PATTERN = Pattern.compile("\\d{4}-\\d{2}-\\d{2}T.*Z--.*");
 
     private final File file;
 
@@ -86,7 +88,7 @@ class Log {
     }
 
     private String fixEntry(String line) {
-        if (line.matches("\\d{4}-\\d{2}-\\d{2}T.*Z--.*")) {
+        if (DATE_PATTERN.matcher(line).matches()) {
             return line.replaceFirst("Z--", "Z -- ");
         }
         return line;

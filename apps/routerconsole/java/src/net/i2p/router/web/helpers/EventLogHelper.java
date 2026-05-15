@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.Map;
 import java.util.TreeMap;
 import net.i2p.data.DataHelper;
@@ -21,6 +22,8 @@ import net.i2p.router.web.HelperBase;
  * Supports /events.jsp page in router console.
  */
 public class EventLogHelper extends FormHandler {
+    private static final Pattern EVENT_SPACE = Pattern.compile(" .+$");
+    private static final Pattern EVENT_DIGIT = Pattern.compile("\\d");
     private long _from, _age;
     //private long _to = Long.MAX_VALUE;
     private String _event = ALL;
@@ -197,7 +200,7 @@ public class EventLogHelper extends FormHandler {
                 type = type + (' ');
             }
             // create a class from truncated event type so we can style the tr's by event severity
-            type = type.substring(0,8).replaceAll(" .+$", "").replaceAll("\\d", "").toLowerCase();
+            type = EVENT_DIGIT.matcher(EVENT_SPACE.matcher(type.substring(0,8)).replaceAll("")).replaceAll("");
             if (isAll) {
                 buf.append("<tr class=\"").append(type).append(" lazy\">");
             } else {

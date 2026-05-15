@@ -156,6 +156,10 @@ public class Reseeder {
     // from PersistentDataStore
     private static final String ROUTERINFO_PREFIX = "routerInfo-";
     private static final String ROUTERINFO_SUFFIX = ".dat";
+    private static final Pattern PAREN_PATTERN = Pattern.compile("\\([^)]*\\)");
+    private static final Pattern VERIFY_FAIL_PATTERN = Pattern.compile("verification failed for .*");
+    private static final Pattern URL_SPLIT_PATTERN = Pattern.compile("[ ,]+");
+    private static final Pattern QUESTION_PATTERN = Pattern.compile("\\?");
 
     Reseeder(RouterContext ctx, ReseedChecker rc) {
         _context = ctx;
@@ -381,7 +385,7 @@ public class Reseeder {
                     }
                 } // else < 0, no valid URLs
                 String old = _checker.getError();
-                String notify = old.replaceAll("\\(.*\\)", "").replace(" \\.", ""); // remove dupe error msgs
+                String notify = PAREN_PATTERN.matcher(old).replaceAll("").replace(" \\.", ""); // remove dupe error msgs
                 _checker.setError(_t("{0}Reseed{1} failed:", "<a href=\"/configreseed\">", "</a>") + ' '  + notify + " <br>" +
                                   _t("For assistance, see the {0}",
                                     "<a target=_top href=\"/help/reseed\">" + _t("reseed help") + "</a>"));
@@ -420,7 +424,7 @@ public class Reseeder {
             int slashIndex = truncatedURL.indexOf('/');
             String hostname = slashIndex > 0 ? truncatedURL.substring(0, slashIndex) : truncatedURL;
             String reason = cause != null && cause.getMessage() != null ?
-                            cause.getMessage().replaceAll("verification failed for .*", "verification failed") : "Unknown error";
+                            cause.getMessage().replaceAll(VERIFY_FAIL_PATTERN.pattern(), "verification failed") : "Unknown error";
             String msg = "Reseeding failed [" + hostname + "] -> " + reason;
             if (_log.shouldWarn()) {_log.warn(msg);}
             else {_log.logAlways(Log.WARN, msg);}
@@ -529,7 +533,7 @@ public class Reseeder {
                 List<URI> sslList = new ArrayList<>();
                 List<URI> nonSslList = new ArrayList<>();
 
-                for (String u : urls.split("[ ,]+")) {
+                for (String u : URL_SPLIT_PATTERN.split(urls)) {
                     u = u.trim();
                     if (!u.endsWith("/")) u += "/";
                     URI uri = safeUri(u);
@@ -562,7 +566,7 @@ public class Reseeder {
          */
         private List<URI> parseUrlsWithTrailingSlash(String urls) {
             List<URI> list = new ArrayList<>();
-            for (String u : urls.split("[ ,]+")) {
+            for (String u : URL_SPLIT_PATTERN.split(urls)) {
                 u = u.trim();
                 if (!u.endsWith("/")) u += "/";
                 URI uri = safeUri(u);
@@ -757,7 +761,7 @@ public class Reseeder {
                     .replace("from ", "")
                     .replace("?", "")
                     .replace("netid=2", "")
-                    .replaceAll("\\(.*\\)", "");
+                    .replaceAll(PAREN_PATTERN.pattern(), "");
         }
 
         /** Case insensitive indexOf for content parsing, returns -1 if not found */
@@ -811,7 +815,7 @@ public class Reseeder {
             File contentRaw = null;
             String s = getDisplayString(seedURL);
             String trimmed = s.replace("http://","").replace("https://","").replace("netDb/","").replace("/i2pseeds.su3","")
-                              .replace("from ","").replace("netid=2", "").replaceAll("\\(.*\\)", "").replaceAll("\\?", "");
+                              .replace("from ","").replace("netid=2", "").replaceAll(PAREN_PATTERN.pattern(), "").replace("?", "");
             try {
                 _checker.setStatus(_t("Contacting reseed host") + ":<br>" + trimmed);
                 System.err.println("Reseeding " + s);

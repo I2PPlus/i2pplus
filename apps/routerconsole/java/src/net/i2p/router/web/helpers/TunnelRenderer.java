@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -44,6 +45,7 @@ import net.i2p.util.ObjectCounterUnsafe;
  *  For /tunnels.jsp, used by TunnelHelper.
  */
 class TunnelRenderer {
+    private static final Pattern TUNNEL_PAREN = Pattern.compile("\\([^)]+\\)");
     private final RouterContext _context;
     private final Log _log;
 
@@ -766,7 +768,7 @@ class TunnelRenderer {
                     .replace("ROOT", _t("PRIVATE IP ADDRESS"))
                     .replace("NON-RIPE-NCC-MANAGED-ADDRESS-BLOCK", "unknown")
                     .replace("unknown", _t("unknown"))
-                    .replaceAll("\\(.*?\\)", "")
+                    .replaceAll(TUNNEL_PAREN.pattern(), "")
                     .trim();
                 result.whois = whois;
                 result.domain = null;

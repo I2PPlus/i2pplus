@@ -1,6 +1,7 @@
 package net.i2p.router.web;
 
 import java.util.HashMap;
+import java.util.regex.Pattern;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
@@ -18,6 +19,7 @@ import net.i2p.util.SystemVersion;
  * @author zzz
  */
 public class CSSHelper extends HelperBase {
+    private static final Pattern LANG_PATTERN = Pattern.compile("[a-zA-Z_]");
 
     private static final Map<String, Boolean> _UACache = new ConcurrentHashMap<String, Boolean>();
     public static final String PROP_UNIVERSAL_THEMING = "routerconsole.universal.theme";
@@ -222,7 +224,7 @@ public class CSSHelper extends HelperBase {
     public void setLang(String lang) {
         // Protected with nonce in css.jsi
         if (lang != null && lang.length() >= 2 && lang.length() <= 6 &&
-            lang.replaceAll("[a-zA-Z_]", "").length() == 0) {
+            LANG_PATTERN.matcher(lang).replaceAll("").length() == 0) {
             Map<String, String> m = new HashMap<String, String>(2);
             int under = lang.indexOf('_');
             if (under < 0) {

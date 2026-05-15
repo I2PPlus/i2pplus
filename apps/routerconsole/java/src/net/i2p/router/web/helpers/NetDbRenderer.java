@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 import net.i2p.util.LHMCache;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -90,6 +91,7 @@ class NetDbRenderer {
         //NetDbCachingJob.schedule(_context);
     }
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
+    private static final Pattern COMMA_SPACE_SPLIT = Pattern.compile("[, ]+");
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     public static final int LOOKUP_WAIT = 3 * 1000;
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
@@ -222,7 +224,7 @@ class NetDbRenderer {
             routerStream = routerStream.filter(ri -> version.equals(ri.getVersion()));
         }
         if (country != null) {
-            Set<String> countryCodes = Arrays.stream(country.split("[, ]+")).map(String::trim).collect(Collectors.toSet());
+            Set<String> countryCodes = Arrays.stream(COMMA_SPACE_SPLIT.split(country)).map(String::trim).collect(Collectors.toSet());
             routerStream = routerStream.filter(ri -> {
                 String routerCountry = _context.commSystem().getCountry(ri.getIdentity().getHash());
                 return routerCountry != null && countryCodes.contains(routerCountry.toLowerCase(Locale.US));
@@ -482,7 +484,7 @@ class NetDbRenderer {
      *  @since 0.9.64
      */
     private void filterCountry(Set<RouterInfo> routers, String country) {
-        String[] countryCodes = country.split("[, ]+");
+        String[] countryCodes = COMMA_SPACE_SPLIT.split(country);
         boolean foundMatch;
         for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
             RouterInfo ri = iter.next();
@@ -1832,22 +1834,22 @@ class NetDbRenderer {
                     .replace("class=tier", "class=\"tier isD\"");
                 if (isReachable) {
                     processedCapsStr = processedCapsStr
-                        .replaceAll("href=\"/netdb\\?caps=K", "href=\"/netdb?caps=KRD")
-                        .replaceAll("href=\"/netdb\\?caps=L", "href=\"/netdb?caps=LRD")
-                        .replaceAll("href=\"/netdb\\?caps=M", "href=\"/netdb?caps=MRD")
-                        .replaceAll("href=\"/netdb\\?caps=N", "href=\"/netdb?caps=NRD")
-                        .replaceAll("href=\"/netdb\\?caps=O", "href=\"/netdb?caps=ORD")
-                        .replaceAll("href=\"/netdb\\?caps=P", "href=\"/netdb?caps=PRD")
-                        .replaceAll("href=\"/netdb\\?caps=X", "href=\"/netdb?caps=XRD");
+                        .replace("href=\"/netdb?caps=K", "href=\"/netdb?caps=KRD")
+                        .replace("href=\"/netdb?caps=L", "href=\"/netdb?caps=LRD")
+                        .replace("href=\"/netdb?caps=M", "href=\"/netdb?caps=MRD")
+                        .replace("href=\"/netdb?caps=N", "href=\"/netdb?caps=NRD")
+                        .replace("href=\"/netdb?caps=O", "href=\"/netdb?caps=ORD")
+                        .replace("href=\"/netdb?caps=P", "href=\"/netdb?caps=PRD")
+                        .replace("href=\"/netdb?caps=X", "href=\"/netdb?caps=XRD");
                 } else if (isUnreachable) {
                     processedCapsStr = processedCapsStr
-                        .replaceAll("href=\"/netdb\\?caps=K", "href=\"/netdb?caps=KUD")
-                        .replaceAll("href=\"/netdb\\?caps=L", "href=\"/netdb?caps=LUD")
-                        .replaceAll("href=\"/netdb\\?caps=M", "href=\"/netdb?caps=MUD")
-                        .replaceAll("href=\"/netdb\\?caps=N", "href=\"/netdb?caps=NUD")
-                        .replaceAll("href=\"/netdb\\?caps=O", "href=\"/netdb?caps=OUD")
-                        .replaceAll("href=\"/netdb\\?caps=P", "href=\"/netdb?caps=PUD")
-                        .replaceAll("href=\"/netdb\\?caps=X", "href=\"/netdb?caps=XUD");
+                        .replace("href=\"/netdb?caps=K", "href=\"/netdb?caps=KUD")
+                        .replace("href=\"/netdb?caps=L", "href=\"/netdb?caps=LUD")
+                        .replace("href=\"/netdb?caps=M", "href=\"/netdb?caps=MUD")
+                        .replace("href=\"/netdb?caps=N", "href=\"/netdb?caps=NUD")
+                        .replace("href=\"/netdb?caps=O", "href=\"/netdb?caps=OUD")
+                        .replace("href=\"/netdb?caps=P", "href=\"/netdb?caps=PUD")
+                        .replace("href=\"/netdb?caps=X", "href=\"/netdb?caps=XUD");
                 }
             } else if (hasE) {
                 processedCapsStr = processedCapsStr
@@ -1855,22 +1857,22 @@ class NetDbRenderer {
                     .replace("class=tier", "class=\"tier isE\"");
                 if (isReachable) {
                     processedCapsStr = processedCapsStr
-                        .replaceAll("href=\"/netdb\\?caps=K", "href=\"/netdb?caps=KRE")
-                        .replaceAll("href=\"/netdb\\?caps=L", "href=\"/netdb?caps=LRE")
-                        .replaceAll("href=\"/netdb\\?caps=M", "href=\"/netdb?caps=MRE")
-                        .replaceAll("href=\"/netdb\\?caps=N", "href=\"/netdb?caps=NRE")
-                        .replaceAll("href=\"/netdb\\?caps=O", "href=\"/netdb?caps=ORE")
-                        .replaceAll("href=\"/netdb\\?caps=P", "href=\"/netdb?caps=PRE")
-                        .replaceAll("href=\"/netdb\\?caps=X", "href=\"/netdb?caps=XRE");
+                        .replace("href=\"/netdb?caps=K", "href=\"/netdb?caps=KRE")
+                        .replace("href=\"/netdb?caps=L", "href=\"/netdb?caps=LRE")
+                        .replace("href=\"/netdb?caps=M", "href=\"/netdb?caps=MRE")
+                        .replace("href=\"/netdb?caps=N", "href=\"/netdb?caps=NRE")
+                        .replace("href=\"/netdb?caps=O", "href=\"/netdb?caps=ORE")
+                        .replace("href=\"/netdb?caps=P", "href=\"/netdb?caps=PRE")
+                        .replace("href=\"/netdb?caps=X", "href=\"/netdb?caps=XRE");
                 } else if (isUnreachable) {
                     processedCapsStr = processedCapsStr
-                        .replaceAll("href=\"/netdb\\?caps=K", "href=\"/netdb?caps=KUE")
-                        .replaceAll("href=\"/netdb\\?caps=L", "href=\"/netdb?caps=LUE")
-                        .replaceAll("href=\"/netdb\\?caps=M", "href=\"/netdb?caps=MUE")
-                        .replaceAll("href=\"/netdb\\?caps=N", "href=\"/netdb?caps=NUE")
-                        .replaceAll("href=\"/netdb\\?caps=O", "href=\"/netdb?caps=OUE")
-                        .replaceAll("href=\"/netdb\\?caps=P", "href=\"/netdb?caps=PUE")
-                        .replaceAll("href=\"/netdb\\?caps=X", "href=\"/netdb?caps=XUE");
+                        .replace("href=\"/netdb?caps=K", "href=\"/netdb?caps=KUE")
+                        .replace("href=\"/netdb?caps=L", "href=\"/netdb?caps=LUE")
+                        .replace("href=\"/netdb?caps=M", "href=\"/netdb?caps=MUE")
+                        .replace("href=\"/netdb?caps=N", "href=\"/netdb?caps=NUE")
+                        .replace("href=\"/netdb?caps=O", "href=\"/netdb?caps=OUE")
+                        .replace("href=\"/netdb?caps=P", "href=\"/netdb?caps=PUE")
+                        .replace("href=\"/netdb?caps=X", "href=\"/netdb?caps=XUE");
                 }
             } else if (hasG) {
                 processedCapsStr = processedCapsStr
@@ -1878,22 +1880,22 @@ class NetDbRenderer {
                     .replace("class=tier", "class=\"tier isG\"");
                 if (isReachable) {
                     processedCapsStr = processedCapsStr
-                        .replaceAll("href=\"/netdb\\?caps=K", "href=\"/netdb?caps=KRG")
-                        .replaceAll("href=\"/netdb\\?caps=L", "href=\"/netdb?caps=LRG")
-                        .replaceAll("href=\"/netdb\\?caps=M", "href=\"/netdb?caps=MRG")
-                        .replaceAll("href=\"/netdb\\?caps=N", "href=\"/netdb?caps=NRG")
-                        .replaceAll("href=\"/netdb\\?caps=O", "href=\"/netdb?caps=ORG")
-                        .replaceAll("href=\"/netdb\\?caps=P", "href=\"/netdb?caps=PRG")
-                        .replaceAll("href=\"/netdb\\?caps=X", "href=\"/netdb?caps=XRG");
+                        .replace("href=\"/netdb?caps=K", "href=\"/netdb?caps=KRG")
+                        .replace("href=\"/netdb?caps=L", "href=\"/netdb?caps=LRG")
+                        .replace("href=\"/netdb?caps=M", "href=\"/netdb?caps=MRG")
+                        .replace("href=\"/netdb?caps=N", "href=\"/netdb?caps=NRG")
+                        .replace("href=\"/netdb?caps=O", "href=\"/netdb?caps=ORG")
+                        .replace("href=\"/netdb?caps=P", "href=\"/netdb?caps=PRG")
+                        .replace("href=\"/netdb?caps=X", "href=\"/netdb?caps=XRG");
                 } else if (isUnreachable) {
                     processedCapsStr = processedCapsStr
-                        .replaceAll("href=\"/netdb\\?caps=K", "href=\"/netdb?caps=KUG")
-                        .replaceAll("href=\"/netdb\\?caps=L", "href=\"/netdb?caps=LUG")
-                        .replaceAll("href=\"/netdb\\?caps=M", "href=\"/netdb?caps=MUG")
-                        .replaceAll("href=\"/netdb\\?caps=N", "href=\"/netdb?caps=NUG")
-                        .replaceAll("href=\"/netdb\\?caps=O", "href=\"/netdb?caps=OUG")
-                        .replaceAll("href=\"/netdb\\?caps=P", "href=\"/netdb?caps=PUG")
-                        .replaceAll("href=\"/netdb\\?caps=X", "href=\"/netdb?caps=XUG");
+                        .replace("href=\"/netdb?caps=K", "href=\"/netdb?caps=KUG")
+                        .replace("href=\"/netdb?caps=L", "href=\"/netdb?caps=LUG")
+                        .replace("href=\"/netdb?caps=M", "href=\"/netdb?caps=MUG")
+                        .replace("href=\"/netdb?caps=N", "href=\"/netdb?caps=NUG")
+                        .replace("href=\"/netdb?caps=O", "href=\"/netdb?caps=OUG")
+                        .replace("href=\"/netdb?caps=P", "href=\"/netdb?caps=PUG")
+                        .replace("href=\"/netdb?caps=X", "href=\"/netdb?caps=XUG");
                 }
             }
         }

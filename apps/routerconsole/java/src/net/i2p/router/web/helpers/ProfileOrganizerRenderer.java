@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.stat.Rate;
@@ -33,6 +34,7 @@ import net.i2p.util.LHMCache;
  *
  */
 class ProfileOrganizerRenderer {
+    private static final Pattern WHOIS_PAREN = Pattern.compile("\\([^)]+\\)");
     private final RouterContext _context;
     private final ProfileOrganizer _organizer;
 
@@ -175,7 +177,7 @@ class ProfileOrganizerRenderer {
                 if (enableReverseLookups()) {
                     if (rl != null && !rl.equals("null") && !rl.isEmpty() && rl.length() != 0 && !ip.toString().equals(rl)) {
                         String whois = CommSystemFacadeImpl.getDomain(rl);
-                        String whoisShort = whois.replaceAll("\\(.*?\\)", "").toLowerCase().trim();
+                        String whoisShort = WHOIS_PAREN.matcher(whois).replaceAll("").toLowerCase().trim();
                         whoisShort = whoisShort.replace("latin american and caribbean ip address regional registry", "lacnic")
                                                .replace("asia pacific network information centre", "apnic")
                                                .replace("mediacom communications corp", "mediacom")

@@ -23,6 +23,7 @@ import org.cybergarage.xml.Node;
 import org.cybergarage.xml.XML;
 import org.cybergarage.xml.parser.JaxpParser;
 import org.w3c.dom.NamedNodeMap;
+import java.util.regex.Pattern;
 
 /**
  * Enhanced XML parser for I2P news content with XHTML support.
@@ -39,6 +40,7 @@ import org.w3c.dom.NamedNodeMap;
  * @since 0.9.17
  */
 public class XMLParser extends JaxpParser {
+    private static final Pattern WHITESPACE = Pattern.compile("[ \t\r\n]");
     private final Log _log;
 
     public static final String TEXT_NAME = "#text";
@@ -76,7 +78,7 @@ public class XMLParser extends JaxpParser {
         // Only add it to the value if we don't have any other nodes.
         // Otherwise, add it as a node.
         if (domNodeType == org.w3c.dom.Node.TEXT_NODE) {
-            if (domNodeValue.replaceAll("[ \t\r\n]", "").length() == 0) {
+            if (WHITESPACE.matcher(domNodeValue).replaceAll("").length() == 0) {
                 return parentNode;
             }
             if (!parentNode.hasNodes()) {
