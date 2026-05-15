@@ -189,7 +189,7 @@ public class BlacklistBean extends BaseBean {
         address = address.trim().toLowerCase();
         String[] lines = content.split("\\n");
         for (String line : lines) {
-            if (line.trim().toLowerCase().equals(address)) {
+            if (line.trim().equalsIgnoreCase(address)) {
                 return true;
             }
         }

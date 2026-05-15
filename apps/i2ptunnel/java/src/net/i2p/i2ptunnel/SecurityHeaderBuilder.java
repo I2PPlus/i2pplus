@@ -134,10 +134,10 @@ public class SecurityHeaderBuilder {
             cacheControlList = null;
         }
 
-        if (cacheControlList != null && cacheControlList.contains("post-check".toLowerCase())) {
+        if (cacheControlList != null && cacheControlList.contains("post-check")) {
             List<String> newList = new java.util.ArrayList<>();
             for (String s : cacheControlList) {
-                if (!s.toLowerCase().equals("post-check")) {
+                if (!"post-check".equalsIgnoreCase(s)) {
                     newList.add(s);
                 }
             }
@@ -255,8 +255,8 @@ public class SecurityHeaderBuilder {
         List<String> cacheControlList = headers.get("Cache-Control");
         if (cacheControlList == null) {return;}
 
-        boolean hasNone = cacheControlList.stream().anyMatch(s -> s.toLowerCase().equals("none"));
-        boolean hasPostCheck = cacheControlList.stream().anyMatch(s -> s.toLowerCase().equals("post-check"));
+        boolean hasNone = cacheControlList.stream().anyMatch(s -> "none".equalsIgnoreCase(s));
+        boolean hasPostCheck = cacheControlList.stream().anyMatch(s -> "post-check".equalsIgnoreCase(s));
 
         if (hasNone || hasPostCheck) {
             List<String> newList = new java.util.ArrayList<>();

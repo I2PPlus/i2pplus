@@ -756,7 +756,7 @@ public class SidebarHelper extends HelperBase {
                 Boolean server = _context.clientManager().shouldPublishLeaseSet(h);
                 Boolean isPing = name.startsWith("Ping [") || name.equals("I2Ping");
                 Boolean isSnark = name.equals(_t("I2PSnark"));
-                Boolean isI2PChat = name.equals(_t("Messenger")) || name.toLowerCase().equals(_t("i2pchat"));
+                Boolean isI2PChat = name.equals(_t("Messenger")) || _t("i2pchat").equalsIgnoreCase(name);
 
                 buf.append("<tr><td ");
                 if (isSnark) {buf.append("class=tunnelI2PSnark ");}

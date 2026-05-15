@@ -122,10 +122,10 @@ public class ConfigurationManager {
                 continue;
             } catch (NumberFormatException e) {}
             //Check if value is a bool
-            if (value.toLowerCase().equals("true")) {
+            if ("true".equalsIgnoreCase(value)) {
                 booleanConfigurations.put(key, Boolean.TRUE);
                 continue;
-            } else if (value.toLowerCase().equals("false")) {
+            } else if ("false".equalsIgnoreCase(value)) {
                 booleanConfigurations.put(key, Boolean.FALSE);
                 continue;
             }

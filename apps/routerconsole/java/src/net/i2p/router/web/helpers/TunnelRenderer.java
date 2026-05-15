@@ -142,8 +142,8 @@ class TunnelRenderer {
                 if (_context.clientManager().shouldPublishLeaseSet(client)) {
                     out.write("server ");
                     if (getTunnelName(in).equals(_t("I2PSnark"))) {out.write("snark ");}
-                    else if (getTunnelName(in).toLowerCase().equals("messenger") ||
-                             getTunnelName(in).toLowerCase().equals("i2pchat")) {
+                    else if ("messenger".equalsIgnoreCase(getTunnelName(in)) ||
+                             "i2pchat".equalsIgnoreCase(getTunnelName(in))) {
                         out.write("i2pchat ");
                     }
                 }
