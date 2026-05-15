@@ -93,10 +93,10 @@ public class SubscriptionsBean extends BaseBean {
                 if (line.length() > 0) {urls.add(line);}
             }
             Collections.sort(urls);
-            PrintWriter out = new PrintWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "UTF-8"));
-            for (String url : urls) {out.println(url);}
-            out.close();
-            if (out.checkError()) {throw new IOException("Failed write to " + file);}
+            try (PrintWriter out = new PrintWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "UTF-8"))) {
+                for (String url : urls) {out.println(url);}
+                if (out.checkError()) {throw new IOException("Failed write to " + file);}
+            }
         } catch (IOException e) {e.printStackTrace();} // TODO Auto-generated catch block
     }
 

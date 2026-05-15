@@ -45,42 +45,35 @@ public class TranslateSVGServlet extends HttpServlet {
             return;
         }
         path = DIR + path;
-        InputStream in = getServletContext().getResourceAsStream(path);
-        if (in == null) {
-            resp.sendError(404);
-            return;
-        }
-        String etag = '"' + System.getProperty("router.version", CoreVersion.VERSION) + '"';
-        // This isn't working, the header is coming back null
-        String requestETag = req.getHeader("If-None-Match");
-        if (etag.equals(requestETag)) {
-            resp.setStatus(304);
-            resp.getOutputStream().close();
-            return;
-        }
-
-        resp.setCharacterEncoding("UTF-8");
-        resp.setHeader("X-Content-Type-Options", "nosniff");
-        resp.setHeader("Accept-Ranges", "none");
-        resp.setDateHeader("Expires", _context.clock().now() + 2628000000L);
-        resp.setHeader("Cache-Control", "no-cache, private, max-age=2628000, immutable");
-        resp.setHeader("Pragma", "no-cache");
-        resp.setContentType("image/svg+xml; charset=utf8");
-        resp.setHeader("ETag", etag);
-
-        PrintWriter out = resp.getWriter();
-        TranslateReader tr = null;
-        try {
-            tr = new TranslateReader(_context, Messages.BUNDLE_NAME, in);
-            char[] buf = new char[256];
-            int read;
-            while ((read = tr.read(buf)) != -1) {
-                out.write(buf, 0, read);
+        try (InputStream in = getServletContext().getResourceAsStream(path)) {
+            if (in == null) {
+                resp.sendError(404);
+                return;
             }
-        } finally {
-            if (tr != null) try { tr.close(); } catch (IOException ioe) {}
-            try { in.close(); } catch (IOException ioe) {}
-            out.close();
+            String etag = '"' + System.getProperty("router.version", CoreVersion.VERSION) + '"';
+            String requestETag = req.getHeader("If-None-Match");
+            if (etag.equals(requestETag)) {
+                resp.setStatus(304);
+                return;
+            }
+
+            resp.setCharacterEncoding("UTF-8");
+            resp.setHeader("X-Content-Type-Options", "nosniff");
+            resp.setHeader("Accept-Ranges", "none");
+            resp.setDateHeader("Expires", _context.clock().now() + 2628000000L);
+            resp.setHeader("Cache-Control", "no-cache, private, max-age=2628000, immutable");
+            resp.setHeader("Pragma", "no-cache");
+            resp.setContentType("image/svg+xml; charset=utf8");
+            resp.setHeader("ETag", etag);
+
+            PrintWriter out = resp.getWriter();
+            try (TranslateReader tr = new TranslateReader(_context, Messages.BUNDLE_NAME, in)) {
+                char[] buf = new char[256];
+                int read;
+                while ((read = tr.read(buf)) != -1) {
+                    out.write(buf, 0, read);
+                }
+            }
         }
     }
 }

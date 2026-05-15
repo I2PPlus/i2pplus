@@ -60,15 +60,12 @@ class Log {
      *            A String containing a message to append to the log.
      */
     public void append(String entry) {
-        BufferedWriter bw = null;
-        try {
-            bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.file, true), "UTF-8"));
+        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.file, true), "UTF-8"))) {
             String timestamp = Instant.now().toString();
             bw.write(timestamp);
             bw.write(" -- ");
             bw.write(entry);
             bw.newLine();
-            bw.close();
             trimLog();
         } catch (IOException exp) {}
     }

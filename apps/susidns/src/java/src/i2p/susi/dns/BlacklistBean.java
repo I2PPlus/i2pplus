@@ -147,10 +147,10 @@ public class BlacklistBean extends BaseBean {
                 }
             }
             Collections.sort(entries, String.CASE_INSENSITIVE_ORDER);
-            PrintWriter out = new PrintWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "UTF-8"));
-            for (String entry : entries) {out.println(entry);}
-            out.close();
-            if (out.checkError()) {throw new IOException("Failed write to " + file);}
+            try (PrintWriter out = new PrintWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "UTF-8"))) {
+                for (String entry : entries) {out.println(entry);}
+                if (out.checkError()) {throw new IOException("Failed write to " + file);}
+            }
             // Update static cache after saving
             cachedContent = null; // Force reload on next read
             lastModified = 0; // Reset modification time to trigger reload
@@ -467,10 +467,10 @@ public class BlacklistBean extends BaseBean {
             // Sort all entries
             Collections.sort(allEntries, String.CASE_INSENSITIVE_ORDER);
             // Write to file
-            PrintWriter out = new PrintWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "UTF-8"));
-            for (String entry : allEntries) {out.println(entry);}
-            out.close();
-            if (out.checkError()) {throw new IOException("Failed write to " + file);}
+            try (PrintWriter out = new PrintWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "UTF-8"))) {
+                for (String entry : allEntries) {out.println(entry);}
+                if (out.checkError()) {throw new IOException("Failed write to " + file);}
+            }
             debug("Saved blacklist to file: " + file.getAbsolutePath() + " (" + allEntries.size() + " entries)");
             // Update static cache after saving
             synchronized(BlacklistBean.class) {
