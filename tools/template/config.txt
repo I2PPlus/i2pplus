@@ -1,0 +1,12 @@
+# I2P+ report template configuration
+# Optional settings for analysis reports (checkstyle, spotbugs, pmd, etc.)
+
+# Editor for clickable file links in local reports
+# Set to your preferred editor: codium, code, idea, vim, nano, etc.
+editor = codium
+
+# Favicon to use in reports (default: installer/resources/themes/console/images/plus.svg)
+# favicon = installer/resources/console/themes/console/images/plus.svg
+
+# Prefix for report titles (default: I2P+)
+# report_prefix = I2P+

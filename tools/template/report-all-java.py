@@ -12,6 +12,7 @@ import json
 import sys
 import os
 import argparse
+from urllib.parse import quote
 from xml.etree import ElementTree as ET
 from collections import defaultdict
 
@@ -348,11 +349,14 @@ def _to_relative(file_path):
 
 
 def _file_link(abs_path, editor, line=0):
-    """Build editor/file link href for local mode."""
+    """Build file link href for local mode."""
+    if not editor:
+        return f"file://{abs_path}"
+    # Use vscode:// for all VSCode-based editors (works for VSCodium too)
+    protocol = "vscode"
     loc = f":{line}" if line else ""
-    if editor:
-        return f"{editor}://file/{abs_path.lstrip('/')}{loc}"
-    return f"file://{abs_path}{loc}"
+    # Single slash format
+    return f"{protocol}://file/{abs_path.lstrip('/')}{loc}"
 
 
 def main():
