@@ -36,8 +36,6 @@ class RatchetTagSet implements TagSetHandle {
     private final SessionKey _tagsetKey;
     // NSR only, else null
     private final HandshakeState _state;
-    // NSR only - track if state has been consumed to prevent reuse race condition
-    private volatile boolean _nsrStateConsumed;
     // inbound only, else null
     // We use object for tags because we must do indexOfValueByValue()
     private final SparseArray<RatchetSessionTag> _sessionTags;
@@ -380,16 +378,6 @@ class RatchetTagSet implements TagSetHandle {
 
         // NSR
         if (_state != null) {
-            // Check if NSR state was already consumed to prevent race condition
-            // where multiple tags from same tagset try to use the same state
-            if (_nsrStateConsumed) {
-                Log log = I2PAppContext.getGlobalContext().logManager().getLog(RatchetTagSet.class);
-                if (log.shouldWarn())
-                    log.warn("NSR state already consumed, rejecting tag " + tag.toBase64() +
-                             " in TagSet #" + _tagSetID + " -> Possible duplicate or stale tag");
-                return null;
-            }
-            _nsrStateConsumed = true;
             addTags(tagnum);
             return new SessionKeyAndNonce(_state);
         }

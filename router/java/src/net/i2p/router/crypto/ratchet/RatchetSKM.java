@@ -605,6 +605,14 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                 else
                     _log.debug("Inbound ES Tag " + key.getNonce() + " consumed: " + tag.toBase64() + "\n* " + tagSet);
             }
+            if (state != null) {
+                for (Iterator<RatchetSessionTag> iter = _inboundTagSets.keySet().iterator(); iter.hasNext(); ) {
+                    RatchetSessionTag t = iter.next();
+                    if (_inboundTagSets.get(t) == tagSet) {
+                        iter.remove();
+                    }
+                }
+            }
         } else {
             if (_log.shouldInfo())
                 _log.info(tag + " not found in Tagset \n* " + tagSet);
@@ -1357,6 +1365,12 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                             _NSRcallback = null;
                         }
                         _lastUsed = _context.clock().now();
+                        for (Iterator<RatchetSessionTag> iter = _inboundTagSets.keySet().iterator(); iter.hasNext(); ) {
+                            RatchetSessionTag t = iter.next();
+                            if (_inboundTagSets.get(t) == set) {
+                                iter.remove();
+                            }
+                        }
                         return;
                     }
                 }
