@@ -226,11 +226,43 @@ def escape(s):
 
 
 def minify_html(html_str):
-    """Minify HTML by collapsing whitespace."""
-    html_str = re.sub(r"<!--.*?-->", "", html_str, flags=re.DOTALL)
-    html_str = re.sub(r"\s+", " ", html_str)
-    html_str = re.sub(r">\s+<", "><", html_str)
-    return html_str.strip()
+    """Minify HTML if external tools available, else do basic whitespace cleanup."""
+    # Try htmlmin first
+    try:
+        import htmlmin
+        return htmlmin.minify(html_str, remove_comments=True, remove_all_empty_space=True)
+    except ImportError:
+        pass
+    # Fallback: basic whitespace removal while preserving script/style content
+    result = []
+    i = 0
+    while i < len(html_str):
+        if html_str[i:i+8].lower() == '<script>':
+            result.append('<script>')
+            i += 8
+            j = html_str.find('</script>', i)
+            if j == -1:
+                j = len(html_str)
+            result.append(html_str[i:j])
+            result.append('</script>')
+            i = j + 9
+        elif html_str[i:i+7].lower() == '<style>':
+            result.append('<style>')
+            i += 7
+            j = html_str.find('</style>', i)
+            if j == -1:
+                j = len(html_str)
+            result.append(html_str[i:j])
+            result.append('</style>')
+            i = j + 8
+        elif html_str[i] in ' \t\n\r':
+            if result and result[-1] not in (' ', '>', '<'):
+                result.append(' ')
+            i += 1
+        else:
+            result.append(html_str[i])
+            i += 1
+    return ''.join(result)
 
 
 def get_code_snippet(file_path, line_num, context=3):

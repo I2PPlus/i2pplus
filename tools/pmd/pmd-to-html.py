@@ -16,8 +16,8 @@ from xml.etree import ElementTree as ET
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 
 from tools.template.common import (
-    escape, load_css, load_favicon, load_js, minify_html, get_code_snippet,
-    snippet_to_text, severity_class,
+    escape, load_css, load_favicon, minify_html, get_code_snippet,
+    snippet_to_text, severity_class, _strip_comments,
     html_header, html_meta_line, html_footer, write_report, CONFIG,
 )
 
@@ -175,16 +175,25 @@ def main():
         # Build rule data JSON for interactive filtering
         def norm_path(f):
             return os.path.abspath(f) if local else f
+        def fix_script_tag(s):
+            return s.replace("</script>", "<\\/script>")
         rule_data_json = json.dumps({rule: [(norm_path(f), {
             "begin": v["begin"], "end": v["end"], "priority": v["priority"],
             "msg": v["msg"], "class": v["class"], "method": v["method"],
             "url": v["url"], "ruleset": v["ruleset"], "subsystem": v["subsystem"],
-            "snippet": snippet_to_text(get_code_snippet(f, v["begin"])),
+            "snippet": fix_script_tag(snippet_to_text(get_code_snippet(f, v["begin"]))),
         }) for f, v in vlist] for rule, vlist in rule_violations.items()})
 
         # Inject PMD-specific data + JS files before closing script tag
+        # Note: Skip minification via load_js since terser/uglifyjs corrupts embedded JSON
         pmd_data = f'var LOCAL_MODE={"true" if local else "false"};\nvar RULE_DATA={rule_data_json};\n'
-        pmd_js = pmd_data + load_js("shared.js", "rule-detail.js")
+        js_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "template", "js")
+        raw_js_parts = []
+        for js_file in ("shared.js", "rule-detail.js"):
+            jf = os.path.join(js_dir, js_file)
+            if os.path.exists(jf):
+                raw_js_parts.append(_strip_comments(open(jf).read()))
+        pmd_js = pmd_data + "\n".join(raw_js_parts)
         # Insert PMD JS before </script> in the header
         html_so_far = "\n".join(lines)
         html_so_far = html_so_far.replace("</script>", pmd_js + "</script>")
