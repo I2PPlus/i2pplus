@@ -350,7 +350,7 @@ class TunnelRenderer {
 
     private final BoundedCache<String, String> reverseLookupCache = new BoundedCache<>(1000);
 
-    public void renderTransitSummary(Writer out) throws IOException {
+    public synchronized void renderTransitSummary(Writer out) throws IOException {
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
         if (!participating.isEmpty() && participating.size() > 1) {
             // Counters for tunnels and bandwidth by peer

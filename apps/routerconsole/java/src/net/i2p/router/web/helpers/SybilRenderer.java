@@ -578,7 +578,7 @@ public class SybilRenderer {
     /**
      *  @since 0.9.38 split out from renderRouterInfoHTML()
      */
-    private void renderThreatsHTML(Writer out, StringBuilder buf, long date, Map<Hash, Points> points) throws IOException {
+    private synchronized void renderThreatsHTML(Writer out, StringBuilder buf, long date, Map<Hash, Points> points) throws IOException {
         double threshold = Analysis.DEFAULT_BLOCK_THRESHOLD;
         try {
             threshold = Double.parseDouble(_context.getProperty(Analysis.PROP_THRESHOLD, Double.toString(threshold)));
@@ -633,7 +633,7 @@ public class SybilRenderer {
     /**
      *  @param pairs sorted
      */
-    private void renderPairDistance(Writer out, StringBuilder buf, List<Pair> pairs, double avg) throws IOException {
+    private synchronized void renderPairDistance(Writer out, StringBuilder buf, List<Pair> pairs, double avg) throws IOException {
         buf.append("<h3 class=sybils>").append(_t("Average Floodfill Distance is")).append(" ").append(TWO_DECIMALS.format(avg)).append("</h3>\n" +
                    "<h3 id=pairs class=sybils>").append(_t("Closest Floodfill Pairs by Hash")).append("</h3>\n");
 
@@ -912,7 +912,7 @@ public class SybilRenderer {
      *  @param ris sorted, closest first
      *  @param usName HTML escaped
      */
-    private void renderRouterInfoHTML(Writer out, StringBuilder buf, Hash us, double avgMinDist,
+    private synchronized void renderRouterInfoHTML(Writer out, StringBuilder buf, Hash us, double avgMinDist,
                                       List<RouterInfo> ris) throws IOException {
         double min = 256;
         double max = 0;
