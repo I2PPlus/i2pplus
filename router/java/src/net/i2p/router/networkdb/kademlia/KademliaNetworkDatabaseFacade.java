@@ -1804,10 +1804,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (validateUptime != null) {
             try {
                 int mins = Integer.parseInt(validateUptime);
-                return uptime > mins*60*1000;
+                return uptime > mins*60L*1000;
             } catch (NumberFormatException ignored) {}
         }
-        return uptime > 20*60*1000;
+        return uptime > 20L*60*1000;
     }
 
     /**

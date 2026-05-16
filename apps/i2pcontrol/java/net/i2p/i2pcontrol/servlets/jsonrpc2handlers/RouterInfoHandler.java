@@ -130,7 +130,7 @@ public class RouterInfoHandler implements RequestHandler {
 
         if (inParams.containsKey("i2p.router.netdb.isreseeding")) {
             outParams.put("i2p.router.netdb.isreseeding",
-            Boolean.valueOf(System.getProperty("net.i2p.router.web.ReseedHandler.reseedInProgress")).booleanValue());
+            Boolean.valueOf(System.getProperty("net.i2p.router.web.ReseedHandler.reseedInProgress")));
         }
         return new JSONRPC2Response(outParams, req.getID());
     }

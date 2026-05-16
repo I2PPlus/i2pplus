@@ -254,7 +254,7 @@ public class RouterTimestamper extends Timestamper {
                     if (_wellSynced)
                         sleepTime *= 3;
                 }
-                try { Thread.sleep(sleepTime); } catch (InterruptedException ie) {}
+                try { Thread.sleep(sleepTime); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
             }
         } catch (Throwable t) {
             synchronized (this) { notifyAll(); }

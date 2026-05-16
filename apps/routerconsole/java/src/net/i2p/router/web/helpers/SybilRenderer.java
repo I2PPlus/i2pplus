@@ -383,7 +383,7 @@ public class SybilRenderer {
         long age = _context.getProperty(Analysis.PROP_REMOVETIME, Analysis.DEFAULT_REMOVE_TIME);
         for (int i = 0; i <DAYS.length; i++) {
             buf.append("<option value=\"").append(DAYS[i]).append('"');
-            long time = DAYS[i] * 24*60*60*1000L;
+            long time = DAYS[i] * 24L*60*60*1000;
             if (time == age)
                 buf.append(HelperBase.SELECTED);
             buf.append('>');

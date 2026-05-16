@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.Map;
@@ -64,13 +65,13 @@ public class BanLogger {
     private static final Map<String, Long> _loggedIPs = Collections.synchronizedMap(new LHMCache<>(MAX_LOGGED_ENTRIES));
 
     public BanLogger() {
-        _dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        _dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
         _dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         _banCount = new AtomicInteger();
     }
 
     public BanLogger(RouterContext context) {
-        _dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        _dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
         _dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         initialize(context);
     }

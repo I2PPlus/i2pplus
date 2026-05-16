@@ -181,8 +181,8 @@ public class AdvancedSettingsHandler implements RequestHandler {
     }
 
     private boolean checkTypes(Map<String, Object> newSettings) {
-        for (String key : newSettings.keySet()) {
-            if (!(newSettings.get(key) instanceof String)) {
+        for (Map.Entry<String, Object> entry : newSettings.entrySet()) {
+            if (!(entry.getValue() instanceof String)) {
                 return false;
             }
         }

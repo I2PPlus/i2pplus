@@ -2,6 +2,7 @@ package net.i2p.client.streaming.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.data.ByteArray;
@@ -23,7 +24,7 @@ class PacketHandler {
     private final Log log;
     private final ByteCache cache = ByteCache.getInstance(128, 32 * 1024);
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss.SSS");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss.SSS", Locale.US);
 
     public PacketHandler(I2PAppContext ctx, ConnectionManager mgr) {
         this.manager = mgr;

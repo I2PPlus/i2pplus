@@ -702,22 +702,12 @@ public class Blocklist {
         try {
             String sip = buf.substring(start1, end1);
             sip = sip.replace(';', ':'); // IPv6
-            if (net.i2p.util.Addresses.isIPAddress(sip)) {
-                InetAddress pi = InetAddress.getByName(sip);
-                ip1 = pi.getAddress();
-            } else {
-                // Hostname - will leak IP via DNS lookup. User's choice if they use hostnames.
-                InetAddress pi = InetAddress.getByName(sip);
-                ip1 = pi.getAddress();
-            }
+            // IP or hostname - DNS lookup may leak IP for hostnames. User's choice.
+            InetAddress pi = InetAddress.getByName(sip);
+            ip1 = pi.getAddress();
             if (start2 >= 0) {
                 String sip2 = buf.substring(start2);
-                InetAddress pi;
-                if (net.i2p.util.Addresses.isIPAddress(sip2)) {
-                    pi = InetAddress.getByName(sip2);
-                } else {
-                    pi = InetAddress.getByName(sip2);
-                }
+                pi = InetAddress.getByName(sip2);
                 if (pi == null) {return null;}
                 ip2 = pi.getAddress();
                 if (ip2.length != 4) {throw new UnknownHostException();}

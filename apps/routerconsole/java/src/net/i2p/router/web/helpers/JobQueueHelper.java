@@ -199,8 +199,9 @@ public class JobQueueHelper extends HelperBase {
             int maxFinishedJobsDisplayed = 40;
 
             for (Long completionTime : allTimes) {
-                for (String jobName : groupedFinishedJobs.keySet()) {
-                    Map<Long, List<Job>> timeGroups = groupedFinishedJobs.get(jobName);
+                for (Map.Entry<String, Map<Long, List<Job>>> entry : groupedFinishedJobs.entrySet()) {
+                    String jobName = entry.getKey();
+                    Map<Long, List<Job>> timeGroups = entry.getValue();
                     if (!timeGroups.containsKey(completionTime)) {
                         continue;
                     }

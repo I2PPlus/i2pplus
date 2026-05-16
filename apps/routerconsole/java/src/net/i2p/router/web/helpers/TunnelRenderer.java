@@ -286,7 +286,7 @@ class TunnelRenderer {
                     int lifetime = (int) ((_context.clock().now() - cfg.getCreation()) / 1000);
                     if (lifetime <= 0) {lifetime = 1;}
                     else if (lifetime > 10*60) {lifetime = 10*60;}
-                    float bps = 1024 * count / lifetime;
+                    float bps = 1024f * count / lifetime;
                     float kbps = bps / 1024;
                     sb.append("<td class=\"cells bps\" data-sort=").append(bps).append("><span class=right>")
                       .append(TWO_DECIMALS.format(kbps)).append("&#8239;</span><span class=left>KB/s</span></td>");

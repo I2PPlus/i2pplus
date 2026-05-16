@@ -58,7 +58,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private LookupThrottler _lookupThrottler;
     private LookupBanHammer _lookupBanner;
     private final Job _ffMonitor;
-    private String tunnelName = "";
     private final ConcurrentHashMap<Long, List<TimeoutEntry>> _searchTimeouts;
     private final BatchedSearchTimeoutProcessor _timeoutProcessor;
 

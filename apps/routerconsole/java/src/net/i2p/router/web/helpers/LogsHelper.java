@@ -468,8 +468,7 @@ public class LogsHelper extends HelperBase {
         if (!f.exists()) {return -1;}
         BufferedReader in = null;
         try {
-            if (utf8) {in = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8));}
-            else {in = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8));}
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8));
             long i = 0;
             while (i < skipLines) {
                 // skip without readLine() to avoid object churn

@@ -309,9 +309,9 @@ public class ConfigUIHelper extends HelperBase {
         ConsolePasswordManager mgr = new ConsolePasswordManager(_context);
         Map<String, String> userpw = mgr.getMD5(RouterConsoleRunner.PROP_CONSOLE_PW);
         Map<String, String> pbkdf2 = mgr.getPBKDF2(RouterConsoleRunner.PROP_CONSOLE_PW);
-        for (String user : pbkdf2.keySet()) {
-            if (!userpw.containsKey(user))
-                userpw.put(user, pbkdf2.get(user));
+        for (Map.Entry<String, String> entry : pbkdf2.entrySet()) {
+            if (!userpw.containsKey(entry.getKey()))
+                userpw.put(entry.getKey(), entry.getValue());
         }
         if (userpw.isEmpty() && pbkdf2.isEmpty())
             buf.append("<style>#consolepass .delete{display:none!important)</style>\n");
