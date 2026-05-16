@@ -37,7 +37,7 @@ public class AuthToken {
         return Calendar.getInstance().getTime().before(expiry);
     }
 
-    public String getExpiryTime() {
+    public synchronized String getExpiryTime() {
         return EXPIRY_FORMAT.format(expiry);
     }
 
