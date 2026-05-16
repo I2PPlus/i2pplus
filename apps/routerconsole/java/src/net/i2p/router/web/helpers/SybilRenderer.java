@@ -416,6 +416,7 @@ public class SybilRenderer {
     /**
      *  @since 0.9.38 split out from renderRouterInfoHTML()
      */
+    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized void renderFFSummary(Writer out, StringBuilder buf, List<RouterInfo> ris, double avgMinDist) throws IOException {
         renderRouterInfo(buf, _context.router().getRouterInfo(), null, true, false);
         buf.append("<h3 id=known class=sybils>").append(_t("Known Floodfills")).append(": ").append(ris.size()).append("</h3>\n")
@@ -578,6 +579,7 @@ public class SybilRenderer {
     /**
      *  @since 0.9.38 split out from renderRouterInfoHTML()
      */
+    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized void renderThreatsHTML(Writer out, StringBuilder buf, long date, Map<Hash, Points> points) throws IOException {
         double threshold = Analysis.DEFAULT_BLOCK_THRESHOLD;
         try {
@@ -633,6 +635,7 @@ public class SybilRenderer {
     /**
      *  @param pairs sorted
      */
+    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized void renderPairDistance(Writer out, StringBuilder buf, List<Pair> pairs, double avg) throws IOException {
         buf.append("<h3 class=sybils>").append(_t("Average Floodfill Distance is")).append(" ").append(TWO_DECIMALS.format(avg)).append("</h3>\n" +
                    "<h3 id=pairs class=sybils>").append(_t("Closest Floodfill Pairs by Hash")).append("</h3>\n");
@@ -912,6 +915,7 @@ public class SybilRenderer {
      *  @param ris sorted, closest first
      *  @param usName HTML escaped
      */
+    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized void renderRouterInfoHTML(Writer out, StringBuilder buf, Hash us, double avgMinDist,
                                       List<RouterInfo> ris) throws IOException {
         double min = 256;
@@ -984,7 +988,8 @@ public class SybilRenderer {
      *  @param full ignored
      *  @return distance to us if non-null, else 0
      */
-    private double renderRouterInfo(StringBuilder buf, RouterInfo info, Hash us, boolean isUs, boolean full) {
+    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
+    private synchronized double renderRouterInfo(StringBuilder buf, RouterInfo info, Hash us, boolean isUs, boolean full) {
         String hash = info.getIdentity().getHash().toBase64();
 
         buf.append("<table class=sybil_routerinfo id=hash_").append(hash,0,6).append(">\n");

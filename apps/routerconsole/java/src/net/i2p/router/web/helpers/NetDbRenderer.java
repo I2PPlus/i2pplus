@@ -1083,6 +1083,7 @@ class NetDbRenderer {
      *  @param debug if true, show debug info
      *  @since 0.9.57
      */
+    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void renderLeaseSet(Writer out, String hostname, boolean debug) throws IOException {
         StringBuilder buf = new StringBuilder(3*1024);
         if (!_context.netDb().isInitialized()) {

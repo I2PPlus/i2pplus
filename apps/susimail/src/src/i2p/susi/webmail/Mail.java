@@ -337,6 +337,7 @@ class Mail {
     * @param dateLong non-negative
     * @since 0.9.34 pulled from parseHeaders()
     */
+    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized void setDate(long dateLong) {
         date = new Date(dateLong);
         synchronized(dateFormatter) {

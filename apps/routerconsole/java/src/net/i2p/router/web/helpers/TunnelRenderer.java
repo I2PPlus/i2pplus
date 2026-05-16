@@ -196,6 +196,7 @@ class TunnelRenderer {
         }
     }
 
+    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void renderParticipating(Writer out, boolean bySpeed) throws IOException {
         boolean isAdvanced = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
@@ -350,6 +351,7 @@ class TunnelRenderer {
 
     private final BoundedCache<String, String> reverseLookupCache = new BoundedCache<>(1000);
 
+    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void renderTransitSummary(Writer out) throws IOException {
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
         if (!participating.isEmpty() && participating.size() > 1) {
@@ -522,7 +524,8 @@ class TunnelRenderer {
         }
     }
 
-    public void renderPeers(Writer out) throws IOException {
+    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
+    public synchronized void renderPeers(Writer out) throws IOException {
         long uptime = _context.router().getUptime();
         final boolean doReverseLookups = enableReverseLookups();
 

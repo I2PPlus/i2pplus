@@ -360,6 +360,7 @@ public class SidebarHelper extends HelperBase {
      * Retrieve amount of used memory.
      * @since 0.9.32 uncommented
      */
+    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized String getMemory() {
         long tot = SystemVersion.getMaxMemory();
         // This reads much higher than the graph, possibly because it's right in
@@ -382,6 +383,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /** @since 0.9.32 */
+    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized String getMemoryBar() {
         long tot = SystemVersion.getMaxMemory();
         // Give 30s for stats to warm up - show 0% initially

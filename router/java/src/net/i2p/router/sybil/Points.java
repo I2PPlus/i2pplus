@@ -48,6 +48,7 @@ public class Points implements Comparable<Points> {
      *  @param reason may not contain '%'
      *  @since 0.9.38
      */
+    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void addPoints(double d, String reason) {
         points += d;
         String rsn = TWO_DECIMALS.format(d) + ": " + reason;

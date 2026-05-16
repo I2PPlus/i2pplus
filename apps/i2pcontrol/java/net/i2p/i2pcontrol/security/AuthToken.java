@@ -37,6 +37,7 @@ public class AuthToken {
         return Calendar.getInstance().getTime().before(expiry);
     }
 
+    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized String getExpiryTime() {
         return EXPIRY_FORMAT.format(expiry);
     }
