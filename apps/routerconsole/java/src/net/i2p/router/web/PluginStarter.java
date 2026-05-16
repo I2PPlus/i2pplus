@@ -421,7 +421,7 @@ public class PluginStarter implements Runnable {
         if (tfiles != null) {
             for (int i = 0; i < tfiles.length; i++) {
                 String name = tfiles[i].getName();
-                if (tfiles[i].isDirectory() && (!Arrays.asList(STANDARD_THEMES).contains(tfiles[i]))) {
+                if (tfiles[i].isDirectory() && (!Arrays.asList(STANDARD_THEMES).contains(name))) {
                     // deprecated
                     ctx.router().setConfigSetting(CSSHelper.PROP_THEME_PFX + name, tfiles[i].getAbsolutePath());
                     // we don't need to save
@@ -688,7 +688,7 @@ public class PluginStarter implements Runnable {
             List<String> removes = new ArrayList<String>();
             for (int i = 0; i < tfiles.length; i++) {
                 String name = tfiles[i].getName();
-                if (tfiles[i].isDirectory() && (!Arrays.asList(STANDARD_THEMES).contains(tfiles[i]))) {
+                if (tfiles[i].isDirectory() && (!Arrays.asList(STANDARD_THEMES).contains(name))) {
                     removes.add(CSSHelper.PROP_THEME_PFX + name);
                     if (name.equals(current))
                         changes.put(CSSHelper.PROP_THEME_NAME, CSSHelper.DEFAULT_THEME);

@@ -27,7 +27,7 @@ import java.util.Arrays;
  */
 public class BitField {
 
-    private final byte[] bitfield;
+    private final byte[] data;
     private final int size;
     private int count;
 
@@ -39,7 +39,7 @@ public class BitField {
     public BitField(int size) {
         this.size = size;
         int arraysize = ((size - 1) / 8) + 1;
-        bitfield = new byte[arraysize];
+        data = new byte[arraysize];
     }
 
     /**
@@ -53,11 +53,11 @@ public class BitField {
     public BitField(byte[] bitfield, int size) {
         this.size = size;
         int arraysize = ((size - 1) / 8) + 1;
-        this.bitfield = new byte[arraysize];
+        this.data = new byte[arraysize];
 
         // XXX - More correct would be to check that unused bits are
         // cleared or clear them explicitly ourselves.
-        System.arraycopy(bitfield, 0, this.bitfield, 0, arraysize);
+        System.arraycopy(bitfield, 0, this.data, 0, arraysize);
 
         for (int i = 0; i < size; i++) if (get(i)) this.count++;
     }
@@ -72,7 +72,7 @@ public class BitField {
      * @return the internal byte array representing the bit field
      */
     public byte[] getFieldBytes() {
-        return bitfield;
+        return data;
     }
 
     /**
@@ -96,9 +96,9 @@ public class BitField {
         int index = bit / 8;
         int mask = 128 >> (bit % 8);
         synchronized (this) {
-            if ((bitfield[index] & mask) == 0) {
+            if ((data[index] & mask) == 0) {
                 count++;
-                bitfield[index] |= mask;
+                data[index] |= mask;
             }
         }
     }
@@ -115,9 +115,9 @@ public class BitField {
         int index = bit / 8;
         int mask = 128 >> (bit % 8);
         synchronized (this) {
-            if ((bitfield[index] & mask) != 0) {
+            if ((data[index] & mask) != 0) {
                 count--;
-                bitfield[index] &= ~mask;
+                data[index] &= ~mask;
             }
         }
     }
@@ -128,7 +128,7 @@ public class BitField {
      * @since 0.9.21
      */
     public void setAll() {
-        Arrays.fill(bitfield, (byte) 0xff);
+        Arrays.fill(data, (byte) 0xff);
         count = size;
     }
 
@@ -144,7 +144,7 @@ public class BitField {
 
         int index = bit / 8;
         int mask = 128 >> (bit % 8);
-        return (bitfield[index] & mask) != 0;
+        return (data[index] & mask) != 0;
     }
 
     /**
@@ -189,7 +189,7 @@ public class BitField {
         BitField bf = (BitField) o;
         return count == bf.count()
                 && size == bf.size()
-                && Arrays.equals(bitfield, bf.getFieldBytes());
+                && Arrays.equals(data, bf.getFieldBytes());
     }
 
     @Override

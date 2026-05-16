@@ -643,7 +643,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     public String getTime() {
         SimpleDateFormat fmt = new SimpleDateFormat("dd/MM HH:mm:ss", Locale.US);
-        Long now = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
         fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
         String date = fmt.format(new Date(now));
         return "<b class=date>" + date + "</b>";
@@ -1717,14 +1717,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             } else if (!dd.isAbsolute()) {
                 addMessage(_t("Data directory must be an absolute path") + ": " + dataDir);
             } else if (!dd.exists() && !dd.mkdirs()) {
-                // save this tag for now, may need it again
-                if (false) {
-                    String msg = _t("Data directory does not exist") + ": " + dataDir;
-                    addMessage(msg);
-                    if (!_context.isRouterContext()) {
-                        System.out.println(" • " + msg);
-                    }
-                }
                 String msg = _t("Data directory cannot be created") + ": " + dataDir;
                 addMessage(msg);
                 if (!_context.isRouterContext()) {
@@ -2714,9 +2706,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
         if (autoStart) {
             startTorrent(ih);
-            if (false) {
-                addMessage(_t("Fetching {0}", name));
-            }
             DHT dht = _util.getDHT();
             boolean shouldWarn =
                     _util.connected()
