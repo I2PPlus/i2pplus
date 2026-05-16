@@ -1,6 +1,7 @@
 package org.klomp.snark.web;
 
 import java.io.File;
+import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -2089,7 +2090,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         // Validate torrent and add
-        try (FileInputStream in = new FileInputStream(tmp)) {
+        try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(tmp))) {
             byte[] infoHash = new byte[20];
             String name = MetaInfo.getNameAndInfoHash(in, infoHash);
 
@@ -2241,7 +2242,7 @@ public class I2PSnarkServlet extends BasicServlet {
             return;
         }
 
-        try (FileInputStream in = new FileInputStream(file)) {
+        try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file))) {
             byte[] infoHash = new byte[20];
             String name = MetaInfo.getNameAndInfoHash(in, infoHash);
 

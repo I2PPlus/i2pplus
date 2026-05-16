@@ -1,6 +1,7 @@
 package net.i2p.router;
 
 import java.io.File;
+import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -215,7 +216,7 @@ public class HashPatternDetector implements Serializable {
      */
     private void savePatterns() {
         File file = new File(_context.getRouterDir(), PATTERN_FILE);
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(file)))) {
             oos.writeObject(new HashMap<>(_prefixStats));
         } catch (IOException e) {
             if (_log.shouldWarn()) {

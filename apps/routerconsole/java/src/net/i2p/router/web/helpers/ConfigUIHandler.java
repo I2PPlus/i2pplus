@@ -2,6 +2,7 @@ package net.i2p.router.web.helpers;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -147,7 +148,7 @@ public class ConfigUIHandler extends FormHandler {
         File themeFile = new File(_context.getBaseDir(), "docs/themes/login/theme.txt");
         try {
             themeFile.getParentFile().mkdirs();
-            try (OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(themeFile), StandardCharsets.UTF_8)) {
+            try (BufferedWriter fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(themeFile), StandardCharsets.UTF_8))) {
                 fw.write(theme);
             }
         } catch (IOException e) {

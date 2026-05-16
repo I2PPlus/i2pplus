@@ -10,6 +10,7 @@ package net.i2p.router.transport;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -1011,7 +1012,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 liveCacheSnapshot = new HashMap<>(rdnsCache);
             }
             File cacheFile = new File(RDNS_CACHE_FILE);
-            try (FileOutputStream fos = new FileOutputStream(cacheFile)) {
+            try (BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(cacheFile))) {
                 long now = System.currentTimeMillis();
                 int writtenCount = 0;
                 for (CacheEntry cacheEntry : liveCacheSnapshot.values()) {
