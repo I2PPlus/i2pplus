@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 import javax.imageio.stream.ImageOutputStream;
@@ -592,7 +593,7 @@ class GraphRenderer {
                 }
             }
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM HH:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM HH:mm", Locale.US);
             int count = 0;
             Color RESTART_COLOR =
                     theme.equals("midnight") || theme.equals("dark") ? RESTART_BAR_COLOR_DARK : RESTART_BAR_COLOR;

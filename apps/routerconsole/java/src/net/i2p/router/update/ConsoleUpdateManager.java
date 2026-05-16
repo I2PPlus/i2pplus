@@ -363,7 +363,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     public String getUpdateAvailable(UpdateType type, String id) {
         Version v = _available.get(new UpdateItem(type, id));
         if (v == null) {return null;}
-        return v.version;
+        return v.versionStr;
     }
 
     /**
@@ -381,7 +381,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     public String getUpdateDownloaded(UpdateType type, String id) {
         Version v = _downloaded.get(new UpdateItem(type, id));
         if (v == null) {return null;}
-        return v.version;
+        return v.versionStr;
     }
 
     /**
@@ -393,10 +393,10 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         Version vi = _installed.get(ui);
         Version vd = _downloaded.get(ui);
         if (vi != null) {
-            if (vd != null) {return (vi.compareTo(vd) > 0) ? vi.version : vd.version;}
-            return vi.version;
+            if (vd != null) {return (vi.compareTo(vd) > 0) ? vi.versionStr : vd.versionStr;}
+            return vi.versionStr;
         }
-        return vd != null ? vd.version : null;
+        return vd != null ? vd.versionStr : null;
     }
 
     /**
@@ -600,7 +600,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             // check in case unregistered later
             if (!_registeredUpdaters.contains(r)) {continue;}
             VersionAvailable va = _available.get(ui);
-            String newVer = va != null ? va.version : "";
+            String newVer = va != null ? va.versionStr : "";
             for (Map.Entry<UpdateMethod, List<URI>> e : sourceMap.entrySet()) {
                 UpdateMethod meth = e.getKey();
                 if (r.type == ui.type && r.method == meth) {
@@ -1524,25 +1524,25 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     private static class Version implements Comparable<Version> {
-        public final String version;
+        public final String versionStr;
 
-        public Version(String version) {this.version = version;}
+        public Version(String version) {this.versionStr = version;}
 
-        public int compareTo(Version r) {return VersionComparator.comp(version, r.version);}
-
-        @Override
-        public int hashCode() {return version.hashCode();}
+        public int compareTo(Version r) {return VersionComparator.comp(versionStr, r.versionStr);}
 
         @Override
-        public boolean equals(Object o) {return (o instanceof Version) && version.equals(((Version)o).version);}
+        public int hashCode() {return versionStr.hashCode();}
+
+        @Override
+        public boolean equals(Object o) {return (o instanceof Version) && versionStr.equals(((Version)o).versionStr);}
 
         @Override
         public String toString() {
-            if (version.length() == 13) {
-                try {return "Version " + version + " (" + DataHelper.formatTime(Long.parseLong(version)) + ')';}
+            if (versionStr.length() == 13) {
+                try {return "Version " + versionStr + " (" + DataHelper.formatTime(Long.parseLong(versionStr)) + ')';}
                 catch (NumberFormatException nfe) {}
             }
-            return "Version " + version;
+            return "Version " + versionStr;
         }
     }
 
@@ -1581,7 +1581,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         @Override
         public String toString() {
             StringBuilder buf = new StringBuilder(128);
-            buf.append("Version ").append(version).append(' ');
+            buf.append("Version ").append(versionStr).append(' ');
             for (Map.Entry<UpdateMethod, List<URI>> e : sourceMap.entrySet()) {
                 buf.append(e.getKey());
                 List<URI> u = e.getValue();

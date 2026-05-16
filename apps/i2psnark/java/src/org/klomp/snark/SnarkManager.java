@@ -1654,7 +1654,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         String msg =
                                 _t(
                                         "Refresh time changed to {0}",
-                                        DataHelper.formatDuration2(secs * 1000));
+                                        DataHelper.formatDuration2(secs * 1000L));
                         addMessageNoEscape(msg);
                         if (!_context.isRouterContext()) {
                             System.out.println(" • " + msg.replace("&nbsp;", " "));
@@ -1863,7 +1863,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 _util.setVaryOutboundHops(enableVaryOutboundHops);
                 int max = getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW);
                 _util.setMaxUpBW(max);
-                _bwManager.setUpBWLimit(max * 1024);
+                _bwManager.setUpBWLimit(max * 1024L);
                 String msg =
                         _t("I2CP and tunnel changes will take effect after stopping all torrents");
                 addMessage(msg);
@@ -1898,7 +1898,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 _util.setI2CPConfig(i2cpHost, port, opts);
                 int max = getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW);
                 _util.setMaxUpBW(max);
-                _bwManager.setUpBWLimit(max * 1024);
+                _bwManager.setUpBWLimit(max * 1024L);
                 boolean ok = _util.connect();
                 if (!ok) {
                     msg =
