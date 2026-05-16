@@ -360,7 +360,7 @@ public class SidebarHelper extends HelperBase {
      * Retrieve amount of used memory.
      * @since 0.9.32 uncommented
      */
-    public String getMemory() {
+    public synchronized String getMemory() {
         long tot = SystemVersion.getMaxMemory();
         // This reads much higher than the graph, possibly because it's right in
         // the middle of a console refresh... so get it from the Rate instead.
@@ -382,7 +382,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /** @since 0.9.32 */
-    public String getMemoryBar() {
+    public synchronized String getMemoryBar() {
         long tot = SystemVersion.getMaxMemory();
         // Give 30s for stats to warm up - show 0% initially
         long uptime = _context.router().getUptime();

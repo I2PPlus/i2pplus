@@ -416,7 +416,7 @@ public class SybilRenderer {
     /**
      *  @since 0.9.38 split out from renderRouterInfoHTML()
      */
-    private void renderFFSummary(Writer out, StringBuilder buf, List<RouterInfo> ris, double avgMinDist) throws IOException {
+    private synchronized void renderFFSummary(Writer out, StringBuilder buf, List<RouterInfo> ris, double avgMinDist) throws IOException {
         renderRouterInfo(buf, _context.router().getRouterInfo(), null, true, false);
         buf.append("<h3 id=known class=sybils>").append(_t("Known Floodfills")).append(": ").append(ris.size()).append("</h3>\n")
            .append("<div id=sybils_summary>\n")

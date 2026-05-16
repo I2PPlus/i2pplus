@@ -196,7 +196,7 @@ class TunnelRenderer {
         }
     }
 
-    public void renderParticipating(Writer out, boolean bySpeed) throws IOException {
+    public synchronized void renderParticipating(Writer out, boolean bySpeed) throws IOException {
         boolean isAdvanced = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
         StringBuilder sb = new StringBuilder(Math.max(32*1024, displayed*1024));

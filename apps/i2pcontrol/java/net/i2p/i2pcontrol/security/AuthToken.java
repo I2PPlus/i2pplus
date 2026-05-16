@@ -11,6 +11,7 @@ import java.util.Locale;
  */
 public class AuthToken {
     static final int VALIDITY_TIME = 1; // Measured in days
+    private static final SimpleDateFormat EXPIRY_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
     private final SecurityManager _secMan;
     private final String id;
     private final Date expiry;
@@ -37,8 +38,7 @@ public class AuthToken {
     }
 
     public String getExpiryTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-        return sdf.format(expiry);
+        return EXPIRY_FORMAT.format(expiry);
     }
 
     @Override

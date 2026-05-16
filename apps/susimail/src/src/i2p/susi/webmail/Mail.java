@@ -337,7 +337,7 @@ class Mail {
     * @param dateLong non-negative
     * @since 0.9.34 pulled from parseHeaders()
     */
-    private void setDate(long dateLong) {
+    private synchronized void setDate(long dateLong) {
         date = new Date(dateLong);
         synchronized(dateFormatter) {
             formattedDate = dateFormatter.format(date);
