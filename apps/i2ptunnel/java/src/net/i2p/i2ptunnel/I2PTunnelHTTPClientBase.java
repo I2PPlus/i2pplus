@@ -687,19 +687,14 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                 if (k.startsWith(PROP_PROXY_DIGEST_PREFIX) &&
                     k.endsWith(PROP_PROXY_DIGEST_SHA256_SUFFIX)) {
                     // SHA-256, RFC 7616
-                    buf.append(", nonce=\"" + nonce + "\"," +
-                               " algorithm=SHA-256," +
-                               " charset=UTF-8," +
-                               " qop=\"auth\"");
+                    buf.append(", nonce=\"").append(nonce).append("\", algorithm=SHA-256, charset=UTF-8, qop=\"auth\"");
                     if (isStale) {buf.append(", stale=true");}
-                    buf.append("\r\n" + "Proxy-Authenticate: Digest" + " realm=\"" + getRealm() + '"');
+                    buf.append("\r\nProxy-Authenticate: Digest realm=\"").append(getRealm()).append("\"");
                     break;
                 }
             }
 
-            buf.append(", nonce=\"" + nonce + "\"," + " algorithm=MD5," +
-                       " charset=UTF-8," + // RFC 7616/7617
-                       " qop=\"auth\"");
+            buf.append(", nonce=\"").append(nonce).append("\", algorithm=MD5, charset=UTF-8, qop=\"auth\"");
             if (isStale) {buf.append(", stale=true");}
         }
         buf.append("\r\n").append(ERR_AUTH2);

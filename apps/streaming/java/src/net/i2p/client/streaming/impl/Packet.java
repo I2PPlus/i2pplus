@@ -823,7 +823,7 @@ class Packet {
             }
             toFlagString(buf);
             if ((_payload != null) && (_payload.getValid() > 0)) {
-                buf.append("\n* Data: ").append(_payload.getValid() + " bytes;");
+                buf.append("\n* Data: ").append(_payload.getValid()).append(" bytes;");
             }
         } else {buf.append("");}
         return buf;

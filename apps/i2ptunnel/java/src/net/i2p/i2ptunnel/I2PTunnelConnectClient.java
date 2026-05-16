@@ -276,7 +276,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                         }
                         if (user != null && pw != null) {
                             newRequest.append("Proxy-Authorization: Basic ")
-                                      .append(Base64.encode(DataHelper.getUTF8(user + ':' + pw), true))    // true = use standard alphabet
+                                      .append(Base64.encode(DataHelper.getUTF8(user + ":" + pw), true))    // true = use standard alphabet
                                       .append("\r\n");
                         }
                     }

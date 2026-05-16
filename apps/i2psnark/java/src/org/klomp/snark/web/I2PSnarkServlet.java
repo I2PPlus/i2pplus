@@ -1862,8 +1862,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
             if (isValidNumeric(value) && value != null && !value.isEmpty()) {
-                if (buf.length() <= 0) {buf.append("?" + paramName + "=");}
-                else {buf.append("&" + paramName + "=");}
+                if (buf.length() <= 0) {buf.append("?").append(paramName).append("=");}
+                else {buf.append("&").append(paramName).append("=");}
                 buf.append(value);
             }
         }

@@ -522,8 +522,8 @@ public abstract class TransportImpl implements Transport {
             buf.append("Received ").append(inMsg.getClass().getSimpleName()).append(" [MsgID ").append(inMsg.getUniqueId()).append("]")
                .append(" (").append(bytesReceived).append(" bytes)").append(" in ").append(msToReceive).append("ms")
                .append(" from [");
-            if (remoteIdentHash != null) {buf.append(remoteIdentHash.toBase64().substring(0,6) + "]");}
-            else if (remoteIdent != null) {buf.append(remoteIdent.getHash().toBase64().substring(0,6) + "]");}
+            if (remoteIdentHash != null) {buf.append(remoteIdentHash.toBase64().substring(0,6)).append("]");}
+            else if (remoteIdent != null) {buf.append(remoteIdent.getHash().toBase64().substring(0,6)).append("]");}
             else {buf.append("unknown]");}
             _log.log(level, buf.toString());
         }

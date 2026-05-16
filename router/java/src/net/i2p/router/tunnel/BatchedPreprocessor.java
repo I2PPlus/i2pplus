@@ -110,7 +110,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
         if (_log.shouldDebug()) {
             _log.debug("Preprocessing queue with " + pending.size() + " messages to send");
             timingBuf = new StringBuilder(128);
-            timingBuf.append("Preprocessing queue with " + pending.size() + " messages to send");
+            timingBuf.append("Preprocessing queue with ").append(pending.size()).append(" messages to send");
             start = System.currentTimeMillis();
         } else {
             timingBuf = null;
@@ -192,7 +192,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                             throw new IllegalArgumentException("i=" + i + " j=" + j + " off=" + cur.getOffset()
                                                                + " len=" + cur.getData().length + " alloc=" + allocated);
                         if (timingBuf != null)
-                            timingBuf.append(" sent " + cur);
+                            timingBuf.append(" sent ").append(cur);
                         if (DEBUG)
                             notePreprocessing(cur.getMessageId(), cur.getFragmentNumber(), cur.getData().length, cur.getMessageIds(), "flushed allocated");
                         _context.statManager().addRateData("tunnel.batchFragmentation", cur.getFragmentNumber() + 1);
@@ -202,7 +202,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                         // ok, this last message fit perfectly, remove it too
                         PendingGatewayMessage cur = pending.remove(0);
                         if (timingBuf != null)
-                            timingBuf.append(" sent perfect fit " + cur).append(".");
+                            timingBuf.append(" sent perfect fit ").append(cur).append(".");
                         if (DEBUG)
                             notePreprocessing(cur.getMessageId(), cur.getFragmentNumber(), msg.getData().length, msg.getMessageIds(), "flushed tail, remaining: " + pending);
                         _context.statManager().addRateData("tunnel.batchFragmentation", cur.getFragmentNumber() + 1);
@@ -214,16 +214,17 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                     batchCount++;
                     if (timingBuf != null) {
                         long pendingEnd = System.currentTimeMillis();
-                        timingBuf.append("\n* After sending " + (i+1) + "/" + pending.size() + " in " + (afterSend-beforeSend)
-                                         + "; After: " + (beforeSend-pendingStart)
-                                         + "; Since: " + (beforeSend-beforePendingLoop)
-                                         + "/" + (beforeSend-start)
-                                         + " Pending current: " + (pendingEnd-pendingStart));
+                        timingBuf.append("\n* After sending ").append(i+1).append("/").append(pending.size())
+                                         .append(" in ").append(afterSend-beforeSend)
+                                         .append("; After: ").append(beforeSend-pendingStart)
+                                         .append("; Since: ").append(beforeSend-beforePendingLoop)
+                                         .append("/").append(beforeSend-start)
+                                         .append(" Pending current: ").append(pendingEnd-pendingStart);
                     }
                     break;
                 }  // if >= full size
                 if (timingBuf != null)
-                    timingBuf.append("\n* After pending loop: " + (System.currentTimeMillis()-beforePendingLoop));
+                    timingBuf.append("\n* After pending loop: ").append(System.currentTimeMillis()-beforePendingLoop);
             }  // for
 
             if (_log.shouldInfo())
@@ -274,8 +275,8 @@ class BatchedPreprocessor extends TrivialPreprocessor {
 
                         if (timingBuf != null) {
                             long now = System.currentTimeMillis();
-                            timingBuf.append("\n* Flushed messages in buffer, some remain (displayed to now: " + (now - afterDisplayed) + ")");
-                            timingBuf.append(" Total time: " + (now - start));
+                            timingBuf.append("\n* Flushed messages in buffer, some remain (displayed to now: ").append(now - afterDisplayed).append(")");
+                            timingBuf.append(" Total time: ").append(now - start);
                             _log.debug(timingBuf.toString());
                         }
                         return true;
@@ -292,8 +293,8 @@ class BatchedPreprocessor extends TrivialPreprocessor {
 
                         if (timingBuf != null) {
                             long now = System.currentTimeMillis();
-                            timingBuf.append("\n* Flushed all messages in buffer, none remain (displayed to now: " + (now - afterDisplayed) + ")");
-                            timingBuf.append(" Total time: " + (now - start));
+                            timingBuf.append("\n* Flushed all messages in buffer, none remain (displayed to now: ").append(now - afterDisplayed).append(")");
+                            timingBuf.append(" Total time: ").append(now - start);
                             _log.debug(timingBuf.toString());
                         }
                         return false;
@@ -312,8 +313,8 @@ class BatchedPreprocessor extends TrivialPreprocessor {
 
                     if (timingBuf != null) {
                         long now = System.currentTimeMillis();
-                        timingBuf.append(" Not flushing (displayed to now: "  + (now - afterDisplayed) + ")");
-                        timingBuf.append(" Total time: " + (now - start) + "ms");
+                        timingBuf.append(" Not flushing (displayed to now: ").append(now - afterDisplayed).append(")");
+                        timingBuf.append(" Total time: ").append(now - start).append("ms");
                         _log.debug(timingBuf.toString());
                     }
                     return true;
@@ -332,7 +333,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
             _log.debug("Sent everything on the list (pending: " + pending.size() + ")");
 
         if (timingBuf != null)
-            timingBuf.append("; Total time: " + (System.currentTimeMillis()-start) + "ms");
+            timingBuf.append("; Total time: ").append(System.currentTimeMillis()-start).append("ms");
 
         if (timingBuf != null)
             _log.debug(timingBuf.toString());

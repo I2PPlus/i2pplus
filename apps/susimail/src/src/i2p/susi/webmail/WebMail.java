@@ -619,7 +619,7 @@ public class WebMail extends HttpServlet {
                 if (mdName == null) {mdName = mailPart.name;}
                 boolean isMarkdown = mdName != null &&
                     (mdName.endsWith(".md") || mdName.endsWith(".markdown"));
-                if (html) {buf.append("<p class=mailbody" + (isMarkdown ? " data-markdown" : "") + ">");}
+                if (html) {buf.append("<p class=mailbody").append(isMarkdown ? " data-markdown" : "").append(">");}
                 else if (isMarkdown) {buf.append("<tr class=mailbody data-markdown><td colspan=2>");}
                 else {buf.append("<tr class=mailbody><td colspan=2>");}
                 String charset = mailPart.charset;
@@ -2259,7 +2259,7 @@ public class WebMail extends HttpServlet {
             response.setContentType("text/html");
             StringBuilder buf = new StringBuilder(16*1024);
 
-            buf.append("<!DOCTYPE HTML>\n<html class=\"" + theme + "\">\n")
+            buf.append("<!DOCTYPE HTML>\n<html class=\"").append(theme).append("\">\n")
                .append("<head>\n")
                .append("<script src=/js/setupIframe.js></script>\n")
                .append("<meta http-equiv=Content-Type content=text/html; charset=utf-8>\n")
@@ -2310,7 +2310,7 @@ public class WebMail extends HttpServlet {
                .append("<script src=/js/iframeResizer/iframeResizer.contentWindow.js></script>\n")
                .append("<script src=\"/js/iframeResizer/updatedEvent.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                .append("<script src=\"/susimail/js/notifications.js?").append(CoreVersion.VERSION).append("\"></script>\n")
-               .append("<script nonce=").append(cspNonce).append(">const theme = \"" + theme + "\";</script>\n")
+               .append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>\n")
                .append("<script src=/js/detectPageZoom.js type=module></script>\n")
                .append("<script src=/js/autologout.js></script>\n")
                .append("<style>body{display:none;pointer-events:none}</style>\n")
