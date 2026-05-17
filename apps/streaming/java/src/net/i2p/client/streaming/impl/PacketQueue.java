@@ -270,16 +270,22 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             case MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE:
             // not really guaranteed
             case MessageStatusMessage.STATUS_SEND_GUARANTEED_FAILURE:
-            // no tunnels may fix itself, allow retx
+                if (_log.shouldInfo()) {
+                    _log.warn("Received Soft Failure status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
+                }
+                _messageStatusMap.remove(id);
+                break;
+            // no tunnels may fix itself, trigger immediate retransmit
             case MessageStatusMessage.STATUS_SEND_FAILURE_NO_TUNNELS:
-            // probably took a long time to open the tunnel, allow retx
+            // probably took a long time to open the tunnel, trigger immediate retransmit
             case MessageStatusMessage.STATUS_SEND_FAILURE_EXPIRED:
-            // overflow in router-side I2CP queue, sent as of 0.9.29, will be retried
+            // overflow in router-side I2CP queue, sent as of 0.9.29, trigger immediate retransmit
             case MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL:
                 if (_log.shouldInfo()) {
                     _log.warn("Received Soft Failure status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
                 }
                 _messageStatusMap.remove(id);
+                con.scheduleSoftFailureRetransmit();
                 break;
 
             case MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET:

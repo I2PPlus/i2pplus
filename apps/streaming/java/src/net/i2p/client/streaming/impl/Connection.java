@@ -382,6 +382,30 @@ class Connection {
     }
 
     /**
+     *  Trigger immediate retransmission of unacked packets after a soft failure
+     *  (e.g., tunnel expiry, no tunnels). This schedules the retransmit event
+     *  with zero delay to retry sending on a new tunnel without waiting for RTO.
+     *
+     *  @since 0.9.70+
+     */
+    void scheduleSoftFailureRetransmit() {
+        synchronized (_outboundPackets) {
+            if (_outboundPackets.isEmpty()) {
+                if (_log.shouldDebug()) {
+                    _log.debug("[" + this + "] Soft failure but no unacked packets, skipping retransmit");
+                }
+                return;
+            }
+        }
+        // Schedule immediate retransmit - the timer will handle resending
+        // oldest unacked packets on a fresh tunnel
+        _retransmitEvent.pushBackRTO(0);
+        if (_log.shouldInfo()) {
+            _log.info("[" + this + "] Scheduled immediate retransmit after soft failure");
+        }
+    }
+
+    /**
      *  This sends all 'normal' packets (acks and data) for the first time.
      *  Retransmits are done in ResendPacketEvent below.
      *  Resets, pings, and pongs are done elsewhere in this class,
