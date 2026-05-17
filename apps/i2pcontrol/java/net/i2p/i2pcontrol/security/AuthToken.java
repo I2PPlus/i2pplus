@@ -51,4 +51,12 @@ public class AuthToken {
     public int hashCode() {
         return id.hashCode();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AuthToken)) return false;
+        AuthToken other = (AuthToken) o;
+        return id.equals(other.id);
+    }
 }

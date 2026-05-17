@@ -827,6 +827,7 @@ public class TransportManager implements TransportEventListener {
      * Port configuration for transport protocols.
      *  @since IPv6
      */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingTypeName")
     static class Port {
         public final String style;
         public final int port;

@@ -696,6 +696,21 @@ public class JobQueueHelper extends HelperBase {
             // If same time, sort by job name
             return Collator.getInstance().compare(this.jobName, other.jobName);
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof JobTimeEntry)) return false;
+            JobTimeEntry other = (JobTimeEntry) o;
+            return time == other.time && jobName.equals(other.jobName);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = jobName.hashCode();
+            result = 31 * result + Long.hashCode(time);
+            return result;
+        }
     }
 
 }

@@ -1010,6 +1010,7 @@ class ClientConnectionRunner {
         _context.jobQueue().addJob(new RequestLeaseSetJob(_context, this, state));
     }
 
+    @SuppressWarnings("ReferenceEquality")
     private class Rerequest extends SimpleTimer2.TimedEvent {
         private final LeaseSet _ls;
         private final long _expirationTime;

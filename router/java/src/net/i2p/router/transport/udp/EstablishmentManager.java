@@ -2450,6 +2450,7 @@ class EstablishmentManager {
      * Token used for SSU2 session establishment and validation.
      * Contains expiration time and validation data.
      */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingTypeName")
     public static class Token {
         private final long token;
         // save space until 2106

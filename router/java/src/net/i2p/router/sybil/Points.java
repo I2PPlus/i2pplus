@@ -10,6 +10,7 @@ import net.i2p.data.DataHelper;
  *
  *  @since 0.9.38 moved from SybilRenderer
  */
+@SuppressWarnings("PMD.AvoidFieldNameMatchingTypeName")
 public class Points implements Comparable<Points> {
     private double points;
     private final List<String> reasons;
@@ -57,6 +58,21 @@ public class Points implements Comparable<Points> {
 
     public int compareTo(Points r) {
         return Double.compare(points, r.points);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Points)) return false;
+        Points p = (Points) o;
+        return Double.compare(points, p.points) == 0 && reasons.equals(p.reasons);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Double.hashCode(points);
+        result = 31 * result + reasons.hashCode();
+        return result;
     }
 
     /**

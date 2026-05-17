@@ -75,6 +75,7 @@ public class ClientMessagePool {
      * @param msg the ClientMessage to add
      * @param isDefinitelyRemote true if we know for sure that the target is not local
      */
+    @SuppressWarnings("UnconditionalIfStatement")
     public void add(ClientMessage msg, boolean isDefinitelyRemote) {
         if (!isDefinitelyRemote &&
             (_context.clientManager().isLocal(msg.getDestination()) ||

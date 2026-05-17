@@ -67,6 +67,7 @@ package net.i2p.router.crypto.ratchet;
  * @param <E> type of objects stored in this sparse array
  */
 
+@SuppressWarnings("ReferenceEquality")
 class SparseArray<E> implements Cloneable {
     private static final char[] EMPTY_CHARS = new char[0];
     private static final Object[] EMPTY_OBJECTS = new Object[0];

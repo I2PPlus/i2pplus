@@ -468,6 +468,7 @@ public class SimpleTimer2 {
             }
         }
 
+        @SuppressWarnings("PMD.AvoidThrowingNewInstanceOfSameException")
         private void run2() {
             if (_log.shouldDebug())
                 _log.debug("Running: " + this);

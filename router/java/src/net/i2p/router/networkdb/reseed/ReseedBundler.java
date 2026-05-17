@@ -60,6 +60,7 @@ public class ReseedBundler {
      *
      *  The file will be in the temp directory. Caller must move or delete.
      */
+    @SuppressWarnings("PMD.AvoidThrowingNewInstanceOfSameException")
     public File createZip(int count) throws IOException {
         Hash me = _context.routerHash();
         int routerCount = 0;

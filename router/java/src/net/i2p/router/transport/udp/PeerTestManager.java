@@ -801,6 +801,7 @@ class PeerTestManager {
      * @param addrBlockPort only used for msgs 5-7, otherwise 0
      * @since 0.9.55
      */
+    @SuppressWarnings("UnconditionalIfStatement")
     private void receiveTest(RemoteHostId from, PeerState2 fromPeer, int msg, int status, Hash h, byte[] data,
                              byte[] addrBlockIP, int addrBlockPort) {
         if (data[0] != 2) {

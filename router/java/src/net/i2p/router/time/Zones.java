@@ -16,6 +16,7 @@ import net.i2p.router.transport.GeoIP;
  *  Country to continent mapping for NTP.
  *  @since 0.9.20
  */
+@SuppressWarnings("PMD.AvoidFieldNameMatchingTypeName")
 class Zones {
 
     private final I2PAppContext _context;

@@ -139,6 +139,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
      *  Inner CachedIterator class - implements hasNext(), next() &amp; remove()
      *
      */
+    @SuppressWarnings("ReferenceEquality")
     public class CachedIterator implements Iterator<E> {
 
         private transient boolean nextCalled;

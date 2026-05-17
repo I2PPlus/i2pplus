@@ -855,6 +855,7 @@ class IntroductionManager {
      *
      *  @since 0.9.55
      */
+    @SuppressWarnings("UnconditionalIfStatement")
     void receiveRelayResponse(PeerState2 peer, int status, byte[] data) {
         long nonce = DataHelper.fromLong(data, 0, 4);
         long time = DataHelper.fromLong(data, 4, 4) * 1000;
