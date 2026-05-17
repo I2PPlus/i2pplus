@@ -166,14 +166,21 @@ public class ConfigBanHandler extends FormHandler {
             _context.blocklist().clearAll();
         }
 
+        String validatedCaps = validateCapabilityBans(_customCapabilityBans);
+        changes.put(PROP_CUSTOM_CAPABILITY_BANS, validatedCaps);
+
+        String validatedCountries = validateCountryCodes(_customCountryCodes);
+        changes.put(PROP_COUNTRY_CODES, validatedCountries);
+
         // Check if retroactive NetDb purge is needed (LU/XG enabled or custom caps added)
         boolean xgWasEnabled = "true".equals(_context.getProperty(PROP_ENABLE_XG_BAN, "false"));
         boolean luWasEnabled = "true".equals(_context.getProperty(PROP_ENABLE_LU_BAN, "true"));
-        boolean capsWereEmpty = _context.getProperty(PROP_CUSTOM_CAPABILITY_BANS, "").isEmpty();
+        String existingCaps = _context.getProperty(PROP_CUSTOM_CAPABILITY_BANS, "");
+        boolean capsWereEmpty = existingCaps.isEmpty();
 
         boolean purgeNeeded = (_enableXgBan && !xgWasEnabled) ||
                               (_enableLuBan && !luWasEnabled) ||
-                              (!_customCapabilityBans.isEmpty() && capsWereEmpty);
+                              (!validatedCaps.isEmpty() && capsWereEmpty);
 
         if (!changes.isEmpty()) {
             _context.router().saveConfig(changes, null);
