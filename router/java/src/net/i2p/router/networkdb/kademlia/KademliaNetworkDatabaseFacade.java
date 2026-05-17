@@ -1273,6 +1273,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (expiration - now < PROACTIVE_REPUBLISH_THRESHOLD) {
                 // Expiring soon - process immediately, don't batch
                 RepublishLeaseSetJob job = new RepublishLeaseSetJob(_context, this, hash);
+                if (!job.registerSelf()) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Skipping immediate republish for [" + hash.toBase32().substring(0, 8) +
+                                   "] -> Registration failed (job already active)");
+                    }
+                    return;
+                }
                 job.getTiming().setStartAfter(now + PUBLISH_DELAY);
                 if (job instanceof JobImpl) {
                     ((JobImpl) job).madeReady(now);
@@ -1318,6 +1325,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 if (!hasActiveRepublishJob(hash)) {
                     RepublishLeaseSetJob job = new RepublishLeaseSetJob(getContext(),
                             KademliaNetworkDatabaseFacade.this, hash);
+                    if (!job.registerSelf()) {
+                        if (_log.shouldDebug()) {
+                            _log.debug("Skipping batch republish for [" + hash.toBase32().substring(0, 8) +
+                                       "] -> Registration failed (job already active)");
+                        }
+                        continue;
+                    }
                     long now = getContext().clock().now();
                     job.getTiming().setStartAfter(now + (count * 100));
                     getContext().jobQueue().addJob(job);
