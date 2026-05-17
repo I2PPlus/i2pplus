@@ -699,6 +699,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /**
      * Job to refresh LeaseSets after slow tunnel removal.
      * Runs ~15s after RemoveSlowTunnelsJob to allow new tunnels to build.
+     * Triggers client-side LeaseSet signing which flows through
+     * RepublishLeaseSetJob for NetDB publication.
      */
     private static class RefreshLeaseSetsJob extends JobImpl {
         private final TunnelPoolManager _mgr;
@@ -718,72 +720,15 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             if (_mgr._log.shouldInfo()) {
                 _mgr._log.info("Running Refresh LeaseSets Job...");
             }
-            // For our local server tunnels: refresh LeaseSet and validate NetDB
             List<TunnelPool> pools = new ArrayList<TunnelPool>();
             _mgr.listPools(pools);
-            long now = _mgr._context.clock().now();
             for (TunnelPool pool : pools) {
+                if (_mgr.isShutdown()) {
+                    return;
+                }
                 if (pool != null && pool.getSettings().isInbound() && !pool.getSettings().isExploratory()) {
-                    // Force refresh if LeaseSet expires within 1 minute
-                    boolean force = pool.isExpiringSoon(now);
-                    // Refresh local LeaseSet (throttled unless force)
-                    pool.refreshLeaseSet(force);
-                    // Validate NetDB has current LeaseSet, republish if stale
-                    validateAndRepublishNetDB(pool);
+                    pool.refreshLeaseSet();
                 }
-            }
-        }
-
-        /**
-         * Check if our published LeaseSet in NetDB matches our current tunnels.
-         * Always republish periodically (every 90s) and when tunnels change.
-         */
-        private static final long NETDB_REPUBLISH_INTERVAL = 90 * 1000;
-
-        private void validateAndRepublishNetDB(TunnelPool pool) {
-            long now = _mgr._context.clock().now();
-            // Always republish periodically (every 90s) to keep NetDB fresh
-            if (now - pool.getLastNetDbPublish() > NETDB_REPUBLISH_INTERVAL) {
-                LeaseSet currentLS = pool.getInboundTunnelsAsLeaseSet();
-                if (currentLS != null) {
-                    Hash key = currentLS.getHash();
-                    if (key != null) {
-                        pool.setLastNetDbPublish(now);
-                        _mgr._context.netDb().publish(currentLS);
-                        if (_mgr._log.shouldInfo()) {
-                            _mgr._log.info("Periodic LeaseSet republish: " + key.toBase32().substring(0, 8));
-                        }
-                        return;
-                    }
-                }
-            }
-            // Build current LeaseSet from our tunnels
-            LeaseSet currentLS = pool.getInboundTunnelsAsLeaseSet();
-            if (currentLS == null) {
-                return;
-            }
-            Hash key = currentLS.getHash();
-            if (key == null) {
-                return;
-            }
-            // Lookup what we have published to NetDB
-            LeaseSet netDbLS = _mgr._context.netDb().lookupLeaseSetLocally(key);
-            if (netDbLS == null) {
-                // Not in NetDB yet, publish
-                if (_mgr._log.shouldInfo()) {
-                    _mgr._log.info("LeaseSet not in NetDB, publishing: " + key.toBase32().substring(0, 8));
-                }
-                pool.setLastNetDbPublish(now);
-                _mgr._context.netDb().publish(currentLS);
-                return;
-            }
-            // Compare - if different, republish
-            if (!currentLS.equals(netDbLS)) {
-                if (_mgr._log.shouldInfo()) {
-                    _mgr._log.info("NetDB LeaseSet stale, republishing: " + key.toBase32().substring(0, 8));
-                }
-                pool.setLastNetDbPublish(now);
-                _mgr._context.netDb().publish(currentLS);
             }
         }
     }

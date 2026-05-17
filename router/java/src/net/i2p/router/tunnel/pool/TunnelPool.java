@@ -789,8 +789,6 @@ public class TunnelPool {
     private static final long REFRESH_THROTTLE = 5 * 1000;
     /** Initialize to allow first request immediately */
     private long _lastRefreshTime = -REFRESH_THROTTLE;
-    /** Track last NetDB publish time */
-    private long _lastNetDbPublish;
     /** Track last proactive LeaseSet publish time for rate limiting */
     private long _lastLeaseSetPublishTime;
     /** Track if a deferred refresh is already scheduled */
@@ -1322,9 +1320,6 @@ public class TunnelPool {
             return locked_buildNewLeaseSet();
         }
     }
-
-    long getLastNetDbPublish() { return _lastNetDbPublish; }
-    void setLastNetDbPublish(long time) { _lastNetDbPublish = time; }
 
     /**
      *  Request lease set from client for the primary and all aliases.
