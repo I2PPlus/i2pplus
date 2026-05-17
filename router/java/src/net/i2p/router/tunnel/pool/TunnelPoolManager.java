@@ -948,11 +948,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                         _log.debug("Scheduling early expiry for slow tunnel: " + cfg.getReceiveTunnelId(0));
                     }
                 } else if (info instanceof TunnelCreatorConfig) {
-                    // Try graceful early expiry for any tunnel config, not just PooledTunnelCreatorConfig
-                    TunnelCreatorConfig cfg = (TunnelCreatorConfig) info;
-                    cfg.setExpiration(now + pruneDelay);
-                    if (_log.shouldDebug()) {
-                        _log.debug("Scheduling early expiry for slow tunnel: " + cfg.getReceiveTunnelId(0));
+                    // ExpireJob.scheduleExpiration requires PooledTunnelCreatorConfig,
+                    // so fall back to direct removal for non-pooled tunnel configs
+                    try {
+                        pool.removeTunnel(info);
+                    } catch (Exception e) {
+                        _log.warn("Exception removing slow tunnel " + info, e);
                     }
                 }
             }

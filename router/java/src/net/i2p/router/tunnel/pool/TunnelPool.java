@@ -767,19 +767,16 @@ public class TunnelPool {
             }
         }
 
-        // Actually remove the tunnels
-        for (TunnelInfo info : toRemove) {
-            removeTunnel(info);
+        // Notify manager to trigger tunnel rebuild for pruned tunnels.
+        // ExpireJob will handle actual removal gracefully after the early expiry window.
+        if (!toRemove.isEmpty()) {
+            _manager.tunnelFailed();
             if (_log.shouldInfo()) {
-                _log.info(toString() + " -> Removed problematic tunnel: " + info);
+                _log.info(toString() + " -> Scheduled early expiry for " + toRemove.size() + " excess tunnels");
             }
         }
 
-        if (removed > 0 && _log.shouldInfo()) {
-            _log.info(toString() + " -> Cleaned up " + removed + " slow/failed tunnels");
-        }
-
-        return removed;
+        return toRemove.size();
     }
 
     /**
@@ -794,6 +791,10 @@ public class TunnelPool {
     private long _lastRefreshTime = -REFRESH_THROTTLE;
     /** Track last NetDB publish time */
     private long _lastNetDbPublish;
+    /** Track last proactive LeaseSet publish time for rate limiting */
+    private long _lastLeaseSetPublishTime;
+    /** Track if a deferred refresh is already scheduled */
+    private volatile boolean _pendingRefreshScheduled;
     private final Map<TunnelId, Long> _recentlyAddedTunnels = new ConcurrentHashMap<>();
 
     /**
@@ -896,6 +897,146 @@ public class TunnelPool {
             // This is racy - see TunnelPoolManager
             _manager.removeTunnels(_settings.getDestination());
         }
+    }
+
+    /**
+     * Synchronous tunnel removal for use during recovery or critical situations.
+     * This removes the tunnel and ensures a new LeaseSet is published BEFORE returning,
+     * preventing client connection failures during recovery.
+     *
+     * @param info tunnel to remove
+     * @return true if removed and LeaseSet republished, false otherwise
+     * @since 0.9.68+
+     */
+    boolean removeTunnelSynchronous(TunnelInfo info) {
+        if (_log.shouldDebug()) {_log.debug(toString() + " -> Synchronous tunnel removal " + info);}
+
+        LeaseSet ls = null;
+        int remaining = 0;
+        boolean removed = false;
+
+        synchronized (_tunnels) {
+            if (_tunnels.remove(info)) {
+                removed = true;
+            }
+            remaining = _tunnels.size();
+
+            if (_settings.isInbound() && !_settings.isExploratory()) {
+                List<TunnelInfo> tunnelsCopy = new ArrayList<TunnelInfo>(_tunnels);
+                ls = buildNewLeaseSetFromCopy(tunnelsCopy);
+            }
+        }
+
+        if (removed) {
+            _manager.tunnelFailed();
+            processRemovalStats(java.util.Collections.singletonList(info));
+        }
+
+        if (_alive && _settings.isInbound() && !_settings.isExploratory()) {
+            if (ls != null) {
+                requestLeaseSet(ls);
+            } else {
+                if (_log.shouldWarn()) {
+                    _log.warn(toString() + " -> Unable to build LeaseSet on sync removal (" + remaining + " remaining)");
+                }
+                if (_settings.getAllowZeroHop()) {
+                    buildFallback();
+                }
+            }
+        }
+
+        if (removed && _log.shouldDebug()) {
+            _log.debug(toString() + " -> Synchronous tunnel removal complete, LeaseSet republished");
+        }
+
+        return removed;
+    }
+
+    /**
+     * Build a LeaseSet from a copy of the tunnels list.
+     * Caller must NOT hold _tunnels lock.
+     *
+     * @param tunnelsCopy copy of the tunnels list
+     * @return LeaseSet or null if not enough tunnels
+     */
+    private LeaseSet buildNewLeaseSetFromCopy(List<TunnelInfo> tunnelsCopy) {
+        long now = _context.clock().now();
+        long expireAfter = now + 10 * 1000;
+        int wanted = Math.min(_settings.getQuantity(), LeaseSet.MAX_LEASES);
+
+        TunnelInfo zeroHopTunnel = null;
+        Lease zeroHopLease = null;
+        TreeSet<Lease> leases = new TreeSet<Lease>(new LeaseComparator());
+
+        for (TunnelInfo tunnel : tunnelsCopy) {
+            if (tunnel.getTunnelFailed() ||
+                tunnel.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED ||
+                tunnel.getConsecutiveFailures() > 1) {
+                continue;
+            }
+            if (tunnel.getExpiration() <= expireAfter) {
+                continue;
+            }
+
+            if (tunnel.getLength() <= 1) {
+                if (zeroHopTunnel != null) {
+                    if (zeroHopTunnel.getExpiration() > tunnel.getExpiration()) {
+                        continue;
+                    }
+                    if (zeroHopLease != null) {
+                        leases.remove(zeroHopLease);
+                    }
+                }
+                zeroHopTunnel = tunnel;
+            }
+
+            TunnelId inId = tunnel.getReceiveTunnelId(0);
+            Hash gw = tunnel.getPeer(0);
+            if ((inId == null) || (gw == null)) {
+                continue;
+            }
+            Lease lease = new Lease();
+            long realExpiration = tunnel.getExpiration();
+            if (tunnel instanceof TunnelCreatorConfig) {
+                realExpiration = ((TunnelCreatorConfig) tunnel).getConfig(0).getExpiration();
+            }
+            lease.setEndDate(realExpiration);
+            lease.setTunnelId(inId);
+            lease.setGateway(gw);
+            leases.add(lease);
+            if (tunnel.getLength() <= 1) {
+                zeroHopLease = lease;
+            }
+        }
+
+        if (leases.isEmpty()) {
+            return null;
+        }
+
+        LeaseSet ls = new LeaseSet();
+        java.util.Iterator<Lease> iter = leases.iterator();
+        int count = Math.min(leases.size(), wanted);
+        for (int i = 0; i < count; i++) {
+            ls.addLease(iter.next());
+        }
+        return ls;
+    }
+
+    /**
+     * Process removal statistics for removed tunnels.
+     *
+     * @param removed list of removed tunnels
+     */
+    private void processRemovalStats(List<TunnelInfo> removed) {
+        for (TunnelInfo info : removed) {
+            _lifetimeProcessed += info.getProcessedMessagesCount();
+            long lifetimeConfirmed = info.getVerifiedBytesTransferred();
+            long lifetime = 10 * 60 * 1000;
+            for (int i = 0; i < info.getLength(); i++) {
+                _context.profileManager().tunnelLifetimePushed(info.getPeer(i), lifetime, lifetimeConfirmed);
+            }
+        }
+        updateRate();
     }
 
     /**
@@ -1010,6 +1151,70 @@ public class TunnelPool {
     }
 
     /**
+     * Proactively republish the LeaseSet when all tunnels are healthy (all > 5 min expiry).
+     * This ensures the LeaseSet always has fresh lifetime and prevents orphaned LeaseSets
+     * where the LeaseSet is technically valid but all leases have expired.
+     *
+     * Unlike refreshLeaseSet() which republishes when tunnels are EXPIRING SOON,
+     * this republishes when tunnels are ALL HEALTHY to reset the LeaseSet lifetime.
+     *
+     * @since 0.9.72
+     */
+    void proactiveRepublishIfHealthy() {
+        if (!_settings.isInbound() || _settings.isExploratory() || !_alive) {
+            return;
+        }
+
+        long now = _context.clock().now();
+        long fiveMinutes = 5 * 60 * 1000;
+        long expiryThreshold = now + fiveMinutes;
+
+        boolean allHealthy = false;
+        int tunnelCount = 0;
+
+        synchronized (_tunnels) {
+            for (TunnelInfo t : _tunnels) {
+                if (t.getExpiration() > now) {
+                    tunnelCount++;
+                    if (t.getExpiration() > expiryThreshold) {
+                        allHealthy = true;
+                    } else {
+                        // At least one tunnel expiring soon, let existing logic handle it
+                        return;
+                    }
+                }
+            }
+        }
+
+        // Only republish if we have tunnels and they're all healthy
+        if (tunnelCount > 0 && allHealthy) {
+            // Rate limit: don't republish more than every 5 minutes
+            long lastPublish = _lastLeaseSetPublishTime;
+            if (lastPublish > 0 && now - lastPublish < fiveMinutes) {
+                return;
+            }
+
+            // Don't republish during attacks (low build success)
+            double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+            if (buildSuccess < 0.40) {
+                return;
+            }
+
+            LeaseSet ls;
+            synchronized (_tunnels) {
+                ls = locked_buildNewLeaseSet();
+            }
+            if (ls != null && ls.getLeaseCount() >= _settings.getQuantity() / 2) {
+                if (_log.shouldInfo()) {
+                    _log.info("Proactive republish: all " + tunnelCount + " tunnels healthy, refreshing LeaseSet lifetime");
+                }
+                _lastLeaseSetPublishTime = now;
+                requestLeaseSet(ls);
+            }
+        }
+    }
+
+    /**
      * Refresh the LeaseSet, throttled to prevent flooding but not on initial creation.
      * @param force if true, bypass throttle (for critical refresh when below minimum or near expiry)
      */
@@ -1035,13 +1240,6 @@ public class TunnelPool {
             if (!force && !hasPublishedLS) {
                 force = true;
             }
-
-            if (!force && now - _lastRefreshTime < REFRESH_THROTTLE) {
-                if (_log.shouldDebug()) {
-                    _log.debug(toString() + "\n* Skipping LeaseSet refresh - throttled");
-                }
-                return;
-            }
             int currentCount = getTunnelCount();
             int minRequired = _settings.getQuantity();
             // Always refresh if we're at or below minimum - cannot serve dead tunnels
@@ -1049,9 +1247,8 @@ public class TunnelPool {
                 force = true;
             }
             if (!force && now - _lastRefreshTime < REFRESH_THROTTLE) {
-                if (_log.shouldDebug()) {
-                    _log.debug(toString() + "\n* Skipping LeaseSet refresh - throttled");
-                }
+                // Instead of dropping, schedule a deferred refresh
+                scheduleDeferredRefresh();
                 return;
             }
             _lastRefreshTime = now;
@@ -1067,6 +1264,35 @@ public class TunnelPool {
                 String dest = _settings.getDestination() != null ? _settings.getDestination().toBase32().substring(0, 8) : "null";
                 _log.debug("Cannot request LeaseSet refresh for [" + dest + "] -> Not fully initialized...");
             }
+        }
+    }
+
+    /**
+     * Schedule a deferred LeaseSet refresh to fire after the throttle window expires.
+     * Prevents dropping refresh requests during rapid tunnel changes.
+     */
+    private void scheduleDeferredRefresh() {
+        if (_pendingRefreshScheduled) {
+            return;
+        }
+        _pendingRefreshScheduled = true;
+        long delay = REFRESH_THROTTLE - (_context.clock().now() - _lastRefreshTime);
+        if (delay <= 0) {
+            delay = REFRESH_THROTTLE;
+        }
+        _context.simpleTimer2().addEvent(new DeferredRefreshEvent(), delay);
+        if (_log.shouldDebug()) {
+            _log.debug(toString() + " -> Scheduled deferred LeaseSet refresh in " + (delay / 1000) + "s");
+        }
+    }
+
+    /**
+     * Event to perform deferred LeaseSet refresh after throttle window expires.
+     */
+    private class DeferredRefreshEvent implements net.i2p.util.SimpleTimer.TimedEvent {
+        public void timeReached() {
+            _pendingRefreshScheduled = false;
+            refreshLeaseSet(false);
         }
     }
 

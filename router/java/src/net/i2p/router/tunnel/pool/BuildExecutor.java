@@ -449,6 +449,13 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
                 _repoll = false;
                 _manager.listPools(pools);
 
+                // Proactive republish LeaseSets when all tunnels are healthy
+                for (TunnelPool pool : pools) {
+                    if (pool.isAlive()) {
+                        pool.proactiveRepublishIfHealthy();
+                    }
+                }
+
                 // Simplified paired replenishment algorithm
                 // Target: max(4, wanted + 2) tunnels per direction with > 5 min expiry
                 wanted.clear();
