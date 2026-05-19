@@ -738,8 +738,10 @@ class PeerTestManager {
         if (retryCount < 5) {
             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
             if (ri == null) {
-                if (_log.shouldInfo())
-                    _log.info("Delay after " + retryCount + " retries, no RI for " + h.toBase64());
+                if (_log.shouldInfo()) {
+                    _log.info("Delay after receiving message " + msg + " and " + retryCount +
+                              " retries, no RI for [" + h.toBase64().substring(0,6) + "]");
+                }
                 if (retryCount == 0)
                     new DelayTest(from, fromPeer, msg, h, data);
                 return false;
@@ -1317,8 +1319,17 @@ class PeerTestManager {
                                 _log.warn("Signature failed on message #4 " + test + '\n' + charlieRI);
                         }
                     } else {
+                        // Without the RI we can't send msg 6, so we have to stop the test,
+                        // but if we did get msg 5 while waiting for the RI,
+                        // we can declare success.
+                        if (test.getCharlieIP() != null) {
+                            if (_log.shouldWarn())
+                                _log.warn("Charlie's RouterInfo not found but got msg 5 -> Declaring success " + test + ' ' + h);
+                            testComplete();
+                            return;
+                        }
                         if (_log.shouldWarn())
-                            _log.warn("Charlie's RouterInfo not found" + test + ' ' + h);
+                            _log.warn("Charlie's RouterInfo not found " + test + ' ' + h);
                     }
                 }
                 if (charlieIntroKey == null || charlieIP == null || charliePort <= 0) {
