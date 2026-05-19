@@ -593,10 +593,10 @@ public class ProfileOrganizer {
              double totalCapacity = 0;
              double totalIntegration = 0;
 
-             for (PeerProfile profile : _strictCapacityOrder) {
-                 if (_us.equals(profile.getPeer()) || profile.wasUnreachable()) {
-                     continue;
-                 }
+              for (PeerProfile profile : _strictCapacityOrder) {
+                  if (_us != null && _us.equals(profile.getPeer()) || profile.wasUnreachable()) {
+                      continue;
+                  }
 
                  // Tiered expiration: Active > Passive > Gossip
                  long lastSend = profile.getLastSendSuccessful();
@@ -639,7 +639,7 @@ public class ProfileOrganizer {
             int numNotFailing = newStrictCapacityOrder.size();
             double newIntegrationThreshold = numNotFailing > 0 ? totalIntegration / numNotFailing : 1.0d;
             double newCapacityThreshold = calculateCapacityThresholdFromSet(newStrictCapacityOrder, numNotFailing);
-            double newSpeedThreshold = calculateSpeedThreshold(newStrictCapacityOrder);
+            double newSpeedThreshold = calculateSpeedThreshold(newStrictCapacityOrder, now);
 
             // Step 3: Clear and rebuild all tier maps
             _fastPeers.clear();
@@ -656,7 +656,8 @@ public class ProfileOrganizer {
             // Step 5: Fallback to ensure minimum fast peers
             int minFast = getMinimumFastPeers();
             int added = 0;
-            int target = Math.max(minFast, getMinimumFastPeers());
+            int target = minFast;
+            boolean earlyUptime = _context.router() != null && _context.router().getUptime() < 30 * 60 * 1000;
 
             if (_fastPeers.size() < target) {
                 // First, try from high-capacity peers
@@ -668,19 +669,19 @@ public class ProfileOrganizer {
                 // Sort by speed descending
                 candidates.sort((p1, p2) -> Double.compare(p2.getSpeedValue(), p1.getSpeedValue()));
 
-                // Try with original threshold
-                double threshold = _thresholdSpeedValue;
+                // First pass: peers with historical low-latency indicator (speedBonus >= 9999999)
                 for (PeerProfile profile : candidates) {
                     if (_fastPeers.size() >= target) break;
-                    if (profile.getIsActive() && profile.getSpeedValue() >= threshold) {
+                    if (profile.getSpeedBonus() >= 9999999) {
                         _fastPeers.put(profile.getPeer(), profile);
                         added++;
                     }
                 }
 
-                // If still not enough, lower threshold and try again
-                if (_fastPeers.size() < target) {
-                    threshold = 0.3;
+                // Second pass: active peers with current traffic
+                double[] thresholds = { _thresholdSpeedValue, 0.3, 0.1, Double.MIN_VALUE };
+                for (double threshold : thresholds) {
+                    if (_fastPeers.size() >= target) break;
                     for (PeerProfile profile : candidates) {
                         if (_fastPeers.size() >= target) break;
                         if (profile.getIsActive() && profile.getSpeedValue() >= threshold) {
@@ -690,22 +691,11 @@ public class ProfileOrganizer {
                     }
                 }
 
-                // If still not enough, lower threshold and try again
-                if (_fastPeers.size() < target) {
+                // Third pass: during early uptime, accept peers with any historical activity
+                if (earlyUptime && _fastPeers.size() < target) {
                     for (PeerProfile profile : candidates) {
                         if (_fastPeers.size() >= target) break;
-                        if (profile.getIsActive() && profile.getSpeedValue() > 0.1) {
-                            _fastPeers.put(profile.getPeer(), profile);
-                            added++;
-                        }
-                    }
-                }
-
-                // If still not enough, bypass threshold and try again
-                if (_fastPeers.size() < target) {
-                    for (PeerProfile profile : candidates) {
-                        if (_fastPeers.size() >= target) break;
-                        if (profile.getIsActive()) {
+                        if (profile.getLastSendSuccessful() > 0 || profile.getLastHeardFrom() > 0) {
                             _fastPeers.put(profile.getPeer(), profile);
                             added++;
                         }
@@ -762,26 +752,30 @@ public class ProfileOrganizer {
     private double calculateCapacityThresholdFromSet(Set<PeerProfile> activeProfiles, int totalPeers) {
         if (totalPeers == 0) return CapacityCalculator.GROWTH_FACTOR;
 
-        List<Double> capacities = new ArrayList<>(activeProfiles.size());
+        double[] capacities = new double[activeProfiles.size()];
         double totalCapacity = 0.0;
+        int idx = 0;
         for (PeerProfile p : activeProfiles) {
             double cap = p.getCapacityValue();
-            capacities.add(cap);
+            capacities[idx++] = cap;
             totalCapacity += cap;
         }
         double meanCapacity = totalCapacity / totalPeers;
 
         // Sort to find median and Nth peer
-        capacities.sort(Double::compareTo);
+        java.util.Arrays.sort(capacities);
         int minHighCap = getMinimumHighCapacityPeers();
-       double thresholdAtMedian = capacities.get(totalPeers / 2);
+        double thresholdAtMedian = capacities[totalPeers / 2];
         double thresholdAtMinHighCap = (minHighCap <= totalPeers)
-           ? capacities.get(Math.min(minHighCap - 1, totalPeers - 1))
-           : CapacityCalculator.GROWTH_FACTOR;
-        double thresholdAtLowest = capacities.get(totalPeers - 1);
-         int numExceedingMean = (int) capacities.stream().filter(v -> v > meanCapacity).count();
-         return calculateCapacityThreshold(meanCapacity, numExceedingMean, totalPeers,
-                                        thresholdAtMedian, thresholdAtMinHighCap, thresholdAtLowest);
+            ? capacities[Math.min(minHighCap - 1, totalPeers - 1)]
+            : CapacityCalculator.GROWTH_FACTOR;
+        double thresholdAtLowest = capacities[totalPeers - 1];
+        int numExceedingMean = 0;
+        for (double v : capacities) {
+            if (v > meanCapacity) numExceedingMean++;
+        }
+        return calculateCapacityThreshold(meanCapacity, numExceedingMean, totalPeers,
+                                       thresholdAtMedian, thresholdAtMinHighCap, thresholdAtLowest);
     }
 
     /**
@@ -816,13 +810,13 @@ public class ProfileOrganizer {
         long now = _context.clock().now();
         long activeThreshold = now - (8 * 60 * 60 * 1000L); // 8 hours
 
+        // More lenient thresholds for firewalled routers
+        boolean isFirewalledRouter = isFirewalled();
+        int fastPeerLimit = isFirewalledRouter ? 1600 : 800;
+        int highCapacityLimit = isFirewalledRouter ? 2400 : 1200;
+
         for (PeerProfile profile : _notFailingPeers.values()) {
             Hash peer = profile.getPeer();
-
-            // More lenient thresholds for firewalled routers
-            boolean isFirewalledRouter = isFirewalled();
-            int fastPeerLimit = isFirewalledRouter ? 1600 : 800;
-            int highCapacityLimit = isFirewalledRouter ? 2400 : 1200;
 
             if ((_fastPeers.containsKey(peer) && _fastPeers.size() <= fastPeerLimit) ||
                 (_highCapacityPeers.containsKey(peer) && _highCapacityPeers.size() <= highCapacityLimit)) {
@@ -880,10 +874,10 @@ public class ProfileOrganizer {
         }
     }
 
-    private double calculateSpeedThreshold(Set<PeerProfile> reordered) {
+    private double calculateSpeedThreshold(Set<PeerProfile> reordered, long now) {
         List<PeerProfile> candidates = new ArrayList<>();
         for (PeerProfile profile : reordered) {
-            if (profile.getCapacityValue() >= _thresholdCapacityValue && profile.getIsActive()) {
+            if (profile.getCapacityValue() >= _thresholdCapacityValue && profile.getIsActive(now)) {
                 candidates.add(profile);
             }
         }
@@ -895,10 +889,6 @@ public class ProfileOrganizer {
         int cutoff = Math.min((int)(candidates.size() * 0.3), 50); // Top 30% or 50 peers
 
         return candidates.get(cutoff).getSpeedValue();
-    }
-
-    private final static double avg(double total, double quantity) {
-        return quantity > 0 ? total / quantity : 0.0d;
     }
 
     /**
@@ -948,7 +938,7 @@ public class ProfileOrganizer {
             Hash peer = iter.next();
             if (toExclude != null && toExclude.contains(peer)) continue;
             if (matches.contains(peer)) continue;
-            if (_us.equals(peer)) continue;
+            if (_us != null && _us.equals(peer)) continue;
 
             int subTier = getSubTier(peer, k0, k1);
             if ((subTier & subTierMode.mask) != subTierMode.val) continue;
@@ -970,7 +960,7 @@ public class ProfileOrganizer {
             Hash peer = iter.next();
             if (toExclude != null && toExclude.contains(peer)) continue;
             if (matches.contains(peer)) continue;
-            if (_us.equals(peer)) continue;
+            if (_us != null && _us.equals(peer)) continue;
             boolean ok = isSelectable(peer);
             if (ok) {
                 ok = mask <= 0 || notRestricted(peer, ipSet, mask);
@@ -1040,17 +1030,18 @@ public class ProfileOrganizer {
 
         // Check tunnel acceptance ratio - demote peers with < 40% acceptance from high-cap/fast tiers
         boolean lowTunnelAcceptance = isLowTunnelAcceptance(profile);
-        boolean highTunnelTestRTT = isHighTunnelTestRTT(profile);
+        // UI latency indicator is the source of truth: capacityBonus == -30 means high latency
+        boolean highLatency = profile.getCapacityBonus() == -30;
 
         // Decide if peer qualifies for high-capacity tier
-        if (profile.getCapacityValue() >= effectiveCapThreshold && isPeerSelectable && !isStrictCountry && !lowTunnelAcceptance && !highTunnelTestRTT) {
+        if (profile.getCapacityValue() >= effectiveCapThreshold && isPeerSelectable && !isStrictCountry && !lowTunnelAcceptance && !highLatency) {
             _highCapacityPeers.put(peer, profile);
 
             // Also check if peer qualifies for fast tier
             if (profile.getSpeedValue() >= effectiveSpeedThreshold && profile.getIsActive() && !lowTunnelAcceptance) {
                 _fastPeers.put(peer, profile);
             }
-        } else if (_highCapacityPeers.size() < minHighCap && isPeerSelectable && !isStrictCountry && !lowTunnelAcceptance && !highTunnelTestRTT) {
+        } else if (_highCapacityPeers.size() < minHighCap && isPeerSelectable && !isStrictCountry && !lowTunnelAcceptance && !highLatency) {
             _highCapacityPeers.put(peer, profile);
         } else if (lowTunnelAcceptance) {
             if (_log.shouldDebug()) {
@@ -1064,8 +1055,57 @@ public class ProfileOrganizer {
         }
     }
 
-    private boolean shouldDrop(PeerProfile profile) {
-        return false;
+    /**
+     * Immediately demote a peer from fast/high-cap tiers if its capacityBonus is -30
+     * (UI shows ✖ for high latency). Non-blocking.
+     */
+    public void demoteIfHighLatency(Hash peer) {
+        getReadLock();
+        try {
+            boolean inFast = _fastPeers.containsKey(peer);
+            boolean inHighCap = _highCapacityPeers.containsKey(peer);
+            if (inFast || inHighCap) {
+                if (_log.shouldInfo()) {
+                    _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                              "] from fast/high-cap tiers due to high latency (capacityBonus = -30)");
+                }
+                if (inFast) _fastPeers.remove(peer);
+                if (inHighCap) _highCapacityPeers.remove(peer);
+            }
+        } finally {
+            releaseReadLock();
+        }
+    }
+
+    /**
+     * Immediately demote a peer from fast/high-cap tiers if its tunnel test RTT
+     * exceeds the low-latency threshold (timeout * 2), matching the PeerTestJob metric.
+     * Uses the immediate test result rather than the smoothed average for instant action.
+     * Sets capacityBonus = -30 so the UI reflects the demotion immediately.
+     * Non-blocking - only acts if the peer is currently in those tiers.
+     */
+    void demoteIfHighRTT(Hash peer, long responseTimeMs) {
+        int timeout = _context.getProperty("peerTest.peerTestTimeout", 8000);
+        if (responseTimeMs >= timeout * 2) {
+            getReadLock();
+            try {
+                boolean inFast = _fastPeers.containsKey(peer);
+                boolean inHighCap = _highCapacityPeers.containsKey(peer);
+                if (inFast || inHighCap) {
+                    if (_log.shouldInfo()) {
+                        _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                                  "] from fast/high-cap tiers due to high RTT: " + responseTimeMs + "ms (threshold: " + (timeout * 2) + "ms)");
+                    }
+                    if (inFast) _fastPeers.remove(peer);
+                    if (inHighCap) _highCapacityPeers.remove(peer);
+                    // Set capacityBonus = -30 so UI shows ✖ and reorganize excludes this peer
+                    PeerProfile profile = locked_getProfile(peer);
+                    if (profile != null) profile.setCapacityBonus(-30);
+                }
+            } finally {
+                releaseReadLock();
+            }
+        }
     }
 
     /**
@@ -1122,35 +1162,6 @@ public class ProfileOrganizer {
                        rejected + " reject)");
         }
         return true;
-    }
-
-    /**
-     * Check if peer has high tunnel test latency (> MAX_RTT_FOR_FAST_TIER ms)
-     * These peers should be excluded from fast tier to improve tunnel build success
-     */
-    private boolean isHighTunnelTestRTT(PeerProfile profile) {
-        if (profile == null) return false;
-        RateStat rs = profile.getTunnelTestResponseTime();
-        if (rs == null) return false;
-        Rate r = rs.getRate(RateConstants.ONE_MINUTE);
-        if (r == null) return false;
-        double avg = r.getAverageValue();
-        if (avg <= 0) return false;
-        return avg > MAX_RTT_FOR_FAST_TIER;
-    }
-
-    /**
-     * Get tunnel acceptance ratio for a peer
-     * @return ratio (0.0 to 1.0), or 1.0 if no data
-     */
-    private double getAcceptanceRatio(PeerProfile profile) {
-        TunnelHistory th = profile.getTunnelHistory();
-        if (th == null) return 1.0;
-        long agreed = th.getLifetimeAgreedTo();
-        long rejected = th.getLifetimeRejected();
-        long total = agreed + rejected;
-        if (total <= 0) return 1.0;
-        return (double) agreed / total;
     }
 
     protected int getMinimumFastPeers() {

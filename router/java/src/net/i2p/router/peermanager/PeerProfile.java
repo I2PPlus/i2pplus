@@ -42,6 +42,7 @@ public class PeerProfile {
     private long _lastHeardFrom;
     // unused
     private float _tunnelTestResponseTimeAvg;
+    private long _tunnelTestTimeAvgLastUpdate;
     private float _peerTestResponseTimeAvg;
     // periodic rates
     //private RateStat _sendSuccessSize = null;
@@ -55,7 +56,9 @@ public class PeerProfile {
     // calculation bonuses
     // ints to save some space
     private int _speedBonus;
+    private long _speedBonusLastUpdate;
     private int _capacityBonus;
+    private long _capacityBonusLastUpdate;
     private int _integrationBonus;
     // calculation values
     // floats to save some space
@@ -324,18 +327,32 @@ public class PeerProfile {
     /**
      * extra factor added to the speed ranking - this can be updated in the profile
      * written to disk to affect how the algorithm ranks speed.  Negative values are
-     * penalties
+     * penalties. Expires after 4 hours if not refreshed.
      */
-    public int getSpeedBonus() {return _speedBonus;}
-    public void setSpeedBonus(int bonus) {_speedBonus = bonus;}
+    public int getSpeedBonus() {
+        if (_speedBonus == 0) return _speedBonus;
+        if (_speedBonusLastUpdate <= 0) return _speedBonus; // backward compat: no timestamp = valid
+        long hoursSinceUpdate = (_context.clock().now() - _speedBonusLastUpdate) / (60 * 60 * 1000L);
+        return hoursSinceUpdate >= 4 ? 0 : _speedBonus;
+    }
+    public void setSpeedBonus(int bonus) {_speedBonus = bonus; _speedBonusLastUpdate = _context.clock().now();}
+    long getSpeedBonusLastUpdate() {return _speedBonusLastUpdate;}
+    void setSpeedBonusLastUpdate(long ts) {_speedBonusLastUpdate = ts;}
 
     /**
      * extra factor added to the capacity ranking - this can be updated in the profile
      * written to disk to affect how the algorithm ranks capacity.  Negative values are
-     * penalties
+     * penalties. Expires after 4 hours if not refreshed.
      */
-    public int getCapacityBonus() {return _capacityBonus;}
-    public void setCapacityBonus(int bonus) {_capacityBonus = bonus;}
+    public int getCapacityBonus() {
+        if (_capacityBonus == 0) return _capacityBonus;
+        if (_capacityBonusLastUpdate <= 0) return _capacityBonus; // backward compat: no timestamp = valid
+        long hoursSinceUpdate = (_context.clock().now() - _capacityBonusLastUpdate) / (60 * 60 * 1000L);
+        return hoursSinceUpdate >= 4 ? 0 : _capacityBonus;
+    }
+    public void setCapacityBonus(int bonus) {_capacityBonus = bonus; _capacityBonusLastUpdate = _context.clock().now();}
+    long getCapacityBonusLastUpdate() {return _capacityBonusLastUpdate;}
+    void setCapacityBonusLastUpdate(long ts) {_capacityBonusLastUpdate = ts;}
 
     /**
      * extra factor added to the integration ranking - this can be updated in the profile
@@ -371,12 +388,25 @@ public class PeerProfile {
     public boolean getIsFailing() {return false;}
 
     /**
-     *  @deprecated unused
-     *  @return 0 always
+     *  @return EWMA average with time-based decay (50% per hour since last update)
      */
     @Deprecated
     @SuppressWarnings("deprecation")
-    public float getTunnelTestTimeAverage() {return _tunnelTestResponseTimeAvg;}
+    public float getTunnelTestTimeAverage() {
+        if (_tunnelTestResponseTimeAvg <= 0 || _tunnelTestTimeAvgLastUpdate <= 0) return 0;
+        long hoursSinceUpdate = (_context.clock().now() - _tunnelTestTimeAvgLastUpdate) / (60 * 60 * 1000L);
+        if (hoursSinceUpdate <= 0) return _tunnelTestResponseTimeAvg;
+        // Decay by 50% per hour, cap at 4 hours (effectively zero)
+        float decay = (float) Math.pow(0.5, Math.min(hoursSinceUpdate, 4));
+        return _tunnelTestResponseTimeAvg * decay;
+    }
+
+    /**
+     *  @return timestamp when the EWMA was last updated
+     */
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    long getTunnelTestTimeAvgLastUpdate() {return _tunnelTestTimeAvgLastUpdate;}
 
     /**
      *  @deprecated unused
@@ -390,6 +420,13 @@ public class PeerProfile {
      */
     @Deprecated
     @SuppressWarnings("deprecation")
+    void setTunnelTestTimeAvgLastUpdate(long ts) {_tunnelTestTimeAvgLastUpdate = ts;}
+
+    /**
+     *  @deprecated unused
+     */
+    @Deprecated
+    @SuppressWarnings("deprecation")
     void updateTunnelTestTimeAverage(float ms) {
 
         if (_tunnelTestResponseTimeAvg <= 0) {_tunnelTestResponseTimeAvg = ms;} // should we instead start at $ms?
@@ -397,6 +434,8 @@ public class PeerProfile {
         // weighted since we want to let the average grow quickly and shrink slowly
         if (ms < _tunnelTestResponseTimeAvg) {_tunnelTestResponseTimeAvg = 0.95f * _tunnelTestResponseTimeAvg + .05f * ms;}
         else {_tunnelTestResponseTimeAvg = 0.75f * _tunnelTestResponseTimeAvg + .25f * ms;}
+
+        _tunnelTestTimeAvgLastUpdate = _context.clock().now();
 
         if (_log.shouldInfo()) {
             _log.info("Timed tunnel test for [" + _peer.toBase64().substring(0,6) +

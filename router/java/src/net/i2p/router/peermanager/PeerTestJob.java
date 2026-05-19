@@ -573,6 +573,7 @@ public class PeerTestJob extends JobImpl {
         private void handleSlowTier(PeerProfile prof) {
             try {
                 prof.setCapacityBonus(-30);
+                getContext().profileOrganizer().demoteIfHighLatency(_peer);
                 if (_log.shouldInfo())
                     _log.info("Setting capacity bonus to -30 for [" + _shortHash + "] -> L, M, N or unreachable");
             } catch (NumberFormatException nfe) {}
@@ -587,6 +588,7 @@ public class PeerTestJob extends JobImpl {
             if (isHighBandwidthTier(data)) {
                 try {
                     data.profile.setCapacityBonus(-30);
+                    getContext().profileOrganizer().demoteIfHighLatency(_peer);
                     if (speedBonus >= 9999999)
                         data.profile.setSpeedBonus(speedBonus - 9999999);
                     if (_log.shouldInfo())
@@ -606,6 +608,7 @@ public class PeerTestJob extends JobImpl {
             if (testAvg > (timeout * 2) && isHighBandwidthTier(data)) {
                 try {
                     data.profile.setCapacityBonus(-30);
+                    getContext().profileOrganizer().demoteIfHighLatency(_peer);
                     if (speedBonus >= 9999999)
                         data.profile.setSpeedBonus(speedBonus - 9999999);
                     if (_log.shouldInfo())
@@ -708,6 +711,7 @@ public class PeerTestJob extends JobImpl {
                     } else if (prof != null && cap != null && (!reachable || bw.equals("L") || (bw.equals("M")))) {
                         try {
                             prof.setCapacityBonus(-30);
+                            getContext().profileOrganizer().demoteIfHighLatency(h);
                             if (_log.shouldInfo())
                                 _log.info("Setting capacity bonus to -30 for [" + _peer.toBase64().substring(0,6) + "] -> L or M tier or unreachable");
                         } catch (NumberFormatException nfe) {}
@@ -715,6 +719,7 @@ public class PeerTestJob extends JobImpl {
                     } else if (prof != null && cap == null) {
                         try {
                             prof.setCapacityBonus(-30);
+                            getContext().profileOrganizer().demoteIfHighLatency(h);
                             if (_log.shouldInfo())
                                 _log.info("Setting capacity bonus to -30 for [" + _peer.toBase64().substring(0,6) +
                                           "] -> No capabilities published in RouterInfo");
@@ -770,6 +775,7 @@ public class PeerTestJob extends JobImpl {
                 (!data.isReachable || data.bandwidthTier.equals("L") || data.bandwidthTier.equals("M") || data.bandwidthTier.equals("N"))) {
                 try {
                     data.profile.setCapacityBonus(-30);
+                    getContext().profileOrganizer().demoteIfHighLatency(_peer.getIdentity().getHash());
                     data.profile.setSpeedBonus(0);
                     if (_log.shouldInfo())
                         _log.info("Setting capacity bonus to -30 and speed bonus to 0 for [" +

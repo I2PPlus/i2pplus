@@ -124,18 +124,17 @@ public class ProfileManagerImpl implements ProfileManager {
      * was successfully tested with the given round trip latency
      *
      * Non-blocking. Will not update the profile if we can't get the lock.
-     *
-     * @deprecated disabled
      */
-    @Deprecated
-    @SuppressWarnings("deprecation")
     @Override
+    @SuppressWarnings("deprecation")
     public void tunnelTestSucceeded(Hash peer, long responseTimeMs) {
         if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
             PeerProfile data = getProfileNonblocking(peer);
             if (data == null) return;
             data.updateTunnelTestTimeAverage(responseTimeMs);
             data.getTunnelTestResponseTime().addData(responseTimeMs, responseTimeMs);
+            // Immediately demote from fast/high-cap tiers if RTT exceeds threshold
+            _context.profileOrganizer().demoteIfHighRTT(peer, responseTimeMs);
         }
     }
 

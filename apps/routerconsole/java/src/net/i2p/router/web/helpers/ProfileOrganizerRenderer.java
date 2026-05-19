@@ -224,6 +224,7 @@ class ProfileOrganizerRenderer {
                         if (failPercentage <= 5.0) { // don't demote if less than 5%
                             if (bonus == 9999999) {prof.setSpeedBonus(0);}
                             prof.setCapacityBonus(-30);
+                            _context.profileOrganizer().demoteIfHighLatency(peer);
                         }
 
                         boolean failHigh = failPercentage >= 10.0;
@@ -245,6 +246,7 @@ class ProfileOrganizerRenderer {
                         buf.append("\" title=\"\u2022 ").append(_t("Unreachable"));
                         if (bonus == 9999999) {prof.setSpeedBonus(0);}
                         prof.setCapacityBonus(-30);
+                        _context.profileOrganizer().demoteIfHighLatency(peer);
                     } else if (isBanned) {
                         buf.append("\" title=\"\u2022 ").append(_t("Banned"));
                     }

@@ -139,8 +139,14 @@ class ProfilePersistenceHelper {
                 buf.append("# ").append("Groups: ").append(groups).append(NL);
             } else {buf.append("# No RouterInfo found for peer").append(NL);}
         }
-        if (profile.getSpeedBonus() != 0) {add(buf, addComments, "speedBonus", profile.getSpeedBonus(), "Manual Speed Score adjustment: " +  profile.getSpeedBonus());}
-        if (profile.getCapacityBonus() != 0) {add(buf, addComments, "capacityBonus", profile.getCapacityBonus(), "Manual Capacity Score adjustment: " +  profile.getCapacityBonus());}
+        if (profile.getSpeedBonus() != 0) {
+            add(buf, addComments, "speedBonus", profile.getSpeedBonus(), "Manual Speed Score adjustment: " +  profile.getSpeedBonus());
+            add(buf, addComments, "speedBonusLastUpdate", profile.getSpeedBonusLastUpdate(), "Last update time for speed bonus:");
+        }
+        if (profile.getCapacityBonus() != 0) {
+            add(buf, addComments, "capacityBonus", profile.getCapacityBonus(), "Manual Capacity Score adjustment: " +  profile.getCapacityBonus());
+            add(buf, addComments, "capacityBonusLastUpdate", profile.getCapacityBonusLastUpdate(), "Last update time for capacity bonus:");
+        }
         if (profile.getIntegrationBonus() != 0) {add(buf, addComments, "integrationBonus", profile.getIntegrationBonus(), "Manual Integration Score adjustment:");}
         addDate(buf, addComments, "firstHeardAbout", profile.getFirstHeardAbout(), "First reference to peer received:");
         addDate(buf, addComments, "lastHeardAbout", profile.getLastHeardAbout(), "Last reference to peer received:");
@@ -150,6 +156,7 @@ class ProfilePersistenceHelper {
         if (profile.getTunnelTestTimeAverage() != 0 && PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
             add(buf, addComments, "tunnelTestTimeAverage", (long) profile.getTunnelTestTimeAverage(), "Average peer response time (ms):" +
                 profile.getTunnelTestTimeAverage());
+            add(buf, addComments, "tunnelTestTimeAvgLastUpdate", profile.getTunnelTestTimeAvgLastUpdate(), "Last update time for tunnel test EWMA:");
         }
         // TODO: needs clarification - difference between tunnel peak and tunnel peak tunnel? And round down KBps display to 2 decimal places
         if (profile.getPeakThroughputKBps() >= 1) {
@@ -362,8 +369,10 @@ class ProfilePersistenceHelper {
             }
 
             profile.setCapacityBonus((int) getLong(props, "capacityBonus"));
+            profile.setCapacityBonusLastUpdate(getLong(props, "capacityBonusLastUpdate"));
             profile.setIntegrationBonus((int) getLong(props, "integrationBonus"));
             profile.setSpeedBonus((int) getLong(props, "speedBonus"));
+            profile.setSpeedBonusLastUpdate(getLong(props, "speedBonusLastUpdate"));
 
             long fh = getLong(props, "firstHeardAbout");
             if (fh <= 0) {fh = file.lastModified();}
@@ -377,6 +386,7 @@ class ProfilePersistenceHelper {
 
             if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
                 profile.setTunnelTestTimeAverage(getFloat(props, "tunnelTestTimeAverage"));
+                profile.setTunnelTestTimeAvgLastUpdate(getLong(props, "tunnelTestTimeAvgLastUpdate"));
             }
 
             profile.setPeakThroughputKBps(getFloat(props, "tunnelPeakThroughput"));
