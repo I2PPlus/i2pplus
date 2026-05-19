@@ -183,8 +183,12 @@ class PeerManager {
     private boolean storeProfile(Hash peer, long cutoff) {
         PeerProfile prof = _organizer.getProfile(peer);
         if (prof == null) return false;
-        if (prof.getLastSendSuccessful() > cutoff) {
-            if (_persistenceHelper.writeProfile(prof)) {return true;}
+        // Only persist Tier 1 (Active) and Tier 2 (Passive) profiles.
+        // Gossip-only profiles (Tier 3) are kept in memory briefly but never written to disk.
+        if (prof.getLastSendSuccessful() > 0 || prof.getLastHeardFrom() > 0) {
+            if (prof.getLastSendSuccessful() > cutoff) {
+                if (_persistenceHelper.writeProfile(prof)) {return true;}
+            }
         }
         return false;
     }

@@ -74,7 +74,7 @@ public class ProfileManagerImpl implements ProfileManager {
         if (_log.shouldInfo())
             _log.info("Comm error occurred for peer " + peer.toBase64(), new Exception("Comm error"));
         PeerProfile data = getProfile(peer);
-        //if (data == null) return;
+        if (data == null) return;
         data.setLastSendFailed(_context.clock().now());
     }
 
@@ -85,7 +85,7 @@ public class ProfileManagerImpl implements ProfileManager {
     @Override
     public void tunnelJoined(Hash peer, long responseTimeMs) {
         PeerProfile data = getProfile(peer);
-        //if (data == null) return;
+        if (data == null) return;
         data.getTunnelCreateResponseTime().addData(responseTimeMs, responseTimeMs);
         data.setLastHeardFrom(_context.clock().now());
         data.getTunnelHistory().incrementAgreedTo();
@@ -101,7 +101,7 @@ public class ProfileManagerImpl implements ProfileManager {
     @Override
     public void tunnelRejected(Hash peer, long responseTimeMs, int severity) {
         PeerProfile data = getProfile(peer);
-        //if (data == null) return;
+        if (data == null) return;
         data.setLastHeardFrom(_context.clock().now());
         data.getTunnelHistory().incrementRejected(severity);
     }
@@ -115,7 +115,7 @@ public class ProfileManagerImpl implements ProfileManager {
     @Override
     public void tunnelTimedOut(Hash peer) {
         PeerProfile data = getProfile(peer);
-        //if (data == null) return;
+        if (data == null) return;
         data.getTunnelHistory().incrementRejected(TunnelHistory.TUNNEL_REJECT_BANDWIDTH);
     }
 
@@ -185,7 +185,7 @@ public class ProfileManagerImpl implements ProfileManager {
     @Override
     public void tunnelFailed(Hash peer, int pct) {
         PeerProfile data = getProfile(peer);
-        //if (data == null) return;
+        if (data == null) return;
         data.getTunnelHistory().incrementFailed(pct);
     }
 
@@ -292,7 +292,7 @@ public class ProfileManagerImpl implements ProfileManager {
     @Override
     public void dbStoreSent(Hash peer, long responseTimeMs) {
         PeerProfile data = getProfile(peer);
-        //if (data == null) return;
+        if (data == null) return;
         long now = _context.clock().now();
         data.setLastHeardFrom(now);
         data.setLastSendSuccessful(now);
@@ -310,7 +310,7 @@ public class ProfileManagerImpl implements ProfileManager {
     @Override
     public void dbStoreSuccessful(Hash peer) {
         PeerProfile data = getProfile(peer);
-        //if (data == null) return;
+        if (data == null) return;
         long now = _context.clock().now();
         data.setLastHeardFrom(now);
         data.setLastSendSuccessful(now);
@@ -329,7 +329,7 @@ public class ProfileManagerImpl implements ProfileManager {
     @Override
     public void dbStoreFailed(Hash peer) {
         PeerProfile data = getProfile(peer);
-        //if (data == null) return;
+        if (data == null) return;
         if (!data.getIsExpandedDB())
             data.expandDBProfile();
         DBHistory hist = data.getDBHistory();
@@ -382,6 +382,7 @@ public class ProfileManagerImpl implements ProfileManager {
     private PeerProfile getProfile(Hash peer) {
         PeerProfile prof = _context.profileOrganizer().getProfile(peer);
         if (prof == null) {
+            if (_context.profileOrganizer().isLowBandwidthTier(peer)) return null;
             prof = new PeerProfile(_context, peer);
             prof.setLastHeardAbout(prof.getFirstHeardAbout());
             _context.profileOrganizer().addProfile(prof);

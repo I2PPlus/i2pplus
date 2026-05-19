@@ -225,7 +225,7 @@ class ProfilePersistenceHelper {
         if (staleDeleted > 0 && _log.shouldInfo()) {
             _log.info("Deleted " + staleDeleted + " stale profile files by timestamp");
         }
-        
+
         if (freshFiles.size() > LIMIT_PROFILES) {Collections.shuffle(freshFiles, _context.random());}
         List<PeerProfile> profiles = new ArrayList<PeerProfile>(Math.min(LIMIT_PROFILES, freshFiles.size()));
         int count = 0;
@@ -240,7 +240,7 @@ class ProfilePersistenceHelper {
                 count++;
             }
         }
-        
+
         long duration = System.currentTimeMillis() - start;
         if (_log.shouldInfo()) {_log.info("Loaded " + count + " peer profiles in " + duration + "ms");}
         return profiles;
@@ -530,6 +530,8 @@ class ProfilePersistenceHelper {
     /**
      * Delete profile files not in 'keepPeers', if total file count > maxProfiles.
      * Deletes oldest or least relevant first (based on file mtime if no RouterInfo).
+     * Prioritizes deletion: Tier 3 (Gossip) > Tier 2 (Passive) > Tier 1 (Active).
+     * Tier 1 profiles are protected and only deleted as absolute last resort.
      */
     public void purgeExcessProfiles(Set<Hash> keepPeers, int maxProfiles) {
         List<File> files = selectFiles();
@@ -537,10 +539,11 @@ class ProfilePersistenceHelper {
             return; // within limit
         }
 
-        // Build list of (file, peerHash, lastModified) for files NOT in keepPeers
+        // Build list of candidates for deletion
         List<FileMetadata> candidates = new ArrayList<>();
+        List<FileMetadata> tier1Candidates = new ArrayList<>(); // Protected, deleted last resort
         long now = System.currentTimeMillis();
-        long activeThreshold = now - (8 * 60 * 60 * 1000L); // 8 hours
+        long activeThreshold = now - (24 * 60 * 60 * 1000L); // 24 hours
 
         for (File f : files) {
             Hash peer = getHash(f.getName());
@@ -548,48 +551,71 @@ class ProfilePersistenceHelper {
                 continue; // protected
             }
 
-            // Try to check RouterInfo for bandwidth tier (K/L/M = delete)
+            // Try to check RouterInfo for bandwidth tier (K/L/M/Unknown = delete)
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
             if (info != null) {
                 String tier = info.getBandwidthTier();
-                if ("K".equals(tier) || "L".equals(tier) || "M".equals(tier)) {
+                if ("K".equals(tier) || "L".equals(tier) || "M".equals(tier) || "Unknown".equals(tier)) {
                     f.delete();
                     continue;
                 }
             }
 
-            // Keep recently active ones (if we can infer)
-            boolean recentlyActive = false;
+            // Determine interaction tier for prioritization
+            int tier = 3; // Default: Gossip
             try {
                 Properties props = new Properties();
                 loadProps(props, f);
                 long lastSent = getLong(props, "lastSentToSuccessfully");
                 long lastHeard = getLong(props, "lastHeardFrom");
+                if (lastSent > 0) {
+                    tier = 1; // Active
+                } else if (lastHeard > 0) {
+                    tier = 2; // Passive
+                }
+                // Keep recently active ones regardless of tier
                 if (lastSent >= activeThreshold || lastHeard >= activeThreshold) {
-                    recentlyActive = true;
+                    continue;
                 }
             } catch (IOException e) {
                 if (_log.shouldDebug()) _log.debug("Failed to read profile " + f, e);
             }
 
-            if (!recentlyActive) {
-                candidates.add(new FileMetadata(f, f.lastModified()));
+            FileMetadata fm = new FileMetadata(f, f.lastModified(), tier);
+            if (tier == 1) {
+                tier1Candidates.add(fm); // Tier 1 protected
+            } else {
+                candidates.add(fm);
             }
         }
 
-        // Now delete oldest first until within limit
+        // Delete Tier 3 and Tier 2 first
         int overage = files.size() - maxProfiles;
         if (overage <= 0) return;
 
-        // Sort by lastModified (oldest first)
-        candidates.sort(Comparator.comparingLong(m -> m.lastModified));
-        int toDelete = Math.min(overage, candidates.size());
+        // Sort: Tier 3 (Gossip) first, then Tier 2 (Passive), oldest first
+        candidates.sort((a, b) -> {
+            if (a.tier != b.tier) return Integer.compare(a.tier, b.tier);
+            return Long.compare(a.lastModified, b.lastModified);
+        });
 
+        int toDelete = Math.min(overage, candidates.size());
         for (int i = 0; i < toDelete; i++) {
             candidates.get(i).file.delete();
         }
 
-        if (_log.shouldInfo()) {
+        // Only if still over limit, delete Tier 1 (Active) profiles as last resort
+        overage = files.size() - toDelete - maxProfiles;
+        if (overage > 0 && !tier1Candidates.isEmpty()) {
+            tier1Candidates.sort((a, b) -> Long.compare(a.lastModified, b.lastModified));
+            int tier1ToDelete = Math.min(overage, tier1Candidates.size());
+            for (int i = 0; i < tier1ToDelete; i++) {
+                tier1Candidates.get(i).file.delete();
+            }
+            toDelete += tier1ToDelete;
+        }
+
+        if (_log.shouldInfo() && toDelete > 0) {
             _log.info("Purged " + toDelete + " stale profile files from disk");
         }
     }
@@ -598,7 +624,8 @@ class ProfilePersistenceHelper {
     private static class FileMetadata {
         final File file;
         final long lastModified;
-        FileMetadata(File f, long lm) { file = f; lastModified = lm; }
+        final int tier; // 1=Active, 2=Passive, 3=Gossip
+        FileMetadata(File f, long lm, int t) { file = f; lastModified = lm; tier = t; }
     }
 
 }

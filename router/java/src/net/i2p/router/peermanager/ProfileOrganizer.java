@@ -172,6 +172,8 @@ public class ProfileOrganizer {
         finally {releaseReadLock();}
         if (rv != null) return rv;
 
+        if (isLowBandwidthTier(peer)) return null;
+
         rv = new PeerProfile(_context, peer);
         rv.setLastHeardAbout(rv.getFirstHeardAbout());
         rv.coalesceStats();
@@ -195,6 +197,7 @@ public class ProfileOrganizer {
         if (profile == null) return null;
         Hash peer = profile.getPeer();
         if (peer.equals(_us)) return null;
+        if (isLowBandwidthTier(peer)) return null;
 
         if (_log.shouldInfo()) {
             _log.info("New profile created for [" + peer.toBase64().substring(0,6) + "]");
@@ -529,88 +532,108 @@ public class ProfileOrganizer {
      * @param shouldCoalesce if {@code true}, coalesce statistics for active profiles
      * @param shouldDecay if {@code true} and coalescing is performed, apply decay to historical stats
      */
-    void reorganize(boolean shouldCoalesce, boolean shouldDecay) {
-        final long now = _context.clock().now();
-        final long start = System.currentTimeMillis();
-        int profileCount = 0;
-        int expiredCount = 0;
+     void reorganize(boolean shouldCoalesce, boolean shouldDecay) {
+         final long now = _context.clock().now();
+         final long start = System.currentTimeMillis();
+         int profileCount = 0;
+         int expiredCount = 0;
 
-        // Determine expiration window based on current profile volume
-        final long expireOlderThan = countNotFailingPeers() > ENOUGH_PROFILES
-            ? 8 * 60 * 60 * 1000L   // 8 hours
-            : 24 * 60 * 60 * 1000L; // 24 hours
+         // Tiered expiration windows based on interaction level.
+         // Active peers (Tier 1) retain long-term data for tunnel selection quality.
+         // Passive peers (Tier 2) kept for a day to capture intermittent interactions.
+         // Gossip-only peers (Tier 3) expire quickly to minimize memory churn.
+         final long expireActive = 7 * 24 * 60 * 60 * 1000L;    // 7 days
+         final long expirePassive = 24 * 60 * 60 * 1000L;       // 24 hours
+         final long expireGossip = 2 * 60 * 60 * 1000L;         // 2 hours
 
-        // Optional coalescing (read-only, safe to skip if lock fails)
-        if (shouldCoalesce && _context.router() != null &&
-            _context.router().getUptime() > 30 * 60 * 1000 &&
-            countNotFailingPeers() > (ENOUGH_PROFILES / 2)) {
-            getReadLock();
-            try {
-                for (PeerProfile prof : _strictCapacityOrder) {
-                    if (prof.getLastSendSuccessful() >= now - expireOlderThan) {
-                        prof.coalesceOnly(shouldDecay);
-                    }
-                }
-            } finally {
-                releaseReadLock();
-            }
-        }
+         // Optional coalescing (read-only, safe to skip if lock fails)
+         if (shouldCoalesce && _context.router() != null &&
+             _context.router().getUptime() > 30 * 60 * 1000 &&
+             countNotFailingPeers() > (ENOUGH_PROFILES / 2)) {
+             getReadLock();
+             try {
+                 for (PeerProfile prof : _strictCapacityOrder) {
+                     long lastSend = prof.getLastSendSuccessful();
+                     long expireWindow = lastSend > 0 ? expireActive : expirePassive;
+                     if (lastSend >= now - expireWindow) {
+                         prof.coalesceOnly(shouldDecay);
+                     }
+                 }
+             } finally {
+                 releaseReadLock();
+             }
+         }
 
-        // Attempt to acquire write lock
-        if (!getWriteLock()) {
-            _log.warn("Write lock unavailable during reorganize; performing lightweight expiration...");
+         // Attempt to acquire write lock
+         if (!getWriteLock()) {
+             _log.warn("Write lock unavailable during reorganize; performing lightweight expiration...");
 
-            getReadLock();
-            try {
-                int estimatedExpired = 0;
-                for (PeerProfile profile : _strictCapacityOrder) {
-                    if (profile.getLastSendSuccessful() < now - expireOlderThan) {
-                        estimatedExpired++;
-                    }
-                }
-                _context.statManager().addRateData("peer.profileEstimatedExpired", estimatedExpired, 0);
-            } finally {
-                releaseReadLock();
-            }
+             getReadLock();
+             try {
+                 int estimatedExpired = 0;
+                 for (PeerProfile profile : _strictCapacityOrder) {
+                     long lastSend = profile.getLastSendSuccessful();
+                     long expireWindow = lastSend > 0 ? expireActive : expirePassive;
+                     if (lastSend < now - expireWindow) {
+                         estimatedExpired++;
+                     }
+                 }
+                 _context.statManager().addRateData("peer.profileEstimatedExpired", estimatedExpired, 0);
+             } finally {
+                 releaseReadLock();
+             }
 
-            _context.statManager().addRateData("peer.reorganizeLockFailures", 1, 0);
-            return;
-        }
+             _context.statManager().addRateData("peer.reorganizeLockFailures", 1, 0);
+             return;
+         }
 
-        try {
-            // Step 1: Build a new set of active, non-expired, non-blacklisted profiles
-            Set<PeerProfile> newStrictCapacityOrder = new TreeSet<>(_comp);
-            double totalCapacity = 0;
-            double totalIntegration = 0;
+         try {
+             // Step 1: Build a new set of active, non-expired, non-blacklisted profiles
+             Set<PeerProfile> newStrictCapacityOrder = new TreeSet<>(_comp);
+             double totalCapacity = 0;
+             double totalIntegration = 0;
 
-            for (PeerProfile profile : _strictCapacityOrder) {
-                if (_us.equals(profile.getPeer()) || profile.wasUnreachable()) {
-                    continue;
-                }
+             for (PeerProfile profile : _strictCapacityOrder) {
+                 if (_us.equals(profile.getPeer()) || profile.wasUnreachable()) {
+                     continue;
+                 }
 
-                if (profile.getLastSendSuccessful() < now - expireOlderThan) {
-                    expiredCount++;
-                    continue;
-                }
+                 // Tiered expiration: Active > Passive > Gossip
+                 long lastSend = profile.getLastSendSuccessful();
+                 long lastHeard = profile.getLastHeardFrom();
+                 long lastHeardAbout = profile.getLastHeardAbout();
+                 long expireWindow;
+                 if (lastSend > 0) {
+                     expireWindow = expireActive;
+                 } else if (lastHeard > 0) {
+                     expireWindow = expirePassive;
+                 } else {
+                     expireWindow = expireGossip;
+                 }
 
-                // Skip peers in low bandwidth tiers
-                RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(profile.getPeer());
-                String bwTier = (peerInfo != null && peerInfo.getBandwidthTier() != null)
-                    ? peerInfo.getBandwidthTier() : "K";
-                if ("K".equals(bwTier) || "L".equals(bwTier) || "M".equals(bwTier)) {
-                    continue;
-                }
+                 long cutoff = Math.max(lastSend, Math.max(lastHeard, lastHeardAbout));
+                 if (cutoff < now - expireWindow) {
+                     expiredCount++;
+                     continue;
+                 }
 
-                if (!profile.getIsActive(now)) {
-                    continue;
-                }
+                 // Skip peers in low bandwidth tiers (K, L, M, Unknown).
+                 // With isLowBandwidthTier() gating profile creation, this is mainly
+                 // a safety net for legacy profiles loaded from disk.
+                 if (isLowBandwidthTier(profile.getPeer())) {
+                     continue;
+                 }
 
-                profile.updateValues(); // Refresh values (e.g., speed, capacity, integration)
-                newStrictCapacityOrder.add(profile);
-                totalCapacity += profile.getCapacityValue();
-                totalIntegration += profile.getIntegrationValue();
-                profileCount++;
-            }
+                 if (!profile.getIsActive(now)) {
+                     continue;
+                 }
+
+                 profile.updateValues(); // Refresh values (e.g., speed, capacity, integration)
+                 newStrictCapacityOrder.add(profile);
+                 totalCapacity += profile.getCapacityValue();
+                 totalIntegration += profile.getIntegrationValue();
+                 profileCount++;
+             }
 
             // Step 2: Calculate new thresholds
             int numNotFailing = newStrictCapacityOrder.size();
@@ -876,6 +899,18 @@ public class ProfileOrganizer {
 
     private final static double avg(double total, double quantity) {
         return quantity > 0 ? total / quantity : 0.0d;
+    }
+
+    /**
+     *  Check if a peer is in a low bandwidth tier (K, L, M, or Unknown).
+     *  @return true if the peer should be excluded from profiling
+     *  @since 0.9.70+
+     */
+    boolean isLowBandwidthTier(Hash peer) {
+        RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
+        if (peerInfo == null) return true; // no RouterInfo, assume low bandwidth
+        String tier = peerInfo.getBandwidthTier();
+        return "K".equals(tier) || "L".equals(tier) || "M".equals(tier) || "Unknown".equals(tier);
     }
 
     private PeerProfile locked_getProfile(Hash peer) {
