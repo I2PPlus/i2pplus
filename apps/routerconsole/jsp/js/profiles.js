@@ -71,7 +71,7 @@ import { refreshElements } from "./refreshElements.js";
 
     // Refresh profile list every 15 seconds
     if (plist) {
-      const targetSelectors = pbody ? `#pbody` : `#profilelist`;
+      const targetSelectors = pbody ? `#pbody, #profiles_overview, #thresholds` : `#profilelist`;
       refreshElements(targetSelectors, uri, 15000);
     }
 
