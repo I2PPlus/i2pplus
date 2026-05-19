@@ -97,6 +97,9 @@ class ConnectionHandler {
      *
      */
     public void receiveNewSyn(Packet packet) {
+        if (_log.shouldWarn()) {
+            _log.warn("[SYN-TRACE] ConnectionHandler.receiveNewSyn() called: active=" + _active + " queueSize=" + _synQueue.size() + " packet=" + packet);
+        }
         if (!_active) {
             if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                 if (_log.shouldWarn()) {_log.warn("Dropping new SYN request because we're not listening");}

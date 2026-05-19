@@ -68,60 +68,61 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
      * keys and tags disabled since dropped in I2PSession
      * @return true if sent
      */
-    public boolean enqueue(PacketLocal packet) {
-        if (_dead) {return false;}
+     public boolean enqueue(PacketLocal packet) {
+         if (_dead) {return false;}
 
-        if (packet.getAckTime() > 0) {
-            if (_log.shouldDebug()) {_log.debug("Not resending packet " + packet);}
-            return false;
-        }
+         if (packet.getAckTime() > 0) {
+             if (_log.shouldDebug()) {_log.debug("Not resending packet " + packet);}
+             return false;
+         }
 
-        Connection con = packet.getConnection();
-        if (con != null) {con.getInputStream().updateAcks(packet);} // this updates the ack/nack fields
+         Connection con = packet.getConnection();
+         if (con != null) {con.getInputStream().updateAcks(packet);} // this updates the ack/nack fields
 
-        ByteArray ba = _cache.acquire();
-        byte buf[] = ba.getData();
+         ByteArray ba = _cache.acquire();
+         byte buf[] = ba.getData();
 
-        long begin = 0;
-        long end = 0;
-        boolean sent = false;
-        boolean isLogged = false;
-        try {
-            int size = 0;
-            //long beforeWrite = System.currentTimeMillis();
-            if (packet.shouldSign()) {size = packet.writeSignedPacket(buf, 0);}
-            else {size = packet.writePacket(buf, 0);}
-            //long writeTime = System.currentTimeMillis() - beforeWrite;
-            //if ((writeTime > 1000) && (_log.shouldInfo())) {
-            //    _log.warn("Slow message delivery -> Took " + writeTime + "ms to write: " + packet);
-            //}
+         long begin = 0;
+         long end = 0;
+         boolean sent = false;
+         boolean isLogged = false;
+         long enqueueStart = _context.clock().now();
+         try {
+             int size = 0;
+             //long beforeWrite = System.currentTimeMillis();
+             if (packet.shouldSign()) {size = packet.writeSignedPacket(buf, 0);}
+             else {size = packet.writePacket(buf, 0);}
+             //long writeTime = System.currentTimeMillis() - beforeWrite;
+             //if ((writeTime > 1000) && (_log.shouldInfo())) {
+             //    _log.warn("Slow message delivery -> Took " + writeTime + "ms to write: " + packet);
+             //}
 
-            // last chance to short circuit...
-            if (packet.getAckTime() > 0) {return false;}
+             // last chance to short circuit...
+             if (packet.getAckTime() > 0) {return false;}
 
-            // this should not block!
-            begin = _context.clock().now();
-            long expires = 0;
-            int pktTimeout = packet.getTimeout();
-            if (pktTimeout > 0) {
-                // we want the router to expire it a little before we do,
-                // so if we retransmit, it will use a new tunnel/lease combo
-                // If we are really close to the timeout already, give this packet
-                // a chance to be sent, but it's likely to be dropped on the
-                // router side if we're running this far behind.
-                expires = Math.max(begin + pktTimeout - I2CP_EXPIRATION_ADJUST, begin + 25);
-            }
-            SendMessageOptions options = new SendMessageOptions();
-            if (expires > 0)
-                options.setDate(expires);
-            boolean listenForStatus = false;
-            // FINAL trumps INITIAL, in the case of SYN+CLOSE
-            if (packet.isFlagSet(FLAGS_FINAL_TAGS)) {
-                if (packet.isFlagSet(Packet.FLAG_ECHO)) {
-                    // Send LS for PING, not for PONG
-                    if (packet.getSendStreamId() <= 0)  // pong
-                        options.setSendLeaseSet(false);
-                } else {
+             // this should not block!
+             begin = _context.clock().now();
+             long expires = 0;
+             int pktTimeout = packet.getTimeout();
+             if (pktTimeout > 0) {
+                 // we want the router to expire it a little before we do,
+                 // so if we retransmit, it will use a new tunnel/lease combo
+                 // If we are really close to the timeout already, give this packet
+                 // a chance to be sent, but it's likely to be dropped on the
+                 // router side if we're running this far behind.
+                 expires = Math.max(begin + pktTimeout - I2CP_EXPIRATION_ADJUST, begin + 25);
+             }
+             SendMessageOptions options = new SendMessageOptions();
+             if (expires > 0)
+                 options.setDate(expires);
+             boolean listenForStatus = false;
+             // FINAL trumps INITIAL, in the case of SYN+CLOSE
+             if (packet.isFlagSet(FLAGS_FINAL_TAGS)) {
+                 if (packet.isFlagSet(Packet.FLAG_ECHO)) {
+                     // Send LS for PING, not for PONG
+                     if (packet.getSendStreamId() <= 0)  // pong
+                         options.setSendLeaseSet(false);
+                 } else {
                     options.setSendLeaseSet(false);
                 }
                 int sendTags = FINAL_TAGS_TO_SEND;
@@ -214,6 +215,10 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
 
         _cache.release(ba);
 
+        long enqueueElapsed = _context.clock().now() - enqueueStart;
+        if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE) && _log.shouldInfo())
+            _log.info("SYN packet enqueue: sent=" + sent + " elapsed=" + enqueueElapsed + "ms, " + packet);
+
         if (!sent) {
             if (_log.shouldWarn() && !isLogged) {_log.warn("Send failed for packet " + packet);}
             if (con != null) {con.disconnect(false);} // handle race on b0rk
@@ -255,18 +260,21 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
      * @param status of the message, as defined in MessageStatusMessage and this class.
      * @since 0.9.14
      */
-    public void messageStatus(I2PSession session, long msgId, int status) {
-        if (_dead) {return;}
-        Long id = Long.valueOf(msgId);
-        Connection con = _messageStatusMap.get(id);
-        if (con == null) {
-            if (_log.shouldWarn()) {
-                _log.warn("Received status [" + status + "] for [MsgID " + msgId + "] on UNKNOWN connection");
-            }
-            return;
-        }
+     public void messageStatus(I2PSession session, long msgId, int status) {
+         if (_dead) {return;}
+         Long id = Long.valueOf(msgId);
+         Connection con = _messageStatusMap.get(id);
+         if (con == null) {
+             if (_log.shouldWarn()) {
+                 _log.warn("Received status [" + status + "] for [MsgID " + msgId + "] on UNKNOWN connection");
+             }
+             return;
+         }
 
-        switch (status) {
+         if (_log.shouldInfo())
+             _log.info("MessageStatus [" + status + "] for [MsgID " + msgId + "] " + con);
+
+         switch (status) {
             case MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE:
             // not really guaranteed
             case MessageStatusMessage.STATUS_SEND_GUARANTEED_FAILURE:
@@ -301,7 +309,6 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 }
                 _messageStatusMap.remove(id);
                 break;
-
 
             case MessageStatusMessage.STATUS_SEND_FAILURE_ROUTER:
             case MessageStatusMessage.STATUS_SEND_FAILURE_NETWORK:

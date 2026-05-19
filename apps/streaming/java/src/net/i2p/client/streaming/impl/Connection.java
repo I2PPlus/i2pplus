@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -14,6 +15,7 @@ import net.i2p.client.I2PSession;
 import net.i2p.client.streaming.I2PSocketException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
+import net.i2p.data.Hash;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.util.BandwidthEstimator;
 import net.i2p.util.Log;
@@ -25,6 +27,11 @@ import net.i2p.util.SystemVersion;
  * Maintain the state controlling a streaming connection between two destinations.
  */
 class Connection {
+    /** Track last LeaseSet purge time per destination to prevent redundant purges. */
+    private static final ConcurrentHashMap<Hash, Long> _lastLeaseSetPurgeTime = new ConcurrentHashMap<Hash, Long>();
+    /** Cooldown period between LeaseSet purges for the same destination (5 minutes). */
+    private static final long LEASESET_PURGE_COOLDOWN = 5 * 60 * 1000;
+
     private final I2PAppContext _context;
     private final Log _log;
     private final ConnectionManager _connectionManager;
@@ -74,6 +81,7 @@ class Connection {
     private volatile long _pacingRate; // bytes per second
     private volatile long _lastPacketSendTime;
     private final Object _pacingLock = new Object();
+
     /** has the other side choked us? */
     private volatile boolean _isChoked;
     /** are we choking the other side? */
@@ -184,6 +192,10 @@ class Connection {
         _connectionEvent = new ConEvent();
         _retransmitEvent = new RetransmitEvent();
 
+        // Initialize pacing
+        _pacingRate = calculatePacingRate();
+        _lastPacketSendTime = 0;
+
         // Initialize random wait for activity timer randomization and bandwidth estimator
         _randomWait = _context.random().nextInt(3*1000); // 0-3 seconds randomization
         _bwEstimator = new SimpleBandwidthEstimator(_context, _options);
@@ -206,7 +218,7 @@ class Connection {
         long rateBytesPerSec = (long) cwnd * mss * 1000 / rtt;
 
         // Ensure minimum rate to prevent excessive delays
-        long minRate = 256 * 1024; // 256 KB/s minimum for better bandwidth utilization
+        long minRate = 256 * 1024; // 256 KB/s minimum
         return Math.max(rateBytesPerSec, minRate);
     }
 
@@ -485,18 +497,7 @@ class Connection {
             pacedEvent.schedule(pacingDelay);
         } else {
             // Send immediately
-            enqueuePacket(packet);
-        }
-    }
-
-    /**
-     * Actually enqueue the packet after pacing delay.
-     */
-    private void enqueuePacket(PacketLocal packet) {
-        if (_outboundQueue.enqueue(packet)) {
-            synchronized (_pacingLock) {
-                _lastPacketSendTime = _context.clock().now();
-            }
+            _outboundQueue.enqueue(packet);
             _unackedPacketsReceived.set(0);
             _lastSendTime = _context.clock().now();
             resetActivityTimer();
@@ -1193,51 +1194,67 @@ class Connection {
      * wait until a connection is made or the connection fails within the
      * timeout period, setting the error accordingly.
      */
-    void waitForConnect() {
-        long now = _context.clock().now();
-        long expiration = now + _options.getConnectTimeout();
-        while (true) {
-            if (_connected.get() && (_receiveStreamId.get() > 0) && (_sendStreamId.get() > 0)) {
-                // w00t
-                if (_log.shouldDebug()) {_log.debug("waitForConnect(): Connected and we have Stream IDs");}
-                return;
-            }
-            if (_connectionError != null) {
-                if (_log.shouldDebug()) {
-                    _log.debug("waitForConnect(): connection error found: " + _connectionError);
-                }
-                return;
-            }
-            if (!_connected.get()) {
-                _connectionError = "Connection failed";
-                if (_log.shouldDebug()) {_log.debug("waitForConnect(): not connected");}
-                return;
-            }
+     void waitForConnect() {
+         long connectStart = _context.clock().now();
+         long now = _context.clock().now();
+         long expiration = now + _options.getConnectTimeout();
+         if (_log.shouldInfo())
+             _log.info("waitForConnect() starting for " + _remotePeer + " (timeout=" + _options.getConnectTimeout() + "ms)");
+         while (true) {
+             if (_connected.get() && (_receiveStreamId.get() > 0) && (_sendStreamId.get() > 0)) {
+                 // w00t
+                 long elapsed = _context.clock().now() - connectStart;
+                 if (_log.shouldInfo())
+                     _log.info("waitForConnect() connected in " + elapsed + "ms for " + _remotePeer);
+                 if (_log.shouldDebug()) {_log.debug("waitForConnect(): Connected and we have Stream IDs");}
+                 return;
+             }
+             if (_connectionError != null) {
+                 long elapsed = _context.clock().now() - connectStart;
+                 if (_log.shouldInfo())
+                     _log.info("waitForConnect() error after " + elapsed + "ms: " + _connectionError);
+                 if (_log.shouldDebug()) {
+                     _log.debug("waitForConnect(): connection error found: " + _connectionError);
+                 }
+                 return;
+             }
+             if (!_connected.get()) {
+                 long elapsed = _context.clock().now() - connectStart;
+                 if (_log.shouldInfo())
+                     _log.info("waitForConnect() failed after " + elapsed + "ms: not connected");
+                 _connectionError = "Connection failed";
+                 if (_log.shouldDebug()) {_log.debug("waitForConnect(): not connected");}
+                 return;
+             }
 
-            long timeLeft = expiration - now;
-            if ((timeLeft <= 0) && (_options.getConnectTimeout() > 0)) {
-                if (_connectionError == null) {
-                    _connectionError = "Connection timed out";
-                    disconnect(false);
-                }
-                if (_log.shouldDebug()) {
-                    _log.debug("waitForConnect(): timed out: " + _connectionError);
-                }
-                return;
-            }
-            if (timeLeft > MAX_CONNECT_TIMEOUT) {timeLeft = MAX_CONNECT_TIMEOUT;}
-            else if (_options.getConnectTimeout() <= 0) {timeLeft = DEFAULT_CONNECT_TIMEOUT;}
+             long timeLeft = expiration - now;
+             if ((timeLeft <= 0) && (_options.getConnectTimeout() > 0)) {
+                 long elapsed = _context.clock().now() - connectStart;
+                 if (_connectionError == null) {
+                     _connectionError = "Connection timed out";
+                     disconnect(false);
+                 }
+                 if (_log.shouldInfo())
+                     _log.info("waitForConnect() timed out after " + elapsed + "ms: " + _connectionError);
+                 if (_log.shouldDebug()) {
+                     _log.debug("waitForConnect(): timed out: " + _connectionError);
+                 }
+                 return;
+             }
+             if (timeLeft > MAX_CONNECT_TIMEOUT) {timeLeft = MAX_CONNECT_TIMEOUT;}
+             else if (_options.getConnectTimeout() <= 0) {timeLeft = DEFAULT_CONNECT_TIMEOUT;}
 
-            if (_log.shouldDebug()) {_log.debug("waitForConnect(): wait " + timeLeft);}
-            try {
-                synchronized (_connectLock) {_connectLock.wait(timeLeft);}
-            } catch (InterruptedException ie) {
-                if (_log.shouldDebug()) _log.debug("waitForConnect(): InterruptedException");
-                _connectionError = "InterruptedException";
-                return;
-            }
-        }
-    }
+             if (_log.shouldDebug()) {_log.debug("waitForConnect(): wait " + timeLeft);}
+             try {
+                 synchronized (_connectLock) {_connectLock.wait(timeLeft);}
+             } catch (InterruptedException ie) {
+                 if (_log.shouldDebug()) _log.debug("waitForConnect(): InterruptedException");
+                 _connectionError = "InterruptedException";
+                 return;
+             }
+             now = _context.clock().now();
+         }
+     }
 
     private void resetActivityTimer() {
         long howLong = _options.getInactivityTimeout();
@@ -1412,6 +1429,57 @@ class Connection {
     }
 
     /**
+     * Invalidate the cached LeaseSet for the remote peer when SYN retransmissions fail.
+     * This handles the case where the server's tunnels have changed but our cached
+     * LeaseSet is still "current" (not expired by time), causing SYNs to be sent
+     * into dead tunnels.
+     *
+     * Called when SYN packets have been retransmitted 3+ times with no ACK response.
+     * After invalidation, the next message send will trigger a fresh LeaseSet lookup
+     * from floodfills, which should return the server's current tunnel IDs.
+     */
+    private void invalidateStaleLeaseSet() {
+        if (_remotePeer == null) {return;}
+        final Hash destHash = _remotePeer.calculateHash();
+        // Check cooldown - prevent redundant purges for the same destination
+        Long lastPurge = _lastLeaseSetPurgeTime.get(destHash);
+        long now = _context.clock().now();
+        if (lastPurge != null && (now - lastPurge) < LEASESET_PURGE_COOLDOWN) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping LeaseSet purge for [" +
+                    destHash.toBase32().substring(0, 8) + "] - cooldown active (" +
+                    ((now - lastPurge) / 1000) + "s elapsed)");
+            }
+            return;
+        }
+        _lastLeaseSetPurgeTime.put(destHash, Long.valueOf(now));
+        // Check if we're running embedded (RouterContext available)
+        // Use reflection to avoid compile-time dependency on router classes
+        try {
+            Class<?> routerCtxClass = Class.forName("net.i2p.router.RouterContext");
+            if (!routerCtxClass.isInstance(_context)) {return;}
+            Object rctx = routerCtxClass.cast(_context);
+            java.lang.reflect.Method clientNetDbMethod = routerCtxClass.getMethod("clientNetDb", Hash.class);
+            Object netDb = clientNetDbMethod.invoke(rctx, destHash);
+            if (netDb != null) {
+                java.lang.reflect.Method failMethod = netDb.getClass().getMethod("fail", Hash.class);
+                failMethod.invoke(netDb, destHash);
+                if (_log.shouldWarn()) {
+                    _log.warn("Invalidated stale LeaseSet for [" +
+                        destHash.toBase32().substring(0, 8) + "] after 3 SYN retransmits");
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            // Not running embedded - ignore
+        } catch (Exception e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Failed to invalidate LeaseSet for [" +
+                    destHash.toBase32().substring(0, 8) + "]: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
      *  A single retransmit timer for all packets.
      *  See RFCs 5681 and 6298.
      *
@@ -1514,6 +1582,12 @@ class Connection {
                     packet.cancelled();
                     disconnect(false);
                     return;
+                } else if (nResends == 3 && !getIsConnected() && _remotePeer != null) {
+                    // SYN has been retransmitted 3 times with no response - likely stale LeaseSet.
+                    // Invalidate the cached LeaseSet so the next send triggers a fresh lookup.
+                    // This handles the case where the server's tunnels changed but our cached
+                    // LeaseSet is still "current" (not expired by time).
+                    invalidateStaleLeaseSet();
                 } else if (packet.getNumSends() >= 3 &&
                            packet.isFlagSet(Packet.FLAG_CLOSE) &&
                            packet.getPayloadSize() <= 0 &&
@@ -1593,7 +1667,10 @@ class Connection {
         public void timeReached() {
             // Verify connection is still valid and packet not already sent/cancelled
             if (_connected.get() && _packet.getAckTime() <= 0 && _packet.getNumSends() <= 0) {
-                enqueuePacket(_packet);
+                _outboundQueue.enqueue(_packet);
+                _unackedPacketsReceived.set(0);
+                _lastSendTime = _context.clock().now();
+                resetActivityTimer();
             }
             // If connection closed or packet already handled, event simply drops - this is correct behavior
         }

@@ -310,11 +310,11 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             if (_log.shouldDebug())
                 _log.debug("Send Outbound client message - LeaseSet for " + _toString + " found locally");
             if (!_leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR / 4)) {
-                // If it's about to expire, refetch in the background, we'll probably need it again.
-                // This will prevent stalls later.
+                // LeaseSet is expired or about to expire. Trigger a remote lookup to get
+                // fresh tunnels, but also try sending immediately with stale data.
+                // The send() method guards against duplicates via _finished flag.
                 boolean shouldFetch = true;
                 if (_leaseSet.getType() != DatabaseEntry.KEY_TYPE_LEASESET) {
-                    // For LS2, we have a bit that tells us if it is published.
                     LeaseSet2 ls2 = (LeaseSet2) _leaseSet;
                     shouldFetch = !ls2.isUnpublished() || ls2.isBlindedWhenPublished();
                 }
@@ -322,9 +322,14 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     if (_log.shouldInfo()) {
                         long exp = now - _leaseSet.getLatestLeaseDate();
                         _log.info("LeaseSet expired " + DataHelper.formatDuration(exp) +
-                                  " ago, initiating search for: " + _leaseSet.getHash().toBase32());
+                                  " ago, initiating remote search for: " + _leaseSet.getHash().toBase32());
                     }
-                    kndf.lookupLeaseSetRemotely(_leaseSet.getHash(), _from.calculateHash());
+                    _leaseSetLookupBegin = getContext().clock().now();
+                    LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
+                    // Use lookupLeaseSetRemotely to force a remote lookup (lookupLeaseSet would
+                    // find the same expired LS locally and call success immediately).
+                    kndf.lookupLeaseSetRemotely(_leaseSet.getHash(), success, failed,
+                                                LS_LOOKUP_TIMEOUT, _from.calculateHash());
                 }
             }
             success.runJob();
@@ -554,12 +559,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             int cause;
             if (getContext().clientNetDb(_from.calculateHash()).isNegativeCachedForever(_to.calculateHash())) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Cannot send to " + _toString + " -> Unsupported Signature type");
+                    _log.warn("[MSG-TRACE] Cannot send to " + _toString + " -> Unsupported Signature type");
                 }
                 cause = MessageStatusMessage.STATUS_SEND_FAILURE_UNSUPPORTED_ENCRYPTION;
             } else {
-                if (_log.shouldInfo()) {
-                    _log.info("Cannot send to " + _toString + " -> LeaseSet not found");
+                if (_log.shouldWarn()) {
+                    _log.warn("[MSG-TRACE] Cannot send to " + _toString + " -> LeaseSet not found after " +
+                              DataHelper.formatDuration(getContext().clock().now() - _leaseSetLookupBegin));
                 }
                 cause = MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
             }
@@ -588,6 +594,12 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         if (now >= _overallExpiration) {
             dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_EXPIRED);
             return;
+        }
+
+        boolean isStale = _leaseSet != null && !_leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR / 4);
+        if (isStale && _log.shouldWarn()) {
+            _log.warn("[MSG-TRACE] Sending with STALE LeaseSet for " + _toString + " (expires " +
+                      DataHelper.formatDuration(now - _leaseSet.getLatestLeaseDate()) + " ago)");
         }
 
         _outTunnel = selectOutboundTunnel(_to);
@@ -719,6 +731,11 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                            + _toString + " at [TunnelID "
                            + _lease.getTunnelId() + "] on Gateway ["
                            + _lease.getGateway().toBase64().substring(0,6) + "]");
+        }
+        if (_log.shouldInfo()) {
+            _log.info("[MSG-TRACE] Dispatching to " + _toString + " via OB tunnel " + _outTunnel.getSendTunnelId(0) +
+                      " -> lease tunnel " + _lease.getTunnelId() + " @ GW [" +
+                      _lease.getGateway().toBase32().substring(0, 6) + "]");
         }
 
         DispatchJob dispatchJob = new DispatchJob(msg, selector, onReply, onFail);
@@ -946,9 +963,14 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             default: statusToString = "Unknown status"; // handle unknown status
         }
         if (_log.shouldWarn()) {
+            String lsInfo = _leaseSet != null ?
+                ("LS=" + _leaseSet.getHash().toBase32().substring(0, 8) +
+                 " leases=" + _leaseSet.getLeaseCount() +
+                 " current=" + _leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR)) :
+                "LS=null";
             if (!statusToString.isEmpty() && !statusToString.equals("Unknown status")) {
-                _log.warn("Sending of " + _clientMessageId + " to " + _toString +
-                          " failed after " + sendTime + "ms -> " + statusToString);
+                _log.warn("[MSG-TRACE] Send FAIL to " + _toString + " after " + sendTime + "ms -> " +
+                          statusToString + " (" + lsInfo + ")");
             } else {
                 _log.warn("Sending of " + _clientMessageId + " to " + _toString +
                           " failed after " + sendTime + "ms (Status code: " + status + ")");
@@ -1209,7 +1231,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     if (skm != null) {skm.failTags(_encryptionKey, _key, _tags);}
                 }
             }
-            if (old == Result.NONE) {dieFatal(MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE);}
+            if (old == Result.NONE) {
+                if (_log.shouldWarn()) {
+                    _log.warn("[MSG-TRACE] Send TIMEOUT to " + _toString + " after " +
+                              DataHelper.formatDuration(getContext().clock().now() - _start));
+                }
+                dieFatal(MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE);
+            }
         }
     }
 

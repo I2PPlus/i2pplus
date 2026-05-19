@@ -45,6 +45,13 @@ class SchedulerPreconnect extends SchedulerImpl {
                 _log.debug("Sending available for the SYN on " + con);
             con.sendAvailable();
             con.setNextSendTime(-1);
+            if (!con.getIsConnected()) {
+                if (_log.shouldWarn())
+                    _log.warn("[SYN-TRACE] SYN send failed for " + con + " -> marking connection as failed");
+                con.setConnectionError("SYN send failed");
+            } else if (_log.shouldInfo()) {
+                _log.info("[SYN-TRACE] SYN sent successfully on " + con);
+            }
         } else {
             if (_log.shouldDebug())
                 _log.debug("Waiting " + timeTillSend + "ms before sending the SYN on " + con);

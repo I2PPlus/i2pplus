@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.NoRouteToHostException;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -38,6 +39,7 @@ import net.i2p.i2ptunnel.localServer.LocalHTTPServer;
 import net.i2p.util.ConvertToHash;
 import net.i2p.util.DNSOverHTTPS;
 import net.i2p.util.EventDispatcher;
+import net.i2p.util.I2PThread;
 import net.i2p.util.InternalSocket;
 import net.i2p.util.PortMapper;
 import net.i2p.i2ptunnel.BlacklistBean;
@@ -1302,7 +1304,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     if (_log.shouldInfo())
                         _log.info("[HTTPClient] B32 lookup out of session for: " + destination);
                     // TODO can't get result code from here
-                    clientDest = _context.namingService().lookup(destination);
+                    clientDest = lookupWithTimeout(destination, 30*1000);
                 }
             } else {
                 String destName = destination;
@@ -1310,7 +1312,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     destName = destination.substring(0,15) + "...";
                 if (_log.shouldInfo())
                     _log.info("[HTTPClient] Looking up hostname: " + destName);
-                clientDest = _context.namingService().lookup(destination);
+                clientDest = lookupWithTimeout(destination, 30*1000);
             }
 
             // Check if the requested destination is blacklisted
@@ -1415,27 +1417,36 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // that should be extremely rare, so don't bother.
             // For common use patterns including outproxy use,
             // this should still be quite effective.
+            boolean needNewSocket = false;
             if (i2ps == null || i2ps.isClosed() ||
                 remotePort != i2ps.getPort() ||
-                !clientDest.equals(i2ps.getPeerDestination()) ||
-                i2ps.getInputStream().available() > 0) {
-
-                if (i2ps != null) {
+                !clientDest.equals(i2ps.getPeerDestination())) {
+                needNewSocket = true;
+            } else {
+                // Health check: verify the socket is still alive before reuse.
+                // getInputStream() throws on dead sockets, which means the
+                // underlying tunnel or connection has failed.
+                try {
                     int avail = i2ps.getInputStream().available();
                     if (avail > 0) {
-                        // server side bug workaround?
+                        // Server-side bug workaround: unread data on kept-alive socket
                         if (_log.shouldWarn()) {
                             byte[] tmp = new byte[avail];
                             i2ps.getInputStream().read(tmp);
                             _log.warn("Resetting old socket with unread data: " + avail + '\n' + net.i2p.util.HexDump.dump(tmp));
                         }
                         try { i2ps.reset(); } catch (IOException ioe) {}
-                    } else {
-                        if (_log.shouldInfo())
-                            _log.info("Old socket closed or different dest/port, opening new one");
-                        try { i2ps.close(); } catch (IOException ioe) {}
                     }
+                } catch (IOException ioe) {
+                    // Socket is dead (tunnel expired, connection lost, etc.)
+                    if (_log.shouldInfo())
+                        _log.info("I2P socket health check failed, opening new one");
+                    try { i2ps.close(); } catch (IOException ioe2) {}
+                    needNewSocket = true;
                 }
+            }
+
+            if (needNewSocket) {
 
                 Properties opts = new Properties();
                 //opts.setProperty("i2p.streaming.inactivityTimeout", ""+120*1000);
@@ -1455,7 +1466,23 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     throw re;
                 }
                 if (remotePort > 0) {sktOpts.setPort(remotePort);}
-                i2ps = createI2PSocket(clientDest, sktOpts);
+                // Retry once on transient connection failures (tunnel build failure,
+                // temporary no-routes). NoRouteToHostException is thrown when the
+                // destination is unreachable or tunnels fail to build.
+                int connectAttempts = 0;
+                while (true) {
+                    try {
+                        i2ps = createI2PSocket(clientDest, sktOpts);
+                        break;
+                    } catch (NoRouteToHostException nrhe) {
+                        connectAttempts++;
+                        if (connectAttempts >= 2) {throw nrhe;}
+                        if (_log.shouldInfo()) {
+                            _log.info(getPrefix(requestId) + "Connection failed, retrying: " + nrhe.getMessage());
+                        }
+                        try {Thread.sleep(2000);} catch (InterruptedException ie) {throw nrhe;}
+                    }
+                }
             }
 
             I2PTunnelRunner t;
@@ -1875,4 +1902,55 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
     }
 ****/
+
+    /**
+     *  Look up a hostname with a timeout to prevent blocking the request handler.
+     *  Naming service lookups can block on NetDB searches or network fetches
+     *  for minutes if the destination isn't cached locally.
+     *
+     *  @param hostname to resolve
+     *  @param timeoutMs maximum time to wait
+     *  @return resolved Destination or null if lookup failed or timed out
+     *  @since 0.9.70+
+     */
+    private Destination lookupWithTimeout(String hostname, long timeoutMs) {
+        final Destination[] result = new Destination[1];
+        final boolean[] done = new boolean[1];
+        I2PThread lookupThread = new I2PThread("Naming lookup for " + hostname) {
+            @Override
+            public void run() {
+                try {
+                    result[0] = _context.namingService().lookup(hostname);
+                } catch (Exception e) {
+                    if (_log.shouldDebug())
+                        _log.debug("[HTTPClient] Naming lookup exception for " + hostname + ": " + e.getMessage());
+                } finally {
+                    synchronized (done) {
+                        done[0] = true;
+                        done.notifyAll();
+                    }
+                }
+            }
+        };
+        lookupThread.setDaemon(true);
+        lookupThread.start();
+        synchronized (done) {
+            while (!done[0]) {
+                try {
+                    done.wait(timeoutMs);
+                } catch (InterruptedException ie) {
+                    lookupThread.interrupt();
+                    return null;
+                }
+                if (!done[0]) {
+                    if (_log.shouldWarn())
+                        _log.warn("[HTTPClient] Naming lookup timed out for " + hostname + " after " + timeoutMs + "ms");
+                    lookupThread.interrupt();
+                    return null;
+                }
+            }
+        }
+        return result[0];
+    }
+
 }

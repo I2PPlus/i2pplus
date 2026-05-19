@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.i2p.router.JobImpl;
-import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
@@ -33,31 +32,21 @@ class ExpireJob extends JobImpl {
     private static final long BATCH_WINDOW = 5 * 1000;
     private static final long OB_EARLY_EXPIRE = 30*1000;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
+    /** Keep tunnels alive for 10 minutes after LeaseSet refresh so clients
+     *  with cached (stale) LeaseSets can still connect using old tunnel IDs. */
+    private static final long LEASESET_GRACE_PERIOD = 10 * 60 * 1000;
     private static final long MAX_ENTRY_LIFETIME = 15 * 60 * 1000L;
     private static final int MAX_ITERATE_PER_RUN = 2000;
     private static final int MAX_ITERATE_BACKED_UP = 5000;
     private static final int BACKED_UP_THRESHOLD = 100;
-
-    public ExpireJob(RouterContext ctx, PooledTunnelCreatorConfig cfg) {
-        super(ctx);
-        _cfg = cfg;
-        long expire = cfg.getExpiration();
-        if (cfg.getTunnelPool().getSettings().isInbound()) {
-            _dropAfter = expire + (2 * Router.CLOCK_FUDGE_FACTOR);
-            expire -= IB_EARLY_EXPIRE + ctx.random().nextLong(IB_EARLY_EXPIRE);
-        } else {
-            _dropAfter = expire + Router.CLOCK_FUDGE_FACTOR;
-            expire -= OB_EARLY_EXPIRE + ctx.random().nextLong(OB_EARLY_EXPIRE);
-        }
-        cfg.setExpiration(expire);
-        getTiming().setStartAfter(expire);
-    }
 
     @Override
     public String getName() {return "Expire Local Tunnels";}
 
     /**
      * Schedule a tunnel for batched expiration.
+     * Applies randomized early expiration to reduce the chance of
+     * LeaseSet/tunnel mismatch during the transition period.
      * @param ctx the router context
      * @param cfg the tunnel config to expire
      */
@@ -70,15 +59,24 @@ class ExpireJob extends JobImpl {
             return;
         }
         long expire = cfg.getExpiration();
-        boolean isInbound = cfg.getTunnelPool().getSettings().isInbound();
-        long dropAfter;
-        if (isInbound) {
-            dropAfter = expire + (2 * Router.CLOCK_FUDGE_FACTOR);
+        // Apply randomized early expiration so tunnels expire before their
+        // official expiration time, giving LeaseSet refresh time to propagate
+        if (cfg.getTunnelPool().getSettings().isInbound()) {
+            expire -= IB_EARLY_EXPIRE + ctx.random().nextLong(IB_EARLY_EXPIRE);
         } else {
-            dropAfter = expire + Router.CLOCK_FUDGE_FACTOR;
+            expire -= OB_EARLY_EXPIRE + ctx.random().nextLong(OB_EARLY_EXPIRE);
         }
+        cfg.setExpiration(expire);
+        // Keep tunnel alive for 10 minutes after phase 1 (LeaseSet refresh)
+        // so clients with cached LeaseSets can still connect using old tunnel IDs.
+        long dropAfter = expire + LEASESET_GRACE_PERIOD;
         TunnelExpiration te = new TunnelExpiration(cfg, key, expire, dropAfter, ctx.clock().now());
         _expirations.put(key, te);
+
+        if (ctx.logManager().getLog(ExpireJob.class).shouldInfo()) {
+            ctx.logManager().getLog(ExpireJob.class).info("Scheduled expiration for tunnel " + key +
+                " at " + expire + " (drop at " + dropAfter + ")");
+        }
 
         synchronized (ExpireJob.class) {
             if (!_isScheduled) {
@@ -123,6 +121,7 @@ class ExpireJob extends JobImpl {
         }
         long now = getContext().clock().now();
         int startSize = _expirations.size();
+        Log log = getContext().logManager().getLog(ExpireJob.class);
 
         List<TunnelExpiration> readyToExpire = new ArrayList<>();
         List<TunnelExpiration> readyToDrop = new ArrayList<>();
@@ -174,28 +173,49 @@ class ExpireJob extends JobImpl {
             pool.removeTunnel(cfg);
             poolsToRefresh.add(pool);
             te.phase1Complete = true;
-            long timeToDrop = te.dropTime - now;
-            if (timeToDrop > 0) {
-                continue;
+            if (log.shouldInfo()) {
+                log.info("Phase 1 complete for tunnel " + te.tunnelKey +
+                    " (removed from pool, LeaseSet refresh pending)");
             }
-            readyToDrop.add(te);
+            // Never allow immediate phase 2 - always enforce grace period
+            // even if the job runs late, to give clients with cached LeaseSets
+            // time to transition to the new tunnels
         }
 
+        // Force refresh all pools - bypass throttling to ensure LeaseSets
+        // are updated immediately before tunnels are dropped
         for (TunnelPool pool : poolsToRefresh) {
-            pool.refreshLeaseSet();
+            pool.refreshLeaseSet(true);
         }
 
         for (TunnelExpiration te : readyToDrop) {
             PooledTunnelCreatorConfig cfg = te.config;
             if (cfg != null) {
                 getContext().tunnelDispatcher().remove(cfg);
+                if (log.shouldInfo()) {
+                    log.info("Phase 2 complete for tunnel " + te.tunnelKey +
+                        " (removed from dispatcher)");
+                }
             }
             _expirations.remove(te.tunnelKey);
         }
 
         int remaining = _expirations.size();
-        // Don't reschedule here - scheduleExpiration() handles scheduling when new tunnels need expiry
-        // This prevents exponential job queue growth from self-rescheduling
+        if (log.shouldInfo() && (readyToExpire.size() > 0 || readyToDrop.size() > 0)) {
+            log.info("ExpireJob processed " + readyToExpire.size() + " phase 1, " +
+                readyToDrop.size() + " phase 2, " + remaining + " remaining");
+        }
+        // Reschedule if there are remaining entries to process
+        if (remaining > 0) {
+            synchronized (ExpireJob.class) {
+                if (!_isScheduled) {
+                    _isScheduled = true;
+                    ExpireJob nextJob = new ExpireJob(getContext());
+                    nextJob.getTiming().setStartAfter(now + BATCH_WINDOW);
+                    getContext().jobQueue().addJob(nextJob);
+                }
+            }
+        }
     }
 
     private static class TunnelExpiration {

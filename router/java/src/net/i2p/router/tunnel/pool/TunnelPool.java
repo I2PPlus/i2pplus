@@ -420,13 +420,13 @@ public class TunnelPool {
                                    _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
                                    _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
 
-                int minTunnels = isFirewalled ? 3 : 1; // Keep 6 tunnels for firewalled routers
+                int minTunnels = isFirewalled ? 3 : 2; // Keep minimum tunnels for redundancy
 
                 rv = Math.max(minTunnels, _settings.getTotalQuantity() / reductionFactor);
 
-                // Additional safety: never reduce below 1 for non-firewalled, 3 for firewalled
+                // Additional safety: never reduce below 2 for non-firewalled, 3 for firewalled
                 if (isFirewalled && rv < 3) {rv = 3;}
-                else if (rv < 1) {rv = 1;}
+                else if (rv < 2) {rv = 2;}
 
                 if (fails >= 10 && _log.shouldWarn() && !shouldSuppressTimeoutWarning() && uptime > STARTUP_TIME) {
                     _log.warn("Limiting to " + rv + " tunnels after " + fails +

@@ -558,50 +558,56 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @throws NoRouteToHostException if the peer is not found or not reachable
      * @throws I2PException if there is some other I2P-related problem
      */
-    public I2PSocket connect(Destination peer, I2PSocketOptions options)
-                             throws I2PException, NoRouteToHostException {
-        if (peer == null)
-            throw new NullPointerException();
-        if (options == null)
-            options = _defaultOptions;
-        ConnectionOptions opts = null;
-        if (options instanceof ConnectionOptions)
-            opts = new ConnectionOptions((ConnectionOptions)options);
-        else
-            opts = new ConnectionOptions(options);
-
-        if (_log.shouldInfo())
-            _log.info("Connecting to [" + peer.calculateHash().toBase64().substring(0,6)
-                      + "]\nOptions: " + opts);
-        // pick the subsession here
-        I2PSession session = _session;
-        if (!_subsessions.isEmpty()) {
-            updateUserDsaList();
-            Hash h = peer.calculateHash();
-            SigAlgo myAlgo = session.getMyDestination().getSigType().getBaseAlgorithm();
-            if ((myAlgo == SigAlgo.EC && _ecUnsupported.contains(h)) ||
-                (myAlgo == SigAlgo.EdDSA && _edUnsupported.contains(h)) ||
-                (!_userDsaOnly.isEmpty() && _userDsaOnly.contains(h))) {
-                // FIXME just taking the first one for now
-                for (I2PSession sess : _subsessions) {
-                    if (sess.getMyDestination().getSigType() == SigType.DSA_SHA1) {
-                        session = sess;
-                        break;
-                    }
-                }
-            }
-        }
-        verifySession(session);
-        // the following blocks unless connect delay > 0
-        Connection con = _connectionManager.connect(peer, opts, session);
-        if (con == null)
-            throw new TooManyStreamsException("Too many streams, max " + _defaultOptions.getMaxConns());
-        I2PSocketFull socket = new I2PSocketFull(con,_context);
-        con.setSocket(socket);
-        if (con.getConnectionError() != null) {
-            con.disconnect(false);
-            throw new NoRouteToHostException(con.getConnectionError());
-        }
+     public I2PSocket connect(Destination peer, I2PSocketOptions options)
+                              throws I2PException, NoRouteToHostException {
+         if (peer == null)
+             throw new NullPointerException();
+         if (options == null)
+             options = _defaultOptions;
+         ConnectionOptions opts = null;
+         if (options instanceof ConnectionOptions)
+             opts = new ConnectionOptions((ConnectionOptions)options);
+         else
+             opts = new ConnectionOptions(options);
+         long connectStart = _context.clock().now();
+         String hashPrefix = peer.calculateHash().toBase64().substring(0,6);
+         if (_log.shouldInfo())
+             _log.info("Connecting to [" + hashPrefix + "]\nOptions: " + opts);
+         // pick the subsession here
+         I2PSession session = _session;
+         if (!_subsessions.isEmpty()) {
+             updateUserDsaList();
+             Hash h = peer.calculateHash();
+             SigAlgo myAlgo = session.getMyDestination().getSigType().getBaseAlgorithm();
+             if ((myAlgo == SigAlgo.EC && _ecUnsupported.contains(h)) ||
+                 (myAlgo == SigAlgo.EdDSA && _edUnsupported.contains(h)) ||
+                 (!_userDsaOnly.isEmpty() && _userDsaOnly.contains(h))) {
+                 // FIXME just taking the first one for now
+                 for (I2PSession sess : _subsessions) {
+                     if (sess.getMyDestination().getSigType() == SigType.DSA_SHA1) {
+                         session = sess;
+                         break;
+                     }
+                 }
+             }
+         }
+         verifySession(session);
+         // the following blocks unless connect delay > 0
+         Connection con = _connectionManager.connect(peer, opts, session);
+         long connectElapsed = _context.clock().now() - connectStart;
+         if (con == null)
+             throw new TooManyStreamsException("Too many streams, max " + _defaultOptions.getMaxConns());
+         I2PSocketFull socket = new I2PSocketFull(con,_context);
+         con.setSocket(socket);
+         if (con.getConnectionError() != null) {
+             long totalElapsed = _context.clock().now() - connectStart;
+             if (_log.shouldWarn())
+                 _log.warn("Connect failed to [" + hashPrefix + "] after " + totalElapsed + "ms: " + con.getConnectionError());
+             con.disconnect(false);
+             throw new NoRouteToHostException(con.getConnectionError());
+         }
+         if (_log.shouldInfo())
+             _log.info("Connected to [" + hashPrefix + "] in " + connectElapsed + "ms");
         return socket;
     }
 

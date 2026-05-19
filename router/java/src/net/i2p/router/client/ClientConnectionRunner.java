@@ -47,6 +47,7 @@ import net.i2p.data.i2cp.SessionId;
 import net.i2p.data.i2cp.SessionStatusMessage;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
+import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.crypto.TransientSessionKeyManager;
 import net.i2p.router.crypto.ratchet.MuxedPQSKM;
@@ -937,7 +938,8 @@ class ClientConnectionRunner {
             current = sp.currentLeaseSet;
             // Skip this check for meta, for now, TODO
             if (current != null && current.getLeaseCount() == leases &&
-                current.getType() != DatabaseEntry.KEY_TYPE_META_LS2) {
+                current.getType() != DatabaseEntry.KEY_TYPE_META_LS2 &&
+                current.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
                 for (int i = 0; i < leases; i++) {
                     if (! current.getLease(i).getTunnelId().equals(set.getLease(i).getTunnelId()))
                         break;
