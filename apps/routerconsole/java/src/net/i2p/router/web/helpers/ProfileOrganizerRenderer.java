@@ -221,7 +221,7 @@ class ProfileOrganizerRenderer {
                         long total = fails + accepted.computeAverages(ra, false).getTotalEventCount();
                         double failPercentage = (double) fails / total * 100;
 
-                        if (failPercentage <= 5.0) { // don't demote if less than 5%
+                        if (failPercentage > 5.0) { // demote if failure rate exceeds 5%
                             if (bonus == 9999999) {prof.setSpeedBonus(0);}
                             prof.setCapacityBonus(-30);
                             _context.profileOrganizer().demoteIfHighLatency(peer);
@@ -252,6 +252,16 @@ class ProfileOrganizerRenderer {
                     }
                     buf.append("\"></span>");
                 } else {buf.append("<span class=mostPass title=\"").append(_t("Most tests passing")).append("\">&ensp;</span>");}
+
+                // Check for congestion caps (D/E) and demote immediately
+                if (info != null && prof != null) {
+                    String caps = info.getCapabilities();
+                    if (caps != null && (caps.indexOf(net.i2p.router.Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
+                                         caps.indexOf(net.i2p.router.Router.CAPABILITY_CONGESTION_SEVERE) >= 0)) {
+                        prof.setCapacityBonus(-30);
+                        _context.profileOrganizer().demoteIfCongested(peer);
+                    }
+                }
                 buf.append("</td><td class=groups><span class=\"");
                 if (isIntegrated) buf.append("integrated ");
                 switch (tier) {

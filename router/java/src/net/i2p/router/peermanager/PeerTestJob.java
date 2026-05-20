@@ -725,6 +725,17 @@ public class PeerTestJob extends JobImpl {
                                           "] -> No capabilities published in RouterInfo");
                         } catch (NumberFormatException nfe) {}
                         return;
+                    } else if (prof != null && cap != null &&
+                               (cap.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
+                                cap.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0)) {
+                        try {
+                            prof.setCapacityBonus(-30);
+                            getContext().profileOrganizer().demoteIfCongested(h);
+                            if (_log.shouldInfo())
+                                _log.info("Setting capacity bonus to -30 for [" + _peer.toBase64().substring(0,6) +
+                                          "] -> Congestion cap (D/E) detected");
+                        } catch (NumberFormatException nfe) {}
+                        return;
                     }
                 }
             }

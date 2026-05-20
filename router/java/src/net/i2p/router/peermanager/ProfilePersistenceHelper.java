@@ -170,6 +170,7 @@ class ProfilePersistenceHelper {
         if (profile.getPeakTunnel1mThroughputKBps() >= 1) {
             add(buf, addComments, "tunnelPeakTunnel1mThroughput", (long) profile.getPeakTunnel1mThroughputKBps(), "Tunnel Peak Tunnel throughput for 1 minute (KB/s): " +
                 profile.getPeakTunnel1mThroughputKBps());
+            add(buf, addComments, "lastThroughputUpdate", profile.getLastThroughputUpdate(), "Last time throughput was recorded:");
         }
         if (addComments) {buf.append(HR).append(NL).append(NL);}
         out.write(buf.toString().getBytes("UTF-8"));
@@ -392,6 +393,7 @@ class ProfilePersistenceHelper {
             profile.setPeakThroughputKBps(getFloat(props, "tunnelPeakThroughput"));
             profile.setPeakTunnelThroughputKBps(getFloat(props, "tunnelPeakTunnelThroughput"));
             profile.setPeakTunnel1mThroughputKBps(getFloat(props, "tunnelPeakTunnel1mThroughput"));
+            profile.setLastThroughputUpdate(getLong(props, "lastThroughputUpdate"));
             profile.getTunnelHistory().load(props);
 
             // In the interest of keeping the in-memory profiles small,

@@ -22,6 +22,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.NetworkDatabaseFacade;
+import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.pool.TunnelPeerSelector;
 import net.i2p.router.util.MaskedIPSet;
@@ -172,7 +173,7 @@ public class ProfileOrganizer {
         finally {releaseReadLock();}
         if (rv != null) return rv;
 
-        if (isLowBandwidthTier(peer)) return null;
+        if (isExcludedFromProfiling(peer)) return null;
 
         rv = new PeerProfile(_context, peer);
         rv.setLastHeardAbout(rv.getFirstHeardAbout());
@@ -197,7 +198,7 @@ public class ProfileOrganizer {
         if (profile == null) return null;
         Hash peer = profile.getPeer();
         if (peer.equals(_us)) return null;
-        if (isLowBandwidthTier(peer)) return null;
+        if (isExcludedFromProfiling(peer)) return null;
 
         if (_log.shouldInfo()) {
             _log.info("New profile created for [" + peer.toBase64().substring(0,6) + "]");
@@ -617,12 +618,12 @@ public class ProfileOrganizer {
                      continue;
                  }
 
-                 // Skip peers in low bandwidth tiers (K, L, M, Unknown).
-                 // With isLowBandwidthTier() gating profile creation, this is mainly
-                 // a safety net for legacy profiles loaded from disk.
-                 if (isLowBandwidthTier(profile.getPeer())) {
-                     continue;
-                 }
+                  // Skip peers in low bandwidth tiers (K, L, M, Unknown) and G cap (no tunnels).
+                  // With isExcludedFromProfiling() gating profile creation, this is mainly
+                  // a safety net for legacy profiles loaded from disk.
+                  if (isExcludedFromProfiling(profile.getPeer())) {
+                      continue;
+                  }
 
                  if (!profile.getIsActive(now)) {
                      continue;
@@ -657,7 +658,6 @@ public class ProfileOrganizer {
             int minFast = getMinimumFastPeers();
             int added = 0;
             int target = minFast;
-            boolean earlyUptime = _context.router() != null && _context.router().getUptime() < 30 * 60 * 1000;
 
             if (_fastPeers.size() < target) {
                 // First, try from high-capacity peers
@@ -691,14 +691,15 @@ public class ProfileOrganizer {
                     }
                 }
 
-                // Third pass: during early uptime, accept peers with any historical activity
-                if (earlyUptime && _fastPeers.size() < target) {
-                    for (PeerProfile profile : candidates) {
+                // Third pass: accept any peer from capacity order to fill gaps
+                if (_fastPeers.size() < target) {
+                    for (PeerProfile profile : newStrictCapacityOrder) {
                         if (_fastPeers.size() >= target) break;
-                        if (profile.getLastSendSuccessful() > 0 || profile.getLastHeardFrom() > 0) {
-                            _fastPeers.put(profile.getPeer(), profile);
-                            added++;
-                        }
+                        if (profile.getPeer().equals(_us)) continue;
+                        if (profile.wasUnreachable()) continue;
+                        if (isLowBandwidthTier(profile.getPeer())) continue;
+                        _fastPeers.put(profile.getPeer(), profile);
+                        added++;
                     }
                 }
             }
@@ -892,6 +893,21 @@ public class ProfileOrganizer {
     }
 
     /**
+     *  Check if a peer should be excluded from profiling.
+     *  Excludes low bandwidth tiers (K, L, M, Unknown) and G cap (no tunnels).
+     *  @return true if the peer should not be profiled
+     *  @since 0.9.70+
+     */
+    boolean isExcludedFromProfiling(Hash peer) {
+        RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
+        if (peerInfo == null) return true;
+        String tier = peerInfo.getBandwidthTier();
+        if ("K".equals(tier) || "L".equals(tier) || "M".equals(tier) || "Unknown".equals(tier)) return true;
+        String caps = peerInfo.getCapabilities();
+        return caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
+    }
+
+    /**
      *  Check if a peer is in a low bandwidth tier (K, L, M, or Unknown).
      *  @return true if the peer should be excluded from profiling
      *  @since 0.9.70+
@@ -901,6 +917,31 @@ public class ProfileOrganizer {
         if (peerInfo == null) return true; // no RouterInfo, assume low bandwidth
         String tier = peerInfo.getBandwidthTier();
         return "K".equals(tier) || "L".equals(tier) || "M".equals(tier) || "Unknown".equals(tier);
+    }
+
+    /**
+     *  Check if a peer has a congestion capability cap (D or E).
+     *  @return true if the peer is moderately or severely congested
+     *  @since 0.9.70+
+     */
+    private boolean isCongestedPeer(Hash peer) {
+        RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
+        if (peerInfo == null) return false;
+        String caps = peerInfo.getCapabilities();
+        return caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
+               caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0;
+    }
+
+    /**
+     *  Check if a peer has the G cap (no tunnels).
+     *  @return true if the peer does not accept tunnel builds
+     *  @since 0.9.70+
+     */
+    private boolean isNoTunnelPeer(Hash peer) {
+        RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
+        if (peerInfo == null) return false;
+        String caps = peerInfo.getCapabilities();
+        return caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
     }
 
     private PeerProfile locked_getProfile(Hash peer) {
@@ -1032,20 +1073,37 @@ public class ProfileOrganizer {
         boolean lowTunnelAcceptance = isLowTunnelAcceptance(profile);
         // UI latency indicator is the source of truth: capacityBonus == -30 means high latency
         boolean highLatency = profile.getCapacityBonus() == -30;
+        // Congestion caps (D/E) indicate degraded capacity - exclude from fast/high-cap tiers
+        boolean congested = isCongestedPeer(peer);
 
         // Decide if peer qualifies for high-capacity tier
-        if (profile.getCapacityValue() >= effectiveCapThreshold && isPeerSelectable && !isStrictCountry && !lowTunnelAcceptance && !highLatency) {
+        if (profile.getCapacityValue() >= effectiveCapThreshold && isPeerSelectable && !isStrictCountry && !lowTunnelAcceptance && !highLatency && !congested) {
             _highCapacityPeers.put(peer, profile);
 
             // Also check if peer qualifies for fast tier
             if (profile.getSpeedValue() >= effectiveSpeedThreshold && profile.getIsActive() && !lowTunnelAcceptance) {
                 _fastPeers.put(peer, profile);
             }
-        } else if (_highCapacityPeers.size() < minHighCap && isPeerSelectable && !isStrictCountry && !lowTunnelAcceptance && !highLatency) {
+        } else if (_highCapacityPeers.size() < minHighCap && isPeerSelectable && !isStrictCountry && !lowTunnelAcceptance && !highLatency && !congested) {
             _highCapacityPeers.put(peer, profile);
+        } else if (isPeerSelectable && !isStrictCountry && !lowTunnelAcceptance && !highLatency && !congested && !isNoTunnelPeer(peer)) {
+            // Automatic promotion when there's spare capacity in high-cap tier
+            if (_highCapacityPeers.size() < getMaximumHighCapPeers()) {
+                _highCapacityPeers.put(peer, profile);
+            }
+        }
+
+        // Auto-promote to fast tier if peer has proven speed bonus and there's spare capacity
+        if (profile.getSpeedBonus() >= 9999999 && _fastPeers.size() < getMaximumFastPeers() &&
+            isPeerSelectable && !isStrictCountry && !lowTunnelAcceptance && !highLatency && !congested) {
+            _fastPeers.put(peer, profile);
         } else if (lowTunnelAcceptance) {
             if (_log.shouldDebug()) {
                 _log.debug("Peer skipped from high-cap tier due to low tunnel acceptance: " + peer.toBase32().substring(0, 6));
+            }
+        } else if (congested) {
+            if (_log.shouldDebug()) {
+                _log.debug("Peer skipped from high-cap tier due to congestion cap: " + peer.toBase32().substring(0, 6));
             }
         }
 
@@ -1071,6 +1129,57 @@ public class ProfileOrganizer {
                 }
                 if (inFast) _fastPeers.remove(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);
+            }
+        } finally {
+            releaseReadLock();
+        }
+    }
+
+    /**
+     * Immediately demote a peer from fast/high-cap tiers if it has a congestion cap (D/E).
+     * Sets capacityBonus = -30 so the UI reflects the demotion immediately.
+     * Non-blocking - only acts if the peer is currently in those tiers.
+     */
+    public void demoteIfCongested(Hash peer) {
+        getReadLock();
+        try {
+            boolean inFast = _fastPeers.containsKey(peer);
+            boolean inHighCap = _highCapacityPeers.containsKey(peer);
+            if (inFast || inHighCap) {
+                if (_log.shouldInfo()) {
+                    _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                              "] from fast/high-cap tiers due to congestion cap (D/E)");
+                }
+                if (inFast) _fastPeers.remove(peer);
+                if (inHighCap) _highCapacityPeers.remove(peer);
+                // Set capacityBonus = -30 so UI shows ✖ and reorganize excludes this peer
+                PeerProfile profile = locked_getProfile(peer);
+                if (profile != null) profile.setCapacityBonus(-30);
+            }
+        } finally {
+            releaseReadLock();
+        }
+    }
+
+    /**
+     * Immediately demote a peer from fast/high-cap tiers if it has G cap (no tunnels).
+     * Sets capacityBonus = -30 so the UI reflects the demotion immediately.
+     * Non-blocking - only acts if the peer is currently in those tiers.
+     */
+    public void demoteIfNoTunnel(Hash peer) {
+        getReadLock();
+        try {
+            boolean inFast = _fastPeers.containsKey(peer);
+            boolean inHighCap = _highCapacityPeers.containsKey(peer);
+            if (inFast || inHighCap) {
+                if (_log.shouldInfo()) {
+                    _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                              "] from fast/high-cap tiers due to no-tunnel cap (G)");
+                }
+                if (inFast) _fastPeers.remove(peer);
+                if (inHighCap) _highCapacityPeers.remove(peer);
+                PeerProfile profile = locked_getProfile(peer);
+                if (profile != null) profile.setCapacityBonus(-30);
             }
         } finally {
             releaseReadLock();

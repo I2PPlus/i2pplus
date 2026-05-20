@@ -92,6 +92,7 @@ public class PeerProfile {
     private final float _peakTunnelThroughput[] = new float[THROUGHPUT_COUNT];
     /** total number of bytes pushed through a single tunnel in a 1 minute period */
     private final float _peakTunnel1mThroughput[] = new float[THROUGHPUT_COUNT];
+    private long _lastThroughputUpdate;
     /** periodically cut the measured throughput values */
     private static final int DEGRADES_PER_DAY = 4;
     // one in this many times, ~= 61
@@ -508,6 +509,7 @@ public class PeerProfile {
 
     /** the tunnel pushed that much data in a 1 minute period */
     void dataPushed1m(int size) {
+        _lastThroughputUpdate = _context.clock().now();
         float lowPeak = _peakTunnel1mThroughput[THROUGHPUT_COUNT-1];
         if (size > lowPeak) {
             synchronized (_peakTunnel1mThroughput) {
@@ -556,6 +558,9 @@ public class PeerProfile {
         float speed = kBps * (60 * 1024);
         for (int i = 0; i < THROUGHPUT_COUNT; i++) {_peakTunnel1mThroughput[i] = speed;}
     }
+
+    long getLastThroughputUpdate() {return _lastThroughputUpdate;}
+    void setLastThroughputUpdate(long ts) {_lastThroughputUpdate = ts;}
 
     /**
      * When the given peer is performing well enough that we want to keep detailed
