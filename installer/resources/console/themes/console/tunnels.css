@@ -45,5 +45,4 @@ h3.toggle.nojobs,h3.toggle.nojobs .dropdown,h3.toggle.nojobs .dropdown::after{po
 #tunnels .status span{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle}
 #tunnels td.direction span,#tunnels td.expiry .percentBarOuter,#tunnels td.status span{vertical-align:middle!important}
 
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1.1)}50%{opacity:.7;transform:scale(.9)}}
 @keyframes building{0,100%{filter:saturate(1)}50%{filter:saturate(1.5) brightness(1.3)}}
