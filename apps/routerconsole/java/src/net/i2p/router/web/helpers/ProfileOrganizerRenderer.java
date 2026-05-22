@@ -119,7 +119,7 @@ class ProfileOrganizerRenderer {
             } else {
                 buf.append("<th class=host>").append(_t("Host")).append("</th>");
             }
-            buf.append("<th>").append(_t("Status")).append("</th>")
+            buf.append("<th class=status>").append(_t("Status")).append("</th>")
                .append("<th class=groups>").append(_t("Groups")).append("</th>")
                .append("<th data-sort-method=number>").append(_t("Speed")).append("</th>")
                .append("<th class=latency data-sort-method=number>").append(_t("Low Latency")).append("</th>")
@@ -194,7 +194,7 @@ class ProfileOrganizerRenderer {
                     }
                     buf.append("</span>");
                 } else {buf.append(ip != null ? ip : _t("unknown"));}
-                buf.append("</td><td>");
+                buf.append("</td><td class=status>");
                 boolean ok = true;
                 boolean isBanned = false;
                 boolean isUnreachable = false;
@@ -211,10 +211,12 @@ class ProfileOrganizerRenderer {
                 long fails = failed.computeAverages(ra, false).getTotalEventCount();
                 long bonus = prof.getSpeedBonus();
                 long capBonus = prof.getCapacityBonus();
-                if (ok && fails == 0) {buf.append("<span class=ok>").append(_t("OK")).append("</span>");}
+                boolean isTesting = prof != null && prof.getLastTestStarted() > 0 &&
+                                    (_context.clock().now() - prof.getLastTestStarted() < 15000);
+                if (ok && fails == 0) {buf.append("<span class=\"ok").append(isTesting ? " testing" : "").append("\">").append(_t("OK")).append("</span>");}
                 else if (!ok) {
                     buf.append("<span class=\"notOk").append(isBanned ? " banned" : "")
-                       .append(isUnreachable ? " unreachable" : "");
+                       .append(isUnreachable ? " unreachable" : "").append(isTesting ? " testing" : "");
 
                     if (fails > 0) {
                         Rate accepted = prof.getTunnelCreateResponseTime().getRate(RateConstants.ONE_HOUR);
@@ -232,7 +234,8 @@ class ProfileOrganizerRenderer {
                             buf.append(" failing").append(failPercentage >= 50.0 ? " fiftyPercent" : "");
                         }
                         buf.append("\" title=\"");
-                        buf.append("\u2022 ").append(fails).append('/').append(total).append(' ').append(_t("Test Fails"));
+                        long passed = total - fails;
+                        buf.append(passed).append('/').append(total).append(' ').append(_t("tests passed"));
                         if (isUnreachable) buf.append(" \u2022 ").append(_t("Unreachable"));
                         if (isBanned) buf.append(" \u2022 ").append(_t("Banned"));
                         buf.append("\">");
@@ -251,7 +254,10 @@ class ProfileOrganizerRenderer {
                         buf.append("\" title=\"\u2022 ").append(_t("Banned"));
                     }
                     buf.append("\"></span>");
-                } else {buf.append("<span class=mostPass title=\"").append(_t("Most tests passing")).append("\">&ensp;</span>");}
+                } else {
+                    buf.append("<span class=\"mostPass").append(isTesting ? " testing" : "")
+                       .append("\" title=\"").append(_t("Most tests passing")).append("\">&ensp;</span>");
+                }
 
                 // Check for congestion caps (D/E) and demote immediately
                 if (info != null && prof != null) {
