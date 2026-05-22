@@ -51,7 +51,7 @@ class ProfilePersistenceHelper {
     private static final String DIR_PREFIX = "p";
     private static final String B64 = Base64.ALPHABET_I2P;
     // Max to read in at startup
-    private static final int LIMIT_PROFILES = SystemVersion.isSlow() ? 1000 : 6000;
+    private static final int LIMIT_PROFILES = SystemVersion.isSlow() ? 2000 : 8000;
 
     private final File _profileDir;
     private Hash _us;
@@ -212,18 +212,24 @@ class ProfilePersistenceHelper {
         long down = _context.router().getEstimatedDowntime();
         long cutoff;
         if (down < 24*60*60*1000L) {
-            cutoff = start - 3*24*60*60*1000;  // 3 days for low downtime
+            cutoff = start - 14*24*60*60*1000;  // 14 days for low downtime (aligns with store expiry)
         } else if (down < 15*24*60*60*1000L) {
             cutoff = start - down - 14*24*60*60*1000;  // 14 days minus downtime
         } else {
-            cutoff = start - 7*24*60*60*1000;  // 7 days default
+            cutoff = start - 14*24*60*60*1000;  // 14 days default
         }
         List<File> files = selectFiles();
+
+        // Determine deletion threshold
+        // If under the limit, be conservative (3 weeks) to preserve historical data.
+        // If over the limit, use the standard cutoff (14 days).
+        long deleteCutoff = (files.size() > LIMIT_PROFILES) ? cutoff : (start - 21*24*60*60*1000);
+
         // Pre-filter stale files by file timestamp to avoid reading them
         List<File> freshFiles = new ArrayList<File>(files.size());
         int staleDeleted = 0;
         for (File f : files) {
-            if (f.lastModified() >= cutoff) {
+            if (f.lastModified() >= deleteCutoff) {
                 freshFiles.add(f);
             } else {
                 f.delete();
@@ -234,11 +240,18 @@ class ProfilePersistenceHelper {
             _log.info("Deleted " + staleDeleted + " stale profile files by timestamp");
         }
 
-        if (freshFiles.size() > LIMIT_PROFILES) {Collections.shuffle(freshFiles, _context.random());}
+        // Sort profiles by modification time (most recent first) to prioritize active peers
+        Collections.sort(freshFiles, new Comparator<File>() {
+            public int compare(File f1, File f2) {
+                return Long.compare(f2.lastModified(), f1.lastModified());
+            }
+        });
+
         List<PeerProfile> profiles = new ArrayList<PeerProfile>(Math.min(LIMIT_PROFILES, freshFiles.size()));
         int count = 0;
         for (File f : freshFiles) {
             if (count >= LIMIT_PROFILES) {
+                // Delete least active profiles when over the limit
                 f.delete();
                 continue;
             }
@@ -341,6 +354,7 @@ class ProfilePersistenceHelper {
             loadProps(props, file);
             long lastSentToSuccessfully = getLong(props, "lastSentToSuccessfully");
             long lastHeardFrom = getLong(props, "lastHeardFrom");
+            long lastHeardAbout = getLong(props, "lastHeardAbout");
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
             String caps = "";
 
@@ -351,13 +365,13 @@ class ProfilePersistenceHelper {
                 return null;
             }
 
-            if (lastSentToSuccessfully <= cutoff && lastHeardFrom <= cutoff) {
+            if (lastSentToSuccessfully <= cutoff && lastHeardFrom <= cutoff && lastHeardAbout <= cutoff) {
                 if (_log.shouldDebug()) {_log.debug("Deleting stale profile: " + file.getName());}
                 file.delete();
                 return null;
             }
 
-            if (!caps.isEmpty() && caps.contains("K") || caps.contains("L") || caps.contains("M") || caps.contains("U")) {
+            if (!caps.isEmpty() && (caps.contains("K") || caps.contains("L") || caps.contains("M") || caps.contains("U"))) {
                 if (_log.shouldDebug()) {_log.debug("Deleting uninteresting profile: " + file.getName() + " -> K, L, M or unreachable");}
                 file.delete();
                 return null;
@@ -399,18 +413,17 @@ class ProfilePersistenceHelper {
             // In the interest of keeping the in-memory profiles small,
             // don't load the DB info at all unless there is something interesting there
             // (i.e. floodfills)
-            if (getLong(props, "dbHistory.lastLookupSuccessful") > 0 ||
-                getLong(props, "dbHistory.lastLookupFailed") > 0 ||
-                getLong(props, "dbHistory.lastStoreSuccessful") > 0 ||
-                getLong(props, "dbHistory.lastStoreFailed") > 0 &&
-                (!caps.isEmpty() && !caps.contains("K") || !caps.contains("L") || !caps.contains("M") || !caps.contains("U"))) {
+            if ((getLong(props, "dbHistory.lastLookupSuccessful") > 0 ||
+                 getLong(props, "dbHistory.lastLookupFailed") > 0 ||
+                 getLong(props, "dbHistory.lastStoreSuccessful") > 0 ||
+                 getLong(props, "dbHistory.lastStoreFailed") > 0)) {
                 profile.expandDBProfile();
                 profile.getDBHistory().load(props);
                 profile.getDbIntroduction().load(props, "dbIntroduction", true);
                 profile.getDbResponseTime().load(props, "dbResponseTime", true);
             }
 
-            if (!caps.isEmpty() && !caps.contains("K") || !caps.contains("L") || !caps.contains("M") || !caps.contains("U")) {
+            if (!caps.isEmpty() && !caps.contains("K") && !caps.contains("L") && !caps.contains("M") && !caps.contains("U")) {
                 profile.getTunnelCreateResponseTime().load(props, "tunnelCreateResponseTime", true);
                 if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
                     profile.getTunnelTestResponseTime().load(props, "tunnelTestResponseTime", true);

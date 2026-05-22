@@ -92,6 +92,7 @@ public class PeerProfile {
     private final float _peakTunnelThroughput[] = new float[THROUGHPUT_COUNT];
     /** total number of bytes pushed through a single tunnel in a 1 minute period */
     private final float _peakTunnel1mThroughput[] = new float[THROUGHPUT_COUNT];
+    private long _lastTestStarted;
     private long _lastThroughputUpdate;
     /** periodically cut the measured throughput values */
     private static final int DEGRADES_PER_DAY = 4;
@@ -213,11 +214,6 @@ public class PeerProfile {
      * Also mark active if it is connected, as this will tend to encourage use
      * of already-connected peers.
      *
-     * Note: this appears to be the only use for these two RateStats.
-     *
-     * Update: Rewritten so we can get rid of the two RateStats.
-     *         This also helps by not having it depend on coalesce boundaries.
-     *
      * @param period must be one of the periods in the RateStat constructors below
      *        (5*60*1000 or 60*60*1000)
      *
@@ -225,7 +221,7 @@ public class PeerProfile {
      */
     public boolean getIsActive(long period, long now) {
         long before = now - period;
-        return getLastHeardFrom() < before || getLastSendSuccessful() < before || isEstablished();
+        return getLastHeardFrom() >= before || getLastSendSuccessful() >= before || isEstablished();
     }
 
 
@@ -561,6 +557,9 @@ public class PeerProfile {
 
     long getLastThroughputUpdate() {return _lastThroughputUpdate;}
     void setLastThroughputUpdate(long ts) {_lastThroughputUpdate = ts;}
+
+    public long getLastTestStarted() {return _lastTestStarted;}
+    void setLastTestStarted(long ts) {_lastTestStarted = ts;}
 
     /**
      * When the given peer is performing well enough that we want to keep detailed

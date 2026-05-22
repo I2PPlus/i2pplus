@@ -177,7 +177,7 @@ class PeerManager {
     Set<Hash> selectPeers() {return _organizer.selectAllPeers();}
 
     /**
-     *  @param cutoff only store if last successful send newer than this (absolute time)
+     *  @param cutoff only store if most recent activity is newer than this (absolute time)
      *  @return success
      */
     private boolean storeProfile(Hash peer, long cutoff) {
@@ -186,7 +186,8 @@ class PeerManager {
         // Only persist Tier 1 (Active) and Tier 2 (Passive) profiles.
         // Gossip-only profiles (Tier 3) are kept in memory briefly but never written to disk.
         if (prof.getLastSendSuccessful() > 0 || prof.getLastHeardFrom() > 0) {
-            if (prof.getLastSendSuccessful() > cutoff) {
+            long latestActivity = Math.max(prof.getLastSendSuccessful(), prof.getLastHeardFrom());
+            if (latestActivity > cutoff) {
                 if (_persistenceHelper.writeProfile(prof)) {return true;}
             }
         }
