@@ -59,9 +59,9 @@ public class PeerTestJob extends JobImpl {
     private final List<Hash> _priorityPeers = new ArrayList<Hash>();
     private final int DEFAULT_PEER_TEST_DELAY = SystemVersion.isSlow() ? 8*1000 : 5*1000;
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
-    private static final int DEFAULT_PEER_TEST_CONCURRENCY = SystemVersion.isSlow() ? 1 :
-                                                             SystemVersion.getCores() <= 2 ? 2 :
-                                                             SystemVersion.getCores() >= 8 ? 4 : 3;
+    private static final int DEFAULT_PEER_TEST_CONCURRENCY = SystemVersion.isSlow() ? 3 :
+                                                             SystemVersion.getCores() <= 2 ? 6 :
+                                                             SystemVersion.getCores() >= 8 ? 12 : 9;
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
     private static final int DEFAULT_PEER_TEST_TIMEOUT = 750;
     public static final String PROP_PEER_TEST_TIMEOUT = "router.peerTestTimeout";
@@ -337,22 +337,18 @@ public class PeerTestJob extends JobImpl {
             criteria.setPurpose(PeerSelectionCriteria.PURPOSE_TEST);
             List<Hash> peerHashes = manager.selectPeers(criteria);
 
+            List<PeerData> validCandidates = new ArrayList<>();
             for (Hash peer : peerHashes) {
-                if (peers.size() >= getTestConcurrency()) break;
                 PeerData data = new PeerData(getContext(), peer);
 
                 // Skip if already testing as priority
                 if (priorityPeers.contains(peer)) continue;
 
-                // Check if peer has been tested before
-                long lastTest = data.profile != null ? data.profile.getLastTestedSuccessfully() : 0;
-                boolean untested = lastTest <= 0;
-
                 // Primary candidates: high-bandwidth, reachable, compatible version
                 if (data.routerInfo != null && data.profile != null && data.capabilities != null && data.isReachable &&
                     VersionComparator.comp(data.routerInfo.getVersion(), "0.9.57") >= 0 &&
                     (data.bandwidthTier.equals("O") || data.bandwidthTier.equals("P") || data.bandwidthTier.equals("X"))) {
-                    peers.add(data.routerInfo);
+                    validCandidates.add(data);
                 // Low-bandwidth or unreachable peers: penalize but don't test
                 } else if (data.routerInfo != null && data.profile != null && data.capabilities != null &&
                     (!data.isReachable || data.bandwidthTier.equals("K") || data.bandwidthTier.equals("L") ||
@@ -365,6 +361,18 @@ public class PeerTestJob extends JobImpl {
                     if (_log.shouldInfo())
                         _log.info("Test of [" + data.shortHash + "] failed: No local RouterInfo");
                 }
+            }
+
+            // Sort candidates by lastTestedSuccessfully ascending: never tested (0) first, then oldest
+            validCandidates.sort((a, b) -> Long.compare(
+                a.profile.getLastTestedSuccessfully(),
+                b.profile.getLastTestedSuccessfully()
+            ));
+
+            // Add top candidates up to concurrency limit
+            for (PeerData data : validCandidates) {
+                if (peers.size() >= getTestConcurrency()) break;
+                peers.add(data.routerInfo);
             }
         }
 
@@ -410,6 +418,10 @@ public class PeerTestJob extends JobImpl {
         TunnelId outTunnelId = outTunnel.getSendTunnelId(0);
 
         String shortHash = peer.getIdentity().getHash().toBase64().substring(0, 6);
+        PeerProfile prof = getContext().profileOrganizer().getProfile(peer.getIdentity().getHash());
+        if (prof != null) {
+            prof.setLastTestStarted(getContext().clock().now());
+        }
         if (_log.shouldDebug()) {
             _log.debug("Initiating peer test of [" + shortHash + "] \n* Outbound: " + outTunnel + "\n* Inbound: " + inTunnel);
         } else if (_log.shouldInfo()) {
