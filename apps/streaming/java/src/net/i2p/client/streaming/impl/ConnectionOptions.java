@@ -1008,15 +1008,11 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
      * Calculate and set minimum required inbound buffer size to accommodate full window.
      * Uses 1.5*maxWindowSize to handle dynamic window growth while keeping memory usage sane.
      */
+    private static final int MAX_INBOUND_BUFFER = 8 * 1024 * 1024; // 8MB
+
     private void initializeInboundBufferSize() {
         int minRequiredBufferSize = getMaxMessageSize() * ((3 * getMaxWindowSize()) / 2 + 2);
-        setInboundBufferSize(minRequiredBufferSize);
-
-        if (_inboundBufferSize < minRequiredBufferSize) {
-            _log.warn("Inbound buffer size (" + _inboundBufferSize + ") is too small for window size (" +
-                     getMaxWindowSize() + "). Adjusting to " + minRequiredBufferSize + " bytes");
-            setInboundBufferSize(minRequiredBufferSize);
-        }
+        setInboundBufferSize(Math.min(minRequiredBufferSize, MAX_INBOUND_BUFFER));
     }
 
     private static boolean getBool(Properties opts, String name, boolean defaultVal) {

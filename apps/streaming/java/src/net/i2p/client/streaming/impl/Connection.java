@@ -134,7 +134,7 @@ class Connection {
      * Maximum number of packets to retransmit when the timer hits.
      * Increased from 16 to 32 for faster loss recovery.
      */
-    private static final int MAX_RTX = 32;
+    private static final int MAX_RTX = 16;
 
     /**
      *  @param opts may be null
@@ -409,9 +409,10 @@ class Connection {
                 return;
             }
         }
-        // Schedule immediate retransmit - the timer will handle resending
-        // oldest unacked packets on a fresh tunnel
-        _retransmitEvent.pushBackRTO(0);
+        // Force immediate reschedule, cancelling any pending timer
+        // pushBackRTO(0) cannot shorten a running timer (reschedule uses false for useEarliestTime),
+        // so we must cancel and re-schedule instead.
+        _retransmitEvent.forceRescheduleNow();
         if (_log.shouldInfo()) {
             _log.info("[" + this + "] Scheduled immediate retransmit after soft failure");
         }
@@ -497,10 +498,11 @@ class Connection {
             pacedEvent.schedule(pacingDelay);
         } else {
             // Send immediately
-            _outboundQueue.enqueue(packet);
-            _unackedPacketsReceived.set(0);
-            _lastSendTime = _context.clock().now();
-            resetActivityTimer();
+            if (_outboundQueue.enqueue(packet)) {
+                _unackedPacketsReceived.set(0);
+                _lastSendTime = _context.clock().now();
+                resetActivityTimer();
+            }
         }
     }
 
@@ -509,25 +511,15 @@ class Connection {
      *  @return List of packets acked for the first time, or null if none
      */
     public List<PacketLocal> ackPackets(long ackThrough, long nacks[]) {
-        long current = _highestAckedThrough.get();
-        if (ackThrough < current) {
-            // dupack which won't tell us anything
+        if (nacks == null) {
+            _highestAckedThrough.updateAndGet(cur -> Math.max(cur, ackThrough));
         } else {
-            if (nacks == null) {
-                _highestAckedThrough.set(ackThrough);
-            } else {
-                long lowest = -1;
-                for (int i = 0; i < nacks.length; i++) {
-                    if ((lowest < 0) || (nacks[i] < lowest)) {lowest = nacks[i];}
-                }
-                long newVal = lowest - 1;
-                long prev;
-                do {
-                    prev = current;
-                    if (newVal <= prev) break;
-                    current = _highestAckedThrough.get();
-                } while (prev != current && !_highestAckedThrough.compareAndSet(prev, newVal));
+            long lowest = -1;
+            for (int i = 0; i < nacks.length; i++) {
+                if ((lowest < 0) || (nacks[i] < lowest)) {lowest = nacks[i];}
             }
+            final long newVal = lowest - 1;
+            _highestAckedThrough.updateAndGet(cur -> Math.max(cur, newVal));
         }
 
         List<PacketLocal> acked = null;
@@ -1504,6 +1496,22 @@ class Connection {
             return true;
         }
 
+        /**
+         *  Force immediate reschedule with minimum delay, cancelling any
+         *  pending timer. Used by scheduleSoftFailureRetransmit() so that
+         *  a soft-failure notification triggers a retransmit without
+         *  waiting for the current RTO to elapse.
+         *
+         *  Unlike pushBackRTO(), this always schedules a new timer event
+         *  rather than relying on reschedule(..., false) which won't
+         *  shorten a running timer.
+         */
+        public synchronized void forceRescheduleNow() {
+            super.cancel();
+            _scheduled = true;
+            schedule(0);
+        }
+
         public synchronized void pushBackRTO(int rto) {
             if (!_scheduled) {
                 // Safety: if we're being asked to push back RTO, we likely have unacked packets.
@@ -1667,10 +1675,11 @@ class Connection {
         public void timeReached() {
             // Verify connection is still valid and packet not already sent/cancelled
             if (_connected.get() && _packet.getAckTime() <= 0 && _packet.getNumSends() <= 0) {
-                _outboundQueue.enqueue(_packet);
-                _unackedPacketsReceived.set(0);
-                _lastSendTime = _context.clock().now();
-                resetActivityTimer();
+                if (_outboundQueue.enqueue(_packet)) {
+                    _unackedPacketsReceived.set(0);
+                    _lastSendTime = _context.clock().now();
+                    resetActivityTimer();
+                }
             }
             // If connection closed or packet already handled, event simply drops - this is correct behavior
         }

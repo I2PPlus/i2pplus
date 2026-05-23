@@ -57,7 +57,7 @@ class MessageInputStream extends InputStream {
      * Minimum number of ready buffers before limiting applies.
      * Helps prevent unnecessary buffering limits on slow systems.
      */
-    private static final int MIN_READY_BUFFERS = SystemVersion.isSlow() ? 128 : 1024;
+    private static final int MIN_READY_BUFFERS = 64;
 
     /**
      * Maximum number of packets to buffer regardless of byte size.
@@ -201,7 +201,7 @@ class MessageInputStream extends InputStream {
                 return _notYetReadyBlocks.containsKey(messageId);
             }
 
-            if (messageId < MIN_READY_BUFFERS) {
+            if (messageId < MIN_READY_BUFFERS && _readyDataSize < _maxBufferSize / 2) {
                 return true;
             }
 
