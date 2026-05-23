@@ -625,10 +625,6 @@ public class ProfileOrganizer {
                       continue;
                   }
 
-                 if (!profile.getIsActive(now)) {
-                     continue;
-                 }
-
                  profile.updateValues(); // Refresh values (e.g., speed, capacity, integration)
                  newStrictCapacityOrder.add(profile);
                  totalCapacity += profile.getCapacityValue();
