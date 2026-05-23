@@ -811,6 +811,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         for (TunnelPool pool : pools) {
             if (pool == null) continue;
 
+            // Skip server (inbound client) pools — their latency doesn't affect our sends,
+            // and removing them early causes LeaseSet churn and connectivity gaps.
+            // Server tunnels are only removed by pruneExcessTunnels() and natural expiry.
+            if (pool.getSettings().isInbound() && !pool.getSettings().isExploratory()) {
+                continue;
+            }
+
             List<TunnelInfo> toRemove = new ArrayList<TunnelInfo>();
 
             // PHASE A: Snapshot decision under lock
@@ -846,12 +853,17 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                         found++;
                         continue;
                     }
+                    // Skip tunnels actively processing data to avoid disrupting active streams.
+                    // This is a lifetime counter, so once a tunnel has been useful, we only
+                    // remove it if it's truly pathological (2x threshold in the latency check below).
+                    boolean hasTraffic = info.getProcessedMessagesCount() > 0;
                     // Use average latency, require at least 3 tests before removal
                     if (info instanceof PooledTunnelCreatorConfig) {
                         PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
                         if (cfg.hasEnoughLatencyTests()) {
                             int avgLatency = cfg.getAverageLatency();
-                            if (avgLatency > threshold) {
+                            double effectiveThreshold = hasTraffic ? threshold * 2 : threshold;
+                            if (avgLatency > effectiveThreshold) {
                                 toRemove.add(info);
                                 found++;
                             }
