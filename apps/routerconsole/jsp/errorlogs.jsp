@@ -11,16 +11,14 @@
    final String critParam = request.getParameter("crit");
    final String nonceParam = request.getParameter("consoleNonce");
    int last = logsHelper.getLastCriticalMessageNumber();
-   if (critParam != null && nonceParam != null) {
-        if (net.i2p.router.web.CSSHelper.validateNonce(session, nonceParam)) {
-            int icrit = -1;
-            try {icrit = Integer.parseInt(critParam);}
-            catch (NumberFormatException nfe) {}
-            logsHelper.clearThrough(-1, icrit, -1, -1, null, session, nonceParam);
-            response.sendRedirect("errorlogs");
-            return;
-        }
-   }
+    if (critParam != null && nonceParam != null) {
+         int icrit = -1;
+         try {icrit = Integer.parseInt(critParam);}
+         catch (NumberFormatException nfe) {}
+         logsHelper.clearThrough(-1, icrit, -1, -1, null, session, nonceParam);
+         response.sendRedirect("errorlogs");
+         return;
+    }
 %>
 <!DOCTYPE HTML>
 <%@include file="head.jsi"%>
@@ -39,9 +37,7 @@
 </div>
 <div class=logwrap>
 <h3 id=critLogsHead class=tabletitle><%=intl._t("Critical / Error Level Logs")%>
-<%  if (last >= 0) { %>
 &nbsp;<a id=clearCritical class=delete title="<%=intl._t("Clear logs")%>" href="/errorlogs?crit=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
-<%  } %>
 </h3>
 <table id=criticallogs class="logtable single"><tbody><tr><td><jsp:getProperty name="logsHelper" property="criticalLogs"/></td></tr></tbody></table>
 </div>

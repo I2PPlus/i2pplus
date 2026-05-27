@@ -10,18 +10,16 @@
    final String svctParam = request.getParameter("svct");
    final String svcfParam = request.getParameter("svcf");
    final String nonceParam = request.getParameter("consoleNonce");
-   if (svcParam != null && svctParam != null && svcfParam != null && nonceParam != null) {
-        if (net.i2p.router.web.CSSHelper.validateNonce(session, nonceParam)) {
-            try {
-                long svc = Long.parseLong(svcParam);
-                long svct = Long.parseLong(svctParam);
-                String svcf = svcfParam;
-                logsHelper.clearThrough(-1, -1, svc, svct, svcf, session, nonceParam);
-                response.sendRedirect("servicelogs");
-                return;
-            } catch (NumberFormatException nfe) {}
-        }
-   }
+    if (svcParam != null && svctParam != null && svcfParam != null && nonceParam != null) {
+         try {
+             long svc = Long.parseLong(svcParam);
+             long svct = Long.parseLong(svctParam);
+             String svcf = svcfParam;
+             logsHelper.clearThrough(-1, -1, svc, svct, svcf, session, nonceParam);
+             response.sendRedirect("servicelogs");
+             return;
+         } catch (NumberFormatException nfe) {}
+    }
    StringBuilder buf = new StringBuilder(24*1024);
    Object[] vals = logsHelper.getServiceLogs(buf);
    String lts = vals[0].toString();
@@ -45,9 +43,7 @@
 </div>
 <div class=logwrap>
 <h3 class=tabletitle id=servicelogs><%=intl._t("Service (Wrapper) Logs")%>
-<%  if (lts != null && !lts.trim().isEmpty()) { %>
 &nbsp;<a class=delete title="<%=intl._t("Clear logs")%>" href="/servicelogs?svc=<%=llast%>&amp;svct=<%=lts%>&amp;svcf=<%=filename%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
-<%  } %>
 </h3>
 <table id=wrapperlogs class="logtable single"><tbody><tr><td><% out.append(buf);%></td></tr></tbody></table>
 </div>

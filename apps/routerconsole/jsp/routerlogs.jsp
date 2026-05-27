@@ -9,16 +9,14 @@
    final String clearParam = request.getParameter("clear");
    final String nonceParam = request.getParameter("consoleNonce");
    int last = logsHelper.getLastMessageNumber();
-   if (clearParam != null && nonceParam != null) {
-        if (net.i2p.router.web.CSSHelper.validateNonce(session, nonceParam)) {
-            int iclear = -1;
-            try {iclear = Integer.parseInt(clearParam);}
-            catch (NumberFormatException nfe) {}
-            logsHelper.clearThrough(iclear, -1, -1, -1, null, session, nonceParam);
-            response.sendRedirect("routerlogs");
-            return;
-        }
-   }
+    if (clearParam != null && nonceParam != null) {
+         int iclear = -1;
+         try {iclear = Integer.parseInt(clearParam);}
+         catch (NumberFormatException nfe) {}
+         logsHelper.clearThrough(iclear, -1, -1, -1, null, session, nonceParam);
+         response.sendRedirect("routerlogs");
+         return;
+    }
 %>
 <!DOCTYPE HTML>
 <%@include file="head.jsi"%>
@@ -37,9 +35,7 @@
 </div>
 <div class=logwrap>
 <h3 class=tabletitle id=routerlogs_h3><%=intl._t("Router Logs")%>
-<%  if (last >= 0) { %>
 &nbsp;<a class=delete title="<%=intl._t("Clear logs")%>" href="/routerlogs?clear=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
-<%  } %>
 &nbsp;<a class=configure title="<%=intl._t("Configure router logging options")%>" href="configlogging">[<%=intl._t("Configure")%>]</a>
 &nbsp;<a id=eventlogLink title="<%=intl._t("View event log")%>" href="/events?from=604800">[<%=intl._t("Events")%>]</a>
 &nbsp;<span id=toggleRefresh></span>
