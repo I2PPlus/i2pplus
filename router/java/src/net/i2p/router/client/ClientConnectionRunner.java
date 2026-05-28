@@ -970,7 +970,8 @@ class ClientConnectionRunner {
                         _log.debug("Already requesting, theirs is newer -> Doing nothing... " + state);
                 } else {
                     // ours is newer, so wait a few secs and retry
-                    set.setDestination(dest);
+                    if (set.getDestination() == null)
+                        set.setDestination(dest);
                     // Cancel any existing timer before creating a new one
                     if (sp.rerequestTimer != null) {
                         sp.rerequestTimer.cancel();
@@ -984,7 +985,8 @@ class ClientConnectionRunner {
                 // fire onCreated?
                 return; // already requesting
             } else {
-                set.setDestination(dest);
+                if (set.getDestination() == null)
+                    set.setDestination(dest);
                 if (current == null && _context.tunnelManager().getOutboundClientTunnelCount(h) <= 0) {
                     // at startup of a client, where we don't have a leaseset, wait for
                     // an outbound tunnel also, so the client doesn't start sending data
