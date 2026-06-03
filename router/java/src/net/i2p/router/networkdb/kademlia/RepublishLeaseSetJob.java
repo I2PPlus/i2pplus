@@ -41,9 +41,12 @@ import net.i2p.util.Log;
  */
 public class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
-    public final static long REPUBLISH_LEASESET_TIMEOUT = 30 * 1000;
-    private final static int RETRY_DELAY = 2000;
-    private final static int RETRY_MAX_DELAY = 30 * 1000;
+    private static final String PROP_TIMEOUT = "router.leaseSetPublishTimeout";
+    private static final String PROP_RETRY_DELAY = "router.leaseSetPublishRetryDelay";
+    private static final String PROP_MAX_RETRY_DELAY = "router.leaseSetPublishMaxRetryDelay";
+    public final static long REPUBLISH_LEASESET_TIMEOUT_DEFAULT = 60 * 1000;
+    public final static int RETRY_DELAY_DEFAULT = 20 * 1000;
+    public final static int RETRY_MAX_DELAY_DEFAULT = 30 * 1000;
     private final static long REPUBLISH_INTERVAL = 8 * 60 * 1000; // 8 minutes
     private final static long REPUBLISH_INTERVAL_LOW_SUCCESS = 7 * 60 * 1000; // 7 minutes (build success < 40%)
     private final static long REPUBLISH_INTERVAL_VERY_LOW_SUCCESS = 6 * 60 * 1000; // 6 minutes (build success < 30%)
@@ -120,7 +123,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                             _log.warn("LeaseSet EXPIRED - triggering immediate rebuild for " + name + " [" + _dest.toBase32().substring(0,8) + "]");
                         }
                         getContext().clientManager().requestLeaseSet(_dest, ls);
-                        scheduleRepublish(REPUBLISH_INTERVAL);
+                        scheduleRepublish(getRepublishInterval());
                     } else {
                         long timeUntilExpiry = ls.getLatestLeaseDate() - now;
 
@@ -139,13 +142,26 @@ public class RepublishLeaseSetJob extends JobImpl {
                                        "] (expires in " + (timeUntilExpiry / 1000) + "s)...");
                             _lastPublishLogTime.put(_dest, now);
                         }
+                        // Don't publish if there are no healthy inbound tunnels —
+                        // doing so would broadcast stale leases pointing to dead
+                        // gateways, making the destination unreachable.
+                        // Allow publish for pool-less targets (internal proxies etc).
+                        int healthyCount = getContext().tunnelManager().getInboundClientTunnelCount(_dest);
+                        if (healthyCount == 0) {
+                            if (_log.shouldWarn()) {
+                                _log.warn("No healthy inbound tunnels for [" + _dest.toBase32().substring(0,8) +
+                                           "] -> Delaying LeaseSet publish");
+                            }
+                            scheduleRepublish(getRepublishInterval());
+                            return;
+                        }
                         cleanupStaleEntries();
                         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
                         failCount.set(0);
-                        _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), REPUBLISH_LEASESET_TIMEOUT, null);
+                        _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), getPublishTimeout(), null);
                         _lastPublished = now;
                         // Schedule next republish for EXPIRY_WINDOW before expiry
-                        long nextRepublish = Math.max(REPUBLISH_INTERVAL, timeUntilExpiry - EXPIRY_WINDOW);
+                        long nextRepublish = Math.max(getRepublishInterval(), timeUntilExpiry - EXPIRY_WINDOW);
                         scheduleRepublish(nextRepublish);
                     }
                 } else {
@@ -155,7 +171,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                     }
                     clearRetryInProgress();
                     getContext().clientManager().requestLeaseSet(_dest, null);
-                    scheduleRepublish(REPUBLISH_INTERVAL);
+                    scheduleRepublish(getRepublishInterval());
                 }
             } else {
                 if (_log.shouldInfo()) {
@@ -179,6 +195,18 @@ public class RepublishLeaseSetJob extends JobImpl {
 
     public String getName() {return "Republish Local LeaseSet" + (highPriority ? " [High priority]" : "");}
 
+    private long getPublishTimeout() {
+        return getContext().getProperty(PROP_TIMEOUT, REPUBLISH_LEASESET_TIMEOUT_DEFAULT);
+    }
+
+    private int getRetryDelay() {
+        return getContext().getProperty(PROP_RETRY_DELAY, RETRY_DELAY_DEFAULT);
+    }
+
+    private int getMaxRetryDelay() {
+        return getContext().getProperty(PROP_MAX_RETRY_DELAY, RETRY_MAX_DELAY_DEFAULT);
+    }
+
     private long getRepublishInterval() {
         double buildSuccess = net.i2p.util.SystemVersion.getTunnelBuildSuccess() / 100.0;
         if (buildSuccess <= 0) {
@@ -195,10 +223,13 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     private void scheduleRepublish(long delayMs) {
+        // Unregister this job before scheduling the next, so hasActiveRepublishJob()
+        // on the facade side doesn't block successor scheduling.
+        _facade.removePublishingJob(_dest, this);
         if (_facade.hasActiveRepublishJob(_dest)) {
             if (_log.shouldDebug()) {
                 _log.debug("Skipping republish for [" + _dest.toBase32().substring(0, 8) +
-                           "] -> Job already active");
+                           "] -> Job already active (scheduled externally)");
             }
             return;
         }
@@ -241,7 +272,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         }
         getContext().statManager().addRateData("netDb.republishLeaseSetFail", 1);
 
-        long retryDelay = Math.min(RETRY_DELAY * (1 << Math.min(count - 1, 4)), RETRY_MAX_DELAY);
+        long retryDelay = Math.min((long)getRetryDelay() * (1 << Math.min(count - 1, 4)), getMaxRetryDelay());
         // Boost to high priority on periodic attempts, but never faster than base delay
         boolean isHighPriority = count % 4 == 0;
         RepublishLeaseSetJob retryJob = new RepublishLeaseSetJob(getContext(), _facade, _dest);

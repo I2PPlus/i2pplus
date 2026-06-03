@@ -752,7 +752,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             return ls;
         }
         key = blindCache().getHash(key);
-        fail(key);
         // Interesting key, so either refetch it or simply explore with it
         if (_exploreKeys != null) {_exploreKeys.add(key);}
         return null;
@@ -1257,13 +1256,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * <p>Uses 15-second batching window to consolidate multiple republish jobs into fewer jobs.</p>
      */
     private void scheduleRepublish(Hash hash) {
-        if (hasActiveRepublishJob(hash)) {
-            if (_log.shouldDebug()) {
-                _log.debug("Skipping republish scheduling for [" + hash.toBase32().substring(0, 8) +
-                           "] -> Job already active");
-            }
-            return;
-        }
+        // Cancel any existing queued job so a fresh one picks up the latest LeaseSet.
+        // Without this, publish() calls that arrive while a job is queued (e.g., from
+        // new tunnel builds) are silently dropped, leaving the network with stale
+        // lease info for up to 7 minutes.
+        cancelActiveRepublishJob(hash);
 
         // Check if lease is expiring soon - if so, process immediately
         LeaseSet ls = lookupLeaseSetLocally(hash);
@@ -1303,6 +1300,27 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (_log.shouldDebug()) {
                 _log.debug("Scheduled batch republish job for " + _batchRepublishQueue.size() + " LeaseSets");
             }
+        }
+    }
+
+    /**
+     * Cancel any queued RepublishLeaseSetJob for the given hash.
+     * This ensures that the next fresh run picks up the latest LeaseSet
+     * rather than using one that was stale when the job was queued.
+     */
+    private void cancelActiveRepublishJob(Hash hash) {
+        Set<RepublishLeaseSetJob> jobs = _publishingLeaseSets.get(hash);
+        if (jobs == null) {return;}
+        synchronized (jobs) {
+            for (RepublishLeaseSetJob job : jobs) {
+                _context.jobQueue().removeJob(job);
+                if (_log.shouldDebug()) {
+                    _log.debug("Cancelled queued republish job for [" + hash.toBase32().substring(0, 8) +
+                               "] -> will reschedule with latest LeaseSet");
+                }
+            }
+            jobs.clear();
+            _publishingLeaseSets.remove(hash);
         }
     }
 
@@ -2799,16 +2817,16 @@ return false;
     /**
      * Refresh client LeaseSets we're actively using and remove stale ones.
      * Only applies to client NetDB (not main NetDB).
-     * 1. Re-fetch LeaseSets accessed between 90s-135s ago
-     * 2. Remove LeaseSets not accessed in 90s
+     * 1. Remove LeaseSets not accessed in 180s
+     * 2. Re-fetch LeaseSets accessed between 135s-180s ago
      * 3. If LeaseSet expires in < 60s, refresh proactively
      */
     private static final long PROACTIVE_REFRESH_THRESHOLD = 60 * 1000;  // Refresh if < 60s to expiry
 
     private void refreshClientLeaseSets() {
         long now = _context.clock().now();
-        long inactiveThreshold = now - LOCAL_LEASESET_REFRESH_INTERVAL;          // 90s
-        long refreshThreshold = now - LOCAL_LEASESET_REFRESH_INTERVAL * 3 / 2;   // 135s
+        long inactiveThreshold = now - LOCAL_LEASESET_REFRESH_INTERVAL;          // 180s
+        long refreshThreshold = now - LOCAL_LEASESET_REFRESH_INTERVAL * 3 / 4;   // 135s
 
         // If client doesn't have active tunnels, skip refresh entirely
         TunnelPool clientPool = _context.tunnelManager().getOutboundPool(_dbid);
