@@ -1250,10 +1250,13 @@ public class TunnelPool {
             scheduleDeferredLeaseSetRepublish();
             if (ls != null) {
                 requestLeaseSet(ls);
-            } else if (remaining == 0 && cfg instanceof TunnelCreatorConfig) {
-                // No valid tunnels remain — build emergency LeaseSet from the
-                // failed tunnel's gateway lease so the destination doesn't become
-                // unreachable during the replacement build window.
+            } else if (cfg instanceof TunnelCreatorConfig) {
+                // locked_buildNewLeaseSet() returned null — all remaining tunnels
+                // have >1 consecutive failures and were filtered out. Build an
+                // emergency LeaseSet from the failed tunnel's gateway lease so the
+                // destination doesn't become unreachable during recovery.
+                // Uses the HopConfig expiration (original 10-min lifetime) so the
+                // LS stays valid long enough for a replacement to build.
                 ls = buildEmergencyLeaseSet(cfg);
                 if (ls != null) {
                     requestLeaseSet(ls);
