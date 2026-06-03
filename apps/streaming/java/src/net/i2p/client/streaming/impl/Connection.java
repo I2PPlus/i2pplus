@@ -126,7 +126,7 @@ class Connection {
      *  where the configured maximum is enforced.
      *  Increased for better throughput on high-bandwidth I2P connections.
      */
-    public static final int MAX_WINDOW_SIZE = SystemVersion.isSlow() ? 128 : 192;
+    public static final int MAX_WINDOW_SIZE = SystemVersion.isSlow() ? 192 : 256;
 
     private static final int UNCHOKES_TO_SEND = 8;
 

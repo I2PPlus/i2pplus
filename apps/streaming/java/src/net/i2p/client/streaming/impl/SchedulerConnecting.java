@@ -54,12 +54,7 @@ class SchedulerConnecting extends SchedulerImpl {
             if (_log.shouldDebug())
                 _log.debug("Waited too long: " + waited);
             return;
-        } else {
-            // should we be doing a con.sendAvailable here?
-            if (con.getOptions().getConnectTimeout() > 0)
-                reschedule(con.getOptions().getConnectTimeout(), con);
         }
-        /*
         long timeTillSend = con.getNextSendTime() - _context.clock().now();
         if ( (timeTillSend <= 0) && (con.getNextSendTime() > 0) ) {
             if (_log.shouldDebug())
@@ -71,8 +66,9 @@ class SchedulerConnecting extends SchedulerImpl {
                 if (_log.shouldDebug())
                     _log.debug("time till send: " + timeTillSend + " on " + con);
                 reschedule(timeTillSend, con);
+            } else if (con.getOptions().getConnectTimeout() > 0) {
+                reschedule(con.getOptions().getConnectTimeout(), con);
             }
         }
-        */
     }
 }
