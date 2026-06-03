@@ -127,6 +127,30 @@
 <tr class=config><th>router.excludePeerCaps={netDBcaps}</th></tr>
 <tr><td><%=intl._t("This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>")%></td></tr>
 
+<tr class=config><th>router.inboundExploratoryExcludeUnreachable={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is true]")%></td></tr>
+
+<tr class=config><th>router.outboundExploratoryExcludeUnreachable={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("When set to false, unreachable peers may be selected as hops for outbound exploratory tunnels. [Default is true]")%></td></tr>
+
+<tr class=config><th>router.inboundClientExcludeUnreachable={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("When set to false, unreachable peers may be selected as hops for inbound client tunnels. [Default is true]")%></td></tr>
+
+<tr class=config><th>router.outboundClientExcludeUnreachable={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is true]")%></td></tr>
+
+<tr class=config><th>router.inboundExploratoryExcludeSlow={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]")%></td></tr>
+
+<tr class=config><th>router.outboundExploratoryExcludeSlow={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]")%></td></tr>
+
+<tr class=config><th>router.inboundClientExcludeSlow={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]")%></td></tr>
+
+<tr class=config><th>router.outboundClientExcludeSlow={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]")%></td></tr>
+
 <tr class=config><th>router.expireRouterInfo={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]")%></td></tr>
 
@@ -208,13 +232,22 @@
 </ul></td></tr>
 
 <tr class=config><th>router.peerTestConcurrency={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]")%></td></tr>
+<tr><td><%=intl._t("This setting determines the number of peer tests to run concurrently, used to determine peer latency. When tunnel build success drops below 50%, concurrency is halved to avoid adding load during a failure cascade. [Default varies: 1 on slow systems, 2 on single/dual-core, 4 otherwise]")%></td></tr>
 
 <tr class=config><th>router.peerTestDelay={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 5000]")%></td></tr>
+<tr><td><%=intl._t("This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 30000 (30s), or 45000 (45s) on slow systems]")%></td></tr>
 
 <tr class=config><th>router.peerTestTimeout={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 1000]")%></td></tr>
+<tr><td><%=intl._t("To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 5000]")%></td></tr>
+
+<tr class=config><th>profileOrganizer.minFastPeers={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Minimum number of peers to retain in the fast tier during profile reorganization. A higher value ensures more peers are available for tunnel building, at the cost of potentially including slower peers. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 400]")%></td></tr>
+
+<tr class=config><th>profileOrganizer.minHighCapacityPeers={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Minimum number of peers to retain in the high-capacity tier. These are the peers with the highest measured throughput and greatest ability to relay traffic. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 500]")%></td></tr>
+
+<tr class=config><th>profileOrganizer.maxProfiles={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum number of peer profiles to retain in memory. Older, inactive profiles are expired first when this limit is reached. Values below 100 are clamped to 100. [Default is 8000, or 800 on slow systems]")%></td></tr>
 
 <tr class=config><th>router.publishPeerRankings={true|false}</th></tr>
 <tr><td><%=intl._t("This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]")%></td></tr>
@@ -250,7 +283,28 @@
 <tr><td><%=intl._t("When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]")%></td></tr>
 
 <tr class=config><th>router.tunnelConcurrentBuilds={n}</th></tr>
-<tr><td><%=intl._t("When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]")%></td></tr>
+<tr><td><%=intl._t("When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. This setting is dynamic and takes effect without restart.")%></td></tr>
+
+<tr class=config><th>router.tunnel.useLegacyPeerSelection={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("When set to true, the router uses the older peer selection algorithm when building tunnels (prefer fast peers directly, without the multi-tier HighCap → Fast → Active fallback chain). May be useful for troubleshooting peer selection issues. [Default is false. This setting is dynamic and takes effect immediately.]")%></td></tr>
+
+<tr class=config><th>router.tunnelGrowthFactor={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Growth factor used by the router's transit tunnel throttle. Higher values make the router accept tunnel build requests more aggressively relative to the 10-minute average. Lower values make it probabalistically reject sooner when tunnel counts are rising rapidly. [Default is 2.0]")%></td></tr>
+
+<tr class=config><th>router.tunnelTestTimeGrowthFactor={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Growth factor for tunnel test time acceptance rate limiting. If the 1-minute average test time exceeds the 1-hour average multiplied by this factor, the router begins probabalistically rejecting. [Default is 1.5]")%></td></tr>
+
+<tr class=config><th>router.throttleRejectExponent={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Controls the steepness of the rejection probability curve when bandwidth usage approaches capacity. Lower values give a smoother transition (less aggressive rejection at moderate load). [Default is 10]")%></td></tr>
+
+<tr class=config><th>router.penaltyCapD={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Penalty multiplier applied to a peer's capacity value when the peer publishes a 'D' congestion cap (moderate congestion). Higher values reduce the peer's effective capacity more aggressively. [Default is 2.5]")%></td></tr>
+
+<tr class=config><th>router.penaltyCapE={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Penalty multiplier applied to a peer's capacity value when the peer publishes an 'E' congestion cap (severe congestion). [Default is 4.75]")%></td></tr>
+
+<tr class=config><th>router.pruneEarlyExpiryDelay={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Time in milliseconds before expiration when pruned tunnels are marked for early expiry, giving replacement tunnels time to build. Higher values allow more overlap between old and new tunnels. [Default is 120000 (2 minutes)]")%></td></tr>
 
 <tr class=config><th>router.tunnel.slowThreshold={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("The latency threshold in milliseconds for removing slow tunnels from <a href=/tunnels>local tunnel pools</a>. Tunnels with latency above this threshold will be removed if the pool exceeds the minimum tunnel count. Set to 0 to use 1 second or the lowest recorded latency from all pools, whichever is higher. [Default is 0]")%></td></tr>
@@ -262,7 +316,7 @@
 <tr><td><%=intl._t("The interval in milliseconds between runs of the Remove Slow Tunnels job. Higher values reduce tunnel churn but may keep slow tunnels longer. [Default is 90000 (90s), or 120000 (120s) if under load]")%></td></tr>
 
 <tr class=config><th>router.tunnel.pruneEarlyExpiryDelay={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("The time in milliseconds before expiration to mark tunnels for early expiry when pruning slow or excess tunnels. Higher values allow more time for new tunnels to build. [Default is 30000]")%></td></tr>
+<tr><td><%=intl._t("The time in milliseconds before expiration to mark tunnels for early expiry when the Remove Slow Tunnels job prunes slow or excess tunnels. Higher values allow more time for new tunnels to build. [Default is 30000]")%></td></tr>
 
 <tr class=config><th>router.idleTunnelDetectionPeriod={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]")%></td></tr>
@@ -318,6 +372,9 @@
 
 <tr class=config><th>i2p.vmCommSystem={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption.")%></td></tr>
+
+<tr class=config><th>i2cp.disableLoopback={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]")%></td></tr>
 
 <tr class=config id=ntpserverconfig><th>time.sntpServerList={server1,server2}</th></tr>
 <tr><td><%=intl._t("This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]")%></td></tr>
