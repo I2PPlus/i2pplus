@@ -38,6 +38,7 @@ import net.i2p.router.ReplyJob;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
+import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.crypto.ratchet.ReplyCallback;
 import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
 import net.i2p.util.Log;
@@ -346,6 +347,19 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
+     *  Resolve a human-readable nickname for a destination, if available.
+     *  @return nickname or null
+     */
+    private String getDestNickname(Hash dest) {
+        TunnelPoolSettings inSettings = getContext().tunnelManager().getInboundSettings(dest);
+        if (inSettings != null) {
+            String nick = inSettings.getDestinationNickname();
+            if (nick != null && !nick.isEmpty()) {return nick;}
+        }
+        return null;
+    }
+
+    /**
      *  @param force to force including a reply lease set
      *  @return lease set or null if we should not send the lease set
      */
@@ -429,14 +443,18 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 _leaseSet = kndf.lookupLeaseSetLocally(_to.calculateHash());
                 if (_leaseSet == null) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Router LeaseSet " + _toString + " not found via local lookup");
+                        String nick = getDestNickname(_to.calculateHash());
+                        _log.warn("Router LeaseSet " + _toString + (nick != null ? " ('" + nick + "')" : "") +
+                                  " not found via local lookup");
                     }
                     return MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
                 }
             }
             if (!kndf.isClientDb() && _leaseSet.getReceivedAsPublished()) {
                 if (_log.shouldWarn()) {
-                    _log.warn(getJobId() + ": Only have ReceivedAsPublished LeaseSet for " + _toString);
+                    String nick = getDestNickname(_to.calculateHash());
+                    _log.warn(getJobId() + ": Only have ReceivedAsPublished LeaseSet for " + _toString +
+                              (nick != null ? " ('" + nick + "')" : ""));
                 }
                 return MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
             }
@@ -510,7 +528,11 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
 
         if (leases.isEmpty()) {
-            if (_log.shouldInfo()) {_log.info("No Leases found from " + _leaseSet);}
+            if (_log.shouldInfo()) {
+                String nick = getDestNickname(_to.calculateHash());
+                _log.info("No valid leases in LeaseSet for " + _toString +
+                          (nick != null ? " ('" + nick + "')" : ""));
+            }
             return MessageStatusMessage.STATUS_SEND_FAILURE_BAD_LEASESET;
         }
 

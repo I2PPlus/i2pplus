@@ -161,7 +161,7 @@ public abstract class TransportImpl implements Transport {
             WAS_UNREACHABLE_PERIOD = 60*1000;
         } else {
             UNREACHABLE_PERIOD = 5*60*1000;
-            WAS_UNREACHABLE_PERIOD = 30*60*1000;
+            WAS_UNREACHABLE_PERIOD = 5*60*1000;
         }
         _context.simpleTimer2().addPeriodicEvent(new CleanupUnreachable(), 2 * UNREACHABLE_PERIOD, UNREACHABLE_PERIOD / 2);
         // if the router is slow, or we have the i2prouter script on linux that bumps the ulimit,

@@ -26,8 +26,9 @@ import net.i2p.util.Log;
 
 /**
  * Async job to walk the client through generating a lease set.
- * Sends the request to the client and handles the response.
- * Failure handling is done by verifyClientLiveliness() which checks for expired leases.
+ * Sends the request to the client and queues a CheckLeaseRequestStatus job
+ * for timeout cleanup. On failure, calls failLeaseRequest() to clean up
+ * the pending LeaseRequestState so new requests can proceed.
  *
  */
 class RequestLeaseSetJob extends JobImpl {
@@ -53,7 +54,11 @@ class RequestLeaseSetJob extends JobImpl {
     public String getName() {return "Request LeaseSet from Client";}
 
     public void runJob() {
-        if (_runner.isDead()) {return;}
+        if (_runner.isDead()) {
+            if (_log.shouldWarn())
+                _log.warn("Runner is dead, cannot request LeaseSet: " + _requestState);
+            return;
+        }
 
         boolean isLS2 = false;
         SessionConfig cfg = _runner.getPrimaryConfig();
@@ -114,6 +119,9 @@ class RequestLeaseSetJob extends JobImpl {
         }
         SessionId id = _runner.getSessionId(dest.calculateHash());
         if (id == null) {
+            if (_log.shouldWarn())
+                _log.warn("No SessionId for destination " + dest.calculateHash().toBase32().substring(0,8) +
+                          " in RequestLeaseSetJob");
             _runner.failLeaseRequest(_requestState);
             return;
         }
@@ -151,6 +159,9 @@ class RequestLeaseSetJob extends JobImpl {
 
         try {
             _runner.doSend(msg);
+            if (_log.shouldInfo())
+                _log.info("LeaseSet request sent to client, scheduling timeout check for " + _requestState);
+            getContext().jobQueue().addJob(new CheckLeaseRequestStatus());
         } catch (I2CPMessageException ime) {
             getContext().statManager().addRateData("client.requestLeaseSetDropped", 1);
             _log.error("Error sending I2CP message requesting the LeaseSet", ime);
@@ -162,4 +173,40 @@ class RequestLeaseSetJob extends JobImpl {
         }
     }
 
+    /**
+     * Schedule this job to be run after the request's expiration, so that if
+     * it wasn't yet successful, we clean up the pending state so new requests
+     * can proceed.
+     */
+    private class CheckLeaseRequestStatus extends JobImpl {
+        private final long _start;
+
+        public CheckLeaseRequestStatus() {
+            super(RequestLeaseSetJob.this.getContext());
+            _start = System.currentTimeMillis();
+            getTiming().setStartAfter(_requestState.getExpiration());
+        }
+
+        public void runJob() {
+            if (_runner.isDead()) {
+                if (_log.shouldDebug())
+                    _log.debug("Already dead, dont try to expire the leaseSet lookup");
+                return;
+            }
+            if (_requestState.getIsSuccessful()) {
+                RequestLeaseSetJob.this.getContext().statManager().addRateData("client.requestLeaseSetSuccess", 1);
+                return;
+            } else {
+                RequestLeaseSetJob.this.getContext().statManager().addRateData("client.requestLeaseSetTimeout", 1);
+                if (_log.shouldError()) {
+                    long waited = System.currentTimeMillis() - _start;
+                    _log.error("Failed to receive a leaseSet in the time allotted (" + waited + "): " + _requestState);
+                }
+                if (_requestState.getOnFailed() != null)
+                    RequestLeaseSetJob.this.getContext().jobQueue().addJob(_requestState.getOnFailed());
+                _runner.failLeaseRequest(_requestState);
+            }
+        }
+        public String getName() { return "Check LeaseRequest Status"; }
+    }
 }
