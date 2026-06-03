@@ -257,13 +257,23 @@ abstract class BuildRequestor {
                 : mgr.selectInboundTunnel(from, farEnd);
 
             if (paired != null) {
-                SessionKeyManager skm = ctx.clientManager().getClientSessionKeyManager(from);
-                if (skm != null || cfg.getGarlicReplyKeys() == null) {
-                    return paired;
-                }
-                // Client SKM missing but garlic reply expected → fall through to expl
-                if (log.shouldInfo()) {
-                    log.info("Client SKM unavailable for garlic reply -> Falling back to exploratory for " + cfg);
+                // Skip paired tunnel with 3+ consecutive failures — it's very likely
+                // to drop the reply, causing a build timeout and unnecessary churn.
+                // Fall through to exploratory which is more reliable.
+                if (paired.getConsecutiveFailures() >= 2) {
+                    if (log.shouldWarn()) {
+                        log.warn("Paired tunnel has " + paired.getConsecutiveFailures() +
+                                 " consecutive failures, falling back to exploratory for reply: " + cfg);
+                    }
+                } else {
+                    SessionKeyManager skm = ctx.clientManager().getClientSessionKeyManager(from);
+                    if (skm != null || cfg.getGarlicReplyKeys() == null) {
+                        return paired;
+                    }
+                    // Client SKM missing but garlic reply expected → fall through to expl
+                    if (log.shouldInfo()) {
+                        log.info("Client SKM unavailable for garlic reply -> Falling back to exploratory for " + cfg);
+                    }
                 }
             }
         } else {
