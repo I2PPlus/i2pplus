@@ -141,7 +141,11 @@ class LegendComposer implements RrdGraphConstants {
                 } else {
                     // nothing specified, align with respect to '\J'
                     if (noJustification || isLastLine) {
-                        placeComments(legX, (legWidth - width) / spaceCount + interLegendSpace);
+                        if (spaceCount > 0) {
+                            placeComments(legX, (legWidth - width) / spaceCount + interLegendSpace);
+                        } else {
+                            placeComments(legX, interLegendSpace);
+                        }
                     } else {
                         placeComments(legX, interLegendSpace);
                     }
