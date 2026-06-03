@@ -5,10 +5,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.CoreVersion;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
@@ -49,6 +53,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     protected static final double ATTACK_THRESHOLD = ProfileOrganizer.ATTACK_THRESHOLD;
     protected static final long STARTUP_WARNING_SUPPRESS_MS = 15 * 60 * 1000;
+
+    /** Peers selected within this window are excluded from further selection to ensure diversity */
+    protected static final long PEER_SELECTION_COOLDOWN_MS = 60_000;
+
+    /** Shared cooldown map across all peer selectors */
+    protected static final Map<Hash, Long> _peerCooldowns = new ConcurrentHashMap<Hash, Long>();
+
+    /** Lock for atomic cooldown check+record across peer selectors */
+    protected static final Object _cooldownLock = new Object();
 
     protected TunnelPeerSelector(RouterContext context) {
         super(context);
@@ -798,14 +811,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @since 0.9.58
      */
     protected class Excluder extends ExcluderBase {
+        private static final int MAX_EXCLUDED_PEERS = 384;
         private final boolean _isIn, _isExpl;
 
         /**
          *  Automatically adds selectPeersInTooManyTunnels(), unless i2np.allowLocal.
          */
         public Excluder(boolean isInbound, boolean isExploratory) {
-            super(ctx.getBooleanProperty("i2np.allowLocal") ? new HashSet<Hash>()
-                                                            : ctx.tunnelManager().selectPeersInTooManyTunnels());
+            super(ctx.getBooleanProperty("i2np.allowLocal") ? new LinkedHashSet<Hash>()
+                                                             : new LinkedHashSet<Hash>(ctx.tunnelManager().selectPeersInTooManyTunnels()));
             _isIn = isInbound;
             _isExpl = isExploratory;
         }
@@ -817,7 +831,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
          *  @param toAdd initial contents, copied
          */
         public Excluder(boolean isInbound, boolean isExploratory, Set<Hash> toAdd) {
-            super(new HashSet<Hash>(toAdd));
+            super(new LinkedHashSet<Hash>(toAdd));
             _isIn = isInbound;
             _isExpl = isExploratory;
         }
@@ -825,6 +839,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      * Check if a peer should be excluded.
      * Automatically adds to the set if excluded.
+     * Capped at MAX_EXCLUDED_PEERS — evicts oldest entry when over limit.
      *
      * @param o a Hash object to check
      * @return true if peer should be excluded (and added to set)
@@ -835,6 +850,13 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             Hash h = (Hash) o;
             if (shouldExclude(h, _isIn, _isExpl)) {
                 s.add(h);
+                if (s.size() > MAX_EXCLUDED_PEERS) {
+                    Iterator<Hash> it = s.iterator();
+                    if (it.hasNext()) {
+                        it.next();
+                        it.remove();
+                    }
+                }
                 return true;
             }
             return false;

@@ -5,6 +5,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,6 +22,7 @@ import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.peermanager.PeerTestJob;
 import net.i2p.router.peermanager.PeerManagerFacadeImpl;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.stat.RateConstants;
@@ -63,11 +65,26 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private static final long REFRESH_DELAY_AFTER_REMOVAL = 15*1000; // wait for new tunnels to build
     private static final double MAX_SHARE_RATIO = 100000d;
 
+    /**
+     * Delay before removing pools after client disconnect.
+     * Allows tunnels to naturally expire rather than collapsing.
+     * @since 0.9.69+
+     */
+    private static final long POOL_CLEANUP_DELAY_MS = 30 * 1000; // 30 seconds
+
+    /**
+     * Pending delayed cleanups for pool removal.
+     * Key: destination hash, Value: cleanup task
+     * @since 0.9.69+
+     */
+    private final Map<Hash, DelayedPoolCleanup> _pendingCleanups;
+
     public TunnelPoolManager(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(TunnelPoolManager.class);
         _clientInboundPools = new ConcurrentHashMap<Hash, TunnelPool>(32);
         _clientOutboundPools = new ConcurrentHashMap<Hash, TunnelPool>(32);
+        _pendingCleanups = new ConcurrentHashMap<Hash, DelayedPoolCleanup>(32);
         _clientPeerSelector = new ClientPeerSelector(ctx);
         _ghostPeerManager = new GhostPeerManager(ctx);
         ExploratoryPeerSelector selector = new ExploratoryPeerSelector(_context);
@@ -293,6 +310,28 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         return 0;
     }
 
+    /**
+     *  Get USABLE inbound client tunnel count for a specific destination.
+     *  Filters out failed and expired tunnels.
+     *  @since 0.9.69+
+     */
+    public int getUsableInboundClientTunnelCount(Hash destination)  {
+        TunnelPool pool = _clientInboundPools.get(destination);
+        if (pool != null) {return pool.getValidTunnelCount();}
+        return 0;
+    }
+
+    /**
+     *  Get USABLE outbound client tunnel count for a specific destination.
+     *  Filters out failed and expired tunnels.
+     *  @since 0.9.69+
+     */
+    public int getUsableOutboundClientTunnelCount(Hash destination)  {
+        TunnelPool pool = _clientOutboundPools.get(destination);
+        if (pool != null) {return pool.getValidTunnelCount();}
+        return 0;
+    }
+
     /** Get the number of tunnels we're participating in as a gateway or endpoint. */
     public int getParticipatingCount() { return _context.tunnelDispatcher().getParticipatingCount(); }
 
@@ -412,6 +451,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         TunnelPool outbound = null;
 
         boolean delayOutbound = false;
+        boolean isClientBootstrapping = false;
         // synch with removeTunnels() below
         synchronized (this) {
             inbound = _clientInboundPools.get(dest);
@@ -419,6 +459,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 inbound = new TunnelPool(_context, this, settings.getInboundSettings(),
                                          _clientPeerSelector);
                 _clientInboundPools.put(dest, inbound);
+                isClientBootstrapping = true;
             } else {inbound.setSettings(settings.getInboundSettings());}
             outbound = _clientOutboundPools.get(dest);
             if (outbound == null) {
@@ -426,6 +467,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                                           _clientPeerSelector);
                 _clientOutboundPools.put(dest, outbound);
                 delayOutbound = true;
+                isClientBootstrapping = true;
             } else {outbound.setSettings(settings.getOutboundSettings());}
             // Set paired pools for client tunnels
             inbound.setPairedPool(outbound);
@@ -434,8 +476,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         inbound.startup();
         // Don't delay the outbound if it already exists, as this opens up a large
         // race window with removeTunnels() below
-        if (delayOutbound) {_context.simpleTimer2().addEvent(new DelayedStartup(outbound), 1000);}
+        if (delayOutbound) {_context.simpleTimer2().addEvent(new ConditionalOutboundStartup(outbound, inbound, _context), 2000);}
         else {outbound.startup();}
+
+        // Bootstrap newly created client pools to ensure they get initial tunnels
+        if (isClientBootstrapping) {
+            _context.jobQueue().addJob(new BootstrapClientPool(_context, inbound, outbound));
+        }
     }
 
     /**
@@ -519,12 +566,35 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
     }
 
-    private static class DelayedStartup implements SimpleTimer.TimedEvent {
-        private final TunnelPool pool;
+    static final String PROP_OUTBOUND_STARTUP_RETRIES = "router.tunnel.outboundStartupRetries";
+    private static final int DEFAULT_OUTBOUND_STARTUP_RETRIES = 5;
 
-        public DelayedStartup(TunnelPool p) {this.pool = p;}
+    /**
+     *  Conditionally start the outbound pool after the inbound pool has at least one tunnel.
+     *  Retries every 2s; after max attempts, starts unconditionally.
+     *  This prevents "Destination not reachable (no LeaseSet found)" at startup.
+     */
+    private static class ConditionalOutboundStartup implements SimpleTimer.TimedEvent {
+        private final TunnelPool outbound;
+        private final TunnelPool inbound;
+        private final RouterContext ctx;
+        private final int maxAttempts;
+        private int attempts;
 
-        public void timeReached() {this.pool.startup();}
+        public ConditionalOutboundStartup(TunnelPool out, TunnelPool in, RouterContext context) {
+            this.outbound = out;
+            this.inbound = in;
+            this.ctx = context;
+            this.maxAttempts = context.getProperty(PROP_OUTBOUND_STARTUP_RETRIES, DEFAULT_OUTBOUND_STARTUP_RETRIES);
+        }
+
+        public void timeReached() {
+            if (inbound.getTunnelCount() > 0 || ++attempts >= maxAttempts) {
+                outbound.startup();
+            } else {
+                ctx.simpleTimer2().addEvent(this, 2000);
+            }
+        }
     }
 
     /**
@@ -542,23 +612,101 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *
      *  Must be called AFTER deregistration by the client manager.
      *
+     *  Uses delayed cleanup to allow tunnels to continue operating
+     *  until they naturally expire. Prevents pool collapse when client disconnects.
+     *
      */
     public synchronized void removeTunnels(Hash destination) {
         if (destination == null) return;
         if (_log.shouldDebug()) {
-            _log.debug("Removing tunnel from client pool [" + destination.toBase32().substring(0,8) + "]");
+            _log.debug("Scheduling tunnel pool removal for client [" + destination.toBase32().substring(0,8) + "]");
         }
         if (_context.clientManager().isLocal(destination)) {
             // race with buildTunnels() on restart of a client
             if (_log.shouldWarn()) {
-                _log.warn("Not removing tunnel from client pool [" + destination.toBase32().substring(0,8) + "] -> Still registered with ClientManager");
+                _log.warn("Not removing tunnel pool for [" + destination.toBase32().substring(0,8) + "] -> Still registered with ClientManager");
             }
             return;
+        }
+
+        // Cancel any existing cleanup for this destination
+        DelayedPoolCleanup existingCleanup = _pendingCleanups.remove(destination);
+        if (existingCleanup != null) {
+            existingCleanup.cancel();
+        }
+
+        // Schedule delayed cleanup to allow graceful tunnel expiration
+        DelayedPoolCleanup cleanup = new DelayedPoolCleanup(destination);
+        _pendingCleanups.put(destination, cleanup);
+        _context.simpleTimer2().addEvent(cleanup, POOL_CLEANUP_DELAY_MS);
+
+        if (_log.shouldInfo()) {
+            TunnelPool inbound = _clientInboundPools.get(destination);
+            TunnelPool outbound = _clientOutboundPools.get(destination);
+            int tunnelCount = 0;
+            if (inbound != null) tunnelCount += inbound.getTunnelCount();
+            if (outbound != null) tunnelCount += outbound.getTunnelCount();
+            _log.info("Delayed pool removal scheduled for [" + destination.toBase32().substring(0,8) +
+                      "] - " + tunnelCount + " tunnels will expire naturally");
+        }
+    }
+
+    /**
+     * Force immediate removal of a pool - used for router shutdown.
+     * @param destination the destination hash
+     * @since 0.9.69+
+     */
+    public synchronized void forceRemoveTunnels(Hash destination) {
+        if (destination == null) return;
+        // Cancel any pending delayed cleanup
+        DelayedPoolCleanup cleanup = _pendingCleanups.remove(destination);
+        if (cleanup != null) {cleanup.cancel();}
+        doRemoveTunnels(destination);
+    }
+
+    /**
+     * Actually perform pool removal.
+     * @param destination the destination hash
+     */
+    private synchronized void doRemoveTunnels(Hash destination) {
+        if (_log.shouldDebug()) {
+            _log.debug("Removing tunnel pool for client [" + destination.toBase32().substring(0,8) + "]");
         }
         TunnelPool inbound = _clientInboundPools.remove(destination);
         TunnelPool outbound = _clientOutboundPools.remove(destination);
         if (inbound != null) {inbound.shutdown();}
         if (outbound != null) {outbound.shutdown();}
+        if (_log.shouldInfo()) {
+            _log.info("Tunnel pools removed for [" + destination.toBase32().substring(0,8) + "]");
+        }
+    }
+
+    /**
+     * Delayed cleanup task for pool removal.
+     * Allows tunnels to continue operating until they naturally expire.
+     * @since 0.9.69+
+     */
+    private class DelayedPoolCleanup implements SimpleTimer.TimedEvent {
+        private final Hash _destination;
+        private volatile boolean _cancelled = false;
+
+        public DelayedPoolCleanup(Hash dest) {_destination = dest;}
+
+        public void cancel() {_cancelled = true;}
+
+        public void timeReached() {
+            if (_cancelled) return;
+            _pendingCleanups.remove(_destination);
+            // Check if client re-registered during delay
+            if (_context.clientManager().isLocal(_destination)) {
+                if (_log.shouldInfo()) {
+                    _log.info("Cancelling delayed pool removal - client re-registered: " +
+                              _destination.toBase32().substring(0,8));
+                }
+                return;
+            }
+            doRemoveTunnels(_destination);
+        }
     }
 
     /** queue a recurring test job if appropriate */
@@ -598,17 +746,19 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             }
         }
 
-        _inboundExploratory.startup();
-        _context.simpleTimer2().addEvent(new DelayedStartup(_outboundExploratory), 3*1000);
+        // Start OUTBOUND exploratory FIRST - it can bootstrap with 0-hop
+        // Inbound exploratory needs outbound for reply path
+        _outboundExploratory.startup();
+        _context.simpleTimer2().addEvent(new SimpleTimer.TimedEvent() {
+            public void timeReached() {_inboundExploratory.startup();}
+        }, 2*1000);
 
         // try to build up longer tunnels
-        _context.jobQueue().addJob(new BootstrapPool(_context, _inboundExploratory));
         _context.jobQueue().addJob(new BootstrapPool(_context, _outboundExploratory));
-
-        // remove slow tunnels job - runs every 10 seconds
-        if (_log.shouldDebug())
-            _log.debug("Adding RemoveSlowTunnelsJob to job queue");
-        _context.jobQueue().addJob(new RemoveSlowTunnelsJob(_context, this));
+        _context.jobQueue().addJob(new BootstrapPool(_context, _inboundExploratory));
+        if (!_context.getBooleanProperty("router.tunnel.disableSlowTunnelRemoval")) {
+            _context.jobQueue().addJob(new RemoveSlowTunnelsJob(_context, this));
+        }
     }
 
     private static class BootstrapPool extends JobImpl {
@@ -619,8 +769,22 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             getTiming().setStartAfter(ctx.clock().now() + 5*1000);
         }
         public String getName() { return "Bootstrap Tunnel Pool"; }
+        public void runJob() {_pool.buildFallback();}
+    }
+
+    private static class BootstrapClientPool extends JobImpl {
+        private final TunnelPool _inbound;
+        private final TunnelPool _outbound;
+        public BootstrapClientPool(RouterContext ctx, TunnelPool inbound, TunnelPool outbound) {
+            super(ctx);
+            _inbound = inbound;
+            _outbound = outbound;
+            getTiming().setStartAfter(ctx.clock().now() + 2*1000);
+        }
+        public String getName() { return "Bootstrap Client Tunnel Pool"; }
         public void runJob() {
-            _pool.buildFallback();
+            _inbound.buildFallback();
+            _outbound.buildFallback();
         }
     }
 
@@ -641,6 +805,11 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             if (_mgr.isShutdown()) {
                 if (_mgr._log.shouldInfo())
                     _mgr._log.info("Remove Slow Tunnels Job: Manager is shutdown, not rescheduling");
+                return;
+            }
+            if (_mgr._context.getBooleanProperty("router.tunnel.disableSlowTunnelRemoval")) {
+                if (_mgr._log.shouldInfo())
+                    _mgr._log.info("Remove Slow Tunnels Job: Disabled via router.tunnel.disableSlowTunnelRemoval");
                 return;
             }
             if (_mgr._log.shouldInfo())
@@ -853,17 +1022,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                         found++;
                         continue;
                     }
-                    // Skip tunnels actively processing data to avoid disrupting active streams.
-                    // This is a lifetime counter, so once a tunnel has been useful, we only
-                    // remove it if it's truly pathological (2x threshold in the latency check below).
-                    boolean hasTraffic = info.getProcessedMessagesCount() > 0;
                     // Use average latency, require at least 3 tests before removal
                     if (info instanceof PooledTunnelCreatorConfig) {
                         PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
                         if (cfg.hasEnoughLatencyTests()) {
                             int avgLatency = cfg.getAverageLatency();
-                            double effectiveThreshold = hasTraffic ? threshold * 2 : threshold;
-                            if (avgLatency > effectiveThreshold) {
+                            if (avgLatency > threshold) {
                                 toRemove.add(info);
                                 found++;
                             }
@@ -934,6 +1098,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         listPools(pools);
         for (TunnelPool pool : pools) {
             if (pool == null || !pool.isAlive()) continue;
+            // Skip non-exploratory client pools entirely — their inbound and outbound
+            // tunnels form paired reply paths. Early expiry on either direction breaks
+            // the pair and causes connection failures. Tunnel count for these pools is
+            // managed by natural expiry and explicit failure handling only.
+            if (!pool.getSettings().isExploratory()) {
+                continue;
+            }
             try {
                 int pruned = pool.pruneExcessTunnels();
                 if (pruned > 0 && _log.shouldInfo()) {
@@ -952,8 +1123,34 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public synchronized void shutdown() {
         _handler.shutdown(_numHandlerThreads);
         _executor.shutdown();
+
+        // Cancel all pending delayed cleanups and force remove all client pools
+        for (Iterator<Map.Entry<Hash, DelayedPoolCleanup>> iter = _pendingCleanups.entrySet().iterator(); iter.hasNext(); ) {
+            Map.Entry<Hash, DelayedPoolCleanup> entry = iter.next();
+            entry.getValue().cancel();
+            iter.remove();
+        }
+
+        // Force remove all client pools immediately
+        for (Iterator<Map.Entry<Hash, TunnelPool>> iter = _clientInboundPools.entrySet().iterator(); iter.hasNext(); ) {
+            Map.Entry<Hash, TunnelPool> entry = iter.next();
+            TunnelPool pool = entry.getValue();
+            if (pool != null) {pool.shutdown();}
+            iter.remove();
+        }
+        for (Iterator<Map.Entry<Hash, TunnelPool>> iter = _clientOutboundPools.entrySet().iterator(); iter.hasNext(); ) {
+            Map.Entry<Hash, TunnelPool> entry = iter.next();
+            TunnelPool pool = entry.getValue();
+            if (pool != null) {pool.shutdown();}
+            iter.remove();
+        }
+
         shutdownExploratory();
         _isShutdown = true;
+
+        if (_log.shouldInfo()) {
+            _log.info("TunnelPoolManager shutdown complete");
+        }
     }
 
     /**
@@ -990,6 +1187,23 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /** @return the build executor */
     BuildExecutor getExecutor() { return _executor; }
 
+    /** Remove a tunnel from the expiration queue to prevent memory leak */
+    void removeFromExpiration(PooledTunnelCreatorConfig cfg) {
+        ExpireJob.removeFromExpiration(cfg);
+    }
+
+    /**
+     * Remove a participating tunnel from the expiration queue.
+     * Called when IdleTunnelMonitor drops idle tunnels.
+     * @param cfg the hop config to remove
+     */
+    public void removeFromExpirationHop(HopConfig cfg) {
+        // HopConfig-based removal is a no-op for now; only PooledTunnelCreatorConfig tracked
+    }
+
+    /** @return the ghost peer manager for tracking unresponsive peers @since 0.9.69+ */
+    public GhostPeerManager getGhostPeerManager() { return _ghostPeerManager; }
+
     /** @return true if the manager has been shut down */
     boolean isShutdown() { return _isShutdown; }
 
@@ -1023,6 +1237,39 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
+     * Count tunnels and peers separately for exploratory or client pools.
+     * @param lc object counter to store peer counts
+     * @param exploratory if true, count exploratory tunnels; if false, count client tunnels
+     * @return total number of tunnels counted
+     * @since 0.9.69+
+     */
+    private int countTunnelsPerPeer(ObjectCounterUnsafe<Hash> lc, boolean exploratory) {
+        List<TunnelPool> pools = new ArrayList<TunnelPool>();
+        if (exploratory) {
+            pools.add(_inboundExploratory);
+            pools.add(_outboundExploratory);
+        } else {
+            pools.addAll(_clientInboundPools.values());
+            pools.addAll(_clientOutboundPools.values());
+        }
+        int tunnelCount = 0;
+        for (TunnelPool tp : pools) {
+            for (TunnelInfo info : tp.listTunnels()) {
+                if (info.getLength() > 1) {
+                    tunnelCount++;
+                    for (int j = 0; j < info.getLength(); j++) {
+                        Hash peer = info.getPeer(j);
+                        if (!_context.routerHash().equals(peer)) {
+                            lc.increment(peer);
+                        }
+                    }
+                }
+            }
+        }
+        return tunnelCount;
+    }
+
+    /**
      *  For reliability reasons, don't allow a peer in more than x% of
      *  client and exploratory tunnels.
      *
@@ -1038,20 +1285,36 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @return Set of peers that should not be allowed in another tunnel
      */
     public Set<Hash> selectPeersInTooManyTunnels() {
-        ObjectCounterUnsafe<Hash> lc = new ObjectCounterUnsafe<Hash>();
-        int tunnelCount = countTunnelsPerPeer(lc);
         Set<Hash> rv = new HashSet<Hash>();
         long uptime = _context.router().getUptime();
         int max = uptime > 30*60*1000 ? DEFAULT_MAX_PCT_TUNNELS : STARTUP_MAX_PCT_TUNNELS;
-        if (isFirewalled()) {max *=2;}
-        for (Hash h : lc.objects()) {
-            if (lc.count(h) > 0) {
-                double percentage = (lc.count(h) + 1) * 100.0 / (tunnelCount + 1);
-                if (percentage > max) {
-                    rv.add(h);
-                }
+
+        // Increase threshold under low tunnel build success
+        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+        if (isFirewalled() || buildSuccess < 0.40) {max *= 2;}
+
+        // Count exploratory and client tunnels separately
+        ObjectCounterUnsafe<Hash> lcExp = new ObjectCounterUnsafe<Hash>();
+        int exploratoryCount = countTunnelsPerPeer(lcExp, true);
+
+        ObjectCounterUnsafe<Hash> lcClient = new ObjectCounterUnsafe<Hash>();
+        int clientCount = countTunnelsPerPeer(lcClient, false);
+
+        // Check percentage limits separately for each tunnel type
+        for (Hash h : lcExp.objects()) {
+            if (lcExp.count(h) > 0 && exploratoryCount > 0 &&
+                (lcExp.count(h) + 1) * 100 / (exploratoryCount + 1) > max) {
+                rv.add(h);
             }
         }
+
+        for (Hash h : lcClient.objects()) {
+            if (lcClient.count(h) > 0 && clientCount > 0 &&
+                (lcClient.count(h) + 1) * 100 / (clientCount + 1) > max) {
+                rv.add(h);
+            }
+        }
+
         return rv;
     }
 
@@ -1105,6 +1368,92 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      */
     public TunnelPool getOutboundPool(Hash client) {
         return _clientOutboundPools.get(client);
+    }
+
+    /**
+     * Emergency pool recovery: Check all registered clients have valid tunnel pools.
+     * Recreates missing pools to prevent service interruption.
+     * Called periodically by BuildExecutor.
+     * @return number of pools recovered
+     * @since 0.9.69+
+     */
+    public int checkAndRecoverPools() {
+        int recovered = 0;
+        Set<Destination> clients = _context.clientManager().listClients();
+        for (Destination dest : clients) {
+            Hash h = dest.calculateHash();
+            boolean hasInbound = _clientInboundPools.containsKey(h);
+            boolean hasOutbound = _clientOutboundPools.containsKey(h);
+
+            if (!hasInbound || !hasOutbound) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Detected missing pool for registered client: " +
+                              h.toBase32().substring(0,8) +
+                              " (inbound=" + hasInbound + ", outbound=" + hasOutbound + ")");
+                }
+
+                // Cancel any pending cleanup for this destination
+                DelayedPoolCleanup cleanup = _pendingCleanups.remove(h);
+                if (cleanup != null) {
+                    cleanup.cancel();
+                    if (_log.shouldInfo()) {
+                        _log.info("Cancelled delayed cleanup for re-registered client: " +
+                                  h.toBase32().substring(0,8));
+                    }
+                }
+
+                try {
+                    ClientTunnelSettings settings = new ClientTunnelSettings(h);
+                    buildTunnels(dest, settings);
+                    recovered++;
+                    if (_log.shouldWarn()) {
+                        _log.warn("RECOVERY: Created new tunnel pools for client: " +
+                                  h.toBase32().substring(0,8));
+                    }
+                } catch (Exception e) {
+                    if (_log.shouldError()) {
+                        _log.error("Failed to recover pools for client: " +
+                                   h.toBase32().substring(0,8), e);
+                    }
+                }
+            }
+        }
+
+        int inboundPools = _clientInboundPools.size();
+        int outboundPools = _clientOutboundPools.size();
+        int registeredClients = clients.size();
+
+        if (inboundPools != registeredClients || outboundPools != registeredClients) {
+            if (_log.shouldWarn()) {
+                _log.warn("Pool health check: " + registeredClients + " registered clients, " +
+                          inboundPools + " inbound pools, " + outboundPools + " outbound pools");
+            }
+        } else if (recovered > 0 && _log.shouldInfo()) {
+            _log.info("Pool health check: All " + registeredClients + " clients have pools");
+        }
+
+        return recovered;
+    }
+
+    /**
+     * Log pool health summary for monitoring.
+     * @since 0.9.69+
+     */
+    public void logPoolHealth() {
+        int inboundPools = _clientInboundPools.size();
+        int outboundPools = _clientOutboundPools.size();
+        int registeredClients = _context.clientManager().listClients().size();
+        int pendingCleanups = _pendingCleanups.size();
+
+        if (inboundPools != registeredClients || outboundPools != registeredClients) {
+            _log.warn("Pool mismatch detected: " + registeredClients + " clients, " +
+                      inboundPools + " inbound pools, " + outboundPools + " outbound pools, " +
+                      pendingCleanups + " pending cleanups");
+        } else {
+            _log.info("Pool health: " + registeredClients + " clients, " +
+                      inboundPools + " inbound pools, " + outboundPools + " outbound pools, " +
+                      pendingCleanups + " pending cleanups");
+        }
     }
 
     /**
@@ -1168,12 +1517,4 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
     }
 
-    /**
-     * Get the ghost peer manager for tracking peers with consistent tunnel build timeouts.
-     * @return the GhostPeerManager instance
-     * @since 0.9.68+
-     */
-    public GhostPeerManager getGhostPeerManager() {
-        return _ghostPeerManager;
-    }
 }

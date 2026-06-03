@@ -39,8 +39,8 @@ import net.i2p.util.SystemVersion;
 class BuildExecutor implements Runnable {
     private static final int TUNNEL_LIFETIME_MS = 10*60*1000;
     private static final int TUNNEL_MIN_EXPIRY_MS = 5*60*1000;
-    private static final int TUNNEL_TARGET_MIN = 4;
-    private static final int TUNNEL_TARGET_BUFFER = 2;
+    private static final int TUNNEL_TARGET_MIN = 2;
+    private static final int TUNNEL_TARGET_BUFFER = 0;
     private final ArrayList<Long> _recentBuildIds = new ArrayList<Long>(256);
     private final RouterContext _context;
     private final Log _log;
@@ -53,6 +53,7 @@ class BuildExecutor implements Runnable {
     private boolean _repoll;
     private final AtomicInteger _buildSuccessCount = new AtomicInteger();
     private final AtomicInteger _buildFailureCount = new AtomicInteger();
+    private final AtomicInteger _buildTimeoutCount = new AtomicInteger();
     private final AtomicInteger _firstHopSuccessCount = new AtomicInteger();
     private final AtomicInteger _firstHopFailureCount = new AtomicInteger();
     private volatile long _adaptiveTimeout = BuildRequestor.REQUEST_TIMEOUT;
@@ -67,6 +68,10 @@ class BuildExecutor implements Runnable {
         int multiplier = _context.getProperty("router.buildConcurrencyMultiplier", 4);
         int cores = SystemVersion.getCores();
         int result = Math.max(cores * multiplier, 16);
+        int maxCap = _context.getProperty("router.maxConcurrentBuilds", Math.max(cores * 8, 64));
+        if (result > maxCap) {
+            result = maxCap;
+        }
         if (_log.shouldDebug()) {
             _log.debug("Max concurrent tunnel builds: " + result +
                        " (cores=" + cores + " * multiplier=" + multiplier + ")");
@@ -142,51 +147,78 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
     }
 
     /**
-     * Update success/failure counters and calculate adaptive timeout
+     * Update success/failure/timeout counters and calculate adaptive timeout
      */
-    private void updateBuildStats(boolean success) {
-        if (success) {
+    private void updateBuildStats(Result result) {
+        if (result == Result.SUCCESS) {
             _buildSuccessCount.incrementAndGet();
+        } else if (result == Result.TIMEOUT) {
+            _buildTimeoutCount.incrementAndGet();
         } else {
             _buildFailureCount.incrementAndGet();
         }
         // Every 50 builds, recalculate adaptive timeout
-        int total = _buildSuccessCount.get() + _buildFailureCount.get();
+        int total = _buildSuccessCount.get() + _buildFailureCount.get() + _buildTimeoutCount.get();
         if (total >= 50) {
             calculateAdaptiveTimeoutFromSuccess();
             // Reset counters periodically to favor recent behavior
-            _buildSuccessCount.set(Math.max(1, _buildSuccessCount.get() / 2));
-            _buildFailureCount.set(Math.max(1, _buildFailureCount.get() / 2));
+            _buildSuccessCount.set(_buildSuccessCount.get() / 2);
+            _buildFailureCount.set(_buildFailureCount.get() / 2);
+            _buildTimeoutCount.set(_buildTimeoutCount.get() / 2);
         }
     }
 
     /**
-     * Calculate adaptive timeout based on build success/failure ratio
+     * Calculate adaptive timeout based on build success/failure/timeout ratio.
+     * Differentiates between rejection (peers respond fast with NACK) and
+     * timeout (peers don't respond at all) to set the right timeout.
      */
     private void calculateAdaptiveTimeoutFromSuccess() {
-        int total = _buildSuccessCount.get() + _buildFailureCount.get();
+        int successCount = _buildSuccessCount.get();
+        int failureCount = _buildFailureCount.get();
+        int timeoutCount = _buildTimeoutCount.get();
+        int total = successCount + failureCount + timeoutCount;
         if (total < 10) { return; }
 
-        double successRate = (double) _buildSuccessCount.get() / total;
-        double failureRate = 1.0 - successRate;
+        double successRate = (double) successCount / total;
+        double failureRate = (double) failureCount / total;
+        double timeoutRate = (double) timeoutCount / total;
 
-        // Base timeout from 20s, up to 30s max
+        // Base timeout from 15s
         long baseTimeout = BuildRequestor.REQUEST_TIMEOUT;
 
-        // Increase timeout by 1s for every 5% failure rate above 20%
-        // At 60% failure (40% success) -> add 8s = 28s timeout
-        // At 80% failure (20% success) -> add 12s = 32s (capped at 30s)
-        if (failureRate > 0.20) {
-            long increment = (long) ((failureRate - 0.20) * 100 / 5); // 1s per 5%
+        // When timeout rate is high, increase timeout to give slow peers more time.
+        // Timeouts mean peers are reachable but slow — more time helps.
+        if (timeoutRate > 0.30) {
+            // Increase 1s per 10% timeout above 30%
+            // At 50% timeouts -> 17s; at 80% -> 20s
+            long increment = (long) ((timeoutRate - 0.30) * 100 / 10);
+            increment = Math.min(increment, 5L);
             baseTimeout += increment * 1000;
         }
 
-        // Also adjust for tunnel length
-        int avgLength = 3; // Assume 3-hop by default
-        baseTimeout += (avgLength - 3) * 5 * 1000;
+        // When rejection rate is high but timeouts are low, decrease timeout to
+        // cycle through peers faster (peers reject fast, more time won't help).
+        if (failureRate > 0.50 && timeoutRate < 0.20) {
+            long decrement = (long) ((failureRate - 0.50) * 100 / 10);
+            decrement = Math.min(decrement, 3L);
+            baseTimeout = Math.max(BuildRequestor.REQUEST_TIMEOUT - 5000, baseTimeout - decrement * 1000);
+        }
 
-         // Cap at 20 seconds
-         _adaptiveTimeout = Math.min(baseTimeout, 20 * 1000);
+        // When success rate is high, increase timeout to maximize build success
+        if (successRate > 0.50) {
+            long increment = (long) ((successRate - 0.50) * 100 / 5);
+            baseTimeout += increment * 1000;
+        }
+
+        // Ensure minimum timeout is reasonable for multi-hop tunnels
+        long minimumTimeout = Math.max(BuildRequestor.REQUEST_TIMEOUT - 3000, BuildRequestor.FIRST_HOP_TIMEOUT + 2000);
+        if (baseTimeout < minimumTimeout) {
+            baseTimeout = minimumTimeout;
+        }
+
+         // Cap at 30 seconds
+         _adaptiveTimeout = Math.min(baseTimeout, 30 * 1000);
 
         // Also calculate adaptive first-hop timeout based on first-hop success rate
         int firstHopTotal = _firstHopSuccessCount.get() + _firstHopFailureCount.get();
@@ -197,8 +229,13 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
             // Base first-hop timeout from 8s, up to 15s max
             long baseFirstHop = BuildRequestor.FIRST_HOP_TIMEOUT;
 
-            // Increase by 1s for every 10% first-hop failure above 20%
-            if (firstHopFailureRate > 0.20) {
+            // When failure rate is high, decrease first-hop timeout to fail fast.
+            if (firstHopFailureRate > 0.50) {
+                // Decrease 1s per 10% failure above 50%, min 5s
+                long decrement = (long) ((firstHopFailureRate - 0.50) * 100 / 10);
+                decrement = Math.min(decrement, 3L);
+                baseFirstHop = Math.max(5000, baseFirstHop - decrement * 1000);
+            } else if (firstHopFailureRate > 0.20) {
                 long increment = (long) ((firstHopFailureRate - 0.20) * 100 / 10);
                 baseFirstHop += increment * 1000;
             }
@@ -264,19 +301,18 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
 
         // Cache repeated system version calls and constants
         final boolean isSlow = SystemVersion.isSlow();
-        final int cores = SystemVersion.getCores();
-        final long maxMemory = SystemVersion.getMaxMemory();
-        final long now = _context.clock().now();
         final Hash selfHash = _context.routerHash();
+        final long now = _context.clock().now();
 
         final int maxKBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond();
         int allowed = maxKBps / 2;
+        if (allowed < 4) {allowed = 4;}
 
         final RateStat rs = _context.statManager().getRate("tunnel.buildRequestTime");
         if (rs != null) {
             Rate r = rs.getRate(RateConstants.ONE_MINUTE);
             double avg = (r != null) ? r.getAverageValue() : rs.getLifetimeAverageValue();
-            int throttleFactor = isSlow ? 100 : 200;
+            int throttleFactor = isSlow ? 150 : 250;
             if (avg > 100) { // If builds take more than 100ms, start throttling
                 int maxConcurrentBuilds = getMaxConcurrentBuilds();
                 int throttle = (int) (throttleFactor * maxConcurrentBuilds / avg);
@@ -292,16 +328,6 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
             } else if (avg <= 0 && rs.getLifetimeAverageValue() > 0) {
                 avg = rs.getLifetimeAverageValue();
             }
-        }
-
-        // Ensure allowed is not below core count
-        if (allowed < cores) {
-            allowed = cores;
-        }
-
-        // Double allowed if enough memory and not slow system
-        if (maxMemory >= 1024L * 1024L * 1024L && !isSlow) {
-            allowed *= 2;
         }
 
         // Cap allowed to max concurrent builds
@@ -353,7 +379,7 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
         if (expired != null) {
             for (PooledTunnelCreatorConfig cfg : expired) {
                 if (_log.shouldInfo()) {
-                    _log.info("Timeout (" + (BuildRequestor.REQUEST_TIMEOUT / 1000) + "s) waiting for tunnel build reply -> " + cfg);
+                    _log.info("Timeout (" + (_adaptiveTimeout / 1000) + "s) waiting for tunnel build reply -> " + cfg);
                 }
 
                 final int length = cfg.getLength();
@@ -380,6 +406,7 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
                 if (pool != null) {
                     pool.buildComplete(cfg, Result.TIMEOUT);
                 }
+                updateBuildStats(Result.TIMEOUT);
                 if (cfg.getDestination() == null) {
                     _context.statManager().addRateData("tunnel.buildExploratoryExpire", 1);
                 } else {
@@ -398,13 +425,7 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
                 _log.warn("System is under load -> Slowing down new tunnel builds...");
             }
             _context.statManager().addRateData("tunnel.concurrentBuildsLagged", concurrent, lag);
-            return isSlow ? 1 : 3;
-        }
-
-        // Adjust allowed tunnels on overload conditions
-        if (allowed < 3) {
-            allowed += 3;
-            allowed *= 4;
+            return 1;
         }
 
         return allowed;
@@ -452,7 +473,11 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
                 // Proactive republish LeaseSets when all tunnels are healthy
                 for (TunnelPool pool : pools) {
                     if (pool.isAlive()) {
-                        pool.proactiveRepublishIfHealthy();
+                        try {
+                            pool.proactiveRepublishIfHealthy();
+                        } catch (RuntimeException e) {
+                            _log.log(Log.WARN, "Error in proactiveRepublishIfHealthy for " + pool, e);
+                        }
                     }
                 }
 
@@ -485,7 +510,8 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
                                            wanted.size() + ") -> Waiting for a moment...");
                             }
                             try {
-                                _currentlyBuilding.wait(100);
+                                int noTunnelWait = 250 + _context.random().nextInt(250);
+                                _currentlyBuilding.wait(noTunnelWait);
                             } catch (InterruptedException ie) {
                                 // interrupted wait, proceed
                             }
@@ -548,7 +574,7 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
                     }
                 }
             } catch (RuntimeException e) {
-                _log.log(Log.CRIT, "Catastrophic Tunnel Manager failure! -> " + e.getMessage());
+                _log.log(Log.CRIT, "Catastrophic Tunnel Manager failure", e);
                 try {
                     Thread.sleep(LOOP_TIME);
                 } catch (InterruptedException ie) {
@@ -557,13 +583,6 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
             }
             wanted.clear();
             pools.clear();
-
-            // Always delay between iterations to prevent rapid spinning
-            try {
-                Thread.sleep(LOOP_TIME);
-            } catch (InterruptedException ie) {
-                // ignore
-            }
         }
 
         if (_log.shouldInfo()) {
@@ -685,8 +704,14 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
         if (_log.shouldInfo()) {_log.info("Build complete (" + result + ") for " + cfg);}
         cfg.getTunnelPool().buildComplete(cfg, result);
         if (cfg.getLength() > 1) {removeFromBuilding(cfg.getReplyMessageId());}
-        // Update adaptive timeout based on success/failure
-        updateBuildStats(result == Result.SUCCESS);
+        long now = _context.clock().now();
+        long buildTime = now + 10*60*1000 - cfg.getExpiration();
+        // Exclude immediate OTHER_FAILURE from adaptive timeout stats.
+        // These complete in under 50ms because no paired tunnel was available,
+        // and don't reflect actual network conditions that more time would help.
+        if (result == Result.SUCCESS || buildTime >= 50) {
+            updateBuildStats(result);
+        }
 
         // Track first-hop success/failure
         if (result == Result.SUCCESS) {
@@ -697,8 +722,6 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
         // Only wake up the build thread if it took a reasonable amount of time -
         // this prevents high CPU usage when there is no network connection
         // (via BuildRequestor.TunnelBuildFirstHopFailJob)
-        long now = _context.clock().now();
-        long buildTime = now + 10*60*1000 - cfg.getExpiration();
         if (buildTime > 250) {
             synchronized (_currentlyBuilding) {_currentlyBuilding.notifyAll();}
         } else if (cfg.getLength() > 1 && _log.shouldInfo() && buildTime < 50) {
@@ -711,9 +734,24 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
         if (result == Result.SUCCESS) {
             _manager.buildComplete(cfg);
             ExpireJob.scheduleExpiration(_context, cfg);
+            // Mark participating peers as low-latency when build completes quickly.
+            // Only write profile when the flag actually changes to avoid disk churn.
+            int peerTimeout = _context.getProperty("router.peerTestTimeout", 750);
+            int lowLatencyThreshold = 3 * peerTimeout;
+            boolean lowLat = buildTime < lowLatencyThreshold;
+            Hash selfHash = _context.routerHash();
+            for (int i = 0; i < cfg.getLength(); i++) {
+                Hash peer = cfg.getPeer(i);
+                if (peer != null && !peer.equals(selfHash)) {
+                    net.i2p.router.peermanager.PeerProfile prof = _context.profileOrganizer().getProfile(peer);
+                    if (prof != null && prof.isLowLatency() != lowLat) {
+                        prof.setLowLatency(lowLat);
+                        _context.profileOrganizer().writeProfile(prof);
+                    }
+                }
+            }
             // Record successful tunnel participation for ghost peer detection
             if (_ghostPeerManager != null) {
-                Hash selfHash = _context.routerHash();
                 for (int i = 0; i < cfg.getLength(); i++) {
                     Hash peer = cfg.getPeer(i);
                     if (peer != null && !peer.equals(selfHash)) {

@@ -2,6 +2,7 @@ package net.i2p.router.tunnel.pool;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
@@ -59,9 +60,21 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             return null;
         }
 
+        synchronized (_cooldownLock) {
         boolean isInbound = settings.isInbound();
+        long now = ctx.clock().now();
         Set<Hash> exclude = getExclude(isInbound, true);
         exclude.add(ctx.routerHash());
+        // Exclude peers on selection cooldown to ensure diversity
+        long cooldownCutoff = now - PEER_SELECTION_COOLDOWN_MS;
+        int cooldownExcluded = 0;
+        for (Map.Entry<Hash, Long> entry : _peerCooldowns.entrySet()) {
+            if (entry.getValue() > cooldownCutoff) {
+                exclude.add(entry.getKey());
+                cooldownExcluded++;
+            }
+        }
+        log.info("EPS cooldown: peers=" + _peerCooldowns.size() + " excluded=" + cooldownExcluded + " from=" + Thread.currentThread().getName());
 
         // Special cases
         boolean nonzero = length > 0;
@@ -231,6 +244,17 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         else
             rv.add(ctx.routerHash());
 
+        // Record selection time for all selected peers (excluding self) to enforce cooldown
+        // Do this before checkTunnel so even failed builds cool down the peer
+        int recorded = 0;
+        for (Hash peer : rv) {
+            if (!peer.equals(ctx.routerHash())) {
+                _peerCooldowns.put(peer, now);
+                recorded++;
+            }
+        }
+        log.info("EPS cooldown record: recorded=" + recorded + " rvSize=" + rv.size() + " from=" + Thread.currentThread().getName());
+
         if (rv.size() > 1) {
             if (!checkTunnel(isInbound, true, rv))
                 rv = null;
@@ -238,6 +262,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         if (isInbound && rv != null && rv.size() > 1)
             ctx.commSystem().exemptIncoming(rv.get(1));
         return rv;
+        }
     }
 
     private static final int MIN_NONFAILING_PCT = 15;

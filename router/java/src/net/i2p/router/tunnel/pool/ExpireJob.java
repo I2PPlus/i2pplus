@@ -61,10 +61,22 @@ class ExpireJob extends JobImpl {
         long expire = cfg.getExpiration();
         // Apply randomized early expiration so tunnels expire before their
         // official expiration time, giving LeaseSet refresh time to propagate
-        if (cfg.getTunnelPool().getSettings().isInbound()) {
-            expire -= IB_EARLY_EXPIRE + ctx.random().nextLong(IB_EARLY_EXPIRE);
+        TunnelPool pool = cfg.getTunnelPool();
+        if (pool.getSettings().isInbound()) {
+            if (pool.getSettings().isExploratory()) {
+                expire -= IB_EARLY_EXPIRE + ctx.random().nextLong(IB_EARLY_EXPIRE);
+            } else {
+                // Non-exploratory (server) pools: expire only slightly early
+                // to minimize LeaseSet churn. The 5s window gives the replacement
+                // tunnel time to build without causing redundant publications.
+                expire -= 5*1000 + ctx.random().nextLong(5000);
+            }
         } else {
-            expire -= OB_EARLY_EXPIRE + ctx.random().nextLong(OB_EARLY_EXPIRE);
+            if (pool.getSettings().isExploratory()) {
+                expire -= OB_EARLY_EXPIRE + ctx.random().nextLong(OB_EARLY_EXPIRE);
+            } else {
+                expire -= 5*1000 + ctx.random().nextLong(5000);
+            }
         }
         cfg.setExpiration(expire);
         // Keep tunnel alive for 10 minutes after phase 1 (LeaseSet refresh)
@@ -92,7 +104,24 @@ class ExpireJob extends JobImpl {
         }
     }
 
-    private static Long getTunnelKey(PooledTunnelCreatorConfig cfg) {
+    /**
+     *  Remove a tunnel from the expiration queue.
+     *  Called during pool shutdown to prevent memory leaks.
+     *  @param cfg config to remove
+     *  @since 0.9.69+
+     */
+    public static void removeFromExpiration(PooledTunnelCreatorConfig cfg) {
+        if (cfg == null) return;
+        Long key = getTunnelKey(cfg);
+        if (key != null) {_expirations.remove(key);}
+    }
+
+    /**
+     *  Get the unique key for this tunnel config.
+     *  @return key or null
+     *  @since 0.9.69+
+     */
+    public static Long getTunnelKey(PooledTunnelCreatorConfig cfg) {
         if (cfg == null) return null;
         try {
             long recvId = cfg.getReceiveTunnelId(0).getTunnelId();
@@ -100,9 +129,14 @@ class ExpireJob extends JobImpl {
             if (recvId != 0 && sendId != 0) {
                 return Long.valueOf((recvId << 32) | (sendId & 0xFFFFFFFFL));
             }
-            return Long.valueOf(System.identityHashCode(cfg));
+            // Fallback: include pool identity to avoid collisions across pools
+            TunnelPool pool = cfg.getTunnelPool();
+            int poolHash = (pool != null) ? System.identityHashCode(pool) : 0;
+            return Long.valueOf(((long)poolHash << 32) | (System.identityHashCode(cfg) & 0xFFFFFFFFL));
         } catch (Exception e) {
-            return Long.valueOf(System.identityHashCode(cfg));
+            TunnelPool pool = cfg.getTunnelPool();
+            int poolHash = (pool != null) ? System.identityHashCode(pool) : 0;
+            return Long.valueOf(((long)poolHash << 32) | (System.identityHashCode(cfg) & 0xFFFFFFFFL));
         }
     }
 
@@ -182,10 +216,13 @@ class ExpireJob extends JobImpl {
             // time to transition to the new tunnels
         }
 
-        // Force refresh all pools - bypass throttling to ensure LeaseSets
-        // are updated immediately before tunnels are dropped
+        // Force refresh pools that still have remaining tunnels so the LeaseSet
+        // is updated immediately before tunnels are dropped. Pools with 0 remaining
+        // are handled by removeTunnel() when the replacement tunnel is built.
         for (TunnelPool pool : poolsToRefresh) {
-            pool.refreshLeaseSet(true);
+            if (pool.size() > 0) {
+                pool.refreshLeaseSet(false);
+            }
         }
 
         for (TunnelExpiration te : readyToDrop) {

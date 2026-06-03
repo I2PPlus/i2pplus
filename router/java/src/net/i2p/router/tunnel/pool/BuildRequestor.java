@@ -187,11 +187,7 @@ abstract class BuildRequestor {
 
         TunnelInfo pairedTunnel = selectPairedTunnel(ctx, pool, cfg, exec, log);
         if (pairedTunnel == null) {
-            // No tunnel available — not even exploratory. This is severe.
-            long uptime = ctx.router().getUptime();
-            if (uptime > 3*60*1000) {
-                log.warn("Tunnel build failed -> No paired or exploratory tunnel available for " + cfg);
-            }
+            log.warn("Tunnel build failed -> No paired or exploratory tunnel available for " + cfg);
             int ms = settings.isExploratory() ? EXPLORATORY_BACKOFF : CLIENT_BACKOFF;
             try {Thread.sleep(ms);} catch (InterruptedException ie) {}
             exec.buildComplete(cfg, OTHER_FAILURE);
@@ -301,8 +297,12 @@ abstract class BuildRequestor {
                 }
                 return tunnel;
             }
-            // Avoid zero/1-hop expl tunnels for anonymity and resource fairness
-            return null;
+            // If there's a longer tunnel, prefer it over the 0/1-hop one
+            if (anyOutbound.getLength() > 1) {
+                return anyOutbound;
+            }
+            // No longer tunnel available - accept the 0/1-hop one
+            return tunnel;
         }
         return tunnel;
     }
@@ -321,7 +321,12 @@ abstract class BuildRequestor {
                 }
                 return tunnel;
             }
-            return null;
+            // If there's a longer tunnel, prefer it over the 0/1-hop one
+            if (anyInbound.getLength() > 1) {
+                return anyInbound;
+            }
+            // No longer tunnel available - accept the 0/1-hop one
+            return tunnel;
         }
         return tunnel;
     }

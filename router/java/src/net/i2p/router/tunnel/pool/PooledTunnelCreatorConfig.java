@@ -13,6 +13,9 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     private final TunnelPool _pool;
     // we don't store the config, that leads to OOM
     private TunnelId _pairedGW;
+    private volatile long _lastActivity;
+    private volatile boolean _lastResort;
+    private static final long ACTIVITY_TIMEOUT = 30*1000;
 
     /**
      *  Creates a new instance of PooledTunnelCreatorConfig
@@ -69,6 +72,38 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      *  @return non-null
      */
     public TunnelPool getTunnelPool() {return _pool;}
+
+    /**
+     *  @return true if this tunnel was built as a last-resort fallback
+     *  @since 0.9.69+
+     */
+    public boolean isLastResort() {return _lastResort;}
+
+    /**
+     *  Mark this tunnel as a last-resort fallback.
+     *  @since 0.9.69+
+     */
+    public void setLastResort() {_lastResort = true;}
+
+    /**
+     *  Record activity on this tunnel (message processed).
+     *  @since 0.9.69+
+     */
+    public void recordActivity() {_lastActivity = System.currentTimeMillis();}
+
+    /**
+     *  @return timestamp of last activity, or 0 if never used
+     *  @since 0.9.69+
+     */
+    public long getLastActivity() {return _lastActivity;}
+
+    /**
+     *  @return true if this tunnel has been recently active (within ACTIVITY_TIMEOUT)
+     *  @since 0.9.69+
+     */
+    public boolean isRecentlyActive() {
+        return System.currentTimeMillis() - _lastActivity < ACTIVITY_TIMEOUT;
+    }
 
     /**
      *  The ID of the gateway of the paired tunnel used to send/receive the build request
