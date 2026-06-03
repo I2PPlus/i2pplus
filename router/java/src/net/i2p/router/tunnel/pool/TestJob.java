@@ -586,14 +586,28 @@ int readyCount = ctx.jobQueue().getReadyCount();
 
         if (_cfg.isInbound()) {
             _replyTunnel = _cfg;
-            _outTunnel = isExploratory ?
-                ctx.tunnelManager().selectOutboundTunnel() :
-                ctx.tunnelManager().selectOutboundTunnel(_pool.getSettings().getDestination());
+            if (isExploratory) {
+                _outTunnel = ctx.tunnelManager().selectOutboundTunnel();
+            } else {
+                _outTunnel = ctx.tunnelManager().selectOutboundTunnel(_pool.getSettings().getDestination());
+                if (_outTunnel == null) {
+                    _outTunnel = ctx.tunnelManager().selectOutboundTunnel();
+                    if (_outTunnel != null && _log.shouldWarn())
+                        _log.warn("Falling back to exploratory outbound tunnel for test of " + _cfg);
+                }
+            }
         } else {
-            _replyTunnel = isExploratory ?
-                ctx.tunnelManager().selectInboundTunnel() :
-                ctx.tunnelManager().selectInboundTunnel(_pool.getSettings().getDestination());
             _outTunnel = _cfg;
+            if (isExploratory) {
+                _replyTunnel = ctx.tunnelManager().selectInboundTunnel();
+            } else {
+                _replyTunnel = ctx.tunnelManager().selectInboundTunnel(_pool.getSettings().getDestination());
+                if (_replyTunnel == null) {
+                    _replyTunnel = ctx.tunnelManager().selectInboundTunnel();
+                    if (_replyTunnel != null && _log.shouldWarn())
+                        _log.warn("Falling back to exploratory inbound tunnel for test of " + _cfg);
+                }
+            }
         }
 
         _otherTunnel = (_outTunnel instanceof PooledTunnelCreatorConfig)
