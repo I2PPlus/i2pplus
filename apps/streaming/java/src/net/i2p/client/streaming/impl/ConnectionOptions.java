@@ -133,7 +133,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * RFC 6928 recommends 10 segments for better initial throughput.
      * Increased to 16 for I2P's high-latency environment to improve initial bandwidth utilization.
      */
-    static final int INITIAL_WINDOW_SIZE = 16;
+    static final int INITIAL_WINDOW_SIZE = 8;
     static final int DEFAULT_MAX_SENDS = 30;
     /**
      *  Initial RTT estimate for new connections before first measurement.
@@ -424,7 +424,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         setProfile(getInt(opts, PROP_PROFILE, PROFILE_BULK));
         setMaxMessageSize(getInt(opts, PROP_MAX_MESSAGE_SIZE, DEFAULT_MAX_MESSAGE_SIZE));
         setReceiveWindow(getInt(opts, PROP_INITIAL_RECEIVE_WINDOW, 1));
-        setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
+        setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 1000));
         setSendAckDelay(getInt(opts, PROP_INITIAL_ACK_DELAY, DEFAULT_INITIAL_ACK_DELAY));
         setWindowSize(getInt(opts, PROP_INITIAL_WINDOW_SIZE, INITIAL_WINDOW_SIZE));
         setMaxResends(getInt(opts, PROP_MAX_RESENDS, DEFAULT_MAX_SENDS));
@@ -748,7 +748,7 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
      * @return delay for a retransmission in ms
      */
     public int getResendDelay() {return _resendDelay;}
-    public void setResendDelay(int ms) {_resendDelay = Math.min(ms, 100);}
+    public void setResendDelay(int ms) {_resendDelay = Math.max(Connection.MIN_RESEND_DELAY, Math.min(ms, Connection.MAX_RESEND_DELAY));}
 
     /**
      * if there are packets we haven't ACKed yet and we don't

@@ -27,7 +27,7 @@ import net.i2p.util.SystemVersion;
 class ConnectionPacketHandler {
     private final I2PAppContext _context;
     private final Log _log;
-    private final ByteCache _cache = ByteCache.getInstance(32, 32*1024);
+    private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
 
     public static final int MAX_SLOW_START_WINDOW = 64;
 
@@ -79,6 +79,7 @@ class ConnectionPacketHandler {
                 if (_log.shouldWarn())
                     _log.warn("Ignoring packet received after hard disconnect on " + con);
             }
+            packet.releasePayload();
             return;
         }
 
@@ -150,12 +151,12 @@ class ConnectionPacketHandler {
                 if (_log.shouldInfo())
                     _log.info("More data received after local close on " + con +
                               " -> Ignoring packet instead of sending RESET...");
-                return;
             } else {
                 if (_log.shouldWarn())
                     _log.warn("Inbound buffer exceeded on " + con + " -> Choking and dropping...");
                 con.setChoking(true);
             }
+            packet.releasePayload();
             return;
         } // else we will call setChoking(false) below
 

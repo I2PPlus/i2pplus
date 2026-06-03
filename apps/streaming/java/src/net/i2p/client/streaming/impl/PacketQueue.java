@@ -327,7 +327,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                     // a retxed SYN succeeded before the first SYN failed
                     if (_log.shouldWarn())
                         _log.warn("Received Hard Failure but Already Connected status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
-                } else if (!con.getIsConnected()) {
+                } else if (!con.getIsConnected() || con.getHighestAckedThrough() < 0) {
                     if (_log.shouldWarn())
                         _log.warn("Received Hard Failure but Already Closed status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
                 } else {

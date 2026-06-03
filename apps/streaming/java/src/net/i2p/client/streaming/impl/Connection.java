@@ -110,7 +110,7 @@ class Connection {
     private final AtomicLong _lifetimeDupMessageReceived = new AtomicLong();
 
     public static final int MAX_RESEND_DELAY = 30*1000;
-    public static final int MIN_RESEND_DELAY = SystemVersion.isSlow() ? 100 : 50;
+    public static final int MIN_RESEND_DELAY = 100;
 
     /**
      *  Wait up to 5 minutes after disconnection so we can ack/close packets.
@@ -126,7 +126,7 @@ class Connection {
      *  where the configured maximum is enforced.
      *  Increased for better throughput on high-bandwidth I2P connections.
      */
-    public static final int MAX_WINDOW_SIZE = SystemVersion.isSlow() ? 192 : 384;
+    public static final int MAX_WINDOW_SIZE = SystemVersion.isSlow() ? 128 : 192;
 
     private static final int UNCHOKES_TO_SEND = 8;
 
@@ -656,9 +656,8 @@ class Connection {
             if (_closeSentOn.get() > 0) {
                 // We sent close first, peer acked it
                 disconnect(true);
-            } else if (!_isInbound && !_connected.get()) {
+            } else if (!_isInbound && _receiveStreamId.get() <= 0) {
                 // Outbound connection that never completed - treat as reset/failure
-                _connected.set(false);
                 disconnect(false);
             } else {
                 // Normal close from peer
@@ -1590,7 +1589,7 @@ class Connection {
                     packet.cancelled();
                     disconnect(false);
                     return;
-                } else if (nResends == 3 && !getIsConnected() && _remotePeer != null) {
+                } else if (nResends == 3 && _highestAckedThrough.get() < 0 && _remotePeer != null) {
                     // SYN has been retransmitted 3 times with no response - likely stale LeaseSet.
                     // Invalidate the cached LeaseSet so the next send triggers a fresh lookup.
                     // This handles the case where the server's tunnels changed but our cached
