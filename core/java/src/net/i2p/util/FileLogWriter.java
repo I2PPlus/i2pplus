@@ -157,6 +157,9 @@ class FileLogWriter extends LogWriter {
         if (_manager.shouldGzip()) (new File(f.getPath() + ".gz")).delete();
         try {
             _currentOut = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(f), "UTF-8"));
+            if (_manager.getContext().getBooleanProperty("logger.groupReadable")) {
+                f.setReadable(true, false);
+            }
         } catch (IOException ioe) {
             if (++_diskFullMessageCount < MAX_DISKFULL_MESSAGES) System.err.println("Error creating log file [" + f.getAbsolutePath() + "]" + ioe);
         }

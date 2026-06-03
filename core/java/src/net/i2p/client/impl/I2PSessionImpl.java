@@ -493,11 +493,11 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         }
         return rv;
     }
-    
+
     /**
      * Check if a streaming property should be allowed through the filter.
      * These are known-good streaming options that should be passed to the router.
-     * 
+     *
      * @param key the property key
      * @return true if the property should be allowed
      */
@@ -673,8 +673,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
         if ((_options != null) &&
              (I2PClient.PROP_RELIABILITY_GUARANTEED.equals(_options.getProperty(I2PClient.PROP_RELIABILITY, I2PClient.PROP_RELIABILITY_BEST_EFFORT)))) {
-            if (_log.shouldError())
-                _log.error("I2CP guaranteed delivery mode has been removed, using best effort.");
+            if (_log.shouldWarn())
+                _log.warn("I2CP guaranteed delivery mode has been removed, using best effort.");
         }
 
         boolean success = false;
