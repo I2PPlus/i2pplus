@@ -86,7 +86,6 @@ class ClientPeerSelector extends TunnelPeerSelector {
             return null;
         }
 
-        synchronized (_cooldownLock) {
         List<Hash> rv;
         boolean isInbound = settings.isInbound();
 
@@ -612,6 +611,24 @@ class ClientPeerSelector extends TunnelPeerSelector {
         if (isInbound) {rv.add(0, ctx.routerHash());}
         else {rv.add(ctx.routerHash());}
 
+        // Sort non-self peers by reliability so better peers are preferred
+        if (rv.size() > 2) {
+            List<Hash> nonSelf = new ArrayList<Hash>(rv);
+            nonSelf.remove(ctx.routerHash());
+            if (nonSelf.size() > 1) {
+                sortByPeerQuality(nonSelf, null);
+                // Rebuild with self in correct position
+                rv.clear();
+                if (isInbound) {
+                    rv.add(ctx.routerHash());
+                    rv.addAll(nonSelf);
+                } else {
+                    rv.addAll(nonSelf);
+                    rv.add(ctx.routerHash());
+                }
+            }
+        }
+
         // Filter out ghost peers before returning
         rv = filterGhostPeers(rv);
 
@@ -644,7 +661,187 @@ class ClientPeerSelector extends TunnelPeerSelector {
         }
         if (isInbound && rv != null && rv.size() > 1) {ctx.commSystem().exemptIncoming(rv.get(1));}
         return rv;
+    }
+
+    /**
+     * Select the best reliable peer from candidates based on:
+     * 1. Tunnel acceptance ratio (prefer &gt;50%, minimum 40%)
+     * 2. Recent tunnel test success (tested within last 10 minutes)
+     * 3. Recent activity (heard from or successful send in last 30 minutes)
+     * 4. Prefer connected peers
+     *
+     * @param candidates peers to choose from
+     * @param exclude peers to exclude
+     * @return best peer or null if none suitable
+     */
+    private Hash selectBestReliablePeer(List<Hash> candidates, Set<Hash> exclude) {
+        if (candidates == null || candidates.isEmpty()) {
+            return null;
         }
+
+        Hash bestPeer = null;
+        double bestScore = -1;
+        long now = ctx.clock().now();
+        long tenMinutes = 10 * 60 * 1000L;
+        long thirtyMinutes = 30 * 60 * 1000L;
+
+        for (Hash peer : candidates) {
+            if (exclude != null && exclude.contains(peer)) {
+                continue;
+            }
+
+            PeerProfile profile = ctx.profileOrganizer().getProfile(peer);
+            if (profile == null) {
+                continue;
+            }
+
+            double score = 0;
+            boolean isConnected = ctx.commSystem().isEstablished(peer);
+
+            double acceptanceRatio = profile.getTunnelAcceptanceRatio();
+
+            if (acceptanceRatio < 0.3) {
+                continue;
+            }
+
+            long lastTested = profile.getLastTestedSuccessfully();
+            boolean recentTest = (lastTested > 0) && (now - lastTested < tenMinutes);
+
+            long lastHeardFrom = profile.getLastHeardFrom();
+            long lastSendSuccessful = profile.getLastSendSuccessful();
+            boolean recentActivity = (lastHeardFrom > 0 && now - lastHeardFrom < thirtyMinutes) ||
+                                     (lastSendSuccessful > 0 && now - lastSendSuccessful < thirtyMinutes);
+
+            if (acceptanceRatio > 0.5) {
+                score += 30;
+            } else if (acceptanceRatio > 0.3) {
+                score += 10;
+            }
+
+            if (recentTest) {
+                score += 40;
+            }
+
+            if (recentActivity) {
+                score += 20;
+            }
+
+            if (isConnected) {
+                score += 20;
+            }
+
+            if (score > bestScore) {
+                bestScore = score;
+                bestPeer = peer;
+            }
+        }
+
+        return bestPeer;
+    }
+
+    /**
+     * Filter candidates through reliability scoring (acceptance ratio, recent test, activity, connection).
+     * Applies consistent quality filtering to any tier selection.
+     *
+     * @param candidates peers to filter
+     * @param exclude peers to exclude
+     * @param max max peers to return
+     * @return list of best peers filtered by reliability
+     */
+    private List<Hash> filterByReliability(Set<Hash> candidates, Set<Hash> exclude, int max) {
+        if (candidates == null || candidates.isEmpty() || max <= 0) {
+            return Collections.emptyList();
+        }
+        List<Hash> result = new ArrayList<Hash>();
+        long now = ctx.clock().now();
+        long tenMinutes = 10 * 60 * 1000L;
+        long thirtyMinutes = 30 * 60 * 1000L;
+
+        for (Hash peer : candidates) {
+            if (exclude != null && exclude.contains(peer)) {
+                continue;
+            }
+            PeerProfile profile = ctx.profileOrganizer().getProfile(peer);
+            if (profile == null) {
+                continue;
+            }
+
+            double score = scorePeer(profile, now, tenMinutes, thirtyMinutes);
+            if (score > 0) {
+                result.add(peer);
+            }
+        }
+
+        result.sort((p1, p2) -> {
+            PeerProfile prof1 = ctx.profileOrganizer().getProfile(p1);
+            PeerProfile prof2 = ctx.profileOrganizer().getProfile(p2);
+            double s1 = scorePeer(prof1, now, tenMinutes, thirtyMinutes);
+            double s2 = scorePeer(prof2, now, tenMinutes, thirtyMinutes);
+            return Double.compare(s2, s1);
+        });
+
+        return result.subList(0, Math.min(max, result.size()));
+    }
+
+    private double scorePeer(PeerProfile profile, long now, long tenMinutes, long thirtyMinutes) {
+        if (profile == null) return 0;
+        double score = 0;
+        double acceptanceRatio = profile.getTunnelAcceptanceRatio();
+        if (acceptanceRatio < 0.3) return 0;
+        if (acceptanceRatio > 0.5) score += 30;
+        else if (acceptanceRatio > 0.3) score += 10;
+
+        long lastTested = profile.getLastTestedSuccessfully();
+        if (lastTested > 0 && now - lastTested < tenMinutes) score += 40;
+
+        long lastHeardFrom = profile.getLastHeardFrom();
+        long lastSendSuccessful = profile.getLastSendSuccessful();
+        if ((lastHeardFrom > 0 && now - lastHeardFrom < thirtyMinutes) ||
+            (lastSendSuccessful > 0 && now - lastSendSuccessful < thirtyMinutes)) {
+            score += 20;
+        }
+
+        if (ctx.commSystem().isEstablished(profile.getPeer())) score += 20;
+        return score;
+    }
+
+    /**
+     * Sort peers by quality for tunnel building preference.
+     * Higher quality peers (recently tested, active, connected) sort first.
+     */
+    private void sortByPeerQuality(List<Hash> peers, Set<Hash> exclude) {
+        if (peers == null || peers.isEmpty()) {
+            return;
+        }
+        long now = ctx.clock().now();
+        long thirtyMinutes = 30 * 60 * 1000L;
+        peers.sort((p1, p2) -> {
+            if (exclude != null && exclude.contains(p1)) {
+                if (exclude.contains(p2)) return 0;
+                return 1;
+            }
+            if (exclude != null && exclude.contains(p2)) return -1;
+
+            PeerProfile prof1 = ctx.profileOrganizer().getProfile(p1);
+            PeerProfile prof2 = ctx.profileOrganizer().getProfile(p2);
+            double ar1 = prof1 != null ? prof1.getTunnelAcceptanceRatio() : 1.0;
+            double ar2 = prof2 != null ? prof2.getTunnelAcceptanceRatio() : 1.0;
+
+            if (ar1 <= 0 && ar2 > 0.3) return -1;
+            if (ar2 <= 0 && ar1 > 0.3) return 1;
+
+            if (ar1 < 0.3 && ar2 >= 0.3) return 1;
+            if (ar2 < 0.3 && ar1 >= 0.3) return -1;
+
+            boolean active1 = prof1 != null && (prof1.getLastHeardFrom() > 0 && now - prof1.getLastHeardFrom() < thirtyMinutes ||
+                                              prof1.getLastSendSuccessful() > 0 && now - prof1.getLastSendSuccessful() < thirtyMinutes);
+            boolean active2 = prof2 != null && (prof2.getLastHeardFrom() > 0 && now - prof2.getLastHeardFrom() < thirtyMinutes ||
+                                              prof2.getLastSendSuccessful() > 0 && now - prof2.getLastSendSuccessful() < thirtyMinutes);
+            if (active1 && !active2) return -1;
+            if (!active1 && active2) return 1;
+
+            return 0;
+        });
     }
 
     /**

@@ -66,16 +66,16 @@ class ExpireJob extends JobImpl {
             if (pool.getSettings().isExploratory()) {
                 expire -= IB_EARLY_EXPIRE + ctx.random().nextLong(IB_EARLY_EXPIRE);
             } else {
-                // Non-exploratory (server) pools: expire only slightly early
-                // to minimize LeaseSet churn. The 5s window gives the replacement
-                // tunnel time to build without causing redundant publications.
-                expire -= 5*1000 + ctx.random().nextLong(5000);
+                // Non-exploratory (server) pools: expire early so replacement
+                // tunnels have time to build before the LeaseSet needs updating.
+                // 30s window is enough for replacement builds while preventing gaps.
+                expire -= 30*1000 + ctx.random().nextLong(15000);
             }
         } else {
             if (pool.getSettings().isExploratory()) {
                 expire -= OB_EARLY_EXPIRE + ctx.random().nextLong(OB_EARLY_EXPIRE);
             } else {
-                expire -= 5*1000 + ctx.random().nextLong(5000);
+                expire -= 30*1000 + ctx.random().nextLong(15000);
             }
         }
         cfg.setExpiration(expire);
@@ -216,13 +216,10 @@ class ExpireJob extends JobImpl {
             // time to transition to the new tunnels
         }
 
-        // Force refresh pools that still have remaining tunnels so the LeaseSet
-        // is updated immediately before tunnels are dropped. Pools with 0 remaining
-        // are handled by removeTunnel() when the replacement tunnel is built.
+        // Force refresh all affected pools so the LeaseSet is updated
+        // immediately before tunnels are dropped.
         for (TunnelPool pool : poolsToRefresh) {
-            if (pool.size() > 0) {
-                pool.refreshLeaseSet(false);
-            }
+            pool.refreshLeaseSet(true);
         }
 
         for (TunnelExpiration te : readyToDrop) {

@@ -264,11 +264,12 @@ public class TunnelPool {
                shouldWarn = _log.shouldWarn() && uptime > STARTUP_TIME && shouldLogNoTunnelsWarning();
             } else {
                 TunnelInfo backloggedTunnel = null;
+                // Random start index for statistical load balancing
+                int startIdx = _tunnels.size() > 0 ? _context.random().nextInt(_tunnels.size()) : 0;
                 if (avoidZeroHop) {
                     for (int i = 0; i < _tunnels.size(); i++) {
-                        _lastSelectedIdx++;
-                        if (_lastSelectedIdx >= _tunnels.size()) {_lastSelectedIdx = 0;}
-                        TunnelInfo info = _tunnels.get(_lastSelectedIdx);
+                        int idx = (startIdx + i) % _tunnels.size();
+                        TunnelInfo info = _tunnels.get(idx);
                         // Skip last resort tunnels on first pass - only use if no other option
                         if (info instanceof PooledTunnelCreatorConfig &&
                             ((PooledTunnelCreatorConfig)info).isLastResort()) {
@@ -298,7 +299,8 @@ public class TunnelPool {
                     }
                 }
                 for (int i = 0; i < _tunnels.size(); i++) {
-                    TunnelInfo info = _tunnels.get(i);
+                    int idx = (startIdx + i) % _tunnels.size();
+                    TunnelInfo info = _tunnels.get(idx);
                     // Skip last resort tunnels on first pass
                     if (info instanceof PooledTunnelCreatorConfig &&
                         ((PooledTunnelCreatorConfig)info).isLastResort()) {
@@ -1186,16 +1188,7 @@ public class TunnelPool {
      *  @param cfg the tunnel that failed
      */
     void tunnelFailed(TunnelInfo cfg) {
-        // Don't remove if only one, just tell the manager to build more
-        if (size() > 1) {
-            fail(cfg);
-        } else {
-            if (_log.shouldWarn())
-                _log.warn(toString() + ": Deferring failure of our only Tunnel: " + cfg);
-            _manager.tunnelFailed();
-            tellProfileFailed(cfg);
-            return;
-        }
+        fail(cfg);
         // Enhanced failure analysis before blaming peers
         if (shouldAnalyzeFailure(cfg)) {
             analyzeFailurePattern(cfg);
@@ -1212,17 +1205,9 @@ public class TunnelPool {
      *  @since 0.8.13
      */
     void tunnelFailed(TunnelInfo cfg, Hash blamePeer) {
-        // Don't remove if only one, just tell the manager to build more
-        if (size() > 1) {
-            fail(cfg);
-            _context.profileManager().tunnelFailed(blamePeer, 100);
-            return;
-        }
-        if (_log.shouldWarn())
-            _log.warn(toString() + ": Deferring failure of our only Tunnel: " + cfg);
-        _manager.tunnelFailed();
-        tellProfileFailed(cfg);
+        fail(cfg);
         _context.profileManager().tunnelFailed(blamePeer, 100);
+        tellProfileFailed(cfg);
     }
 
     /**

@@ -50,8 +50,8 @@ class RequestThrottler {
     private volatile Boolean cachedShouldBlockOldRouters;
     private static final long PROPERTY_CHECK_INTERVAL = 30*1000; // Check every 30 seconds
 
-    private static final int MIN_LIMIT = 200;
-    private static final int MAX_LIMIT = 400;
+    private static final int MIN_LIMIT = 10;
+    private static final int MAX_LIMIT = 300;
     private static final int PERCENT_LIMIT = 20;
     private static final long CLEAN_TIME = 90 * 1000; // Reset limits every 90 seconds
 
@@ -230,13 +230,16 @@ class RequestThrottler {
             return rv;
         }
 
-        // Early return: Low-share routers when blocking is enabled
+        // Moderate load gate: only block low-share peers when under load pressure
         if (isLowShare && shouldBlockOldRouters) {
-            if (_log.shouldInfo()) {
-                _log.info("Dropping all connections from [" + routerId + "] -> Low share / " + v);
+            boolean underLoad = lag > 500 || SystemVersion.getCPULoadAvg() > 90;
+            if (underLoad) {
+                if (_log.shouldInfo()) {
+                    _log.info("Dropping all connections from [" + routerId + "] -> Low share / " + v + " (load=" + lag + ")");
+                }
+                context.simpleTimer2().addEvent(new Disconnector(h, v), 11*60*1000);
+                return true;
             }
-            context.simpleTimer2().addEvent(new Disconnector(h, v), 11*60*1000);
-            return true;
         }
 
         // Handle excessive tunnel requests
@@ -522,9 +525,7 @@ class RequestThrottler {
         private int getWindowSum(AtomicIntegerArray array, int currentBucket) {
             int sum = 0;
             for (int i = 0; i < bucketCount; i++) {
-                if (i != currentBucket) {
-                    sum += array.get(i);
-                }
+                sum += array.get(i);
             }
             return sum;
         }

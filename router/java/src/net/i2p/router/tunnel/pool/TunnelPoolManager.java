@@ -746,11 +746,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             }
         }
 
-        // Start OUTBOUND exploratory FIRST - it can bootstrap with 0-hop
-        // Inbound exploratory needs outbound for reply path
-        _outboundExploratory.startup();
+        // Start INBOUND exploratory FIRST - outbound build replies need inbound tunnels
+        // to receive the reply message. Starting outbound before inbound guarantees
+        // initial outbound builds will fail (no reply path exists yet).
+        _inboundExploratory.startup();
         _context.simpleTimer2().addEvent(new SimpleTimer.TimedEvent() {
-            public void timeReached() {_inboundExploratory.startup();}
+            public void timeReached() {_outboundExploratory.startup();}
         }, 2*1000);
 
         // try to build up longer tunnels

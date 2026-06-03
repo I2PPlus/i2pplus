@@ -583,6 +583,13 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
             }
             wanted.clear();
             pools.clear();
+
+            // Always delay between iterations to prevent rapid spinning
+            try {
+                Thread.sleep(LOOP_TIME);
+            } catch (InterruptedException ie) {
+                // ignore
+            }
         }
 
         if (_log.shouldInfo()) {
@@ -832,7 +839,11 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
     }
 
     /**
-     * Simple replenishment - each pool builds independently to reach its target.
+     * Graduated-urgency replenishment - replaces simple deficit-based approach.
+     * Uses expiry-window urgency multipliers from mainline I2P:
+     *   1x at 210-270s, 2x at 150-210s, 4x at 90-150s, 6x at <90s.
+     * This ensures tunnels are rebuilt predictively before they expire,
+     * rather than only reactively after failure.
      */
     private void calculatePairedBuilds(List<TunnelPool> pools, List<TunnelPool> wanted) {
         long now = _context.clock().now();
@@ -844,19 +855,66 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
             String nickname = pool.getSettings().getDestinationNickname();
             boolean isPing = nickname != null && nickname.startsWith("Ping");
 
-            // For ping tunnels, target is just the wanted count (typically 1 in, 1 out)
-            // For others, use min 4 or wanted + 2
             int target = isPing ? wantedCount : Math.max(TUNNEL_TARGET_MIN, wantedCount + TUNNEL_TARGET_BUFFER);
 
-            // Count tunnels with > 5 min expiry
-            int current = countWithExpiry(pool, now, TUNNEL_MIN_EXPIRY_MS);
-            int inProgress = pool.getInProgressCount();
-            int total = current + inProgress;
+            List<TunnelInfo> tunnels = pool.listTunnels();
+            boolean allowZeroHop = pool.getSettings().getAllowZeroHop();
 
-            // Add pool multiple times if needs more
-            while (total < target) {
+            int expire30s = 0, expire90s = 0, expire150s = 0, expire210s = 0, expire270s = 0, expireLater = 0;
+            int fallbackCount = 0;
+
+            for (TunnelInfo info : tunnels) {
+                if (!allowZeroHop && info.getLength() <= 1) {
+                    fallbackCount++;
+                    continue;
+                }
+                long timeToExpire = info.getExpiration() - now;
+                if (timeToExpire <= 0) {
+                    expire30s++;
+                } else if (timeToExpire <= 30*1000) {
+                    expire30s++;
+                } else if (timeToExpire <= 90*1000) {
+                    expire90s++;
+                } else if (timeToExpire <= 150*1000) {
+                    expire150s++;
+                } else if (timeToExpire <= 210*1000) {
+                    expire210s++;
+                } else if (timeToExpire <= 270*1000) {
+                    expire270s++;
+                } else {
+                    expireLater++;
+                }
+            }
+
+            int inProgress = pool.getInProgressCount();
+            int remainingWanted = target - expireLater;
+            if (allowZeroHop) remainingWanted -= fallbackCount;
+
+            // Walk through urgency windows, counting what's covered by later-expiring tunnels
+            for (int i = 0; i < expire270s && remainingWanted > 0; i++) remainingWanted--;
+            for (int i = 0; i < expire210s && remainingWanted > 0; i++) remainingWanted--;
+            for (int i = 0; i < expire150s && remainingWanted > 0; i++) remainingWanted--;
+            for (int i = 0; i < expire90s && remainingWanted > 0; i++) remainingWanted--;
+            for (int i = 0; i < expire30s && remainingWanted > 0; i++) remainingWanted--;
+
+            int builds;
+            if (remainingWanted > 0) {
+                // Deficit — graduated urgency: 270s=1x, 210s=1x, 150s=2x, 90s=4x, 30s=6x, deficit=6x
+                builds = expire270s + expire210s + 2*expire150s + 4*expire90s + 6*expire30s + 6*remainingWanted;
+            } else {
+                // Sufficient count — just start replacing approaching-expiry tunnels
+                builds = expire270s + expire210s;
+            }
+
+            builds -= inProgress;
+            if (builds <= 0) continue;
+
+            // Cap at 4x target to prevent runaway builds
+            int maxBuilds = Math.max(target * 4, 16);
+            if (builds > maxBuilds) builds = maxBuilds;
+
+            for (int i = 0; i < builds; i++) {
                 wanted.add(pool);
-                total++;
             }
         }
     }

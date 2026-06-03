@@ -528,7 +528,7 @@ abstract class BuildRequestor {
 
             if (!BuildMessageGenerator.isBlank(cfg, hopIndex)) {
                 Hash peer = cfg.getPeer(hopIndex);
-                RouterInfo peerInfo = ctx.netDb().lookupRouterInfoWithTimeout(peer, 8000);
+                RouterInfo peerInfo = ctx.netDb().lookupRouterInfoLocally(peer);
                 if (peerInfo == null) {
                     log.warn("Peer not found for hop " + hopIndex + ": " + peer + " in " + cfg);
                     return null;
