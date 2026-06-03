@@ -55,7 +55,17 @@ public class PeerProfile {
     private RateStat _dbIntroduction;
     // calculation bonuses
     // ints to save some space
+    /**
+     * @deprecated Replaced by {@link #isLowLatency()}. This field is no longer
+     * used for routing decisions; it is retained only for backward compatibility
+     * with stored profile data. New reads/write go through the lowLatency flag.
+     */
+    @Deprecated
     private int _speedBonus;
+    /**
+     * @deprecated Replaced by lowLatency flag for routing decisions.
+     */
+    @Deprecated
     private long _speedBonusLastUpdate;
     private int _capacityBonus;
     private long _capacityBonusLastUpdate;
@@ -77,6 +87,8 @@ public class PeerProfile {
     // does this peer profile contain expanded data, or just the basics?
     private boolean _expanded;
     private boolean _expandedDB;
+    /** low latency flag, set when peer responds quickly to tunnel builds, persisted */
+    private boolean _lowLatency;
     //private int _consecutiveBanlists;
     private final int _distance;
 
@@ -156,6 +168,14 @@ public class PeerProfile {
      */
     public boolean getIsExpanded() {return _expanded;}
     public boolean getIsExpandedDB() {return _expandedDB;}
+
+    /**
+     * Low latency flag, set when this peer has been observed to respond quickly
+     * to tunnel build requests. Persisted in profiles and used to seed fast/high-cap
+     * tiers at startup from prior session data.
+     */
+    public boolean isLowLatency() {return _lowLatency;}
+    public void setLowLatency(boolean low) {_lowLatency = low;}
 
     /**
      * Is this peer active at the moment (sending/receiving messages within the last
@@ -322,18 +342,33 @@ public class PeerProfile {
     public synchronized RateStat getDbIntroduction() {return _dbIntroduction;}
 
     /**
-     * extra factor added to the speed ranking - this can be updated in the profile
-     * written to disk to affect how the algorithm ranks speed.  Negative values are
-     * penalties. Expires after 4 hours if not refreshed.
+     * @deprecated Replaced by {@link #isLowLatency()}. This method is no longer
+     * used for routing decisions; it is retained only for backward compatibility
+     * with stored profile data. Returns 0 unconditionally if not set, or the stored
+     * value with a 4-hour expiry for existing profiles that still carry it.
      */
+    @Deprecated
     public int getSpeedBonus() {
         if (_speedBonus == 0) return _speedBonus;
         if (_speedBonusLastUpdate <= 0) return _speedBonus; // backward compat: no timestamp = valid
         long hoursSinceUpdate = (_context.clock().now() - _speedBonusLastUpdate) / (60 * 60 * 1000L);
         return hoursSinceUpdate >= 4 ? 0 : _speedBonus;
     }
+    /**
+     * @deprecated Replaced by {@link #setLowLatency(boolean)}. Retained for
+     * backward compatibility with stored profile data.
+     */
+    @Deprecated
     public void setSpeedBonus(int bonus) {_speedBonus = bonus; _speedBonusLastUpdate = _context.clock().now();}
+    /**
+     * @deprecated No longer used for routing decisions.
+     */
+    @Deprecated
     long getSpeedBonusLastUpdate() {return _speedBonusLastUpdate;}
+    /**
+     * @deprecated No longer used for routing decisions.
+     */
+    @Deprecated
     void setSpeedBonusLastUpdate(long ts) {_speedBonusLastUpdate = ts;}
 
     /**
@@ -350,6 +385,7 @@ public class PeerProfile {
     public void setCapacityBonus(int bonus) {_capacityBonus = bonus; _capacityBonusLastUpdate = _context.clock().now();}
     long getCapacityBonusLastUpdate() {return _capacityBonusLastUpdate;}
     void setCapacityBonusLastUpdate(long ts) {_capacityBonusLastUpdate = ts;}
+    int getCapacityBonusRaw() {return _capacityBonus;}
 
     /**
      * extra factor added to the integration ranking - this can be updated in the profile

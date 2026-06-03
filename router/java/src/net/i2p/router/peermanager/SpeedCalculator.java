@@ -13,8 +13,7 @@ import net.i2p.router.RouterContext;
  * - Base score from bandwidth tier (X=10000, P=5000, O=2500)
  * - RTT penalty reduces score for high-latency peers
  * - Congestion caps (D/E) reduce effective speed
- * - Actual peak throughput overrides estimate when available
- * - Speed bonus adds temporary boost for recently proven fast peers
+ * - Actual peak throughput adds to bandwidth tier estimate
  */
 class SpeedCalculator {
 
@@ -22,6 +21,11 @@ class SpeedCalculator {
     private static final double BASE_X = 10000;
     private static final double BASE_P = 5000;
     private static final double BASE_O = 2500;
+    private static final double BASE_N = 1250;
+    private static final double BASE_M = 625;
+    private static final double BASE_L = 312;
+    private static final double BASE_K = 125;
+    private static final double BASE_UNKNOWN = 100;
 
     /** RTT threshold where speed is fully penalized (16s) */
     private static final double MAX_RTT = 16000;
@@ -41,27 +45,21 @@ class SpeedCalculator {
 
         double speed;
         if (actualThroughput > 0) {
-            // Use actual throughput when available (immune to decay)
-            speed = Math.max(estimatedSpeed, actualThroughput);
+            // Peer has proven throughput — use it as floor, no time-based decay
+            // Peak throughput is a persistent capability indicator
+            speed = estimatedSpeed + actualThroughput;
         } else {
-            // No actual throughput: decay estimated speed over time
-            // 50% decay every 5 minutes, effectively 0 after 30 minutes
+            // No throughput data: use bandwidth-tier estimate with slow decay
+            // 50% decay every 30 minutes (was 5 min — too aggressive; caused
+            // good-but-idle peers to drop below speed threshold during cascades)
             long lastUpdate = profile.getLastThroughputUpdate();
             long now = context.clock().now();
-            long minutesSinceUpdate = (now - lastUpdate) / (60 * 1000L);
-            if (lastUpdate <= 0 || minutesSinceUpdate >= 30) {
-                // No throughput data or expired: estimated speed is 0
-                speed = 0;
-            } else {
-                double decay = Math.pow(0.5, minutesSinceUpdate / 5.0);
-                speed = estimatedSpeed * decay;
-            }
+            long minutesSinceUpdate = lastUpdate > 0 ? (now - lastUpdate) / (60 * 1000L) : 0;
+            double decay = Math.pow(0.5, Math.min(minutesSinceUpdate, 240) / 30.0);
+            speed = estimatedSpeed * decay;
         }
 
-        // Add decaying speed bonus for recently proven fast peers
-        speed += profile.getSpeedBonus();
-
-        return speed >= 0 ? speed : 0.0d;
+        return Math.max(speed, 0.0d);
     }
 
     private static double getBaseScore(RouterContext context, PeerProfile profile) {
@@ -74,7 +72,12 @@ class SpeedCalculator {
         String tier = ri.getBandwidthTier();
         if ("X".equals(tier)) return BASE_X;
         if ("P".equals(tier)) return BASE_P;
-        return BASE_O; // O or unknown defaults to medium
+        if ("O".equals(tier)) return BASE_O;
+        if ("N".equals(tier)) return BASE_N;
+        if ("M".equals(tier)) return BASE_M;
+        if ("L".equals(tier)) return BASE_L;
+        if ("K".equals(tier)) return BASE_K;
+        return BASE_UNKNOWN;
     }
 
     @SuppressWarnings("deprecation")

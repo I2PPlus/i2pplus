@@ -57,13 +57,12 @@ public class PeerTestJob extends JobImpl {
     private PeerManager _manager;
     private boolean _keepTesting;
     private final List<Hash> _priorityPeers = new ArrayList<Hash>();
-    private final int DEFAULT_PEER_TEST_DELAY = SystemVersion.isSlow() ? 8*1000 : 5*1000;
+    private final int DEFAULT_PEER_TEST_DELAY = SystemVersion.isSlow() ? 45*1000 : 30*1000;
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
-    private static final int DEFAULT_PEER_TEST_CONCURRENCY = SystemVersion.isSlow() ? 3 :
-                                                             SystemVersion.getCores() <= 2 ? 6 :
-                                                             SystemVersion.getCores() >= 8 ? 12 : 9;
+    private static final int DEFAULT_PEER_TEST_CONCURRENCY = SystemVersion.isSlow() ? 1 :
+                                                              SystemVersion.getCores() <= 2 ? 2 : 4;
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
-    private static final int DEFAULT_PEER_TEST_TIMEOUT = 750;
+    private static final int DEFAULT_PEER_TEST_TIMEOUT = 5000;
     public static final String PROP_PEER_TEST_TIMEOUT = "router.peerTestTimeout";
 
     /**
@@ -151,10 +150,11 @@ public class PeerTestJob extends JobImpl {
                 _log.warn("Peer test timeout set below successful test average, setting to: " + getAvgPeerTestTime() + "ms");
             return getAvgPeerTestTime();
         } else {
+            int minTimeout = Math.max(testTimeout, 2000);
             if (avgTestTime > 400)
-                return Math.min(testTimeout, avgTestTime * 3 / 2);
+                return Math.min(minTimeout, avgTestTime * 3 / 2);
             else
-                return testTimeout;
+                return minTimeout;
         }
     }
 
@@ -171,6 +171,16 @@ public class PeerTestJob extends JobImpl {
         long memory = SystemVersion.getMaxMemory();
         int testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, DEFAULT_PEER_TEST_CONCURRENCY);
         if (SystemVersion.getCPULoadAvg() > 80) {testConcurrent = 1;}
+        // Reduce concurrency when tunnel builds are failing — avoid adding
+        // load during a failure cascade when peer tests are likely to fail
+        // and would just consume tunnel resources.
+        double buildSuccess = getContext().profileOrganizer().getTunnelBuildSuccess();
+        if (buildSuccess < 0.50 && testConcurrent > 1) {
+            testConcurrent = Math.max(1, testConcurrent / 2);
+        }
+        if (buildSuccess < 0.30) {
+            testConcurrent = 1;
+        }
         return testConcurrent;
     }
 
@@ -562,16 +572,15 @@ public class PeerTestJob extends JobImpl {
             }
 
             long timeLeft = _expiration - getContext().clock().now();
-            int speedBonus = data.profile.getSpeedBonus();
             int timeout = getTestTimeout();
             float testAvg = data.profile.getPeerTestTimeAverage();
 
             if (isSlowTier(data)) {
                 handleSlowTier(data.profile);
             } else if (timeLeft < 0) {
-                handleTimeout(data, speedBonus, timeLeft);
+                handleTimeout(data, timeLeft);
             } else {
-                return handleSuccessfulTest(data, speedBonus, timeout, testAvg, timeLeft);
+                return handleSuccessfulTest(data, timeout, testAvg, timeLeft);
             }
 
             return false;
@@ -591,7 +600,7 @@ public class PeerTestJob extends JobImpl {
             } catch (NumberFormatException nfe) {}
         }
 
-        private void handleTimeout(PeerData data, int speedBonus, long timeLeft) {
+        private void handleTimeout(PeerData data, long timeLeft) {
             if (_log.shouldInfo())
                 _log.info("[" + _shortHash + "] Test reply took too long: " + (0-timeLeft) + "ms too slow");
 
@@ -601,8 +610,7 @@ public class PeerTestJob extends JobImpl {
                 try {
                     data.profile.setCapacityBonus(-30);
                     getContext().profileOrganizer().demoteIfHighLatency(_peer);
-                    if (speedBonus >= 9999999)
-                        data.profile.setSpeedBonus(speedBonus - 9999999);
+                    data.profile.setLowLatency(false);
                     if (_log.shouldInfo())
                         _log.info("Setting capacity bonus to -30 for [" + _shortHash + "]");
                 } catch (NumberFormatException nfe) {}
@@ -614,15 +622,14 @@ public class PeerTestJob extends JobImpl {
                    data.bandwidthTier.equals("P") || data.bandwidthTier.equals("X");
         }
 
-        private boolean handleSuccessfulTest(PeerData data, int speedBonus, int timeout, float testAvg, long timeLeft) {
+        private boolean handleSuccessfulTest(PeerData data, int timeout, float testAvg, long timeLeft) {
             getContext().statManager().addRateData("peer.testOK", getTestTimeout() - timeLeft);
 
             if (testAvg > (timeout * 2) && isHighBandwidthTier(data)) {
                 try {
                     data.profile.setCapacityBonus(-30);
                     getContext().profileOrganizer().demoteIfHighLatency(_peer);
-                    if (speedBonus >= 9999999)
-                        data.profile.setSpeedBonus(speedBonus - 9999999);
+                    data.profile.setLowLatency(false);
                     if (_log.shouldInfo())
                         _log.info("Setting capacity bonus to -30 for [" + _shortHash + "]" +
                                   " -> Average response is over twice timeout value");
@@ -630,7 +637,7 @@ public class PeerTestJob extends JobImpl {
                 return false;
             }
 
-            if ((data.profile.getCapacityBonus() == -30 || data.profile.getSpeedBonus() < 9999999) &&
+            if ((data.profile.getCapacityBonus() == -30 || !data.profile.isLowLatency()) &&
                 data.capabilities != null && data.isReachable && testAvg < (timeout * 2) &&
                 isHighOrMidBandwidthTier(data)) {
                 try {
@@ -639,11 +646,11 @@ public class PeerTestJob extends JobImpl {
                         if (_log.shouldInfo())
                             _log.info("Resetting capacity bonus to 0 for [" + _shortHash + "]");
                     }
-                    if (data.profile.getSpeedBonus() < 9999999 && data.capabilities != null &&
+                    if (!data.profile.isLowLatency() && data.capabilities != null &&
                         data.isReachable && isHighBandwidthTier(data)) {
-                        data.profile.setSpeedBonus(speedBonus + 9999999);
+                        data.profile.setLowLatency(true);
                         if (_log.shouldInfo())
-                            _log.info("Setting speed bonus to 9999999 for [" + _shortHash + "]");
+                            _log.info("Setting low latency flag for [" + _shortHash + "]");
                     }
                 } catch (NumberFormatException nfe) {}
                 _matchFound = true;
@@ -707,10 +714,10 @@ public class PeerTestJob extends JobImpl {
                     String bw = peerInfo.getBandwidthTier();
                     PeerProfile prof = getContext().profileOrganizer().getProfile(h);
                     if (prof != null && cap != null && reachable && (bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
-                        prof.setSpeedBonus(9999999);
+                        prof.setLowLatency(true);
                         if (_log.shouldInfo())
                             _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
-                                      "] Setting speed bonus to 9999999 for fast tier router");
+                                      "] Setting low latency flag for fast tier router");
                     }
                     if (prof != null && prof.getCapacityBonus() == -30 && cap != null && reachable &&
                         (!bw.equals("L") || !bw.equals("M"))) {
@@ -799,9 +806,9 @@ public class PeerTestJob extends JobImpl {
                 try {
                     data.profile.setCapacityBonus(-30);
                     getContext().profileOrganizer().demoteIfHighLatency(_peer.getIdentity().getHash());
-                    data.profile.setSpeedBonus(0);
+                    data.profile.setLowLatency(false);
                     if (_log.shouldInfo())
-                        _log.info("Setting capacity bonus to -30 and speed bonus to 0 for [" +
+                        _log.info("Setting capacity bonus to -30 for [" +
                                   shortHash + "] -> Slow or unreachable");
                 } catch (NumberFormatException nfe) {}
             }

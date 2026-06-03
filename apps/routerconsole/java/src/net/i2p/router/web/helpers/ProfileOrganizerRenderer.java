@@ -283,7 +283,7 @@ class ProfileOrganizerRenderer {
                 buf.append("</span></td><td data-sort=").append(speed).append(">");
                 if (prof.getSpeedValue() > 0.1) {
                     buf.append("<span class=\"");
-                    if (bonus >= 9999999) {buf.append("testOK ");}
+                    if (prof.isLowLatency()) {buf.append("testOK ");}
                     else if (capBonus == -30) {buf.append("testFail ");}
                     if (speed >= 9999999) {speed = speed - 9999999;}
                     if (speed > 1025) {
@@ -302,15 +302,15 @@ class ProfileOrganizerRenderer {
                     buf.append("</span>");
                 } else {
                     buf.append("<span hidden>0</span><span class=\"");
-                    if (bonus >= 9999999) {buf.append("testOK ");}
+                    if (prof.isLowLatency()) {buf.append("testOK ");}
                     else if (capBonus <= -30) {buf.append("testFail ");}
                     buf.append("nospeed\">&ensp;</span>");
                 }
                 int score = 0;
-                if (bonus >= 9999999) {score = 2;}
+                if (prof.isLowLatency()) {score = 2;}
                 else if (capBonus == -30) {score = 1;}
                 buf.append("</td><td class=latency data-sort=").append(score).append(">");
-                if (bonus >= 9999999) {buf.append("<span class=lowlatency>✔</span>");}
+                if (prof.isLowLatency()) {buf.append("<span class=lowlatency>✔</span>");}
                 else if (capBonus == -30) {buf.append("<span class=highlatency>✖</span>");}
                 else {buf.append("<span>&ensp;</span>");}
                 int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());

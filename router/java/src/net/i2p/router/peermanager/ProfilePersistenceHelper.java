@@ -148,6 +148,7 @@ class ProfilePersistenceHelper {
             add(buf, addComments, "capacityBonusLastUpdate", profile.getCapacityBonusLastUpdate(), "Last update time for capacity bonus:");
         }
         if (profile.getIntegrationBonus() != 0) {add(buf, addComments, "integrationBonus", profile.getIntegrationBonus(), "Manual Integration Score adjustment:");}
+        if (profile.isLowLatency()) {add(buf, addComments, "lowLatency", 1, "Low latency flag (fast tunnel builds):");}
         addDate(buf, addComments, "firstHeardAbout", profile.getFirstHeardAbout(), "First reference to peer received:");
         addDate(buf, addComments, "lastHeardAbout", profile.getLastHeardAbout(), "Last reference to peer received:");
         if (profile.getLastHeardFrom() != 0) {addDate(buf, addComments, "lastHeardFrom", profile.getLastHeardFrom(), "Last message from peer received:");}
@@ -371,11 +372,7 @@ class ProfilePersistenceHelper {
                 return null;
             }
 
-            if (!caps.isEmpty() && (caps.contains("K") || caps.contains("L") || caps.contains("M") || caps.contains("U"))) {
-                if (_log.shouldDebug()) {_log.debug("Deleting uninteresting profile: " + file.getName() + " -> K, L, M or unreachable");}
-                file.delete();
-                return null;
-            } else if (file.getName().endsWith(OLD_SUFFIX)) {
+            if (file.getName().endsWith(OLD_SUFFIX)) {
                 // migrate to new file name, ignore failure
                 String newName = file.getAbsolutePath();
                 newName = newName.substring(0, newName.length() - OLD_SUFFIX.length()) + SUFFIX;
@@ -388,6 +385,7 @@ class ProfilePersistenceHelper {
             profile.setIntegrationBonus((int) getLong(props, "integrationBonus"));
             profile.setSpeedBonus((int) getLong(props, "speedBonus"));
             profile.setSpeedBonusLastUpdate(getLong(props, "speedBonusLastUpdate"));
+            profile.setLowLatency(getLong(props, "lowLatency") > 0);
 
             long fh = getLong(props, "firstHeardAbout");
             if (fh <= 0) {fh = file.lastModified();}

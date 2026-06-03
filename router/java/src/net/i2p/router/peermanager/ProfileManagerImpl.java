@@ -133,6 +133,7 @@ public class ProfileManagerImpl implements ProfileManager {
             if (data == null) return;
             data.updateTunnelTestTimeAverage(responseTimeMs);
             data.getTunnelTestResponseTime().addData(responseTimeMs, responseTimeMs);
+            data.getTunnelHistory().incrementTestSucceeded();
             // Immediately demote from fast/high-cap tiers if RTT exceeds threshold
             _context.profileOrganizer().demoteIfHighRTT(peer, responseTimeMs);
         }
@@ -381,7 +382,6 @@ public class ProfileManagerImpl implements ProfileManager {
     private PeerProfile getProfile(Hash peer) {
         PeerProfile prof = _context.profileOrganizer().getProfile(peer);
         if (prof == null) {
-            if (_context.profileOrganizer().isLowBandwidthTier(peer)) return null;
             prof = new PeerProfile(_context, peer);
             prof.setLastHeardAbout(prof.getFirstHeardAbout());
             _context.profileOrganizer().addProfile(prof);
