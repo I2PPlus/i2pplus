@@ -279,7 +279,7 @@ public class TunnelPool {
                         // Skip tunnels that have failed completely
                         if (info.getTunnelFailed()) {continue;}
                         // Only skip tunnels with multiple consecutive failures
-                        if (info.getConsecutiveFailures() > 3) {continue;}
+                        if (info.getConsecutiveFailures() > 1) {continue;}
                         if (info.getLength() > 1 && info.getExpiration() > now) {
                             if (_settings.isInbound() || !_context.commSystem().isBacklogged(info.getPeer(1))) {
                                 resetConsecutiveTimeoutsOnSuccess();
@@ -309,7 +309,7 @@ public class TunnelPool {
                     }
                     // Skip completely failed tunnels
                     if (info.getTunnelFailed()) {continue;}
-                    if (info.getConsecutiveFailures() > 3) {continue;}
+                    if (info.getConsecutiveFailures() > 1) {continue;}
                     if (info.getExpiration() > now) {
                         if (_settings.isInbound() || info.getLength() <= 1 ||
                             !_context.commSystem().isBacklogged(info.getPeer(1))) {
@@ -400,7 +400,7 @@ public class TunnelPool {
                     // Skip completely failed tunnels
                     if (info.getTunnelFailed()) {continue;}
                     // Only skip tunnels with multiple consecutive failures
-                    if (info.getConsecutiveFailures() > 3) {continue;}
+                    if (info.getConsecutiveFailures() > 1) {continue;}
                     if (info.getExpiration() > now) {
                         if (rv == null || comparator.compare(info, rv) < 0) {
                             rv = info;
@@ -691,7 +691,7 @@ public class TunnelPool {
                 TunnelInfo info = _tunnels.get(i);
                 if (info.getTunnelFailed() ||
                     info.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED ||
-                    info.getConsecutiveFailures() > 3) {
+                    info.getConsecutiveFailures() > 1) {
                     continue;
                 }
                 long timeLeft = info.getExpiration() - now;
@@ -716,18 +716,18 @@ public class TunnelPool {
      *  Cancel excess in-progress tunnel builds to stay within budget.
      *  Cancels the newest builds first (less time invested).
      *  @param maxAllowed the maximum number of in-progress builds allowed
-     *  @return the number of builds cancelled
+     *  @return list of cancelled tunnel configs (BuildExecutor should remove from _currentlyBuildingMap)
      *  @since 0.9.68
      */
-    public int cancelExcessInProgress(int maxAllowed) {
-        int cancelled = 0;
+    public List<PooledTunnelCreatorConfig> cancelExcessInProgress(int maxAllowed) {
+        List<PooledTunnelCreatorConfig> cancelled = new ArrayList<PooledTunnelCreatorConfig>();
         synchronized (_inProgress) {
             while (_inProgress.size() > maxAllowed && !_inProgress.isEmpty()) {
                 PooledTunnelCreatorConfig cfg = _inProgress.remove(_inProgress.size() - 1);
                 if (_log.shouldWarn()) {
                     _log.warn("Cancelling excess tunnel build: " + cfg);
                 }
-                cancelled++;
+                cancelled.add(cfg);
             }
         }
         return cancelled;
@@ -960,6 +960,22 @@ public class TunnelPool {
             }
 
             if (info.getExpiration() > now + 60*1000) {
+                // Prevent overbuild: don't add if we already have enough valid tunnels
+                int target = _settings.getQuantity();
+                int validCount = 0;
+                for (TunnelInfo existing : _tunnels) {
+                    if (existing.getExpiration() > now && existing.getLength() > 1 &&
+                        !existing.getTunnelFailed() && existing.getConsecutiveFailures() <= 1) {
+                        validCount++;
+                    }
+                }
+                if (validCount >= target) {
+                    if (_log.shouldWarn()) {
+                        _log.warn(toString() + " -> Rejecting excess tunnel (" + validCount +
+                                  " valid, target=" + target + "): " + info);
+                    }
+                    return;
+                }
                 _tunnels.add(info);
                 // Track this tunnel ID as recently added
                 _recentlyAddedTunnels.put(gatewayId, now);
@@ -1017,6 +1033,10 @@ public class TunnelPool {
                 if (_log.shouldWarn()) {
                     _log.warn(toString() + "\n* No tunnels remaining -> Requesting a new tunnel...");
                 }
+                // Force LeaseSet refresh to extend the current LS lifetime,
+                // preventing the destination from becoming unreachable during
+                // the replacement build window.
+                refreshLeaseSet(true);
                 // Always start a new tunnel build regardless of zero-hop setting
                 PooledTunnelCreatorConfig newCfg = configureNewTunnel(false);
                 if (newCfg != null) {
@@ -1113,23 +1133,8 @@ public class TunnelPool {
             // the LeaseSet would cause clients to fail when connecting.
             if (tunnel.getTunnelFailed() ||
                 tunnel.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED ||
-                tunnel.getConsecutiveFailures() > 3) {
+                tunnel.getConsecutiveFailures() > 1) {
                 continue;
-            }
-            if (tunnel.getExpiration() <= expireAfter) {
-                continue;
-            }
-
-            if (tunnel.getLength() <= 1) {
-                if (zeroHopTunnel != null) {
-                    if (zeroHopTunnel.getExpiration() > tunnel.getExpiration()) {
-                        continue;
-                    }
-                    if (zeroHopLease != null) {
-                        leases.remove(zeroHopLease);
-                    }
-                }
-                zeroHopTunnel = tunnel;
             }
 
             TunnelId inId = tunnel.getReceiveTunnelId(0);
@@ -1215,31 +1220,13 @@ public class TunnelPool {
      *  @param cfg the tunnel to remove
      */
     private void fail(TunnelInfo cfg) {
-        // For server pools: keep tunnel in the pool for in-flight data delivery,
-        // but defer LeaseSet republish so multiple failures within a short
-        // window are batched into a single LeaseSet update. Schedule removal
-        // in 30s.
-        if (_settings.isInbound() && !_settings.isExploratory() && _alive) {
-            long now = _context.clock().now();
-            if (cfg instanceof PooledTunnelCreatorConfig) {
-                ((PooledTunnelCreatorConfig) cfg).setExpiration(now + 30*1000);
-            }
-            if (_log.shouldWarn())
-                _log.warn(toString() + ": Scheduling early expiry for server tunnel (30s): " + cfg);
-            _manager.tunnelFailed();
-            _context.simpleTimer2().addEvent(new EarlyExpiryRemoval(cfg), 30*1000);
-            // Defer LeaseSet republish — batch multiple failures into one update
-            // within a 10s window. Prevents rapid LeaseSet churn when several
-            // tunnels fail in quick succession.
-            scheduleDeferredLeaseSetRepublish();
-            return;
-        }
-
+        int remaining;
         LeaseSet ls = null;
         _tunnelsLock.lock();
         try {
             boolean removed = _tunnels.remove(cfg);
             if (!removed) {return;}
+            remaining = _tunnels.size();
             if (_settings.isInbound() && !_settings.isExploratory()) {
                 ls = locked_buildNewLeaseSet();
             }
@@ -1251,23 +1238,37 @@ public class TunnelPool {
         _lifetimeProcessed += cfg.getProcessedMessagesCount();
         updateRate();
 
-        if (_settings.isInbound() && !_settings.isExploratory()) {
+        // Set 30s expiry so in-flight data can still be delivered via dispatcher
+        // even though the tunnel is no longer in the pool's selectable list.
+        if (cfg instanceof PooledTunnelCreatorConfig)
+            ((PooledTunnelCreatorConfig) cfg).setExpiration(_context.clock().now() + 30*1000);
+
+        if (_settings.isInbound() && !_settings.isExploratory() && _alive) {
+            // Defer LeaseSet republish — batch multiple failures into one update
+            // within a 10s window. Prevents rapid LeaseSet churn when several
+            // tunnels fail in quick succession.
+            scheduleDeferredLeaseSetRepublish();
             if (ls != null) {
-                // Throttled internally
                 requestLeaseSet(ls);
+            } else if (remaining == 0 && cfg instanceof TunnelCreatorConfig) {
+                // No valid tunnels remain — build emergency LeaseSet from the
+                // failed tunnel's gateway lease so the destination doesn't become
+                // unreachable during the replacement build window.
+                ls = buildEmergencyLeaseSet(cfg);
+                if (ls != null) {
+                    requestLeaseSet(ls);
+                }
+            }
+            // If no tunnels remain, kick off a replacement build immediately
+            // so the pool recovers without waiting for the next scheduled cycle.
+            if (remaining == 0) {
+                PooledTunnelCreatorConfig newCfg = configureNewTunnel(false);
+                if (newCfg != null)
+                    _manager.getExecutor().buildTunnel(newCfg);
+                if (_settings.getAllowZeroHop())
+                    buildFallback();
             }
         }
-    }
-
-    /**
-     *  Timer event to remove a server pool tunnel after early expiry.
-     *  Scheduled by fail() when a server tunnel fails — gives it 30s
-     *  grace before removal so the LeaseSet stays valid during replacement.
-     */
-    private class EarlyExpiryRemoval implements net.i2p.util.SimpleTimer.TimedEvent {
-        private final TunnelInfo _cfg;
-        EarlyExpiryRemoval(TunnelInfo cfg) { _cfg = cfg; }
-        public void timeReached() { removeTunnel(_cfg); }
     }
 
     /**
@@ -1668,7 +1669,7 @@ public class TunnelPool {
             // the LeaseSet would cause clients to fail when connecting.
             if (tunnel.getTunnelFailed() ||
                 tunnel.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED ||
-                tunnel.getConsecutiveFailures() > 3) {
+                tunnel.getConsecutiveFailures() > 1) {
                 continue;
             }
             if (tunnel.getExpiration() <= expireAfter) {continue;}
@@ -1731,6 +1732,36 @@ public class TunnelPool {
         int count = Math.min(leases.size(), wanted);
         for (int i = 0; i < count; i++) {ls.addLease(iter.next());}
         if (_log.shouldInfo()) {_log.info(toString() + " -> New LeaseSet built" + ls);}
+        return ls;
+    }
+
+    /**
+     * Build an emergency LeaseSet from a single tunnel's gateway lease,
+     * bypassing failure filters. Used when all tunnels have been removed
+     * due to failures, to keep the destination reachable during the
+     * replacement build window. Uses the HopConfig expiration (full
+     * 10-minute lifetime) rather than the shortened failure expiration.
+     */
+    private LeaseSet buildEmergencyLeaseSet(TunnelInfo cfg) {
+        if (cfg == null) {return null;}
+        TunnelId inId = cfg.getReceiveTunnelId(0);
+        Hash gw = cfg.getPeer(0);
+        if (inId == null || gw == null) {return null;}
+        Lease lease = new Lease();
+        long expiration = cfg.getExpiration();
+        if (cfg instanceof TunnelCreatorConfig) {
+            expiration = ((TunnelCreatorConfig) cfg).getConfig(0).getExpiration();
+        }
+        long minExpiry = _context.clock().now() + 60*1000;
+        if (expiration < minExpiry) {expiration = minExpiry;}
+        lease.setEndDate(expiration);
+        lease.setTunnelId(inId);
+        lease.setGateway(gw);
+        LeaseSet ls = new LeaseSet();
+        ls.addLease(lease);
+        if (_log.shouldWarn()) {
+            _log.warn(toString() + "\n* Emergency LeaseSet published from failed tunnel " + cfg);
+        }
         return ls;
     }
 

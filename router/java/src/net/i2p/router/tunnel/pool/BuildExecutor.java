@@ -556,8 +556,9 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
                             int maxAllowed = Math.max(2, wantedCount + 2);
                             int currentInProgress = pool.getInProgressCount();
                             if (currentInProgress > maxAllowed) {
-                                int toCancel = currentInProgress - maxAllowed;
-                                pool.cancelExcessInProgress(toCancel);
+                                for (PooledTunnelCreatorConfig cfg : pool.cancelExcessInProgress(maxAllowed)) {
+                                    removeFromBuilding(cfg.getReplyMessageId());
+                                }
                             }
                         }
                     }
