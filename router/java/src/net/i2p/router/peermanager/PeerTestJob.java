@@ -57,10 +57,10 @@ public class PeerTestJob extends JobImpl {
     private PeerManager _manager;
     private boolean _keepTesting;
     private final List<Hash> _priorityPeers = new ArrayList<Hash>();
-    private final int DEFAULT_PEER_TEST_DELAY = SystemVersion.isSlow() ? 45*1000 : 30*1000;
+    private final int DEFAULT_PEER_TEST_DELAY = SystemVersion.isSlow() ? 8*1000 : 5*1000;
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
-    private static final int DEFAULT_PEER_TEST_CONCURRENCY = SystemVersion.isSlow() ? 1 :
-                                                              SystemVersion.getCores() <= 2 ? 2 : 4;
+    private static final int DEFAULT_PEER_TEST_CONCURRENCY = SystemVersion.isSlow() ? 2 :
+                                                              SystemVersion.getCores() <= 2 ? 3 : 4;
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
     private static final int DEFAULT_PEER_TEST_TIMEOUT = 5000;
     public static final String PROP_PEER_TEST_TIMEOUT = "router.peerTestTimeout";
