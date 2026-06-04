@@ -1077,7 +1077,7 @@ public class TunnelPool {
 
         if (_alive && _settings.isInbound() && !_settings.isExploratory()) {
             if (ls != null) {
-                requestLeaseSet(ls);
+                requestLeaseSet(ls, true);
             } else {
                 if (_log.shouldWarn()) {
                     _log.warn(toString() + " -> Unable to build LeaseSet on sync removal (" + remaining + " remaining)");
@@ -1252,7 +1252,8 @@ public class TunnelPool {
             // tunnels fail in quick succession.
             scheduleDeferredLeaseSetRepublish();
             if (ls != null) {
-                requestLeaseSet(ls);
+                // Use force to bypass throttle — this is a failure recovery path
+                requestLeaseSet(ls, true);
             } else if (cfg instanceof TunnelCreatorConfig) {
                 // locked_buildNewLeaseSet() returned null — all remaining tunnels
                 // have >1 consecutive failures and were filtered out. Build an
@@ -1262,7 +1263,7 @@ public class TunnelPool {
                 // LS stays valid long enough for a replacement to build.
                 ls = buildEmergencyLeaseSet(cfg);
                 if (ls != null) {
-                    requestLeaseSet(ls);
+                    requestLeaseSet(ls, true);
                 }
             }
             // Ensure the pool has enough valid tunnels — proactively build
@@ -2200,7 +2201,17 @@ public class TunnelPool {
      */
     private boolean isDestinationReachable() {
         if (_settings.isExploratory()) {
-            return true; // Exploratory tunnels don't have a specific destination
+            return true;
+        }
+
+        // For inbound server pools: the pool IS the source of the LeaseSet.
+        // If we're alive and have tunnels, the destination is reachable even if
+        // the signed LS hasn't propagated to the local netDB yet (the client
+        // app signs it asynchronously). Don't check netDB — that would create
+        // a window where the destination appears unreachable between LS build
+        // and client signing.
+        if (_settings.isInbound()) {
+            return _alive && size() > 0;
         }
 
         Hash destHash = _settings.getDestination().calculateHash();
