@@ -1024,27 +1024,12 @@ public class TunnelPool {
         for (int i = 0; i < info.getLength(); i++) {
             _context.profileManager().tunnelLifetimePushed(info.getPeer(i), lifetime, lifetimeConfirmed);
         }
-        if (_alive && _settings.isInbound() && !_settings.isExploratory()) {
-            // When remaining == 0, the pool has no valid tunnels to advertise.
-            // Still build a replacement immediately (not just zero-hop fallback)
-            // so the pool recovers and addTunnel() triggers a fresh LeaseSet.
-            // This avoids a window where the destination has no LeaseSet in NetDB.
-            if (remaining == 0) {
-                if (_log.shouldWarn()) {
-                    _log.warn(toString() + "\n* No tunnels remaining -> Requesting a new tunnel...");
-                }
-                // Force LeaseSet refresh to extend the current LS lifetime,
-                // preventing the destination from becoming unreachable during
-                // the replacement build window.
-                refreshLeaseSet(true);
-                // Always start a new tunnel build regardless of zero-hop setting
-                PooledTunnelCreatorConfig newCfg = configureNewTunnel(false);
-                if (newCfg != null) {
-                    _manager.getExecutor().buildTunnel(newCfg);
-                }
-                // Also build zero-hop fallback if allowed, for faster recovery
-                if (_settings.getAllowZeroHop()) {buildFallback();}
-            } else if (remaining > 0) {
+        if (_alive) {
+            // Proactively build replacements when valid tunnel count falls below target.
+            // This catches all removal paths (expiry, failure, manual) and prevents
+            // the pool from draining to zero.
+            ensureSufficientTunnels();
+            if (_settings.isInbound() && !_settings.isExploratory()) {
                 refreshLeaseSet(false);
             }
         }
@@ -1106,6 +1091,9 @@ public class TunnelPool {
         if (removed && _log.shouldDebug()) {
             _log.debug(toString() + " -> Synchronous tunnel removal complete, LeaseSet republished");
         }
+        if (removed) {
+            ensureSufficientTunnels();
+        }
 
         return removed;
     }
@@ -1156,6 +1144,21 @@ public class TunnelPool {
             }
         }
 
+        if (leases.isEmpty()) {
+            TunnelInfo fallback = findBestDegradedTunnel(tunnelsCopy);
+            if (fallback != null) {
+                TunnelId inId = fallback.getReceiveTunnelId(0);
+                Hash gw = fallback.getPeer(0);
+                if (inId != null && gw != null) {
+                    Lease lease = buildLeaseFromTunnel(fallback);
+                    leases.add(lease);
+                    if (_log.shouldWarn()) {
+                        _log.warn(toString() + "\n* Emergency fallback lease from degraded tunnel (" +
+                                  fallback.getConsecutiveFailures() + " failures)");
+                    }
+                }
+            }
+        }
         if (leases.isEmpty()) {
             return null;
         }
@@ -1262,15 +1265,9 @@ public class TunnelPool {
                     requestLeaseSet(ls);
                 }
             }
-            // If no tunnels remain, kick off a replacement build immediately
-            // so the pool recovers without waiting for the next scheduled cycle.
-            if (remaining == 0) {
-                PooledTunnelCreatorConfig newCfg = configureNewTunnel(false);
-                if (newCfg != null)
-                    _manager.getExecutor().buildTunnel(newCfg);
-                if (_settings.getAllowZeroHop())
-                    buildFallback();
-            }
+            // Ensure the pool has enough valid tunnels — proactively build
+            // replacements when count falls below target.
+            ensureSufficientTunnels();
         }
     }
 
@@ -1295,6 +1292,13 @@ public class TunnelPool {
             _tunnelsLock.lock();
             try {
                 ls = locked_buildNewLeaseSet();
+                if (ls == null) {
+                    // Even locked_buildNewLeaseSet couldn't find a tunnel —
+                    // try emergency fallback from any remaining tunnel.
+                    TunnelInfo fallback = findBestDegradedTunnel();
+                    if (fallback != null)
+                        ls = buildEmergencyLeaseSet(fallback);
+                }
             } finally {
                 _tunnelsLock.unlock();
             }
@@ -1723,6 +1727,23 @@ public class TunnelPool {
          * So we will generate a succession of leases at startup. That's OK.
          * Do we want a config option for this, or are there times when we shouldn't do this?
          */
+        if (leases.isEmpty()) {
+            // All tunnels filtered by quality checks — pick the best degraded
+            // tunnel as a fallback so the LeaseSet never goes empty.
+            TunnelInfo fallback = findBestDegradedTunnel();
+            if (fallback != null) {
+                TunnelId inId = fallback.getReceiveTunnelId(0);
+                Hash gw = fallback.getPeer(0);
+                if (inId != null && gw != null) {
+                    Lease lease = buildLeaseFromTunnel(fallback);
+                    leases.add(lease);
+                    if (_log.shouldWarn()) {
+                        _log.warn(toString() + "\n* Emergency fallback lease from degraded tunnel (" +
+                                  fallback.getConsecutiveFailures() + " failures)");
+                    }
+                }
+            }
+        }
         if (leases.size() < wanted) {
             if (_log.shouldInfo()) {
                 _log.info(toString() + "\n* Not enough leases to build full LeaseSet (" + leases.size() + "/" + wanted + " available)");
@@ -1739,14 +1760,11 @@ public class TunnelPool {
     }
 
     /**
-     * Build an emergency LeaseSet from a single tunnel's gateway lease,
-     * bypassing failure filters. Used when all tunnels have been removed
-     * due to failures, to keep the destination reachable during the
-     * replacement build window. Uses the HopConfig expiration (full
-     * 10-minute lifetime) rather than the shortened failure expiration.
+     * Build a Lease from a single tunnel's gateway, using the HopConfig
+     * expiration (original full lifetime) rather than the possibly-shortened
+     * failure expiration.
      */
-    private LeaseSet buildEmergencyLeaseSet(TunnelInfo cfg) {
-        if (cfg == null) {return null;}
+    private Lease buildLeaseFromTunnel(TunnelInfo cfg) {
         TunnelId inId = cfg.getReceiveTunnelId(0);
         Hash gw = cfg.getPeer(0);
         if (inId == null || gw == null) {return null;}
@@ -1760,12 +1778,79 @@ public class TunnelPool {
         lease.setEndDate(expiration);
         lease.setTunnelId(inId);
         lease.setGateway(gw);
+        return lease;
+    }
+
+    /**
+     * Build an emergency LeaseSet from a single tunnel's gateway lease,
+     * bypassing failure filters. Used when all tunnels have been removed
+     * due to failures, to keep the destination reachable during the
+     * replacement build window. Uses the HopConfig expiration (full
+     * 10-minute lifetime) rather than the shortened failure expiration.
+     */
+    private LeaseSet buildEmergencyLeaseSet(TunnelInfo cfg) {
+        if (cfg == null) {return null;}
+        Lease lease = buildLeaseFromTunnel(cfg);
+        if (lease == null) {return null;}
         LeaseSet ls = new LeaseSet();
         ls.addLease(lease);
         if (_log.shouldWarn()) {
             _log.warn(toString() + "\n* Emergency LeaseSet published from failed tunnel " + cfg);
         }
         return ls;
+    }
+
+    /**
+     * Find the best degraded tunnel from _tunnels for emergency LS fallback.
+     * Picks the tunnel with the fewest consecutive failures (excluding fully
+     * dead tunnels). If tied, picks the one with the latest expiration.
+     */
+    private TunnelInfo findBestDegradedTunnel() {
+        long now = _context.clock().now();
+        TunnelInfo best = null;
+        int bestFailures = Integer.MAX_VALUE;
+        for (int i = 0; i < _tunnels.size(); i++) {
+            TunnelInfo t = _tunnels.get(i);
+            if (t.getTunnelFailed() ||
+                t.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED) {
+                continue;
+            }
+            if (t.getReceiveTunnelId(0) == null || t.getPeer(0) == null) {
+                continue;
+            }
+            if (t.getExpiration() <= now + 10*1000) {continue;}
+            int failures = t.getConsecutiveFailures();
+            if (best == null || failures < bestFailures ||
+                (failures == bestFailures && t.getExpiration() > best.getExpiration())) {
+                best = t;
+                bestFailures = failures;
+            }
+        }
+        return best;
+    }
+
+    /**
+     * Find the best degraded tunnel from a given list for emergency LS fallback.
+     */
+    private static TunnelInfo findBestDegradedTunnel(List<TunnelInfo> tunnels) {
+        TunnelInfo best = null;
+        int bestFailures = Integer.MAX_VALUE;
+        for (TunnelInfo t : tunnels) {
+            if (t.getTunnelFailed() ||
+                t.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED) {
+                continue;
+            }
+            if (t.getReceiveTunnelId(0) == null || t.getPeer(0) == null) {
+                continue;
+            }
+            int failures = t.getConsecutiveFailures();
+            if (best == null || failures < bestFailures ||
+                (failures == bestFailures && t.getExpiration() > best.getExpiration())) {
+                best = t;
+                bestFailures = failures;
+            }
+        }
+        return best;
     }
 
     /**
@@ -1790,6 +1875,31 @@ public class TunnelPool {
      *  @return null on failure
      */
     PooledTunnelCreatorConfig configureNewTunnel() {return configureNewTunnel(false);}
+
+    /**
+     *  Ensure the pool has at least target valid tunnels, building replacements
+     *  proactively when the count drops below target. This prevents the pool
+     *  from silently draining to zero, avoiding tunnel collapse cascades.
+     */
+    private void ensureSufficientTunnels() {
+        if (!_alive) {return;}
+        int target = _settings.getQuantity();
+        int valid = getValidTunnelCount();
+        int inProgress = getInProgressCount();
+        int needed = target - (valid + inProgress);
+        if (needed > 0) {
+            if (_log.shouldWarn()) {
+                _log.warn(toString() + "\n* Proactive build: " + valid + " valid + " + inProgress +
+                          " in-progress < target " + target + ", building " + needed + " replacement(s)");
+            }
+            for (int i = 0; i < needed; i++) {
+                PooledTunnelCreatorConfig cfg = configureNewTunnel(false);
+                if (cfg != null) {
+                    _manager.getExecutor().buildTunnel(cfg);
+                }
+            }
+        }
+    }
 
     /**
      *  This only sets the peers and creation/expiration times in the configuration.
