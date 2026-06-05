@@ -31,8 +31,8 @@ public class LoginServlet extends HttpServlet {
         loadPersistedSessions();
     }
 
-    private static final String PARAM_USERNAME = "username";
-    private static final String PARAM_PASSWORD = "password";
+    private static final String PARAM_USERNAME = "nofilter_username";
+    private static final String PARAM_PASSWORD = "nofilter_password";
     private static final String REALM = "i2prouter";
     private static final String DEFAULT_THEME = "dark";
     private static final String PROP_PERSISTED_SESSIONS = "routerconsole.persistedSessions";
@@ -175,20 +175,26 @@ public class LoginServlet extends HttpServlet {
         try {
         String username = req.getParameter(PARAM_USERNAME);
         String password = req.getParameter(PARAM_PASSWORD);
-        String confirmPassword = req.getParameter("confirmPassword");
+        String confirmPassword = req.getParameter("nofilter_confirmPassword");
         String duration = req.getParameter("duration");
         String csrfToken = req.getParameter("I2P+CSRFTOKEN");
 
-        javax.servlet.http.HttpSession session = req.getSession(false);
-        if (session == null) {
-            _log.warn("No session for login request");
-            resp.sendRedirect(req.getContextPath() + "/login?error=session_expired");
-            return;
-        }
+        javax.servlet.http.HttpSession session = req.getSession(true);
         String sessionCSRF = (String) session.getAttribute("loginCSRF");
         if (sessionCSRF == null || csrfToken == null || !csrfToken.equals(sessionCSRF)) {
-            _log.warn("CSRF validation failed");
-            resp.sendRedirect(req.getContextPath() + "/login?error=csrf_invalid");
+            _log.warn("CSRF validation failed or session expired — re-displaying form");
+            String newCsrfToken = Long.toString(System.currentTimeMillis()) + "-" + java.util.UUID.randomUUID().toString();
+            session.setAttribute("loginCSRF", newCsrfToken);
+            req.setAttribute("I2P+CSRFTOKEN", newCsrfToken);
+            req.setAttribute("error", "Session expired, please try again");
+            req.setAttribute("theme", getLoginTheme());
+            boolean hasPasswords = isPasswordConfigured();
+            req.setAttribute("setupMode", !hasPasswords);
+            if (!hasPasswords) {
+                req.setAttribute("setupTitle", "Set Up Console Access");
+                req.setAttribute("setupMessage", "Create a username and password to access the router console.");
+            }
+            req.getRequestDispatcher("/login.jsp").forward(req, resp);
             return;
         }
         session.removeAttribute("loginCSRF");

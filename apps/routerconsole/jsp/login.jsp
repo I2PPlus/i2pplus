@@ -156,16 +156,16 @@ if (csrfToken != null) {
 <% }%>
 <div class=form-group>
 <label for="username"><%=intl._t("Username")%></label>
-<input type=text id=username name=username required autocomplete="username" maxlength=64>
+<input type=text id=username name=nofilter_username required autocomplete="username" maxlength=64>
 </div>
 <div class=form-group>
 <label for="password"><%=intl._t("Password")%></label>
-<input type=password id=password name=password required minlength=8 <% if (setupMode) {%> autocomplete="new-password" <% } else {%> autocomplete="current-password" <% }%> maxlength=128>
+<input type=password id=password name=nofilter_password required minlength=8 <% if (setupMode) {%> autocomplete="new-password" <% } else {%> autocomplete="current-password" <% }%> maxlength=128>
 </div>
 <% if (setupMode) {%>
 <div class=form-group>
 <label for="confirmPassword"><%=intl._t("Confirm Password")%></label>
-<input type=password id=confirmPassword name=confirmPassword required minlength=8 autocomplete="new-password" maxlength=128>
+<input type=password id=confirmPassword name=nofilter_confirmPassword required minlength=8 autocomplete="new-password" maxlength=128>
 </div>
 <% } else {%>
 <div class=form-group>
