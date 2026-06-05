@@ -67,14 +67,28 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private int _latencyIdx = 0;
     private int _latencyCount = 0;
     private volatile boolean _needsExpeditedTest = false;
+    /** optional pool nickname for log display */
+    private String _destinationNickname;
 
     /**
-     * For exploratory only (null destination)
-     * @param length 1 minimum (0 hop is length 1)
+     *  For exploratory only (null destination)
+     *  @param length 1 minimum (0 hop is length 1)
      */
     public TunnelCreatorConfig(RouterContext ctx, int length, boolean isInbound) {
         this(ctx, length, isInbound, null);
     }
+
+    /**
+     *  Set an optional display nickname for this tunnel (e.g. pool name like I2PSnark)
+     *  @since 0.9.70+
+     */
+    public void setDestinationNickname(String name) { _destinationNickname = name; }
+
+    /**
+     *  @return the pool nickname if set, null otherwise
+     *  @since 0.9.70+
+     */
+    public String getDestinationNickname() { return _destinationNickname; }
 
     /**
      * @param length 1 minimum (0 hop is length 1)
@@ -205,6 +219,17 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         boolean rv = _failures.incrementAndGet() <= MAX_CONSECUTIVE_TEST_FAILURES;
         if (!rv) {_reused = true;} // don't allow it to be rebuilt
         return rv;
+    }
+
+    /**
+     *  Increment the failure count without triggering pool removal or reuse flag.
+     *  Used when a previously GOOD tunnel fails a retest — we want to track
+     *  the failure for selection deprioritization but keep the tunnel alive
+     *  for further testing and data delivery.
+     *  @since 0.9.69+
+     */
+    public void incrementTestFailures() {
+        _failures.incrementAndGet();
     }
 
     /**
@@ -490,7 +515,13 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         if (_isInbound) {buf.append("Inbound");}
         else {buf.append("Outbound");}
         if (_destination == null) {buf.append(" Exploratory tunnel");}
-        else {buf.append(" Client tunnel [").append(Base64.encode(_destination.getData(), 0, 6)).append("]");}
+        else {
+            buf.append(" Client tunnel [");
+            if (_destinationNickname != null) {
+                buf.append(_destinationNickname).append("/");
+            }
+            buf.append(_destination.toBase32().substring(0, 8)).append("]");
+        }
         int fails = _failures.get();
         if (fails > 1) {buf.append(" (").append(fails).append(" consecutive failures)");}
         if (_log.shouldInfo()) {
