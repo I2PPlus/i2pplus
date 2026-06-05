@@ -47,10 +47,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     public final static long REPUBLISH_LEASESET_TIMEOUT_DEFAULT = 60 * 1000;
     public final static int RETRY_DELAY_DEFAULT = 20 * 1000;
     public final static int RETRY_MAX_DELAY_DEFAULT = 30 * 1000;
-    private final static long REPUBLISH_INTERVAL = 8 * 60 * 1000; // 8 minutes
-    private final static long REPUBLISH_INTERVAL_LOW_SUCCESS = 7 * 60 * 1000; // 7 minutes (build success < 40%)
-    private final static long REPUBLISH_INTERVAL_VERY_LOW_SUCCESS = 6 * 60 * 1000; // 6 minutes (build success < 30%)
-    private final static long REPUBLISH_INTERVAL_CRITICAL = 5 * 60 * 1000; // 5 minutes (build success < 20%)
+    private final static long REPUBLISH_INTERVAL = 5 * 60 * 1000; // 5 minutes
     private final static long EXPIRY_WINDOW = 3 * 60 * 1000;
     private static final long CACHE_CLEANUP_THRESHOLD = 15 * 60 * 1000;
     private static final ConcurrentHashMap<Hash, Boolean> _retryInProgress = new ConcurrentHashMap<>();
@@ -208,17 +205,6 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     private long getRepublishInterval() {
-        double buildSuccess = net.i2p.util.SystemVersion.getTunnelBuildSuccess() / 100.0;
-        if (buildSuccess <= 0) {
-            return REPUBLISH_INTERVAL;
-        }
-        if (buildSuccess < 0.20) {
-            return REPUBLISH_INTERVAL_CRITICAL;
-        } else if (buildSuccess < 0.30) {
-            return REPUBLISH_INTERVAL_VERY_LOW_SUCCESS;
-        } else if (buildSuccess < ProfileOrganizer.ATTACK_THRESHOLD) {
-            return REPUBLISH_INTERVAL_LOW_SUCCESS;
-        }
         return REPUBLISH_INTERVAL;
     }
 
