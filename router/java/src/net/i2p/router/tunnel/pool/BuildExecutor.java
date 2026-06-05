@@ -53,6 +53,8 @@ class BuildExecutor implements Runnable {
     private boolean _repoll;
     private final AtomicInteger _buildSuccessCount = new AtomicInteger();
     private final AtomicInteger _buildFailureCount = new AtomicInteger();
+    private final ConcurrentHashMap<TunnelPool, Long> _lastRebuildTime = new ConcurrentHashMap<TunnelPool, Long>(64);
+    private static final long GOOD_DEFICIT_THROTTLE_MS = 30000;
     private final AtomicInteger _buildTimeoutCount = new AtomicInteger();
     private final AtomicInteger _firstHopSuccessCount = new AtomicInteger();
     private final AtomicInteger _firstHopFailureCount = new AtomicInteger();
@@ -547,16 +549,19 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
                             }
                         }
 
-                        // Cancel excess in-progress builds to stay within budget
+                        // Cancel excess in-progress builds to stay within budget.
+                        // Only count building (in-progress) tunnels, not testing tunnels —
+                        // they're different pipeline stages. Testing tunnels are built and
+                        // being evaluated; building tunnels are still in construction.
                         for (TunnelPool pool : pools) {
                             if (!pool.isAlive()) {
                                 continue;
                             }
                             int wantedCount = pool.getSettings().getTotalQuantity();
-                            int maxAllowed = Math.max(2, wantedCount + 2);
-                            int currentInProgress = pool.getInProgressCount();
-                            if (currentInProgress > maxAllowed) {
-                                for (PooledTunnelCreatorConfig cfg : pool.cancelExcessInProgress(maxAllowed)) {
+                            int buildingCount = pool.getInProgressCount();
+                            int maxBuilding = Math.max(4, wantedCount * 2);
+                            if (buildingCount > maxBuilding) {
+                                for (PooledTunnelCreatorConfig cfg : pool.cancelExcessInProgress(maxBuilding)) {
                                     removeFromBuilding(cfg.getReplyMessageId());
                                 }
                             }
@@ -861,29 +866,45 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
             List<TunnelInfo> tunnels = pool.listTunnels();
             boolean allowZeroHop = pool.getSettings().getAllowZeroHop();
 
-            int expire30s = 0, expire90s = 0, expire150s = 0, expire210s = 0, expire270s = 0, expireLater = 0;
+            int expire30s = 0, expire90s = 0, expire150s = 0, expire210s = 0, expire270s = 0, expire330s = 0, expireLater = 0;
             int fallbackCount = 0;
+            int goodExpire30s = 0, goodExpire90s = 0, goodExpire150s = 0, goodExpire210s = 0, goodExpire270s = 0, goodExpire330s = 0, goodExpireLater = 0;
 
             for (TunnelInfo info : tunnels) {
                 if (!allowZeroHop && info.getLength() <= 1) {
                     fallbackCount++;
                     continue;
                 }
+                // Skip completely dead tunnels — they'll be removed by ExpireJob
+                // and must NOT fill the deficit or they'll block replacement builds.
+                if (info.getTunnelFailed()) {continue;}
+                boolean isGood = info.getTestStatus() == net.i2p.router.TunnelTestStatus.GOOD &&
+                                 info.getConsecutiveFailures() <= 1;
                 long timeToExpire = info.getExpiration() - now;
                 if (timeToExpire <= 0) {
                     expire30s++;
+                    if (isGood) goodExpire30s++;
                 } else if (timeToExpire <= 30*1000) {
                     expire30s++;
+                    if (isGood) goodExpire30s++;
                 } else if (timeToExpire <= 90*1000) {
                     expire90s++;
+                    if (isGood) goodExpire90s++;
                 } else if (timeToExpire <= 150*1000) {
                     expire150s++;
+                    if (isGood) goodExpire150s++;
                 } else if (timeToExpire <= 210*1000) {
                     expire210s++;
+                    if (isGood) goodExpire210s++;
                 } else if (timeToExpire <= 270*1000) {
                     expire270s++;
+                    if (isGood) goodExpire270s++;
+                } else if (timeToExpire <= 330*1000) {
+                    expire330s++;
+                    if (isGood) goodExpire330s++;
                 } else {
                     expireLater++;
+                    if (isGood) goodExpireLater++;
                 }
             }
 
@@ -891,7 +912,10 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
             int remainingWanted = target - expireLater;
             if (allowZeroHop) remainingWanted -= fallbackCount;
 
-            // Walk through urgency windows, counting what's covered by later-expiring tunnels
+            // Walk through urgency windows, counting what's covered by later-expiring tunnels.
+            // This uses ALL tunnels (including FAILING) so retained tunnels fill the deficit
+            // and prevent unnecessary builds.
+            for (int i = 0; i < expire330s && remainingWanted > 0; i++) remainingWanted--;
             for (int i = 0; i < expire270s && remainingWanted > 0; i++) remainingWanted--;
             for (int i = 0; i < expire210s && remainingWanted > 0; i++) remainingWanted--;
             for (int i = 0; i < expire150s && remainingWanted > 0; i++) remainingWanted--;
@@ -899,20 +923,74 @@ public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager 
             for (int i = 0; i < expire30s && remainingWanted > 0; i++) remainingWanted--;
 
             int builds;
+            // Check if pool is critically low on GOOD tunnels before entering
+            // build calculation. Critical pools bypass the GOOD_DEFICIT_THROTTLE_MS
+            // and test queue cap so replacement builds don't lag behind expiry.
+            int activeCount = pool.getActiveTunnelCount();
+            boolean isCritical = !isPing && (activeCount == 0 || (activeCount < target && activeCount <= 2));
+            // Don't overbuild when we already have untested tunnels queued for testing.
+            // If enough pending tunnels are waiting for test results to cover the target,
+            // let those complete before building more. Otherwise we pile up untested tunnels
+            // faster than the test queue can process them (25/2, 40/2).
+            if (isCritical) {
+                int needed = target - activeCount;
+                if (pool.getTestingTunnelCount() >= needed) {
+                    isCritical = false;
+                }
+            }
             if (remainingWanted > 0) {
-                // Deficit — graduated urgency: 270s=1x, 210s=1x, 150s=2x, 90s=4x, 30s=6x, deficit=6x
-                builds = expire270s + expire210s + 2*expire150s + 4*expire90s + 6*expire30s + 6*remainingWanted;
+                // Deficit — build just enough to fill the gap, no multiplier needed
+                // since builds complete in ~1s and the 1s loop refills quickly
+                builds = expire330s + expire270s + expire210s + expire150s + expire90s + expire30s + remainingWanted;
             } else {
-                // Sufficient count — just start replacing approaching-expiry tunnels
-                builds = expire270s + expire210s;
+                // Sufficient count — proactively replace GOOD tunnels approaching expiry.
+                // Start at 330s (5.5 min) so replacements have time to build before
+                // the originals expire at 600s (10 min). FAILING tunnels are NOT
+                // proactively replaced — they stay until near-expiry (handled by
+                // ensureSufficientTunnels) or natural expiry. This prevents build-spam
+                // when all tunnels are FAILING.
+                // BUT: if there aren't enough GOOD tunnels to meet the target, build
+                // replacements so the pool doesn't get stuck with 0 GOOD tunnels.
+                // Without this, when all tunnels are FAILING the pool has zero viable
+                // tunnels but doesn't trigger builds (numerical deficit is satisfied
+                // by FAILING tunnels).
+                builds = goodExpire330s + goodExpire270s + goodExpire210s;
+                int goodDeficit = target - goodExpireLater;
+                if (goodDeficit > 0) {
+                    if (isCritical) {
+                        builds += goodDeficit;
+                    } else {
+                        long nowMs = System.currentTimeMillis();
+                        Long lastRebuild = _lastRebuildTime.get(pool);
+                        if (lastRebuild == null || nowMs - lastRebuild >= GOOD_DEFICIT_THROTTLE_MS) {
+                            builds += goodDeficit;
+                            _lastRebuildTime.put(pool, nowMs);
+                        }
+                    }
+                }
             }
 
             builds -= inProgress;
             if (builds <= 0) continue;
 
-            // Cap at 4x target to prevent runaway builds
-            int maxBuilds = Math.max(target * 4, 16);
+            // Cap at 2x target to prevent overbuilding.
+            // When test queue is saturated (>80% full), also cap builds per pool
+            // so we don't pile up untested tunnels faster than they can be tested.
+            // Each free test slot supports ~2 concurrent builds.
+            // Critical pools (low GOOD count) bypass the test queue cap — they need
+            // builds regardless. Emergency test priority in TestJob.shouldSchedule()
+            // ensures new tunnels get tested ASAP.
+            int maxBuilds = Math.max(target * 2, 4);
             if (builds > maxBuilds) builds = maxBuilds;
+            if (!isCritical) {
+                int testJobs = TestJob.getCurrentTestJobCount();
+                int maxTestJobs = TestJob.getMaxTestJobs();
+                if (testJobs > maxTestJobs * 4 / 5) {
+                    int free = Math.max(maxTestJobs - testJobs, 0);
+                    int maxByTestCap = Math.max(free * 2, 1);
+                    if (builds > maxByTestCap) builds = maxByTestCap;
+                }
+            }
 
             for (int i = 0; i < builds; i++) {
                 wanted.add(pool);
