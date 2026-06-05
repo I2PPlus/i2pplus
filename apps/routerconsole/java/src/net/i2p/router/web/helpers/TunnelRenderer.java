@@ -949,9 +949,9 @@ class TunnelRenderer {
             TunnelInfo info = tunnels.get(i);
             long timeLeft = info.getExpiration()-_context.clock().now();
             if (timeLeft <= 0) {continue;} // don't display tunnels in their grace period
+            net.i2p.router.TunnelTestStatus testStatus = info.getTestStatus();
             live++;
             boolean isInbound = info.isInbound();
-            net.i2p.router.TunnelTestStatus testStatus = info.getTestStatus();
             boolean isFailed = (testStatus == net.i2p.router.TunnelTestStatus.FAILED ||
                                 testStatus == net.i2p.router.TunnelTestStatus.TOO_SLOW ||
                                 testStatus == net.i2p.router.TunnelTestStatus.OVER_BUDGET);
@@ -979,26 +979,26 @@ class TunnelRenderer {
             buf.append("<td class=status>");
             switch (testStatus) {
                 case GOOD:
-                    buf.append("<span title=\"").append(_t("Test successful")).append("\"></span>");
+                    buf.append("<span class=ok title=\"").append(_t("Test successful")).append("\"></span>");
                     break;
                 case TESTING:
-                    buf.append("<span title=\"").append(_t("Test in progress")).append("\"></span>");
+                    buf.append("<span class=testing title=\"").append(_t("Test in progress")).append("\"></span>");
                     break;
                 case FAILING:
                     int fails = info.getConsecutiveFailures();
-                    buf.append("<span title=\"").append(_t("Test failing (failures: {0})", fails)).append("\"></span>");
+                    buf.append("<span class=failing title=\"").append(_t("Test failing (failures: {0})", fails)).append("\"></span>");
                     break;
                 case FAILED:
-                    buf.append("<span title=\"").append(_t("Test failed (3 consecutive failures)")).append("\"></span>");
+                    buf.append("<span class=failed title=\"").append(_t("Test failed (3 consecutive failures)")).append("\"></span>");
                     break;
                 case TOO_SLOW:
-                    buf.append("<span title=\"").append(_t("Tunnel too slow - scheduled for early expiry")).append("\"></span>");
+                    buf.append("<span class=failed title=\"").append(_t("Tunnel too slow - scheduled for early expiry")).append("\"></span>");
                     break;
                 case OVER_BUDGET:
-                    buf.append("<span title=\"").append(_t("Pool over budget - scheduled for early expiry")).append("\"></span>");
+                    buf.append("<span class=failed title=\"").append(_t("Pool over budget - scheduled for early expiry")).append("\"></span>");
                     break;
                 default:
-                    buf.append("<span title=\"").append(_t("Not yet tested")).append("\"></span>");
+                    buf.append("<span class=untested title=\"").append(_t("Not yet tested")).append("\"></span>");
                     break;
             }
             buf.append("</td>");
@@ -1006,7 +1006,7 @@ class TunnelRenderer {
 
             int latency = info.getLastLatency();
             buf.append("<td class=latency data-sort=").append(latency).append(">");
-            if (latency > 0) {
+            if (latency >= 0) {
                 buf.append("<span>").append(latency).append("</span><span class=left>&#8239;ms</span>");
             }
             buf.append("</td>");
@@ -1235,12 +1235,12 @@ class TunnelRenderer {
      *  @since 0.9.68+
      */
     private void renderPoolSummary(Writer out, TunnelPool in, TunnelPool outPool, Hash client) throws IOException {
-        int inCount = in.getValidTunnelCount();
-        int outCount = outPool != null ? outPool.getValidTunnelCount() : 0;
+        int inCount = in.getActiveTunnelCount();
+        int outCount = outPool != null ? outPool.getActiveTunnelCount() : 0;
         int inWanted = in.getSettings().getQuantity() + in.getSettings().getBackupQuantity();
         int outWanted = outPool != null ? outPool.getSettings().getQuantity() + outPool.getSettings().getBackupQuantity() : 0;
-        int inBuilding = in.getInProgressCount();
-        int outBuilding = outPool != null ? outPool.getInProgressCount() : 0;
+        int inBuilding = in.getInProgressCount() + in.getTestingTunnelCount();
+        int outBuilding = outPool != null ? outPool.getInProgressCount() + outPool.getTestingTunnelCount() : 0;
 
         String sep = " / ";
         boolean buildIn = inBuilding > 0;
