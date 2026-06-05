@@ -429,12 +429,10 @@ public class JobQueue {
                 // Drop non-critical verification jobs when lagging
                 if (jobName.contains("DropLookupFoundJob") || jobName.contains("DropLookupFailedJob") || 
                     jobName.contains("DirectLookupJob") || jobName.contains("DirectLookupMatch")) {return true;}
-                if ((!disableTunnelTests && cls == TestJob.class) || cls == PeerTestJob.class) {
+                if (cls == PeerTestJob.class) {
                     return true;
                 }
-                if ((!disableTunnelTests && cls == TestJob.class) ||
-                    cls == PeerTestJob.class ||
-                    cls == ExploreJob.class ||
+                if (cls == ExploreJob.class ||
                     cls == HandleFloodfillDatabaseLookupMessageJob.class ||
                     cls == HandleGarlicMessageJob.class ||
                     cls == IterativeSearchJob.class) {
