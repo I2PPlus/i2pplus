@@ -270,65 +270,82 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /** @return number of valid (non-failed, non-expired) outbound exploratory tunnels */
     public int getOutboundTunnelCount() {return _outboundExploratory.getValidTunnelCount();}
 
-    /** @return number of valid (non-failed, non-expired) inbound client tunnels across all destinations */
+    /** @return number of GOOD (tested+passed, non-failed, non-expired) inbound client tunnels across all destinations */
     public int getInboundClientTunnelCount() {
         int count = 0;
         for (TunnelPool pool : _clientInboundPools.values()) {
-            count += pool.getValidTunnelCount();
+            count += pool.getActiveTunnelCount();
         }
         return count;
     }
 
-    /** @return number of valid (non-failed, non-expired) outbound client tunnels across all destinations */
+    /** @return number of GOOD (tested+passed, non-failed, non-expired) outbound client tunnels across all destinations */
     public int getOutboundClientTunnelCount() {
         int count = 0;
         for (TunnelPool pool : _clientOutboundPools.values()) {
-            count += pool.getValidTunnelCount();
+            count += pool.getActiveTunnelCount();
         }
         return count;
     }
 
     /**
      *  Use to verify a tunnel pool is alive.
-     *  @return number of valid outbound client tunnels for the given destination
+     *  During bootstrap (no GOOD tunnels yet), counts any valid tunnel
+     *  (including UNTESTED) so the sidebar shows ok immediately after
+     *  the first build.  Once the pool has established GOOD tunnels,
+     *  enforces a strict GOOD-only count — UNTESTED tunnels alone
+     *  don't keep the indicator green.
+     *  @return number of outbound client tunnels for the given destination
      *  @since 0.7.11
      */
     public int getOutboundClientTunnelCount(Hash destination)  {
         TunnelPool pool = _clientOutboundPools.get(destination);
-        if (pool != null) {return pool.getValidTunnelCount();}
+        if (pool != null) {
+            int good = pool.getActiveTunnelCount();
+            if (good > 0) {return good;}
+            return pool.getValidTunnelCount();
+        }
         return 0;
     }
 
     /**
      *  Use to verify a tunnel pool is alive.
-     *  @return number of valid inbound client tunnels for the given destination
+     *  During bootstrap (no GOOD tunnels yet), counts any valid tunnel
+     *  (including UNTESTED) so the sidebar shows ok immediately after
+     *  the first build.  Once the pool has established GOOD tunnels,
+     *  enforces a strict GOOD-only count.
+     *  @return number of inbound client tunnels for the given destination
      *  @since 0.9.68+
      */
     public int getInboundClientTunnelCount(Hash destination)  {
         TunnelPool pool = _clientInboundPools.get(destination);
-        if (pool != null) {return pool.getValidTunnelCount();}
+        if (pool != null) {
+            int good = pool.getActiveTunnelCount();
+            if (good > 0) {return good;}
+            return pool.getValidTunnelCount();
+        }
         return 0;
     }
 
     /**
      *  Get USABLE inbound client tunnel count for a specific destination.
-     *  Filters out failed and expired tunnels.
+     *  @return number of GOOD (tested+passed, non-failed, non-expired) tunnels
      *  @since 0.9.69+
      */
     public int getUsableInboundClientTunnelCount(Hash destination)  {
         TunnelPool pool = _clientInboundPools.get(destination);
-        if (pool != null) {return pool.getValidTunnelCount();}
+        if (pool != null) {return pool.getActiveTunnelCount();}
         return 0;
     }
 
     /**
      *  Get USABLE outbound client tunnel count for a specific destination.
-     *  Filters out failed and expired tunnels.
+     *  @return number of GOOD (tested+passed, non-failed, non-expired) tunnels
      *  @since 0.9.69+
      */
     public int getUsableOutboundClientTunnelCount(Hash destination)  {
         TunnelPool pool = _clientOutboundPools.get(destination);
-        if (pool != null) {return pool.getValidTunnelCount();}
+        if (pool != null) {return pool.getActiveTunnelCount();}
         return 0;
     }
 
@@ -1099,13 +1116,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         listPools(pools);
         for (TunnelPool pool : pools) {
             if (pool == null || !pool.isAlive()) continue;
-            // Skip non-exploratory client pools entirely — their inbound and outbound
-            // tunnels form paired reply paths. Early expiry on either direction breaks
-            // the pair and causes connection failures. Tunnel count for these pools is
-            // managed by natural expiry and explicit failure handling only.
-            if (!pool.getSettings().isExploratory()) {
-                continue;
-            }
             try {
                 int pruned = pool.pruneExcessTunnels();
                 if (pruned > 0 && _log.shouldInfo()) {
