@@ -11,6 +11,11 @@
 # zzz - public domain
 #
 cd $(dirname $0)
+if [ -n "$1" -a "$1" != "-p" ]; then
+    BD="$1"
+else
+    BD=build
+fi
 CLASS=i2p.susi.dns.messages
 TMPFILE=tmp/javafiles.txt
 export TZ=UTC
@@ -35,7 +40,7 @@ fi
 #
 # generated build/SVG.java from svg/how.svg
 #
-SVGFILE=build/HowSVG.java
+SVGFILE=$BD/HowSVG.java
 
 # add ../src/ so the refs will work in the po file
 JPATHS="../src/java/ ../src/tmp/ $SVGFILE"
@@ -111,10 +116,10 @@ for i in ../locale/messages_*.po; do
       fi
     else
       # fast way
-      # convert to java files in build/messages-src
-      TD=build/messages-src-tmp
+      # convert to java files in $BD/messages-src
+      TD=$BD/messages-src-tmp
       TDX=$TD/i2p/susi/dns
-      TD2=build/messages-src
+      TD2=$BD/messages-src
       TDY=$TD2/i2p/susi/dns
       rm -rf $TD
       mkdir -p $TD $TDY

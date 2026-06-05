@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="ministreaming">
+  <property name="build.dir" value="build"/>
+
+  <property name="...build.dir" value="../../../build"/>
+  <property name="core.java.build.dir" value="../../../core/java/build"/>
+
+  <property name="...build.dir" value="${...build.dir}"/>
+  <property name="core.java.build.dir" value="${core.java.build.dir}"/>
   <target name="all" depends="clean, build"/>
   <target name="build" depends="builddep, jar"/>
   <target name="builddep">
@@ -10,12 +17,12 @@
   </condition>
   <target name="depend" if="depend.available">
     <depend
-      cache="../../../build"
+      cache="${...build.dir}"
       srcdir="./src"
-      destdir="./build/obj">
+      destdir="${build.dir}/obj">
       <!-- Depend on classes instead of jars where available -->
       <classpath>
-        <pathelement location="../../../core/java/build/obj"/>
+        <pathelement location="${core.java.build.dir}/obj"/>
       </classpath>
     </depend>
   </target>
@@ -32,14 +39,14 @@
   </condition>
 
   <target name="compile" depends="depend">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/obj"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/obj"/>
     <!-- half of this is deprecated classes so turn deprecation off -->
     <javac srcdir="./src" debug="true" deprecation="off" source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="./build/obj" classpath="../../../core/java/build/i2p.jar">
+      destdir="${build.dir}/obj" classpath="${core.java.build.dir}/i2p.jar">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -54,13 +61,13 @@
       includeAntRuntime="false"
       encoding="UTF-8"
       destdir="./buildDemo/obj"
-      classpath="../../../core/java/build/i2p.jar:./build/mstreaming.jar">
+      classpath="${core.java.build.dir}/i2p.jar:./build/mstreaming.jar">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
 
   <target name="jarDemo" depends="jar, compileDemo">
-    <jar destfile="./build/mstreamingDemo.jar" basedir="./buildDemo/obj" includes="**/*.class" update="true"/>
+    <jar destfile="${build.dir}/mstreamingDemo.jar" basedir="./buildDemo/obj" includes="**/*.class" update="true"/>
   </target>
 
   <target name="listChangedFiles" depends="jarUpToDate" if="shouldListChanges">
@@ -80,7 +87,7 @@
   <target name="jar" depends="compile, bundle, jarUpToDate, listChangedFiles" unless="jar.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
-    <jar destfile="./build/mstreaming.jar" basedir="./build/obj" includes="**/*.class">
+    <jar destfile="${build.dir}/mstreaming.jar" basedir="${build.dir}/obj" includes="**/*.class">
       <manifest>
         <attribute name="${manifest.classpath.name}" value="i2p.jar streaming.jar"/>
         <attribute name="Specification-Title" value="I2P Streaming API"/>
@@ -100,7 +107,7 @@
   </target>
 
   <target name="jarUpToDate">
-    <uptodate property="jar.uptodate" targetfile="build/mstreaming.jar">
+    <uptodate property="jar.uptodate" targetfile="${build.dir}/mstreaming.jar">
       <srcfiles dir="." includes="build/obj/**/*.class"/>
     </uptodate>
     <condition property="shouldListChanges">
@@ -114,22 +121,25 @@
   </target>
 
   <target name="bundle" depends="compile" unless="no.bundle">
-    <mkdir dir="build/messages-src"/>
+    <mkdir dir="${build.dir}/messages-src"/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}"/>
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}">
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="false">
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <javac source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      srcdir="build/messages-src" destdir="build/obj">
+      srcdir="${build.dir}/messages-src" destdir="${build.dir}/obj">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -156,11 +166,11 @@
   </target>
 
   <target name="javadoc">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/javadoc"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/javadoc"/>
     <javadoc access="package"
       source="${javac.version}"
-      destdir="./build/javadoc"
+      destdir="${build.dir}/javadoc"
       packagenames="*"
       use="true"
       splitindex="true"
@@ -173,10 +183,10 @@
         <pathelement location="./src"/>
       </sourcepath>
       <classpath>
-        <pathelement location="../../../core/java/build/i2p.jar"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <!-- following are only for debian builds -->
-        <pathelement location="../../../core/java/build/libintl.jar"/>
-        <pathelement location="../../../core/java/build/gnu-getopt.jar"/>
+        <pathelement location="${core.java.build.dir}/libintl.jar"/>
+        <pathelement location="${core.java.build.dir}/gnu-getopt.jar"/>
       </classpath>
       <!-- These variables are stored in build.properties.
                   End-users can override by creating the file override.properties -->
@@ -189,8 +199,8 @@
 
   <!-- for Maven Central -->
   <target name="javadocJar" depends="javadoc">
-    <jar jarfile="./build/mstreaming-${release.number}-javadoc.jar">
-      <fileset dir="./build/javadoc"/>
+    <jar jarfile="${build.dir}/mstreaming-${release.number}-javadoc.jar">
+      <fileset dir="${build.dir}/javadoc"/>
       <manifest>
         <attribute name="Specification-Title" value="I2P Streaming API"/>
         <attribute name="Specification-Version" value="${api.version}"/>
@@ -205,7 +215,7 @@
     </jar>
   </target>
   <target name="sourcesJar">
-    <jar jarfile="./build/mstreaming-${release.number}-sources.jar">
+    <jar jarfile="${build.dir}/mstreaming-${release.number}-sources.jar">
       <fileset dir="./src"/>
       <manifest>
         <attribute name="Specification-Title" value="I2P Streaming API"/>
@@ -245,10 +255,10 @@
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="./build/obj">
+      destdir="${build.dir}/obj">
       <classpath>
         <pathelement path="${javac.classpath}"/>
-        <pathelement location="../../../core/java/build/i2p.jar"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
@@ -268,10 +278,10 @@
   </target>
   <target name="prepareCobertura" depends="compile" if="with.cobertura">
     <taskdef classpath="${with.cobertura}" resource="tasks.properties" onerror="report"/>
-    <mkdir dir="./build/obj_cobertura"/>
+    <mkdir dir="${build.dir}/obj_cobertura"/>
     <delete file="./cobertura.ser"/>
-    <cobertura-instrument todir="./build/obj_cobertura">
-      <fileset dir="./build/obj">
+    <cobertura-instrument todir="${build.dir}/obj_cobertura">
+      <fileset dir="${build.dir}/obj">
         <include name="**/*.class"/>
         <!-- exclude stub classes -->
         <exclude name="net/i2p/client/streaming/I2PSocketManagerFull.class"/>
@@ -312,10 +322,10 @@
         <pathelement location="${mockito.home}/objenesis.jar"/>
         <pathelement location="${mockito.home}/mockito-core.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
-        <pathelement location="./build/obj_cobertura"/>
-        <pathelement location="./build/obj"/>
-        <pathelement location="../../../core/java/build/i2ptest.jar"/>
-        <pathelement location="../../../core/java/build/i2p.jar"/>
+        <pathelement location="${build.dir}/obj_cobertura"/>
+        <pathelement location="${build.dir}/obj"/>
+        <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="../../build/jbigi.jar"/>
         <pathelement location="${with.clover}"/>
         <pathelement location="${with.cobertura}"/>
@@ -366,7 +376,7 @@
   <!-- end unit tests -->
 
   <target name="clean">
-    <delete dir="./build"/>
+    <delete dir="${build.dir}"/>
     <delete dir="./buildDemo"/>
   </target>
   <target name="cleandep" depends="clean">

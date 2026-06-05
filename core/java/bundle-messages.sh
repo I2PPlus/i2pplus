@@ -5,14 +5,19 @@
 # Requires installed programs xgettext, msgfmt, msgmerge -q, and find.
 #
 # usage:
-#    bundle-messages.sh (generates the resource bundle from the .po file)
+#    bundle-messages.sh [build.dir] (generates the resource bundle from the .po file)
 #    bundle-messages.sh -p (updates the .po file from the source tags, then generates the resource bundle)
 #
 # zzz - public domain
 #
 cd `dirname $0`
 CLASS=net.i2p.util.messages
-TMPFILE=build/javafiles.txt
+if [ -n "$1" -a "$1" != "-p" ]; then
+    BD="$1"
+else
+    BD=build
+fi
+TMPFILE=$BD/javafiles.txt
 export TZ=UTC
 RC=0
 
@@ -53,8 +58,8 @@ do
     find $JPATHS -name *.java -newer $i > $TMPFILE
   fi
 
-  if [ -s build/obj/net/i2p/util/messages_$LG.class -a \
-       build/obj/net/i2p/util/messages_$LG.class -nt $i -a \
+  if [ -s $BD/obj/net/i2p/util/messages_$LG.class -a \
+       $BD/obj/net/i2p/util/messages_$LG.class -nt $i -a \
        ! -s $TMPFILE ]
   then
     continue
@@ -106,22 +111,22 @@ do
         then
             # slow way
             # convert to class files in build/obj
-            msgfmt --java2 -r $CLASS -l $LG -d build/obj $i
+            msgfmt --java2 -r $CLASS -l $LG -d $BD/obj $i
             if [ $? -ne 0 ]
             then
                 echo "ERROR - msgfmt failed on ${i}, not updating translations"
                 echo "sudo apt install gettext, or put require.gettext=false in override.properties"
                 # msgfmt leaves the class file there so the build would work the next time
-                find build -name messages_${LG}.class -exec rm -f {} \;
+                find $BD -name messages_${LG}.class -exec rm -f {} \;
                 RC=1
                 break
             fi
         else
             # fast way
             # convert to java files in build/messages-src
-            TD=build/messages-src-tmp
+            TD=$BD/messages-src-tmp
             TDX=$TD/net/i2p/util
-            TD2=build/messages-src
+            TD2=$BD/messages-src
             TDY=$TD2/net/i2p/util
             rm -rf $TD
             mkdir -p $TD $TDY
@@ -131,7 +136,7 @@ do
                 echo "ERROR - msgfmt failed on ${i}, not updating translations"
                 echo "sudo apt install gettext, or put require.gettext=false in override.properties"
                 # msgfmt leaves the class file there so the build would work the next time
-                find build/obj -name messages_${LG}.class -exec rm -f {} \;
+                find $BD/obj -name messages_${LG}.class -exec rm -f {} \;
                 RC=1
                 break
             fi

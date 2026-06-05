@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="zxing">
+  <property name="build.dir" value="build"/>
+
+  <property name="...build.dir" value="../../../build"/>
+
+  <property name="...build.dir" value="${...build.dir}"/>
   <target name="all" depends="clean, build"/>
   <target name="build" depends="builddep, jar"/>
   <target name="builddep">
@@ -10,9 +15,9 @@
   </condition>
   <target name="depend" if="depend.available">
     <depend
-      cache="../../../build"
+      cache="${...build.dir}"
       srcdir="./core/src/main/java"
-      destdir="./build/obj">
+      destdir="${build.dir}/obj">
     </depend>
   </target>
 
@@ -22,20 +27,20 @@
   <property name="javac.compilerargs" value=""/>
 
   <target name="compile" depends="depend">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/obj"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/obj"/>
     <javac srcdir="./core/src/main/java" debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="./build/obj">
+      destdir="${build.dir}/obj">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
     <javac srcdir="./javase/src/main/java" debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="./build/obj" classpath="./build/obj">
+      destdir="${build.dir}/obj" classpath="${build.dir}/obj">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -50,13 +55,13 @@
       includeAntRuntime="false"
       encoding="UTF-8"
       destdir="./buildTest/obj"
-      classpath="./build/zxing.jar">
+      classpath="${build.dir}/zxing.jar">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
 
   <target name="jarTest" depends="jar, compileTest">
-    <jar destfile="./build/zxingTest.jar" basedir="./buildTest/obj" includes="**/*.class" update="true"/>
+    <jar destfile="${build.dir}/zxingTest.jar" basedir="./buildTest/obj" includes="**/*.class" update="true"/>
   </target>
 
   <target name="listChangedFiles" depends="jarUpToDate" if="shouldListChanges">
@@ -76,7 +81,7 @@
   <target name="jar" depends="compile, jarUpToDate, listChangedFiles" unless="jar.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
-    <jar destfile="./build/zxing.jar" basedir="./build/obj" includes="**/*.class">
+    <jar destfile="${build.dir}/zxing.jar" basedir="${build.dir}/obj" includes="**/*.class">
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
         <attribute name="Built-By" value="${build.built-by}"/>
@@ -90,7 +95,7 @@
   </target>
 
   <target name="jarUpToDate">
-    <uptodate property="jar.uptodate" targetfile="build/zxing.jar">
+    <uptodate property="jar.uptodate" targetfile="${build.dir}/zxing.jar">
       <srcfiles dir="." includes="build/obj/**/*.class"/>
     </uptodate>
     <condition property="shouldListChanges">
@@ -104,17 +109,17 @@
   </target>
 
   <target name="javadoc">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/javadoc"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/javadoc"/>
     <javadoc
-      sourcepath="./core/src/main/java" destdir="./build/javadoc"
+      sourcepath="./core/src/main/java" destdir="${build.dir}/javadoc"
       packagenames="*"
       use="true"
       splitindex="true"
       windowtitle="zxing library subset"/>
   </target>
   <target name="clean">
-    <delete dir="./build"/>
+    <delete dir="${build.dir}"/>
     <delete dir="./buildTest"/>
   </target>
   <target name="cleandep" depends="clean">

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="pack200">
+  <property name="build.dir" value="build"/>
+  <property name="dist.dir" value="dist"/>
   <property name="src" value="src"/>
-  <property name="build" value="build"/>
+  <property name="build" value="${build.dir}"/>
   <property name="jar" value="pack200.jar"/>
   <property name="javadoc" value="javadoc"/>
   <property name="javac.compilerargs" value=""/>

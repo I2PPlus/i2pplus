@@ -1,9 +1,21 @@
 <?xml version="1.0"?>
 <project name="addressbook" default="all" basedir=".">
+  <property name="build.dir" value="build"/>
+
+  <property name="core.java.build.dir" value="../../core/java/build"/>
+  <property name="ministreaming.java.build.dir" value="../../ministreaming/java/build"/>
+  <property name="router.java.build.dir" value="../../router/java/build"/>
+  <property name="streaming.java.build.dir" value="../../streaming/java/build"/>
+
+  <property name="core.java.build.dir" value="${core.java.build.dir}"/>
+  <property name="ministreaming.java.build.dir" value="${ministreaming.java.build.dir}"/>
+  <property name="router.java.build.dir" value="${router.java.build.dir}"/>
+  <property name="streaming.java.build.dir" value="${streaming.java.build.dir}"/>
 
   <property name="src" value="java/src"/>
-  <property name="build" value="build"/>
-  <property name="dist" location="dist"/>
+  <property name="build" value="${build.dir}"/>
+  <property name="dist.dir" value="dist"/>
+  <property name="dist" location="${dist.dir}"/>
   <property name="jar" value="addressbook.jar"/>
   <property name="war" value="addressbook.war"/>
   <property name="javac.compilerargs" value=""/>
@@ -35,10 +47,10 @@
       destdir="${build}">
       <!-- Depend on classes instead of jars where available -->
       <classpath>
-        <pathelement location="../../core/java/build/obj"/>
-        <pathelement location="../../router/java/build/obj"/>
-        <pathelement location="../../ministreaming/java/build/obj"/>
-        <pathelement location="../../streaming/java/build/obj"/>
+        <pathelement location="${core.java.build.dir}/obj"/>
+        <pathelement location="${router.java.build.dir}/obj"/>
+        <pathelement location="${ministreaming.java.build.dir}/obj"/>
+        <pathelement location="${streaming.java.build.dir}/obj"/>
       </classpath>
     </depend>
   </target>
@@ -51,15 +63,15 @@
       srcdir="${src}" destdir="${build}">
       <compilerarg line="${javac.compilerargs}"/>
       <classpath>
-        <pathelement location="../../core/java/build/i2p.jar"/>
-        <pathelement location="../../router/java/build/router.jar"/>
-        <pathelement location="../../build/mstreaming.jar"/>
-        <pathelement location="../../build/streaming.jar"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
+        <pathelement location="${router.java.build.dir}/router.jar"/>
+        <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
+        <pathelement location="${streaming.java.build.dir}/streaming.jar"/>
         <pathelement location="../susidns/src/WEB-INF/classes"/>
       </classpath>
       <src>
         <pathelement location="${src}"/>
-        <pathelement location="java/build/messages-src"/>
+        <pathelement location="${build}/messages-src"/>
       </src>
     </javac>
   </target>
@@ -67,6 +79,7 @@
   <target name="bundle">
     <exec dir="java" executable="sh" failonerror="false">
       <arg value="bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
   </target>
 

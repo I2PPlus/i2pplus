@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="i2p_sdk">
+  <property name="build.dir" value="build"/>
   <target name="all" depends="clean, build"/>
   <target name="build" depends="builddep, jar"/>
   <target name="builddep">
-    <!-- noop, since the core doesnt depend on anything -->
+    <!-- noop, since the core doesn't depend on anything -->
   </target>
   <condition property="no.bundle">
     <isfalse value="${require.gettext}"/>
@@ -15,7 +16,7 @@
     <depend
       cache="../../build"
       srcdir="./src"
-      destdir="./build/obj">
+      destdir="${build.dir}/obj">
     </depend>
   </target>
 
@@ -64,15 +65,15 @@
   </condition>
 
   <target name="compile" depends="depend">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/obj"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/obj"/>
     <!-- sourcepath="" necessary for excludes to work, see ant manual for javac -->
     <javac sourcepath="" srcdir="./src" debug="true" source="${javac.version}" target="${javac.version}" deprecation="on"
       release="${javac.release}"
       debuglevel="lines,vars,source"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="./build/obj" classpath="${javac.classpath.mod}">
+      destdir="${build.dir}/obj" classpath="${javac.classpath.mod}">
       <compilerarg line="${javac.compilerargs}"/>
       <include name="**/*.java"/>
       <exclude name="${source.exclude1}"/>
@@ -98,8 +99,8 @@
   <target name="jar" depends="compile, bundle, jarUpToDate, listChangedFiles" unless="jar.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
-    <jar destfile="./build/i2p.jar">
-      <fileset dir="./build/obj" includes="**/*.class"/>
+    <jar destfile="${build.dir}/i2p.jar">
+      <fileset dir="${build.dir}/obj" includes="**/*.class"/>
       <fileset dir="./src" includes="net/i2p/util/resources/*"/>
       <!-- the getopt translation files -->
       <fileset dir="src" includes="${translation.includes}"/>
@@ -129,28 +130,31 @@
   </target>
 
   <target name="jarUpToDate">
-    <uptodate property="jar.uptodate" targetfile="build/i2p.jar">
-      <srcfiles dir="build/obj" includes="**/*.class"/>
+    <uptodate property="jar.uptodate" targetfile="${build.dir}/i2p.jar">
+      <srcfiles dir="${build.dir}/obj" includes="**/*.class"/>
     </uptodate>
   </target>
 
   <target name="bundle" unless="no.bundle">
-    <mkdir dir="build/messages-src"/>
+    <mkdir dir="${build.dir}/messages-src"/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}"/>
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}">
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="false">
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <javac source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      srcdir="build/messages-src" destdir="build/obj">
+      srcdir="${build.dir}/messages-src" destdir="${build.dir}/obj">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -177,11 +181,11 @@
   </target>
 
   <target name="javadoc">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/javadoc"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/javadoc"/>
     <javadoc access="package"
       source="${javac.version}"
-      destdir="./build/javadoc"
+      destdir="${build.dir}/javadoc"
       packagenames="*"
       use="true"
       splitindex="true"
@@ -204,9 +208,9 @@
         <pathelement location="${mockito.home}/mockito-core.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
         <!-- following are only for debian builds -->
-        <pathelement location="build/libintl.jar"/>
-        <pathelement location="build/gnu-getopt.jar"/>
-        <pathelement location="build/json-simple.jar"/>
+        <pathelement location="${build.dir}/libintl.jar"/>
+        <pathelement location="${build.dir}/gnu-getopt.jar"/>
+        <pathelement location="${build.dir}/json-simple.jar"/>
       </classpath>
       <!-- These variables are stored in build.properties.
                   End-users can override by creating the file override.properties -->
@@ -218,8 +222,8 @@
 
   <!-- for Maven Central -->
   <target name="javadocJar" depends="javadoc">
-    <jar jarfile="./build/i2p-${release.number}-javadoc.jar">
-      <fileset dir="./build/javadoc"/>
+    <jar jarfile="${build.dir}/i2p-${release.number}-javadoc.jar">
+      <fileset dir="${build.dir}/javadoc"/>
       <manifest>
         <attribute name="Specification-Title" value="I2P Core API"/>
         <attribute name="Specification-Version" value="${api.version}"/>
@@ -235,7 +239,7 @@
   </target>
 
   <target name="sourcesJar">
-    <jar jarfile="./build/i2p-${release.number}-sources.jar">
+    <jar jarfile="${build.dir}/i2p-${release.number}-sources.jar">
       <fileset dir="./src"/>
       <manifest>
         <attribute name="Specification-Title" value="I2P Core API"/>
@@ -268,22 +272,22 @@
 
   <!-- unit tests -->
   <target name="scalatest.compileTest" depends="compile, scala.init">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/obj_scala"/>
-    <scalac srcdir="./test/scalatest" destdir="./build/obj_scala" deprecation="on">
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/obj_scala"/>
+    <scalac srcdir="./test/scalatest" destdir="${build.dir}/obj_scala" deprecation="on">
       <classpath>
         <pathelement path="${javac.classpath.mod}"/>
         <pathelement location="${scala-library.jar}"/>
         <pathelement location="${scalactic.jar}"/>
         <pathelement location="${scalatest.jar}"/>
-        <pathelement location="./build/obj"/>
+        <pathelement location="${build.dir}/obj"/>
       </classpath>
     </scalac>
   </target>
   <target name="junit.compileTest" depends="compile">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/obj"/>
-    <mkdir dir="./build/testobj"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/obj"/>
+    <mkdir dir="${build.dir}/testobj"/>
     <!-- set hamcrest, junit, and mockito homes to the old default unless overridden elsewhere -->
     <echo message="[DEBUG] ant home is ${ant.home}"/>
     <echo message="[DEBUG] junit home before override is ${junit.home}"/>
@@ -301,10 +305,10 @@
       includeAntRuntime="true"
       encoding="UTF-8"
       excludes="${source.exclude}"
-      destdir="./build/testobj">
+      destdir="${build.dir}/testobj">
       <classpath>
         <pathelement path="${javac.classpath.mod}"/>
-        <pathelement location="./build/obj"/>
+        <pathelement location="${build.dir}/obj"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-integration.jar"/>
@@ -320,20 +324,20 @@
   </target>
   <!-- jars with tests -->
   <target name="jarScalaTest" depends="scalatest.compileTest">
-    <mkdir dir="./build/obj_scala_jar"/>
-    <copy todir="./build/obj_scala_jar">
-      <fileset dir="./build/">
+    <mkdir dir="${build.dir}/obj_scala_jar"/>
+    <copy todir="${build.dir}/obj_scala_jar">
+      <fileset dir="${build.dir}/">
         <include name="obj/**/*.class"/>
       </fileset>
       <mapper type="glob" from="obj/*" to="*"/>
     </copy>
-    <copy todir="./build/obj_scala_jar">
-      <fileset dir="./build/">
+    <copy todir="${build.dir}/obj_scala_jar">
+      <fileset dir="${build.dir}/">
         <include name="obj_scala/**/*.class"/>
       </fileset>
       <mapper type="glob" from="obj_scala/*" to="*"/>
     </copy>
-    <jar destfile="./build/i2pscalatest.jar" basedir="./build/obj_scala_jar" includes="**/*.class">
+    <jar destfile="${build.dir}/i2pscalatest.jar" basedir="${build.dir}/obj_scala_jar" includes="**/*.class">
       <manifest>
         <attribute name="${manifest.classpath.name}" value="${gettext.jar} ${getopt.jar}"/>
         <attribute name="Specification-Title" value="I2P Core API"/>
@@ -356,11 +360,11 @@
     <!-- warning - The junit.test target below doesn't actually include i2ptest.jar in the classpath,
              only the build/obj directory.
           -->
-    <mkdir dir="build/obj/net/i2p/util/resources"/>
-    <copy todir="build/obj/net/i2p/util/resources">
+    <mkdir dir="${build.dir}/obj/net/i2p/util/resources"/>
+    <copy todir="${build.dir}/obj/net/i2p/util/resources">
       <fileset dir="../resources"/>
     </copy>
-    <jar destfile="./build/i2ptest.jar" basedir="./build/obj">
+    <jar destfile="${build.dir}/i2ptest.jar" basedir="${build.dir}/obj">
       <fileset dir="test/resources" includes="**/test.data **/baseDblPrecmp **/basePrecmp"/>
       <!-- the getopt translation files -->
       <fileset dir="src" includes="${translation.includes}"/>
@@ -389,10 +393,10 @@
   </target>
   <target name="prepareCobertura" depends="compile" if="with.cobertura">
     <taskdef classpath="${with.cobertura}" resource="tasks.properties" onerror="report"/>
-    <mkdir dir="./build/obj_cobertura"/>
+    <mkdir dir="${build.dir}/obj_cobertura"/>
     <delete file="./cobertura.ser"/>
-    <cobertura-instrument todir="./build/obj_cobertura">
-      <fileset dir="./build/obj">
+    <cobertura-instrument todir="${build.dir}/obj_cobertura">
+      <fileset dir="${build.dir}/obj">
         <include name="**/*.class"/>
         <!-- exclude Test classes -->
         <exclude name="**/*Test.class"/>
@@ -425,15 +429,15 @@
         <pathelement location="${scala-xml.jar}"/>
         <pathelement location="${scalactic.jar}"/>
         <pathelement location="${scalatest.jar}"/>
-        <pathelement location="./build/obj_cobertura"/>
-        <pathelement location="./build/obj"/>
+        <pathelement location="${build.dir}/obj_cobertura"/>
+        <pathelement location="${build.dir}/obj"/>
         <pathelement location="./test/resources"/>
         <pathelement location="../../build/jbigi.jar"/>
         <pathelement location="${with.clover}"/>
         <pathelement location="${with.cobertura}"/>
       </classpath>
     </taskdef>
-    <scalatest runpath="./build/obj_scala" fork="yes" maxmemory="384M">
+    <scalatest runpath="${build.dir}/obj_scala" fork="yes" maxmemory="384M">
       <tagsToExclude>
         SlowTests
       </tagsToExclude>
@@ -473,9 +477,9 @@
         <pathelement location="${mockito.home}/byte-buddy.jar"/>
         <pathelement location="${mockito.home}/byte-buddy-agent.jar"/>
         <pathelement location="${mockito.home}/objenesis.jar"/>
-        <pathelement location="./build/obj_cobertura"/>
-        <pathelement location="./build/obj"/>
-        <pathelement location="./build/testobj"/>
+        <pathelement location="${build.dir}/obj_cobertura"/>
+        <pathelement location="${build.dir}/obj"/>
+        <pathelement location="${build.dir}/testobj"/>
         <pathelement location="./test/resources"/>
         <pathelement location="../../build/jbigi.jar"/>
         <pathelement location="${with.clover}"/>
@@ -503,7 +507,7 @@
       replace="\1&quot;${host.fakename}&quot;">
       <fileset dir="../../reports/core/junit/"/>
     </replaceregexp>
-    <delete dir="./build/testobj"/>
+    <delete dir="${build.dir}/testobj"/>
   </target>
   <target name="test" depends="junit.test, scalatest.test"/>
   <!-- test reports -->
@@ -561,18 +565,18 @@
   </target>
 
   <target name="bench.compile" depends="compile, jmhLibCheck">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/obj_bench"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/obj_bench"/>
     <javac srcdir="./bench" debug="true" source="${javac.version}" target="${javac.version}" deprecation="on"
       release="${javac.release}"
       debuglevel="lines,vars,source"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="./build/obj_bench">
+      destdir="${build.dir}/obj_bench">
       <classpath>
         <pathelement location="${jmh.home}/jmh-core.jar"/>
         <pathelement location="${jmh.home}/jmh-generator-annprocess.jar"/>
-        <pathelement location="./build/obj"/>
+        <pathelement location="${build.dir}/obj"/>
       </classpath>
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
@@ -581,7 +585,7 @@
   <target name="bench.jar" depends="bench.compile, bench.jarUpToDate, listChangedFiles" unless="bench.jar.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
-    <jar destfile="./build/i2p-benchmarks.jar" basedir="./build/obj_bench">
+    <jar destfile="${build.dir}/i2p-benchmarks.jar" basedir="${build.dir}/obj_bench">
       <manifest>
         <attribute name="Built-By" value="${build.built-by}"/>
         <attribute name="Build-Date" value="${build.timestamp}"/>
@@ -593,19 +597,19 @@
       <zipfileset src="${jmh.home}/jmh-core.jar" excludes="**/META-INF/services/**"/>
       <zipfileset src="${jmh.home}/jopt-simple.jar"/>
       <zipfileset src="${jmh.home}/commons-math3.jar"/>
-      <fileset dir="./build/obj" includes="**/*.class"/>
+      <fileset dir="${build.dir}/obj" includes="**/*.class"/>
     </jar>
   </target>
 
   <target name="bench.jarUpToDate">
-    <uptodate property="bench.jar.uptodate" targetfile="build/i2p-benchmarks.jar">
-      <srcfiles dir="build/obj" includes="**/*.class"/>
-      <srcfiles dir="build/obj_bench" includes="**/*.class"/>
+    <uptodate property="bench.jar.uptodate" targetfile="${build.dir}/i2p-benchmarks.jar">
+      <srcfiles dir="${build.dir}/obj" includes="**/*.class"/>
+      <srcfiles dir="${build.dir}/obj_bench" includes="**/*.class"/>
     </uptodate>
   </target>
 
   <target name="clean">
-    <delete dir="./build"/>
+    <delete dir="${build.dir}"/>
   </target>
   <target name="cleandep" depends="clean">
     <!-- noop, since the core doesn't depend on anything -->

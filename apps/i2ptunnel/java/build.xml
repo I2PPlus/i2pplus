@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="i2ptunnel">
+  <property name="build.dir" value="build"/>
+
+  <property name="...build.dir" value="../../../build"/>
+  <property name="core.java.build.dir" value="../../../core/java/build"/>
+  <property name="ministreaming.java.build.dir" value="../../ministreaming/java/build"/>
+  <property name="streaming.java.build.dir" value="../../streaming/java/build"/>
+
+  <property name="...build.dir" value="${...build.dir}"/>
+  <property name="core.java.build.dir" value="${core.java.build.dir}"/>
+  <property name="ministreaming.java.build.dir" value="${ministreaming.java.build.dir}"/>
+  <property name="streaming.java.build.dir" value="${streaming.java.build.dir}"/>
 
   <target name="all" depends="clean, build"/>
   <target name="build" depends="builddep, jar, war"/>
@@ -25,48 +36,48 @@
 
   <target name="depend" if="depend.available">
     <depend
-      cache="../../../build"
+      cache="${...build.dir}"
       srcdir="./src"
-      destdir="./build/obj">
+      destdir="${build.dir}/obj">
       <!-- Depend on classes instead of jars where available -->
       <classpath>
-        <pathelement location="../../../core/java/build/obj"/>
-        <pathelement location="../../../core/java/build/gnu-getopt.jar"/>
-        <pathelement location="../../ministreaming/java/build/obj"/>
+        <pathelement location="${core.java.build.dir}/obj"/>
+        <pathelement location="${core.java.build.dir}/gnu-getopt.jar"/>
+        <pathelement location="${ministreaming.java.build.dir}/obj"/>
       </classpath>
     </depend>
   </target>
 
   <!-- Compile includes ui/ classes but not web/ classes here -->
   <target name="compile" depends="depend">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/obj"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/obj"/>
     <javac
       srcdir="./src"
       excludes="net/i2p/i2ptunnel/web/**/*"
       debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
-      destdir="./build/obj"
+      destdir="${build.dir}/obj"
       includeAntRuntime="false"
       encoding="UTF-8"
-      classpath="../../../core/java/build/i2p.jar:../../../core/java/build/gnu-getopt.jar:../../ministreaming/java/build/mstreaming.jar:../../jetty/jettylib/javax.servlet.jar">
+      classpath="${core.java.build.dir}/i2p.jar:${core.java.build.dir}/gnu-getopt.jar:${ministreaming.java.build.dir}/mstreaming.jar:../../jetty/jettylib/javax.servlet.jar">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
 
   <!-- Compile web/ classes only here. Not for Android. -->
   <target name="compileWeb" depends="jar">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/obj"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/obj"/>
     <javac
       srcdir="./src"
       includes="net/i2p/i2ptunnel/web/**/*"
       debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
-      destdir="./build/obj"
+      destdir="${build.dir}/obj"
       includeAntRuntime="false"
       encoding="UTF-8"
-      classpath="../../../core/java/build/i2p.jar:build/i2ptunnel.jar:../../jetty/jettylib/jetty-i2p.jar:../../jetty/jettylib/jetty-util.jar:../../jetty/jettylib/jetty-xml.jar:../../jetty/jettylib/javax.servlet.jar">
+      classpath="${core.java.build.dir}/i2p.jar:build/i2ptunnel.jar:../../jetty/jettylib/jetty-i2p.jar:../../jetty/jettylib/jetty-util.jar:../../jetty/jettylib/jetty-xml.jar:../../jetty/jettylib/javax.servlet.jar">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -94,7 +105,7 @@
     unless="jar.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.j.tr" value=""/>
-    <jar destfile="./build/i2ptunnel.jar" basedir="./build/obj" includes="**/*.class"
+    <jar destfile="${build.dir}/i2ptunnel.jar" basedir="${build.dir}/obj" includes="**/*.class"
       excludes="**/ui/*.class **/web/*.class">
       <manifest>
         <attribute name="Main-Class" value="net.i2p.i2ptunnel.I2PTunnel"/>
@@ -112,13 +123,13 @@
 
   <!-- web/ and ui/ classes that will go in the war. Not for Android. -->
   <target name="jarTempBeans" depends="builddep, compileWeb">
-    <jar destfile="./build/temp-beans.jar" basedir="./build/obj"
+    <jar destfile="${build.dir}/temp-beans.jar" basedir="${build.dir}/obj"
       includes="**/ui/*.class **/web/*.class"/>
   </target>
 
   <target name="jarUpToDate">
-    <uptodate property="jar.uptodate" targetfile="build/i2ptunnel.jar">
-      <srcfiles dir="build/obj" includes="**/*.class"/>
+    <uptodate property="jar.uptodate" targetfile="${build.dir}/i2ptunnel.jar">
+      <srcfiles dir="${build.dir}/obj" includes="**/*.class"/>
     </uptodate>
     <condition property="shouldListChanges">
       <and>
@@ -135,7 +146,7 @@
   <target name="uiJar" depends="jar, uiJarUpToDate, listChangedFiles" unless="uiJar.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.j.tr" value=""/>
-    <jar destfile="./build/i2ptunnel-ui.jar" basedir="./build/obj" includes="**/ui/*.class">
+    <jar destfile="${build.dir}/i2ptunnel-ui.jar" basedir="${build.dir}/obj" includes="**/ui/*.class">
       <manifest>
         <attribute name="Class-Path" value="i2p.jar mstreaming.jar i2ptunnel.jar"/>
         <attribute name="Implementation-Version" value="${full.version}"/>
@@ -150,8 +161,8 @@
   </target>
 
   <target name="uiJarUpToDate">
-    <uptodate property="uiJar.uptodate" targetfile="build/i2ptunnel-ui.jar">
-      <srcfiles dir="build/obj" includes="**/ui/*.class"/>
+    <uptodate property="uiJar.uptodate" targetfile="${build.dir}/i2ptunnel-ui.jar">
+      <srcfiles dir="${build.dir}/obj" includes="**/ui/*.class"/>
     </uptodate>
     <condition property="shouldListChanges">
       <and>
@@ -165,27 +176,30 @@
 
   <!-- servlet translations go in the war, not the jar -->
   <target name="bundle" depends="compile, precompilejsp" unless="no.bundle">
-    <mkdir dir="build/messages-src"/>
+    <mkdir dir="${build.dir}/messages-src"/>
     <!-- Update the messages_*.po files.
          We need to supply the bat file for windows, and then change the fail property to true -->
     <exec executable="sh" osfamily="unix" failifexecutionfails="true"
       failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}"/>
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true"
       failonerror="${require.gettext}">
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <!-- multi-lang is optional -->
     <exec executable="sh" osfamily="windows" failifexecutionfails="false">
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <javac source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      srcdir="build/messages-src" destdir="../jsp/WEB-INF/classes">
+      srcdir="${build.dir}/messages-src" destdir="../jsp/WEB-INF/classes">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -213,7 +227,7 @@
 
   <!-- proxy error page translations go in the jar, not the war -->
   <target name="bundle-proxy" unless="no.bundle">
-    <mkdir dir="build/messages-proxy-src"/>
+    <mkdir dir="${build.dir}/messages-proxy-src"/>
     <!-- Update the messages_*.po files.
          We need to supply the bat file for windows, and then change the fail property to true -->
     <exec executable="sh" osfamily="unix" failifexecutionfails="true"
@@ -233,7 +247,7 @@
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      srcdir="build/messages-proxy-src" destdir="build/obj">
+      srcdir="${build.dir}/messages-proxy-src" destdir="${build.dir}/obj">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -241,7 +255,7 @@
   <target name="extractProxyTags">
     <java classname="net.i2p.util.TranslateReader" fork="true" failonerror="true">
       <classpath>
-        <pathelement location="../../../build/i2p.jar"/>
+        <pathelement location="${...build.dir}/i2p.jar"/>
       </classpath>
       <arg value="tag"/>
       <arg value="../../../installer/resources/console/proxy/"/>
@@ -293,13 +307,13 @@
     <!-- set if unset -->
     <property name="workspace.changes.w.tr" value=""/>
     <copy todir="../jsp/WEB-INF/classes/net/i2p/i2ptunnel/ui">
-      <fileset dir="build/obj/net/i2p/i2ptunnel/ui"/>
+      <fileset dir="${build.dir}/obj/net/i2p/i2ptunnel/ui"/>
     </copy>
     <copy todir="../jsp/WEB-INF/classes/net/i2p/i2ptunnel/web">
-      <fileset dir="build/obj/net/i2p/i2ptunnel/web"/>
+      <fileset dir="${build.dir}/obj/net/i2p/i2ptunnel/web"/>
     </copy>
-    <mkdir dir="build/js"/>
-    <copy todir="build/js">
+    <mkdir dir="${build.dir}/js"/>
+    <copy todir="${build.dir}/js">
       <fileset dir="../jsp/js/"/>
     </copy>
     <if>
@@ -307,7 +321,7 @@
       <then>
         <parallel>
           <foreach target="compressJavascript" param="file" parallel="true">
-            <fileset dir="build/js" includes="*.js"/>
+            <fileset dir="${build.dir}/js" includes="*.js"/>
           </foreach>
         </parallel>
       </then>
@@ -315,9 +329,9 @@
         <echo message="UglifyJS not found, skipping Javascript file compression..."/>
       </else>
     </if>
-    <war destfile="build/i2ptunnel.war" webxml="../jsp/web-out.xml"
+    <war destfile="${build.dir}/i2ptunnel.war" webxml="../jsp/web-out.xml"
       basedir="../jsp/" excludes="web.xml, web-fragment.xml, web-out.xml, **/*.java, *.jsp, *.jsi, **/*.js">
-      <zipfileset dir="build/js" prefix="js"/>
+      <zipfileset dir="${build.dir}/js" prefix="js"/>
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
         <attribute name="Built-By" value="${build.built-by}"/>
@@ -331,9 +345,9 @@
   </target>
 
   <target name="warUpToDate">
-    <uptodate property="war.uptodate" targetfile="build/i2ptunnel.war">
+    <uptodate property="war.uptodate" targetfile="${build.dir}/i2ptunnel.war">
       <srcfiles dir="../jsp" excludes="web.xml, web-fragment.xml, **/*.java, *.jsp, *.jsi"/>
-      <srcfiles dir="build/obj" includes="**/ui/*.class **/web/*.class"/>
+      <srcfiles dir="${build.dir}/obj" includes="**/ui/*.class **/web/*.class"/>
     </uptodate>
     <condition property="shouldListChanges2">
       <and>
@@ -374,9 +388,9 @@
         <pathelement location="../../jetty/jettylib/jetty-xml.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-util.jar"/>
         <pathelement location="${ant.home}/lib/ant.jar"/>
-        <pathelement location="build/i2ptunnel.jar"/>
-        <pathelement location="build/temp-beans.jar"/>
-        <pathelement location="../../../core/java/build/i2p.jar"/>
+        <pathelement location="${build.dir}/i2ptunnel.jar"/>
+        <pathelement location="${build.dir}/temp-beans.jar"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <!-- required for multipart form handling in register.jsp -->
         <pathelement location="../../jetty/jettylib/jetty-i2p.jar"/>
         <pathelement location="../../jetty/jettylib/jspc.jar"/>
@@ -412,9 +426,9 @@
         <pathelement location="../../jetty/jettylib/commons-el.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-xml.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-util.jar"/>
-        <pathelement location="build/i2ptunnel.jar"/>
-        <pathelement location="build/temp-beans.jar"/>
-        <pathelement location="../../../core/java/build/i2p.jar"/>
+        <pathelement location="${build.dir}/i2ptunnel.jar"/>
+        <pathelement location="${build.dir}/temp-beans.jar"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <!-- required for multipart form handling in register.jsp -->
         <pathelement location="../../jetty/jettylib/jetty-i2p.jar"/>
       </classpath>
@@ -445,11 +459,11 @@
   </uptodate>
 
   <target name="javadoc">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/javadoc"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/javadoc"/>
     <javadoc
       sourcepath="./src:../../../core/java/src:../../ministreaming/java/src"
-      destdir="./build/javadoc"
+      destdir="${build.dir}/javadoc"
       packagenames="*"
       use="true"
       splitindex="true"
@@ -457,8 +471,8 @@
   </target>
 
   <target name="compileTest">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/obj"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/obj"/>
     <property name="junit.home" value="${ant.home}/lib/"/>
     <!-- We need the ant runtime, as it includes junit -->
     <javac srcdir="./src:./test/junit" debug="true" source="${javac.version}"
@@ -466,12 +480,12 @@
       release="${javac.release}"
       includeAntRuntime="true"
       encoding="UTF-8"
-      deprecation="on" destdir="./build/obj">
+      deprecation="on" destdir="${build.dir}/obj">
       <compilerarg line="${javac.compilerargs}"/>
       <classpath>
-        <pathelement location="../../../core/java/build/i2p.jar"/>
-        <pathelement location="../../../core/java/build/i2ptest.jar"/>
-        <pathelement location="../../ministreaming/java/build/mstreaming.jar"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
+        <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
+        <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
       </classpath>
     </javac>
@@ -481,11 +495,11 @@
     <junit printsummary="on" fork="yes">
       <classpath>
         <pathelement path="${classpath}"/>
-        <pathelement location="./build/obj"/>
-        <pathelement location="../../../core/java/build/i2p.jar"/>
-        <pathelement location="../../../core/java/build/i2ptest.jar"/>
-        <pathelement location="../../ministreaming/java/build/mstreaming.jar"/>
-        <pathelement location="../../streaming/java/build/streaming.jar"/>
+        <pathelement location="${build.dir}/obj"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
+        <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
+        <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
+        <pathelement location="${streaming.java.build.dir}/streaming.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
       </classpath>
       <batchtest>
@@ -516,7 +530,7 @@
   </target>
 
   <target name="clean">
-    <delete dir="./build"/>
+    <delete dir="${build.dir}"/>
     <delete dir="../jsp/WEB-INF/"/>
     <delete file="../jsp/web-fragment.xml"/>
     <delete file="../jsp/web-out.xml"/>

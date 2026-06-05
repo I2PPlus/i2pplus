@@ -11,8 +11,13 @@
 # zzz - public domain
 #
 cd $(dirname $0)
+if [ -n "$1" -a "$1" != "-p" ]; then
+    BD="$1"
+else
+    BD=build
+fi
 CLASS=org.klomp.snark.web.messages
-TMPFILE=build/javafiles.txt
+TMPFILE=$BD/javafiles.txt
 export TZ=UTC
 RC=0
 
@@ -49,8 +54,8 @@ for i in ../locale/messages_*.po; do
     find $JPATHS -name *.java -newer $i >$TMPFILE
   fi
 
-  if [ -s build/obj/org/klomp/snark/web/messages_$LG.class -a \
-    build/obj/org/klomp/snark/web/messages_$LG.class -nt $i -a \
+  if [ -s $BD/obj/org/klomp/snark/web/messages_$LG.class -a \
+    $BD/obj/org/klomp/snark/web/messages_$LG.class -nt $i -a \
     ! -s $TMPFILE ]; then
     continue
   fi
@@ -92,21 +97,21 @@ for i in ../locale/messages_*.po; do
     msgfmt -V | grep -q -E ' 0\.((19)|[2-9])'
     if [ $? -ne 0 ]; then
       # slow way
-      # convert to class files in build/obj
-      msgfmt --java2 -r $CLASS -l $LG -d build/obj $i
+      # convert to class files in $BD/obj
+      msgfmt --java2 -r $CLASS -l $LG -d $BD/obj $i
       if [ $? -ne 0 ]; then
         echo "ERROR - msgfmt failed on ${i}, not updating translations"
         # msgfmt leaves the class file there so the build would work the next time
-        find build -name messages_${LG}.class -exec rm -f {} \;
+        find $BD -name messages_${LG}.class -exec rm -f {} \;
         RC=1
         break
       fi
     else
       # fast way
-      # convert to java files in build/messages-src
-      TD=build/messages-src-tmp
+      # convert to java files in $BD/messages-src
+      TD=$BD/messages-src-tmp
       TDX=$TD/org/klomp/snark/web
-      TD2=build/messages-src
+      TD2=$BD/messages-src
       TDY=$TD2/org/klomp/snark/web
       rm -rf $TD
       mkdir -p $TD $TDY
@@ -114,7 +119,7 @@ for i in ../locale/messages_*.po; do
       if [ $? -ne 0 ]; then
         echo "ERROR - msgfmt failed on ${i}, not updating translations"
         # msgfmt leaves the class file there so the build would work the next time
-        find build/obj -name messages_${LG}.class -exec rm -f {} \;
+        find $BD/obj -name messages_${LG}.class -exec rm -f {} \;
         RC=1
         break
       fi

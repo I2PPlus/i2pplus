@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="jar" name="jfreesvg">
+  <property name="build.dir" value="build"/>
 
     <property name="src" value="src"/>
-    <property name="build" value="build"/>
-    <property name="dist" location="dist"/>
+    <property name="build" value="${build.dir}"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="dist" location="${dist.dir}"/>
     <property name="jar" value="jfreeSVG.jar"/>
     <property name="javadoc" value="javadoc"/>
     <property name="javac.compilerargs" value=""/>
@@ -50,12 +52,12 @@
     </target>
 
     <target name="javadoc">
-        <mkdir dir="./build"/>
-        <mkdir dir="./build/javadoc"/>
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.dir}/javadoc"/>
         <javadoc
             sourcepath="./src"
             classpath="./src"
-            destdir="./build/javadoc"
+            destdir="${build.dir}/javadoc"
             packagenames="*"
             use="true"
             access="package"

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="jetty">
+  <property name="build.dir" value="build"/>
+
+  <property name="core.java.build.dir" value="../../core/java/build"/>
+
+  <property name="core.java.build.dir" value="${core.java.build.dir}"/>
 
   <!-- This copies jars, with some modifications and renaming,
          from the jetty-distribution directory to the jettylib directory.
@@ -430,9 +435,9 @@
     <depend
       cache="../../build"
       srcdir="./java/src"
-      destdir="./build/obj">
+      destdir="${build.dir}/obj">
       <classpath>
-        <pathelement location="../../core/java/build/i2p.jar"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="./jettylib/org.mortbay.jetty.jar"/>
         <pathelement location="./jettylib/jasper-runtime.jar"/>
         <pathelement location="./jettylib/javax.servlet.jar"/>
@@ -449,17 +454,17 @@
   </target>
 
   <target name="compile" depends="builddep, ensureJettylib, depend">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/obj"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/obj"/>
     <javac
       srcdir="./java/src"
       debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
-      destdir="./build/obj"
+      destdir="${build.dir}/obj"
       encoding="UTF-8"
       includeAntRuntime="false">
       <classpath>
-        <pathelement location="../../core/java/build/i2p.jar"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="./jettylib/jasper-runtime.jar"/>
         <pathelement location="./jettylib/javax.servlet.jar"/>
         <pathelement location="./jettylib/jetty-deploy.jar"/>
@@ -500,8 +505,8 @@
   <target name="jar" depends="compile, jarUpToDate, listChangedFiles" unless="jar.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
-    <copy todir="build/obj" file="resources/log4j.properties"/>
-    <jar destfile="./jettylib/jetty-i2p.jar" basedir="./build/obj" includes="**/*.class log4j.properties" excludes="**/JspC.class">
+    <copy todir="${build.dir}/obj" file="resources/log4j.properties"/>
+    <jar destfile="./jettylib/jetty-i2p.jar" basedir="${build.dir}/obj" includes="**/*.class log4j.properties" excludes="**/JspC.class">
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
         <attribute name="Built-By" value="${build.built-by}"/>
@@ -515,12 +520,12 @@
       </manifest>
     </jar>
     <!-- separate jar for JspC wrapper used only in build, not included in jetty-i2p.jar -->
-    <jar destfile="./jettylib/jspc.jar" basedir="./build/obj" includes="**/JspC.class"/>
+    <jar destfile="./jettylib/jspc.jar" basedir="${build.dir}/obj" includes="**/JspC.class"/>
   </target>
 
   <target name="jarUpToDate">
     <uptodate property="jar.uptodate" targetfile="jettylib/jetty-i2p.jar">
-      <srcfiles dir="build/obj" includes="**/*.class"/>
+      <srcfiles dir="${build.dir}/obj" includes="**/*.class"/>
       <!-- <srcfiles dir= "resources"/> -->
     </uptodate>
     <condition property="shouldListChanges">
@@ -541,25 +546,25 @@
   <target name="buildPatches" depends="jarPatches" unless="${with-libjetty9-java}"/>
 
   <target name="compilePatches" unless="${with-libjetty9-java}">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/objPatches"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/objPatches"/>
     <javac
       srcdir="./patches/jetty-util/src/main/java"
       debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
-      destdir="./build/objPatches"
+      destdir="${build.dir}/objPatches"
       includeAntRuntime="false"
       encoding="UTF-8"
       classpath="">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
     <!--
-        <mkdir dir="./build/objPatches2"/>
+        <mkdir dir="${build.dir}/objPatches2"/>
         <javac
             srcdir="./patches/jetty-io/src/main/java"
             debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
             release="${javac.release}"
-            destdir="./build/objPatches2"
+            destdir="${build.dir}/objPatches2"
             includeAntRuntime="false"
             encoding="UTF-8" >
             <compilerarg line="${javac.compilerargs}"/>
@@ -573,10 +578,10 @@
 
   <target name="jarPatches" depends="compilePatches, jarPatchesUpToDate"
     unless="jarPatches.uptodate">
-    <jar destfile="./build/jetty-util-patch.jar" basedir="./build/objPatches"
+    <jar destfile="${build.dir}/jetty-util-patch.jar" basedir="${build.dir}/objPatches"
       includes="**/*.class"/>
     <!--
-        <jar destfile="./build/jetty-io-patch.jar" basedir="./build/objPatches2" includes="**/*.class"/>
+        <jar destfile="${build.dir}/jetty-io-patch.jar" basedir="${build.dir}/objPatches2" includes="**/*.class"/>
 -->
   </target>
 
@@ -585,7 +590,7 @@
       <or>
         <equals arg1="${with-libjetty9-java}" arg2="true"/>
         <uptodate property="jarPatches.uptodate" targetfile="jettylib/jetty-i2p.jar">
-          <srcfiles dir="build/objPatches" includes="**/*.class"/>
+          <srcfiles dir="${build.dir}/objPatches" includes="**/*.class"/>
           <!--
                     <srcfiles dir= "build/objPatches2" includes="**/*.class"/>
 -->
@@ -595,7 +600,7 @@
   </target>
 
   <target name="clean">
-    <delete dir="./build"/>
+    <delete dir="${build.dir}"/>
     <delete file="${verified.filename}"/>
   </target>
   <target name="cleandep" depends="clean"/>
@@ -613,15 +618,15 @@
   </target>
   <target name="javadoc">
     <available property="jetty.zip.available" file="${jetty.filename}" type="file"/>
-    <available property="jetty.zip.javadocExtracted" file="build/javadoc" type="dir"/>
+    <available property="jetty.zip.javadocExtracted" file="${build.dir}/javadoc" type="dir"/>
     <ant target="fetchJettylib"/>
     <ant target="verifyJettylib"/>
     <ant target="extractJavadoc"/>
   </target>
   <target name="extractJavadoc" unless="jetty.zip.javadocExtracted">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/javadoc"/>
-    <unzip src="${jetty.filename}" dest="./build/javadoc">
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/javadoc"/>
+    <unzip src="${jetty.filename}" dest="${build.dir}/javadoc">
       <patternset>
         <include name="${jetty.base}/javadoc/"/>
       </patternset>
@@ -632,7 +637,7 @@
   <!-- for Maven Central -->
   <target name="servletJar" depends="compile">
     <!-- set if unset -->
-    <jar destfile="./build/servlet-i2p-${release.number}.jar" basedir="./build/obj"
+    <jar destfile="${build.dir}/servlet-i2p-${release.number}.jar" basedir="${build.dir}/obj"
       includes="net/i2p/servlet/filters/*.class">
       <manifest>
         <attribute name="Specification-Title" value="I2P Servlet classes"/>
@@ -651,11 +656,11 @@
   </target>
 
   <target name="servletJavadoc">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/servlet-i2p-javadoc"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/servlet-i2p-javadoc"/>
     <javadoc access="package"
       source="${javac.version}"
-      destdir="./build/servlet-i2p-javadoc"
+      destdir="${build.dir}/servlet-i2p-javadoc"
       packagenames="*"
       use="true"
       splitindex="true"
@@ -668,7 +673,7 @@
         <pathelement location="./java/src"/>
       </sourcepath>
       <classpath>
-        <pathelement location="../../core/java/build/i2p.jar"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="./jettylib/org.mortbay.jetty.jar"/>
         <pathelement location="./jettylib/javax.servlet.jar"/>
         <pathelement location="./jettylib/jasper-runtime.jar"/>
@@ -681,9 +686,9 @@
         <pathelement location="./jettylib/jetty-webapp.jar"/>
         <pathelement location="./jettylib/jetty-xml.jar"/>
         <!-- following are only for debian builds -->
-        <pathelement location="../../core/java/build/libintl.jar"/>
-        <pathelement location="../../core/java/build/gnu-getopt.jar"/>
-        <pathelement location="../../core/java/build/json-simple.jar"/>
+        <pathelement location="${core.java.build.dir}/libintl.jar"/>
+        <pathelement location="${core.java.build.dir}/gnu-getopt.jar"/>
+        <pathelement location="${core.java.build.dir}/json-simple.jar"/>
         <pathelement location="./jettylib/tomcat-api.jar"/>
       </classpath>
       <!-- These variables are stored in build.properties.
@@ -700,8 +705,8 @@
   </target>
 
   <target name="servletJavadocJar" depends="servletJavadoc">
-    <jar jarfile="./build/servlet-i2p-${release.number}-javadoc.jar">
-      <fileset dir="./build/servlet-i2p-javadoc"/>
+    <jar jarfile="${build.dir}/servlet-i2p-${release.number}-javadoc.jar">
+      <fileset dir="${build.dir}/servlet-i2p-javadoc"/>
       <manifest>
         <attribute name="Specification-Title" value="I2P Servlet classes"/>
         <attribute name="Specification-Version" value="${api.version}"/>
@@ -717,7 +722,7 @@
   </target>
 
   <target name="servletSourcesJar">
-    <jar jarfile="./build/servlet-i2p-${release.number}-sources.jar">
+    <jar jarfile="${build.dir}/servlet-i2p-${release.number}-sources.jar">
       <fileset dir="./java/src" includes="net/i2p/servlet/filters/**"/>
       <manifest>
         <attribute name="Specification-Title" value="I2P Servlet classes"/>

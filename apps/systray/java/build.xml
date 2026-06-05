@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="systray">
+  <property name="build.dir" value="build"/>
+
+  <property name="...build.dir" value="../../../build"/>
+  <property name="core.java.build.dir" value="../../../core/java/build"/>
+
+  <property name="...build.dir" value="${...build.dir}"/>
+  <property name="core.java.build.dir" value="${core.java.build.dir}"/>
   <target name="all" depends="clean, build"/>
   <target name="build" depends="builddep, jar"/>
   <target name="builddep">
@@ -10,12 +17,12 @@
   </condition>
   <target name="depend" if="depend.available">
     <depend
-      cache="../../../build"
+      cache="${...build.dir}"
       srcdir="./src:./test/junit"
-      destdir="./build/obj">
+      destdir="${build.dir}/obj">
       <!-- Depend on classes instead of jars where available -->
       <classpath>
-        <pathelement location="../../../core/java/build/obj"/>
+        <pathelement location="${core.java.build.dir}/obj"/>
       </classpath>
     </depend>
   </target>
@@ -27,8 +34,8 @@
   <property name="manifest.classpath.name" value="Class-Path"/>
 
   <target name="compile" depends="depend">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/obj"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/obj"/>
     <javac
       srcdir="./src"
       debug="true"
@@ -36,11 +43,11 @@
       source="${javac.version}"
       target="${javac.version}"
       release="${javac.release}"
-      destdir="./build/obj"
+      destdir="${build.dir}/obj"
       includeAntRuntime="false"
       encoding="UTF-8"
       includes="**/*.java"
-      classpath="../../../core/java/build/i2p.jar">
+      classpath="${core.java.build.dir}/i2p.jar">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -62,7 +69,7 @@
   <target name="jar" depends="compile, jarUpToDate, listChangedFiles" unless="jar.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
-    <jar destfile="./build/systray.jar" basedir="./build/obj" includes="**/*.class">
+    <jar destfile="${build.dir}/systray.jar" basedir="${build.dir}/obj" includes="**/*.class">
       <manifest>
         <attribute name="${manifest.classpath.name}" value="i2p.jar"/>
         <attribute name="Implementation-Version" value="${full.version}"/>
@@ -77,8 +84,8 @@
   </target>
 
   <target name="jarUpToDate">
-    <uptodate property="jar.uptodate" targetfile="./build/systray.jar">
-      <srcfiles dir="build/obj" includes="**/*.class"/>
+    <uptodate property="jar.uptodate" targetfile="${build.dir}/systray.jar">
+      <srcfiles dir="${build.dir}/obj" includes="**/*.class"/>
     </uptodate>
     <condition property="shouldListChanges">
       <and>
@@ -91,19 +98,19 @@
   </target>
 
   <target name="javadoc">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/javadoc"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/javadoc"/>
     <javadoc
       sourcepath="./src"
       classpath="./src"
-      destdir="./build/javadoc"
+      destdir="${build.dir}/javadoc"
       packagenames="*"
       use="true"
       access="package"
       splitindex="true"/>
   </target>
   <target name="clean">
-    <delete dir="./build"/>
+    <delete dir="${build.dir}"/>
   </target>
   <target name="cleandep" depends="clean">
   </target>

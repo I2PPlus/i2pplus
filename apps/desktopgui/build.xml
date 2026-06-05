@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="desktopgui">
+  <property name="build.dir" value="build"/>
+
+  <property name="core.java.build.dir" value="../../core/java/build"/>
+  <property name="router.java.build.dir" value="../../router/java/build"/>
+  <property name="systray.java.build.dir" value="../systray/java/build"/>
+
+  <property name="core.java.build.dir" value="${core.java.build.dir}"/>
+  <property name="router.java.build.dir" value="${router.java.build.dir}"/>
+  <property name="systray.java.build.dir" value="${systray.java.build.dir}"/>
 
   <property name="src" value="src"/>
-  <property name="build" value="build"/>
-  <property name="dist" location="dist"/>
+  <property name="build" value="${build.dir}"/>
+  <property name="dist.dir" value="dist"/>
+  <property name="dist" location="${dist.dir}"/>
   <property name="jar" value="desktopgui.jar"/>
   <property name="javadoc" value="javadoc"/>
   <property name="javac.compilerargs" value=""/>
@@ -35,10 +45,10 @@
       srcdir="${src}" destdir="${build}">
       <compilerarg line="${javac.compilerargs}"/>
       <classpath>
-        <pathelement location="../../core/java/build/i2p.jar"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="../../installer/lib/wrapper/all/wrapper.jar"/>
-        <pathelement location="../../router/java/build/router.jar"/>
-        <pathelement location="../systray/java/build/systray.jar"/>
+        <pathelement location="${router.java.build.dir}/router.jar"/>
+        <pathelement location="${systray.java.build.dir}/systray.jar"/>
       </classpath>
     </javac>
   </target>
@@ -47,12 +57,15 @@
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}"/>
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}">
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="false">
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <javac source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
@@ -123,8 +136,8 @@
       splitindex="true"
       windowtitle="Desktopgui">
       <classpath>
-        <pathelement location="../../router/java/build/router.jar"/>
-        <pathelement location="../../core/java/build/i2p.jar"/>
+        <pathelement location="${router.java.build.dir}/router.jar"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
       </classpath>
     </javadoc>
   </target>

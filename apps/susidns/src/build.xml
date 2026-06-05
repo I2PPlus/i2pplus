@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="susidns" default="all" basedir=".">
+  <property name="build.dir" value="build"/>
+
+  <property name="...build.dir" value="../../../build"/>
+  <property name="addressbook.build.dir" value="../../addressbook/build"/>
+  <property name="addressbook.dist.dir" value="../../addressbook/dist"/>
+  <property name="core.java.build.dir" value="../../../core/java/build"/>
+
+  <property name="...build.dir" value="${...build.dir}"/>
+  <property name="addressbook.build.dir" value="${addressbook.build.dir}"/>
+  <property name="addressbook.dist.dir" value="${addressbook.dist.dir}"/>
+  <property name="core.java.build.dir" value="${core.java.build.dir}"/>
 
   <property name="jetty" value="../../jetty/"/>
   <property name="project" value="susidns"/>
@@ -34,8 +45,8 @@
     <pathelement location="${lib}/jetty-i2p.jar"/>
     <pathelement location="${lib}/jspc.jar"/>
     <pathelement location="${ant.home}/lib/ant.jar"/>
-    <pathelement location="../../../core/java/build/i2p.jar"/>
-    <pathelement location="../../addressbook/dist/addressbook.jar"/>
+    <pathelement location="${core.java.build.dir}/i2p.jar"/>
+    <pathelement location="${addressbook.dist.dir}/addressbook.jar"/>
   </path>
 
   <property name="javac.compilerargs" value=""/>
@@ -171,20 +182,20 @@
   <target name="war" depends="compile, precompilejsp, bundle, warUpToDate" unless="war.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
-    <mkdir dir="build/js"/>
-    <copy todir="build/js">
+    <mkdir dir="${build.dir}/js"/>
+    <copy todir="${build.dir}/js">
       <fileset dir="js/"/>
     </copy>
     <!-- Copy addressbook translations -->
     <copy todir="${bin}">
-      <fileset dir="../../addressbook/build" includes="net/i2p/addressbook/messages*.class"/>
+      <fileset dir="${addressbook.build.dir}" includes="net/i2p/addressbook/messages*.class"/>
     </copy>
     <if>
       <isset property="uglifyjs.present"/>
       <then>
         <parallel>
           <foreach target="compressJavascript" param="file" parallel="true">
-            <fileset dir="build/js" includes="*.js"/>
+            <fileset dir="${build.dir}/js" includes="*.js"/>
           </foreach>
         </parallel>
       </then>
@@ -192,13 +203,13 @@
         <echo message="UglifyJS not found, skipping Javascript file compression..."/>
       </else>
     </if>
-    <war destfile="${project}.war" webxml="WEB-INF/web-out.xml">
+    <war destfile="${build.dir}/${project}.war" webxml="WEB-INF/web-out.xml">
       <fileset dir=".">
         <include name="WEB-INF/**/*.class"/>
         <include name="svg/*"/>
         <exclude name="js/*"/>
       </fileset>
-      <zipfileset dir="build/js" prefix="js"/>
+      <zipfileset dir="${build.dir}/js" prefix="js"/>
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
         <attribute name="Built-By" value="${build.built-by}"/>
@@ -212,7 +223,7 @@
   </target>
 
   <target name="warUpToDate">
-    <uptodate property="war.uptodate" targetfile="${project}.war">
+    <uptodate property="war.uptodate" targetfile="${build.dir}/${project}.war">
       <srcfiles dir="." includes="WEB-INF/web-out.xml WEB-INF/**/*.class svg/*"/>
     </uptodate>
     <condition property="shouldListChanges">
@@ -226,33 +237,36 @@
   </target>
 
   <target name="bundle" depends="compile, precompilejsp" unless="no.bundle">
-    <mkdir dir="build/messages-src"/>
+    <mkdir dir="${build.dir}/messages-src"/>
     <!-- Update the messages_*.po files.
          We need to supply the bat file for windows, and then change the fail property to true -->
     <exec executable="sh" osfamily="unix" failifexecutionfails="true"
       failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}"/>
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true"
       failonerror="${require.gettext}">
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <!-- multi-lang is optional -->
     <exec executable="sh" osfamily="windows" failifexecutionfails="false">
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <javac source="${javac.version}" target="${javac.version}" release="${javac.release}"
-      includeAntRuntime="false" encoding="UTF-8" srcdir="build/messages-src" destdir="${bin}">
+      includeAntRuntime="false" encoding="UTF-8" srcdir="${build.dir}/messages-src" destdir="${bin}">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
 
   <target name="extractSVGTags">
-    <mkdir dir="build/"/>
+    <mkdir dir="${build.dir}/"/>
     <java classname="net.i2p.util.TranslateReader" fork="true" failonerror="true">
       <classpath>
-        <pathelement location="../../../build/i2p.jar"/>
+        <pathelement location="${...build.dir}/i2p.jar"/>
       </classpath>
       <arg value="tag"/>
       <arg value="svg/"/>
@@ -282,15 +296,16 @@
   </target>
 
   <target name="clean">
-    <delete file="susidns.war"/>
+      <delete file="${build.dir}/susidns.war"/>
     <delete>
       <fileset dir="." includes="**/*.class"/>
-      <fileset dir="." includes="tmp, build"/>
+      <fileset dir="." includes="tmp"/>
       <fileset dir="WEB-INF" includes="web-fragment.xml, web-out.xml"/>
     </delete>
+    <delete dir="${build.dir}"/>
     <delete dir="${bin}"/>
     <delete dir="${tmp}"/>
-    <delete dir="build"/>
+    <delete dir="${build.dir}"/>
   </target>
 
   <target name="distclean" depends="clean"/>

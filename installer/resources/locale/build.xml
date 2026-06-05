@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="i2prouter" default="bundle" basedir=".">
+  <property name="build.dir" value="build"/>
 
   <target name="bundle">
     <mkdir dir="mo"/>

@@ -9,8 +9,13 @@
 #    bundle-messages.sh -p (updates the .po file from the source tags, then generates the resource bundle)
 #
 cd `dirname $0`
+if [ -n "$1" -a "$1" != "-p" ]; then
+    BD="$1"
+else
+    BD=build
+fi
 CLASS=net.i2p.addressbook.messages
-TMPFILE=build/javafiles.txt
+TMPFILE=$BD/javafiles.txt
 export TZ=UTC
 RC=0
 
@@ -52,8 +57,8 @@ do
     find $JPATHS -name *.java -newer $i > $TMPFILE
   fi
 
-  if [ -s build/obj/net/i2p/addressbook/messages_$LG.class -a \
-       build/obj/net/i2p/addressbook/messages_$LG.class -nt $i -a \
+  if [ -s $BD/obj/net/i2p/addressbook/messages_$LG.class -a \
+       $BD/obj/net/i2p/addressbook/messages_$LG.class -nt $i -a \
        ! -s $TMPFILE ]
   then
     continue
@@ -110,22 +115,22 @@ do
         if [ $? -ne 0 ]
         then
             # slow way
-            # convert to class files in build/obj
-            msgfmt --java2 -r $CLASS -l $LG -d build/obj $i
+            # convert to class files in $BD/obj
+            msgfmt --java2 -r $CLASS -l $LG -d $BD/obj $i
             if [ $? -ne 0 ]
             then
                 echo "ERROR - msgfmt failed on ${i}, not updating translations"
                 # msgfmt leaves the class file there so the build would work next time
-                find build -name messages_${LG}.class -exec rm -f {} \;
+                find $BD -name messages_${LG}.class -exec rm -f {} \;
                 RC=1
                 break
             fi
         else
             # fast way
-            # convert to java files in build/messages-src
-            TD=build/messages-src-tmp
+            # convert to java files in $BD/messages-src
+            TD=$BD/messages-src-tmp
             TDX=$TD/net/i2p/addressbook
-            TD2=build/messages-src
+            TD2=$BD/messages-src
             TDY=$TD2/net/i2p/addressbook
             rm -rf $TD
             mkdir -p $TD $TDY
@@ -134,7 +139,7 @@ do
             then
                 echo "ERROR - msgfmt failed on ${i}, not updating translations"
                 # msgfmt leaves the class file there so the build would work next time
-                find build -name messages_${LG}.class -exec rm -f {} \;
+                find $BD -name messages_${LG}.class -exec rm -f {} \;
                 RC=1
                 break
             fi

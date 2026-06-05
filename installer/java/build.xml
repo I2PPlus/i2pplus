@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="utility_jars">
+  <property name="build.dir" value="build"/>
+
+  <property name="core.java.build.dir" value="../../core/java/build"/>
+
+  <property name="...build.dir" value="../../build"/>
+
+  <property name="core.java.build.dir" value="${core.java.build.dir}"/>
+  <property name="...build.dir" value="${...build.dir}"/>
   <target name="all" depends="clean, build"/>
   <target name="build" depends="builddep, jar"/>
   <target name="builddep">
-    <!-- noop, since the core doesnt depend on anything -->
+    <!-- noop, since the core doesn't depend on anything -->
   </target>
   <condition property="depend.available">
     <typefound name="depend"/>
   </condition>
   <target name="depend" if="depend.available">
     <depend
-      cache="../../build"
+      cache="${...build.dir}"
       srcdir="./src"
-      destdir="./build/obj">
+      destdir="${build.dir}/obj">
     </depend>
   </target>
 
@@ -23,13 +31,13 @@
   <property name="javac.release" value="8"/>
 
   <target name="compile" depends="depend">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/obj"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/obj"/>
     <javac srcdir="./src" debug="true" source="${javac.version}" target="${javac.version}" deprecation="on"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="./build/obj" classpath="${javac.classpath}:../../core/java/build/obj">
+      destdir="${build.dir}/obj" classpath="${javac.classpath}:${core.java.build.dir}/obj">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -51,9 +59,9 @@
   <target name="jar" depends="compile, listChangedFiles">
     <!-- set if unset -->
     <property name="workspace.changes.util.tr" value=""/>
-    <jar destfile="../../build/utility.jar">
-      <fileset dir="../../core/java/build/obj" includes="**/FileUtil.class"/>
-      <fileset dir="./build/obj" includes="**"/>
+    <jar destfile="${...build.dir}/utility.jar">
+      <fileset dir="${core.java.build.dir}/obj" includes="**/FileUtil.class"/>
+      <fileset dir="${build.dir}/obj" includes="**"/>
       <manifest>
         <attribute name="Main-Class" value="net.i2p.installer.Main"/>
         <attribute name="Built-By" value="${build.built-by}"/>
@@ -67,7 +75,7 @@
   </target>
 
   <target name="clean">
-    <delete dir="./build"/>
+    <delete dir="${build.dir}"/>
   </target>
   <target name="cleandep" depends="clean">
     <!-- noop, since the core doesn't depend on anything -->

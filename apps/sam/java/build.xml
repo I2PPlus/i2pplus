@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="sam">
+  <property name="build.dir" value="build"/>
+
+  <property name="...build.dir" value="../../../build"/>
+  <property name="core.java.build.dir" value="../../../core/java/build"/>
+  <property name="ministreaming.java.build.dir" value="../../ministreaming/java/build"/>
+
+  <property name="...build.dir" value="${...build.dir}"/>
+  <property name="core.java.build.dir" value="${core.java.build.dir}"/>
+  <property name="ministreaming.java.build.dir" value="${ministreaming.java.build.dir}"/>
   <target name="all" depends="clean, build"/>
   <target name="build" depends="builddep, jar"/>
   <target name="builddep">
@@ -10,14 +19,14 @@
   </condition>
   <target name="depend" if="depend.available">
     <depend
-      cache="../../../build"
+      cache="${...build.dir}"
       srcdir="./src"
-      destdir="./build/obj">
+      destdir="${build.dir}/obj">
       <!-- Depend on classes instead of jars where available -->
       <classpath>
-        <pathelement location="../../../core/java/build/obj"/>
-        <pathelement location="../../../core/java/build/gnu-getopt.jar"/>
-        <pathelement location="../../ministreaming/java/build/obj"/>
+        <pathelement location="${core.java.build.dir}/obj"/>
+        <pathelement location="${core.java.build.dir}/gnu-getopt.jar"/>
+        <pathelement location="${ministreaming.java.build.dir}/obj"/>
       </classpath>
     </depend>
   </target>
@@ -30,16 +39,16 @@
 
   <!-- compile everything including client classes -->
   <target name="compile" depends="depend">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/obj"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/obj"/>
     <javac
       srcdir="./src"
       debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="./build/obj"
-      classpath="../../../core/java/build/i2p.jar:../../../core/java/build/gnu-getopt.jar:../../ministreaming/java/build/mstreaming.jar">
+      destdir="${build.dir}/obj"
+      classpath="${core.java.build.dir}/i2p.jar:${core.java.build.dir}/gnu-getopt.jar:${ministreaming.java.build.dir}/mstreaming.jar">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -51,8 +60,8 @@
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="./build/obj"
-      classpath="../../../core/java/build/i2p.jar:../../ministreaming/java/build/mstreaming.jar">
+      destdir="${build.dir}/obj"
+      classpath="${core.java.build.dir}/i2p.jar:${ministreaming.java.build.dir}/mstreaming.jar">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -75,7 +84,7 @@
   <target name="jar" depends="compile, jarUpToDate, listChangedFiles" unless="jar.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
-    <jar destfile="./build/sam.jar" basedir="./build/obj" includes="**/*.class" excludes="net/i2p/sam/client/*">
+    <jar destfile="${build.dir}/sam.jar" basedir="${build.dir}/obj" includes="**/*.class" excludes="net/i2p/sam/client/*">
       <manifest>
         <attribute name="Main-Class" value="net.i2p.sam.SAMBridge"/>
         <attribute name="${manifest.classpath.name}" value="i2p.jar mstreaming.jar streaming.jar"/>
@@ -93,7 +102,7 @@
   <target name="clientjar" depends="compile, listChangedFiles">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
-    <jar destfile="./build/samclient.jar" basedir="./build/obj" includes="net/i2p/sam/client/*.class">
+    <jar destfile="${build.dir}/samclient.jar" basedir="${build.dir}/obj" includes="net/i2p/sam/client/*.class">
       <manifest>
         <attribute name="Main-Class" value="net.i2p.sam.SAMBridge"/>
         <attribute name="Class-Path" value="i2p.jar mstreaming.jar streaming.jar"/>
@@ -107,8 +116,8 @@
   </target>
 
   <target name="jarUpToDate">
-    <uptodate property="jar.uptodate" targetfile="build/sam.jar">
-      <srcfiles dir="build/obj" includes="**/*.class"/>
+    <uptodate property="jar.uptodate" targetfile="${build.dir}/sam.jar">
+      <srcfiles dir="${build.dir}/obj" includes="**/*.class"/>
     </uptodate>
     <condition property="shouldListChanges">
       <and>
@@ -121,20 +130,20 @@
   </target>
 
   <target name="jarTest" depends="jar, compileTest">
-    <jar destfile="./build/sam.jar" basedir="./build/obj" includes="**/*Test*.class" update="true"/>
+    <jar destfile="${build.dir}/sam.jar" basedir="${build.dir}/obj" includes="**/*Test*.class" update="true"/>
   </target>
   <target name="javadoc">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/javadoc"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/javadoc"/>
     <javadoc
-      sourcepath="./src:../../../core/java/src:../../ministreaming/java/src:../../streaming/java/src" destdir="./build/javadoc"
+      sourcepath="./src:../../../core/java/src:../../ministreaming/java/src:../../streaming/java/src" destdir="${build.dir}/javadoc"
       packagenames="*"
       use="true"
       splitindex="true"
       windowtitle="SAMBridge"/>
   </target>
   <target name="clean">
-    <delete dir="./build"/>
+    <delete dir="${build.dir}"/>
   </target>
   <target name="cleandep" depends="clean">
   </target>

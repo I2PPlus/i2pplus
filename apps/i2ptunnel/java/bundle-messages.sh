@@ -9,8 +9,13 @@
 # zzz - public domain
 #
 cd $(dirname $0)
+if [ -n "$1" -a "$1" != "-p" ]; then
+    BD="$1"
+else
+    BD=build
+fi
 CLASS=net.i2p.i2ptunnel.web.messages
-TMPFILE=build/javafiles.txt
+TMPFILE=$BD/javafiles.txt
 export TZ=UTC
 RC=0
 if ! $(which javac >/dev/null 2>&1); then
@@ -95,16 +100,16 @@ for i in ../locale/messages_*.po; do
       if [ $? -ne 0 ]; then
         echo "ERROR - msgfmt failed on ${i}, not updating translations"
         # msgfmt leaves the class file there so the build would work the next time
-        find build -name messages_${LG}.class -exec rm -f {} \;
+        find $BD -name messages_${LG}.class -exec rm -f {} \;
         RC=1
         break
       fi
     else
       # fast way
-      # convert to java files in build/messages-src
-      TD=build/messages-src-tmp
+      # convert to java files in $BD/messages-src
+      TD=$BD/messages-src-tmp
       TDX=$TD/net/i2p/i2ptunnel/web
-      TD2=build/messages-src
+      TD2=$BD/messages-src
       TDY=$TD2/net/i2p/i2ptunnel/web
       rm -rf $TD
       mkdir -p $TD $TDY

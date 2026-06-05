@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project basedir="." default="all" name="i2p" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
+    <property name="build.dir" value="build"/>
+    <property name="build.root" value="${java.io.tmpdir}/build-i2p/"/>
+    <property name="apps.addressbook.dist" value="${build.root}apps/addressbook/dist"/>
+    <property name="apps.i2pcontrol.build.dir" value="${build.root}apps/i2pcontrol/build"/>
+    <property name="apps.i2psnark.java.build.dir" value="${build.root}apps/i2psnark/java/build"/>
+    <property name="apps.i2ptunnel.java.build.dir" value="${build.root}apps/i2ptunnel/java/build"/>
+    <property name="apps.imagegen.imagegen.build.dir" value="${build.root}apps/imagegen/imagegen/build"/>
+    <property name="apps.jetty.build.dir" value="${build.root}apps/jetty/build"/>
+    <property name="apps.jrobin.java.build.dir" value="${build.root}apps/jrobin/java/build"/>
+    <property name="apps.jrobin.jfree.svg.build.dir" value="${build.root}apps/jrobin/java/src/org/jfree/svg/build"/>
+    <property name="apps.ministreaming.java.build.dir" value="${build.root}apps/ministreaming/java/build"/>
+    <property name="apps.pack200.java.build.dir" value="${build.root}apps/pack200/java/build"/>
+    <property name="apps.routerconsole.java.build.dir" value="${build.root}apps/routerconsole/java/build"/>
+    <property name="apps.sam.java.build.dir" value="${build.root}apps/sam/java/build"/>
+    <property name="apps.streaming.java.build.dir" value="${build.root}apps/streaming/java/build"/>
+    <property name="apps.systray.java.build.dir" value="${build.root}apps/systray/java/build"/>
+    <property name="core.java.build.dir" value="${build.root}core/java/build"/>
+    <property name="installer.tools.java.build.dir" value="${build.root}installer/tools/java/build"/>
+    <property name="router.java.build.dir" value="${build.root}router/java/build"/>
+
   <!-- Define the ant-contrib tasks -->
   <taskdef resource="net/sf/antcontrib/antcontrib.properties">
     <classpath>
@@ -278,8 +298,8 @@
       <delete file="@{file}.torrent" quiet="true"/>
       <java classname="org.klomp.snark.Storage" fork="true" failonerror="true">
         <classpath>
-          <pathelement location="build/i2p.jar"/>
-          <pathelement location="build/i2psnark.jar"/>
+          <pathelement location="${build.root}build/i2p.jar"/>
+          <pathelement location="${build.root}build/i2psnark.jar"/>
         </classpath>
         <arg value="-a"/>
         <arg value="http://tracker2.postman.i2p/announce.php"/>
@@ -323,7 +343,7 @@
       <echo message="Key file is ${release.privkey}"/>
       <java classname="net.i2p.crypto.TrustedUpdate" fork="true" failonerror="true">
         <classpath>
-          <pathelement location="build/i2p.jar"/>
+          <pathelement location="${build.root}build/i2p.jar"/>
         </classpath>
         <arg value="sign"/>
         <arg value="@{infile}"/>
@@ -334,21 +354,21 @@
       <echo message="Verify version and VALID signature:"/>
       <java classname="net.i2p.crypto.TrustedUpdate" fork="true" failonerror="true">
         <classpath>
-          <pathelement location="build/i2p.jar"/>
+          <pathelement location="${build.root}build/i2p.jar"/>
         </classpath>
         <arg value="verifysig"/>
         <arg value="@{outfile}"/>
       </java>
       <java classname="net.i2p.crypto.TrustedUpdate" fork="true" failonerror="true">
         <classpath>
-          <pathelement location="build/i2p.jar"/>
+          <pathelement location="${build.root}build/i2p.jar"/>
         </classpath>
         <arg value="verifyversion"/>
         <arg value="@{outfile}"/>
       </java>
       <java classname="net.i2p.crypto.TrustedUpdate" fork="true" failonerror="true">
         <classpath>
-          <pathelement location="build/i2p.jar"/>
+          <pathelement location="${build.root}build/i2p.jar"/>
         </classpath>
         <arg value="showversion"/>
         <arg value="@{outfile}"/>
@@ -387,7 +407,7 @@
       </fail>
       <java classname="net.i2p.crypto.SU3File" inputstring="${release.password.su3}" fork="true" failonerror="true">
         <classpath>
-          <pathelement location="build/i2p.jar"/>
+          <pathelement location="${build.root}build/i2p.jar"/>
         </classpath>
         <arg value="sign"/>
         <arg value="-c"/>
@@ -403,7 +423,7 @@
       <echo message="Verify version and VALID signature:"/>
       <java classname="net.i2p.crypto.SU3File" fork="true" failonerror="true">
         <classpath>
-          <pathelement location="build/i2p.jar"/>
+          <pathelement location="${build.root}build/i2p.jar"/>
         </classpath>
         <!-- set base dir so it can find the pubkey cert -->
         <jvmarg value="-Di2p.dir.base=installer/resources"/>
@@ -412,7 +432,7 @@
       </java>
       <java classname="net.i2p.crypto.SU3File" fork="true" failonerror="true">
         <classpath>
-          <pathelement location="build/i2p.jar"/>
+          <pathelement location="${build.root}build/i2p.jar"/>
         </classpath>
         <!-- set base dir so it can find the pubkey cert -->
         <jvmarg value="-Di2p.dir.base=installer/resources"/>
@@ -458,129 +478,246 @@
   </target>
 
   <target name="buildSAM" depends="buildMinistreaming">
-    <ant dir="apps/sam/java/" target="jar"/>
-    <copy quiet="true" file="apps/sam/java/build/sam.jar" todir="build/"/>
+    <ant dir="apps/sam/java/" target="jar">
+      <property name="build.dir" location="${build.root}apps/sam/java/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      </ant>
+    <copy quiet="true" file="${apps.sam.java.build.dir}/sam.jar" todir="${build.root}build/"/>
   </target>
 
   <target name="buildSusiMail" depends="buildCore, buildJetty">
-    <ant dir="apps/susimail/" target="war"/>
-    <copy quiet="true" file="apps/susimail/susimail.war" todir="build/"/>
+    <ant dir="apps/susimail/" target="war">
+      <property name="build.dir" location="${build.root}apps/susimail/build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <copy quiet="true" file="${build.root}apps/susimail/build/susimail.war" todir="${build.root}build/"/>
   </target>
 
   <!-- jar (not war) for testing only -->
   <target name="buildSusiMailJar" depends="buildCore, buildJetty">
-    <ant dir="apps/susimail/" target="jar"/>
-    <copy quiet="true" file="apps/susimail/susimail.jar" todir="build/"/>
+    <ant dir="apps/susimail/" target="jar">
+      <property name="build.dir" location="${build.root}apps/susimail/build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <copy quiet="true" file="${build.root}apps/susimail/build/susimail.jar" todir="${build.root}build/"/>
   </target>
 
   <target name="buildSusiDNS" depends="buildCore, buildJetty, buildImagegen, buildAddressbook">
-    <ant dir="apps/susidns/src" target="all"/>
-    <copy quiet="true" file="apps/susidns/src/susidns.war" todir="build/"/>
+    <ant dir="apps/susidns/src" target="all">
+      <property name="build.dir" location="${build.root}apps/susidns/src/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="addressbook.build.dir" location="${build.root}apps/addressbook/build"/>
+      <property name="addressbook.dist.dir" location="${build.root}apps/addressbook/dist"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <copy quiet="true" file="${build.root}apps/susidns/src/build/susidns.war" todir="${build.root}build/"/>
   </target>
 
   <target name="buildImagegen" depends="buildCore, buildJetty">
-    <ant dir="apps/imagegen" target="build"/>
-    <copy quiet="true" file="apps/imagegen/imagegen/build/imagegen.war" todir="build/"/>
+    <ant dir="apps/imagegen/identicon" target="jar">
+      <property name="build.dir" location="${build.root}apps/imagegen/identicon/build"/>
+    </ant>
+    <ant dir="apps/imagegen/zxing" target="jar">
+      <property name="build.dir" location="${build.root}apps/imagegen/zxing/build"/>
+    </ant>
+    <ant dir="apps/imagegen/imagegen" target="war">
+      <property name="build.dir" location="${build.root}apps/imagegen/imagegen/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+    </ant>
+    <copy quiet="true" file="${apps.imagegen.imagegen.build.dir}/imagegen.war" todir="${build.root}build/"/>
   </target>
 
   <target name="buildI2PControl" depends="buildRouter, buildJetty">
-    <ant dir="apps/i2pcontrol" target="war"/>
-    <copy quiet="true" file="apps/i2pcontrol/build/jsonrpc.war" todir="build/"/>
+    <ant dir="apps/i2pcontrol" target="war">
+      <property name="build.dir" location="${build.root}apps/i2pcontrol/build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="i2plib" location="${build.root}build"/>
+      </ant>
+    <copy quiet="true" file="${apps.i2pcontrol.build.dir}/jsonrpc.war" todir="${build.root}build/"/>
   </target>
 
   <target name="buildI2PSnark" depends="buildMinistreaming, buildJetty, buildSystray">
-    <ant dir="apps/i2psnark/java/" target="war"/>
-    <copy quiet="true" file="apps/i2psnark/i2psnark.war" todir="build/"/>
-    <copy quiet="true" file="apps/i2psnark/java/build/i2psnark.jar" todir="build/"/>
+    <ant dir="apps/i2psnark/java/" target="war">
+      <property name="build.dir" location="${build.root}apps/i2psnark/java/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      <property name="streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
+      <property name="systray.java.build.dir" location="${build.root}apps/systray/java/build"/>
+      </ant>
+    <copy quiet="true" file="${build.root}apps/i2psnark/java/build/i2psnark.war" todir="${build.root}build/"/>
+    <copy quiet="true" file="${apps.i2psnark.java.build.dir}/i2psnark.jar" todir="${build.root}build/"/>
   </target>
 
   <!-- jar (not war) for Android -->
   <target name="buildAddressbookJar" depends="buildCore">
-    <ant dir="apps/addressbook/" target="jar"/>
-    <copy quiet="true" file="apps/addressbook/dist/addressbook.jar" todir="build/"/>
+    <ant dir="apps/addressbook/" target="jar">
+      <property name="build.dir" location="${build.root}apps/addressbook/build"/>
+      <property name="dist.dir" location="${build.root}apps/addressbook/dist"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      <property name="router.java.build.dir" location="${build.root}router/java/build"/>
+      <property name="streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
+      </ant>
+    <copy quiet="true" file="${apps.addressbook.dist}/addressbook.jar" todir="${build.root}build/"/>
   </target>
 
   <target name="buildAddressbook" depends="buildCore">
-    <ant dir="apps/addressbook/" target="all"/>
-    <copy quiet="true" file="apps/addressbook/dist/addressbook.jar" todir="build/"/>
+    <ant dir="apps/addressbook/" target="all">
+      <property name="build.dir" location="${build.root}apps/addressbook/build"/>
+      <property name="dist.dir" location="${build.root}apps/addressbook/dist"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      <property name="router.java.build.dir" location="${build.root}router/java/build"/>
+      <property name="streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
+      </ant>
+    <copy quiet="true" file="${apps.addressbook.dist}/addressbook.jar" todir="${build.root}build/"/>
     <!-- war is empty, only for updates -->
-    <copy quiet="true" file="apps/addressbook/dist/addressbook.war" todir="build/"/>
+    <copy quiet="true" file="${apps.addressbook.dist}/addressbook.war" todir="${build.root}build/"/>
   </target>
 
   <!-- Both jars and no war, for Android -->
   <target name="buildI2PTunnelJars" depends="buildStreaming">
-    <ant dir="apps/i2ptunnel/java/" target="uiJar"/>
-    <copy quiet="true" file="apps/i2ptunnel/java/build/i2ptunnel.jar" todir="build/"/>
-    <copy quiet="true" file="apps/i2ptunnel/java/build/i2ptunnel-ui.jar" todir="build/"/>
+    <ant dir="apps/i2ptunnel/java/" target="uiJar">
+      <property name="build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      <property name="streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
+      </ant>
+    <copy quiet="true" file="${apps.i2ptunnel.java.build.dir}/i2ptunnel.jar" todir="${build.root}build/"/>
+    <copy quiet="true" file="${apps.i2ptunnel.java.build.dir}/i2ptunnel-ui.jar" todir="${build.root}build/"/>
   </target>
 
   <target name="buildI2PTunnel" depends="buildMinistreaming, buildJetty, buildImagegen">
-    <ant dir="apps/i2ptunnel/java/" target="build"/>
-    <copy quiet="true" file="apps/i2ptunnel/java/build/i2ptunnel.jar" todir="build/"/>
-    <copy quiet="true" file="apps/i2ptunnel/java/build/i2ptunnel.war" todir="build/"/>
+    <ant dir="apps/i2ptunnel/java/" target="build">
+      <property name="build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      <property name="streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
+      </ant>
+    <copy quiet="true" file="${apps.i2ptunnel.java.build.dir}/i2ptunnel.jar" todir="${build.root}build/"/>
+    <copy quiet="true" file="${apps.i2ptunnel.java.build.dir}/i2ptunnel.war" todir="${build.root}build/"/>
   </target>
 
   <target name="buildDesktopGui" depends="buildCore, buildrouter, buildSystray">
-    <ant dir="apps/desktopgui" target="jar"/>
-    <copy quiet="true" file="apps/desktopgui/dist/desktopgui.jar" todir="build/"/>
+    <ant dir="apps/desktopgui" target="jar">
+      <property name="build.dir" location="${build.root}apps/desktopgui/build"/>
+      <property name="dist.dir" location="${build.root}apps/desktopgui/dist"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="router.java.build.dir" location="${build.root}router/java/build"/>
+      <property name="systray.java.build.dir" location="${build.root}apps/systray/java/build"/>
+      </ant>
+    <copy quiet="true" file="${build.root}apps/desktopgui/dist/desktopgui.jar" todir="${build.root}build/"/>
   </target>
 
   <target name="buildRouterConsole" depends="buildrouter, buildSystray, buildDesktopGui, buildJetty, buildJrobin, buildI2PTunnel">
-    <ant dir="apps/routerconsole/java/" target="jar"/>
+    <ant dir="apps/routerconsole/java/" target="jar">
+      <property name="build.dir" location="${build.root}apps/routerconsole/java/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="desktopgui.build.dir" location="${build.root}apps/desktopgui/build"/>
+      <property name="desktopgui.dist.dir" location="${build.root}apps/desktopgui/dist"/>
+      <property name="i2ptunnel.java.build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+      <property name="jrobin.java.build.dir" location="${build.root}apps/jrobin/java/build"/>
+      <property name="router.java.build.dir" location="${build.root}router/java/build"/>
+      <property name="systray.java.build.dir" location="${build.root}apps/systray/java/build"/>
+      </ant>
   </target>
 
   <!-- newsxml.jar only (subset of routerconsole, no war) for Android -->
   <target name="buildNewsXMLJar" depends="buildRouter">
-    <ant dir="apps/routerconsole/java/" target="newsxmljar"/>
+    <ant dir="apps/routerconsole/java/" target="newsxmljar">
+      <property name="build.dir" location="${build.root}apps/routerconsole/java/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="desktopgui.build.dir" location="${build.root}apps/desktopgui/build"/>
+      <property name="desktopgui.dist.dir" location="${build.root}apps/desktopgui/dist"/>
+      <property name="i2ptunnel.java.build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+      <property name="jrobin.java.build.dir" location="${build.root}apps/jrobin/java/build"/>
+      <property name="router.java.build.dir" location="${build.root}router/java/build"/>
+      <property name="systray.java.build.dir" location="${build.root}apps/systray/java/build"/>
+      </ant>
   </target>
 
   <target name="buildJetty" depends="buildCore">
-    <ant dir="apps/jetty" target="build"/>
-    <copy quiet="true" todir="build/">
+    <ant dir="apps/jetty" target="build">
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <copy quiet="true" todir="${build.root}build/">
       <fileset dir="apps/jetty/jettylib" excludes="ant.jar,jspc.jar"/>
     </copy>
   </target>
 
   <target name="buildSystray" depends="buildCore">
-    <ant dir="apps/systray/java/" target="jar"/>
-    <copy quiet="true" file="apps/systray/java/build/systray.jar" todir="build/"/>
+    <ant dir="apps/systray/java/" target="jar">
+      <property name="build.dir" location="${build.root}apps/systray/java/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <copy quiet="true" file="${apps.systray.java.build.dir}/systray.jar" todir="${build.root}build/"/>
   </target>
 
   <target name="buildStreaming" depends="buildMinistreaming">
-    <ant dir="apps/streaming/java/" target="jar"/>
-    <copy quiet="true" file="apps/streaming/java/build/streaming.jar" todir="build/"/>
+    <ant dir="apps/streaming/java/" target="jar">
+      <property name="build.dir" location="${build.root}apps/streaming/java/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      </ant>
+    <copy quiet="true" file="${apps.streaming.java.build.dir}/streaming.jar" todir="${build.root}build/"/>
   </target>
 
   <target name="buildMinistreaming" depends="buildCore">
-    <ant dir="apps/ministreaming/java/" target="jar"/>
-    <copy quiet="true" file="apps/ministreaming/java/build/mstreaming.jar" todir="build/"/>
+    <ant dir="apps/ministreaming/java/" target="jar">
+      <property name="build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <copy quiet="true" file="${apps.ministreaming.java.build.dir}/mstreaming.jar" todir="${build.root}build/"/>
   </target>
 
   <target name="buildRouter" depends="buildrouter"/>
   <target name="buildrouter" depends="buildCore, buildI2PTunnel">
-    <ant dir="router/java/" target="jar"/>
-    <copy quiet="true" file="router/java/build/router.jar" todir="build/"/>
+    <ant dir="router/java/" target="jar">
+      <property name="build.dir" location="${build.root}router/java/build"/>
+      <property name="apps.i2ptunnel.java.build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <copy quiet="true" file="${router.java.build.dir}/router.jar" todir="${build.root}build/"/>
   </target>
 
   <target name="buildCore" depends="buildProperties">
-    <ant dir="core/java/" target="jar"/>
-    <copy quiet="true" file="core/java/build/i2p.jar" todir="build/"/>
+    <ant dir="core/java/" target="jar">
+      <property name="build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <copy quiet="true" file="${build.root}core/java/build/i2p.jar" todir="${build.root}build/"/>
   </target>
 
   <target name="buildJrobin" depends="buildProperties">
-    <ant dir="apps/jrobin/java/" target="jar"/>
-    <copy quiet="true" file="apps/jrobin/java/build/jrobin.jar" todir="build/"/>
+    <ant dir="apps/jrobin/java/" target="jar">
+      <property name="build.dir" location="${build.root}apps/jrobin/java/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      </ant>
+    <copy quiet="true" file="${apps.jrobin.java.build.dir}/jrobin.jar" todir="${build.root}build/"/>
   </target>
 
   <!-- not required, jrobin handles this -->
   <target name="buildJFreeSVG" depends="buildProperties">
-    <ant dir="apps/jrobin/java/src/org/jfree/svg/" target="jar"/>
-    <copy quiet="true" file="apps/jrobin/java/src/org/jfree/svg/build/jfreesvg.jar" todir="build/"/>
+    <ant dir="apps/jrobin/java/src/org/jfree/svg/" target="jar">
+      <property name="build.dir" location="${build.root}apps/jrobin/java/src/org/jfree/svg/build"/>
+      </ant>
+    <copy quiet="true" file="${apps.jrobin.jfree.svg.build.dir}/jfreesvg.jar" todir="${build.root}build/"/>
   </target>
 
   <target name="buildPack200" depends="buildProperties">
-    <ant dir="apps/pack200/java/" target="jar"/>
-    <copy quiet="true" file="apps/pack200/java/build/pack200.jar" todir="build/"/>
+    <ant dir="apps/pack200/java/" target="jar">
+      <property name="build.dir" location="${build.root}apps/pack200/java/build"/>
+      </ant>
+    <copy quiet="true" file="${apps.pack200.java.build.dir}/pack200.jar" todir="${build.root}build/"/>
   </target>
 
   <target name="buildProperties" depends="getGitRev, getReleaseNumber, getBuildNumber, setBuildTimestamp, disableManifestClasspath, checkLibraryVersions">
@@ -636,13 +773,17 @@
   </target>
 
   <target name="buildWEB" depends="buildRouterConsole, buildI2PTunnel">
-    <copy quiet="true" file="apps/routerconsole/java/build/routerconsole.jar" todir="build/"/>
-    <copy quiet="true" file="apps/routerconsole/java/build/routerconsole.war" todir="build/"/>
+    <copy quiet="true" file="${apps.routerconsole.java.build.dir}/routerconsole.jar" todir="${build.root}build/"/>
+    <copy quiet="true" file="${apps.routerconsole.java.build.dir}/routerconsole.war" todir="${build.root}build/"/>
   </target>
 
   <target name="buildTools" depends="buildrouter">
-    <ant dir="installer/tools/java" target="jar"/>
-    <copy quiet="true" file="installer/tools/java/build/tools.jar" todir="build/"/>
+    <ant dir="installer/tools/java" target="jar">
+      <property name="build.dir" location="${build.root}installer/tools/java/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <copy quiet="true" file="${installer.tools.java.build.dir}/tools.jar" todir="${build.root}build/"/>
   </target>
 
   <!-- end of sub-build.xml targets -->
@@ -836,8 +977,8 @@
 
   <!-- Custom target to collect the jars that I2P-Bote needs to compile, so it can compile from source. -->
   <target name="jarBote" depends="buildRouter, buildStreaming, buildJetty">
-    <copy quiet="true" file="apps/susidns/src/lib/jstl.jar" todir="build/"/>
-    <copy quiet="true" file="apps/susidns/src/lib/standard.jar" todir="build/"/>
+    <copy quiet="true" file="apps/susidns/src/lib/jstl.jar" todir="${build.root}build/"/>
+    <copy quiet="true" file="apps/susidns/src/lib/standard.jar" todir="${build.root}build/"/>
   </target>
 
   <!-- jbigi targets -->
@@ -846,7 +987,7 @@
     <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
     <mkdir dir="./build"/>
-    <jar destfile="build/jbigi.jar" whenmanifestonly="fail">
+    <jar destfile="${build.root}build/jbigi.jar" whenmanifestonly="fail">
       <fileset dir="installer/lib/jbigi" includes="*.so *.dll *.jnilib"/>
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
@@ -861,8 +1002,8 @@
   <target name="jbigi-nowindows" depends="buildProperties">
     <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
-    <delete file="build/jbigi.jar" failonerror="false" quiet="true"/>
-    <jar destfile="build/jbigi.jar" whenmanifestonly="fail">
+    <delete file="${build.root}build/jbigi.jar" failonerror="false" quiet="true"/>
+    <jar destfile="${build.root}build/jbigi.jar" whenmanifestonly="fail">
       <fileset dir="installer/lib/jbigi" includes="*.so *.jnilib"/>
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
@@ -878,7 +1019,7 @@
   <target name="jbigi-freebsd-only" depends="buildProperties">
     <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
-    <jar destfile="build/jbigi.jar" whenmanifestonly="fail">
+    <jar destfile="${build.root}build/jbigi.jar" whenmanifestonly="fail">
       <fileset dir="installer/lib/jbigi" includes="*bsd*.so"/>
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
@@ -893,7 +1034,7 @@
   <target name="jbigi-linux-only" depends="buildProperties">
     <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
-    <jar destfile="build/jbigi.jar" whenmanifestonly="fail">
+    <jar destfile="${build.root}build/jbigi.jar" whenmanifestonly="fail">
       <fileset dir="installer/lib/jbigi" includes="*linux*.so"/>
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
@@ -908,7 +1049,7 @@
   <target name="jbigi-linux-x86-only" depends="buildProperties">
     <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
-    <jar destfile="build/jbigi.jar" whenmanifestonly="fail">
+    <jar destfile="${build.root}build/jbigi.jar" whenmanifestonly="fail">
       <fileset dir="installer/lib/jbigi" includes="*linux*.so" excludes="*linux-arm*.so,*linux-ppc*.so"/>
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
@@ -923,7 +1064,7 @@
   <target name="jbigi-linux-x86-64-only" depends="buildProperties">
     <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
-    <jar destfile="build/jbigi.jar" whenmanifestonly="fail">
+    <jar destfile="${build.root}build/jbigi.jar" whenmanifestonly="fail">
       <fileset dir="installer/lib/jbigi" includes="*linux*_64.so libjcpuid-x86_64-linux.so" excludes="*linux-arm*.so,*linux-ppc*.so"/>
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
@@ -938,7 +1079,7 @@
   <target name="jbigi-linux-nonx86-only" depends="buildProperties">
     <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
-    <jar destfile="build/jbigi.jar" whenmanifestonly="fail">
+    <jar destfile="${build.root}build/jbigi.jar" whenmanifestonly="fail">
       <fileset dir="installer/lib/jbigi" includes="*linux-arm*.so,*linux-ppc*.so"/>
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
@@ -953,7 +1094,7 @@
   <target name="jbigi-osx-only" depends="buildProperties">
     <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
-    <jar destfile="build/jbigi.jar" whenmanifestonly="fail">
+    <jar destfile="${build.root}build/jbigi.jar" whenmanifestonly="fail">
       <fileset dir="installer/lib/jbigi" includes="*.jnilib"/>
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
@@ -968,8 +1109,8 @@
   <target name="jbigi-windows-only" depends="buildProperties">
     <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
-    <delete file="build/jbigi.jar" failonerror="false" quiet="true"/>
-    <jar destfile="build/jbigi.jar" whenmanifestonly="fail">
+    <delete file="${build.root}build/jbigi.jar" failonerror="false" quiet="true"/>
+    <jar destfile="${build.root}build/jbigi.jar" whenmanifestonly="fail">
       <fileset dir="installer/lib/jbigi" includes="*windows*.dll"/>
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
@@ -1033,8 +1174,8 @@
     </exec>
     <java classname="net.i2p.util.NativeBigInteger" fork="true" maxmemory="256m" failonerror="true">
       <classpath>
-        <pathelement location="core/java/build/i2p.jar"/>
-        <pathelement location="build/jbigi.jar"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
+        <pathelement location="${build.root}build/jbigi.jar"/>
       </classpath>
       <jvmarg value="-Djava.library.path=installer/lib/jbigi:core/c/jbigi/lib/net/i2p/util"/>
     </java>
@@ -1056,23 +1197,51 @@
     <property name="lg2" value=""/>
 
     <parallel>
-      <ant dir="core/java/" target="poupdate"/>
-      <ant dir="router/java/" target="poupdate"/>
+      <ant dir="core/java/" target="poupdate">
+      <property name="build.dir" location="${build.root}core/java/build"/>
+      </ant>
+      <ant dir="router/java/" target="poupdate">
+      <property name="build.dir" location="${build.root}router/java/build"/>
+      <property name="apps.i2ptunnel.java.build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
       <ant dir="apps/routerconsole/java/">
         <target name="poupdate"/>
         <target name="poupdate-news"/>
         <target name="poupdate-countries"/>
       </ant>
-      <ant dir="apps/i2psnark/java/" target="poupdate"/>
+      <ant dir="apps/i2psnark/java/" target="poupdate">
+      <property name="build.dir" location="${build.root}apps/i2psnark/java/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      <property name="streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
+      <property name="systray.java.build.dir" location="${build.root}apps/systray/java/build"/>
+      </ant>
       <ant dir="apps/i2ptunnel/java/">
         <target name="poupdate"/>
         <target name="poupdate-proxy"/>
       </ant>
-      <ant dir="apps/susidns/src/" target="poupdate"/>
-      <ant dir="apps/susimail/" target="poupdate"/>
-      <ant dir="apps/desktopgui" target="poupdate"/>
+      <ant dir="apps/susidns/src/" target="poupdate">
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="addressbook.build.dir" location="${build.root}apps/addressbook/build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+      <ant dir="apps/susimail/" target="poupdate">
+      <property name="build.dir" location="${build.root}apps/susimail/build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+      <ant dir="apps/desktopgui" target="poupdate">
+      <property name="build.dir" location="${build.root}apps/desktopgui/build"/>
+      <property name="dist.dir" location="${build.root}apps/desktopgui/dist"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="router.java.build.dir" location="${build.root}router/java/build"/>
+      </ant>
       <ant dir="installer/resources/locale" target="poupdate"/>
-      <ant dir="apps/ministreaming/java" target="poupdate"/>
+      <ant dir="apps/ministreaming/java" target="poupdate">
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
     </parallel>
 
   </target>
@@ -1090,7 +1259,9 @@
   </target>
 
   <target name="javadoc" depends="getReleaseNumber, getBuildNumber">
-    <ant dir="apps/jetty" target="ensureJettylib"/>
+    <ant dir="apps/jetty" target="ensureJettylib">
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
     <mkdir dir="./build"/>
     <mkdir dir="./build/javadoc"/>
     <copy quiet="true" file="./installer/resources/eepsite/docroot/favicon.ico" tofile="./build/javadoc/favicon.ico"/>
@@ -1172,9 +1343,9 @@
         <pathelement location="apps/jetty/jettylib/tomcat-api.jar"/>
         <pathelement location="installer/lib/wrapper/all/wrapper.jar"/>
         <!-- following are only for debian builds -->
-        <pathelement location="core/java/build/gnu-getopt.jar"/>
-        <pathelement location="core/java/build/json-simple.jar"/>
-        <pathelement location="core/java/build/libintl.jar"/>
+        <pathelement location="${core.java.build.dir}/gnu-getopt.jar"/>
+        <pathelement location="${core.java.build.dir}/json-simple.jar"/>
+        <pathelement location="${core.java.build.dir}/libintl.jar"/>
       </classpath>
       <!--
          These variables are stored in build.properties.
@@ -1187,7 +1358,7 @@
     </javadoc>
     <!-- create an empty dejavu.css file to keep the browser happy -->
     <mkdir dir="./build/javadoc/resources/fonts"/>
-    <echo message="/* intentionally empty */" file="build/javadoc/resources/fonts/dejavu.css"/>
+    <echo message="/* intentionally empty */" file="${build.root}build/javadoc/resources/fonts/dejavu.css"/>
     <!-- copy our fixed JavaScript file to replace the default script.js -->
     <copy quiet="true" file="tools/javadoc/javadoc-jav8-fix.js" tofile="./build/javadoc/script.js"/>
     <move todir="./dist/javadoc" quiet="true">
@@ -1210,7 +1381,9 @@
 
   <!-- Will use the native stylesheet - use this if the javadoc target looks broken, Java 11 or later? -->
   <target name="javadoc-nostylesheet" depends="getReleaseNumber, getBuildNumber, distclean">
-    <ant dir="apps/jetty" target="ensureJettylib"/>
+    <ant dir="apps/jetty" target="ensureJettylib">
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
     <mkdir dir="./build"/>
     <mkdir dir="./build/javadoc"/>
     <copy quiet="true" file="./installer/resources/eepsite/docroot/favicon.ico" tofile="./build/javadoc/favicon.ico"/>
@@ -1292,9 +1465,9 @@
         <pathelement location="apps/jetty/jettylib/tomcat-api.jar"/>
         <pathelement location="installer/lib/wrapper/all/wrapper.jar"/>
         <!-- following are only for debian builds -->
-        <pathelement location="core/java/build/gnu-getopt.jar"/>
-        <pathelement location="core/java/build/json-simple.jar"/>
-        <pathelement location="core/java/build/libintl.jar"/>
+        <pathelement location="${core.java.build.dir}/gnu-getopt.jar"/>
+        <pathelement location="${core.java.build.dir}/json-simple.jar"/>
+        <pathelement location="${core.java.build.dir}/libintl.jar"/>
       </classpath>
       <!--
          These variables are stored in build.properties.
@@ -1307,7 +1480,7 @@
     </javadoc>
     <!-- Create an empty dejavu.css file to keep the browser happy -->
     <mkdir dir="./build/javadoc/resources/fonts"/>
-    <echo message="/* intentionally empty */" file="build/javadoc/resources/fonts/dejavu.css"/>
+    <echo message="/* intentionally empty */" file="${build.root}build/javadoc/resources/fonts/dejavu.css"/>
     <move todir="./dist/javadoc" quiet="true">
       <fileset dir="./build/javadoc">
         <include name="**/*"/>
@@ -1355,8 +1528,8 @@
         <pathelement location="core/java/test/scalatest"/>
       </sourcepath>
       <classpath>
-        <pathelement location="build/i2p.jar"/>
-        <pathelement location="build/router.jar"/>
+        <pathelement location="${build.root}build/i2p.jar"/>
+        <pathelement location="${build.root}build/router.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
       </classpath>
@@ -1691,6 +1864,8 @@
           <include name="*.AppImage"/>
         </fileset>
       </delete>
+      <!-- Remove redirected build output -->
+      <delete dir="${build.root}" quiet="true" failonerror="false"/>
       <!-- Ensure dist directory exists after cleanup -->
       <mkdir dir="./dist"/>
       <!-- Use exec to run ant subprojects quietly -->
@@ -1814,6 +1989,10 @@
       <delete dir="installer/lib/izpack/5/patches/java/build" quiet="true"/>
       <delete dir="installer/lib/wrapper/build-temp" quiet="true"/>
       <delete dir="installer/bin" quiet="true"/>
+      <!-- Stale module-level build dirs from old build system / manual ant runs -->
+      <delete includeEmptyDirs="true" quiet="true">
+        <fileset dir="." includes="apps/*/build/**,core/build/**,router/build/**"/>
+      </delete>
       <delete dir="installer/java/build" quiet="true"/>
       <delete dir="installer/build" quiet="true"/>
       <delete dir="reproducible/build" quiet="true"/>
@@ -1892,7 +2071,7 @@
   <target name="preppkg" depends="preppkg-linux, preppkg-freebsd, preppkg-osx, preppkg-windows, jbigi">
     <mkdir dir="dist"/>
     <parallel>
-      <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" file="${build.root}build/jbigi.jar" todir="pkg-temp/lib"/>
       <!--
          Force using the new wrapper.jar.
          The new jar with the old Windows binaries will *fail to work* on windows, so we'll copy the correct
@@ -1906,7 +2085,7 @@
 
   <target name="preppkg-nowindows" depends="preppkg-linux, preppkg-freebsd, preppkg-osx, jbigi-nowindows">
     <parallel>
-      <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" file="${build.root}build/jbigi.jar" todir="pkg-temp/lib"/>
       <copy quiet="true" todir="pkg-temp/lib/wrapper/solaris/">
         <fileset dir="installer/lib/wrapper/solaris/" excludes="*.txt README.md"/>
       </copy>
@@ -1917,7 +2096,7 @@
   <target name="preppkgRepack" depends="preppkg-linux, preppkg-freebsd, preppkg-osx, preppkg-windows, jbigi">
     <ant target="repack200"/>
     <!-- no use doing repack200 on jbigi.jar -->
-    <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
+    <copy quiet="true" file="${build.root}build/jbigi.jar" todir="pkg-temp/lib"/>
     <copy quiet="true" todir="pkg-temp/lib/wrapper/solaris/">
       <fileset dir="installer/lib/wrapper/solaris/" excludes="*.txt README.md"/>
     </copy>
@@ -1935,13 +2114,13 @@
   </target>
 
   <target name="preppkg-freebsd-only" depends="preppkg-freebsd, jbigi-freebsd-only">
-    <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
+    <copy quiet="true" file="${build.root}build/jbigi.jar" todir="pkg-temp/lib"/>
     <copy quiet="true" file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
   </target>
 
   <!-- only what is needed for debian, etc. -->
   <target name="preppkg-linux-only" depends="preppkg-linux, jbigi-linux-only">
-    <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
+    <copy quiet="true" file="${build.root}build/jbigi.jar" todir="pkg-temp/lib"/>
     <copy quiet="true" file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
   </target>
 
@@ -2012,13 +2191,13 @@
   </target>
 
   <target name="preppkg-osx-only" depends="preppkg-osx, jbigi-osx-only">
-    <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
+    <copy quiet="true" file="${build.root}build/jbigi.jar" todir="pkg-temp/lib"/>
     <copy quiet="true" file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
   </target>
 
   <target name="preppkg-windows" depends="preppkg-base, preplicenses-windows, buildUtilityJar, buildexe">
     <parallel>
-      <copy quiet="true" file="build/i2p.exe" todir="pkg-temp/" failonerror="false"/>
+      <copy quiet="true" file="${build.root}build/i2p.exe" todir="pkg-temp/" failonerror="false"/>
       <copy quiet="true" file="installer/resources/platform-specific/windows/eepget.bat" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/platform-specific/windows/eephead.bat" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/platform-specific/windows/i2prouter.bat" todir="pkg-temp/"/>
@@ -2030,7 +2209,7 @@
       <copy quiet="true" file="installer/resources/platform-specific/windows/StopI2P+Service.bat" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/platform-specific/windows/EnableI2P+Service.bat" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/platform-specific/windows/DisableI2P+Service.bat" todir="pkg-temp/"/>
-      <copy quiet="true" file="build/utility.jar" todir="pkg-temp"/>
+      <copy quiet="true" file="${build.root}build/utility.jar" todir="pkg-temp"/>
       <copy quiet="true" todir="pkg-temp/lib/wrapper/win32/">
         <fileset dir="installer/lib/wrapper/win32/" excludes="*.txt README.md"/>
       </copy>
@@ -2041,7 +2220,7 @@
   </target>
 
   <target name="preppkg-windows-only" depends="preppkg-windows, jbigi-windows-only">
-    <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
+    <copy quiet="true" file="${build.root}build/jbigi.jar" todir="pkg-temp/lib"/>
     <!--
              Win binaries are down-rev from the others, so use the old jar.
              This will not overwrite, so preppkg (for all OSes) will get the new jar with
@@ -2078,26 +2257,26 @@
 
     <parallel>
       <!-- Copy wars and jars -->
-      <copy quiet="true" file="build/i2p.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/pack200.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/i2ptunnel.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/mstreaming.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/streaming.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/router.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/desktopgui.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/routerconsole.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar"/>
-      <copy quiet="true" file="build/sam.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/systray.jar" todir="pkg-temp/lib"/>
-      <copy quiet="true" file="build/i2psnark.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/i2ptunnel.war" todir="pkg-temp/webapps/"/>
-      <copy quiet="true" file="build/routerconsole.war" todir="pkg-temp/webapps/"/>
-      <copy quiet="true" file="build/addressbook.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/susimail.war" todir="pkg-temp/webapps/"/>
-      <copy quiet="true" file="build/susidns.war" todir="pkg-temp/webapps/"/>
-      <copy quiet="true" file="build/imagegen.war" todir="pkg-temp/webapps/"/>
-      <copy quiet="true" file="build/jsonrpc.war" todir="pkg-temp/webapps/"/>
-      <copy quiet="true" file="build/i2psnark.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/i2p.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/pack200.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/i2ptunnel.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/mstreaming.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/streaming.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/router.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/desktopgui.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/routerconsole.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar"/>
+      <copy quiet="true" file="${build.root}build/sam.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/systray.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" file="${build.root}build/i2psnark.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/i2ptunnel.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/routerconsole.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/addressbook.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/susimail.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/susidns.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/imagegen.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/jsonrpc.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/i2psnark.war" todir="pkg-temp/webapps/"/>
 
       <!-- Copy configs and misc files -->
       <copy quiet="true" file="apps/i2psnark/i2psnark.config" todir="pkg-temp/"/>
@@ -2323,7 +2502,7 @@
   </target>
 
   <target name="copyjetty" depends="copyjetty-unlesspkg">
-    <copy quiet="true" file="build/jetty-i2p.jar" todir="pkg-temp/lib"/>
+    <copy quiet="true" file="${build.root}build/jetty-i2p.jar" todir="pkg-temp/lib"/>
   </target>
 
   <target name="copyjetty-unlesspkg" unless="${with-libjetty9-java}">
@@ -2407,7 +2586,7 @@
     </copy>
     <java classname="net.i2p.crypto.CertUtil" fork="true" failonerror="true">
       <classpath>
-        <pathelement location="build/i2p.jar"/>
+        <pathelement location="${build.root}build/i2p.jar"/>
       </classpath>
       <arg value="checkall"/>
       <arg value="pkg-temp/certificates"/>
@@ -2423,10 +2602,10 @@
     <mkdir dir="pkg-temp/netDb"/>
     <java classname="net.i2p.router.networkdb.kademlia.BundleRouterInfos" fork="true" failonerror="true">
       <classpath>
-        <pathelement location="build/i2p.jar"/>
-        <pathelement location="core/java/build/gnu-getopt.jar"/>
-        <pathelement location="build/router.jar"/>
-        <pathelement location="build/tools.jar"/>
+        <pathelement location="${build.root}build/i2p.jar"/>
+        <pathelement location="${core.java.build.dir}/gnu-getopt.jar"/>
+        <pathelement location="${build.root}build/router.jar"/>
+        <pathelement location="${build.root}build/tools.jar"/>
       </classpath>
       <arg value="-i"/>
       <arg value="${bundle.routerInfos.i2pConfigDir}"/>
@@ -2453,26 +2632,26 @@
 
   <!-- text output -->
   <target name="translationReport" depends="buildTools, builddep, jar, buildWEB" unless="no.bundle">
-    <java classname="net.i2p.util.TranslationStatus" fork="true" dir="build/" failonerror="true">
+    <java classname="net.i2p.util.TranslationStatus" fork="true" dir="${build.root}build/" failonerror="true">
       <classpath>
-        <pathelement location="build/i2p.jar"/>
-        <pathelement location="build/tools.jar"/>
+        <pathelement location="${build.root}build/i2p.jar"/>
+        <pathelement location="${build.root}build/tools.jar"/>
       </classpath>
     </java>
   </target>
 
   <!-- stuff html output into routerconsole.war -->
   <target name="bundleTranslationReport" depends="buildTools, builddep, jar, buildWEB" unless="no.bundle">
-    <mkdir dir="build/txstatus/WEB-INF/classes/net/i2p/router/web/resources/"/>
-    <java classname="net.i2p.util.TranslationStatus" fork="true" dir="build/" failonerror="true" output="build/txstatus/WEB-INF/classes/net/i2p/router/web/resources/translationstatus.html" logError="true">
+    <mkdir dir="${build.root}build/txstatus/WEB-INF/classes/net/i2p/router/web/resources/"/>
+    <java classname="net.i2p.util.TranslationStatus" fork="true" dir="${build.root}build/" failonerror="true" output="${build.root}build/txstatus/WEB-INF/classes/net/i2p/router/web/resources/translationstatus.html" logError="true">
       <classpath>
-        <pathelement location="build/i2p.jar"/>
-        <pathelement location="build/tools.jar"/>
+        <pathelement location="${build.root}build/i2p.jar"/>
+        <pathelement location="${build.root}build/tools.jar"/>
       </classpath>
       <arg value="-h"/>
     </java>
-    <jar destfile="build/routerconsole.war" update="true" duplicate="preserve">
-      <fileset dir="build/txstatus"/>
+    <jar destfile="${build.root}build/routerconsole.war" update="true" duplicate="preserve">
+      <fileset dir="${build.root}build/txstatus"/>
     </jar>
     <echo message="Translation status report bundled in routerconsole.war"/>
   </target>
@@ -2663,16 +2842,16 @@
 
   <target name="prepupdate" depends="build2, prepupdateSmall, preplicenses, prepConsoleDocUpdates, prepCertificates, prep-script-translation, truncatehistory">
     <parallel>
-      <copy quiet="true" file="build/sam.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/i2psnark.jar" todir="pkg-temp/lib"/>
-      <copy quiet="true" file="build/systray.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/desktopgui.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/pack200.jar" todir="pkg-temp/lib"/>
-      <copy quiet="true" file="build/susimail.war" todir="pkg-temp/webapps/"/>
-      <copy quiet="true" file="build/susidns.war" todir="pkg-temp/webapps/"/>
-      <copy quiet="true" file="build/imagegen.war" todir="pkg-temp/webapps/"/>
-      <copy quiet="true" file="build/jsonrpc.war" todir="pkg-temp/webapps/"/>
-      <copy quiet="true" file="build/i2psnark.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/sam.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/i2psnark.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" file="${build.root}build/systray.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/desktopgui.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/pack200.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" file="${build.root}build/susimail.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/susidns.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/imagegen.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/jsonrpc.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/i2psnark.war" todir="pkg-temp/webapps/"/>
       <copy quiet="true" file="installer/resources/deletelist.txt" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/blocklist/blocklist.txt" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/blocklist/blocklist_tor.txt" todir="pkg-temp/"/>
@@ -2698,18 +2877,18 @@
 
   <target name="prepupdateSmall" depends="buildSmall, prepupdateRouter, prepjupdatefixes, prepthemeupdates">
     <parallel>
-      <copy quiet="true" file="build/i2ptunnel.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/mstreaming.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/streaming.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/routerconsole.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/i2ptunnel.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/mstreaming.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/streaming.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/routerconsole.jar" todir="pkg-temp/lib/"/>
       <!-- Updated in 0.9.28 -->
       <!-- name without version so we can overwrite if we upgrade  -->
-      <copy quiet="true" file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar"/>
-      <copy quiet="true" file="build/i2ptunnel.war" todir="pkg-temp/webapps/"/>
-      <copy quiet="true" file="build/pack200.jar" todir="pkg-temp/lib"/>
-      <copy quiet="true" file="build/routerconsole.war" todir="pkg-temp/webapps/"/>
-      <copy quiet="true" file="build/addressbook.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/addressbook.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar"/>
+      <copy quiet="true" file="${build.root}build/i2ptunnel.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/pack200.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" file="${build.root}build/routerconsole.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/addressbook.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/addressbook.war" todir="pkg-temp/webapps/"/>
       <!-- decapitalized the file in 0.7.8 -->
       <copy quiet="true" file="installer/resources/geoip/countries.txt" todir="pkg-temp/geoip/"/>
       <copy quiet="true" file="installer/resources/geoip/continents.txt" todir="pkg-temp/geoip/"/>
@@ -2718,28 +2897,28 @@
 
   <target name="prepupdateEssential" depends="buildSmall, prepupdateRouter, prepjupdatefixes, prepthemeupdates">
     <parallel>
-      <copy quiet="true" file="build/i2ptunnel.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/mstreaming.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/streaming.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/routerconsole.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/pack200.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" file="${build.root}build/i2ptunnel.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/mstreaming.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/streaming.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/routerconsole.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/pack200.jar" todir="pkg-temp/lib"/>
       <!-- Updated in 0.9.28 -->
       <!-- name without version so we can overwrite if we upgrade  -->
-      <copy quiet="true" file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar"/>
-      <copy quiet="true" file="build/i2ptunnel.war" todir="pkg-temp/webapps/"/>
-      <copy quiet="true" file="build/routerconsole.war" todir="pkg-temp/webapps/"/>
-      <copy quiet="true" file="build/addressbook.jar" todir="pkg-temp/lib/"/>
-      <copy quiet="true" file="build/addressbook.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar"/>
+      <copy quiet="true" file="${build.root}build/i2ptunnel.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/routerconsole.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/addressbook.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="${build.root}build/addressbook.war" todir="pkg-temp/webapps/"/>
     </parallel>
   </target>
 
   <target name="prepupdatecompact" depends="build2, prepupdateEssential, prepProxyDocs, prepCertificates, prep-script-translation, truncatehistory">
     <parallel>
-      <copy quiet="true" file="build/i2psnark.jar" todir="pkg-temp/lib"/>
-      <copy quiet="true" file="build/i2psnark.war" todir="pkg-temp/webapps/"/>
-      <copy quiet="true" file="build/pack200.jar" todir="pkg-temp/lib"/>
-      <copy quiet="true" file="build/susidns.war" todir="pkg-temp/webapps/"/>
-      <copy quiet="true" file="build/susimail.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/i2psnark.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" file="${build.root}build/i2psnark.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/pack200.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" file="${build.root}build/susidns.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="${build.root}build/susimail.war" todir="pkg-temp/webapps/"/>
       <copy quiet="true" file="installer/resources/deletelist.txt" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/blocklist/blocklist.txt" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/blocklist/blocklist_tor.txt" todir="pkg-temp/"/>
@@ -2751,18 +2930,18 @@
   </target>
 
   <target name="prepupdateRouter" depends="buildrouter, deletepkg-temp">
-    <copy quiet="true" file="build/i2p.jar" todir="pkg-temp/lib/"/>
-    <copy quiet="true" file="build/router.jar" todir="pkg-temp/lib/"/>
+    <copy quiet="true" file="${build.root}build/i2p.jar" todir="pkg-temp/lib/"/>
+    <copy quiet="true" file="${build.root}build/router.jar" todir="pkg-temp/lib/"/>
   </target>
 
   <target name="prepupdateRouterConsole" depends="buildRouterConsole, deletepkg-temp">
-    <copy quiet="true" file="build/routerconsole.war" todir="pkg-temp/webapps/"/>
-    <copy quiet="true" file="build/routerconsole.jar" todir="pkg-temp/lib/"/>
+    <copy quiet="true" file="${build.root}build/routerconsole.war" todir="pkg-temp/webapps/"/>
+    <copy quiet="true" file="${build.root}build/routerconsole.jar" todir="pkg-temp/lib/"/>
   </target>
 
   <!-- jbigi.jar -->
   <target name="prepjbigiupdate" depends="jbigi">
-    <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib/"/>
+    <copy quiet="true" file="${build.root}build/jbigi.jar" todir="pkg-temp/lib/"/>
   </target>
 
   <!-- GeoIP database -->
@@ -2803,7 +2982,7 @@
 
   <!-- Jetty 6 I2P logging addons, not really fixes -->
   <target name="prepjupdatefixes" depends="buildWEB">
-    <copy quiet="true" file="build/jetty-i2p.jar" todir="pkg-temp/lib/"/>
+    <copy quiet="true" file="${build.root}build/jetty-i2p.jar" todir="pkg-temp/lib/"/>
   </target>
 
   <target name="izpack-patches">
@@ -2814,7 +2993,11 @@
   </target>
 
   <target name="buildUtilityJar" depends="buildCore">
-    <ant dir="installer/java" target="build"/>
+    <ant dir="installer/java" target="build">
+      <property name="build.dir" location="${build.root}installer/java/build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      </ant>
   </target>
 
   <!-- IzPack 4 -->
@@ -3010,38 +3193,71 @@
 
   <!-- unit tests -->
   <target name="buildCoreTest" depends="buildProperties">
-    <ant dir="core/java/" target="jarTest"/>
+    <ant dir="core/java/" target="jarTest">
+      <property name="build.dir" location="${build.root}core/java/build"/>
+      </ant>
   </target>
 
   <target name="buildRouterTest" depends="buildCoreTest">
-    <ant dir="router/java/" target="jarTest"/>
+    <ant dir="router/java/" target="jarTest">
+      <property name="build.dir" location="${build.root}router/java/build"/>
+      <property name="apps.i2ptunnel.java.build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
   </target>
 
   <target name="buildTest" depends="buildRouterTest, buildMinistreaming">
-    <copy quiet="true" file="core/java/build/i2ptest.jar" todir="build"/>
-    <copy quiet="true" file="router/java/build/routertest.jar" todir="build"/>
-    <ant dir="apps/i2ptunnel/java/" target="compileTest"/>
+    <copy quiet="true" file="${core.java.build.dir}/i2ptest.jar" todir="${build.dir}"/>
+    <copy quiet="true" file="${router.java.build.dir}/routertest.jar" todir="${build.dir}"/>
+    <ant dir="apps/i2ptunnel/java/" target="compileTest">
+      <property name="build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      <property name="streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
+      </ant>
   </target>
 
   <target name="prepTest" depends="prepupdate, buildTest">
     <!-- overwrite i2p.jar and router.jar with the test versions -->
-    <copy quiet="true" file="build/i2ptest.jar" tofile="pkg-temp/lib/i2p.jar" overwrite="true"/>
-    <copy quiet="true" file="build/routertest.jar" tofile="pkg-temp/lib/router.jar" overwrite="true"/>
+    <copy quiet="true" file="${build.root}build/i2ptest.jar" tofile="pkg-temp/lib/i2p.jar" overwrite="true"/>
+    <copy quiet="true" file="${build.root}build/routertest.jar" tofile="pkg-temp/lib/router.jar" overwrite="true"/>
   </target>
 
   <target name="updateTest" depends="prepTest, zipit"/>
 
   <target name="junit.test" depends="buildProperties, jbigi">
-    <ant dir="core/java/" target="junit.test"/>
-    <ant dir="router/java/" target="junit.test"/>
-    <ant dir="apps/ministreaming/java/" target="junit.test"/>
-    <ant dir="apps/streaming/java/" target="junit.test"/>
+    <ant dir="core/java/" target="junit.test">
+      <property name="build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <ant dir="router/java/" target="junit.test">
+      <property name="build.dir" location="${build.root}router/java/build"/>
+      <property name="apps.i2ptunnel.java.build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <ant dir="apps/ministreaming/java/" target="junit.test">
+      <property name="build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <ant dir="apps/streaming/java/" target="junit.test">
+      <property name="build.dir" location="${build.root}apps/streaming/java/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      </ant>
   </target>
 
   <target name="scalatest.test" depends="buildProperties, jbigi">
-    <ant dir="core/java/" target="scalatest.test"/>
+    <ant dir="core/java/" target="scalatest.test">
+      <property name="build.dir" location="${build.root}core/java/build"/>
+      </ant>
     <!-- note there are no router scala tests yet -->
-    <ant dir="router/java/" target="scalatest.test"/>
+    <ant dir="router/java/" target="scalatest.test">
+      <property name="build.dir" location="${build.root}router/java/build"/>
+      <property name="apps.i2ptunnel.java.build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
   </target>
 
   <!-- both junit and scala -->
@@ -3050,38 +3266,98 @@
 
 
   <target name="scalatest.report" depends="buildProperties">
-    <ant dir="core/java/" target="scalatest.report"/>
-    <ant dir="router/java/" target="scalatest.report"/>
+    <ant dir="core/java/" target="scalatest.report">
+      <property name="build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <ant dir="router/java/" target="scalatest.report">
+      <property name="build.dir" location="${build.root}router/java/build"/>
+      <property name="apps.i2ptunnel.java.build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
   </target>
 
   <target name="junit.report" depends="buildProperties">
-    <ant dir="core/java/" target="junit.report"/>
-    <ant dir="router/java/" target="junit.report"/>
-    <ant dir="apps/ministreaming/java/" target="junit.report"/>
-    <ant dir="apps/streaming/java/" target="junit.report"/>
+    <ant dir="core/java/" target="junit.report">
+      <property name="build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <ant dir="router/java/" target="junit.report">
+      <property name="build.dir" location="${build.root}router/java/build"/>
+      <property name="apps.i2ptunnel.java.build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <ant dir="apps/ministreaming/java/" target="junit.report">
+      <property name="build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <ant dir="apps/streaming/java/" target="junit.report">
+      <property name="build.dir" location="${build.root}apps/streaming/java/build"/>
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      </ant>
   </target>
 
   <target name="clover.report" depends="buildProperties" if="with.clover">
-    <ant dir="core/java/" target="clover.report"/>
-    <ant dir="router/java/" target="clover.report"/>
-    <ant dir="apps/ministreaming/java" target="clover.report"/>
-    <ant dir="apps/streaming/java" target="clover.report"/>
+    <ant dir="core/java/" target="clover.report">
+      <property name="build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <ant dir="router/java/" target="clover.report">
+      <property name="build.dir" location="${build.root}router/java/build"/>
+      <property name="apps.i2ptunnel.java.build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <ant dir="apps/ministreaming/java" target="clover.report">
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <ant dir="apps/streaming/java" target="clover.report">
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      </ant>
   </target>
 
   <target name="cobertura.report" depends="buildProperties" if="with.cobertura">
-    <ant dir="core/java/" target="cobertura.report"/>
-    <ant dir="router/java/" target="cobertura.report"/>
-    <ant dir="apps/ministreaming/java" target="cobertura.report"/>
-    <ant dir="apps/streaming/java" target="cobertura.report"/>
+    <ant dir="core/java/" target="cobertura.report">
+      <property name="build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <ant dir="router/java/" target="cobertura.report">
+      <property name="build.dir" location="${build.root}router/java/build"/>
+      <property name="apps.i2ptunnel.java.build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <ant dir="apps/ministreaming/java" target="cobertura.report">
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <ant dir="apps/streaming/java" target="cobertura.report">
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      </ant>
   </target>
 
   <target name="test.report" depends="junit.report, scalatest.report, clover.report, cobertura.report"/>
 
   <target name="fulltest" depends="buildProperties, jbigi">
-    <ant dir="core/java/" target="fulltest"/>
-    <ant dir="router/java/" target="fulltest"/>
-    <ant dir="apps/ministreaming/java" target="fulltest"/>
-    <ant dir="apps/streaming/java" target="fulltest"/>
+    <ant dir="core/java/" target="fulltest">
+      <property name="build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <ant dir="router/java/" target="fulltest">
+      <property name="build.dir" location="${build.root}router/java/build"/>
+      <property name="apps.i2ptunnel.java.build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <ant dir="apps/ministreaming/java" target="fulltest">
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      </ant>
+    <ant dir="apps/streaming/java" target="fulltest">
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      </ant>
   </target>
 
   <target name="jenkins.cobertura.report" depends="cobertura.report">
@@ -3127,24 +3403,44 @@
   <target name="testscripts-all" depends="testscripts,testscripts-net"/>
 
   <target name="bench" depends="jbigi">
-    <ant dir="core/java/" target="bench.jar"/>
+    <ant dir="core/java/" target="bench.jar">
+      <property name="build.dir" location="${build.root}core/java/build"/>
+      </ant>
   </target>
 
   <!-- standalone i2psnark zip -->
   <target name="i2psnark" depends="buildStreaming, buildJetty, buildSystray, jbigi">
-    <ant dir="apps/i2psnark/java" target="standalone"/>
+    <ant dir="apps/i2psnark/java" target="standalone">
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      <property name="streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
+      <property name="systray.java.build.dir" location="${build.root}apps/systray/java/build"/>
+      </ant>
     <copy quiet="true" file="apps/i2psnark/java/i2psnark-standalone.zip" todir="./dist"/>
   </target>
 
   <!-- standalone i2psnark 7z archive -->
   <target name="i2psnark7zip" depends="buildStreaming, buildJetty, buildSystray, jbigi">
-    <ant dir="apps/i2psnark/java" target="standalone"/>
+    <ant dir="apps/i2psnark/java" target="standalone">
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      <property name="streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
+      <property name="systray.java.build.dir" location="${build.root}apps/systray/java/build"/>
+      </ant>
     <copy quiet="true" file="apps/i2psnark/java/i2psnark-standalone.7z" todir="./dist"/>
   </target>
 
   <!-- standalone i2psnark no zip -->
   <target name="i2psnark_nozip" depends="buildStreaming, buildJetty, buildSystray, jbigi">
-    <ant dir="apps/i2psnark/java" target="standalone_nozip"/>
+    <ant dir="apps/i2psnark/java" target="standalone_nozip">
+      <property name="...build.dir" location="${build.root}build"/>
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
+      <property name="streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
+      <property name="systray.java.build.dir" location="${build.root}apps/systray/java/build"/>
+      </ant>
     <delete dir="./dist/i2psnark_standalone" quiet="true" excludes="README.md"/>
     <move todir="./dist/i2psnark_standalone" quiet="true">
       <fileset dir="apps/i2psnark/java/i2psnark" includes="**/*"/>
@@ -3196,33 +3492,33 @@
       <arg value="-high"/>
       <arg value="-quiet"/>
       <arg value="-auxclasspath"/>
-      <arg value="build/commons-el.jar:build/jasper-runtime.jar:build/javax.servlet.jar:build/org.mortbay.jetty.jar:build/jrobin.jar:installer/lib/wrapper/all/wrapper.jar:apps/susidns/src/lib/standard.jar:apps/susidns/src/lib/jstl.jar"/>
+      <arg value="${build.root}build/commons-el.jar:build/jasper-runtime.jar:build/javax.servlet.jar:build/org.mortbay.jetty.jar:build/jrobin.jar:installer/lib/wrapper/all/wrapper.jar:apps/susidns/src/lib/standard.jar:apps/susidns/src/lib/jstl.jar"/>
       <arg value="-exclude"/>
       <arg value="core/java/findbugs-exclude.xml"/>
       <arg value="-sourcepath"/>
       <arg value="apps/addressbook/java/src/:apps/desktopgui/src:apps/i2pcontrol/java:apps/i2psnark/java/src/:apps/i2ptunnel/java/src/:apps/imagegen/identicon/core/src/main/java:apps/imagegen/imagegen/webapp/src/main/java:apps/imagegen/zxing/core/src/main/java:apps/jetty/java/src:apps/jrobin/java/src:apps/ministreaming/java/src/:apps/routerconsole/java/src/:apps/sam/java/src/:apps/streaming/java/src/:apps/susidns/src/java/src/:apps/susimail/src/src/:apps/systray/java/src/:core/java/src/:router/java/src/:installer/java/src"/>
       <!-- start of the files to be analyzed -->
-      <arg value="build/addressbook.jar"/>
-      <arg value="build/i2p.jar"/>
-      <arg value="build/i2psnark.jar"/>
-      <arg value="build/i2psnark.war"/>
-      <arg value="build/i2ptunnel.jar"/>
-      <arg value="build/i2ptunnel.war"/>
-      <arg value="build/imagegen.war"/>
-      <arg value="build/jetty-i2p.jar"/>
-      <arg value="build/jrobin.jar"/>
-      <arg value="build/jsonrpc.war"/>
-      <arg value="build/mstreaming.jar"/>
-      <arg value="build/router.jar"/>
-      <arg value="build/desktopgui.jar"/>
-      <arg value="build/routerconsole.jar"/>
-      <arg value="build/routerconsole.war"/>
-      <arg value="build/sam.jar"/>
-      <arg value="build/streaming.jar"/>
-      <arg value="build/susidns.war"/>
-      <arg value="build/susimail.war"/>
-      <arg value="build/systray.jar"/>
-      <arg value="build/utility.jar"/>
+      <arg value="${build.root}build/addressbook.jar"/>
+      <arg value="${build.root}build/i2p.jar"/>
+      <arg value="${build.root}build/i2psnark.jar"/>
+      <arg value="${build.root}build/i2psnark.war"/>
+      <arg value="${build.root}build/i2ptunnel.jar"/>
+      <arg value="${build.root}build/i2ptunnel.war"/>
+      <arg value="${build.root}build/imagegen.war"/>
+      <arg value="${build.root}build/jetty-i2p.jar"/>
+      <arg value="${build.root}build/jrobin.jar"/>
+      <arg value="${build.root}build/jsonrpc.war"/>
+      <arg value="${build.root}build/mstreaming.jar"/>
+      <arg value="${build.root}build/router.jar"/>
+      <arg value="${build.root}build/desktopgui.jar"/>
+      <arg value="${build.root}build/routerconsole.jar"/>
+      <arg value="${build.root}build/routerconsole.war"/>
+      <arg value="${build.root}build/sam.jar"/>
+      <arg value="${build.root}build/streaming.jar"/>
+      <arg value="${build.root}build/susidns.war"/>
+      <arg value="${build.root}build/susimail.war"/>
+      <arg value="${build.root}build/systray.jar"/>
+      <arg value="${build.root}build/utility.jar"/>
     </exec>
     <echo message="Findbugs report written to dist/findbugs.html"/>
   </target>
@@ -4148,23 +4444,23 @@
   <target name="mavenCentral" depends="verifyReleaseBuildNumbers, -pre-release, debcheckpatch, distclean, testscripts, mavenCentral.deps">
     <mkdir dir="./pkg-mavencentral"/>
     <!-- Libraries -->
-    <copy quiet="true" file="build/i2p.jar" tofile="pkg-mavencentral/i2p-${release.number}.jar"/>
-    <copy quiet="true" file="build/router.jar" tofile="pkg-mavencentral/router-${release.number}.jar"/>
-    <copy quiet="true" file="build/mstreaming.jar" tofile="pkg-mavencentral/mstreaming-${release.number}.jar"/>
-    <copy quiet="true" file="build/streaming.jar" tofile="pkg-mavencentral/streaming-${release.number}.jar"/>
-    <copy quiet="true" file="apps/jetty/build/servlet-i2p-${release.number}.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="${build.root}build/i2p.jar" tofile="pkg-mavencentral/i2p-${release.number}.jar"/>
+    <copy quiet="true" file="${build.root}build/router.jar" tofile="pkg-mavencentral/router-${release.number}.jar"/>
+    <copy quiet="true" file="${build.root}build/mstreaming.jar" tofile="pkg-mavencentral/mstreaming-${release.number}.jar"/>
+    <copy quiet="true" file="${build.root}build/streaming.jar" tofile="pkg-mavencentral/streaming-${release.number}.jar"/>
+    <copy quiet="true" file="${apps.jetty.build.dir}/servlet-i2p-${release.number}.jar" todir="pkg-mavencentral/"/>
     <!-- JavaDocs -->
-    <copy quiet="true" file="core/java/build/i2p-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
-    <copy quiet="true" file="router/java/build/router-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
-    <copy quiet="true" file="apps/ministreaming/java/build/mstreaming-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
-    <copy quiet="true" file="apps/streaming/java/build/streaming-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
-    <copy quiet="true" file="apps/jetty/build/servlet-i2p-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="${core.java.build.dir}/i2p-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="${router.java.build.dir}/router-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="${apps.ministreaming.java.build.dir}/mstreaming-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="${apps.streaming.java.build.dir}/streaming-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="${apps.jetty.build.dir}/servlet-i2p-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
     <!-- Sources -->
-    <copy quiet="true" file="core/java/build/i2p-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
-    <copy quiet="true" file="router/java/build/router-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
-    <copy quiet="true" file="apps/ministreaming/java/build/mstreaming-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
-    <copy quiet="true" file="apps/streaming/java/build/streaming-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
-    <copy quiet="true" file="apps/jetty/build/servlet-i2p-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="${core.java.build.dir}/i2p-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="${router.java.build.dir}/router-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="${apps.ministreaming.java.build.dir}/mstreaming-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="${apps.streaming.java.build.dir}/streaming-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="${apps.jetty.build.dir}/servlet-i2p-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
     <echo message="This requires the Maven Ant Tasks to be installed."/>
     <echo message="If this fails, on Debian jessie or, Ubuntu Trusty / Xenial:"/>
     <echo message="sudo apt-get install libmaven-ant-tasks-java"/>
@@ -4307,11 +4603,11 @@
     <mkdir dir="./dist/pkg-mavencentral"/>
     <!-- Libraries -->
     <parallel>
-      <copy quiet="true" file="build/i2p.jar" tofile="./dist/pkg-mavencentral/i2p-${release.number}.jar"/>
-      <copy quiet="true" file="build/router.jar" tofile="./dist/pkg-mavencentral/router-${release.number}.jar"/>
-      <copy quiet="true" file="build/mstreaming.jar" tofile="./dist/pkg-mavencentral/mstreaming-${release.number}.jar"/>
-      <copy quiet="true" file="build/streaming.jar" tofile="./dist/pkg-mavencentral/streaming-${release.number}.jar"/>
-      <copy quiet="true" file="apps/jetty/build/servlet-i2p-${release.number}.jar" todir="./dist/pkg-mavencentral/"/>
+      <copy quiet="true" file="${build.root}build/i2p.jar" tofile="./dist/pkg-mavencentral/i2p-${release.number}.jar"/>
+      <copy quiet="true" file="${build.root}build/router.jar" tofile="./dist/pkg-mavencentral/router-${release.number}.jar"/>
+      <copy quiet="true" file="${build.root}build/mstreaming.jar" tofile="./dist/pkg-mavencentral/mstreaming-${release.number}.jar"/>
+      <copy quiet="true" file="${build.root}build/streaming.jar" tofile="./dist/pkg-mavencentral/streaming-${release.number}.jar"/>
+      <copy quiet="true" file="${apps.jetty.build.dir}/servlet-i2p-${release.number}.jar" todir="./dist/pkg-mavencentral/"/>
     </parallel>
   </target>
 
@@ -4809,15 +5105,15 @@
     </copy>
     <mkdir dir="pkg-temp/webapps"/>
     <copy quiet="true" todir="pkg-temp/webapps/">
-      <fileset dir="build/" includes="**.war"/>
+      <fileset dir="${build.root}build/" includes="**.war"/>
     </copy>
     <mkdir dir="pkg-temp/lib"/>
     <copy quiet="true" todir="pkg-temp/lib/">
-      <fileset dir="build/" includes="**.jar"/>
+      <fileset dir="${build.root}build/" includes="**.jar"/>
     </copy>
     <!-- 3rd party jars from apps/  -->
     <!-- jrobin - without jobin , you lose graphs and get a lot of error entries in logs -->
-    <copy quiet="true" file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar"/>
+    <copy quiet="true" file="${build.root}build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar"/>
   </target>
 
   <!-- *3* os dependent procedure/commands -->
@@ -4939,6 +5235,15 @@
     <exec executable="tools/scripts/run-tests.sh" failonerror="true" dir="${basedir}">
       <arg value="i2ptunnel"/>
     </exec>
+  </target>
+
+
+
+  <target name="copyFromBuildRoot" description="Copy artifacts from build.root subdirs to root build/">
+    <fail message="build.root not set" unless="build.root"/>
+    <copy todir="${basedir}/build" verbose="true" failonerror="false">
+      <fileset dir="${build.root}" includes="**/*.jar,**/*.war"/>
+    </copy>
   </target>
 
 </project>

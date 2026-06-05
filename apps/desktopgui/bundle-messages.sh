@@ -12,8 +12,13 @@
 # Mathiasdm - modifications for desktopgui
 #
 cd $(dirname $0)
+if [ -n "$1" -a "$1" != "-p" ]; then
+    BD="$1"
+else
+    BD=build
+fi
 CLASS=net.i2p.desktopgui.messages
-TMPFILE=build/javafiles.txt
+TMPFILE=$BD/javafiles.txt
 export TZ=UTC
 RC=0
 
@@ -50,8 +55,8 @@ for i in locale/messages_*.po; do
     find $JPATHS -name *.java -newer $i >$TMPFILE
   fi
 
-  if [ -s build/net/i2p/desktopgui/messages_$LG.class -a \
-    build/net/i2p/desktopgui/messages_$LG.class -nt $i -a \
+  if [ -s $BD/net/i2p/desktopgui/messages_$LG.class -a \
+    $BD/net/i2p/desktopgui/messages_$LG.class -nt $i -a \
     ! -s $TMPFILE ]; then
     continue
   fi
@@ -106,16 +111,16 @@ for i in locale/messages_*.po; do
       if [ $? -ne 0 ]; then
         echo "ERROR - msgfmt failed on ${i}, not updating translations"
         # msgfmt leaves the class file there so the build would work the next time
-        find build -name messages_${LG}.class -exec rm -f {} \;
+        find $BD -name messages_${LG}.class -exec rm -f {} \;
         RC=1
         break
       fi
     else
       # fast way
-      # convert to java files in build/messages-src
-      TD=build/messages-src-tmp
+      # convert to java files in $BD/messages-src
+      TD=$BD/messages-src-tmp
       TDX=$TD/net/i2p/desktopgui
-      TD2=build/messages-src
+      TD2=$BD/messages-src
       TDY=$TD2/net/i2p/desktopgui
       rm -rf $TD
       mkdir -p $TD $TDY
@@ -123,7 +128,7 @@ for i in locale/messages_*.po; do
       if [ $? -ne 0 ]; then
         echo "ERROR - msgfmt failed on ${i}, not updating translations"
         # msgfmt leaves the class file there so the build would work the next time
-        find build -name messages_${LG}.class -exec rm -f {} \;
+        find $BD -name messages_${LG}.class -exec rm -f {} \;
         RC=1
         break
       fi

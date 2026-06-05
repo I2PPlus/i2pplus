@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="jrobin">
+  <property name="build.dir" value="build"/>
+
+  <property name="...build.dir" value="../../../build"/>
+
+  <property name="...build.dir" value="${...build.dir}"/>
   <target name="all" depends="clean, build"/>
   <target name="build" depends="builddep, jar"/>
   <target name="builddep">
@@ -10,9 +15,9 @@
   </condition>
   <target name="depend" if="depend.available">
     <depend
-      cache="../../../build"
+      cache="${...build.dir}"
       srcdir="./src"
-      destdir="./build/obj">
+      destdir="${build.dir}/obj">
     </depend>
   </target>
 
@@ -23,8 +28,8 @@
   <property name="manifest.classpath.name" value="Class-Path"/>
 
   <target name="compile" depends="depend">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/obj"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/obj"/>
     <javac
       srcdir="./src"
       debug="true"
@@ -32,7 +37,7 @@
       source="${javac.version}"
       target="${javac.version}"
       release="${javac.release}"
-      destdir="./build/obj"
+      destdir="${build.dir}/obj"
       includeAntRuntime="false"
       encoding="UTF-8"
       includes="**/*.java">
@@ -57,7 +62,7 @@
   <target name="jar" depends="compile, jarUpToDate, listChangedFiles" unless="jar.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
-    <jar destfile="./build/jrobin.jar" basedir="./build/obj" includes="**/*.class">
+    <jar destfile="${build.dir}/jrobin.jar" basedir="${build.dir}/obj" includes="**/*.class">
       <manifest>
         <attribute name="Implementation-Version" value="3.8"/>
         <attribute name="Built-By" value="${build.built-by}"/>
@@ -71,8 +76,8 @@
   </target>
 
   <target name="jarUpToDate">
-    <uptodate property="jar.uptodate" targetfile="./build/jrobin.jar">
-      <srcfiles dir="build/obj" includes="**/*.class"/>
+    <uptodate property="jar.uptodate" targetfile="${build.dir}/jrobin.jar">
+      <srcfiles dir="${build.dir}/obj" includes="**/*.class"/>
     </uptodate>
     <condition property="shouldListChanges">
       <and>
@@ -85,19 +90,19 @@
   </target>
 
   <target name="javadoc">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/javadoc"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/javadoc"/>
     <javadoc
       sourcepath="./src"
       classpath="./src"
-      destdir="./build/javadoc"
+      destdir="${build.dir}/javadoc"
       packagenames="*"
       use="true"
       access="package"
       splitindex="true"/>
   </target>
   <target name="clean">
-    <delete dir="./build"/>
+    <delete dir="${build.dir}"/>
   </target>
   <target name="cleandep" depends="clean">
   </target>
