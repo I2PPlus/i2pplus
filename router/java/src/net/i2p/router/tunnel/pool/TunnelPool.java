@@ -25,6 +25,7 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.TunnelTestStatus;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 import net.i2p.stat.Rate;
@@ -263,6 +264,23 @@ public class TunnelPool {
             if (_tunnels.isEmpty()) {
                shouldWarn = _log.shouldWarn() && uptime > STARTUP_TIME && shouldLogNoTunnelsWarning();
             } else {
+                // Determine if pool has any tested tunnels (non-UNTESTED).
+                // If so, skip UNTESTED tunnels — prefer routes through tunnels
+                // with known performance. When ALL tunnels are UNTESTED (e.g.
+                // pool startup), use them all to avoid stalls.
+                boolean hasTestedTunnels = false;
+                for (TunnelInfo ti : _tunnels) {
+                    if (ti instanceof PooledTunnelCreatorConfig) {
+                        if (((PooledTunnelCreatorConfig) ti).getTestStatus() != TunnelTestStatus.UNTESTED) {
+                            hasTestedTunnels = true;
+                            break;
+                        }
+                    } else {
+                        hasTestedTunnels = true;
+                        break;
+                    }
+                }
+
                 TunnelInfo backloggedTunnel = null;
                 // Random start index for statistical load balancing
                 int startIdx = _tunnels.size() > 0 ? _context.random().nextInt(_tunnels.size()) : 0;
@@ -274,6 +292,11 @@ public class TunnelPool {
                         if (info instanceof PooledTunnelCreatorConfig &&
                             ((PooledTunnelCreatorConfig)info).isLastResort()) {
                             lastResortTunnel = info;
+                            continue;
+                        }
+                        // Skip untested tunnels if tested alternatives exist (client pools only)
+                        if (hasTestedTunnels && !_settings.isExploratory() && info instanceof PooledTunnelCreatorConfig &&
+                            ((PooledTunnelCreatorConfig) info).getTestStatus() == TunnelTestStatus.UNTESTED) {
                             continue;
                         }
                         // Skip tunnels that have failed completely
@@ -307,6 +330,11 @@ public class TunnelPool {
                         if (lastResortTunnel == null) lastResortTunnel = info;
                         continue;
                     }
+                    // Skip untested tunnels if tested alternatives exist (client pools only)
+                    if (hasTestedTunnels && !_settings.isExploratory() && info instanceof PooledTunnelCreatorConfig &&
+                        ((PooledTunnelCreatorConfig) info).getTestStatus() == TunnelTestStatus.UNTESTED) {
+                        continue;
+                    }
                     // Skip completely failed tunnels
                     if (info.getTunnelFailed()) {continue;}
                     if (info.getConsecutiveFailures() > 1) {continue;}
@@ -336,6 +364,39 @@ public class TunnelPool {
                         ((PooledTunnelCreatorConfig) backloggedTunnel).recordActivity();
                     }
                     return backloggedTunnel;
+                }
+                // If tested tunnels exist but none are selectable, fall back
+                // to untested tunnels before using degraded/FAILED ones.
+                // Always scan — even when hasTestedTunnels is false (tested tunnels
+                // may have expired mid-scan), untested tunnels are better than null.
+                for (int i = 0; i < _tunnels.size(); i++) {
+                    TunnelInfo info = _tunnels.get(i);
+                    if (info instanceof PooledTunnelCreatorConfig &&
+                        ((PooledTunnelCreatorConfig) info).getTestStatus() == TunnelTestStatus.UNTESTED &&
+                        info.getExpiration() > now) {
+                        if (info instanceof PooledTunnelCreatorConfig) {
+                            ((PooledTunnelCreatorConfig) info).recordActivity();
+                        }
+                        return info;
+                    }
+                }
+                // If nothing found, accept any non-expired tunnel even with high
+                // consecutive failures. Retained tunnels are kept deliberately
+                // and are better than returning null (which causes "No tunnels
+                // available" and lost build replies). This applies to ALL pools
+                // — even exploratory, since a null return can disrupt exploration.
+                for (int i = 0; i < _tunnels.size(); i++) {
+                    TunnelInfo info = _tunnels.get(i);
+                    if (info.getExpiration() > now) {
+                        if (_log.shouldWarn()) {
+                            _log.warn(toString() + " -> Using degraded tunnel (" +
+                                      info.getConsecutiveFailures() + " failures) as last resort");
+                        }
+                        if (info instanceof PooledTunnelCreatorConfig) {
+                            ((PooledTunnelCreatorConfig) info).recordActivity();
+                        }
+                        return info;
+                    }
                 }
             }
         } finally {_tunnelsLock.unlock();}
@@ -404,6 +465,16 @@ public class TunnelPool {
                     if (info.getExpiration() > now) {
                         if (rv == null || comparator.compare(info, rv) < 0) {
                             rv = info;
+                        }
+                    }
+                }
+                // For non-exploratory pools: if nothing found, use any non-expired tunnel
+                // even with high consecutive failures.
+                if (rv == null && !_settings.isExploratory()) {
+                    for (TunnelInfo info : _tunnels) {
+                        if (info.getExpiration() > now) {
+                            rv = info;
+                            break;
                         }
                     }
                 }
@@ -680,6 +751,8 @@ public class TunnelPool {
 
     /**
      *  @return the number of valid (non-failed, not expired) tunnels in the pool
+     *  Includes untested and testing tunnels — suitable for exploratory pools
+     *  and build management.
      *  @since 0.9.68+
      */
     public int getValidTunnelCount() {
@@ -698,6 +771,71 @@ public class TunnelPool {
                 if (timeLeft <= 0) {
                     continue;
                 }
+                count++;
+            }
+        } finally {_tunnelsLock.unlock();}
+        return count;
+    }
+
+    /**
+     *  @return the number of GOOD (tested+passed, non-failed, not expired)
+     *          tunnels in the pool.  Excludes untested, testing, failing, and
+     *          failed tunnels.  Suitable for LeaseSet publication and UI
+     *          "ready" indicators.
+     *  @since 0.9.69+
+     */
+    public int getActiveTunnelCount() {
+        int count = 0;
+        long now = _context.clock().now();
+        // Ping tunnels don't publish LeaseSets and aren't tested — always count as active
+        String nickname = _settings.getDestinationNickname();
+        boolean isPingPool = nickname != null && (nickname.equals("I2Ping") ||
+                                                  (nickname.startsWith("Ping") && nickname.contains("[")));
+        _tunnelsLock.lock();
+        try {
+            for (int i = 0; i < _tunnels.size(); i++) {
+                TunnelInfo info = _tunnels.get(i);
+                if (info.getTunnelFailed() ||
+                    (!isPingPool && info.getTestStatus() != net.i2p.router.TunnelTestStatus.GOOD) ||
+                    info.getConsecutiveFailures() > 1) {
+                    continue;
+                }
+                long timeLeft = info.getExpiration() - now;
+                if (timeLeft <= 0) {
+                    continue;
+                }
+                count++;
+            }
+        } finally {_tunnelsLock.unlock();}
+        return count;
+    }
+
+    /**
+     *  @return the number of tunnels that have been built but not yet passed
+     *          their first test.  Excludes previously-GOOD (FAILING), FAILED,
+     *          and definitely-failed tunnels.  These are treated as "in progress"
+     *          for replacement accounting and UI display.
+     *  @since 0.9.69+
+     */
+    public int getTestingTunnelCount() {
+        int count = 0;
+        long now = _context.clock().now();
+        String nickname = _settings.getDestinationNickname();
+        boolean isPingPool = nickname != null && (nickname.equals("I2Ping") ||
+                                                  (nickname.startsWith("Ping") && nickname.contains("[")));
+        if (isPingPool) {return 0;}
+        _tunnelsLock.lock();
+        try {
+            for (int i = 0; i < _tunnels.size(); i++) {
+                TunnelInfo info = _tunnels.get(i);
+                if (info.getTunnelFailed() || info.getConsecutiveFailures() > 1) {continue;}
+                net.i2p.router.TunnelTestStatus ts = info.getTestStatus();
+                // Exclude GOOD (already proven), FAILED (dead), FAILING (previously GOOD, still works)
+                if (ts == net.i2p.router.TunnelTestStatus.GOOD ||
+                    ts == net.i2p.router.TunnelTestStatus.FAILED ||
+                    ts == net.i2p.router.TunnelTestStatus.FAILING) {continue;}
+                long timeLeft = info.getExpiration() - now;
+                if (timeLeft <= 0) {continue;}
                 count++;
             }
         } finally {_tunnelsLock.unlock();}
@@ -789,75 +927,97 @@ public class TunnelPool {
             int currentSize = _tunnels.size();
             boolean isServerPool = _settings.isInbound() && !_settings.isExploratory();
 
-            // Prune oldest tunnels if we're over target - use ExpireJob instead of direct removal
-            // For server pools, skip early-expiry scheduling to avoid publishing a LeaseSet
-            // with fewer leases before replacement tunnels are built and the new LeaseSet propagates.
-            if (!isServerPool && currentSize > target) {
+            // Unified pruning for all pool types: prune excess tunnels down to target.
+            // For server pools, NEVER prune GOOD tunnels — they're published in the
+            // LeaseSet and removing them breaks client connections.
+            // Priority order: FAILED > FAILING/TOO_SLOW/OVER_BUDGET > UNTESTED > TESTING > GOOD
+            // Within same status, prune soonest-expiring first.
+            if (currentSize > target) {
                 int toPrune = currentSize - target;
+                int goodKept = 0;
+                int goodTarget = _settings.getQuantity(); // how many GOOD we want to keep
                 List<TunnelInfo> sortedTunnels = new ArrayList<>(_tunnels);
-                sortedTunnels.sort(Comparator.comparingLong(TunnelInfo::getExpiration));
+                sortedTunnels.sort(new Comparator<TunnelInfo>() {
+                    public int compare(TunnelInfo a, TunnelInfo b) {
+                        int pa = pruneRank(a.getTestStatus());
+                        int pb = pruneRank(b.getTestStatus());
+                        if (pa != pb) return pa - pb;
+                        return Long.compare(a.getExpiration(), b.getExpiration());
+                    }
+                    private int pruneRank(TunnelTestStatus s) {
+                        if (s == null) return 0;
+                        switch (s) {
+                            case FAILED: return 0;
+                            case TOO_SLOW: return 1;
+                            case OVER_BUDGET: return 2;
+                            case FAILING: return 3;
+                            case UNTESTED: return 4;
+                            case TESTING: return 5;
+                            default: return 6; // GOOD last
+                        }
+                    }
+                });
                 for (TunnelInfo info : sortedTunnels) {
                     if (toPrune <= 0) break;
-                    if (!info.getTunnelFailed() && info instanceof PooledTunnelCreatorConfig) {
-                        // Skip if already scheduled for early expiry
-                        if (info.getExpiration() < now + getPruneEarlyExpiry()) {
-                            continue;
+                    // For server pools: never prune GOOD or FAILING tunnels.
+                    // GOOD tunnels are published in the LeaseSet and removing them
+                    // breaks client connections.  FAILING tunnels were recently GOOD
+                    // and the old LeaseSet (propagated to peers) still references
+                    // them — pruning during the propagation window causes unreachable
+                    // destinations.  Let them expire naturally (10 min).
+                    if (isServerPool && (info.getTestStatus() == TunnelTestStatus.GOOD ||
+                                         info.getTestStatus() == TunnelTestStatus.FAILING)) {continue;}
+                    // For non-server pools: keep at least goodTarget GOOD tunnels
+                    if (!isServerPool && info.getTestStatus() == TunnelTestStatus.GOOD) {
+                        goodKept++;
+                        if (goodKept < goodTarget) {continue;}
+                    }
+                    // Never prune a tunnel actively carrying traffic
+                    if (info instanceof PooledTunnelCreatorConfig &&
+                        ((PooledTunnelCreatorConfig) info).isRecentlyActive()) {continue;}
+                    if (info.getExpiration() < now + getPruneEarlyExpiry()) {continue;}
+                    if (!(info instanceof PooledTunnelCreatorConfig)) {continue;}
+                    PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
+                    TunnelId gwId = _settings.isInbound() ? cfg.getReceiveTunnelId(0) : cfg.getSendTunnelId(0);
+                    if (gwId == null || gwId.getTunnelId() == 0) {continue;}
+                    cfg.setExpiration(now + getPruneEarlyExpiry());
+                    cfg.setTestOverBudget();
+                    ExpireJob.scheduleExpiration(_context, cfg);
+                    toRemove.add(info);
+                    toPrune--;
+                    removed++;
+                    if (_log.shouldDebug()) {
+                        _log.debug(toString() + " -> Scheduling early expiry for excess tunnel: " + gwId);
+                    }
+                }
+
+                // If we still need to prune but only have GOOD tunnels left (non-server),
+                // prune the soonest-expiring GOOD tunnels.
+                if (toPrune > 0 && !isServerPool) {
+                    List<TunnelInfo> goodTunnels = new ArrayList<>();
+                    for (TunnelInfo info : _tunnels) {
+                        if (!toRemove.contains(info) && info.getTestStatus() == TunnelTestStatus.GOOD &&
+                            info instanceof PooledTunnelCreatorConfig) {
+                            goodTunnels.add(info);
                         }
+                    }
+                    goodTunnels.sort(Comparator.comparingLong(TunnelInfo::getExpiration));
+                    for (TunnelInfo info : goodTunnels) {
+                        if (toPrune <= 0) break;
+                        // Don't prune if tunnel is actively carrying traffic
+                        if (((PooledTunnelCreatorConfig) info).isRecentlyActive()) {continue;}
                         PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
-                        // Skip half-formed tunnels with null gateway IDs
-                        TunnelId gwId = _settings.isInbound() ? cfg.getReceiveTunnelId(0) : cfg.getSendTunnelId(0);
-                        if (gwId == null || gwId.getTunnelId() == 0) {continue;}
-                        // Use ExpireJob for graceful early expiration instead of direct removal
                         cfg.setExpiration(now + getPruneEarlyExpiry());
                         cfg.setTestOverBudget();
                         ExpireJob.scheduleExpiration(_context, cfg);
                         toRemove.add(info);
                         toPrune--;
-                        if (_log.shouldDebug()) {
-                            _log.debug(toString() + " -> Scheduling early expiry to meet target (" + target + "): " + info.getReceiveTunnelId(0));
-                        }
+                        removed++;
                     }
                 }
             }
 
-            // Additional pruning for tunnels with < 3 min to expiry that exceed target + 2
-            int pruneThreshold = target + 2;
-            long pruneExpiryThreshold = now + 3 * 60 * 1000;
-            int healthyExpiring = 0;
-            for (TunnelInfo info : _tunnels) {
-                if (info.getExpiration() > pruneExpiryThreshold && !info.getTunnelFailed()) {
-                    healthyExpiring++;
-                }
-            }
-
-            // Skip for server pools — same reason: LeaseSet coherence.
-            if (!isServerPool && healthyExpiring > pruneThreshold) {
-                int extraToPrune = healthyExpiring - target;
-                List<TunnelInfo> sortedExpiring = new ArrayList<>(_tunnels);
-                sortedExpiring.sort(Comparator.comparingLong(TunnelInfo::getExpiration));
-                for (TunnelInfo info : sortedExpiring) {
-                    if (extraToPrune <= 0) break;
-                    long exp = info.getExpiration();
-                    // Skip if already scheduled for early expiry
-                    if (exp < now + getPruneEarlyExpiry()) {
-                        continue;
-                    }
-                    if (exp <= pruneExpiryThreshold && !info.getTunnelFailed() && !toRemove.contains(info) && info instanceof PooledTunnelCreatorConfig) {
-                        PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
-                        // Skip half-formed tunnels with null gateway IDs
-                        TunnelId gwId2 = _settings.isInbound() ? cfg.getReceiveTunnelId(0) : cfg.getSendTunnelId(0);
-                        if (gwId2 == null || gwId2.getTunnelId() == 0) {continue;}
-                        // Use ExpireJob for graceful early expiration
-                        cfg.setExpiration(now + getPruneEarlyExpiry());
-                        cfg.setTestOverBudget();
-                        ExpireJob.scheduleExpiration(_context, cfg);
-                        toRemove.add(info);
-                        extraToPrune--;
-                    }
-                }
-            }
-
-            // Schedule early expiry for completely failed tunnels.
+            // Schedule early expiry for completely failed tunnels (all pool types).
             // Caps removal per run and staggers expiry times to prevent
             // simultaneous removal of all failed tunnels in one ExpireJob batch.
             int poolSizeAtEnd = _tunnels.size();
@@ -897,6 +1057,25 @@ public class TunnelPool {
         }
 
         return toRemove.size();
+    }
+
+    /**
+     *  Get an effective latency value for prune sorting.
+     *  Higher = slower = more likely to be pruned.
+     *  Uses average latency (3+ samples), then last latency,
+     *  then MAX_VALUE (no data = prune first).
+     *  @return latency in ms, or Integer.MAX_VALUE if unknown
+     */
+    private static int getEffectiveLatencyForPrune(TunnelInfo info) {
+        if (info instanceof TunnelCreatorConfig) {
+            TunnelCreatorConfig cfg = (TunnelCreatorConfig) info;
+            if (cfg.hasEnoughLatencyTests()) {
+                return cfg.getAverageLatency();
+            }
+            int last = cfg.getLastLatency();
+            if (last >= 0) return last;
+        }
+        return Integer.MAX_VALUE;
     }
 
     /**
@@ -960,19 +1139,19 @@ public class TunnelPool {
             }
 
             if (info.getExpiration() > now + 60*1000) {
-                // Prevent overbuild: don't add if we already have enough valid tunnels
                 int target = _settings.getQuantity();
-                int validCount = 0;
-                for (TunnelInfo existing : _tunnels) {
-                    if (existing.getExpiration() > now && existing.getLength() > 1 &&
-                        !existing.getTunnelFailed() && existing.getConsecutiveFailures() <= 1) {
-                        validCount++;
-                    }
-                }
-                if (validCount >= target) {
+                int activeCount = getActiveTunnelCount();
+                // Cap total pool size to prevent UNTESTED tunnel pileup.
+                // When all tunnels are UNTESTED (no test results yet), activeCount
+                // is 0 and we'd accept every build — pools grow unbounded.  The
+                // hard cap ensures at most 4x target tunnels in the pool pipeline.
+                int totalNow = _tunnels.size();
+                int maxTotal = target + 4;
+                if (totalNow >= maxTotal || activeCount >= target) {
                     if (_log.shouldWarn()) {
-                        _log.warn(toString() + " -> Rejecting excess tunnel (" + validCount +
-                                  " valid, target=" + target + "): " + info);
+                        _log.warn(toString() + " -> Rejecting excess tunnel (" + activeCount +
+                                  " active, target=" + target + ", total=" + totalNow +
+                                  ", max=" + maxTotal + "): " + info);
                     }
                     return;
                 }
@@ -1030,7 +1209,10 @@ public class TunnelPool {
             // the pool from draining to zero.
             ensureSufficientTunnels();
             if (_settings.isInbound() && !_settings.isExploratory()) {
-                refreshLeaseSet(false);
+                // Force-publish — a tunnel just left the pool and the LS must be
+                // updated immediately.  Without force, the 5s throttle defers
+                // publication and selectTunnel() may report DNR during the gap.
+                refreshLeaseSet(true);
             }
         }
 
@@ -1066,7 +1248,7 @@ public class TunnelPool {
 
             if (_settings.isInbound() && !_settings.isExploratory()) {
                 List<TunnelInfo> tunnelsCopy = new ArrayList<TunnelInfo>(_tunnels);
-                ls = buildNewLeaseSetFromCopy(tunnelsCopy);
+                ls = buildNewLeaseSetFromCopy(tunnelsCopy, true);
             }
         } finally {_tunnelsLock.unlock();}
 
@@ -1105,7 +1287,7 @@ public class TunnelPool {
      * @param tunnelsCopy copy of the tunnels list
      * @return LeaseSet or null if not enough tunnels
      */
-    private LeaseSet buildNewLeaseSetFromCopy(List<TunnelInfo> tunnelsCopy) {
+    private LeaseSet buildNewLeaseSetFromCopy(List<TunnelInfo> tunnelsCopy, boolean isServerPool) {
         long now = _context.clock().now();
         long expireAfter = now + 10 * 1000;
         int wanted = Math.min(_settings.getQuantity(), LeaseSet.MAX_LEASES);
@@ -1115,13 +1297,10 @@ public class TunnelPool {
         TreeSet<Lease> leases = new TreeSet<Lease>(new LeaseComparator());
 
         for (TunnelInfo tunnel : tunnelsCopy) {
-            // Don't include tunnels that selectTunnel() would skip.
-            // A tunnel with getTunnelFailed() or too many consecutive
-            // failures cannot carry traffic, and advertising it in
-            // the LeaseSet would cause clients to fail when connecting.
+            // Only include tunnels that have passed at least one test (GOOD).
+            // Untested, testing, and failing tunnels are excluded.
             if (tunnel.getTunnelFailed() ||
-                tunnel.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED ||
-                tunnel.getConsecutiveFailures() > 1) {
+                tunnel.getTestStatus() != net.i2p.router.TunnelTestStatus.GOOD) {
                 continue;
             }
 
@@ -1145,7 +1324,7 @@ public class TunnelPool {
         }
 
         if (leases.isEmpty()) {
-            TunnelInfo fallback = findBestDegradedTunnel(tunnelsCopy);
+            TunnelInfo fallback = findBestDegradedTunnel(tunnelsCopy, isServerPool);
             if (fallback != null) {
                 TunnelId inId = fallback.getReceiveTunnelId(0);
                 Hash gw = fallback.getPeer(0);
@@ -1223,52 +1402,14 @@ public class TunnelPool {
      *  @param cfg the tunnel to remove
      */
     private void fail(TunnelInfo cfg) {
-        int remaining;
-        LeaseSet ls = null;
-        _tunnelsLock.lock();
-        try {
-            boolean removed = _tunnels.remove(cfg);
-            if (!removed) {return;}
-            remaining = _tunnels.size();
-            if (_settings.isInbound() && !_settings.isExploratory()) {
-                ls = locked_buildNewLeaseSet();
-            }
-        } finally {_tunnelsLock.unlock();}
-
-        if (_log.shouldWarn()) {_log.warn("Tunnel build failed -> " + cfg);}
-
-        _manager.tunnelFailed();
-        _lifetimeProcessed += cfg.getProcessedMessagesCount();
-        updateRate();
-
-        // Set 30s expiry so in-flight data can still be delivered via dispatcher
-        // even though the tunnel is no longer in the pool's selectable list.
-        if (cfg instanceof PooledTunnelCreatorConfig)
-            ((PooledTunnelCreatorConfig) cfg).setExpiration(_context.clock().now() + 30*1000);
-
-        if (_settings.isInbound() && !_settings.isExploratory() && _alive) {
-            // Defer LeaseSet republish — batch multiple failures into one update
-            // within a 10s window. Prevents rapid LeaseSet churn when several
-            // tunnels fail in quick succession.
-            scheduleDeferredLeaseSetRepublish();
-            if (ls != null) {
-                // Use force to bypass throttle — this is a failure recovery path
-                requestLeaseSet(ls, true);
-            } else if (cfg instanceof TunnelCreatorConfig) {
-                // locked_buildNewLeaseSet() returned null — all remaining tunnels
-                // have >1 consecutive failures and were filtered out. Build an
-                // emergency LeaseSet from the failed tunnel's gateway lease so the
-                // destination doesn't become unreachable during recovery.
-                // Uses the HopConfig expiration (original 10-min lifetime) so the
-                // LS stays valid long enough for a replacement to build.
-                ls = buildEmergencyLeaseSet(cfg);
-                if (ls != null) {
-                    requestLeaseSet(ls, true);
-                }
-            }
-            // Ensure the pool has enough valid tunnels — proactively build
-            // replacements when count falls below target.
-            ensureSufficientTunnels();
+        // Never remove tunnels via fail() — let ExpireJob handle all removal.
+        // Removing tunnels here creates a gap before replacements are built,
+        // causing "No tunnels available" until the replacement completes.
+        // Tunnels are deprioritized by consecutiveFailures in selectTunnel()
+        // and removed naturally when they expire. This applies to ALL pools
+        // including exploratory — temporary FAILED tunnels are better than none.
+        if (_log.shouldWarn()) {
+            _log.warn("NOT removing tunnel via fail(): " + cfg);
         }
     }
 
@@ -1532,6 +1673,32 @@ public class TunnelPool {
     }
 
     /**
+     * Called by TestJob when a server pool tunnel fails a test but is retained.
+     * Immediately builds and publishes an emergency LeaseSet via the degraded
+     * tunnel fallback path, and also schedules a deferred republish to batch
+     * any additional failures within the 10s window.
+     * @since 0.9.69+
+     */
+    void notifyServerPoolTestFailed() {
+        if (!_settings.isInbound() || _settings.isExploratory() || !_alive)
+            return;
+        LeaseSet ls;
+        _tunnelsLock.lock();
+        try {
+            ls = locked_buildNewLeaseSet();
+            if (ls == null) {
+                TunnelInfo fallback = findBestDegradedTunnel();
+                if (fallback != null)
+                    ls = buildEmergencyLeaseSet(fallback);
+            }
+        } finally { _tunnelsLock.unlock(); }
+        if (ls != null) {
+            requestLeaseSet(ls, true);
+        }
+        scheduleDeferredLeaseSetRepublish();
+    }
+
+    /**
      *  Request lease set from client for the primary and all aliases.
      *
      *  @param ls non-null
@@ -1671,13 +1838,11 @@ public class TunnelPool {
         TreeSet<Lease> leases = new TreeSet<Lease>(new LeaseComparator());
         for (int i = 0; i < _tunnels.size(); i++) {
             TunnelInfo tunnel = _tunnels.get(i);
-            // Don't include tunnels that selectTunnel() would skip.
-            // A tunnel with getTunnelFailed() or too many consecutive
-            // failures cannot carry traffic, and advertising it in
-            // the LeaseSet would cause clients to fail when connecting.
+            // Only include tunnels that have passed at least one test (GOOD).
+            // Untested, testing, and failing tunnels are excluded — they aren't
+            // proven to carry traffic, and advertising them causes client failures.
             if (tunnel.getTunnelFailed() ||
-                tunnel.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED ||
-                tunnel.getConsecutiveFailures() > 1) {
+                tunnel.getTestStatus() != net.i2p.router.TunnelTestStatus.GOOD) {
                 continue;
             }
             if (tunnel.getExpiration() <= expireAfter) {continue;}
@@ -1805,15 +1970,19 @@ public class TunnelPool {
      * Find the best degraded tunnel from _tunnels for emergency LS fallback.
      * Picks the tunnel with the fewest consecutive failures (excluding fully
      * dead tunnels). If tied, picks the one with the latest expiration.
+     * For server pools (inbound non-exploratory), tunnels retained with
+     * getTunnelFailed() == true are still eligible — they're deliberately
+     * kept to prevent pool collapse and must be available for LS fallback.
      */
     private TunnelInfo findBestDegradedTunnel() {
         long now = _context.clock().now();
+        boolean isServerPool = _settings.isInbound() && !_settings.isExploratory();
         TunnelInfo best = null;
         int bestFailures = Integer.MAX_VALUE;
         for (int i = 0; i < _tunnels.size(); i++) {
             TunnelInfo t = _tunnels.get(i);
-            if (t.getTunnelFailed() ||
-                t.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED) {
+            if (!isServerPool && (t.getTunnelFailed() ||
+                t.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED)) {
                 continue;
             }
             if (t.getReceiveTunnelId(0) == null || t.getPeer(0) == null) {
@@ -1832,13 +2001,14 @@ public class TunnelPool {
 
     /**
      * Find the best degraded tunnel from a given list for emergency LS fallback.
+     * @param isServerPool if true, don't skip getTunnelFailed() tunnels
      */
-    private static TunnelInfo findBestDegradedTunnel(List<TunnelInfo> tunnels) {
+    private static TunnelInfo findBestDegradedTunnel(List<TunnelInfo> tunnels, boolean isServerPool) {
         TunnelInfo best = null;
         int bestFailures = Integer.MAX_VALUE;
         for (TunnelInfo t : tunnels) {
-            if (t.getTunnelFailed() ||
-                t.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED) {
+            if (!isServerPool && (t.getTunnelFailed() ||
+                t.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED)) {
                 continue;
             }
             if (t.getReceiveTunnelId(0) == null || t.getPeer(0) == null) {
@@ -1885,12 +2055,35 @@ public class TunnelPool {
     private void ensureSufficientTunnels() {
         if (!_alive) {return;}
         int target = _settings.getQuantity();
-        int valid = getValidTunnelCount();
+        int testing = getTestingTunnelCount();
         int inProgress = getInProgressCount();
-        int needed = target - (valid + inProgress);
+        long now = _context.clock().now();
+        long preBuildThreshold = now + 60 * 1000;
+
+        int safeActive = 0;  // tunnels with > 60s remaining
+        int nearExpiry = 0;  // tunnels with <= 60s remaining but not yet expired
+
+        _tunnelsLock.lock();
+        try {
+            for (TunnelInfo t : _tunnels) {
+                if (t.getExpiration() <= now) continue;
+                // Skip non-GOOD tunnels for exploratory pools only. ALL client pools
+                // (inbound and outbound) count FAILING tunnels so retained tunnels
+                // prevent continuous build requests that create build-spam.
+                if (_settings.isExploratory() && t.getTestStatus() != net.i2p.router.TunnelTestStatus.GOOD) continue;
+                if (t.getExpiration() > preBuildThreshold) {
+                    safeActive++;
+                } else {
+                    nearExpiry++;
+                }
+            }
+        } finally { _tunnelsLock.unlock(); }
+
+        int needed = target - (safeActive + testing + inProgress);
         if (needed > 0) {
-            if (_log.shouldWarn()) {
-                _log.warn(toString() + "\n* Proactive build: " + valid + " valid + " + inProgress +
+            if (_log.shouldInfo()) {
+                _log.info(toString() + "\n* Proactive build: " + safeActive + " safe + " + nearExpiry +
+                          " expiring + " + testing + " testing + " + inProgress +
                           " in-progress < target " + target + ", building " + needed + " replacement(s)");
             }
             for (int i = 0; i < needed; i++) {
@@ -1915,6 +2108,9 @@ public class TunnelPool {
         List<Hash> peers = null;
         long now = _context.clock().now();
         long expiration = now + TunnelPoolSettings.DEFAULT_DURATION;
+        // Stagger 0-120s to prevent all tunnels expiring simultaneously
+        int stagger = _context.random().nextInt(120001);
+        expiration += stagger;
 
         if (!forceZeroHop) {
             int len = settings.getLengthOverride();
@@ -2111,13 +2307,22 @@ public class TunnelPool {
            else {pool = _manager.getInboundExploratoryPool();}
            paired = (PooledTunnelCreatorConfig) pool.getTunnel(pairedGW);
        }
-       if (paired != null && paired.getLength() > 1) {
-           if (success) {
-               long requestedOn = cfg.getExpiration() - 10*60*1000;
-               int rtt = (int) (_context.clock().now() - requestedOn);
-               paired.testSuccessful(rtt);
-           } else {paired.tunnelFailed();}
-       }
+        if (paired != null && paired.getLength() > 1) {
+            if (success) {
+                // Only seed latency for UNTESTED paired tunnels — don't
+                // overwrite real test results with build-time RTT estimates.
+                if (paired.getTestStatus() == net.i2p.router.TunnelTestStatus.UNTESTED) {
+                    long requestedOn = cfg.getExpiration() - 10*60*1000;
+                    int rtt = (int) (_context.clock().now() - requestedOn);
+                    if (rtt > 0) {
+                        paired.addLatencySample(rtt);
+                    }
+                }
+            }
+            // On failure: don't touch the paired tunnel's test status.
+            // A build failure in this direction doesn't indicate the paired
+            // tunnel is broken — the failure was in the new tunnel's path.
+        }
     }
 
     /**
@@ -2205,13 +2410,22 @@ public class TunnelPool {
         }
 
         // For inbound server pools: the pool IS the source of the LeaseSet.
-        // If we're alive and have tunnels, the destination is reachable even if
-        // the signed LS hasn't propagated to the local netDB yet (the client
-        // app signs it asynchronously). Don't check netDB — that would create
-        // a window where the destination appears unreachable between LS build
-        // and client signing.
+        // If we're alive and have tunnels (or builds in progress), the destination
+        // is reachable even if the signed LS hasn't propagated to the local netDB
+        // yet (the client app signs it asynchronously). Don't check netDB — that
+        // would create a window where the destination appears unreachable between
+        // LS build and client signing. Also count in-progress builds so the
+        // destination never appears unreachable during the brief gap between
+        // natural tunnel expiry and replacement build completion.
         if (_settings.isInbound()) {
-            return _alive && size() > 0;
+            return _alive && (size() > 0 || getInProgressCount() > 0);
+        }
+
+        // For outbound pools to local destinations: the LS is published by our
+        // own inbound pool. Same async signing issue applies. If the destination
+        // runs on this router, it's reachable.
+        if (_context.clientManager().isLocal(_settings.getDestination())) {
+            return true;
         }
 
         Hash destHash = _settings.getDestination().calculateHash();
@@ -2359,6 +2573,24 @@ public class TunnelPool {
             }
             return rv.toString();
         }
+    }
+
+    /**
+     * Format a pool identity for log messages, combining nickname and truncated hash.
+     * Format: "nickname/hash" if nickname set, or just "hash" if not.
+     * Globally available helper for consistent log formatting across all tunnel pool code.
+     *
+     * @param settings the pool settings
+     * @return formatted identity string
+     * @since 0.9.70+
+     */
+    public static String formatPoolIdentity(TunnelPoolSettings settings) {
+        String nickname = settings.getDestinationNickname();
+        Hash dest = settings.getDestination();
+        if (nickname != null) {
+            return nickname + " / " + dest.toBase32().substring(0, 8);
+        }
+        return dest.toBase32().substring(0, 8);
     }
 
 }
