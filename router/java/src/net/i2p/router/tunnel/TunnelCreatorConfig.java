@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Base64;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.data.TunnelId;
@@ -34,6 +35,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private final boolean _isInbound;
     private int _messagesProcessed;
     private long _verifiedBytesTransferred;
+    private long _lastTransferredTime;
     private final AtomicInteger _failures = new AtomicInteger();
     private volatile TunnelTestStatus _testStatus = TunnelTestStatus.UNTESTED;
     private volatile long _lastTestStartTime;
@@ -187,11 +189,12 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      *  This calls profile manager tunnelDataPushed1m() for each peer
      */
-    public synchronized void incrementVerifiedBytesTransferred(int bytes) {
-        _verifiedBytesTransferred += bytes;
-        _peakThroughputCurrentTotal += bytes;
-        long now = System.currentTimeMillis();
-        long timeSince = now - _peakThroughputLastCoallesce;
+     public synchronized void incrementVerifiedBytesTransferred(int bytes) {
+         _verifiedBytesTransferred += bytes;
+         _peakThroughputCurrentTotal += bytes;
+         long now = System.currentTimeMillis();
+         _lastTransferredTime = now;
+         long timeSince = now - _peakThroughputLastCoallesce;
         if (timeSince >= 60*1000) {
             long tot = _peakThroughputCurrentTotal;
             int normalized = (int) (tot * 60d*1000d / timeSince);
@@ -209,6 +212,11 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     public synchronized long getVerifiedBytesTransferred() {return _verifiedBytesTransferred;}
+
+    /**
+     *  When we last sent or received data on this tunnel
+     */
+    public synchronized long getLastTransferred() { return _lastTransferredTime; }
 
     /**
      * The tunnel failed a test, so (maybe) stop using it
@@ -551,6 +559,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
                 else if (_isInbound || i == 0) {buf.append(".local");}
                 if (i + 1 < _peers.length) {buf.append(" -> ");}
             }
+            if (_lastTransferredTime > 0)
+                buf.append("\n* Last traffic: ").append(DataHelper.formatTime(_lastTransferredTime));
             buf.append("\n* Expires: ").append(new Date(_expiration));
             if (_replyMessageId > 0) {buf.append("; [ReplyMsgID ").append(_replyMessageId).append("]");}
             if (_messagesProcessed > 0) {

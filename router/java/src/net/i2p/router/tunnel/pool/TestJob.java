@@ -640,6 +640,19 @@ public class TestJob extends JobImpl {
         _cfg.setTestStarted();
 
         if (_cfg.isInbound()) {
+            // Skip testing inbound tunnels that recently received data —
+            // they're obviously working and testing risks false failures on
+            // high-bandwidth tunnels.
+            if (ctx.clock().now() - _cfg.getLastTransferred() < MIN_TEST_DELAY) {
+                if (_log.shouldWarn())
+                    _log.warn("Skipping test on " + _cfg + " that recently received data");
+                CONCURRENT_TESTS.decrementAndGet();
+                if (!scheduleRetest(false)) {
+                    cleanupTunnelTracking();
+                    decrementTotalJobs();
+                }
+                return;
+            }
             _replyTunnel = _cfg;
             if (isExploratory) {
                 _outTunnel = ctx.tunnelManager().selectOutboundTunnel();
