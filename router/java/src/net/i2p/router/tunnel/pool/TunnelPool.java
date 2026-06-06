@@ -1401,15 +1401,36 @@ public class TunnelPool {
      *  Remove the tunnel from the pool.
      *  @param cfg the tunnel to remove
      */
+    /**
+     *  Does this pool publish a LeaseSet to the network?
+     *  Structural: inbound + non-exploratory. Additionally, for
+     *  I2CP pools, the session's i2cp.dontPublishLeaseSet option
+     *  can suppress publication.
+     */
+    private boolean publishesLeaseSet() {
+        if (!_settings.isInbound() || _settings.isExploratory()) {return false;}
+        Hash dest = _settings.getDestination();
+        if (dest == null) {return false;}
+        return _context.clientManager().shouldPublishLeaseSet(dest);
+    }
+
     private void fail(TunnelInfo cfg) {
-        // Never remove tunnels via fail() — let ExpireJob handle all removal.
-        // Removing tunnels here creates a gap before replacements are built,
-        // causing "No tunnels available" until the replacement completes.
-        // Tunnels are deprioritized by consecutiveFailures in selectTunnel()
-        // and removed naturally when they expire. This applies to ALL pools
-        // including exploratory — temporary FAILED tunnels are better than none.
-        if (_log.shouldWarn()) {
-            _log.warn("NOT removing tunnel via fail(): " + cfg);
+        // A LeaseSet only contains inbound gateway tunnels. Keep inbound
+        // FAILING tunnels as fallback entries so the destination stays
+        // reachable even if all GOOD tunnels expire. Outbound tunnels are
+        // never in a LeaseSet — remove them once they pass the selectTunnel()
+        // skip threshold (> 1 failure) so ensureSufficientTunnels() can
+        // build a replacement.
+        if (cfg.isInbound()) {
+            if (_log.shouldWarn()) {
+                _log.warn("NOT removing inbound tunnel via fail(): " + cfg);
+            }
+        } else if (cfg.getConsecutiveFailures() > 1) {
+            if (_log.shouldWarn()) {
+                _log.warn("Removing failed outbound tunnel (" + cfg.getConsecutiveFailures() +
+                          " failures): " + cfg);
+            }
+            removeTunnel(cfg);
         }
     }
 
@@ -1705,9 +1726,10 @@ public class TunnelPool {
      *  @since 0.9.49
      */
     private void requestLeaseSet(LeaseSet ls) {
-        if (!_settings.isInbound() || _settings.isExploratory()) {
-            return;
-        }
+        // Always register the LS locally so ClientManager can serve it to
+        // sidebar queries and local consumers. Network publication is
+        // handled by ClientManager.shouldPublishLeaseSet() which checks
+        // i2cp.dontPublishLeaseSet internally.
         _context.clientManager().requestLeaseSet(_settings.getDestination(), ls);
         Set<Hash> aliases = _settings.getAliases();
         if (aliases != null && !aliases.isEmpty()) {
@@ -2307,22 +2329,23 @@ public class TunnelPool {
            else {pool = _manager.getInboundExploratoryPool();}
            paired = (PooledTunnelCreatorConfig) pool.getTunnel(pairedGW);
        }
-        if (paired != null && paired.getLength() > 1) {
-            if (success) {
-                // Only seed latency for UNTESTED paired tunnels — don't
-                // overwrite real test results with build-time RTT estimates.
-                if (paired.getTestStatus() == net.i2p.router.TunnelTestStatus.UNTESTED) {
-                    long requestedOn = cfg.getExpiration() - 10*60*1000;
-                    int rtt = (int) (_context.clock().now() - requestedOn);
-                    if (rtt > 0) {
-                        paired.addLatencySample(rtt);
-                    }
-                }
-            }
-            // On failure: don't touch the paired tunnel's test status.
-            // A build failure in this direction doesn't indicate the paired
-            // tunnel is broken — the failure was in the new tunnel's path.
-        }
+         if (paired != null && paired.getLength() > 1) {
+             if (success) {
+                 // Seed UNTESTED paired tunnels as GOOD on build success so
+                 // the pool has at least one usable tunnel. Once tested
+                 // (GOOD/FAILING), build RTT doesn't overwrite real results.
+                 if (paired.getTestStatus() == net.i2p.router.TunnelTestStatus.UNTESTED) {
+                     long requestedOn = cfg.getExpiration() - 10*60*1000;
+                     int rtt = (int) (_context.clock().now() - requestedOn);
+                     if (rtt > 0) {
+                         paired.testSuccessful(rtt);
+                     }
+                 }
+             }
+             // On failure: don't touch the paired tunnel's test status.
+             // A build failure in this direction doesn't indicate the paired
+             // tunnel is broken — the failure was in the new tunnel's path.
+         }
     }
 
     /**
