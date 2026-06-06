@@ -447,6 +447,13 @@ public class HostChecker {
                 removeFromClientTracking(destHash);
                 return result;
             } else {
+                // Not in local cache — will be fetched remotely for HostChecker.
+                // Mark it so removeFromCache() only purges if this LS was
+                // freshly fetched for us, not if it was independently cached
+                // by another client (e.g. HTTP Proxy).
+                if (netDb instanceof KademliaNetworkDatabaseFacade) {
+                    ((KademliaNetworkDatabaseFacade) netDb).markHostCheckerLeaseSet(destHash);
+                }
                 return lookupLeaseSetRemotely(hostname, destination, destHash, startTime, existingResponseTime);
             }
         } catch (Exception e) {

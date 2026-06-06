@@ -145,6 +145,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Used to refresh remote LeaseSets we're actively accessing and remove after 90s inactivity.
      */
     private final ConcurrentHashMap<Hash, Long> _clientLeaseSetAccessTime = new ConcurrentHashMap<>(32);
+    /** Tracks destination hashes whose LeaseSets were fetched on behalf of
+     *  HostChecker.  When HostChecker is done and calls removeFromCache(),
+     *  only LeaseSets in this set are eligible for purge — pre-existing
+     *  LeaseSets that were independently cached by other clients are preserved.
+     *  @since 2.12.0 */
+    private final Set<Hash> _hostCheckerLeaseSets = ConcurrentHashMap.newKeySet(8);
 
     /** Cached set of blocked countries - lazily initialized */
     private volatile Set<String> _blockedCountries;
@@ -2494,7 +2500,27 @@ return false;
     }
 
     /**
+     * Mark a destination hash as being looked up on behalf of HostChecker.
+     * The LeaseSet will be eligible for removal from cache when HostChecker
+     * finishes its ping test.  LeaseSets that were independently cached
+     * (not in this set) are preserved.
+     *
+     * @param hash the destination hash being pinged by HostChecker
+     * @since 2.12.0
+     */
+    public void markHostCheckerLeaseSet(Hash hash) {
+        if (hash != null) {
+            _hostCheckerLeaseSets.add(hash);
+        }
+    }
+
+    /**
      * Remove a remote LeaseSet from local cache (e.g., after HostChecker has used it).
+     * Only removes LeaseSets that were explicitly fetched for HostChecker
+     * (tracked via markHostCheckerLeaseSet()).  Pre-existing LeaseSets that
+     * were independently cached by other clients (e.g. HTTP Proxy browsing)
+     * are preserved.
+     *
      * @param hash the LeaseSet hash to remove
      */
     public void removeFromCache(Hash hash) {
@@ -2504,6 +2530,16 @@ return false;
             LeaseSet ls = (LeaseSet) data;
             // Only remove remote LeaseSets, not our own local ones
             if (!_context.clientManager().isLocal(hash)) {
+                // Only remove LeaseSets that were explicitly fetched for HostChecker.
+                // If another client independently cached this LS (not in the set),
+                // it may still be in use and should not be purged.
+                if (!_hostCheckerLeaseSets.remove(hash)) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Not removing LeaseSet from cache — independently cached, not a HostChecker lookup: " +
+                                   hash.toBase32().substring(0, 8));
+                    }
+                    return;
+                }
                 _ds.remove(hash);
                 knownLeaseSetsCount.updateAndGet(v -> Math.max(0, v - 1));
                 if (_log.shouldDebug()) {
