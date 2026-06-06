@@ -1414,13 +1414,22 @@ public class TunnelPool {
     }
 
     private void fail(TunnelInfo cfg) {
-        // A LeaseSet only contains inbound gateway tunnels, but for
-        // exploratory pools (the only caller of fail()) no LeaseSet is
-        // published — keeping dead inbound tunnels only wastes slots.
-        // The selectTunnel() skip threshold (> 1 consecutive failure) is
-        // the same for both directions.  The pool will build replacements
-        // via ensureSufficientTunnels().
         if (cfg.getConsecutiveFailures() > 1) {
+            // Guard removal: keep at least one GOOD tunnel in client pools and
+            // at least two in server pools (to prevent simultaneous-removal races).
+            // The failing tunnel has consecutiveFailures > 1 so getActiveTunnelCount()
+            // already excludes it — activeCount is the count of OTHER GOOD tunnels.
+            boolean isServerPool = _settings.isInbound() && !_settings.isExploratory();
+            int activeCount = getActiveTunnelCount();
+            boolean hasGoodReplacement = isServerPool ? activeCount > 1 : activeCount > 0;
+            if (!hasGoodReplacement) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Not removing " + (cfg.isInbound() ? "inbound" : "outbound") +
+                              " tunnel via fail() — no good replacement available " +
+                              "(active=" + activeCount + ", server=" + isServerPool + "): " + cfg);
+                }
+                return;
+            }
             if (_log.shouldWarn()) {
                 _log.warn("Removing " + (cfg.isInbound() ? "inbound" : "outbound") +
                           " tunnel via fail() (" + cfg.getConsecutiveFailures() +
@@ -1974,6 +1983,7 @@ public class TunnelPool {
      */
     private void pruneNonGoodTunnels() {
         List<TunnelInfo> toRemove = new ArrayList<TunnelInfo>();
+        int goodCount = 0;
         _tunnelsLock.lock();
         try {
             for (int i = 0; i < _tunnels.size(); i++) {
@@ -1981,9 +1991,26 @@ public class TunnelPool {
                 if (t.getTunnelFailed() ||
                     t.getTestStatus() != net.i2p.router.TunnelTestStatus.GOOD) {
                     toRemove.add(t);
+                } else {
+                    goodCount++;
                 }
             }
         } finally {_tunnelsLock.unlock();}
+        if (toRemove.isEmpty()) {return;}
+        // Only prune non-GOOD tunnels if enough GOOD ones remain as replacements.
+        // For server pools (inbound + non-exploratory), require 2+ GOOD to prevent
+        // races; for others, 1+ GOOD is sufficient.  If the pool is fully degraded,
+        // keep the non-GOOD tunnels as degraded fallback — an empty pool is worse.
+        boolean isServerPool = _settings.isInbound() && !_settings.isExploratory();
+        int minGoodRequired = isServerPool ? 2 : 1;
+        if (goodCount < minGoodRequired) {
+            if (_log.shouldInfo()) {
+                _log.info("Skipping pruneNonGoodTunnels — not enough GOOD " +
+                          "(good=" + goodCount + ", non-good=" + toRemove.size() +
+                          ", server=" + isServerPool + ")");
+            }
+            return;
+        }
         for (TunnelInfo t : toRemove) {
             removeTunnel(t);
         }
