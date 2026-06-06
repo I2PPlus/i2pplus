@@ -251,6 +251,16 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     public int getTunnelFailures() {return _failures.get();}
 
+    /**
+     *  Reset the consecutive failure counter back to zero without marking the
+     *  tunnel as GOOD.  Used when a data-carrying tunnel fails a test — the
+     *  data proves it works, so the failure should not accumulate toward removal.
+     *  @since 0.9.69+
+     */
+    public void clearTestFailures() {
+        _failures.set(0);
+    }
+
     public void testSuccessful(int ms) {
         _failures.set(0);
         _testStatus = TunnelTestStatus.GOOD;

@@ -555,6 +555,20 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             return true;
         }
 
+        // Pre-qualification: prefer peers with recent tunnel test success or
+        // an active connection.  Peers that haven't been tested in hours and
+        // aren't connected are high-risk picks that tend to fail immediately
+        // after tunnel build.
+        Hash peerHash = ident.calculateHash();
+        PeerProfile profile = ctx.profileOrganizer().getProfile(peerHash);
+        if (profile != null && !ctx.commSystem().isBacklogged(peerHash)) {
+            boolean hasRecentTest = profile.getTunnelTestTimeAverage() > 0;
+            boolean isConnected = ctx.commSystem().isEstablished(peerHash);
+            if (!hasRecentTest && !isConnected && fastPeerCount >= 10) {
+                return true;
+            }
+        }
+
         // Peer is acceptable
         return false;
     }

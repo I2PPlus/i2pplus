@@ -477,7 +477,8 @@ public class TestJob extends JobImpl {
             _valid = false;
             return;
         }
-        // No delay for first test — test immediately after tunnel build completes
+        // Test immediately after tunnel build completes.  The test period
+        // (45-90s) already provides generous tolerance for transient latency.
         long startTime = ctx.clock().now();
         getTiming().setStartAfter(startTime);
     }
@@ -645,9 +646,32 @@ public class TestJob extends JobImpl {
             } else {
                 _outTunnel = ctx.tunnelManager().selectOutboundTunnel(_pool.getSettings().getDestination());
                 if (_outTunnel == null) {
-                    _outTunnel = ctx.tunnelManager().selectOutboundTunnel();
-                    if (_outTunnel != null && _log.shouldWarn())
-                        _log.warn("Falling back to exploratory outbound tunnel for test of " + _cfg);
+                    // No GOOD outbound tunnel — use any non-expired tunnel from
+                    // the paired outbound pool.  Untested tunnels are functional
+                    // (they just haven't been tested yet) and work fine as test
+                    // partners.  This prevents the deadlock where both directions
+                    // defer because neither has a tested partner.
+                    TunnelPool paired = _pool.getPairedPool();
+                    if (paired != null) {
+                        for (TunnelInfo t : paired.listTunnels()) {
+                            if (t.getExpiration() > now) {
+                                _outTunnel = t;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (_outTunnel == null) {
+                    if (_log.shouldWarn())
+                        _log.warn("No outbound tunnel for test of " + _cfg +
+                                  " -> Deferring (pool may be recovering)");
+                    ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
+                    CONCURRENT_TESTS.decrementAndGet();
+                    if (!scheduleRetest(false)) {
+                        cleanupTunnelTracking();
+                        decrementTotalJobs();
+                    }
+                    return;
                 }
             }
         } else {
@@ -657,9 +681,30 @@ public class TestJob extends JobImpl {
             } else {
                 _replyTunnel = ctx.tunnelManager().selectInboundTunnel(_pool.getSettings().getDestination());
                 if (_replyTunnel == null) {
-                    _replyTunnel = ctx.tunnelManager().selectInboundTunnel();
-                    if (_replyTunnel != null && _log.shouldWarn())
-                        _log.warn("Falling back to exploratory inbound tunnel for test of " + _cfg);
+                    // No GOOD inbound tunnel — use any non-expired tunnel from
+                    // the paired inbound pool.  Same rationale as above: untested
+                    // tunnels work fine as reply receivers for outbound tests.
+                    TunnelPool paired = _pool.getPairedPool();
+                    if (paired != null) {
+                        for (TunnelInfo t : paired.listTunnels()) {
+                            if (t.getExpiration() > now) {
+                                _replyTunnel = t;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (_replyTunnel == null) {
+                    if (_log.shouldWarn())
+                        _log.warn("No inbound tunnel for test of " + _cfg +
+                                  " -> Deferring (pool may be recovering)");
+                    ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
+                    CONCURRENT_TESTS.decrementAndGet();
+                    if (!scheduleRetest(false)) {
+                        cleanupTunnelTracking();
+                        decrementTotalJobs();
+                    }
+                    return;
                 }
             }
         }
@@ -670,14 +715,15 @@ public class TestJob extends JobImpl {
                 ? (PooledTunnelCreatorConfig) _replyTunnel
                 : null;
 
-        // Early viability guard
         if (_replyTunnel == null || _outTunnel == null) {
             if (_log.shouldWarn())
                 _log.warn("Insufficient tunnels to test " + _cfg + " with: " + _replyTunnel + " / " + _outTunnel);
-            ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
+            ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
             CONCURRENT_TESTS.decrementAndGet();
-            cleanupTunnelTracking();
-            decrementTotalJobs(); // Clean up total counter
+            if (!scheduleRetest(false)) {
+                cleanupTunnelTracking();
+                decrementTotalJobs();
+            }
             return;
         }
 
@@ -928,12 +974,53 @@ public class TestJob extends JobImpl {
         // GOOD tunnel to take over.  Without this, a pool where ALL tunnels
         // are failing will report DNR — keeping the tunnel alive (even degraded)
         // is better than having no tunnels at all.
-        boolean hasGoodReplacement = _pool.getActiveTunnelCount() > 0;
+        int activeCount = _pool.getActiveTunnelCount();
+        boolean hasGoodReplacement;
+        // A GOOD tunnel under test counts itself in getActiveTunnelCount().
+        // If this is the only GOOD tunnel, removing it would leave the pool
+        // empty — so require at least one OTHER good tunnel before allowing
+        // removal of a previously-GOOD tunnel.  Non-GOOD tunnels (FAILING,
+        // UNTESTED) don't count themselves, so > 0 is correct for those.
+        if (_cfg.getTestStatus() == net.i2p.router.TunnelTestStatus.GOOD) {
+            hasGoodReplacement = activeCount > 1;
+        } else {
+            hasGoodReplacement = activeCount > 0;
+        }
 
         if (isClientTunnel) {
             if (hasGoodReplacement) {
                 _cfg.incrementTestFailures();
                 _cfg.setTestFailed();
+                // After 3 consecutive failures with a GOOD replacement
+                // available, remove the tunnel — it's provably broken and
+                // retesting only wastes resources.
+                if (_cfg.getTunnelFailures() >= 3) {
+                    // Don't remove if tunnel has carried user data — the data
+                    // proves the tunnel is functional; transient test issues
+                    // should not force replacement.
+                    if (_cfg.getVerifiedBytesTransferred() > 0) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("Tunnel Test failed -> Keeping data-carrying tunnel: " + _cfg +
+                                      " (verified=" + _cfg.getVerifiedBytesTransferred() + " bytes)");
+                        }
+                        _cfg.clearTestFailures();
+                        if (!scheduleRetest(false)) {
+                            cleanupTunnelTracking();
+                            decrementTotalJobs();
+                        }
+                        return;
+                    }
+                    if (_log.shouldWarn()) {
+                        _log.warn("Tunnel Test failed -> Removing " + _cfg +
+                                  " after " + _cfg.getTunnelFailures() + " consecutive failures");
+                    }
+                    _pool.removeTunnel(_cfg);
+                    // not calling notifyServerPoolTestFailed() here since
+                    // removeTunnel already triggers refreshLeaseSet
+                    cleanupTunnelTracking();
+                    decrementTotalJobs();
+                    return;
+                }
             }
             // Always trigger LS renewal so the LeaseSet is re-published with
             // the best remaining tunnel's lease (via findBestDegradedTunnel
@@ -960,6 +1047,33 @@ public class TestJob extends JobImpl {
             if (hasGoodReplacement) {
                 _cfg.incrementTestFailures();
                 _cfg.setTestFailed();
+                // After 3 consecutive failures with a GOOD replacement
+                // available, remove the tunnel — unless it carried data.
+                if (_cfg.getTunnelFailures() >= 3) {
+                    // Don't remove if tunnel has carried user data — the data
+                    // proves the tunnel is functional; transient test issues
+                    // should not force replacement.
+                    if (_cfg.getVerifiedBytesTransferred() > 0) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("Tunnel Test failed -> Keeping previously-GOOD data-carrying tunnel: " + _cfg +
+                                      " (verified=" + _cfg.getVerifiedBytesTransferred() + " bytes)");
+                        }
+                        _cfg.clearTestFailures();
+                        if (!scheduleRetest(false)) {
+                            cleanupTunnelTracking();
+                            decrementTotalJobs();
+                        }
+                        return;
+                    }
+                    if (_log.shouldWarn()) {
+                        _log.warn("Tunnel Test failed -> Removing previously-GOOD " + _cfg +
+                                  " after " + _cfg.getTunnelFailures() + " consecutive failures");
+                    }
+                    _pool.removeTunnel(_cfg);
+                    cleanupTunnelTracking();
+                    decrementTotalJobs();
+                    return;
+                }
             }
 
             if (_log.shouldWarn()) {
@@ -1026,6 +1140,18 @@ public class TestJob extends JobImpl {
             Rate r = tspt.getRate(RateConstants.ONE_MINUTE);
             if (r != null) {
                 base = 3 * (int) r.getAverageValue();
+            }
+        }
+
+        // If the pool has observed successful test latencies, allow more time
+        // so that tests that complete on the upper edge of the distribution
+        // are not spuriously timed out.
+        RateStat testTimeStat = ctx.statManager().getRate("tunnel.testSuccessTime");
+        if (testTimeStat != null) {
+            Rate oneMin = testTimeStat.getRate(RateConstants.ONE_MINUTE);
+            if (oneMin != null) {
+                // 3x the average observed test time as a generous timeout
+                base = Math.max(base, 3 * (int) oneMin.getAverageValue());
             }
         }
 

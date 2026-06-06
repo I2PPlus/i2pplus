@@ -1414,19 +1414,16 @@ public class TunnelPool {
     }
 
     private void fail(TunnelInfo cfg) {
-        // A LeaseSet only contains inbound gateway tunnels. Keep inbound
-        // FAILING tunnels as fallback entries so the destination stays
-        // reachable even if all GOOD tunnels expire. Outbound tunnels are
-        // never in a LeaseSet — remove them once they pass the selectTunnel()
-        // skip threshold (> 1 failure) so ensureSufficientTunnels() can
-        // build a replacement.
-        if (cfg.isInbound()) {
+        // A LeaseSet only contains inbound gateway tunnels, but for
+        // exploratory pools (the only caller of fail()) no LeaseSet is
+        // published — keeping dead inbound tunnels only wastes slots.
+        // The selectTunnel() skip threshold (> 1 consecutive failure) is
+        // the same for both directions.  The pool will build replacements
+        // via ensureSufficientTunnels().
+        if (cfg.getConsecutiveFailures() > 1) {
             if (_log.shouldWarn()) {
-                _log.warn("NOT removing inbound tunnel via fail(): " + cfg);
-            }
-        } else if (cfg.getConsecutiveFailures() > 1) {
-            if (_log.shouldWarn()) {
-                _log.warn("Removing failed outbound tunnel (" + cfg.getConsecutiveFailures() +
+                _log.warn("Removing " + (cfg.isInbound() ? "inbound" : "outbound") +
+                          " tunnel via fail() (" + cfg.getConsecutiveFailures() +
                           " failures): " + cfg);
             }
             removeTunnel(cfg);
