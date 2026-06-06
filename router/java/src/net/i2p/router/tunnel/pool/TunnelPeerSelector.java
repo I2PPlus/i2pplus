@@ -555,6 +555,14 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             return true;
         }
 
+        // Skip pre-qualification during startup — peers haven't accumulated
+        // test history yet, so rejecting untested peers would block all
+        // tunnel builds (including Ping tunnels for HostChecker).
+        long uptime = ctx.router().getUptime();
+        if (uptime > 0 && uptime < STARTUP_WARNING_SUPPRESS_MS) {
+            return false;
+        }
+
         // Pre-qualification: prefer peers with recent tunnel test success or
         // an active connection.  Peers that haven't been tested in hours and
         // aren't connected are high-risk picks that tend to fail immediately
