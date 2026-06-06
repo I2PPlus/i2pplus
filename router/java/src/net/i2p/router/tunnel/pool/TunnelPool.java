@@ -1087,7 +1087,7 @@ public class TunnelPool {
     /** Throttle refresh — publications are only needed when tunnels change,
      *  and the LeaseSet has a 10-minute lifespan. 3-minute throttle prevents
      *  churn while still keeping the LeaseSet reasonably current. */
-    private static final long REFRESH_THROTTLE = 5 * 1000;
+    private static final long REFRESH_THROTTLE = 5 * 60 * 1000;
     /** Initialize to allow first request immediately */
     private long _lastRefreshTime = -REFRESH_THROTTLE;
     /** Track last proactive LeaseSet publish time for rate limiting */
@@ -1209,10 +1209,9 @@ public class TunnelPool {
             // the pool from draining to zero.
             ensureSufficientTunnels();
             if (_settings.isInbound() && !_settings.isExploratory()) {
-                // Force-publish — a tunnel just left the pool and the LS must be
-                // updated immediately.  Without force, the 5s throttle defers
-                // publication and selectTunnel() may report DNR during the gap.
-                refreshLeaseSet(true);
+                // Let the 5s REFRESH_THROTTLE batch rapid removals rather than
+                // publishing a new LeaseSet on every single removal.
+                refreshLeaseSet(false);
             }
         }
 
@@ -1469,6 +1468,9 @@ public class TunnelPool {
                 requestLeaseSet(ls, true);
             }
             _leaseSetRepublishPending = false;
+            // Prune non-GOOD tunnels after publishing so the pool
+            // replaces them on the next build cycle.
+            pruneNonGoodTunnels();
         }
     }
 
@@ -1634,6 +1636,9 @@ public class TunnelPool {
             if (ls != null) {
                 requestLeaseSet(ls);
             }
+            // On each publish cycle, clean out tunnels that haven't passed
+            // testing so ensureSufficientTunnels() builds replacements.
+            pruneNonGoodTunnels();
         }
     }
 
@@ -1695,27 +1700,14 @@ public class TunnelPool {
 
     /**
      * Called by TestJob when a server pool tunnel fails a test but is retained.
-     * Immediately builds and publishes an emergency LeaseSet via the degraded
-     * tunnel fallback path, and also schedules a deferred republish to batch
-     * any additional failures within the 10s window.
+     * Schedules a deferred republish to batch any additional failures within
+     * the 10s debounce window rather than publishing an emergency LeaseSet
+     * on every single failure.
      * @since 0.9.69+
      */
     void notifyServerPoolTestFailed() {
         if (!_settings.isInbound() || _settings.isExploratory() || !_alive)
             return;
-        LeaseSet ls;
-        _tunnelsLock.lock();
-        try {
-            ls = locked_buildNewLeaseSet();
-            if (ls == null) {
-                TunnelInfo fallback = findBestDegradedTunnel();
-                if (fallback != null)
-                    ls = buildEmergencyLeaseSet(fallback);
-            }
-        } finally { _tunnelsLock.unlock(); }
-        if (ls != null) {
-            requestLeaseSet(ls, true);
-        }
         scheduleDeferredLeaseSetRepublish();
     }
 
@@ -1857,7 +1849,7 @@ public class TunnelPool {
 
         TunnelInfo zeroHopTunnel = null;
         Lease zeroHopLease = null;
-        TreeSet<Lease> leases = new TreeSet<Lease>(new LeaseComparator());
+        List<TunnelInfo> goodTunnels = new ArrayList<TunnelInfo>();
         for (int i = 0; i < _tunnels.size(); i++) {
             TunnelInfo tunnel = _tunnels.get(i);
             // Only include tunnels that have passed at least one test (GOOD).
@@ -1875,9 +1867,9 @@ public class TunnelPool {
                 // Keep only the one that expires the latest.
                 if (zeroHopTunnel != null) {
                     if (zeroHopTunnel.getExpiration() > tunnel.getExpiration()) {continue;}
-                    if (zeroHopLease != null) {leases.remove(zeroHopLease);}
                 }
                 zeroHopTunnel = tunnel;
+                continue;
             }
 
             TunnelId inId = tunnel.getReceiveTunnelId(0);
@@ -1886,23 +1878,45 @@ public class TunnelPool {
                 _log.error(toString() + "-> Broken? Tunnel has no InboundGateway / TunnelID? " + tunnel);
                 continue;
             }
-            Lease lease = new Lease();
-            // Bugfix
-            // ExpireJob reduces the expiration, which causes a 2nd leaseset with the same lease
-            // to have an earlier expiration, so it isn't stored.
-            // Get the "real" expiration from the gateway hop config,
-            // HopConfig expirations are the same as the "real" expiration and don't change
-            // see configureNewTunnel()
-            long realExpiration = tunnel.getExpiration();
-            if (tunnel instanceof TunnelCreatorConfig) {
-                realExpiration = ((TunnelCreatorConfig) tunnel).getConfig(0).getExpiration();
+            goodTunnels.add(tunnel);
+        }
+
+        // Sort by latency ascending — prefer fast tunnels for the LeaseSet.
+        // Tunnels with no latency data sort after tested ones.
+        Collections.sort(goodTunnels, new Comparator<TunnelInfo>() {
+            public int compare(TunnelInfo a, TunnelInfo b) {
+                int la = getTunnelAvgLatency(a);
+                int lb = getTunnelAvgLatency(b);
+                if (la < 0 && lb < 0) return 0;
+                if (la < 0) return 1;
+                if (lb < 0) return -1;
+                return Integer.compare(la, lb);
             }
-            lease.setEndDate(realExpiration);
-            lease.setTunnelId(inId);
-            lease.setGateway(gw);
-            leases.add(lease);
-            // Remember in case we want to remove it for a later-expiring zero-hopper
-            if (tunnel.getLength() <= 1) {zeroHopLease = lease;}
+        });
+
+        // Take only the best latency tunnels up to wanted count
+        int wantedLeases = wanted - (zeroHopTunnel != null ? 1 : 0);
+        if (goodTunnels.size() > wantedLeases) {
+            goodTunnels = new ArrayList<TunnelInfo>(goodTunnels.subList(0, wantedLeases));
+        }
+
+        TreeSet<Lease> leases = new TreeSet<Lease>(new LeaseComparator());
+
+        // Add zero-hop lease if present
+        if (zeroHopTunnel != null) {
+            Lease lease = buildLeaseFromTunnel(zeroHopTunnel);
+            if (lease != null) {
+                leases.add(lease);
+                zeroHopLease = lease;
+            }
+        }
+
+        // Add latency-sorted GOOD tunnels
+        for (TunnelInfo tunnel : goodTunnels) {
+            Lease lease = buildLeaseFromTunnel(tunnel);
+            if (lease != null) {
+                leases.add(lease);
+            }
         }
 
         /* Go ahead and use less leases for now, hopefully a new tunnel will be built soon,
@@ -1945,6 +1959,37 @@ public class TunnelPool {
         for (int i = 0; i < count; i++) {ls.addLease(iter.next());}
         if (_log.shouldInfo()) {_log.info(toString() + " -> New LeaseSet built" + ls);}
         return ls;
+    }
+
+    /**
+     *  @return average test latency in ms for the tunnel, or -1 if unknown
+     */
+    private static int getTunnelAvgLatency(TunnelInfo t) {
+        if (t instanceof TunnelCreatorConfig) {
+            return ((TunnelCreatorConfig) t).getAverageLatency();
+        }
+        return -1;
+    }
+
+    /**
+     * Remove all tunnels that are not GOOD from the pool.
+     * Caller should NOT hold _tunnelsLock.
+     */
+    private void pruneNonGoodTunnels() {
+        List<TunnelInfo> toRemove = new ArrayList<TunnelInfo>();
+        _tunnelsLock.lock();
+        try {
+            for (int i = 0; i < _tunnels.size(); i++) {
+                TunnelInfo t = _tunnels.get(i);
+                if (t.getTunnelFailed() ||
+                    t.getTestStatus() != net.i2p.router.TunnelTestStatus.GOOD) {
+                    toRemove.add(t);
+                }
+            }
+        } finally {_tunnelsLock.unlock();}
+        for (TunnelInfo t : toRemove) {
+            removeTunnel(t);
+        }
     }
 
     /**
