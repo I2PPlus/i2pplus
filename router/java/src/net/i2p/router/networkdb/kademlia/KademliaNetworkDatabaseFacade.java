@@ -135,7 +135,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final long BATCH_WINDOW_MS = 15 * 1000;
     private static final long BATCH_PROCESS_DELAY = 5 * 1000;
 
-    private static final long LOCAL_LEASESET_REFRESH_INTERVAL = 3*60*1000;  // 3 minutes
+    private static final long LOCAL_LEASESET_REFRESH_INTERVAL = 150*1000;  // 2.5 minutes
 
     /** Singleton job to refresh client LeaseSets - only one instance exists */
     private volatile RefreshClientLeaseSetsJob _refreshClientLeaseSetsJob;
@@ -2817,16 +2817,15 @@ return false;
     /**
      * Refresh client LeaseSets we're actively using and remove stale ones.
      * Only applies to client NetDB (not main NetDB).
-     * 1. Remove LeaseSets not accessed in 180s
-     * 2. Re-fetch LeaseSets accessed between 135s-180s ago
-     * 3. If LeaseSet expires in < 60s, refresh proactively
+     * 1. Remove LeaseSets not accessed in 150s
+     * 2. Re-fetch every tracked LeaseSet each cycle (unconditional)
+     * 3. If LeaseSet expires in < 60s, refresh proactively (early-out)
      */
     private static final long PROACTIVE_REFRESH_THRESHOLD = 60 * 1000;  // Refresh if < 60s to expiry
 
     private void refreshClientLeaseSets() {
         long now = _context.clock().now();
-        long inactiveThreshold = now - LOCAL_LEASESET_REFRESH_INTERVAL;          // 180s
-        long refreshThreshold = now - LOCAL_LEASESET_REFRESH_INTERVAL * 3 / 4;   // 135s
+        long inactiveThreshold = now - LOCAL_LEASESET_REFRESH_INTERVAL;          // 150s
 
         // If client doesn't have active tunnels, skip refresh entirely
         TunnelPool clientPool = _context.tunnelManager().getOutboundPool(_dbid);
@@ -2915,8 +2914,8 @@ return false;
                         // Always use client tunnels for client subDb refresh
                         _clientLeaseSetAccessTime.put(key, now);
                         lookupLeaseSetRemotely(key, _dbid);
-                        if (_log.shouldDebug()) {
-                            _log.debug("Proactive refresh for " + hostname + " (expires in " + (timeToExpiry/1000) + "s)");
+                        if (_log.shouldInfo()) {
+                            _log.info("Proactive refresh for " + hostname + " (expires in " + (timeToExpiry/1000) + "s)");
                         }
                         processed++;
                         continue;
@@ -2926,17 +2925,17 @@ return false;
             if (lastAccess < inactiveThreshold) {
                 iter.remove();
                 removed++;
-                if (_log.shouldDebug()) {
-                    _log.debug("Removing stale client LeaseSet: " + hostname);
+                if (_log.shouldInfo()) {
+                    _log.info("Removing stale client LeaseSet: " + hostname);
                 }
-            } else if (lastAccess < refreshThreshold) {
-                // Only refresh if we have tunnels built to this destination (already checked above)
-                // Update access time instead of removing - keeps entry for periodic refresh
-                // Always use client tunnels for client subDb - exploratory tunnels won't work
+            } else {
+                // Refresh every cycle while tracked — the server may have
+                // published new tunnel endpoints.  Do not gate on access
+                // recency; stale LS data causes connection failures.
                 _clientLeaseSetAccessTime.put(key, now);
                 lookupLeaseSetRemotely(key, _dbid);
-                if (_log.shouldDebug()) {
-                    _log.debug("Refreshing client LeaseSet: " + hostname);
+                if (_log.shouldInfo()) {
+                    _log.info("Refreshing client LeaseSet: " + hostname);
                 }
                 processed++;
             }
