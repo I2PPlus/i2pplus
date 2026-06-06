@@ -92,6 +92,10 @@ class ClientPeerSelector extends TunnelPeerSelector {
         if (length > 0) {
             // Cache buildSuccess to avoid repeated expensive calls
             double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+            // Under stress (< 40% build success), prefer HighCapacity peers over
+            // FastPeers — speed-ranked peers are often overloaded/rejecting while
+            // HighCapacity peers have proven reliability in completed tunnels.
+            boolean useHighCapPrimary = buildSuccess < ATTACK_THRESHOLD;
 
             // special cases
             boolean v6Only = isIPv6Only();
@@ -325,9 +329,16 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
                     }
                 } else {
-                    // Standard upstream selection: pick from fast pool with appropriate slice
-                    ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, randomKey,
-                        length == 2 ? SLICE_0_1 : SLICE_0, ipRestriction, ipSet);
+                    if (useHighCapPrimary) {
+                        ctx.profileOrganizer().selectHighCapacityPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
+                        if (matches.isEmpty()) {
+                            ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, randomKey,
+                                length == 2 ? SLICE_0_1 : SLICE_0, ipRestriction, ipSet);
+                        }
+                    } else {
+                        ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, randomKey,
+                            length == 2 ? SLICE_0_1 : SLICE_0, ipRestriction, ipSet);
+                    }
                 }
 
                 matches.remove(ctx.routerHash());
@@ -342,14 +353,22 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     }
                     int middleCount = length - 2;
 
-                    // Upstream-style: select from SLICE_2_3 (slower subtier for middle hops)
-                    ctx.profileOrganizer().selectFastPeers(middleCount, exclude, matches, randomKey, SLICE_2_3, ipRestriction, ipSet);
-                    if (matches.size() < middleCount) {
-                        ctx.profileOrganizer().selectFastPeers(middleCount - matches.size(), exclude, matches, randomKey, SLICE_2_3, ipRestriction, ipSet);
-                    }
-                    // Fallback: try broader selection if SLICE_2_3 didn't have enough
-                    if (matches.size() < middleCount) {
-                        ctx.profileOrganizer().selectFastPeers(middleCount - matches.size(), exclude, matches, 0, null);
+                    if (useHighCapPrimary) {
+                        ctx.profileOrganizer().selectHighCapacityPeers(middleCount, exclude, matches, ipRestriction, ipSet);
+                        if (matches.size() < middleCount) {
+                            ctx.profileOrganizer().selectFastPeers(middleCount - matches.size(), exclude, matches, randomKey, SLICE_2_3, ipRestriction, ipSet);
+                        }
+                        if (matches.size() < middleCount) {
+                            ctx.profileOrganizer().selectFastPeers(middleCount - matches.size(), exclude, matches, 0, null);
+                        }
+                    } else {
+                        ctx.profileOrganizer().selectFastPeers(middleCount, exclude, matches, randomKey, SLICE_2_3, ipRestriction, ipSet);
+                        if (matches.size() < middleCount) {
+                            ctx.profileOrganizer().selectFastPeers(middleCount - matches.size(), exclude, matches, randomKey, SLICE_2_3, ipRestriction, ipSet);
+                        }
+                        if (matches.size() < middleCount) {
+                            ctx.profileOrganizer().selectFastPeers(middleCount - matches.size(), exclude, matches, 0, null);
+                        }
                     }
                     if (matches.size() < middleCount && ctx.getBooleanProperty(PROP_LEGACY_SELECTION)) {
                         ctx.profileOrganizer().selectFastPeers(middleCount, exclude, matches, 0, null);
@@ -416,11 +435,16 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         log.info("Selecting closest Outbound... \n* Excluding: " + formatExcludedPeers(exclude));
                     }
                 }
-                // Upstream-style: select from appropriate slice
-                ctx.profileOrganizer().selectFastPeers(1, exclude, matches, randomKey, length == 2 ? SLICE_2_3 : SLICE_1, ipRestriction, ipSet);
-                if (matches.isEmpty()) {
-                    // Raw fallback: bypass selectivity for startup / low-profile peers
+                if (useHighCapPrimary) {
+                    ctx.profileOrganizer().selectHighCapacityPeers(1, exclude, matches, ipRestriction, ipSet);
+                    if (matches.isEmpty()) {
+                        ctx.profileOrganizer().selectFastPeers(1, exclude, matches, randomKey, length == 2 ? SLICE_2_3 : SLICE_1, ipRestriction, ipSet);
+                    }
+                } else {
                     ctx.profileOrganizer().selectFastPeers(1, exclude, matches, randomKey, length == 2 ? SLICE_2_3 : SLICE_1, ipRestriction, ipSet);
+                    if (matches.isEmpty()) {
+                        ctx.profileOrganizer().selectFastPeers(1, exclude, matches, randomKey, length == 2 ? SLICE_2_3 : SLICE_1, ipRestriction, ipSet);
+                    }
                 }
                 if (matches.isEmpty()) {
                     ctx.profileOrganizer().selectNotFailingPeers(1, exclude, matches, false, 0, null);
