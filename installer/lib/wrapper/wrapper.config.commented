@@ -91,6 +91,13 @@ wrapper.java.classpath.1=$INSTALL_PATH/lib/*.jar
 #  Uncomment this to use the system classpath as well (e.g. to get tools.jar)
 #  wrapper.java.classpath.2=%CLASSPATH%
 
+#  Tell the native wrapper process the exact path to its own JAR.
+#  Starting with JDK 26, the wrapper's classpath scanning for
+#  wrapper.jar may fail (module system / URLClassLoader changes).
+#  Setting this explicitly bypasses the scan. Required for JDK 26+;
+#  harmless on older JDKs (wrapper versions 3.5.55+).
+wrapper.jarfile=lib/wrapper.jar
+
 #  Java Library Path (location of Wrapper.DLL or libwrapper.so)
 wrapper.java.library.path.1=$INSTALL_PATH
 wrapper.java.library.path.2=$INSTALL_PATH/lib
