@@ -170,17 +170,7 @@ public class PeerTestJob extends JobImpl {
         int cores = SystemVersion.getCores();
         long memory = SystemVersion.getMaxMemory();
         int testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, DEFAULT_PEER_TEST_CONCURRENCY);
-        if (SystemVersion.getCPULoadAvg() > 80) {testConcurrent = 1;}
-        // Reduce concurrency when tunnel builds are failing — avoid adding
-        // load during a failure cascade when peer tests are likely to fail
-        // and would just consume tunnel resources.
-        double buildSuccess = getContext().profileOrganizer().getTunnelBuildSuccess();
-        if (buildSuccess < 0.50 && testConcurrent > 1) {
-            testConcurrent = Math.max(1, testConcurrent / 2);
-        }
-        if (buildSuccess < 0.30) {
-            testConcurrent = 1;
-        }
+        if (SystemVersion.getCPULoadAvg() > 95) {testConcurrent = 1;}
         return testConcurrent;
     }
 
