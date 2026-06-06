@@ -1,3 +1,60 @@
+2026-06-06 dr|z3d
+  * Router: skip peer pre-qualification during first 15 min of uptime
+  * NetDB: only purge HostChecker-fetched LS from cache; LS refresh
+    interval 150s with unconditional re-fetch each cycle
+
+2026-06-05 dr|z3d
+  * Router:
+    - Tunnel pool: fix cascading collapse — keep failing tunnels for
+      retest; paired pool fallback; data-based survival for tunnels with
+      verified content; remove 60s pre-test grace period; fail() removes
+      both directions; clear test failures on data-bearing tunnels
+    - Peer pre-qualification: prefer peers with recent test success or
+      active connection
+    - GOOD-based build urgency; building cap 2×wanted
+  * Console: GOOD-only pool summary; nofilter_ prefix for login
+  * Profile: drop buildSuccess throttling; raise CPU throttle to 95%
+
+2026-06-03 dr|z3d
+  * Router:
+    - Tunnel pool: emergency LS on empty pool; isDestinationReachable
+      uses pool state for inbound (not netDB); graduated build urgency;
+      30s early expiry; adaptive build concurrency; inbound-first
+      startup; fall back to exploratory when client test reply is null;
+      skip paired tunnel ≥2 consecutive failures for build reply
+  * Peer Manager: persisted low-latency flag; speed decay 30 min (was 5);
+    bypass isActive for proven peers; test frequency 5-8s at 2-4 concurrency
+  * NetDB: cancel+reschedule LS republish instead of dropping
+  * Streaming: raise MAX_WINDOW_SIZE to 256; fix retransmit delay
+    clamping, window sizes, outbound connection reset
+
+2026-05-22 dr|z3d
+  * Router: protect server pools from premature expiry; prioritize peer tests
+  * Peer Manager: fix profile retention and getIsActive inversion
+  * Streaming: fix retransmit, memory, and enqueue-guard regressions
+
+2026-05-19 dr|z3d
+  * Peer Manager: composite speed scoring, congestion gating, auto-tier
+    promotion; high-latency demotion; tiered expiration
+  * Router: fix RepublishLeaseSetJob to restore LS publication for
+    hosted services
+  * Streaming: immediate packet retransmit on soft tunnel failures
+  * SSU2: fix peer test result as Alice when Charlie's RI missing
+
+2026-05-15 dr|z3d
+  * Router: fix NSR stale tag handling after session established
+
+2026-05-12 dr|z3d
+  * Security: Console theme/lang allowlisting, redirect sanitization,
+    XSS fixes; I2PTunnel path validation, MD5→SHA-256 for nonces;
+    Router constant-time NTCP, bounds validation in GarlicMessage/
+    DatabaseLookupMessage/LeaseSet2 (reported by bottomlineit.za);
+    fix TOCTOU race in NTCP2 Reader
+  * Router: SSU2 peer-diversity requirement for address confirmation;
+    fix volatile counter races; only auto-refresh LS for active tunnels
+  * Console: /configban blockMyCountry, clear/reset, auto-purge
+  * Addressbook: remove HostChecker LS from tracking after completion
+
 2026-05-10 dr|z3d
   * Router/NetDB: Fix counter race conditions, thread safety, and performance
   * Addressbook: Drop LeaseSet from cache after HostChecker use
@@ -17,7 +74,8 @@
   * Console: Fix XSS sanitization in ConfigClients
 
 2026-05-07 zzz
-  * Security: Fix multiple upstream security issues (constant-time crypto, I2NP length checks)
+  * Security: Fix multiple upstream security issues
+    (constant-time crypto, I2NP length checks)
 
 2026-05-06 zzz
   * Crypto: Fix Noise protocol implementation, reduce message padding
