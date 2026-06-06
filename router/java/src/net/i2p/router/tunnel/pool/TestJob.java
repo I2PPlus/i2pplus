@@ -575,28 +575,28 @@ public class TestJob extends JobImpl {
         // Check for queue saturation using atomic counter instead of job queue count
         // This prevents race conditions and ensures consistent limiting
         if (totalCount >= maxQueuedTests) {
-            // Under queue pressure, prioritize client tunnels
+            // Under queue pressure, deprioritize exploratory tunnels.
+            // Drop exploratory tests to free capacity; reschedule client tunnels.
             if (isExploratory) {
                 if (_log.shouldInfo()) {
-                    _log.info("TestJob queue saturated -> Deprioritizing Exploratory tunnel test (" + totalCount + " >= " + maxQueuedTests + ")");
+                    _log.info("TestJob queue saturated -> Dropping exploratory tunnel test (" + totalCount + " >= " + maxQueuedTests + ")");
                 }
                 ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
-                if (!scheduleRetest(_cfg.needsExpeditedTest())) {
-                    cleanupTunnelTracking();
-                    decrementTotalJobs();
-                }
+                cleanupTunnelTracking();
+                decrementTotalJobs();
                 return;
             }
 
-            // Client tunnels get priority in saturated queue
+            // Client tunnels get priority — reschedule them
             if (_log.shouldInfo()) {
-                _log.info("TestJob queue saturated (" + totalCount + " >= " + maxQueuedTests + ") -> Rescheduling client tunnel test for " + _cfg);
+                _log.info("TestJob queue saturated -> Rescheduling client tunnel test (" + totalCount + " >= " + maxQueuedTests + ") for " + _cfg);
             }
-
             ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
-            cleanupTunnelTracking();
-            decrementTotalJobs(); // Clean up counter since we won't proceed
-            return; // Exit without rescheduling
+            if (!scheduleRetest(_cfg.needsExpeditedTest())) {
+                cleanupTunnelTracking();
+                decrementTotalJobs();
+            }
+            return;
         }
 
         // Concurrency control: Check and increment counter
@@ -757,9 +757,9 @@ public class TestJob extends JobImpl {
         boolean sendSuccess = sendTest(m, testPeriod);
         if (!sendSuccess) {
             CONCURRENT_TESTS.decrementAndGet();
-            cleanupTunnelTracking();
-            // Try to reschedule - if it fails, clean up total counter
+            // Try to reschedule - if it fails, clean up tunnel tracking and total counter
             if (!scheduleRetest(_cfg.needsExpeditedTest())) {
+                cleanupTunnelTracking();
                 decrementTotalJobs();
             }
             return;
@@ -987,6 +987,7 @@ public class TestJob extends JobImpl {
         // GOOD tunnel to take over.  Without this, a pool where ALL tunnels
         // are failing will report DNR — keeping the tunnel alive (even degraded)
         // is better than having no tunnels at all.
+        boolean isServerPool = _pool.getSettings().isInbound() && !_pool.getSettings().isExploratory();
         int activeCount = _pool.getActiveTunnelCount();
         boolean hasGoodReplacement;
         // A GOOD tunnel under test counts itself in getActiveTunnelCount().
@@ -994,10 +995,13 @@ public class TestJob extends JobImpl {
         // empty — so require at least one OTHER good tunnel before allowing
         // removal of a previously-GOOD tunnel.  Non-GOOD tunnels (FAILING,
         // UNTESTED) don't count themselves, so > 0 is correct for those.
+        // For server pools, require 2+ other GOOD tunnels to prevent a
+        // simultaneous-removal race where both tunnels see each other as
+        // replacements and both get removed.
         if (_cfg.getTestStatus() == net.i2p.router.TunnelTestStatus.GOOD) {
-            hasGoodReplacement = activeCount > 1;
+            hasGoodReplacement = isServerPool ? activeCount > 2 : activeCount > 1;
         } else {
-            hasGoodReplacement = activeCount > 0;
+            hasGoodReplacement = isServerPool ? activeCount > 1 : activeCount > 0;
         }
 
         if (isClientTunnel) {
@@ -1279,12 +1283,12 @@ public class TestJob extends JobImpl {
         public void runJob() {
             if (_sentMessage != null)
                 getContext().messageRegistry().unregisterPending(_sentMessage);
+            _found = true;
             if (_successTime < getTestPeriod()) {
                 testSuccessful((int) _successTime);
             } else {
                 testFailed(_successTime);
             }
-            _found = true;
             CONCURRENT_TESTS.decrementAndGet(); // Decrement counter
             if (_log.shouldDebug()) {
                 _log.debug("Tunnel test reply received for " + _cfg + " (Active concurrent tests: " + CONCURRENT_TESTS.get() + ")");
@@ -1312,9 +1316,10 @@ public class TestJob extends JobImpl {
             clearTestTags();
 
             if (!_found) {
+                _found = true;
                 testFailed(getContext().clock().now() - _started);
+                CONCURRENT_TESTS.decrementAndGet(); // Decrement counter
             }
-            CONCURRENT_TESTS.decrementAndGet(); // Decrement counter
             if (_log.shouldDebug()) {
                 _log.debug("Tunnel test timeout for " + _cfg + " (Active concurrent tests: " + CONCURRENT_TESTS.get() + ")");
             }
