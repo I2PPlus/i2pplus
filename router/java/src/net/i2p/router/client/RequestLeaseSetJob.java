@@ -99,8 +99,14 @@ class RequestLeaseSetJob extends JobImpl {
             endTime += fudge;
         }
 
-        // Ensure lease expiration doesn't exceed maximum future time
+        // Ensure lease expiration is never in the past — expired LS from
+        // RepublishLeaseSetJob would otherwise cause the client's signLeaseSet()
+        // to throw DataFormatException("LeaseSet expired X seconds ago").
         long now = getContext().clock().now();
+        long minAllowed = now + 60*1000;
+        if (endTime < minAllowed) {endTime = minAllowed;}
+
+        // Ensure lease expiration doesn't exceed maximum future time
         long maxAllowedTime = now + MAX_LEASE_FUTURE + CLOCK_FUDGE_FACTOR;
         if (endTime > maxAllowedTime) {
             if (_log.shouldInfo()) {
