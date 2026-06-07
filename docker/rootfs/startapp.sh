@@ -39,22 +39,19 @@ export CLASSPATH
 if [ -f /.dockerenv ] || [ -f /run/.containerenv ]; then
     echo "[startapp] Running I2P+ in docker container"
     if [ -z "${IP_ADDR:-}" ]; then
-        export IP_ADDR=$(hostname -I | awk '{print $1}')
+        export IP_ADDR=0.0.0.0
         echo ""
-        echo "[startapp] Note: To access I2P+ from other computers on your lan, set IP_ADDR to this host's lan ip,"
-        echo "[startapp] or 0.0.0.0 for access from anywhere - make sure your firewall permissions prevent access"
-        echo "[startapp] from the public internet if using 0.0.0.0"
+        echo "[startapp] Binding web console to 0.0.0.0 (all interfaces)."
+        echo "[startapp] To restrict to a specific IP, set IP_ADDR environment variable."
         echo ""
     fi
-    echo "[startapp] Setting IP address for I2P+ console and service access to $IP_ADDR"
-    echo "[startapp] When I2P+ is running, you can reach the web console at https://$IP_ADDR:7667/"
-    echo "[startapp] Note that your browser may warn you about the site certificate which is self-signed."
+    echo "[startapp] Setting IP address for I2P+ console access to $IP_ADDR"
+    echo "[startapp] When I2P+ is running, you can reach the web console at http://$IP_ADDR:7657/"
     echo ""
 
-    # Update configuration files with the new IP (only for console, not listeners)
-    # Keep listeners on 127.0.0.1 for security - only update console hostname
-    if [ -f "i2pconsole.config" ]; then
-        sed -i "s/localhost/$IP_ADDR/g" "i2pconsole.config"
+    # Rewrite clients.config to bind console to the configured IP (both non-SSL and SSL)
+    if [ -f "clients.config" ]; then
+        sed -i "/^clientApp\.0\.args=/s/127\.0\.0\.1/$IP_ADDR/g" clients.config
     fi
 
     # Override external port if EXTERNAL_PORT env var is set (runtime override)

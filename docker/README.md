@@ -7,10 +7,10 @@ If you just want to give I2P+ a quick try or are using it on a home network, fol
 
 ```bash
 docker pull ghcr.io/i2pplus/i2pplus:latest
-docker run -d -p 7667:7667 -p 4444:4444 ghcr.io/i2pplus/i2pplus:latest
+docker run -d -p 7657:7657 -p 7667:7667 -p 4444:4444 ghcr.io/i2pplus/i2pplus:latest
 ```
 
-Then open http://127.0.0.1:7667 in your browser. The I2NP external port is assigned randomly - check your router console (Network section) or router.config for the assigned port. For full network participation, you'll need to map this port externally.
+Then open http://127.0.0.1:7657 in your browser. The web console binds to `0.0.0.0` (all interfaces) inside the container, so you can also access it at your Docker host's IP address. The I2NP external port is assigned randomly - check your router console (Network section) or router.config for the assigned port. For full network participation, you'll need to map this port externally.
 
 ### Or build locally
 
@@ -18,7 +18,7 @@ Then open http://127.0.0.1:7667 in your browser. The I2NP external port is assig
 2. Download the I2P+ git repository with the command: `git clone https://github.com/I2PPlus/i2pplus.git`
 3. Copy `docker/docker-compose.yml` to `docker-compose.yml` in the root directory of your local I2P+ git workspace
 4. cd to the i2pplus git workspace and execute `docker-compose up --build`
-5. Start a browser and go to `http://127.0.0.1:7667` and then hit the Wizard link to configure your router
+5. Start a browser and go to `http://127.0.0.1:7657` and then hit the Wizard link to configure your router
 6. To stop the router, hit Ctrl+C and then, optionally, `docker-compose down`
 7. To remove all existing cache files and generated images, run `docker system prune -a -f`
 
@@ -45,23 +45,23 @@ docker run --read-only --tmpfs /i2p/.i2p:rw --tmpfs /i2psnark:rw ...
 ### Ports
 There are several ports which are exposed by the image. You can choose which ones to publish depending on your specific needs.
 
-| Port     | Interface       | Description         | TCP/UDP   |
-| -------- | --------------- | ------------------- | --------- |
-| 4444     | 127.0.0.1       | HTTP Proxy          | TCP       |
-| 6668     | 127.0.0.1       | IRC Proxy           | TCP       |
-| 7654     | 127.0.0.1       | I2CP Protocol       | TCP       |
-| 7656     | 127.0.0.1       | SAM Bridge TCP      | TCP       |
-| 7657     | 127.0.0.1       | Web Console         | TCP       |
-| 7667     | 127.0.0.1       | Web Console (SSL)   | TCP       |
-| 7658     | 127.0.0.1       | I2P Webserver       | TCP       |
-| 7659     | 127.0.0.1       | SMTP Proxy          | TCP       |
-| 7660     | 127.0.0.1       | POP Proxy           | TCP       |
-| 7652     | LAN interface   | UPnP                | TCP       |
-| 7653     | LAN interface   | UPnP                | UDP       |
-| RANDOM   | 0.0.0.0         | I2NP Protocol       | TCP+UDP   |
+| Port     | Interface       | Description           | TCP/UDP   |
+| -------- | --------------- | --------------------- | --------- |
+| 4444     | 127.0.0.1       | HTTP Proxy            | TCP       |
+| 6668     | 127.0.0.1       | IRC Proxy             | TCP       |
+| 7654     | 127.0.0.1       | I2CP Protocol         | TCP       |
+| 7656     | 127.0.0.1       | SAM Bridge TCP        | TCP       |
+| 7657     | 0.0.0.0         | Web Console (non-SSL) | TCP       |
+| 7667     | 0.0.0.0         | Web Console (SSL)     | TCP       |
+| 7658     | 127.0.0.1       | I2P Webserver         | TCP       |
+| 7659     | 127.0.0.1       | SMTP Proxy            | TCP       |
+| 7660     | 127.0.0.1       | POP Proxy             | TCP       |
+| 7652     | LAN interface   | UPnP                  | TCP       |
+| 7653     | LAN interface   | UPnP                  | UDP       |
+| RANDOM   | 0.0.0.0         | I2NP Protocol         | TCP+UDP   |
 
 ### Networking
-At the minimum, you'll want the Router Console (7667) and the HTTP Proxy (4444) available on localhost or your LAN network. The services indicated above on 127.0.0.1 will only be available on localhost and should not be exposed to the public internet. They can be disabled in the I2P+ web console if not required. To change the listening address for these services, including the web console, uncomment and edit the `IP_ADDR` line in the startapp.sh file.
+At the minimum, you'll want the Router Console (7657) and the HTTP Proxy (4444) available on localhost or your LAN network. Most services bind to `127.0.0.1` and will only be available inside the container. The web console binds to `0.0.0.0` so it's accessible from your Docker host by default — both the non-SSL (7657) and SSL (7667) ports are bound. Services should not be exposed to the public internet. They can be disabled in the I2P+ web console if not required.
 
 To receive inbound connections from peers, you must expose the external I2NP port (TCP+UDP). Without it, the router will show as firewalled and rely on hole punching, which is less reliable. See [External Network Port](#external-network-port) below for how to set a fixed port for port forwarding.
 
@@ -78,7 +78,7 @@ docker build --build-arg EXTERNAL_PORT=12345 -t i2pplus .
 docker run -e EXTERNAL_PORT=12345 i2pplus:latest
 ```
 
-Your allocated port will be listed in your Router Web Console at http://127.0.0.1:7667/info. Note: This is the *only* port that you need to expose to the public internet, access to other ports should only be permitted from localhost or your LAN.
+Your allocated port will be listed in your Router Web Console at http://127.0.0.1:7657/info. Note: This is the *only* port that you need to expose to the public internet, access to other ports should only be permitted from localhost or your LAN.
 
 ## Useful Docker Commands
 
@@ -97,13 +97,13 @@ docker load -i /tmp/i2pplus.tar
 ### Run the container
 ```bash
 # Basic run (with port mapping for console access)
-docker run -d -p 7667:7667 -p 4444:4444 --name i2pplus i2pplus:latest
+docker run -d -p 7657:7657 -p 7667:7667 -p 4444:4444 --name i2pplus i2pplus:latest
 
 # With persistent config (survives container restart)
 # Note: The external I2NP port is random - see your router console or router.config for the assigned port
 docker run -d -v /path/to/i2p-data:/i2p/.i2p \
            -v /path/to/snark:/i2psnark \
-           -p 7667:7667 -p 4444:4444 \
+           -p 7657:7657 -p 7667:7667 -p 4444:4444 \
            --name i2pplus i2pplus:latest
 
 # Override JVM heap size
