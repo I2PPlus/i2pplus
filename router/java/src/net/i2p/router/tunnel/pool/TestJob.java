@@ -689,6 +689,21 @@ public class TestJob extends JobImpl {
             }
         } else {
             _outTunnel = _cfg;
+            // Skip testing outbound tunnels that recently sent data —
+            // they're obviously working and testing risks false failures
+            // on high-traffic paths.  Tunnel must be tested at least once
+            // so every tunnel gets an initial latency reading.
+            if (_cfg.getTestStatus() != net.i2p.router.TunnelTestStatus.UNTESTED &&
+                ctx.clock().now() - _cfg.getLastTransferred() < MIN_TEST_DELAY) {
+                if (_log.shouldWarn())
+                    _log.warn("Skipping test on " + _cfg + " that recently transferred data");
+                CONCURRENT_TESTS.decrementAndGet();
+                if (!scheduleRetest(false)) {
+                    cleanupTunnelTracking();
+                    decrementTotalJobs();
+                }
+                return;
+            }
             if (isExploratory) {
                 _replyTunnel = ctx.tunnelManager().selectInboundTunnel();
             } else {
