@@ -1474,13 +1474,14 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     try {
                         i2ps = createI2PSocket(clientDest, sktOpts);
                         break;
-                    } catch (NoRouteToHostException nrhe) {
+                    } catch (IOException ioe) {
                         connectAttempts++;
-                        if (connectAttempts >= 2) {throw nrhe;}
+                        if (connectAttempts >= 2) {throw ioe;}
                         if (_log.shouldInfo()) {
-                            _log.info(getPrefix(requestId) + "Connection failed, retrying: " + nrhe.getMessage());
+                            _log.info(getPrefix(requestId) + "Connection failed (" + ioe.getClass().getSimpleName() +
+                                      "), retrying: " + ioe.getMessage());
                         }
-                        try {Thread.sleep(2000);} catch (InterruptedException ie) {throw nrhe;}
+                        try {Thread.sleep(2000);} catch (InterruptedException ie) {throw ioe;}
                     }
                 }
             }
@@ -1497,8 +1498,17 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     data = null;
                     response = SUCCESS_RESPONSE.getBytes("UTF-8");
                 }
-                // no OnTimeout, we can't send HTTP error responses after sending SUCCESS_RESPONSE.
-                t = new I2PTunnelRunner(s, i2ps, sockLock, data, response, mySockets, (OnTimeout) null);
+                // Can't send HTTP error after SUCCESS_RESPONSE (browser expects TLS),
+                // but close the socket so the browser's TLS handshake fails fast.
+                final boolean useOutproxy = usingWWWProxy;
+                final String proxyHost = hostLowerCase;
+                final String proxyAddr = currentProxy;
+                t = new I2PTunnelRunner(s, i2ps, sockLock, data, response, mySockets,
+                    (Runnable) () -> {
+                        if (useOutproxy && proxyHost != null)
+                            noteProxyResult(proxyAddr, proxyHost, false, false);
+                        closeSocket(s);
+                    });
             } else {
                 byte[] data = newRequest.toString().getBytes("ISO-8859-1");
                 OnTimeout onTimeout = new OnTimeout(s, s.getOutputStream(), targetRequest, usingWWWProxy,
@@ -1795,8 +1805,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 host != null ? host : uri.getHost(),
                 port != 0 ? port : uri.getPort(),
                 path != null ? path : uri.getPath(),
-                // FIXME this breaks encoded =, &
-                uri.getQuery(),
+                uri.getRawQuery(),
                 null);
     }
 

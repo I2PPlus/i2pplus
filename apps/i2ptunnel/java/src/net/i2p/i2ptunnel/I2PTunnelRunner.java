@@ -597,7 +597,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         private final ByteCache _cache;
         private final SuccessCallback _callback;
         private volatile Exception _failure;
-        public boolean done; // Does not need to be volatile, will be set from same thread
+        public volatile boolean done;
 
         /**
          *  Does not start itself. Caller must start()
@@ -654,7 +654,13 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                     finishLock.notifyAll();
                 }
             } catch (IOException ex) {
-                // Handle other IO errors
+                if (_log.shouldWarn())
+                    _log.warn(direction + " IO Error: " + ex);
+                _failure = ex;
+                synchronized (finishLock) {
+                    finished = true;
+                    finishLock.notifyAll();
+                }
             } finally {
                 _cache.release(ba);
                 boolean keepAliveFrom, keepAliveTo;
