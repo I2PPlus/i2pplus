@@ -444,6 +444,64 @@ public class ProfileOrganizer {
         }
     }
 
+    /**
+     *  Select up to howMany peers from O/P/X bandwidth tiers (high shared bandwidth)
+     *  that are not failing.  Falls through to selectAllNotFailingPeers on shortfall.
+     */
+    public void selectHighBandwidthPeers(int howMany, Set<Hash> exclude, Set<Hash> matches) {
+        selectHighBandwidthPeers(howMany, exclude, matches, false, 0, null);
+    }
+
+    public void selectHighBandwidthPeers(int howMany, Set<Hash> exclude, Set<Hash> matches,
+                                         boolean onlyNotFailing, int mask, MaskedIPSet ipSet) {
+        if (matches.size() < howMany) {
+            selectHighBandwidthPeers(howMany, exclude, matches, onlyNotFailing);
+        }
+    }
+
+    private void selectHighBandwidthPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing) {
+        if (matches.size() < howMany) {
+            int needed = howMany - matches.size();
+            List<Hash> selected = new ArrayList<>(needed);
+            long now = _context.clock().now();
+            long tenMinutes = 10 * 60 * 1000L;
+            long thirtyMinutes = 30 * 60 * 1000L;
+            getReadLock();
+            try {
+                for (Iterator<Hash> iter = new RandomIterator<>(_notFailingPeersList); selected.size() < needed && iter.hasNext(); ) {
+                    Hash cur = iter.next();
+                    if (matches.contains(cur) || (exclude != null && exclude.contains(cur))) continue;
+                    if (onlyNotFailing && _highCapacityPeers.containsKey(cur)) continue;
+                    if (!isSelectable(cur)) continue;
+                    RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(cur);
+                    if (info != null) {
+                        String tier = DataHelper.stripHTML(info.getBandwidthTier());
+                        if ("O".equals(tier) || "P".equals(tier) || "X".equals(tier)) {
+                            // Reliability check: skip peers with low acceptance or no recent activity
+                            PeerProfile profile = _notFailingPeers.get(cur);
+                            if (profile != null) {
+                                if (profile.getTunnelAcceptanceRatio() < 0.3) continue;
+                                boolean recentTest = profile.getLastTestedSuccessfully() > 0 &&
+                                    now - profile.getLastTestedSuccessfully() < tenMinutes;
+                                boolean recentActivity =
+                                    (profile.getLastHeardFrom() > 0 && now - profile.getLastHeardFrom() < thirtyMinutes) ||
+                                    (profile.getLastSendSuccessful() > 0 && now - profile.getLastSendSuccessful() < thirtyMinutes);
+                                if (!recentTest && !recentActivity && !_context.commSystem().isEstablished(cur)) continue;
+                            }
+                            selected.add(cur);
+                        }
+                    }
+                }
+            } finally {
+                releaseReadLock();
+            }
+            matches.addAll(selected);
+        }
+        if (matches.size() < howMany) {
+            selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, 0);
+        }
+    }
+
     public void selectAllNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing) {
         selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, 0);
     }

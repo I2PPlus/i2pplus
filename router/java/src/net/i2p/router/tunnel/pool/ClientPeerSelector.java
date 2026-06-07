@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 import net.i2p.data.Hash;
@@ -33,6 +35,13 @@ class ClientPeerSelector extends TunnelPeerSelector {
     private static final double SEVERE_ATTACK_THRESHOLD = 0.30;
 
     private static final double SEVERE_STRESS_THRESHOLD = 0.30;
+
+    /** Cooldown duration for client peer selections — shorter than exploratory
+     *  to avoid exhausting the smaller client Fast pool (~447 peers vs full netdb). */
+    private static final long CLIENT_COOLDOWN_MS = 15_000;
+
+    /** Per-pool cooldown map so one pool's selections don't starve another's. */
+    private static final Map<Hash, Long> _clientCooldowns = new ConcurrentHashMap<Hash, Long>();
 
     private static String formatExcludedPeers(Set<Hash> peers) {
         if (peers == null || peers.isEmpty()) {return "[no exclusions]";}
@@ -123,6 +132,21 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
             // Create a copy of exclude set to avoid mutating caller's set
             Set<Hash> exclude = new HashSet<Hash>(getExclude(isInbound, false));
+
+            // Exclude recently-selected peers to ensure diversity across client pools
+            long nowCooldown = ctx.clock().now();
+            long cooldownCutoff = nowCooldown - CLIENT_COOLDOWN_MS;
+            int cooldownExcluded = 0;
+            for (Map.Entry<Hash, Long> entry : _clientCooldowns.entrySet()) {
+                if (entry.getValue() > cooldownCutoff) {
+                    exclude.add(entry.getKey());
+                    cooldownExcluded++;
+                }
+            }
+            // Evict stale entries every ~50 selections to keep map bounded
+            if (cooldownExcluded == 0 && !_clientCooldowns.isEmpty() && (nowCooldown % 50) < 10) {
+                _clientCooldowns.values().removeIf(v -> v <= cooldownCutoff);
+            }
 
             // Add first peer exclusions for diversity
             Set<Hash> firstPeerExclusions = settings.getFirstPeerExclusions();
@@ -369,6 +393,12 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         if (matches.size() < middleCount) {
                             ctx.profileOrganizer().selectFastPeers(middleCount - matches.size(), exclude, matches, 0, null);
                         }
+                        if (matches.size() < middleCount) {
+                            ctx.profileOrganizer().selectNotFailingPeers(middleCount - matches.size(), exclude, matches, false, 0, null);
+                        }
+                    }
+                    if (matches.size() < middleCount) {
+                        ctx.profileOrganizer().selectHighBandwidthPeers(middleCount - matches.size(), exclude, matches, false, 0, null);
                     }
                     if (matches.size() < middleCount && ctx.getBooleanProperty(PROP_LEGACY_SELECTION)) {
                         ctx.profileOrganizer().selectFastPeers(middleCount, exclude, matches, 0, null);
@@ -683,6 +713,15 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 rv = null;
             }
         }
+        // Record selection cooldown for all selected peers (excluding self)
+        if (rv != null && rv.size() > 1) {
+            long now = ctx.clock().now();
+            for (Hash peer : rv) {
+                if (!peer.equals(ctx.routerHash())) {
+                    _clientCooldowns.put(peer, now);
+                }
+            }
+        }
         if (isInbound && rv != null && rv.size() > 1) {ctx.commSystem().exemptIncoming(rv.get(1));}
         return rv;
     }
@@ -833,6 +872,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
      * Sort peers by quality for tunnel building preference.
      * Higher quality peers (recently tested, active, connected) sort first.
      */
+    @SuppressWarnings("deprecation")
     private void sortByPeerQuality(List<Hash> peers, Set<Hash> exclude) {
         if (peers == null || peers.isEmpty()) {
             return;
@@ -861,8 +901,33 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                               prof1.getLastSendSuccessful() > 0 && now - prof1.getLastSendSuccessful() < thirtyMinutes);
             boolean active2 = prof2 != null && (prof2.getLastHeardFrom() > 0 && now - prof2.getLastHeardFrom() < thirtyMinutes ||
                                               prof2.getLastSendSuccessful() > 0 && now - prof2.getLastSendSuccessful() < thirtyMinutes);
+            // Push high-latency peers (>10s tunnel test time) to the bottom
+            // so that fast peers are preferred. 0 = no data yet, treat as unknown.
+            float lat1 = prof1 != null ? prof1.getTunnelTestTimeAverage() : 0;
+            float lat2 = prof2 != null ? prof2.getTunnelTestTimeAverage() : 0;
+            boolean slow1 = lat1 > 10_000;
+            boolean slow2 = lat2 > 10_000;
+            if (slow1 && !slow2) return 1;
+            if (!slow1 && slow2) return -1;
+            if (slow1 && slow2) {
+                // Both slow — prefer the less slow one
+                if (lat1 < lat2) return -1;
+                if (lat1 > lat2) return 1;
+            }
+
             if (active1 && !active2) return -1;
             if (!active1 && active2) return 1;
+
+            // Prefer lower latency — peers with recent fast tunnel tests
+            // get priority over peers with high or no latency data.
+            if (lat1 > 0 && lat2 > 0) {
+                if (lat1 < lat2) return -1;
+                if (lat1 > lat2) return 1;
+            } else if (lat1 > 0) {
+                return -1;  // only p1 has measured latency
+            } else if (lat2 > 0) {
+                return 1;   // only p2 has measured latency
+            }
 
             return 0;
         });
