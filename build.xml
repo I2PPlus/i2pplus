@@ -2507,7 +2507,7 @@
 
   <target name="copyjetty-unlesspkg" unless="${with-libjetty9-java}">
     <copy quiet="true" todir="pkg-temp/lib">
-      <fileset dir="build" includes="javax.servlet.jar jetty*.jar org.mortbay.*.jar" excludes="jetty-i2p.jar"/>
+      <fileset dir="${build.root}build/" includes="javax.servlet.jar jetty*.jar org.mortbay.*.jar" excludes="jetty-i2p.jar"/>
     </copy>
   </target>
 
@@ -2524,7 +2524,7 @@
 
   <target name="copytomcat-unlesspkg" depends="settomcatprop" unless="${with-libtomcat-java}">
     <copy quiet="true" todir="pkg-temp/lib">
-      <fileset dir="build" includes="commons*.jar jasper*.jar javax*.jar"/>
+      <fileset dir="${build.root}build/" includes="commons*.jar jasper*.jar javax*.jar"/>
     </copy>
   </target>
 
