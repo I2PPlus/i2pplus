@@ -23,7 +23,7 @@ COPY --from=builder /tmp/build/pkg-temp .
 
 # Install I2P+ by copying over installed files
 COPY docker/rootfs/ /
-RUN chmod +x /startapp.sh
+RUN chmod a+rx /startapp.sh
 
 # Create i2p user and group
 RUN addgroup -g 1000 i2p && \
