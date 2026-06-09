@@ -1,19 +1,39 @@
+2026-06-09 dr|z3d
+  * Router:
+    - Peer Manager: Freshness proof-of-life check in isSelectable() —
+      exclude non-connected peers with stale RouterInfo (>2h) and no
+      activity (<1h); 10 min startup grace; demoteIfStale() removes
+      stale peers from fast/high-cap tiers immediately
+    - Profile: Extend expiration windows — passive 3d (was 24h),
+      gossip 24h (was 2h); lastHeardAbout qualifies for passive tier
+    - NetDB: ProbeStalePeerJob proactively pings stale peers via
+      DirectLookupJob (3 min cycle, up to 5 per cycle, 10 min cooldown)
+    - Tunnel: Extend setLengthOverride() to client pools for adaptive
+      hop reduction (min 2); increase build timeouts 15→20s; raise
+      latency threshold 10→15s; boost test concurrency 64→128
+    - Client: Handle expired LeaseSet gracefully without disconnecting
+  * Streaming: Make resend delay, disconnect timeout, and RTO
+    configurable via PROPs
+  * EepGet: Make timeouts and retries configurable via PROPs
+  * Build: Restructure Windows wrapper binary layout to subdirectories
+
 2026-06-06 dr|z3d
-  * Router: skip peer pre-qualification during first 15 min of uptime
-  * NetDB: only purge HostChecker-fetched LS from cache; LS refresh
-    interval 150s with unconditional re-fetch each cycle
+  * Router:
+    - Skip peer pre-qualification during first 15 min of uptime
+    - NetDB: Only purge HostChecker-fetched LS from cache; LS refresh
+      interval 150s with unconditional re-fetch each cycle
 
 2026-06-05 dr|z3d
   * Router:
-    - Tunnel pool: fix cascading collapse — keep failing tunnels for
+    - Tunnel pool: Fix cascading collapse — keep failing tunnels for
       retest; paired pool fallback; data-based survival for tunnels with
       verified content; remove 60s pre-test grace period; fail() removes
       both directions; clear test failures on data-bearing tunnels
-    - Peer pre-qualification: prefer peers with recent test success or
+    - Peer pre-qualification: Prefer peers with recent test success or
       active connection
     - GOOD-based build urgency; building cap 2×wanted
+    - Profile: Drop buildSuccess throttling; raise CPU throttle to 95%
   * Console: GOOD-only pool summary; nofilter_ prefix for login
-  * Profile: drop buildSuccess throttling; raise CPU throttle to 95%
 
 2026-06-03 dr|z3d
   * Router:
@@ -22,24 +42,27 @@
       30s early expiry; adaptive build concurrency; inbound-first
       startup; fall back to exploratory when client test reply is null;
       skip paired tunnel ≥2 consecutive failures for build reply
-  * Peer Manager: persisted low-latency flag; speed decay 30 min (was 5);
-    bypass isActive for proven peers; test frequency 5-8s at 2-4 concurrency
-  * NetDB: cancel+reschedule LS republish instead of dropping
+    - Peer Manager: Persisted low-latency flag; speed decay 30 min (was 5);
+      bypass isActive for proven peers; test frequency 5-8s at 2-4
+      concurrency
+    - NetDB: Cancel+reschedule LS republish instead of dropping
   * Streaming: raise MAX_WINDOW_SIZE to 256; fix retransmit delay
     clamping, window sizes, outbound connection reset
 
 2026-05-22 dr|z3d
-  * Router: protect server pools from premature expiry; prioritize peer tests
-  * Peer Manager: fix profile retention and getIsActive inversion
+  * Router:
+    - Protect server pools from premature expiry; prioritize peer tests
+    - Peer Manager: Fix profile retention and getIsActive inversion
   * Streaming: fix retransmit, memory, and enqueue-guard regressions
 
 2026-05-19 dr|z3d
-  * Peer Manager: composite speed scoring, congestion gating, auto-tier
-    promotion; high-latency demotion; tiered expiration
-  * Router: fix RepublishLeaseSetJob to restore LS publication for
-    hosted services
+  * Router:
+    - Peer Manager: Composite speed scoring, congestion gating, auto-tier
+      promotion; high-latency demotion; tiered expiration
+    - Fix RepublishLeaseSetJob to restore LS publication for hosted
+      services
+    - SSU2: Fix peer test result as Alice when Charlie's RI missing
   * Streaming: immediate packet retransmit on soft tunnel failures
-  * SSU2: fix peer test result as Alice when Charlie's RI missing
 
 2026-05-15 dr|z3d
   * Router: fix NSR stale tag handling after session established
