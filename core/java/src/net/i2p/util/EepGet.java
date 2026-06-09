@@ -107,6 +107,7 @@ public class EepGet {
     protected volatile int _fetchHeaderTimeout;
     protected volatile int _fetchTotalTimeout;
     protected volatile int _fetchInactivityTimeout;
+    protected volatile int _maxCompleteFails;
     protected AtomicInteger _redirects;
     protected String _redirectLocation;
     protected boolean _isGzippedResponse;
@@ -118,10 +119,20 @@ public class EepGet {
 
     /** this will be replaced by the HTTP Proxy if we are using it */
     protected static final String USER_AGENT = "Wget/1.11.4";
-    protected static final int CONNECT_TIMEOUT = 90*1000;
-    protected static final int INACTIVITY_TIMEOUT = 5*60*1000;
+    static final String PROP_CONNECT_TIMEOUT = "eepget.connectTimeout";
+    static final String PROP_INACTIVITY_TIMEOUT = "eepget.inactivityTimeout";
+    static final String PROP_MAX_COMPLETE_FAILS = "eepget.maxCompleteFails";
+    static final String PROP_DEFAULT_RETRIES = "eepget.defaultRetries";
+    protected static final int DEFAULT_CONNECT_TIMEOUT = 90*1000;
+    protected static final int DEFAULT_INACTIVITY_TIMEOUT = 5*60*1000;
     /** maximum times to try without getting any data at all, even if numRetries is higher @since 0.7.14 */
-    protected static final int MAX_COMPLETE_FAILS = 20;
+    protected static final int DEFAULT_MAX_COMPLETE_FAILS = 20;
+    protected static final int DEFAULT_NUM_RETRIES = 10;
+    /** backward compatibility aliases */
+    /** @deprecated use DEFAULT_CONNECT_TIMEOUT */
+    protected static final int CONNECT_TIMEOUT = DEFAULT_CONNECT_TIMEOUT;
+    /** @deprecated use DEFAULT_INACTIVITY_TIMEOUT */
+    protected static final int INACTIVITY_TIMEOUT = DEFAULT_INACTIVITY_TIMEOUT;
 
     public EepGet(I2PAppContext ctx, String proxyHost, int proxyPort, int numRetries, String outputFile, String url) {
         this(ctx, true, proxyHost, proxyPort, numRetries, outputFile, url);
@@ -191,7 +202,7 @@ public class EepGet {
         _actualURL = url;
         _postData = postData;
         _bytesRemaining = -1;
-        _fetchHeaderTimeout = CONNECT_TIMEOUT;
+        _fetchHeaderTimeout = DEFAULT_CONNECT_TIMEOUT;
         _listeners = new ArrayList<StatusListener>(1);
         _allowCaching = allowCaching;
         _etag = etag;
@@ -209,10 +220,10 @@ public class EepGet {
     public static void main(String args[]) {
         String proxyHost = "127.0.0.1";
         int proxyPort = 4444;
-        int numRetries = 10;
+        int numRetries = (int) I2PAppContext.getGlobalContext().getProperty(PROP_DEFAULT_RETRIES, DEFAULT_NUM_RETRIES);
         int markSize = 1024;
         int lineLen = 10;
-        long inactivityTimeout = INACTIVITY_TIMEOUT;
+        long inactivityTimeout = (int) I2PAppContext.getGlobalContext().getProperty(PROP_INACTIVITY_TIMEOUT, DEFAULT_INACTIVITY_TIMEOUT);
         String etag = null;
         String saveAs = null;
         List<String> extra = null;
@@ -353,7 +364,7 @@ public class EepGet {
             get.addAuthorization(username, password);
         }
         get.addStatusListener(get.new CLIStatusListener(markSize, lineLen));
-        if (!get.fetch(CONNECT_TIMEOUT, -1, inactivityTimeout)) {
+        if (!get.fetch((int) I2PAppContext.getGlobalContext().getProperty(PROP_CONNECT_TIMEOUT, DEFAULT_CONNECT_TIMEOUT), -1, inactivityTimeout)) {
             System.exit(1);
         } else {
             System.exit(0);
@@ -813,7 +824,7 @@ public class EepGet {
 
             _currentAttempt++;
             if (_currentAttempt > _numRetries ||
-                (_alreadyTransferred == 0 && _currentAttempt > MAX_COMPLETE_FAILS) ||
+                (_alreadyTransferred == 0 && _currentAttempt > DEFAULT_MAX_COMPLETE_FAILS) ||
                 !_keepFetching)
                 break;
             _redirects.set(0);
