@@ -249,6 +249,9 @@
 <tr class=config><th>profileOrganizer.maxProfiles={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Maximum number of peer profiles to retain in memory. Older, inactive profiles are expired first when this limit is reached. Values below 100 are clamped to 100. [Default is 8000, or 800 on slow systems]")%></td></tr>
 
+<tr class=config><th>profileOrganizer.maxRouterInfoAgeHours={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 3]")%></td></tr>
+
 <tr class=config><th>router.publishPeerRankings={true|false}</th></tr>
 <tr><td><%=intl._t("This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]")%></td></tr>
 
@@ -369,6 +372,33 @@
 
 <tr class=config><th>i2p.streaming.maxPongDelay={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used.")%></td></tr>
+
+<tr class=config><th>eepget.connectTimeout={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("The connect timeout in milliseconds for eepget HTTP requests (time to wait for initial response headers). Increase for high-latency remote access scenarios. [Default is 90000 (90s)]")%></td></tr>
+
+<tr class=config><th>eepget.inactivityTimeout={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("The inactivity timeout in milliseconds for eepget transfers (max idle time during data phase). Increase for slow connections experiencing stalls. [Default is 300000 (5min)]")%></td></tr>
+
+<tr class=config><th>eepget.maxCompleteFails={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum number of consecutive zero-data transfer failures before eepget gives up, even if retries remain. Increase if transfers fail without receiving any data. [Default is 20]")%></td></tr>
+
+<tr class=config><th>eepget.defaultRetries={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.disconnectTimeout={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 300000 (5min)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxConnectTimeout={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration. Increase for very high-latency remote access. [Default is 120000 (2min)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.minResendDelay={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxResendDelay={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxRTO={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]")%></td></tr>
 
 <tr class=config><th>i2p.vmCommSystem={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption.")%></td></tr>
