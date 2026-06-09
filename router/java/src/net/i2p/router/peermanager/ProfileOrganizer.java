@@ -57,6 +57,11 @@ public class ProfileOrganizer {
 
     public static final String PROP_MINIMUM_FAST_PEERS = "profileOrganizer.minFastPeers";
     public static final int DEFAULT_MINIMUM_FAST_PEERS = 400;
+
+    public static final String PROP_MAX_ROUTERINFO_AGE_HOURS = "profileOrganizer.maxRouterInfoAgeHours";
+    public static final int DEFAULT_MAX_ROUTERINFO_AGE_HOURS = 2;
+    private static final long STARTUP_GRACE_PERIOD_MS = 10 * 60 * 1000;
+    private static final long PROOF_OF_LIFE_WINDOW_MS = 60 * 60 * 1000;
     private static final int DEFAULT_MAXIMUM_FAST_PEERS = 500;
     private static final int ABSOLUTE_MAX_FAST_PEERS = 600;
 
@@ -593,13 +598,13 @@ public class ProfileOrganizer {
          int profileCount = 0;
          int expiredCount = 0;
 
-         // Tiered expiration windows based on interaction level.
-         // Active peers (Tier 1) retain long-term data for tunnel selection quality.
-         // Passive peers (Tier 2) kept for a day to capture intermittent interactions.
-         // Gossip-only peers (Tier 3) expire quickly to minimize memory churn.
-         final long expireActive = 7 * 24 * 60 * 60 * 1000L;    // 7 days
-         final long expirePassive = 24 * 60 * 60 * 1000L;       // 24 hours
-         final long expireGossip = 2 * 60 * 60 * 1000L;         // 2 hours
+          // Tiered expiration windows based on interaction level.
+          // Active peers (Tier 1) retain long-term data for tunnel selection quality.
+          // Passive peers (Tier 2) kept for 3 days to capture intermittent interactions.
+          // Gossip-only peers (Tier 3) kept for 24h since floodfill stores are infrequent.
+          final long expireActive = 7 * 24 * 60 * 60 * 1000L;    // 7 days
+          final long expirePassive = 3 * 24 * 60 * 60 * 1000L;   // 3 days
+          final long expireGossip = 24 * 60 * 60 * 1000L;        // 24 hours
 
          // Optional coalescing (read-only, safe to skip if lock fails)
          if (shouldCoalesce && _context.router() != null &&
@@ -658,13 +663,13 @@ public class ProfileOrganizer {
                  long lastHeard = profile.getLastHeardFrom();
                  long lastHeardAbout = profile.getLastHeardAbout();
                  long expireWindow;
-                 if (lastSend > 0) {
-                     expireWindow = expireActive;
-                 } else if (lastHeard > 0) {
-                     expireWindow = expirePassive;
-                 } else {
-                     expireWindow = expireGossip;
-                 }
+                if (lastSend > 0) {
+                    expireWindow = expireActive;
+                } else if (lastHeard > 0 || lastHeardAbout > 0) {
+                    expireWindow = expirePassive;
+                } else {
+                    expireWindow = expireGossip;
+                }
 
                  long cutoff = Math.max(lastSend, Math.max(lastHeard, lastHeardAbout));
                  if (cutoff < now - expireWindow) {
@@ -754,20 +759,36 @@ public class ProfileOrganizer {
                 }
             }
 
-            // Step 6: Update global thresholds
+            // Step 6: Fallback to ensure minimum high-capacity peers
+            int minHighCap = getMinimumHighCapacityPeers();
+            int highCapAdded = 0;
+            if (_highCapacityPeers.size() < minHighCap) {
+                for (PeerProfile profile : newStrictCapacityOrder) {
+                    if (_highCapacityPeers.size() >= minHighCap) break;
+                    if (profile.getPeer().equals(_us)) continue;
+                    if (profile.wasUnreachable()) continue;
+                    if (isLowBandwidthTier(profile.getPeer())) continue;
+                    if (isCongestedPeer(profile.getPeer())) continue;
+                    _highCapacityPeers.put(profile.getPeer(), profile);
+                    highCapAdded++;
+                }
+            }
+
+            // Step 8: Update global thresholds
             _strictCapacityOrder = newStrictCapacityOrder;
             _thresholdCapacityValue = newCapacityThreshold;
             _thresholdIntegrationValue = newIntegrationThreshold;
             _thresholdSpeedValue = newSpeedThreshold;
 
-            // Step 7: Log and record stats
+            // Step 9: Log and record stats
             if (_log.shouldInfo()) {
                 _log.info("Profiles reorganized: " + expiredCount + " expired, " +
                           profileCount + " retained. Thresholds -> " +
                           "Cap: " + num(_thresholdCapacityValue) +
                           ", Spd: " + num(_thresholdSpeedValue) +
                           ", Int: " + num(_thresholdIntegrationValue) +
-                          " -> Fast peers: " + _fastPeers.size() + " (added " + added + " via fallback)");
+                          " -> Fast peers: " + _fastPeers.size() + " (added " + added + " via fallback)" +
+                          ", HighCap peers: " + _highCapacityPeers.size() + " (added " + highCapAdded + " via fallback)");
             }
 
             long total = System.currentTimeMillis() - start;
@@ -775,10 +796,10 @@ public class ProfileOrganizer {
             _context.statManager().addRateData("peer.activeProfileCount", profileCount, 0);
             _context.statManager().addRateData("peer.expiredProfileCount", expiredCount, 0);
 
-            // Step 8: Enforce memory cap
+            // Step 10: Enforce memory cap
             enforceProfileCap();
 
-            // Step 9: Clean up persisted profiles
+            // Step 11: Clean up persisted profiles
             purgeStaleProfileFiles();
 
         } finally {
@@ -1100,8 +1121,22 @@ public class ProfileOrganizer {
 
         RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
         if (info != null) {
-            String tier = DataHelper.stripHTML(info.getBandwidthTier());
             if (info.isHidden()) return false;
+            if (_context.router() != null && _context.router().getUptime() > STARTUP_GRACE_PERIOD_MS &&
+                !_context.commSystem().isEstablished(peer)) {
+                long now = _context.clock().now();
+                long maxAge = _context.getProperty(PROP_MAX_ROUTERINFO_AGE_HOURS, DEFAULT_MAX_ROUTERINFO_AGE_HOURS) * 3600_000L;
+                // RouterInfo is stale — demand proof of life to trust it
+                if (info.getPublished() < now - maxAge) {
+                    PeerProfile profile = _context.profileOrganizer().getProfile(peer);
+                    if (profile == null) return false;
+                    boolean alive = profile.getLastSendSuccessful() > now - PROOF_OF_LIFE_WINDOW_MS ||
+                                    profile.getLastHeardFrom() > now - PROOF_OF_LIFE_WINDOW_MS ||
+                                    profile.getLastHeardAbout() > now - PROOF_OF_LIFE_WINDOW_MS;
+                    if (!alive) return false;
+                }
+            }
+            String tier = DataHelper.stripHTML(info.getBandwidthTier());
             if (tier.equals("L") || tier.equals("M") || tier.equals("N")) return false;
             return !TunnelPeerSelector.shouldExclude(_context, info);
         }
@@ -1235,6 +1270,32 @@ public class ProfileOrganizer {
                               " raw=" + profile.getCapacityBonusRaw() +
                               " sameObj=" + (profile == nfProfile));
                 }
+            }
+        }
+    }
+
+    /**
+     * Immediately demote a peer from fast/high-cap tiers if its RouterInfo is stale
+     * and it has no recent proof of life (fails isSelectable). Non-blocking — only acts
+     * if the peer is currently in those tiers.
+     */
+    public void demoteIfStale(Hash peer) {
+        if (!isSelectable(peer)) {
+            if (!getWriteLock()) return;
+            try {
+                boolean inFast = _fastPeers.containsKey(peer);
+                boolean inHighCap = _highCapacityPeers.containsKey(peer);
+                if (inFast || inHighCap) {
+                    if (_log.shouldInfo()) {
+                        _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                                  "] from fast/high-cap tiers due to stale RouterInfo / no proof of life");
+                    }
+                    if (inFast) _fastPeers.remove(peer);
+                    if (inHighCap) _highCapacityPeers.remove(peer);
+                    promoteToFillTiers();
+                }
+            } finally {
+                releaseWriteLock();
             }
         }
     }
