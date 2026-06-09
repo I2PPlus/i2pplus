@@ -58,6 +58,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private LookupThrottler _lookupThrottler;
     private LookupBanHammer _lookupBanner;
     private final Job _ffMonitor;
+    private final ProbeStalePeerJob _probeStalePeerJob;
     private final ConcurrentHashMap<Long, List<TimeoutEntry>> _searchTimeouts;
     private final BatchedSearchTimeoutProcessor _timeoutProcessor;
 
@@ -121,8 +122,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         _context.statManager().createRateStat("netDb.lateReplyCacheSize", "Size of late reply grace period cache", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.lateReplyTimedOut", "Timed out peers added to late reply cache", "NetworkDatabase", rate);
         // No need to start the FloodfillMonitorJob for client subDb.
-        if (isClientDb()) {_ffMonitor = null;}
-        else {_ffMonitor = new FloodfillMonitorJob(_context, this);}
+        if (isClientDb()) {_ffMonitor = null; _probeStalePeerJob = null;}
+        else {
+            _ffMonitor = new FloodfillMonitorJob(_context, this);
+            _probeStalePeerJob = new ProbeStalePeerJob(_context, this);
+        }
     }
 
     @Override
@@ -130,6 +134,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         boolean isFF;
         super.startup();
         if (_ffMonitor != null) {_context.jobQueue().addJob(_ffMonitor);}
+        if (_probeStalePeerJob != null) {_context.jobQueue().addJob(_probeStalePeerJob);}
         if (isClientDb()) {isFF = false;}
         else {
             isFF = _context.getBooleanProperty(PROP_FLOODFILL_PARTICIPANT);
@@ -736,6 +741,25 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      */
     void complete(Hash key) {
         _activeFloodQueries.remove(key);
+    }
+
+    /**
+     *  Fire a DirectLookupJob for a stale peer, deduplicated via _activeFloodQueries.
+     *  Caller should already have verified the peer is stale and not recently probed.
+     *
+     *  @since 0.9.70
+     */
+    void probeStalePeer(Hash peer, RouterInfo ri) {
+        FloodSearchJob searchJob = _activeFloodQueries.get(peer);
+        if (searchJob == null) {
+            searchJob = new DirectLookupJob(_context, this, peer, ri, null, null);
+            FloodSearchJob existing = _activeFloodQueries.putIfAbsent(peer, searchJob);
+            if (existing != null) return;
+            if (_log.shouldInfo()) {
+                _log.info("Probing stale peer [" + peer.toBase64().substring(0,6) + "]");
+            }
+            _context.jobQueue().addJob(searchJob);
+        }
     }
 
     /** list of the Hashes of currently known floodfill peers;
