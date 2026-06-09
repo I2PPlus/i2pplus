@@ -669,8 +669,22 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                 _runner.getFloodfillNetworkDatabaseFacade().store(dest.getHash(), encls.getDecryptedLeaseSet());
             }
         } catch (IllegalArgumentException iae) {
-            if (_log.shouldError()) {_log.error("Invalid LeaseSet from client", iae);}
+            String msg = iae.getMessage();
+            boolean isExpired = msg != null && msg.contains("expired");
+            if (_log.shouldError()) {
+                if (isExpired) {
+                    _log.error("Invalid (expired) LeaseSet from client, will retry: " + iae.getMessage());
+                } else {
+                    _log.error("Invalid LeaseSet from client", iae);
+                }
+            }
             String destDesc = dest != null ? dest.toBase32().substring(0, Math.min(8, dest.toBase32().length())) + "..." : "unknown";
+            if (isExpired) {
+                if (_log.shouldWarn()) {
+                    _log.warn("LeaseSet for [" + destDesc + "] expired before publication; rerequest timer will retry");
+                }
+                return;
+            }
             _runner.disconnectClient("Invalid LeaseSet: " + iae.getMessage() + " [dest: " + destDesc + "]");
             return;
         }
