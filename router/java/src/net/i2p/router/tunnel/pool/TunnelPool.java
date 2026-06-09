@@ -75,6 +75,8 @@ public class TunnelPool {
     /** if less than one success in this many, reduce length (exploratory only) */
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_1 = 10;
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_2 = 12;
+    private static final int BUILD_TRIES_LENGTH_OVERRIDE_CLIENT_1 = 4;
+    private static final int BUILD_TRIES_LENGTH_OVERRIDE_CLIENT_2 = 5;
     private static final long STARTUP_TIME = 5*60*1000;
     /** Default early expiration time for pruned tunnels (30 seconds) */
     static final long DEFAULT_PRUNE_EARLY_EXPIRY = 120*1000;
@@ -661,12 +663,25 @@ public class TunnelPool {
      *  @since 0.8.11
      */
     private void setLengthOverride() {
-        if (!_settings.isExploratory()) {return;}
         int len = _settings.getLength();
         if (len > 1) {
-            RateStat e = _context.statManager().getRate("tunnel.buildExploratoryExpire");
-            RateStat r = _context.statManager().getRate("tunnel.buildExploratoryReject");
-            RateStat s = _context.statManager().getRate("tunnel.buildExploratorySuccess");
+            int th1, th2, minLen;
+            RateStat e, r, s;
+            if (_settings.isExploratory()) {
+                th1 = BUILD_TRIES_LENGTH_OVERRIDE_1;   // 10
+                th2 = BUILD_TRIES_LENGTH_OVERRIDE_2;   // 12
+                minLen = 1;
+                e = _context.statManager().getRate("tunnel.buildExploratoryExpire");
+                r = _context.statManager().getRate("tunnel.buildExploratoryReject");
+                s = _context.statManager().getRate("tunnel.buildExploratorySuccess");
+            } else {
+                th1 = BUILD_TRIES_LENGTH_OVERRIDE_CLIENT_1;  // 4
+                th2 = BUILD_TRIES_LENGTH_OVERRIDE_CLIENT_2;  // 5
+                minLen = 2;
+                e = _context.statManager().getRate("tunnel.buildClientExpire");
+                r = _context.statManager().getRate("tunnel.buildClientReject");
+                s = _context.statManager().getRate("tunnel.buildClientSuccess");
+            }
             if (e != null && r != null && s != null) {
                 Rate er = e.getRate(RateConstants.TEN_MINUTES);
                 Rate rr = r.getRate(RateConstants.TEN_MINUTES);
@@ -677,13 +692,15 @@ public class TunnelPool {
                     long rc = rr.computeAverages(ra, false).getTotalEventCount();
                     long sc = sr.computeAverages(ra, false).getTotalEventCount();
                     long tot = ec + rc + sc;
-                    if (tot >= BUILD_TRIES_LENGTH_OVERRIDE_1 ||
+                    if (tot >= th1 ||
                         _firstInstalled > _context.clock().now()) {
                         long succ = tot > 0 ? 1000 * sc / tot : 0;
-                        if (succ <=  1000 / BUILD_TRIES_LENGTH_OVERRIDE_1) {
-                            if (len > 2 && succ <= 1000 / BUILD_TRIES_LENGTH_OVERRIDE_2) {
-                                _settings.setLengthOverride(len - 2);
-                            } else {_settings.setLengthOverride(len - 1);}
+                        if (succ <=  1000 / th1) {
+                            if (len > 2 && succ <= 1000 / th2) {
+                                _settings.setLengthOverride(Math.max(minLen, len - 2));
+                            } else {
+                                _settings.setLengthOverride(Math.max(minLen, len - 1));
+                            }
                             return;
                         }
                     }
@@ -1085,9 +1102,9 @@ public class TunnelPool {
      */
     private static final long RECENTLY_ADDED_WINDOW = 60 * 1000;
     /** Throttle refresh — publications are only needed when tunnels change,
-     *  and the LeaseSet has a 10-minute lifespan. 3-minute throttle prevents
-     *  churn while still keeping the LeaseSet reasonably current. */
-    private static final long REFRESH_THROTTLE = 5 * 60 * 1000;
+     *  and the LeaseSet has a 10-minute lifespan. 3-minute throttle gives 7
+     *  minutes of slack for the full refresh cycle before leases expire. */
+    private static final long REFRESH_THROTTLE = 3 * 60 * 1000;
     /** Initialize to allow first request immediately */
     private long _lastRefreshTime = -REFRESH_THROTTLE;
     /** Track last proactive LeaseSet publish time for rate limiting */
@@ -1295,13 +1312,26 @@ public class TunnelPool {
         Lease zeroHopLease = null;
         TreeSet<Lease> leases = new TreeSet<Lease>(new LeaseComparator());
 
+        boolean hasGoodTunnel = false;
         for (TunnelInfo tunnel : tunnelsCopy) {
-            // Only include tunnels that have passed at least one test (GOOD).
-            // Untested, testing, and failing tunnels are excluded.
-            if (tunnel.getTunnelFailed() ||
-                tunnel.getTestStatus() != net.i2p.router.TunnelTestStatus.GOOD) {
+            if (!tunnel.getTunnelFailed() &&
+                tunnel.getTestStatus() == net.i2p.router.TunnelTestStatus.GOOD) {
+                hasGoodTunnel = true;
+                break;
+            }
+        }
+
+        for (TunnelInfo tunnel : tunnelsCopy) {
+            // Only include GOOD tunnels by default. When no GOOD tunnels exist
+            // (e.g. test queue saturated), fall back to UNTESTED tunnels —
+            // they're fully built and functional, just not yet verified.
+            if (tunnel.getTunnelFailed()) continue;
+            if (tunnel.getTestStatus() == net.i2p.router.TunnelTestStatus.GOOD) {
+                // include — known good
+            } else if (hasGoodTunnel || tunnel.getTestStatus() != net.i2p.router.TunnelTestStatus.UNTESTED) {
                 continue;
             }
+            // else: no GOOD tunnels exist and this is UNTESTED — include as fallback
 
             TunnelId inId = tunnel.getReceiveTunnelId(0);
             Hash gw = tunnel.getPeer(0);
@@ -1553,8 +1583,8 @@ public class TunnelPool {
         }
 
         long now = _context.clock().now();
-        long fiveMinutes = 5 * 60 * 1000;
-        long expiryThreshold = now + fiveMinutes;
+        long threeMinutes = 3 * 60 * 1000;
+        long expiryThreshold = now + threeMinutes;
 
         boolean allHealthy = false;
         int tunnelCount = 0;
@@ -1576,9 +1606,9 @@ public class TunnelPool {
 
         // Only republish if we have tunnels and they're all healthy
         if (tunnelCount > 0 && allHealthy) {
-            // Rate limit: don't republish more than every 5 minutes
+            // Rate limit: don't republish more than every 3 minutes
             long lastPublish = _lastLeaseSetPublishTime;
-            if (lastPublish > 0 && now - lastPublish < fiveMinutes) {
+            if (lastPublish > 0 && now - lastPublish < threeMinutes) {
                 return;
             }
 
@@ -1853,18 +1883,28 @@ public class TunnelPool {
         // We don't want it to expire before the client signs it or the ff gets it
         long expireAfter = _context.clock().now() + 10*1000;
 
+        boolean hasGoodTunnel = false;
+        for (int i = 0; i < _tunnels.size(); i++) {
+            TunnelInfo t = _tunnels.get(i);
+            if (!t.getTunnelFailed() && t.getTestStatus() == net.i2p.router.TunnelTestStatus.GOOD &&
+                t.getExpiration() > expireAfter) {
+                hasGoodTunnel = true;
+                break;
+            }
+        }
+
         TunnelInfo zeroHopTunnel = null;
         Lease zeroHopLease = null;
         List<TunnelInfo> goodTunnels = new ArrayList<TunnelInfo>();
         for (int i = 0; i < _tunnels.size(); i++) {
             TunnelInfo tunnel = _tunnels.get(i);
-            // Only include tunnels that have passed at least one test (GOOD).
-            // Untested, testing, and failing tunnels are excluded — they aren't
-            // proven to carry traffic, and advertising them causes client failures.
-            if (tunnel.getTunnelFailed() ||
-                tunnel.getTestStatus() != net.i2p.router.TunnelTestStatus.GOOD) {
+            if (tunnel.getTunnelFailed()) continue;
+            if (tunnel.getTestStatus() == net.i2p.router.TunnelTestStatus.GOOD) {
+                // include — known good
+            } else if (hasGoodTunnel || tunnel.getTestStatus() != net.i2p.router.TunnelTestStatus.UNTESTED) {
                 continue;
             }
+            // else: no GOOD tunnels exist and this is UNTESTED — include as fallback
             if (tunnel.getExpiration() <= expireAfter) {continue;}
 
             if (tunnel.getLength() <= 1) {
