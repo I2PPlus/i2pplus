@@ -50,20 +50,19 @@ set _REALPATH=%~dp0
 rem
 rem Decide on the specific Wrapper binary to use (See delta-pack)
 rem
+set _WRAPPER_DIR=%_REALPATH%lib\wrapper
 if "%PROCESSOR_ARCHITECTURE%"=="AMD64" goto amd64
 if "%PROCESSOR_ARCHITECTURE%"=="IA64" goto ia64
-set _WRAPPER_L_EXE=%_REALPATH%%_WRAPPER_BASE%-windows-x86-32.exe
+set _WRAPPER_L_EXE=%_WRAPPER_DIR%\win32\%_WRAPPER_BASE%.exe
 goto search
 :amd64
-set _WRAPPER_L_EXE=%_REALPATH%%_WRAPPER_BASE%-windows-x86-64.exe
+set _WRAPPER_L_EXE=%_WRAPPER_DIR%\win64\%_WRAPPER_BASE%.exe
 goto search
 :ia64
-set _WRAPPER_L_EXE=%_REALPATH%%_WRAPPER_BASE%-windows-ia-64.exe
+set _WRAPPER_L_EXE=%_WRAPPER_DIR%\win64\%_WRAPPER_BASE%.exe
 goto search
 :search
 set _WRAPPER_EXE=%_WRAPPER_L_EXE%
-if exist "%_WRAPPER_EXE%" goto conf
-set _WRAPPER_EXE=%_REALPATH%%_WRAPPER_BASE%.exe
 if exist "%_WRAPPER_EXE%" goto conf
 echo Unable to locate a Wrapper executable using any of the following names:
 echo %_WRAPPER_L_EXE%
