@@ -901,12 +901,12 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                               prof1.getLastSendSuccessful() > 0 && now - prof1.getLastSendSuccessful() < thirtyMinutes);
             boolean active2 = prof2 != null && (prof2.getLastHeardFrom() > 0 && now - prof2.getLastHeardFrom() < thirtyMinutes ||
                                               prof2.getLastSendSuccessful() > 0 && now - prof2.getLastSendSuccessful() < thirtyMinutes);
-            // Push high-latency peers (>10s tunnel test time) to the bottom
+            // Push high-latency peers (>15s tunnel test time) to the bottom
             // so that fast peers are preferred. 0 = no data yet, treat as unknown.
             float lat1 = prof1 != null ? prof1.getTunnelTestTimeAverage() : 0;
             float lat2 = prof2 != null ? prof2.getTunnelTestTimeAverage() : 0;
-            boolean slow1 = lat1 > 10_000;
-            boolean slow2 = lat2 > 10_000;
+            boolean slow1 = lat1 > 15_000;
+            boolean slow2 = lat2 > 15_000;
             if (slow1 && !slow2) return 1;
             if (!slow1 && slow2) return -1;
             if (slow1 && slow2) {

@@ -46,14 +46,14 @@ public class TestJob extends JobImpl {
     private static final AtomicInteger __id = new AtomicInteger();
     private int _id;
     private static final int MIN_TEST_PERIOD = 45*1000;
-    private static final int MAX_TEST_PERIOD = 75*1000;
+    private static final int MAX_TEST_PERIOD = 50*1000;
 
     /**
      * Maximum number of tunnel tests that can run concurrently.
      * Prevents overwhelming the router with too many simultaneous tunnel tests.
      * This value can be adjusted based on system capacity.
      */
-    private static final int MAX_CONCURRENT_TESTS = SystemVersion.isSlow() ? 32 : 64;
+    private static final int MAX_CONCURRENT_TESTS = SystemVersion.isSlow() ? 64 : 128;
 
     // Adaptive testing frequency constants
     private static final int MIN_TEST_DELAY = 30 * 1000; // 30s minimum
@@ -73,7 +73,7 @@ public class TestJob extends JobImpl {
      * Maximum number of TestJob instances that should be queued before deferring new ones.
      * Prevents job queue saturation from too many waiting tunnel tests.
      */
-    private static final int MAX_QUEUED_TESTS = SystemVersion.isSlow() ? 20 : 40;
+    private static final int MAX_QUEUED_TESTS = SystemVersion.isSlow() ? 40 : 80;
     public static volatile int maxQueuedTests = MAX_QUEUED_TESTS;
 
     /**
@@ -81,7 +81,7 @@ public class TestJob extends JobImpl {
      * Above this threshold, no new tests are scheduled until count decreases.
      * Prevents ever-increasing backlogs that could cause job lag.
      */
-    public static final int HARD_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 160 : 512;
+    public static final int HARD_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 320 : 1024;
 
     /**
      * Static counter tracking the number of currently active tunnel tests.
@@ -263,7 +263,7 @@ public class TestJob extends JobImpl {
         } else {
             numPools = 0;
         }
-        int maxTestJobs = Math.min(maxQueuedTests, Math.max(activeRunners, Math.max(numPools * 8, 24)));
+        int maxTestJobs = Math.min(maxQueuedTests, Math.max(activeRunners, Math.max(numPools * 12, 24)));
         int currentTestJobs = getTotalTestJobCount();
         boolean isCritical = false;
         if (pool != null && !pool.getSettings().isExploratory()) {
@@ -604,15 +604,15 @@ public class TestJob extends JobImpl {
         // Exploratory tunnels are deprioritized under high load
         int maxTests;
         if (maxLag > 3000 || avgLag > 100) {
-            maxTests = isExploratory ? 4 : 8; // Severe load - reduce but don't stall
+            maxTests = isExploratory ? 8 : 12; // Severe load - reduce but don't stall
         } else if (maxLag > 2000 || avgLag > 50) {
-            maxTests = isExploratory ? 8 : 16; // High load
+            maxTests = isExploratory ? 12 : 24; // High load
         } else if (maxLag > 1000 || avgLag > 20) {
-            maxTests = isExploratory ? 16 : 32; // Moderate load
-        } else if (maxLag > 100 || avgLag > 1) {
-            maxTests = isExploratory ? 32 : 64; // Low lag - relax limits
+            maxTests = isExploratory ? 32 : 64; // Moderate load
+        } else if (maxLag > 400 || avgLag > 5) {
+            maxTests = isExploratory ? 64 : 128; // Low lag - relax limits
         } else {
-            maxTests = isExploratory ? 64 : 128; // Very low lag (<1ms avg) - maximum throughput
+            maxTests = isExploratory ? 128 : 256; // Very low lag (<1ms avg) - maximum throughput
         }
 
         int current;
@@ -1023,10 +1023,10 @@ public class TestJob extends JobImpl {
             if (hasGoodReplacement) {
                 _cfg.incrementTestFailures();
                 _cfg.setTestFailed();
-                // After 3 consecutive failures with a GOOD replacement
+                // After 5 consecutive failures with a GOOD replacement
                 // available, remove the tunnel — it's provably broken and
                 // retesting only wastes resources.
-                if (_cfg.getTunnelFailures() >= 3) {
+                if (_cfg.getTunnelFailures() >= 5) {
                     // Don't remove if tunnel has carried user data — the data
                     // proves the tunnel is functional; transient test issues
                     // should not force replacement.
@@ -1079,9 +1079,9 @@ public class TestJob extends JobImpl {
             if (hasGoodReplacement) {
                 _cfg.incrementTestFailures();
                 _cfg.setTestFailed();
-                // After 3 consecutive failures with a GOOD replacement
+                // After 5 consecutive failures with a GOOD replacement
                 // available, remove the tunnel — unless it carried data.
-                if (_cfg.getTunnelFailures() >= 3) {
+                if (_cfg.getTunnelFailures() >= 5) {
                     // Don't remove if tunnel has carried user data — the data
                     // proves the tunnel is functional; transient test issues
                     // should not force replacement.
@@ -1232,7 +1232,7 @@ public class TestJob extends JobImpl {
         } else {
             numPools = 0;
         }
-        int maxTestJobs = Math.min(maxQueuedTests, Math.max(activeRunners, Math.max(numPools * 8, 24)));
+        int maxTestJobs = Math.min(maxQueuedTests, Math.max(activeRunners, Math.max(numPools * 12, 24)));
         int totalCount = getTotalTestJobCount();
         boolean isExpedited = _cfg.needsExpeditedTest();
         long rescheduleLagLimit = isExpedited ? MAX_LAG_RESCHEDULE * 3 : MAX_LAG_RESCHEDULE;
