@@ -39,10 +39,10 @@ class SchedulerClosed extends SchedulerImpl {
                      //(con.getUnackedPacketsReceived() <= 0) &&
                      (con.getUnackedPacketsSent() <= 0) &&
                      (!con.getResetReceived()) &&
-                     (timeSinceClose < Connection.DISCONNECT_TIMEOUT);
+                      (timeSinceClose < Connection.getDisconnectTimeout());
         boolean conTimeout = (con.getOptions().getConnectTimeout() < con.getLifetime()) &&
                              con.getSendStreamId() <= 0 &&
-                             con.getLifetime() < Connection.DISCONNECT_TIMEOUT;
+                             con.getLifetime() < Connection.getDisconnectTimeout();
         return (ok || conTimeout);
     }
 

@@ -371,10 +371,10 @@ class MessageOutputStream extends OutputStream {
                     _log.info("WriteStatus is null during flush");
                     throw new IOException("DataReceiver returned null WriteStatus");
                 }
-            } else if (_closed.get() && (_writeTimeout > Connection.DISCONNECT_TIMEOUT || _writeTimeout <= 0)) {
-                ws.waitForCompletion(Connection.DISCONNECT_TIMEOUT);
-            } else if (_writeTimeout <= 0 || _writeTimeout > Connection.DISCONNECT_TIMEOUT) {
-                ws.waitForCompletion(Connection.DISCONNECT_TIMEOUT);
+            } else if (_closed.get() && (_writeTimeout > Connection.getDisconnectTimeout() || _writeTimeout <= 0)) {
+                ws.waitForCompletion(Connection.getDisconnectTimeout());
+            } else if (_writeTimeout <= 0 || _writeTimeout > Connection.getDisconnectTimeout()) {
+                ws.waitForCompletion(Connection.getDisconnectTimeout());
             } else {
                 ws.waitForCompletion(_writeTimeout);
             }

@@ -109,17 +109,30 @@ class Connection {
     private final AtomicLong _lifetimeDupMessageSent = new AtomicLong();
     private final AtomicLong _lifetimeDupMessageReceived = new AtomicLong();
 
+    /** @since I2P+ */
+    public static int getMaxResendDelay() {
+        return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.maxResendDelay", 30*1000);
+    }
+    /** @since I2P+ */
+    public static int getMinResendDelay() {
+        return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.minResendDelay", 100);
+    }
+    /** @since I2P+ */
+    public static int getDisconnectTimeout() {
+        return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.disconnectTimeout", 5*60*1000);
+    }
+    /** backward compat, @deprecated use getMaxResendDelay() */
     public static final int MAX_RESEND_DELAY = 30*1000;
+    /** backward compat, @deprecated use getMinResendDelay() */
     public static final int MIN_RESEND_DELAY = 100;
-
-    /**
-     *  Wait up to 5 minutes after disconnection so we can ack/close packets.
-     *  Roughly equal to the TIME-WAIT time in RFC 793, where the recommendation is 4 minutes (2 * MSL)
-     */
+    /** backward compat, @deprecated use getDisconnectTimeout() */
     public static final int DISCONNECT_TIMEOUT = 5*60*1000;
 
     public static final int DEFAULT_CONNECT_TIMEOUT = 60*1000;
-    private static final long MAX_CONNECT_TIMEOUT = 2*60*1000;
+    /** @since I2P+ */
+    static long getMaxConnectTimeout() {
+        return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.maxConnectTimeout", 2*60*1000);
+    }
 
     /**
      *  This is the default maximum. See ConnectionOptions.setMaxWindowSize()
@@ -862,7 +875,7 @@ class Connection {
      */
     private boolean scheduleDisconnectEvent() {
         if (!_disconnectScheduledOn.compareAndSet(0, _context.clock().now())) {return false;}
-        schedule(new DisconnectEvent(), DISCONNECT_TIMEOUT);
+        schedule(new DisconnectEvent(), getDisconnectTimeout());
         return true;
     }
 
@@ -1232,7 +1245,7 @@ class Connection {
                  }
                  return;
              }
-             if (timeLeft > MAX_CONNECT_TIMEOUT) {timeLeft = MAX_CONNECT_TIMEOUT;}
+             if (timeLeft > getMaxConnectTimeout()) {timeLeft = getMaxConnectTimeout();}
              else if (_options.getConnectTimeout() <= 0) {timeLeft = DEFAULT_CONNECT_TIMEOUT;}
 
              if (_log.shouldDebug()) {_log.debug("waitForConnect(): wait " + timeLeft);}
@@ -1825,7 +1838,8 @@ class Connection {
             } else {
                 //long timeout = _options.getResendDelay() << numSends;
                 int timeout = _options.getRTO();
-                if ((timeout > MAX_RESEND_DELAY) || (timeout <= 0)) {timeout = MAX_RESEND_DELAY;}
+                int mrd = getMaxResendDelay();
+                if ((timeout > mrd) || (timeout <= 0)) {timeout = mrd;}
                 // set this before enqueue() as it passes it on to the router
                 _packet.setTimeout(timeout);
 

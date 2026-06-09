@@ -38,7 +38,7 @@ class SchedulerHardDisconnected extends SchedulerImpl {
         if (con.getResetSent())
             timeSinceClose = _context.clock().now() - con.getResetSentOn();
         boolean ok = (con.getHardDisconnected() || con.getResetSent()) &&
-                     (timeSinceClose < Connection.DISCONNECT_TIMEOUT);
+                      (timeSinceClose < Connection.getDisconnectTimeout());
         return ok || con.getResetReceived();
     }
 

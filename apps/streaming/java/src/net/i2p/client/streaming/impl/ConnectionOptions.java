@@ -86,8 +86,23 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private static final float TCP_KAPPA = 4;
 
     private static final String PROP_INITIAL_RTO = "i2p.streaming.initialRTO";
+    static final String PROP_MAX_RTO = "i2p.streaming.maxRTO";
+    private static final String PROP_MIN_RESEND_DELAY = "i2p.streaming.minResendDelay";
+    private static final String PROP_MAX_RESEND_DELAY = "i2p.streaming.maxResendDelay";
     private static final int INITIAL_RTO = 10000;
-    private static final int MAX_RTO = 30000;
+
+    /** @since I2P+ */
+    private int getMaxRTO() {
+        return I2PAppContext.getGlobalContext().getProperty(PROP_MAX_RTO, 30000);
+    }
+    /** @since I2P+ */
+    private int getMinResendDelay() {
+        return I2PAppContext.getGlobalContext().getProperty(PROP_MIN_RESEND_DELAY, 100);
+    }
+    /** @since I2P+ */
+    private int getMaxResendDelay() {
+        return I2PAppContext.getGlobalContext().getProperty(PROP_MAX_RESEND_DELAY, 30*1000);
+    }
 
     public static final String PROP_CONNECT_DELAY = "i2p.streaming.connectDelay";
     public static final String PROP_MAX_MESSAGE_SIZE = "i2p.streaming.maxMessageSize";
@@ -702,8 +717,10 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
             break;
         }
 
-        if (_rto < Connection.MIN_RESEND_DELAY) {_rto = Connection.MIN_RESEND_DELAY;}
-        else if (_rto > Connection.MAX_RESEND_DELAY) {_rto = Connection.MAX_RESEND_DELAY;}
+        int minRD = getMinResendDelay();
+        int maxRD = getMaxResendDelay();
+        if (_rto < minRD) {_rto = minRD;}
+        else if (_rto > maxRD) {_rto = maxRD;}
     }
 
     /**
@@ -716,7 +733,8 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
     synchronized int doubleRTO() {
         // we don't need to switch on _initState, _rto is set in constructor
         _rto *= 2;
-        if (_rto > MAX_RTO) {_rto = MAX_RTO;}
+        int mrto = getMaxRTO();
+        if (_rto > mrto) {_rto = mrto;}
         return _rto;
     }
 
@@ -748,7 +766,11 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
      * @return delay for a retransmission in ms
      */
     public int getResendDelay() {return _resendDelay;}
-    public void setResendDelay(int ms) {_resendDelay = Math.max(Connection.MIN_RESEND_DELAY, Math.min(ms, Connection.MAX_RESEND_DELAY));}
+    public void setResendDelay(int ms) {
+        int minRD = getMinResendDelay();
+        int maxRD = getMaxResendDelay();
+        _resendDelay = Math.max(minRD, Math.min(ms, maxRD));
+    }
 
     /**
      * if there are packets we haven't ACKed yet and we don't
