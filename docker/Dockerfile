@@ -12,14 +12,14 @@ RUN echo "build.built-by=DockerUser" >> override.properties
 RUN echo "javac.compilerargs=-Xlint:none" >> override.properties
 
 RUN ant preppkg-linux-only -q
-RUN rm -rf pkg-temp/osid pkg-temp/lib/wrapper pkg-temp/lib/wrapper.*
+RUN rm -rf /tmp/build-i2p/pkg-temp/osid /tmp/build-i2p/pkg-temp/lib/wrapper /tmp/build-i2p/pkg-temp/lib/wrapper.*
 
 FROM alpine:latest
 ENV APP_HOME="/i2p"
 
 RUN apk add --no-cache openjdk21-jre ttf-opensans
 WORKDIR ${APP_HOME}
-COPY --from=builder /tmp/build/pkg-temp .
+COPY --from=builder /tmp/build-i2p/pkg-temp .
 
 # Install I2P+ by copying over installed files
 COPY docker/rootfs/ /
