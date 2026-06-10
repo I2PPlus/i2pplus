@@ -27,6 +27,7 @@
 
   <target name="init">
     <mkdir dir="${build}"/>
+    <mkdir dir="${build}/messages-src"/>
     <mkdir dir="${dist}"/>
   </target>
 
