@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="i2p_router">
+  <available file="git" property="git.available"/>
   <property name="build.dir" value="build"/>
 
   <property name="apps.i2ptunnel.java.build.dir" value="../../apps/i2ptunnel/java/build"/>
@@ -60,14 +61,13 @@
     </javac>
   </target>
 
-  <target name="listChangedFiles" if="mtn.available">
-    <exec executable="mtn" outputproperty="workspace.changes" errorproperty="mtn.error2" failifexecutionfails="false">
-      <arg value="list"/>
-      <arg value="changed"/>
-      <arg value="."/>
-    </exec>
+  <target name="listChangedFiles" if="git.available">
+    <exec executable="sh" outputproperty="workspace.changes" errorproperty="git.error2" failifexecutionfails="false">
+    <arg value="-c"/>
+    <arg value="git diff --name-only HEAD -- . &amp;&amp; git ls-files --others --exclude-standard ."/>
+  </exec>
     <!-- \n in an attribute value generates an invalid manifest -->
-    <exec executable="tr" inputstring="${workspace.changes}" outputproperty="workspace.changes.tr" errorproperty="mtn.error2" failifexecutionfails="false">
+    <exec executable="tr" inputstring="${workspace.changes}" outputproperty="workspace.changes.tr" errorproperty="git.error2" failifexecutionfails="false">
       <arg value="-s"/>
       <arg value="[:space:]"/>
       <arg value=","/>

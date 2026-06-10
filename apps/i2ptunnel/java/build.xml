@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="i2ptunnel">
+  <available file="git" property="git.available"/>
   <property name="build.dir" value="/tmp/build-i2p/apps/i2ptunnel/java/build"/>
 
   <property name="...build.dir" value="../../../build"/>
@@ -84,15 +85,14 @@
   </target>
 
   <target name="listChangedFiles" depends="jarUpToDate" if="shouldListChanges">
-    <exec executable="mtn" outputproperty="workspace.changes.j" errorproperty="mtn.error2"
+    <exec executable="sh" outputproperty="workspace.changes.j" errorproperty="git.error2"
       failifexecutionfails="false">
-      <arg value="list"/>
-      <arg value="changed"/>
-      <arg value="."/>
-    </exec>
+    <arg value="-c"/>
+    <arg value="git diff --name-only HEAD -- . &amp;&amp; git ls-files --others --exclude-standard ."/>
+  </exec>
     <!-- \n in an attribute value generates an invalid manifest -->
     <exec executable="tr" inputstring="${workspace.changes.j}"
-      outputproperty="workspace.changes.j.tr" errorproperty="mtn.error2"
+      outputproperty="workspace.changes.j.tr" errorproperty="git.error2"
       failifexecutionfails="false">
       <arg value="-s"/>
       <arg value="[:space:]"/>
@@ -137,7 +137,7 @@
         <not>
           <isset property="jar.uptodate"/>
         </not>
-        <isset property="mtn.available"/>
+        <isset property="git.available"/>
       </and>
     </condition>
   </target>
@@ -170,7 +170,7 @@
         <not>
           <isset property="uiJar.uptodate"/>
         </not>
-        <isset property="mtn.available"/>
+        <isset property="git.available"/>
       </and>
     </condition>
   </target>
@@ -293,15 +293,14 @@
   </target>
 
   <target name="listChangedFiles2" depends="warUpToDate" if="shouldListChanges2">
-    <exec executable="mtn" outputproperty="workspace.changes.w" errorproperty="mtn.error2"
+    <exec executable="sh" outputproperty="workspace.changes.w" errorproperty="git.error2"
       failifexecutionfails="false">
-      <arg value="list"/>
-      <arg value="changed"/>
-      <arg value="../jsp"/>
-    </exec>
+    <arg value="-c"/>
+    <arg value="git diff --name-only HEAD -- ../jsp &amp;&amp; git ls-files --others --exclude-standard ../jsp"/>
+  </exec>
     <!-- \n in an attribute value generates an invalid manifest -->
     <exec executable="tr" inputstring="${workspace.changes.w}"
-      outputproperty="workspace.changes.w.tr" errorproperty="mtn.error2"
+      outputproperty="workspace.changes.w.tr" errorproperty="git.error2"
       failifexecutionfails="false">
       <arg value="-s"/>
       <arg value="[:space:]"/>
@@ -363,7 +362,7 @@
         <not>
           <isset property="war.uptodate"/>
         </not>
-        <isset property="mtn.available"/>
+        <isset property="git.available"/>
       </and>
     </condition>
   </target>

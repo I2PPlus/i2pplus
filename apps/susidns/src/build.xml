@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="susidns" default="all" basedir=".">
+  <available file="git" property="git.available"/>
   <property name="build.dir" value="/tmp/build-i2p/apps/susidns/src/build"/>
 
   <property name="...build.dir" value="../../../build"/>
@@ -165,15 +166,14 @@
   <target name="all" depends="war"/>
 
   <target name="listChangedFiles" depends="warUpToDate" if="shouldListChanges">
-    <exec executable="mtn" outputproperty="workspace.changes" errorproperty="mtn.error2"
+    <exec executable="sh" outputproperty="workspace.changes" errorproperty="git.error2"
       failifexecutionfails="false">
-      <arg value="list"/>
-      <arg value="changed"/>
-      <arg value="."/>
-    </exec>
+    <arg value="-c"/>
+    <arg value="git diff --name-only HEAD -- . &amp;&amp; git ls-files --others --exclude-standard ."/>
+  </exec>
     <!-- \n in an attribute value generates an invalid manifest -->
     <exec executable="tr" inputstring="${workspace.changes}" outputproperty="workspace.changes.tr"
-      errorproperty="mtn.error2" failifexecutionfails="false">
+      errorproperty="git.error2" failifexecutionfails="false">
       <arg value="-s"/>
       <arg value="[:space:]"/>
       <arg value=","/>
@@ -232,7 +232,7 @@
         <not>
           <isset property="war.uptodate"/>
         </not>
-        <isset property="mtn.available"/>
+        <isset property="git.available"/>
       </and>
     </condition>
   </target>

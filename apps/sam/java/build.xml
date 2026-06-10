@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="sam">
+  <available file="git" property="git.available"/>
   <property name="build.dir" value="build"/>
 
   <property name="...build.dir" value="../../../build"/>
@@ -67,13 +68,12 @@
   </target>
 
   <target name="listChangedFiles" depends="jarUpToDate" if="shouldListChanges">
-    <exec executable="mtn" outputproperty="workspace.changes" errorproperty="mtn.error2" failifexecutionfails="false">
-      <arg value="list"/>
-      <arg value="changed"/>
-      <arg value="."/>
-    </exec>
+    <exec executable="sh" outputproperty="workspace.changes" errorproperty="git.error2" failifexecutionfails="false">
+    <arg value="-c"/>
+    <arg value="git diff --name-only HEAD -- . &amp;&amp; git ls-files --others --exclude-standard ."/>
+  </exec>
     <!-- \n in an attribute value generates an invalid manifest -->
-    <exec executable="tr" inputstring="${workspace.changes}" outputproperty="workspace.changes.tr" errorproperty="mtn.error2" failifexecutionfails="false">
+    <exec executable="tr" inputstring="${workspace.changes}" outputproperty="workspace.changes.tr" errorproperty="git.error2" failifexecutionfails="false">
       <arg value="-s"/>
       <arg value="[:space:]"/>
       <arg value=","/>
@@ -124,7 +124,7 @@
         <not>
           <isset property="jar.uptodate"/>
         </not>
-        <isset property="mtn.available"/>
+        <isset property="git.available"/>
       </and>
     </condition>
   </target>
