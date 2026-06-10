@@ -18,6 +18,7 @@ fi
 cd "$BASEDIR"
 
 VERSION="${1:-}"
+PKG_TEMP_DIR="${2:-pkg-temp}"
 
 if [ -z "$VERSION" ]; then
     if [ -f "${BASEDIR}/core/java/src/net/i2p/CoreVersion.java" ]; then
@@ -36,9 +37,9 @@ echo "Building I2P+ Debian package v${VERSION}..."
 mkdir -p "$DISTDIR"
 
 echo "Step 1: Checking build artifacts..."
-if [ ! -d "pkg-temp" ] || [ ! -f "build.xml" ]; then
+if [ ! -d "$PKG_TEMP_DIR" ] || [ ! -f "build.xml" ]; then
     echo "Error: Must be run from project root directory."
-    echo "  Expected: pkg-temp/ and build.xml present"
+    echo "  Expected: $PKG_TEMP_DIR/ and build.xml present"
     exit 1
 fi
 
@@ -49,8 +50,8 @@ mkdir -p "$BUILD_DIR/I2P"
 mkdir -p "$TMP_DEB"
 
 # Copy pkg-temp contents
-echo "Copying pkg-temp to build directory..."
-cp -a pkg-temp/* "$BUILD_DIR/I2P/" 2>/dev/null
+echo "Copying $PKG_TEMP_DIR to build directory..."
+cp -a "$PKG_TEMP_DIR"/* "$BUILD_DIR/I2P/" 2>/dev/null
 
 # Copy jbigi native libs for multi-arch Linux support
 if [ -d "installer/lib/jbigi" ]; then
@@ -203,7 +204,7 @@ echo "Step 4: Building .deb packages..."
 # Manual dpkg-deb build for i2p package
 echo "Building i2p package..."
 rm -rf "$TMP_DEB"
-mkdir -p "$TMP_DEB/DEBIAN"
+mkdir -m 755 -p "$TMP_DEB/DEBIAN"
 mkdir -p "$TMP_DEB/usr/share/i2p"
 mkdir -p "$TMP_DEB/usr/bin"
 mkdir -p "$TMP_DEB/var/lib/i2p"

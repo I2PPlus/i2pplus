@@ -2283,6 +2283,7 @@
       <arg value="tools/appimage/build-appimage.sh"/>
       <arg value="${full.version}"/>
       <arg value="${appimagetool.update}"/>
+      <arg value="${pkg.temp.dir}"/>
     </exec>
   </target>
 
@@ -2291,6 +2292,7 @@
     <exec executable="bash" dir="${basedir}" failonerror="true">
       <arg value="tools/scripts/build-deb.sh"/>
       <arg value="${full.version}"/>
+      <arg value="${pkg.temp.dir}"/>
     </exec>
   </target>
 

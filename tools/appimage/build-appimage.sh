@@ -10,6 +10,7 @@ cd "$BASEDIR"
 
 VERSION="${1:-}"
 APPIMAGETOOL_UPDATE="${2:-never}"
+PKG_TEMP_DIR="${3:-pkg-temp}"
 
 # Get version from CoreVersion.java if not provided
 if [ -z "$VERSION" ]; then
@@ -42,7 +43,7 @@ else
 fi
 
 # Copy I2P+ files
-cp -r pkg-temp/* "$APPDIR/i2p/"
+cp -r "$PKG_TEMP_DIR"/* "$APPDIR/i2p/"
 
 # Copy AppRun
 cp tools/appimage/AppRun "$APPDIR/"

@@ -5,7 +5,7 @@ task prepUpdateRouter(type: Copy) {
         project(':core').jar.archiveFile,
         project(':router').jar.archiveFile
     ]}
-    into 'pkg-temp/lib'
+    into pkgTempDir + '/lib'
 }
 
 task prepUpdateSmall(type: Copy) {
@@ -15,7 +15,7 @@ task prepUpdateSmall(type: Copy) {
     dependsOn ':apps:routerconsole:war', ':apps:i2ptunnel:war'
     dependsOn ':apps:addressbook:jar'
     // Base dir
-    into 'pkg-temp'
+    into pkgTempDir
     into('lib') {
         from {[
             project(':apps:ministreaming').jar.archiveFile,
@@ -43,16 +43,16 @@ task prepUpdate(type: Copy) {
     dependsOn ':apps:i2psnark:war'
     dependsOn ':apps:i2pcontrol:war'
     dependsOn ':apps:imagegen:war'
-    inputs.files fileTree('pkg-temp/lib').include('*.jar')
-    inputs.files fileTree('pkg-temp/webapps').include('*.war')
-    from 'pkg-temp'
+    inputs.files fileTree(pkgTempDir + '/lib').include('*.jar')
+    inputs.files fileTree(pkgTempDir + '/webapps').include('*.war')
+    from pkgTempDir
     mustRunAfter ':apps:susidns:war', ':apps:susimail:war'
     mustRunAfter ':apps:i2psnark:war'
     mustRunAfter ':apps:i2pcontrol:war'
     mustRunAfter ':apps:imagegen:war'
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     // Base dir
-    into 'pkg-temp'
+    into pkgTempDir
     into('lib') {
         from {[
             project(':apps:sam').jar.archiveFile,
@@ -79,7 +79,7 @@ task prepUpdate(type: Copy) {
     }
     doLast {
         String more = '\n\n----------------\n\nEARLIER HISTORY IS AVAILABLE IN THE SOURCE PACKAGE'
-        ant.concat(more, append: 'true', destfile: 'pkg-temp/history.txt')
+        ant.concat(more, append: 'true', destfile: pkgTempDir + '/history.txt')
     }
     from 'docs/LICENSE.md'
     into('docs') { from 'docs/LICENSE.md' }
@@ -96,19 +96,19 @@ task updaterRouter(type: Zip) {
     // https://discuss.gradle.org/t/destinationdir-is-deprecated-archivename-is-deprecated/31586
     archiveFileName.set('i2pupdate.zip')
     destinationDirectory.set(file('dist'))
-    from 'pkg-temp'
+    from pkgTempDir
 }
 
 task updaterSmall(type: Zip) {
     dependsOn prepUpdateSmall
     archiveFileName.set('i2pupdate.zip')
     destinationDirectory.set(file('dist'))
-    from 'pkg-temp'
+    from pkgTempDir
 }
 
 task updater(type: Zip) {
     dependsOn prepUpdate
     archiveFileName.set('i2pupdate.zip')
     destinationDirectory.set(file('dist'))
-    from 'pkg-temp'
+    from pkgTempDir
 }
