@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="routerconsole">
-  <property name="build.dir" value="build"/>
+  <property name="build.dir" value="/tmp/build-i2p/apps/routerconsole/java/build"/>
+  <property name="jsp.build.dir" value="../jsp"/>
 
   <property name="...build.dir" value="../../../build"/>
   <property name="core.java.build.dir" value="../../../core/java/build"/>
@@ -63,10 +64,10 @@
     <!-- Force the dependency on the RouterVersion as depend doesn't recognize constant changes  -->
     <dependset>
       <srcfilelist dir="." files="${router.java.build.dir}/obj/net/i2p/router/RouterVersion.class"/>
-      <targetfilelist dir="." files="build/obj/net/i2p/router/web/NewsFetcher.class"/>
-      <targetfilelist dir="." files="build/obj/net/i2p/router/web/PluginStarter.class"/>
-      <targetfilelist dir="." files="build/obj/net/i2p/router/web/SidebarHelper.class"/>
-      <targetfilelist dir="." files="build/obj/net/i2p/router/web/UpdateHandler.class"/>
+      <targetfilelist dir="." files="${build.dir}/obj/net/i2p/router/web/NewsFetcher.class"/>
+      <targetfilelist dir="." files="${build.dir}/obj/net/i2p/router/web/PluginStarter.class"/>
+      <targetfilelist dir="." files="${build.dir}/obj/net/i2p/router/web/SidebarHelper.class"/>
+      <targetfilelist dir="." files="${build.dir}/obj/net/i2p/router/web/UpdateHandler.class"/>
     </dependset>
   </target>
 
@@ -251,17 +252,19 @@
     <property name="lg2" value=""/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
-      <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
   </target>
@@ -271,12 +274,15 @@
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}"/>
       <arg value="./bundle-messages-news.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}">
       <arg value="./bundle-messages-news.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="false">
       <arg value="./bundle-messages-news.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <javac source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
@@ -292,12 +298,15 @@
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}"/>
       <arg value="./bundle-messages-countries.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}">
       <arg value="./bundle-messages-countries.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="false">
       <arg value="./bundle-messages-countries.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <javac source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
@@ -315,7 +324,7 @@
       </classpath>
       <arg value="tag"/>
       <arg value="../../../installer/resources/initialNews/initialNews.xml"/>
-      <arg value="build/News.java"/>
+      <arg value="${build.dir}/News.java"/>
     </java>
   </target>
 
@@ -325,16 +334,19 @@
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
       <arg value="./bundle-messages-news.sh"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
       <arg value="./bundle-messages-news.sh"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
       <arg value="./bundle-messages-news.sh"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
   </target>
@@ -345,16 +357,19 @@
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
       <arg value="./bundle-messages-countries.sh"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
       <arg value="./bundle-messages-countries.sh"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
       <arg value="./bundle-messages-countries.sh"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
   </target>
@@ -404,7 +419,7 @@
         <echo message="UglifyJS not found, skipping Javascript file compression..."/>
       </else>
     </if>
-    <war destfile="${build.dir}/routerconsole.war" webxml="../jsp/web-out.xml" basedir="${build.dir}/jsp/"
+    <war destfile="${build.dir}/routerconsole.war" webxml="${jsp.build.dir}/web-out.xml" basedir="${build.dir}/jsp/"
       excludes="web.xml, *.css, **/*.java, *.jsp, *.jsi, web-fragment.xml, web-out.xml">
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
@@ -437,13 +452,13 @@
 
   <target name="precompilejsp" depends="jar1" unless="precompilejsp.uptodate">
     <parallel>
-      <delete dir="../jsp/WEB-INF/"/>
-      <delete file="../jsp/web-fragment.xml"/>
-      <delete file="../jsp/web-out.xml"/>
+      <delete dir="${jsp.build.dir}/WEB-INF/"/>
+      <delete file="${jsp.build.dir}/web-fragment.xml"/>
+      <delete file="${jsp.build.dir}/web-out.xml"/>
     </parallel>
     <parallel>
-      <mkdir dir="../jsp/WEB-INF/"/>
-      <mkdir dir="../jsp/WEB-INF/classes"/>
+      <mkdir dir="${jsp.build.dir}/WEB-INF/"/>
+      <mkdir dir="${jsp.build.dir}/WEB-INF/classes"/>
     </parallel>
 
     <!-- There are various jspc ant tasks, but they all seem a bit flakey.
@@ -534,12 +549,12 @@
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
       </classpath>
       <arg value="-d"/>
-      <arg value="../jsp/WEB-INF/classes"/>
+      <arg value="${jsp.build.dir}/WEB-INF/classes"/>
       <arg value="-v"/>
       <arg value="-p"/>
       <arg value="net.i2p.router.web.jsp"/>
       <arg value="-webinc"/>
-      <arg value="../jsp/web-fragment.xml"/>
+      <arg value="${jsp.build.dir}/web-fragment.xml"/>
       <arg value="-webapp"/>
       <arg value="../jsp/"/>
       <arg value="-die"/>
@@ -549,8 +564,8 @@
       release="${javac.release}"
       encoding="UTF-8"
       includeAntRuntime="false"
-      destdir="../jsp/WEB-INF/classes/"
-      srcdir="../jsp/WEB-INF/classes" includes="**/*.java">
+      destdir="${jsp.build.dir}/WEB-INF/classes/"
+      srcdir="${jsp.build.dir}/WEB-INF/classes" includes="**/*.java">
       <compilerarg line="${javac.compilerargs}"/>
       <classpath>
         <pathelement location="../../jetty/jettylib/jasper-runtime.jar"/>
@@ -575,9 +590,9 @@
       </classpath>
     </javac>
 
-    <copy file="../jsp/web.xml" tofile="../jsp/web-out.xml"/>
-    <loadfile property="jspc.web.fragment" srcfile="../jsp/web-fragment.xml"/>
-    <replace file="../jsp/web-out.xml">
+    <copy file="../jsp/web.xml" tofile="${jsp.build.dir}/web-out.xml"/>
+    <loadfile property="jspc.web.fragment" srcfile="${jsp.build.dir}/web-fragment.xml"/>
+    <replace file="${jsp.build.dir}/web-out.xml">
       <replacefilter token="&lt;!-- precompiled servlets --&gt;" value="${jspc.web.fragment}"/>
     </replace>
     <!-- Add multipart config to servlets that need them -->
@@ -593,14 +608,14 @@
            &lt;max-request-size&gt;134217728&lt;/max-request-size&gt;&#10;
            &lt;file-size-threshold&gt;262144&lt;/file-size-threshold&gt;&#10;
        &lt;/multipart-config&gt;"/>
-    <replace file="../jsp/web-out.xml">
+    <replace file="${jsp.build.dir}/web-out.xml">
       <replacefilter token="${__class1}" value="${__class1}${__multipart}"/>
       <replacefilter token="${__class2}" value="${__class2}${__multipart}"/>
       <replacefilter token="${__class3}" value="${__class3}${__multipart}"/>
     </replace>
   </target>
 
-  <uptodate property="precompilejsp.uptodate" targetfile="../jsp/web-out.xml">
+  <uptodate property="precompilejsp.uptodate" targetfile="${jsp.build.dir}/web-out.xml">
     <srcfiles dir="../jsp" includes="**/*.jsp, help/*.jsp, *.jsi, **/*.html, *.css, susimail/susimail, web.xml"/>
     <!-- So the version is right on logs.jsp -->
     <srcfiles dir="../../../router/java/src/net/i2p/router" includes="RouterVersion.java"/>
@@ -750,9 +765,9 @@
   <target name="clean">
     <parallel>
       <delete dir="${build.dir}"/>
-      <delete dir="../jsp/WEB-INF/"/>
-      <delete file="../jsp/web-fragment.xml"/>
-      <delete file="../jsp/web-out.xml"/>
+      <delete dir="${jsp.build.dir}/WEB-INF/"/>
+      <delete file="${jsp.build.dir}/web-fragment.xml"/>
+      <delete file="${jsp.build.dir}/web-out.xml"/>
     </parallel>
   </target>
 

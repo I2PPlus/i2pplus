@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="susidns" default="all" basedir=".">
-  <property name="build.dir" value="build"/>
+  <property name="build.dir" value="/tmp/build-i2p/apps/susidns/src/build"/>
 
   <property name="...build.dir" value="../../../build"/>
   <property name="addressbook.build.dir" value="../../addressbook/build"/>
@@ -15,9 +15,10 @@
   <property name="jetty" value="../../jetty/"/>
   <property name="project" value="susidns"/>
   <property name="src" value="java/src"/>
-  <property name="bin" value="./WEB-INF/classes"/>
+  <property name="bin" value="${build.dir}/classes"/>
   <property name="lib" value="${jetty}/jettylib"/>
-  <property name="tmp" value="./tmp"/>
+  <property name="jsp.build.dir" value="${build.dir}/jsp-output"/>
+  <property name="tmp" value="${jsp.build.dir}/tmp"/>
   <property name="jsp" value="./jsp"/>
   <path id="cp">
     <pathelement path="${classpath}"/>
@@ -83,8 +84,8 @@
   </target>
 
   <target name="precompilejsp" depends="verifylibtaglibs" unless="precompilejsp.uptodate">
-    <delete file="WEB-INF/web-fragment.xml"/>
-    <delete file="WEB-INF/web-out.xml"/>
+    <delete file="${jsp.build.dir}/web-fragment.xml"/>
+    <delete file="${jsp.build.dir}/web-out.xml"/>
     <mkdir dir="${tmp}"/>
     <echo message="Ignore any warning about /WEB-INF/web.xml not found"/>
     <!-- See apps/routerconsole/java/build.xml for important JspC build documentation -->
@@ -100,7 +101,7 @@
       <arg value="-p"/>
       <arg value="i2p.susi.dns.jsp"/>
       <arg value="-webinc"/>
-      <arg value="WEB-INF/web-fragment.xml"/>
+      <arg value="${jsp.build.dir}/web-fragment.xml"/>
       <arg value="-webapp"/>
       <arg value="./jsp"/>
       <arg value="-die"/>
@@ -120,15 +121,15 @@
           -  We first strip the full path in case the latter steps don't work due to changing JspC
     implementation.
     -->
-    <replace file="tmp/i2p/susi/dns/jsp/addressbook_jsp.java">
+    <replace file="${tmp}/i2p/susi/dns/jsp/addressbook_jsp.java">
       <replacefilter token="${user.dir}/apps/susidns/src/" value=""/>
     </replace>
-    <replaceregexp file="tmp/i2p/susi/dns/jsp/addressbook_jsp.java"
+    <replaceregexp file="${tmp}/i2p/susi/dns/jsp/addressbook_jsp.java"
       match="_jspx_dependants.put\(.*\);" replace="//_jspx_dependants.put(@@@);" flags="g"/>
-    <replaceregexp file="tmp/i2p/susi/dns/jsp/addressbook_jsp.java"
+    <replaceregexp file="${tmp}/i2p/susi/dns/jsp/addressbook_jsp.java"
       match="//_jspx_dependants.put\(@@@\);"
       replace="_jspx_dependants.put(&quot;jar:file:lib/standard.jar!/META-INF/c.tld&quot;, Long.valueOf(1200000000000L));"/>
-    <replaceregexp file="tmp/i2p/susi/dns/jsp/addressbook_jsp.java"
+    <replaceregexp file="${tmp}/i2p/susi/dns/jsp/addressbook_jsp.java"
       match="//_jspx_dependants.put\(@@@\);"
       replace="_jspx_dependants.put(&quot;file:lib/standard.jar&quot;, Long.valueOf(1200000000000L));"/>
     <javac debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
@@ -136,9 +137,9 @@
       srcdir="${tmp}" includes="**/*.java" classpathref="cp">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
-    <copy file="WEB-INF/web-template.xml" tofile="WEB-INF/web-out.xml"/>
-    <loadfile property="jspc.web.fragment" srcfile="WEB-INF/web-fragment.xml"/>
-    <replace file="WEB-INF/web-out.xml">
+    <copy file="WEB-INF/web-template.xml" tofile="${jsp.build.dir}/web-out.xml"/>
+    <loadfile property="jspc.web.fragment" srcfile="${jsp.build.dir}/web-fragment.xml"/>
+    <replace file="${jsp.build.dir}/web-out.xml">
       <replacefilter token="&lt;!-- precompiled servlets --&gt;" value="${jspc.web.fragment}"/>
     </replace>
     <!-- Add multipart config to servlets that need them -->
@@ -152,12 +153,12 @@
        &lt;max-request-size&gt;67108864&lt;/max-request-size&gt;&#10;
        &lt;file-size-threshold&gt;262144&lt;/file-size-threshold&gt;&#10;
        &lt;/multipart-config&gt;"/>
-    <replace file="WEB-INF/web-out.xml">
+    <replace file="${jsp.build.dir}/web-out.xml">
       <replacefilter token="${__class1}" value="${__class1}${__multipart}"/>
     </replace>
   </target>
 
-  <uptodate property="precompilejsp.uptodate" targetfile="WEB-INF/web-out.xml">
+  <uptodate property="precompilejsp.uptodate" targetfile="${jsp.build.dir}/web-out.xml">
     <srcfiles dir="." includes="jsp/*.jsp, WEB-INF/web-template.xml"/>
   </uptodate>
 
@@ -203,9 +204,9 @@
         <echo message="UglifyJS not found, skipping Javascript file compression..."/>
       </else>
     </if>
-    <war destfile="${build.dir}/${project}.war" webxml="WEB-INF/web-out.xml">
+    <war destfile="${build.dir}/${project}.war" webxml="${jsp.build.dir}/web-out.xml">
+      <classes dir="${bin}"/>
       <fileset dir=".">
-        <include name="WEB-INF/**/*.class"/>
         <include name="svg/*"/>
         <exclude name="js/*"/>
       </fileset>
@@ -224,7 +225,7 @@
 
   <target name="warUpToDate">
     <uptodate property="war.uptodate" targetfile="${build.dir}/${project}.war">
-      <srcfiles dir="." includes="WEB-INF/web-out.xml WEB-INF/**/*.class svg/*"/>
+      <srcfiles dir="." includes="svg/*"/>
     </uptodate>
     <condition property="shouldListChanges">
       <and>
@@ -270,7 +271,7 @@
       </classpath>
       <arg value="tag"/>
       <arg value="svg/"/>
-      <arg value="build/HowSVG.java"/>
+      <arg value="${build.dir}/HowSVG.java"/>
     </java>
   </target>
 
@@ -280,31 +281,29 @@
     <property name="lg2" value=""/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
-      <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
   </target>
 
   <target name="clean">
-      <delete file="${build.dir}/susidns.war"/>
+    <delete file="${build.dir}/susidns.war"/>
+    <delete dir="${tmp}"/>
     <delete>
-      <fileset dir="." includes="**/*.class"/>
-      <fileset dir="." includes="tmp"/>
       <fileset dir="WEB-INF" includes="web-fragment.xml, web-out.xml"/>
     </delete>
-    <delete dir="${build.dir}"/>
-    <delete dir="${bin}"/>
-    <delete dir="${tmp}"/>
     <delete dir="${build.dir}"/>
   </target>
 

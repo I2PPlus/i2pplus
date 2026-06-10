@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="susimail">
-  <property name="build.dir" value="build"/>
+  <property name="build.dir" value="/tmp/build-i2p/apps/susimail/build"/>
+  <property name="classes.dir" value="${build.dir}/classes"/>
 
   <property name="core.java.build.dir" value="../../core/java/build"/>
 
@@ -28,7 +29,7 @@
     <depend
       cache="../../build"
       srcdir="./src/src"
-      destdir="./src/WEB-INF/classes">
+      destdir="${classes.dir}">
       <!-- Depend on classes instead of jars where available -->
       <classpath>
         <pathelement location="${core.java.build.dir}/obj"/>
@@ -43,14 +44,14 @@
   </target>
 
   <target name="compile" depends="depend">
-    <mkdir dir="./src/WEB-INF/classes"/>
+    <mkdir dir="${classes.dir}"/>
     <javac
       srcdir="./src/src"
       debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="./src/WEB-INF/classes">
+      destdir="${classes.dir}">
       <compilerarg line="${javac.compilerargs}"/>
       <classpath>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
@@ -68,9 +69,9 @@
   <target name="jar" depends="compile, bundle, warUpToDate, listChangedFiles">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
-    <copy file="src/susimail.properties" todir="src/WEB-INF/classes"/>
+    <copy file="src/susimail.properties" todir="${classes.dir}"/>
     <jar destfile="${build.dir}/susimail.jar"
-      basedir="src/WEB-INF/classes">
+      basedir="${classes.dir}">
       <manifest>
         <attribute name="Class-Path" value="i2p.jar"/>
         <attribute name="Implementation-Version" value="${full.version}"/>
@@ -101,7 +102,7 @@
   <target name="war" depends="compile, bundle, warUpToDate, listChangedFiles" unless="war.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
-    <copy file="src/susimail.properties" todir="src/WEB-INF/classes"/>
+    <copy file="src/susimail.properties" todir="${classes.dir}"/>
     <mkdir dir="${build.dir}/js"/>
     <copy todir="${build.dir}/js">
       <fileset dir="src/js/"/>
@@ -121,6 +122,7 @@
     </if>
     <war destfile="${build.dir}/susimail.war" webxml="src/WEB-INF/web.xml" update="true" basedir="src/"
          excludes="WEB-INF/web.xml LICENSE src src/**/* susimail.properties js/*.js">
+      <classes dir="${classes.dir}"/>
       <zipfileset dir="${build.dir}/js" prefix="js"/>
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
@@ -170,7 +172,7 @@
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      srcdir="${build.dir}/messages-src" destdir="src/WEB-INF/classes">
+      srcdir="${build.dir}/messages-src" destdir="${classes.dir}">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -209,7 +211,7 @@
 
   <target name="clean">
     <parallel>
-      <delete dir="src/WEB-INF/classes"/>
+      <delete dir="${classes.dir}"/>
       <delete file="${build.dir}/susimail.war"/>
       <delete file="${build.dir}/susimail.jar"/>
       <delete dir="${build.dir}"/>

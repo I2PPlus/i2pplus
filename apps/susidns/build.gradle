@@ -7,7 +7,7 @@ sourceSets {
     main {
         java {
             srcDir 'src/java/src'
-            srcDir 'src/build/messages-src'
+            srcDir "$buildDir/messages-src"
         }
     }
 }
@@ -29,7 +29,7 @@ dependencies {
 task bundle {
     doLast {
         if (!(new File("$buildDir/classes/java/main/i2p/susi/dns/messages_de.class")).exists())
-            println "apps/susidns/src/bundle-messages.sh".execute().text
+            println "apps/susidns/src/bundle-messages.sh $buildDir".execute().text
     }
 }
 

@@ -6,7 +6,7 @@ sourceSets {
     main {
         java {
             srcDir 'src'
-            srcDir 'build/messages-src'
+            srcDir "$buildDir/messages-src"
         }
     }
 }
@@ -24,7 +24,7 @@ dependencies {
 task bundle {
     doLast {
         if (!(new File("$buildDir/net/i2p/desktopgui/messages_de.class")).exists())
-            println "${projectDir}/bundle-messages.sh".execute().text
+            println "${projectDir}/bundle-messages.sh $buildDir".execute().text
     }
 }
 jar.dependsOn bundle

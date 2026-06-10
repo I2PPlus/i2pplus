@@ -1,6 +1,8 @@
 apply plugin: 'java'
 apply plugin: 'java-library'
 
+buildDir = file("/tmp/build-i2p/gradle")
+
 String getReleaseVersion() {
     def releaseVersion
     file("core/java/src/net/i2p/CoreVersion.java").readLines().findAll({ line ->
@@ -70,6 +72,8 @@ subprojects {
         return
     }
     
+    buildDir = file("/tmp/build-i2p/gradle/${project.path.replace(':', '/').replaceFirst('/', '')}")
+
     apply plugin: 'java'
     apply plugin: 'java-library'
     apply plugin: 'jacoco'

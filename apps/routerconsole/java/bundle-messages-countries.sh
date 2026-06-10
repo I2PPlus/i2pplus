@@ -12,7 +12,12 @@
 #
 cd `dirname $0`
 CLASS=net.i2p.router.countries.messages
-TMPFILE=build/javafiles-countries.txt
+if [ -n "$1" -a "$1" != "-p" ]; then
+    BD="$1"
+else
+    BD=build
+fi
+TMPFILE=$BD/javafiles-countries.txt
 export TZ=UTC
 RC=0
 
@@ -20,7 +25,7 @@ if ! $(which javac > /dev/null 2>&1); then
     export JAVAC=${JAVA_HOME}/../bin/javac
 fi
 
-if [ "$1" = "-p" ]
+if [ "$1" = "-p" -o "$2" = "-p" ]
 then
 	POUPDATE=1
 fi
@@ -38,10 +43,10 @@ fi
 #
 CFILE=../../../installer/resources/countries.txt
 # add ../java/ so the refs will work in the po file
-JFILE=../java/build/Countries.java
+JFILE=$BD/Countries.java
 if [ $CFILE -nt $JFILE -o ! -s $JFILE ]
 then
-	mkdir -p build
+	mkdir -p $BD
         echo '// Automatically generated pseudo-java for xgettext - do not edit' > $JFILE
 	echo '// Translators may wish to translate a few of these, do not bother to translate all of them!!' >> $JFILE
 	sed -e '/^#/d' -e 's/..,\(..*\)/_t("\1");/' $CFILE >> $JFILE
@@ -65,8 +70,8 @@ do
 		# make list of java files newer than the .po file
 		find $JPATHS -name *.java -newer $i > $TMPFILE
 	fi
-	if [ -s build/obj/net/i2p/router/countries/messages_$LG.class -a \
-	     build/obj/net/i2p/router/countries/messages_$LG.class -nt $i -a \
+	if [ -s $BD/obj/net/i2p/router/countries/messages_$LG.class -a \
+	     $BD/obj/net/i2p/router/countries/messages_$LG.class -nt $i -a \
 	     ! -s $TMPFILE ]
 	then
 		continue
@@ -118,21 +123,21 @@ do
         then
             # slow way
             # convert to class files in build/obj
-            msgfmt --java2 -r $CLASS -l $LG -d build/obj $i
+            msgfmt --java2 -r $CLASS -l $LG -d $BD/obj $i
             if [ $? -ne 0 ]
             then
                 echo "ERROR - msgfmt failed on ${i}, not updating translations"
                 # msgfmt leaves the class file there so the build would work the next time
-                find build -name messages_${LG}.class -exec rm -f {} \;
+                find $BD -name messages_${LG}.class -exec rm -f {} \;
                 RC=1
                 break
             fi
         else
             # fast way
             # convert to java files in build/messages-countries-src
-            TD=build/messages-countries-src-tmp
+            TD=$BD/messages-countries-src-tmp
             TDX=$TD/net/i2p/router/countries
-            TD2=build/messages-countries-src
+            TD2=$BD/messages-countries-src
             TDY=$TD2/net/i2p/router/countries
             rm -rf $TD
             mkdir -p $TD $TDY
@@ -141,7 +146,7 @@ do
             then
                 echo "ERROR - msgfmt failed on ${i}, not updating translations"
                 # msgfmt leaves the class file there so the build would work the next time
-                find build/obj -name messages_${LG}.class -exec rm -f {} \;
+                find $BD/obj -name messages_${LG}.class -exec rm -f {} \;
                 RC=1
                 break
             fi

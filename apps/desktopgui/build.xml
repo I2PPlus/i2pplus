@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="desktopgui">
-  <property name="build.dir" value="build"/>
+  <property name="build.dir" value="/tmp/build-i2p/apps/desktopgui/build"/>
 
   <property name="core.java.build.dir" value="../../core/java/build"/>
   <property name="router.java.build.dir" value="../../router/java/build"/>

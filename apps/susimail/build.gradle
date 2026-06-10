@@ -6,7 +6,7 @@ sourceSets {
     main {
         java {
             srcDir 'src/src'
-            srcDir 'build/messages-src'
+            srcDir "$buildDir/messages-src"
         }
     }
 }
@@ -22,7 +22,7 @@ dependencies {
 task bundle {
     doLast {
         if (!(new File("$buildDir/classes/java/main/i2p/susi/webmail/messages_de.class")).exists())
-            println "apps/susimail/bundle-messages.sh".execute().text
+            println "apps/susimail/bundle-messages.sh $buildDir".execute().text
     }
 }
 war.dependsOn bundle, ':apps:i2ptunnel:i2ptunnelJar'

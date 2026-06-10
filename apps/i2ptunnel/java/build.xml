@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="i2ptunnel">
-  <property name="build.dir" value="build"/>
+  <property name="build.dir" value="/tmp/build-i2p/apps/i2ptunnel/java/build"/>
 
   <property name="...build.dir" value="../../../build"/>
   <property name="core.java.build.dir" value="../../../core/java/build"/>
   <property name="ministreaming.java.build.dir" value="../../ministreaming/java/build"/>
   <property name="streaming.java.build.dir" value="../../streaming/java/build"/>
+  <property name="jsp.build.dir" value="../jsp"/>
 
   <property name="...build.dir" value="${...build.dir}"/>
   <property name="core.java.build.dir" value="${core.java.build.dir}"/>
@@ -77,7 +78,7 @@
       destdir="${build.dir}/obj"
       includeAntRuntime="false"
       encoding="UTF-8"
-      classpath="${core.java.build.dir}/i2p.jar:build/i2ptunnel.jar:../../jetty/jettylib/jetty-i2p.jar:../../jetty/jettylib/jetty-util.jar:../../jetty/jettylib/jetty-xml.jar:../../jetty/jettylib/javax.servlet.jar">
+      classpath="${core.java.build.dir}/i2p.jar:${build.dir}/i2ptunnel.jar:../../jetty/jettylib/jetty-i2p.jar:../../jetty/jettylib/jetty-util.jar:../../jetty/jettylib/jetty-xml.jar:../../jetty/jettylib/javax.servlet.jar">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -199,7 +200,7 @@
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      srcdir="${build.dir}/messages-src" destdir="../jsp/WEB-INF/classes">
+      srcdir="${build.dir}/messages-src" destdir="${jsp.build.dir}/WEB-INF/classes">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -210,17 +211,19 @@
     <property name="lg2" value=""/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
-      <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
       <arg value="./bundle-messages.sh"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
   </target>
@@ -234,14 +237,17 @@
       failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}"/>
       <arg value="./bundle-messages-proxy.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true"
       failonerror="${require.gettext}">
       <arg value="./bundle-messages-proxy.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <!-- multi-lang is optional -->
     <exec executable="sh" osfamily="windows" failifexecutionfails="false">
       <arg value="./bundle-messages-proxy.sh"/>
+      <arg value="${build.dir}"/>
     </exec>
     <javac source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
@@ -259,7 +265,7 @@
       </classpath>
       <arg value="tag"/>
       <arg value="../../../installer/resources/console/proxy/"/>
-      <arg value="build/Proxy.java"/>
+      <arg value="${build.dir}/Proxy.java"/>
     </java>
   </target>
 
@@ -269,17 +275,19 @@
     <property name="lg2" value=""/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
-      <arg value="./bundle-messages-proxy.sh"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
       <arg value="./bundle-messages-proxy.sh"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
       <arg value="./bundle-messages-proxy.sh"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
   </target>
@@ -306,10 +314,10 @@
     unless="war.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.w.tr" value=""/>
-    <copy todir="../jsp/WEB-INF/classes/net/i2p/i2ptunnel/ui">
+    <copy todir="${jsp.build.dir}/WEB-INF/classes/net/i2p/i2ptunnel/ui">
       <fileset dir="${build.dir}/obj/net/i2p/i2ptunnel/ui"/>
     </copy>
-    <copy todir="../jsp/WEB-INF/classes/net/i2p/i2ptunnel/web">
+    <copy todir="${jsp.build.dir}/WEB-INF/classes/net/i2p/i2ptunnel/web">
       <fileset dir="${build.dir}/obj/net/i2p/i2ptunnel/web"/>
     </copy>
     <mkdir dir="${build.dir}/js"/>
@@ -329,9 +337,10 @@
         <echo message="UglifyJS not found, skipping Javascript file compression..."/>
       </else>
     </if>
-    <war destfile="${build.dir}/i2ptunnel.war" webxml="../jsp/web-out.xml"
+    <war destfile="${build.dir}/i2ptunnel.war" webxml="${jsp.build.dir}/web-out.xml"
       basedir="../jsp/" excludes="web.xml, web-fragment.xml, web-out.xml, **/*.java, *.jsp, *.jsi, **/*.js">
       <zipfileset dir="${build.dir}/js" prefix="js"/>
+      <classes dir="${jsp.build.dir}/WEB-INF/classes"/>
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
         <attribute name="Built-By" value="${build.built-by}"/>
@@ -360,11 +369,11 @@
   </target>
 
   <target name="precompilejsp" depends="jarTempBeans" unless="precompilejsp.uptodate">
-    <delete dir="../jsp/WEB-INF/"/>
-    <delete file="../jsp/web-fragment.xml"/>
-    <delete file="../jsp/web-out.xml"/>
-    <mkdir dir="../jsp/WEB-INF/"/>
-    <mkdir dir="../jsp/WEB-INF/classes"/>
+    <delete dir="${jsp.build.dir}/WEB-INF/"/>
+    <delete file="${jsp.build.dir}/web-fragment.xml"/>
+    <delete file="${jsp.build.dir}/web-out.xml"/>
+    <mkdir dir="${jsp.build.dir}/WEB-INF/"/>
+    <mkdir dir="${jsp.build.dir}/WEB-INF/classes"/>
     <!-- See apps/routerconsole/java/build.xml for important JspC build documentation -->
     <java classname="net.i2p.servlet.util.JspC" fork="true" failonerror="true">
       <!-- these are to detect tomcat version and reproducible build setting -->
@@ -396,12 +405,12 @@
         <pathelement location="../../jetty/jettylib/jspc.jar"/>
       </classpath>
       <arg value="-d"/>
-      <arg value="../jsp/WEB-INF/classes"/>
+      <arg value="${jsp.build.dir}/WEB-INF/classes"/>
       <arg value="-v"/>
       <arg value="-p"/>
       <arg value="net.i2p.i2ptunnel.jsp"/>
       <arg value="-webinc"/>
-      <arg value="../jsp/web-fragment.xml"/>
+      <arg value="${jsp.build.dir}/web-fragment.xml"/>
       <arg value="-webapp"/>
       <arg value="../jsp/"/>
       <arg value="-die"/>
@@ -410,7 +419,7 @@
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="../jsp/WEB-INF/classes/" srcdir="../jsp/WEB-INF/classes" includes="**/*.java">
+      destdir="${jsp.build.dir}/WEB-INF/classes/" srcdir="${jsp.build.dir}/WEB-INF/classes" includes="**/*.java">
       <compilerarg line="${javac.compilerargs}"/>
       <classpath>
         <pathelement location="../../jetty/jettylib/jasper-runtime.jar"/>
@@ -433,9 +442,9 @@
         <pathelement location="../../jetty/jettylib/jetty-i2p.jar"/>
       </classpath>
     </javac>
-    <copy file="../jsp/web.xml" tofile="../jsp/web-out.xml"/>
-    <loadfile property="jspc.web.fragment" srcfile="../jsp/web-fragment.xml"/>
-    <replace file="../jsp/web-out.xml">
+    <copy file="../jsp/web.xml" tofile="${jsp.build.dir}/web-out.xml"/>
+    <loadfile property="jspc.web.fragment" srcfile="${jsp.build.dir}/web-fragment.xml"/>
+    <replace file="${jsp.build.dir}/web-out.xml">
       <replacefilter token="&lt;!-- precompiled servlets --&gt;" value="${jspc.web.fragment}"/>
     </replace>
     <!-- Add multipart config to servlets that need them -->
@@ -448,12 +457,12 @@
        &lt;max-file-size&gt;131072&lt;/max-file-size&gt;&#10;
        &lt;max-request-size&gt;131072&lt;/max-request-size&gt;&#10;
      &lt;/multipart-config&gt;"/>
-    <replace file="../jsp/web-out.xml">
+    <replace file="${jsp.build.dir}/web-out.xml">
       <replacefilter token="${__class1}" value="${__class1}${__multipart}"/>
     </replace>
   </target>
 
-  <uptodate property="precompilejsp.uptodate" targetfile="../jsp/web-out.xml">
+  <uptodate property="precompilejsp.uptodate" targetfile="${jsp.build.dir}/web-out.xml">
     <srcfiles dir="../jsp" includes="*.jsp, *.jsi, *.html, web.xml"/>
     <srcfiles dir="src/net/i2p/i2ptunnel/web" includes="*.java"/>
   </uptodate>
@@ -531,9 +540,9 @@
 
   <target name="clean">
     <delete dir="${build.dir}"/>
-    <delete dir="../jsp/WEB-INF/"/>
-    <delete file="../jsp/web-fragment.xml"/>
-    <delete file="../jsp/web-out.xml"/>
+    <delete dir="${jsp.build.dir}/WEB-INF/"/>
+    <delete file="${jsp.build.dir}/web-fragment.xml"/>
+    <delete file="${jsp.build.dir}/web-out.xml"/>
   </target>
 
   <target name="cleandep" depends="clean"/>

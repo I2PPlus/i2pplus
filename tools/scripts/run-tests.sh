@@ -11,7 +11,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 HAMCREST="${REPO_ROOT}/tools/test/hamcrest"
 JUNIT="${REPO_ROOT}/tools/test/junit"
@@ -58,7 +58,7 @@ run_test() {
   fi
   
   echo -e "${BOLD}${label}${RESET}"
-  cd "${REPO_ROOT}/${dir}" && ant $ANT_PROPS test -logfile "$LOG_FILE" > /dev/null 2>&1
+  cd "${REPO_ROOT}/${dir}" && ant $ANT_PROPS $(get_build_props "$dir") test -logfile "$LOG_FILE" > /dev/null 2>&1
 
   local report_name
   report_name=$(get_report_name "$dir")
@@ -97,9 +97,27 @@ run_test() {
   echo ""
 }
 
-run_build() {
+get_build_props() {
   local dir="$1"
-  cd "${REPO_ROOT}/${dir}" && ant $ANT_PROPS build -logfile "$LOG_FILE" > /dev/null 2>&1
+  local build_root="/tmp/build-i2p"
+  local props="-Dbuild.dir=${build_root}/${dir}/build"
+  case "$dir" in
+    apps/ministreaming/java)
+      props="$props -Dcore.java.build.dir=${build_root}/core/java/build"
+      ;;
+    apps/streaming/java|apps/i2ptunnel/java)
+      props="$props -Dcore.java.build.dir=${build_root}/core/java/build -Dministreaming.java.build.dir=${build_root}/apps/ministreaming/java/build"
+      ;;
+    router/java)
+      props="$props -Dcore.java.build.dir=${build_root}/core/java/build -Dapps.i2ptunnel.java.build.dir=${build_root}/apps/i2ptunnel/java/build"
+      ;;
+  esac
+  echo "$props"
+}
+
+run_build() {
+  local dir="$1" target="${2:-jar}"
+  cd "${REPO_ROOT}/${dir}" && ant $ANT_PROPS $(get_build_props "$dir") "$target" -logfile "$LOG_FILE" > /dev/null 2>&1
 }
 
 rm -rf "${REPO_ROOT}/reports" 2>/dev/null
@@ -120,6 +138,9 @@ case "${1:-all}" in
     ;;
   router)
     run_build core/java
+    run_build core/java jarTest
+    run_build apps/ministreaming/java
+    run_build apps/i2ptunnel/java
     run_build router/java
     run_test router/java "Router"
     ;;

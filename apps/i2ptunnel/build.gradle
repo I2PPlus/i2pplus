@@ -7,8 +7,8 @@ sourceSets {
     main {
         java {
             srcDir 'java/src'
-            srcDir 'java/build/messages-src'
-            srcDir 'java/build/messages-proxy-src'
+            srcDir "$buildDir/messages-src"
+            srcDir "$buildDir/messages-proxy-src"
         }
     }
     test {
@@ -39,14 +39,14 @@ dependencies {
 task bundleProxy {
     doLast {
         if (!(new File("$buildDir/classes/java/main/net/i2p/i2ptunnel/proxy/messages_de.class")).exists())
-            println "apps/i2ptunnel/java/bundle-messages-proxy.sh".execute().text
+            println "apps/i2ptunnel/java/bundle-messages-proxy.sh $buildDir".execute().text
     }
 }
 
 task bundle {
     doLast {
         if (!(new File("$buildDir/classes/java/main/net/i2p/i2ptunnel/web/messages_de.class")).exists())
-            println "apps/i2ptunnel/java/bundle-messages.sh".execute().text
+            println "apps/i2ptunnel/java/bundle-messages.sh $buildDir".execute().text
     }
 }
 

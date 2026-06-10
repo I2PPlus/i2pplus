@@ -12,7 +12,12 @@
 #
 cd `dirname $0`
 CLASS=net.i2p.router.news.messages
-TMPFILE=build/javafiles-news.txt
+if [ -n "$1" -a "$1" != "-p" ]; then
+    BD="$1"
+else
+    BD=build
+fi
+TMPFILE=$BD/javafiles-news.txt
 export TZ=UTC
 RC=0
 
@@ -20,7 +25,7 @@ if ! $(which javac > /dev/null 2>&1); then
     export JAVAC=${JAVA_HOME}/../bin/javac
 fi
 
-if [ "$1" = "-p" ]
+if [ "$1" = "-p" -o "$2" = "-p" ]
 then
 	POUPDATE=1
 fi
@@ -34,7 +39,7 @@ fi
 # set LG2 to the language you need in environment variables to enable this
 
 # add ../java/ so the refs will work in the po file
-JPATHS="../java/build/News.java"
+JPATHS="$BD/News.java"
 for i in ../locale-news/messages_*.po
 do
 	# get language
@@ -51,8 +56,8 @@ do
 		# make list of java files newer than the .po file
 		find $JPATHS -name *.java -newer $i > $TMPFILE
 	fi
-	if [ -s build/obj/net/i2p/router/news/messages_$LG.class -a \
-	     build/obj/net/i2p/router/news/messages_$LG.class -nt $i -a \
+	if [ -s $BD/obj/net/i2p/router/news/messages_$LG.class -a \
+	     $BD/obj/net/i2p/router/news/messages_$LG.class -nt $i -a \
 	     ! -s $TMPFILE ]
 	then
 		continue
@@ -104,21 +109,21 @@ do
         then
             # slow way
             # convert to class files in build/obj
-            msgfmt --java2 -r $CLASS -l $LG -d build/obj $i
+            msgfmt --java2 -r $CLASS -l $LG -d $BD/obj $i
             if [ $? -ne 0 ]
             then
                 echo "ERROR - msgfmt failed on ${i}, not updating translations"
                 # msgfmt leaves the class file there so the build would work the next time
-                find build -name messages_${LG}.class -exec rm -f {} \;
+                find $BD -name messages_${LG}.class -exec rm -f {} \;
                 RC=1
                 break
             fi
         else
             # fast way
             # convert to java files in build/messages-news-src
-            TD=build/messages-news-src-tmp
+            TD=$BD/messages-news-src-tmp
             TDX=$TD/net/i2p/router/news
-            TD2=build/messages-news-src
+            TD2=$BD/messages-news-src
             TDY=$TD2/net/i2p/router/news
             rm -rf $TD
             mkdir -p $TD $TDY
@@ -127,7 +132,7 @@ do
             then
                 echo "ERROR - msgfmt failed on ${i}, not updating translations"
                 # msgfmt leaves the class file there so the build would work the next time
-                find build/obj -name messages_${LG}.class -exec rm -f {} \;
+                find $BD/obj -name messages_${LG}.class -exec rm -f {} \;
                 RC=1
                 break
             fi

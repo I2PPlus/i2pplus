@@ -8,9 +8,9 @@ sourceSets {
     main {
         java {
             srcDir 'java/src'
-            srcDir 'java/build/messages-src'
-            srcDir 'java/build/messages-countries-src'
-            srcDir 'java/build/messages-news-src'
+            srcDir "$buildDir/messages-src"
+            srcDir "$buildDir/messages-countries-src"
+            srcDir "$buildDir/messages-news-src"
         }
     }
 }
@@ -67,15 +67,15 @@ if (System.getenv("TARGET_JAVA_HOME") == null && JavaVersion.current() != JavaVe
 task bundleJar {
     doLast {
         if (!(new File("$buildDir/classes/java/main/net/i2p/router/countries/messages_de.class")).exists())
-            println "apps/routerconsole/java/bundle-messages-countries.sh".execute().text
+            println "apps/routerconsole/java/bundle-messages-countries.sh $buildDir".execute().text
         if (!(new File("$buildDir/classes/java/main/net/i2p/router/news/messages_de.class")).exists())
-            println "apps/routerconsole/java/bundle-messages-news.sh".execute().text
+            println "apps/routerconsole/java/bundle-messages-news.sh $buildDir".execute().text
     }
 }
 task bundle {
     doLast {
         if (!(new File("$buildDir/classes/java/main/net/i2p/router/web/messages_de.class")).exists())
-            println "apps/routerconsole/java/bundle-messages.sh".execute().text
+            println "apps/routerconsole/java/bundle-messages.sh $buildDir".execute().text
     }
 }
 
@@ -130,7 +130,7 @@ task precompileJsp(type: JavaExec) {
     jvmArgs "-Dbuild.reproducible=true"
     
     args "-d"
-    args "jsp/WEB-INF/classes"
+    args "$buildDir/jsp_classes"
     args "-v"
     args "-p"
     args "net.i2p.router.web.jsp"
@@ -141,7 +141,7 @@ task precompileJsp(type: JavaExec) {
     doLast {
         def output = new File("$buildDir/compiledJsps")
         output.mkdirs()
-        ant.javac(srcDir: "jsp/WEB-INF/classes",
+        ant.javac(srcDir: "$buildDir/jsp_classes",
                     classpath: java.sourceSets.main.runtimeClasspath.asPath,
                     debug : true,
                     includeAntRuntime : false,

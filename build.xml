@@ -586,6 +586,7 @@
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
       <property name="streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
+      <property name="jsp.build.dir" location="${build.root}apps/i2ptunnel/jsp"/>
       </ant>
     <copy quiet="true" file="${apps.i2ptunnel.java.build.dir}/i2ptunnel.jar" todir="${build.root}build/"/>
     <copy quiet="true" file="${apps.i2ptunnel.java.build.dir}/i2ptunnel-ui.jar" todir="${build.root}build/"/>
@@ -598,6 +599,7 @@
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
       <property name="streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
+      <property name="jsp.build.dir" location="${build.root}apps/i2ptunnel/jsp"/>
       </ant>
     <copy quiet="true" file="${apps.i2ptunnel.java.build.dir}/i2ptunnel.jar" todir="${build.root}build/"/>
     <copy quiet="true" file="${apps.i2ptunnel.java.build.dir}/i2ptunnel.war" todir="${build.root}build/"/>
@@ -625,6 +627,7 @@
       <property name="jrobin.java.build.dir" location="${build.root}apps/jrobin/java/build"/>
       <property name="router.java.build.dir" location="${build.root}router/java/build"/>
       <property name="systray.java.build.dir" location="${build.root}apps/systray/java/build"/>
+      <property name="jsp.build.dir" location="${build.root}apps/routerconsole/jsp"/>
       </ant>
   </target>
 
@@ -645,6 +648,7 @@
 
   <target name="buildJetty" depends="buildCore">
     <ant dir="apps/jetty" target="build">
+      <property name="build.dir" location="${build.root}apps/jetty/build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       </ant>
     <copy quiet="true" todir="${build.root}build/">
@@ -1209,6 +1213,9 @@
         <target name="poupdate"/>
         <target name="poupdate-news"/>
         <target name="poupdate-countries"/>
+        <property name="build.dir" location="${build.root}apps/routerconsole/java/build"/>
+        <property name="...build.dir" location="${build.root}build"/>
+        <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       </ant>
       <ant dir="apps/i2psnark/java/" target="poupdate">
       <property name="build.dir" location="${build.root}apps/i2psnark/java/build"/>
@@ -1221,8 +1228,14 @@
       <ant dir="apps/i2ptunnel/java/">
         <target name="poupdate"/>
         <target name="poupdate-proxy"/>
+        <property name="build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+        <property name="...build.dir" location="${build.root}build"/>
+        <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+        <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
+        <property name="streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
       </ant>
       <ant dir="apps/susidns/src/" target="poupdate">
+      <property name="build.dir" location="${build.root}apps/susidns/src/build"/>
       <property name="...build.dir" location="${build.root}build"/>
       <property name="addressbook.build.dir" location="${build.root}apps/addressbook/build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
@@ -3199,7 +3212,7 @@
       </ant>
   </target>
 
-  <target name="buildRouterTest" depends="buildCoreTest">
+  <target name="buildRouterTest" depends="buildCoreTest, buildI2PTunnel">
     <ant dir="router/java/" target="jarTest">
       <property name="build.dir" location="${build.root}router/java/build"/>
       <property name="apps.i2ptunnel.java.build.dir" location="${build.root}apps/i2ptunnel/java/build"/>

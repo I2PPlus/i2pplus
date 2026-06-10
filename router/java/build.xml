@@ -247,11 +247,17 @@
 
   <!-- unit tests -->
   <target name="builddepscalatest">
-    <ant dir="../../core/java/" target="jar"/>
-    <ant dir="../../core/java/" target="jarScalaTest"/>
+    <ant dir="../../core/java/" target="jar">
+      <property name="build.dir" location="${core.java.build.dir}"/>
+    </ant>
+    <ant dir="../../core/java/" target="jarScalaTest">
+      <property name="build.dir" location="${core.java.build.dir}"/>
+    </ant>
   </target>
   <target name="builddeptest">
-    <ant dir="../../core/java/" target="jarTest"/>
+    <ant dir="../../core/java/" target="jarTest">
+      <property name="build.dir" location="${core.java.build.dir}"/>
+    </ant>
   </target>
   <target name="scalatest.compileTest" depends="builddepscalatest, compile, scala.init">
     <mkdir dir="${build.dir}"/>
@@ -329,8 +335,8 @@
 
   <target name="jarTest" depends="junit.compileTest">
     <mkdir dir="${build.dir}/obj/net/i2p/router/util/resources"/>
-    <copy todir="${build.dir}/obj/net/i2p/router/util/resources">
-      <fileset dir="../resources"/>
+    <copy todir="${build.dir}/obj/net/i2p/router/util/resources" failonerror="false">
+      <fileset dir="../resources" erroronmissingdir="false"/>
     </copy>
     <jar destfile="${build.dir}/routertest.jar" basedir="${build.dir}/obj">
       <manifest>

@@ -62,7 +62,7 @@ sourceSets {
     main {
         java {
             srcDir 'java/src'
-            srcDir 'java/build/messages-src'
+            srcDir "$buildDir/messages-src"
             exclude 'gnu/gettext'
         }
         resources {
@@ -133,7 +133,7 @@ if (System.getenv("TARGET_JAVA_HOME") == null && JavaVersion.current() != JavaVe
 task bundle {
     doLast {
         if (!(new File("$buildDir/classes/java/main/net/i2p/util/messages_de.class")).exists())
-            println "core/java/bundle-messages.sh".execute().text
+            println "core/java/bundle-messages.sh $buildDir".execute().text
     }
 }
 jar.dependsOn bundle

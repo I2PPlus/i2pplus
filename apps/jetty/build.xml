@@ -213,7 +213,7 @@
       filesetmanifest="mergewithoutmain">
       <zipfileset excludes="**/JavaVersion.class"
         src="${jetty.base}/lib/jetty-util-${jetty.ver}.jar"/>
-      <zipfileset src="build/jetty-util-patch.jar"/>
+      <zipfileset src="${build.dir}/jetty-util-patch.jar"/>
     </jar>
 
     <copy preservelastmodified="true" file="${jetty.base}/lib/jetty-webapp-${jetty.ver}.jar"

@@ -12,7 +12,12 @@
 #
 cd $(dirname $0)
 CLASS=net.i2p.i2ptunnel.proxy.messages
-TMPFILE=build/javafiles-proxy.txt
+if [ -n "$1" -a "$1" != "-p" ]; then
+    BD="$1"
+else
+    BD=build
+fi
+TMPFILE=$BD/javafiles-proxy.txt
 export TZ=UTC
 RC=0
 
@@ -20,7 +25,7 @@ if ! $(which javac >/dev/null 2>&1); then
   export JAVAC=${JAVA_HOME}/../bin/javac
 fi
 
-if [ "$1" = "-p" ]; then
+if [ "$1" = "-p" -o "$2" = "-p" ]; then
   POUPDATE=1
 fi
 
@@ -33,7 +38,7 @@ fi
 # set LG2 to the language you need in environment variables to enable this
 
 # add ../java/ so the refs will work in the po file
-JPATHS="../java/build/Proxy.java ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java"
+JPATHS="$BD/Proxy.java ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java"
 for i in ../locale-proxy/messages_*.po; do
   # get language
   LG=${i#../locale-proxy/messages_}
@@ -48,8 +53,8 @@ for i in ../locale-proxy/messages_*.po; do
     # make list of java files newer than the .po file
     find $JPATHS -name *.java -newer $i >$TMPFILE
   fi
-  if [ -s build/obj/net/i2p/i2ptunnel/proxy/messages_$LG.class -a \
-    build/obj/net/i2p/i2ptunnel/proxy/messages_$LG.class -nt $i -a \
+  if [ -s $BD/obj/net/i2p/i2ptunnel/proxy/messages_$LG.class -a \
+    $BD/obj/net/i2p/i2ptunnel/proxy/messages_$LG.class -nt $i -a \
     ! -s $TMPFILE ]; then
     continue
   fi
@@ -95,7 +100,7 @@ for i in ../locale-proxy/messages_*.po; do
     if [ $? -ne 0 ]; then
       # slow way
       # convert to class files in build/obj
-      msgfmt --java2 -r $CLASS -l $LG -d build/obj $i
+      msgfmt --java2 -r $CLASS -l $LG -d $BD/obj $i
       if [ $? -ne 0 ]; then
         echo "ERROR - msgfmt failed on ${i}, not updating translations"
         # msgfmt leaves the class file there so the build would work the next time
@@ -106,9 +111,9 @@ for i in ../locale-proxy/messages_*.po; do
     else
       # fast way
       # convert to java files in build/messages-proxy-src
-      TD=build/messages-proxy-src-tmp
+      TD=$BD/messages-proxy-src-tmp
       TDX=$TD/net/i2p/i2ptunnel/proxy
-      TD2=build/messages-proxy-src
+      TD2=$BD/messages-proxy-src
       TDY=$TD2/net/i2p/i2ptunnel/proxy
       rm -rf $TD
       mkdir -p $TD $TDY
@@ -116,7 +121,7 @@ for i in ../locale-proxy/messages_*.po; do
       if [ $? -ne 0 ]; then
         echo "ERROR - msgfmt failed on ${i}, not updating translations"
         # msgfmt leaves the class file there so the build would work the next time
-        find build/obj -name messages_${LG}.class -exec rm -f {} \;
+        find $BD/obj -name messages_${LG}.class -exec rm -f {} \;
         RC=1
         break
       fi
