@@ -24,6 +24,11 @@ jobs:
           java-version: '8'
           distribution: 'temurin'
 
+      - name: Create tmpfs for build output
+        run: |
+          sudo mkdir -p /tmp/build-i2p
+          sudo mount -t tmpfs -o size=2G tmpfs /tmp/build-i2p
+
       - name: Build i2pupdate.zip with Ant
         run: |
           echo "Building i2pupdate.zip..."
