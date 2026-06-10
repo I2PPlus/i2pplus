@@ -1,7 +1,7 @@
 package net.i2p.router.update
 
 import org.scalatest.FunSpec
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 
 /**
  * @author str4d
