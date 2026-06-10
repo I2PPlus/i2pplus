@@ -101,6 +101,6 @@ task codeCoverageReport(type: JacocoReport) {
     }
 }
 
-def pkgTempDir = "${System.getProperty('java.io.tmpdir')}/build-i2p/pkg-temp"
+ext.pkgTempDir = "${System.getProperty('java.io.tmpdir')}/build-i2p/pkg-temp"
 
 apply from: file('tools/gradle/update.gradle')
