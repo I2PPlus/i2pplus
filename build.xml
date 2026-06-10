@@ -1823,14 +1823,8 @@
           <include name=".settings"/>
         </fileset>
       </delete>
-      <!-- Clean Gradle build directories from subprojects -->
-      <delete includeEmptyDirs="true" quiet="true">
-        <fileset dir="." includes="**/build" excludes="build/README.md"/>
-        <fileset dir="apps" includes="**/build"/>
-        <fileset dir="core" includes="**/build"/>
-        <fileset dir="router" includes="**/build"/>
-        <fileset dir="installer" includes="**/build"/>
-      </delete>
+      <!-- Clean redirected build output -->
+      <delete dir="${build.root}" quiet="true" failonerror="false"/>
     </parallel>
     <echo message="Clean completed successfully."/>
   </target>
@@ -1855,15 +1849,6 @@
           <include name="*.so.*"/>
         </fileset>
       </delete>
-      <delete includeemptydirs="true" quiet="true">
-        <fileset dir=".">
-          <include name="apps/*/bin"/>
-          <include name="apps/*/bin/main"/>
-          <include name="apps/*/bin/test"/>
-          <include name="apps/*/*/bin"/>
-          <include name="apps/*/*/*/bin"/>
-        </fileset>
-      </delete>
       <!-- AppImage build artifacts (keep downloaded appimagetool) -->
       <delete includeemptydirs="true" quiet="true">
         <fileset dir="tools/appimage">
@@ -1881,121 +1866,6 @@
       <delete dir="${build.root}" quiet="true" failonerror="false"/>
       <!-- Ensure dist directory exists after cleanup -->
       <mkdir dir="./dist"/>
-      <!-- Use exec to run ant subprojects quietly -->
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error1">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="core/java/build.xml"/>
-        <arg value="distclean"/>
-      </exec>
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error2">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="router/java/build.xml"/>
-        <arg value="distclean"/>
-      </exec>
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error3">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="installer/java/build.xml"/>
-        <arg value="distclean"/>
-      </exec>
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error4">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="apps/ministreaming/java/build.xml"/>
-        <arg value="distclean"/>
-      </exec>
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error5">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="apps/streaming/java/build.xml"/>
-        <arg value="distclean"/>
-      </exec>
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error6">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="apps/i2ptunnel/java/build.xml"/>
-        <arg value="distclean"/>
-      </exec>
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error7">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="apps/sam/java/build.xml"/>
-        <arg value="distclean"/>
-      </exec>
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error8">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="apps/desktopgui/build.xml"/>
-        <arg value="clean"/>
-      </exec>
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error9">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="apps/routerconsole/java/build.xml"/>
-        <arg value="distclean"/>
-      </exec>
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error10">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="apps/addressbook/build.xml"/>
-        <arg value="distclean"/>
-      </exec>
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error11">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="apps/susimail/build.xml"/>
-        <arg value="distclean"/>
-      </exec>
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error12">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="apps/susidns/src/build.xml"/>
-        <arg value="distclean"/>
-      </exec>
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error13">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="apps/systray/java/build.xml"/>
-        <arg value="distclean"/>
-      </exec>
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error14">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="apps/i2psnark/java/build.xml"/>
-        <arg value="distclean"/>
-      </exec>
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error15">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="apps/jetty/build.xml"/>
-        <arg value="distclean"/>
-      </exec>
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error16">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="apps/imagegen/build.xml"/>
-        <arg value="distclean"/>
-      </exec>
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error17">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="apps/jrobin/java/build.xml"/>
-        <arg value="distclean"/>
-      </exec>
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error18">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="installer/resources/locale/build.xml"/>
-        <arg value="distclean"/>
-      </exec>
-      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error19">
-        <arg value="-quiet"/>
-        <arg value="-f"/>
-        <arg value="installer/tools/java/build.xml"/>
-        <arg value="distclean"/>
-      </exec>
       <delete dir="core/c/jbigi/bin" quiet="true"/>
       <delete dir="core/c/jbigi/lib" quiet="true"/>
       <delete dir="core/c/jcpuid/lib" quiet="true"/>
