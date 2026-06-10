@@ -2,50 +2,12 @@ plugins {
     id 'java-library'
     id 'scala'
     id 'me.champeau.jmh' version '0.7.3'
-    id 'net.ltgt.errorprone' version '5.1.0'
-    id 'org.danilopianini.gradle-java-qa' version '1.167.0'
 }
 
 tasks.configureEach { task ->
-    if (task.name.contains('checkstyle') || task.name.contains('Checkstyle') ||
-        task.name.contains('pmd') || task.name.contains('Pmd') ||
-        task.name.contains('test') || task.name.contains('Test')) {
+    if (task.name.contains('test') || task.name.contains('Test')) {
         task.enabled = false
     }
-}
-
-dependencies {
-    errorprone 'com.google.errorprone:error_prone_core:2.48.0'
-}
-
-spotbugs {
-    showStackTraces = true
-    showProgress = true
-    effort = 'default'
-    reportLevel = 'default'
-    ignoreFailures = true
-}
-
-checkstyle {
-    ignoreFailures = true
-}
-
-spotbugsMain {
-    reports {
-        xml.required = true
-        html.required = true
-    }
-}
-
-compileJava {
-    options.errorprone.enabled = true
-    options.errorprone.allErrorsAsWarnings = true
-    options.errorprone.checks = [
-        DoubleBraceInitialization: 'OFF',
-        DoNotCall: 'OFF',
-        CollectionIncompatibleType: 'OFF',
-        ComparisonOutOfRange: 'OFF'
-    ]
 }
 
 base {
