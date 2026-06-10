@@ -76,7 +76,7 @@
     </javac>
   </target>
 
-  <target name="bundle">
+  <target name="bundle" depends="init">
     <exec dir="java" executable="sh" failonerror="false">
       <arg value="bundle-messages.sh"/>
       <arg value="${build.dir}"/>
