@@ -431,6 +431,7 @@
         <attribute name="X-Compile-Target-JDK" value="${javac.version}"/>
       </manifest>
       <classes dir="${build.dir}/obj" includes="net/i2p/router/web/helpers/* net/i2p/router/web/servlets/* net/i2p/router/web/resources/**/*"/>
+      <classes dir="${jsp.build.dir}/WEB-INF/classes"/>
     </war>
   </target>
 
