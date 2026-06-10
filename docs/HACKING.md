@@ -19,6 +19,12 @@ builds and avoid re-running the installer. To build the updater `zip` files:
 ant updater
 ```
 
+Or with Gradle:
+
+```sh
+./gradlew updater
+```
+
 Then copy the updater to the I2P configuration directory and restart I2P.
 On Linux, this is `$HOME/.i2p` if installed with the `install.jar` file;
 on Windows it is `%LOCALAPPDATA%\I2P\`. Debian packages intentionally disable

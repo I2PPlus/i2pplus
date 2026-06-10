@@ -73,6 +73,10 @@ To build an unsigned update for an existing installation, run:
 
     ant updater
 
+or with Gradle:
+
+    ./gradlew updater
+
 If you have issues building a full installer (Java14 and later may generate build errors for izpack relating to pack200),
 you can build a full installation zip which can be extracted and run in situ:
 

@@ -33,6 +33,8 @@ task prepUpdateSmall(type: Copy) {
     }
 }
 
+def pkgTmpDir = pkgTempDir
+
 task prepUpdate(type: Copy) {
     dependsOn ':apps:sam:jar'
     dependsOn ':apps:i2psnark:i2psnarkJar', ':apps:i2psnark:jar'
@@ -43,16 +45,16 @@ task prepUpdate(type: Copy) {
     dependsOn ':apps:i2psnark:war'
     dependsOn ':apps:i2pcontrol:war'
     dependsOn ':apps:imagegen:war'
-    inputs.files fileTree(pkgTempDir + '/lib').include('*.jar')
-    inputs.files fileTree(pkgTempDir + '/webapps').include('*.war')
-    from pkgTempDir
+    inputs.files fileTree(pkgTmpDir + '/lib').include('*.jar')
+    inputs.files fileTree(pkgTmpDir + '/webapps').include('*.war')
+    from pkgTmpDir
     mustRunAfter ':apps:susidns:war', ':apps:susimail:war'
     mustRunAfter ':apps:i2psnark:war'
     mustRunAfter ':apps:i2pcontrol:war'
     mustRunAfter ':apps:imagegen:war'
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     // Base dir
-    into pkgTempDir
+    into pkgTmpDir
     into('lib') {
         from {[
             project(':apps:sam').jar.archiveFile,
@@ -79,7 +81,7 @@ task prepUpdate(type: Copy) {
     }
     doLast {
         String more = '\n\n----------------\n\nEARLIER HISTORY IS AVAILABLE IN THE SOURCE PACKAGE'
-        ant.concat(more, append: 'true', destfile: pkgTempDir + '/history.txt')
+        ant.concat(more, append: 'true', destfile: pkgTmpDir + '/history.txt')
     }
     from 'docs/LICENSE.md'
     into('docs') { from 'docs/LICENSE.md' }
@@ -106,9 +108,22 @@ task updaterSmall(type: Zip) {
     from pkgTempDir
 }
 
+def rootDirAbs = rootDir.absolutePath
+
 task updater(type: Zip) {
     dependsOn prepUpdate
     archiveFileName.set('i2pupdate.zip')
     destinationDirectory.set(file("${buildDir}/dist"))
     from pkgTempDir
+    doLast {
+        ant.exec(executable: 'git', outputproperty: 'git.revision', dir: rootDirAbs) {
+            arg(value: 'rev-parse')
+            arg(value: '--short')
+            arg(value: 'HEAD')
+        }
+        def rev = ant.project.properties['git.revision'] ?: 'unknown'
+        logger.lifecycle("Created I2P+ update (rev. ${rev}): ${archiveFile.get().asFile.absolutePath}")
+    }
 }
+
+

@@ -130,6 +130,7 @@ core/c/jbigi/*.tar.bz2
 
 # Static analysis tools (downloaded at runtime)
 tools/
+!tools/gradle/
 !tools/README.md
 !tools/pmd/*.py
 !tools/pmd/*.css
@@ -178,6 +179,7 @@ docs/javadoc/
 docs/jsdoc/
 
 # Python
+.python-version
 __pycache__/
 tools/codeql/db/
 tools/codeql/packs/
