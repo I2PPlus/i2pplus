@@ -26,25 +26,26 @@ dependencies {
 // Create the java files from the po files. The jar task will compile them.
 // This requires gettext 0.19 or higher.
 // We don't support the "slow way"
+def buildDirPath = buildDir
 task bundle {
     doLast {
-        if (!(new File("$buildDir/classes/java/main/i2p/susi/dns/messages_de.class")).exists())
-            println "apps/susidns/src/bundle-messages.sh $buildDir".execute().text
+        if (!(new File("${buildDirPath}/classes/java/main/i2p/susi/dns/messages_de.class")).exists())
+            println "apps/susidns/src/bundle-messages.sh ${buildDirPath}".execute().text
     }
 }
 
 task copyJsps(type: Copy) {
     doFirst {
-        def f = file("$buildDir/jsp_copy")
+        def f = new File("${buildDirPath}/jsp_copy")
         f.mkdirs()
     }
     from("src/jsp")
     include("**/*.jsp")
     include("**/*.jsi")
-    into("$buildDir/jsp_copy")
+    into("${buildDirPath}/jsp_copy")
 
     doLast {
-        fileTree("$buildDir/jsp_copy").getFiles().each {
+        (new File("${buildDirPath}/jsp_copy").listFiles() ?: []).each {
             if (it.getName().endsWith("jsi"))
                 it.setLastModified(0)
         }
@@ -54,55 +55,57 @@ task copyJsps(type: Copy) {
 
 task precompileJsp(type: JavaExec) {
     doFirst {
-        file("$buildDir/tmp_jsp").mkdirs()
+        new File("${buildDirPath}/tmp_jsp").mkdirs()
     }
 
     dependsOn copyJsps, ':apps:i2ptunnel:i2ptunnelJar'
 
     classpath = java.sourceSets.main.runtimeClasspath + fileTree("src/lib")
+    def jspClasspathStr = (java.sourceSets.main.runtimeClasspath + fileTree("src/lib")).asPath
+    def sourceCompat = java.sourceCompatibility
+    def targetCompat = java.targetCompatibility
+    def projectDirPath = projectDir
     mainClass.set('net.i2p.servlet.util.JspC')
 
     jvmArgs "-Dtomcat.util.scan.StandardJarScanFilter.jarsToSkip=commons-collections.jar,junit.jar,junit4.jar"
     jvmArgs "-Dbuild.reproducible=true"
 
     args "-d"
-    args "$buildDir/tmp_jsp"
+    args "${buildDirPath}/tmp_jsp"
     args "-v"
     args "-p"
     args "i2p.susi.dns.jsp"
     args "-webinc"
-    args "$buildDir/web-fragment.xml"
+    args "${buildDirPath}/web-fragment.xml"
     args "-webapp"
-    args "$buildDir/jsp_copy"
+    args "${buildDirPath}/jsp_copy"
     doLast {
         // normalize the order of the _jspx_dependents
-        ant.replaceregexp(file : "$buildDir/tmp_jsp/i2p/susi/dns/jsp/addressbook_jsp.java",
+        ant.replaceregexp(file : "${buildDirPath}/tmp_jsp/i2p/susi/dns/jsp/addressbook_jsp.java",
                             match : "_jspx_dependants.put\\(.*\\);",
                             replace : "//_jspx_dependants.put(@@@);",
                             flags : "g")
-        ant.replaceregexp(file : "$buildDir/tmp_jsp/i2p/susi/dns/jsp/addressbook_jsp.java",
+        ant.replaceregexp(file : "${buildDirPath}/tmp_jsp/i2p/susi/dns/jsp/addressbook_jsp.java",
                             match : "//_jspx_dependants.put(@@@);",
                             replace : "_jspx_dependants.put(&quot;jar:file:lib/standard.jar!/META-INF/c.tld&quot;, Long.valueOf(1200000000000L));")
-        ant.replaceregexp(file : "$buildDir/tmp_jsp/i2p/susi/dns/jsp/addressbook_jsp.java",
+        ant.replaceregexp(file : "${buildDirPath}/tmp_jsp/i2p/susi/dns/jsp/addressbook_jsp.java",
                             match : "//_jspx_dependants.put(@@@);",
                             replace : "_jspx_dependants.put(&quot;file:lib/standard.jar&quot;, Long.valueOf(1200000000000L));")
 
-        def output = new File("$buildDir/compiledJsps")
+        def output = new File("${buildDirPath}/compiledJsps")
         output.mkdirs()
 
-        def classpath = java.sourceSets.main.runtimeClasspath + fileTree("src/lib")
-
-        ant.javac(srcDir: "$buildDir/tmp_jsp",
-                    classpath: classpath.asPath,
+        ant.javac(srcDir: "${buildDirPath}/tmp_jsp",
+                    classpath: jspClasspathStr,
                     debug : true,
                     includeAntRuntime : false,
                     deprecation : "on",
-                    source: java.sourceCompatibility,
-                    target: java.targetCompatibility,
-                    destDir:file("$buildDir/compiledJsps"))
+                    source: sourceCompat,
+                    target: targetCompat,
+                    destDir:new File("${buildDirPath}/compiledJsps"))
 
-        def fragment = file("$buildDir/web-fragment.xml").text
-        def templateXML = file("src/WEB-INF/web-template.xml").text
+        def fragment = new File("${buildDirPath}/web-fragment.xml").text
+        def templateXML = new File(projectDirPath, "src/WEB-INF/web-template.xml").text
         def webXML = templateXML.replace("<!-- precompiled servlets -->", fragment)
 
         def multipart = "<multipart-config>" +
@@ -121,7 +124,7 @@ task precompileJsp(type: JavaExec) {
             webXML = webXML.replace(it, it + multipart)
         }
 
-        file("$buildDir/web.xml").text = webXML
+        new File("${buildDirPath}/web.xml").text = webXML
 
 
     }

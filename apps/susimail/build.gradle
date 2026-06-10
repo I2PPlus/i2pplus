@@ -19,10 +19,11 @@ dependencies {
 // Create the java files from the po files. The jar task will compile them.
 // This requires gettext 0.19 or higher.
 // We don't support the "slow way"
+def buildDirPath = buildDir
 task bundle {
     doLast {
-        if (!(new File("$buildDir/classes/java/main/i2p/susi/webmail/messages_de.class")).exists())
-            println "apps/susimail/bundle-messages.sh $buildDir".execute().text
+        if (!(new File("${buildDirPath}/classes/java/main/i2p/susi/webmail/messages_de.class")).exists())
+            println "apps/susimail/bundle-messages.sh ${buildDirPath}".execute().text
     }
 }
 war.dependsOn bundle, ':apps:i2ptunnel:i2ptunnelJar'

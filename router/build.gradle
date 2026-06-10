@@ -40,10 +40,11 @@ tasks.named('test') {
 // Create the java files from the po files. The jar task will compile them.
 // This requires gettext 0.19 or higher.
 // We don't support the "slow way"
+def buildDirPath = buildDir
 task bundle {
     doLast {
-        if (!(new File("$buildDir/classes/java/main/net/i2p/router/util/messages_de.class")).exists())
-            println "router/java/bundle-messages.sh $buildDir".execute().text
+        if (!(new File("${buildDirPath}/classes/java/main/net/i2p/router/util/messages_de.class")).exists())
+            println "router/java/bundle-messages.sh ${buildDirPath}".execute().text
     }
 }
 jar.dependsOn bundle

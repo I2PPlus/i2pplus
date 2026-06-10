@@ -21,10 +21,12 @@ dependencies {
 // Create the java files from the po files. The jar task will compile them.
 // This requires gettext 0.19 or higher.
 // We don't support the "slow way"
+def buildDirPath = buildDir
+def projectDirPath = projectDir
 task bundle {
     doLast {
-        if (!(new File("$buildDir/net/i2p/desktopgui/messages_de.class")).exists())
-            println "${projectDir}/bundle-messages.sh $buildDir".execute().text
+        if (!(new File("${buildDirPath}/net/i2p/desktopgui/messages_de.class")).exists())
+            println "${projectDirPath}/bundle-messages.sh ${buildDirPath}".execute().text
     }
 }
 jar.dependsOn bundle

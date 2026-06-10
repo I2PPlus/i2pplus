@@ -36,17 +36,18 @@ dependencies {
 // Create the java files from the po files. The jar task will compile them.
 // This requires gettext 0.19 or higher.
 // We don't support the "slow way"
+def buildDirPath = buildDir
 task bundleProxy {
     doLast {
-        if (!(new File("$buildDir/classes/java/main/net/i2p/i2ptunnel/proxy/messages_de.class")).exists())
-            println "apps/i2ptunnel/java/bundle-messages-proxy.sh $buildDir".execute().text
+        if (!(new File("${buildDirPath}/classes/java/main/net/i2p/i2ptunnel/proxy/messages_de.class")).exists())
+            println "apps/i2ptunnel/java/bundle-messages-proxy.sh ${buildDirPath}".execute().text
     }
 }
 
 task bundle {
     doLast {
-        if (!(new File("$buildDir/classes/java/main/net/i2p/i2ptunnel/web/messages_de.class")).exists())
-            println "apps/i2ptunnel/java/bundle-messages.sh $buildDir".execute().text
+        if (!(new File("${buildDirPath}/classes/java/main/net/i2p/i2ptunnel/web/messages_de.class")).exists())
+            println "apps/i2ptunnel/java/bundle-messages.sh ${buildDirPath}".execute().text
     }
 }
 
@@ -83,16 +84,16 @@ task helpersJar(type: Jar) {
 
 task copyJsps(type: Copy) {
     doFirst {
-        def f = file("$buildDir/jsp_copy")
+        def f = new File("${buildDirPath}/jsp_copy")
         f.mkdirs()
     }
     from("jsp")
     include("**/*.jsp")
     include("**/*.jsi")
-    into("$buildDir/jsp_copy")
+    into("${buildDirPath}/jsp_copy")
 
     doLast {
-        fileTree("$buildDir/jsp_copy").getFiles().each {
+        (new File("${buildDirPath}/jsp_copy").listFiles() ?: []).each {
             if (it.getName().endsWith("jsi"))
                 it.setLastModified(0)
         }
@@ -103,34 +104,41 @@ task copyJsps(type: Copy) {
 task precompileJsp(type : JavaExec) {
     dependsOn copyJsps
     classpath = sourceSets.main.runtimeClasspath
+    def jspClasspathStr = sourceSets.main.runtimeClasspath.asPath
+    def sourceCompat = java.sourceCompatibility
+    def targetCompat = java.targetCompatibility
+    def projectDirPath = projectDir
     mainClass.set('net.i2p.servlet.util.JspC')
+    doFirst {
+        new File("${buildDirPath}/jsp_classes").mkdirs()
+    }
 
     jvmArgs "-Dtomcat.util.scan.StandardJarScanFilter.jarsToSkip=commons-collections.jar,junit.jar,junit4.jar"
     jvmArgs "-Dbuild.reproducible=true"
 
     args "-d"
-    args "jsp/WEB-INF/classes"
+    args "${buildDirPath}/jsp_classes"
     args "-v"
     args "-p"
     args "net.i2p.i2ptunnel.jsp"
     args "-webinc"
-    args "$buildDir/web-fragment.xml"
+    args "${buildDirPath}/web-fragment.xml"
     args "-webapp"
-    args "$buildDir/jsp_copy"
+    args "${buildDirPath}/jsp_copy"
     doLast {
-        def output = new File("$buildDir/compiledJsps")
+        def output = new File("${buildDirPath}/compiledJsps")
         output.mkdirs()
-        ant.javac(srcDir: "jsp/WEB-INF/classes",
-                    classpath: sourceSets.main.runtimeClasspath.asPath,
+        ant.javac(srcDir: "${buildDirPath}/jsp_classes",
+                    classpath: jspClasspathStr,
                     debug : true,
                     includeAntRuntime : false,
                     deprecation : "on",
-                    source: java.sourceCompatibility,
-                    target: java.targetCompatibility,
-                    destDir:file("$buildDir/compiledJsps"))
+                    source: sourceCompat,
+                    target: targetCompat,
+                    destDir:new File("${buildDirPath}/compiledJsps"))
 
-        def fragment = file("$buildDir/web-fragment.xml").text
-        def templateXML = file("jsp/web.xml").text
+        def fragment = new File("${buildDirPath}/web-fragment.xml").text
+        def templateXML = new File(projectDirPath, "jsp/web.xml").text
         def webXML = templateXML.replace("<!-- precompiled servlets -->", fragment)
 
         def multipart = "<multipart-config>" +
@@ -150,7 +158,7 @@ task precompileJsp(type : JavaExec) {
             webXML = webXML.replace(it, it + multipart)
         }
 
-        file("$buildDir/web.xml").text = webXML
+        new File("${buildDirPath}/web.xml").text = webXML
     }
 
 
