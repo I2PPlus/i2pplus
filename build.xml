@@ -2191,6 +2191,19 @@
       </copy>
       <copy quiet="true" file="installer/resources/console/themes/console/light/images/favicon.svg" tofile="${pkg.temp.dir}/eepsite/docroot/favicon.svg"/>
     </parallel>
+    <!-- Prepare IzPack install files with redirected pkg-temp path -->
+    <mkdir dir="${build.root}/izpack/4"/>
+    <mkdir dir="${build.root}/izpack/5"/>
+    <copy file="installer/lib/izpack/4/install.xml" tofile="${build.root}/izpack/4/install.xml" overwrite="true">
+      <filterchain>
+        <replacestring from="dir=&quot;pkg-temp&quot;" to="dir=&quot;${pkg.temp.dir}&quot;"/>
+      </filterchain>
+    </copy>
+    <copy file="installer/lib/izpack/5/install5.xml" tofile="${build.root}/izpack/5/install5.xml" overwrite="true">
+      <filterchain>
+        <replacestring from="dir=&quot;pkg-temp&quot;" to="dir=&quot;${pkg.temp.dir}&quot;"/>
+      </filterchain>
+    </copy>
   </target>
 
   <target name="zip-linux">
@@ -2885,7 +2898,7 @@
 
   <!-- IzPack 4 -->
   <target name="installer" depends="timestamp.started, preppkg, buildProperties, izpack-patches, buildUtilityJar, timestamp.stopped">
-    <izpack input="${basedir}/installer/lib/izpack/4/install.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack input="${build.root}/izpack/4/install.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installerexe"/>
   </target>
 
@@ -2925,7 +2938,7 @@
   </target>
 
   <target name="installer5" depends="timestamp.started, izpack5-patches, preppkg, buildProperties, buildUtilityJar, timestamp.stopped">
-    <izpack5 input="${basedir}/installer/lib/izpack/5/install5.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5 input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installer5exe"/>
   </target>
 
@@ -2976,36 +2989,36 @@
   <!-- IzPack 4 -->
   <target name="installer-nowindows" depends="timestamp.started, clean, preppkg-nowindows, izpack-patches, timestamp.stopped">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
-    <izpack input="${basedir}/installer/lib/izpack/4/install.xml" output="${basedir}/dist/i2pinstall_${full.version}.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack input="${build.root}/izpack/4/install.xml" output="${basedir}/dist/i2pinstall_${full.version}.jar" installerType="standard" basedir="${basedir}"/>
   </target>
 
   <!-- IzPack 5 -->
   <target name="installer5-nowindows" depends="timestamp.started, clean, izpack5-patches, preppkg-nowindows, timestamp.stopped">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
-    <izpack5 input="${basedir}/installer/lib/izpack/5/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5 input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}.jar" installerType="standard" basedir="${basedir}"/>
   </target>
 
   <target name="installer-freebsd" depends="timestamp.started, clean, preppkg-freebsd-only, izpack-patches, timestamp.stopped">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
-    <izpack input="${basedir}/installer/lib/izpack/4/install.xml" output="${basedir}/dist/i2pinstall_${full.version}_freebsd-only.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack input="${build.root}/izpack/4/install.xml" output="${basedir}/dist/i2pinstall_${full.version}_freebsd-only.jar" installerType="standard" basedir="${basedir}"/>
   </target>
 
   <!-- IzPack 4 -->
   <target name="installer-linux" depends="timestamp.started, clean, preppkg-linux-only, izpack-patches, timestamp.stopped">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
-    <izpack input="${basedir}/installer/lib/izpack/4/install.xml" output="${basedir}/dist/i2pinstall_${full.version}_linux-only.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack input="${build.root}/izpack/4/install.xml" output="${basedir}/dist/i2pinstall_${full.version}_linux-only.jar" installerType="standard" basedir="${basedir}"/>
   </target>
 
   <!-- IzPack 5 -->
   <target name="installer5-linux" depends="timestamp.started, clean, izpack5-patches, preppkg-linux-only, timestamp.stopped">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
-    <izpack5 input="${basedir}/installer/lib/izpack/5/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}_linux-only.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5 input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}_linux-only.jar" installerType="standard" basedir="${basedir}"/>
   </target>
 
   <target name="installer-osx" depends="timestamp.started, clean, checkForIzpack2App, preppkg-osx-only, izpack-patches, timestamp.stopped">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
     <mkdir dir="${pkg.temp.dir}/osx"/>
-    <izpack input="${basedir}/installer/lib/izpack/4/install.xml" output="${basedir}/dist/i2pinstall_${full.version}_osx-only.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack input="${build.root}/izpack/4/install.xml" output="${basedir}/dist/i2pinstall_${full.version}_osx-only.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installer2app"/>
     <delete dir="${pkg.temp.dir}/osx"/>
   </target>
@@ -3013,7 +3026,7 @@
   <target name="installer5-osx" depends="timestamp.started, clean, checkForIzpack2App, izpack5-patches, preppkg-osx-only, timestamp.stopped">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
     <mkdir dir="${pkg.temp.dir}/osx"/>
-    <izpack5 input="${basedir}/installer/lib/izpack/5/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}_osx-only.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5 input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}_osx-only.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installer2app"/>
     <delete dir="${pkg.temp.dir}/osx"/>
   </target>
@@ -3055,7 +3068,7 @@
   <!-- IzPack 4 -->
   <target name="installer-windows" depends="clean, preppkg-windows-only, izpack-patches, buildUtilityJar">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config *.bat *.cmd **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="crlf"/>
-    <izpack input="${basedir}/installer/lib/izpack/4/install.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack input="${build.root}/izpack/4/install.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installerexe"/>
     <delete file="${basedir}/install.jar"/>
     <move file="${basedir}/i2pinstall.exe" tofile="${basedir}/dist/i2pinstall_${full.version}_windows.exe"/>
@@ -3064,7 +3077,7 @@
   <!-- IzPack 5 -->
   <target name="installer5-windows" depends="clean, izpack5-patches, preppkg-windows-only, buildUtilityJar">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config *.bat *.cmd **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="crlf"/>
-    <izpack5 input="${basedir}/installer/lib/izpack/5/install5.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5 input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installer5exe"/>
     <delete file="${basedir}/install.jar"/>
     <move file="${basedir}/i2pinstall.exe" tofile="${basedir}/dist/2pinstall_${full.version}_windows.exe"/>

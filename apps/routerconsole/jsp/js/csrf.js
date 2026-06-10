@@ -5,7 +5,6 @@
  * sends both in request headers for defense-in-depth.
  * @author dr|z3d
  * @license AGPL3 or later
- */
  * @description Provides CSRF protection wrappers for fetch and XMLHttpRequest.
  * Uses double-submit cookie pattern: reads token from both meta tag and cookie,
  * then sends both in request headers for defense-in-depth.
