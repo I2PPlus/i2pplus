@@ -11,10 +11,7 @@ jobs:
 
     steps:
       - name: PackageInstall
-        run: |
-          echo "Installing gettext, ant-contrib, parallel and uglifyjs..."
-          sudo apt install -y gettext ant-contrib parallel uglifyjs
-          echo "gettext installation completed."
+        run: sudo apt install -y gettext ant-contrib parallel uglifyjs
 
       - uses: actions/checkout@v4
 
@@ -36,32 +33,16 @@ jobs:
         run: cp tools/ant/.antrc ~/.antrc
 
       - name: Build i2pupdate.zip with Ant
-        run: |
-          echo "Building i2pupdate.zip..."
-          ant distclean updaterCompact
-          echo "Build complete. Here are the files:"
-          ls -al
+        run: ant distclean updaterCompact
 
       - name: Build installer with Ant
-        run: |
-          echo "Building installer..."
-          ant pkg
-          echo "Installer build complete. Current directory contents:"
-          ls -al
+        run: ant pkg
 
       - name: Build Debian package with Ant
-        run: |
-          echo "Building Debian package..."
-          ant buildDeb
-          echo "Debian package build complete:"
-          ls -la dist/*.deb
+        run: ant buildDeb
 
       - name: Build I2PSnark standalone with Ant
-        run: |
-          echo "Building I2PSnark standalone..."
-          ant i2psnark
-          echo "I2PSnark build complete. Current directory contents:"
-          ls -al
+        run: ant i2psnark
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
