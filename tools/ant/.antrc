@@ -1,0 +1,3 @@
+# Quiet build output - suppresses noisy [copy] Copying, [mkdir] Created dir,
+# [javac] Creating empty package-info, [java] JspC chatter, izpack/launch4j noise
+ANT_ARGS="-logger net.i2p.router.build.QuietCopyLogger"

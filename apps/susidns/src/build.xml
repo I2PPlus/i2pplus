@@ -88,7 +88,6 @@
     <delete file="${jsp.build.dir}/web-fragment.xml"/>
     <delete file="${jsp.build.dir}/web-out.xml"/>
     <mkdir dir="${tmp}"/>
-    <echo message="Ignore any warning about /WEB-INF/web.xml not found"/>
     <!-- See apps/routerconsole/java/build.xml for important JspC build documentation -->
     <java classname="net.i2p.servlet.util.JspC" fork="true" classpathref="cp" failonerror="true">
       <!-- these are to detect tomcat version and reproducible build setting -->
@@ -194,11 +193,24 @@
     <if>
       <isset property="uglifyjs.present"/>
       <then>
+        <length property="js.size.before" mode="all">
+          <fileset dir="${build.dir}/js" includes="*.js"/>
+        </length>
         <parallel>
           <foreach target="compressJavascript" param="file" parallel="true">
             <fileset dir="${build.dir}/js" includes="*.js"/>
           </foreach>
         </parallel>
+        <length property="js.size.after" mode="all">
+          <fileset dir="${build.dir}/js" includes="*.js"/>
+        </length>
+        <math result="js.saved" operand1="${js.size.before}" operand2="${js.size.after}" operation="-" datatype="int"/>
+        <if>
+          <not><equals arg1="${js.saved}" arg2="0"/></not>
+          <then>
+            <echo message="Compressed JS: ${js.size.before} -> ${js.size.after} bytes (saved ${js.saved})"/>
+          </then>
+        </if>
       </then>
       <else>
         <echo message="UglifyJS not found, skipping Javascript file compression..."/>
@@ -329,7 +341,7 @@
   <target name="distclean" depends="clean"/>
 
   <target name="compressJavascript">
-    <exec executable="uglifyjs">
+    <exec executable="uglifyjs" outputproperty="uglifyjs.out" errorproperty="uglifyjs.err">
       <arg value="${file}"/>
       <arg value="--compress"/>
       <arg value="--in-situ"/>

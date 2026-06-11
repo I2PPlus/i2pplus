@@ -126,7 +126,7 @@
       <arg value="."/>
       <arg value="--build-dir"/>
       <arg value="${build.dir}"/>
-      <arg value="--coverage"/>
+      <arg value="--no-coverage"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}">
       <arg value="../../tools/scripts/bundle-messages.sh"/>

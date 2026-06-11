@@ -21,6 +21,11 @@ web-out.xml
 git.rev
 override.properties
 
+# Build artifacts
+*.mo
+config/
+apps/i2psnark/java/i2psnark/
+
 # Temporary/build dirs
 build/
 !build/README.md

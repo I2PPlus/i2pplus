@@ -151,11 +151,24 @@
     <if>
       <isset property="uglifyjs.present"/>
       <then>
+        <length property="js.size.before" mode="all">
+          <fileset dir="${build.dir}/res/.res/js" includes="*.js"/>
+        </length>
         <parallel>
           <foreach target="compressJavascript" param="file" parallel="true">
             <fileset dir="${build.dir}/res/.res/js" includes="*.js"/>
           </foreach>
         </parallel>
+        <length property="js.size.after" mode="all">
+          <fileset dir="${build.dir}/res/.res/js" includes="*.js"/>
+        </length>
+        <math result="js.saved" operand1="${js.size.before}" operand2="${js.size.after}" operation="-" datatype="int"/>
+        <if>
+          <not><equals arg1="${js.saved}" arg2="0"/></not>
+          <then>
+            <echo message="Compressed JS: ${js.size.before} -> ${js.size.after} bytes (saved ${js.saved})"/>
+          </then>
+        </if>
       </then>
       <else>
         <echo message="UglifyJS not found, skipping Javascript file compression..."/>
@@ -454,7 +467,7 @@
   <target name="distclean" depends="clean"/>
 
   <target name="compressJavascript">
-    <exec executable="uglifyjs">
+    <exec executable="uglifyjs" outputproperty="uglifyjs.out" errorproperty="uglifyjs.err">
       <arg value="${file}"/>
       <arg value="--compress"/>
       <arg value="--in-situ"/>
