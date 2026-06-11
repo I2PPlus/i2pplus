@@ -68,15 +68,15 @@ def buildDirPath = buildDir
 task bundleJar {
     doLast {
         if (!(new File("${buildDirPath}/classes/java/main/net/i2p/router/countries/messages_de.class")).exists())
-            println "apps/routerconsole/java/bundle-messages-countries.sh ${buildDirPath}".execute().text
+            println "tools/scripts/bundle-messages.sh --dir apps/routerconsole/java --cfg bundle-messages-countries.cfg --build-dir ${buildDirPath}".execute().text
         if (!(new File("${buildDirPath}/classes/java/main/net/i2p/router/news/messages_de.class")).exists())
-            println "apps/routerconsole/java/bundle-messages-news.sh ${buildDirPath}".execute().text
+            println "tools/scripts/bundle-messages.sh --dir apps/routerconsole/java --cfg bundle-messages-news.cfg --build-dir ${buildDirPath}".execute().text
     }
 }
 task bundle {
     doLast {
         if (!(new File("${buildDirPath}/classes/java/main/net/i2p/router/web/messages_de.class")).exists())
-            println "apps/routerconsole/java/bundle-messages.sh ${buildDirPath}".execute().text
+            println "tools/scripts/bundle-messages.sh --dir apps/routerconsole/java --build-dir ${buildDirPath}".execute().text
     }
 }
 

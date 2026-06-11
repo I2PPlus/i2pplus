@@ -139,15 +139,32 @@
     <mkdir dir="${build.dir}/messages-src"/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}"/>
-      <arg value="./bundle-messages.sh"/>
+      <arg value="../../tools/scripts/bundle-messages.sh"/>
+      <arg value="--dir"/>
+      <arg value="."/>
+      <arg value="--build-dir"/>
       <arg value="${build.dir}"/>
     </exec>
+    <exec executable="sh" osfamily="unix" failifexecutionfails="false" failonerror="false">
+      <arg value="../../tools/scripts/bundle-messages.sh"/>
+      <arg value="--dir"/>
+      <arg value="."/>
+      <arg value="--build-dir"/>
+      <arg value="${build.dir}"/>
+      <arg value="--coverage"/>
+    </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}">
-      <arg value="./bundle-messages.sh"/>
+      <arg value="../../tools/scripts/bundle-messages.sh"/>
+      <arg value="--dir"/>
+      <arg value="."/>
+      <arg value="--build-dir"/>
       <arg value="${build.dir}"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="false">
-      <arg value="./bundle-messages.sh"/>
+      <arg value="../../tools/scripts/bundle-messages.sh"/>
+      <arg value="--dir"/>
+      <arg value="."/>
+      <arg value="--build-dir"/>
       <arg value="${build.dir}"/>
     </exec>
     <javac source="${javac.version}" target="${javac.version}"
@@ -165,17 +182,29 @@
     <property name="lg2" value=""/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
-      <arg value="./bundle-messages.sh"/>
+      <arg value="../../tools/scripts/bundle-messages.sh"/>
+      <arg value="--dir"/>
+      <arg value="."/>
+      <arg value="--build-dir"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
-      <arg value="./bundle-messages.sh"/>
+      <arg value="../../tools/scripts/bundle-messages.sh"/>
+      <arg value="--dir"/>
+      <arg value="."/>
+      <arg value="--build-dir"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
-      <arg value="./bundle-messages.sh"/>
+      <arg value="../../tools/scripts/bundle-messages.sh"/>
+      <arg value="--dir"/>
+      <arg value="."/>
+      <arg value="--build-dir"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
   </target>

@@ -30,7 +30,7 @@ def buildDirPath = buildDir
 task bundle {
     doLast {
         if (!(new File("${buildDirPath}/classes/java/main/i2p/susi/dns/messages_de.class")).exists())
-            println "apps/susidns/src/bundle-messages.sh ${buildDirPath}".execute().text
+            println "tools/scripts/bundle-messages.sh --dir apps/susidns/src --build-dir ${buildDirPath}".execute().text
     }
 }
 

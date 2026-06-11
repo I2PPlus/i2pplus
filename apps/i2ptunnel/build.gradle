@@ -40,14 +40,14 @@ def buildDirPath = buildDir
 task bundleProxy {
     doLast {
         if (!(new File("${buildDirPath}/classes/java/main/net/i2p/i2ptunnel/proxy/messages_de.class")).exists())
-            println "apps/i2ptunnel/java/bundle-messages-proxy.sh ${buildDirPath}".execute().text
+            println "tools/scripts/bundle-messages.sh --dir apps/i2ptunnel/java --cfg bundle-messages-proxy.cfg --build-dir ${buildDirPath}".execute().text
     }
 }
 
 task bundle {
     doLast {
         if (!(new File("${buildDirPath}/classes/java/main/net/i2p/i2ptunnel/web/messages_de.class")).exists())
-            println "apps/i2ptunnel/java/bundle-messages.sh ${buildDirPath}".execute().text
+            println "tools/scripts/bundle-messages.sh --dir apps/i2ptunnel/java --build-dir ${buildDirPath}".execute().text
     }
 }
 

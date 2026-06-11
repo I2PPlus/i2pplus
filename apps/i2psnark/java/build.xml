@@ -185,20 +185,28 @@
 
   <target name="bundle" depends="compile" unless="no.bundle">
     <mkdir dir="${build.dir}/messages-src"/>
-    <!-- Update the messages_*.po files.
-         We need to supply the bat file for windows, and then change the fail property to true -->
+    <!-- Update the messages_*.po files. -->
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}"/>
-      <arg value="./bundle-messages.sh"/>
+      <arg value="../../../tools/scripts/bundle-messages.sh"/>
+      <arg value="--dir"/>
+      <arg value="."/>
+      <arg value="--build-dir"/>
       <arg value="${build.dir}"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}">
-      <arg value="./bundle-messages.sh"/>
+      <arg value="../../../tools/scripts/bundle-messages.sh"/>
+      <arg value="--dir"/>
+      <arg value="."/>
+      <arg value="--build-dir"/>
       <arg value="${build.dir}"/>
     </exec>
     <!-- multi-lang is optional -->
     <exec executable="sh" osfamily="windows" failifexecutionfails="false">
-      <arg value="./bundle-messages.sh"/>
+      <arg value="../../../tools/scripts/bundle-messages.sh"/>
+      <arg value="--dir"/>
+      <arg value="."/>
+      <arg value="--build-dir"/>
       <arg value="${build.dir}"/>
     </exec>
     <javac source="${javac.version}" target="${javac.version}"
@@ -210,24 +218,36 @@
     </javac>
     <echo message="I2PSnark translations added"/>
   </target>
-
+ 
   <target name="poupdate" depends="builddep, compile">
     <!-- Update the messages_*.po files.  -->
     <!-- Set if unset -->
     <property name="lg2" value=""/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
-      <arg value="./bundle-messages.sh"/>
+      <arg value="../../../tools/scripts/bundle-messages.sh"/>
+      <arg value="--dir"/>
+      <arg value="."/>
+      <arg value="--build-dir"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
-      <arg value="./bundle-messages.sh"/>
+      <arg value="../../../tools/scripts/bundle-messages.sh"/>
+      <arg value="--dir"/>
+      <arg value="."/>
+      <arg value="--build-dir"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
-      <arg value="./bundle-messages.sh"/>
+      <arg value="../../../tools/scripts/bundle-messages.sh"/>
+      <arg value="--dir"/>
+      <arg value="."/>
+      <arg value="--build-dir"/>
+      <arg value="${build.dir}"/>
       <arg value="-p"/>
     </exec>
     <echo message="I2PSnark .po translation files updated"/>

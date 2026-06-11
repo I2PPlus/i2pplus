@@ -79,8 +79,11 @@
   </target>
 
   <target name="bundle" depends="init">
-    <exec dir="java" executable="sh" failonerror="false">
-      <arg value="bundle-messages.sh"/>
+    <exec executable="sh" failonerror="false">
+      <arg value="../../tools/scripts/bundle-messages.sh"/>
+      <arg value="--dir"/>
+      <arg value="java"/>
+      <arg value="--build-dir"/>
       <arg value="${build.dir}"/>
     </exec>
   </target>

@@ -44,7 +44,7 @@ def buildDirPath = buildDir
 task bundle {
     doLast {
         if (!(new File("${buildDirPath}/classes/java/main/org/klomp/snark/web/messages_de.class")).exists())
-            println "apps/i2psnark/java/bundle-messages.sh ${buildDirPath}".execute().text
+            println "tools/scripts/bundle-messages.sh --dir apps/i2psnark/java --build-dir ${buildDirPath}".execute().text
     }
 }
 war.dependsOn bundle, ':apps:i2ptunnel:i2ptunnelJar'

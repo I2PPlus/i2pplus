@@ -44,7 +44,7 @@ def buildDirPath = buildDir
 task bundle {
     doLast {
         if (!(new File("${buildDirPath}/classes/java/main/net/i2p/router/util/messages_de.class")).exists())
-            println "router/java/bundle-messages.sh ${buildDirPath}".execute().text
+            println "tools/scripts/bundle-messages.sh --dir router/java --build-dir ${buildDirPath}".execute().text
     }
 }
 jar.dependsOn bundle

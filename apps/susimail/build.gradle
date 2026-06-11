@@ -23,7 +23,7 @@ def buildDirPath = buildDir
 task bundle {
     doLast {
         if (!(new File("${buildDirPath}/classes/java/main/i2p/susi/webmail/messages_de.class")).exists())
-            println "apps/susimail/bundle-messages.sh ${buildDirPath}".execute().text
+            println "tools/scripts/bundle-messages.sh --dir apps/susimail --build-dir ${buildDirPath}".execute().text
     }
 }
 war.dependsOn bundle, ':apps:i2ptunnel:i2ptunnelJar'
