@@ -183,6 +183,9 @@ class PeerManager {
     private boolean storeProfile(Hash peer, long cutoff) {
         PeerProfile prof = _organizer.getProfile(peer);
         if (prof == null) return false;
+        // Recalculate low-latency flag from accumulated peer test data before persisting,
+        // so the flag reflects current conditions on the next startup.
+        prof.recalculateLowLatency();
         // Only persist Tier 1 (Active) and Tier 2 (Passive) profiles.
         // Gossip-only profiles (Tier 3) are kept in memory briefly but never written to disk.
         if (prof.getLastSendSuccessful() > 0 || prof.getLastHeardFrom() > 0) {

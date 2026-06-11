@@ -480,12 +480,26 @@ public class PeerProfile {
     void setPeerTestTimeAverage(float testAvg) {_peerTestResponseTimeAvg = testAvg;}
 
     void updatePeerTestTimeAverage(float ms) {
-        if (_peerTestResponseTimeAvg <= 0) {_peerTestResponseTimeAvg = ms;} // default timeout * 2
+        if (_peerTestResponseTimeAvg <= 0) {_peerTestResponseTimeAvg = ms;}
         else {_peerTestResponseTimeAvg = 0.75f * _peerTestResponseTimeAvg + .25f * ms;}
         if (_log.shouldInfo()) {
             _log.info("Timed peer test average for [" + _peer.toBase64().substring(0,6) +
                       "] updated to " + (_peerTestResponseTimeAvg) + "ms");
         }
+    }
+
+    /**
+     * Recalculate the low-latency flag from the accumulated peer test time average.
+     * Low latency is defined as an average response time under 3x the peer test timeout
+     * (default 750ms, so 2250ms threshold), matching the same threshold used in BuildExecutor.
+     * Called periodically to keep _lowLatency in sync with measured data.
+     * @since 0.9.70
+     */
+    void recalculateLowLatency() {
+        if (_peerTestResponseTimeAvg <= 0)
+            return;
+        int peerTimeout = _context.getProperty("router.peerTestTimeout", 750);
+        _lowLatency = _peerTestResponseTimeAvg < 3 * peerTimeout;
     }
 
     public float getPeakThroughputKBps() {

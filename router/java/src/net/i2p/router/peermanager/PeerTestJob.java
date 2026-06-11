@@ -131,7 +131,7 @@ public class PeerTestJob extends JobImpl {
         else if (uptime >= 3*60*1000)
             return testDelay;
         else
-            return testDelay + (3*60*1000 - uptime);
+            return testDelay + Math.min(30*1000, 3*60*1000 - uptime);
     }
 
     /**
@@ -171,6 +171,11 @@ public class PeerTestJob extends JobImpl {
         long memory = SystemVersion.getMaxMemory();
         int testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, DEFAULT_PEER_TEST_CONCURRENCY);
         if (SystemVersion.getCPULoadAvg() > 95) {testConcurrent = 1;}
+        // Double concurrency during first 5 minutes to quickly profile untested peers
+        long uptime = getContext().router().getUptime();
+        if (uptime > 0 && uptime < 5 * 60 * 1000) {
+            testConcurrent = Math.max(testConcurrent, DEFAULT_PEER_TEST_CONCURRENCY * 2);
+        }
         return testConcurrent;
     }
 
@@ -614,6 +619,10 @@ public class PeerTestJob extends JobImpl {
 
         private boolean handleSuccessfulTest(PeerData data, int timeout, float testAvg, long timeLeft) {
             getContext().statManager().addRateData("peer.testOK", getTestTimeout() - timeLeft);
+
+            // Record ping response time so peer pre-qualification can confirm this peer has been tested
+            float responseMs = getTestTimeout() - timeLeft;
+            data.profile.updatePeerTestTimeAverage(responseMs);
 
             if (testAvg > (timeout * 2) && isHighBandwidthTier(data)) {
                 try {
