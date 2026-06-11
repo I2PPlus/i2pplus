@@ -266,7 +266,7 @@ class MessageInputStream extends InputStream {
     /**
      * Gets an array of missing block IDs between the highest ready block and highest received block.
      *
-     * @return array of missing block IDs, or null if none
+     * @return array of missing block IDs, empty if none
      */
     public long[] getNacks() {
         synchronized (_dataLock) {
@@ -286,7 +286,7 @@ class MessageInputStream extends InputStream {
                 }
                 return array;
             }
-            return null;
+            return new long[0];
         }
     }
 
