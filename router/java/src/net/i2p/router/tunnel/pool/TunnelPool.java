@@ -1101,10 +1101,10 @@ public class TunnelPool {
      *  Window set to 10 minutes to handle slow tunnel builds.
      */
     private static final long RECENTLY_ADDED_WINDOW = 60 * 1000;
-    /** Throttle refresh — publications are only needed when tunnels change,
-     *  and the LeaseSet has a 10-minute lifespan. 3-minute throttle gives 7
-     *  minutes of slack for the full refresh cycle before leases expire. */
-    private static final long REFRESH_THROTTLE = 3 * 60 * 1000;
+    /** Throttle refresh — publish at most once per throttle window.
+     *  5 min minimum prevents storms; with occasional emergency publishes
+     *  the actual interval averages ~10 min. */
+    private static final long REFRESH_THROTTLE = 5 * 60 * 1000;
     /** Initialize to allow first request immediately */
     private long _lastRefreshTime = -REFRESH_THROTTLE;
     /** Track last proactive LeaseSet publish time for rate limiting */
@@ -1486,24 +1486,12 @@ public class TunnelPool {
 
     private class LeaseSetRepublishEvent implements net.i2p.util.SimpleTimer.TimedEvent {
         public void timeReached() {
-            LeaseSet ls;
-            _tunnelsLock.lock();
-            try {
-                ls = locked_buildNewLeaseSet();
-                if (ls == null) {
-                    // Even locked_buildNewLeaseSet couldn't find a tunnel —
-                    // try emergency fallback from any remaining tunnel.
-                    TunnelInfo fallback = findBestDegradedTunnel();
-                    if (fallback != null)
-                        ls = buildEmergencyLeaseSet(fallback);
-                }
-            } finally {
-                _tunnelsLock.unlock();
-            }
-            if (ls != null) {
-                requestLeaseSet(ls, true);
-            }
             _leaseSetRepublishPending = false;
+            // Use refreshLeaseSet which respects REFRESH_THROTTLE.
+            // Passing force=true bypasses the throttle for emergencies
+            // (e.g. all tunnels expired), but the 5-minute throttle
+            // prevents storming under sustained failure.
+            refreshLeaseSet(true);
             // Prune non-GOOD tunnels after publishing so the pool
             // replaces them on the next build cycle.
             pruneNonGoodTunnels();
@@ -1658,7 +1646,7 @@ public class TunnelPool {
                 force = true;
             }
             if (!force && now - _lastRefreshTime < REFRESH_THROTTLE) {
-                // Instead of dropping, schedule a deferred refresh
+                // Instead of dropping, schedule a deferred refresh.
                 scheduleDeferredRefresh();
                 return;
             }
@@ -1744,6 +1732,8 @@ public class TunnelPool {
     void notifyServerPoolTestFailed() {
         if (!_settings.isInbound() || _settings.isExploratory() || !_alive)
             return;
+        // Don't publish on every test failure — the deferred republish batches
+        // rapid test failures and respects REFRESH_THROTTLE (5 min min).
         scheduleDeferredLeaseSetRepublish();
     }
 
@@ -2029,7 +2019,8 @@ public class TunnelPool {
             for (int i = 0; i < _tunnels.size(); i++) {
                 TunnelInfo t = _tunnels.get(i);
                 if (t.getTunnelFailed() ||
-                    t.getTestStatus() != net.i2p.router.TunnelTestStatus.GOOD) {
+                    (t.getTestStatus() != net.i2p.router.TunnelTestStatus.GOOD &&
+                     t.getTestStatus() != net.i2p.router.TunnelTestStatus.UNTESTED)) {
                     toRemove.add(t);
                 } else {
                     goodCount++;

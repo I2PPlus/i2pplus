@@ -673,6 +673,16 @@ public class TestJob extends JobImpl {
                             }
                         }
                     }
+                    if (_outTunnel == null) {
+                        // Fall back to exploratory outbound tunnel so tests can
+                        // still proceed when the paired pool is empty (e.g. both
+                        // directions cycling through failures).  Without this,
+                        // server pools deadlock: inbound tests need outbound
+                        // partners and vice versa, and neither can ever pass.
+                        _outTunnel = ctx.tunnelManager().selectOutboundTunnel();
+                        if (_outTunnel != null && _log.shouldWarn())
+                            _log.warn("Falling back to exploratory outbound tunnel for test of " + _cfg);
+                    }
                 }
                 if (_outTunnel == null) {
                     if (_log.shouldWarn())
@@ -720,6 +730,13 @@ public class TestJob extends JobImpl {
                                 break;
                             }
                         }
+                    }
+                    if (_replyTunnel == null) {
+                        // Fall back to exploratory inbound tunnel so tests can
+                        // still proceed when the paired pool is empty.
+                        _replyTunnel = ctx.tunnelManager().selectInboundTunnel();
+                        if (_replyTunnel != null && _log.shouldWarn())
+                            _log.warn("Falling back to exploratory inbound tunnel for test of " + _cfg);
                     }
                 }
                 if (_replyTunnel == null) {

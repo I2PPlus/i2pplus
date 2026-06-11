@@ -191,10 +191,10 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         if (matches.isEmpty()) {
                             ctx.profileOrganizer().selectActiveNotFailingPeers(length, exclude, matches);
                         }
-                        if (matches.isEmpty()) {
+                        if (matches.isEmpty() && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
                             ctx.profileOrganizer().selectNotFailingPeers(length, exclude, matches, false, 0, null);
                         }
-                        if (matches.isEmpty()) {
+                        if (matches.isEmpty() && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
                             ctx.profileOrganizer().selectAllNotFailingPeers(length, exclude, matches, false);
                         }
                     }
@@ -245,13 +245,17 @@ class ClientPeerSelector extends TunnelPeerSelector {
                             ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
                         }
                         if (matches.isEmpty()) {
-                            // Fallback to any not-failing peer if active not available
-                            if (log.shouldWarn()) {
-                                log.warn("No active peers found, falling back to any non-failing peers");
+                            if (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod()) {
+                                // Fallback to any not-failing peer if active not available
+                                if (log.shouldWarn()) {
+                                    log.warn("No active peers found, falling back to any non-failing peers");
+                                }
+                                ctx.profileOrganizer().selectNotFailingPeers(1, lastHopExclude, matches, false, ipRestriction, ipSet);
+                            } else if (log.shouldWarn()) {
+                                log.warn("No active peers found -> Under attack threshold, not falling back to non-failing peers");
                             }
-                            ctx.profileOrganizer().selectNotFailingPeers(1, lastHopExclude, matches, false, ipRestriction, ipSet);
                         }
-                        if (matches.isEmpty()) {
+                        if (matches.isEmpty() && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
                             // Fallback to all peers as last resort
                             if (log.shouldWarn()) {
                                 log.warn("No non-failing peers found, falling back to all peers");
@@ -259,7 +263,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                             ctx.profileOrganizer().selectAllNotFailingPeers(1, lastHopExclude, matches, false);
                         }
                     }
-                    if (matches.isEmpty()) {
+                    if (matches.isEmpty() && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
                         // Emergency: try all-not-failing before giving up
                         if (log.shouldWarn()) {
                             log.warn("No peers found after standard fallbacks -> Attempting emergency all-peers fallback");
@@ -334,14 +338,14 @@ class ClientPeerSelector extends TunnelPeerSelector {
                             if (matches.isEmpty()) {
                                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
                             }
-                            if (matches.isEmpty()) {
+                            if (matches.isEmpty() && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
                                 // Fallback to non-failing peers
                                 ctx.profileOrganizer().selectNotFailingPeers(1, lastHopExclude, matches, false, ipRestriction, ipSet);
                                 if (matches.isEmpty() && log.shouldWarn()) {
                                     log.warn("No active peers found for OutboundEndpoint, falling back to all peers");
                                 }
                             }
-                            if (matches.isEmpty()) {
+                            if (matches.isEmpty() && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
                                 // Final fallback to all peers
                                 ctx.profileOrganizer().selectAllNotFailingPeers(1, lastHopExclude, matches, false);
                             }
@@ -393,7 +397,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         if (matches.size() < middleCount) {
                             ctx.profileOrganizer().selectFastPeers(middleCount - matches.size(), exclude, matches, 0, null);
                         }
-                        if (matches.size() < middleCount) {
+                        if (matches.size() < middleCount && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
                             ctx.profileOrganizer().selectNotFailingPeers(middleCount - matches.size(), exclude, matches, false, 0, null);
                         }
                     }
@@ -430,7 +434,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                             matches.addAll(fallback);
                         }
                     }
-                    if (matches.size() < middleCount) {
+                    if (matches.size() < middleCount && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
                         int needed = middleCount - matches.size();
                         ArraySet<Hash> fallback = new ArraySet<Hash>(needed);
                         ctx.profileOrganizer().selectAllNotFailingPeers(needed, exclude, fallback, false);
@@ -476,10 +480,10 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         ctx.profileOrganizer().selectFastPeers(1, exclude, matches, randomKey, length == 2 ? SLICE_2_3 : SLICE_1, ipRestriction, ipSet);
                     }
                 }
-                if (matches.isEmpty()) {
+                if (matches.isEmpty() && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
                     ctx.profileOrganizer().selectNotFailingPeers(1, exclude, matches, false, 0, null);
                 }
-                if (matches.isEmpty()) {
+                if (matches.isEmpty() && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
                     // Last resort: any not-failing peer
                     ctx.profileOrganizer().selectAllNotFailingPeers(1, exclude, matches, false);
                 }
@@ -566,8 +570,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                 }
                             }
 
-                            // If still not enough, try all not-failing peers (may not be connected)
-                            if (rv.size() < min) {
+                            // If still not enough, and not under severe stress, try all not-failing peers
+                            if (rv.size() < min && (buildSuccess >= SEVERE_ATTACK_THRESHOLD || isInStartupGracePeriod())) {
                                 ArraySet<Hash> nfFallback = new ArraySet<Hash>(min);
                                 ctx.profileOrganizer().selectNotFailingPeers(min, exclude, nfFallback, false, 0, null);
                                 nfFallback.remove(ctx.routerHash());
@@ -581,8 +585,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                 }
                             }
 
-                            // If still not enough, try all peers as last resort
-                            if (rv.size() < min) {
+                            // If still not enough, and not under severe stress, try all peers as last resort
+                            if (rv.size() < min && (buildSuccess >= SEVERE_ATTACK_THRESHOLD || isInStartupGracePeriod())) {
                                 ArraySet<Hash> allFallback = new ArraySet<Hash>(min);
                                 ctx.profileOrganizer().selectAllNotFailingPeers(min, exclude, allFallback, false);
                                 allFallback.remove(ctx.routerHash());

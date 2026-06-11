@@ -23,8 +23,8 @@ public class GhostPeerManager {
     private final ConcurrentHashMap<Hash, AtomicInteger> _timeoutCounts;
     private final ConcurrentHashMap<Hash, Long> _ghostSince;
 
-    private static final int DEFAULT_TIMEOUT_THRESHOLD = 3;
-    private static final int ATTACK_TIMEOUT_THRESHOLD = 3;
+    private static final int DEFAULT_TIMEOUT_THRESHOLD = 2;
+    private static final int ATTACK_TIMEOUT_THRESHOLD = 2;
     private static final long COOLDOWN_MS = 180*1000; // 3m
     private static final long ATTACK_COOLDOWN_MS = 300*1000; // 5m
     private static final int MAX_TRACKED_PEERS = 1024;

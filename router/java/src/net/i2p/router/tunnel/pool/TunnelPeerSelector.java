@@ -52,7 +52,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                                                        String.valueOf(Router.CAPABILITY_NO_TUNNELS);
 
     protected static final double ATTACK_THRESHOLD = ProfileOrganizer.ATTACK_THRESHOLD;
-    protected static final long STARTUP_WARNING_SUPPRESS_MS = 15 * 60 * 1000;
+    protected static final long STARTUP_WARNING_SUPPRESS_MS = 5 * 60 * 1000;
 
     /** Peers selected within this window are excluded from further selection to ensure diversity */
     protected static final long PEER_SELECTION_COOLDOWN_MS = 60_000;
@@ -65,6 +65,26 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     protected TunnelPeerSelector(RouterContext context) {
         super(context);
+    }
+
+    /**
+     * Is the router in the startup grace period?
+     * During startup, peers haven't accumulated test history yet, so 
+     * quality filters (pre-qualification, tier capping) should be relaxed
+     * to allow tunnels to build.
+     * @param ctx the router context
+     * @return true if uptime is between 1ms and STARTUP_WARNING_SUPPRESS_MS
+     */
+    protected static boolean isInStartupGracePeriod(RouterContext ctx) {
+        long uptime = ctx.router().getUptime();
+        return uptime > 0 && uptime < STARTUP_WARNING_SUPPRESS_MS;
+    }
+
+    /**
+     * Convenience instance method wrapping the static helper.
+     */
+    protected boolean isInStartupGracePeriod() {
+        return isInStartupGracePeriod(ctx);
     }
 
     /**
@@ -558,21 +578,36 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // Skip pre-qualification during startup — peers haven't accumulated
         // test history yet, so rejecting untested peers would block all
         // tunnel builds (including Ping tunnels for HostChecker).
-        long uptime = ctx.router().getUptime();
-        if (uptime > 0 && uptime < STARTUP_WARNING_SUPPRESS_MS) {
+        if (isInStartupGracePeriod(ctx)) {
             return false;
         }
 
-        // Pre-qualification: prefer peers with recent tunnel test success or
-        // an active connection.  Peers that haven't been tested in hours and
-        // aren't connected are high-risk picks that tend to fail immediately
-        // after tunnel build.
+        // Also skip when build success is low — trying every available peer
+        // is better than tightening filters during a failure cascade.
+        double buildSuccess;
+        try {
+            buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+        } catch (Exception e) {
+            buildSuccess = 0;
+        }
+        if (buildSuccess < ATTACK_THRESHOLD) {
+            return false;
+        }
+
+        // Pre-qualification: prefer peers with recent peer test success,
+        // recent contact, or an active connection.  Peers that haven't been
+        // heard from or tested are high-risk picks that tend to fail.
         Hash peerHash = ident.calculateHash();
         PeerProfile profile = ctx.profileOrganizer().getProfile(peerHash);
         if (profile != null && !ctx.commSystem().isBacklogged(peerHash)) {
-            boolean hasRecentTest = profile.getTunnelTestTimeAverage() > 0;
+            float tunnelTestTime = profile.getTunnelTestTimeAverage();
+            boolean hasRecentTest = profile.getPeerTestTimeAverage() > 0 ||
+                                    profile.isLowLatency() ||
+                                    (tunnelTestTime > 0 && tunnelTestTime <= 15_000);
+            boolean hasRecentContact = profile.getLastHeardFrom() > 0 &&
+                ctx.clock().now() - profile.getLastHeardFrom() < 4 * 60 * 60 * 1000;
             boolean isConnected = ctx.commSystem().isEstablished(peerHash);
-            if (!hasRecentTest && !isConnected && fastPeerCount >= 10) {
+            if (!hasRecentTest && !hasRecentContact && !isConnected && fastPeerCount >= 10) {
                 return true;
             }
         }

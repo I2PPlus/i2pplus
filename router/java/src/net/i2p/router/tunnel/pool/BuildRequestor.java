@@ -107,7 +107,7 @@ abstract class BuildRequestor {
      * Randomized per-message to obscure tunnel length.
      */
     private static final int BUILD_MSG_TIMEOUT = 45*1000;
-    private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 30;
+    private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 15;
     private static final int EXPLORATORY_BACKOFF = 200;
     private static final int CLIENT_BACKOFF = 50;
 
