@@ -732,10 +732,12 @@ class MessageOutputStream extends OutputStream {
                 if (_valid > 0 && flushTimeThreshold <= _context.clock().now()) {
                     if (_buf != null) {
                         ws = _dataReceiver.writeData(_buf, 0, _valid);
-                        _written += _valid;
-                        _valid = 0;
-                        _dataLock.notifyAll();
-                        sent = true;
+                        if (!ws.writeFailed()) {
+                            _written += _valid;
+                            _valid = 0;
+                            _dataLock.notifyAll();
+                            sent = true;
+                        }
                     }
                 } else if (_log.shouldInfo() && _valid > 0) {
                     _log.info("Passive flush skipped, valid=" + _valid);
@@ -746,11 +748,9 @@ class MessageOutputStream extends OutputStream {
                 if (_log.shouldDebug()) {
                     _log.debug("Passive flush executed: " + ws);
                 }
-                if (ws != null) {} //no-op
-                else {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Passive flush executed but WriteStatus was null");
-                    }
+            } else if (ws != null && ws.writeFailed()) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Passive flush failed, will retry on close: " + ws);
                 }
             }
         }

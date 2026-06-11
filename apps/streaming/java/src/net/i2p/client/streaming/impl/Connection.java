@@ -29,8 +29,8 @@ import net.i2p.util.SystemVersion;
 class Connection {
     /** Track last LeaseSet purge time per destination to prevent redundant purges. */
     private static final ConcurrentHashMap<Hash, Long> _lastLeaseSetPurgeTime = new ConcurrentHashMap<Hash, Long>();
-    /** Cooldown period between LeaseSet purges for the same destination (5 minutes). */
-    private static final long LEASESET_PURGE_COOLDOWN = 5 * 60 * 1000;
+    /** Cooldown period between LeaseSet purges for the same destination (1 second). */
+    private static final long LEASESET_PURGE_COOLDOWN = 1 * 1000;
 
     private final I2PAppContext _context;
     private final Log _log;
@@ -459,6 +459,7 @@ class Connection {
         } else {
             int windowSize;
             int remaining;
+            int timeout;
             synchronized (_outboundPackets) {
                 _outboundPackets.put(Long.valueOf(packet.getSequenceNum()), packet);
                 windowSize = _options.getWindowSize();
@@ -478,30 +479,24 @@ class Connection {
                     (packet.getSequenceNum() % 8 == 0) */ ) {
                     packet.setOptionalDelay(0);
                     packet.setFlag(Packet.FLAG_DELAY_REQUESTED);
-                    //if (_log.shouldDebug())
-                    //    _log.debug("Requesting no ack delay for packet " + packet);
                 }
 
-                int timeout = _options.getRTO();
-
-                // RFC 6298 section 5.1
-                if (_retransmitEvent.scheduleIfNotRunning(timeout)) {
-                   if (_log.shouldDebug()) {
-                       _log.debug("[" + Connection.this + "] Resend in " + timeout + "ms for " + packet);
-                   }
-
-                } else {
-                    if (_log.shouldDebug()) {
-                        _log.debug("[" + Connection.this + "] Timer was already running!");
-                    }
-                }
-
+                timeout = _options.getRTO();
                 packet.setTimeout(timeout);
             }
-        }
 
-        // warning, getStatLog() can be null
-        //_context.statManager().getStatLog().addData(Packet.toId(_sendStreamId), "stream.rtt", _options.getRTT(), _options.getWindowSize());
+            // Schedule retransmit timer outside the _outboundPackets lock
+            // to prevent deadlock with RetransmitEvent.timeReached()
+            if (_retransmitEvent.scheduleIfNotRunning(timeout)) {
+               if (_log.shouldDebug()) {
+                   _log.debug("[" + Connection.this + "] Resend in " + timeout + "ms for " + packet);
+               }
+            } else {
+                if (_log.shouldDebug()) {
+                    _log.debug("[" + Connection.this + "] Timer was already running!");
+                }
+            }
+        }
 
         // Apply pacing to smooth transmission
         long pacingDelay = calculatePacingDelay(packet.getPayloadSize());
@@ -509,9 +504,13 @@ class Connection {
             // Schedule packet with pacing delay
             PacedPacketEvent pacedEvent = new PacedPacketEvent(packet);
             pacedEvent.schedule(pacingDelay);
+            // Mark immediately so writeData() doesn't return FailedWriteStatus;
+            // the paced event will enqueue it later
+            packet.markEnqueued();
         } else {
             // Send immediately
             if (_outboundQueue.enqueue(packet)) {
+                packet.markEnqueued();
                 _unackedPacketsReceived.set(0);
                 _lastSendTime = _context.clock().now();
                 resetActivityTimer();
@@ -537,6 +536,9 @@ class Connection {
 
         List<PacketLocal> acked = null;
         boolean anyLeft = false;
+        boolean doPushBack = false;
+        boolean doCancel = false;
+        int pushBackRTO = 0;
         synchronized (_outboundPackets) {
             if (!_outboundPackets.isEmpty()) {  // short circuit iterator
                 for (Iterator<Map.Entry<Long, PacketLocal>> iter = _outboundPackets.entrySet().iterator(); iter.hasNext(); ) {
@@ -614,20 +616,25 @@ class Connection {
                 _bwEstimator.addSample(acked.size());
                 if (anyLeft) {
                     // RFC 6298 section 5.3
-                    int rto = _options.getRTO();
-                    _retransmitEvent.pushBackRTO(rto);
-
-                    if (_log.shouldDebug()) {
-                        _log.debug("[" + Connection.this + "] Not all packets ACKed, pushing timer out " + rto);
-                    }
+                    pushBackRTO = _options.getRTO();
+                    doPushBack = true;
                 } else {
                     // RFC 6298 section 5.2
-                    if (_log.shouldDebug()) {
-                        _log.debug("[" + Connection.this + "] All outstanding packets ACKed, cancelling timer");
-                    }
-
-                    _retransmitEvent.cancel();
+                    doCancel = true;
                 }
+            }
+        }
+        // Call RetransmitEvent outside _outboundPackets lock
+        // to prevent deadlock with RetransmitEvent.timeReached()
+        if (doPushBack) {
+            _retransmitEvent.pushBackRTO(pushBackRTO);
+            if (_log.shouldDebug()) {
+                _log.debug("[" + Connection.this + "] Not all packets ACKed, pushing timer out " + pushBackRTO);
+            }
+        } else if (doCancel) {
+            _retransmitEvent.cancel();
+            if (_log.shouldDebug()) {
+                _log.debug("[" + Connection.this + "] All outstanding packets ACKed, cancelling timer");
             }
         }
         return acked;
@@ -1679,7 +1686,7 @@ class Connection {
         private final long _createdOn;
 
         public PacedPacketEvent(PacketLocal packet) {
-            super(_context.simpleTimer2());
+            super(_timer);
             _packet = packet;
             _createdOn = _context.clock().now();
         }
@@ -1688,6 +1695,7 @@ class Connection {
             // Verify connection is still valid and packet not already sent/cancelled
             if (_connected.get() && _packet.getAckTime() <= 0 && _packet.getNumSends() <= 0) {
                 if (_outboundQueue.enqueue(_packet)) {
+                    _packet.markEnqueued();
                     _unackedPacketsReceived.set(0);
                     _lastSendTime = _context.clock().now();
                     resetActivityTimer();

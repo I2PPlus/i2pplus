@@ -36,6 +36,8 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     private final AtomicInteger _nackCount = new AtomicInteger();
     private volatile boolean _retransmitted;
     private volatile int _timeout;
+    /** whether this packet has been enqueued for I2CP send */
+    private volatile boolean _enqueued;
 
     /** not bound to a connection */
     public PacketLocal(I2PAppContext ctx, Destination to, I2PSession session) {
@@ -410,4 +412,10 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                _log.warn("PCAP write ioe: " + ioe);
             }
     }
+
+    /** @since I2P+ */
+    public void markEnqueued() { _enqueued = true; }
+
+    /** @since I2P+ */
+    public boolean isEnqueued() { return _enqueued; }
 }

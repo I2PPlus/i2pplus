@@ -103,7 +103,11 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         if (doSend) {
             PacketLocal packet = send(buf, off, size);
             if ((packet.getSequenceNum() > 0) || packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
-                return packet;
+                if (packet.isEnqueued()) {
+                    return packet;
+                } else {
+                    return new FailedWriteStatus(new IOException("Send failed: queue full"));
+                }
             } else {
                 return _dummyStatus;
             }

@@ -164,7 +164,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private static final int MAX_RTT = 60*1000;
     /**
      * Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
-     * Reduced from 100ms to 30ms to reduce latency while maintaining reasonable ACK aggregation.
+     * 500ms provides a reasonable delayed-ACK window for I2P's high-latency environment,
+     * allowing data piggybacking and reducing ACK-only packet floods.
      */
     private static final int DEFAULT_INITIAL_ACK_DELAY = 30;
     static final int MIN_WINDOW_SIZE = 1;
