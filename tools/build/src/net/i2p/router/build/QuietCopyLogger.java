@@ -35,6 +35,8 @@ public class QuietCopyLogger extends DefaultLogger {
         }
         if ("javac".equals(taskName) && msg.startsWith("Creating empty"))
             return true;
+        if ("exec".equals(taskName) && msg.startsWith("Generating ") && msg.contains(" ResourceBundle"))
+            return true;
         return ("copy".equals(taskName) && (msg.startsWith("Copying") || msg.startsWith("Copied")))
             || ("mkdir".equals(taskName) && msg.startsWith("Created dir"))
             || (("izpack".equals(taskName) || "izpack5".equals(taskName))
