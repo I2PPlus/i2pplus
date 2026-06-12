@@ -33,7 +33,7 @@ public class QuietCopyLogger extends DefaultLogger {
                 || msg.contains(":INFO:oajs.TldScanner:")
                 || (msg.contains(":INFO:oaj.JspC:") && msg.contains(" Built file ["));
         }
-        if ("javac".equals(taskName) && (msg.startsWith("Creating empty") || msg.startsWith("Ignoring source, target")))
+        if ("javac".equals(taskName) && (msg.startsWith("Creating empty") || msg.startsWith("Ignoring source, target") || msg.contains("ignoring it")))
             return true;
         if ("exec".equals(taskName) && msg.startsWith("Generating ") && msg.contains(" ResourceBundle"))
             return true;

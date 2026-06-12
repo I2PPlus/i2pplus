@@ -166,7 +166,7 @@
         <if>
           <not><equals arg1="${js.saved}" arg2="0"/></not>
           <then>
-            <echo message="Compressed JS: ${js.size.before} -> ${js.size.after} bytes (saved ${js.saved})"/>
+            <echo message="I2PSnark: Javascript compression -> ${js.size.before} / ${js.size.after} (saved ${js.saved} bytes)"/>
           </then>
         </if>
       </then>
