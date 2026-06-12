@@ -516,7 +516,7 @@
     <copy quiet="true" verbose="false" file="${build.root}apps/susidns/src/build/susidns.war" todir="${build.root}build/"/>
   </target>
 
-  <target name="buildImagegen" depends="buildCore, buildJetty">
+  <target name="buildImagegen" depends="buildCore, buildJetty, buildJrobin">
     <ant dir="apps/imagegen/identicon" target="jar">
       <property name="build.dir" location="${build.root}apps/imagegen/identicon/build"/>
     </ant>

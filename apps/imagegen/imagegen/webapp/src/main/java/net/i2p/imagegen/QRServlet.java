@@ -30,6 +30,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -57,8 +58,10 @@ public class QRServlet extends HttpServlet {
     private static final String PARAM_IDENTICON_SIZE_SHORT = "s";
     private static final String PARAM_IDENTICON_CODE_SHORT = "c";
     private static final String PARAM_IDENTICON_TEXT_SHORT = "t";
+    private static final String PARAM_FORMAT = "fmt";
     private static final String IDENTICON_IMAGE_FORMAT = "PNG";
     private static final String IDENTICON_IMAGE_MIMETYPE = "image/png";
+    private static final String IDENTICON_SVG_MIMETYPE = "image/svg+xml";
     private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * 60 * 1000;
     private static final String DEFAULT_FONT_NAME = SystemVersion.isWindows() ?
                                                     "Lucida Sans Typewriter" : Font.MONOSPACED;
@@ -67,6 +70,101 @@ public class QRServlet extends HttpServlet {
     private int version = 1;
     private IdenticonCache cache;
     private long identiconExpiresInMillis = DEFAULT_IDENTICON_EXPIRES_IN_MILLIS;
+
+    private static boolean acceptsSvg(HttpServletRequest req) {
+        String accept = req.getHeader("Accept");
+        return accept != null && accept.contains("image/svg+xml");
+    }
+
+    private static String bitMatrixToSvg(BitMatrix matrix) {
+        return bitMatrixToSvg(matrix, null, null);
+    }
+
+    private static String bitMatrixToSvg(BitMatrix matrix, String text, String textName) {
+        int qrWidth = matrix.getWidth();
+        int qrHeight = matrix.getHeight();
+        String name = text;
+        if (name == null || name.length() == 0)
+            name = textName;
+        if (name != null && name.length() > 0) {
+            float shrink = Math.min(1.0f, 14.0f / name.length());
+            int fontSize = Math.max(2, Math.round(shrink * qrWidth / 10));
+            int gap = Math.max(2, fontSize);
+            int contentHeight = qrHeight + gap + fontSize;
+            int pad = Math.max(1, (qrWidth - contentHeight) / 2);
+            if (pad < 1) pad = 1;
+            int totalHeight = Math.max(qrWidth, contentHeight + 2 * pad);
+            StringBuilder sb = new StringBuilder(1024);
+            sb.append("<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 ")
+              .append(qrWidth).append(' ').append(totalHeight).append("\">")
+              .append("<rect width=\"100%\" height=\"100%\" fill=\"#fff\"/>")
+              .append("<path shape-rendering=\"crispEdges\" fill=\"#000\" d=\"");
+            int maxQrY = appendQrPath(sb, matrix, qrWidth, qrHeight, pad);
+            int textY = maxQrY + 1 + gap;
+            sb.append("\"/><text x=\"").append(qrWidth / 2.0f).append("\" y=\"")
+              .append(textY)
+              .append("\" text-anchor=\"middle\" dominant-baseline=\"text-before-edge\" font-family=\"Open Sans\" font-weight=\"bold\" font-size=\"")
+              .append(fontSize).append("\" fill=\"#000\">")
+              .append(escapeXml(name)).append("</text></svg>");
+            return sb.toString();
+        } else {
+            StringBuilder sb = new StringBuilder(256);
+            sb.append("<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 ")
+              .append(qrWidth).append(' ').append(qrHeight).append("\">")
+              .append("<rect width=\"100%\" height=\"100%\" fill=\"#fff\"/>")
+              .append("<path shape-rendering=\"crispEdges\" fill=\"#000\" d=\"");
+            appendQrPath(sb, matrix, qrWidth, qrHeight, 0);
+            sb.append("\"/></svg>");
+            return sb.toString();
+        }
+    }
+
+    private static int appendQrPath(StringBuilder sb, BitMatrix matrix, int width, int height, int yOffset) {
+        boolean first = true;
+        int maxY = 0;
+        for (int y = 0; y < height; y++) {
+            int x = 0;
+            while (x < width) {
+                if (matrix.get(x, y)) {
+                    int x1 = x;
+                    while (x < width && matrix.get(x, y))
+                        x++;
+                    if (!first)
+                        sb.append(' ');
+                    else
+                        first = false;
+                    int yo = y + yOffset;
+                    if (yo > maxY) maxY = yo;
+                    sb.append('M').append(x1).append(' ').append(yo)
+                      .append('h').append(x - x1).append('v').append(1)
+                      .append('h').append(-(x - x1)).append('Z');
+                } else {
+                    x++;
+                }
+            }
+        }
+        return maxY;
+    }
+
+    private static String escapeXml(String s) {
+        StringBuilder sb = new StringBuilder(s.length());
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == '&')
+                sb.append("&amp;");
+            else if (c == '<')
+                sb.append("&lt;");
+            else if (c == '>')
+                sb.append("&gt;");
+            else if (c == '"')
+                sb.append("&quot;");
+            else if (c == '\'')
+                sb.append("&apos;");
+            else
+                sb.append(c);
+        }
+        return sb.toString();
+    }
 
     @Override
     public void init(ServletConfig cfg) throws ServletException {
@@ -103,12 +201,13 @@ public class QRServlet extends HttpServlet {
             return;
         }
 
+        String fmt = request.getParameter(PARAM_FORMAT);
+        boolean svg = "svg".equalsIgnoreCase(fmt);
+        if (!svg && fmt == null)
+            svg = acceptsSvg(request);
+        String suffix = svg ? "-svg" : "";
+
         String sizeParam = request.getParameter(PARAM_IDENTICON_SIZE_SHORT);
-        // very rougly, number of "modules" is about 4 * sqrt(chars)
-        // (assuming 7 bit) default margin each side is 4
-        // assuming level L
-        // min modules is 21x21
-        // shoot for 2 pixels per module
         int size = Math.max(50, (2 * 4) + (int) (2 * 5 * Math.sqrt(codeParam.length())));
         if (sizeParam != null) {
             try {
@@ -118,7 +217,7 @@ public class QRServlet extends HttpServlet {
             } catch (NumberFormatException nfe) {}
         }
 
-        String identiconETag = IdenticonUtil.getIdenticonETag(codeParam.hashCode(), size, version);
+        String identiconETag = IdenticonUtil.getIdenticonETag(codeParam.hashCode(), size, version) + suffix;
         String requestETag = request.getHeader("If-None-Match");
 
         if (requestETag != null && requestETag.equals(identiconETag)) {
@@ -126,48 +225,71 @@ public class QRServlet extends HttpServlet {
         } else {
             byte[] imageBytes = null;
 
-            // retrieve image bytes from either cache or renderer
             if (cache == null || (imageBytes = cache.get(identiconETag)) == null) {
-                ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-                QRCodeWriter qrcw = new QRCodeWriter();
-                BitMatrix matrix;
-                try {matrix = qrcw.encode(codeParam, BarcodeFormat.QR_CODE, size, size);}
-                catch (WriterException we) {throw new IOException("encode failed", we);}
-                String text = request.getParameter(PARAM_IDENTICON_TEXT_SHORT);
-                if (text != null) {
-                    // add 1 so it generates RGB instead of 1 bit,
-                    // so text anti-aliasing works
-                    MatrixToImageConfig cfg = new MatrixToImageConfig(MatrixToImageConfig.BLACK + 1,
-                                                                      MatrixToImageConfig.WHITE);
-                    BufferedImage bi = MatrixToImageWriter.toBufferedImage(matrix, cfg);
-                    Graphics2D g = bi.createGraphics();
-                    // anti-aliasing and hinting for the text
-                    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-                    g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-                    g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
-
-                    // scale font
-                    int width = bi.getWidth();
-                    int height = bi.getHeight();
-                    float shrink = Math.min(1.0f, 14.0f / text.length());
-                    if (width >= 256) {shrink = Math.min(1.0f, 16.0f / text.length());}
-                    int pts = Math.round(shrink * 16.0f * size / 160);
-                    if (width >= 256) {pts = Math.round(shrink * 16.0f * size / 180);}
-                    Font font = new Font(DEFAULT_FONT_NAME, Font.BOLD, pts);
-                    g.setFont(font);
-                    Color color = Color.BLACK;
-                    g.setColor(color);
-                    double swidth = font.getStringBounds(text, 0, text.length(), g.getFontRenderContext()).getBounds().getWidth();
-                    int x = (width - (int) swidth) / 2;
-                    int y = height - 10;
-                    if (height >= 256) {y = height - ((height / 50) + 10);}
-                    g.drawString(text, x, y);
-                    if (!ImageIO.write(bi, IDENTICON_IMAGE_FORMAT, byteOut))
-                        throw new IOException("ImageIO.write() fail");
+                if (svg) {
+                    QRCodeWriter qrcw = new QRCodeWriter();
+                    BitMatrix matrix;
+                    try {
+                        matrix = qrcw.encode(codeParam, BarcodeFormat.QR_CODE, 0, 0);
+                    } catch (WriterException we) {
+                        throw new IOException("encode failed", we);
+                    }
+                    String text = request.getParameter(PARAM_IDENTICON_TEXT_SHORT);
+                    String svgOut = bitMatrixToSvg(matrix, text, null);
+                    imageBytes = svgOut.getBytes("UTF-8");
                 } else {
-                    MatrixToImageWriter.writeToStream(matrix, IDENTICON_IMAGE_FORMAT, byteOut);
+                    ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+                    QRCodeWriter qrcw = new QRCodeWriter();
+                    BitMatrix matrix;
+                    try {matrix = qrcw.encode(codeParam, BarcodeFormat.QR_CODE, size, size);}
+                    catch (WriterException we) {throw new IOException("encode failed", we);}
+                    String text = request.getParameter(PARAM_IDENTICON_TEXT_SHORT);
+                    if (text != null) {
+                        // add 1 so it generates RGB instead of 1 bit,
+                        // so text anti-aliasing works
+                        MatrixToImageConfig cfg = new MatrixToImageConfig(MatrixToImageConfig.BLACK + 1,
+                                                                          MatrixToImageConfig.WHITE);
+                        BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(matrix, cfg);
+                        int qrPx = qrImage.getWidth();
+                        // Find the last non-white row in the QR image (skip quiet zone)
+                        int lastQRRow = qrPx - 1;
+                        for (int y = qrPx - 1; y >= 0; y--) {
+                            if (qrImage.getRGB(qrPx / 2, y) != -1) {
+                                lastQRRow = y;
+                                break;
+                            }
+                        }
+                        float shrink = Math.min(1.0f, 14.0f / text.length());
+                        int pts = Math.round(shrink * 16.0f * size / 160);
+                        int gap = pts;
+                        int contentHeight = lastQRRow + 1 + gap + pts;
+                        int pad = Math.max(2, (size - contentHeight) / 2);
+                        int bottomPad = Math.max(pad, pts / 3);
+                        int totalHeight = Math.max(size, contentHeight + pad + bottomPad);
+                        BufferedImage bi = new BufferedImage(size, totalHeight, BufferedImage.TYPE_INT_RGB);
+                        Graphics2D g = bi.createGraphics();
+                        g.setColor(Color.WHITE);
+                        g.fillRect(0, 0, size, totalHeight);
+                        g.drawImage(qrImage, 0, pad, null);
+                        // anti-aliasing and hinting for the text
+                        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                        g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+                        Font font = new Font(DEFAULT_FONT_NAME, Font.BOLD, pts);
+                        g.setFont(font);
+                        g.setColor(Color.BLACK);
+                        FontMetrics fm = g.getFontMetrics();
+                        int x = (size - fm.stringWidth(text)) / 2;
+                        int y = pad + lastQRRow + gap + fm.getAscent();
+                        g.drawString(text, x, y);
+                        g.dispose();
+                        if (!ImageIO.write(bi, IDENTICON_IMAGE_FORMAT, byteOut))
+                            throw new IOException("ImageIO.write() fail");
+                    } else {
+                        MatrixToImageWriter.writeToStream(matrix, IDENTICON_IMAGE_FORMAT, byteOut);
+                    }
+                    imageBytes = byteOut.toByteArray();
                 }
-                imageBytes = byteOut.toByteArray();
                 if (cache != null) {cache.add(identiconETag, imageBytes);}
             } else {
                 response.setStatus(404);
@@ -182,7 +304,7 @@ public class QRServlet extends HttpServlet {
             }
 
             // return image bytes to requester
-            response.setContentType(IDENTICON_IMAGE_MIMETYPE);
+            response.setContentType(svg ? IDENTICON_SVG_MIMETYPE : IDENTICON_IMAGE_MIMETYPE);
             response.setHeader("X-Content-Type-Options", "nosniff");
             response.setHeader("Accept-Ranges", "none");
             response.setHeader("Cache-control", "max-age=2628000, immutable");

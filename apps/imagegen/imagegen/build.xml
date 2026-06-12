@@ -13,6 +13,7 @@
     <pathelement location="${lib}/javax.servlet.jar"/>
     <pathelement location="${build.root}apps/imagegen/identicon/build/identicon.jar"/>
     <pathelement location="${build.root}apps/imagegen/zxing/build/zxing.jar"/>
+    <pathelement location="${build.root}apps/jrobin/java/build/jrobin.jar"/>
     <pathelement location="${...build.dir}/i2p.jar"/>
   </path>
 
@@ -67,10 +68,11 @@
   <target name="war" depends="compile, warUpToDate" unless="war.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
-    <!-- put the identicon and zxing classes in the war -->
+    <!-- put the identicon, zxing and jrobin classes in the war -->
     <copy todir="${build.dir}/WEB-INF/classes">
       <fileset dir="${build.root}apps/imagegen/identicon/build/obj"/>
       <fileset dir="${build.root}apps/imagegen/zxing/build/obj"/>
+      <fileset dir="${build.root}apps/jrobin/java/build/obj"/>
     </copy>
     <war destfile="${build.dir}/${project}.war" webxml="webapp/src/main/webapp/WEB-INF/web.xml">
       <fileset dir="${build.dir}">
