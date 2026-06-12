@@ -32,17 +32,8 @@ jobs:
       - name: Enable quiet logger for subsequent builds
         run: cp tools/ant/.antrc ~/.antrc
 
-      - name: Build i2pupdate.zip with Ant
-        run: ant distclean updaterCompact
-
-      - name: Build installer with Ant
-        run: ant pkg
-
-      - name: Build Debian package with Ant
-        run: ant buildDeb
-
-      - name: Build I2PSnark standalone with Ant
-        run: ant i2psnark
+      - name: Build all artifacts
+        run: ant updaterWithGeoIP installer i2psnark buildDeb
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
