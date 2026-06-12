@@ -250,9 +250,9 @@ public class EepPost extends EepGet {
         String proxyHost = "127.0.0.1";
         int proxyPort = 4444;
         int numRetries = 0;
-        int headerTimeout = CONNECT_TIMEOUT;
+        int headerTimeout = DEFAULT_CONNECT_TIMEOUT;
         int totalTimeout = -1;
-        int inactivityTimeout = INACTIVITY_TIMEOUT;
+        int inactivityTimeout = DEFAULT_INACTIVITY_TIMEOUT;
         int markSize = 1024;
         int lineLen = 40;
         String saveAs = null;

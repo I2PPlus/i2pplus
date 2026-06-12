@@ -875,13 +875,13 @@ public class EepGet {
             if (_fetchInactivityTimeout > 0)
                 _proxy.setSoTimeout(_fetchInactivityTimeout);
             else
-                _proxy.setSoTimeout(INACTIVITY_TIMEOUT);
+                _proxy.setSoTimeout(DEFAULT_INACTIVITY_TIMEOUT);
         } else if (timeout != null) {
             timeout.resetTimer();
             if (_fetchInactivityTimeout > 0)
                 timeout.setInactivityTimeout(_fetchInactivityTimeout);
             else
-                timeout.setInactivityTimeout(INACTIVITY_TIMEOUT);
+                timeout.setInactivityTimeout(DEFAULT_INACTIVITY_TIMEOUT);
         }
 
         if (_redirectLocation != null) {

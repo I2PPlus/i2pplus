@@ -14,7 +14,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.TimeZone;
 import javax.servlet.http.Cookie;
-import org.eclipse.jetty.http.PathMap;
+import org.eclipse.jetty.http.pathmap.PathMappings;
+import org.eclipse.jetty.http.pathmap.ServletPathSpec;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.RequestLog;
 import org.eclipse.jetty.server.Response;
@@ -65,7 +66,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     private transient OutputStream _out;
     private transient OutputStream _fileOut;
     private transient DateCache _logDateCache;
-    private transient PathMap<String> _ignorePathMap;
+    private transient PathMappings<String> _ignorePathMap;
     private transient java.io.Writer _writer;
     private transient ArrayList<Utf8StringBuilder> _buffers;
     private transient char[] _copy;
@@ -315,9 +316,9 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
         _out = _fileOut;
 
         if (_ignorePaths != null && _ignorePaths.length > 0) {
-            _ignorePathMap = new PathMap<String>();
+            _ignorePathMap = new PathMappings<String>();
             for (int i = 0; i < _ignorePaths.length; i++) {
-                _ignorePathMap.put(_ignorePaths[i], _ignorePaths[i]);
+                _ignorePathMap.put(new ServletPathSpec(_ignorePaths[i]), _ignorePaths[i]);
             }
         } else {_ignorePathMap = null;}
 

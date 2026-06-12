@@ -1,8 +1,8 @@
 package org.rrd4j.core.jrrd;
 
 import java.util.Map;
+import org.rrd4j.data.IPlottable;
 import org.rrd4j.data.LinearInterpolator;
-import org.rrd4j.data.Plottable;
 
 /**
  * Models a chunk of result data from an RRDatabase.
@@ -10,7 +10,6 @@ import org.rrd4j.data.Plottable;
  * @author <a href="mailto:ciaran@codeloop.com">Ciaran Treanor</a>
  * @version $Revision: 1.1 $
  */
-@SuppressWarnings("deprecation")
 public class DataChunk {
 
     private static final String NEWLINE = System.getProperty("line.separator");
@@ -125,7 +124,7 @@ public class DataChunk {
      * @param name the datasource name
      * @return a plottable for the datasource
      */
-    public Plottable toPlottable(String name) {
+    public IPlottable toPlottable(String name) {
         Integer dsId = nameindex.get(name);
         if (dsId == null) throw new RuntimeException("datasource not not found: " + name);
         long[] date = new long[rows];

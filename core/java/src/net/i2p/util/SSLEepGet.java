@@ -622,7 +622,7 @@ public class SSLEepGet extends EepGet {
             }
         }
         if (_fetchInactivityTimeout > 0) _proxy.setSoTimeout(_fetchInactivityTimeout);
-        else _proxy.setSoTimeout(INACTIVITY_TIMEOUT);
+        else _proxy.setSoTimeout(DEFAULT_INACTIVITY_TIMEOUT);
 
         if (_redirectLocation != null) {
             if (!_redirectLocation.startsWith("https://"))

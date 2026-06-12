@@ -230,7 +230,7 @@ public class EepHead extends EepGet {
         if (timeout != null) {
             timeout.resetTimer();
             if (_fetchInactivityTimeout > 0) timeout.setInactivityTimeout(_fetchInactivityTimeout);
-            else timeout.setInactivityTimeout(INACTIVITY_TIMEOUT);
+            else timeout.setInactivityTimeout(DEFAULT_INACTIVITY_TIMEOUT);
         }
 
         // Should we even follow redirects for HEAD?

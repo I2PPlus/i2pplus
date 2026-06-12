@@ -342,12 +342,10 @@ public class PeerProfile {
     public synchronized RateStat getDbIntroduction() {return _dbIntroduction;}
 
     /**
-     * @deprecated Replaced by {@link #isLowLatency()}. This method is no longer
-     * used for routing decisions; it is retained only for backward compatibility
+     * Obsolete — prefer {@link #isLowLatency()}. Retained for backward compatibility
      * with stored profile data. Returns 0 unconditionally if not set, or the stored
      * value with a 4-hour expiry for existing profiles that still carry it.
      */
-    @Deprecated
     public int getSpeedBonus() {
         if (_speedBonus == 0) return _speedBonus;
         if (_speedBonusLastUpdate <= 0) return _speedBonus; // backward compat: no timestamp = valid
@@ -355,10 +353,9 @@ public class PeerProfile {
         return hoursSinceUpdate >= 4 ? 0 : _speedBonus;
     }
     /**
-     * @deprecated Replaced by {@link #setLowLatency(boolean)}. Retained for
+     * Obsolete — prefer {@link #setLowLatency(boolean)}. Retained for
      * backward compatibility with stored profile data.
      */
-    @Deprecated
     public void setSpeedBonus(int bonus) {_speedBonus = bonus; _speedBonusLastUpdate = _context.clock().now();}
     /**
      * @deprecated No longer used for routing decisions.
@@ -414,17 +411,8 @@ public class PeerProfile {
      */
     public float getIntegrationValue() {return _integrationValue;}
     /**
-     * is this peer actively failing (aka not worth touching)?
-     * @deprecated - unused - always false
-     */
-    @Deprecated
-    public boolean getIsFailing() {return false;}
-
-    /**
      *  @return EWMA average with time-based decay (50% per hour since last update)
      */
-    @Deprecated
-    @SuppressWarnings("deprecation")
     public float getTunnelTestTimeAverage() {
         if (_tunnelTestResponseTimeAvg <= 0 || _tunnelTestTimeAvgLastUpdate <= 0) return 0;
         long hoursSinceUpdate = (_context.clock().now() - _tunnelTestTimeAvgLastUpdate) / (60 * 60 * 1000L);
@@ -437,29 +425,18 @@ public class PeerProfile {
     /**
      *  @return timestamp when the EWMA was last updated
      */
-    @Deprecated
-    @SuppressWarnings("deprecation")
     long getTunnelTestTimeAvgLastUpdate() {return _tunnelTestTimeAvgLastUpdate;}
 
     /**
-     *  @deprecated unused
      */
-    @Deprecated
-    @SuppressWarnings("deprecation")
     void setTunnelTestTimeAverage(float avg) {_tunnelTestResponseTimeAvg = avg;}
 
     /**
-     *  @deprecated unused
      */
-    @Deprecated
-    @SuppressWarnings("deprecation")
     void setTunnelTestTimeAvgLastUpdate(long ts) {_tunnelTestTimeAvgLastUpdate = ts;}
 
     /**
-     *  @deprecated unused
      */
-    @Deprecated
-    @SuppressWarnings("deprecation")
     void updateTunnelTestTimeAverage(float ms) {
 
         if (_tunnelTestResponseTimeAvg <= 0) {_tunnelTestResponseTimeAvg = ms;} // should we instead start at $ms?
@@ -733,12 +710,6 @@ public class PeerProfile {
     private float calculateSpeed() {return (float) SpeedCalculator.calc(this);}
     private float calculateCapacity() {return (float) CapacityCalculator.calc(this);}
     private float calculateIntegration() {return (float) IntegrationCalculator.calc(this);}
-
-    /**
-     * @deprecated - unused - always false
-     */
-    @Deprecated
-    void setIsFailing(boolean val) {}
 
     /**
      *  Helper for calculators

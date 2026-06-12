@@ -1504,7 +1504,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 final String proxyHost = hostLowerCase;
                 final String proxyAddr = currentProxy;
                 t = new I2PTunnelRunner(s, i2ps, sockLock, data, response, mySockets,
-                    (Runnable) () -> {
+                    (e) -> {
                         if (useOutproxy && proxyHost != null)
                             noteProxyResult(proxyAddr, proxyHost, false, false);
                         closeSocket(s);

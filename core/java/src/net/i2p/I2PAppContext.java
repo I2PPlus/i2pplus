@@ -82,7 +82,6 @@ public class I2PAppContext {
     private RandomSource _random;
     private KeyGenerator _keyGenerator;
     protected KeyRing _keyRing; // overridden in RouterContext
-    @SuppressWarnings("deprecation")
     private SimpleScheduler _simpleScheduler;
     private SimpleTimer _simpleTimer;
     private SimpleTimer2 _simpleTimer2;
@@ -1022,7 +1021,6 @@ public class I2PAppContext {
      * @deprecated in 0.9.20, use simpleTimer2()
      */
     @Deprecated
-    @SuppressWarnings("deprecation")
     public SimpleScheduler simpleScheduler() {
         if (!_simpleSchedulerInitialized)
             initializeSimpleScheduler();

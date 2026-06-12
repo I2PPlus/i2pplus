@@ -7,7 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.rrd4j.ConsolFun;
-import org.rrd4j.data.Aggregates;
 import org.rrd4j.data.DataProcessor;
 import org.rrd4j.data.Variable;
 
@@ -339,34 +338,6 @@ public class FetchData {
      * @return Simple object containing all aggregated values.
      * @throws java.lang.IllegalArgumentException Thrown if the given datasource name cannot be
      *     found in the fetched data.
-     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used
-     *     with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
-     */
-    @Deprecated
-    public Aggregates getAggregates(String dsName) {
-        DataProcessor dataProcessor = createDataProcessor(null);
-        return dataProcessor.getAggregates(dsName);
-    }
-
-    /**
-     * Returns all aggregated values for a set of values calculated by applying an RPN expression to
-     * the fetched data. For example, if you have two datasources named <code>x</code> and <code>y
-     * </code> in this FetchData and you want to calculate MIN, MAX, LAST, FIRST, AVERAGE and TOTAL
-     * value of <code>(x+y)/2</code> use something like:
-     *
-     * <p><code>getRpnAggregates("x,y,+,2,/");</code>
-     *
-     * @param rpnExpression RRDTool-like RPN expression
-     * @return Object containing all aggregated values
-     * @throws java.lang.IllegalArgumentException Thrown if invalid RPN expression is supplied
-     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used
-     *     with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
-     */
-    @Deprecated
-    public Aggregates getRpnAggregates(String rpnExpression) {
-        DataProcessor dataProcessor = createDataProcessor(rpnExpression);
-        return dataProcessor.getAggregates(RPN_SOURCE_NAME);
-    }
 
     /**
      * Used by ISPs which charge for bandwidth utilization on a "95th percentile" basis.
