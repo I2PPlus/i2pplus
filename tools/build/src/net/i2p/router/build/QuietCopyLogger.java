@@ -31,7 +31,7 @@ public class QuietCopyLogger extends DefaultLogger {
         if ("java".equals(taskName)) {
             return msg.contains(":INFO::main: Logging initialized")
                 || msg.contains(":INFO:oajs.TldScanner:")
-                || (msg.contains(":INFO:oaj.JspC:") && msg.contains(" Built file ["));
+                || msg.contains(":INFO:oaj.JspC:");
         }
         if ("javac".equals(taskName) && (msg.startsWith("Creating empty") || msg.startsWith("Ignoring source, target") || msg.contains("ignoring it") || msg.startsWith("Note:")))
             return true;
