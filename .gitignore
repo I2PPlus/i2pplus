@@ -153,8 +153,6 @@ tools/
 !tools/spotbugs/*.xml
 !tools/spotbugs/config/
 !tools/jsdoc/
-!tools/build/
-!tools/build/**/*.java
 !tools/test/
 !tools/test/*
 tools/test/*.jar
