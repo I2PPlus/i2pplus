@@ -309,7 +309,7 @@ if [ "$NOCOVERAGE" = "0" ]; then
         PCT=0
         [ "$TOTAL" -gt 0 ] && PCT=$((TRANS * 100 / TOTAL))
 
-        LINE="$LINE\t$LG $PCT%"
+        LINE="$LINE	$LG $PCT%"
         N=$((N + 1))
         if [ $((N % 6)) -eq 0 ]; then
             echo " $LINE"
