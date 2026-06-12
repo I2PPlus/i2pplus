@@ -35,6 +35,8 @@ public class QuietCopyLogger extends DefaultLogger {
         }
         if ("javac".equals(taskName) && (msg.startsWith("Creating empty") || msg.startsWith("Ignoring source, target") || msg.contains("ignoring it") || msg.startsWith("Note:")))
             return true;
+        if ("exec".equals(taskName) && msg.startsWith("Note:"))
+            return true;
         if ("exec".equals(taskName) && msg.startsWith("Generating ") && msg.contains(" ResourceBundle"))
             return true;
         if ("exec".equals(taskName) && msg.contains("Using cached translation bundles"))
