@@ -92,7 +92,7 @@
         <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
         <pathelement location="${systray.java.build.dir}/systray.jar"/>
         <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar"/>
-        <pathelement location="../../jetty/jettylib/jetty-util.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
       </classpath>
     </javac>
     <echo message="I2PSnark compilation completed"/>
@@ -356,7 +356,7 @@
       <zipfileset src="../../jetty/jettylib/jetty-io.jar"/>
       <zipfileset src="../../jetty/jettylib/jetty-security.jar"/>
       <zipfileset src="../../jetty/jettylib/jetty-servlet.jar"/>
-      <zipfileset src="../../jetty/jettylib/jetty-util.jar"/>
+      <zipfileset src="${jetty.pkg.dir}/jetty-util.jar"/>
       <zipfileset src="../../jetty/jettylib/jetty-webapp.jar"/>
       <zipfileset src="../../jetty/jettylib/jetty-xml.jar"/>
       <zipfileset src="../../jetty/jettylib/org.mortbay.jetty.jar"/>

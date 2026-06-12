@@ -210,7 +210,7 @@
 -->
     <!-- comment out above line and uncomment below and the patches section further down if we
         need patches -->
-    <jar destfile="jettylib/jetty-util.jar"
+    <jar destfile="${jetty.pkg.dir}/jetty-util.jar"
       manifest="${jetty.base}/lib/jetty-util-${jetty.ver}.jar"
       filesetmanifest="mergewithoutmain">
       <zipfileset excludes="**/JavaVersion.class"
@@ -448,7 +448,7 @@
         <pathelement location="./jettylib/jetty-io.jar"/>
         <pathelement location="./jettylib/jetty-security.jar"/>
         <pathelement location="./jettylib/jetty-servlet.jar"/>
-        <pathelement location="./jettylib/jetty-util.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
         <pathelement location="./jettylib/jetty-webapp.jar"/>
         <pathelement location="./jettylib/jetty-xml.jar"/>
       </classpath>
@@ -480,7 +480,7 @@
         <pathelement location="./jettylib/jetty-io.jar"/>
         <pathelement location="./jettylib/jetty-security.jar"/>
         <pathelement location="./jettylib/jetty-servlet.jar"/>
-        <pathelement location="./jettylib/jetty-util.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
         <pathelement location="./jettylib/jetty-webapp.jar"/>
         <pathelement location="./jettylib/jetty-xml.jar"/>
         <pathelement location="./jettylib/org.mortbay.jetty.jar"/>
@@ -689,7 +689,7 @@
         <pathelement location="./jettylib/jetty-io.jar"/>
         <pathelement location="./jettylib/jetty-security.jar"/>
         <pathelement location="./jettylib/jetty-servlet.jar"/>
-        <pathelement location="./jettylib/jetty-util.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
         <pathelement location="./jettylib/jetty-webapp.jar"/>
         <pathelement location="./jettylib/jetty-xml.jar"/>
         <!-- following are only for debian builds -->

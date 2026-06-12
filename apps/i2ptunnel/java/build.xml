@@ -80,7 +80,7 @@
       destdir="${build.dir}/obj"
       includeAntRuntime="false"
       encoding="UTF-8"
-      classpath="${core.java.build.dir}/i2p.jar:${build.dir}/i2ptunnel.jar:${jetty.pkg.dir}/jetty-i2p.jar:../../jetty/jettylib/jetty-util.jar:../../jetty/jettylib/jetty-xml.jar:../../jetty/jettylib/javax.servlet.jar">
+      classpath="${core.java.build.dir}/i2p.jar:${build.dir}/i2ptunnel.jar:${jetty.pkg.dir}/jetty-i2p.jar:${jetty.pkg.dir}/jetty-util.jar:../../jetty/jettylib/jetty-xml.jar:../../jetty/jettylib/javax.servlet.jar">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -488,7 +488,7 @@
         <pathelement location="../../jetty/jettylib/jasper-el.jar"/>
         <pathelement location="../../jetty/jettylib/commons-el.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-xml.jar"/>
-        <pathelement location="../../jetty/jettylib/jetty-util.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
         <pathelement location="${ant.home}/lib/ant.jar"/>
         <pathelement location="${build.dir}/i2ptunnel.jar"/>
         <pathelement location="${build.dir}/temp-beans.jar"/>
@@ -527,7 +527,7 @@
 
         <pathelement location="../../jetty/jettylib/commons-el.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-xml.jar"/>
-        <pathelement location="../../jetty/jettylib/jetty-util.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
         <pathelement location="${build.dir}/i2ptunnel.jar"/>
         <pathelement location="${build.dir}/temp-beans.jar"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>

@@ -1372,7 +1372,7 @@
         <pathelement location="apps/jetty/jettylib/jetty-servlet.jar"/>
         <pathelement location="apps/jetty/jettylib/jetty-servlets.jar"/>
         <pathelement location="apps/jetty/jettylib/jetty-start.jar"/>
-        <pathelement location="apps/jetty/jettylib/jetty-util.jar"/>
+        <pathelement location="${build.root}apps/jetty/build/jetty-util.jar"/>
         <pathelement location="apps/jetty/jettylib/jetty-webapp.jar"/>
         <pathelement location="apps/jetty/jettylib/jetty-xml.jar"/>
         <pathelement location="apps/jetty/jettylib/org.mortbay.jetty.jar"/>
@@ -1494,7 +1494,7 @@
         <pathelement location="apps/jetty/jettylib/jetty-servlet.jar"/>
         <pathelement location="apps/jetty/jettylib/jetty-servlets.jar"/>
         <pathelement location="apps/jetty/jettylib/jetty-start.jar"/>
-        <pathelement location="apps/jetty/jettylib/jetty-util.jar"/>
+        <pathelement location="${build.root}apps/jetty/build/jetty-util.jar"/>
         <pathelement location="apps/jetty/jettylib/jetty-webapp.jar"/>
         <pathelement location="apps/jetty/jettylib/jetty-xml.jar"/>
         <pathelement location="apps/jetty/jettylib/org.mortbay.jetty.jar"/>

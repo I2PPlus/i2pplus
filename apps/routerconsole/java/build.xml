@@ -52,7 +52,7 @@
         <pathelement location="../../../installer/lib/wrapper/all/wrapper.jar"/>
         <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
         <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
-        <pathelement location="../../jetty/jettylib/jetty-util.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
         <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar"/>
         <pathelement location="${jrobin.java.build.dir}/jrobin.jar"/>
         <pathelement location="${router.java.build.dir}/obj"/>
@@ -110,7 +110,7 @@
         <pathelement location="../../jetty/jettylib/jetty-security.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-servlet.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-servlets.jar"/>
-        <pathelement location="../../jetty/jettylib/jetty-util.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-webapp.jar"/>
         <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar"/>
         <pathelement location="${jrobin.java.build.dir}/jrobin.jar"/>
@@ -671,7 +671,7 @@
         <pathelement location="../../jetty/jettylib/tomcat-util-scan.jar"/>
 
         <pathelement location="../../jetty/jettylib/commons-el.jar"/>
-        <pathelement location="../../jetty/jettylib/jetty-util.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
         <pathelement location="${ant.home}/lib/ant.jar"/>
         <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
         <pathelement location="${jetty.pkg.dir}/jspc.jar"/>
@@ -713,7 +713,7 @@
 
         <pathelement location="../../jetty/jettylib/commons-el.jar"/>
         <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar"/>
-        <pathelement location="../../jetty/jettylib/jetty-util.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
         <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
         <pathelement location="${systray.java.build.dir}/obj"/>
         <pathelement location="${desktopgui.dist.dir}/desktopgui.jar"/>
