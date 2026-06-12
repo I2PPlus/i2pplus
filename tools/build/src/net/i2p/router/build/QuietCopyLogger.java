@@ -37,6 +37,10 @@ public class QuietCopyLogger extends DefaultLogger {
             return true;
         if ("exec".equals(taskName) && msg.startsWith("Generating ") && msg.contains(" ResourceBundle"))
             return true;
+        if ("exec".equals(taskName) && msg.contains("Using cached translation bundles"))
+            return true;
+        if ("jar".equals(taskName) && msg.contains("module-info.class already added"))
+            return true;
         return ("copy".equals(taskName) && (msg.startsWith("Copying") || msg.startsWith("Copied")))
             || ("mkdir".equals(taskName) && msg.startsWith("Created dir"))
             || (("izpack".equals(taskName) || "izpack5".equals(taskName))

@@ -432,9 +432,9 @@
     <typefound name="depend"/>
   </condition>
 
-  <target name="depend" if="depend.available">
+  <target name="depend" if="depend.available" unless="compile.uptodate">
     <depend
-      cache="../../build"
+      cache="${build.dir}/depend-cache"
       srcdir="./java/src"
       destdir="${build.dir}/obj">
       <classpath>
@@ -454,7 +454,13 @@
     </depend>
   </target>
 
-  <target name="compile" depends="builddep, ensureJettylib, depend">
+  <target name="compileUpToDate">
+    <uptodate property="compile.uptodate" targetfile="${build.dir}/jetty.jar">
+        <srcfiles dir="./java/src" includes="**/*.java"/>
+    </uptodate>
+</target>
+
+  <target name="compile" depends="compileUpToDate, builddep, ensureJettylib, depend" unless="compile.uptodate">
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/obj"/>
     <javac

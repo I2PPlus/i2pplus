@@ -20,7 +20,7 @@
   </condition>
   <target name="depend" if="depend.available">
     <depend
-      cache="${...build.dir}"
+      cache="${build.dir}/depend-cache"
       srcdir="./src:./test/junit"
       destdir="${build.dir}/obj">
       <!-- Depend on classes instead of jars where available -->

@@ -46,7 +46,13 @@
     </exec>
   </target>
 
-  <target name="jar" depends="compile, listChangedFiles">
+  <target name="jarUpToDate">
+    <uptodate property="jar.uptodate" targetfile="${build}/${jar}">
+      <srcfiles dir="${build}" includes="**/*.class"/>
+    </uptodate>
+  </target>
+
+  <target name="jar" depends="compile, listChangedFiles, jarUpToDate" unless="jar.uptodate">
     <property name="workspace.changes.tr" value=""/>
     <jar destfile="${build}/${jar}">
       <fileset dir="${build}" includes="**/*.class"/>

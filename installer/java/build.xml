@@ -19,7 +19,7 @@
   </condition>
   <target name="depend" if="depend.available">
     <depend
-      cache="${...build.dir}"
+      cache="${build.dir}/depend-cache"
       srcdir="./src"
       destdir="${build.dir}/obj">
     </depend>
@@ -56,7 +56,18 @@
     </exec>
   </target>
 
-  <target name="jar" depends="compile, listChangedFiles">
+  <target name="checkJarUpToDate">
+    <uptodate property="jar.uptodate" targetfile="${...build.dir}/utility.jar">
+      <srcfiles dir="${build.dir}/obj" includes="**"/>
+      <srcfiles dir="${core.java.build.dir}/obj" includes="**/FileUtil.class"/>
+    </uptodate>
+  </target>
+
+  <target name="jar" depends="compile, checkJarUpToDate, listChangedFiles">
+    <antcall target="do-jar"/>
+  </target>
+
+  <target name="do-jar" unless="jar.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.util.tr" value=""/>
     <jar destfile="${...build.dir}/utility.jar">

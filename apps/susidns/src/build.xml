@@ -179,7 +179,7 @@
     </exec>
   </target>
 
-  <target name="war" depends="compile, precompilejsp, bundle, warUpToDate" unless="war.uptodate">
+  <target name="war" depends="compile, precompilejsp, bundleTranslations, warUpToDate" unless="war.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
     <mkdir dir="${build.dir}/js"/>
@@ -193,6 +193,12 @@
     <if>
       <isset property="uglifyjs.present"/>
       <then>
+        <uptodate property="js.uptodate" targetfile="${build.dir}/${project}.war">
+          <srcfiles dir="js" includes="*.js"/>
+        </uptodate>
+        <if>
+          <not><isset property="js.uptodate"/></not>
+          <then>
         <length property="js.size.before" mode="all">
           <fileset dir="${build.dir}/js" includes="*.js"/>
         </length>
@@ -210,6 +216,11 @@
           <then>
             <echo message="SusiDNS: Javascript compression -> ${js.size.before} / ${js.size.after} (saved ${js.saved} bytes)"/>
           </then>
+        </if>
+          </then>
+          <else>
+            <echo message="SusiDNS: Using cached Javascript compression"/>
+          </else>
         </if>
       </then>
       <else>
@@ -249,7 +260,7 @@
     </condition>
   </target>
 
-  <target name="bundle" depends="compile, precompilejsp" unless="no.bundle">
+  <target name="bundleTranslations" depends="compile, precompilejsp" unless="no.bundle">
     <mkdir dir="${build.dir}/messages-src"/>
     <!-- Update the messages_*.po files.
          We need to supply the bat file for windows, and then change the fail property to true -->
@@ -278,10 +289,19 @@
       <arg value="--build-dir"/>
       <arg value="${build.dir}"/>
     </exec>
+    <uptodate property="bundle.javac.uptodate" targetfile="${build.dir}/.bundle-javac-stamp">
+      <srcfiles dir="${build.dir}/messages-src" includes="**/*.java"/>
+    </uptodate>
+    <if>
+      <not><isset property="bundle.javac.uptodate"/></not>
+      <then>
     <javac source="${javac.version}" target="${javac.version}" release="${javac.release}"
       includeAntRuntime="false" encoding="UTF-8" srcdir="${build.dir}/messages-src" destdir="${bin}">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
+    <touch file="${build.dir}/.bundle-javac-stamp"/>
+      </then>
+    </if>
   </target>
 
   <target name="extractSVGTags">

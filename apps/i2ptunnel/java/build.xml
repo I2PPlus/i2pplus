@@ -38,7 +38,7 @@
 
   <target name="depend" if="depend.available">
     <depend
-      cache="${...build.dir}"
+      cache="${build.dir}/depend-cache"
       srcdir="./src"
       destdir="${build.dir}/obj">
       <!-- Depend on classes instead of jars where available -->
@@ -124,8 +124,16 @@
 
   <!-- web/ and ui/ classes that will go in the war. Not for Android. -->
   <target name="jarTempBeans" depends="builddep, compileWeb">
+    <uptodate property="jarTempBeans.uptodate" targetfile="${build.dir}/temp-beans.jar">
+      <srcfiles dir="${build.dir}/obj" includes="**/ui/*.class **/web/*.class"/>
+    </uptodate>
+    <if>
+      <not><isset property="jarTempBeans.uptodate"/></not>
+      <then>
     <jar destfile="${build.dir}/temp-beans.jar" basedir="${build.dir}/obj"
       includes="**/ui/*.class **/web/*.class"/>
+      </then>
+    </if>
   </target>
 
   <target name="jarUpToDate">
@@ -176,7 +184,7 @@
   </target>
 
   <!-- servlet translations go in the war, not the jar -->
-  <target name="bundle" depends="compile, precompilejsp" unless="no.bundle">
+  <target name="bundleTranslations" depends="compile, precompilejsp" unless="no.bundle">
     <mkdir dir="${build.dir}/messages-src"/>
     <!-- Update the messages_*.po files.
          We need to supply the bat file for windows, and then change the fail property to true -->
@@ -205,6 +213,12 @@
       <arg value="--build-dir"/>
       <arg value="${build.dir}"/>
     </exec>
+    <uptodate property="bundle.javac.uptodate" targetfile="${build.dir}/.bundle-javac-stamp">
+      <srcfiles dir="${build.dir}/messages-src" includes="**/*.java"/>
+    </uptodate>
+    <if>
+      <not><isset property="bundle.javac.uptodate"/></not>
+      <then>
     <javac source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
@@ -212,6 +226,9 @@
       srcdir="${build.dir}/messages-src" destdir="${jsp.build.dir}/WEB-INF/classes">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
+    <touch file="${build.dir}/.bundle-javac-stamp"/>
+      </then>
+    </if>
   </target>
 
   <target name="poupdate" depends="compile, precompilejsp">
@@ -359,7 +376,7 @@
   </target>
 
   <!-- The web classes are now in the war not the jar - they are not part of the API -->
-  <target name="war" depends="compileWeb, precompilejsp, bundle, warUpToDate, listChangedFiles2"
+  <target name="war" depends="compileWeb, precompilejsp, bundleTranslations, warUpToDate, listChangedFiles2"
     unless="war.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.w.tr" value=""/>
@@ -376,6 +393,12 @@
     <if>
       <isset property="uglifyjs.present"/>
       <then>
+        <uptodate property="js.uptodate" targetfile="${build.dir}/i2ptunnel.war">
+          <srcfiles dir="../jsp/js" includes="*.js"/>
+        </uptodate>
+        <if>
+          <not><isset property="js.uptodate"/></not>
+          <then>
         <length property="js.size.before" mode="all">
           <fileset dir="${build.dir}/js" includes="*.js"/>
         </length>
@@ -393,6 +416,11 @@
           <then>
             <echo message="I2PTunnel: Javascript compression -> ${js.size.before} / ${js.size.after} (saved ${js.saved} bytes)"/>
           </then>
+        </if>
+          </then>
+          <else>
+            <echo message="I2PTunnel: Using cached Javascript compression"/>
+          </else>
         </if>
       </then>
       <else>

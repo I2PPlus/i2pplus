@@ -47,7 +47,7 @@
   </condition>
   <target name="builddep" if="depend.available">
     <depend
-      cache="${i2pbase}/build"
+      cache="${build.dir}/depend-cache"
       srcdir="./java"
       classpath="${cp}"
       destdir="${build.dir}/obj">
@@ -97,7 +97,13 @@
     </javac>
   </target>
 
-  <target name="jar" depends="compile">
+  <target name="jarUpToDate">
+    <uptodate property="jar.uptodate" targetfile="${build.dir}/i2pcontrol.jar">
+      <srcfiles dir="${build.dir}/obj" includes="**/*.class"/>
+    </uptodate>
+  </target>
+
+  <target name="jar" depends="compile, jarUpToDate" unless="jar.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
     <jar destfile="${build.dir}/i2pcontrol.jar" basedir="${build.dir}/obj" includes="**/*.class">
@@ -129,7 +135,13 @@
     </jar>
   </target>
 
-  <target name="war" depends="compile">
+  <target name="warUpToDate">
+    <uptodate property="war.uptodate" targetfile="${build.dir}/jsonrpc.war">
+      <srcfiles dir="${build.dir}/obj" includes="**/*.class"/>
+    </uptodate>
+  </target>
+
+  <target name="war" depends="compile, warUpToDate" unless="war.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
     <war destfile="${build.dir}/jsonrpc.war" webxml="web.xml">

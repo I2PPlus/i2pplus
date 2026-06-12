@@ -14,9 +14,9 @@
   <condition property="depend.available">
     <typefound name="depend"/>
   </condition>
-  <target name="depend" if="depend.available">
+  <target name="depend" if="depend.available" unless="compile.uptodate">
     <depend
-      cache="${...build.dir}"
+      cache="${build.dir}/depend-cache"
       srcdir="./src"
       destdir="${build.dir}/obj">
     </depend>
@@ -28,7 +28,13 @@
   <property name="javac.release" value="8"/>
   <property name="manifest.classpath.name" value="Class-Path"/>
 
-  <target name="compile" depends="depend">
+  <target name="compileUpToDate">
+    <uptodate property="compile.uptodate" targetfile="${build.dir}/jrobin.jar">
+        <srcfiles dir="./src" includes="**/*.java"/>
+    </uptodate>
+</target>
+
+  <target name="compile" depends="compileUpToDate, depend" unless="compile.uptodate">
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/obj"/>
     <javac

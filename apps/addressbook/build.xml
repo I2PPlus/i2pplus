@@ -44,7 +44,7 @@
   </condition>
   <target name="depend" if="depend.available">
     <depend
-      cache="../../build"
+      cache="${build.dir}/depend-cache"
       srcdir="${src}"
       destdir="${build}">
       <!-- Depend on classes instead of jars where available -->
@@ -78,7 +78,7 @@
     </javac>
   </target>
 
-  <target name="bundle" depends="init">
+  <target name="bundleTranslations" depends="init">
     <exec executable="sh" failonerror="false">
       <arg value="../../tools/scripts/bundle-messages.sh"/>
       <arg value="--dir"/>
@@ -88,7 +88,13 @@
     </exec>
   </target>
 
-  <target name="jar" depends="bundle, compile, changes">
+  <target name="jarUpToDate">
+    <uptodate property="jar.uptodate" targetfile="${dist}/${jar}">
+      <srcfiles dir="${build}" includes="**/*.class"/>
+    </uptodate>
+  </target>
+
+  <target name="jar" depends="bundleTranslations, compile, changes, jarUpToDate" unless="jar.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
     <jar basedir="${build}" destfile="${dist}/${jar}">

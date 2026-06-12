@@ -26,9 +26,9 @@
   <condition property="depend.available">
     <typefound name="depend"/>
   </condition>
-  <target name="depend" if="depend.available">
+  <target name="depend" if="depend.available" unless="compile.uptodate">
     <depend
-      cache="../../build"
+      cache="${build.dir}/depend-cache"
       srcdir="./src/src"
       destdir="${classes.dir}">
       <!-- Depend on classes instead of jars where available -->
@@ -44,7 +44,13 @@
     </depend>
   </target>
 
-  <target name="compile" depends="depend">
+  <target name="compileUpToDate">
+    <uptodate property="compile.uptodate" targetfile="${build.dir}/susimail.jar">
+        <srcfiles dir="./src/src" includes="**/*.java"/>
+    </uptodate>
+</target>
+
+  <target name="compile" depends="compileUpToDate, depend" unless="compile.uptodate">
     <mkdir dir="${classes.dir}"/>
     <javac
       srcdir="./src/src"
@@ -67,7 +73,7 @@
   </target>
 
   <!-- jar (not war) for testing only -->
-  <target name="jar" depends="compile, bundle, warUpToDate, listChangedFiles">
+  <target name="jar" depends="compile, bundleTranslations, warUpToDate, listChangedFiles">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
     <copy file="src/susimail.properties" todir="${classes.dir}"/>
@@ -99,7 +105,7 @@
     </exec>
   </target>
 
-  <target name="war" depends="compile, bundle, warUpToDate, listChangedFiles" unless="war.uptodate">
+  <target name="war" depends="compile, bundleTranslations, warUpToDate, listChangedFiles" unless="war.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
     <copy file="src/susimail.properties" todir="${classes.dir}"/>
@@ -110,6 +116,12 @@
     <if>
       <isset property="uglifyjs.present"/>
       <then>
+        <uptodate property="js.uptodate" targetfile="${build.dir}/susimail.war">
+          <srcfiles dir="src/js" includes="*.js"/>
+        </uptodate>
+        <if>
+          <not><isset property="js.uptodate"/></not>
+          <then>
         <length property="js.size.before" mode="all">
           <fileset dir="${build.dir}/js" includes="*.js"/>
         </length>
@@ -128,6 +140,11 @@
             <echo message="SusiMail: Javascript compression -> ${js.size.before} / ${js.size.after} (saved ${js.saved} bytes)"/>
           </then>
         </if>
+          </then>
+          <else>
+            <echo message="SusiMail: Using cached Javascript compression"/>
+          </else>
+        </if>
       </then>
       <else>
         <echo message="UglifyJS not found, skipping Javascript file compression..."/>
@@ -136,6 +153,7 @@
     <war destfile="${build.dir}/susimail.war" webxml="src/WEB-INF/web.xml" update="true" basedir="src/"
          excludes="WEB-INF/web.xml LICENSE src src/**/* susimail.properties js/*.js">
       <classes dir="${classes.dir}"/>
+      <classes dir="${build.dir}/messages-obj"/>
       <zipfileset dir="${build.dir}/js" prefix="js"/>
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
@@ -163,7 +181,7 @@
     </condition>
   </target>
 
-  <target name="bundle" depends="compile" unless="no.bundle">
+  <target name="bundleTranslations" depends="compile" unless="no.bundle">
     <mkdir dir="${build.dir}/messages-src"/>
     <!-- Update the messages_*.po files.
              We need to supply the bat file for windows, and then change the fail property to true -->
@@ -190,13 +208,23 @@
       <arg value="--build-dir"/>
       <arg value="${build.dir}"/>
     </exec>
+    <uptodate property="bundle.javac.uptodate" targetfile="${build.dir}/.bundle-javac-stamp">
+      <srcfiles dir="${build.dir}/messages-src" includes="**/*.java"/>
+    </uptodate>
+    <if>
+      <not><isset property="bundle.javac.uptodate"/></not>
+      <then>
+    <mkdir dir="${build.dir}/messages-obj"/>
     <javac source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      srcdir="${build.dir}/messages-src" destdir="${classes.dir}">
+      srcdir="${build.dir}/messages-src" destdir="${build.dir}/messages-obj">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
+    <touch file="${build.dir}/.bundle-javac-stamp"/>
+      </then>
+    </if>
   </target>
 
   <target name="poupdate" depends="builddep, compile">

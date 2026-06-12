@@ -38,9 +38,9 @@
   <!-- Is uglifyjs installed? -->
   <available file="/usr/bin/uglifyjs" property="uglifyjs.present"/>
 
-  <target name="depend" if="depend.available">
+  <target name="depend" if="depend.available" unless="compile.uptodate">
     <depend
-      cache="${...build.dir}"
+      cache="${build.dir}/depend-cache"
       srcdir="./src"
       destdir="${build.dir}/obj">
       <!-- Depend on classes instead of jars where available -->
@@ -78,7 +78,13 @@
   <property name="javac.release" value="8"/>
   <property name="manifest.classpath.name" value="Class-Path"/>
 
-  <target name="compile" depends="prepare, depend, dependVersion">
+  <target name="compileUpToDate">
+    <uptodate property="compile.uptodate" targetfile="${build.dir}/routerconsole.jar">
+        <srcfiles dir="./src" includes="**/*.java"/>
+    </uptodate>
+</target>
+
+  <target name="compile" depends="compileUpToDate, prepare, depend, dependVersion" unless="compile.uptodate">
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/obj"/>
     <javac
@@ -139,7 +145,7 @@
   </target>
 
   <!-- The jar with the latest message classes from the jsps, and the war too -->
-  <target name="jar" depends="jar1, war, bundle"/>
+  <target name="jar" depends="jar1, war, bundleTranslations"/>
 
   <!-- The jar without the latest message classes from the jsps -->
   <target name="listChangedFiles" depends="jarUpToDate" if="shouldListChanges">
@@ -201,7 +207,7 @@
   </target>
 
   <!-- This is tricky because the message classes go in the jar, not in the war -->
-  <target name="bundle" depends="jar1, precompilejsp" unless="no.bundle">
+  <target name="bundleTranslations" depends="jar1, precompilejsp" unless="no.bundle">
     <mkdir dir="${build.dir}/messages-src"/>
     <!-- Update the messages_*.po files.
          We need to supply the bat file for windows, and then change the fail property to true -->
@@ -235,15 +241,23 @@
       <arg value="--build-dir"/>
       <arg value="${build.dir}"/>
     </exec>
+    <uptodate property="bundle.javac.uptodate" targetfile="${build.dir}/routerconsole.jar">
+      <srcfiles dir="${build.dir}/messages-src" includes="**/*.java"/>
+    </uptodate>
+    <if>
+      <not><isset property="bundle.javac.uptodate"/></not>
+      <then>
+    <mkdir dir="${build.dir}/messages-obj"/>
     <javac source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      srcdir="${build.dir}/messages-src" destdir="${build.dir}/obj">
+      srcdir="${build.dir}/messages-src" destdir="${build.dir}/messages-obj">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
-    <!-- jar again to get the latest messages_*.class files -->
-    <jar destfile="${build.dir}/routerconsole.jar" basedir="${build.dir}/obj" includes="**/messages_*.class" update="true"/>
+    <jar destfile="${build.dir}/routerconsole.jar" basedir="${build.dir}/messages-obj" includes="**/messages_*.class" update="true"/>
+      </then>
+    </if>
   </target>
  
   <target name="jarUpToDate">
@@ -501,6 +515,12 @@
     <if>
       <isset property="uglifyjs.present"/>
       <then>
+        <uptodate property="js.uptodate" targetfile="${build.dir}/routerconsole.war">
+          <srcfiles dir="../jsp" includes="**/*.js"/>
+        </uptodate>
+        <if>
+          <not><isset property="js.uptodate"/></not>
+          <then>
         <length property="js.size.before" mode="all">
           <fileset dir="${build.dir}/jsp" includes="**/*.js"/>
         </length>
@@ -520,6 +540,11 @@
           <then>
             <echo message="RouterConsole: Javascript compression -> ${js.size.before} -> ${js.size.after} bytes (saved ${js.saved})"/>
           </then>
+        </if>
+          </then>
+          <else>
+            <echo message="RouterConsole: Using cached Javascript compression"/>
+          </else>
         </if>
       </then>
       <else>

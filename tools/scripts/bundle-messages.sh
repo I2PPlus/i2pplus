@@ -120,6 +120,24 @@ if [ "$TYPE" = "java" ]; then
         XGS=""
     fi
 
+    ALL_UPTODATE=1
+    for i in $PO_GLOB; do
+        LG=$(basename "$i" .po)
+        LG="${LG#messages_}"
+        [ "$LG" = "en" ] && continue
+        # Search for the class file under the build tree.
+        # Modules output to various subdirs: $BD/obj, $BD/classes, $BD,
+        # or to a sibling under the build root (e.g. i2ptunnel/jsp).
+        MATCH=$(find "$BD" "$BD/.." "$BD/../.." "$BD/../../.." \
+          -path "*/$PACKAGE_PATH/messages_$LG.class" 2>/dev/null | head -1)
+        if [ -z "$MATCH" ] || [ "$i" -nt "$MATCH" ]; then
+            ALL_UPTODATE=0; break
+        fi
+    done
+    if [ "$ALL_UPTODATE" = "1" ] && [ "$POUPDATE" != "1" ]; then
+        rm -f "$TMPFILE"; echo "INFO: Using cached translation bundles"; exit 0
+    fi
+
     for i in $PO_GLOB; do
         LG=$(basename "$i" .po)
         LG="${LG#messages_}"
@@ -192,6 +210,20 @@ if [ "$TYPE" = "java" ]; then
 # TYPE=mo -- gettext .mo files (e.g., shell script translations)
 # =========================================================================
 elif [ "$TYPE" = "mo" ]; then
+
+    ALL_UPTODATE=1
+    for i in $PO_GLOB; do
+        LG=$(basename "$i" .po)
+        LG="${LG#messages_}"
+        [ "$LG" = "en" ] && continue
+        MO_FILE="$BD/$(echo "$MO_FILE_PATTERN" | sed "s/\$LG/$LG/g")"
+        if [ ! -s "$MO_FILE" ] || [ "$i" -nt "$MO_FILE" ]; then
+            ALL_UPTODATE=0; break
+        fi
+    done
+    if [ "$ALL_UPTODATE" = "1" ] && [ "$POUPDATE" != "1" ]; then
+        rm -f "$TMPFILE"; exit 0
+    fi
 
     for i in $PO_GLOB; do
         LG=$(basename "$i" .po)

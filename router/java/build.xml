@@ -21,7 +21,7 @@
   </condition>
   <target name="depend" if="depend.available">
     <depend
-      cache="../../build"
+      cache="${build.dir}/depend-cache"
       srcdir="./src"
       destdir="${build.dir}/obj">
       <!-- Depend on classes instead of jars where available -->
@@ -74,7 +74,7 @@
     </exec>
   </target>
 
-  <target name="jar" depends="compile, bundle, jarUpToDate, listChangedFiles" unless="jar.uptodate">
+  <target name="jar" depends="compile, bundleTranslations, jarUpToDate, listChangedFiles" unless="jar.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
     <jar destfile="${build.dir}/router.jar" basedir="${build.dir}/obj" includes="**/*.class">
@@ -110,7 +110,7 @@
     </uptodate>
   </target>
 
-  <target name="bundle" unless="no.bundle">
+  <target name="bundleTranslations" unless="no.bundle">
     <mkdir dir="${build.dir}/messages-src"/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}"/>

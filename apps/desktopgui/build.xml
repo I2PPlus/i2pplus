@@ -54,7 +54,7 @@
     </javac>
   </target>
 
-  <target name="bundle" unless="no.bundle" depends="init">
+  <target name="bundleTranslations" unless="no.bundle" depends="init">
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}"/>
       <arg value="../../tools/scripts/bundle-messages.sh"/>
@@ -99,7 +99,7 @@
     </exec>
   </target>
 
-  <target name="jar" depends="compile, bundle, listChangedFiles" unless="jar.uptodate">
+  <target name="jar" depends="compile, bundleTranslations, listChangedFiles" unless="jar.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
     <!-- ideal for linux: 24x24, but transparency doesn't work -->

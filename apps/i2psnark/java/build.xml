@@ -28,7 +28,7 @@
 
   <target name="depend" if="depend.available">
     <depend
-      cache="${...build.dir}"
+      cache="${build.dir}/depend-cache"
       srcdir="./src"
       destdir="${build.dir}/obj">
       <!-- Depend on classes instead of jars where available -->
@@ -41,7 +41,7 @@
         <pathelement location="../../jetty/jettylib/jsp-api.jar"/>
       </classpath>
     </depend>
-    <echo message="I2PSnark dependecies added"/>
+    <echo message="I2PSnark dependencies added"/>
   </target>
 
   <!-- Only used if not set by a higher build.xml -->
@@ -137,7 +137,7 @@
        So we must continue to duplicate everything in the war.
        <classes dir="${build.dir}/obj" includes="**/I2PSnarkServlet*.class"/>
      -->
-  <target name="war" depends="jar, bundle, warUpToDate, listChangedFiles" unless="war.uptodate">
+  <target name="war" depends="jar, bundleTranslations, warUpToDate, listChangedFiles" unless="war.uptodate">
     <!-- Set if unset -->
     <property name="workspace.changes.tr" value=""/>
     <parallel>
@@ -151,6 +151,12 @@
     <if>
       <isset property="uglifyjs.present"/>
       <then>
+        <uptodate property="js.uptodate" targetfile="${build.dir}/i2psnark.war">
+          <srcfiles dir="../res" includes="**/*.js"/>
+        </uptodate>
+        <if>
+          <not><isset property="js.uptodate"/></not>
+          <then>
         <length property="js.size.before" mode="all">
           <fileset dir="${build.dir}/res/.res/js" includes="*.js"/>
         </length>
@@ -169,6 +175,11 @@
             <echo message="I2PSnark: Javascript compression -> ${js.size.before} / ${js.size.after} (saved ${js.saved} bytes)"/>
           </then>
         </if>
+          </then>
+          <else>
+            <echo message="I2PSnark: Using cached Javascript compression"/>
+          </else>
+        </if>
       </then>
       <else>
         <echo message="UglifyJS not found, skipping Javascript file compression..."/>
@@ -177,6 +188,7 @@
     <war destfile="${build.dir}/i2psnark.war" webxml="../web.xml">
       <!-- Include only the web stuff, as of 0.7.12 the router will add i2psnark.jar to the classpath for the war -->
       <classes dir="${build.dir}/obj" includes="**/web/*"/>
+      <classes dir="${build.dir}/messages-obj" includes="**/web/*"/>
       <fileset dir="${build.dir}/res/"/>
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
@@ -196,7 +208,7 @@
     </uptodate>
   </target>
 
-  <target name="bundle" depends="compile" unless="no.bundle">
+  <target name="bundleTranslations" depends="compile" unless="no.bundle">
     <mkdir dir="${build.dir}/messages-src"/>
     <!-- Update the messages_*.po files. -->
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
@@ -222,16 +234,26 @@
       <arg value="--build-dir"/>
       <arg value="${build.dir}"/>
     </exec>
+    <uptodate property="bundle.javac.uptodate" targetfile="${build.dir}/.bundle-javac-stamp">
+      <srcfiles dir="${build.dir}/messages-src" includes="**/*.java"/>
+    </uptodate>
+    <if>
+      <not><isset property="bundle.javac.uptodate"/></not>
+      <then>
+    <mkdir dir="${build.dir}/messages-obj"/>
     <javac source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      srcdir="${build.dir}/messages-src" destdir="${build.dir}/obj">
+      srcdir="${build.dir}/messages-src" destdir="${build.dir}/messages-obj">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
     <echo message="I2PSnark translations added"/>
+    <touch file="${build.dir}/.bundle-javac-stamp"/>
+      </then>
+    </if>
   </target>
- 
+
   <target name="poupdate" depends="builddep, compile">
     <!-- Update the messages_*.po files.  -->
     <!-- Set if unset -->
