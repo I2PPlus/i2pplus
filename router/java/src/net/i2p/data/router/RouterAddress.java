@@ -101,84 +101,11 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     * Retrieve the date after which the address should not be used.  If this
-     * is null, then the address never expires.
-     * As of 0.9.3, expiration MUST be all zeros as it is ignored on
-     * readin and the signature will fail.
-     * Restored as of 0.9.12.
-     *
-     * @deprecated unused for now
-     * @return null for never, or a Date
-     */
-    @Deprecated
-    public Date getExpiration() {
-        //return _expiration;
-        if (_expiration > 0)
-            return new Date(_expiration);
-        return null;
-    }
-
-    /**
-     * Retrieve the date after which the address should not be used.  If this
-     * is zero, then the address never expires.
-     *
-     * @deprecated unused for now
-     * @return 0 for never
-     * @since 0.9.12
-     */
-    @Deprecated
-    public long getExpirationTime() {
-        return _expiration;
-    }
-
-    /**
-     * Configure the expiration date of the address (null for no expiration)
-     * As of 0.9.3, expiration MUST be all zeros as it is ignored on
-     * readin and the signature will fail.
-     * Restored as of 0.9.12, wait several more releases before using.
-     * TODO: Use for introducers
-     *
-     * Unused for now, always null
-     * @deprecated unused for now
-     */
-    @Deprecated
-    public void setExpiration(Date expiration) {
-        if (expiration != null)
-            _expiration = expiration.getDate();
-        else
-            _expiration = 0;
-    }
-
-    /**
      * Retrieve the type of transport that must be used to communicate on this address.
      *
      */
     public String getTransportStyle() {
         return _transportStyle;
-    }
-
-    /**
-     * Configure the type of transport that must be used to communicate on this address
-     *
-     * @throws IllegalStateException if was already set
-     * @deprecated unused, use 3-arg constructor
-     */
-    @Deprecated
-    public void setTransportStyle(String transportStyle) {
-        if (_transportStyle != null)
-            throw new IllegalStateException();
-        _transportStyle = transportStyle;
-    }
-
-    /**
-     * Retrieve the transport specific options necessary for communication
-     *
-     * @deprecated use getOptionsMap()
-     * @return sorted, non-null, NOT a copy, do not modify
-     */
-    @Deprecated
-    public Properties getOptions() {
-        return _options;
     }
 
     /**
@@ -196,20 +123,6 @@ public class RouterAddress extends DataStructureImpl {
      */
     public String getOption(String opt) {
         return _options.getProperty(opt);
-    }
-
-    /**
-     * Specify the transport specific options necessary for communication.
-     * Makes a copy.
-     * @param options non-null
-     * @throws IllegalStateException if was already set
-     * @deprecated unused, use 3-arg constructor
-     */
-    @Deprecated
-    public void setOptions(Properties options) {
-        if (!_options.isEmpty())
-            throw new IllegalStateException();
-        _options.putAll(options);
     }
 
     /**

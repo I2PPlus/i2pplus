@@ -121,17 +121,17 @@ public class Lease extends DataStructureImpl {
     }
 
     /**
-     * @deprecated use getEndTime()
+     *  Convenience wrapper, prefer getEndTime() for new code.
+     *  @return end date
      */
-    @Deprecated
     public Date getEndDate() {
         return Date.from(Instant.ofEpochMilli(_end));
     }
 
     /**
-     * @deprecated use setEndDate(long)
+     *  Convenience wrapper, prefer the long overload for new code.
+     *  @param date end date
      */
-    @Deprecated
     public void setEndDate(Date date) {
         _end = date.getTime();
     }

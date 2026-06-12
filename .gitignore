@@ -19,6 +19,7 @@ web-out.xml
 *.bak
 *.orig
 git.rev
+local.properties
 override.properties
 
 # Build artifacts

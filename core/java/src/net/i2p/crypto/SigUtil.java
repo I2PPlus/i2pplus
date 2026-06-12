@@ -424,9 +424,12 @@ public final class SigUtil {
     }
 
     /**
-     *  @deprecated unused
+     *  Prefer toJavaKey(SigningPublicKey) for type-generic conversion.
+     *
+     *  @param pk non-null
+     *  @return Java RSA public key
+     *  @throws GeneralSecurityException if conversion fails
      */
-    @Deprecated
     public static RSAPublicKey toJavaRSAKey(SigningPublicKey pk) throws GeneralSecurityException {
         SigType type = pk.getType();
         KeyFactory kf = KeyFactory.getInstance("RSA");

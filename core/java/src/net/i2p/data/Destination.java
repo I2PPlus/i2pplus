@@ -189,32 +189,6 @@ public class Destination extends KeysAndCert {
         return cur - offset;
     }
 
-    /**
-     * deprecated was used only by Packet.java in streaming, now unused
-     * Warning - used by i2p-bote. Does NOT support alternate key types. DSA-SHA1 only.
-     *
-     * @deprecated This method does not support alternate key types.
-     * @throws IllegalStateException if data already set
-     */
-    @Deprecated
-    public int readBytes(byte source[], int offset) throws DataFormatException {
-        if (source == null) throw new DataFormatException("Null source");
-        if (source.length <= offset + PublicKey.KEYSIZE_BYTES + SigningPublicKey.KEYSIZE_BYTES) throw new DataFormatException("Not enough data (len=" + source.length + " off=" + offset + ")");
-        if (_publicKey != null || _signingKey != null || _certificate != null) throw new IllegalStateException();
-        int cur = offset;
-
-        _publicKey = PublicKey.create(source, cur);
-        cur += PublicKey.KEYSIZE_BYTES;
-
-        _signingKey = SigningPublicKey.create(source, cur);
-        cur += SigningPublicKey.KEYSIZE_BYTES;
-
-        _certificate = Certificate.create(source, cur);
-        cur += _certificate.size();
-
-        return cur - offset;
-    }
-
     public int size() {
         int rv = PublicKey.KEYSIZE_BYTES + _signingKey.length();
         if (_certificate.getCertificateType() == Certificate.CERTIFICATE_TYPE_KEY) {

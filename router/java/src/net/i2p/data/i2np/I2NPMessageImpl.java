@@ -8,8 +8,6 @@ package net.i2p.data.i2np;
  *
  */
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -68,18 +66,6 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         _expiration = _context.clock().now() + DEFAULT_EXPIRATION_MS;
         //_context.statManager().createRateStat("i2np.writeTime", "Time to write an I2NP message", "I2NP", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
         //_context.statManager().createRateStat("i2np.readTime", "Time to read an I2NP message", "I2NP", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-    }
-
-    /**
-     *  Read the whole message.
-     *  Unused - All transports provide encapsulation and so we have byte arrays available.
-     *
-     *  @deprecated unused
-     *  @throws UnsupportedOperationException always
-     */
-    @Deprecated
-    public void readBytes(InputStream in) {
-        throw new UnsupportedOperationException();
     }
 
     /**
@@ -168,17 +154,6 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         //if (time > 50)
         //    _context.statManager().addRateData("i2np.readTime", time, time);
         return cur - offset;
-    }
-
-    /**
-     *  Don't do this if you need a byte array - use toByteArray()
-     *
-     *  @deprecated unused
-     *  @throws UnsupportedOperationException always
-     */
-    @Deprecated
-    public void writeBytes(OutputStream out) {
-        throw new UnsupportedOperationException();
     }
 
     /**

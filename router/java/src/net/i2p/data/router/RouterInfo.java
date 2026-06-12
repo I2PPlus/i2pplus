@@ -229,10 +229,8 @@ public class RouterInfo extends DatabaseEntry {
     /**
      * Retrieve a set of SHA-256 hashes of RouterIdentities from routers
      * this router can be reached through.
-     *
-     * @deprecated Implemented here but unused elsewhere
+     * Obsolete — peer set is typically empty.
      */
-    @Deprecated
     public Set<Hash> getPeers() {
         if (_peers == null)
             return Collections.emptySet();
@@ -242,11 +240,10 @@ public class RouterInfo extends DatabaseEntry {
     /**
      * Specify a set of SHA-256 hashes of RouterIdentities from routers
      * this router can be reached through.
+     * Obsolete — peer set is typically empty.
      *
-     * @deprecated Implemented here but unused elsewhere
      * @throws IllegalStateException if RouterInfo is already signed
      */
-    @Deprecated
     public void setPeers(Set<Hash> peers) {
         if (_signature != null)
             throw new IllegalStateException();
@@ -264,11 +261,10 @@ public class RouterInfo extends DatabaseEntry {
 
     /**
      * Retrieve a set of options or statistics that the router can expose.
+     * Prefer getOptionsMap() for an unmodifiable view.
      *
-     * @deprecated use getOptionsMap()
      * @return sorted, non-null, NOT a copy, do not modify!!!
      */
-    @Deprecated
     public Properties getOptions() {return _options;}
 
     /**

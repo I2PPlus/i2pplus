@@ -327,10 +327,8 @@ public class LeaseSet extends DatabaseEntry {
      * Verify that the signature matches the leaseset's destination's signing public key.
      * As of 0.9.47, revocation is not checked.
      *
-     * @deprecated revocation unused
      * @return true only if the signature matches
      */
-    @Deprecated
     public boolean verifySignature(SigningPublicKey signingKey) {
         return super.verifySignature();
     } // Revocation unused (see above)

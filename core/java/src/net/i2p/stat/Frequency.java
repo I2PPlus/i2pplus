@@ -32,15 +32,6 @@ public class Frequency {
     }
 
     /**
-     * when did the last event occur?
-     * @deprecated unused
-     */
-    @Deprecated
-    public synchronized long getLastEvent() {
-        return _lastEvent;
-    }
-
-    /**
      * on average over the last $period, after how many milliseconds are events coming in,
      * as calculated during the last event occurrence?
      * @return milliseconds; returns period + 1 if no events in previous period
@@ -52,9 +43,7 @@ public class Frequency {
     /**
      * what is the lowest average interval (aka most frequent) we have seen? (ms)
      * @return milliseconds; returns period + 1 if no events in previous period
-     * @deprecated unused
      */
-    @Deprecated
     public synchronized double getMinAverageInterval() {
         return _minAverageInterval;
     }

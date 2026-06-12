@@ -793,22 +793,6 @@ public class DataHelper {
     }
 
     /**
-     *  Positive decimal without leading zeros.
-     *  @param buf may be null (returns "0")
-     *  @param len unused
-     *  @return (new BigInteger(1, buf)).toString()
-     *  @deprecated unused
-     */
-    @Deprecated
-    public static String toDecimalString(byte buf[], int len) {
-        if (buf == null) {
-            return "0";
-        }
-        BigInteger val = new BigInteger(1, buf);
-        return val.toString();
-    }
-
-    /**
      *  Lower-case hex without leading zeros.
      *  Use toString(byte[]) to get leading zeros
      *  @param data may be null (returns "00")
@@ -822,11 +806,12 @@ public class DataHelper {
     }
 
     /**
+     *  Decode a hex string to a byte array.
+     *  Use DataHelper.toString(byte[]) for the reverse operation.
+     *
      *  @param val non-null, may have leading minus sign
      *  @return minimum-length representation (with possible leading 0 byte)
-     *  @deprecated unused
      */
-    @Deprecated
     public static final byte[] fromHexString(String val) {
         BigInteger bv = new BigInteger(val, 16);
         return bv.toByteArray();
@@ -1062,8 +1047,13 @@ public class DataHelper {
         }
     }
 
-    /** @deprecated unused */
-    @Deprecated
+    /**
+     *  Prefer toDate(byte[], int, long).
+     *
+     *  @param date may be null (returns zero date)
+     *  @return a newly-allocated byte array of length DATE_LENGTH
+     *  @throws IllegalArgumentException if the time does not fit in DATE_LENGTH bytes
+     */
     public static byte[] toDate(Date date) throws IllegalArgumentException {
         if (date == null) {
             return toLong(DATE_LENGTH, 0L);
@@ -2237,22 +2227,6 @@ public class DataHelper {
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("no utf8!?");
         }
-    }
-
-    /**
-     *  Same as orig.getBytes("UTF-8") but throws an unchecked RuntimeException
-     *  instead of an UnsupportedEncodingException if no UTF-8, for ease of use.
-     *
-     *  @return null if orig is null
-     *  @throws RuntimeException
-     *  @deprecated unused
-     */
-    @Deprecated
-    public static byte[] getUTF8(StringBuilder orig) {
-        if (orig == null) {
-            return new byte[0];
-        }
-        return getUTF8(orig.toString());
     }
 
     /**

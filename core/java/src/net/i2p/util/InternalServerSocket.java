@@ -138,19 +138,7 @@ public class InternalServerSocket extends ServerSocket {
 
     // most below here unsupported
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public void bind(SocketAddress endpoint) {
-        throw new IllegalArgumentException("unsupported");
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public void bind(SocketAddress endpoint, int backlog) {
-        throw new IllegalArgumentException("unsupported");
-    }
 
     /**
      * Returns null as of 0.9.33, prior to that threw IllegalArgumentException
@@ -160,33 +148,9 @@ public class InternalServerSocket extends ServerSocket {
         return null;
     }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public InetAddress getInetAddress() {
-        throw new IllegalArgumentException("unsupported");
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public SocketAddress getLocalSocketAddress() {
-        throw new IllegalArgumentException("unsupported");
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public int getReceiveBufferSize() {
-        throw new IllegalArgumentException("unsupported");
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public boolean getReuseAddress() {
-        throw new IllegalArgumentException("unsupported");
-    }
 
     /**
      * Returns true as of 0.9.33, prior to that threw IllegalArgumentException
@@ -204,19 +168,7 @@ public class InternalServerSocket extends ServerSocket {
         return !_running;
     }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public void setReceiveBufferSize(int size) {
-        throw new IllegalArgumentException("unsupported");
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public void setReuseAddress(boolean on) {
-        throw new IllegalArgumentException("unsupported");
-    }
 
     /**
      *  For debugging only

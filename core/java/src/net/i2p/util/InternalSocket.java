@@ -122,54 +122,12 @@ public class InternalSocket extends Socket {
 
     // everything below here unsupported unless otherwise noted
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public void bind(SocketAddress endpoint) {
-        throw new UnsupportedOperationException();
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public void connect(SocketAddress endpoint) {
-        throw new UnsupportedOperationException();
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public void connect(SocketAddress endpoint, int timeout) {
-        throw new UnsupportedOperationException();
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public SocketChannel getChannel() {
-        throw new UnsupportedOperationException();
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public InetAddress getInetAddress() {
-        throw new UnsupportedOperationException();
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public boolean getKeepAlive() {
-        throw new UnsupportedOperationException();
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public InetAddress getLocalAddress() {
-        throw new UnsupportedOperationException();
-    }
 
     /**
      * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
@@ -180,19 +138,7 @@ public class InternalSocket extends Socket {
         return isConnected() ? 1 : -1;
     }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public SocketAddress getLocalSocketAddress() {
-        throw new UnsupportedOperationException();
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public boolean getOOBInline() {
-        throw new UnsupportedOperationException();
-    }
 
     /**
      * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
@@ -203,33 +149,9 @@ public class InternalSocket extends Socket {
         return isConnected() ? _port : 0;
     }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public int getReceiveBufferSize() {
-        throw new UnsupportedOperationException();
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public SocketAddress getRemoteSocketAddress() {
-        throw new UnsupportedOperationException();
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public boolean getReuseAddress() {
-        throw new UnsupportedOperationException();
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public int getSendBufferSize() {
-        throw new UnsupportedOperationException();
-    }
 
     /**
      * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
@@ -240,26 +162,8 @@ public class InternalSocket extends Socket {
         return -1;
     }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public boolean getTcpNoDelay() {
-        throw new UnsupportedOperationException();
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public int getTrafficClass() {
-        throw new UnsupportedOperationException();
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public boolean isBound() {
-        throw new UnsupportedOperationException();
-    }
 
     /**
      * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
@@ -285,47 +189,11 @@ public class InternalSocket extends Socket {
         return _os == null;
     }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public void sendUrgentData(int data) {
-        throw new UnsupportedOperationException();
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public void setKeepAlive(boolean on) {
-        throw new UnsupportedOperationException();
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public void setOOBInline(boolean on) {
-        throw new UnsupportedOperationException();
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public void setReceiveBufferSize(int size) {
-        throw new UnsupportedOperationException();
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public void setReuseAddress(boolean on) {
-        throw new UnsupportedOperationException();
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public void setSendBufferSize(int size) {
-        throw new UnsupportedOperationException();
-    }
 
     /**
      * Does nothing as of 0.9.33, prior to that threw UnsupportedOperationException
@@ -333,19 +201,7 @@ public class InternalSocket extends Socket {
     @Override
     public void setSoLinger(boolean on, int linger) {}
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public void setTcpNoDelay(boolean on) {
-        throw new UnsupportedOperationException();
-    }
 
-    /** @deprecated unsupported */
-    @Deprecated
-    @Override
-    public void setTrafficClass(int cize) {
-        throw new UnsupportedOperationException();
-    }
 
     /**
      * Supported as of 0.9.33, prior to that threw UnsupportedOperationException

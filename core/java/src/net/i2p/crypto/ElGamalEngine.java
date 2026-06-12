@@ -50,9 +50,8 @@ import java.math.BigInteger;
  * a random byte and SHA-256 hash to data before encryption, which are
  * verified and stripped during decryption.
  *
- * <p><strong>Security Note:</strong> This implementation is deprecated and not
- * recommended for new applications. Use modern alternatives like ECIES or post-quantum
- * schemes when available.</p>
+ * <p><strong>Note:</strong> ECIES or post-quantum schemes are preferred for new
+ * applications, but this engine remains in active use by existing code.</p>
  *
  * <p>The encryption process:</p>
  * <ol>
@@ -64,9 +63,7 @@ import java.math.BigInteger;
  *
  * @author crypto, jrandom
  * @since 0.8.0
- * @deprecated Use modern encryption schemes such as ECIES when available
  */
-@Deprecated
 public final class ElGamalEngine {
     private final Log _log;
     private final I2PAppContext _context;

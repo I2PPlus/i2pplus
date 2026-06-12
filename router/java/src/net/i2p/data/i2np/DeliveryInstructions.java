@@ -43,9 +43,6 @@ public class DeliveryInstructions extends DataStructureImpl {
     private final static int FLAG_MODE_ROUTER = 2;
     private final static int FLAG_MODE_TUNNEL = 3;
 
-    /** @deprecated unused */
-    @Deprecated
-    private final static int FLAG_ENCRYPTED = 128;
     private final static int FLAG_MODE = 96;
     private final static int FLAG_DELAY = 16;
 
@@ -74,32 +71,10 @@ public class DeliveryInstructions extends DataStructureImpl {
     }
 
     /**
-     * For cloves only (not tunnels), default false, unused
-     * @deprecated unused
+     * For cloves only (not tunnels), default null
+     * Unused — always returns null, feature not implemented.
      */
-    @Deprecated
-    public boolean getEncrypted() { return /* _encrypted */ false; }
-
-    /**
-     * For cloves only (not tunnels), default false, unused
-     * @deprecated unused
-     */
-    @Deprecated
-    public void setEncrypted(boolean encrypted) { /* _encrypted = encrypted; */ }
-
-    /**
-     * For cloves only (not tunnels), default null, unused
-     * @deprecated unused
-     */
-    @Deprecated
     public SessionKey getEncryptionKey() { return /* _encryptionKey */ null; }
-
-    /**
-     * For cloves only (not tunnels), default null, unused
-     * @deprecated unused
-     */
-    @Deprecated
-    public void setEncryptionKey(SessionKey key) { /* _encryptionKey = key; */ }
 
     /** default -1 */
     public int getDeliveryMode() { return _deliveryMode; }
@@ -126,38 +101,33 @@ public class DeliveryInstructions extends DataStructureImpl {
     public void setTunnelId(TunnelId id) { _tunnelId = id; }
 
     /**
-     * default false, unused
-     * @deprecated unused
+     * default false
+     * Obsolete — delay not implemented in this release.
      */
-    @Deprecated
     public boolean getDelayRequested() { return _delayRequested; }
 
     /**
-     * default false, unused
-     * @deprecated unused
+     * default false
+     * Obsolete — delay not implemented in this release.
      */
-    @Deprecated
     public void setDelayRequested(boolean req) { _delayRequested = req; }
 
     /**
-     * default 0, unused
-     * @deprecated unused
+     * default 0
+     * Obsolete — delay not implemented in this release.
      */
-    @Deprecated
     public long getDelaySeconds() { return _delaySeconds; }
 
     /**
-     * default 0, unused
-     * @deprecated unused
+     * default 0
+     * Obsolete — delay not implemented in this release.
      */
-    @Deprecated
     public void setDelaySeconds(long seconds) { _delaySeconds = seconds; }
 
     /**
-     * @deprecated unused
-     * @throws UnsupportedOperationException always
+     *  Not supported, use readBytes(byte[], int)
+     *  @throws UnsupportedOperationException always
      */
-    @Deprecated
     public void readBytes(InputStream in) {
         throw new UnsupportedOperationException();
     }
@@ -299,10 +269,9 @@ public class DeliveryInstructions extends DataStructureImpl {
     }
 
     /**
-     * @deprecated unused
-     * @throws UnsupportedOperationException always
+     *  Not supported, use writeBytes(byte[], int)
+     *  @throws UnsupportedOperationException always
      */
-    @Deprecated
     public void writeBytes(OutputStream out) {
         throw new UnsupportedOperationException();
     }
@@ -381,16 +350,6 @@ public class DeliveryInstructions extends DataStructureImpl {
      */
     private static final class LocalInstructions extends DeliveryInstructions {
         //private static final byte flag = DELIVERY_MODE_LOCAL << 5;  // 0
-
-        @Override
-        public void setEncrypted(boolean encrypted) {
-            throw new RuntimeException("immutable");
-        }
-
-        @Override
-        public void setEncryptionKey(SessionKey key) {
-            throw new RuntimeException("immutable");
-        }
 
         @Override
         public int getDeliveryMode() { return DELIVERY_MODE_LOCAL; }

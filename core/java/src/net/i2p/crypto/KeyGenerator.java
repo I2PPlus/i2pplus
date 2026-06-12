@@ -157,13 +157,6 @@ public final class KeyGenerator {
     /** @since 0.9.8 */
     private static final boolean DEFAULT_USE_LONG_EXPONENT = !SystemVersion.isSlow();
 
-    /**
-     *  @deprecated use getElGamalExponentSize() which allows override in the properties
-     */
-    @Deprecated
-    public static final int PUBKEY_EXPONENT_SIZE =
-            DEFAULT_USE_LONG_EXPONENT ? PUBKEY_EXPONENT_SIZE_FULL : PUBKEY_EXPONENT_SIZE_SHORT;
-
     private static final String PROP_LONG_EXPONENT = "crypto.elGamal.useLongKey";
 
     /** Whether to use a long (2048-bit) ElGamal exponent.

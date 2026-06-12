@@ -34,24 +34,6 @@ public class RateStatTest extends TestCase {
         assertNull(rs.getRate(2000));
     }
 
-    @SuppressWarnings("deprecation")
-    @Test
-    public void testAddingAndRemovingThrows() throws Exception {
-        final long periods[] = new long[] {10};
-        RateStat rs = new RateStat("test", "test RateStat getters etc", "tests", periods);
-
-        try {
-            rs.addRate(1000);
-            fail("adding periods should not be supported");
-        } catch (UnsupportedOperationException expected) {
-        }
-        try {
-            rs.removeRate(10);
-            fail("removing periods should not be supported");
-        } catch (UnsupportedOperationException expected) {
-        }
-    }
-
     @Test
     public void testRateStat() throws Exception {
         RateStat rs = new RateStat("moo", "moo moo moo", "cow trueisms", new long[] {60 * 1000, 60 * 60 * 1000, 24 * 60 * 60 * 1000});

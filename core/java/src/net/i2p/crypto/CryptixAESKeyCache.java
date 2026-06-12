@@ -1,7 +1,6 @@
 package net.i2p.crypto;
 
 import java.io.Serializable;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Cache the objects used in CryptixRijndael_Algorithm.makeKey to reduce
@@ -15,45 +14,11 @@ import java.util.concurrent.LinkedBlockingQueue;
  * but the static methods are used in FortunaStandalone.
  */
 public final class CryptixAESKeyCache {
-    private final LinkedBlockingQueue<KeyCacheEntry> _availableKeys;
-
     private static final int KEYSIZE = 32; // 256bit AES
     private static final int BLOCKSIZE = 16;
     private static final int ROUNDS = CryptixRijndael_Algorithm.getRounds(KEYSIZE, BLOCKSIZE);
     private static final int BC = BLOCKSIZE / 4;
     private static final int KC = KEYSIZE / 4;
-
-    private static final int MAX_KEYS = 64;
-
-    /*
-     * @deprecated unused, keys are now cached in the SessionKey objects
-     */
-    @Deprecated
-    public CryptixAESKeyCache() {
-        _availableKeys = new LinkedBlockingQueue<KeyCacheEntry>(MAX_KEYS);
-    }
-
-    /**
-     * Get the next available structure, either from the cache or a brand new one
-     *
-     * @deprecated unused, keys are now cached in the SessionKey objects
-     */
-    @Deprecated
-    public final KeyCacheEntry acquireKey() {
-        KeyCacheEntry rv = _availableKeys.poll();
-        if (rv != null) return rv;
-        return createNew();
-    }
-
-    /**
-     * Put this structure back onto the available cache for reuse
-     *
-     * @deprecated unused, keys are now cached in the SessionKey objects
-     */
-    @Deprecated
-    public final void releaseKey(KeyCacheEntry key) {
-        _availableKeys.offer(key);
-    }
 
     public static final KeyCacheEntry createNew() {
         KeyCacheEntry e = new KeyCacheEntry();
@@ -87,8 +52,7 @@ public final class CryptixAESKeyCache {
      * <code>2 × (rounds + 1) × 4 × 4 bytes</code> of heap memory.
      * For AES-256 (14 rounds), this is about 448 bytes per entry.
      *
-     * @deprecated This class is part of a deprecated caching mechanism.
-     *             Keys are now cached directly in SessionKey objects for better performance.
+     * Obsolete — Keys are now cached in SessionKey objects. Retained for legacy AES engine support.
      */
     public static class KeyCacheEntry implements Serializable {
         /** encryption round keys */

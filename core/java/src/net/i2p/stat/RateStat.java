@@ -102,27 +102,6 @@ public class RateStat {
     }
 
     /**
-     * Adds a new rate with the requested period, provided that
-     * a rate with that period does not already exist.
-     * @param period ms
-     * @since 0.8.8
-     */
-    @Deprecated
-    public void addRate(long period) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * If a rate with the provided period exists, remove it.
-     * @param period ms
-     * @since 0.8.8
-     */
-    @Deprecated
-    public void removeRate(long period) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
      * Tests if a rate with the provided period exists within this RateStat.
      * @param period ms
      * @return true if exists
