@@ -2662,7 +2662,7 @@
     <if>
       <isset property="updater.uptodate"/>
       <then>
-        <echo>dist/i2pupdate.zip already up to date, skipping rebuild...${line.separator}Note: if you updated jbigi/tools/utility, delete dist/i2pupdate.zip and rebuild</echo>
+        <echo>dist/i2pupdate.zip already up to date, skipping rebuild...${line.separator}Note: if you updated installer/lib/jbigi/ or tools/, delete dist/i2pupdate.zip and rebuild</echo>
       </then>
       <else>
         <antcall target="timestamp.started"/>
@@ -2724,7 +2724,7 @@
     <if>
       <isset property="updater200.uptodate"/>
       <then>
-        <echo>dist/i2pupdate200.zip already up to date, skipping rebuild...${line.separator}Note: if you updated jbigi/tools/utility, delete dist/i2pupdate200.zip and rebuild</echo>
+        <echo>dist/i2pupdate200.zip already up to date, skipping rebuild...${line.separator}Note: if you updated installer/lib/jbigi/ or tools/, delete dist/i2pupdate200.zip and rebuild</echo>
       </then>
       <else>
         <antcall target="timestamp.started"/>
@@ -3096,7 +3096,7 @@
     <if>
       <isset property="installer.uptodate"/>
       <then>
-        <echo>dist/install.jar already up to date, skipping rebuild...${line.separator}Note: if you updated jbigi/tools/utility, delete dist/install.jar and rebuild</echo>
+        <echo>dist/install.jar already up to date, skipping rebuild...${line.separator}Note: if you updated installer/lib/jbigi/ or tools/, delete dist/install.jar and rebuild</echo>
       </then>
       <else>
         <echo>Building dist/install.jar (IzPack4)...</echo>
@@ -3106,10 +3106,10 @@
         <antcall target="buildUtilityJar"/>
         <izpack input="${build.root}/izpack/4/install.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
         <ant target="installerexe"/>
-        <antcall target="timestamp.stopped"/>
         <antcall target="sha256sum">
           <param name="sha256.file" value="dist/install.jar"/>
         </antcall>
+        <antcall target="timestamp.stopped"/>
       </else>
     </if>
   </target>
@@ -3163,10 +3163,10 @@
         <antcall target="buildUtilityJar"/>
         <izpack5 input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
         <ant target="installer5exe"/>
-        <antcall target="timestamp.stopped"/>
         <antcall target="sha256sum">
           <param name="sha256.file" value="dist/install.jar"/>
         </antcall>
+        <antcall target="timestamp.stopped"/>
       </else>
     </if>
   </target>
