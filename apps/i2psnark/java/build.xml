@@ -162,7 +162,9 @@
         </length>
         <parallel>
           <foreach target="compressJavascript" param="file" parallel="true">
-            <fileset dir="${build.dir}/res/.res/js" includes="*.js"/>
+            <path>
+              <fileset dir="${build.dir}/res/.res/js" includes="*.js"/>
+            </path>
           </foreach>
         </parallel>
         <length property="js.size.after" mode="all">
