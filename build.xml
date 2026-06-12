@@ -685,7 +685,7 @@
     <copy quiet="true" verbose="false" file="${apps.ministreaming.java.build.dir}/mstreaming.jar" todir="${build.root}build/"/>
   </target>
 
-  <target name="build-buildtools" description="Build QuietCopyLogger for suppressing verbosity from copy tasks">
+  <target name="build-buildtools" description="Build ConciseLogger for suppressing verbose build output">
     <mkdir dir="${build.root}build-tools/obj"/>
     <javac srcdir="tools/build/src" destdir="${build.root}build-tools/obj"
            includeAntRuntime="true"
@@ -693,9 +693,9 @@
            source="1.8" target="1.8"/>
   </target>
 
-  <target name="install-buildtools" depends="build-buildtools" description="Install QuietCopyLogger to ~/.ant/lib/ (one-time)">
+  <target name="install-buildtools" depends="build-buildtools" description="Install ConciseLogger to ~/.ant/lib/ (one-time)">
     <mkdir dir="${user.home}/.ant/lib"/>
-    <jar destfile="${user.home}/.ant/lib/quiet-copy-logger.jar" basedir="${build.root}build-tools/obj"/>
+    <jar destfile="${user.home}/.ant/lib/concise-logger.jar" basedir="${build.root}build-tools/obj"/>
   </target>
 
   <target name="buildRouter" depends="build-buildtools, buildrouter"/>

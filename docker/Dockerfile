@@ -14,7 +14,7 @@ RUN echo "javac.compilerargs=-Xlint:none" >> override.properties
 RUN ant build-buildtools install-buildtools
 
 RUN --mount=type=tmpfs,target=/tmp/build-i2p \
-    ANT_ARGS="-logger net.i2p.router.build.QuietCopyLogger" \
+    ANT_ARGS="-logger net.i2p.router.build.ConciseLogger" \
     ant preppkg-linux-only && \
     rm -rf /tmp/build-i2p/pkg-temp/osid /tmp/build-i2p/pkg-temp/lib/wrapper /tmp/build-i2p/pkg-temp/lib/wrapper.* && \
     cp -a /tmp/build-i2p/pkg-temp /tmp/pkg-temp-output

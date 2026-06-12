@@ -4,7 +4,7 @@ import org.apache.tools.ant.BuildEvent;
 import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;
 
-public class QuietCopyLogger extends DefaultLogger {
+public class ConciseLogger extends DefaultLogger {
     private boolean targetHeaderPending;
     private BuildEvent lastTargetEvent;
 
@@ -44,6 +44,7 @@ public class QuietCopyLogger extends DefaultLogger {
         if ("jar".equals(taskName) && msg.contains("module-info.class already added"))
             return true;
         return ("copy".equals(taskName) && (msg.startsWith("Copying") || msg.startsWith("Copied")))
+            || ("replace".equals(taskName) && msg.startsWith("Replaced"))
             || ("mkdir".equals(taskName) && msg.startsWith("Created dir"))
             || (("izpack".equals(taskName) || "izpack5".equals(taskName))
                 && (msg.startsWith("Copying ") || msg.startsWith("Merging ") || msg.startsWith("Writing ")))
