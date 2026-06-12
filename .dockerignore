@@ -17,5 +17,4 @@ build/
 wip/
 
 # Not needed for Docker build
-docs/
 gradle/
