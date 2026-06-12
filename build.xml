@@ -2288,6 +2288,9 @@
       <arg value="./dist/i2p-linux.7z"/>
       <arg value="${pkg.temp.dir}/i2p"/>
     </exec>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2p-linux.7z"/>
+    </antcall>
   </target>
 
   <target name="buildAppImage" depends="preppkg-linux" description="Build AppImage for Linux">
@@ -2298,6 +2301,9 @@
       <arg value="${appimagetool.update}"/>
       <arg value="${pkg.temp.dir}"/>
     </exec>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/I2P+_${full.version}.appimage"/>
+    </antcall>
   </target>
 
   <target name="buildDeb" depends="preppkg-linux" description="Build self-contained Debian package">
@@ -2337,8 +2343,10 @@
       <arg value="./dist/i2p-windows.7z"/>
       <arg value="${pkg.temp.dir}/i2p"/>
     </exec>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2p-windows.7z"/>
+    </antcall>
   </target>
-
   <target name="7zip-macos">
     <parallel>
       <delete>
@@ -2364,8 +2372,10 @@
       <arg value="./dist/i2p-macos.7z"/>
       <arg value="${pkg.temp.dir}/i2p"/>
     </exec>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2p-macos.7z"/>
+    </antcall>
   </target>
-
   <target name="7zip-freebsd">
     <parallel>
       <delete>
@@ -2391,8 +2401,10 @@
       <arg value="./dist/i2p-freebsd.7z"/>
       <arg value="${pkg.temp.dir}/i2p"/>
     </exec>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2p-freebsd.7z"/>
+    </antcall>
   </target>
-
   <target name="7zip-multiplaform">
     <ant target="7zip-freebsd"/>
     <ant target="7zip-macos"/>
@@ -3152,6 +3164,9 @@
         <izpack5 input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
         <ant target="installer5exe"/>
         <antcall target="timestamp.stopped"/>
+        <antcall target="sha256sum">
+          <param name="sha256.file" value="dist/install.jar"/>
+        </antcall>
       </else>
     </if>
   </target>
@@ -3175,6 +3190,9 @@
         <!-- now the installer exe -->
         <launch4j configFile="./installer/i2pinstaller.xml"/>
         <!-- thazzit -->
+        <antcall target="sha256sum">
+          <param name="sha256.file" value="dist/i2pinstall.exe"/>
+        </antcall>
       </else>
     </if>
   </target>
@@ -3220,6 +3238,9 @@
       <arg value="--no-upx"/>
       <arg value="--output=${basedir}/dist/i2pinstall.exe"/>
     </exec>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2pinstall.exe"/>
+    </antcall>
       </else>
     </if>
   </target>
@@ -3568,6 +3589,9 @@
       <property name="systray.java.build.dir" location="${build.root}apps/systray/java/build"/>
       </ant>
     <copy quiet="true" verbose="false" file="apps/i2psnark/java/i2psnark-standalone.7z" todir="./dist"/>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2psnark-standalone.7z"/>
+    </antcall>
   </target>
 
   <!-- standalone i2psnark no zip -->
