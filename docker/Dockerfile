@@ -11,8 +11,12 @@ COPY . .
 RUN echo "build.built-by=DockerUser" >> override.properties
 RUN echo "javac.compilerargs=-Xlint:none" >> override.properties
 
+RUN ant build-buildtools install-buildtools && \
+    rm -rf build/build-tools
+
 RUN --mount=type=tmpfs,target=/tmp/build-i2p \
-    ant preppkg-linux-only -q && \
+    ANT_ARGS="-logger net.i2p.router.build.QuietCopyLogger" \
+    ant preppkg-linux-only && \
     rm -rf /tmp/build-i2p/pkg-temp/osid /tmp/build-i2p/pkg-temp/lib/wrapper /tmp/build-i2p/pkg-temp/lib/wrapper.* && \
     cp -a /tmp/build-i2p/pkg-temp /tmp/pkg-temp-output
 
