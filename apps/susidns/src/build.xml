@@ -14,6 +14,7 @@
   <property name="core.java.build.dir" value="${core.java.build.dir}"/>
 
   <property name="jetty" value="../../jetty/"/>
+  <property name="jetty.pkg.dir" value="${jetty}/jettylib"/>
   <property name="project" value="susidns"/>
   <property name="src" value="java/src"/>
   <property name="bin" value="${build.dir}/classes"/>
@@ -44,8 +45,8 @@
     <pathelement location="lib/standard.jar"/>
     <pathelement location="${lib}/jasper-runtime.jar"/>
     <pathelement location="${lib}/jetty-util.jar"/>
-    <pathelement location="${lib}/jetty-i2p.jar"/>
-    <pathelement location="${lib}/jspc.jar"/>
+    <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
+    <pathelement location="${jetty.pkg.dir}/jspc.jar"/>
     <pathelement location="${ant.home}/lib/ant.jar"/>
     <pathelement location="${core.java.build.dir}/i2p.jar"/>
     <pathelement location="${addressbook.dist.dir}/addressbook.jar"/>

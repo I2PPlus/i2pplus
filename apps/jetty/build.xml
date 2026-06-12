@@ -2,6 +2,7 @@
 <project basedir="." default="all" name="jetty">
   <available file="git" property="git.available"/>
   <property name="build.dir" value="build"/>
+  <property name="jetty.pkg.dir" value="./jettylib"/>
 
   <property name="core.java.build.dir" value="../../core/java/build"/>
 
@@ -512,7 +513,7 @@
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
     <copy todir="${build.dir}/obj" file="resources/log4j.properties"/>
-    <jar destfile="./jettylib/jetty-i2p.jar" basedir="${build.dir}/obj" includes="**/*.class log4j.properties" excludes="**/JspC.class">
+    <jar destfile="${jetty.pkg.dir}/jetty-i2p.jar" basedir="${build.dir}/obj" includes="**/*.class log4j.properties" excludes="**/JspC.class">
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
         <attribute name="Built-By" value="${build.built-by}"/>
@@ -526,11 +527,11 @@
       </manifest>
     </jar>
     <!-- separate jar for JspC wrapper used only in build, not included in jetty-i2p.jar -->
-    <jar destfile="./jettylib/jspc.jar" basedir="${build.dir}/obj" includes="**/JspC.class"/>
+    <jar destfile="${jetty.pkg.dir}/jspc.jar" basedir="${build.dir}/obj" includes="**/JspC.class"/>
   </target>
 
   <target name="jarUpToDate">
-    <uptodate property="jar.uptodate" targetfile="jettylib/jetty-i2p.jar">
+    <uptodate property="jar.uptodate" targetfile="${jetty.pkg.dir}/jetty-i2p.jar">
       <srcfiles dir="${build.dir}/obj" includes="**/*.class"/>
       <!-- <srcfiles dir= "resources"/> -->
     </uptodate>
@@ -595,7 +596,7 @@
     <condition property="jarPatches.uptodate">
       <or>
         <equals arg1="${with-libjetty9-java}" arg2="true"/>
-        <uptodate property="jarPatches.uptodate" targetfile="jettylib/jetty-i2p.jar">
+        <uptodate property="jarPatches.uptodate" targetfile="${jetty.pkg.dir}/jetty-i2p.jar">
           <srcfiles dir="${build.dir}/objPatches" includes="**/*.class"/>
           <!--
                     <srcfiles dir= "build/objPatches2" includes="**/*.class"/>

@@ -14,6 +14,7 @@
   <property name="ministreaming.java.build.dir" value="${ministreaming.java.build.dir}"/>
   <property name="streaming.java.build.dir" value="${streaming.java.build.dir}"/>
   <property name="systray.java.build.dir" value="${systray.java.build.dir}"/>
+  <property name="jetty.pkg.dir" value="../../jetty/jettylib"/>
 
   <condition property="standalone.dir" value="${build.root}apps/i2psnark/java/standalone" else="i2psnark">
     <isset property="build.root"/>
@@ -88,7 +89,7 @@
         <!-- jsp-api.jar only present for debian builds -->
         <pathelement location="../../jetty/jettylib/jsp-api.jar"/>
         <!-- Following jars only for standalone builds -->
-        <pathelement location="../../jetty/jettylib/jetty-i2p.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
         <pathelement location="${systray.java.build.dir}/systray.jar"/>
         <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-util.jar"/>
@@ -351,7 +352,7 @@
       <zipfileset src="../../jetty/jettylib/jetty-continuation.jar"/>
       <zipfileset src="../../jetty/jettylib/jetty-deploy.jar"/>
       <zipfileset src="../../jetty/jettylib/jetty-http.jar"/>
-      <zipfileset src="../../jetty/jettylib/jetty-i2p.jar"/>
+      <zipfileset src="${jetty.pkg.dir}/jetty-i2p.jar"/>
       <zipfileset src="../../jetty/jettylib/jetty-io.jar"/>
       <zipfileset src="../../jetty/jettylib/jetty-security.jar"/>
       <zipfileset src="../../jetty/jettylib/jetty-servlet.jar"/>

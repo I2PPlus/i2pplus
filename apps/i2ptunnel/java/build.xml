@@ -13,6 +13,7 @@
   <property name="core.java.build.dir" value="${core.java.build.dir}"/>
   <property name="ministreaming.java.build.dir" value="${ministreaming.java.build.dir}"/>
   <property name="streaming.java.build.dir" value="${streaming.java.build.dir}"/>
+  <property name="jetty.pkg.dir" value="../../jetty/jettylib"/>
 
   <target name="all" depends="clean, build"/>
   <target name="build" depends="builddep, jar, war"/>
@@ -79,7 +80,7 @@
       destdir="${build.dir}/obj"
       includeAntRuntime="false"
       encoding="UTF-8"
-      classpath="${core.java.build.dir}/i2p.jar:${build.dir}/i2ptunnel.jar:../../jetty/jettylib/jetty-i2p.jar:../../jetty/jettylib/jetty-util.jar:../../jetty/jettylib/jetty-xml.jar:../../jetty/jettylib/javax.servlet.jar">
+      classpath="${core.java.build.dir}/i2p.jar:${build.dir}/i2ptunnel.jar:${jetty.pkg.dir}/jetty-i2p.jar:../../jetty/jettylib/jetty-util.jar:../../jetty/jettylib/jetty-xml.jar:../../jetty/jettylib/javax.servlet.jar">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -493,8 +494,8 @@
         <pathelement location="${build.dir}/temp-beans.jar"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <!-- required for multipart form handling in register.jsp -->
-        <pathelement location="../../jetty/jettylib/jetty-i2p.jar"/>
-        <pathelement location="../../jetty/jettylib/jspc.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jspc.jar"/>
       </classpath>
       <arg value="-d"/>
       <arg value="${jsp.build.dir}/WEB-INF/classes"/>
@@ -531,7 +532,7 @@
         <pathelement location="${build.dir}/temp-beans.jar"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <!-- required for multipart form handling in register.jsp -->
-        <pathelement location="../../jetty/jettylib/jetty-i2p.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
       </classpath>
     </javac>
     <copy file="../jsp/web.xml" tofile="${jsp.build.dir}/web-out.xml"/>

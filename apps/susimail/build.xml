@@ -7,6 +7,7 @@
   <property name="core.java.build.dir" value="../../core/java/build"/>
 
   <property name="core.java.build.dir" value="${core.java.build.dir}"/>
+  <property name="jetty.pkg.dir" value="../jetty/jettylib"/>
 
   <target name="all" depends="clean, build"/>
   <target name="build" depends="builddep, jar"/>
@@ -39,7 +40,7 @@
         <pathelement location="../jetty/jettylib/jsp-api.jar"/>
         <!-- tomcat-api.jar only present for debian builds -->
         <pathelement location="../jetty/jettylib/tomcat-api.jar"/>
-        <pathelement location="../jetty/jettylib/jetty-i2p.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
       </classpath>
     </depend>
   </target>
@@ -67,7 +68,7 @@
         <pathelement location="../jetty/jettylib/jsp-api.jar"/>
         <!-- tomcat-api.jar only present for debian builds -->
         <pathelement location="../jetty/jettylib/tomcat-api.jar"/>
-        <pathelement location="../jetty/jettylib/jetty-i2p.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
       </classpath>
     </javac>
   </target>

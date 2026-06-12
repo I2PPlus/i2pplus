@@ -491,6 +491,7 @@
   <target name="buildSusiMail" depends="buildCore, buildJetty">
     <ant dir="apps/susimail/" target="war">
       <property name="build.dir" location="${build.root}apps/susimail/build"/>
+      <property name="jetty.pkg.dir" location="${build.root}apps/jetty/build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       </ant>
     <copy quiet="true" verbose="false" file="${build.root}apps/susimail/build/susimail.war" todir="${build.root}build/"/>
@@ -500,6 +501,7 @@
   <target name="buildSusiMailJar" depends="buildCore, buildJetty">
     <ant dir="apps/susimail/" target="jar">
       <property name="build.dir" location="${build.root}apps/susimail/build"/>
+      <property name="jetty.pkg.dir" location="${build.root}apps/jetty/build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       </ant>
     <copy quiet="true" verbose="false" file="${build.root}apps/susimail/build/susimail.jar" todir="${build.root}build/"/>
@@ -508,6 +510,7 @@
   <target name="buildSusiDNS" depends="buildCore, buildJetty, buildImagegen, buildAddressbook">
     <ant dir="apps/susidns/src" target="all">
       <property name="build.dir" location="${build.root}apps/susidns/src/build"/>
+      <property name="jetty.pkg.dir" location="${build.root}apps/jetty/build"/>
       <property name="...build.dir" location="${build.root}build"/>
       <property name="addressbook.build.dir" location="${build.root}apps/addressbook/build"/>
       <property name="addressbook.dist.dir" location="${build.root}apps/addressbook/dist"/>
@@ -542,6 +545,7 @@
   <target name="buildI2PSnark" depends="buildMinistreaming, buildJetty, buildSystray">
     <ant dir="apps/i2psnark/java/" target="war">
       <property name="build.dir" location="${build.root}apps/i2psnark/java/build"/>
+      <property name="jetty.pkg.dir" location="${build.root}apps/jetty/build"/>
       <property name="...build.dir" location="${build.root}build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
@@ -583,6 +587,7 @@
   <target name="buildI2PTunnelJars" depends="buildStreaming">
     <ant dir="apps/i2ptunnel/java/" target="uiJar">
       <property name="build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+      <property name="jetty.pkg.dir" location="${build.root}apps/jetty/build"/>
       <property name="...build.dir" location="${build.root}build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
@@ -596,6 +601,7 @@
   <target name="buildI2PTunnel" depends="buildMinistreaming, buildJetty, buildImagegen">
     <ant dir="apps/i2ptunnel/java/" target="build">
       <property name="build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+      <property name="jetty.pkg.dir" location="${build.root}apps/jetty/build"/>
       <property name="...build.dir" location="${build.root}build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
@@ -620,6 +626,7 @@
   <target name="buildRouterConsole" depends="buildrouter, buildSystray, buildDesktopGui, buildJetty, buildJrobin, buildI2PTunnel">
     <ant dir="apps/routerconsole/java/" target="jar">
       <property name="build.dir" location="${build.root}apps/routerconsole/java/build"/>
+      <property name="jetty.pkg.dir" location="${build.root}apps/jetty/build"/>
       <property name="...build.dir" location="${build.root}build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       <property name="desktopgui.build.dir" location="${build.root}apps/desktopgui/build"/>
@@ -636,6 +643,7 @@
   <target name="buildNewsXMLJar" depends="buildRouter">
     <ant dir="apps/routerconsole/java/" target="newsxmljar">
       <property name="build.dir" location="${build.root}apps/routerconsole/java/build"/>
+      <property name="jetty.pkg.dir" location="${build.root}apps/jetty/build"/>
       <property name="...build.dir" location="${build.root}build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       <property name="desktopgui.build.dir" location="${build.root}apps/desktopgui/build"/>
@@ -650,10 +658,12 @@
   <target name="buildJetty" depends="buildCore">
     <ant dir="apps/jetty" target="build">
       <property name="build.dir" location="${build.root}apps/jetty/build"/>
+      <property name="jetty.pkg.dir" location="${build.root}apps/jetty/build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       </ant>
     <copy quiet="true" verbose="false" todir="${build.root}build/">
       <fileset dir="apps/jetty/jettylib" excludes="ant.jar,jspc.jar"/>
+      <fileset dir="${build.root}apps/jetty/build/" includes="jetty-i2p.jar,jspc.jar"/>
     </copy>
   </target>
 
