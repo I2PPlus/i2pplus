@@ -8,6 +8,7 @@
   <property name="i2pbase" value="../.."/>
   <property name="i2plib" value="${i2pbase}/build"/>
   <property name="jettylib" value="${i2pbase}/apps/jetty/jettylib"/>
+  <property name="jetty.pkg.dir" value="${jettylib}"/>
   <property name="wrapperlib" value="${i2pbase}/installer/lib/wrapper/all"/>
 
   <!--
@@ -26,6 +27,7 @@
     <pathelement location="${jettylib}/org.mortbay.jetty.jar"/>
     <pathelement location="${jettylib}/javax.servlet.jar"/>
     <pathelement location="${jettylib}/jetty-servlet.jar"/>
+    <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
     <pathelement location="${wrapperlib}/wrapper.jar"/>
     <!-- following jar only present for debian builds -->
     <pathelement location="${core.java.build.dir}/json-simple.jar"/>

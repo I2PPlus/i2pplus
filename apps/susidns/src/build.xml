@@ -44,7 +44,7 @@
     <pathelement location="lib/jstl.jar"/>
     <pathelement location="lib/standard.jar"/>
     <pathelement location="${lib}/jasper-runtime.jar"/>
-    <pathelement location="${lib}/jetty-util.jar"/>
+    <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
     <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
     <pathelement location="${jetty.pkg.dir}/jspc.jar"/>
     <pathelement location="${ant.home}/lib/ant.jar"/>

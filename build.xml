@@ -538,6 +538,7 @@
       <property name="build.dir" location="${build.root}apps/i2pcontrol/build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       <property name="i2plib" location="${build.root}build"/>
+      <property name="jetty.pkg.dir" location="${build.root}apps/jetty/build"/>
       </ant>
     <copy quiet="true" verbose="false" file="${apps.i2pcontrol.build.dir}/jsonrpc.war" todir="${build.root}build/"/>
   </target>
