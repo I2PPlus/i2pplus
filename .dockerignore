@@ -1,0 +1,21 @@
+# Large static-analysis tools (downloaded at runtime per .gitignore)
+tools/codeql/
+tools/jsdoc/
+tools/test/
+tools/checkstyle/
+tools/appimage/
+tools/pmd/
+tools/spotbugs/
+tools/ant/
+tools/java-format/
+tools/template/
+
+# Generated artifacts from local builds
+dist/
+build/
+.opencode/
+wip/
+
+# Not needed for Docker build
+docs/
+gradle/
