@@ -773,7 +773,6 @@
     <property name="minidns.latest" value="1.1.1"/>
     <echo message="  MiniDNS: ${minidns.version} (latest: ${minidns.latest})"/>
     <!-- Warning -->
-    <echo message=""/>
     <echo message="NOTE: To update libraries, see:"/>
     <echo message="  json-simple: https://cliftonlabs.github.io/json-simple/"/>
     <echo message="  MiniDNS: https://github.com/minidns/minidns"/>
@@ -3567,13 +3566,14 @@
   <!-- standalone i2psnark zip -->
   <target name="i2psnark" depends="buildStreaming, buildJetty, buildSystray, jbigi">
     <ant dir="apps/i2psnark/java" target="standalone">
+      <property name="build.root" location="${build.root}"/>
       <property name="...build.dir" location="${build.root}build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
       <property name="streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
       <property name="systray.java.build.dir" location="${build.root}apps/systray/java/build"/>
       </ant>
-    <copy quiet="true" verbose="false" file="apps/i2psnark/java/i2psnark-standalone.zip" todir="./dist"/>
+    <copy quiet="true" verbose="false" file="${build.root}apps/i2psnark/java/i2psnark-standalone.zip" todir="./dist"/>
     <antcall target="sha256sum">
       <param name="sha256.file" value="dist/i2psnark-standalone.zip"/>
     </antcall>
@@ -3582,13 +3582,14 @@
   <!-- standalone i2psnark 7z archive -->
   <target name="i2psnark7zip" depends="buildStreaming, buildJetty, buildSystray, jbigi">
     <ant dir="apps/i2psnark/java" target="standalone">
+      <property name="build.root" location="${build.root}"/>
       <property name="...build.dir" location="${build.root}build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
       <property name="streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
       <property name="systray.java.build.dir" location="${build.root}apps/systray/java/build"/>
       </ant>
-    <copy quiet="true" verbose="false" file="apps/i2psnark/java/i2psnark-standalone.7z" todir="./dist"/>
+    <copy quiet="true" verbose="false" file="${build.root}apps/i2psnark/java/i2psnark-standalone.7z" todir="./dist"/>
     <antcall target="sha256sum">
       <param name="sha256.file" value="dist/i2psnark-standalone.7z"/>
     </antcall>
@@ -3597,6 +3598,7 @@
   <!-- standalone i2psnark no zip -->
   <target name="i2psnark_nozip" depends="buildStreaming, buildJetty, buildSystray, jbigi">
     <ant dir="apps/i2psnark/java" target="standalone_nozip">
+      <property name="build.root" location="${build.root}"/>
       <property name="...build.dir" location="${build.root}build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
@@ -3605,7 +3607,7 @@
       </ant>
     <delete dir="./dist/i2psnark_standalone" quiet="true" excludes="README.md"/>
     <move todir="./dist/i2psnark_standalone" quiet="true">
-      <fileset dir="apps/i2psnark/java/i2psnark" includes="**/*"/>
+      <fileset dir="${build.root}apps/i2psnark/java/standalone" includes="**/*"/>
     </move>
     <chmod type="file" file="./dist/i2psnark_standalone/launch-i2psnark" perm="+x"/>
     <echo message="I2PSnark standalone (nozip) build finished and copied to ./dist/i2psnark_standalone"/>

@@ -62,6 +62,8 @@ public class ConciseLogger extends DefaultLogger {
             return true;
         if ("loadfile".equals(taskName) && msg.contains("doesn't exist"))
             return true;
+        if ("touch".equals(taskName) && msg.startsWith("Creating"))
+            return true;
         return ("copy".equals(taskName) && (msg.startsWith("Copying") || msg.startsWith("Copied")))
             || ("replace".equals(taskName) && msg.startsWith("Replaced"))
             || ("mkdir".equals(taskName) && msg.startsWith("Created dir"))

@@ -15,6 +15,16 @@
   <property name="streaming.java.build.dir" value="${streaming.java.build.dir}"/>
   <property name="systray.java.build.dir" value="${systray.java.build.dir}"/>
 
+  <condition property="standalone.dir" value="${build.root}apps/i2psnark/java/standalone" else="i2psnark">
+    <isset property="build.root"/>
+  </condition>
+  <condition property="standalone.zip" value="${build.root}apps/i2psnark/java/i2psnark-standalone.zip" else="i2psnark-standalone.zip">
+    <isset property="build.root"/>
+  </condition>
+  <condition property="standalone.7z" value="${build.root}apps/i2psnark/java/i2psnark-standalone.7z" else="i2psnark-standalone.7z">
+    <isset property="build.root"/>
+  </condition>
+
   <!-- Is uglifyjs installed? -->
   <available file="/usr/bin/uglifyjs" property="uglifyjs.present"/>
 
@@ -291,12 +301,13 @@
   </target>
 
   <target name="standalone" depends="standalone_prep">
-    <exec executable="zip" failifexecutionfails="true" failonerror="true">
+    <basename property="standalone.dir.name" file="${standalone.dir}"/>
+    <exec executable="zip" dir="${standalone.dir}/.." failifexecutionfails="true" failonerror="true">
       <arg value="-r"/>
       <arg value="-9"/>
       <arg value="-q"/>
-      <arg value="i2psnark-standalone.zip"/>
-      <arg value="i2psnark"/>
+      <arg value="${standalone.zip}"/>
+      <arg value="${standalone.dir.name}"/>
     </exec>
   </target>
 
@@ -311,16 +322,17 @@
   -->
 
   <target name="standalone7zip" depends="standalone_prep">
-    <exec executable="7z" failifexecutionfails="true" failonerror="true">
+    <basename property="standalone.dir.name" file="${standalone.dir}"/>
+    <exec executable="7z" dir="${standalone.dir}/.." failifexecutionfails="true" failonerror="true">
       <arg value="a"/>
       <arg value="-t7z"/>
-      <arg value="-mx=9"/> <!-- Compression -->
-      <arg value="-md=4m"/> <!-- Dictionary size -->
-      <arg value="-mmt2"/> <!-- Use 2 threads -->
-      <arg value="-ssw"/> <!-- Compress shared files -->
-      <arg value="-bt"/> <!-- Show execution stats -->
-      <arg value="i2psnark-standalone.7z"/>
-      <arg value="i2psnark"/>
+      <arg value="-mx=9"/>
+      <arg value="-md=4m"/>
+      <arg value="-mmt2"/>
+      <arg value="-ssw"/>
+      <arg value="-bt"/>
+      <arg value="${standalone.7z}"/>
+      <arg value="${standalone.dir.name}"/>
     </exec>
   </target>
 
@@ -429,61 +441,62 @@
   </target>
 
   <target name="standalone_prep" depends="standalone_jar, standalone_war">
-    <delete dir="./i2psnark"/>
-    <mkdir dir="./i2psnark"/>
+    <delete dir="${standalone.dir}"/>
+    <mkdir dir="${standalone.dir}"/>
     <parallel>
-      <mkdir dir="./i2psnark/logs"/>
-      <mkdir dir="./i2psnark/webapps"/>
-      <mkdir dir="./i2psnark/docroot"/>
-      <mkdir dir="./i2psnark/contexts"/>
+      <mkdir dir="${standalone.dir}/logs"/>
+      <mkdir dir="${standalone.dir}/webapps"/>
+      <mkdir dir="${standalone.dir}/docroot"/>
+      <mkdir dir="${standalone.dir}/contexts"/>
       <parallel>
-        <copy file="../launch-i2psnark" todir="./i2psnark/" quiet="true"/>
-        <copy file="../launch-i2psnark.bat" todir="./i2psnark/" quiet="true"/>
-        <copy file="../standalone-context.xml" tofile="./i2psnark/contexts/context.xml" quiet="true"/>
-        <copy file="../standalone-index.html" tofile="./i2psnark/docroot/index.html" quiet="true"/>
-        <copy file="../i2psnark.war" tofile="./i2psnark/webapps/i2psnark.war" quiet="true"/>
-        <copy file="../jetty-i2psnark.xml" tofile="./i2psnark/jetty-i2psnark.xml" quiet="true"/>
-        <copy file="../i2psnark-appctx.config" tofile="./i2psnark/i2psnark-appctx.config" quiet="true"/>
-        <copy file="${build.dir}/i2psnark-standalone.jar" tofile="./i2psnark/i2psnark.jar" quiet="true"/>
-        <copy file="../readme-standalone.txt" tofile="./i2psnark/readme.txt" quiet="true"/>
-        <copy file="../../../installer/resources/hosts_i2psnark.txt" tofile="./i2psnark/hosts.txt" quiet="true"/>
+        <copy file="../launch-i2psnark" todir="${standalone.dir}/" quiet="true"/>
+        <copy file="../launch-i2psnark.bat" todir="${standalone.dir}/" quiet="true"/>
+        <copy file="../standalone-context.xml" tofile="${standalone.dir}/contexts/context.xml" quiet="true"/>
+        <copy file="../standalone-index.html" tofile="${standalone.dir}/docroot/index.html" quiet="true"/>
+        <copy file="../i2psnark.war" tofile="${standalone.dir}/webapps/i2psnark.war" quiet="true"/>
+        <copy file="../jetty-i2psnark.xml" tofile="${standalone.dir}/jetty-i2psnark.xml" quiet="true"/>
+        <copy file="../i2psnark-appctx.config" tofile="${standalone.dir}/i2psnark-appctx.config" quiet="true"/>
+        <copy file="${build.dir}/i2psnark-standalone.jar" tofile="${standalone.dir}/i2psnark.jar" quiet="true"/>
+        <copy file="../readme-standalone.txt" tofile="${standalone.dir}/readme.txt" quiet="true"/>
+        <copy file="../../../installer/resources/hosts_i2psnark.txt" tofile="${standalone.dir}/hosts.txt" quiet="true"/>
       </parallel>
     </parallel>
-    <chmod type="file" file="./i2psnark/launch-i2psnark" perm="+x"/>
+    <chmod type="file" file="${standalone.dir}/launch-i2psnark" perm="+x"/>
   </target>
 
   <target name="standalone_nozip" depends="standalone_jar, standalone_war">
-    <delete dir="./i2psnark" quiet="true"/>
+    <delete dir="${standalone.dir}" quiet="true"/>
     <parallel>
-      <mkdir dir="./i2psnark"/>
+      <mkdir dir="${standalone.dir}"/>
       <sequential>
-        <mkdir dir="./i2psnark/contexts"/>
-        <mkdir dir="./i2psnark/docroot"/>
-        <mkdir dir="./i2psnark/webapps"/>
-        <mkdir dir="./i2psnark/logs"/>
+        <mkdir dir="${standalone.dir}/contexts"/>
+        <mkdir dir="${standalone.dir}/docroot"/>
+        <mkdir dir="${standalone.dir}/webapps"/>
+        <mkdir dir="${standalone.dir}/logs"/>
       </sequential>
       <parallel>
-        <copy file="../launch-i2psnark" todir="./i2psnark/" quiet="true"/>
-        <copy file="../launch-i2psnark.bat" todir="./i2psnark/" quiet="true"/>
-        <copy file="../standalone-context.xml" tofile="./i2psnark/contexts/context.xml" quiet="true"/>
-        <copy file="../standalone-index.html" tofile="./i2psnark/docroot/index.html" quiet="true"/>
-        <copy file="../i2psnark.war" tofile="./i2psnark/webapps/i2psnark.war" quiet="true"/>
-        <copy file="../jetty-i2psnark.xml" tofile="./i2psnark/jetty-i2psnark.xml" quiet="true"/>
-        <copy file="../i2psnark-appctx.config" tofile="./i2psnark/i2psnark-appctx.config" quiet="true"/>
-        <copy file="${build.dir}/i2psnark-standalone.jar" tofile="./i2psnark/i2psnark.jar" quiet="true"/>
-        <copy file="../readme-standalone.txt" tofile="./i2psnark/readme.txt" quiet="true"/>
-        <copy file="../../../installer/resources/hosts_i2psnark.txt" tofile="./i2psnark/hosts.txt" quiet="true"/>
+        <copy file="../launch-i2psnark" todir="${standalone.dir}/" quiet="true"/>
+        <copy file="../launch-i2psnark.bat" todir="${standalone.dir}/" quiet="true"/>
+        <copy file="../standalone-context.xml" tofile="${standalone.dir}/contexts/context.xml" quiet="true"/>
+        <copy file="../standalone-index.html" tofile="${standalone.dir}/docroot/index.html" quiet="true"/>
+        <copy file="../i2psnark.war" tofile="${standalone.dir}/webapps/i2psnark.war" quiet="true"/>
+        <copy file="../jetty-i2psnark.xml" tofile="${standalone.dir}/jetty-i2psnark.xml" quiet="true"/>
+        <copy file="../i2psnark-appctx.config" tofile="${standalone.dir}/i2psnark-appctx.config" quiet="true"/>
+        <copy file="${build.dir}/i2psnark-standalone.jar" tofile="${standalone.dir}/i2psnark.jar" quiet="true"/>
+        <copy file="../readme-standalone.txt" tofile="${standalone.dir}/readme.txt" quiet="true"/>
+        <copy file="../../../installer/resources/hosts_i2psnark.txt" tofile="${standalone.dir}/hosts.txt" quiet="true"/>
       </parallel>
     </parallel>
-    <echo message="I2PSnark standalone folder moved to ./dist/i2psnark_standalone"/>
+    <echo message="I2PSnark standalone folder created at ${standalone.dir}"/>
   </target>
 
   <target name="clean">
     <parallel>
       <delete dir="${build.dir}"/>
       <delete file="../i2psnark.war"/>
-      <delete file="./i2psnark-standalone.zip"/>
-      <delete dir="./i2psnark"/>
+      <delete file="${standalone.zip}"/>
+      <delete file="${standalone.7z}"/>
+      <delete dir="${standalone.dir}"/>
     </parallel>
   </target>
 
