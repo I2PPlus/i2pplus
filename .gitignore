@@ -28,7 +28,6 @@ apps/i2psnark/java/i2psnark/
 
 # Temporary/build dirs
 build/
-!build/README.md
 pkg-temp/
 !pkg-temp/README.md
 classes/
@@ -93,7 +92,6 @@ apps/routerconsole/jsp/favicon.ico
 
 # Gradle build output directories (comprehensive)
 **/build/
-!build/README.md
 !pkg-temp/README.md
 !dist/README.md
 

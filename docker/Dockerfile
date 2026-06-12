@@ -11,8 +11,7 @@ COPY . .
 RUN echo "build.built-by=DockerUser" >> override.properties
 RUN echo "javac.compilerargs=-Xlint:none" >> override.properties
 
-RUN ant build-buildtools install-buildtools && \
-    rm -rf build/build-tools
+RUN ant build-buildtools install-buildtools
 
 RUN --mount=type=tmpfs,target=/tmp/build-i2p \
     ANT_ARGS="-logger net.i2p.router.build.QuietCopyLogger" \

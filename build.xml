@@ -686,8 +686,8 @@
   </target>
 
   <target name="build-buildtools" description="Build QuietCopyLogger for suppressing verbosity from copy tasks">
-    <mkdir dir="build/build-tools/obj"/>
-    <javac srcdir="tools/build/src" destdir="build/build-tools/obj"
+    <mkdir dir="${build.root}build-tools/obj"/>
+    <javac srcdir="tools/build/src" destdir="${build.root}build-tools/obj"
            includeAntRuntime="true"
            debug="true" encoding="UTF-8"
            source="1.8" target="1.8"/>
@@ -695,7 +695,7 @@
 
   <target name="install-buildtools" depends="build-buildtools" description="Install QuietCopyLogger to ~/.ant/lib/ (one-time)">
     <mkdir dir="${user.home}/.ant/lib"/>
-    <jar destfile="${user.home}/.ant/lib/quiet-copy-logger.jar" basedir="build/build-tools/obj"/>
+    <jar destfile="${user.home}/.ant/lib/quiet-copy-logger.jar" basedir="${build.root}build-tools/obj"/>
   </target>
 
   <target name="buildRouter" depends="build-buildtools, buildrouter"/>

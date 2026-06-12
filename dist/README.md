@@ -1,13 +1,7 @@
-This folder is now persistent, which enables optional mounting via tmpfs to
-minimize SSD wear and tear. The contents of this folder, this file excepted,
-will be removed when invoking `ant clean` or `ant distclean`.
+Distribution archives (installers, updaters) are placed here.
+Removed by `ant clean` / `ant distclean`. Build output goes to
+`/tmp/build-i2p/` (configurable via `build.root` in `override.properties`).
 
-In Linux, to mount the temporary build folders via tmpfs, add the following
-lines to your `/etc/fstab` file after running `ant distclean`:
-
-
-`tmpfs {path/to/i2pplus/build}         tmpfs defaults,mode=1777   0  0`\
-`tmpfs {path/to/i2pplus/dist}          tmpfs defaults,mode=1777   0  0`\
-`tmpfs {path/to/i2pplus/pkg-temp}      tmpfs defaults,mode=1777   0  0`
-
-You can now mount them without a restart with: `sudo mount -a`
+To mount `dist/` via tmpfs (reduces SSD wear), add to `/etc/fstab`:
+`tmpfs {path/to/i2pplus/dist}   tmpfs defaults,mode=1777   0  0`
+Then `sudo mount -a`.
