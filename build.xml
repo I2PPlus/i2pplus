@@ -3566,8 +3566,10 @@
   <!-- standalone i2psnark zip -->
   <target name="i2psnark" depends="buildStreaming, buildJetty, buildSystray, jbigi">
     <ant dir="apps/i2psnark/java" target="standalone">
+      <property name="build.dir" value="${build.root}apps/i2psnark/java/build"/>
       <property name="standalone.dir" value="${build.root}apps/i2psnark/java/standalone"/>
       <property name="standalone.zip" value="${build.root}apps/i2psnark/java/i2psnark-standalone.zip"/>
+      <property name="standalone.war" value="${build.root}apps/i2psnark/i2psnark.war"/>
       <property name="...build.dir" location="${build.root}build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
@@ -3583,8 +3585,10 @@
   <!-- standalone i2psnark 7z archive -->
   <target name="i2psnark7zip" depends="buildStreaming, buildJetty, buildSystray, jbigi">
     <ant dir="apps/i2psnark/java" target="standalone7zip">
+      <property name="build.dir" value="${build.root}apps/i2psnark/java/build"/>
       <property name="standalone.dir" value="${build.root}apps/i2psnark/java/standalone"/>
       <property name="standalone.7z" value="${build.root}apps/i2psnark/java/i2psnark-standalone.7z"/>
+      <property name="standalone.war" value="${build.root}apps/i2psnark/i2psnark.war"/>
       <property name="...build.dir" location="${build.root}build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
@@ -3600,7 +3604,9 @@
   <!-- standalone i2psnark no zip -->
   <target name="i2psnark_nozip" depends="buildStreaming, buildJetty, buildSystray, jbigi">
     <ant dir="apps/i2psnark/java" target="standalone_nozip">
+      <property name="build.dir" value="${build.root}apps/i2psnark/java/build"/>
       <property name="standalone.dir" value="${build.root}apps/i2psnark/java/standalone"/>
+      <property name="standalone.war" value="${build.root}apps/i2psnark/i2psnark.war"/>
       <property name="...build.dir" location="${build.root}build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>

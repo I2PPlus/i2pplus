@@ -24,6 +24,9 @@
   <condition property="standalone.7z" value="${build.root}apps/i2psnark/java/i2psnark-standalone.7z" else="i2psnark-standalone.7z">
     <isset property="build.root"/>
   </condition>
+  <condition property="standalone.war" value="${build.root}apps/i2psnark/i2psnark.war" else="../i2psnark.war">
+    <isset property="build.root"/>
+  </condition>
 
   <!-- Is uglifyjs installed? -->
   <available file="/usr/bin/uglifyjs" property="uglifyjs.present"/>
@@ -342,7 +345,7 @@
     <property name="workspace.changes.tr" value=""/>
     <jar destfile="${build.dir}/i2psnark-standalone.jar">
       <fileset dir="${build.dir}/obj" includes="**/standalone/*.class"/>
-      <zipfileset src="build/i2psnark.jar"/>
+      <zipfileset src="${build.dir}/i2psnark.jar"/>
       <zipfileset src="${core.java.build.dir}/i2p.jar"/>
       <zipfileset src="../../jetty/jettylib/javax.servlet.jar"/>
       <zipfileset src="../../jetty/jettylib/jetty-continuation.jar"/>
@@ -434,7 +437,7 @@
         <include name="**/refreshTorrents.js"/>
       </replace>
     </parallel>
-    <zip destfile="../i2psnark.war" update="true" duplicate="preserve">
+    <zip destfile="${standalone.war}" update="true" duplicate="preserve">
       <fileset dir="${build.dir}/standalone-resources"/>
     </zip>
     <echo message="I2PSnark standalone .war file created"/>
@@ -453,7 +456,7 @@
         <copy file="../launch-i2psnark.bat" todir="${standalone.dir}/" quiet="true"/>
         <copy file="../standalone-context.xml" tofile="${standalone.dir}/contexts/context.xml" quiet="true"/>
         <copy file="../standalone-index.html" tofile="${standalone.dir}/docroot/index.html" quiet="true"/>
-        <copy file="../i2psnark.war" tofile="${standalone.dir}/webapps/i2psnark.war" quiet="true"/>
+        <copy file="${standalone.war}" tofile="${standalone.dir}/webapps/i2psnark.war" quiet="true"/>
         <copy file="../jetty-i2psnark.xml" tofile="${standalone.dir}/jetty-i2psnark.xml" quiet="true"/>
         <copy file="../i2psnark-appctx.config" tofile="${standalone.dir}/i2psnark-appctx.config" quiet="true"/>
         <copy file="${build.dir}/i2psnark-standalone.jar" tofile="${standalone.dir}/i2psnark.jar" quiet="true"/>
@@ -479,7 +482,7 @@
         <copy file="../launch-i2psnark.bat" todir="${standalone.dir}/" quiet="true"/>
         <copy file="../standalone-context.xml" tofile="${standalone.dir}/contexts/context.xml" quiet="true"/>
         <copy file="../standalone-index.html" tofile="${standalone.dir}/docroot/index.html" quiet="true"/>
-        <copy file="../i2psnark.war" tofile="${standalone.dir}/webapps/i2psnark.war" quiet="true"/>
+        <copy file="${standalone.war}" tofile="${standalone.dir}/webapps/i2psnark.war" quiet="true"/>
         <copy file="../jetty-i2psnark.xml" tofile="${standalone.dir}/jetty-i2psnark.xml" quiet="true"/>
         <copy file="../i2psnark-appctx.config" tofile="${standalone.dir}/i2psnark-appctx.config" quiet="true"/>
         <copy file="${build.dir}/i2psnark-standalone.jar" tofile="${standalone.dir}/i2psnark.jar" quiet="true"/>
@@ -493,7 +496,7 @@
   <target name="clean">
     <parallel>
       <delete dir="${build.dir}"/>
-      <delete file="../i2psnark.war"/>
+      <delete file="${standalone.war}"/>
       <delete file="${standalone.zip}"/>
       <delete file="${standalone.7z}"/>
       <delete dir="${standalone.dir}"/>
