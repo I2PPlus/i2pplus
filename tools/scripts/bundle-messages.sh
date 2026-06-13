@@ -320,10 +320,11 @@ if [ "$NOCOVERAGE" = "0" ]; then
         PCT=0
         [ "$TOTAL" -gt 0 ] && PCT=$((TRANS * 100 / TOTAL))
 
+        ENTRY=$(printf "%-8s" "$LG $PCT%")
         if [ -z "$LINE" ]; then
-            LINE="$LG $PCT%"
+            LINE="$ENTRY"
         else
-            LINE="$LINE	$LG $PCT%"
+            LINE="$LINE $ENTRY"
         fi
         N=$((N + 1))
         if [ $((N % 6)) -eq 0 ]; then
