@@ -280,7 +280,18 @@ fi
 # =========================================================================
 if [ "$NOCOVERAGE" = "0" ]; then
     MODULE=$(pwd | sed 's,.*/\([^/]*/[^/]*\)$,\1,')
-    echo "=== Translation coverage ($MODULE) ==="
+    MASTER_COUNT=0
+    for i in $PO_GLOB; do
+        LG=$(basename "$i" .po)
+        LG="${LG#messages_}"
+        if [ "$LG" = "en" ]; then
+            MASTER_COUNT=$(grep -c '^msgid ' "$i" 2>/dev/null)
+            MASTER_COUNT=${MASTER_COUNT:-0}
+            [ "$MASTER_COUNT" -gt 0 ] && MASTER_COUNT=$((MASTER_COUNT - 1))
+            break
+        fi
+    done
+    echo "* Translation coverage for: $MODULE ($MASTER_COUNT strings)"
 
     TOTAL_ALL=0
     TRANS_ALL=0
@@ -309,17 +320,21 @@ if [ "$NOCOVERAGE" = "0" ]; then
         PCT=0
         [ "$TOTAL" -gt 0 ] && PCT=$((TRANS * 100 / TOTAL))
 
-        LINE="$LINE	$LG $PCT%"
+        if [ -z "$LINE" ]; then
+            LINE="$LG $PCT%"
+        else
+            LINE="$LINE	$LG $PCT%"
+        fi
         N=$((N + 1))
         if [ $((N % 6)) -eq 0 ]; then
-            echo " $LINE"
+            echo "*   $LINE"
             LINE=""
         fi
     done
-    [ -n "$LINE" ] && echo " $LINE"
+    [ -n "$LINE" ] && echo "*   $LINE"
     if [ "$TOTAL_ALL" -gt 0 ]; then
         PCT_ALL=$((TRANS_ALL * 100 / TOTAL_ALL))
-        printf "  Total: %d/%d (%d%%)\n" "$TRANS_ALL" "$TOTAL_ALL" "$PCT_ALL"
+        printf "*   Total: %d / %d strings (%d%%)\n" "$TRANS_ALL" "$TOTAL_ALL" "$PCT_ALL"
     fi
 fi
 

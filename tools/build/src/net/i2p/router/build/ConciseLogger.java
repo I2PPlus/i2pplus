@@ -16,6 +16,9 @@ public class ConciseLogger extends DefaultLogger {
 
     private boolean targetHeaderPending;
     private BuildEvent lastTargetEvent;
+    private int deprecationPhase; // 0=none, 1=source line next, 2=caret line next
+    private String deprecationSource;
+    private boolean pendingWarningLine;
 
     public ConciseLogger() {
         this.color = System.console() != null;
@@ -104,6 +107,13 @@ public class ConciseLogger extends DefaultLogger {
                 stream.flush();
                 return;
             }
+            if ("exec".equals(taskName) && (msg.startsWith("*") || msg.matches("^\\S+\\.\\w+:\\s+[0-9a-f]{40,}$"))) {
+                PrintStream stream = out;
+                String outMsg = msg.startsWith("*") ? msg : "* " + msg;
+                stream.println(c(GREEN, "      " + (emacsMode ? outMsg : outMsg.trim())));
+                stream.flush();
+                return;
+            }
             if (event.getPriority() == Project.MSG_ERR) {
                 PrintStream stream = err;
                 String prefix = taskName != null ? taskPrefix(taskName) : "";
@@ -121,12 +131,47 @@ public class ConciseLogger extends DefaultLogger {
                     } else if (msg.startsWith("warning: ")) {
                         msg = "WARNING: " + msg.substring("warning: ".length());
                     }
+                    if (msg.contains("[deprecation]")) {
+                        deprecationSource = msg;
+                        deprecationPhase = 1;
+                        stream.flush();
+                        return;
+                    }
                 }
                 stream.println(c(DARK_RED, prefix + (emacsMode ? msg : msg.trim())));
                 stream.flush();
                 return;
             }
-            if ("javac".equals(taskName) && event.getPriority() == Project.MSG_WARN) {
+
+        }
+        if ("javac".equals(taskName) && deprecationPhase > 0 && msg != null) {
+            if (deprecationPhase == 1) {
+                String trimmed = msg.trim().replaceAll(" ?\\{?$", "");
+                String condensed = deprecationSource.replace(" has been deprecated", " -> " + trimmed);
+                PrintStream stream = out;
+                stream.println(c(DARK_RED, "      * " + (emacsMode ? condensed : condensed.trim())));
+                stream.flush();
+                deprecationPhase = 2;
+                return;
+            }
+            deprecationPhase = 0;
+            deprecationSource = null;
+            return;
+        }
+        if (msg != null && msg.contains("WARNING")) {
+            PrintStream stream = out;
+            String cleaned = msg.trim().replaceFirst("^[\\*\\s]+", "");
+            stream.println(c(DARK_RED, "      * " + (emacsMode ? cleaned : cleaned)));
+            stream.flush();
+            pendingWarningLine = true;
+            return;
+        }
+        if (pendingWarningLine) {
+            pendingWarningLine = false;
+            if (msg != null) {
+                PrintStream stream = out;
+                stream.println(c(DARK_RED, "      * " + (emacsMode ? msg : msg.trim())));
+                stream.flush();
                 return;
             }
         }
