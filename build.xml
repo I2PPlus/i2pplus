@@ -53,8 +53,6 @@
   <target name="all">
     <echo message="Ant: ${ant.version}"/>
     <echo message="JDK: ${java.vendor} ${java.version} (${java.runtime.name} ${java.runtime.version})"/>
-    <echo message="&#8199;"/>
-    <echo message="Useful targets:"/>
     <echo message=""/>
     <echo message=" === Build Components ==="/>
     <echo message="  build                                        Build all .jar and .war components"/>
@@ -209,7 +207,7 @@
     <echo message="  test                                         Run JUnit tests (Core, MiniStreaming, Streaming) via tools/scripts/run-tests.sh"/>
     <echo message="  testJbigi                                    Benchmark jbigi: native vs pure Java modPow/modPowCT/modInverse"/>
     <echo message="  testscripts                                  Run various scripts to check certificate validity, file integrity etc"/>
-
+    <echo message=""/>
     <!-- <echo message=" translationReport                            Generate in-console translation status report"/> -->
     <!-- <echo message="  debianrepo                                  Build a Debian repository (reprepro required)"/> -->
     <!-- <echo message="  syndie                                      Generate a standalone syndie install"/> -->
@@ -228,6 +226,7 @@
     <echo message="sudo apt install geoip-database famfamfam-flag-png"/>
     <echo message="&#8199;"/>
     <echo message="Once the dependencies are installed, run &apos;ant debian&apos; to patch the source and build packages."/>
+    <echo message=""/>
   </target>
 
   <target name="buildRequirements">
@@ -242,6 +241,7 @@
     <echo message=" * To build pack200 updates, Java 13 or earlier is required; on Linux, the GNU parallel package is also required"/>
     <echo message=" * On a Linux system with multiple Java installations, you can configure ant to use a specific version by setting"/>
     <echo message="   an alias in your ~/.bashrc file, e.g. alias ant8=&quot;JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64 ant&quot;"/>
+    <echo message=""/>
   </target>
 
   <property name="gpg" value="gpg"/>
