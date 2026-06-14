@@ -52,15 +52,15 @@ The script checks the latest PMD release from GitHub and the latest jPinpoint re
 
 ## Files
 
-| File                   | Purpose                                       |
-| ---------------------- | --------------------------------------------- |
-| `bin/`                 | PMD binary (auto-downloaded)                  |
-| `lib/`                 | Stripped PMD jars (Java + JS only)            |
-| `version.txt`          | Installed PMD version                         |
-| `jpinpoint-version.txt`| Installed jPinpoint rules version             |
-| `ruleset-java.xml`     | Java ruleset (security + error-prone + jpinpoint) |
-| `ruleset-js.xml`       | JavaScript ruleset                            |
-| `ruleset-java-jpinpoint.xml` | jPinpoint performance/quality rules           |
-| `pmd-to-html.py`       | XML → HTML converter                          |
-| `report.css`           | Dark theme stylesheet                         |
-| `download-pmd.sh`      | Download/update PMD + jPinpoint script        |
+| File                         | Purpose                                           |
+| ---------------------------- | ------------------------------------------------- |
+| `bin/`                       | PMD binary (auto-downloaded)                      |
+| `lib/`                       | Stripped PMD jars (Java + JS only)                |
+| `version.txt`                | Installed PMD version                             |
+| `jpinpoint-version.txt`      | Installed jPinpoint rules version                 |
+| `ruleset-java.xml`           | Java ruleset (security + error-prone + jpinpoint) |
+| `ruleset-js.xml`             | JavaScript ruleset                                |
+| `ruleset-java-jpinpoint.xml` | jPinpoint performance/quality rules               |
+| `pmd-to-html.py`             | XML → HTML converter                              |
+| `report.css`                 | Dark theme stylesheet                             |
+| `download-pmd.sh`            | Download/update PMD + jPinpoint script            |

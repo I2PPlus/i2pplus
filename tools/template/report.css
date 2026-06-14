@@ -465,6 +465,7 @@ tr[data-detail] {
 
 .snippet .offense .codeline {
   font-weight: 700;
+  margin-left: -9px;
 }
 
 /* ---- Collapsible Sections ---- */

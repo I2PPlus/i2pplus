@@ -4,10 +4,10 @@ Validation and testing scripts for I2P+ builds.
 
 ## Unit tests
 
-| Command                     | Description                                                    |
-| --------------------------- | -------------------------------------------------------------- |
-| `ant test`                  | Run all unit tests (Core, MiniStreaming, Streaming)            |
-| `ant testJbigi`             | Benchmark native vs pure Java BigInteger performance           |
+| Command                           | Description                                                    |
+| --------------------------------- | -------------------------------------------------------------- |
+| `ant test`                        | Run all unit tests (Core, MiniStreaming, Streaming)            |
+| `ant testJbigi`                   | Benchmark native vs pure Java BigInteger performance           |
 | `tools/scripts/run-tests.sh`      | Wrapper for `ant test` — handles dep downloads and build order |
 | `tools/scripts/run-tests.sh core` | Run core tests only                                            |
 

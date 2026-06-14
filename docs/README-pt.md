@@ -42,7 +42,7 @@ Para obter o branch de desenvolvimento do controle de código fonte: https://git
 ### Pré-requisitos
 
 - Java SDK (preferencialmente Oracle/Sun ou OpenJDK) 1.8.0 ou superior
-  - Sistemas operacionais não-linux e JVMs: Veja 
+  - Sistemas operacionais não-linux e JVMs: Veja
   - Certos subsistemas para embarcado (core, router, mstreaming, streaming, i2ptunnel)
 - Apache Ant 1.9.8 ou superior
 - As ferramentas xgettext, msgfmt e msgmerge instaladas do pacote GNU gettext
