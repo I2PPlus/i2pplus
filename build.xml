@@ -988,8 +988,22 @@
         <attribute name="Base-Revision" value="${workspace.version}"/>
       </manifest>
     </jar>
-    <!-- now the standalone launcher exe -->
-    <launch4j configFile="./installer/i2pstandalone.xml"/>
+    <!-- Generate launch4j config with paths matching ${build.root} -->
+    <echo file="${build.root}build/launchi2p.xml"><![CDATA[<launch4jConfig>
+  <headerType>0</headerType>
+  <jar>]]>${build.root}build/launchi2p.jar<![CDATA[</jar>
+  <outfile>]]>${build.root}build/i2p.exe<![CDATA[</outfile>
+  <errTitle>I2P+</errTitle>
+  <chdir>.</chdir>
+  <customProcName>false</customProcName>
+  <icon>]]>${basedir}/installer/resources/platform-specific/windows/start.ico<![CDATA[</icon>
+  <jre>
+    <minVersion>1.8.0</minVersion>
+    <maxHeapSize>512</maxHeapSize>
+    <args>-Djava.library.path=.;lib -DloggerFilenameOverride=logs/log-router-@.txt -Dorg.mortbay.http.Version.paranoid=true -Dorg.mortbay.util.FileResource.checkAliases=false</args>
+  </jre>
+</launch4jConfig>]]></echo>
+    <launch4j configFile="${build.root}build/launchi2p.xml"/>
     <!-- thazzit -->
   </target>
 
