@@ -25,7 +25,7 @@ Then open http://127.0.0.1:7657 in your browser. The web console binds to `0.0.0
 ## Running a container
 
 ### Memory usage
-By default the image limits the memory available to the Java heap to 512MB. You can override this at runtime with the `-e JVM_XMX=1024m` flag, or by modifying the `JVM_XMX` environment variable in the `docker/rootfs/startapp.sh` file before building.
+By default the image limits the memory available to the Java heap to 1024MB. You can override this at runtime with the `-e JVM_XMX=2048m` flag, or by modifying the `JVM_XMX` environment variable in the `docker/rootfs/startapp.sh` file before building.
 
 ### Security
 The container runs as a non-root user `i2p` (UID 1000) for security. If you need to exec into the container for debugging, note that you are running as user `i2p`.
@@ -62,6 +62,8 @@ There are several ports which are exposed by the image. You can choose which one
 
 ### Networking
 At the minimum, you'll want the Router Console (7657) and the HTTP Proxy (4444) available on localhost or your LAN network. Most services bind to `127.0.0.1` and will only be available inside the container. The web console binds to `0.0.0.0` so it's accessible from your Docker host by default — both the non-SSL (7657) and SSL (7667) ports are bound. Services should not be exposed to the public internet. They can be disabled in the I2P+ web console if not required.
+
+> **Security note:** Binding the web console to `0.0.0.0` makes it accessible on all network interfaces. If your Docker host is exposed to the internet, restrict access by setting `IP_ADDR` to your LAN IP (e.g., `192.168.1.10`) or use Docker's `-p 127.0.0.1:7657:7657` to limit exposure to localhost only. Without these precautions, the console may be reachable from the public internet if firewall rules permit.
 
 To receive inbound connections from peers, you must expose the external I2NP port (TCP+UDP). Without it, the router will show as firewalled and rely on hole punching, which is less reliable. See [External Network Port](#external-network-port) below for how to set a fixed port for port forwarding.
 
@@ -107,7 +109,7 @@ docker run -d -v /path/to/i2p-data:/i2p/.i2p \
            --name i2pplus i2pplus:latest
 
 # Override JVM heap size
-docker run -d -e JVM_XMX=1024m i2pplus:latest
+docker run -d -e JVM_XMX=2048m i2pplus:latest
 
 # Override JAVA options
 docker run -d -e JAVA17OPTS="-XX:+UseG1GC" i2pplus:latest
