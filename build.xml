@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project basedir="." default="all" name="i2p" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
-    <property name="build.dir" value="build"/>
+    <property name="build.dir" value="${build.root}build"/>
     <property name="build.root" value="${java.io.tmpdir}/build-i2p/"/>
     <property name="pkg.temp.dir" value="${build.root}pkg-temp"/>
     <property name="apps.addressbook.dist" value="${build.root}apps/addressbook/dist"/>
@@ -176,7 +176,7 @@
     <echo message=" === Documentation ==="/>
     <echo message="  javadoc                                      Create javadocs for project &#10140; ./dist/javadoc"/>
     <echo message="  javadoc-nostylesheet                         Create javadocs for project without custom stylesheet &#10140; ./dist/javadoc"/>
-    <echo message="  javadoc-test                                 Javadocs for unit test classes &#10140; ./build/javadoc-test"/>
+    <echo message="  javadoc-test                                 Javadocs for unit test classes &#10140; ${build.dir}/javadoc-test"/>
     <echo message="  javadoc-zip                                  Create javadocs zip for project &#10140; ./dist/javadoc.zip"/>
     <echo message="  javadoc-zip-nostylesheet                     Create javadocs zip without custom stylesheet for project &#10140; ./dist/javadoc.zip"/>
     <echo message="  jsdoc                                        Create jsdoc with docdash template (requires npm) &#10140; ./dist/jsdoc"/>
@@ -197,8 +197,9 @@
     <echo message="  pmd-js                                       Run PMD static analysis on JavaScript sources &#10140; dist/pmd-js.html + dist/pmd-js-local.html"/>
     <echo message="  pmd-fix-errors                               Run fix-java-issues.py (dry run) &#10140; all fix types"/>
     <echo message="  pmd-fix-errors-apply                         Apply fix-java-issues.py --fix all fix types"/>
+	<echo message="  sonarqube                                    Full SonarQube analysis (auto-downloads server + scanner, runs scan, generates reports) &#10140; dist/sonarqube.html + dist/sonarqube-local.html"/>
+	<echo message="  sonarqube-report                             Generate SonarQube reports from cached data &#10140; dist/sonarqube.html + dist/sonarqube-local.html"/>
     <echo message="  spotbugs                                     Run SpotBugs static analysis on Java sources &#10140; dist/spotbugs.html + dist/spotbugs-local.html"/>
-    <echo message="  sonar                                        Run SonarQube analysis (requires local server at :9000)"/>
     <echo message="  report-all-java                              Run all Java analysis tools and combine into single report &#10140; dist/report-all-java.html + dist/report-all-java-local.html"/>
     <echo message="  report-all-java-quick                        Compile combined report from existing results (no re-analysis) &#10140; dist/report-all-java.html + dist/report-all-java-local.html"/>
     <echo message=""/>
@@ -978,7 +979,7 @@
   <!-- this makes an empty build/launchi2p.jar and the build/i2p.exe for the no-wrapper windows startup, if possible -->
   <target name="buildexe" depends="buildProperties, launch4j" unless="noExe">
     <echo message="See the file &apos;build.properties&apos; if this step fails."/>
-    <jar destfile="./build/launchi2p.jar">
+    <jar destfile="${build.root}build/launchi2p.jar">
       <manifest>
         <attribute name="Main-Class" value="net.i2p.router.RouterLaunch"/>
         <attribute name="Class-Path" value="lib/commons-el.jar lib/desktopgui.jar lib/i2p.jar lib/i2psnark.jar lib/i2ptunnel.jar lib/jasper-runtime.jar lib/javax.servlet.jar lib/jbigi.jar lib/jetty-continuation.jar lib/jetty-deploy.jar lib/jetty-http.jar lib/jetty-i2p.jar lib/jetty-io.jar lib/jetty-rewrite-handler.jar lib/jetty-security.jar lib/jetty-servlet.jar lib/jetty-servlets.jar lib/jetty-start.jar lib/jetty-util.jar lib/jetty-webapp.jar lib/jetty-xml.jar lib/jrobin.jar lib/jstl.jar lib/mstreaming.jar lib/org.mortbay.jetty.jar lib/pack200.jar lib/routerconsole.jar lib/router.jar lib/sam.jar lib/standard.jar lib/streaming.jar lib/systray.jar lib/wrapper.jar"/>
@@ -1015,7 +1016,6 @@
   <target name="jbigi" depends="buildProperties">
     <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
-    <mkdir dir="./build"/>
     <jar destfile="${build.root}build/jbigi.jar" whenmanifestonly="fail">
       <fileset dir="installer/lib/jbigi" includes="*.so *.dll *.jnilib"/>
       <manifest>
@@ -1300,14 +1300,14 @@
     <ant dir="apps/jetty" target="ensureJettylib">
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       </ant>
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/javadoc"/>
-    <copy quiet="true" verbose="false" file="./installer/resources/eepsite/docroot/favicon.ico" tofile="./build/javadoc/favicon.ico"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/javadoc"/>
+    <copy quiet="true" verbose="false" file="./installer/resources/eepsite/docroot/favicon.ico" tofile="${build.dir}/javadoc/favicon.ico"/>
     <!-- Set if unset -->
     <property name="javac.version" value="1.8"/>
     <javadoc access="package"
       source="${javac.version}"
-      destdir="./build/javadoc"
+      destdir="${build.dir}/javadoc"
       use="true"
       failonerror="false"
       charset="utf-8"
@@ -1395,12 +1395,12 @@
       <link offline="true" href="${wrapperdocs.url}" packagelistLoc="installer/resources/package-lists/wrapper/"/>
     </javadoc>
     <!-- create an empty dejavu.css file to keep the browser happy -->
-    <mkdir dir="./build/javadoc/resources/fonts"/>
+    <mkdir dir="${build.dir}/javadoc/resources/fonts"/>
     <echo message="/* intentionally empty */" file="${build.root}build/javadoc/resources/fonts/dejavu.css"/>
     <!-- copy our fixed JavaScript file to replace the default script.js -->
-    <copy quiet="true" verbose="false" file="tools/javadoc/javadoc-jav8-fix.js" tofile="./build/javadoc/script.js"/>
+    <copy quiet="true" verbose="false" file="tools/javadoc/javadoc-jav8-fix.js" tofile="${build.dir}/javadoc/script.js"/>
     <move todir="./dist/javadoc" quiet="true">
-      <fileset dir="./build/javadoc">
+      <fileset dir="${build.dir}/javadoc">
         <include name="**/*"/>
       </fileset>
     </move>
@@ -1413,7 +1413,7 @@
         </exec>
       </then>
     </if>
-    <delete dir="./build/javadoc" quiet="true"/>
+    <delete dir="${build.dir}/javadoc" quiet="true"/>
     <echo message="javadoc creation complete, saved to dist/javadoc (${ant.project.name} ${release.number}-${i2p.build.number}${build.extra})"/>
   </target>
 
@@ -1422,14 +1422,14 @@
     <ant dir="apps/jetty" target="ensureJettylib">
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       </ant>
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/javadoc"/>
-    <copy quiet="true" verbose="false" file="./installer/resources/eepsite/docroot/favicon.ico" tofile="./build/javadoc/favicon.ico"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/javadoc"/>
+    <copy quiet="true" verbose="false" file="./installer/resources/eepsite/docroot/favicon.ico" tofile="${build.dir}/javadoc/favicon.ico"/>
     <!-- Set if unset -->
     <property name="javac.version" value="1.8"/>
     <javadoc access="package"
       source="${javac.version}"
-      destdir="./build/javadoc"
+      destdir="${build.dir}/javadoc"
       use="true"
       failonerror="false"
       charset="utf-8"
@@ -1517,10 +1517,10 @@
       <link offline="true" href="${wrapperdocs.url}" packagelistLoc="installer/resources/package-lists/wrapper/"/>
     </javadoc>
     <!-- Create an empty dejavu.css file to keep the browser happy -->
-    <mkdir dir="./build/javadoc/resources/fonts"/>
+    <mkdir dir="${build.dir}/javadoc/resources/fonts"/>
     <echo message="/* intentionally empty */" file="${build.root}build/javadoc/resources/fonts/dejavu.css"/>
     <move todir="./dist/javadoc" quiet="true">
-      <fileset dir="./build/javadoc">
+      <fileset dir="${build.dir}/javadoc">
         <include name="**/*"/>
       </fileset>
     </move>
@@ -1533,7 +1533,7 @@
         </exec>
       </then>
     </if>
-    <delete dir="./build/javadoc" quiet="true"/>
+    <delete dir="${build.dir}/javadoc" quiet="true"/>
     <echo message="javadoc creation complete -> Saved to dist/javadoc (${ant.project.name} ${release.number}-${i2p.build.number}${build.extra})"/>
   </target>
 
@@ -1546,13 +1546,13 @@
   </target>
 
   <target name="javadoc-test" depends="buildRouter, javadoc">
-    <mkdir dir="./build"/>
-    <mkdir dir="./build/javadoc-test"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/javadoc-test"/>
 
     <!-- Set junit home to the old default unless overridden elsewhere -->
     <property name="junit.home" value="${ant.home}/lib/"/>
     <javadoc access="package"
-      destdir="./build/javadoc-test"
+      destdir="${build.dir}/javadoc-test"
       packagenames="*"
       use="true"
       splitindex="true"
@@ -4136,9 +4136,18 @@
     <echo message="CodeQL JSP report written to dist/codeql-jsp.html (${cq.jsp.count} issues)"/>
   </target>
 
-  <target name="sonar">
+  <target name="sonarqube">
+    <echo message="Running SonarQube analysis (full scan)..."/>
     <exec executable="bash" dir="${basedir}" failonerror="false">
       <arg value="tools/sonarqube/run-sonar.sh"/>
+    </exec>
+  </target>
+
+  <target name="sonarqube-report">
+    <echo message="Generating SonarQube HTML reports..."/>
+    <exec executable="bash" dir="${basedir}" failonerror="false">
+      <arg value="tools/sonarqube/run-sonar.sh"/>
+      <arg value="--skip-scan"/>
     </exec>
   </target>
 
