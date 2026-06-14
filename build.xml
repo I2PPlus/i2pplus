@@ -200,6 +200,7 @@
     <echo message="  pmd-fix-errors                               Run fix-java-issues.py (dry run) &#10140; all fix types"/>
     <echo message="  pmd-fix-errors-apply                         Apply fix-java-issues.py --fix all fix types"/>
     <echo message="  spotbugs                                     Run SpotBugs static analysis on Java sources &#10140; dist/spotbugs.html + dist/spotbugs-local.html"/>
+    <echo message="  sonar                                        Run SonarQube analysis (requires local server at :9000)"/>
     <echo message="  report-all-java                              Run all Java analysis tools and combine into single report &#10140; dist/report-all-java.html + dist/report-all-java-local.html"/>
     <echo message="  report-all-java-quick                        Compile combined report from existing results (no re-analysis) &#10140; dist/report-all-java.html + dist/report-all-java-local.html"/>
     <echo message=""/>
@@ -664,7 +665,7 @@
       </ant>
     <copy quiet="true" verbose="false" todir="${build.root}build/">
       <fileset dir="apps/jetty/jettylib" excludes="ant.jar,jspc.jar"/>
-      <fileset dir="${build.root}apps/jetty/build/" includes="jetty-i2p.jar,jspc.jar"/>
+      <fileset dir="${build.root}apps/jetty/build/" includes="jetty-i2p.jar,jspc.jar,jetty-util.jar"/>
     </copy>
   </target>
 
@@ -4133,6 +4134,12 @@
     </exec>
     <echo message="${cq.jsp.count}" file="dist/codeql-jsp.txt"/>
     <echo message="CodeQL JSP report written to dist/codeql-jsp.html (${cq.jsp.count} issues)"/>
+  </target>
+
+  <target name="sonar">
+    <exec executable="bash" dir="${basedir}" failonerror="false">
+      <arg value="tools/sonarqube/run-sonar.sh"/>
+    </exec>
   </target>
 
   <target name="report-all-java" depends="jar, build2, buildUtilityJar, pmd-setup, checkstyle-setup, checkstyle-download">

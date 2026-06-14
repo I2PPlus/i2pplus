@@ -4,11 +4,11 @@ set -u
 
 # Default JVM heap size
 if [ -z "${JVM_XMX:-}" ]; then
-    echo "[startapp] Using the default 512MB JVM heap limit for I2P+..."
+    echo "[startapp] Using the default 1024MB JVM heap limit for I2P+..."
     echo "[startapp] To configure a different maximum value, change the JVM_XMX"
-    echo "[startapp] variable value in startapp.sh (for example JVM_XMX=1024m)"
+    echo "[startapp] variable value in startapp.sh (for example JVM_XMX=2048m)"
     echo ""
-    JVM_XMX=512m
+    JVM_XMX=1024m
 fi
 
 # Manually configure an ip address to use for I2P+ service access
