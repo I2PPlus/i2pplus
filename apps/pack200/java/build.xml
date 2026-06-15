@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="pack200">
   <available file="git" property="git.available"/>
-  <property name="build.dir" value="build"/>
+  <property name="build.dir" value="${java.io.tmpdir}/build-i2p/apps/pack200/java/build"/>
   <property name="dist.dir" value="dist"/>
   <property name="src" value="src"/>
   <property name="build" value="${build.dir}"/>

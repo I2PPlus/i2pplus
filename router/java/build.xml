@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="i2p_router">
   <available file="git" property="git.available"/>
-  <property name="build.dir" value="build"/>
+  <property name="build.root" value="${java.io.tmpdir}/build-i2p/"/>
+  <property name="build.dir" value="${build.root}router/java/build"/>
 
   <property name="apps.i2ptunnel.java.build.dir" value="../../apps/i2ptunnel/java/build"/>
   <property name="core.java.build.dir" value="../../core/java/build"/>

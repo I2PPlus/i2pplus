@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="susidns" default="all" basedir=".">
   <available file="git" property="git.available"/>
-  <property name="build.dir" value="/tmp/build-i2p/apps/susidns/src/build"/>
+  <property name="build.dir" value="${java.io.tmpdir}/build-i2p/apps/susidns/src/build"/>
 
   <property name="...build.dir" value="../../../build"/>
   <property name="addressbook.build.dir" value="../../addressbook/build"/>

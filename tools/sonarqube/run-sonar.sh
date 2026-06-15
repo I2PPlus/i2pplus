@@ -278,11 +278,14 @@ if [ "$SKIP_SCAN" = false ]; then
     echo "Config: ${PROPERTIES_FILE}"
     echo ""
 
+    BUILD_ROOT="${TMPDIR:-/tmp}/build-i2p"
     SCAN_OUTPUT=$(LD_PRELOAD="" SONAR_SCANNER_OPTS="-Xmx8g" \
         "$SCANNER_BIN" \
         ${SONAR_TOKEN_ARG} \
         -Dsonar.projectBaseDir="$PROJECT_DIR" \
         -Dproject.settings="$PROPERTIES_FILE" \
+        -Dsonar.java.binaries="${BUILD_ROOT}/build" \
+        -Dsonar.java.libraries="${BUILD_ROOT}/build/*.jar" \
         -Dsonar.working.directory="/tmp/opencode/sonar-scanner-work" \
         -Dsonar.scanner.socketTimeout=1800 2>&1)
     SCAN_EXIT=$?

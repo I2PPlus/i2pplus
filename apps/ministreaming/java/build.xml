@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="ministreaming">
   <available file="git" property="git.available"/>
-  <property name="build.dir" value="build"/>
+  <property name="build.dir" value="${java.io.tmpdir}/build-i2p/apps/ministreaming/java/build"/>
 
   <property name="...build.dir" value="../../../build"/>
   <property name="core.java.build.dir" value="../../../core/java/build"/>

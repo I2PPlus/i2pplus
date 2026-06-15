@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="routerconsole">
   <available file="git" property="git.available"/>
-  <property name="build.dir" value="/tmp/build-i2p/apps/routerconsole/java/build"/>
+  <property name="build.dir" value="${java.io.tmpdir}/build-i2p/apps/routerconsole/java/build"/>
   <property name="jsp.build.dir" value="../jsp"/>
 
   <property name="...build.dir" value="../../../build"/>

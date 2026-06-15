@@ -100,17 +100,36 @@ public class ConciseLogger extends DefaultLogger {
         String taskName = event.getTask() != null ? event.getTask().getTaskName() : null;
         String msg = event.getMessage();
         if (msg != null && event.getPriority() <= msgOutputLevel) {
-            if ("echo".equals(taskName)) {
+                if ("echo".equals(taskName)) {
                 PrintStream stream = event.getPriority() == Project.MSG_ERR ? err : out;
-                String color = event.getPriority() == Project.MSG_ERR ? RED : GREEN;
-                stream.println(c(color, "      * " + (emacsMode ? msg : msg.trim())));
+                String trimmed = msg != null ? msg.trim() : "";
+                if (event.getPriority() == Project.MSG_ERR) {
+                    stream.println(c(RED, "      * " + (emacsMode ? msg : trimmed)));
+                } else if (trimmed.isEmpty() || trimmed.matches("[\\s\\u00A0\\u2007\\u202F]+")) {
+                    stream.println();
+                } else if (trimmed.startsWith("===") && trimmed.endsWith("===")) {
+                    stream.println(c(CYAN, "   " + (emacsMode ? msg : trimmed)));
+                } else {
+                    stream.println(c(GREEN, "      * " + (emacsMode ? msg : trimmed)));
+                }
                 stream.flush();
                 return;
             }
             if ("exec".equals(taskName) && (msg.startsWith("*") || msg.matches("^\\S+\\.\\w+:\\s+[0-9a-f]{40,}$"))) {
                 PrintStream stream = out;
-                String outMsg = msg.startsWith("*") ? msg : "* " + msg;
-                stream.println(c(GREEN, "      " + (emacsMode ? outMsg : outMsg.trim())));
+                String prefix = "      ";
+                String outMsg = msg;
+                if (msg.startsWith("*")) {
+                    if (msg.contains("Translation coverage")) {
+                        outMsg = msg;
+                    } else {
+                        outMsg = " " + msg.substring(1);
+                        prefix = "        ";
+                    }
+                } else {
+                    outMsg = "* " + msg;
+                }
+                stream.println(c(GREEN, prefix + (emacsMode ? outMsg : outMsg.trim())));
                 stream.flush();
                 return;
             }
@@ -134,6 +153,11 @@ public class ConciseLogger extends DefaultLogger {
                     if (msg.contains("[deprecation]")) {
                         deprecationSource = msg;
                         deprecationPhase = 1;
+                        stream.flush();
+                        return;
+                    }
+                    if (msg.contains("[options]")) {
+                        stream.println(c(DARK_RED, "      * " + (emacsMode ? msg : msg.trim())));
                         stream.flush();
                         return;
                     }
@@ -191,8 +215,8 @@ public class ConciseLogger extends DefaultLogger {
                         printMessage(c(RED, m), err, Project.MSG_ERR);
                     ex = ex.getCause();
                 }
-                return;
             }
+            return;
         }
         super.buildFinished(event);
     }

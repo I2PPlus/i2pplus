@@ -74,7 +74,7 @@
     <echo message="  buildJrobin                                  Build the JRobin (RRD4J) .jar component &#10140; ./build/jrobin.jar"/>
     <echo message="  buildMinistreaming                           Build MiniStreaming .jar component &#10140; ./build/mstreaming.jar"/>
     <echo message="  buildPack200                                 Build Pack200 .jar component &#10140; ./build/pack200.jar"/>
-    <echo message="  buildProperties                              Display build properties  and Ant / JDK versions for current build"/>
+    <echo message="  buildProperties                              Display build properties and Ant / JDK versions for current build"/>
     <echo message="  buildRequirements                            Information about requirements for building packages using ant"/>
     <echo message="  buildRouter                                  Build Router .jar component &#10140; ./build/router.jar"/>
     <echo message="  buildRouterConsole                           Build required .jar components for RouterConsole &#10140; ./build/"/>
@@ -1289,7 +1289,9 @@
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       <property name="router.java.build.dir" location="${build.root}router/java/build"/>
       </ant>
-      <ant dir="installer/resources/locale" target="poupdate"/>
+      <ant dir="installer/resources/locale" target="poupdate">
+      <property name="build.dir" location="${build.root}installer/resources/locale/build"/>
+      </ant>
       <ant dir="apps/ministreaming/java" target="poupdate">
       <property name="...build.dir" location="${build.root}build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
@@ -1304,9 +1306,11 @@
 
   <target name="prep-script-translation" unless="no.bundle">
     <!-- script translation added in 0.8.13, enabled in 0.9.5. -->
-    <ant dir="installer/resources/locale" target="bundleTranslations"/>
+    <ant dir="installer/resources/locale" target="bundleTranslations">
+      <property name="build.dir" location="${build.root}installer/resources/locale/build"/>
+    </ant>
     <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/locale/">
-      <fileset dir="installer/resources/locale/mo/"/>
+      <fileset dir="${build.root}installer/resources/locale/build/mo/"/>
     </copy>
   </target>
 
@@ -2825,11 +2829,11 @@
     <zip destfile="./dist/i2pupdate200.zip" level="9" basedir="${pkg.temp.dir}" excludes="README.md" whenempty="fail" comment="${release.number}"/>
     <exec executable="sh" osfamily="unix" failonerror="false">
       <arg value="-c"/>
-      <arg value="if [ -f /tmp/build-i2p/.pack200-before ]; then before=$(cat /tmp/build-i2p/.pack200-before); zipsize=$(wc -c &lt; dist/i2pupdate200.zip); saved=$((before - zipsize)); b_mb=$(printf &quot;%d.%02d&quot; $((before/1000000)) $(((before%1000000)/10000))); z_mb=$(printf &quot;%d.%02d&quot; $((zipsize/1000000)) $(((zipsize%1000000)/10000))); s_mb=$(printf &quot;%d.%02d&quot; $((saved/1000000)) $(((saved%1000000)/10000))); echo &quot;Pack200: jars (${b_mb}MB) -&gt; zip (${z_mb}MB) (saved ${s_mb}MB)&quot;; rm -f /tmp/build-i2p/.pack200-before; fi"/>
+      <arg value="if [ -f ${java.io.tmpdir}/build-i2p/.pack200-before ]; then before=$(cat ${java.io.tmpdir}/build-i2p/.pack200-before); zipsize=$(wc -c &lt; dist/i2pupdate200.zip); saved=$((before - zipsize)); b_mb=$(printf &quot;%d.%02d&quot; $((before/1000000)) $(((before%1000000)/10000))); z_mb=$(printf &quot;%d.%02d&quot; $((zipsize/1000000)) $(((zipsize%1000000)/10000))); s_mb=$(printf &quot;%d.%02d&quot; $((saved/1000000)) $(((saved%1000000)/10000))); echo &quot;Pack200: jars (${b_mb}MB) -&gt; zip (${z_mb}MB) (saved ${s_mb}MB)&quot;; rm -f ${java.io.tmpdir}/build-i2p/.pack200-before; fi"/>
     </exec>
     <exec executable="sh" osfamily="mac" failonerror="false">
       <arg value="-c"/>
-      <arg value="if [ -f /tmp/build-i2p/.pack200-before ]; then before=$(cat /tmp/build-i2p/.pack200-before); zipsize=$(wc -c &lt; dist/i2pupdate200.zip); saved=$((before - zipsize)); b_mb=$(printf &quot;%d.%02d&quot; $((before/1000000)) $(((before%1000000)/10000))); z_mb=$(printf &quot;%d.%02d&quot; $((zipsize/1000000)) $(((zipsize%1000000)/10000))); s_mb=$(printf &quot;%d.%02d&quot; $((saved/1000000)) $(((saved%1000000)/10000))); echo &quot;Pack200: jars (${b_mb}MB) -&gt; zip (${z_mb}MB) (saved ${s_mb}MB)&quot;; rm -f /tmp/build-i2p/.pack200-before; fi"/>
+      <arg value="if [ -f ${java.io.tmpdir}/build-i2p/.pack200-before ]; then before=$(cat ${java.io.tmpdir}/build-i2p/.pack200-before); zipsize=$(wc -c &lt; dist/i2pupdate200.zip); saved=$((before - zipsize)); b_mb=$(printf &quot;%d.%02d&quot; $((before/1000000)) $(((before%1000000)/10000))); z_mb=$(printf &quot;%d.%02d&quot; $((zipsize/1000000)) $(((zipsize%1000000)/10000))); s_mb=$(printf &quot;%d.%02d&quot; $((saved/1000000)) $(((saved%1000000)/10000))); echo &quot;Pack200: jars (${b_mb}MB) -&gt; zip (${z_mb}MB) (saved ${s_mb}MB)&quot;; rm -f ${java.io.tmpdir}/build-i2p/.pack200-before; fi"/>
     </exec>
     <antcall target="sha256sum">
       <param name="sha256.file" value="dist/i2pupdate200.zip"/>
@@ -2846,7 +2850,7 @@
                 done &amp;&amp;
                 b_mb=$(printf &quot;%d.%02d&quot; $((before/1000000)) $(((before%1000000)/10000))) &amp;&amp;
                 echo &quot;Pack200: Compressing $count files (${b_mb}MB)...&quot; &amp;&amp;
-                echo $before &gt; /tmp/build-i2p/.pack200-before &amp;&amp;
+                echo $before &gt; ${java.io.tmpdir}/build-i2p/.pack200-before &amp;&amp;
                 find ${pkg.temp.dir}/lib/*.jar ${pkg.temp.dir}/webapps/*war -type f | parallel '
                   mv {} {}.jar &amp;&amp; pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g {}.pack {}.jar &amp;&amp;
                   rm -f {}.jar' &amp;&amp;
@@ -2868,7 +2872,7 @@
                 done &amp;&amp;
                 b_mb=$(printf &quot;%d.%02d&quot; $((before/1000000)) $(((before%1000000)/10000))) &amp;&amp;
                 echo &quot;Pack200: Compressing $count files (${b_mb}MB)...&quot; &amp;&amp;
-                echo $before &gt; /tmp/build-i2p/.pack200-before &amp;&amp;
+                echo $before &gt; ${java.io.tmpdir}/build-i2p/.pack200-before &amp;&amp;
                 for i in ${pkg.temp.dir}/lib/*.jar ${pkg.temp.dir}/webapps/*war; do
                   mv $i $i.jar &amp;&amp; pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g $i.pack $i.jar &amp;&amp;
                   rm -f $i.jar &amp; done; wait &amp;&amp;

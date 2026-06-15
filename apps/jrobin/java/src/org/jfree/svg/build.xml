@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="jar" name="jfreesvg">
-  <property name="build.dir" value="build"/>
+  <property name="build.dir" value="${java.io.tmpdir}/build-i2p/apps/jrobin/java/src/org/jfree/svg/build"/>
 
     <property name="src" value="src"/>
     <property name="build" value="${build.dir}"/>

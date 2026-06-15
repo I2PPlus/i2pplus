@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="source">
-  <property name="build.dir" value="build"/>
+  <property name="build.dir" value="${java.io.tmpdir}/build-i2p/apps/i2pcontrol/build"/>
 
   <property name="core.java.build.dir" value="../../core/java/build"/>
 

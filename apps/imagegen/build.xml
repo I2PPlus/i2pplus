@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="identicon">
-  <property name="build.dir" value="build"/>
+  <property name="build.dir" value="${java.io.tmpdir}/build-i2p/apps/imagegen/build"/>
   <target name="all" depends="clean, build"/>
 
   <target name="build">

@@ -99,7 +99,7 @@ run_test() {
 
 get_build_props() {
   local dir="$1"
-  local build_root="/tmp/build-i2p"
+  local build_root="${TMPDIR:-/tmp}/build-i2p"
   local props="-Dbuild.dir=${build_root}/${dir}/build"
   case "$dir" in
     apps/ministreaming/java)

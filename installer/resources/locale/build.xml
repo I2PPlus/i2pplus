@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="i2prouter" default="bundleTranslations" basedir=".">
-  <property name="build.dir" value="build"/>
+  <property name="build.dir" value="${java.io.tmpdir}/build-i2p/installer/resources/locale/build"/>
 
   <target name="bundleTranslations">
-    <mkdir dir="mo"/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
       <arg value="../../../tools/scripts/bundle-messages.sh"/>
       <arg value="--dir"/>
@@ -62,6 +61,7 @@
 
   <target name="clean">
     <delete dir="mo"/>
+    <delete dir="build"/>
   </target>
 
   <target name="distclean" depends="clean"/>
