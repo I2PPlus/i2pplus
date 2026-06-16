@@ -228,13 +228,13 @@ msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostna
 msgstr "Tarkista URL-osoitteesi yrittääksesi korjata apuavaimen kelvolliseksi Base 32 -isäntänimeksi tai Base 64 -avaimeksi."
 
 msgid "Warning: Address Blacklisted"
-msgstr ""
+msgstr "Varoitus: Osoite on mustalla listalla"
 
 msgid "The requested destination is in your blacklist and access has been blocked."
-msgstr ""
+msgstr "Pyydetty kohde on mustalla listallasi ja pääsy on estetty."
 
 msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
-msgstr ""
+msgstr "Salliaksesi pääsyn tähän sivustoon, poista se mustalta listaltesi SusiDNS:n mustan listan hallintasivulta."
 
 msgid "Warning: Invalid Destination"
 msgstr "Varoitus: virheellinen kohde"

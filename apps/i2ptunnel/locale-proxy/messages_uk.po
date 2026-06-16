@@ -228,13 +228,13 @@ msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostna
 msgstr "Перевірте свою URL-адресу, щоб спробувати виправити допоміжний ключ на дійсне ім’я хосту Base 32 або ключ Base 64."
 
 msgid "Warning: Address Blacklisted"
-msgstr ""
+msgstr "Попередження: Адреса в чорному списку"
 
 msgid "The requested destination is in your blacklist and access has been blocked."
-msgstr ""
+msgstr "Запитане призначення є у вашому чорному списку, і доступ заблоковано."
 
 msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
-msgstr ""
+msgstr "Щоб надати доступ до цього сайту, видаліть його зі свого чорного списку на сторінці керування чорними списками SusiDNS."
 
 msgid "Warning: Invalid Destination"
 msgstr "Локальний адрес призначення"

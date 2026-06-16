@@ -228,13 +228,13 @@ msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostna
 msgstr "Kiểm tra URL của bạn để thử và sửa khóa trợ giúp thành tên máy chủ Base 32 hoặc khóa Base 64 hợp lệ."
 
 msgid "Warning: Address Blacklisted"
-msgstr ""
+msgstr "Cảnh báo: Địa chỉ bị liệt kê đen"
 
 msgid "The requested destination is in your blacklist and access has been blocked."
-msgstr ""
+msgstr "Đích đến đã yêu cầu nằm trong danh sách chặn của bạn và quyền truy cập đã bị chặn."
 
 msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
-msgstr ""
+msgstr "Để cho phép truy cập vào trang web này, hãy xóa nó khỏi danh sách chặn của bạn trên trang quản lý danh sách chặn của SusiDNS."
 
 msgid "Warning: Invalid Destination"
 msgstr "Điểm đến nội bộ"

@@ -228,13 +228,13 @@ msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostna
 msgstr "Zkontrolujte svou adresu URL a pokuste se opravit pomocný klíč tak, aby byl platným názvem hostitele Base 32 nebo klíčem Base 64."
 
 msgid "Warning: Address Blacklisted"
-msgstr ""
+msgstr "Upozornění: Adresa je na černé listině"
 
 msgid "The requested destination is in your blacklist and access has been blocked."
-msgstr ""
+msgstr "Požadovaná destinace je ve vaší černé listině a přístup byl zablokován."
 
 msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
-msgstr ""
+msgstr "Chcete-li povolit přístup k této stránce, odstraňte ji ze své černé listiny na stránce pro správu černých listin v SusiDNS."
 
 msgid "Warning: Invalid Destination"
 msgstr "Cíl tunelu"

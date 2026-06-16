@@ -228,13 +228,13 @@ msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostna
 msgstr "URL を確認して、有効な Base 32 ホスト名または Base 64 キーになるようにヘルパー キーを修正してください。"
 
 msgid "Warning: Address Blacklisted"
-msgstr ""
+msgstr "警告：住所ブラックリスト化"
 
 msgid "The requested destination is in your blacklist and access has been blocked."
-msgstr ""
+msgstr "要求された宛先はブラックリストにあり、アクセスがブロックされています。"
 
 msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
-msgstr ""
+msgstr "このサイトへのアクセスを許可するには、SusiDNSのブラックリスト管理ページからブラックリストから削除してください。"
 
 msgid "Warning: Invalid Destination"
 msgstr "警告: 無効な宛先"

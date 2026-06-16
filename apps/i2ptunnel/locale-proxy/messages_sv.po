@@ -228,13 +228,13 @@ msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostna
 msgstr "Kontrollera din URL för att försöka fixa hjälpar-nyckeln så att den är ett giltigt Base32 värdnamn eller Base64 nyckel."
 
 msgid "Warning: Address Blacklisted"
-msgstr ""
+msgstr "Varning: Adress svartlistad"
 
 msgid "The requested destination is in your blacklist and access has been blocked."
-msgstr ""
+msgstr "Den begärda destinationen finns på din svartlista och åtkomsten har blockerats."
 
 msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
-msgstr ""
+msgstr "För att tillåta åtkomst till denna webbplats, ta bort den från din svartlista på SusiDNS:s sida för hantering av svarta listor."
 
 msgid "Warning: Invalid Destination"
 msgstr "Varning: Ogiltigt Mål"

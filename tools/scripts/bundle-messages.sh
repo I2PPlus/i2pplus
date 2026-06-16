@@ -303,13 +303,13 @@ if [ "$NOCOVERAGE" = "0" ]; then
         [ "$LG" = "en" ] && continue
 
         stats=$(msgfmt --statistics "$i" 2>&1)
-        eval "$(echo "$stats" | sed 's/, */;/g' | awk -F'; ' '
+        eval "$(echo "$stats" | sed 's/, */; /g' | awk -F'; ' '
         {
             t = 0; f = 0; u = 0
             for (i = 1; i <= NF; i++) {
-                if ($i ~ /translated/) t = $i + 0
-                if ($i ~ /fuzzy/) f = $i + 0
-                if ($i ~ /untranslated/) u = $i + 0
+                if ($i ~ /^[0-9]+ translated /) t = $i + 0
+                if ($i ~ /^[0-9]+ fuzzy /) f = $i + 0
+                if ($i ~ /^[0-9]+ untranslated /) u = $i + 0
             }
             print "TRANS=" t "; FUZZY=" f "; UNTRANS=" u
         }')"

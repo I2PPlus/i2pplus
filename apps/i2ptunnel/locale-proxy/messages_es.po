@@ -40,7 +40,7 @@ msgid "If you have the Base 64 address, {0}add it to your addressbook{1}."
 msgstr "Si tienes la dirección Base 64, {0}agrégala a tu libreta de direcciones{1}.Si tiene la dirección Base 64, {0}añádala a su libreta de direcciones{1} (resolución distribuida de nombres)."
 
 msgid "Otherwise, find a Base 32 or address helper link, or use a jump service link below."
-msgstr ""
+msgstr "De lo contrario, busque un enlace de dirección Base 32 o de asistencia, o use un enlace de servicio de salto a continuación."
 "De lo contrario, busque un enlace de ayuda de dirección o Base 32, o utilice un enlace de servicio de salto a continuación.De lo contrario, busque un enlace de ayuda de dirección o Base 32, o utilice un enlace de servicio de salto a continuación.De otro modo, encuentre una dirección Base 32 o un enlace de ayudante\n"
 "de direccionamiento (address helper), o use uno de los enlaces a un servicio\n"
 "de salto (jump, direccionamiento distribuido) de debajo."
@@ -231,13 +231,13 @@ msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostna
 msgstr "Verifique su URL para intentar arreglar la clave auxiliar para que sea un nombre de host Base 32 o una clave Base 64 válida.Verifique su URL para intentar arreglar la clave auxiliar para que sea un nombre de host Base 32 o una clave Base 64 válida.Compruebe la URL e intente arreglar la clave de ayuda para que sea un nombre de dominio Base 32 válido, o una clave Base 64."
 
 msgid "Warning: Address Blacklisted"
-msgstr ""
+msgstr "Advertencia: Dirección en lista negra"
 
 msgid "The requested destination is in your blacklist and access has been blocked."
-msgstr ""
+msgstr "El destino solicitado está en su lista negra y el acceso ha sido bloqueado."
 
 msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
-msgstr ""
+msgstr "Para permitir el acceso a este sitio, elimínelo de su lista negra en la página de gestión de listas negras de SusiDNS."
 
 msgid "Warning: Invalid Destination"
 msgstr "Aviso: Destinación no válida"

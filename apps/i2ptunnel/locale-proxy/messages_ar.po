@@ -228,13 +228,13 @@ msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostna
 msgstr "تحقق من عنوان URL الخاص بك لمحاولة إصلاح المفتاح المساعد ليكون اسم مضيف Base 32 أو مفتاح Base 64 صالحًا."
 
 msgid "Warning: Address Blacklisted"
-msgstr ""
+msgstr "تحذير: العنوان مدرج في القائمة السوداء"
 
 msgid "The requested destination is in your blacklist and access has been blocked."
-msgstr ""
+msgstr "الوجهة المطلوبة مدرجة في قائمتك السوداء وتم حظر الوصول إليها."
 
 msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
-msgstr ""
+msgstr "لسماح الوصول إلى هذا الموقع، قم بإزالته من قائمتك السوداء في صفحة إدارة القوائم السوداء على SusiDNS."
 
 msgid "Warning: Invalid Destination"
 msgstr "وجهة محلية"

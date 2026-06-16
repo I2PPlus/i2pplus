@@ -228,13 +228,13 @@ msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostna
 msgstr "请检查您的链接尝试修复助手密钥为有效的 Base32 地址或 Base64 密钥。"
 
 msgid "Warning: Address Blacklisted"
-msgstr ""
+msgstr "警告：地址被列入黑名单"
 
 msgid "The requested destination is in your blacklist and access has been blocked."
-msgstr ""
+msgstr "请求的目标地址在您的黑名单中，访问已被阻止。"
 
 msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
-msgstr ""
+msgstr "要允许访问此网站，请在 SusiDNS 黑名单管理页面上将其从您的黑名单中移除。"
 
 msgid "Warning: Invalid Destination"
 msgstr "警告：无效目标"

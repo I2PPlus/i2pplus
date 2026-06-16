@@ -1,0 +1,428 @@
+# I2P
+# Copyright (C) 2025 The I2P Project
+msgid ""
+msgstr ""
+"Language: bo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Website Unknown"
+msgstr "དྲ་ཚིག མི་གསལ།"
+
+msgid "Router Console"
+msgstr "Router Console"
+
+msgid "I2P Router Console"
+msgstr "I2P Router Console"
+
+msgid "Addressbook"
+msgstr "ཁ་བྱང་དེབ།"
+
+msgid "Configuration"
+msgstr "སྒྲིག་སྟངས།"
+
+msgid "Help"
+msgstr "རོགས་རམ།"
+
+msgid "Website Not Found in Addressbook"
+msgstr "དྲ་ཚིག་ཁ་བྱང་དེབ་ནང་མ་རྙེད།"
+
+msgid "The website was not found in your router's addressbook."
+msgstr "དྲ་ཚིག་དེ་ཁྱེད་ཀྱི་router ཁ་བྱང་དེབ་ནང་མ་རྙེད།"
+
+msgid "Check the link or find a Base 32 or Base 64 address."
+msgstr "སྦྲེལ་ཐག་ལ་གཟིགས་པའམ Base 32 ཡང་ན Base 64 ཁ་བྱང་རྙེད་རོགས།"
+
+#, java-format
+msgid "If you have the Base 64 address, {0}add it to your addressbook{1}."
+msgstr "Base 64 ཁ་བྱང་ཡོད་ན། {0}ཁ་བྱང་དེབ་ལ་སྣོན་རོགས{1}།"
+
+msgid "Otherwise, find a Base 32 or address helper link, or use a jump service link below."
+msgstr "དེ་མིན། Base 32 ཡང་ན ཁ་བྱང་རོགས་སྦྲེལ་ཐག རྙེད། ཡང་ན འོག་གི་ jump service སྦྲེལ་ཐག བེད་སྤྱོད་གནང་།"
+
+#, java-format
+msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
+msgstr "ཤོག་ངོས་འདི་རྒྱུན་མཐོང་གི་ཡོད། {0}FAQ{1} ལ་གཟིགས་ནས་ཁྱེད་ཀྱི་ཁ་བྱང་དེབ་ལ་{2}subscription འགའ་ཞིག་སྣོན་པར{3}རོགས་རམ་ཐོབ།"
+
+msgid "Could not find the following destination:"
+msgstr "འོག་གི་འབྲེལ་ས་མ་རྙེད།"
+
+msgid "Warning: Non-HTTP Protocol"
+msgstr "ཉེན་བརྡ། HTTP མིན་པའི་Protocol"
+
+msgid "The request uses a bad protocol."
+msgstr "རེ་སྐུལ་དེ་ protocol ཉེན་ཅན་བེད་སྤྱོད་བྱེད་ཀྱི་ཡོད།"
+
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "I2P HTTP Proxy ཡིས་ HTTP དང་ HTTPS རེ་སྐུལ་ཁོ་ནར་རྒྱབ་སྐྱོར་བྱེད།"
+
+msgid "Other protocols such as FTP are not allowed."
+msgstr "Gopher དང་ FTP ལྟ་བུའི་ Protocol གཞན་ཁྱབ་བཀག་ཡོད།"
+
+msgid "Error: Request Denied"
+msgstr "ནོར་འཁྲུལ། རེ་སྐུལ་བཀག།"
+
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "ནོར་འཁྲུལ། I2P Proxy བརྒྱུད་ནས་ Router Console ལ་འཛུལ་མི་ཐུབ།"
+
+msgid "Your browser is misconfigured."
+msgstr "ཁྱེད་ཀྱི་ browser སྒྲིག་སྟངས་ནོར་འཁྲུལ་ཡོད།"
+
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "router console, localhost, ཡང་ན ས་གནས་LAN འབྲེལ་སར་ proxy བེད་སྤྱོད་མ་གནང་།"
+
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "127.0.0.1 (ཡང་ན ཁྱེད་ཀྱིས་ I2P console ལ་འཛུལ་བའི་ཁ་བྱང་) དེ་ I2P གི་ http proxy བརྒྱུད་ནས་སྐྱེལ་བར་བཀག་དགོས། སྤྱིར་བཏང་ཁྱེད་ཀྱི་ browser གི་ proxy སྒྲིག་སྟངས་ནང་ཁ་བྱང་དེ་སྤན་ནས་བྱེད།"
+
+msgid "Warning: Destination Key Conflict"
+msgstr "ཉེན་བརྡ། འབྲེལ་སའི་ Key འགལ་བ།"
+
+msgid "The address helper link you followed specifies a different destination key than the entry in your address book."
+msgstr "ཁྱེད་ཀྱིས་བརྒྱུད་པའི་ཁ་བྱང་རོགས་སྦྲེལ་ཐག་གིས་ཁྱེད་ཀྱི་ཁ་བྱང་དེབ་ནང་གི་ནང་དུ་འཇུག་པ་དང་མི་འདྲ་བའི་འབྲེལ་སའི་key ཞིག་ངོས་འཛིན་བྱེད་ཀྱི་ཡོད།"
+
+msgid "Someone could be trying to impersonate another website, or people have given two websites identical names."
+msgstr "མི་འགའ་ཞིག་གིས་དྲ་ཚིག་གཞན་ཞིག་བརྫུས་པར་འབད་ཀྱི་ཡོད་པའམ། ཡང་ན མི་རྣམས་ཀྱིས་དྲ་ཚིག་གཉིས་ལ་མཚུངས་པའི་མིང་བཏགས་ཡོད།"
+
+msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
+msgstr "key གང་ལ་ཡིད་ཆེས་བྱེད་པ་ཐག་གཅོད་བྱས་ཏེ། ཁ་བྱང་རོགས་སྦྲེལ་ཐག་ལ་བརྩི་མེད་བྱེད། ཡང་ན ཁ་བྱང་དེབ་ནས་རྒྱུགས་མཁན་(host) ནང་དུ་འཇུག་བཤིག་སྟེ། ཁ་བྱང་རོགས་སྦྲེལ་ཐག་ལ་བསྐྱར་ནོན་བྱེད།"
+
+msgid "Connection Reset"
+msgstr "འབྲེལ་ལམ་བསྐྱར་སྒྲིག"
+
+msgid "The connection to the website was reset while the page was loading."
+msgstr "ཤོག་ངོས་འཇུག་བཞིན་པའི་སྐབས་དྲ་ཚིག་དང་འབྲེལ་ལམ་བསྐྱར་སྒྲིག་བྱུང་།"
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "དྲ་ཚིག་དེ་སྐབས་སྐབས་མེད་པར་འགྱུར་བ་དང་། ཧ་ཅང་བྲེལ་བ། ཡང་ན ཁྱེད་ཀྱི་འཛུལ་སྒོ་བཀག་པ་ཡིན་སྲིད།"
+
+#, java-format
+msgid "You may want to {0}retry{1}."
+msgstr "ཁྱེད་ཀྱིས་{0}བསྐྱར་ཚོད{1}བྱེད་འདོད་ཡོང་སྲིད།"
+
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "ཤོག་ངོས་འདི་ཕྱེ་བཞག་ན། འབྲེལ་ལམ་འབྲེལ་ཚོད་ཕམ་རྗེས་ {0} སྐར་ཆ་རེར་རང་འགུལ་གྱིས་བསྐྱར་འབྲེལ་བྱེད།"
+
+msgid "Website Unreachable"
+msgstr "དྲ་ཚིག་འབྲེལ་མི་ཐུབ།"
+
+msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "ཁྱེད་ཀྱི་ I2P ཡང་ན Java ཐོན་རིམ་གྱིས་རྒྱབ་སྐྱོར་མི་བྱེད་པའི་གསང་སྒྲིག་གདམ་ག་བེད་སྤྱོད་བྱེད་ཀྱི་ཡོད་པས། དྲ་ཚིག་དེ་འབྲེལ་མི་ཐུབ།"
+
+msgid "Could not connect to the following destination:"
+msgstr "འོག་གི་འབྲེལ་སར་འབྲེལ་མ་ཚང་།"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "དེའི་ lease set མ་རྙེད་པས། དྲ་ཚིག་དེ་འབྲེལ་མི་ཐུབ།"
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "དྲ་ཚིག་དེ་ཞིག་གི་རྒྱུ་མཚན་ཡིན་སྲིད། ཡིན་ནའང་དྲ་རྒྱ་འཁོར་ཡོད་པའང་ཡིན་སྲིད།"
+
+msgid "The connection to the proxy was reset."
+msgstr "proxy དང་འབྲེལ་ལམ་བསྐྱར་སྒྲིག་བྱུང་།"
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Proxy དེ་སྐབས་སྐབས་མེད་པར་འགྱུར་བ་དང་། ཧ་ཅང་བྲེལ་བ། ཡང་ན ཁྱེད་ཀྱི་འཛུལ་སྒོ་བཀག་པ་ཡིན་སྲིད།"
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "ཁྱེད་ཀྱིས་{0}བསྐྱར་ཚོད{1}བྱེད་འདོད་ཡོང་སྲིད། གང་ཡིན་ཞེན་འདིས་ཁྱེད་ཀྱིས་{2}འདིར{3}གཞི་བཅས་བྱས་པའི་ཞོལ་ནས་outproxy གཅིག་གློ་བུར་བདམས་པར་བྱེད།"
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "དཀའ་ངལ་རྒྱུན་མཐོང་བྱུང་ན། ཁྱེད་ཀྱི་ outproxy ཐོ་བདག་ལ་{0}འདིར{1}བཅོས་བསྒྱུར་བྱེད་འདོད་ཡོང་སྲིད།"
+
+msgid "Outproxy Unreachable"
+msgstr "Outproxy འབྲེལ་མི་ཐུབ།"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "ཁྱེད་ཀྱི་ I2P ཡང་ན Java ཐོན་རིམ་གྱིས་རྒྱབ་སྐྱོར་མི་བྱེད་པའི་གསང་སྒྲིག་གདམ་ག་བེད་སྤྱོད་བྱེད་ཀྱི་ཡོད་པས། HTTP outproxy འབྲེལ་མི་ཐུབ།"
+
+msgid "The website was not reachable."
+msgstr "དྲ་ཚིག་དེ་འབྲེལ་མི་ཐུབ།"
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "དྲ་ཚིག་དེ་ཞིག་གི་རྒྱུ་མཚན་ཡིན་པའམ། དྲ་རྒྱ་འཁོར་ཡོད་པ། ཡང་ན ཁྱེད་ཀྱི་ router དུས་ཐོག་དང་མཐུན་པར་འབྲེལ་མེད།"
+
+msgid "Warning: No Outproxy Configured"
+msgstr "ཉེན་བརྡ། Outproxy སྒྲིག་སྟངས་མེད།"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "ཁྱེད་ཀྱི་རེ་སྐུལ་ I2P ཕྱིའི་དྲ་ཚིག་ཞིག་ལ་ཡིན། ཡིན་ནའང་ HTTP outproxy སྒྲིག་སྟངས་མེད།"
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "I2PTunnel ནང་ outproxy ཞིག་སྒྲིག་རོགས།"
+
+msgid "Outproxy Not Found"
+msgstr "Outproxy མ་རྙེད།"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "HTTP Outproxy མ་རྙེད།"
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "དེ་ཞིག་གི་རྒྱུ་མཚན་ཡིན་པའམ། དྲ་རྒྱ་འཁོར་ཡོད་པ། ཡང་ན ཁྱེད་ཀྱི་ router དུས་ཐོག་དང་མཐུན་པར་འབྲེལ་མེད།"
+
+msgid "Information: New Host Name"
+msgstr "བརྡ་ཆད། རྒྱུགས་མཁན་མིང་གསར་པ།"
+
+msgid "Information: New Host Name with Address Helper"
+msgstr "བརྡ་ཆད། ཁ་བྱང་རོགས་དང་བཅས་པའི་རྒྱུགས་མཁན་མིང་གསར་པ།"
+
+msgid "The address helper link you followed is for a new host name that is not in your address book."
+msgstr "ཁྱེད་ཀྱིས་བརྒྱུད་པའི་ཁ་བྱང་རོགས་སྦྲེལ་ཐག་ནི་ཁྱེད་ཀྱི་ཁ་བྱང་དེབ་ནང་མེད་པའི་རྒྱུགས་མཁན་(host) མིང་གསར་པ་ཞིག་ལ་ཡིན།"
+
+msgid "You may save this host name to your local address book."
+msgstr "རྒྱུགས་མཁན་(host) མིང་འདི་ཁྱེད་ཀྱི་ས་གནས་ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་བྱེད་ཆོག།"
+
+msgid "If you save it to your address book, you will not see this message again."
+msgstr "ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་བྱས་ན། བརྡ་འཕྲིན་འདི་བསྐྱར་མི་མཐོང་།"
+
+msgid "If you do not save it, the host name will be forgotten after the next router restart."
+msgstr "ཉར་ཚགས་མ་བྱས་ན། router བསྐྱར་འགོ་འཛུགས་རྗེས་རྒྱུགས་མཁན་(host) མིང་དེ་བརྗེད་འགྲོ།"
+
+msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
+msgstr "རྒྱུགས་མཁན་(host) འདི་ལ་ཕེབས་འདོད་མེད་ན། ཁྱེད་ཀྱི་ browser ནང་གི་\"back\" མཐེབ་གཞོང་ནོན།"
+
+msgid "Proxy Authorization Required"
+msgstr "Proxy དབང་ཆ་དགོས།"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "I2P HTTP Proxy དབང་ཆ་དགོས།"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "Proxy འདི་ནི་འཛུལ་སྒོར་བེད་སྤྱོད་མཁན་མིང་དང་གསང་བྱང་དགོས་པར་སྒྲིག་སྟངས་བྱས་ཡོད།"
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "ཁྱེད་ཀྱི་བེད་སྤྱོད་མཁན་མིང་དང་གསང་བྱང་འཇུག་རོགས། ཡང་ན {0}router སྒྲིག་སྟངས{1} ཡང་ན {2}I2PTunnel སྒྲིག་སྟངས{3} ལ་གཟིགས།"
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "དབང་ཆ་བཀག་པར། སྒྲིག་སྟངས་{0}i2ptunnel.proxy.auth=basic{1}སེལ་སྟེ། HTTP Proxy tunnel འགོག་ནས་བསྐྱར་འགོ་འཛུགས།"
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "དེའི་ lease set མ་རྙེད་པས། HTTP outproxy འབྲེལ་མི་ཐུབ།"
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "Outproxy ཞིག་གི་རྒྱུ་མཚན་ཡིན་སྲིད། ཡིན་ནའང་དྲ་རྒྱ་འཁོར་ཡོད་པའང་ཡིན་སྲིད།"
+
+msgid "Warning: Request Denied"
+msgstr "ཉེན་བརྡ། རེ་སྐུལ་བཀག།"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "ཁ་བྱང་འདི་ནོར་འཁྲུལ་ཅན་དུ་སྣང་། ཁྱེད་ཀྱིས་ཁ་བྱང་བདེན་པ་ཞིག་སྤྲོད་ཡོད་མེད་གསལ་པོར་གཟིགས་རོགས།"
+
+msgid "Warning: Bad Address Helper"
+msgstr "ཉེན་བརྡ། ཁ་བྱང་རོགས་ནོར་འཁྲུལ།"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "URL ནང་གི་རོགས་key ({0}i2paddresshelper={1}) དེ་གསལ་མི་ཐུབ།"
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "མཆོངས་གྲངས་ཡིན་པའམ། ཡང་ན Base 32 ཁ་བྱང་ནོར་འཁྲུལ་ཞིག་ཡིན་སྲིད།"
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "URL ལ་གཟིགས་ནས་རོགས་key དེ་ Base 32 རྒྱུགས་མཁན་མིང་(hostname) ཡང་ན Base 64 key བདེན་པར་བཅོས་སྒྲིག་བྱེད།"
+
+msgid "Warning: Address Blacklisted"
+msgstr "ཉེན་བརྡ། ཁ་བྱང་ནག་ཐོར་ཚུད་པ།"
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr "རེ་སྐུལ་བྱས་པའི་འབྲེལ་ས་ནི་ཁྱེད་ཀྱི་ནག་ཐོར་ཡོད་པས་འཛུལ་སྒོ་བཀག་ཡོད།"
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr "དྲ་ཚིག་འདིར་འཛུལ་སྒོ་སྤྱི་བཀྲམ་བྱེད་པར། SusiDNS ནག་ཐོ་དོ་དམ་ཤོག་ངོས་ནས་བཤིག།"
+
+msgid "Warning: Invalid Destination"
+msgstr "ཉེན་བརྡ། འབྲེལ་ས་བདེན་མིན།"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "དྲ་ཚིག་འབྲེལ་ས་ངོས་འཛིན་བྱས་པ་དེ་བདེན་པ་མིན་པའམ། ཡང་ན འབྲེལ་མི་ཐུབ།"
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "སྲིད་ཀྱང་ཁྱེད་ཀྱིས་Base 64 སྒྲིག་ཡིག་ནོར་འཁྲུལ་ཞིག་འཇོག་པའམ། ཡང་ན ཁྱེད་ཀྱིས་བརྒྱུད་པའི་སྦྲེལ་ཐག་དེ་ནོར་འཁྲུལ་ཡིན་སྲིད།"
+
+msgid "The I2P host could also be offline."
+msgstr "I2P རྒྱུགས་མཁན་(host) ཡང་ཞིག་གི་རྒྱུ་མཚན་ཡིན་སྲིད།"
+
+msgid "Warning: Authorization Required"
+msgstr "ཉེན་བརྡ། དབང་ཆ་དགོས།"
+
+msgid "Warning: Invalid Request URI"
+msgstr "ཉེན་བརྡ། རེ་སྐུལ་ URI བདེན་མིན།"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "རེ་སྐུལ་ URI དེ་བདེན་མིན་ཡིན་ལ། ཁྱབ་བཀག་ཡིག་རྟགས་འདུག་སྲིད།"
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "སྦྲེལ་ཐག་ཞིག་ནོན་པ་ཡིན་ན། URI ཀྱི་མཇུག་ལ་ browser ཡིས་ནོར་འཁྲུལ་གྱིས་སྣོན་པའི་ཡིག་རྟགས་ཡོད་མེད་ལ་གཟིགས།"
+
+msgid "The Base32 address is invalid."
+msgstr "Base32 ཁ་བྱང་དེ་བདེན་མིན།"
+
+msgid "This seems to be a bad destination:"
+msgstr "འདི་འབྲེལ་ས་ནོར་འཁྲུལ་ཞིག་ཡིན་སྲིད།"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper ཡིས་འདྲའི་འབྲེལ་སར་རོགས་མི་ཐུབ།"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "ཁ་བྱང་དེབ་ནང་གི་འབྲེལ་སར་ཕེབས་པར། <a href=\"{0}\">འདིར</a>ནོན། འགལ་བའི་addresshelper འབྲེལ་སར་ཕེབས་པར། <a href=\"{1}\">འདིར</a>ནོན།"
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "ཁ་བྱང་དེབ་ནང་གི་ {0} ཀྱི་འབྲེལ་ས།"
+
+msgid "Conflicting address helper destination"
+msgstr "འགལ་བའི་ཁ་བྱང་རོགས་འབྲེལ་ས།"
+
+msgid "Corrupt Base32 address"
+msgstr "Base32 ཁ་བྱང་ཉམས་ཟད།"
+
+msgid "Destination LeaseSet not found"
+msgstr "འབྲེལ་སའི་ LeaseSet མ་རྙེད།"
+
+msgid "Host"
+msgstr "རྒྱུགས་མཁན།"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "འབྲེལ་ས།"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "ཉར་ཚགས་མེད་པར་ {0} ལ་མུ་མཐུད།"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "དྲ་ཚིག་དེར་ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་མེད་པར་འཆར་སྐྱོད་བྱེད་ཆོག། ཁ་བྱང་དེ་ཁྱེད་ཀྱིས་ I2P router བསྐྱར་འགོ་མ་འཛུགས་བར་བརྗེད་མི་འགྲོ།"
+
+msgid "Continue without saving"
+msgstr "ཉར་ཚགས་མེད་པར་མུ་མཐུད།"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "{0} དེ་ router ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་བྱས་ཏེ་དྲ་ཚིག་ལ་མུ་མཐུད།"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "ཁ་བྱང་འདི་ཁྱེད་ཀྱི་ Router ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་འགྲོ། དེར་ཁྱེད་ཀྱི་ subscription ལ་བརྟེན་པའི་ཁ་བྱང་རྣམས་ཉར་ཡོད།"
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "ཁྱེད་ཀྱིས་རང་ཉིད་ཀྱིས་སྣོན་པའི་དྲ་ཚིག་རྣམས་ཉར་འཛིན་བྱེད་འདོད་ན། ཁྱེད་ཀྱི་ Master ཡང་ན Private ཁ་བྱང་དེབ་ལ་སྣོན་རོགས།"
+
+msgid "Save & continue"
+msgstr "ཉར་ཚགས་བྱས་ཏེ་མུ་མཐུད།"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "{0} དེ་ master ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་བྱས་ཏེ་དྲ་ཚིག་ལ་མུ་མཐུད།"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "ཁ་བྱང་འདི་ཁྱེད་ཀྱི་ Master ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་འགྲོ། གཙོ་བོའི་ router ཁ་བྱང་དེབ་ལས་འཚུད་སྤེལ་ལོགས་སུ་གཞག་འདོད་ཀྱི་ཁ་བྱང་རྣམས་ལ་གདམ་ག་འདི་འདེམས།"
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "{0} དེ་ private ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་བྱས་ཏེ་དྲ་ཚིག་ལ་མུ་མཐུད།"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "ཁ་བྱང་འདི་ཁྱེད་ཀྱི་ Private ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་འགྲོ། ནམ་ཡང་སྤེལ་མི་འགྲོ།"
+
+msgid "Base32 address requires lookup password"
+msgstr "Base32 ཁ་བྱང་ལ་ལྟ་ཤེས་གསང་བྱང་དགོས།"
+
+msgid "Base32 address requires encryption key"
+msgstr "Base32 ཁ་བྱང་ལ་གསང་སྒྲིག་key དགོས།"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Base32 ཁ་བྱང་ལ་གསང་སྒྲིག་key དང་ལྟ་ཤེས་གསང་བྱང་གཉིས་ཀ་དགོས།"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Base32 ཁ་བྱང་གསང་འགྲེལ་ཕམ་པ། གསང་སྒྲིག་key ལ་གཟིགས།"
+
+msgid "Generate"
+msgstr "བཟོ་སྐྲུན།"
+
+msgid "Encryption key"
+msgstr "གསང་སྒྲིག་key"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "ཁྱེད་ཀྱིས་ server དབྱེ་འཛིན་པས་སྤྲོད་པའི་ PSK གསང་སྒྲིག་key ཞིག་འཇུག་དགོས་པའམ། ཡང་ན DH གསང་སྒྲིག་key ཞིག་བཟོ་སྐྲུན་བྱས་ཏེ། server དབྱེ་འཛིན་པར་སྐུར་དགོས།"
+
+msgid "Ask the server operator for help."
+msgstr "server དབྱེ་འཛིན་པར་རོགས་རམ་ཞུ།"
+
+msgid "Enter PSK encryption key"
+msgstr "PSK གསང་སྒྲིག་key འཇུག།"
+
+msgid "Generate new DH encryption key"
+msgstr "DH གསང་སྒྲིག་key གསར་པ་བཟོ་སྐྲུན།"
+
+msgid "Lookup password"
+msgstr "ལྟ་ཤེས་གསང་བྱང་།"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "ཁྱེད་ཀྱིས་ server དབྱེ་འཛིན་པས་སྤྲོད་པའི་གསང་བྱང་འཇུག་དགོས།"
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "{0} ནས་ཁ་བྱང་རོགས་བརྒྱུད་སྣོན་པ།"
+
+msgid "Added via address helper"
+msgstr "ཁ་བྱང་རོགས་བརྒྱུད་སྣོན་པ།"
+
+msgid "Missing lookup password"
+msgstr "ལྟ་ཤེས་གསང་བྱང་ཕྱིས།"
+
+msgid "Missing private key"
+msgstr "སྒེར་key ཕྱིས།"
+
+msgid "Invalid private key"
+msgstr "སྒེར་key བདེན་མིན།"
+
+msgid "Your new encryption key"
+msgstr "ཁྱེད་ཀྱི་གསང་སྒྲིག་key གསར་པ།"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "key དེ་འདྲ་པར་བྱས་ཏེ། server དབྱེ་འཛིན་པར་སྐུར་རོགས།"
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "ཁྱེད་ལ་ཆོག་མཆན་སྤྲོད་རྗེས། དྲ་ཚིག་ལ་མུ་མཐུད་བྱེད་ཆོག།"
+
+msgid "Go back and fix the error"
+msgstr "ཕྱིར་ཕེབས་ཏེ་ནོར་འཁྲུལ་བཅོས།"
+
+msgid "router"
+msgstr "router"
+
+msgid "master"
+msgstr "master"
+
+msgid "private"
+msgstr "private"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "{0} ལ་ལམ་བསྒྱུར་བྱེད་བཞིན་ཡོད།"
+
+msgid "Redirection in progress"
+msgstr "ལམ་བསྒྱུར་བྱེད་བཞིན་ཡོད།"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "{0} དེ་ {1} ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་བྱས། ད་ལྟ་ལམ་བསྒྱུར་བྱེད་བཞིན་ཡོད།"
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "{0} དེ་ {1} ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་མ་ཚང་། ད་ལྟ་ལམ་བསྒྱུར་བྱེད་བཞིན་ཡོད།"
+
+msgid "Click here if you are not redirected automatically."
+msgstr "རང་འགུལ་ལམ་བསྒྱུར་མ་བྱུང་ན་འདིར་ནོན།"
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "{0} ཀྱི་དབང་ཆ་ཉར་ཚགས་བྱས། ད་ལྟ་ལམ་བསྒྱུར་བྱེད་བཞིན་ཡོད།"

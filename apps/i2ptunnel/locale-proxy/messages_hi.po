@@ -228,13 +228,13 @@ msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostna
 msgstr "अपनी URL की जाँच करें और प्रयास करें कि सहायक कुंजी को एक मान्य Base 32 होस्टनेम या Base 64 कुंजी के रूप में सुधारें।"
 
 msgid "Warning: Address Blacklisted"
-msgstr ""
+msgstr "चेतावनी: पता ब्लैकलिस्टेड है"
 
 msgid "The requested destination is in your blacklist and access has been blocked."
-msgstr ""
+msgstr "अनुरोधित गंतव्य आपके ब्लैकलिस्ट में है और पहुंच को रोक दिया गया है।"
 
 msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
-msgstr ""
+msgstr "इस साइट तक पहुंच की अनुमति देने के लिए, उसे SusiDNS ब्लैकलिस्ट प्रबंधन पेज पर अपने ब्लैकलिस्ट से हटाएं।"
 
 msgid "Warning: Invalid Destination"
 msgstr "अहत्यार: अवैध गंतव्य"

@@ -1,0 +1,63 @@
+# I2P
+# Copyright (C) 2025 The I2P Project
+msgid ""
+msgstr ""
+"Language: bo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Message timeout"
+msgstr "ཉེར་སྒྲིག་གནས་ཚུལ་དུས་ཡུན་ཟུངས།"
+
+msgid "Failed delivery to local destination"
+msgstr "ས་གནས་དམིགས་ཡུལ་དུ་བཏང་ཐབས་འགུལ་ཞིང་སྙོམས་མིན་"
+
+msgid "Local router failure"
+msgstr "ས་གནས་ཀྱི་ཕྱོགས་སློག་པའི་ནུས་པ་བརྡོངས།"
+
+msgid "Local network failure"
+msgstr "ས་གནས་དྲ་རྒྱའི་ནུས་པ་བརྡོངས།"
+
+msgid "Session closed"
+msgstr "སྤྱི་འཐཱ་སྤེལ་ཟིན།"
+
+msgid "Invalid message"
+msgstr "མིན་པའི་ཉེར་སྒྲིག་གནས་ཚུལ།"
+
+msgid "Invalid message options"
+msgstr "ཉེར་སྒྲིག་གནས་ཚུལ་གྱི་བདེ་འཇགས་ཁྲིམས་ཡིག་ཉེན་ཁ།"
+
+msgid "Buffer overflow"
+msgstr "བཞག་ཆུང་ཆུང་ཕྱུག་པོ་ཆེ།"
+
+msgid "Message expired"
+msgstr "ཉེར་སྒྲིག་གནས་ཚུལ་དུས་ཡུན་ཟུངས་ཟིན།"
+
+msgid "Local lease set invalid"
+msgstr "ས་གནས་ཀྱི་ཉེར་སྒྲིག་གནས་ཚུལ་གྱི་ཐབས་ལམ་མེད་པ།"
+
+msgid "No local tunnels"
+msgstr "ས་གནས་ཀྱི་སྤུང་ཆུང་གང་ཡང་མེད།"
+
+msgid "Unsupported encryption options"
+msgstr "བཀོད་སྒྲིག་གནས་ཚུལ་གྱི་བདེ་འཇགས་ཁྲིམས་ཡིག་མི་རྒྱབ་སྐྱོར།"
+
+msgid "Invalid destination"
+msgstr "དམིགས་ཡུལ་གྱི་ཐབས་ལམ་ཉེན་ཁ།"
+
+msgid "Destination lease set expired"
+msgstr "དམིགས་ཡུལ་གྱི་ཉེར་སྒྲིག་གནས་ཚུལ་གྱི་ཐབས་ལམ་དུས་ཡུན་ཟུངས་ཟིན།"
+
+msgid "Destination lease set not found"
+msgstr "དམིགས་ཡུལ་གྱི་ཉེར་སྒྲིག་གནས་ཚུལ་གྱི་ཐབས་ལམ་མི་འཚམས།"
+
+msgid "Local destination shutdown"
+msgstr "ས་གནས་དམིགས་ཡུལ་གྱི་བརྡ་འཕྲིན་བརྗེ་བ་མེད་པ།"
+
+msgid "Connection was reset"
+msgstr "གཏོང་ཤེས་བློ་ཆེ་བ།"
+
+msgid "Failure code"
+msgstr "ཁྱེར་འཕྲོ་དཀའ་ངལ"

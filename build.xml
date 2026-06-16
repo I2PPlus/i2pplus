@@ -1298,6 +1298,22 @@
       </ant>
     </parallel>
 
+    <!-- Cleanup .po files after update: remove fuzzy markers, wrap, location, comments -->
+    <exec executable="sh" osfamily="unix" failifexecutionfails="false">
+      <arg value="tools/scripts/cleanup_po.sh"/>
+      <arg value="."/>
+      <arg value="--no-wrap"/>
+      <arg value="--no-location"/>
+      <arg value="--no-comments"/>
+    </exec>
+    <exec executable="sh" osfamily="mac" failifexecutionfails="false">
+      <arg value="tools/scripts/cleanup_po.sh"/>
+      <arg value="."/>
+      <arg value="--no-wrap"/>
+      <arg value="--no-location"/>
+      <arg value="--no-comments"/>
+    </exec>
+
   </target>
 
   <condition property="no.bundle">

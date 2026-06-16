@@ -228,13 +228,13 @@ msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostna
 msgstr "URL-nizi yoxlayın və köməkçi açarı düzgün Base 32 xost adı və ya Base 64 açarı olaraq düzəltməyə çalışın."
 
 msgid "Warning: Address Blacklisted"
-msgstr ""
+msgstr "Xəbərdarlıq: Ünvan siyahıya düşüb"
 
 msgid "The requested destination is in your blacklist and access has been blocked."
-msgstr ""
+msgstr "Tələb edilən ünvan sizin siyahınızdadır və giriş bloklaşdırılıb."
 
 msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
-msgstr ""
+msgstr "Bu siteyə girişi izləmək üçün onu SusiDNS-dəki siyahıların idarə edilməsi səhifəsindən çıxarın."
 
 msgid "Warning: Invalid Destination"
 msgstr "Xəbərdarlıq: Səhv Nöqtə"

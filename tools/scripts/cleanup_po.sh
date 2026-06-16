@@ -32,7 +32,7 @@ while [ $# -gt 0 ]; do
             remove_comments=1
             ;;
         *)
-            echo " ! Error: Unrecognized option '$1'."
+            echo " ! Error: Unrecognised option '$1'."
             echo " > Usage: $0 <directory> [--no-wrap] [--no-location] [--no-comments]"
             exit 1
             ;;

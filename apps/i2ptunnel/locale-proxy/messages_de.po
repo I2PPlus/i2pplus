@@ -228,13 +228,13 @@ msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostna
 msgstr "Kontrollieren Sie die URL und versuchen Sie den Helfer-Schlüssel in einen korrekten Base 32 Hostnamen oder Base 64 Schlüssel zu bringen."
 
 msgid "Warning: Address Blacklisted"
-msgstr ""
+msgstr "Warnung: Adresse ist gesperrt"
 
 msgid "The requested destination is in your blacklist and access has been blocked."
-msgstr ""
+msgstr "Das angeforderte Ziel befindet sich in Ihrer Schwarzen Liste und der Zugriff wurde blockiert."
 
 msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
-msgstr ""
+msgstr "Um den Zugriff auf diese Seite zu ermöglichen, entfernen Sie sie von der Schwarzen Liste über die Verwaltungsoberfläche für Schwarze Listen bei SusiDNS."
 
 msgid "Warning: Invalid Destination"
 msgstr "Warnung: Ungültiges Ziel"

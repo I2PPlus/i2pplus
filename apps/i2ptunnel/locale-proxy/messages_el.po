@@ -228,13 +228,13 @@ msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostna
 msgstr "Ελέγξτε τη διεύθυνση URL σας για να προσπαθήσετε να διορθώσετε το βοηθητικό κλειδί ώστε να είναι έγκυρο όνομα κεντρικού υπολογιστή Base 32 ή κλειδί Βάσης 64."
 
 msgid "Warning: Address Blacklisted"
-msgstr ""
+msgstr "Προειδοποίηση: Η διεύθυνση είναι σε μαύρη λίστα"
 
 msgid "The requested destination is in your blacklist and access has been blocked."
-msgstr ""
+msgstr "Ο ζητούμενος προορισμός βρίσκεται στη μαύρη λίστα σας και η πρόσβαση έχει αποκλειστεί."
 
 msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
-msgstr ""
+msgstr "Για να επιτρέψετε την πρόσβαση σε αυτήν την ιστοσελίδα, αφαιρέστε την από τη μαύρη λίστα σας στη σελίδα διαχείρισης μαύρης λίστας του SusiDNS."
 
 msgid "Warning: Invalid Destination"
 msgstr "Προειδοποίηση: Μη έγκυρος προορισμός"

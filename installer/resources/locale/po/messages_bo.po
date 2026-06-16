@@ -9,136 +9,136 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "Failed to load the wrapper"
-msgstr ""
+msgstr "རྐྱང་སྒྲོམ་བཟོ་གཞི་འཇུག་མ་ཚང་།"
 
 #, sh-format
 msgid "$APP_LONG_NAME is already running."
-msgstr ""
+msgstr "$APP_LONG_NAME ད་ལྟ་བཞག་ཡོད།"
 
 #, sh-format
 msgid "Running $APP_LONG_NAME"
-msgstr ""
+msgstr "$APP_LONG_NAME བཞག་བཞིན་ཡོད།"
 
 #, sh-format
 msgid "Waiting for $APP_LONG_NAME"
-msgstr ""
+msgstr "$APP_LONG_NAME ལ་སྒུག་བཞིན་ཡོད།"
 
 #, sh-format
 msgid "WARNING: $APP_LONG_NAME may have failed to start."
-msgstr ""
+msgstr "ཉེན་བརྡ། $APP_LONG_NAME འགོ་འཛུགས་ལ་ཕམ་སྲིད།"
 
 msgid "Must be root to perform this action."
-msgstr ""
+msgstr "བྱ་སྤྱོད་འདི་ལ་root དབང་ཤོག་དགོས།"
 
 #, sh-format
 msgid "Starting $APP_LONG_NAME"
-msgstr ""
+msgstr "$APP_LONG_NAME འགོ་འཛུགས་བཞིན་ཡོད།"
 
 #, sh-format
 msgid "Stopping $APP_LONG_NAME"
-msgstr ""
+msgstr "$APP_LONG_NAME འགོག་བཞིན་ཡོད།"
 
 #, sh-format
 msgid "$APP_LONG_NAME was not running."
-msgstr ""
+msgstr "$APP_LONG_NAME བཞག་མེད།"
 
 #, sh-format
 msgid "Unable to stop $APP_LONG_NAME."
-msgstr ""
+msgstr "$APP_LONG_NAME འགོག་མ་ཚང་།"
 
 #, sh-format
 msgid "Waiting for $APP_LONG_NAME to exit"
-msgstr ""
+msgstr "$APP_LONG_NAME ཕྱིར་ཐོན་ལ་སྒུག་བཞིན་ཡོད།"
 
 #, sh-format
 msgid "Failed to stop $APP_LONG_NAME."
-msgstr ""
+msgstr "$APP_LONG_NAME འགོག་ལ་ཕམ།"
 
 #, sh-format
 msgid "Stopped $APP_LONG_NAME."
-msgstr ""
+msgstr "$APP_LONG_NAME འགོག་ཟིན།"
 
 #, sh-format
 msgid "Stopping $APP_LONG_NAME gracefully"
-msgstr ""
+msgstr "$APP_LONG_NAME སྙིང་བཟང་མཐུན་འགྱུར་བྱེད་བཞིན་ཡོད།"
 
 #, sh-format
 msgid "$APP_LONG_NAME is not running."
-msgstr ""
+msgstr "$APP_LONG_NAME བཞག་མེད།"
 
 #, sh-format
 msgid "$APP_LONG_NAME is running: PID:$pid"
-msgstr ""
+msgstr "$APP_LONG_NAME བཞག་ཡོད། PID:$pid"
 
 #, sh-format
 msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr ""
+msgstr "$APP_LONG_NAME བཞག་ཡོད། PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
-msgstr ""
+msgstr "$APP_LONG_NAME དེ་མོན་ ད་ལྟ་ཚུད་ཟིན།"
 
 #, sh-format
 msgid "Installing the $APP_LONG_NAME daemon"
-msgstr ""
+msgstr "$APP_LONG_NAME དེ་མོན་ འཚུད་བཞིན་ཡོད།"
 
 #, sh-format
 msgid "Install not currently supported for $DIST_OS"
-msgstr ""
+msgstr "འཛུགས་སྒྲིག་  $DIST_OS ལ་ད་ལྟ་རྒྱབ་སྐྱོར་མེད།"
 
 #, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
-msgstr ""
+msgstr "$APP_LONG_NAME དེ་མོན་ སེལ་བཞིན་ཡོད།"
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
-msgstr ""
+msgstr "$APP_LONG_NAME དེ་མོན་ ད་ལྟ་ཚུད་མེད།"
 
 #, sh-format
 msgid "Remove not currently supported for $DIST_OS"
-msgstr ""
+msgstr "སེལ་སྒྲིག་  $DIST_OS ལ་ད་ལྟ་རྒྱབ་སྐྱོར་མེད།"
 
 msgid "Commands:"
-msgstr ""
+msgstr "བཀའ་དྲིན།"
 
 msgid "Launch in the current console."
-msgstr ""
+msgstr "ད་ལྟའི་ console ནང་གཏོང་བ།"
 
 msgid "Start in the background as a daemon process."
-msgstr ""
+msgstr "རྒྱབ་ལྗོངས་སུ་ དེ་མོན་ བྱ་རིམ་ལྟར་འགོ་འཛུགས།"
 
 msgid "Stop if running as a daemon or in another console."
-msgstr ""
+msgstr "དེ་མོན་ཡང་ན  console གཞན་དུ་བཞག་ན་འགོག།"
 
 msgid "Stop gracefully, may take up to 11 minutes or more."
-msgstr ""
+msgstr "སྙིང་བཟང་མཐུན་འགྱུར་བྱེད་པ། སྐར་མ ༡༡ ཙམ་འགོར་སྲིད།"
 
 msgid "Restart gracefully, may take up to 11 minutes or more."
-msgstr ""
+msgstr "སྙིང་བཟང་མཐུན་འགྱུར་བྱེད་པ། སྐར་མ ༡༡ ཙམ་འགོར་སྲིད།"
 
 msgid "Stop if running and then start."
-msgstr ""
+msgstr "བཞག་ན་འགོག་རྗེས་འགོ་འཛུགས།"
 
 msgid "Restart only if already running."
-msgstr ""
+msgstr "བཞག་ཡོད་ན་གཅིག་ཁོ་ནར་ཡང་བསྐྱར་འགོ་འཛུགས།"
 
 msgid "Query the current status."
-msgstr ""
+msgstr "ད་ལྟའི་གནས་སྟངས་དྲིས།"
 
 msgid "Install to start automatically when system boots."
-msgstr ""
+msgstr "མ་ལག་འགོ་ཐོག་རང་འགོ་འཛུགས་པར་འཛུགས།"
 
 msgid "Uninstall."
-msgstr ""
+msgstr "འཛུགས་སེལ།"
 
 msgid "Request a Java thread dump if running."
-msgstr ""
+msgstr "བཞག་ན Java thread dump ཞུ།"
 
 msgid "Please edit i2prouter and set the variable RUN_AS_USER"
-msgstr ""
+msgstr "i2prouter ལ་བཅོས་བསྒྱུར་བྱེད་ནས་ RUN_AS_USER ཡིག་འབྲུ་སྒྲིག་རོགས།"
 
 msgid "Running I2P as the root user is *not* recommended."
-msgstr ""
+msgstr "I2P root བེད་སྤྱོད་མཁན་ལྟར་བཞག་པ་ *མི་འོས་པར་མདོར་བསྟན།*"
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
-msgstr ""
+msgstr "root ལྟར་བཞག་ནའང་ i2prouter ལ་བཅོས་བསྒྱུར་བྱེད་ནས་ ALLOW_ROOT=true སྒྲིག།"

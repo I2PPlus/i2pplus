@@ -228,13 +228,13 @@ msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostna
 msgstr "Periksa URL Anda untuk mencoba dan memperbaiki kunci pembantu menjadi nama host Base 32 atau kunci Base 64 yang valid.Periksa URL Anda untuk mencoba dan memperbaiki kunci pembantu untuk menjadi hostname Base 32 valid atau kunci Base 64."
 
 msgid "Warning: Address Blacklisted"
-msgstr ""
+msgstr "Peringatan: Alamat Dalam Daftar Hitam"
 
 msgid "The requested destination is in your blacklist and access has been blocked."
-msgstr ""
+msgstr "Tujuan yang diminta ada di daftar hitam Anda dan akses telah diblokir."
 
 msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
-msgstr ""
+msgstr "Untuk mengizinkan akses ke situs ini, hapus dari daftar hitam Anda di halaman manajemen daftar hitam SusiDNS."
 
 msgid "Warning: Invalid Destination"
 msgstr "Peringatan: Tujuan Tidak Valid"

@@ -228,13 +228,13 @@ msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostna
 msgstr "URL을 확인하여 도우미 키가 유효한 Base 32 호스트 이름 또는 Base 64 키가 되도록 수정해 보세요.URL을 확인해 helper key를 올바른 Base 32 / Base 64 주소로 변경하십시오."
 
 msgid "Warning: Address Blacklisted"
-msgstr ""
+msgstr "경고: 주소 블랙리스트됨"
 
 msgid "The requested destination is in your blacklist and access has been blocked."
-msgstr ""
+msgstr "요청된 목적지가 귀하의 블랙리스트에 있으며 접근이 차단되었습니다."
 
 msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
-msgstr ""
+msgstr "이 사이트에 대한 접근을 허용하려면 SusiDNS의 블랙리스트 관리 페이지에서 이를 제거하세요."
 
 msgid "Warning: Invalid Destination"
 msgstr "경고: 비정상적인 목적지"

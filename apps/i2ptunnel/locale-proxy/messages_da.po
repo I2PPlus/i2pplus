@@ -228,13 +228,13 @@ msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostna
 msgstr "Tjek din URL for at forsøge at rette hjælpe nøglen til at være en gyldig Base 32 værtsnavn eller Base 64 nøgle."
 
 msgid "Warning: Address Blacklisted"
-msgstr ""
+msgstr "Advarsel: Adresse er på sort liste"
 
 msgid "The requested destination is in your blacklist and access has been blocked."
-msgstr ""
+msgstr "Den ønskede destination er på din sortliste, og adgang er blokeret."
 
 msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
-msgstr ""
+msgstr "For at tillade adgang til denne side skal du fjerne den fra din sortliste på SusiDNS' sortlistestyreside."
 
 msgid "Warning: Invalid Destination"
 msgstr "Advarsel: Ugyldig destination"
