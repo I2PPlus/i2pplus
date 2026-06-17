@@ -688,6 +688,9 @@ msgstr "A bejelentés után indítsa újra az útválasztót"
 msgid "Invalid form submission, requires POST"
 msgstr "Érvénytelen űrlap küldés, POST szükséges"
 
+msgid "Too many form submissions, please try again later"
+msgstr "Túl sok űrlapbeküldés, kérjük próbálja újra később"
+
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Úrlap küldése sikertelen, valószínűleg a \"vissza\" vagy az \"újratöltés\" gombokat használtad a böngészőben. Kérlek, hogy küldd újra."
 
@@ -751,31 +754,26 @@ msgstr[1] "{0} a plugins frissítve"
 msgid "Plugin check complete"
 msgstr "A beépülő modul ellenőrzése befejeződött"
 
-msgid "none"
-msgstr "semmi"
-
-msgid "Permanently banned"
-msgstr "Véglegesen kitiltva"
-
-#, java-format
-msgid "Temporary ban expiring in {0}"
-msgstr "Ideiglenes kitiltás lejár a következőn belül: {0}"
-
-#, java-format
-msgid "Banned for {0} / until restart"
-msgstr "Letiltva {0} / újraindításig"
-
-msgid "unban now"
-msgstr "Kitiltás visszavonása most"
-
 msgid "No bans currently active"
 msgstr "Jelenleg nincs aktív tiltás"
 
+msgid "Country"
+msgstr "Ország"
+
+msgid "Version"
+msgstr "Verzió"
+
+msgid "IP Address"
+msgstr "IP-cím"
+
+msgid "Port"
+msgstr "Port"
+
+msgid "Hostname"
+msgstr "Hostnév"
+
 msgid "Reason"
 msgstr "Ok"
-
-msgid "Router Hash"
-msgstr "Router Hash"
 
 msgid "Expiry"
 msgstr "Lejárat"
@@ -834,6 +832,15 @@ msgstr "MEGJEGYZÉS"
 msgid "Some changes may require a restart to take effect."
 msgstr "Némely változtatás érvénybe lépéséhez újraindítás szükséges."
 
+msgid "All session bans and blocklists cleared"
+msgstr "Az összes munkamenet-tiltás és blokkolólista törölve"
+
+msgid "Ban settings reset to defaults"
+msgstr "Tiltás beállítások visszaállítása alapértelmezettre"
+
+msgid "Ban configuration updated"
+msgstr "Tiltás konfiguráció frissítve"
+
 msgid "Save Client Configuration"
 msgstr "Kliens Beállítások Mentése"
 
@@ -880,9 +887,6 @@ msgstr "A következő kiegészítő leállítva: {0}"
 #, java-format
 msgid "Stopped webapp {0}"
 msgstr "Leállított webalkalmazás {0}"
-
-msgid "Start"
-msgstr "Indítás"
 
 msgid "Client configuration saved successfully"
 msgstr "Az ügyfél konfigurációja sikeresen mentve"
@@ -974,9 +978,6 @@ msgstr "{0} felhasználó hozzáadva"
 msgid "Interface configuration saved"
 msgstr "Az interfész konfigurációja mentve"
 
-msgid "Edit"
-msgstr "Szerkesztés"
-
 msgid "Add Client"
 msgstr "Kliens Hozzáadása"
 
@@ -1016,9 +1017,6 @@ msgstr "E-mail"
 msgid "Plugin"
 msgstr "Kiegészítő"
 
-msgid "Version"
-msgstr "Verzió"
-
 msgid "Author"
 msgstr "Szerző"
 
@@ -1031,8 +1029,14 @@ msgstr "Frissítési link"
 msgid "License"
 msgstr "Licensz"
 
+msgid "Start"
+msgstr "Indítás"
+
 msgid "Stop"
 msgstr "Állj"
+
+msgid "Edit"
+msgstr "Szerkesztés"
 
 msgid "Update"
 msgstr "Frissítés"
@@ -1197,6 +1201,9 @@ msgstr "Vakított keresési jelszóval"
 msgid "Blinded"
 msgstr "Elvakult"
 
+msgid "none"
+msgstr "semmi"
+
 msgid "Log overrides updated"
 msgstr "Napló felülbírálás frissítve"
 
@@ -1289,6 +1296,9 @@ msgstr "Webes alkalmazások"
 
 msgid "Advanced"
 msgstr "Haladó"
+
+msgid "Bans"
+msgstr "Tiltások"
 
 msgid "Reseeding"
 msgstr "Újratáplálás (reseed) folyamatban"
@@ -1528,6 +1538,14 @@ msgstr "Újraindítás"
 msgid "Shutdown"
 msgstr "Kikapcsolás"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr "Újraindítás elhalasztva {0} számára, amíg az összes kiszolgáló le nem állt"
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr "Leállítás elhalasztva {0} számára, amíg az összes kiszolgáló le nem állt"
+
 msgid "Restart imminent"
 msgstr "Újraindítás hamarosan"
 
@@ -1701,6 +1719,9 @@ msgstr "Figyelem: Az ISO-8859-1 karakterkészleten kívüli felhasználói nevek
 msgid "No password entered"
 msgstr "Nincs jelszó megadva"
 
+msgid "Password must be at least 8 characters"
+msgstr "A jelszónak legalább 8 karakterből kell állnia"
+
 #, java-format
 msgid "To recover from a forgotten or non-working password, stop I2P, edit the file {0}, delete the line {1}, and restart I2P."
 msgstr "Az elfelejtett vagy nem működő jelszó helyreállításához állítsa le az I2P-t, szerkessze a fájlt {0}, törölje a(z) {1} sort, és indítsa újra az I2P-t."
@@ -1748,8 +1769,8 @@ msgstr "Jelszó"
 msgid "Please supply a username"
 msgstr "Kérjük, adjon meg egy felhasználónevet"
 
-msgid "Please supply a password"
-msgstr "Adjon meg egy jelszót"
+msgid "Please supply a password (minimum 8 characters)"
+msgstr "Kérjük adjon meg egy jelszót (minimum 8 karakter)"
 
 msgid "Aborted startup"
 msgstr "Megszakított indítás"
@@ -2185,9 +2206,6 @@ msgstr "Hálózatokon átívelő mikroblog"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Alternatív adatvédelemre összpontosító előtér a Reddithez"
 
-msgid "AI Image generation & Chat hub"
-msgstr "AI képgenerálás és csevegő központ"
-
 msgid "IRC Logs for multiple networks"
 msgstr "IRC naplók több hálózathoz"
 
@@ -2438,9 +2456,6 @@ msgstr "Identitás"
 msgid "Network Database entry"
 msgstr "Hálózati adatbázis bejegyzés"
 
-msgid "IP Address"
-msgstr "IP-cím"
-
 msgid "UDP Port"
 msgstr "UDP port"
 
@@ -2535,28 +2550,49 @@ msgstr "Router Átvitel Címek"
 msgid "{0} is used for outbound connections only"
 msgstr "A következő csak kimenő csatlakozásokhoz használva: {0}"
 
-msgid "Job runners"
-msgstr "Munkahelyi futók"
+#, java-format
+msgid "Delayed: {0}"
+msgstr "Késleltetve: {0}"
+
+#, java-format
+msgid "Average: {0}µs"
+msgstr "Átlag: {0}µs"
+
+#, java-format
+msgid "Average: {0}"
+msgstr "Átlag: {0}"
 
 msgid "Active jobs"
 msgstr "Aktív Munkák"
 
 #, java-format
-msgid "started {0} ago"
-msgstr "{0} ezelőtt kezdődött"
+msgid "Duration: {0}"
+msgstr "Időtartam: {0}"
 
 msgid "Just finished jobs"
 msgstr "A Közelmúltban Befejezett Munkahelyek"
+
+msgid "finished just now"
+msgstr "épp most fejeződött be"
 
 #, java-format
 msgid "finished {0} ago"
 msgstr "{0} ideje befejeződött"
 
+#, java-format
+msgid "Dropped: {0}"
+msgstr "Ejtve: {0}"
+
 msgid "Ready / waiting jobs"
 msgstr "Kész/várakozó munkák"
 
-msgid "waiting"
-msgstr "vár"
+#, java-format
+msgid "waiting {0}"
+msgstr "várakozás {0}"
+
+#, java-format
+msgid "Max wait: {0}"
+msgstr "Max várakozás: {0}"
 
 msgid "Scheduled jobs"
 msgstr "Tervezett munkahelyek"
@@ -2565,17 +2601,24 @@ msgstr "Tervezett munkahelyek"
 msgid "{0} starting in {1}"
 msgstr "{0} {1} múlva kezdődik"
 
-msgid "DELAYED"
-msgstr "KÉSLELTETETT"
-
-msgid "OUT OF ORDER"
-msgstr "RENDBEN"
+#, java-format
+msgid "Runners: {0} / {1}"
+msgstr "Futtatók: {0} / {1}"
 
 msgid "Queue Totals"
 msgstr "Várólista összesen"
 
 msgid "Job Statistics"
 msgstr "Állásstatisztika (az egyszeri munkák kivételével)"
+
+msgid "last 10s"
+msgstr "utolsó 10 mp"
+
+msgid "All Stats"
+msgstr "Összes statisztika"
+
+msgid "Last 10s"
+msgstr "Utolsó 10 mp"
 
 msgid "Job"
 msgstr "Munka"
@@ -2645,9 +2688,6 @@ msgstr "pl. f vagy XOfR"
 
 msgid "Cost"
 msgstr "Költség"
-
-msgid "Country"
-msgstr "Ország"
 
 msgid "Country Codes"
 msgstr "Ország kódok"
@@ -2919,9 +2959,6 @@ msgstr "Rejtett"
 
 msgid "Published"
 msgstr "Közzétett"
-
-msgid "Hostname"
-msgstr "Hostnév"
 
 msgid "Whois"
 msgstr "Whois"
@@ -3363,11 +3400,14 @@ msgstr "Megtekintés/Szerkesztés"
 msgid "OK"
 msgstr "Rendben"
 
-msgid "Test Fails"
-msgstr "Teszt sikertelen"
+msgid "tests passed"
+msgstr "tesztek sikeresek"
 
 msgid "Unreachable"
 msgstr "Nem elérhető"
+
+msgid "Test Fails"
+msgstr "Teszt sikertelen"
 
 msgid "Most tests passing"
 msgstr "A legtöbb teszt sikeres"
@@ -3527,19 +3567,6 @@ msgstr "A közelmúltban hány új társról szóltak nekünk?"
 msgid "All"
 msgstr "Összes"
 
-msgid "Session Bans"
-msgstr "Munkamenet tiltások"
-
-msgid "Total number of banned peers"
-msgstr "A kitiltott társak száma összesen"
-
-msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr "Megjegyzés: 'LU' osztályú routerek ki lettek a listából."
-
-#, java-format
-msgid "To view, see {0}Session Bans{1}."
-msgstr "Megtekintéshez, lásd {0}Munkamenet Tiltásai{1}."
-
 msgid "Select search engine"
 msgstr "Válassz keresőmotort"
 
@@ -3627,6 +3654,12 @@ msgstr "Alagutak építés alatt"
 
 msgid "Shared Clients"
 msgstr "Megosztott Ügyfelek"
+
+msgid "Ping"
+msgstr "Ping"
+
+msgid "I2Ping"
+msgstr "I2Ping"
 
 msgid "Click Restart to install"
 msgstr "Telepítéshez kattints az újraindításra"
@@ -3857,6 +3890,12 @@ msgstr "A legutóbbi társ teljesítmény profilok megjelenítése"
 msgid "View existing tunnels and tunnel build status"
 msgstr "Létező alagutak és alagút építési állapot megtekintése"
 
+msgid "Streams"
+msgstr "Folyamok"
+
+msgid "View active streaming connections"
+msgstr "Aktív streaming kapcsolatok megtekintése"
+
 msgid "Advanced Configuration"
 msgstr "Speciális Konfiguráció"
 
@@ -4009,8 +4048,8 @@ msgstr "Bejövő és kimenő forgalmunk az elmúlt 20 percben"
 msgid "Total number of tunnels in use"
 msgstr "A használt alagutak teljes száma"
 
-msgid "Average tunnel build success for last 10m interval"
-msgstr "Átlagos alagútépítési siker az utolsó 10 méteres intervallumban"
+msgid "Tunnel build success (higher of 1m or 10m average)"
+msgstr "Alagútépítés sikeressége (magasabb az 1 perces vagy 10 perces átlagból)"
 
 msgid "Tunnels we are using to provide or access services on the network"
 msgstr "Alagutak, amelyeket a hálózati szolgáltatások nyújtására vagy elérésére használunk"
@@ -4039,8 +4078,8 @@ msgstr "Egyidejű alagútépítések (egy perc alatt átlagolva) / egy alagúté
 msgid "Concurrency"
 msgstr "51-es konkurencia:"
 
-msgid "Combined utility and service tunnel build success (averaged over 10 minute intervals)"
-msgstr "Kombinált közmű- és szervizalagút-építési siker (átlagosan 10 perces időközönként)"
+msgid "Combined utility and service tunnel build success (higher of 1m or 10m average)"
+msgstr "Kombinált segéd- és szolgáltatás alagútépítés sikeressége (magasabb az 1 perces vagy 10 perces átlagból)"
 
 msgid "Build Success"
 msgstr "Építési siker"
@@ -4184,8 +4223,8 @@ msgstr "Új elemzés futtatása"
 msgid "Configure periodic analysis"
 msgstr "Időszakos elemzés konfigurálása"
 
-msgid "Review current bans"
-msgstr "A jelenlegi tilalmak áttekintése"
+msgid "Review session bans"
+msgstr "Munkamenet-tiltások áttekintése"
 
 msgid "Delete Sybil Blocklist"
 msgstr "Sybil blokklistájának törlése"
@@ -4235,8 +4274,14 @@ msgstr "Szkenelés indítása"
 msgid "Run analysis on all routers in NetDb"
 msgstr "Elemzés futtatása a NetDb összes routerén"
 
-msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, with the option to block peers meeting the configured threshold. Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."
-msgstr "A sybil észlelési rutin beállítható úgy, hogy rendszeres időközönként átvizsgálja a hálózati adatbázist, és blokkolja a beállított küszöbértéket elérő társakat. A társak blokkolása megakadályozza, hogy az útválasztó alagutakat építsen velük a konfigurált időtartamig, vagy amíg az útválasztót újra nem indítják."
+msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, "
+msgstr "A szibilaészlelő rutin beállítható a Hálózati Adatbázis rendszeres időközönkénti vizsgálatára, "
+
+msgid "with the option to block peers meeting the configured threshold. "
+msgstr "azzal a lehetőséggel, hogy blokkolja a beállított küszöbértéket elérő társakat. "
+
+msgid "Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."
+msgstr "A társak blokkolása megakadályozza, hogy az útválasztó alagutakat építsen velük a beállított időtartamig, vagy az útválasztó újraindításáig."
 
 msgid "Configure Background Analysis"
 msgstr "Háttérelemzés konfigurálása"
@@ -4466,22 +4511,11 @@ msgstr "Bejövő Átjáró (Gateway)"
 msgid "Participant"
 msgstr "Résztvevő"
 
-msgid "sec"
-msgstr "mp"
-
 msgid "grace period"
 msgstr "türelmi idő"
 
 msgid "Tunnel identity"
 msgstr "Alagútazonosító"
-
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "Korlátozott megjelenítés a legnagyobb kihasználtságú {0} alagúthoz"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "Korlátozott megjelenítés a (z) {0} legutóbbi alagútban"
 
 msgid "Lifetime bandwidth usage"
 msgstr "Élethossz sávszélesség használat"
@@ -4536,6 +4570,12 @@ msgstr "Bejövő vagy kimenő?"
 msgid "In/Out"
 msgstr "Be/Kimenet"
 
+msgid "Tunnel test status"
+msgstr "Alagút teszt állapot"
+
+msgid "Latency"
+msgstr "Késleltetés"
+
 msgid "Gateway"
 msgstr "Átjáró (Gateway)"
 
@@ -4545,11 +4585,30 @@ msgstr "Résztvevők"
 msgid "Endpoint"
 msgstr "Végpont"
 
+msgid "Test successful"
+msgstr "Teszt sikeres"
+
+msgid "Test in progress"
+msgstr "Teszt folyamatban"
+
+#, java-format
+msgid "Test failing (failures: {0})"
+msgstr "Teszt sikertelen (hibák: {0})"
+
+msgid "Test failed (3 consecutive failures)"
+msgstr "Teszt sikertelen (3 egymást követő hiba)"
+
+msgid "Tunnel too slow - scheduled for early expiry"
+msgstr "Túl lassú alagút - korai lejáratra ütemezve"
+
+msgid "Pool over budget - scheduled for early expiry"
+msgstr "Medence túlköltekezett - korai lejáratra ütemezve"
+
+msgid "Not yet tested"
+msgstr "Még nem tesztelt"
+
 msgid "Locally hosted tunnel"
 msgstr "Helyi alagút"
-
-msgid "Build in progress"
-msgstr "Építés folyamatban"
 
 msgid "in"
 msgstr "be"
@@ -4565,6 +4624,9 @@ msgstr "Alagút Neve"
 
 msgid "Data Out"
 msgstr "Adatkimenet"
+
+msgid "Active / Configured"
+msgstr "Aktív / Beállított"
 
 msgid "Console language saved."
 msgstr "Konzolnyelv mentve."
@@ -4835,6 +4897,123 @@ msgstr "Segítség a további konfigurációs beállításokkal"
 msgid "To make changes, edit the file: {0}"
 msgstr "A módosítások elvégzéséhez szerkessze a következő fájlt: {0}"
 
+msgid "config bans"
+msgstr "tiltások beállítása"
+
+msgid "Ban Configuration"
+msgstr "Tiltás konfiguráció"
+
+msgid "Custom Router Ban Policies"
+msgstr "Egyéni útválasztó tiltás szabályzatok"
+
+msgid "IP Blocklists"
+msgstr "IP blokkolólisták"
+
+msgid "Ban IP addresses from blocklist.txt. Disabling will purge all blocked IPs."
+msgstr "IP-címek tiltása a blocklist.txt fájlból. Letiltás esetén az összes blokkolt IP törlődik."
+
+msgid "Enable IP blocklist"
+msgstr "IP blokkolólista engedélyezése"
+
+msgid "Ban Tor exit node IPs from blocklist_tor.txt. Disabling will purge all blocked IPs."
+msgstr "Tor kilépési csomópont IP-k tiltása a blocklist_tor.txt fájlból. Letiltás esetén az összes blokkolt IP törlődik."
+
+msgid "Enable Tor exit node blocklist"
+msgstr "Tor kilépési csomópont blokkolólista engedélyezése"
+
+msgid "Country Bans"
+msgstr "Ország szerinti tiltások"
+
+msgid "Ban routers from your own country until router restart"
+msgstr "Társak tiltása a saját országodból az útválasztó újraindításáig"
+
+msgid "Ban peers in my country"
+msgstr "Társak tiltása a saját országomban"
+
+msgid "Ban routers from specified countries until router restart"
+msgstr "Társak tiltása megadott országokból az útválasztó újraindításáig"
+
+msgid "Enable country-based bans"
+msgstr "Ország alapú tiltások engedélyezése"
+
+msgid "Country codes"
+msgstr "Országkódok"
+
+msgid "Add county codes, separated by spaces or commas e.g. cn,de"
+msgstr "Országkódok hozzáadása szóközzel vagy vesszővel elválasztva pl. cn,de"
+
+msgid "Network Abuse"
+msgstr "Hálózati visszaélés"
+
+msgid "Ban peers that send malformed packets"
+msgstr "Társak tiltása, akik hibás csomagokat küldenek"
+
+msgid "Ban peers sending malformed packets"
+msgstr "Társak tiltása, akik hibás csomagokat küldenek"
+
+msgid "Ban peers with corrupt connections during handshake"
+msgstr "Társak tiltása sérült kapcsolatokkal a kézfogás során"
+
+msgid "Ban peers with corrupt connections"
+msgstr "Társak tiltása sérült kapcsolatokkal"
+
+msgid "Ban peers that rapidly change their ports"
+msgstr "Társak tiltása, akik gyorsan változtatják portjaikat"
+
+msgid "Ban peers attempting port hopping"
+msgstr "Társak tiltása, akik portugrást kísérelnek meg"
+
+msgid "Ban peers sending excessive unsolicited search replies"
+msgstr "Társak tiltása, akik túlzott kéretlen keresési válaszokat küldenek"
+
+msgid "Ban peers sending fake/slow search replies"
+msgstr "Társak tiltása, akik hamis/lassú keresési válaszokat küldenek"
+
+msgid "Abuse Thresholds"
+msgstr "Visszaélési küszöbök"
+
+msgid "Startup grace period"
+msgstr "Indítási türelmi idő"
+
+msgid "Ban duration"
+msgstr "Tiltás időtartama"
+
+msgid "Max offenses"
+msgstr "Max szabálysértések"
+
+msgid "Period during which offenses are counted"
+msgstr "Időszak, amely alatt a szabálysértések számítanak"
+
+msgid "Offense window"
+msgstr "Szabálysértési ablak"
+
+msgid "Bans by Capability"
+msgstr "Tiltások képesség szerint"
+
+msgid "Ban XG tier routers - unlimited bandwidth but not hosting transit tunnels (probably botnet participant)"
+msgstr "XG szintű útválasztók tiltása - korlátlan sávszélesség, de nem üzemeltet tranzitalagutakat (valószínűleg botnet résztvevő)"
+
+msgid "Ban XG routers"
+msgstr "XG útválasztók tiltása"
+
+msgid "Ban LU tier routers - low bandwidth and unreachable/firewalled"
+msgstr "LU szintű útválasztók tiltása - alacsony sávszélesség és elérhetetlen/tűzfal mögött"
+
+msgid "Ban LU routers"
+msgstr "LU útválasztók tiltása"
+
+msgid "Additional Router Caps"
+msgstr "További útválasztó képességek"
+
+msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG"
+msgstr "Képességcsoportok hozzáadása szóközzel vagy vesszővel elválasztva pl. LUf,PUG"
+
+msgid "Clear all bans"
+msgstr "Összes tiltás törlése"
+
+msgid "Reset to defaults"
+msgstr "Visszaállítás alapértelmezettre"
+
 msgid "config clients"
 msgstr "kliensek beállítása"
 
@@ -4893,7 +5072,7 @@ msgid "You may create a new router family here. Once you have created the family
 msgstr "Itt létrehozhat egy új útválasztó családot. Miután létrehozta a családot, exportálhatja a családi kulcsfájlt, és megoszthatja a kijelölt család többi útválasztójával."
 
 msgid "Note: To avoid deanonymization, do not name your family with personally-attributable information e.g. your IRC nickname; your family name is associated with your router's IP address."
-msgstr "Megjegyzés: A névtelenítés elkerülése érdekében ne nevezze meg családját személyesen felróható adatokkal, pl. az Ön IRC beceneve; a családneve az útválasztó IP-címéhez van társítva."
+msgstr "Megjegyzés: A névtelenítés elkerülése érdekében ne nevezze meg családját személyesen felróható adatokkal, pl. az Ön IRC beceneve; a családneve az útválasztó IP-címéhez van társítva. your IRC nickname; your family name is associated with your router's IP address"
 
 msgid "Enter new family name"
 msgstr "Adja meg az új családnevet"
@@ -5216,6 +5395,9 @@ msgstr "Peer Manager"
 msgid "Manual Peer Controls"
 msgstr "Társ Kézi Irányítás"
 
+msgid "Router Hash"
+msgstr "Router Hash"
+
 msgid "Manually Ban / Unban a Peer"
 msgstr "Társ Kézi Kitiltása / Kitiltás Visszavonása"
 
@@ -5323,9 +5505,6 @@ msgstr "Ez az opció az I2P HTTP outproxyját fogja használni az újratöltésh
 
 msgid "I2P Outproxy"
 msgstr "I2P Külső Proxy"
-
-msgid "Port"
-msgstr "Port"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "Használjon HTTP proxyt a HTTP újraolvasó gazdagépekhez"
@@ -5746,6 +5925,9 @@ msgstr "Ez a beállítás, amikor igazra van állítva, megjeleníti az érdekes
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
 msgstr "Ez a beállítás, ha igazra van állítva, a standard oldalsáv jelenik meg a főoldalon, lehetővé téve a konfigurációt a <a href=/configsidebar> linken keresztül. [Alapértelmezett false]"
 
+msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
+msgstr "Ha igaz, az útválasztó konzol bejelentkezési hitelesítést igényel. Ha nincs jelszó beállítva, meg kell adnia egyet a bejelentkezési oldalon. Ha hamis, a konzol bejelentkezés nélkül elérhető, ha nincsenek jelszavak beállítva. [Alapértelmezés hamis, egy jövőbeli kiadásban alapértelmezetten engedélyezve lesz CSRF védelemhez]"
+
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Ezt a beállítástól függ, használja-e a router a rendelkezésre bocsátott <i>blocklist.txt</i> fájlt és a felhasználó által konfigurált tilalmi listákat a routerek tiltásához hash vagy IP cím alapján. Az IPv4 esetében tartományok és hálózati maszkok támogatottak, de az IPv6 esetében nem. További információkért tekintse meg az I2P+ alkalmazás könyvtárában található <i>blocklist.txt</i> fájlt. [Elsődlegesen engedélyezve, újraindítás szükséges]"
 
@@ -5760,6 +5942,12 @@ msgstr "Ezt a beállítástól függ, hogy a router használja-e a rendelkezésr
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
 msgstr "Ez a beállítás lehetővé teszi, hogy a megadott országokból származó routerek kéréseit és kitiltása, amint egy közvetlen alagút kérés történik. Az országoknak kétbetű országkódként kell megadni, vesszővel elválasztva. Pl. router.blockCountries=cn,ru"
+
+msgid "The maximum number of session banlog archive files to keep. When exceeded, older archives are deleted. [Default is 5]"
+msgstr "A megőrzendő munkamenet-tiltás napló archív fájlok maximális száma. Túllépés esetén a régebbi archívumok törlődnek. [Alapértelmezés 5]"
+
+msgid "The frequency in milliseconds to scan for suspicious hash patterns (potential Sybil attacks). Set to 0 to disable. [Default is 3600000]"
+msgstr "A gyakoriság ezredmásodpercben a gyanús hash minták (potenciális szibila támadások) vizsgálatához. Állítsa 0-ra a letiltáshoz. [Alapértelmezés 3600000]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "Amikor hamisra van állítva, a router nem blokkolja az alacsonyabb sebességű vagy elérhetetlen, régebbi verziójú routerektől érkező alagút létrehozási kérelmeket. [Alapértelmezés szerint igaz, újraindítás szükséges]"
@@ -5794,6 +5982,30 @@ msgstr "Amikor hamisra van állítva, a router nem korlátozza a többi router �
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "Ez a beállítás meghatározza, melyik <a href=/profiles#profile_defs>peer képességek</a> nem lesznek használva a router alagútjainak létrehozásához. pl. <code>router.excludePeerCaps=LMN</code>"
 
+msgid "When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is true]"
+msgstr "Ha hamisra van állítva, az elérhetetlen társak kiválaszthatók ugrópontként a bejövő feltáró alagutakhoz. [Alapértelmezés igaz]"
+
+msgid "When set to false, unreachable peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
+msgstr "Ha hamisra van állítva, az elérhetetlen társak kiválaszthatók ugrópontként a kimenő feltáró alagutakhoz. [Alapértelmezés igaz]"
+
+msgid "When set to false, unreachable peers may be selected as hops for inbound client tunnels. [Default is true]"
+msgstr "Ha hamisra van állítva, az elérhetetlen társak kiválaszthatók ugrópontként a bejövő kliens alagutakhoz. [Alapértelmezés igaz]"
+
+msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is true]"
+msgstr "Ha hamisra van állítva, az elérhetetlen társak kiválaszthatók ugrópontként a kimenő kliens alagutakhoz. [Alapértelmezés igaz]"
+
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
+msgstr "Ha hamisra van állítva, a lassú társak (magas alagút tesztidők) kiválaszthatók ugrópontként a bejövő feltáró alagutakhoz. [Alapértelmezés igaz]"
+
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
+msgstr "Ha hamisra van állítva, a lassú társak kiválaszthatók ugrópontként a kimenő feltáró alagutakhoz. [Alapértelmezés igaz]"
+
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
+msgstr "Ha hamisra van állítva, a lassú társak kiválaszthatók ugrópontként a bejövő kliens alagutakhoz. [Alapértelmezés igaz]"
+
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
+msgstr "Ha hamisra van állítva, a lassú társak kiválaszthatók ugrópontként a kimenő kliens alagutakhoz. [Alapértelmezés igaz]"
+
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
 msgstr "Ez a beállítás (órákat) meghatározza, hogy mennyi idős egy RouterInfo az NetDb-ban (utolsó ismert közzétételi dátuma) mielőtt elavultnak és törlendőnek minősül. [Az alapértelmezett érték 28 óra, hacsak a router nem Floodfill, ebben az esetben az alapértelmezett érték 8 óra]"
 
@@ -5820,6 +6032,39 @@ msgstr "Ha igazra van állítva, és a router a hálózat központi szerverekén
 
 msgid "Defines the maximum number of parallel <a href=/jobs>jobs</a> that can be run. The default value is determined by the amount of memory allocated to the JVM via <code>wrapper.config</code>, and is set at 3 for less than 64MB, 4 for less than 256M, or 5 for more than 256MB. Note: A change to this setting requires a restart of the router."
 msgstr "Meghatározza a futtatható párhuzamos <a href=/jobs>munkafolyamatok</a> maximális számát. Az alapérték a JVM-nek a <code>wrapper.config</code> segítségével rendelt memóriamennyiségtől függ: 3, ha kevesebb, mint 64MB, 4, ha kevesebb, mint 256MB, vagy 5, ha 256MB-nál több. Megjegyzés: A beállítás megváltoztatása a router újraindítását igényli."
+
+msgid "Defines the minimum number of parallel <a href=/jobs>job runners</a>. The router will not scale down below this number. Default is 4, minimum is 1. This setting is dynamic and takes effect without restart."
+msgstr "Meghatározza a párhuzamos <a href=/jobs>feladatfuttatók</a> minimális számát. Az útválasztó nem skálázódik e szám alá. Alapértelmezés 4, minimum 1. Ez a beállítás dinamikus és újraindítás nélkül hatályba lép."
+
+msgid "Enable dynamic scaling of job runners based on queue load. When enabled, the router automatically scales the number of job runner threads up or down based on ready job count and lag. [Default is true]"
+msgstr "Feladatfuttatók dinamikus skálázásának engedélyezése a sor terhelése alapján. [Alapértelmezés igaz] [Default is true]"
+
+msgid "The job queue lag threshold in milliseconds that triggers scaling up job runners. When max lag exceeds this value, additional runners are started. [Default is 1]"
+msgstr "A feladatsor késleltetési küszöbértéke ezredmásodpercben, amely elindítja a feladatfuttatók felskálázását. [Alapértelmezés 1] [Default is 1]"
+
+msgid "The job queue lag threshold in milliseconds that allows scaling down job runners. When max lag stays below this value, excess runners are stopped. [Default is 1]"
+msgstr "A feladatsor késleltetési küszöbértéke ezredmásodpercben, amely lehetővé teszi a feladatfuttatók leskálázását. [Alapértelmezés 1] [Default is 1]"
+
+msgid "The ratio of ready jobs to active runners that triggers scaling up. If readyJobs > activeRunners * ratio, additional runners are started. [Default is 1.2]"
+msgstr "A kész feladatok és az aktív futtatók aránya, amely elindítja a felskálázást. [Alapértelmezés 1.2]"
+
+msgid "The interval in milliseconds between job runner scaling checks. [Default is 1000]"
+msgstr "A feladatfuttató skálázási ellenőrzések közötti időköz ezredmásodpercben. [Alapértelmezés 1000]"
+
+msgid "The cooldown period in milliseconds between scale operations. [Default is 5000]"
+msgstr "A skálázási műveletek közötti lehűlési idő ezredmásodpercben. [Alapértelmezés 5000]"
+
+msgid "Enable the feedback mechanism that automatically rolls back ineffective scale-up operations. If lag increases after adding runners, they will be removed. [Default is true]"
+msgstr "A visszacsatolási mechanizmus engedélyezése, amely automatikusan visszavonja a hatástalan felskálázásokat. [Alapértelmezés igaz] [Default is true]"
+
+msgid "The maximum number of waiting jobs in the queue before aggressive job dropping is triggered. When exceeded, non-critical jobs are dropped to reduce queue pressure. [Default is 48]"
+msgstr "A sorban várakozó feladatok maximális száma az agresszív feladateldobás előtt. [Alapértelmezés 48] [Default is 48]"
+
+msgid "Maximum number of pending tunnel build jobs in the BuildHandler queue. When the queue exceeds this limit, new build requests are rejected to prevent job queue overload. [Default is 256]"
+msgstr "A BuildHandler sorban függőben lévő alagútépítési feladatok maximális száma. [Alapértelmezés 256] [Default is 256]"
+
+msgid "Multiplier applied to the base tunnel build concurrency. The effective concurrency is baseBuildRate * multiplier, clamped by maxConcurrentBuilds. Higher values accelerate pool recovery but increase network load. [Default is 1.0]"
+msgstr "Az alap alagútépítési egyidejűségre alkalmazott szorzó. A hatékony egyidejűség baseBuildRate * szorzó, maxConcurrentBuilds korlátozva. [Alapértelmezés 1.0]"
 
 msgid "Determines the maximum number of participating tunnels the router can build. To disable participation completely, set to 0. [Default is 8000, or 2000 if running on Arm or Android]"
 msgstr "Meghatározza, hogy a routernak legfeljebb hány résztvevő alagútat lehet építeni. Teljes részvételi tilalom esetén állítsa 0-ra. [Az alapértelmezett érték 8000, vagy ha Arm vagy Android fut, akkor 2000]"
@@ -5857,14 +6102,26 @@ msgstr "Kevesebb, mint 256MB JVM-nek kiosztott memória"
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
 msgstr "A router egy nem natív, szoftver emulált Java BigInteger könyvtárat futtat"
 
-msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
-msgstr "Ez a beállítás meghatározza a közvetítő tesztek számát egyidejűleg, ami a peer lassúságának meghatározásához használatos. [Az alapérték 4]"
+msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. When tunnel build success drops below 50%, concurrency is halved to avoid adding load during a failure cascade. [Default varies: 1 on slow systems, 2 on single/dual-core, 4 otherwise]"
+msgstr "Ez a beállítás határozza meg az egyidejűleg futtatott társ-tesztek számát. Ha az alagútépítés sikeressége 50% alá csökken, az egyidejűség feleződik. [Alapértelmezés változó: 1 lassú rendszereken, 4 egyébként]"
 
-msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 5000]"
-msgstr "Ez a beállítás meghatározza a közvetítő tesztfeladataink közötti késleltetést, milliszekundumban konfigurálva. [Az alapérték 5000]"
+msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 30000 (30s), or 45000 (45s) on slow systems]"
+msgstr "Ez a beállítás határozza meg a társ-teszt feladatok közötti késleltetést ezredmásodpercben. [Alapértelmezés 30000 (30 mp), vagy 45000 (45 mp) lassú rendszereken]"
 
-msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 1000]"
-msgstr "A peer lassúságának meghatározása érdekében ez a beállítás a maximális időt szánja, amit egy peer tesztnek vegyen igénybe a kudarcnak való tekintet nélkül, milliszekundumban bemérve. Amennyiben a válaszidő a sikeres tesztek átlagánál kisebbre van konfigurálva, használatba veszi az átlag sikeres teszt értékét. [Az alapérték 1000]"
+msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 5000]"
+msgstr "A társ késleltetésének meghatározásához ez a beállítás allokálja a maximális időt, amit egy társ-tesztnek el kell tartania a hiba megállapítása előtt. [Alapértelmezés 5000] [Default is 5000]"
+
+msgid "Minimum number of peers to retain in the fast tier during profile reorganization. A higher value ensures more peers are available for tunnel building, at the cost of potentially including slower peers. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 400]"
+msgstr "A gyors szinten megtartandó társak minimális száma a profilátszervezés során. Ha több mint 3000 útválasztó ismert, az alapértelmezés <code>knownRouters / 15</code> lesz. [Alapértelmezés 400] [Default is 400]"
+
+msgid "Minimum number of peers to retain in the high-capacity tier. These are the peers with the highest measured throughput and greatest ability to relay traffic. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 500]"
+msgstr "A nagy kapacitású szinten megtartandó társak minimális száma. [Alapértelmezés 500] Ha több mint 3000 router ismert, az alapértelmezés a knownRouters/15 értékre skálázódik. [Alapértelmezés 500]"
+
+msgid "Maximum number of peer profiles to retain in memory. Older, inactive profiles are expired first when this limit is reached. Values below 100 are clamped to 100. [Default is 8000, or 800 on slow systems]"
+msgstr "A memóriában megtartandó társ profilok maximális száma. A 100 alatti értékek 100-ra vannak szorítva. [Alapértelmezés 8000, vagy 800 lassú rendszereken] [Default is 8000, or 800 on slow systems]"
+
+msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 3]"
+msgstr "A RouterInfo maximális kora (órákban) ahhoz, hogy egy társ kiválasztható legyen alagútépítéshez. [Alapértelmezés 3] Ez különösen fontos a floodfill routereknél, amelyek nem fedezik fel aktívan a NetDB-t, mivel a RouterInfo-ik elavulhatnak időszakos frissítés nélkül. [Alapértelmezés 3]"
 
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
 msgstr "Ez a beállítás meghatározza, hogy a mi Útválasztónk adatai közvetett módon megjelennek-e a NetDb-ben. [Az alapérték hamis]"
@@ -5899,8 +6156,227 @@ msgstr "Ez a beállítás meghatározza, hogy az érdektelennek minősített rou
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
 msgstr "Ha igazra van állítva, ez a beállítás fellazgatja a router számára a torlódési sapkák közzétételéhez szükséges feltételeket, különösen akkor is, ha megállapítást, hogy a sávszélesség használata magas. Egyéb feltételek, mint például magas munka késés vagy a router lassúnak minősítése, továbbra is okozzák a sapkák közzétételét. [Alapértelmezett false]"
 
-msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr "Amikor konfigurálva van, ez meghatározza a router által egyszerre felépíthető alagutak általános korlátát. Alapértelmezés szerint a router az átlagos felépítési időt és a jelenlegi kimenő sávszélességet használja az optimális felépítési sebesség meghatározásához. [Újraindítás szükséges]"
+msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. This setting is dynamic and takes effect without restart."
+msgstr "Ha be van állítva, ez kemény korlátot szab az útválasztó által egyidejűleg építhető alagutak számára. Dinamikus, újraindítás nélkül hatályba lép. This setting is dynamic and takes effect without restart"
+
+msgid "When set to true, the router uses the older peer selection algorithm when building tunnels (prefer fast peers directly, without the multi-tier HighCap → Fast → Active fallback chain). May be useful for troubleshooting peer selection issues. [Default is false. This setting is dynamic and takes effect immediately.]"
+msgstr "Ha igaz, az útválasztó a régebbi társ-kiválasztási algoritmust használja alagutak építésekor. [Alapértelmezés hamis, dinamikus, azonnal hatályos] [Default is false This setting is dynamic and takes effect immediately ]"
+
+msgid "Growth factor used by the router's transit tunnel throttle. Higher values make the router accept tunnel build requests more aggressively relative to the 10-minute average. Lower values make it probabalistically reject sooner when tunnel counts are rising rapidly. [Default is 2.0]"
+msgstr "Az útválasztó tranzitalagút fojtása által használt növekedési tényező. [Alapértelmezés 2.0] [Alapértelmezés 2.0]"
+
+msgid "Growth factor for tunnel test time acceptance rate limiting. If the 1-minute average test time exceeds the 1-hour average multiplied by this factor, the router begins probabalistically rejecting. [Default is 1.5]"
+msgstr "Növekedési tényező az alagút tesztidő elfogadási arány korlátozásához. [Alapértelmezés 1.5]"
+
+msgid "Controls the steepness of the rejection probability curve when bandwidth usage approaches capacity. Lower values give a smoother transition (less aggressive rejection at moderate load). [Default is 10]"
+msgstr "Az elutasítási valószínűségi görbe meredekségét szabályozza, amikor a sávszélesség-használat közelíti a kapacitást. [Alapértelmezés 10] [Default is 10]"
+
+msgid "Penalty multiplier applied to a peer's capacity value when the peer publishes a 'D' congestion cap (moderate congestion). Higher values reduce the peer's effective capacity more aggressively. [Default is 2.5]"
+msgstr "Büntető szorzó alkalmazva a társ kapacitásértékére, amikor a társ 'D' torlódási képességet tesz közzé. [Alapértelmezés 2.5]"
+
+msgid "Penalty multiplier applied to a peer's capacity value when the peer publishes an 'E' congestion cap (severe congestion). [Default is 4.75]"
+msgstr "Büntető szorzó 'E' torlódási képességhez. [Alapértelmezés 4.75]"
+
+msgid "Time in milliseconds before expiration when pruned tunnels are marked for early expiry, giving replacement tunnels time to build. Higher values allow more overlap between old and new tunnels. [Default is 120000 (2 minutes)]"
+msgstr "Idő ezredmásodpercben a lejárat előtt, amikor a kivágott alagutak korai lejáratra vannak jelölve. [Alapértelmezés 120000 (2 perc)] [Default is 120000 (2 minutes)]"
+
+msgid "The latency threshold in milliseconds for removing slow tunnels from <a href=/tunnels>local tunnel pools</a>. Tunnels with latency above this threshold will be removed if the pool exceeds the minimum tunnel count. Set to 0 to use 1 second or the lowest recorded latency from all pools, whichever is higher. [Default is 0]"
+msgstr "A késleltetési küszöb ezredmásodpercben a lassú alagutak eltávolításához a <a href=/tunnels>helyi alagútmedencékből</a>. [Alapértelmezés 0] Set to 0 to use 1 second or the lowest recorded latency from all pools, whichever is higher [Default is 0]"
+
+msgid "The minimum number of tunnels to keep in each pool when removing slow tunnels (minimum 2), overriding the configured tunnel quantity. Set to 0 to use the configured quantity per pool. [Default is 0]"
+msgstr "Az egyes medencékben megtartandó alagutak minimális száma lassú alagutak eltávolításakor (minimum 2). [Alapértelmezés 0] [Default is 0]"
+
+msgid "The interval in milliseconds between runs of the Remove Slow Tunnels job. Higher values reduce tunnel churn but may keep slow tunnels longer. [Default is 90000 (90s), or 120000 (120s) if under load]"
+msgstr "A Lassú Alagutak Eltávolítása feladat futtatásai közötti időköz ezredmásodpercben. [Alapértelmezés 90000 (90 mp)] [Default is 90000 (90s), or 120000 (120s) if under load]"
+
+msgid "The time in milliseconds before expiration to mark tunnels for early expiry when the Remove Slow Tunnels job prunes slow or excess tunnels. Higher values allow more time for new tunnels to build. [Default is 30000]"
+msgstr "Idő ezredmásodpercben a lejárat előtt az alagutak korai lejáratra jelöléséhez. [Alapértelmezés 30000] [Default is 30000]"
+
+msgid "Hard limit on total tunnel test jobs (queued + active). Prevents runaway test backlogs from causing job queue lag. Once reached, no new tests are scheduled until the count drops. [Default is 128 (96 on slower systems)]"
+msgstr "Kemény korlát az összes alagútteszt-feladatra (sorban + aktív). [Alapértelmezés 128 (96 lassúbb rendszereken)] Once reached, no new tests are scheduled until the count drops [Default is 128 (96 on slower systems)]"
+
+msgid "Base adaptive queue limit for tunnel test jobs. The router scales this up/down by 2-3x based on job queue lag and failure rates. [Default is 48 (32 on slower systems)]"
+msgstr "Alap adaptív sor korlát alagútteszt-feladatokhoz. [Alapértelmezés 48 (32 lassúbb rendszereken)] [Default is 48 (32 on slower systems)]"
+
+msgid "Maximum number of tunnel tests that can execute simultaneously. Caps concurrent test throughput to prevent overwhelming the router. [Default is 64 (32 on slower systems)]"
+msgstr "Az egyidejűleg végrehajtható alagúttesztek maximális száma. [Alapértelmezés 64 (32 lassúbb rendszereken)] [Default is 64 (32 on slower systems)]"
+
+msgid "Maximum consecutive client tunnel build timeouts before forcing exploratory tunnels for build reply delivery. Higher values keep the router trying paired tunnels longer; lower values fall back to exploratory sooner. [Default is 3]"
+msgstr "Maximális egymást követő kliens alagútépítési időtúllépések, mielőtt a feltáró alagutak kényszerítésre kerülnének. [Alapértelmezés 3] [Default is 3]"
+
+msgid "How long to wait for a tunnel build reply before trying a different pool or different peers. The BuildExecutor adaptively increases this when success rates are low. [Default is 5000 (5s), 10000 (10s) on slow systems]"
+msgstr "Mennyi ideig várjon alagútépítési válaszra, mielőtt másik medencét vagy társakat próbálna. [Alapértelmezés 5000 (5 mp), 10000 (10 mp) lassú rendszereken] [Default is 5000 (5s), 10000 (10s) on slow systems]"
+
+msgid "Timeout in milliseconds for the first-hop OutNetMessage before firing TunnelBuildFirstHopFailJob. Should be >= requestTimeout for proper sequencing. [Default is 10000 (10 seconds)]"
+msgstr "Időtúllépés ezredmásodpercben az első ugró OutNetMessage számára a TunnelBuildFirstHopFailJob elindítása előtt. [Alapértelmezés 10000 (10 mp)] [Default is 10000 (10 seconds)]"
+
+msgid "Timeout in milliseconds for RouterInfo lookup of the next hop during tunnel build processing. If the lookup times out, the build request is rejected. [Default is 8000 (8 seconds)]"
+msgstr "Időtúllépés ezredmásodpercben a következő ugró RouterInfo kereséséhez alagútépítés során. [Alapértelmezés 8000 (8 mp)] [Default is 8000 (8 seconds)]"
+
+msgid "Backoff delay in milliseconds between exploratory tunnel build retries. Higher values reduce build request rate during failures; lower values retry faster. [Default is 200]"
+msgstr "Visszalépési késleltetés ezredmásodpercben a feltáró alagútépítési újrapróbálkozások között. [Alapértelmezés 200] [Default is 200]"
+
+msgid "Backoff delay in milliseconds between client tunnel build retries. Lower values rebuild failed client tunnels faster. [Default is 50]"
+msgstr "Visszalépési késleltetés ezredmásodpercben a kliens alagútépítési újrapróbálkozások között. [Alapértelmezés 50] [Default is 50]"
+
+msgid "Grace period in milliseconds to accept late tunnel build replies after the router has given up waiting. Prevents wasting valid tunnel builds that arrive just after timeout. [Default is 60000 (60 seconds)]"
+msgstr "Türelmi idő ezredmásodpercben a késői alagútépítési válaszok elfogadásához, miután az útválasztó feladta a várakozást. [Alapértelmezés 60000 (60 mp)] [Default is 60000 (60 seconds)]"
+
+msgid "Minimum target tunnels per pool before triggering urgent rebuild logic. When the number of good tunnels drops below this threshold, the pool escalates to urgent rebuild mode. [Default is 2]"
+msgstr "Minimális célszámú alagút medencénként a sürgős újraépítési logika elindítása előtt. [Alapértelmezés 2] [Default is 2]"
+
+msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build processing. Ensures a minimum level of lookup concurrency even when few tunnels are participating. [Default is 10 (4 on slow systems)]"
+msgstr "Padló az egyidejű következő-ugró RouterInfo keresésekhez alagútépítés során. [Alapértelmezés 10 (4 lassú rendszereken)] [Default is 10 (4 on slow systems)]"
+
+msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Caps lookup concurrency to prevent overwhelming the netDb. [Default is max(cores/2, 16) (10 on slow systems)]"
+msgstr "Plafon az egyidejű RouterInfo keresésekhez. [Alapértelmezés max(cores/2, 16)]"
+
+msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
+msgstr "A jelenleg résztvevő alagutak százaléka az egyidejű keresési korlát skálázásához. [Alapértelmezés 40 (15 lassú rendszereken)] [Default is 40 (15 on slow systems)]"
+
+msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
+msgstr "Maximális megengedett jövőbeli eltérés az alagútépítési kérések időbélyegeihez. [Alapértelmezés 300000 (5 perc)] [Alapértelmezés 300000 (5 perc)]"
+
+msgid "Maximum age in milliseconds for tunnel build requests (ElGamal). Requests older than this are rejected as potential replay attacks. Must be >1 hour due to rounding in the protocol. [Default is 3900000 (65 minutes)]"
+msgstr "Maximális kor ezredmásodpercben az alagútépítési kérésekhez (ElGamal). [Alapértelmezés 3900000 (65 perc)] Must be >1 hour due to rounding in the protocol [Default is 3900000 (65 minutes)]"
+
+msgid "Maximum age in milliseconds for tunnel build requests (ECIES). ECIES timestamps are rounded to minutes so the tolerance is tighter. [Default is 480000 (8 minutes)]"
+msgstr "Maximális kor ezredmásodpercben az alagútépítési kérésekhez (ECIES). [Alapértelmezés 480000 (8 perc)] [Default is 480000 (8 minutes)]"
+
+msgid "Job lag threshold in milliseconds that triggers tunnel build limiting. When router job lag exceeds this value, tunnel build requests are throttled to reduce queue pressure. [Default is 800 (500 on slow systems)]"
+msgstr "Feladatkésleltetési küszöb ezredmásodpercben, amely elindítja az alagútépítés korlátozását. [Alapértelmezés 800 (500 lassú rendszereken)] [Default is 800 (500 on slow systems)]"
+
+msgid "Minimum delay in milliseconds before scheduling a tunnel test. The router will not test a tunnel that was recently tested within this window. [Default is 30000 (30 seconds)]"
+msgstr "Minimális késleltetés ezredmásodpercben az alagútteszt ütemezése előtt. [Alapértelmezés 30000 (30 mp)] [Default is 30000 (30 seconds)]"
+
+msgid "Maximum delay in milliseconds before scheduling a tunnel test. The router will not defer a tunnel test beyond this limit. [Default is 90000 (90 seconds)]"
+msgstr "Maximális késleltetés ezredmásodpercben az alagútteszt ütemezése előtt. [Alapértelmezés 90000 (90 mp)] [Default is 90000 (90 seconds)]"
+
+msgid "Maximum concurrent tunnel test jobs per exploratory pool. Caps how many exploratory tunnels are tested simultaneously. [Default is 12]"
+msgstr "Maximális egyidejű alagútteszt-feladatok feltáró medencénként. [Alapértelmezés 12] [Default is 12]"
+
+msgid "Maximum concurrent tunnel test jobs per client pool. Caps how many client tunnels are tested simultaneously. [Default is 24]"
+msgstr "Maximális egyidejű alagútteszt-feladatok kliens medencénként. [Alapértelmezés 24] [Default is 24]"
+
+msgid "Ratio of tunnels tested vs total pool size that triggers pool coverage heuristics. When fewer than this fraction of tunnels have recent test results, the pool prioritises testing over building. [Default is 0.95]"
+msgstr "A tesztelt alagutak aránya a teljes medenceméretben, amely elindítja a medence lefedettségi heurisztikáit. [Alapértelmezés 0.95]"
+
+msgid "Cooldown period in milliseconds for client peer selection. Peers selected for a client tunnel are excluded from selection in other client pools for this duration, ensuring peer diversity. [Default is 15000 (15 seconds)]"
+msgstr "Lehűlési idő ezredmásodpercben a kliens társ-kiválasztáshoz. [Alapértelmezés 15000 (15 mp)] [Default is 15000 (15 seconds)]"
+
+msgid "Client peer selection strategy: 'default' (balanced, preferred), 'reliability' (prioritise proven peers with high tunnel acceptance ratio), or 'diversity' (lower cooldowns, explores broader peer set). Changes apply dynamically. [Default is 'default']"
+msgstr "Kliens társ-kiválasztási stratégia: default, reliability, vagy diversity. [Alapértelmezés 'default']"
+
+msgid "Tunnel lifetime in milliseconds. Tunnels expire after this period and are replaced with fresh builds. Lower values increase churn but may improve freshness; higher values reduce build overhead but may accumulate stale tunnels. [Default is 600000 (10 minutes)]"
+msgstr "Alagút élettartama ezredmásodpercben. [Alapértelmezés 600000 (10 perc)] Az alacsonyabb értékek növelik a cserélődést, de javíthatják a frissességet; a magasabb értékek csökkentik az építési többletterhelést, de elavult alagutakat halmozhatnak fel. [Alapértelmezés 600000 (10 perc)]"
+
+msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions. [Default is 300000 (5 minutes)]"
+msgstr "Indítási elnyomási idő ezredmásodpercben. [Alapértelmezés 300000 (5 perc)] [Alapértelmezés 300000 (5 perc)]"
+
+msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 300000 (5 minutes)]"
+msgstr "Minimális időköz a LeaseSet közzétételek között. [Alapértelmezés 300000 (5 perc)] [Alapértelmezés 300000 (5 perc)]"
+
+msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 300000 (5 minutes)]"
+msgstr "Minimális időköz a LeaseSet objektumépítések között. [Alapértelmezés 300000 (5 perc)] [Alapértelmezés 300000 (5 perc)]"
+
+msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
+msgstr "Maximális egyidejű alagútépítés irányonként. [Alapértelmezés 6] [Default is 6]"
+
+msgid "If exploratory tunnel build success rate falls below 1 in this many attempts, tunnel quantity is reduced. Higher values make quantity reduction less likely. [Default is 12]"
+msgstr "Ha a feltáró alagútépítés sikerességi aránya 1 alá esik ennyi próbálkozásból, az alagutak száma csökken. [Alapértelmezés 12] [Default is 12]"
+
+msgid "Extra tunnels to maintain beyond the configured pool quantity. A positive value keeps spare tunnels ready so the pool doesn't drain when tunnels expire simultaneously. [Default is 0]"
+msgstr "További alagutak fenntartása a beállított medence mennyiségen felül. [Alapértelmezés 0] [Default is 0]"
+
+msgid "Minimum interval in milliseconds between GOOD-tunnel deficit rebuilds for non-critical pools. Prevents rapid build-retry loops when the pool has enough FAILING tunnels to satisfy the numerical target. [Default is 30000 (30 seconds)]"
+msgstr "Minimális időköz a JÓ-alagút hiány újraépítések között nem kritikus medencékhez. [Alapértelmezés 30000 (30 mp)] [Default is 30000 (30 seconds)]"
+
+msgid "Minimum tunnel test period in milliseconds. Tunnel tests always wait at least this long for a reply before timing out. [Default is 45000 (45 seconds)]"
+msgstr "Minimális alagútteszt idő ezredmásodpercben. [Alapértelmezés 45000 (45 mp)] [Default is 45000 (45 seconds)]"
+
+msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
+msgstr "Maximális alagútteszt idő ezredmásodpercben. [Alapértelmezés 50000 (50 mp)] [Default is 50000 (50 seconds)]"
+
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
+msgstr "Alagútépítési időtúllépések száma, mielőtt egy társ szellemként lenne jelölve. [Alapértelmezés 3] [Default is 3]"
+
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
+msgstr "Lehűlési idő ezredmásodpercben, mielőtt egy szellemként jelölt társ újra figyelembe vehető. [Alapértelmezés 180000 (3 perc)] [Default is 180000 (3 minutes)]"
+
+msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
+msgstr "Lehűlési idő ezredmásodpercben a szellemként jelölt társak számára támadási módban. [Alapértelmezés 300000 (5 perc)] [Alapértelmezés 300000 (5 perc)]"
+
+msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
+msgstr "Minimális számú bejövő alagútépítési kérés elfogadva társanként tisztítási ablakonként. [Alapértelmezés 10] [Default is 10]"
+
+msgid "Maximum number of incoming tunnel build requests accepted per peer per clean window. Caps request volume to prevent DoS. [Default is 300]"
+msgstr "Maximális számú bejövő alagútépítési kérés elfogadva társanként tisztítási ablakonként. [Alapértelmezés 300] [Default is 300]"
+
+msgid "Number of tunnel build requests from a single peer in 1 second that triggers an immediate ban. Protects against rapid-fire DoS attacks. [Default is 10]"
+msgstr "Alagútépítési kérések száma egyetlen társról 1 másodperc alatt, amely azonnali tiltást vált ki. [Alapértelmezés 10] [Default is 10]"
+
+msgid "Percentage of participating tunnels used to dynamically scale the per-peer request throttle limit. The effective maxLimit is adjusted based on this percentage of current participating tunnel count. [Default is 20]"
+msgstr "A résztvevő alagutak százaléka a társankénti kérésfojtási korlát dinamikus skálázásához. [Alapértelmezés 20] [Default is 20]"
+
+msgid "Minimum number of participating tunnel build requests accepted per clean window. Ensures a baseline acceptance rate even when the router is under load. [Default is 80 (40 on slow systems)]"
+msgstr "Minimális számú résztvevő alagútépítési kérés elfogadva tisztítási ablakonként. [Alapértelmezés 80 (40 lassú rendszereken)] [Default is 80 (40 on slow systems)]"
+
+msgid "Maximum number of participating tunnel build requests accepted per clean window. Caps acceptance to prevent overload. [Default is 300 (150 on slow systems)]"
+msgstr "Maximális számú résztvevő alagútépítési kérés elfogadva tisztítási ablakonként. [Alapértelmezés 300 (150 lassú rendszereken)] [Default is 300 (150 on slow systems)]"
+
+msgid "Percentage of current participating tunnels used to scale the participating throttle limits. Higher values allow more build requests relative to tunnel count. [Default is 10]"
+msgstr "A jelenleg résztvevő alagutak százaléka a résztvevő fojtási korlátok skálázásához. [Alapértelmezés 10] [Default is 10]"
+
+msgid "Minimum percentage of non-failing peer profiles required before the router broadens exploratory peer selection. When below this threshold, only the most reliable peers are used. [Default is 15]"
+msgstr "A nem hibás társ profilok minimális százaléka, mielőtt az útválasztó kiterjesztené a feltáró társ-kiválasztást. [Alapértelmezés 15] [Default is 15]"
+
+msgid "Minimum number of active (non-failing) peers required for normal exploratory peer selection. Below this threshold, selection logic becomes more permissive. [Default is 12]"
+msgstr "A normál feltáró társ-kiválasztáshoz szükséges aktív társak minimális száma. [Alapértelmezés 12] [Default is 12]"
+
+msgid "Minimum number of active peers required during router startup before restricting exploratory peer selection. During early startup the router is more lenient about peer quality. [Default is 6]"
+msgstr "Az útválasztó indítása során szükséges minimális aktív társak száma. [Alapértelmezés 6] [Default is 6]"
+
+msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 64]"
+msgstr "Maximális lassú indítási ablakméret streaming kapcsolatokhoz. [Alapértelmezés 64] [Default is 64]"
+
+msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 60000 (60 seconds)]"
+msgstr "Maximális oda-vissza idő ezredmásodpercben streaming kapcsolatokhoz. [Alapértelmezés 60000 (60 mp)] [Default is 60000 (60 seconds)]"
+
+msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 64]"
+msgstr "Maximális csomag-újraküldések száma a kapcsolat feladása előtt. [Alapértelmezés 64] [Default is 64]"
+
+msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 60000 (60 seconds)]"
+msgstr "Lehűlési idő ezredmásodpercben a kapcsolódási kísérletek között ugyanazon elérhetetlen célponthoz. [Alapértelmezés 60000 (60 mp)] [Default is 60000 (60 seconds)]"
+
+msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
+msgstr "Maximális idő ezredmásodpercben a pong válaszra várva társ pingelésekor. [Alapértelmezés 300000 (5 perc)]"
+
+msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
+msgstr "Hányszor válaszoljon egy korlátozott célpontra, mielőtt csendben eldobja a túlzó csomagokat. [Alapértelmezés 3] [Default is 3]"
+
+msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
+msgstr "Alapértelmezett maximális folyamkésleltetés ezredmásodpercben, ha nincs explicit kapcsolódási időtúllépés beállítva. [Alapértelmezés 10000 (10 mp)]"
+
+msgid "Maximum time in milliseconds between receiving a SYN and accepting it on a server socket. Controls how long incomplete connections are kept in the accept queue. [Default is 4000 (4 seconds)]"
+msgstr "Maximális idő ezredmásodpercben a SYN fogadása és elfogadása között egy kiszolgáló socketen. [Alapértelmezés 4000 (4 mp)] [Default is 4000 (4 seconds)]"
+
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. Larger values buffer more incoming connections at the cost of memory. [Default is 80 (48 on slow systems)]"
+msgstr "Maximális függőben lévő kapcsolatok száma a kiszolgáló elfogadási sorában. [Alapértelmezés 80 (48 lassú rendszereken)] [Default is 80 (48 on slow systems)]"
+
+msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
+msgstr "Időköz ezredmásodpercben az automatikus LeaseSet újraközzétételek között. [Alapértelmezés 300000 (5 perc)] [Alapértelmezés 300000 (5 perc)]"
+
+msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle. [Default is 180000 (3 minutes)]"
+msgstr "Küszöbérték ezredmásodpercben a proaktív LeaseSet újraközzétételhez. [Alapértelmezés 180000 (3 perc)] [Default is 180000 (3 minutes)]"
+
+msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
+msgstr "Az időtartam ezredmásodpercben az inaktív alagutak ellenőrzéséhez. [Alapértelmezés 60000] [Default is 60000]"
+
+msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
+msgstr "Az üzenetek minimális száma, amelyet egy alagútnak fel kell dolgoznia az észlelési időszakban ahhoz, hogy aktívnak minősüljön. [Alapértelmezés 3] [Default is 3]"
+
+msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
+msgstr "Az időköz ezredmásodpercben az inaktív tranzitalagutak vizsgálata között. [Alapértelmezés 180000]"
 
 msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
 msgstr "Amennyiben telepíteni kíván honosítatlan (.zip) I2P frissítéseket, akkor hozzá kell adni a <code>router.config</code> fájlhoz, hacsak már nincs konfigurálva <code>routerconsole.advanced=true</code>, mivel ebben az esetben ez a beállítás már kész. Megjegyzés: I2P+ 0.9.48+ verziótól kezdve az <a href=/configupdate#i2pupdates>aláíratlan frissítések</a> telepítése az alapértelmezés szerint engedélyezett."
@@ -5911,11 +6387,14 @@ msgstr "Ezzel a beállítással konfigurálhatja a honosítatlan frissítési fu
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
 msgstr "Ez a beállítás (percben) lehetővé teszi, hogy kézzel állítsa be, mennyi ideig kell várni a rendszerindítás után, mielőtt a RouterInfo-kat a NetDb-ben ellenőriznék. Ezt követően csak érvényes routerek lesznek elfogadva a felvételre. Amikor a ellenőrzés megtörténik, a lejárt RouterInfo-k és az SSU-n keresztül elérhetetlen társak eltávolításra kerülnek a NetDb-ből. [Az alapértelmezés 60 perc] Megjegyzés: Ez a beállítás nem érinti a régebbi routereket (alapértelmezetten 0.9.29-nél régebbiek), amelyek eltávolításra kerülnek a NetDb-ből, és az útválasztói munkamenetet követően tiltásra kerülnek, amint egy NetDb tárolás megkísérelve lesz."
 
-msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr "Ez a beállítás, ha igazra van állítva, blokkolja a saját ország összes routerével a közvetlen kommunikációt, és hozzáadja őket a kitiltási listájához, amíg a router újraindításig. [Alapértelmezett false]"
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false, or true if router is in hidden mode]"
+msgstr "Ha igaz, blokkolja a közvetlen kommunikációt az összes saját országbeli útválasztótól. [Alapértelmezés hamis, vagy igaz ha rejtett módban]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "Ez a beállítás, ha igazra van állítva, blokkolja az összes X szintű routerrel a közvetlen kommunikációt, amelyek G torlódési sapkát tesznek, és sem elérhető sem elérhetetlen, hozzáadva őket a munkamenetek listájához. Figyelemmel, hogy ehhez a beállításnak hatályba kell lépnie a haladó módot. [Alapértelmezett false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]"
+msgstr "Ha igaz, blokkolja a közvetlen kommunikációt az összes G torlódási képességet közzétevő X szintű útválasztótól. [Alapértelmezés hamis]"
+
+msgid "This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is true]"
+msgstr "Ha igaz, blokkolja a közvetlen kommunikációt az összes LU szintű útválasztótól. [Alapértelmezés igaz]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Ez a beállítás lehetővé teszi az SSU tesztek letiltását a router tűzfalállapotának meghatározásához, és engedélyezhető azokon a routerekre, amelyek határozottan nincsenek tűzfalon kívül, de időszakos tűzfalozási problémákkal küzdenek. Abban az esetben, ha a tesztelés le van tiltva, mind az SSU, mind az NTCP jelentenie kell a jelenlegi nyilvános IP-címet a <a href=/info>tűzfal információ oldal</a>on. [Újraindítás szükséges]"
@@ -5941,8 +6420,44 @@ msgstr "Ez a beállítás, ha engedélyezve van, akkor az összes ping engedély
 msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
 msgstr "Ez a beállítás akkor módosítja a maximális további véletlenszerű \"pong\" késleltetést, ha engedélyezve van a ping-kapcsolatú szerverekre a beállítás (i2p.streaming.enablePongDelay). Hacsak nincs kifejezetten beállítva, akkor az alapértelmezett értéket, 50 ms-t veszi figyelembe."
 
+msgid "The connect timeout in milliseconds for eepget HTTP requests (time to wait for initial response headers). Increase for high-latency remote access scenarios. [Default is 90000 (90s)]"
+msgstr "A kapcsolódási időtúllépés ezredmásodpercben az eepget HTTP kérésekhez. [Alapértelmezés 90000 (90 mp)] [Default is 90000 (90s)]"
+
+msgid "The inactivity timeout in milliseconds for eepget transfers (max idle time during data phase). Increase for slow connections experiencing stalls. [Default is 300000 (5min)]"
+msgstr "Az inaktivitási időtúllépés ezredmásodpercben az eepget átvitelekhez. [Alapértelmezés 300000 (5 perc)] [Default is 300000 (5min)]"
+
+msgid "Maximum number of consecutive zero-data transfer failures before eepget gives up, even if retries remain. Increase if transfers fail without receiving any data. [Default is 20]"
+msgstr "Maximális egymást követő nulla-adat átviteli hibák száma, mielőtt az eepget feladja. [Alapértelmezés 20] [Default is 20]"
+
+msgid "Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]"
+msgstr "Az eepget alapértelmezett újrapróbálkozási száma, ha a <code>-n</code> kapcsoló nincs megadva. [Alapértelmezés 10]"
+
+msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 300000 (5min)]"
+msgstr "A TIME-WAIT időtartam ezredmásodpercben streaming kapcsolat bontása után. [Alapértelmezés 300000 (5 perc)] [Default is 300000 (5min)]"
+
+msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration. Increase for very high-latency remote access. [Default is 120000 (2min)]"
+msgstr "A streaming kapcsolódási időtúllépés felső korlátja. [Alapértelmezés 120000 (2 perc)] Növelje nagyon nagy késleltetésű távoli hozzáférés esetén. [Alapértelmezés 120000 (2 perc)]"
+
+msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 8]"
+msgstr "Kezdeti torlódási ablakméret (csomagokban) új streaming kapcsolatokhoz. [Alapértelmezés 8] [Default is 8]"
+
+msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 128]"
+msgstr "Maximális torlódási ablakméret (csomagokban) streaming kapcsolatokhoz. [Alapértelmezés 128] [Default is 128]"
+
+msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
+msgstr "A minimális újraküldési késleltetés ezredmásodpercben. [Alapértelmezés 100 ms] Lower values allow faster recovery on lossy connections [Default is 100ms]"
+
+msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
+msgstr "A maximális újraküldési késleltetés ezredmásodpercben. [Alapértelmezés 30000 (30 mp)] Increase to allow longer between retries on congested paths [Default is 30000 (30s)]"
+
+msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
+msgstr "A maximális újraküldési időtúllépés ezredmásodpercben exponenciális visszalépés után. [Alapértelmezés 30000 (30 mp)] [Default is 30000 (30s)]"
+
 msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
 msgstr "Ha az érték igaz-ra van állítva, az I2P hálózati kapcsolat nélkül fut, ami hasznos lehet, ha folyamatosan újraindítja a routert a kódfrissítések teszteléséhez, mivel ez megakadályozza a hálózat megszakadását."
+
+msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
+msgstr "Ha igaz, letiltja a helyi-helyi loopback kézbesítést és minden forgalmat alagutakon keresztül irányít. [Alapértelmezés szerint letiltva] [Disabled by default]"
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Ez a beállítás lehetővé teszi alternatív NTP szerverek beállítását, amelyek szükségesek ahhoz, hogy a router pontos időtartamot tartsa. [Az alapértelmezett érték: 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -6122,7 +6637,7 @@ msgid "What is an eepsite?"
 msgstr "Mi az eepsite?"
 
 msgid "An eepsite is a website that is hosted anonymously on the I2P network - you can access it by configuring your web browser to use I2P's HTTP proxy (see above) and browsing to the <code>.i2p</code> suffixed website (e.g. <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p</a>). Also ensure your browser is configured to resolve DNS remotely when using the proxy to avoid DNS leaks."
-msgstr "Egy eepsite egy weboldal, amely névtelenül van tárolva az I2P hálózatban - hozzáférhet ehhez a weboldalhoz, amikor konfigurálja böngészőjét az I2P HTTP proxy használatára (ld. fentebb) és böngészi a <code>.i2p</code> végződésű webhelyet (például: <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p</a>). Biztosítson arról, hogy a böngészője be van állítva a távoli DNS feloldásra a proxy használata közben a DNS-szivárgás elkerülése érdekében."
+msgstr "Egy eepsite egy weboldal, amely névtelenül van tárolva az I2P hálózatban - hozzáférhet ehhez a weboldalhoz, amikor konfigurálja böngészőjét az I2P HTTP proxy használatára (ld. fentebb) és böngészi a <code>.i2p</code> végződésű webhelyet (például: <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p</a>). Biztosítson arról, hogy a böngészője be van állítva a távoli DNS feloldásra a proxy használata közben a DNS-szivárgás elkerülése érdekében. Győződjön meg arról is, hogy böngészője távoli DNS-feloldásra van konfigurálva a proxy használatakor a DNS-szivárgás elkerülése érdekében."
 
 msgid "Most of the eepsites are down?"
 msgstr "A legtöbb eepsite nem működik?"
@@ -6566,7 +7081,7 @@ msgid "Backup your private key!"
 msgstr "Készíts biztonsági másolatot a privát kulcsodról!"
 
 msgid "When a new service tunnel is created, or a service is run for the first time (e.g. the default jetty webserver, plugins), a private encryption key is created which essentially controls the ownership of address. This is usually named <code>&hellip;privKey.dat</code>, or <code>eepPriv.dat</code>, though it's a good idea to change the name to indicate the service it belongs to and then respecify it in the Tunnel Manager server settings. This .dat file should be backed up safely; lose it and you will lose ownership and control of your hostname!"
-msgstr "Amikor létrehoz egy új szolgáltatási alagutat, vagy először futtat egy szolgáltatást (pl. az alapértelmezett jetty webszervert, bővítményeket), létrehozódik egy privát titkosítási kulcs, amely lényegében irányítja a cím tulajdonjogát. Ez általában <code>&hellip;privKey.dat</code> néven van elmentve, vagy <code>eepPriv.dat</code>, bár jó ötlet megváltoztatni a nevét, hogy jelezze, melyik szolgáltatáshoz tartozik, majd újra meg kell határozni a Tunal menedzser szerver beállításaiban. Ez a .dat fájl meg kell, hogy legyen biztonsági mentésben; ha elveszíted azt, elveszted a hosztnév tulajdonjogát és ellenőrzését is!"
+msgstr "Amikor létrehoz egy új szolgáltatási alagutat, vagy először futtat egy szolgáltatást (pl. az alapértelmezett jetty webszervert, bővítményeket), létrehozódik egy privát titkosítási kulcs, amely lényegében irányítja a cím tulajdonjogát. Ez általában <code>&hellip;privKey.dat</code> néven van elmentve, vagy <code>eepPriv.dat</code>, bár jó ötlet megváltoztatni a nevét, hogy jelezze, melyik szolgáltatáshoz tartozik, majd újra meg kell határozni a Tunal menedzser szerver beállításaiban. Ez a .dat fájl meg kell, hogy legyen biztonsági mentésben; ha elveszíted azt, elveszted a hosztnév tulajdonjogát és ellenőrzését is! dat file should be backed up safely; lose it and you will lose ownership and control of your hostname!"
 
 msgid "To migrate the key to a new router, or to setup multihoming (running the same service on multiple routers for redundancy and load-balancing), copy the backed up key to your .i2p directory and specify it in the new server tunnel, or replace the default key in the plugin folder (e.g. the zzzot plugin)."
 msgstr "A kulcs áthelyezéséhez az új útválasztóra vagy többes otthoni konfiguráció beállításához (ugyanazon szolgáltatás futtatása több útválasztón a feleslegesség és az állapotterhelési egyensúly elérése érdekében) másolja át a biztonsági mentett kulcsot .i2p könyvtárába, és határozza meg az új szerver alagútban, vagy cserélje le az alapértelmezett kulcsot a bővítmények mappájában (például a zzzot bővítményben)."
@@ -7115,7 +7630,7 @@ msgid "Joining the I2P Network using a reseed file"
 msgstr "Az I2P hálózathoz való csatlakozás újratelepítő fájl használatával"
 
 msgid "Please contact a known trustworthy friend who has a running I2P router, and ask them for help with reseeding your I2P router. Request that they send you a reseed file exported from their running I2P router. It is vital that the file is exchanged over a secure channel, e.g. encrypted to avoid external tampering (PGP Sign, Encrypt and Verified with a trusted public key). The file itself is unsigned, so please accept files only from known trusted friends. Never import a reseed file if you cannot verify its source."
-msgstr "Kérjük, lépjen kapcsolatba egy ismert megbízható baráttal, aki üzemben lévő I2P útválasztóval rendelkezik, és kérje segítségét az I2P útválasztója újbóli betöltéséhez. Kérje tőlük, hogy küldjenek Önnek egy olyan reseed fájlt, amelyet üzemben lévő I2P útválasztójukból exportáltak. Fontos, hogy a fájl egy biztonságos csatornán keresztül cserélődjön ki, például titkosítva legyen, hogy megakadályozzák a külső manipulációt (PGP aláírás, titkosítás és megbízható nyilvános kulccsal történő megerősítés). A fájl maga nem hitelesített, ezért kizárólag ismert megbízható barátoktól fogadjon el fájlokat. Sose importáljon egy reseed fájlt, ha nem tudja ellenőrizni annak forrását."
+msgstr "Kérjük, lépjen kapcsolatba egy ismert megbízható baráttal, aki üzemben lévő I2P útválasztóval rendelkezik, és kérje segítségét az I2P útválasztója újbóli betöltéséhez. Kérje tőlük, hogy küldjenek Önnek egy olyan reseed fájlt, amelyet üzemben lévő I2P útválasztójukból exportáltak. Fontos, hogy a fájl egy biztonságos csatornán keresztül cserélődjön ki, például titkosítva legyen, hogy megakadályozzák a külső manipulációt (PGP aláírás, titkosítás és megbízható nyilvános kulccsal történő megerősítés). A fájl maga nem hitelesített, ezért kizárólag ismert megbízható barátoktól fogadjon el fájlokat. Sose importáljon egy reseed fájlt, ha nem tudja ellenőrizni annak forrását. A fájl aláíratlan, ezért csak ismert megbízható barátoktól fogadjon el fájlokat. Soha ne importáljon reseed fájlt, ha nem tudja ellenőrizni a forrását."
 
 msgid "To import the received i2preseed.zip file into your local I2P router:"
 msgstr "Az érkezett i2preseed.zip fájl importálásához a helyi I2P útválasztójába:"
@@ -7294,13 +7809,13 @@ msgid "Numeric definition of the number of connection attempts in the period spe
 msgstr "A meghatározott időszakban (másodpercben) végrehajtott kapcsolódási kísérletek számának numerikus meghatározása, pl. <i class=example>15/5</i>, <i class=example>60/60</i> stb."
 
 msgid "Note that if the number of connections is 1 (e.g. <i class=example>1/60</i>), the first connection attempt will result in a breach."
-msgstr "Megjegyzés: Ha a kapcsolatok száma 1 (például <i class=example>1/60</i>), az első kapcsolódási kísérlet megszakadáshoz vezet."
+msgstr "Megjegyzés: Ha a kapcsolatok száma 1 (például <i class=example>1/60</i>), az első kapcsolódási kísérlet megszakadáshoz vezet. g 1/60), the first connection attempt will result in a breach"
 
 msgid "The keyword <i class=example>allow</i>. This threshold is never breached, i.e. an infinite number of connection attempts is permitted."
-msgstr "A kulcsszó <i class=example>allowed</i> használata. Ez a küszöb soha nem meghaladható, tehát végtelen számú kapcsolódási kísérlet engedélyezett."
+msgstr "A kulcsszó <i class=example>allowed</i> használata. Ez a küszöb soha nem meghaladható, tehát végtelen számú kapcsolódási kísérlet engedélyezett. e an infinite number of connection attempts is permitted"
 
 msgid "The keyword <i class=example>deny</i>. This threshold is always breached, i.e. no connection attempts will be allowed."
-msgstr "A kulcsszó <i class=example>deny</i> használata. Ez a küszöb mindig meghaladható, vagyis nincs kapcsolódási kísérlet engedélyezve."
+msgstr "A kulcsszó <i class=example>deny</i> használata. Ez a küszöb mindig meghaladható, vagyis nincs kapcsolódási kísérlet engedélyezve. e no connection attempts will be allowed"
 
 msgid "Default Threshold"
 msgstr "Alapértelmezett küszöb"
@@ -7663,7 +8178,7 @@ msgid "Directory listings (sometimes referred to as virtual directories) are ena
 msgstr "A könyvtárlistázás (néha virtuális könyvtárként hivatkoznak rá) alapértelmezetten engedélyezve van, így a fájlokat egy <code>docroot</code> al-könyvtárból is tudja szolgáltatni anélkül, hogy azokhoz egy oldalt adna azokhoz vezető linkekkel. Tartalom szolgáltatható azonban, ami kívül van a <code>docroot</code>-on, használva egy <a href=https://en.wikipedia.org/wiki/Symbolic_link target=_blank rel=noreferrer class='sitelink external'>szimbolikus linket</a> a kívánt könyvtárhoz."
 
 msgid "You can override the <a href=http://127.0.0.1:7658/help/images/>default appearance</a> of the directory listing by supplying an edited <a href=http://127.0.0.1:7658/.resources/jetty-dir.css>jetty-dir.css</a> file to set a global appearance. Note that this file will not be displayed in the webserver's directory listing. Files and directories prefixed with . and files named favicon.ico or files ending with ~ or .bak or .old will also be hidden from view (though still accessible). Note: To create hidden files with a . prefix on Windows, add a trailing . to the file or directory e.g. <code>.hidden.</code>; Windows explorer will then save the file with the correct name, removing the trailing dot in the process."
-msgstr "A könyv mappák alapértelmezett kinézetét felül lehet bírálni azáltal, hogy egy szerkesztett jetty-dir.css fájlt adunk meg a globális kinézethez. Megjegyzés: Ez a fájl nem jelenik meg a webszerver mappalista oldalán. Pontban kezdődő fájlok és könyvtárak, a favicon.ico nevű fájlok és a ~ végződésű, vagy .bak, vagy .old fájlok szintén rejtve lesznek a nézet elől (de még elérhetőek). Megjegyzés: Rejtett fájlokat, amelyek a . előtagot viselik, a Windows rendszeren egy pontot adhatsz hozzá a fájl vagy a könyvtár mögé, pl. <code>.rejtett.</code>; A Windows fájlszemlélője ekkor a megfelelő névvel menti el a fájlt, és eltávolítja a végződő pontot a folyamat során."
+msgstr "A könyv mappák alapértelmezett kinézetét felül lehet bírálni azáltal, hogy egy szerkesztett jetty-dir.css fájlt adunk meg a globális kinézethez. Megjegyzés: Ez a fájl nem jelenik meg a webszerver mappalista oldalán. Pontban kezdődő fájlok és könyvtárak, a favicon.ico nevű fájlok és a ~ végződésű, vagy .bak, vagy .old fájlok szintén rejtve lesznek a nézet elől (de még elérhetőek). Megjegyzés: Rejtett fájlokat, amelyek a . előtagot viselik, a Windows rendszeren egy pontot adhatsz hozzá a fájl vagy a könyvtár mögé, pl. <code>.rejtett.</code>; A Windows fájlszemlélője ekkor a megfelelő névvel menti el a fájlt, és eltávolítja a végződő pontot a folyamat során. rejtett; a Windows Explorer ekkor a megfelelő néven menti el a fájlt, eltávolítva a végződő pontot a folyamat során."
 
 msgid "To disable directory listings, find the entry for <code>org.eclipse.jetty.servlet.Default.dirAllowed</code> in the <code>base-context.xml</code> file, located in the <code>eepsite/contexts</code> folder (just above docroot folder), and change 'true' to 'false' immediately underneath. To apply the change immediately, stop and restart the <i>I2P Webserver</i> client on the <a href=/configclients>Client Configuration page</a>. You can also drop an empty <code>index.html</code> file in any exposed directory to suppress directory listings for that location."
 msgstr "A mappalista letiltásához keresd meg az <code>org.eclipse.jetty.servlet.Default.dirAllowed</code> bejegyzést a <code>base-context.xml</code> fájlban, ami a <code>eepsite/contexts</code> mappában található (a docroot mappa feletti helyen), és az alatta lévő 'true' értéket változtasd meg 'false' értékre. Azonnali hatályba lépés érdekében állítsd le és indítsd újra az <i>I2P Webszerver</i> klienset a <a href=/configclients>Kliens konfigurációs oldal</a> segítségével. A mappalista elnyomásához dobhatsz egy üres <code>index.html</code> fájlt bármelyik elérhető mappába."
@@ -7803,6 +8318,63 @@ msgstr "feladatsor statisztika"
 msgid "Job Queue Stats"
 msgstr "Feladatsorok statisztikái"
 
+msgid "Login"
+msgstr "Bejelentkezés"
+
+msgid "Setup"
+msgstr "Beállítás"
+
+msgid "Select theme"
+msgstr "Téma kiválasztása"
+
+msgid "Classic"
+msgstr "Klasszikus"
+
+msgid "Dark"
+msgstr "Sötét"
+
+msgid "Light"
+msgstr "Világos"
+
+msgid "Midnight"
+msgstr "Éjfél"
+
+msgid "Select display language"
+msgstr "Megjelenítési nyelv kiválasztása"
+
+msgid "Router is starting up..."
+msgstr "Az útválasztó indul..."
+
+msgid "This page will refresh automatically"
+msgstr "Ez az oldal automatikusan frissül"
+
+msgid "Confirm Password"
+msgstr "Jelszó megerősítése"
+
+msgid "Session Duration"
+msgstr "Munkamenet időtartam"
+
+msgid "15 minutes"
+msgstr "15 perc"
+
+msgid "1 hour"
+msgstr "1 óra"
+
+msgid "4 hours"
+msgstr "4 óra"
+
+msgid "8 hours"
+msgstr "8 óra"
+
+msgid "1 day"
+msgstr "1 nap"
+
+msgid "Forever"
+msgstr "Örökké"
+
+msgid "Set Password"
+msgstr "Jelszó beállítása"
+
 msgid "network database"
 msgstr "hálózati adatbázis"
 
@@ -7897,6 +8469,21 @@ msgstr "statisztika"
 msgid "Router Statistics"
 msgstr "Router statisztika"
 
+msgid "streaming connections"
+msgstr "streaming kapcsolatok"
+
+msgid "Streaming Connections"
+msgstr "Streaming kapcsolatok"
+
+msgid "Active I2P streaming connections"
+msgstr "Aktív I2P streaming kapcsolatok"
+
+msgid "Local Tunnels"
+msgstr "Helyi Alagutak"
+
+msgid "Most Recent"
+msgstr "Legújabb"
+
 msgid "torrents"
 msgstr "torrentek"
 
@@ -7908,9 +8495,6 @@ msgstr "Legújabb tranzit alagutak"
 
 msgid "Locally hosted tunnels (exploratory and client)"
 msgstr "Helyi üzemeltetett alagutak (feltáró és kliens)"
-
-msgid "Most Recent"
-msgstr "Legújabb"
 
 msgid "Fastest"
 msgstr "Leggyorsabb"
@@ -7933,9 +8517,6 @@ msgstr "alagút társak száma"
 msgid "local tunnels"
 msgstr "helyi alagutak"
 
-msgid "Local Tunnels"
-msgstr "Helyi Alagutak"
-
 msgid "Toggle Tunnel Ids"
 msgstr "Alagútazonosítók váltása"
 
@@ -7944,6 +8525,9 @@ msgstr "Alagutak váltása"
 
 msgid "Peer Profile"
 msgstr "Társ Profil"
+
+msgid "Session Bans"
+msgstr "Munkamenet tiltások"
 
 msgid "Profile View"
 msgstr "Profilnézet"

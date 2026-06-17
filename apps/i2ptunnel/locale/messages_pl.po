@@ -44,6 +44,12 @@ msgstr "wyższa przepustowość i niezawodność"
 msgid "Error - tunnels are not initialized yet"
 msgstr "Błąd - tunele nie zostały jeszcze zainicjowane"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Błąd formularza, prawdopodobnie dlatego, że użyłeś przycisku 'wstecz' lub 'odśwież' w swojej przeglądarce. Proszę wyślij ponownie."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Jeśli problem występuje nadal, sprawdź, czy obsługa ciasteczek jest włączona w Twojej przeglądarce."
+
 msgid "No services configured, cannot restart!"
 msgstr "Brak skonfigurowanych usług, nie można ponownie uruchomić!"
 
@@ -619,6 +625,39 @@ msgstr "Nowa konfiguracja serwera"
 msgid "Hostname"
 msgstr "Nazwa hosta"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Losowe opóźnienie uruchomienia (gdy automatyczne uruchamianie jest włączone) w celu obrony przed atakami korelacyjnymi"
+
+msgid "Startup Delay"
+msgstr "Opóźnienie uruchomienia"
+
+msgid "Minimum"
+msgstr "Minimum"
+
+msgid "Minimum startup delay"
+msgstr "Minimalne opóźnienie uruchomienia"
+
+msgid "seconds"
+msgstr "sekund(y)"
+
+msgid "Maximum"
+msgstr "Maksimum"
+
+msgid "Maximum startup delay"
+msgstr "Maksymalne opóźnienie uruchomienia"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Dodaj losowe opóźnienie przed wyłączeniem tunelu, a następnie rozpocznij proces łagodnego wyłączania/restartu routera"
+
+msgid "Shutdown Delay"
+msgstr "Opóźnienie wyłączenia"
+
+msgid "Minimum shutdown delay"
+msgstr "Minimalne opóźnienie wyłączenia"
+
+msgid "Maximum shutdown delay"
+msgstr "Maksymalne opóźnienie wyłączenia"
+
 msgid "Website Hostname"
 msgstr "Nazwa hosta strony"
 
@@ -1100,8 +1139,8 @@ msgstr "Brak podglądu"
 msgid "Starting..."
 msgstr "Rozpoczynam..."
 
-msgid "Stop this Tunnel"
-msgstr "Zatrzymaj ten tunel"
+msgid "Starting in"
+msgstr "Uruchamianie za"
 
 msgid "Running"
 msgstr "Uruchomiony"
@@ -1115,14 +1154,17 @@ msgstr "w"
 msgid "out"
 msgstr "wyjście"
 
+msgid "Stopped"
+msgstr "Zatrzymany"
+
+msgid "Stop this Tunnel"
+msgstr "Zatrzymaj ten tunel"
+
 msgid "Restart this Tunnel"
 msgstr "Uruchom ponownie ten tunel"
 
 msgid "Restart"
 msgstr "Uruchom ponownie"
-
-msgid "Stopped"
-msgstr "Zatrzymany"
 
 msgid "Destination"
 msgstr "Cel"
@@ -1298,12 +1340,6 @@ msgstr "Utwórz uwierzytelnianie"
 
 msgid "SSL Helper"
 msgstr "Pomocnik SSL"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Błąd formularza, prawdopodobnie dlatego, że użyłeś przycisku 'wstecz' lub 'odśwież' w swojej przeglądarce. Proszę wyślij ponownie."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Jeśli problem występuje nadal, sprawdź, czy obsługa ciasteczek jest włączona w Twojej przeglądarce."
 
 msgid "Experts only!"
 msgstr "Tylko dla zaawansowanych!"

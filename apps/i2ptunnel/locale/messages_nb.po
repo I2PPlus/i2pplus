@@ -41,6 +41,12 @@ msgstr "høyere bredbånd og pålitelighet"
 msgid "Error - tunnels are not initialized yet"
 msgstr "Feil - tunnelene er ikke initialisert ennå"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Ugyldig innsending av skjema, sannsynligvis fordi du brukte 'tilbake' eller \"last på nytt\"-knappen i nettleseren din. Ugyldig skjemainnsendelse, sannsynligvis fordi du brukte 'tilbake' eller 'oppdater'-knappen i nettleseren. Send inn på nytt."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Hvis problemet vedvarer, kontroller at du har aktivert informasjonskapsler i nettleseren din.Hvis problemet vedvarer, må du kontrollere at du har aktivert informasjonskapsler i nettleseren din."
+
 msgid "No services configured, cannot restart!"
 msgstr "Ingen tjenester konfigurert, kan ikke starte på nytt!"
 
@@ -614,6 +620,39 @@ msgstr "Ny serverkonfigurasjon"
 msgid "Hostname"
 msgstr "Vertsnavn"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Tilfeldig startforsinkelse (når autostart er aktivert) for å forsvare seg mot korrelasjonsangrep"
+
+msgid "Startup Delay"
+msgstr "Startforsinkelse"
+
+msgid "Minimum"
+msgstr "Minimum"
+
+msgid "Minimum startup delay"
+msgstr "Minimum startforsinkelse"
+
+msgid "seconds"
+msgstr "sekunder"
+
+msgid "Maximum"
+msgstr "Maksimum"
+
+msgid "Maximum startup delay"
+msgstr "Maksimum startforsinkelse"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Legg til tilfeldig forsinkelse før tunnelnedstenging, start deretter en skånsom router-nedstenging/omstartsprosess"
+
+msgid "Shutdown Delay"
+msgstr "Nedstengingsforsinkelse"
+
+msgid "Minimum shutdown delay"
+msgstr "Minimum nedstengingsforsinkelse"
+
+msgid "Maximum shutdown delay"
+msgstr "Maksimum nedstengingsforsinkelse"
+
 msgid "Website Hostname"
 msgstr "Nettstedets vertsnavn"
 
@@ -1095,8 +1134,8 @@ msgstr "Ingen forhåndsvisning"
 msgid "Starting..."
 msgstr "Starter…"
 
-msgid "Stop this Tunnel"
-msgstr "Stopp denne tunnelen"
+msgid "Starting in"
+msgstr "Starter om"
 
 msgid "Running"
 msgstr "Kjører"
@@ -1110,14 +1149,17 @@ msgstr "i"
 msgid "out"
 msgstr "ut"
 
+msgid "Stopped"
+msgstr "Stoppet"
+
+msgid "Stop this Tunnel"
+msgstr "Stopp denne tunnelen"
+
 msgid "Restart this Tunnel"
 msgstr "Start denne tunnelen på nytt"
 
 msgid "Restart"
 msgstr "Start på nytt"
-
-msgid "Stopped"
-msgstr "Stoppet"
 
 msgid "Destination"
 msgstr "Mål"
@@ -1293,12 +1335,6 @@ msgstr "Generer autentisering"
 
 msgid "SSL Helper"
 msgstr "SSL-hjelper"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Ugyldig innsending av skjema, sannsynligvis fordi du brukte 'tilbake' eller \"last på nytt\"-knappen i nettleseren din. Ugyldig skjemainnsendelse, sannsynligvis fordi du brukte 'tilbake' eller 'oppdater'-knappen i nettleseren. Send inn på nytt."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Hvis problemet vedvarer, kontroller at du har aktivert informasjonskapsler i nettleseren din.Hvis problemet vedvarer, må du kontrollere at du har aktivert informasjonskapsler i nettleseren din."
 
 msgid "Experts only!"
 msgstr "For eksperter!"

@@ -8,13 +8,131 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-msgid "Website Unknown"
-msgstr "الموقع غير معروف"
+msgid "This seems to be a bad destination:"
+msgstr "يبدو أن هذه وجهة سيئة:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper لا يمكنه مساعدتك في وجهة كهذه!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "لزيارة الوجهة في دفتر العناوين الخاص بك، انقر <a href=\"{0}\">هنا</a>. لزيارة وجهة مساعد العنوان المتضاربة، انقر <a href=\"{1}\">هنا</a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "وجهة {0} في دفتر العناوين"
+
+msgid "Conflicting address helper destination"
+msgstr "وجهة مساعد العنوان المتضاربة"
+
+msgid "Corrupt Base32 address"
+msgstr "عنوان Base32 تالف"
+
+msgid "Destination LeaseSet not found"
+msgstr "لم يتم العثور على مجموعة تأجير الوجهة"
+
+msgid "Host"
+msgstr "المُضيف"
+
+msgid "Base32"
+msgstr "قاعدة 32"
+
+msgid "Destination"
+msgstr "اتجاه"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "تابع إلى {0} بدون حفظ"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "يمكنك تصفح الموقع دون حفظه في دفتر العناوين. سيتم تذكر العنوان حتى تقوم بإعادة تشغيل جهاز التوجيه I2P الخاص بك."
+
+msgid "Continue without saving"
+msgstr "استمر دون حفظ"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "احفظ {0} في دفتر عناوين جهاز التوجيه وتابع إلى موقع الويب"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "سيتم حفظ هذا العنوان في دفتر عناوين جهاز التوجيه الخاص بك حيث يتم تخزين العناوين المستندة إلى الاشتراك."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "إذا كنت تريد متابعة المواقع التي أضفتها يدويًا، أضفها إلى دفتر العناوين الرئيسي أو الخاص بدلاً من ذلك."
+
+msgid "Save & continue"
+msgstr "حفظ"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "احفظ {0} في دفتر العناوين الرئيسي وتابع إلى موقع الويب"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "سيتم حفظ هذا العنوان في دفتر العناوين الرئيسي الخاص بك."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "احفظ {0} في دفتر العناوين الخاص وتابع إلى موقع الويب"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "سيتم حفظ هذا العنوان في دفتر العناوين الخاص بك، مما يضمن عدم نشره أبدًا."
+
+msgid "Base32 address requires lookup password"
+msgstr "عنوان Base32 يتطلب كلمة مرور البحث"
+
+msgid "Base32 address requires encryption key"
+msgstr "عنوان Base32 يتطلب مفتاح التشفير"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "يتطلب عنوان Base32 مفتاح التشفير وكلمة مرور البحث"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "فشل فك تشفير عنوان Base32، تحقق من مفتاح التشفير"
+
+msgid "Generate"
+msgstr "توليد"
+
+msgid "Encryption key"
+msgstr "مفتاح التشفير"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "يجب عليك إما إدخال مفتاح تشفير PSK المقدم من مشغل الخادم، أو إنشاء مفتاح تشفير DH وإرساله إلى مشغل الخادم."
+
+msgid "Ask the server operator for help."
+msgstr "اطلب المساعدة من مشغل الخادم."
+
+msgid "Enter PSK encryption key"
+msgstr "أدخل مفتاح تشفير PSK"
+
+msgid "Generate new DH encryption key"
+msgstr "إنشاء مفتاح تشفير DH جديد"
+
+msgid "Lookup password"
+msgstr "كلمة المرور للبحث"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "يجب عليك إدخال كلمة المرور المقدمة من مشغل الخادم."
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "تمت الإضافة عبر مساعد العنوان من {0}"
+
+msgid "Added via address helper"
+msgstr "تمت الإضافة عبر مساعد العنوان"
+
+msgid "Missing lookup password"
+msgstr "كلمة مرور البحث مفقودة"
+
+msgid "Missing private key"
+msgstr "المفتاح الخاص مفقود"
+
+msgid "Invalid private key"
+msgstr "المفتاح الخاص غير صالح"
+
+msgid "Your new encryption key"
+msgstr "مفتاح التشفير الجديد الخاص بك"
 
 msgid "Router Console"
-msgstr "مركز تحكم I2P"
-
-msgid "I2P Router Console"
 msgstr "مركز تحكم I2P"
 
 msgid "Addressbook"
@@ -25,6 +143,52 @@ msgstr "تم حفظ تغيرات الاعدادات"
 
 msgid "Help"
 msgstr "المساعدة"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "انسخ المفتاح وأرسله إلى مشغل الخادم."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "بعد منحك الإذن، يمكنك المتابعة إلى الموقع."
+
+msgid "Go back and fix the error"
+msgstr "الرجوع وإصلاح الخطأ"
+
+msgid "router"
+msgstr "موجه"
+
+msgid "master"
+msgstr "رئيسي"
+
+msgid "private"
+msgstr "خاص"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "تحديث من {0}"
+
+msgid "Redirection in progress"
+msgstr "إعادة التوجيه قيد التقدم"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "تم حفظ {0} في دفتر العناوين {1}، ويتم إعادة التوجيه الآن."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "فشل حفظ {0} في دفتر العناوين {1}، تتم إعادة التوجيه الآن."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "انقر هنا إذا لم تتم إعادة توجيهك تلقائيًا."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "تم حفظ المصادقة لـ {0}، إعادة التوجيه الآن."
+
+msgid "Website Unknown"
+msgstr "الموقع غير معروف"
+
+msgid "I2P Router Console"
+msgstr "مركز تحكم I2P"
 
 msgid "Website Not Found in Addressbook"
 msgstr "لم يتم العثور على موقع الويب في دفتر العناوين"
@@ -262,167 +426,3 @@ msgstr "إذا قمت بالنقر فوق رابط، فتحقق من نهاية 
 
 msgid "The Base32 address is invalid."
 msgstr "عنوان Base32 غير صالح."
-
-msgid "This seems to be a bad destination:"
-msgstr "يبدو أن هذه وجهة سيئة:"
-
-msgid "i2paddresshelper cannot help you with a destination like that!"
-msgstr "i2paddresshelper لا يمكنه مساعدتك في وجهة كهذه!"
-
-#, java-format
-msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr "لزيارة الوجهة في دفتر العناوين الخاص بك، انقر <a href=\"{0}\">هنا</a>. لزيارة وجهة مساعد العنوان المتضاربة، انقر <a href=\"{1}\">هنا</a>."
-
-#, java-format
-msgid "Destination for {0} in addressbook"
-msgstr "وجهة {0} في دفتر العناوين"
-
-msgid "Conflicting address helper destination"
-msgstr "وجهة مساعد العنوان المتضاربة"
-
-msgid "Corrupt Base32 address"
-msgstr "عنوان Base32 تالف"
-
-msgid "Destination LeaseSet not found"
-msgstr "لم يتم العثور على مجموعة تأجير الوجهة"
-
-msgid "Host"
-msgstr "المُضيف"
-
-msgid "Base32"
-msgstr "قاعدة 32"
-
-msgid "Destination"
-msgstr "اتجاه"
-
-#, java-format
-msgid "Continue to {0} without saving"
-msgstr "تابع إلى {0} بدون حفظ"
-
-msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr "يمكنك تصفح الموقع دون حفظه في دفتر العناوين. سيتم تذكر العنوان حتى تقوم بإعادة تشغيل جهاز التوجيه I2P الخاص بك."
-
-msgid "Continue without saving"
-msgstr "استمر دون حفظ"
-
-#, java-format
-msgid "Save {0} to router address book and continue to website"
-msgstr "احفظ {0} في دفتر عناوين جهاز التوجيه وتابع إلى موقع الويب"
-
-msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr "سيتم حفظ هذا العنوان في دفتر عناوين جهاز التوجيه الخاص بك حيث يتم تخزين العناوين المستندة إلى الاشتراك."
-
-msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr "إذا كنت تريد متابعة المواقع التي أضفتها يدويًا، أضفها إلى دفتر العناوين الرئيسي أو الخاص بدلاً من ذلك."
-
-msgid "Save & continue"
-msgstr "حفظ"
-
-#, java-format
-msgid "Save {0} to master addressbook and continue to website"
-msgstr "احفظ {0} في دفتر العناوين الرئيسي وتابع إلى موقع الويب"
-
-msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr "سيتم حفظ هذا العنوان في دفتر العناوين الرئيسي الخاص بك."
-
-#, java-format
-msgid "Save {0} to private addressbook and continue to website"
-msgstr "احفظ {0} في دفتر العناوين الخاص وتابع إلى موقع الويب"
-
-msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr "سيتم حفظ هذا العنوان في دفتر العناوين الخاص بك، مما يضمن عدم نشره أبدًا."
-
-msgid "Base32 address requires lookup password"
-msgstr "عنوان Base32 يتطلب كلمة مرور البحث"
-
-msgid "Base32 address requires encryption key"
-msgstr "عنوان Base32 يتطلب مفتاح التشفير"
-
-msgid "Base32 address requires encryption key and lookup password"
-msgstr "يتطلب عنوان Base32 مفتاح التشفير وكلمة مرور البحث"
-
-msgid "Base32 address decryption failure, check encryption key"
-msgstr "فشل فك تشفير عنوان Base32، تحقق من مفتاح التشفير"
-
-msgid "Generate"
-msgstr "توليد"
-
-msgid "Encryption key"
-msgstr "مفتاح التشفير"
-
-msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr "يجب عليك إما إدخال مفتاح تشفير PSK المقدم من مشغل الخادم، أو إنشاء مفتاح تشفير DH وإرساله إلى مشغل الخادم."
-
-msgid "Ask the server operator for help."
-msgstr "اطلب المساعدة من مشغل الخادم."
-
-msgid "Enter PSK encryption key"
-msgstr "أدخل مفتاح تشفير PSK"
-
-msgid "Generate new DH encryption key"
-msgstr "إنشاء مفتاح تشفير DH جديد"
-
-msgid "Lookup password"
-msgstr "كلمة المرور للبحث"
-
-msgid "You must enter the password provided by the server operator."
-msgstr "يجب عليك إدخال كلمة المرور المقدمة من مشغل الخادم."
-
-#, java-format
-msgid "Added via address helper from {0}"
-msgstr "تمت الإضافة عبر مساعد العنوان من {0}"
-
-msgid "Added via address helper"
-msgstr "تمت الإضافة عبر مساعد العنوان"
-
-msgid "Missing lookup password"
-msgstr "كلمة مرور البحث مفقودة"
-
-msgid "Missing private key"
-msgstr "المفتاح الخاص مفقود"
-
-msgid "Invalid private key"
-msgstr "المفتاح الخاص غير صالح"
-
-msgid "Your new encryption key"
-msgstr "مفتاح التشفير الجديد الخاص بك"
-
-msgid "Copy the key and send it to the server operator."
-msgstr "انسخ المفتاح وأرسله إلى مشغل الخادم."
-
-msgid "After you are granted permission, you may proceed to the website."
-msgstr "بعد منحك الإذن، يمكنك المتابعة إلى الموقع."
-
-msgid "Go back and fix the error"
-msgstr "الرجوع وإصلاح الخطأ"
-
-msgid "router"
-msgstr "موجه"
-
-msgid "master"
-msgstr "رئيسي"
-
-msgid "private"
-msgstr "خاص"
-
-#, java-format
-msgid "Redirecting to {0}"
-msgstr "تحديث من {0}"
-
-msgid "Redirection in progress"
-msgstr "إعادة التوجيه قيد التقدم"
-
-#, java-format
-msgid "Saved {0} to the {1} addressbook, redirecting now."
-msgstr "تم حفظ {0} في دفتر العناوين {1}، ويتم إعادة التوجيه الآن."
-
-#, java-format
-msgid "Failed to save {0} to the {1} addressbook, redirecting now."
-msgstr "فشل حفظ {0} في دفتر العناوين {1}، تتم إعادة التوجيه الآن."
-
-msgid "Click here if you are not redirected automatically."
-msgstr "انقر هنا إذا لم تتم إعادة توجيهك تلقائيًا."
-
-#, java-format
-msgid "Saved the authentication for {0}, redirecting now."
-msgstr "تم حفظ المصادقة لـ {0}، إعادة التوجيه الآن."

@@ -41,6 +41,12 @@ msgstr "yüksək səbət və mənbə"
 msgid "Error - tunnels are not initialized yet"
 msgstr "Xəta - tunellər hələ başladılmayıb"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Formun düzgün göndərilməsi, ehtimal ki, sizin brauzerinizdəki 'geri' və ya 'yenilə' düyməsindən istifadə etməyiniz səbəbindir. Lütfən yenidən göndərin."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Sorğun davam edirsə, brauzerinizdə çerezlərin aktiv olduğunu yoxlayın."
+
 msgid "No services configured, cannot restart!"
 msgstr "Xidmət konfiqurasiya edilməyib, yenidən başladıla bilmir!"
 
@@ -614,6 +620,39 @@ msgstr "Yeni server təyinatı"
 msgid "Hostname"
 msgstr "Ünvan adı"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Korrelyasiya hücumlarından qorunmaq üçün təsadüfi başlanğıc gecikməsi (avtomatik başlanğıc aktiv olduqda)"
+
+msgid "Startup Delay"
+msgstr "Başlanğıc gecikməsi"
+
+msgid "Minimum"
+msgstr "Minimum"
+
+msgid "Minimum startup delay"
+msgstr "Minimum başlanğıc gecikməsi"
+
+msgid "seconds"
+msgstr "saniyə"
+
+msgid "Maximum"
+msgstr "Maksimum"
+
+msgid "Maximum startup delay"
+msgstr "Maksimum başlanğıc gecikməsi"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Tunnel söndürməzdən əvvəl təsadüfi gecikmə əlavə edin, sonra rəvan router söndürmə/restart prosesinə başlayın"
+
+msgid "Shutdown Delay"
+msgstr "Söndürmə gecikməsi"
+
+msgid "Minimum shutdown delay"
+msgstr "Minimum söndürmə gecikməsi"
+
+msgid "Maximum shutdown delay"
+msgstr "Maksimum söndürmə gecikməsi"
+
 msgid "Website Hostname"
 msgstr "Veb saytın ünvan adı"
 
@@ -1095,8 +1134,8 @@ msgstr "Ön izləmə yoxdur"
 msgid "Starting..."
 msgstr "Başlamaqdadır..."
 
-msgid "Stop this Tunnel"
-msgstr "Bu tünəli dayandırın"
+msgid "Starting in"
+msgstr "Başlayır"
 
 msgid "Running"
 msgstr "İşləyir"
@@ -1110,14 +1149,17 @@ msgstr "daxil"
 msgid "out"
 msgstr "çıxış"
 
+msgid "Stopped"
+msgstr "Dayandırıldı"
+
+msgid "Stop this Tunnel"
+msgstr "Bu tünəli dayandırın"
+
 msgid "Restart this Tunnel"
 msgstr "Bu tunneli yenidən başlat"
 
 msgid "Restart"
 msgstr "Yenidən başlat"
-
-msgid "Stopped"
-msgstr "Dayandırıldı"
 
 msgid "Destination"
 msgstr "Mərhələ"
@@ -1293,12 +1335,6 @@ msgstr "Təsdiqləmə yarat"
 
 msgid "SSL Helper"
 msgstr "SSL köməkçisi"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Formun düzgün göndərilməsi, ehtimal ki, sizin brauzerinizdəki 'geri' və ya 'yenilə' düyməsindən istifadə etməyiniz səbəbindir. Lütfən yenidən göndərin."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Sorğun davam edirsə, brauzerinizdə çerezlərin aktiv olduğunu yoxlayın."
 
 msgid "Experts only!"
 msgstr "Fərqli sahələr üçün!"

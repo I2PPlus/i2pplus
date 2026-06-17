@@ -41,6 +41,12 @@ msgstr "korkeampi kaistanleveys ja luotettavuus"
 msgid "Error - tunnels are not initialized yet"
 msgstr "Virhe - tunneleita ei ole vielä alustettu"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Virheellinen lomakkeen lähetys, luultavasti siksi, että käytit selaimesi 'takaisin'- tai 'reload'-painiketta."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Jos pulma jatkuu, vahvista, että evästeet ovar käytössä selaimessasi."
+
 msgid "No services configured, cannot restart!"
 msgstr "Yhtään palvelua ei ole määritetty, ei voida käynnistää uudelleen!"
 
@@ -614,6 +620,39 @@ msgstr "Uusi palvelinkokoonpano"
 msgid "Hostname"
 msgstr "Tietokoneen nimi"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Satunnainen käynnistysviive (kun automaattikäynnistys on käytössä) korrelaatiohyökkäyksiä vastaan"
+
+msgid "Startup Delay"
+msgstr "Käynnistysviive"
+
+msgid "Minimum"
+msgstr "Minimi"
+
+msgid "Minimum startup delay"
+msgstr "Minimi käynnistysviive"
+
+msgid "seconds"
+msgstr "sekuntia"
+
+msgid "Maximum"
+msgstr "Maksimi"
+
+msgid "Maximum startup delay"
+msgstr "Maksimi käynnistysviive"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Lisää satunnainen viive ennen tunnelin sammutusta ja aloita hallittu reitittimen sammutus/uudelleenkäynnistys"
+
+msgid "Shutdown Delay"
+msgstr "Sammutusviive"
+
+msgid "Minimum shutdown delay"
+msgstr "Minimi sammutusviive"
+
+msgid "Maximum shutdown delay"
+msgstr "Maksimi sammutusviive"
+
 msgid "Website Hostname"
 msgstr "Verkkosivuston isäntänimi"
 
@@ -1095,8 +1134,8 @@ msgstr "Ei esikatselua"
 msgid "Starting..."
 msgstr "Käynnistetään..."
 
-msgid "Stop this Tunnel"
-msgstr "Pysäytä tämä tunneli"
+msgid "Starting in"
+msgstr "Käynnistyy"
 
 msgid "Running"
 msgstr "Käynnissä"
@@ -1110,14 +1149,17 @@ msgstr "sisään"
 msgid "out"
 msgstr "ulos"
 
+msgid "Stopped"
+msgstr "Pysäytetty"
+
+msgid "Stop this Tunnel"
+msgstr "Pysäytä tämä tunneli"
+
 msgid "Restart this Tunnel"
 msgstr "Käynnistä tämä tunneli uudelleen"
 
 msgid "Restart"
 msgstr "Käynnistä uudelleen"
-
-msgid "Stopped"
-msgstr "Pysäytetty"
 
 msgid "Destination"
 msgstr "Kohde"
@@ -1293,12 +1335,6 @@ msgstr "Luo todennus"
 
 msgid "SSL Helper"
 msgstr "SSL-apuohjelma"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Virheellinen lomakkeen lähetys, luultavasti siksi, että käytit selaimesi 'takaisin'- tai 'reload'-painiketta."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Jos pulma jatkuu, vahvista, että evästeet ovar käytössä selaimessasi."
 
 msgid "Experts only!"
 msgstr "Vain asiantuntijoille!"

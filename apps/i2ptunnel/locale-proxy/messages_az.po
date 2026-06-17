@@ -8,14 +8,132 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Website Unknown"
-msgstr "Tanınmayan Veb Sayt"
+msgid "This seems to be a bad destination:"
+msgstr "Bu pis bir nöqtə kimi görünür:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper belə bir nöqtə ilə sizə kömək edə bilməz!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "Ünvan defterinizdəki nöqtəni ziyarət etmək üçün, <a href=\"{0}\">buraya</a> klikləyin. Mübahisəli ünvan köməkçisi nöqtəsini ziyarət etmək üçün, <a href=\"{1}\">buraya</a> klikləyin."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "Ünvan defterində {0} üçün nöqtə"
+
+msgid "Conflicting address helper destination"
+msgstr "Mübəhiscə ünvan köməkçisi nöqtəsi"
+
+msgid "Corrupt Base32 address"
+msgstr "Hasarlı Base32 ünvanı"
+
+msgid "Destination LeaseSet not found"
+msgstr "Nöqtə Kirayəsi tapılmadı"
+
+msgid "Host"
+msgstr "Xost"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "Nöqtə"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "{0}-ə saxlamaq olmadan davam etmək"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "Ünvan defterinə saxlamaq olmadan saytın səhifəsinə getmək olar. Ünvan sizin I2P ruternizi yenidən başlamağa qədər yadda saxlanılacaq."
+
+msgid "Continue without saving"
+msgstr "Saxlamaq olmadan davam etmək"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "{0}-i ruter ünvan defterinə saxlamaq və saytın səhifəsinə davam etmək"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "Bu ünvan sizin abunament bazası ünvanləriniz saxlanıldığı ruter ünvan defterinə saxlanılacaq."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "Manuel olaraq əlavə etdiyiniz saytları izləmək istəyirsinizsə, onları Master və ya Private ünvan defterinə əlavə edin."
+
+msgid "Save & continue"
+msgstr "Saxla və davam et"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "{0}-i Master ünvan defterinə saxlamaq və saytın səhifəsinə davam etmək"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "Bu ünvan sizin Master ünvan defterinə saxlanılacaq. Bunu əsas ruter ünvan defterindən ayrı saxlamaq istədiyiniz, amma nəşr etməkdən imtina etməyən ünvanlar üçün seçin."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "{0}-i Private ünvan defterinə saxlamaq və saytın səhifəsinə davam etmək"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "Bu ünvan sizin Private ünvan defterinə saxlanılacaq, bu da onun hər zaman nəşr olunmamasını təmin edir."
+
+msgid "Base32 address requires lookup password"
+msgstr "Base32 ünvanı axtarış şifrəsinə ehtiyac duyur"
+
+msgid "Base32 address requires encryption key"
+msgstr "Base32 ünvanı şifrələmə açarına ehtiyac duyur"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Base32 ünvanı şifrələmə açarı və axtarış şifrəsinə ehtiyac duyur"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Base32 ünvanı şifrələmə açarını yoxlamaq üçün şifrə açma uğursuzluğu"
+
+msgid "Generate"
+msgstr "Yarat"
+
+msgid "Encryption key"
+msgstr "Şifrələmə açarı"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "Sizin PSK şifrələmə açarını server operatörü tərəfindən təqdim edilməli, və ya DH şifrələmə açarını yaratmalı və bunu server operatörünə göndərməlisiniz."
+
+msgid "Ask the server operator for help."
+msgstr "Server operatöründən kömək istəyin."
+
+msgid "Enter PSK encryption key"
+msgstr "PSK şifrələmə açarını daxil edin"
+
+msgid "Generate new DH encryption key"
+msgstr "Yeni DH şifrələmə açarını yarat"
+
+msgid "Lookup password"
+msgstr "Axtarış şifrəsi"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "Server operatörünün təqdim etdiyi şifrəni daxil etməlisiniz."
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "{0} ilə ünvan köməkçisi vasitəsilə əlavə edildi"
+
+msgid "Added via address helper"
+msgstr "Ünvan köməkçisi vasitəsilə əlavə edildi"
+
+msgid "Missing lookup password"
+msgstr "Eksik axtarış şifrəsi"
+
+msgid "Missing private key"
+msgstr "Eksik gizli açar"
+
+msgid "Invalid private key"
+msgstr "Səhv gizli açar"
+
+msgid "Your new encryption key"
+msgstr "Yeni şifrələmə açarınız"
 
 msgid "Router Console"
 msgstr "Ruter Konsolı"
-
-msgid "I2P Router Console"
-msgstr "I2P Ruter Konsolı"
 
 msgid "Addressbook"
 msgstr "Ünvan Defteri"
@@ -25,6 +143,52 @@ msgstr "Konfigurasiya"
 
 msgid "Help"
 msgstr "Yardım"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "Açarı kopyalayın və server operatörünə göndərin."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "İcazə verildikdən sonra, saytın səhifəsinə getmək olar."
+
+msgid "Go back and fix the error"
+msgstr "Geriyə gedin və səhvə düzəldin"
+
+msgid "router"
+msgstr "ruter"
+
+msgid "master"
+msgstr "master"
+
+msgid "private"
+msgstr "gizli"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "{0}-ə yönləndirilir"
+
+msgid "Redirection in progress"
+msgstr "Yönləndirmə davam edir"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "{0}-i {1} ünvan defterinə saxladıq, indi yönləndiririk."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "{0}-i {1} ünvan defterinə saxlamaq uğursuz olduq, indi yönləndiririk."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "Avtomatik olaraq yönləndirilməyəsəniz, buraya klikləyin."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "{0} üçün təsdiqləməni saxladık, indi yönləndiririk."
+
+msgid "Website Unknown"
+msgstr "Tanınmayan Veb Sayt"
+
+msgid "I2P Router Console"
+msgstr "I2P Ruter Konsolı"
 
 msgid "Website Not Found in Addressbook"
 msgstr "Ünvan Defterində Tapılmayan Veb Sayt"
@@ -262,167 +426,3 @@ msgstr "Əgər siz bir keçidi seçdinizsə, brauzerin yanlış şəkildə əlav
 
 msgid "The Base32 address is invalid."
 msgstr "Base32 ünvanı səhvdir."
-
-msgid "This seems to be a bad destination:"
-msgstr "Bu pis bir nöqtə kimi görünür:"
-
-msgid "i2paddresshelper cannot help you with a destination like that!"
-msgstr "i2paddresshelper belə bir nöqtə ilə sizə kömək edə bilməz!"
-
-#, java-format
-msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr "Ünvan defterinizdəki nöqtəni ziyarət etmək üçün, <a href=\"{0}\">buraya</a> klikləyin. Mübahisəli ünvan köməkçisi nöqtəsini ziyarət etmək üçün, <a href=\"{1}\">buraya</a> klikləyin."
-
-#, java-format
-msgid "Destination for {0} in addressbook"
-msgstr "Ünvan defterində {0} üçün nöqtə"
-
-msgid "Conflicting address helper destination"
-msgstr "Mübəhiscə ünvan köməkçisi nöqtəsi"
-
-msgid "Corrupt Base32 address"
-msgstr "Hasarlı Base32 ünvanı"
-
-msgid "Destination LeaseSet not found"
-msgstr "Nöqtə Kirayəsi tapılmadı"
-
-msgid "Host"
-msgstr "Xost"
-
-msgid "Base32"
-msgstr "Base32"
-
-msgid "Destination"
-msgstr "Nöqtə"
-
-#, java-format
-msgid "Continue to {0} without saving"
-msgstr "{0}-ə saxlamaq olmadan davam etmək"
-
-msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr "Ünvan defterinə saxlamaq olmadan saytın səhifəsinə getmək olar. Ünvan sizin I2P ruternizi yenidən başlamağa qədər yadda saxlanılacaq."
-
-msgid "Continue without saving"
-msgstr "Saxlamaq olmadan davam etmək"
-
-#, java-format
-msgid "Save {0} to router address book and continue to website"
-msgstr "{0}-i ruter ünvan defterinə saxlamaq və saytın səhifəsinə davam etmək"
-
-msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr "Bu ünvan sizin abunament bazası ünvanləriniz saxlanıldığı ruter ünvan defterinə saxlanılacaq."
-
-msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr "Manuel olaraq əlavə etdiyiniz saytları izləmək istəyirsinizsə, onları Master və ya Private ünvan defterinə əlavə edin."
-
-msgid "Save & continue"
-msgstr "Saxla və davam et"
-
-#, java-format
-msgid "Save {0} to master addressbook and continue to website"
-msgstr "{0}-i Master ünvan defterinə saxlamaq və saytın səhifəsinə davam etmək"
-
-msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr "Bu ünvan sizin Master ünvan defterinə saxlanılacaq. Bunu əsas ruter ünvan defterindən ayrı saxlamaq istədiyiniz, amma nəşr etməkdən imtina etməyən ünvanlar üçün seçin."
-
-#, java-format
-msgid "Save {0} to private addressbook and continue to website"
-msgstr "{0}-i Private ünvan defterinə saxlamaq və saytın səhifəsinə davam etmək"
-
-msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr "Bu ünvan sizin Private ünvan defterinə saxlanılacaq, bu da onun hər zaman nəşr olunmamasını təmin edir."
-
-msgid "Base32 address requires lookup password"
-msgstr "Base32 ünvanı axtarış şifrəsinə ehtiyac duyur"
-
-msgid "Base32 address requires encryption key"
-msgstr "Base32 ünvanı şifrələmə açarına ehtiyac duyur"
-
-msgid "Base32 address requires encryption key and lookup password"
-msgstr "Base32 ünvanı şifrələmə açarı və axtarış şifrəsinə ehtiyac duyur"
-
-msgid "Base32 address decryption failure, check encryption key"
-msgstr "Base32 ünvanı şifrələmə açarını yoxlamaq üçün şifrə açma uğursuzluğu"
-
-msgid "Generate"
-msgstr "Yarat"
-
-msgid "Encryption key"
-msgstr "Şifrələmə açarı"
-
-msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr "Sizin PSK şifrələmə açarını server operatörü tərəfindən təqdim edilməli, və ya DH şifrələmə açarını yaratmalı və bunu server operatörünə göndərməlisiniz."
-
-msgid "Ask the server operator for help."
-msgstr "Server operatöründən kömək istəyin."
-
-msgid "Enter PSK encryption key"
-msgstr "PSK şifrələmə açarını daxil edin"
-
-msgid "Generate new DH encryption key"
-msgstr "Yeni DH şifrələmə açarını yarat"
-
-msgid "Lookup password"
-msgstr "Axtarış şifrəsi"
-
-msgid "You must enter the password provided by the server operator."
-msgstr "Server operatörünün təqdim etdiyi şifrəni daxil etməlisiniz."
-
-#, java-format
-msgid "Added via address helper from {0}"
-msgstr "{0} ilə ünvan köməkçisi vasitəsilə əlavə edildi"
-
-msgid "Added via address helper"
-msgstr "Ünvan köməkçisi vasitəsilə əlavə edildi"
-
-msgid "Missing lookup password"
-msgstr "Eksik axtarış şifrəsi"
-
-msgid "Missing private key"
-msgstr "Eksik gizli açar"
-
-msgid "Invalid private key"
-msgstr "Səhv gizli açar"
-
-msgid "Your new encryption key"
-msgstr "Yeni şifrələmə açarınız"
-
-msgid "Copy the key and send it to the server operator."
-msgstr "Açarı kopyalayın və server operatörünə göndərin."
-
-msgid "After you are granted permission, you may proceed to the website."
-msgstr "İcazə verildikdən sonra, saytın səhifəsinə getmək olar."
-
-msgid "Go back and fix the error"
-msgstr "Geriyə gedin və səhvə düzəldin"
-
-msgid "router"
-msgstr "ruter"
-
-msgid "master"
-msgstr "master"
-
-msgid "private"
-msgstr "gizli"
-
-#, java-format
-msgid "Redirecting to {0}"
-msgstr "{0}-ə yönləndirilir"
-
-msgid "Redirection in progress"
-msgstr "Yönləndirmə davam edir"
-
-#, java-format
-msgid "Saved {0} to the {1} addressbook, redirecting now."
-msgstr "{0}-i {1} ünvan defterinə saxladıq, indi yönləndiririk."
-
-#, java-format
-msgid "Failed to save {0} to the {1} addressbook, redirecting now."
-msgstr "{0}-i {1} ünvan defterinə saxlamaq uğursuz olduq, indi yönləndiririk."
-
-msgid "Click here if you are not redirected automatically."
-msgstr "Avtomatik olaraq yönləndirilməyəsəniz, buraya klikləyin."
-
-#, java-format
-msgid "Saved the authentication for {0}, redirecting now."
-msgstr "{0} üçün təsdiqləməni saxladık, indi yönləndiririk."

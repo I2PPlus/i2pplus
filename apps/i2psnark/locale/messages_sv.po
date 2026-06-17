@@ -104,9 +104,6 @@ msgstr "Stoppa alla torrenter innan du ändrar datakatalogen"
 msgid "Data directory must be an absolute path"
 msgstr "Datamappen måste vara en absolut sökväg"
 
-msgid "Data directory does not exist"
-msgstr "Datamappen finns inte"
-
 msgid "Not a directory"
 msgstr "Inte en mapp"
 
@@ -278,10 +275,6 @@ msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disab
 msgstr "Varning - Inga I2P-spårare i \"{0}\", och DHT och öppna spårare är inaktiverade, du bör aktivera öppna spårare eller DHT innan du startar torrenten.Varning - Inga I2P-spårare i \"{0}\", och DHT och öppna spårare är inaktiverade, du bör aktivera öppna spårare eller DHT innan du startar torrenten.Varning - Inga I2P-spårare i \"{0}\", och DHT och öppna spårare är inaktiverade, du bör aktivera öppna spårare eller DHT innan du startar torrenten.Varning - Ingen I2P bevakare i \"{0}\" och både DHT och offentliga bevakare är inaktiverade, du bör aktivera offentliga bevakare eller DHT innan du startar torrenten."
 
 #, java-format
-msgid "Fetching {0}"
-msgstr "Hämtar {0}"
-
-#, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
 msgstr "Open trackers är inaktiverade och vi har inga DHT-peers. Open trackers är inaktiverade och vi har inga DHT-peers. Open trackers är inaktiverade och vi har inga DHT-peers. Publika bevakare är inaktiverade och vi har inga DHT-jämlikar. Hämtningen av {0} kan kanske inte genomföras innan du startar en annan torrent eller aktiverar offentliga bevakare eller DHT."
 
@@ -442,6 +435,9 @@ msgstr "Avslutade omkontroll av torrent {0}, oförändrad"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Fel vid kontroll av torrent {0}"
+
+msgid "Data directory does not exist"
+msgstr "Datamappen finns inte"
 
 msgid "Cannot create diskspace bar"
 msgstr "Kan inte skapa diskytenhetens statusfält"

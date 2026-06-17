@@ -41,6 +41,12 @@ msgstr "قابلیت اطمینان و پهنای باند بالا"
 msgid "Error - tunnels are not initialized yet"
 msgstr "خطا - تونل‌ها هنوز راه‌اندازی نشده‌اند"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "ارسال فرم نامعتبر است، احتمالاً به این دلیل که از دکمه \"بازگشت\" یا \"بارگذاری مجدد\"در مرورگر خود استفاده کرده اید. فرمِ اشتباهی ارسال شده است. احتمالا شما از کلیدهای 'back' و یا 'reload' در مرورگر خود استفاده کردید. لطفا دوباره تلاش کنید."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "اگر مشکل ادامه داشت، بررسی کنید که کوکی ها را در مرورگر خود فعال کرده اید.اگر همچنان مشکل پابرجاست، مطمئن شوید که در مرورگر شما Cookie ها فعال هستند."
+
 msgid "No services configured, cannot restart!"
 msgstr "هیچ سرویسی پیکربندی نشده است، امکان راه‌اندازی مجدد وجود ندارد!"
 
@@ -614,6 +620,39 @@ msgstr "پیکربندی سرور جدید"
 msgid "Hostname"
 msgstr "نام سرور"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "تأخیر تصادفی راه‌اندازی (زمانی که شروع خودکار فعال است) برای دفاع در برابر حملات همبستگی"
+
+msgid "Startup Delay"
+msgstr "تأخیر راه‌اندازی"
+
+msgid "Minimum"
+msgstr "حداقل"
+
+msgid "Minimum startup delay"
+msgstr "حداقل تأخیر راه‌اندازی"
+
+msgid "seconds"
+msgstr "ثانیه"
+
+msgid "Maximum"
+msgstr "حداکثر"
+
+msgid "Maximum startup delay"
+msgstr "حداکثر تأخیر راه‌اندازی"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "افزودن تأخیر تصادفی قبل از خاموش‌سازی تونل، سپس شروع فرآیند خاموش‌سازی/راه‌اندازی مجدد تدریجی مسیریاب"
+
+msgid "Shutdown Delay"
+msgstr "تأخیر خاموش‌سازی"
+
+msgid "Minimum shutdown delay"
+msgstr "حداقل تأخیر خاموش‌سازی"
+
+msgid "Maximum shutdown delay"
+msgstr "حداکثر تأخیر خاموش‌سازی"
+
 msgid "Website Hostname"
 msgstr "نام میزبان وبسایت"
 
@@ -1095,8 +1134,8 @@ msgstr "بدون پیش نمایش"
 msgid "Starting..."
 msgstr "در حال شروع..."
 
-msgid "Stop this Tunnel"
-msgstr "توقف سازی این تونل"
+msgid "Starting in"
+msgstr "شروع در"
 
 msgid "Running"
 msgstr "در حال اجرا"
@@ -1110,14 +1149,17 @@ msgstr "در"
 msgid "out"
 msgstr "خارج"
 
+msgid "Stopped"
+msgstr "متوقف شد"
+
+msgid "Stop this Tunnel"
+msgstr "توقف سازی این تونل"
+
 msgid "Restart this Tunnel"
 msgstr "راه‌اندازی مجدد این تونل"
 
 msgid "Restart"
 msgstr "راه‌اندازی مجدد"
-
-msgid "Stopped"
-msgstr "متوقف شد"
 
 msgid "Destination"
 msgstr "مقصد"
@@ -1293,12 +1335,6 @@ msgstr "تولید احراز هویت"
 
 msgid "SSL Helper"
 msgstr "یاور SSL"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "ارسال فرم نامعتبر است، احتمالاً به این دلیل که از دکمه \"بازگشت\" یا \"بارگذاری مجدد\"در مرورگر خود استفاده کرده اید. فرمِ اشتباهی ارسال شده است. احتمالا شما از کلیدهای 'back' و یا 'reload' در مرورگر خود استفاده کردید. لطفا دوباره تلاش کنید."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "اگر مشکل ادامه داشت، بررسی کنید که کوکی ها را در مرورگر خود فعال کرده اید.اگر همچنان مشکل پابرجاست، مطمئن شوید که در مرورگر شما Cookie ها فعال هستند."
 
 msgid "Experts only!"
 msgstr "فقط متخصصان!"

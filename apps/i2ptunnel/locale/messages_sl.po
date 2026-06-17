@@ -47,6 +47,12 @@ msgstr "višja širina pasma in pouzdanost"
 msgid "Error - tunnels are not initialized yet"
 msgstr "Napaka - predori še niso inicializirani"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Neveljavno pošiljanje obrazca, verjetno zaradi uporabe gumba 'nazaj' ali 'osveži' v brskalniku. Prosim poskusite znova."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Če težava obstaja, preverite, ali imate omogočene piškotke v brskalniku."
+
 msgid "No services configured, cannot restart!"
 msgstr "Ni nastavljenih storitev, ponovnega zagona ni mogoče izvesti!"
 
@@ -624,6 +630,39 @@ msgstr "Nova konfiguracija strežnika"
 msgid "Hostname"
 msgstr "Ime gostitelja"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Naključni zamik zagona (ko je samodejni zagon omogočen) za obrambo pred korelacijskimi napadi"
+
+msgid "Startup Delay"
+msgstr "Zamik zagona"
+
+msgid "Minimum"
+msgstr "Najmanj"
+
+msgid "Minimum startup delay"
+msgstr "Najmanjši zamik zagona"
+
+msgid "seconds"
+msgstr "sekund"
+
+msgid "Maximum"
+msgstr "Največ"
+
+msgid "Maximum startup delay"
+msgstr "Največji zamik zagona"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Dodaj naključni zamik pred zaustavitvijo tunela, nato začni postopek nežne zaustavitve/ponovnega zagona usmerjevalnika"
+
+msgid "Shutdown Delay"
+msgstr "Zamik zaustavitve"
+
+msgid "Minimum shutdown delay"
+msgstr "Najmanjši zamik zaustavitve"
+
+msgid "Maximum shutdown delay"
+msgstr "Največji zamik zaustavitve"
+
 msgid "Website Hostname"
 msgstr "Ime spletne strani"
 
@@ -1105,8 +1144,8 @@ msgstr "Brez predogleda"
 msgid "Starting..."
 msgstr "Zagon..."
 
-msgid "Stop this Tunnel"
-msgstr "Ustavi ta tunelj"
+msgid "Starting in"
+msgstr "Zaganja se čez"
 
 msgid "Running"
 msgstr "Deluje"
@@ -1120,14 +1159,17 @@ msgstr "v"
 msgid "out"
 msgstr "iz"
 
+msgid "Stopped"
+msgstr "Ustavljen"
+
+msgid "Stop this Tunnel"
+msgstr "Ustavi ta tunelj"
+
 msgid "Restart this Tunnel"
 msgstr "Ponovno zaženi ta predor"
 
 msgid "Restart"
 msgstr "Ponovni zagon"
-
-msgid "Stopped"
-msgstr "Ustavljen"
 
 msgid "Destination"
 msgstr "Destinacija"
@@ -1303,12 +1345,6 @@ msgstr "Ustvari avtentikacijo"
 
 msgid "SSL Helper"
 msgstr "Pomočnik SSL"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Neveljavno pošiljanje obrazca, verjetno zaradi uporabe gumba 'nazaj' ali 'osveži' v brskalniku. Prosim poskusite znova."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Če težava obstaja, preverite, ali imate omogočene piškotke v brskalniku."
 
 msgid "Experts only!"
 msgstr "Le za strokovnjake!"

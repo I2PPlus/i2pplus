@@ -41,6 +41,12 @@ msgstr "larghezza di banda e affidabilità maggiori"
 msgid "Error - tunnels are not initialized yet"
 msgstr "Errore - i tunnel non sono ancora inizializzati"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Invio modulo non valido, probabilmente perché hai utilizzato il pulsante 'Indietro' o 'Ricarica' ​​del tuo browser. Ripetere perfavore."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Se il problema persiste, verifica di avere i cookies abilitati nel tuo browser."
+
 msgid "No services configured, cannot restart!"
 msgstr "Nessun servizio configurato, impossibile riavviare!"
 
@@ -614,6 +620,39 @@ msgstr "Nuova configurazione del server"
 msgid "Hostname"
 msgstr "Nome host"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Ritardo di avvio casuale (quando l'avvio automatico è abilitato) per difendersi da attacchi di correlazione"
+
+msgid "Startup Delay"
+msgstr "Ritardo di avvio"
+
+msgid "Minimum"
+msgstr "Minimo"
+
+msgid "Minimum startup delay"
+msgstr "Ritardo minimo di avvio"
+
+msgid "seconds"
+msgstr "secondi"
+
+msgid "Maximum"
+msgstr "Massimo"
+
+msgid "Maximum startup delay"
+msgstr "Ritardo massimo di avvio"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Aggiungere un ritardo casuale prima dello spegnimento del tunnel, quindi avviare un processo di spegnimento/riavvio graduale del router"
+
+msgid "Shutdown Delay"
+msgstr "Ritardo di spegnimento"
+
+msgid "Minimum shutdown delay"
+msgstr "Ritardo minimo di spegnimento"
+
+msgid "Maximum shutdown delay"
+msgstr "Ritardo massimo di spegnimento"
+
 msgid "Website Hostname"
 msgstr "Nome host sito web"
 
@@ -1095,8 +1134,8 @@ msgstr "Nessuna anteprima"
 msgid "Starting..."
 msgstr "In avvio..."
 
-msgid "Stop this Tunnel"
-msgstr "Termina tunnel"
+msgid "Starting in"
+msgstr "Avvio tra"
 
 msgid "Running"
 msgstr "In funzione"
@@ -1110,14 +1149,17 @@ msgstr "nel"
 msgid "out"
 msgstr "fuori"
 
+msgid "Stopped"
+msgstr "Fermato"
+
+msgid "Stop this Tunnel"
+msgstr "Termina tunnel"
+
 msgid "Restart this Tunnel"
 msgstr "Riavvia questo tunnel"
 
 msgid "Restart"
 msgstr "Riavvio"
-
-msgid "Stopped"
-msgstr "Fermato"
 
 msgid "Destination"
 msgstr "Destinazione"
@@ -1293,12 +1335,6 @@ msgstr "Genera autenticazione"
 
 msgid "SSL Helper"
 msgstr "Assistente SSL"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Invio modulo non valido, probabilmente perché hai utilizzato il pulsante 'Indietro' o 'Ricarica' ​​del tuo browser. Ripetere perfavore."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Se il problema persiste, verifica di avere i cookies abilitati nel tuo browser."
 
 msgid "Experts only!"
 msgstr "Solo per esperti!"

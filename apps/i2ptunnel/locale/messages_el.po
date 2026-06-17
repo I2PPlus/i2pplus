@@ -41,6 +41,12 @@ msgstr "μεγαλύτερη ρυθμικότητα και αξιοπιστία"
 msgid "Error - tunnels are not initialized yet"
 msgstr "Σφάλμα - οι διάδρομοι δεν έχουν αρχικοποιηθεί ακόμα"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Μη έγκυρη υποβολή φόρμας, πιθανώς λόγω της χρήσης του κουμπιού 'πίσω' ή 'ανανέωση' στο πρόγραμμα περιήγησης σας. Παρακαλώ, υποβάλτε ξανά."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Εάν το πρόβλημα παραμένει, ελέγξτε αν έχετε ενεργοποιημένα τα cookies στο πρόγραμμα περιήγησης σας."
+
 msgid "No services configured, cannot restart!"
 msgstr "Δεν έχουν ρυθμιστεί υπηρεσίες, δεν είναι δυνατή η επανεκκίνηση!"
 
@@ -614,6 +620,39 @@ msgstr "Νέα Διαμόρφωση Διακομιστή"
 msgid "Hostname"
 msgstr "Όνομα διακομιστή"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Τυχαία καθυστέρηση εκκίνησης (όταν είναι ενεργοποιημένη η αυτόματη εκκίνηση) για άμυνα έναντι επιθέσεων συσχέτισης"
+
+msgid "Startup Delay"
+msgstr "Καθυστέρηση εκκίνησης"
+
+msgid "Minimum"
+msgstr "Ελάχιστο"
+
+msgid "Minimum startup delay"
+msgstr "Ελάχιστη καθυστέρηση εκκίνησης"
+
+msgid "seconds"
+msgstr "δευτερόλεπτα"
+
+msgid "Maximum"
+msgstr "Μέγιστο"
+
+msgid "Maximum startup delay"
+msgstr "Μέγιστη καθυστέρηση εκκίνησης"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Προσθήκη τυχαίας καθυστέρησης πριν τον τερματισμό σήραγγας και έναρξη ομαλής διαδικασίας τερματισμού/επανεκκίνησης δρομολογητή"
+
+msgid "Shutdown Delay"
+msgstr "Καθυστέρηση τερματισμού"
+
+msgid "Minimum shutdown delay"
+msgstr "Ελάχιστη καθυστέρηση τερματισμού"
+
+msgid "Maximum shutdown delay"
+msgstr "Μέγιστη καθυστέρηση τερματισμού"
+
 msgid "Website Hostname"
 msgstr "Όνομα διακομιστή ιστοσελίδας"
 
@@ -1095,8 +1134,8 @@ msgstr "Χωρίς Προεπισκόπηση"
 msgid "Starting..."
 msgstr "Εκκίνηση..."
 
-msgid "Stop this Tunnel"
-msgstr "Σταμάτημα Αυτού του Διαδρόμου"
+msgid "Starting in"
+msgstr "Εκκίνηση σε"
 
 msgid "Running"
 msgstr "Εκτελείται"
@@ -1110,14 +1149,17 @@ msgstr "εισ."
 msgid "out"
 msgstr "εξ."
 
+msgid "Stopped"
+msgstr "Σταματημένος"
+
+msgid "Stop this Tunnel"
+msgstr "Σταμάτημα Αυτού του Διαδρόμου"
+
 msgid "Restart this Tunnel"
 msgstr "Επανεκκίνηση αυτού του διαδρόμου"
 
 msgid "Restart"
 msgstr "Επανεκκίνηση"
-
-msgid "Stopped"
-msgstr "Σταματημένος"
 
 msgid "Destination"
 msgstr "Προορισμός"
@@ -1293,12 +1335,6 @@ msgstr "Δημιουργία Αυθεντικοποίησης"
 
 msgid "SSL Helper"
 msgstr "Βοηθός SSL"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Μη έγκυρη υποβολή φόρμας, πιθανώς λόγω της χρήσης του κουμπιού 'πίσω' ή 'ανανέωση' στο πρόγραμμα περιήγησης σας. Παρακαλώ, υποβάλτε ξανά."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Εάν το πρόβλημα παραμένει, ελέγξτε αν έχετε ενεργοποιημένα τα cookies στο πρόγραμμα περιήγησης σας."
 
 msgid "Experts only!"
 msgstr "Μόνο για ειδικούς!"

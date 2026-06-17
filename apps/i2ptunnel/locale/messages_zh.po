@@ -38,6 +38,12 @@ msgstr "较高的带宽和稳定性"
 msgid "Error - tunnels are not initialized yet"
 msgstr "错误 - 隧道尚未初始化"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "网页提交无效，可能的原因是您使用了浏览器的“后退”和“刷新”按钮，导致表单过期，请重新提交。"
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "如果问题持续，请确认您的浏览器支持Cookie。"
+
 msgid "No services configured, cannot restart!"
 msgstr "未配置服务，无法重启！"
 
@@ -609,6 +615,39 @@ msgstr "新服务端隧道设置"
 msgid "Hostname"
 msgstr "主机名"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "随机启动延迟（启用自动启动时）以防止关联攻击"
+
+msgid "Startup Delay"
+msgstr "启动延迟"
+
+msgid "Minimum"
+msgstr "最小"
+
+msgid "Minimum startup delay"
+msgstr "最小启动延迟"
+
+msgid "seconds"
+msgstr "秒"
+
+msgid "Maximum"
+msgstr "最大"
+
+msgid "Maximum startup delay"
+msgstr "最大启动延迟"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "在隧道关闭前添加随机延迟，然后开始优雅的路由器关闭/重启过程"
+
+msgid "Shutdown Delay"
+msgstr "关闭延迟"
+
+msgid "Minimum shutdown delay"
+msgstr "最小关闭延迟"
+
+msgid "Maximum shutdown delay"
+msgstr "最大关闭延迟"
+
 msgid "Website Hostname"
 msgstr "网站主机名"
 
@@ -1090,8 +1129,8 @@ msgstr "无预览"
 msgid "Starting..."
 msgstr "正在启动..."
 
-msgid "Stop this Tunnel"
-msgstr "停止这个隧道"
+msgid "Starting in"
+msgstr "正在启动"
 
 msgid "Running"
 msgstr "运行中"
@@ -1105,14 +1144,17 @@ msgstr "入口"
 msgid "out"
 msgstr "出口"
 
+msgid "Stopped"
+msgstr "已停止"
+
+msgid "Stop this Tunnel"
+msgstr "停止这个隧道"
+
 msgid "Restart this Tunnel"
 msgstr "重启此隧道"
 
 msgid "Restart"
 msgstr "重启"
-
-msgid "Stopped"
-msgstr "已停止"
 
 msgid "Destination"
 msgstr "目标"
@@ -1288,12 +1330,6 @@ msgstr "生成验证"
 
 msgid "SSL Helper"
 msgstr "SSL 助手"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "网页提交无效，可能的原因是您使用了浏览器的“后退”和“刷新”按钮，导致表单过期，请重新提交。"
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "如果问题持续，请确认您的浏览器支持Cookie。"
 
 msgid "Experts only!"
 msgstr "仅供专家！"

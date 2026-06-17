@@ -41,6 +41,12 @@ msgstr "basse passante et fiabilité plus élevées"
 msgid "Error - tunnels are not initialized yet"
 msgstr "Erreur - les tunnels ne sont pas encore initialisés"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "L’envoi du formulaire est invalide, car vous avez probablement utilisé le bouton « Retour » ou « Recharger » de votre navigateur. Veuillez le renvoyer."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Si le problème persiste, vérifiez que les témoins sont activés dans votre navigateur."
+
 msgid "No services configured, cannot restart!"
 msgstr "Aucun service configuré, redémarrage impossible !"
 
@@ -614,6 +620,39 @@ msgstr "Nouvelle configuration du serveur"
 msgid "Hostname"
 msgstr "Nom d’hôte"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Délai de démarrage aléatoire (lorsque le démarrage automatique est activé) pour se défendre contre les attaques par corrélation"
+
+msgid "Startup Delay"
+msgstr "Délai de démarrage"
+
+msgid "Minimum"
+msgstr "Minimum"
+
+msgid "Minimum startup delay"
+msgstr "Délai minimum de démarrage"
+
+msgid "seconds"
+msgstr "secondes"
+
+msgid "Maximum"
+msgstr "Maximum"
+
+msgid "Maximum startup delay"
+msgstr "Délai maximum de démarrage"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Ajouter un délai aléatoire avant l'arrêt du tunnel, puis lancer un processus d'arrêt/redémarrage progressif du routeur"
+
+msgid "Shutdown Delay"
+msgstr "Délai d'arrêt"
+
+msgid "Minimum shutdown delay"
+msgstr "Délai minimum d'arrêt"
+
+msgid "Maximum shutdown delay"
+msgstr "Délai maximum d'arrêt"
+
 msgid "Website Hostname"
 msgstr "Nom d’hôte du site Web"
 
@@ -1095,8 +1134,8 @@ msgstr "Aucun aperçu"
 msgid "Starting..."
 msgstr "Démarrage…"
 
-msgid "Stop this Tunnel"
-msgstr "Arrêter ce tunnel"
+msgid "Starting in"
+msgstr "Démarrage dans"
 
 msgid "Running"
 msgstr "En cours"
@@ -1110,14 +1149,17 @@ msgstr "dans"
 msgid "out"
 msgstr "sorti"
 
+msgid "Stopped"
+msgstr "Arrêté"
+
+msgid "Stop this Tunnel"
+msgstr "Arrêter ce tunnel"
+
 msgid "Restart this Tunnel"
 msgstr "Redémarrer ce tunnel"
 
 msgid "Restart"
 msgstr "Redémarrer"
-
-msgid "Stopped"
-msgstr "Arrêté"
 
 msgid "Destination"
 msgstr "Destination"
@@ -1293,12 +1335,6 @@ msgstr "Générer l’authentification"
 
 msgid "SSL Helper"
 msgstr "Aide SSL"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "L’envoi du formulaire est invalide, car vous avez probablement utilisé le bouton « Retour » ou « Recharger » de votre navigateur. Veuillez le renvoyer."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Si le problème persiste, vérifiez que les témoins sont activés dans votre navigateur."
 
 msgid "Experts only!"
 msgstr "Experts seulement !"

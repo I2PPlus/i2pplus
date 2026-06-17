@@ -8,14 +8,132 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Website Unknown"
-msgstr "Sitio web desconocido"
+msgid "This seems to be a bad destination:"
+msgstr "Éste parece ser un destino falso:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "El ayudante de direcciones no te puede ayudar con un destino así."
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "Para visitar el destino en su libro de direcciones, haga clic en <a href=\"{0}\"> aquí </a>. Para visitar el destino en conflicto de direcciones, haga clic en <a href=\"{1}\"> aquí </a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "Destino de {0} en la libreta de direcciones"
+
+msgid "Conflicting address helper destination"
+msgstr "Destino I2P en conflicto del asistente de direcciones"
+
+msgid "Corrupt Base32 address"
+msgstr "Dirección Base32 corrupta"
+
+msgid "Destination LeaseSet not found"
+msgstr "Conjunto de arrendamiento de destino no encontrado"
+
+msgid "Host"
+msgstr "Host"
+
+msgid "Base32"
+msgstr "Base 32"
+
+msgid "Destination"
+msgstr "Destino"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "Acceder a {0} sin guardar"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "Puede navegar al sitio sin guardarlo en el libro de direcciones. La dirección se recordará hasta que reinicie su enrutador I2P."
+
+msgid "Continue without saving"
+msgstr "Continuar sin guardar"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "Guarde {0} en la libreta de direcciones del enrutador y continúe al sitio webGuardar {0} en la libreta de direcciones del router I2P y continuar hacia el sitio web"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "Esta dirección se guardará en la libreta de direcciones de su enrutador, donde se almacenan sus direcciones basadas en suscripción."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "Si desea realizar un seguimiento de los sitios que ha agregado manualmente, agréguelos a su libreta de direcciones maestra o privada."
+
+msgid "Save & continue"
+msgstr "Guardar y continuar"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "Guardar {0} en la libreta de direcciones maestra y continuar al sitio web"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "Esta dirección se guardará en su libro de direcciones maestro. Seleccione esta opción para direcciones que desea mantener separadas de la libreta de direcciones del enrutador principal, pero no le importe publicar."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "Guardar {0} en la libreta de direcciones privada y continuar al sitio web"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "Esta dirección se guardará en su libreta de direcciones privada, asegurando que nunca se publique."
+
+msgid "Base32 address requires lookup password"
+msgstr "La dirección Base32 requiere una contraseña de búsqueda"
+
+msgid "Base32 address requires encryption key"
+msgstr "La dirección Base32 requiere una clave de cifrado"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "La dirección Base32 requiere clave de cifrado y contraseña de búsqueda"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Error al descifrar la dirección Base32, verifique la clave de cifrado"
+
+msgid "Generate"
+msgstr "Generar"
+
+msgid "Encryption key"
+msgstr "Clave de cifrado"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "Debe ingresar una clave de cifrado PSK proporcionada por el operador del servidor o generar una clave de cifrado DH y enviarla al operador del servidor."
+
+msgid "Ask the server operator for help."
+msgstr "Pide ayuda al operador del servidor."
+
+msgid "Enter PSK encryption key"
+msgstr "Ingrese la clave de cifrado PSK"
+
+msgid "Generate new DH encryption key"
+msgstr "Generar nueva clave de cifrado DH"
+
+msgid "Lookup password"
+msgstr "Contraseña de búsqueda"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "Debe ingresar la contraseña proporcionada por el operador del servidor."
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "Agregado por el ayudante de direcciones desde {0}"
+
+msgid "Added via address helper"
+msgstr "Agregado por el ayudante de direcciones"
+
+msgid "Missing lookup password"
+msgstr "Falta la contraseña de búsqueda"
+
+msgid "Missing private key"
+msgstr "Falta clave privada"
+
+msgid "Invalid private key"
+msgstr "Clave privada no válida"
+
+msgid "Your new encryption key"
+msgstr "Tu nueva clave de cifrado"
 
 msgid "Router Console"
 msgstr "Consola del Ruter"
-
-msgid "I2P Router Console"
-msgstr "Consola del Ruter I2P"
 
 msgid "Addressbook"
 msgstr "Libreta de direcciones"
@@ -25,6 +143,52 @@ msgstr "Ajustes"
 
 msgid "Help"
 msgstr "Ayuda"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "Copie la clave y envíela al operador del servidor."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "Una vez que se le haya concedido el permiso, podrá acceder al sitio web."
+
+msgid "Go back and fix the error"
+msgstr "Regrese y corrija el error"
+
+msgid "router"
+msgstr "router"
+
+msgid "master"
+msgstr "maestro"
+
+msgid "private"
+msgstr "privado"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "Redireccionando a {0}"
+
+msgid "Redirection in progress"
+msgstr "Redirección en curso"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "{0} ha sido guardado en la libreta {1}, accediendo ahora."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "No se ha podido guardar {0} en la libreta {1}, accediendo ahora."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "¡Haz click aquí si no estás siendo enviado automáticamente!"
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "Se guardó la autenticación para {0}, redirigiendo ahora."
+
+msgid "Website Unknown"
+msgstr "Sitio web desconocido"
+
+msgid "I2P Router Console"
+msgstr "Consola del Ruter I2P"
 
 msgid "Website Not Found in Addressbook"
 msgstr "Sitio web no se encuentra en el libro de direcciones"
@@ -40,8 +204,8 @@ msgid "If you have the Base 64 address, {0}add it to your addressbook{1}."
 msgstr "Si tienes la dirección Base 64, {0}agrégala a tu libreta de direcciones{1}.Si tiene la dirección Base 64, {0}añádala a su libreta de direcciones{1} (resolución distribuida de nombres)."
 
 msgid "Otherwise, find a Base 32 or address helper link, or use a jump service link below."
-msgstr "De lo contrario, busque un enlace de dirección Base 32 o de asistencia, o use un enlace de servicio de salto a continuación."
-"De lo contrario, busque un enlace de ayuda de dirección o Base 32, o utilice un enlace de servicio de salto a continuación.De lo contrario, busque un enlace de ayuda de dirección o Base 32, o utilice un enlace de servicio de salto a continuación.De otro modo, encuentre una dirección Base 32 o un enlace de ayudante\n"
+msgstr ""
+"De lo contrario, busque un enlace de dirección Base 32 o de asistencia, o use un enlace de servicio de salto a continuación.De lo contrario, busque un enlace de ayuda de dirección o Base 32, o utilice un enlace de servicio de salto a continuación.De lo contrario, busque un enlace de ayuda de dirección o Base 32, o utilice un enlace de servicio de salto a continuación.De otro modo, encuentre una dirección Base 32 o un enlace de ayudante\n"
 "de direccionamiento (address helper), o use uno de los enlaces a un servicio\n"
 "de salto (jump, direccionamiento distribuido) de debajo."
 
@@ -265,167 +429,3 @@ msgstr "Si hizo clic en un enlace, verifique el final del URI para ver si hay ca
 
 msgid "The Base32 address is invalid."
 msgstr "La dirección Base32 no es válida."
-
-msgid "This seems to be a bad destination:"
-msgstr "Éste parece ser un destino falso:"
-
-msgid "i2paddresshelper cannot help you with a destination like that!"
-msgstr "El ayudante de direcciones no te puede ayudar con un destino así."
-
-#, java-format
-msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr "Para visitar el destino en su libro de direcciones, haga clic en <a href=\"{0}\"> aquí </a>. Para visitar el destino en conflicto de direcciones, haga clic en <a href=\"{1}\"> aquí </a>."
-
-#, java-format
-msgid "Destination for {0} in addressbook"
-msgstr "Destino de {0} en la libreta de direcciones"
-
-msgid "Conflicting address helper destination"
-msgstr "Destino I2P en conflicto del asistente de direcciones"
-
-msgid "Corrupt Base32 address"
-msgstr "Dirección Base32 corrupta"
-
-msgid "Destination LeaseSet not found"
-msgstr "Conjunto de arrendamiento de destino no encontrado"
-
-msgid "Host"
-msgstr "Host"
-
-msgid "Base32"
-msgstr "Base 32"
-
-msgid "Destination"
-msgstr "Destino"
-
-#, java-format
-msgid "Continue to {0} without saving"
-msgstr "Acceder a {0} sin guardar"
-
-msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr "Puede navegar al sitio sin guardarlo en el libro de direcciones. La dirección se recordará hasta que reinicie su enrutador I2P."
-
-msgid "Continue without saving"
-msgstr "Continuar sin guardar"
-
-#, java-format
-msgid "Save {0} to router address book and continue to website"
-msgstr "Guarde {0} en la libreta de direcciones del enrutador y continúe al sitio webGuardar {0} en la libreta de direcciones del router I2P y continuar hacia el sitio web"
-
-msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr "Esta dirección se guardará en la libreta de direcciones de su enrutador, donde se almacenan sus direcciones basadas en suscripción."
-
-msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr "Si desea realizar un seguimiento de los sitios que ha agregado manualmente, agréguelos a su libreta de direcciones maestra o privada."
-
-msgid "Save & continue"
-msgstr "Guardar y continuar"
-
-#, java-format
-msgid "Save {0} to master addressbook and continue to website"
-msgstr "Guardar {0} en la libreta de direcciones maestra y continuar al sitio web"
-
-msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr "Esta dirección se guardará en su libro de direcciones maestro. Seleccione esta opción para direcciones que desea mantener separadas de la libreta de direcciones del enrutador principal, pero no le importe publicar."
-
-#, java-format
-msgid "Save {0} to private addressbook and continue to website"
-msgstr "Guardar {0} en la libreta de direcciones privada y continuar al sitio web"
-
-msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr "Esta dirección se guardará en su libreta de direcciones privada, asegurando que nunca se publique."
-
-msgid "Base32 address requires lookup password"
-msgstr "La dirección Base32 requiere una contraseña de búsqueda"
-
-msgid "Base32 address requires encryption key"
-msgstr "La dirección Base32 requiere una clave de cifrado"
-
-msgid "Base32 address requires encryption key and lookup password"
-msgstr "La dirección Base32 requiere clave de cifrado y contraseña de búsqueda"
-
-msgid "Base32 address decryption failure, check encryption key"
-msgstr "Error al descifrar la dirección Base32, verifique la clave de cifrado"
-
-msgid "Generate"
-msgstr "Generar"
-
-msgid "Encryption key"
-msgstr "Clave de cifrado"
-
-msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr "Debe ingresar una clave de cifrado PSK proporcionada por el operador del servidor o generar una clave de cifrado DH y enviarla al operador del servidor."
-
-msgid "Ask the server operator for help."
-msgstr "Pide ayuda al operador del servidor."
-
-msgid "Enter PSK encryption key"
-msgstr "Ingrese la clave de cifrado PSK"
-
-msgid "Generate new DH encryption key"
-msgstr "Generar nueva clave de cifrado DH"
-
-msgid "Lookup password"
-msgstr "Contraseña de búsqueda"
-
-msgid "You must enter the password provided by the server operator."
-msgstr "Debe ingresar la contraseña proporcionada por el operador del servidor."
-
-#, java-format
-msgid "Added via address helper from {0}"
-msgstr "Agregado por el ayudante de direcciones desde {0}"
-
-msgid "Added via address helper"
-msgstr "Agregado por el ayudante de direcciones"
-
-msgid "Missing lookup password"
-msgstr "Falta la contraseña de búsqueda"
-
-msgid "Missing private key"
-msgstr "Falta clave privada"
-
-msgid "Invalid private key"
-msgstr "Clave privada no válida"
-
-msgid "Your new encryption key"
-msgstr "Tu nueva clave de cifrado"
-
-msgid "Copy the key and send it to the server operator."
-msgstr "Copie la clave y envíela al operador del servidor."
-
-msgid "After you are granted permission, you may proceed to the website."
-msgstr "Una vez que se le haya concedido el permiso, podrá acceder al sitio web."
-
-msgid "Go back and fix the error"
-msgstr "Regrese y corrija el error"
-
-msgid "router"
-msgstr "router"
-
-msgid "master"
-msgstr "maestro"
-
-msgid "private"
-msgstr "privado"
-
-#, java-format
-msgid "Redirecting to {0}"
-msgstr "Redireccionando a {0}"
-
-msgid "Redirection in progress"
-msgstr "Redirección en curso"
-
-#, java-format
-msgid "Saved {0} to the {1} addressbook, redirecting now."
-msgstr "{0} ha sido guardado en la libreta {1}, accediendo ahora."
-
-#, java-format
-msgid "Failed to save {0} to the {1} addressbook, redirecting now."
-msgstr "No se ha podido guardar {0} en la libreta {1}, accediendo ahora."
-
-msgid "Click here if you are not redirected automatically."
-msgstr "¡Haz click aquí si no estás siendo enviado automáticamente!"
-
-#, java-format
-msgid "Saved the authentication for {0}, redirecting now."
-msgstr "Se guardó la autenticación para {0}, redirigiendo ahora."

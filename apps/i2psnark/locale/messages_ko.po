@@ -104,9 +104,6 @@ msgstr "데이터 디렉토리를 변경하기 전에 모든 토렌트를 중지
 msgid "Data directory must be an absolute path"
 msgstr "데이터 디렉토리는 반드시 절대경로로 설정되어야 합니다."
 
-msgid "Data directory does not exist"
-msgstr "데이터 디렉토리가 존재하지 않습니다."
-
 msgid "Not a directory"
 msgstr "디렉토리가 아닙니다"
 
@@ -278,10 +275,6 @@ msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disab
 msgstr "경고- \"{0}\"에 I2P 트래커가 없습니다, 오픈트래커와 DHT도 비활성화 되었으며, 토렌트를 시작하려면 이를 활성화해야 합니다."
 
 #, java-format
-msgid "Fetching {0}"
-msgstr "정보를 가져오는 중 {0}"
-
-#, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
 msgstr "오픈 트래커가 비활성화되어 있으며 DHT 피어가 없습니다. 다른 토렌트를 시작하거나 해당 설정들을 활성화하지 않으면 {0}의 정보를 가져오지 못할 수 있습니다."
 
@@ -442,6 +435,9 @@ msgstr "토렌트 {0}를 재확인하는것을 마쳤습니다, 변경사항 없
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "토렌트 {0}를 확인하는데 오류가 있습니다"
+
+msgid "Data directory does not exist"
+msgstr "데이터 디렉토리가 존재하지 않습니다."
 
 msgid "Cannot create diskspace bar"
 msgstr "디스크 공간 막대를 생성할 수 없습니다"

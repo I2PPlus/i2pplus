@@ -104,9 +104,6 @@ msgstr "Peata kõik torrentid enne andmekausta muutmist"
 msgid "Data directory must be an absolute path"
 msgstr "Andmekausta peab olema absoluutne tee"
 
-msgid "Data directory does not exist"
-msgstr "Andmekausta ei eksisteeri"
-
 msgid "Not a directory"
 msgstr "Pole kaust"
 
@@ -278,10 +275,6 @@ msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disab
 msgstr "Hoiatus - \"{0}\" pole I2P trackeritega, samuti on DHT ja avalikud trackerid keelatud, torrenti käivitamisel peaksid sisse lülitama avalikud trackerid või DHT."
 
 #, java-format
-msgid "Fetching {0}"
-msgstr "{0} hankimine"
-
-#, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
 msgstr "Avalikud trackerid on keelatud ning meil pole DHT partnerid. {0} hankimine ei pruugi õnnestuda seni, kuni sa ei käivita veel ühte torrentit, sisse lülitad avalikke trackerid või sisse lülitad DHT."
 
@@ -442,6 +435,9 @@ msgstr "Torrenti {0} kontroll lõpetatud, mitte muutunud"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Torrenti {0} kontrollimisel tekkis viga"
+
+msgid "Data directory does not exist"
+msgstr "Andmekausta ei eksisteeri"
 
 msgid "Cannot create diskspace bar"
 msgstr "Kettaruumi riba ei saa luua"

@@ -8,14 +8,132 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "Website Unknown"
-msgstr "Situs ini tidak diketahui"
+msgid "This seems to be a bad destination:"
+msgstr "Ini sepertinya menjadi tujuan yang buruk:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper tidak dapat membantu Anda dengan tujuan seperti itu!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "Untuk mengunjungi tujuan di buku alamat Anda, klik <a href=\"{0}\">di sini</a>. Untuk mengunjungi tujuan yang bertentangan, klik <a href=\"{1}\">di sini</a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "Tujuan untuk {0} di buku alamat"
+
+msgid "Conflicting address helper destination"
+msgstr "Destinasi addresshelper yang konflik"
+
+msgid "Corrupt Base32 address"
+msgstr "Alamat Base32 Rusak"
+
+msgid "Destination LeaseSet not found"
+msgstr "Leaseset tujuan tidak ditemukan"
+
+msgid "Host"
+msgstr "Host"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "Tujuan"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "Melanjutkan ke {0} tanpa menyimpan"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "Anda dapat menelusuri situs tanpa menyimpannya ke buku alamat. Alamat akan diingat sampai Anda memulai kembali router I2P Anda."
+
+msgid "Continue without saving"
+msgstr "Lanjutkan tanpa menyimpan"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "Simpan {0} ke buku alamat router dan lanjutkan ke situs webSimpan {0} ke dalam buku alamat router lalu lanjut ke situs yang anda tuju"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "Jika Anda ingin melacak situs yang telah Anda tambahkan secara manual, tambahkan ke buku alamat master atau pribadi Anda sebagai gantinya."
+
+msgid "Save & continue"
+msgstr "Simpan & lanjutkan"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "Simpan {0} ke Master Addresbook dan lanjutkan ke situs web"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "Alamat ini akan disimpan ke buku alamat utama Anda. Pilih opsi ini untuk alamat yang ingin Anda pisahkan dari buku alamat router utama, tetapi jangan keberatan menerbitkan."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "Simpan {0} ke buku alamat pribadi dan lanjutkan ke situs web"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "Alamat ini akan disimpan ke buku alamat pribadi Anda, memastikannya tidak pernah dipublikasikan."
+
+msgid "Base32 address requires lookup password"
+msgstr "Alamat Base32 memerlukan kata sandi pencarian"
+
+msgid "Base32 address requires encryption key"
+msgstr "Alamat Base32 memerlukan kunci enkripsi"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Alamat Base32 memerlukan kunci enkripsi dan kata sandi pencarian"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Kegagalan dekripsi alamat Base32, periksa kunci enkripsi"
+
+msgid "Generate"
+msgstr "Buat"
+
+msgid "Encryption key"
+msgstr "Kunci enkripsi"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "Anda harus memasukkan kunci enkripsi PSK yang disediakan oleh operator server, atau membuat kunci enkripsi DH dan mengirimkannya ke operator server."
+
+msgid "Ask the server operator for help."
+msgstr "Minta bantuan operator server."
+
+msgid "Enter PSK encryption key"
+msgstr "Masukkan kunci enkripsi PSK"
+
+msgid "Generate new DH encryption key"
+msgstr "Hasilkan kunci enkripsi DH baru"
+
+msgid "Lookup password"
+msgstr "Cari kata sandi"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "Anda harus memasukkan kata sandi yang diberikan oleh operator server."
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "Ditambahkan melalui alamat pembantu dari {0}"
+
+msgid "Added via address helper"
+msgstr "Ditambahkan melalui alamat pembantu"
+
+msgid "Missing lookup password"
+msgstr "Kata sandi pencarian tidak ada"
+
+msgid "Missing private key"
+msgstr "Kunci pribadi tidak ada"
+
+msgid "Invalid private key"
+msgstr "Kunci pribadi tidak valid"
+
+msgid "Your new encryption key"
+msgstr "Kunci enkripsi baru Anda"
 
 msgid "Router Console"
 msgstr "Konsol Router"
-
-msgid "I2P Router Console"
-msgstr "I2P Konsol Router"
 
 msgid "Addressbook"
 msgstr "Buku alamat"
@@ -25,6 +143,52 @@ msgstr "Konfigurasi"
 
 msgid "Help"
 msgstr "Bantuan"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "Salin kunci dan kirimkan ke operator server."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "Setelah Anda diberikan izin, Anda dapat melanjutkan ke situs web."
+
+msgid "Go back and fix the error"
+msgstr "Kembali dan perbaiki kesalahannya"
+
+msgid "router"
+msgstr "router"
+
+msgid "master"
+msgstr "master"
+
+msgid "private"
+msgstr "pribadi"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "Mengalihkan ke {0}"
+
+msgid "Redirection in progress"
+msgstr "Pengalihan sedang berlangsung"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "Menyimpan {0} ke buku alamat {1}, mengalihkan sekarang."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "Gagal menyimpan {0} ke buku alamat {1}, mengalihkan sekarang."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "Klik disini jika Anda tidak dialihkan secara otomatis."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "Menyimpan autentikasi untuk {0}, mengalihkannya sekarang."
+
+msgid "Website Unknown"
+msgstr "Situs ini tidak diketahui"
+
+msgid "I2P Router Console"
+msgstr "I2P Konsol Router"
 
 msgid "Website Not Found in Addressbook"
 msgstr "Situs ini tidak ada di buku alamat"
@@ -262,167 +426,3 @@ msgstr "Jika Anda mengeklik tautan, periksa bagian akhir URI apakah ada karakter
 
 msgid "The Base32 address is invalid."
 msgstr "Alamat Base32 tidak valid."
-
-msgid "This seems to be a bad destination:"
-msgstr "Ini sepertinya menjadi tujuan yang buruk:"
-
-msgid "i2paddresshelper cannot help you with a destination like that!"
-msgstr "i2paddresshelper tidak dapat membantu Anda dengan tujuan seperti itu!"
-
-#, java-format
-msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr "Untuk mengunjungi tujuan di buku alamat Anda, klik <a href=\"{0}\">di sini</a>. Untuk mengunjungi tujuan yang bertentangan, klik <a href=\"{1}\">di sini</a>."
-
-#, java-format
-msgid "Destination for {0} in addressbook"
-msgstr "Tujuan untuk {0} di buku alamat"
-
-msgid "Conflicting address helper destination"
-msgstr "Destinasi addresshelper yang konflik"
-
-msgid "Corrupt Base32 address"
-msgstr "Alamat Base32 Rusak"
-
-msgid "Destination LeaseSet not found"
-msgstr "Leaseset tujuan tidak ditemukan"
-
-msgid "Host"
-msgstr "Host"
-
-msgid "Base32"
-msgstr "Base32"
-
-msgid "Destination"
-msgstr "Tujuan"
-
-#, java-format
-msgid "Continue to {0} without saving"
-msgstr "Melanjutkan ke {0} tanpa menyimpan"
-
-msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr "Anda dapat menelusuri situs tanpa menyimpannya ke buku alamat. Alamat akan diingat sampai Anda memulai kembali router I2P Anda."
-
-msgid "Continue without saving"
-msgstr "Lanjutkan tanpa menyimpan"
-
-#, java-format
-msgid "Save {0} to router address book and continue to website"
-msgstr "Simpan {0} ke buku alamat router dan lanjutkan ke situs webSimpan {0} ke dalam buku alamat router lalu lanjut ke situs yang anda tuju"
-
-msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-
-msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr "Jika Anda ingin melacak situs yang telah Anda tambahkan secara manual, tambahkan ke buku alamat master atau pribadi Anda sebagai gantinya."
-
-msgid "Save & continue"
-msgstr "Simpan & lanjutkan"
-
-#, java-format
-msgid "Save {0} to master addressbook and continue to website"
-msgstr "Simpan {0} ke Master Addresbook dan lanjutkan ke situs web"
-
-msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr "Alamat ini akan disimpan ke buku alamat utama Anda. Pilih opsi ini untuk alamat yang ingin Anda pisahkan dari buku alamat router utama, tetapi jangan keberatan menerbitkan."
-
-#, java-format
-msgid "Save {0} to private addressbook and continue to website"
-msgstr "Simpan {0} ke buku alamat pribadi dan lanjutkan ke situs web"
-
-msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr "Alamat ini akan disimpan ke buku alamat pribadi Anda, memastikannya tidak pernah dipublikasikan."
-
-msgid "Base32 address requires lookup password"
-msgstr "Alamat Base32 memerlukan kata sandi pencarian"
-
-msgid "Base32 address requires encryption key"
-msgstr "Alamat Base32 memerlukan kunci enkripsi"
-
-msgid "Base32 address requires encryption key and lookup password"
-msgstr "Alamat Base32 memerlukan kunci enkripsi dan kata sandi pencarian"
-
-msgid "Base32 address decryption failure, check encryption key"
-msgstr "Kegagalan dekripsi alamat Base32, periksa kunci enkripsi"
-
-msgid "Generate"
-msgstr "Buat"
-
-msgid "Encryption key"
-msgstr "Kunci enkripsi"
-
-msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr "Anda harus memasukkan kunci enkripsi PSK yang disediakan oleh operator server, atau membuat kunci enkripsi DH dan mengirimkannya ke operator server."
-
-msgid "Ask the server operator for help."
-msgstr "Minta bantuan operator server."
-
-msgid "Enter PSK encryption key"
-msgstr "Masukkan kunci enkripsi PSK"
-
-msgid "Generate new DH encryption key"
-msgstr "Hasilkan kunci enkripsi DH baru"
-
-msgid "Lookup password"
-msgstr "Cari kata sandi"
-
-msgid "You must enter the password provided by the server operator."
-msgstr "Anda harus memasukkan kata sandi yang diberikan oleh operator server."
-
-#, java-format
-msgid "Added via address helper from {0}"
-msgstr "Ditambahkan melalui alamat pembantu dari {0}"
-
-msgid "Added via address helper"
-msgstr "Ditambahkan melalui alamat pembantu"
-
-msgid "Missing lookup password"
-msgstr "Kata sandi pencarian tidak ada"
-
-msgid "Missing private key"
-msgstr "Kunci pribadi tidak ada"
-
-msgid "Invalid private key"
-msgstr "Kunci pribadi tidak valid"
-
-msgid "Your new encryption key"
-msgstr "Kunci enkripsi baru Anda"
-
-msgid "Copy the key and send it to the server operator."
-msgstr "Salin kunci dan kirimkan ke operator server."
-
-msgid "After you are granted permission, you may proceed to the website."
-msgstr "Setelah Anda diberikan izin, Anda dapat melanjutkan ke situs web."
-
-msgid "Go back and fix the error"
-msgstr "Kembali dan perbaiki kesalahannya"
-
-msgid "router"
-msgstr "router"
-
-msgid "master"
-msgstr "master"
-
-msgid "private"
-msgstr "pribadi"
-
-#, java-format
-msgid "Redirecting to {0}"
-msgstr "Mengalihkan ke {0}"
-
-msgid "Redirection in progress"
-msgstr "Pengalihan sedang berlangsung"
-
-#, java-format
-msgid "Saved {0} to the {1} addressbook, redirecting now."
-msgstr "Menyimpan {0} ke buku alamat {1}, mengalihkan sekarang."
-
-#, java-format
-msgid "Failed to save {0} to the {1} addressbook, redirecting now."
-msgstr "Gagal menyimpan {0} ke buku alamat {1}, mengalihkan sekarang."
-
-msgid "Click here if you are not redirected automatically."
-msgstr "Klik disini jika Anda tidak dialihkan secara otomatis."
-
-#, java-format
-msgid "Saved the authentication for {0}, redirecting now."
-msgstr "Menyimpan autentikasi untuk {0}, mengalihkannya sekarang."

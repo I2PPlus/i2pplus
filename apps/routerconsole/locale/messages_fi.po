@@ -688,6 +688,9 @@ msgstr "Raportoinnin jälkeen käynnistä reititin uudelleen"
 msgid "Invalid form submission, requires POST"
 msgstr "Virheellinen lähetys, vaatii POST"
 
+msgid "Too many form submissions, please try again later"
+msgstr "Liian monta lomakkeen lähetystä, yritä myöhemmin uudelleen"
+
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Virheellinen lomakkeen lähetys, luultavasti siksi, että käytit selaimesi 'takaisin' tai 'reload'-painiketta. "
 
@@ -751,31 +754,26 @@ msgstr[1] "{0} liitännäistä päivitetty"
 msgid "Plugin check complete"
 msgstr "Plugin tarkistus valmis"
 
-msgid "none"
-msgstr "ei mitään"
-
-msgid "Permanently banned"
-msgstr "Pysyvästi estetty"
-
-#, java-format
-msgid "Temporary ban expiring in {0}"
-msgstr "Väliaikainen esto kestää vielä {0}"
-
-#, java-format
-msgid "Banned for {0} / until restart"
-msgstr "Estetty {0} / uudelleenkäynnistykseen asti"
-
-msgid "unban now"
-msgstr "poista esto nyt"
-
 msgid "No bans currently active"
 msgstr "Ei tällä hetkellä voimassa olevia kieltoja"
 
+msgid "Country"
+msgstr "Maa"
+
+msgid "Version"
+msgstr "Versio"
+
+msgid "IP Address"
+msgstr "IP-osoite"
+
+msgid "Port"
+msgstr "Portti"
+
+msgid "Hostname"
+msgstr "Isäntänimi"
+
 msgid "Reason"
 msgstr "Syy"
-
-msgid "Router Hash"
-msgstr "Reitittimen tiiviste"
 
 msgid "Expiry"
 msgstr "Vanhenee"
@@ -834,6 +832,15 @@ msgstr "HUOMIO"
 msgid "Some changes may require a restart to take effect."
 msgstr "Jotkut muutokset saattavat vaatia uudelleenkäynnistykset tullakseen voimaan."
 
+msgid "All session bans and blocklists cleared"
+msgstr "Kaikki istunnon estot ja estolistat tyhjennetty"
+
+msgid "Ban settings reset to defaults"
+msgstr "Estoasetukset palautettu oletusarvoihin"
+
+msgid "Ban configuration updated"
+msgstr "Estokokoonpano päivitetty"
+
 msgid "Save Client Configuration"
 msgstr "Tallenna asiakasasetukset"
 
@@ -880,9 +887,6 @@ msgstr "Pysäytetty lisäosa {0}"
 #, java-format
 msgid "Stopped webapp {0}"
 msgstr "Pysäytetty webbisovellus {0}"
-
-msgid "Start"
-msgstr "Käynnistä"
 
 msgid "Client configuration saved successfully"
 msgstr "Asiakasasetusten tallennus onnistui"
@@ -974,9 +978,6 @@ msgstr "Lisätty käyttäjä {0}"
 msgid "Interface configuration saved"
 msgstr "Liitäntäkokoonpano tallennettu"
 
-msgid "Edit"
-msgstr "Muokkaa"
-
 msgid "Add Client"
 msgstr "Lisää asiakas"
 
@@ -1016,9 +1017,6 @@ msgstr "Sähköposti"
 msgid "Plugin"
 msgstr "Plugin"
 
-msgid "Version"
-msgstr "Versio"
-
 msgid "Author"
 msgstr "Kirjoittaja"
 
@@ -1031,8 +1029,14 @@ msgstr "Päivitä linkkiä"
 msgid "License"
 msgstr "Lupa"
 
+msgid "Start"
+msgstr "Käynnistä"
+
 msgid "Stop"
 msgstr "Pysäytä"
+
+msgid "Edit"
+msgstr "Muokkaa"
 
 msgid "Update"
 msgstr "Päivitä"
@@ -1197,6 +1201,9 @@ msgstr "Sokaistettu hakusalasanalla"
 msgid "Blinded"
 msgstr "Sokea"
 
+msgid "none"
+msgstr "ei mitään"
+
 msgid "Log overrides updated"
 msgstr "Lokien ohitukset päivitetty."
 
@@ -1289,6 +1296,9 @@ msgstr "Verkkosovellukset"
 
 msgid "Advanced"
 msgstr "Lisätietoja"
+
+msgid "Bans"
+msgstr "Estot"
 
 msgid "Reseeding"
 msgstr "Uudelleenkylvö"
@@ -1528,6 +1538,14 @@ msgstr "Uudelleenkäynnistä"
 msgid "Shutdown"
 msgstr "Sammuta"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr "Uudelleenkäynnistystä lykätään {0} kunnes kaikki palvelimet ovat pysähtyneet"
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr "Sammutusta lykätään {0} kunnes kaikki palvelimet ovat pysähtyneet"
+
 msgid "Restart imminent"
 msgstr "Uudelleenkäynnistys välitön"
 
@@ -1701,6 +1719,9 @@ msgstr "Varoitus: ISO-8859-1-merkkijoukon ulkopuolisia käyttäjänimiä ei suos
 msgid "No password entered"
 msgstr "Salasanaa ei ole annettu"
 
+msgid "Password must be at least 8 characters"
+msgstr "Salasanan on oltava vähintään 8 merkkiä"
+
 #, java-format
 msgid "To recover from a forgotten or non-working password, stop I2P, edit the file {0}, delete the line {1}, and restart I2P."
 msgstr "Jos haluat palauttaa unohdetun tai ei-toimivan salasanan, lopeta I2P, muokkaa tiedostoa {0}, poista rivi {1} ja käynnistä I2P uudelleen."
@@ -1748,8 +1769,8 @@ msgstr "Salasana"
 msgid "Please supply a username"
 msgstr "Anna käyttäjätunnus"
 
-msgid "Please supply a password"
-msgstr "Anna salasana"
+msgid "Please supply a password (minimum 8 characters)"
+msgstr "Anna salasana (vähintään 8 merkkiä)"
 
 msgid "Aborted startup"
 msgstr "Käynnistys keskeytetty"
@@ -2185,9 +2206,6 @@ msgstr "Verkkojen välinen mikrobloggaaminen"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Vaihtoehtoinen yksityisyyteen keskittyvä käyttöliittymä Redditille"
 
-msgid "AI Image generation & Chat hub"
-msgstr "TE-kuvien ja keskusteluhubi"
-
 msgid "IRC Logs for multiple networks"
 msgstr "IRC-lokit useille verkoille"
 
@@ -2438,9 +2456,6 @@ msgstr "Identiteetti"
 msgid "Network Database entry"
 msgstr "Verkkotietokannan merkintä"
 
-msgid "IP Address"
-msgstr "IP-osoite"
-
 msgid "UDP Port"
 msgstr "UDP-portti"
 
@@ -2535,28 +2550,49 @@ msgstr "Reititin Transport Osoitteet"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} käytetään vain lähteviin yhteyksiin"
 
-msgid "Job runners"
-msgstr "Job juoksijat"
+#, java-format
+msgid "Delayed: {0}"
+msgstr "Viivästetty: {0}"
+
+#, java-format
+msgid "Average: {0}µs"
+msgstr "Keskiarvo: {0}µs"
+
+#, java-format
+msgid "Average: {0}"
+msgstr "Keskiarvo: {0}"
 
 msgid "Active jobs"
 msgstr "Aktiiviset työt"
 
 #, java-format
-msgid "started {0} ago"
-msgstr "aloitettiin {0} sitten"
+msgid "Duration: {0}"
+msgstr "Kesto: {0}"
 
 msgid "Just finished jobs"
 msgstr "Juuri päättyneet työt"
+
+msgid "finished just now"
+msgstr "päättyi juuri äsken"
 
 #, java-format
 msgid "finished {0} ago"
 msgstr "valmis {0} sitten"
 
+#, java-format
+msgid "Dropped: {0}"
+msgstr "Hylätty: {0}"
+
 msgid "Ready / waiting jobs"
 msgstr "Valmiit/odottavat työt"
 
-msgid "waiting"
-msgstr "odottaa"
+#, java-format
+msgid "waiting {0}"
+msgstr "odottaa {0}"
+
+#, java-format
+msgid "Max wait: {0}"
+msgstr "Maksimi odotus: {0}"
 
 msgid "Scheduled jobs"
 msgstr "Aikataulutetut tehtävät"
@@ -2565,17 +2601,24 @@ msgstr "Aikataulutetut tehtävät"
 msgid "{0} starting in {1}"
 msgstr "{0} alkaa {1}"
 
-msgid "DELAYED"
-msgstr "VIIVE"
-
-msgid "OUT OF ORDER"
-msgstr "POIS KÄYTÖSTÄ"
+#, java-format
+msgid "Runners: {0} / {1}"
+msgstr "Suorittajat: {0} / {1}"
 
 msgid "Queue Totals"
 msgstr "Jonon kokonaissummat"
 
 msgid "Job Statistics"
 msgstr "Työtilastot (pois lukien yksittäiset työt)"
+
+msgid "last 10s"
+msgstr "viimeiset 10s"
+
+msgid "All Stats"
+msgstr "Kaikki tilastot"
+
+msgid "Last 10s"
+msgstr "Viimeiset 10s"
 
 msgid "Job"
 msgstr "Työ"
@@ -2645,9 +2688,6 @@ msgstr "esim. f tai XOfR"
 
 msgid "Cost"
 msgstr "Hinta"
-
-msgid "Country"
-msgstr "Maa"
 
 msgid "Country Codes"
 msgstr "Maakoodit"
@@ -2919,9 +2959,6 @@ msgstr "Piilotettu"
 
 msgid "Published"
 msgstr "Julkaistu"
-
-msgid "Hostname"
-msgstr "Isäntänimi"
 
 msgid "Whois"
 msgstr "Whois"
@@ -3363,11 +3400,14 @@ msgstr "Näytä/muokkaa"
 msgid "OK"
 msgstr "OK"
 
-msgid "Test Fails"
-msgstr "Testi epäonnistui"
+msgid "tests passed"
+msgstr "testit läpäisty"
 
 msgid "Unreachable"
 msgstr "Ei saavutettavissa"
+
+msgid "Test Fails"
+msgstr "Testi epäonnistui"
 
 msgid "Most tests passing"
 msgstr "Useimmat testit läpäisevät"
@@ -3527,19 +3567,6 @@ msgstr "kuinka monesta uudesta kollegasta he ovat kertoneet meille viime aikoina
 msgid "All"
 msgstr "Kaikki"
 
-msgid "Session Bans"
-msgstr "Istuntokiellot"
-
-msgid "Total number of banned peers"
-msgstr "Kiellettyjen vertaisten kokonaismäärä"
-
-msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr "Huom: 'LU'-luokan reitittimet on poistettu listalta."
-
-#, java-format
-msgid "To view, see {0}Session Bans{1}."
-msgstr "Katso, näet {0}Istuntokielte{1}."
-
 msgid "Select search engine"
 msgstr "Valitse hakukone"
 
@@ -3627,6 +3654,12 @@ msgstr "Rakentaa käytäviä"
 
 msgid "Shared Clients"
 msgstr "Jaetut asiakkaat"
+
+msgid "Ping"
+msgstr "Ping"
+
+msgid "I2Ping"
+msgstr "I2Ping"
 
 msgid "Click Restart to install"
 msgstr "Napsauta Käynnistä uudelleen asentaaksesi"
@@ -3857,6 +3890,12 @@ msgstr "Näytä viimeisimmät vertaistoimintaprofiilit"
 msgid "View existing tunnels and tunnel build status"
 msgstr "Näytä nykyiset käytävät ja käytävien rakentamistilanne"
 
+msgid "Streams"
+msgstr "Streamit"
+
+msgid "View active streaming connections"
+msgstr "Näytä aktiiviset streaming-yhteydet"
+
 msgid "Advanced Configuration"
 msgstr "Lisäasetukset"
 
@@ -4009,8 +4048,8 @@ msgstr "Sisääntulomme"
 msgid "Total number of tunnels in use"
 msgstr "Käytettävien tunnelien kokonaismäärä"
 
-msgid "Average tunnel build success for last 10m interval"
-msgstr "Keskimääräinen tunnelin rakentamisen menestys viimeisen 10 metrin aikana"
+msgid "Tunnel build success (higher of 1m or 10m average)"
+msgstr "Tunnelien rakennuksen onnistuminen (suurempi 1min tai 10min keskiarvosta)"
 
 msgid "Tunnels we are using to provide or access services on the network"
 msgstr "Tunnelit, joita käytämme tarjotaksemme tai käyttääksemme palveluita verkossa"
@@ -4039,8 +4078,8 @@ msgstr "Samanaikaiset tunnelin rakennukset (keskiarvo yli minuutin) / yhden tunn
 msgid "Concurrency"
 msgstr "Samanaikaisuus"
 
-msgid "Combined utility and service tunnel build success (averaged over 10 minute intervals)"
-msgstr "Yhdistetty hyöty- ja palvelutunnelin rakentaminen onnistui (keskiarvoisesti yli 10 minuutin välein)"
+msgid "Combined utility and service tunnel build success (higher of 1m or 10m average)"
+msgstr "Yhdistetty hyöty- ja palvelutunnelien rakennuksen onnistuminen (suurempi 1min tai 10min keskiarvosta)"
 
 msgid "Build Success"
 msgstr "Rakenna menestystä"
@@ -4184,8 +4223,8 @@ msgstr "Suorita uusi analyysi"
 msgid "Configure periodic analysis"
 msgstr "Määritä jaksollinen analyysi"
 
-msgid "Review current bans"
-msgstr "Tarkista nykyiset kiellot"
+msgid "Review session bans"
+msgstr "Tarkastele istunnon estoja"
 
 msgid "Delete Sybil Blocklist"
 msgstr "Poista Sybil-suojalista"
@@ -4235,8 +4274,14 @@ msgstr "Aloita skannaus"
 msgid "Run analysis on all routers in NetDb"
 msgstr "Suorita analyysi kaikilla NetDb:n reitittimillä"
 
-msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, with the option to block peers meeting the configured threshold. Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."
-msgstr "Sybil-tunnistusrutiini voidaan määrittää skannaamaan verkkotietokantaa säännöllisin väliajoin, ja siinä on mahdollisuus estää vertaiskäyttäjät, jotka täyttävät määritetyn kynnyksen. Vertaiskäyttäjien estäminen estää reititintäsi rakentamasta tunneleita niiden kanssa määritetyn ajan tai kunnes reititin käynnistetään uudelleen."
+msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, "
+msgstr "Sybil-tunnistus voidaan määrittää skannaamaan Verkkotietokantaa säännöllisin väliajoin, "
+
+msgid "with the option to block peers meeting the configured threshold. "
+msgstr "ja tarvittaessa estää vertaiset jotka ylittävät määritetyn kynnyksen. "
+
+msgid "Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."
+msgstr "Vertaisten estäminen estää reitintäsi rakentamasta tunneleita heidän kanssaan määritetyksi ajaksi tai kunnes reititin käynnistetään uudelleen."
 
 msgid "Configure Background Analysis"
 msgstr "Määritä taustaanalyysi"
@@ -4466,22 +4511,11 @@ msgstr "Sisääntuleva yhdyskäytävä"
 msgid "Participant"
 msgstr "Osallistuja"
 
-msgid "sec"
-msgstr "s"
-
 msgid "grace period"
 msgstr "armonaika"
 
 msgid "Tunnel identity"
 msgstr "Tunnelin identiteetti"
-
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "Rajoitettu näyttö {0} tunneliin, joissa käytetään eniten"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "Rajoitettu näyttö {0} viimeisimpään tunneliin"
 
 msgid "Lifetime bandwidth usage"
 msgstr "Elinikäinen kaistanleveyden käyttö"
@@ -4536,6 +4570,12 @@ msgstr "saapuva vai lähtevä?"
 msgid "In/Out"
 msgstr "Sisään/Ulos"
 
+msgid "Tunnel test status"
+msgstr "Tunnelien testaustila"
+
+msgid "Latency"
+msgstr "Viive"
+
 msgid "Gateway"
 msgstr "Yhdyskäytävä"
 
@@ -4545,11 +4585,30 @@ msgstr "Osallistujat"
 msgid "Endpoint"
 msgstr "Päätepiste"
 
+msgid "Test successful"
+msgstr "Testi onnistui"
+
+msgid "Test in progress"
+msgstr "Testi käynnissä"
+
+#, java-format
+msgid "Test failing (failures: {0})"
+msgstr "Testi epäonnistuu (epäonnistumiset: {0})"
+
+msgid "Test failed (3 consecutive failures)"
+msgstr "Testi epäonnistui (3 peräkkäistä epäonnistumista)"
+
+msgid "Tunnel too slow - scheduled for early expiry"
+msgstr "Tunneli liian hidas - aikaistettu vanheneminen"
+
+msgid "Pool over budget - scheduled for early expiry"
+msgstr "Pooli yli budjetin - aikaistettu vanheneminen"
+
+msgid "Not yet tested"
+msgstr "Ei vielä testattu"
+
 msgid "Locally hosted tunnel"
 msgstr "Paikallisesti isännöity tunneli"
-
-msgid "Build in progress"
-msgstr "Rakennus käynnissä"
 
 msgid "in"
 msgstr "sisään"
@@ -4565,6 +4624,9 @@ msgstr "Tunnelin nimi"
 
 msgid "Data Out"
 msgstr "Data ulos"
+
+msgid "Active / Configured"
+msgstr "Aktiiviset / Määritetyt"
 
 msgid "Console language saved."
 msgstr "Konsolin kieli tallennettu."
@@ -4835,6 +4897,123 @@ msgstr "Apua lisäasetuksiin"
 msgid "To make changes, edit the file: {0}"
 msgstr "Jos haluat tehdä muutoksia, muokkaa tiedostoa: {0}"
 
+msgid "config bans"
+msgstr "estä asetukset"
+
+msgid "Ban Configuration"
+msgstr "Estokokoonpano"
+
+msgid "Custom Router Ban Policies"
+msgstr "Mukautetut reitittimen estokäytännöt"
+
+msgid "IP Blocklists"
+msgstr "IP-estolistat"
+
+msgid "Ban IP addresses from blocklist.txt. Disabling will purge all blocked IPs."
+msgstr "Estä IP-osoitteet tiedostosta blocklist.txt. Poistaminen käytöstä poistaa kaikki estetyt IP-osoitteet."
+
+msgid "Enable IP blocklist"
+msgstr "Ota IP-estolista käyttöön"
+
+msgid "Ban Tor exit node IPs from blocklist_tor.txt. Disabling will purge all blocked IPs."
+msgstr "Estä Tor-lähtösolmu IP-osoitteet tiedostosta blocklist_tor.txt. Poistaminen käytöstä poistaa kaikki estetyt IP-osoitteet."
+
+msgid "Enable Tor exit node blocklist"
+msgstr "Ota Tor-lähtösolmujen estolista käyttöön"
+
+msgid "Country Bans"
+msgstr "Maakohtaiset estot"
+
+msgid "Ban routers from your own country until router restart"
+msgstr "Estä reitittimet omasta maastasi reitittimen uudelleenkäynnistykseen asti"
+
+msgid "Ban peers in my country"
+msgstr "Estä vertaiset omassa maassani"
+
+msgid "Ban routers from specified countries until router restart"
+msgstr "Estä reitittimet määritetyistä maista reitittimen uudelleenkäynnistykseen asti"
+
+msgid "Enable country-based bans"
+msgstr "Ota maakohtaiset estot käyttöön"
+
+msgid "Country codes"
+msgstr "Maakoodit"
+
+msgid "Add county codes, separated by spaces or commas e.g. cn,de"
+msgstr "Lisää maakoodit pilkuilla tai välilyönneillä eroteltuna esim. cn,de"
+
+msgid "Network Abuse"
+msgstr "Verkon väärinkäyttö"
+
+msgid "Ban peers that send malformed packets"
+msgstr "Estä vertaiset jotka lähettävät virheellisiä paketteja"
+
+msgid "Ban peers sending malformed packets"
+msgstr "Estä vertaiset jotka lähettävät virheellisiä paketteja"
+
+msgid "Ban peers with corrupt connections during handshake"
+msgstr "Estä vertaiset joilla on vioittuneet yhteydet kättelyn aikana"
+
+msgid "Ban peers with corrupt connections"
+msgstr "Estä vertaiset joilla on vioittuneet yhteydet"
+
+msgid "Ban peers that rapidly change their ports"
+msgstr "Estä vertaiset jotka vaihtavat porttejaan nopeasti"
+
+msgid "Ban peers attempting port hopping"
+msgstr "Estä vertaiset jotka yrittävät porttihyppelyä"
+
+msgid "Ban peers sending excessive unsolicited search replies"
+msgstr "Estä vertaiset jotka lähettävät liikaa pyytämättömiä hakuvastauksia"
+
+msgid "Ban peers sending fake/slow search replies"
+msgstr "Estä vertaiset jotka lähettävät väärennettyjä/hitaita hakuvastauksia"
+
+msgid "Abuse Thresholds"
+msgstr "Väärinkäytön kynnykset"
+
+msgid "Startup grace period"
+msgstr "Käynnistyksen armonaika"
+
+msgid "Ban duration"
+msgstr "Eston kesto"
+
+msgid "Max offenses"
+msgstr "Maksimi rikkomukset"
+
+msgid "Period during which offenses are counted"
+msgstr "Ajanjakso jolloin rikkomukset lasketaan"
+
+msgid "Offense window"
+msgstr "Rikkomusikkuna"
+
+msgid "Bans by Capability"
+msgstr "Estot kapasiteetin mukaan"
+
+msgid "Ban XG tier routers - unlimited bandwidth but not hosting transit tunnels (probably botnet participant)"
+msgstr "Estä XG-tason reitittimet - rajoittamaton kaista mutta ei isännöi transiittitunneleita (todennäköisesti botnet-osallistuja)"
+
+msgid "Ban XG routers"
+msgstr "Estä XG-reitittimet"
+
+msgid "Ban LU tier routers - low bandwidth and unreachable/firewalled"
+msgstr "Estä LU-tason reitittimet - alhainen kaista ja tavoittamattomissa/palomuurin takana"
+
+msgid "Ban LU routers"
+msgstr "Estä LU-reitittimet"
+
+msgid "Additional Router Caps"
+msgstr "Lisäkapasiteetit"
+
+msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG"
+msgstr "Lisää kapasiteettiryhmät välilyönneillä tai pilkuilla eroteltuna esim. LUf,PUG"
+
+msgid "Clear all bans"
+msgstr "Tyhjennä kaikki estot"
+
+msgid "Reset to defaults"
+msgstr "Palauta oletusarvoihin"
+
 msgid "config clients"
 msgstr "asiakasasetukset"
 
@@ -4863,7 +5042,7 @@ msgid "To change client options, edit the file: {0}"
 msgstr "Voit muuttaa asiakasasetuksia muokkaamalla tiedostoa: {0}"
 
 msgid "Be careful changing any settings here. The 'router console' and 'application tunnels' are required for most uses of I2P. Only advanced users should change these."
-msgstr "Ole varovainen muuttaessasi asetuksia täällä."
+msgstr "Ole varovainen muuttaessasi asetuksia täällä. The 'router console' and 'application tunnels' are required for most uses of I2P Only advanced users should change these \"Reititinkonsoli\" ja \"sovellustunnelit\" vaaditaan useimpiin I2P-käyttöihin. Vain kokeneiden käyttäjien tulisi muuttaa näitä \"Reititinkonsoli\" ja \"sovellustunnelit\" vaaditaan useimpiin I2P-käyttöihin. Vain kokeneiden käyttäjien tulisi muuttaa näitä \"Reititinkonsoli\" ja \"sovellustunnelit\" vaaditaan useimpiin I2P-käyttöihin. Vain kokeneiden käyttäjien tulisi muuttaa näitä. \"Reititinkonsoli\" ja \"sovellustunnelit\" vaaditaan useimpiin I2P-käyttöihin. Vain kokeneiden käyttäjien tulisi muuttaa näitä"
 
 msgid "config router family"
 msgstr "config-reititinperhe"
@@ -4893,7 +5072,7 @@ msgid "You may create a new router family here. Once you have created the family
 msgstr "Voit luoda uuden reititinperheen täällä. "
 
 msgid "Note: To avoid deanonymization, do not name your family with personally-attributable information e.g. your IRC nickname; your family name is associated with your router's IP address."
-msgstr "Huomautus: Älä anna perheesi nimeä henkilökohtaisilla tiedoilla esim. deanonymisoinnin välttämiseksi. "
+msgstr "Huomautus: Älä anna perheesi nimeä henkilökohtaisilla tiedoilla esim. deanonymisoinnin välttämiseksi. your IRC nickname; your family name is associated with your router's IP address IRC-lempinimesi; sukunimesi on liitetty reitittimesi IP-osoitteeseen IRC-lempinimesi; sukunimesi on liitetty reitittimesi IP-osoitteeseen IRC-lempinimesi; sukunimesi on liitetty reitittimesi IP-osoitteeseen. IRC-lempinimesi;sukunimesi on liitetty reitittimesi IP-osoitteeseen"
 
 msgid "Enter new family name"
 msgstr "Kirjoita uusi sukunimi"
@@ -5216,6 +5395,9 @@ msgstr "Vertaispäällikkö"
 msgid "Manual Peer Controls"
 msgstr "Manuaaliset vertaisohjaukset"
 
+msgid "Router Hash"
+msgstr "Reitittimen tiiviste"
+
 msgid "Manually Ban / Unban a Peer"
 msgstr "Estä (ban) tai poista vertaissolmun esto manuaalisesti."
 
@@ -5323,9 +5505,6 @@ msgstr "Tämä vaihtoehto käyttää I2P: n HTTP -OutProxy -ohjelmaa uudelleen t
 
 msgid "I2P Outproxy"
 msgstr "I2P Outproxy"
-
-msgid "Port"
-msgstr "Portti"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "Käytä HTTP-välityspalvelinta HTTP-uudelleensyöttöisännille"
@@ -5557,7 +5736,7 @@ msgid "Update URL"
 msgstr "Päivitä URL-osoite"
 
 msgid "To update with unsigned I2P+ release builds: <code>http://skank.i2p/i2pupdate.zip</code> or for the latest unsigned development builds: <code>http://skank.i2p/dev/i2pupdate.zip</code>"
-msgstr "Päivitys allekirjoittamattomilla I2P-version koontiversioilla: <code>http://skank.i2p/i2pupdate.zip</code> tai uusimmat allekirjoittamattomat kehitysversiot: <code>http://skank.i2p/dev/i2pupdate "
+msgstr "Päivitys allekirjoittamattomilla I2P-version koontiversioilla: <code>http://skank.i2p/i2pupdate.zip</code> tai uusimmat allekirjoittamattomat kehitysversiot: <code>http://skank.i2p/dev/i2pupdate zip zip zip zip. postinumero"
 
 msgid "Update with unsigned development builds"
 msgstr "Päivitys allekirjoittamattomilla kehitysversioilla"
@@ -5602,7 +5781,7 @@ msgid "config webapps"
 msgstr "määritä WebApps"
 
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
-msgstr "WebConsole-asiakasohjelma käynnistää alla luetellut Java-verkkosovellukset, ja ne toimivat samassa JVM:ssä kuin reititin. "
+msgstr "WebConsole-asiakasohjelma käynnistää alla luetellut Java-verkkosovellukset, ja ne toimivat samassa JVM:ssä kuin reititin. They are usually web applications accessible through the router console They may be complete applications (e g i2psnark), front-ends to another client or application which must be separately enabled (e g susidns, i2ptunnel), or have no web interface at all (e g addressbook) Ne ovat yleensä verkkosovelluksia, joihin pääsee reititinkonsolin kautta Ne voivat olla täydellisiä sovelluksia (esim g i2psnark), käyttöliittymät toiselle asiakkaalle tai sovellukselle, joka on otettava käyttöön erikseen (esim g susidns, i2ptunnel) tai niillä ei ole verkkokäyttöliittymää ollenkaan (esim g addressbook) Ne ovat yleensä verkkosovelluksia, joihin pääsee reititinkonsolin kautta Ne voivat olla täydellisiä sovelluksia (esim g i2psnark), käyttöliittymät toiselle asiakkaalle tai sovellukselle, joka on otettava käyttöön erikseen (esim g susidns, i2ptunnel) tai niillä ei ole verkkokäyttöliittymää ollenkaan (esim g addressbook) Ne ovat yleensä verkkosovelluksia, joihin pääsee reititinkonsolin kautta Ne voivat olla täydellisiä sovelluksia (esim g i2psnark), käyttöliittymät toiselle asiakkaalle tai sovellukselle, joka on otettava käyttöön erikseen (esim g susidns, i2ptunnel) tai niillä ei ole verkkokäyttöliittymää ollenkaan (esim g addressbook). Ne ovat yleensä verkkosovelluksia, joihin pääsee reititinkonsolin kautta Ne voivat olla täydellisiä sovelluksia (esim g i2psnark), käyttöliittymät toiselle asiakkaalle tai sovellukselle, joka on otettava käyttöön erikseen (esim g susidns, i2ptunnel) tai niillä ei ole lainkaan verkkokäyttöliittymää (esim g osoitekirja)"
 
 msgid "Open in new tab"
 msgstr "Avaa uudessa välilehdessä"
@@ -5746,6 +5925,9 @@ msgstr "Tämän asetuksen asettaminen todeksi näyttää <i>Kiinnostuksen kohtee
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
 msgstr "Tämä asetus, kun on asetettu tosioksi, näyttää oletussivupalkin etusivulla ja mahdollistaa asetuksen <a href=/configsidebar> kautta. [Oletusarvo on false]"
 
+msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
+msgstr "Kun asetettu todeksi, reitittimen konsoli vaatii kirjautumistunnistuksen. Jos salasanaa ei ole asetettu, sinun on asetettava se kirjautumissivulla. Kun asetettu epätodeksi, konsoli on käytettävissä ilman kirjautumista jos salasanoja ei ole määritetty. [Oletus on epätosi, otetaan oletuksena käyttöön tulevassa julkaisussa CSRF-puolustusta varten]"
+
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Tämä asetus määrittää, tulisiko reitittimen käyttää annettua <i>blocklist.txt</i> -tiedostoa ja käyttäjän määrittämiä estolistoja reitittimen estämiseksi hajosiin tai ip-osoitteilla. Ipv4:lle tuetaan alueita ja verkkoasettimia, mutta Ipv6 ei. Lisätietoja on <i>blocklist.txt</i> -tiedostossa I2P+ sovelluskansiossa. [Oletusarvoisesti päällä, uudelleenkäynnistys vaaditaan]"
 
@@ -5759,7 +5941,13 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "Tämä asetus määrittää, tulisiko reitittimen käyttää annettua <i>blocklist_tor.txt</i> -tiedostoa I2P+ sovelluskansiossa estämiseen tor-verkon ulostulonodejen ip-osoitteista. [Oletusarvoisesti päällä, uudelleenkäynnistys vaaditaan]"
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr "Tämä asetus mahdollistaa pyyntöjen estämisen reitittimien estämisen maasta, kun suora tunnelipyyntö tehdään. Maat on määritettävä kahden kirjaimella maakoodilla, pilkuilla eroteltuna. Esim. router.blockCountries=cn,ru"
+msgstr "Tämä asetus mahdollistaa pyyntöjen estämisen reitittimien estämisen maasta, kun suora tunnelipyyntö tehdään. Maat on määritettävä kahden kirjaimella maakoodilla, pilkuilla eroteltuna. Esim. router.blockCountries=cn,ru blockCountries=cn,ru blockCountries=cn,ru blockCountries=cn,ru blockCountries=cn,ru. blockCountries=cn,ru"
+
+msgid "The maximum number of session banlog archive files to keep. When exceeded, older archives are deleted. [Default is 5]"
+msgstr "Säilytettävien istunnon estolokin arkistotiedostojen enimmäismäärä. Kun ylitetty, vanhemmat arkistot poistetaan. [Oletus on 5]"
+
+msgid "The frequency in milliseconds to scan for suspicious hash patterns (potential Sybil attacks). Set to 0 to disable. [Default is 3600000]"
+msgstr "Tiheys millisekunneissa epäilyttävien hash-kuvioiden (mahdolliset Sybil-hyökkäykset) skannaamiseen. Aseta 0 poistaaksesi käytöstä. [Oletus on 3600000]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "Kun asetetaan epätosi, reititin ei estä tunnelien luomisen pyyntöjä hitaammilta tai saavuttamattomilta reitteiltä, joissa käytetään vanhempaa versiota. [Oletusarvo on totta, tarvitsee uudelleenkäynnistys]"
@@ -5792,7 +5980,31 @@ msgid "When set to false, the router will not throttle tunnel build requests fro
 msgstr "Kun asetetaan epätosi, reititin ei rajoita muita reittejä käyttävien tunnelien luontipyyntöjä ja sen käyttö vaatii varovaisuutta. [Oletusarvo on totta, tarvitsee uudelleenkäynnistys]"
 
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
-msgstr "Tämä asetus määrittää, mitkä <a href=/profiles#profile_defs>verkostokyvykkyydet</a> eivät tule käyttöön reitittimen tunnelien luomiseen. esim. <code>router.excludePeerCaps=LMN</code>"
+msgstr "Tämä asetus määrittää, mitkä <a href=/profiles#profile_defs>verkostokyvykkyydet</a> eivät tule käyttöön reitittimen tunnelien luomiseen. esim. <code>router.excludePeerCaps=LMN</code> excludePeerCaps=LMN excludePeerCaps=LMN excludePeerCaps=LMN excludePeerCaps=LMN. cludePeerCaps=LMN"
+
+msgid "When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is true]"
+msgstr "Kun asetettu epätodeksi, tavoittamattomat vertaiset voidaan valita hypyiksi saapuville tutkiville tunneleille. [Oletus on tosi]"
+
+msgid "When set to false, unreachable peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
+msgstr "Kun asetettu epätodeksi, tavoittamattomat vertaiset voidaan valita hypyiksi lähteville tutkiville tunneleille. [Oletus on tosi]"
+
+msgid "When set to false, unreachable peers may be selected as hops for inbound client tunnels. [Default is true]"
+msgstr "Kun asetettu epätodeksi, tavoittamattomat vertaiset voidaan valita hypyiksi saapuville asiakastunneleille. [Oletus on tosi]"
+
+msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is true]"
+msgstr "Kun asetettu epätodeksi, tavoittamattomat vertaiset voidaan valita hypyiksi lähteville asiakastunneleille. [Oletus on tosi]"
+
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
+msgstr "Kun asetettu epätodeksi, hitaat vertaiset (korkeat tunnelien testausajat) voidaan valita hypyiksi saapuville tutkiville tunneleille. [Oletus on tosi]"
+
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
+msgstr "Kun asetettu epätodeksi, hitaat vertaiset voidaan valita hypyiksi lähteville tutkiville tunneleille. [Oletus on tosi]"
+
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
+msgstr "Kun asetettu epätodeksi, hitaat vertaiset voidaan valita hypyiksi saapuville asiakastunneleille. [Oletus on tosi]"
+
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
+msgstr "Kun asetettu epätodeksi, hitaat vertaiset voidaan valita hypyiksi lähteville asiakastunneleille. [Oletus on tosi]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
 msgstr "Tämä asetus (tunteina) määrittää, kuinka vanha RouterInfon NetDb:ssä (sen viimeisin tunnettu julkaisupäivä) pitää olla, ennen kuin se luokitellaan vanhaksi ja poistetaan. [Oletusarvo on 28 tuntia, ellei reititin ole täyttöreititin, jolloin oletusarvo on 8 tuntia]"
@@ -5820,6 +6032,39 @@ msgstr "Tämän ollessa tosi, jos reititin toimii tulvatoimialueena verkolle, <a
 
 msgid "Defines the maximum number of parallel <a href=/jobs>jobs</a> that can be run. The default value is determined by the amount of memory allocated to the JVM via <code>wrapper.config</code>, and is set at 3 for less than 64MB, 4 for less than 256M, or 5 for more than 256MB. Note: A change to this setting requires a restart of the router."
 msgstr "Määrittää samanaikaisesti suoritettavien <a href=/jobs>tehtävien</a> enimmäismäärän. Oletusarvo määritetään JVM:lle varatun muistin mukaan <b>wrapper.config</b>:n kautta ja on asetettu arvoon 3, jos muistia on alle 64 Mt, 4, jos muistia on alle 256 Mt, tai 5, jos muistia on yli 256 Mt. Huomaa: Muutoksen tekeminen tähän asetukseen vaatii reitittimen uudelleenkäynnistyksen."
+
+msgid "Defines the minimum number of parallel <a href=/jobs>job runners</a>. The router will not scale down below this number. Default is 4, minimum is 1. This setting is dynamic and takes effect without restart."
+msgstr "Määrittää rinnakkaisten <a href=/jobs>työsuorittajien</a> vähimmäismäärän. Reititin ei skaalaudu tämän luvun alapuolelle. Oletus on 4, vähimmäismäärä on 1. Tämä asetus on dynaaminen ja tulee voimaan ilman uudelleenkäynnistystä."
+
+msgid "Enable dynamic scaling of job runners based on queue load. When enabled, the router automatically scales the number of job runner threads up or down based on ready job count and lag. [Default is true]"
+msgstr "Ota käyttöön työsuorittajien dynaaminen skaalaus jonokuorman perusteella. Kun käytössä, reititin skaalaa automaattisesti työsuorittajasäikeiden määrää ylös tai alas valmiiden töiden määrän ja viiveen perusteella. [Oletus on tosi]"
+
+msgid "The job queue lag threshold in milliseconds that triggers scaling up job runners. When max lag exceeds this value, additional runners are started. [Default is 1]"
+msgstr "Työjonon viivekynnys millisekunneissa joka laukaisee työsuorittajien lisäyksen. Kun maksimiviive ylittää tämän arvon, lisää suorittajia käynnistetään. [Oletus on 1]"
+
+msgid "The job queue lag threshold in milliseconds that allows scaling down job runners. When max lag stays below this value, excess runners are stopped. [Default is 1]"
+msgstr "Työjonon viivekynnys millisekunneissa joka sallii työsuorittajien vähentämisen. Kun maksimiviive pysyy tämän arvon alapuolella, ylimääräiset suorittajat pysäytetään. [Oletus on 1]"
+
+msgid "The ratio of ready jobs to active runners that triggers scaling up. If readyJobs > activeRunners * ratio, additional runners are started. [Default is 1.2]"
+msgstr "Valmiiden töiden suhde aktiivisiin suorittajiin joka laukaisee skaalauksen ylös. Jos readyJobs > activeRunners * ratio, lisää suorittajia käynnistetään. [Oletus on 1.2]"
+
+msgid "The interval in milliseconds between job runner scaling checks. [Default is 1000]"
+msgstr "Aikaväli millisekunneissa työsuorittajien skaalaustarkistusten välillä. [Oletus on 1000]"
+
+msgid "The cooldown period in milliseconds between scale operations. [Default is 5000]"
+msgstr "Jäähdytysaika millisekunneissa skaalaustoimintojen välillä. [Oletus on 5000]"
+
+msgid "Enable the feedback mechanism that automatically rolls back ineffective scale-up operations. If lag increases after adding runners, they will be removed. [Default is true]"
+msgstr "Ota käyttöön palautemekanismi joka peruuttaa automaattisesti tehottomat ylösskaalaukset. Jos viive kasvaa suorittajien lisäyksen jälkeen, ne poistetaan. [Oletus on tosi]"
+
+msgid "The maximum number of waiting jobs in the queue before aggressive job dropping is triggered. When exceeded, non-critical jobs are dropped to reduce queue pressure. [Default is 48]"
+msgstr "Jonossa odottavien töiden enimmäismäärä ennen aggressiivisen töiden hylkäämisen käynnistymistä. Kun ylitetty, ei-kriittiset työt hylätään jonopaineen vähentämiseksi. [Oletus on 48]"
+
+msgid "Maximum number of pending tunnel build jobs in the BuildHandler queue. When the queue exceeds this limit, new build requests are rejected to prevent job queue overload. [Default is 256]"
+msgstr "BuildHandler-jonossa odottavien tunnelienrakennustöiden enimmäismäärä. Kun jono ylittää tämän rajan, uudet rakennuspyynnöt hylätään työjonon ylikuormituksen estämiseksi. [Oletus on 256]"
+
+msgid "Multiplier applied to the base tunnel build concurrency. The effective concurrency is baseBuildRate * multiplier, clamped by maxConcurrentBuilds. Higher values accelerate pool recovery but increase network load. [Default is 1.0]"
+msgstr "Kerroin jota sovelletaan tunnelien perusrakennusnopeuteen. Tehollinen rinnakkaisuus on baseBuildRate * multiplier, rajattuna maxConcurrentBuilds-arvolla. Korkeammat arvot nopeuttavat poolin palautumista mutta lisäävät verkkokuormaa. [Oletus on 1.0]"
 
 msgid "Determines the maximum number of participating tunnels the router can build. To disable participation completely, set to 0. [Default is 8000, or 2000 if running on Arm or Android]"
 msgstr "Määrittää enimmäismäärän solmuja, joiden kanssa reititin voi muodostaa tunnelin. Voit poistaa osallistumisen kokonaan käytöstä asettamalla arvon 0. [Oletusarvo on 8000 tai 2000 jos käytetään Armin tai Androidin kanssa]"
@@ -5857,14 +6102,26 @@ msgstr "JVM:lle varattu alle 256 Mt"
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
 msgstr "Reititin, joka käyttää Java BigInteger -kirjaston ei-alkuperäistä ohjelmistoemuloitua versiota"
 
-msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
-msgstr "Tämä asetus määrittää samanaikaisesti suoritettavien vertaisarviointitestejen määrän, jota käytetään vertaisviiveen määrittämiseen. [Oletusarvo on 4]"
+msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. When tunnel build success drops below 50%, concurrency is halved to avoid adding load during a failure cascade. [Default varies: 1 on slow systems, 2 on single/dual-core, 4 otherwise]"
+msgstr "Tämä asetus määrittää samanaikaisesti suoritettavien vertaistestien määrän. Kun tunnelienrakennuksen onnistuminen laskee alle 50%, rinnakkaisuus puolitetaan. [Oletus vaihtelee: 1 hitailla, 2 yksi-/kaksiydin, 4 muuten]"
 
-msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 5000]"
-msgstr "Tämä asetus määrittää vertaisarviointitöiden välisen viiveen millisekunteina. [Oletusarvo on 5000]"
+msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 30000 (30s), or 45000 (45s) on slow systems]"
+msgstr "Tämä asetus määrittää viiveen vertaistestien välillä millisekunneissa. [Oletus on 30000 (30s) tai 45000 (45s) hitailla järjestelmillä]"
 
-msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 1000]"
-msgstr "Vertaisviiveen määrittämiseksi tämä asetus varaa enimmäisajan, jonka vertaisarviointitesti saa kestää ennen kuin sitä pidetään epäonnistumisena, millisekunteina. Mikäli aikaraja on määritetty pienemmäksi kuin keskimääräinen onnistunut testi, käytetään keskimääräisen onnistuneen testin arvoa. [Oletusarvo on 1000]"
+msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 5000]"
+msgstr "Enimmäisaika vertaistestille ennen epäonnistumiseksi katsomista. Jos aikakatkaisu on alempi kuin onnistuneiden testien keskiarvo, käytetään keskiarvoa. [Oletus on 5000]"
+
+msgid "Minimum number of peers to retain in the fast tier during profile reorganization. A higher value ensures more peers are available for tunnel building, at the cost of potentially including slower peers. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 400]"
+msgstr "Vähimmäismäärä vertaisia nopeassa tasossa profiilien uudelleenjärjestelyn aikana. Jos tunnetaan yli 3000 reititintä, oletus skaalautuu arvoon <code>knownRouters / 15</code>. [Oletus on 400] [Default is 400] [Oletusarvo on 400] [Oletusarvo on 400] [Oletusarvo on 400]. [Oletusarvo on 400]"
+
+msgid "Minimum number of peers to retain in the high-capacity tier. These are the peers with the highest measured throughput and greatest ability to relay traffic. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 500]"
+msgstr "Vähimmäismäärä vertaisia suuren kapasiteetin tasossa. Jos tunnetaan yli 3000 reititintä, oletus skaalautuu arvoon <code>knownRouters / 15</code>. [Oletus on 500] [Default is 500] [Oletusarvo on 500] [Oletusarvo on 500] [Oletusarvo on 500]. [Oletus on 500]"
+
+msgid "Maximum number of peer profiles to retain in memory. Older, inactive profiles are expired first when this limit is reached. Values below 100 are clamped to 100. [Default is 8000, or 800 on slow systems]"
+msgstr "Muistissa säilytettävien vertaisprofiilien enimmäismäärä. Arvot alle 100 rajataan 100:aan. [Oletus on 8000 tai 800 hitailla] [Default is 8000, or 800 on slow systems] [Oletusarvo on 8000 tai 800 hitaissa järjestelmissä] [Oletusarvo on 8000 tai 800 hitaissa järjestelmissä] [Oletusarvo on 8000 tai 800 hitaissa järjestelmissä]. [Oletus on 8000 tai 800 hitaissa järjestelmissä]"
+
+msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 3]"
+msgstr "RouterInfon enimmäisikä tunneissa. Vertaiset vanhemmilla Infolla suljetaan pois valinnasta. [Oletus on 3] [Default is 3] [Oletusarvo on 3] [Oletusarvo on 3] [Oletusarvo on 3]. [Oletus on 3]"
 
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
 msgstr "Tämä asetus määrittää, julkaistaanko reitittimestämme tilastotietoja satunnaisesti NetDb:hen. [Oletusarvo on false]"
@@ -5899,8 +6156,227 @@ msgstr "Tämä asetus määrittää tarkistetaanko päivitettyjen reitittimien p
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
 msgstr "Kun on asetettu tosioksi, tämä asetus lieventää reitittimen ehtoja, kun reititin on määritetty julkaisemaan ruuhkapien, erityisesti kun on määritetty, että kaistanakaan käyttö on korkea. Muut ehdot, kuten korkea työviive tai reititin, joka on luokiteltu hitaaksi, aiheuttavat yhä ruuhkapien julkaisemista. [Oletusarvo on false]"
 
-msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr "Kun konfiguroidaan, tämä asettaa kovan rajan reitittimen luvan rakentaa tunnelit samanaikaisesti. Oletusarvoisesti reititin käyttää keskimääräistä rakennusaikaa ja nykyistä lähtevää kaistanleveyttä määrittääkseen optimaalisen rakennusnopeuden. [Vaaditaan uudelleenkäynnistys]"
+msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. This setting is dynamic and takes effect without restart."
+msgstr "Kova raja samanaikaisesti rakennettaville tunneleille. Dynaaminen, voimaan ilman uudelleenkäynnistystä. This setting is dynamic and takes effect without restart Tämä asetus on dynaaminen ja tulee voimaan ilman uudelleenkäynnistystä Tämä asetus on dynaaminen ja tulee voimaan ilman uudelleenkäynnistystä Tämä asetus on dynaaminen ja tulee voimaan ilman uudelleenkäynnistystä. Tämä asetus on dynaaminen ja tulee voimaan ilman uudelleenkäynnistystä"
+
+msgid "When set to true, the router uses the older peer selection algorithm when building tunnels (prefer fast peers directly, without the multi-tier HighCap → Fast → Active fallback chain). May be useful for troubleshooting peer selection issues. [Default is false. This setting is dynamic and takes effect immediately.]"
+msgstr "Kun todeksi, reititin käyttää vanhempaa vertaisvalinta-algoritmia (suosii nopeita suoraan, ilman HighCap→Fast→Active-ketjua). [Oletus epätosi, dynaaminen, heti voimaan] [Default is false This setting is dynamic and takes effect immediately ] [Oletusarvo on epätosi Tämä asetus on dynaaminen ja tulee voimaan välittömästi ] [Oletusarvo on epätosi Tämä asetus on dynaaminen ja tulee voimaan välittömästi ] [Oletusarvo on epätosi Tämä asetus on dynaaminen ja tulee voimaan välittömästi ]. [Oletusarvo on epätosi Tämä asetus on dynaaminen ja tulee voimaan välittömästi ]"
+
+msgid "Growth factor used by the router's transit tunnel throttle. Higher values make the router accept tunnel build requests more aggressively relative to the 10-minute average. Lower values make it probabalistically reject sooner when tunnel counts are rising rapidly. [Default is 2.0]"
+msgstr "Transiittitunnelien rajoittimen kasvukerroin. Korkeampi = hyväksyy aggressiivisemmin. [Oletus 2.0] 0] 0] 0] 0]. 0]"
+
+msgid "Growth factor for tunnel test time acceptance rate limiting. If the 1-minute average test time exceeds the 1-hour average multiplied by this factor, the router begins probabalistically rejecting. [Default is 1.5]"
+msgstr "Kasvukerroin testausajan hyväksyntänopeuden rajoitukselle. [Oletus 1.5] 5] 5] 5] 5]. 5]"
+
+msgid "Controls the steepness of the rejection probability curve when bandwidth usage approaches capacity. Lower values give a smoother transition (less aggressive rejection at moderate load). [Default is 10]"
+msgstr "Hylkäystodennäköisyyskäyrän jyrkkyys kaistan lähestyessä kapasiteettia. [Oletus 10] [Default is 10] [Oletusarvo on 10] [Oletusarvo on 10] [Oletusarvo on 10]. [Oletus on 10]"
+
+msgid "Penalty multiplier applied to a peer's capacity value when the peer publishes a 'D' congestion cap (moderate congestion). Higher values reduce the peer's effective capacity more aggressively. [Default is 2.5]"
+msgstr "Rangaistuskerroin 'D' ruuhkakapasiteetille. [Oletus 2.5] 5] 5] 5] 5]. 5]"
+
+msgid "Penalty multiplier applied to a peer's capacity value when the peer publishes an 'E' congestion cap (severe congestion). [Default is 4.75]"
+msgstr "Rangaistuskerroin 'E' ruuhkakapasiteetille. [Oletus 4.75]"
+
+msgid "Time in milliseconds before expiration when pruned tunnels are marked for early expiry, giving replacement tunnels time to build. Higher values allow more overlap between old and new tunnels. [Default is 120000 (2 minutes)]"
+msgstr "Aika ennen vanhenemista karsituille tunneleille. [Oletus 120000 (2 min)] [Default is 120000 (2 minutes)] [Oletusarvo on 120 000 (2 minuuttia)] [Oletus on 120000 (2 minuuttia)] [Oletus on 120000 (2 minuuttia)]. [Oletus on 120000 (2 minuuttia)]"
+
+msgid "The latency threshold in milliseconds for removing slow tunnels from <a href=/tunnels>local tunnel pools</a>. Tunnels with latency above this threshold will be removed if the pool exceeds the minimum tunnel count. Set to 0 to use 1 second or the lowest recorded latency from all pools, whichever is higher. [Default is 0]"
+msgstr "Viivekynnys hitaiden tunnelien poistolle <a href=/tunnels>paikallisista pooleista</a>. [Oletus 0] Set to 0 to use 1 second or the lowest recorded latency from all pools, whichever is higher [Default is 0] Aseta arvoksi 0, jos haluat käyttää yhtä sekuntia tai alinta tallennettua viivettä kaikista pooleista sen mukaan, kumpi on korkeampi [Oletusarvo on 0] Aseta arvoksi 0, jos haluat käyttää yhtä sekuntia tai alinta tallennettua viivettä kaikista pooleista sen mukaan, kumpi on korkeampi [Oletusarvo on 0] Aseta arvoksi 0, jos haluat käyttää yhtä sekuntia tai alinta tallennettua viivettä kaikista pooleista sen mukaan, kumpi on korkeampi [Oletusarvo on 0]. Aseta arvoksi 0, jos haluat käyttää yhtä sekuntia tai alinta tallennettua viivettä kaikista pooleista sen mukaan, kumpi on korkeampi [Oletus on 0]"
+
+msgid "The minimum number of tunnels to keep in each pool when removing slow tunnels (minimum 2), overriding the configured tunnel quantity. Set to 0 to use the configured quantity per pool. [Default is 0]"
+msgstr "Vähimmäistunnelit poolia kohden hitaita poistettaessa. [Oletus 0] [Default is 0] [Oletusarvo on 0] [Oletusarvo on 0] [Oletusarvo on 0]. [Oletus on 0]"
+
+msgid "The interval in milliseconds between runs of the Remove Slow Tunnels job. Higher values reduce tunnel churn but may keep slow tunnels longer. [Default is 90000 (90s), or 120000 (120s) if under load]"
+msgstr "Väli Hitaiden Tunnelien Poisto -työn suorituskertojen välillä. [Oletus 90000 (90s)] [Default is 90000 (90s), or 120000 (120s) if under load] [Oletusarvo on 90000 (90s) tai 120000 (120s), jos kuormitettu] [Oletusarvo on 90000 (90s) tai 120000 (120s), jos kuormitettu] [Oletusarvo on 90000 (90s) tai 120000 (120s), jos kuormitettu]. [Oletus on 90000 (90s) tai 120000 (120s), jos kuormitettu]"
+
+msgid "The time in milliseconds before expiration to mark tunnels for early expiry when the Remove Slow Tunnels job prunes slow or excess tunnels. Higher values allow more time for new tunnels to build. [Default is 30000]"
+msgstr "Aika ennen vanhenemista merkitä tunnelit aikaistetulle vanhenemiselle. [Oletus 30000] [Default is 30000] [Oletusarvo on 30 000] [Oletusarvo on 30 000] [Oletusarvo on 30 000]. [Oletus on 30 000]"
+
+msgid "Hard limit on total tunnel test jobs (queued + active). Prevents runaway test backlogs from causing job queue lag. Once reached, no new tests are scheduled until the count drops. [Default is 128 (96 on slower systems)]"
+msgstr "Kova raja tunnelitestien kokonaismäärälle (jonossa+aktiiviset). [Oletus 128 (96 hitaammilla)] Once reached, no new tests are scheduled until the count drops [Default is 128 (96 on slower systems)] Kun se on saavutettu, uusia testejä ei ajoiteta, ennen kuin määrä laskee [Oletusarvo on 128 (96 hitaammissa järjestelmissä)] Kun se on saavutettu, uusia testejä ei ajoiteta, ennen kuin määrä laskee [Oletusarvo on 128 (96 hitaammissa järjestelmissä)] Kun se on saavutettu, uusia testejä ei ajoiteta, ennen kuin määrä laskee [Oletusarvo on 128 (96 hitaammissa järjestelmissä)]. Kun se on saavutettu, uusia testejä ei ajoiteta, ennen kuin määrä laskee [Oletusarvo on 128 (96 hitaammissa järjestelmissä)]"
+
+msgid "Base adaptive queue limit for tunnel test jobs. The router scales this up/down by 2-3x based on job queue lag and failure rates. [Default is 48 (32 on slower systems)]"
+msgstr "Mukautuva jonon perusraja tunnelitesteille. [Oletus 48 (32 hitaammilla)] [Default is 48 (32 on slower systems)] [Oletusarvo on 48 (32 hitaammissa järjestelmissä)] [Oletusarvo on 48 (32 hitaammissa järjestelmissä)] [Oletusarvo on 48 (32 hitaammissa järjestelmissä)]. [Oletusarvo on 48 (32 hitaammissa järjestelmissä)]"
+
+msgid "Maximum number of tunnel tests that can execute simultaneously. Caps concurrent test throughput to prevent overwhelming the router. [Default is 64 (32 on slower systems)]"
+msgstr "Samanaikaisten tunnelitestien enimmäismäärä. [Oletus 64 (32 hitaammilla)] [Default is 64 (32 on slower systems)] [Oletusarvo on 64 (32 hitaammissa järjestelmissä)] [Oletusarvo on 64 (32 hitaammissa järjestelmissä)] [Oletusarvo on 64 (32 hitaammissa järjestelmissä)]. [Oletusarvo on 64 (32 hitaammissa järjestelmissä)]"
+
+msgid "Maximum consecutive client tunnel build timeouts before forcing exploratory tunnels for build reply delivery. Higher values keep the router trying paired tunnels longer; lower values fall back to exploratory sooner. [Default is 3]"
+msgstr "Peräkkäisten asiakastunnelien rakennusaikakatkaisujen enimmäismäärä ennen tutkivien pakottamista. [Oletus 3] [Default is 3] [Oletusarvo on 3] [Oletusarvo on 3] [Oletusarvo on 3]. [Oletus on 3]"
+
+msgid "How long to wait for a tunnel build reply before trying a different pool or different peers. The BuildExecutor adaptively increases this when success rates are low. [Default is 5000 (5s), 10000 (10s) on slow systems]"
+msgstr "Kuinka kauan odottaa rakennusvastausta ennen vaihtoa. [Oletus 5000 (5s), 10000 (10s) hitailla] [Default is 5000 (5s), 10000 (10s) on slow systems] [Oletus on 5000 (5s), 10000 (10s) hitaissa järjestelmissä] [Oletus on 5000 (5s), 10000 (10s) hitaissa järjestelmissä] [Oletus on 5000 (5s), 10000 (10s) hitaissa järjestelmissä]. [Oletus on 5000 (5s), 10000 (10s) hitaissa järjestelmissä]"
+
+msgid "Timeout in milliseconds for the first-hop OutNetMessage before firing TunnelBuildFirstHopFailJob. Should be >= requestTimeout for proper sequencing. [Default is 10000 (10 seconds)]"
+msgstr "Aikakatkaisu ensimmäisen hypyn OutNetMessageille. [Oletus 10000 (10s)] [Default is 10000 (10 seconds)] [Oletus on 10 000 (10 sekuntia)] [Oletus on 10 000 (10 sekuntia)] [Oletus on 10 000 (10 sekuntia)]. [Oletus on 10 000 (10 sekuntia)]"
+
+msgid "Timeout in milliseconds for RouterInfo lookup of the next hop during tunnel build processing. If the lookup times out, the build request is rejected. [Default is 8000 (8 seconds)]"
+msgstr "Aikakatkaisu seuraavan hypyn RouterInfo-hakulle. [Oletus 8000 (8s)] [Default is 8000 (8 seconds)] [Oletus on 8000 (8 sekuntia)] [Oletus on 8000 (8 sekuntia)] [Oletus on 8000 (8 sekuntia)]. [Oletus on 8000 (8 sekuntia)]"
+
+msgid "Backoff delay in milliseconds between exploratory tunnel build retries. Higher values reduce build request rate during failures; lower values retry faster. [Default is 200]"
+msgstr "Viive tutkivien tunnelienrakennuksen uudelleenyritysten välillä. [Oletus 200] [Default is 200] [Oletusarvo on 200] [Oletusarvo on 200] [Oletusarvo on 200]. [Oletusarvo on 200]"
+
+msgid "Backoff delay in milliseconds between client tunnel build retries. Lower values rebuild failed client tunnels faster. [Default is 50]"
+msgstr "Viive asiakastunnelienrakennuksen uudelleenyritysten välillä. [Oletus 50] [Default is 50] [Oletusarvo on 50] [Oletusarvo on 50] [Oletusarvo on 50]. [Oletus on 50]"
+
+msgid "Grace period in milliseconds to accept late tunnel build replies after the router has given up waiting. Prevents wasting valid tunnel builds that arrive just after timeout. [Default is 60000 (60 seconds)]"
+msgstr "Armoaika myöhästyneiden rakennusvastausten hyväksymiseen. [Oletus 60000 (60s)] [Default is 60000 (60 seconds)] [Oletus on 60 000 (60 sekuntia)] [Oletus on 60 000 (60 sekuntia)] [Oletus on 60 000 (60 sekuntia)]. [Oletus on 60 000 (60 sekuntia)]"
+
+msgid "Minimum target tunnels per pool before triggering urgent rebuild logic. When the number of good tunnels drops below this threshold, the pool escalates to urgent rebuild mode. [Default is 2]"
+msgstr "Vähimmäistunnelit poolia kohden ennen kiireellistä uudelleenrakennusta. [Oletus 2] [Default is 2] [Oletusarvo on 2] [Oletusarvo on 2] [Oletusarvo on 2]. [Oletus on 2]"
+
+msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build processing. Ensures a minimum level of lookup concurrency even when few tunnels are participating. [Default is 10 (4 on slow systems)]"
+msgstr "Lattia samanaikaisille RouterInfo-hauille. [Oletus 10 (4 hitailla)] [Default is 10 (4 on slow systems)] [Oletusarvo on 10 (4 hitaissa järjestelmissä)] [Oletusarvo on 10 (4 hitaissa järjestelmissä)] [Oletusarvo on 10 (4 hitaissa järjestelmissä)]. [Oletusarvo on 10 (4 hitaissa järjestelmissä)]"
+
+msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Caps lookup concurrency to prevent overwhelming the netDb. [Default is max(cores/2, 16) (10 on slow systems)]"
+msgstr "Katto samanaikaisille RouterInfo-hauille. [Oletus max(cores/2, 16)] [Default is max(cores/2, 16) (10 on slow systems)] [Oletus on max(cores/2, 16) (10 hitaissa järjestelmissä)] [Oletus on max(cores/2, 16) (10 hitaissa järjestelmissä)] [Oletus on max(cores/2, 16) (10 hitaissa järjestelmissä)]. [Oletus on max(cores/2, 16) (10 hitaissa järjestelmissä)]"
+
+msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
+msgstr "Prosenttiosuus tunneleista hakurajoituksen skaalaamiseen. [Oletus 40 (15 hitailla)] [Default is 40 (15 on slow systems)] [Oletusarvo on 40 (15 hitaissa järjestelmissä)] [Oletusarvo on 40 (15 hitaissa järjestelmissä)] [Oletusarvo on 40 (15 hitaissa järjestelmissä)]. [Oletusarvo on 40 (15 hitaissa järjestelmissä)]"
+
+msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
+msgstr "Sallittu enimmäispoikkeama tulevaisuuteen aikaleimoille. [Oletus 300000 (5 min)] [Default is 300000 (5 minutes)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)]. [Oletus on 300000 (5 minuuttia)]"
+
+msgid "Maximum age in milliseconds for tunnel build requests (ElGamal). Requests older than this are rejected as potential replay attacks. Must be >1 hour due to rounding in the protocol. [Default is 3900000 (65 minutes)]"
+msgstr "Enimmäisikä tunnelienrakennuspyynnöille (ElGamal). [Oletus 3900000 (65 min)] Must be >1 hour due to rounding in the protocol [Default is 3900000 (65 minutes)] Sen on oltava yli 1 tunti pöytäkirjan pyöristyksen vuoksi [Oletus on 3900000 (65 minuuttia)] Sen on oltava yli 1 tunti pöytäkirjan pyöristyksen vuoksi [Oletus on 3900000 (65 minuuttia)] Sen on oltava yli 1 tunti pöytäkirjan pyöristyksen vuoksi [Oletus on 3900000 (65 minuuttia)]. Sen on oltava yli 1 tunti pöytäkirjan pyöristyksen vuoksi [Oletus on 3900000 (65 minuuttia)]"
+
+msgid "Maximum age in milliseconds for tunnel build requests (ECIES). ECIES timestamps are rounded to minutes so the tolerance is tighter. [Default is 480000 (8 minutes)]"
+msgstr "Enimmäisikä tunnelienrakennuspyynnöille (ECIES). [Oletus 480000 (8 min)] [Default is 480000 (8 minutes)] [Oletus on 480000 (8 minuuttia)] [Oletus on 480000 (8 minuuttia)] [Oletus on 480000 (8 minuuttia)]. [Oletus on 480000 (8 minuuttia)]"
+
+msgid "Job lag threshold in milliseconds that triggers tunnel build limiting. When router job lag exceeds this value, tunnel build requests are throttled to reduce queue pressure. [Default is 800 (500 on slow systems)]"
+msgstr "Työviivekynnys joka laukaisee tunnelirakennuksen rajoituksen. [Oletus 800 (500 hitailla)] [Default is 800 (500 on slow systems)] [Oletusarvo on 800 (500 hitaissa järjestelmissä)] [Oletusarvo on 800 (500 hitaissa järjestelmissä)] [Oletusarvo on 800 (500 hitaissa järjestelmissä)]. [Oletusarvo on 800 (500 hitaissa järjestelmissä)]"
+
+msgid "Minimum delay in milliseconds before scheduling a tunnel test. The router will not test a tunnel that was recently tested within this window. [Default is 30000 (30 seconds)]"
+msgstr "Vähimmäisviive ennen tunnelitestin ajoittamista. [Oletus 30000 (30s)] [Default is 30000 (30 seconds)] [Oletus on 30 000 (30 sekuntia)] [Oletus on 30 000 (30 sekuntia)] [Oletus on 30 000 (30 sekuntia)]. [Oletus on 30 000 (30 sekuntia)]"
+
+msgid "Maximum delay in milliseconds before scheduling a tunnel test. The router will not defer a tunnel test beyond this limit. [Default is 90000 (90 seconds)]"
+msgstr "Enimmäisviive ennen tunnelitestin ajoittamista. [Oletus 90000 (90s)] [Default is 90000 (90 seconds)] [Oletus on 90 000 (90 sekuntia)] [Oletus on 90 000 (90 sekuntia)] [Oletus on 90 000 (90 sekuntia)]. [Oletus on 90000 (90 sekuntia)]"
+
+msgid "Maximum concurrent tunnel test jobs per exploratory pool. Caps how many exploratory tunnels are tested simultaneously. [Default is 12]"
+msgstr "Samanaikaiset tunnelitestit per tutkiva pooli. [Oletus 12] [Default is 12] [Oletusarvo on 12] [Oletusarvo on 12] [Oletusarvo on 12]. [Oletus on 12]"
+
+msgid "Maximum concurrent tunnel test jobs per client pool. Caps how many client tunnels are tested simultaneously. [Default is 24]"
+msgstr "Samanaikaiset tunnelitestit per asiakaspooli. [Oletus 24] [Default is 24] [Oletusarvo on 24] [Oletusarvo on 24] [Oletusarvo on 24]. [Oletus on 24]"
+
+msgid "Ratio of tunnels tested vs total pool size that triggers pool coverage heuristics. When fewer than this fraction of tunnels have recent test results, the pool prioritises testing over building. [Default is 0.95]"
+msgstr "Testattujen tunnelien suhde poolin kokoon joka laukaisee kattavuusheuristiikan. [Oletus 0.95] 95] 95] 95] 95]. 95]"
+
+msgid "Cooldown period in milliseconds for client peer selection. Peers selected for a client tunnel are excluded from selection in other client pools for this duration, ensuring peer diversity. [Default is 15000 (15 seconds)]"
+msgstr "Jäähdytysaika asiakasvertaisvalinnalle. [Oletus 15000 (15s)] [Default is 15000 (15 seconds)] [Oletus on 15 000 (15 sekuntia)] [Oletus on 15 000 (15 sekuntia)] [Oletus on 15 000 (15 sekuntia)]. [Oletus on 15000 (15 sekuntia)]"
+
+msgid "Client peer selection strategy: 'default' (balanced, preferred), 'reliability' (prioritise proven peers with high tunnel acceptance ratio), or 'diversity' (lower cooldowns, explores broader peer set). Changes apply dynamically. [Default is 'default']"
+msgstr "Asiakasvertaisvalintastrategia: default, reliability, diversity. [Oletus 'default'] [Default is 'default'] [Oletus on \"oletus\"] [Oletus on \"oletus\"] [Oletus on \"oletus\"]. [Oletus on \"oletus\"]"
+
+msgid "Tunnel lifetime in milliseconds. Tunnels expire after this period and are replaced with fresh builds. Lower values increase churn but may improve freshness; higher values reduce build overhead but may accumulate stale tunnels. [Default is 600000 (10 minutes)]"
+msgstr "Tunnelin elinaika. [Oletus 600000 (10 min)] Lower values increase churn but may improve freshness; higher values reduce build overhead but may accumulate stale tunnels [Default is 600000 (10 minutes)] Pienemmät arvot lisäävät vaihtuvuutta, mutta voivat parantaa tuoreutta; korkeammat arvot vähentävät rakennuskustannuksia, mutta voivat kerääntyä vanhentuneita tunneleita [Oletus on 600 000 (10 minuuttia)] Pienemmät arvot lisäävät vaihtuvuutta, mutta voivat parantaa tuoreutta; korkeammat arvot vähentävät rakennuskustannuksia, mutta voivat kerääntyä vanhentuneita tunneleita [Oletus on 600 000 (10 minuuttia)] Pienemmät arvot lisäävät vaihtuvuutta, mutta voivat parantaa tuoreutta; korkeammat arvot vähentävät rakennuskustannuksia, mutta voivat kerääntyä vanhentuneita tunneleita [Oletus on 600 000 (10 minuuttia)]. Pienemmät arvot lisäävät vaihtuvuutta, mutta voivat parantaa tuoreutta;korkeammat arvot vähentävät rakennuskustannuksia, mutta voivat kerääntyä vanhentuneita tunneleita [Oletusarvo on 600000 (10 minuuttia)]"
+
+msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions. [Default is 300000 (5 minutes)]"
+msgstr "Käynnistyksen vaimennusaika. [Oletus 300000 (5 min)] [Default is 300000 (5 minutes)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)]. [Oletus on 300000 (5 minuuttia)]"
+
+msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 300000 (5 minutes)]"
+msgstr "Vähimmäisväli LeaseSet-julkaisujen välillä. [Oletus 300000 (5 min)] [Default is 300000 (5 minutes)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)]. [Oletus on 300000 (5 minuuttia)]"
+
+msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 300000 (5 minutes)]"
+msgstr "Vähimmäisväli LeaseSet-objektien rakennusten välillä. [Oletus 300000 (5 min)] [Default is 300000 (5 minutes)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)]. [Oletus on 300000 (5 minuuttia)]"
+
+msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
+msgstr "Samanaikaiset tunnelirakennukset per suunta. [Oletus 6] [Default is 6] [Oletusarvo on 6] [Oletusarvo on 6] [Oletusarvo on 6]. [Oletus on 6]"
+
+msgid "If exploratory tunnel build success rate falls below 1 in this many attempts, tunnel quantity is reduced. Higher values make quantity reduction less likely. [Default is 12]"
+msgstr "Jos tutkivan tunnelin onnistuminen alle 1/N, tunnelimäärää vähennetään. [Oletus 12] [Default is 12] [Oletusarvo on 12] [Oletusarvo on 12] [Oletusarvo on 12]. [Oletus on 12]"
+
+msgid "Extra tunnels to maintain beyond the configured pool quantity. A positive value keeps spare tunnels ready so the pool doesn't drain when tunnels expire simultaneously. [Default is 0]"
+msgstr "Ylimääräiset tunnelit poolin määrän yli. [Oletus 0] [Default is 0] [Oletusarvo on 0] [Oletusarvo on 0] [Oletusarvo on 0]. [Oletus on 0]"
+
+msgid "Minimum interval in milliseconds between GOOD-tunnel deficit rebuilds for non-critical pools. Prevents rapid build-retry loops when the pool has enough FAILING tunnels to satisfy the numerical target. [Default is 30000 (30 seconds)]"
+msgstr "Vähimmäisväli HYVIEN tunnelien alijäämärakennuksille. [Oletus 30000 (30s)] [Default is 30000 (30 seconds)] [Oletus on 30 000 (30 sekuntia)] [Oletus on 30 000 (30 sekuntia)] [Oletus on 30 000 (30 sekuntia)]. [Oletus on 30 000 (30 sekuntia)]"
+
+msgid "Minimum tunnel test period in milliseconds. Tunnel tests always wait at least this long for a reply before timing out. [Default is 45000 (45 seconds)]"
+msgstr "Vähimmäis tunnelitestausaika. [Oletus 45000 (45s)] [Default is 45000 (45 seconds)] [Oletus on 45 000 (45 sekuntia)] [Oletus on 45 000 (45 sekuntia)] [Oletus on 45 000 (45 sekuntia)]. [Oletus on 45000 (45 sekuntia)]"
+
+msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
+msgstr "Enimmäis tunnelitestausaika. [Oletus 50000 (50s)] [Default is 50000 (50 seconds)] [Oletus on 50 000 (50 sekuntia)] [Oletus on 50 000 (50 sekuntia)] [Oletus on 50 000 (50 sekuntia)]. [Oletus on 50 000 (50 sekuntia)]"
+
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
+msgstr "Rakennusaikakatkaisujen määrä ennen vertaisen merkitsemistä haamuksi. [Oletus 3] [Default is 3] [Oletusarvo on 3] [Oletusarvo on 3] [Oletusarvo on 3]. [Oletus on 3]"
+
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
+msgstr "Jäähdytysaika haamumerkitylle vertaiselle. [Oletus 180000 (3 min)] [Default is 180000 (3 minutes)] [Oletus on 180000 (3 minuuttia)] [Oletus on 180000 (3 minuuttia)] [Oletus on 180000 (3 minuuttia)]. [Oletus on 180000 (3 minuuttia)]"
+
+msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
+msgstr "Jäähdytysaika haamuille hyökkäystilassa. [Oletus 300000 (5 min)] [Default is 300000 (5 minutes)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)]. [Oletus on 300000 (5 minuuttia)]"
+
+msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
+msgstr "Vähimmäismäärä saapuvia rakennuspyyntöjä per vertainen per ikkuna. [Oletus 10] [Default is 10] [Oletusarvo on 10] [Oletusarvo on 10] [Oletusarvo on 10]. [Oletus on 10]"
+
+msgid "Maximum number of incoming tunnel build requests accepted per peer per clean window. Caps request volume to prevent DoS. [Default is 300]"
+msgstr "Enimmäismäärä saapuvia rakennuspyyntöjä per vertainen per ikkuna. [Oletus 300] [Default is 300] [Oletusarvo on 300] [Oletusarvo on 300] [Oletusarvo on 300]. [Oletusarvo on 300]"
+
+msgid "Number of tunnel build requests from a single peer in 1 second that triggers an immediate ban. Protects against rapid-fire DoS attacks. [Default is 10]"
+msgstr "Pyyntöjen määrä 1 sekunnissa joka laukaisee välittömän eston. [Oletus 10] [Default is 10] [Oletusarvo on 10] [Oletusarvo on 10] [Oletusarvo on 10]. [Oletusarvo on 10]"
+
+msgid "Percentage of participating tunnels used to dynamically scale the per-peer request throttle limit. The effective maxLimit is adjusted based on this percentage of current participating tunnel count. [Default is 20]"
+msgstr "Prosenttiosuus tunneleista vertaiskohtaisen rajoituksen skaalaamiseen. [Oletus 20] [Default is 20] [Oletusarvo on 20] [Oletusarvo on 20] [Oletusarvo on 20]. [Oletusarvo on 20]"
+
+msgid "Minimum number of participating tunnel build requests accepted per clean window. Ensures a baseline acceptance rate even when the router is under load. [Default is 80 (40 on slow systems)]"
+msgstr "Vähimmäis osallistuvat rakennuspyynnöt per ikkuna. [Oletus 80 (40 hitailla)] [Default is 80 (40 on slow systems)] [Oletusarvo on 80 (hitaissa järjestelmissä 40)] [Oletusarvo on 80 (hitaissa järjestelmissä 40)] [Oletusarvo on 80 (hitaissa järjestelmissä 40)]. [Oletusarvo on 80 (40 hitaissa järjestelmissä)]"
+
+msgid "Maximum number of participating tunnel build requests accepted per clean window. Caps acceptance to prevent overload. [Default is 300 (150 on slow systems)]"
+msgstr "Enimmäis osallistuvat rakennuspyynnöt per ikkuna. [Oletus 300 (150 hitailla)] [Default is 300 (150 on slow systems)] [Oletusarvo on 300 (150 hitaissa järjestelmissä)] [Oletusarvo on 300 (150 hitaissa järjestelmissä)] [Oletusarvo on 300 (150 hitaissa järjestelmissä)]. [Oletusarvo on 300 (150 hitaissa järjestelmissä)]"
+
+msgid "Percentage of current participating tunnels used to scale the participating throttle limits. Higher values allow more build requests relative to tunnel count. [Default is 10]"
+msgstr "Prosenttiosuus tunneleista osallistuvien rajoitusten skaalaamiseen. [Oletus 10] [Default is 10] [Oletusarvo on 10] [Oletusarvo on 10] [Oletusarvo on 10]. [Oletusarvo on 10]"
+
+msgid "Minimum percentage of non-failing peer profiles required before the router broadens exploratory peer selection. When below this threshold, only the most reliable peers are used. [Default is 15]"
+msgstr "Vähimmäisprosentti ei-epäonnistuvia profiileja ennen valinnan laajentamista. [Oletus 15] [Default is 15] [Oletusarvo on 15] [Oletusarvo on 15] [Oletusarvo on 15]. [Oletusarvo on 15]"
+
+msgid "Minimum number of active (non-failing) peers required for normal exploratory peer selection. Below this threshold, selection logic becomes more permissive. [Default is 12]"
+msgstr "Vähimmäismäärä aktiivisia vertaisia normaalille valinnalle. [Oletus 12] [Default is 12] [Oletusarvo on 12] [Oletusarvo on 12] [Oletusarvo on 12]. [Oletus on 12]"
+
+msgid "Minimum number of active peers required during router startup before restricting exploratory peer selection. During early startup the router is more lenient about peer quality. [Default is 6]"
+msgstr "Vähimmäismäärä aktiivisia vertaisia käynnistyksen aikana. [Oletus 6] [Default is 6] [Oletusarvo on 6] [Oletusarvo on 6] [Oletusarvo on 6]. [Oletus on 6]"
+
+msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 64]"
+msgstr "Hitaan käynnistyksen ikkunan maksimikoko streaming-yhteyksille. [Oletus 64] [Default is 64] [Oletusarvo on 64] [Oletusarvo on 64] [Oletusarvo on 64]. [Oletusarvo on 64]"
+
+msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 60000 (60 seconds)]"
+msgstr "Enimmäis RTT streaming-yhteyksille. [Oletus 60000 (60s)] [Default is 60000 (60 seconds)] [Oletus on 60 000 (60 sekuntia)] [Oletus on 60 000 (60 sekuntia)] [Oletus on 60 000 (60 sekuntia)]. [Oletus on 60 000 (60 sekuntia)]"
+
+msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 64]"
+msgstr "Enimmäispakettien uudelleenlähetysmäärä ennen luovuttamista. [Oletus 64] [Default is 64] [Oletusarvo on 64] [Oletusarvo on 64] [Oletusarvo on 64]. [Oletusarvo on 64]"
+
+msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 60000 (60 seconds)]"
+msgstr "Jäähdytysaika yhteysyritysten välillä samaan tavoittamattomaan kohteeseen. [Oletus 60000 (60s)] [Default is 60000 (60 seconds)] [Oletus on 60 000 (60 sekuntia)] [Oletus on 60 000 (60 sekuntia)] [Oletus on 60 000 (60 sekuntia)]. [Oletus on 60 000 (60 sekuntia)]"
+
+msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
+msgstr "Enimmäisaika odottaa pong-vastausta pingauksessa. [Oletus 300000 (5 min)]"
+
+msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
+msgstr "Kuinka monta kertaa vastata rajoitetulle kohteelle ennen hiljaista hylkäämistä. [Oletus 3] [Default is 3] [Oletusarvo on 3] [Oletusarvo on 3] [Oletusarvo on 3]. [Oletus on 3]"
+
+msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
+msgstr "Oletus enimmäis stream-viive ilman nimenomaista yhteyden aikakatkaisua. [Oletus 10000 (10s)]"
+
+msgid "Maximum time in milliseconds between receiving a SYN and accepting it on a server socket. Controls how long incomplete connections are kept in the accept queue. [Default is 4000 (4 seconds)]"
+msgstr "Enimmäisaika SYN:n vastaanoton ja hyväksynnän välillä palvelinsoketilla. [Oletus 4000 (4s)] [Default is 4000 (4 seconds)] [Oletus on 4000 (4 sekuntia)] [Oletus on 4000 (4 sekuntia)] [Oletus on 4000 (4 sekuntia)]. [Oletus on 4000 (4 sekuntia)]"
+
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. Larger values buffer more incoming connections at the cost of memory. [Default is 80 (48 on slow systems)]"
+msgstr "Enimmäismäärä odottavia yhteyksiä palvelimen hyväksymisjonossa. [Oletus 80 (48 hitailla)] [Default is 80 (48 on slow systems)] [Oletusarvo on 80 (48 hitaissa järjestelmissä)] [Oletusarvo on 80 (48 hitaissa järjestelmissä)] [Oletusarvo on 80 (48 hitaissa järjestelmissä)]. [Oletusarvo on 80 (48 hitaissa järjestelmissä)]"
+
+msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
+msgstr "Väli automaattisten LeaseSet-uudelleenjulkaisujen välillä. [Oletus 300000 (5 min)] [Default is 300000 (5 minutes)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)]. [Oletus on 300000 (5 minuuttia)]"
+
+msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle. [Default is 180000 (3 minutes)]"
+msgstr "Kynnys ennakoivalle LeaseSet-uudelleenjulkaisulle. [Oletus 180000 (3 min)] [Default is 180000 (3 minutes)] [Oletus on 180000 (3 minuuttia)] [Oletus on 180000 (3 minuuttia)] [Oletus on 180000 (3 minuuttia)]. [Oletus on 180000 (3 minuuttia)]"
+
+msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
+msgstr "Aika tarkistaa joutilaita tunneleita. [Oletus 60000] [Default is 60000] [Oletusarvo on 60 000] [Oletusarvo on 60 000] [Oletusarvo on 60 000]. [Oletus on 60 000]"
+
+msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
+msgstr "Vähimmäisviestit tunnelin käsiteltäväksi aktiiviseksi katsomiseen. [Oletus 3] [Default is 3] [Oletusarvo on 3] [Oletusarvo on 3] [Oletusarvo on 3]. [Oletus on 3]"
+
+msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
+msgstr "Väli joutilaiden transiittitunnelien skannausten välillä. [Oletus 180000]"
 
 msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
 msgstr "Jos haluat asentaa allekirjoittamattomia (.zip) I2P-päivityksiä, tämä tulisi lisätä <code>router.config</code>-tiedostoon, ellei <code>routerconsole.advanced=true</code> ole jo määritetty, jolloin tämä vaihtoehto on jo varustettu. Huomaa: I2P+ -version 0.9.48+ asennus <a href=/configupdate#i2pupdates>allekirjoittamattomista päivityksistä</a> on oletusarvoisesti käytössä."
@@ -5911,11 +6387,14 @@ msgstr "Tämä asetus mahdollistaa allekirjoittamattoman päivitystoiminnon päi
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
 msgstr "Perustusajankohdan jälkeen voit tässä asetuksessa (minuutteina) määrittää kuinka kauan odotetaan ennen kuin NetDb:n RouterInfos tutkitaan niiden pätemättömyyden varalle, jonka jälkeen vain pätevät reitittimet hyväksytään mukaan. Kun tarkistus tehdään, päättyneet RouterInfos ja huonosti reagoivat vertaiset, joihin on pääsy vain SSU:n kautta, poistetaan NetDb:stä. [Oletusarvo on 60 minuuttia] Huomaa: Tämä asetus ei vaikuta vanhempiin reitittimiin (oletuksena vanhempi kuin 0.9.29), jotka poistetaan NetDb:stä ja estetään reititinistunnosta heti kun NetDb-varastoa yritetään."
 
-msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr "Tämä asetus, kun on asetettu tosioksi, estää suoranaisen viestinnän reitittimen ja lisää kaikki oman maan reitittimet ja lisää ne estä kieltolistalle, kunnesi reititin käynnistyy uudelleen. [Oletusarvo on false]"
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false, or true if router is in hidden mode]"
+msgstr "Estää suoran viestinnän kotimaasi reitittimiltä. [Oletus epätosi, tai tosi jos piilotilassa]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "Tämä asetus, kun on asetettu tosioksi, estää suoranaisen X-tason reitittimien viestinnän reitittimen ja lisää ne estä kieltolistalle, jos ne eivät ole saavutettavissa eikä ole saavutettavissa. Huomaa, että kehitty tila on oltava käytössä tähän asetuksen voimaanastumiseksi. [Oletusarvo on false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]"
+msgstr "Estää suoran viestinnän X-tason G-ruuhka-reitittimiltä. [Oletus epätosi]"
+
+msgid "This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is true]"
+msgstr "Estää suoran viestinnän LU-tason reitittimiltä. [Oletus tosi]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Tämä asetus sallii SSU-testien poistamisen reitittimesi suojauksen määrittämiseksi ja voidaan ottaa käyttöön reitittimille, jotka eivät ole ehdottomasti suojattuja, mutta kokevat satunnaista palomuuriongelmaa. Jos testi on poistettu käytöstä, sekä SSU että NTCP raportoivasta nykyisestä julkisesta ip-osoitteestasi <a href=/info>reitittimen tietosivulla</a>. [Vaaditaan uudelleenkäynnistys]"
@@ -5930,7 +6409,7 @@ msgid "If set to true, this option will place an icon in the system tray / notif
 msgstr "Jos tämä vaihtoehto asetetaan todeksi, se luo kuvakkeen järjestelmälokeroon / ilmoitusalueelle, jossa on peruspalvelujen hallintavaihtoehdot. [Oletuksena pois käytöstä]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "Tämä asetus mahdollistaa I2PSnarkin määrittämän enimmäismäärän tiedostoja per torrent-lataus tai torrentin luonti. Huomaa, että tämän arvon merkittävä lisääminen oletusarvosta 2000 tiedostoa voi vaatia lisäkonfigurointia isäntäjärjestelmässä, jotta käyttöjärjestelmän sallima enimmäisavaamisten määrä voidaan lisätä (esim. <code>ulimit -n</code> Linuxissa). Muuttaaksesi tätä, lisää I2PSnarkin asetustiedostoon <code>i2psnark.config</code>. [Vaaditaan I2PSnarkin tai reitittimen uudelleenkäynnistys]"
+msgstr "Tämä asetus mahdollistaa I2PSnarkin määrittämän enimmäismäärän tiedostoja per torrent-lataus tai torrentin luonti. Huomaa, että tämän arvon merkittävä lisääminen oletusarvosta 2000 tiedostoa voi vaatia lisäkonfigurointia isäntäjärjestelmässä, jotta käyttöjärjestelmän sallima enimmäisavaamisten määrä voidaan lisätä (esim. <code>ulimit -n</code> Linuxissa). Muuttaaksesi tätä, lisää I2PSnarkin asetustiedostoon <code>i2psnark.config</code>. [Vaaditaan I2PSnarkin tai reitittimen uudelleenkäynnistys] [Restart of I2PSnark or router required] [I2PSnarkin tai reitittimen uudelleenkäynnistys vaaditaan] [I2PSnarkin tai reitittimen uudelleenkäynnistys vaaditaan] [I2PSnarkin tai reitittimen uudelleenkäynnistys vaaditaan]. [I2PSnarkin tai reitittimen uudelleenkäynnistys vaaditaan]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "Tämä tunnelikohtainen asetus mahdollistaa sinun ottaa käyttöön tai poistaa käytöstä vastaukset reitittimen isännöimille palvelimille lähetettyihin pingviesteihin. Pingejen poistamiseksi sinun on lisättävä rivi <code>i2p.streaming.answerPings=false</code> palvelimen kokoonpanon <i>Mukautetut valinnat</i> -osioon Tunnel Managerissa."
@@ -5941,8 +6420,44 @@ msgstr "Tämä asetus aiheuttaa satunnaisen pong-viiveen enintään 50 ms kaikil
 msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
 msgstr "Tämä asetus muuttaa maksimaalisen ylimääräisen satunnaisen pong-viiveen, joka esitellään, jos ping-palvelimet ovat käytössä ja <code>i2p.streaming.enablePongDelay</code> on myös käytössä. Ellei toisin määritetty, käytetään 50 ms:n oletusarvoa."
 
+msgid "The connect timeout in milliseconds for eepget HTTP requests (time to wait for initial response headers). Increase for high-latency remote access scenarios. [Default is 90000 (90s)]"
+msgstr "Yhteyden aikakatkaisu eepget-pyynnöille. [Oletus 90000 (90s)] [Default is 90000 (90s)] [Oletus on 90000 (90s)] [Oletus on 90000 (90s)] [Oletus on 90000 (90s)]. [Oletus on 90000 (90s)]"
+
+msgid "The inactivity timeout in milliseconds for eepget transfers (max idle time during data phase). Increase for slow connections experiencing stalls. [Default is 300000 (5min)]"
+msgstr "Passiivisuuden aikakatkaisu eepget-siirroille. [Oletus 300000 (5min)] [Default is 300000 (5min)] [Oletus on 300 000 (5 min)] [Oletus on 300 000 (5 min)] [Oletus on 300 000 (5 min)]. [Oletus on 300 000 (5 min)]"
+
+msgid "Maximum number of consecutive zero-data transfer failures before eepget gives up, even if retries remain. Increase if transfers fail without receiving any data. [Default is 20]"
+msgstr "Peräkkäisten nolladata-siirtovirheiden enimmäismäärä. [Oletus 20] [Default is 20] [Oletusarvo on 20] [Oletusarvo on 20] [Oletusarvo on 20]. [Oletusarvo on 20]"
+
+msgid "Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]"
+msgstr "Oletus uudelleenyritysten määrä eepgetille. [Oletus 10]"
+
+msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 300000 (5min)]"
+msgstr "TIME-WAIT-aika streaming-yhteyden katkeamisen jälkeen. [Oletus 300000 (5min)] [Default is 300000 (5min)] [Oletus on 300 000 (5 min)] [Oletus on 300 000 (5 min)] [Oletus on 300 000 (5 min)]. [Oletus on 300 000 (5 min)]"
+
+msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration. Increase for very high-latency remote access. [Default is 120000 (2min)]"
+msgstr "Yläraja streaming-yhteyden aikakatkaisulle. [Oletus 120000 (2min)] Increase for very high-latency remote access [Default is 120000 (2min)] Lisäys erittäin korkean viiveen etäkäyttöä varten [Oletus on 120 000 (2 min)] Lisäys erittäin korkean viiveen etäkäyttöä varten [Oletus on 120 000 (2 min)] Lisäys erittäin korkean viiveen etäkäyttöä varten [Oletus on 120 000 (2 min)]. Lisäys erittäin korkean viiveen etäkäyttöä varten [Oletus on 120000 (2min)]"
+
+msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 8]"
+msgstr "Alkuperäinen ruuhkaikkunan koko uusille streaming-yhteyksille. [Oletus 8] [Default is 8] [Oletusarvo on 8] [Oletusarvo on 8] [Oletusarvo on 8]. [Oletus on 8]"
+
+msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 128]"
+msgstr "Ruuhkaikkunan maksimikoko streaming-yhteyksille. [Oletus 128] [Default is 128] [Oletusarvo on 128] [Oletusarvo on 128] [Oletusarvo on 128]. [Oletus on 128]"
+
+msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
+msgstr "Vähimmäis uudelleenlähetysviive. [Oletus 100ms] Lower values allow faster recovery on lossy connections [Default is 100ms] Pienemmät arvot mahdollistavat nopeamman palautumisen häviöllisissä yhteyksissä [Oletusarvo on 100 ms] Pienemmät arvot mahdollistavat nopeamman palautumisen häviöllisissä yhteyksissä [Oletusarvo on 100 ms] Pienemmät arvot mahdollistavat nopeamman palautumisen häviöllisissä yhteyksissä [Oletusarvo on 100 ms]. Pienemmät arvot mahdollistavat nopeamman palautumisen häviöllisissä yhteyksissä [Oletus on 100 ms]"
+
+msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
+msgstr "Enimmäis uudelleenlähetysviive. [Oletus 30000 (30s)] Increase to allow longer between retries on congested paths [Default is 30000 (30s)] Kasvata, jotta ruuhkaisilla reiteillä olevien uudelleenyritysten välillä on pidempi aika [Oletusarvo on 30 000 (30 s)] Kasvata, jotta ruuhkaisilla reiteillä olevien uudelleenyritysten välillä on pidempi aika [Oletusarvo on 30 000 (30 s)] Kasvata, jotta ruuhkaisilla reiteillä olevien uudelleenyritysten välillä on pidempi aika [Oletusarvo on 30 000 (30 s)]. Kasvata, jotta ruuhkaisilla reiteillä olevien uudelleenyritysten välillä on pidempi aika [Oletusarvo on 30000 (30s)]"
+
+msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
+msgstr "Enimmäis uudelleenlähetysaikakatkaisu eksponentiaalisen backoffin jälkeen. [Oletus 30000 (30s)] [Default is 30000 (30s)] [Oletusarvo on 30 000 (30 s)] [Oletusarvo on 30 000 (30 s)] [Oletusarvo on 30 000 (30 s)]. [Oletusarvo on 30000 (30s)]"
+
 msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
 msgstr "Kun arvo on päällä, I2P toimii ilman verkkoyhteyttä. Tämä on hyödyllistä, jos käynnistät reititintä jatkuvasti koodipäivitysten testaamiseksi, koska se estää verkkohäiriöitä."
+
+msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
+msgstr "Poistaa paikallis-paikallinen loopback-toimituksen käytöstä. [Oletuksena pois käytöstä] [Disabled by default] [Oletuksena poissa käytöstä] [Oletuksena poissa käytöstä] [Oletuksena poissa käytöstä]. [Oletusarvoisesti poissa käytöstä]"
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Tämä asetus mahdollistaa vaihtoehtoisten NTP-palvelinten määrittämisen, joita tarvitaan varmistamaan, että reititin ylläpitää tarkkaa kellonaikaa. [Oletuksena 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -6122,7 +6637,7 @@ msgid "What is an eepsite?"
 msgstr "Mikä on eepsinetti?"
 
 msgid "An eepsite is a website that is hosted anonymously on the I2P network - you can access it by configuring your web browser to use I2P's HTTP proxy (see above) and browsing to the <code>.i2p</code> suffixed website (e.g. <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p</a>). Also ensure your browser is configured to resolve DNS remotely when using the proxy to avoid DNS leaks."
-msgstr "Eepsinetti on verkkosivusto, joka on anonyymisti isännöity I2P-verkossa - pääset siihen määrittämällä verkkoselaimesi käyttämään I2P:n HTTP-välityspalvelinta (katso yllä) ja selaamalla <code>.i2p</code> suffiksista verkkosivustoa (esim. <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p</a>). Varmista myös, että verkkoselaimesi on määritetty ratkaisemaan DNS-etäisesti käytettäessä välityspalvelinta, jotta vältetään DNS-vuodot."
+msgstr "Eepsinetti on verkkosivusto, joka on anonyymisti isännöity I2P-verkossa - pääset siihen määrittämällä verkkoselaimesi käyttämään I2P:n HTTP-välityspalvelinta (katso yllä) ja selaamalla <code>.i2p</code> suffiksista verkkosivustoa (esim. <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p</a>). Varmista myös, että verkkoselaimesi on määritetty ratkaisemaan DNS-etäisesti käytettäessä välityspalvelinta, jotta vältetään DNS-vuodot. Also ensure your browser is configured to resolve DNS remotely when using the proxy to avoid DNS leaks Varmista myös, että selaimesi on määritetty ratkaisemaan DNS etäyhteydellä, kun käytät välityspalvelinta DNS-vuodojen välttämiseksi Varmista myös, että selaimesi on määritetty ratkaisemaan DNS etäyhteydellä, kun käytät välityspalvelinta DNS-vuodojen välttämiseksi Varmista myös, että selaimesi on määritetty ratkaisemaan DNS etäyhteydellä, kun käytät välityspalvelinta DNS-vuodojen välttämiseksi. Varmista myös, että selaimesi on määritetty ratkaisemaan DNS etäyhteydellä, kun käytät välityspalvelinta DNS-vuodojen välttämiseksi"
 
 msgid "Most of the eepsites are down?"
 msgstr "Useimmat eepsinetit ovat alhaalla?"
@@ -6566,10 +7081,10 @@ msgid "Backup your private key!"
 msgstr "Varmuuskopioi yksityinen avain!"
 
 msgid "When a new service tunnel is created, or a service is run for the first time (e.g. the default jetty webserver, plugins), a private encryption key is created which essentially controls the ownership of address. This is usually named <code>&hellip;privKey.dat</code>, or <code>eepPriv.dat</code>, though it's a good idea to change the name to indicate the service it belongs to and then respecify it in the Tunnel Manager server settings. This .dat file should be backed up safely; lose it and you will lose ownership and control of your hostname!"
-msgstr "Kun luodaan uusi palvelutunneli tai palvelu ajetaan ensimmäisen kerran (esim. oletusarvoinen jetty-webpalvelin, liitännäiset), luodaan yksityinen salausavain, joka hallitsee käytännössä osoitteen omistamista. Tämä on yleensä nimeltään <code>&hellip;privKey.dat</code> tai <code>eepPriv.dat</code>, vaikka onkin hyvä idea vaihtaa nimi osoittamaan sille kuuluvaa palvelua, ja määrittää se uudelleen Tunnelinjohtajan palvelinasetuksissa. Tämä .dat-tiedosto tulisi varmuuskopioida turvallisesti; menetä se ja menetät omistajuuden ja hallinnan verkkotunnuksestasi!"
+msgstr "Kun luodaan uusi palvelutunneli tai palvelu ajetaan ensimmäisen kerran (esim. oletusarvoinen jetty-webpalvelin, liitännäiset), luodaan yksityinen salausavain, joka hallitsee käytännössä osoitteen omistamista. Tämä on yleensä nimeltään <code>&hellip;privKey.dat</code> tai <code>eepPriv.dat</code>, vaikka onkin hyvä idea vaihtaa nimi osoittamaan sille kuuluvaa palvelua, ja määrittää se uudelleen Tunnelinjohtajan palvelinasetuksissa. Tämä .dat-tiedosto tulisi varmuuskopioida turvallisesti; menetä se ja menetät omistajuuden ja hallinnan verkkotunnuksestasi! dat file should be backed up safely; lose it and you will lose ownership and control of your hostname! dat-tiedosto tulee varmuuskopioida turvallisesti; menetät sen ja menetät isäntänimesi omistajuuden ja hallinnan! dat-tiedosto tulee varmuuskopioida turvallisesti; menetät sen ja menetät isäntänimesi omistajuuden ja hallinnan! dat-tiedosto tulee varmuuskopioida turvallisesti; menetät sen ja menetät isäntänimesi omistajuuden ja hallinnan! dat-tiedosto tulee varmuuskopioida turvallisesti;menetät sen ja menetät isäntänimesi omistajuuden ja hallinnan!"
 
 msgid "To migrate the key to a new router, or to setup multihoming (running the same service on multiple routers for redundancy and load-balancing), copy the backed up key to your .i2p directory and specify it in the new server tunnel, or replace the default key in the plugin folder (e.g. the zzzot plugin)."
-msgstr "Siirtääksesi avaimen uuteen reitittimeen tai asentaaksesi monipesäkkeen (ajamalla samaa palvelua useammalla reitittimellä redundanssia ja kuorman tasapainottamista varten), kopioi varmuuskopioitu avain .i2p-hakemistoosi ja määritä se uudessa palvelutunnelissa tai korvaa oletusavain liitännäiskansiossa (esim. zzzot-liitännäinen)."
+msgstr "Siirtääksesi avaimen uuteen reitittimeen tai asentaaksesi monipesäkkeen (ajamalla samaa palvelua useammalla reitittimellä redundanssia ja kuorman tasapainottamista varten), kopioi varmuuskopioitu avain .i2p-hakemistoosi ja määritä se uudessa palvelutunnelissa tai korvaa oletusavain liitännäiskansiossa (esim. zzzot-liitännäinen). the zzzot plugin) the zzzot plugin) the zzzot plugin) the zzzot plugin). Zzzot-laajennus)"
 
 msgid "Help Section"
 msgstr "Ohjesivu"
@@ -7115,7 +7630,7 @@ msgid "Joining the I2P Network using a reseed file"
 msgstr "I2P-verkkoon liittyminen reseed-tiedoston avulla"
 
 msgid "Please contact a known trustworthy friend who has a running I2P router, and ask them for help with reseeding your I2P router. Request that they send you a reseed file exported from their running I2P router. It is vital that the file is exchanged over a secure channel, e.g. encrypted to avoid external tampering (PGP Sign, Encrypt and Verified with a trusted public key). The file itself is unsigned, so please accept files only from known trusted friends. Never import a reseed file if you cannot verify its source."
-msgstr "Ole hyvä ja ota yhteyttä tunnettuun luotettavaan ystävään, jolla on käynnissä I2P-reititin, ja pyydä heitä auttamaan I2P-reitittimen uudelleenvaravoimisessa. Pyydä heitä lähettämään sinulle uudelleenvarannölöstiedosto, joka on viety heidän käynnissä olevasta I2P-reitittimestään. On erittäin tärkeää, että tiedosto vaihdetaan turvallisessa kanavassa, kuten salattuna välttääkseen ulkoiset muutokset (allekirjoittakaa tiedosto PGP:llä, salatkaa ja varmistakaa se luotetulla julkisella avaimella). Itse tiedosto on allekirjoittamaton, joten hyväksy tiedostoja ainoastaan tunnetuilta luotetuilta ystäviltä. Älä tuo uudelleenvarannölöstiedostoa, jos et voi varmistaa sen lähdettä."
+msgstr "Ole hyvä ja ota yhteyttä tunnettuun luotettavaan ystävään, jolla on käynnissä I2P-reititin, ja pyydä heitä auttamaan I2P-reitittimen uudelleenvaravoimisessa. Pyydä heitä lähettämään sinulle uudelleenvarannölöstiedosto, joka on viety heidän käynnissä olevasta I2P-reitittimestään. On erittäin tärkeää, että tiedosto vaihdetaan turvallisessa kanavassa, kuten salattuna välttääkseen ulkoiset muutokset (allekirjoittakaa tiedosto PGP:llä, salatkaa ja varmistakaa se luotetulla julkisella avaimella). Itse tiedosto on allekirjoittamaton, joten hyväksy tiedostoja ainoastaan tunnetuilta luotetuilta ystäviltä. Älä tuo uudelleenvarannölöstiedostoa, jos et voi varmistaa sen lähdettä. The file itself is unsigned, so please accept files only from known trusted friends Never import a reseed file if you cannot verify its source Itse tiedosto on allekirjoittamaton, joten hyväksy tiedostot vain tunnetuilta luotettavilta ystäviltä Älä koskaan tuo uudelleenlähetettyä tiedostoa, jos et voi vahvistaa sen lähdettä Itse tiedosto on allekirjoittamaton, joten hyväksy tiedostot vain tunnetuilta luotettavilta ystäviltä Älä koskaan tuo uudelleenlähetettyä tiedostoa, jos et voi vahvistaa sen lähdettä Itse tiedosto on allekirjoittamaton, joten hyväksy tiedostot vain tunnetuilta luotettavilta ystäviltä Älä koskaan tuo uudelleenlähetettyä tiedostoa, jos et voi vahvistaa sen lähdettä. Itse tiedosto on allekirjoittamaton, joten hyväksy tiedostot vain tunnetuilta luotettavilta ystäviltä Älä koskaan tuo uudelleenlähetettyä tiedostoa, jos et voi vahvistaa sen lähdettä"
 
 msgid "To import the received i2preseed.zip file into your local I2P router:"
 msgstr "Tuodaksesi saamasi i2preseed.zip-tiedoston paikalliseen I2P-reitittimeesi:"
@@ -7291,16 +7806,16 @@ msgid "A threshold declaration can be expressed in one of the following ways:"
 msgstr "Kynnysarvo voidaan ilmaista yhdellä seuraavista tavoista:"
 
 msgid "Numeric definition of the number of connection attempts in the period specified (in seconds) e.g. <i class=example>15/5</i>, <i class=example>60/60</i> etc."
-msgstr "Yhteydenmuodostusyritysten määrän numeerinen määrittely annetun jakson aikana (sekunteina) esim. <i class=example>15/5</i>, <i class=example>60/60</i> jne."
+msgstr "Yhteydenmuodostusyritysten määrän numeerinen määrittely annetun jakson aikana (sekunteina) esim. <i class=example>15/5</i>, <i class=example>60/60</i> jne. 15/5, 60/60 etc 15/5, 60/60 etc 15/5, 60/60 etc 15/5, 60/60 etc. 15/5, 60/60 jne"
 
 msgid "Note that if the number of connections is 1 (e.g. <i class=example>1/60</i>), the first connection attempt will result in a breach."
-msgstr "Huomaa, että jos yhteyksien määrä on 1 (esim. <i class=example>1/60</i>), ensimmäinen yhteydenmuodostusyritys aiheuttaa rikkomuksen."
+msgstr "Huomaa, että jos yhteyksien määrä on 1 (esim. <i class=example>1/60</i>), ensimmäinen yhteydenmuodostusyritys aiheuttaa rikkomuksen. 1/60), the first connection attempt will result in a breach 1/60), ensimmäinen yhteysyritys johtaa rikkomiseen 1/60), ensimmäinen yhteysyritys johtaa rikkomiseen 1/60), ensimmäinen yhteysyritys johtaa rikkomiseen. 1/60), ensimmäinen yhteysyritys johtaa rikkomiseen"
 
 msgid "The keyword <i class=example>allow</i>. This threshold is never breached, i.e. an infinite number of connection attempts is permitted."
-msgstr "Avainsana <i class=example>allow</i>. Tätä kynnystä ei koskaan ylitetä, eli rajattomasti yhteysyrityksiä sallitaan."
+msgstr "Avainsana <i class=example>allow</i>. Tätä kynnystä ei koskaan ylitetä, eli rajattomasti yhteysyrityksiä sallitaan. e an infinite number of connection attempts is permitted e rajaton määrä yhteysyrityksiä on sallittu e rajaton määrä yhteysyrityksiä on sallittu e rajaton määrä yhteysyrityksiä on sallittu. e rajaton määrä yhteysyrityksiä on sallittu"
 
 msgid "The keyword <i class=example>deny</i>. This threshold is always breached, i.e. no connection attempts will be allowed."
-msgstr "Avainsana <i class=example>deny</i>. Tätä kynnystä rikotaan aina, eli mitään yhteysyrityksiä ei sallita."
+msgstr "Avainsana <i class=example>deny</i>. Tätä kynnystä rikotaan aina, eli mitään yhteysyrityksiä ei sallita. e no connection attempts will be allowed e yhteysyrityksiä ei sallita e yhteysyrityksiä ei sallita e yhteysyrityksiä ei sallita. e yhteysyrityksiä ei sallita"
 
 msgid "Default Threshold"
 msgstr "Oletuskynnys"
@@ -7450,7 +7965,7 @@ msgid "Share Ratio"
 msgstr "Osuusprosentti"
 
 msgid "The number of participating tunnels you route for others, divided by the total number of hops in all your exploratory and client tunnels. A number greater than 1.00 means you are contributing more tunnels to the network than you are using."
-msgstr "Muiden käyttäjien puolesta reitittämiesi osallistuvien tunnelien määrä jaettuna kaikkien tutkimus- ja asiakastunnistesi yhteisten hyppyjen määrällä. Luku yli 1,00 tarkoittaa, että tuot enemmän verkostotunneleita kuin käytät."
+msgstr "Muiden käyttäjien puolesta reitittämiesi osallistuvien tunnelien määrä jaettuna kaikkien tutkimus- ja asiakastunnistesi yhteisten hyppyjen määrällä. Luku yli 1,00 tarkoittaa, että tuot enemmän verkostotunneleita kuin käytät. 00 means you are contributing more tunnels to the network than you are using 00 tarkoittaa, että lisäät verkkoon enemmän tunneleita kuin käytät 00 tarkoittaa, että lisäät verkkoon enemmän tunneleita kuin käytät 00 tarkoittaa, että lisäät verkkoon enemmän tunneleita kuin käytät. 00 tarkoittaa, että lisäät verkkoon enemmän tunneleita kuin käytät"
 
 msgid "Some basic indications of router overload:"
 msgstr "Joitakin perusmerkkejä reitittimen ylikuormituksesta:"
@@ -7663,7 +8178,7 @@ msgid "Directory listings (sometimes referred to as virtual directories) are ena
 msgstr "Hakemistoluettelo (joskus kutsuttu virtuaalisiksi hakemistoiksi) on oletuksena käytössä, jolloin voit isännöidä tiedostoja <code>docroot</code>:n alahakemistosta ilman, että tarvitset sivua, jossa on linkkejä tiedostoihin. Voit myös palvella sisältöä, joka sijaitsee <code>docroot</code>:n ulkopuolella käyttämällä halutulle hakemistolle <a href=https://en.wikipedia.org/wiki/Symbolic_link target=_blank rel=noreferrer class='sitelink external'>symbolista linkkiä</a>."
 
 msgid "You can override the <a href=http://127.0.0.1:7658/help/images/>default appearance</a> of the directory listing by supplying an edited <a href=http://127.0.0.1:7658/.resources/jetty-dir.css>jetty-dir.css</a> file to set a global appearance. Note that this file will not be displayed in the webserver's directory listing. Files and directories prefixed with . and files named favicon.ico or files ending with ~ or .bak or .old will also be hidden from view (though still accessible). Note: To create hidden files with a . prefix on Windows, add a trailing . to the file or directory e.g. <code>.hidden.</code>; Windows explorer will then save the file with the correct name, removing the trailing dot in the process."
-msgstr "Hakemistoluettelon <a href=http://127.0.0.1:7658/help/images/>oletusnäkymän</a> voi korvata toimittamalla muokatun <a href=http://127.0.0.1:7658/.resources/jetty-dir.css>jetty-dir.css</a> tiedoston, jolla määritetään globaali ulkoasu. Huomaa, että tämä tiedosto ei näy palvelimen hakemistoluettelossa. Pisteellä alkavat tiedostot ja hakemistot sekä favicon.ico-tiedostot tai ~-tai .bak- tai .old-päätteiset tiedostot ovat myös piilossa (mutta silti saavutettavissa). Huomio: Windowsissa piilossa olevien tiedostojen luomiseksi pisteellä alkavilla nimillä lisää tiedoston tai hakemiston loppuun piste, esim. <code>.hidden.</code>; Windows Explorer tallentaa sitten tiedoston oikealla nimellä poistaen loppupiste."
+msgstr "Hakemistoluettelon <a href=http://127.0.0.1:7658/help/images/>oletusnäkymän</a> voi korvata toimittamalla muokatun <a href=http://127.0.0.1:7658/.resources/jetty-dir.css>jetty-dir.css</a> tiedoston, jolla määritetään globaali ulkoasu. Huomaa, että tämä tiedosto ei näy palvelimen hakemistoluettelossa. Pisteellä alkavat tiedostot ja hakemistot sekä favicon.ico-tiedostot tai ~-tai .bak- tai .old-päätteiset tiedostot ovat myös piilossa (mutta silti saavutettavissa). Huomio: Windowsissa piilossa olevien tiedostojen luomiseksi pisteellä alkavilla nimillä lisää tiedoston tai hakemiston loppuun piste, esim. <code>.hidden.</code>; Windows Explorer tallentaa sitten tiedoston oikealla nimellä poistaen loppupiste. to the file or directory e g hidden ; Windows explorer will then save the file with the correct name, removing the trailing dot in the process tiedostoon tai hakemistoon e g hidden ; Windows Explorer tallentaa sitten tiedoston oikealla nimellä ja poistaa lopussa olevan pisteen tiedostoon tai hakemistoon e g hidden ; Windows Explorer tallentaa sitten tiedoston oikealla nimellä ja poistaa lopussa olevan pisteen tiedostoon tai hakemistoon e g hidden ; Windows Explorer tallentaa sitten tiedoston oikealla nimellä ja poistaa lopussa olevan pisteen. tiedostoon tai hakemistoon e g piilotettu ;Windows Explorer tallentaa sitten tiedoston oikealla nimellä ja poistaa lopussa olevan pisteen"
 
 msgid "To disable directory listings, find the entry for <code>org.eclipse.jetty.servlet.Default.dirAllowed</code> in the <code>base-context.xml</code> file, located in the <code>eepsite/contexts</code> folder (just above docroot folder), and change 'true' to 'false' immediately underneath. To apply the change immediately, stop and restart the <i>I2P Webserver</i> client on the <a href=/configclients>Client Configuration page</a>. You can also drop an empty <code>index.html</code> file in any exposed directory to suppress directory listings for that location."
 msgstr "Hakemistoluettelojen poistamiseksi etsi tiedoston <code>base-context.xml</code> kohta <code>org.eclipse.jetty.servlet.Default.dirAllowed</code>, joka sijaitsee kansiossa <code>eepsite/contexts</code> (suoraan kohteen docroot-kansio yläpuolella) ja muuta sen arvo 'true' lukemasta 'false' lukioksi. Muutos otetaan välittömästi käyttöön, kun pysäytät ja käynnistät <i>I2P-palvelin</i> asiakkaan sivulla <a href=/configclients>Asiakaskonfiguraatiosivu</a>. Voit myös pudottaa tyhjän <code>index.html</code>-tiedoston mihin tahansa alttiiksi jäävään kansioon estääksesi hakemistoluettelot tässä sijainnissa."
@@ -7803,6 +8318,63 @@ msgstr "työjonotilastot"
 msgid "Job Queue Stats"
 msgstr "Työjonotilastot"
 
+msgid "Login"
+msgstr "Kirjaudu"
+
+msgid "Setup"
+msgstr "Asetukset"
+
+msgid "Select theme"
+msgstr "Valitse teema"
+
+msgid "Classic"
+msgstr "Klassinen"
+
+msgid "Dark"
+msgstr "Tumma"
+
+msgid "Light"
+msgstr "Vaalea"
+
+msgid "Midnight"
+msgstr "Yö"
+
+msgid "Select display language"
+msgstr "Valitse näyttökieli"
+
+msgid "Router is starting up..."
+msgstr "Reititin käynnistyy..."
+
+msgid "This page will refresh automatically"
+msgstr "Tämä sivu päivittyy automaattisesti"
+
+msgid "Confirm Password"
+msgstr "Vahvista salasana"
+
+msgid "Session Duration"
+msgstr "Istunnon kesto"
+
+msgid "15 minutes"
+msgstr "15 minuuttia"
+
+msgid "1 hour"
+msgstr "1 tunti"
+
+msgid "4 hours"
+msgstr "4 tuntia"
+
+msgid "8 hours"
+msgstr "8 tuntia"
+
+msgid "1 day"
+msgstr "1 päivä"
+
+msgid "Forever"
+msgstr "Ikuisesti"
+
+msgid "Set Password"
+msgstr "Aseta salasana"
+
 msgid "network database"
 msgstr "verkkotietokanta"
 
@@ -7897,6 +8469,21 @@ msgstr "tilastot"
 msgid "Router Statistics"
 msgstr "Reitittimen tilastot"
 
+msgid "streaming connections"
+msgstr "streaming-yhteydet"
+
+msgid "Streaming Connections"
+msgstr "Streaming-yhteydet"
+
+msgid "Active I2P streaming connections"
+msgstr "Aktiiviset I2P streaming-yhteydet"
+
+msgid "Local Tunnels"
+msgstr "Paikalliset tunnelit"
+
+msgid "Most Recent"
+msgstr "Uusin"
+
 msgid "torrents"
 msgstr "torrentit"
 
@@ -7908,9 +8495,6 @@ msgstr "Viimeisimmät kauttakulkutunnelit"
 
 msgid "Locally hosted tunnels (exploratory and client)"
 msgstr "Paikallisesti isännöidyt tunnelit (tutkimus- ja asiakastunnelit)"
-
-msgid "Most Recent"
-msgstr "Uusin"
 
 msgid "Fastest"
 msgstr "Nopein"
@@ -7933,9 +8517,6 @@ msgstr "tunnelin vertaismäärä"
 msgid "local tunnels"
 msgstr "paikalliset tunnelit"
 
-msgid "Local Tunnels"
-msgstr "Paikalliset tunnelit"
-
 msgid "Toggle Tunnel Ids"
 msgstr "Käytä/loptaa tunneltunnisteita"
 
@@ -7944,6 +8525,9 @@ msgstr "Käytä/loptaa tuneleja"
 
 msgid "Peer Profile"
 msgstr "Vertaisprofiili"
+
+msgid "Session Bans"
+msgstr "Istuntokiellot"
 
 msgid "Profile View"
 msgstr "Profiilinäkymä"

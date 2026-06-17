@@ -41,6 +41,12 @@ msgstr "kõrgem bändlaius ja usaldusväärsus"
 msgid "Error - tunnels are not initialized yet"
 msgstr "Viga - tunnelid pole veel lähtestatud"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Vigane vormi saatmine, tõenäoliselt seetõttu, et kasutasite oma brauseris nuppu 'tagasi' või 'värskenda'. Palun saatke uuesti."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Kui probleem jätkub, kontrollige, et teie brauseris on küpsised lubatud."
+
 msgid "No services configured, cannot restart!"
 msgstr "Ühtegi teenust pole seadistatud, ei saa taaskäivitada!"
 
@@ -614,6 +620,39 @@ msgstr "Uus serveri seadistus"
 msgid "Hostname"
 msgstr "Majandajanime"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Juhuslik käivitusviivitus (kui automaatkäivitus on lubatud), et kaitsta korrelatsioonirünnakute eest"
+
+msgid "Startup Delay"
+msgstr "Käivitusviivitus"
+
+msgid "Minimum"
+msgstr "Miinimum"
+
+msgid "Minimum startup delay"
+msgstr "Minimaalne käivitusviivitus"
+
+msgid "seconds"
+msgstr "sekundit"
+
+msgid "Maximum"
+msgstr "Maksimum"
+
+msgid "Maximum startup delay"
+msgstr "Maksimaalne käivitusviivitus"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Lisage juhuslik viivitus enne tunneli seiskamist, seejärel alustage sujuvat ruuteri seiskamise/taaskäivitamise protsessi"
+
+msgid "Shutdown Delay"
+msgstr "Seiskamisviivitus"
+
+msgid "Minimum shutdown delay"
+msgstr "Minimaalne seiskamisviivitus"
+
+msgid "Maximum shutdown delay"
+msgstr "Maksimaalne seiskamisviivitus"
+
 msgid "Website Hostname"
 msgstr "Veebilehe majandajanime"
 
@@ -1095,8 +1134,8 @@ msgstr "Eelvaade puudub"
 msgid "Starting..."
 msgstr "Käivitamine..."
 
-msgid "Stop this Tunnel"
-msgstr "Peata see tunnel"
+msgid "Starting in"
+msgstr "Käivitub"
 
 msgid "Running"
 msgstr "Töötab"
@@ -1110,14 +1149,17 @@ msgstr "sisse"
 msgid "out"
 msgstr "välja"
 
+msgid "Stopped"
+msgstr "Peatatud"
+
+msgid "Stop this Tunnel"
+msgstr "Peata see tunnel"
+
 msgid "Restart this Tunnel"
 msgstr "Taaskäivita see tunnel"
 
 msgid "Restart"
 msgstr "Taaskäivita"
-
-msgid "Stopped"
-msgstr "Peatatud"
 
 msgid "Destination"
 msgstr "Sihtkoht"
@@ -1293,12 +1335,6 @@ msgstr "Genereeri Autentimine"
 
 msgid "SSL Helper"
 msgstr "SSL Abi"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Vigane vormi saatmine, tõenäoliselt seetõttu, et kasutasite oma brauseris nuppu 'tagasi' või 'värskenda'. Palun saatke uuesti."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Kui probleem jätkub, kontrollige, et teie brauseris on küpsised lubatud."
 
 msgid "Experts only!"
 msgstr "Vaid ekspertidele!"

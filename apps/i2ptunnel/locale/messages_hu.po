@@ -41,6 +41,12 @@ msgstr "nagyobb sávszélesség és megbízhatóság"
 msgid "Error - tunnels are not initialized yet"
 msgstr "Hiba - az alagutak még nem lettek inicializálva"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Űrlap küldése sikertelen, valószínűleg a 'vissza' vagy 'újratöltés' gombokat használtad a böngésződben. Kérlek, hogy küldd újra."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Ha a probléma fennáll, ellenőrizd, hogy a sütik engedélyezve vannak-e a böngésződben."
+
 msgid "No services configured, cannot restart!"
 msgstr "Nincs szolgáltatás konfigurálva, nem lehet újraindítani!"
 
@@ -614,6 +620,39 @@ msgstr "Új kiszolgálókonfiguráció"
 msgid "Hostname"
 msgstr "Gépnév"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Véletlenszerű indítási késleltetés (ha az automatikus indítás engedélyezett) a korrelációs támadások elleni védelemhez"
+
+msgid "Startup Delay"
+msgstr "Indítási késleltetés"
+
+msgid "Minimum"
+msgstr "Minimum"
+
+msgid "Minimum startup delay"
+msgstr "Minimális indítási késleltetés"
+
+msgid "seconds"
+msgstr "másodperc"
+
+msgid "Maximum"
+msgstr "Maximum"
+
+msgid "Maximum startup delay"
+msgstr "Maximális indítási késleltetés"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Véletlenszerű késleltetés hozzáadása a tunel leállítása előtt, majd a router fokozatos leállításának/újraindításának megkezdése"
+
+msgid "Shutdown Delay"
+msgstr "Leállítási késleltetés"
+
+msgid "Minimum shutdown delay"
+msgstr "Minimális leállítási késleltetés"
+
+msgid "Maximum shutdown delay"
+msgstr "Maximális leállítási késleltetés"
+
 msgid "Website Hostname"
 msgstr "Webhely gazdagépneve"
 
@@ -1095,8 +1134,8 @@ msgstr "Nincs Előnézet"
 msgid "Starting..."
 msgstr "Indítás..."
 
-msgid "Stop this Tunnel"
-msgstr "Alagút Leállítása"
+msgid "Starting in"
+msgstr "Indítás ennyi idő múlva"
 
 msgid "Running"
 msgstr "Fut"
@@ -1110,14 +1149,17 @@ msgstr "be"
 msgid "out"
 msgstr "ki"
 
+msgid "Stopped"
+msgstr "Leállítva"
+
+msgid "Stop this Tunnel"
+msgstr "Alagút Leállítása"
+
 msgid "Restart this Tunnel"
 msgstr "Alagút újraindítása"
 
 msgid "Restart"
 msgstr "Újraindítás"
-
-msgid "Stopped"
-msgstr "Leállítva"
 
 msgid "Destination"
 msgstr "Célállomás"
@@ -1293,12 +1335,6 @@ msgstr "Hitelesítés generálása"
 
 msgid "SSL Helper"
 msgstr "SSL segítő"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Űrlap küldése sikertelen, valószínűleg a 'vissza' vagy 'újratöltés' gombokat használtad a böngésződben. Kérlek, hogy küldd újra."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Ha a probléma fennáll, ellenőrizd, hogy a sütik engedélyezve vannak-e a böngésződben."
 
 msgid "Experts only!"
 msgstr "Csak szakértők!"

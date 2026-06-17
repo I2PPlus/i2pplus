@@ -41,6 +41,12 @@ msgstr "högre bandbredd och pålitlighet"
 msgid "Error - tunnels are not initialized yet"
 msgstr "Fel - tunnlar är inte initialiserade ännu"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Ogiltig formulärinlämning, förmodligen för att du använde 'tillbaka' eller 'reload'-knappen i din webbläsare. Ogiltig formulärinlämning, förmodligen för att du använde 'tillbaka' eller 'reload'-knappen i din webbläsare. Ogiltig formulärinlämning, förmodligen för att du använde 'tillbaka' eller 'reload'-knappen i din webbläsare. Ogiltigt formulärbegäran, beror troligtvis på att du använde knappen \"tillbaka\" eller \"uppdatera\". Försök att skicka igen."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Om problemet kvarstår, kontrollera att du har aktiverat cookies i din webbläsare.Om problem kvartstår, bekräfta att du har cookies påslaget i din browser."
+
 msgid "No services configured, cannot restart!"
 msgstr "Inga tjänster konfigurerade, kan inte starta om!"
 
@@ -614,6 +620,39 @@ msgstr "Ny serverkonfiguration"
 msgid "Hostname"
 msgstr "Värdnamn"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Slumpmässig startfördröjning (när automatisk start är aktiverad) för att försvara sig mot korrelationsattacker"
+
+msgid "Startup Delay"
+msgstr "Startfördröjning"
+
+msgid "Minimum"
+msgstr "Minimum"
+
+msgid "Minimum startup delay"
+msgstr "Minsta startfördröjning"
+
+msgid "seconds"
+msgstr "sekunder"
+
+msgid "Maximum"
+msgstr "Maximum"
+
+msgid "Maximum startup delay"
+msgstr "Största startfördröjning"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Lägg till slumpmässig fördröjning före tunnelavstängning, påbörja sedan en mjuk avstängning/omstart av routern"
+
+msgid "Shutdown Delay"
+msgstr "Avstängningsfördröjning"
+
+msgid "Minimum shutdown delay"
+msgstr "Minsta avstängningsfördröjning"
+
+msgid "Maximum shutdown delay"
+msgstr "Största avstängningsfördröjning"
+
 msgid "Website Hostname"
 msgstr "Webbplatsens värdnamn"
 
@@ -1095,8 +1134,8 @@ msgstr "Ingen förhandsvisning"
 msgid "Starting..."
 msgstr "Startar..."
 
-msgid "Stop this Tunnel"
-msgstr "Stoppa denna tunnel"
+msgid "Starting in"
+msgstr "Startar om"
 
 msgid "Running"
 msgstr "Kör"
@@ -1110,14 +1149,17 @@ msgstr "i"
 msgid "out"
 msgstr "ut"
 
+msgid "Stopped"
+msgstr "Stoppad"
+
+msgid "Stop this Tunnel"
+msgstr "Stoppa denna tunnel"
+
 msgid "Restart this Tunnel"
 msgstr "Starta om denna tunnel"
 
 msgid "Restart"
 msgstr "Starta om"
-
-msgid "Stopped"
-msgstr "Stoppad"
 
 msgid "Destination"
 msgstr "Destination"
@@ -1293,12 +1335,6 @@ msgstr "Generera autentisering"
 
 msgid "SSL Helper"
 msgstr "SSL Hjälpare"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Ogiltig formulärinlämning, förmodligen för att du använde 'tillbaka' eller 'reload'-knappen i din webbläsare. Ogiltig formulärinlämning, förmodligen för att du använde 'tillbaka' eller 'reload'-knappen i din webbläsare. Ogiltig formulärinlämning, förmodligen för att du använde 'tillbaka' eller 'reload'-knappen i din webbläsare. Ogiltigt formulärbegäran, beror troligtvis på att du använde knappen \"tillbaka\" eller \"uppdatera\". Försök att skicka igen."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Om problemet kvarstår, kontrollera att du har aktiverat cookies i din webbläsare.Om problem kvartstår, bekräfta att du har cookies påslaget i din browser."
 
 msgid "Experts only!"
 msgstr "Endast Experter!"

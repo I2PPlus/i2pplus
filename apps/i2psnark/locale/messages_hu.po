@@ -104,9 +104,6 @@ msgstr "Az összes torrent megállítása a adatkönyvtár változtatásának el
 msgid "Data directory must be an absolute path"
 msgstr "Az adatkönyvtár elérési útjának abszolútnak kell lennie"
 
-msgid "Data directory does not exist"
-msgstr "Az adatkönyvtár nem létezik"
-
 msgid "Not a directory"
 msgstr "Nem könyvtár"
 
@@ -278,10 +275,6 @@ msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disab
 msgstr "Figyelem! Nincsenek I2P-követők a \"{0}\" mappában, és a DHT és a nyílt nyomkövetők le vannak tiltva. A torrent elindítása előtt engedélyeznie kell a nyílt nyomkövetőket vagy a DHT-t."
 
 #, java-format
-msgid "Fetching {0}"
-msgstr "Leszedés: {0}"
-
-#, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
 msgstr "A nyílt nyomkövetők le vannak tiltva, és nincs DHT-társunk. Előfordulhat, hogy a(z) {0} letöltése nem sikerül addig, amíg el nem indít egy másik torrentet, engedélyezi a nyílt nyomkövetőket vagy a DHT-t."
 
@@ -442,6 +435,9 @@ msgstr "A(z) {0} torrent újraellenőrzése befejeződött, változatlan"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Hiba a torrent ellenőrzése során {0}"
+
+msgid "Data directory does not exist"
+msgstr "Az adatkönyvtár nem létezik"
 
 msgid "Cannot create diskspace bar"
 msgstr "A lemezterület-sáv nem hozható létre"

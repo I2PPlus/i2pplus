@@ -689,6 +689,9 @@ msgstr "Pärast teatamist taaskäivitage ruuter"
 msgid "Invalid form submission, requires POST"
 msgstr "Kehtetu vormi esitamine, nõuab POST-päringut"
 
+msgid "Too many form submissions, please try again later"
+msgstr "Liiga palju vormisaadetisi, proovige hiljem uuesti"
+
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Kehtetu vormipostitus, kasutasid ehk brauseri 'back' või 'reload' nuppu. Saada vorm uuesti."
 
@@ -752,31 +755,26 @@ msgstr[1] "{0} pluginaid värskendatud"
 msgid "Plugin check complete"
 msgstr "pistikprogrammi kontroll on lõpetatud"
 
-msgid "none"
-msgstr "puudub"
-
-msgid "Permanently banned"
-msgstr "Püsivalt keelatud"
-
-#, java-format
-msgid "Temporary ban expiring in {0}"
-msgstr "Ajutine bänn, aegub {0} pärast"
-
-#, java-format
-msgid "Banned for {0} / until restart"
-msgstr "Keelatud {0} / kuni taaskäivitamiseni"
-
-msgid "unban now"
-msgstr "tühista bänn"
-
 msgid "No bans currently active"
 msgstr "Hetkel ei ole aktiivseid keelde"
 
+msgid "Country"
+msgstr "Maa"
+
+msgid "Version"
+msgstr "Versioon"
+
+msgid "IP Address"
+msgstr "IP-aadress"
+
+msgid "Port"
+msgstr "Sadam"
+
+msgid "Hostname"
+msgstr "Hostinimi"
+
 msgid "Reason"
 msgstr "Põhjus"
-
-msgid "Router Hash"
-msgstr "Ruuteri ID/hash"
 
 msgid "Expiry"
 msgstr "Kehtivusaeg"
@@ -835,6 +833,15 @@ msgstr "NB"
 msgid "Some changes may require a restart to take effect."
 msgstr "Mõned muutused vajavad jõustumiseks uuesti käivitamist."
 
+msgid "All session bans and blocklists cleared"
+msgstr "Kõik seansi keelud ja blokeerimisnimekirjad on tühjendatud"
+
+msgid "Ban settings reset to defaults"
+msgstr "Keeluseaded on taastatud vaikeväärtustele"
+
+msgid "Ban configuration updated"
+msgstr "Keeluseaded on uuendatud"
+
 msgid "Save Client Configuration"
 msgstr "Salvesta kliendihäälestus"
 
@@ -881,9 +888,6 @@ msgstr "Peatati plugin {0}"
 #, java-format
 msgid "Stopped webapp {0}"
 msgstr "peatatud veebirakendus {0}"
-
-msgid "Start"
-msgstr "Käivita"
 
 msgid "Client configuration saved successfully"
 msgstr "Kliendi konfiguratsioon salvestati edukalt"
@@ -975,9 +979,6 @@ msgstr "lisatud kasutaja {0}"
 msgid "Interface configuration saved"
 msgstr "liidese konfiguratsioon on salvestatud"
 
-msgid "Edit"
-msgstr "Muuda"
-
 msgid "Add Client"
 msgstr "Lisa klient"
 
@@ -1017,9 +1018,6 @@ msgstr "E-post"
 msgid "Plugin"
 msgstr "Plugin"
 
-msgid "Version"
-msgstr "Versioon"
-
 msgid "Author"
 msgstr "Autor"
 
@@ -1032,8 +1030,14 @@ msgstr "Uuenduse link"
 msgid "License"
 msgstr "Litsents"
 
+msgid "Start"
+msgstr "Käivita"
+
 msgid "Stop"
 msgstr "Peata"
+
+msgid "Edit"
+msgstr "Muuda"
 
 msgid "Update"
 msgstr "Uuenda"
@@ -1198,6 +1202,9 @@ msgstr "Pimestatud otsinguparooliga"
 msgid "Blinded"
 msgstr "Pimestatud"
 
+msgid "none"
+msgstr "puudub"
+
 msgid "Log overrides updated"
 msgstr "Logimise erandkäsud uuendatud"
 
@@ -1290,6 +1297,9 @@ msgstr "Veebirakendused"
 
 msgid "Advanced"
 msgstr "Peenhäälestus"
+
+msgid "Bans"
+msgstr "Keelud"
 
 msgid "Reseeding"
 msgstr "Hangin ruuterite kontakte"
@@ -1529,6 +1539,14 @@ msgstr "Käivitu uuesti"
 msgid "Shutdown"
 msgstr "Lülitu välja"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr "Edasi lükatud taaskäivitus {0} jaoks kuni kõik serverid on peatunud"
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr "Edasi lükatud sulgemine {0} jaoks kuni kõik serverid on peatunud"
+
 msgid "Restart imminent"
 msgstr "Käivitun kohe uuesti"
 
@@ -1702,6 +1720,9 @@ msgstr "HOIATUS: Kasutajanimesid väljaspool ISO-8859-1 tähemärgikomplekti pol
 msgid "No password entered"
 msgstr "parooli pole sisestatud"
 
+msgid "Password must be at least 8 characters"
+msgstr "Parool peab olema vähemalt 8 tähemärki"
+
 #, java-format
 msgid "To recover from a forgotten or non-working password, stop I2P, edit the file {0}, delete the line {1}, and restart I2P."
 msgstr "Unustatud või mittetöötava parooli taastamiseks peatage I2P, muutke faili {0}, kustutage rida {1} ja taaskäivitage I2P."
@@ -1749,8 +1770,8 @@ msgstr "Parool"
 msgid "Please supply a username"
 msgstr "Sisestage kasutajanimi"
 
-msgid "Please supply a password"
-msgstr "Sisestage parool"
+msgid "Please supply a password (minimum 8 characters)"
+msgstr "Palun sisestage parool (vähemalt 8 tähemärki)"
 
 msgid "Aborted startup"
 msgstr "Käivitamine katkestati"
@@ -2186,9 +2207,6 @@ msgstr "Võrkudevaheline mikroblogimine"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Redditi alternatiivne privaatsusele keskendunud kasutajaliides"
 
-msgid "AI Image generation & Chat hub"
-msgstr "AI pildi loomise ja vestluse keskus"
-
 msgid "IRC Logs for multiple networks"
 msgstr "IRC logid mitme võrgu jaoks"
 
@@ -2439,9 +2457,6 @@ msgstr "Identiteet"
 msgid "Network Database entry"
 msgstr "Võrguandmebaasi kirje"
 
-msgid "IP Address"
-msgstr "IP-aadress"
-
 msgid "UDP Port"
 msgstr "UDP port"
 
@@ -2536,28 +2551,49 @@ msgstr "Ruuteri transpordiprotokollide aadressid"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} kasutatakse vaid välja ühendumiseks"
 
-msgid "Job runners"
-msgstr "tööjooksjad"
+#, java-format
+msgid "Delayed: {0}"
+msgstr "Viivitatud: {0}"
+
+#, java-format
+msgid "Average: {0}µs"
+msgstr "Keskmine: {0}µs"
+
+#, java-format
+msgid "Average: {0}"
+msgstr "Keskmine: {0}"
 
 msgid "Active jobs"
 msgstr "Aktiivsed tööd"
 
 #, java-format
-msgid "started {0} ago"
-msgstr "algas {0} tagasi"
+msgid "Duration: {0}"
+msgstr "Kestus: {0}"
 
 msgid "Just finished jobs"
 msgstr "just lõpetatud tööd"
+
+msgid "finished just now"
+msgstr "lõpetas just praegu"
 
 #, java-format
 msgid "finished {0} ago"
 msgstr "lõpetas {0} tagasi"
 
+#, java-format
+msgid "Dropped: {0}"
+msgstr "Loobutud: {0}"
+
 msgid "Ready / waiting jobs"
 msgstr "Valmis/ootel tööd"
 
-msgid "waiting"
-msgstr "ootan"
+#, java-format
+msgid "waiting {0}"
+msgstr "ootamas {0}"
+
+#, java-format
+msgid "Max wait: {0}"
+msgstr "Maks ootamine: {0}"
 
 msgid "Scheduled jobs"
 msgstr "Plaanilised tööd"
@@ -2566,17 +2602,24 @@ msgstr "Plaanilised tööd"
 msgid "{0} starting in {1}"
 msgstr "{0} algab {1} pärast"
 
-msgid "DELAYED"
-msgstr "HILINEB"
-
-msgid "OUT OF ORDER"
-msgstr "VÄLJAS"
+#, java-format
+msgid "Runners: {0} / {1}"
+msgstr "Täitjad: {0} / {1}"
 
 msgid "Queue Totals"
 msgstr "Järjekorra summad"
 
 msgid "Job Statistics"
 msgstr "Tööstatistika (v.a ühekordsed tööd)"
+
+msgid "last 10s"
+msgstr "viimased 10s"
+
+msgid "All Stats"
+msgstr "Kõik Statistikad"
+
+msgid "Last 10s"
+msgstr "Viimased 10s"
 
 msgid "Job"
 msgstr "Töö"
@@ -2646,9 +2689,6 @@ msgstr "nt f või XOfR"
 
 msgid "Cost"
 msgstr "Maksumus"
-
-msgid "Country"
-msgstr "Maa"
 
 msgid "Country Codes"
 msgstr "Riigikoodid"
@@ -2920,9 +2960,6 @@ msgstr "Peidetud"
 
 msgid "Published"
 msgstr "Avaldatud"
-
-msgid "Hostname"
-msgstr "Hostinimi"
 
 msgid "Whois"
 msgstr "Whois"
@@ -3364,11 +3401,14 @@ msgstr "Vaata/redigeeri"
 msgid "OK"
 msgstr "OK"
 
-msgid "Test Fails"
-msgstr "Testis läbikukkuvad"
+msgid "tests passed"
+msgstr "testid läbitud"
 
 msgid "Unreachable"
 msgstr "Kättesaadamatud"
+
+msgid "Test Fails"
+msgstr "Testis läbikukkuvad"
 
 msgid "Most tests passing"
 msgstr "Enamik testid läbivad"
@@ -3528,19 +3568,6 @@ msgstr "mitmest uuest ruuterist nad meile hiljuti rääkinud on?"
 msgid "All"
 msgstr "Kõik"
 
-msgid "Session Bans"
-msgstr "Seansi keelud"
-
-msgid "Total number of banned peers"
-msgstr "keelatud kaaslaste koguarv"
-
-msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr "Märkus: 'LU' klassi ruuterid on loendist välja jäetud."
-
-#, java-format
-msgid "To view, see {0}Session Bans{1}."
-msgstr "Nägemiseks, vt {0}Sessiooni Keelustamiseid{1}."
-
 msgid "Select search engine"
 msgstr "valige otsingumootor"
 
@@ -3628,6 +3655,12 @@ msgstr "Ehitan tunneleid"
 
 msgid "Shared Clients"
 msgstr "jagatud kliendid"
+
+msgid "Ping"
+msgstr "Ping"
+
+msgid "I2Ping"
+msgstr "I2Ping"
 
 msgid "Click Restart to install"
 msgstr "Käivita uuesti et paigaldada"
@@ -3858,6 +3891,12 @@ msgstr "Näita hiljutisi ruuterite jõudluse profiile"
 msgid "View existing tunnels and tunnel build status"
 msgstr "Vaata tunnelite ja nende ehitamise staatust"
 
+msgid "Streams"
+msgstr "Vood"
+
+msgid "View active streaming connections"
+msgstr "Vaata aktiivseid vooguhendusi"
+
 msgid "Advanced Configuration"
 msgstr "Täpsem konfiguratsioon"
 
@@ -4010,8 +4049,8 @@ msgstr "Meie sissetulev ja väljaminev liiklus viimase 20 minuti jooksul"
 msgid "Total number of tunnels in use"
 msgstr "kasutusel olevate tunnelite koguarv"
 
-msgid "Average tunnel build success for last 10m interval"
-msgstr "Tunneli ehitamise keskmine edu viimase 10 m intervalli jooksul"
+msgid "Tunnel build success (higher of 1m or 10m average)"
+msgstr "Tunneli ehituse õnnestumine (kõrgem 1m või 10m keskmine)"
 
 msgid "Tunnels we are using to provide or access services on the network"
 msgstr "tunnelid, mida kasutame võrguteenuste pakkumiseks või neile juurdepääsuks"
@@ -4040,8 +4079,8 @@ msgstr "samaaegsed tunneliehitused (keskmiselt üle minuti) / ühe tunneli ehita
 msgid "Concurrency"
 msgstr "Samaaegsus"
 
-msgid "Combined utility and service tunnel build success (averaged over 10 minute intervals)"
-msgstr "kombineeritud utiliidi ja teenindustunneli ehitamise edu (keskmiselt 10-minutilise intervalliga)"
+msgid "Combined utility and service tunnel build success (higher of 1m or 10m average)"
+msgstr "Kombineeritud kasulikkuse ja teenuse tunneli ehituse õnnestumine (kõrgem 1m või 10m keskmine)"
 
 msgid "Build Success"
 msgstr "Edu saavutamine"
@@ -4185,8 +4224,8 @@ msgstr "Käivitage uus analüüs"
 msgid "Configure periodic analysis"
 msgstr "perioodilise analüüsi konfigureerimine"
 
-msgid "Review current bans"
-msgstr "vaadake üle kehtivad keelud"
+msgid "Review session bans"
+msgstr "Vaata üle seansi keelud"
 
 msgid "Delete Sybil Blocklist"
 msgstr "Kustuta Sybil-blokeerimine"
@@ -4236,8 +4275,14 @@ msgstr "Alusta skanneerimist"
 msgid "Run analysis on all routers in NetDb"
 msgstr "Käivitage analüüs kõigis NetDb ruuterites"
 
-msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, with the option to block peers meeting the configured threshold. Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."
-msgstr "SYBIL -i tuvastamise rutiini saab konfigureerida võrguandmebaasi regulaarsel intervallil, võimalusega blokeerida eakaaslased konfigureeritud lävele vastavaid. Blokeerivad eakaaslased takistavad teie ruuteril tunnelite ehitamist koos nendega konfigureeritud kestuse jaoks või kuni ruuteri taaskäivitamiseni."
+msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, "
+msgstr "Sybil-tuvastusrutiini saab seadistada skannima võrguandmebaasi regulaarsete intervallide järel, "
+
+msgid "with the option to block peers meeting the configured threshold. "
+msgstr "võimalusega blokeerida kaaslasi, kes vastavad seadistatud läviväärtusele. "
+
+msgid "Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."
+msgstr "Kaaslaste blokeerimine takistab teie ruuteril tunnelite ehitamist nendega seadistatud kestuse jooksul või kuni ruuteri taaskäivitamiseni."
 
 msgid "Configure Background Analysis"
 msgstr "taustaanalüüsi seadistamine"
@@ -4467,22 +4512,11 @@ msgstr "Sisenev lüüs"
 msgid "Participant"
 msgstr "Osaleja"
 
-msgid "sec"
-msgstr "sek"
-
 msgid "grace period"
 msgstr "lisaajal"
 
 msgid "Tunnel identity"
 msgstr "Tunneli identiteet"
-
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "kuvatakse ainult {0} kõige suurema kasutusega tunnelites"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "kuvatakse ainult {0} viimast tunnelit"
 
 msgid "Lifetime bandwidth usage"
 msgstr "Tööea vältel siirdatud andmemaht"
@@ -4537,6 +4571,12 @@ msgstr "sissetulev või väljaminev?"
 msgid "In/Out"
 msgstr "Sisse/Välja"
 
+msgid "Tunnel test status"
+msgstr "Tunneli testimise olek"
+
+msgid "Latency"
+msgstr "Latentsus"
+
 msgid "Gateway"
 msgstr "Lüüs"
 
@@ -4546,11 +4586,30 @@ msgstr "Osalejad"
 msgid "Endpoint"
 msgstr "Otspunkt"
 
+msgid "Test successful"
+msgstr "Test õnnestus"
+
+msgid "Test in progress"
+msgstr "Test käib"
+
+#, java-format
+msgid "Test failing (failures: {0})"
+msgstr "Test ebaõnnestub (ebaõnnestumisi: {0})"
+
+msgid "Test failed (3 consecutive failures)"
+msgstr "Test ebaõnnestus (3 järjestikust ebaõnnestumist)"
+
+msgid "Tunnel too slow - scheduled for early expiry"
+msgstr "Tunnel liiga aeglane - määratud ennetähtaegseks aegumiseks"
+
+msgid "Pool over budget - scheduled for early expiry"
+msgstr "Kogum üle eelarve - määratud ennetähtaegseks aegumiseks"
+
+msgid "Not yet tested"
+msgstr "Veel testitud"
+
 msgid "Locally hosted tunnel"
 msgstr "Kohalikult hostitud tunnel"
-
-msgid "Build in progress"
-msgstr "Ehitamine pooleli"
 
 msgid "in"
 msgstr "sisse"
@@ -4566,6 +4625,9 @@ msgstr "Tunneli nimi"
 
 msgid "Data Out"
 msgstr "Andmed väljas"
+
+msgid "Active / Configured"
+msgstr "Aktiivsed / Seadistatud"
 
 msgid "Console language saved."
 msgstr "konsooli keel on salvestatud."
@@ -4836,6 +4898,123 @@ msgstr "Abi lisakonfiguratsiooni sätetega"
 msgid "To make changes, edit the file: {0}"
 msgstr "Muudatuste tegemiseks redigeerige faili: {0}"
 
+msgid "config bans"
+msgstr "seadista keelde"
+
+msgid "Ban Configuration"
+msgstr "Keeluseaded"
+
+msgid "Custom Router Ban Policies"
+msgstr "Kohandatud ruuteri keelupoliitikad"
+
+msgid "IP Blocklists"
+msgstr "IP blokeerimisnimekirjad"
+
+msgid "Ban IP addresses from blocklist.txt. Disabling will purge all blocked IPs."
+msgstr "Blokeeri IP-aadressid failist blocklist.txt. Keelamine puhastab kõik blokeeritud IP-d."
+
+msgid "Enable IP blocklist"
+msgstr "Luba IP blokeerimisnimekiri"
+
+msgid "Ban Tor exit node IPs from blocklist_tor.txt. Disabling will purge all blocked IPs."
+msgstr "Blokeeri Tor väljumissõlmede IP-d failist blocklist_tor.txt. Keelamine puhastab kõik blokeeritud IP-d."
+
+msgid "Enable Tor exit node blocklist"
+msgstr "Luba Tor väljumissõlme blokeerimisnimekiri"
+
+msgid "Country Bans"
+msgstr "Riigipõhised keelud"
+
+msgid "Ban routers from your own country until router restart"
+msgstr "Blokeeri ruuterid teie enda riigist kuni ruuteri taaskäivitamiseni"
+
+msgid "Ban peers in my country"
+msgstr "Blokeeri kaaslased minu riigis"
+
+msgid "Ban routers from specified countries until router restart"
+msgstr "Blokeeri ruuterid määratud riikidest kuni ruuteri taaskäivitamiseni"
+
+msgid "Enable country-based bans"
+msgstr "Luba riigipõhised keelud"
+
+msgid "Country codes"
+msgstr "Riigikoodid"
+
+msgid "Add county codes, separated by spaces or commas e.g. cn,de"
+msgstr "Lisage riigikoodid, eraldatud tühikute või komadega nt cn,de"
+
+msgid "Network Abuse"
+msgstr "Võrgu kuritarvitamine"
+
+msgid "Ban peers that send malformed packets"
+msgstr "Blokeeri kaaslased, kes saadavad vigaseid pakette"
+
+msgid "Ban peers sending malformed packets"
+msgstr "Blokeeri kaaslased, kes saadavad vigaseid pakette"
+
+msgid "Ban peers with corrupt connections during handshake"
+msgstr "Blokeeri kaaslased rikutud ühendustega kättlusperioodil"
+
+msgid "Ban peers with corrupt connections"
+msgstr "Blokeeri kaaslased rikutud ühendustega"
+
+msgid "Ban peers that rapidly change their ports"
+msgstr "Blokeeri kaaslased, kes vahetavad kiiresti oma porte"
+
+msgid "Ban peers attempting port hopping"
+msgstr "Blokeeri kaaslased, kes proovivad pordihüpet"
+
+msgid "Ban peers sending excessive unsolicited search replies"
+msgstr "Blokeeri kaaslased, kes saadavad liigselt soovimatuid otsinguvastuseid"
+
+msgid "Ban peers sending fake/slow search replies"
+msgstr "Blokeeri kaaslased, kes saadavad võltsitud/aeglaseid otsinguvastuseid"
+
+msgid "Abuse Thresholds"
+msgstr "Kuritarvitamise läviväärtused"
+
+msgid "Startup grace period"
+msgstr "Käivitusperiood"
+
+msgid "Ban duration"
+msgstr "Keelu kestus"
+
+msgid "Max offenses"
+msgstr "Maksimaalsed rikkumised"
+
+msgid "Period during which offenses are counted"
+msgstr "Periood, mille jooksul rikkumisi arvestatakse"
+
+msgid "Offense window"
+msgstr "Rikkumiste aken"
+
+msgid "Bans by Capability"
+msgstr "Keelud võimekuse järgi"
+
+msgid "Ban XG tier routers - unlimited bandwidth but not hosting transit tunnels (probably botnet participant)"
+msgstr "Blokeeri XG-taseme ruuterid - piiramatu ribalaius, kuid ilma transiittunneliteta (tõenäoliselt botneti osaline)"
+
+msgid "Ban XG routers"
+msgstr "Blokeeri XG ruuterid"
+
+msgid "Ban LU tier routers - low bandwidth and unreachable/firewalled"
+msgstr "Blokeeri LU-taseme ruuterid - madal ribalaius ja kättesaamatud/tulemüüriga"
+
+msgid "Ban LU routers"
+msgstr "Blokeeri LU ruuterid"
+
+msgid "Additional Router Caps"
+msgstr "Täiendavad ruuteri võimekused"
+
+msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG"
+msgstr "Lisage võimekuste rühmad, eraldatud tühikute või komadega nt LUf,PUG"
+
+msgid "Clear all bans"
+msgstr "Puhasta kõik keelud"
+
+msgid "Reset to defaults"
+msgstr "Taasta vaikeväärtused"
+
 msgid "config clients"
 msgstr "config kliendid"
 
@@ -4864,7 +5043,7 @@ msgid "To change client options, edit the file: {0}"
 msgstr "Kliendi valikute muutmiseks muutke faili: {0}"
 
 msgid "Be careful changing any settings here. The 'router console' and 'application tunnels' are required for most uses of I2P. Only advanced users should change these."
-msgstr "Olge siinsete sätete muutmisel ettevaatlik. "
+msgstr "Olge siinsete sätete muutmisel ettevaatlik. \"Ruuteri konsool\" ja \"rakenduse tunnelid\" on enamiku I2P kasutuste jaoks vajalikud Ainult kogenud kasutajad peaksid neid muutma \"Ruuteri konsool\" ja \"rakenduse tunnelid\" on enamiku I2P kasutuste jaoks vajalikud Ainult kogenud kasutajad peaksid neid muutma \"Ruuteri konsool\" ja \"rakenduse tunnelid\" on enamiku I2P kasutuste jaoks vajalikud Ainult kogenud kasutajad peaksid neid muutma. \"Ruuteri konsool\" ja \"rakenduse tunnelid\" on enamiku I2P kasutuste jaoks vajalikud Ainult kogenud kasutajad peaksid neid muutma"
 
 msgid "config router family"
 msgstr "config ruuteri perekond"
@@ -5217,6 +5396,9 @@ msgstr "Eakaaslaste Konfiguratsioon"
 msgid "Manual Peer Controls"
 msgstr "Partner-ruuterite käsitsi häälestus"
 
+msgid "Router Hash"
+msgstr "Ruuteri ID/hash"
+
 msgid "Manually Ban / Unban a Peer"
 msgstr "Bänni ruuter käsitsi / tühista bänn"
 
@@ -5324,9 +5506,6 @@ msgstr "Sellel suvandil kasutatakse I2P HTTP Outproxy reseprodutseerimiseks või
 
 msgid "I2P Outproxy"
 msgstr "I2P puhverserver"
-
-msgid "Port"
-msgstr "Sadam"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "Kasutage HTTP-puhverserverit HTTP-reseed-hostide jaoks"
@@ -5747,6 +5926,9 @@ msgstr "Selle seadistuse märkimisel tõeks kuvatakse <i>Huvipakkuva saidi</i> l
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
 msgstr "See seade, kui see on tõene, esitab avalehel standardse külgriba, võimaldades konfiguratsiooni <a href=/configsidebar> kaudu. [Vaikimisi on see väär]"
 
+msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
+msgstr "Kui seatud tõeseks, nõuab ruuteri konsool sisselogimise autentimist. Kui parooli pole määratud, palutakse teil seada see sisselogimislehel. Kui väär, on konsool juurdepääsetav ilma sisselogimiseta. [Vaikeväärtus väär, lubatakse vaikimisi tulevases väljalaskes CSRF-kaitseks]"
+
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "See on seade, mis määrab, kas ruuter peaks kasutama pakutud <i>blocklist.txt</i> faili ja kasutajate poolt seadistatud blokeeringunimekirju või keelama marsruuterid vastavalt täissumma või IP-aadressi järgi. IPv4 jaoks toetatakse vahemikke ja netimaske, kuid seda ei tehta IPv6 jaoks. Rohkem teavet leiate I2P+ rakenduse kataloogi failist <i>blocklist.txt</i>. [Vaikimisi on lubatud, taaskäivitamine on vajalik]"
 
@@ -5761,6 +5943,12 @@ msgstr "See seade määrab, kas ruuter kasutab kasutajate poolt pakutud <i>block
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
 msgstr "See seade võimaldab blokeerida ja keelata taotlused määratud riikide ruuteritelt kohe, kui tehakse otse tunnelipäring. Riigid peavad olema määratud kahetäheliste riigikoodidena, eraldatud komadega. nt router.blockCountries=cn,ru"
+
+msgid "The maximum number of session banlog archive files to keep. When exceeded, older archives are deleted. [Default is 5]"
+msgstr "Maksimaalne säilitatavate seansi keelu arhiivifailide arv. Ületamisel kustutatakse vanemad arhiivid. [Vaikeväärtus 5]"
+
+msgid "The frequency in milliseconds to scan for suspicious hash patterns (potential Sybil attacks). Set to 0 to disable. [Default is 3600000]"
+msgstr "Sagedus millisekundites kahtlaste räsimismustrite (võimalikud Sybil-rünnakud) skannimiseks. Määrake 0 keelamiseks. [Vaikeväärtus 3600000]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "Kui see on määratud valeks, ei blokeeri routter tunnelite loomise päringuid aeglasematest või kättesaadamatutest routteritest vanemates versioonides. [Vaikimisi on tõene, vajalik on taaskäivitamine]"
@@ -5795,6 +5983,30 @@ msgstr "Kui see on määratud valeks, ei piirdu routter tunnelite loomise pärin
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "Selle sätte abil saate määrata, milliseid <a href=/profiles#profile_defs>saatja võimeid</a> ei kasutata teie ruuteri tunnelite loomiseks. nt <code>ruuter.excludePeerCaps=LMN</code>"
 
+msgid "When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is true]"
+msgstr "Kui seatud vääraks, võib kättesaamatuid kaaslasi valida hüpeteks sissetulevatele avastustunnelitele. [Vaikeväärtus tõene]"
+
+msgid "When set to false, unreachable peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
+msgstr "Kui seatud vääraks, võib kättesaamatuid kaaslasi valida hüpeteks väljaminevatele avastustunnelitele. [Vaikeväärtus tõene]"
+
+msgid "When set to false, unreachable peers may be selected as hops for inbound client tunnels. [Default is true]"
+msgstr "Kui seatud vääraks, võib kättesaamatuid kaaslasi valida hüpeteks sissetulevatele klienditunnelitele. [Vaikeväärtus tõene]"
+
+msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is true]"
+msgstr "Kui seatud vääraks, võib kättesaamatuid kaaslasi valida hüpeteks väljaminevatele klienditunnelitele. [Vaikeväärtus tõene]"
+
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
+msgstr "Kui seatud vääraks, võib aeglasi kaaslasi (kõrged tunnelitesti ajad) valida hüpeteks sissetulevatele avastustunnelitele. [Vaikeväärtus tõene]"
+
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
+msgstr "Kui seatud vääraks, võib aeglasi kaaslasi valida hüpeteks väljaminevatele avastustunnelitele. [Vaikeväärtus tõene]"
+
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
+msgstr "Kui seatud vääraks, võib aeglasi kaaslasi valida hüpeteks sissetulevatele klienditunnelitele. [Vaikeväärtus tõene]"
+
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
+msgstr "Kui seatud vääraks, võib aeglasi kaaslasi valida hüpeteks väljaminevatele klienditunnelitele. [Vaikeväärtus tõene]"
+
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
 msgstr "See sättimine (tundides) määrab, kui vana RouterInfo NetDb-s on (viimane teadaolev avaldamise kuupäev), enne kui see klassifitseeritakse aegunuks ja kustutatakse. [Vaikimisi on 28 tundi, kui ruuter pole üleujutuse täidis, siis vaikimisi on see 8 tundi]"
 
@@ -5821,6 +6033,39 @@ msgstr "Kui see on määratud tõeväärtuseks, peidetakse muu võrkude poolt n�
 
 msgid "Defines the maximum number of parallel <a href=/jobs>jobs</a> that can be run. The default value is determined by the amount of memory allocated to the JVM via <code>wrapper.config</code>, and is set at 3 for less than 64MB, 4 for less than 256M, or 5 for more than 256MB. Note: A change to this setting requires a restart of the router."
 msgstr "Määrab maksimaalse paralleelsete <a href=/jobs>tööde</a> arvu, mis saab töötada. Vaikenumber määratakse JVM'le eraldatava mälu koguse järgi <code>wrapper.config</code>, ja see on kas 3, kui mälu on alla 64MB, 4, kui mälu on alla 256M, või 5, kui mälu on rohkem kui 256MB. Märkus: selle seadistamise muutmisel tuleb ruuter taaskäivitada."
+
+msgid "Defines the minimum number of parallel <a href=/jobs>job runners</a>. The router will not scale down below this number. Default is 4, minimum is 1. This setting is dynamic and takes effect without restart."
+msgstr "Määrab minimaalse arvu paralleelseid <a href=/jobs>töötäitjaid</a>. Ruuter ei skaleeru alla selle numbri. Vaikimisi 4, minimaalne 1. See seade on düznaamiline ja jõustub ilma taaskäivituseta."
+
+msgid "Enable dynamic scaling of job runners based on queue load. When enabled, the router automatically scales the number of job runner threads up or down based on ready job count and lag. [Default is true]"
+msgstr "Luba töötäitjate düznaamiline skaleerimine järjekorra koormuse põhjal. Kui lubatud, skaleerib ruuter automaatselt töötäitjate arvu. [Vaikeväärtus tõene]"
+
+msgid "The job queue lag threshold in milliseconds that triggers scaling up job runners. When max lag exceeds this value, additional runners are started. [Default is 1]"
+msgstr "Tööjärjekorra viivituse läviväärtus millisekundites, mis käivitab töötäitjate skaleerimise. Kui maksimaalne viivitus ühetab selle väärtuse, käivitatakse täiendavad täitjad. [Vaikeväärtus 1]"
+
+msgid "The job queue lag threshold in milliseconds that allows scaling down job runners. When max lag stays below this value, excess runners are stopped. [Default is 1]"
+msgstr "Tööjärjekorra viivituse läviväärtus millisekundites, mis lubab töötäitjate vähendamist. Kui maksimaalne viivitus püsib sellest väärtusest madalamal, peatatakse üleliigsed täitjad. [Vaikeväärtus 1]"
+
+msgid "The ratio of ready jobs to active runners that triggers scaling up. If readyJobs > activeRunners * ratio, additional runners are started. [Default is 1.2]"
+msgstr "Valmis tööde ja aktiivsete täitjate suhe, mis käivitab skaleerimise. Kui readyJobs > activeRunners * suhe, käivitatakse täiendavad täitjad. [Vaikeväärtus 1.2]"
+
+msgid "The interval in milliseconds between job runner scaling checks. [Default is 1000]"
+msgstr "Intervall millisekundites töötäitjate skaleerimise kontrollide vahel. [Vaikeväärtus 1000]"
+
+msgid "The cooldown period in milliseconds between scale operations. [Default is 5000]"
+msgstr "Jahutusperiood millisekundites skaleerimisoperatsioonide vahel. [Vaikeväärtus 5000]"
+
+msgid "Enable the feedback mechanism that automatically rolls back ineffective scale-up operations. If lag increases after adding runners, they will be removed. [Default is true]"
+msgstr "Luba tagasisidemehhanism, mis automaatselt tühistab ebatõhusad skaleerimisoperatsioonid. Kui viivitus suureneb pärast täitjate lisamist, eemaldatakse need. [Vaikeväärtus tõene]"
+
+msgid "The maximum number of waiting jobs in the queue before aggressive job dropping is triggered. When exceeded, non-critical jobs are dropped to reduce queue pressure. [Default is 48]"
+msgstr "Maksimaalne ootavate tööde arv järjekorras enne agressiivse tööde mahajätmise käivitamist. Ühetamisel jäetakse mittekriitilised tööd maha. [Vaikeväärtus 48]"
+
+msgid "Maximum number of pending tunnel build jobs in the BuildHandler queue. When the queue exceeds this limit, new build requests are rejected to prevent job queue overload. [Default is 256]"
+msgstr "Maksimaalne ootel olevate tunneliehituse tööde arv BuildHandleri järjekorras. Kui järjekord ühetab selle piiri, lükatakse uued ehitustaotlused tagasi. [Vaikeväärtus 256]"
+
+msgid "Multiplier applied to the base tunnel build concurrency. The effective concurrency is baseBuildRate * multiplier, clamped by maxConcurrentBuilds. Higher values accelerate pool recovery but increase network load. [Default is 1.0]"
+msgstr "Kordaja, mida rakendatakse tunneliehituse baaskäivusele. Efektiivne käivus on baseBuildRate * kordaja, piiratud maxConcurrentBuilds-iga. [Vaikeväärtus 1.0]"
 
 msgid "Determines the maximum number of participating tunnels the router can build. To disable participation completely, set to 0. [Default is 8000, or 2000 if running on Arm or Android]"
 msgstr "Määrab maksimaalse osalevate tunnelite arvu, mille ruuter saab luua. Täieliku osaluse keelamiseks seadista 0-ks. [Vaikenumber on 8000, või 2000, kui töötab Arm või Android]"
@@ -5858,14 +6103,26 @@ msgstr "Vähem kui 256MB JVM-le eraldatud"
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
 msgstr "Ruuter, mis töötab Java BigInteger raamatukogu mitte-algstüüpsel, tarkvarapõhises emuleeritud versioonil"
 
-msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
-msgstr "Selle seade määrab samaaegselt käitatavate eakaaslaste testimiste arvu, mida kasutatakse eakaaslaste latentsuse kindlaksmääramiseks. [Vaikimisi on 4]"
+msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. When tunnel build success drops below 50%, concurrency is halved to avoid adding load during a failure cascade. [Default varies: 1 on slow systems, 2 on single/dual-core, 4 otherwise]"
+msgstr "See seade määrab samaaegselt käivitatavate kaaslastestide arvu. Kui tunneliehituse õnnestumine langeb alla 50%, vähendatakse käivust poole võrra. [Vaikeväärtus: 1 aeglastel süsteemidel, 2 ühe/kahetuumalistel, 4 muidu]"
 
-msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 5000]"
-msgstr "See seade määrab eakaaslaste testimisülesannete vahelise viivituse millisekundites. [Vaikimisi on 5000]"
+msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 30000 (30s), or 45000 (45s) on slow systems]"
+msgstr "See seade määrab viivituse kaaslastestide tööde vahel, millisekundites. [Vaikeväärtus 30000 (30s) või 45000 (45s) aeglastel süsteemidel]"
 
-msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 1000]"
-msgstr "Eakaaslaste hilinemise kindlaksmääramiseks eraldatakse selle seadistuse abil eakaaslase testimise maksimaalne aeg, enne kui see loetakse ebaõnnestunuks, mis on konfigureeritud millisekundites. Juhul, kui ülempiir on sättetuna madalam võrreldes keskmise edukatest testidest, kasutatakse keskmise edukate testide väärtust. [Vaikimisi on 1000]"
+msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 5000]"
+msgstr "Kaaslase latentsuse määramiseks eraldab see seade maksimaalse aja, mille jooksul kaaslastest peaks toimuma. Kui aegumine on madalam keskmisest õnnestunud testist, kasutatakse keskmist. [Vaikeväärtus 5000]"
+
+msgid "Minimum number of peers to retain in the fast tier during profile reorganization. A higher value ensures more peers are available for tunnel building, at the cost of potentially including slower peers. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 400]"
+msgstr "Minimaalne kaaslaste arv, mida säilitada kiires astmes profiilide ümberkorraldamise ajal. Kõrgem väärtus tagab rohkemate kaaslaste kättesaadavuse. [Vaikeväärtus 400]"
+
+msgid "Minimum number of peers to retain in the high-capacity tier. These are the peers with the highest measured throughput and greatest ability to relay traffic. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 500]"
+msgstr "Minimaalne kaaslaste arv, mida säilitada kõrge mahutavusega astmes. Need on kaaslased, kellel on kõrgeim mõõdetud läbilaskevõime. [Vaikeväärtus 500]"
+
+msgid "Maximum number of peer profiles to retain in memory. Older, inactive profiles are expired first when this limit is reached. Values below 100 are clamped to 100. [Default is 8000, or 800 on slow systems]"
+msgstr "Maksimaalne mälus säilitatavate kaaslaste profiilide arv. Vanemad, mitteaktiivsed profiilid aeguvad esimesena. [Vaikeväärtus 8000 või 800 aeglastel süsteemidel]"
+
+msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 3]"
+msgstr "RouterInfo maksimaalne vanus (tundides), et kaaslast peetaks tunneliehituseks valitavaks. Vanemad RouterInfod välistatakse valikust. [Vaikeväärtus 3]"
 
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
 msgstr "See seade määrab, kas statistika meie ruuteri kohta avaldatakse vaheldumisi NetDb-s. [Vaikimisi on vale]"
@@ -5900,8 +6157,227 @@ msgstr "See sättetus otsustab, kas värskenduste tööülesande raames kontroll
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
 msgstr "Kui see on seatud tõeseks, lõdvestab see seade oma ruuteri tingimusi, mida vajatakse ülekoormuspiirangute avaldamiseks, eriti kui on kindlaks tehtud, et teie ribalaiuse kasutus on kõrge. Muud tingimused, nagu suur tööde viivitus või aeglaseks liigitatud ruuter, põhjustavad endiselt piirangute avaldamist. [Vaikimisi on see väär]"
 
-msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr "Kui konfigureeritud, seab see kindla piirmäära, kui palju tunnelit ruuter võib samaaegselt luua. Vaikimisi kasutab ruuter keskmist ehitusaega ja praegust väljaminevat ribalaiust, et määrata optimaalne ehituskiirus. [Nõutav taaskäivitamine]"
+msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. This setting is dynamic and takes effect without restart."
+msgstr "Kui seadistatud, seab see kõva piiri tunnelite arvule, mida ruuter saab samaaegselt ehitada. Vaikimisi kasutab ruuter keskmist ehitusaega ja väljuvat ribalaiust. See seade on düznaamiline."
+
+msgid "When set to true, the router uses the older peer selection algorithm when building tunnels (prefer fast peers directly, without the multi-tier HighCap → Fast → Active fallback chain). May be useful for troubleshooting peer selection issues. [Default is false. This setting is dynamic and takes effect immediately.]"
+msgstr "Kui seatud tõeseks, kasutab ruuter vanemat kaaslaste valiku algoritmi (otsene kiirete kaaslaste eelistamine, ilma mitmetasandilise ahelata). [Vaikeväärtus väär, düznaamiline]"
+
+msgid "Growth factor used by the router's transit tunnel throttle. Higher values make the router accept tunnel build requests more aggressively relative to the 10-minute average. Lower values make it probabalistically reject sooner when tunnel counts are rising rapidly. [Default is 2.0]"
+msgstr "Kasvutegur, mida ruuteri transiittunneli piiraja kasutab. Kõrgemad väärtused muudavad ruuteri tunneliehituse taotluste vastuvõtmisel agressiivsemaks. [Vaikeväärtus 2.0]"
+
+msgid "Growth factor for tunnel test time acceptance rate limiting. If the 1-minute average test time exceeds the 1-hour average multiplied by this factor, the router begins probabalistically rejecting. [Default is 1.5]"
+msgstr "Kasvutegur tunnelitesti aja vastuvõtu määra piiramiseks. Kui 1-minuti keskmine testaeg ühetab 1-tunni keskmise korrutatuna selle teguriga, hakkab ruuter tõenäosuslikult tagasi lükkama. [Vaikeväärtus 1.5]"
+
+msgid "Controls the steepness of the rejection probability curve when bandwidth usage approaches capacity. Lower values give a smoother transition (less aggressive rejection at moderate load). [Default is 10]"
+msgstr "Kontrollib tagasilükkamise tõenäosuse kõvera järskust, kui ribalaiuse kasutamine läheneb mahutavusele. Madalamad väärtused annavad sujuvama ülemineku. [Vaikeväärtus 10]"
+
+msgid "Penalty multiplier applied to a peer's capacity value when the peer publishes a 'D' congestion cap (moderate congestion). Higher values reduce the peer's effective capacity more aggressively. [Default is 2.5]"
+msgstr "Karistuskordaja, mida rakendatakse kaaslase mahutavuse väärtusele, kui kaaslane avaldab 'D' ummistuse piirangu (mõõdukas ummistus). [Vaikeväärtus 2.5]"
+
+msgid "Penalty multiplier applied to a peer's capacity value when the peer publishes an 'E' congestion cap (severe congestion). [Default is 4.75]"
+msgstr "Karistuskordaja, mida rakendatakse kaaslase mahutavuse väärtusele, kui kaaslane avaldab 'E' ummistuse piirangu (tõsine ummistus). [Vaikeväärtus 4.75]"
+
+msgid "Time in milliseconds before expiration when pruned tunnels are marked for early expiry, giving replacement tunnels time to build. Higher values allow more overlap between old and new tunnels. [Default is 120000 (2 minutes)]"
+msgstr "Aeg millisekundites enne aegumist, kui kärbitud tunnelid märgitakse ennetähtaegseks aegumiseks. Kõrgemad väärtused lubavad rohkem kattuvust vanade ja uute tunnelite vahel. [Vaikeväärtus 120000 (2 minutit)]"
+
+msgid "The latency threshold in milliseconds for removing slow tunnels from <a href=/tunnels>local tunnel pools</a>. Tunnels with latency above this threshold will be removed if the pool exceeds the minimum tunnel count. Set to 0 to use 1 second or the lowest recorded latency from all pools, whichever is higher. [Default is 0]"
+msgstr "Latentsuse läviväärtus millisekundites aeglaste tunnelite eemaldamiseks kohalikest tunnelikogumitest. Tunnelid latentsusega üle selle läviväärtuse eemaldatakse. [Vaikeväärtus 0]"
+
+msgid "The minimum number of tunnels to keep in each pool when removing slow tunnels (minimum 2), overriding the configured tunnel quantity. Set to 0 to use the configured quantity per pool. [Default is 0]"
+msgstr "Minimaalne tunnelite arv igas kogumis aeglaste tunnelite eemaldamisel (minimaalselt 2). Määrake 0, et kasutada seadistatud kogust. [Vaikeväärtus 0]"
+
+msgid "The interval in milliseconds between runs of the Remove Slow Tunnels job. Higher values reduce tunnel churn but may keep slow tunnels longer. [Default is 90000 (90s), or 120000 (120s) if under load]"
+msgstr "Intervall millisekundites aeglaste tunnelite eemaldamise töö käivitamise vahel. Kõrgemad väärtused vähendavad tunnelite vahetust. [Vaikeväärtus 90000 (90s) või 120000 (120s) koormuse all]"
+
+msgid "The time in milliseconds before expiration to mark tunnels for early expiry when the Remove Slow Tunnels job prunes slow or excess tunnels. Higher values allow more time for new tunnels to build. [Default is 30000]"
+msgstr "Aeg millisekundites enne aegumist tunnelite märkimiseks ennetähtaegseks aegumiseks. Kõrgemad väärtused lubavad rohkem aega uute tunnelite ehitamiseks. [Vaikeväärtus 30000]"
+
+msgid "Hard limit on total tunnel test jobs (queued + active). Prevents runaway test backlogs from causing job queue lag. Once reached, no new tests are scheduled until the count drops. [Default is 128 (96 on slower systems)]"
+msgstr "Kõva piir tunnelitesti tööde koguarvule (järjekorras + aktiivsed). Hoiab ära kontrollimatu testide mahajäämuse. [Vaikeväärtus 128 (96 aeglastel süsteemidel)]"
+
+msgid "Base adaptive queue limit for tunnel test jobs. The router scales this up/down by 2-3x based on job queue lag and failure rates. [Default is 48 (32 on slower systems)]"
+msgstr "Baas kohanduv järjekorra piir tunnelitesti töödele. Ruuter skaleerib seda 2-3x vastavalt viivitusele ja ebaõnnestumiste määrale. [Vaikeväärtus 48 (32 aeglastel süsteemidel)]"
+
+msgid "Maximum number of tunnel tests that can execute simultaneously. Caps concurrent test throughput to prevent overwhelming the router. [Default is 64 (32 on slower systems)]"
+msgstr "Maksimaalne samaaegselt käivitatavate tunnelitestide arv. Piirab samaaegset testide läbilaskevõimet. [Vaikeväärtus 64 (32 aeglastel süsteemidel)]"
+
+msgid "Maximum consecutive client tunnel build timeouts before forcing exploratory tunnels for build reply delivery. Higher values keep the router trying paired tunnels longer; lower values fall back to exploratory sooner. [Default is 3]"
+msgstr "Maksimaalsed järjestikused klienditunneli ehituse aegumised enne avastustunnelite sundimist. Kõrgemad väärtused hoiavad ruuterit kauem proovimas. [Vaikeväärtus 3]"
+
+msgid "How long to wait for a tunnel build reply before trying a different pool or different peers. The BuildExecutor adaptively increases this when success rates are low. [Default is 5000 (5s), 10000 (10s) on slow systems]"
+msgstr "Kui kaua oodata tunneliehituse vastust enne teise kogumi või teiste kaaslaste proovimist. BuildExecutor suurendab seda kohanduvalt, kui õnnestumise määrad on madalad. [Vaikeväärtus 5000 (5s), 10000 (10s) aeglastel]"
+
+msgid "Timeout in milliseconds for the first-hop OutNetMessage before firing TunnelBuildFirstHopFailJob. Should be >= requestTimeout for proper sequencing. [Default is 10000 (10 seconds)]"
+msgstr "Aegumine millisekundites esimese hüppe OutNetMessage'i jaoks enne TunnelBuildFirstHopFailJob'i käivitamist. Peab olema >= requestTimeout. [Vaikeväärtus 10000 (10 sekundit)]"
+
+msgid "Timeout in milliseconds for RouterInfo lookup of the next hop during tunnel build processing. If the lookup times out, the build request is rejected. [Default is 8000 (8 seconds)]"
+msgstr "Aegumine millisekundites järgmise hüppe RouterInfo otsingule tunneliehituse töötlemise ajal. Kui otsing aegub, lükatakse ehitustaotlus tagasi. [Vaikeväärtus 8000 (8 sekundit)]"
+
+msgid "Backoff delay in milliseconds between exploratory tunnel build retries. Higher values reduce build request rate during failures; lower values retry faster. [Default is 200]"
+msgstr "Tagasilöögi viivitus millisekundites avastustunneli ehituse korduskatsete vahel. Kõrgemad väärtused vähendavad ehitustaotluste määra. [Vaikeväärtus 200]"
+
+msgid "Backoff delay in milliseconds between client tunnel build retries. Lower values rebuild failed client tunnels faster. [Default is 50]"
+msgstr "Tagasilöögi viivitus millisekundites klienditunneli ehituse korduskatsete vahel. Madalamad väärtused ehitavad ebaõnnestunud tunnelid kiiremini üles. [Vaikeväärtus 50]"
+
+msgid "Grace period in milliseconds to accept late tunnel build replies after the router has given up waiting. Prevents wasting valid tunnel builds that arrive just after timeout. [Default is 60000 (60 seconds)]"
+msgstr "Armuaeag millisekundites hilinenud tunneliehituse vastuste aktsepteerimiseks. Hoiab ära kehtivate tunnelite raiskamise, mis saabuvad kohe pärast aegumist. [Vaikeväärtus 60000 (60 sekundit)]"
+
+msgid "Minimum target tunnels per pool before triggering urgent rebuild logic. When the number of good tunnels drops below this threshold, the pool escalates to urgent rebuild mode. [Default is 2]"
+msgstr "Minimaalne sihttunnelite arv kogumi kohta enne kiireloomulise ümberehituse loogika käivitamist. [Vaikeväärtus 2]"
+
+msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build processing. Ensures a minimum level of lookup concurrency even when few tunnels are participating. [Default is 10 (4 on slow systems)]"
+msgstr "Põrand samaaegsetele järgmise hüppe RouterInfo otsingutele tunneliehituse töötlemise ajal. Tagab minimaalse otsingu käivuse. [Vaikeväärtus 10 (4 aeglastel)]"
+
+msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Caps lookup concurrency to prevent overwhelming the netDb. [Default is max(cores/2, 16) (10 on slow systems)]"
+msgstr "Lagi samaaegsetele järgmise hüppe RouterInfo otsingutele. Piirab otsingu käivust, et vältida netDb ülekoormamist. [Vaikeväärtus max(tuumad/2, 16) (10 aeglastel)]"
+
+msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
+msgstr "Protsent osalevatest tunnelitest, mida kasutatakse samaaegse otsingu piiri skaleerimiseks. Efektiivne piir jääb minLookupLimit ja maxLookupLimit vahele. [Vaikeväärtus 40 (15 aeglastel)]"
+
+msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
+msgstr "Maksimaalne lubatud tuleviku kõrvalekalle tunneliehituse taotluste ajatemplitele. Kaugemad ajatemplid lüatakse tagasi. [Vaikeväärtus 300000 (5 minutit)]"
+
+msgid "Maximum age in milliseconds for tunnel build requests (ElGamal). Requests older than this are rejected as potential replay attacks. Must be >1 hour due to rounding in the protocol. [Default is 3900000 (65 minutes)]"
+msgstr "Maksimaalne vanus millisekundites tunneliehituse taotlustele (ElGamal). Vanemad taotlused lüatakse tagasi. Peab olema >1 tund. [Vaikeväärtus 3900000 (65 minutit)]"
+
+msgid "Maximum age in milliseconds for tunnel build requests (ECIES). ECIES timestamps are rounded to minutes so the tolerance is tighter. [Default is 480000 (8 minutes)]"
+msgstr "Maksimaalne vanus millisekundites tunneliehituse taotlustele (ECIES). ECIES ajatemplid ümardatakse minutiteks. [Vaikeväärtus 480000 (8 minutit)]"
+
+msgid "Job lag threshold in milliseconds that triggers tunnel build limiting. When router job lag exceeds this value, tunnel build requests are throttled to reduce queue pressure. [Default is 800 (500 on slow systems)]"
+msgstr "Tööde viivituse läviväärtus millisekundites, mis käivitab tunneliehituse piiramise. Ühetamisel piiratakse ehitustaotlusi. [Vaikeväärtus 800 (500 aeglastel)]"
+
+msgid "Minimum delay in milliseconds before scheduling a tunnel test. The router will not test a tunnel that was recently tested within this window. [Default is 30000 (30 seconds)]"
+msgstr "Minimaalne viivitus millisekundites enne tunnelitesti ajastamist. Ruuter ei testi tunnelit, mida hiljuti testiti. [Vaikeväärtus 30000 (30 sekundit)]"
+
+msgid "Maximum delay in milliseconds before scheduling a tunnel test. The router will not defer a tunnel test beyond this limit. [Default is 90000 (90 seconds)]"
+msgstr "Maksimaalne viivitus millisekundites enne tunnelitesti ajastamist. Ruuter ei lükka testi sellest piirist edasi. [Vaikeväärtus 90000 (90 sekundit)]"
+
+msgid "Maximum concurrent tunnel test jobs per exploratory pool. Caps how many exploratory tunnels are tested simultaneously. [Default is 12]"
+msgstr "Maksimaalsed samaaegsed tunnelitesti tööd avastuskogumi kohta. Piirab, kui palju avastustuneleid korraga testitakse. [Vaikeväärtus 12]"
+
+msgid "Maximum concurrent tunnel test jobs per client pool. Caps how many client tunnels are tested simultaneously. [Default is 24]"
+msgstr "Maksimaalsed samaaegsed tunnelitesti tööd kliendikogumi kohta. [Vaikeväärtus 24]"
+
+msgid "Ratio of tunnels tested vs total pool size that triggers pool coverage heuristics. When fewer than this fraction of tunnels have recent test results, the pool prioritises testing over building. [Default is 0.95]"
+msgstr "Testitud tunnelite ja kogumi suuruse suhe, mis käivitab kogumi katvuse heuristikud. Kui vähem kui see osa tunnelitest on hiljuti testitud, eelistab kogum testimist. [Vaikeväärtus 0.95]"
+
+msgid "Cooldown period in milliseconds for client peer selection. Peers selected for a client tunnel are excluded from selection in other client pools for this duration, ensuring peer diversity. [Default is 15000 (15 seconds)]"
+msgstr "Jahutusperiood millisekundites kliendikaaslaste valikuks. Valitud kaaslased välistatakse teistes kogumites valikust. [Vaikeväärtus 15000 (15 sekundit)]"
+
+msgid "Client peer selection strategy: 'default' (balanced, preferred), 'reliability' (prioritise proven peers with high tunnel acceptance ratio), or 'diversity' (lower cooldowns, explores broader peer set). Changes apply dynamically. [Default is 'default']"
+msgstr "Kliendikaaslaste valiku strateegia: 'default' (tasakaalustatud), 'reliability' (usaldusväärsed kaaslased), või 'diversity' (laiem kaaslaste valik). [Vaikeväärtus 'default']"
+
+msgid "Tunnel lifetime in milliseconds. Tunnels expire after this period and are replaced with fresh builds. Lower values increase churn but may improve freshness; higher values reduce build overhead but may accumulate stale tunnels. [Default is 600000 (10 minutes)]"
+msgstr "Tunneli eluiga millisekundites. Tunnelid aeguvad pärast seda perioodi. Madalamad väärtused suurendavad vahetust. [Vaikeväärtus 600000 (10 minutit)]"
+
+msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions. [Default is 300000 (5 minutes)]"
+msgstr "Käivitusperiood millisekundites. Hoiatused ja tunnelite vähendamise loogika surutakse maha esialgsel käivitusel. [Vaikeväärtus 300000 (5 minutit)]"
+
+msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 300000 (5 minutes)]"
+msgstr "Minimaalne intervall millisekundites LeaseSet'i avaldamiste vahel. Hoiab ära kiired avaldamised tunnelite vahetuse ajal. [Vaikeväärtus 300000 (5 minutit)]"
+
+msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 300000 (5 minutes)]"
+msgstr "Minimaalne intervall millisekundites LeaseSet'i objektide ehitamise vahel. Hoiab ära tarbetu objektide loomise. [Vaikeväärtus 300000 (5 minutit)]"
+
+msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
+msgstr "Maksimaalne samaaegsete tunneliehituste arv suuna kohta. Kõrgemad väärtused kiirendavad kogumi taastumist. [Vaikeväärtus 6]"
+
+msgid "If exploratory tunnel build success rate falls below 1 in this many attempts, tunnel quantity is reduced. Higher values make quantity reduction less likely. [Default is 12]"
+msgstr "Kui avastustunneli ehituse õnnestumise määr langeb alla 1 selle arvu katsete jooksul, vähendatakse tunnelite arvu. [Vaikeväärtus 12]"
+
+msgid "Extra tunnels to maintain beyond the configured pool quantity. A positive value keeps spare tunnels ready so the pool doesn't drain when tunnels expire simultaneously. [Default is 0]"
+msgstr "Täiendavad tunnelid, mida hoida üle seadistatud kogumi koguse. Positiivne väärtus hoiab varutunnelid valmis. [Vaikeväärtus 0]"
+
+msgid "Minimum interval in milliseconds between GOOD-tunnel deficit rebuilds for non-critical pools. Prevents rapid build-retry loops when the pool has enough FAILING tunnels to satisfy the numerical target. [Default is 30000 (30 seconds)]"
+msgstr "Minimaalne intervall millisekundites GOOD-tunneli puudujäägi ümberehituste vahel. Hoiab ära kiired ehituse korduskatsete ahelad. [Vaikeväärtus 30000 (30 sekundit)]"
+
+msgid "Minimum tunnel test period in milliseconds. Tunnel tests always wait at least this long for a reply before timing out. [Default is 45000 (45 seconds)]"
+msgstr "Minimaalne tunnelitesti periood millisekundites. Tunnelitestid ootavad alati vähemalt selle aja vastust. [Vaikeväärtus 45000 (45 sekundit)]"
+
+msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
+msgstr "Maksimaalne tunnelitesti periood millisekundites. Tunnelitestid ei oota kunagi kauem kui see aeg. [Vaikeväärtus 50000 (50 sekundit)]"
+
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
+msgstr "Tunneliehituse aegumiste arv enne kaaslase märkimist kummituseks. Kõrgemad väärtused taluvad rohkem mõõdukaid ebaõnnestumisi. [Vaikeväärtus 3]"
+
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
+msgstr "Jahutusperiood millisekundites enne kummitusena märgitud kaaslase uuesti kaalumist. Lühemad väärtused lubavad kiiremat taaskasutamist. [Vaikeväärtus 180000 (3 minutit)]"
+
+msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
+msgstr "Jahutusperiood millisekundites kummitusena märgitud kaaslastele rünnakureⴳiimis. Pikemad jahutusperioodid piiravad kokkupuudet. [Vaikeväärtus 300000 (5 minutit)]"
+
+msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
+msgstr "Minimaalne vastuvõetud sissetulevate tunneliehituse taotluste arv kaaslase kohta puhta akna kohta. Hoiab ära kaaslaste nälgimise. [Vaikeväärtus 10]"
+
+msgid "Maximum number of incoming tunnel build requests accepted per peer per clean window. Caps request volume to prevent DoS. [Default is 300]"
+msgstr "Maksimaalne vastuvõetud sissetulevate tunneliehituse taotluste arv kaaslase kohta puhta akna kohta. Piirab taotluste mahtu. [Vaikeväärtus 300]"
+
+msgid "Number of tunnel build requests from a single peer in 1 second that triggers an immediate ban. Protects against rapid-fire DoS attacks. [Default is 10]"
+msgstr "Tunneliehituse taotluste arv ühelt kaaslaselt 1 sekundi jooksul, mis käivitab viivitamatu keelu. Kaitseb kiirete DoS-rünnakute eest. [Vaikeväärtus 10]"
+
+msgid "Percentage of participating tunnels used to dynamically scale the per-peer request throttle limit. The effective maxLimit is adjusted based on this percentage of current participating tunnel count. [Default is 20]"
+msgstr "Protsent osalevatest tunnelitest, mida kasutatakse kaaslasepõhise piiramispiiri düznaamiliseks skaleerimiseks. [Vaikeväärtus 20]"
+
+msgid "Minimum number of participating tunnel build requests accepted per clean window. Ensures a baseline acceptance rate even when the router is under load. [Default is 80 (40 on slow systems)]"
+msgstr "Minimaalne vastuvõetud osalevate tunneliehituse taotluste arv puhta akna kohta. Tagab baasväärtuse. [Vaikeväärtus 80 (40 aeglastel)]"
+
+msgid "Maximum number of participating tunnel build requests accepted per clean window. Caps acceptance to prevent overload. [Default is 300 (150 on slow systems)]"
+msgstr "Maksimaalne vastuvõetud osalevate tunneliehituse taotluste arv puhta akna kohta. Piirab vastuvõttu ülekoormuse vältimiseks. [Vaikeväärtus 300 (150 aeglastel)]"
+
+msgid "Percentage of current participating tunnels used to scale the participating throttle limits. Higher values allow more build requests relative to tunnel count. [Default is 10]"
+msgstr "Protsent osalevatest tunnelitest, mida kasutatakse osalevate piiramispiiride skaleerimiseks. [Vaikeväärtus 10]"
+
+msgid "Minimum percentage of non-failing peer profiles required before the router broadens exploratory peer selection. When below this threshold, only the most reliable peers are used. [Default is 15]"
+msgstr "Minimaalne protsent mitt ebaõnnestunud kaaslaste profiilidest enne avastuskaaslaste valiku laiendamist. [Vaikeväärtus 15]"
+
+msgid "Minimum number of active (non-failing) peers required for normal exploratory peer selection. Below this threshold, selection logic becomes more permissive. [Default is 12]"
+msgstr "Minimaalne aktiivsete (ebaõnnestumata) kaaslaste arv tavaliseks avastuskaaslaste valikuks. [Vaikeväärtus 12]"
+
+msgid "Minimum number of active peers required during router startup before restricting exploratory peer selection. During early startup the router is more lenient about peer quality. [Default is 6]"
+msgstr "Minimaalne aktiivsete kaaslaste arv ruuteri käivituse ajal enne avastuskaaslaste valiku piiramist. [Vaikeväärtus 6]"
+
+msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 64]"
+msgstr "Maksimaalne aeglase käivituse akna suurus vooguhendustele. Piirab ummistuse akent. [Vaikeväärtus 64]"
+
+msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 60000 (60 seconds)]"
+msgstr "Maksimaalne edasi-tagasi aeg millisekundites vooguhendustele. Piirab arvutatud RTT-d. [Vaikeväärtus 60000 (60 sekundit)]"
+
+msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 64]"
+msgstr "Maksimaalne pakettide edastuskordade arv enne ühenduse katkestamist. Kõrgemad väärtused parandavad usaldusväärsust. [Vaikeväärtus 64]"
+
+msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 60000 (60 seconds)]"
+msgstr "Jahutusperiood millisekundites ühenduskatsete vahel samale kättesaamatule sihtkohale. Hoiab ära kättesaamatute kaaslaste pommitamise. [Vaikeväärtus 60000 (60 sekundit)]"
+
+msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
+msgstr "Maksimaalne aeg millisekundites pongi vastuse ootamiseks kaaslase pingimisel. [Vaikeväärtus 300000 (5 minutit)]"
+
+msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
+msgstr "Mitu korda piiratud sihtkohale vastata enne üleliigsete pakettide vaikset mahajätmist. Hoiab ära ühenduse tulvamise. [Vaikeväärtus 3]"
+
+msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
+msgstr "Vaikimisi maksimaalne voo viivitus millisekundites, kui pole seatud selgesõnalist ühenduse aegumist. [Vaikeväärtus 10000 (10 sekundit)]"
+
+msgid "Maximum time in milliseconds between receiving a SYN and accepting it on a server socket. Controls how long incomplete connections are kept in the accept queue. [Default is 4000 (4 seconds)]"
+msgstr "Maksimaalne aeg millisekundites SYN-i vastuvõtmise ja aktsepteerimise vahel serveripessa. Kontrollib, kui kaua mittetäielikke ühendusi hoitakse. [Vaikeväärtus 4000 (4 sekundit)]"
+
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. Larger values buffer more incoming connections at the cost of memory. [Default is 80 (48 on slow systems)]"
+msgstr "Maksimaalne ootel ühenduste arv serveri aktsepteerimisjärjekorras. Suuremad väärtused puhverdavad rohkem ühendusi. [Vaikeväärtus 80 (48 aeglastel)]"
+
+msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
+msgstr "Intervall millisekundites automatiseeritud LeaseSet'i taasavaldamiste vahel. Kõrgemad väärtused vähendavad netdb liiklust. [Vaikeväärtus 300000 (5 minutit)]"
+
+msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle. [Default is 180000 (3 minutes)]"
+msgstr "Läviväärtus millisekundites ennetavaks LeaseSet'i taasavaldamiseks. Kui rent aegub selle akna jooksul, avaldatakse LeaseSet kohe uuesti. [Vaikeväärtus 180000 (3 minutit)]"
+
+msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
+msgstr "Periood millisekundites järelevalveta tunnelite kontrollimiseks. Tunnelid ilma liikluseta võidakse maha jätta. [Vaikeväärtus 60000]"
+
+msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
+msgstr "Minimaalne sõnumite arv, mille tunnel peab tuvastusperioodil töötlema, et lugeda aktiivseks. [Vaikeväärtus 3]"
+
+msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
+msgstr "Intervall millisekundites järelevalveta transiittunnelite skannimiste vahel. [Vaikeväärtus 180000]"
 
 msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
 msgstr "Kui soovite paigaldada allkirjastamata (.zip) I2P värskendusi, tuleks see lisada oma <code>router.config</code> faili, kui te pole veel konfigureerinud <code>routerconsole.advanced=true</code>, milles see võimalus juba on. Märkus: I2P+ 0.9.48+ puhul on vaikimisi lubatud allkirjastamata värskenduste paigaldamine. "
@@ -5912,11 +6388,14 @@ msgstr "Selle seadistuse abil saate konfigureerida allkirjastamata värskenduste
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
 msgstr "See seadistus (minutites) võimaldab teil seadistada, kui kaua pärast käivitamist oodatakse enne kui kontrollitakse RouterInfos NetDb-s. Pärast seda aktsepteeritakse ainult kehtivad ruuterid. Edasilükatud RouterInfos ja SSU-ga kättesaamatud eakaaslased eemaldatakse NetDb-st validerimise ajal. [Vaikimisi on 60 minutit] Märkus: see seadistus ei mõjuta vanemaid ruutereid (vaikimisi vanemad kui 0.9.29), mis eemaldatakse NetDb-st ja keelatakse routeri seansi jaoks, niipea kui NetDb ladu on aset leidnud."
 
-msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr "See seade, kui see on seatud tõeseks, blokeerib kõigi oma riigi ruuterite otsesuhtluse ja lisab need oma keeluloendisse kuni ruuteri taaskäivitamiseni. [Vaikimisi on see väär]"
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false, or true if router is in hidden mode]"
+msgstr "See seade, kui tõene, blokeerib otsesuhtluse kõigilt ruuteritelt teie riigis. [Vaikeväärtus väär või tõene peidetud reⴳiimis]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "See seade, kui see on seatud tõeseks, blokeerib kõigi X-taseme ruuterite otsesuhtluse, mis avaldavad G ülekoormuspiirangu ja ei ole kättesaadavad ega kättesaamatud, lisates need seansi keeluloendisse. Pange tähele, et täiustatud režiim peab olema lubatud, et see seade jõustuks. [Vaikimisi on see väär]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]"
+msgstr "See seade, kui tõene, blokeerib otsesuhtluse kõigilt X-taseme ruuteritelt, mis avaldavad G ummistuse piirangut. [Vaikeväärtus väär]"
+
+msgid "This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is true]"
+msgstr "See seade, kui tõene, blokeerib otsesuhtluse kõigilt LU-taseme ruuteritelt (madal ribalaius). [Vaikeväärtus tõene]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "See seadistus lubab keelata SSU testid, et teha kindlaks, kas teie ruuter on tulemüüri taga ja see saab lubada ruuteritele, mis pole kindlasti tulemüüri taga, kuid kogevad katkendlikke tulemüüri probleeme. Testimise keelamise korral peaksid nii SSU kui ka NTCP teatama teie praeguse avaliku IP-aadressi aadressil <a href=/info>ruuteri teabekülg</a>. [Nõutav taaskäivitamine]"
@@ -5942,8 +6421,44 @@ msgstr "Kui see seadistus on sisse lülitatud, lisatakse marsuuteri majutatud k�
 msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
 msgstr "Kui see seadistus on sisse lülitatud, muudetakse pingiga ühenduse aktsepteerivatele serveritele lisatava maksimaalse täiendava juhusliku pongi viivituse väärtust, kui on ka lubatud <code>i2p.streaming.enablePongDelay</code>. Kui seda eraldi määratletud ei ole, kasutatakse vaikeväärtust 50 ms."
 
+msgid "The connect timeout in milliseconds for eepget HTTP requests (time to wait for initial response headers). Increase for high-latency remote access scenarios. [Default is 90000 (90s)]"
+msgstr "Ühenduse aegumine millisekundites eepget HTTP päringute jaoks. Suurendage kõrge latentsusega kaugjuurdepääsu stsenaariumide puhul. [Vaikeväärtus 90000 (90s)]"
+
+msgid "The inactivity timeout in milliseconds for eepget transfers (max idle time during data phase). Increase for slow connections experiencing stalls. [Default is 300000 (5min)]"
+msgstr "Tegevusetuse aegumine millisekundites eepget ülekannete jaoks. Suurendage aeglaste ühenduste jaoks. [Vaikeväärtus 300000 (5min)]"
+
+msgid "Maximum number of consecutive zero-data transfer failures before eepget gives up, even if retries remain. Increase if transfers fail without receiving any data. [Default is 20]"
+msgstr "Maksimaalsed järjestikused nullandmete ülekande ebaõnnestumised enne eepget'i allaandmist. Suurendage, kui ülekanded ebaõnnestuvad. [Vaikeväärtus 20]"
+
+msgid "Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]"
+msgstr "Vaikimisi korduskatsete arv eepget'i jaoks, kui lipik <code>-n</code> pole määratud. [Vaikeväärtus 10]"
+
+msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 300000 (5min)]"
+msgstr "TIME-WAIT kestus millisekundites pärast vooguhenduse katkestamist. Suurendage kõrge latentsusega radadel. [Vaikeväärtus 300000 (5min)]"
+
+msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration. Increase for very high-latency remote access. [Default is 120000 (2min)]"
+msgstr "Voo ühenduse aegumise ülemine piir. Hoiab ära ühendusepõhiste aegumiste ühe tamise. [Vaikeväärtus 120000 (2min)]"
+
+msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 8]"
+msgstr "Algne ummistuse akna suurus (pakettides) uutele vooguhendustele. Suurem aken alustab ühendusi kiiremini. [Vaikeväärtus 8]"
+
+msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 128]"
+msgstr "Maksimaalne ummistuse akna suurus (pakettides) vooguhendustele. Piirab ühe voo maksimaalset läbilaskevõimet. [Vaikeväärtus 128]"
+
+msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
+msgstr "Minimaalne edastusviivitus millisekundites. Pakette ei saadeta uuesti kiiremini kui see intervall. [Vaikeväärtus 100ms]"
+
+msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
+msgstr "Maksimaalne edastusviivitus millisekundites. Edastusintervall ei üheta seda väärtust. [Vaikeväärtus 30000 (30s)]"
+
+msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
+msgstr "Maksimaalne edastuse aegumine millisekundites pärast eksponentsiaalset tagasilöõki (kahekordistamist). Piirab, kui kaua saatja ootab. [Vaikeväärtus 30000 (30s)]"
+
 msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
 msgstr "Kui see seadistus on true, töötab I2P ilma võrguühenduseta, mis on kasulik, kui teiste marsruuterite kodeerimisuuenduste testimiseks tuleb marsruuterit pidevalt taaskäivitada ja see takistab võrgu katkestusi."
+
+msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
+msgstr "Kui tõene, keelab kohaliku silmuse kohaletoimetamise ja sunnib kogu liikluse läbi tunnelite. Kasulik tunnelite marsruutimise testimiseks. [Vaikimisi keelatud]"
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "See seadistus võimaldab alternatiivsete NTP serverite seadistamist, mis on vajalikud selleks, et teie marsruuter hoiaks täpset kellaega. [Vaikimisi on 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -7804,6 +8319,63 @@ msgstr "tööjärjekorra statistika"
 msgid "Job Queue Stats"
 msgstr "Tööjärjekorra statistika"
 
+msgid "Login"
+msgstr "Sisselogimine"
+
+msgid "Setup"
+msgstr "Seadistamine"
+
+msgid "Select theme"
+msgstr "Vali teema"
+
+msgid "Classic"
+msgstr "Klassikaline"
+
+msgid "Dark"
+msgstr "Tume"
+
+msgid "Light"
+msgstr "Hele"
+
+msgid "Midnight"
+msgstr "Öö"
+
+msgid "Select display language"
+msgstr "Vali kuvakeel"
+
+msgid "Router is starting up..."
+msgstr "Ruuter käivitub..."
+
+msgid "This page will refresh automatically"
+msgstr "See leht värskendub automaatselt"
+
+msgid "Confirm Password"
+msgstr "Kinnita parool"
+
+msgid "Session Duration"
+msgstr "Seansi kestus"
+
+msgid "15 minutes"
+msgstr "15 minutit"
+
+msgid "1 hour"
+msgstr "1 tund"
+
+msgid "4 hours"
+msgstr "4 tundi"
+
+msgid "8 hours"
+msgstr "8 tundi"
+
+msgid "1 day"
+msgstr "1 päev"
+
+msgid "Forever"
+msgstr "Igavesti"
+
+msgid "Set Password"
+msgstr "Määra parool"
+
 msgid "network database"
 msgstr "võrgu andmebaas"
 
@@ -7898,6 +8470,21 @@ msgstr "statistika"
 msgid "Router Statistics"
 msgstr "ruuteri statistika"
 
+msgid "streaming connections"
+msgstr "vooguhendused"
+
+msgid "Streaming Connections"
+msgstr "Vooguhendused"
+
+msgid "Active I2P streaming connections"
+msgstr "Aktiivsed I2P vooguhendused"
+
+msgid "Local Tunnels"
+msgstr "Kohalikud tunnelid"
+
+msgid "Most Recent"
+msgstr "Uusim"
+
 msgid "torrents"
 msgstr "torrentid"
 
@@ -7909,9 +8496,6 @@ msgstr "uusimad transiiditunnelid"
 
 msgid "Locally hosted tunnels (exploratory and client)"
 msgstr "Kohalikult hostitud tunnelid (uurimis- ja klienditunnelid)"
-
-msgid "Most Recent"
-msgstr "Uusim"
 
 msgid "Fastest"
 msgstr "Kiireim"
@@ -7934,9 +8518,6 @@ msgstr "tunneli kaaslaste arv"
 msgid "local tunnels"
 msgstr "kohalikud tunnelid"
 
-msgid "Local Tunnels"
-msgstr "Kohalikud tunnelid"
-
 msgid "Toggle Tunnel Ids"
 msgstr "Läbi- ja väljutünnelite ID-d"
 
@@ -7945,6 +8526,9 @@ msgstr "Läbi- ja väljutunneleid"
 
 msgid "Peer Profile"
 msgstr "Ruuteri profiil"
+
+msgid "Session Bans"
+msgstr "Seansi keelud"
 
 msgid "Profile View"
 msgstr "Profiili vaade"

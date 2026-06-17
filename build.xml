@@ -626,7 +626,7 @@
     <copy quiet="true" verbose="false" file="${build.root}apps/desktopgui/dist/desktopgui.jar" todir="${build.root}build/"/>
   </target>
 
-  <target name="buildRouterConsole" depends="buildrouter, buildSystray, buildDesktopGui, buildJetty, buildJrobin, buildI2PTunnel">
+  <target name="buildRouterConsole" depends="buildrouter, buildSystray, buildDesktopGui, buildJetty, buildJrobin, buildStreaming, buildI2PTunnel">
     <ant dir="apps/routerconsole/java/" target="jar">
       <property name="build.dir" location="${build.root}apps/routerconsole/java/build"/>
       <property name="jetty.pkg.dir" location="${build.root}apps/jetty/build"/>
@@ -636,7 +636,9 @@
       <property name="desktopgui.dist.dir" location="${build.root}apps/desktopgui/dist"/>
       <property name="i2ptunnel.java.build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
       <property name="jrobin.java.build.dir" location="${build.root}apps/jrobin/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
       <property name="router.java.build.dir" location="${build.root}router/java/build"/>
+      <property name="streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
       <property name="systray.java.build.dir" location="${build.root}apps/systray/java/build"/>
       <property name="jsp.build.dir" location="${build.root}apps/routerconsole/jsp"/>
       </ant>
@@ -653,7 +655,9 @@
       <property name="desktopgui.dist.dir" location="${build.root}apps/desktopgui/dist"/>
       <property name="i2ptunnel.java.build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
       <property name="jrobin.java.build.dir" location="${build.root}apps/jrobin/java/build"/>
+      <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
       <property name="router.java.build.dir" location="${build.root}router/java/build"/>
+      <property name="streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
       <property name="systray.java.build.dir" location="${build.root}apps/systray/java/build"/>
       </ant>
   </target>
@@ -1301,14 +1305,12 @@
     <!-- Cleanup .po files after update: remove fuzzy markers, wrap, location, comments -->
     <exec executable="sh" osfamily="unix" failifexecutionfails="false">
       <arg value="tools/scripts/cleanup_po.sh"/>
-      <arg value="."/>
       <arg value="--no-wrap"/>
       <arg value="--no-location"/>
       <arg value="--no-comments"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="false">
       <arg value="tools/scripts/cleanup_po.sh"/>
-      <arg value="."/>
       <arg value="--no-wrap"/>
       <arg value="--no-location"/>
       <arg value="--no-comments"/>

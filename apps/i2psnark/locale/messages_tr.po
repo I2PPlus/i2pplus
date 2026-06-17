@@ -104,9 +104,6 @@ msgstr "Veri dizini değiştirmeden önce tüm torrentleri durdurun"
 msgid "Data directory must be an absolute path"
 msgstr "Veri klasörü yolu mutlak olmalıdır"
 
-msgid "Data directory does not exist"
-msgstr "Veri klasörü bulunamadı"
-
 msgid "Not a directory"
 msgstr "Bir klasör değil"
 
@@ -278,10 +275,6 @@ msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disab
 msgstr "Uyarı - \"{0}\" içinde I2P izleyici yok ve DHT ile açık izleyiciler devre dışı, torrenti başlatmadan önce açık izleyicileri veya DHT'yi etkinleştirmelisiniz.Uyarı - \"{0}\" içinde I2P izleyici yok ve DHT ile açık izleyiciler devre dışı, torrenti başlatmadan önce açık izleyicileri veya DHT'yi etkinleştirmelisiniz.Uyarı - \"{0}\" içinde I2P izleyici yok ve DHT ile açık izleyiciler devre dışı, torrenti başlatmadan önce açık izleyicileri veya DHT'yi etkinleştirmelisiniz.Uyarı - \"{0}\" içinde herhangi bir I2P izleyici yok. I2P açık izleyicileri ve DHT devre dışı bırakılmış. Torrenti başlatmadan önce açık izleyicileri ya da DHT özelliğini etkinleştirin."
 
 #, java-format
-msgid "Fetching {0}"
-msgstr "Alınıyor {0}"
-
-#, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
 msgstr "Açık izleyiciler devre dışı ve DHT eşimiz yok. Açık izleyiciler devre dışı ve DHT eşimiz yok. Açık izleyiciler devre dışı bırakıldı ve DHT eşimiz yok. Açık izleyiciler devre dışı bırakılmış ve herhangi bir DHT eşi yok. Başka bir torrent başlatılana kadar {0} alınamayabilir. Açık izleyicileri ya da DHT özelliğini etkinleştirin."
 
@@ -442,6 +435,9 @@ msgstr "{0} torrentinin yeniden kontrolü tamamlandı, değişmedi{0} torrentini
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "{0} torrenti denetlenirken bir sorun çıktı"
+
+msgid "Data directory does not exist"
+msgstr "Veri klasörü bulunamadı"
 
 msgid "Cannot create diskspace bar"
 msgstr "Disk alanı çubuğu oluşturulamıyor"

@@ -38,6 +38,12 @@ msgstr "높은 대역폭과 신뢰도"
 msgid "Error - tunnels are not initialized yet"
 msgstr "오류 - 터널이 아직 초기화되지 않았습니다"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "잘못된 폼 서브미션. 뒤로가기나 새로고침을 누르셨을 수 있습니다. 재시도해주세요."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "문제가 지속되면 브라우저의 쿠키가 활성화되어 있는지 확인해주세요."
+
 msgid "No services configured, cannot restart!"
 msgstr " 구성된 서비스가 없어 재시작할 수 없습니다!"
 
@@ -609,6 +615,39 @@ msgstr "새 서버 구성"
 msgid "Hostname"
 msgstr "호스트 이름"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "상관 관계 공격을 방어하기 위한 무작위 시작 지연(자동 시작이 활성화된 경우)"
+
+msgid "Startup Delay"
+msgstr "시작 지연"
+
+msgid "Minimum"
+msgstr "최소"
+
+msgid "Minimum startup delay"
+msgstr "최소 시작 지연"
+
+msgid "seconds"
+msgstr "초"
+
+msgid "Maximum"
+msgstr "최대"
+
+msgid "Maximum startup delay"
+msgstr "최대 시작 지연"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "터널 종료 전에 무작위 지연을 추가한 후 정상적인 라우터 종료/재시작 프로세스 시작"
+
+msgid "Shutdown Delay"
+msgstr "종료 지연"
+
+msgid "Minimum shutdown delay"
+msgstr "최소 종료 지연"
+
+msgid "Maximum shutdown delay"
+msgstr "최대 종료 지연"
+
 msgid "Website Hostname"
 msgstr "웹 사이트 호스트 이름"
 
@@ -1090,8 +1129,8 @@ msgstr "미리보기 없음"
 msgid "Starting..."
 msgstr "시작 중..."
 
-msgid "Stop this Tunnel"
-msgstr "이 터널 중지"
+msgid "Starting in"
+msgstr "시작까지"
 
 msgid "Running"
 msgstr "실행 중"
@@ -1105,14 +1144,17 @@ msgstr "내부"
 msgid "out"
 msgstr "외부"
 
+msgid "Stopped"
+msgstr "중지됨"
+
+msgid "Stop this Tunnel"
+msgstr "이 터널 중지"
+
 msgid "Restart this Tunnel"
 msgstr "이 터널 재시작"
 
 msgid "Restart"
 msgstr "재시작"
-
-msgid "Stopped"
-msgstr "중지됨"
 
 msgid "Destination"
 msgstr "목적지"
@@ -1288,12 +1330,6 @@ msgstr "인증 생성"
 
 msgid "SSL Helper"
 msgstr "SSL 도우미"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "잘못된 폼 서브미션. 뒤로가기나 새로고침을 누르셨을 수 있습니다. 재시도해주세요."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "문제가 지속되면 브라우저의 쿠키가 활성화되어 있는지 확인해주세요."
 
 msgid "Experts only!"
 msgstr "전문가 전용!"

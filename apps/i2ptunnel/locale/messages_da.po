@@ -41,6 +41,12 @@ msgstr "højere båndbredde og pålidelighed"
 msgid "Error - tunnels are not initialized yet"
 msgstr "Fejl - tunneler er ikke initialiseret endnu"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Ugyldig formularindsendelse, sandsynligvis fordi du brugte knappen 'tilbage' eller 'genindlæs' i din browser. Ugyldig formularindsendelse, sandsynligvis fordi du brugte knappen 'tilbage' eller 'genindlæs' i din browser. Ugyldig formularafsendelse, sandsynligvis fordi du brugte 'tilbage' eller 'reload' knappen i din browser. Prøv venligst at sende igen."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Hvis problemet fortsætter, skal du kontrollere, at du har aktiveret cookies i din browser.Hvis problemet fortsætter, kontrollere, at du har slået cookies til i din browser."
+
 msgid "No services configured, cannot restart!"
 msgstr "Ingen tjenester konfigureret, kan ikke genstarte!"
 
@@ -614,6 +620,39 @@ msgstr "Ny serverkonfiguration"
 msgid "Hostname"
 msgstr "Hostnavn"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Tilfældig startforsinkelse (når automatisk start er aktiveret) for at beskytte mod korrelationsangreb"
+
+msgid "Startup Delay"
+msgstr "Startforsinkelse"
+
+msgid "Minimum"
+msgstr "Minimum"
+
+msgid "Minimum startup delay"
+msgstr "Minimum startforsinkelse"
+
+msgid "seconds"
+msgstr "sekunder"
+
+msgid "Maximum"
+msgstr "Maksimum"
+
+msgid "Maximum startup delay"
+msgstr "Maksimum startforsinkelse"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Tilføj tilfældig forsinkelse før tunnelnedlukning, start derefter en gradvis router-nedlukning/genstartsproces"
+
+msgid "Shutdown Delay"
+msgstr "Nedlukningsforsinkelse"
+
+msgid "Minimum shutdown delay"
+msgstr "Minimum nedlukningsforsinkelse"
+
+msgid "Maximum shutdown delay"
+msgstr "Maksimum nedlukningsforsinkelse"
+
 msgid "Website Hostname"
 msgstr "Webstedets værtsnavn"
 
@@ -1095,8 +1134,8 @@ msgstr "Ingen Preview"
 msgid "Starting..."
 msgstr "Starter..."
 
-msgid "Stop this Tunnel"
-msgstr "Stop denne tunnel"
+msgid "Starting in"
+msgstr "Starter om"
 
 msgid "Running"
 msgstr "Kører"
@@ -1110,14 +1149,17 @@ msgstr "ind"
 msgid "out"
 msgstr "ud"
 
+msgid "Stopped"
+msgstr "Stoppet"
+
+msgid "Stop this Tunnel"
+msgstr "Stop denne tunnel"
+
 msgid "Restart this Tunnel"
 msgstr "Genstart denne tunnel"
 
 msgid "Restart"
 msgstr "Genstart"
-
-msgid "Stopped"
-msgstr "Stoppet"
 
 msgid "Destination"
 msgstr "Destination"
@@ -1293,12 +1335,6 @@ msgstr "Generer godkendelse"
 
 msgid "SSL Helper"
 msgstr "SSL-hjælper"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Ugyldig formularindsendelse, sandsynligvis fordi du brugte knappen 'tilbage' eller 'genindlæs' i din browser. Ugyldig formularindsendelse, sandsynligvis fordi du brugte knappen 'tilbage' eller 'genindlæs' i din browser. Ugyldig formularafsendelse, sandsynligvis fordi du brugte 'tilbage' eller 'reload' knappen i din browser. Prøv venligst at sende igen."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Hvis problemet fortsætter, skal du kontrollere, at du har aktiveret cookies i din browser.Hvis problemet fortsætter, kontrollere, at du har slået cookies til i din browser."
 
 msgid "Experts only!"
 msgstr "Kun eksperter!"

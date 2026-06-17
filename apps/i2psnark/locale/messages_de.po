@@ -104,9 +104,6 @@ msgstr "Stoppe alle Torrents bevor das Datenverzeichnis geändert wird"
 msgid "Data directory must be an absolute path"
 msgstr "Datenverzeichnis muss ein absoluter Pfad sein"
 
-msgid "Data directory does not exist"
-msgstr "Datenverzeichnis nicht vorhanden"
-
 msgid "Not a directory"
 msgstr "Kein Verzeichnis"
 
@@ -278,10 +275,6 @@ msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disab
 msgstr "Warnung - Keine I2P-Tracker in \"{0}\", und DHT und OpenTrackers sind deaktiviert. Sie sollten DHT oder OpenTrackers vor dem Starten des Torrents aktivieren."
 
 #, java-format
-msgid "Fetching {0}"
-msgstr "{0} wird abgerufen"
-
-#, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
 msgstr "Offene Tracker sind deaktiviert und wir haben keine DHT-Peers. Das Abrufen von {0} könnte scheitern, sofern Sie keinen anderen Torrent starten, OpenTracker oder DHT aktivieren."
 
@@ -442,6 +435,9 @@ msgstr "Überprüfung von Torrent {0} beendet, keine Änderung"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Fehler bei der Überprüfung von Torrent {0}"
+
+msgid "Data directory does not exist"
+msgstr "Datenverzeichnis nicht vorhanden"
 
 msgid "Cannot create diskspace bar"
 msgstr "Speicherplatzleiste kann nicht erstellt werden"

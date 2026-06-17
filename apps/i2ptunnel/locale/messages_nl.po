@@ -41,6 +41,12 @@ msgstr "hogere bandbreedte en betrouwbaarheid"
 msgid "Error - tunnels are not initialized yet"
 msgstr "Fout - tunnels zijn nog niet geïnitialiseerd"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Ongeldige formulierinzending, waarschijnlijk omdat u de 'terug'- of 'herlaad'-knop in uw browser heeft gebruikt. Ongeldige formulier verzonden, waarschijnlijk doordat je de 'back' of 'reload' button van je browser hebt gebruikt. Verzend opnieuw."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Als dit probleem blijft bestaan, kijk dan of je browser cookies toestaat."
+
 msgid "No services configured, cannot restart!"
 msgstr "Geen services geconfigureerd, kan niet opnieuw starten!"
 
@@ -614,6 +620,39 @@ msgstr "Nieuwe serverconfiguratie"
 msgid "Hostname"
 msgstr "Hostnaam"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Willekeurige opstartvertraging (wanneer automatisch opstarten is ingeschakeld) ter verdediging tegen correlatieaanvallen"
+
+msgid "Startup Delay"
+msgstr "Opstartvertraging"
+
+msgid "Minimum"
+msgstr "Minimum"
+
+msgid "Minimum startup delay"
+msgstr "Minimale opstartvertraging"
+
+msgid "seconds"
+msgstr "seconden"
+
+msgid "Maximum"
+msgstr "Maximum"
+
+msgid "Maximum startup delay"
+msgstr "Maximale opstartvertraging"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Voeg willekeurige vertraging toe vóór het uitschakelen van de tunnel en start vervolgens een graceful router-uitschakeling/herstartproces"
+
+msgid "Shutdown Delay"
+msgstr "Uitschakelvertraging"
+
+msgid "Minimum shutdown delay"
+msgstr "Minimale uitschakelvertraging"
+
+msgid "Maximum shutdown delay"
+msgstr "Maximale uitschakelvertraging"
+
 msgid "Website Hostname"
 msgstr "Hostnaam van website"
 
@@ -1095,8 +1134,8 @@ msgstr "Geen voorbeeld"
 msgid "Starting..."
 msgstr "Bezig met starten..."
 
-msgid "Stop this Tunnel"
-msgstr "Stop deze tunnel"
+msgid "Starting in"
+msgstr "Starten over"
 
 msgid "Running"
 msgstr "Draait"
@@ -1110,14 +1149,17 @@ msgstr "in"
 msgid "out"
 msgstr "uit"
 
+msgid "Stopped"
+msgstr "Gestopt"
+
+msgid "Stop this Tunnel"
+msgstr "Stop deze tunnel"
+
 msgid "Restart this Tunnel"
 msgstr "Deze tunnel opnieuw starten"
 
 msgid "Restart"
 msgstr "Opnieuw starten"
-
-msgid "Stopped"
-msgstr "Gestopt"
 
 msgid "Destination"
 msgstr "Destination"
@@ -1293,12 +1335,6 @@ msgstr "Authenticatie genereren"
 
 msgid "SSL Helper"
 msgstr "SSL-helper"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Ongeldige formulierinzending, waarschijnlijk omdat u de 'terug'- of 'herlaad'-knop in uw browser heeft gebruikt. Ongeldige formulier verzonden, waarschijnlijk doordat je de 'back' of 'reload' button van je browser hebt gebruikt. Verzend opnieuw."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Als dit probleem blijft bestaan, kijk dan of je browser cookies toestaat."
 
 msgid "Experts only!"
 msgstr "Alleen experts!"

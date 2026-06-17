@@ -8,14 +8,132 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Website Unknown"
-msgstr "Tundmatu veebisait"
+msgid "This seems to be a bad destination:"
+msgstr "See tundub olevat halb sihtkoht:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper ei saa aidata sellise sihtkoha puhul!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "Kui soovid külastada aadressiraamatus olevat sihtkoha, siis klõpsa <a href=\"{0}\">siia</a>. Kui soovid külastada vastuolulise aadressiabi sihtkoha, siis klõpsa <a href=\"{1}\">siia</a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "Sihtkoha {0} aadressiraamatus"
+
+msgid "Conflicting address helper destination"
+msgstr "Vastuoluline aadressiabi sihtkoha"
+
+msgid "Corrupt Base32 address"
+msgstr "Rikutud Base32 aadress"
+
+msgid "Destination LeaseSet not found"
+msgstr "Sihtkoha LeaseSeti ei leitud"
+
+msgid "Host"
+msgstr "Meeskond"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "Sihtkoht"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "Jätka {0} salvestamata"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "Sa saad külastada veebisaiti ilma, et salvestaksid seda aadressiraamatusse. Aadress on meeles kuni taaskäivitad oma I2P routerit."
+
+msgid "Continue without saving"
+msgstr "Jätka salvestamata"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "Salvesta {0} routeri aadressiraamatusse ja jätka veebisaidi külastamisega"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "See aadress salvestatakse sinu Rooteri aadressiraamatusse, kus säilitad oma tellimuse põhinevad aadressid."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "Kui soovid hoida meeles manuaalselt lisatud veebisaitide üle, siis lisa neid oma Master või Private aadressiraamatusse."
+
+msgid "Save & continue"
+msgstr "Salvesta & jätka"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "Salvesta {0} master aadressiraamatusse ja jätka veebisaidi külastamisega"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "See aadress salvestatakse sinu Master aadressiraamatusse. Vali see valik aadresside jaoks, mida soovid hoida eraldi peamisest routeri aadressiraamatust, kuid mis ei pea olema avalikud."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "Salvesta {0} privaatse aadressiraamatusse ja jätka veebisaidi külastamisega"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "See aadress salvestatakse sinu Privaatse aadressiraamatusse, tagades selle kunagi avaldamata jätmine."
+
+msgid "Base32 address requires lookup password"
+msgstr "Base32 aadress nõuab otsinguparaola"
+
+msgid "Base32 address requires encryption key"
+msgstr "Base32 aadress nõuab krüpteerimisvõtme"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Base32 aadress nõuab krüpteerimisvõtme ja otsinguparaola"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Base32 aadressi krüpteerimisviga, kontrolli krüpteerimisvõtme"
+
+msgid "Generate"
+msgstr "Genereeri"
+
+msgid "Encryption key"
+msgstr "Krüpteerimisvõti"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "Sa pead sisestama serveri operatiivilt antud PSK krüpteerimisvõtme või genereerima DH krüpteerimisvõtme ja saatma see serveri operatiivile."
+
+msgid "Ask the server operator for help."
+msgstr "Pöördu serveri operatiivi poole abi saamiseks."
+
+msgid "Enter PSK encryption key"
+msgstr "Sisesta PSK krüpteerimisvõti"
+
+msgid "Generate new DH encryption key"
+msgstr "Genereeri uus DH krüpteerimisvõti"
+
+msgid "Lookup password"
+msgstr "Otsinguparaol"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "Sa pead sisestama serveri operatiivilt antud paraola."
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "Lisa aadressiabi kaudu {0}"
+
+msgid "Added via address helper"
+msgstr "Lisa aadressiabi abiga"
+
+msgid "Missing lookup password"
+msgstr "Puuduv otsinguparaol"
+
+msgid "Missing private key"
+msgstr "Puuduv privaatne võti"
+
+msgid "Invalid private key"
+msgstr "Kehtetu privaatne võti"
+
+msgid "Your new encryption key"
+msgstr "Sinu uus krüpteerimisvõti"
 
 msgid "Router Console"
 msgstr "Routeri konsool"
-
-msgid "I2P Router Console"
-msgstr "I2P Routeri konsool"
 
 msgid "Addressbook"
 msgstr "Aadressiraamat"
@@ -25,6 +143,52 @@ msgstr "Seadistused"
 
 msgid "Help"
 msgstr "Abi"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "Kopeeri võti ja saada see serveri operatiivile."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "Kui sul on antud luba, võid edasi minna veebisaidile."
+
+msgid "Go back and fix the error"
+msgstr "Mine tagasi ja paranda viga"
+
+msgid "router"
+msgstr "router"
+
+msgid "master"
+msgstr "master"
+
+msgid "private"
+msgstr "privaatne"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "Ümber suunamine {0} poole"
+
+msgid "Redirection in progress"
+msgstr "Ümber suunamine käimas"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "{0} salvestatud {1} aadressiraamatusse, ümber suunamine praegu."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "Ebaõnnestus {0} salvestamine {1} aadressiraamatusse, ümber suunamine praegu."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "Klõpsa siia, kui sa ei suunata automaatselt ümber."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "Salvestas autentimise {0} ja suuname praegu ümber."
+
+msgid "Website Unknown"
+msgstr "Tundmatu veebisait"
+
+msgid "I2P Router Console"
+msgstr "I2P Routeri konsool"
 
 msgid "Website Not Found in Addressbook"
 msgstr "Veebisaiti ei leitud aadressiraamatus"
@@ -262,167 +426,3 @@ msgstr "Kui vajutasid lingi, kontrolli URI lõppu, kas brauser on ootamatult mid
 
 msgid "The Base32 address is invalid."
 msgstr "Base32 aadress on kehtetu."
-
-msgid "This seems to be a bad destination:"
-msgstr "See tundub olevat halb sihtkoht:"
-
-msgid "i2paddresshelper cannot help you with a destination like that!"
-msgstr "i2paddresshelper ei saa aidata sellise sihtkoha puhul!"
-
-#, java-format
-msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr "Kui soovid külastada aadressiraamatus olevat sihtkoha, siis klõpsa <a href=\"{0}\">siia</a>. Kui soovid külastada vastuolulise aadressiabi sihtkoha, siis klõpsa <a href=\"{1}\">siia</a>."
-
-#, java-format
-msgid "Destination for {0} in addressbook"
-msgstr "Sihtkoha {0} aadressiraamatus"
-
-msgid "Conflicting address helper destination"
-msgstr "Vastuoluline aadressiabi sihtkoha"
-
-msgid "Corrupt Base32 address"
-msgstr "Rikutud Base32 aadress"
-
-msgid "Destination LeaseSet not found"
-msgstr "Sihtkoha LeaseSeti ei leitud"
-
-msgid "Host"
-msgstr "Meeskond"
-
-msgid "Base32"
-msgstr "Base32"
-
-msgid "Destination"
-msgstr "Sihtkoht"
-
-#, java-format
-msgid "Continue to {0} without saving"
-msgstr "Jätka {0} salvestamata"
-
-msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr "Sa saad külastada veebisaiti ilma, et salvestaksid seda aadressiraamatusse. Aadress on meeles kuni taaskäivitad oma I2P routerit."
-
-msgid "Continue without saving"
-msgstr "Jätka salvestamata"
-
-#, java-format
-msgid "Save {0} to router address book and continue to website"
-msgstr "Salvesta {0} routeri aadressiraamatusse ja jätka veebisaidi külastamisega"
-
-msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr "See aadress salvestatakse sinu Rooteri aadressiraamatusse, kus säilitad oma tellimuse põhinevad aadressid."
-
-msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr "Kui soovid hoida meeles manuaalselt lisatud veebisaitide üle, siis lisa neid oma Master või Private aadressiraamatusse."
-
-msgid "Save & continue"
-msgstr "Salvesta & jätka"
-
-#, java-format
-msgid "Save {0} to master addressbook and continue to website"
-msgstr "Salvesta {0} master aadressiraamatusse ja jätka veebisaidi külastamisega"
-
-msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr "See aadress salvestatakse sinu Master aadressiraamatusse. Vali see valik aadresside jaoks, mida soovid hoida eraldi peamisest routeri aadressiraamatust, kuid mis ei pea olema avalikud."
-
-#, java-format
-msgid "Save {0} to private addressbook and continue to website"
-msgstr "Salvesta {0} privaatse aadressiraamatusse ja jätka veebisaidi külastamisega"
-
-msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr "See aadress salvestatakse sinu Privaatse aadressiraamatusse, tagades selle kunagi avaldamata jätmine."
-
-msgid "Base32 address requires lookup password"
-msgstr "Base32 aadress nõuab otsinguparaola"
-
-msgid "Base32 address requires encryption key"
-msgstr "Base32 aadress nõuab krüpteerimisvõtme"
-
-msgid "Base32 address requires encryption key and lookup password"
-msgstr "Base32 aadress nõuab krüpteerimisvõtme ja otsinguparaola"
-
-msgid "Base32 address decryption failure, check encryption key"
-msgstr "Base32 aadressi krüpteerimisviga, kontrolli krüpteerimisvõtme"
-
-msgid "Generate"
-msgstr "Genereeri"
-
-msgid "Encryption key"
-msgstr "Krüpteerimisvõti"
-
-msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr "Sa pead sisestama serveri operatiivilt antud PSK krüpteerimisvõtme või genereerima DH krüpteerimisvõtme ja saatma see serveri operatiivile."
-
-msgid "Ask the server operator for help."
-msgstr "Pöördu serveri operatiivi poole abi saamiseks."
-
-msgid "Enter PSK encryption key"
-msgstr "Sisesta PSK krüpteerimisvõti"
-
-msgid "Generate new DH encryption key"
-msgstr "Genereeri uus DH krüpteerimisvõti"
-
-msgid "Lookup password"
-msgstr "Otsinguparaol"
-
-msgid "You must enter the password provided by the server operator."
-msgstr "Sa pead sisestama serveri operatiivilt antud paraola."
-
-#, java-format
-msgid "Added via address helper from {0}"
-msgstr "Lisa aadressiabi kaudu {0}"
-
-msgid "Added via address helper"
-msgstr "Lisa aadressiabi abiga"
-
-msgid "Missing lookup password"
-msgstr "Puuduv otsinguparaol"
-
-msgid "Missing private key"
-msgstr "Puuduv privaatne võti"
-
-msgid "Invalid private key"
-msgstr "Kehtetu privaatne võti"
-
-msgid "Your new encryption key"
-msgstr "Sinu uus krüpteerimisvõti"
-
-msgid "Copy the key and send it to the server operator."
-msgstr "Kopeeri võti ja saada see serveri operatiivile."
-
-msgid "After you are granted permission, you may proceed to the website."
-msgstr "Kui sul on antud luba, võid edasi minna veebisaidile."
-
-msgid "Go back and fix the error"
-msgstr "Mine tagasi ja paranda viga"
-
-msgid "router"
-msgstr "router"
-
-msgid "master"
-msgstr "master"
-
-msgid "private"
-msgstr "privaatne"
-
-#, java-format
-msgid "Redirecting to {0}"
-msgstr "Ümber suunamine {0} poole"
-
-msgid "Redirection in progress"
-msgstr "Ümber suunamine käimas"
-
-#, java-format
-msgid "Saved {0} to the {1} addressbook, redirecting now."
-msgstr "{0} salvestatud {1} aadressiraamatusse, ümber suunamine praegu."
-
-#, java-format
-msgid "Failed to save {0} to the {1} addressbook, redirecting now."
-msgstr "Ebaõnnestus {0} salvestamine {1} aadressiraamatusse, ümber suunamine praegu."
-
-msgid "Click here if you are not redirected automatically."
-msgstr "Klõpsa siia, kui sa ei suunata automaatselt ümber."
-
-#, java-format
-msgid "Saved the authentication for {0}, redirecting now."
-msgstr "Salvestas autentimise {0} ja suuname praegu ümber."

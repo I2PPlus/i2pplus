@@ -104,9 +104,6 @@ msgstr "Zastavte všechny torrenty před změnou datového adresáře"
 msgid "Data directory must be an absolute path"
 msgstr "Datový adresář musí být absolutní cesta"
 
-msgid "Data directory does not exist"
-msgstr "Datový adresář neexistuje"
-
 msgid "Not a directory"
 msgstr "Není adresář"
 
@@ -278,10 +275,6 @@ msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disab
 msgstr "Varování - V \"{0}\" nejsou žádné I2P sledovače a DHT a otevřené sledovače jsou zakázány. Před spuštěním torrentu byste měli povolit otevřené sledovače nebo DHT."
 
 #, java-format
-msgid "Fetching {0}"
-msgstr "Získávám {0}"
-
-#, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
 msgstr "Otevřené sledovače jsou deaktivovány a nemáme žádné vrstevníky DHT. Fetch of {0} nemusí uspět, dokud nezačnete další torrent, povolíte otevřené sledovače nebo nepovoláte DHT."
 
@@ -442,6 +435,9 @@ msgstr "Dokončeno překontrolování torrentu {0}, nezměněno"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Chyba při kontrole torrentu {0}"
+
+msgid "Data directory does not exist"
+msgstr "Datový adresář neexistuje"
 
 msgid "Cannot create diskspace bar"
 msgstr "Nelze vytvořit ukazatel volného místa na disku"

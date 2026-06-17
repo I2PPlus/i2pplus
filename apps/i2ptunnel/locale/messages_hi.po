@@ -41,6 +41,12 @@ msgstr "अधिक बैंडविड्थ और विश्वसनी
 msgid "Error - tunnels are not initialized yet"
 msgstr "त्रुटि - अभी तक टनल प्रारंभ नहीं हुए हैं"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "अवैध फ़ॉर्म सबमिशन, शायद क्योंकि आपने अपने ब्राउज़र में 'वापस' या 'रीलोड' बटन का उपयोग किया है। कृपया पुनः प्रस्तुत करें।"
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "यदि समस्या जारी रहती है, तो यह सत्यापित करें कि आपके ब्राउज़र में कुकीज़ सक्रिय हैं।"
+
 msgid "No services configured, cannot restart!"
 msgstr "कोई सेवा कॉन्फ़िगर नहीं है, पुनः आरंभ नहीं हो सकती!"
 
@@ -614,6 +620,39 @@ msgstr "नई सर्वर सेटिंग"
 msgid "Hostname"
 msgstr "होस्टनेम"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "सहसंबंध हमलों से बचाव के लिए रैंडम स्टार्टअप विलंब (जब ऑटो-स्टार्ट सक्षम हो)"
+
+msgid "Startup Delay"
+msgstr "स्टार्टअप विलंब"
+
+msgid "Minimum"
+msgstr "न्यूनतम"
+
+msgid "Minimum startup delay"
+msgstr "न्यूनतम स्टार्टअप विलंब"
+
+msgid "seconds"
+msgstr "सेकंड"
+
+msgid "Maximum"
+msgstr "अधिकतम"
+
+msgid "Maximum startup delay"
+msgstr "अधिकतम स्टार्टअप विलंब"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "टनल शटडाउन से पहले रैंडम विलंब जोड़ें, फिर ग्रेसफुल राउटर शटडाउन/रीस्टार्ट प्रक्रिया शुरू करें"
+
+msgid "Shutdown Delay"
+msgstr "शटडाउन विलंब"
+
+msgid "Minimum shutdown delay"
+msgstr "न्यूनतम शटडाउन विलंब"
+
+msgid "Maximum shutdown delay"
+msgstr "अधिकतम शटडाउन विलंब"
+
 msgid "Website Hostname"
 msgstr "वेबसाइट होस्टनेम"
 
@@ -1095,8 +1134,8 @@ msgstr "कोई पूर्वावलोकन नहीं"
 msgid "Starting..."
 msgstr "शुरू हो रहा है..."
 
-msgid "Stop this Tunnel"
-msgstr "इस टनल को रोकें"
+msgid "Starting in"
+msgstr "में शुरू हो रहा है"
 
 msgid "Running"
 msgstr "चालू"
@@ -1110,14 +1149,17 @@ msgstr "में"
 msgid "out"
 msgstr "बाहर"
 
+msgid "Stopped"
+msgstr "रोका गया"
+
+msgid "Stop this Tunnel"
+msgstr "इस टनल को रोकें"
+
 msgid "Restart this Tunnel"
 msgstr "इस टनल को पुनः आरंभ करें"
 
 msgid "Restart"
 msgstr "पुनः आरंभ करें"
-
-msgid "Stopped"
-msgstr "रोका गया"
 
 msgid "Destination"
 msgstr "गंतव्य"
@@ -1293,12 +1335,6 @@ msgstr "प्रमाणीकरण उत्पन्न करें"
 
 msgid "SSL Helper"
 msgstr "SSL सहायक"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "अवैध फ़ॉर्म सबमिशन, शायद क्योंकि आपने अपने ब्राउज़र में 'वापस' या 'रीलोड' बटन का उपयोग किया है। कृपया पुनः प्रस्तुत करें।"
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "यदि समस्या जारी रहती है, तो यह सत्यापित करें कि आपके ब्राउज़र में कुकीज़ सक्रिय हैं।"
 
 msgid "Experts only!"
 msgstr "केवल विशेषज्ञों के लिए!"

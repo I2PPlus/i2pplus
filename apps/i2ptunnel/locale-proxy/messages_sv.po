@@ -8,14 +8,132 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Website Unknown"
-msgstr "Okänd Webbplats"
+msgid "This seems to be a bad destination:"
+msgstr "Detta verkar vara ett felaktigt mål:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2padresshjälp kan inte hjälpa dig med ett sådant  mål!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "Klicka <a href=\"{0}\">här</a> för att besöka destinationen i din adressbok. Klicka <a href=\"{1}\">här</a> om du vill besöka den motstridiga adresshjälpardestinationen."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "Destination för {0} i adressboken"
+
+msgid "Conflicting address helper destination"
+msgstr "Motstridig hjälparadress destination"
+
+msgid "Corrupt Base32 address"
+msgstr "Korrupt Base32-adress"
+
+msgid "Destination LeaseSet not found"
+msgstr "Destination LeaseSet hittades inte"
+
+msgid "Host"
+msgstr "Värd"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "Mål"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "Fortsätt till {0} utan att spara"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "Du kan bläddra till webbplatsen utan att spara den i adressboken. Adressen kommer att komma ihåg tills du startar om din I2P-router."
+
+msgid "Continue without saving"
+msgstr "Fortsätt utan att spara"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "Spara {0} till routerns adressbok och fortsätt till webbplatsen"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "Denna adress kommer att sparas i din routeradressbok där dina prenumerationsbaserade adresser lagras."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "Om du vill hålla reda på webbplatser som du har lagt till manuellt, lägg till i din Master eller Privata adressbok istället."
+
+msgid "Save & continue"
+msgstr "Spara & fortsätt"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "Spara {0} i huvudadressboken och fortsätt till webbplatsen"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "Den här adressen kommer att sparas i din masteradressbok. Välj det här alternativet för adresser som du vill hålla åtskilda från huvudrouterns adressbok, men inte har något emot att publicera."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "Spara {0} i privat adressbok och fortsätt till webbplatsen"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "Den här adressen kommer att sparas i din privata adressbok, vilket säkerställer att den aldrig publiceras."
+
+msgid "Base32 address requires lookup password"
+msgstr "Base32-adress kräver uppslagslösenord"
+
+msgid "Base32 address requires encryption key"
+msgstr "Base32-adress kräver krypteringsnyckel"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Base32-adress kräver krypteringsnyckel och uppslagslösenord"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Base32-adressdekrypteringsfel, kontrollera krypteringsnyckeln"
+
+msgid "Generate"
+msgstr "Generera"
+
+msgid "Encryption key"
+msgstr "Krypteringsnyckel"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "Du måste antingen ange en PSK-krypteringsnyckel som tillhandahålls av serveroperatören, eller generera en DH-krypteringsnyckel och skicka den till serveroperatören."
+
+msgid "Ask the server operator for help."
+msgstr "Be serveroperatören om hjälp."
+
+msgid "Enter PSK encryption key"
+msgstr "Ange PSK-krypteringsnyckel"
+
+msgid "Generate new DH encryption key"
+msgstr "Generera ny DH-krypteringsnyckel"
+
+msgid "Lookup password"
+msgstr "Sök lösenord"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "Du måste ange lösenordet från serveroperatören."
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "Tillagd via adresshjälpare från {0}"
+
+msgid "Added via address helper"
+msgstr "Tillagd via adresshjälpen"
+
+msgid "Missing lookup password"
+msgstr "Sökningslösenord saknas"
+
+msgid "Missing private key"
+msgstr "Privat nyckel saknas"
+
+msgid "Invalid private key"
+msgstr "Ogiltig privat nyckel"
+
+msgid "Your new encryption key"
+msgstr "Din nya krypteringsnyckel"
 
 msgid "Router Console"
 msgstr "Routerkonsol"
-
-msgid "I2P Router Console"
-msgstr "I2P-routerkonsol"
 
 msgid "Addressbook"
 msgstr "Adressbok"
@@ -25,6 +143,52 @@ msgstr "Konfiguration"
 
 msgid "Help"
 msgstr "Hjälp"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "Kopiera nyckeln och skicka den till serveroperatören."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "När du har fått tillstånd kan du fortsätta till webbplatsen."
+
+msgid "Go back and fix the error"
+msgstr "Gå tillbaka och åtgärda felet"
+
+msgid "router"
+msgstr "router"
+
+msgid "master"
+msgstr "master"
+
+msgid "private"
+msgstr "privat"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "Om dirigerar till  {0}"
+
+msgid "Redirection in progress"
+msgstr "Omdirigering pågår"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "Spara {0} till {1}adressboken, omdirigerar nu."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "Misslyckades med att spara {0} till {1}adressboken, omdirigerar nu."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "Klicka här om du inte omdirigeras automatiskt."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "Sparade autentiseringen för {0}, omdirigerar nu."
+
+msgid "Website Unknown"
+msgstr "Okänd Webbplats"
+
+msgid "I2P Router Console"
+msgstr "I2P-routerkonsol"
 
 msgid "Website Not Found in Addressbook"
 msgstr "Webbplatsen inte funnen i Adressboken"
@@ -262,167 +426,3 @@ msgstr "Om du klicka på en länk, kontrollera slutet av URI:n efter andra tecke
 
 msgid "The Base32 address is invalid."
 msgstr "Base32-adressen är ogiltig."
-
-msgid "This seems to be a bad destination:"
-msgstr "Detta verkar vara ett felaktigt mål:"
-
-msgid "i2paddresshelper cannot help you with a destination like that!"
-msgstr "i2padresshjälp kan inte hjälpa dig med ett sådant  mål!"
-
-#, java-format
-msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr "Klicka <a href=\"{0}\">här</a> för att besöka destinationen i din adressbok. Klicka <a href=\"{1}\">här</a> om du vill besöka den motstridiga adresshjälpardestinationen."
-
-#, java-format
-msgid "Destination for {0} in addressbook"
-msgstr "Destination för {0} i adressboken"
-
-msgid "Conflicting address helper destination"
-msgstr "Motstridig hjälparadress destination"
-
-msgid "Corrupt Base32 address"
-msgstr "Korrupt Base32-adress"
-
-msgid "Destination LeaseSet not found"
-msgstr "Destination LeaseSet hittades inte"
-
-msgid "Host"
-msgstr "Värd"
-
-msgid "Base32"
-msgstr "Base32"
-
-msgid "Destination"
-msgstr "Mål"
-
-#, java-format
-msgid "Continue to {0} without saving"
-msgstr "Fortsätt till {0} utan att spara"
-
-msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr "Du kan bläddra till webbplatsen utan att spara den i adressboken. Adressen kommer att komma ihåg tills du startar om din I2P-router."
-
-msgid "Continue without saving"
-msgstr "Fortsätt utan att spara"
-
-#, java-format
-msgid "Save {0} to router address book and continue to website"
-msgstr "Spara {0} till routerns adressbok och fortsätt till webbplatsen"
-
-msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr "Denna adress kommer att sparas i din routeradressbok där dina prenumerationsbaserade adresser lagras."
-
-msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr "Om du vill hålla reda på webbplatser som du har lagt till manuellt, lägg till i din Master eller Privata adressbok istället."
-
-msgid "Save & continue"
-msgstr "Spara & fortsätt"
-
-#, java-format
-msgid "Save {0} to master addressbook and continue to website"
-msgstr "Spara {0} i huvudadressboken och fortsätt till webbplatsen"
-
-msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr "Den här adressen kommer att sparas i din masteradressbok. Välj det här alternativet för adresser som du vill hålla åtskilda från huvudrouterns adressbok, men inte har något emot att publicera."
-
-#, java-format
-msgid "Save {0} to private addressbook and continue to website"
-msgstr "Spara {0} i privat adressbok och fortsätt till webbplatsen"
-
-msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr "Den här adressen kommer att sparas i din privata adressbok, vilket säkerställer att den aldrig publiceras."
-
-msgid "Base32 address requires lookup password"
-msgstr "Base32-adress kräver uppslagslösenord"
-
-msgid "Base32 address requires encryption key"
-msgstr "Base32-adress kräver krypteringsnyckel"
-
-msgid "Base32 address requires encryption key and lookup password"
-msgstr "Base32-adress kräver krypteringsnyckel och uppslagslösenord"
-
-msgid "Base32 address decryption failure, check encryption key"
-msgstr "Base32-adressdekrypteringsfel, kontrollera krypteringsnyckeln"
-
-msgid "Generate"
-msgstr "Generera"
-
-msgid "Encryption key"
-msgstr "Krypteringsnyckel"
-
-msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr "Du måste antingen ange en PSK-krypteringsnyckel som tillhandahålls av serveroperatören, eller generera en DH-krypteringsnyckel och skicka den till serveroperatören."
-
-msgid "Ask the server operator for help."
-msgstr "Be serveroperatören om hjälp."
-
-msgid "Enter PSK encryption key"
-msgstr "Ange PSK-krypteringsnyckel"
-
-msgid "Generate new DH encryption key"
-msgstr "Generera ny DH-krypteringsnyckel"
-
-msgid "Lookup password"
-msgstr "Sök lösenord"
-
-msgid "You must enter the password provided by the server operator."
-msgstr "Du måste ange lösenordet från serveroperatören."
-
-#, java-format
-msgid "Added via address helper from {0}"
-msgstr "Tillagd via adresshjälpare från {0}"
-
-msgid "Added via address helper"
-msgstr "Tillagd via adresshjälpen"
-
-msgid "Missing lookup password"
-msgstr "Sökningslösenord saknas"
-
-msgid "Missing private key"
-msgstr "Privat nyckel saknas"
-
-msgid "Invalid private key"
-msgstr "Ogiltig privat nyckel"
-
-msgid "Your new encryption key"
-msgstr "Din nya krypteringsnyckel"
-
-msgid "Copy the key and send it to the server operator."
-msgstr "Kopiera nyckeln och skicka den till serveroperatören."
-
-msgid "After you are granted permission, you may proceed to the website."
-msgstr "När du har fått tillstånd kan du fortsätta till webbplatsen."
-
-msgid "Go back and fix the error"
-msgstr "Gå tillbaka och åtgärda felet"
-
-msgid "router"
-msgstr "router"
-
-msgid "master"
-msgstr "master"
-
-msgid "private"
-msgstr "privat"
-
-#, java-format
-msgid "Redirecting to {0}"
-msgstr "Om dirigerar till  {0}"
-
-msgid "Redirection in progress"
-msgstr "Omdirigering pågår"
-
-#, java-format
-msgid "Saved {0} to the {1} addressbook, redirecting now."
-msgstr "Spara {0} till {1}adressboken, omdirigerar nu."
-
-#, java-format
-msgid "Failed to save {0} to the {1} addressbook, redirecting now."
-msgstr "Misslyckades med att spara {0} till {1}adressboken, omdirigerar nu."
-
-msgid "Click here if you are not redirected automatically."
-msgstr "Klicka här om du inte omdirigeras automatiskt."
-
-#, java-format
-msgid "Saved the authentication for {0}, redirecting now."
-msgstr "Sparade autentiseringen för {0}, omdirigerar nu."

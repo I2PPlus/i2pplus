@@ -104,9 +104,6 @@ msgstr "Stop alle torrents voordat u de gegevensmap verandert"
 msgid "Data directory must be an absolute path"
 msgstr "Data-directory moet een absoluut pad zijn"
 
-msgid "Data directory does not exist"
-msgstr "Data-directory bestaat niet"
-
 msgid "Not a directory"
 msgstr "Geen directory"
 
@@ -278,10 +275,6 @@ msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disab
 msgstr "Waarschuwing - Geen I2P-trackers in \"{0}\", en DHT en open trackers zijn uitgeschakeld. Je moet open trackers of DHT inschakelen voordat je de torrent start."
 
 #, java-format
-msgid "Fetching {0}"
-msgstr "Downloaden {0}"
-
-#, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
 msgstr "Open trackers zijn uitgeschakeld en we hebben geen DHT-peers. Ophalen van {0} zal misschien niet lukken tot je een andere torrent start, open trackers aanzet, of DHT aanzet."
 
@@ -442,6 +435,9 @@ msgstr "Hercontroleren van torrent {0} is voltooid, ongewijzigd"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Fout bij het controleren van torrent {0}"
+
+msgid "Data directory does not exist"
+msgstr "Data-directory bestaat niet"
 
 msgid "Cannot create diskspace bar"
 msgstr "Kan schijfruimte balk niet maken"

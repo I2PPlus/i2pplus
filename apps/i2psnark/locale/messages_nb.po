@@ -104,9 +104,6 @@ msgstr "Stopp alle torrenter før du endrer datamappe"
 msgid "Data directory must be an absolute path"
 msgstr "Datakatalog må være en absolutt bane"
 
-msgid "Data directory does not exist"
-msgstr "Datakatalog eksisterer ikke"
-
 msgid "Not a directory"
 msgstr "Ikke ei mappe"
 
@@ -278,10 +275,6 @@ msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disab
 msgstr "Advarsel - Ingen I2P-sporere i \"{0}\", og DHT og åpne sporere er deaktivert, bør du aktivere åpne sporere eller DHT før du starter torrenten."
 
 #, java-format
-msgid "Fetching {0}"
-msgstr "Henter {0}"
-
-#, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
 msgstr "Åpne sporere er deaktivert og vi har ingen DHT-likemenn. Mottak av {0} blir muligens ikke fullført før du starter en annen torrent, aktiverer åpne sporere eller DHT."
 
@@ -442,6 +435,9 @@ msgstr "Fullført ny kontroll av torrent {0}, uendret"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Feil under kontroll av torrenten {0}"
+
+msgid "Data directory does not exist"
+msgstr "Datakatalog eksisterer ikke"
 
 msgid "Cannot create diskspace bar"
 msgstr "Kan ikke opprette diskplasslinje"

@@ -7,17 +7,14 @@ no_wrap=0
 no_location=0
 remove_comments=0
 
-# Check if the directory argument is provided first
-if [ "$#" -lt 1 ]; then
-    echo " ! Error: A directory is required."
-    echo " > Usage: $0 <directory> [--no-wrap] [--no-location] [--no-comments]"
-    exit 1
+# Default basedir: project root relative to this script's location
+directory="$(cd "$(dirname "$0")/../.." && pwd)"
+
+# Override directory if provided as first argument
+if [ $# -ge 1 ] && [ "${1#--}" = "$1" ]; then
+    directory="$1"
+    shift
 fi
-
-directory="$1"
-
-# Shift the directory argument to start parsing options
-shift
 
 # Parse optional arguments
 while [ $# -gt 0 ]; do

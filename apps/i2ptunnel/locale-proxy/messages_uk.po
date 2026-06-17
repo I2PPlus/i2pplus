@@ -8,14 +8,132 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
-msgid "Website Unknown"
-msgstr "Веб-сайт невідомий"
+msgid "This seems to be a bad destination:"
+msgstr "Скоріше всього це поганий адрес призначення:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper не може допомогти Вам з місцем призначення як це!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "Щоб відвідати пункт призначення у вашій адресній книжці, натисніть <a href=\"{0}\"> тут </a>. Щоб відвідати конфліктну адресу призначення, натисніть <a href=\"{1}\"> тут </a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "Призначення для {0} в адресній книзі"
+
+msgid "Conflicting address helper destination"
+msgstr "Конфліктне призначення допоміжної адреси"
+
+msgid "Corrupt Base32 address"
+msgstr "Пошкоджена адреса Base32"
+
+msgid "Destination LeaseSet not found"
+msgstr "Destination LeaseSet не знайдено"
+
+msgid "Host"
+msgstr "Адрес"
+
+msgid "Base32"
+msgstr "База32"
+
+msgid "Destination"
+msgstr "Адреса призначення"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "Продовжити до {0} без збереження"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "Ви можете переглядати на Сайт, не зберігаючи його до адресної книжки. Адреса запам'ятається, поки ви не перезапустите свій маршрутизатор I2P."
+
+msgid "Continue without saving"
+msgstr "Продовжити без збереження"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "Збережіть {0} в адресній книзі маршрутизатора та перейдіть на веб-сайт"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "Ця адреса буде збережена в адресній книзі вашого маршрутизатора, де зберігаються ваші адреси на основі підписки."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "Якщо ви хочете відстежувати сайти, які ви додали вручну, додайте натомість до вашої головної або приватної адресної книги."
+
+msgid "Save & continue"
+msgstr "Зберегти"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "Зберегти {0} для майстер -адреси та продовжуйте веб -сайт"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "Ця адреса буде збережена у вашій головній адресній книжці. Виберіть цю опцію для адрес, які ви хочете зберегти окремо від головної адреси маршрутизатора, але не проти публікації."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "Зберегти {0} до приватної адреси та продовжуйте веб -сайт"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "Цю адресу буде збережено у вашій приватній адресній книзі, щоб вона ніколи не була опублікована."
+
+msgid "Base32 address requires lookup password"
+msgstr "адреса Base32 потребує пошуку пароля"
+
+msgid "Base32 address requires encryption key"
+msgstr "Адреса Base32 потребує ключа шифрування"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Aдреса Base32 потребує ключа шифрування та пароля пошуку"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Помилка дешифрування адреси Base32, перевірте ключ шифрування"
+
+msgid "Generate"
+msgstr "Згенерувати"
+
+msgid "Encryption key"
+msgstr "Ключ шифрування"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "Ви повинні або ввести ключ шифрування PSK, наданий оператором сервера, або створити ключ шифрування DH і надіслати його оператору сервера."
+
+msgid "Ask the server operator for help."
+msgstr "Зверніться по допомогу до оператора сервера."
+
+msgid "Enter PSK encryption key"
+msgstr "Введіть ключ шифрування PSK"
+
+msgid "Generate new DH encryption key"
+msgstr "Створити новий ключ шифрування DH"
+
+msgid "Lookup password"
+msgstr "Пошуковий пароль"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "Ви повинні ввести пароль, наданий оператором сервера."
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "Додано через address helper {0}"
+
+msgid "Added via address helper"
+msgstr "Додано через address helper"
+
+msgid "Missing lookup password"
+msgstr "Відсутній пароль пошуку"
+
+msgid "Missing private key"
+msgstr "Відсутній закритий ключ"
+
+msgid "Invalid private key"
+msgstr "Недійсний закритий ключ"
+
+msgid "Your new encryption key"
+msgstr "Ваш новий ключ шифрування"
 
 msgid "Router Console"
 msgstr "Консоль роутера"
-
-msgid "I2P Router Console"
-msgstr "Консоль роутера I2P"
 
 msgid "Addressbook"
 msgstr "Адресна книга"
@@ -25,6 +143,52 @@ msgstr "Настройки"
 
 msgid "Help"
 msgstr "Допомога"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "Скопіюйте ключ і надішліть його оператору сервера."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "Отримавши дозвіл, ви можете перейти на веб-сайт."
+
+msgid "Go back and fix the error"
+msgstr "Поверніться та виправте помилку"
+
+msgid "router"
+msgstr "роутер"
+
+msgid "master"
+msgstr "основна"
+
+msgid "private"
+msgstr "приватна"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "Перенаправляємо до {0}"
+
+msgid "Redirection in progress"
+msgstr "Триває перенаправлення"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "{0} збережено в {1} адресної книги, перенапрявляємо."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "Не вдалось зберегти {0} в {1} адресної книги, перенаправляємо."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "Клацніть тут якщо вас не перенаправило автоматично."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "Збережено автентифікацію для {0}, переспрямування зараз."
+
+msgid "Website Unknown"
+msgstr "Веб-сайт невідомий"
+
+msgid "I2P Router Console"
+msgstr "Консоль роутера I2P"
 
 msgid "Website Not Found in Addressbook"
 msgstr "Сайт не знайдено в адресній книзі"
@@ -262,167 +426,3 @@ msgstr "Якщо ви клацнули посилання, перевірте к
 
 msgid "The Base32 address is invalid."
 msgstr "Адреса Base32 недійсна."
-
-msgid "This seems to be a bad destination:"
-msgstr "Скоріше всього це поганий адрес призначення:"
-
-msgid "i2paddresshelper cannot help you with a destination like that!"
-msgstr "i2paddresshelper не може допомогти Вам з місцем призначення як це!"
-
-#, java-format
-msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr "Щоб відвідати пункт призначення у вашій адресній книжці, натисніть <a href=\"{0}\"> тут </a>. Щоб відвідати конфліктну адресу призначення, натисніть <a href=\"{1}\"> тут </a>."
-
-#, java-format
-msgid "Destination for {0} in addressbook"
-msgstr "Призначення для {0} в адресній книзі"
-
-msgid "Conflicting address helper destination"
-msgstr "Конфліктне призначення допоміжної адреси"
-
-msgid "Corrupt Base32 address"
-msgstr "Пошкоджена адреса Base32"
-
-msgid "Destination LeaseSet not found"
-msgstr "Destination LeaseSet не знайдено"
-
-msgid "Host"
-msgstr "Адрес"
-
-msgid "Base32"
-msgstr "База32"
-
-msgid "Destination"
-msgstr "Адреса призначення"
-
-#, java-format
-msgid "Continue to {0} without saving"
-msgstr "Продовжити до {0} без збереження"
-
-msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr "Ви можете переглядати на Сайт, не зберігаючи його до адресної книжки. Адреса запам'ятається, поки ви не перезапустите свій маршрутизатор I2P."
-
-msgid "Continue without saving"
-msgstr "Продовжити без збереження"
-
-#, java-format
-msgid "Save {0} to router address book and continue to website"
-msgstr "Збережіть {0} в адресній книзі маршрутизатора та перейдіть на веб-сайт"
-
-msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr "Ця адреса буде збережена в адресній книзі вашого маршрутизатора, де зберігаються ваші адреси на основі підписки."
-
-msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr "Якщо ви хочете відстежувати сайти, які ви додали вручну, додайте натомість до вашої головної або приватної адресної книги."
-
-msgid "Save & continue"
-msgstr "Зберегти"
-
-#, java-format
-msgid "Save {0} to master addressbook and continue to website"
-msgstr "Зберегти {0} для майстер -адреси та продовжуйте веб -сайт"
-
-msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr "Ця адреса буде збережена у вашій головній адресній книжці. Виберіть цю опцію для адрес, які ви хочете зберегти окремо від головної адреси маршрутизатора, але не проти публікації."
-
-#, java-format
-msgid "Save {0} to private addressbook and continue to website"
-msgstr "Зберегти {0} до приватної адреси та продовжуйте веб -сайт"
-
-msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr "Цю адресу буде збережено у вашій приватній адресній книзі, щоб вона ніколи не була опублікована."
-
-msgid "Base32 address requires lookup password"
-msgstr "адреса Base32 потребує пошуку пароля"
-
-msgid "Base32 address requires encryption key"
-msgstr "Адреса Base32 потребує ключа шифрування"
-
-msgid "Base32 address requires encryption key and lookup password"
-msgstr "Aдреса Base32 потребує ключа шифрування та пароля пошуку"
-
-msgid "Base32 address decryption failure, check encryption key"
-msgstr "Помилка дешифрування адреси Base32, перевірте ключ шифрування"
-
-msgid "Generate"
-msgstr "Згенерувати"
-
-msgid "Encryption key"
-msgstr "Ключ шифрування"
-
-msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr "Ви повинні або ввести ключ шифрування PSK, наданий оператором сервера, або створити ключ шифрування DH і надіслати його оператору сервера."
-
-msgid "Ask the server operator for help."
-msgstr "Зверніться по допомогу до оператора сервера."
-
-msgid "Enter PSK encryption key"
-msgstr "Введіть ключ шифрування PSK"
-
-msgid "Generate new DH encryption key"
-msgstr "Створити новий ключ шифрування DH"
-
-msgid "Lookup password"
-msgstr "Пошуковий пароль"
-
-msgid "You must enter the password provided by the server operator."
-msgstr "Ви повинні ввести пароль, наданий оператором сервера."
-
-#, java-format
-msgid "Added via address helper from {0}"
-msgstr "Додано через address helper {0}"
-
-msgid "Added via address helper"
-msgstr "Додано через address helper"
-
-msgid "Missing lookup password"
-msgstr "Відсутній пароль пошуку"
-
-msgid "Missing private key"
-msgstr "Відсутній закритий ключ"
-
-msgid "Invalid private key"
-msgstr "Недійсний закритий ключ"
-
-msgid "Your new encryption key"
-msgstr "Ваш новий ключ шифрування"
-
-msgid "Copy the key and send it to the server operator."
-msgstr "Скопіюйте ключ і надішліть його оператору сервера."
-
-msgid "After you are granted permission, you may proceed to the website."
-msgstr "Отримавши дозвіл, ви можете перейти на веб-сайт."
-
-msgid "Go back and fix the error"
-msgstr "Поверніться та виправте помилку"
-
-msgid "router"
-msgstr "роутер"
-
-msgid "master"
-msgstr "основна"
-
-msgid "private"
-msgstr "приватна"
-
-#, java-format
-msgid "Redirecting to {0}"
-msgstr "Перенаправляємо до {0}"
-
-msgid "Redirection in progress"
-msgstr "Триває перенаправлення"
-
-#, java-format
-msgid "Saved {0} to the {1} addressbook, redirecting now."
-msgstr "{0} збережено в {1} адресної книги, перенапрявляємо."
-
-#, java-format
-msgid "Failed to save {0} to the {1} addressbook, redirecting now."
-msgstr "Не вдалось зберегти {0} в {1} адресної книги, перенаправляємо."
-
-msgid "Click here if you are not redirected automatically."
-msgstr "Клацніть тут якщо вас не перенаправило автоматично."
-
-#, java-format
-msgid "Saved the authentication for {0}, redirecting now."
-msgstr "Збережено автентифікацію для {0}, переспрямування зараз."

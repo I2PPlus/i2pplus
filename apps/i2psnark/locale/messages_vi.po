@@ -104,9 +104,6 @@ msgstr "Dừng tất cả torrent trước khi thay đổi thư mục dữ liệ
 msgid "Data directory must be an absolute path"
 msgstr "Thư mục dữ liệu phải là đường dẫn tuyệt đối"
 
-msgid "Data directory does not exist"
-msgstr "Thư mục dữ liệu không tồn tại"
-
 msgid "Not a directory"
 msgstr "Không phải là thư mục"
 
@@ -278,10 +275,6 @@ msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disab
 msgstr "Cảnh báo - Không có trình theo dõi I2P nào trong \"{0}\", đồng thời DHT và trình theo dõi mở bị tắt, bạn nên bật trình theo dõi mở hoặc DHT trước khi bắt đầu torrent."
 
 #, java-format
-msgid "Fetching {0}"
-msgstr "Đang tìm nạp {0}"
-
-#, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
 msgstr "Trình theo dõi mở bị vô hiệu hóa và chúng tôi không có đồng nghiệp DHT. Lấy {0} có thể không thành công cho đến khi bạn bắt đầu một torrent khác, bật Trình theo dõi mở hoặc bật DHT."
 
@@ -442,6 +435,9 @@ msgstr "Đã hoàn tất kiểm tra lại torrent {0}, không thay đổi"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Lỗi kiểm tra torrent {0}"
+
+msgid "Data directory does not exist"
+msgstr "Thư mục dữ liệu không tồn tại"
 
 msgid "Cannot create diskspace bar"
 msgstr "Không thể tạo thanh không gian đĩa"

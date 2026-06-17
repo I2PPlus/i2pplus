@@ -104,9 +104,6 @@ msgstr "更改数据目录之前，请停止所有种子"
 msgid "Data directory must be an absolute path"
 msgstr "数据存放目录必须是绝对路径"
 
-msgid "Data directory does not exist"
-msgstr "数据存放目录不存在"
-
 msgid "Not a directory"
 msgstr "不是文件夹"
 
@@ -278,10 +275,6 @@ msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disab
 msgstr "警告 - “{0}”中没有 I2P 跟踪器，并且 DHT 和开放式跟踪器被禁用，您应该在启动 torrent 之前启用开放式跟踪器或 DHT。警告 - \"{0}\"中缺少 I2P Tracker，已禁用 I2P  Open Tracker 和 DHT，下载先您需要先启用  OpenTracker 或 DHT 。"
 
 #, java-format
-msgid "Fetching {0}"
-msgstr "正在获取{0}"
-
-#, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
 msgstr "开放跟踪器已禁用，我们没有 DHT 对等点。OpenTracker被禁用，程序目前没有DHT节点。{0}的下载不会成功，直到您启动另一个种子的下载、重新启用OpenTracker或DHT。"
 
@@ -442,6 +435,9 @@ msgstr "已完成对种子 {0} 的重新检查，未变更"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "检查种子 {0} 时出错"
+
+msgid "Data directory does not exist"
+msgstr "数据存放目录不存在"
 
 msgid "Cannot create diskspace bar"
 msgstr "无法创建磁盘空间栏"

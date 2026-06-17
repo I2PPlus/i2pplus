@@ -104,9 +104,6 @@ msgstr "Hentikan semua torrent sebelum mengubah direktori data"
 msgid "Data directory must be an absolute path"
 msgstr "Direktori data harus berupa absolute path"
 
-msgid "Data directory does not exist"
-msgstr "Direktori data tidak ada"
-
 msgid "Not a directory"
 msgstr "Bukan direktori"
 
@@ -278,10 +275,6 @@ msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disab
 msgstr "Peringatan - Tidak ada pelacak I2P di \"{0}\", dan DHT serta pelacak terbuka dinonaktifkan, Anda harus mengaktifkan pelacak terbuka atau DHT sebelum memulai torrent."
 
 #, java-format
-msgid "Fetching {0}"
-msgstr "Mengambil {0}"
-
-#, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
 msgstr "Pelacak terbuka dinonaktifkan dan kami tidak memiliki rekan DHT. Pengambilan {0} mungkin tidak berhasil sampai anda memulai torrent lain, mengaktifkan open tracker, atau mengaktifkan DHT."
 
@@ -442,6 +435,9 @@ msgstr "Selesai memeriksa torrent {0}, tidak berubah"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Error dalam memeriksa torrent {0}"
+
+msgid "Data directory does not exist"
+msgstr "Direktori data tidak ada"
 
 msgid "Cannot create diskspace bar"
 msgstr "Tidak dapat membuat bilah ruang disk"

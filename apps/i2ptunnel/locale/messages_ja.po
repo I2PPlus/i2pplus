@@ -38,6 +38,12 @@ msgstr "高い転送量だが高い信頼性"
 msgid "Error - tunnels are not initialized yet"
 msgstr "エラー - トンネルがまだ初期化されていません"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "フォームの送信が無効です。おそらくブラウザの「戻る」ボタンまたは「再読み込み」ボタンを使用したためです。無効な送信フォーム。おそらくブラウザで「戻る」か「再読込」を使用したためです。再送信してください。"
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "問題が解決しない場合は、ブラウザで Cookie が有効になっていることを確認してください。問題が残る場合、ブラウザでクッキーが有効になっているかを確かめてください。"
+
 msgid "No services configured, cannot restart!"
 msgstr "設定されたサービスがないため、再起動できません！"
 
@@ -609,6 +615,39 @@ msgstr "新しいサーバー構成"
 msgid "Hostname"
 msgstr "ホスト名"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "相関攻撃を防御するためのランダム起動遅延（自動起動が有効な場合）"
+
+msgid "Startup Delay"
+msgstr "起動遅延"
+
+msgid "Minimum"
+msgstr "最小"
+
+msgid "Minimum startup delay"
+msgstr "最小起動遅延"
+
+msgid "seconds"
+msgstr "秒"
+
+msgid "Maximum"
+msgstr "最大"
+
+msgid "Maximum startup delay"
+msgstr "最大起動遅延"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "トンネルシャットダウン前にランダム遅延を追加し、ルーターのグレースフルシャットダウン/再起動プロセスを開始"
+
+msgid "Shutdown Delay"
+msgstr "シャットダウン遅延"
+
+msgid "Minimum shutdown delay"
+msgstr "最小シャットダウン遅延"
+
+msgid "Maximum shutdown delay"
+msgstr "最大シャットダウン遅延"
+
 msgid "Website Hostname"
 msgstr "Webサイトのホスト名"
 
@@ -1090,8 +1129,8 @@ msgstr "プレビューなし"
 msgid "Starting..."
 msgstr "開始しています..."
 
-msgid "Stop this Tunnel"
-msgstr "このトンネルを止めてください"
+msgid "Starting in"
+msgstr "起動まで"
 
 msgid "Running"
 msgstr "稼働中"
@@ -1105,14 +1144,17 @@ msgstr "で"
 msgid "out"
 msgstr "アウト"
 
+msgid "Stopped"
+msgstr "停止しました"
+
+msgid "Stop this Tunnel"
+msgstr "このトンネルを止めてください"
+
 msgid "Restart this Tunnel"
 msgstr "このトンネルを再起動"
 
 msgid "Restart"
 msgstr "再起動"
-
-msgid "Stopped"
-msgstr "停止しました"
 
 msgid "Destination"
 msgstr "宛先"
@@ -1288,12 +1330,6 @@ msgstr "認証の生成"
 
 msgid "SSL Helper"
 msgstr "SSL ヘルパー"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "フォームの送信が無効です。おそらくブラウザの「戻る」ボタンまたは「再読み込み」ボタンを使用したためです。無効な送信フォーム。おそらくブラウザで「戻る」か「再読込」を使用したためです。再送信してください。"
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "問題が解決しない場合は、ブラウザで Cookie が有効になっていることを確認してください。問題が残る場合、ブラウザでクッキーが有効になっているかを確かめてください。"
 
 msgid "Experts only!"
 msgstr "上級者向け!"

@@ -44,6 +44,12 @@ msgstr "lățime de bandă și fiabilitate inalta"
 msgid "Error - tunnels are not initialized yet"
 msgstr "Eroare - tunelurile nu sunt încă inițializate"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Transmiterea formularului invalid, probabil pentru că ați folosit butonul \"reload\" sau \"inapoi\" din browser-ul dumneavoastră. Vă rugăm retrimiteți."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Dacă problema persistă, verificați dacă aveți activate cookie-urile în browser-ul dumneavoastră."
+
 msgid "No services configured, cannot restart!"
 msgstr "Nu există servicii configurate, nu se poate reporni!"
 
@@ -619,6 +625,39 @@ msgstr "Configurare server nouă"
 msgid "Hostname"
 msgstr "Nume host"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Întârziere aleatorie la pornire (când pornirea automată este activată) pentru a se apăra împotriva atacurilor de corelare"
+
+msgid "Startup Delay"
+msgstr "Întârziere pornire"
+
+msgid "Minimum"
+msgstr "Minim"
+
+msgid "Minimum startup delay"
+msgstr "Întârziere minimă la pornire"
+
+msgid "seconds"
+msgstr "secunde"
+
+msgid "Maximum"
+msgstr "Maxim"
+
+msgid "Maximum startup delay"
+msgstr "Întârziere maximă la pornire"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Adăugați o întârziere aleatorie înainte de oprirea tunelului, apoi începeți procesul de oprire/revenire lină a routerului"
+
+msgid "Shutdown Delay"
+msgstr "Întârziere oprire"
+
+msgid "Minimum shutdown delay"
+msgstr "Întârziere minimă la oprire"
+
+msgid "Maximum shutdown delay"
+msgstr "Întârziere maximă la oprire"
+
 msgid "Website Hostname"
 msgstr "Nume gazdă site"
 
@@ -1100,8 +1139,8 @@ msgstr "Nici o previzualizare"
 msgid "Starting..."
 msgstr "Pornire..."
 
-msgid "Stop this Tunnel"
-msgstr "Opriți acest tunel"
+msgid "Starting in"
+msgstr "Pornește în"
 
 msgid "Running"
 msgstr "În execuţie"
@@ -1115,14 +1154,17 @@ msgstr "în"
 msgid "out"
 msgstr "afară"
 
+msgid "Stopped"
+msgstr "Oprit"
+
+msgid "Stop this Tunnel"
+msgstr "Opriți acest tunel"
+
 msgid "Restart this Tunnel"
 msgstr "Repornire tunel"
 
 msgid "Restart"
 msgstr "Repornire"
-
-msgid "Stopped"
-msgstr "Oprit"
 
 msgid "Destination"
 msgstr "Destinație"
@@ -1298,12 +1340,6 @@ msgstr "Generați autentificare"
 
 msgid "SSL Helper"
 msgstr "SSL Helper"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Transmiterea formularului invalid, probabil pentru că ați folosit butonul \"reload\" sau \"inapoi\" din browser-ul dumneavoastră. Vă rugăm retrimiteți."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Dacă problema persistă, verificați dacă aveți activate cookie-urile în browser-ul dumneavoastră."
 
 msgid "Experts only!"
 msgstr "Numai experți!"

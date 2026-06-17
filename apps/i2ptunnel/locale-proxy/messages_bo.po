@@ -8,14 +8,132 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "Website Unknown"
-msgstr "དྲ་ཚིག མི་གསལ།"
+msgid "This seems to be a bad destination:"
+msgstr "འདི་འབྲེལ་ས་ནོར་འཁྲུལ་ཞིག་ཡིན་སྲིད།"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper ཡིས་འདྲའི་འབྲེལ་སར་རོགས་མི་ཐུབ།"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "ཁ་བྱང་དེབ་ནང་གི་འབྲེལ་སར་ཕེབས་པར། <a href=\"{0}\">འདིར</a>ནོན། འགལ་བའི་addresshelper འབྲེལ་སར་ཕེབས་པར། <a href=\"{1}\">འདིར</a>ནོན།"
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "ཁ་བྱང་དེབ་ནང་གི་ {0} ཀྱི་འབྲེལ་ས།"
+
+msgid "Conflicting address helper destination"
+msgstr "འགལ་བའི་ཁ་བྱང་རོགས་འབྲེལ་ས།"
+
+msgid "Corrupt Base32 address"
+msgstr "Base32 ཁ་བྱང་ཉམས་ཟད།"
+
+msgid "Destination LeaseSet not found"
+msgstr "འབྲེལ་སའི་ LeaseSet མ་རྙེད།"
+
+msgid "Host"
+msgstr "རྒྱུགས་མཁན།"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "འབྲེལ་ས།"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "ཉར་ཚགས་མེད་པར་ {0} ལ་མུ་མཐུད།"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "དྲ་ཚིག་དེར་ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་མེད་པར་འཆར་སྐྱོད་བྱེད་ཆོག། ཁ་བྱང་དེ་ཁྱེད་ཀྱིས་ I2P router བསྐྱར་འགོ་མ་འཛུགས་བར་བརྗེད་མི་འགྲོ།"
+
+msgid "Continue without saving"
+msgstr "ཉར་ཚགས་མེད་པར་མུ་མཐུད།"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "{0} དེ་ router ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་བྱས་ཏེ་དྲ་ཚིག་ལ་མུ་མཐུད།"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "ཁ་བྱང་འདི་ཁྱེད་ཀྱི་ Router ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་འགྲོ། དེར་ཁྱེད་ཀྱི་ subscription ལ་བརྟེན་པའི་ཁ་བྱང་རྣམས་ཉར་ཡོད།"
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "ཁྱེད་ཀྱིས་རང་ཉིད་ཀྱིས་སྣོན་པའི་དྲ་ཚིག་རྣམས་ཉར་འཛིན་བྱེད་འདོད་ན། ཁྱེད་ཀྱི་ Master ཡང་ན Private ཁ་བྱང་དེབ་ལ་སྣོན་རོགས།"
+
+msgid "Save & continue"
+msgstr "ཉར་ཚགས་བྱས་ཏེ་མུ་མཐུད།"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "{0} དེ་ master ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་བྱས་ཏེ་དྲ་ཚིག་ལ་མུ་མཐུད།"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "ཁ་བྱང་འདི་ཁྱེད་ཀྱི་ Master ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་འགྲོ། གཙོ་བོའི་ router ཁ་བྱང་དེབ་ལས་འཚུད་སྤེལ་ལོགས་སུ་གཞག་འདོད་ཀྱི་ཁ་བྱང་རྣམས་ལ་གདམ་ག་འདི་འདེམས།"
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "{0} དེ་ private ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་བྱས་ཏེ་དྲ་ཚིག་ལ་མུ་མཐུད།"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "ཁ་བྱང་འདི་ཁྱེད་ཀྱི་ Private ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་འགྲོ། ནམ་ཡང་སྤེལ་མི་འགྲོ།"
+
+msgid "Base32 address requires lookup password"
+msgstr "Base32 ཁ་བྱང་ལ་ལྟ་ཤེས་གསང་བྱང་དགོས།"
+
+msgid "Base32 address requires encryption key"
+msgstr "Base32 ཁ་བྱང་ལ་གསང་སྒྲིག་key དགོས།"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Base32 ཁ་བྱང་ལ་གསང་སྒྲིག་key དང་ལྟ་ཤེས་གསང་བྱང་གཉིས་ཀ་དགོས།"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Base32 ཁ་བྱང་གསང་འགྲེལ་ཕམ་པ། གསང་སྒྲིག་key ལ་གཟིགས།"
+
+msgid "Generate"
+msgstr "བཟོ་སྐྲུན།"
+
+msgid "Encryption key"
+msgstr "གསང་སྒྲིག་key"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "ཁྱེད་ཀྱིས་ server དབྱེ་འཛིན་པས་སྤྲོད་པའི་ PSK གསང་སྒྲིག་key ཞིག་འཇུག་དགོས་པའམ། ཡང་ན DH གསང་སྒྲིག་key ཞིག་བཟོ་སྐྲུན་བྱས་ཏེ། server དབྱེ་འཛིན་པར་སྐུར་དགོས།"
+
+msgid "Ask the server operator for help."
+msgstr "server དབྱེ་འཛིན་པར་རོགས་རམ་ཞུ།"
+
+msgid "Enter PSK encryption key"
+msgstr "PSK གསང་སྒྲིག་key འཇུག།"
+
+msgid "Generate new DH encryption key"
+msgstr "DH གསང་སྒྲིག་key གསར་པ་བཟོ་སྐྲུན།"
+
+msgid "Lookup password"
+msgstr "ལྟ་ཤེས་གསང་བྱང་།"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "ཁྱེད་ཀྱིས་ server དབྱེ་འཛིན་པས་སྤྲོད་པའི་གསང་བྱང་འཇུག་དགོས།"
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "{0} ནས་ཁ་བྱང་རོགས་བརྒྱུད་སྣོན་པ།"
+
+msgid "Added via address helper"
+msgstr "ཁ་བྱང་རོགས་བརྒྱུད་སྣོན་པ།"
+
+msgid "Missing lookup password"
+msgstr "ལྟ་ཤེས་གསང་བྱང་ཕྱིས།"
+
+msgid "Missing private key"
+msgstr "སྒེར་key ཕྱིས།"
+
+msgid "Invalid private key"
+msgstr "སྒེར་key བདེན་མིན།"
+
+msgid "Your new encryption key"
+msgstr "ཁྱེད་ཀྱི་གསང་སྒྲིག་key གསར་པ།"
 
 msgid "Router Console"
 msgstr "Router Console"
-
-msgid "I2P Router Console"
-msgstr "I2P Router Console"
 
 msgid "Addressbook"
 msgstr "ཁ་བྱང་དེབ།"
@@ -25,6 +143,52 @@ msgstr "སྒྲིག་སྟངས།"
 
 msgid "Help"
 msgstr "རོགས་རམ།"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "key དེ་འདྲ་པར་བྱས་ཏེ། server དབྱེ་འཛིན་པར་སྐུར་རོགས།"
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "ཁྱེད་ལ་ཆོག་མཆན་སྤྲོད་རྗེས། དྲ་ཚིག་ལ་མུ་མཐུད་བྱེད་ཆོག།"
+
+msgid "Go back and fix the error"
+msgstr "ཕྱིར་ཕེབས་ཏེ་ནོར་འཁྲུལ་བཅོས།"
+
+msgid "router"
+msgstr "router"
+
+msgid "master"
+msgstr "master"
+
+msgid "private"
+msgstr "private"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "{0} ལ་ལམ་བསྒྱུར་བྱེད་བཞིན་ཡོད།"
+
+msgid "Redirection in progress"
+msgstr "ལམ་བསྒྱུར་བྱེད་བཞིན་ཡོད།"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "{0} དེ་ {1} ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་བྱས། ད་ལྟ་ལམ་བསྒྱུར་བྱེད་བཞིན་ཡོད།"
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "{0} དེ་ {1} ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་མ་ཚང་། ད་ལྟ་ལམ་བསྒྱུར་བྱེད་བཞིན་ཡོད།"
+
+msgid "Click here if you are not redirected automatically."
+msgstr "རང་འགུལ་ལམ་བསྒྱུར་མ་བྱུང་ན་འདིར་ནོན།"
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "{0} ཀྱི་དབང་ཆ་ཉར་ཚགས་བྱས། ད་ལྟ་ལམ་བསྒྱུར་བྱེད་བཞིན་ཡོད།"
+
+msgid "Website Unknown"
+msgstr "དྲ་ཚིག མི་གསལ།"
+
+msgid "I2P Router Console"
+msgstr "I2P Router Console"
 
 msgid "Website Not Found in Addressbook"
 msgstr "དྲ་ཚིག་ཁ་བྱང་དེབ་ནང་མ་རྙེད།"
@@ -262,167 +426,3 @@ msgstr "སྦྲེལ་ཐག་ཞིག་ནོན་པ་ཡིན་ན
 
 msgid "The Base32 address is invalid."
 msgstr "Base32 ཁ་བྱང་དེ་བདེན་མིན།"
-
-msgid "This seems to be a bad destination:"
-msgstr "འདི་འབྲེལ་ས་ནོར་འཁྲུལ་ཞིག་ཡིན་སྲིད།"
-
-msgid "i2paddresshelper cannot help you with a destination like that!"
-msgstr "i2paddresshelper ཡིས་འདྲའི་འབྲེལ་སར་རོགས་མི་ཐུབ།"
-
-#, java-format
-msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr "ཁ་བྱང་དེབ་ནང་གི་འབྲེལ་སར་ཕེབས་པར། <a href=\"{0}\">འདིར</a>ནོན། འགལ་བའི་addresshelper འབྲེལ་སར་ཕེབས་པར། <a href=\"{1}\">འདིར</a>ནོན།"
-
-#, java-format
-msgid "Destination for {0} in addressbook"
-msgstr "ཁ་བྱང་དེབ་ནང་གི་ {0} ཀྱི་འབྲེལ་ས།"
-
-msgid "Conflicting address helper destination"
-msgstr "འགལ་བའི་ཁ་བྱང་རོགས་འབྲེལ་ས།"
-
-msgid "Corrupt Base32 address"
-msgstr "Base32 ཁ་བྱང་ཉམས་ཟད།"
-
-msgid "Destination LeaseSet not found"
-msgstr "འབྲེལ་སའི་ LeaseSet མ་རྙེད།"
-
-msgid "Host"
-msgstr "རྒྱུགས་མཁན།"
-
-msgid "Base32"
-msgstr "Base32"
-
-msgid "Destination"
-msgstr "འབྲེལ་ས།"
-
-#, java-format
-msgid "Continue to {0} without saving"
-msgstr "ཉར་ཚགས་མེད་པར་ {0} ལ་མུ་མཐུད།"
-
-msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr "དྲ་ཚིག་དེར་ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་མེད་པར་འཆར་སྐྱོད་བྱེད་ཆོག། ཁ་བྱང་དེ་ཁྱེད་ཀྱིས་ I2P router བསྐྱར་འགོ་མ་འཛུགས་བར་བརྗེད་མི་འགྲོ།"
-
-msgid "Continue without saving"
-msgstr "ཉར་ཚགས་མེད་པར་མུ་མཐུད།"
-
-#, java-format
-msgid "Save {0} to router address book and continue to website"
-msgstr "{0} དེ་ router ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་བྱས་ཏེ་དྲ་ཚིག་ལ་མུ་མཐུད།"
-
-msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr "ཁ་བྱང་འདི་ཁྱེད་ཀྱི་ Router ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་འགྲོ། དེར་ཁྱེད་ཀྱི་ subscription ལ་བརྟེན་པའི་ཁ་བྱང་རྣམས་ཉར་ཡོད།"
-
-msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr "ཁྱེད་ཀྱིས་རང་ཉིད་ཀྱིས་སྣོན་པའི་དྲ་ཚིག་རྣམས་ཉར་འཛིན་བྱེད་འདོད་ན། ཁྱེད་ཀྱི་ Master ཡང་ན Private ཁ་བྱང་དེབ་ལ་སྣོན་རོགས།"
-
-msgid "Save & continue"
-msgstr "ཉར་ཚགས་བྱས་ཏེ་མུ་མཐུད།"
-
-#, java-format
-msgid "Save {0} to master addressbook and continue to website"
-msgstr "{0} དེ་ master ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་བྱས་ཏེ་དྲ་ཚིག་ལ་མུ་མཐུད།"
-
-msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr "ཁ་བྱང་འདི་ཁྱེད་ཀྱི་ Master ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་འགྲོ། གཙོ་བོའི་ router ཁ་བྱང་དེབ་ལས་འཚུད་སྤེལ་ལོགས་སུ་གཞག་འདོད་ཀྱི་ཁ་བྱང་རྣམས་ལ་གདམ་ག་འདི་འདེམས།"
-
-#, java-format
-msgid "Save {0} to private addressbook and continue to website"
-msgstr "{0} དེ་ private ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་བྱས་ཏེ་དྲ་ཚིག་ལ་མུ་མཐུད།"
-
-msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr "ཁ་བྱང་འདི་ཁྱེད་ཀྱི་ Private ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་འགྲོ། ནམ་ཡང་སྤེལ་མི་འགྲོ།"
-
-msgid "Base32 address requires lookup password"
-msgstr "Base32 ཁ་བྱང་ལ་ལྟ་ཤེས་གསང་བྱང་དགོས།"
-
-msgid "Base32 address requires encryption key"
-msgstr "Base32 ཁ་བྱང་ལ་གསང་སྒྲིག་key དགོས།"
-
-msgid "Base32 address requires encryption key and lookup password"
-msgstr "Base32 ཁ་བྱང་ལ་གསང་སྒྲིག་key དང་ལྟ་ཤེས་གསང་བྱང་གཉིས་ཀ་དགོས།"
-
-msgid "Base32 address decryption failure, check encryption key"
-msgstr "Base32 ཁ་བྱང་གསང་འགྲེལ་ཕམ་པ། གསང་སྒྲིག་key ལ་གཟིགས།"
-
-msgid "Generate"
-msgstr "བཟོ་སྐྲུན།"
-
-msgid "Encryption key"
-msgstr "གསང་སྒྲིག་key"
-
-msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr "ཁྱེད་ཀྱིས་ server དབྱེ་འཛིན་པས་སྤྲོད་པའི་ PSK གསང་སྒྲིག་key ཞིག་འཇུག་དགོས་པའམ། ཡང་ན DH གསང་སྒྲིག་key ཞིག་བཟོ་སྐྲུན་བྱས་ཏེ། server དབྱེ་འཛིན་པར་སྐུར་དགོས།"
-
-msgid "Ask the server operator for help."
-msgstr "server དབྱེ་འཛིན་པར་རོགས་རམ་ཞུ།"
-
-msgid "Enter PSK encryption key"
-msgstr "PSK གསང་སྒྲིག་key འཇུག།"
-
-msgid "Generate new DH encryption key"
-msgstr "DH གསང་སྒྲིག་key གསར་པ་བཟོ་སྐྲུན།"
-
-msgid "Lookup password"
-msgstr "ལྟ་ཤེས་གསང་བྱང་།"
-
-msgid "You must enter the password provided by the server operator."
-msgstr "ཁྱེད་ཀྱིས་ server དབྱེ་འཛིན་པས་སྤྲོད་པའི་གསང་བྱང་འཇུག་དགོས།"
-
-#, java-format
-msgid "Added via address helper from {0}"
-msgstr "{0} ནས་ཁ་བྱང་རོགས་བརྒྱུད་སྣོན་པ།"
-
-msgid "Added via address helper"
-msgstr "ཁ་བྱང་རོགས་བརྒྱུད་སྣོན་པ།"
-
-msgid "Missing lookup password"
-msgstr "ལྟ་ཤེས་གསང་བྱང་ཕྱིས།"
-
-msgid "Missing private key"
-msgstr "སྒེར་key ཕྱིས།"
-
-msgid "Invalid private key"
-msgstr "སྒེར་key བདེན་མིན།"
-
-msgid "Your new encryption key"
-msgstr "ཁྱེད་ཀྱི་གསང་སྒྲིག་key གསར་པ།"
-
-msgid "Copy the key and send it to the server operator."
-msgstr "key དེ་འདྲ་པར་བྱས་ཏེ། server དབྱེ་འཛིན་པར་སྐུར་རོགས།"
-
-msgid "After you are granted permission, you may proceed to the website."
-msgstr "ཁྱེད་ལ་ཆོག་མཆན་སྤྲོད་རྗེས། དྲ་ཚིག་ལ་མུ་མཐུད་བྱེད་ཆོག།"
-
-msgid "Go back and fix the error"
-msgstr "ཕྱིར་ཕེབས་ཏེ་ནོར་འཁྲུལ་བཅོས།"
-
-msgid "router"
-msgstr "router"
-
-msgid "master"
-msgstr "master"
-
-msgid "private"
-msgstr "private"
-
-#, java-format
-msgid "Redirecting to {0}"
-msgstr "{0} ལ་ལམ་བསྒྱུར་བྱེད་བཞིན་ཡོད།"
-
-msgid "Redirection in progress"
-msgstr "ལམ་བསྒྱུར་བྱེད་བཞིན་ཡོད།"
-
-#, java-format
-msgid "Saved {0} to the {1} addressbook, redirecting now."
-msgstr "{0} དེ་ {1} ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་བྱས། ད་ལྟ་ལམ་བསྒྱུར་བྱེད་བཞིན་ཡོད།"
-
-#, java-format
-msgid "Failed to save {0} to the {1} addressbook, redirecting now."
-msgstr "{0} དེ་ {1} ཁ་བྱང་དེབ་ལ་ཉར་ཚགས་མ་ཚང་། ད་ལྟ་ལམ་བསྒྱུར་བྱེད་བཞིན་ཡོད།"
-
-msgid "Click here if you are not redirected automatically."
-msgstr "རང་འགུལ་ལམ་བསྒྱུར་མ་བྱུང་ན་འདིར་ནོན།"
-
-#, java-format
-msgid "Saved the authentication for {0}, redirecting now."
-msgstr "{0} ཀྱི་དབང་ཆ་ཉར་ཚགས་བྱས། ད་ལྟ་ལམ་བསྒྱུར་བྱེད་བཞིན་ཡོད།"

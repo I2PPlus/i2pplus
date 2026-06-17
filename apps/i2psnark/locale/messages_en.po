@@ -104,9 +104,6 @@ msgstr ""
 msgid "Data directory must be an absolute path"
 msgstr ""
 
-msgid "Data directory does not exist"
-msgstr ""
-
 msgid "Not a directory"
 msgstr ""
 
@@ -278,10 +275,6 @@ msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disab
 msgstr ""
 
 #, java-format
-msgid "Fetching {0}"
-msgstr ""
-
-#, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
 msgstr ""
 
@@ -441,6 +434,9 @@ msgstr ""
 
 #, java-format
 msgid "Error checking torrent {0}"
+msgstr ""
+
+msgid "Data directory does not exist"
 msgstr ""
 
 msgid "Cannot create diskspace bar"

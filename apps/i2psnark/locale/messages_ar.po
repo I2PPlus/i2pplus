@@ -104,9 +104,6 @@ msgstr "توقف كل التورنتات قبل تغيير مسار البيان
 msgid "Data directory must be an absolute path"
 msgstr "يجب أن يكون دليل البيانات مسارًا مطلقًا"
 
-msgid "Data directory does not exist"
-msgstr "دليل البيانات غير موجود"
-
 msgid "Not a directory"
 msgstr "ليس دليلا"
 
@@ -278,10 +275,6 @@ msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disab
 msgstr "تحذير - لا توجد أدوات تعقب I2P في \"{0}\"، وتم تعطيل أدوات التتبع المفتوحة وDHT، يجب عليك تمكين أدوات التتبع المفتوحة أو DHT قبل بدء تشغيل التورنت."
 
 #, java-format
-msgid "Fetching {0}"
-msgstr "يحمل {0}"
-
-#, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
 msgstr "يتم تعطيل أجهزة التتبع المفتوحة وليس لدينا أقران DHT. قد لا ينجح جلب {0} حتى تبدأ سيلًا آخر ، أو تمكين المتتبعات المفتوحة ، أو تمكين DHT."
 
@@ -442,6 +435,9 @@ msgstr "تم الانتهاء من إعادة فحص التورنت {0}، بدو
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "خطأ في فحص السيل {0}"
+
+msgid "Data directory does not exist"
+msgstr "دليل البيانات غير موجود"
 
 msgid "Cannot create diskspace bar"
 msgstr "لا يمكن إنشاء شريط مساحة القرص"

@@ -8,14 +8,132 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n%100<=4 ? 2 : 3);\n"
 
-msgid "Website Unknown"
-msgstr "Stran neznana"
+msgid "This seems to be a bad destination:"
+msgstr "To zelo deluje kot slabo destinacijo:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2p naslovni pomočnik ne more pomagati z destinacijo te vrste!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "Da obiščete destinacijo v svojih naslovnikih, kliknite tukaj <a href=\"{0}\">tukaj</a>. Za obisk konfliktnije destinacije pri i2p naslovnem pomočniku, kliknite tukaj <a href=\"{1}\">tukaj</a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "Destinacija za {0} v naslovniku"
+
+msgid "Conflicting address helper destination"
+msgstr "Konfliktna destinacija pri i2p naslovnem pomočniku"
+
+msgid "Corrupt Base32 address"
+msgstr "Poškodovana Base32 naslovna koda"
+
+msgid "Destination LeaseSet not found"
+msgstr "Ni bilo mogoče najti dogovora o izdaji z naslovom destinacije"
+
+msgid "Host"
+msgstr "Gostitelj"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "Destinacija"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "Nadaljuj z obiskom {0} brez shranjevanja"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "Lahko obiščete spletišče brez shranjevanja v naslovnik. Naslov bo shranjen do ponovnega zaganjanja vašega I2P routeja."
+
+msgid "Continue without saving"
+msgstr "Nadaljuj brez shranjevanja"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "Shrani {0} v upravljalčev naslovnik in nadaljuj z obiskom spletišča"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "To naslov bo shranjen v zbirko naslovov s prijavno obveznim sistemom."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "Če želite beležiti spletišča, ki ste jih dodali sami, dodajte jih v zbirko Master ali Private namesto v Upravljalčev naslovnik."
+
+msgid "Save & continue"
+msgstr "Shrani & nadaljuj"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "Shrani {0} v zbirko Master in nadaljuj z obiskom spletišča"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "To naslov bo shranjen v zbirko Master. Pozabite na to izbiritev za naslove, ki jih želite shraniti ločeno od zbirke Naslovi, a se jim ne boste slipli."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "Shrani {0} v zbirko Privatni in nadaljuj z obiskom spletišča"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "To naslov bo shranjen v zbirko Privatni z garancijo, da ne bo nikoli objavljen."
+
+msgid "Base32 address requires lookup password"
+msgstr "Potrebeno je geslo za pregled iz podatkovnega gradiva z Base32 naslovom"
+
+msgid "Base32 address requires encryption key"
+msgstr "Osnovni c32 naslov zahteva šifrirno ključ"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Osnovni c32 naslov zahteva šifrirno ključ in geslo za iskanje"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Napaka pri dešifriranju c32 naslova, preverite šifrirno ključ"
+
+msgid "Generate"
+msgstr "Ustvari"
+
+msgid "Encryption key"
+msgstr "Šifrirno ključ"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "Morate vnesti PSK šifrirno ključ, ki jo je določil upravljavec strežnika, ali generirati DH šifrirno ključ in pošiljat to upravljavec strežnika."
+
+msgid "Ask the server operator for help."
+msgstr "Prosite pomoči upravljavca strežnika."
+
+msgid "Enter PSK encryption key"
+msgstr "Vnesite PSK šifrirno ključ"
+
+msgid "Generate new DH encryption key"
+msgstr "Ustvari novo DH šifrirno ključ"
+
+msgid "Lookup password"
+msgstr "Geslo za iskanje"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "Morate vnesti geslo, ki ga je določil upravljavca strežnika."
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "Dodano prek pomočnika z očo v {0}"
+
+msgid "Added via address helper"
+msgstr "Dodano preko pomočnika z očo"
+
+msgid "Missing lookup password"
+msgstr "Premalo geslo za iskanje"
+
+msgid "Missing private key"
+msgstr "Manjkajoča zasebna ključ"
+
+msgid "Invalid private key"
+msgstr "Neveljavna zasebna ključ"
+
+msgid "Your new encryption key"
+msgstr "Vaše novo šifrirno ključ"
 
 msgid "Router Console"
 msgstr "Konzola dostavilnika"
-
-msgid "I2P Router Console"
-msgstr "Konzola dostavilnika I2P"
 
 msgid "Addressbook"
 msgstr "Seznam naslovov"
@@ -25,6 +143,52 @@ msgstr "Nastavitev"
 
 msgid "Help"
 msgstr "Pomoč"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "Kopirajte ključ in pošiljte ga upravljavcu strežnika."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "Po tem, ko ste prejeli dovoljenje, lahko nadaljujete na spletni strani."
+
+msgid "Go back and fix the error"
+msgstr "Pojdite nazaj in popravite napako"
+
+msgid "router"
+msgstr "Ruter"
+
+msgid "master"
+msgstr "Glavni"
+
+msgid "private"
+msgstr "Zasebne"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "Preusmerjanje na {0}"
+
+msgid "Redirection in progress"
+msgstr "Preusmerjanje poteka"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "{0} shranjena v knjigo telefonskih zapisov {1} in trenutno preusmerjai."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "Neuspešno shranjevanje {0} v knjigo telefonskih zapisov {1}, trenutno preusmerjam."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "Kliknite tukaj, če si ne preusmerjeno avtomatsko."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "Shranjeni so podatki za vstop v {0} in trenutno preusmerjam."
+
+msgid "Website Unknown"
+msgstr "Stran neznana"
+
+msgid "I2P Router Console"
+msgstr "Konzola dostavilnika I2P"
 
 msgid "Website Not Found in Addressbook"
 msgstr "Stran ni bila najdena v knjigi naslovov"
@@ -262,167 +426,3 @@ msgstr "Kadar kliknete na povezavo, preverite konec URI za vsako znak, ki ga je 
 
 msgid "The Base32 address is invalid."
 msgstr "Base32 naslov ni veljaven."
-
-msgid "This seems to be a bad destination:"
-msgstr "To zelo deluje kot slabo destinacijo:"
-
-msgid "i2paddresshelper cannot help you with a destination like that!"
-msgstr "i2p naslovni pomočnik ne more pomagati z destinacijo te vrste!"
-
-#, java-format
-msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr "Da obiščete destinacijo v svojih naslovnikih, kliknite tukaj <a href=\"{0}\">tukaj</a>. Za obisk konfliktnije destinacije pri i2p naslovnem pomočniku, kliknite tukaj <a href=\"{1}\">tukaj</a>."
-
-#, java-format
-msgid "Destination for {0} in addressbook"
-msgstr "Destinacija za {0} v naslovniku"
-
-msgid "Conflicting address helper destination"
-msgstr "Konfliktna destinacija pri i2p naslovnem pomočniku"
-
-msgid "Corrupt Base32 address"
-msgstr "Poškodovana Base32 naslovna koda"
-
-msgid "Destination LeaseSet not found"
-msgstr "Ni bilo mogoče najti dogovora o izdaji z naslovom destinacije"
-
-msgid "Host"
-msgstr "Gostitelj"
-
-msgid "Base32"
-msgstr "Base32"
-
-msgid "Destination"
-msgstr "Destinacija"
-
-#, java-format
-msgid "Continue to {0} without saving"
-msgstr "Nadaljuj z obiskom {0} brez shranjevanja"
-
-msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr "Lahko obiščete spletišče brez shranjevanja v naslovnik. Naslov bo shranjen do ponovnega zaganjanja vašega I2P routeja."
-
-msgid "Continue without saving"
-msgstr "Nadaljuj brez shranjevanja"
-
-#, java-format
-msgid "Save {0} to router address book and continue to website"
-msgstr "Shrani {0} v upravljalčev naslovnik in nadaljuj z obiskom spletišča"
-
-msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr "To naslov bo shranjen v zbirko naslovov s prijavno obveznim sistemom."
-
-msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr "Če želite beležiti spletišča, ki ste jih dodali sami, dodajte jih v zbirko Master ali Private namesto v Upravljalčev naslovnik."
-
-msgid "Save & continue"
-msgstr "Shrani & nadaljuj"
-
-#, java-format
-msgid "Save {0} to master addressbook and continue to website"
-msgstr "Shrani {0} v zbirko Master in nadaljuj z obiskom spletišča"
-
-msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr "To naslov bo shranjen v zbirko Master. Pozabite na to izbiritev za naslove, ki jih želite shraniti ločeno od zbirke Naslovi, a se jim ne boste slipli."
-
-#, java-format
-msgid "Save {0} to private addressbook and continue to website"
-msgstr "Shrani {0} v zbirko Privatni in nadaljuj z obiskom spletišča"
-
-msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr "To naslov bo shranjen v zbirko Privatni z garancijo, da ne bo nikoli objavljen."
-
-msgid "Base32 address requires lookup password"
-msgstr "Potrebeno je geslo za pregled iz podatkovnega gradiva z Base32 naslovom"
-
-msgid "Base32 address requires encryption key"
-msgstr "Osnovni c32 naslov zahteva šifrirno ključ"
-
-msgid "Base32 address requires encryption key and lookup password"
-msgstr "Osnovni c32 naslov zahteva šifrirno ključ in geslo za iskanje"
-
-msgid "Base32 address decryption failure, check encryption key"
-msgstr "Napaka pri dešifriranju c32 naslova, preverite šifrirno ključ"
-
-msgid "Generate"
-msgstr "Ustvari"
-
-msgid "Encryption key"
-msgstr "Šifrirno ključ"
-
-msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr "Morate vnesti PSK šifrirno ključ, ki jo je določil upravljavec strežnika, ali generirati DH šifrirno ključ in pošiljat to upravljavec strežnika."
-
-msgid "Ask the server operator for help."
-msgstr "Prosite pomoči upravljavca strežnika."
-
-msgid "Enter PSK encryption key"
-msgstr "Vnesite PSK šifrirno ključ"
-
-msgid "Generate new DH encryption key"
-msgstr "Ustvari novo DH šifrirno ključ"
-
-msgid "Lookup password"
-msgstr "Geslo za iskanje"
-
-msgid "You must enter the password provided by the server operator."
-msgstr "Morate vnesti geslo, ki ga je določil upravljavca strežnika."
-
-#, java-format
-msgid "Added via address helper from {0}"
-msgstr "Dodano prek pomočnika z očo v {0}"
-
-msgid "Added via address helper"
-msgstr "Dodano preko pomočnika z očo"
-
-msgid "Missing lookup password"
-msgstr "Premalo geslo za iskanje"
-
-msgid "Missing private key"
-msgstr "Manjkajoča zasebna ključ"
-
-msgid "Invalid private key"
-msgstr "Neveljavna zasebna ključ"
-
-msgid "Your new encryption key"
-msgstr "Vaše novo šifrirno ključ"
-
-msgid "Copy the key and send it to the server operator."
-msgstr "Kopirajte ključ in pošiljte ga upravljavcu strežnika."
-
-msgid "After you are granted permission, you may proceed to the website."
-msgstr "Po tem, ko ste prejeli dovoljenje, lahko nadaljujete na spletni strani."
-
-msgid "Go back and fix the error"
-msgstr "Pojdite nazaj in popravite napako"
-
-msgid "router"
-msgstr "Ruter"
-
-msgid "master"
-msgstr "Glavni"
-
-msgid "private"
-msgstr "Zasebne"
-
-#, java-format
-msgid "Redirecting to {0}"
-msgstr "Preusmerjanje na {0}"
-
-msgid "Redirection in progress"
-msgstr "Preusmerjanje poteka"
-
-#, java-format
-msgid "Saved {0} to the {1} addressbook, redirecting now."
-msgstr "{0} shranjena v knjigo telefonskih zapisov {1} in trenutno preusmerjai."
-
-#, java-format
-msgid "Failed to save {0} to the {1} addressbook, redirecting now."
-msgstr "Neuspešno shranjevanje {0} v knjigo telefonskih zapisov {1}, trenutno preusmerjam."
-
-msgid "Click here if you are not redirected automatically."
-msgstr "Kliknite tukaj, če si ne preusmerjeno avtomatsko."
-
-#, java-format
-msgid "Saved the authentication for {0}, redirecting now."
-msgstr "Shranjeni so podatki za vstop v {0} in trenutno preusmerjam."

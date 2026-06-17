@@ -104,9 +104,6 @@ msgstr "Остановите все торренты перед изменени
 msgid "Data directory must be an absolute path"
 msgstr "Директория данных должна быть абсолютным путём"
 
-msgid "Data directory does not exist"
-msgstr "Директория данных не существует"
-
 msgid "Not a directory"
 msgstr "Не директория"
 
@@ -278,10 +275,6 @@ msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disab
 msgstr "Предупреждение - Нет I2P трекеров в \"{0}\" и использование открытых трекеров и DHT запрещено. Следует разрешить их использование перед запуском торрента."
 
 #, java-format
-msgid "Fetching {0}"
-msgstr "Получение торрента: {0}"
-
-#, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
 msgstr "Использование открытых трекеров запрещено и нет DHT-пиров. Передача {0} не может быть завершена. Запустите другой торрент или разрешите использование открытых трекеров и/или DHT."
 
@@ -442,6 +435,9 @@ msgstr "Закончена перепроверка торрента {0}, без
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Ошибка проверки торрента {0}"
+
+msgid "Data directory does not exist"
+msgstr "Директория данных не существует"
 
 msgid "Cannot create diskspace bar"
 msgstr "Невозможно создать панель дискового пространства"

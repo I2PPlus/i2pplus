@@ -2,7 +2,7 @@
 <project basedir="." default="all" name="routerconsole">
   <available file="git" property="git.available"/>
   <property name="build.dir" value="${java.io.tmpdir}/build-i2p/apps/routerconsole/java/build"/>
-  <property name="jsp.build.dir" value="../jsp"/>
+  <property name="jsp.build.dir" value="${java.io.tmpdir}/build-i2p/apps/routerconsole/jsp"/>
 
   <property name="...build.dir" value="../../../build"/>
   <property name="core.java.build.dir" value="../../../core/java/build"/>
@@ -10,7 +10,9 @@
   <property name="desktopgui.dist.dir" value="../../desktopgui/dist"/>
   <property name="i2ptunnel.java.build.dir" value="../../i2ptunnel/java/build"/>
   <property name="jrobin.java.build.dir" value="../../jrobin/java/build"/>
+  <property name="ministreaming.java.build.dir" value="../../ministreaming/java/build"/>
   <property name="router.java.build.dir" value="../../../router/java/build"/>
+  <property name="streaming.java.build.dir" value="../../streaming/java/build"/>
   <property name="systray.java.build.dir" value="../../systray/java/build"/>
   <property name="jetty.pkg.dir" value="../../jetty/jettylib"/>
 
@@ -57,6 +59,8 @@
         <pathelement location="${jrobin.java.build.dir}/jrobin.jar"/>
         <pathelement location="${router.java.build.dir}/obj"/>
         <pathelement location="${i2ptunnel.java.build.dir}/i2ptunnel.jar"/>
+        <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
+        <pathelement location="${streaming.java.build.dir}/streaming.jar"/>
         <pathelement location="${systray.java.build.dir}/obj"/>
       </classpath>
     </depend>
@@ -116,6 +120,8 @@
         <pathelement location="${jrobin.java.build.dir}/jrobin.jar"/>
         <pathelement location="${router.java.build.dir}/router.jar"/>
         <pathelement location="${i2ptunnel.java.build.dir}/i2ptunnel.jar"/>
+        <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
+        <pathelement location="${streaming.java.build.dir}/streaming.jar"/>
         <pathelement location="${systray.java.build.dir}/systray.jar"/>
 
         <!-- following jars only present for debian builds -->

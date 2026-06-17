@@ -44,6 +44,12 @@ msgstr "более высокая пропускная способность и
 msgid "Error - tunnels are not initialized yet"
 msgstr "Ошибка - туннели ещё не инициализированы"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Неправильно переданная форма, возможно вы использовали действие браузера \"назад\" или \"обновить\". Пожалуйста повторите попытку."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Если проблема сохраняется, проверьте, что в Вашем браузере разрешены cookies."
+
 msgid "No services configured, cannot restart!"
 msgstr "Нет настроенных сервисов, невозможно перезапустить!"
 
@@ -619,6 +625,39 @@ msgstr "Новая конфигурация сервера"
 msgid "Hostname"
 msgstr "Имя узла"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Случайная задержка запуска (при включенном автозапуске) для защиты от корреляционных атак"
+
+msgid "Startup Delay"
+msgstr "Задержка запуска"
+
+msgid "Minimum"
+msgstr "Минимум"
+
+msgid "Minimum startup delay"
+msgstr "Минимальная задержка запуска"
+
+msgid "seconds"
+msgstr "секунд(ы)"
+
+msgid "Maximum"
+msgstr "Максимум"
+
+msgid "Maximum startup delay"
+msgstr "Максимальная задержка запуска"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Добавить случайную задержку перед выключением туннеля, затем начать процесс плавного выключения/перезапуска маршрутизатора"
+
+msgid "Shutdown Delay"
+msgstr "Задержка выключения"
+
+msgid "Minimum shutdown delay"
+msgstr "Минимальная задержка выключения"
+
+msgid "Maximum shutdown delay"
+msgstr "Максимальная задержка выключения"
+
 msgid "Website Hostname"
 msgstr "Имя узла веб-сайта"
 
@@ -1100,8 +1139,8 @@ msgstr "Предпросмотр недоступен"
 msgid "Starting..."
 msgstr "Запускается..."
 
-msgid "Stop this Tunnel"
-msgstr "Остановить этот туннель"
+msgid "Starting in"
+msgstr "Запуск через"
 
 msgid "Running"
 msgstr "Запущен"
@@ -1115,14 +1154,17 @@ msgstr "в"
 msgid "out"
 msgstr "выход"
 
+msgid "Stopped"
+msgstr "Остановлен"
+
+msgid "Stop this Tunnel"
+msgstr "Остановить этот туннель"
+
 msgid "Restart this Tunnel"
 msgstr "Перезапустить этот туннель"
 
 msgid "Restart"
 msgstr "Перезапуск"
-
-msgid "Stopped"
-msgstr "Остановлен"
 
 msgid "Destination"
 msgstr "Адрес назначения"
@@ -1298,12 +1340,6 @@ msgstr "Сгенерировать аутентификацию"
 
 msgid "SSL Helper"
 msgstr "Помощник SSL"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Неправильно переданная форма, возможно вы использовали действие браузера \"назад\" или \"обновить\". Пожалуйста повторите попытку."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Если проблема сохраняется, проверьте, что в Вашем браузере разрешены cookies."
 
 msgid "Experts only!"
 msgstr "Только для продвинутых пользователей!"

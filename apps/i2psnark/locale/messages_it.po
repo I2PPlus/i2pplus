@@ -104,9 +104,6 @@ msgstr "Ferma tutti i torrent prima di cambiare la directory dei dati"
 msgid "Data directory must be an absolute path"
 msgstr "La cartella dei dati deve essere un percorso assoluto"
 
-msgid "Data directory does not exist"
-msgstr "La cartella dei dati non esiste"
-
 msgid "Not a directory"
 msgstr "Non è una cartella"
 
@@ -278,10 +275,6 @@ msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disab
 msgstr "Avviso - Nessun tracker I2P in \"{0}\", e DHT e tracker aperti sono disabilitati, dovresti abilitare i tracker aperti o DHT prima di avviare il torrent."
 
 #, java-format
-msgid "Fetching {0}"
-msgstr "Recupero di {0}"
-
-#, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
 msgstr "I tracker aperti sono disabilitati e non abbiamo peer DHT. Il recupero di {0} potrebbe non riuscire finché non avvii un altro torrent, abiliti i tracker aperti o abiliti DHT."
 
@@ -442,6 +435,9 @@ msgstr "Ricontrollo del torrent {0} terminato, invariato"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Errore durante la verifica del torrent {0}"
+
+msgid "Data directory does not exist"
+msgstr "La cartella dei dati non esiste"
 
 msgid "Cannot create diskspace bar"
 msgstr "Impossibile creare la barra dello spazio su disco"

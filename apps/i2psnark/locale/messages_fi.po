@@ -104,9 +104,6 @@ msgstr "Lopeta kaikki torrentit ennen kuin muutat datankansiota"
 msgid "Data directory must be an absolute path"
 msgstr "Data-hakemiston on oltava absoluuttinen polku"
 
-msgid "Data directory does not exist"
-msgstr "Data-hakemistoa ei ole olemassa"
-
 msgid "Not a directory"
 msgstr "Ei ole hakemisto"
 
@@ -278,10 +275,6 @@ msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disab
 msgstr "Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ja DHT ja avoimet seurantalaitteet on poistettu käytöstä. Ota avoimet seurantalaitteet tai DHT käyttöön ennen torrentin käynnistämistä."
 
 #, java-format
-msgid "Fetching {0}"
-msgstr "Noudetaan {0}"
-
-#, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
 msgstr "Avoimet seurantalaitteet on poistettu käytöstä, eikä meillä ole DHT-vertaisia. Kohteen {0} nouto ei onnistu ellet käynnistä uutta vertaisverkkoa, ota käyttöön avoimia seuraajia, tai ota käyttöön DHT:ä."
 
@@ -442,6 +435,9 @@ msgstr "Torrentin {0} uudelleentarkistus valmis, ei muutoksia"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Virheentarkistus vertaisverkossa {0}"
+
+msgid "Data directory does not exist"
+msgstr "Data-hakemistoa ei ole olemassa"
 
 msgid "Cannot create diskspace bar"
 msgstr "Levytilapalkkia ei voi luoda"

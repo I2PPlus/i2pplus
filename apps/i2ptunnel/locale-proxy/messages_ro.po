@@ -8,14 +8,132 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 
-msgid "Website Unknown"
-msgstr "Website Necunoscut"
+msgid "This seems to be a bad destination:"
+msgstr "Aceasta pare a fi o destinație rea:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper nu vă poate ajuta cu o destinație de genul asta!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "Pentru a vizita destinația în manualul dvs. de adrese, faceți clic pe <a href=\"{0}\">aici</a>. Pentru a vizita destinația Conflicting AddressHelper, faceți clic pe <a href=\"{1}\">aici</a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "Destinație pentru {0} în agendă"
+
+msgid "Conflicting address helper destination"
+msgstr "Destinație de ajutor a adresei în conflict"
+
+msgid "Corrupt Base32 address"
+msgstr "Adresa Base32 coruptă"
+
+msgid "Destination LeaseSet not found"
+msgstr "Destination LeaseSet nu a fost găsit"
+
+msgid "Host"
+msgstr "Gazdă"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "Destinație"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "Continuați {0} fără salvare"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "Puteți naviga pe site fără să -l salvați în cartea de adrese. Adresa va fi amintită până când reporniți routerul I2P."
+
+msgid "Continue without saving"
+msgstr "Continuati fara a salva"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "Salvați {0} în agenda de adrese de router și continuați pe site-ul web"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "Această adresă va fi salvată în agenda de adrese a routerului, unde sunt stocate adresele bazate pe abonament."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "Dacă doriți să urmăriți site-urile pe care le-ați adăugat manual, adăugați în agenda dvs. principală sau privată."
+
+msgid "Save & continue"
+msgstr "Salvați și continuați"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "Salvați {0} în agenda principală și continuați pe site"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "Această adresă va fi salvată în manualul dvs. de adrese master. Selectați această opțiune pentru adresele pe care doriți să le păstrați separat de agenda principală de adrese a routerului, dar nu vă deranjează publicarea."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "Salvați {0} în agenda privată și continuați pe site"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "Această adresă va fi salvată în agenda dvs. privată, asigurându-vă că nu este niciodată publicată."
+
+msgid "Base32 address requires lookup password"
+msgstr "Adresa Base32 necesită parola de căutare"
+
+msgid "Base32 address requires encryption key"
+msgstr "Adresa Base32 necesită cheie de criptare"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Adresa Base32 necesită cheia de criptare și parola de căutare"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Eșec de decriptare a adresei Base32, verificați cheia de criptare"
+
+msgid "Generate"
+msgstr "Generează"
+
+msgid "Encryption key"
+msgstr "Cheia de criptare"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "Trebuie fie să introduceți o cheie de criptare PSK furnizată de operatorul serverului, fie să generați o cheie de criptare DH și să o trimiteți operatorului serverului.Trebuie să introduceți o cheie de criptare PSK furnizată de operatorul serverului, sau să generați o cheie de criptare DH și să o trimiteți operatorului de server."
+
+msgid "Ask the server operator for help."
+msgstr "Solicitați ajutor operatorului de server."
+
+msgid "Enter PSK encryption key"
+msgstr "Introduceți cheia de criptare PSK"
+
+msgid "Generate new DH encryption key"
+msgstr "Generați o nouă cheie de criptare DH"
+
+msgid "Lookup password"
+msgstr "Parola de căutare"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "Trebuie să introduceți parola furnizată de operatorul serverului."
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "Adăugat prin adresa de ajutor de la {0}"
+
+msgid "Added via address helper"
+msgstr "Adăugat prin adresa de ajutor"
+
+msgid "Missing lookup password"
+msgstr "Lipsește parola de căutare"
+
+msgid "Missing private key"
+msgstr "Lipsește cheia privată"
+
+msgid "Invalid private key"
+msgstr "Cheie privată nevalidă"
+
+msgid "Your new encryption key"
+msgstr "Noua ta cheie de criptare"
 
 msgid "Router Console"
 msgstr "Consola router"
-
-msgid "I2P Router Console"
-msgstr "I2P consola router"
 
 msgid "Addressbook"
 msgstr "Agendă"
@@ -25,6 +143,52 @@ msgstr "Configurație"
 
 msgid "Help"
 msgstr "Ajutor"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "Copiați cheia și trimiteți-o operatorului de server."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "După ce veți primi permisiunea, puteți continua pe site-ul web."
+
+msgid "Go back and fix the error"
+msgstr "Întoarceți-vă și remediați eroarea"
+
+msgid "router"
+msgstr "router"
+
+msgid "master"
+msgstr "administrator"
+
+msgid "private"
+msgstr "privat"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "Redirecționare la {0}"
+
+msgid "Redirection in progress"
+msgstr "Redirecționare în curs"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "Salvate {0} in {1} agenda, redirecționarea acum."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "Salvarea {0} in agenda {1} a eșuat , redirecționarea acum."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "Clic aici dacă nu sunteți redirecționat automat."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "Am salvat autentificarea pentru {0}, redirecționând acum."
+
+msgid "Website Unknown"
+msgstr "Website Necunoscut"
+
+msgid "I2P Router Console"
+msgstr "I2P consola router"
 
 msgid "Website Not Found in Addressbook"
 msgstr "Site Web care nu este găsit în agenda de adrese"
@@ -262,167 +426,3 @@ msgstr "Dacă ați făcut clic pe un link, verificați la sfârșitul URI-ului o
 
 msgid "The Base32 address is invalid."
 msgstr "Adresa Base32 nu este validă."
-
-msgid "This seems to be a bad destination:"
-msgstr "Aceasta pare a fi o destinație rea:"
-
-msgid "i2paddresshelper cannot help you with a destination like that!"
-msgstr "i2paddresshelper nu vă poate ajuta cu o destinație de genul asta!"
-
-#, java-format
-msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr "Pentru a vizita destinația în manualul dvs. de adrese, faceți clic pe <a href=\"{0}\">aici</a>. Pentru a vizita destinația Conflicting AddressHelper, faceți clic pe <a href=\"{1}\">aici</a>."
-
-#, java-format
-msgid "Destination for {0} in addressbook"
-msgstr "Destinație pentru {0} în agendă"
-
-msgid "Conflicting address helper destination"
-msgstr "Destinație de ajutor a adresei în conflict"
-
-msgid "Corrupt Base32 address"
-msgstr "Adresa Base32 coruptă"
-
-msgid "Destination LeaseSet not found"
-msgstr "Destination LeaseSet nu a fost găsit"
-
-msgid "Host"
-msgstr "Gazdă"
-
-msgid "Base32"
-msgstr "Base32"
-
-msgid "Destination"
-msgstr "Destinație"
-
-#, java-format
-msgid "Continue to {0} without saving"
-msgstr "Continuați {0} fără salvare"
-
-msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr "Puteți naviga pe site fără să -l salvați în cartea de adrese. Adresa va fi amintită până când reporniți routerul I2P."
-
-msgid "Continue without saving"
-msgstr "Continuati fara a salva"
-
-#, java-format
-msgid "Save {0} to router address book and continue to website"
-msgstr "Salvați {0} în agenda de adrese de router și continuați pe site-ul web"
-
-msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr "Această adresă va fi salvată în agenda de adrese a routerului, unde sunt stocate adresele bazate pe abonament."
-
-msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr "Dacă doriți să urmăriți site-urile pe care le-ați adăugat manual, adăugați în agenda dvs. principală sau privată."
-
-msgid "Save & continue"
-msgstr "Salvați și continuați"
-
-#, java-format
-msgid "Save {0} to master addressbook and continue to website"
-msgstr "Salvați {0} în agenda principală și continuați pe site"
-
-msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr "Această adresă va fi salvată în manualul dvs. de adrese master. Selectați această opțiune pentru adresele pe care doriți să le păstrați separat de agenda principală de adrese a routerului, dar nu vă deranjează publicarea."
-
-#, java-format
-msgid "Save {0} to private addressbook and continue to website"
-msgstr "Salvați {0} în agenda privată și continuați pe site"
-
-msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr "Această adresă va fi salvată în agenda dvs. privată, asigurându-vă că nu este niciodată publicată."
-
-msgid "Base32 address requires lookup password"
-msgstr "Adresa Base32 necesită parola de căutare"
-
-msgid "Base32 address requires encryption key"
-msgstr "Adresa Base32 necesită cheie de criptare"
-
-msgid "Base32 address requires encryption key and lookup password"
-msgstr "Adresa Base32 necesită cheia de criptare și parola de căutare"
-
-msgid "Base32 address decryption failure, check encryption key"
-msgstr "Eșec de decriptare a adresei Base32, verificați cheia de criptare"
-
-msgid "Generate"
-msgstr "Generează"
-
-msgid "Encryption key"
-msgstr "Cheia de criptare"
-
-msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr "Trebuie fie să introduceți o cheie de criptare PSK furnizată de operatorul serverului, fie să generați o cheie de criptare DH și să o trimiteți operatorului serverului.Trebuie să introduceți o cheie de criptare PSK furnizată de operatorul serverului, sau să generați o cheie de criptare DH și să o trimiteți operatorului de server."
-
-msgid "Ask the server operator for help."
-msgstr "Solicitați ajutor operatorului de server."
-
-msgid "Enter PSK encryption key"
-msgstr "Introduceți cheia de criptare PSK"
-
-msgid "Generate new DH encryption key"
-msgstr "Generați o nouă cheie de criptare DH"
-
-msgid "Lookup password"
-msgstr "Parola de căutare"
-
-msgid "You must enter the password provided by the server operator."
-msgstr "Trebuie să introduceți parola furnizată de operatorul serverului."
-
-#, java-format
-msgid "Added via address helper from {0}"
-msgstr "Adăugat prin adresa de ajutor de la {0}"
-
-msgid "Added via address helper"
-msgstr "Adăugat prin adresa de ajutor"
-
-msgid "Missing lookup password"
-msgstr "Lipsește parola de căutare"
-
-msgid "Missing private key"
-msgstr "Lipsește cheia privată"
-
-msgid "Invalid private key"
-msgstr "Cheie privată nevalidă"
-
-msgid "Your new encryption key"
-msgstr "Noua ta cheie de criptare"
-
-msgid "Copy the key and send it to the server operator."
-msgstr "Copiați cheia și trimiteți-o operatorului de server."
-
-msgid "After you are granted permission, you may proceed to the website."
-msgstr "După ce veți primi permisiunea, puteți continua pe site-ul web."
-
-msgid "Go back and fix the error"
-msgstr "Întoarceți-vă și remediați eroarea"
-
-msgid "router"
-msgstr "router"
-
-msgid "master"
-msgstr "administrator"
-
-msgid "private"
-msgstr "privat"
-
-#, java-format
-msgid "Redirecting to {0}"
-msgstr "Redirecționare la {0}"
-
-msgid "Redirection in progress"
-msgstr "Redirecționare în curs"
-
-#, java-format
-msgid "Saved {0} to the {1} addressbook, redirecting now."
-msgstr "Salvate {0} in {1} agenda, redirecționarea acum."
-
-#, java-format
-msgid "Failed to save {0} to the {1} addressbook, redirecting now."
-msgstr "Salvarea {0} in agenda {1} a eșuat , redirecționarea acum."
-
-msgid "Click here if you are not redirected automatically."
-msgstr "Clic aici dacă nu sunteți redirecționat automat."
-
-#, java-format
-msgid "Saved the authentication for {0}, redirecting now."
-msgstr "Am salvat autentificarea pentru {0}, redirecționând acum."

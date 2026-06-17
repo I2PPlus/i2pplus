@@ -41,6 +41,12 @@ msgstr "aumentar largura de banda e confiabilidade"
 msgid "Error - tunnels are not initialized yet"
 msgstr "Erro - túneis ainda não foram inicializados"
 
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Envio de formulário inválido, provavelmente porque você usou o botão 'voltar' ou 'recarregar' no seu navegador. Envio de formulário inválido, provavelmente porque você usou o 'voltar' ou 'recarregar' no seu navegador. Por favor reenvie."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Se o problema persistir, verifique se os cookies estão ativados no seu navegador.Se o problema persistir, verificar se o seu navegador está aceitando cookies."
+
 msgid "No services configured, cannot restart!"
 msgstr "Nenhum serviço configurado, não é possível reiniciar!"
 
@@ -614,6 +620,39 @@ msgstr "Nova Configuração do Servidor"
 msgid "Hostname"
 msgstr "Nome do host"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Atraso aleatório de inicialização (quando a inicialização automática está ativada) para se defender contra ataques de correlação"
+
+msgid "Startup Delay"
+msgstr "Atraso de inicialização"
+
+msgid "Minimum"
+msgstr "Mínimo"
+
+msgid "Minimum startup delay"
+msgstr "Atraso mínimo de inicialização"
+
+msgid "seconds"
+msgstr "segundos"
+
+msgid "Maximum"
+msgstr "Máximo"
+
+msgid "Maximum startup delay"
+msgstr "Atraso máximo de inicialização"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Adicionar um atraso aleatório antes do desligamento do túnel e iniciar um processo de desligamento/reinicialização suave do roteador"
+
+msgid "Shutdown Delay"
+msgstr "Atraso de desligamento"
+
+msgid "Minimum shutdown delay"
+msgstr "Atraso mínimo de desligamento"
+
+msgid "Maximum shutdown delay"
+msgstr "Atraso máximo de desligamento"
+
 msgid "Website Hostname"
 msgstr "Nome do host do site"
 
@@ -1095,8 +1134,8 @@ msgstr "Sem visualização"
 msgid "Starting..."
 msgstr "Iniciando..."
 
-msgid "Stop this Tunnel"
-msgstr "Pare este túnel"
+msgid "Starting in"
+msgstr "Iniciando em"
 
 msgid "Running"
 msgstr "Executando"
@@ -1110,14 +1149,17 @@ msgstr "em"
 msgid "out"
 msgstr "fora"
 
+msgid "Stopped"
+msgstr "Parado"
+
+msgid "Stop this Tunnel"
+msgstr "Pare este túnel"
+
 msgid "Restart this Tunnel"
 msgstr "Reiniciar este túnel"
 
 msgid "Restart"
 msgstr "Reiniciar"
-
-msgid "Stopped"
-msgstr "Parado"
 
 msgid "Destination"
 msgstr "Destino"
@@ -1293,12 +1335,6 @@ msgstr "Gerar autenticação"
 
 msgid "SSL Helper"
 msgstr "Ajudante SSL"
-
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Envio de formulário inválido, provavelmente porque você usou o botão 'voltar' ou 'recarregar' no seu navegador. Envio de formulário inválido, provavelmente porque você usou o 'voltar' ou 'recarregar' no seu navegador. Por favor reenvie."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Se o problema persistir, verifique se os cookies estão ativados no seu navegador.Se o problema persistir, verificar se o seu navegador está aceitando cookies."
 
 msgid "Experts only!"
 msgstr "Apenas técnicos!"
