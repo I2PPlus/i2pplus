@@ -127,7 +127,7 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
     public static final String ID_COMPOSER_OBSELETE = "TCM";
 
     /** Obsolete publisher frame ID. */
-    public static final String ID_PUBLISHER_OBSELETE = "TBP";
+    public static final String ID_PUBLISHER_OBSELETE = "TPB";
 
     /** Obsolete comment frame ID. */
     public static final String ID_COMMENT_OBSELETE = "COM";
@@ -288,7 +288,6 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
     /** Compression flag. */
     protected boolean compression = false;
 
-    /** Padding flag. */
     /** Padding flag. */
     protected boolean padding = false;
 
