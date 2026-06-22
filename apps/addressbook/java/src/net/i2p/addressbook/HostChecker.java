@@ -72,6 +72,7 @@ public class HostChecker {
     private final File _categoriesFile;
     private final File _blacklistFile;
     private final Semaphore _pingSemaphore;
+    private volatile I2PSocketManager _sharedPingSocketManager;
     private Set<String> _blacklistedHosts;
     private volatile long _blacklistLastModified;
     private int _categoryRetryCount = 0;
@@ -699,6 +700,7 @@ public class HostChecker {
         I2PSocketManager pingSocketManager = null;
         String displayHostname = hostname;
         if (hostname.length() > 30) {displayHostname = hostname.substring(0,29) + "&hellip;";}
+        boolean shared = false;
 
         if (leaseSetTypes == null) {
             leaseSetTypes = "[]";
@@ -706,26 +708,32 @@ public class HostChecker {
 
         try {
             long tunnelBuildStart = System.currentTimeMillis();
-            Properties options = new Properties();
-            options.setProperty("i2cp.host", "127.0.0.1");
-            options.setProperty("i2cp.port", "7611");
-            options.setProperty("inbound.nickname", "Ping [" + hostname.replace(".i2p", "") + "]");
-            options.setProperty("outbound.nickname", "Ping [" + hostname.replace(".i2p", "") + "]");
-            options.setProperty("inbound.quantity", "1");
-            options.setProperty("outbound.quantity", "1");
-            options.setProperty("inbound.backupQuantity", "0");
-            options.setProperty("outbound.backupQuantity", "0");
-            options.setProperty("i2cp.leaseSetType", "3");
-            options.setProperty("i2cp.leaseSetEncType", "6,4");
-            options.setProperty("i2cp.dontPublishLeaseSet", "true");
 
-            pingSocketManager = I2PSocketManagerFactory.createManager(options);
+            shared = _sharedPingSocketManager != null && !_sharedPingSocketManager.isDestroyed();
+            if (shared) {
+                pingSocketManager = _sharedPingSocketManager;
+            } else {
+                Properties options = new Properties();
+                options.setProperty("i2cp.host", "127.0.0.1");
+                options.setProperty("i2cp.port", "7611");
+                options.setProperty("inbound.nickname", "Ping [" + hostname.replace(".i2p", "") + "]");
+                options.setProperty("outbound.nickname", "Ping [" + hostname.replace(".i2p", "") + "]");
+                options.setProperty("inbound.quantity", "1");
+                options.setProperty("outbound.quantity", "1");
+                options.setProperty("inbound.backupQuantity", "0");
+                options.setProperty("outbound.backupQuantity", "0");
+                options.setProperty("i2cp.leaseSetType", "3");
+                options.setProperty("i2cp.leaseSetEncType", "6,4");
+                options.setProperty("i2cp.dontPublishLeaseSet", "true");
 
-            if (pingSocketManager == null) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Failed to create SocketManager for HostChecker ping -> " + displayHostname + " [6,4]");
+                pingSocketManager = I2PSocketManagerFactory.createManager(options);
+
+                if (pingSocketManager == null) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Failed to create SocketManager for HostChecker ping -> " + displayHostname + " [6,4]");
+                    }
+                    return createPingResult(false, startTime, System.currentTimeMillis() - startTime, hostname, leaseSetTypes);
                 }
-                return createPingResult(false, startTime, System.currentTimeMillis() - startTime, hostname, leaseSetTypes);
             }
 
             long tunnelBuildTime = System.currentTimeMillis() - tunnelBuildStart;
@@ -813,7 +821,7 @@ public class HostChecker {
             }
             return result;
         } finally {
-            if (pingSocketManager != null) {
+            if (pingSocketManager != null && !shared) {
                 try {
                     pingSocketManager.destroySocketManager();
                     if (_log.shouldDebug()) {
@@ -1922,6 +1930,23 @@ public class HostChecker {
                 int success = 0;
                 int skipped = 0;
 
+                // Create shared socket manager for all pings in this cycle
+                if (_sharedPingSocketManager == null || _sharedPingSocketManager.isDestroyed()) {
+                    Properties options = new Properties();
+                    options.setProperty("i2cp.host", "127.0.0.1");
+                    options.setProperty("i2cp.port", "7611");
+                    options.setProperty("inbound.nickname", "HostChecker");
+                    options.setProperty("outbound.nickname", "HostChecker");
+                    options.setProperty("inbound.quantity", "1");
+                    options.setProperty("outbound.quantity", "1");
+                    options.setProperty("inbound.backupQuantity", "0");
+                    options.setProperty("outbound.backupQuantity", "0");
+                    options.setProperty("i2cp.leaseSetType", "3");
+                    options.setProperty("i2cp.leaseSetEncType", "6,4");
+                    options.setProperty("i2cp.dontPublishLeaseSet", "true");
+                    _sharedPingSocketManager = I2PSocketManagerFactory.createManager(options);
+                }
+
                 // Create a list of ping tasks to run concurrently
                 java.util.List<java.util.concurrent.Future<Void>> futures = new java.util.ArrayList<java.util.concurrent.Future<Void>>();
 
@@ -2043,6 +2068,19 @@ public class HostChecker {
                     _log.warn("Error during HostChecker cycle", e);
                 }
             } finally {
+                if (_sharedPingSocketManager != null && !_sharedPingSocketManager.isDestroyed()) {
+                    try {
+                        _sharedPingSocketManager.destroySocketManager();
+                        if (_log.shouldDebug()) {
+                            _log.debug("Destroyed shared HostChecker SocketManager");
+                        }
+                    } catch (Exception e) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("Error destroying shared HostChecker SocketManager", e);
+                        }
+                    }
+                    _sharedPingSocketManager = null;
+                }
                 _cycleInProgress.set(false);
             }
         }
