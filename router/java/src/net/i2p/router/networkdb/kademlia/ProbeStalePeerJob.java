@@ -7,11 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.Hash;
+import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
+import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.peermanager.PeerProfile;
+import net.i2p.router.transport.Transport;
 import net.i2p.util.Log;
 import net.i2p.util.VersionComparator;
 
@@ -31,18 +34,23 @@ class ProbeStalePeerJob extends JobImpl {
     private final Log _log;
     private final FloodfillNetworkDatabaseFacade _facade;
     private final Map<Hash, Long> _lastProbed;
+    private int _runCount;
 
     private static final long CYCLE_INTERVAL = 60 * 1000;
     private static final int MAX_PROBES_PER_CYCLE = 20;
+    /** More aggressive during startup to establish transport connections faster */
+    private static final int STARTUP_MAX_PROBES_PER_CYCLE = 50;
     private static final long PROBE_COOLDOWN = 10 * 60 * 1000;
     private static final long PROOF_OF_LIFE_WINDOW_MS = 60 * 60 * 1000;
     private static final long STARTUP_BURST_PERIOD = 5 * 60 * 1000;
+    private static final int STARTUP_BURST_CYCLES = 3;
 
     public ProbeStalePeerJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade) {
         super(ctx);
         _log = ctx.logManager().getLog(ProbeStalePeerJob.class);
         _facade = facade;
         _lastProbed = new ConcurrentHashMap<Hash, Long>();
+        _runCount = 0;
     }
 
     public String getName() { return "Probe Stale Peers"; }
@@ -56,10 +64,13 @@ class ProbeStalePeerJob extends JobImpl {
         List<Hash> candidates = new ArrayList<Hash>();
         long maxAge = ctx.getProperty(
             "profileOrganizer.maxRouterInfoAgeHours", 2) * 3600_000L;
-        boolean isStartupBurst = uptime > 0 && uptime < STARTUP_BURST_PERIOD;
+        boolean isStartupBurst = (_runCount < STARTUP_BURST_CYCLES) ||
+                                 (uptime > 0 && uptime < STARTUP_BURST_PERIOD);
+        _runCount++;
 
+        int maxCandidates = isStartupBurst ? STARTUP_MAX_PROBES_PER_CYCLE * 2 : MAX_PROBES_PER_CYCLE * 2;
         for (Hash peer : ctx.profileOrganizer().selectAllPeers()) {
-            if (candidates.size() >= MAX_PROBES_PER_CYCLE * 2) break;
+            if (candidates.size() >= maxCandidates) break;
 
             Long last = _lastProbed.get(peer);
             if (last != null && now - last < PROBE_COOLDOWN) continue;
@@ -101,9 +112,10 @@ class ProbeStalePeerJob extends JobImpl {
             });
         }
 
+        int maxProbes = isStartupBurst ? STARTUP_MAX_PROBES_PER_CYCLE : MAX_PROBES_PER_CYCLE;
         int probed = 0;
         for (Hash peer : candidates) {
-            if (probed >= MAX_PROBES_PER_CYCLE) break;
+            if (probed >= maxProbes) break;
 
             _lastProbed.put(peer, now);
             probed++;
@@ -117,6 +129,32 @@ class ProbeStalePeerJob extends JobImpl {
 
             ctx.profileOrganizer().demoteIfStale(peer);
             _facade.probeStalePeer(peer, ri);
+
+            // During startup burst, explicitly trigger transport session
+            // establishment to this peer. The NetDB probe (above) only sends
+            // a DatabaseLookup to a floodfill — this ensures the probed peer
+            // itself gets a transport connection for tunnel building.
+            // Prefer NTCP when available since SSU establishment is timing out.
+            if (isStartupBurst && ri != null) {
+                DatabaseStoreMessage warm = new DatabaseStoreMessage(ctx);
+                warm.setEntry(ri);
+                warm.setMessageExpiration(ctx.clock().now() + 30*1000);
+                OutNetMessage onm = new OutNetMessage(ctx, warm,
+                    ctx.clock().now() + 30*1000,
+                    OutNetMessage.PRIORITY_MY_NETDB_STORE, ri);
+                // Check if peer supports NTCP — if so, send directly through NTCP
+                // to bypass the transport selector that always prefers SSU.
+                if (!ri.getTargetAddresses("NTCP", "NTCP2").isEmpty()) {
+                    Transport ntcp = ctx.commSystem().getTransports().get("NTCP");
+                    if (ntcp != null) {
+                        ntcp.send(onm);
+                    } else {
+                        ctx.outNetMessagePool().add(onm);
+                    }
+                } else {
+                    ctx.outNetMessagePool().add(onm);
+                }
+            }
         }
 
         if (_log.shouldInfo() && probed > 0) {

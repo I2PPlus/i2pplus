@@ -47,13 +47,16 @@ public class RepublishLeaseSetJob extends JobImpl {
     public final static long REPUBLISH_LEASESET_TIMEOUT_DEFAULT = 60 * 1000;
     public final static int RETRY_DELAY_DEFAULT = 20 * 1000;
     public final static int RETRY_MAX_DELAY_DEFAULT = 30 * 1000;
-    private final static long REPUBLISH_INTERVAL = 5 * 60 * 1000; // 5 minutes
     private final static long EXPIRY_WINDOW = 3 * 60 * 1000;
     private static final long CACHE_CLEANUP_THRESHOLD = 15 * 60 * 1000;
     private static final ConcurrentHashMap<Hash, Boolean> _retryInProgress = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<Hash, Long> _lastPublishLogTime = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<Hash, Long> _lastVerifyLogTime = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<Hash, Long> _lastNotRequeueLogTime = new ConcurrentHashMap<>();
+    // Persistent per-destination failure count — never reset, survives job instances.
+    // Used to decide when to perform expensive floodfill verification.
+    private static final ConcurrentHashMap<Hash, AtomicInteger> _globalFailCount = new ConcurrentHashMap<>();
+    private static final int MAX_FLOODFILL_VERIFICATIONS = 3;
     private final Hash _dest;
     private final KademliaNetworkDatabaseFacade _facade;
     private long _lastPublished;
@@ -102,8 +105,8 @@ public class RepublishLeaseSetJob extends JobImpl {
                 _facade.stopPublishing(_dest);
                 return;
             }
-            if (uptime < 20 * 1000) {
-                long delay = Math.max(1000, 20 * 1000 - uptime);
+            if (uptime < 5 * 1000) {
+                long delay = Math.max(1000, 5 * 1000 - uptime);
                 scheduleRepublish(delay);
                 return;
             }
@@ -139,19 +142,11 @@ public class RepublishLeaseSetJob extends JobImpl {
                                        "] (expires in " + (timeUntilExpiry / 1000) + "s)...");
                             _lastPublishLogTime.put(_dest, now);
                         }
-                        // Don't publish if there are no healthy inbound tunnels —
-                        // doing so would broadcast stale leases pointing to dead
-                        // gateways, making the destination unreachable.
-                        // Allow publish for pool-less targets (internal proxies etc).
-                        int healthyCount = getContext().tunnelManager().getInboundClientTunnelCount(_dest);
-                        if (healthyCount == 0) {
-                            if (_log.shouldWarn()) {
-                                _log.warn("No healthy inbound tunnels for [" + _dest.toBase32().substring(0,8) +
-                                           "] -> Delaying LeaseSet publish");
-                            }
-                            scheduleRepublish(getRepublishInterval());
-                            return;
-                        }
+                        // Publish even with 0 healthy (tested) inbound tunnels.
+                        // Untested tunnels have valid leases — publishing them
+                        // immediately makes the destination reachable.  Waiting
+                        // for a full test cycle just delays the first usable
+                        // LeaseSet by 30+ seconds.
                         cleanupStaleEntries();
                         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
                         failCount.set(0);
@@ -205,7 +200,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     private long getRepublishInterval() {
-        return REPUBLISH_INTERVAL;
+        return getContext().getProperty("i2p.netdb.republishInterval", 5*60*1000);
     }
 
     private void scheduleRepublish(long delayMs) {
@@ -289,6 +284,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         cleanupMap(_lastPublishLogTime, now);
         cleanupMap(_lastVerifyLogTime, now);
         cleanupMap(_lastNotRequeueLogTime, now);
+        cleanupGlobalFailCount(now);
     }
 
     private static void cleanupMap(ConcurrentHashMap<Hash, Long> map, long now) {
@@ -296,6 +292,22 @@ public class RepublishLeaseSetJob extends JobImpl {
         while (iter.hasNext()) {
             Map.Entry<Hash, Long> entry = iter.next();
             if (now - entry.getValue() > CACHE_CLEANUP_THRESHOLD) {
+                iter.remove();
+            }
+        }
+    }
+
+    /** Reset global fail counters that have been idle beyond the threshold. */
+    private static void cleanupGlobalFailCount(long now) {
+        // Global fail count has no timestamp per entry; just clear entries
+        // for destinations no longer being tracked in the publish log.
+        // If _lastPublishLogTime is empty for a given hash and the global
+        // fail counter exists, assume publication succeeded and reset.
+        Iterator<Map.Entry<Hash, AtomicInteger>> iter = _globalFailCount.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<Hash, AtomicInteger> entry = iter.next();
+            if (!_retryInProgress.containsKey(entry.getKey()) &&
+                !_lastPublishLogTime.containsKey(entry.getKey())) {
                 iter.remove();
             }
         }
@@ -316,7 +328,6 @@ public class RepublishLeaseSetJob extends JobImpl {
         public String getName() {return "Timeout LeaseSet Publication";}
 
         public void runJob() {
-            int count = failCount.get();
             LeaseSet ls = _facade.lookupLeaseSetLocally(_ls.getHash());
             String tunnelName = ls != null ? getTunnelName(_ls.getDestination()) : "";
             String name = !tunnelName.isEmpty() ? " for '" + tunnelName + "'" : "";
@@ -335,9 +346,26 @@ public class RepublishLeaseSetJob extends JobImpl {
                 return;
             }
 
-            if (count % 3 == 0 && _lookupInProgress.compareAndSet(false, true)) {
+            // Use the persistent global fail counter, NOT the per-instance failCount
+            // (which is reset to 0 every runJob()).  Verification only kicks in after
+            // multiple real failures, not on the first store timeout.
+            int globalCount = _globalFailCount
+                .computeIfAbsent(_ls.getHash(), k -> new AtomicInteger(0))
+                .incrementAndGet();
+
+            if (globalCount > 2 && globalCount % 3 == 0 && _lookupInProgress.compareAndSet(false, true)) {
                 long now = getContext().clock().now();
                 Long lastVerifyLog = _lastVerifyLogTime.get(_ls.getHash());
+                if (globalCount / 3 > MAX_FLOODFILL_VERIFICATIONS) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Floodfill verification maxed out for" + name + " [" +
+                                  _ls.getDestination().calculateHash().toBase32().substring(0,8) +
+                                  "] -> falling back to retry directly");
+                    }
+                    _lookupInProgress.set(false);
+                    requeueRepublish();
+                    return;
+                }
                 if (_log.shouldInfo() && (lastVerifyLog == null || (now - lastVerifyLog > 10 * 1000))) {
                     _log.info("Verifying LeaseSet publication" + name + " [" +
                               _ls.getDestination().calculateHash().toBase32().substring(0,8) + "] via floodfill...");

@@ -1191,7 +1191,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     private static final long PUBLISH_DELAY = 1000;
-    private static final long PROACTIVE_REPUBLISH_THRESHOLD = 3 * 60 * 1000;
+
+    /**
+     * Get the proactive republish threshold from config or default (3 minutes).
+     * If a lease is expiring within this threshold, it gets republished immediately.
+     * Tunable via i2p.netdb.proactiveRepublishThreshold (default: 180000).
+     */
+    private long getProactiveRepublishThreshold() {
+        return _context.getProperty("i2p.netdb.proactiveRepublishThreshold", 3*60*1000);
+    }
 
     /**
      * Publishes a local LeaseSet by storing it and scheduling republishing if applicable.
@@ -1273,7 +1281,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         long now = _context.clock().now();
         if (ls != null) {
             long expiration = ls.getLatestLeaseDate();
-            if (expiration - now < PROACTIVE_REPUBLISH_THRESHOLD) {
+            if (expiration - now < getProactiveRepublishThreshold()) {
                 // Expiring soon - process immediately, don't batch
                 RepublishLeaseSetJob job = new RepublishLeaseSetJob(_context, this, hash);
                 if (!job.registerSelf()) {
