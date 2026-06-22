@@ -573,12 +573,40 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  Runtime.getRuntime().availableProcssors()
+     *  Total CPUs including parked/offline cores.
+     *  On Linux, reads /sys/devices/system/cpu/present to get the full
+     *  CPU topology regardless of cpufreq governor parking.
+     *  Falls back to Runtime.getRuntime().availableProcessors().
      *  @return never smaller than 1
      *  @since 0.9.34
      */
     public static int getCores() {
-        return Runtime.getRuntime().availableProcessors();
+        int fallback = Runtime.getRuntime().availableProcessors();
+        if (_isWin || _isMac) {
+            return fallback;
+        }
+        try {
+            java.io.File f = new java.io.File("/sys/devices/system/cpu/present");
+            if (!f.exists()) {
+                return fallback;
+            }
+            String content = new String(java.nio.file.Files.readAllBytes(f.toPath()), "UTF-8").trim();
+            int count = 0;
+            for (String part : content.split(",")) {
+                part = part.trim();
+                int dash = part.indexOf('-');
+                if (dash > 0) {
+                    int lo = Integer.parseInt(part.substring(0, dash));
+                    int hi = Integer.parseInt(part.substring(dash + 1));
+                    count += hi - lo + 1;
+                } else if (!part.isEmpty()) {
+                    count++;
+                }
+            }
+            return Math.max(count, 1);
+        } catch (Exception e) {
+            return fallback;
+        }
     }
 
     /** calculate how many (virtual) cores should be actually used by a thread pool */
