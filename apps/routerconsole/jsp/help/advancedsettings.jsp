@@ -205,6 +205,12 @@
 <tr class=config><th>router.maxWaitingJobs={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("The maximum number of waiting jobs in the queue before aggressive job dropping is triggered. When exceeded, non-critical jobs are dropped to reduce queue pressure. [Default is 48]")%></td></tr>
 
+<tr class=config><th>router.buildHandlerMaxQueue={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum number of pending tunnel build jobs in the BuildHandler queue. When the queue exceeds this limit, new build requests are rejected to prevent job queue overload. [Default is 256]")%></td></tr>
+
+<tr class=config><th>router.buildConcurrencyMultiplier={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Multiplier applied to the base tunnel build concurrency. The effective concurrency is baseBuildRate * multiplier, clamped by maxConcurrentBuilds. Higher values accelerate pool recovery but increase network load. [Default is 1.0]")%></td></tr>
+
 <tr class=config><th>router.maxParticipatingTunnels={n}</th></tr>
 <tr><td><%=intl._t("Determines the maximum number of participating tunnels the router can build. To disable participation completely, set to 0. [Default is 8000, or 2000 if running on Arm or Android]")%></td></tr>
 
@@ -321,6 +327,185 @@
 <tr class=config><th>router.tunnel.pruneEarlyExpiryDelay={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("The time in milliseconds before expiration to mark tunnels for early expiry when the Remove Slow Tunnels job prunes slow or excess tunnels. Higher values allow more time for new tunnels to build. [Default is 30000]")%></td></tr>
 
+<tr class=section><th>i2p.tunnel</th></tr>
+
+<tr class=config><th>i2p.tunnel.testJob.hardLimit={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Hard limit on total tunnel test jobs (queued + active). Prevents runaway test backlogs from causing job queue lag. Once reached, no new tests are scheduled until the count drops. [Default is 128 (96 on slower systems)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.testJob.maxQueued={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Base adaptive queue limit for tunnel test jobs. The router scales this up/down by 2-3x based on job queue lag and failure rates. [Default is 48 (32 on slower systems)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.testJob.maxConcurrent={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum number of tunnel tests that can execute simultaneously. Caps concurrent test throughput to prevent overwhelming the router. [Default is 64 (32 on slower systems)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.buildRequest.maxConsecutiveFails={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum consecutive client tunnel build timeouts before forcing exploratory tunnels for build reply delivery. Higher values keep the router trying paired tunnels longer; lower values fall back to exploratory sooner. [Default is 3]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.build.requestTimeout={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("How long to wait for a tunnel build reply before trying a different pool or different peers. The BuildExecutor adaptively increases this when success rates are low. [Default is 5000 (5s), 10000 (10s) on slow systems]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.build.firstHopTimeout={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Timeout in milliseconds for the first-hop OutNetMessage before firing TunnelBuildFirstHopFailJob. Should be >= requestTimeout for proper sequencing. [Default is 10000 (10 seconds)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.build.nextHopLookupTimeout={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Timeout in milliseconds for RouterInfo lookup of the next hop during tunnel build processing. If the lookup times out, the build request is rejected. [Default is 8000 (8 seconds)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.build.exploratoryBackoff={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Backoff delay in milliseconds between exploratory tunnel build retries. Higher values reduce build request rate during failures; lower values retry faster. [Default is 200]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.build.clientBackoff={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Backoff delay in milliseconds between client tunnel build retries. Lower values rebuild failed client tunnels faster. [Default is 50]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.build.gracePeriod={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Grace period in milliseconds to accept late tunnel build replies after the router has given up waiting. Prevents wasting valid tunnel builds that arrive just after timeout. [Default is 60000 (60 seconds)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.build.targetMin={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Minimum target tunnels per pool before triggering urgent rebuild logic. When the number of good tunnels drops below this threshold, the pool escalates to urgent rebuild mode. [Default is 2]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.build.minLookupLimit={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Floor on concurrent next-hop RouterInfo lookups during tunnel build processing. Ensures a minimum level of lookup concurrency even when few tunnels are participating. [Default is 10 (4 on slow systems)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.build.maxLookupLimit={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Caps lookup concurrency to prevent overwhelming the netDb. [Default is max(cores/2, 16) (10 on slow systems)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.build.percentLookupLimit={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Percentage of current participating tunnels used to scale the concurrent lookup limit. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.build.maxRequestFuture={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.build.maxRequestAge={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum age in milliseconds for tunnel build requests (ElGamal). Requests older than this are rejected as potential replay attacks. Must be >1 hour due to rounding in the protocol. [Default is 3900000 (65 minutes)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.build.maxRequestAgeEcies={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum age in milliseconds for tunnel build requests (ECIES). ECIES timestamps are rounded to minutes so the tolerance is tighter. [Default is 480000 (8 minutes)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.build.jobLagLimitTunnel={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Job lag threshold in milliseconds that triggers tunnel build limiting. When router job lag exceeds this value, tunnel build requests are throttled to reduce queue pressure. [Default is 800 (500 on slow systems)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.testJob.minTestDelay={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Minimum delay in milliseconds before scheduling a tunnel test. The router will not test a tunnel that was recently tested within this window. [Default is 30000 (30 seconds)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.testJob.maxTestDelay={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum delay in milliseconds before scheduling a tunnel test. The router will not defer a tunnel test beyond this limit. [Default is 90000 (90 seconds)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.testJob.maxExploratoryPerPool={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum concurrent tunnel test jobs per exploratory pool. Caps how many exploratory tunnels are tested simultaneously. [Default is 12]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.testJob.maxClientPerPool={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum concurrent tunnel test jobs per client pool. Caps how many client tunnels are tested simultaneously. [Default is 24]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.testJob.poolCoverageThreshold={f} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Ratio of tunnels tested vs total pool size that triggers pool coverage heuristics. When fewer than this fraction of tunnels have recent test results, the pool prioritises testing over building. [Default is 0.95]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.peerSelector.clientCooldownMs={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Cooldown period in milliseconds for client peer selection. Peers selected for a client tunnel are excluded from selection in other client pools for this duration, ensuring peer diversity. [Default is 15000 (15 seconds)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.peerSelector.clientStrategy={s} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Client peer selection strategy: 'default' (balanced, preferred), 'reliability' (prioritise proven peers with high tunnel acceptance ratio), or 'diversity' (lower cooldowns, explores broader peer set). Changes apply dynamically. [Default is 'default']")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.lifetime={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Tunnel lifetime in milliseconds. Tunnels expire after this period and are replaced with fresh builds. Lower values increase churn but may improve freshness; higher values reduce build overhead but may accumulate stale tunnels. [Default is 600000 (10 minutes)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.startupTime={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Startup suppression period in milliseconds. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions. [Default is 300000 (5 minutes)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.refreshThrottle={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 300000 (5 minutes)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.leasesetBuildMinInterval={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 300000 (5 minutes)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.maxConcurrentBuildsPerDirection={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.buildTriesQuantityOverride={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("If exploratory tunnel build success rate falls below 1 in this many attempts, tunnel quantity is reduced. Higher values make quantity reduction less likely. [Default is 12]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.targetBuffer={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Extra tunnels to maintain beyond the configured pool quantity. A positive value keeps spare tunnels ready so the pool doesn't drain when tunnels expire simultaneously. [Default is 0]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.goodDeficitThrottle={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Minimum interval in milliseconds between GOOD-tunnel deficit rebuilds for non-critical pools. Prevents rapid build-retry loops when the pool has enough FAILING tunnels to satisfy the numerical target. [Default is 30000 (30 seconds)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.testJob.minTestPeriod={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Minimum tunnel test period in milliseconds. Tunnel tests always wait at least this long for a reply before timing out. [Default is 45000 (45 seconds)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.testJob.maxTestPeriod={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.ghostPeer.timeoutThreshold={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.ghostPeer.cooldownMs={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.ghostPeer.attackCooldownMs={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.requestThrottle.minLimit={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.requestThrottle.maxLimit={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum number of incoming tunnel build requests accepted per peer per clean window. Caps request volume to prevent DoS. [Default is 300]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.requestThrottle.burst1sThreshold={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Number of tunnel build requests from a single peer in 1 second that triggers an immediate ban. Protects against rapid-fire DoS attacks. [Default is 10]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.requestThrottle.percentLimit={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Percentage of participating tunnels used to dynamically scale the per-peer request throttle limit. The effective maxLimit is adjusted based on this percentage of current participating tunnel count. [Default is 20]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.participatingThrottle.minLimit={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Minimum number of participating tunnel build requests accepted per clean window. Ensures a baseline acceptance rate even when the router is under load. [Default is 80 (40 on slow systems)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.participatingThrottle.maxLimit={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum number of participating tunnel build requests accepted per clean window. Caps acceptance to prevent overload. [Default is 300 (150 on slow systems)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.participatingThrottle.percentLimit={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Percentage of current participating tunnels used to scale the participating throttle limits. Higher values allow more build requests relative to tunnel count. [Default is 10]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.exploratoryPeer.minNonfailingPct={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Minimum percentage of non-failing peer profiles required before the router broadens exploratory peer selection. When below this threshold, only the most reliable peers are used. [Default is 15]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.exploratoryPeer.minActivePeers={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Minimum number of active (non-failing) peers required for normal exploratory peer selection. Below this threshold, selection logic becomes more permissive. [Default is 12]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.exploratoryPeer.minActivePeersStartup={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Minimum number of active peers required during router startup before restricting exploratory peer selection. During early startup the router is more lenient about peer quality. [Default is 6]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxSlowStartWindow={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 64]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxRtt={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 60000 (60 seconds)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxRetransmissions={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 64]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.destinationCooldownMs={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 60000 (60 seconds)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxPingTimeout={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.dropOverLimit={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.defaultStreamDelayMax={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.acceptTimeout={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum time in milliseconds between receiving a SYN and accepting it on a server socket. Controls how long incomplete connections are kept in the accept queue. [Default is 4000 (4 seconds)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxQueueSize={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum number of pending connections (SYNs and partial packets) in the server accept queue. Larger values buffer more incoming connections at the cost of memory. [Default is 80 (48 on slow systems)]")%></td></tr>
+
+<tr class=config><th>i2p.netdb.republishInterval={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]")%></td></tr>
+
+<tr class=config><th>i2p.netdb.proactiveRepublishThreshold={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Threshold in milliseconds for proactive LeaseSet republish. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle. [Default is 180000 (3 minutes)]")%></td></tr>
+
 <tr class=config><th>router.idleTunnelDetectionPeriod={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]")%></td></tr>
 
@@ -390,6 +575,12 @@
 
 <tr class=config><th>i2p.streaming.maxConnectTimeout={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration. Increase for very high-latency remote access. [Default is 120000 (2min)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.initialWindowSize={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 8]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxWindowSize={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 128]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.minResendDelay={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]")%></td></tr>

@@ -548,7 +548,18 @@ class SidebarRenderer {
             .append(tx)
             .append("\" hidden><span><img src=/themes/console/images/profile.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
-
+/*
+        tx = _t("Streams");
+        rbuf.setLength(0);
+        rbuf.append("<a href=/streams target=_top title=\"")
+            .append(_t("View active streaming connections"))
+            .append("\">")
+            .append(nbsp(tx))
+            .append("</a>\n<a class=sb_icon target=_top href=/streams title=\"")
+            .append(tx)
+            .append("\" hidden><span><img src=/themes/console/images/hardhat.svg></span></a>\n");
+        svcs.put(tx, rbuf.toString());
+*/
         tx = _t("Tunnels");
         rbuf.setLength(0);
         rbuf.append("<a href=/tunnels target=_top title=\"")
