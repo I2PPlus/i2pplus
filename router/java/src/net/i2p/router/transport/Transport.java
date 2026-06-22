@@ -390,6 +390,25 @@ public interface Transport {
     public boolean isEstablished(Hash peer);
 
     /**
+     * Check if a connection attempt is in progress for the given peer.
+     *
+     * This method returns true when the transport has accepted a message
+     * for this peer and initiated a connection handshake, but the
+     * handshake has not yet completed. Unlike isEstablished(), which
+     * only returns true for fully-connected peers, this method detects
+     * connections that are still being set up.
+     *
+     * Used by the tunnel build system to distinguish between peers that
+     * are genuinely unreachable vs. peers that just need more time for
+     * the initial NTCP2/SSU2 handshake.
+     *
+     * @param peer hash of the peer to check
+     * @return true if a connection attempt is in progress
+     * @since 0.9.62
+     */
+    public boolean isConnecting(Hash peer);
+
+    /**
      * Suggest that transport may disconnect from specified peer.
      *
      * This method provides an advisory recommendation that the

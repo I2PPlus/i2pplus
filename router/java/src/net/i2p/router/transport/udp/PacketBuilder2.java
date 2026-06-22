@@ -401,7 +401,7 @@ class PacketBuilder2 {
     public UDPPacket buildTokenRequestPacket(OutboundEstablishState2 state) {
         long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
         UDPPacket packet = buildLongPacketHeader(state.getSendConnID(), n, TOKEN_REQUEST_FLAG_BYTE,
-                                                 state.getRcvConnID(), 0);
+                                                 state.getRcvConnID(), 0, state.getVersion());
         DatagramPacket pkt = packet.getPacket();
         pkt.setLength(LONG_HEADER_SIZE);
         byte[] introKey = state.getSendHeaderEncryptKey1();
@@ -422,7 +422,7 @@ class PacketBuilder2 {
     public UDPPacket buildSessionRequestPacket(OutboundEstablishState2 state) {
         long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
         UDPPacket packet = buildLongPacketHeader(state.getSendConnID(), n, SESSION_REQUEST_FLAG_BYTE,
-                                                 state.getRcvConnID(), state.getToken());
+                                                 state.getRcvConnID(), state.getToken(), state.getVersion());
         DatagramPacket pkt = packet.getPacket();
         pkt.setLength(LONG_HEADER_SIZE);
         byte[] introKey = state.getSendHeaderEncryptKey1();
@@ -443,7 +443,7 @@ class PacketBuilder2 {
     public UDPPacket buildSessionCreatedPacket(InboundEstablishState2 state) {
         long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
         UDPPacket packet = buildLongPacketHeader(state.getSendConnID(), n, SESSION_CREATED_FLAG_BYTE,
-                                                 state.getRcvConnID(), 0);
+                                                 state.getRcvConnID(), 0, state.getVersion());
         DatagramPacket pkt = packet.getPacket();
 
         byte sentIP[] = state.getSentIP();
@@ -471,7 +471,7 @@ class PacketBuilder2 {
         long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
         long token = terminationCode == 0 ? state.getToken() : 0;
         UDPPacket packet = buildLongPacketHeader(state.getSendConnID(), n, RETRY_FLAG_BYTE,
-                                                 state.getRcvConnID(), token);
+                                                 state.getRcvConnID(), token, state.getVersion());
         DatagramPacket pkt = packet.getPacket();
 
         byte sentIP[] = state.getSentIP();
@@ -495,9 +495,9 @@ class PacketBuilder2 {
      * @return ready to send packet, non-null
      * @since 0.9.57
      */
-    public UDPPacket buildRetryPacket(RemoteHostId to, SocketAddress toAddr, long destID, long srcID, int terminationCode) {
+    public UDPPacket buildRetryPacket(RemoteHostId to, SocketAddress toAddr, long destID, long srcID, int version, int terminationCode) {
         long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
-        UDPPacket packet = buildLongPacketHeader(destID, n, RETRY_FLAG_BYTE, srcID, 0);
+        UDPPacket packet = buildLongPacketHeader(destID, n, RETRY_FLAG_BYTE, srcID, 0, version);
         DatagramPacket pkt = packet.getPacket();
         pkt.setLength(LONG_HEADER_SIZE);
         byte[] introKey = _transport.getSSU2StaticIntroKey();
@@ -716,7 +716,7 @@ class PacketBuilder2 {
                                             long sendID, long rcvID, byte[] signedData) {
         long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
         long token = _context.random().nextLong();
-        UDPPacket packet = buildLongPacketHeader(sendID, n, PEER_TEST_FLAG_BYTE, rcvID, token);
+        UDPPacket packet = buildLongPacketHeader(sendID, n, PEER_TEST_FLAG_BYTE, rcvID, token, PROTOCOL_VERSION);
         Block block = new SSU2Payload.PeerTestBlock(6, 0, null, signedData);
         byte[] ik = introKey.getData();
         packet.getPacket().setLength(LONG_HEADER_SIZE);
@@ -779,7 +779,7 @@ class PacketBuilder2 {
                                           long sendID, long rcvID, byte[] signedData) {
         long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
         long token = _context.random().nextLong();
-        UDPPacket packet = buildLongPacketHeader(sendID, n, PEER_TEST_FLAG_BYTE, rcvID, token);
+        UDPPacket packet = buildLongPacketHeader(sendID, n, PEER_TEST_FLAG_BYTE, rcvID, token, PROTOCOL_VERSION);
         int msgNum = firstSend ? 5 : 7;
         Block block = new SSU2Payload.PeerTestBlock(msgNum, 0, null, signedData);
         byte[] ik = introKey.getData();
@@ -895,7 +895,7 @@ class PacketBuilder2 {
                                     long sendID, long rcvID, byte[] signedData) {
         long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
         long token = _context.random().nextLong();
-        UDPPacket packet = buildLongPacketHeader(sendID, n, HOLE_PUNCH_FLAG_BYTE, rcvID, token);
+        UDPPacket packet = buildLongPacketHeader(sendID, n, HOLE_PUNCH_FLAG_BYTE, rcvID, token, PROTOCOL_VERSION);
         Block block = new SSU2Payload.RelayResponseBlock(signedData);
         if (_log.shouldLog(Log.INFO))
             _log.info("[SSU] Sending relay HolePunch to " + to.toString().replace("/", "") + ":" + port);
@@ -913,12 +913,10 @@ class PacketBuilder2 {
      *  @param pktNum 0 - 0xFFFFFFFF
      *  @return a packet with the first 32 bytes filled in
      */
-    private UDPPacket buildLongPacketHeader(long destID, long pktNum, byte type, long srcID, long token) {
-        //if (_log.shouldDebug())
-        //    _log.debug("[SSU] Building long header with DestinationID [" + destID + "] \n* Packet [#" + pktNum + "]; Type: " + type + "; SourceID [" + srcID + "]; Token [" + token + "]");
+    private UDPPacket buildLongPacketHeader(long destID, long pktNum, byte type, long srcID, long token, int version) {
         UDPPacket packet = buildShortPacketHeader(destID, pktNum, type);
         byte data[] = packet.getPacket().getData();
-        data[13] = PROTOCOL_VERSION;
+        data[13] = (byte) version;
         data[14] = (byte) _context.router().getNetworkID();
         DataHelper.toLong8(data, 16, srcID);
         DataHelper.toLong8(data, 24, token);

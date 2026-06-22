@@ -865,6 +865,17 @@ public abstract class TransportImpl implements Transport {
     public boolean isEstablished(Hash peer) {return false;}
 
     /**
+     * Check if a connection attempt is in progress for the given peer.
+     * Default returns false.  NTCP2 and SSU2 transports that have an async
+     * handshake phase should override to report in-progress connections.
+     *
+     * @param peer hash of the peer to check
+     * @return true if a connection attempt is in progress but not yet established
+     * @since 0.9.62
+     */
+    public boolean isConnecting(Hash peer) { return false; }
+
+    /**
      * Tell the transport that we may disconnect from this peer.
      * This is advisory only.
      *

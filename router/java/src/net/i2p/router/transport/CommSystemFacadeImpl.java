@@ -483,6 +483,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     @Override
+    public boolean isConnecting(Hash peer) {
+        return _manager.isConnecting(peer);
+    }
+
+    @Override
     public byte[] getIP(Hash peer) {
         return _manager.getIP(peer);
     }

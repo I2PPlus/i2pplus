@@ -33,6 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
@@ -133,6 +134,19 @@ public class TransportManager implements TransportEventListener {
     private final long _msgIDBloomXor;
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
+    /**
+     *  Interval for the outbound connection maintainer (60 seconds).
+     *  Periodically checks whether we have enough outbound connections
+     *  to Fast peers and proactively establishes new ones.
+     */
+    private static final long MAINTAINER_INTERVAL = 60*1000;
+    /** Maximum per-cycle establishments to avoid flooding the network */
+    private static final int MAINTAINER_MAX_PER_CYCLE = 10;
+    /** Minimum outbound Fast connections to maintain (below this, we establish more) */
+    private static final int MAINTAINER_MIN_OUTBOUND = 150;
+
+    private OutboundMaintainerEvent _outboundMaintainer;
+
     public TransportManager(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(TransportManager.class);
@@ -158,6 +172,7 @@ public class TransportManager implements TransportEventListener {
         // always created, even if NTCP2 is not enabled, because ratchet needs it
         _xdhThread = new X25519KeyFactory(context);
         _msgIDBloomXor = _context.random().nextLong(I2NPMessage.MAX_ID_VALUE);
+        _outboundMaintainer = new OutboundMaintainerEvent();
     }
 
     /**
@@ -531,6 +546,8 @@ public class TransportManager implements TransportEventListener {
             if (_log.shouldDebug())
                 _log.debug("Transport [" + t.getStyle() + "] started");
         }
+        // Start the outbound connection maintainer
+        _outboundMaintainer.schedule(MAINTAINER_INTERVAL);
         // kick UPnP - Do this to get the ports opened even before UDP registers an address
         transportAddressChanged();
         _log.debug("Done start listening on transports");
@@ -708,6 +725,21 @@ public class TransportManager implements TransportEventListener {
     boolean isEstablished(Hash peer) {
         for (Transport t : _transports.values()) {
             if (t.isEstablished(peer))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if any transport has a connection attempt in progress for the peer.
+     *
+     * @param peer hash of the peer to check
+     * @return true if at least one transport is currently establishing
+     * @since 0.9.62
+     */
+    boolean isConnecting(Hash peer) {
+        for (Transport t : _transports.values()) {
+            if (t.isConnecting(peer))
                 return true;
         }
         return false;
@@ -1189,5 +1221,110 @@ public class TransportManager implements TransportEventListener {
      */
     private final String _t(String s) {
         return Translate.getString(s, _context, BUNDLE_NAME);
+    }
+
+    /**
+     *  Periodically ensures we have enough outbound connections to Fast peers.
+     *
+     *  The transport layer creates outbound connections on-demand when a message
+     *  needs to be sent. However, in low-traffic scenarios or when the I2P+ pre-send
+     *  check blocks sends to unconnected peers, outbound connections can dry up,
+     *  causing tunnel build failures ("first hop unreachable").
+     *
+     *  This maintainer runs every 60 seconds, checks how many outbound connections
+     *  we have to Fast/HiCap peers, and proactively establishes new ones if the count
+     *  is below the threshold.
+     */
+    private class OutboundMaintainerEvent extends SimpleTimer2.TimedEvent {
+        public OutboundMaintainerEvent() {
+            super(_context.simpleTimer2());
+        }
+
+        public void timeReached() {
+            try {
+                maintainOutboundConnections();
+            } catch (Throwable t) {
+                _log.log(Log.WARN, "Error in outbound connection maintainer", t);
+            }
+            reschedule(MAINTAINER_INTERVAL);
+        }
+    }
+
+    /**
+     *  Check outbound connection count and establish new ones if below threshold.
+     */
+    private void maintainOutboundConnections() {
+        List<Hash> established = getEstablished();
+        Set<Hash> establishedSet;
+        if (established != null && !established.isEmpty()) {
+            establishedSet = new HashSet<Hash>(established);
+        } else {
+            establishedSet = Collections.emptySet();
+        }
+        int fastCount = 0;
+        if (!establishedSet.isEmpty()) {
+            for (Hash h : establishedSet) {
+                if (_context.profileOrganizer().isFast(h))
+                    fastCount++;
+            }
+        }
+        if (fastCount >= MAINTAINER_MIN_OUTBOUND)
+            return;
+        Set<Hash> candidates = new HashSet<Hash>();
+        Set<Hash> exclude = new HashSet<Hash>(establishedSet);
+        _context.profileOrganizer().selectFastPeers(MAINTAINER_MAX_PER_CYCLE, exclude, candidates);
+        if (candidates.size() < MAINTAINER_MAX_PER_CYCLE) {
+            _context.profileOrganizer().selectHighCapacityPeers(
+                MAINTAINER_MAX_PER_CYCLE - candidates.size(), exclude, candidates);
+        }
+        if (candidates.isEmpty())
+            return;
+        if (_log.shouldInfo())
+            _log.info("Outbound maintainer: " + fastCount + "/" + establishedSet.size() +
+                      " Fast outbound connections, establishing to " + candidates.size() +
+                      " more peers");
+        for (Hash peer : candidates) {
+            establishTo(peer);
+        }
+    }
+
+    /**
+     *  Trigger transport connection establishment to a peer.
+     *  Uses a DatabaseLookupMessage to warm the connection, which triggers
+     *  a real handshake and keeps the session alive (peer replies with its
+     *  RouterInfo). NTCP crashes on null messages, so we always provide
+     *  a real payload.
+     */
+    private void establishTo(Hash peer) {
+        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
+        if (ri == null)
+            return;
+        long lifetime = _context.clock().now() + 30*1000;
+        DatabaseLookupMessage dlm = new DatabaseLookupMessage(_context, true);
+        dlm.setFrom(_context.routerHash());
+        dlm.setSearchKey(peer);
+        dlm.setSearchType(DatabaseLookupMessage.Type.RI);
+        dlm.setMessageExpiration(lifetime);
+        OutNetMessage onm = new OutNetMessage(_context, dlm, lifetime,
+            OutNetMessage.PRIORITY_LOWEST, ri);
+        Transport udp = _transports.get("SSU");
+        if (udp != null && !ri.getTargetAddresses("SSU", "SSU2").isEmpty()) {
+            try {
+                udp.send(onm);
+                return;
+            } catch (Exception e) {
+                if (_log.shouldWarn())
+                    _log.warn("SSU establish failed for [" + peer.toBase64().substring(0,6) + "]", e);
+            }
+        }
+        Transport ntcp = _transports.get("NTCP");
+        if (ntcp != null && !ri.getTargetAddresses("NTCP", "NTCP2").isEmpty()) {
+            try {
+                ntcp.send(onm);
+            } catch (Exception e) {
+                if (_log.shouldWarn())
+                    _log.warn("NTCP establish failed for [" + peer.toBase64().substring(0,6) + "]", e);
+            }
+        }
     }
 }

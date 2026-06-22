@@ -99,6 +99,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     public static final int MIN_MTU = 1280;
     public static final int MAX_MTU = 1500;
     public static final int DEFAULT_MTU = MAX_MTU;
+    public static final int MIN_MLKEM768_IPV4_MTU = 1318;
+    public static final int MIN_MLKEM768_IPV6_MTU = 1338;
 
     private static final int BITFIELD_SIZE = 512;
     private static final int MAX_SESS_CONF_RETX = 5;

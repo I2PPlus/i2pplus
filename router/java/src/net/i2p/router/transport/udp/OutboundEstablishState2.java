@@ -17,6 +17,8 @@ import java.util.Map;
 import net.i2p.crypto.HKDF;
 import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
+import net.i2p.crypto.EncType;
+import net.i2p.crypto.KeyFactory;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
@@ -49,6 +51,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     private final Map<Hash, IntroState> _introducers;
     private long _token;
     private HandshakeState _handshakeState;
+    private final int _version;
     // Bob's intro key, same for send and receive
     private final byte[] _headerEncryptKey1;
     private byte[] _sendHeaderEncryptKey2;
@@ -136,11 +139,12 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     public OutboundEstablishState2(RouterContext ctx, UDPTransport transport, RemoteHostId claimedAddress,
                                    RemoteHostId remoteHostId, RouterIdentity remotePeer,
                                    boolean needIntroduction,
-                                   SessionKey introKey, RouterAddress ra, UDPAddress addr) throws IllegalArgumentException {
+                                   SessionKey introKey, RouterAddress ra, UDPAddress addr, int version) throws IllegalArgumentException {
         super(ctx, claimedAddress, remoteHostId, remotePeer, needIntroduction, introKey, addr);
         _transport = transport;
         _banLogger = new BanLogger();
         _banLogger.initialize(ctx);
+        _version = version;
         if (claimedAddress != null) {
             try {
                 _bobSocketAddress = new InetSocketAddress(InetAddress.getByAddress(_bobIP), _bobPort);
@@ -267,7 +271,26 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         if (publicKey.length != 32)
             throw new IllegalArgumentException("BAD SSU2 S length");
         try {
-            _handshakeState = new HandshakeState(NoiseInit.PatternID.XK_SSU2, HandshakeState.INITIATOR, _transport.getXDHFactory());
+            NoiseInit.PatternID pattern;
+            KeyFactory hkf;
+            switch (_version) {
+                case 2:
+                    pattern = NoiseInit.PatternID.XK_SSU2;
+                    _handshakeState = new HandshakeState(pattern, HandshakeState.INITIATOR, _transport.getXDHFactory());
+                    break;
+                case 3:
+                    pattern = NoiseInit.PatternID.XKHFS_512_SSU2;
+                    hkf = _context.eciesEngine().getHybridKeyFactory(EncType.MLKEM512_X25519);
+                    _handshakeState = new HandshakeState(pattern, HandshakeState.INITIATOR, _transport.getXDHFactory(), hkf);
+                    break;
+                case 4:
+                    pattern = NoiseInit.PatternID.XKHFS_768_SSU2;
+                    hkf = _context.eciesEngine().getHybridKeyFactory(EncType.MLKEM768_X25519);
+                    _handshakeState = new HandshakeState(pattern, HandshakeState.INITIATOR, _transport.getXDHFactory(), hkf);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Bad version " + _version);
+            }
         } catch (GeneralSecurityException gse) {
             throw new IllegalStateException("BAD proto", gse);
         }
@@ -477,7 +500,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     // SSU 2 things
 
     @Override
-    public int getVersion() { return 2; }
+    public int getVersion() { return _version; }
     public long getSendConnID() { return _sendConnID; }
     public long getRcvConnID() { return _rcvConnID; }
     public long getToken() { return _token; }
@@ -652,7 +675,20 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         //if (_log.shouldDebug())
         //    _log.debug("[SSU] State after SessionCreate: " + _handshakeState);
         _timeReceived = 0;
-        processPayload(data, off + LONG_HEADER_SIZE, len - (LONG_HEADER_SIZE + KEY_LEN + MAC_LEN), true);
+        int overhead = LONG_HEADER_SIZE + KEY_LEN + MAC_LEN;
+        switch (_version) {
+            case 2:
+                break;
+            case 3:
+                overhead += MAC_LEN + EncType.MLKEM512_X25519_CT.getPubkeyLen();
+                break;
+            case 4:
+                overhead += MAC_LEN + EncType.MLKEM768_X25519_CT.getPubkeyLen();
+                break;
+            default:
+                throw new IllegalArgumentException("Bad version " + _version);
+        }
+        processPayload(data, off + LONG_HEADER_SIZE, len - overhead, true);
         packetReceived();
         if (_currentState == OutboundState.OB_STATE_VALIDATION_FAILED) {
             // termination block received

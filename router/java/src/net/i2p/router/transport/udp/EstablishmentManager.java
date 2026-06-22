@@ -456,7 +456,7 @@ class EstablishmentManager {
                 // must have a valid session key
                 byte[] keyBytes;
                 int version = _transport.getSSUVersion(ra);
-                if (isIndirect && version == 2 && ra.getTransportStyle().equals("SSU")) {
+                if (isIndirect && version >= 2 && version <= 4 && ra.getTransportStyle().equals("SSU")) {
                     boolean v2intros = false;
                     int count = addr.getIntroducerCount();
                     for (int i = 0; i < count; i++) {
@@ -473,7 +473,7 @@ class EstablishmentManager {
                         }
                     }
                 }
-                if (version == 2) {
+                if (version >= 2 && version <= 4) {
                     int mtu = addr.getMTU();
                     boolean isIPv6 = TransportUtil.isIPv6(ra);
                     int ourMTU = _transport.getMTU(isIPv6);
@@ -542,11 +542,11 @@ class EstablishmentManager {
                     }
                     return;
                 }
-                if (version == 2) {
-                    boolean requestIntroduction = !isIndirect && _transport.introducersMaybeRequired(TransportUtil.isIPv6(ra));
-                    try {
-                        state = new OutboundEstablishState2(_context, _transport, maybeTo, to,
-                                                            toIdentity, requestIntroduction, sessionKey, ra, addr);
+                    if (version == 2 || version == 3 || version == 4) {
+                        boolean requestIntroduction = !isIndirect && _transport.introducersMaybeRequired(TransportUtil.isIPv6(ra));
+                        try {
+                            state = new OutboundEstablishState2(_context, _transport, maybeTo, to,
+                                                                toIdentity, requestIntroduction, sessionKey, ra, addr, version);
                     } catch (IllegalArgumentException iae) {
                         if (_log.shouldWarn()) {_log.warn("[SSU] OES2 error: " + toRouterInfo, iae);}
                         _transport.markUnreachable(toHash);
@@ -562,6 +562,7 @@ class EstablishmentManager {
                 boolean isNew = oldState == null;
                 if (isNew) {
                     if (isIndirect && maybeTo != null) {_outboundByClaimedAddress.put(maybeTo, state);}
+                    _outboundByHash.put(toHash, state);
                     if (_log.shouldDebug()) {_log.debug("[SSU] Adding new Outbound connection to: " + state);}
                 } else {
                     // whoops, somebody beat us to it, throw out the state we just created
@@ -881,7 +882,7 @@ class EstablishmentManager {
              String typeStr = UDPPacket.payloadTypeToString(type);
             _log.warn("[SSU] Sending termination packet for " + typeStr + " to: " + to + " -> " + parseReason(terminationCode));
         }
-        UDPPacket packet = _builder2.buildRetryPacket(to, pkt.getSocketAddress(), sendConnID, rcvConnID, terminationCode);
+        UDPPacket packet = _builder2.buildRetryPacket(to, pkt.getSocketAddress(), sendConnID, rcvConnID, 2, terminationCode);
         _transport.send(packet);
     }
 
@@ -947,6 +948,8 @@ class EstablishmentManager {
                 _log.warn("[SSU] Received CORRUPT SessionCreated -> Router: " + state + "\n* " + gse.getMessage());
             }
             _outboundStates.remove(state.getRemoteHostId());
+            RouterIdentity rid = state.getRemoteIdentity();
+            if (rid != null) _outboundByHash.remove(rid.calculateHash(), state);
             return;
         }
 
@@ -977,6 +980,8 @@ class EstablishmentManager {
                 _log.warn("[SSU] Received CORRUPT Retry -> Router: " + state + "\n* " + gse.getMessage());
             }
             _outboundStates.remove(state.getRemoteHostId());
+            RouterIdentity rid = state.getRemoteIdentity();
+            if (rid != null) _outboundByHash.remove(rid.calculateHash(), state);
             return;
         }
 
@@ -1010,7 +1015,10 @@ class EstablishmentManager {
         if (_log.shouldDebug())
             _log.debug("Received Outbound SessionDestroy from " + from);
         _outboundStates.remove(from);
-        Hash peer = state.getRemoteIdentity().calculateHash();
+        RouterIdentity rid = state.getRemoteIdentity();
+        Hash peer = rid != null ? rid.calculateHash() : null;
+        if (peer == null) return;
+        _outboundByHash.remove(peer, state);
         _transport.dropPeer(peer, false, "Received destroy message during Outbound establish");
     }
 
@@ -1433,7 +1441,7 @@ class EstablishmentManager {
                     case INTRO_STATE_CONNECTING:
                         bob = _transport.getPeerState(h);
                         if (bob != null) {
-                            if (bob.getVersion() == 2) {
+                            if (bob.getVersion() >= 2 && bob.getVersion() <= 4) {
                                 istate = INTRO_STATE_CONNECTED;
                                 state2.setIntroState(h, istate);
                             } else {
@@ -1499,7 +1507,7 @@ class EstablishmentManager {
                                 break;
                             }
                             int version = _transport.getSSUVersion(ra);
-                            if (version == 2) {
+                if (version >= 2 && version <= 4) {
                                 if (_log.shouldDebug())
                                     _log.debug("[SSU] Connecting to Introducer " + bob + " for " + state);
                                 // arbitrary message because we have no way to connect for no reason
@@ -1617,7 +1625,7 @@ class EstablishmentManager {
             }
             return; // already established, or we were Bob and got a dup from Charlie
         }
-        if (charlie.getVersion() != 2) {return;}
+        if (charlie.getVersion() < 2 || charlie.getVersion() > 4) {return;}
         OutboundEstablishState2 charlie2 = (OutboundEstablishState2) charlie;
         long token;
         if (code == 0) {
@@ -1822,7 +1830,7 @@ class EstablishmentManager {
                 return;
             }
         }
-        if (state.getVersion() != 2) {return;}
+        if (state.getVersion() < 2 || state.getVersion() > 4) {return;}
         OutboundEstablishState2 state2 = (OutboundEstablishState2) state;
         Hash charlieHash = state.getRemoteIdentity().getHash();
         RouterInfo charlieRI = _context.netDb().lookupRouterInfoLocally(charlieHash);
@@ -2330,6 +2338,17 @@ class EstablishmentManager {
         if (tok == null) {return 0;}
         if (tok.getExpiration() < _context.clock().now()) {return 0;}
         return tok.getToken();
+    }
+
+    /**
+     *  Check if an outbound SSU handshake is in progress for the given peer.
+     *
+     *  @param dest router hash
+     *  @return true if we are currently trying to establish an outbound connection
+     *  @since I2P+
+     */
+    public boolean isConnecting(Hash dest) {
+        return _outboundByHash.containsKey(dest);
     }
 
     /**

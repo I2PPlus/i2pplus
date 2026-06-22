@@ -690,7 +690,7 @@ public class PeerState {
         // window and SST set in highestSeqNumAcked()
         if (_fastRetransmit.get()) {bwe = -1;} // for log below
         else {
-            _sendWindowBytes = getVersion() == 2 ? PeerState2.MAX_MTU : (isIPv6() ? MAX_IPV6_MTU : LARGE_MTU);
+            _sendWindowBytes = (getVersion() >= 2 && getVersion() <= 4) ? PeerState2.MAX_MTU : (isIPv6() ? MAX_IPV6_MTU : LARGE_MTU);
             bwe = _bwEstimator.getBandwidthEstimate(now);
             _slowStartThreshold = Math.max( (int)(bwe * _rtt), 2 * _mtu);
         }
@@ -1604,7 +1604,7 @@ public class PeerState {
         buf.append("\n* Router: ").append(_remoteHostId.toString());
         buf.append(" [").append(_remotePeer.toBase64().substring(0,6)).append("]");
 
-        if (getVersion() == 2) {buf.append(_isInbound? " Inbound v2 " : " Outbound v2 ");}
+        if (getVersion() >= 2 && getVersion() <= 4) {buf.append(_isInbound? " Inbound v" + getVersion() + " " : " Outbound v" + getVersion() + " ");}
         else {buf.append(_isInbound ? " Inbound" : " Outbound");}
         long now = _context.clock().now();
         buf.append("\n* Received: ").append(now-_lastReceiveTime).append("ms ago");

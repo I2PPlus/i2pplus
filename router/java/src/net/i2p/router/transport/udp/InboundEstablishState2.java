@@ -16,6 +16,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import net.i2p.crypto.HKDF;
+import net.i2p.crypto.EncType;
+import net.i2p.crypto.KeyFactory;
 import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
@@ -49,6 +51,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     private final long _sendConnID;
     private final long _token;
     private final HandshakeState _handshakeState;
+    private final int _version;
     private byte[] _sendHeaderEncryptKey1;
     private byte[] _sendHeaderEncryptKey2;
     private byte[] _rcvHeaderEncryptKey2;
@@ -81,9 +84,6 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         _banLogger.initialize(ctx);
         DatagramPacket pkt = packet.getPacket();
         _aliceSocketAddress = (InetSocketAddress) pkt.getSocketAddress();
-        _handshakeState = new HandshakeState(NoiseInit.PatternID.XK_SSU2, HandshakeState.RESPONDER, transport.getXDHFactory());
-        _handshakeState.getLocalKeyPair().setKeys(transport.getSSU2StaticPrivKey(), 0,
-                                                  transport.getSSU2StaticPubKey(), 0);
         byte[] introKey = transport.getSSU2StaticIntroKey();
         _sendHeaderEncryptKey1 = introKey;
         //_sendHeaderEncryptKey2 set below
@@ -96,6 +96,49 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (_rcvConnID == _sendConnID) {throw new GeneralSecurityException("Identical Connection IDs");}
         int type = data[off + TYPE_OFFSET] & 0xff;
         long token = DataHelper.fromLong8(data, off + TOKEN_OFFSET);
+        _version = data[off + VERSION_OFFSET] & 0xff;
+        NoiseInit.PatternID pattern;
+        KeyFactory hkf;
+        int overhead = LONG_HEADER_SIZE + KEY_LEN + MAC_LEN;
+        boolean isIPv6 = _aliceIP.length == 16;
+        switch (_version) {
+            case 2:
+                pattern = NoiseInit.PatternID.XK_SSU2;
+                _handshakeState = new HandshakeState(pattern, HandshakeState.RESPONDER, transport.getXDHFactory());
+                break;
+            case 3:
+                if (type == SESSION_REQUEST_FLAG_BYTE) {
+                    int ipOverhead = (isIPv6 ? PacketBuilder.IPV6_HEADER_SIZE : PacketBuilder.IP_HEADER_SIZE) + PacketBuilder.UDP_HEADER_SIZE;
+                    _mtu = Math.max(PeerState2.MIN_MTU, len + ipOverhead);
+                }
+                pattern = NoiseInit.PatternID.XKHFS_512_SSU2;
+                overhead += MAC_LEN + EncType.MLKEM512_X25519_INT.getPubkeyLen();
+                hkf = _context.eciesEngine().getHybridKeyFactory(EncType.MLKEM512_X25519);
+                _handshakeState = new HandshakeState(pattern, HandshakeState.RESPONDER, transport.getXDHFactory(), hkf);
+                break;
+            case 4:
+                int ourmtu = transport.getSSU2MTU(isIPv6);
+                int min = isIPv6 ? PeerState2.MIN_MLKEM768_IPV6_MTU : PeerState2.MIN_MLKEM768_IPV4_MTU;
+                if (ourmtu > 0 && ourmtu < min) {
+                    _currentState = InboundState.IB_STATE_FAILED;
+                    UDPPacket retry = transport.getBuilder2().buildRetryPacket(this, SSU2Util.REASON_VERSION);
+                    transport.send(retry);
+                    throw new GeneralSecurityException("Our MTU too small for version 4 (retry sent): " + ourmtu);
+                }
+                if (type == SESSION_REQUEST_FLAG_BYTE) {
+                    int ipOverhead = (isIPv6 ? PacketBuilder.IPV6_HEADER_SIZE : PacketBuilder.IP_HEADER_SIZE) + PacketBuilder.UDP_HEADER_SIZE;
+                    _mtu = Math.max(min, len + ipOverhead);
+                }
+                pattern = NoiseInit.PatternID.XKHFS_768_SSU2;
+                overhead += MAC_LEN + EncType.MLKEM768_X25519_INT.getPubkeyLen();
+                hkf = _context.eciesEngine().getHybridKeyFactory(EncType.MLKEM768_X25519);
+                _handshakeState = new HandshakeState(pattern, HandshakeState.RESPONDER, transport.getXDHFactory(), hkf);
+                break;
+            default:
+                throw new GeneralSecurityException("Bad version " + _version + " in session/token request from: " + _aliceSocketAddress);
+        }
+        _handshakeState.getLocalKeyPair().setKeys(transport.getSSU2StaticPrivKey(), 0,
+                                                   transport.getSSU2StaticPubKey(), 0);
         String aliceIP = _aliceSocketAddress.toString().replace("/", "");
         if (type == TOKEN_REQUEST_FLAG_BYTE) {
             if (_log.shouldDebug()) {_log.debug("[SSU] Received Token Request from: " + aliceIP);}
@@ -139,11 +182,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             // probably don't need again
             _token = token;
             _handshakeState.start();
-            //if (_log.shouldDebug())
-            //    _log.debug("[SSU] State after start: " + _handshakeState);
+            if (_version != 2)
+                _handshakeState.mixHash(_context.routerHash().getData(), 0, 32);
             _handshakeState.mixHash(data, off, LONG_HEADER_SIZE);
-            //if (_log.shouldDebug())
-            //    _log.debug("[SSU] State after mixHash 1: " + _handshakeState);
 
             // decrypt in-place
             try {
@@ -155,8 +196,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 }
                 throw gse;
             }
-            //if (_log.shouldDebug()) {_log.debug("[SSU] State after Session Request: " + _handshakeState);}
-            processPayload(data, off + LONG_HEADER_SIZE, len - (LONG_HEADER_SIZE + KEY_LEN + MAC_LEN), true);
+            processPayload(data, off + LONG_HEADER_SIZE, len - overhead, true);
             _sendHeaderEncryptKey2 = SSU2Util.hkdf(_context, _handshakeState.getChainingKey(), "SessCreateHeader");
             _currentState = InboundState.IB_STATE_REQUEST_RECEIVED;
         }
@@ -181,7 +221,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     @Override
-    public int getVersion() {return 2;}
+    public int getVersion() {return _version;}
 
     private void processPayload(byte[] payload, int offset, int length, boolean isHandshake) throws GeneralSecurityException {
         try {
@@ -721,6 +761,34 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             throw new GeneralSecurityException("Token mismatch -> Expected: " + _token + " Received: " + token);
         }
         _handshakeState.start();
+        int overhead = LONG_HEADER_SIZE + KEY_LEN + MAC_LEN;
+        switch (_version) {
+            case 2:
+                break;
+            case 3: {
+                overhead += MAC_LEN + EncType.MLKEM512_X25519_INT.getPubkeyLen();
+                _handshakeState.mixHash(_context.routerHash().getData(), 0, 32);
+                boolean isIPv6 = _aliceIP.length == 16;
+                int ipOverhead = (isIPv6 ? PacketBuilder.IPV6_HEADER_SIZE : PacketBuilder.IP_HEADER_SIZE) + PacketBuilder.UDP_HEADER_SIZE;
+                int mtu = Math.max(PeerState2.MIN_MTU, len + ipOverhead);
+                if (mtu > _mtu)
+                    _mtu = mtu;
+                break;
+            }
+            case 4: {
+                overhead += MAC_LEN + EncType.MLKEM768_X25519_INT.getPubkeyLen();
+                _handshakeState.mixHash(_context.routerHash().getData(), 0, 32);
+                boolean isIPv6 = _aliceIP.length == 16;
+                int ipOverhead = (isIPv6 ? PacketBuilder.IPV6_HEADER_SIZE : PacketBuilder.IP_HEADER_SIZE) + PacketBuilder.UDP_HEADER_SIZE;
+                int min = isIPv6 ? PeerState2.MIN_MLKEM768_IPV6_MTU : PeerState2.MIN_MLKEM768_IPV4_MTU;
+                int mtu = Math.max(min, len + ipOverhead);
+                if (mtu > _mtu)
+                    _mtu = mtu;
+                break;
+            }
+            default:
+                throw new GeneralSecurityException("Bad version " + _version + " in session/token request from: " + _aliceSocketAddress);
+        }
         _handshakeState.mixHash(data, off, 32);
 
         // decrypt in-place
@@ -733,7 +801,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         }
 
         _timeReceived = 0;
-        processPayload(data, off + LONG_HEADER_SIZE, len - (LONG_HEADER_SIZE + KEY_LEN + MAC_LEN), true);
+        processPayload(data, off + LONG_HEADER_SIZE, len - overhead, true);
         packetReceived();
         if (_currentState == InboundState.IB_STATE_FAILED) {
             // termination block received

@@ -85,6 +85,8 @@ class EventPumper implements Runnable {
     private static final long MIN_RETRY_INTERVAL = 500;
     private static final int MAX_RETRY_INTERVAL = 5 * 60 * 1000; // 5 minutes
     private static final float RETRY_BACKOFF_FACTOR = 1.5f;
+    /** Max consecutive failures before giving up on a peer entirely (until map clearance) */
+    private static final int MAX_OUTBOUND_RETRY_COUNT = 3;
     private long _lastRetryMapClear = System.currentTimeMillis();
     private static final long RETRY_MAP_CLEAR_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
@@ -218,12 +220,21 @@ class EventPumper implements Runnable {
             Integer failCount = _failedOutboundCount.get(peerHash);
             if (lastFailed != null) {
                 long now = System.currentTimeMillis();
-                int consecutiveFailures = failCount != null ? failCount : 1;
-                long delay = (long) (MIN_RETRY_INTERVAL * Math.pow(RETRY_BACKOFF_FACTOR, Math.min(100, consecutiveFailures - 1)));
+                int totalFailures = failCount != null ? failCount : 1;
+                // Hard cap: don't retry peers that have failed too many times
+                if (totalFailures > MAX_OUTBOUND_RETRY_COUNT) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Giving up on retry to " + remote + " (" + totalFailures + " failures, max " +
+                                  MAX_OUTBOUND_RETRY_COUNT + ")");
+                    }
+                    con.closeOnTimeout("Too many consecutive failures", null);
+                    return;
+                }
+                long delay = (long) (MIN_RETRY_INTERVAL * Math.pow(RETRY_BACKOFF_FACTOR, Math.min(100, totalFailures - 1)));
                 delay = Math.min(delay, MAX_RETRY_INTERVAL);
                 if (now - lastFailed < delay) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Throttling retry to " + remote + " (last failed " + (now - lastFailed) + "ms ago, attempt " + consecutiveFailures + ")");
+                        _log.warn("Throttling retry to " + remote + " (last failed " + (now - lastFailed) + "ms ago, attempt " + totalFailures + ")");
                     }
                     con.closeOnTimeout("Connection retry throttled", null);
                     return;

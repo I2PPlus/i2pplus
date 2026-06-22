@@ -1,7 +1,5 @@
 package net.i2p.router.transport.udp;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.concurrent.BlockingQueue;
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.CoDelBlockingQueue;
@@ -36,6 +34,8 @@ class PacketHandler {
     private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 64 : 512;
     private static final int MIN_NUM_HANDLERS = 1;  // if < 128MB
     private static final int MAX_NUM_HANDLERS = SystemVersion.isSlow() ? 3 : 6;
+    private static final int MIN_VERSION = 2;
+    private static final int MAX_VERSION = 4;
 
     PacketHandler(RouterContext ctx, UDPTransport transport, EstablishmentManager establisher,
                   InboundMessageFragments inbound, PeerTestManager testManager, IntroductionManager introManager) {
@@ -227,28 +227,14 @@ class PacketHandler {
         byte[] k2;
         SSU2Header.Header header;
         int type = -1;
-        boolean shouldBan = false;
-        String banReason = "";
-        InetAddress ip = null;
-        boolean ipBlocklisted = false;
-
-        // Extract IP once for logging and banning decisions
-        if (from != null && from.getIP() != null) {
-            try {
-                ip = InetAddress.getByAddress(from.getIP());
-                ipBlocklisted = _context.blocklist().isBlocklisted(ip.getHostAddress());
-            } catch (UnknownHostException e) {
-                if (_log.shouldDebug())
-                    _log.warn("Failed to create InetAddress for blocklist check from RemoteHostId: " + from + " -> " + e.getMessage());
-            }
-        }
 
         if (state == null) {
             k2 = k1;
             header = SSU2Header.trialDecryptHandshakeHeader(packet, k1, k2);
             if (header == null ||
                 header.getType() != SSU2Util.SESSION_REQUEST_FLAG_BYTE ||
-                header.getVersion() != 2 ||
+                header.getVersion() < MIN_VERSION ||
+                header.getVersion() > MAX_VERSION ||
                 header.getNetID() != _networkID) {
 
                 if (header != null && _log.shouldInfo()) {
@@ -257,7 +243,10 @@ class PacketHandler {
                 }
 
                 header = SSU2Header.trialDecryptLongHeader(packet, k1, k2);
-                if (header == null || header.getVersion() != 2 || header.getNetID() != _networkID) {
+                if (header == null ||
+                    header.getVersion() < MIN_VERSION ||
+                    header.getVersion() > MAX_VERSION ||
+                    header.getNetID() != _networkID) {
                     if (header != null) {
                         long id = header.getDestConnID();
                         PeerState2 ps2 = _transport.getPeerState(id);
@@ -266,7 +255,6 @@ class PacketHandler {
                                 _log.info("Migrated " + packet.getPacket().getLength() + " byte packet from " + from + ps2);
                             }
                             ps2.receivePacket(from, packet);
-                            performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
                             return true;
                         }
                         PeerStateDestroyed dead = _transport.getRecentlyClosed(id);
@@ -276,26 +264,15 @@ class PacketHandler {
                                            " for recently closed ID " + id);
                             }
                             dead.receivePacket(from, packet);
-                            performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
                             return true;
                         }
                     }
-                    performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
                     return false;
                 }
                 type = header.getType();
 
                 if (type == SSU2Util.SESSION_CONFIRMED_FLAG_BYTE) {
-                    performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
                     return false;
-                }
-                if (type == SSU2Util.SESSION_REQUEST_FLAG_BYTE &&
-                    packet.getPacket().getLength() == SSU2Util.MIN_HANDSHAKE_DATA_LEN - 1) {
-                    if (!ipBlocklisted && _log.shouldWarn()) {
-                        _log.warn("Received short Session Request (87 bytes) from " + from);
-                    }
-                    shouldBan = true;
-                    banReason = "Short Session Requests";
                 }
             } else {
                 type = SSU2Util.SESSION_REQUEST_FLAG_BYTE;
@@ -307,88 +284,63 @@ class PacketHandler {
                 header = SSU2Header.trialDecryptHandshakeHeader(packet, k1, k2);
                 if (header == null ||
                     header.getType() != SSU2Util.SESSION_REQUEST_FLAG_BYTE ||
-                    header.getVersion() != 2 ||
+                    header.getVersion() < MIN_VERSION ||
+                    header.getVersion() > MAX_VERSION ||
                     header.getNetID() != _networkID) {
 
                     header = SSU2Header.trialDecryptLongHeader(packet, k1, k2);
-                    if (header != null && header.getType() == SSU2Util.SESSION_REQUEST_FLAG_BYTE &&
-                        header.getVersion() == 2 && header.getNetID() == _networkID &&
-                        packet.getPacket().getLength() == 87) {
-                        if (!ipBlocklisted && _log.shouldWarn()) {
-                            _log.warn("Received short Session Request (87 bytes) after retry on " + state);
-                        }
-                        shouldBan = true;
-                        banReason = "Short Session Requests";
-                    }
                     if (header == null ||
                         header.getType() != SSU2Util.TOKEN_REQUEST_FLAG_BYTE ||
-                        header.getVersion() != 2 ||
+                        header.getVersion() < MIN_VERSION ||
+                        header.getVersion() > MAX_VERSION ||
                         header.getNetID() != _networkID) {
-                        if (!ipBlocklisted && _log.shouldWarn()) {
+                        if (_log.shouldWarn()) {
                             _log.warn("Failed to decrypt Session or Token Request after retry \n* " + header +
                                       " (" + packet.getPacket().getLength() + " bytes) on " + state);
                         }
-                        shouldBan = true;
-                        banReason = "Corrupt Session / Token Requests";
-                        performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
                         return false;
                     }
                 }
                 if (header.getSrcConnID() != state.getSendConnID()) {
-                    if (!ipBlocklisted && _log.shouldWarn()) {
+                    if (_log.shouldWarn()) {
                         _log.warn("Received BAD Source Connection ID \n* " + header +
                                   " (" + packet.getPacket().getLength() + " bytes) on " + state);
                     }
-                    shouldBan = true;
-                    banReason = "Bad Source ConnectionID";
-                    performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
                     return false;
                 }
                 if (header.getDestConnID() != state.getRcvConnID()) {
-                    if (!ipBlocklisted && _log.shouldWarn()) {
+                    if (_log.shouldWarn()) {
                         _log.warn("Received BAD Destination Connection ID \n* " + header +
                                   " (" + packet.getPacket().getLength() + " bytes) on " + state);
                     }
-                    shouldBan = true;
-                    banReason = "Bad Destination ConnectionID";
                 }
                 type = header.getType();
             } else {
                 header = SSU2Header.trialDecryptShortHeader(packet, k1, k2);
                 if (header == null) {
-                    if (!ipBlocklisted && _log.shouldWarn()) {
+                    if (_log.shouldWarn()) {
                         _log.warn("Received SessionConfirmed packet was too short (" +
                                   + packet.getPacket().getLength() + " bytes) on " + state);
                     }
-                    shouldBan = true;
-                    banReason = "Short Session Requests";
-                    performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
                     return false;
                 }
                 if (header.getDestConnID() != state.getRcvConnID()) {
-                    if (!ipBlocklisted && _log.shouldWarn()) {
+                    if (_log.shouldWarn()) {
                         _log.warn("Received BAD Destination Connection ID \n* " + header + " on " + state);
                     }
-                    shouldBan = true;
-                    banReason = "Bad Destination ConnectionID";
-                    performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
                     return false;
                 }
                 if (header.getPacketNumber() != 0 ||
                     header.getType() != SSU2Util.SESSION_CONFIRMED_FLAG_BYTE) {
-                    shouldBan = false;
                     if (_log.shouldInfo()) {
                         _log.info("Queueing possible data packet (" + packet.getPacket().getLength() + " bytes) on: " + state);
                     }
                     state.queuePossibleDataPacket(packet);
-                    performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
                     return true;
                 }
                 type = SSU2Util.SESSION_CONFIRMED_FLAG_BYTE;
             }
         }
-
-        performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
 
         if (type != -1) {
             SSU2Header.acceptTrialDecrypt(packet, header);
@@ -429,40 +381,6 @@ class PacketHandler {
     }
 
     /**
-     * Performs banning of a peer IP address if requested.
-     * Does nothing if the IP is already blocklisted or if banning is not required.
-     *
-     * @param ip the InetAddress of the peer to ban; may be null
-     * @param banReason the reason for banning; must not be null or empty if banning
-     * @param shouldBan true if banning should be performed; false to skip banning
-     */
-    private void performBanIfNeeded(InetAddress ip, String banReason, boolean shouldBan, int packetSize) {
-        // Track all blocked packets regardless of whether we ban or not
-        // This helps identify inbound bandwidth waste from bad actors
-        if (packetSize > 0) {
-            _context.statManager().addRateData("udp.blockedPacketBytes", packetSize);
-        }
-
-        long uptime = _context.router().getUptime();
-        if (uptime < 15*60*1000) {return;} // don't ban at startup
-
-        if (shouldBan && ip != null && banReason != null && !banReason.isEmpty()) {
-            if (_context.blocklist().isBlocklisted(ip.getHostAddress())) {
-                return;
-            }
-            long now = _context.clock().now();
-            _context.blocklist().add(ip.getHostAddress());
-            if (_log.shouldWarn()) {
-                _log.warn("Banning IP Address " + ip.getHostAddress() + " for duration of session -> " + banReason);
-            }
-        } else {
-            if (_log.shouldInfo()) {
-                _log.info("Cannot ban packet source -> Missing " + (ip == null ? "IP address" : "ban reason") + "...");
-            }
-        }
-    }
-
-    /**
      *  Decrypt the header and hand off to the state for processing.
      *  Packet is trial-decrypted, so fallback
      *  processing is possible if this returns false.
@@ -495,7 +413,8 @@ class PacketHandler {
         int type;
         if (header == null ||
             header.getType() != SSU2Util.SESSION_CREATED_FLAG_BYTE ||
-            header.getVersion() != 2 ||
+            header.getVersion() < MIN_VERSION ||
+            header.getVersion() > MAX_VERSION ||
             header.getNetID() != _networkID) {
             if (_log.shouldInfo()) {
                 _log.info("Packet does not decrypt as SessionCreated, attempting to decrypt as Retry" + (header != null ? "\n* " + header : ""));
@@ -503,7 +422,7 @@ class PacketHandler {
             k2 = state.getRcvRetryHeaderEncryptKey2();
             header = SSU2Header.trialDecryptLongHeader(packet, k1, k2);
             if (header == null || header.getType() != SSU2Util.RETRY_FLAG_BYTE ||
-                header.getVersion() != 2 || header.getNetID() != _networkID) {
+                header.getVersion() < MIN_VERSION || header.getVersion() > MAX_VERSION || header.getNetID() != _networkID) {
                 if (_log.shouldInfo()) {
                     _log.info("Packet does not decrypt as SessionCreated or Retry \n* " + header + " on " + state);
                 }

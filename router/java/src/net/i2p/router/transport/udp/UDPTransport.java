@@ -259,7 +259,7 @@ public class UDPTransport extends TransportImpl {
     private static final int PRIORITY_LIMITS[] = new int[] { 100, 200, 300, 400, 500, 1000 };
     /** Configure the priority queue with the given weighting per priority group */
     private static final int PRIORITY_WEIGHT[] = new int[] { 1, 1, 1, 1, 1, 2 };
-    private static final int MAX_CONSECUTIVE_FAILED = 3;
+    private static final int MAX_CONSECUTIVE_FAILED = 5;
 
     public static final int DEFAULT_COST = 5;
     private static final int SSU_OUTBOUND_COST = 14;
@@ -1020,6 +1020,26 @@ public class UDPTransport extends TransportImpl {
         // his address is SSU2
         // do not validate the s/i b64, we will just catch it later
         // todo check mtu
+        String pq = addr.getOption("pq");
+        if (pq != null) {
+            if (pq.indexOf('4') >= 0) {
+                String ip = addr.getHost();
+                boolean ipv6 = ip != null && ip.indexOf(':') >= 0;
+                int mtu = 0;
+                String smtu = addr.getOption("mtu");
+                if (smtu != null) {
+                    try {
+                        mtu = Integer.parseInt(smtu);
+                    } catch (NumberFormatException nfe) {}
+                }
+                int ourmtu = getSSU2MTU(ipv6);
+                int min = ipv6 ? PeerState2.MIN_MLKEM768_IPV6_MTU : PeerState2.MIN_MLKEM768_IPV4_MTU;
+                if ((mtu == 0 || mtu >= min) && (ourmtu == 0 || ourmtu >= min))
+                    return 4;
+            }
+            if (pq.indexOf('3') >= 0)
+                return 3;
+        }
         return SSU2_INT_VERSION;
     }
 
@@ -1422,8 +1442,8 @@ public class UDPTransport extends TransportImpl {
                     return;
                 if (!eq(_lastOurIPv4, _lastOurPortv4, ourIP, ourPort)) {
                     if (_log.shouldInfo())
-                        _log.info("The router " + from + " at IP " + Addresses.toString(hisIP) + " told us we have a new IP/port - " 
-                                  + Addresses.toString(ourIP, ourPort) + ".  Wait until somebody else tells us the same thing.");
+                        _log.info("Router [" + from.toBase64().substring(0,6) + "] told us we have a new IP/port ("
+                                  + Addresses.toString(ourIP, ourPort) + ") -> Waiting for a second opinion...");
                 } else {
                     if (!DataHelper.eq(_lastFromIPv4, 0, hisIP, 0, 2)) {
                         changeIt = true;
@@ -1439,8 +1459,8 @@ public class UDPTransport extends TransportImpl {
                     return;
                 if (!eq(_lastOurIPv6, _lastOurPortv6, ourIP, ourPort)) {
                     if (_log.shouldInfo())
-                        _log.info("The router " + from + " at IP " + Addresses.toString(hisIP) + " told us we have a new IP/port - " 
-                                  + Addresses.toString(ourIP, ourPort) + ".  Wait until somebody else tells us the same thing.");
+                        _log.info("Router [" + from.toBase64().substring(0,6) + "] told us we have a new IP/port ("
+                                  + Addresses.toString(ourIP, ourPort) + ") -> Waiting for a second opinion...");
                 } else {
                     if (!DataHelper.eq(_lastFromIPv6, 0, hisIP, 0, 4)) {
                         changeIt = true;
@@ -1455,7 +1475,8 @@ public class UDPTransport extends TransportImpl {
         }
         if (changeIt) {
             if (_log.shouldInfo())
-                _log.info(from + " at IP " + Addresses.toString(hisIP) + " and " + lastFrom + " agree our address is " + Addresses.toString(ourIP, ourPort));
+                _log.info("Routers [" + from.toBase64().substring(0,6) + "] and [" + lastFrom.toBase64().substring(0,6) +
+                          "] agree our address is " + Addresses.toString(ourIP, ourPort));
             if (_haveUPnP || isIPv6)
                 ourPort = 0;
             changeAddress(ourIP, ourPort);
@@ -1862,7 +1883,7 @@ public class UDPTransport extends TransportImpl {
             }
         }
 
-        if (peer.getVersion() == 2) {
+        if (peer.getVersion() >= 2 && peer.getVersion() <= 4) {
             PeerState2 state2 = (PeerState2) peer;
             _peersByConnID.put(Long.valueOf(state2.getRcvConnID()), state2);
         }
@@ -1884,7 +1905,7 @@ public class UDPTransport extends TransportImpl {
                      _introManager.remove(oldPeer2);
                 }
             }
-            if (oldPeer != peer && oldPeer.getVersion() == 2) {
+            if (oldPeer != peer && oldPeer.getVersion() >= 2 && oldPeer.getVersion() <= 4) {
                 PeerState2 state2 = (PeerState2) oldPeer;
                 Long id = Long.valueOf(state2.getRcvConnID());
                 PeerStateDestroyed newPSD = new PeerStateDestroyed(_context, this, state2);
@@ -2092,7 +2113,7 @@ public class UDPTransport extends TransportImpl {
             altByIdent = _peersByIdent.remove(peer.getRemotePeer());
         }
 
-        if (peer.getVersion() == 2) {
+        if (peer.getVersion() >= 2 && peer.getVersion() <= 4) {
             PeerState2 state2 = (PeerState2) peer;
             Long id = Long.valueOf(state2.getRcvConnID());
             PeerStateDestroyed newPSD = new PeerStateDestroyed(_context, this, state2);
@@ -2545,13 +2566,6 @@ public class UDPTransport extends TransportImpl {
             return;
         }
 
-        boolean weAreFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
-                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
-                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
-                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
-                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
-                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
-
         msg.timestamp("Sending on UDP transport");
         Hash to = tori.getIdentity().calculateHash();
         PeerState peer = getPeerState(to);
@@ -2561,11 +2575,10 @@ public class UDPTransport extends TransportImpl {
             long lastRecv = peer.getLastReceiveTime();
             long now = _context.clock().now();
             int inboundActive = peer.expireInboundMessages();
-            int maxIdle = weAreFirewalled ? MAX_IDLE_TIME*2 : MAX_IDLE_TIME;
-            if (!weAreFirewalled && (lastSend > 0) && (lastRecv > 0)) {
+            if ((lastSend > 0) && (lastRecv > 0)) {
                 if ((now - lastSend > MAX_IDLE_TIME) &&
                      (now - lastRecv > MAX_IDLE_TIME) &&
-                     (peer.getConsecutiveFailedSends() > 5) &&
+                     (peer.getConsecutiveFailedSends() > 2) &&
                      (inboundActive <= 0)) {
                     // peer is waaaay idle, drop the con and queue it up as a new con
                     dropPeer(peer, false, "proactive reconnection");
@@ -3323,9 +3336,13 @@ public class UDPTransport extends TransportImpl {
                 _log.info("Consecutive failure #" + consecutive
                           + msg.toString()
                           + " to " + msg.getPeer());
+            // Relaxed: only drop after more consecutive failures AND longer timeouts,
+            // to handle NAT port churn without prematurely dropping peers
+            long now = _context.clock().now();
             if (consecutive < MAX_CONSECUTIVE_FAILED ||
-                _context.clock().now() - msg.getPeer().getLastSendFullyTime() <= 60*1000) {
-                // ok, a few conseutive failures, but we /are/ getting through to them
+                now - msg.getPeer().getLastSendFullyTime() <= 90*1000 ||
+                now - msg.getPeer().getLastReceiveTime() <= 120*1000) {
+                // recent activity on the connection — keep it alive
             } else {
                 _context.statManager().addRateData("udp.dropPeerConsecutiveFailures", consecutive, msg.getPeer().getInactivityTime());
                 sendDestroy(msg.getPeer(), SSU2Util.REASON_FRAME_TIMEOUT);
@@ -3429,6 +3446,11 @@ public class UDPTransport extends TransportImpl {
     public boolean isBacklogged(Hash dest) {
         PeerState peer =  _peersByIdent.get(dest);
         return peer != null && peer.isBacklogged();
+    }
+
+    @Override
+    public boolean isConnecting(Hash dest) {
+        return _establisher != null && _establisher.isConnecting(dest);
     }
 
     /**

@@ -403,7 +403,11 @@ public class NTCPTransport extends TransportImpl {
 
         NTCPConnection con = getConnectionOrCreateNew(ih, target);
         if (con == null) {
-            banPeerForInvalidAddress(ih, target);
+            if (_log.shouldWarn()) {
+                _log.warn("[NTCP] No valid NTCP address for [" + ih.toBase64().substring(0,6) + "], dropping message");
+            }
+            _context.statManager().addRateData("ntcp.noBidNoAddress", 1);
+            markUnreachable(ih);
             afterSend(msg, false);
             return;
         }
@@ -454,26 +458,6 @@ public class NTCPTransport extends TransportImpl {
         } catch (DataFormatException dfe) {
             return null;
         }
-    }
-
-    /**
-     * Bans a peer router for having an invalid or missing NTCP address.
-     * Logs the ban event with appropriate log levels based on configuration.
-     *
-     * @param ih The hash identifier of the peer router.
-     * @param target The RouterInfo of the banned peer.
-     */
-    private void banPeerForInvalidAddress(Hash ih, RouterInfo target) {
-        long now = _context.clock().now();
-        String ipPort = getIPPortFromRouterInfo(target);
-        if (_log.shouldInfo()) {
-            _log.warn("[NTCP] We bid on a peer without a valid NTCP address, banning for 8h\n" + target);
-        } else if (_log.shouldWarn()) {
-            String shortId = target.getIdentity().toBase64().substring(0,6);
-            _log.warn("[NTCP] Router [" + shortId + "] has no valid NTCP address, banning for 8h");
-        }
-        _banLogger.logBan(ih, ipPort, "Invalid NTCP address", 8*60*60*1000);
-        _context.banlist().banlistRouter(ih, "Invalid NTCP address", null, null, now + 8*60*60*1000);
     }
 
     /**
@@ -736,6 +720,12 @@ public class NTCPTransport extends TransportImpl {
     public boolean isEstablished(Hash dest) {
             NTCPConnection con = _conByIdent.get(dest);
             return (con != null) && con.isEstablished() && !con.isClosed();
+    }
+
+    @Override
+    public boolean isConnecting(Hash dest) {
+            NTCPConnection con = _conByIdent.get(dest);
+            return (con != null) && !con.isEstablished() && !con.isClosed();
     }
 
     @Override
