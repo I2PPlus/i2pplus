@@ -68,11 +68,10 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         // Exclude peers on selection cooldown to ensure diversity
         long cooldownCutoff = now - PEER_SELECTION_COOLDOWN_MS;
         int cooldownExcluded = 0;
+        _peerCooldowns.entrySet().removeIf(e -> e.getValue() <= cooldownCutoff);
         for (Map.Entry<Hash, Long> entry : _peerCooldowns.entrySet()) {
-            if (entry.getValue() > cooldownCutoff) {
                 exclude.add(entry.getKey());
                 cooldownExcluded++;
-            }
         }
         log.info("EPS cooldown: peers=" + _peerCooldowns.size() + " excluded=" + cooldownExcluded + " from=" + Thread.currentThread().getName());
 
@@ -137,6 +136,38 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                     log.info("EPS SNFP closest " + (isInbound ? "IB " : "OB ") + closestExclude);
                 ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet);
             }
+            // D1: Post-selection first-hop quality check for closest hop
+            if (!closest.isEmpty() && !isInbound) {
+                Hash peer = closest.iterator().next();
+                if (isFirstHopFailing(ctx, peer)) {
+                    if (log.shouldInfo())
+                        log.info("EPS closest hop " + peer.toBase64().substring(0,6) +
+                                 " previously failed as first hop, retrying...");
+                    closestExclude.add(peer);
+                    closest.clear();
+                    ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet);
+                    if (closest.isEmpty()) {
+                        ctx.profileOrganizer().selectFastPeers(1, closestExclude, closest, ipRestriction, ipSet);
+                    }
+                } else if (!ctx.commSystem().isEstablished(peer)) {
+                    if (ctx.commSystem().wasUnreachable(peer)) {
+                        if (log.shouldInfo())
+                            log.info("EPS closest hop " + peer.toBase64().substring(0,6) +
+                                     " is unreachable, retrying selection...");
+                        closestExclude.add(peer);
+                        closest.clear();
+                        ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet);
+                        if (closest.isEmpty()) {
+                            ctx.profileOrganizer().selectFastPeers(1, closestExclude, closest, ipRestriction, ipSet);
+                        }
+                    } else if (!ctx.commSystem().isConnecting(peer)) {
+                        if (log.shouldInfo())
+                            log.info("EPS pre-connecting to closest hop " +
+                                     peer.toBase64().substring(0,6) + " for tunnel build");
+                        preConnectTo(ctx, peer);
+                    }
+                }
+            }
             if (!closest.isEmpty()) {
                 closestHop = closest.get(0);
                 exclude.add(closestHop);
@@ -181,6 +212,32 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                     if (log.shouldInfo())
                         log.info("EPS SFP OBEP exclude " + formatExcludedPeers(exclude));
                     ctx.profileOrganizer().selectFastPeers(1, exclude, furthest, ipRestriction, ipSet);
+                }
+                // D1: Post-selection first-hop quality check for furthest hop
+                if (!furthest.isEmpty()) {
+                    Hash peer = furthest.iterator().next();
+                    if (isFirstHopFailing(ctx, peer)) {
+                        if (log.shouldInfo())
+                            log.info("EPS furthest hop " + peer.toBase64().substring(0,6) +
+                                     " previously failed as first hop, retrying...");
+                        exclude.add(peer);
+                        furthest.clear();
+                        ctx.profileOrganizer().selectFastPeers(1, exclude, furthest, ipRestriction, ipSet);
+                    } else if (!ctx.commSystem().isEstablished(peer)) {
+                        if (ctx.commSystem().wasUnreachable(peer)) {
+                            if (log.shouldInfo())
+                                log.info("EPS furthest hop " + peer.toBase64().substring(0,6) +
+                                         " is unreachable, retrying selection...");
+                            exclude.add(peer);
+                            furthest.clear();
+                            ctx.profileOrganizer().selectFastPeers(1, exclude, furthest, ipRestriction, ipSet);
+                        } else if (!ctx.commSystem().isConnecting(peer)) {
+                            if (log.shouldInfo())
+                                log.info("EPS pre-connecting to furthest hop " +
+                                         peer.toBase64().substring(0,6) + " for tunnel build");
+                            preConnectTo(ctx, peer);
+                        }
+                    }
                 }
                 if (!furthest.isEmpty()) {
                     furthestHop = furthest.get(0);
@@ -245,10 +302,10 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             rv.add(ctx.routerHash());
 
         // Record selection time for all selected peers (excluding self) to enforce cooldown
-        // Do this before checkTunnel so even failed builds cool down the peer
         int recorded = 0;
         for (Hash peer : rv) {
-            if (!peer.equals(ctx.routerHash())) {
+            if (!peer.equals(ctx.routerHash()) &&
+                !TunnelPeerSelector.hasRecoveredFromFailure(ctx, peer)) {
                 _peerCooldowns.put(peer, now);
                 recorded++;
             }
@@ -256,8 +313,14 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         log.info("EPS cooldown record: recorded=" + recorded + " rvSize=" + rv.size() + " from=" + Thread.currentThread().getName());
 
         if (rv.size() > 1) {
-            if (!checkTunnel(isInbound, true, rv))
+            if (!checkTunnel(isInbound, true, rv)) {
+                for (Hash peer : rv) {
+                    if (!peer.equals(ctx.routerHash())) {
+                        TunnelPeerSelector.recordPeerFailure(ctx, peer);
+                    }
+                }
                 rv = null;
+            }
         }
         if (isInbound && rv != null && rv.size() > 1)
             ctx.commSystem().exemptIncoming(rv.get(1));
@@ -265,9 +328,15 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         }
     }
 
-    private static final int MIN_NONFAILING_PCT = 15;
-    private static final int MIN_ACTIVE_PEERS_STARTUP = 6;
-    private static final int MIN_ACTIVE_PEERS = 12;
+    private static int getMinNonfailingPct(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.exploratoryPeer.minNonfailingPct", 15);
+    }
+    private static int getMinActivePeersStartup(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.exploratoryPeer.minActivePeersStartup", 6);
+    }
+    private static int getMinActivePeers(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.exploratoryPeer.minActivePeers", 12);
+    }
 
     /**
      *  Should we pick from the high cap pool instead of the larger not failing pool?
@@ -286,7 +355,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         // will decline also, as we repeatedly try to build tunnels
         // through the same few peers.
         int active = ctx.commSystem().countActivePeers();
-        if (active < MIN_ACTIVE_PEERS_STARTUP)
+        if (active < getMinActivePeersStartup(ctx))
             return false;
 
         // no need to explore too wildly at first (if we have enough connected peers)
@@ -301,7 +370,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             return true;
 
         // see above
-        if (active < MIN_ACTIVE_PEERS)
+        if (active < getMinActivePeers(ctx))
             return false;
 
         // ok, if we aren't explicitly asking for it, we should try to pick peers
@@ -311,7 +380,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         int failPct;
         // getEvents() will be 0 for first 10 minutes
         if (uptime <= 11*60*1000) {
-            failPct = 100 - MIN_NONFAILING_PCT;
+            failPct = 100 - getMinNonfailingPct(ctx);
         } else {
             // If well connected or ff, don't pick from high cap
             // even during congestion, because congestion starts from the top
@@ -323,8 +392,8 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             //if (l.shouldLog(Log.DEBUG))
             //    l.debug("Normalized Fail pct: " + failPct);
             // always try a little, this helps keep the failPct stat accurate too
-            if (failPct > 100 - MIN_NONFAILING_PCT)
-                failPct = 100 - MIN_NONFAILING_PCT;
+            if (failPct > 100 - getMinNonfailingPct(ctx))
+                failPct = 100 - getMinNonfailingPct(ctx);
         }
         return (failPct >= ctx.random().nextInt(100));
     }
@@ -350,7 +419,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             return 0;
         // Doing very badly? This is important to prevent network congestion collapse
         if (c >= 70 || e >= 75)
-            return 100 - MIN_NONFAILING_PCT;
+            return 100 - getMinNonfailingPct(ctx);
         return (100 * (e-c)) / (100-c);
     }
 

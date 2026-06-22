@@ -36,12 +36,29 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
     private static final double SEVERE_STRESS_THRESHOLD = 0.30;
 
+
     /** Cooldown duration for client peer selections — shorter than exploratory
-     *  to avoid exhausting the smaller client Fast pool (~447 peers vs full netdb). */
-    private static final long CLIENT_COOLDOWN_MS = 15_000;
+     *  to avoid exhausting the smaller client Fast pool (~447 peers vs full netdb).
+     *  Tunable via i2p.tunnel.peerSelector.clientCooldownMs (default: 15000).
+     */
+    private long getClientCooldownMs() {
+        String strat = ctx.getProperty(PROP_STRATEGY, STRATEGY_DEFAULT);
+        if (STRATEGY_DIVERSITY.equals(strat))
+            return 5000L;
+        return ctx.getProperty("i2p.tunnel.peerSelector.clientCooldownMs", 15000L);
+    }
+
+    private String getStrategy() {
+        return ctx.getProperty(PROP_STRATEGY, STRATEGY_DEFAULT);
+    }
+
+
 
     /** Per-pool cooldown map so one pool's selections don't starve another's. */
     private static final Map<Hash, Long> _clientCooldowns = new ConcurrentHashMap<Hash, Long>();
+
+    /** Track when peers last failed to allow recovery */
+    private static final Map<Hash, Long> _peerFailureTimes = new ConcurrentHashMap<Hash, Long>();
 
     private static String formatExcludedPeers(Set<Hash> peers) {
         if (peers == null || peers.isEmpty()) {return "[no exclusions]";}
@@ -69,6 +86,12 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
     private static final String PROP_LEGACY_SELECTION = "router.tunnel.useLegacyPeerSelection";
 
+    private static final String PROP_STRATEGY = "i2p.tunnel.peerSelector.clientStrategy";
+
+    private static final String STRATEGY_DEFAULT = "default";
+    private static final String STRATEGY_RELIABILITY = "reliability";
+    private static final String STRATEGY_DIVERSITY = "diversity";
+
     public ClientPeerSelector(RouterContext context) {
         super(context);
     }
@@ -81,7 +104,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
      * @return ordered list of Hash objects (one per peer) specifying what order
      *         they should appear in a tunnel (ENDPOINT FIRST).  This includes
      *         the local router in the list.  If there are no tunnels or peers
-     *         to build through, and the settings reject 0 hop tunnels, this will
+     *         to build through, and the settings reject 0hop tunnels, this will
      *         return null.
      */
     public List<Hash> selectPeers(TunnelPoolSettings settings) {
@@ -95,6 +118,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             return null;
         }
 
+        synchronized (_cooldownLock) {
         List<Hash> rv;
         boolean isInbound = settings.isInbound();
 
@@ -105,6 +129,12 @@ class ClientPeerSelector extends TunnelPeerSelector {
             // FastPeers — speed-ranked peers are often overloaded/rejecting while
             // HighCapacity peers have proven reliability in completed tunnels.
             boolean useHighCapPrimary = buildSuccess < ATTACK_THRESHOLD;
+            String strat = getStrategy();
+            if (STRATEGY_RELIABILITY.equals(strat)) {
+                useHighCapPrimary = true;
+            } else if (STRATEGY_DIVERSITY.equals(strat)) {
+                useHighCapPrimary = buildSuccess < SEVERE_ATTACK_THRESHOLD;
+            }
 
             // special cases
             boolean v6Only = isIPv6Only();
@@ -130,23 +160,39 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
             if (shouldSelectExplicit(settings)) {return selectExplicit(settings, length);}
 
-            // Create a copy of exclude set to avoid mutating caller's set
-            Set<Hash> exclude = new HashSet<Hash>(getExclude(isInbound, false));
+            // Excluder is lazy — contains() auto-classifies and tracks reasons.
+            // Don't copy to HashSet or reason tracking is lost.
+            Excluder excluder = new Excluder(isInbound, false);
+            Set<Hash> exclude = excluder;
 
             // Exclude recently-selected peers to ensure diversity across client pools
             long nowCooldown = ctx.clock().now();
-            long cooldownCutoff = nowCooldown - CLIENT_COOLDOWN_MS;
+            long cooldownCutoff = nowCooldown - getClientCooldownMs();
             int cooldownExcluded = 0;
+            // Evict stale client cooldowns EVERY selection (not every ~20)
+            // to prevent map bloat (was growing to 300+ entries with stale data)
+            _clientCooldowns.entrySet().removeIf(e -> e.getValue() <= cooldownCutoff);
             for (Map.Entry<Hash, Long> entry : _clientCooldowns.entrySet()) {
-                if (entry.getValue() > cooldownCutoff) {
-                    exclude.add(entry.getKey());
-                    cooldownExcluded++;
-                }
+                exclude.add(entry.getKey());
+                cooldownExcluded++;
             }
-            // Evict stale entries every ~50 selections to keep map bounded
-            if (cooldownExcluded == 0 && !_clientCooldowns.isEmpty() && (nowCooldown % 50) < 10) {
-                _clientCooldowns.values().removeIf(v -> v <= cooldownCutoff);
+            // Check shared peer cooldowns (from checkTunnel failures across ALL pools)
+            long sharedCooldownCutoff = nowCooldown - PEER_SELECTION_COOLDOWN_MS;
+            int peerCooldownExcluded = 0;
+            // Evict stale shared cooldowns EVERY selection
+            _peerCooldowns.entrySet().removeIf(e -> e.getValue() <= sharedCooldownCutoff);
+            for (Map.Entry<Hash, Long> entry : _peerCooldowns.entrySet()) {
+                exclude.add(entry.getKey());
+                peerCooldownExcluded++;
             }
+            // Evict expired firstHopFails entries (3min TTL) for map hygiene.
+            // Do NOT add to global exclude — firstHopFails only filter first-hop
+            // selection via isFirstHopFailing() in the quality loop. Adding them
+            // to the global set would exclude 300+ peers from ALL hops (first,
+            // middle, last), which is overkill and starves middle/last hop selection.
+            int firstHopFailCount = _firstHopFails.size();
+            _firstHopFails.entrySet().removeIf(e -> e.getValue() <=
+                    (nowCooldown - FIRST_HOP_FAIL_COOLDOWN_MS));
 
             // Add first peer exclusions for diversity
             Set<Hash> firstPeerExclusions = settings.getFirstPeerExclusions();
@@ -191,14 +237,15 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         if (matches.isEmpty()) {
                             ctx.profileOrganizer().selectActiveNotFailingPeers(length, exclude, matches);
                         }
-                        if (matches.isEmpty() && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
+                        if (matches.isEmpty()) {
                             ctx.profileOrganizer().selectNotFailingPeers(length, exclude, matches, false, 0, null);
                         }
-                        if (matches.isEmpty() && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
+                        if (matches.isEmpty()) {
                             ctx.profileOrganizer().selectAllNotFailingPeers(length, exclude, matches, false);
                         }
                     }
                     // Filter: remove peers that are in the exclude set
+                    // For outbound single-hop, prefer peers with transport connections
                     matches.removeAll(exclude);
                 }
                 matches.remove(ctx.routerHash());
@@ -245,17 +292,13 @@ class ClientPeerSelector extends TunnelPeerSelector {
                             ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
                         }
                         if (matches.isEmpty()) {
-                            if (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod()) {
-                                // Fallback to any not-failing peer if active not available
-                                if (log.shouldWarn()) {
-                                    log.warn("No active peers found, falling back to any non-failing peers");
-                                }
-                                ctx.profileOrganizer().selectNotFailingPeers(1, lastHopExclude, matches, false, ipRestriction, ipSet);
-                            } else if (log.shouldWarn()) {
-                                log.warn("No active peers found -> Under attack threshold, not falling back to non-failing peers");
+                            // Fallback to any not-failing peer if active not available
+                            if (log.shouldWarn()) {
+                                log.warn("No active peers found, falling back to any non-failing peers");
                             }
+                            ctx.profileOrganizer().selectNotFailingPeers(1, lastHopExclude, matches, false, ipRestriction, ipSet);
                         }
-                        if (matches.isEmpty() && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
+                        if (matches.isEmpty()) {
                             // Fallback to all peers as last resort
                             if (log.shouldWarn()) {
                                 log.warn("No non-failing peers found, falling back to all peers");
@@ -263,20 +306,20 @@ class ClientPeerSelector extends TunnelPeerSelector {
                             ctx.profileOrganizer().selectAllNotFailingPeers(1, lastHopExclude, matches, false);
                         }
                     }
-                    if (matches.isEmpty() && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
-                        // Emergency: try all-not-failing before giving up
-                        if (log.shouldWarn()) {
-                            log.warn("No peers found after standard fallbacks -> Attempting emergency all-peers fallback");
+                        if (matches.isEmpty()) {
+                            // Emergency: try all-not-failing before giving up
+                            if (log.shouldWarn()) {
+                                log.warn("No peers found after standard fallbacks -> Attempting emergency all-peers fallback");
+                            }
+                            ctx.profileOrganizer().selectAllNotFailingPeers(1, lastHopExclude, matches, false);
                         }
-                        ctx.profileOrganizer().selectAllNotFailingPeers(1, lastHopExclude, matches, false);
-                    }
-                    if (matches.isEmpty()) {
-                        if (log.shouldWarn()) {
-                            log.warn("No peers found after all fallbacks -> Returning empty list...");
+                        if (matches.isEmpty()) {
+                            if (log.shouldWarn()) {
+                                log.warn("No peers found after all fallbacks -> Returning empty list...");
+                            }
+                            return Collections.emptyList();
                         }
-                        return Collections.emptyList();
-                    }
-                } else if (hiddenOutbound) {
+                    } else if (hiddenOutbound) {
                     // OBEP
                     // check for hidden and outbound, and the paired (inbound) tunnel is zero-hop
                     // if so, we need the OBEP to be connected to us, so we get the build reply back
@@ -338,14 +381,14 @@ class ClientPeerSelector extends TunnelPeerSelector {
                             if (matches.isEmpty()) {
                                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
                             }
-                            if (matches.isEmpty() && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
+                            if (matches.isEmpty()) {
                                 // Fallback to non-failing peers
                                 ctx.profileOrganizer().selectNotFailingPeers(1, lastHopExclude, matches, false, ipRestriction, ipSet);
                                 if (matches.isEmpty() && log.shouldWarn()) {
                                     log.warn("No active peers found for OutboundEndpoint, falling back to all peers");
                                 }
                             }
-                            if (matches.isEmpty() && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
+                            if (matches.isEmpty()) {
                                 // Final fallback to all peers
                                 ctx.profileOrganizer().selectAllNotFailingPeers(1, lastHopExclude, matches, false);
                             }
@@ -357,15 +400,23 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
                     }
                 } else {
-                    if (useHighCapPrimary) {
+                    // For OBEP, prefer connected+not-failing peers over raw tier-based
+                    // selection.  A peer with an established transport session can receive
+                    // the build message immediately; a peer without one will trigger a
+                    // 10s first-hop timeout while the transport tries to connect.
+                    ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
+                    if (matches.isEmpty() && useHighCapPrimary) {
                         ctx.profileOrganizer().selectHighCapacityPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
-                        if (matches.isEmpty()) {
-                            ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, randomKey,
-                                length == 2 ? SLICE_0_1 : SLICE_0, ipRestriction, ipSet);
-                        }
-                    } else {
+                    }
+                    if (matches.isEmpty()) {
                         ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, randomKey,
                             length == 2 ? SLICE_0_1 : SLICE_0, ipRestriction, ipSet);
+                    }
+                    if (matches.isEmpty()) {
+                        ctx.profileOrganizer().selectNotFailingPeers(1, lastHopExclude, matches, false, 0, null);
+                    }
+                    if (matches.isEmpty()) {
+                        ctx.profileOrganizer().selectAllNotFailingPeers(1, lastHopExclude, matches, false);
                     }
                 }
 
@@ -397,7 +448,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         if (matches.size() < middleCount) {
                             ctx.profileOrganizer().selectFastPeers(middleCount - matches.size(), exclude, matches, 0, null);
                         }
-                        if (matches.size() < middleCount && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
+                        if (matches.size() < middleCount) {
                             ctx.profileOrganizer().selectNotFailingPeers(middleCount - matches.size(), exclude, matches, false, 0, null);
                         }
                     }
@@ -434,7 +485,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                             matches.addAll(fallback);
                         }
                     }
-                    if (matches.size() < middleCount && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
+                    if (matches.size() < middleCount) {
                         int needed = middleCount - matches.size();
                         ArraySet<Hash> fallback = new ArraySet<Hash>(needed);
                         ctx.profileOrganizer().selectAllNotFailingPeers(needed, exclude, fallback, false);
@@ -469,29 +520,119 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         log.info("Selecting closest Outbound... \n* Excluding: " + formatExcludedPeers(exclude));
                     }
                 }
-                if (useHighCapPrimary) {
-                    ctx.profileOrganizer().selectHighCapacityPeers(1, exclude, matches, ipRestriction, ipSet);
-                    if (matches.isEmpty()) {
+                if (log.shouldInfo()) {
+                    log.info("Selecting first hop for " + (isInbound ? "inbound" : "outbound") + "...");
+                }
+                // Prefer vetted HighCap/Fast peers first — they've been tested
+                // and are more reliable for tunnel builds than random connected peers.
+                if (matches.isEmpty()) {
+                    if (useHighCapPrimary) {
+                        ctx.profileOrganizer().selectHighCapacityPeers(1, exclude, matches, ipRestriction, ipSet);
+                        if (matches.isEmpty()) {
+                            ctx.profileOrganizer().selectNotFailingPeers(1, exclude, matches, false, 0, null);
+                        }
+                    } else {
                         ctx.profileOrganizer().selectFastPeers(1, exclude, matches, randomKey, length == 2 ? SLICE_2_3 : SLICE_1, ipRestriction, ipSet);
-                    }
-                } else {
-                    ctx.profileOrganizer().selectFastPeers(1, exclude, matches, randomKey, length == 2 ? SLICE_2_3 : SLICE_1, ipRestriction, ipSet);
-                    if (matches.isEmpty()) {
-                        ctx.profileOrganizer().selectFastPeers(1, exclude, matches, randomKey, length == 2 ? SLICE_2_3 : SLICE_1, ipRestriction, ipSet);
+                        if (matches.isEmpty()) {
+                            ctx.profileOrganizer().selectFastPeers(1, exclude, matches, randomKey, length == 2 ? SLICE_2_3 : SLICE_1, ipRestriction, ipSet);
+                        }
                     }
                 }
-                if (matches.isEmpty() && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
+                // Fallback to connected peers. KeepAlive job maintains active peer count
+                // at all uptimes, so no startup leniency needed.
+                if (matches.isEmpty()) {
+                    ctx.profileOrganizer().selectActiveNotFailingPeers(1, exclude, matches, 0, null);
+                }
+                if (matches.isEmpty()) {
                     ctx.profileOrganizer().selectNotFailingPeers(1, exclude, matches, false, 0, null);
                 }
-                if (matches.isEmpty() && (buildSuccess >= ATTACK_THRESHOLD || isInStartupGracePeriod())) {
-                    // Last resort: any not-failing peer
+                if (matches.isEmpty()) {
                     ctx.profileOrganizer().selectAllNotFailingPeers(1, exclude, matches, false);
+                }
+                // Post-selection first-hop quality check.
+                // Hard-fail gates: first-hop-failing peers, stale peers — always reject.
+                // Established preference: prefer established/connecting peers but fall
+                // back quickly (lower budget than before) to avoid starving the pool
+                // during recovery.  During startup grace (first 15 min), skip the
+                // established/connecting tier entirely — accept whatever passed the
+                // tier filters above (transport address, acceptance ratio, etc.).
+                if (!matches.isEmpty()) {
+                    final int ESTABLISHED_PREF_ATTEMPTS = 3;
+                    final int CONNECTING_PREF_ATTEMPTS = 5;
+                    int qualityAttempts = 0;
+                    int tier = 0;
+                    boolean inStartup = ctx.router() != null && ctx.router().getUptime() < 15*60*1000;
+                    if (inStartup)
+                        tier = 2;
+                    // When few candidates remain, skip established preference to avoid
+                    // exhausting the pool. Quality filtering with only 2-3 candidates
+                    // nearly always rejects all of them (cooldowns, stale, first-hop
+                    // fails), leaving matches empty and triggering "Not enough peers".
+                    if (matches.size() < 5)
+                        tier = 2;
+                    Set<Hash> localExclude = new HashSet<Hash>();
+                    while (qualityAttempts < 8 && !matches.isEmpty()) {
+                        qualityAttempts++;
+                        if (!inStartup) {
+                            if (qualityAttempts > CONNECTING_PREF_ATTEMPTS) {
+                                tier = 2;
+                            } else if (qualityAttempts > ESTABLISHED_PREF_ATTEMPTS) {
+                                tier = 1;
+                            }
+                        }
+                        Hash firstHop = matches.iterator().next();
+                        // During startup grace (first 15 min), skip the first-hop
+                        // failing check. We have too few peers and too many transient
+                        // transport failures to permanently penalize peers.
+                        if (!inStartup && isFirstHopFailing(ctx, firstHop)) {
+                            if (log.shouldInfo()) {
+                                log.info("First hop " + firstHop.toBase64().substring(0,6) +
+                                         " previously failed as first hop, retrying...");
+                            }
+                            localExclude.add(firstHop);
+                            matches.remove(firstHop);
+                            continue;
+                        }
+                        if (isStalePeer(ctx, firstHop)) {
+                            if (log.shouldInfo()) {
+                                log.info("First hop " + firstHop.toBase64().substring(0,6) +
+                                         " is stale (no contact >4hrs), retrying selection...");
+                            }
+                            localExclude.add(firstHop);
+                            matches.remove(firstHop);
+                            continue;
+                        }
+                        if (tier <= 1 && !ctx.commSystem().isEstablished(firstHop) &&
+                            !ctx.commSystem().isConnecting(firstHop)) {
+                            localExclude.add(firstHop);
+                            matches.remove(firstHop);
+                            continue;
+                        }
+                        break;
+                    }
+                }
+                // preConnectTo: warm up the transport session so the TBR delivery
+                // has a better chance of reaching the first hop.  The actual
+                // fast-fail check is in configureNewTunnel(), which validates the
+                // TBR target (cfg.getPeer(1)) after the full config is built.
+                if (!matches.isEmpty()) {
+                    Hash candidate = matches.iterator().next();
+                    if (!ctx.commSystem().isEstablished(candidate) &&
+                        !ctx.commSystem().isConnecting(candidate)) {
+                        preConnectTo(ctx, candidate);
+                    }
                 }
                 matches.remove(ctx.routerHash());
                 rv.addAll(matches);
             }
             if (log.shouldInfo()) {
-                log.info("ClientPeerSelector " + length + (isInbound ? " Inbound" : " Outbound") + ", excluding: " + formatExcludedPeers(exclude));
+                log.info("ClientPeerSelector " + length + (isInbound ? " Inbound" : " Outbound") +
+                         ", " + excluder.formatByReason() +
+                         " | cooldowns: " + cooldownExcluded + " client(" + _clientCooldowns.size() +
+                         "), " + peerCooldownExcluded + " shared(" + _peerCooldowns.size() +
+                         "), firstHopFails=" + firstHopFailCount +
+                         (firstPeerExclusions != null && !firstPeerExclusions.isEmpty() ?
+                          ", " + firstPeerExclusions.size() + " first-hop diversity" : ""));
             }
             if (rv.size() < length) {
                 // not enough peers to build the requested size
@@ -525,10 +666,10 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         // Progressive fallback under network stress based on build success rate
                         boolean isUnderStress = buildSuccess < ATTACK_THRESHOLD;
 
-                        if (isUnderStress && rv.size() > 0) {
-                            // Network stress detected: try fallback with relaxed restrictions
+                        if ((isUnderStress || useHighCapPrimary) && rv.size() > 0) {
+                            // Network stress or HighCap mode: try fallback with relaxed restrictions
                             if (log.shouldInfo()) {
-                                log.info("Network stress (" + (int) (buildSuccess * 100) + "% success) -> Trying relaxed fallback peer selection...");
+                                log.info("Network stress or HighCap primary (" + (int) (buildSuccess * 100) + "% success) -> Trying relaxed fallback peer selection...");
                             }
 
                             // Priority: HighCap > Fast > Active > NotFailing (under network stress, prioritize bandwidth)
@@ -539,7 +680,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                             if (!fallback.isEmpty()) {
                                 rv.clear();
                                 rv.addAll(fallback);
-                                if (log.shouldDebug()) {
+                                    if (log.shouldDebug()) {
                                     log.debug("HighCap fallback successful: found " + rv.size() + " peers for tunnel");
                                 }
                             }
@@ -552,7 +693,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                 if (!fallback.isEmpty()) {
                                     rv.clear();
                                     rv.addAll(fallback);
-                                }
+                                        }
                             }
 
                             // If still not enough, try active (connected) peers
@@ -564,14 +705,14 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                 if (!fallback.isEmpty()) {
                                     rv.clear();
                                     rv.addAll(fallback);
-                                    if (log.shouldDebug()) {
+                                            if (log.shouldDebug()) {
                                         log.debug("Active fallback successful: found " + rv.size() + " peers for tunnel");
                                     }
                                 }
                             }
 
-                            // If still not enough, and not under severe stress, try all not-failing peers
-                            if (rv.size() < min && (buildSuccess >= SEVERE_ATTACK_THRESHOLD || isInStartupGracePeriod())) {
+                            // If still not enough, try all not-failing peers
+                            if (rv.size() < min) {
                                 ArraySet<Hash> nfFallback = new ArraySet<Hash>(min);
                                 ctx.profileOrganizer().selectNotFailingPeers(min, exclude, nfFallback, false, 0, null);
                                 nfFallback.remove(ctx.routerHash());
@@ -579,21 +720,21 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                 if (!nfFallback.isEmpty()) {
                                     rv.clear();
                                     rv.addAll(nfFallback);
-                                    if (log.shouldDebug()) {
+                                            if (log.shouldDebug()) {
                                         log.debug("Not-failing fallback successful: found " + rv.size() + " peers for tunnel");
                                     }
                                 }
                             }
 
-                            // If still not enough, and not under severe stress, try all peers as last resort
-                            if (rv.size() < min && (buildSuccess >= SEVERE_ATTACK_THRESHOLD || isInStartupGracePeriod())) {
+                            // If still not enough, try all peers as last resort
+                            if (rv.size() < min) {
                                 ArraySet<Hash> allFallback = new ArraySet<Hash>(min);
                                 ctx.profileOrganizer().selectAllNotFailingPeers(min, exclude, allFallback, false);
                                 allFallback.remove(ctx.routerHash());
                                 if (!allFallback.isEmpty()) {
                                     rv.clear();
                                     rv.addAll(allFallback);
-                                }
+                                        }
                             }
 
                             // If still not enough, try with even more relaxed criteria but prefer better peers
@@ -611,7 +752,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                 if (!qualityFallback.isEmpty()) {
                                     rv.clear();
                                     rv.addAll(qualityFallback);
-                                    if (log.shouldDebug()) {
+                                            if (log.shouldDebug()) {
                                         log.debug("Quality-aware fallback successful: found " + rv.size() + " peers");
                                     }
                                 } else {
@@ -626,7 +767,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                     if (!relaxedFallback.isEmpty()) {
                                         rv.clear();
                                         rv.addAll(relaxedFallback);
-                                        if (log.shouldDebug()) {
+                                                    if (log.shouldDebug()) {
                                             log.debug("Emergency fallback: found " + rv.size() + " peers");
                                         }
                                     }
@@ -636,7 +777,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
                         // Final check - if still not enough peers and we have some, allow shorter tunnel
                         if (rv.size() < min) {
-                            if (isUnderStress && rv.size() > 0) {
+                            if ((isUnderStress || useHighCapPrimary) && rv.size() > 0) {
                                 // Under stress but have some peers - allow shorter tunnel instead of null
                                 if (log.shouldWarn()) {
                                     log.warn("Network stress: allowing shorter tunnel (" + rv.size() + " hops) instead of " + min + " minimum");
@@ -690,6 +831,30 @@ class ClientPeerSelector extends TunnelPeerSelector {
         // Filter out ghost peers before returning
         rv = filterGhostPeers(rv);
 
+        // Strategy-specific post-processing
+        if (rv != null && rv.size() > 2) {
+            String strategy = getStrategy();
+            if (STRATEGY_RELIABILITY.equals(strategy)) {
+                // Apply reliability filter on non-self peers
+                List<Hash> nonSelf = new ArrayList<Hash>(rv);
+                nonSelf.remove(ctx.routerHash());
+                Set<Hash> nonSelfSet = new HashSet<Hash>(nonSelf);
+                List<Hash> reliable = filterByReliability(nonSelfSet, null, nonSelf.size());
+                if (!reliable.isEmpty()) {
+                    rv.clear();
+                    if (isInbound) {
+                        rv.add(ctx.routerHash());
+                        rv.addAll(reliable);
+                    } else {
+                        rv.addAll(reliable);
+                        rv.add(ctx.routerHash());
+                    }
+                }
+            } else if (STRATEGY_DIVERSITY.equals(strategy)) {
+                // Diversity: skip ghost re-check (already filtered above)
+            }
+        }
+
         // Check for duplicate sequence and regenerate if needed
         if (rv != null && rv.size() > 2) {
             int attempts = 0;
@@ -714,6 +879,30 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     log.warn("CPS checkTunnel failed for " + settings.getDestinationNickname() +
                              " (" + (settings.isInbound() ? "in" : "out") + ") rv=" + formatPeerList(rv));
                 }
+                // Only add failed peers to cooldown, not all peers
+                // Use the new recovery mechanism to allow peers to be reconsidered
+                long now = ctx.clock().now();
+                for (Hash peer : rv) {
+                    if (!peer.equals(ctx.routerHash())) {
+                        if (!TunnelPeerSelector.hasRecoveredFromFailure(ctx, peer)) {
+                            _clientCooldowns.put(peer, now);
+                            TunnelPeerSelector.recordPeerFailure(ctx, peer);
+                        }
+                    }
+                }
+                // The peer adjacent to us (IBGW for inbound, OBEP for outbound) gets shared
+                // cooldown (60s) across ALL pools, since an address-family mismatch with us
+                // is fundamental and won't change between retries.
+                int adjIdx = isInbound ? 1 : rv.size() - 2;
+                if (adjIdx >= 0 && adjIdx < rv.size()) {
+                    Hash adjPeer = rv.get(adjIdx);
+                    if (!adjPeer.equals(ctx.routerHash())) {
+                        if (!TunnelPeerSelector.hasRecoveredFromFailure(ctx, adjPeer)) {
+                            TunnelPeerSelector._peerCooldowns.put(adjPeer, now);
+                            TunnelPeerSelector.recordPeerFailure(ctx, adjPeer);
+                        }
+                    }
+                }
                 rv = null;
             }
         }
@@ -722,12 +911,15 @@ class ClientPeerSelector extends TunnelPeerSelector {
             long now = ctx.clock().now();
             for (Hash peer : rv) {
                 if (!peer.equals(ctx.routerHash())) {
-                    _clientCooldowns.put(peer, now);
+                    if (!TunnelPeerSelector.hasRecoveredFromFailure(ctx, peer)) {
+                        _clientCooldowns.put(peer, now);
+                    }
                 }
             }
         }
         if (isInbound && rv != null && rv.size() > 1) {ctx.commSystem().exemptIncoming(rv.get(1));}
         return rv;
+        }
     }
 
     /**

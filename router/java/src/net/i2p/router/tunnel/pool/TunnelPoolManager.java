@@ -115,12 +115,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         long[] RATES = RateConstants.SHORT_TERM_RATES;
         long[] TEST_RATES = RateConstants.TUNNEL_TEST_RATES;
         ctx.statManager().createRequiredRateStat("tunnel.testFailedTime", "Time for tunnel test failure (ms)", "Tunnels", RATES);
-        ctx.statManager().createRateStat("tunnel.testExploratoryFailedTime", "Time to fail exploratory tunnel test (max 60s)", "Tunnels [Exploratory]", RATES);
-        ctx.statManager().createRateStat("tunnel.testFailedCompletelyTime", "Time to complete fail for tunnel test (max 60s)", "Tunnels", RATES);
-        ctx.statManager().createRateStat("tunnel.testExploratoryFailedCompletelyTime", "Time to complete fail for exploratory tunnel test (max 60s)", "Tunnels [Exploratory]", RATES);
-        ctx.statManager().createRateStat("tunnel.testSuccessLength", "Length (hops) of tunnels passing test", "Tunnels", RATES);
+        ctx.statManager().createRequiredRateStat("tunnel.testExploratoryFailedTime", "Time to fail exploratory tunnel test (max 60s)", "Tunnels [Exploratory]", RATES);
+        ctx.statManager().createRequiredRateStat("tunnel.testFailedCompletelyTime", "Time to complete fail for tunnel test (max 60s)", "Tunnels", RATES);
+        ctx.statManager().createRequiredRateStat("tunnel.testExploratoryFailedCompletelyTime", "Time to complete fail for exploratory tunnel test (max 60s)", "Tunnels [Exploratory]", RATES);
+        ctx.statManager().createRequiredRateStat("tunnel.testSuccessLength", "Length (hops) of tunnels passing test", "Tunnels", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.testSuccessTime", "Time for tunnel test success (ms)", "Tunnels", TEST_RATES);
-        ctx.statManager().createRateStat("tunnel.testAborted", "Time taken by aborted tunnel tests (no available peers)", "Tunnels", RATES);
+        ctx.statManager().createRequiredRateStat("tunnel.testAborted", "Time taken by aborted tunnel tests (no available peers)", "Tunnels", RATES);
     }
 
     /**
@@ -840,6 +840,15 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 // This ensures we don't accumulate way more tunnels than configured
                 _mgr.pruneAllPools();
                 didRemove = _mgr.replaceSlowTunnels();
+                // Proactive tunnel prebuild: ensure each pool has sufficient tunnels
+                // before current ones expire.  This runs every 30-120s.
+                List<TunnelPool> pools = new ArrayList<TunnelPool>();
+                _mgr.listPools(pools);
+                for (TunnelPool pool : pools) {
+                    if (pool != null && pool.isAlive()) {
+                        pool.ensureSufficientTunnels();
+                    }
+                }
             } catch (Exception e) {
                 if (_mgr._log.shouldWarn())
                     _mgr._log.warn("Error replacing slow tunnels", e);

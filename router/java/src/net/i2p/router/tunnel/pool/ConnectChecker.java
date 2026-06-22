@@ -69,9 +69,29 @@ public class ConnectChecker {
         Hash us = ctx.routerHash();
         if (us == null) {return true;}
         boolean usf = from.equals(us);
-        if (usf && ctx.commSystem().isEstablished(to)) {return true;}
+        if (usf) {
+            if (ctx.commSystem().isEstablished(to)) {
+                if (ctx.commSystem().wasUnreachable(to)) {
+                    if (log.shouldWarn()) {
+                        log.warn("canConnect: we control from, but [" + to.toString().substring(0,6) + "] is unreachable");
+                    }
+                    return false;
+                }
+                return true;
+            }
+        }
         boolean ust = to.equals(us);
-        if (ust && ctx.commSystem().isEstablished(from)) {return true;}
+        if (ust) {
+            if (ctx.commSystem().isEstablished(from)) {
+                if (ctx.commSystem().wasUnreachable(from)) {
+                    if (log.shouldWarn()) {
+                        log.warn("canConnect: we control to, but [" + from.toString().substring(0,6) + "] is unreachable");
+                    }
+                    return false;
+                }
+                return true;
+            }
+        }
         RouterInfo rt = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(to);
         if (rt == null) {return true;}
         RouterInfo rf = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(from);
@@ -98,6 +118,24 @@ public class ConnectChecker {
             log.warn("Cannot connect [" +
                      (usf ? "Our Router" : from.toString().substring(0,6)) + "] with mask " + cf + " -> [" +
                      (ust ? "Our Router" : to.toString().substring(0,6)) + "] with mask " + ct);
+        }
+        // When neither peer is us, check our own reachability as a proxy.
+        // If we can't reach a tunnel participant, they're unlikely to reliably
+        // forward data for others either.
+        if (rv && !usf && !ust) {
+            if (!ctx.commSystem().getEstablished().isEmpty()) {
+                if (ctx.commSystem().wasUnreachable(from) ||
+                    ctx.commSystem().wasUnreachable(to)) {
+                    if (log.shouldWarn()) {
+                        log.warn("canConnect: non-self pair rejected - [" +
+                                 from.toString().substring(0,6) + "] unreachable=" +
+                                 ctx.commSystem().wasUnreachable(from) + ", [" +
+                                 to.toString().substring(0,6) + "] unreachable=" +
+                                 ctx.commSystem().wasUnreachable(to));
+                    }
+                    return false;
+                }
+            }
         }
         return rv;
     }

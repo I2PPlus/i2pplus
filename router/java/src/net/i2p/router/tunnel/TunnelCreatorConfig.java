@@ -62,7 +62,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public static final int REPLY_IV_LENGTH = 16;
 
     // Make configurable? - but can't easily get to pool options from here
-    private static final int MAX_CONSECUTIVE_TEST_FAILURES = 3;
+    public static final int MAX_CONSECUTIVE_TEST_FAILURES = 3;
     private static final int LATENCY_SAMPLE_SIZE = 3;
     private volatile int _lastLatency = -1;
     private final int[] _latencyHistory = new int[LATENCY_SAMPLE_SIZE];
@@ -260,13 +260,14 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public int getTunnelFailures() {return _failures.get();}
 
     /**
-     *  Reset the consecutive failure counter back to zero without marking the
-     *  tunnel as GOOD.  Used when a data-carrying tunnel fails a test — the
-     *  data proves it works, so the failure should not accumulate toward removal.
+     *  Reset the consecutive failure counter and mark the tunnel as GOOD.
+     *  Used when a data-carrying tunnel fails a test — the data proves it
+     *  works, so the tunnel should remain selectable and avoid pruning.
      *  @since 0.9.69+
      */
     public void clearTestFailures() {
         _failures.set(0);
+        _testStatus = TunnelTestStatus.GOOD;
     }
 
     public void testSuccessful(int ms) {
@@ -536,7 +537,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         else {
             buf.append(" Client tunnel [");
             if (_destinationNickname != null) {
-                buf.append(_destinationNickname).append("/");
+                buf.append(_destinationNickname).append(" / ");
             }
             buf.append(_destination.toBase32().substring(0, 8)).append("]");
         }

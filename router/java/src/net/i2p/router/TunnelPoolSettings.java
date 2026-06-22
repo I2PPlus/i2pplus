@@ -57,7 +57,7 @@ public class TunnelPoolSettings {
     public static final String      PROP_PRIORITY = "priority";
     /** @since 0.9.17 */
     public static final String      PROP_RANDOM_KEY = "randomKey";
-    public static final int         DEFAULT_QUANTITY = 3;
+    public static final int         DEFAULT_QUANTITY = 2;
     public static final int         DEFAULT_BACKUP_QUANTITY = 0;
     public static final int         DEFAULT_DURATION = 10*60*1000;
     private static final boolean    isSlow = SystemVersion.isSlow();
@@ -71,7 +71,7 @@ public class TunnelPoolSettings {
     private static final int        DEFAULT_IB_EXPL_LENGTH_VARIANCE = isSlow ? 0 : 1;
     private static final int        DEFAULT_OB_EXPL_LENGTH_VARIANCE = isSlow ? 0 : 1;
     public static final boolean     DEFAULT_ALLOW_ZERO_HOP = false;
-    public static final int         DEFAULT_IP_RESTRICTION = 1;    // class A (/8)
+    public static final int         DEFAULT_IP_RESTRICTION = 2;    // class B (/16)
     private static final int        MIN_PRIORITY = -25;
     private static final int        MAX_PRIORITY = 25;
     private static final int        EXPLORATORY_PRIORITY = 30;

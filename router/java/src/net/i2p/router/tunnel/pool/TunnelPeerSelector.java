@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +23,13 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.data.router.RouterIdentity;
+import net.i2p.data.i2np.DatabaseLookupMessage;
+import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
+import net.i2p.router.transport.Transport;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
@@ -62,6 +68,62 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /** Lock for atomic cooldown check+record across peer selectors */
     protected static final Object _cooldownLock = new Object();
+
+    /** Peers that failed as first hop (first hop unreachable) excluded for this long */
+    protected static final long FIRST_HOP_FAIL_COOLDOWN_MS = 60 * 1000;
+
+    /** Tracks when a peer last failed as first hop */
+    protected static final Map<Hash, Long> _firstHopFails = new ConcurrentHashMap<Hash, Long>();
+
+    /** How often to send keepalive pings to established Fast/HighCap peers */
+    private static final long KEEPALIVE_INTERVAL_MS = 15_000; // More frequent keepalives
+
+    /** Tracks last keepalive send time per peer */
+    private static final ConcurrentHashMap<Hash, Long> _lastKeepAlive = new ConcurrentHashMap<Hash, Long>(512);
+
+    /**
+     *  Check if a peer recently failed as first hop and should be excluded.
+     */
+    protected static boolean isFirstHopFailing(RouterContext ctx, Hash peer) {
+        Long when = _firstHopFails.get(peer);
+        if (when == null)
+            return false;
+        if (ctx.clock().now() - when > FIRST_HOP_FAIL_COOLDOWN_MS) {
+            _firstHopFails.remove(peer);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     *  Record that a peer failed as first hop (first hop unreachable).
+     */
+    protected static void recordFirstHopFail(RouterContext ctx, Hash peer) {
+        _firstHopFails.put(peer, ctx.clock().now());
+    }
+
+    /**
+     * Record that a peer failed (for recovery tracking).
+     */
+    protected static void recordPeerFailure(RouterContext ctx, Hash peer) {
+        _firstHopFails.put(peer, ctx.clock().now());
+    }
+
+    /**
+     * Check if a peer has recovered from failure and can be reconsidered.
+     * This is used to prevent permanent exclusion of peers that may recover.
+     */
+    protected static boolean hasRecoveredFromFailure(RouterContext ctx, Hash peer) {
+        Long failTime = _firstHopFails.get(peer);
+        if (failTime == null)
+            return true;
+        long recoveryTime = ctx.clock().now() - 60 * 1000; // 60 seconds recovery window
+        if (failTime < recoveryTime) {
+            _firstHopFails.remove(peer);
+            return true;
+        }
+        return false;
+    }
 
     protected TunnelPeerSelector(RouterContext context) {
         super(context);
@@ -260,62 +322,51 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @return true if the peer should be excluded
      * @since 0.9.58
      */
-    private boolean shouldExclude(Hash peerHash, boolean isInbound, boolean isExploratory) {
-        /*
-         *  We may want to update this to skip 'hidden' or 'unreachable' peers, but that isn't safe,
-         *  since they may publish one set of routerInfo to us and another to other peers.
-         *  The defaults for filterUnreachable has always been to return false, but might as well
-         *  make it explicit with a "false &&"
-         *
-         *  Unreachable peers at the inbound gateway is a major cause of problems.
-         *  Due to a bug in SSU peer testing in 0.6.1.32 and earlier, peers don't know
-         *  if they are unreachable, so the netdb indication won't help much.
-         *
-         *  As of 0.6.1.33 we should have lots of unreachables, so enable this for now.
-         *  Also (and more effectively) exclude peers we detect are unreachable,
-         *  this should be much more effective, especially on a router that has been
-         *  up a few hours.
-         *
-         *  We could just try and exclude them as the inbound gateway but that's harder
-         *  (and even worse for anonymity?).
-         */
-        final long BANDWIDTH_REJECTION_CUTOFF_MS = 60_000L; // 60 seconds cutoff for recent rejection
+    /**
+     *  Check if a peer should be excluded, returning the reason or null.
+     *  Used by Excluder to classify exclusion reasons for diagnostics.
+     */
+    private String getExclusionReason(Hash peerHash, boolean isInbound, boolean isExploratory) {
+        final long BANDWIDTH_REJECTION_CUTOFF_MS = 60_000L;
 
         PeerProfile profile = ctx.profileOrganizer().getProfileNonblocking(peerHash);
         if (profile != null && wasRecentlyRejected(profile, BANDWIDTH_REJECTION_CUTOFF_MS)) {
-            return true;
+            return "recently-rejected";
         }
 
         if (ctx.commSystem().wasUnreachable(peerHash)) {
-            return true;
+            return "unreachable";
         }
 
         RouterInfo routerInfo = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(peerHash);
         if (routerInfo == null) {
-            return false;  // Allow peers with incomplete RouterInfo - build will fail naturally if unreachable
+            return null;
         }
 
         if (shouldExcludeFloodfillPeer(isExploratory, routerInfo)) {
-            return true;
+            return "floodfill";
         }
 
         if (filterUnreachable(isInbound, isExploratory)) {
-            // During attacks, allow U-cap peers if they have M, N, O, P, or X capability
             if (routerInfo.getCapabilities().contains(Character.toString(Router.CAPABILITY_UNREACHABLE))) {
                 if (!allowFirewalledUnderAttack(routerInfo)) {
-                    return true;
+                    return "U-cap";
                 }
             }
         }
 
         if (filterSlow(isInbound, isExploratory)) {
             String excludeCaps = getEffectiveExcludeCaps(ctx);
-            if (shouldExclude(ctx, routerInfo, excludeCaps)) {
-                return true;
+            if (shouldExclude(ctx, routerInfo, excludeCaps, isExploratory)) {
+                return "slow/capped";
             }
         }
 
-        return false;
+        return null;
+    }
+
+    private boolean shouldExclude(Hash peerHash, boolean isInbound, boolean isExploratory) {
+        return getExclusionReason(peerHash, isInbound, isExploratory) != null;
     }
 
     /**
@@ -427,7 +478,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     protected boolean allowAsOBEP(Hash h) {
         RouterInfo ri = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
         if (ri == null)
-            return true;
+            return false;
         return canConnect(ri, ANY_V4);
     }
 
@@ -444,7 +495,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     protected boolean allowAsIBGW(Hash h) {
         RouterInfo ri = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
         if (ri == null)
-            return true;
+            return false;
         if (ri.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0)
             return false;
         return canConnect(ANY_V4, ri);
@@ -491,7 +542,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @since 0.9.17
      */
     public static boolean shouldExclude(RouterContext ctx, RouterInfo peer) {
-        return shouldExclude(ctx, peer, getExcludeCaps(ctx));
+        return shouldExclude(ctx, peer, getExcludeCaps(ctx), false);
     }
 
     /**
@@ -510,9 +561,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @param ctx Router context for peer count checks
      * @param peer The peer to evaluate
      * @param excl Characters representing capabilities we want to exclude
+     * @param isExploratory true if this check is for an exploratory pool
      * @return true if the peer should be excluded
      */
-    private static boolean shouldExclude(RouterContext ctx, RouterInfo peer, String excl) {
+    private static boolean shouldExclude(RouterContext ctx, RouterInfo peer, String excl, boolean isExploratory) {
         String cap = peer.getCapabilities();
         RouterIdentity ident = peer.getIdentity();
 
@@ -582,32 +634,38 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             return false;
         }
 
-        // Also skip when build success is low — trying every available peer
-        // is better than tightening filters during a failure cascade.
+        // Check build success rate for tiered quality filtering.
+        // Under normal conditions (high build success), apply strict pre-qualification
+        // to ensure first-hop peers have some evidence of connectivity.  Under stress
+        // (low build success), relax the filter but don't disable it entirely — peers
+        // with zero connectivity history still waste tunnel builds and test cycles.
         double buildSuccess;
         try {
             buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
         } catch (Exception e) {
             buildSuccess = 0;
         }
-        if (buildSuccess < ATTACK_THRESHOLD) {
+        // Exploratory pools always skip pre-qualification — they need to test
+        // unknown peers to build connectivity profiles.
+        // Client pools also skip during stress (< 40% build success) when few
+        // peers have recent connectivity, to avoid starving the candidate pool.
+        if (isExploratory || buildSuccess < ATTACK_THRESHOLD) {
             return false;
         }
 
-        // Pre-qualification: prefer peers with recent peer test success,
-        // recent contact, or an active connection.  Peers that haven't been
-        // heard from or tested are high-risk picks that tend to fail.
+        // Client pool pre-qualification: reject peers with ZERO evidence of
+        // connectivity.  A peer that has never been tested, hasn't been heard
+        // from in hours, and isn't currently connected is very likely to fail
+        // as a first-hop, wasting the build attempt.
         Hash peerHash = ident.calculateHash();
         PeerProfile profile = ctx.profileOrganizer().getProfile(peerHash);
         if (profile != null && !ctx.commSystem().isBacklogged(peerHash)) {
-            float tunnelTestTime = profile.getTunnelTestTimeAverage();
-            boolean hasRecentTest = profile.getPeerTestTimeAverage() > 0 ||
-                                    profile.isLowLatency() ||
-                                    (tunnelTestTime > 0 && tunnelTestTime <= 15_000);
-            boolean hasRecentContact = profile.getLastHeardFrom() > 0 &&
-                ctx.clock().now() - profile.getLastHeardFrom() < 4 * 60 * 60 * 1000;
+            boolean hasRecentTest = profile.getTunnelTestTimeAverage() > 0;
+            long lastHeardFrom = profile.getLastHeardFrom();
+            long heardCutoff = ctx.clock().now() - 2 * 60 * 60 * 1000;
+            boolean recentlyHeard = lastHeardFrom > heardCutoff;
             boolean isConnected = ctx.commSystem().isEstablished(peerHash);
-            if (!hasRecentTest && !hasRecentContact && !isConnected && fastPeerCount >= 10) {
+            if (!hasRecentTest && !recentlyHeard && !isConnected && fastPeerCount >= 20) {
                 return true;
             }
         }
@@ -870,13 +928,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     protected class Excluder extends ExcluderBase {
         private static final int MAX_EXCLUDED_PEERS = 384;
         private final boolean _isIn, _isExpl;
+        /** Maps peer hash to the reason it was excluded, for diagnostic logging */
+        final Map<Hash, String> _reasons = new LinkedHashMap<Hash, String>();
 
         /**
          *  Automatically adds selectPeersInTooManyTunnels(), unless i2np.allowLocal.
          */
         public Excluder(boolean isInbound, boolean isExploratory) {
             super(ctx.getBooleanProperty("i2np.allowLocal") ? new LinkedHashSet<Hash>()
-                                                             : new LinkedHashSet<Hash>(ctx.tunnelManager().selectPeersInTooManyTunnels()));
+                                                              : new LinkedHashSet<Hash>(ctx.tunnelManager().selectPeersInTooManyTunnels()));
             _isIn = isInbound;
             _isExpl = isExploratory;
         }
@@ -897,6 +957,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * Check if a peer should be excluded.
      * Automatically adds to the set if excluded.
      * Capped at MAX_EXCLUDED_PEERS — evicts oldest entry when over limit.
+     * Tracks exclusion reason for diagnostic logging.
      *
      * @param o a Hash object to check
      * @return true if peer should be excluded (and added to set)
@@ -905,18 +966,43 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     public boolean contains(Object o) {
             if (s.contains(o)) {return true;}
             Hash h = (Hash) o;
-            if (shouldExclude(h, _isIn, _isExpl)) {
+            String reason = getExclusionReason(h, _isIn, _isExpl);
+            if (reason != null) {
                 s.add(h);
+                _reasons.put(h, reason);
                 if (s.size() > MAX_EXCLUDED_PEERS) {
                     Iterator<Hash> it = s.iterator();
                     if (it.hasNext()) {
-                        it.next();
+                        Hash evicted = it.next();
                         it.remove();
+                        _reasons.remove(evicted);
                     }
                 }
                 return true;
             }
             return false;
+        }
+
+        /**
+         *  Format exclusion summary grouped by reason.
+         */
+        String formatByReason() {
+            if (_reasons.isEmpty()) return "";
+            Map<String, Integer> counts = new LinkedHashMap<String, Integer>();
+            for (String r : _reasons.values()) {
+                Integer c = counts.get(r);
+                counts.put(r, c != null ? c + 1 : 1);
+            }
+            StringBuilder sb = new StringBuilder();
+            sb.append(s.size()).append(" excluded [");
+            boolean first = true;
+            for (Map.Entry<String, Integer> e : counts.entrySet()) {
+                if (!first) sb.append(", ");
+                sb.append(e.getValue()).append(" ").append(e.getKey());
+                first = false;
+            }
+            sb.append("]");
+            return sb.toString();
         }
     }
 
@@ -968,4 +1054,228 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
     }
 
+    /**
+     *  Check if a peer supports NTCP2 transport.
+     *  NTCP2 is preferred for direct connections (first hop / IBGW)
+     *  because SSU2-only peers are typically firewalled, requiring
+     *  introduction-based connections that are slower and less reliable.
+     *
+     *  @param ctx the router context
+     *  @param peer hash of the peer to check
+     *  @return true if the peer has an NTCP2 address
+     */
+    protected static boolean supportsNTCP2(RouterContext ctx, Hash peer) {
+        RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(peer);
+        if (ri == null) return false;
+        for (RouterAddress ra : ri.getAddresses()) {
+            if ("NTCP2".equals(ra.getTransportStyle()))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     *  Check if a peer's RouterInfo has at least one reachable SSU or NTCP address.
+     *  Peers without valid transport addresses always fail as first hops and trigger
+     *  bans in EstablishmentManager.establish() — they should be excluded from selection.
+     *
+     *  @param ctx the router context
+     *  @param peer hash of the peer to check
+     *  @return true if the peer has a valid SSU or NTCP address
+     */
+    protected static boolean hasValidTransportAddress(RouterContext ctx, Hash peer) {
+        RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(peer);
+        if (ri == null) return false;
+        for (RouterAddress ra : ri.getAddresses()) {
+            String style = ra.getTransportStyle();
+            byte[] ip = ra.getIP();
+            int port = ra.getPort();
+            if ("SSU".equals(style)) {
+                if (!"2".equals(ra.getOption("v")))
+                    continue;
+                if (ip != null && TransportUtil.isValidPort(port))
+                    return true;
+                if (ra.getOption("itag0") != null)
+                    return true;
+            } else if ("SSU2".equals(style)) {
+                if (ip != null && TransportUtil.isValidPort(port))
+                    return true;
+                if (ra.getOption("itag0") != null)
+                    return true;
+            } else if ("NTCP".equals(style) || "NTCP2".equals(style)) {
+                if (ip != null && TransportUtil.isValidPort(port))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     *  Check if a peer has a history of rejecting tunnel build requests.
+     *  Returns true when the lifetime acceptance ratio drops below 30%.
+     *  Defaults to false (accept) when no data is available.
+     *
+     *  @param ctx the router context
+     *  @param peer hash of the peer to check
+     *  @return true if the acceptance ratio is below threshold
+     */
+    protected static boolean isLowAcceptanceRatio(RouterContext ctx, Hash peer) {
+        PeerProfile profile = ctx.profileOrganizer().getProfile(peer);
+        if (profile == null) return false;
+        return profile.getTunnelAcceptanceRatio() < 0.3;
+    }
+
+    /**
+     *  Trigger an outbound connection establishment to a peer.
+     *  Creates a low-priority dummy OutNetMessage that causes the transport
+     *  layer to initiate a connection. Used to pre-warm connections for
+     *  first-hop peers before the build message is sent.
+     *
+     *  @param ctx the router context
+     *  @param peer hash of the peer to connect to
+     */
+    protected static void preConnectTo(RouterContext ctx, Hash peer) {
+        RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(peer);
+        if (ri == null)
+            return;
+        // Skip peers with no valid transport addresses to avoid triggering
+        // bans in EstablishmentManager.establish() or NTCPTransport.send().
+        if (!hasValidTransportAddress(ctx, peer)) {
+            // Record failure so selector avoids this peer
+            recordFirstHopFail(ctx, peer);
+            Log log = ctx.logManager().getLog(TunnelPeerSelector.class);
+            if (log.shouldInfo())
+                log.info("Skipping pre-connect to " + peer.toBase64().substring(0,6) +
+                         " — no valid SSU or NTCP address");
+            return;
+        }
+        long lifetime = ctx.clock().now() + 30*1000;
+        // Use a DatabaseLookupMessage (peer looks up its own RouterInfo and replies)
+        // This triggers a real transport connection + request/response cycle,
+        // keeping the session alive for the upcoming tunnel build message.
+        DatabaseLookupMessage dlm = new DatabaseLookupMessage(ctx, true);
+        dlm.setFrom(ctx.routerHash());
+        dlm.setSearchKey(peer);
+        dlm.setSearchType(DatabaseLookupMessage.Type.RI);
+        dlm.setMessageExpiration(lifetime);
+        OutNetMessage onm = new OutNetMessage(ctx, dlm, lifetime,
+            OutNetMessage.PRIORITY_MY_BUILD_REQUEST, ri);
+        // Send directly to the transport instead of going through GetBidsJob,
+        // which may drop messages to non-connected peers. Direct send forces
+        // connection establishment — same approach as TransportManager.establishTo().
+        Transport udp = ctx.commSystem().getTransports().get("SSU");
+        if (udp != null) {
+            try { udp.send(onm); return; } catch (Exception e) {}
+        }
+        Transport ntcp = ctx.commSystem().getTransports().get("NTCP");
+        if (ntcp != null) {
+            try { ntcp.send(onm); } catch (Exception e) {}
+        }
+    }
+
+    /**
+     *  Check if a peer is stale — no contact (heard from or heard about) in the last 4 hours.
+     *  Peers in the netDb often go offline silently; this avoids wasting first-hop
+     *  selection and keepalive resources on peers that are likely dead.
+     *  Skipped during the first 15 minutes of uptime (startup grace) to allow
+     *  the router to build initial tunnels before profile data accumulates.
+     *
+     *  @param ctx the router context
+     *  @param peer hash of the peer to check
+     *  @return true if the peer hasn't been heard from or about in the last 4 hours
+     */
+    static boolean isStalePeer(RouterContext ctx, Hash peer) {
+        if (ctx.router() != null && ctx.router().getUptime() < 15*60*1000)
+            return false;
+        PeerProfile profile = ctx.profileOrganizer().getProfileNonblocking(peer);
+        if (profile == null)
+            return true;
+        long now = ctx.clock().now();
+        long cutoff = now - 4*60*60*1000;
+        return profile.getLastHeardFrom() < cutoff && profile.getLastHeardAbout() < cutoff;
+    }
+
+    /**
+     *  Periodically called to keep transport sessions alive for top-tier peers and
+     *  proactively establish connections to Fast/HighCap peers before builds need them.
+     *
+     *  This prevents the natural session aging that drops the active peer count from
+     *  ~600 to ~300 in the first 30 minutes, which starves first-hop selection and
+     *  causes tunnel pool collapse.
+     *
+     *  @param ctx the router context
+     *  @param aggressive if true, also pre-connect to non-established eligible peers
+     *                    (used when any pool has 0 tunnels)
+     */
+    public static void keepAlive(RouterContext ctx, boolean aggressive) {
+        long now = ctx.clock().now();
+        Log log = ctx.logManager().getLog(TunnelPeerSelector.class);
+        RouterContext rctx = ctx;
+
+        // Collect top Fast + HighCap peers that aren't in first-hop fail cooldown
+        Set<Hash> targets = new HashSet<Hash>(512);
+        // Must use mutable set — locked_selectPeers may add to the exclude set
+        rctx.profileOrganizer().selectFastPeers(400, new HashSet<Hash>(4), targets);
+        // Also add top HighCap to cover more candidates
+        rctx.profileOrganizer().selectHighCapacityPeers(400, targets, targets);
+        // Remove self
+        targets.remove(rctx.routerHash());
+
+        if (targets.isEmpty())
+            return;
+
+        int keepalived = 0;
+        int preConnected = 0;
+
+        for (Hash peer : targets) {
+            if (keepalived + preConnected >= 400)
+                break; // per-cycle budget (doubled)
+
+            // Skip peers in first-hop fail cooldown — they've proven unreachable recently
+            if (isFirstHopFailing(rctx, peer))
+                continue;
+
+            // Skip stale peers — no activity in the last 4 hours
+            if (isStalePeer(rctx, peer))
+                continue;
+
+            Long lastKa = _lastKeepAlive.get(peer);
+            if (lastKa != null && now - lastKa < KEEPALIVE_INTERVAL_MS)
+                continue;
+
+            boolean established = rctx.commSystem().isEstablished(peer);
+
+            if (established) {
+                // Peer already connected — send a lightweight DLM to keep the session alive.
+                // For established peers, transport.send() just enqueues to fragments with
+                // no establishment overhead.
+                RouterInfo ri = rctx.netDb().lookupRouterInfoLocally(peer);
+                if (ri == null) continue;
+                long lifetime = now + 30*1000;
+                DatabaseLookupMessage dlm = new DatabaseLookupMessage(rctx, true);
+                dlm.setFrom(rctx.routerHash());
+                dlm.setSearchKey(peer);
+                dlm.setSearchType(DatabaseLookupMessage.Type.RI);
+                dlm.setMessageExpiration(lifetime);
+                OutNetMessage onm = new OutNetMessage(rctx, dlm, lifetime,
+                    OutNetMessage.PRIORITY_MY_BUILD_REQUEST, ri);
+                Transport udp = rctx.commSystem().getTransports().get("SSU");
+                if (udp != null) {
+                    try { udp.send(onm); keepalived++; _lastKeepAlive.put(peer, now); } catch (Exception e) {}
+                }
+            } else if (aggressive) {
+                // Peer not connected and pools are depleted — proactively start
+                // establishment so it's ready when the next build runs.
+                preConnectTo(rctx, peer);
+                preConnected++;
+                _lastKeepAlive.put(peer, now);
+            }
+        }
+
+        if (log.shouldInfo() && (keepalived + preConnected > 0)) {
+            log.info("KeepAlive: " + keepalived + " keepalives, " + preConnected +
+                     " pre-connects (" + (aggressive ? "aggressive" : "normal") +
+                     ", " + targets.size() + " targets)");
+        }
+    }
 }

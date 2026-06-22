@@ -41,11 +41,17 @@ class ParticipatingThrottler {
     private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
 
     // Minimum tunnels per peer - prevents decay floor from being too aggressive at low counts
-    private static final int MIN_LIMIT = isSlow ? 40 : 80;
+    private static int getMinLimit(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.participatingThrottle.minLimit", SystemVersion.isSlow() ? 40 : 80);
+    }
     // Maximum tunnels per peer - caps individual peer participation
-    private static final int MAX_LIMIT = isSlow ? 150 : 300;
+    private static int getMaxLimit(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.participatingThrottle.maxLimit", SystemVersion.isSlow() ? 150 : 300);
+    }
     // Percentage-based limit for fast peers - ~10% of total tunnels
-    private static final int PERCENT_LIMIT = 10;
+    private static int getPercentLimit(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.participatingThrottle.percentLimit", 10);
+    }
     // Cleanup interval in ms - 90 seconds
     private static final long CLEAN_TIME = 90 * 1000;
     private static final String MIN_VERSION = "0.9.66";
@@ -196,9 +202,9 @@ class ParticipatingThrottler {
      * @return the maximum allowed tunnel participation limit for the router
      */
     private int calculateLimit(int numTunnels, boolean isUnreachable, boolean isLowShare, boolean isFast) {
-        if (isUnreachable || isLowShare) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 20, numTunnels * (PERCENT_LIMIT / 5) / 100));}
-        else if (isSlow) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 10, numTunnels * (PERCENT_LIMIT / 3) / 100));}
-        return Math.min((MIN_LIMIT * 3), Math.max(MAX_LIMIT / 2, numTunnels * PERCENT_LIMIT / 100));
+        if (isUnreachable || isLowShare) {return Math.min(getMinLimit(context), Math.max(getMaxLimit(context) / 20, numTunnels * (getPercentLimit(context) / 5) / 100));}
+        else if (isSlow) {return Math.min(getMinLimit(context), Math.max(getMaxLimit(context) / 10, numTunnels * (getPercentLimit(context) / 3) / 100));}
+        return Math.min((getMinLimit(context) * 3), Math.max(getMaxLimit(context) / 2, numTunnels * getPercentLimit(context) / 100));
     }
 
     /**

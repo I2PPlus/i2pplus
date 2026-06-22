@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.crypto.SessionKeyManager;
+import net.i2p.data.Hash;
 import net.i2p.data.SessionTag;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.DeliveryStatusMessage;
@@ -21,6 +22,7 @@ import net.i2p.router.crypto.ratchet.MuxedSKM;
 import net.i2p.router.crypto.ratchet.RatchetSKM;
 import net.i2p.router.crypto.ratchet.RatchetSessionTag;
 import net.i2p.router.networkdb.kademlia.MessageWrapper;
+import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
@@ -45,25 +47,71 @@ public class TestJob extends JobImpl {
     private RatchetSessionTag _ratchetEncryptTag;
     private static final AtomicInteger __id = new AtomicInteger();
     private int _id;
-    private static final int MIN_TEST_PERIOD = 45*1000;
-    private static final int MAX_TEST_PERIOD = 50*1000;
+
+    /**
+     * Maximum number of times a test can be deferred (no partner tunnel available)
+     * before forcing a test or marking the tunnel as failed.  Prevents test deadlock
+     * where both inbound and outbound pools are degraded and neither can test.
+     * @since 0.9.69+
+     */
+    private static final int MAX_DEFERRED = 3;
+    private int _deferredCount = 0;
+
 
     /**
      * Maximum number of tunnel tests that can run concurrently.
      * Prevents overwhelming the router with too many simultaneous tunnel tests.
      * This value can be adjusted based on system capacity.
+     * Tunable via i2p.tunnel.testJob.maxConcurrent (default: 64 fast / 32 slow)
      */
-    private static final int MAX_CONCURRENT_TESTS = SystemVersion.isSlow() ? 64 : 128;
+    private int getMaxConcurrentTests() {
+        return getContext().getProperty("i2p.tunnel.testJob.maxConcurrent",
+                                        SystemVersion.isSlow() ? 32 : 64);
+    }
+
+    /**
+     * Get the minimum test period from config or default (45s).
+     * Tunable via i2p.tunnel.testJob.minTestPeriod (default: 45000).
+     */
+    private int getMinTestPeriod() {
+        return getContext().getProperty("i2p.tunnel.testJob.minTestPeriod", 45*1000);
+    }
+
+    /**
+     * Get the maximum test period from config or default (50s).
+     * Tunable via i2p.tunnel.testJob.maxTestPeriod (default: 50000).
+     */
+    private int getMaxTestPeriod() {
+        return getContext().getProperty("i2p.tunnel.testJob.maxTestPeriod", 50*1000);
+    }
 
     // Adaptive testing frequency constants
-    private static final int MIN_TEST_DELAY = 30 * 1000; // 30s minimum
-    private static final int MAX_TEST_DELAY = 90 * 1000; // 90s maximum
+    private static int getMinTestDelay(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.testJob.minTestDelay", 30*1000);
+    }
+    private static int getMaxTestDelay(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.testJob.maxTestDelay", 90*1000);
+    }
     private static final int SUCCESS_HISTORY_SIZE = 3; // Track last 3 results
     private static final int MIN_TEST_JOBS_PER_RUNNER = 20;
     private static final int MAX_LAG_FOR_SCHEDULE = 150;
-    private static final double POOL_COVERAGE_THRESHOLD = 0.9; // 90% of maxQueuedTests
-    private static final int MAX_EXPLORATORY_PER_POOL = 8;
-    private static final int MAX_CLIENT_PER_POOL = 16;
+    private static double getPoolCoverageThreshold(RouterContext ctx) {
+        String val = ctx.getProperty("i2p.tunnel.testJob.poolCoverageThreshold");
+        if (val != null) {
+            try {
+                return Double.parseDouble(val);
+            } catch (NumberFormatException e) {
+                // fall through
+            }
+        }
+        return 0.95;
+    }
+    private static int getMaxExploratoryPerPool(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.testJob.maxExploratoryPerPool", 12);
+    }
+    private static int getMaxClientPerPool(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.testJob.maxClientPerPool", 24);
+    }
     private static final float DEFAULT_SUCCESS_RATE = 0.5f; // 50% for new tunnels
     private static final int LAG_SEVERE_MAX = 2500;
     private static final int LAG_SEVERE_AVG = 15;
@@ -72,16 +120,30 @@ public class TestJob extends JobImpl {
     /**
      * Maximum number of TestJob instances that should be queued before deferring new ones.
      * Prevents job queue saturation from too many waiting tunnel tests.
+     * Tunable via i2p.tunnel.testJob.maxQueued (default: 192 fast / 96 slow)
      */
-    private static final int MAX_QUEUED_TESTS = SystemVersion.isSlow() ? 40 : 80;
-    public static volatile int maxQueuedTests = MAX_QUEUED_TESTS;
+    public static volatile int maxQueuedTests = 192;
+
+    /**
+     *  Base max queued tests value, read from PROP or static default.
+     *  @param ctx router context
+     *  @return configured base max queued tests
+     */
+    private static int getBaseMaxQueuedTests(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.testJob.maxQueued",
+                               SystemVersion.isSlow() ? 64 : 96);
+    }
 
     /**
      * Hard limit for total TestJob instances (queued + active).
      * Above this threshold, no new tests are scheduled until count decreases.
      * Prevents ever-increasing backlogs that could cause job lag.
+     * Tunable via i2p.tunnel.testJob.hardLimit (default: 256 fast / 192 slow)
      */
-    public static final int HARD_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 320 : 1024;
+    public static int getHardLimit(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.testJob.hardLimit",
+                               SystemVersion.isSlow() ? 192 : 256);
+    }
 
     /**
      * Static counter tracking the number of currently active tunnel tests.
@@ -263,7 +325,7 @@ public class TestJob extends JobImpl {
         } else {
             numPools = 0;
         }
-        int maxTestJobs = Math.min(maxQueuedTests, Math.max(activeRunners, Math.max(numPools * 12, 24)));
+        int maxTestJobs = Math.min(maxQueuedTests, Math.max(activeRunners, Math.max(numPools * 10, 24)));
         int currentTestJobs = getTotalTestJobCount();
         boolean isCritical = false;
         if (pool != null && !pool.getSettings().isExploratory()) {
@@ -320,19 +382,22 @@ public class TestJob extends JobImpl {
             String poolId = getPoolId(pool);
             AtomicInteger poolCount = POOL_TEST_COUNTS.get(poolId);
             if (poolCount != null && poolCount.get() > 0) {
-                if (pool.getSettings().isExploratory() && poolCount.get() >= MAX_EXPLORATORY_PER_POOL &&
-                        current > (int)(maxQueuedTests * POOL_COVERAGE_THRESHOLD)) {
-                    Log log = ctx.logManager().getLog(TestJob.class);
-                    if (log.shouldDebug()) {
-                        log.debug("Pool " + poolId + " already has " + poolCount.get() + " tests running -> Deferring for better coverage");
-                    }
-                    return false;
+                int poolTestBudget;
+                if (pool.getSettings().isExploratory()) {
+                    poolTestBudget = getMaxExploratoryPerPool(ctx);
+                } else {
+                    // Per-pool concurrent test cap: we only need at most target+1
+                    // tunnels tested at any time (target operational + 1 replacement).
+                    // Testing more than needed oversaturates the queue and starves
+                    // other pools. Untested tunnels are picked up next scan cycle.
+                    int poolTarget = pool.getSettings().getTotalQuantity();
+                    poolTestBudget = Math.max(1, poolTarget + 1);
                 }
-                else if (!pool.getSettings().isExploratory() && poolCount.get() >= MAX_CLIENT_PER_POOL &&
-                        current > (int)(maxQueuedTests * POOL_COVERAGE_THRESHOLD)) {
+                if (poolCount.get() >= poolTestBudget) {
                     Log log = ctx.logManager().getLog(TestJob.class);
                     if (log.shouldDebug()) {
-                        log.debug("Pool " + poolId + " already has " + poolCount.get() + " tests running -> Deferring for better coverage");
+                        log.debug("Pool " + poolId + " has " + poolCount.get() +
+                                  " tests (budget " + poolTestBudget + ") -> Deferring");
                     }
                     return false;
                 }
@@ -357,7 +422,7 @@ public class TestJob extends JobImpl {
      */
     private static boolean isUnderHardLimit(RouterContext ctx) {
         int current = TOTAL_TEST_JOBS.get();
-        return current < HARD_TEST_JOB_LIMIT;
+        return current < getHardLimit(ctx);
     }
 
     /**
@@ -456,7 +521,7 @@ public class TestJob extends JobImpl {
         // Verify total job counter not over hard limit (slot reserved in shouldSchedule)
         if (!isUnderHardLimit(ctx)) {
             if (_log.shouldInfo()) {
-                _log.info("Hard limit (" + HARD_TEST_JOB_LIMIT + ") reached -> Not scheduling test for " + cfg);
+                _log.info("Hard limit (" + getHardLimit(ctx) + ") reached -> Not scheduling test for " + cfg);
             }
             // Clean up tunnel registration
             if (tunnelKey != null) {
@@ -537,66 +602,148 @@ public class TestJob extends JobImpl {
         // Scale capacity when the queue has headroom, but keep it
         // bounded — excess tests don't improve success rate and only
         // recycle failing tunnels.
-        if (maxLag < 500 && avgLag < 5) {
+        int baseMaxQueued = getBaseMaxQueuedTests(ctx);
+        if (maxLag < 200 && avgLag < 2) {
+            // Extremely low lag — can handle massive test throughput
+            maxQueuedTests = baseMaxQueued * 5; // 480 fast / 320 slow
+        } else if (maxLag < 500 && avgLag < 5) {
             // Very low lag — can handle substantial test throughput
-            maxQueuedTests = MAX_QUEUED_TESTS * 10; // 400
+            maxQueuedTests = baseMaxQueued * 4; // 384 fast / 256 slow
         } else if (maxLag < 1000 && avgLag < 15) {
             // Low lag — moderate headroom
-            maxQueuedTests = MAX_QUEUED_TESTS * 6; // 240
+            maxQueuedTests = baseMaxQueued * 3; // 288 fast / 192 slow
         } else if (maxLag < 1500 && avgLag < 30) {
             // Some lag — slight headroom
-            maxQueuedTests = MAX_QUEUED_TESTS * 2; // 80
+            maxQueuedTests = baseMaxQueued * 2; // 192 fast / 128 slow
+        } else if (maxLag < 3000 && avgLag < 60) {
+            // Moderate lag — reduce but keep substantial capacity
+            maxQueuedTests = baseMaxQueued; // 96 fast / 64 slow
+        } else if (maxLag < 5000 && avgLag < 100) {
+            // High lag — reduce but keep minimum viable capacity
+            maxQueuedTests = baseMaxQueued * 3 / 4; // 72 fast / 48 slow
         } else {
-            // Queue has lag — be conservative
-            maxQueuedTests = MAX_QUEUED_TESTS; // 40
+            // Severe lag — be conservative but never below minimum
+            maxQueuedTests = Math.max(baseMaxQueued / 2, 48);
         }
 
-        // Cap adaptive queue limit at hard limit to prevent exceeding configured maximum
-        maxQueuedTests = Math.min(maxQueuedTests, HARD_TEST_JOB_LIMIT);
+        // Cap by pool capacity: allowing tests for all pools to be pending
+        // simultaneously prevents one pool from starving another.  The 16x
+        // multiplier gives each pool enough room to test 4-5 tunnels per cycle
+        // (each takes ~30-45s to timeout), so a 10-pool router can sustain ~160
+        // tests without blocking new builds or message delivery.
+        int numPools = 0;
+        if (_pool != null) {
+            List<TunnelPool> poolList = new ArrayList<TunnelPool>();
+            ctx.tunnelManager().listPools(poolList);
+            numPools = poolList.size();
+        }
+        int poolCap = Math.max(Math.max(numPools * 16, 64), getBaseMaxQueuedTests(ctx));
+        maxQueuedTests = Math.min(maxQueuedTests, poolCap);
+
+        // Cap adaptive queue limit at hard limit
+        maxQueuedTests = Math.min(maxQueuedTests, getHardLimit(ctx));
+
+        // Floor: at least numPools * 12 + 24 so every pool gets a fair share of
+        // test slots. Without this floor, pools with many clients starve each other.
+        maxQueuedTests = Math.max(maxQueuedTests, numPools * 12 + 24);
+
+        // Failure-rate backoff: when > 50% of recent tests time out,
+        // halve the cap to let the system drain and recover.
+        // Skip during startup (first 5 minutes) — high failure rate is
+        // expected before the network is fully connected.
+        if (ctx.router().getUptime() > 5 * 60 * 1000) {
+            RateStat failRate = ctx.statManager().getRate("tunnel.testFailedTime");
+            RateStat successRate = ctx.statManager().getRate("tunnel.testSuccessTime");
+            if (failRate != null && successRate != null) {
+                long failCount = failRate.getRate(RateConstants.ONE_MINUTE).getLifetimeEventCount();
+                long successCount = successRate.getRate(RateConstants.ONE_MINUTE).getLifetimeEventCount();
+                long total = failCount + successCount;
+                if (total > 50 && failCount > total * 3 / 4) {
+                    maxQueuedTests = Math.max(maxQueuedTests * 3 / 4, 32);
+                }
+            }
+        }
+
+        // When test queue is near saturation, log a warning so operators know
+        // the bottleneck. Critical pools (0 GOOD tunnels) will still bypass.
+        if (maxQueuedTests < baseMaxQueued && _log.shouldWarn()) {
+            _log.warn("TestJob capacity reduced to " + maxQueuedTests +
+                      " (base=" + baseMaxQueued + ", lag=" + maxLag + "/" + avgLag + "ms)");
+        }
 
         // Update public static field for JobQueueHelper display
         TestJob.maxQueuedTests = maxQueuedTests;
 
+        // Snapshot limit into a local before we check thresholds.
+        // The static field can be modified by concurrent runJob() threads
+        // between our adaptive calc above and this check, causing a TOCTOU
+        // race where a test that computed a high limit sees a lower value
+        // overwritten by a lagging thread and incorrectly exits.
+        int currentLimit = maxQueuedTests;
+
         // Check for queue saturation and hard limits before proceeding
         int totalCount = getTotalTestJobCount();
 
-        if (totalCount >= HARD_TEST_JOB_LIMIT) {
-            if (_log.shouldInfo()) {
-                _log.info("Hard limit reached (" + totalCount + " >= " + HARD_TEST_JOB_LIMIT +
-                          ") -> Cancelling test of " + _cfg);
+        int hardLimit = getHardLimit(ctx);
+        if (totalCount >= hardLimit) {
+            // Critical pools (0 GOOD) always get through — without tested tunnels
+            // their LeaseSet expires. Non-critical pools wait for headroom.
+            boolean poolCritical = !isExploratory && _pool != null && _pool.getActiveTunnelCount() == 0;
+            if (!poolCritical) {
+                if (_log.shouldInfo()) {
+                    _log.info("Hard limit reached (" + totalCount + " >= " + hardLimit +
+                              ") -> Cancelling test of " + _cfg);
+                }
+                ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
+                ctx.statManager().addRateData("jobQueue.testJobHardLimit", 1);
+                cleanupTunnelTracking();
+                decrementTotalJobs(); // Clean up counter since we won't proceed
+                return; // Exit without rescheduling
             }
-            ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
-            ctx.statManager().addRateData("jobQueue.testJobHardLimit", 1);
-            cleanupTunnelTracking();
-            decrementTotalJobs(); // Clean up counter since we won't proceed
-            return; // Exit without rescheduling
         }
 
         // Check for queue saturation using atomic counter instead of job queue count
         // This prevents race conditions and ensures consistent limiting
-        if (totalCount >= maxQueuedTests) {
-            // Under queue pressure, deprioritize exploratory tunnels.
-            // Drop exploratory tests to free capacity; reschedule client tunnels.
-            if (isExploratory) {
-                if (_log.shouldInfo()) {
-                    _log.info("TestJob queue saturated -> Dropping exploratory tunnel test (" + totalCount + " >= " + maxQueuedTests + ")");
+        if (totalCount >= currentLimit) {
+            // Critical pools (0 GOOD tunnels) always get to test — without tested
+            // tunnels their LeaseSet expires and the pool becomes unreachable.
+            // Let them proceed regardless of queue pressure.
+            boolean poolCritical = !isExploratory && _pool != null && _pool.getActiveTunnelCount() == 0;
+            if (poolCritical) {
+                // Critical pool bypasses saturation check — the test runs now
+                if (_log.shouldDebug()) {
+                    _log.debug("Queue saturated but proceeding with critical test for " + _cfg);
                 }
-                ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
-                cleanupTunnelTracking();
-                decrementTotalJobs();
+            } else {
+                // Under queue pressure, deprioritize exploratory tunnels.
+                // Drop exploratory tests to free capacity; reschedule client tunnels.
+                if (isExploratory) {
+                    if (_log.shouldInfo()) {
+                        _log.info("TestJob queue saturated -> Dropping exploratory tunnel test (" + totalCount + " >= " + currentLimit + ")");
+                    }
+                    ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
+                    cleanupTunnelTracking();
+                    decrementTotalJobs();
+                    return;
+                }
+
+                // Always reschedule when queue is saturated — dropping non-expedited
+                // tests creates a closed loop: tests never run → tunnels stay UNTESTED
+                // → addTunnel() rejects new builds with "Too many untested" → pool
+                // starves.  Rescheduling with getDelay() backoff ensures the test
+                // eventually gets through when capacity frees up, and the backoff
+                // prevents tight polling loops.
+                if (_log.shouldInfo()) {
+                    _log.info("TestJob queue saturated -> Rescheduling " +
+                              (_cfg.needsExpeditedTest() ? "expedited" : "") +
+                              " test (" + totalCount + " >= " + currentLimit + ") for " + _cfg);
+                }
+                if (!scheduleRetest(_cfg.needsExpeditedTest())) {
+                    cleanupTunnelTracking();
+                    decrementTotalJobs();
+                }
                 return;
             }
-
-            // Client tunnels get priority — reschedule them
-            if (_log.shouldInfo()) {
-                _log.info("TestJob queue saturated -> Rescheduling client tunnel test (" + totalCount + " >= " + maxQueuedTests + ") for " + _cfg);
-            }
-            ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
-            if (!scheduleRetest(_cfg.needsExpeditedTest())) {
-                cleanupTunnelTracking();
-                decrementTotalJobs();
-            }
-            return;
         }
 
         // Concurrency control: Check and increment counter
@@ -643,9 +790,9 @@ public class TestJob extends JobImpl {
             // Skip testing inbound tunnels that recently received data —
             // they're obviously working and testing risks false failures on
             // high-bandwidth tunnels.
-            if (ctx.clock().now() - _cfg.getLastTransferred() < MIN_TEST_DELAY) {
-                if (_log.shouldWarn())
-                    _log.warn("Skipping test on " + _cfg + " that recently received data");
+            if (ctx.clock().now() - _cfg.getLastTransferred() < getMaxTestDelay(ctx)) {
+                if (_log.shouldInfo())
+                    _log.info("Skipping test on " + _cfg + " -> Data recently received");
                 CONCURRENT_TESTS.decrementAndGet();
                 if (!scheduleRetest(false)) {
                     cleanupTunnelTracking();
@@ -685,9 +832,25 @@ public class TestJob extends JobImpl {
                     }
                 }
                 if (_outTunnel == null) {
+                    _deferredCount++;
+                    if (_deferredCount >= MAX_DEFERRED) {
+                        // Test deadlock: both pools degraded, neither has a partner.
+                        // Mark this tunnel as failed to trigger pool recovery rather
+                        // than letting it sit UNTESTED forever blocking builds.
+                        if (_log.shouldWarn()) {
+                            _log.warn("Test deadlock after " + _deferredCount + " deferrals -> marking " +
+                                      _cfg + " as failed (pool may be recovering)");
+                        }
+                        _cfg.incrementTestFailures();
+                        _cfg.setTestFailed();
+                        CONCURRENT_TESTS.decrementAndGet();
+                        cleanupTunnelTracking();
+                        decrementTotalJobs();
+                        return;
+                    }
                     if (_log.shouldWarn())
                         _log.warn("No outbound tunnel for test of " + _cfg +
-                                  " -> Deferring (pool may be recovering)");
+                                  " -> Deferring (" + _deferredCount + "/" + MAX_DEFERRED + ", pool may be recovering)");
                     ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
                     CONCURRENT_TESTS.decrementAndGet();
                     if (!scheduleRetest(false)) {
@@ -704,9 +867,9 @@ public class TestJob extends JobImpl {
             // on high-traffic paths.  Tunnel must be tested at least once
             // so every tunnel gets an initial latency reading.
             if (_cfg.getTestStatus() != net.i2p.router.TunnelTestStatus.UNTESTED &&
-                ctx.clock().now() - _cfg.getLastTransferred() < MIN_TEST_DELAY) {
-                if (_log.shouldWarn())
-                    _log.warn("Skipping test on " + _cfg + " that recently transferred data");
+                ctx.clock().now() - _cfg.getLastTransferred() < getMaxTestDelay(ctx)) {
+                if (_log.shouldInfo())
+                    _log.info("Skipping test on " + _cfg + " -> Data recently received");
                 CONCURRENT_TESTS.decrementAndGet();
                 if (!scheduleRetest(false)) {
                     cleanupTunnelTracking();
@@ -740,9 +903,25 @@ public class TestJob extends JobImpl {
                     }
                 }
                 if (_replyTunnel == null) {
+                    _deferredCount++;
+                    if (_deferredCount >= MAX_DEFERRED) {
+                        // Test deadlock: both pools degraded, neither has a partner.
+                        // Mark this tunnel as failed to trigger pool recovery rather
+                        // than letting it sit UNTESTED forever blocking builds.
+                        if (_log.shouldWarn()) {
+                            _log.warn("Test deadlock after " + _deferredCount + " deferrals -> marking " +
+                                      _cfg + " as failed (pool may be recovering)");
+                        }
+                        _cfg.incrementTestFailures();
+                        _cfg.setTestFailed();
+                        CONCURRENT_TESTS.decrementAndGet();
+                        cleanupTunnelTracking();
+                        decrementTotalJobs();
+                        return;
+                    }
                     if (_log.shouldWarn())
                         _log.warn("No inbound tunnel for test of " + _cfg +
-                                  " -> Deferring (pool may be recovering)");
+                                  " -> Deferring (" + _deferredCount + "/" + MAX_DEFERRED + ", pool may be recovering)");
                     ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
                     CONCURRENT_TESTS.decrementAndGet();
                     if (!scheduleRetest(false)) {
@@ -896,7 +1075,32 @@ public class TestJob extends JobImpl {
         noteSuccess(ms, _outTunnel);
         noteSuccess(ms, _replyTunnel);
 
+        // For 0-hop/1-hop tunnels, latency IS the direct RTT to the far-end peer.
+        // If it exceeds 3s, demote the peer from fast/high-cap tiers immediately
+        // so the peer selector avoids re-selecting this slow peer as a first hop.
+        // Note: only demotes from tiers (not a full first-hop cooldown) so the peer
+        // remains selectable if no fast-tier peers are available.
+        if (ms > 3000 && _cfg.getLength() <= 2) {
+            Hash peer = _cfg.getFarEnd();
+            if (peer != null) {
+                ctx.profileOrganizer().demoteIfHighLatency(peer);
+                if (_log.shouldInfo()) {
+                    _log.info("Demoting [" + peer.toBase64().substring(0,6) +
+                              "] due to high latency (" + ms + "ms) on " + _cfg);
+                }
+            }
+        }
+
         _cfg.testJobSuccessful(ms);
+        // Share success credit with the paired tunnels — mirrors mainline
+        // behavior.  Both inbound and outbound tunnels get their failure
+        // counters reset on a successful test round-trip.
+        if (_outTunnel instanceof PooledTunnelCreatorConfig) {
+            ((PooledTunnelCreatorConfig) _outTunnel).testJobSuccessful(ms);
+        }
+        if (_replyTunnel instanceof PooledTunnelCreatorConfig) {
+            ((PooledTunnelCreatorConfig) _replyTunnel).testJobSuccessful(ms);
+        }
         _cfg.clearExpeditedTest();
 
         if (_log.shouldDebug()) {
@@ -914,20 +1118,50 @@ public class TestJob extends JobImpl {
         }
     }
 
+    /**
+     *  @return true when build success is below the attack threshold,
+     *          indicating the router is struggling to find suitable peers.
+     *          In this state, the test cycle should run more slowly and
+     *          tolerate more failures to avoid wasting pool build capacity.
+     */
+    private boolean isDegraded() {
+        try {
+            return getContext().profileOrganizer().getTunnelBuildSuccess() < ProfileOrganizer.ATTACK_THRESHOLD;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     private int getDelay() {
-        // Minimum 30s between retests; scale up for reliable tunnels.
-        // Failing tunnels retest at the minimum interval so they can recover,
-        // reliable tunnels are tested less frequently.
+        // Minimum 30s between retests; scale up for reliable tunnels
+        // so the test queue prioritizes UNTESTED and failing tunnels.
+        // Reliable tunnels that have passed all recent tests only need
+        // occasional verification — aggressive retesting consumes slots
+        // that could be testing new or recovering tunnels.
         float successRate = getSuccessRate();
         int scaled;
         if (successRate >= 1.0f) {
-            scaled = MIN_TEST_DELAY * 2; // 100% success → 2x delay
+            scaled = getMinTestDelay(getContext()) * 4; // 100% success → 4x delay (2 min)
         } else if (successRate > 0.5f) {
-            scaled = MIN_TEST_DELAY * 3 / 2; // >50% success → 1.5x delay
+            scaled = getMinTestDelay(getContext()) * 3 / 2; // >50% success → 1.5x delay
         } else {
-            scaled = MIN_TEST_DELAY; // unreliable or new → fastest retest
+            scaled = getMinTestDelay(getContext()); // unreliable or new → fastest retest
         }
-        scaled = Math.min(scaled, MAX_TEST_DELAY);
+        // Backoff for tunnels with many failures: reduce retest frequency to
+        // avoid saturating the test queue with DeliveryStatusMessage
+        // reply-through failures.  These aren't tunnel problems — the test
+        // protocol itself is broken — so there's no value in rapid retesting.
+        int failures = _cfg.getTunnelFailures();
+        if (failures >= 3) {
+            scaled += getMinTestDelay(getContext()) * (failures - 1); // +60s for 3, +90s for 4
+        }
+        // Degraded mode: multiply delay by 2.  When the router has few
+        // connected peers, test messages take longer to round-trip and
+        // rapid retesting just saturates the queue.
+        if (isDegraded()) {
+            scaled *= 2;
+        }
+        scaled = Math.min(scaled, getMaxTestDelay(getContext()) * 2);
         // Add a small jitter to avoid thundering herd (ensure positive jitter)
         int jitter = getContext().random().nextInt(Math.max(1, scaled / 3));
         return scaled + jitter;
@@ -981,7 +1215,7 @@ public class TestJob extends JobImpl {
         }
     }
 
-    private int _failureCount = 0;
+
     private boolean _successHistory[] = new boolean[SUCCESS_HISTORY_SIZE];
     private int _successHistoryIndex = 0;
     private int _successCount = 0;
@@ -1004,184 +1238,83 @@ public class TestJob extends JobImpl {
 
         _cfg.clearExpeditedTest();
 
-        // Client tunnels (having a non-null destination) must NEVER be removed
-        // by TestJob — removal triggers churn and can leave the pool temporarily
-        // depleted.  Check the tunnel's destination rather than the pool's
-        // isExploratory() flag, because aliased pools delegate build/TestJob
-        // management to the aliasOf (exploratory) pool while the tunnel itself
-        // is a client tunnel.  Tunnels are deprioritized by selectTunnel() via
-        // consecutiveFailures > 1 and expire naturally when their lifetime ends.
-        // The only removal paths are natural expiry and budget pruning by ExpireJob.
-        // For inbound client pools (no remote destination), check the pool itself.
-        boolean isClientTunnel = _cfg.getDestination() != null || !_pool.getSettings().isExploratory();
-
-        // Never deprioritize a client tunnel until the pool has at least one
-        // GOOD tunnel to take over.  Without this, a pool where ALL tunnels
-        // are failing will report DNR — keeping the tunnel alive (even degraded)
-        // is better than having no tunnels at all.
-        boolean isServerPool = _pool.getSettings().isInbound() && !_pool.getSettings().isExploratory();
-        int activeCount = _pool.getActiveTunnelCount();
-        boolean hasGoodReplacement;
-        // A GOOD tunnel under test counts itself in getActiveTunnelCount().
-        // If this is the only GOOD tunnel, removing it would leave the pool
-        // empty — so require at least one OTHER good tunnel before allowing
-        // removal of a previously-GOOD tunnel.  Non-GOOD tunnels (FAILING,
-        // UNTESTED) don't count themselves, so > 0 is correct for those.
-        // For server pools, require 2+ other GOOD tunnels to prevent a
-        // simultaneous-removal race where both tunnels see each other as
-        // replacements and both get removed.
-        if (_cfg.getTestStatus() == net.i2p.router.TunnelTestStatus.GOOD) {
-            hasGoodReplacement = isServerPool ? activeCount > 2 : activeCount > 1;
-        } else {
-            hasGoodReplacement = isServerPool ? activeCount > 1 : activeCount > 0;
-        }
-
-        if (isClientTunnel) {
-            if (hasGoodReplacement) {
-                _cfg.incrementTestFailures();
-                _cfg.setTestFailed();
-                // After 5 consecutive failures with a GOOD replacement
-                // available, remove the tunnel — it's provably broken and
-                // retesting only wastes resources.
-                if (_cfg.getTunnelFailures() >= 5) {
-                    // Don't remove if tunnel has carried user data — the data
-                    // proves the tunnel is functional; transient test issues
-                    // should not force replacement.
-                    if (_cfg.getVerifiedBytesTransferred() > 0) {
-                        if (_log.shouldWarn()) {
-                            _log.warn("Tunnel Test failed -> Keeping data-carrying tunnel: " + _cfg +
-                                      " (verified=" + _cfg.getVerifiedBytesTransferred() + " bytes)");
-                        }
-                        _cfg.clearTestFailures();
-                        if (!scheduleRetest(false)) {
-                            cleanupTunnelTracking();
-                            decrementTotalJobs();
-                        }
-                        return;
-                    }
-                    if (_log.shouldWarn()) {
-                        _log.warn("Tunnel Test failed -> Removing " + _cfg +
-                                  " after " + _cfg.getTunnelFailures() + " consecutive failures");
-                    }
-                    _pool.removeTunnel(_cfg);
-                    // not calling notifyServerPoolTestFailed() here since
-                    // removeTunnel already triggers refreshLeaseSet
-                    cleanupTunnelTracking();
-                    decrementTotalJobs();
-                    return;
-                }
-            }
-            // Always trigger LS renewal so the LeaseSet is re-published with
-            // the best remaining tunnel's lease (via findBestDegradedTunnel
-            // fallback).  Without this, retained failing tunnels never trigger
-            // fail() and the LS goes stale.
-            _pool.notifyServerPoolTestFailed();
-
+        // Data-verified trust: a tunnel that has successfully transferred real
+        // data has proven itself in production.  Test failures for such tunnels
+        // are usually due to transient partner-tunnel issues (the remote peer
+        // used for the return path) or temporary network congestion, not the
+        // tunnel under test itself.  Preserve its GOOD status and retry.
+        if (_cfg.getVerifiedBytesTransferred() > 0) {
+            getContext().statManager().addRateData(
+                "tunnel.testFailedDataTrust", _cfg.getVerifiedBytesTransferred());
+            _cfg.clearTestFailures();
             if (_log.shouldWarn()) {
-                _log.warn("Tunnel Test failed -> Client tunnel, keeping for retest: " + _cfg);
+                _log.warn("Tunnel Test failed -> Keeping data-carrying tunnel: " + _cfg +
+                          " (verified=" + _cfg.getVerifiedBytesTransferred() + " bytes)");
             }
-
-            if (!scheduleRetest(false)) {
+            if (!scheduleRetest(true)) {
                 cleanupTunnelTracking();
                 decrementTotalJobs();
             }
             return;
         }
 
-        // For previously GOOD tunnels (non-exploratory), keep testing and
-        // only deprioritize if the pool has a GOOD replacement available.
-        boolean wasGood = _cfg.getTestStatus() == net.i2p.router.TunnelTestStatus.GOOD;
+        // Server pools (inbound, non-exploratory) must never lose tunnels
+        // mid-lifecycle — they're referenced by the published LeaseSet.
+        // Mark them FAILING/FAILED but keep them in the pool until the next
+        // LeaseSet republish, when pruneNonGoodTunnels() will clean up
+        // (only if enough GOOD tunnels exist to serve the replacement).
+        // This prevents the LeaseSet from going empty and ensures smooth
+        // tunnel replacement at republish time.
+        boolean isServerPool = _pool.getSettings().isInbound() && !isExploratory;
 
-        if (wasGood) {
-            if (hasGoodReplacement) {
-                _cfg.incrementTestFailures();
-                _cfg.setTestFailed();
-                // After 5 consecutive failures with a GOOD replacement
-                // available, remove the tunnel — unless it carried data.
-                if (_cfg.getTunnelFailures() >= 5) {
-                    // Don't remove if tunnel has carried user data — the data
-                    // proves the tunnel is functional; transient test issues
-                    // should not force replacement.
-                    if (_cfg.getVerifiedBytesTransferred() > 0) {
-                        if (_log.shouldWarn()) {
-                            _log.warn("Tunnel Test failed -> Keeping previously-GOOD data-carrying tunnel: " + _cfg +
-                                      " (verified=" + _cfg.getVerifiedBytesTransferred() + " bytes)");
-                        }
-                        _cfg.clearTestFailures();
-                        if (!scheduleRetest(false)) {
-                            cleanupTunnelTracking();
-                            decrementTotalJobs();
-                        }
-                        return;
-                    }
-                    if (_log.shouldWarn()) {
-                        _log.warn("Tunnel Test failed -> Removing previously-GOOD " + _cfg +
-                                  " after " + _cfg.getTunnelFailures() + " consecutive failures");
-                    }
-                    _pool.removeTunnel(_cfg);
-                    cleanupTunnelTracking();
-                    decrementTotalJobs();
-                    return;
-                }
-            }
-
-            if (_log.shouldWarn()) {
-                _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") +
-                          " Test failed -> Previously GOOD, keeping for retest: " + _cfg);
-            }
-
-            if (!scheduleRetest(false)) {
-                cleanupTunnelTracking();
-                decrementTotalJobs();
-            }
-            return;
-        }
-
-        // First test or already failing: remove immediately
-        // SAFETY NET: Non-exploratory tunnels (client/server) must NEVER be
-        // removed by TestJob — they're caught by Branch 1 above. If one
-        // reaches here, something is wrong; retain it and log diagnostics.
-        if (_cfg.getDestination() != null || !_pool.getSettings().isExploratory()) {
+        // Always count the failure against the tunnel under test.
+        // Any partner tunnel is better than none — the 3-strike model
+        // (or server-pool keep-for-LS-cycle) handles this robustly.
+        if (isServerPool) {
+            // Server pool: mark failed but don't remove.
+            // pruneNonGoodTunnels() handles removal at LS republish.
             _cfg.incrementTestFailures();
             _cfg.setTestFailed();
             _pool.notifyServerPoolTestFailed();
-            if (_log.shouldError()) {
-                _log.error("BUG: Non-exploratory tunnel reached Branch 3! pool=" + _pool +
-                           " isExploratory=" + isExploratory + " settings.isExploratory=" +
-                           _pool.getSettings().isExploratory() + " cfg.dest=" +
-                           _cfg.getDestination().toBase32().substring(0, 8) + " failures=" +
-                           _cfg.getTunnelFailures());
+            if (_log.shouldWarn()) {
+                _log.warn("Tunnel Test failed -> " + _cfg +
+                          " (" + _cfg.getTunnelFailures() + " consecutive) — kept for LS cycle");
             }
-            if (!scheduleRetest(false)) {
+        } else {
+            // Client/exploratory: count failures with adaptive thresholds.
+            // Under degraded mode (low build success), allow more consecutive
+            // failures before removal.  This prevents pool churn from wasting
+            // build resources when the router is struggling to find good peers.
+            _cfg.incrementTestFailures();
+            _cfg.setTestFailed();
+            int currentFailures = _cfg.getTunnelFailures();
+            int maxFailures = isDegraded() ? 5 : 3;
+            if (currentFailures > maxFailures) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Tunnel Test failed -> Removing " + _cfg +
+                              " after " + currentFailures + " consecutive failures" +
+                              (maxFailures > 3 ? " (degraded mode)" : ""));
+                }
+                getContext().statManager().addRateData(
+                    isExploratory ? "tunnel.testExploratoryFailedCompletelyTime" : "tunnel.testFailedCompletelyTime",
+                    timeToFail);
+                _cfg.tunnelFailedCompletely();
+                _pool.tunnelFailed(_cfg);
                 cleanupTunnelTracking();
                 decrementTotalJobs();
+                return;
             }
-            return;
         }
-
-        _cfg.tunnelFailed();
-        _cfg.setTestFailed();
-
-        if (_log.shouldWarn()) {
-            _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " Test failed -> Immediate removal: " + _cfg);
+        // Schedule retest with failure-based delay
+        if (!scheduleRetest(true)) {
+            cleanupTunnelTracking();
+            decrementTotalJobs();
         }
-
-        getContext().statManager().addRateData(
-            isExploratory ? "tunnel.testExploratoryFailedCompletelyTime" : "tunnel.testFailedCompletelyTime",
-            timeToFail);
-
-        _cfg.tunnelFailedCompletely();
-        _pool.tunnelFailed(_cfg);
-
-        _failureCount = 0;
-
-        cleanupTunnelTracking();
-        decrementTotalJobs();
     }
 
     private int getTestPeriod() {
         final RouterContext ctx = getContext();
-        if (_outTunnel == null || _replyTunnel == null) return MAX_TEST_PERIOD;
+        if (_outTunnel == null || _replyTunnel == null) return getMaxTestPeriod();
 
         RateStat tspt = ctx.statManager().getRate("transport.sendProcessingTime");
         int base = 0;
@@ -1206,8 +1339,10 @@ public class TestJob extends JobImpl {
 
         int totalHops = _outTunnel.getLength() + _replyTunnel.getLength();
         int calculated = base + (1000 * totalHops);
-        int clamped = Math.max(MIN_TEST_PERIOD, calculated);
-        return Math.min(clamped, MAX_TEST_PERIOD);
+        int clamped = Math.max(getMinTestPeriod()
+
+, calculated);
+        return Math.min(clamped, getMaxTestPeriod());
     }
 
     private boolean scheduleRetest() {
@@ -1249,11 +1384,11 @@ public class TestJob extends JobImpl {
         } else {
             numPools = 0;
         }
-        int maxTestJobs = Math.min(maxQueuedTests, Math.max(activeRunners, Math.max(numPools * 12, 24)));
+        int maxTestJobs = Math.min(maxQueuedTests, Math.max(activeRunners, Math.max(numPools * 10, 24)));
         int totalCount = getTotalTestJobCount();
         boolean isExpedited = _cfg.needsExpeditedTest();
         long rescheduleLagLimit = isExpedited ? MAX_LAG_RESCHEDULE * 3 : MAX_LAG_RESCHEDULE;
-        int rescheduleJobLimit = isExpedited ? maxTestJobs * 2 : maxTestJobs;
+        int rescheduleJobLimit = isExpedited ? maxTestJobs * 2 : maxTestJobs + Math.max(4, maxTestJobs / 4);
         if (readyCount > MAX_LAG_RESCHEDULE || maxLag > rescheduleLagLimit || totalCount >= rescheduleJobLimit) {
             if (_log.shouldInfo()) {
                 _log.info("Job queue lagging or too many test jobs (" + readyCount + " ready jobs, maxLag=" + maxLag +
@@ -1262,16 +1397,23 @@ public class TestJob extends JobImpl {
             return false;
         }
 
-        if (totalCount >= HARD_TEST_JOB_LIMIT) {
-            if (_log.shouldInfo()) {
-                _log.info("Hard limit reached during reschedule (" + totalCount + " >= " + HARD_TEST_JOB_LIMIT +
-                          ") \n* Skipping reschedule for " + _cfg);
+        int hardLimit = getHardLimit(ctx);
+        if (totalCount >= hardLimit) {
+            // Critical pools (0 GOOD) always reschedule — without tested tunnels
+            // their LeaseSet expires. Non-critical pools wait for headroom.
+            boolean poolCritical = _pool != null && !_pool.getSettings().isExploratory() &&
+                                  _pool.getActiveTunnelCount() == 0;
+            if (!poolCritical) {
+                if (_log.shouldInfo()) {
+                    _log.info("Hard limit reached during reschedule (" + totalCount + " >= " + hardLimit +
+                              ") \n* Skipping reschedule for " + _cfg);
+                }
+                return false;
             }
-            return false;
         }
 
         int delay = getDelay();
-        // asap path: no extra cap, getDelay() already respects MAX_TEST_DELAY
+        // asap path: no extra cap, getDelay() already respects getMaxTestDelay()
 
         // Ensure delay is not negative and set start time properly
         delay = Math.max(0, delay);

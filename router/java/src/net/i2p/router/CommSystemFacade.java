@@ -104,6 +104,16 @@ public abstract class CommSystemFacade implements Service {
     public boolean isBacklogged(Hash peer) { return false; }
     public boolean wasUnreachable(Hash peer) { return false; }
     public abstract boolean isEstablished(Hash peer);
+
+    /**
+     * Check if any transport has a connection attempt in progress
+     * for the given peer (handshake started but not yet complete).
+     *
+     * @param peer hash of the peer to check
+     * @return true if at least one transport is currently establishing
+     * @since 0.9.62
+     */
+    public boolean isConnecting(Hash peer) { return false; }
     public byte[] getIP(Hash dest) { return null; }
     public void queueLookup(byte[] ip) {}
 

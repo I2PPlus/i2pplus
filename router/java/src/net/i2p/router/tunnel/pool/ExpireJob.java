@@ -66,16 +66,18 @@ class ExpireJob extends JobImpl {
             if (pool.getSettings().isExploratory()) {
                 expire -= IB_EARLY_EXPIRE + ctx.random().nextLong(IB_EARLY_EXPIRE);
             } else {
-                // Non-exploratory (server) pools: expire early so replacement
-                // tunnels have time to build before the LeaseSet needs updating.
-                // 30s window is enough for replacement builds while preventing gaps.
-                expire -= 30*1000 + ctx.random().nextLong(15000);
+                // Non-exploratory (client) pools: wider early expiration window
+                // (60-120s) spreads tunnel expirations over a 2-minute window
+                // instead of the old 45s, preventing synchronized mass expiry.
+                // Replacement builds are triggered in ExpireJob.phase1 BEFORE
+                // tunnels are removed, so this is safe.
+                expire -= 60*1000 + ctx.random().nextLong(60*1000);
             }
         } else {
             if (pool.getSettings().isExploratory()) {
                 expire -= OB_EARLY_EXPIRE + ctx.random().nextLong(OB_EARLY_EXPIRE);
             } else {
-                expire -= 30*1000 + ctx.random().nextLong(15000);
+                expire -= 60*1000 + ctx.random().nextLong(60*1000);
             }
         }
         cfg.setExpiration(expire);
@@ -192,6 +194,21 @@ class ExpireJob extends JobImpl {
             }
         }
 
+        // Trigger replacement builds BEFORE removing tunnels so the build pipeline
+        // is primed when the pool shrinks.  Without this, removeTunnel() calls
+        // ensureSufficientTunnels() which may not build if UNTESTED/TESTING tunnels
+        // inflate the count — by then the pool has already lost a tunnel.
+        Set<TunnelPool> poolsToPreBuild = new HashSet<>();
+        for (TunnelExpiration te : readyToExpire) {
+            PooledTunnelCreatorConfig cfg = te.config;
+            if (cfg == null) continue;
+            TunnelPool pool = cfg.getTunnelPool();
+            if (pool != null) {poolsToPreBuild.add(pool);}
+        }
+        for (TunnelPool pool : poolsToPreBuild) {
+            pool.ensureSufficientTunnels();
+        }
+
         Set<TunnelPool> poolsToRefresh = new HashSet<>();
         for (TunnelExpiration te : readyToExpire) {
             PooledTunnelCreatorConfig cfg = te.config;
@@ -216,10 +233,11 @@ class ExpireJob extends JobImpl {
             // time to transition to the new tunnels
         }
 
-        // Force refresh all affected pools so the LeaseSet is updated
-        // immediately before tunnels are dropped.
+        // Refresh all affected pools so the LeaseSet is updated.
+        // Uses non-forced refresh so the 5-minute REFRESH_THROTTLE
+        // prevents cascading republishes on staggered tunnel expiries.
         for (TunnelPool pool : poolsToRefresh) {
-            pool.refreshLeaseSet(true);
+            pool.refreshLeaseSet(false);
         }
 
         for (TunnelExpiration te : readyToDrop) {

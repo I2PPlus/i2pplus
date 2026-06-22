@@ -89,27 +89,43 @@ abstract class BuildRequestor {
     private static final int PRIORITY = OutNetMessage.PRIORITY_MY_BUILD_REQUEST;
 
     /**
-     * Timeout for waiting for a full tunnel build reply.
-     * Increased from 15s to 20s (slow: 25s) to reduce timeout failures
-     * on slow I2P network, where 33%+ of builds time out within 15s.
+     * How long we wait for a reply before trying a different pool/peers.
+     * Adaptive mechanism in BuildExecutor adjusts this upward when
+     * success rates are low or timeout rates are high.
+     * Default: 20s (normal), 25s (slow systems).
      */
-    static final int REQUEST_TIMEOUT = SystemVersion.isSlow() ? 25*1000 : 20*1000;
+    static int getRequestTimeout(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.build.requestTimeout", SystemVersion.isSlow() ? 25*1000 : 20*1000);
+    }
 
     /**
-     * Shorter timeout for the first hop of an outbound build,
-     * to trigger early failure detection.
-     * Increased from 8s to 10s (slow: 12s) to match REQUEST_TIMEOUT increase.
+     * How long the OutNetMessage for the first hop gets before
+     * TunnelBuildFirstHopFailJob fires. Matches request timeout
+     * so pre-connect has time to finish (avg 8.5s, can spike to 90s).
      */
-    public static final int FIRST_HOP_TIMEOUT = SystemVersion.isSlow() ? 12*1000 : 10*1000;
+    public static int getFirstHopTimeout(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.build.firstHopTimeout", 20*1000);
+    }
 
     /**
      * Base expiration for the TunnelBuildMessage itself.
-     * Randomized per-message to obscure tunnel length.
+     * Randomized per-message by +/- 20s jitter to obscure tunnel length.
      */
-    private static final int BUILD_MSG_TIMEOUT = 45*1000;
-    private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 15;
-    private static final int EXPLORATORY_BACKOFF = 200;
-    private static final int CLIENT_BACKOFF = 50;
+    private static final int BUILD_MSG_TIMEOUT = 60*1000;
+    private static int getExploratoryBackoff(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.build.exploratoryBackoff", 200);
+    }
+
+    /**
+     *  Maximum consecutive client build timeouts before forcing exploratory tunnel for replies.
+     *  Tunable via i2p.tunnel.buildRequest.maxConsecutiveFails (default: 3)
+     */
+    static int getMaxConsecutiveClientBuildFails(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.buildRequest.maxConsecutiveFails", 3);
+    }
+    private static int getClientBackoff(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.build.clientBackoff", 50);
+    }
 
     // Proposal 168 bandwidth property keys
     static final String PROP_MIN_BW = "m";
@@ -171,9 +187,11 @@ abstract class BuildRequestor {
      * @param ctx   router context
      * @param cfg   tunnel configuration (must have ReplyMessageId set)
      * @param exec  executor to notify on completion
+     * @param firstHopTimeout  adaptive first-hop timeout ms (from BuildExecutor stats)
      * @return {@code true} if request was successfully dispatched
      */
-    public static boolean request(RouterContext ctx, PooledTunnelCreatorConfig cfg, BuildExecutor exec) {
+    public static boolean request(RouterContext ctx, PooledTunnelCreatorConfig cfg,
+                                  BuildExecutor exec, long firstHopTimeout) {
         prepare(ctx, cfg);
 
         if (cfg.getLength() <= 1) {
@@ -190,16 +208,16 @@ abstract class BuildRequestor {
         TunnelInfo pairedTunnel = selectPairedTunnel(ctx, pool, cfg, exec, log);
         if (pairedTunnel == null) {
             log.warn("Tunnel build failed -> No paired or exploratory tunnel available for " + cfg);
-            int ms = settings.isExploratory() ? EXPLORATORY_BACKOFF : CLIENT_BACKOFF;
+            int ms = settings.isExploratory() ? getExploratoryBackoff(ctx) : getClientBackoff(ctx);
             try {Thread.sleep(ms);} catch (InterruptedException ie) {}
-            exec.buildComplete(cfg, OTHER_FAILURE);
+            exec.buildComplete(cfg, OTHER_FAILURE, "No paired tunnel");
             return false;
         }
 
         I2NPMessage msg = createTunnelBuildMessage(ctx, pool, cfg, pairedTunnel, exec);
         if (msg == null) {
             log.warn("Tunnel build failed -> Could not create TunnelBuildMessage for " + cfg);
-            exec.buildComplete(cfg, OTHER_FAILURE);
+            exec.buildComplete(cfg, OTHER_FAILURE, "No build message");
             return false;
         }
 
@@ -214,7 +232,7 @@ abstract class BuildRequestor {
         if (isInbound) {
             handleInboundBuild(ctx, cfg, pairedTunnel, msg, log);
         } else {
-            handleOutboundBuild(ctx, cfg, pairedTunnel, msg, exec, log);
+            handleOutboundBuild(ctx, cfg, pairedTunnel, msg, exec, log, firstHopTimeout);
         }
         return true;
     }
@@ -253,7 +271,7 @@ abstract class BuildRequestor {
         int fails = pool.getConsecutiveBuildTimeouts();
         Hash from = settings.getDestination();
 
-        if (fails < MAX_CONSECUTIVE_CLIENT_BUILD_FAILS) {
+        if (fails < getMaxConsecutiveClientBuildFails(ctx)) {
             TunnelInfo paired = isInbound
                 ? mgr.selectOutboundTunnel(from, farEnd)
                 : mgr.selectInboundTunnel(from, farEnd);
@@ -370,39 +388,30 @@ abstract class BuildRequestor {
     }
 
     private static void handleOutboundBuild(RouterContext ctx, PooledTunnelCreatorConfig cfg,
-                                            TunnelInfo pairedTunnel, I2NPMessage msg,
-                                            BuildExecutor exec, Log log) {
+                                             TunnelInfo pairedTunnel, I2NPMessage msg,
+                                             BuildExecutor exec, Log log, long firstHopTimeout) {
         Hash nextHop = cfg.getPeer(1);
-        if (log.shouldInfo()) {
-            log.info("Sending outbound TunnelBuildRequest direct to [" + nextHop.toBase64().substring(0,6) + "] for " + cfg +
-                     "\n* Reply via: " + pairedTunnel + " [MsgID " + msg.getUniqueId() + "]");
-        }
 
         // Add fuzz to expiration to obscure tunnel structure
-        long baseExp = ctx.clock().now() + BUILD_MSG_TIMEOUT;
-        long fuzz = ctx.random().nextLong(15_000) + ctx.random().nextInt(5_000);
-        msg.setMessageExpiration(baseExp + fuzz);
+        msg.setMessageExpiration(ctx.clock().now() + BUILD_MSG_TIMEOUT + ctx.random().nextLong(20*1000));
 
         RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(nextHop);
         if (peer == null) {
             log.warn("Next hop RouterInfo not found for outbound build: " + cfg);
-            exec.buildComplete(cfg, OTHER_FAILURE);
+            exec.buildComplete(cfg, OTHER_FAILURE, "Next hop not in netdb");
             return;
         }
 
-        OutNetMessage outMsg = new OutNetMessage(ctx, msg, ctx.clock().now() + FIRST_HOP_TIMEOUT, PRIORITY, peer);
-        outMsg.setOnFailedSendJob(new TunnelBuildFirstHopFailJob(ctx, cfg, exec));
-
-        // Register one-time reply tags
+        // Register one-time reply tags (needed for both direct and tunnel routing)
         OneTimeSession ots = cfg.getGarlicReplyKeys();
         if (ots != null) {
             SessionKeyManager replySKM = ctx.clientManager().getClientSessionKeyManager(cfg.getTunnelPool().getSettings().getDestination());
             if (replySKM == null) {
-                replySKM = ctx.sessionKeyManager(); // fallback for exploratory
+                replySKM = ctx.sessionKeyManager();
             }
             if (replySKM == null) {
                 log.warn("No SessionKeyManager available for garlic reply to: " + cfg);
-                exec.buildComplete(cfg, OTHER_FAILURE);
+                exec.buildComplete(cfg, OTHER_FAILURE, "No session key manager");
                 return;
             }
             if (replySKM instanceof RatchetSKM) {
@@ -411,17 +420,61 @@ abstract class BuildRequestor {
                 ((MuxedSKM) replySKM).tagsReceived(ots.key, ots.rtag, 2 * BUILD_MSG_TIMEOUT);
             } else if (replySKM instanceof MuxedPQSKM) {
                 ((MuxedPQSKM) replySKM).tagsReceived(ots.key, ots.rtag, 2 * BUILD_MSG_TIMEOUT);
-            } else {
-                log.warn("Unsupported SessionKeyManager for garlic reply: " + replySKM.getClass());
             }
             cfg.setGarlicReplyKeys(null);
         }
+
+        // When the first hop isn't directly connected, try routing the TBM through
+        // an exploratory outbound tunnel to avoid transport establishment delays.
+        // The tunnel endpoint unwraps the garlic and forwards the raw TBM to nextHop.
+        // (Not used for exploratory outbound builds — that would be circular.)
+        boolean connected = ctx.commSystem().isEstablished(nextHop);
+        if (!connected && !cfg.getTunnelPool().getSettings().isExploratory()) {
+            TunnelInfo outTunnel = ctx.tunnelManager().selectOutboundExploratoryTunnel(nextHop);
+            if (outTunnel != null) {
+                // Garlic-wrap to hide TBM content from tunnel endpoint
+                if (msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE && !nextHop.equals(outTunnel.getEndpoint())) {
+                    I2NPMessage enc = MessageWrapper.wrap(ctx, msg, peer);
+                    if (enc != null) {
+                        msg = enc;
+                    }
+                }
+                if (log.shouldInfo()) {
+                    log.info("Sending outbound TunnelBuildRequest via exploratory tunnel to [" +
+                             nextHop.toBase64().substring(0,6) + "] for " + cfg +
+                             "\n* Via: " + outTunnel + " Reply via: " + pairedTunnel);
+                }
+                ctx.tunnelDispatcher().dispatchOutbound(msg, outTunnel.getSendTunnelId(0), nextHop);
+                return;
+            }
+        }
+
+        // Fall back to direct transport send
+        long effectiveTimeout = firstHopTimeout;
+        if (!connected) {
+            // preConnectTo() was called in configureNewTunnel(), which starts
+            // transport establishment (the DatabaseLookupMessage has a 30s
+            // lifetime).  Give the build message the full adaptive timeout
+            // so it survives transport establishment (~8.5s SSU2 handshake)
+            // plus the build request propagation and TBR reply (~6-10s).
+            // A blanket 5s cap was too short and caused all outbound builds
+            // on connecting peers to deterministically fail.
+            effectiveTimeout = firstHopTimeout;
+        }
+
+        if (log.shouldInfo()) {
+            log.info("Sending outbound TunnelBuildRequest direct to [" + nextHop.toBase64().substring(0,6) + "] for " + cfg +
+                     "\n* Reply via: " + pairedTunnel + " [MsgID " + msg.getUniqueId() + "]");
+        }
+
+        OutNetMessage outMsg = new OutNetMessage(ctx, msg, ctx.clock().now() + effectiveTimeout, PRIORITY, peer);
+        outMsg.setOnFailedSendJob(new TunnelBuildFirstHopFailJob(ctx, cfg, exec));
 
         try {
             ctx.outNetMessagePool().add(outMsg);
         } catch (RuntimeException e) {
             log.error("Failed to send TunnelBuildMessage", e);
-            exec.buildComplete(cfg, OTHER_FAILURE);
+            exec.buildComplete(cfg, OTHER_FAILURE, "Send failed");
         }
     }
 
@@ -600,10 +653,72 @@ abstract class BuildRequestor {
 
         @Override
         public void runJob() {
-            _exec.buildComplete(_cfg, OTHER_FAILURE);
-            getContext().profileManager().tunnelFailed(_cfg.getPeer(1), 500);
-            getContext().profileManager().tunnelTimedOut(_cfg.getPeer(1));
-            getContext().statManager().addRateData("tunnel.buildFailFirstHop", 1);
+            Hash hopPeer = _cfg.getPeer(1);
+            RouterContext ctx = getContext();
+            boolean connected = ctx.commSystem().isEstablished(hopPeer);
+            boolean connecting = ctx.commSystem().isConnecting(hopPeer);
+            boolean backlogged = ctx.commSystem().isBacklogged(hopPeer);
+            if (connected) {
+                // Peer accepted the build message but never replied — this is a
+                // genuine failure. Give it a first-hop fail cooldown to prevent
+                // immediate retry, which would also fail with "no reply" and
+                // waste build slots.
+                Log log = ctx.logManager().getLog(BuildRequestor.class);
+                if (log.shouldInfo()) {
+                    int estCount = ctx.commSystem().getEstablished() != null ?
+                        ctx.commSystem().getEstablished().size() : 0;
+                    log.info("First hop " + hopPeer.toBase64().substring(0, 8) +
+                             " connected but no reply | estCount=" + estCount +
+                             " | fast=" + ctx.profileOrganizer().isFast(hopPeer) +
+                             " | hc=" + ctx.profileOrganizer().isHighCapacity(hopPeer));
+                }
+                TunnelPeerSelector.recordFirstHopFail(ctx, hopPeer);
+                _exec.buildComplete(_cfg, OTHER_FAILURE, "No reply from first hop");
+                ctx.profileManager().tunnelFailed(hopPeer, 500);
+                ctx.profileManager().tunnelTimedOut(hopPeer);
+                ctx.profileOrganizer().demoteIfNoTunnel(hopPeer);
+                ctx.statManager().addRateData("tunnel.buildFailFirstHop", 1);
+                return;
+            } else if (connecting) {
+                // Transport has accepted the message and is still establishing
+                // the handshake — the connection just needs more time.
+                // Fail the build but don't penalize the peer profile or demote it.
+                if (ctx.logManager().getLog(BuildRequestor.class).shouldInfo())
+                    ctx.logManager().getLog(BuildRequestor.class)
+                        .info("Build failed -> First hop connection still in progress for " + _cfg);
+                _exec.buildComplete(_cfg, OTHER_FAILURE, "First hop connection still in progress");
+                ctx.statManager().addRateData("tunnel.buildFailFirstHop", 1);
+                return;
+            } else {
+                // No connection: the peer isn't established and the build
+                // message couldn't be delivered.  Record a first-hop fail
+                // cooldown so the peer selector doesn't immediately re-select
+                // the same unreachable peer.  Without this, the pool retries
+                // the same peer 150+ times in a row (151 consecutive timeouts
+                // observed for whois pool).  The 3-minute cooldown gives
+                // KeepAlive time to establish a session; if it does, the peer
+                // will be eligible again after the cooldown expires.
+                TunnelPeerSelector.recordFirstHopFail(ctx, hopPeer);
+                Log log = ctx.logManager().getLog(BuildRequestor.class);
+                if (log.shouldInfo()) {
+                    int estCount = ctx.commSystem().getEstablished() != null ?
+                        ctx.commSystem().getEstablished().size() : 0;
+                    StringBuilder sb = new StringBuilder(256);
+                    sb.append("First hop ").append(backlogged ? "backlogged" : "unreachable")
+                      .append(" for ").append(_cfg)
+                      .append("\n * Peer [").append(hopPeer.toBase64().substring(0, 8)).append("]")
+                      .append(" | inEst=").append(ctx.commSystem().getEstablished().contains(hopPeer))
+                      .append(" | estCount=").append(estCount)
+                      .append(" | ri=").append(ctx.netDb().lookupRouterInfoLocally(hopPeer) != null)
+                      .append(" | connecting=").append(connecting)
+                      .append(" | backlog=").append(backlogged)
+                      .append(" | fast=").append(ctx.profileOrganizer().isFast(hopPeer))
+                      .append(" | hc=").append(ctx.profileOrganizer().isHighCapacity(hopPeer));
+                    log.info(sb.toString());
+                }
+                _exec.buildComplete(_cfg, OTHER_FAILURE, backlogged ? "First hop unreachable (backlogged)" : "First hop unreachable (no connection)");
+                ctx.statManager().addRateData("tunnel.buildFailFirstHop", 1);
+            }
         }
     }
 }

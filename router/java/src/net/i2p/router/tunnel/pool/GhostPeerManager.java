@@ -23,10 +23,20 @@ public class GhostPeerManager {
     private final ConcurrentHashMap<Hash, AtomicInteger> _timeoutCounts;
     private final ConcurrentHashMap<Hash, Long> _ghostSince;
 
-    private static final int DEFAULT_TIMEOUT_THRESHOLD = 2;
-    private static final int ATTACK_TIMEOUT_THRESHOLD = 2;
-    private static final long COOLDOWN_MS = 180*1000; // 3m
-    private static final long ATTACK_COOLDOWN_MS = 300*1000; // 5m
+    private static final int ATTACK_TIMEOUT_THRESHOLD = 3;
+
+    private static int getTimeoutThreshold(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.ghostPeer.timeoutThreshold", 3);
+    }
+
+    private static long getCooldownMs(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.ghostPeer.cooldownMs", 180*1000);
+    }
+
+    private static long getAttackCooldownMs(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.ghostPeer.attackCooldownMs", 300*1000);
+    }
+
     private static final int MAX_TRACKED_PEERS = 1024;
 
     public GhostPeerManager(RouterContext context) {
@@ -57,7 +67,7 @@ public class GhostPeerManager {
             Long existingTime = _ghostSince.putIfAbsent(peer, _context.clock().now());
             if (existingTime == null && _log.shouldWarn()) {
                 _log.warn("Peer [" + peer.toBase64().substring(0,6) + "] marked as ghost for " +
-                          (underAttack ? ATTACK_COOLDOWN_MS/1000 : COOLDOWN_MS/1000) + "s -> " +
+                          (underAttack ? getAttackCooldownMs(_context)/1000 : getCooldownMs(_context)/1000) + "s -> " +
                            newCount + " consecutive tunnel build timeouts");
             }
         }
@@ -95,7 +105,7 @@ public class GhostPeerManager {
         if (since != null) {
             long elapsed = _context.clock().now() - since;
             double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-            long cooldown = buildSuccess < ProfileOrganizer.ATTACK_THRESHOLD ? ATTACK_COOLDOWN_MS : COOLDOWN_MS;
+            long cooldown = buildSuccess < ProfileOrganizer.ATTACK_THRESHOLD ? getAttackCooldownMs(_context) : getCooldownMs(_context);
             if (elapsed >= cooldown) {
                 _timeoutCounts.remove(peer);
                 _ghostSince.remove(peer);
@@ -117,7 +127,7 @@ public class GhostPeerManager {
         if (buildSuccess < ProfileOrganizer.ATTACK_THRESHOLD) {
             return ATTACK_TIMEOUT_THRESHOLD;
         }
-        return DEFAULT_TIMEOUT_THRESHOLD;
+        return getTimeoutThreshold(_context);
     }
 
     /**

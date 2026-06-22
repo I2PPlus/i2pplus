@@ -50,9 +50,17 @@ class RequestThrottler {
     private volatile Boolean cachedShouldBlockOldRouters;
     private static final long PROPERTY_CHECK_INTERVAL = 30*1000; // Check every 30 seconds
 
-    private static final int MIN_LIMIT = 10;
-    private static final int MAX_LIMIT = 300;
-    private static final int PERCENT_LIMIT = 20;
+    private static int getMinLimit(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.requestThrottle.minLimit", 10);
+    }
+
+    private static int getMaxLimit(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.requestThrottle.maxLimit", 300);
+    }
+
+    private static int getPercentLimit(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.requestThrottle.percentLimit", 20);
+    }
     private static final long CLEAN_TIME = 90 * 1000; // Reset limits every 90 seconds
 
     // Burst detection configuration
@@ -60,7 +68,9 @@ class RequestThrottler {
     private static final int BURST_BUCKET_COUNT = 10; // 1 second per bucket
     private static final int BURST_THRESHOLD_MIN = 50; // Minimum burst threshold
     private static final int BURST_THRESHOLD_MAX = 200; // Maximum burst threshold
-    private static final int BURST_1S_THRESHOLD = 10; // 10 requests in 1 second = immediate ban
+    private static int getBurst1sThreshold(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.requestThrottle.burst1sThreshold", 10);
+    }
     private static final double BURST_THRESHOLD_PERCENT = 0.50; // 50% of 90s limit scaled to 10s window
     private static final long BURST_OFFENSE_RESET = 60 * 60 * 1000; // Reset after 1 hour clean
 
@@ -147,13 +157,13 @@ class RequestThrottler {
         int limit;
         if (isUnreachable || isLowShare) {
             // 4% for unreachable/low-share routers - conservative limit to protect network
-            limit = Math.min(MAX_LIMIT, Math.max(MIN_LIMIT, numTunnels * 4 / 100));
+            limit = Math.min(getMaxLimit(context), Math.max(getMinLimit(context), numTunnels * 4 / 100));
         } else if (isFast) {
             // 15% for high-bandwidth routers - rewards capable routers with higher limits
-            limit = Math.min(MAX_LIMIT, Math.max(MIN_LIMIT, numTunnels * 15 / 100));
+            limit = Math.min(getMaxLimit(context), Math.max(getMinLimit(context), numTunnels * 15 / 100));
         } else {
             // 8% for regular routers - balanced approach for average capability
-            limit = Math.min(MAX_LIMIT, Math.max(MIN_LIMIT, numTunnels * 8 / 100));
+            limit = Math.min(getMaxLimit(context), Math.max(getMinLimit(context), numTunnels * 8 / 100));
         }
         int count = counter.increment(h);
         int burstCount = _burstCounter.increment(h);
@@ -163,10 +173,10 @@ class RequestThrottler {
         // Check for severe burst (10+ requests in 1 second) - immediate ban
         if (enableThrottle && !rv) {
             int currentBucketCount = _burstCounter.getCurrentBucketCount(h);
-            if (currentBucketCount >= BURST_1S_THRESHOLD) {
+            if (currentBucketCount >= getBurst1sThreshold(context)) {
                 if (_log.shouldWarn()) {
                     _log.warn("Severe transit request burst detected from Router [" + routerId + "] -> " +
-                              "Requests: " + currentBucketCount + " in 1s (threshold: " + BURST_1S_THRESHOLD + ")");
+                              "Requests: " + currentBucketCount + " in 1s (threshold: " + getBurst1sThreshold(context) + ")");
                 }
                 String ipPort = getRouterIPPort(ri);
                 _banLogger.logBan(h, ipPort, "Transit request burst (10 in 1s)", 4*60*60*1000L);
