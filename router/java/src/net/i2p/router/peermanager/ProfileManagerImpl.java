@@ -104,6 +104,13 @@ public class ProfileManagerImpl implements ProfileManager {
         if (data == null) return;
         data.setLastHeardFrom(_context.clock().now());
         data.getTunnelHistory().incrementRejected(severity);
+        // Immediately evict from fast/high-cap tiers on bandwidth-limit or
+        // critical rejection — these peers will waste tunnel build slots.
+        // They'll be re-promoted on the next reorganize() cycle if their
+        // profile recovers.
+        if (severity >= TunnelHistory.TUNNEL_REJECT_BANDWIDTH) {
+            _context.profileOrganizer().demoteIfCongested(peer);
+        }
     }
 
     /**

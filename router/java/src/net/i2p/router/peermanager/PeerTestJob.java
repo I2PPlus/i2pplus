@@ -62,7 +62,7 @@ public class PeerTestJob extends JobImpl {
     private static final int DEFAULT_PEER_TEST_CONCURRENCY = SystemVersion.isSlow() ? 2 :
                                                               SystemVersion.getCores() <= 2 ? 3 : 4;
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
-    private static final int DEFAULT_PEER_TEST_TIMEOUT = 5000;
+    private static final int DEFAULT_PEER_TEST_TIMEOUT = 10000;
     public static final String PROP_PEER_TEST_TIMEOUT = "router.peerTestTimeout";
 
     /**

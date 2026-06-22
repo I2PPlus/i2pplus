@@ -14,14 +14,17 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import net.i2p.crypto.SipHashInline;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
+import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.NetworkDatabaseFacade;
+import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.pool.TunnelPeerSelector;
@@ -47,6 +50,12 @@ public class ProfileOrganizer {
     private final Map<Hash, PeerProfile> _wellIntegratedPeers;
     private final Map<Hash, PeerProfile> _notFailingPeers;
     private final List<Hash> _notFailingPeersList;
+    /** Peers demoted via demoteIfUnreachable — excluded from promotion for TUNNEL_DEMOTION_COOLDOWN_MS */
+    private final ConcurrentHashMap<Hash, Long> _demotedPeers = new ConcurrentHashMap<>(64);
+    /** Strike count per peer for demoteIfUnreachable — only demote after DEMOTE_STRIKE_THRESHOLD strikes */
+    private final ConcurrentHashMap<Hash, Integer> _demoteStrikes = new ConcurrentHashMap<>(64);
+    private static final int DEMOTE_STRIKE_THRESHOLD = 5;
+
     private Hash _us;
     private final ProfilePersistenceHelper _persistenceHelper;
     private Set<PeerProfile> _strictCapacityOrder;
@@ -1136,6 +1145,24 @@ public class ProfileOrganizer {
                     if (!alive) return false;
                 }
             }
+            // Peers without a reachable NTCP2 or SSU2 address cannot be used
+            // for outbound builds.  Filtering just by transport style misses
+            // peers whose RouterInfo has the right style but null IP, invalid
+            // port, or a private/internal address — selecting them leads to
+            // immediate transport failure and an 8h ban with logspam.
+            boolean hasUsableAddress = false;
+            for (RouterAddress ra : info.getAddresses()) {
+                String style = ra.getTransportStyle();
+                if (!"NTCP".equals(style) && !"NTCP2".equals(style) &&
+                    !"SSU".equals(style) && !"SSU2".equals(style))
+                    continue;
+                byte[] ip = ra.getIP();
+                if (ip == null) continue;
+                if (!TransportUtil.isValidPort(ra.getPort())) continue;
+                hasUsableAddress = true;
+                break;
+            }
+            if (!hasUsableAddress) return false;
             String tier = DataHelper.stripHTML(info.getBandwidthTier());
             if (tier.equals("L") || tier.equals("M") || tier.equals("N")) return false;
             return !TunnelPeerSelector.shouldExclude(_context, info);
@@ -1367,6 +1394,53 @@ public class ProfileOrganizer {
                 }
                 if (inFast) _fastPeers.remove(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);
+                promoteToFillTiers();
+            }
+        } finally {
+            releaseWriteLock();
+        }
+    }
+
+    /**
+     * Immediately demote a peer from fast/high-cap tiers when our transport
+     * connection to it failed during tunnel build (first hop unreachable).
+     * Uses a 3-strike threshold to avoid premature demotion — transient
+     * failures (e.g. pre-connect race) should not remove peers from tiers.
+     * Increments the tunnel failure count so the profile's long-term rating
+     * also reflects the issue.
+     */
+    public void demoteIfUnreachable(Hash peer) {
+        if (!getWriteLock()) return;
+        try {
+            PeerProfile profile = locked_getProfile(peer);
+            if (profile != null) {
+                profile.getTunnelHistory().incrementFailed(100);
+            }
+            // Evict stale strike entries (>10 min old) to keep map bounded
+            long cooldownCutoff = _context.clock().now() - TUNNEL_DEMOTION_COOLDOWN_MS;
+            _demoteStrikes.entrySet().removeIf(e -> e.getValue() == null || e.getValue() <= 0);
+            _demotedPeers.entrySet().removeIf(e -> e.getValue() < cooldownCutoff);
+            // Strike tracking: only demote after threshold consecutive failures
+            Integer strikes = _demoteStrikes.get(peer);
+            int newStrikes = (strikes != null ? strikes : 0) + 1;
+            if (newStrikes < DEMOTE_STRIKE_THRESHOLD) {
+                _demoteStrikes.put(peer, newStrikes);
+                return;
+            }
+            // Reset strikes and proceed with demotion
+            _demoteStrikes.remove(peer);
+            boolean inFast = _fastPeers.containsKey(peer);
+            boolean inHighCap = _highCapacityPeers.containsKey(peer);
+            if (inFast || inHighCap) {
+                if (_log.shouldInfo()) {
+                    _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                              "] from fast/high-cap tiers after " + DEMOTE_STRIKE_THRESHOLD +
+                              " unreachable first-hop failures");
+                }
+                _demotedPeers.put(peer, _context.clock().now());
+                if (inFast) _fastPeers.remove(peer);
+                if (inHighCap) _highCapacityPeers.remove(peer);
+                if (profile != null) profile.setCapacityBonus(-30);
                 promoteToFillTiers();
             }
         } finally {
