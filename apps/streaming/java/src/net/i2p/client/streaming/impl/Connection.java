@@ -147,7 +147,13 @@ class Connection {
      * Maximum number of packets to retransmit when the timer hits.
      * Increased from 16 to 32 for faster loss recovery.
      */
-    private static final int MAX_RTX = 16;
+    /**
+     * Maximum number of retransmissions before giving up.
+     * Tunable via i2p.streaming.maxRetransmissions (default: 64).
+     */
+    private int getMaxRtx() {
+        return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.maxRetransmissions", 64);
+    }
 
     /**
      *  @param opts may be null
@@ -188,7 +194,7 @@ class Connection {
         _nextSendTime = -1;
         _createdOn = _context.clock().now();
         _congestionWindowEnd = _options.getWindowSize()-1;
-        _ssthresh = ConnectionPacketHandler.MAX_SLOW_START_WINDOW;
+        _ssthresh = ConnectionPacketHandler.getMaxSlowStartWindow(_context);
         _lastCongestionTime = -1;
         _lastCongestionHighestUnacked = -1;
         _lastReceivedOn = -1;
@@ -204,10 +210,6 @@ class Connection {
         // Initialize connection event and retransmit event
         _connectionEvent = new ConEvent();
         _retransmitEvent = new RetransmitEvent();
-
-        // Initialize pacing
-        _pacingRate = calculatePacingRate();
-        _lastPacketSendTime = 0;
 
         // Initialize random wait for activity timer randomization and bandwidth estimator
         _randomWait = _context.random().nextInt(3*1000); // 0-3 seconds randomization
@@ -456,6 +458,13 @@ class Connection {
                 packet.setOptionalDelay(0);
                 packet.setFlag(Packet.FLAG_DELAY_REQUESTED);
             }
+            if (_outboundQueue.enqueue(packet)) {
+                packet.markEnqueued();
+                _unackedPacketsReceived.set(0);
+                _lastSendTime = _context.clock().now();
+                resetActivityTimer();
+            }
+            return;
         } else {
             int windowSize;
             int remaining;
@@ -485,35 +494,30 @@ class Connection {
                 packet.setTimeout(timeout);
             }
 
-            // Schedule retransmit timer outside the _outboundPackets lock
-            // to prevent deadlock with RetransmitEvent.timeReached()
-            if (_retransmitEvent.scheduleIfNotRunning(timeout)) {
-               if (_log.shouldDebug()) {
-                   _log.debug("[" + Connection.this + "] Resend in " + timeout + "ms for " + packet);
-               }
-            } else {
-                if (_log.shouldDebug()) {
-                    _log.debug("[" + Connection.this + "] Timer was already running!");
-                }
-            }
-        }
-
-        // Apply pacing to smooth transmission
-        long pacingDelay = calculatePacingDelay(packet.getPayloadSize());
-        if (pacingDelay > 0) {
-            // Schedule packet with pacing delay
-            PacedPacketEvent pacedEvent = new PacedPacketEvent(packet);
-            pacedEvent.schedule(pacingDelay);
-            // Mark immediately so writeData() doesn't return FailedWriteStatus;
-            // the paced event will enqueue it later
-            packet.markEnqueued();
-        } else {
-            // Send immediately
-            if (_outboundQueue.enqueue(packet)) {
+            // Apply pacing to smooth transmission
+            long pacingDelay = calculatePacingDelay(packet.getPayloadSize());
+            if (pacingDelay > 0) {
+                PacedPacketEvent pacedEvent = new PacedPacketEvent(packet);
+                pacedEvent.schedule(pacingDelay);
                 packet.markEnqueued();
-                _unackedPacketsReceived.set(0);
-                _lastSendTime = _context.clock().now();
-                resetActivityTimer();
+            } else {
+                if (_outboundQueue.enqueue(packet)) {
+                    packet.markEnqueued();
+                    _unackedPacketsReceived.set(0);
+                    _lastSendTime = _context.clock().now();
+                    resetActivityTimer();
+                }
+                // Schedule retransmit timer outside the _outboundPackets lock
+                // to prevent deadlock with RetransmitEvent.timeReached()
+                if (_retransmitEvent.scheduleIfNotRunning(timeout)) {
+                   if (_log.shouldDebug()) {
+                       _log.debug("[" + Connection.this + "] Resend in " + timeout + "ms for " + packet);
+                   }
+                } else {
+                    if (_log.shouldDebug()) {
+                        _log.debug("[" + Connection.this + "] Timer was already running!");
+                    }
+                }
             }
         }
     }
@@ -790,8 +794,8 @@ class Connection {
         if (cleanDisconnect) {
             if (_log.shouldDebug()) {
                 _log.debug("Clean disconnecting from " + getRemotePeerString() + " -> " +
-                           (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager") +
-                           "\n* " + toString(), new Exception("Disconnected"));
+                           (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
+                           //"\n* " + toString(), new Exception("Disconnected"));
             }
             _outputStream.closeInternal();
         } else {
@@ -889,7 +893,7 @@ class Connection {
     private class DisconnectEvent implements SimpleTimer.TimedEvent {
         public DisconnectEvent() {
             if (_log.shouldInfo()) {
-                _log.info("Disconnect timer initiated on connection to " + getRemotePeerString() + "-> 5 minutes to drop...");
+                _log.info("Disconnect timer initiated on connection to " + getRemotePeerString() + " -> 5 minutes to drop...");
             }
         }
         public void timeReached() {disconnectComplete();}
@@ -1131,7 +1135,7 @@ class Connection {
              *
              * When the persist timer expires, the TCP sender attempts recovery by sending a small packet
              * so that the receiver responds by sending another acknowledgement containing the new window size.
-             * ...
+             *
              * We don't do any of that, but we set the window size to 1, and let the retransmission
              * of packets do the "attempted recovery".
              */
@@ -1264,6 +1268,51 @@ class Connection {
                  return;
              }
              now = _context.clock().now();
+         }
+     }
+
+     /**
+      * Wait for the connection to be established, but no longer than timeoutMs.
+      * Unlike waitForConnect(), this will NOT set the error on timeout; the
+      * caller acknowledges that the connection may not be fully established
+      * after this returns.  The connection may still complete asynchronously.
+      *
+      * @param timeoutMs max milliseconds to wait (<= 0 delegates to waitForConnect())
+      */
+     void waitForConnect(int timeoutMs) {
+         if (timeoutMs <= 0) {
+             waitForConnect();
+             return;
+         }
+         long connectStart = _context.clock().now();
+         long expiration = connectStart + Math.min(timeoutMs, getMaxConnectTimeout());
+         if (_log.shouldInfo())
+             _log.info("waitForConnect() bounded starting for " + _remotePeer + " (timeout=" + timeoutMs + "ms)");
+         while (true) {
+             if (_connected.get() && (_receiveStreamId.get() > 0) && (_sendStreamId.get() > 0)) {
+                 long elapsed = _context.clock().now() - connectStart;
+                 if (_log.shouldInfo())
+                     _log.info("waitForConnect() connected in " + elapsed + "ms for " + _remotePeer);
+                 return;
+             }
+             if (_connectionError != null)
+                 return;
+             if (!_connected.get())
+                 return;
+             long timeLeft = expiration - _context.clock().now();
+             if (timeLeft <= 0) {
+                 if (_log.shouldInfo())
+                     _log.info("waitForConnect() bounded timeout after " +
+                               (_context.clock().now() - connectStart) + "ms for " + _remotePeer);
+                 return;
+             }
+             try {
+                 synchronized (_connectLock) { _connectLock.wait(Math.min(timeLeft, 1000)); }
+             } catch (InterruptedException ie) {
+                 if (_log.shouldDebug()) _log.debug("waitForConnect(): InterruptedException");
+                 _connectionError = "InterruptedException";
+                 return;
+             }
          }
      }
 
@@ -1581,7 +1630,7 @@ class Connection {
                         _log.debug(Connection.this + " cutting SlowStartThreshold and Window");
                     }
                     _ssthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2 );
-                    _ssthresh = Math.min(ConnectionPacketHandler.MAX_SLOW_START_WINDOW, _ssthresh);
+                    _ssthresh = Math.min(ConnectionPacketHandler.getMaxSlowStartWindow(_context), _ssthresh);
                     _options.setWindowSize(1);
                 } else if (_log.shouldDebug()) {
                     _log.debug(Connection.this + " not cutting SlowStartThreshold and Window");
@@ -1595,7 +1644,7 @@ class Connection {
                  * to give preference to SYN packets and head-of-window data.
                  */
                 toResend.sort((p1, p2) -> Long.compareUnsigned(p1.getSequenceNum(), p2.getSequenceNum()));
-                toResend = toResend.subList(0, Math.max(1, Math.min(MAX_RTX, toResend.size() / 2)));
+                toResend = toResend.subList(0, Math.max(1, Math.min(getMaxRtx(), toResend.size() / 2)));
             }
 
             // 3. Retransmit up to half of the packets in flight (RFC 6298 section 5.4 and RFC 5681 section 4.3)
@@ -1609,11 +1658,10 @@ class Connection {
                     packet.cancelled();
                     disconnect(false);
                     return;
-                } else if (nResends == 3 && _highestAckedThrough.get() < 0 && _remotePeer != null) {
-                    // SYN has been retransmitted 3 times with no response - likely stale LeaseSet.
-                    // Invalidate the cached LeaseSet so the next send triggers a fresh lookup.
-                    // This handles the case where the server's tunnels changed but our cached
-                    // LeaseSet is still "current" (not expired by time).
+                } else if (nResends == 1 && _highestAckedThrough.get() < 0 && _remotePeer != null) {
+                    // SYN has been retransmitted once with no response - likely stale LeaseSet.
+                    // Invalidate early so the fresh lookup completes before the next RTO retransmit,
+                    // allowing the retransmit to use the updated tunnels via PacketQueue re-resolution.
                     invalidateStaleLeaseSet();
                 } else if (packet.getNumSends() >= 3 &&
                            packet.isFlagSet(Packet.FLAG_CLOSE) &&
@@ -1692,16 +1740,24 @@ class Connection {
         }
 
         public void timeReached() {
-            // Verify connection is still valid and packet not already sent/cancelled
-            if (_connected.get() && _packet.getAckTime() <= 0 && _packet.getNumSends() <= 0) {
-                if (_outboundQueue.enqueue(_packet)) {
-                    _packet.markEnqueued();
-                    _unackedPacketsReceived.set(0);
-                    _lastSendTime = _context.clock().now();
-                    resetActivityTimer();
+            if (!_connected.get() || _packet.getAckTime() > 0 || _packet.getNumSends() > 0) {
+                return;
+            }
+            if (_outboundQueue.enqueue(_packet)) {
+                _packet.markEnqueued();
+                _unackedPacketsReceived.set(0);
+                _lastSendTime = _context.clock().now();
+                synchronized (_pacingLock) {
+                    _lastPacketSendTime = _context.clock().now();
+                }
+                resetActivityTimer();
+                // Schedule RTO now that the packet is actually in flight
+                if (_retransmitEvent.scheduleIfNotRunning(_packet.getTimeout())) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("[" + Connection.this + "] Resend in " + _packet.getTimeout() + "ms for paced " + _packet);
+                    }
                 }
             }
-            // If connection closed or packet already handled, event simply drops - this is correct behavior
         }
     }
 
@@ -1807,7 +1863,7 @@ class Connection {
 
                     if (_packet.getNumSends() == 1) {
                         _ssthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2);
-                        _ssthresh = Math.min(ConnectionPacketHandler.MAX_SLOW_START_WINDOW, _ssthresh);
+                        _ssthresh = Math.min(ConnectionPacketHandler.getMaxSlowStartWindow(_context), _ssthresh);
                         int wsize = _options.getWindowSize();
                         _options.setWindowSize(Math.min(_ssthresh, wsize));
                         updatePacingRate(); // Update pacing when window changes

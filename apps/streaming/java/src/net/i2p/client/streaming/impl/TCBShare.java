@@ -44,7 +44,14 @@ class TCBShare {
     /////
     private static final int MAX_RTT = Connection.getMaxResendDelay() / 2;
     private static final int MAX_RTT_DEV = (int) (MAX_RTT * 1.5);
-    private static final int MAX_WINDOW_SIZE = ConnectionPacketHandler.MAX_SLOW_START_WINDOW;
+
+    /**
+     * Get the maximum window size for TCB sharing from config.
+     * Tunable via i2p.streaming.maxSlowStartWindow (default: 64).
+     */
+    private int getMaxWindowSize() {
+        return ConnectionPacketHandler.getMaxSlowStartWindow(_context);
+    }
 
     public TCBShare(I2PAppContext ctx, SimpleTimer2 timer) {
         _context = ctx;
@@ -172,8 +179,8 @@ class TCBShare {
         public synchronized int getWindowSize() { return _wdw; }
         public synchronized void setWindowSize(int wdw) {
             _wdw = (int)(0.5 + _wdwDampening*_wdw + (1-_wdwDampening)*wdw);
-            if (_wdw > MAX_WINDOW_SIZE)
-                _wdw = MAX_WINDOW_SIZE;
+            if (_wdw > getMaxWindowSize())
+                _wdw = getMaxWindowSize();
             _updated = _context.clock().now();
         }
         public synchronized boolean isExpired() {

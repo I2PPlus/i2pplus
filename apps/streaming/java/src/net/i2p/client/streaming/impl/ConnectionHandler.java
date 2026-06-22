@@ -35,14 +35,19 @@ class ConnectionHandler {
     private boolean _restartPending;
 
     /** max time after receiveNewSyn() and before the matched accept() */
-    private static final int DEFAULT_ACCEPT_TIMEOUT = 4*1000;
+    private int getAcceptTimeout() {
+        return _context.getProperty("i2p.streaming.acceptTimeout", 4*1000);
+    }
 
     /**
      *  This is both SYNs and subsequent packets, and with an initial window size of 12,
      *  this is a backlog of 5 to 64 Syns, which seems like plenty for now
      *  Don't make this too big because the removal by all the TimeoutSyns is O(n**2) - sortof.
      */
-    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 48 : 80;
+    private int getMaxQueueSize() {
+        int def = SystemVersion.isSlow() ? 48 : 80;
+        return _context.getProperty("i2p.streaming.maxQueueSize", def);
+    }
 
     /** Creates a new instance of ConnectionHandler */
     public ConnectionHandler(I2PAppContext context, ConnectionManager mgr, SimpleTimer2 timer) {
@@ -50,8 +55,8 @@ class ConnectionHandler {
         _log = context.logManager().getLog(ConnectionHandler.class);
         _manager = mgr;
         _timer = timer;
-        _synQueue = new LinkedBlockingDeque<>(MAX_QUEUE_SIZE);
-        _acceptTimeout = DEFAULT_ACCEPT_TIMEOUT;
+        _synQueue = new LinkedBlockingDeque<>(getMaxQueueSize());
+        _acceptTimeout = getAcceptTimeout();
     }
 
     /**
@@ -69,7 +74,7 @@ class ConnectionHandler {
         // FIXME active=false this only kills for one thread in accept()
         // if there are more, they won't get a poison packet.
         if (_log.shouldInfo()) {
-            _log.info("setActive(" + active + ") called, previously " + _active, new Exception("I did it"));
+            _log.info("setActive(" + active + ") called, previously " + _active);
         }
         // if starting, clear any old poison
         if (active && !_active) {
@@ -97,9 +102,6 @@ class ConnectionHandler {
      *
      */
     public void receiveNewSyn(Packet packet) {
-        if (_log.shouldWarn()) {
-            _log.warn("[SYN-TRACE] ConnectionHandler.receiveNewSyn() called: active=" + _active + " queueSize=" + _synQueue.size() + " packet=" + packet);
-        }
         if (!_active) {
             if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                 if (_log.shouldWarn()) {_log.warn("Dropping new SYN request because we're not listening");}

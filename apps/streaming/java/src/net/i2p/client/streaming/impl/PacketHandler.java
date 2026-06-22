@@ -280,9 +280,6 @@ class PacketHandler {
         }
 
         if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
-            if (log.shouldWarn()) {
-                log.warn("[SYN-TRACE] PacketHandler routing SYN to ConnectionHandler: sendId=" + sendId + " recvId=" + packet.getReceiveStreamId());
-            }
             manager.getConnectionHandler().receiveNewSyn(packet);
         } else if (queueIfNoConn) {
             if (log.shouldWarn())
@@ -294,8 +291,8 @@ class PacketHandler {
                 }
                 log.debug("Connections: " + buf + " SendID: " + Packet.toId(sendId));
             }
-            if (log.shouldWarn()) {
-                log.warn("[SYN-TRACE] PacketHandler queuing non-SYN packet to ConnectionHandler: " + packet);
+            if (log.shouldDebug()) {
+                log.debug("PacketHandler queuing non-SYN packet to ConnectionHandler: " + packet);
             }
             manager.getConnectionHandler().receiveNewSyn(packet);
         } else {

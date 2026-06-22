@@ -418,7 +418,6 @@ class MessageOutputStream extends OutputStream {
             synchronized (_dataLock) {
                 _dataLock.notifyAll();
             }
-            _log.logCloseLoop("MessageOutputStream close called multiple times");
             return;
         }
 
@@ -452,7 +451,6 @@ class MessageOutputStream extends OutputStream {
      */
     void closeInternal() {
         if (!_closed.compareAndSet(false, true)) {
-            _log.logCloseLoop("closeInternal called multiple times");
             return;
         }
         _flusher.cancel();
@@ -576,7 +574,6 @@ class MessageOutputStream extends OutputStream {
      */
     void destroy() {
         if (!_closed.compareAndSet(false, true)) {
-            _log.logCloseLoop("destroy() called multiple times");
             return;
         }
         _flusher.cancel();

@@ -44,8 +44,6 @@ class I2PSocketFull implements I2PSocket {
      */
     public void close() throws IOException {
         if (!_closed.compareAndSet(false,true)) {
-            // log a trace to find out why
-            log.logCloseLoop("I2PSocket",_localPeer,"-->",_remotePeer,_connection);
             return;
         }
         Connection c = _connection;
@@ -57,7 +55,7 @@ class I2PSocketFull implements I2PSocket {
             MessageInputStream in = c.getInputStream();
             in.close();
             MessageOutputStream out = c.getOutputStream();
-            out.closeInternal();
+            out.close();
             // this will cause any thread waiting in Connection.packetSendChoke()
             // to throw an IOE
             c.windowAdjusted();

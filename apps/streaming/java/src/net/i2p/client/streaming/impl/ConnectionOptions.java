@@ -158,10 +158,12 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static final int DEFAULT_INITIAL_RTT = 8*1000;
     /**
      *  Maximum RTT to prevent pathological cases from breaking RTO calculations.
-     *  I2P typically has 2-10 second RTT, so 60 seconds provides a safe upper bound
-     *  while preventing excessively high timeout values after network disturbances.
+     *  I2P typically has 2-10 second RTT.
+     *  Tunable via i2p.streaming.maxRtt (default: 60000).
      */
-    private static final int MAX_RTT = 60*1000;
+    private int getMaxRtt() {
+        return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.maxRtt", 60*1000);
+    }
     /**
      * Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
      * 500ms provides a reasonable delayed-ACK window for I2P's high-latency environment,
@@ -170,7 +172,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private static final int DEFAULT_INITIAL_ACK_DELAY = 30;
     static final int MIN_WINDOW_SIZE = 1;
     private static final boolean DEFAULT_ANSWER_PINGS = true;
-    private static final int DEFAULT_INACTIVITY_TIMEOUT = 90*1000;
+    private static final int DEFAULT_INACTIVITY_TIMEOUT = 180*1000;
     private static final int DEFAULT_INACTIVITY_ACTION = INACTIVITY_ACTION_SEND;
     private static final int DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR = 1;
     private static final int DEFAULT_SLOW_START_GROWTH_RATE_FACTOR = 1;
@@ -678,7 +680,7 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
     private void setRTT(int ms) {
         synchronized(this) {
             _rtt = ms;
-            if (_rtt > MAX_RTT) {_rtt = MAX_RTT;}
+            if (_rtt > getMaxRtt()) {_rtt = getMaxRtt();}
         }
     }
 

@@ -58,6 +58,21 @@ class ConnectionManager {
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
     private static final Object DUMMY = new Object();
 
+    /**
+     * Per-destination cooldown to avoid hammering unreachable peers.
+     * Key is destination Hash, value is timestamp of last failed connect.
+     * @since 2.7.0
+     */
+    private static final ConcurrentHashMap<Hash, Long> _destFailures = new ConcurrentHashMap<Hash, Long>();
+
+    /**
+     * Cooldown between connection attempts to the same failed destination.
+     * Tunable via i2p.streaming.destinationCooldownMs (default: 60000).
+     */
+    private long getDestCooldownMs() {
+        return _context.getProperty("i2p.streaming.destinationCooldownMs", 60*1000);
+    }
+
      private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     /** cache of the property to detect changes */
@@ -66,12 +81,23 @@ class ConnectionManager {
 
     /** @since 0.9.3 */
     public static final String PROP_BLACKLIST = "i2p.streaming.blacklist";
-//    private static final long MAX_PING_TIMEOUT = 5*60*1000;
-    private static final long MAX_PING_TIMEOUT = 3*60*1000;
+
+    /**
+     * Maximum ping timeout. Tunable via i2p.streaming.maxPingTimeout (default: 300000).
+     */
+    private long getMaxPingTimeout() {
+        return _context.getProperty("i2p.streaming.maxPingTimeout", 5*60*1000);
+    }
+
     private static final int MAX_PONG_PAYLOAD = 32;
-    /** once over throttle limits, respond this many times before just dropping */
-//    private static final int DROP_OVER_LIMIT = 3;
-    private static final int DROP_OVER_LIMIT = 2;
+
+    /**
+     * Once over throttle limits, respond this many times before just dropping.
+     * Tunable via i2p.streaming.dropOverLimit (default: 3).
+     */
+    private int getDropOverLimit() {
+        return _context.getProperty("i2p.streaming.dropOverLimit", 3);
+    }
 
     /* @since 0.9.54+ */
     private static final String PROP_ENABLE_PONG_DELAY = "i2p.streaming.enablePongDelay";
@@ -329,9 +355,9 @@ class ConnectionManager {
                 return null;
             }
 
-            if ((_minuteThrottler != null && _minuteThrottler.isOverBy(h, DROP_OVER_LIMIT)) ||
-                (_hourThrottler != null && _hourThrottler.isOverBy(h, DROP_OVER_LIMIT)) ||
-                (_dayThrottler != null && _dayThrottler.isOverBy(h, DROP_OVER_LIMIT))) {
+            if ((_minuteThrottler != null && _minuteThrottler.isOverBy(h, getDropOverLimit())) ||
+                (_hourThrottler != null && _hourThrottler.isOverBy(h, getDropOverLimit())) ||
+                (_dayThrottler != null && _dayThrottler.isOverBy(h, getDropOverLimit()))) {
                 // A signed RST/close packet + ElGamal + session tags is fairly expensive, so
                 // once a limit is significantly exceeded for a particular peer, don't even send it.
                 // This is a tradeoff, because it will keep retransmitting the SYN for a while,
@@ -553,7 +579,13 @@ class ConnectionManager {
         return receiveId;
     }
 
-    private static final long DEFAULT_STREAM_DELAY_MAX = 10*1000;
+    /**
+     * Default stream delay maximum when no connect timeout is set.
+     * Tunable via i2p.streaming.defaultStreamDelayMax (default: 10000).
+     */
+    private long getDefaultStreamDelayMax() {
+        return _context.getProperty("i2p.streaming.defaultStreamDelayMax", 10*1000);
+    }
 
     /**
      * Build a new connection to the given peer.  This blocks if there is no
@@ -571,7 +603,7 @@ class ConnectionManager {
          long expiration = _context.clock().now();
          long tmout = opts.getConnectTimeout();
          int max = _defaultOptions.getMaxConns();
-         if (tmout <= 0) {expiration += DEFAULT_STREAM_DELAY_MAX;}
+         if (tmout <= 0) {expiration += getDefaultStreamDelayMax();}
          else {expiration += tmout;}
          _numWaiting.incrementAndGet();
          while (true) {
@@ -604,29 +636,65 @@ class ConnectionManager {
              }
          }
 
-         // ok we're in...
-         con.eventOccurred();
+          // ok we're in...
+          // Check per-destination cooldown to avoid hammering unreachable peers
+          Hash destHash = peer.calculateHash();
+          Long lastFailure = _destFailures.get(destHash);
+          if (lastFailure != null) {
+              long elapsed = _context.clock().now() - lastFailure;
+              if (elapsed < getDestCooldownMs() && elapsed >= 0) {
+                  long delay = getDestCooldownMs() - elapsed;
+                  if (_log.shouldWarn())
+                      _log.warn("Delaying connect to [" + destHash.toBase64().substring(0,6) +
+                                "] for " + delay + "ms (cooldown from previous failure)");
+                  try {
+                      Thread.sleep(delay);
+                  } catch (InterruptedException ie) {}
+              } else {
+                  _destFailures.remove(destHash, lastFailure);
+              }
+          }
+          con.eventOccurred();
 
-         if (_log.shouldDebug())
-             _log.debug("Connect() conDelay = " + opts.getConnectDelay());
-         if (opts.getConnectDelay() <= 0) {
-             con.waitForConnect();
-         }
-         long connectElapsed = _context.clock().now() - connectStart;
-         if (_log.shouldInfo())
-             _log.info("ConnectionManager.connect() to [" + peer.calculateHash().toBase64().substring(0,6) +
-                       "] completed in " + connectElapsed + "ms (error=" + con.getConnectionError() + ")");
-         // safe decrement
-         for (;;) {
-             int n = _numWaiting.get();
-             if (n <= 0)
-                 break;
-             if (_numWaiting.compareAndSet(n, n - 1))
-                 break;
-         }
+           if (_log.shouldDebug())
+               _log.debug("Connect() conDelay = " + opts.getConnectDelay());
+           if (opts.getConnectDelay() <= 0) {
+               con.waitForConnect();
+           } else {
+               // The SYN send is delayed by connectDelay ms (SchedulerPreconnect).
+               // Wait for the connection to establish with enough margin for the
+               // SYN delay plus a round trip.  Returns early on connect or error.
+               int boundedTimeout = opts.getConnectDelay() + 8000;
+               con.waitForConnect(boundedTimeout);
+           }
+           long connectElapsed = _context.clock().now() - connectStart;
+           if (_log.shouldInfo()) {
+               String err = con.getConnectionError();
+               if (err != null) {
+                   _log.info("ConnectionManager.connect() to [" + destHash.toBase64().substring(0,6) +
+                             "] failed in " + connectElapsed + "ms: " + err);
+               } else {
+                   _log.info("ConnectionManager.connect() to [" + destHash.toBase64().substring(0,6) +
+                             "] succeeded in " + connectElapsed + "ms");
+               }
+           }
+           // Record failure for cooldown, clear on success
+           if (con.getConnectionError() != null) {
+              _destFailures.put(destHash, _context.clock().now());
+          } else {
+              _destFailures.remove(destHash);
+          }
+          // safe decrement
+          for (;;) {
+              int n = _numWaiting.get();
+              if (n <= 0)
+                  break;
+              if (_numWaiting.compareAndSet(n, n - 1))
+                  break;
+          }
 
-         _context.statManager().addRateData("stream.connectionCreated", 1);
-         return con;
+          _context.statManager().addRateData("stream.connectionCreated", 1);
+          return con;
      }
 
     /**
@@ -937,8 +1005,8 @@ class ConnectionManager {
         packet.setOptionalFrom();
         packet.setLocalPort(fromPort);
         packet.setRemotePort(toPort);
-        if (timeoutMs > MAX_PING_TIMEOUT)
-            timeoutMs = MAX_PING_TIMEOUT;
+        if (timeoutMs > getMaxPingTimeout())
+            timeoutMs = getMaxPingTimeout();
         if (_log.shouldInfo()) {
             _log.info(String.format("About to ping %s port %d from port %d timeout=%d blocking=%b",
                       peer.calculateHash().toString(), toPort, fromPort, timeoutMs, blocking));
@@ -984,8 +1052,8 @@ class ConnectionManager {
         packet.setLocalPort(fromPort);
         packet.setRemotePort(toPort);
         packet.setPayload(new ByteArray(payload));
-        if (timeoutMs > MAX_PING_TIMEOUT)
-            timeoutMs = MAX_PING_TIMEOUT;
+        if (timeoutMs > getMaxPingTimeout())
+            timeoutMs = getMaxPingTimeout();
         if (_log.shouldInfo()) {
             _log.info(String.format("About to ping %s port %d from port %d timeout=%d payload=%d",
                       peer.calculateHash().toString(), toPort, fromPort, timeoutMs, payload.length));

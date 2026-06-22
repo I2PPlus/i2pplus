@@ -29,7 +29,13 @@ class ConnectionPacketHandler {
     private final Log _log;
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
 
-    public static final int MAX_SLOW_START_WINDOW = 64;
+    /**
+     * Get the maximum slow start window size from config or default (64).
+     * Tunable via i2p.streaming.maxSlowStartWindow (default: 64).
+     */
+    public static int getMaxSlowStartWindow(I2PAppContext ctx) {
+        return ctx.getProperty("i2p.streaming.maxSlowStartWindow", 64);
+    }
 
     // see tickets 1939 and 2584
     private static final int IMMEDIATE_ACK_DELAY = SystemVersion.isSlow() ? 100 : 80;
@@ -148,9 +154,10 @@ class ConnectionPacketHandler {
 
         if (!con.getInputStream().canAccept(seqNum, packet.getPayloadSize())) {
             if (con.getInputStream().isLocallyClosed()) {
-                if (_log.shouldInfo())
-                    _log.info("More data received after local close on " + con +
-                              " -> Ignoring packet instead of sending RESET...");
+                if (_log.shouldWarn())
+                    _log.warn("More data received after local close on " + con +
+                              ", sending reset and dropping " + packet);
+                con.disconnect(false);
             } else {
                 if (_log.shouldWarn())
                     _log.warn("Inbound buffer exceeded on " + con + " -> Choking and dropping...");

@@ -80,9 +80,6 @@ class MessageHandler implements I2PSessionMuxedListener {
             packet.readPacket(data, 0, data.length);
             packet.setRemotePort(fromPort);
             packet.setLocalPort(toPort);
-            if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE) && _log.shouldWarn()) {
-                _log.warn("[SYN-TRACE] MessageHandler received SYN packet: " + data.length + " bytes, proto=" + proto);
-            }
             _manager.getPacketHandler().receivePacket(packet);
         } catch (IndexOutOfBoundsException ioobe) {
             _context.statManager().addRateData("stream.packetReceiveFailure", 1);
