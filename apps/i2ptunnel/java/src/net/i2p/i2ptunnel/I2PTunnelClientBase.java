@@ -237,15 +237,21 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     /**
-     * This is ONLY for shared clients.
-     * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
-     * Call verifySocketManager() for that.
-     *
-     * @return non-null
-     * @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     *                                  badly that we cant create a socketManager
+     *  Returns the I2PSocketManager for this task.
+     *  For non-shared clients returns the instance socket manager.
+     *  For shared clients returns the shared static socket manager.
+     *  @since 0.9.63
      */
-    protected I2PSocketManager getSocketManager() {
+    @Override
+    public I2PSocketManager getSocketManager() {
+        if (_ownDest) {
+            synchronized (sockLock) {
+                I2PSocketManager mgr = sockMgr;
+                if (mgr != null && !mgr.isDestroyed())
+                    return mgr;
+            }
+            return null;
+        }
         return getSocketManager(getTunnel(), this.privKeyFile);
     }
 

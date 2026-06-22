@@ -348,6 +348,14 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      *  @return A copy, unmodifiable, non-null
      *  @since public since 0.9.53 for advanced plugin usage, was package private
      */
+    public List<I2PTunnelTask> getTasks() {
+        return new ArrayList<I2PTunnelTask>(tasks);
+    }
+
+    /**
+     *  @return A copy, unmodifiable, non-null
+     *  @since public since 0.9.53 for advanced plugin usage, was package private
+     */
     public List<I2PSession> getSessions() {
         if (_sessions.isEmpty()) {return Collections.emptyList();}
         return new ArrayList<I2PSession>(_sessions);

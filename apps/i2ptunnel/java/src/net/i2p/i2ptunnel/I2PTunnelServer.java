@@ -483,15 +483,26 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      */
     public long getReadTimeout() {return readTimeout;}
 
-     /**
-      *  Note that the tunnel can be reopened after this by calling startRunning().
-      *  This does not release all resources. In particular, the I2PSocketManager remains
-      *  and it may have timer threads that continue running.
-      *
-      *  To release all resources permanently, call destroy().
-      *
-      *  @return true if the tunnel was closed successfully, false if connections exist and forced is false
-      */
+    /**
+     *  @since 0.9.63
+     */
+    @Override
+    public I2PSocketManager getSocketManager() {
+        I2PSocketManager mgr = sockMgr;
+        if (mgr != null && !mgr.isDestroyed())
+            return mgr;
+        return null;
+    }
+
+    /**
+     *  Note that the tunnel can be reopened after this by calling startRunning().
+     *  This does not release all resources. In particular, the I2PSocketManager remains
+     *  and it may have timer threads that continue running.
+     *
+     *  To release all resources permanently, call destroy().
+     *
+     *  @return true if the tunnel was closed successfully, false if connections exist and forced is false
+     */
     public synchronized boolean close(boolean forced) {
         if (!open) return true;
         synchronized (lock) {

@@ -5,6 +5,7 @@ package net.i2p.i2ptunnel;
 
 import java.util.Properties;
 import net.i2p.client.I2PSession;
+import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.EventDispatcherImpl;
 
@@ -111,6 +112,13 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
      *  Does nothing here. Extending classes may override.
      */
     public void reportAbuse(I2PSession session, int severity) {}
+
+    /**
+     *  Returns the I2PSocketManager for this task, or null if not applicable.
+     *  Extending classes may override to return their socket manager.
+     *  @since 0.9.63
+     */
+    public I2PSocketManager getSocketManager() {return null;}
 
     @Override
     public String toString() {return name;}
