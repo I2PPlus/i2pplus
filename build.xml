@@ -197,8 +197,7 @@
     <echo message="  pmd-js                                       Run PMD static analysis on JavaScript sources &#10140; dist/pmd-js.html + dist/pmd-js-local.html"/>
     <echo message="  pmd-fix-errors                               Run fix-java-issues.py (dry run) &#10140; all fix types"/>
     <echo message="  pmd-fix-errors-apply                         Apply fix-java-issues.py --fix all fix types"/>
-	<echo message="  sonarqube                                    Full SonarQube analysis (auto-downloads server + scanner, runs scan, generates reports) &#10140; dist/sonarqube.html + dist/sonarqube-local.html"/>
-	<echo message="  sonarqube-report                             Generate SonarQube reports from cached data &#10140; dist/sonarqube.html + dist/sonarqube-local.html"/>
+	<echo message="  sonarqube-report                             Run SonarQube analysis (auto-downloads server + scanner, runs scan, generates reports) &#10140; dist/sonarqube.html + dist/sonarqube-local.html"/>
     <echo message="  spotbugs                                     Run SpotBugs static analysis on Java sources &#10140; dist/spotbugs.html + dist/spotbugs-local.html"/>
     <echo message="  report-all-java                              Run all Java analysis tools and combine into single report &#10140; dist/report-all-java.html + dist/report-all-java-local.html"/>
     <echo message="  report-all-java-quick                        Compile combined report from existing results (no re-analysis) &#10140; dist/report-all-java.html + dist/report-all-java-local.html"/>
@@ -4172,18 +4171,10 @@
     <echo message="CodeQL JSP report written to dist/codeql-jsp.html (${cq.jsp.count} issues)"/>
   </target>
 
-  <target name="sonarqube">
+  <target name="sonarqube-report" depends="jar, build2, buildUtilityJar">
     <echo message="* Running SonarQube analysis..."/>
     <exec executable="bash" dir="${basedir}" failonerror="false">
       <arg value="tools/sonarqube/run-sonar.sh"/>
-    </exec>
-  </target>
-
-  <target name="sonarqube-report">
-    <echo message="* Generating SonarQube HTML reports..."/>
-    <exec executable="bash" dir="${basedir}" failonerror="false">
-      <arg value="tools/sonarqube/run-sonar.sh"/>
-      <arg value="--skip-scan"/>
     </exec>
   </target>
 

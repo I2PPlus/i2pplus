@@ -18,33 +18,18 @@ Binaries are auto-downloaded on first `ant sonar`. Versions are pinned in `downl
 version string in the script and `version.txt` / `server-version.txt` manually. No auto-update. If a newer version is available upstream,
 the pinned version must be bumped by a developer.
 
-### Ant Targets
+### Ant Target
 
-| Target             | Description                                                                                                 |
-| ------------------ | ----------------------------------------------------------------------------------------------------------- |
-| `ant sonar`        | Full scan: download/start server, run scanner, generate HTML report, stop server                            |
-| `ant sonar-report` | Regenerate report from cached data (`--skip-scan`). Uses local cache if available; falls back to server API |
-| `ant sonar-report-local` | Same as above with clickable file links that open in your configured editor (`--local`) |
+| Target                | Description                                                                                                   |
+| --------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `ant sonarqube-report` | Full analysis: download/start server, run scanner, generate HTML report, stop server |
 
 ### Workflow
 
-**First run** -- downloads server + scanner, starts server, runs analysis, generates report, stops server:
+    ant sonarqube-report
 
-    ant sonar
-
-**Subsequent runs** -- reuses cached issues from `/tmp/i2p-sonarqube/.issues-cache.json`; server not needed:
-
-    ant sonar-report
-
-### Offline / Cached Reports
-
-After the first `ant sonar`, issues are cached at `/tmp/i2p-sonarqube/.issues-cache.json`.
-You can regenerate the HTML report from cache anytime without starting the server:
-
-    ant sonar-report
-
-If the cache is missing or expired, `ant sonar-report` falls back to starting the server
-and checking the SonarQube API for previously analyzed data.
+This downloads the server + scanner on first run, starts the server, runs the analysis, generates HTML reports
+to `dist/sonarqube.html` and `dist/sonarqube-local.html`, then stops the server.
 
 ### Environment
 
@@ -87,11 +72,8 @@ bash tools/sonarqube/run-sonar.sh
 # Keep server running after scan (faster subsequent runs)
 bash tools/sonarqube/run-sonar.sh --no-stop
 
-# Regenerate report from cache (no server needed)
-bash tools/sonarqube/run-sonar.sh --skip-scan
-
 # Pass a custom sonar-project.properties file
-bash tools/sonarqube/run-sonar.sh --skip-scan --no-stop path/to/sonar-project.properties
+bash tools/sonarqube/run-sonar.sh --no-stop path/to/sonar-project.properties
 ```
 
 ### Standalone Report Generation

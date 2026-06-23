@@ -3,7 +3,7 @@
 # Run SonarQube analysis on I2P+.
 # Auto-downloads server + scanner, starts server, runs analysis, stops server.
 #
-# Usage: run-sonar.sh [--no-stop|--skip-scan] [--local] [sonar-project.properties]
+# Usage: run-sonar.sh [--no-stop] [--local] [sonar-project.properties]
 #
 set -e
 
@@ -11,11 +11,9 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 PROPERTIES_FILE="${SCRIPT_DIR}/sonar-project.properties"
 NO_STOP=false
-SKIP_SCAN=false
 LOCAL=false
 SCAN_EXIT=0
 # --no-stop: leave server running after scan
-# --skip-scan: start server, generate report from cached data, stop
 # --local: generate report with file:// links for editor integration
 parse_args() {
     local args=("$@")
@@ -23,7 +21,6 @@ parse_args() {
     for arg in "${args[@]}"; do
         case "$arg" in
             --no-stop) NO_STOP=true ;;
-            --skip-scan) SKIP_SCAN=true ;;
             --local) LOCAL=true ;;
             *) PROPERTIES_FILE="$arg" ;;
         esac
@@ -112,19 +109,8 @@ ln -snf "${SONAR_TMP}/temp" "${SERVER_DIR}/temp"
 # Clean up any stray recursive symlink inside the cache from prior bad runs
 rm -f "${SONAR_CACHE}/data" "${SONAR_TMP}/logs/data" "${SONAR_TMP}/temp/data"
 
-# ---- Skip server startup if local cache available (for --skip-scan) ----
-if [ "$SKIP_SCAN" = true ] && [ -f "$SONAR_ISSUES_CACHE" ]; then
-    TOTAL=$(python3 -c "import json; print(len(json.load(open('${SONAR_ISSUES_CACHE}'))) )" 2>/dev/null)
-    if [ "$TOTAL" -gt 0 ] 2>/dev/null; then
-        CE_TASK_ID="cached"
-    else
-        rm -f "$SONAR_ISSUES_CACHE"
-    fi
-fi
-
-# ---- Server startup (skipped when local cache available) ----
-if [ -z "$CE_TASK_ID" ]; then
-    echo "Starting SonarQube server (no local issues cache)..."
+# ---- Server startup ----
+echo "Starting SonarQube server..."
 
 # ---- Kill any existing instance to ensure known password ----
 STARTED_BY_US=false
@@ -139,60 +125,55 @@ if [ -f "${SERVER_DIR}/bin/linux-x86-64/SonarQube.pid" ]; then
     echo "Removing leftover PID file..."
     LD_PRELOAD="" "$SONAR_SH" force-stop 2>/dev/null || true
     sleep 2
-    # Unclean shutdown — ES cluster state may be corrupt, force fresh
     rm -rf "${SERVER_DIR}/data/es8"
     rm -f "${SERVER_DIR}/bin/linux-x86-64/SonarQube.pid"
 fi
 
-    # Configure port and memory in sonar.properties
-    SONAR_PROPERTIES="${SERVER_DIR}/conf/sonar.properties"
-    if grep -q "^sonar.web.port=" "$SONAR_PROPERTIES" 2>/dev/null; then
-        sed -i "s/^sonar.web.port=.*/sonar.web.port=${SONAR_PORT}/" "$SONAR_PROPERTIES"
-    else
-        echo "sonar.web.port=${SONAR_PORT}" >> "$SONAR_PROPERTIES"
+# Configure port and memory in sonar.properties
+SONAR_PROPERTIES="${SERVER_DIR}/conf/sonar.properties"
+if grep -q "^sonar.web.port=" "$SONAR_PROPERTIES" 2>/dev/null; then
+    sed -i "s/^sonar.web.port=.*/sonar.web.port=${SONAR_PORT}/" "$SONAR_PROPERTIES"
+else
+    echo "sonar.web.port=${SONAR_PORT}" >> "$SONAR_PROPERTIES"
+fi
+sed -i '/^sonar.web.javaOpts=/d' "$SONAR_PROPERTIES"
+echo "sonar.web.javaOpts=-Xms512m -Xmx1g -XX:+HeapDumpOnOutOfMemoryError" >> "$SONAR_PROPERTIES"
+sed -i '/^sonar.ce.javaOpts=/d' "$SONAR_PROPERTIES"
+echo "sonar.ce.javaOpts=-Xms512m -Xmx1g -XX:+HeapDumpOnOutOfMemoryError" >> "$SONAR_PROPERTIES"
+sed -i '/^sonar.search.javaOpts=/d' "$SONAR_PROPERTIES"
+echo "sonar.search.javaOpts=-Xms1g -Xmx2g" >> "$SONAR_PROPERTIES"
+
+sed -i '/^sonar.path.logs=/d' "$SONAR_PROPERTIES"
+echo "sonar.path.logs=${SONAR_TMP}/logs" >> "$SONAR_PROPERTIES"
+sed -i '/^sonar.path.temp=/d' "$SONAR_PROPERTIES"
+echo "sonar.path.temp=${SONAR_TMP}/temp" >> "$SONAR_PROPERTIES"
+
+echo "Starting SonarQube Server on port ${SONAR_PORT}..."
+export ES_DISCOVERY_TYPE=single-node
+LD_PRELOAD="" "$SONAR_SH" start
+STARTED_BY_US=true
+
+echo "Waiting for server to be ready..."
+for i in $(seq 1 180); do
+    if curl -m 2 -s -o /dev/null -w "%{http_code}" "${SONAR_HOST}/api/system/health" 2>/dev/null | grep -qE '200|403|401'; then
+        echo "Server ready after ${i}s"
+        sleep 3
+        break
     fi
-    # Set 8GB heap for web server
-    sed -i '/^sonar.web.javaOpts=/d' "$SONAR_PROPERTIES"
-    echo "sonar.web.javaOpts=-Xms512m -Xmx1g -XX:+HeapDumpOnOutOfMemoryError" >> "$SONAR_PROPERTIES"
-    # Set 2GB heap for compute engine
-    sed -i '/^sonar.ce.javaOpts=/d' "$SONAR_PROPERTIES"
-    echo "sonar.ce.javaOpts=-Xms512m -Xmx1g -XX:+HeapDumpOnOutOfMemoryError" >> "$SONAR_PROPERTIES"
-    # Set 2GB for Elasticsearch (SonarQube manages its own -Djava.io.tmpdir)
-    sed -i '/^sonar.search.javaOpts=/d' "$SONAR_PROPERTIES"
-    echo "sonar.search.javaOpts=-Xms1g -Xmx2g" >> "$SONAR_PROPERTIES"
-
-    # Keep sonar.properties in sync with the /tmp/build-i2p/sonarqube/ symlinks.
-    sed -i '/^sonar.path.logs=/d' "$SONAR_PROPERTIES"
-    echo "sonar.path.logs=${SONAR_TMP}/logs" >> "$SONAR_PROPERTIES"
-    sed -i '/^sonar.path.temp=/d' "$SONAR_PROPERTIES"
-    echo "sonar.path.temp=${SONAR_TMP}/temp" >> "$SONAR_PROPERTIES"
-
-    echo "Starting SonarQube Server on port ${SONAR_PORT}..."
-    export ES_DISCOVERY_TYPE=single-node
-    LD_PRELOAD="" "$SONAR_SH" start
-    STARTED_BY_US=true
-
-    echo "Waiting for server to be ready..."
-    for i in $(seq 1 180); do
-        if curl -m 2 -s -o /dev/null -w "%{http_code}" "${SONAR_HOST}/api/system/health" 2>/dev/null | grep -qE '200|403|401'; then
-            echo "Server ready after ${i}s"
-            sleep 3
-            break
-        fi
-        # Detect early process death (ES/CE/web crashed)
-        if ! grep -q "SonarQube is stopped" "${SERVER_DIR}/logs/sonar.log" 2>/dev/null; then
-            if ! pgrep -f "sonar-application" >/dev/null 2>&1; then
-                echo "Error: SonarQube process died unexpectedly (check logs)"
-                tail -30 "${SERVER_DIR}/logs/sonar.log" 2>/dev/null
-                exit 1
-            fi
-        fi
-        if [ "$i" -eq 180 ]; then
-            echo "Error: Server failed to start within 180s"
+    # Detect early process death (ES/CE/web crashed)
+    if ! grep -q "SonarQube is stopped" "${SERVER_DIR}/logs/sonar.log" 2>/dev/null; then
+        if ! pgrep -f "sonar-application" >/dev/null 2>&1; then
+            echo "Error: SonarQube process died unexpectedly (check logs)"
+            tail -30 "${SERVER_DIR}/logs/sonar.log" 2>/dev/null
             exit 1
         fi
-        sleep 1
-    done
+    fi
+    if [ "$i" -eq 180 ]; then
+        echo "Error: Server failed to start within 180s"
+        exit 1
+    fi
+    sleep 1
+done
 
 # ---- Force admin password to known value ----
 # Prevents Web UI password-change prompt and keeps CLI token generation working
@@ -259,73 +240,41 @@ if [ -z "${SONAR_TOKEN_ARG}" ]; then
     echo "$TOKEN" > "$SONAR_TOKEN_FILE"
     SONAR_TOKEN_ARG="-Dsonar.token=${TOKEN}"
 fi
-fi  # end server startup guard
 
 # ---- Extract token value ----
 SONAR_TOKEN_VALUE=$(echo "${SONAR_TOKEN_ARG}" | sed 's/-Dsonar.token=//')
 
-# ---- Skip scan if --skip-scan and project has cached results ----
-if [ -z "$CE_TASK_ID" ] && [ "$SKIP_SCAN" = true ]; then
-    # Prefer local cache file (avoids needing the server at all)
-    if [ -f "$SONAR_ISSUES_CACHE" ]; then
-        TOTAL=$(python3 -c "import json; print(len(json.load(open('${SONAR_ISSUES_CACHE}'))) )" 2>/dev/null)
-        if [ "$TOTAL" -gt 0 ] 2>/dev/null; then
-            echo "Found $TOTAL issues in local cache ($SONAR_ISSUES_CACHE) — skipping scan."
-            CE_TASK_ID="cached"
-        else
-            echo "Local cache empty, removing..."
-            rm -f "$SONAR_ISSUES_CACHE"
-        fi
-    fi
-    # Fall back to server API check
-    if [ -z "$CE_TASK_ID" ]; then
-        echo "No local cache — checking server for cached analysis results..."
-        EXISTING=$(LD_PRELOAD="" curl -s \
+# ---- Run analysis ----
+echo "Running SonarQube analysis..."
+echo "Server: ${SONAR_HOST}"
+echo "Config: ${PROPERTIES_FILE}"
+echo ""
+
+BUILD_ROOT="${TMPDIR:-/tmp}/build-i2p"
+SCAN_OUTPUT=$(LD_PRELOAD="" SONAR_SCANNER_OPTS="-Xmx8g" \
+    "$SCANNER_BIN" \
+    ${SONAR_TOKEN_ARG} \
+    -Dsonar.projectBaseDir="$PROJECT_DIR" \
+    -Dproject.settings="$PROPERTIES_FILE" \
+    -Dsonar.java.binaries="${BUILD_ROOT}/build" \
+    -Dsonar.java.libraries="${BUILD_ROOT}/build/*.jar" \
+    -Dsonar.working.directory="${SONAR_TMP}/scanner-work" \
+    -Dsonar.userHome="${SONAR_TMP}/scanner-home" \
+    -Dsonar.scanner.socketTimeout=1800 2>&1)
+SCAN_EXIT=$?
+echo "$SCAN_OUTPUT"
+
+# Extract CE task ID from scanner output
+CE_TASK_ID=$(echo "$SCAN_OUTPUT" | grep -oP 'id=[a-f0-9-]+' | head -1 | cut -d= -f2)
+
+# Wait for Compute Engine to process
+if [ -n "$CE_TASK_ID" ]; then
+    echo "Waiting for Compute Engine (task $CE_TASK_ID)..."
+    for i in $(seq 1 150); do
+        TASK_STATUS=$(LD_PRELOAD="" curl -s \
             -H "Authorization: Bearer ${SONAR_TOKEN_VALUE}" \
-            "${SONAR_HOST}/api/issues/search?componentKeys=net.i2p.router:i2pplus&ps=1" 2>/dev/null)
-        TOTAL=$(echo "$EXISTING" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('total',0))" 2>/dev/null)
-        if [ "$TOTAL" -gt 0 ] 2>/dev/null; then
-            echo "Found $TOTAL cached issues on server — skipping scan."
-            CE_TASK_ID="cached"
-        else
-            echo "No cached results found — will run full analysis."
-            SKIP_SCAN=false
-        fi
-    fi
-fi
-
-# ---- Run analysis (skip if --skip-scan with cached results) ----
-if [ "$SKIP_SCAN" = false ]; then
-    echo "Running SonarQube analysis..."
-    echo "Server: ${SONAR_HOST}"
-    echo "Config: ${PROPERTIES_FILE}"
-    echo ""
-
-    BUILD_ROOT="${TMPDIR:-/tmp}/build-i2p"
-    SCAN_OUTPUT=$(LD_PRELOAD="" SONAR_SCANNER_OPTS="-Xmx8g" \
-        "$SCANNER_BIN" \
-        ${SONAR_TOKEN_ARG} \
-        -Dsonar.projectBaseDir="$PROJECT_DIR" \
-        -Dproject.settings="$PROPERTIES_FILE" \
-        -Dsonar.java.binaries="${BUILD_ROOT}/build" \
-        -Dsonar.java.libraries="${BUILD_ROOT}/build/*.jar" \
-        -Dsonar.working.directory="${SONAR_TMP}/scanner-work" \
-        -Dsonar.userHome="${SONAR_TMP}/scanner-home" \
-        -Dsonar.scanner.socketTimeout=1800 2>&1)
-    SCAN_EXIT=$?
-    echo "$SCAN_OUTPUT"
-
-    # Extract CE task ID from scanner output
-    CE_TASK_ID=$(echo "$SCAN_OUTPUT" | grep -oP 'id=[a-f0-9-]+' | head -1 | cut -d= -f2)
-
-    # Wait for Compute Engine to process
-    if [ "$SCAN_EXIT" = 0 ] && [ -n "$CE_TASK_ID" ] && [ "$CE_TASK_ID" != "cached" ]; then
-        echo "Waiting for Compute Engine (task $CE_TASK_ID)..."
-        for i in $(seq 1 150); do
-            TASK_STATUS=$(LD_PRELOAD="" curl -s \
-                -H "Authorization: Bearer ${SONAR_TOKEN_VALUE}" \
-                "${SONAR_HOST}/api/ce/task?id=${CE_TASK_ID}" 2>/dev/null)
-            CURRENT_STATUS=$(echo "$TASK_STATUS" | python3 -c "
+            "${SONAR_HOST}/api/ce/task?id=${CE_TASK_ID}" 2>/dev/null)
+        CURRENT_STATUS=$(echo "$TASK_STATUS" | python3 -c "
 import sys, json
 try:
     d = json.load(sys.stdin)
@@ -334,24 +283,23 @@ try:
 except Exception:
     print('ERROR')
 " 2>/dev/null)
-            if [ "$CURRENT_STATUS" = "SUCCESS" ]; then
-                echo "CE processing finished after ${i}s"
-                break
-            fi
-            if [ "$CURRENT_STATUS" = "FAILED" ] || [ "$CURRENT_STATUS" = "CANCELED" ]; then
-                echo "CE task ${CURRENT_STATUS} after ${i}s (continuing anyway)"
-                echo "  Error: $(echo "$TASK_STATUS" | python3 -c 'import sys,json; print(json.load(sys.stdin).get(\"task\",{}).get(\"errorMessage\",\"\"))' 2>/dev/null)"
-                break
-            fi
-            if [ "$i" -eq 150 ]; then
-                echo "CE not finished after 300s (continuing anyway)"
-            fi
-            sleep 2
-        done
-    fi
+        if [ "$CURRENT_STATUS" = "SUCCESS" ]; then
+            echo "CE processing finished after ${i}s"
+            break
+        fi
+        if [ "$CURRENT_STATUS" = "FAILED" ] || [ "$CURRENT_STATUS" = "CANCELED" ]; then
+            echo "CE task ${CURRENT_STATUS} after ${i}s (continuing anyway)"
+            echo "  Error: $(echo "$TASK_STATUS" | python3 -c 'import sys,json; print(json.load(sys.stdin).get(\"task\",{}).get(\"errorMessage\",\"\"))' 2>/dev/null)"
+            break
+        fi
+        if [ "$i" -eq 150 ]; then
+            echo "CE not finished after 300s (continuing anyway)"
+        fi
+        sleep 2
+    done
 fi
 
-# ---- Generate HTML report (skips scan for cached or successful scan) ----
+# ---- Generate HTML report ----
 if [ -n "$CE_TASK_ID" ]; then
     CACHE_ARG=""
     if [ -f "$SONAR_ISSUES_CACHE" ]; then
