@@ -322,23 +322,6 @@ public class TunnelPool {
             if (_tunnels.isEmpty()) {
                shouldWarn = _log.shouldWarn() && uptime > getStartupTime(_context) && shouldLogNoTunnelsWarning();
             } else {
-                // Determine if pool has any tested tunnels (non-UNTESTED).
-                // If so, skip UNTESTED tunnels — prefer routes through tunnels
-                // with known performance. When ALL tunnels are UNTESTED (e.g.
-                // pool startup), use them all to avoid stalls.
-                boolean hasTestedTunnels = false;
-                for (TunnelInfo ti : _tunnels) {
-                    if (ti instanceof PooledTunnelCreatorConfig) {
-                        if (((PooledTunnelCreatorConfig) ti).getTestStatus() != TunnelTestStatus.UNTESTED) {
-                            hasTestedTunnels = true;
-                            break;
-                        }
-                    } else {
-                        hasTestedTunnels = true;
-                        break;
-                    }
-                }
-
                 TunnelInfo backloggedTunnel = null;
                 // Random start index for statistical load balancing
                 int startIdx = _tunnels.size() > 0 ? _context.random().nextInt(_tunnels.size()) : 0;
@@ -350,11 +333,6 @@ public class TunnelPool {
                         if (info instanceof PooledTunnelCreatorConfig &&
                             ((PooledTunnelCreatorConfig)info).isLastResort()) {
                             lastResortTunnel = info;
-                            continue;
-                        }
-                        // Skip untested tunnels if tested alternatives exist (client pools only)
-                        if (hasTestedTunnels && !_settings.isExploratory() && info instanceof PooledTunnelCreatorConfig &&
-                            ((PooledTunnelCreatorConfig) info).getTestStatus() == TunnelTestStatus.UNTESTED) {
                             continue;
                         }
                         // Skip tunnels that have failed completely
@@ -390,11 +368,6 @@ public class TunnelPool {
                         if (lastResortTunnel == null) lastResortTunnel = info;
                         continue;
                     }
-                    // Skip untested tunnels if tested alternatives exist (client pools only)
-                    if (hasTestedTunnels && !_settings.isExploratory() && info instanceof PooledTunnelCreatorConfig &&
-                        ((PooledTunnelCreatorConfig) info).getTestStatus() == TunnelTestStatus.UNTESTED) {
-                        continue;
-                    }
                     // Skip completely failed tunnels
                     if (info.getTunnelFailed()) {continue;}
                     // Skip only after max failures exceeded
@@ -426,22 +399,7 @@ public class TunnelPool {
                     }
                     return backloggedTunnel;
                 }
-                // If tested tunnels exist but none are selectable, fall back
-                // to untested tunnels before using degraded/FAILED ones.
-                // Always scan — even when hasTestedTunnels is false (tested tunnels
-                // may have expired mid-scan), untested tunnels are better than null.
-                for (int i = 0; i < _tunnels.size(); i++) {
-                    TunnelInfo info = _tunnels.get(i);
-                    if (info instanceof PooledTunnelCreatorConfig &&
-                        ((PooledTunnelCreatorConfig) info).getTestStatus() == TunnelTestStatus.UNTESTED &&
-                        info.getExpiration() > now) {
-                        if (info instanceof PooledTunnelCreatorConfig) {
-                            ((PooledTunnelCreatorConfig) info).recordActivity();
-                        }
-                        return info;
-                    }
-                }
-                // If nothing found, accept any non-expired tunnel even with high
+                // Accept any non-expired tunnel even with high
                 // consecutive failures. Retained tunnels are kept deliberately
                 // and are better than returning null (which causes "No tunnels
                 // available" and lost build replies). This applies to ALL pools
@@ -654,16 +612,15 @@ public class TunnelPool {
             // pool collapse.  The backoff is meant to avoid wasting build slots
             // during congestion, but with 0 GOOD tunnels every build is critical.
             boolean poolEmpty = getActiveTunnelCount() == 0;
-            // At extreme timeout counts (>= 100), override the poolEmpty guard:
+            // At >= 30 consecutive timeouts, override the poolEmpty guard:
             // the destination is likely unreachable or all candidate peers dead.
-            // Reduce quantity aggressively to 1 to stop wasting build slots.
+            // Reduce quantity to 1 to stop wasting build slots.
             // The pool gets a single attempt per cycle — if it succeeds, normal
             // backoff resumes; if not, no harm in minimal retries.
-            if (fails > 100 && !testQueueSaturated) {
-                int reductionFactor = Math.min(fails / 50, 4);
-                rv = Math.max(1, _settings.getTotalQuantity() / reductionFactor);
+            if (fails > 30 && !testQueueSaturated) {
+                rv = Math.max(1, _settings.getTotalQuantity() / 4);
                 if (rv < 1) {rv = 1;}
-                if (reductionFactor > 1 && _log.shouldWarn() && !shouldSuppressTimeoutWarning()) {
+                if (_log.shouldWarn() && !shouldSuppressTimeoutWarning()) {
                     _log.warn("Extreme backoff: reducing " + this + " to " + rv +
                               " after " + fails + " consecutive timeouts (destination may be unreachable)");
                 }

@@ -70,19 +70,19 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     * Get the minimum test period from config or default (45s).
-     * Tunable via i2p.tunnel.testJob.minTestPeriod (default: 45000).
+     * Get the minimum test period from config or default (15s).
+     * Tunable via i2p.tunnel.testJob.minTestPeriod (default: 15000).
      */
     private int getMinTestPeriod() {
-        return getContext().getProperty("i2p.tunnel.testJob.minTestPeriod", 45*1000);
+        return getContext().getProperty("i2p.tunnel.testJob.minTestPeriod", 15*1000);
     }
 
     /**
-     * Get the maximum test period from config or default (50s).
-     * Tunable via i2p.tunnel.testJob.maxTestPeriod (default: 50000).
+     * Get the maximum test period from config or default (30s).
+     * Tunable via i2p.tunnel.testJob.maxTestPeriod (default: 30000).
      */
     private int getMaxTestPeriod() {
-        return getContext().getProperty("i2p.tunnel.testJob.maxTestPeriod", 50*1000);
+        return getContext().getProperty("i2p.tunnel.testJob.maxTestPeriod", 30*1000);
     }
 
     // Adaptive testing frequency constants
@@ -122,7 +122,7 @@ public class TestJob extends JobImpl {
      * Prevents job queue saturation from too many waiting tunnel tests.
      * Tunable via i2p.tunnel.testJob.maxQueued (default: 192 fast / 96 slow)
      */
-    public static volatile int maxQueuedTests = 192;
+    public static volatile int maxQueuedTests = 384;
 
     /**
      *  Base max queued tests value, read from PROP or static default.
@@ -138,11 +138,11 @@ public class TestJob extends JobImpl {
      * Hard limit for total TestJob instances (queued + active).
      * Above this threshold, no new tests are scheduled until count decreases.
      * Prevents ever-increasing backlogs that could cause job lag.
-     * Tunable via i2p.tunnel.testJob.hardLimit (default: 256 fast / 192 slow)
+     * Tunable via i2p.tunnel.testJob.hardLimit (default: 512 fast / 384 slow)
      */
     public static int getHardLimit(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.testJob.hardLimit",
-                               SystemVersion.isSlow() ? 192 : 256);
+                               SystemVersion.isSlow() ? 384 : 512);
     }
 
     /**

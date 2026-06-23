@@ -557,8 +557,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 // established/connecting tier entirely — accept whatever passed the
                 // tier filters above (transport address, acceptance ratio, etc.).
                 if (!matches.isEmpty()) {
-                    final int ESTABLISHED_PREF_ATTEMPTS = 3;
-                    final int CONNECTING_PREF_ATTEMPTS = 5;
+                    final int ESTABLISHED_PREF_ATTEMPTS = 1;
+                    final int CONNECTING_PREF_ATTEMPTS = 2;
                     int qualityAttempts = 0;
                     int tier = 0;
                     boolean inStartup = ctx.router() != null && ctx.router().getUptime() < 15*60*1000;
@@ -571,7 +571,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     if (matches.size() < 5)
                         tier = 2;
                     Set<Hash> localExclude = new HashSet<Hash>();
-                    while (qualityAttempts < 8 && !matches.isEmpty()) {
+                    while (qualityAttempts < 4 && !matches.isEmpty()) {
                         qualityAttempts++;
                         if (!inStartup) {
                             if (qualityAttempts > CONNECTING_PREF_ATTEMPTS) {
