@@ -281,8 +281,7 @@ class PeerState implements DataLoader {
                                 setInteresting(interest);
                                 return;
                             }
-                        } catch (InvalidBEncodingException ibee) {
-                        }
+                        } catch (InvalidBEncodingException ibee) { /* ignored */ }
                     }
                 }
             }

@@ -149,8 +149,7 @@ public class ExternalMain implements ClientApp, NotificationService {
                     synchronized (o) {
                         o.wait();
                     }
-                } catch (InterruptedException ie) {
-                }
+                } catch (InterruptedException ie) { /* ignored */ }
             }
         };
         Thread t = new Thread(r, "DesktopGUI spinner");

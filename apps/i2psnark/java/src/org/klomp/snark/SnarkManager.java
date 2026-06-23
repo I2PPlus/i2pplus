@@ -990,8 +990,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         synchronized (_configLock) { // one lock for all
             try {
                 I2PSnarkUtil.loadProps(rv, conf);
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
         }
         return rv;
     }
@@ -1386,8 +1385,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if ((p != null) && (p.trim().length() > 0)) {
                 return Integer.parseInt(p.trim());
             }
-        } catch (NumberFormatException nfe) {
-        } // ignore
+        } catch (NumberFormatException nfe) { /* ignored */ } // ignore
         return defaultVal;
     }
 
@@ -1496,8 +1494,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             int limit = _util.getMaxUploaders();
             try {
                 limit = Integer.parseInt(upLimit.trim());
-            } catch (NumberFormatException nfe) {
-            }
+            } catch (NumberFormatException nfe) { /* ignored */ }
             if (limit != _util.getMaxUploaders()) {
                 if (limit >= Snark.MIN_TOTAL_UPLOADERS) {
                     _util.setMaxUploaders(limit);
@@ -1521,8 +1518,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             int limit = _util.getMaxUpBW();
             try {
                 limit = Integer.parseInt(upBW.trim());
-            } catch (NumberFormatException nfe) {
-            }
+            } catch (NumberFormatException nfe) { /* ignored */ }
             if (limit != _util.getMaxUpBW()) {
                 if (limit >= MIN_UP_BW) {
                     _bwManager.setUpBWLimit(limit * 1024L);
@@ -1546,8 +1542,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             int limit = _util.getMaxUpBW();
             try {
                 limit = Integer.parseInt(upBW.trim());
-            } catch (NumberFormatException nfe) {
-            }
+            } catch (NumberFormatException nfe) { /* ignored */ }
             if (limit != _util.getMaxUpBW()) {
                 if (limit >= MIN_UP_BW) {
                     _util.setMaxUpBW(limit);
@@ -1572,8 +1567,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             int limit = (int) (_bwManager.getDownBWLimit() / 1024);
             try {
                 limit = Integer.parseInt(downBW.trim());
-            } catch (NumberFormatException nfe) {
-            }
+            } catch (NumberFormatException nfe) { /* ignored */ }
             if (limit != _bwManager.getDownBWLimit() / 1024) {
                 if (limit >= MIN_DOWN_BW) {
                     _bwManager.setDownBWLimit(limit * 1024L);
@@ -1627,8 +1621,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             int minutes = _util.getStartupDelay();
             try {
                 minutes = Integer.parseInt(startDelay.trim());
-            } catch (NumberFormatException nfe) {
-            }
+            } catch (NumberFormatException nfe) { /* ignored */ }
             if (minutes != _util.getStartupDelay()) {
                 _util.setStartupDelay(minutes);
                 changed = true;
@@ -1667,8 +1660,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         }
                     }
                 }
-            } catch (NumberFormatException nfe) {
-            }
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
 
         if (pageSize != null) {
@@ -1685,8 +1677,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _config.setProperty(PROP_PAGE_SIZE, pageSize);
                     addMessage(_t("Page size changed to {0}", pageSize));
                 }
-            } catch (NumberFormatException nfe) {
-            }
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
 
         // set this before we check the data dir
@@ -1794,8 +1785,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (i2cpPort != null) {
             try {
                 port = Integer.parseInt(i2cpPort);
-            } catch (NumberFormatException nfe) {
-            }
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
 
         Map<String, String> opts = new HashMap<>();
@@ -2414,8 +2404,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     try {
                         fis.close();
                         fis = null;
-                    } catch (IOException e) {
-                    }
+                    } catch (IOException e) { /* ignored */ }
 
                     // These tests may be duplicates, but not if we were called
                     // from the DirMonitor, which only checks for dup torrent file names.
@@ -2488,8 +2477,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         try {
                             fis.close();
                             fis = null;
-                        } catch (IOException ioe2) {
-                        }
+                        } catch (IOException ioe2) { /* ignored */ }
                     String err =
                             _t("Torrent in \"{0}\" is invalid", sfile.toString())
                                     + ": "
@@ -2514,8 +2502,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     if (fis != null) {
                         try {
                             fis.close();
-                        } catch (IOException ioe) {
-                        }
+                        } catch (IOException ioe) { /* ignored */ }
                     }
                 }
             }
@@ -2536,8 +2523,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             try {
                 long activity = Long.parseLong(prop);
                 torrent.getStorage().setActivity(activity);
-            } catch (NumberFormatException nfe) {
-            }
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
 
         // Were we running last time?
@@ -2924,8 +2910,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 if (out != null) {
                     out.close();
                 }
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -2938,8 +2923,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
         try {
             return Long.parseLong(time);
-        } catch (NumberFormatException nfe) {
-        }
+        } catch (NumberFormatException nfe) { /* ignored */ }
         return 0;
     }
 
@@ -2999,8 +2983,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 if (arr[i].length() > 0) {
                     try {
                         rv[i] = Integer.parseInt(arr[i]);
-                    } catch (Throwable t) {
-                    }
+                    } catch (Throwable t) { /* ignored */ }
                 }
             }
             storage.setFilePriorities(rv);
@@ -3046,8 +3029,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (config != null) {
             try {
                 return Long.parseLong(config.getProperty(PROP_META_UPLOADED));
-            } catch (NumberFormatException nfe) {
-            }
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
         return 0;
     }
@@ -3064,12 +3046,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (config != null) {
             try {
                 rv[0] = Long.parseLong(config.getProperty(PROP_META_ADDED));
-            } catch (NumberFormatException nfe) {
-            }
+            } catch (NumberFormatException nfe) { /* ignored */ }
             try {
                 rv[1] = Long.parseLong(config.getProperty(PROP_META_COMPLETED));
-            } catch (NumberFormatException nfe) {
-            }
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
         return rv;
     }
@@ -3631,15 +3611,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                                 DataHelper.formatDuration2(delay)));
                 try {
                     Thread.sleep(delay);
-                } catch (InterruptedException ie) {
-                }
+                } catch (InterruptedException ie) { /* ignored */ }
                 _messages.clearThrough(id); // Remove that first message
             } else if (_context.isRouterContext()) {
                 try {
                     Thread.sleep(3000);
                 } // Wait for client manager to be up so we can get bandwidth limits
-                catch (InterruptedException ie) {
-                }
+                catch (InterruptedException ie) { /* ignored */ }
             }
             // Here because we need to delay until I2CP is up although the user will see the default
             // until then
@@ -3734,8 +3712,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                         break;
                                     } // Snark.fatal() will log and call fatal() here for user
                                       // message before throwing
-                                    catch (RuntimeException re) {
-                                    } // Snark.fatal() will log and call fatal() here for user
+                                    catch (RuntimeException re) { /* ignored */ } // Snark.fatal() will log and call fatal() here for user
                                       // message before throwing
                                 }
                             }
@@ -3797,8 +3774,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 try {
                     Thread.sleep(30 * 1000);
                 } // Polling period for scanning data dir for new content
-                catch (InterruptedException ie) {
-                }
+                catch (InterruptedException ie) { /* ignored */ }
             }
         }
     }
@@ -4092,8 +4068,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         // let's find new ones first...
         int count = 0;
         for (String name : foundNames) {
-            if (existingNames.contains(name)) {
-            } // already known. noop
+            if (existingNames.contains(name)) { /* ignored */ } // already known. noop
             else {
                 // Will call connect() in addTorrent() if enabled
                 // if (shouldStart && !_util.connect())
@@ -4124,8 +4099,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     // try to prevent OOMs at startup
                     try {
                         Thread.sleep(250);
-                    } catch (InterruptedException ie) {
-                    }
+                    } catch (InterruptedException ie) { /* ignored */ }
                 }
             }
         }
@@ -4133,15 +4107,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         existingNames.removeAll(_magnets);
         // now let's see which ones have been removed...
         for (String name : existingNames) {
-            if (foundNames.contains(name)) {
-            } // known and still there.  noop
+            if (foundNames.contains(name)) { /* ignored */ } // known and still there.  noop
             else { // known, but removed.  drop it
                 try {
                     // Snark.fatal() throws a RuntimeException
                     // don't let one bad torrent kill the whole loop
                     stopTorrent(name, true);
-                } catch (RuntimeException e) {
-                } // don't bother with message
+                } catch (RuntimeException e) { /* ignored */ } // don't bother with message
             }
         }
         return rv;
@@ -4485,8 +4457,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             (new I2PAppThread(new ThreadedStarter(snark), "TorrentStarter", true)).start();
             try {
                 Thread.sleep(200);
-            } catch (InterruptedException ie) {
-            }
+            } catch (InterruptedException ie) { /* ignored */ }
         }
     }
 
@@ -4510,8 +4481,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         (new I2PAppThread(new ThreadedStarter(null), "TorrentStarterAll", true)).start();
         try {
             Thread.sleep(200);
-        } catch (InterruptedException ie) {
-        }
+        } catch (InterruptedException ie) { /* ignored */ }
     }
 
     /**
@@ -4531,8 +4501,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 if (snark.isStopped()) {
                     try {
                         snark.startTorrent();
-                    } catch (RuntimeException re) {
-                    } // Snark.fatal() will log and call fatal() here for user message before
+                    } catch (RuntimeException re) { /* ignored */ } // Snark.fatal() will log and call fatal() here for user message before
                       // throwing
                 }
             } else {
@@ -4552,14 +4521,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if (snark.isStopped()) {
                 try {
                     snark.startTorrent();
-                } catch (RuntimeException re) {
-                } // Snark.fatal() will log and call fatal() here for user message before throwing
+                } catch (RuntimeException re) { /* ignored */ } // Snark.fatal() will log and call fatal() here for user message before throwing
                 if ((count++ & 0x0f) == 15) {
                     try {
                         Thread.sleep(250);
                     } // try to prevent OOMs
-                    catch (InterruptedException ie) {
-                    }
+                    catch (InterruptedException ie) { /* ignored */ }
                 }
             }
         }
@@ -4606,8 +4573,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     if (count % 8 == 0) {
                         try {
                             Thread.sleep(20);
-                        } catch (InterruptedException ie) {
-                        }
+                        } catch (InterruptedException ie) { /* ignored */ }
                     }
                 }
             }
@@ -4633,8 +4599,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 if (count % 8 == 0) {
                     try {
                         Thread.sleep(20);
-                    } catch (InterruptedException ie) {
-                    }
+                    } catch (InterruptedException ie) { /* ignored */ }
                 }
             } else {
                 CommentSet cs = snark.getComments();
@@ -4665,8 +4630,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     }
                     try {
                         Thread.sleep(toWait);
-                    } catch (InterruptedException ie) {
-                    }
+                    } catch (InterruptedException ie) { /* ignored */ }
                     _util.disconnect();
                     _stopping = false;
                 } else {
@@ -4715,8 +4679,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         (new I2PAppThread(new ThreadedRechecker(snark), "TorrentRechecker", true)).start();
         try {
             Thread.sleep(200);
-        } catch (InterruptedException ie) {
-        }
+        } catch (InterruptedException ie) { /* ignored */ }
     }
 
     /**

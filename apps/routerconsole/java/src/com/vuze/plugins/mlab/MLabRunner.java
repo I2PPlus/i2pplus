@@ -254,13 +254,13 @@ public class MLabRunner {
                         long up_bps = 0;
                         try {
                             up_bps = (long)(Double.parseDouble(test.get_c2sspd())*1000000)/8;
-                        } catch(Throwable e) {}
+                        } catch(Throwable e) { /* ignored */ }
 
                         // in integer bytes per second
                         long down_bps = 0;
                         try {
                             down_bps = (long)(Double.parseDouble(test.get_s2cspd())*1000000)/8;
-                        } catch(Throwable e) {}
+                        } catch(Throwable e) { /* ignored */ }
 
                         String result_str;
                         if (cancelled.get()) {
@@ -314,8 +314,7 @@ public class MLabRunner {
             public void run() {
                 try{
                     target.run();
-                }finally{
-                }
+                }finally{ /* ignored */ }
             }
         }.start();
     }

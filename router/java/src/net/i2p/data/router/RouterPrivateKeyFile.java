@@ -59,7 +59,7 @@ public class RouterPrivateKeyFile extends PrivateKeyFile {
             return ri;
         } finally {
             if (in != null) {
-                try { in.close(); } catch (IOException ioe) {}
+                try { in.close(); } catch (IOException ioe) { /* ignored */ }
             }
         }
     }

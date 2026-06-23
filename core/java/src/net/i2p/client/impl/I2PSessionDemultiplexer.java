@@ -59,8 +59,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
             }
             try {
                 session.receiveMessage(msgId);
-            } catch (I2PSessionException ise) {
-            }
+            } catch (I2PSessionException ise) { /* ignored */ }
         }
     }
 

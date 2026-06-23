@@ -136,7 +136,7 @@ public class BlocklistEntries {
             boolean diff = true;
             try {
                 diff = !ctx.getBaseDir().getCanonicalPath().equals(ctx.getConfigDir().getCanonicalPath());
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             if (diff) {
                 ring = new DirKeyRing(new File(ctx.getConfigDir(), "certificates"));
                 try {
@@ -238,7 +238,7 @@ public class BlocklistEntries {
             ioe.printStackTrace();
             System.exit(1);
         } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) {}
+            if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
         }
         if (elist.isEmpty() && rlist.isEmpty()) {
             System.err.println("Signing empty blocklist");

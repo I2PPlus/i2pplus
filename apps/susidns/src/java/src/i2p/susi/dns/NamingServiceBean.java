@@ -452,7 +452,7 @@ public class NamingServiceBean extends AddressbookBean {
                         // remove specified dest only in case there is more than one
                         if (destination != null) {
                             try {matchDest = new Destination(destination);}
-                            catch (DataFormatException dfe) {}
+                            catch (DataFormatException dfe) { /* ignored */ }
                         }
                     }
                     for (String n : deletionMarks) {
@@ -808,11 +808,11 @@ public class NamingServiceBean extends AddressbookBean {
         } finally {
             if (in != null) {
                 try {in.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
             }
             if (out != null) {
                 try {out.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
             }
             // shutdown SFNS
             if (sfns != null) {sfns.shutdown();}

@@ -381,7 +381,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
                 if (_log.shouldDebug())
                     _log.debug("Sending TERMINATION reason " + _destroyReason + " to " + PeerStateDestroyed.this);
                 _transport.send(pkt);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             if (_destroyReason != REASON_TERMINATION) {
                 _delay *= 2;
                 reschedule(_delay);

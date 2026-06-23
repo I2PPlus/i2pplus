@@ -337,7 +337,7 @@ public class LoadClientAppsJob extends JobImpl {
                     if (intfcs[i] == intfc)
                         return true;
                 }
-            } catch (Throwable t) {}
+            } catch (Throwable t) { /* ignored */ }
             return false;
         }
     }

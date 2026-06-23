@@ -331,7 +331,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                     }
                 }
             }
-        } catch (Exception e) {}
+        } catch (Exception e) { /* ignored */ }
         return null;
     }
 

@@ -89,7 +89,7 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
             // only because we are running it inline
             closeSocket(s);
             if (i2ps != null) {
-                try { i2ps.close(); } catch (IOException ioe) {}
+                try { i2ps.close(); } catch (IOException ioe) { /* ignored */ }
             }
         }
         stop();
@@ -133,7 +133,7 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
         open = false;
         try {
             ss.close();
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ }
     }
 
     /**

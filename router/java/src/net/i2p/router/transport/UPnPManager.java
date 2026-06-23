@@ -122,7 +122,7 @@ class UPnPManager {
             try {
                 InetAddress ia = InetAddress.getByName(addr);
                 ias.add(ia);
-            } catch (UnknownHostException uhe) {}
+            } catch (UnknownHostException uhe) { /* ignored */ }
         }
         InetAddress[] binds = ias.toArray(new InetAddress[ias.size()]);
         _upnp = new UPnP(context, ssdpPort, httpPort, binds);

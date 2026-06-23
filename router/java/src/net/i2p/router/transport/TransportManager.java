@@ -211,7 +211,7 @@ public class TransportManager implements TransportEventListener {
                     System.out.println(msg);
                     _log.logAlways(Log.WARN, msg);
                 }
-            } catch (URISyntaxException use) {}
+            } catch (URISyntaxException use) { /* ignored */ }
         }
         // These only apply to Http/HttpsURLConnection
         proxy = System.getProperty(PROP_JAVA_PROXY3);
@@ -556,7 +556,7 @@ public class TransportManager implements TransportEventListener {
 
     synchronized void restart() {
         stopListening();
-        try { Thread.sleep(5*1000); } catch (InterruptedException ie) {}
+        try { Thread.sleep(5*1000); } catch (InterruptedException ie) { /* ignored */ }
         startListening();
     }
 

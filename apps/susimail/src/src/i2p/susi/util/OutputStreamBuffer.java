@@ -43,7 +43,7 @@ public class OutputStreamBuffer implements Buffer {
 	 * Closes the output stream
 	 */
 	public void writeComplete(boolean success) {
-		try { _out.close(); } catch (IOException ioe) {}
+		try { _out.close(); } catch (IOException ioe) { /* ignored */ }
 	}
 
 	/**

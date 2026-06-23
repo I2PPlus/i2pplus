@@ -161,8 +161,7 @@ public final class KeyStoreUtil {
                 if (fis != null)
                     try {
                         fis.close();
-                    } catch (IOException ioe) {
-                    }
+                    } catch (IOException ioe) { /* ignored */ }
             }
         }
         if (ksFile != null && !exists) {
@@ -176,8 +175,7 @@ public final class KeyStoreUtil {
                 if (fos != null)
                     try {
                         fos.close();
-                    } catch (IOException ioe) {
-                    }
+                    } catch (IOException ioe) { /* ignored */ }
             }
         }
         return ks;
@@ -208,9 +206,7 @@ public final class KeyStoreUtil {
                     try {
                         ks.load(null, DEFAULT_KEYSTORE_PASSWORD.toCharArray());
                         success = addCerts(new File(System.getProperty("java.home"), "etc/security/cacerts"), ks) > 0;
-                    } catch (IOException e) {
-                    } catch (GeneralSecurityException e) {
-                    }
+                    } catch (IOException e) { /* ignored */ } catch (GeneralSecurityException e) { /* ignored */ }
                 } else {
                     success = loadCerts(new File(System.getProperty("java.home"), "etc/security/cacerts.bks"), ks);
                 }
@@ -227,9 +223,7 @@ public final class KeyStoreUtil {
             try {
                 // must be initted
                 ks.load(null, DEFAULT_KEYSTORE_PASSWORD.toCharArray());
-            } catch (IOException e) {
-            } catch (GeneralSecurityException e) {
-            }
+            } catch (IOException e) { /* ignored */ } catch (GeneralSecurityException e) { /* ignored */ }
             error("All key store loads failed, will only load local certificates", null);
         }
         return ks;
@@ -255,23 +249,18 @@ public final class KeyStoreUtil {
             try {
                 // not clear if null is allowed for password
                 ks.load(null, DEFAULT_KEYSTORE_PASSWORD.toCharArray());
-            } catch (IOException foo) {
-            } catch (GeneralSecurityException e) {
-            }
+            } catch (IOException foo) { /* ignored */ } catch (GeneralSecurityException e) { /* ignored */ }
             return false;
         } catch (IOException ioe) {
             error("KeyStore load error, no default keys: " + file.getAbsolutePath(), ioe);
             try {
                 ks.load(null, DEFAULT_KEYSTORE_PASSWORD.toCharArray());
-            } catch (IOException foo) {
-            } catch (GeneralSecurityException e) {
-            }
+            } catch (IOException foo) { /* ignored */ } catch (GeneralSecurityException e) { /* ignored */ }
             return false;
         } finally {
             try {
                 if (fis != null) fis.close();
-            } catch (IOException foo) {
-            }
+            } catch (IOException foo) { /* ignored */ }
         }
         return true;
     }
@@ -292,8 +281,7 @@ public final class KeyStoreUtil {
                     count++;
                 }
             }
-        } catch (GeneralSecurityException e) {
-        }
+        } catch (GeneralSecurityException e) { /* ignored */ }
         return count;
     }
 
@@ -328,8 +316,7 @@ public final class KeyStoreUtil {
         } finally {
             try {
                 if (fis != null) fis.close();
-            } catch (IOException foo) {
-            }
+            } catch (IOException foo) { /* ignored */ }
         }
     }
 
@@ -479,15 +466,13 @@ public final class KeyStoreUtil {
                     }
                 }
             }
-        } catch (GeneralSecurityException e) {
-        }
+        } catch (GeneralSecurityException e) { /* ignored */ }
         if (!toRemove.isEmpty()) {
             _blacklistLogged = true;
             for (String alias : toRemove) {
                 try {
                     ks.deleteEntry(alias);
-                } catch (GeneralSecurityException e) {
-                }
+                } catch (GeneralSecurityException e) { /* ignored */ }
             }
         }
         return toRemove.size();
@@ -1107,8 +1092,7 @@ public final class KeyStoreUtil {
             if (fis != null)
                 try {
                     fis.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -1142,8 +1126,7 @@ public final class KeyStoreUtil {
             if (fis != null)
                 try {
                     fis.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -1171,8 +1154,7 @@ public final class KeyStoreUtil {
             keyStore.load(fis, pwchars);
             try {
                 fis.close();
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
             fis = null;
             char[] keypwchars = keyPW.toCharArray();
             if (alias == null) {
@@ -1199,13 +1181,11 @@ public final class KeyStoreUtil {
             if (fis != null)
                 try {
                     fis.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             if (fos != null)
                 try {
                     fos.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -1248,12 +1228,10 @@ public final class KeyStoreUtil {
             if (fos != null)
                 try {
                     fos.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             try {
                 in.close();
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -1286,8 +1264,7 @@ public final class KeyStoreUtil {
             if (fos != null)
                 try {
                     fos.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -1311,8 +1288,7 @@ public final class KeyStoreUtil {
             if (fis != null)
                 try {
                     fis.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -1589,8 +1565,7 @@ public final class KeyStoreUtil {
             } finally {
                 try {
                     if (fis != null) fis.close();
-                } catch (IOException foo) {
-                }
+                } catch (IOException foo) { /* ignored */ }
             }
         } else {
             System.err.println("Keystore file not found: " + ksf);

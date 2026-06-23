@@ -104,8 +104,7 @@ try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileIn
                     }
                 }
             }
-        } catch (IOException e) {
-        }
+        } catch (IOException e) { /* ignored */ }
         return ipMap;
     }
 
@@ -138,8 +137,7 @@ try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileIn
                     }
                 }
             }
-        } catch (IOException e) {
-        }
+        } catch (IOException e) { /* ignored */ }
         return hostnameMap;
     }
 
@@ -185,8 +183,7 @@ try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileIn
                     }
                 }
             }
-        } catch (IOException e) {
-        }
+        } catch (IOException e) { /* ignored */ }
         return ipBans;
     }
 
@@ -281,8 +278,7 @@ try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileIn
             } else if (durationStr.endsWith("ms")) {
                 return now + Long.parseLong(durationStr.substring(0, durationStr.length() - 2));
             }
-        } catch (NumberFormatException e) {
-        }
+        } catch (NumberFormatException e) { /* ignored */ }
         return now;
     }
 

@@ -146,8 +146,7 @@ public class Icon {
     public int getWidth() {
         try {
             return Integer.parseInt(getIconNode().getNodeValue(WIDTH));
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { /* ignored */ }
        ;
         return 0;
     }
@@ -188,8 +187,7 @@ public class Icon {
     public int getHeight() {
         try {
             return Integer.parseInt(getIconNode().getNodeValue(HEIGHT));
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { /* ignored */ }
        ;
         return 0;
     }
@@ -230,8 +228,7 @@ public class Icon {
     public int getDepth() {
         try {
             return Integer.parseInt(getIconNode().getNodeValue(DEPTH));
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { /* ignored */ }
        ;
         return 0;
     }

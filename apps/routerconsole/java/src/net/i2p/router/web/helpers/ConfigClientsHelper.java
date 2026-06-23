@@ -290,7 +290,7 @@ public class ConfigClientsHelper extends HelperBase {
                 if (s != null) {
                     long ms = 0;
                     try {ms = Long.parseLong(s);}
-                    catch (NumberFormatException nfe) {}
+                    catch (NumberFormatException nfe) { /* ignored */ }
                     if (ms > 0) {
                         String date = DataHelper.formatTime(ms);
                         desc.append(" (").append(date).append(")");

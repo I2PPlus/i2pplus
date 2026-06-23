@@ -220,7 +220,7 @@ class LookupDestJob extends JobImpl {
         if (_reqID >= 0) {msg = new HostReplyMessage(_sessID, d, _reqID, null);}
         else {msg = new DestReplyMessage(d);}
         try {_runner.doSend(msg);}
-        catch (I2CPMessageException ime) {}
+        catch (I2CPMessageException ime) { /* ignored */ }
     }
 
     /**
@@ -240,7 +240,7 @@ class LookupDestJob extends JobImpl {
         else if (_hash != null) {msg = new DestReplyMessage(_hash);}
         else {return;} // shouldn't happen
         try {_runner.doSend(msg);}
-        catch (I2CPMessageException ime) {}
+        catch (I2CPMessageException ime) { /* ignored */ }
     }
 
 }

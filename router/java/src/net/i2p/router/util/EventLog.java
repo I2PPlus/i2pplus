@@ -138,9 +138,8 @@ public class EventLog {
                 buf.append('\r');
             buf.append('\n');
             out.write(buf.toString().getBytes("UTF-8"));
-        } catch (IOException ioe) {
-        } finally {
-            if (out != null) try { out.close(); } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ } finally {
+            if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -177,17 +176,14 @@ public class EventLog {
                     Long ltime = Long.valueOf(time);
                     String info = s.length > 2 ? s[2] : "";
                     rv.put(ltime, info);
-                } catch (IndexOutOfBoundsException ioobe) {
-                } catch (NumberFormatException nfe) {
-                }
+                } catch (IndexOutOfBoundsException ioobe) { /* ignored */ } catch (NumberFormatException nfe) { /* ignored */ }
             }
             rv = Collections.unmodifiableSortedMap(rv);
             _cache.put(event, rv);
             _cacheTime.put(event, Long.valueOf(since));
             evictIfNeeded();
-        } catch (IOException ioe) {
-        } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ } finally {
+            if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
         }
         return rv;
     }
@@ -219,14 +215,11 @@ public class EventLog {
                         continue;
                     Long ltime = Long.valueOf(time);
                     rv.put(ltime, s[1]);
-                } catch (IndexOutOfBoundsException ioobe) {
-                } catch (NumberFormatException nfe) {
-                }
+                } catch (IndexOutOfBoundsException ioobe) { /* ignored */ } catch (NumberFormatException nfe) { /* ignored */ }
             }
             rv = Collections.unmodifiableSortedMap(rv);
-        } catch (IOException ioe) {
-        } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ } finally {
+            if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
         }
         return rv;
     }
@@ -257,12 +250,10 @@ public class EventLog {
                     if (time <= since)
                         continue;
                     rv = time;
-                } catch (NumberFormatException nfe) {
-                }
+                } catch (NumberFormatException nfe) { /* ignored */ }
             }
-        } catch (IOException ioe) {
-        } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ } finally {
+            if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
         }
         return rv;
     }

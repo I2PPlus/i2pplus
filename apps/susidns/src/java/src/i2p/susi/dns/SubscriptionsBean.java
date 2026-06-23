@@ -71,7 +71,7 @@ public class SubscriptionsBean extends BaseBean {
             finally {
                 if (br != null) {
                     try {br.close();}
-                    catch (IOException ioe) {}
+                    catch (IOException ioe) { /* ignored */ }
                 }
             }
         } else {content = DEFAULT_SUB;}

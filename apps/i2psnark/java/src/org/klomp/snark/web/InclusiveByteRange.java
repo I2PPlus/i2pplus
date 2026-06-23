@@ -118,8 +118,7 @@ public class InclusiveByteRange {
                         continue;
                     }
                 }
-            } catch (Exception e) {
-            }
+            } catch (Exception e) { /* ignored */ }
         }
         return satRanges;
     }

@@ -132,7 +132,7 @@ public class Servlet extends HttpServlet {
                 Class<?> cls = Class.forName("net.i2p.addressbook.DaemonThread", true, cl);
                 Object t = cls.cast(this.thread);
                 cls.getDeclaredMethod("halt").invoke(t);
-            } catch (Throwable t) {}
+            } catch (Throwable t) { /* ignored */ }
         }
         super.destroy();
     }

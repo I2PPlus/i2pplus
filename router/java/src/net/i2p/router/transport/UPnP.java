@@ -170,7 +170,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		while (i++ < 20 && !portsForwarded.isEmpty()) {
 			try {
 				Thread.sleep(100);
-			} catch (InterruptedException ie) {}
+			} catch (InterruptedException ie) { /* ignored */ }
 		}
 		// stop() does unsubscribe()
 		super.stop();
@@ -530,7 +530,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				break;
 			try {
 				Thread.sleep(5000);
-			} catch (InterruptedException e) {}
+			} catch (InterruptedException e) { /* ignored */ }
 		}
 		if (_log.shouldWarn())
 			_log.warn((isPortForwarded ? "Mapping is successful!" : "Mapping has failed!") + " ("+ nbOfTries + " tries)");
@@ -1046,7 +1046,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
                                 // spec says roll over to 0 but mine doesn't
                                 if (l == UINT_MAX)
                                     rv = "&gt; " + rv;
-			} catch (NumberFormatException nfe) {}
+			} catch (NumberFormatException nfe) { /* ignored */ }
 		}
 		return rv;
 	}
@@ -1060,7 +1060,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			try {
 				long l = Long.parseLong(rv);
 				rv = DataHelper.formatDuration2(l * 1000);
-			} catch (NumberFormatException nfe) {}
+			} catch (NumberFormatException nfe) { /* ignored */ }
 		}
 		return rv;
 	}
@@ -1469,7 +1469,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 							_log.debug("Updating UID from " + uid + " to " + newuid + " for " + fp);
 						fp.setUID(newuid);
 					}
-				} catch (NumberFormatException nfe) {}
+				} catch (NumberFormatException nfe) { /* ignored */ }
 			}
 			synchronized(lock) {
 				portsForwarded.add(fp);
@@ -1529,7 +1529,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			try {
 				URI url = new URI(him);
 				rv = url.getHost();
-			} catch (URISyntaxException use) {}
+			} catch (URISyntaxException use) { /* ignored */ }
 		}
 		if (rv == null) {
 			him = dev.getLocation();
@@ -1537,7 +1537,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				try {
 					URI url = new URI(him);
 					rv = url.getHost();
-				} catch (URISyntaxException use) {}
+				} catch (URISyntaxException use) { /* ignored */ }
 			}
 		}
 		if (rv != null && rv.startsWith("[") && rv.endsWith("]"))
@@ -1594,9 +1594,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 						rv = me;
 						distance = newDistance;
 					}
-				} catch (UnknownHostException uhe) {}
+				} catch (UnknownHostException uhe) { /* ignored */ }
 			}
-		} catch (UnknownHostException uhe) {}
+		} catch (UnknownHostException uhe) { /* ignored */ }
 		return rv;
 	}
 
@@ -1786,7 +1786,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 										if (_log.shouldWarn())
 											_log.warn("Address now deprecated, continue forwarding for 24h: " + v6port);
 									}
-								} catch (UnknownHostException uhe) {}
+								} catch (UnknownHostException uhe) { /* ignored */ }
 							}
 							if (keep) {
 								// copy over uid and expiration from existing
@@ -2016,7 +2016,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			    try {
 				InetAddress ia = InetAddress.getByName(addr);
 				ias.add(ia);
-			    } catch (UnknownHostException uhe) {}
+			    } catch (UnknownHostException uhe) { /* ignored */ }
 		}
 		InetAddress[] binds = ias.toArray(new InetAddress[ias.size()]);
 		UPnP cp = new UPnP(ctx, 8008, 8058, binds);

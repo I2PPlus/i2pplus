@@ -176,8 +176,7 @@ public class HostInterface {
                     return host;
                 }
             }
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { /* ignored */ }
        ;
         return "";
     }
@@ -191,8 +190,7 @@ public class HostInterface {
             InetAddress addr = InetAddress.getByName(host);
             if (addr instanceof Inet6Address) return true;
             return false;
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { /* ignored */ }
         return false;
     }
 
@@ -201,8 +199,7 @@ public class HostInterface {
             InetAddress addr = InetAddress.getByName(host);
             if (addr instanceof Inet4Address) return true;
             return false;
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { /* ignored */ }
         return false;
     }
 

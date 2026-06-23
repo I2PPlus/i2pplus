@@ -445,7 +445,7 @@ public class SAMStreamSend {
                 if(fin != null) {
                     try {
                         fin.close();
-                    } catch(IOException ioe) {}
+                    } catch(IOException ioe) { /* ignored */ }
                 }
             }
         }
@@ -458,7 +458,7 @@ public class SAMStreamSend {
             _closed = true;
             long lifetime = _context.clock().now() - _started;
             _context.statManager().addRateData("send." + _connectionId + ".lifetime", lifetime, lifetime);
-            try { _in.close(); } catch (IOException ioe) {}
+            try { _in.close(); } catch (IOException ioe) { /* ignored */ }
         }
 
         public void run() {
@@ -519,7 +519,7 @@ public class SAMStreamSend {
                             byte[] pkt = baos.toByteArray();
                             DatagramPacket p = new DatagramPacket(pkt, pkt.length, _dgSAM);
                             _dgSock.send(p);
-                            try { Thread.sleep(25); } catch (InterruptedException ie) {}
+                            try { Thread.sleep(25); } catch (InterruptedException ie) { /* ignored */ }
                         }
 
                         _totalSent += read;
@@ -561,7 +561,7 @@ public class SAMStreamSend {
             // closing the master socket too fast will kill the data socket flushing through
             try {
                 Thread.sleep(10000);
-            } catch (InterruptedException ie) {}
+            } catch (InterruptedException ie) { /* ignored */ }
             if (_log.shouldDebug())
                 _log.debug("Runner exiting");
             if (toSend != _totalSent)

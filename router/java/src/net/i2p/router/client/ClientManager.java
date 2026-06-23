@@ -165,7 +165,7 @@ class ClientManager {
         shutdown("Router restart");
 
         // to let the old listener die
-        try { Thread.sleep(2*1000); } catch (InterruptedException ie) {}
+        try { Thread.sleep(2*1000); } catch (InterruptedException ie) { /* ignored */ }
 
         startListeners();
     }
@@ -755,7 +755,7 @@ class ClientManager {
                     // only send version if the client can handle it (0.8.7 or greater)
                     runner.doSend(new SetDateMessage(runner.getClientVersion() != null ?
                                                      CoreVersion.PUBLISHED_VERSION : null));
-                } catch (I2CPMessageException ime) {}
+                } catch (I2CPMessageException ime) { /* ignored */ }
             }
 
             if (_isStarted) {schedule(LOOP_TIME);}

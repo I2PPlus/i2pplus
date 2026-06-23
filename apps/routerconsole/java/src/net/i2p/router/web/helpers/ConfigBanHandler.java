@@ -118,7 +118,7 @@ public class ConfigBanHandler extends FormHandler {
                 if (val >= 1 && val <= 100) {
                     changes.put(PROP_MAX_OFFENSES, String.valueOf(val));
                 }
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) { /* ignored */ }
         }
 
         if (_offenseWindow != null && _offenseWindow.length() > 0) {
@@ -127,7 +127,7 @@ public class ConfigBanHandler extends FormHandler {
                 if (val >= 1 && val <= 1440) {
                     changes.put(PROP_OFFENSE_WINDOW, String.valueOf(val * 60000));
                 }
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) { /* ignored */ }
         }
 
         if (_startupGrace != null && _startupGrace.length() > 0) {
@@ -136,7 +136,7 @@ public class ConfigBanHandler extends FormHandler {
                 if (val >= 0 && val <= 60) {
                     changes.put(PROP_STARTUP_GRACE, String.valueOf(val * 60000));
                 }
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) { /* ignored */ }
         }
 
         if (_badPacketDuration != null && _badPacketDuration.length() > 0) {
@@ -145,7 +145,7 @@ public class ConfigBanHandler extends FormHandler {
                 if (val >= 1 && val <= 10080) {
                     changes.put(PROP_BAD_PACKET_DURATION, String.valueOf(val * 60000));
                 }
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) { /* ignored */ }
         }
 
         changes.put(PROP_ENABLE_BAD_PACKET_BAN, Boolean.toString(_enableBadPacketBan));

@@ -132,9 +132,9 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
             }
             try (DataImporter rrdImporter = resoleImporter(externalPath, importer)) {
                 if (usePool) {
-                    try (RrdDb db = resolvePool(pool).requestRrdDb(rrdUri, factory, importer)) {}
+                    try (RrdDb db = resolvePool(pool).requestRrdDb(rrdUri, factory, importer)) { /* ignored */ }
                 } else {
-                    try (RrdDb db = new RrdDb(path, rrdUri, null, rrdImporter, factory, null)) {}
+                    try (RrdDb db = new RrdDb(path, rrdUri, null, rrdImporter, factory, null)) { /* ignored */ }
                 }
             }
         }

@@ -157,7 +157,7 @@ public class JspC {
         } catch (IOException ioe) {
             return null;
         } finally {
-            if (in != null) try { in.close(); } catch (IOException e) {}
+            if (in != null) try { in.close(); } catch (IOException e) { /* ignored */ }
         }
     }
 }

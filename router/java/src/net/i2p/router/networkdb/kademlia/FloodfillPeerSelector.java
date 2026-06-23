@@ -553,7 +553,7 @@ class FloodfillPeerSelector extends PeerSelector {
                     }
                 }
             }
-        } catch (Exception e) {}
+        } catch (Exception e) { /* ignored */ }
         return null;
     }
 }

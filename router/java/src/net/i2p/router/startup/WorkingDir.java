@@ -189,7 +189,7 @@ public class WorkingDir {
                 setupSystemOut(cwd);
                 return cwd;
             }
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ }
 
         // where we want to go
         String rv = dirf.getAbsolutePath();
@@ -399,7 +399,7 @@ public class WorkingDir {
             System.err.println("FAILED copy of: " + oldFile + ": " + ioe);
             return false;
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
             if (out != null) out.close();
         }
     }
@@ -462,7 +462,7 @@ public class WorkingDir {
             out.println("<!-- Modified by I2P User dir migration script -->");
             System.err.println("Copied file: " + oldFile + " with modifications");
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
             if (out != null) out.close();
         }
     }
@@ -528,8 +528,8 @@ public class WorkingDir {
             System.err.println("FAILED copy " + src.getPath() + ": " + ioe);
             rv = false;
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
-            if (out != null) try { out.close(); } catch (IOException ioe) {}
+            if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
+            if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
         }
         if (rv)
             dst.setLastModified(src.lastModified());

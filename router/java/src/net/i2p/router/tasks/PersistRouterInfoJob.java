@@ -108,7 +108,7 @@ public class PersistRouterInfoJob extends JobImpl {
             } catch (IOException ioe) {
                 _log.error("Error saving our updated RouterInfo file", ioe);
             } finally {
-                if (fos != null) try { fos.close(); } catch (IOException ioe) {}
+                if (fos != null) try { fos.close(); } catch (IOException ioe) { /* ignored */ }
             }
         }
     }

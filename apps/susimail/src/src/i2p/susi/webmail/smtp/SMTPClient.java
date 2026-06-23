@@ -230,7 +230,7 @@ public class SMTPClient {
                             try {
                                 maxSize = Long.parseLong(c.substring(5));
                                 if (_log.shouldDebug()) {_log.debug("Server max size: " + maxSize);}
-                            } catch (NumberFormatException nfe) {}
+                            } catch (NumberFormatException nfe) { /* ignored */ }
                         } else if (c.equals("8BITMIME")) {
                             // unused, see encoding/EightBit.java
                             eightBitMime = true;
@@ -303,10 +303,10 @@ public class SMTPClient {
         sendCmd("QUIT", false);
         if (socket != null) {
             try {socket.close();}
-            catch (IOException e1) {}
+            catch (IOException e1) { /* ignored */ }
             if (out != null) {
                 try {out.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
             }
         }
         return mailSent;
@@ -350,7 +350,7 @@ public class SMTPClient {
                 } finally {
                     if (in != null) {
                         try {in.close();}
-                        catch (IOException ioe) {}
+                        catch (IOException ioe) { /* ignored */ }
                     }
                 }
             }

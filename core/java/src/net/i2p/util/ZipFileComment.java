@@ -77,8 +77,7 @@ public abstract class ZipFileComment {
         } finally {
             if (in != null) try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 

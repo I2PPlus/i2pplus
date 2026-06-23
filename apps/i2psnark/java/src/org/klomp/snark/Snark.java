@@ -180,8 +180,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             if (in != null) {
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
         }
 
@@ -1000,8 +999,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             if (storage != null) {
                 try {
                     storage.close();
-                } catch (IOException ioee) {
-                }
+                } catch (IOException ioee) { /* ignored */ }
                 // clear storage, we have a mess if we have non-null storage and null metainfo,
                 // as on restart, Storage.reopen() will throw an ioe
                 storage = null;

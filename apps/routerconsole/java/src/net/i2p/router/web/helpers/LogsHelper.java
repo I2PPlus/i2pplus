@@ -88,7 +88,7 @@ public class LogsHelper extends HelperBase {
             // returns "standard-taglib 1.2.0"
             Object version = getVersion.invoke(null, (Object[]) null);
             rv = (String) version;
-        } catch (Exception e) {}
+        } catch (Exception e) { /* ignored */ }
         return rv;
     }
 
@@ -195,8 +195,8 @@ public class LogsHelper extends HelperBase {
             String[] vals = DataHelper.split(prop, ",", 3);
             if (vals.length == 3) {
                 if (vals[2].equals(f.getName())) {
-                    try { lastMod = Long.parseLong(vals[0]); } catch (NumberFormatException nfe) {}
-                    try { toSkip = Long.parseLong(vals[1]); } catch (NumberFormatException nfe) {}
+                    try { lastMod = Long.parseLong(vals[0]); } catch (NumberFormatException nfe) { /* ignored */ }
+                    try { toSkip = Long.parseLong(vals[1]); } catch (NumberFormatException nfe) { /* ignored */ }
                 } else {lastMod = 0;} // file rotated
             }
         }
@@ -494,7 +494,7 @@ public class LogsHelper extends HelperBase {
         finally {
             if (in != null) {
                 try {in.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
             }
         }
     }

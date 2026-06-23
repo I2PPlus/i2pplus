@@ -161,7 +161,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
                 String name = addr != null ? addr.getHostName() : "undefined";
                 String msg = ":" + name + " 499 you :" + ex + "\r\n";
                 s.getOutputStream().write(DataHelper.getUTF8(msg));
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
         } catch (I2PException ex) {
             if (_log.shouldWarn())
                 _log.warn("[IRC Client] Error connecting: " + ex.getMessage());
@@ -171,12 +171,12 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
                 String name = addr != null ? addr.getHostName() : "undefined";
                 String msg = ":" + name + " 499 you :" + ex + "\r\n";
                 s.getOutputStream().write(DataHelper.getUTF8(msg));
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
         } finally {
             // only because we are running it inline
             closeSocket(s);
             if (i2ps != null) {
-                try { i2ps.close(); } catch (IOException ioe) {}
+                try { i2ps.close(); } catch (IOException ioe) { /* ignored */ }
                 synchronized (sockLock) {
                     mySockets.remove(i2ps);
                 }

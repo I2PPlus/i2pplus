@@ -85,9 +85,9 @@ public class ConfigServiceHandler extends FormHandler {
                                 try {
                                     int cwait = Integer.parseInt(tmout) * 1000;
                                     if (cwait > wait) {wait = cwait;}
-                                } catch (NumberFormatException nfe) {}
+                                } catch (NumberFormatException nfe) { /* ignored */ }
                             }
-                        } catch (Throwable t) {}
+                        } catch (Throwable t) { /* ignored */ }
                     }
                     WrapperManager.signalStopping(wait);
                 }
@@ -153,7 +153,7 @@ public class ConfigServiceHandler extends FormHandler {
             String wv = System.getProperty("wrapper.version");
             if (wv != null && VersionComparator.comp(wv, LISTENER_AVAILABLE) >= 0) {
                 try {_wrapperListener = new WrapperListener(ctx);}
-                catch (Throwable t) {}
+                catch (Throwable t) { /* ignored */ }
             }
         }
     }
@@ -290,7 +290,7 @@ public class ConfigServiceHandler extends FormHandler {
             String wv = System.getProperty("wrapper.version");
             if (wv != null && VersionComparator.comp(wv, LOCATION_AVAILABLE) >= 0) {
                 try {f = WrapperManager.getWrapperLogFile();}
-                catch (Throwable t) {}
+                catch (Throwable t) { /* ignored */ }
             }
         }
         if (f == null || !f.exists()) {

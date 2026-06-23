@@ -57,7 +57,7 @@ class PluginUpdateHandler implements Checker, Updater {
                 _log.info("Checking for updates for " + appName + ": " + xpi2pURL);
             try {
                 updateSources = Collections.singletonList(new URI(xpi2pURL));
-            } catch (URISyntaxException use) {}
+            } catch (URISyntaxException use) { /* ignored */ }
         }
 
         if (oldVersion == null || updateSources == null) {

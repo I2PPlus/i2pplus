@@ -423,7 +423,7 @@ public class DecayingBloomFilter {
             if (!rv)
                 _log.error("no lock, size is: " + _reorganizeLock.getQueueLength(), new Exception("rats"));
             return rv;
-        } catch (InterruptedException ie) {}
+        } catch (InterruptedException ie) { /* ignored */ }
         return false;
     }
 

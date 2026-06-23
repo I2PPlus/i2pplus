@@ -609,8 +609,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             if (in != null)
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -758,8 +757,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             if (len > 0) {
                 try {
                     addr = new String(d, 10, len, "ISO-8859-1");
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
             String host = "";
             String path = "/";
@@ -776,16 +774,14 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
                 if (len > 0) {
                     try {
                         host = new String(d, off, len, "ISO-8859-1");
-                    } catch (IOException ioe) {
-                    }
+                    } catch (IOException ioe) { /* ignored */ }
                     off += len;
                 }
                 len = d[off++] & 0xff;
                 if (len > 0) {
                     try {
                         path = new String(d, off, len, "ISO-8859-1");
-                    } catch (IOException ioe) {
-                    }
+                    } catch (IOException ioe) { /* ignored */ }
                     off += len;
                 }
             }
@@ -835,8 +831,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             if (in != null)
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 }

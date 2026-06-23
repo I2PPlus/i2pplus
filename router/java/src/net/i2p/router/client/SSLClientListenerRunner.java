@@ -151,7 +151,7 @@ class SSLClientListenerRunner extends ClientListenerRunner {
         } catch (IOException ioe) {
             _log.error("Error loading SSL keys", ioe);
         } finally {
-            if (fis != null) try { fis.close(); } catch (IOException ioe) {}
+            if (fis != null) try { fis.close(); } catch (IOException ioe) { /* ignored */ }
         }
         return false;
     }
@@ -204,7 +204,7 @@ class SSLClientListenerRunner extends ClientListenerRunner {
             boolean rv = is.read() == I2PClient.PROTOCOL_BYTE;
             socket.setSoTimeout(oldTimeout);
             return rv;
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ }
         if (_log.shouldWarn())
              _log.warn("Peer did not authenticate themselves as I2CP quickly enough, dropping");
         return false;

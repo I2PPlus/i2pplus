@@ -182,8 +182,7 @@ public class HTTP {
                     }
                 }
                 if (uri.endsWith("/")) uri = uri.substring(0, uri.length() - 1);
-            } catch (Exception e) {
-            }
+            } catch (Exception e) { /* ignored */ }
         }
         return uri;
     }

@@ -69,21 +69,21 @@ public class OOMListener implements I2PThread.OOMEventListener {
             // prevent multiple parallel shutdowns (when you OOM, you OOM a lot...)
             if (_context.router().isFinalShutdownInProgress())
                 return;
-        } catch (OutOfMemoryError oome) {}
+        } catch (OutOfMemoryError oome) { /* ignored */ }
         try {
             // Only do this once
             if (_wasCalled.getAndSet(true))
                 return;
-        } catch (OutOfMemoryError oome) {}
+        } catch (OutOfMemoryError oome) { /* ignored */ }
 
         try {
             // boost priority to help us shut down
             // this may or may not do anything...
             Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-        } catch (OutOfMemoryError oome) {}
+        } catch (OutOfMemoryError oome) { /* ignored */ }
         try {
             Router.clearCaches();
-        } catch (OutOfMemoryError oome) {}
+        } catch (OutOfMemoryError oome) { /* ignored */ }
         Log log = null;
         try {
             log = _context.logManager().getLog(Router.class);
@@ -101,16 +101,16 @@ public class OOMListener implements I2PThread.OOMEventListener {
                 log.log(Log.CRIT, "To prevent future shutdowns, run the restartable version of I2P, and increase wrapper.java.maxmemory in " +
                                   path);
             }
-        } catch (OutOfMemoryError oome) {}
+        } catch (OutOfMemoryError oome) { /* ignored */ }
         try {
             ThreadDump.dump(_context, 1);
-        } catch (OutOfMemoryError oome) {}
+        } catch (OutOfMemoryError oome) { /* ignored */ }
         try {
             _context.router().eventLog().addEvent(EventLog.OOM);
-        } catch (OutOfMemoryError oome) {}
+        } catch (OutOfMemoryError oome) { /* ignored */ }
         try {
             _context.router().shutdown(Router.EXIT_OOM);
-        } catch (OutOfMemoryError oome) {}
+        } catch (OutOfMemoryError oome) { /* ignored */ }
     }
 
     /**

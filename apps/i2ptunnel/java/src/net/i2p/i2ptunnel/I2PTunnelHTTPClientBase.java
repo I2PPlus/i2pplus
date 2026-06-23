@@ -503,7 +503,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                         }
                     }
                     _log.logAlways(Log.WARN, "[HTTPClient] HTTP proxy authentication failed -> User: " + user + " on " + s.getInetAddress());
-                    try { Thread.sleep(5000); } catch (InterruptedException ie) {}
+                    try { Thread.sleep(5000); } catch (InterruptedException ie) { /* ignored */ }
                 } catch (UnsupportedEncodingException uee) {
                     _log.error(getPrefix(requestId) + "[HTTPClient] No UTF-8 support? B64: " + authorization, uee);
                 } catch (ArrayIndexOutOfBoundsException aioobe) {
@@ -583,7 +583,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             PROP_PROXY_DIGEST_PREFIX + user + (isSHA256 ? PROP_PROXY_DIGEST_SHA256_SUFFIX : PROP_PROXY_DIGEST_SUFFIX));
         if (ha1 == null) {
             _log.logAlways(Log.WARN, "[HTTPClient] HTTP proxy authentication failed -> User: " + user + " on " + s.getInetAddress());
-             try { Thread.sleep(5000); } catch (InterruptedException ie) {}
+             try { Thread.sleep(5000); } catch (InterruptedException ie) { /* ignored */ }
             return AuthResult.AUTH_BAD;
         }
         // get H(A2)
@@ -597,7 +597,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             if (_log.shouldInfo()) {
                 _log.info("[HTTPClient] Bad digest auth: " + DataHelper.toString(args));
             }
-            try { Thread.sleep(5000); } catch (InterruptedException ie) {}
+            try { Thread.sleep(5000); } catch (InterruptedException ie) { /* ignored */ }
             return AuthResult.AUTH_BAD;
         }
         if (_log.shouldInfo()) {_log.info("[HTTPClient] Good digest auth - user: " + user);}
@@ -807,7 +807,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         } finally {
             try {
                 if (reader != null) {reader.close();}
-            } catch(IOException foo) {}
+            } catch(IOException foo) { /* ignored */ }
         }
         // we won't ever get here
     }
@@ -910,7 +910,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             header = getErrorPage(I2PAppContext.getGlobalContext(), "dnf", ERR_DESTINATION_UNKNOWN);
         }
         try {writeErrorMessage(header, out, targetRequest, usingWWWProxy, wwwProxy);}
-        catch (IOException ioe) {}
+        catch (IOException ioe) { /* ignored */ }
     }
 
     /**
@@ -939,7 +939,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         String header = getErrorPage(error, ERR_DESTINATION_UNKNOWN);
         String message = ise != null ? ise.getLocalizedMessage() : "unknown error";
         try {writeErrorMessage(header, message, out, targetRequest, usingWWWProxy, wwwProxy);}
-        catch(IOException ioe) {}
+        catch(IOException ioe) { /* ignored */ }
     }
 
     /**
@@ -1078,7 +1078,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             int idx = uri.indexOf(h);
             if (idx < 0) {return uri;}
             return uri.substring(0, idx) + hu + uri.substring(idx + h.length(), uri.length());
-         } catch(URISyntaxException use) {}
+         } catch(URISyntaxException use) { /* ignored */ }
          return uri;
     }
 

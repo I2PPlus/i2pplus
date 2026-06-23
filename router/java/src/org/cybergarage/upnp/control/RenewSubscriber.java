@@ -67,8 +67,7 @@ public class RenewSubscriber extends ThreadCore {
         while (isRunnable() == true) {
             try {
                 Thread.sleep(renewInterval);
-            } catch (InterruptedException e) {
-            }
+            } catch (InterruptedException e) { /* ignored */ }
             ctrlp.renewSubscriberService();
         }
     }

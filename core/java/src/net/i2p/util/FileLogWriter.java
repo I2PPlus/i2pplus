@@ -114,8 +114,7 @@ class FileLogWriter extends LogWriter {
         if (out != null) {
             try {
                 out.close();
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
         }
         if (_manager.shouldGzip() && currentFile != null && currentFile.length() >= _manager.getMinGzipSize()) {
             Gzipper gzipper = new Gzipper(currentFile);
@@ -277,12 +276,10 @@ class FileLogWriter extends LogWriter {
             } finally {
                 if (in != null) try {
                         in.close();
-                    } catch (IOException ioe) {
-                    }
+                    } catch (IOException ioe) { /* ignored */ }
                 if (out != null) try {
                         out.close();
-                    } catch (IOException ioe) {
-                    }
+                    } catch (IOException ioe) { /* ignored */ }
                 to.setLastModified(_f.lastModified());
                 _f.delete();
             }

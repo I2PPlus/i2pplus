@@ -115,12 +115,12 @@ class Zones {
                     _countryToZone.put(lcCountry, zone);
                     //if (_log.shouldDebug())
                     //   _log.debug("Country " + lcCountry + " is in " + zone);
-                } catch (IndexOutOfBoundsException ioobe) {}
+                } catch (IndexOutOfBoundsException ioobe) { /* ignored */ }
             }
         } catch (IOException ioe) {
             System.out.println("Error reading the continent file " + geoFile.getAbsolutePath());
         } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) {}
+            if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 

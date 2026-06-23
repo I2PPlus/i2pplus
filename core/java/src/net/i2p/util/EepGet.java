@@ -811,14 +811,14 @@ public class EepGet {
                 if (_out != null) {
                     try {
                         _out.close();
-                    } catch (IOException cioe) {}
+                    } catch (IOException cioe) { /* ignored */ }
                     _out = null;
                 }
                 if (_proxy != null) {
                     try {
                         _proxy.close();
                         _proxy = null;
-                    } catch (IOException ioe) {}
+                    } catch (IOException ioe) { /* ignored */ }
                 }
             }
 
@@ -831,7 +831,7 @@ public class EepGet {
             try {
                 long delay = _context.random().nextInt(60*1000);
                 Thread.sleep(5*1000+delay);
-            } catch (InterruptedException ie) {}
+            } catch (InterruptedException ie) { /* ignored */ }
         }
 
         for (int i = 0; i < _listeners.size(); i++)
@@ -898,7 +898,7 @@ public class EepGet {
                     try {
                         _proxy.close();
                         _proxy = null;
-                    } catch (IOException ioe) {}
+                    } catch (IOException ioe) { /* ignored */ }
                     if (timeout != null)
                         timeout.cancel();
                     EepGet get;
@@ -1124,7 +1124,7 @@ public class EepGet {
         if (_isGzippedResponse) {
             try {
                 pusher.join();
-            } catch (InterruptedException ie) {}
+            } catch (InterruptedException ie) { /* ignored */ }
             pusher = null;
             if (_decompressException != null) {
                 // we can't resume from here
@@ -1571,9 +1571,9 @@ public class EepGet {
 
         String req = getRequest();
 
-        if (_proxyIn != null) try { _proxyIn.close(); } catch (IOException ioe) {}
-        if (_proxyOut != null) try { _proxyOut.close(); } catch (IOException ioe) {}
-        if (_proxy != null) try { _proxy.close(); } catch (IOException ioe) {}
+        if (_proxyIn != null) try { _proxyIn.close(); } catch (IOException ioe) { /* ignored */ }
+        if (_proxyOut != null) try { _proxyOut.close(); } catch (IOException ioe) { /* ignored */ }
+        if (_proxy != null) try { _proxy.close(); } catch (IOException ioe) { /* ignored */ }
 
         if (_shouldProxy) {
             _proxy = InternalSocket.getSocket(_proxyHost, _proxyPort);
@@ -1608,7 +1608,7 @@ public class EepGet {
                         if (tempSocket != null && tempSocket != _proxy) { // NOPMD - CompareObjectsWithEquals (identity check)
                             try {
                                 tempSocket.close();
-                            } catch (IOException ioe) {}
+                            } catch (IOException ioe) { /* ignored */ }
                         }
                     }
                 } else {
@@ -1636,7 +1636,7 @@ public class EepGet {
             try {
                 DataHelper.copy(in, _proxyOut);
             } finally {
-                try { in.close(); } catch (IOException ioe) {}
+                try { in.close(); } catch (IOException ioe) { /* ignored */ }
             }
         }
         _proxyOut.flush();
@@ -2428,7 +2428,7 @@ public class EepGet {
             } finally {
                 if (_out != null) try {
                         _out.close();
-                    } catch (IOException ioe) {}
+                    } catch (IOException ioe) { /* ignored */ }
                 ReusableGZIPInputStream.release(in);
             }
         }

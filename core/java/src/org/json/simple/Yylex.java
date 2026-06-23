@@ -676,8 +676,7 @@ int getPosition(){
           }
         case 45: break;
         case 3: 
-          { 
-          }
+          { /* ignored */ }
         case 46: break;
         default: 
           if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {

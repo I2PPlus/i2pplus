@@ -208,7 +208,7 @@ class ClientConnectionRunner {
         // we need these keys to unpublish the leaseSet
         if (_reader != null) _reader.stopReading();
         if (_writer != null) _writer.stopWriting();
-        if (_socket != null) try { _socket.close(); } catch (IOException ioe) { }
+        if (_socket != null) try { _socket.close(); } catch (IOException ioe) { /* ignored */ }
         _messages.clear();
         _acceptedPending.clear();
         if (_sessionKeyManager != null)
@@ -586,11 +586,11 @@ class ClientConnectionRunner {
             if (opts != null && _context.router() != null) {
                 String ptags = opts.getProperty(PROP_TAGS);
                 if (ptags != null) {
-                    try { tags = Integer.parseInt(ptags); } catch (NumberFormatException nfe) {}
+                    try { tags = Integer.parseInt(ptags); } catch (NumberFormatException nfe) { /* ignored */ }
                 }
                 String pthresh = opts.getProperty(PROP_THRESH);
                 if (pthresh != null) {
-                    try { thresh = Integer.parseInt(pthresh); } catch (NumberFormatException nfe) {}
+                    try { thresh = Integer.parseInt(pthresh); } catch (NumberFormatException nfe) { /* ignored */ }
                 }
                 String senc = opts.getProperty("i2cp.leaseSetEncType");
                 if (senc != null) {
@@ -765,7 +765,7 @@ class ClientConnectionRunner {
         // give it a little time to get sent out...
         // even better would be to have stopRunning() flush it?
         try {Thread.sleep(50);}
-        catch (InterruptedException ie) {}
+        catch (InterruptedException ie) { /* ignored */ }
         stopRunning();
     }
 

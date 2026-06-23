@@ -1102,7 +1102,7 @@ class SidebarRenderer {
         String r = _context.getProperty(CSSHelper.PROP_REFRESH, CSSHelper.DEFAULT_REFRESH);
         int refreshPeriod = 3;
         try {refreshPeriod = Integer.parseInt(r);}
-        catch (NumberFormatException nfe) {}
+        catch (NumberFormatException nfe) { /* ignored */ }
         String t = "&amp;t=" + (_context.clock().now() / 1000);
         String g = "style=\"background-image:url(\'/viewstat.jsp?stat=bw.combined&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;hideTitle=true" +
                     t + "\')\"";
@@ -1410,7 +1410,7 @@ class SidebarRenderer {
                                                    ConfigUpdateHandler.DEFAULT_REFRESH_FREQUENCY);
                 long ms = ConfigUpdateHandler.DEFAULT_REFRESH_FREQ;
                 try {ms = Long.parseLong(freq);}
-                catch (NumberFormatException nfe) {}
+                catch (NumberFormatException nfe) { /* ignored */ }
                 final int min = (ms > 0) ? 1 : 0;
                 final int max = 3;
                 final long age = (ms > 0) ? 60*24*60*60*1000L : 7*24*60*60*1000L;

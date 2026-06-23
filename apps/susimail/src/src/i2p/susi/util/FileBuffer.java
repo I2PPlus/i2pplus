@@ -13,6 +13,9 @@ import net.i2p.util.SecureFileOutputStream;
  *
  * @since 0.9.34
  */
+		// TODO if _sublen > 0, wrap with a read limiter
+		//if (_os != null)
+		//	throw new IllegalStateException();
 public class FileBuffer implements Buffer {
 
 	protected final File _file;
@@ -20,11 +23,11 @@ public class FileBuffer implements Buffer {
 	protected final int _sublen;
 	private InputStream _is;
 	private OutputStream _os;
-	
+
 	public FileBuffer(File file) {
 		this(file, 0, 0);
 	}
-	
+
 	public FileBuffer(File file, int offset, int sublen) {
 		_file = file;
 		_offset = offset;
@@ -59,7 +62,6 @@ public class FileBuffer implements Buffer {
 	 * @return new FileOutputStream
 	 */
 	public synchronized OutputStream getOutputStream() throws IOException {
-		//if (_os != null)
 		//	throw new IllegalStateException();
 		if (_os == null)
 			_os = new SecureFileOutputStream(_file);
@@ -68,7 +70,7 @@ public class FileBuffer implements Buffer {
 
 	public synchronized void readComplete(boolean success) {
 		if (_is != null) {
-			try { _is.close(); } catch (IOException ioe) {}
+			try { _is.close(); } catch (IOException ioe) { /* ignored */ }
 			_is = null;
 		}
 	}
@@ -78,7 +80,7 @@ public class FileBuffer implements Buffer {
 	 */
 	public synchronized void writeComplete(boolean success) {
 		if (_os != null) {
-			try { _os.close(); } catch (IOException ioe) {}
+			try { _os.close(); } catch (IOException ioe) { /* ignored */ }
 			_os = null;
 		}
 		if (!success)

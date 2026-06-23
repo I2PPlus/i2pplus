@@ -911,7 +911,7 @@ class SAMStreamSession implements SAMMessageSess {
                             _cache.release(data);
                         }
                     }
-                } catch (InterruptedException ie) {}
+                } catch (InterruptedException ie) { /* ignored */ }
             }
             synchronized (_data) {
                 _data.clear();

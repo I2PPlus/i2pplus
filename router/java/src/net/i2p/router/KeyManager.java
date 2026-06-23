@@ -288,8 +288,8 @@ public class KeyManager {
             } catch (DataFormatException dfe) {
                 _log.error("Error syncing the structure with " + keyFile.getAbsolutePath(), dfe);
             } finally {
-                if (out != null) try { out.close(); } catch (IOException ioe) {}
-                if (in != null) try { in.close(); } catch (IOException ioe) {}
+                if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
+                if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
             }
 
             if (exists)

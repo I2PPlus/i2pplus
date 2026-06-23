@@ -174,7 +174,7 @@ public class WebAppConfiguration implements Configuration {
             for (int i = 0; i < urls.length; i++) {
                 try {
                     rv.add(urls[i].toURI());
-                } catch (URISyntaxException use) {}
+                } catch (URISyntaxException use) { /* ignored */ }
             }
         } else {
             // Java 9 - assume everything in lib/ is in the classpath

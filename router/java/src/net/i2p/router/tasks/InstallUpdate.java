@@ -257,9 +257,8 @@ public class InstallUpdate {
                         System.out.println("INFO: " + (df.isDirectory() ? "Directory [" : "File [") + fl + "] deleted");
                 }
             }
-        } catch (IOException ioe) {
-        } finally {
-            if (in != null) try { in.close(); } catch(IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ } finally {
+            if (in != null) try { in.close(); } catch(IOException ioe) { /* ignored */ }
             if (deleteFile.delete()) {
                 //System.out.println("INFO: File [" + DELETE_FILE + "] deleted");
             }

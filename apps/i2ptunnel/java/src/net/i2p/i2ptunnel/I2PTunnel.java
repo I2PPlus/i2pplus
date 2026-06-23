@@ -1495,7 +1495,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             //notifyEvent("genkeysResult", "error");
             //_log.error(getPrefix() + "Error generating keys", ioe);
         } finally {
-            if(pubdest != null) try { pubdest.close(); } catch(IOException ioe) {}
+            if(pubdest != null) try { pubdest.close(); } catch(IOException ioe) { /* ignored */ }
         }
     }
 
@@ -1636,7 +1636,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 _log.error(getPrefix() + "Error running the file", ioe);
                 notifyEvent("runResult", "error");
             } finally {
-                if (br != null) try { br.close(); } catch (IOException ioe) {}
+                if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
             }
         } else {
             l.log("run <commandfile>\n" +
@@ -1806,12 +1806,12 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             session.connect();
             System.out.println("Sending: " + bd);
             session.sendBlindingInfo(bd);
-            try { Thread.sleep(1000); } catch (InterruptedException ie) {}
+            try { Thread.sleep(1000); } catch (InterruptedException ie) { /* ignored */ }
         } catch (I2PSessionException ise) {
             System.out.println("Send blinding info failed: " + ise);
         } finally {
             if (session != null) {
-                try { session.destroySession(); } catch (I2PSessionException ise) {}
+                try { session.destroySession(); } catch (I2PSessionException ise) { /* ignored */ }
             }
         }
     }
@@ -1977,8 +1977,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             } finally {
                 if (in != null) try {
                     in.close();
-                } catch (IOException io) {
-                }
+                } catch (IOException io) { /* ignored */ }
             }
             try {
                 result.fromByteArray(content);
@@ -2034,7 +2033,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                     log.warn("Lookup via router failed", ise);
             } finally {
                 if (session != null) {
-                    try { session.destroySession(); } catch (I2PSessionException ise) {}
+                    try { session.destroySession(); } catch (I2PSessionException ise) { /* ignored */ }
                 }
             }
             return d;

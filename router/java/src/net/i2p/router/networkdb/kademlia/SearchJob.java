@@ -290,7 +290,7 @@ class SearchJob extends JobImpl {
                             _floodfillPeersExhausted = true;
                             if (onlyFloodfill) {continue;}
                         }
-                        if (ri.isHidden()) {} // don't bother
+                        if (ri.isHidden()) { /* ignored */ } // don't bother
                         else {
                             _state.addPending(peer);
                             sendSearch((RouterInfo)ds);

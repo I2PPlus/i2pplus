@@ -113,7 +113,7 @@ public class BlacklistBean extends BaseBean {
             finally {
                 if (br != null) {
                     try {br.close();}
-                    catch (IOException ioe) {}
+                    catch (IOException ioe) { /* ignored */ }
                 }
             }
         } else {
@@ -416,7 +416,7 @@ public class BlacklistBean extends BaseBean {
             finally {
                 if (br != null) {
                     try {br.close();}
-                    catch (IOException ioe) {}
+                    catch (IOException ioe) { /* ignored */ }
                 }
             }
             return buf.toString();

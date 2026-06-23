@@ -134,8 +134,7 @@ public class BuildTime {
             if (date != null) {
                 return date.getTime();
             }
-        } catch (ParseException pe) {
-        }
+        } catch (ParseException pe) { /* ignored */ }
         return 0;
     }
 
@@ -151,8 +150,7 @@ public class BuildTime {
             if (in != null) {
                 try {
                     in.close();
-                } catch (IOException e) {
-                }
+                } catch (IOException e) { /* ignored */ }
             }
         }
     }

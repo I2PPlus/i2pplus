@@ -384,7 +384,7 @@ public class Banlist {
                         toUnbanlist.add(e.getKey());
                     }
                 }
-            } catch (IllegalStateException ise) {} // next time...
+            } catch (IllegalStateException ise) { /* ignored */ } // next time...
             for (Hash peer : toUnbanlist) {
                 _context.messageHistory().unbanlist(peer);
                 if (_log.shouldInfo()) {
@@ -400,7 +400,7 @@ public class Banlist {
                         iter.remove();
                     }
                 }
-            } catch (IllegalStateException ise) {} // next time...
+            } catch (IllegalStateException ise) { /* ignored */ } // next time...
 
             requeue(5*60*1000);
         }

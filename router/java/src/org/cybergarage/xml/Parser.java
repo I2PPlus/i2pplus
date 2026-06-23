@@ -158,8 +158,7 @@ public abstract class Parser {
                 if (urlIn != null)
                     try {
                         urlIn.close();
-                    } catch (IOException ioe) {
-                    }
+                    } catch (IOException ioe) { /* ignored */ }
                 if (urlCon != null) urlCon.disconnect();
             }
         }

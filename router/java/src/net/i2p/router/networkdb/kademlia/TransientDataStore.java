@@ -322,7 +322,7 @@ class TransientDataStore implements DataStore {
                     }
                 }
             }
-        } catch (Exception e) {}
+        } catch (Exception e) { /* ignored */ }
         return "UNKNOWN";
     }
 

@@ -290,7 +290,7 @@ public class GraphGenerator implements Runnable, ClientApp {
                                         int end, boolean showCredit) throws IOException {
         try {
             try {_sem.acquire();}
-            catch (InterruptedException ie) {}
+            catch (InterruptedException ie) { /* ignored */ }
             try {
                 return locked_renderPng(rate, out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
                                         periodCount, end, showCredit);
@@ -335,7 +335,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     public boolean getXML(Rate rate, OutputStream out) throws IOException {
         try {
             try {_sem.acquire();}
-            catch (InterruptedException ie) {}
+            catch (InterruptedException ie) { /* ignored */ }
             return locked_getXML(rate, out);
         } finally {_sem.release();}
     }
@@ -365,7 +365,7 @@ public class GraphGenerator implements Runnable, ClientApp {
                                  int periodCount, int end, boolean showCredit) throws IOException {
         try {
             try {_sem.acquire();}
-            catch (InterruptedException ie) {}
+            catch (InterruptedException ie) { /* ignored */ }
             try {return locked_renderRatePng(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);}
             catch (NoClassDefFoundError ncdfe) {
                 setDisabled();
@@ -429,7 +429,7 @@ public class GraphGenerator implements Runnable, ClientApp {
                     Rate r = rs.getRate(period);
                     if (r != null) {rv.add(r);}
                 }
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
         return rv;
     }
@@ -465,7 +465,7 @@ public class GraphGenerator implements Runnable, ClientApp {
             stop();
             // Stops the sync thread pool in NIO; noop if not persistent, we set num threads to zero in run() above
             try {RrdBackendFactory.getDefaultFactory().close();}
-            catch (IOException ioe) {}
+            catch (IOException ioe) { /* ignored */ }
         }
     }
 

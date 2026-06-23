@@ -113,8 +113,7 @@ class ConnectionAcceptor implements Runnable {
         if (ss != null) {
             try {
                 ss.close();
-            } catch (I2PException ioe) {
-            }
+            } catch (I2PException ioe) { /* ignored */ }
         }
         _badCounter.clear();
         _cleaner.cancel();
@@ -157,8 +156,7 @@ class ConnectionAcceptor implements Runnable {
                 }
                 try {
                     Thread.sleep(10 * 1000);
-                } catch (InterruptedException ie) {
-                }
+                } catch (InterruptedException ie) { /* ignored */ }
                 serverSocket = _util.getServerSocket();
             }
             if (stop) {
@@ -173,8 +171,7 @@ class ConnectionAcceptor implements Runnable {
                         _log.error("[I2PSnark] Dropping incoming connection from our own router");
                         try {
                             socket.close();
-                        } catch (IOException ioe) {
-                        }
+                        } catch (IOException ioe) { /* ignored */ }
                         continue;
                     }
                     Hash h = socket.getPeerDestination().calculateHash();
@@ -188,8 +185,7 @@ class ConnectionAcceptor implements Runnable {
                         }
                         try {
                             socket.close();
-                        } catch (IOException ioe) {
-                        }
+                        } catch (IOException ioe) { /* ignored */ }
                         continue;
                     }
                     int bad = _badCounter.count(h);
@@ -206,8 +202,7 @@ class ConnectionAcceptor implements Runnable {
                         }
                         try {
                             socket.close();
-                        } catch (IOException ioe) {
-                        }
+                        } catch (IOException ioe) { /* ignored */ }
                         continue;
                     }
                     Thread t =
@@ -225,8 +220,7 @@ class ConnectionAcceptor implements Runnable {
                 }
                 try {
                     Thread.sleep(2 * 60 * 1000);
-                } catch (InterruptedException ie) {
-                }
+                } catch (InterruptedException ie) { /* ignored */ }
                 while (true) {
                     if (_util.connected() || _util.connect()) {
                         break;
@@ -322,8 +316,7 @@ class ConnectionAcceptor implements Runnable {
                 }
                 try {
                     _socket.close();
-                } catch (IOException ignored) {
-                }
+                } catch (IOException ignored) { /* ignored */ }
             } catch (IOException ioe) {
                 if (_log.shouldDebug()) {
                     _log.debug(
@@ -334,8 +327,7 @@ class ConnectionAcceptor implements Runnable {
                 }
                 try {
                     _socket.close();
-                } catch (IOException ignored) {
-                }
+                } catch (IOException ignored) { /* ignored */ }
             }
         }
     }

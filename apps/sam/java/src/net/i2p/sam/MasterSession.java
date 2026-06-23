@@ -348,7 +348,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                 } catch (ConnectException ce) {
                     if (_log.shouldWarn())
                         _log.warn("Error accepting", ce);
-                    try { Thread.sleep(50); } catch (InterruptedException ie) {}
+                    try { Thread.sleep(50); } catch (InterruptedException ie) { /* ignored */ }
                     continue;
                 } catch (I2PException ipe) {
                     if (_log.shouldWarn())
@@ -387,7 +387,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                     boolean ok = ssess.queueSocket(i2ps);
                     if (!ok) {
                         _log.logAlways(Log.WARN, "Accept queue overflow for " + ssess);
-                        try { i2ps.reset(); } catch (IOException ioe) {}
+                        try { i2ps.reset(); } catch (IOException ioe) { /* ignored */ }
                     }
                 } else {
                     if (_log.shouldWarn())

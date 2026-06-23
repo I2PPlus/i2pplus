@@ -290,7 +290,7 @@ class IntroductionManager {
                                 // still good, use old expiration time
                                 sexp = oexp;
                             }
-                        } catch (NumberFormatException nfe) {}
+                        } catch (NumberFormatException nfe) { /* ignored */ }
                     }
                     break;
                 }
@@ -570,7 +570,7 @@ class IntroductionManager {
             UDPPacket packet = _builder2.buildRelayResponse(data, alice);
             alice.setLastSendTime(now);
             _transport.send(packet);
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ }
     }
 
     /**
@@ -643,8 +643,7 @@ class IntroductionManager {
                 _log.info("Send relay limit response " + rcode + " as charlie nonce " + nonce + " to bob " + bob);
             _transport.send(packet);
             bob.setLastSendTime(_context.clock().now());
-        } catch (IOException ioe) {
-        }
+        } catch (IOException ioe) { /* ignored */ }
     }
 
     /**
@@ -887,8 +886,7 @@ class IntroductionManager {
                         signedData = data;
                     SigningPublicKey spk = charlie.getIdentity().getSigningPublicKey();
                     if (SSU2Util.validateSig(_context, SSU2Util.RELAY_RESPONSE_PROLOGUE,
-                                             _context.routerHash(), null, signedData, spk)) {
-                    } else {
+                                             _context.routerHash(), null, signedData, spk)) { /* ignored */ } else {
                         if (_log.shouldWarn())
                             _log.warn("Signature failed RelayReponse as Bob from Charlie:\n" + charlie);
                     }
@@ -907,7 +905,7 @@ class IntroductionManager {
                     _log.debug("Received RelayReponse " + status + " as Bob, forwarding " + " nonce " + nonce + " to Alice " + alice);
                 _transport.send(packet);
                 alice.setLastSendTime(now);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
         } else {
             boolean isDup;
             synchronized(_recentRelaysAsBob) {

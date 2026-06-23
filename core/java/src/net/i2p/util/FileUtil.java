@@ -174,16 +174,13 @@ public class FileUtil {
                     } finally {
                         try {
                             if (in != null) in.close();
-                        } catch (IOException ioe) {
-                        }
+                        } catch (IOException ioe) { /* ignored */ }
                         try {
                             if (fos != null) fos.close();
-                        } catch (IOException ioe) {
-                        }
+                        } catch (IOException ioe) { /* ignored */ }
                         try {
                             if (jos != null) jos.close();
-                        } catch (IOException ioe) {
-                        }
+                        } catch (IOException ioe) { /* ignored */ }
                     }
                 }
             }
@@ -198,8 +195,7 @@ public class FileUtil {
             if (zip != null) {
                 try {
                     zip.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
             // if (files > 0 && logLevel <= Log.WARN)
             //    System.err.println("INFO: " + files + " files extracted to " + targetDir);
@@ -265,8 +261,7 @@ public class FileUtil {
             if (zip != null) {
                 try {
                     zip.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
         }
     }
@@ -279,13 +274,11 @@ public class FileUtil {
         try {
             Class.forName("java.util.jar.Pack200", false, ClassLoader.getSystemClassLoader());
             return true;
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { /* ignored */ }
         try {
             Class.forName("io.pack200.Pack200", false, ClassLoader.getSystemClassLoader());
             return true;
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { /* ignored */ }
         /**
          * try {
          * Class.forName("org.apache.commons.compress.harmony.unpack200.Archive", false, ClassLoader.getSystemClassLoader());
@@ -423,8 +416,7 @@ public class FileUtil {
         } finally {
             if (in != null) try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -452,13 +444,11 @@ public class FileUtil {
             DataHelper.copy(in, out);
             try {
                 out.close();
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
         } finally {
             if (in != null) try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -510,12 +500,10 @@ public class FileUtil {
         } finally {
             try {
                 if (in != null) in.close();
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
             try {
                 if (out != null) out.close();
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
         }
     }
 

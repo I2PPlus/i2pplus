@@ -85,7 +85,7 @@ class PersistNews {
                 if (log.shouldWarn())
                     log.warn("Failed to write " + file + " to storage", ioe);
             } finally {
-                if (out != null) try { out.close(); } catch (IOException ioe) {}
+                if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
             }
         }
         return rv;
@@ -131,7 +131,7 @@ class PersistNews {
                     log.warn("load error from " + file, ioe);
                 error = true;
             } finally {
-                if (in != null) try { in.close(); } catch (IOException ioe) {}
+                if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
             }
             if (error)
                 file.delete();

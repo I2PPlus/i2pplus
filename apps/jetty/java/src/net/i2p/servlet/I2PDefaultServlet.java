@@ -86,7 +86,7 @@ public class I2PDefaultServlet extends DefaultServlet {
                 _stylesheet = Resource.newResource(this.getClass().getResource("/jetty-dir.css"));
             }
         }
-        catch(Exception e) {}
+        catch(Exception e) { /* ignored */ }
 
         // Read the configuration parameter from webdefault.xml and set the flag
         String setLastModifiedHeaderParam = getInitParameter("setLastModifiedHeader");
@@ -285,7 +285,7 @@ public class I2PDefaultServlet extends DefaultServlet {
                 boolean db = rb.isDirectory();
                 if (da && !db) return -1;
                 if (!da && db) return 1;
-            } catch (Exception e) {} // see above
+            } catch (Exception e) { /* ignored */ } // see above
             return _coll.compare(a, b);
         }
     }

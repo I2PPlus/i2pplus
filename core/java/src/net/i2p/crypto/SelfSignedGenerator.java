@@ -290,8 +290,7 @@ public final class SelfSignedGenerator {
                 try {
                     cpub = new EdDSAPublicKey(new X509EncodedKeySpec(cpub.getEncoded()));
                     ok = cpub.equals(jpub);
-                } catch (InvalidKeySpecException ex) {
-                }
+                } catch (InvalidKeySpecException ex) { /* ignored */ }
             }
             if (!ok)
                 throw new GeneralSecurityException(

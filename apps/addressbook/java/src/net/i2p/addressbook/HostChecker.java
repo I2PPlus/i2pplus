@@ -761,8 +761,7 @@ public class HostChecker {
                                 break;
                             }
                         }
-                    } catch (Exception e) {
-                    }
+                    } catch (Exception e) { /* ignored */ }
                 }
                 try {
                     Thread.sleep(2000);
@@ -885,8 +884,7 @@ public class HostChecker {
                                 }
                             }
                         }
-                    } catch (Exception e) {
-                    }
+                    } catch (Exception e) { /* ignored */ }
                 } else {
                     try {
                         Thread.sleep(2000);

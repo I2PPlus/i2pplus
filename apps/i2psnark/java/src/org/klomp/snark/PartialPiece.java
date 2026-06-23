@@ -355,8 +355,7 @@ class PartialPiece implements Comparable<PartialPiece> {
                 if (raf != null) {
                     try {
                         raf.close();
-                    } catch (IOException ignored) {
-                    }
+                    } catch (IOException ignored) { /* ignored */ }
                     tempfile.delete();
                     raf = null;
                 }

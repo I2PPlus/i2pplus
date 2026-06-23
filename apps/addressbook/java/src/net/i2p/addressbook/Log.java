@@ -69,7 +69,7 @@ class Log {
             bw.write(entry);
             bw.newLine();
             trimLog();
-        } catch (IOException exp) {}
+        } catch (IOException exp) { /* ignored */ }
     }
 
     private void trimLog() {
@@ -84,7 +84,7 @@ class Log {
                 }
                 Files.write(path, sb.toString().getBytes("UTF-8"));
             }
-        } catch (IOException e) {}
+        } catch (IOException e) { /* ignored */ }
     }
 
     private String fixEntry(String line) {

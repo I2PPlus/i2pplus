@@ -81,12 +81,12 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         try {
             try {
                 s.setSoTimeout(INITIAL_SO_TIMEOUT);
-            } catch (SocketException ioe) {}
+            } catch (SocketException ioe) { /* ignored */ }
             SOCKSServer serv = SOCKSServerFactory.createSOCKSServer(_context, s, getTunnel().getClientOptions());
             Socket clientSock = serv.getClientSocket();
             try {
                 s.setSoTimeout(0);
-            } catch (SocketException ioe) {}
+            } catch (SocketException ioe) { /* ignored */ }
             destSock = serv.getDestinationI2PSocket(this);
             Thread t = new I2PTunnelRunner(clientSock, destSock, sockLock, null, null, mySockets,
                                            (I2PTunnelRunner.FailCallback) null);
@@ -99,7 +99,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         } finally {
             // only because we are running it inline
             closeSocket(s);
-            if (destSock != null) try { destSock.close(); } catch (IOException ioe) {}
+            if (destSock != null) try { destSock.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 

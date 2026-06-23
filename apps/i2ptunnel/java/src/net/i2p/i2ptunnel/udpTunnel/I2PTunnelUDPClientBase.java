@@ -151,7 +151,7 @@ import net.i2p.util.EventDispatcher;
         if (_session != null) {
             try {
                 _session.destroySession();
-            } catch (I2PSessionException ise) {}
+            } catch (I2PSessionException ise) { /* ignored */ }
         }
         l.log("Closing client " + toString());
         open = false;

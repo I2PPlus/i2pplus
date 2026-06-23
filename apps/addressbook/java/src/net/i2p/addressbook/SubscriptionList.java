@@ -152,12 +152,12 @@ class SubscriptionList implements Iterable<AddressBook> {
         }
         try {
             ConfigParser.write(etags, this.etagsFile);
-        } catch (IOException exp) {}
+        } catch (IOException exp) { /* ignored */ }
         try {
             ConfigParser.write(lastModified, this.lastModifiedFile);
-        } catch (IOException exp) {}
+        } catch (IOException exp) { /* ignored */ }
         try {
             ConfigParser.write(lastFetched, this.lastFetchedFile);
-        } catch (IOException exp) {}
+        } catch (IOException exp) { /* ignored */ }
     }
 }

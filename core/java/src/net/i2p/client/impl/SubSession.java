@@ -205,8 +205,7 @@ class SubSession extends I2PSessionMuxedImpl {
         }
         try {
             _producer.disconnect(this);
-        } catch (I2PSessionException ise) {
-        }
+        } catch (I2PSessionException ise) { /* ignored */ }
         changeState(State.CLOSED);
     }
 

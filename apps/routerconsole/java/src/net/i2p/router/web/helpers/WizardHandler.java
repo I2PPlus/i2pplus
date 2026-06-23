@@ -29,7 +29,7 @@ public class WizardHandler extends FormHandler {
             cancelNDT();
             for (int i = 0; i < 20 && !_helper.isNDTComplete(); i++) {
                 try {Thread.sleep(100);}
-                catch (InterruptedException ie) {}
+                catch (InterruptedException ie) { /* ignored */ }
             }
             return;
         }

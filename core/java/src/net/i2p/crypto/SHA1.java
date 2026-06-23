@@ -99,7 +99,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
             try {
                 MessageDigest.getInstance("SHA-1");
                 useBitzi = false;
-            } catch (NoSuchAlgorithmException e) {}
+            } catch (NoSuchAlgorithmException e) { /* ignored */ }
         }
         //if (useBitzi)
         //    System.out.println("INFO: Using Bitzi SHA-1");
@@ -136,7 +136,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
         if (!_useBitzi) {
             try {
                 return MessageDigest.getInstance("SHA-1");
-            } catch (NoSuchAlgorithmException e) {}
+            } catch (NoSuchAlgorithmException e) { /* ignored */ }
         }
         return new SHA1();
     }

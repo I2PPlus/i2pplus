@@ -28,8 +28,7 @@ public class CryptoCheck {
                 SecretKeySpec key = new SecretKeySpec(new byte[32], "AES");
                 cipher.init(Cipher.ENCRYPT_MODE, key);
                 unlimited = true;
-            } catch (GeneralSecurityException gse) {
-            }
+            } catch (GeneralSecurityException gse) { /* ignored */ }
         } catch (ExceptionInInitializerError eiie) {
             // Java 9 b134 bug
             // > java -jar build/i2p.jar cryptocheck

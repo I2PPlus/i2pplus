@@ -59,7 +59,7 @@ public class ConfigReseedHandler extends FormHandler {
                     for (int i = 0; i < 40; i++) {
                         try {
                             Thread.sleep(500);
-                        } catch (InterruptedException ie) {}
+                        } catch (InterruptedException ie) { /* ignored */ }
                         if (!checker.inProgress())
                             break;
                     }
@@ -98,7 +98,7 @@ public class ConfigReseedHandler extends FormHandler {
             } finally {
                 // it's really a ByteArrayInputStream but we'll play along...
                 if (in != null)
-                    try { in.close(); } catch (IOException ioe) {}
+                    try { in.close(); } catch (IOException ioe) { /* ignored */ }
             }
         } else if (_action.equals(_t("Save changes"))) {
             saveChanges();

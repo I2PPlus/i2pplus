@@ -39,8 +39,7 @@ public class RunStandalone {
         if (APP_CONFIG_FILE.exists()) {
             try {
                 DataHelper.loadProps(p, APP_CONFIG_FILE);
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
         }
 
         _context = new I2PAppContext(p);
@@ -86,8 +85,7 @@ public class RunStandalone {
             _jettyStart.startup();
             try {
                 Thread.sleep(1000);
-            } catch (InterruptedException ie) {
-            }
+            } catch (InterruptedException ie) { /* ignored */ }
             String p = _context.getProperty("routerconsole.browser");
             if (!("/bin/false".equals(p) || "NUL".equals(p))) {
                 UrlLauncher launch = new UrlLauncher(_context, null, new String[] {url});
@@ -112,8 +110,7 @@ public class RunStandalone {
         try {
             Thread.sleep(3000);
         } // JettyStart.shutdown() is threaded
-        catch (InterruptedException ie) {
-        }
+        catch (InterruptedException ie) { /* ignored */ }
         System.exit(1);
     }
 
@@ -135,8 +132,7 @@ public class RunStandalone {
             Attributes att = manifest.getMainAttributes();
             rev = att.getValue("Base-Revision");
             date = att.getValue("Build-Date");
-        } catch (IOException e) {
-        }
+        } catch (IOException e) { /* ignored */ }
         return rev.isEmpty() ? "unknown" : rev + " (Built: " + date + ")";
     }
 
@@ -161,8 +157,7 @@ public class RunStandalone {
                     }
                 }
             }
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { /* ignored */ }
         return "127.0.0.1";
     }
 
@@ -187,8 +182,7 @@ public class RunStandalone {
                     }
                 }
             }
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { /* ignored */ }
         return 8002;
     }
 }

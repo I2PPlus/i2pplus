@@ -30,7 +30,7 @@ public class ProfilesHelper extends HelperBase {
             try {
                 _full = Integer.parseInt(f);
                 if (_full < 0 || _full > 3) {_full = 0;}
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -46,7 +46,7 @@ public class ProfilesHelper extends HelperBase {
      */
     public String getSummary() {
         try {renderNavBar();}
-        catch (IOException ioe) {}
+        catch (IOException ioe) { /* ignored */ }
         if (_full == 3) getBanlistCompact();
         else getProfileSummary();
         return "";

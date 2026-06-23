@@ -144,8 +144,7 @@ public final class SigUtil {
                 try {
                     EdDSAPublicKey edpk = new EdDSAPublicKey(spec);
                     return fromJavaKey(edpk, SigType.EdDSA_SHA512_Ed25519);
-                } catch (GeneralSecurityException gse) {
-                }
+                } catch (GeneralSecurityException gse) { /* ignored */ }
             }
         }
         throw new InvalidKeyException("Unknown type: " + pk.getClass());
@@ -214,8 +213,7 @@ public final class SigUtil {
                 try {
                     EdDSAPrivateKey edpk = new EdDSAPrivateKey(spec);
                     return fromJavaKey(edpk, SigType.EdDSA_SHA512_Ed25519);
-                } catch (GeneralSecurityException gse) {
-                }
+                } catch (GeneralSecurityException gse) { /* ignored */ }
             }
         }
         throw new InvalidKeyException("Unknown type: " + pk.getClass());
@@ -536,8 +534,7 @@ public final class SigUtil {
         } finally {
             if (in != null) try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 

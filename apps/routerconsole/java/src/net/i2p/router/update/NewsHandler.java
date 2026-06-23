@@ -51,9 +51,9 @@ public class NewsHandler extends UpdateHandler implements Checker {
         if ((type != ROUTER_SIGNED && type != NEWS && type != NEWS_SU3) ||method != HTTP) {return null;}
         List<URI> updateSources = new ArrayList<>(2);
         try {updateSources.add(new URI(ConfigUpdateHelper.getNewsURL(_context)));} // This may be su3 or xml
-        catch (URISyntaxException use) {}
+        catch (URISyntaxException use) { /* ignored */ }
         try {updateSources.add(new URI(_context.getProperty(PROP_BACKUP_NEWS_URL_SU3, DEFAULT_BACKUP_NEWS_URL_SU3)));}
-        catch (URISyntaxException use) {}
+        catch (URISyntaxException use) { /* ignored */ }
         UpdateRunner update = new NewsFetcher(_context, _mgr, updateSources, maxTime);
         return update;
     }

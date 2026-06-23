@@ -112,7 +112,7 @@ class JobQueueRunner extends I2PThread {
             try {
                 if (SystemVersion.isAndroid()) {_context.router().shutdown(Router.EXIT_OOM);}
                 else {fireOOM(oom);}
-            } catch (Throwable t) {}
+            } catch (Throwable t) { /* ignored */ }
         } catch (Throwable t) {
             _log.log(Log.CRIT, "Error processing job [" + _currentJob.getName() + "] on thread " + _id, t);
         }

@@ -562,7 +562,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         try {
             threshold = Double.parseDouble(_context.getProperty(PROP_THRESHOLD, Double.toString(DEFAULT_BLOCK_THRESHOLD)));
             if (threshold < MIN_BLOCK_POINTS) {threshold = MIN_BLOCK_POINTS;}
-        } catch (NumberFormatException nfe) {}
+        } catch (NumberFormatException nfe) { /* ignored */ }
         String day = DataHelper.formatTime(now);
         Set<String> blocks = new HashSet<>();
         for (Map.Entry<Hash, Points> e : points.entrySet()) {

@@ -931,7 +931,7 @@ public class FIFOBandwidthLimiter {
                     else
                         wait(100);
                 }
-            } catch (InterruptedException ie) {}
+            } catch (InterruptedException ie) { /* ignored */ }
             if (complete && _lsnr != null)
                 _lsnr.complete(this);
         }

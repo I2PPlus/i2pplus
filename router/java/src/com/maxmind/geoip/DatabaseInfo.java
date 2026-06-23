@@ -113,8 +113,7 @@ public class DatabaseInfo {
                     synchronized (formatter) {
                         return formatter.parse(dateString);
                     }
-                } catch (ParseException pe) {
-                }
+                } catch (ParseException pe) { /* ignored */ }
                 break;
             }
         }

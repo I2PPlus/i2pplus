@@ -81,8 +81,7 @@ public class ControlRequest extends SOAPRequest {
                 if (0 < baseLen) {
                     if (1 < baseLen || (basePath.charAt(0) != '/')) ctrlURL = basePath + ctrlURL;
                 }
-            } catch (MalformedURLException e) {
-            }
+            } catch (MalformedURLException e) { /* ignored */ }
         }
 
         // Thanks for Giordano Sassaroli <sassarol@cefriel.it> (05/21/03)

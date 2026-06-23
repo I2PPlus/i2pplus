@@ -241,7 +241,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                         _log.info("[SSU] InboundEstablishState Payload Error", rie);
                     }
                 }
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             throw new GeneralSecurityException("IES2 Payload Error: " + this, rie);
         } catch (DataFormatException dfe) {
             // no in-session response possible
@@ -342,7 +342,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         String smtu = ra.getOption(UDPAddress.PROP_MTU);
         int mtu = 0;
         try {mtu = Integer.parseInt(smtu);}
-        catch (NumberFormatException nfe) {}
+        catch (NumberFormatException nfe) { /* ignored */ }
         if (mtu == 0) {
             if (ra.getTransportStyle().equals(UDPTransport.STYLE2)) {mtu = PeerState2.DEFAULT_MTU;}
             else {

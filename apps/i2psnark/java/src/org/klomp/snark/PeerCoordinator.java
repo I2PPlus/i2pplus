@@ -1711,8 +1711,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     peer.setPexLastSent(_util.getContext().clock().now());
                 }
             }
-        } catch (InvalidBEncodingException ibee) {
-        }
+        } catch (InvalidBEncodingException ibee) { /* ignored */ }
     }
 
     /**
@@ -1737,8 +1736,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             if (bev.getMap().get(ExtensionHandler.TYPE_DHT) != null) {
                 ExtensionHandler.sendDHT(peer, dht.getPort(), dht.getRPort());
             }
-        } catch (InvalidBEncodingException ibee) {
-        }
+        } catch (InvalidBEncodingException ibee) { /* ignored */ }
     }
 
     /**
@@ -1789,8 +1787,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     _commentsLastRequested.set(_util.getContext().clock().now());
                 }
             }
-        } catch (InvalidBEncodingException ibee) {
-        }
+        } catch (InvalidBEncodingException ibee) { /* ignored */ }
     }
 
     /**

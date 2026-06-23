@@ -166,7 +166,7 @@ class SOCKS5Server extends SOCKSServer {
         c = in.readUnsignedByte();
         if (c <= 0) {
             _log.logAlways(Log.WARN, "SOCKS proxy authentication failed");
-            try { Thread.sleep(5000); } catch (InterruptedException ie) {}
+            try { Thread.sleep(5000); } catch (InterruptedException ie) { /* ignored */ }
             throw new SOCKSException("Bad authentication");
         }
         byte[] user = new byte[c];
@@ -175,7 +175,7 @@ class SOCKS5Server extends SOCKSServer {
         c = in.readUnsignedByte();
         if (c <= 0) {
             _log.logAlways(Log.WARN, "SOCKS proxy authentication failed -> User: " + u + " on " + client);
-            try { Thread.sleep(5000); } catch (InterruptedException ie) {}
+            try { Thread.sleep(5000); } catch (InterruptedException ie) { /* ignored */ }
             throw new SOCKSException("Bad authentication");
         }
         byte[] pw = new byte[c];
@@ -189,7 +189,7 @@ class SOCKS5Server extends SOCKSServer {
             String hex = PasswordManager.sha256Hex(I2PSOCKSTunnel.AUTH_REALM, u, p);
             if (configPW == null || !DataHelper.eqCT(hex, configPW)) {
                 _log.logAlways(Log.WARN, "SOCKS proxy authentication failed -> User: " + u + " on " + client);
-                try { Thread.sleep(5000); } catch (InterruptedException ie) {}
+                try { Thread.sleep(5000); } catch (InterruptedException ie) { /* ignored */ }
                 sendAuthReply(AUTH_FAILURE, out);
                 throw new SOCKSException("SOCKS authorization failure");
             }
@@ -478,7 +478,7 @@ class SOCKS5Server extends SOCKSServer {
                 if (dest == null) {
                     try {
                         sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-                    } catch (IOException ioe) {}
+                    } catch (IOException ioe) { /* ignored */ }
                     throw new SOCKSException("Host not found");
                 }
                 if (_log.shouldDebug())
@@ -494,7 +494,7 @@ class SOCKS5Server extends SOCKSServer {
                 _log.error(err);
                 try {
                     sendRequestReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-                } catch (IOException ioe) {}
+                } catch (IOException ioe) { /* ignored */ }
                 throw new SOCKSException(err);
           /****
             } else if (connPort == 80) {
@@ -518,7 +518,7 @@ class SOCKS5Server extends SOCKSServer {
                     } catch (IOException ioe) {
                         try {
                             sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-                        } catch (IOException ioe2) {}
+                        } catch (IOException ioe2) { /* ignored */ }
                         throw new SOCKSException("connect failed via outproxy plugin", ioe);
                     }
                 } else {
@@ -528,7 +528,7 @@ class SOCKS5Server extends SOCKSServer {
                         _log.error(err);
                         try {
                             sendRequestReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-                        } catch (IOException ioe) {}
+                        } catch (IOException ioe) { /* ignored */ }
                         throw new SOCKSException(err);
                     }
                     // TODO sticky proxy selection like in HTTP client
@@ -539,7 +539,7 @@ class SOCKS5Server extends SOCKSServer {
                     } catch (SOCKSException se) {
                         try {
                             sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-                        } catch (IOException ioe) {}
+                        } catch (IOException ioe) { /* ignored */ }
                         throw se;
                     }
                 }
@@ -551,21 +551,21 @@ class SOCKS5Server extends SOCKSServer {
                 _log.warn("SOCKS error", e);
             try {
                 sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             throw new SOCKSException("Error in destination format");
         } catch (IOException e) {
             if (_log.shouldWarn())
                 _log.warn("socks error", e);
             try {
                 sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             throw new SOCKSException("Connection error", e);
         } catch (I2PException e) {
             if (_log.shouldWarn())
                 _log.warn("socks error", e);
             try {
                 sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             throw new SOCKSException("Connection error", e);
         }
 
@@ -591,7 +591,7 @@ class SOCKS5Server extends SOCKSServer {
                 proxyPort = Integer.parseInt(proxy.substring(colon + 1));
                 if (proxyPort > 0)
                     proxyOpts.setPort(proxyPort);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
             proxy = proxy.substring(0, colon);
         }
         Destination dest = _context.namingService().lookup(proxy);
@@ -624,9 +624,9 @@ class SOCKS5Server extends SOCKSServer {
                 SOCKS5Client.connect(in, out, connHostName, connPort, configUser, configPW);
             }
         } catch (IOException e) {
-            try { destSock.close(); } catch (IOException ioe) {}
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
-            if (out != null) try { out.close(); } catch (IOException ioe) {}
+            try { destSock.close(); } catch (IOException ioe) { /* ignored */ }
+            if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
+            if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
             throw e;
         }
         // that's it, caller will send confirmation to our client
@@ -703,7 +703,7 @@ class SOCKS5Server extends SOCKSServer {
             InetAddress ia = null;
             try {
                 ia = InetAddress.getByAddress(connHostName, dummyIP);
-            } catch (UnknownHostException uhe) {} // won't happen, no resolving done here
+            } catch (UnknownHostException uhe) { /* ignored */ } // won't happen, no resolving done here
             int myPort = _tunnel.add(ia, connPort);
             ports.add(Integer.valueOf(myPort));
             try {

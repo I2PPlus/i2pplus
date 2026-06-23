@@ -72,8 +72,7 @@ public class ID3v2CommentFrameData extends AbstractID3v2FrameData {
         }
         try {
             BufferTools.stringIntoByteBuffer(langPadded, 0, 3, bytes, 1);
-        } catch (UnsupportedEncodingException e) {
-        }
+        } catch (UnsupportedEncodingException e) { /* ignored */ }
         int marker = 4;
         if (description != null) {
             byte[] descriptionBytes = description.toBytes(true, true);

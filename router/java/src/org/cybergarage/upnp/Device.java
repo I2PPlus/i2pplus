@@ -196,8 +196,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
             URL url = new URL(urlString);
             // Debug.warning("Return 0: " + url);
             return url.toString();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { /* ignored */ }
 
         if ((baseURLStr == null) || (baseURLStr.length() <= 0)) {
             if ((locationURLStr != null) && (0 < locationURLStr.length())) {
@@ -215,8 +214,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
                         URL url = new URL(absUrl);
                         // Debug.warning("Return 1: " + url);
                         return url.toString();
-                    } catch (Exception e) {
-                    }
+                    } catch (Exception e) { /* ignored */ }
                 }
 
                 String absUrl = HTTP.getAbsoluteURL(locationURLStr, urlString);
@@ -224,8 +222,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
                     URL url = new URL(absUrl);
                     // Debug.warning("Return 3: " + url);
                     return url.toString();
-                } catch (Exception e) {
-                }
+                } catch (Exception e) { /* ignored */ }
 
                 // Thanks for Steven Yen (2003/09/03)
                 Device rootDev = getRootDevice();
@@ -251,8 +248,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
                     URL url = new URL(absUrl);
                     // Debug.warning("Return 4: " + url);
                     return url.toString();
-                } catch (Exception e) {
-                }
+                } catch (Exception e) { /* ignored */ }
             }
 
             String absUrl = HTTP.getAbsoluteURL(baseURLStr, urlString);
@@ -260,8 +256,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
                 URL url = new URL(absUrl);
                 // Debug.warning("Return 6: " + url);
                 return url.toString();
-            } catch (Exception e) {
-            }
+            } catch (Exception e) { /* ignored */ }
         }
 
         // Debug.warning("Return 7: " + urlString);

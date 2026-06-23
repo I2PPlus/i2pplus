@@ -75,8 +75,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         byte[] fake = null;
         try {
             fake = SHA1.getInstance().digest(url.getBytes("ISO-8859-1"));
-        } catch (IOException ioe) {
-        }
+        } catch (IOException ioe) { /* ignored */ }
         _fakeHash = fake;
     }
 
@@ -152,8 +151,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
             String name = MetaInfo.getNameAndInfoHash(in, fileInfoHash);
             try {
                 in.close();
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
             Snark snark = _mgr.getTorrentByInfoHash(fileInfoHash);
             if (snark != null) {
                 _mgr.addMessage(
@@ -194,8 +192,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         } finally {
             try {
                 if (in != null) in.close();
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
         }
     }
 

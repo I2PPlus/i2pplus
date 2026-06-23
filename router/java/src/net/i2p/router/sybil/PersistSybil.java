@@ -78,7 +78,7 @@ public class PersistSybil {
                 buf.setLength(0);
             }
         } finally {
-            if (out != null) try { out.close(); } catch (IOException ioe) {}
+            if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -98,7 +98,7 @@ public class PersistSybil {
                 String name = file.getName();
                 long d = Long.parseLong(name.substring(PFX.length(), name.length() - SFX.length()));
                 rv.add(Long.valueOf(d));
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
         Collections.sort(rv, Collections.reverseOrder());
         return rv;
@@ -137,7 +137,7 @@ public class PersistSybil {
                 rv.put(h, p);
             }
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
         }
         return rv;
     }
@@ -169,7 +169,7 @@ public class PersistSybil {
                     rv.put(date, p);
                 }
             } finally {
-                if (in != null) try { in.close(); } catch (IOException ioe) {}
+                if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
             }
         }
         return rv;
@@ -215,7 +215,7 @@ public class PersistSybil {
                     else if (_log.shouldWarn())
                         _log.warn("Failed to delete: " + file);
                 }
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
         if (deleted > 0 && _log.shouldWarn())
             _log.warn("Deleted " + deleted + " old analysis files");
@@ -305,13 +305,13 @@ public class PersistSybil {
                         if (exp < now)
                             continue;
                         rv.put(ss[0], Long.valueOf(exp));
-                    } catch (NumberFormatException nfe) {}
+                    } catch (NumberFormatException nfe) { /* ignored */ }
                 }
             } catch (IOException ioe) {
                 if (_log.shouldWarn())
                     _log.warn("Error reading the blocklist file", ioe);
             } finally {
-                if (br != null) try { br.close(); } catch (IOException ioe) {}
+                if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
             }
         }
         return rv;
@@ -357,7 +357,7 @@ public class PersistSybil {
             if (_log.shouldWarn())
                 _log.warn("Error writing the blocklist file", ioe);
         } finally {
-            if (out != null) try { out.close(); } catch (IOException ioe) {}
+            if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 

@@ -69,8 +69,7 @@ class RRDFile implements Constants {
             if (!ok) {
                 try {
                     close();
-                } catch (IOException ignored) {
-                }
+                } catch (IOException ignored) { /* ignored */ }
                 // and then rethrow
             }
         }

@@ -60,8 +60,7 @@ public class SocketTimeout extends SimpleTimer2.TimedEvent {
             if (_targetSocket != null) {
                 try {
                     if (!_targetSocket.isClosed()) _targetSocket.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
             if (_command != null) _command.run();
         } else {

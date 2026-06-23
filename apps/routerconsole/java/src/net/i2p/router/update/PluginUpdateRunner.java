@@ -82,8 +82,7 @@ class PluginUpdateRunner extends UpdateRunner {
                 else if (slc.endsWith(".xpi2p")) s = s.substring(0, s.length() - 6);
                 if (s.length() > 0) appDisplayName = s;
             }
-        } catch (NumberFormatException nfe) {
-        }
+        } catch (NumberFormatException nfe) { /* ignored */ }
         _appDisplayName = appDisplayName;
         _oldVersion = oldVersion;
     }
@@ -214,8 +213,7 @@ class PluginUpdateRunner extends UpdateRunner {
             if (fis != null)
                 try {
                     fis.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 

@@ -65,8 +65,7 @@ public class EepGetAndAddNamingService extends EepGetNamingService {
                         } finally {
                             if (fos != null) try {
                                     fos.close();
-                                } catch (IOException cioe) {
-                                }
+                                } catch (IOException cioe) { /* ignored */ }
                         }
                     }
                 }

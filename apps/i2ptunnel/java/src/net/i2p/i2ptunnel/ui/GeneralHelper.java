@@ -498,8 +498,8 @@ public class GeneralHelper {
                     rv = pkf.getDestination();
                     if (rv != null) {return rv;}
                 }
-                catch (I2PException e) {}
-                catch (IOException e) {}
+                catch (I2PException e) { /* ignored */ }
+                catch (IOException e) { /* ignored */ }
             }
         }
         return null;
@@ -521,8 +521,8 @@ public class GeneralHelper {
                     Destination rv = pkf.getDestination();
                     if (rv != null) {return rv;}
                 }
-                catch (I2PException e) {}
-                catch (IOException e) {}
+                catch (I2PException e) { /* ignored */ }
+                catch (IOException e) { /* ignored */ }
             }
         }
         return null;
@@ -1004,7 +1004,7 @@ public class GeneralHelper {
                 String s = opts.getProperty(prop);
                 if (s == null) return def;
                 try {return Integer.parseInt(s);}
-                catch (NumberFormatException nfe) {}
+                catch (NumberFormatException nfe) { /* ignored */ }
             }
         }
         return def;

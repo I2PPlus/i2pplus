@@ -172,7 +172,7 @@ abstract class MigrateJetty {
             try {
                 LoadClientAppsJob.testClient(TEST_CLASS, null);
                 _hasLatestJetty = true;
-            } catch (ClassNotFoundException cnfe) {}
+            } catch (ClassNotFoundException cnfe) { /* ignored */ }
             _wasChecked = true;
         }
         return _hasLatestJetty;

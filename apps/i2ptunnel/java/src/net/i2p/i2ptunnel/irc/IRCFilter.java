@@ -84,7 +84,7 @@ abstract class IRCFilter {
         try {
             Integer.parseInt(command);
             return s;
-        } catch(NumberFormatException nfe){}
+        } catch(NumberFormatException nfe){ /* ignored */ }
 
 
         if ("PONG".equals(command)) {

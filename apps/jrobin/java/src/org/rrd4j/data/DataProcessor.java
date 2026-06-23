@@ -1078,8 +1078,7 @@ public class DataProcessor implements DataHolder {
                     t -> {
                         try {
                             t.close();
-                        } catch (IOException e) {
-                        }
+                        } catch (IOException e) { /* ignored */ }
                     });
         }
     }

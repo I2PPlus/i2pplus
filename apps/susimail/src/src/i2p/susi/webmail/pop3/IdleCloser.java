@@ -44,7 +44,7 @@ class IdleCloser {
                 int secs = Integer.parseInt(con);
                 if (secs < MIN_IDLE_CONFIG) {secs = MIN_IDLE_CONFIG;}
                 seconds = secs;
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
         return seconds * 1000L;
     }

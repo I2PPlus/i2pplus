@@ -268,8 +268,7 @@ public class SU3File {
             if (in != null)
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -341,8 +340,7 @@ public class SU3File {
                         diff = !_context.getBaseDir()
                                 .getCanonicalPath()
                                 .equals(_context.getConfigDir().getCanonicalPath());
-                    } catch (IOException ioe) {
-                    }
+                    } catch (IOException ioe) { /* ignored */ }
                     if (diff) {
                         ring = new DirKeyRing(new File(_context.getConfigDir(), "certificates"));
                         try {
@@ -458,20 +456,17 @@ public class SU3File {
             if (in != null)
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             if (out != null) {
                 // We will generally be reading this file right back in,
                 // so do a POSIX flush and sync to ensure it will be there.
                 try {
                     out.flush();
                     out.getFD().sync();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
                 try {
                     out.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
             if (migrateTo != null && !rv) migrateTo.delete();
         }
@@ -561,13 +556,11 @@ public class SU3File {
             if (in != null)
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             if (out != null)
                 try {
                     out.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             if (!ok) _file.delete();
         }
     }
@@ -759,8 +752,7 @@ public class SU3File {
                 long ver = 0;
                 try {
                     ver = Long.parseLong(versionString);
-                } catch (NumberFormatException nfe) {
-                }
+                } catch (NumberFormatException nfe) { /* ignored */ }
                 if (ver > 1000000000L)
                     System.out.println("Version:  " + versionString + " (" + DataHelper.formatTime(ver * 1000) + ')');
                 else System.out.println("Version:  " + versionString);
@@ -1126,8 +1118,7 @@ public class SU3File {
             if (out != null)
                 try {
                     out.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
         return true;
     }

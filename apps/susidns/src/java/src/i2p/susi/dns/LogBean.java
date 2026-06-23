@@ -89,7 +89,7 @@ public class LogBean extends BaseBean
             finally {
                 if (br != null) {
                     try {br.close();}
-                    catch (IOException ioe) {}
+                    catch (IOException ioe) { /* ignored */ }
                 }
             }
         } else {logged = LOG_FILE;}
@@ -156,7 +156,7 @@ public class LogBean extends BaseBean
             finally {
                 if (br != null) {
                     try {br.close();}
-                    catch (IOException ioe) {}
+                    catch (IOException ioe) { /* ignored */ }
                 }
             }
         }

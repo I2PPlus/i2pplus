@@ -47,8 +47,7 @@ public class InternalSocket extends Socket {
         if (I2PAppContext.getGlobalContext().isRouterContext() && (host.equals("127.0.0.1") || host.equals("localhost"))) {
             try {
                 return new InternalSocket(port);
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
             // guess it wasn't really internal...
         }
         return new Socket(host, port);
@@ -79,15 +78,13 @@ public class InternalSocket extends Socket {
                 _is.close();
                 _is = null;
             }
-        } catch (IOException ie) {
-        }
+        } catch (IOException ie) { /* ignored */ }
         try {
             if (_os != null) {
                 _os.close();
                 _os = null;
             }
-        } catch (IOException ie) {
-        }
+        } catch (IOException ie) { /* ignored */ }
     }
 
     @Override

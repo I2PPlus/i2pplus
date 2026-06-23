@@ -576,7 +576,7 @@ public class TunnelControllerGroup implements ClientApp {
                     }
                 }
             }
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ }
         return false;
     }
 

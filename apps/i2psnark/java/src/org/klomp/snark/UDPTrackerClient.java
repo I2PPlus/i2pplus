@@ -239,8 +239,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
                     wasInProgress = true;
                     try {
                         tr.wait(toWait);
-                    } catch (InterruptedException ie) {
-                    }
+                    } catch (InterruptedException ie) { /* ignored */ }
                 } else {
                     shouldConnect = true;
                     tr.setConnInProgress(true);
@@ -395,8 +394,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
                         return false;
                     }
                     w.wait(toWait);
-                } catch (InterruptedException ie) {
-                }
+                } catch (InterruptedException ie) { /* ignored */ }
                 switch (w.getState()) {
                     case SUCCESS:
                         return true;

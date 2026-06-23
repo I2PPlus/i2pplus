@@ -1038,14 +1038,14 @@ public class I2PSnarkServlet extends BasicServlet {
 
         int start = 0;
         if (stParam != null) {
-            try { start = Math.max(0, Math.min(total - 1, Integer.parseInt(stParam))); } catch(NumberFormatException ignored) {}
+            try { start = Math.max(0, Math.min(total - 1, Integer.parseInt(stParam))); } catch(NumberFormatException ignored) { /* ignored */ }
         }
 
         int pageSize = filterEnabled ? 9999 : Math.max(_manager.getPageSize(), 10);
         String ps = req.getParameter("ps");
         if ("null".equals(ps)) ps = Integer.toString(pageSize);
         if (ps != null) {
-            try { pageSize = Integer.parseInt(ps); } catch(NumberFormatException ignored) {}
+            try { pageSize = Integer.parseInt(ps); } catch(NumberFormatException ignored) { /* ignored */ }
         }
 
         boolean isDegraded = false, noThinsp = false;
@@ -2070,7 +2070,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     _manager.addMessage(msg);
                     if (isStandalone()) {System.out.println(" • " + msg);}
                 }
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) { /* ignored */ }
             return;
         }
 
@@ -2495,7 +2495,7 @@ public class I2PSnarkServlet extends BasicServlet {
                               enableAddCreate, enableVaryInboundHops, enableVaryOutboundHops, apiTarget, apiKey);
         try {
             setResourceBase(_manager.getDataDir());
-        } catch (ServletException ignored) {}
+        } catch (ServletException ignored) { /* ignored */ }
     }
 
     /**
@@ -2723,7 +2723,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     if (!snark.isStopped()) continue;
                     _manager.startTorrent(snark);
                     if ((count++ & 0x0f) == 15) {
-                        try { Thread.sleep(200); } catch (InterruptedException ignored) {}
+                        try { Thread.sleep(200); } catch (InterruptedException ignored) { /* ignored */ }
                     }
                 }
                 return;
@@ -2743,7 +2743,7 @@ public class I2PSnarkServlet extends BasicServlet {
             try {
                 int id = Integer.parseInt(sid);
                 _manager.clearMessages(id);
-            } catch (NumberFormatException ignored) {}
+            } catch (NumberFormatException ignored) { /* ignored */ }
         }
     }
 
@@ -2930,7 +2930,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String ssort = req.getParameter("sort");
             if (ssort != null) {
                 try {sort = Integer.parseInt(ssort);}
-                catch (NumberFormatException nfe) {}
+                catch (NumberFormatException nfe) { /* ignored */ }
             }
             String lang;
             if (_manager.isSmartSortEnabled()) {
@@ -3534,7 +3534,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 try {
                     String s = bev.getString();
                     if (!s.isEmpty()) {return s.length() > 64 ? s.substring(0, 64) : s;}
-                } catch (InvalidBEncodingException ignored) {}
+                } catch (InvalidBEncodingException ignored) { /* ignored */ }
             }
         }
 
@@ -3971,10 +3971,10 @@ public class I2PSnarkServlet extends BasicServlet {
                 // If we get to here, we have the language settings
                 buf.append("<span class=configOption><b>").append(_t("Language")).append("</b> ")
                    .append(langSettings).append("</span><br>\n");
-            } catch (ClassNotFoundException e) {}
-            catch (NoSuchMethodException e) {}
-            catch (IllegalAccessException e) {}
-            catch (InvocationTargetException e) {}
+            } catch (ClassNotFoundException e) { /* ignored */ }
+            catch (NoSuchMethodException e) { /* ignored */ }
+            catch (IllegalAccessException e) { /* ignored */ }
+            catch (InvocationTargetException e) { /* ignored */ }
         } else {
             buf.append("<span class=configOption><b>").append(_t("Language")).append("</b> ")
                .append("<span id=snarkLang>").append(lang).append("</span> ")
@@ -4515,7 +4515,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private String renderOptions(int min, int max, int dflt, String strNow, String selName, String name) {
        int now = dflt;
        try {now = Integer.parseInt(strNow);}
-       catch (Throwable t) {}
+       catch (Throwable t) { /* ignored */ }
        StringBuilder buf = new StringBuilder(128);
        buf.append("<select name=\"").append(selName);
        if (selName.contains("quantity")) {
@@ -4847,7 +4847,7 @@ public class I2PSnarkServlet extends BasicServlet {
             int sort = 0;
             if (sortParam != null) {
                 try {sort = Integer.parseInt(sortParam);}
-                catch (NumberFormatException nfe) {}
+                catch (NumberFormatException nfe) { /* ignored */ }
             }
             DataHelper.sort(fileList, Sorters.getFileComparator(sort, this));
         }
@@ -5721,7 +5721,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (showSort) {
             if (sortParam != null) {
                 try {sort = Integer.parseInt(sortParam);}
-                catch (NumberFormatException nfe) {}
+                catch (NumberFormatException nfe) { /* ignored */ }
             }
             DataHelper.sort(fileList, Sorters.getFileComparator(sort, this));
         }
@@ -6123,7 +6123,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if ((r == null || r.equals("0")) && (c == null || c.length() == 0)) {return;}
         int rat = 0;
         try {rat = Integer.parseInt(r);}
-        catch (NumberFormatException nfe) {}
+        catch (NumberFormatException nfe) { /* ignored */ }
         Comment com = new Comment(c, _manager.util().getCommentsName(), rat);
         boolean changed = snark.addComments(Collections.singletonList(com));
         if (!changed) {_log.warn("Add of comment ID " + com.getID() + " failed");}
@@ -6141,7 +6141,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         int id = Integer.parseInt(key.substring(8));
                         boolean changed = cs.remove(id);
                         if (!changed) {_log.warn("Delete of comment ID " + id + " failed");}
-                    } catch (NumberFormatException nfe) {}
+                    } catch (NumberFormatException nfe) { /* ignored */ }
                 }
             }
         }
@@ -6284,13 +6284,13 @@ public class I2PSnarkServlet extends BasicServlet {
             String val = entry.getValue()[0];   // jetty arrays
             if (key.startsWith("addTracker-")) {
                 try {toAdd.add(Integer.parseInt(key.substring(11)));}
-                catch (NumberFormatException nfe) {}
+                catch (NumberFormatException nfe) { /* ignored */ }
             } else if (key.startsWith("removeTracker-")) {
                 try {toDel.add(Integer.parseInt(key.substring(14)));}
-                catch (NumberFormatException nfe) {}
+                catch (NumberFormatException nfe) { /* ignored */ }
             } else if (key.equals("primary")) {
                 try {primary = Integer.parseInt(val);}
-                catch (NumberFormatException nfe) {}
+                catch (NumberFormatException nfe) { /* ignored */ }
             } else if (key.equals("nofilter_newTorrentComment")) {
                 newComment = val.trim();
             } else if (key.equals("nofilter_newTorrentCreatedBy")) {
@@ -6375,7 +6375,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         } catch (IOException ioe) {
             try {if (out != null) out.close();}
-            catch (IOException ioe2) {}
+            catch (IOException ioe2) { /* ignored */ }
             _manager.addMessage("Save edit changes failed: " + ioe.getMessage());
             return;
         } finally {f.delete();}

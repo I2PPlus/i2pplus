@@ -127,7 +127,7 @@ class Writer {
                             }
                         }
                     }
-                } catch (InterruptedException ie) {}
+                } catch (InterruptedException ie) { /* ignored */ }
                 if (!_stop && (con != null)) {
                     try {
                         if (_log.shouldDebug())

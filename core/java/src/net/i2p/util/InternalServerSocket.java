@@ -61,8 +61,7 @@ public class InternalServerSocket extends ServerSocket {
         try {
             // use null streams as a poison
             _acceptQueue.put(new InternalSocket(null, null));
-        } catch (InterruptedException ie) {
-        }
+        } catch (InterruptedException ie) { /* ignored */ }
     }
 
     @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
@@ -116,8 +115,7 @@ public class InternalServerSocket extends ServerSocket {
         //    _log.debug("Queueing " + _port);
         try {
             _acceptQueue.put(sock);
-        } catch (InterruptedException ie) {
-        }
+        } catch (InterruptedException ie) { /* ignored */ }
     }
 
     @Override

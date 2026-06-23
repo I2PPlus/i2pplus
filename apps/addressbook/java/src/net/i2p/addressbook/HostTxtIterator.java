@@ -107,7 +107,7 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
     public void close() {
         if (input != null) {
             try {input.close();}
-            catch (IOException ioe) {}
+            catch (IOException ioe) { /* ignored */ }
         }
     }
 

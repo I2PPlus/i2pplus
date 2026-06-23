@@ -59,7 +59,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
 
     public void shutdown() {
         _isRunning = false;
-        if (_snark != null) {}
+        if (_snark != null) { /* ignored */ }
     }
 
     public UpdateType getType() {

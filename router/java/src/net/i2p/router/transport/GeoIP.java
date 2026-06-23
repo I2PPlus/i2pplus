@@ -384,7 +384,7 @@ public class GeoIP {
                     }
                 }
             } finally {
-                if (dbr != null) try { dbr.close(); } catch (IOException ioe) {}
+                if (dbr != null) try { dbr.close(); } catch (IOException ioe) { /* ignored */ }
                 _lock.set(false);
             }
             if (_log.shouldInfo())
@@ -463,8 +463,8 @@ public class GeoIP {
                 // Tor-style database, unsupported
             }
         } finally {
-            if (out != null) try { out.close(); } catch (IOException e) {}
-            if (dbr != null) try { dbr.close(); } catch (IOException ioe) {}
+            if (out != null) try { out.close(); } catch (IOException e) { /* ignored */ }
+            if (dbr != null) try { dbr.close(); } catch (IOException ioe) { /* ignored */ }
             _lock.set(false);
         }
         if (_log.shouldInfo())
@@ -569,14 +569,13 @@ public class GeoIP {
                     String lc = s[0].toLowerCase(Locale.US);
                     _codeToName.put(lc, s[1]);
                     _codeCache.put(lc, lc);
-                } catch (IndexOutOfBoundsException ioobe) {
-                }
+                } catch (IndexOutOfBoundsException ioobe) { /* ignored */ }
             }
         } catch (IOException ioe) {
             if (_log.shouldError())
                 _log.error("Error reading the Country File", ioe);
         } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) {}
+            if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -636,15 +635,15 @@ public class GeoIP {
                         if (cached == null) {cached = lc;}
                         rv[idx++] = cached;
                     }
-                } catch (IndexOutOfBoundsException ioobe) {}
-                catch (NumberFormatException nfe) {}
+                } catch (IndexOutOfBoundsException ioobe) { /* ignored */ }
+                catch (NumberFormatException nfe) { /* ignored */ }
             }
         } catch (IOException ioe) {
             if (_log.shouldError()) {_log.error("Error reading the GeoIP file", ioe);}
         } finally {
             if (br != null) {
                 try {br.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
             }
         }
 

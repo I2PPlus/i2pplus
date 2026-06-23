@@ -71,7 +71,7 @@ public class ConfigKeyringHandler extends FormHandler {
                 BlindData bdin = null;
                 try {
                     bdin = Blinding.decode(_context, _peer);
-                } catch (IllegalArgumentException iae) {}
+                } catch (IllegalArgumentException iae) { /* ignored */ }
 
                 // we need the dest or the spk, not just the desthash
                 SigningPublicKey spk = null;
@@ -188,8 +188,7 @@ public class ConfigKeyringHandler extends FormHandler {
                             SigningPublicKey spk = bd.getUnblindedPubKey();
                             removed = _context.netDb().removeBlindData(spk);
                         }
-                    } catch (IllegalArgumentException iae) {
-                    }
+                    } catch (IllegalArgumentException iae) { /* ignored */ }
                 } else {
                     addFormError(_t("Invalid destination") + ": " + p, true);
                 }
@@ -227,8 +226,7 @@ public class ConfigKeyringHandler extends FormHandler {
     public void setEncryptMode(String m) {
         try {
             _mode = Integer.parseInt(m);
-        } catch (NumberFormatException nfe) {
-        }
+        } catch (NumberFormatException nfe) { /* ignored */ }
     }
 
     /** @since 0.9.41 */

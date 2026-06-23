@@ -13,6 +13,7 @@ import net.i2p.crypto.KeyStoreUtil;
  * Provider for managing I2PControl keystore operations.
  * Handles loading and accessing SSL certificates for secure connections.
  */
+        // Generate a random secure password on class load
 public class KeyStoreProvider {
     public static final String DEFAULT_CERTIFICATE_ALGORITHM_STRING = "RSA";
     public static final int DEFAULT_CERTIFICATE_KEY_LENGTH = 4096;
@@ -111,7 +112,7 @@ public class KeyStoreProvider {
             } catch (Exception e) {
                 // Ignore. Not an issue. Let's just create a new keystore instead.
             } finally {
-                if (is != null) try { is.close(); } catch (IOException ioe) {}
+                if (is != null) try { is.close(); } catch (IOException ioe) { /* ignored */ }
             }
             return null;
         } else {

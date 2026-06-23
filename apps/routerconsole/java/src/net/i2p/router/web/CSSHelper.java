@@ -268,7 +268,7 @@ public class CSSHelper extends HelperBase {
             if (r.equals("0")) {_context.router().saveConfig(PROP_DISABLE_REFRESH, "true");}
             if (Integer.parseInt(r) < MIN_REFRESH) {r = Integer.toString(MIN_REFRESH);}
             _context.router().saveConfig(PROP_REFRESH, r);
-        } catch (RuntimeException e) {}
+        } catch (RuntimeException e) { /* ignored */ }
     }
 
     /** @return refresh time in seconds, as a string */

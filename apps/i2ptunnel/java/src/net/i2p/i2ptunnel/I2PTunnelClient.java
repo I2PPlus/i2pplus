@@ -186,7 +186,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
             closeSocket(s);
             if (i2ps != null) {
                 try {i2ps.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
                 synchronized (sockLock) {mySockets.remove(i2ps);}
             }
         }

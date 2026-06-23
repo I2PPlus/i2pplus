@@ -1413,7 +1413,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
                 return result; // Valid result, return immediately
 
-            } catch (IOException e) {}
+            } catch (IOException e) { /* ignored */ }
         }
 
         return null; // All attempts failed without valid response

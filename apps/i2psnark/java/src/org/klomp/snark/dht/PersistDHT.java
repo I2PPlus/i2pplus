@@ -56,8 +56,7 @@ abstract class PersistDHT {
             if (br != null)
                 try {
                     br.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
         if (log.shouldInfo()) log.info("Loaded " + count + " nodes from " + file);
     }

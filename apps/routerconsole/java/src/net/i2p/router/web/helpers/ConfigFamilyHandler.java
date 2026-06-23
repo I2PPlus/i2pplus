@@ -119,7 +119,7 @@ public class ConfigFamilyHandler extends FormHandler {
                 addFormError(_t("Load from file failed") + " - " + ioe.getMessage(), true);
             } finally {
                 // it's really a ByteArrayInputStream but we'll play along...
-                try { in.close(); } catch (IOException ioe) {}
+                try { in.close(); } catch (IOException ioe) { /* ignored */ }
             }
         } else if (_action.equals(_t("Leave Family"))) {
             List<String> removes = new ArrayList<>();

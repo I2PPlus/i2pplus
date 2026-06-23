@@ -475,7 +475,7 @@ public class NTCPTransport extends TransportImpl {
                     }
                 }
             }
-        } catch (Exception e) {}
+        } catch (Exception e) { /* ignored */ }
         return "UNKNOWN";
     }
 
@@ -1180,7 +1180,7 @@ public class NTCPTransport extends TransportImpl {
                 // FIXME range of IPv6 addresses
                 if (Addresses.getAddresses().contains(testAddr))
                     return testAddr;
-            } catch (UnknownHostException uhe) {}
+            } catch (UnknownHostException uhe) { /* ignored */ }
         }
         return null;
     }
@@ -1195,7 +1195,7 @@ public class NTCPTransport extends TransportImpl {
         // Wait for NTCP Pumper to stop so we don't end up with two...
         while (isAlive()) {
             try {Thread.sleep(5*1000);}
-            catch (InterruptedException ie) {}
+            catch (InterruptedException ie) { /* ignored */ }
         }
         if (_log.shouldWarn()) {_log.warn("Restarting NTCP transport listener...");}
         startIt();
@@ -1406,7 +1406,7 @@ public class NTCPTransport extends TransportImpl {
                     int pqn = Integer.parseInt(pq);
                     if (pqn >= 3 && pqn <= 5)
                         return pqn;
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) { /* ignored */ }
             }
         }
         // his address is NTCP2
@@ -1532,7 +1532,7 @@ public class NTCPTransport extends TransportImpl {
                 try {
                     InetAddress ia = InetAddress.getByAddress(ip);
                     saveLocalAddress(ia);
-                } catch (UnknownHostException uhe) {}
+                } catch (UnknownHostException uhe) { /* ignored */ }
             } else if (source == SOURCE_CONFIG) {synchronized(this) {_ssuPort = port;}} // save for startListening()
             return;
         }

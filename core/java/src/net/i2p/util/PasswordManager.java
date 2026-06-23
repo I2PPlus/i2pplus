@@ -227,8 +227,7 @@ public class PasswordManager {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(data);
             return md.digest();
-        } catch (NoSuchAlgorithmException nsae) {
-        }
+        } catch (NoSuchAlgorithmException nsae) { /* ignored */ }
         return new byte[0];
     }
 
@@ -243,8 +242,7 @@ public class PasswordManager {
             MessageDigest md = MessageDigest.getInstance("MD5");
             md.update(data);
             return md.digest();
-        } catch (NoSuchAlgorithmException nsae) {
-        }
+        } catch (NoSuchAlgorithmException nsae) { /* ignored */ }
         return new byte[0];
     }
 

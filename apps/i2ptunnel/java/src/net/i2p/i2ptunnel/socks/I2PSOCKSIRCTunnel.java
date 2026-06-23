@@ -56,12 +56,12 @@ public class I2PSOCKSIRCTunnel extends I2PSOCKSTunnel {
             //_log.error("SOCKS IRC Tunnel Start");
             try {
                 s.setSoTimeout(INITIAL_SO_TIMEOUT);
-            } catch (SocketException ioe) {}
+            } catch (SocketException ioe) { /* ignored */ }
             SOCKSServer serv = SOCKSServerFactory.createSOCKSServer(_context, s, getTunnel().getClientOptions());
             Socket clientSock = serv.getClientSocket();
             try {
                 s.setSoTimeout(0);
-            } catch (SocketException ioe) {}
+            } catch (SocketException ioe) { /* ignored */ }
             destSock = serv.getDestinationI2PSocket(this);
             StringBuffer expectedPong = new StringBuffer();
             int id = __clientId.incrementAndGet();
@@ -80,7 +80,7 @@ public class I2PSOCKSIRCTunnel extends I2PSOCKSTunnel {
         } finally {
             // only because we are running it inline
             closeSocket(s);
-            if (destSock != null) try { destSock.close(); } catch (IOException ioe) {}
+            if (destSock != null) try { destSock.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 }

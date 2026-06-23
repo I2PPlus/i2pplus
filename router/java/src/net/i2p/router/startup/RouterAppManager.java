@@ -208,7 +208,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
                    if (_log.shouldWarn())
                        _log.warn("Shutting down client " + app.getDisplayName());
                     app.shutdown(null);
-                } catch (Throwable t) {}
+                } catch (Throwable t) { /* ignored */ }
             }
         }
     }

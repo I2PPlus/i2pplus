@@ -954,8 +954,7 @@ public class I2PSnarkUtil implements DisconnectListener {
                                 _log.debug("Using existing session for lookup of [" + ip + "]");
                             try {
                                 return sess.lookupDest(h, 15 * 1000);
-                            } catch (I2PSessionException ise) {
-                            }
+                            } catch (I2PSessionException ise) { /* ignored */ }
                         }
                     }
                 }
@@ -1318,8 +1317,7 @@ public class I2PSnarkUtil implements DisconnectListener {
             if (in != null) {
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
         }
     }
@@ -1387,8 +1385,7 @@ public class I2PSnarkUtil implements DisconnectListener {
             if (fos != null)
                 try {
                     fos.close();
-                } catch (IOException e) {
-                }
+                } catch (IOException e) { /* ignored */ }
         }
         if (ioe != null) {
             throw ioe;

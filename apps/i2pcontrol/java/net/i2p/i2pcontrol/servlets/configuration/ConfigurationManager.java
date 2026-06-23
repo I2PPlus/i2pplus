@@ -120,7 +120,7 @@ public class ConfigurationManager {
                 int i = Integer.parseInt(value);
                 integerConfigurations.put(key, i);
                 continue;
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) { /* ignored */ }
             //Check if value is a bool
             if ("true".equalsIgnoreCase(value)) {
                 booleanConfigurations.put(key, Boolean.TRUE);

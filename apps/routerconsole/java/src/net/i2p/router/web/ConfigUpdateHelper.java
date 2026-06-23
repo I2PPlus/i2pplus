@@ -113,7 +113,7 @@ public class ConfigUpdateHelper extends HelperBase {
         try {
             ms = Long.parseLong(freq);
             if (ms <= 0) {ms = -1;}
-        } catch (NumberFormatException nfe) {}
+        } catch (NumberFormatException nfe) { /* ignored */ }
 
         StringBuilder buf = new StringBuilder(256);
         buf.append("<select name=\"refreshFrequency\">\n");

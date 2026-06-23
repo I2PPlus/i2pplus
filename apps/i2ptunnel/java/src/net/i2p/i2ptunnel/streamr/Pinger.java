@@ -63,7 +63,7 @@ public class Pinger implements Source, Runnable {
             this.sink.send(null, fromPort, 0, data);
             if (log.shouldDebug())
                 log.debug("Sent unsubscribe from port " + fromPort);
-        } catch (RuntimeException re) {}
+        } catch (RuntimeException re) { /* ignored */ }
     }
 
     /**

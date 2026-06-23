@@ -214,7 +214,7 @@ public class QRServlet extends HttpServlet {
                 size = Integer.parseInt(sizeParam);
                 if (size < 40) {size = 40;}
                 else if (size > 1024) {size = 1024;}
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
 
         String identiconETag = IdenticonUtil.getIdenticonETag(codeParam.hashCode(), size, version) + suffix;

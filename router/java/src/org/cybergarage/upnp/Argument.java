@@ -311,8 +311,7 @@ public class Argument {
         String value = getValue();
         try {
             return Integer.parseInt(value);
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { /* ignored */ }
         return 0;
     }
 

@@ -154,7 +154,7 @@ class UDPAddress {
                 else if (_host.startsWith("2a06:a004:"))
                     cmtu = 1420;
             }
-        } catch (NumberFormatException nfe) {}
+        } catch (NumberFormatException nfe) { /* ignored */ }
         _mtu = cmtu;
 
         String key = addr.getOption(PROP_INTRO_KEY);
@@ -241,7 +241,7 @@ class UDPAddress {
             if (t != null) {
                 try {
                     exp = Long.parseLong(t) * 1000L;
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) { /* ignored */ }
             }
 
             if (cintroTags == null) {
@@ -473,7 +473,7 @@ class UDPAddress {
                     synchronized (_inetAddressCache) {
                         _inetAddressCache.put(host, rv);
                     }
-                } catch (UnknownHostException uhe) {}
+                } catch (UnknownHostException uhe) { /* ignored */ }
             }
         }
         return rv;

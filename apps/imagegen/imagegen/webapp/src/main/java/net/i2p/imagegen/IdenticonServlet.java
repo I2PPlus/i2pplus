@@ -114,7 +114,7 @@ public class IdenticonServlet extends HttpServlet {
 					size = 16;
 				else if (size > 1024)
 					size = 1024;
-			} catch (NumberFormatException nfe) {}
+			} catch (NumberFormatException nfe) { /* ignored */ }
 		}
 
 		String identiconETag = IdenticonUtil.getIdenticonETag(codeParam.hashCode(), size,

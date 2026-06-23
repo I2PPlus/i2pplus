@@ -1281,7 +1281,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             _sErrMsg = _resBundDisplayMsgs.getString("unsupportedClient") + "\n";
             _bFailed = true;
             try {ctlSocket.close();}
-            catch (IOException ioe) {}
+            catch (IOException ioe) { /* ignored */ }
             return;
         }
         ctlSocket.setSoTimeout(60*1000);
@@ -1309,7 +1309,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                         // we seem to always get here, why bother trying extended above?
                         if (ctlSocket != null) {
                             try {ctlSocket.close();}
-                            catch (IOException ioe) {}
+                            catch (IOException ioe) { /* ignored */ }
                         }
                         ctlSocket = newSocket(hostAddress, ctlport);
                     } catch (UnknownHostException e) {
@@ -2348,7 +2348,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                     try {t.interrupt();}
                     catch (RuntimeException re) {_log.debug("TG", re);}
                     try {Thread.sleep(20);}
-                    catch (InterruptedException ie) {}
+                    catch (InterruptedException ie) { /* ignored */ }
                     if (t.isAlive()) {
                         if (_log.shouldWarn()) {_log.warn("Killing TG thread " + t);}
                         try {t.stop();}
@@ -2366,7 +2366,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             }
 
             try {Thread.sleep(50);}
-            catch (InterruptedException ie) {}
+            catch (InterruptedException ie) { /* ignored */ }
         }
     }
 
@@ -2386,7 +2386,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                 try {new TestWorker().run();}
                 catch(Throwable e) {
                     if (!(e instanceof ThreadDeath)) {_log.warn("Bandwidth test error", e);}
-                } finally {}
+                } finally { /* ignored */ }
             }
         }, "TestWorker");
         t.setDaemon(true);

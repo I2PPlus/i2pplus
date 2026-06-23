@@ -237,8 +237,7 @@ public class TrackerClient implements Runnable {
             if (!ok) {
                 try {
                     Thread.sleep(30 * 1000);
-                } catch (InterruptedException ie) {
-                }
+                } catch (InterruptedException ie) { /* ignored */ }
             }
         }
         return !stop && _util.connected();
@@ -271,8 +270,7 @@ public class TrackerClient implements Runnable {
                 long delay = _util.getContext().random().nextInt(30 * 1000);
                 try {
                     Thread.sleep(delay);
-                } catch (InterruptedException ie) {
-                }
+                } catch (InterruptedException ie) { /* ignored */ }
             }
             loop();
         } finally {
@@ -520,8 +518,7 @@ public class TrackerClient implements Runnable {
                     } else if (delay > 0) {
                         Thread.sleep(delay);
                     }
-                } catch (InterruptedException interrupt) {
-                }
+                } catch (InterruptedException interrupt) { /* ignored */ }
             } // *** end of while loop
         } // try
         catch (Throwable t) {
@@ -645,8 +642,7 @@ public class TrackerClient implements Runnable {
                                 int delay = r.nextInt(DELAY_RAND) + DELAY_MIN;
                                 try {
                                     Thread.sleep(delay);
-                                } catch (InterruptedException ie) {
-                                }
+                                } catch (InterruptedException ie) { /* ignored */ }
                             }
                         }
                     }
@@ -760,8 +756,7 @@ public class TrackerClient implements Runnable {
                         int delay = r.nextInt(DELAY_RAND) + DELAY_MIN;
                         try {
                             Thread.sleep(delay);
-                        } catch (InterruptedException ie) {
-                        }
+                        } catch (InterruptedException ie) { /* ignored */ }
                     }
                 }
                 rv = pids.size();
@@ -829,8 +824,7 @@ public class TrackerClient implements Runnable {
                                         snark.getID(),
                                         snark.getInfoHash(),
                                         snark.getMetaInfo()));
-                    } catch (InvalidBEncodingException ibe) {
-                    }
+                    } catch (InvalidBEncodingException ibe) { /* ignored */ }
                 }
                 Random r = _util.getContext().random();
                 Collections.shuffle(peers, r);
@@ -841,8 +835,7 @@ public class TrackerClient implements Runnable {
                         int delay = r.nextInt(DELAY_RAND) + DELAY_MIN;
                         try {
                             Thread.sleep(delay);
-                        } catch (InterruptedException ie) {
-                        }
+                        } catch (InterruptedException ie) { /* ignored */ }
                     }
                 }
             }
@@ -891,9 +884,7 @@ public class TrackerClient implements Runnable {
                     continue;
                 }
                 peers.add(new WebPeer(coordinator, uri, pID, snark.getMetaInfo()));
-            } catch (InvalidBEncodingException ibe) {
-            } catch (URISyntaxException use) {
-            }
+            } catch (InvalidBEncodingException ibe) { /* ignored */ } catch (URISyntaxException use) { /* ignored */ }
         }
 
         if (peers.isEmpty()) {
@@ -910,8 +901,7 @@ public class TrackerClient implements Runnable {
                 int delay = r.nextInt(DELAY_RAND) + DELAY_MIN;
                 try {
                     Thread.sleep(delay);
-                } catch (InterruptedException ie) {
-                }
+                } catch (InterruptedException ie) { /* ignored */ }
             }
         }
         return peers.size();

@@ -315,8 +315,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             synchronized (waiter) {
                 try {
                     waiter.wait(maxWait);
-                } catch (InterruptedException ie) {
-                }
+                } catch (InterruptedException ie) { /* ignored */ }
             }
 
             int replyType = waiter.getReplyCode();
@@ -429,8 +428,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                             Math.max(
                                     30 * 1000,
                                     (Math.min(45 * 1000, endTime - _context.clock().now()))));
-                } catch (InterruptedException ie) {
-                }
+                } catch (InterruptedException ie) { /* ignored */ }
             }
 
             int replyType = waiter.getReplyCode();
@@ -620,8 +618,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             synchronized (waiter) {
                 try {
                     waiter.wait(maxWait);
-                } catch (InterruptedException ie) {
-                }
+                } catch (InterruptedException ie) { /* ignored */ }
             }
             int replyType = waiter.getReplyCode();
             if (!(replyType == REPLY_PEERS || replyType == REPLY_NODES)) {
@@ -652,8 +649,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         synchronized (waiter) {
             try {
                 waiter.wait(maxWait);
-            } catch (InterruptedException ie) {
-            }
+            } catch (InterruptedException ie) { /* ignored */ }
         }
         int replyType = waiter.getReplyCode();
         return replyType == REPLY_PONG;
@@ -1091,8 +1087,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                                 + dest.calculateHash()
                                 + "]\n* "
                                 + BDecoder.bdecode(bais).toString());
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
         }
 
         // Always send query port, peer will increment for unsigned replies

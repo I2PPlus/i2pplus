@@ -79,7 +79,7 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
             notifyEvent("openServerResult", "error");
         } finally {
             if (fis != null)
-                try { fis.close(); } catch (IOException ioe) {}
+                try { fis.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 

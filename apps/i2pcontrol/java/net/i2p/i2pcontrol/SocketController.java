@@ -172,7 +172,7 @@ public class SocketController implements RouterApp {
             } finally {
                 synchronized (SocketController.this) {
                     if (_server != null) {
-                        try { _server.close(); } catch (IOException ioe) {}
+                        try { _server.close(); } catch (IOException ioe) { /* ignored */ }
                     }
                 }
             }
@@ -202,7 +202,7 @@ public class SocketController implements RouterApp {
                 synchronized (SocketController.this) {
                     _listeners.remove(s);
                 }
-                try { s.close(); } catch (IOException ioe) {}
+                try { s.close(); } catch (IOException ioe) { /* ignored */ }
             }
         }
     }
@@ -217,11 +217,11 @@ public class SocketController implements RouterApp {
                 _context.portMapper().unregister(SVC_SKT_I2PCONTROL);
                 try {
                     _server.close();
-                } catch (IOException ioe) {}
+                } catch (IOException ioe) { /* ignored */ }
                 for (Socket listener : _listeners) {
                     try {
                         listener.close();
-                    } catch (IOException ioe) {}
+                    } catch (IOException ioe) { /* ignored */ }
                 }
                 _listeners.clear();
             }

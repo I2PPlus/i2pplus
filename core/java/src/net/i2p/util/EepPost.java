@@ -85,8 +85,7 @@ public class EepPost extends EepGet {
             } catch (IOException ioe) {
                 try {
                     out.close();
-                } catch (IOException ioe2) {
-                }
+                } catch (IOException ioe2) { /* ignored */ }
                 if (tmp != null) {
                     tmp.delete();
                 }

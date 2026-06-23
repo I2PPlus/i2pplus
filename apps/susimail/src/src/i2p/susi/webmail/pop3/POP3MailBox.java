@@ -120,13 +120,13 @@ public class POP3MailBox implements NewMailListener {
             Buffer header = null;
             if (id >= 1 && id <= mails) {
                 try {socket.setSoTimeout(120*1000);}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
                 header = sendCmdN("TOP " + id + " 0", new MemoryBuffer(1024)); // try 'TOP n 0' command
                 if (header == null) {header = sendCmdN("RETR " + id, new MemoryBuffer(2048));} // try 'RETR n' command
                 if (header == null && _log.shouldDebug()) {_log.debug("RETR returned null");}
                 if (socket != null) {
                     try {socket.setSoTimeout(300*1000);}
-                    catch (IOException ioe) {}
+                    catch (IOException ioe) { /* ignored */ }
                 }
             } else {lastError = "Message id out of range.";}
             return header;
@@ -184,7 +184,7 @@ public class POP3MailBox implements NewMailListener {
                 if (_log.shouldDebug()) {_log.debug("Error fetching bodies", ioe);}
                 if (socket != null) {
                     try {socket.close();}
-                    catch (IOException e) {}
+                    catch (IOException e) { /* ignored */ }
                     socket = null;
                     connected = false;
                 }
@@ -209,9 +209,9 @@ public class POP3MailBox implements NewMailListener {
         Buffer body = null;
         if (id >= 1 && id <= mails) {
             try {
-                try { socket.setSoTimeout(120*1000); } catch (IOException ioe) {}
+                try { socket.setSoTimeout(120*1000); } catch (IOException ioe) { /* ignored */ }
                 body = sendCmdN("RETR " + id, buffer);
-                if (socket != null) try { socket.setSoTimeout(300*1000); } catch (IOException ioe) {}
+                if (socket != null) try { socket.setSoTimeout(300*1000); } catch (IOException ioe) { /* ignored */ }
                 if (body == null && _log.shouldDebug()) {_log.debug("RETR returned null");}
             } catch (OutOfMemoryError oom) {
                 _log.error("OOM fetching mail", oom);
@@ -261,7 +261,7 @@ public class POP3MailBox implements NewMailListener {
                     sendCmd1a("QUIT");
                     if (socket != null) {
                         try {socket.close();}
-                        catch (IOException e) {}
+                        catch (IOException e) { /* ignored */ }
                         socket = null;
                         connected = false;
                     }
@@ -270,7 +270,7 @@ public class POP3MailBox implements NewMailListener {
                 if (_log.shouldDebug()) {_log.debug("Error deleting", ioe);}
                 if (socket != null) {
                     try {socket.close();}
-                    catch (IOException e) {}
+                    catch (IOException e) { /* ignored */ }
                     socket = null;
                     connected = false;
                 }
@@ -502,7 +502,7 @@ public class POP3MailBox implements NewMailListener {
                 lastError = _t("Cannot connect") + ": " + _t("No response from server");
                 if (socket != null) {
                     try {socket.close();}
-                    catch (IOException e) {}
+                    catch (IOException e) { /* ignored */ }
                     socket = null;
                     connected = false;
                 }
@@ -510,7 +510,7 @@ public class POP3MailBox implements NewMailListener {
             } catch (IOException e1) {
                 if (socket != null) {
                     try {socket.close();}
-                    catch (IOException e) {}
+                    catch (IOException e) { /* ignored */ }
                     socket = null;
                     connected = false;
                 }
@@ -522,7 +522,7 @@ public class POP3MailBox implements NewMailListener {
                 result = blockingConnectToServer();
                 if (socket != null) {
                     try {socket.close();}
-                    catch (IOException e) {}
+                    catch (IOException e) { /* ignored */ }
                     socket = null;
                     connected = false;
                 }
@@ -607,7 +607,7 @@ public class POP3MailBox implements NewMailListener {
                 lastError = _t("Cannot connect") + ": " + _t("No response from server");
                 if (socket != null) {
                     try {socket.close();}
-                    catch (IOException e) {}
+                    catch (IOException e) { /* ignored */ }
                     socket = null;
                     connected = false;
                 }
@@ -616,7 +616,7 @@ public class POP3MailBox implements NewMailListener {
                 lastError = _t("Cannot connect") + ": " + e1.getLocalizedMessage();
                 if (socket != null) {
                     try {socket.close();}
-                    catch (IOException e) {}
+                    catch (IOException e) { /* ignored */ }
                     socket = null;
                     connected = false;
                 }
@@ -693,7 +693,7 @@ public class POP3MailBox implements NewMailListener {
         // delete all pending deletions
         doDelete(false);
 
-        if (socket != null) try { socket.setSoTimeout(300*1000); } catch (IOException ioe) {}
+        if (socket != null) try { socket.setSoTimeout(300*1000); } catch (IOException ioe) { /* ignored */ }
         return ok;
     }
 
@@ -842,7 +842,7 @@ public class POP3MailBox implements NewMailListener {
                         sr.result = false;
                         if (socket != null) {
                             try {socket.close();}
-                            catch (IOException e) {}
+                            catch (IOException e) { /* ignored */ }
                             socket = null;
                             connected = false;
                         }
@@ -859,7 +859,7 @@ public class POP3MailBox implements NewMailListener {
                         sr.result = false;
                         if (socket != null) {
                             try {socket.close();}
-                            catch (IOException e) {}
+                            catch (IOException e) { /* ignored */ }
                             socket = null;
                             connected = false;
                         }
@@ -906,7 +906,7 @@ public class POP3MailBox implements NewMailListener {
                 if (_log.shouldDebug()) {_log.debug("sendCmdNa throws", e);}
                 if (socket != null) {
                     try {socket.close();}
-                    catch (IOException ioe) {}
+                    catch (IOException ioe) { /* ignored */ }
                     socket = null;
                     connected = false;
                 }
@@ -919,7 +919,7 @@ public class POP3MailBox implements NewMailListener {
                     if (_log.shouldDebug()) {_log.debug("2nd sendCmdNa throws", e2);}
                     if (socket != null) {
                         try {socket.close();}
-                        catch (IOException e) {}
+                        catch (IOException e) { /* ignored */ }
                         socket = null;
                         connected = false;
                     }
@@ -994,7 +994,7 @@ public class POP3MailBox implements NewMailListener {
             }
             success = true;
         } finally {
-            if (out != null) try { out.close(); } catch (IOException ioe) {}
+            if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
             buffer.writeComplete(success);
         }
     }
@@ -1040,7 +1040,7 @@ public class POP3MailBox implements NewMailListener {
         synchronized(synchronizer) {
             if (_log.shouldDebug()) {_log.debug("getNumMails()");}
             try {checkConnection();}
-            catch (IOException ioe) {}
+            catch (IOException ioe) { /* ignored */ }
             return connected ? mails : 0;
         }
     }
@@ -1128,11 +1128,11 @@ public class POP3MailBox implements NewMailListener {
                             if (_log.shouldDebug()) {_log.debug("close() with wait complete");}
                         } else {sendCmd1aNoWait("QUIT");}
                     }
-                } catch (IOException e) {}
+                } catch (IOException e) { /* ignored */ }
                 finally {
                     if (socket != null) {
                         try {socket.close();}
-                        catch (IOException e) {}
+                        catch (IOException e) { /* ignored */ }
                     }
                 }
             }

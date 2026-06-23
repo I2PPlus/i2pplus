@@ -126,8 +126,7 @@ public class SingleFileNamingService extends NamingService {
             if (in != null)
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             releaseReadLock();
         }
     }
@@ -156,8 +155,7 @@ public class SingleFileNamingService extends NamingService {
             if (in != null)
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             releaseReadLock();
         }
         return null;
@@ -212,13 +210,11 @@ public class SingleFileNamingService extends NamingService {
             if (in != null)
                 try {
                     in.close();
-                } catch (IOException e) {
-                }
+                } catch (IOException e) { /* ignored */ }
             if (out != null)
                 try {
                     out.close();
-                } catch (IOException e) {
-                }
+                } catch (IOException e) { /* ignored */ }
             releaseWriteLock();
         }
     }
@@ -263,8 +259,7 @@ public class SingleFileNamingService extends NamingService {
             if (out != null)
                 try {
                     out.close();
-                } catch (IOException e) {
-                }
+                } catch (IOException e) { /* ignored */ }
             releaseWriteLock();
         }
     }
@@ -343,13 +338,11 @@ public class SingleFileNamingService extends NamingService {
             if (in != null)
                 try {
                     in.close();
-                } catch (IOException e) {
-                }
+                } catch (IOException e) { /* ignored */ }
             if (out != null)
                 try {
                     out.close();
-                } catch (IOException e) {
-                }
+                } catch (IOException e) { /* ignored */ }
             releaseWriteLock();
         }
     }
@@ -396,8 +389,7 @@ public class SingleFileNamingService extends NamingService {
                 try {
                     Destination dest = new Destination(b64);
                     rv.put(key, dest);
-                } catch (DataFormatException dfe) {
-                }
+                } catch (DataFormatException dfe) { /* ignored */ }
             }
             if (searchOpt == null && startsWith == null) {
                 _lastWrite = _file.lastModified();
@@ -411,8 +403,7 @@ public class SingleFileNamingService extends NamingService {
             if (in != null)
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             releaseReadLock();
         }
     }
@@ -475,8 +466,7 @@ public class SingleFileNamingService extends NamingService {
             if (in != null)
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             releaseReadLock();
         }
     }
@@ -510,8 +500,7 @@ public class SingleFileNamingService extends NamingService {
             if (in != null)
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             releaseReadLock();
         }
     }
@@ -545,8 +534,7 @@ public class SingleFileNamingService extends NamingService {
             if (in != null)
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             releaseReadLock();
         }
     }
@@ -578,8 +566,7 @@ public class SingleFileNamingService extends NamingService {
             if (in != null)
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             releaseReadLock();
         }
     }
@@ -609,8 +596,7 @@ public class SingleFileNamingService extends NamingService {
             if ((!rv) && _log.shouldWarn())
                 _log.warn("no lock, size is: " + _fileLock.getQueueLength(), new Exception("rats"));
             return rv;
-        } catch (InterruptedException ie) {
-        }
+        } catch (InterruptedException ie) { /* ignored */ }
         return false;
     }
 

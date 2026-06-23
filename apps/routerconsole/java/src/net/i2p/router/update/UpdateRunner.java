@@ -213,7 +213,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
                     _get = new PartialEepGet(_context, proxyHost, proxyPort, _baos, updateURL, TrustedUpdate.HEADER_BYTES);
                     _get.addStatusListener(UpdateRunner.this);
                     _get.fetch(CONNECT_TIMEOUT);
-                } catch (Throwable t) {}
+                } catch (Throwable t) { /* ignored */ }
                 _isPartial = false;
                 if (_newVersion == null) {continue;}
             }

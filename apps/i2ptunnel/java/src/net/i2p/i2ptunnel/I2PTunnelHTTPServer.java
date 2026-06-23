@@ -370,7 +370,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         String o = opts.getProperty(opt);
         if (o != null) {
             try {return Integer.parseInt(o);}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
         return dflt;
     }
@@ -441,7 +441,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     // can't write non-ssl error message
                     // client side already sent 200 to browser
                     try {socket.reset();}
-                    catch (IOException ioe) {}
+                    catch (IOException ioe) { /* ignored */ }
                     return;
                 }
 
@@ -482,7 +482,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                              _log.debug("[HTTPServer] Timeout reached awaiting request [#" + requestCount + "]");
                     } else {
                         try {sendError(socket, ERR_REQUEST_TIMEOUT);}
-                        catch (IOException ioe) {}
+                        catch (IOException ioe) { /* ignored */ }
                         if (_log.shouldWarn()) {
                             if (ste.getMessage() != null) {
                                 _log.warn("[HTTPServer] Request error: " + ste.getMessage() + " \n* Client: " + peerB32);
@@ -490,7 +490,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         }
                     }
                     try {socket.close();}
-                    catch (IOException ioe) {}
+                    catch (IOException ioe) { /* ignored */ }
                     return;
                 } catch (EOFException eofe) {
                     if (requestCount > 0) {
@@ -498,7 +498,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                              _log.debug("[HTTPServer] Client closed awaiting request [#" + requestCount + "]");
                     } else {
                         try {sendError(socket, ERR_BAD_REQUEST);}
-                        catch (IOException ioe) {}
+                        catch (IOException ioe) { /* ignored */ }
                         if (_log.shouldWarn()) {
                             if (eofe.getMessage() != null) {
                                 _log.warn("[HTTPServer] Request error: " + eofe.getMessage() + " \n* Client: " + peerB32);
@@ -506,14 +506,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         }
                     }
                     try {socket.close();}
-                    catch (IOException ioe) {}
+                    catch (IOException ioe) { /* ignored */ }
                     return;
                 } catch (LineTooLongException ltle) {
                     try {sendError(socket, ERR_HEADERS_TOO_LARGE);}
-                    catch (IOException ioe) {}
+                    catch (IOException ioe) { /* ignored */ }
                     finally {
                         try {socket.close();}
-                        catch (IOException ioe) {}
+                        catch (IOException ioe) { /* ignored */ }
                     }
                     if (_log.shouldWarn()) {
                         _log.warn("[HTTPServer] Request error: Headers too large \n* Client: " + peerB32);
@@ -521,10 +521,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     return;
                 } catch (RequestTooLongException rtle) {
                     try {sendError(socket, ERR_REQUEST_URI_TOO_LONG);}
-                    catch (IOException ioe) {}
+                    catch (IOException ioe) { /* ignored */ }
                     finally {
                         try {socket.close();}
-                        catch (IOException ioe) {}
+                        catch (IOException ioe) { /* ignored */ }
                     }
                     if (_log.shouldWarn()) {
                         _log.warn("[HTTPServer] Request error: URI too long \n* Client: " + peerB32);
@@ -532,10 +532,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     return;
                 } catch (BadRequestException bre) {
                     try {sendError(socket, ERR_BAD_REQUEST);}
-                    catch (IOException ioe) {}
+                    catch (IOException ioe) { /* ignored */ }
                     finally {
                         try {socket.close();}
-                        catch (IOException ioe) {}
+                        catch (IOException ioe) { /* ignored */ }
                     }
                     if (_log.shouldDebug()) {
                         if (bre.getMessage() != null) {
@@ -620,7 +620,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     }
                     if (!isValidRequest && socket != null) {
                         try {socket.close();}
-                        catch (IOException e) {}
+                        catch (IOException e) { /* ignored */ }
                     }
                 }
 
@@ -652,9 +652,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     // Send a 403, so the user doesn't get an HTTP Proxy error message
                     // and blame his router or the network.
                     try {sendError(socket, ERR_FORBIDDEN);}
-                    catch (IOException ioe) {}
+                    catch (IOException ioe) { /* ignored */ }
                     try {socket.close();}
-                    catch (IOException ioe) {}
+                    catch (IOException ioe) { /* ignored */ }
                     return;
                 }
 
@@ -672,9 +672,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                               "\n* Referer: " + referer);
                                 }
                                 try {sendError(socket, ERR_FORBIDDEN);}
-                                catch (IOException ioe) {}
+                                catch (IOException ioe) { /* ignored */ }
                                 try {socket.close();}
-                                catch (IOException ioe) {}
+                                catch (IOException ioe) { /* ignored */ }
                                 return;
                             }
                         }
@@ -696,9 +696,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                             _log.warn("[HTTPServer] Refusing access: Blacklisted User Agent (" + ua + ") \n* Client: " + peerB32);
                                         }
                                         try {sendError(socket, ERR_FORBIDDEN);}
-                                        catch (IOException ioe) {}
+                                        catch (IOException ioe) { /* ignored */ }
                                         try {socket.close();}
-                                        catch (IOException ioe) {}
+                                        catch (IOException ioe) { /* ignored */ }
                                         return;
                                     }
                                 }
@@ -716,9 +716,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                         _log.warn("[HTTPServer] Refusing access: User Agent header is blank \n* Client: " + peerB32);
                                     }
                                     try {sendError(socket, ERR_FORBIDDEN);}
-                                    catch (IOException ioe) {}
+                                    catch (IOException ioe) { /* ignored */ }
                                     try {socket.close();}
-                                    catch (IOException ioe) {}
+                                    catch (IOException ioe) { /* ignored */ }
                                     return;
                                 }
                             }
@@ -740,9 +740,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         // Send a 429, so the user doesn't get an HTTP Proxy error message
                         // and blame his router or the network.
                         try {sendError(socket, ERR_DENIED);}
-                        catch (IOException ioe) {}
+                        catch (IOException ioe) { /* ignored */ }
                         try {socket.close();}
-                        catch (IOException ioe) {}
+                        catch (IOException ioe) { /* ignored */ }
                         return;
                     }
                 }
@@ -881,10 +881,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // Send a 503, so the user doesn't get an HTTP Proxy error message
                 // and blame his router or the network.
                 sendError(socket, ERR_UNAVAILABLE);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             try {
                 socket.close();
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             // Don't complain too early, Jetty may not be ready.
             int level = getTunnel().getContext().clock().now() - _startedOn > START_INTERVAL ? Log.ERROR : Log.WARN;
             if (_log.shouldLog(level))
@@ -892,7 +892,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         } catch (IOException ex) {
             try {
                 socket.close();
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             if (_log.shouldWarn())
                 if (ex.getMessage().indexOf("Name or service not known") >= 0) {
                     _log.warn("[HTTPServer] Request error: DNS error (blocked?) for: " +
@@ -907,10 +907,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // Send a 503, so the user doesn't get an HTTP Proxy error message
                 // and blame his router or the network.
                 sendError(socket, ERR_UNAVAILABLE);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             try {
                 socket.close();
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             if (_log.shouldError())
                 _log.error("[HTTPServer] Out of Memory error (" + oom.getMessage() + ")");
         }
@@ -1079,7 +1079,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         if (browserout == null) {browserout = _browser.getOutputStream();}
                         browserout.write(ERR_UNAVAILABLE.getBytes("UTF-8"));
                     }
-                } catch (IOException ioe) {}
+                } catch (IOException ioe) { /* ignored */ }
                 _keepalive = false;
             } catch (IOException ioe) {
                 if (_log.shouldWarn()) {
@@ -1107,7 +1107,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                           (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                             }
                             try {_webserver.setSoLinger(true, 0);}
-                            catch (IOException ioe) {}
+                            catch (IOException ioe) { /* ignored */ }
                         }
                     }
                     if (!i2pReset && ioex instanceof SocketException) {
@@ -1119,7 +1119,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                           (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                             }
                             try {_browser.reset();}
-                            catch (IOException ioe) {}
+                            catch (IOException ioe) { /* ignored */ }
                         }
                     }
                 }
@@ -1130,13 +1130,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             if (compressedout != null) {compressedout.finish();}
                             else {browserout.flush();}
                         } else {browserout.close();}
-                    } catch (IOException ioe) {}
+                    } catch (IOException ioe) { /* ignored */ }
                 }
-                if (serverout != null) try { serverout.close(); } catch (IOException ioe) {}
-                if (!_keepalive && browserin != null) try { browserin.close(); } catch (IOException ioe) {}
-                if (serverin != null) try { serverin.close(); } catch (IOException ioe) {}
-                try { _webserver.close(); } catch (IOException ioe) {}
-                if (!_keepalive) try { _browser.close(); } catch (IOException ioe) {}
+                if (serverout != null) try { serverout.close(); } catch (IOException ioe) { /* ignored */ }
+                if (!_keepalive && browserin != null) try { browserin.close(); } catch (IOException ioe) { /* ignored */ }
+                if (serverin != null) try { serverin.close(); } catch (IOException ioe) { /* ignored */ }
+                try { _webserver.close(); } catch (IOException ioe) { /* ignored */ }
+                if (!_keepalive) try { _browser.close(); } catch (IOException ioe) { /* ignored */ }
                 if (_log.shouldDebug()) {
                     _log.debug("Finished server-to-browser: Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
                                (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
@@ -1446,7 +1446,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 else if (lcName.contains("-encoding") && !lcName.contains("accept")) {
                     if (socket != null) {
                         try {socket.close();}
-                        catch (IOException ioe) {}
+                        catch (IOException ioe) { /* ignored */ }
                         throw new BadRequestException("Invalid HTTP header: \"" + name + "\" -> Terminating connection...");
                     }
                 }

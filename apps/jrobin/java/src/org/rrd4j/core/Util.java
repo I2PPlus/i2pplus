@@ -508,8 +508,7 @@ public class Util {
         try {
             long timestamp = Long.parseLong(timeStr);
             return Util.getCalendar(timestamp);
-        } catch (NumberFormatException e) {
-        }
+        } catch (NumberFormatException e) { /* ignored */ }
         // not a long timestamp, try to parse it as data
         SimpleDateFormat df = new SimpleDateFormat(ISO_DATE_FORMAT);
         df.setLenient(false);
@@ -729,8 +728,7 @@ public class Util {
                 JarURLConnection connection = (JarURLConnection) uri.toURL().openConnection();
                 homedir = connection.getJarFileURL().getFile();
             }
-        } catch (URISyntaxException | IOException e) {
-        }
+        } catch (URISyntaxException | IOException e) { /* ignored */ }
         if (homedir != null) {
             return Paths.get(homedir).toAbsolutePath().toString();
         } else {

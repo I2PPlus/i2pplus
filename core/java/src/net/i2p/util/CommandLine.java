@@ -88,8 +88,7 @@ public class CommandLine {
                             usage.setAccessible(true);
                             usage.invoke(null);
                             System.exit(0);
-                        } catch (Exception e) {
-                        }
+                        } catch (Exception e) { /* ignored */ }
                         // else fall through to try main("-?")
                     }
                     Method main = c.getMethod("main", String[].class);

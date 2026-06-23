@@ -88,8 +88,7 @@ class TrackerInfo {
                     if (complete < 0) {
                         complete = 0;
                     }
-                } catch (InvalidBEncodingException ibe) {
-                }
+                } catch (InvalidBEncodingException ibe) { /* ignored */ }
             }
 
             bev = m.get("incomplete");
@@ -99,8 +98,7 @@ class TrackerInfo {
                     if (incomplete < 0) {
                         incomplete = 0;
                     }
-                } catch (InvalidBEncodingException ibe) {
-                }
+                } catch (InvalidBEncodingException ibe) { /* ignored */ }
         }
     }
 

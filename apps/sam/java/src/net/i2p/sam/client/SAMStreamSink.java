@@ -331,7 +331,7 @@ public class SAMStreamSink {
                                         if (_log.shouldInfo()) {
                                             try {
                                                 _log.info("Received incoming accept from: \"" + new String(dest, 0, dlen, "ISO-8859-1") + '"');
-                                            } catch (IOException uee) {}
+                                            } catch (IOException uee) { /* ignored */ }
                                         }
                                         // feed any remaining to the sink
                                         i++;
@@ -506,7 +506,7 @@ public class SAMStreamSink {
                 }
             } catch (IOException ioe) {
                 _log.error("Error creating a new sink", ioe);
-                try { _in.close(); } catch (IOException ioe2) {}
+                try { _in.close(); } catch (IOException ioe2) { /* ignored */ }
                 if (sink != null)
                     sink.closed();
                 return;
@@ -528,7 +528,7 @@ public class SAMStreamSink {
                                 if (_log.shouldInfo()) {
                                     try {
                                         _log.info("Received incoming accept from: \"" + new String(dest, 0, dlen, "ISO-8859-1") + '"');
-                                    } catch (IOException uee) {}
+                                    } catch (IOException uee) { /* ignored */ }
                                 }
                                 // feed any remaining to the sink
                                 i++;
@@ -552,7 +552,7 @@ public class SAMStreamSink {
             } catch (IOException ioe) {
                 _log.error("Error reading", ioe);
             } finally {
-                try { _in.close(); } catch (IOException ioe) {}
+                try { _in.close(); } catch (IOException ioe) { /* ignored */ }
             }
         }
     }
@@ -784,7 +784,7 @@ public class SAMStreamSink {
             _log.error("Error writing to " + _destFile, e);
             return false;
         } finally {
-            if(fos != null) try { fos.close(); } catch(IOException ioe) {}
+            if(fos != null) try { fos.close(); } catch(IOException ioe) { /* ignored */ }
         }
         return true;
     }

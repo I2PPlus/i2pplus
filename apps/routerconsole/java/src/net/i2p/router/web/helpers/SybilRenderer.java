@@ -586,7 +586,7 @@ public class SybilRenderer {
             threshold = Double.parseDouble(_context.getProperty(Analysis.PROP_THRESHOLD, Double.toString(threshold)));
             if (threshold < Analysis.MIN_BLOCK_POINTS)
                 threshold = Analysis.MIN_BLOCK_POINTS;
-        } catch (NumberFormatException nfe) {}
+        } catch (NumberFormatException nfe) { /* ignored */ }
         final double minDisplay = Math.min(threshold, MIN_DISPLAY_POINTS);
         if (!points.isEmpty()) {
             List<Hash> warns = new ArrayList<>(points.keySet());

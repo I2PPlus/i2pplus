@@ -358,8 +358,7 @@ public class Node {
         String val = getAttributeValue(name);
         try {
             return Integer.parseInt(val);
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { /* ignored */ }
         return 0;
     }
 

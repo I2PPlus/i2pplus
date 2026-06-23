@@ -91,13 +91,13 @@ public class GraphHelper extends FormHandler {
     /** @since 0.9 */
     public void setE(String str) {
         try {_end = Math.max(0, Integer.parseInt(str));}
-        catch (NumberFormatException nfe) {}
+        catch (NumberFormatException nfe) { /* ignored */ }
     }
 
     /** @since 0.9 shorter parameter */
     public void setC(String str) {
         try {_periodCount = Math.max(MIN_C, Math.min(Integer.parseInt(str), MAX_C));}
-        catch (NumberFormatException nfe) {}
+        catch (NumberFormatException nfe) { /* ignored */ }
     }
 
     public void setShowEvents(String b) {
@@ -111,7 +111,7 @@ public class GraphHelper extends FormHandler {
     /** @since 0.9 shorter parameter */
     public void setH(String str) {
         try {_height = Math.max(MIN_Y, Math.min(Integer.parseInt(str), MAX_Y));}
-        catch (NumberFormatException nfe) {}
+        catch (NumberFormatException nfe) { /* ignored */ }
     }
 
     public void setWidth(String str) {
@@ -121,7 +121,7 @@ public class GraphHelper extends FormHandler {
     /** @since 0.9 shorter parameter */
     public void setW(String str) {
         try {_width = Math.max(MIN_X, Math.min(Integer.parseInt(str), MAX_X));}
-        catch (NumberFormatException nfe) {}
+        catch (NumberFormatException nfe) { /* ignored */ }
     }
 
     public void setRefreshDelay(String str) {
@@ -129,7 +129,7 @@ public class GraphHelper extends FormHandler {
             int rds = Integer.parseInt(str);
             if (rds > 0) {_refreshDelaySeconds = Math.max(rds, MIN_REFRESH);}
             else {_refreshDelaySeconds = -1;}
-        } catch (NumberFormatException nfe) {}
+        } catch (NumberFormatException nfe) { /* ignored */ }
     }
 
     /** @since 0.8.7 */

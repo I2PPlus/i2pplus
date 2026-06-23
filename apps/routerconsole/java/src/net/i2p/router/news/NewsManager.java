@@ -190,7 +190,7 @@ public class NewsManager implements ClientApp {
         } finally {
             try {
                 if (reader != null) {reader.close();}
-            } catch (IOException foo) {}
+            } catch (IOException foo) { /* ignored */ }
         }
     }
 
@@ -236,7 +236,7 @@ public class NewsManager implements ClientApp {
                             fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
                             Date date = fmt.parse(newsContent.substring(0, colon));
                             entry.updated = date.getTime();
-                        } catch (ParseException pe2) {} // can't find date, will be zero
+                        } catch (ParseException pe2) { /* ignored */ } // can't find date, will be zero
                     }
                     newsContent = newsContent.substring(colon + 2);
                 }

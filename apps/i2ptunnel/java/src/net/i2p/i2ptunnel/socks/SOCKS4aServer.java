@@ -228,7 +228,7 @@ class SOCKS4aServer extends SOCKSServer {
                 if (dest == null) {
                     try {
                         sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-                    } catch (IOException ioe) {}
+                    } catch (IOException ioe) { /* ignored */ }
                     throw new SOCKSException("Host not found");
                 }
                 if (_log.shouldDebug())
@@ -244,7 +244,7 @@ class SOCKS4aServer extends SOCKSServer {
                 _log.error(err);
                 try {
                     sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-                } catch (IOException ioe) {}
+                } catch (IOException ioe) { /* ignored */ }
                 throw new SOCKSException(err);
           /****
             } else if (connPort == 80) {
@@ -266,7 +266,7 @@ class SOCKS4aServer extends SOCKSServer {
                     } catch (IOException ioe) {
                         try {
                             sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-                        } catch (IOException ioe2) {}
+                        } catch (IOException ioe2) { /* ignored */ }
                         throw new SOCKSException("connect failed via outproxy plugin", ioe);
                     }
                 } else {
@@ -276,7 +276,7 @@ class SOCKS4aServer extends SOCKSServer {
                         _log.error(err);
                         try {
                             sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-                        } catch (IOException ioe) {}
+                        } catch (IOException ioe) { /* ignored */ }
                         throw new SOCKSException(err);
                     }
                     int p = _context.random().nextInt(proxies.size());
@@ -285,7 +285,7 @@ class SOCKS4aServer extends SOCKSServer {
                     if (dest == null) {
                         try {
                             sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-                        } catch (IOException ioe) {}
+                        } catch (IOException ioe) { /* ignored */ }
                         throw new SOCKSException("Outproxy not found");
                     }
                     if (_log.shouldDebug())
@@ -300,17 +300,17 @@ class SOCKS4aServer extends SOCKSServer {
         } catch (DataFormatException e) {
             try {
                 sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             throw new SOCKSException("Error in destination format: " + e.getMessage());
         } catch (IOException e) {
             try {
                 sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             throw new SOCKSException("Error connecting: " + e.getMessage());
         } catch (I2PException e) {
             try {
                 sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             throw new SOCKSException("Error connecting: " + e.getMessage());
         }
 

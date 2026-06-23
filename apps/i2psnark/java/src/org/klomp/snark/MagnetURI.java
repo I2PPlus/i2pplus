@@ -209,8 +209,7 @@ public class MagnetURI {
                     continue;
                 }
                 rv.add(t);
-            } catch (URISyntaxException use) {
-            }
+            } catch (URISyntaxException use) { /* ignored */ }
         }
         return rv.isEmpty() ? null : rv;
     }
@@ -252,8 +251,7 @@ public class MagnetURI {
         if (utf8) {
             try {
                 return new String(buf.toString().getBytes("ISO-8859-1"), "UTF-8");
-            } catch (UnsupportedEncodingException uee) {
-            }
+            } catch (UnsupportedEncodingException uee) { /* ignored */ }
         }
         return buf.toString();
     }

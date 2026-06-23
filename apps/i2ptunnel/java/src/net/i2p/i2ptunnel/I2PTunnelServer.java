@@ -187,7 +187,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         } finally {
             if (fis != null) {
                 try {fis.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
             }
         }
     }
@@ -275,7 +275,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             throw new IllegalArgumentException("Can't create socket manager", ise);
         } finally {
             try {privData.close();}
-            catch (IOException ioe) {}
+            catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -332,7 +332,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         } finally {
             if (privData != null) {
                 try {privData.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
             }
         }
     }
@@ -691,7 +691,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
             } catch (RouterRestartException rre) {
                 _log.warn("Waiting for router restart...");
-                if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) {}
+                if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) { /* ignored */ }
                 try {
                     Thread.sleep(2 * 60 * 1000);
                 } catch (InterruptedException ie) {
@@ -704,8 +704,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 if (i2ps != null) {
                     try {
                         i2ps.close();
-                    } catch (IOException ioe) {
-                    }
+                    } catch (IOException ioe) { /* ignored */ }
                 }
                 try {
                     Thread.sleep(10 * 1000);
@@ -728,7 +727,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                     break;
                 }
             } catch (ConnectException ce) {
-                if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) {}
+                if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) { /* ignored */ }
                 if (!open) {
                     break;
                 }
@@ -859,7 +858,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         } catch (SocketException ex) {
             int port = socket.getLocalPort();
             try {socket.reset();}
-            catch (IOException ioe) {}
+            catch (IOException ioe) { /* ignored */ }
             if (_log.shouldError()) {_log.error("Error connecting to server " + getSocketString(port));}
         } catch (IOException ex) {_log.error("Error while waiting for I2PConnections", ex);}
     }

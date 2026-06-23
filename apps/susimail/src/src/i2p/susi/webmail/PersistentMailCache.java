@@ -328,11 +328,11 @@ class PersistentMailCache {
         } finally {
             if (in != null) {
                 try {in.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
             }
             if (out != null) {
                 try {out.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
             }
         }
     }
@@ -422,7 +422,7 @@ class PersistentMailCache {
                 } finally {
                     if (in != null) {
                         try {in.close();}
-                        catch (IOException ioe) {}
+                        catch (IOException ioe) { /* ignored */ }
                     }
                 }
                 if (uidl == null)
@@ -447,11 +447,11 @@ class PersistentMailCache {
                 } finally {
                     if (in != null) {
                         try {in.close();}
-                        catch (IOException ioe) {}
+                        catch (IOException ioe) { /* ignored */ }
                     }
                     if (out != null) {
                         try {out.close();}
-                        catch (IOException ioe) {}
+                        catch (IOException ioe) { /* ignored */ }
                     }
                 }
                 f.delete();

@@ -187,7 +187,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 }
             } catch (IOException ioe) {
                 if (raf != null) {
-                    try { raf.close(); } catch (IOException e) {}
+                    try { raf.close(); } catch (IOException e) { /* ignored */ }
                 }
                 File corrupt = new File(_context.getRouterDir(), HOSTS_DB + '.' + System.currentTimeMillis() + ".corrupt");
                 _log.log(Log.CRIT, "Corrupt, unsupported version, or unreadable database " +
@@ -207,7 +207,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 bf = initNew(raf);
             } catch (IOException ioe) {
                 if (raf != null) {
-                    try { raf.close(); } catch (IOException e) {}
+                    try { raf.close(); } catch (IOException e) { /* ignored */ }
                 }
                 _log.log(Log.CRIT, "Failed to initialize database", ioe);
                 throw new RuntimeException(ioe);
@@ -282,7 +282,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 } catch (IOException ioe) {
                     _log.error("Failed to read hosts from " + file, ioe);
                 } finally {
-                    if (in != null) try { in.close(); } catch (IOException ioe) {}
+                    if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
                 }
                 total += count;
                 _log.logAlways(Log.INFO, "Migrating " + count + " hosts from " + file + " to new hosts database");
@@ -321,7 +321,7 @@ public class BlockfileNamingService extends DummyNamingService {
             if (created != null) {
                 try {
                     createdOn = Long.parseLong(created);
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) { /* ignored */ }
             }
 
             String version = info.getProperty(PROP_VERSION);
@@ -1143,11 +1143,11 @@ public class BlockfileNamingService extends DummyNamingService {
             String lim = options.getProperty("limit");
             try {
                 limit = Integer.parseInt(lim);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
             String sk = options.getProperty("skip");
             try {
                 skip = Integer.parseInt(sk);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
         if (_log.shouldDebug())
             _log.debug("Searching " + listname + " beginning with " + beginWith +
@@ -1241,11 +1241,11 @@ public class BlockfileNamingService extends DummyNamingService {
             String lim = options.getProperty("limit");
             try {
                 limit = Integer.parseInt(lim);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
             String sk = options.getProperty("skip");
             try {
                 skip = Integer.parseInt(sk);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
         synchronized(_bf) {
             if (_isClosed)
@@ -1468,11 +1468,11 @@ public class BlockfileNamingService extends DummyNamingService {
             String lim = options.getProperty("limit");
             try {
                 limit = Integer.parseInt(lim);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
             String sk = options.getProperty("skip");
             try {
                 skip = Integer.parseInt(sk);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
         synchronized(_bf) {
             if (_isClosed)
@@ -1838,8 +1838,7 @@ public class BlockfileNamingService extends DummyNamingService {
             }
             try {
                 _raf.close();
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
             _isClosed = true;
         }
         synchronized(_negativeCache) {

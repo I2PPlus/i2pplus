@@ -1,8 +1,8 @@
 /*
  * Created on Nov 15, 2004
- * 
+ *
  *  This file is part of susimail project, see http://susi.i2p/
- *  
+ *
  *  Copyright (C) 2004-2005  <susi23@mail.i2p>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,7 +18,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *  
+ *
  * $Revision: 1.4 $
  */
 package i2p.susi.util;
@@ -40,36 +40,36 @@ import net.i2p.util.OrderedProperties;
  * @author susi
  */
 public class Config {
-	
+
 	private static Properties properties, config;
 	private static String configPrefix;
 
 	/**
-	 * 
+	 *
 	 * @param name
 	 */
 	public synchronized static String getProperty( String name )
 	{
 		if( configPrefix != null )
 			name = configPrefix + name;
-		
+
 		String result = null;
-		
+
 		if( properties == null ) {
 			reloadConfiguration();
 		}
-		
+
 		result = System.getProperty( name );
-		
+
 		if( result != null )
 			return result;
-		
+
 		if( config != null ) {
 			result = config.getProperty( name );
 			if( result != null )
 				return result;
 		}
-		
+
 		result = properties.getProperty( name );
 
 		return result;
@@ -85,7 +85,7 @@ public class Config {
 	}
 
 	/**
-	 * 
+	 *
 	 *
 	 */
 	public synchronized static void reloadConfiguration()
@@ -100,7 +100,7 @@ public class Config {
 			Log log = ctx.logManager().getLog(Config.class);
 			log.error("Could not open WEB-INF/classes/susimail.properties (possibly in jar)", e);
 		} finally {
-			if(iv != null) try { iv.close(); } catch(IOException ioe) {}
+			if(iv != null) try { iv.close(); } catch(IOException ioe) { /* ignored */ }
 		}
 		try {
 			File cfg = new File(I2PAppContext.getGlobalContext().getConfigDir(), "susimail.config");
@@ -167,7 +167,7 @@ public class Config {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param name
 	 * @param defaultValue
 	 */
@@ -178,16 +178,16 @@ public class Config {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param name
 	 * @param defaultValue
 	 */
 	public synchronized static int getProperty( String name, int defaultValue )
 	{
 		int result = defaultValue;
-		
+
 		String str = getProperty( name );
-		
+
 		if( str != null ) {
 			try {
 				result = Integer.parseInt( str );

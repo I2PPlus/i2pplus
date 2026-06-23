@@ -381,7 +381,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             if (id != null) {_subsessionMap.remove(id);}
             // tell the subsession
             try {session.destroySession();} // doesn't really throw
-            catch (I2PSessionException ise) {}
+            catch (I2PSessionException ise) { /* ignored */ }
         }
         Destination d = session.getMyDestination();
         if (d != null) {_context.keyRing().remove(d.calculateHash());}
@@ -524,7 +524,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         _options.putAll(filter(options));
         _producer.updateBandwidth(this);
         try {_producer.updateTunnels(this, 0);}
-        catch (I2PSessionException ise) {}
+        catch (I2PSessionException ise) { /* ignored */ }
     }
 
     /**
@@ -805,7 +805,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                 synchronized (_stateLock) {
                     changeState(State.CLOSING);
                     try {_producer.disconnect(this);}
-                    catch (I2PSessionException ipe) {}
+                    catch (I2PSessionException ipe) { /* ignored */ }
                     closeSocket();
                 }
             }
@@ -954,7 +954,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                 synchronized (AvailabilityNotifier.this) {
                     if (_pendingIds.isEmpty()) {
                         try {AvailabilityNotifier.this.wait();}
-                        catch (InterruptedException ie) {} // nop
+                        catch (InterruptedException ie) { /* ignored */ } // nop
                     }
                     if (!_pendingIds.isEmpty()) {
                         msgId = _pendingIds.remove(0);
@@ -1277,8 +1277,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                 try {
                     sendMessage_unchecked(dmsg);
                     try {Thread.sleep(20);} // give it a chance to get there
-                    catch (InterruptedException ie) {}
-                } catch (I2PSessionException ise) {}
+                    catch (InterruptedException ie) { /* ignored */ }
+                } catch (I2PSessionException ise) { /* ignored */ }
             }
         }
         // SimpleSession does not initialize

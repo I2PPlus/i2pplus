@@ -95,7 +95,7 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
                 if (freq != null) {
                     try {
                         return Integer.parseInt(freq);
-                    } catch (NumberFormatException nfe) {}
+                    } catch (NumberFormatException nfe) { /* ignored */ }
                 }
             }
         }

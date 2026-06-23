@@ -63,8 +63,7 @@ public class ConvertToHash {
                 Destination d = new Destination();
                 d.fromBase64(peer.substring(0, peer.length() - 4));
                 return d.calculateHash();
-            } catch (DataFormatException dfe) {
-            }
+            } catch (DataFormatException dfe) { /* ignored */ }
         }
         // b64 dest
         if (peer.length() >= 516 && !peerLC.endsWith(".i2p")) {
@@ -72,8 +71,7 @@ public class ConvertToHash {
                 Destination d = new Destination();
                 d.fromBase64(peer);
                 return d.calculateHash();
-            } catch (DataFormatException dfe) {
-            }
+            } catch (DataFormatException dfe) { /* ignored */ }
         }
         // b32 hash.b32.i2p
         // do this here rather than in naming service so it will work

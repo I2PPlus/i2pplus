@@ -249,8 +249,7 @@ public class TrustedUpdate {
         } finally {
             if (fileOutputStream != null) try {
                     fileOutputStream.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
         return true;
     }
@@ -380,8 +379,7 @@ public class TrustedUpdate {
         } finally {
             if (fileInputStream != null) try {
                     fileInputStream.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -417,8 +415,7 @@ public class TrustedUpdate {
         } finally {
             if (inputStream != null) try {
                     inputStream.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -489,8 +486,7 @@ public class TrustedUpdate {
         try {
             String zipComment = net.i2p.util.ZipFileComment.getComment(signedFile, VERSION_BYTES, HEADER_BYTES);
             return zipComment.equals(_newVersion);
-        } catch (IOException ioe) {
-        }
+        } catch (IOException ioe) { /* ignored */ }
         return false;
     }
 
@@ -523,13 +519,11 @@ public class TrustedUpdate {
         } finally {
             if (fileInputStream != null) try {
                     fileInputStream.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
 
             if (fileOutputStream != null) try {
                     fileOutputStream.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
 
         return null;
@@ -571,8 +565,7 @@ public class TrustedUpdate {
         } finally {
             if (fileInputStream != null) try {
                     fileInputStream.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
 
         return sign(inputFile, signedFile, signingPrivateKey, version);
@@ -633,12 +626,10 @@ public class TrustedUpdate {
         } finally {
             if (bytesToSignInputStream != null) try {
                     bytesToSignInputStream.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             if (fileInputStream != null) try {
                     fileInputStream.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
 
         FileOutputStream fileOutputStream = null;
@@ -657,13 +648,11 @@ public class TrustedUpdate {
         } finally {
             if (fileInputStream != null) try {
                     fileInputStream.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
 
             if (fileOutputStream != null) try {
                     fileOutputStream.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
 
         return signature;
@@ -733,8 +722,7 @@ public class TrustedUpdate {
         } finally {
             if (fileInputStream != null) try {
                     fileInputStream.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
 
         return verify(new File(signedFile), signingPublicKey);
@@ -772,8 +760,7 @@ public class TrustedUpdate {
         } finally {
             if (fileInputStream != null) try {
                     fileInputStream.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 }

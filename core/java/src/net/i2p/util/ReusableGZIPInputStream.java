@@ -45,8 +45,7 @@ public class ReusableGZIPInputStream extends ResettableGZIPInputStream {
         if (!cached) {
             try {
                 released.destroy();
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
         }
     }
 

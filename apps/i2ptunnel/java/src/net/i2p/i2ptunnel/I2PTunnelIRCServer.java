@@ -158,9 +158,8 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
                 // Send a response so the user doesn't just see a disconnect
                 // and blame his router or the network.
                 socket.getOutputStream().write(ERR_REGISTRATION.getBytes("ISO-8859-1"));
-            } catch (IOException ioe) {
-            } finally {
-                 try { socket.close(); } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ } finally {
+                 try { socket.close(); } catch (IOException ioe) { /* ignored */ }
             }
             if (_log.shouldWarn())
                 _log.warn("Error while receiving the new IRC Connection", ex);
@@ -169,9 +168,8 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
                 // Send a response so the user doesn't just see a disconnect
                 // and blame his router or the network.
                 socket.getOutputStream().write(ERR_EOF.getBytes("ISO-8859-1"));
-            } catch (IOException ioe) {
-            } finally {
-                 try { socket.close(); } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ } finally {
+                 try { socket.close(); } catch (IOException ioe) { /* ignored */ }
             }
             if (_log.shouldWarn())
                 _log.warn("Error while receiving the new IRC Connection", ex);
@@ -180,9 +178,8 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
                 // Send a response so the user doesn't just see a disconnect
                 // and blame his router or the network.
                 socket.getOutputStream().write(ERR_TIMEOUT.getBytes("ISO-8859-1"));
-            } catch (IOException ioe) {
-            } finally {
-                 try { socket.close(); } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ } finally {
+                 try { socket.close(); } catch (IOException ioe) { /* ignored */ }
             }
             if (_log.shouldWarn())
                 _log.warn("Error while receiving the new IRC Connection", ex);
@@ -191,22 +188,22 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
                 // Send a response so the user doesn't just see a disconnect
                 // and blame his router or the network.
                 socket.getOutputStream().write(ERR_UNAVAILABLE.getBytes("ISO-8859-1"));
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             try {
                 socket.close();
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             if (_log.shouldError())
                 _log.error("Error connecting to IRC server " + remoteHost + ':' + remotePort, ex);
         } catch (IOException ex) {
             try {
                 socket.reset();
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             if (_log.shouldWarn())
                 _log.warn("Error while receiving the new IRC Connection", ex);
         } catch (OutOfMemoryError oom) {
             try {
                 socket.reset();
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             if (_log.shouldError())
                 _log.error("OOM in IRC server", oom);
         }

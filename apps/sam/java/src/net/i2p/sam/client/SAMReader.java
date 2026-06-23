@@ -44,7 +44,7 @@ public class SAMReader {
         if (_thread != null) {
             _thread.interrupt();
             _thread = null;
-            try { _inRaw.close(); } catch (IOException ioe) {}
+            try { _inRaw.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 

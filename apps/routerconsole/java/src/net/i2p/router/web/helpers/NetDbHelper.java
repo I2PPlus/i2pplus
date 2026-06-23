@@ -131,7 +131,7 @@ public class NetDbHelper extends FormHandler {
                 _port = Integer.parseInt(f.substring(0, dash).trim());
                 _highPort = Integer.parseInt(f.substring(dash + 1).trim());
             } else {_port = Integer.parseInt(f.trim());}
-        } catch (NumberFormatException nfe) {}
+        } catch (NumberFormatException nfe) { /* ignored */ }
     }
 
     /** @since 0.9.28 */
@@ -170,24 +170,24 @@ public class NetDbHelper extends FormHandler {
     /** @since 0.9.28 */
     public void setCost(String f) {
         try {_cost = Integer.parseInt(f);}
-        catch (NumberFormatException nfe) {}
+        catch (NumberFormatException nfe) { /* ignored */ }
     }
 
     /** @since 0.9.38 */
     public void setMode(String f) {
         try {_mode = Integer.parseInt(f);}
-        catch (NumberFormatException nfe) {}
+        catch (NumberFormatException nfe) { /* ignored */ }
     }
 
     /** @since 0.9.38 */
     public void setDate(String f) {
         try {_date = Long.parseLong(f);}
-        catch (NumberFormatException nfe) {}
+        catch (NumberFormatException nfe) { /* ignored */ }
     }
 
     public void setFull(String f) {
         try {_full = Integer.parseInt(f);}
-        catch (NumberFormatException nfe) {}
+        catch (NumberFormatException nfe) { /* ignored */ }
     }
 
     public void setLease(String l) {
@@ -207,7 +207,7 @@ public class NetDbHelper extends FormHandler {
             _limit = Integer.parseInt(f);
             if (_limit <= 0) {_limit = Integer.MAX_VALUE;}
             else if (_limit <= 10) {_limit = 10;}
-        } catch (NumberFormatException nfe) {}
+        } catch (NumberFormatException nfe) { /* ignored */ }
     }
 
     /** @since 0.9.36 */
@@ -215,7 +215,7 @@ public class NetDbHelper extends FormHandler {
         try {
             _page = Integer.parseInt(f) - 1;
             if (_page < 0) {_page = 0;}
-        } catch (NumberFormatException nfe) {}
+        } catch (NumberFormatException nfe) { /* ignored */ }
     }
 
     /** @since 0.9.57 */
@@ -224,12 +224,12 @@ public class NetDbHelper extends FormHandler {
     /** @since 0.9.58 */
     public void setIntros(String f) {
         try {_icount = Integer.parseInt(f);}
-        catch (NumberFormatException nfe) {}
+        catch (NumberFormatException nfe) { /* ignored */ }
     }
 
     public void setClientPage(String f) {
-        try {}
-        catch(Exception e) {}
+        try { /* ignored */ }
+        catch(Exception e) { /* ignored */ }
     }
 
     /**

@@ -354,8 +354,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         public void available(long msgId, int size, int proto, int fromPort, int toPort) {
             try {
                 _msgs.put(new MsgData((int) (msgId & 0xffffffff), size, proto, fromPort, toPort));
-            } catch (InterruptedException ie) {
-            }
+            } catch (InterruptedException ie) { /* ignored */ }
             if (!_alive && _log.shouldWarn()) _log.warn(getPrefix() + "Message available but notifier not running");
         }
 

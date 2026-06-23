@@ -389,7 +389,7 @@ public class TunnelConfig {
         for (String k : s) {
             try {
                 _clientRevocations.add(Integer.valueOf(Integer.parseInt(k)));
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 

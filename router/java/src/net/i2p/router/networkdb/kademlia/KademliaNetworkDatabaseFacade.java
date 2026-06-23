@@ -666,7 +666,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         } else if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
             try {
                 if (validate((RouterInfo)rv) == null) {return rv;}
-            } catch (IllegalArgumentException iae) {}
+            } catch (IllegalArgumentException iae) { /* ignored */ }
             fail(key);
         }
         return null;
@@ -1893,7 +1893,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             try {
                 int mins = Integer.parseInt(validateUptime);
                 return uptime > mins*60L*1000;
-            } catch (NumberFormatException ignored) {}
+            } catch (NumberFormatException ignored) { /* ignored */ }
         }
         return uptime > 20L*60*1000;
     }
@@ -1914,7 +1914,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                               _context.router().getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
         if (expireRI != null) {
             try {return Integer.parseInt(expireRI)*60*60*1000L;}
-            catch (NumberFormatException ignored) {}
+            catch (NumberFormatException ignored) { /* ignored */ }
         }
         long calculatedExpiry = ROUTER_INFO_EXPIRATION;
         if (floodfillEnabled() && existingRouters > 3000) {calculatedExpiry = ROUTER_INFO_EXPIRATION_FLOODFILL / 3 * 2;}
@@ -2244,7 +2244,7 @@ return false;
                     long age = now - routerInfo.getPublished();
                     return caps + " Router [" + routerId + "] -> Published " + DataHelper.formatDuration(age) + " ago";
                 }
-            } catch (NumberFormatException ignored) {}
+            } catch (NumberFormatException ignored) { /* ignored */ }
         } else {
             if (upLongEnough && routerInfo.getPublished() < now - adjustedExpiration && !isUs) {
                 long age = now - routerInfo.getPublished();
@@ -2390,7 +2390,7 @@ return false;
                                 }
                                 throw new UnsupportedCryptoException("Sig type " + stype);
                             }
-                        } catch (DataFormatException dfe) {}
+                        } catch (DataFormatException dfe) { /* ignored */ }
                     }
                 }
             } else if (etype == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
@@ -2412,7 +2412,7 @@ return false;
                             }
                             throw new UnsupportedCryptoException("Sig type " + stype);
                         }
-                    } catch (DataFormatException dfe) {}
+                    } catch (DataFormatException dfe) { /* ignored */ }
                 }
             }
         }

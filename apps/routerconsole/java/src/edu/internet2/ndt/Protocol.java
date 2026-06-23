@@ -167,7 +167,7 @@ public class Protocol {
         try {
             _ctlInStream.close();
             _ctlOutStream.close();
-        } catch (IOException e) {}
+        } catch (IOException e) { /* ignored */ }
     }
 
     public void setJsonSupport(boolean jsonSupport) {this.jsonSupport = jsonSupport;}

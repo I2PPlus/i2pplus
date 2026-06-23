@@ -508,7 +508,7 @@ class ConnectionManager {
         int randomDelay = _context.random().nextInt(pongDelay);
         boolean enableDelay = _context.getProperty(PROP_ENABLE_PONG_DELAY, DEFAULT_ENABLE_PONG_DELAY);
         if (enableDelay) {
-            try { Thread.sleep(randomDelay); } catch (InterruptedException ie) {}
+            try { Thread.sleep(randomDelay); } catch (InterruptedException ie) { /* ignored */ }
             if (_log.shouldInfo())
                 _log.info("Sending pong to: " + dest.toBase32() + " with random delay of " + randomDelay + "ms");
         } else {
@@ -626,7 +626,7 @@ class ConnectionManager {
                  // no remaining streams, let's wait a bit
                  // got rid of the lock, so just sleep (fixme?)
                  // try { _connectionLock.wait(remaining); } catch (InterruptedException ie) {}
-                 try { Thread.sleep(remaining/4); } catch (InterruptedException ie) {}
+                 try { Thread.sleep(remaining/4); } catch (InterruptedException ie) { /* ignored */ }
              } else {
                  con = new Connection(_context, this, session, _schedulerChooser, _timer,
                                       _outboundQueue, _conPacketHandler, opts, false);
@@ -649,7 +649,7 @@ class ConnectionManager {
                                 "] for " + delay + "ms (cooldown from previous failure)");
                   try {
                       Thread.sleep(delay);
-                  } catch (InterruptedException ie) {}
+                  } catch (InterruptedException ie) { /* ignored */ }
               } else {
                   _destFailures.remove(destHash, lastFailure);
               }
@@ -1018,7 +1018,7 @@ class ConnectionManager {
         if (blocking) {
             synchronized (req) {
                 if (!req.pongReceived())
-                    try { req.wait(timeoutMs); } catch (InterruptedException ie) {}
+                    try { req.wait(timeoutMs); } catch (InterruptedException ie) { /* ignored */ }
             }
             _pendingPings.remove(id);
         } else {
@@ -1064,7 +1064,7 @@ class ConnectionManager {
 
         synchronized (req) {
             if (!req.pongReceived())
-                try { req.wait(timeoutMs); } catch (InterruptedException ie) {}
+                try { req.wait(timeoutMs); } catch (InterruptedException ie) { /* ignored */ }
         }
         _pendingPings.remove(id);
 

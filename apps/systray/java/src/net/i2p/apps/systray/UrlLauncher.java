@@ -153,20 +153,20 @@ public class UrlLauncher implements ClientApp {
                     test.connect(sa, WAIT_TIME);
                     // it worked
                 } finally {
-                    if (test != null) try { test.close(); } catch (IOException ioe) {}
+                    if (test != null) try { test.close(); } catch (IOException ioe) { /* ignored */ }
                 }
                 // Jetty 6 seems to start the Connector before the
                 // webapp is completely ready
                 try {
                    Thread.sleep(2*1000);
-                } catch (InterruptedException ie) {}
+                } catch (InterruptedException ie) { /* ignored */ }
                 return true;
-            } catch (IOException e) {}
+            } catch (IOException e) { /* ignored */ }
             if (System.currentTimeMillis() > done)
                 break;
             try {
                 Thread.sleep(WAIT_TIME);
-            } catch (InterruptedException ie) {}
+            } catch (InterruptedException ie) { /* ignored */ }
         }
         return false;
     }
@@ -589,6 +589,6 @@ public class UrlLauncher implements ClientApp {
                 launcher.openUrl(args[0]);
             else
                 launcher.openUrl(I2PAppContext.getGlobalContext().portMapper().getConsoleURL());
-         } catch (IOException e) {}
+         } catch (IOException e) { /* ignored */ }
     }
 }

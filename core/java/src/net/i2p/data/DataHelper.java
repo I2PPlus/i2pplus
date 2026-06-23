@@ -655,8 +655,7 @@ public class DataHelper {
             if (in != null) {
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
         }
     }
@@ -722,8 +721,7 @@ public class DataHelper {
             if (fos != null) {
                 try {
                     fos.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
         }
         if (iae != null) {
@@ -2385,12 +2383,10 @@ public class DataHelper {
         } catch (IllegalArgumentException iae1) {
             try {
                 Thread.sleep(5);
-            } catch (InterruptedException ie) {
-            }
+            } catch (InterruptedException ie) { /* ignored */ }
             try {
                 Collections.sort(list, c);
-            } catch (IllegalArgumentException iae2) {
-            }
+            } catch (IllegalArgumentException iae2) { /* ignored */ }
         }
     }
 
@@ -2412,12 +2408,10 @@ public class DataHelper {
         } catch (IllegalArgumentException iae1) {
             try {
                 Thread.sleep(5);
-            } catch (InterruptedException ie) {
-            }
+            } catch (InterruptedException ie) { /* ignored */ }
             try {
                 Arrays.sort(a, c);
-            } catch (IllegalArgumentException iae2) {
-            }
+            } catch (IllegalArgumentException iae2) { /* ignored */ }
         }
     }
 

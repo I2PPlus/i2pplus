@@ -204,8 +204,7 @@ class BasicServlet extends HttpServlet {
         if (slimit != null) {
             try {
                 limit = Long.parseLong(slimit);
-            } catch (NumberFormatException nfe) {
-            }
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
 
         // Find the resource and content
@@ -655,14 +654,12 @@ class BasicServlet extends HttpServlet {
             if (in != null) {
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
             if (out != null) {
                 try {
                     out.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
         }
     }

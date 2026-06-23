@@ -166,7 +166,7 @@ public class RequestWrapper {
                 finally {
                     if (in != null) {
                         try { in.close(); }
-                        catch (IOException ioe) {}
+                        catch (IOException ioe) { /* ignored */ }
                     }
                 }
             }

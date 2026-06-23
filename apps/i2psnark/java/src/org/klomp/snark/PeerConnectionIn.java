@@ -55,8 +55,7 @@ class PeerConnectionIn implements Runnable {
         if (din != null) {
             try {
                 din.close();
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
         }
     }
 

@@ -183,7 +183,7 @@ public class FileDumpHelper extends HelperBase {
         finally {
             if (in != null) {
                 try {in.close();}
-                catch (IOException e) {}
+                catch (IOException e) { /* ignored */ }
             }
         }
     }
@@ -202,7 +202,7 @@ public class FileDumpHelper extends HelperBase {
         finally {
             if (in != null) {
                 try {in.close();}
-                catch (IOException e) {}
+                catch (IOException e) { /* ignored */ }
             }
         }
     }

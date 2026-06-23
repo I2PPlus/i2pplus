@@ -322,8 +322,7 @@ public abstract class RrdBackendFactory implements Closeable {
         public void clear() {
             try {
                 backend.close();
-            } catch (IOException e) {
-            }
+            } catch (IOException e) { /* ignored */ }
             backend = null;
             super.clear();
         }
@@ -364,8 +363,7 @@ public abstract class RrdBackendFactory implements Closeable {
             } else if (ref.backend != null) {
                 try {
                     ref.backend.close();
-                } catch (IOException e) {
-                }
+                } catch (IOException e) { /* ignored */ }
             }
         }
     }

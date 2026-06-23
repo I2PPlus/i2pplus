@@ -288,7 +288,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                                     // save for compress decision on server side
                                     try {
                                         _dataExpected = Long.parseLong(val);
-                                    } catch (NumberFormatException nfe) {}
+                                    } catch (NumberFormatException nfe) { /* ignored */ }
                                 } else if ("content-type".equals(lcKey)) {
                                     // save for compress decision on server side
                                     _contentType = val.toLowerCase(Locale.US);

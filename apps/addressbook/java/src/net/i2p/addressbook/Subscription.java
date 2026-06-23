@@ -56,7 +56,7 @@ class Subscription {
         if (lastFetched != null) {
             try {
                 this.lastFetched = Long.parseLong(lastFetched);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 

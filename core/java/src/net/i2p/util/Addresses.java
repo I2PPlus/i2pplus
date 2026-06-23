@@ -220,7 +220,7 @@ public abstract class Addresses {
                     }
                 }
             }
-        } catch (UnknownHostException e) {}
+        } catch (UnknownHostException e) { /* ignored */ }
 
         try {
             Enumeration<NetworkInterface> ifcs = NetworkInterface.getNetworkInterfaces();
@@ -240,7 +240,7 @@ public abstract class Addresses {
                         if (mac != null && mac.length == 6) {
                             newMacs.add(DataHelper.toString(mac));
                         }
-                    } catch (SocketException ioe) {}
+                    } catch (SocketException ioe) { /* ignored */ }
                     for (Enumeration<InetAddress> addrs =  ifc.getInetAddresses(); addrs.hasMoreElements();) {
                         InetAddress addr = addrs.nextElement();
                         boolean isv4 = addr instanceof Inet4Address;
@@ -269,8 +269,7 @@ public abstract class Addresses {
                     }
                 }
             }
-        } catch (SocketException e) {
-        } catch (java.lang.Error e) {
+        } catch (SocketException e) { /* ignored */ } catch (java.lang.Error e) {
             // Windows, possibly when IPv6 only...
             // https://bugs.openjdk.java.net/browse/JDK-8046500
             // java.lang.Error: IP Helper Library GetIfTable function failed
@@ -312,9 +311,7 @@ public abstract class Addresses {
                     }
                 }
             }
-        } catch (SocketException e) {
-        } catch (java.lang.Error e) {
-        }
+        } catch (SocketException e) { /* ignored */ } catch (java.lang.Error e) { /* ignored */ }
         return null;
     }
 
@@ -345,9 +342,7 @@ public abstract class Addresses {
                     }
                 }
             }
-        } catch (SocketException e) {
-        } catch (java.lang.Error e) {
-        }
+        } catch (SocketException e) { /* ignored */ } catch (java.lang.Error e) { /* ignored */ }
         return rv;
     }
 
@@ -517,7 +512,7 @@ public abstract class Addresses {
                 int iport = Integer.parseInt(port);
                 if (iport > 0 && iport <= 65535)
                     rv = iport;
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
         return rv;
     }
@@ -637,7 +632,7 @@ public abstract class Addresses {
                     synchronized (_IPAddress) {
                         _IPAddress.put(host, rv);
                     }
-                } catch (UnknownHostException uhe) {}
+                } catch (UnknownHostException uhe) { /* ignored */ }
             }
         }
         return rv;
@@ -955,13 +950,12 @@ public abstract class Addresses {
                 int flags = FLAG_PERMANENT;
                 try {
                     flags = Integer.parseInt(parts[4], 16);
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) { /* ignored */ }
                 Inet6Addr a = new Inet6Addr(addr, flags);
                 _ifCache.put(addr, a);
             }
-        } catch (IOException ioe) {
-        } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ } finally {
+            if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
         }
         _ifCacheTime = now;
     }
@@ -1129,7 +1123,7 @@ public abstract class Addresses {
                     if (isDeprecated(addr))
                         buf.append(" deprecated");
                 }
-            } catch (UnknownHostException uhe) {}
+            } catch (UnknownHostException uhe) { /* ignored */ }
             System.out.println(buf.toString());
             buf.setLength(0);
         }
@@ -1314,11 +1308,10 @@ public abstract class Addresses {
                 if (line != null) {
                     try {
                         rv = Long.parseLong(line.trim());
-                    } catch (NumberFormatException nfe) {}
+                    } catch (NumberFormatException nfe) { /* ignored */ }
                 }
-            } catch (IOException ioe) {
-            } finally {
-                if (in != null) try { in.close(); } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ } finally {
+                if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
             }
         }
         return rv;

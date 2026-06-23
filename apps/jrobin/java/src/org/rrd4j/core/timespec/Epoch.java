@@ -151,8 +151,7 @@ public class Epoch extends JFrame {
         for (SimpleDateFormat parser : parsers) {
             try {
                 return Util.getTimestamp(parser.parse(time));
-            } catch (ParseException e) {
-            }
+            } catch (ParseException e) { /* ignored */ }
         }
         return new TimeParser(time).parse().getTimestamp();
     }

@@ -172,7 +172,7 @@ public class FIFOBandwidthRefiller implements Runnable {
                 _lastRefillTime = now;
             }
 
-            try { Thread.sleep(REPLENISH_FREQUENCY); } catch (InterruptedException ie) {}
+            try { Thread.sleep(REPLENISH_FREQUENCY); } catch (InterruptedException ie) { /* ignored */ }
         }
     }
 

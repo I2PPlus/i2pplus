@@ -71,7 +71,7 @@ public class RouterInfoHandler implements RequestHandler {
                 java.lang.reflect.Field field = rvClass.getDeclaredField("FULL_VERSION");
                 String fullVersion = (String) field.get(new RouterVersion());
                 outParams.put("i2p.router.version", fullVersion);
-            } catch (Exception e) {} // Ignore
+            } catch (Exception e) { /* ignored */ } // Ignore
         }
 
         if (inParams.containsKey("i2p.router.uptime")) {

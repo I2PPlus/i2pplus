@@ -77,7 +77,7 @@ public class I2PSocketEepGet extends EepGet {
             try {
                 _socket.close();
                 _socket = null;
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
         }
         return rv;
     }
@@ -109,9 +109,9 @@ public class I2PSocketEepGet extends EepGet {
                 _alreadyTransferred = outFile.length();
         }
 
-        if (_proxyIn != null) try { _proxyIn.close(); } catch (IOException ioe) {}
-        if (_proxyOut != null) try { _proxyOut.close(); } catch (IOException ioe) {}
-        if (_socket != null) try { _socket.close(); } catch (IOException ioe) {}
+        if (_proxyIn != null) try { _proxyIn.close(); } catch (IOException ioe) { /* ignored */ }
+        if (_proxyOut != null) try { _proxyOut.close(); } catch (IOException ioe) { /* ignored */ }
+        if (_socket != null) try { _socket.close(); } catch (IOException ioe) { /* ignored */ }
 
         try {
             URI url = new URI(_actualURL);
@@ -131,7 +131,7 @@ public class I2PSocketEepGet extends EepGet {
                                 ann = ann.substring(0, ann.length() - 4);
                             try {
                                 dest = new Destination(ann);
-                            } catch (DataFormatException dfe) {}
+                            } catch (DataFormatException dfe) { /* ignored */ }
                         }
                     }
                     if (dest == null)

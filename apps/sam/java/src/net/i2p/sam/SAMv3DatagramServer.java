@@ -73,7 +73,7 @@ class SAMv3DatagramServer implements Handler {
 	public synchronized void stopHandling() {
 		try {
 			_server.close();
-		} catch (IOException ioe) {}
+		} catch (IOException ioe) { /* ignored */ }
 		_listener.interrupt();
 		if (_parent != null)
 			_parent.unregister(this);

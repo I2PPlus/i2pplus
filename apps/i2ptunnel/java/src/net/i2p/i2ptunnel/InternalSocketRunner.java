@@ -52,7 +52,7 @@ class InternalSocketRunner extends I2PAppThread {
             this.open = false;
             try {
                 this.ss.close();
-            } catch (IOException ex) {}
+            } catch (IOException ex) { /* ignored */ }
         }
     }
 }

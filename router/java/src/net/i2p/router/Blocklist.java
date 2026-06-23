@@ -579,7 +579,7 @@ public class Blocklist {
             _log.log(Log.CRIT, "OOM reading the blocklist");
             return 0;
         } finally {
-            if (br != null) try {br.close();} catch (IOException ioe) {}
+            if (br != null) try {br.close();} catch (IOException ioe) { /* ignored */ }
         }
 
         if (_wrapSave != null) {
@@ -765,7 +765,7 @@ public class Blocklist {
         } finally {
             if (br != null) {
                 try {br.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
             }
         }
         return lines;
@@ -1325,7 +1325,7 @@ public class Blocklist {
                     Entry e = parse(buf, false);
                     if (e == null || e.peer != null) {continue;}
                     if (match(ipint, toEntry(e.ip1, e.ip2))) {
-                        try {br.close();} catch (IOException ioe) {}
+                        try {br.close();} catch (IOException ioe) { /* ignored */ }
                         String reason = "" + _x("Blocklist") + ": " + sip;
                         if (_log.shouldWarn()) {
                             _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for duration of session -> Blocklist entry");
@@ -1338,7 +1338,7 @@ public class Blocklist {
                 if (_log.shouldWarn())
                     _log.warn("Error reading the blocklist file", ioe);
             } finally {
-                if (br != null) try {br.close();} catch (IOException ioe) {}
+                if (br != null) try {br.close();} catch (IOException ioe) { /* ignored */ }
             }
         }
         // We already banlisted in banlist(peer), that's good enough

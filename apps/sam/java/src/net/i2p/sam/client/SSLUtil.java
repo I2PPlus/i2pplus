@@ -172,7 +172,7 @@ class SSLUtil {
             ioe.initCause(gse);
             throw ioe;
         } finally {
-            if (fis != null) try { fis.close(); } catch (IOException ioe) {}
+            if (fis != null) try { fis.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 

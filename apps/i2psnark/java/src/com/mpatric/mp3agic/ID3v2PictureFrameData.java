@@ -70,8 +70,7 @@ public class ID3v2PictureFrameData extends AbstractID3v2FrameData {
             mimeTypeLength = mimeType.length();
             try {
                 BufferTools.stringIntoByteBuffer(mimeType, 0, mimeTypeLength, bytes, 1);
-            } catch (UnsupportedEncodingException e) {
-            }
+            } catch (UnsupportedEncodingException e) { /* ignored */ }
         }
         int marker = mimeTypeLength + 1;
         bytes[marker++] = 0;

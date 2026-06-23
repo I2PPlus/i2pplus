@@ -132,7 +132,7 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
                 if (waitTime <= 0) {waitTime = 50;} // somehow postman saw waitTime show up as negative
                 else if (waitTime > 5000) {waitTime = 5000;}
                 try {Thread.sleep(waitTime);}
-                catch (InterruptedException ie) {}
+                catch (InterruptedException ie) { /* ignored */ }
             }
         }
     }

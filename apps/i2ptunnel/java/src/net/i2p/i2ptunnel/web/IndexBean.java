@@ -879,7 +879,7 @@ public class IndexBean {
                                             (mode == 3 || mode == 5 || mode == 7 || mode == 9);
                     boolean requireAuth = mode >= 4 && mode <= 9;
                     return Blinding.encode(d.getSigningPublicKey(), requireSecret, requireAuth);
-                } catch (RuntimeException re) {}
+                } catch (RuntimeException re) { /* ignored */ }
             }
         }
         return "";
@@ -976,7 +976,7 @@ public class IndexBean {
     public void setTunnelDepth(String tunnelDepth) {
         if (tunnelDepth != null) {
             try {_config.setTunnelDepth(Integer.parseInt(tunnelDepth.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -987,7 +987,7 @@ public class IndexBean {
     public void setTunnelQuantity(String tunnelQuantity) {
         if (tunnelQuantity != null) {
             try {_config.setTunnelQuantity(Integer.parseInt(tunnelQuantity.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -997,7 +997,7 @@ public class IndexBean {
     public void setTunnelVariance(String tunnelVariance) {
         if (tunnelVariance != null) {
             try {_config.setTunnelVariance(Integer.parseInt(tunnelVariance.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -1007,7 +1007,7 @@ public class IndexBean {
     public void setTunnelBackupQuantity(String tunnelBackupQuantity) {
         if (tunnelBackupQuantity != null) {
             try {_config.setTunnelBackupQuantity(Integer.parseInt(tunnelBackupQuantity.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -1017,7 +1017,7 @@ public class IndexBean {
     public void setTunnelDepthOut(String tunnelDepth) {
         if (tunnelDepth != null) {
             try {_config.setTunnelDepthOut(Integer.parseInt(tunnelDepth.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -1027,7 +1027,7 @@ public class IndexBean {
     public void setTunnelQuantityOut(String tunnelQuantity) {
         if (tunnelQuantity != null) {
             try {_config.setTunnelQuantityOut(Integer.parseInt(tunnelQuantity.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -1037,7 +1037,7 @@ public class IndexBean {
     public void setTunnelVarianceOut(String tunnelVariance) {
         if (tunnelVariance != null) {
             try {_config.setTunnelVarianceOut(Integer.parseInt(tunnelVariance.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -1047,7 +1047,7 @@ public class IndexBean {
     public void setTunnelBackupQuantityOut(String tunnelBackupQuantity) {
         if (tunnelBackupQuantity != null) {
             try {_config.setTunnelBackupQuantityOut(Integer.parseInt(tunnelBackupQuantity.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -1063,7 +1063,7 @@ public class IndexBean {
     public void setPort(String port) {
         if (port != null) {
             try {_config.setPort(Integer.parseInt(port.trim()));
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
     /**
@@ -1084,7 +1084,7 @@ public class IndexBean {
     public void setTargetPort(String port) {
         if (port != null) {
             try {_config.setTargetPort(Integer.parseInt(port.trim()));
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
     /** What host does this http server tunnel spoof */
@@ -1143,7 +1143,7 @@ public class IndexBean {
         if (val != null) {
             try {
                 _config.setStartupDelayMin(Integer.parseInt(val.trim()));
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -1155,7 +1155,7 @@ public class IndexBean {
         if (val != null) {
             try {
                 _config.setStartupDelayMax(Integer.parseInt(val.trim()));
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -1167,7 +1167,7 @@ public class IndexBean {
         if (val != null) {
             try {
                 _config.setShutdownDelayMin(Integer.parseInt(val.trim()));
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -1179,7 +1179,7 @@ public class IndexBean {
         if (val != null) {
             try {
                 _config.setShutdownDelayMax(Integer.parseInt(val.trim()));
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -1207,7 +1207,7 @@ public class IndexBean {
     public void setEncryptMode(String val) {
         if (val != null) {
             try {_config.setEncryptMode(Integer.parseInt(val.trim()));
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -1318,7 +1318,7 @@ public class IndexBean {
     public void setAccessMode(String val) {
         if (val != null) {
             try {_config.setAccessMode(Integer.parseInt(val.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -1334,20 +1334,20 @@ public class IndexBean {
     public void setNewDest(String val) {
         if (val != null) {
             try {_config.setNewDest(Integer.parseInt(val.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
     public void setReduceTime(String val) {
         if (val != null) {
             try {_config.setReduceTime(Integer.parseInt(val.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
     public void setReduceCount(String val) {
         if (val != null) {
             try {_config.setReduceCount(Integer.parseInt(val.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
     public void setEncryptKey(String val) {
@@ -1365,7 +1365,7 @@ public class IndexBean {
     public void setCloseTime(String val) {
         if (val != null) {
             try {_config.setCloseTime(Integer.parseInt(val.trim()));
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -1443,49 +1443,49 @@ public class IndexBean {
     public void setLimitMinute(String s) {
         if (s != null) {
             try {_config.setLimitMinute(Integer.parseInt(s.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
     public void setLimitHour(String s) {
         if (s != null) {
             try {_config.setLimitHour(Integer.parseInt(s.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
     public void setLimitDay(String s) {
         if (s != null) {
             try {_config.setLimitDay(Integer.parseInt(s.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
     public void setTotalMinute(String s) {
         if (s != null) {
             try {_config.setTotalMinute(Integer.parseInt(s.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
     public void setTotalHour(String s) {
         if (s != null) {
             try {_config.setTotalHour(Integer.parseInt(s.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
     public void setTotalDay(String s) {
         if (s != null) {
             try {_config.setTotalDay(Integer.parseInt(s.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
     public void setMaxStreams(String s) {
         if (s != null) {
             try {_config.setMaxStreams(Integer.parseInt(s.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -1496,35 +1496,35 @@ public class IndexBean {
     public void setPostMax(String s) {
         if (s != null) {
             try {_config.setPostMax(Integer.parseInt(s.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
     public void setPostTotalMax(String s) {
         if (s != null) {
             try {_config.setPostTotalMax(Integer.parseInt(s.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
     public void setPostCheckTime(String s) {
         if (s != null) {
             try {_config.setPostCheckTime(Integer.parseInt(s.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
     public void setPostBanTime(String s) {
         if (s != null) {
             try {_config.setPostBanTime(Integer.parseInt(s.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
     public void setPostTotalBanTime(String s) {
         if (s != null) {
             try {_config.setPostTotalBanTime(Integer.parseInt(s.trim()));}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -1533,7 +1533,7 @@ public class IndexBean {
     public void setCert(String val) {
         if (val != null) {
             try {_certType = Integer.parseInt(val.trim());}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
 
@@ -1718,7 +1718,7 @@ public class IndexBean {
     /** New key */
     private String generateNewEncryptionKey() {
         TunnelController tun = getController(_tunnel);
-        if (tun == null) {} // creating new
+        if (tun == null) { /* ignored */ } // creating new
         else if (tun.getIsRunning() || tun.getIsStarting()) {
             return "Tunnel must be stopped before modifying LeaseSet encryption key";
         }

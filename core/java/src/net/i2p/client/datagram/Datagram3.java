@@ -89,8 +89,7 @@ public class Datagram3 {
             if (options != null && !options.isEmpty()) DataHelper.writeProperties(out, options);
             out.write(payload);
             if (out.size() > MAX_DGRAM_BUFSIZE) throw new DataFormatException("Too big");
-        } catch (IOException ioe) {
-        }
+        } catch (IOException ioe) { /* ignored */ }
         return out.toByteArray();
     }
 

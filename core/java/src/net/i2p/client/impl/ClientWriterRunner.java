@@ -70,8 +70,7 @@ class ClientWriterRunner implements Runnable {
         _messagesToWrite.clear();
         try {
             _messagesToWrite.put(new PoisonI2CPMessage());
-        } catch (InterruptedException ie) {
-        }
+        } catch (InterruptedException ie) { /* ignored */ }
     }
 
     @Override

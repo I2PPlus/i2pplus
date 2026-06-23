@@ -1014,8 +1014,7 @@ public class Storage implements Closeable {
                     // close as we go so we don't run out of file descriptors
                     try {
                         tf.closeRAF();
-                    } catch (IOException ioe) {
-                    }
+                    } catch (IOException ioe) { /* ignored */ }
                 }
                 String msg = "File '" + tf.name + "' was deleted, must be downloaded again";
                 if (listener != null) {
@@ -1395,8 +1394,7 @@ public class Storage implements Closeable {
                 // close as we go so we don't run out of file descriptors
                 try {
                     tf.closeRAF();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
             if (!resume) {
                 _checkProgress.set((int) (pieces * lengthProgress / total_length));
@@ -1427,8 +1425,7 @@ public class Storage implements Closeable {
                     raf.setLength(tf.length);
                     try {
                         tf.closeRAF();
-                    } catch (IOException ioe) {
-                    }
+                    } catch (IOException ioe) { /* ignored */ }
                 }
             }
         }
@@ -1449,8 +1446,7 @@ public class Storage implements Closeable {
                     TorrentFile tf = _torrentFiles.get(file);
                     try {
                         tf.closeRAF();
-                    } catch (IOException ioe) {
-                    }
+                    } catch (IOException ioe) { /* ignored */ }
                     if (++file >= _torrentFiles.size()) {
                         break;
                     }
@@ -1641,8 +1637,7 @@ public class Storage implements Closeable {
                     } catch (IOException ioe) {
                         try {
                             tf.closeRAF();
-                        } catch (IOException ioe2) {
-                        }
+                        } catch (IOException ioe2) { /* ignored */ }
                         // get the file name in the logs
                         IOException ioe2 =
                                 new IOException("Error writing " + tf.RAFfile.getAbsolutePath());
@@ -1743,8 +1738,7 @@ public class Storage implements Closeable {
                 } catch (IOException ioe) {
                     try {
                         tf.closeRAF();
-                    } catch (IOException ioe2) {
-                    }
+                    } catch (IOException ioe2) { /* ignored */ }
                     // get the file name in the logs
                     IOException ioe2 =
                             new IOException("Error reading " + tf.RAFfile.getAbsolutePath());
@@ -1843,8 +1837,7 @@ public class Storage implements Closeable {
             if (RAFtime > 0 && RAFtime < cutoff) {
                 try {
                     closeRAF();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
         }
 
@@ -2045,8 +2038,7 @@ public class Storage implements Closeable {
         } finally {
             try {
                 if (out != null) out.close();
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
         }
     }
 }

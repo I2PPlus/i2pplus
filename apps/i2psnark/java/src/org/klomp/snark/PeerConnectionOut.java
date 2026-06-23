@@ -83,8 +83,7 @@ class PeerConnectionOut implements Runnable {
                         try {
                             sendQueue.wait(shouldThrottleRequests ? 5000 : 60 * 1000);
                         } // Wait till more data arrives.
-                        catch (InterruptedException ie) {
-                        } // ignored
+                        catch (InterruptedException ie) { /* ignored */ } // ignored
                         shouldThrottleRequests = false;
                     }
 
@@ -155,8 +154,7 @@ class PeerConnectionOut implements Runnable {
                                     }
                                     try {
                                         sendQueue.wait(5000);
-                                    } catch (InterruptedException ie) {
-                                    }
+                                    } catch (InterruptedException ie) { /* ignored */ }
                                     continue;
                                 }
                             } else if (m != null && m.type == Message.REQUEST) {
@@ -235,8 +233,7 @@ class PeerConnectionOut implements Runnable {
         if (dout != null) {
             try {
                 dout.close();
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -273,8 +270,7 @@ class PeerConnectionOut implements Runnable {
                         if (_log.shouldDebug()) _log.debug("Sending [" + peer + "]: " + r);
                         try {
                             r.sendMessage(dout);
-                        } catch (IOException ioe) {
-                        }
+                        } catch (IOException ioe) { /* ignored */ }
                     }
                 }
             }

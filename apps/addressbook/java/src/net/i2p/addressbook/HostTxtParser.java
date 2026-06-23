@@ -61,7 +61,7 @@ public class HostTxtParser {
             }
             return result;
         } finally {
-            try { input.close(); } catch (IOException ioe) {}
+            try { input.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -147,7 +147,7 @@ public class HostTxtParser {
             if (fileStream != null) {
                 try {
                     fileStream.close();
-                } catch (IOException ioe) {}
+                } catch (IOException ioe) { /* ignored */ }
             }
         }
     }
@@ -177,8 +177,7 @@ public class HostTxtParser {
             result = map;
             try {
                 write(result, file);
-            } catch (IOException exp2) {
-            }
+            } catch (IOException exp2) { /* ignored */ }
         }
         return result;
     }
@@ -200,7 +199,7 @@ public class HostTxtParser {
                 entry.getValue().write(output);
             }
         } finally {
-            try { output.close(); } catch (IOException ioe) {}
+            try { output.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 

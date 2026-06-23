@@ -55,16 +55,14 @@ class SessionIdleTimer implements SimpleTimer.TimedEvent {
                 // also check vs. configured quantities?
                 try {
                     reduceQuantity = Math.max(Integer.parseInt(p), 1);
-                } catch (NumberFormatException nfe) {
-                }
+                } catch (NumberFormatException nfe) { /* ignored */ }
             }
             reduceTime = DEFAULT_REDUCE_TIME;
             p = props.getProperty("i2cp.reduceIdleTime");
             if (p != null) {
                 try {
                     reduceTime = Math.max(Long.parseLong(p), MINIMUM_TIME);
-                } catch (NumberFormatException nfe) {
-                }
+                } catch (NumberFormatException nfe) { /* ignored */ }
             }
             minimumTime = reduceTime;
         }
@@ -74,8 +72,7 @@ class SessionIdleTimer implements SimpleTimer.TimedEvent {
             if (p != null) {
                 try {
                     shutdownTime = Math.max(Long.parseLong(p), MINIMUM_TIME);
-                } catch (NumberFormatException nfe) {
-                }
+                } catch (NumberFormatException nfe) { /* ignored */ }
             }
             minimumTime = Math.min(minimumTime, shutdownTime);
             if (reduce && shutdownTime <= reduceTime) {

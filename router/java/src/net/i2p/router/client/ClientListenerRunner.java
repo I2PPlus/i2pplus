@@ -110,7 +110,7 @@ class ClientListenerRunner implements Runnable {
                                 _log.warn("Refused connection from " + socket.getInetAddress());
                             try {
                                 socket.close();
-                            } catch (IOException ioe) {}
+                            } catch (IOException ioe) { /* ignored */ }
                         }
                     } catch (IOException ioe) {
                         if (isAlive())
@@ -134,7 +134,7 @@ class ClientListenerRunner implements Runnable {
 
             _listening = false;
             if (_socket != null) {
-                try { _socket.close(); } catch (IOException ioe) {}
+                try { _socket.close(); } catch (IOException ioe) { /* ignored */ }
                 _socket = null;
             }
 
@@ -144,7 +144,7 @@ class ClientListenerRunner implements Runnable {
                 _log.error("Error listening, waiting " + (curDelay/1000) + "s before we try again");
             else
                 _log.log(Log.CRIT, "I2CP error listening to port " + _port + " - is another I2P instance running? Resolve conflicts and restart");
-            try { Thread.sleep(curDelay); } catch (InterruptedException ie) {}
+            try { Thread.sleep(curDelay); } catch (InterruptedException ie) { /* ignored */ }
             curDelay = Math.min(curDelay*3, 60*1000);
         }
 
@@ -175,7 +175,7 @@ class ClientListenerRunner implements Runnable {
             boolean rv = is.read() == I2PClient.PROTOCOL_BYTE;
             socket.setSoTimeout(0);
             return rv;
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ }
         if (_log.shouldWarn())
              _log.warn("Peer did not authenticate themselves as I2CP quickly enough, dropping");
         return false;
@@ -195,6 +195,6 @@ class ClientListenerRunner implements Runnable {
         if (_socket != null) try {
             _socket.close();
             _socket = null;
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ }
     }
 }

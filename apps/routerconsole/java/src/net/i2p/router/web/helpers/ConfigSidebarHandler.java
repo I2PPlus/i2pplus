@@ -168,7 +168,7 @@ public class ConfigSidebarHandler extends FormHandler {
             try {
                 int keyInt = Integer.parseInt(k);
                 toDelete.add(keyInt);
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) { /* ignored */ }
         }
         Iterator<Map.Entry<Integer, String>> iter = sections.entrySet().iterator();
         while (iter.hasNext()) {

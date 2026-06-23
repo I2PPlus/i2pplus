@@ -162,8 +162,8 @@ public class BlockFile implements Closeable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			if (bf != null) try { bf.close(); } catch (IOException ioe) {}
-			if (raif != null) try { raif.close(); } catch (IOException ioe) {}
+			if (bf != null) try { bf.close(); } catch (IOException ioe) { /* ignored */ }
+			if (raif != null) try { raif.close(); } catch (IOException ioe) { /* ignored */ }
 		}
 	}
 

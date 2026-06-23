@@ -94,7 +94,7 @@ class Reader {
                 try {
                     synchronized (_pendingConnections) {
                         boolean keepReading = (con != null) && _readAfterLive.remove(con);
-                        if (keepReading) {} // keep on reading the same one
+                        if (keepReading) { /* ignored */ } // keep on reading the same one
                         else {
                             if (con != null) {
                                 _liveReads.remove(con);
@@ -109,7 +109,7 @@ class Reader {
                             }
                         }
                     }
-                } catch (InterruptedException ie) {}
+                } catch (InterruptedException ie) { /* ignored */ }
                 if (!_stop && (con != null) ) {
                     if (_log.shouldDebug())
                         _log.debug("Begin read for " + con);

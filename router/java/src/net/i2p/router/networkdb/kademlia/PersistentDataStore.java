@@ -273,7 +273,7 @@ public class PersistentDataStore extends TransientDataStore {
                 }
                 synchronized (_waitLock) {
                     try { _waitLock.wait(WRITE_DELAY); }
-                    catch (InterruptedException ie) {}
+                    catch (InterruptedException ie) { /* ignored */ }
                 }
             }
         }
@@ -435,7 +435,7 @@ public class PersistentDataStore extends TransientDataStore {
                 _log.error("Error writing to disk (" + ioe.getMessage() + ")");
             }
         } finally {
-            if (fos != null) try {fos.close();} catch (IOException ioe) {}
+            if (fos != null) try {fos.close();} catch (IOException ioe) { /* ignored */ }
         }
         if (shouldDelete && dbFile != null) {dbFile.delete();}
     }
@@ -802,7 +802,7 @@ public class PersistentDataStore extends TransientDataStore {
                     if (_log.shouldInfo())
                         _log.info("Deleted " + _routerFile.getName() + " -> Unable to read Router reference \n* " + e.getMessage());
                 } finally {
-                    if (fis != null) try {fis.close();} catch (IOException ioe) {}
+                    if (fis != null) try {fis.close();} catch (IOException ioe) { /* ignored */ }
                 }
                 if (corrupt) _routerFile.delete();
                 return !corrupt;

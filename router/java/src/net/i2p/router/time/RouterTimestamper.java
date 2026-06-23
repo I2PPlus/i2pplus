@@ -145,7 +145,7 @@ public class RouterTimestamper extends Timestamper {
                 if (!_initialized)
                     wait(MAX_WAIT_INITIALIZATION);
             }
-        } catch (InterruptedException ie) {}
+        } catch (InterruptedException ie) { /* ignored */ }
     }
 
     /**
@@ -216,7 +216,7 @@ public class RouterTimestamper extends Timestamper {
                 }
                 if (!wasInitialized) {
                     // let the log manager get initialized
-                    try { Thread.sleep(10*1000); } catch (InterruptedException ie) {}
+                    try { Thread.sleep(10*1000); } catch (InterruptedException ie) { /* ignored */ }
                     // NOW we set up logging
                     _log = _context.logManager().getLog(RouterTimestamper.class);
                     if (lastFailed) {

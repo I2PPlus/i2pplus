@@ -330,8 +330,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                     if (log.shouldWarn()) log.warn("Error accepting", ce);
                     try {
                         Thread.sleep(50);
-                    } catch (InterruptedException ie) {
-                    }
+                    } catch (InterruptedException ie) { /* ignored */ }
                     continue;
                 } catch (I2PException ipe) {
                     Log log = I2PAppContext.getGlobalContext().logManager().getLog(SAMv3StreamSession.class);
@@ -354,8 +353,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                                     log.error("SSL error", gse);
                                     try {
                                         i2ps.reset();
-                                    } catch (IOException ee) {
-                                    }
+                                    } catch (IOException ee) { /* ignored */ }
                                     throw new RuntimeException("SSL error", gse);
                                 }
                             }
@@ -372,8 +370,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                     if (log.shouldWarn()) log.warn("Error forwarding", ioe);
                     try {
                         i2ps.reset();
-                    } catch (IOException ee) {
-                    }
+                    } catch (IOException ee) { /* ignored */ }
                     continue;
                 }
 
@@ -398,12 +395,10 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                 } catch (IOException e) {
                     try {
                         clientServerSock.close();
-                    } catch (IOException ee) {
-                    }
+                    } catch (IOException ee) { /* ignored */ }
                     try {
                         i2ps.reset();
-                    } catch (IOException ee) {
-                    }
+                    } catch (IOException ee) { /* ignored */ }
                     continue;
                 }
             }
@@ -440,19 +435,16 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
             } finally {
                 try {
                     in.close();
-                } catch (IOException e) {
-                }
+                } catch (IOException e) { /* ignored */ }
                 try {
                     ((Buffer) buf).flip();
                     while (buf.hasRemaining()) {
                         out.write(buf);
                     }
-                } catch (IOException e) {
-                }
+                } catch (IOException e) { /* ignored */ }
                 try {
                     out.close();
-                } catch (IOException e) {
-                }
+                } catch (IOException e) { /* ignored */ }
                 if (bridge != null) bridge.unregister(this);
             }
         }
@@ -464,8 +456,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         public void stopHandling() {
             try {
                 in.close();
-            } catch (IOException e) {
-            }
+            } catch (IOException e) { /* ignored */ }
         }
     }
 

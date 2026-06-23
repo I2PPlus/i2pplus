@@ -853,7 +853,7 @@ public class Daemon {
         // wait
         try {
             Thread.sleep(5*60*1000 + I2PAppContext.getGlobalContext().random().nextLong(5*60*1000));
-        } catch (InterruptedException ie) {}
+        } catch (InterruptedException ie) { /* ignored */ }
 
         while (_running) {
             long delay = Long.parseLong(settings.get("update_delay"));
@@ -862,7 +862,7 @@ public class Daemon {
             update(settings, homeFile.getAbsolutePath());
             try {
                 synchronized (this) {wait(delay * 60 * 60 * 1000);}
-            } catch (InterruptedException exp) {}
+            } catch (InterruptedException exp) { /* ignored */ }
             if (!_running) {break;}
             settings = ConfigParser.parse(settingsFile, defaultSettings);
         }

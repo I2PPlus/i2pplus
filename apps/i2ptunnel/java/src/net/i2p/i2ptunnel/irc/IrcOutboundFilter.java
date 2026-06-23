@@ -97,7 +97,7 @@ public class IrcOutboundFilter implements Runnable {
         } catch (RuntimeException re) {
             _log.error("[IRC Client] Error filtering outbound data", re);
         } finally {
-            try { remote.close(); } catch (IOException e) {}
+            try { remote.close(); } catch (IOException e) { /* ignored */ }
         }
         if (_log.shouldDebug())
             _log.debug("[IRC Client] Outbound Filter: Stopped");

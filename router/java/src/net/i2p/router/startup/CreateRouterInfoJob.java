@@ -180,7 +180,7 @@ public class CreateRouterInfoJob extends JobImpl {
         } catch (IOException ioe) {
             _log.log(Log.CRIT, "Error writing out the new router information", ioe);
         } finally {
-            if (fos1 != null) try { fos1.close(); } catch (IOException ioe) {}
+            if (fos1 != null) try { fos1.close(); } catch (IOException ioe) { /* ignored */ }
         }
         return info;
     }

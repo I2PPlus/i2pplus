@@ -127,14 +127,14 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
             fetchNews();
             if (shouldFetchDevSU3()) {
                 // give it a sec for the download to kick in, if it's going to
-                try { Thread.sleep(5*1000); } catch (InterruptedException ie) {}
+                try { Thread.sleep(5*1000); } catch (InterruptedException ie) { /* ignored */ }
                 if (!_mgr.isCheckInProgress() && !_mgr.isUpdateInProgress())
                     // nonblocking
                     _mgr.check(ROUTER_DEV_SU3);
             }
             if (shouldFetchUnsigned()) {
                 // give it a sec for the download to kick in, if it's going to
-                try { Thread.sleep(5*1000); } catch (InterruptedException ie) {}
+                try { Thread.sleep(5*1000); } catch (InterruptedException ie) { /* ignored */ }
                 if (!_mgr.isCheckInProgress() && !_mgr.isUpdateInProgress())
                     // nonblocking
                     _mgr.check(ROUTER_UNSIGNED);

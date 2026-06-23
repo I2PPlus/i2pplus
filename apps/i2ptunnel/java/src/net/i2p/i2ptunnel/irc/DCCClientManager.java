@@ -207,12 +207,12 @@ public class DCCClientManager extends EventReceiver {
             try {
                 I2PTunnelDCCClient client = (I2PTunnelDCCClient) args;
                 connStarted(client);
-            } catch (ClassCastException cce) {}
+            } catch (ClassCastException cce) { /* ignored */ }
         } else if (eventName.equals(I2PTunnelDCCClient.CONNECT_STOP_EVENT)) {
             try {
                 Integer port = (Integer) args;
                 connStopped(port);
-            } catch (ClassCastException cce) {}
+            } catch (ClassCastException cce) { /* ignored */ }
         }
     }
 

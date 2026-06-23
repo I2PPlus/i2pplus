@@ -84,8 +84,7 @@ public class Advertiser extends ThreadCore {
             notifyInterval *= 1000;
             try {
                 Thread.sleep(notifyInterval);
-            } catch (InterruptedException e) {
-            }
+            } catch (InterruptedException e) { /* ignored */ }
             dev.announce();
         }
     }

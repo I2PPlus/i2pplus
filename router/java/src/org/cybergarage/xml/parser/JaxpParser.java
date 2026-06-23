@@ -155,26 +155,21 @@ public class JaxpParser extends Parser {
                 try {
                     factory.setFeature(
                             "http://xml.org/sax/features/external-general-entities", false);
-                } catch (ParserConfigurationException pce) {
-                }
+                } catch (ParserConfigurationException pce) { /* ignored */ }
                 try {
                     factory.setFeature(
                             "http://xml.org/sax/features/external-parameter-entities", false);
-                } catch (ParserConfigurationException pce) {
-                }
+                } catch (ParserConfigurationException pce) { /* ignored */ }
                 try {
                     factory.setFeature(
                             "http://apache.org/xml/features/disallow-doctype-decl", true);
-                } catch (ParserConfigurationException pce) {
-                }
+                } catch (ParserConfigurationException pce) { /* ignored */ }
                 try {
                     factory.setFeature(
                             "http://apache.org/xml/features/nonvalidating/load-external-dtd",
                             false);
-                } catch (ParserConfigurationException pce) {
-                }
-            } catch (AbstractMethodError ame) {
-            } // FreeBSD
+                } catch (ParserConfigurationException pce) { /* ignored */ }
+            } catch (AbstractMethodError ame) { /* ignored */ } // FreeBSD
             DocumentBuilder builder = factory.newDocumentBuilder();
             builder.setEntityResolver(new BlankingResolver());
             InputSource inSrc = new InputSource(new NullFilterInputStream(inStream));

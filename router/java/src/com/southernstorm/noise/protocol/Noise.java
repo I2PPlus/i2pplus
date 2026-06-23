@@ -133,12 +133,7 @@ public final class Noise {
 			// java since 1.7; android since API 19
 			Class<?> c = Class.forName("javax.crypto.AEADBadTagException");
 			throw (BadPaddingException)(c.getDeclaredConstructor().newInstance());
-		} catch (ClassNotFoundException e) {
-		} catch (InstantiationException e) {
-		} catch (IllegalAccessException e) {
-		} catch (InvocationTargetException e) {
-		} catch (NoSuchMethodException e) {
-		}
+		} catch (ClassNotFoundException e) { /* ignored */ } catch (InstantiationException e) { /* ignored */ } catch (IllegalAccessException e) { /* ignored */ } catch (InvocationTargetException e) { /* ignored */ } catch (NoSuchMethodException e) { /* ignored */ }
 		throw new BadPaddingException();
 	}
 }

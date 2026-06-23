@@ -410,8 +410,7 @@ public class TranslateReader extends FilterReader {
             if (r != null)
                 try {
                     r.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 

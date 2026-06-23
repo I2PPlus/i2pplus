@@ -92,13 +92,13 @@ public class PcapWriter implements Closeable, Flushable {
     public void close() {
             try {
                 _fos.close();
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
     }
 
     public void flush() {
             try {
                 _fos.flush();
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
     }
 
     /**

@@ -347,7 +347,7 @@ class NewsFetcher extends UpdateRunner {
         } finally {
             if (in != null) {
                 try {in.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
             }
         }
         if (_log.shouldWarn()) {_log.warn("No version found in news.xml file");}
@@ -422,7 +422,7 @@ class NewsFetcher extends UpdateRunner {
         List<URI> rv = new ArrayList<>();
         while (tok.hasMoreTokens()) {
             try {rv.add(new URI(tok.nextToken().trim()));}
-            catch (URISyntaxException use) {}
+            catch (URISyntaxException use) { /* ignored */ }
         }
         return rv;
     }
@@ -597,7 +597,7 @@ class NewsFetcher extends UpdateRunner {
         } finally {
             if (out != null) try {
                 out.close();
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             ReusableGZIPInputStream.release(in);
         }
     }
@@ -644,7 +644,7 @@ class NewsFetcher extends UpdateRunner {
             } catch (IOException ioe) {
                 _log.error("Failed to write CRL", ioe);
             } finally {
-                if (out != null) try { out.close(); } catch (IOException ioe) {}
+                if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
             }
             f.setLastModified(e.updated);
             i++;
@@ -736,7 +736,7 @@ class NewsFetcher extends UpdateRunner {
             fail = true;
         } finally {
             if (out != null) try {out.close();}
-            catch (IOException ioe) {}
+            catch (IOException ioe) { /* ignored */ }
         }
         if (!fail) {
             f.setLastModified(ble.updated);
@@ -818,7 +818,7 @@ class NewsFetcher extends UpdateRunner {
         } finally {
             if (out != null) try {
                 out.close();
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
         }
     }
 

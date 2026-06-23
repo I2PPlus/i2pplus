@@ -95,7 +95,7 @@ public abstract class RFC3339Date {
                 Date date = rfc3339DateFormats[i].parse(s);
                 if (date != null)
                     return date.getTime();
-            } catch (ParseException pe) {}
+            } catch (ParseException pe) { /* ignored */ }
         }
         return -1;
     }

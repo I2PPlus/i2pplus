@@ -341,7 +341,7 @@ public class Router implements RouterClock.ClockShiftListener {
                     if (i == 0) {System.err.println("WARN: There may be another router already running... waiting a while to be sure...");}
                     // yes this is ugly to sleep in the constructor.
                     try {Thread.sleep(5000);}
-                    catch (InterruptedException ie) {}
+                    catch (InterruptedException ie) { /* ignored */ }
                 } else {
                     _eventLog.addEvent(EventLog.ABORTED, "Another router running");
                     System.err.println("ERROR: There appears to be another router already running!");
@@ -691,7 +691,7 @@ public class Router implements RouterClock.ClockShiftListener {
         changeState(State.STARTING_2);
         _started = System.currentTimeMillis();
         try {Runtime.getRuntime().addShutdownHook(_shutdownHook);}
-        catch (IllegalStateException ise) {}
+        catch (IllegalStateException ise) { /* ignored */ }
         if (!SystemVersion.isAndroid()) {I2PThread.addOOMEventListener(_oomListener);}
 
         // message handlers
@@ -1331,7 +1331,7 @@ public class Router implements RouterClock.ClockShiftListener {
     public synchronized void rebuildNewIdentity() {
         if (_shutdownHook != null) {
             try {Runtime.getRuntime().removeShutdownHook(_shutdownHook);}
-            catch (IllegalStateException ise) {}
+            catch (IllegalStateException ise) { /* ignored */ }
         }
         killKeys();
         for (Runnable task : _context.getShutdownTasks()) {
@@ -1391,7 +1391,7 @@ public class Router implements RouterClock.ClockShiftListener {
                         }
                     }
                 }
-            } catch (UnknownCPUException e) {}
+            } catch (UnknownCPUException e) { /* ignored */ }
         }
         _context.random().nextBoolean();
         // Instantiate to fire up the YK refiller thread
@@ -1442,7 +1442,7 @@ public class Router implements RouterClock.ClockShiftListener {
         _context.throttle().setShutdownStatus();
         if (_shutdownHook != null) {
             try {Runtime.getRuntime().removeShutdownHook(_shutdownHook);}
-            catch (IllegalStateException ise) {}
+            catch (IllegalStateException ise) { /* ignored */ }
         }
         shutdown2(exitCode);
     }
@@ -1472,7 +1472,7 @@ public class Router implements RouterClock.ClockShiftListener {
         // No, you can't do Thread.currentThread.setDaemon(false)
         if (_killVMOnEnd) {
             try {(new Spinner()).start();}
-            catch (Throwable t) {}
+            catch (Throwable t) { /* ignored */ }
         }
         ((RouterClock) _context.clock()).removeShiftListener(this);
         _context.random().saveSeed();
@@ -1503,7 +1503,7 @@ public class Router implements RouterClock.ClockShiftListener {
                 break;
             }
             try {th.join(toWait);}
-            catch (InterruptedException ie) {}
+            catch (InterruptedException ie) { /* ignored */ }
             if (th.isAlive()) {
                 _log.logAlways(Log.WARN, "Shutdown Task [" + th.getName() + "] took more than " + waitSecs + "s to run");
                 tasks.clear();
@@ -1531,7 +1531,7 @@ public class Router implements RouterClock.ClockShiftListener {
         if (waitForClients) {
             // Give time for the disconnect messages to get to them
             // so they can shut down correctly before the JVM goes away
-            try {Thread.sleep(delay);} catch (InterruptedException ie) {}
+            try {Thread.sleep(delay);} catch (InterruptedException ie) { /* ignored */ }
             if (_log.shouldWarn()) {
                 _log.warn("Done waiting " + delay + "ms for clients to disconnect, terminating subsystems...");
             }
@@ -1575,23 +1575,23 @@ public class Router implements RouterClock.ClockShiftListener {
             // do stat manager last to reduce chance of NPEs in other threads
             try {_context.statManager().shutdown();} catch (Throwable t) {_log.error("[StatsManager] " + t.getMessage());}
         } else {
-            try {_context.namingService().shutdown();} catch (Throwable t) {}
-            try {_context.jobQueue().shutdown();} catch (Throwable t) {}
-            try {_context.tunnelManager().shutdown();} catch (Throwable t) {}
-            try {_context.tunnelDispatcher().shutdown();} catch (Throwable t) {}
-            try {_context.netDbSegmentor().shutdown();} catch (Throwable t) {}
-            try {_context.commSystem().shutdown();} catch (Throwable t) {}
-            try {_context.bandwidthLimiter().shutdown();} catch (Throwable t) {}
-            try {_context.peerManager().shutdown();} catch (Throwable t) {}
-            try {_context.messageRegistry().shutdown();} catch (Throwable t) {}
-            try {_context.messageValidator().shutdown();} catch (Throwable t) {}
-            try {_context.inNetMessagePool().shutdown();} catch (Throwable t) {}
-            try {_context.clientMessagePool().shutdown();} catch (Throwable t) {}
-            try {_context.sessionKeyManager().shutdown();} catch (Throwable t) {}
-            try {_context.eciesEngine().shutdown();} catch (Throwable t) {}
-            try {_context.messageHistory().shutdown();} catch (Throwable t) {}
+            try {_context.namingService().shutdown();} catch (Throwable t) { /* ignored */ }
+            try {_context.jobQueue().shutdown();} catch (Throwable t) { /* ignored */ }
+            try {_context.tunnelManager().shutdown();} catch (Throwable t) { /* ignored */ }
+            try {_context.tunnelDispatcher().shutdown();} catch (Throwable t) { /* ignored */ }
+            try {_context.netDbSegmentor().shutdown();} catch (Throwable t) { /* ignored */ }
+            try {_context.commSystem().shutdown();} catch (Throwable t) { /* ignored */ }
+            try {_context.bandwidthLimiter().shutdown();} catch (Throwable t) { /* ignored */ }
+            try {_context.peerManager().shutdown();} catch (Throwable t) { /* ignored */ }
+            try {_context.messageRegistry().shutdown();} catch (Throwable t) { /* ignored */ }
+            try {_context.messageValidator().shutdown();} catch (Throwable t) { /* ignored */ }
+            try {_context.inNetMessagePool().shutdown();} catch (Throwable t) { /* ignored */ }
+            try {_context.clientMessagePool().shutdown();} catch (Throwable t) { /* ignored */ }
+            try {_context.sessionKeyManager().shutdown();} catch (Throwable t) { /* ignored */ }
+            try {_context.eciesEngine().shutdown();} catch (Throwable t) { /* ignored */ }
+            try {_context.messageHistory().shutdown();} catch (Throwable t) { /* ignored */ }
             // do stat manager last to reduce chance of NPEs in other threads
-            try {_context.statManager().shutdown();} catch (Throwable t) {}
+            try {_context.statManager().shutdown();} catch (Throwable t) { /* ignored */ }
         }
 
         //_context.deleteTempDir();
@@ -1603,7 +1603,7 @@ public class Router implements RouterClock.ClockShiftListener {
         try {_context.elGamalEngine().shutdown();}
         catch (Throwable t) {_log.log(Log.CRIT, "[ElGamal engine] " + t.getMessage());}
 
-        if (contexts.isEmpty()) {} // any thing else to shut down?
+        if (contexts.isEmpty()) { /* ignored */ } // any thing else to shut down?
         else {
             _log.logAlways(Log.WARN, "Warning - " + contexts.size() + " routers remaining in this JVM, not releasing all resources");
         }
@@ -1641,7 +1641,7 @@ public class Router implements RouterClock.ClockShiftListener {
         else if (exitCode == 10)
             _log.log(Log.CRIT, "Completed forced restart, now restarting...");
 */
-        try {_context.logManager().shutdown();} catch (Throwable t) {}
+        try {_context.logManager().shutdown();} catch (Throwable t) { /* ignored */ }
         if (ALLOW_DYNAMIC_KEYS) {
             if (_context.getBooleanProperty(PROP_DYNAMIC_KEYS)) {killKeys();}
         }
@@ -1667,8 +1667,8 @@ public class Router implements RouterClock.ClockShiftListener {
 
         if (_killVMOnEnd) {
             try {Thread.sleep(1000);}
-            catch (InterruptedException ie) {}
             //Runtime.getRuntime().halt(exitCode);
+            catch (InterruptedException ie) { /* ignored */ }
             // allow the Runtime shutdown hooks to execute
             Runtime.getRuntime().exit(exitCode);
         }

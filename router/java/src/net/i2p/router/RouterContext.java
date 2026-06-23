@@ -526,7 +526,7 @@ public class RouterContext extends I2PAppContext {
                 int ival = defaultVal;
                 try {
                     ival = Integer.parseInt(val);
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) { /* ignored */ }
                 return ival;
             }
         }
@@ -545,7 +545,7 @@ public class RouterContext extends I2PAppContext {
                 long rv = defaultVal;
                 try {
                     rv = Long.parseLong(val);
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) { /* ignored */ }
                 return rv;
             }
         }

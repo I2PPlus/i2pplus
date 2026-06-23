@@ -146,7 +146,7 @@ public class WebAppStarter {
         // the first one, so we remove any previous one here
         try {
             stopWebApp(ctx, appName);
-        } catch (Throwable t) {}
+        } catch (Throwable t) { /* ignored */ }
 
         // To avoid ZipErrors from JarURLConnetion caching,
         // (used by Jetty JarResource and JarFileResource)
@@ -245,14 +245,14 @@ public class WebAppStarter {
         try {
             // not graceful is default in Jetty 6?
             wac.stop();
-        } catch (Exception ie) {}
+        } catch (Exception ie) { /* ignored */ }
         ContextHandlerCollection server = getConsoleServer(ctx);
         if (server == null)
             return;
         try {
             server.removeHandler(wac);
             server.mapContexts();
-        } catch (IllegalStateException ise) {}
+        } catch (IllegalStateException ise) { /* ignored */ }
     }
 
     /**
@@ -271,11 +271,11 @@ public class WebAppStarter {
         try {
             // not graceful is default in Jetty 6?
             wac.stop();
-        } catch (Exception ie) {}
+        } catch (Exception ie) { /* ignored */ }
         try {
             server.removeHandler(wac);
             server.mapContexts();
-        } catch (IllegalStateException ise) {}
+        } catch (IllegalStateException ise) { /* ignored */ }
     }
 
     /**

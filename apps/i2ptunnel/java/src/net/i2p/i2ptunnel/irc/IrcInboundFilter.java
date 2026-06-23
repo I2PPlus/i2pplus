@@ -96,8 +96,8 @@ public class IrcInboundFilter implements Runnable {
         } catch (RuntimeException re) {
             _log.error("Error filtering inbound data", re);
         } finally {
-            try { in.close(); } catch (IOException e) {}
-            try { local.close(); } catch(IOException e) {}
+            try { in.close(); } catch (IOException e) { /* ignored */ }
+            try { local.close(); } catch(IOException e) { /* ignored */ }
         }
         if(_log.shouldDebug())
             _log.debug("[IRC Client] Inbound Filter: Stopped");

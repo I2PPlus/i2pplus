@@ -108,7 +108,7 @@ public class ConfigClientsHandler extends FormHandler {
             int appnum = -1;
             try {
                 appnum = Integer.parseInt(app);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
             if (appnum >= 0) {
                 startClient(appnum);
             } else {
@@ -132,7 +132,7 @@ public class ConfigClientsHandler extends FormHandler {
             int appnum = -1;
             try {
                 appnum = Integer.parseInt(app);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
             if (appnum >= 0) {
                 if (_context.getBooleanProperty(ConfigClientsHelper.PROP_ENABLE_CLIENT_CHANGE) ||
                     isAdvanced()) {
@@ -172,7 +172,7 @@ public class ConfigClientsHandler extends FormHandler {
             int appnum = -1;
             try {
                 appnum = Integer.parseInt(app);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
             if (appnum >= 0) {
                 stopClient(appnum);
             } else {
@@ -325,7 +325,7 @@ public class ConfigClientsHandler extends FormHandler {
                 // Give a chance for status to update
                 try {
                    Thread.sleep(1000);
-                } catch (InterruptedException ie) {}
+                } catch (InterruptedException ie) { /* ignored */ }
             } catch (Throwable t) {
                 addFormError("Cannot stop client " + ca.className + ": " + t, true);
                 _log.error("Error stopping client " + ca.className, t);
@@ -347,7 +347,7 @@ public class ConfigClientsHandler extends FormHandler {
         // Give a chance for status to update
         try {
             Thread.sleep(1000);
-        } catch (InterruptedException ie) {}
+        } catch (InterruptedException ie) { /* ignored */ }
     }
 
     private void deleteClient(int i) {
@@ -474,7 +474,7 @@ public class ConfigClientsHandler extends FormHandler {
                 }
                 try {
                    Thread.sleep(500);
-                } catch (InterruptedException ie) {}
+                } catch (InterruptedException ie) { /* ignored */ }
              }
              String status = mgr.getStatus();
              if (status != null && status.length() > 0)
@@ -484,8 +484,8 @@ public class ConfigClientsHandler extends FormHandler {
         } finally {
             // it's really a ByteArrayInputStream but we'll play along...
             if (in != null)
-                try { in.close(); } catch (IOException ioe) {}
-            if (out != null)  try { out.close(); } catch (IOException ioe) {}
+                try { in.close(); } catch (IOException ioe) { /* ignored */ }
+            if (out != null)  try { out.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -514,7 +514,7 @@ public class ConfigClientsHandler extends FormHandler {
         // So that update() will post a status to the summary bar before we reload
         try {
            Thread.sleep(1000);
-        } catch (InterruptedException ie) {}
+        } catch (InterruptedException ie) { /* ignored */ }
     }
 
     /**
@@ -557,7 +557,7 @@ public class ConfigClientsHandler extends FormHandler {
         // So that update() will post a status to the summary bar before we reload
         try {
            Thread.sleep(5000);
-        } catch (InterruptedException ie) {}
+        } catch (InterruptedException ie) { /* ignored */ }
     }
 
     private void checkPlugin(String app) {
@@ -573,7 +573,7 @@ public class ConfigClientsHandler extends FormHandler {
         // So that update() will post a status to the summary bar before we reload
         try {
            Thread.sleep(1000);
-        } catch (InterruptedException ie) {}
+        } catch (InterruptedException ie) { /* ignored */ }
     }
 
     /**

@@ -181,8 +181,7 @@ public class AddressbookBean extends BaseBean {
         File path = new File(addressbookDir(), filename); // clean up the ../ with getCanonicalPath()
         try {
             return path.getCanonicalPath();
-        } catch (IOException ioe) {
-        }
+        } catch (IOException ioe) { /* ignored */ }
         return filename;
     }
 
@@ -404,8 +403,7 @@ public class AddressbookBean extends BaseBean {
             if (fis != null) {
                 try {
                     fis.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
         }
         if (message.length() > 0) {
@@ -461,8 +459,7 @@ public class AddressbookBean extends BaseBean {
                 message = ngettext("Book contains 1 entry", "Book contains {0} entries", getTotalFilteredCount());
             }
         }
-        if (resultCount <= 0 || category != null) {
-        } // nothing to display or category filter
+        if (resultCount <= 0 || category != null) { /* ignored */ } // nothing to display or category filter
         else if (getPageBegin() == 0 && getEndInt() >= getTotalFilteredCount() - 1) {
             message += "</span>";
         } else {
@@ -656,8 +653,7 @@ public class AddressbookBean extends BaseBean {
             if (fos != null) {
                 try {
                     fos.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
         }
     }
@@ -802,8 +798,7 @@ public class AddressbookBean extends BaseBean {
     public void setBegin(String s) {
         try {
             beginIndex = Integer.parseInt(s);
-        } catch (NumberFormatException nfe) {
-        }
+        } catch (NumberFormatException nfe) { /* ignored */ }
     }
 
     /**
@@ -855,8 +850,7 @@ public class AddressbookBean extends BaseBean {
     public void setEnd(String s) {
         try {
             endIndex = Integer.parseInt(s);
-        } catch (NumberFormatException nfe) {
-        }
+        } catch (NumberFormatException nfe) { /* ignored */ }
     }
 
     /**

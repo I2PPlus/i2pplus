@@ -153,7 +153,7 @@ class Mail {
         finally {
             if (in != null) {
                 try {in.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
             }
             rb.readComplete(success);
         }
@@ -416,7 +416,7 @@ class Mail {
                         else if (hlc.startsWith("to:")) {
                             ArrayList<String> list = new ArrayList<>();
                             getRecipientsFromList(list, line.substring(3).trim(), true);
-                            if (list.isEmpty()) {} // don't set
+                            if (list.isEmpty()) { /* ignored */ } // don't set
                             else if (to == null) {to = list.toArray(new String[list.size()]);}
                             else if (cc == null) {cc = list.toArray(new String[list.size()]);}
                             else {
@@ -426,7 +426,7 @@ class Mail {
                         } else if (hlc.startsWith("cc:")) {
                             ArrayList<String> list = new ArrayList<>();
                             getRecipientsFromList(list, line.substring(3).trim(), true);
-                            if (list.isEmpty()) {} // don't set
+                            if (list.isEmpty()) { /* ignored */ } // don't set
                             else if (cc == null) {cc = list.toArray(new String[list.size()]);}
                             else {
                                 for (int i = 0; i < cc.length; i++) {list.add(i, cc[i]);} // add to the array, shouldn't happen

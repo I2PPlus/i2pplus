@@ -200,7 +200,7 @@ class AccessFilter implements StatefulConnectionFilter {
                         breached.add(b32);
                     }
                 } finally {
-                    if (reader != null) try { reader.close(); } catch (IOException ignored) {}
+                    if (reader != null) try { reader.close(); } catch (IOException ignored) { /* ignored */ }
                 }
             }
 
@@ -226,7 +226,7 @@ class AccessFilter implements StatefulConnectionFilter {
                     writer.newLine();
                 }
             } finally {
-                if (writer != null) try { writer.close(); } catch (IOException ignored) {}
+                if (writer != null) try { writer.close(); } catch (IOException ignored) { /* ignored */ }
             }
         }
     }

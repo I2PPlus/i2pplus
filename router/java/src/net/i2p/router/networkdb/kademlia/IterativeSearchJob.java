@@ -555,7 +555,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         EncType type = ri != null ? ri.getIdentity().getPublicKey().getType() : null;
         boolean encryptElG = ctx.getProperty(PROP_ENCRYPT_RI, DEFAULT_ENCRYPT_RI);
         I2NPMessage outMsg = null;
-        if (isDirect) {} // never wrap
+        if (isDirect) { /* ignored */ } // never wrap
         else if (_isLease || (encryptElG && type == EncType.ELGAMAL_2048 && ctx.jobQueue().getMaxLag() < 300) || type == EncType.ECIES_X25519) {
             /*
              * Full ElG is fairly expensive so only do it for LS lookups and for RI lookups on fast boxes.

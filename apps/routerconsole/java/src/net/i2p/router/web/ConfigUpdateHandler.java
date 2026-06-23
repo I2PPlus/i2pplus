@@ -208,7 +208,7 @@ public class ConfigUpdateHandler extends FormHandler {
 
         String oldFreqStr = _context.getProperty(PROP_REFRESH_FREQUENCY, DEFAULT_REFRESH_FREQUENCY);
         long oldFreq = DEFAULT_REFRESH_FREQ;
-        try {oldFreq = Long.parseLong(oldFreqStr);} catch (NumberFormatException nfe) {}
+        try {oldFreq = Long.parseLong(oldFreqStr);} catch (NumberFormatException nfe) { /* ignored */ }
         if (_refreshFrequency != oldFreq) {
             changes.put(PROP_REFRESH_FREQUENCY, Long.toString(_refreshFrequency));
             addFormNoticeNoEscape(_t("Updating refresh frequency to {0}",
@@ -267,7 +267,7 @@ public class ConfigUpdateHandler extends FormHandler {
     public void setNewsURL(String url) {_newsURL = url;}
     public void setRefreshFrequency(String freq) {
         try {_refreshFrequency = Long.parseLong(freq);}
-        catch (NumberFormatException nfe) {}
+        catch (NumberFormatException nfe) { /* ignored */ }
     }
     public void setUpdateURL(String url) {_updateURL = url;}
     public void setUpdatePolicy(String policy) {_updatePolicy = policy;}

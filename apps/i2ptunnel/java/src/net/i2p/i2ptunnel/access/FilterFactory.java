@@ -43,7 +43,7 @@ public class FilterFactory {
                 linesList.add(line);
             }
         } finally {
-            if (reader != null) try { reader.close(); } catch (IOException ignored) {}
+            if (reader != null) try { reader.close(); } catch (IOException ignored) { /* ignored */ }
         }
 
         FilterDefinition parsedDefinition = DefinitionParser.parse(linesList.toArray(new String[0]));

@@ -392,7 +392,7 @@ public class RouterInfo extends DatabaseEntry {
         if ("2".equals(id)) {return 2;}
         if (id != null) {
             try {return Integer.parseInt(id);}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* ignored */ }
         }
         return -1;
     }
@@ -716,7 +716,7 @@ public class RouterInfo extends DatabaseEntry {
                  fail = true;
              } finally {
                  if (is != null) {
-                     try { is.close(); } catch (IOException ioe) {}
+                     try { is.close(); } catch (IOException ioe) { /* ignored */ }
                  }
              }
         }

@@ -80,7 +80,7 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
     private void closeQuietly(AutoCloseable resource) {
         if (resource != null) {
             try {resource.close();}
-            catch (Exception ignored) {}
+            catch (Exception ignored) { /* ignored */ }
         }
     }
 
@@ -123,7 +123,7 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
             try {
                 if (keepaliveI2P) {i2pout.flush();}
                 else {closeQuietly(i2pout);}
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) { /* ignored */ }
         }
 
         // Close local socket resources
@@ -135,7 +135,7 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
                 if (_hout != null) {_hout.flush();} // Ensure all buffered data is written before closing
                 closeQuietly(out);
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) { /* ignored */ }
 
         // Final close of I2P socket and browser socket if not kept alive
         if (!threadI2PClose && !keepaliveI2P) {closeQuietly(i2ps);}

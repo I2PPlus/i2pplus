@@ -83,8 +83,7 @@ public class CommentSet extends AbstractSet<Comment> {
             if (br != null)
                 try {
                     br.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
         modified = false;
     }

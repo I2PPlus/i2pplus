@@ -57,7 +57,7 @@ class BackgroundChecker {
                 // allow shorter for testing
                 if (mins < MIN_CHECK_MINUTES && !_log.shouldDebug()) {mins = MIN_CHECK_MINUTES;}
                 minutes = mins;
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
         return minutes * 60 * 1000L;
     }

@@ -552,7 +552,7 @@ public class NTCPConnection implements Closeable {
      *         only this or null as of 0.9.37
      */
     private synchronized NTCPConnection locked_close(boolean allowRequeue) {
-        if (_chan != null) try { _chan.close(); } catch (IOException ioe) { }
+        if (_chan != null) try { _chan.close(); } catch (IOException ioe) { /* ignored */ }
         if (_conKey != null) _conKey.cancel();
         _establishState = EstablishBase.FAILED;
         NTCPConnection old = _transport.removeCon(this);
@@ -651,7 +651,7 @@ public class NTCPConnection implements Closeable {
                           ") \n* Wants write? " + writeStatus +
                           "; Current Outbound set? " + currentOutboundSet +
                           "\n* Write buffers: " + writeBufs + " on " + toString());
-            } catch (RuntimeException ignored) {}
+            } catch (RuntimeException ignored) { /* ignored */ }
         }
 
         return true;
@@ -1027,7 +1027,7 @@ public class NTCPConnection implements Closeable {
     synchronized void outboundConnected() {
         if (_establishState == EstablishBase.FAILED) {
             _conKey.cancel();
-            try {_chan.close(); } catch (IOException ignored) {}
+            try {_chan.close(); } catch (IOException ignored) { /* ignored */ }
             return;
         }
         try {
@@ -1035,7 +1035,7 @@ public class NTCPConnection implements Closeable {
                 EventPumper.setInterest(_conKey, SelectionKey.OP_READ);
             }
         } catch (CancelledKeyException cke) {
-            try {_chan.close(); } catch (IOException ignored) {}
+            try {_chan.close(); } catch (IOException ignored) { /* ignored */ }
             return;
         }
         // schedule up the beginning of our handshaking by calling prepareNextWrite on the

@@ -27,8 +27,7 @@ class Executor implements Runnable {
             synchronized (_readyEvents) {
                 if (_readyEvents.isEmpty()) try {
                         _readyEvents.wait();
-                    } catch (InterruptedException ie) {
-                    }
+                    } catch (InterruptedException ie) { /* ignored */ }
                 if (!_readyEvents.isEmpty()) evt = _readyEvents.remove(0);
             }
 

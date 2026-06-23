@@ -346,7 +346,7 @@ public class TunnelController implements Logging {
             log("✖ Error writing the keys to " + keyFile.getAbsolutePath());
             return false;
         } finally {
-            if (fos != null) try { fos.close(); } catch (IOException ioe) {}
+            if (fos != null) try { fos.close(); } catch (IOException ioe) { /* ignored */ }
         }
         return true;
     }
@@ -408,7 +408,7 @@ public class TunnelController implements Logging {
             d.writeBytes(out);
             priv.writeBytes(out);
             signingPrivKey.writeBytes(out);
-            try { out.close(); } catch (IOException ioe) {}
+            try { out.close(); } catch (IOException ioe) { /* ignored */ }
 
             String destStr = d.toBase64();
             log("✔ Alternate private key created and saved in " + altFile.getAbsolutePath());
@@ -442,7 +442,7 @@ public class TunnelController implements Logging {
             log("✖ Error creating keys " + e);
             return false;
         } finally {
-            if (out != null) try { out.close(); } catch (IOException ioe) {}
+            if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 

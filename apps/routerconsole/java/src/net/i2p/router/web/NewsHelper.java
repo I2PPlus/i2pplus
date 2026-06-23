@@ -230,7 +230,7 @@ public class NewsHelper extends ContentHelper {
             try {
                 long modtime = Long.parseLong(ver);
                 return DataHelper.formatTime(modtime);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
         return null;
     }

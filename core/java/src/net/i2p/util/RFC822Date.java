@@ -45,8 +45,7 @@ public abstract class RFC822Date {
             try {
                 Date date = rfc822DateFormats[i].parse(s);
                 if (date != null) return date.getTime();
-            } catch (ParseException pe) {
-            }
+            } catch (ParseException pe) { /* ignored */ }
         }
         return -1;
     }

@@ -405,7 +405,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         } finally {
             if (fis != null) {
                 try {fis.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
             }
         }
         sockManager.setName("Client");
@@ -553,7 +553,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         synchronized (this) {
             while (!listenerReady && open) {
                 try {wait();}
-                catch (InterruptedException e) {} // ignore
+                catch (InterruptedException e) { /* ignored */ } // ignore
             }
         }
 
@@ -749,7 +749,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             synchronized (startLock) {
                 while (!startRunning) {
                     try {startLock.wait();}
-                    catch (InterruptedException ie) {}
+                    catch (InterruptedException ie) { /* ignored */ }
                 }
             }
 
@@ -776,7 +776,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 boolean wasStopped = close(true);
                 if (wasStopped) {
                     try {Thread.sleep(500);}
-                    catch (InterruptedException ie) {}
+                    catch (InterruptedException ie) { /* ignored */ }
                     if (!open) {
                         _log.info("Tunnel on " + address + ":" + localPort + " restarting...");
                         notifyEvent("openBaseClientResult", "started");
@@ -801,14 +801,14 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         if (tpe == null) {
             _log.error("No executor for socket!");
             try {s.close();}
-            catch (IOException ioe) {}
+            catch (IOException ioe) { /* ignored */ }
             return;
         }
         try {tpe.execute(new BlockingRunner(s));}
         catch (RejectedExecutionException ree) {
             // should never happen, we have an unbounded pool and never stop the executor
             try {s.close();}
-            catch (IOException ioe) {}
+            catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -827,7 +827,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                  */
                 _log.error("Uncaught error in I2PTunnel client", t);
                 try {_s.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
             }
         }
     }
@@ -882,7 +882,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     getTunnel().removeSession(session);
                     if (_ownDest) {
                         try {session.destroySession();}
-                        catch (I2PException ex) {}
+                        catch (I2PException ex) { /* ignored */ }
                     }
                     // TCG will try to destroy it too
                 } // else the app chaining to this one closes it!
@@ -918,7 +918,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
 
     public static void closeSocket(Socket s) {
         try {s.close();}
-        catch (IOException ex) {}
+        catch (IOException ex) { /* ignored */ }
     }
 
     /**

@@ -95,7 +95,7 @@ public class MarkLiveliness implements SimpleTimer.TimedEvent {
                 _errorLogged = true;
             }
         } finally {
-            if (fos != null) try { fos.close(); } catch (IOException ioe) {}
+            if (fos != null) try { fos.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 }

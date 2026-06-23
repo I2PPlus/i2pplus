@@ -53,7 +53,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
         InetAddress dummy = null;
         try {
             dummy = InetAddress.getByAddress(new byte[4]);
-        } catch (UnknownHostException uhe) {}
+        } catch (UnknownHostException uhe) { /* ignored */ }
         DUMMY = dummy;
     }
 
@@ -105,7 +105,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
                     _log.warn("Rejecting incoming DCC connection for unknown port " + myPort);
                 try {
                     socket.close();
-                } catch (IOException ioe) {}
+                } catch (IOException ioe) { /* ignored */ }
                 return;
             }
             if (_log.shouldWarn())
@@ -125,7 +125,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
             } catch (SocketException ex) {
                 try {
                     socket.reset();
-                } catch (IOException ioe) {}
+                } catch (IOException ioe) { /* ignored */ }
                 _log.error("Error relaying incoming DCC connection to IRC client at " + local.ia + ':' + local.port, ex);
             }
         } catch (IOException ex) {
@@ -147,7 +147,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
         for (I2PSocket s : _sockList) {
             try {
                 s.close();
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
         }
         _sockList.clear();
         return super.close(forced);

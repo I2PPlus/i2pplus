@@ -127,18 +127,15 @@ public class HTTPSocket {
         if (sockIn != null)
             try {
                 sockIn.close();
-            } catch (IOException e) {
-            }
+            } catch (IOException e) { /* ignored */ }
         if (sockOut != null)
             try {
                 sockOut.close();
-            } catch (IOException e) {
-            }
+            } catch (IOException e) { /* ignored */ }
         if (socket != null)
             try {
                 socket.close();
-            } catch (IOException e) {
-            }
+            } catch (IOException e) { /* ignored */ }
         return true;
     }
 

@@ -1335,7 +1335,7 @@ public class WebMail extends HttpServlet {
             Log log = sessionObject.log;
             sessionObject.isFetching = true;
             ConnectWaiter cw = new ConnectWaiter(sessionObject);
-            if (mailbox.connectToServer(cw)) {} // mailbox will callback to cw
+            if (mailbox.connectToServer(cw)) { /* ignored */ } // mailbox will callback to cw
             else {
                 sessionObject.error += _t("Cannot connect") + '\n';
                 sessionObject.isFetching = false;
@@ -1406,11 +1406,11 @@ public class WebMail extends HttpServlet {
                 } finally {
                     if (in != null) {
                         try {in.close();}
-                        catch (IOException ioe) {}
+                        catch (IOException ioe) { /* ignored */ }
                     }
                     if (out != null) {
                         try {out.close();}
-                        catch (IOException ioe) {}
+                        catch (IOException ioe) { /* ignored */ }
                     }
                 }
             }
@@ -1430,7 +1430,7 @@ public class WebMail extends HttpServlet {
                             break;
                         }
                     }
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) { /* ignored */ }
             }
             if (deleted) {// Save the draft or else the attachment comes back
                 String uidl = Base64.decodeToString(request.getParameter(NEW_UIDL));
@@ -1543,10 +1543,10 @@ public class WebMail extends HttpServlet {
                 if (part != null) {
                     if (sendAttachment(sessionObject, part, response, isRaw)) {return true;}
                 }
-            } catch(NumberFormatException nfe) {}
+            } catch(NumberFormatException nfe) { /* ignored */ }
             // error if we get here
             try {response.sendError(404, _t("Attachment not found."));}
-            catch (IOException ioe) {}
+            catch (IOException ioe) { /* ignored */ }
             return true;
         }
         return false;
@@ -1580,21 +1580,21 @@ public class WebMail extends HttpServlet {
                         }
                     }
                 }
-            } catch (NumberFormatException nfe) {}
-            catch (IOException ioe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
+            catch (IOException ioe) { /* ignored */ }
             finally {
                 if (in != null) {
                     try {in.close();}
-                    catch (IOException ioe) {}
+                    catch (IOException ioe) { /* ignored */ }
                 }
                 if (out != null) {
                     try {out.close();}
-                    catch (IOException ioe) {}
+                    catch (IOException ioe) { /* ignored */ }
                 }
             }
         }
         try {response.sendError(404, _t("Attachment not found."));} // error if we get here
-        catch (IOException ioe) {}
+        catch (IOException ioe) { /* ignored */ }
     }
 
     /**
@@ -1617,7 +1617,7 @@ public class WebMail extends HttpServlet {
         // error if we get here
         sessionObject.error += _t("Message not found.");
         try {response.sendError(404, _t("Message not found."));}
-        catch (IOException ioe) {}
+        catch (IOException ioe) { /* ignored */ }
         return true;
     }
 
@@ -1677,7 +1677,7 @@ public class WebMail extends HttpServlet {
                 try {
                     page = Integer.parseInt(sp);
                     sessionObject.pageChanged = true;
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) { /* ignored */ }
             }
         }
         else if (buttonPressed(request, NEXTPAGE)) {
@@ -1686,7 +1686,7 @@ public class WebMail extends HttpServlet {
                 try {
                     page = Integer.parseInt(sp);
                     sessionObject.pageChanged = true;
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) { /* ignored */ }
             }
         }
         else if (buttonPressed(request, FIRSTPAGE)) {
@@ -1784,7 +1784,7 @@ public class WebMail extends HttpServlet {
                         int pageSize = Math.max(5, Integer.parseInt(request.getParameter(PAGESIZE)));
                         int oldPageSize = folder.getPageSize();
                         if (pageSize != oldPageSize) {folder.setPageSize(pageSize);}
-                    } catch(NumberFormatException nfe) {}
+                    } catch(NumberFormatException nfe) { /* ignored */ }
                 }
 
                 Config.saveConfiguration(props);
@@ -1827,18 +1827,18 @@ public class WebMail extends HttpServlet {
     private synchronized SessionObject getSessionObject(HttpSession httpSession) {
         SessionObject sessionObject = null;
         try {sessionObject = (SessionObject)httpSession.getAttribute("sessionObject");}
-        catch (IllegalStateException ise) {}
+        catch (IllegalStateException ise) { /* ignored */ }
         if (sessionObject == null) {
             sessionObject = new SessionObject(_log);
             try {httpSession.setAttribute("sessionObject", sessionObject);}
-            catch (IllegalStateException ise) {}
+            catch (IllegalStateException ise) { /* ignored */ }
             if (_log.shouldDebug()) _log.debug("NEW session " + httpSession.getId());
         } else {
             if (_log.shouldDebug()) {
                 try {
                     _log.debug("Existing session " + httpSession.getId() +
                                "\n* Created: " + new Date(httpSession.getCreationTime()));
-                } catch (IllegalStateException ise) {}
+                } catch (IllegalStateException ise) { /* ignored */ }
             }
         }
         return sessionObject;
@@ -1955,7 +1955,7 @@ public class WebMail extends HttpServlet {
             URI uri = new URI(requrl);
             host = uri.getHost();
             me = uri.getHost() + ':' + uri.getPort();
-        } catch(URISyntaxException use) {}
+        } catch(URISyntaxException use) { /* ignored */ }
 
         httpRequest.setCharacterEncoding("UTF-8");
 
@@ -2070,7 +2070,7 @@ public class WebMail extends HttpServlet {
                     String sp = request.getParameter(CUR_PAGE);
                     if (sp != null) {
                         try {page = Integer.parseInt(sp);}
-                        catch (NumberFormatException nfe) {}
+                        catch (NumberFormatException nfe) { /* ignored */ }
                     }
                     int newPage = processFolderButtons(sessionObject, page, request);
                     // LIST is from SHOW page, SEND and CANCEL are from NEW page
@@ -2215,7 +2215,7 @@ public class WebMail extends HttpServlet {
 
                 // get through cache so we have the disk-only ones too
                 String[] uidls = mc.getUIDLs();
-                if (folder.addElements(Arrays.asList(uidls)) > 0) {} // we added elements, so it got sorted
+                if (folder.addElements(Arrays.asList(uidls)) > 0) { /* ignored */ } // we added elements, so it got sorted
                 else {
                     // check for changed sort
                     String curSort = folder.getCurrentSortBy();
@@ -2346,7 +2346,7 @@ public class WebMail extends HttpServlet {
                     String sp = request.getParameter(CUR_PAGE);
                     if (sp != null) {
                         try {page = Integer.parseInt(sp);}
-                        catch (NumberFormatException nfe) {}
+                        catch (NumberFormatException nfe) { /* ignored */ }
                     }
                     buf.append("<input type=hidden name=\"").append(CUR_PAGE).append("\" value=\"").append(page).append("\">\n");
                 }
@@ -2623,7 +2623,7 @@ public class WebMail extends HttpServlet {
                     log.error("Error sending raw attachment " + name + " length " + part.decodedLength, e);
                 } finally {
                     if (out != null)
-                        try {out.close();} catch (IOException ioe) {}
+                        try {out.close();} catch (IOException ioe) { /* ignored */ }
                 }
             } else {
                 ZipOutputStream zip = null;
@@ -2643,7 +2643,7 @@ public class WebMail extends HttpServlet {
                     log.error("Error sending zip attachment " + name + " length " + part.decodedLength, e);
                 } finally {
                     if (zip != null)
-                        try {zip.close();} catch (IOException ioe) {}
+                        try {zip.close();} catch (IOException ioe) { /* ignored */ }
                 }
             }
         }
@@ -2687,7 +2687,7 @@ public class WebMail extends HttpServlet {
             if (log.shouldDebug()) log.debug("Save-As", e);
             return false;
         } finally {
-            if (in != null) try {in.close();} catch (IOException ioe) {}
+            if (in != null) try {in.close();} catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -2823,7 +2823,7 @@ public class WebMail extends HttpServlet {
             sessionObject.error += _t("Unable to save mail.") + ' ' + ioe.getMessage() + '\n';
             if (log.shouldDebug()) log.debug("Unable to save as draft: " + uidl, ioe);
         } finally {
-            if (wout != null) try {wout.close();} catch (IOException ioe) {}
+            if (wout != null) try {wout.close();} catch (IOException ioe) { /* ignored */ }
             if (buffer != null)
                 toMC.writeComplete(uidl, buffer, ok);
         }
@@ -3004,7 +3004,7 @@ public class WebMail extends HttpServlet {
                                 sessionObject.error += _t("Unable to save mail.") + ' ' + ioe.getMessage() + '\n';
                                 if (log.shouldDebug()) log.debug("Sent email saved error", ioe);
                             } finally {
-                                if (wout != null) try {wout.close();} catch (IOException ioe) {}
+                                if (wout != null) try {wout.close();} catch (IOException ioe) { /* ignored */ }
                                 if (buffer != null)
                                     mc.writeComplete(uidl, buffer, copyOK);
                             }
@@ -3415,7 +3415,7 @@ public class WebMail extends HttpServlet {
             String sp = request.getParameter(CUR_PAGE);
             if (sp != null) {
                 try {page = Integer.parseInt(sp);}
-                catch (NumberFormatException nfe) {}
+                catch (NumberFormatException nfe) { /* ignored */ }
             }
             folder.setCurrentPage(page);
         }
@@ -3813,10 +3813,9 @@ public class WebMail extends HttpServlet {
                 in = body.getInputStream();
                 sout = new EscapeHTMLOutputStream(new WriterOutputStream(out));
                 DataHelper.copy(in, sout);
-            } catch (IOException ioe) {
-            } finally {
-                if (in != null) try {in.close();} catch (IOException ioe) {}
-                if (sout != null) try {sout.close();} catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ } finally {
+                if (in != null) try {in.close();} catch (IOException ioe) { /* ignored */ }
+                if (sout != null) try {sout.close();} catch (IOException ioe) { /* ignored */ }
                 body.readComplete(true);
             }
             buf.append("-->");

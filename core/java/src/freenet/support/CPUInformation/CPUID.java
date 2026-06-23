@@ -453,7 +453,7 @@ public class CPUID {
             }
             System.loadLibrary("jcpuid");
             return true;
-        } catch (UnsatisfiedLinkError ule) {} // fallthrough, try the OS-specific filename
+        } catch (UnsatisfiedLinkError ule) { /* ignored */ } // fallthrough, try the OS-specific filename
 
         // Don't bother trying a 64 bit filename variant.
 
@@ -548,10 +548,10 @@ public class CPUID {
             if (outFile != null) {outFile.delete();}
             return false;
         } finally {
-            if (libStream != null) try { libStream.close(); } catch (IOException ioe) {}
+            if (libStream != null) try { libStream.close(); } catch (IOException ioe) { /* ignored */ }
             if (fos != null) {
                 try {fos.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
             }
         }
         // copy to install dir, ignore failure

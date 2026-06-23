@@ -86,8 +86,7 @@ public final class CertUtil {
         } finally {
             try {
                 if (os != null) os.close();
-            } catch (IOException foo) {
-            }
+            } catch (IOException foo) { /* ignored */ }
         }
     }
 
@@ -185,12 +184,10 @@ public final class CertUtil {
                 for (List<?> list : c) {
                     try {
                         rv.add((String) list.get(1));
-                    } catch (ClassCastException cce) {
-                    }
+                    } catch (ClassCastException cce) { /* ignored */ }
                 }
             }
-        } catch (GeneralSecurityException gse) {
-        }
+        } catch (GeneralSecurityException gse) { /* ignored */ }
         return rv;
     }
 
@@ -254,12 +251,7 @@ public final class CertUtil {
                     return (String) getValue.invoke(rdn);
                 }
             }
-        } catch (ClassNotFoundException e) {
-        } catch (IllegalAccessException e) {
-        } catch (InstantiationException e) {
-        } catch (InvocationTargetException e) {
-        } catch (NoSuchMethodException e) {
-        }
+        } catch (ClassNotFoundException e) { /* ignored */ } catch (IllegalAccessException e) { /* ignored */ } catch (InstantiationException e) { /* ignored */ } catch (InvocationTargetException e) { /* ignored */ } catch (NoSuchMethodException e) { /* ignored */ }
         return null;
     }
 
@@ -323,8 +315,7 @@ public final class CertUtil {
         } finally {
             try {
                 if (fis != null) fis.close();
-            } catch (IOException foo) {
-            }
+            } catch (IOException foo) { /* ignored */ }
         }
     }
 
@@ -420,8 +411,7 @@ public final class CertUtil {
         } finally {
             try {
                 in.close();
-            } catch (IOException foo) {
-            }
+            } catch (IOException foo) { /* ignored */ }
         }
     }
 
@@ -446,8 +436,7 @@ public final class CertUtil {
         } finally {
             try {
                 if (os != null) os.close();
-            } catch (IOException foo) {
-            }
+            } catch (IOException foo) { /* ignored */ }
         }
     }
 
@@ -501,8 +490,7 @@ public final class CertUtil {
                     return true;
                 }
             }
-        } catch (GeneralSecurityException gse) {
-        }
+        } catch (GeneralSecurityException gse) { /* ignored */ }
         return false;
     }
 
@@ -530,8 +518,7 @@ public final class CertUtil {
         boolean diff = true;
         try {
             diff = !ctx.getBaseDir().getCanonicalPath().equals(ctx.getConfigDir().getCanonicalPath());
-        } catch (IOException ioe) {
-        }
+        } catch (IOException ioe) { /* ignored */ }
         if (diff) {
             File dir2 = new File(ctx.getConfigDir(), CERT_DIR);
             dir2 = new File(dir2, REVOCATION_DIR);
@@ -589,8 +576,7 @@ public final class CertUtil {
             if (in != null) {
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
         }
     }

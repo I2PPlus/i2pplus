@@ -266,7 +266,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 flood(local);
                 // let the messages get out...
                 try {Thread.sleep(5000);}
-                catch (InterruptedException ie) {}
+                catch (InterruptedException ie) { /* ignored */ }
             }
         }
         if (_ffMonitor != null) {_context.jobQueue().removeJob(_ffMonitor);}
@@ -373,7 +373,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 }
                 else if (successCount == 0) {
                     try {Thread.sleep(1000);}
-                    catch (InterruptedException ie) {}
+                    catch (InterruptedException ie) { /* ignored */ }
                     _context.jobQueue().addJob(new FloodfillStoreJob(_context, this, key, ds, onSuccess, onFailure, sendTimeout, toIgnore));
                     failCount++;
                     if (failCount > 9) {concurrent = 3;}

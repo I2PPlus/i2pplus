@@ -518,25 +518,25 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             if (i2pReset) {
                 if (_log.shouldInfo()) {_log.warn("Received I2P reset, resetting socket...");}
                 try {s.setSoLinger(true, 0);}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
                 try {s.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
                 try {i2ps.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
                 _keepAliveI2P = false;
                 _keepAliveSocket = false;
             } else if (sockReset) {
                 if (_log.shouldInfo()) {_log.warn("Received socket reset, resetting I2P socket...");}
                 try {i2ps.reset();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
                 try {s.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
                 _keepAliveI2P = false;
                 _keepAliveSocket = false;
             } else {
                 // Now one connection is dead - kill the other as well, after making sure we flush
                 try {close(out, in, i2pout, i2pin, s, i2ps, toI2P, fromI2P);}
-                catch (InterruptedException ie) {}
+                catch (InterruptedException ie) { /* ignored */ }
             }
         }
     }
@@ -557,25 +557,25 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                          Socket s, I2PSocket i2ps, Thread t1, Thread t2) throws InterruptedException {
         if (out != null) {
             try {out.flush();}
-            catch (IOException ioe) {}
+            catch (IOException ioe) { /* ignored */ }
         }
         if (i2pout != null) {
             try {i2pout.flush();}
-            catch (IOException ioe) {}
+            catch (IOException ioe) { /* ignored */ }
         }
         if (in != null) {
             try {in.close();}
-            catch (IOException ioe) {}
+            catch (IOException ioe) { /* ignored */ }
         }
         if (i2pin != null) {
             try {i2pin.close();}
-            catch (IOException ioe) {}
+            catch (IOException ioe) { /* ignored */ }
         }
         // There's a race here in theory, if data comes in after flushing and before closing, but it's better than before...
         try {s.close();}
-        catch (IOException ioe) {}
+        catch (IOException ioe) { /* ignored */ }
         try {i2ps.close();}
-        catch (IOException ioe) {}
+        catch (IOException ioe) { /* ignored */ }
         if (t1 != null) {t1.join(30*1000);}
     }
 

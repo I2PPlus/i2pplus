@@ -86,7 +86,7 @@ public class RouterManagerHandler implements RequestHandler {
                 public void run() {
                     try {
                         Thread.sleep(SHUTDOWN_WAIT);
-                    } catch (InterruptedException e) {}
+                    } catch (InterruptedException e) { /* ignored */ }
                     _context.addShutdownTask(new UpdateWrapperManagerTask(Router.EXIT_HARD));
                     _context.router().shutdown(Router.EXIT_HARD);
                 }
@@ -101,7 +101,7 @@ public class RouterManagerHandler implements RequestHandler {
                 public void run() {
                     try {
                         Thread.sleep(SHUTDOWN_WAIT);
-                    } catch (InterruptedException e) {}
+                    } catch (InterruptedException e) { /* ignored */ }
                     _context.addShutdownTask(new UpdateWrapperManagerTask(Router.EXIT_HARD_RESTART));
                     _context.router().shutdown(Router.EXIT_HARD_RESTART);
                 }
@@ -116,7 +116,7 @@ public class RouterManagerHandler implements RequestHandler {
                 public void run() {
                     try {
                         Thread.sleep(SHUTDOWN_WAIT);
-                    } catch (InterruptedException e) {}
+                    } catch (InterruptedException e) { /* ignored */ }
                     _context.addShutdownTask(new UpdateWrapperManagerTask(Router.EXIT_GRACEFUL));
                     _context.router().shutdownGracefully();
                 }
@@ -131,7 +131,7 @@ public class RouterManagerHandler implements RequestHandler {
                 public void run() {
                     try {
                         Thread.sleep(SHUTDOWN_WAIT);
-                    } catch (InterruptedException e) {}
+                    } catch (InterruptedException e) { /* ignored */ }
                     _context.addShutdownTask(new UpdateWrapperManagerTask(Router.EXIT_GRACEFUL_RESTART));
                     _context.router().shutdownGracefully(Router.EXIT_GRACEFUL_RESTART);
                 }
@@ -172,7 +172,7 @@ public class RouterManagerHandler implements RequestHandler {
             t.start();
             try {
                 t.join();
-            } catch (InterruptedException e) {}
+            } catch (InterruptedException e) { /* ignored */ }
             return new JSONRPC2Response(outParams, req.getID());
         }
 
@@ -211,7 +211,7 @@ public class RouterManagerHandler implements RequestHandler {
             t.start();
             try {
                 t.join();
-            } catch (InterruptedException e) {}
+            } catch (InterruptedException e) { /* ignored */ }
             return new JSONRPC2Response(outParams, req.getID());
         }
 

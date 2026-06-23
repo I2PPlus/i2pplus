@@ -266,8 +266,8 @@ public class Base64 {
         } catch (IOException ioe) {
             ioe.printStackTrace(System.err);
         } finally {
-            try { in.close(); } catch (IOException e) {}
-            try { out.close(); } catch (IOException e) {}
+            try { in.close(); } catch (IOException e) { /* ignored */ }
+            try { out.close(); } catch (IOException e) { /* ignored */ }
         }
     }
 

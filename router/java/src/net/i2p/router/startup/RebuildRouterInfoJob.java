@@ -134,7 +134,7 @@ class RebuildRouterInfoJob extends JobImpl {
                 } catch (IOException ioe) {
                     _log.log(Log.CRIT, "Error writing out the rebuilt RouterInfo", ioe);
                 } finally {
-                    if (fos != null) try { fos.close(); } catch (IOException ioe) {}
+                    if (fos != null) try { fos.close(); } catch (IOException ioe) { /* ignored */ }
                 }
             }
 

@@ -536,8 +536,7 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
     private int packHeader(byte[] bytes, int offset) {
         try {
             BufferTools.stringIntoByteBuffer(TAG, 0, TAG.length(), bytes, offset);
-        } catch (UnsupportedEncodingException e) {
-        }
+        } catch (UnsupportedEncodingException e) { /* ignored */ }
         String[] s = version.split("\\.");
         if (s.length > 0) {
             byte majorVersion = Byte.parseByte(s[0]);
@@ -619,8 +618,7 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
     private int packFooter(byte[] bytes, int offset) {
         try {
             BufferTools.stringIntoByteBuffer(FOOTER_TAG, 0, FOOTER_TAG.length(), bytes, offset);
-        } catch (UnsupportedEncodingException e) {
-        }
+        } catch (UnsupportedEncodingException e) { /* ignored */ }
         String[] s = version.split("\\.");
         if (s.length > 0) {
             byte majorVersion = Byte.parseByte(s[0]);

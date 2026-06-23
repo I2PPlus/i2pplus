@@ -171,7 +171,7 @@ abstract class SAMHandler implements Runnable, Handler {
         }
         try {
             closeClientSocket();
-        } catch (IOException e) {}
+        } catch (IOException e) { /* ignored */ }
         bridge.unregister(this);
     }
 

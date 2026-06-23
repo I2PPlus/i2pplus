@@ -859,7 +859,7 @@ class EstablishmentManager {
                         }
                         return;
                     }
-                } catch (UnknownHostException uhe) {}
+                } catch (UnknownHostException uhe) { /* ignored */ }
             }
             if (_log.shouldWarn()) {
                 _log.warn("[SSU] Rate limit of " + MAX_TERMINATIONS + " in 3m exceeded (Count: " + count + ") \n* No more termination packets to: " + to);
@@ -917,7 +917,7 @@ class EstablishmentManager {
         InboundEstablishState.InboundState istate = state.getState();
         if (istate == IB_STATE_CONFIRMED_COMPLETELY || istate == IB_STATE_COMPLETE) {
             handleCompletelyEstablished(state); // we are done, go right to ps2
-        } else {} // More RI blocks to come, TODO
+        } else { /* ignored */ } // More RI blocks to come, TODO
 
         notifyActivity();
         if (_log.shouldDebug()) {
@@ -1723,7 +1723,7 @@ class EstablishmentManager {
                         }
                     }
                     if (claimed != null) {_outboundByClaimedAddress.remove(oldId, charlie);} // only if == state
-                } else {} // TODO validate same IP/port as in hole punch?
+                } else { /* ignored */ } // TODO validate same IP/port as in hole punch?
             }
             charlie2.setIntroState(bobHash, istate);
             notifyActivity();
@@ -1960,7 +1960,7 @@ class EstablishmentManager {
                     }
                     if (claimed != null)
                         _outboundByClaimedAddress.remove(oldId, state);  // only if == state
-                } else {} // TODO validate same IP/port as in response?
+                } else { /* ignored */ } // TODO validate same IP/port as in response?
             }
             boolean sendNow = state.receiveHolePunch();
             if (sendNow) {
@@ -2562,7 +2562,7 @@ class EstablishmentManager {
                                         count++;
                                     }
                                 }
-                            } catch (NumberFormatException nfe) {}
+                            } catch (NumberFormatException nfe) { /* ignored */ }
                         }
                     }
                 }
@@ -2573,7 +2573,7 @@ class EstablishmentManager {
         } finally {
             if (in != null) {
                 try {in.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) { /* ignored */ }
                 f.delete();
             }
         }
@@ -2798,7 +2798,7 @@ class EstablishmentManager {
                        }
                     } else {_log.error("Error in the establisher", re);}
                     // don't loop too fast
-                    try {Thread.sleep(500);} catch (InterruptedException ie) {}
+                    try {Thread.sleep(500);} catch (InterruptedException ie) { /* ignored */ }
                 }
             }
             _inboundStates.clear();
@@ -2845,7 +2845,7 @@ class EstablishmentManager {
                         if (_activity > 0) {return;}
                         _activityLock.wait(delay);
                     }
-                } catch (InterruptedException ie) {}
+                } catch (InterruptedException ie) { /* ignored */ }
             }
         }
 

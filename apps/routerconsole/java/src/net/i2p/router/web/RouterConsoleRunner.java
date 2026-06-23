@@ -487,7 +487,7 @@ public class RouterConsoleRunner implements RouterApp {
             app = new File(_context.getBaseDir(), _webAppsDir);
             try {
                 _webAppsDir = app.getCanonicalPath();
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
         }
         if (!_webAppsDir.endsWith("/"))
             _webAppsDir += '/';
@@ -507,7 +507,7 @@ public class RouterConsoleRunner implements RouterApp {
             if (_listenPort != null) {
                 try {
                     lport = Integer.parseInt(_listenPort);
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) { /* ignored */ }
                 if (lport <= 0)
                     System.err.println("Bad RouterConsole port " + _listenPort);
             }
@@ -533,7 +533,7 @@ public class RouterConsoleRunner implements RouterApp {
                             InetSocketAddress isa = new InetSocketAddress(host, 0);
                             testSock.bind(isa);
                         } finally {
-                            if (testSock != null) try { testSock.close(); } catch (IOException ioe) {}
+                            if (testSock != null) try { testSock.close(); } catch (IOException ioe) { /* ignored */ }
                         }
                         HttpConfiguration httpConfig = new HttpConfiguration();
                         // number of acceptors, (default) number of selectors
@@ -569,7 +569,7 @@ public class RouterConsoleRunner implements RouterApp {
             if (_sslListenPort != null) {
                 try {
                     sslPort = Integer.parseInt(_sslListenPort);
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) { /* ignored */ }
                 if (sslPort <= 0)
                     System.err.println("Bad RouterConsole SSL port " + _sslListenPort);
             }
@@ -620,7 +620,7 @@ public class RouterConsoleRunner implements RouterApp {
                                 InetSocketAddress isa = new InetSocketAddress(host, 0);
                                 testSock.bind(isa);
                             } finally {
-                                if (testSock != null) try { testSock.close(); } catch (IOException ioe) {}
+                                if (testSock != null) try { testSock.close(); } catch (IOException ioe) { /* ignored */ }
                             }
                             HttpConfiguration httpConfig = new HttpConfiguration();
                             httpConfig.setSecureScheme("https");
@@ -981,7 +981,7 @@ public class RouterConsoleRunner implements RouterApp {
                             cm.setConstraint(constraint);
                             cm.setPathSpec("/");
                             constraints.add(cm);
-                        } catch (UnsupportedEncodingException uee) {}
+                        } catch (UnsupportedEncodingException uee) { /* ignored */ }
                     }
                 }
             }

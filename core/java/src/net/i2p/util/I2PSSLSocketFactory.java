@@ -363,8 +363,7 @@ public class I2PSSLSocketFactory {
                         } finally {
                             try {
                                 if (in != null) in.close();
-                            } catch (IOException ioe) {
-                            }
+                            } catch (IOException ioe) { /* ignored */ }
                         }
                         DEFAULT_MATCHER = new PublicSuffixMatcher(list.getRules(), list.getExceptions());
                         if (log.shouldWarn())
@@ -441,8 +440,7 @@ public class I2PSSLSocketFactory {
                     String lc = s[0].toLowerCase(Locale.US);
                     tlds.add(lc);
                     i++;
-                } catch (IndexOutOfBoundsException ioobe) {
-                }
+                } catch (IndexOutOfBoundsException ioobe) { /* ignored */ }
             }
             if (log.shouldInfo()) log.info("Loaded " + i + " TLDs from " + geoFile.getAbsolutePath());
         } catch (IOException ioe) {
@@ -451,8 +449,7 @@ public class I2PSSLSocketFactory {
             if (br != null)
                 try {
                     br.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 

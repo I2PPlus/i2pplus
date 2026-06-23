@@ -154,7 +154,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 if (shouldLogDebug) {_log.debug("Sending ACK 0 with tag " + tag + this);}
             } else {pkt = _transport.getBuilder2().buildACK(this);}
             _transport.send(pkt);
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ }
     }
 
     // SSU 1 overrides
@@ -278,7 +278,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             try {
                 UDPPacket pkt = _transport.getBuilder2().buildSessionDestroyPacket(SSU2Util.REASON_FRAME_TIMEOUT, this);
                 _transport.send(pkt);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
             _transport.dropPeer(this, true, "No SessionConfirmed ACK received");
         }
         return rv;
@@ -609,7 +609,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             pkt.setAddress(toIP);
             pkt.setPort(toPort);
             _transport.send(packet);
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ }
     }
 
     /////////////////////////////////////////////////////////
@@ -680,7 +680,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                                                      Collections.singletonList(block),
                                                                      this);
                 _transport.send(pkt);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -857,7 +857,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         if (shouldLogDebug) {
             _log.debug("[SSU] Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) + "; Count: " + count + " " + this);
         }
-        if (reason == SSU2Util.REASON_TERMINATION) {} // this should only happen at shutdown, where we don't have a post-termination handler
+        if (reason == SSU2Util.REASON_TERMINATION) { /* ignored */ } // this should only happen at shutdown, where we don't have a post-termination handler
         else if (!_dead) {
             try {
                 UDPPacket pkt = _transport.getBuilder2().buildSessionDestroyPacket(SSU2Util.REASON_TERMINATION, this);
@@ -884,7 +884,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             long now = _context.clock().now();
             setLastSendTime(now);
             setLastReceiveTime(now);
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ }
     }
 
     public void gotPathResponse(RemoteHostId from, byte[] data) {
@@ -1199,7 +1199,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 UDPPacket ack = _transport.getBuilder2().buildACK(PeerState2.this);
                 if (shouldLogDebug) {_log.debug("[SSU] ACKTimer sending ACKs" + PeerState2.this);}
                 _transport.send(ack);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) { /* ignored */ }
         }
     }
 

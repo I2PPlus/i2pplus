@@ -305,7 +305,7 @@ class ConnectionHandler {
                     if (_log.shouldWarn()) {_log.warn("Expired on the SYN queue: " + _synPacket);}
                     sendReset(_synPacket); // timeout - send RST
                 } else {reReceivePacket(_synPacket);} // non-syn packet got stranded on the syn queue, send it to the con
-            } else {} // handled. noop
+            } else { /* ignored */ } // handled. noop
         }
     }
 

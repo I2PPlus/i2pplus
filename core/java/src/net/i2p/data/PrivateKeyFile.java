@@ -358,8 +358,7 @@ public class PrivateKeyFile {
                         if (out != null)
                             try {
                                 out.close();
-                            } catch (IOException ioe) {
-                            }
+                            } catch (IOException ioe) { /* ignored */ }
                     }
                     return;
                 }
@@ -557,8 +556,7 @@ public class PrivateKeyFile {
                 if (out != null) {
                     try {
                         out.close();
-                    } catch (IOException ioe) {
-                    }
+                    } catch (IOException ioe) { /* ignored */ }
                 }
             }
         }
@@ -640,8 +638,7 @@ public class PrivateKeyFile {
                 if (out != null) {
                     try {
                         out.close();
-                    } catch (IOException ioe) {
-                    }
+                    } catch (IOException ioe) { /* ignored */ }
                 }
             }
         }
@@ -888,8 +885,7 @@ public class PrivateKeyFile {
             if (in != null) {
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
         }
     }
@@ -915,8 +911,7 @@ public class PrivateKeyFile {
             if (out != null) {
                 try {
                     out.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
         }
     }
@@ -1052,9 +1047,7 @@ public class PrivateKeyFile {
                         }
                     }
                 }
-            } catch (DataFormatException dfe) {
-            } catch (IOException ioe) {
-            }
+            } catch (DataFormatException dfe) { /* ignored */ } catch (IOException ioe) { /* ignored */ }
             // not found, continue to the next file
         }
         if (tried > 0) System.out.println("No valid signer found");

@@ -155,8 +155,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
         } finally {
             if (fos != null) try {
                     fos.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -183,8 +182,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
                 // else
                 //    System.out.println("INFO: SecureRandom init failed or took too long");
             }
-        } catch (InterruptedException ie) {
-        }
+        } catch (InterruptedException ie) { /* ignored */ }
 
         // why urandom?  because /dev/random blocks
         if (!SystemVersion.isWindows()) ok = seedFromFile(new File("/dev/urandom"), buf) || ok;
@@ -222,8 +220,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
                         System.arraycopy(buf2, 0, buf, i, Math.min(SZ, buf.length - i));
                     }
                 }
-            } catch (NoSuchAlgorithmException e) {
-            }
+            } catch (NoSuchAlgorithmException e) { /* ignored */ }
         }
     }
 
@@ -252,8 +249,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
             } finally {
                 if (fis != null) try {
                         fis.close();
-                    } catch (IOException ioe) {
-                    }
+                    } catch (IOException ioe) { /* ignored */ }
             }
         }
         return false;

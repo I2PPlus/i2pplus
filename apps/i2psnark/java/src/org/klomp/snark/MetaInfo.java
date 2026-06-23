@@ -269,8 +269,7 @@ public class MetaInfo {
         if (val != null) {
             try {
                 st = val.getString();
-            } catch (InvalidBEncodingException ibee) {
-            }
+            } catch (InvalidBEncodingException ibee) { /* ignored */ }
         }
         this.comment = st;
         val = m.get("created by");
@@ -278,8 +277,7 @@ public class MetaInfo {
         if (val != null) {
             try {
                 st = val.getString();
-            } catch (InvalidBEncodingException ibee) {
-            }
+            } catch (InvalidBEncodingException ibee) { /* ignored */ }
         }
         this.created_by = st;
         val = m.get("creation date");
@@ -287,8 +285,7 @@ public class MetaInfo {
         if (val != null) {
             try {
                 time = val.getLong() * 1000;
-            } catch (InvalidBEncodingException ibee) {
-            }
+            } catch (InvalidBEncodingException ibee) { /* ignored */ }
         }
         this.creation_date = time;
 
@@ -945,14 +942,12 @@ public class MetaInfo {
                     if (in != null) {
                         in.close();
                     }
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
                 try {
                     if (out != null) {
                         out.close();
                     }
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
         }
     }

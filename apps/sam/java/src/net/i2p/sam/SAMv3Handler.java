@@ -101,7 +101,7 @@ class SAMv3Handler extends SAMv1Handler
         if (sendPorts) {
             try {
                 socket.socket().setSoTimeout(0);
-            } catch (SocketException se) {}
+            } catch (SocketException se) { /* ignored */ }
         }
         this.stopHandling();
     }
@@ -357,7 +357,7 @@ class SAMv3Handler extends SAMv1Handler
               try {
                   closeClientSocket();
               }
-              catch (IOException e) {}
+              catch (IOException e) { /* ignored */ }
           }
           bridge.unregister(this);
       }
@@ -374,7 +374,7 @@ class SAMv3Handler extends SAMv1Handler
             while (rec.getThreadGroup().activeCount()>0)
             try {
                 Thread.sleep(1000);
-            } catch ( InterruptedException e) {}
+            } catch ( InterruptedException e) { /* ignored */ }
             rec.getThreadGroup().destroy();
             sSessionsHash.del(session.getNick());
         }
@@ -631,7 +631,7 @@ class SAMv3Handler extends SAMv1Handler
                                             _log.error("SAM socket closed while waiting for tunnels to build");
                                             writeString(SESSION_ERROR, "Tunnel build interrupted");
                                             writeString(domain + " STATUS RESULT=OK", "bye");
-                                            try { closeClientSocket(); } catch (IOException ioe) {}
+                                            try { closeClientSocket(); } catch (IOException ioe) { /* ignored */ }
                                             _handler.interrupt();
                                             return;
                                         }
@@ -644,7 +644,7 @@ class SAMv3Handler extends SAMv1Handler
                                 }
                                 buf.append((char) c);
                             }
-                        } catch (SocketTimeoutException ste) {}
+                        } catch (SocketTimeoutException ste) { /* ignored */ }
                         s.setSoTimeout(0);
                     }
                 } while (!done);
@@ -675,7 +675,7 @@ class SAMv3Handler extends SAMv1Handler
             _log.error("v3 control socket cannot be used for STREAM");
             try {
                 notifyStreamResult(true, "I2P_ERROR", "v3 control socket cannot be used for STREAM");
-            } catch (IOException e) {}
+            } catch (IOException e) { /* ignored */ }
             return false;
         }
 
@@ -685,7 +685,7 @@ class SAMv3Handler extends SAMv1Handler
                 _log.debug("SESSION ID parameter not specified");
             try {
                 notifyStreamResult(true, "I2P_ERROR", "ID not specified");
-            } catch (IOException e) {}
+            } catch (IOException e) { /* ignored */ }
             return false;
         }
 
@@ -695,7 +695,7 @@ class SAMv3Handler extends SAMv1Handler
                 _log.debug("STREAM SESSION ID does not exist");
             try {
                 notifyStreamResult(true, "INVALID_ID", "STREAM SESSION ID " + nick + " does not exist");
-            } catch (IOException e) {}
+            } catch (IOException e) { /* ignored */ }
             return false;
         }
 
@@ -706,7 +706,7 @@ class SAMv3Handler extends SAMv1Handler
                 _log.debug("specified ID is not a stream session");
             try {
                 notifyStreamResult(true, "I2P_ERROR",  "specified ID " + nick + " is not a STREAM session");
-            } catch (IOException e) {}
+            } catch (IOException e) { /* ignored */ }
             return false;
         }
         if (streamSession.isDestroyed()) {
@@ -714,7 +714,7 @@ class SAMv3Handler extends SAMv1Handler
                 _log.debug("Session manager is destroyed");
             try {
                 notifyStreamResult(true, "I2P_ERROR",  "Session is closed");
-            } catch (IOException e) {}
+            } catch (IOException e) { /* ignored */ }
             ctl.writeString(SESSION_ERROR, "Session is closed");
             ctl.stopHandling();
             return false;
@@ -741,7 +741,7 @@ class SAMv3Handler extends SAMv1Handler
                 _log.debug ( "Unrecognized STREAM message opcode: \"" + opcode + "\"" );
             try {
                 notifyStreamResult(true, "I2P_ERROR",  "Unrecognized STREAM message opcode: "+opcode );
-            } catch (IOException e) {}
+            } catch (IOException e) { /* ignored */ }
             return false;
         }
     }
@@ -791,7 +791,7 @@ class SAMv3Handler extends SAMv1Handler
                     _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
                 notifyStreamResult ( verbose, "I2P_ERROR", e.getMessage() );
             }
-        } catch (IOException e) {}
+        } catch (IOException e) { /* ignored */ }
         return false;
     }
 
@@ -810,7 +810,7 @@ class SAMv3Handler extends SAMv1Handler
                 _log.debug("Forwarding STREAM connections failed" + "\n* Error: " + e.getMessage());
             notifyStreamResult ( true, "I2P_ERROR", "Forwarding failed : " + e.getMessage() );
             }
-        } catch (IOException e) {}
+        } catch (IOException e) { /* ignored */ }
         return false;
     }
 
@@ -856,7 +856,7 @@ class SAMv3Handler extends SAMv1Handler
                     _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
                 notifyStreamResult ( verbose, "ALREADY_ACCEPTING", e.getMessage());
             }
-        } catch (IOException e) {}
+        } catch (IOException e) { /* ignored */ }
         return false;
     }
 

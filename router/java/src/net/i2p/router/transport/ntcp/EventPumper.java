@@ -434,7 +434,7 @@ class EventPumper implements Runnable {
                             }
                         }
                     }
-                } catch (CancelledKeyException ignored) {}
+                } catch (CancelledKeyException ignored) { /* ignored */ }
             }
             if (failsafeWrites > 0)
                 _context.statManager().addRateData("ntcp.failsafeWrites", failsafeWrites);
@@ -442,7 +442,7 @@ class EventPumper implements Runnable {
                 _context.statManager().addRateData("ntcp.failsafeCloses", failsafeCloses);
             if (failsafeInvalid > 0)
                 _context.statManager().addRateData("ntcp.failsafeInvalid", failsafeInvalid);
-        } catch (ClosedSelectorException ignored) {}
+        } catch (ClosedSelectorException ignored) { /* ignored */ }
     }
 
     private void processKeys(Set<SelectionKey> selected) {
@@ -541,7 +541,7 @@ class EventPumper implements Runnable {
                 }
                 try {
                     chan.close();
-                } catch (IOException ioe) {}
+                } catch (IOException ioe) { /* ignored */ }
                 return;
             }
             if (!_context.commSystem().isExemptIncoming(Addresses.toCanonicalString(ba))) {
@@ -551,7 +551,7 @@ class EventPumper implements Runnable {
                     }
                     try {
                         chan.close();
-                    } catch (IOException ioe) {}
+                    } catch (IOException ioe) { /* ignored */ }
                     return;
                 }
                 int count = _blockedIPs.count(ba);
@@ -566,13 +566,13 @@ class EventPumper implements Runnable {
                     }
                     try {
                         chan.close();
-                    } catch (IOException ioe) {}
+                    } catch (IOException ioe) { /* ignored */ }
                     return;
                 }
                 if (!shouldAllowInboundEstablishment()) {
                     try {
                         chan.close();
-                    } catch (IOException ioe) {}
+                    } catch (IOException ioe) { /* ignored */ }
                     return;
                 }
             }

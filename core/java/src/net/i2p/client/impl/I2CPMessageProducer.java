@@ -115,8 +115,7 @@ class I2CPMessageProducer {
                     // round up to next higher TYP_SIZE for efficiency, then add some fudge for small messages
                     _maxBytesPerSecond = 256 + Math.max(MIN_RATE, TYP_SIZE * ((iMax + TYP_SIZE - 1) / TYP_SIZE));
                 else _maxBytesPerSecond = 0;
-            } catch (NumberFormatException nfe) {
-            }
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
         if (_log.shouldDebug()) _log.debug("Setting " + _maxBytesPerSecond + "Bps max");
     }
@@ -372,8 +371,7 @@ class I2CPMessageProducer {
                 try {
                     // this.wait(1000 - period);
                     _lock.newCondition().await(1000 - period, TimeUnit.MILLISECONDS);
-                } catch (InterruptedException ie) {
-                }
+                } catch (InterruptedException ie) { /* ignored */ }
             }
         } finally {
             _lock.unlock();

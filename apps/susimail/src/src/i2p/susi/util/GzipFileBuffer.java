@@ -17,6 +17,7 @@ import net.i2p.util.SecureFileOutputStream;
  *
  * @since 0.9.34
  */
+		// TODO if _sublen > 0, wrap with a read limiter
 public class GzipFileBuffer extends FileBuffer {
 
 	private long _actualLength;
@@ -26,7 +27,7 @@ public class GzipFileBuffer extends FileBuffer {
 	public GzipFileBuffer(File file) {
 		super(file);
 	}
-	
+
 	public GzipFileBuffer(File file, int offset, int sublen) {
 		super(file, offset, sublen);
 	}
@@ -67,7 +68,7 @@ public class GzipFileBuffer extends FileBuffer {
 		if (_cis != null) {
 			if (success)
 				_actualLength = _cis.getRead();
-			try { _cis.close(); } catch (IOException ioe) {}
+			try { _cis.close(); } catch (IOException ioe) { /* ignored */ }
 			_cis = null;
 		}
 	}
@@ -80,7 +81,7 @@ public class GzipFileBuffer extends FileBuffer {
 		if (_cos != null) {
 			if (success)
 				_actualLength = _cos.getWritten();
-			try { _cos.close(); } catch (IOException ioe) {}
+			try { _cos.close(); } catch (IOException ioe) { /* ignored */ }
 			_cos = null;
 		}
 	}

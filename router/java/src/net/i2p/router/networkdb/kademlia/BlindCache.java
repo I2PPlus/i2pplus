@@ -345,7 +345,7 @@ class BlindCache {
             if (log.shouldWarn() && file.exists())
                 log.warn("Error reading the blinding cache file", ioe);
         } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) {}
+            if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
         }
         if (log.shouldInfo())
             log.info("Loaded " + count + " entries from " + file);

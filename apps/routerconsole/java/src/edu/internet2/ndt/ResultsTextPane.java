@@ -22,7 +22,7 @@ public class ResultsTextPane extends JTextPane {
     public void append(String paramTextStr) {
         try {
             getStyledDocument().insertString(getStyledDocument().getLength(),paramTextStr, null);
-        } catch (BadLocationException e) {}
+        } catch (BadLocationException e) { /* ignored */ }
     }
 
     /**

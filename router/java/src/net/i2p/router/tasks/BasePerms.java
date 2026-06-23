@@ -65,8 +65,7 @@ public class BasePerms {
                 f3.delete();  // don't need it
                 try {
                     fix(dir);
-                } catch (Exception e) {
-                }
+                } catch (Exception e) { /* ignored */ }
             }
         }
         ctx.router().saveConfig(PROP_FIXED, "true");

@@ -121,8 +121,7 @@ public class ID3v1Tag implements ID3v1 {
         Arrays.fill(bytes, (byte) 0);
         try {
             BufferTools.stringIntoByteBuffer(TAG, 0, 3, bytes, 0);
-        } catch (UnsupportedEncodingException e) {
-        }
+        } catch (UnsupportedEncodingException e) { /* ignored */ }
         packField(bytes, title, TITLE_LENGTH, TITLE_OFFSET);
         packField(bytes, artist, ARTIST_LENGTH, ARTIST_OFFSET);
         packField(bytes, album, ALBUM_LENGTH, ALBUM_OFFSET);
@@ -153,8 +152,7 @@ public class ID3v1Tag implements ID3v1 {
             try {
                 BufferTools.stringIntoByteBuffer(
                         value, 0, Math.min(value.length(), maxLength), bytes, offset);
-            } catch (UnsupportedEncodingException e) {
-            }
+            } catch (UnsupportedEncodingException e) { /* ignored */ }
         }
     }
 

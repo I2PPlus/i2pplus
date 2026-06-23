@@ -66,7 +66,7 @@ public class ConfigFile {
             rv = false;
         } finally {
             if (fileInputStream != null) {
-                try { fileInputStream.close(); } catch (IOException e) {}
+                try { fileInputStream.close(); } catch (IOException e) { /* ignored */ }
             }
         }
         return rv;
@@ -83,7 +83,7 @@ public class ConfigFile {
             rv = false;
         } finally {
             if (fileOutputStream != null) {
-                try { fileOutputStream.close(); } catch (IOException e) {}
+                try { fileOutputStream.close(); } catch (IOException e) { /* ignored */ }
             }
         }
         return rv;

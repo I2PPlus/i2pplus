@@ -122,7 +122,7 @@ public class GeoIPv6 {
             if (log.shouldError())
                 log.error("Error reading the geoFile", ioe);
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
         }
 
         if (log.shouldInfo())
@@ -208,8 +208,8 @@ public class GeoIPv6 {
                 //    _log.error("Error reading the geoFile", ioe);
                 return false;
             } finally {
-                if (in != null) try { in.close(); } catch (IOException ioe) {}
-                if (br != null) try { br.close(); } catch (IOException ioe) {}
+                if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
+                if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
             }
         }
         Collections.sort(entries);
@@ -272,7 +272,7 @@ public class GeoIPv6 {
             //    _log.error("Error reading the geoFile", ioe);
             return false;
         } finally {
-            if (out != null) try { out.close(); } catch (IOException ioe) {}
+            if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
         }
         return true;
     }

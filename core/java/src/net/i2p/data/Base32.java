@@ -161,12 +161,10 @@ public class Base32 {
         } finally {
             try {
                 in.close();
-            } catch (IOException e) {
-            }
+            } catch (IOException e) { /* ignored */ }
             try {
                 out.close();
-            } catch (IOException e) {
-            }
+            } catch (IOException e) { /* ignored */ }
         }
     }
 

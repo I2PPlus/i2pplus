@@ -801,7 +801,7 @@ public class SAMBridge implements Runnable, ClientApp {
                                     _log.debug("SAM handler has not been instantiated");
                                 try {
                                     s.close();
-                                } catch (IOException e) {}
+                                } catch (IOException e) { /* ignored */ }
                                 return;
                             }
                             handler.startHandling();
@@ -810,9 +810,9 @@ public class SAMBridge implements Runnable, ClientApp {
                                 _log.error("SAM error: " + e.getMessage(), e);
                             String reply = "HELLO REPLY RESULT=I2P_ERROR MESSAGE=\"" + e.getMessage() + "\"\n";
                             SAMHandler.writeString(reply, s);
-                            try { s.close(); } catch (IOException ioe) {}
+                            try { s.close(); } catch (IOException ioe) { /* ignored */ }
                         } catch (Exception ee) {
-                            try { s.close(); } catch (IOException ioe) {}
+                            try { s.close(); } catch (IOException ioe) { /* ignored */ }
                             _log.log(Log.CRIT, "Unexpected error handling SAM connection", ee);
                         } finally {
                             parent.unregister(this);
@@ -821,7 +821,7 @@ public class SAMBridge implements Runnable, ClientApp {
 
                     /** @since 0.9.20 */
                     public void stopHandling() {
-                        try { s.close(); } catch (IOException ioe) {}
+                        try { s.close(); } catch (IOException ioe) { /* ignored */ }
                     }
                 }
                 new I2PAppThread(new HelloHandler(s,this), "SAM HelloHandler").start();
@@ -839,7 +839,7 @@ public class SAMBridge implements Runnable, ClientApp {
                     _log.debug("Shutting down, closing server socket");
                 if (serverSocket != null)
                     serverSocket.close();
-            } catch (IOException e) {}
+            } catch (IOException e) { /* ignored */ }
             I2PAppContext.getGlobalContext().portMapper().unregister(_useSSL ? PortMapper.SVC_SAM_SSL : PortMapper.SVC_SAM);
             stopHandlers();
             changeState(STOPPED);

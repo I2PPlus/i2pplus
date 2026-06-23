@@ -91,7 +91,7 @@ public class MultiRouter {
                 for(Router r : _routers) {
                     r.shutdown(0);
                 }
-                try { Thread.sleep(1500); } catch (InterruptedException ie) {}
+                try { Thread.sleep(1500); } catch (InterruptedException ie) { /* ignored */ }
                 Runtime.getRuntime().halt(0);
             }
         });
@@ -101,7 +101,7 @@ public class MultiRouter {
             router.setKillVMOnEnd(false);
             _routers.add(router);
             _out.println("Router " + i + " was created");
-            try { Thread.sleep(100); } catch (InterruptedException ie) {}
+            try { Thread.sleep(100); } catch (InterruptedException ie) { /* ignored */ }
         }
 
         for (int i = 0; i < nbrRouters; i++) {
@@ -118,7 +118,7 @@ public class MultiRouter {
                       r.runRouter();
                   }
             }).start();
-            try { Thread.sleep(100); } catch (InterruptedException ie) {}
+            try { Thread.sleep(100); } catch (InterruptedException ie) { /* ignored */ }
 
             _out.println("Router " + i + " was started with time offset " + offset);
         }
@@ -129,7 +129,7 @@ public class MultiRouter {
         int waitForRouters = (nbrRouters/10)*1000;
         _out.println("Waiting " + waitForRouters/1000 +  " seconds for routers to start" +
                      "before doing the internal reseed");
-        try { Thread.sleep(waitForRouters); } catch (InterruptedException ie) {}
+        try { Thread.sleep(waitForRouters); } catch (InterruptedException ie) { /* ignored */ }
         internalReseed();
 
         waitForCompletion();
@@ -246,7 +246,7 @@ public class MultiRouter {
                 }
             }
             if (alive > 0) {
-                try { Thread.sleep(30*1000); } catch (InterruptedException ie) {}
+                try { Thread.sleep(30*1000); } catch (InterruptedException ie) { /* ignored */ }
             } else {
                 break;
             }

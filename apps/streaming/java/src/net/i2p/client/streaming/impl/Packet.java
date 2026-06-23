@@ -873,6 +873,6 @@ class Packet {
      */
     public void logTCPDump(Connection con) {
         try {I2PSocketManagerFull.pcapWriter.write(this, con);}
-        catch (IOException ioe) {}
+        catch (IOException ioe) { /* ignored */ }
     }
 }

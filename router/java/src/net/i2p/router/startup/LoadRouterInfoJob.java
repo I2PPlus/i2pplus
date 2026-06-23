@@ -120,14 +120,14 @@ class LoadRouterInfoJob extends JobImpl {
                     } else {
                         _log.logAlways(Log.WARN, "NetDb family keys are invalid");
                         // close and delete so we don't infinite loop
-                        try { fis1.close(); } catch (IOException ioe2) {}
+                        try { fis1.close(); } catch (IOException ioe2) { /* ignored */ }
                         fis1 = null;
                         rif.delete();
                     }
                 } else {
                     _log.logAlways(Log.WARN, "NetDb family name changed");
                     // close and delete so we don't infinite loop
-                    try { fis1.close(); } catch (IOException ioe2) {}
+                    try { fis1.close(); } catch (IOException ioe2) { /* ignored */ }
                     fis1 = null;
                     rif.delete();
                 }
@@ -137,7 +137,7 @@ class LoadRouterInfoJob extends JobImpl {
                     if (riTime > now || now - riTime > 45*60*1000) {
                         // prevent netdb store failure and rekey
                         _us = null;
-                        try { fis1.close(); } catch (IOException ioe2) {}
+                        try { fis1.close(); } catch (IOException ioe2) { /* ignored */ }
                         fis1 = null;
                         rif.delete();
                     }
@@ -188,7 +188,7 @@ class LoadRouterInfoJob extends JobImpl {
                         _log.logAlways(Log.WARN, "Rebuilding RouterInfo with new encryption type " + cetype);
                     // windows... close before deleting
                     if (fis1 != null) {
-                        try { fis1.close(); } catch (IOException ioe) {}
+                        try { fis1.close(); } catch (IOException ioe) { /* ignored */ }
                         fis1 = null;
                     }
                     rif.delete();
@@ -204,7 +204,7 @@ class LoadRouterInfoJob extends JobImpl {
             _us = null;
             // windows... close before deleting
             if (fis1 != null) {
-                try { fis1.close(); } catch (IOException ioe2) {}
+                try { fis1.close(); } catch (IOException ioe2) { /* ignored */ }
                 fis1 = null;
             }
             rif.delete();
@@ -215,14 +215,14 @@ class LoadRouterInfoJob extends JobImpl {
             _us = null;
             // windows... close before deleting
             if (fis1 != null) {
-                try { fis1.close(); } catch (IOException ioe) {}
+                try { fis1.close(); } catch (IOException ioe) { /* ignored */ }
                 fis1 = null;
             }
             rif.delete();
             rkf.delete();
             rkf2.delete();
         } finally {
-            if (fis1 != null) try { fis1.close(); } catch (IOException ioe) {}
+            if (fis1 != null) try { fis1.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -316,7 +316,7 @@ class LoadRouterInfoJob extends JobImpl {
                 ri.setSigningPublicKey(signingPubKey);
                 ri.setCertificate(Certificate.NULL_CERT);
             } finally {
-                if (fis != null) try { fis.close(); } catch (IOException ioe) {}
+                if (fis != null) try { fis.close(); } catch (IOException ioe) { /* ignored */ }
             }
         }
         return new KeyData(ri, privkey, signingPrivKey);

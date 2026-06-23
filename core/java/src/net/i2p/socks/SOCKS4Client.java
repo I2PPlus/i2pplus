@@ -49,16 +49,13 @@ public class SOCKS4Client {
         } catch (IOException e) {
             try {
                 sock.close();
-            } catch (IOException ioe) {
-            }
+            } catch (IOException ioe) { /* ignored */ }
             if (in != null) try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             if (out != null) try {
                     out.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             throw e;
         }
     }
@@ -112,12 +109,10 @@ public class SOCKS4Client {
         } catch (IOException e) {
             if (in != null) try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             if (out != null) try {
                     out.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             throw e;
         }
     }

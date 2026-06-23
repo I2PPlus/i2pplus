@@ -117,13 +117,11 @@ class MimeTypes {
                 }
             }
             // System.out.println("Loaded " + _mimeMap.size() + " mime types from /etc/mime.types");
-        } catch (IOException ioe) {
-        } finally {
+        } catch (IOException ioe) { /* ignored */ } finally {
             if (in != null)
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
     }
 

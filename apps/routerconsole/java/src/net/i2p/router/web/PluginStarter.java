@@ -238,7 +238,7 @@ public class PluginStarter implements Runnable {
                 // keep going
                 try {
                     Thread.sleep(5*1000);
-                } catch (InterruptedException ie) {}
+                } catch (InterruptedException ie) { /* ignored */ }
                 if (loop++ > 48) break;
             } while (mgr.isUpdateInProgress(PLUGIN, appName));
 
@@ -720,7 +720,7 @@ public class PluginStarter implements Runnable {
         Properties rv = new Properties();
         try {
             DataHelper.loadProps(rv, cfgFile);
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ }
         return rv;
     }
 
@@ -735,7 +735,7 @@ public class PluginStarter implements Runnable {
 
         try {
             DataHelper.loadProps(rv, cfgFile);
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ }
 
         List<String> names = getAllPlugins();
         for (String name : names) {
@@ -838,7 +838,7 @@ public class PluginStarter implements Runnable {
         File cfgFile = new File(I2PAppContext.getGlobalContext().getConfigDir(), CONFIG_FILE);
         try {
             DataHelper.storeProps(props, cfgFile);
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ }
     }
 
     /**
@@ -977,7 +977,7 @@ public class PluginStarter implements Runnable {
                         } else {
                             Thread.sleep(1000);
                         }
-                    } catch (InterruptedException ie) {}
+                    } catch (InterruptedException ie) { /* ignored */ }
                     // quick check, will throw ClassNotFoundException on error
                     LoadClientAppsJob.testClient(app.className, cl);
                 }

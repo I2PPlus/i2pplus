@@ -851,7 +851,7 @@ public class LookupService {
         int start = buffer.position();
         int oldLimit = buffer.limit();
 
-        while (buffer.hasRemaining() && buffer.get() != 0) {}
+        while (buffer.hasRemaining() && buffer.get() != 0) { /* ignored */ }
 
         int end = buffer.position() - 1;
         String str = null;

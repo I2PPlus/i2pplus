@@ -694,8 +694,7 @@ class GraphRenderer {
             if (ios != null) {
                 try {
                     ios.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
         }
     }

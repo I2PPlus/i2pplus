@@ -329,9 +329,7 @@ class SAMv2StreamSession extends SAMStreamSession {
                             _cache.release(data, false);
                         }
                     }
-                } catch (InterruptedException ie) {
-                } catch (IOException e) {
-                }
+                } catch (InterruptedException ie) { /* ignored */ } catch (IOException e) { /* ignored */ }
             }
 
             synchronized (_data) {
@@ -409,8 +407,7 @@ class SAMv2StreamSession extends SAMStreamSession {
                         while (stillRunning && (!nolimit && totalReceived >= limit)) {
                             try {
                                 runningLock.wait();
-                            } catch (InterruptedException ie) {
-                            }
+                            } catch (InterruptedException ie) { /* ignored */ }
                         }
                         if (!stillRunning) break;
                     }

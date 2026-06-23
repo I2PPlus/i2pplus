@@ -449,8 +449,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
                 int reqq = bev.getInt();
                 _maxPipeline =
                         Math.min(PeerState.MAX_PIPELINE, Math.max(PeerState.MIN_PIPELINE, reqq));
-            } catch (InvalidBEncodingException ibee) {
-            }
+            } catch (InvalidBEncodingException ibee) { /* ignored */ }
         } else {
             // BEP 10 "The default in libtorrent is 250"
             _maxPipeline = PeerState.MAX_PIPELINE;

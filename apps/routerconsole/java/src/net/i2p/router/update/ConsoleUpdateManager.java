@@ -306,7 +306,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 if (t != null) {
                     synchronized(t) {
                         try {t.wait(maxWait);}
-                        catch (InterruptedException ie) {}
+                        catch (InterruptedException ie) { /* ignored */ }
                     }
                     return getUpdateAvailable(type, id);
                 }
@@ -1166,7 +1166,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 List<URI> rv = new ArrayList<>();
                 while (tok.hasMoreTokens()) {
                     try {rv.add(new URI(tok.nextToken().trim()));}
-                    catch (URISyntaxException use) {}
+                    catch (URISyntaxException use) { /* ignored */ }
                 }
                 Collections.shuffle(rv, _context.random());
                 return rv;
@@ -1180,7 +1180,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 String url = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
                 if (url != null) {
                     try {return Collections.singletonList(new URI(url));}
-                    catch (URISyntaxException use) {}
+                    catch (URISyntaxException use) { /* ignored */ }
                 }
                 break;
 
@@ -1188,7 +1188,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 String url3 = _context.getProperty(ConfigUpdateHandler.PROP_DEV_SU3_URL);
                 if (url3 != null) {
                     try {return Collections.singletonList(new URI(url3));}
-                    catch (URISyntaxException use) {}
+                    catch (URISyntaxException use) { /* ignored */ }
                 }
                 break;
 
@@ -1197,7 +1197,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 String xpi2pURL = props.getProperty("updateURL");
                 if (xpi2pURL != null) {
                     try {return Collections.singletonList(new URI(xpi2pURL));}
-                    catch (URISyntaxException use) {}
+                    catch (URISyntaxException use) { /* ignored */ }
                 }
                 break;
 
@@ -1325,7 +1325,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             long modtime = 0;
             if (lastmod != null) {
                 try {modtime = Long.parseLong(lastmod);}
-                catch (NumberFormatException nfe) {}
+                catch (NumberFormatException nfe) { /* ignored */ }
             }
             if (modtime <= 0) {modtime = _context.clock().now();}
             _context.router().saveConfig(NewsHelper.PROP_LAST_UPDATE_TIME, Long.toString(modtime));
@@ -1540,7 +1540,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         public String toString() {
             if (versionStr.length() == 13) {
                 try {return "Version " + versionStr + " (" + DataHelper.formatTime(Long.parseLong(versionStr)) + ')';}
-                catch (NumberFormatException nfe) {}
+                catch (NumberFormatException nfe) { /* ignored */ }
             }
             return "Version " + versionStr;
         }

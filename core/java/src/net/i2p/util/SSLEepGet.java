@@ -727,8 +727,7 @@ public class SSLEepGet extends EepGet {
         if (_isGzippedResponse) {
             try {
                 pusher.join();
-            } catch (InterruptedException ie) {
-            }
+            } catch (InterruptedException ie) { /* ignored */ }
             pusher = null;
             if (_decompressException != null) {
                 // we can't resume from here

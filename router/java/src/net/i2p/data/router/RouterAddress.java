@@ -177,7 +177,7 @@ public class RouterAddress extends DataStructureImpl {
                 int rv = Integer.parseInt(port);
                 if (rv > 0 && rv <= 65535)
                     _port = rv;
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
         return _port;
     }

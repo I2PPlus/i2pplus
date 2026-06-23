@@ -74,7 +74,7 @@ class MessageReceiver {
         }
         for (int i = 1; i <= 5 && !_completeMessages.isEmpty(); i++) {
             try {Thread.sleep(i * 10);}
-            catch (InterruptedException ie) {}
+            catch (InterruptedException ie) { /* ignored */ }
         }
         _completeMessages.clear();
     }
@@ -110,7 +110,7 @@ class MessageReceiver {
                         expired++;
                     }
                 }
-            } catch (InterruptedException ie) {}
+            } catch (InterruptedException ie) { /* ignored */ }
 
             if (expired > 0) {_context.statManager().addRateData("udp.inboundExpired", expired, expiredLifetime);}
 

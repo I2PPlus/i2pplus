@@ -196,7 +196,7 @@ public class I2Ping extends I2PTunnelClientBase {
                 if (br != null) {
                     try {
                         br.close();
-                    } catch (IOException ignored) {}
+                    } catch (IOException ignored) { /* ignored */ }
                 }
             }
             return;

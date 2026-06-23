@@ -422,8 +422,7 @@ public class NativeBigInteger extends BigInteger {
                 try {
                     _cpuModel = c.getCPUModelString();
                     // System.out.println("CPUModel: " + _cpuModel.toString());
-                } catch (UnknownCPUException e) {
-                }
+                } catch (UnknownCPUException e) { /* ignored */ }
                 if (c instanceof VIACPUInfo) {
                     VIACPUInfo viacpu = (VIACPUInfo) c;
                     if (viacpu.IsNanoCompatible()) return JBIGI_OPTIMIZATION_NANO;
@@ -465,8 +464,7 @@ public class NativeBigInteger extends BigInteger {
                     if (intelcpu.IsPentiumMMXCompatible()) return JBIGI_OPTIMIZATION_PENTIUMMMX;
                     if (intelcpu.IsPentiumCompatible()) return JBIGI_OPTIMIZATION_PENTIUM;
                 }
-            } catch (UnknownCPUException e) {
-            }
+            } catch (UnknownCPUException e) { /* ignored */ }
             // always try "none" if we don't know the x86 type,
             // in case of CPUID fail or not finding compatibility above
             return JBIGI_OPTIMIZATION_X86;
@@ -1237,13 +1235,11 @@ public class NativeBigInteger extends BigInteger {
             if (libStream != null)
                 try {
                     libStream.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             if (fos != null) {
                 try {
                     fos.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
             }
         }
         // copy to install dir, ignore failure
@@ -1324,8 +1320,7 @@ public class NativeBigInteger extends BigInteger {
             if (in != null)
                 try {
                     in.close();
-                } catch (IOException ioe) {
-                }
+                } catch (IOException ioe) { /* ignored */ }
         }
         return rv;
     }
