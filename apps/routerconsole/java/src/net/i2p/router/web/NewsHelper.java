@@ -341,7 +341,7 @@ public class NewsHelper extends ContentHelper {
              buf.append("\nNo update currently available.");
         }
         buf.append("</i></span><span id=newsDisplay>");
-        String consoleNonce = (session != null) ? CSSHelper.getNonce(session) : CSSHelper.getNonce();
+        String consoleNonce = CSSHelper.getNonce();
         if (lastUpdated > 0 && consoleNonce != null) {
             if (shouldShowNews(ctx)) {
                 buf.append(" <a href=\"/home?news=0&amp;consoleNonce=").append(consoleNonce).append("\">")
