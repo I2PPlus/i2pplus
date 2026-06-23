@@ -113,6 +113,20 @@ public interface I2PSocket extends Closeable {
     public int getLocalPort();
 
     /**
+     *  How many bytes have been sent over the lifetime of this socket.
+     *  @return bytes sent, or 0 if unknown
+     *  @since 2.6.0
+     */
+    public default long getLifetimeBytesSent() { return 0; }
+
+    /**
+     *  How many bytes have been received over the lifetime of this socket.
+     *  @return bytes received, or 0 if unknown
+     *  @since 2.6.0
+     */
+    public default long getLifetimeBytesReceived() { return 0; }
+
+    /**
      *  Resets and closes this socket. Sends a RESET indication to the far-end.
      *  This is the equivalent of setSoLinger(true, 0) followed by close() on a Java Socket.
      *

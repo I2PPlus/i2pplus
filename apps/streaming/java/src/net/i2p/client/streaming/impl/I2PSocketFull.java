@@ -217,6 +217,18 @@ class I2PSocketFull implements I2PSocket {
     }
 
     @Override
+    public long getLifetimeBytesSent() {
+        Connection c = _connection;
+        return c != null ? c.getLifetimeBytesSent() : 0;
+    }
+
+    @Override
+    public long getLifetimeBytesReceived() {
+        Connection c = _connection;
+        return c != null ? c.getLifetimeBytesReceived() : 0;
+    }
+
+    @Override
     public String toString() {
         Connection c = _connection;
         if (c == null)
