@@ -4173,14 +4173,14 @@
   </target>
 
   <target name="sonarqube">
-    <echo message="Running SonarQube analysis (full scan)..."/>
+    <echo message="* Running SonarQube analysis..."/>
     <exec executable="bash" dir="${basedir}" failonerror="false">
       <arg value="tools/sonarqube/run-sonar.sh"/>
     </exec>
   </target>
 
   <target name="sonarqube-report">
-    <echo message="Generating SonarQube HTML reports..."/>
+    <echo message="* Generating SonarQube HTML reports..."/>
     <exec executable="bash" dir="${basedir}" failonerror="false">
       <arg value="tools/sonarqube/run-sonar.sh"/>
       <arg value="--skip-scan"/>

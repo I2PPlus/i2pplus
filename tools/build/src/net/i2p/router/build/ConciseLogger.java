@@ -61,6 +61,10 @@ public class ConciseLogger extends DefaultLogger {
             return true;
         if ("exec".equals(taskName) && msg.contains("Using cached translation bundles"))
             return true;
+        if ("exec".equals(taskName) && (msg.startsWith("/bin/java") ||
+            msg.startsWith("/usr/bin/java") ||
+            msg.contains("SonarQube is operational")))
+            return true;
         if ("jar".equals(taskName) && (msg.contains("module-info.class already added") || msg.contains("already added, skipping")))
             return true;
         if ("loadfile".equals(taskName) && msg.contains("doesn't exist"))

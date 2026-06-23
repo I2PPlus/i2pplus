@@ -40,22 +40,30 @@ find_latest() {
 # ---- Config ----
 SONAR_PORT="${SONAR_PORT:-11199}"
 SONAR_HOST="http://localhost:${SONAR_PORT}"
-SONAR_ISSUES_CACHE="/tmp/i2p-sonarqube/.issues-cache.json"
+SONAR_TMP="/tmp/build-i2p/sonarqube"
+SONAR_ISSUES_CACHE="${SONAR_TMP}/.issues-cache.json"
 
 SERVER_DIR="$(find_latest "sonarqube-*")"
-for f in "${SCRIPT_DIR}"/sonarqube-*/logs/*.log; do
-    : > "$f" 2>/dev/null || true
-done
 SONAR_USER="${SONAR_USER:-admin}"
 SONAR_PASSWORD="${SONAR_PASSWORD:-SonarQube2026!}"
 SONAR_TOKEN_FILE="${SCRIPT_DIR}/.token"
 
+# SonarQube 26.x requires Java 17-21; default system JDK (27 EA) breaks ES.
+# Use Java 21 if available, otherwise fall back to the system default.
+if [ -z "$SONAR_JAVA_PATH" ]; then
+    for jv in "/usr/lib/jvm/java-21-openjdk-amd64" "/usr/lib/jvm/java-17-openjdk-amd64"; do
+        if [ -x "$jv/bin/java" ]; then
+            export SONAR_JAVA_PATH="$jv/bin/java"
+            export JAVA_HOME="$jv"
+            break
+        fi
+    done
+fi
+
 # ---- Helpers ----
 ensure_downloaded() {
     local WHAT="$1"
-    if ! bash "${SCRIPT_DIR}/download-sonar.sh" "$WHAT" 2>&1 | grep -qv "up to date"; then
-        : # already installed
-    fi
+    bash "${SCRIPT_DIR}/download-sonar.sh" "$WHAT" 2>&1
 }
 
 # ---- Ensure scanner installed ----
@@ -80,21 +88,29 @@ if [ ! -x "$SONAR_SH" ]; then
     exit 1
 fi
 
-# ---- Cache data in /tmp for fast restarts ----
-SONAR_CACHE="/tmp/i2p-sonarqube/data"
+# ---- Redirect runtime dirs to /tmp so workspace stays clean ----
+SONAR_CACHE="${SONAR_TMP}/data"
+mkdir -p "$SONAR_TMP" "$SONAR_CACHE"
+# data — migrate existing data on first run, then symlink
 if [ -e "${SERVER_DIR}/data" ] && [ ! -L "${SERVER_DIR}/data" ]; then
-    mkdir -p "$SONAR_CACHE"
-    if ls "${SERVER_DIR}/data"/ >/dev/null 2>&1; then
-        cp -a "${SERVER_DIR}/data"/* "$SONAR_CACHE"/
-    fi
+    cp -a "${SERVER_DIR}/data"/* "$SONAR_CACHE"/ 2>/dev/null || true
     rm -rf "${SERVER_DIR}/data"
 fi
-mkdir -p "$SONAR_CACHE"
-ln -sf "$SONAR_CACHE" "${SERVER_DIR}/data"
-# Clean up any stray recursive symlink inside the cache from prior bad runs
-if [ -L "${SONAR_CACHE}/data" ]; then
-    rm -f "${SONAR_CACHE}/data"
+ln -snf "$SONAR_CACHE" "${SERVER_DIR}/data"
+# logs — replace dir with symlink so nohup redirect and sonar.properties agree
+if [ -e "${SERVER_DIR}/logs" ] && [ ! -L "${SERVER_DIR}/logs" ]; then
+    rm -rf "${SERVER_DIR}/logs"
 fi
+mkdir -p "${SONAR_TMP}/logs"
+ln -snf "${SONAR_TMP}/logs" "${SERVER_DIR}/logs"
+# temp — replace dir with symlink for PID file etc
+if [ -e "${SERVER_DIR}/temp" ] && [ ! -L "${SERVER_DIR}/temp" ]; then
+    rm -rf "${SERVER_DIR}/temp"
+fi
+mkdir -p "${SONAR_TMP}/temp"
+ln -snf "${SONAR_TMP}/temp" "${SERVER_DIR}/temp"
+# Clean up any stray recursive symlink inside the cache from prior bad runs
+rm -f "${SONAR_CACHE}/data" "${SONAR_TMP}/logs/data" "${SONAR_TMP}/temp/data"
 
 # ---- Skip server startup if local cache available (for --skip-scan) ----
 if [ "$SKIP_SCAN" = true ] && [ -f "$SONAR_ISSUES_CACHE" ]; then
@@ -141,9 +157,15 @@ fi
     # Set 2GB heap for compute engine
     sed -i '/^sonar.ce.javaOpts=/d' "$SONAR_PROPERTIES"
     echo "sonar.ce.javaOpts=-Xms512m -Xmx1g -XX:+HeapDumpOnOutOfMemoryError" >> "$SONAR_PROPERTIES"
-    # Set 2GB for Elasticsearch
+    # Set 2GB for Elasticsearch (SonarQube manages its own -Djava.io.tmpdir)
     sed -i '/^sonar.search.javaOpts=/d' "$SONAR_PROPERTIES"
     echo "sonar.search.javaOpts=-Xms1g -Xmx2g" >> "$SONAR_PROPERTIES"
+
+    # Keep sonar.properties in sync with the /tmp/build-i2p/sonarqube/ symlinks.
+    sed -i '/^sonar.path.logs=/d' "$SONAR_PROPERTIES"
+    echo "sonar.path.logs=${SONAR_TMP}/logs" >> "$SONAR_PROPERTIES"
+    sed -i '/^sonar.path.temp=/d' "$SONAR_PROPERTIES"
+    echo "sonar.path.temp=${SONAR_TMP}/temp" >> "$SONAR_PROPERTIES"
 
     echo "Starting SonarQube Server on port ${SONAR_PORT}..."
     export ES_DISCOVERY_TYPE=single-node
@@ -152,8 +174,9 @@ fi
 
     echo "Waiting for server to be ready..."
     for i in $(seq 1 180); do
-if curl -m 2 -s -o /dev/null -w "%{http_code}" "${SONAR_HOST}/api/system/health" 2>/dev/null | grep -qE '200|403|401'; then
+        if curl -m 2 -s -o /dev/null -w "%{http_code}" "${SONAR_HOST}/api/system/health" 2>/dev/null | grep -qE '200|403|401'; then
             echo "Server ready after ${i}s"
+            sleep 3
             break
         fi
         # Detect early process death (ES/CE/web crashed)
@@ -265,8 +288,8 @@ if [ -z "$CE_TASK_ID" ] && [ "$SKIP_SCAN" = true ]; then
             echo "Found $TOTAL cached issues on server — skipping scan."
             CE_TASK_ID="cached"
         else
-            echo "No cached results found. Run without --skip-scan to perform a full analysis."
-            exit 0
+            echo "No cached results found — will run full analysis."
+            SKIP_SCAN=false
         fi
     fi
 fi
@@ -286,7 +309,8 @@ if [ "$SKIP_SCAN" = false ]; then
         -Dproject.settings="$PROPERTIES_FILE" \
         -Dsonar.java.binaries="${BUILD_ROOT}/build" \
         -Dsonar.java.libraries="${BUILD_ROOT}/build/*.jar" \
-        -Dsonar.working.directory="/tmp/opencode/sonar-scanner-work" \
+        -Dsonar.working.directory="${SONAR_TMP}/scanner-work" \
+        -Dsonar.userHome="${SONAR_TMP}/scanner-home" \
         -Dsonar.scanner.socketTimeout=1800 2>&1)
     SCAN_EXIT=$?
     echo "$SCAN_OUTPUT"

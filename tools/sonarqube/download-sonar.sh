@@ -53,7 +53,7 @@ download_scanner() {
     echo "Downloading SonarScanner ${VERSION}..."
     local ZIP_FILE
     ZIP_FILE=$(mktemp)
-    curl -L -o "$ZIP_FILE" "$DOWNLOAD_URL"
+    curl -sS -L --no-progress-meter -o "$ZIP_FILE" "$DOWNLOAD_URL"
 
     echo "Extracting..."
     unzip -q -o -d "$SCRIPT_DIR" "$ZIP_FILE"
@@ -90,7 +90,7 @@ download_server() {
     echo "Downloading SonarQube Server ${VERSION} (~885MB)..."
     local ZIP_FILE
     ZIP_FILE=$(mktemp)
-    curl -L -o "$ZIP_FILE" "$DOWNLOAD_URL"
+    curl -sS -L --no-progress-meter -o "$ZIP_FILE" "$DOWNLOAD_URL"
 
     echo "Extracting to ${SCRIPT_DIR}..."
     unzip -q -o -d "$SCRIPT_DIR" "$ZIP_FILE"
