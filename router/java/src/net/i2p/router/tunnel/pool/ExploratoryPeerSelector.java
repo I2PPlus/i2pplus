@@ -292,7 +292,6 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         }
         if (rv.size() > 1)
             orderPeers(rv, settings.getRandomKey());
-        //if (length != rv.size() && log.shouldWarn())
         //    log.warn("EPS requested " + length + " got " + rv.size() + ": " + DataHelper.toString(rv));
         //else if (log.shouldDebug())
         //    log.debug("EPS result: " + DataHelper.toString(rv));
@@ -388,7 +387,6 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 return false;
 
             failPct = getExploratoryFailPercentage();
-            //Log l = ctx.logManager().getLog(getClass());
             //if (l.shouldLog(Log.DEBUG))
             //    l.debug("Normalized Fail pct: " + failPct);
             // always try a little, this helps keep the failPct stat accurate too
@@ -412,7 +410,6 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
     private int getExploratoryFailPercentage() {
         int c = getFailPercentage("Client");
         int e = getFailPercentage("Exploratory");
-        //Log l = ctx.logManager().getLog(getClass());
         //if (l.shouldDebug())
         //    l.debug("Client, Expl. Fail pct: " + c + ", " + e);
         if (e <= c || e <= 25) // doing very well (unlikely)

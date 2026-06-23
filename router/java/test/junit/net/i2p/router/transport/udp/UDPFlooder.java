@@ -10,8 +10,6 @@ import net.i2p.util.I2PThread;
 import java.util.ArrayList;
 import java.util.List;
 
-// import net.i2p.util.Log;
-
 /**
  *  This sends random data to all UDP peers at a specified rate.
  *  It is for testing only!

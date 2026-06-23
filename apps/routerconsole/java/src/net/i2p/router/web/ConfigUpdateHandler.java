@@ -144,7 +144,6 @@ public class ConfigUpdateHandler extends FormHandler {
 
             boolean a1 = mgr.checkAvailable(NEWS, 40*1000) != null;
             boolean a2 = false;
-//            boolean a3 = false;
             boolean a3 = true;
             if ((!a1) && _updateDevSU3 && _devSU3URL != null && _devSU3URL.length() > 0) {
                 a2 = mgr.checkAvailable(ROUTER_DEV_SU3, 40*1000) != null;

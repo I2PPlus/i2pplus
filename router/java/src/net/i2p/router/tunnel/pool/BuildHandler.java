@@ -143,7 +143,6 @@ class BuildHandler implements Runnable {
         _banLogger = new BanLogger();
         _banLogger.initialize(ctx);
         // Queue size = 12 * share BW / 48K
-        //int sz = Math.min(MAX_QUEUE, Math.max(MIN_QUEUE, TunnelDispatcher.getShareBandwidth(ctx) * MIN_QUEUE / 48));
         int sz = ctx.getProperty(PROP_MAX_QUEUE, MAX_QUEUE);
         _inboundBuildMessages = new LinkedBlockingQueue<>(sz);
         ctx.statManager().createRequiredRateStat("tunnel.buildLookupSuccess", "Confirmation of successful deferred lookup", "Tunnels", RATES);
@@ -1057,7 +1056,6 @@ class BuildHandler implements Runnable {
             cfg.setLayerKey(req.readLayerKey());
             if (isInGW) {
                 // default
-                //cfg.setReceiveFrom(null);
             } else {
                 if (from != null) {cfg.setReceiveFrom(from);}
                 else {return;} // b0rk
@@ -1065,7 +1063,6 @@ class BuildHandler implements Runnable {
             cfg.setReceiveTunnelId(ourId);
             if (isOutEnd) {
                 // default
-                //cfg.setSendTo(null);
                 //cfg.setSendTunnelId(null);
             } else {
                 cfg.setSendTo(nextPeer);
@@ -1392,7 +1389,7 @@ class BuildHandler implements Runnable {
                     }
                 }
             }
-        } catch (Exception e) {}
+        } catch (Exception e) { /* ignored */ }
         return "UNKNOWN";
     }
 

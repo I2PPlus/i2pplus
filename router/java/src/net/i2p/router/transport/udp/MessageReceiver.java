@@ -11,7 +11,6 @@ import net.i2p.data.i2np.I2NPMessageImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.router.BanLogger;
 import net.i2p.router.util.CoDelBlockingQueue;
-//import net.i2p.util.ByteCache;
 import net.i2p.util.HexDump;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;

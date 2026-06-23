@@ -14,8 +14,6 @@ package net.i2p.crypto;
  * this property in your Provider derived class:
  * put("MessageDigest.SHA-1", "com.bitzi.util.SHA1");
  */
-//package com.bitzi.util;
-
 import java.security.DigestException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

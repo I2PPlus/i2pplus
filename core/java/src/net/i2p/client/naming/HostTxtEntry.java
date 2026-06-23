@@ -17,8 +17,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
 
-// for testing only
-
 /**
  * A hostname, b64 destination, and optional properties.
  * Includes methods to sign and verify the entry.

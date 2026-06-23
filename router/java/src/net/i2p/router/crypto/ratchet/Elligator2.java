@@ -10,7 +10,6 @@ import net.i2p.crypto.eddsa.math.bigint.BigIntegerLittleEndianEncoding;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveSpec;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
 import net.i2p.data.PublicKey;
-//import net.i2p.router.transport.crypto.X25519KeyFactory;
 import net.i2p.util.NativeBigInteger;
 
 /**

@@ -53,10 +53,8 @@ public class HostCheckHandler extends GzipHandler
                                  "font/ttf", "font/otf", "font/woff", "text/css", "text/html", "text/plain"
                                 );
         } else {
-            // poorly documented, but we must put something in,
-            // if empty all are matched,
+            // poorly documented, but we must put something in if empty all are matched
             // see IncludeExcludeSet
-//            addIncludedMimeTypes("xyzzy");
             addIncludedMimeTypes("text/html");
         }
     }

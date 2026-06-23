@@ -49,7 +49,6 @@ public class RouterClock extends Clock {
      *  call the callback, we probably need a soft restart.
      *  @since 0.8.8
      */
-//    private static final long MASSIVE_SHIFT_FORWARD = 150*1000;
     private static final long MASSIVE_SHIFT_FORWARD = 360*1000;
     private static final long MASSIVE_SHIFT_BACKWARD = 61*1000;
 
@@ -218,7 +217,6 @@ public class RouterClock extends Clock {
                     delta = offsetMs - _offset;
                 }
                 if (log.shouldInfo())
-//                    log.info("Initializing clock offset to " + offsetMs + "ms (Stratum: " + stratum + ")", new Exception());
                     log.info("Initializing clock offset to " + offsetMs + "ms (Stratum: " + stratum + ")");
                 _alreadyChanged = true;
                _lastProposedOffset = 0;
@@ -232,7 +230,6 @@ public class RouterClock extends Clock {
                 }
             } else {
                 if (log.shouldInfo())
-//                    log.info("Pending clock offset " + offsetMs + "ms (Stratum: " + stratum + ")", new Exception());
                     log.info("Pending clock offset " + offsetMs + "ms (Stratum: " + stratum + ")");
                     // so we know we were here
                 if (offsetMs == 0)

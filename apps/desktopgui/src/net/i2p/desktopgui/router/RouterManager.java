@@ -4,7 +4,6 @@ import java.io.IOException;
 import net.i2p.I2PAppContext;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
-//import net.i2p.router.web.ConfigServiceHandler;
 import net.i2p.util.Log;
 
 /**

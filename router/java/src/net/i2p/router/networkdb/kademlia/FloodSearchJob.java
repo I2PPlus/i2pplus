@@ -87,8 +87,6 @@ abstract class FloodSearchJob extends JobImpl {
 
     /** using context clock */
     public long getExpiration() { return _expiration; }
-
-//    protected static final int CONCURRENT_SEARCHES = 2;
     protected static final int CONCURRENT_SEARCHES = SystemVersion.isSlow() ? 3 : 5;
     private static final int FLOOD_SEARCH_TIME_FACTOR = 2;
     /**

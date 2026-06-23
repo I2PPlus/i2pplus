@@ -163,9 +163,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
             notifyAll();
         }
        cancelResend();
-        if (_log.shouldDebug())
-//            _log.debug("Cancelled! " + toString(), new Exception("cancelled"));
-            _log.debug("Resend cancelled! " + toString());
+        if (_log.shouldDebug())            _log.debug("Resend cancelled! " + toString());
     }
 
     /** how long after packet creation was it acked?

@@ -164,7 +164,6 @@ class PeerTestManager {
 
     /** initial - ContinueTest adds backoff */
     private static final int RESEND_TIMEOUT = 4*1000;
-//    private static final int MAX_TEST_TIME = 30*1000;
     private static final int MAX_TEST_TIME = 20*1000;
     private static final long MAX_SKEW = 2*60*1000;
     private static final long MAX_NONCE = (1L << 32) - 1L;
@@ -173,7 +172,7 @@ class PeerTestManager {
     private static final InetAddress PENDING_IP;
     static {
         InetAddress p = null;
-        try { p = InetAddress.getByName("0.0.0.1"); } catch (UnknownHostException uhe) {}
+        try { p = InetAddress.getByName("0.0.0.1"); } catch (UnknownHostException uhe) { /* ignored */ }
         PENDING_IP = p;
     }
     private static final int PENDING_PORT = 99999;
@@ -940,7 +939,7 @@ class PeerTestManager {
                         packet = _packetBuilder2.buildPeerTestToBob(SSU2Util.TEST_REJECT_CHARLIE_LIMIT,
                                                                     data, fromPeer);
                     _transport.send(packet);
-                } catch (IOException ioe) {}
+                } catch (IOException ioe) { /* ignored */ }
                 return;
             }
         } else {
@@ -1418,13 +1417,13 @@ class PeerTestManager {
                     // msg 5 before msg 4
                     try {
                         test.setCharlie(InetAddress.getByAddress(fromIP), fromPort, null);
-                    } catch (UnknownHostException uhe) {}
+                    } catch (UnknownHostException uhe) { /* ignored */ }
                 } else if (charlieIP == PENDING_IP) {
                     // msg 5 after msg 4, charlie is firewalled
                     // set charlie's real IP/port
                     try {
                         test.setCharlie(InetAddress.getByAddress(fromIP), fromPort, test.getCharlieHash());
-                    } catch (UnknownHostException uhe) {}
+                    } catch (UnknownHostException uhe) { /* ignored */ }
                     // TODO, if charlie is symmetric natted, we won't know it when handling msg 7
                 } else {
                     // msg 5 after msg 4, charlie is not firewalled
@@ -1584,7 +1583,7 @@ class PeerTestManager {
                         try {
                             InetAddress addr = InetAddress.getByAddress(addrBlockIP);
                             test.setAliceIPFromCharlie(addr);
-                        } catch (UnknownHostException uhe) {}
+                        } catch (UnknownHostException uhe) { /* ignored */ }
                     } else {
                         bad = true;
                     }
@@ -1684,7 +1683,7 @@ class PeerTestManager {
         try {
             UDPPacket packet = _packetBuilder2.buildPeerTestToAlice(reason, Hash.FAKE_HASH, data, alice);
             _transport.send(packet);
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) { /* ignored */ }
     }
 
     /**

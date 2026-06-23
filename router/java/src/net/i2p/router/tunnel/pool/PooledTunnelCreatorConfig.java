@@ -45,7 +45,6 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
             // remove us from the pool (but not the dispatcher) so that we aren't
             // selected again.  _expireJob is left to do its thing, in case there
             // are any straggling messages coming down the tunnel
-            //
             // Todo: Maybe delay or prevent failing if we are near tunnel build capacity,
             // to prevent collapse (loss of all tunnels)
             _pool.tunnelFailed(this);

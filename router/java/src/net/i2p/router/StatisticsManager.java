@@ -36,7 +36,6 @@ public class StatisticsManager {
     public final static String PROP_PUBLISH_RANKINGS = "router.publishPeerRankings";
     //private static final String PROP_CONTACT_NAME = "netdb.contact";
     /** enhance anonymity by only including build stats one out of this many times */
-//    private static final int RANDOM_INCLUDE_STATS = 16;
     private static final int RANDOM_INCLUDE_STATS = 1024;
     private static final boolean SIMPLE_STATS = true;
 

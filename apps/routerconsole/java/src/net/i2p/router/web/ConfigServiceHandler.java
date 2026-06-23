@@ -316,24 +316,18 @@ public class ConfigServiceHandler extends FormHandler {
 
     private void enableService() {
         try {
-//            Runtime.getRuntime().exec("install_i2p_service_winnt.bat");
             Runtime.getRuntime().exec("EnableI2P+Service.bat");
-//            addFormNotice(_t("Service installed"));
             addFormNotice(_t("Enabled I2P+ service autostart at system startup"));
         } catch (IOException ioe) {
-//            addFormError(_t("Warning: unable to install the service") + " - " + ioe.getLocalizedMessage());
             addFormError(_t("Warning: could not set the I2P+ service to autostart") + " - " + ioe.getLocalizedMessage());
         }
     }
 
     private void disableService() {
         try {
-//            Runtime.getRuntime().exec("uninstall_i2p_service_winnt.bat");
             Runtime.getRuntime().exec("DisableI2P+Service.bat");
-//            addFormNotice(_t("Service removed"));
             addFormNotice(_t("Disabled I2P+ Service autostart at system startup"));
         } catch (IOException ioe) {
-//            addFormError(_t("Warning: unable to remove the service") + " - " + ioe.getLocalizedMessage());
             addFormError(_t("Warning: could not set the I2P+ service to manual start") + " - " + ioe.getLocalizedMessage());
         }
     }

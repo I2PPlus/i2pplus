@@ -656,8 +656,6 @@ class SearchJob extends JobImpl {
         if (_log.shouldInfo()) {
             _log.info("Search for [" + _state.getTarget().toBase64().substring(0,6) + "] failed");
         }
-//        if (_log.shouldDebug())
-//            _log.debug("Failed: " + _state);
 
         long time = getContext().clock().now() - _state.getWhenStarted();
         int attempted = _state.getAttempted().size();

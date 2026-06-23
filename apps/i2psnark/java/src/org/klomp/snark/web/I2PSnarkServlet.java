@@ -4852,8 +4852,6 @@ public class I2PSnarkServlet extends BasicServlet {
             DataHelper.sort(fileList, Sorters.getFileComparator(sort, this));
         }
 
-// Directory info section
-
         buf.append("<div class=mainsection id=snarkFiles>")
            .append("<input hidden class=toggle_input id=toggle_files type=checkbox");
         // don't collapse file view if not in torrent root
@@ -5107,8 +5105,6 @@ public class I2PSnarkServlet extends BasicServlet {
         if (imgCount > 0) {buf.append("<script src=").append(_resourcePath).append("js/getImgDimensions.js></script>\n");}
         if (txtCount > 0) {buf.append("<script src=").append(_resourcePath).append("js/textView.js></script>\n");}
         buf.append("<script src=").append(_resourcePath).append("js/togglePriorities.js></script>\n");
-
-// Comment section
 
         CommentSet comments = snark.getComments();
         if (er || ec) {

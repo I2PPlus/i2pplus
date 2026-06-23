@@ -90,11 +90,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *
      *  @param name for stats
      */
-
-//    public CoDelBlockingQueue(I2PAppContext ctx, String name, int capacity) {
 //        this(ctx, name, capacity, TARGET, INTERVAL);
-//    }
-
     public CoDelBlockingQueue(I2PAppContext ctx, String name, int capacity) {
         this(ctx, name, capacity, ctx.getProperty(PROP_CODEL_TARGET, DEFAULT_CODEL_TARGET),
                                   ctx.getProperty(PROP_CODEL_INTERVAL, DEFAULT_CODEL_INTERVAL));

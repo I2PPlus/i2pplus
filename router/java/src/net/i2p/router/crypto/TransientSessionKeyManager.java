@@ -820,7 +820,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     private static String toString(PublicKey target) {
         if (target == null)
             return "null";
-//        return target.toBase64().substring(0, 20) + "...";
         return target.toBase64();
     }
 

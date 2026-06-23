@@ -34,7 +34,6 @@ class ExpireRoutersJob extends JobImpl {
     private final KademliaNetworkDatabaseFacade _facade;
 
     /** rerun fairly often, so the fails don't queue up too many netdb searches at once */
-//    private final static long RERUN_DELAY_MS = 5*60*1000;
     private final static long RERUN_DELAY_MS = 15*60*1000;
     private static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 4000 : 8000;
 
@@ -67,7 +66,6 @@ class ExpireRoutersJob extends JobImpl {
                 else if (_log.shouldDebug())
                     _log.debug("No expired RouterInfo files found - next check in " + (RERUN_DELAY_MS / 1000 / 60) + "m");
         }
-//        if (getContext().netDbSegmentor().getKnownRouters() > 2000)
         if (getContext().netDb().getKnownRouters() > 2000)
             requeue(RERUN_DELAY_MS / 5);
         else

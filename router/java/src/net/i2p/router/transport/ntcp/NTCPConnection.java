@@ -266,8 +266,6 @@ public class NTCPConnection implements Closeable {
         _lastRateUpdated = _created;
         _readBufs = new ConcurrentLinkedQueue<>();
         _writeBufs = new ConcurrentLinkedQueue<>();
-//        _bwInRequests = new ConcurrentHashSet<>(2);
-//        _bwOutRequests = new ConcurrentHashSet<>(8);
         _bwInRequests = new ConcurrentHashSet<>(4);
         _bwOutRequests = new ConcurrentHashSet<>(16);
         _outbound = new PriBlockingQueue<>(ctx, "NTCP-Connection", 32);
@@ -1719,18 +1717,14 @@ public class NTCPConnection implements Closeable {
                 _blockCount += blocks;
             } catch (IOException ioe) {
                 if (_log.shouldWarn())
-//                    _log.warn("Payload delivery failure " + NTCPConnection.this + ioe.getMessage());
                     _log.warn("Payload delivery failure \n* " + ioe.getMessage());
             } catch (DataFormatException dfe) {
                 if (_log.shouldWarn())
-//                    _log.warn("Payload delivery failure " + NTCPConnection.this + dfe.getMessage());
                     _log.warn("Payload delivery failure \n* " + dfe.getMessage());
             } catch (I2NPMessageException ime) {
                 if (_log.shouldDebug())
-//                    _log.warn("Error parsing I2NP message on " + NTCPConnection.this + ime.getMessage());
                     _log.warn("Error parsing I2NP message \n* " + ime.getMessage());
                 else if (_log.shouldWarn())
-//                    _log.warn("Error parsing I2NP message on " + NTCPConnection.this + "\n* I2NP Message Exception: " + ime.getMessage());
                     _log.warn("Error parsing I2NP message \n* " + ime.getMessage());
                 _context.statManager().addRateData("ntcp.corruptI2NPIME", 1);
             }
@@ -1741,7 +1735,6 @@ public class NTCPConnection implements Closeable {
 
         public void destroy() {
             if (_log.shouldInfo())
-//                _log.info("NTCP2 read state destroy() on " + NTCPConnection.this, new Exception("I did it"));
                 _log.info("NTCP2 read state destroy() on " + NTCPConnection.this);
             if (_dataBuf != null && _dataBuf.getData().length == BUFFER_SIZE)
                 releaseReadBuf(_dataBuf);

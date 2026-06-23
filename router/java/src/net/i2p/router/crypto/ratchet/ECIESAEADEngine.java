@@ -1125,7 +1125,6 @@ public final class ECIESAEADEngine {
             }
             if (_log.shouldDebug())
                 _log.debug("Encrypting as NewSession Reply \n* Target: " + target + "\n* Tag: " + re.tag.toBase64());
-// trash old state if this throws IAE???
             return encryptNewSessionReply(cloves, target, state, re.tag, keyManager, callback);
         }
         if (_log.shouldDebug())

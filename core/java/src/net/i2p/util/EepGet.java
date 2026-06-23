@@ -466,11 +466,6 @@ public class EepGet {
             "  -x <value>           proxy password\n";
     }
 
-//            "  -e <value>          require specified etag\n" +
-//            "  -h <name=value>     specify header name and value\n" +
-//            "  -l <value>            line length - update refresh (default 10 (KB))\n" +
-//            "  -m <value>            mark size (default 1024)\n" +
-
     /**
      *  Callback interface
      */

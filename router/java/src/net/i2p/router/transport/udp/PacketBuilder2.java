@@ -150,7 +150,6 @@ class PacketBuilder2 {
         // calculate data size
         int numFragments = fragments.size();
         int dataSize = 0;
-//        int priority = PRIORITY_LOW;
         int priority = PRIORITY_MEDIUM;
         for (int i = 0; i < numFragments; i++) {
             Fragment frag = fragments.get(i);
@@ -347,7 +346,6 @@ class PacketBuilder2 {
         pkt.setLength(off);
         encryptDataPacket(packet, peer.getSendCipher(), pktNum, peer.getSendHeaderEncryptKey1(), peer.getSendHeaderEncryptKey2());
         setTo(packet, peer.getRemoteIPAddress(), peer.getRemotePort());
-//        packet.setPriority(PRIORITY_LOW);
         packet.setPriority(PRIORITY_MEDIUM);
         try {
             peer.getAckedMessages().set(pktNum); // not ack-eliciting
@@ -505,7 +503,6 @@ class PacketBuilder2 {
                      to.getIP(), to.getPort(), terminationCode);
         pkt.setSocketAddress(toAddr);
         packet.setMessageType(TYPE_CREAT);
-//        packet.setPriority(PRIORITY_LOW);
         packet.setPriority(PRIORITY_MEDIUM);
         return packet;
     }
@@ -723,7 +720,6 @@ class PacketBuilder2 {
         encryptPeerTest(packet, ik, n, ik, ik, toIP.getAddress(), toPort, block);
         setTo(packet, toIP, toPort);
         packet.setMessageType(TYPE_TFA);
-//        packet.setPriority(PRIORITY_LOW);
         packet.setPriority(PRIORITY_MEDIUM);
         return packet;
     }
@@ -787,7 +783,6 @@ class PacketBuilder2 {
         encryptPeerTest(packet, ik, n, ik, ik, aliceIP.getAddress(), alicePort, block);
         setTo(packet, aliceIP, alicePort);
         packet.setMessageType(TYPE_TTA);
-//        packet.setPriority(PRIORITY_LOW);
         packet.setPriority(PRIORITY_MEDIUM);
         return packet;
     }

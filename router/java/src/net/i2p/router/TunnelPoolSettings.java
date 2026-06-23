@@ -21,7 +21,6 @@ public class TunnelPoolSettings {
     private String _destinationNickname;
     private int _quantity;
     private int _backupQuantity;
-    // private int _rebuildPeriod;
     //private int _duration;
     private int _length;
     private int _lengthVariance;
@@ -93,7 +92,6 @@ public class TunnelPoolSettings {
         _isInbound = isInbound;
         _quantity = DEFAULT_QUANTITY;
         _backupQuantity = DEFAULT_BACKUP_QUANTITY;
-        // _rebuildPeriod = DEFAULT_REBUILD_PERIOD;
         //_duration = DEFAULT_DURATION;
 
         if (isInbound) {
@@ -137,7 +135,6 @@ public class TunnelPoolSettings {
     }
 
     /** how long before tunnel expiration should new tunnels be built */
-    // public int getRebuildPeriod() { return _rebuildPeriod; }
     // public void setRebuildPeriod(int periodMs) { _rebuildPeriod = periodMs; }
 
     /**
@@ -221,7 +218,6 @@ public class TunnelPoolSettings {
     public boolean isExploratory() { return _isExploratory; }
 
     // Duration is hardcoded
-    //public int getDuration() { return _duration; }
     //public void setDuration(int ms) { _duration = ms; }
 
     /** what destination is this a client tunnel for (or null if exploratory) */
@@ -346,7 +342,6 @@ public class TunnelPoolSettings {
                         _allowZeroHop = getBoolean(value, DEFAULT_ALLOW_ZERO_HOP);
                 } else if (name.equalsIgnoreCase(prefix + PROP_BACKUP_QUANTITY))
                     _backupQuantity = getInt(value, DEFAULT_BACKUP_QUANTITY);
-                //else if (name.equalsIgnoreCase(prefix + PROP_DURATION))
                 //    _duration = getInt(value, DEFAULT_DURATION);
                 else if (name.equalsIgnoreCase(prefix + PROP_LENGTH))
                     _length = getInt(value, _isInbound ?
@@ -360,7 +355,6 @@ public class TunnelPoolSettings {
                                                         DEFAULT_LENGTH_VARIANCE);
                 else if (name.equalsIgnoreCase(prefix + PROP_QUANTITY))
                     _quantity = getInt(value, DEFAULT_QUANTITY);
-                // else if (name.equalsIgnoreCase(prefix + PROP_REBUILD_PERIOD))
                 //     _rebuildPeriod = getInt(value, DEFAULT_REBUILD_PERIOD);
                 else if (name.equalsIgnoreCase(prefix + PROP_NICKNAME))
                     _destinationNickname = value;
@@ -392,13 +386,11 @@ public class TunnelPoolSettings {
         if (props == null) return;
         props.setProperty(prefix + PROP_ALLOW_ZERO_HOP, Boolean.toString(_allowZeroHop));
         props.setProperty(prefix + PROP_BACKUP_QUANTITY, Integer.toString(_backupQuantity));
-        //props.setProperty(prefix + PROP_DURATION, ""+_duration);
         props.setProperty(prefix + PROP_LENGTH, Integer.toString(_length));
         props.setProperty(prefix + PROP_LENGTH_VARIANCE, Integer.toString(_lengthVariance));
         if (_destinationNickname != null)
             props.setProperty(prefix + PROP_NICKNAME, _destinationNickname);
         props.setProperty(prefix + PROP_QUANTITY, Integer.toString(_quantity));
-        // props.setProperty(prefix + PROP_REBUILD_PERIOD, ""+_rebuildPeriod);
         props.setProperty(prefix + PROP_IP_RESTRICTION, Integer.toString(_IPRestriction));
         if (!_isInbound)
             props.setProperty(prefix + PROP_PRIORITY, Integer.toString(_priority));

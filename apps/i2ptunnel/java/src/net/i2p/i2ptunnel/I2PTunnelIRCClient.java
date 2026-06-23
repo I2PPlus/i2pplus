@@ -57,14 +57,10 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
                               boolean ownDest,
                               EventDispatcher notifyThis,
                               I2PTunnel tunnel, String pkf) throws IllegalArgumentException {
-        super(localPort,
-              ownDest,
-              l,
-              notifyThis,
+        super(localPort, ownDest, l, notifyThis,
               "IRC Client on " + tunnel.listenHost + ':' + localPort, tunnel, pkf);
         // force connect delay and bulk profile
         Properties opts = tunnel.getClientOptions();
-//        opts.setProperty("i2p.streaming.connectDelay", "200");
         if (opts.getProperty("i2p.streaming.connectDelay") == null)
             opts.setProperty("i2p.streaming.connectDelay", "150");
         opts.remove("i2p.streaming.maxWindowSize");
@@ -83,10 +79,8 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
 
             // Don't close() here, because it does a removeSession() and then
             // TunnelController can't acquire() it to release() it.
-            //close(true);
             // Unfortunately, super() built the whole tunnel before we get here.
             throw new IllegalArgumentException("No valid target destinations found");
-            //return;
         }
 
         setName("IRC Client on " + tunnel.listenHost + ':' + localPort);

@@ -24,8 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-// import net.i2p.util.ZipFileComment;
-
 /**
  * Handles signing and verification of I2P update files.
  * Supports multiple signature types and content formats for secure software distribution.

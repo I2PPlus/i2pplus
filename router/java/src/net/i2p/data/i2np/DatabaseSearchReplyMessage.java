@@ -136,7 +136,6 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-//        buf.append("\n\tDatabaseSearchReplyMessage: ");
         buf.append("from [").append(_from.toBase64().substring(0,6)).append("]");
         buf.append(" for key [").append(_key.toBase64().substring(0,6)).append("]");
         if (getNumReplies() > 0) {

@@ -333,9 +333,7 @@ public class UrlLauncher implements ClientApp {
         if (IS_SERVICE)
             return false;
         if (_log.shouldDebug()) _log.debug("Waiting for Router Console initialization before launching browser...");
-        waitForServer(url);
-//        if (_log.shouldDebug()) _log.debug("Done waiting for router console to be ready for browser launch");
-        if (validateUrlFormat(url)) {
+        waitForServer(url);        if (validateUrlFormat(url)) {
             String cbrowser = _context.getProperty(PROP_BROWSER);
             if (cbrowser != null) {
                 return openUrl(url, cbrowser);

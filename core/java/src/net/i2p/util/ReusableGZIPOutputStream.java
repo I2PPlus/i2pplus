@@ -1,6 +1,4 @@
 package net.i2p.util;
-
-// import java.io.ByteArrayInputStream;
 import net.i2p.data.DataHelper;
 
 import java.io.ByteArrayOutputStream;

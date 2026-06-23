@@ -77,43 +77,11 @@ public class RandomArt {
      * intersects with itself.  Matter of taste.
      */
     private static final String A_augmentation_string = " .o+=*BOX@%&#/^SE";
-    // https://en.wikipedia.org/wiki/Miscellaneous_Symbols
-
-//    private static final String U_augmentation_string = " \u2600\u2601\u2602\u2603" +
-//                                                         "\u2604\u2605\u2606\u2607" +
-//                                                         "\u2608\u2609\u260a\u260b" +
-//                                                         "\u260c\u260d\u260e\u260f";
-
-// modified to remove glyphs with poor visiblity/coverage e.g. snowman, telephone
     private static final String U_augmentation_string = " \u265a\u265e\u265c\u2618" +
                                                          "\u2665\u2605\u2622\u265f" +
                                                          "\u2666\u2685\u262f\u263b" +
                                                          "\u2691\u265b\u2663\u2660";
 
-/**
-    private static final char A_BOX_TOP = '-';
-    private static final char A_BOX_BOTTOM = '-';
-    private static final char A_BOX_LEFT = '|';
-    private static final char A_BOX_RIGHT = '|';
-    private static final char A_BOX_TL = '+';
-    private static final char A_BOX_TR = '+';
-    private static final char A_BOX_BL = '+';
-    private static final char A_BOX_BR = '+';
-
-    // https://en.wikipedia.org/wiki/Box-drawing_characters
-    // these are the thin singles
-    private static final char U_BOX_TOP = '\u2500';
-    private static final char U_BOX_BOTTOM = '\u2500';
-    private static final char U_BOX_LEFT = '\u2502';
-    private static final char U_BOX_RIGHT = '\u2502';
-    private static final char U_BOX_TL = '\u250c';
-    private static final char U_BOX_TR = '\u2510';
-    private static final char U_BOX_BL = '\u2514';
-    private static final char U_BOX_BR = '\u2518';
-
-**/
-
-    // white box elements to avoid mis-shapen boxes
     private static final char A_BOX_TOP = ' ';
     private static final char A_BOX_BOTTOM = ' ';
     private static final char A_BOX_LEFT = ' ';

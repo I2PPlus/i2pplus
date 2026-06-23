@@ -18,8 +18,6 @@ import net.i2p.I2PAppContext;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 
-// import net.i2p.util.SimpleTimer;
-
 /**
  * Manages outgoing BitTorrent protocol messages to a peer.<br>
  * This class maintains a queue of outgoing messages and handles bandwidth limiting, message

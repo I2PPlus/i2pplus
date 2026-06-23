@@ -126,7 +126,6 @@ public class ConfigTunnelsHelper extends HelperBase {
     }
 
     private static final int WARN_LENGTH = 4;
-//    private static final int MAX_LENGTH = 4;
     private static final int MAX_LENGTH = 5;
     private static final int MAX_ADVANCED_LENGTH = 7;
     private static final int WARN_QUANTITY = 5;

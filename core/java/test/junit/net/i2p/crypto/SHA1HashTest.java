@@ -20,8 +20,6 @@ package net.i2p.crypto;
 /* Sun may wish to change the following package name, if integrating this
  * class in the Sun JCE Security Provider for Java 1.5 (code-named Tiger).
  */
-// package com.bitzi.util;
-
 import junit.framework.TestCase;
 
 import java.security.MessageDigest;

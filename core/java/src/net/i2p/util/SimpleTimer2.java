@@ -275,7 +275,6 @@ public class SimpleTimer2 {
         private final Log _log;
         private final SimpleTimer2 _pool;
         private int _fuzz;
-//        protected static final int DEFAULT_FUZZ = 3;
         protected static final int DEFAULT_FUZZ = 100;
         private ScheduledFuture<?> _future; // _executor.remove() doesn't work so we have to use this
                                          // ... and I expect cancelling this way is more efficient

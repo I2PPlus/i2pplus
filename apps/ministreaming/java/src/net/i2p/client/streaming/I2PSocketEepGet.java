@@ -169,13 +169,11 @@ public class I2PSocketEepGet extends EepGet {
                                 byte[] b = Base32.decode(host.substring(0, 52));
                                 if (b != null) {
                                     Hash h = Hash.create(b);
-//                                    dest = sess.lookupDest(h, 20*1000);
                                     dest = sess.lookupDest(h, 30*1000);
                                 } else {
                                     dest = null;
                                 }
                             } else {
-//                                dest = sess.lookupDest(host, 20*1000);
                                 dest = sess.lookupDest(host, 30*1000);
                             }
                         } catch (I2PSessionException ise) {

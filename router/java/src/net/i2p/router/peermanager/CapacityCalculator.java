@@ -28,15 +28,10 @@ class CapacityCalculator {
     private static final double BONUS_SAME_COUNTRY = 0;
     private static final double BONUS_XOR = .25;
     private static final double PENALTY_NEW = 4;
-//    private static final double PENALTY_UNREACHABLE = 2;
     private static final double PENALTY_UNREACHABLE = 3;
-//    private static final double PENALTY_NO_RI = 2;
     private static final double PENALTY_NO_RI = 4;
-//    private static final double PENALTY_L_CAP = 1;
     private static final double PENALTY_L_CAP = 3;
-//    private static final double PENALTY_NO_R_CAP = 1;
     private static final double PENALTY_NO_R_CAP = 2;
-//    private static final double PENALTY_U_CAP = 2;
     private static final double PENALTY_U_CAP = 3;
     private static final double PENALTY_LAST_SEND_FAIL = 4;
     private static final String PROP_D_CAP = "router.penaltyCapD";

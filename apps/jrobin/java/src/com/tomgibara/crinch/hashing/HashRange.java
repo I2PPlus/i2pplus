@@ -23,8 +23,6 @@ import java.math.BigInteger;
  *
  * @author tomgibara
  */
-
-// TODO really need to revisit the inclusivity of maximum bound
 public class HashRange {
 
     // statics

@@ -30,8 +30,6 @@ package net.metanotion.util.skiplist;
 
 import java.io.Flushable;
 
-//import net.metanotion.io.block.BlockFile;
-
 /**
  * Represents a span or node in a skip list data structure.
  * Contains arrays of keys and values at a specific level in the skip list.

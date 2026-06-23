@@ -420,8 +420,6 @@ class FloodfillPeerSelector extends PeerSelector {
             _toIgnore = toIgnore;
             _wanted = wanted;
         }
-
-//        private static final int EXTRA_MATCHES = 100;
         private static final int EXTRA_MATCHES = 200;
         public void add(Hash entry) {
             if ((_toIgnore != null) && (_toIgnore.contains(entry))) {return;}
@@ -474,7 +472,6 @@ class FloodfillPeerSelector extends PeerSelector {
                         _log.debug("Floodfill sort: Skipping [" + entry.toBase64().substring(0,6) + "] -> RouterInfo published over 3h ago");
                 } else {
                     PeerProfile prof = _context.profileOrganizer().getProfile(entry);
-//                    if (prof != null && now - prof.getLastSendFailed() < 30*60*1000) {
                     if (prof != null && now - prof.getLastSendFailed() < 5*60*1000) {
                         badff.add(entry);
                         if (_log.shouldDebug())

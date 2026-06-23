@@ -2945,8 +2945,6 @@ return false;
                 }
                 continue;
             }
-
-// Check if LeaseSet is expiring soon - proactive refresh before expiry
                 // Use raw lookup to get LeaseSet even if expired
                 DatabaseEntry ds = _ds.get(key);
                 if (ds != null && ds.isLeaseSet()) {

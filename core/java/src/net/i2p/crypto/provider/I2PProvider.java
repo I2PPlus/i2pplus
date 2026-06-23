@@ -1,6 +1,4 @@
 package net.i2p.crypto.provider;
-
-// import java.security.AccessController;
 // import java.security.PrivilegedAction;
 import java.security.Provider;
 import java.security.Security;

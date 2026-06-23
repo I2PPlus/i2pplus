@@ -347,9 +347,7 @@ class SAMv3Handler extends SAMv1Handler
      */
     @Override
     public void stopHandling() {
-        if (_log.shouldInfo())
-//          _log.info("Stopping (stolen? " + stolenSocket + "): " + this, new Exception("I did it"));
-          _log.info("Stopping " + this + " -> Stolen? " + stolenSocket);
+        if (_log.shouldInfo())          _log.info("Stopping " + this + " -> Stolen? " + stolenSocket);
           synchronized (stopLock) {
               stopHandler = true;
           }

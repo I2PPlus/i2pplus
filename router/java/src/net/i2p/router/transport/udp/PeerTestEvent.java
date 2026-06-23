@@ -26,8 +26,6 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
     private static final int NO_FORCE = 0, FORCE_IPV4 = 1, FORCE_IPV6 = 2;
     private int _forceRun;
     private boolean _lastTestIPv6 = true;
-
-//    private static final int TEST_FREQUENCY = 13*60*1000;
     private static final int TEST_FREQUENCY = 5*60*1000;
     // must be greater than PeerTestManager.MAX_TEST_TIME
     private static final int MIN_TEST_FREQUENCY = 45*1000;

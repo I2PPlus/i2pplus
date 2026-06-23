@@ -202,7 +202,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     protected boolean shouldSelectExplicit(TunnelPoolSettings settings) {
         if (settings.isExploratory()) return false;
         // To test IB or OB only
-        //if (settings.isInbound()) return false;
         //if (!settings.isInbound()) return false;
         Properties opts = settings.getUnknownOptions();
         String peers = opts.getProperty("explicitPeers");
@@ -1162,11 +1161,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // connection establishment — same approach as TransportManager.establishTo().
         Transport udp = ctx.commSystem().getTransports().get("SSU");
         if (udp != null) {
-            try { udp.send(onm); return; } catch (Exception e) {}
+            try { udp.send(onm); return; } catch (Exception e) { /* ignored */ }
         }
         Transport ntcp = ctx.commSystem().getTransports().get("NTCP");
         if (ntcp != null) {
-            try { ntcp.send(onm); } catch (Exception e) {}
+            try { ntcp.send(onm); } catch (Exception e) { /* ignored */ }
         }
     }
 
@@ -1258,7 +1257,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                     OutNetMessage.PRIORITY_MY_BUILD_REQUEST, ri);
                 Transport udp = rctx.commSystem().getTransports().get("SSU");
                 if (udp != null) {
-                    try { udp.send(onm); keepalived++; _lastKeepAlive.put(peer, now); } catch (Exception e) {}
+                    try { udp.send(onm); keepalived++; _lastKeepAlive.put(peer, now); } catch (Exception e) { /* ignored */ }
                 }
             } else if (aggressive) {
                 // Peer not connected and pools are depleted — proactively start

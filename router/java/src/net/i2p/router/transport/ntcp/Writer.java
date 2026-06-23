@@ -26,13 +26,9 @@ class Writer {
 
     public Writer(RouterContext ctx) {
         _log = ctx.logManager().getLog(getClass());
-//        _pendingConnections = new LinkedHashSet<>(16);
         _pendingConnections = new LinkedHashSet<>(128);
-//        _runners = new ArrayList<>(5);
         _runners = new ArrayList<>(16);
-//        _liveWrites = new HashSet<>(5);
         _liveWrites = new HashSet<>(16);
-//        _writeAfterLive = new HashSet<>(5);
         _writeAfterLive = new HashSet<>(16);
     }
 

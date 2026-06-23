@@ -2339,13 +2339,11 @@ public class TunnelPool {
 
         // Only fire builds in true emergency: zero usable tunnels (no GOOD, no
         // near-expiry) and no builds already in progress for this pool.
-        //
         // Normal deficit handling is delegated to the BuildExecutor main loop
         // (calculatePairedBuilds), which runs every 1s and already accounts for
         // in-progress builds, global concurrency budget, and paired direction
         // allocation.  Firing builds from both paths simultaneously causes 600+
         // excess cancellations per session and wastes build slots.
-        //
         // Skip if builds are already in progress — during synchronized expiration
         // (e.g. boot-time IB tunnels expiring together), firing EMERGENCY for
         // every pool simultaneously causes a build storm (11 pools × 2 EMERGENCY
@@ -2566,7 +2564,6 @@ public class TunnelPool {
                 // detects the failure. Without this cooldown, the peer selector
                 // keeps re-selecting the same unresponsive peer, causing dozens of
                 // consecutive timeouts.
-                //
                 // Record only when consecutive timeouts are 2-6. A single isolated
                 // timeout (1) after a success is likely a fluke — don't penalize.
                 // At >= 7, selectPairedTunnel() uses exploratory tunnels for the

@@ -25,7 +25,6 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
     private final RouterContext _context;
     private final Log _log;
     private static final String PROP_INTERVAL = "router.deadlockDetectIntervalHours";
-//    private static final long DEFAULT_INTERVAL = SystemVersion.isSlow() ? 12 : 4;
     private static final long DEFAULT_INTERVAL = 1;
     private static final AtomicBoolean _isDeadlocked = new AtomicBoolean();
 

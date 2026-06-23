@@ -6,8 +6,6 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.util.SystemVersion;
-//import net.i2p.util.Log;
-
 /**
  * Performs targeted followup lookups for RouterInfo entries from search replies.
  * <p>
@@ -32,7 +30,6 @@ class SingleLookupJob extends JobImpl {
      *  I2NP spec allows 255, max actually sent (in ../HDLMJ) is 3,
      *  so just to prevent trouble, we don't want to queue 255 jobs at once
      */
-//    public static final int MAX_TO_FOLLOW = 8;
     public static final int MAX_TO_FOLLOW = SystemVersion.isSlow() || SystemVersion.getCPULoadAvg() > 90 ? 6 : 12;
 
     public SingleLookupJob(RouterContext ctx, DatabaseSearchReplyMessage dsrm) {

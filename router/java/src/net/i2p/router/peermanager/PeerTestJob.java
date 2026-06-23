@@ -592,7 +592,7 @@ public class PeerTestJob extends JobImpl {
                 getContext().profileOrganizer().demoteIfHighLatency(_peer);
                 if (_log.shouldInfo())
                     _log.info("Setting capacity bonus to -30 for [" + _shortHash + "] -> L, M, N or unreachable");
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) { /* ignored */ }
         }
 
         private void handleTimeout(PeerData data, long timeLeft) {
@@ -608,7 +608,7 @@ public class PeerTestJob extends JobImpl {
                     data.profile.setLowLatency(false);
                     if (_log.shouldInfo())
                         _log.info("Setting capacity bonus to -30 for [" + _shortHash + "]");
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) { /* ignored */ }
             }
         }
 
@@ -632,7 +632,7 @@ public class PeerTestJob extends JobImpl {
                     if (_log.shouldInfo())
                         _log.info("Setting capacity bonus to -30 for [" + _shortHash + "]" +
                                   " -> Average response is over twice timeout value");
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) { /* ignored */ }
                 return false;
             }
 
@@ -651,7 +651,7 @@ public class PeerTestJob extends JobImpl {
                         if (_log.shouldInfo())
                             _log.info("Setting low latency flag for [" + _shortHash + "]");
                     }
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) { /* ignored */ }
                 _matchFound = true;
                 return true;
             }
@@ -724,7 +724,7 @@ public class PeerTestJob extends JobImpl {
                             prof.setCapacityBonus(0);
                             if (_log.shouldInfo())
                                 _log.info("Resetting capacity bonus to 0 for [" + _peer.toBase64().substring(0,6) + "]");
-                        } catch (NumberFormatException nfe) {}
+                        } catch (NumberFormatException nfe) { /* ignored */ }
                         return;
                     } else if (prof != null && cap != null && (!reachable || bw.equals("L") || (bw.equals("M")))) {
                         try {
@@ -732,7 +732,7 @@ public class PeerTestJob extends JobImpl {
                             getContext().profileOrganizer().demoteIfHighLatency(h);
                             if (_log.shouldInfo())
                                 _log.info("Setting capacity bonus to -30 for [" + _peer.toBase64().substring(0,6) + "] -> L or M tier or unreachable");
-                        } catch (NumberFormatException nfe) {}
+                        } catch (NumberFormatException nfe) { /* ignored */ }
                         return;
                     } else if (prof != null && cap == null) {
                         try {
@@ -741,7 +741,7 @@ public class PeerTestJob extends JobImpl {
                             if (_log.shouldInfo())
                                 _log.info("Setting capacity bonus to -30 for [" + _peer.toBase64().substring(0,6) +
                                           "] -> No capabilities published in RouterInfo");
-                        } catch (NumberFormatException nfe) {}
+                        } catch (NumberFormatException nfe) { /* ignored */ }
                         return;
                     } else if (prof != null && cap != null &&
                                (cap.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
@@ -752,7 +752,7 @@ public class PeerTestJob extends JobImpl {
                             if (_log.shouldInfo())
                                 _log.info("Setting capacity bonus to -30 for [" + _peer.toBase64().substring(0,6) +
                                           "] -> Congestion cap (D/E) detected");
-                        } catch (NumberFormatException nfe) {}
+                        } catch (NumberFormatException nfe) { /* ignored */ }
                         return;
                     }
                 }
@@ -809,7 +809,7 @@ public class PeerTestJob extends JobImpl {
                     if (_log.shouldInfo())
                         _log.info("Setting capacity bonus to -30 for [" +
                                   shortHash + "] -> Slow or unreachable");
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) { /* ignored */ }
             }
         }
     }

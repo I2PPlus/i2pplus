@@ -1099,9 +1099,7 @@ public class PluginStarter implements Runnable {
                     if (!"org.eclipse.jetty.util.RolloverFileOutputStream".equals(name) &&
                         !name.startsWith("HSQLDB Timer"))
                         notRollover = true;
-                    if (log.shouldDebug())
-//                        log.debug("Found " + activeThreads[i].getState() + " thread " + name + "\n* Plugin: " + pluginName + ": " + name);
-                        log.debug("[" + pluginName + "] Found " + activeThreads[i].getState() + " thread: " + name);
+                    if (log.shouldDebug())                        log.debug("[" + pluginName + "] Found " + activeThreads[i].getState() + " thread: " + name);
                 }
             }
             rv = notRollover;
