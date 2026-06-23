@@ -48,7 +48,7 @@ public class VMCommSystem extends CommSystemFacade {
     /**
      * Mapping from Hash to VMCommSystem for all routers hooked together
      */
-    private static Map<Hash, VMCommSystem> _commSystemFacades = Collections.synchronizedMap(new HashMap<Hash, VMCommSystem>(16));
+    private static Map<Hash, VMCommSystem> _commSystemFacades = Collections.synchronizedMap(new HashMap<>(16));
 
     public VMCommSystem(RouterContext context) {
         _context = context;
@@ -80,7 +80,7 @@ public class VMCommSystem extends CommSystemFacade {
     public List<Hash> getEstablished() {
         List<Hash> rv;
         synchronized (_commSystemFacades) {
-            rv = new ArrayList<Hash>(_commSystemFacades.keySet());
+            rv = new ArrayList<>(_commSystemFacades.keySet());
         }
         Hash us = _context.routerHash();
         if (us != null)

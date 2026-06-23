@@ -429,7 +429,7 @@ public class UrlLauncher implements ClientApp {
      *  @since 0.9.38
      */
     private static String[] parseArgs(String args, String url) {
-        List<String> argList = new ArrayList<String>(4);
+        List<String> argList = new ArrayList<>(4);
         StringBuilder buf = new StringBuilder(32);
         boolean isQuoted = false;
         for (int j = 0; j < args.length(); j++) {

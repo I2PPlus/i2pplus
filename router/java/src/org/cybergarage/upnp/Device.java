@@ -1175,7 +1175,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // iconList
     // //////////////////////////////////////////////
 
-    private HashMap<String, byte[]> iconBytesMap = new HashMap<String, byte[]>();
+    private HashMap<String, byte[]> iconBytesMap = new HashMap<>();
 
     public boolean isIconBytesURI(String uri) {
         byte iconBytes[] = iconBytesMap.get(uri);

@@ -145,7 +145,7 @@ class BuildHandler implements Runnable {
         // Queue size = 12 * share BW / 48K
         //int sz = Math.min(MAX_QUEUE, Math.max(MIN_QUEUE, TunnelDispatcher.getShareBandwidth(ctx) * MIN_QUEUE / 48));
         int sz = ctx.getProperty(PROP_MAX_QUEUE, MAX_QUEUE);
-        _inboundBuildMessages = new LinkedBlockingQueue<BuildMessageState>(sz);
+        _inboundBuildMessages = new LinkedBlockingQueue<>(sz);
         ctx.statManager().createRequiredRateStat("tunnel.buildLookupSuccess", "Confirmation of successful deferred lookup", "Tunnels", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.buildReplyTooSlow", "Received a tunnel build reply after timeout", "Tunnels", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.corruptBuildReply", "Corrupt tunnel build replies received", "Tunnels", RATES);

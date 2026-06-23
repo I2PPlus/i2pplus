@@ -63,8 +63,8 @@ public final class CryptixAESEngine extends AESEngine {
     public CryptixAESEngine(I2PAppContext context) {
         super(context);
         // testing
-        // _ciphers = new LinkedBlockingQueue<Cipher>(CACHE_SIZE);
-        _ciphers = USE_SYSTEM_AES ? new LinkedBlockingQueue<Cipher>(CACHE_SIZE) : null;
+        // _ciphers = new LinkedBlockingQueue<>(CACHE_SIZE);
+        _ciphers = USE_SYSTEM_AES ? new LinkedBlockingQueue<>(CACHE_SIZE) : null;
         // _cache = new CryptixAESKeyCache();
     }
 

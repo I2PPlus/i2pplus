@@ -130,7 +130,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      */
     public Map<String, String> getMD5(String realm) {
         String pfx = realm + '.';
-        Map<String, String> rv = new HashMap<String, String>(4);
+        Map<String, String> rv = new HashMap<>(4);
         for (Map.Entry<String, String> e : _context.router().getConfigMap().entrySet()) {
             String prop = e.getKey();
             if (prop.startsWith(pfx) && prop.endsWith(PROP_MD5)) {
@@ -151,7 +151,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      */
     public Map<String, String> getPBKDF2(String realm) {
         String pfx = realm + '.';
-        Map<String, String> rv = new HashMap<String, String>(4);
+        Map<String, String> rv = new HashMap<>(4);
         for (Map.Entry<String, String> e : _context.router().getConfigMap().entrySet()) {
             String prop = e.getKey();
             if (prop.startsWith(pfx) && prop.endsWith(PROP_PBKDF2)) {
@@ -177,7 +177,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
             // consolePassword
             String pw = _context.getProperty(PROP_CONSOLE_OLD);
             if (pw != null) {
-                Map<String, String> toAdd = new HashMap<String, String>(2);
+                Map<String, String> toAdd = new HashMap<>(2);
                 if (pw.length() > 0) {
                     saveMD5(RouterConsoleRunner.PROP_CONSOLE_PW, RouterConsoleRunner.JETTY_REALM,
                             CONSOLE_USER, pw);
@@ -257,7 +257,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
             byte[] hash = skf.generateSecret(spec).getEncoded();
             String stored = PBKDF2_ITERATIONS + ":" + HexEncode(salt) + ":" + HexEncode(hash);
             Map<String, String> toAdd = Collections.singletonMap(pfx + PROP_PBKDF2, stored);
-            List<String> toDel = new ArrayList<String>(4);
+            List<String> toDel = new ArrayList<>(4);
             toDel.add(pfx + PROP_PW);
             toDel.add(pfx + PROP_B64);
             toDel.add(pfx + ".crypt");

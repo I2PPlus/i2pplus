@@ -85,7 +85,7 @@ public class SubscriptionsBean extends BaseBean {
         File file = subsFile();
         try {
             // trim and sort
-            List<String> urls = new ArrayList<String>();
+            List<String> urls = new ArrayList<>();
             InputStream in = new ByteArrayInputStream(content.getBytes("UTF-8"));
             String line;
             while ((line = DataHelper.readLine(in)) != null) {

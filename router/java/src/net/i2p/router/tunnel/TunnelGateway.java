@@ -55,7 +55,7 @@ abstract class TunnelGateway {
     protected TunnelGateway(RouterContext context, QueuePreprocessor preprocessor, Sender sender, Receiver receiver) {
         _context = context;
         _log = context.logManager().getLog(getClass());
-        _queue = new ArrayList<PendingGatewayMessage>(4);
+        _queue = new ArrayList<>(4);
         _preprocessor = preprocessor;
         _sender = sender;
         _receiver = receiver;

@@ -66,10 +66,10 @@ import java.util.Map;
 public final class SigUtil {
 
     private static final int FACTOR = SystemVersion.isAndroid() ? 1 : 4;
-    private static final Map<SigningPublicKey, ECPublicKey> _ECPubkeyCache = new LHMCache<SigningPublicKey, ECPublicKey>(FACTOR * 8);
-    private static final Map<SigningPrivateKey, ECPrivateKey> _ECPrivkeyCache = new LHMCache<SigningPrivateKey, ECPrivateKey>(8);
-    private static final Map<SigningPublicKey, EdDSAPublicKey> _EdPubkeyCache = new LHMCache<SigningPublicKey, EdDSAPublicKey>(FACTOR * 64);
-    private static final Map<SigningPrivateKey, EdDSAPrivateKey> _EdPrivkeyCache = new LHMCache<SigningPrivateKey, EdDSAPrivateKey>(FACTOR * 4);
+    private static final Map<SigningPublicKey, ECPublicKey> _ECPubkeyCache = new LHMCache<>(FACTOR * 8);
+    private static final Map<SigningPrivateKey, ECPrivateKey> _ECPrivkeyCache = new LHMCache<>(8);
+    private static final Map<SigningPublicKey, EdDSAPublicKey> _EdPubkeyCache = new LHMCache<>(FACTOR * 64);
+    private static final Map<SigningPrivateKey, EdDSAPrivateKey> _EdPrivkeyCache = new LHMCache<>(FACTOR * 4);
 
     private SigUtil() {}
 

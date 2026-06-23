@@ -271,7 +271,7 @@ abstract class StoreJob extends JobImpl {
          */
         Hash rkey = getContext().routingKeyGenerator().getRoutingKey(key);
         KBucketSet<Hash> ks = _facade.getKBuckets();
-        if (ks == null) return new ArrayList<Hash>();
+        if (ks == null) return new ArrayList<>();
         List<Hash> rv = ((FloodfillPeerSelector)_peerSelector).selectFloodfillParticipants(rkey, numClosest, alreadyChecked, ks);
         return rv;
     }

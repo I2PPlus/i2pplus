@@ -25,7 +25,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     private final PeerCoordinator _coordinator;
     private final URI _uri;
     // as received from coordinator
-    private final List<Request> outstandingRequests = new ArrayList<Request>();
+    private final List<Request> outstandingRequests = new ArrayList<>();
     private final boolean isMultiFile;
     // needed?
     private Request lastRequest;
@@ -126,7 +126,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
         boolean notify = true;
         ByteArrayOutputStream out = null;
         // current requests per-loop
-        List<Request> requests = new ArrayList<Request>(8);
+        List<Request> requests = new ArrayList<>(8);
         try {
             if (!util.connected()) {
                 boolean ok = util.connect();
@@ -634,7 +634,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
      * @return all pieces we are currently requesting, or empty Set
      */
     private synchronized Set<Integer> getRequestedPieces() {
-        Set<Integer> rv = new HashSet<Integer>(outstandingRequests.size() + 1);
+        Set<Integer> rv = new HashSet<>(outstandingRequests.size() + 1);
         for (Request req : outstandingRequests) {
             rv.add(Integer.valueOf(req.getPiece()));
         }
@@ -653,7 +653,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
 
     private synchronized List<Request> returnPartialPieces() {
         Set<Integer> pcs = getRequestedPieces();
-        List<Request> rv = new ArrayList<Request>(pcs.size());
+        List<Request> rv = new ArrayList<>(pcs.size());
         for (Integer p : pcs) {
             Request req = getLowestOutstandingRequest(p.intValue());
             if (req != null) rv.add(req);

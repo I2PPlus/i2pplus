@@ -259,7 +259,7 @@ public class EepPost extends EepGet {
         String username = null;
         String password = null;
         boolean error = false;
-        Map<String, Object> fields = new HashMap<String, Object>(8);
+        Map<String, Object> fields = new HashMap<>(8);
         Getopt g = new Getopt("eeppost", args, "p:cn:t:v:w:o:u:x:l:m:s:f:");
         try {
             int c;

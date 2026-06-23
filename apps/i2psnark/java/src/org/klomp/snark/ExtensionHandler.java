@@ -65,8 +65,8 @@ abstract class ExtensionHandler {
             boolean dht,
             boolean uploadOnly,
             boolean comment) {
-        Map<String, Object> handshake = new HashMap<String, Object>();
-        Map<String, Integer> m = new HashMap<String, Integer>();
+        Map<String, Object> handshake = new HashMap<>();
+        Map<String, Integer> m = new HashMap<>();
         if (pexAndMetadata) {
             m.put(TYPE_METADATA, Integer.valueOf(ID_METADATA));
             m.put(TYPE_PEX, Integer.valueOf(ID_PEX));
@@ -309,7 +309,7 @@ abstract class ExtensionHandler {
 
     /** REQUEST and REJECT are the same except for message type */
     private static void sendMessage(Peer peer, int type, int piece) {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("msg_type", Integer.valueOf(type));
         map.put("piece", Integer.valueOf(piece));
         byte[] payload = BEncoder.bencode(map);
@@ -324,7 +324,7 @@ abstract class ExtensionHandler {
     }
 
     private static void sendPiece(Peer peer, int piece, byte[] data, int totalSize) {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("msg_type", Integer.valueOf(TYPE_DATA));
         map.put("piece", Integer.valueOf(piece));
         // BEP 9
@@ -367,7 +367,7 @@ abstract class ExtensionHandler {
             byte[] ids = bev.getBytes();
             if (ids.length < HASH_LENGTH) return;
             int len = Math.min(ids.length, (I2PSnarkUtil.MAX_CONNECTIONS - 1) * HASH_LENGTH);
-            List<PeerID> peers = new ArrayList<PeerID>(len / HASH_LENGTH);
+            List<PeerID> peers = new ArrayList<>(len / HASH_LENGTH);
             for (int off = 0; off < len; off += HASH_LENGTH) {
                 byte[] hash = new byte[HASH_LENGTH];
                 System.arraycopy(ids, off, hash, 0, HASH_LENGTH);
@@ -412,7 +412,7 @@ abstract class ExtensionHandler {
      */
     public static void sendPEX(Peer peer, List<Peer> pList) {
         if (pList.isEmpty()) return;
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         byte[] peers = new byte[HASH_LENGTH * pList.size()];
         int off = 0;
         for (Peer p : pList) {
@@ -437,7 +437,7 @@ abstract class ExtensionHandler {
      * @since DHT
      */
     public static void sendDHT(Peer peer, int qport, int rport) {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("port", Integer.valueOf(qport));
         map.put("rport", Integer.valueOf(rport));
         byte[] payload = BEncoder.bencode(map);
@@ -477,7 +477,7 @@ abstract class ExtensionHandler {
                 // response
                 List<BEValue> list = map.get("comments").getList();
                 if (list.isEmpty()) return;
-                List<Comment> comments = new ArrayList<Comment>(list.size());
+                List<Comment> comments = new ArrayList<>(list.size());
                 long now = I2PAppContext.getGlobalContext().clock().now();
                 for (BEValue li : list) {
                     Map<String, BEValue> m = li.getMap();
@@ -508,7 +508,7 @@ abstract class ExtensionHandler {
      * @since 0.9.31
      */
     public static void sendCommentReq(Peer peer, int num) {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("msg_type", Integer.valueOf(0));
         map.put("num", Integer.valueOf(num));
         map.put("filter", COMMENTS_FILTER);
@@ -531,14 +531,14 @@ abstract class ExtensionHandler {
     public static void locked_sendComments(Peer peer, int num, CommentSet comments) {
         int toSend = Math.min(num, comments.size());
         if (toSend <= 0) return;
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("msg_type", Integer.valueOf(1));
-        List<Object> lc = new ArrayList<Object>(toSend);
+        List<Object> lc = new ArrayList<>(toSend);
         long now = I2PAppContext.getGlobalContext().clock().now();
         int i = 0;
         for (Comment c : comments) {
             if (i++ >= toSend) break;
-            Map<String, Object> mc = new HashMap<String, Object>();
+            Map<String, Object> mc = new HashMap<>();
             String s = c.getName();
             mc.put("owner", s != null ? s : "");
             s = c.getText();

@@ -128,7 +128,7 @@ class ParticipatingThrottler {
 
     ParticipatingThrottler(RouterContext ctx) {
         this.context = ctx;
-        this.counter = new ObjectCounter<Hash>();
+        this.counter = new ObjectCounter<>();
         this._log = ctx.logManager().getLog(ParticipatingThrottler.class);
         _banLogger = new BanLogger();
         _banLogger.initialize(ctx);

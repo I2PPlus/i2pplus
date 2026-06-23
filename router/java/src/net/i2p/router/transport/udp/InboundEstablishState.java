@@ -97,7 +97,7 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
         _bobPort = 0;
         _currentState = InboundState.IB_STATE_UNKNOWN;
         _establishBegin = ctx.clock().now();
-        _queuedMessages = new LinkedBlockingQueue<OutNetMessage>();
+        _queuedMessages = new LinkedBlockingQueue<>();
    }
 
     /**

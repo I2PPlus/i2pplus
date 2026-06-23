@@ -43,7 +43,7 @@ class BuildExecutor implements Runnable {
     private static int getTunnelTargetMin(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.build.targetMin", 2);
     }
-    private final ArrayList<Long> _recentBuildIds = new ArrayList<Long>(256);
+    private final ArrayList<Long> _recentBuildIds = new ArrayList<>(256);
     private final RouterContext _context;
     private final Log _log;
     private final TunnelPoolManager _manager;
@@ -55,7 +55,7 @@ class BuildExecutor implements Runnable {
     private boolean _repoll;
     private final AtomicInteger _buildSuccessCount = new AtomicInteger();
     private final AtomicInteger _buildFailureCount = new AtomicInteger();
-    private final ConcurrentHashMap<TunnelPool, Long> _lastRebuildTime = new ConcurrentHashMap<TunnelPool, Long>(64);
+    private final ConcurrentHashMap<TunnelPool, Long> _lastRebuildTime = new ConcurrentHashMap<>(64);
     private final AtomicInteger _buildTimeoutCount = new AtomicInteger();
     private final AtomicInteger _firstHopSuccessCount = new AtomicInteger();
     private final AtomicInteger _firstHopFailureCount = new AtomicInteger();
@@ -67,7 +67,7 @@ class BuildExecutor implements Runnable {
      */
     private static final int CONSECUTIVE_FAILURE_THRESHOLD = 3;
     private static final long POOL_BACKOFF_MS = 30 * 1000;
-    private final ConcurrentHashMap<TunnelPool, long[]> _poolFailureState = new ConcurrentHashMap<TunnelPool, long[]>(64);
+    private final ConcurrentHashMap<TunnelPool, long[]> _poolFailureState = new ConcurrentHashMap<>(64);
     private int _keepAliveCounter;
     private volatile long _adaptiveTimeout;
     private volatile long _adaptiveFirstHopTimeout;
@@ -144,8 +144,8 @@ class BuildExecutor implements Runnable {
         _adaptiveFirstHopTimeout = BuildRequestor.getFirstHopTimeout(ctx);
         _currentlyBuilding = new Object();
         int maxConcurrentBuilds = getMaxConcurrentBuilds();
-        _currentlyBuildingMap = new ConcurrentHashMap<Long, PooledTunnelCreatorConfig>(maxConcurrentBuilds);
-        _recentlyBuildingMap = new ConcurrentHashMap<Long, PooledTunnelCreatorConfig>(4 * maxConcurrentBuilds);
+        _currentlyBuildingMap = new ConcurrentHashMap<>(maxConcurrentBuilds);
+        _recentlyBuildingMap = new ConcurrentHashMap<>(4 * maxConcurrentBuilds);
         _context.statManager().createRequiredRateStat("tunnel.buildFailFirstHop", "OB tunnel build failure frequency (can't contact 1st hop)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildReplySlow", "Build reply late, but not too late", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.concurrentBuildsLagged", "Concurrent build count before rejecting (job lag)", "Tunnels", RATES); // (period is lag)
@@ -997,7 +997,7 @@ class BuildExecutor implements Runnable {
         // Pre-collect per-direction targets for paired destinations.
         // Used for proportional build allocation so one direction of a pair
         // can't cannibalize the other's share of the build pool.
-        Map<Hash, int[]> pairTargets = new HashMap<Hash, int[]>(pools.size());
+        Map<Hash, int[]> pairTargets = new HashMap<>(pools.size());
         for (TunnelPool p : pools) {
             if (!p.isAlive()) continue;
             Hash dest = p.getSettings().getDestination();
@@ -1016,7 +1016,7 @@ class BuildExecutor implements Runnable {
         }
 
         // Track per-direction builds requested in this iteration for capping
-        Map<Hash, int[]> pairRequested = new HashMap<Hash, int[]>(pools.size());
+        Map<Hash, int[]> pairRequested = new HashMap<>(pools.size());
 
         for (TunnelPool pool : pools) {
             if (!pool.isAlive()) continue;

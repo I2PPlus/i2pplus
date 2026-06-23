@@ -164,7 +164,7 @@ public class MagnetURI {
         if (idx < 0 || idx > uri.length()) {
             return null;
         }
-        List<String> rv = new ArrayList<String>();
+        List<String> rv = new ArrayList<>();
         while (true) {
             String p = uri.substring(idx);
             uri = p;
@@ -194,7 +194,7 @@ public class MagnetURI {
             return null;
         }
 
-        List<String> rv = new ArrayList<String>(trackers.size());
+        List<String> rv = new ArrayList<>(trackers.size());
         for (String t : trackers) {
             try {
                 URI u = new URI(t);

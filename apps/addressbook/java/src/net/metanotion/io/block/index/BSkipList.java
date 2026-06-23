@@ -69,8 +69,8 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 	/** Whether this skiplist is closed */
 	private boolean isClosed;
 
-	final HashMap<Integer, BSkipSpan<K, V>> spanHash = new HashMap<Integer, BSkipSpan<K, V>>();
-	final HashMap<Integer, SkipLevels<K, V>> levelHash = new HashMap<Integer, SkipLevels<K, V>>();
+	final HashMap<Integer, BSkipSpan<K, V>> spanHash = new HashMap<>();
+	final HashMap<Integer, SkipLevels<K, V>> levelHash = new HashMap<>();
 
 	private final boolean fileOnly;
 
@@ -120,10 +120,10 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 
 		this.fileOnly = fileOnly;
 		if (fileOnly)
-			first = new IBSkipSpan<K, V>(bf, this, firstSpanPage, key, val);
+			first = new IBSkipSpan<>(bf, this, firstSpanPage, key, val);
 		else
-			first = new BSkipSpan<K, V>(bf, this, firstSpanPage, key, val);
-		BSkipLevels<K, V> bstack = new BSkipLevels<K, V>(bf, firstLevelPage, this);
+			first = new BSkipSpan<>(bf, this, firstSpanPage, key, val);
+		BSkipLevels<K, V> bstack = new BSkipLevels<>(bf, firstLevelPage, this);
 		bstack.initializeLevels();
 		stack = bstack;
 		int total = 0;
@@ -260,7 +260,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 	public SkipIterator<K, V> iterator() {
 		if (!this.fileOnly)
 			return super.iterator();
-		return new IBSkipIterator<K, V>(first, 0);
+		return new IBSkipIterator<>(first, 0);
 	}
 
 /****
@@ -274,7 +274,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 		if (!this.fileOnly)
 			return super.max();
 		SkipSpan<K, V> ss = stack.getEnd();
-		return new IBSkipIterator<K, V>(ss, ss.nKeys - 1);
+		return new IBSkipIterator<>(ss, ss.nKeys - 1);
 	}
 ****/
 
@@ -291,7 +291,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 		int[] search = new int[1];
 		SkipSpan<K, V> ss = stack.getSpan(stack.levels.length - 1, key, search);
 		if(search[0] < 0) { search[0] = -1 * (search[0] + 1); }
-		return new IBSkipIterator<K, V>(ss, search[0]);
+		return new IBSkipIterator<>(ss, search[0]);
 	}
 
 	/**

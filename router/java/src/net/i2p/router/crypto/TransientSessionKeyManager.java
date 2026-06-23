@@ -174,8 +174,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         _lowThreshold = lowThreshold;
         _log = context.logManager().getLog(TransientSessionKeyManager.class);
         _context = context;
-        _outboundSessions = new HashMap<PublicKey, OutboundSession>(64);
-        _inboundTagSets = new HashMap<SessionTag, TagSet>(128);
+        _outboundSessions = new HashMap<>(64);
+        _inboundTagSets = new HashMap<>(128);
         context.statManager().createRateStat("crypto.sessionTagsExpired", "Number of expired tags/sessions", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
         context.statManager().createRateStat("crypto.sessionTagsRemaining", "Number of remaining tags/sessions after a cleanup", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
          _alive = true;
@@ -206,14 +206,14 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     /** TagSet */
     private Set<TagSet> getInboundTagSets() {
         synchronized (_inboundTagSets) {
-            return new HashSet<TagSet>(_inboundTagSets.values());
+            return new HashSet<>(_inboundTagSets.values());
         }
     }
 
     /** OutboundSession - used only by HTML */
     private Set<OutboundSession> getOutboundSessions() {
         synchronized (_outboundSessions) {
-            return new HashSet<OutboundSession>(_outboundSessions.values());
+            return new HashSet<>(_outboundSessions.values());
         }
     }
 
@@ -550,7 +550,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         int tags = 0;
         int toRemove = overage * 2;
         _log.logAlways(Log.WARN, "TOO MANY SESSION TAGS! Starting cleanup, overage = " + overage);
-        List<TagSet> removed = new ArrayList<TagSet>(toRemove);
+        List<TagSet> removed = new ArrayList<>(toRemove);
         synchronized (_inboundTagSets) {
             for (TagSet set : _inboundTagSets.values()) {
                 int size = set.getTags().size();
@@ -724,12 +724,12 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      */
     private Map<SessionKey, Set<TagSet>> getInboundTagSetsBySessionKey() {
         Set<TagSet> inbound = getInboundTagSets();
-        Map<SessionKey, Set<TagSet>> inboundSets = new HashMap<SessionKey, Set<TagSet>>(inbound.size());
+        Map<SessionKey, Set<TagSet>> inboundSets = new HashMap<>(inbound.size());
         // Build a map of the inbound tag sets, grouped by SessionKey
         for (TagSet ts : inbound) {
             Set<TagSet> sets = inboundSets.get(ts.getAssociatedKey());
             if (sets == null) {
-                sets = new HashSet<TagSet>(4);
+                sets = new HashSet<>(4);
                 inboundSets.put(ts.getAssociatedKey(), sets);
             }
             sets.add(ts);
@@ -746,7 +746,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         int total = 0;
         int totalSets = 0;
         long now = _context.clock().now();
-        Set<TagSet> sets = new TreeSet<TagSet>(new TagSetComparator());
+        Set<TagSet> sets = new TreeSet<>(new TagSetComparator());
         for (Map.Entry<SessionKey, Set<TagSet>> e : inboundSets.entrySet()) {
             SessionKey skey = e.getKey();
             sets.clear();
@@ -883,8 +883,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             _currentKey = key;
             _established = ctx.clock().now();
             _lastUsed = _established;
-            _unackedTagSets = new HashSet<TagSet>(4);
-            _tagSets = new ArrayList<TagSet>(6);
+            _unackedTagSets = new HashSet<>(4);
+            _tagSets = new ArrayList<>(6);
         }
 
         /**
@@ -895,7 +895,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         List<TagSet> getTagSets() {
             List<TagSet> rv;
             synchronized (_tagSets) {
-                rv = new ArrayList<TagSet>(_unackedTagSets);
+                rv = new ArrayList<>(_unackedTagSets);
                 rv.addAll(_tagSets);
             }
             return rv;

@@ -178,7 +178,7 @@ public final class CertUtil {
      *  @since 0.9.34
      */
     public static Set<String> getSubjectAlternativeNames(X509Certificate cert) {
-        Set<String> rv = new HashSet<String>(8);
+        Set<String> rv = new HashSet<>(8);
         try {
             Collection<List<?>> c = cert.getSubjectAlternativeNames();
             if (c != null) {
@@ -399,7 +399,7 @@ public final class CertUtil {
         try {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
             Collection<? extends Certificate> certs = cf.generateCertificates(in);
-            List<X509Certificate> rv = new ArrayList<X509Certificate>(certs.size());
+            List<X509Certificate> rv = new ArrayList<>(certs.size());
             for (Certificate cert : certs) {
                 if (!(cert instanceof X509Certificate)) {
                     throw new GeneralSecurityException("Not a X.509 cert");
@@ -523,7 +523,7 @@ public final class CertUtil {
      *  @since 0.9.25
      */
     public static CertStore loadCRLs(I2PAppContext ctx) {
-        Set<X509CRL> crls = new HashSet<X509CRL>(8);
+        Set<X509CRL> crls = new HashSet<>(8);
         File dir = new File(ctx.getBaseDir(), CERT_DIR);
         dir = new File(dir, REVOCATION_DIR);
         loadCRLs(crls, dir);
@@ -621,7 +621,7 @@ public final class CertUtil {
             } else if (args[0].equals("loadcrl")) {
                 loadCRL(f);
             } else if (args[0].equals("loadcrldir")) {
-                Set<X509CRL> crls = new HashSet<X509CRL>(8);
+                Set<X509CRL> crls = new HashSet<>(8);
                 loadCRLs(crls, f);
                 System.out.println("Found " + crls.size() + " CRLs");
             } else if (args[0].equals("loadcrldirs")) {
@@ -662,7 +662,7 @@ public final class CertUtil {
         int good = 0;
         int soon = 0;
         int bad = 0;
-        Set<X509CRL> crls = new HashSet<X509CRL>(8);
+        Set<X509CRL> crls = new HashSet<>(8);
         File rdir = new File(dir, REVOCATION_DIR);
         loadCRLs(crls, rdir);
         // System.out.println("Loaded " + crls.size() + " CRLs");

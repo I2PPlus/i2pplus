@@ -63,7 +63,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         if (_log.shouldDebug()) {
             _log.debug("EDH Precalc (minimum: " + _minSize + " max: " + _maxSize + ", delay: " + _calcDelay + ")");
         }
-        _keys = new LinkedBlockingQueue<Elg2KeyPair>(_maxSize);
+        _keys = new LinkedBlockingQueue<>(_maxSize);
         if (!SystemVersion.isWindows()) {setPriority(Thread.NORM_PRIORITY - 1);}
     }
 

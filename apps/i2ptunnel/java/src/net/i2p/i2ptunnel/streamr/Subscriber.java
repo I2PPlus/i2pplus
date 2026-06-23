@@ -34,7 +34,7 @@ public class Subscriber implements Sink {
     public Subscriber(MultiSource multi) {
         this.multi = multi;
         // subscriptions
-        this.subscriptions = new ConcurrentHashMap<MultiSource.MSink, Long>();
+        this.subscriptions = new ConcurrentHashMap<>();
         timer = new Expire();
     }
 

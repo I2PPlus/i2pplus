@@ -106,8 +106,8 @@ public class FIFOBandwidthLimiter {
         _context.statManager().createRateStat("bwLimiter.pendingInboundRequests", "Inbound non-zero length requests ahead of current", "BandwidthLimiter", RateConstants.BANDWIDTH_RATES);
         _context.statManager().createRateStat("bwLimiter.outboundDelayedTime", "Time to honor non-zero length outbound request (ms)", "BandwidthLimiter", RateConstants.BANDWIDTH_RATES);
         _context.statManager().createRateStat("bwLimiter.inboundDelayedTime", "Time to honor non-zero length inbound request (ms)", "BandwidthLimiter", RateConstants.BANDWIDTH_RATES);
-        _pendingInboundRequests = new ArrayList<SimpleRequest>(16);
-        _pendingOutboundRequests = new ArrayList<SimpleRequest>(16);
+        _pendingInboundRequests = new ArrayList<>(16);
+        _pendingOutboundRequests = new ArrayList<>(16);
         _lastTotalSent = _totalAllocatedOutboundBytes.get();
         _lastTotalReceived = _totalAllocatedInboundBytes.get();
         _lastStatsUpdated = now();
@@ -874,7 +874,7 @@ public class FIFOBandwidthLimiter {
          *  @param priority 0 for now
          */
         public SimpleRequest(int bytes, int priority) {
-            satisfiedBuffer = new ArrayList<Request>(1);
+            satisfiedBuffer = new ArrayList<>(1);
             _total = bytes;
             _priority = priority;
             // following two are temp until switch to PBQ

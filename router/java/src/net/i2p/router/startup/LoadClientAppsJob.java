@@ -134,7 +134,7 @@ public class LoadClientAppsJob extends JobImpl {
      *  @return non-null, 0-length if args is null
      */
     public static String[] parseArgs(String args) {
-        List<String> argList = new ArrayList<String>(4);
+        List<String> argList = new ArrayList<>(4);
         if (args != null) {
             StringBuilder buf = new StringBuilder(32);
             boolean isQuoted = false;

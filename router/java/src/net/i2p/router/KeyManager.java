@@ -55,7 +55,7 @@ public class KeyManager {
     public KeyManager(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(KeyManager.class);
-        _leaseSetKeys = new ConcurrentHashMap<Hash, LeaseSetKeys>();
+        _leaseSetKeys = new ConcurrentHashMap<>();
     }
 
     /**

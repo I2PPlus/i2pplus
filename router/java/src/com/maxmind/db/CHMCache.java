@@ -22,7 +22,7 @@ public class CHMCache implements NodeCache {
 
     public CHMCache(int capacity) {
         this.capacity = capacity;
-        this.cache = new ConcurrentHashMap<Integer, Object>(capacity);
+        this.cache = new ConcurrentHashMap<>(capacity);
     }
 
     @Override

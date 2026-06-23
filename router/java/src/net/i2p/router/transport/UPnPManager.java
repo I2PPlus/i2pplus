@@ -117,7 +117,7 @@ class UPnPManager {
         int ssdpPort = _context.getProperty(PROP_SSDP_PORT, DEFAULT_SSDP_PORT);
         int httpPort = _context.getProperty(PROP_HTTP_PORT, DEFAULT_HTTP_PORT);
         Set<String> addrs = UPnP.getLocalAddresses();
-        List<InetAddress> ias = new ArrayList<InetAddress>(addrs.size());
+        List<InetAddress> ias = new ArrayList<>(addrs.size());
         for (String addr : addrs) {
             try {
                 InetAddress ia = InetAddress.getByName(addr);
@@ -308,7 +308,7 @@ class UPnPManager {
                 return;
         //}
 
-        Set<ForwardPort> forwards = new HashSet<ForwardPort>(ports.size());
+        Set<ForwardPort> forwards = new HashSet<>(ports.size());
         for (TransportManager.Port entry : ports) {
             String style = entry.style;
             int port = entry.port;

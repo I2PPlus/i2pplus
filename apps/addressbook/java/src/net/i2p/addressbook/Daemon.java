@@ -712,7 +712,7 @@ public class Daemon {
         }
         delay *= 60 * 60 * 1000;
 
-        List<String> defaultSubs = new ArrayList<String>(4);
+        List<String> defaultSubs = new ArrayList<>(4);
         defaultSubs.add(DEFAULT_SUB);
         SubscriptionList subscriptions = new SubscriptionList(subscriptionFile,
                                                               etagsFile, lastModifiedFile, lastFetchedFile,
@@ -807,7 +807,7 @@ public class Daemon {
             }
         } else {homeFile = new SecureDirectory(System.getProperty("user.dir"));}
 
-        Map<String, String> defaultSettings = new HashMap<String, String>();
+        Map<String, String> defaultSettings = new HashMap<>();
         defaultSettings.put("proxy_host", "127.0.0.1");
         defaultSettings.put("proxy_port", "4444");
         defaultSettings.put("master_addressbook", "../userhosts.txt");

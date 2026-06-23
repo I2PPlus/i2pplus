@@ -47,7 +47,7 @@ class LocalHash extends Hash {
     public void prepareCache() {
         synchronized (this) {
             if (_xorCache == null)
-                _xorCache = new HashMap<Hash, byte[]>(MAX_CACHED_XOR);
+                _xorCache = new HashMap<>(MAX_CACHED_XOR);
         }
     }
 
@@ -69,7 +69,7 @@ class LocalHash extends Hash {
             synchronized (_xorCache) {
                 int toRemove = _xorCache.size() + 1 - MAX_CACHED_XOR;
                 if (toRemove > 0) {
-                    Set<Hash> keys = new HashSet<Hash>(toRemove);
+                    Set<Hash> keys = new HashSet<>(toRemove);
                     // this removes essentially random keys - we don't maintain any sort
                     // of LRU or age.  perhaps we should?
                     int removed = 0;

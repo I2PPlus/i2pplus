@@ -39,7 +39,7 @@ public class ConfigTunnelsHelper extends HelperBase {
         Set<Destination> clients = _context.clientManager().listClients();
         TunnelManagerFacade mgr = _context.tunnelManager();
         // display name to in pool
-        List<TunnelPoolSettings> sorted = new ArrayList<TunnelPoolSettings>(clients.size());
+        List<TunnelPoolSettings> sorted = new ArrayList<>(clients.size());
         for (Destination dest : clients) {
             TunnelPoolSettings in = mgr.getInboundSettings(dest.calculateHash());
             if (in != null)

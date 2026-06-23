@@ -191,20 +191,20 @@ class EstablishmentManager {
         _banLogger = new BanLogger();
         _banLogger.initialize(ctx);
         _builder2 = transport.getBuilder2();
-        _inboundStates = new ConcurrentHashMap<RemoteHostId, InboundEstablishState>();
-        _outboundStates = new ConcurrentHashMap<RemoteHostId, OutboundEstablishState>();
-        _queuedOutbound = new ConcurrentHashMap<RemoteHostId, LinkedBlockingQueue<OutNetMessage>>();
-        _liveIntroductions = new ConcurrentHashMap<Long, OutboundEstablishState>();
-        _outboundByClaimedAddress = new ConcurrentHashMap<RemoteHostId, OutboundEstablishState>();
-        _outboundByHash = new ConcurrentHashMap<Hash, OutboundEstablishState>();
-        _inboundBans = new LHMCache<RemoteHostId, Long>(32);
+        _inboundStates = new ConcurrentHashMap<>();
+        _outboundStates = new ConcurrentHashMap<>();
+        _queuedOutbound = new ConcurrentHashMap<>();
+        _liveIntroductions = new ConcurrentHashMap<>();
+        _outboundByClaimedAddress = new ConcurrentHashMap<>();
+        _outboundByHash = new ConcurrentHashMap<>();
+        _inboundBans = new LHMCache<>(32);
         // scale based on expected traffic and system capabilities
         int multiplier = SystemVersion.isSlow() ? 1 : 2;  // Double cache for fast systems
         int tokenCacheSize = Math.max(MIN_TOKENS, Math.min(MAX_TOKENS,
             multiplier * _transport.getMaxConnections() / 2));
         _inboundTokens = new InboundTokens(tokenCacheSize);
-        _outboundTokens = new LHMCache<RemoteHostId, Token>(tokenCacheSize);
-        _terminationCounter = new ObjectCounter<RemoteHostId>();
+        _outboundTokens = new LHMCache<>(tokenCacheSize);
+        _terminationCounter = new ObjectCounter<>();
 
         _activityLock = new Object();
         DEFAULT_MAX_CONCURRENT_ESTABLISH = Math.max(DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH,
@@ -1266,7 +1266,7 @@ class EstablishmentManager {
         _context.statManager().addRateData("udp.outboundEstablishTime", state.getLifetime(now));
         DatabaseStoreMessage dbsm = null;
 
-        List<OutNetMessage> msgs = new ArrayList<OutNetMessage>(8);
+        List<OutNetMessage> msgs = new ArrayList<>(8);
         OutNetMessage msg;
         while ((msg = state.getNextQueuedMessage()) != null) {
             if (now - Router.CLOCK_FUDGE_FACTOR > msg.getExpiration()) {
@@ -2605,7 +2605,7 @@ class EstablishmentManager {
             TokenComparator comp = new TokenComparator();
             List<Map.Entry<RemoteHostId, Token>> tmp;
             synchronized(_inboundTokens) {
-                tmp = new ArrayList<Map.Entry<RemoteHostId, Token>>(_inboundTokens.entrySet());
+                tmp = new ArrayList<>(_inboundTokens.entrySet());
             }
             Collections.sort(tmp, comp);
             for (Map.Entry<RemoteHostId, Token> e : tmp) {

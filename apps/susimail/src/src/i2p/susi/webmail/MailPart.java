@@ -81,7 +81,7 @@ class MailPart {
         intID = id.getAndIncrement();
         buffer = readBuffer;
 
-        parts = new ArrayList<MailPart>(4);
+        parts = new ArrayList<>(4);
 
         if (hdrlines != null) {
             // from Mail headers

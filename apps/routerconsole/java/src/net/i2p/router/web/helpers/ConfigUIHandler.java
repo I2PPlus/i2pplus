@@ -54,8 +54,8 @@ public class ConfigUIHandler extends FormHandler {
             addFormError(_t("Cannot save theme choice, theme name has illegal characters"), true);
             return;
         }
-        Map<String, String> changes = new HashMap<String, String>();
-        List<String> removes = new ArrayList<String>();
+        Map<String, String> changes = new HashMap<>();
+        List<String> removes = new ArrayList<>();
         String oldTheme = _context.getProperty(CSSHelper.PROP_THEME_NAME, CSSHelper.DEFAULT_THEME);
         boolean oldForceMobileConsole = _context.getBooleanProperty(CSSHelper.PROP_FORCE_MOBILE_CONSOLE);
 

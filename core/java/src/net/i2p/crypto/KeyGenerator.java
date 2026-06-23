@@ -453,7 +453,7 @@ public final class KeyGenerator {
         int runs = 200; // warmup
         Collection<SigType> toTest;
         if (args.length > 0) {
-            toTest = new ArrayList<SigType>();
+            toTest = new ArrayList<>();
             for (int i = 0; i < args.length; i++) {
                 SigType type = SigType.parseSigType(args[i]);
                 if (type != null) toTest.add(type);

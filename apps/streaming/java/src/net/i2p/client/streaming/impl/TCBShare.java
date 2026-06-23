@@ -62,7 +62,7 @@ class TCBShare {
         _wdwDampening = getDouble(props, WDW_DAMP_PROP, WDW_DAMPENING);
         _rttDevDampening = getDouble(props, RTTDEV_DAMP_PROP, RTTDEV_DAMPENING);
 
-        _cache = new ConcurrentHashMap<Destination,Entry>(4);
+        _cache = new ConcurrentHashMap<>(4);
         _cleaner = new CleanEvent(timer);
         _cleaner.schedule(CLEAN_TIME);
 

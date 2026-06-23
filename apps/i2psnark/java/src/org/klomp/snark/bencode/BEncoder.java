@@ -165,10 +165,10 @@ public class BEncoder {
                 } else if (b != null) {
                     b.add((byte[]) k);
                 } else if (String.class.isAssignableFrom(k.getClass())) {
-                    l = new ArrayList<String>(s.size());
+                    l = new ArrayList<>(s.size());
                     l.add((String) k);
                 } else if (byte[].class.isAssignableFrom(k.getClass())) {
-                    b = new ArrayList<byte[]>(s.size());
+                    b = new ArrayList<>(s.size());
                     b.add((byte[]) k);
                 } else {
                     throw new IllegalArgumentException(

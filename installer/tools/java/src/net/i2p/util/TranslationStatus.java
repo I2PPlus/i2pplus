@@ -71,9 +71,9 @@ public class TranslationStatus {
         buf = new StringBuilder(65536);
         buf2 = new StringBuilder(4096);
         langs = Arrays.asList(LANGS);
-        counts = new ObjectCounterUnsafe<Locale>();
-        bundles = new ObjectCounterUnsafe<Locale>();
-        foundLangs = new HashSet<Locale>(64);
+        counts = new ObjectCounterUnsafe<>();
+        bundles = new ObjectCounterUnsafe<>();
+        foundLangs = new HashSet<>(64);
     }
 
 /*
@@ -95,7 +95,7 @@ public class TranslationStatus {
     public String getStatus(File[] files) throws IOException {
         buf.setLength(0);
         buf2.setLength(0);
-        List<String> classes = new ArrayList<String>(64);
+        List<String> classes = new ArrayList<>(64);
         int grandtot = 0;
         int resources = 0;
 
@@ -146,7 +146,7 @@ public class TranslationStatus {
 
             String pclz = "";
             int max = 0;
-            List<ResourceBundle> buns = new ArrayList<ResourceBundle>(64);
+            List<ResourceBundle> buns = new ArrayList<>(64);
             for (String name : classes) {
                 name = name.substring(0, name.length() - 6);  // .class
                 int c = name.indexOf('_');
@@ -322,7 +322,7 @@ public class TranslationStatus {
                .append("<tr><th>Language</th><th>Language Code</th><th>Translated</th><th>% Translated</th></tr>\n")
                .append("</thead>\n<tbody>\n");
         }
-        Set<String> missing = new TreeSet<String>(langs);
+        Set<String> missing = new TreeSet<>(langs);
         for (ResourceBundle bun : buns) {
             Set<String> keys = bun.keySet();
             int tot = keys.size() - 1; // subtract empty header string

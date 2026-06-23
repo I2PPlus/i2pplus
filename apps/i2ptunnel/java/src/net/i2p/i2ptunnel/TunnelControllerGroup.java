@@ -184,7 +184,7 @@ public class TunnelControllerGroup implements ClientApp {
         _context = context;
         _mgr = mgr;
         _log = _context.logManager().getLog(TunnelControllerGroup.class);
-        _controllers = new ArrayList<TunnelController>();
+        _controllers = new ArrayList<>();
         _controllersLock = new ReentrantReadWriteLock(true);
         if (args == null || args.length <= 0) {
             _configFile = DEFAULT_CONFIG_FILE;
@@ -196,7 +196,7 @@ public class TunnelControllerGroup implements ClientApp {
         } else {
             throw new IllegalArgumentException("Usage: TunnelControllerGroup [filename] [configdirectory] ");
         }
-        _sessions = new HashMap<I2PSession, Set<TunnelController>>(4);
+        _sessions = new HashMap<>(4);
         synchronized (TunnelControllerGroup.class) {
             if (_instance == null) {
                 _instance = this;
@@ -463,7 +463,7 @@ public class TunnelControllerGroup implements ClientApp {
         _controllersLock.readLock().lock();
         List<TunnelController> delayedServers;
         try {
-            delayedServers = new ArrayList<TunnelController>();
+            delayedServers = new ArrayList<>();
             for (TunnelController controller : _controllers) {
                 if (!controller.isClient() && controller.getIsRunning()) {
                     int delayMin = controller.getShutdownDelayMin();
@@ -492,7 +492,7 @@ public class TunnelControllerGroup implements ClientApp {
         _delayedShutdownInProgress = true;
         _delayedShutdownStartTime = System.currentTimeMillis();
         _cancelDelayedShutdown = false;
-        List<TunnelController> stoppedServers = Collections.synchronizedList(new ArrayList<TunnelController>());
+        List<TunnelController> stoppedServers = Collections.synchronizedList(new ArrayList<>());
         _delayedShutdownExecutor = Executors.newCachedThreadPool();
 
         for (TunnelController controller : delayedServers) {
@@ -853,7 +853,7 @@ public class TunnelControllerGroup implements ClientApp {
      * @return list of messages from the controller as it is stopped
      */
     public synchronized List<String> removeController(TunnelController controller) {
-        if (controller == null) return new ArrayList<String>();
+        if (controller == null) return new ArrayList<>();
         controller.stopTunnel();
         List<String> msgs = controller.clearMessages();
         _controllersLock.writeLock().lock();
@@ -873,7 +873,7 @@ public class TunnelControllerGroup implements ClientApp {
      * @return list of messages the tunnels generate when stopped
      */
     public synchronized List<String> stopAllControllers() {
-        List<String> msgs = new ArrayList<String>();
+        List<String> msgs = new ArrayList<>();
         _controllersLock.readLock().lock();
         try {
             for (TunnelController controller : _controllers) {
@@ -909,7 +909,7 @@ public class TunnelControllerGroup implements ClientApp {
      * @return list of messages the tunnels generate when started
      */
     public synchronized List<String> startAllControllers() {
-        List<String> msgs = new ArrayList<String>();
+        List<String> msgs = new ArrayList<>();
         _controllersLock.readLock().lock();
         try {
             for (TunnelController controller : _controllers) {
@@ -932,7 +932,7 @@ public class TunnelControllerGroup implements ClientApp {
      * @return list of messages the tunnels generate when restarted
      */
     public synchronized List<String> restartAllControllers() {
-        List<String> msgs = new ArrayList<String>();
+        List<String> msgs = new ArrayList<>();
         _controllersLock.readLock().lock();
         try {
             for (TunnelController controller : _controllers) {
@@ -953,7 +953,7 @@ public class TunnelControllerGroup implements ClientApp {
      * @return list of messages the tunnels have generated
      */
     public List<String> clearAllMessages() {
-        List<String> msgs = new ArrayList<String>();
+        List<String> msgs = new ArrayList<>();
         _controllersLock.readLock().lock();
         try {
             for (TunnelController controller : _controllers) {
@@ -1130,7 +1130,7 @@ public class TunnelControllerGroup implements ClientApp {
         if (_log.shouldInfo())
             _log.info("Seeking controller configs in " + folder.toString());
         File[] listOfFiles = folder.listFiles(new FileSuffixFilter(".config"));
-        List<File> files = new ArrayList<File>();
+        List<File> files = new ArrayList<>();
         if (listOfFiles != null && listOfFiles.length > 0){
             for (File afile : listOfFiles) {
                 files.add(afile);
@@ -1166,7 +1166,7 @@ public class TunnelControllerGroup implements ClientApp {
             } else {
                 if (_log.shouldDebug())
                     _log.debug("Found split config file " + cfgFile);
-                List<Properties> rv = new ArrayList<Properties>(1);
+                List<Properties> rv = new ArrayList<>(1);
                 config.setProperty(TunnelController.PROP_CONFIG_FILE, cfgFile.getAbsolutePath());
                 rv.add(config);
                 return rv;
@@ -1184,7 +1184,7 @@ public class TunnelControllerGroup implements ClientApp {
      * @since 0.9.42
      */
     private List<Properties> splitMonolithicConfig(Properties config) throws IOException {
-        List<Properties> rv = new ArrayList<Properties>();
+        List<Properties> rv = new ArrayList<>();
         int i = 0;
         while (true) {
             String prefix = PREFIX + i + ".";
@@ -1215,7 +1215,7 @@ public class TunnelControllerGroup implements ClientApp {
      * @throws IllegalArgumentException if unable to load config from file
      */
     public List<TunnelController> getControllers() {
-        List<TunnelController> rv = new ArrayList<TunnelController>();
+        List<TunnelController> rv = new ArrayList<>();
         File cfgFile = new File(_configFile);
         if (!cfgFile.isAbsolute())
             cfgFile = new File(_context.getConfigDir(), _configFile);
@@ -1241,7 +1241,7 @@ public class TunnelControllerGroup implements ClientApp {
 
         _controllersLock.readLock().lock();
         try {
-            List<TunnelController> rv = new ArrayList<TunnelController>(_controllers);
+            List<TunnelController> rv = new ArrayList<>(_controllers);
             return rv;
         } finally {
             _controllersLock.readLock().unlock();
@@ -1257,7 +1257,7 @@ public class TunnelControllerGroup implements ClientApp {
         synchronized (_sessions) {
             Set<TunnelController> owners = _sessions.get(session);
             if (owners == null) {
-                owners = new HashSet<TunnelController>(2);
+                owners = new HashSet<>(2);
                 _sessions.put(session, owners);
             }
             owners.add(controller);
@@ -1347,7 +1347,7 @@ public class TunnelControllerGroup implements ClientApp {
     static class CustomThreadPoolExecutor extends ThreadPoolExecutor {
         public CustomThreadPoolExecutor() {
              super(0, Integer.MAX_VALUE, HANDLER_KEEPALIVE_MS, TimeUnit.MILLISECONDS,
-                   new SynchronousQueue<Runnable>(), new CustomThreadFactory());
+                   new SynchronousQueue<>(), new CustomThreadFactory());
         }
     }
 

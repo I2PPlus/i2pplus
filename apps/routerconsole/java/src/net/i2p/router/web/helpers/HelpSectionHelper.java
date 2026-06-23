@@ -59,7 +59,7 @@ public class HelpSectionHelper extends HelperBase {
      */
     public void renderNavBar(String requestURI, boolean graphical) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
-        List<Tab> tabs = new ArrayList<Tab>(pages.length);
+        List<Tab> tabs = new ArrayList<>(pages.length);
         boolean hidePlugins = !PluginStarter.pluginsEnabled(_context);
         for (int i = 0; i < pages.length; i++) {tabs.add(new Tab(pages[i], _t(titles[i])));}
         Collections.sort(tabs, new TabComparator());

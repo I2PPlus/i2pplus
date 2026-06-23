@@ -42,8 +42,8 @@ public class GhostPeerManager {
     public GhostPeerManager(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(GhostPeerManager.class);
-        _timeoutCounts = new ConcurrentHashMap<Hash, AtomicInteger>(MAX_TRACKED_PEERS);
-        _ghostSince = new ConcurrentHashMap<Hash, Long>(MAX_TRACKED_PEERS);
+        _timeoutCounts = new ConcurrentHashMap<>(MAX_TRACKED_PEERS);
+        _ghostSince = new ConcurrentHashMap<>(MAX_TRACKED_PEERS);
     }
 
     /**

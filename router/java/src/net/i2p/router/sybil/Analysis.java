@@ -61,7 +61,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     private volatile ClientAppState _state = UNINITIALIZED;
     private final DecimalFormat fmt = new DecimalFormat("#0.00");
     private boolean _wasRun;
-    private final List<String> _familyExemptPoints24 = new ArrayList<String>(2);
+    private final List<String> _familyExemptPoints24 = new ArrayList<>(2);
 
     /**
      *  The name we register with the ClientAppManager.
@@ -423,7 +423,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      */
     public List<RouterInfo> getFloodfills(Hash us) {
         Set<Hash> ffs = _context.peerManager().getPeersByCapability('f');
-        List<RouterInfo> ris = new ArrayList<RouterInfo>(ffs.size());
+        List<RouterInfo> ris = new ArrayList<>(ffs.size());
         for (Hash ff : ffs) {
              if (ff.equals(us))
                  continue;
@@ -443,7 +443,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      */
     public List<RouterInfo> getAllRouters(Hash us) {
         Set<RouterInfo> set = _context.netDb().getRouters();
-        List<RouterInfo> ris = new ArrayList<RouterInfo>(set.size());
+        List<RouterInfo> ris = new ArrayList<>(set.size());
         for (RouterInfo ri : set) {
             if (!ri.getIdentity().getHash().equals(us))
             ris.add(ri);
@@ -481,7 +481,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      */
     public synchronized Map<Hash, Points> backgroundAnalysis(boolean includeAll) {
         _wasRun = true;
-        Map<Hash, Points> points = new HashMap<Hash, Points>(64);
+        Map<Hash, Points> points = new HashMap<>(64);
         Hash us = _context.routerHash();
         if (us == null)
             return points;
@@ -501,7 +501,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         calculateIPGroupsUs(ris, points, dummy, dummy, dummy, dummy, dummy);
         long sz = ris.size();
         if (sz * sz < SystemVersion.getMaxMemory() / 10) {
-            List<Pair> pairs = new ArrayList<Pair>(PAIRMAX);
+            List<Pair> pairs = new ArrayList<>(PAIRMAX);
             calculatePairDistance(ris, points, pairs);
         }
 
@@ -518,7 +518,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
 
         // Distance to our published destinations analysis
         Map<Hash, TunnelPool> clientInboundPools = _context.tunnelManager().getInboundClientPools();
-        List<Hash> destinations = new ArrayList<Hash>(clientInboundPools.keySet());
+        List<Hash> destinations = new ArrayList<>(clientInboundPools.keySet());
         for (Hash client : destinations) {
             boolean isLocal = _context.clientManager().isLocal(client);
             if (!isLocal) {continue;}
@@ -564,7 +564,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
             if (threshold < MIN_BLOCK_POINTS) {threshold = MIN_BLOCK_POINTS;}
         } catch (NumberFormatException nfe) {}
         String day = DataHelper.formatTime(now);
-        Set<String> blocks = new HashSet<String>();
+        Set<String> blocks = new HashSet<>();
         for (Map.Entry<Hash, Points> e : points.entrySet()) {
             double p = e.getValue().getPoints();
             if (p >= threshold) {
@@ -806,7 +806,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      * @since 0.9.38 split out from renderIPGroups32()
      */
     public Map<Integer, List<RouterInfo>> calculateIPGroups32(List<RouterInfo> ris, Map<Hash, Points> points) {
-        ObjectCounterUnsafe<Integer> oc = new ObjectCounterUnsafe<Integer>();
+        ObjectCounterUnsafe<Integer> oc = new ObjectCounterUnsafe<>();
         for (RouterInfo info : ris) {
             byte[] ip = getIP(info);
             if (ip == null)
@@ -814,11 +814,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
             Integer x = Integer.valueOf((int) DataHelper.fromLong(ip, 0, 4));
             oc.increment(x);
         }
-        Map<Integer, List<RouterInfo>> rv = new HashMap<Integer, List<RouterInfo>>();
+        Map<Integer, List<RouterInfo>> rv = new HashMap<>();
         for (Integer ii : oc.objects()) {
             int count = oc.count(ii);
             if (count >= 2)
-                rv.put(ii, new ArrayList<RouterInfo>(count));
+                rv.put(ii, new ArrayList<>(count));
         }
         for (Map.Entry<Integer, List<RouterInfo>> e : rv.entrySet()) {
             Integer ii = e.getKey();
@@ -860,7 +860,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      * @since 0.9.38 split out from renderIPGroups24()
      */
     public Map<Integer, List<RouterInfo>> calculateIPGroups24(List<RouterInfo> ris, Map<Hash, Points> points) {
-        ObjectCounterUnsafe<Integer> oc = new ObjectCounterUnsafe<Integer>();
+        ObjectCounterUnsafe<Integer> oc = new ObjectCounterUnsafe<>();
         for (RouterInfo info : ris) {
             byte[] ip = getIP(info);
             if (ip == null)
@@ -868,11 +868,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
             Integer x = Integer.valueOf((int) DataHelper.fromLong(ip, 0, 3));
             oc.increment(x);
         }
-        Map<Integer, List<RouterInfo>> rv = new HashMap<Integer, List<RouterInfo>>();
+        Map<Integer, List<RouterInfo>> rv = new HashMap<>();
         for (Integer ii : oc.objects()) {
             int count = oc.count(ii);
             if (count >= 2)
-                rv.put(ii, new ArrayList<RouterInfo>(count));
+                rv.put(ii, new ArrayList<>(count));
         }
         FamilyKeyCrypto fkc = _context.router().getFamilyKeyCrypto();
         for (Map.Entry<Integer, List<RouterInfo>> e : rv.entrySet()) {
@@ -918,7 +918,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      *  @since 0.9.38 split out from renderIPGroups16()
      */
     public Map<Integer, List<RouterInfo>> calculateIPGroups16(List<RouterInfo> ris, Map<Hash, Points> points) {
-        ObjectCounterUnsafe<Integer> oc = new ObjectCounterUnsafe<Integer>();
+        ObjectCounterUnsafe<Integer> oc = new ObjectCounterUnsafe<>();
         for (RouterInfo info : ris) {
             byte[] ip = getIP(info);
             if (ip == null)
@@ -926,11 +926,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
             Integer x = Integer.valueOf((int) DataHelper.fromLong(ip, 0, 2));
             oc.increment(x);
         }
-        Map<Integer, List<RouterInfo>> rv = new HashMap<Integer, List<RouterInfo>>();
+        Map<Integer, List<RouterInfo>> rv = new HashMap<>();
         for (Integer ii : oc.objects()) {
             int count = oc.count(ii);
             if (count >= 4)
-                rv.put(ii, new ArrayList<RouterInfo>(count));
+                rv.put(ii, new ArrayList<>(count));
         }
         for (Map.Entry<Integer, List<RouterInfo>> e : rv.entrySet()) {
             Integer ii = e.getKey();
@@ -966,7 +966,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      *  @since 0.9.57
      */
     public Map<Long, List<RouterInfo>> calculateIPGroups64(List<RouterInfo> ris, Map<Hash, Points> points) {
-        ObjectCounterUnsafe<Long> oc = new ObjectCounterUnsafe<Long>();
+        ObjectCounterUnsafe<Long> oc = new ObjectCounterUnsafe<>();
         for (RouterInfo info : ris) {
             byte[] ip = getIPv6(info);
             if (ip == null)
@@ -974,11 +974,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
             Long x = Long.valueOf(DataHelper.fromLong8(ip, 0));
             oc.increment(x);
         }
-        Map<Long, List<RouterInfo>> rv = new HashMap<Long, List<RouterInfo>>();
+        Map<Long, List<RouterInfo>> rv = new HashMap<>();
         for (Long ii : oc.objects()) {
             int count = oc.count(ii);
             if (count >= 2)
-                rv.put(ii, new ArrayList<RouterInfo>(count));
+                rv.put(ii, new ArrayList<>(count));
         }
         for (Map.Entry<Long, List<RouterInfo>> e : rv.entrySet()) {
             Long ii = e.getKey();
@@ -1036,7 +1036,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      *  @since 0.9.57
      */
     public Map<Long, List<RouterInfo>> calculateIPGroups48(List<RouterInfo> ris, Map<Hash, Points> points) {
-        ObjectCounterUnsafe<Long> oc = new ObjectCounterUnsafe<Long>();
+        ObjectCounterUnsafe<Long> oc = new ObjectCounterUnsafe<>();
         for (RouterInfo info : ris) {
             byte[] ip = getIPv6(info);
             if (ip == null)
@@ -1044,11 +1044,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
             Long x = Long.valueOf(DataHelper.fromLong(ip, 0, 6));
             oc.increment(x);
         }
-        Map<Long, List<RouterInfo>> rv = new HashMap<Long, List<RouterInfo>>();
+        Map<Long, List<RouterInfo>> rv = new HashMap<>();
         for (Long ii : oc.objects()) {
             int count = oc.count(ii);
             if (count >= 4)
-                rv.put(ii, new ArrayList<RouterInfo>(count));
+                rv.put(ii, new ArrayList<>(count));
         }
         for (Map.Entry<Long, List<RouterInfo>> e : rv.entrySet()) {
             Long ii = e.getKey();
@@ -1100,14 +1100,14 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      *  @since 0.9.38 split out from renderIPGroupsFamily()
      */
     public Map<String, List<RouterInfo>> calculateIPGroupsFamily(List<RouterInfo> ris, Map<Hash, Points> points) {
-        Map<String, List<RouterInfo>> rv = new HashMap<String, List<RouterInfo>>();
+        Map<String, List<RouterInfo>> rv = new HashMap<>();
         for (RouterInfo info : ris) {
             String fam = info.getOption("family");
             if (fam == null)
                 continue;
             List<RouterInfo> fris = rv.get(fam);
             if (fris == null) {
-                fris = new ArrayList<RouterInfo>(4);
+                fris = new ArrayList<>(4);
                 rv.put(fam, fris);
             }
             fris.add(info);

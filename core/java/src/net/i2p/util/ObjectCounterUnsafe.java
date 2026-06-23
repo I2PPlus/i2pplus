@@ -29,7 +29,7 @@ import java.util.Set;
  * @param <K> type of objects being counted
  */
 public class ObjectCounterUnsafe<K> {
-    private final HashMap<K, Int> map = new HashMap<K, Int>();
+    private final HashMap<K, Int> map = new HashMap<>();
 
     /**
      *  Add one.
@@ -78,7 +78,7 @@ public class ObjectCounterUnsafe<K> {
      *  @return list of objects reverse sorted by count, highest to lowest
      */
     public List<K> sortedObjects() {
-        List<K> rv = new ArrayList<K>(map.keySet());
+        List<K> rv = new ArrayList<>(map.keySet());
         Collections.sort(rv, new ObjComparator());
         return rv;
     }

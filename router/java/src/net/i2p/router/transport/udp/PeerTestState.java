@@ -61,7 +61,7 @@ class PeerTestState {
         _isIPv6 = isIPv6;
         _testNonce = nonce;
         _beginTime = now;
-        _previousCharlies = role == Role.BOB ? new ArrayList<Hash>(8) : null;
+        _previousCharlies = role == Role.BOB ? new ArrayList<>(8) : null;
     }
 
     public long getNonce() { return _testNonce; }

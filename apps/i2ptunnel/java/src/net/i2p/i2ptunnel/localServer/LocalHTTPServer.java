@@ -434,7 +434,7 @@ public abstract class LocalHTTPServer {
      *  @since 0.9.43 adapted from I2PTunnelHTTPClient.removeHelper()
      */
     private static Map<String, String> decodeQuery(String query) {
-        Map<String, String> rv = new HashMap<String, String>(8);
+        Map<String, String> rv = new HashMap<>(8);
         int keystart = 0;
         int valstart = -1;
         String key = null;

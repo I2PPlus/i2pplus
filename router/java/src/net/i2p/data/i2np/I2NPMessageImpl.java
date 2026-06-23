@@ -48,7 +48,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
                         + CHECKSUM_LENGTH;
 
     /** unused */
-    private static final Map<Integer, Builder> _builders = new ConcurrentHashMap<Integer, Builder>(1);
+    private static final Map<Integer, Builder> _builders = new ConcurrentHashMap<>(1);
 
     /** @deprecated unused */
     @Deprecated

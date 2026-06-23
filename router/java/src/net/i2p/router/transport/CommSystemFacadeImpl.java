@@ -163,7 +163,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         _netMonitorStatus = true;
         _geoIP = new GeoIP(_context);
         _manager = new TransportManager(_context);
-        _exemptIncoming = new LHMCache<String, Object>(128);
+        _exemptIncoming = new LHMCache<>(128);
         initExecutors();
     }
 
@@ -593,7 +593,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
       */
      @Override
      public List<RouterAddress> createAddresses() {
-        List<RouterAddress> addresses = new ArrayList<RouterAddress>(_manager.getAddresses());
+        List<RouterAddress> addresses = new ArrayList<>(_manager.getAddresses());
         if (addresses.size() > 1) {Collections.sort(addresses, new AddrComparator());}
         return addresses;
     }
@@ -674,7 +674,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
         if (ri == null) {return;}
         Collection<RouterAddress> addrs = ri.getAddresses();
-        ArraySet<String> ips = new ArraySet<String>(addrs.size());
+        ArraySet<String> ips = new ArraySet<>(addrs.size());
         for (RouterAddress addr : addrs) {
             String ip = addr.getHost();
             if (ip == null) {continue;}

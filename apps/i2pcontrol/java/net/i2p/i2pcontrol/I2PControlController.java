@@ -234,7 +234,7 @@ public class I2PControlController implements RouterApp {
         ServletHandler sh = new ServletHandler();
         sh.addServletWithMapping(new ServletHolder(new JSONRPC2Servlet(_context, _secMan)), "/");
         HostCheckHandler hch = new HostCheckHandler(_appContext);
-        Set<String> listenHosts = new HashSet<String>(8);
+        Set<String> listenHosts = new HashSet<>(8);
         // fix up the allowed hosts set (see HostCheckHandler)
         // empty set says all are valid
         String address = _conf.getConf("i2pcontrol.listen.address", "127.0.0.1");

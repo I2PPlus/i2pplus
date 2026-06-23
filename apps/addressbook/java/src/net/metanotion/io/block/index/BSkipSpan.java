@@ -123,7 +123,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
         try {
             int newPage = bf.allocPage();
             init(bf, newPage, bf.spanSize);
-            return new BSkipSpan<K, V>(bf, (BSkipList<K, V>) sl, newPage, keySer, valSer);
+            return new BSkipSpan<>(bf, (BSkipList<K, V>) sl, newPage, keySer, valSer);
         } catch (IOException ioe) { throw new RuntimeException("Error creating database page", ioe); }
     }
 
@@ -493,7 +493,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
                 bss.next = temp;
                 break;
             }
-            bss.next = new BSkipSpan<K, V>(bf, bsl);
+            bss.next = new BSkipSpan<>(bf, bsl);
             bss.next.next = null;
             bss.next.prev = bss;
             bss = (BSkipSpan<K, V>) bss.next;
@@ -511,7 +511,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
                 bss.prev = temp;
                 break;
             }
-            bss.prev = new BSkipSpan<K, V>(bf, bsl);
+            bss.prev = new BSkipSpan<>(bf, bsl);
             bss.prev.next = bss;
             bss.prev.prev = null;
             bss = (BSkipSpan<K, V>) bss.prev;

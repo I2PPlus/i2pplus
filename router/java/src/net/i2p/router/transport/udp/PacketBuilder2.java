@@ -197,7 +197,7 @@ class PacketBuilder2 {
         int bcnt = fragments.size() + 2;
         if (otherBlocks != null)
             bcnt += otherBlocks.size();
-        List<Block> blocks = new ArrayList<Block>(bcnt);
+        List<Block> blocks = new ArrayList<>(bcnt);
         // payload only
         int sizeWritten = 0;
 
@@ -320,7 +320,7 @@ class PacketBuilder2 {
             if (fragments.size() == 1)
                 fragments = Collections.singletonList(fragments.get(0));
             else
-                fragments = new ArrayList<Fragment>(fragments);
+                fragments = new ArrayList<>(fragments);
             peer.fragmentsSent(pktNum, length, fragments);
         }
         return packet;
@@ -378,7 +378,7 @@ class PacketBuilder2 {
             if (_log.shouldDebug())
             _log.debug("[SSU] Sending termination " + reason + " to : " + peer);
         peer.setDestroyReason(reason);
-        List<Block> blocks = new ArrayList<Block>(2);
+        List<Block> blocks = new ArrayList<>(2);
         if (peer.isIPv6() || !_transport.isSymNatted()) {
             // update token
             EstablishmentManager.Token token = _transport.getEstablisher().getInboundToken(peer.getRemoteHostId());
@@ -656,7 +656,7 @@ class PacketBuilder2 {
         SSU2Header.encryptShortHeader(packet0, hdrKey1, hdrKey2);
         packet0.setMessageType(TYPE_CONF);
         packet0.setPriority(PRIORITY_HIGH);
-        List<UDPPacket> rv = new ArrayList<UDPPacket>(4);
+        List<UDPPacket> rv = new ArrayList<>(4);
         rv.add(packet0);
 
         // build all the remaining packets
@@ -757,7 +757,7 @@ class PacketBuilder2 {
         List<Block> blocks;
         if (riBlock != null) {
             // RouterInfo must be first
-            blocks = new ArrayList<Block>(2);
+            blocks = new ArrayList<>(2);
             blocks.add(riBlock);
             blocks.add(block);
         } else {
@@ -805,7 +805,7 @@ class PacketBuilder2 {
         List<Block> blocks;
         if (riBlock != null) {
             // RouterInfo must be first
-            blocks = new ArrayList<Block>(2);
+            blocks = new ArrayList<>(2);
             blocks.add(riBlock);
             blocks.add(block);
         } else {
@@ -860,7 +860,7 @@ class PacketBuilder2 {
         List<Block> blocks;
         if (riBlock != null) {
             // RouterInfo must be first
-            blocks = new ArrayList<Block>(2);
+            blocks = new ArrayList<>(2);
             blocks.add(riBlock);
             blocks.add(block);
         } else {
@@ -954,7 +954,7 @@ class PacketBuilder2 {
         try {
             if (_log.shouldDebug())
                 _log.debug("[SSU] After start: " + state);
-            List<Block> blocks = new ArrayList<Block>(3);
+            List<Block> blocks = new ArrayList<>(3);
             Block block = new SSU2Payload.DateTimeBlock(_context);
             int len = block.getTotalLength();
             blocks.add(block);
@@ -1006,7 +1006,7 @@ class PacketBuilder2 {
         byte data[] = pkt.getData();
         int off = pkt.getOffset();
         try {
-            List<Block> blocks = new ArrayList<Block>(4);
+            List<Block> blocks = new ArrayList<>(4);
             Block block = new SSU2Payload.DateTimeBlock(_context);
             int len = block.getTotalLength();
             blocks.add(block);
@@ -1081,7 +1081,7 @@ class PacketBuilder2 {
         byte data[] = pkt.getData();
         int off = pkt.getOffset();
         try {
-            List<Block> blocks = new ArrayList<Block>(4);
+            List<Block> blocks = new ArrayList<>(4);
             Block block = new SSU2Payload.DateTimeBlock(_context);
             int len = block.getTotalLength();
             blocks.add(block);
@@ -1126,7 +1126,7 @@ class PacketBuilder2 {
         byte data[] = pkt.getData();
         int off = pkt.getOffset();
         try {
-            List<Block> blocks = new ArrayList<Block>(2);
+            List<Block> blocks = new ArrayList<>(2);
             Block block = new SSU2Payload.DateTimeBlock(_context);
             int len = block.getTotalLength();
             blocks.add(block);
@@ -1173,7 +1173,7 @@ class PacketBuilder2 {
         mtu -= UDP_HEADER_SIZE;
         mtu -= isIPv6 ? IPV6_HEADER_SIZE : IP_HEADER_SIZE;
         try {
-            List<Block> blocks = new ArrayList<Block>(3);
+            List<Block> blocks = new ArrayList<>(3);
             int len = riblock.getTotalLength();
             blocks.add(riblock);
             // only if room

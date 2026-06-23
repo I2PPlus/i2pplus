@@ -73,7 +73,7 @@ public class Folder<O extends Object> {
 	{
 		pages = 1;
 		currentPage = 1;
-		sorter = new HashMap<String, Comparator<O>>();
+		sorter = new HashMap<>();
 		sortingDirection = SortOrder.DOWN;
 	}
 	
@@ -201,7 +201,7 @@ public class Folder<O extends Object> {
 	@SuppressWarnings("unchecked")
 	public synchronized void removeElements(Collection<O> elems) {
 		if (elements != null) {
-			List<O> list = new ArrayList<O>(Arrays.asList(elements));
+			List<O> list = new ArrayList<>(Arrays.asList(elements));
 			boolean shouldUpdate = false;
 			for (O e : elems) {
 				if (list.remove(e))
@@ -247,7 +247,7 @@ public class Folder<O extends Object> {
 				}
 				if (!found) {
 					if (list == null) {
-						list = new ArrayList<O>(Arrays.asList(elements));
+						list = new ArrayList<>(Arrays.asList(elements));
 					}
 					list.add(e);
 				}
@@ -274,7 +274,7 @@ public class Folder<O extends Object> {
 	 */
 	public synchronized Iterator<O> currentPageIterator()
 	{
-		ArrayList<O> list = new ArrayList<O>();
+		ArrayList<O> list = new ArrayList<>();
 		if( elements != null ) {
 			int pageSize = getPageSize();
 			int offset = ( currentPage - 1 ) * pageSize;

@@ -97,7 +97,7 @@ public class ConfigClientsHelper extends HelperBase {
     /** @since 0.8.3 */
     public String[] intfcAddresses() {
         // Exclude IPv6 temporary
-        ArrayList<String> al = new ArrayList<String>(Addresses.getAddresses(true, true, true, false));
+        ArrayList<String> al = new ArrayList<>(Addresses.getAddresses(true, true, true, false));
         return al.toArray(new String[al.size()]);
     }
 
@@ -132,7 +132,7 @@ public class ConfigClientsHelper extends HelperBase {
 
         boolean allowEdit = isClientChangeEnabled();
         List<ClientAppConfig> clients = ClientAppConfig.getClientApps(_context);
-        List<CAC> cacs = new ArrayList<CAC>(clients.size());
+        List<CAC> cacs = new ArrayList<>(clients.size());
         for (int cur = 0; cur < clients.size(); cur++) {
             ClientAppConfig ca = clients.get(cur);
             String xname = ca.clientName;
@@ -225,7 +225,7 @@ public class ConfigClientsHelper extends HelperBase {
            .append(_t("Control")).append("</th><th class=left>")
            .append(_t("Description")).append("</th></tr>\n");
         Properties props = RouterConsoleRunner.webAppProperties(_context);
-        Set<String> keys = new TreeSet<String>(props.stringPropertyNames());
+        Set<String> keys = new TreeSet<>(props.stringPropertyNames());
         for (String name : keys) {
             if (name.startsWith(RouterConsoleRunner.PREFIX) && name.endsWith(RouterConsoleRunner.ENABLED)) {
                 String app = name.substring(RouterConsoleRunner.PREFIX.length(), name.lastIndexOf(RouterConsoleRunner.ENABLED));
@@ -273,7 +273,7 @@ public class ConfigClientsHelper extends HelperBase {
            .append("<th class=left>").append(_t("Description")).append("</th>")
            .append("</tr>\n");
         Properties props = PluginStarter.pluginProperties();
-        Set<String> keys = new TreeSet<String>(Collator.getInstance());
+        Set<String> keys = new TreeSet<>(Collator.getInstance());
         keys.addAll(props.stringPropertyNames());
         for (String name : keys) {
             if (name.startsWith(PluginStarter.PREFIX) && name.endsWith(PluginStarter.ENABLED)) {

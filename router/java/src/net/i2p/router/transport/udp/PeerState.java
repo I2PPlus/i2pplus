@@ -316,8 +316,8 @@ public class PeerState {
         int outboundQueueSize = Math.max(16, Math.min(64, (int)(maxMemory / (256 * 1024 * 1024))));
 
         _inboundMessages = new ConcurrentHashMap<>(16);
-        _outboundMessages = new CachedIteratorCollection<OutboundMessageState>();
-        _outboundQueue = new PriBlockingQueue<OutboundMessageState>(ctx, "UDP-PeerState", outboundQueueSize);
+        _outboundMessages = new CachedIteratorCollection<>();
+        _outboundQueue = new PriBlockingQueue<>(ctx, "UDP-PeerState", outboundQueueSize);
         _remotePeer = remotePeer;
         _isInbound = isInbound;
         _remoteHostId = new RemoteHostId(_remoteIP, _remotePort);
@@ -1002,7 +1002,7 @@ public class PeerState {
         _dead = true;
         List<OutboundMessageState> tempList;
         synchronized (_outboundLock) {
-            tempList = new ArrayList<OutboundMessageState>(_outboundMessages);
+            tempList = new ArrayList<>(_outboundMessages);
             _outboundMessages.clear();
         }
         synchronized (_outboundQueue) {_outboundQueue.drainTo(tempList);}
@@ -1574,7 +1574,7 @@ public class PeerState {
         oldPeer._dead = true;
 
         if (getVersion() == oldPeer.getVersion()) {
-            Map<Long, InboundMessageState> msgs = new HashMap<Long, InboundMessageState>();
+            Map<Long, InboundMessageState> msgs = new HashMap<>();
             synchronized (oldPeer._inboundLock) {
                 msgs.putAll(oldPeer._inboundMessages);
                 oldPeer._inboundMessages.clear();
@@ -1582,7 +1582,7 @@ public class PeerState {
             if (!_dead) { synchronized (_inboundLock) {_inboundMessages.putAll(msgs);} }
             msgs.clear();
 
-            List<OutboundMessageState> tmp2 = new ArrayList<OutboundMessageState>();
+            List<OutboundMessageState> tmp2 = new ArrayList<>();
             OutboundMessageState retransmitter = null;
             synchronized (oldPeer._outboundLock) {
                 tmp2.addAll(oldPeer._outboundMessages);

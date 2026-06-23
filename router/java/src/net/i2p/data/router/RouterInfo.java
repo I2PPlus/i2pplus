@@ -118,7 +118,7 @@ public class RouterInfo extends DatabaseEntry {
         Router.CAPABILITY_NO_TUNNELS;
 
     public RouterInfo() {
-        _addresses = new ArrayList<RouterAddress>(2);
+        _addresses = new ArrayList<>(2);
         _options = new OrderedProperties();
     }
 
@@ -252,7 +252,7 @@ public class RouterInfo extends DatabaseEntry {
             return;
         }
         if (_peers == null)
-            _peers = new HashSet<Hash>(2);
+            _peers = new HashSet<>(2);
         synchronized (_peers) {
             _peers.clear();
             _peers.addAll(peers);
@@ -490,7 +490,7 @@ public class RouterInfo extends DatabaseEntry {
      *  @since 0.7.11
      */
     public List<RouterAddress> getTargetAddresses(String transportStyle) {
-        List<RouterAddress> ret = new ArrayList<RouterAddress>(_addresses.size());
+        List<RouterAddress> ret = new ArrayList<>(_addresses.size());
         for (RouterAddress addr : _addresses) {
             if (addr.getTransportStyle().equals(transportStyle))
                 ret.add(addr);
@@ -506,7 +506,7 @@ public class RouterInfo extends DatabaseEntry {
      *  @since 0.9.35
      */
     public List<RouterAddress> getTargetAddresses(String transportStyle1, String transportStyle2) {
-        List<RouterAddress> ret = new ArrayList<RouterAddress>(_addresses.size());
+        List<RouterAddress> ret = new ArrayList<>(_addresses.size());
         for (RouterAddress addr : _addresses) {
             String style = addr.getTransportStyle();
             if (style.equals(transportStyle1) || style.equals(transportStyle2))
@@ -589,7 +589,7 @@ public class RouterInfo extends DatabaseEntry {
         int numPeers = din.read();
         if (numPeers <= 0) {_peers = null;}
         else {
-            _peers = new HashSet<Hash>(numPeers);
+            _peers = new HashSet<>(numPeers);
             if (numPeers > MAX_INTRODUCERS) {
                 if (_identity != null) {
                     Hash h = _identity.getHash();

@@ -68,8 +68,8 @@ public class BlocklistEntries {
      *  @param capacity the initial capacity for the entries list
      */
     public BlocklistEntries(int capacity) {
-        entries = new ArrayList<String>(capacity);
-        removes = new ArrayList<String>(4);
+        entries = new ArrayList<>(capacity);
+        removes = new ArrayList<>(4);
     }
 
     /**
@@ -204,8 +204,8 @@ public class BlocklistEntries {
         String signerName = args[st];
 
         I2PAppContext ctx = new I2PAppContext();
-        List<String> elist = new ArrayList<String>(16);
-        List<String> rlist = new ArrayList<String>(4);
+        List<String> elist = new ArrayList<>(16);
+        List<String> rlist = new ArrayList<>(4);
         StringBuilder buf = new StringBuilder();
         long now = System.currentTimeMillis();
         String date = RFC3339Date.to3339Date(now);

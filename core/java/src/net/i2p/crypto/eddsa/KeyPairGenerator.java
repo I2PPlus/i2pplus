@@ -55,7 +55,7 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
     private static final Map<Integer, AlgorithmParameterSpec> edParameters;
 
     static {
-        edParameters = new HashMap<Integer, AlgorithmParameterSpec>();
+        edParameters = new HashMap<>();
 
         edParameters.put(Integer.valueOf(256), new EdDSAGenParameterSpec(EdDSANamedCurveTable.ED_25519));
     }

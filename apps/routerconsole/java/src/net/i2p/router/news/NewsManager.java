@@ -70,7 +70,7 @@ public class NewsManager implements ClientApp {
      *  @return non-null, sorted by updated date, newest first
      */
     public synchronized List<NewsEntry> getEntries() {
-        if (!_currentNews.isEmpty()) {return new ArrayList<NewsEntry>(_currentNews);}
+        if (!_currentNews.isEmpty()) {return new ArrayList<>(_currentNews);}
         if (_log.shouldWarn()) {_log.warn("No real XML, falling back to news.xml");} // load old news.xml
         List<NewsEntry> rv = parseOldNews();
         if (!rv.isEmpty()) {
@@ -200,7 +200,7 @@ public class NewsManager implements ClientApp {
      *  @param addMissingDiv true for initialNews, false for news.xml
      */
     private List<NewsEntry> parseNews(String newsContent, boolean addMissingDiv) {
-        List<NewsEntry> rv = new ArrayList<NewsEntry>();
+        List<NewsEntry> rv = new ArrayList<>();
         // Parse news content for headings.
         boolean foundEntry = false;
         int start = newsContent.indexOf("<h3>");

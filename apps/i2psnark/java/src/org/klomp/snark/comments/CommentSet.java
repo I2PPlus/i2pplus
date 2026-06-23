@@ -56,12 +56,12 @@ public class CommentSet extends AbstractSet<Comment> {
 
     private CommentSet() {
         super();
-        map = new HashMap<Integer, List<Comment>>(4);
+        map = new HashMap<>(4);
     }
 
     public CommentSet(Collection<Comment> coll) {
         super();
-        map = new HashMap<Integer, List<Comment>>(coll.size());
+        map = new HashMap<>(coll.size());
         addAll(coll);
     }
 
@@ -144,7 +144,7 @@ public class CommentSet extends AbstractSet<Comment> {
         if (list.contains(c)) return false;
         if (list.size() == 1) {
             // presume unmodifiable singletonList
-            List<Comment> nlist = new ArrayList<Comment>(2);
+            List<Comment> nlist = new ArrayList<>(2);
             nlist.add(list.get(0));
             map.put(hc, nlist);
             list = nlist;
@@ -321,7 +321,7 @@ public class CommentSet extends AbstractSet<Comment> {
      */
     public Iterator<Comment> iterator() {
         if (size <= 0) return Collections.<Comment>emptyList().iterator();
-        List<Comment> list = new ArrayList<Comment>(size);
+        List<Comment> list = new ArrayList<>(size);
         for (List<Comment> l : map.values()) {
             int hc = l.get(0).hashCode();
             List<Comment> prevList = map.get(Integer.valueOf(hc - 1));

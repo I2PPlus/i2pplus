@@ -146,7 +146,7 @@ public class ClientAppConfig {
     public synchronized static List<ClientAppConfig> getClientApps(RouterContext ctx) {
         File dir = new SecureDirectory(ctx.getConfigDir(), CLIENT_CONFIG_DIR);
         // clients.config
-        List<ClientAppConfig> rv = new ArrayList<ClientAppConfig>(8);
+        List<ClientAppConfig> rv = new ArrayList<>(8);
         File cf = configFile(ctx);
         try {
             List<ClientAppConfig> cacs = getClientApps(cf);
@@ -203,7 +203,7 @@ public class ClientAppConfig {
      */
     public synchronized static List<ClientAppConfig> getClientApps(File cfgFile) throws IOException {
         if (!cfgFile.isFile())
-            return new ArrayList<ClientAppConfig>();
+            return new ArrayList<>();
         Properties clientApps = new Properties();
         DataHelper.loadProps(clientApps, cfgFile);
         List<ClientAppConfig> rv =  getClientApps(clientApps);
@@ -260,7 +260,7 @@ public class ClientAppConfig {
      * @since 0.7.12
      */
     private static List<ClientAppConfig> getClientApps(Properties clientApps) {
-        List<ClientAppConfig> rv = new ArrayList<ClientAppConfig>(8);
+        List<ClientAppConfig> rv = new ArrayList<>(8);
         int i = 0;
         while (true) {
             ClientAppConfig cac = getClientApp(clientApps, PREFIX + i);
@@ -352,7 +352,7 @@ public class ClientAppConfig {
      */
     public synchronized static void writeClientAppConfig(I2PAppContext ctx, List<ClientAppConfig> apps) throws IOException {
         // Gather the set of config files
-        ObjectCounterUnsafe<File> counter = new ObjectCounterUnsafe<File>();
+        ObjectCounterUnsafe<File> counter = new ObjectCounterUnsafe<>();
         for (ClientAppConfig cac : apps) {
             File f = cac.configFile;
             if (f == null)
@@ -365,7 +365,7 @@ public class ClientAppConfig {
         // For each file, write all the configs for that file
         for (File f : files) {
             // Gather configs for this file
-            List<ClientAppConfig> cacs = new ArrayList<ClientAppConfig>(8);
+            List<ClientAppConfig> cacs = new ArrayList<>(8);
             for (ClientAppConfig cac : apps) {
                 if (cac.configFile.equals(f))
                     cacs.add(cac);

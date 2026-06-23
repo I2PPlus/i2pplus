@@ -73,7 +73,7 @@ public class AuthenticateHandler implements RequestHandler {
                 return new JSONRPC2Response(err, req.getID());
 
 
-            Map<String, Object> outParams = new HashMap<String, Object>(4);
+            Map<String, Object> outParams = new HashMap<>(4);
             outParams.put("Token", token.getId());
             outParams.put("API", I2PControlVersion.API_VERSION);
             return new JSONRPC2Response(outParams, req.getID());

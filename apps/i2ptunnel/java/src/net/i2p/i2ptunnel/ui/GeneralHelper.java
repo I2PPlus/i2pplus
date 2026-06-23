@@ -101,7 +101,7 @@ public class GeneralHelper {
      *  @param context unused, taken from tcg
      */
     public static List<String> saveTunnel(I2PAppContext context, TunnelControllerGroup tcg, int tunnel, TunnelConfig config) {
-        List<String> msgs = new ArrayList<String>();
+        List<String> msgs = new ArrayList<>();
         TunnelController cur = updateTunnelConfig(tcg, tunnel, config, msgs);
         msgs.addAll(saveConfig(tcg, cur));
         return msgs;
@@ -113,7 +113,7 @@ public class GeneralHelper {
      *  This does NOT save this tunnel's config. Caller must call saveConfig() also.
      */
     protected static List<String> updateTunnelConfig(TunnelControllerGroup tcg, int tunnel, TunnelConfig config) {
-        List<String> msgs = new ArrayList<String>();
+        List<String> msgs = new ArrayList<>();
         updateTunnelConfig(tcg, tunnel, config, msgs);
         return msgs;
     }
@@ -139,7 +139,7 @@ public class GeneralHelper {
             if (Boolean.parseBoolean(props.getProperty(OPT + I2PTunnelClientBase.PROP_USE_SSL))) {
                 // Add the local interface and all targets to the cert
                 String intfc = props.getProperty(TunnelController.PROP_INTFC);
-                Set<String> altNames = new HashSet<String>(4);
+                Set<String> altNames = new HashSet<>(4);
                 if (intfc != null && !intfc.equals("0.0.0.0") && !intfc.equals("::") &&
                     !intfc.equals("0:0:0:0:0:0:0:0")) {
                     altNames.add(intfc);
@@ -291,7 +291,7 @@ public class GeneralHelper {
         List<String> msgs;
         TunnelController cur = getController(tcg, tunnel);
         if (cur == null) {
-            msgs = new ArrayList<String>();
+            msgs = new ArrayList<>();
             msgs.add("✖ Invalid tunnel number");
             return msgs;
         }
@@ -667,7 +667,7 @@ public class GeneralHelper {
      *  @since 0.9.41
      */
     public List<String> getClientAuths(int tunnel, boolean isDH) {
-        List<String> rv = new ArrayList<String>(4);
+        List<String> rv = new ArrayList<>(4);
         String pfx = isDH ? "i2cp.leaseSetClient.dh." : "i2cp.leaseSetClient.psk.";
         int i = 0;
         String p;
@@ -964,7 +964,7 @@ public class GeneralHelper {
             if (opts == null) {return "";}
             boolean isMD5Proxy = TunnelController.TYPE_HTTP_CLIENT.equals(tun.getType()) ||
                                  TunnelController.TYPE_CONNECT.equals(tun.getType());
-            Map<String, String> sorted = new TreeMap<String, String>();
+            Map<String, String> sorted = new TreeMap<>();
             for (Map.Entry<Object, Object> e : opts.entrySet()) {
                 String key = (String)e.getKey();
                 if (TunnelConfig._noShowSet.contains(key))

@@ -17,7 +17,7 @@ class IPThrottler {
 
     public IPThrottler(int max, long time) {
         _max = max;
-        _counter = new ObjectCounter<Integer>();
+        _counter = new ObjectCounter<>();
         SimpleTimer2.getInstance().addPeriodicEvent(new Cleaner(), time);
     }
 

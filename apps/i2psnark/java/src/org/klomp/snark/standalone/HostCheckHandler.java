@@ -32,7 +32,7 @@ public class HostCheckHandler extends AbstractHandler {
     public HostCheckHandler(I2PAppContext ctx) {
         super();
         _context = ctx;
-        _listenHosts = new HashSet<String>(8);
+        _listenHosts = new HashSet<>(8);
         _listenHosts.add("127.0.0.1");
         _listenHosts.add("::1");
         _listenHosts.add("localhost");

@@ -108,7 +108,7 @@ public class Destination extends KeysAndCert {
         //    I2PAppContext.getGlobalContext().statManager().createRateStat("DestCache", "Hit rate", "Router", new long[] { RateConstants.TEN_MINUTES });
     }
 
-    private static final Map<SigningPublicKey, Destination> _cache = new LHMCache<SigningPublicKey, Destination>(CACHE_SIZE);
+    private static final Map<SigningPublicKey, Destination> _cache = new LHMCache<>(CACHE_SIZE);
 
     /**
      * Pull from cache or return new

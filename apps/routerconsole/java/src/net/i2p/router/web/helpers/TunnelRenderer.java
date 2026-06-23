@@ -115,7 +115,7 @@ class TunnelRenderer {
 
         Map<Hash, TunnelPool> clientInboundPools = tm.getInboundClientPools();
         // display name to in pool
-        List<TunnelPool> sorted = new ArrayList<TunnelPool>(clientInboundPools.values());
+        List<TunnelPool> sorted = new ArrayList<>(clientInboundPools.values());
         if (sorted.size() > 1)
             DataHelper.sort(sorted, new TPComparator());
         for (TunnelPool in : sorted) {
@@ -889,7 +889,7 @@ class TunnelRenderer {
     private void renderPool(Writer out, TunnelPool in, TunnelPool outPool) throws IOException {
         Comparator<TunnelInfo> comp = new TunnelInfoComparator();
         List<TunnelInfo> tunnels;
-        if (in == null) {tunnels = new ArrayList<TunnelInfo>();}
+        if (in == null) {tunnels = new ArrayList<>();}
         else {
             tunnels = in.listTunnels();
             Collections.sort(tunnels, comp);
@@ -1082,7 +1082,7 @@ class TunnelRenderer {
     public void renderLifetimeBandwidth(Writer out, TunnelPool in, TunnelPool outPool) throws IOException {
         Comparator<TunnelInfo> comp = new TunnelInfoComparator();
         List<TunnelInfo> tunnels;
-        if (in == null) {tunnels = new ArrayList<TunnelInfo>();}
+        if (in == null) {tunnels = new ArrayList<>();}
         else {
             tunnels = in.listTunnels();
             Collections.sort(tunnels, comp);

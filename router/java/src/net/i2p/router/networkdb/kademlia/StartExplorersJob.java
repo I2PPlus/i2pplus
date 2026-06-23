@@ -103,10 +103,10 @@ class StartExplorersJob extends JobImpl {
         }
 
         // Don't flood the queue - cap at MAX_EXPLORE_JOBS concurrent
-        java.util.List<Job> activeJobs = new java.util.ArrayList<Job>(8);
-        java.util.List<Job> readyJobs = new java.util.ArrayList<Job>(64);
-        java.util.List<Job> timedJobs = new java.util.ArrayList<Job>(64);
-        java.util.List<Job> justFinishedJobs = new java.util.ArrayList<Job>(8);
+        java.util.List<Job> activeJobs = new java.util.ArrayList<>(8);
+        java.util.List<Job> readyJobs = new java.util.ArrayList<>(64);
+        java.util.List<Job> timedJobs = new java.util.ArrayList<>(64);
+        java.util.List<Job> justFinishedJobs = new java.util.ArrayList<>(8);
         ctx.jobQueue().getJobs(readyJobs, timedJobs, activeJobs, justFinishedJobs);
         int exploring = 0;
         for (Job j : activeJobs) {

@@ -16,7 +16,7 @@ public class SSLHelper {
      *  @return non-null
      */
     public static List<String> parseArgs(String args) {
-        List<String> argList = new ArrayList<String>(4);
+        List<String> argList = new ArrayList<>(4);
         StringBuilder buf = new StringBuilder(32);
         boolean isQuoted = false;
         for (int j = 0; j < args.length(); j++) {

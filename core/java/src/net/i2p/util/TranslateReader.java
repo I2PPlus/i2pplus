@@ -84,7 +84,7 @@ public class TranslateReader extends FilterReader {
         super(in);
         _ctx = ctx;
         _bundle = bundle;
-        _args = new ArrayList<String>(4);
+        _args = new ArrayList<>(4);
         _inBuf = new StringBuilder(64);
         _outBuf = new StringBuilder(64);
         _argBuf = new StringBuilder(64);
@@ -428,7 +428,7 @@ public class TranslateReader extends FilterReader {
             File dir = new File(files[1]);
             File[] listing = dir.listFiles();
             if (listing == null) throw new IOException();
-            filelist = new ArrayList<String>(listing.length);
+            filelist = new ArrayList<>(listing.length);
             for (int i = 0; i < listing.length; i++) {
                 File f = listing[i];
                 if (!f.isDirectory()) filelist.add(f.getAbsolutePath());

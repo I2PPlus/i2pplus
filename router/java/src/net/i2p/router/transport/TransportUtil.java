@@ -102,7 +102,7 @@ public abstract class TransportUtil {
         }
     }
 
-    private static final Map<String, IPv6Config> BY_NAME = new HashMap<String, IPv6Config>();
+    private static final Map<String, IPv6Config> BY_NAME = new HashMap<>();
     public static final IPv6Config DEFAULT_IPV6_CONFIG = IPv6Config.IPV6_PREFERRED;
 
     static {

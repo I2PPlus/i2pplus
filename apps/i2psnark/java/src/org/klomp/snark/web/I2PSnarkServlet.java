@@ -192,7 +192,7 @@ public class I2PSnarkServlet extends BasicServlet {
         synchronized(session) {
             LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_NONCE_OUTER);
             if (nonces == null) {
-                nonces = new LinkedList<String>();
+                nonces = new LinkedList<>();
                 session.setAttribute(SESSION_NONCE_OUTER, nonces);
             }
             nonces.offer(rv);
@@ -212,7 +212,7 @@ public class I2PSnarkServlet extends BasicServlet {
         synchronized(session) {
             LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_NONCE_INNER);
             if (nonces == null) {
-                nonces = new LinkedList<String>();
+                nonces = new LinkedList<>();
                 session.setAttribute(SESSION_NONCE_INNER, nonces);
             }
             nonces.offer(rv);
@@ -1522,7 +1522,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</span></span>");
         out.write(buf.toString());
 
-        ArrayList<Snark> snarks = new ArrayList<Snark>(_manager.getTorrents());
+        ArrayList<Snark> snarks = new ArrayList<>(_manager.getTorrents());
 
         // actively downloading
         int downloads = 0;
@@ -1751,12 +1751,12 @@ public class I2PSnarkServlet extends BasicServlet {
         for (int i = 0; i < terms.length; i++) {
             String term = terms[i];
             if (term.length() > 0) {
-                if (searchList == null) {searchList = new ArrayList<String>(4);}
+                if (searchList == null) {searchList = new ArrayList<>(4);}
                 searchList.add(Normalizer.normalize(term.toLowerCase(Locale.US), Normalizer.Form.NFKD));
             }
         }
-        if (searchList == null || searchList.isEmpty()) {return new ArrayList<Snark>(0);} // empty list
-        List<Snark> matches = new ArrayList<Snark>(32);
+        if (searchList == null || searchList.isEmpty()) {return new ArrayList<>(0);} // empty list
+        List<Snark> matches = new ArrayList<>(32);
         loop:
         for (Snark snark : snarks) {
             String lcname = Normalizer.normalize(snark.getBaseName().toLowerCase(Locale.US), Normalizer.Form.NFKD);
@@ -2780,9 +2780,9 @@ public class I2PSnarkServlet extends BasicServlet {
         if (action.equals(_t("Delete selected")) || action.equals(_t("Save tracker configuration"))) {
             boolean changed = false;
             Map<String, Tracker> trackers = _manager.getTrackerMap();
-            List<String> removed = new ArrayList<String>();
-            List<String> open = new ArrayList<String>();
-            List<String> priv = new ArrayList<String>();
+            List<String> removed = new ArrayList<>();
+            List<String> open = new ArrayList<>();
+            List<String> priv = new ArrayList<>();
             Enumeration<?> e = req.getParameterNames();
             while (e.hasMoreElements()) {
                  Object o = e.nextElement();
@@ -2806,7 +2806,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (changed) {_manager.saveTrackerMap();}
 
             open.removeAll(removed);
-            List<String> oldOpen = new ArrayList<String>(_manager.util().getOpenTrackers());
+            List<String> oldOpen = new ArrayList<>(_manager.util().getOpenTrackers());
             Collections.sort(oldOpen);
             Collections.sort(open);
             if (!open.equals(oldOpen)) {_manager.saveOpenTrackers(open);}
@@ -2814,7 +2814,7 @@ public class I2PSnarkServlet extends BasicServlet {
             priv.removeAll(removed);
             // open trumps private
             priv.removeAll(open);
-            List<String> oldPriv = new ArrayList<String>(_manager.getPrivateTrackers());
+            List<String> oldPriv = new ArrayList<>(_manager.getPrivateTrackers());
             Collections.sort(oldPriv);
             Collections.sort(priv);
             if (!priv.equals(oldPriv)) {_manager.savePrivateTrackers(priv);}
@@ -2835,11 +2835,11 @@ public class I2PSnarkServlet extends BasicServlet {
                     _manager.saveTrackerMap();
                     String type = req.getParameter("add_tracker_type");
                     if ("1".equals(type)) {
-                        List<String> newOpen = new ArrayList<String>(_manager.util().getOpenTrackers());
+                        List<String> newOpen = new ArrayList<>(_manager.util().getOpenTrackers());
                         newOpen.add(aurl);
                         _manager.saveOpenTrackers(newOpen);
                     } else if ("2".equals(type)) {
-                        List<String> newPriv = new ArrayList<String>(_manager.getPrivateTrackers());
+                        List<String> newPriv = new ArrayList<>(_manager.getPrivateTrackers());
                         newPriv.add(aurl);
                         _manager.savePrivateTrackers(newPriv);
                     }
@@ -2858,8 +2858,8 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean changed = false;
             Map<String, TorrentCreateFilter> torrentCreateFilters = _manager.getTorrentCreateFilterMap();
             Enumeration<?> e = req.getParameterNames();
-            ArrayList<String> newDefaults = new ArrayList<String>();
-            ArrayList<TorrentCreateFilter> replaceFilters = new ArrayList<TorrentCreateFilter>();
+            ArrayList<String> newDefaults = new ArrayList<>();
+            ArrayList<TorrentCreateFilter> replaceFilters = new ArrayList<>();
             while (e.hasMoreElements()) {
                 Object o = e.nextElement();
                 if (!(o instanceof String)) {continue;}
@@ -2924,7 +2924,7 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     private List<Snark> getSortedSnarks(HttpServletRequest req) {
-        ArrayList<Snark> rv = new ArrayList<Snark>(_manager.getTorrents());
+        ArrayList<Snark> rv = new ArrayList<>(_manager.getTorrents());
         if (rv.size() > 1) {
             int sort = 0;
             String ssort = req.getParameter("sort");
@@ -4144,7 +4144,7 @@ public class I2PSnarkServlet extends BasicServlet {
 /* i2cp/tunnel configuration */
         _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         String IPString = _manager.util().getOurIPString();
-        Map<String, String> options = new TreeMap<String, String>(_manager.util().getI2CPOptions());
+        Map<String, String> options = new TreeMap<>(_manager.util().getI2CPOptions());
 
         buf.append("<tr><th class=suboption>").append(_t("Tunnel Configuration")).append("&nbsp;");
         if (!IPString.equals("unknown")) {
@@ -4826,7 +4826,7 @@ public class I2PSnarkServlet extends BasicServlet {
             return buf.toString();
         }
 
-        List<Sorters.FileAndIndex> fileList = new ArrayList<Sorters.FileAndIndex>(ls.length);
+        List<Sorters.FileAndIndex> fileList = new ArrayList<>(ls.length);
         // Precompute remaining for all files for efficiency
         long[][] arrays = (storage != null) ? storage.remaining2() : null;
         long[] remainingArray = (arrays != null) ? arrays[0] : null;
@@ -5666,7 +5666,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 // recurse
                 File[] ls = fai.file.listFiles();
                 if (ls != null && ls.length > 0) {
-                    List<Sorters.FileAndIndex> fl2 = new ArrayList<Sorters.FileAndIndex>(ls.length);
+                    List<Sorters.FileAndIndex> fl2 = new ArrayList<>(ls.length);
                     for (int i = 0; i < ls.length; i++) {fl2.add(new Sorters.FileAndIndex(ls[i], storage, remainingArray));}
                     if (hasCompleteAudio(fl2, storage, remainingArray)) {return true;}
                 }
@@ -5711,7 +5711,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (!r.isDirectory()) {return null;}
         File[] ls = r.listFiles();
         if (ls == null) {return null;}
-        List<Sorters.FileAndIndex> fileList = new ArrayList<Sorters.FileAndIndex>(ls.length);
+        List<Sorters.FileAndIndex> fileList = new ArrayList<>(ls.length);
         // precompute remaining for all files for efficiency
         long[] remainingArray = storage.remaining();
         for (int i = 0; i < ls.length; i++) {fileList.add(new Sorters.FileAndIndex(ls[i], storage, remainingArray));}
@@ -5746,7 +5746,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 // recurse
                 File[] ls = fai.file.listFiles();
                 if (ls != null && ls.length > 0) {
-                    List<Sorters.FileAndIndex> fl2 = new ArrayList<Sorters.FileAndIndex>(ls.length);
+                    List<Sorters.FileAndIndex> fl2 = new ArrayList<>(ls.length);
                     for (int i = 0; i < ls.length; i++) {fl2.add(new Sorters.FileAndIndex(ls[i], storage, remainingArray));}
                     if (ls.length > 1) {DataHelper.sort(fl2, Sorters.getFileComparator(sort, this));}
                     String name = fai.file.getName();
@@ -6172,7 +6172,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (announce == null) {announce = snark.getTrackerURL();}
         if (announce != null && !isI2PTracker(announce)) {announce = null;} // strip non-i2p trackers
         List<List<String>> alist = meta.getAnnounceList();
-        Set<String> annlist = new TreeSet<String>();
+        Set<String> annlist = new TreeSet<>();
         if (alist != null && !alist.isEmpty()) {
             for (List<String> alist2 : alist) { // strip non-i2p trackers
                 for (String s : alist2) {
@@ -6274,8 +6274,8 @@ public class I2PSnarkServlet extends BasicServlet {
             _manager.addMessage(_t("Torrent must be stopped")); // shouldn't happen
             return;
         }
-        List<Integer> toAdd = new ArrayList<Integer>();
-        List<Integer> toDel = new ArrayList<Integer>();
+        List<Integer> toAdd = new ArrayList<>();
+        List<Integer> toDel = new ArrayList<>();
         Integer primary = null;
         String newComment = "";
         String newCreatedBy = "";
@@ -6314,7 +6314,7 @@ public class I2PSnarkServlet extends BasicServlet {
             return;
         }
         List<List<String>> alist = meta.getAnnounceList();
-        Set<String> annlist = new TreeSet<String>();
+        Set<String> annlist = new TreeSet<>();
         if (alist != null && !alist.isEmpty()) {
             for (List<String> alist2 : alist) { // strip non-i2p trackers
                 for (String s : alist2) {
@@ -6355,7 +6355,7 @@ public class I2PSnarkServlet extends BasicServlet {
             newAnnList = null;
             thePrimary = null;
         } else {
-            List<String> aalist = new ArrayList<String>(annlist);
+            List<String> aalist = new ArrayList<>(annlist);
             newAnnList = Collections.singletonList(aalist);
             if (!aalist.contains(thePrimary)) {thePrimary = aalist.get(0);}
         }

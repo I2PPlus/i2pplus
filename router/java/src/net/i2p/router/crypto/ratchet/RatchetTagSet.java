@@ -154,9 +154,9 @@ class RatchetTagSet implements TagSetHandle {
         hkdf.calculate(ck, ZEROLEN, INFO_2, _sesstag_ck, _symmkey_ck, 0);
         hkdf.calculate(_sesstag_ck, ZEROLEN, INFO_3, _sesstag_ck, _sesstag_constant, 0);
         if (isInbound) {
-            _sessionTags = new SparseArray<RatchetSessionTag>(minSize);
+            _sessionTags = new SparseArray<>(minSize);
             if (state == null)
-                _sessionKeys = new SparseArray<byte[]>(INITIAL_KEY_CAPACITY);
+                _sessionKeys = new SparseArray<>(INITIAL_KEY_CAPACITY);
             else
                 _sessionKeys = null;
             for (int i = 0; i < minSize; i++) {
@@ -606,7 +606,7 @@ class RatchetTagSet implements TagSetHandle {
         if (_sessionTags == null)
             return Collections.emptyList();
         int sz = _sessionTags.size();
-        List<RatchetSessionTag> rv = new ArrayList<RatchetSessionTag>(sz);
+        List<RatchetSessionTag> rv = new ArrayList<>(sz);
         for (int i = 0; i < sz; i++) {
             rv.add(_sessionTags.valueAt(i));
         }
@@ -654,7 +654,7 @@ class RatchetTagSet implements TagSetHandle {
         rts = new RatchetTagSet(hkdf, null, (PublicKey) null, k1, k2, 0, 0, 0, 10, 50);
         System.out.println("Size now: " + rts.size());
         tags = rts.getTags();
-        List<RatchetSessionTag> origtags = new ArrayList<RatchetSessionTag>(tags);
+        List<RatchetSessionTag> origtags = new ArrayList<>(tags);
         Collections.shuffle(tags);
         System.out.println("TAGNUM\tTAG\t\tKEY");
         for (RatchetSessionTag tag : tags) {

@@ -48,7 +48,7 @@ public class SecurityManager {
         _context = ctx;
         _conf = conf;
         _log = ctx.logManager().getLog(SecurityManager.class);
-        authTokens = new HashMap<String, AuthToken>();
+        authTokens = new HashMap<>();
 
         timer = new Sweeper();
 

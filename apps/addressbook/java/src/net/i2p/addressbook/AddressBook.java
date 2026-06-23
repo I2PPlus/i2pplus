@@ -159,7 +159,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
         this.location = file.toString();
         Map<String, HostTxtEntry> a;
         try {a = HostTxtParser.parse(file);}
-        catch (IOException exp) {a = new HashMap<String, HostTxtEntry>();}
+        catch (IOException exp) {a = new HashMap<>();}
         this.addresses = a;
         this.subFile = null;
     }

@@ -191,8 +191,8 @@ class PeerTestManager {
         _context = context;
         _transport = transport;
         _log = context.logManager().getLog(PeerTestManager.class);
-        _activeTests = new ConcurrentHashMap<Long, PeerTestState>();
-        _recentTests = new LinkedBlockingQueue<Long>();
+        _activeTests = new ConcurrentHashMap<>();
+        _recentTests = new LinkedBlockingQueue<>();
         _packetBuilder2 = transport.getBuilder2();
         _throttle = new IPThrottler(MAX_PER_IP, THROTTLE_CLEAN_TIME);
         _context.statManager().createRateStat("udp.testBadIP", "Received IP or port was bad", "Transport [UDP]", UDPTransport.RATES);

@@ -168,7 +168,7 @@ public class Edns {
             long optFlags = flags;
             optFlags |= extendedRcode << 8;
             optFlags |= version << 16;
-            optRecord = new Record<OPT>(DnsName.ROOT, Record.TYPE.OPT, udpPayloadSize, optFlags, new OPT(variablePart));
+            optRecord = new Record<>(DnsName.ROOT, Record.TYPE.OPT, udpPayloadSize, optFlags, new OPT(variablePart));
         }
         return optRecord;
     }

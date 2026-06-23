@@ -147,8 +147,8 @@ public class TrackerClient implements Runnable {
         this.port = PORT; // (port == -1) ? 9 : port;
         this.infoHash = urlencode(hash);
         this.peerID = urlencode(snark.getID());
-        this.trackers = new ArrayList<TCTracker>(2);
-        this.backupTrackers = new ArrayList<TCTracker>(2);
+        this.trackers = new ArrayList<>(2);
+        this.backupTrackers = new ArrayList<>(2);
     }
 
     public synchronized void start() {
@@ -320,7 +320,7 @@ public class TrackerClient implements Runnable {
         } else if (additionalTrackerURL != null) {
             primary = additionalTrackerURL;
         }
-        Set<Hash> trackerHashes = new HashSet<Hash>(8);
+        Set<Hash> trackerHashes = new HashSet<>(8);
 
         // primary tracker
         if (primary != null) {
@@ -343,7 +343,7 @@ public class TrackerClient implements Runnable {
         // announce list
         // We completely ignore the BEP 12 processing rules
         if (meta != null && !meta.isPrivate()) {
-            List<String> urls = new ArrayList<String>(16);
+            List<String> urls = new ArrayList<>(16);
             List<List<String>> list = meta.getAnnounceList();
             if (list != null) {
                 for (List<String> llist : list) {
@@ -633,7 +633,7 @@ public class TrackerClient implements Runnable {
                     if (coordinator.needOutboundPeers()) {
                         // We only want to talk to new people if we need things
                         // from them (duh)
-                        List<Peer> ordered = new ArrayList<Peer>(peers);
+                        List<Peer> ordered = new ArrayList<>(peers);
                         Random r = _util.getContext().random();
                         Collections.shuffle(ordered, r);
                         Iterator<Peer> it = ordered.iterator();
@@ -746,7 +746,7 @@ public class TrackerClient implements Runnable {
                 if (_log.shouldInfo()) {
                     _log.info("Received " + pids.size() + " from PEX");
                 }
-                List<Peer> peers = new ArrayList<Peer>(pids.size());
+                List<Peer> peers = new ArrayList<>(pids.size());
                 for (PeerID pID : pids) {
                     peers.add(
                             new Peer(pID, snark.getID(), snark.getInfoHash(), snark.getMetaInfo()));
@@ -819,7 +819,7 @@ public class TrackerClient implements Runnable {
 
             // Now try these peers
             if ((!stop) && !hashes.isEmpty()) {
-                List<Peer> peers = new ArrayList<Peer>(hashes.size());
+                List<Peer> peers = new ArrayList<>(hashes.size());
                 for (Hash h : hashes) {
                     try {
                         PeerID pID = new PeerID(h.getData(), _util);
@@ -867,7 +867,7 @@ public class TrackerClient implements Runnable {
         if (urls == null || urls.isEmpty()) {
             return 0;
         }
-        List<Peer> peers = new ArrayList<Peer>(urls.size());
+        List<Peer> peers = new ArrayList<>(urls.size());
         for (String url : urls) {
             Hash h = getHostHash(url);
             if (h == null) {

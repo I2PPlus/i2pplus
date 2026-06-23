@@ -233,7 +233,7 @@ public class ConfigNetHelper extends HelperBase {
         if (cs.length() <= 0) {
             configs = Collections.emptySet();
         } else {
-            configs = new HashSet<String>(4);
+            configs = new HashSet<>(4);
             String[] ca = DataHelper.split(cs, "[,; \r\n\t]");
             for (int i = 0; i < ca.length; i++) {
                 String c = ca[i];

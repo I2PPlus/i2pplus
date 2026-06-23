@@ -109,7 +109,7 @@ public class InclusiveByteRange {
                         }
                         if (first < size) {
                             if (satRanges == null) {
-                                satRanges = new ArrayList<InclusiveByteRange>(4);
+                                satRanges = new ArrayList<>(4);
                             }
                             InclusiveByteRange range = new InclusiveByteRange(first, last);
                             satRanges.add(range);

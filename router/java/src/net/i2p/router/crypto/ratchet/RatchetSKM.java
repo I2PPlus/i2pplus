@@ -106,9 +106,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         _context = context;
         _destination = dest;
         _type = type;
-        _outboundSessions = new ConcurrentHashMap<PublicKey, OutboundSession>(64);
-        _pendingOutboundSessions = new HashMap<PublicKey, List<OutboundSession>>(64);
-        _inboundTagSets = new ConcurrentHashMap<RatchetSessionTag, RatchetTagSet>(128);
+        _outboundSessions = new ConcurrentHashMap<>(64);
+        _pendingOutboundSessions = new HashMap<>(64);
+        _inboundTagSets = new ConcurrentHashMap<>(128);
         _hkdf = new HKDF(context);
         _replayFilter = new DecayingHashSet(context, (int) ECIESAEADEngine.MAX_NS_AGE, 32, "Ratchet-NS");
         // start the precalc of Elg2 keys if it wasn't already started
@@ -168,13 +168,13 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /** RatchetTagSet */
     private Set<RatchetTagSet> getRatchetTagSets() {
         synchronized (_inboundTagSets) {
-            return new HashSet<RatchetTagSet>(_inboundTagSets.values());
+            return new HashSet<>(_inboundTagSets.values());
         }
     }
 
     /** OutboundSession - used only by HTML */
     private Set<OutboundSession> getOutboundSessions() {
-        return new HashSet<OutboundSession>(_outboundSessions.values());
+        return new HashSet<>(_outboundSessions.values());
     }
 
     /**
@@ -244,7 +244,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                         _log.info("Another new Outbound session " + state.hashCode() + " as Alice, total now: " + pending.size() +
                                   ". Bob: " + toString(target));
                 } else {
-                    pending = new ArrayList<OutboundSession>(4);
+                    pending = new ArrayList<>(4);
                     pending.add(sess);
                     _pendingOutboundSessions.put(target, pending);
                     if (_log.shouldInfo())
@@ -786,7 +786,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      */
     private Map<PublicKey, Set<RatchetTagSet>> getRatchetTagSetsByPublicKey() {
         Set<RatchetTagSet> inbound = getRatchetTagSets();
-        Map<PublicKey, Set<RatchetTagSet>> inboundSets = new HashMap<PublicKey, Set<RatchetTagSet>>(inbound.size());
+        Map<PublicKey, Set<RatchetTagSet>> inboundSets = new HashMap<>(inbound.size());
         long now = _context.clock().now();
         // Build a map of the inbound tag sets, grouped by PublicKey
         for (RatchetTagSet ts : inbound) {
@@ -797,7 +797,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                 continue;
             Set<RatchetTagSet> sets = inboundSets.get(pk);
             if (sets == null) {
-                sets = new HashSet<RatchetTagSet>(4);
+                sets = new HashSet<>(4);
                 inboundSets.put(pk, sets);
             }
             sets.add(ts);
@@ -818,7 +818,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         int totalSets = 0;
         long now = _context.clock().now();
         Comparator<RatchetTagSet> comp = new RatchetTagSetComparator();
-        List<RatchetTagSet> sets = new ArrayList<RatchetTagSet>();
+        List<RatchetTagSet> sets = new ArrayList<>();
         for (Map.Entry<PublicKey, Set<RatchetTagSet>> e : inboundSets.entrySet()) {
             PublicKey skey = e.getKey();
             sets.clear();
@@ -1014,9 +1014,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             _established = _context.clock().now();
             _lastUsed = _established;
             _lastReceived = _established;
-            _unackedTagSets = new HashSet<RatchetTagSet>(4);
-            _callbacks = new ConcurrentHashMap<Integer, ReplyCallback>();
-            _acksToSend = new LinkedBlockingQueue<Integer>();
+            _unackedTagSets = new HashSet<>(4);
+            _callbacks = new ConcurrentHashMap<>();
+            _acksToSend = new LinkedBlockingQueue<>();
             // generate expected tagset
             byte[] ck = state.getChainingKey();
             byte[] tagsetkey = new byte[32];
@@ -1389,7 +1389,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         List<RatchetTagSet> getTagSets() {
             List<RatchetTagSet> rv;
             synchronized (_unackedTagSets) {
-                rv = new ArrayList<RatchetTagSet>(_unackedTagSets);
+                rv = new ArrayList<>(_unackedTagSets);
                 if (_tagSet != null)
                     rv.add(_tagSet);
             }
@@ -1609,7 +1609,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             int sz = _acksToSend.size();
             if (sz == 0)
                 return null;
-            List<Integer> rv = new ArrayList<Integer>(Math.min(sz, MAX_SEND_ACKS));
+            List<Integer> rv = new ArrayList<>(Math.min(sz, MAX_SEND_ACKS));
             _acksToSend.drainTo(rv, MAX_SEND_ACKS);
             if (rv.isEmpty())
                 return null;

@@ -101,10 +101,10 @@ public class FamilyKeyCrypto {
         }
         _privkey = (_fname != null) ? initialize() : null;
         _pubkey = (_privkey != null) ? _privkey.toPublic() : null;
-        _verified = new ConcurrentHashMap<Hash, Verified>(16);
-        _negativeCache = new ConcurrentHashMap<Hash, Result>(4);
-        _ourFamily = (_privkey != null) ? new ConcurrentHashSet<Hash>(4) : Collections.<Hash>emptySet();
-        _knownKeys = new HashMap<String, SigningPublicKey>(8);
+        _verified = new ConcurrentHashMap<>(16);
+        _negativeCache = new ConcurrentHashMap<>(4);
+        _ourFamily = (_privkey != null) ? new ConcurrentHashSet<>(4) : Collections.<Hash>emptySet();
+        _knownKeys = new HashMap<>(8);
         loadCerts();
     }
 
@@ -154,7 +154,7 @@ public class FamilyKeyCrypto {
         Signature sig = _context.dsa().sign(b, _privkey);
         if (sig == null)
             throw new GeneralSecurityException("sig failed");
-        Map<String, String> rv = new HashMap<String, String>(3);
+        Map<String, String> rv = new HashMap<>(3);
         rv.put(OPT_NAME, family);
         rv.put(OPT_KEY, _pubkey.getType().getCode() + ":" + _pubkey.toBase64());
         rv.put(OPT_SIG, sig.toBase64());
@@ -438,7 +438,7 @@ public class FamilyKeyCrypto {
                                                   DEFAULT_KEY_VALID_DAYS, DEFAULT_KEY_ALGORITHM,
                                                   DEFAULT_KEY_SIZE, keyPassword);
 
-                Map<String, String> changes = new HashMap<String, String>();
+                Map<String, String> changes = new HashMap<>();
                 changes.put(PROP_KEYSTORE_PASSWORD, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD);
                 changes.put(PROP_KEY_PASSWORD, keyPassword);
                 changes.put(PROP_FAMILY_NAME, _fname);

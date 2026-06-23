@@ -1120,7 +1120,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (_pstate == null) {
             // case 1, race or out-of-order, queue until we have the peerstate
             if (_queuedDataPackets == null) {
-                _queuedDataPackets = new ArrayList<UDPPacket>(4);
+                _queuedDataPackets = new ArrayList<>(4);
             } else if (_queuedDataPackets.size() >= 10) {
                 if (_log.shouldWarn())
                     _log.warn("[SSU] Not queueing possible data packet from " + packet + " -> Too many packets already queued");

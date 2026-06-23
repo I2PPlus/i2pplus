@@ -45,7 +45,7 @@ class SidebarRenderer {
     static final Map<String, String> SECTION_NAMES;
 
     static {
-        Map<String, String> aMap = new HashMap<String, String>();
+        Map<String, String> aMap = new HashMap<>();
         aMap.put("AdvancedRouterInfo", _x("Router Information (advanced)"));
         aMap.put("Advanced", _x("Advanced Links"));
         aMap.put("BandwidthGraph", _x("Bandwidth Graph"));
@@ -172,7 +172,7 @@ class SidebarRenderer {
            .append("</h3><hr class=b>\n<table id=sb_help>\n<tr><td>");
 
         // Store all items in map so they are sorted by translated name, then output
-        Map<String, String> svcs = new TreeMap<String, String>(Collator.getInstance());
+        Map<String, String> svcs = new TreeMap<>(Collator.getInstance());
         StringBuilder rbuf = new StringBuilder(128);
 
         String tx = _t("Advanced Settings");
@@ -264,7 +264,7 @@ class SidebarRenderer {
         boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
 
         // Store all items in map so they are sorted by translated name, add the plugins, then output
-        Map<String, String> svcs = new TreeMap<String, String>(Collator.getInstance());
+        Map<String, String> svcs = new TreeMap<>(Collator.getInstance());
         StringBuilder rbuf = new StringBuilder(128);
         PortMapper pm = _context.portMapper();
         if (pm.isRegistered(PortMapper.SVC_SUSIDNS)) {
@@ -430,7 +430,7 @@ class SidebarRenderer {
            .append("</h3>\n<hr class=b>\n<table id=sb_internals class=collapse>\n<tr><td>");
 
         // Store all items in map so they are sorted by translated name, then output
-        Map<String, String> svcs = new TreeMap<String, String>(Collator.getInstance());
+        Map<String, String> svcs = new TreeMap<>(Collator.getInstance());
         StringBuilder rbuf = new StringBuilder(128);
 
         String tx = _t("Certs");
@@ -589,7 +589,7 @@ class SidebarRenderer {
            .append("</h3>\n<hr class=b>\n<table id=sb_advanced class=collapse>\n<tr><td>");
 
         // Store all items in map so they are sorted by translated name, then output
-        Map<String, String> svcs = new TreeMap<String, String>(Collator.getInstance());
+        Map<String, String> svcs = new TreeMap<>(Collator.getInstance());
         StringBuilder rbuf = new StringBuilder(128);
 
         File javadoc = new File(_context.getBaseDir(), "docs/javadoc/index.html");

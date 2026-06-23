@@ -71,7 +71,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         if (opts.getProperty("i2cp.leaseSetEncType") == null)
             opts.setProperty("i2cp.leaseSetEncType", "4,0");
 
-        _addrs = new ArrayList<I2PSocketAddress>(4);
+        _addrs = new ArrayList<>(4);
         buildAddresses(destinations);
 
         if (_addrs.isEmpty()) {

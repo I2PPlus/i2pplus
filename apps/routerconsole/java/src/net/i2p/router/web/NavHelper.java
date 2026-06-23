@@ -18,8 +18,8 @@ import net.i2p.app.NavService;
  */
 public class NavHelper implements NavService, ClientApp {
     // both indexed by standard (untranslated) app name
-    private final Map<String, App> _apps = new ConcurrentHashMap<String, App>(4);
-    private final Map<String, byte[]> _binary = new ConcurrentHashMap<String, byte[]>(4);
+    private final Map<String, App> _apps = new ConcurrentHashMap<>(4);
+    private final Map<String, byte[]> _binary = new ConcurrentHashMap<>(4);
 
     /**
      * To register a new client application so that it shows up on the router
@@ -77,7 +77,7 @@ public class NavHelper implements NavService, ClientApp {
     public Map<String, String> getClientAppLinks() {
         if (_apps.isEmpty())
             return null;
-        Map<String, String> rv = new HashMap<String, String>(_apps.size());
+        Map<String, String> rv = new HashMap<>(_apps.size());
         StringBuilder buf = new StringBuilder(128);
         for (Map.Entry<String, App> e : _apps.entrySet()) {
             String appName = e.getKey();
@@ -123,7 +123,7 @@ public class NavHelper implements NavService, ClientApp {
     public List<App> getClientApps(I2PAppContext ctx) {
         if (_apps.isEmpty())
             return Collections.emptyList();
-        List<App> rv = new ArrayList<App>(_apps.size());
+        List<App> rv = new ArrayList<>(_apps.size());
         for (Map.Entry<String, App> e : _apps.entrySet()) {
             String name = e.getKey();
             App mapp = e.getValue();

@@ -109,10 +109,10 @@ class RefreshRoutersJob extends JobImpl {
     private void initializeRouterListIfNeeded() {
         if (_routers == null || _routers.isEmpty()) {
             // Create defensive copies to avoid ConcurrentModificationException
-            List<Hash> floodfills = new ArrayList<Hash>(_facade.getFloodfillPeers());
-            Set<Hash> allRouters = new HashSet<Hash>(_facade.getAllRouters());
+            List<Hash> floodfills = new ArrayList<>(_facade.getFloodfillPeers());
+            Set<Hash> allRouters = new HashSet<>(_facade.getAllRouters());
             allRouters.removeAll(floodfills);
-            _routers = new ArrayList<Hash>(floodfills);
+            _routers = new ArrayList<>(floodfills);
             _routers.addAll(allRouters);
 
             if (_log.shouldInfo()) {

@@ -48,8 +48,8 @@ public class StatManager {
     public StatManager(I2PAppContext context) {
         _context = context;
         _log = context.logManager().getLog(getClass());
-        _frequencyStats = new ConcurrentHashMap<String, FrequencyStat>(8);
-        _rateStats = new ConcurrentHashMap<String, RateStat>(128);
+        _frequencyStats = new ConcurrentHashMap<>(8);
+        _rateStats = new ConcurrentHashMap<>(128);
     }
 
     /**
@@ -182,7 +182,7 @@ public class StatManager {
      * @return a copy of the frequency stat names
      */
     public Set<String> getFrequencyNames() {
-        return new HashSet<String>(_frequencyStats.keySet());
+        return new HashSet<>(_frequencyStats.keySet());
     }
 
     /**
@@ -190,7 +190,7 @@ public class StatManager {
      * @return a copy of the rate stat names
      */
     public Set<String> getRateNames() {
-        return new HashSet<String>(_rateStats.keySet());
+        return new HashSet<>(_rateStats.keySet());
     }
 
     /** is the given stat a monitored rate? */
@@ -208,12 +208,12 @@ public class StatManager {
      * Map is unsorted.
      */
     public Map<String, SortedSet<String>> getStatsByGroup() {
-        Map<String, SortedSet<String>> groups = new HashMap<String, SortedSet<String>>(32);
+        Map<String, SortedSet<String>> groups = new HashMap<>(32);
         for (FrequencyStat stat : _frequencyStats.values()) {
             String gname = stat.getGroupName();
             SortedSet<String> names = groups.get(gname);
             if (names == null) {
-                names = new TreeSet<String>(Collator.getInstance());
+                names = new TreeSet<>(Collator.getInstance());
                 groups.put(gname, names);
             }
             names.add(stat.getName());
@@ -222,7 +222,7 @@ public class StatManager {
             String gname = stat.getGroupName();
             SortedSet<String> names = groups.get(gname);
             if (names == null) {
-                names = new TreeSet<String>(Collator.getInstance());
+                names = new TreeSet<>(Collator.getInstance());
                 groups.put(gname, names);
             }
             names.add(stat.getName());

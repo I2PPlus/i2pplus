@@ -45,7 +45,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class ByteCache extends TryCache<ByteArray> {
 
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(ByteCache.class);
-    private static final Map<Integer, ByteCache> _caches = new ConcurrentHashMap<Integer, ByteCache>(16);
+    private static final Map<Integer, ByteCache> _caches = new ConcurrentHashMap<>(16);
 
     /**
      *  max size in bytes of each cache

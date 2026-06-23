@@ -103,7 +103,7 @@ public class ConfigFamilyHandler extends FormHandler {
                 // ignore failure
                 KeyStoreUtil.exportCert(ks, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD, family, cf);
                 // save config
-                Map<String, String> changes = new HashMap<String, String>();
+                Map<String, String> changes = new HashMap<>();
                 changes.put(FamilyKeyCrypto.PROP_FAMILY_NAME, family);
                 changes.put(FamilyKeyCrypto.PROP_KEY_PASSWORD, keypw);
                 changes.put(FamilyKeyCrypto.PROP_KEYSTORE_PASSWORD, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD);
@@ -122,7 +122,7 @@ public class ConfigFamilyHandler extends FormHandler {
                 try { in.close(); } catch (IOException ioe) {}
             }
         } else if (_action.equals(_t("Leave Family"))) {
-            List<String> removes = new ArrayList<String>();
+            List<String> removes = new ArrayList<>();
             removes.add(FamilyKeyCrypto.PROP_FAMILY_NAME);
             removes.add(FamilyKeyCrypto.PROP_KEY_PASSWORD);
             removes.add(FamilyKeyCrypto.PROP_KEYSTORE_PASSWORD);

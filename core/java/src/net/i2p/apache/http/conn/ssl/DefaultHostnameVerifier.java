@@ -282,7 +282,7 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
                 if (type == subjectType) {
                     final String s = (String) list.get(1);
                     if (subjectAltList == null) {
-                        subjectAltList = new ArrayList<String>();
+                        subjectAltList = new ArrayList<>();
                     }
                     subjectAltList.add(s);
                 }

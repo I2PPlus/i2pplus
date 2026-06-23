@@ -28,7 +28,7 @@ import net.i2p.util.SystemVersion;
  */
 class Connection {
     /** Track last LeaseSet purge time per destination to prevent redundant purges. */
-    private static final ConcurrentHashMap<Hash, Long> _lastLeaseSetPurgeTime = new ConcurrentHashMap<Hash, Long>();
+    private static final ConcurrentHashMap<Hash, Long> _lastLeaseSetPurgeTime = new ConcurrentHashMap<>();
     /** Cooldown period between LeaseSet purges for the same destination (1 second). */
     private static final long LEASESET_PURGE_COOLDOWN = 1 * 1000;
 
@@ -180,7 +180,7 @@ class Connection {
         _outputStream = new MessageOutputStream(_context, timer, _receiver,
                                                 _options.getMaxMessageSize(), _options.getMaxInitialMessageSize());
         _timer = timer;
-        _outboundPackets = new TreeMap<Long, PacketLocal>();
+        _outboundPackets = new TreeMap<>();
         if (opts != null) {
             _localPort = opts.getLocalPort();
             _remotePort = opts.getPort();
@@ -563,7 +563,7 @@ class Connection {
                             }
                         }
                         if (!nacked) { // aka ACKed
-                            if (acked == null) {acked = new ArrayList<PacketLocal>(8);}
+                            if (acked == null) {acked = new ArrayList<>(8);}
                             PacketLocal ackedPacket = e.getValue();
                             ackedPacket.ackReceived();
                             acked.add(ackedPacket);

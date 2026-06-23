@@ -278,7 +278,7 @@ public class MLabRunner {
                         if (listener != null){
                             listener.reportSummary(result_str);
                             listener.reportDetail(result_str);
-                            Map<String,Object> results = new HashMap<String, Object>();
+                            Map<String,Object> results = new HashMap<>();
                             results.put("up", up_bps);
                             results.put("down", down_bps);
                             results.put("server_host", server_host);
@@ -294,7 +294,7 @@ public class MLabRunner {
                         }
                     } finally {
                         if (!completed && listener != null) {
-                            listener.complete( new HashMap<String, Object>());
+                            listener.complete( new HashMap<>());
                         }
                         _running.set(false);
                     }
@@ -333,14 +333,14 @@ public class MLabRunner {
      * Returned from runNDT
      */
     private class ToolRunImpl implements ToolRun {
-        private List<ToolRunListener> listeners = new ArrayList<ToolRunListener>();
+        private List<ToolRunListener> listeners = new ArrayList<>();
         private boolean cancelled;
 
         public void cancel() {
             List<ToolRunListener> copy;
             synchronized( this ){
                 cancelled = true;
-                copy = new ArrayList<ToolRunListener>(listeners);
+                copy = new ArrayList<>(listeners);
             }
             for ( ToolRunListener l: copy ){
                 try{

@@ -58,12 +58,12 @@ public final class PublicSuffixMatcher {
      */
     public PublicSuffixMatcher(final Collection<String> rules, final Collection<String> exceptions) {
         Args.notNull(rules,  "Domain suffix rules");
-        this.rules = new ConcurrentHashMap<String, String>(rules.size());
+        this.rules = new ConcurrentHashMap<>(rules.size());
         for (String rule: rules) {
             this.rules.put(rule, rule);
         }
         if (exceptions != null) {
-            this.exceptions = new ConcurrentHashMap<String, String>(exceptions.size());
+            this.exceptions = new ConcurrentHashMap<>(exceptions.size());
             for (String exception: exceptions) {
                 this.exceptions.put(exception, exception);
             }

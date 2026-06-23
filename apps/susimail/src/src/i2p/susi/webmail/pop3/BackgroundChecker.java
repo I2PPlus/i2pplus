@@ -33,13 +33,13 @@ class BackgroundChecker {
 
     public BackgroundChecker(POP3MailBox mailbox) {
         this.mailbox = mailbox;
-        toDelete = new ConcurrentHashSet<String>();
+        toDelete = new ConcurrentHashSet<>();
         timer = new Checker();
         _log = I2PAppContext.getGlobalContext().logManager().getLog(BackgroundChecker.class);
     }
 
     public Collection<String> getQueued() {
-        List<String> rv = new ArrayList<String>(toDelete);
+        List<String> rv = new ArrayList<>(toDelete);
         return rv;
     }
 

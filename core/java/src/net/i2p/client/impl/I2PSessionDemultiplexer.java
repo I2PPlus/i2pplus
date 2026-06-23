@@ -34,7 +34,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
 
     public I2PSessionDemultiplexer(I2PAppContext ctx) {
         _log = ctx.logManager().getLog(I2PSessionDemultiplexer.class);
-        _listeners = new ConcurrentHashMap<Integer, I2PSessionMuxedListener>(4);
+        _listeners = new ConcurrentHashMap<>(4);
     }
 
     /** unused */
@@ -80,7 +80,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
     public void reportAbuse(I2PSession session, int severity) {
         Collection<I2PSessionMuxedListener> lsnrs = _listeners.values();
         // dedup
-        if (lsnrs.size() > 1) lsnrs = new HashSet<I2PSessionMuxedListener>(lsnrs);
+        if (lsnrs.size() > 1) lsnrs = new HashSet<>(lsnrs);
         for (I2PSessionMuxedListener l : lsnrs) {
             l.reportAbuse(session, severity);
         }
@@ -90,7 +90,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
     public void disconnected(I2PSession session) {
         Collection<I2PSessionMuxedListener> lsnrs = _listeners.values();
         // dedup
-        if (lsnrs.size() > 1) lsnrs = new HashSet<I2PSessionMuxedListener>(lsnrs);
+        if (lsnrs.size() > 1) lsnrs = new HashSet<>(lsnrs);
         for (I2PSessionMuxedListener l : lsnrs) {
             if (_log.shouldInfo()) _log.info("Sending disconnected() to " + l);
             l.disconnected(session);
@@ -101,7 +101,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
     public void errorOccurred(I2PSession session, String message, Throwable error) {
         Collection<I2PSessionMuxedListener> lsnrs = _listeners.values();
         // dedup
-        if (lsnrs.size() > 1) lsnrs = new HashSet<I2PSessionMuxedListener>(lsnrs);
+        if (lsnrs.size() > 1) lsnrs = new HashSet<>(lsnrs);
         for (I2PSessionMuxedListener l : lsnrs) {
             if (_log.shouldInfo()) _log.info("Sending errorOccurred() \"" + message + "\" to " + l);
             l.errorOccurred(session, message, error);

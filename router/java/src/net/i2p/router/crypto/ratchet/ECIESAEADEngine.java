@@ -1468,7 +1468,7 @@ public final class ECIESAEADEngine {
 
     private class PLCallback implements RatchetPayload.PayloadCallback {
         /** non null, may be empty */
-        public final List<GarlicClove> cloveSet = new ArrayList<GarlicClove>(3);
+        public final List<GarlicClove> cloveSet = new ArrayList<>(3);
         private final RatchetSKM skm;
         private final PublicKey remote;
         public long datetime;
@@ -1525,7 +1525,7 @@ public final class ECIESAEADEngine {
             // could have both a forward and reverse.
             // shouldn't have two forwards or two reverses
             if (nextKeys == null)
-                nextKeys = new ArrayList<NextSessionKey>(2);
+                nextKeys = new ArrayList<>(2);
             nextKeys.add(next);
         }
 
@@ -1606,7 +1606,7 @@ public final class ECIESAEADEngine {
         if (acksToSend != null)
             numblocks++;
         int len = 0;
-        List<Block> blocks = new ArrayList<Block>(numblocks);
+        List<Block> blocks = new ArrayList<>(numblocks);
         if (expiration > 0) {
             Block block = new DateTimeBlock(expiration);
             blocks.add(block);

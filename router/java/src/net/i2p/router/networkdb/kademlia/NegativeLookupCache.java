@@ -36,8 +36,8 @@ class NegativeLookupCache {
     private static final long CLEAN_TIME = 2*60*1000;
 
     public NegativeLookupCache(RouterContext context) {
-        this.counter = new ObjectCounter<Hash>();
-        this.badDests = new LHMCache<Hash, Destination>(MAX_BAD_DESTS);
+        this.counter = new ObjectCounter<>();
+        this.badDests = new LHMCache<>(MAX_BAD_DESTS);
         this._maxFails = context.getProperty("netdb.negativeCache.maxFails",MAX_FAILS);
         cleanTime = context.getProperty("netdb.negativeCache.cleanupInterval", CLEAN_TIME);
         cleaner = new Cleaner(context.simpleTimer2());

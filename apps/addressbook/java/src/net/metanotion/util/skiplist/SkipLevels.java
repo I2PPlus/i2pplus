@@ -65,7 +65,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
 	 *  @return a new SkipLevels instance
 	 */
 	public SkipLevels<K, V> newInstance(int levels, SkipSpan<K, V> ss, SkipList<K, V> sl) {
-		return new SkipLevels<K, V>(levels, ss);
+		return new SkipLevels<>(levels, ss);
 	}
 
 	/**

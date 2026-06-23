@@ -66,7 +66,7 @@ class SubscriptionList implements Iterable<AddressBook> {
     public SubscriptionList(File locationsFile, File etagsFile,
             File lastModifiedFile, File lastFetchedFile, long delay, List<String> defaultSubs, String proxyHost,
             int proxyPort) {
-        this.subscriptions = new ArrayList<Subscription>(4);
+        this.subscriptions = new ArrayList<>(4);
         this.etagsFile = etagsFile;
         this.lastModifiedFile = lastModifiedFile;
         this.lastFetchedFile = lastFetchedFile;
@@ -138,9 +138,9 @@ class SubscriptionList implements Iterable<AddressBook> {
      */
     public void write() {
         int sz = subscriptions.size();
-        Map<String, String> etags = new HashMap<String, String>(sz);
-        Map<String, String> lastModified = new HashMap<String, String>(sz);
-        Map<String, String> lastFetched = new HashMap<String, String>(sz);
+        Map<String, String> etags = new HashMap<>(sz);
+        Map<String, String> lastModified = new HashMap<>(sz);
+        Map<String, String> lastFetched = new HashMap<>(sz);
         for (Subscription sub : this.subscriptions) {
             if (sub.getEtag() != null) {
                 etags.put(sub.getLocation(), sub.getEtag());

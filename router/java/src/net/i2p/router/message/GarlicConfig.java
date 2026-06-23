@@ -41,7 +41,7 @@ class GarlicConfig {
     //private long _replyBlockExpiration;
 
     public GarlicConfig(Certificate cert, long id, long expiration, DeliveryInstructions di) {
-	this(new ArrayList<GarlicConfig>(4), cert, id, expiration, di);
+	this(new ArrayList<>(4), cert, id, expiration, di);
     }
 
     protected GarlicConfig(List<GarlicConfig> cloveConfigs, Certificate cert, long id,

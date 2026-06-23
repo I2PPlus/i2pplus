@@ -37,8 +37,8 @@ public class ConfigStatsHelper extends HelperBase {
     private boolean _currentCanBeGraphed;
 
     public ConfigStatsHelper() {
-        _stats = new ArrayList<String>();
-        _graphs = new HashSet<String>();
+        _stats = new ArrayList<>();
+        _graphs = new HashSet<>();
     }
 
     /**
@@ -53,7 +53,7 @@ public class ConfigStatsHelper extends HelperBase {
         _log = _context.logManager().getLog(ConfigStatsHelper.class);
 
         Map<String, SortedSet<String>> unsorted = _context.statManager().getStatsByGroup();
-        Map<String, Set<String>> groups = new TreeMap<String, Set<String>>(new AlphaComparator());
+        Map<String, Set<String>> groups = new TreeMap<>(new AlphaComparator());
         groups.putAll(unsorted);
         for (Set<String> stats : groups.values()) {
              _stats.addAll(stats);

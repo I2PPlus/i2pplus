@@ -256,7 +256,7 @@ public class NetDbHelper extends FormHandler {
         _postOK = "Start Scan".equals(_action) || "Review".equals(_action);
         if ("Save".equals(_action)) {
             try {
-                Map<String, String> toSave = new HashMap<String, String>(4);
+                Map<String, String> toSave = new HashMap<>(4);
                 String newTime = getJettyString("runFrequency");
                 if (newTime != null) {
                     long ntime = Long.parseLong(newTime) * 60*60*1000;
@@ -412,7 +412,7 @@ public class NetDbHelper extends FormHandler {
            .append("</b></td><td><input type=text name=cost></td></tr>\n<tr><td><b>")
            .append(_t("Country"))
            .append("</b></td><td><select name=\"c\"><option value=\"\" selected></option>");
-        Map<String, String> sorted = new TreeMap<String, String>(Collator.getInstance());
+        Map<String, String> sorted = new TreeMap<>(Collator.getInstance());
         for (Map.Entry<String, String> e : _context.commSystem().getCountries().entrySet()) {
             String tr = Messages.getString(e.getValue(), _context, Messages.COUNTRY_BUNDLE_NAME);
             sorted.put(tr, e.getKey());

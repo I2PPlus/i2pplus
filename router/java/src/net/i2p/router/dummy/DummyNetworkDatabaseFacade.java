@@ -31,7 +31,7 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
     private final RouterContext _context;
 
     public DummyNetworkDatabaseFacade(RouterContext ctx) {
-        _routers = Collections.synchronizedMap(new HashMap<Hash, RouterInfo>());
+        _routers = Collections.synchronizedMap(new HashMap<>());
         _context = ctx;
     }
 
@@ -93,6 +93,6 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
         _routers.remove(dbEntry);
     }
 
-    public Set<Hash> getAllRouters() { return new HashSet<Hash>(_routers.keySet()); }
+    public Set<Hash> getAllRouters() { return new HashSet<>(_routers.keySet()); }
     public Set<Hash> findNearestRouters(Hash key, int maxNumRouters, Set<Hash> peersToIgnore) { return getAllRouters(); }
 }

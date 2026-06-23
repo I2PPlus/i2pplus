@@ -46,7 +46,7 @@ public final class HMAC256Generator extends HMACGenerator {
      */
     public HMAC256Generator(I2PAppContext context) {
         super();
-        _macs = new LinkedBlockingQueue<Mac>(CACHE_SIZE);
+        _macs = new LinkedBlockingQueue<>(CACHE_SIZE);
     }
 
     /**

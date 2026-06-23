@@ -149,7 +149,7 @@ class OutboundEstablishState {
         _needIntroduction = needIntroduction;
         _remotePeer = remotePeer;
         _introKey = introKey;
-        _queuedMessages = new LinkedBlockingQueue<OutNetMessage>();
+        _queuedMessages = new LinkedBlockingQueue<>();
         _establishBegin = ctx.clock().now();
         _remoteAddress = addr;
         _introductionNonce = -1;

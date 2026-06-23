@@ -47,7 +47,7 @@ class MimeTypes {
     private final Map<String, String> _mimeMap;
 
     public MimeTypes() {
-        _mimeMap = new ConcurrentHashMap<String, String>();
+        _mimeMap = new ConcurrentHashMap<>();
         if (!(SystemVersion.isWindows()
                 || SystemVersion.isMac()
                 || SystemVersion.getMaxMemory() < 100 * 1024 * 1024L)) loadSystemMimeTypes();

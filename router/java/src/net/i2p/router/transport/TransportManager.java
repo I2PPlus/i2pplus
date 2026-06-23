@@ -159,8 +159,8 @@ public class TransportManager implements TransportEventListener {
         _context.statManager().createRateStat("transport.bidFailSelf", "Failed to bid on message (self as target)", "Transport", RATES);
         _context.statManager().createRateStat("transport.bidFailNoTransports", "Failed to bid on message (unreachable on any transport)", "Transport", RATES);
         _context.statManager().createRateStat("transport.bidFailAllTransports", "Failed to bid on message (failed on all transports)", "Transport", RATES);
-        _transports = new ConcurrentHashMap<String, Transport>(2);
-        _pluggableTransports = new HashMap<String, Transport>(2);
+        _transports = new ConcurrentHashMap<>(2);
+        _pluggableTransports = new HashMap<>(2);
 
         boolean isProxied = isProxied();
         boolean enableUPnP = !isProxied && _context.getBooleanPropertyDefaultTrue(PROP_ENABLE_UPNP);
@@ -401,8 +401,8 @@ public class TransportManager implements TransportEventListener {
         // unless the kernel prefers them
         //
         boolean hasPreferredV6Address = false;
-        List<InetAddress> addresses = new ArrayList<InetAddress>(4);
-        List<Inet6Address> nonPreferredV6Addresses = new ArrayList<Inet6Address>(4);
+        List<InetAddress> addresses = new ArrayList<>(4);
+        List<Inet6Address> nonPreferredV6Addresses = new ArrayList<>(4);
         for (String ips : ipset) {
             try {
                 InetAddress addr = InetAddress.getByName(ips);
@@ -530,7 +530,7 @@ public class TransportManager implements TransportEventListener {
         _log.debug("Starting up the Transport Manager...");
         // Let's do this in a predictable order to make testing easier
         // Start NTCP first so it can get notified from SSU
-        List<Transport> tps = new ArrayList<Transport>();
+        List<Transport> tps = new ArrayList<>();
         Transport tp = getTransport(NTCPTransport.STYLE);
         if (tp != null)
             tps.add(tp);
@@ -598,7 +598,7 @@ public class TransportManager implements TransportEventListener {
      *  @since 0.9.31
      */
     SortedMap<String, Transport> getTransports() {
-        TreeMap<String, Transport> rv = new TreeMap<String, Transport>();
+        TreeMap<String, Transport> rv = new TreeMap<>();
         rv.putAll(_transports);
         // TODO (also synch)
         //rv.putAll(_pluggableTransports);
@@ -680,7 +680,7 @@ public class TransportManager implements TransportEventListener {
      * Note: this method returns them in whimsical order.
      */
     List<Long> getClockSkews() {
-        List<Long> skews = new ArrayList<Long>();
+        List<Long> skews = new ArrayList<>();
         for (Transport t : _transports.values()) {
             List<Long> tempSkews = t.getClockSkews();
             if ((tempSkews == null) || (tempSkews.isEmpty())) continue;
@@ -772,7 +772,7 @@ public class TransportManager implements TransportEventListener {
             else
                 rv = t.getEstablished();
         } else if (rv == null) {
-            rv = new ArrayList<Hash>(0);
+            rv = new ArrayList<>(0);
         }
         return rv;
     }
@@ -845,7 +845,7 @@ public class TransportManager implements TransportEventListener {
      *  This forces a rebuild
      */
     List<RouterAddress> getAddresses() {
-        List<RouterAddress> rv = new ArrayList<RouterAddress>(4);
+        List<RouterAddress> rv = new ArrayList<>(4);
         // do this first since SSU may force a NTCP change
         for (Transport t : _transports.values())
             t.updateAddress();
@@ -908,7 +908,7 @@ public class TransportManager implements TransportEventListener {
      * which we will pass along to UPnP
      */
     private Set<Port> getPorts() {
-        Set<Port> rv = new HashSet<Port>(4);
+        Set<Port> rv = new HashSet<>(4);
         if (_context.router().isHidden())
             return rv;
         for (Transport t : _transports.values()) {
@@ -963,7 +963,7 @@ public class TransportManager implements TransportEventListener {
         if (_context.router().getRouterInfo().equals(msg.getTarget()))
             throw new IllegalArgumentException("Bids for a message bound to ourselves?");
 
-        List<TransportBid> rv = new ArrayList<TransportBid>(_transports.size());
+        List<TransportBid> rv = new ArrayList<>(_transports.size());
         List<String> failedTransports = msg.getFailedTransports();
         for (Transport t : _transports.values()) {
             if (failedTransports.contains(t.getStyle())) {
@@ -1166,7 +1166,7 @@ public class TransportManager implements TransportEventListener {
     }
 
     List<String> getMostRecentErrorMessages() {
-        List<String> rv = new ArrayList<String>(16);
+        List<String> rv = new ArrayList<>(16);
         for (Transport t : _transports.values()) {
             rv.addAll(t.getMostRecentErrorMessages());
         }
@@ -1257,7 +1257,7 @@ public class TransportManager implements TransportEventListener {
         List<Hash> established = getEstablished();
         Set<Hash> establishedSet;
         if (established != null && !established.isEmpty()) {
-            establishedSet = new HashSet<Hash>(established);
+            establishedSet = new HashSet<>(established);
         } else {
             establishedSet = Collections.emptySet();
         }
@@ -1270,8 +1270,8 @@ public class TransportManager implements TransportEventListener {
         }
         if (fastCount >= MAINTAINER_MIN_OUTBOUND)
             return;
-        Set<Hash> candidates = new HashSet<Hash>();
-        Set<Hash> exclude = new HashSet<Hash>(establishedSet);
+        Set<Hash> candidates = new HashSet<>();
+        Set<Hash> exclude = new HashSet<>(establishedSet);
         _context.profileOrganizer().selectFastPeers(MAINTAINER_MAX_PER_CYCLE, exclude, candidates);
         if (candidates.size() < MAINTAINER_MAX_PER_CYCLE) {
             _context.profileOrganizer().selectHighCapacityPeers(

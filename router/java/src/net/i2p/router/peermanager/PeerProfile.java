@@ -123,7 +123,7 @@ public class PeerProfile {
      *  Only routers in these countries will use a same-country metric.
      *  Yes this is an arbitrary cutoff.
      */
-    private static final Set<String> _bigCountries = new HashSet<String>();
+    private static final Set<String> _bigCountries = new HashSet<>();
 
     static {
         String[] big = new String[] { "fr", "de", "ru", "au", "us", "ca", "gb", "jp", "nl", "ir", "se" };

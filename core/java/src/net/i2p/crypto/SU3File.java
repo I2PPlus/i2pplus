@@ -136,7 +136,7 @@ public class SU3File {
         }
     }
 
-    private static final Map<Integer, ContentType> BY_CODE = new HashMap<Integer, ContentType>();
+    private static final Map<Integer, ContentType> BY_CODE = new HashMap<>();
 
     static {
         for (ContentType type : ContentType.values()) {
@@ -632,7 +632,7 @@ public class SU3File {
 
             int idx = g.getOptind();
             String cmd = args[idx].toLowerCase(Locale.US);
-            List<String> a = new ArrayList<String>(Arrays.asList(args).subList(idx + 1, args.length));
+            List<String> a = new ArrayList<>(Arrays.asList(args).subList(idx + 1, args.length));
 
             if (error) {
                 showUsageCLI();

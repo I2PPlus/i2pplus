@@ -63,7 +63,7 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
         if (pk == null) {setPrivateKey(key);}
         else {
             if (_privateKeys == null) {
-                _privateKeys = new ArrayList<PrivateKey>(4);
+                _privateKeys = new ArrayList<>(4);
                 _privateKeys.add(pk);
             }
             _privateKeys.add(key);

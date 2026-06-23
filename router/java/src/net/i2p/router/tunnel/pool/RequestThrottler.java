@@ -88,7 +88,7 @@ class RequestThrottler {
 
      RequestThrottler(RouterContext ctx) {
         this.context = ctx;
-        this.counter = new ObjectCounter<Hash>();
+        this.counter = new ObjectCounter<>();
         this._burstCounter = new BurstWindowCounter(BURST_WINDOW_MS, BURST_BUCKET_COUNT);
         _log = ctx.logManager().getLog(RequestThrottler.class);
         this.lastBlockCountriesProp = null;

@@ -239,7 +239,7 @@ public class BDecoder {
         if (c != 'l') throw new InvalidBEncodingException("Expected 'l', not '" + (char) c + "'");
         indicator = 0;
 
-        List<BEValue> result = new ArrayList<BEValue>();
+        List<BEValue> result = new ArrayList<>();
         c = getNextIndicator();
         while (c != 'e') {
             result.add(bdecode());
@@ -267,7 +267,7 @@ public class BDecoder {
             throw new InvalidBEncodingException("Expected 'd', not '" + (char) c + "'");
         indicator = 0;
 
-        Map<String, BEValue> result = new HashMap<String, BEValue>();
+        Map<String, BEValue> result = new HashMap<>();
         c = getNextIndicator();
         while (c != 'e') {
             // Dictionary keys are always strings.

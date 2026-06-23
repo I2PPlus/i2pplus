@@ -58,8 +58,8 @@ public class Dispatcher implements RequestHandler, NotificationHandler {
      * Creates a new dispatcher with no registered handlers.
      */
     public Dispatcher() {
-        requestHandlers = new Hashtable<String,RequestHandler>();
-        notificationHandlers = new Hashtable<String,NotificationHandler>();
+        requestHandlers = new Hashtable<>();
+        notificationHandlers = new Hashtable<>();
     }
 
     /**

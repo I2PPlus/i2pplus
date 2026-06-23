@@ -57,7 +57,7 @@ class LookupThrottler {
         MAX_LOOKUPS = maxlookups;
         MAX_NON_FF_LOOKUPS = maxnonfflookups;
         CLEAN_TIME = cleanTime;
-        this.counter = new ObjectCounter<ReplyTunnel>();
+        this.counter = new ObjectCounter<>();
         this.burstTimestamps = new HashMap<>();
         SimpleTimer2.getInstance().addPeriodicEvent(new Cleaner(), CLEAN_TIME);
         _max = _facade.floodfillEnabled() ? MAX_LOOKUPS : MAX_NON_FF_LOOKUPS;

@@ -31,7 +31,7 @@ class DelayedDeleter {
 
     public DelayedDeleter(POP3MailBox mailbox) {
         this.mailbox = mailbox;
-        toDelete = new ConcurrentHashSet<String>();
+        toDelete = new ConcurrentHashSet<>();
         timer = new Checker();
         _log = I2PAppContext.getGlobalContext().logManager().getLog(DelayedDeleter.class);
     }
@@ -41,7 +41,7 @@ class DelayedDeleter {
     public void removeQueued(String uidl) {toDelete.remove(uidl);}
 
     public Collection<String> getQueued() {
-        List<String> rv = new ArrayList<String>(toDelete);
+        List<String> rv = new ArrayList<>(toDelete);
         return rv;
     }
 

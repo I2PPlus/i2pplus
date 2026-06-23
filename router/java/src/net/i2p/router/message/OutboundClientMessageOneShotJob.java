@@ -510,7 +510,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
 
         // get the possible leases
-        List<Lease> leases = new ArrayList<Lease>(_leaseSet.getLeaseCount());
+        List<Lease> leases = new ArrayList<>(_leaseSet.getLeaseCount());
         // first try to get ones that really haven't expired
         for (int i = 0; i < _leaseSet.getLeaseCount(); i++) {
             Lease lease = _leaseSet.getLease(i);
@@ -690,7 +690,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             tags = null;
         } else {
             sessKey = new SessionKey();
-            tags = new HashSet<SessionTag>();
+            tags = new HashSet<>();
         }
 
         // Per-message flag > 0 overrides per-session option

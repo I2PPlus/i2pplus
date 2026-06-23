@@ -157,10 +157,10 @@ class ClientConnectionRunner {
         _manager = manager;
         _socket = socket;
         // unused for fastReceive
-        _messages = new ConcurrentHashMap<MessageId, Payload>();
-        _sessions = new ConcurrentHashMap<Hash, SessionParams>(4);
-        _alreadyProcessed = new ArrayList<MessageId>();
-        _acceptedPending = new ConcurrentHashSet<MessageId>();
+        _messages = new ConcurrentHashMap<>();
+        _sessions = new ConcurrentHashMap<>(4);
+        _alreadyProcessed = new ArrayList<>();
+        _acceptedPending = new ConcurrentHashSet<>();
         _messageId = new AtomicInteger(_context.random().nextInt());
     }
 
@@ -388,7 +388,7 @@ class ClientConnectionRunner {
      *  @since 0.9.21
      */
     List<SessionId> getSessionIds() {
-        List<SessionId> rv = new ArrayList<SessionId>(_sessions.size());
+        List<SessionId> rv = new ArrayList<>(_sessions.size());
         for (SessionParams sp : _sessions.values()) {
             SessionId id = sp.sessionId;
             if (id != null) {rv.add(id);}
@@ -403,7 +403,7 @@ class ClientConnectionRunner {
      *  @since 0.9.21
      */
     List<Destination> getDestinations() {
-        List<Destination> rv = new ArrayList<Destination>(_sessions.size());
+        List<Destination> rv = new ArrayList<>(_sessions.size());
         for (SessionParams sp : _sessions.values()) {rv.add(sp.dest);}
         return rv;
     }

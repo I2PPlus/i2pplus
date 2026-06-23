@@ -36,7 +36,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
         // these override the settings in super
         _timeoutMs = Math.min(timeoutMs, SearchJob.PER_FLOODFILL_PEER_TIMEOUT);
         _expiration = _timeoutMs + ctx.clock().now();
-        _unheardFrom = new HashSet<Hash>(CONCURRENT_SEARCHES);
+        _unheardFrom = new HashSet<>(CONCURRENT_SEARCHES);
         _replySelector = new FloodOnlyLookupSelector(ctx, this);
         _onReply = new FloodOnlyLookupMatchJob(ctx, this);
         _onTimeout = new FloodOnlyLookupTimeoutJob(ctx, this);
@@ -51,7 +51,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
         super(ctx, facade, key, onFind, onFailed, timeoutMs, false);
         _timeoutMs = timeoutMs;
         _expiration = _timeoutMs + ctx.clock().now();
-        _unheardFrom = new HashSet<Hash>(1);
+        _unheardFrom = new HashSet<>(1);
         _replySelector = new FloodOnlyLookupSelector(ctx, this);
         _onReply = new DirectLookupMatchJob(ctx, this);
         _onTimeout = new FloodOnlyLookupTimeoutJob(ctx, this);

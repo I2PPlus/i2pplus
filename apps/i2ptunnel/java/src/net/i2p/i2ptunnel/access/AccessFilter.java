@@ -75,11 +75,11 @@ class AccessFilter implements StatefulConnectionFilter {
     /**
      * Trackers for known destinations defined in access lists
      */
-    private final Map<Hash, DestTracker> knownDests = new HashMap<Hash, DestTracker>();
+    private final Map<Hash, DestTracker> knownDests = new HashMap<>();
     /**
      * Trackers for unknown destinations not defined in access lists
      */
-    private final Map<Hash, DestTracker> unknownDests = new HashMap<Hash, DestTracker>();
+    private final Map<Hash, DestTracker> unknownDests = new HashMap<>();
 
     private volatile Syncer syncer;
 
@@ -166,7 +166,7 @@ class AccessFilter implements StatefulConnectionFilter {
     }
 
     private void reload() throws IOException {
-        Map<Hash, DestTracker> tmp = new HashMap<Hash, DestTracker>();
+        Map<Hash, DestTracker> tmp = new HashMap<>();
         for (FilterDefinitionElement element : definition.getElements()) {
             element.update(tmp);
         }
@@ -188,7 +188,7 @@ class AccessFilter implements StatefulConnectionFilter {
         for (Recorder recorder : definition.getRecorders()) {
             Threshold threshold = recorder.getThreshold();
             File file = recorder.getFile();
-            Set<String> breached = new LinkedHashSet<String>();
+            Set<String> breached = new LinkedHashSet<>();
 
             // if the file already exists, add previously breached b32s
             if (file.exists() && file.isFile()) {

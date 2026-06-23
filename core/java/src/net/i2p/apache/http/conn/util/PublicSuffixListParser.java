@@ -53,8 +53,8 @@ public final class PublicSuffixListParser {
      * @throws java.io.IOException on error while reading from list
      */
     public PublicSuffixList parse(final Reader reader) throws IOException {
-        final List<String> rules = new ArrayList<String>();
-        final List<String> exceptions = new ArrayList<String>();
+        final List<String> rules = new ArrayList<>();
+        final List<String> exceptions = new ArrayList<>();
         final BufferedReader r = new BufferedReader(reader);
         final StringBuilder sb = new StringBuilder(256);
         boolean more = true;

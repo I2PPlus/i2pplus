@@ -74,11 +74,11 @@ class IntroductionManager {
         _log = ctx.logManager().getLog(IntroductionManager.class);
         _transport = transport;
         _builder2 = transport.getBuilder2();
-        _outbound = new ConcurrentHashMap<Long, PeerState>(MAX_OUTBOUND);
-        _inbound = new ConcurrentHashMap<Long, PeerState>(MAX_INBOUND);
-        _recentHolePunches = new HashSet<Long>(16);
-        _nonceToAlice = new ConcurrentHashMap<Long, PeerState2>(MAX_INBOUND);
-        _recentRelaysAsBob = new LHMCache<Long, Object>(64);
+        _outbound = new ConcurrentHashMap<>(MAX_OUTBOUND);
+        _inbound = new ConcurrentHashMap<>(MAX_INBOUND);
+        _recentHolePunches = new HashSet<>(16);
+        _nonceToAlice = new ConcurrentHashMap<>(MAX_INBOUND);
+        _recentRelaysAsBob = new LHMCache<>(64);
         ctx.statManager().createRateStat("udp.relayBadIP", "Received IP or port was bad", "Transport [UDP]", UDPTransport.RATES);
     }
 
@@ -153,7 +153,7 @@ class IntroductionManager {
         if (_log.shouldDebug())
             _log.debug("Picking inbound out of " + _inbound.size());
         if (_inbound.isEmpty()) return 0;
-        List<PeerState> peers = new ArrayList<PeerState>(_inbound.values());
+        List<PeerState> peers = new ArrayList<>(_inbound.values());
         int sz = peers.size();
         Collections.sort(peers, new PeerStateComparator());
         int found = 0;
@@ -162,7 +162,7 @@ class IntroductionManager {
         // if not too many to choose from, be less picky
         if (sz <= howMany + 2)
             inactivityCutoff -= UDPTransport.EXPIRE_TIMEOUT / 4;
-        List<Introducer> introducers = new ArrayList<Introducer>(howMany);
+        List<Introducer> introducers = new ArrayList<>(howMany);
         String exp = Long.toString((now + INTRODUCER_EXPIRATION) / 1000);
 
         int ssu2count = 0;

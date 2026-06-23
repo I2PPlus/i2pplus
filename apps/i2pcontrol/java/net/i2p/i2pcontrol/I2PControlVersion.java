@@ -19,7 +19,7 @@ public class I2PControlVersion {
     public final static Set<Integer> SUPPORTED_API_VERSIONS;
 
     static {
-        Set<Integer> mutableSet = new HashSet<Integer>();
+        Set<Integer> mutableSet = new HashSet<>();
         mutableSet.add(1);
         SUPPORTED_API_VERSIONS = Collections.unmodifiableSet(mutableSet);
     }

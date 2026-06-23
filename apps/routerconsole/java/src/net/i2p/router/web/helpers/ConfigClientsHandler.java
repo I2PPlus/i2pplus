@@ -239,7 +239,7 @@ public class ConfigClientsHandler extends FormHandler {
         // will save if not split config
         List<ClientAppConfig> clients = ClientAppConfig.getClientApps(_context);
         // will save if split config
-        List<ClientAppConfig> saveClients = new ArrayList<ClientAppConfig>(clients.size() + 1);
+        List<ClientAppConfig> saveClients = new ArrayList<>(clients.size() + 1);
         boolean isSplitConfig = ClientAppConfig.isSplitConfig(_context);
         for (int cur = 0; cur < clients.size(); cur++) {
             ClientAppConfig ca = clients.get(cur);
@@ -621,7 +621,7 @@ public class ConfigClientsHandler extends FormHandler {
      */
     private void saveInterfaceChanges() {
         boolean restart = false;
-        Map<String, String> changes = new HashMap<String, String>();
+        Map<String, String> changes = new HashMap<>();
         String port = getJettyString("port");
         if (port != null && !port.equals(_context.getProperty(ClientManagerFacadeImpl.PROP_CLIENT_PORT, "7654"))) {
             changes.put(ClientManagerFacadeImpl.PROP_CLIENT_PORT, port);

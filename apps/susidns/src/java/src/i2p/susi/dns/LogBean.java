@@ -60,7 +60,7 @@ public class LogBean extends BaseBean
             BufferedReader br = null;
             try {
                 br = new BufferedReader(new InputStreamReader(new FileInputStream(log), "UTF-8"));
-                List<String> lines = new ArrayList<String>(maxLines);
+                List<String> lines = new ArrayList<>(maxLines);
                 String line;
                 while ((line = br.readLine()) != null) {
                     lines.add(line);

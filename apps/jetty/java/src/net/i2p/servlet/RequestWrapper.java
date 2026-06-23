@@ -71,7 +71,7 @@ public class RequestWrapper {
      * @param httpRequest
      */
     public RequestWrapper(HttpServletRequest httpRequest) {
-      cache = new Hashtable<String, String>();
+      cache = new Hashtable<>();
       this.httpRequest = httpRequest;
       String contentType = httpRequest.getContentType();
       isMultiPartRequest = contentType != null && contentType.toLowerCase(Locale.US).startsWith("multipart/form-data");
@@ -97,7 +97,7 @@ public class RequestWrapper {
     public Enumeration<String> getParameterNames() {
         if (isMultiPartRequest) {
             if (cachedParameterNames == null) {
-                cachedParameterNames = new Hashtable<String, Integer>();
+                cachedParameterNames = new Hashtable<>();
                 try {
                     Integer DUMMY = Integer.valueOf(0);
                     for (Part p : httpRequest.getParts()) {cachedParameterNames.put(p.getName(), DUMMY);}

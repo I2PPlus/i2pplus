@@ -216,7 +216,7 @@ public class I2PAppContext {
             _overrideProps = new I2PProperties();
             if (envProps != null)
                 _overrideProps.putAll(envProps);
-            _shutdownTasks = new ConcurrentHashSet<Runnable>(32);
+            _shutdownTasks = new ConcurrentHashSet<>(32);
             _portMapper = new PortMapper(this);
             _appManager = isRouterContext() ? null : new ClientAppManagerImpl(this);
 
@@ -638,7 +638,7 @@ public class I2PAppContext {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public Set<String> getPropertyNames() {
         // clone to avoid ConcurrentModificationException
-        Set<String> names = new HashSet<String>((Set<String>) (Set) ((Properties) System.getProperties().clone()).keySet()); // TODO-Java6: s/keySet()/stringPropertyNames()/
+        Set<String> names = new HashSet<>((Set<String>) (Set) ((Properties) System.getProperties().clone()).keySet()); // TODO-Java6: s/keySet()/stringPropertyNames()/
         if (_overrideProps != null)
             names.addAll((Set<String>) (Set) _overrideProps.keySet()); // TODO-Java6: s/keySet()/stringPropertyNames()/
         return names;

@@ -36,7 +36,7 @@ public class MetaNamingService extends DummyNamingService {
         super(context);
         String list = _context.getProperty(PROP_NAME_SERVICES, DEFAULT_NAME_SERVICES);
         StringTokenizer tok = new StringTokenizer(list, ",");
-        _services = new CopyOnWriteArrayList<NamingService>();
+        _services = new CopyOnWriteArrayList<>();
         while (tok.hasMoreTokens()) {
             try {
                 Class<?> cls = Class.forName(tok.nextToken());
@@ -54,7 +54,7 @@ public class MetaNamingService extends DummyNamingService {
      */
     public MetaNamingService(I2PAppContext context, List<NamingService> services) {
         super(context);
-        _services = new CopyOnWriteArrayList<NamingService>();
+        _services = new CopyOnWriteArrayList<>();
         if (services != null) {
             for (NamingService ns : services) {
                 addNamingService(ns, false);
@@ -163,7 +163,7 @@ public class MetaNamingService extends DummyNamingService {
      */
     @Override
     public Map<String, Destination> getEntries(Properties options) {
-        Map<String, Destination> rv = new HashMap<String, Destination>();
+        Map<String, Destination> rv = new HashMap<>();
         for (NamingService ns : _services) {
             rv.putAll(ns.getEntries(options));
         }
@@ -176,7 +176,7 @@ public class MetaNamingService extends DummyNamingService {
      */
     @Override
     public Map<String, String> getBase64Entries(Properties options) {
-        Map<String, String> rv = new HashMap<String, String>();
+        Map<String, String> rv = new HashMap<>();
         for (NamingService ns : _services) {
             rv.putAll(ns.getBase64Entries(options));
         }
@@ -188,7 +188,7 @@ public class MetaNamingService extends DummyNamingService {
      */
     @Override
     public Set<String> getNames(Properties options) {
-        Set<String> rv = new HashSet<String>();
+        Set<String> rv = new HashSet<>();
         for (NamingService ns : _services) {
             rv.addAll(ns.getNames(options));
         }

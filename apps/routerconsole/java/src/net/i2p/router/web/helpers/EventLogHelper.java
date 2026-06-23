@@ -61,7 +61,7 @@ public class EventLogHelper extends FormHandler {
 
     public EventLogHelper() {
         super();
-        _xevents = new HashMap<String, String>(1 + (_events.length / 2));
+        _xevents = new HashMap<>(1 + (_events.length / 2));
     }
 
     protected void processForm() {}
@@ -109,7 +109,7 @@ public class EventLogHelper extends FormHandler {
             _out.write("</select>&nbsp;<b>");
             _out.write(_t("Event type") + ":</b> <select name=type>");
             // sorted by translated display string
-            Map<String, String> events = new TreeMap<String, String>(Collator.getInstance());
+            Map<String, String> events = new TreeMap<>(Collator.getInstance());
             for (int i = 0; i < _events.length; i += 2) {
                 events.put(_xevents.get(_events[i]), _events[i]);
             }
@@ -190,7 +190,7 @@ public class EventLogHelper extends FormHandler {
         }
         buf.append("</th></tr></thead>\n");
 
-        List<Map.Entry<Long, String>> entries = new ArrayList<Map.Entry<Long, String>>(events.entrySet());
+        List<Map.Entry<Long, String>> entries = new ArrayList<>(events.entrySet());
         Collections.reverse(entries);
         for (Map.Entry<Long, String> e : entries) {
             long time = e.getKey().longValue();

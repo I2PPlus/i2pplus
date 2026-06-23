@@ -118,10 +118,10 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     private static final String nocli_args[] = { "-nocli", "-die"};
 
-    private final List<I2PTunnelTask> tasks = new CopyOnWriteArrayList<I2PTunnelTask>();
+    private final List<I2PTunnelTask> tasks = new CopyOnWriteArrayList<>();
     private int next_task_id = 1;
 
-    private final Set<ConnectionEventListener> listeners = new CopyOnWriteArraySet<ConnectionEventListener>();
+    private final Set<ConnectionEventListener> listeners = new CopyOnWriteArraySet<>();
 
     private static final int NOGUI = 99999;
     private static final LongOpt[] longopts = new LongOpt[] {
@@ -195,7 +195,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         // as of 0.8.4, include context properties
         Properties p = _context.getProperties();
         _clientOptions = p;
-        _sessions = new CopyOnWriteArraySet<I2PSession>();
+        _sessions = new CopyOnWriteArraySet<>();
 
         addConnectionEventListener(lsnr);
         boolean gui = true;
@@ -251,7 +251,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
             case 'e':
                 if (eargs == null)
-                    eargs = new ArrayList<String>(4);
+                    eargs = new ArrayList<>(4);
                 eargs.add(g.getOptarg());
                 if (checkRunByE) {
                     checkRunByE = false;
@@ -349,7 +349,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      *  @since public since 0.9.53 for advanced plugin usage, was package private
      */
     public List<I2PTunnelTask> getTasks() {
-        return new ArrayList<I2PTunnelTask>(tasks);
+        return new ArrayList<>(tasks);
     }
 
     /**
@@ -358,7 +358,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     public List<I2PSession> getSessions() {
         if (_sessions.isEmpty()) {return Collections.emptyList();}
-        return new ArrayList<I2PSession>(_sessions);
+        return new ArrayList<>(_sessions);
     }
 
     /**
@@ -1854,7 +1854,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      *
      */
     private void purgetasks(Logging l) {
-        List<I2PTunnelTask> removed = new ArrayList<I2PTunnelTask>();
+        List<I2PTunnelTask> removed = new ArrayList<>();
         for (I2PTunnelTask t : tasks) {
             if (!t.isOpen()) {
                 _log.debug(getPrefix() + "Purging inactive tunnel: [" + t.getId() + "] " + t.toString());

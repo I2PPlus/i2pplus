@@ -49,7 +49,7 @@ class ConnThrottler {
     public ConnThrottler(int max, int totalMax, long period,
                          long throttlePeriod, long totalThrottlePeriod, String action, Log log) {
         updateLimits(max, totalMax, period, throttlePeriod, totalThrottlePeriod);
-        _peers = new HashMap<Hash, Record>(4);
+        _peers = new HashMap<>(4);
         _action = action;
         _log = log;
         _cleaner = new Cleaner();
@@ -199,7 +199,7 @@ class ConnThrottler {
         private long until;
 
         public Record() {
-            times = new ArrayList<Long>(8);
+            times = new ArrayList<>(8);
             increment();
         }
 

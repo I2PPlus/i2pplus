@@ -128,7 +128,7 @@ public class LeaseSet extends DatabaseEntry {
     public static final int MAX_LEASES = 16;
 
     public LeaseSet() {
-        _leases = new ArrayList<Lease>(2);
+        _leases = new ArrayList<>(2);
         _firstExpiration = Long.MAX_VALUE;
     }
 
@@ -578,7 +578,7 @@ public class LeaseSet extends DatabaseEntry {
         byte[] dec = new byte[enclen];
         I2PAppContext.getGlobalContext().aes().decrypt(enc, 0, dec, 0, key, iv, enclen);
         ByteArrayInputStream bais = new ByteArrayInputStream(dec);
-        _decryptedLeases = new ArrayList<Lease>(size - 1);
+        _decryptedLeases = new ArrayList<>(size - 1);
         for (int i = 0; i < size - 1; i++) {
             Lease l = new Lease();
             Hash h = new Hash();

@@ -107,7 +107,7 @@ public final class ElGamalAESEngine {
         SessionKey key = keyManager.consumeTag(st);
         SessionKey foundKey = new SessionKey();
         SessionKey usedKey = new SessionKey();
-        Set<SessionTag> foundTags = new HashSet<SessionTag>();
+        Set<SessionTag> foundTags = new HashSet<>();
         byte decrypted[];
         boolean wasExisting = false;
         final boolean shouldDebug = _log.shouldDebug();
@@ -205,7 +205,7 @@ public final class ElGamalAESEngine {
             return null;
         SessionKey foundKey = new SessionKey();
         SessionKey usedKey = new SessionKey();
-        Set<SessionTag> foundTags = new HashSet<SessionTag>();
+        Set<SessionTag> foundTags = new HashSet<>();
         final boolean shouldDebug = _log.shouldDebug();
         if (shouldDebug)
             _log.debug("Decrypting existing session \n* Tag: " + st.toString() + "\n* Key: " + key.toBase64() + " (" + data.length + " bytes)");
@@ -248,7 +248,7 @@ public final class ElGamalAESEngine {
             return null;
         SessionKey foundKey = new SessionKey();
         SessionKey usedKey = new SessionKey();
-        Set<SessionTag> foundTags = new HashSet<SessionTag>();
+        Set<SessionTag> foundTags = new HashSet<>();
         byte[] decrypted = decryptNewSession(data, targetPrivateKey, foundTags, usedKey, foundKey);
         final boolean shouldDebug = _log.shouldDebug();
         if (decrypted != null) {
@@ -446,7 +446,7 @@ public final class ElGamalAESEngine {
             int cur = 0;
             long numTags = DataHelper.fromLong(decrypted, cur, 2);
             if ((numTags < 0) || (numTags > MAX_TAGS_RECEIVED)) throw new IllegalArgumentException("Invalid number of session tags");
-            if (numTags > 0) tags = new ArrayList<SessionTag>((int)numTags);
+            if (numTags > 0) tags = new ArrayList<>((int)numTags);
             cur += 2;
             //_log.debug("# tags: " + numTags);
             if (numTags * SessionTag.BYTE_LENGTH > decrypted.length - 2) {

@@ -414,7 +414,7 @@ class Mail {
                         }
                         else if (hlc.startsWith("reply-to:")) {reply = getAddress(line.substring(9).trim());}
                         else if (hlc.startsWith("to:")) {
-                            ArrayList<String> list = new ArrayList<String>();
+                            ArrayList<String> list = new ArrayList<>();
                             getRecipientsFromList(list, line.substring(3).trim(), true);
                             if (list.isEmpty()) {} // don't set
                             else if (to == null) {to = list.toArray(new String[list.size()]);}
@@ -424,7 +424,7 @@ class Mail {
                                 to = list.toArray(new String[list.size()]);
                             }
                         } else if (hlc.startsWith("cc:")) {
-                            ArrayList<String> list = new ArrayList<String>();
+                            ArrayList<String> list = new ArrayList<>();
                             getRecipientsFromList(list, line.substring(3).trim(), true);
                             if (list.isEmpty()) {} // don't set
                             else if (cc == null) {cc = list.toArray(new String[list.size()]);}

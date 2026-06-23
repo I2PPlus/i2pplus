@@ -37,7 +37,7 @@ class SessionsDB {
 	private final HashMap<String, SessionRecord> map;
 
 	public SessionsDB() {
-		map = new HashMap<String, SessionRecord>();
+		map = new HashMap<>();
 	}
 
 	public synchronized void put(String nick, SessionRecord session)

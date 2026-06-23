@@ -262,7 +262,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         } else {
             _reseedChecker = new ReseedChecker(context);
             _blindCache = new BlindCache(context);
-            _exploreKeys = new ConcurrentHashSet<Hash>(64);
+            _exploreKeys = new ConcurrentHashSet<>(64);
             // We don't have a comm system here to check for ctx.commSystem().isDummy()
             // we'll check before starting in startup()
             _erj = new ExpireRoutersJob(_context, this);
@@ -460,8 +460,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (isClientDb()) {_kb = ((FloodfillNetworkDatabaseFacade) _context.netDb()).getKBuckets();}
         else {
             synchronized (kbInitLock) {
-                _kb = new KBucketSet<Hash>(_context, ri.getIdentity().getHash(),
-                                           BUCKET_SIZE, KAD_B, new RejectTrimmer<Hash>());
+                _kb = new KBucketSet<>(_context, ri.getIdentity().getHash(),
+                                           BUCKET_SIZE, KAD_B, new RejectTrimmer<>());
             }
         }
 
@@ -548,7 +548,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public Set<Hash> findNearestRouters(Hash key, int maxNumRouters, Set<Hash> peersToIgnore) {
         if (isClientDb()) {return Collections.emptySet();}
         if (!_initialized) {return Collections.emptySet();}
-        return new HashSet<Hash>(_peerSelector.selectNearest(key, maxNumRouters, peersToIgnore, _kb));
+        return new HashSet<>(_peerSelector.selectNearest(key, maxNumRouters, peersToIgnore, _kb));
     }
 
     /** get the hashes for all known routers */

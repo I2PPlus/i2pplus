@@ -54,7 +54,7 @@ class PeerCheckerTask implements Runnable {
 
         // Keep track of peers we remove now,
         // we will add them back to the end of the list.
-        List<Peer> removed = new ArrayList<Peer>();
+        List<Peer> removed = new ArrayList<>();
         int uploadLimit = coordinator.allowedUploaders();
         boolean overBWLimit = coordinator.overUpBWLimit();
         if (_log.shouldDebug())

@@ -1260,7 +1260,7 @@ public class NativeBigInteger extends BigInteger {
      */
     private static List<String> getResourceList() {
         if (_isAndroid) return Collections.emptyList();
-        List<String> rv = new ArrayList<String>(20);
+        List<String> rv = new ArrayList<>(20);
         String primary = getMiddleName2(true);
         // primary may be null
         String[] compatList = JBIGI_COMPAT_MAP.get(primary);
@@ -1307,7 +1307,7 @@ public class NativeBigInteger extends BigInteger {
      *  @since 0.9.1
      */
     private static Map<String, String> getCPUInfo() {
-        Map<String, String> rv = new HashMap<String, String>(32);
+        Map<String, String> rv = new HashMap<>(32);
         BufferedReader in = null;
         try {
             in = new BufferedReader(new InputStreamReader(new FileInputStream("/proc/cpuinfo"), "ISO-8859-1"), 4096);

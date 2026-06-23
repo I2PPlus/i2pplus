@@ -80,7 +80,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      */
     protected I2PSessionImpl2(I2PAppContext ctx, InputStream destKeyStream, Properties options) throws I2PSessionException {
         super(ctx, destKeyStream, options);
-        _sendingStates = new ConcurrentHashMap<Long, MessageState>(32);
+        _sendingStates = new ConcurrentHashMap<>(32);
         _sendMessageNonce = new AtomicLong();
         // default is BestEffort
         _noEffort = "none".equals(getOptions().getProperty(I2PClient.PROP_RELIABILITY, "").toLowerCase(Locale.US));
@@ -101,7 +101,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      */
     protected I2PSessionImpl2(I2PSessionImpl primary, InputStream destKeyStream, Properties options) throws I2PSessionException {
         super(primary, destKeyStream, options);
-        _sendingStates = new ConcurrentHashMap<Long, MessageState>(32);
+        _sendingStates = new ConcurrentHashMap<>(32);
         _sendMessageNonce = new AtomicLong();
         _noEffort = "none".equals(getOptions().getProperty(I2PClient.PROP_RELIABILITY, "").toLowerCase(Locale.US));
         _context.statManager().createRateStat("i2cp.receiveStatusTime.1", "Time to get status=1 back", "I2CP", RATES);

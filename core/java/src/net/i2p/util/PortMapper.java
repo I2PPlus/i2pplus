@@ -138,8 +138,8 @@ public class PortMapper {
      *  @param context unused for now
      */
     public PortMapper(I2PAppContext context) {
-        _dir = new ConcurrentHashMap<String, InetSocketAddress>(8);
-        _eepsites = new ConcurrentHashSet<String>(4);
+        _dir = new ConcurrentHashMap<>(8);
+        _eepsites = new ConcurrentHashSet<>(4);
     }
 
     /**
@@ -366,7 +366,7 @@ public class PortMapper {
      */
     public List<String> getEepsiteURLs() {
         if (_eepsites.isEmpty()) return Collections.emptyList();
-        return new ArrayList<String>(_eepsites);
+        return new ArrayList<>(_eepsites);
     }
 
     /**
@@ -388,7 +388,7 @@ public class PortMapper {
      *  @since 0.9.20
      */
     public void renderStatusHTML(Writer out) throws IOException {
-        List<String> services = new ArrayList<String>(_dir.keySet());
+        List<String> services = new ArrayList<>(_dir.keySet());
         out.write("<h2 id=debug_portmapper>Port Mapper</h2>\n" + "<table id=portmapper>\n<thead>\n<tr><th>Service</th><th>Host</th><th>Port</th></tr>\n</thead>\n");
         Collections.sort(services, Collator.getInstance());
         for (String s : services) {

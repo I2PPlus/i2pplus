@@ -71,7 +71,7 @@ class SOCKS5Server extends SOCKSServer {
      * The fake IP is a partial SipHash of the hostname, so collisions aren't predictable.
      * The IPs will change at restart, but torsocks doesn't appear to do any caching.
      */
-    private static final Map<String, String> _torCache = new LHMCache<String, String>(256);
+    private static final Map<String, String> _torCache = new LHMCache<>(256);
     private static final String[] _skipHeaders = new String[0];
 
     /**
@@ -690,7 +690,7 @@ class SOCKS5Server extends SOCKSServer {
      * RFC 1928 isn't clear... maybe not.
      */
     private void handleUDP(DataInputStream in, DataOutputStream out) throws SOCKSException {
-        List<Integer> ports = new ArrayList<Integer>(1);
+        List<Integer> ports = new ArrayList<>(1);
         synchronized (_startLock) {
             if (_tunnel == null) {
                 // tunnel options?

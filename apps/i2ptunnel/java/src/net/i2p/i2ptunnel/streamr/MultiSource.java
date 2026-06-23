@@ -22,7 +22,7 @@ public class MultiSource implements Source, Sink {
      *  @since 0.9.53
      */
     public MultiSource() {
-        this.sinks = new CopyOnWriteArrayList<MSink>();
+        this.sinks = new CopyOnWriteArrayList<>();
     }
 
     /**

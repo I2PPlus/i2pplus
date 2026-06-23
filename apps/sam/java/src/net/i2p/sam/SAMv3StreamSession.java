@@ -97,7 +97,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
             throws IOException, DataFormatException, SAMException {
         super(mgr, props, handler, listenPort);
         this.nick = login;
-        _acceptQueue = new LinkedBlockingQueue<I2PSocket>(MAX_ACCEPT_QUEUE);
+        _acceptQueue = new LinkedBlockingQueue<>(MAX_ACCEPT_QUEUE);
     }
 
     /**

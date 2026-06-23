@@ -104,7 +104,7 @@ class SearchJob extends JobImpl {
         _timeoutMs = timeoutMs;
         _keepStats = keepStats;
         _isLease = isLease;
-        _deferredSearches = new ArrayList<Search>(0);
+        _deferredSearches = new ArrayList<>(0);
         _peerSelector = facade.getPeerSelector();
         _startedOn = -1;
         _expiration = getContext().clock().now() + timeoutMs;
@@ -698,7 +698,7 @@ class SearchJob extends JobImpl {
         List<Search> deferred = null;
         synchronized (_deferredSearches) {
             if (!_deferredSearches.isEmpty()) {
-                deferred = new ArrayList<Search>(_deferredSearches);
+                deferred = new ArrayList<>(_deferredSearches);
                 _deferredSearches.clear();
             }
             _deferredCleared = true;

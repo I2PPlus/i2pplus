@@ -13,8 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("PMD.SingleMethodSingleton")
 public final class SimpleByteCache {
 
-    private static final ConcurrentHashMap<Integer, SimpleByteCache> _caches = new ConcurrentHashMap<Integer, SimpleByteCache>(8);
-    private static final ConcurrentHashMap<Integer, SimpleByteCache> _allCaches = new ConcurrentHashMap<Integer, SimpleByteCache>(8);
+    private static final ConcurrentHashMap<Integer, SimpleByteCache> _caches = new ConcurrentHashMap<>(8);
+    private static final ConcurrentHashMap<Integer, SimpleByteCache> _allCaches = new ConcurrentHashMap<>(8);
 
     private static final int DEFAULT_SIZE = 64;
 
@@ -119,7 +119,7 @@ public final class SimpleByteCache {
     }
 
     private SimpleByteCache(int maxCachedEntries, int entrySize) {
-        _available = new TryCache<byte[]>(new ByteArrayFactory(entrySize), maxCachedEntries);
+        _available = new TryCache<>(new ByteArrayFactory(entrySize), maxCachedEntries);
         _entrySize = entrySize;
     }
 

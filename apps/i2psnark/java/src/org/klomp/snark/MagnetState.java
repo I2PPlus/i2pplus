@@ -218,7 +218,7 @@ class MagnetState {
      */
     private MetaInfo buildMetaInfo() throws Exception {
         // top map has nothing in it but the info map (no announce)
-        Map<String, BEValue> map = new HashMap<String, BEValue>();
+        Map<String, BEValue> map = new HashMap<>();
         InputStream is = new ByteArrayInputStream(metainfoBytes);
         BDecoder dec = new BDecoder(is);
         BEValue bev = dec.bdecodeMap();

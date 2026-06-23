@@ -254,7 +254,7 @@ public class Router implements RouterClock.ClockShiftListener {
     public Router(String configFilename, Properties envProps) {
         _killVMOnEnd = true;
         _gracefulExitCode = -1;
-        _config = new ConcurrentHashMap<String, String>();
+        _config = new ConcurrentHashMap<>();
 
         if (configFilename == null) {
             if (envProps != null) {_configFilename = envProps.getProperty(PROP_CONFIG_FILE);}
@@ -1399,11 +1399,11 @@ public class Router implements RouterClock.ClockShiftListener {
         String loaded = NativeBigInteger.getLoadedResourceName();
         Map<String, String> changes = null;
         if (loaded != null && !loaded.equals(oldLoaded)) {
-            changes = new HashMap<String, String>(2);
+            changes = new HashMap<>(2);
             changes.put(PROP_JBIGI, loaded);
         }
         if (processor != null && !processor.equals(oldProcessor)) {
-            if (changes == null) {changes = new HashMap<String, String>(1);}
+            if (changes == null) {changes = new HashMap<>(1);}
             changes.put(PROP_JBIGI_PROCESSOR, processor);
         }
         if (changes != null) {saveConfig(changes, null);}
@@ -1479,7 +1479,7 @@ public class Router implements RouterClock.ClockShiftListener {
         I2PThread.removeOOMEventListener(_oomListener);
         // Run the shutdown hooks first in case they want to send some goodbye messages
         // Maybe we need a delay after this too?
-        LinkedList<Thread> tasks = new LinkedList<Thread>();
+        LinkedList<Thread> tasks = new LinkedList<>();
         for (Runnable task : _context.getShutdownTasks()) {
             //System.err.println("Running shutdown task " + task.getClass());
             if (_log.shouldWarn()) {_log.warn("Running Shutdown Task " + task.getClass());}

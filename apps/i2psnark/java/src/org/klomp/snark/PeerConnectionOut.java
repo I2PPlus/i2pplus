@@ -38,7 +38,7 @@ class PeerConnectionOut implements Runnable {
     // Contains Messages.
     // Bounded queue to prevent unbounded memory growth under slow network conditions
     private static final int MAX_QUEUE_SIZE = 1000;
-    private final BlockingQueue<Message> sendQueue = new LinkedBlockingQueue<Message>(MAX_QUEUE_SIZE);
+    private final BlockingQueue<Message> sendQueue = new LinkedBlockingQueue<>(MAX_QUEUE_SIZE);
     private static final AtomicLong __id = new AtomicLong();
     private final long _id;
     long lastSent;

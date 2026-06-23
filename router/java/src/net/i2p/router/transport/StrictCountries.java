@@ -64,7 +64,7 @@ public abstract class StrictCountries {
             "VN", // Vietnam
             "YE"  // Yemen
         };
-        _countries = new HashSet<String>(Arrays.asList(c));
+        _countries = new HashSet<>(Arrays.asList(c));
     }
 
     /** @param country non-null, two letter code, case-independent */

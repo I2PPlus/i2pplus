@@ -119,7 +119,7 @@ public final class Reader implements Closeable {
     }
 
     private Reader(BufferHolder bufferHolder, String name, NodeCache cache) throws IOException {
-        this.bufferHolderReference = new AtomicReference<BufferHolder>(
+        this.bufferHolderReference = new AtomicReference<>(
                 bufferHolder);
 
         if (cache == null) {
@@ -188,7 +188,7 @@ public final class Reader implements Closeable {
             _out = out;
             _nodeCount = metadata.getNodeCount();
             _buffer = getBufferHolder().get();
-            _negativeCache = new HashSet<Integer>(256);
+            _negativeCache = new HashSet<>(256);
         }
 
         /** only call once */

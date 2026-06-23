@@ -264,14 +264,14 @@ public class NTCPConnection implements Closeable {
         _lastSendTime = _created;
         _lastReceiveTime = _created;
         _lastRateUpdated = _created;
-        _readBufs = new ConcurrentLinkedQueue<ByteBuffer>();
-        _writeBufs = new ConcurrentLinkedQueue<ByteBuffer>();
-//        _bwInRequests = new ConcurrentHashSet<Request>(2);
-//        _bwOutRequests = new ConcurrentHashSet<Request>(8);
-        _bwInRequests = new ConcurrentHashSet<Request>(4);
-        _bwOutRequests = new ConcurrentHashSet<Request>(16);
-        _outbound = new PriBlockingQueue<OutNetMessage>(ctx, "NTCP-Connection", 32);
-        _currentOutbound = new ArrayList<OutNetMessage>(1);
+        _readBufs = new ConcurrentLinkedQueue<>();
+        _writeBufs = new ConcurrentLinkedQueue<>();
+//        _bwInRequests = new ConcurrentHashSet<>(2);
+//        _bwOutRequests = new ConcurrentHashSet<>(8);
+        _bwInRequests = new ConcurrentHashSet<>(4);
+        _bwOutRequests = new ConcurrentHashSet<>(16);
+        _outbound = new PriBlockingQueue<>(ctx, "NTCP-Connection", 32);
+        _currentOutbound = new ArrayList<>(1);
         _isInbound = isIn;
         _inboundListener = new InboundListener();
         _outboundListener = new OutboundListener();
@@ -570,7 +570,7 @@ public class NTCPConnection implements Closeable {
         }
         _bwOutRequests.clear();
 
-        List<OutNetMessage> pending = new ArrayList<OutNetMessage>();
+        List<OutNetMessage> pending = new ArrayList<>();
         synchronized(_writeLock) {
         _writeBufs.clear();
         _outbound.drainTo(pending);
@@ -730,7 +730,7 @@ public class NTCPConnection implements Closeable {
      */
     private void prepareNextWriteNTCP2(PrepBuffer buf) {
         int size = OutboundNTCP2State.MAC_SIZE;
-        List<Block> blocks = new ArrayList<Block>(4);
+        List<Block> blocks = new ArrayList<>(4);
         long now = _context.clock().now();
         /* synchronized (_currentOutbound) */  {
             if (!_currentOutbound.isEmpty()) {
@@ -888,7 +888,7 @@ public class NTCPConnection implements Closeable {
         // no synch needed, sendNTCP2() is synched
         if (_log.shouldDebug())
             _log.debug("Sending router info for: " + ri.getHash() + " flood? " + shouldFlood);
-        List<Block> blocks = new ArrayList<Block>(2);
+        List<Block> blocks = new ArrayList<>(2);
         Block block = new NTCP2Payload.RIBlock(ri, shouldFlood);
         int size = block.getTotalLength();
         if (size + NTCP2Payload.BLOCK_HEADER_SIZE > BUFFER_SIZE) {
@@ -943,7 +943,7 @@ public class NTCPConnection implements Closeable {
         // no synch needed, sendNTCP2() is synched
         if (_log.shouldInfo())
             _log.info("Sending termination, reason: " + reason + "; Valid frames received: " + validFramesRcvd + " on " + this);
-        List<Block> blocks = new ArrayList<Block>(2);
+        List<Block> blocks = new ArrayList<>(2);
         Block block = new NTCP2Payload.TerminationBlock(reason, validFramesRcvd);
         int plen = block.getTotalLength();
         blocks.add(block);
@@ -1241,7 +1241,7 @@ public class NTCPConnection implements Closeable {
         if (clearMessage) {
             List<OutNetMessage> msgs = null;
                 if (!_currentOutbound.isEmpty()) {
-                    msgs = new ArrayList<OutNetMessage>(_currentOutbound);
+                    msgs = new ArrayList<>(_currentOutbound);
                     _currentOutbound.clear();
                 }
             // push through the bw limiter to reach _writeBufs
@@ -1362,7 +1362,7 @@ public class NTCPConnection implements Closeable {
     /**
      *  FIXME static queue mixes handlers from different contexts in multirouter JVM
      */
-    private final static LinkedBlockingQueue<I2NPMessageHandler> _i2npHandlers = new LinkedBlockingQueue<I2NPMessageHandler>(MAX_HANDLERS);
+    private final static LinkedBlockingQueue<I2NPMessageHandler> _i2npHandlers = new LinkedBlockingQueue<>(MAX_HANDLERS);
 
     private final static I2NPMessageHandler acquireHandler(RouterContext ctx) {
         I2NPMessageHandler rv = _i2npHandlers.poll();

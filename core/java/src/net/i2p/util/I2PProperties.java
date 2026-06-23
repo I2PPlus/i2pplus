@@ -18,7 +18,7 @@ public class I2PProperties extends Properties {
      * Keep a list of callbacks to contact the interested parties
      * that want to know about property changes.
      */
-    private final List<I2PPropertyCallback> _callbacks = new CopyOnWriteArrayList<I2PPropertyCallback>();
+    private final List<I2PPropertyCallback> _callbacks = new CopyOnWriteArrayList<>();
 
     public I2PProperties() {
         super();

@@ -130,7 +130,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     private static int MIN_THREADS = Math.max(CORES / 2, 8);
     private static int MAX_THREADS = 4096;
     private static int KEEP_ALIVE = 30; // seconds
-    private final Map<Integer, InetSocketAddress> _socketMap = new ConcurrentHashMap<Integer, InetSocketAddress>(4);
+    private final Map<Integer, InetSocketAddress> _socketMap = new ConcurrentHashMap<>(4);
     private volatile StatefulConnectionFilter _filter;
 
     /* the following are required for http bidir server */

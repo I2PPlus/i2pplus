@@ -97,7 +97,7 @@ public class ConfigReseedHelper extends HelperBase {
     private List<String> reseedList() {
         String urls = _context.getProperty(Reseeder.PROP_RESEED_URL, Reseeder.DEFAULT_SEED_URL + ',' + Reseeder.DEFAULT_SSL_SEED_URL);
         StringTokenizer tok = new StringTokenizer(urls, " ,\r\n");
-        List<String> URLList = new ArrayList<String>(16);
+        List<String> URLList = new ArrayList<>(16);
         while (tok.hasMoreTokens()) {
             String s = tok.nextToken().trim();
             if (s.length() > 0)

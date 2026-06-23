@@ -404,7 +404,7 @@ public class FileUtil {
         try {
             fis = new FileInputStream(f);
             in = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
-            List<String> lines = new ArrayList<String>(maxNumLines > 0 ? maxNumLines : 64);
+            List<String> lines = new ArrayList<>(maxNumLines > 0 ? maxNumLines : 64);
             String line = null;
             while ((line = in.readLine()) != null) {
                 lines.add(line);

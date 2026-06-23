@@ -51,7 +51,7 @@ class SortHelper {
         //for (DataStructure struct : tm.values()) {
         //    rv.add(struct);
         //}
-        ArrayList<T> rv = new ArrayList<T>(dataStructures);
+        ArrayList<T> rv = new ArrayList<>(dataStructures);
         sortStructureList(rv);
         return rv;
     }

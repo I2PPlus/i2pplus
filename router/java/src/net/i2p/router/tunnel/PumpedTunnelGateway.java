@@ -96,7 +96,7 @@ class PumpedTunnelGateway extends TunnelGateway {
             _isInbound = false;
         } else {
             // Inbound gateway uses bounded blocking queue
-            _prequeue = new CoDelBlockingQueue<PendingGatewayMessage>(context, "IBGW",
+            _prequeue = new CoDelBlockingQueue<>(context, "IBGW",
                     context.getProperty(PROP_MAX_IB_QUEUE, MAX_IB_QUEUE));
             _isInbound = true;
         }

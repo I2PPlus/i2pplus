@@ -76,7 +76,7 @@ public class SDSCache<V extends SimpleDataStructure> {
      */
     public SDSCache(Class<V> rvClass, int len, int max) {
         int size = (int) (max * FACTOR);
-        _cache = new LHMCache<Integer, WeakReference<V>>(size);
+        _cache = new LHMCache<>(size);
         _datalen = len;
         try {
             _rvCon = rvClass.getConstructor(byte[].class);
@@ -147,7 +147,7 @@ public class SDSCache<V extends SimpleDataStructure> {
                 } catch (InvocationTargetException e) {
                     throw new RuntimeException("SDSCache error", e);
                 }
-                _cache.put(key, new WeakReference<V>(rv));
+                _cache.put(key, new WeakReference<>(rv));
                 found = 0;
             }
         }

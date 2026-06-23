@@ -54,8 +54,8 @@ class Zones {
     public Zones(I2PAppContext ctx) {
         _context = ctx;
         //_log = ctx.logManager().getLog(Zones.class);
-        _countryToZone = new HashMap<String, String>(256);
-        _continentToZone = new HashMap<String, String>(8);
+        _countryToZone = new HashMap<>(256);
+        _continentToZone = new HashMap<>(8);
         for (int i = 0; i < ZONES.length; i += 2) {
             _continentToZone.put(ZONES[i], ZONES[i+1]);
         }

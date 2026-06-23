@@ -57,7 +57,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                 throw new SAMException("Illegal option " + p + " specificied in MASTER session");
         }
         dgs = dgServer;
-        sessions = new ConcurrentHashMap<String, SAMMessageSess>(4);
+        sessions = new ConcurrentHashMap<>(4);
         this.handler = handler;
         I2PSession isess = socketMgr.getSession();
         // if we get a RAW session added with 0/0, it will replace this,

@@ -75,7 +75,7 @@ public class JspC {
      *  a sorted list of files, for reproducible builds.
      */
     private static String[] fixupArgs(String[] args) {
-        List<String> largs = new ArrayList<String>(32);
+        List<String> largs = new ArrayList<>(32);
 
         // change the webapp arg to uriroot, save the location
         String sdir = null;

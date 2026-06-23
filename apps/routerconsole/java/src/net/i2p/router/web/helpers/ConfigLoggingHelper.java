@@ -50,7 +50,7 @@ public class ConfigLoggingHelper extends HelperBase {
     public String getLogLevelTable() {
         StringBuilder buf = new StringBuilder(32*1024);
         Properties limits = _mgr.getLimits();
-        TreeSet<String> sortedLogs = new TreeSet<String>();
+        TreeSet<String> sortedLogs = new TreeSet<>();
         for (String prefix : limits.stringPropertyNames()) {
             sortedLogs.add(prefix);
         }
@@ -116,7 +116,7 @@ public class ConfigLoggingHelper extends HelperBase {
     public String getNewClassBox() {
         List<Log> logs = _mgr.getLogs();
         Set<String> limits = _mgr.getLimits().stringPropertyNames();
-        TreeSet<String> sortedLogs = new TreeSet<String>();
+        TreeSet<String> sortedLogs = new TreeSet<>();
 
         for (Log log : logs) {
             String name = log.getName();

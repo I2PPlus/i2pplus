@@ -66,7 +66,7 @@ public class RouterClock extends Clock {
         super(context);
         _lastStratum = WORST_STRATUM;
         _lastSlewed = System.currentTimeMillis();
-        _shiftListeners = new CopyOnWriteArraySet<ClockShiftListener>();
+        _shiftListeners = new CopyOnWriteArraySet<>();
         _lastShiftNanos = System.nanoTime();
         _timeStamper = new RouterTimestamper(context, this);
     }

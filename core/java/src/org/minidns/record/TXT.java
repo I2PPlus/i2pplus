@@ -78,7 +78,7 @@ public class TXT extends Data {
     }
 
     public List<byte[]> getExtents() {
-        ArrayList<byte[]> extents = new ArrayList<byte[]>();
+        ArrayList<byte[]> extents = new ArrayList<>();
         int segLength = 0;
         for (int used = 0; used < blob.length; used += segLength) {
             segLength = 0x00ff & blob[used];

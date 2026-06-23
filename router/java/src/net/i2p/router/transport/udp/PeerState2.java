@@ -127,7 +127,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         _rcvHeaderEncryptKey2 = rcvHdrKey2;
         _receivedMessages = new SSU2Bitfield(BITFIELD_SIZE, 0);
         _ackedMessages = new SSU2Bitfield(BITFIELD_SIZE, 0);
-        _sentMessages = new ConcurrentHashMap<Long, List<PacketBuilder.Fragment>>(32);
+        _sentMessages = new ConcurrentHashMap<>(32);
         _sentMessagesLastExpired = _keyEstablishedTime;
         if (isInbound) {_receivedMessages.set(0);} // Prep for immediate ack of Session Confirmed
         // ACK 0 now sent in sendAck0() below
@@ -598,7 +598,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         if (shouldLogDebug) {
             _log.debug("[SSU] Sending path challenge to " + toIP.toString().replace("/", "") + ":" + toPort + this);
         }
-        List<SSU2Payload.Block> blocks = new ArrayList<SSU2Payload.Block>(3);
+        List<SSU2Payload.Block> blocks = new ArrayList<>(3);
         blocks.add(new SSU2Payload.DateTimeBlock(_context));
         blocks.add(new SSU2Payload.AddressBlock(toIP.getAddress(), toPort));
         blocks.add(new SSU2Payload.PathChallengeBlock(_pathChallengeData));

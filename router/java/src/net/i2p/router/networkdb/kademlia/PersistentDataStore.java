@@ -196,8 +196,8 @@ public class PersistentDataStore extends TransientDataStore {
         private volatile boolean _quit;
 
         public Writer() {
-            _keys = new ConcurrentHashMap<Hash, DatabaseEntry>(64);
-            _keysToRemove = new ConcurrentHashSet<Hash>();
+            _keys = new ConcurrentHashMap<>(64);
+            _keysToRemove = new ConcurrentHashSet<>();
             _waitLock = new Object();
         }
 
@@ -573,7 +573,7 @@ public class PersistentDataStore extends TransientDataStore {
                 // Loading the files in-order causes clumping in the kbuckets,
                 // and bias on early peer selection, so first collect all the files,
                 // then shuffle and load.
-                List<File> toRead = new ArrayList<File>(2048);
+                List<File> toRead = new ArrayList<>(2048);
                 for (int j = 0; j < B64.length(); j++) {
                     File subdir = new File(_dbDir, DIR_PREFIX + B64.charAt(j));
                     File[] files = subdir.listFiles(RI_FILTER);

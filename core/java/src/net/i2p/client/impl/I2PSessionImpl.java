@@ -148,7 +148,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     protected Map<Long, MessagePayloadMessage> _availableMessages;
 
     /** hashes of lookups we are waiting for */
-    protected final LinkedBlockingQueue<LookupWaiter> _pendingLookups = new LinkedBlockingQueue<LookupWaiter>();
+    protected final LinkedBlockingQueue<LookupWaiter> _pendingLookups = new LinkedBlockingQueue<>();
     private final AtomicInteger _lookupID = new AtomicInteger();
     protected final Object _bwReceivedLock = new Object();
     protected volatile int[] _bwLimits;
@@ -205,14 +205,14 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     private volatile boolean _routerSupportsBlindingInfo;
 
     /** listeners for tunnel status changes (tunnel failures and removals) */
-    protected final Set<TunnelStatusListener> _tunnelStatusListeners = new CopyOnWriteArraySet<TunnelStatusListener>();
+    protected final Set<TunnelStatusListener> _tunnelStatusListeners = new CopyOnWriteArraySet<>();
 
     protected static final int CACHE_MAX_SIZE = SystemVersion.isSlow() ? 64 : 256;
     /**
      *  Since 0.9.11, key is either a Hash or a String
      *  @since 0.8.9
      */
-    private static final Map<Object, Destination> _lookupCache = new LHMCache<Object, Destination>(CACHE_MAX_SIZE);
+    private static final Map<Object, Destination> _lookupCache = new LHMCache<>(CACHE_MAX_SIZE);
     private static final String MIN_HOST_LOOKUP_VERSION = "0.9.11";
     // cached failure
     private static final LookupResult LOOKUP_FAILURE = new LkupResult(LookupResult.RESULT_FAILURE, null);
@@ -286,8 +286,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         _context = context;
         _handlerMap = handlerMap;
         _log = context.logManager().getLog(getClass());
-        _subsessions = new CopyOnWriteArrayList<SubSession>();
-        _subsessionMap = new ConcurrentHashMap<SessionId, SubSession>(4);
+        _subsessions = new CopyOnWriteArrayList<>();
+        _subsessionMap = new ConcurrentHashMap<>(4);
         if (options == null) {options = (Properties) System.getProperties().clone();}
         _options = loadConfig(options);
         _hostname = getHost();
@@ -295,7 +295,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         _fastReceive = Boolean.parseBoolean(_options.getProperty(I2PClient.PROP_FAST_RECEIVE));
         if (hasDest) {
             _producer = producer;
-            _availableMessages = new ConcurrentHashMap<Long, MessagePayloadMessage>();
+            _availableMessages = new ConcurrentHashMap<>();
             _myDestination = new Destination();
             _privateKey = new PrivateKey();
             _signingPrivateKey = new SigningPrivateKey();
@@ -393,7 +393,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      */
     @Override
     public List<I2PSession> getSubsessions() {
-        synchronized (_subsessionLock) {return new ArrayList<I2PSession>(_subsessions);}
+        synchronized (_subsessionLock) {return new ArrayList<>(_subsessions);}
     }
 
     /**
@@ -894,7 +894,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  message. Just copy all unclaimed ones and check some time later.
      */
     private class VerifyUsage extends SimpleTimer2.TimedEvent {
-        private final List<Long> toCheck = new ArrayList<Long>();
+        private final List<Long> toCheck = new ArrayList<>();
 
         public VerifyUsage() {
             super(_context.simpleTimer2(), VERIFY_USAGE_TIME);
@@ -927,8 +927,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         private volatile boolean _alive;
 
         public AvailabilityNotifier() {
-            _pendingIds = new ArrayList<Long>(2);
-            _pendingSizes = new ArrayList<Integer>(2);
+            _pendingIds = new ArrayList<>(2);
+            _pendingSizes = new ArrayList<>(2);
         }
 
         public void stopNotifying() {

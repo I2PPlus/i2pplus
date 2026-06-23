@@ -240,7 +240,7 @@ public final class Record<D extends Data> {
          * Internal reverse lookup table to map binary class values to symbolic
          * names.
          */
-        private static final HashMap<Integer, CLASS> INVERSE_LUT = new HashMap<Integer, CLASS>();
+        private static final HashMap<Integer, CLASS> INVERSE_LUT = new HashMap<>();
 
         static {
             // Initialize the interal reverse lookup table.

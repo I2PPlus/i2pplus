@@ -121,7 +121,7 @@ public final class KeyStoreUtil {
         "58:11:9f:0e:12:82:87:ea:50:fd:d9:87:45:6f:4f:78:dc:fa:d6:d4"
     };
 
-    private static final Set<SHA1Hash> _blacklist = new HashSet<SHA1Hash>(16);
+    private static final Set<SHA1Hash> _blacklist = new HashSet<>(16);
 
     static {
         for (int i = 0; i < BLACKLIST_SHA1.length; i++) {
@@ -432,7 +432,7 @@ public final class KeyStoreUtil {
      */
     private static synchronized int removeBlacklistedCerts(KeyStore ks) {
         if (SystemVersion.isAndroid()) return 0;
-        List<String> toRemove = new ArrayList<String>(4);
+        List<String> toRemove = new ArrayList<>(4);
         try {
             MessageDigest md = SHA1.getInstance();
             for (Enumeration<String> e = ks.aliases(); e.hasMoreElements(); ) {
@@ -997,7 +997,7 @@ public final class KeyStoreUtil {
             }
         }
         String keytool = (new File(System.getProperty("java.home"), "bin/keytool")).getAbsolutePath();
-        List<String> a = new ArrayList<String>(32);
+        List<String> a = new ArrayList<>(32);
         a.add(keytool);
         a.add("-genkey"); // -genkeypair preferred in newer keytools, but this works with more
         // a.add("-v");         // verbose, gives you a stack trace on exception

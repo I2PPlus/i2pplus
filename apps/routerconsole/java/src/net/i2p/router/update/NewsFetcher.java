@@ -153,7 +153,7 @@ class NewsFetcher extends UpdateRunner {
                 if (get.fetch(_timeout)) {
                     int status = get.getStatusCode();
                     if (status == 200 || status == 304) {
-                        Map<String, String> opts = new HashMap<String, String>(3);
+                        Map<String, String> opts = new HashMap<>(3);
                         opts.put(NewsHelper.PROP_LAST_CHECKED, Long.toString(start));
                         if (status == 200 && _isNewer) {
                             String lastMod = Long.toString(_newLastModified);
@@ -322,7 +322,7 @@ class NewsFetcher extends UpdateRunner {
                             /** TODO: - if minversion > our version, continue and look for a second entry with clearnet URLs
                              *        - clearnet URLs, notify with HTTP_CLEARNET and/or HTTPS_CLEARNET
                              */
-                            Map<UpdateMethod, List<URI>> sourceMap = new HashMap<UpdateMethod, List<URI>>(4);
+                            Map<UpdateMethod, List<URI>> sourceMap = new HashMap<>(4);
                             // Must do su3 first
                             boolean enableVanillaUpdates = _context.getProperty(PROP_ENABLE_VANILLA_UPDATES, DEFAULT_ENABLE_VANILLA_UPDATES);
                             if (enableVanillaUpdates) {
@@ -361,7 +361,7 @@ class NewsFetcher extends UpdateRunner {
      *  @since 0.9.4
      */
     private static Map<String, String> parseArgs(String args) {
-        Map<String, String> rv = new HashMap<String, String>(8);
+        Map<String, String> rv = new HashMap<>(8);
         char data[] = args.toCharArray();
         StringBuilder buf = new StringBuilder(32);
         boolean isQuoted = false;
@@ -419,7 +419,7 @@ class NewsFetcher extends UpdateRunner {
 
     private static List<URI> tokenize(String URLs) {
         StringTokenizer tok = new StringTokenizer(URLs, " ,\r\n");
-        List<URI> rv = new ArrayList<URI>();
+        List<URI> rv = new ArrayList<>();
         while (tok.hasMoreTokens()) {
             try {rv.add(new URI(tok.nextToken().trim()));}
             catch (URISyntaxException use) {}

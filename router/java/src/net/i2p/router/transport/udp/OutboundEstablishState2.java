@@ -182,7 +182,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         if (intros > 0) {
             _currentState = OutboundState.OB_STATE_PENDING_INTRO;
             // we will get a token in the relay response or hole punch
-            _introducers = new HashMap<Hash, IntroState>(4);
+            _introducers = new HashMap<>(4);
             // Initial setup of per-introducer state tracking.
             // See EstablishmentManager.handlePendingIntro() for state machine
             for (int i = 0; i < intros; i++) {

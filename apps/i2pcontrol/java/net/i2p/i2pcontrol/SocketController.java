@@ -78,7 +78,7 @@ public class SocketController implements RouterApp {
         _conf = new ConfigurationManager(_context, pluginDir, true);
         _ksp = new KeyStoreProvider(_pluginDir);
         _secMan = new SecurityManager(_context, _ksp, _conf);
-        _listeners = new ArrayList<Socket>(4);
+        _listeners = new ArrayList<>(4);
         _state = INITIALIZED;
     }
 

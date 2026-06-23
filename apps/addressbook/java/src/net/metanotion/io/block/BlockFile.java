@@ -108,7 +108,7 @@ public class BlockFile implements Closeable {
 	private boolean _isClosed;
 	/** cached list of free pages, only valid if freListStart > 0 */
 	private FreeListBlock flb;
-	private final HashMap<String, BSkipList> openIndices = new HashMap<String, BSkipList>();
+	private final HashMap<String, BSkipList> openIndices = new HashMap<>();
 
 	private void mount() throws IOException {
 		file.seek(BlockFile.OFFSET_MOUNTED);
@@ -365,7 +365,7 @@ public class BlockFile implements Closeable {
 		if (rai.canWrite())
 			mount();
 
-		metaIndex = new BSkipList<String, Integer>(spanSize, this, METAINDEX_PAGE, new StringBytes(), new IntBytes());
+		metaIndex = new BSkipList<>(spanSize, this, METAINDEX_PAGE, new StringBytes(), new IntBytes());
 	}
 
 	/**
@@ -511,7 +511,7 @@ public class BlockFile implements Closeable {
 
 		Integer page = metaIndex.get(name);
 		if (page == null) { return null; }
-		bsl = new BSkipList<K, V>(spanSize, this, page.intValue(), key, val, true);
+		bsl = new BSkipList<>(spanSize, this, page.intValue(), key, val, true);
 		if (file.canWrite()) {
 			log.info("Checking skiplist " + name + " in blockfile " + file);
 			if (bsl.bslck(true, false))
@@ -540,7 +540,7 @@ public class BlockFile implements Closeable {
 		int page = allocPage();
 		metaIndex.put(name, Integer.valueOf(page));
 		BSkipList.init(this, page, spanSize);
-		BSkipList<K, V> bsl = new BSkipList<K, V>(spanSize, this, page, key, val, true);
+		BSkipList<K, V> bsl = new BSkipList<>(spanSize, this, page, key, val, true);
 		openIndices.put(name, bsl);
 		return bsl;
 	}
@@ -610,8 +610,8 @@ public class BlockFile implements Closeable {
 		// It could be much more efficient to do this at the
 		// SkipSpan layer but that's way too hard.
 		final int loop = 32;
-		List<K> keys = new ArrayList<K>(loop);
-		List<V> vals = new ArrayList<V>(loop);
+		List<K> keys = new ArrayList<>(loop);
+		List<V> vals = new ArrayList<>(loop);
 		while (true) {
 			SkipIterator<K, V> iter = old.iterator();
 			for (int i = 0; iter.hasNext() && i < loop; i++) {

@@ -113,7 +113,7 @@ public class CommandLine {
 
     protected static void printCommands(List<String> classes) {
         System.err.println("Available commands:");
-        List<String> cmds = new ArrayList<String>(classes.size());
+        List<String> cmds = new ArrayList<>(classes.size());
         int max = 0;
         for (String cls : classes) {
             String ccmd = cls.substring(cls.lastIndexOf('.') + 1).toLowerCase(Locale.US);

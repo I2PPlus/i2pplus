@@ -51,8 +51,8 @@ public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
     public SOCKSUDPTunnel(I2PTunnel tunnel) {
         super(null, tunnel, tunnel, tunnel);
 
-        this.ports = new ConcurrentHashMap<Integer, SOCKSUDPPort>(1);
-        this.demuxer = new MultiSink<SOCKSUDPPort>(ports);
+        this.ports = new ConcurrentHashMap<>(1);
+        this.demuxer = new MultiSink<>(ports);
         setSink(this.demuxer);
     }
 

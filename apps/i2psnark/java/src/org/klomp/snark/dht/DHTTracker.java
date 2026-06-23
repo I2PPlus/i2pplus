@@ -113,7 +113,7 @@ class DHTTracker {
         if (totalPeers == 0) return Collections.emptyList();
 
         // Pre-size result list to avoid resizing
-        List<Hash> result = new ArrayList<Hash>(Math.min(max, totalPeers));
+        List<Hash> result = new ArrayList<>(Math.min(max, totalPeers));
 
         if (noSeeds) {
             // Filter out seeds while collecting up to max peers
@@ -185,7 +185,7 @@ class DHTTracker {
                 if (recent > MAX_PEERS_PER_TORRENT) {
                     // Too many, remove oldest peers (LRU eviction)
                     // TODO per-torrent adjustable expiration?
-                    List<Peer> sortedPeers = new ArrayList<Peer>(p.values());
+                    List<Peer> sortedPeers = new ArrayList<>(p.values());
                     Collections.sort(sortedPeers, new Comparator<Peer>() {
                         public int compare(Peer p1, Peer p2) {
                             return Long.compare(p1.lastSeen(), p2.lastSeen());

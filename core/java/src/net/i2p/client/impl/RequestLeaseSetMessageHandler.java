@@ -87,7 +87,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     protected RequestLeaseSetMessageHandler(I2PAppContext context, int messageType) {
         super(context, messageType);
         // not clear why there would ever be more than one
-        _existingLeaseSets = new ConcurrentHashMap<Destination, LeaseInfo>(4);
+        _existingLeaseSets = new ConcurrentHashMap<>(4);
     }
 
     /**
@@ -222,7 +222,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         // reuse the old keys for the client
         LeaseInfo li = _existingLeaseSets.get(dest);
         if (li == null) {
-            List<EncType> types = new ArrayList<EncType>(2);
+            List<EncType> types = new ArrayList<>(2);
             String senc = session.getOptions().getProperty(PROP_LS_ENCTYPE);
             if (senc != null) {
                 if (!PREFER_NEW_ENC && senc.equals("4,0")) {
@@ -258,7 +258,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             // [sigtype:]b64 of private key
             // only for LS1
             String sspk = isLS2 ? null : session.getOptions().getProperty(PROP_LS_SPK);
-            List<PrivateKey> privKeys = new ArrayList<PrivateKey>(2);
+            List<PrivateKey> privKeys = new ArrayList<>(2);
             SigningPrivateKey signingPrivKey = null;
             if (spk != null && (isLS2 || sspk != null)) {
                 boolean useOldKeys = true;
@@ -378,7 +378,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 String at = opts.getProperty(PROP_AUTH_TYPE, "0");
                 if (at.equals("1")) {
                     int authType = BlindData.AUTH_DH;
-                    List<PublicKey> clientKeys = new ArrayList<PublicKey>(4);
+                    List<PublicKey> clientKeys = new ArrayList<>(4);
                     String pfx = PROP_DH;
                     String p = opts.getProperty(PROP_PRIV_KEY);
                     if (p == null) {
@@ -410,7 +410,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                     els2.sign(session.getPrivateKey(), authType, clientKeys);
                 } else if (at.equals("2")) {
                     int authType = BlindData.AUTH_PSK;
-                    List<PrivateKey> clientKeys = new ArrayList<PrivateKey>(4);
+                    List<PrivateKey> clientKeys = new ArrayList<>(4);
                     String pfx = PROP_PSK;
                     String p = opts.getProperty(PROP_PRIV_KEY);
                     if (p == null) {
@@ -567,8 +567,8 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             if (types.size() > 1 && PREFER_NEW_ENC) {
                 Collections.sort(types, Collections.reverseOrder());
             }
-            _privKeys = new ArrayList<PrivateKey>(types.size());
-            _pubKeys = new ArrayList<PublicKey>(types.size());
+            _privKeys = new ArrayList<>(types.size());
+            _pubKeys = new ArrayList<>(types.size());
             for (EncType type : types) {
                 KeyPair encKeys = KeyGenerator.getInstance().generatePKIKeys(type);
                 _pubKeys.add(encKeys.getPublic());
@@ -600,7 +600,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 Collections.sort(privKeys, new PrivKeyComparator());
             }
             _privKeys = privKeys;
-            _pubKeys = new ArrayList<PublicKey>(privKeys.size());
+            _pubKeys = new ArrayList<>(privKeys.size());
             for (PrivateKey privKey : privKeys) {
                 _pubKeys.add(KeyGenerator.getPublicKey(privKey));
             }
@@ -621,7 +621,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 throw new IllegalStateException(gse);
             }
             _privKeys = privKeys;
-            _pubKeys = new ArrayList<PublicKey>(privKeys.size());
+            _pubKeys = new ArrayList<>(privKeys.size());
             for (PrivateKey privKey : privKeys) {
                 _pubKeys.add(KeyGenerator.getPublicKey(privKey));
             }
@@ -639,7 +639,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 Collections.sort(privKeys, new PrivKeyComparator());
             }
             _privKeys = privKeys;
-            _pubKeys = new ArrayList<PublicKey>(privKeys.size());
+            _pubKeys = new ArrayList<>(privKeys.size());
             for (PrivateKey privKey : privKeys) {
                 _pubKeys.add(KeyGenerator.getPublicKey(privKey));
             }

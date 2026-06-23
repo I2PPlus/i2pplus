@@ -76,7 +76,7 @@ public class NetworkSettingHandler implements RequestHandler {
                        req.getID());
         }
         Map<String, Object> inParams = req.getNamedParams();
-        Map<String, Object> outParams = new HashMap<String, Object>(4);
+        Map<String, Object> outParams = new HashMap<>(4);
 
         boolean restartNeeded = false;
         boolean settingsSaved = false;
@@ -98,7 +98,7 @@ public class NetworkSettingHandler implements RequestHandler {
                                                      "\"i2p.router.net.ntcp.port\" must be a string representing a number in the range 1-65535. " + inParam + " isn't valid."),
                                    req.getID());
                     }
-                    Map<String, String> config = new HashMap<String, String>();
+                    Map<String, String> config = new HashMap<>();
                     config.put(NTCPTransport.PROP_I2NP_NTCP_PORT, String.valueOf(newPort));
                     config.put(NTCPTransport.PROP_I2NP_NTCP_AUTO_PORT, "false");
                     _context.router().saveConfig(config, null);
@@ -167,7 +167,7 @@ public class NetworkSettingHandler implements RequestHandler {
                                                      "\"i2p.router.net.ssu.port\" must be a string representing a number in the range 1-65535. " + inParam + " isn't valid."),
                                    req.getID());
                     }
-                    Map<String, String> config = new HashMap<String, String>();
+                    Map<String, String> config = new HashMap<>();
                     config.put(UDPTransport.PROP_EXTERNAL_PORT, String.valueOf(newPort));
                     config.put(UDPTransport.PROP_INTERNAL_PORT, String.valueOf(newPort));
                     _context.router().saveConfig(config, null);
@@ -281,7 +281,7 @@ public class NetworkSettingHandler implements RequestHandler {
                 Integer burstRate = (rate * BW_BURST_PCT) / 100;
                 Integer burstSize = (burstRate * BW_BURST_TIME);
                 if (oldBWIn == null || !oldBWIn.equals(rate.toString())) {
-                    Map<String, String> config = new HashMap<String, String>();
+                    Map<String, String> config = new HashMap<>();
                     config.put(FIFOBandwidthRefiller.PROP_INBOUND_BANDWIDTH, rate.toString());
                     config.put(FIFOBandwidthRefiller.PROP_INBOUND_BURST_BANDWIDTH, burstRate.toString());
                     config.put(FIFOBandwidthRefiller.PROP_INBOUND_BANDWIDTH_PEAK, burstSize.toString());
@@ -310,7 +310,7 @@ public class NetworkSettingHandler implements RequestHandler {
                 Integer burstRate = (rate * BW_BURST_PCT) / 100;
                 Integer burstSize = (burstRate * BW_BURST_TIME);
                 if (oldBWOut == null || !oldBWOut.equals(rate.toString())) {
-                    Map<String, String> config = new HashMap<String, String>();
+                    Map<String, String> config = new HashMap<>();
                     config.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BANDWIDTH, rate.toString());
                     config.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BURST_BANDWIDTH, burstRate.toString());
                     config.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BANDWIDTH_PEAK, burstSize.toString());

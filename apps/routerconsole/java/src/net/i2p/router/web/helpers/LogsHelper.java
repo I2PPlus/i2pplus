@@ -479,7 +479,7 @@ public class LogsHelper extends HelperBase {
                 } while (c != '\n');
                 i++;
             }
-            Queue<String> lines = new ArrayBlockingQueue<String>(maxNumLines);
+            Queue<String> lines = new ArrayBlockingQueue<>(maxNumLines);
             synchronized(lines) {
                 String line = null;
                 while ((line = in.readLine()) != null) {

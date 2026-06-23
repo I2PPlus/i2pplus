@@ -18,8 +18,8 @@ import net.i2p.router.web.Messages;
  *  @since 0.8.3
  */
 public class ConfigReseedHandler extends FormHandler {
-    private final Map<String, String> changes = new HashMap<String, String>();
-    private final List<String> removes = new ArrayList<String>();
+    private final Map<String, String> changes = new HashMap<>();
+    private final List<String> removes = new ArrayList<>();
 
     @Override
     protected void processForm() {

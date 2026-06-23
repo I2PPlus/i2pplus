@@ -261,7 +261,7 @@ final class Decoder {
     /** @return modifiable, don't modify it */
     private List<Object> decodeArray(int size) throws IOException {
 
-        List<Object> array = new ArrayList<Object>(size);
+        List<Object> array = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             Object r = this.decode();
             array.add(r);
@@ -273,7 +273,7 @@ final class Decoder {
     /** @return modifiable, don't modify it */
     private Map<String, Object> decodeMap(int size) throws IOException {
         int capacity = (int) (size / 0.75F + 1.0F);
-        Map<String, Object> map = new HashMap<String, Object>(capacity);
+        Map<String, Object> map = new HashMap<>(capacity);
 
         for (int i = 0; i < size; i++) {
             String key = (String) this.decode();

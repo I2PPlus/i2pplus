@@ -376,7 +376,7 @@ public class SingleFileNamingService extends NamingService {
         try {
             in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
             String line = null;
-            Map<String, Destination> rv = new HashMap<String, Destination>();
+            Map<String, Destination> rv = new HashMap<>();
             while ((line = in.readLine()) != null) {
                 if (line.length() <= 0) continue;
                 if (startsWith != null) {
@@ -443,7 +443,7 @@ public class SingleFileNamingService extends NamingService {
         try {
             in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
             String line = null;
-            Map<String, String> rv = new HashMap<String, String>();
+            Map<String, String> rv = new HashMap<>();
             while ((line = in.readLine()) != null) {
                 if (line.length() <= 0) continue;
                 if (startsWith != null) {
@@ -528,7 +528,7 @@ public class SingleFileNamingService extends NamingService {
         try {
             in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
             String line = null;
-            Set<String> rv = new HashSet<String>();
+            Set<String> rv = new HashSet<>();
             while ((line = in.readLine()) != null) {
                 if (line.length() <= 0) continue;
                 if (line.startsWith("#")) continue;

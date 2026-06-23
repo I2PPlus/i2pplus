@@ -1320,7 +1320,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     static void addEntry(Map<String, List<String>> headers, String key, String value) {
         List<String> entry = headers.get(key);
-        if (entry == null) {headers.put(key, entry = new ArrayList<String>(1));}
+        if (entry == null) {headers.put(key, entry = new ArrayList<>(1));}
         entry.add(value);
     }
 
@@ -1329,7 +1329,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     static void setEntry(Map<String, List<String>> headers, String key, String value) {
       List<String> entry = headers.get(key);
-      if (entry == null) {headers.put(key, entry = new ArrayList<String>(1));}
+      if (entry == null) {headers.put(key, entry = new ArrayList<>(1));}
       else {entry.clear();}
       entry.add(value);
     }
@@ -1378,7 +1378,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     private static Map<String, List<String>> readHeadersInternal(I2PSocket socket, InputStream in, StringBuilder command,
                                                         Set<String> skipHeaders, I2PAppContext ctx, long initialTimeout) throws IOException {
-        HashMap<String, List<String>> headers = new HashMap<String, List<String>>();
+        HashMap<String, List<String>> headers = new HashMap<>();
         StringBuilder buf = new StringBuilder(128);
 
         // slowloris / darkloris

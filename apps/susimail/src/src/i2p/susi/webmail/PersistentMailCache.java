@@ -52,7 +52,7 @@ class PersistentMailCache {
      *  Never expired.
      *  Sure, if we did a maildir format we wouldn't need this.
      */
-    private static final ConcurrentHashMap<String, Object> _locks = new ConcurrentHashMap<String, Object>();
+    private static final ConcurrentHashMap<String, Object> _locks = new ConcurrentHashMap<>();
 
     private final Object _lock;
     private final File _cacheDir;
@@ -112,7 +112,7 @@ class PersistentMailCache {
     }
 
     private Collection<Mail> locked_getMails() {
-        Queue<File> fq = new LinkedBlockingQueue<File>();
+        Queue<File> fq = new LinkedBlockingQueue<>();
         for (int j = 0; j < B64.length(); j++) {
             File subdir = new File(_cacheDir, DIR_PREFIX + B64.charAt(j));
             File[] files = subdir.listFiles();
@@ -128,9 +128,9 @@ class PersistentMailCache {
 
         // thread the read-in
         long begin = _context.clock().now();
-        Queue<Mail> rv = new LinkedBlockingQueue<Mail>();
+        Queue<Mail> rv = new LinkedBlockingQueue<>();
         int tcnt = Math.max(1, Math.min(sz / 4, Math.min(SystemVersion.getCores(), 16)));
-        List<Thread> threads = new ArrayList<Thread>(tcnt);
+        List<Thread> threads = new ArrayList<>(tcnt);
         for (int i = 0; i < tcnt; i++) {
             Thread t = new I2PAppThread(new Loader(fq, rv, _isDrafts), "Email loader " + i);
             t.start();

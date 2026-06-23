@@ -177,7 +177,7 @@ public abstract class JSONRPC2Message {
 
 
 		if (nonStdAttributes == null)
-			nonStdAttributes = new HashMap<String,Object>();
+			nonStdAttributes = new HashMap<>();
 
 		nonStdAttributes.put(name, value);
 	}

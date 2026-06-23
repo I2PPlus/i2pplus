@@ -166,7 +166,7 @@ public class AddressbookBean extends BaseBean {
      */
     public AddressbookBean() {
         super();
-        deletionMarks = new LinkedList<String>();
+        deletionMarks = new LinkedList<>();
         beginIndex = 0;
         endIndex = DISPLAY_SIZE - 1;
     }
@@ -284,7 +284,7 @@ public class AddressbookBean extends BaseBean {
         try {
             fis = new FileInputStream(getFileName());
             addressbook.load(fis);
-            LinkedList<AddressBean> list = new LinkedList<AddressBean>();
+            LinkedList<AddressBean> list = new LinkedList<>();
             for (Map.Entry<Object, Object> entry : addressbook.entrySet()) {
                 String name = (String) entry.getKey();
                 String destination = (String) entry.getValue();

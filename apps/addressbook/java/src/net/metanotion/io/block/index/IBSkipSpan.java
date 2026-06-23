@@ -70,7 +70,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 		try {
 			int newPage = bf.allocPage();
 			init(bf, newPage, bf.spanSize);
-			SkipSpan<K, V> rv = new IBSkipSpan<K, V>(bf, (BSkipList<K, V>) sl, newPage, keySer, valSer);
+			SkipSpan<K, V> rv = new IBSkipSpan<>(bf, (BSkipList<K, V>) sl, newPage, keySer, valSer);
 			// this is called after a split, so we need the data arrays initialized
 			rv.keys = (K[]) new Comparable[bf.spanSize];
 			rv.vals = (V[]) new Object[bf.spanSize];
@@ -279,7 +279,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 				bss.next = temp;
 				break;
 			}
-			bss.next = new IBSkipSpan<K, V>(bf, bsl);
+			bss.next = new IBSkipSpan<>(bf, bsl);
 			bss.next.next = null;
 			bss.next.prev = bss;
 			K previousFirstKey = bss.firstKey;
@@ -309,7 +309,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 				bss.prev = temp;
 				break;
 			}
-			bss.prev = new IBSkipSpan<K, V>(bf, bsl);
+			bss.prev = new IBSkipSpan<>(bf, bsl);
 			bss.prev.next = bss;
 			bss.prev.prev = null;
 			K nextFirstKey = bss.firstKey;

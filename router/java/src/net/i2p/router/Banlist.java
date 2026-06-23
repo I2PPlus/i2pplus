@@ -181,11 +181,11 @@ public class Banlist {
     public Banlist(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(Banlist.class);
-        _entries = new ConcurrentHashMap<Hash, Entry>(16);
-        _badPacketIPs = new ConcurrentHashMap<String, long[]>(64);
-        _corruptConnectionIPs = new ConcurrentHashMap<String, long[]>(64);
-        _portHoppingIPs = new ConcurrentHashMap<String, long[]>(64);
-        _unsolicitedDBSearch = new ConcurrentHashMap<Hash, long[]>(64);
+        _entries = new ConcurrentHashMap<>(16);
+        _badPacketIPs = new ConcurrentHashMap<>(64);
+        _corruptConnectionIPs = new ConcurrentHashMap<>(64);
+        _portHoppingIPs = new ConcurrentHashMap<>(64);
+        _unsolicitedDBSearch = new ConcurrentHashMap<>(64);
         _context.jobQueue().addJob(new Cleanup(_context));
         banlistRouterForever(Hash.FAKE_HASH, "" + "Invalid Hash"); // i2pd bug?
         banlistRouterForever(HASH_ZERORI, "" + "Invalid Hash (All zeros)");
@@ -374,7 +374,7 @@ public class Banlist {
          *  Removes expired ban entries and updates message history.
          */
         public void runJob() {
-            List<Hash> toUnbanlist = new ArrayList<Hash>(4);
+            List<Hash> toUnbanlist = new ArrayList<>(4);
             long now = getContext().clock().now();
             try {
                 for (Iterator<Map.Entry<Hash, Entry>> iter = _entries.entrySet().iterator(); iter.hasNext(); ) {
@@ -736,7 +736,7 @@ public class Banlist {
         e.causeCode = reasonCode;
         e.transports = null;
         if (transport != null) {
-            e.transports = new ConcurrentHashSet<String>(2);
+            e.transports = new ConcurrentHashSet<>(2);
             e.transports.add(transport);
         }
 

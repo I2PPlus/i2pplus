@@ -35,7 +35,7 @@ public class HostCheckHandler extends HandlerWrapper
     public HostCheckHandler(I2PAppContext ctx) {
         super();
         _context = ctx;
-        _listenHosts = new HashSet<String>(8);
+        _listenHosts = new HashSet<>(8);
     }
 
     /**

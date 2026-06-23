@@ -17,7 +17,7 @@ public class ClientAppManagerImpl implements ClientAppManager {
     protected final ConcurrentHashMap<String, ClientApp> _registered;
 
     public ClientAppManagerImpl(I2PAppContext ctx) {
-        _registered = new ConcurrentHashMap<String, ClientApp>(8);
+        _registered = new ConcurrentHashMap<>(8);
     }
 
     /**

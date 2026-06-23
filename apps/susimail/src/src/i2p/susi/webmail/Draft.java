@@ -27,7 +27,7 @@ class Draft extends Mail {
 
 	public Draft(String uidl) {
 		super(uidl);
-		attachments = new ArrayList<Attachment>(4);
+		attachments = new ArrayList<>(4);
 	}
 
 	/**
@@ -43,7 +43,7 @@ class Draft extends Mail {
 			for (int i = 0; i < hdrs.length; i++) {
 				String hdr = hdrs[i];
 				if (hdr.startsWith(HDR_BCC)) {
-					ArrayList<String> list = new ArrayList<String>();
+					ArrayList<String> list = new ArrayList<>();
 					getRecipientsFromList(list, hdr.substring(HDR_BCC.length()).trim(), true);
 					if (list.isEmpty()) {
 						// don't set

@@ -75,7 +75,7 @@ public class RouterContext extends I2PAppContext {
     private volatile boolean _initialized;
     private final Object _lock1 = new Object(), _lock2 = new Object(), _lock3 = new Object();
 
-    private static final List<RouterContext> _contexts = new CopyOnWriteArrayList<RouterContext>();
+    private static final List<RouterContext> _contexts = new CopyOnWriteArrayList<>();
 
     /**
      *  Caller MUST call initAll() after instantiation.
@@ -118,7 +118,7 @@ public class RouterContext extends I2PAppContext {
         //initAll();
         if (!_contexts.isEmpty())
             System.err.println("Warning - More than one router in this JVM");
-        _finalShutdownTasks = new CopyOnWriteArraySet<Runnable>();
+        _finalShutdownTasks = new CopyOnWriteArraySet<>();
         if (doInit) {
             // Bad practice, adding this to static List in constructor.
             // doInit will be false when instantiated via Router.

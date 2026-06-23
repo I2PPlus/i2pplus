@@ -29,7 +29,7 @@ public class UIMessages {
     public UIMessages(int maxSize) {
         if (maxSize < 1) throw new IllegalArgumentException();
         _maxSize = maxSize;
-        _messages = new LinkedList<Message>();
+        _messages = new LinkedList<>();
     }
 
     /**
@@ -73,7 +73,7 @@ public class UIMessages {
      */
     public synchronized List<Message> getMessages() {
         if (_messages.peekLast() == null) return Collections.emptyList();
-        return new ArrayList<Message>(_messages);
+        return new ArrayList<>(_messages);
     }
 
     /**
@@ -88,7 +88,7 @@ public class UIMessages {
             return _cachedStrings;
         }
         // Build cache
-        List<String> rv = new ArrayList<String>(_messages.size());
+        List<String> rv = new ArrayList<>(_messages.size());
         for (Message m : _messages) {
             rv.add(m.message);
         }

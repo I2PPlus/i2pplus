@@ -32,7 +32,7 @@ public class StatsGenerator {
         buf.append("<div class=\"confignav\">");
 
         Map<String, SortedSet<String>> unsorted = _context.statManager().getStatsByGroup();
-        Map<String, Set<String>> groups = new TreeMap<String, Set<String>>(new AlphaComparator());
+        Map<String, Set<String>> groups = new TreeMap<>(new AlphaComparator());
         groups.putAll(unsorted);
 
         for (Map.Entry<String, Set<String>> entry : groups.entrySet()) {

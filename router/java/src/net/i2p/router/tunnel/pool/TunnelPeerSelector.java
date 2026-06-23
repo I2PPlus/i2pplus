@@ -61,7 +61,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     protected static final long PEER_SELECTION_COOLDOWN_MS = 60_000;
 
     /** Shared cooldown map across all peer selectors */
-    protected static final Map<Hash, Long> _peerCooldowns = new ConcurrentHashMap<Hash, Long>();
+    protected static final Map<Hash, Long> _peerCooldowns = new ConcurrentHashMap<>();
 
     /** Lock for atomic cooldown check+record across peer selectors */
     protected static final Object _cooldownLock = new Object();
@@ -70,13 +70,13 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     protected static final long FIRST_HOP_FAIL_COOLDOWN_MS = 60 * 1000;
 
     /** Tracks when a peer last failed as first hop */
-    protected static final Map<Hash, Long> _firstHopFails = new ConcurrentHashMap<Hash, Long>();
+    protected static final Map<Hash, Long> _firstHopFails = new ConcurrentHashMap<>();
 
     /** How often to send keepalive pings to established Fast/HighCap peers */
     private static final long KEEPALIVE_INTERVAL_MS = 15_000; // More frequent keepalives
 
     /** Tracks last keepalive send time per peer */
-    private static final ConcurrentHashMap<Hash, Long> _lastKeepAlive = new ConcurrentHashMap<Hash, Long>(512);
+    private static final ConcurrentHashMap<Hash, Long> _lastKeepAlive = new ConcurrentHashMap<>(512);
 
     /**
      *  Check if a peer recently failed as first hop and should be excluded.
@@ -230,7 +230,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         if (peers == null)
             peers = ctx.getProperty("explicitPeers");
 
-        List<Hash> rv = new ArrayList<Hash>();
+        List<Hash> rv = new ArrayList<>();
         StringTokenizer tok = new StringTokenizer(peers, ",");
         while (tok.hasMoreTokens()) {
             String peerStr = tok.nextToken();
@@ -264,7 +264,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             int more = length - rv.size();
             Set<Hash> exclude = getExclude(settings.isInbound(), settings.isExploratory());
             exclude.addAll(rv);
-            Set<Hash> matches = new ArraySet<Hash>(more);
+            Set<Hash> matches = new ArraySet<>(more);
             // don't bother with IP restrictions here
             ctx.profileOrganizer().selectFastPeers(more, exclude, matches);
             rv.addAll(matches);
@@ -790,7 +790,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         SessionKey randomKey = settings.getRandomKey();
         if (randomKey != null && peers.size() > 1) {
             Collections.shuffle(peers, ctx.random());
-            List<Hash> reordered = new ArrayList<Hash>(peers);
+            List<Hash> reordered = new ArrayList<>(peers);
             orderPeers(reordered, randomKey);
             return reordered;
         }
@@ -926,14 +926,14 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         private static final int MAX_EXCLUDED_PEERS = 384;
         private final boolean _isIn, _isExpl;
         /** Maps peer hash to the reason it was excluded, for diagnostic logging */
-        final Map<Hash, String> _reasons = new LinkedHashMap<Hash, String>();
+        final Map<Hash, String> _reasons = new LinkedHashMap<>();
 
         /**
          *  Automatically adds selectPeersInTooManyTunnels(), unless i2np.allowLocal.
          */
         public Excluder(boolean isInbound, boolean isExploratory) {
-            super(ctx.getBooleanProperty("i2np.allowLocal") ? new LinkedHashSet<Hash>()
-                                                              : new LinkedHashSet<Hash>(ctx.tunnelManager().selectPeersInTooManyTunnels()));
+            super(ctx.getBooleanProperty("i2np.allowLocal") ? new LinkedHashSet<>()
+                                                              : new LinkedHashSet<>(ctx.tunnelManager().selectPeersInTooManyTunnels()));
             _isIn = isInbound;
             _isExpl = isExploratory;
         }
@@ -945,7 +945,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
          *  @param toAdd initial contents, copied
          */
         public Excluder(boolean isInbound, boolean isExploratory, Set<Hash> toAdd) {
-            super(new LinkedHashSet<Hash>(toAdd));
+            super(new LinkedHashSet<>(toAdd));
             _isIn = isInbound;
             _isExpl = isExploratory;
         }
@@ -985,7 +985,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
          */
         String formatByReason() {
             if (_reasons.isEmpty()) return "";
-            Map<String, Integer> counts = new LinkedHashMap<String, Integer>();
+            Map<String, Integer> counts = new LinkedHashMap<>();
             for (String r : _reasons.values()) {
                 Integer c = counts.get(r);
                 counts.put(r, c != null ? c + 1 : 1);
@@ -1210,9 +1210,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         RouterContext rctx = ctx;
 
         // Collect top Fast + HighCap peers that aren't in first-hop fail cooldown
-        Set<Hash> targets = new HashSet<Hash>(512);
+        Set<Hash> targets = new HashSet<>(512);
         // Must use mutable set — locked_selectPeers may add to the exclude set
-        rctx.profileOrganizer().selectFastPeers(400, new HashSet<Hash>(4), targets);
+        rctx.profileOrganizer().selectFastPeers(400, new HashSet<>(4), targets);
         // Also add top HighCap to cover more candidates
         rctx.profileOrganizer().selectHighCapacityPeers(400, targets, targets);
         // Remove self

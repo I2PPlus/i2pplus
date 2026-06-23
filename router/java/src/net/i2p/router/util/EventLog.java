@@ -102,8 +102,8 @@ public class EventLog {
         //    throw new IllegalArgumentException();
         _context = ctx;
         _file = file;
-        _cache = new HashMap<String, SortedMap<Long, String>>(4);
-        _cacheTime = new HashMap<String, Long>(4);
+        _cache = new HashMap<>(4);
+        _cacheTime = new HashMap<>(4);
     }
 
     /**
@@ -160,7 +160,7 @@ public class EventLog {
                     return rv.tailMap(Long.valueOf(since));
             }
         }
-        rv = new TreeMap<Long, String>();
+        rv = new TreeMap<>();
         BufferedReader br = null;
         try {
             br = new BufferedReader(new InputStreamReader(
@@ -203,7 +203,7 @@ public class EventLog {
      *  @since 0.9.14
      */
     public synchronized SortedMap<Long, String> getEvents(long since) {
-        SortedMap<Long, String> rv = new TreeMap<Long, String>();
+        SortedMap<Long, String> rv = new TreeMap<>();
         BufferedReader br = null;
         try {
             br = new BufferedReader(new InputStreamReader(

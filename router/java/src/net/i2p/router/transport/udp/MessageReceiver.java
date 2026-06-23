@@ -46,7 +46,7 @@ class MessageReceiver {
         boolean isSlow = SystemVersion.isSlow();
         _threadCount = MAX_THREADS;
         int qsize = Math.max(64, Math.min(512, (int)(maxMemory / (32 * 1024 * 1024))));
-        _completeMessages = new CoDelBlockingQueue<InboundMessageState>(ctx, "UDP-MessageReceiver", qsize);
+        _completeMessages = new CoDelBlockingQueue<>(ctx, "UDP-MessageReceiver", qsize);
         _context.statManager().createRateStat("udp.inboundExpired", "Number of inbound messages expired before receipt", "Transport [UDP]", UDPTransport.RATES);
         _alive = true;
     }

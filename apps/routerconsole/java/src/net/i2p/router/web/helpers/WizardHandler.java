@@ -50,7 +50,7 @@ public class WizardHandler extends FormHandler {
                     else {addFormError(_t("Bandwidth test did not complete"));} // didn't run at all?
                 }
             } else if ("5".equals(page)) {
-                Map<String, String> changes = new HashMap<String, String>();
+                Map<String, String> changes = new HashMap<>();
                 boolean updated = updateRates(changes);
                 if (updated) {
                     boolean saved = _context.router().saveConfig(changes, null);

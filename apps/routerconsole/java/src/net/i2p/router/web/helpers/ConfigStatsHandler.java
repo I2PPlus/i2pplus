@@ -52,7 +52,7 @@ public class ConfigStatsHandler extends FormHandler {
      *
      */
     private void saveChanges() {
-        Map<String, String> changes = new HashMap<String, String>();
+        Map<String, String> changes = new HashMap<>();
         boolean graphsChanged = !_graphs.equals(_context.getProperty("stat.summaries"));
         changes.put("stat.summaries", _graphs);
         boolean fullChanged = _context.getBooleanProperty(StatManager.PROP_STAT_FULL) != _isFull;

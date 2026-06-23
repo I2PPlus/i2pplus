@@ -30,7 +30,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 @SuppressWarnings("PMD.CloseResource")
 public class InternalServerSocket extends ServerSocket {
     private static final ConcurrentHashMap<Integer, InternalServerSocket> _sockets =
-            new ConcurrentHashMap<Integer, InternalServerSocket>(4);
+            new ConcurrentHashMap<>(4);
     private final BlockingQueue<InternalSocket> _acceptQueue;
     private final Integer _port;
     private volatile boolean _running;
@@ -46,7 +46,7 @@ public class InternalServerSocket extends ServerSocket {
         InternalServerSocket previous = _sockets.putIfAbsent(_port, this);
         if (previous != null) throw new IOException("Internal port in use: " + port);
         _running = true;
-        _acceptQueue = new LinkedBlockingQueue<InternalSocket>();
+        _acceptQueue = new LinkedBlockingQueue<>();
         // if (_log.shouldDebug())
         //    _log.debug("Registered " + _port);
     }
@@ -176,7 +176,7 @@ public class InternalServerSocket extends ServerSocket {
      */
     public static void renderStatusHTML(Writer out) throws IOException {
         out.write("<h2 id=debug_sockets>Internal Server Sockets</h2>\n<table id=sockets>\n");
-        List<Integer> ports = new ArrayList<Integer>(_sockets.keySet());
+        List<Integer> ports = new ArrayList<>(_sockets.keySet());
         if (!ports.isEmpty()) {
             out.write("<tr><th>Port\n");
             Collections.sort(ports);

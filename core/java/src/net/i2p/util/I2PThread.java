@@ -29,7 +29,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public class I2PThread extends Thread {
 
-    private static final Set<OOMEventListener> _listeners = new CopyOnWriteArraySet<OOMEventListener>();
+    private static final Set<OOMEventListener> _listeners = new CopyOnWriteArraySet<>();
 
     public I2PThread() {
         super();

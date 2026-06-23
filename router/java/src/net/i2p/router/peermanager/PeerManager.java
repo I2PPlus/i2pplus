@@ -85,10 +85,10 @@ class PeerManager {
         _persistenceHelper = new ProfilePersistenceHelper(context);
         _organizer = context.profileOrganizer();
         _organizer.setUs(context.routerHash());
-        _capabilitiesByPeer = new ConcurrentHashMap<Hash, String>(256);
-        _peersByCapability = new HashMap<Character, Set<Hash>>(TRACKED_CAPS.length());
+        _capabilitiesByPeer = new ConcurrentHashMap<>(256);
+        _peersByCapability = new HashMap<>(TRACKED_CAPS.length());
         for (int i = 0; i < TRACKED_CAPS.length(); i++) {
-            _peersByCapability.put(Character.valueOf(Character.toLowerCase(TRACKED_CAPS.charAt(i))), new ConcurrentHashSet<Hash>());
+            _peersByCapability.put(Character.valueOf(Character.toLowerCase(TRACKED_CAPS.charAt(i))), new ConcurrentHashSet<>());
         }
         loadProfilesInBackground();
     }
@@ -243,9 +243,9 @@ class PeerManager {
      * Only used by PeerTestJob (PURPOSE_TEST)
      */
     List<Hash> selectPeers(PeerSelectionCriteria criteria) {
-        Set<Hash> peers = new HashSet<Hash>(criteria.getMinimumRequired());
+        Set<Hash> peers = new HashSet<>(criteria.getMinimumRequired());
         // not a singleton, SANFP adds to it
-        Set<Hash> exclude = new HashSet<Hash>(1);
+        Set<Hash> exclude = new HashSet<>(1);
         exclude.add(_context.routerHash());
         switch (criteria.getPurpose()) {
             case PeerSelectionCriteria.PURPOSE_TEST:
@@ -275,7 +275,7 @@ class PeerManager {
                           + _organizer.countFastPeers() + " Fast peers -> Falling back to non-failing peers...");
             _organizer.selectActiveNotFailingPeers(criteria.getMinimumRequired(), exclude, peers);
         }
-        return new ArrayList<Hash>(peers);
+        return new ArrayList<>(peers);
     }
 
     /**

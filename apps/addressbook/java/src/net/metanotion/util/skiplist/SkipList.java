@@ -65,8 +65,8 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 	public SkipList(int span) {
 		if(span < 1 || span > SkipSpan.MAX_SIZE)
 			throw new IllegalArgumentException("Invalid span size");
-		first = new SkipSpan<K, V>(span);
-		stack = new SkipLevels<K, V>(1, first);
+		first = new SkipSpan<>(span);
+		stack = new SkipLevels<>(1, first);
 		//rng = new Random(System.currentTimeMillis());
 	}
 
@@ -170,14 +170,14 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 		return stack.get(stack.levels.length - 1, key);
 	}
 
-	public SkipIterator<K, V> iterator() { return new SkipIterator<K, V>(first, 0); }
+	public SkipIterator<K, V> iterator() { return new SkipIterator<>(first, 0); }
 
 /****
-	public SkipIterator<K, V> min() { return new SkipIterator<K, V>(first, 0); }
+	public SkipIterator<K, V> min() { return new SkipIterator<>(first, 0); }
 
 	public SkipIterator<K, V> max() {
 		SkipSpan<K, V> ss = stack.getEnd();
-		return new SkipIterator<K, V>(ss, ss.nKeys - 1);
+		return new SkipIterator<>(ss, ss.nKeys - 1);
 	}
 ****/
 
@@ -186,7 +186,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 		int[] search = new int[1];
 		SkipSpan<K, V> ss = stack.getSpan(stack.levels.length - 1, key, search);
 		if(search[0] < 0) { search[0] = -1 * (search[0] + 1); }
-		return new SkipIterator<K, V>(ss, search[0]);
+		return new SkipIterator<>(ss, search[0]);
 	}
 
 	// Levels adjusted to guarantee O(log n) search

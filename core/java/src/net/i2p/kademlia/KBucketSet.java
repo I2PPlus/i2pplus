@@ -80,7 +80,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      *           b &gt; 0, use 1 for bittorrent, Kademlia paper recommends 5
      */
     public KBucketSet(I2PAppContext context, T us, int max, int b) {
-        this(context, us, max, b, new RandomTrimmer<T>(context, max));
+        this(context, us, max, b, new RandomTrimmer<>(context, max));
     }
 
     /**
@@ -100,7 +100,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
         NUM_BUCKETS = KEYSIZE_BITS * B_FACTOR;
         BUCKET_SIZE = max;
         _buckets = createBuckets();
-        _rangeCalc = new Range<T>(us, B_VALUE);
+        _rangeCalc = new Range<>(us, B_VALUE);
         makeKey(new byte[us.length()]); // this verifies the zero-argument constructor
     }
 
@@ -315,7 +315,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      *  @return a copy in a new set
      */
     public Set<T> getAll() {
-        Set<T> all = new HashSet<T>(256);
+        Set<T> all = new HashSet<>(256);
         getReadLock();
         try {
             for (KBucket<T> b : _buckets) {
@@ -362,7 +362,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      *  @return non-null, closest first
      */
     public List<T> getClosest(int max, Collection<T> toIgnore) {
-        List<T> rv = new ArrayList<T>(max);
+        List<T> rv = new ArrayList<>(max);
         int count = 0;
         getReadLock();
         try {
@@ -381,7 +381,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
         } finally {
             releaseReadLock();
         }
-        Comparator<T> comp = new XORComparator<T>(_us);
+        Comparator<T> comp = new XORComparator<>(_us);
         Collections.sort(rv, comp);
         int sz = rv.size();
         for (int i = sz - 1; i >= max; i--) {
@@ -406,7 +406,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      */
     public List<T> getClosest(T key, int max, Collection<T> toIgnore) {
         if (key.equals(_us)) return getClosest(max, toIgnore);
-        List<T> rv = new ArrayList<T>(max);
+        List<T> rv = new ArrayList<>(max);
         int count = 0;
         getReadLock();
         try {
@@ -434,7 +434,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
         } finally {
             releaseReadLock();
         }
-        Comparator<T> comp = new XORComparator<T>(key);
+        Comparator<T> comp = new XORComparator<>(key);
         Collections.sort(rv, comp);
         int sz = rv.size();
         for (int i = sz - 1; i >= max; i--) {
@@ -474,7 +474,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
     List<KBucket<T>> getBuckets() {
         getReadLock();
         try {
-            return new ArrayList<KBucket<T>>(_buckets);
+            return new ArrayList<>(_buckets);
         } finally {
             releaseReadLock();
         }
@@ -512,21 +512,21 @@ public class KBucketSet<T extends SimpleDataStructure> {
             }
             return -1;
         } else {
-            KBucket<T> dummy = new DummyBucket<T>(range);
-            return Collections.binarySearch(_buckets, dummy, new BucketComparator<T>());
+            KBucket<T> dummy = new DummyBucket<>(range);
+            return Collections.binarySearch(_buckets, dummy, new BucketComparator<>());
         }
     }
 
     private List<KBucket<T>> createBuckets() {
         // just an initial size
-        List<KBucket<T>> buckets = new ArrayList<KBucket<T>>(4 * B_FACTOR);
+        List<KBucket<T>> buckets = new ArrayList<>(4 * B_FACTOR);
         buckets.add(createBucket(0, NUM_BUCKETS - 1));
         return buckets;
     }
 
     private KBucket<T> createBucket(int start, int end) {
         if (end - start >= B_FACTOR && (((end + 1) & B_FACTOR - 1) != 0 || (start & B_FACTOR - 1) != 0)) throw new IllegalArgumentException("Sub-bkt crosses K-bkt boundary: " + start + '-' + end);
-        KBucket<T> bucket = new KBucketImpl<T>(_context, start, end, BUCKET_SIZE, _trimmer);
+        KBucket<T> bucket = new KBucketImpl<>(_context, start, end, BUCKET_SIZE, _trimmer);
         return bucket;
     }
 
@@ -547,7 +547,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      *  @return non-null, closest first
      */
     public List<T> getExploreKeys(long age) {
-        List<T> rv = new ArrayList<T>(_buckets.size());
+        List<T> rv = new ArrayList<>(_buckets.size());
         long old = _context.clock().now() - age;
         getReadLock();
         try {
@@ -683,7 +683,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
         public Range(T us, int bValue) {
             _bValue = bValue;
             _bigUs = new BigInteger(1, us.getData());
-            _distanceCache = new LHMCache<T, Integer>(256);
+            _distanceCache = new LHMCache<>(256);
         }
 
         /** @return 0 to max-1 or -1 for us */

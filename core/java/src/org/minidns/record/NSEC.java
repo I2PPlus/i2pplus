@@ -93,7 +93,7 @@ public class NSEC extends Data {
 
     @SuppressWarnings("NarrowingCompoundAssignment")
     static byte[] createTypeBitMap(List<TYPE> types) {
-        List<Integer> typeList = new ArrayList<Integer>(types.size());
+        List<Integer> typeList = new ArrayList<>(types.size());
         for (TYPE type : types) {
             typeList.add(type.getValue());
         }
@@ -140,7 +140,7 @@ public class NSEC extends Data {
     static List<TYPE> readTypeBitMap(byte[] typeBitmap) throws IOException {
         DataInputStream dis = new DataInputStream(new ByteArrayInputStream(typeBitmap));
         int read = 0;
-        ArrayList<TYPE> typeList = new ArrayList<TYPE>();
+        ArrayList<TYPE> typeList = new ArrayList<>();
         while (typeBitmap.length > read) {
             int windowBlock = dis.readUnsignedByte();
             int bitmapLength = dis.readUnsignedByte();

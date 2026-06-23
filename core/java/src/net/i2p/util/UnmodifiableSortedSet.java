@@ -169,7 +169,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
             java.util.List<String> list = Arrays.asList(test);
             Set<String> set = new UnmodifiableSortedSet(list);
             System.out.println(set.toString());
-            Set<String> set2 = new java.util.HashSet<String>(list);
+            Set<String> set2 = new java.util.HashSet<>(list);
             set = new UnmodifiableSortedSet(set2);
             System.out.println(set.toString());
         }

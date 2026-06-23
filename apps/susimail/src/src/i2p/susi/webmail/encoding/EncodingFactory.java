@@ -42,7 +42,7 @@ public class EncodingFactory {
 	private static final Map<String, Encoding> encodings;
 	
 	static {
-		encodings = new HashMap<String, Encoding>();
+		encodings = new HashMap<>();
 		// Let's not give the user a chance to break things
 		//String list = Config.getProperty( CONFIG_ENCODING );
 		String list = DEFAULT_ENCODINGS;

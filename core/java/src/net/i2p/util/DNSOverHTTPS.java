@@ -51,14 +51,14 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     private long fetchStart;
     private int gotDate;
 
-    private static final Map<String, Result> v4Cache = new LHMCache<String, Result>(32);
-    private static final Map<String, Result> v6Cache = new LHMCache<String, Result>(32);
+    private static final Map<String, Result> v4Cache = new LHMCache<>(32);
+    private static final Map<String, Result> v6Cache = new LHMCache<>(32);
     // v4 URLs to query, ending with '&'
-    private static final List<String> v4urls = new ArrayList<String>(8);
+    private static final List<String> v4urls = new ArrayList<>(8);
     // v6 URLs to query, ending with '&'
-    private static final List<String> v6urls = new ArrayList<String>(8);
+    private static final List<String> v6urls = new ArrayList<>(8);
     // consecutive failures
-    private static final ObjectCounter<String> fails = new ObjectCounter<String>();
+    private static final ObjectCounter<String> fails = new ObjectCounter<>();
 
     /**
      *  ESR version of Firefox, same as Tor Browser
@@ -340,7 +340,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         if (url != null) {
             toQuery = Collections.singletonList(url);
         } else {
-            toQuery = new ArrayList<String>((type == Type.V6_ONLY) ? v6urls : v4urls);
+            toQuery = new ArrayList<>((type == Type.V6_ONLY) ? v6urls : v4urls);
             Collections.shuffle(toQuery);
         }
         final long timeout = System.currentTimeMillis() + OVERALL_TIMEOUT;

@@ -446,7 +446,7 @@ public class RouterConsoleRunner implements RouterApp {
 
         // so Jetty can find WebAppConfiguration
         System.setProperty("jetty.class.path", (new File(_context.getLibDir(), "routerconsole.jar")).getPath());
-        LinkedBlockingQueue<Runnable> lbq = new LinkedBlockingQueue<Runnable>(4*MAX_THREADS);
+        LinkedBlockingQueue<Runnable> lbq = new LinkedBlockingQueue<>(4*MAX_THREADS);
         // min and max threads will be reset below
         QueuedThreadPool qtp = new QueuedThreadPool(MAX_THREADS, MIN_THREADS, MAX_IDLE_TIME, lbq);
         qtp.setName(THREAD_NAME);
@@ -492,10 +492,10 @@ public class RouterConsoleRunner implements RouterApp {
         if (!_webAppsDir.endsWith("/"))
             _webAppsDir += '/';
 
-        Set<String> listenHosts = new HashSet<String>(8);
+        Set<String> listenHosts = new HashSet<>(8);
         HandlerWrapper rootWebApp = null;
         ServletHandler rootServletHandler = null;
-        List<Connector> connectors = new ArrayList<Connector>(4);
+        List<Connector> connectors = new ArrayList<>(4);
         try {
             int boundAddresses = 0;
             SortedSet<String> addresses = Addresses.getAllAddresses();
@@ -512,7 +512,7 @@ public class RouterConsoleRunner implements RouterApp {
                     System.err.println("Bad RouterConsole port " + _listenPort);
             }
             if (lport > 0) {
-                List<String> hosts = new ArrayList<String>(2);
+                List<String> hosts = new ArrayList<>(2);
                 StringTokenizer tok = new StringTokenizer(_listenHost, " ,");
                 while (tok.hasMoreTokens()) {
                     String host = tok.nextToken().trim();
@@ -577,7 +577,7 @@ public class RouterConsoleRunner implements RouterApp {
                 File keyStore = new File(_context.getConfigDir(), "keystore/console.ks");
                 // Put the list of hosts together early, so we can put it in the selfsigned cert.
                 StringTokenizer tok = new StringTokenizer(_sslListenHost, " ,");
-                Set<String> altNames = new HashSet<String>(4);
+                Set<String> altNames = new HashSet<>(4);
                 while (tok.hasMoreTokens()) {
                     String s = tok.nextToken().trim();
                     if (!s.equals("0.0.0.0") && !s.equals("::") &&
@@ -601,7 +601,7 @@ public class RouterConsoleRunner implements RouterApp {
                                                    new String[I2PSSLSocketFactory.EXCLUDE_PROTOCOLS.size()]));
                     sslFactory.addExcludeCipherSuites(I2PSSLSocketFactory.EXCLUDE_CIPHERS.toArray(
                                                       new String[I2PSSLSocketFactory.EXCLUDE_CIPHERS.size()]));
-                    List<String> hosts = new ArrayList<String>(2);
+                    List<String> hosts = new ArrayList<>(2);
                     tok = new StringTokenizer(_sslListenHost, " ,");
                     while (tok.hasMoreTokens()) {
                         String host = tok.nextToken().trim();
@@ -764,7 +764,7 @@ public class RouterConsoleRunner implements RouterApp {
         // so things start faster.
         // Jetty 6 starts the connector before the router console is ready
         // This also prevents one webapp from breaking the whole thing
-        List<String> notStarted = new ArrayList<String>();
+        List<String> notStarted = new ArrayList<>();
         if (_server.isRunning()) {
             if (_mgr != null)
                 _mgr.register(_navHelper);
@@ -891,7 +891,7 @@ public class RouterConsoleRunner implements RouterApp {
             success = ks.exists();
             if (success) {
                 try {
-                    Map<String, String> changes = new HashMap<String, String>();
+                    Map<String, String> changes = new HashMap<>();
                     changes.put(PROP_KEYSTORE_PASSWORD, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD);
                     changes.put(PROP_KEY_PASSWORD, keyPassword);
                     _context.router().saveConfig(changes, null);
@@ -925,7 +925,7 @@ public class RouterConsoleRunner implements RouterApp {
      */
     static void initialize(RouterContext ctx, WebAppContext context) {
         ConstraintSecurityHandler sec = new ConstraintSecurityHandler();
-        List<ConstraintMapping> constraints = new ArrayList<ConstraintMapping>(4);
+        List<ConstraintMapping> constraints = new ArrayList<>(4);
         ConsolePasswordManager mgr = new ConsolePasswordManager(ctx);
         boolean enable = ctx.getBooleanProperty(PROP_PW_ENABLE);
         if (enable) {

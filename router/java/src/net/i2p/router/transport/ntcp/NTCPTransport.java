@@ -233,10 +233,10 @@ public class NTCPTransport extends TransportImpl {
         _context.statManager().createRateStat("ntcp.wantsQueuedWrite", "Number of wanted NTCP QueuedWrite events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.writeError", "Number of NTCP write errors", "Transport [NTCP]", RATES);
 
-        _endpoints = new HashSet<InetSocketAddress>(4);
-        _establishing = new ConcurrentHashSet<NTCPConnection>(64);
+        _endpoints = new HashSet<>(4);
+        _establishing = new ConcurrentHashSet<>(64);
         _conLock = new Object();
-        _conByIdent = new ConcurrentHashMap<Hash, NTCPConnection>(256);
+        _conByIdent = new ConcurrentHashMap<>(256);
         _replayFilter = new DecayingHashSet(ctx, 10*60*1000, 8, "NTCP-Hx^HI");
         _finisher = new NTCPSendFinisher(ctx, this);
         _pumper = new EventPumper(ctx, this);
@@ -292,7 +292,7 @@ public class NTCPTransport extends TransportImpl {
                 shouldSave = true;
             }
             if (shouldSave) {
-                Map<String, String> changes = new HashMap<String, String>(2);
+                Map<String, String> changes = new HashMap<>(2);
                 String b64Priv = Base64.encode(_ntcp2StaticPrivkey);
                 b64IV = Base64.encode(iv);
                 changes.put(PROP_NTCP2_SP, b64Priv);
@@ -844,7 +844,7 @@ public class NTCPTransport extends TransportImpl {
      * @since 0.9.34
      */
     public List<Hash> getEstablished() {
-        List<Hash> rv = new ArrayList<Hash>(_conByIdent.size());
+        List<Hash> rv = new ArrayList<>(_conByIdent.size());
         for (Map.Entry<Hash, NTCPConnection> e : _conByIdent.entrySet()) {
             NTCPConnection con = e.getValue();
             if (con.isEstablished() && !con.isClosed())
@@ -897,7 +897,7 @@ public class NTCPTransport extends TransportImpl {
      */
     @Override
     public List<Long> getClockSkews() {
-        List<Long> skews = new ArrayList<Long>(_conByIdent.size());
+        List<Long> skews = new ArrayList<>(_conByIdent.size());
         // Omit ones established too long ago,
         // since the skew is only set at startup (or after a meta message)
         // and won't include effects of later offset adjustments
@@ -1430,7 +1430,7 @@ public class NTCPTransport extends TransportImpl {
             return null;
         }
         String[] hosts = DataHelper.split(name, "[,; \r\n\t]");
-        List<String> ipstrings = new ArrayList<String>(2);
+        List<String> ipstrings = new ArrayList<>(2);
         // we only take one each of v4 and v6
         boolean v4 = false;
         boolean v6 = false;
@@ -1934,7 +1934,7 @@ public class NTCPTransport extends TransportImpl {
         _finisher.stop();
         List<NTCPConnection> cons;
         synchronized (_conLock) {
-            cons = new ArrayList<NTCPConnection>(_conByIdent.values());
+            cons = new ArrayList<>(_conByIdent.values());
             _conByIdent.clear();
         }
         for (NTCPConnection con : cons) {

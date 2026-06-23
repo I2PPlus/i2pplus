@@ -14,7 +14,7 @@ public class SearchHelper extends HelperBase {
 
     private String _engine;
     private String _query;
-    private Map<String, String> _engines = new TreeMap<String, String>();
+    private Map<String, String> _engines = new TreeMap<>();
 
     private static final char S = ',';
     static final String PROP_ENGINES = "routerconsole.searchEngines";

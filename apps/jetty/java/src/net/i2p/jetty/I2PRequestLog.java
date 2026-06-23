@@ -316,14 +316,14 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
         _out = _fileOut;
 
         if (_ignorePaths != null && _ignorePaths.length > 0) {
-            _ignorePathMap = new PathMappings<String>();
+            _ignorePathMap = new PathMappings<>();
             for (int i = 0; i < _ignorePaths.length; i++) {
                 _ignorePathMap.put(new ServletPathSpec(_ignorePaths[i]), _ignorePaths[i]);
             }
         } else {_ignorePathMap = null;}
 
         _writer = new OutputStreamWriter(_out, "UTF-8");
-        _buffers = new ArrayList<Utf8StringBuilder>();
+        _buffers = new ArrayList<>();
         _copy = new char[1024];
         super.doStart();
     }

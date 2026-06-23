@@ -115,8 +115,8 @@ public class GeoIP {
     static {
         // To block additional countries b,c,d when blocking country a,
         // put the list a,b,c,d for country a.
-        _associatedCountries = new HashMap<String, List<String>>(3);
-        List<String> c = new ArrayList<String>(3);
+        _associatedCountries = new HashMap<>(3);
+        List<String> c = new ArrayList<>(3);
         c.add("cn");
         c.add("hk");
         c.add("mo");
@@ -131,18 +131,18 @@ public class GeoIP {
     public GeoIP(I2PAppContext context) {
         _context = context;
         _log = context.logManager().getLog(GeoIP.class);
-        _codeToName = new ConcurrentHashMap<String, String>(512);
-        _codeCache = new ConcurrentHashMap<String, String>(512);
-        _IPToCountry = new ConcurrentHashMap<Long, String>();
+        _codeToName = new ConcurrentHashMap<>(512);
+        _codeCache = new ConcurrentHashMap<>(512);
+        _IPToCountry = new ConcurrentHashMap<>();
 /**
-        _pendingSearch = new ConcurrentHashSet<Long>();
-        _pendingIPv6Search = new ConcurrentHashSet<Long>();
-        _notFound = new ConcurrentHashSet<Long>();
+        _pendingSearch = new ConcurrentHashSet<>();
+        _pendingIPv6Search = new ConcurrentHashSet<>();
+        _notFound = new ConcurrentHashSet<>();
 **/
 
-        _pendingSearch = new CopyOnWriteArraySet<Long>();
-        _pendingIPv6Search = new CopyOnWriteArraySet<Long>();
-        _notFound = new CopyOnWriteArraySet<Long>();
+        _pendingSearch = new CopyOnWriteArraySet<>();
+        _pendingIPv6Search = new CopyOnWriteArraySet<>();
+        _notFound = new CopyOnWriteArraySet<>();
 
         _lock = new AtomicBoolean();
         readCountryFile();

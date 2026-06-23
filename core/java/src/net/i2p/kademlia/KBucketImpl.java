@@ -72,7 +72,7 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     public KBucketImpl(I2PAppContext context, int begin, int end, int max, KBucketTrimmer<T> trimmer) {
         if (begin > end) throw new IllegalArgumentException(begin + " > " + end);
         _context = context;
-        _entries = new ConcurrentHashSet<T>(max + 4);
+        _entries = new ConcurrentHashSet<>(max + 4);
         _begin = begin;
         _end = end;
         _max = max;

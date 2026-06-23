@@ -90,7 +90,7 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
      */
     @Override
     public Map<String, String[]> getParameterMap() {
-        Map<String, String[]> rv = new HashMap<String, String[]>();
+        Map<String, String[]> rv = new HashMap<>();
         for (Enumeration<String> keys = getParameterNames(); keys.hasMoreElements(); ) {
              String k = keys.nextElement();
              String[] v = getParameterValues(k);

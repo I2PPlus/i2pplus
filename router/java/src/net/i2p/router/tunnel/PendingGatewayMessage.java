@@ -67,7 +67,7 @@ class PendingGatewayMessage implements CDQEntry {
     public void addMessageId(long id) {
         synchronized (this) {
             if (_messageIds == null)
-                _messageIds = new ArrayList<Long>();
+                _messageIds = new ArrayList<>();
             _messageIds.add(Long.valueOf(id));
         }
     }
@@ -79,9 +79,9 @@ class PendingGatewayMessage implements CDQEntry {
     public List<Long> getMessageIds() {
         synchronized (this) {
             if (_messageIds != null)
-                return new ArrayList<Long>(_messageIds);
+                return new ArrayList<>(_messageIds);
             else
-                return new ArrayList<Long>();
+                return new ArrayList<>();
         }
     }
 

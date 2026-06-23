@@ -55,10 +55,10 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
 
     /** Per-pool cooldown map so one pool's selections don't starve another's. */
-    private static final Map<Hash, Long> _clientCooldowns = new ConcurrentHashMap<Hash, Long>();
+    private static final Map<Hash, Long> _clientCooldowns = new ConcurrentHashMap<>();
 
     /** Track when peers last failed to allow recovery */
-    private static final Map<Hash, Long> _peerFailureTimes = new ConcurrentHashMap<Hash, Long>();
+    private static final Map<Hash, Long> _peerFailureTimes = new ConcurrentHashMap<>();
 
     private static String formatExcludedPeers(Set<Hash> peers) {
         if (peers == null || peers.isEmpty()) {return "[no exclusions]";}
@@ -204,7 +204,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             if (lastPeerExclusions != null && !lastPeerExclusions.isEmpty()) {
                 exclude.addAll(lastPeerExclusions);
             }
-            ArraySet<Hash> matches = new ArraySet<Hash>(length);
+            ArraySet<Hash> matches = new ArraySet<>(length);
             if (length == 1) {
                 // closest-hop restrictions
                 if (checkClosestHop) {exclude = getClosestHopExclude(isInbound, exclude);}
@@ -249,12 +249,12 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     matches.removeAll(exclude);
                 }
                 matches.remove(ctx.routerHash());
-                rv = new ArrayList<Hash>(matches);
+                rv = new ArrayList<>(matches);
             } else {
                 // build a tunnel using 4 subtiers.
                 // For a 2-hop tunnel, the first hop comes from subtiers 0-1 and the last from subtiers 2-3.
                 // For a longer tunnels, the first hop comes from subtier 0, the middle from subtiers 2-3, and the last from subtier 1.
-                rv = new ArrayList<Hash>(length + 1);
+                rv = new ArrayList<>(length + 1);
                 SessionKey randomKey = settings.getRandomKey();
                 // OBEP or IB last hop
                 // group 0 or 1 if two hops, otherwise group 0
@@ -460,7 +460,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     } else if (matches.size() < middleCount) {
                         // Priority: HighCap > Active > NotFailing > AllNotFailing
                         int needed = middleCount - matches.size();
-                        ArraySet<Hash> fallback = new ArraySet<Hash>(needed);
+                        ArraySet<Hash> fallback = new ArraySet<>(needed);
                         ctx.profileOrganizer().selectHighCapacityPeers(needed, exclude, fallback, 0, null);
                         fallback.remove(ctx.routerHash());
                         if (!fallback.isEmpty()) {
@@ -469,7 +469,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     }
                     if (matches.size() < middleCount) {
                         int needed = middleCount - matches.size();
-                        ArraySet<Hash> fallback = new ArraySet<Hash>(needed);
+                        ArraySet<Hash> fallback = new ArraySet<>(needed);
                         ctx.profileOrganizer().selectActiveNotFailingPeers(needed, exclude, fallback, 0, null);
                         fallback.remove(ctx.routerHash());
                         if (!fallback.isEmpty()) {
@@ -478,7 +478,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     }
                     if (matches.size() < middleCount) {
                         int needed = middleCount - matches.size();
-                        ArraySet<Hash> fallback = new ArraySet<Hash>(needed);
+                        ArraySet<Hash> fallback = new ArraySet<>(needed);
                         ctx.profileOrganizer().selectNotFailingPeers(needed, exclude, fallback, false, 0, null);
                         fallback.remove(ctx.routerHash());
                         if (!fallback.isEmpty()) {
@@ -487,7 +487,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     }
                     if (matches.size() < middleCount) {
                         int needed = middleCount - matches.size();
-                        ArraySet<Hash> fallback = new ArraySet<Hash>(needed);
+                        ArraySet<Hash> fallback = new ArraySet<>(needed);
                         ctx.profileOrganizer().selectAllNotFailingPeers(needed, exclude, fallback, false);
                         fallback.remove(ctx.routerHash());
                         if (!fallback.isEmpty()) {
@@ -496,7 +496,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     }
                     matches.remove(ctx.routerHash());
                     if (matches.size() > 1) {
-                        List<Hash> ordered = new ArrayList<Hash>(matches);
+                        List<Hash> ordered = new ArrayList<>(matches);
                         orderPeers(ordered, randomKey);
                         rv.addAll(ordered);
                     } else {
@@ -570,7 +570,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     // fails), leaving matches empty and triggering "Not enough peers".
                     if (matches.size() < 5)
                         tier = 2;
-                    Set<Hash> localExclude = new HashSet<Hash>();
+                    Set<Hash> localExclude = new HashSet<>();
                     while (qualityAttempts < 4 && !matches.isEmpty()) {
                         qualityAttempts++;
                         if (!inStartup) {
@@ -655,7 +655,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         }
                         // Continue with whatever peers we have
                     } else if (ctx.getBooleanProperty(PROP_LEGACY_SELECTION)) {
-                        ArraySet<Hash> fallback = new ArraySet<Hash>(min);
+                        ArraySet<Hash> fallback = new ArraySet<>(min);
                         ctx.profileOrganizer().selectFastPeers(min, exclude, fallback, 0, null);
                         fallback.remove(ctx.routerHash());
                         if (!fallback.isEmpty()) {
@@ -673,7 +673,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                             }
 
                             // Priority: HighCap > Fast > Active > NotFailing (under network stress, prioritize bandwidth)
-                            ArraySet<Hash> fallback = new ArraySet<Hash>(min);
+                            ArraySet<Hash> fallback = new ArraySet<>(min);
                             ctx.profileOrganizer().selectHighCapacityPeers(min, exclude, fallback, 0, null);
                             fallback.remove(ctx.routerHash());
 
@@ -713,7 +713,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
                             // If still not enough, try all not-failing peers
                             if (rv.size() < min) {
-                                ArraySet<Hash> nfFallback = new ArraySet<Hash>(min);
+                                ArraySet<Hash> nfFallback = new ArraySet<>(min);
                                 ctx.profileOrganizer().selectNotFailingPeers(min, exclude, nfFallback, false, 0, null);
                                 nfFallback.remove(ctx.routerHash());
 
@@ -728,7 +728,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
                             // If still not enough, try all peers as last resort
                             if (rv.size() < min) {
-                                ArraySet<Hash> allFallback = new ArraySet<Hash>(min);
+                                ArraySet<Hash> allFallback = new ArraySet<>(min);
                                 ctx.profileOrganizer().selectAllNotFailingPeers(min, exclude, allFallback, false);
                                 allFallback.remove(ctx.routerHash());
                                 if (!allFallback.isEmpty()) {
@@ -744,7 +744,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                     log.warn("Severe network stress (" + (int) (buildSuccess * 100) + "% success) -> Trying quality-aware fallback with speed-adjusted peer selection...");
                                 }
                                 // Use a quality-ordered fallback that prefers faster peers even if they recently failed
-                                ArraySet<Hash> qualityFallback = new ArraySet<Hash>(min);
+                                ArraySet<Hash> qualityFallback = new ArraySet<>(min);
                                 // Get peers with good speed even if they have some failures
                                 ctx.profileOrganizer().selectActiveNotFailingPeers(min, exclude, qualityFallback);
                                 qualityFallback.remove(ctx.routerHash());
@@ -760,7 +760,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                     if (log.shouldWarn()) {
                                         log.warn("All quality peers exhausted -> Using emergency fallback (any peer)");
                                     }
-                                    ArraySet<Hash> relaxedFallback = new ArraySet<Hash>(min);
+                                    ArraySet<Hash> relaxedFallback = new ArraySet<>(min);
                                     ctx.profileOrganizer().selectAllNotFailingPeers(min, exclude, relaxedFallback, false);
                                     relaxedFallback.remove(ctx.routerHash());
 
@@ -804,7 +804,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 return Collections.emptyList();
             }
         } else {
-            rv = new ArrayList<Hash>(1);
+            rv = new ArrayList<>(1);
         }
 
         if (isInbound) {rv.add(0, ctx.routerHash());}
@@ -812,7 +812,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
         // Sort non-self peers by reliability so better peers are preferred
         if (rv.size() > 2) {
-            List<Hash> nonSelf = new ArrayList<Hash>(rv);
+            List<Hash> nonSelf = new ArrayList<>(rv);
             nonSelf.remove(ctx.routerHash());
             if (nonSelf.size() > 1) {
                 sortByPeerQuality(nonSelf, null);
@@ -836,9 +836,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
             String strategy = getStrategy();
             if (STRATEGY_RELIABILITY.equals(strategy)) {
                 // Apply reliability filter on non-self peers
-                List<Hash> nonSelf = new ArrayList<Hash>(rv);
+                List<Hash> nonSelf = new ArrayList<>(rv);
                 nonSelf.remove(ctx.routerHash());
-                Set<Hash> nonSelfSet = new HashSet<Hash>(nonSelf);
+                Set<Hash> nonSelfSet = new HashSet<>(nonSelf);
                 List<Hash> reliable = filterByReliability(nonSelfSet, null, nonSelf.size());
                 if (!reliable.isEmpty()) {
                     rv.clear();
@@ -860,7 +860,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             int attempts = 0;
             int maxAttempts = 3;
             while (attempts < maxAttempts && isDuplicateSequence(settings, rv.subList(0, rv.size() - 1))) {
-                List<Hash> regenerated = regeneratePeers(settings, new ArrayList<Hash>(rv.subList(0, rv.size() - 1)));
+                List<Hash> regenerated = regeneratePeers(settings, new ArrayList<>(rv.subList(0, rv.size() - 1)));
                 if (regenerated == null || regenerated.equals(rv.subList(0, rv.size() - 1))) {
                     break; // No change possible, accept the duplicate
                 }
@@ -1011,7 +1011,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
         if (candidates == null || candidates.isEmpty() || max <= 0) {
             return Collections.emptyList();
         }
-        List<Hash> result = new ArrayList<Hash>();
+        List<Hash> result = new ArrayList<>();
         long now = ctx.clock().now();
         long tenMinutes = 10 * 60 * 1000L;
         long thirtyMinutes = 30 * 60 * 1000L;
@@ -1143,7 +1143,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
         GhostPeerManager ghostManager = tmf.getGhostPeerManager();
         if (ghostManager == null) {return peers;}
 
-        List<Hash> filtered = new ArrayList<Hash>(peers.size());
+        List<Hash> filtered = new ArrayList<>(peers.size());
         for (Hash peer : peers) {
             if (ghostManager.isGhost(peer)) {
                 if (log.shouldDebug()) {

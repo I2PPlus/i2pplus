@@ -44,8 +44,8 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
         super(context.getBooleanPropertyDefaultTrue("prng.useDevRandom") && !SystemVersion.isWindows() && !SystemVersion.isSlow());
         _bufferCount = Math.max(context.getProperty("prng.buffers", DEFAULT_BUFFERS), 2);
         _bufferSize = Math.max(context.getProperty("prng.bufferSize", DEFAULT_BUFSIZE), 16*1024);
-        _emptyBuffers = new LinkedBlockingQueue<AsyncBuffer>(_bufferCount);
-        _fullBuffers = new LinkedBlockingQueue<AsyncBuffer>(_bufferCount);
+        _emptyBuffers = new LinkedBlockingQueue<>(_bufferCount);
+        _fullBuffers = new LinkedBlockingQueue<>(_bufferCount);
         _context = context;
         context.statManager().createRateStat("prng.bufferFillTime", "Time to fill random number buffer (ms)", "Encryption", new long[] { RateConstants.ONE_MINUTE } );
         _log = context.logManager().getLog(AsyncFortunaStandalone.class);

@@ -46,7 +46,7 @@ public class FileDumpHelper extends HelperBase {
             // through Java 8, not available in Java 9
             URLClassLoader urlClassLoader = (URLClassLoader) loader;
             URL[] urls = urlClassLoader.getURLs();
-            List<File> flist = new ArrayList<File>();
+            List<File> flist = new ArrayList<>();
             for (int i = 0; i < urls.length; i++) {
                 String p = urls[i].toString();
                 if (p.startsWith("file:") && p.endsWith(".jar")) {

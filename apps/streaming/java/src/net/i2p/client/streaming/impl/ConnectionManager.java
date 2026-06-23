@@ -63,7 +63,7 @@ class ConnectionManager {
      * Key is destination Hash, value is timestamp of last failed connect.
      * @since 2.7.0
      */
-    private static final ConcurrentHashMap<Hash, Long> _destFailures = new ConcurrentHashMap<Hash, Long>();
+    private static final ConcurrentHashMap<Hash, Long> _destFailures = new ConcurrentHashMap<>();
 
     /**
      * Cooldown between connection attempts to the same failed destination.
@@ -77,7 +77,7 @@ class ConnectionManager {
 
     /** cache of the property to detect changes */
     private static volatile String _currentBlacklist = "";
-    private static final Set<Hash> _globalBlacklist = new ConcurrentHashSet<Hash>();
+    private static final Set<Hash> _globalBlacklist = new ConcurrentHashSet<>();
 
     /** @since 0.9.3 */
     public static final String PROP_BLACKLIST = "i2p.streaming.blacklist";
@@ -136,8 +136,8 @@ class ConnectionManager {
         _defaultOptions = defaultOptions;
         _connectionFilter = connectionFilter;
         _log = _context.logManager().getLog(ConnectionManager.class);
-        _connectionByInboundId = new ConcurrentHashMap<Long,Connection>(32);
-        _pendingPings = new ConcurrentHashMap<Long,PingRequest>(4);
+        _connectionByInboundId = new ConcurrentHashMap<>(32);
+        _pendingPings = new ConcurrentHashMap<>(4);
         _messageHandler = new MessageHandler(_context, this);
         _packetHandler = new PacketHandler(_context, this);
         _schedulerChooser = new SchedulerChooser(_context);
@@ -154,7 +154,7 @@ class ConnectionManager {
         int protocol = defaultOptions.getEnforceProtocol() ? I2PSession.PROTO_STREAMING : I2PSession.PROTO_ANY;
         _session.addMuxedSessionListener(_messageHandler, protocol, defaultOptions.getLocalPort());
         _outboundQueue = new PacketQueue(_context, _timer);
-        _recentlyClosed = new LHMCache<Long, Object>(128);
+        _recentlyClosed = new LHMCache<>(128);
         /** Socket timeout for accept() */
         _soTimeout = -1;
 
@@ -771,7 +771,7 @@ class ConnectionManager {
             // rebuild _globalBlacklist when property changes
             synchronized(_globalBlacklist) {
                 if (hashes.length() > 0) {
-                    Set<Hash> newSet = new HashSet<Hash>();
+                    Set<Hash> newSet = new HashSet<>();
                     StringTokenizer tok = new StringTokenizer(hashes, ",; ");
                     while (tok.hasMoreTokens()) {
                         String hashstr = tok.nextToken();
@@ -954,7 +954,7 @@ class ConnectionManager {
      * @return set of Connection objects
      */
     public Set<Connection> listConnections() {
-            return new HashSet<Connection>(_connectionByInboundId.values());
+            return new HashSet<>(_connectionByInboundId.values());
     }
 
     /**

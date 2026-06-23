@@ -96,13 +96,13 @@ class ClientManager {
     public ClientManager(RouterContext context, int port) {
         _ctx = context;
         _log = context.logManager().getLog(ClientManager.class);
-        _listeners = new ArrayList<ClientListenerRunner>(4);
-        _runners = new ConcurrentHashMap<Destination, ClientConnectionRunner>(4);
-        _runnersByHash = new ConcurrentHashMap<Hash, ClientConnectionRunner>(4);
-        _pendingRunners = new HashSet<ClientConnectionRunner>(4);
-        _runnerSessionIds = new HashSet<SessionId>(4);
-        _metaDests = new ConcurrentHashSet<Destination>(4);
-        _metaHashes = new ConcurrentHashSet<Hash>(4);
+        _listeners = new ArrayList<>(4);
+        _runners = new ConcurrentHashMap<>(4);
+        _runnersByHash = new ConcurrentHashMap<>(4);
+        _pendingRunners = new HashSet<>(4);
+        _runnerSessionIds = new HashSet<>(4);
+        _metaDests = new ConcurrentHashSet<>(4);
+        _metaHashes = new ConcurrentHashSet<>(4);
         _port = port;
         _clientTimestamper = new ClientTimestamper();
         // following are for RequestLeaseSetJob
@@ -178,7 +178,7 @@ class ClientManager {
         _log.info("Shutting down the ClientManager...");
         for (ClientListenerRunner listener : _listeners) {listener.stopListening();}
         _listeners.clear();
-        Set<ClientConnectionRunner> runners = new HashSet<ClientConnectionRunner>();
+        Set<ClientConnectionRunner> runners = new HashSet<>();
         synchronized (_runners) {
             for (ClientConnectionRunner runner : _runners.values()) {runners.add(runner);}
         }
@@ -213,8 +213,8 @@ class ClientManager {
                 throw new I2PSessionException("Router ClientManager failed to start");
             }
         }
-        LinkedBlockingQueue<I2CPMessage> in = new LinkedBlockingQueue<I2CPMessage>(INTERNAL_QUEUE_SIZE);
-        LinkedBlockingQueue<I2CPMessage> out = new LinkedBlockingQueue<I2CPMessage>(INTERNAL_QUEUE_SIZE);
+        LinkedBlockingQueue<I2CPMessage> in = new LinkedBlockingQueue<>(INTERNAL_QUEUE_SIZE);
+        LinkedBlockingQueue<I2CPMessage> out = new LinkedBlockingQueue<>(INTERNAL_QUEUE_SIZE);
         I2CPMessageQueue myQueue = new I2CPMessageQueueImpl(in, out);
         I2CPMessageQueue hisQueue = new I2CPMessageQueueImpl(out, in);
         ClientConnectionRunner runner = new QueuedClientConnectionRunner(_ctx, this, myQueue);
@@ -570,7 +570,7 @@ class ClientManager {
      *  Does NOT contain meta destinations.
      */
     public Set<Destination> listClients() {
-        Set<Destination> rv = new HashSet<Destination>();
+        Set<Destination> rv = new HashSet<>();
         rv.addAll(_runners.keySet());
         return rv;
     }
@@ -693,7 +693,7 @@ class ClientManager {
      * @since 0.9.61
      */
     public Set<Hash> getPrimaryHashes() {
-        Set<Hash> rv = new HashSet<Hash>();
+        Set<Hash> rv = new HashSet<>();
         for (ClientConnectionRunner runner : _runners.values()) {rv.add(runner.getDestHash());}
         return rv;
     }
@@ -743,7 +743,7 @@ class ClientManager {
             if (_runners.isEmpty()) {schedule(LOOP_TIME); return;}
 
             // dedup subsessions
-            Set<ClientConnectionRunner> runners = new HashSet<ClientConnectionRunner>(_runners.values());
+            Set<ClientConnectionRunner> runners = new HashSet<>(_runners.values());
             for (ClientConnectionRunner runner : runners) {
                 if (runner instanceof QueuedClientConnectionRunner) {continue;}
                 if (runner.isDead()) {continue;}

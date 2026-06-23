@@ -249,8 +249,8 @@ public class HostChecker {
         _context = I2PAppContext.getGlobalContext();
         _log = _context.logManager().getLog(HostChecker.class);
         _namingService = namingService;
-        _pingResults = new ConcurrentHashMap<String, PingResult>();
-        _destinations = new ConcurrentHashMap<String, Destination>();
+        _pingResults = new ConcurrentHashMap<>();
+        _destinations = new ConcurrentHashMap<>();
         _running = new AtomicBoolean(false);
         _categoriesDownloaded = new AtomicBoolean(false);
         _categoriesDownloadSuccessful = new AtomicBoolean(false);
@@ -961,7 +961,7 @@ public class HostChecker {
      * @return map of hostname to ping result
      */
     public Map<String, PingResult> getAllPingResults() {
-        return new ConcurrentHashMap<String, PingResult>(_pingResults);
+        return new ConcurrentHashMap<>(_pingResults);
     }
 
     /**
@@ -1155,7 +1155,7 @@ public class HostChecker {
      * Get all hostnames from the naming service
      */
     private Set<String> getAllHostnames() {
-        Set<String> hostnames = new HashSet<String>();
+        Set<String> hostnames = new HashSet<>();
 
         // Use NamingService.getNames() to get all hostnames
         Properties options = new Properties();
@@ -1173,7 +1173,7 @@ public class HostChecker {
     private void cleanupStaleHosts() {
         try {
             Set<String> currentHostnames = getAllHostnames();
-            Set<String> cachedHostnames = new HashSet<String>(_pingResults.keySet());
+            Set<String> cachedHostnames = new HashSet<>(_pingResults.keySet());
 
             // Safety check: only run cleanup if we have current hosts from the naming service
             // This prevents removing all hosts during startup when naming service might not be ready
@@ -1417,7 +1417,7 @@ public class HostChecker {
      */
     private void loadCategories() {
         if (_hostCategories == null) {
-            _hostCategories = new ConcurrentHashMap<String, String>();
+            _hostCategories = new ConcurrentHashMap<>();
         }
 
         if (!_categoriesFile.exists()) {
@@ -1560,7 +1560,7 @@ public class HostChecker {
      * Get all host categories
      */
     public Map<String, String> getAllCategories() {
-        return new HashMap<String, String>(_hostCategories);
+        return new HashMap<>(_hostCategories);
     }
 
     /**
@@ -1905,7 +1905,7 @@ public class HostChecker {
 
             // Get all hostnames and randomize order
             Set<String> allHostnamesSet = getAllHostnames();
-            java.util.List<String> allHostnames = new java.util.ArrayList<String>(allHostnamesSet);
+            java.util.List<String> allHostnames = new java.util.ArrayList<>(allHostnamesSet);
             java.util.Collections.shuffle(allHostnames, _context.random());
             int addressBookSize = allHostnames.size();
 
@@ -1948,7 +1948,7 @@ public class HostChecker {
                 }
 
                 // Create a list of ping tasks to run concurrently
-                java.util.List<java.util.concurrent.Future<Void>> futures = new java.util.ArrayList<java.util.concurrent.Future<Void>>();
+                java.util.List<java.util.concurrent.Future<Void>> futures = new java.util.ArrayList<>();
 
                 for (String hostname : allHostnames) {
                     if (!_running.get()) {
@@ -2099,7 +2099,7 @@ public class HostChecker {
                 return;
             }
 
-            Set<String> newBlacklist = new HashSet<String>();
+            Set<String> newBlacklist = new HashSet<>();
             List<String> lines = java.nio.file.Files.readAllLines(_blacklistFile.toPath());
             for (String line : lines) {
                 line = line.trim().toLowerCase();

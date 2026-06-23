@@ -51,7 +51,7 @@ public class HostTxtParser {
      */
     private static Map<String, HostTxtEntry> parse(BufferedReader input) throws IOException {
         try {
-            Map<String, HostTxtEntry> result = new HashMap<String, HostTxtEntry>();
+            Map<String, HostTxtEntry> result = new HashMap<>();
             String inputLine;
             while ((inputLine = input.readLine()) != null) {
                 HostTxtEntry he = parse(inputLine, false);

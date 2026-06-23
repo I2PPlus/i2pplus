@@ -196,7 +196,7 @@ public class SybilRenderer {
         if (mode == 1 || mode == 8 || mode == 9 || mode == 10 || mode == 11) {
             avgMinDist = analysis.getAvgMinDist(ris);
         }
-        Map<Hash, Points> points = new HashMap<Hash, Points>(64);
+        Map<Hash, Points> points = new HashMap<>(64);
 
         if (mode == 0) {
             renderOverview(out, buf, nonce, analysis);
@@ -440,11 +440,11 @@ public class SybilRenderer {
      *  @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderIPUsSummary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
-        List<RouterInfo> ri32 = new ArrayList<RouterInfo>(4);
-        List<RouterInfo> ri24 = new ArrayList<RouterInfo>(4);
-        List<RouterInfo> ri16 = new ArrayList<RouterInfo>(4);
-        List<RouterInfo> ri64 = new ArrayList<RouterInfo>(4);
-        List<RouterInfo> ri48 = new ArrayList<RouterInfo>(4);
+        List<RouterInfo> ri32 = new ArrayList<>(4);
+        List<RouterInfo> ri24 = new ArrayList<>(4);
+        List<RouterInfo> ri16 = new ArrayList<>(4);
+        List<RouterInfo> ri64 = new ArrayList<>(4);
+        List<RouterInfo> ri48 = new ArrayList<>(4);
         analysis.calculateIPGroupsUs(ris, points, ri32, ri24, ri16, ri64, ri48);
         renderIPGroupsUs(out, buf, ri32, ri24, ri16, ri64, ri48);
     }
@@ -494,7 +494,7 @@ public class SybilRenderer {
      */
     private void renderPairSummary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
         // Pairwise distance analysis
-        List<Pair> pairs = new ArrayList<Pair>(PAIRMAX);
+        List<Pair> pairs = new ArrayList<>(PAIRMAX);
         double avg = analysis.calculatePairDistance(ris, points, pairs);
         renderPairDistance(out, buf, pairs, avg);
     }
@@ -541,7 +541,7 @@ public class SybilRenderer {
         RouterKeyGenerator rkgen = _context.routerKeyGenerator();
         buf.append("<h3 id=dest class=sybils>").append(_t("Floodfills Close to Our Destinations")).append("</h3>\n");
         Map<Hash, TunnelPool> clientInboundPools = _context.tunnelManager().getInboundClientPools();
-        List<Hash> destinations = new ArrayList<Hash>(clientInboundPools.keySet());
+        List<Hash> destinations = new ArrayList<>(clientInboundPools.keySet());
         for (Iterator<Hash> iter = destinations.iterator(); iter.hasNext(); ) {
             Hash client = iter.next();
             if (!_context.clientManager().isLocal(client) ||
@@ -589,7 +589,7 @@ public class SybilRenderer {
         } catch (NumberFormatException nfe) {}
         final double minDisplay = Math.min(threshold, MIN_DISPLAY_POINTS);
         if (!points.isEmpty()) {
-            List<Hash> warns = new ArrayList<Hash>(points.keySet());
+            List<Hash> warns = new ArrayList<>(points.keySet());
             Collections.sort(warns, new PointsComparator(points));
             ReasonComparator rcomp = new ReasonComparator();
             buf.append("<h3 id=threats class=sybils>").append(_t("Routers with Most Threat Points"))
@@ -736,8 +736,8 @@ public class SybilRenderer {
      */
     private void renderIPGroups32(Writer out, StringBuilder buf, Map<Integer, List<RouterInfo>> map) throws IOException {
         buf.append("<h3 id=sameIP class=sybils>").append(_t("Routers with the same IPv4")).append("</h3>\n");
-        List<Integer> foo = new ArrayList<Integer>(map.keySet());
-        Collections.sort(foo, new FooComparator<Integer>(map));
+        List<Integer> foo = new ArrayList<>(map.keySet());
+        Collections.sort(foo, new FooComparator<>(map));
         boolean found = false;
         for (Integer ii : foo) {
             List<RouterInfo> ris = map.get(ii);
@@ -766,8 +766,8 @@ public class SybilRenderer {
      */
     private void renderIPGroups24(Writer out, StringBuilder buf, Map<Integer, List<RouterInfo>> map) throws IOException {
         buf.append("<h3 id=same24 class=sybils>").append(_t("Routers in the same IPv4 /24")).append("</h3>\n");
-        List<Integer> foo = new ArrayList<Integer>(map.keySet());
-        Collections.sort(foo, new FooComparator<Integer>(map));
+        List<Integer> foo = new ArrayList<>(map.keySet());
+        Collections.sort(foo, new FooComparator<>(map));
         boolean found = false;
         for (Integer ii : foo) {
             List<RouterInfo> ris = map.get(ii);
@@ -795,8 +795,8 @@ public class SybilRenderer {
      */
     private void renderIPGroups16(Writer out, StringBuilder buf, Map<Integer, List<RouterInfo>> map) throws IOException {
         buf.append("<h3 id=same16 class=sybils>").append(_t("Routers in the same IPv4 /16 (4 minimum)")).append("</h3>\n");
-        List<Integer> foo = new ArrayList<Integer>(map.keySet());
-        Collections.sort(foo, new FooComparator<Integer>(map));
+        List<Integer> foo = new ArrayList<>(map.keySet());
+        Collections.sort(foo, new FooComparator<>(map));
         boolean found = false;
         for (Integer ii : foo) {
             List<RouterInfo> ris = map.get(ii);
@@ -823,8 +823,8 @@ public class SybilRenderer {
      */
     private void renderIPGroups64(Writer out, StringBuilder buf, Map<Long, List<RouterInfo>> map) throws IOException {
         buf.append("<h3 id=same64 class=sybils>Routers in the same IPv6 /64</h3>");
-        List<Long> foo = new ArrayList<Long>(map.keySet());
-        Collections.sort(foo, new FooComparator<Long>(map));
+        List<Long> foo = new ArrayList<>(map.keySet());
+        Collections.sort(foo, new FooComparator<>(map));
         boolean found = false;
         for (Long ii : foo) {
             List<RouterInfo> ris = map.get(ii);
@@ -854,8 +854,8 @@ public class SybilRenderer {
      */
     private void renderIPGroups48(Writer out, StringBuilder buf, Map<Long, List<RouterInfo>> map) throws IOException {
         buf.append("<h3 id=same48 class=sybils>Routers in the same IPv6 /48 (4 minimum)</h3>");
-        List<Long> foo = new ArrayList<Long>(map.keySet());
-        Collections.sort(foo, new FooComparator<Long>(map));
+        List<Long> foo = new ArrayList<>(map.keySet());
+        Collections.sort(foo, new FooComparator<>(map));
         boolean found = false;
         for (Long ii : foo) {
             List<RouterInfo> ris = map.get(ii);
@@ -885,7 +885,7 @@ public class SybilRenderer {
     private void renderIPGroupsFamily(Writer out, StringBuilder buf, Map<String, List<RouterInfo>> map) throws IOException {
         buf.append("<h3 id=samefamily class=sybils>").append(_t("Routers in the same Family"))
            .append("</h3><div class=\"sybil_container\">\n");
-        List<String> foo = new ArrayList<String>(map.keySet());
+        List<String> foo = new ArrayList<>(map.keySet());
         Collections.sort(foo, new FoofComparator(map));
         FamilyKeyCrypto fkc = _context.router().getFamilyKeyCrypto();
         String ourFamily = fkc != null ? fkc.getOurFamilyName() : null;
@@ -1162,7 +1162,7 @@ public class SybilRenderer {
         Collection<RouterAddress> addrs = info.getAddresses();
         if (addrs.size() > 1) {
             // addrs is unmodifiable
-            List<RouterAddress> laddrs = new ArrayList<RouterAddress>(addrs);
+            List<RouterAddress> laddrs = new ArrayList<>(addrs);
             Collections.sort(laddrs, new NetDbRenderer.RAComparator());
             addrs = laddrs;
         }
@@ -1193,7 +1193,7 @@ public class SybilRenderer {
     public static void renderSybilHTML(Writer out, RouterContext ctx, List<Hash> sybils, String victim) throws IOException {
         if (sybils.isEmpty())
             return;
-        XORComparator<Hash> xor = new XORComparator<Hash>(Hash.FAKE_HASH);
+        XORComparator<Hash> xor = new XORComparator<>(Hash.FAKE_HASH);
         out.write("<h3 class=tabletitle>Group Distances</h3><table class=sybil_distance><tr><th>Hash<th>Distance from previous</tr>\n");
         Collections.sort(sybils, xor);
         Hash prev = null;
@@ -1229,7 +1229,7 @@ public class SybilRenderer {
             out.write("<h3 class=tabletitle>" + _x("Distance for") + ' ' + utcTWO_DECIMALS.format(new Date(now)) +
                       "</h3><table class=sybil_distance><tr><th>Hash<th>Distance<th>Distance from previous</tr>\n");
             Hash rkey = rkgen.getRoutingKey(from, now);
-            xor = new XORComparator<Hash>(rkey);
+            xor = new XORComparator<>(rkey);
             Collections.sort(sybils, xor);
             for (int j = 0; j < limit; j++) {
                 Hash h = sybils.get(j);

@@ -392,14 +392,14 @@ public class UDPTransport extends TransportImpl {
         _log = ctx.logManager().getLog(UDPTransport.class);
         _banLogger = new BanLogger();
         _banLogger.initialize(ctx);
-        _peersByIdent = new ConcurrentHashMap<Hash, PeerState>(128);
-        _peersByRemoteHost = new ConcurrentHashMap<RemoteHostId, PeerState>(128);
-        _peersByConnID = (xdh != null) ? new ConcurrentHashMap<Long, PeerState2>(32) : null;
+        _peersByIdent = new ConcurrentHashMap<>(128);
+        _peersByRemoteHost = new ConcurrentHashMap<>(128);
+        _peersByConnID = (xdh != null) ? new ConcurrentHashMap<>(32) : null;
         // roughly scale based on expected traffic
         int sz = Math.max(16, Math.min(128, getMaxConnections() / 16));
         _recentlyClosedConnIDs = new DestroyedCache(sz);
-        _dropList = new ConcurrentHashSet<RemoteHostId>(2);
-        _endpoints = new CopyOnWriteArrayList<UDPEndpoint>();
+        _dropList = new ConcurrentHashSet<>(2);
+        _endpoints = new CopyOnWriteArrayList<>();
 
         _cachedBid = new SharedBid[BID_VALUES.length];
         for (int i = 0; i < BID_VALUES.length; i++) {
@@ -493,7 +493,7 @@ public class UDPTransport extends TransportImpl {
             shouldSave = true;
         }
         if (shouldSave) {
-            Map<String, String> changes = new HashMap<String, String>(2);
+            Map<String, String> changes = new HashMap<>(2);
             String b64Priv = Base64.encode(_ssu2StaticPrivKey);
             b64Ikey = Base64.encode(ikey);
             changes.put(PROP_SSU2_SP, b64Priv);
@@ -526,7 +526,7 @@ public class UDPTransport extends TransportImpl {
         int port = getRequestedPort();
         if (port <= 0) {
             port = TransportUtil.selectRandomPort(_context, STYLE);
-            Map<String, String> changes = new HashMap<String, String>(2);
+            Map<String, String> changes = new HashMap<>(2);
             String sport = Integer.toString(port);
             changes.put(PROP_INTERNAL_PORT, sport);
             changes.put(PROP_EXTERNAL_PORT, sport);
@@ -1311,7 +1311,7 @@ public class UDPTransport extends TransportImpl {
             String oldIP = _context.getProperty(prop);
             String newIP = Addresses.toString(ip);
             if (!newIP.equals(oldIP)) {
-                Map<String, String> changes = new HashMap<String, String>(2);
+                Map<String, String> changes = new HashMap<>(2);
                 changes.put(prop, newIP);
                 if (ip.length == 4)
                     changes.put(PROP_IP_CHANGE, Long.toString(_context.clock().now()));
@@ -1531,7 +1531,7 @@ public class UDPTransport extends TransportImpl {
                             String oldIP = _context.getProperty(PROP_IPV6);
                             String newIP = Addresses.toString(ourIP);
                             if (!newIP.equals(oldIP)) {
-                                Map<String, String> changes = new HashMap<String, String>(1);
+                                Map<String, String> changes = new HashMap<>(1);
                                 changes.put(PROP_IPV6, newIP);
                                 _context.router().saveConfig(changes, null);
                                 if (oldIP != null) {
@@ -1594,7 +1594,7 @@ public class UDPTransport extends TransportImpl {
             _testEvent.forceRunImmediately(isIPv6);
         } else if (updated) {
             _context.statManager().addRateData("udp.addressUpdated", 1);
-            Map<String, String> changes = new HashMap<String, String>();
+            Map<String, String> changes = new HashMap<>();
             if (!isIPv6 && !fixedPort)
                 changes.put(PROP_EXTERNAL_PORT, Integer.toString(ourPort));
             // Queue a country code lookup of the new IP
@@ -1721,7 +1721,7 @@ public class UDPTransport extends TransportImpl {
      *  @since 0.9.3
      */
     List<PeerState> getPeerStatesByIP(RemoteHostId hostInfo) {
-        List<PeerState> rv = new ArrayList<PeerState>(4);
+        List<PeerState> rv = new ArrayList<>(4);
         byte[] ip = hostInfo.getIP();
         if (ip != null && ip.length == 4) {
             for (PeerState ps : _peersByIdent.values()) {
@@ -1803,7 +1803,7 @@ public class UDPTransport extends TransportImpl {
      * @since 0.9.34
      */
     public List<Hash> getEstablished() {
-        return new ArrayList<Hash>(_peersByIdent.keySet());
+        return new ArrayList<>(_peersByIdent.keySet());
     }
 
     /**
@@ -2639,7 +2639,7 @@ public class UDPTransport extends TransportImpl {
     void send(I2NPMessage msg, List<OutNetMessage> msgs, PeerState peer) {
         try {
             int sz = msgs.size();
-            List<OutboundMessageState> states = new ArrayList<OutboundMessageState>(sz + 1);
+            List<OutboundMessageState> states = new ArrayList<>(sz + 1);
             if (msg != null) {
                 OutboundMessageState state = new OutboundMessageState(_context, msg, peer);
                 states.add(state);
@@ -2667,7 +2667,7 @@ public class UDPTransport extends TransportImpl {
     void send(List<I2NPMessage> msgs, PeerState peer) {
         try {
             int sz = msgs.size();
-            List<OutboundMessageState> states = new ArrayList<OutboundMessageState>(sz);
+            List<OutboundMessageState> states = new ArrayList<>(sz);
             for (int i = 0; i < sz; i++) {
                 OutboundMessageState state = new OutboundMessageState(_context, msgs.get(i), peer);
                 states.add(state);
@@ -3521,7 +3521,7 @@ public class UDPTransport extends TransportImpl {
      */
     @Override
     public List<Long> getClockSkews() {
-        List<Long> skews = new ArrayList<Long>(_peersByIdent.size());
+        List<Long> skews = new ArrayList<>(_peersByIdent.size());
 
         // If our clock is way off, we may not have many (or any) successful connections,
         // so try hard in that case to return good data
@@ -3613,7 +3613,7 @@ public class UDPTransport extends TransportImpl {
 
         public ExpirePeerEvent() {
             super(_context.simpleTimer2());
-            _expireBuffer = new ArrayList<PeerState>();
+            _expireBuffer = new ArrayList<>();
         }
 
         public void timeReached() {
@@ -3975,8 +3975,8 @@ public class UDPTransport extends TransportImpl {
         // if we are or may be symmetric natted, require SSU2 so we don't let an SSU1 test change the state
         boolean requireV2 = peerRole == BOB && !isIPv6 &&
                             (isSymNatted() || STATUS_IPV4_SYMNAT.contains(_reachabilityStatusPending));
-        List<PeerState> peers = new ArrayList<PeerState>(_peersByIdent.values());
-        for (Iterator<PeerState> iter = new RandomIterator<PeerState>(peers); iter.hasNext(); ) {
+        List<PeerState> peers = new ArrayList<>(_peersByIdent.values());
+        for (Iterator<PeerState> iter = new RandomIterator<>(peers); iter.hasNext(); ) {
             PeerState peer = iter.next();
             if (peerRole == BOB) {
                 version = peer.getVersion();

@@ -135,10 +135,10 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		super(ssdpPort, httpPort, binds);
 		_context = context;
 		_log = _context.logManager().getLog(UPnP.class);
-		portsToForward = new HashSet<ForwardPort>();
-		portsForwarded = new HashSet<ForwardPort>();
-		_otherUDNs = new HashMap<String, Device>(4);
-		_eventVars = new HashMap<String, String>(4);
+		portsToForward = new HashSet<>();
+		portsForwarded = new HashSet<>();
+		_otherUDNs = new HashMap<>(4);
+		_eventVars = new HashMap<>(4);
 	}
 
 	public synchronized boolean runPlugin() {
@@ -417,7 +417,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				}
 				if (!portsForwarded.isEmpty()) {
 					fpc = forwardCallback;
-					removeMap = new HashMap<ForwardPort, ForwardPortStatus>(portsForwarded.size());
+					removeMap = new HashMap<>(portsForwarded.size());
 					for (ForwardPort port : portsForwarded) {
 						ForwardPortStatus fps = new ForwardPortStatus(ForwardPortStatus.DEFINITE_FAILURE,
 						                                              "UPnP device changed",
@@ -461,7 +461,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 	private void registerPortMappings() {
 		Set<ForwardPort> ports;
 		synchronized(lock) {
-			ports = new HashSet<ForwardPort>(portsForwarded);
+			ports = new HashSet<>(portsForwarded);
 		}
 		if (ports.isEmpty())
 			return;
@@ -502,7 +502,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 					if (service != null) {
 						Service svc2 = current2.getService(WAN_IPV6_CONNECTION);
 						if (svc2 != null) {
-							List<Service> rv = new ArrayList<Service>(2);
+							List<Service> rv = new ArrayList<>(2);
 							rv.add(service);
 							rv.add(svc2);
 							return rv;
@@ -540,7 +540,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 	public void unregisterPortMappings() {
 		Set<ForwardPort> ports;
 		synchronized(lock) {
-			ports = new HashSet<ForwardPort>(portsForwarded);
+			ports = new HashSet<>(portsForwarded);
 		}
 		if (ports.isEmpty())
 			return;
@@ -580,7 +580,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				_permanentLeasesOnly = false;
 				if (!portsForwarded.isEmpty()) {
 					fpc = forwardCallback;
-					removeMap = new HashMap<ForwardPort, ForwardPortStatus>(portsForwarded.size());
+					removeMap = new HashMap<>(portsForwarded.size());
 					for (ForwardPort port : portsForwarded) {
 						ForwardPortStatus fps = new ForwardPortStatus(ForwardPortStatus.DEFINITE_FAILURE,
                                                                       "UPnP device removed",
@@ -691,7 +691,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			return;
 		if (_log.shouldWarn())
 			_log.warn("Device change, retrying " + sz + " other devices");
-                List<Device> others = new ArrayList<Device>(sz);
+                List<Device> others = new ArrayList<>(sz);
 		synchronized (lock) {
 			others.addAll(_otherUDNs.values());
 		}
@@ -732,7 +732,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 	 */
 	private void updateInterfaces() {
 		Set<String> addrs = getLocalAddresses();
-		Set<String> oldaddrs = new HashSet<String>(addrs.size());
+		Set<String> oldaddrs = new HashSet<>(addrs.size());
 
 		// protect against list mod in super.stop()
 		synchronized(this) {
@@ -1208,7 +1208,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				sb.append("<b>");
 				sb.append(_t("Disabled UPnP Devices"));
 				sb.append(":</b>");
-				List<Map.Entry<String, Device>> other = new ArrayList<Map.Entry<String, Device>>(_otherUDNs.entrySet());
+				List<Map.Entry<String, Device>> other = new ArrayList<>(_otherUDNs.entrySet());
 				Collections.sort(other, new UDNComparator());
 				boolean found = false;
 				for (Map.Entry<String, Device> e : other) {
@@ -1731,7 +1731,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				portsToForward.clear();
 				portsToForwardNow = null;
 			} else {
-				portsToForwardNow = new HashSet<ForwardPort>();
+				portsToForwardNow = new HashSet<>();
 				// Some ports to keep, some ports to dump
 				// Ports in ports but not in portsToForwardNow we must forward
 				// Ports in portsToForwardNow but not in ports we must dump
@@ -1798,7 +1798,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
 						if (!keep) {
 							// Needs dropping
-							if (portsToDumpNow == null) portsToDumpNow = new HashSet<ForwardPort>();
+							if (portsToDumpNow == null) portsToDumpNow = new HashSet<>();
 							portsToDumpNow.add(port);
 						}
 					}
@@ -1840,7 +1840,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
                     if (_log.shouldWarn())
 			_log.warn("UPnP device does not support port forwarding");
 		    Map<ForwardPort, ForwardPortStatus> map =
-			new HashMap<ForwardPort, ForwardPortStatus>(portsToForwardNow.size());
+			new HashMap<>(portsToForwardNow.size());
 		    for (ForwardPort port : portsToForwardNow) {
 			ForwardPortStatus fps = new ForwardPortStatus(ForwardPortStatus.DEFINITE_FAILURE,
                                                                       "UPnP device does not support port forwarding",
@@ -1881,7 +1881,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			if (portsToForwardNow == null)
 				return;
 			Map<ForwardPort, ForwardPortStatus> map =
-				new HashMap<ForwardPort, ForwardPortStatus>(portsToForwardNow.size());
+				new HashMap<>(portsToForwardNow.size());
 			for(ForwardPort port : portsToForwardNow) {
 				String proto = protoToString(port.protocol);
 				ForwardPortStatus fps;
@@ -2011,7 +2011,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
                 props.setProperty(PROP_ADVANCED, "true");
 		I2PAppContext ctx = new I2PAppContext(props);
 		Set<String> addrs = UPnP.getLocalAddresses();
-		List<InetAddress> ias = new ArrayList<InetAddress>(addrs.size());
+		List<InetAddress> ias = new ArrayList<>(addrs.size());
 		for (String addr : addrs) {
 			    try {
 				InetAddress ia = InetAddress.getByName(addr);

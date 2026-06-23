@@ -308,7 +308,7 @@ try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileIn
     /* @since 0.9.59+ */
     public void renderBanlistCompact(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
-        Map<Hash, Banlist.Entry> entries = new TreeMap<Hash, Banlist.Entry>(new HashComparator());
+        Map<Hash, Banlist.Entry> entries = new TreeMap<>(new HashComparator());
         Map<String, String> ipMap = readSessionBansIPMap();
         Map<String, String> hostnameMap = readSessionBansHostnameMap();
         List<IPBanEntry> ipOnlyBans = readSessionBansIPOnly();

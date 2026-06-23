@@ -154,7 +154,7 @@ public final class MLKEM {
         int runs = 200; // warmup
         java.util.Collection<EncType> toTest;
         if (args.length > 0) {
-            toTest = new java.util.ArrayList<EncType>();
+            toTest = new java.util.ArrayList<>();
             for (int i = 0; i < args.length; i++) {
                 EncType type = EncType.parseEncType(args[i]);
                 if (type != null)

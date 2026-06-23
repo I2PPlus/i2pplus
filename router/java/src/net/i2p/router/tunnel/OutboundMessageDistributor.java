@@ -56,7 +56,7 @@ class OutboundMessageDistributor {
         _priority = priority;
         _log = ctx.logManager().getLog(OutboundMessageDistributor.class);
         if (priority <= OutNetMessage.PRIORITY_PARTICIPATING) {
-            _toRouters = new HashSet<Hash>(4);
+            _toRouters = new HashSet<>(4);
             _toRouters.add(ctx.routerHash());
         } else {_toRouters = null;}
         _partBWE = bwe;

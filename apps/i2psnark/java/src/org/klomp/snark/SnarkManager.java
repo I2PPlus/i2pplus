@@ -317,7 +317,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final Set<String> DEFAULT_TRACKER_ANNOUNCES;
 
     /** host names for config form */
-    static final Set<String> KNOWN_OPENTRACKERS = new HashSet<String>(Arrays.asList(new String[] {
+    static final Set<String> KNOWN_OPENTRACKERS = new HashSet<>(Arrays.asList(new String[] {
         "opentracker.bt.i2p", "ev5dpxvcmshi6mil7gaon3b2wbplwylzraxs4wtz7dd5lzdsc2dq.b32.i2p",
         "opentracker.dg2.i2p", "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p",
         "opentracker.r4sas.i2p", "punzipidirfqspstvzpj6gb4tkuykqp6quurj6e23bgxcxhdoe7q.b32.i2p",
@@ -338,7 +338,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     };
 
     static {
-        Set<String> ann = new HashSet<String>(8);
+        Set<String> ann = new HashSet<>(8);
         for (int i = 1; i < DEFAULT_TRACKERS.length; i += 2) {
             if (DEFAULT_TRACKERS[i - 1].equals("TheBland")
                     && !SigType.ECDSA_SHA256_P256.isAvailable()) {
@@ -375,10 +375,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.9.6
      */
     public SnarkManager(I2PAppContext ctx, String ctxPath, String ctxName) {
-        _snarks = new ConcurrentHashMap<String, Snark>();
-        _infoHashToSnark = new HashMap<SHA1Hash, Snark>();
-        _filteredBaseNameToSnark = new HashMap<String, Snark>();
-        _magnets = new ConcurrentHashSet<String>();
+        _snarks = new ConcurrentHashMap<>();
+        _infoHashToSnark = new HashMap<>();
+        _filteredBaseNameToSnark = new HashMap<>();
+        _magnets = new ConcurrentHashSet<>();
         _addSnarkLock = new Object();
         _context = ctx;
         _contextPath = ctxPath;
@@ -398,8 +398,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
         _configDir = migrateConfig(configFile);
         _configFile = new File(_configDir, CONFIG_FILE);
-        _trackerMap = new ConcurrentHashMap<String, Tracker>(4);
-        _torrentCreateFilterMap = new ConcurrentHashMap<String, TorrentCreateFilter>(3);
+        _trackerMap = new ConcurrentHashMap<>(4);
+        _torrentCreateFilterMap = new ConcurrentHashMap<>(3);
         loadConfig(null);
         if (!ctx.isRouterContext()) {
             Runtime.getRuntime()
@@ -891,7 +891,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
         // Gather the props for each torrent, removing them from config
         // old b64 of hash as key
-        Map<String, Properties> configs = new HashMap<String, Properties>(16);
+        Map<String, Properties> configs = new HashMap<>(16);
         for (Iterator<Map.Entry<Object, Object>> iter = oldProps.entrySet().iterator();
                 iter.hasNext(); ) {
             Map.Entry<Object, Object> e = iter.next();
@@ -1240,7 +1240,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     };
             File[] dirnames = dir.listFiles(fileFilter);
             if (dirnames != null) {
-                List<String> th = new ArrayList<String>(dirnames.length);
+                List<String> th = new ArrayList<>(dirnames.length);
                 for (int i = 0; i < dirnames.length; i++) {
                     String name = dirnames[i].getName();
                     if (name.equals("images")) {
@@ -1281,7 +1281,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         String i2cpHost = _config.getProperty(PROP_I2CP_HOST);
         int i2cpPort = getInt(PROP_I2CP_PORT, I2PClient.DEFAULT_LISTEN_PORT);
         String opts = _config.getProperty(PROP_I2CP_OPTS);
-        Map<String, String> i2cpOpts = new HashMap<String, String>();
+        Map<String, String> i2cpOpts = new HashMap<>();
         if (opts != null) {
             StringTokenizer tok = new StringTokenizer(opts, " ");
             while (tok.hasMoreTokens()) {
@@ -1798,7 +1798,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         }
 
-        Map<String, String> opts = new HashMap<String, String>();
+        Map<String, String> opts = new HashMap<>();
         i2cpOpts = DataHelper.stripHTML(i2cpOpts);
         StringTokenizer tok = new StringTokenizer(i2cpOpts, " \t\n");
         while (tok.hasMoreTokens()) {
@@ -1808,7 +1808,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 opts.put(pair.substring(0, split), pair.substring(split + 1));
             }
         }
-        Map<String, String> oldOpts = new HashMap<String, String>();
+        Map<String, String> oldOpts = new HashMap<>();
         String oldI2CPOpts = _config.getProperty(PROP_I2CP_OPTS);
         if (oldI2CPOpts == null) oldI2CPOpts = "";
         tok = new StringTokenizer(oldI2CPOpts, " \t\n");
@@ -2205,7 +2205,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /** Set of canonical .torrent filenames that we are dealing with. An unsynchronized copy. */
     public Set<String> listTorrentFiles() {
-        return new HashSet<String>(_snarks.keySet());
+        return new HashSet<>(_snarks.keySet());
     }
 
     /**
@@ -3341,7 +3341,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.9.20
      */
     private void cleanupTorrentStatus() {
-        Set<SHA1Hash> torrents = new HashSet<SHA1Hash>(32);
+        Set<SHA1Hash> torrents = new HashSet<>(32);
         int found = 0;
         int totalDeleted = 0;
         synchronized (_snarks) {
@@ -4075,7 +4075,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private boolean monitorTorrents(File dir, boolean shouldStart) {
         boolean rv = true;
         File files[] = dir.listFiles(new FileSuffixFilter(".torrent"));
-        List<String> foundNames = new ArrayList<String>(0);
+        List<String> foundNames = new ArrayList<>(0);
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
                 try {
@@ -4218,7 +4218,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.9.1
      */
     public List<Tracker> getSortedTrackers() {
-        List<Tracker> rv = new ArrayList<Tracker>(_trackerMap.values());
+        List<Tracker> rv = new ArrayList<>(_trackerMap.values());
         if (!_util.udpEnabled()) {
             for (Iterator<Tracker> iter = rv.iterator(); iter.hasNext(); ) {
                 Tracker tr = iter.next();
@@ -4238,7 +4238,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public List<TorrentCreateFilter> getSortedTorrentCreateFilterStrings() {
         List<TorrentCreateFilter> fv =
-                new ArrayList<TorrentCreateFilter>(_torrentCreateFilterMap.values());
+                new ArrayList<>(_torrentCreateFilterMap.values());
         Collections.sort(fv, new IgnoreCaseComparatorF());
         return fv;
     }

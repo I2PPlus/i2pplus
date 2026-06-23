@@ -86,7 +86,7 @@ class SSLClientListenerRunner extends ClientListenerRunner {
         if (success) {
             success = ks.exists();
             if (success) {
-                Map<String, String> changes = new HashMap<String, String>();
+                Map<String, String> changes = new HashMap<>();
                 changes.put(PROP_KEYSTORE_PASSWORD, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD);
                 changes.put(PROP_KEY_PASSWORD, keyPassword);
                 _context.router().saveConfig(changes, null);

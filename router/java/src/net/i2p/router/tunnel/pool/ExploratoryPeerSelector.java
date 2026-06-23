@@ -108,7 +108,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 closestExclude = exclude;
             }
 
-            ArraySet<Hash> closest = new ArraySet<Hash>(1);
+            ArraySet<Hash> closest = new ArraySet<>(1);
             if (hiddenInbound || lowOutbound) {
                 // If hidden and inbound, use connected peers to guarantee
                 // that the adjacent hop can connect to us.
@@ -125,7 +125,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                     if (log.shouldWarn()) {
                         log.warn("Firewalled router with no established connections -> Allowing 0-hop exploratory tunnel...");
                     }
-                    return new ArrayList<Hash>(1); // Empty list = 0-hop tunnel
+                    return new ArrayList<>(1); // Empty list = 0-hop tunnel
                 }
             } else if (exploreHighCap) {
                 if (log.shouldInfo())
@@ -203,7 +203,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 }
             }
             if (pickFurthest) {
-                ArraySet<Hash> furthest = new ArraySet<Hash>(1);
+                ArraySet<Hash> furthest = new ArraySet<>(1);
                 if (log.shouldInfo())
                     log.info("EPS SANFP OBEP exclude " + formatExcludedPeers(exclude));
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, exclude, furthest, ipRestriction, ipSet);
@@ -249,7 +249,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         }
 
         if (length > 0) {
-            Set<Hash> matches = new ArraySet<Hash>(length);
+            Set<Hash> matches = new ArraySet<>(length);
             if (exploreHighCap) {
                 if (log.shouldInfo())
                     log.info("EPS SHCP " + length + (isInbound ? " IB " : " OB ") + formatExcludedPeers(exclude));

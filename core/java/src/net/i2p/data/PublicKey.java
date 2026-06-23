@@ -92,7 +92,7 @@ public class PublicKey extends SimpleDataStructure {
     private static final EncType DEF_TYPE = EncType.ELGAMAL_2048;
     public static final int KEYSIZE_BYTES = DEF_TYPE.getPubkeyLen();
     private static final int CACHE_SIZE = 1024;
-    private static final SDSCache<PublicKey> _cache = new SDSCache<PublicKey>(PublicKey.class, KEYSIZE_BYTES, CACHE_SIZE);
+    private static final SDSCache<PublicKey> _cache = new SDSCache<>(PublicKey.class, KEYSIZE_BYTES, CACHE_SIZE);
     private final EncType _type;
     private final int _unknownTypeCode;
 

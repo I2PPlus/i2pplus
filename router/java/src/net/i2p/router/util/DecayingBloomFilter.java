@@ -496,7 +496,7 @@ public class DecayingBloomFilter {
         double fpr = 0d;
         for (int j = 0; j < numRuns; j++) {
             // screen out birthday paradoxes (waste of time and space?)
-            java.util.Set<Long> longs = new java.util.HashSet<Long>(messages);
+            java.util.Set<Long> longs = new java.util.HashSet<>(messages);
             long start = System.currentTimeMillis();
             for (int i = 0; i < messages; i++) {
                 long rand;

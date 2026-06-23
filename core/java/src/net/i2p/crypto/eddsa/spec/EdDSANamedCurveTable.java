@@ -50,10 +50,10 @@ public class EdDSANamedCurveTable {
                     Utils.hexToBytes("5866666666666666666666666666666666666666666666666666666666666666"),
                     true)); // Precompute tables for B
 
-    private static volatile HashMap<String, EdDSANamedCurveSpec> curves = new HashMap<String, EdDSANamedCurveSpec>();
+    private static volatile HashMap<String, EdDSANamedCurveSpec> curves = new HashMap<>();
 
     private static synchronized void putCurve(String name, EdDSANamedCurveSpec curve) {
-        HashMap<String, EdDSANamedCurveSpec> newCurves = new HashMap<String, EdDSANamedCurveSpec>(curves);
+        HashMap<String, EdDSANamedCurveSpec> newCurves = new HashMap<>(curves);
         newCurves.put(name, curve);
         curves = newCurves;
     }

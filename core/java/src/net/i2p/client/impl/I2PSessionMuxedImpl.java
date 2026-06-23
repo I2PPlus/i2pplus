@@ -320,7 +320,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         private final AtomicBoolean stopping = new AtomicBoolean();
 
         public MuxedAvailabilityNotifier() {
-            _msgs = new LinkedBlockingQueue<MsgData>();
+            _msgs = new LinkedBlockingQueue<>();
         }
 
         @Override

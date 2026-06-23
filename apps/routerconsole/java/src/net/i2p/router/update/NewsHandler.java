@@ -49,7 +49,7 @@ public class NewsHandler extends UpdateHandler implements Checker {
     public UpdateTask check(UpdateType type, UpdateMethod method,
                             String id, String currentVersion, long maxTime) {
         if ((type != ROUTER_SIGNED && type != NEWS && type != NEWS_SU3) ||method != HTTP) {return null;}
-        List<URI> updateSources = new ArrayList<URI>(2);
+        List<URI> updateSources = new ArrayList<>(2);
         try {updateSources.add(new URI(ConfigUpdateHelper.getNewsURL(_context)));} // This may be su3 or xml
         catch (URISyntaxException use) {}
         try {updateSources.add(new URI(_context.getProperty(PROP_BACKUP_NEWS_URL_SU3, DEFAULT_BACKUP_NEWS_URL_SU3)));}

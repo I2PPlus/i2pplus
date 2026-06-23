@@ -377,7 +377,7 @@ public class I2PSSLSocketFactory {
                         // DEFAULT_MATCHER remains null
                     }
                 } else {
-                    List<String> list = new ArrayList<String>(320);
+                    List<String> list = new ArrayList<>(320);
                     addCountries(ctx, list);
                     list.addAll(Arrays.asList(DEFAULT_TLDS));
                     list.addAll(Arrays.asList(ADDITIONAL_TLDS));
@@ -403,8 +403,8 @@ public class I2PSSLSocketFactory {
         List<String> ae = a.getExceptions();
         List<String> br = b.getRules();
         List<String> be = b.getExceptions();
-        List<String> cr = new ArrayList<String>(ar.size() + br.size());
-        List<String> ce = new ArrayList<String>(ae.size() + be.size());
+        List<String> cr = new ArrayList<>(ar.size() + br.size());
+        List<String> ce = new ArrayList<>(ae.size() + be.size());
         cr.addAll(ar);
         cr.addAll(br);
         ce.addAll(ae);
@@ -599,10 +599,10 @@ public class I2PSSLSocketFactory {
     private static String[] select(
             String[] enabledArr, String[] supportedArr, List<String> toEnable, List<String> toExclude) {
         Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PSSLSocketFactory.class);
-        Set<String> selected = new HashSet<String>(enabledArr.length);
+        Set<String> selected = new HashSet<>(enabledArr.length);
         selected.addAll(Arrays.asList(enabledArr));
         selected.removeAll(toExclude);
-        Set<String> supported = new HashSet<String>(supportedArr.length);
+        Set<String> supported = new HashSet<>(supportedArr.length);
         supported.addAll(Arrays.asList(supportedArr));
         for (String s : toEnable) {
             if (supported.contains(s)) {
@@ -619,7 +619,7 @@ public class I2PSSLSocketFactory {
             return enabledArr;
         }
         if (log.shouldDebug()) {
-            List<String> foo = new ArrayList<String>(selected);
+            List<String> foo = new ArrayList<>(selected);
             Collections.sort(foo);
             log.debug("Selected: " + foo);
         }

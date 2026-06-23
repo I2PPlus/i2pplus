@@ -23,7 +23,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public class I2PAppThread extends I2PThread {
 
-    private final Set<OOMEventListener> _threadListeners = new CopyOnWriteArraySet<OOMEventListener>();
+    private final Set<OOMEventListener> _threadListeners = new CopyOnWriteArraySet<>();
 
     public I2PAppThread() {
         super();

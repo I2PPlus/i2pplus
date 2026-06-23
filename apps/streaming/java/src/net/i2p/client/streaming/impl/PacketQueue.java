@@ -46,7 +46,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     public PacketQueue(I2PAppContext context, SimpleTimer2 timer) {
         _context = context;
         _log = context.logManager().getLog(PacketQueue.class);
-        _messageStatusMap = new ConcurrentHashMap<Long, Connection>(16);
+        _messageStatusMap = new ConcurrentHashMap<>(16);
         new RemoveExpired(timer);
         // all createRateStats in ConnectionManager
     }

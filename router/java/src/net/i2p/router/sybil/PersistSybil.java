@@ -89,7 +89,7 @@ public class PersistSybil {
      */
     public synchronized List<Long> load() {
         File dir = new File(_context.getConfigDir(), DIR);
-        List<Long> rv = new ArrayList<Long>();
+        List<Long> rv = new ArrayList<>();
         File[] files = dir.listFiles(new FileSuffixFilter(PFX, SFX));
         if (files == null)
             return rv;
@@ -112,7 +112,7 @@ public class PersistSybil {
     public synchronized Map<Hash, Points> load(long date) throws IOException {
         File dir = new File(_context.getConfigDir(), DIR);
         File file = new File(dir, PFX + date + SFX);
-        Map<Hash, Points> rv = new HashMap<Hash, Points>();
+        Map<Hash, Points> rv = new HashMap<>();
         BufferedReader in = null;
         try {
                 in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), "UTF-8"));
@@ -150,7 +150,7 @@ public class PersistSybil {
     public synchronized Map<Long, Points> load(Hash h) throws IOException {
         String bh = h.toBase64() + ':';
         File dir = new File(_context.getConfigDir(), DIR);
-        Map<Long, Points> rv = new HashMap<Long, Points>();
+        Map<Long, Points> rv = new HashMap<>();
         List<Long> dates = load();
         for (Long date : dates) {
             File file = new File(dir, PFX + date + SFX);
@@ -290,7 +290,7 @@ public class PersistSybil {
             try {
                 br = new BufferedReader(new InputStreamReader(
                         new FileInputStream(blFile), "UTF-8"));
-                rv = new HashMap<String, Long>();
+                rv = new HashMap<>();
                 String buf = null;
                 long now = _context.clock().now() + 5*60*1000L;
                 while ((buf = br.readLine()) != null) {
@@ -332,7 +332,7 @@ public class PersistSybil {
         File blFile = new File(dir, BLOCKLIST_SYBIL_FILE);
         Map<String, Long> map = readBlocklist(blFile);
         if (map == null)
-            map = new HashMap<String, Long>();
+            map = new HashMap<>();
         Long until = Long.valueOf(blockUntil);
         for (String s : blocks) {
             Long old = map.put(s, until);
@@ -384,7 +384,7 @@ public class PersistSybil {
         Points p = new Points(1.234, rsn);
         rsn = "Test reason2";
         p.addPoints(2.345, rsn);
-        Map<Hash, Points> map = new HashMap<Hash, Points>();
+        Map<Hash, Points> map = new HashMap<>();
         map.put(h, p);
         b = new byte[32];
         ctx.random().nextBytes(b);

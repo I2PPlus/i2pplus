@@ -160,7 +160,7 @@ public class CreateRouterInfoJob extends JobImpl {
             pkf.write();
 
             // set or overwrite old random keys
-            Map<String, String> map = new HashMap<String, String>(2);
+            Map<String, String> map = new HashMap<>(2);
             byte rk[] = new byte[32];
             ctx.random().nextBytes(rk);
             map.put(Router.PROP_IB_RANDOM_KEY, Base64.encode(rk));

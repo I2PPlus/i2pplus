@@ -59,7 +59,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     public GraphGenerator(RouterContext ctx) {
         _context = ctx;
         _log = _context.logManager().getLog(getClass());
-        _listeners = new CopyOnWriteArrayList<GraphListener>();
+        _listeners = new CopyOnWriteArrayList<>();
         _sem = new Semaphore(MAX_CONCURRENT_PNG, true);
         _context.addShutdownTask(new Shutdown());
     }
@@ -96,7 +96,7 @@ public class GraphGenerator implements Runnable, ClientApp {
             String[] rates = DataHelper.split(spec, ",");
             syncThreads = 1;
             // delete files for unconfigured rates
-            Set<String> configured = new HashSet<String>(rates.length);
+            Set<String> configured = new HashSet<>(rates.length);
             for (String r : rates) {configured.add(GraphListener.createName(_context, r));}
             File rrdDir = new File(_context.getRouterDir(), GraphListener.RRD_DIR);
             FileFilter filter = new FileSuffixFilter(GraphListener.RRD_PREFIX, GraphListener.RRD_SUFFIX);
@@ -414,7 +414,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     public Set<Rate> parseSpecs(String specs) {
         if (specs == null) {return Collections.emptySet();}
         StringTokenizer tok = new StringTokenizer(specs, ",");
-        Set<Rate> rv = new HashSet<Rate>();
+        Set<Rate> rv = new HashSet<>();
         while (tok.hasMoreTokens()) {
             String spec = tok.nextToken();
             int split = spec.lastIndexOf('.');

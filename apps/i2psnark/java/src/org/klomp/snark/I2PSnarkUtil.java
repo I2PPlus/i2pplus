@@ -151,10 +151,10 @@ public class I2PSnarkUtil implements DisconnectListener {
         _log = _context.logManager().getLog(I2PSnarkUtil.class);
         _baseName = baseName;
         _discon = discon;
-        _opts = new HashMap<String, String>();
+        _opts = new HashMap<>();
         // setProxy("127.0.0.1", 4444);
         setI2CPConfig("127.0.0.1", I2PClient.DEFAULT_LISTEN_PORT, null);
-        _banlist = new ConcurrentHashSet<Hash>();
+        _banlist = new ConcurrentHashSet<>();
         _maxUploaders = Snark.MAX_TOTAL_UPLOADERS;
         _maxUpBW = SnarkManager.DEFAULT_MAX_UP_BW;
         _maxConnections = MAX_CONNECTIONS;
@@ -270,7 +270,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public Map<String, String> getI2CPOptions() {
         synchronized (_opts) {
-            return new HashMap<String, String>(_opts);
+            return new HashMap<>(_opts);
         }
     }
 

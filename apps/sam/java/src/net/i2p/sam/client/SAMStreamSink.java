@@ -165,7 +165,7 @@ public class SAMStreamSink {
         _destFile = destFile;
         _sinkDir = sinkDir;
         _conOptions = "";
-        _remotePeers = new HashMap<String, Sink>();
+        _remotePeers = new HashMap<>();
     }
 
     public void startup(String version, boolean isSSL, int mode, String user, String password, String sessionOpts) {

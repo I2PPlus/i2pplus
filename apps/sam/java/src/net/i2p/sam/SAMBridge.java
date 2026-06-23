@@ -121,8 +121,8 @@ public class SAMBridge implements Runnable, ClientApp {
             throw new IllegalArgumentException("SSL requires Java 7 or higher");
         persistFilename = options.keyFile;
         _configFile = options.configFile;
-        nameToPrivKeys = new HashMap<String, String>(8);
-        _handlers = new HashSet<Handler>(8);
+        nameToPrivKeys = new HashMap<>(8);
+        _handlers = new HashSet<>(8);
         this.i2cpProps = options.opts;
         _state = INITIALIZED;
     }
@@ -185,8 +185,8 @@ public class SAMBridge implements Runnable, ClientApp {
         this.i2cpProps = i2cpProps;
         persistFilename = persistFile;
         _configFile = configFile;
-        nameToPrivKeys = new HashMap<String, String>(8);
-        _handlers = new HashSet<Handler>(8);
+        nameToPrivKeys = new HashMap<>(8);
+        _handlers = new HashSet<>(8);
         loadKeys();
         try {
             openSocket();
@@ -379,7 +379,7 @@ public class SAMBridge implements Runnable, ClientApp {
         List<Handler> handlers = null;
         synchronized (_handlers) {
             if (!_handlers.isEmpty()) {
-                handlers = new ArrayList<Handler>(_handlers);
+                handlers = new ArrayList<>(_handlers);
                 _handlers.clear();
             }
         }

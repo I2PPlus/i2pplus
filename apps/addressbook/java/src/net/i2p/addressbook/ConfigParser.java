@@ -86,7 +86,7 @@ class ConfigParser {
      */
     private static Map<String, String> parse(BufferedReader input) throws IOException {
         try {
-            Map<String, String> result = new HashMap<String, String>();
+            Map<String, String> result = new HashMap<>();
             String inputLine;
             while ((inputLine = input.readLine()) != null) {
                 inputLine = stripComments(inputLine);
@@ -205,7 +205,7 @@ class ConfigParser {
      */
     private static List<String> parseSubscriptions(BufferedReader input) throws IOException {
         try {
-            List<String> result = new ArrayList<String>(4);
+            List<String> result = new ArrayList<>(4);
             String inputLine;
             while ((inputLine = input.readLine()) != null) {
                 inputLine = stripComments(inputLine).trim();

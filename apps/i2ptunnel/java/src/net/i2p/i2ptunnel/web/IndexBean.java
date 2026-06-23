@@ -82,14 +82,14 @@ public class IndexBean {
     /** 3 wasn't enough for some browsers. They are reloading the page for some reason - maybe HEAD? @since 0.8.1 */
     private static final int MAX_NONCES = 8;
     /** store nonces in a static FIFO instead of in System Properties @since 0.8.1 */
-    private static final List<String> _nonces = new ArrayList<String>(MAX_NONCES + 1);
+    private static final List<String> _nonces = new ArrayList<>(MAX_NONCES + 1);
 
     /** Session-bound nonce for CSRF protection, replaces static nonces @since 0.9.69 */
     private static final String SESSION_NONCE = "__i2ptunnel.nonce.queue__";
     private static final int SESSION_NONCE_QUEUE_SIZE = 10;
 
     private static final int MAX_FORM_KEYS = 100;
-    private static final Map<Integer, SessionKey> _formKeys = new HashMap<Integer, SessionKey>();
+    private static final Map<Integer, SessionKey> _formKeys = new HashMap<>();
     private static final UIMessages _messages = new UIMessages(100);
     private static final List<TimestampedMessage> _timestampedMessages = new ArrayList<>(100);
     private static final int MAX_SEEN_MESSAGES = 500;
@@ -188,7 +188,7 @@ public class IndexBean {
         synchronized(session) {
             LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_NONCE);
             if (nonces == null) {
-                nonces = new LinkedList<String>();
+                nonces = new LinkedList<>();
                 session.setAttribute(SESSION_NONCE, nonces);
             }
             nonces.offer(rv);
@@ -643,7 +643,7 @@ public class IndexBean {
     public List<Integer> getControllerNumbers(boolean isClient) {
         if (_group == null) {return Collections.emptyList();}
         List<TunnelController> all = _group.getControllers();
-        List<Integer> rv = new ArrayList<Integer>(all.size());
+        List<Integer> rv = new ArrayList<>(all.size());
         for (int i = 0; i < all.size(); i++) {
             TunnelController tc = all.get(i);
             if (tc.isClient() == isClient) {rv.add(Integer.valueOf(i));}

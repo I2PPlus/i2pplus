@@ -71,7 +71,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         opts.remove("i2p.streaming.maxWindowSize");
 
         setName("SOCKS Proxy on " + tunnel.listenHost + ':' + localPort);
-        proxies = new HashMap<String, List<String>>(1);
+        proxies = new HashMap<>(1);
         parseOptions();
         notifyEvent("openSOCKSTunnelResult", "ok");
     }
@@ -134,7 +134,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
            if ((!prop.startsWith(PROP_PROXY_PREFIX)) || prop.length() <= PROP_PROXY_PREFIX.length())
               continue;
            String port = prop.substring(PROP_PROXY_PREFIX.length());
-           List<String> proxyList = new ArrayList<String>(1);
+           List<String> proxyList = new ArrayList<>(1);
            StringTokenizer tok = new StringTokenizer((String)e.getValue(), ", \t");
            while (tok.hasMoreTokens()) {
                String proxy = tok.nextToken().trim();

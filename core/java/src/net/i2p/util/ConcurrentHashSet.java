@@ -18,11 +18,11 @@ public class ConcurrentHashSet<E> extends AbstractSet<E> implements Set<E> {
     private final Map<E, Object> _map;
 
     public ConcurrentHashSet() {
-        _map = new ConcurrentHashMap<E, Object>();
+        _map = new ConcurrentHashMap<>();
     }
 
     public ConcurrentHashSet(int capacity) {
-        _map = new ConcurrentHashMap<E, Object>(capacity);
+        _map = new ConcurrentHashMap<>(capacity);
     }
 
     @Override

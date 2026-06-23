@@ -88,7 +88,7 @@ public final class SelfSignedGenerator {
     private static final Map<String, String> OIDS;
 
     static {
-        OIDS = new HashMap<String, String>(16);
+        OIDS = new HashMap<>(16);
         // only OIDs in the distinguished name need to be in here
         OIDS.put(OID_CN, "CN");
         OIDS.put(OID_C, "C");
@@ -686,9 +686,9 @@ public final class SelfSignedGenerator {
         // SEQUENCE doesn't have to be sorted, but let's do it for consistency,
         // so it's platform-independent and the same after renewal
         if (altNames == null) {
-            altNames = new TreeSet<String>();
+            altNames = new TreeSet<>();
         } else {
-            altNames = new TreeSet<String>(altNames);
+            altNames = new TreeSet<>(altNames);
             altNames.remove("0:0:0:0:0:0:0:1"); // We don't want dup of "::1"
         }
         altNames.add(cname);
@@ -1042,7 +1042,7 @@ public final class SelfSignedGenerator {
      * X509Certificate cert = (X509Certificate) rv[2];
      * X509CRL crl = (X509CRL) rv[3];
      * File ks = new File(name + ".ks");
-     * List<X509Certificate> certs = new ArrayList<X509Certificate>(1);
+     * List<X509Certificate> certs = new ArrayList<>(1);
      * certs.add(cert);
      * KeyStoreUtil.storePrivateKey(ks, "changeit", "foo", "foobar", jpriv, certs);
      * System.out.println("Private key saved to " + ks + " with alias foo, password foobar, keystore password changeit");

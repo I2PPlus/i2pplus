@@ -97,9 +97,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      */
     public FloodfillNetworkDatabaseFacade(RouterContext context, Hash dbid) {
         super(context, dbid);
-        _activeFloodQueries = new ConcurrentHashMap<Hash, FloodSearchJob>();
-        _verifiesInProgress = new ConcurrentHashSet<Hash>(8);
-        _searchTimeouts = new ConcurrentHashMap<Long, List<TimeoutEntry>>();
+        _activeFloodQueries = new ConcurrentHashMap<>();
+        _verifiesInProgress = new ConcurrentHashSet<>(8);
+        _searchTimeouts = new ConcurrentHashMap<>();
         _timeoutProcessor = new BatchedSearchTimeoutProcessor();
 
         long[] rate = new long[] { RateConstants.ONE_MINUTE };
@@ -658,7 +658,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
     public List<RouterInfo> getKnownRouterData() {
-        List<RouterInfo> rv = new ArrayList<RouterInfo>();
+        List<RouterInfo> rv = new ArrayList<>();
         DataStore ds = getDataStore();
         if (ds != null) {
             for (DatabaseEntry o : ds.getEntries()) {

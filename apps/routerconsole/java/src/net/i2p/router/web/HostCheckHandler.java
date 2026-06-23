@@ -38,7 +38,7 @@ public class HostCheckHandler extends GzipHandler
         super();
         _context = ctx;
         _portMapper = ctx.portMapper();
-        _listenHosts = new HashSet<String>(8);
+        _listenHosts = new HashSet<>(8);
         //setMinGzipSize(64*1024);
         // set this super small so we clobber almost everything
         // this has the side effect of faster page loads with less progressive rendering

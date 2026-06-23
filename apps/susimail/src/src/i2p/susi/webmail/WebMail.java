@@ -261,8 +261,8 @@ public class WebMail extends HttpServlet {
         public String lastNotice = "";
 
         SessionObject(Log log) {
-            nonces = new ArrayList<String>(MAX_NONCES + 1);
-            caches = new HashMap<String, MailCache>(8);
+            nonces = new ArrayList<>(MAX_NONCES + 1);
+            caches = new HashMap<>(8);
             this.log = log;
             String dbg = Config.getProperty(CONFIG_DEBUG);
             if (dbg != null) {
@@ -1192,7 +1192,7 @@ public class WebMail extends HttpServlet {
                             // Copy each valid attachment from the mail to a file
                             // in Drafts/attachments and add to list
                             // This is similar to the add attachment code in processComposeButtons()
-                            attachments = new ArrayList<Attachment>(parts.size());
+                            attachments = new ArrayList<>(parts.size());
                             MailCache drafts = sessionObject.caches.get(DIR_DRAFTS);
                             for (MailPart mp : parts) {
                                 if (mp.name == null || mp.type == null) {
@@ -1215,7 +1215,7 @@ public class WebMail extends HttpServlet {
                             }
                         } else if ("text/html".equals(part.type)) {
                             // HTML-only email, add as attachment
-                            attachments = new ArrayList<Attachment>(1);
+                            attachments = new ArrayList<>(1);
                             MailCache drafts = sessionObject.caches.get(DIR_DRAFTS);
                             String temp = "susimail-attachment-" + ctx.random().nextLong();
                             File f;
@@ -1308,7 +1308,7 @@ public class WebMail extends HttpServlet {
      * @return non-null List of Base64 UIDLs, or attachment numbers as Strings
      */
     private static List<String> getCheckedItems(RequestWrapper request) {
-        List<String> rv = new ArrayList<String>(8);
+        List<String> rv = new ArrayList<>(8);
         for (Enumeration<String> e = request.getParameterNames(); e.hasMoreElements();) {
             String parameter = e.nextElement();
             if (parameter.startsWith("check") && request.getParameter(parameter).equals("1")) {
@@ -1391,7 +1391,7 @@ public class WebMail extends HttpServlet {
                     } else {encodeTo = "base64";}
                     Encoding encoding = EncodingFactory.getEncoding(encodeTo);
                     if (encoding != null) {
-                        if (sessionObject.attachments == null) {sessionObject.attachments = new ArrayList<Attachment>();}
+                        if (sessionObject.attachments == null) {sessionObject.attachments = new ArrayList<>();}
                         sessionObject.attachments.add(new Attachment(filename, contentType, encodeTo, f));
                         // Save the draft
                         String uidl = Base64.decodeToString(request.getParameter(NEW_UIDL));
@@ -1708,7 +1708,7 @@ public class WebMail extends HttpServlet {
                     sessionObject.reallyDelete = false;
                 } else if (mc.getFolderName().equals(DIR_TRASH) || buttonPressed(request, REALLYDELETE)) {
                     // Delete from Trash does not require confirmation
-                    List<String> toDelete = new ArrayList<String>(m);
+                    List<String> toDelete = new ArrayList<>(m);
                     for (String b64UIDL : b64uidls) {
                         String uidl = Base64.decodeToString(b64UIDL); // This is the I2P Base64, not the encoder
                         if (uidl != null) {toDelete.add(uidl);}
@@ -2737,9 +2737,9 @@ public class WebMail extends HttpServlet {
         if (fixed) {
             from = getDefaultSender(sessionObject);
         }
-        ArrayList<String> toList = new ArrayList<String>();
-        ArrayList<String> ccList = new ArrayList<String>();
-        ArrayList<String> bccList = new ArrayList<String>();
+        ArrayList<String> toList = new ArrayList<>();
+        ArrayList<String> ccList = new ArrayList<>();
+        ArrayList<String> bccList = new ArrayList<>();
 
         // no validation
         Mail.getRecipientsFromList(toList, to, ok);
@@ -2847,10 +2847,10 @@ public class WebMail extends HttpServlet {
         String subject = draft.subject;
         List<Attachment> attachments = draft.getAttachments();
 
-        ArrayList<String> toList = new ArrayList<String>();
-        ArrayList<String> ccList = new ArrayList<String>();
-        ArrayList<String> bccList = new ArrayList<String>();
-        ArrayList<String> recipients = new ArrayList<String>();
+        ArrayList<String> toList = new ArrayList<>();
+        ArrayList<String> ccList = new ArrayList<>();
+        ArrayList<String> bccList = new ArrayList<>();
+        ArrayList<String> recipients = new ArrayList<>();
 
         String sender = null;
 
@@ -3194,7 +3194,7 @@ public class WebMail extends HttpServlet {
             List<Attachment> a = draft.getAttachments();
             if (!a.isEmpty()) {
                 if (sessionObject.attachments == null) {
-                    sessionObject.attachments = new ArrayList<Attachment>(a.size());
+                    sessionObject.attachments = new ArrayList<>(a.size());
                 } else {sessionObject.attachments.clear();}
                 sessionObject.attachments.addAll(a);
             } else if (sessionObject.attachments != null) {sessionObject.attachments.clear();}
@@ -3826,7 +3826,7 @@ public class WebMail extends HttpServlet {
         if (hasHeader) {
             buf.append(button(REPLY, _t("Reply")));
             // dedup sender/to/cc/us to get a true count of recipients
-            Set<String> rep = new HashSet<String>();
+            Set<String> rep = new HashSet<>();
             if (mail.to != null) {rep.addAll(Arrays.asList(mail.to));}
             if (mail.cc != null) {rep.addAll(Arrays.asList(mail.cc));}
             if (mail.reply == null) {rep.remove(mail.sender);}
@@ -4016,7 +4016,7 @@ public class WebMail extends HttpServlet {
         FileFilter fileFilter = new FileFilter() {public boolean accept(File file) {return file.isDirectory();} };
         File[] dirnames = dir.listFiles(fileFilter);
         if (dirnames != null) {
-            List<String> th = new ArrayList<String>(dirnames.length);
+            List<String> th = new ArrayList<>(dirnames.length);
             for (int i = 0; i < dirnames.length; i++) {
                 String name = dirnames[i].getName();
                 th.add(name);

@@ -39,7 +39,7 @@ public class ConfigTunnelsHandler extends FormHandler {
     private void saveChanges() {
         TunnelManagerFacade mgr = _context.tunnelManager();
         boolean saveRequired = false;
-        Map<String, String> changes = new HashMap<String, String>();
+        Map<String, String> changes = new HashMap<>();
 
         if (_log.shouldDebug())
             _log.debug("Saving changes, with props = " + _settings + ".");

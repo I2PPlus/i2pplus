@@ -63,11 +63,11 @@ public class PluginStarter implements Runnable {
                                                        "susimail", "addressbook", "routerconsole" };
     private static final String[] STANDARD_THEMES = { "images", "light", "dark", "classic",
                                                       "midnight" };
-    private static Map<String, ThreadGroup> pluginThreadGroups = new ConcurrentHashMap<String, ThreadGroup>();   // one thread group per plugin (map key=plugin name)
+    private static Map<String, ThreadGroup> pluginThreadGroups = new ConcurrentHashMap<>();   // one thread group per plugin (map key=plugin name)
     private static Map<String, Collection<SimpleTimer2.TimedEvent>> _pendingPluginClients =
-                   new ConcurrentHashMap<String, Collection<SimpleTimer2.TimedEvent>>();
-    private static Map<String, ClassLoader> _clCache = new ConcurrentHashMap<String, ClassLoader>();
-    private static Map<String, Collection<String>> pluginWars = new ConcurrentHashMap<String, Collection<String>>();
+                   new ConcurrentHashMap<>();
+    private static Map<String, ClassLoader> _clCache = new ConcurrentHashMap<>();
+    private static Map<String, Collection<String>> pluginWars = new ConcurrentHashMap<>();
 
     /**
      *  Plugin name to plugin version of plugins that do not work
@@ -79,7 +79,7 @@ public class PluginStarter implements Runnable {
     public static final Map<String, String> jetty9Blacklist;
 
     static {
-        Map<String, String> map = new HashMap<String, String>(2);
+        Map<String, String> map = new HashMap<>(2);
         map.put("i2pbote", "0.4.5");
         map.put("BwSchedule", "0.0.36");
         jetty9Blacklist = Collections.unmodifiableMap(map);
@@ -95,7 +95,7 @@ public class PluginStarter implements Runnable {
     public static final Map<String, String> java9Blacklist;
 
     static {
-        Map<String, String> map = new HashMap<String, String>(2);
+        Map<String, String> map = new HashMap<>(2);
         map.put("01_neodatis", "2.1-2.14-209-17");
         map.put("02_seedless", "0.1.7-0.1.12");
         java9Blacklist = Collections.unmodifiableMap(map);
@@ -157,7 +157,7 @@ public class PluginStarter implements Runnable {
      */
     private static void updateAll(RouterContext ctx, boolean delay) {
         List<String> plugins = getPlugins();
-        Map<String, String> toUpdate = new HashMap<String, String>();
+        Map<String, String> toUpdate = new HashMap<>();
         for (String appName : plugins) {
             Properties props = pluginProperties(ctx, appName);
             String url = props.getProperty("updateURL");
@@ -459,7 +459,7 @@ public class PluginStarter implements Runnable {
             File files[] = webappDir.listFiles(RouterConsoleRunner.WAR_FILTER);
             if (files != null) {
                 if(!pluginWars.containsKey(appName))
-                    pluginWars.put(appName, new ConcurrentHashSet<String>());
+                    pluginWars.put(appName, new ConcurrentHashSet<>());
                 for (int i = 0; i < files.length; i++) {
                     try {
                         String warName = files[i].getName();
@@ -684,8 +684,8 @@ public class PluginStarter implements Runnable {
         File[] tfiles = dir.listFiles();
         if (tfiles != null) {
             String current = ctx.getProperty(CSSHelper.PROP_THEME_NAME);
-            Map<String, String> changes = new HashMap<String, String>();
-            List<String> removes = new ArrayList<String>();
+            Map<String, String> changes = new HashMap<>();
+            List<String> removes = new ArrayList<>();
             for (int i = 0; i < tfiles.length; i++) {
                 String name = tfiles[i].getName();
                 if (tfiles[i].isDirectory() && (!Arrays.asList(STANDARD_THEMES).contains(name))) {
@@ -796,7 +796,7 @@ public class PluginStarter implements Runnable {
      *  @since 0.9.13
      */
     private static List<String> getAllPlugins() {
-        List<String> rv = new ArrayList<String>();
+        List<String> rv = new ArrayList<>();
         File pluginDir = new File(I2PAppContext.getGlobalContext().getConfigDir(), PLUGIN_DIR);
         File[] files = pluginDir.listFiles();
         if (files == null)
@@ -814,7 +814,7 @@ public class PluginStarter implements Runnable {
      *  Last one wins if a dup (installer should prevent dups)
      */
     public static Map<String, String> getPluginKeys(I2PAppContext ctx) {
-        Map<String, String> rv = new HashMap<String, String>();
+        Map<String, String> rv = new HashMap<>();
         List<String> names = getPlugins();
         for (String name : names) {
             Properties props = pluginProperties(ctx, name);
@@ -855,7 +855,7 @@ public class PluginStarter implements Runnable {
             pluginThreadGroups.put(pluginName, new ThreadGroup(pluginName));
         ThreadGroup pluginThreadGroup = pluginThreadGroups.get(pluginName);
         if (action.equals("start"))
-            _pendingPluginClients.put(pluginName, new ConcurrentHashSet<SimpleTimer2.TimedEvent>());
+            _pendingPluginClients.put(pluginName, new ConcurrentHashSet<>());
 
         for(ClientAppConfig app : apps) {
             // If the client is a running ClientApp that we want to stop,
@@ -1141,7 +1141,7 @@ public class PluginStarter implements Runnable {
      */
     private static URL[] classpathToURLArray(String classpath, String clientName, Log log) {
         StringTokenizer tok = new StringTokenizer(classpath, ",");
-        List<URL> urls = new ArrayList<URL>();
+        List<URL> urls = new ArrayList<>();
         while (tok.hasMoreTokens()) {
             String elem = tok.nextToken().trim();
             File f = new File(elem);

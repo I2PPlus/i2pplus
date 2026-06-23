@@ -192,7 +192,7 @@ public abstract class CommSystemFacade implements Service {
      *  @since 0.9.31
      */
     public SortedMap<String, Transport> getTransports() {
-        return new TreeMap<String, Transport>();
+        return new TreeMap<>();
     }
 
     /**

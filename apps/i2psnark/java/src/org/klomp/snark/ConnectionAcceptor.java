@@ -52,7 +52,7 @@ class ConnectionAcceptor implements Runnable {
     private final PeerAcceptor peeracceptor;
     private Thread thread;
     private final I2PSnarkUtil _util;
-    private final ObjectCounter<Hash> _badCounter = new ObjectCounter<Hash>();
+    private final ObjectCounter<Hash> _badCounter = new ObjectCounter<>();
     private final SimpleTimer2.TimedEvent _cleaner;
     private volatile boolean stop; // protocol errors before blacklisting.
     private static final int MAX_BAD = 1;

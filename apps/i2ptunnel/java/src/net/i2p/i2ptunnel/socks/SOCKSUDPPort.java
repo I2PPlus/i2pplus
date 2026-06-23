@@ -33,7 +33,7 @@ public class SOCKSUDPPort implements Source, Sink {
     public SOCKSUDPPort(InetAddress host, int port, Map<Integer, SOCKSUDPPort> replyMap) {
 
         // this passes the host and port from UDPUnwrapper to UDPWrapper
-        Map<I2PSocketAddress, SOCKSHeader> cache = new ConcurrentHashMap<I2PSocketAddress, SOCKSHeader>(4);
+        Map<I2PSocketAddress, SOCKSHeader> cache = new ConcurrentHashMap<>(4);
 
         // rcv from I2P and send to a port
         this.wrapper = new SOCKSUDPWrapper(cache);

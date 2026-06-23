@@ -52,15 +52,15 @@ class StoreState {
         _context = ctx;
         _key = key;
         _data = data;
-        _pendingPeers = new HashSet<Hash>(4);
-        _pendingPeerTimes = new HashMap<Hash, Long>(4);
-        _pendingMessages = new ConcurrentHashMap<Hash, WrappedMessage>(4);
+        _pendingPeers = new HashSet<>(4);
+        _pendingPeerTimes = new HashMap<>(4);
+        _pendingMessages = new ConcurrentHashMap<>(4);
         if (toSkip != null) {
             _attemptedPeers = toSkip;
         } else {
-            _attemptedPeers = new HashSet<Hash>(8);
+            _attemptedPeers = new HashSet<>(8);
         }
-        _successfulPeers = new HashSet<Hash>(4);
+        _successfulPeers = new HashSet<>(4);
         _completed = -1;
         _started = _context.clock().now();
     }
@@ -81,7 +81,7 @@ public int getPendingCount() {
      */
     public Set<Hash> getAttempted() {
         synchronized (_attemptedPeers) {
-            return new HashSet<Hash>(_attemptedPeers);
+            return new HashSet<>(_attemptedPeers);
         }
     }
 

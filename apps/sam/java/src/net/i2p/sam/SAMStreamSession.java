@@ -57,9 +57,9 @@ class SAMStreamSession implements SAMMessageSess {
     protected final I2PSocketManager socketMgr;
 
     /** stream id (Long) to SAMStreamSessionSocketReader */
-    private final HashMap<Integer,SAMStreamSessionSocketReader> handlersMap = new HashMap<Integer,SAMStreamSessionSocketReader>();
+    private final HashMap<Integer,SAMStreamSessionSocketReader> handlersMap = new HashMap<>();
     /** stream id (Long) to StreamSender */
-    private final HashMap<Integer,StreamSender> sendersMap = new HashMap<Integer,StreamSender>();
+    private final HashMap<Integer,StreamSender> sendersMap = new HashMap<>();
 
     private final AtomicInteger lastNegativeId = new AtomicInteger();
 
@@ -806,7 +806,7 @@ class SAMStreamSession implements SAMMessageSess {
 
 	public V1StreamSender ( I2PSocket s, int id ) throws IOException {
 	    super ( s, id );
-            _data = new ArrayList<ByteArray>(1);
+            _data = new ArrayList<>(1);
             _cache = ByteCache.getInstance(4, 32*1024);
             _out = s.getOutputStream();
             _stillRunning = true;

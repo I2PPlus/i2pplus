@@ -36,7 +36,7 @@ class SchedulerChooser {
     }
 
     private List<TaskScheduler> createSchedulers() {
-        List<TaskScheduler> rv = new ArrayList<TaskScheduler>(8);
+        List<TaskScheduler> rv = new ArrayList<>(8);
         rv.add(new SchedulerHardDisconnected(_context));
         rv.add(new SchedulerPreconnect(_context));
         rv.add(new SchedulerConnecting(_context));

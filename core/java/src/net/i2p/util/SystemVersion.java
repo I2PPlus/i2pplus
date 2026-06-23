@@ -685,7 +685,7 @@ public abstract class SystemVersion {
         System.out.println("Cores / Max memory: " + getCores() + " / " + (getMaxMemory() / 1024 / 1024) + "KB");
         System.out.println("");
         System.out.println("System Properties:");
-        TreeSet<String> keys = new TreeSet<String>(System.getProperties().stringPropertyNames());
+        TreeSet<String> keys = new TreeSet<>(System.getProperties().stringPropertyNames());
         for (String k : keys) {
             String v = System.getProperty(k);
             if (k.equals("line.separator")) {

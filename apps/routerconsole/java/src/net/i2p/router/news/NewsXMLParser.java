@@ -43,7 +43,7 @@ public class NewsXMLParser {
     private NewsMetadata _metadata;
     private XHTMLMode _mode;
 
-    private static final Set<String> xhtmlWhitelist = new HashSet<String>(Arrays.asList(new String[] {
+    private static final Set<String> xhtmlWhitelist = new HashSet<>(Arrays.asList(new String[] {
         "a", "b", "br", "div", "i", "p", "span", "font", "blockquote", "hr",
         "del", "ins", "em", "strong", "mark", "sub", "sup", "tt", "code", "strike", "s", "u",
         "h4", "h5", "h6",
@@ -54,7 +54,7 @@ public class NewsXMLParser {
     }));
 
     // http://www.w3.org/TR/html-markup/global-attributes.html#common.attrs.event-handler
-    private static final Set<String> attributeBlacklist = new HashSet<String>(Arrays.asList(new String[] {
+    private static final Set<String> attributeBlacklist = new HashSet<>(Arrays.asList(new String[] {
         "onabort", "onblur", "oncanplay", "oncanplaythrough", "onchange", "onclick",
         "oncontextmenu", "ondblclick", "ondrag", "ondragend", "ondragenter", "ondragleave",
         "ondragover", "ondragstart", "ondrop", "ondurationchange", "onemptied",
@@ -214,7 +214,7 @@ public class NewsXMLParser {
             }
         }
 
-        List<NewsMetadata.Release> releases = new ArrayList<NewsMetadata.Release>();
+        List<NewsMetadata.Release> releases = new ArrayList<>();
         List<Node> releaseNodes = getNodes(feed, "i2p:release");
         if (releaseNodes.size() == 0)
             throw new I2PParserException("no release data in XML");
@@ -241,11 +241,11 @@ public class NewsXMLParser {
                     release.i2pVersion = release.i2pVersion.trim();
             }
 
-            List<NewsMetadata.Update> updates = new ArrayList<NewsMetadata.Update>();
+            List<NewsMetadata.Update> updates = new ArrayList<>();
             List<Node> updateNodes = getNodes(r, "i2p:update");
             if (updateNodes.size() == 0)
                 throw new I2PParserException("no updates in release");
-            Set<String> types = new HashSet<String>();
+            Set<String> types = new HashSet<>();
             for (Node u : updateNodes) {
                 // returns "" for none
                 String type = u.getAttributeValue("type");
@@ -272,7 +272,7 @@ public class NewsXMLParser {
                     String href = n1.getAttributeValue("href");
                     if (href.length() > 0) {
                         if (update.clearnet == null)
-                            update.clearnet = new ArrayList<String>(4);
+                            update.clearnet = new ArrayList<>(4);
                         update.clearnet.add(href.trim());
                         totalSources++;
                     }
@@ -282,7 +282,7 @@ public class NewsXMLParser {
                     String href = n2.getAttributeValue("href");
                     if (href.length() > 0) {
                         if (update.ssl == null)
-                            update.ssl = new ArrayList<String>(4);
+                            update.ssl = new ArrayList<>(4);
                         update.ssl.add(href.trim());
                         totalSources++;
                     }
@@ -292,7 +292,7 @@ public class NewsXMLParser {
                     String href = n3.getAttributeValue("href");
                     if (href.length() > 0) {
                         if (update.i2pnet == null)
-                            update.i2pnet = new ArrayList<String>(4);
+                            update.i2pnet = new ArrayList<>(4);
                         update.i2pnet.add(href.trim());
                         totalSources++;
                     }
@@ -317,7 +317,7 @@ public class NewsXMLParser {
      *  Any field in any NewsEntry may be null.
      */
     private List<NewsEntry> extractNewsEntries(Node feed) throws I2PParserException {
-        List<NewsEntry> rv = new ArrayList<NewsEntry>();
+        List<NewsEntry> rv = new ArrayList<>();
         List<Node> entries = getNodes(feed, "entry");
         for (Node entry : entries) {
             NewsEntry e = new NewsEntry();
@@ -426,7 +426,7 @@ public class NewsXMLParser {
         List<Node> entries = getNodes(rev, "i2p:crl");
         if (entries.isEmpty())
             return null;
-        List<CRLEntry> rv = new ArrayList<CRLEntry>(entries.size());
+        List<CRLEntry> rv = new ArrayList<>(entries.size());
         for (Node entry : entries) {
             CRLEntry e = new CRLEntry();
             String a = entry.getAttributeValue("id");
@@ -502,7 +502,7 @@ public class NewsXMLParser {
      *  @return non-null
      */
     public static List<Node> getNodes(Node node, String name) {
-        List<Node> rv = new ArrayList<Node>();
+        List<Node> rv = new ArrayList<>();
         int count = node.getNNodes();
         for (int i = 0; i < count; i++) {
             Node n = node.getNode(i);
@@ -609,7 +609,7 @@ public class NewsXMLParser {
             System.out.println("Release timestamp: " + latestRelease.date);
             System.out.println("Feed timestamp: " + ud.feedUpdated);
             System.out.println("Found " + entries.size() + " news entries");
-            Set<String> uuids = new HashSet<String>(entries.size());
+            Set<String> uuids = new HashSet<>(entries.size());
             for (int i = 0; i < entries.size(); i++) {
                 NewsEntry e = entries.get(i);
                 System.out.println("\n****** News #" + (i+1) + ": " + e.title + '\n' + e.content);

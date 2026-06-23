@@ -69,8 +69,8 @@ class ExpireLeasesJob extends JobImpl {
         boolean isClient = _facade.isClientDb();
         boolean isFFDB = _facade.floodfillEnabled() && !isClient;
         Set<Map.Entry<Hash, DatabaseEntry>> entries =  _facade.getDataStore().getMapEntries();
-        List<LeaseSet> current = new ArrayList<LeaseSet>(isFFDB ? 512 : (isClient ? entries.size() : 128)); // clientdb only has leasesets
-        List<Hash> toExpire = new ArrayList<Hash>(Math.min(entries.size(), 128));
+        List<LeaseSet> current = new ArrayList<>(isFFDB ? 512 : (isClient ? entries.size() : 128)); // clientdb only has leasesets
+        List<Hash> toExpire = new ArrayList<>(Math.min(entries.size(), 128));
         int sz = 0;
         String tunnelName = "";
         for (Map.Entry<Hash, DatabaseEntry> entry : entries) {

@@ -53,13 +53,13 @@ class SearchState {
         _log = context.logManager().getLog(SearchState.class);
         _context = context;
         _searchKey = key;
-        _pendingPeers = new HashSet<Hash>(16);
-        _attemptedPeers = new HashSet<Hash>(16);
-        _failedPeers = new HashSet<Hash>(16);
-        _successfulPeers = new HashSet<Hash>(16);
-        _pendingPeerTimes = new HashMap<Hash, Long>(16);
-        _repliedPeers = new HashSet<Hash>(16);
-        _leaseSetResponses = new HashMap<Hash, LeaseSet>(8);
+        _pendingPeers = new HashSet<>(16);
+        _attemptedPeers = new HashSet<>(16);
+        _failedPeers = new HashSet<>(16);
+        _successfulPeers = new HashSet<>(16);
+        _pendingPeerTimes = new HashMap<>(16);
+        _repliedPeers = new HashSet<>(16);
+        _leaseSetResponses = new HashMap<>(8);
         _firstLeaseSetTime = 0;
         _completed = -1;
         _started = _context.clock().now();
@@ -68,12 +68,12 @@ class SearchState {
     public Hash getTarget() {return _searchKey;}
     public Set<Hash> getPending() {
         synchronized (_pendingPeers) {
-            return new HashSet<Hash>(_pendingPeers);
+            return new HashSet<>(_pendingPeers);
         }
     }
     public Set<Hash> getAttempted() {
         synchronized (_attemptedPeers) {
-            return new HashSet<Hash>(_attemptedPeers);
+            return new HashSet<>(_attemptedPeers);
         }
     }
     public Set<Hash> getClosestAttempted(int max) {
@@ -83,10 +83,10 @@ class SearchState {
     }
 
     private Set<Hash> locked_getClosest(Set<Hash> peers, int max, Hash target) {
-        if (_attemptedPeers.size() <= max) {return new HashSet<Hash>(_attemptedPeers);}
-        TreeSet<Hash> closest = new TreeSet<Hash>(new XORComparator<Hash>(target));
+        if (_attemptedPeers.size() <= max) {return new HashSet<>(_attemptedPeers);}
+        TreeSet<Hash> closest = new TreeSet<>(new XORComparator<>(target));
         closest.addAll(_attemptedPeers);
-        Set<Hash> rv = new HashSet<Hash>(max);
+        Set<Hash> rv = new HashSet<>(max);
         int i = 0;
         for (Iterator<Hash> iter = closest.iterator(); iter.hasNext() && i < max; i++) {
             rv.add(iter.next());
@@ -101,12 +101,12 @@ class SearchState {
     }
     public Set<Hash> getSuccessful() {
         synchronized (_successfulPeers) {
-            return new HashSet<Hash>(_successfulPeers);
+            return new HashSet<>(_successfulPeers);
         }
     }
     public Set<Hash> getFailed() {
         synchronized (_failedPeers) {
-            return new HashSet<Hash>(_failedPeers);
+            return new HashSet<>(_failedPeers);
         }
     }
 
@@ -178,7 +178,7 @@ class SearchState {
     }
 
     public Set<Hash> getRepliedPeers() {
-        synchronized (_repliedPeers) {return new HashSet<Hash>(_repliedPeers);}
+        synchronized (_repliedPeers) {return new HashSet<>(_repliedPeers);}
     }
 
     public void replyTimeout(Hash peer) {

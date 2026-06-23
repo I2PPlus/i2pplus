@@ -60,7 +60,7 @@ public class ConfigNavHelper extends HelperBase {
     public void renderNavBar(String requestURI, boolean graphical) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<link rel=stylesheet href=/themes/console/confignav.css>\n");
-        List<Tab> tabs = new ArrayList<Tab>(pages.length);
+        List<Tab> tabs = new ArrayList<>(pages.length);
         boolean hidePlugins = !PluginStarter.pluginsEnabled(_context);
         for (int i = 0; i < pages.length; i++) {
             if (hidePlugins && pages[i].equals("plugins")) {continue;}

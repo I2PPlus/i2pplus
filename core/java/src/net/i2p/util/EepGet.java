@@ -203,7 +203,7 @@ public class EepGet {
         _postData = postData;
         _bytesRemaining = -1;
         _fetchHeaderTimeout = DEFAULT_CONNECT_TIMEOUT;
-        _listeners = new ArrayList<StatusListener>(1);
+        _listeners = new ArrayList<>(1);
         _allowCaching = allowCaching;
         _etag = etag;
         _lastModified = lastModified;
@@ -288,7 +288,7 @@ public class EepGet {
                         int eq = a.indexOf('=');
                         if (eq > 0) {
                             if (extra == null)
-                                extra = new ArrayList<String>(2);
+                                extra = new ArrayList<>(2);
                             String key = a.substring(0, eq);
                             String val = a.substring(eq + 1);
                             extra.add(key);
@@ -2071,7 +2071,7 @@ public class EepGet {
      */
     public void addHeader(String name, String value) {
         if (_extraHeaders == null)
-            _extraHeaders = new ArrayList<String>();
+            _extraHeaders = new ArrayList<>();
         _extraHeaders.add(name + ": " + value);
     }
 
@@ -2150,7 +2150,7 @@ public class EepGet {
      *  @since 0.9.4, moved from I2PTunnelHTTPClientBase in 0.9.12
      */
     public static Map<String, String> parseAuthArgs(String args) {
-        Map<String, String> rv = new HashMap<String, String>(8);
+        Map<String, String> rv = new HashMap<>(8);
         char data[] = args.toCharArray();
         StringBuilder buf = new StringBuilder(32);
         boolean isQuoted = false;
@@ -2318,7 +2318,7 @@ public class EepGet {
          *  @since 0.9.12 modified from I2PTunnelHTTPClientBase.validateDigest()
          */
         public Map<String, String> generateAuthArgs(String method, String uri) throws IOException {
-            Map<String, String> rv = new HashMap<String, String>(12);
+            Map<String, String> rv = new HashMap<>(12);
             String realm = args.get("realm");
             String nonce = args.get("nonce");
             String qop = args.get("qop");

@@ -51,7 +51,7 @@ public class HostsTxtNamingService extends MetaNamingService {
     private List<String> getFilenames() {
         String list = _context.getProperty(PROP_HOSTS_FILE, DEFAULT_HOSTS_FILE);
         StringTokenizer tok = new StringTokenizer(list, ",");
-        List<String> rv = new ArrayList<String>(tok.countTokens());
+        List<String> rv = new ArrayList<>(tok.countTokens());
         while (tok.hasMoreTokens()) rv.add(tok.nextToken());
         return rv;
     }
@@ -91,6 +91,6 @@ public class HostsTxtNamingService extends MetaNamingService {
             String name = ns.getName();
             if (name.equals(file) || name.endsWith('/' + file) || name.endsWith('\\' + file)) return ns.getNames(options);
         }
-        return new HashSet<String>(0);
+        return new HashSet<>(0);
     }
 }

@@ -259,7 +259,7 @@ public class SMTPClient {
             if (ok) {
                 // RFC 4954 says AUTH must be the last but let's assume
                 // that includes the user/pass on following lines
-                List<SendExpect> cmds = new ArrayList<SendExpect>();
+                List<SendExpect> cmds = new ArrayList<>();
                 cmds.add(new SendExpect("AUTH LOGIN", 334));
                 cmds.add(new SendExpect(base64.encode(user), 334));
                 cmds.add(new SendExpect(base64.encode(pass), 235));
@@ -269,7 +269,7 @@ public class SMTPClient {
                 }
             }
             if (ok) {
-                List<SendExpect> cmds = new ArrayList<SendExpect>();
+                List<SendExpect> cmds = new ArrayList<>();
                 cmds.add(new SendExpect("MAIL FROM: " + sender, 250));
                 for (String r : recipients) {cmds.add(new SendExpect("RCPT TO: " + r, 250));}
                 cmds.add(new SendExpect("DATA", 354));

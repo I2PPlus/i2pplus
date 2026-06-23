@@ -122,7 +122,7 @@ public abstract class TransportImpl implements Transport {
         long max = 8192;
         // 1024 nominal for 128 MB
         int size = (int) Math.max(min, Math.min(max, 1 + (maxMemory / (128*1024))));
-        _IPMap = new LHMCache<Hash, byte[]>(size);
+        _IPMap = new LHMCache<>(size);
     }
 
     /** 50/100/150/250/450/550/700 for BW Tiers K/L/M/N/O/P/X */
@@ -148,12 +148,12 @@ public abstract class TransportImpl implements Transport {
         _context.statManager().createRequiredRateStat("transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", RATES);
         //_context.statManager().createRequiredRateStat("transport.sendProcessingTime." + getStyle(), "Time to process and send a message (ms)", "Transport", RATES);
 
-        _currentAddresses = new ArrayList<RouterAddress>(3);
-        if (getStyle().equals("NTCP")) {_sendPool = new ArrayBlockingQueue<OutNetMessage>(SEND_POOL_CAPACITY);}
+        _currentAddresses = new ArrayList<>(3);
+        if (getStyle().equals("NTCP")) {_sendPool = new ArrayBlockingQueue<>(SEND_POOL_CAPACITY);}
         else {_sendPool = null;}
-        _unreachableEntries = new ConcurrentHashMap<Hash, Long>(32);
-        _wasUnreachableEntries = new ConcurrentHashMap<Hash, Long>(32);
-        _localAddresses = new ConcurrentHashSet<InetAddress>(4);
+        _unreachableEntries = new ConcurrentHashMap<>(32);
+        _wasUnreachableEntries = new ConcurrentHashMap<>(32);
+        _localAddresses = new ConcurrentHashSet<>(4);
         if (allowLocal()) {
             // don't ban for a long time in testnet, or else everybody is excluded by
             // ProfileOrganizer.selectPeersLocallyUnreachable() at startup for half an hour
@@ -558,7 +558,7 @@ public abstract class TransportImpl implements Transport {
      */
     public List<RouterAddress> getCurrentAddresses() {
         synchronized(_currentAddresses) {
-            return new ArrayList<RouterAddress>(_currentAddresses);
+            return new ArrayList<>(_currentAddresses);
         }
     }
 
@@ -596,7 +596,7 @@ public abstract class TransportImpl implements Transport {
      * @since 0.7.12
      */
     public List<RouterAddress> updateAddress() {
-        synchronized(_currentAddresses) {return new ArrayList<RouterAddress>(_currentAddresses);}
+        synchronized(_currentAddresses) {return new ArrayList<>(_currentAddresses);}
     }
 
     /**
@@ -701,7 +701,7 @@ public abstract class TransportImpl implements Transport {
      *  @since IPv6
      */
     protected Collection<InetAddress> getSavedLocalAddresses() {
-        List<InetAddress> rv = new ArrayList<InetAddress>(_localAddresses);
+        List<InetAddress> rv = new ArrayList<>(_localAddresses);
         _localAddresses.clear();
         return rv;
     }

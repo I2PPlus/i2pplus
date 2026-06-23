@@ -189,7 +189,7 @@ public class LeaseSet2 extends LeaseSet {
                 if (supported.contains(pk.getType())) {return pk;}
             }
         } else {
-            List<EncType> types = new ArrayList<EncType>(supported); // Our preference, newest enc type first
+            List<EncType> types = new ArrayList<>(supported); // Our preference, newest enc type first
             Collections.sort(types, Collections.reverseOrder());
             for (EncType type : types) {
                 for (PublicKey pk : keys) {
@@ -209,7 +209,7 @@ public class LeaseSet2 extends LeaseSet {
         if (_encryptionKey == null) {setEncryptionKey(key);}
         else {
             if (_encryptionKeys == null) {
-                _encryptionKeys = new ArrayList<PublicKey>(4);
+                _encryptionKeys = new ArrayList<>(4);
                 _encryptionKeys.add(_encryptionKey);
             } else {
                 if (_encryptionKeys.size() >= MAX_KEYS) {throw new IllegalStateException();}
@@ -403,7 +403,7 @@ public class LeaseSet2 extends LeaseSet {
         _options = DataHelper.readProperties(in, null); // LS2 part - null arg to get an EmptyProperties back
         int numKeys = in.read();
         if (numKeys <= 0 || numKeys > MAX_KEYS) {throw new DataFormatException("Bad key count: " + numKeys);}
-        if (numKeys > 1) {_encryptionKeys = new ArrayList<PublicKey>(numKeys);}
+        if (numKeys > 1) {_encryptionKeys = new ArrayList<>(numKeys);}
         for (int i = 0; i < numKeys; i++) {
             int encType = (int) DataHelper.readLong(in, 2);
             int encLen = (int) DataHelper.readLong(in, 2);

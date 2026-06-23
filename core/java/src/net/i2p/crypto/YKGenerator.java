@@ -67,7 +67,7 @@ final class YKGenerator {
         MIN_NUM_BUILDERS = ctx.getProperty(PROP_YK_PRECALC_MIN, defaultMin);
         MAX_NUM_BUILDERS = ctx.getProperty(PROP_YK_PRECALC_MAX, defaultMax);
         CALC_DELAY = ctx.getProperty(PROP_YK_PRECALC_DELAY, DEFAULT_YK_PRECALC_DELAY);
-        _values = new LinkedBlockingQueue<BigInteger[]>(MAX_NUM_BUILDERS);
+        _values = new LinkedBlockingQueue<>(MAX_NUM_BUILDERS);
         ctx.statManager().createRateStat("crypto.YKUsed", "How often a precalculated ephemeral key (YK) is needed from queue", "Encryption", new long[] {RateConstants.ONE_MINUTE});
         ctx.statManager().createRateStat("crypto.YKEmpty", "How often precalculated ephemeral key (YK) queue is empty", "Encryption", new long[] {RateConstants.ONE_MINUTE});
     }

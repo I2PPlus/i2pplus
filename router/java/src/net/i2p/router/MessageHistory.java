@@ -49,7 +49,7 @@ public class MessageHistory {
     public MessageHistory(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(getClass());
-        _unwrittenEntries = new LinkedBlockingQueue<String>();
+        _unwrittenEntries = new LinkedBlockingQueue<>();
         _reinitializeJob = new ReinitializeJob();
         _writeJob = new WriteJob();
         _firstPass = true;

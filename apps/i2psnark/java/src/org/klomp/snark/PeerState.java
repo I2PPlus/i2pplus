@@ -60,7 +60,7 @@ class PeerState implements DataLoader {
     final PeerConnectionOut out;
 
     // Outstanding request
-    private final List<Request> outstandingRequests = new ArrayList<Request>();
+    private final List<Request> outstandingRequests = new ArrayList<>();
 
     /** the tail (NOT the head) of the request queue */
     private Request lastRequest;
@@ -172,7 +172,7 @@ class PeerState implements DataLoader {
                 } else {
                     // note reception for later
                     if (havesBeforeMetaInfo == null) {
-                        havesBeforeMetaInfo = new ArrayList<Integer>(8);
+                        havesBeforeMetaInfo = new ArrayList<>(8);
                     } else if (havesBeforeMetaInfo.size() > 1000) {
                         // don't blow up
                         if (_log.shouldWarn())
@@ -242,7 +242,7 @@ class PeerState implements DataLoader {
                     if (isAll) {
                         // note reception for later
                         if (havesBeforeMetaInfo == null)
-                            havesBeforeMetaInfo = new ArrayList<Integer>(1);
+                            havesBeforeMetaInfo = new ArrayList<>(1);
                         else havesBeforeMetaInfo.clear();
                         havesBeforeMetaInfo.add(PIECE_ALL);
                     } // else HAVE_NONE, ignore
@@ -651,7 +651,7 @@ class PeerState implements DataLoader {
      */
     synchronized List<Request> returnPartialPieces() {
         Set<Integer> pcs = getRequestedPieces();
-        List<Request> rv = new ArrayList<Request>(pcs.size());
+        List<Request> rv = new ArrayList<>(pcs.size());
         for (Integer p : pcs) {
             Request req = getLowestOutstandingRequest(p.intValue());
             if (req != null) rv.add(req);
@@ -666,7 +666,7 @@ class PeerState implements DataLoader {
      * @return all pieces we are currently requesting, or empty Set
      */
     private synchronized Set<Integer> getRequestedPieces() {
-        Set<Integer> rv = new HashSet<Integer>(outstandingRequests.size() + 1);
+        Set<Integer> rv = new HashSet<>(outstandingRequests.size() + 1);
         for (Request req : outstandingRequests) {
             rv.add(Integer.valueOf(req.getPiece()));
             if (pendingRequest != null) rv.add(Integer.valueOf(pendingRequest.getPiece()));

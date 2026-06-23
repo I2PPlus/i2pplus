@@ -21,7 +21,7 @@ import net.i2p.util.SystemVersion;
 public class CSSHelper extends HelperBase {
     private static final Pattern LANG_PATTERN = Pattern.compile("[a-zA-Z_]");
 
-    private static final Map<String, Boolean> _UACache = new ConcurrentHashMap<String, Boolean>();
+    private static final Map<String, Boolean> _UACache = new ConcurrentHashMap<>();
     public static final String PROP_UNIVERSAL_THEMING = "routerconsole.universal.theme";
     public static final String PROP_THEME_NAME = "routerconsole.theme";
     /**  @since 0.9.33 moved from ConfigUIHelper */
@@ -72,7 +72,7 @@ public class CSSHelper extends HelperBase {
         synchronized(session) {
             LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_CONSOLE_NONCE);
             if (nonces == null) {
-                nonces = new LinkedList<String>();
+                nonces = new LinkedList<>();
                 session.setAttribute(SESSION_CONSOLE_NONCE, nonces);
             }
             nonces.offer(rv);
@@ -225,7 +225,7 @@ public class CSSHelper extends HelperBase {
         // Protected with nonce in css.jsi
         if (lang != null && lang.length() >= 2 && lang.length() <= 6 &&
             LANG_PATTERN.matcher(lang).replaceAll("").length() == 0) {
-            Map<String, String> m = new HashMap<String, String>(2);
+            Map<String, String> m = new HashMap<>(2);
             int under = lang.indexOf('_');
             if (under < 0) {
                 m.put(Messages.PROP_LANG, lang.toLowerCase(Locale.US));

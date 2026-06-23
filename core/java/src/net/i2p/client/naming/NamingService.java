@@ -53,8 +53,8 @@ public abstract class NamingService {
     protected NamingService(I2PAppContext context) {
         _context = context;
         _log = context.logManager().getLog(getClass());
-        _listeners = new CopyOnWriteArraySet<NamingServiceListener>();
-        _updaters = new CopyOnWriteArraySet<NamingServiceUpdater>();
+        _listeners = new CopyOnWriteArraySet<>();
+        _updaters = new CopyOnWriteArraySet<>();
     }
 
     /**
@@ -290,7 +290,7 @@ public abstract class NamingService {
     public Map<String, String> getBase64Entries(Properties options) {
         Map<String, Destination> entries = getEntries(options);
         if (entries.size() <= 0) return Collections.emptyMap();
-        Map<String, String> rv = new TreeMap<String, String>();
+        Map<String, String> rv = new TreeMap<>();
         for (Map.Entry<String, Destination> e : entries.entrySet()) {
             rv.put(e.getKey(), e.getValue().toBase64());
         }

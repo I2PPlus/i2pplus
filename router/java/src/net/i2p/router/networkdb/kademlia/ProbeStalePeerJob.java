@@ -49,7 +49,7 @@ class ProbeStalePeerJob extends JobImpl {
         super(ctx);
         _log = ctx.logManager().getLog(ProbeStalePeerJob.class);
         _facade = facade;
-        _lastProbed = new ConcurrentHashMap<Hash, Long>();
+        _lastProbed = new ConcurrentHashMap<>();
         _runCount = 0;
     }
 
@@ -61,7 +61,7 @@ class ProbeStalePeerJob extends JobImpl {
         long uptime = ctx.router().getUptime();
         long now = ctx.clock().now();
 
-        List<Hash> candidates = new ArrayList<Hash>();
+        List<Hash> candidates = new ArrayList<>();
         long maxAge = ctx.getProperty(
             "profileOrganizer.maxRouterInfoAgeHours", 2) * 3600_000L;
         boolean isStartupBurst = (_runCount < STARTUP_BURST_CYCLES) ||

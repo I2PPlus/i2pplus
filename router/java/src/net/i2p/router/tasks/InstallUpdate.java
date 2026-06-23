@@ -107,7 +107,7 @@ public class InstallUpdate {
             if (ok) {
                 // This may be useful someday. First added in 0.8.2
                 // Moved above the extract so we don't NCDFE
-                Map<String, String> config = new HashMap<String, String>(4);
+                Map<String, String> config = new HashMap<>(4);
                 config.put("router.updateLastInstalled", "" + System.currentTimeMillis());
                 // Set the last version to the current version, since 0.8.13
                 config.put("router.previousVersion", RouterVersion.VERSION);

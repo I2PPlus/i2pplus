@@ -71,7 +71,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      *  Map of host name to base64 destination for destinations collected
      *  via address helper links
      */
-    private final ConcurrentHashMap<String, String> addressHelpers = new ConcurrentHashMap<String, String>(8);
+    private final ConcurrentHashMap<String, String> addressHelpers = new ConcurrentHashMap<>(8);
 
     /**
      *  Used to protect actions via http://proxy.i2p/

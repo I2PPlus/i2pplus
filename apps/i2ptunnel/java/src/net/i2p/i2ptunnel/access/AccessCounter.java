@@ -22,7 +22,7 @@ class AccessCounter {
     /**
      * List of timestamps of each connection attempt
      */
-    private final List<Long> accesses = new ArrayList<Long>();
+    private final List<Long> accesses = new ArrayList<>();
 
     /**
      * records that a connection attempt was made

@@ -80,13 +80,13 @@ public class Blocklist {
     private int _countryBlocklistSize;
     private final Object _lock = new Object();
     private Entry _wrapSave;
-    private final Set<Hash> _inProcess = new HashSet<Hash>(4);
+    private final Set<Hash> _inProcess = new HashSet<>(4);
     private final File _blocklistFeedFile;
     private boolean _haveIPv6;
     private boolean _started;
     private long _lastExpired = 0;
     // temp
-    private final Map<Hash, String> _peerBlocklist = new HashMap<Hash, String>(4);
+    private final Map<Hash, String> _peerBlocklist = new HashMap<>(4);
     // Configurable properties
     private boolean _blocklistEnabled;
     private boolean _blocklistTorEnabled;
@@ -122,7 +122,7 @@ public class Blocklist {
     private static final int MAX_IPV4_SINGLES = SystemVersion.isSlow() ? 2048 : 8192;
     private static final int MAX_IPV6_SINGLES = SystemVersion.isSlow() ? 1024 : 4096;
 
-    private final Map<Integer, Object> _singleIPBlocklist = new LHMCache<Integer, Object>(MAX_IPV4_SINGLES);
+    private final Map<Integer, Object> _singleIPBlocklist = new LHMCache<>(MAX_IPV4_SINGLES);
     private final Map<BigInteger, Object> _singleIPv6Blocklist;
 
     private static final Object DUMMY = Integer.valueOf(0);
@@ -160,7 +160,7 @@ public class Blocklist {
                     Addresses.isConnectedIPv6();
         _haveIPv6 = TransportUtil.getIPv6Config(_context, "SSU") != TransportUtil.IPv6Config.IPV6_DISABLED &&
                     Addresses.isConnectedIPv6();
-        _singleIPv6Blocklist = _haveIPv6 ? new LHMCache<BigInteger, Object>(MAX_IPV6_SINGLES) : null;
+        _singleIPv6Blocklist = _haveIPv6 ? new LHMCache<>(MAX_IPV6_SINGLES) : null;
         initConfig();
     }
 
@@ -221,7 +221,7 @@ public class Blocklist {
         _blocklistFeedFile = new File(BLOCKLIST_FEED_FILE);
         _haveIPv6 = TransportUtil.getIPv6Config(_context, "SSU") != TransportUtil.IPv6Config.IPV6_DISABLED &&
                     Addresses.isConnectedIPv6();
-        _singleIPv6Blocklist = _haveIPv6 ? new LHMCache<BigInteger, Object>(MAX_IPV6_SINGLES) : null;
+        _singleIPv6Blocklist = _haveIPv6 ? new LHMCache<>(MAX_IPV6_SINGLES) : null;
     }
 
     /**
@@ -282,7 +282,7 @@ public class Blocklist {
             return;
         }
 
-        List<BLFile> files = new ArrayList<BLFile>(5);
+        List<BLFile> files = new ArrayList<>(5);
         File blFile = new File(_context.getBaseDir(), BLOCKLIST_FILE_DEFAULT); // install dir
         files.add(new BLFile(blFile, ID_SYSTEM));
 
@@ -974,7 +974,7 @@ public class Blocklist {
      * @since 0.9.29
      */
     private List<byte[]> getAddresses(RouterInfo pinfo) {
-        List<byte[]> rv = new ArrayList<byte[]>(4);
+        List<byte[]> rv = new ArrayList<>(4);
         for (RouterAddress pa : pinfo.getAddresses()) { // for each peer address
             byte[] pib = pa.getIP();
             if (pib == null) continue;
@@ -1356,7 +1356,7 @@ public class Blocklist {
      */
     public List<Integer> getTransientIPv4Blocks() {
         synchronized(_singleIPBlocklist) {
-            return new ArrayList<Integer>(_singleIPBlocklist.keySet());
+            return new ArrayList<>(_singleIPBlocklist.keySet());
         }
     }
 
@@ -1371,7 +1371,7 @@ public class Blocklist {
     public List<BigInteger> getTransientIPv6Blocks() {
         if (!_haveIPv6) {return Collections.<BigInteger>emptyList();}
         if (_singleIPv6Blocklist != null) {
-            synchronized(_singleIPv6Blocklist) {return new ArrayList<BigInteger>(_singleIPv6Blocklist.keySet());}
+            synchronized(_singleIPv6Blocklist) {return new ArrayList<>(_singleIPv6Blocklist.keySet());}
         }
         return Collections.<BigInteger>emptyList();
     }

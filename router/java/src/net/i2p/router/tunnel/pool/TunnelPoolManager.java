@@ -82,9 +82,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public TunnelPoolManager(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(TunnelPoolManager.class);
-        _clientInboundPools = new ConcurrentHashMap<Hash, TunnelPool>(32);
-        _clientOutboundPools = new ConcurrentHashMap<Hash, TunnelPool>(32);
-        _pendingCleanups = new ConcurrentHashMap<Hash, DelayedPoolCleanup>(32);
+        _clientInboundPools = new ConcurrentHashMap<>(32);
+        _clientOutboundPools = new ConcurrentHashMap<>(32);
+        _pendingCleanups = new ConcurrentHashMap<>(32);
         _clientPeerSelector = new ClientPeerSelector(ctx);
         _ghostPeerManager = new GhostPeerManager(ctx);
         ExploratoryPeerSelector selector = new ExploratoryPeerSelector(_context);
@@ -364,7 +364,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public double getShareRatio() {
         int part = getParticipatingCount();
         if (part <= 0) {return 0d;}
-        List<TunnelPool> pools = new ArrayList<TunnelPool>();
+        List<TunnelPool> pools = new ArrayList<>();
         listPools(pools);
         int count = 0;
         for (int i = 0; i < pools.size(); i++) {
@@ -842,7 +842,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 didRemove = _mgr.replaceSlowTunnels();
                 // Proactive tunnel prebuild: ensure each pool has sufficient tunnels
                 // before current ones expire.  This runs every 30-120s.
-                List<TunnelPool> pools = new ArrayList<TunnelPool>();
+                List<TunnelPool> pools = new ArrayList<>();
                 _mgr.listPools(pools);
                 for (TunnelPool pool : pools) {
                     if (pool != null && pool.isAlive()) {
@@ -916,7 +916,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             if (_mgr._log.shouldInfo()) {
                 _mgr._log.info("Running Refresh LeaseSets Job...");
             }
-            List<TunnelPool> pools = new ArrayList<TunnelPool>();
+            List<TunnelPool> pools = new ArrayList<>();
             _mgr.listPools(pools);
             for (TunnelPool pool : pools) {
                 if (_mgr.isShutdown()) {
@@ -939,7 +939,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * @since 0.9.69+
      */
     public boolean replaceSlowTunnels() {
-        List<TunnelPool> pools = new ArrayList<TunnelPool>();
+        List<TunnelPool> pools = new ArrayList<>();
         listPools(pools);
         boolean didRemove = false;
 
@@ -1014,7 +1014,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 continue;
             }
 
-            List<TunnelInfo> toRemove = new ArrayList<TunnelInfo>();
+            List<TunnelInfo> toRemove = new ArrayList<>();
 
             // PHASE A: Snapshot decision under lock
             synchronized (pool) {
@@ -1030,7 +1030,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 }
 
                 // Create snapshot WHILE HOLDING THE LOCK
-                List<TunnelInfo> tunnelSnapshot = new ArrayList<TunnelInfo>(pool.listTunnels());
+                List<TunnelInfo> tunnelSnapshot = new ArrayList<>(pool.listTunnels());
                 int maxToRemove = currentCount - minToKeep;
                 int found = 0;
 
@@ -1085,7 +1085,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                     cfg.setTestTooSlow();
                     ExpireJob.scheduleExpiration(_context, cfg);
                     // Schedule all peers in this tunnel for priority testing
-                    List<Hash> tunnelPeers = new ArrayList<Hash>();
+                    List<Hash> tunnelPeers = new ArrayList<>();
                     for (int i = 0; i < cfg.getLength(); i++) {
                         tunnelPeers.add(cfg.getPeer(i));
                     }
@@ -1121,7 +1121,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * @since 0.9.69+
      */
     public void pruneAllPools() {
-        List<TunnelPool> pools = new ArrayList<TunnelPool>();
+        List<TunnelPool> pools = new ArrayList<>();
         listPools(pools);
         for (TunnelPool pool : pools) {
             if (pool == null || !pool.isAlive()) continue;
@@ -1237,7 +1237,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /** @return total number of non-fallback expl. + client tunnels */
     private int countTunnelsPerPeer(ObjectCounterUnsafe<Hash> lc) {
-        List<TunnelPool> pools = new ArrayList<TunnelPool>();
+        List<TunnelPool> pools = new ArrayList<>();
         listPools(pools);
         int tunnelCount = 0;
         for (TunnelPool tp : pools) {
@@ -1264,7 +1264,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * @since 0.9.69+
      */
     private int countTunnelsPerPeer(ObjectCounterUnsafe<Hash> lc, boolean exploratory) {
-        List<TunnelPool> pools = new ArrayList<TunnelPool>();
+        List<TunnelPool> pools = new ArrayList<>();
         if (exploratory) {
             pools.add(_inboundExploratory);
             pools.add(_outboundExploratory);
@@ -1305,7 +1305,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @return Set of peers that should not be allowed in another tunnel
      */
     public Set<Hash> selectPeersInTooManyTunnels() {
-        Set<Hash> rv = new HashSet<Hash>();
+        Set<Hash> rv = new HashSet<>();
         long uptime = _context.router().getUptime();
         int max = uptime > 30*60*1000 ? DEFAULT_MAX_PCT_TUNNELS : STARTUP_MAX_PCT_TUNNELS;
 
@@ -1314,10 +1314,10 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (isFirewalled() || buildSuccess < 0.40) {max *= 2;}
 
         // Count exploratory and client tunnels separately
-        ObjectCounterUnsafe<Hash> lcExp = new ObjectCounterUnsafe<Hash>();
+        ObjectCounterUnsafe<Hash> lcExp = new ObjectCounterUnsafe<>();
         int exploratoryCount = countTunnelsPerPeer(lcExp, true);
 
-        ObjectCounterUnsafe<Hash> lcClient = new ObjectCounterUnsafe<Hash>();
+        ObjectCounterUnsafe<Hash> lcClient = new ObjectCounterUnsafe<>();
         int clientCount = countTunnelsPerPeer(lcClient, false);
 
         // Check percentage limits separately for each tunnel type
@@ -1350,12 +1350,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /** for TunnelRenderer in router console */
     public Map<Hash, TunnelPool> getInboundClientPools() {
-        return new HashMap<Hash, TunnelPool>(_clientInboundPools);
+        return new HashMap<>(_clientInboundPools);
     }
 
     /** for TunnelRenderer in router console */
     public Map<Hash, TunnelPool> getOutboundClientPools() {
-        return new HashMap<Hash, TunnelPool>(_clientOutboundPools);
+        return new HashMap<>(_clientOutboundPools);
     }
 
     /**
@@ -1501,7 +1501,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @since 0.8.13
      */
     private void failTunnelsWithFirstHop(TunnelPool pool, Hash peer) {
-        List<TunnelInfo> toFail = new ArrayList<TunnelInfo>();
+        List<TunnelInfo> toFail = new ArrayList<>();
         for (TunnelInfo tun : pool.listTunnels()) {
             int len = tun.getLength();
             if (len > 1 && tun.getPeer(1).equals(peer)) {
@@ -1522,7 +1522,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @since 0.8.13
      */
     private void failTunnelsWithLastHop(TunnelPool pool, Hash peer) {
-        List<TunnelInfo> toFail = new ArrayList<TunnelInfo>();
+        List<TunnelInfo> toFail = new ArrayList<>();
         for (TunnelInfo tun : pool.listTunnels()) {
             int len = tun.getLength();
             if (len > 1 && tun.getPeer(len - 2).equals(peer)) {

@@ -159,7 +159,7 @@ public class SAMStreamSend {
         _destFile = destFile;
         _dataFile = dataFile;
         _conOptions = "";
-        _remotePeers = new HashMap<String, Sender>();
+        _remotePeers = new HashMap<>();
     }
 
     public void startup(String version, boolean isSSL, int mode, String user, String password, String sessionOpts) {

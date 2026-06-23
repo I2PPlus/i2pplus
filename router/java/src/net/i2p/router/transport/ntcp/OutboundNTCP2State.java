@@ -450,7 +450,7 @@ class OutboundNTCP2State implements EstablishState {
 
         // total for parts 1 and 2 with mac
         byte[] tmp = new byte[MSG3P1_SIZE + msg3p2len + MAC_SIZE];
-        List<Block> blocks = new ArrayList<Block>(3);
+        List<Block> blocks = new ArrayList<>(3);
         Block block = new NTCP2Payload.RIBlock(_aliceRI, false);
         blocks.add(block);
         byte[] opts = new byte[OPTIONS3_SIZE];

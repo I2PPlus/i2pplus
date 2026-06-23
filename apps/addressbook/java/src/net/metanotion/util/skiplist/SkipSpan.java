@@ -58,7 +58,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 	 *  @param sl the SkipList to create the span for
 	 *  @return a new SkipSpan instance
 	 */
-	public SkipSpan<K, V> newInstance(SkipList<K, V> sl) { return new SkipSpan<K, V>(keys.length); }
+	public SkipSpan<K, V> newInstance(SkipList<K, V> sl) { return new SkipSpan<>(keys.length); }
 
 	/**
 	 *  Mark this instance as killed.

@@ -227,7 +227,7 @@ class ProfilePersistenceHelper {
         long deleteCutoff = (files.size() > LIMIT_PROFILES) ? cutoff : (start - 21*24*60*60*1000);
 
         // Pre-filter stale files by file timestamp to avoid reading them
-        List<File> freshFiles = new ArrayList<File>(files.size());
+        List<File> freshFiles = new ArrayList<>(files.size());
         int staleDeleted = 0;
         for (File f : files) {
             if (f.lastModified() >= deleteCutoff) {
@@ -248,7 +248,7 @@ class ProfilePersistenceHelper {
             }
         });
 
-        List<PeerProfile> profiles = new ArrayList<PeerProfile>(Math.min(LIMIT_PROFILES, freshFiles.size()));
+        List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles.size()));
         int count = 0;
         for (File f : freshFiles) {
             if (count >= LIMIT_PROFILES) {
@@ -281,7 +281,7 @@ class ProfilePersistenceHelper {
         FilenameFilter filter = new ProfileFilter();
         File files[] = _profileDir.listFiles(filter);
         if (files != null && files.length > 0) {migrate(files);}
-        List<File> rv = new ArrayList<File>(1024);
+        List<File> rv = new ArrayList<>(1024);
         for (int j = 0; j < B64.length(); j++) {
             File subdir = new File(_profileDir, DIR_PREFIX + B64.charAt(j));
             files = subdir.listFiles(filter);

@@ -57,9 +57,9 @@ public abstract class Addresses {
     private static final int FLAG_DEPRECATED = 0x20;
     private static final int FLAG_TEMPORARY = 0x01;
     private static long _ifCacheTime;
-    private static final Map<Inet6Address, Inet6Addr> _ifCache = INET6_CACHE_ENABLED ? new HashMap<Inet6Address, Inet6Addr>(8) : null;
+    private static final Map<Inet6Address, Inet6Addr> _ifCache = INET6_CACHE_ENABLED ? new HashMap<>(8) : null;
     /** 12 char hex lower case */
-    private static final Set<String> _macCache = new HashSet<String>();
+    private static final Set<String> _macCache = new HashSet<>();
     private static final boolean TEST_IPV6_ONLY = false;
 
     // Convert IPv6 to canonical RFC 5952
@@ -202,7 +202,7 @@ public abstract class Addresses {
                                                  boolean includeIPv6Temporary) {
         boolean haveIPv4 = false;
         boolean haveIPv6 = false;
-        SortedSet<String> rv = new TreeSet<String>();
+        SortedSet<String> rv = new TreeSet<>();
         final boolean omitDeprecated = INET6_CACHE_ENABLED && !includeSiteLocal && includeIPv6;
         try {
             InetAddress localhost = InetAddress.getLocalHost();
@@ -225,7 +225,7 @@ public abstract class Addresses {
         try {
             Enumeration<NetworkInterface> ifcs = NetworkInterface.getNetworkInterfaces();
             if (ifcs != null) {
-                Set<String> newMacs = new HashSet<String>(8);
+                Set<String> newMacs = new HashSet<>(8);
                 while (ifcs.hasMoreElements()) {
                     NetworkInterface ifc = ifcs.nextElement();
                     if (!ifc.isUp()) {
@@ -543,8 +543,8 @@ public abstract class Addresses {
         } else {
             size = 32;
         }
-        _IPAddress = new LHMCache<String, byte[]>(size);
-        _negativeCache = new LHMCache<String, Long>(128);
+        _IPAddress = new LHMCache<>(size);
+        _negativeCache = new LHMCache<>(128);
     }
 
 /**
@@ -732,7 +732,7 @@ public abstract class Addresses {
             InetAddress[] addrs = InetAddress.getAllByName(host);
             if (addrs == null || addrs.length == 0)
                 return null;
-            List<byte[]> rv = new ArrayList<byte[]>(addrs.length);
+            List<byte[]> rv = new ArrayList<>(addrs.length);
             for (int i = 0; i < addrs.length; i++) {
                 rv.add(addrs[i].getAddress());
             }
@@ -1135,7 +1135,7 @@ public abstract class Addresses {
         }
 
         System.out.println("\nMac addresses:");
-        Set<String> macs = new TreeSet<String>();
+        Set<String> macs = new TreeSet<>();
         for (String m : _macCache) {
             int i = 0;
             while (true) {

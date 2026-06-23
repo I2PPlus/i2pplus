@@ -210,7 +210,7 @@ public class DataHelper {
             // Tunnel BW params prop. 168
             "l", "r", "b"
         };
-        _propertiesKeyCache = new HashMap<String, String>(keys.length);
+        _propertiesKeyCache = new HashMap<>(keys.length);
         for (int i = 0; i < keys.length; i++) {
             _propertiesKeyCache.put(keys[i], keys[i]);
         }

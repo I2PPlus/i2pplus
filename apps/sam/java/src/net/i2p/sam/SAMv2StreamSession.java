@@ -200,7 +200,7 @@ class SAMv2StreamSession extends SAMStreamSession {
 
         public V2StreamSender(I2PSocket s, int id) throws IOException {
             super(s, id);
-            _data = new ArrayList<ByteArray>(1);
+            _data = new ArrayList<>(1);
             _cache = ByteCache.getInstance(10, 32 * 1024);
             _out = s.getOutputStream();
             _stillRunning = true;

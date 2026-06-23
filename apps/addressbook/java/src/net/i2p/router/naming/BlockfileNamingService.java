@@ -156,9 +156,9 @@ public class BlockfileNamingService extends DummyNamingService {
      */
     public BlockfileNamingService(I2PAppContext context) {
         super(context);
-        _lists = new ArrayList<String>();
-        _invalid = new ArrayList<InvalidEntry>();
-        _negativeCache = new LHMCache<String, String>(NEGATIVE_CACHE_SIZE);
+        _lists = new ArrayList<>();
+        _invalid = new ArrayList<>();
+        _negativeCache = new LHMCache<>(NEGATIVE_CACHE_SIZE);
         BlockFile bf = null;
         RAIFile raf = null;
         boolean readOnly = false;
@@ -590,7 +590,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
     private static List<String> getFilenames(String list) {
         StringTokenizer tok = new StringTokenizer(list, ",");
-        List<String> rv = new ArrayList<String>(tok.countTokens());
+        List<String> rv = new ArrayList<>(tok.countTokens());
         while (tok.hasMoreTokens())
             rv.add(tok.nextToken());
         return rv;
@@ -636,7 +636,7 @@ public class BlockfileNamingService extends DummyNamingService {
             Properties props = rev.get(idx);
             if (props == null)
                 return null;
-            List<String> rv = new ArrayList<String>(props.size());
+            List<String> rv = new ArrayList<>(props.size());
             for (String key : props.stringPropertyNames()) {
                 // now do the forward lookup to verify (using the cache)
                 List<Destination> ld = lookupAll(key);
@@ -1007,7 +1007,7 @@ public class BlockfileNamingService extends DummyNamingService {
         }
         String listname = FALLBACK_LIST;
         String date = Long.toString(_context.clock().now());
-        List<Properties> outProps = new ArrayList<Properties>(propsList.size());
+        List<Properties> outProps = new ArrayList<>(propsList.size());
         for (Properties options : propsList) {
             Properties props = new Properties();
             props.setProperty(PROP_ADDED, date);
@@ -1168,7 +1168,7 @@ public class BlockfileNamingService extends DummyNamingService {
                     iter = sl.find(beginWith);
                 else
                     iter = sl.iterator();
-                Map<String, Destination> rv = new TreeMap<String, Destination>();
+                Map<String, Destination> rv = new TreeMap<>();
                 for (int i = 0; i < skip && iter.hasNext(); i++) {
                     // don't bother validating here
                     iter.next();
@@ -1262,7 +1262,7 @@ public class BlockfileNamingService extends DummyNamingService {
                     iter = sl.find(beginWith);
                 else
                     iter = sl.iterator();
-                Map<String, String> rv = new TreeMap<String, String>();
+                Map<String, String> rv = new TreeMap<>();
                 for (int i = 0; i < skip && iter.hasNext(); i++) {
                     // don't bother validating here
                     iter.next();
@@ -1489,7 +1489,7 @@ public class BlockfileNamingService extends DummyNamingService {
                     iter = sl.find(beginWith);
                 else
                     iter = sl.iterator();
-                Set<String> rv = new HashSet<String>();
+                Set<String> rv = new HashSet<>();
                 for (int i = 0; i < skip && iter.hasNext(); i++) {
                     iter.next();
                 }
@@ -1651,7 +1651,7 @@ public class BlockfileNamingService extends DummyNamingService {
     public boolean addDestination(String hostname, Destination d, Properties options) {
         if (!_isVersion4)
             return putIfAbsent(hostname, d, options);
-        List<Properties> storedOptions = new ArrayList<Properties>(4);
+        List<Properties> storedOptions = new ArrayList<>(4);
         synchronized(_bf) {
             // We use lookupAll2(), not lookupAll(), because if hostname starts with www.,
             // we do not want to read in from the
@@ -1663,7 +1663,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 return false;
             if (dests.size() >= MAX_DESTS_PER_HOST)
                 return false;
-            List<Destination> newDests = new ArrayList<Destination>(dests.size() + 1);
+            List<Destination> newDests = new ArrayList<>(dests.size() + 1);
             newDests.addAll(dests);
             // TODO better sort by sigtype preference.
             // For now, non-DSA at the front, DSA at the end
@@ -1698,7 +1698,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 return super.remove(hostname, d, options);
             }
         }
-        List<Properties> storedOptions = new ArrayList<Properties>(4);
+        List<Properties> storedOptions = new ArrayList<>(4);
         synchronized(_bf) {
             // We use lookupAll2(), not lookupAll(), because if hostname starts with www.,
             // we do not want to read in from the
@@ -1712,7 +1712,7 @@ public class BlockfileNamingService extends DummyNamingService {
                     // Found it. Remove and return.
                     if (dests.size() == 1)
                         return remove(hostname, options);
-                    List<Destination> newDests = new ArrayList<Destination>(dests.size() - 1);
+                    List<Destination> newDests = new ArrayList<>(dests.size() - 1);
                     for (int j = 0; j < dests.size(); j++) {
                         if (j != i)
                             newDests.add(dests.get(j));
@@ -2027,8 +2027,8 @@ public class BlockfileNamingService extends DummyNamingService {
                 rv.props = readProperties(bais);
                 rv.dest = Destination.create(bais);
                 if (sz > 1) {
-                    rv.propsList = new ArrayList<Properties>(sz);
-                    rv.destList = new ArrayList<Destination>(sz);
+                    rv.propsList = new ArrayList<>(sz);
+                    rv.destList = new ArrayList<>(sz);
                     rv.propsList.add(rv.props);
                     rv.destList.add(rv.dest);
                     for (int i = 1; i < sz; i++) {

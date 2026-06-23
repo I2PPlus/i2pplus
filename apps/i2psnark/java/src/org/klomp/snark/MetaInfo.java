@@ -230,11 +230,11 @@ public class MetaInfo {
         if (val == null) {
             this.announce_list = null;
         } else {
-            this.announce_list = new ArrayList<List<String>>();
+            this.announce_list = new ArrayList<>();
             List<BEValue> bl1 = val.getList();
             for (BEValue bev : bl1) {
                 List<BEValue> bl2 = bev.getList();
-                List<String> sl2 = new ArrayList<String>();
+                List<String> sl2 = new ArrayList<>();
                 for (BEValue bev2 : bl2) {
                     sl2.add(bev2.getString());
                 }
@@ -250,7 +250,7 @@ public class MetaInfo {
             List<String> urllist;
             try {
                 List<BEValue> bl1 = val.getList();
-                urllist = new ArrayList<String>(bl1.size());
+                urllist = new ArrayList<>(bl1.size());
                 for (BEValue bev : bl1) {
                     urllist.add(bev.getString());
                 }
@@ -369,8 +369,8 @@ public class MetaInfo {
                 throw new InvalidBEncodingException("Zero size files list");
             }
 
-            List<List<String>> m_files = new ArrayList<List<String>>(size);
-            List<Long> m_lengths = new ArrayList<Long>(size);
+            List<List<String>> m_files = new ArrayList<>(size);
+            List<Long> m_lengths = new ArrayList<>(size);
             List<String> m_attributes = null;
             long l = 0;
             for (int i = 0; i < list.size(); i++) {
@@ -401,7 +401,7 @@ public class MetaInfo {
                     throw new InvalidBEncodingException("Zero size file path list");
                 }
 
-                List<String> file = new ArrayList<String>(path_length);
+                List<String> file = new ArrayList<>(path_length);
                 Iterator<BEValue> it = path_list.iterator();
                 while (it.hasNext()) {
                     String s = it.next().getString();
@@ -424,7 +424,7 @@ public class MetaInfo {
                 if (val != null) {
                     String s = val.getString();
                     if (m_attributes == null) {
-                        m_attributes = new ArrayList<String>(size);
+                        m_attributes = new ArrayList<>(size);
                         for (int j = 0; j < i; j++) {
                             m_attributes.add("");
                         }
@@ -695,7 +695,7 @@ public class MetaInfo {
      * @param announce may be null
      */
     public MetaInfo reannounce(String announce) throws InvalidBEncodingException {
-        Map<String, BEValue> m = new HashMap<String, BEValue>();
+        Map<String, BEValue> m = new HashMap<>();
         if (announce != null) {
             m.put("announce", new BEValue(DataHelper.getUTF8(announce)));
         }
@@ -706,7 +706,7 @@ public class MetaInfo {
 
     /** Called by servlet to save a new torrent file generated from local data */
     public synchronized byte[] getTorrentData() {
-        Map<String, Object> m = new HashMap<String, Object>();
+        Map<String, Object> m = new HashMap<>();
         if (announce != null) {
             m.put("announce", announce);
         }
@@ -774,7 +774,7 @@ public class MetaInfo {
             _log.debug("Creating new infomap", new Exception());
         }
         // otherwise we must create it
-        Map<String, BEValue> info = new HashMap<String, BEValue>();
+        Map<String, BEValue> info = new HashMap<>();
         info.put("name", new BEValue(DataHelper.getUTF8(name)));
         // BEP 27
         if (privateTorrent != 0) {
@@ -788,11 +788,11 @@ public class MetaInfo {
         if (files == null) {
             info.put("length", new BEValue(Long.valueOf(length)));
         } else {
-            List<BEValue> l = new ArrayList<BEValue>();
+            List<BEValue> l = new ArrayList<>();
             for (int i = 0; i < files.size(); i++) {
-                Map<String, BEValue> file = new HashMap<String, BEValue>();
+                Map<String, BEValue> file = new HashMap<>();
                 List<String> fi = files.get(i);
-                List<BEValue> befiles = new ArrayList<BEValue>(fi.size());
+                List<BEValue> befiles = new ArrayList<>(fi.size());
                 for (int j = 0; j < fi.size(); j++) {
                     befiles.add(new BEValue(DataHelper.getUTF8(fi.get(j))));
                 }
@@ -869,7 +869,7 @@ public class MetaInfo {
                         break;
 
                     case 'w':
-                        if (url_list == null) url_list = new ArrayList<String>();
+                        if (url_list == null) url_list = new ArrayList<>();
                         url_list.add(g.getOptarg());
                         break;
 

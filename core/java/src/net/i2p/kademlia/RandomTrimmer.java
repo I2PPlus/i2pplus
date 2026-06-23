@@ -22,7 +22,7 @@ public class RandomTrimmer<T extends SimpleDataStructure> implements KBucketTrim
 
     @Override
     public boolean trim(KBucket<T> kbucket, T toAdd) {
-        List<T> e = new ArrayList<T>(kbucket.getEntries());
+        List<T> e = new ArrayList<>(kbucket.getEntries());
         int sz = e.size();
         // concurrency
         if (sz < _max) return true;

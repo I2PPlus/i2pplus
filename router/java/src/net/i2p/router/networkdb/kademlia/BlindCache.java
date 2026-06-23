@@ -55,9 +55,9 @@ class BlindCache {
      */
     public BlindCache(RouterContext ctx) {
         _context = ctx;
-        _cache = new ConcurrentHashMap<SigningPublicKey, BlindData>(32);
-        _reverseCache = new ConcurrentHashMap<SigningPublicKey, BlindData>(32);
-        _hashCache = new ConcurrentHashMap<Hash, BlindData>(32);
+        _cache = new ConcurrentHashMap<>(32);
+        _reverseCache = new ConcurrentHashMap<>(32);
+        _hashCache = new ConcurrentHashMap<>(32);
     }
 
     /**
@@ -272,7 +272,7 @@ class BlindCache {
      *  @since 0.9.41
      */
     public synchronized List<BlindData> getData() {
-        List<BlindData> rv = new ArrayList<BlindData>(_cache.size());
+        List<BlindData> rv = new ArrayList<>(_cache.size());
         rv.addAll(_cache.values());
         return rv;
     }

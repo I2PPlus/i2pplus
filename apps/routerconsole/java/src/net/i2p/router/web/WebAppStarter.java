@@ -38,8 +38,8 @@ import org.eclipse.jetty.webapp.WebAppContext;
  */
 public class WebAppStarter {
 
-    private static final Map<String, Long> warModTimes = new ConcurrentHashMap<String, Long>();
-    static final Map<String, String> INIT_PARAMS = new HashMap<String, String>(4);
+    private static final Map<String, Long> warModTimes = new ConcurrentHashMap<>();
+    static final Map<String, String> INIT_PARAMS = new HashMap<>(4);
     static final String PARAM_PLUGIN_NAME = "net.i2p.router.web.WebAppStarter.PLUGIN_NAME";
 
     // There are 4 additional jars that are required to do the Servlet 3.0 annotation scanning.
@@ -57,7 +57,7 @@ public class WebAppStarter {
     private static final String CLASS_CONFIG = "org.eclipse.jetty.webapp.JettyWebXmlConfiguration";
 
     private static final boolean HAS_ANNOTATION_CLASSES;
-    private static final Set<String> BUILTINS = new HashSet<String>(8);
+    private static final Set<String> BUILTINS = new HashSet<>(8);
 
     static {
         //_log = ContextHelper.getContext(null).logManager().getLog(WebAppStarter.class);;
@@ -208,7 +208,7 @@ public class WebAppStarter {
         // See WebAppContext.loadConfigurations() in source
         if (classNames.length == 0)
             classNames = wac.getDefaultConfigurationClasses();
-        List<String> newClassNames = new ArrayList<String>(Arrays.asList(classNames));
+        List<String> newClassNames = new ArrayList<>(Arrays.asList(classNames));
         for (String name : newClassNames) {
              // fix for Jetty 9.4 ticket #2385
              wac.prependServerClass("-" + name);

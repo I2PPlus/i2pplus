@@ -20,7 +20,7 @@ public class Points implements Comparable<Points> {
      *  @since 0.9.38
      */
     private Points() {
-        reasons = new ArrayList<String>(4);
+        reasons = new ArrayList<>(4);
     }
 
     /**

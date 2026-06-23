@@ -82,10 +82,10 @@ public class JobQueueHelper extends HelperBase {
      *  @since 0.8.9
      */
     private void renderStatusHTML(Writer out) throws IOException {
-        List<Job> readyJobs = new ArrayList<Job>(8);
-        List<Job> timedJobs = new ArrayList<Job>(128);
-        List<Job> activeJobs = new ArrayList<Job>(8);
-        List<Job> justFinishedJobs = new ArrayList<Job>(8);
+        List<Job> readyJobs = new ArrayList<>(8);
+        List<Job> timedJobs = new ArrayList<>(128);
+        List<Job> activeJobs = new ArrayList<>(8);
+        List<Job> justFinishedJobs = new ArrayList<>(8);
 
         int numRunners = _context.jobQueue().getJobs(readyJobs, timedJobs, activeJobs, justFinishedJobs);
         int totalTimedJobs = timedJobs.size();
@@ -128,12 +128,12 @@ public class JobQueueHelper extends HelperBase {
         if (activeJobs.size() > 0) {
             buf.append("<ol class=jobqueue>\n");
             // Group active jobs by name
-            Map<String, List<Job>> groupedActiveJobs = new HashMap<String, List<Job>>();
+            Map<String, List<Job>> groupedActiveJobs = new HashMap<>();
             for (int i = 0; i < activeJobs.size(); i++) {
                 Job j = activeJobs.get(i);
                 String jobName = j.getName();
                 if (!groupedActiveJobs.containsKey(jobName)) {
-                    groupedActiveJobs.put(jobName, new ArrayList<Job>());
+                    groupedActiveJobs.put(jobName, new ArrayList<>());
                 }
                 groupedActiveJobs.get(jobName).add(j);
             }
@@ -170,7 +170,7 @@ public class JobQueueHelper extends HelperBase {
                .append("</h3>\n<ol class=jobqueue>\n");
 
             // Group finished jobs by name and completion time
-            Map<String, Map<Long, List<Job>>> groupedFinishedJobs = new HashMap<String, Map<Long, List<Job>>>();
+            Map<String, Map<Long, List<Job>>> groupedFinishedJobs = new HashMap<>();
 
             for (int i = 0; i < justFinishedJobs.size(); i++) {
                 Job j = justFinishedJobs.get(i);
@@ -178,21 +178,21 @@ public class JobQueueHelper extends HelperBase {
                 long completionTime = j.getTiming().getActualEnd();
 
                 if (!groupedFinishedJobs.containsKey(jobName)) {
-                    groupedFinishedJobs.put(jobName, new HashMap<Long, List<Job>>());
+                    groupedFinishedJobs.put(jobName, new HashMap<>());
                 }
                 Map<Long, List<Job>> timeGroups = groupedFinishedJobs.get(jobName);
                 if (!timeGroups.containsKey(completionTime)) {
-                    timeGroups.put(completionTime, new ArrayList<Job>());
+                    timeGroups.put(completionTime, new ArrayList<>());
                 }
                 timeGroups.get(completionTime).add(j);
             }
 
             // Use Set to avoid duplicate timestamps
-            java.util.Set<Long> uniqueTimes = new java.util.HashSet<Long>();
+            java.util.Set<Long> uniqueTimes = new java.util.HashSet<>();
             for (Map<Long, List<Job>> timeGroups : groupedFinishedJobs.values()) {
                 uniqueTimes.addAll(timeGroups.keySet());
             }
-            List<Long> allTimes = new ArrayList<Long>(uniqueTimes);
+            List<Long> allTimes = new ArrayList<>(uniqueTimes);
             Collections.sort(allTimes, Collections.reverseOrder());
 
             int displayedJobCount = 0;
@@ -268,18 +268,18 @@ public class JobQueueHelper extends HelperBase {
             buf.append("<ol class=jobqueue>\n");
 
             // Group ready jobs by name and elapsed time (rounded to nearest second)
-            Map<String, Map<Long, List<Job>>> groupedReadyJobs = new HashMap<String, Map<Long, List<Job>>>();
+            Map<String, Map<Long, List<Job>>> groupedReadyJobs = new HashMap<>();
             for (int i = 0; i < readyJobs.size(); i++) {
                 Job j = readyJobs.get(i);
                 String jobName = j.getName();
                 long elapsed = Math.max(0, now - j.getTiming().getStartAfter());
                 long elapsedSeconds = (elapsed / 1000) * 1000; // Round to nearest second
                 if (!groupedReadyJobs.containsKey(jobName)) {
-                    groupedReadyJobs.put(jobName, new HashMap<Long, List<Job>>());
+                    groupedReadyJobs.put(jobName, new HashMap<>());
                 }
                 Map<Long, List<Job>> timeGroups = groupedReadyJobs.get(jobName);
                 if (!timeGroups.containsKey(elapsedSeconds)) {
-                    timeGroups.put(elapsedSeconds, new ArrayList<Job>());
+                    timeGroups.put(elapsedSeconds, new ArrayList<>());
                 }
                 timeGroups.get(elapsedSeconds).add(j);
             }
@@ -318,8 +318,8 @@ public class JobQueueHelper extends HelperBase {
         out.append(buf);
         buf.setLength(0);
 
-        ObjectCounterUnsafe<String> totalQueueCounter = new ObjectCounterUnsafe<String>();
-        Map<String, Map<Long, List<Job>>> groupedJobs = new HashMap<String, Map<Long, List<Job>>>();
+        ObjectCounterUnsafe<String> totalQueueCounter = new ObjectCounterUnsafe<>();
+        Map<String, Map<Long, List<Job>>> groupedJobs = new HashMap<>();
         int eligibleScheduledCount = 0;
         long maxScheduledDelay = 0;
 
@@ -347,11 +347,11 @@ public class JobQueueHelper extends HelperBase {
             // Group by job name and rounded time (seconds)
             long timeInSeconds = (delay / 1000) * 1000;
             if (!groupedJobs.containsKey(jobName)) {
-                groupedJobs.put(jobName, new HashMap<Long, List<Job>>());
+                groupedJobs.put(jobName, new HashMap<>());
             }
             Map<Long, List<Job>> timeGroups = groupedJobs.get(jobName);
             if (!timeGroups.containsKey(timeInSeconds)) {
-                timeGroups.put(timeInSeconds, new ArrayList<Job>());
+                timeGroups.put(timeInSeconds, new ArrayList<>());
             }
             timeGroups.get(timeInSeconds).add(j);
         }
@@ -361,7 +361,7 @@ public class JobQueueHelper extends HelperBase {
         int displayedLiCount = 0;
 
         // Sort jobs for display
-        List<JobTimeEntry> sortedJobs = new ArrayList<JobTimeEntry>();
+        List<JobTimeEntry> sortedJobs = new ArrayList<>();
         for (String jobName : groupedJobs.keySet()) {
             Map<Long, List<Job>> timeGroups = groupedJobs.get(jobName);
             for (Long time : timeGroups.keySet()) {
@@ -526,7 +526,7 @@ public class JobQueueHelper extends HelperBase {
         long maxPendingTime = 0;
         long minPendingTime = Long.MAX_VALUE;
 
-        List<JobStats> tstats = new ArrayList<JobStats>(_context.jobQueue().getJobStats());
+        List<JobStats> tstats = new ArrayList<>(_context.jobQueue().getJobStats());
         Collections.sort(tstats, new JobStatsComparator());
 
         for (JobStats stats : tstats) {

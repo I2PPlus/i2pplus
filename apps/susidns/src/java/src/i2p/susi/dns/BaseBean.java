@@ -140,7 +140,7 @@ public class BaseBean {
             FileFilter fileFilter = new FileFilter() { public boolean accept(File file) { return file.isDirectory(); } };
             File[] dirnames = dir.listFiles(fileFilter);
             if (dirnames != null) {
-                List<String> th = new ArrayList<String>(dirnames.length);
+                List<String> th = new ArrayList<>(dirnames.length);
                 for (int i = 0; i < dirnames.length; i++) {
                     String name = dirnames[i].getName();
                     th.add(name);

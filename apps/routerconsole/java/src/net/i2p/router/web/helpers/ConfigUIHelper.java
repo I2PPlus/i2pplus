@@ -132,7 +132,7 @@ public class ConfigUIHelper extends HelperBase {
      * @return a sorted Set containing all available theme names (untranslated)
      */
     private Set<String> themeSet() {
-         Set<String> rv = new TreeSet<String>();
+         Set<String> rv = new TreeSet<>();
          // add a failsafe even if we can't find any themes
          rv.add(CSSHelper.DEFAULT_THEME);
          File dir = new File(_context.getBaseDir(), "docs/themes/console");

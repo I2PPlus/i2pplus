@@ -103,14 +103,14 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         _context = ctx;
         _cmgr = listener;
         _log = ctx.logManager().getLog(ConsoleUpdateManager.class);
-        _registeredUpdaters = new ConcurrentHashSet<RegisteredUpdater>();
-        _registeredCheckers = new ConcurrentHashSet<RegisteredChecker>();
-        _registeredPostProcessors = new ConcurrentHashMap<Integer, UpdatePostProcessor>(2);
-        _activeCheckers = new ConcurrentHashSet<UpdateTask>();
-        _downloaders = new ConcurrentHashMap<UpdateTask, List<RegisteredUpdater>>();
-        _available = new ConcurrentHashMap<UpdateItem, VersionAvailable>();
-        _downloaded = new ConcurrentHashMap<UpdateItem, Version>();
-        _installed = new ConcurrentHashMap<UpdateItem, Version>();
+        _registeredUpdaters = new ConcurrentHashSet<>();
+        _registeredCheckers = new ConcurrentHashSet<>();
+        _registeredPostProcessors = new ConcurrentHashMap<>(2);
+        _activeCheckers = new ConcurrentHashSet<>();
+        _downloaders = new ConcurrentHashMap<>();
+        _available = new ConcurrentHashMap<>();
+        _downloaded = new ConcurrentHashMap<>();
+        _installed = new ConcurrentHashMap<>();
         _status = "";
         _allowTorrent = true;
         _state = INITIALIZED;
@@ -584,7 +584,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             if (_log.shouldWarn()) {_log.warn("No version available for: " + type + ' ' + id);}
             return false;
         }
-        List<RegisteredUpdater> sorted = new ArrayList<RegisteredUpdater>(4);
+        List<RegisteredUpdater> sorted = new ArrayList<>(4);
         for (RegisteredUpdater ru : _registeredUpdaters) {
             if (ru.type == type) {sorted.add(ru);}
         }
@@ -1163,7 +1163,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
               { // avoid dup variables in next case
                 String URLs = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_URL, ConfigUpdateHandler.DEFAULT_UPDATE_URL);
                 StringTokenizer tok = new StringTokenizer(URLs, " ,\r\n");
-                List<URI> rv = new ArrayList<URI>();
+                List<URI> rv = new ArrayList<>();
                 while (tok.hasMoreTokens()) {
                     try {rv.add(new URI(tok.nextToken().trim()));}
                     catch (URISyntaxException use) {}
@@ -1557,7 +1557,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         public VersionAvailable(String version, String min, UpdateMethod method, List<URI> updateSources) {
             super(version);
             minVersion = min;
-            sourceMap = new ConcurrentHashMap<UpdateMethod, List<URI>>(4);
+            sourceMap = new ConcurrentHashMap<>(4);
             sourceMap.put(method, updateSources);
         }
 
@@ -1568,7 +1568,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         public VersionAvailable(String version, String constraint) {
             super(version);
             minVersion = "";
-            sourceMap = new ConcurrentHashMap<UpdateMethod, List<URI>>(4);
+            sourceMap = new ConcurrentHashMap<>(4);
             this.constraint = constraint;
         }
 
@@ -1636,7 +1636,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
     /** debug */
     private static void toString(StringBuilder buf, Collection<?> col) {
-        List<String> list = new ArrayList<String>(col.size());
+        List<String> list = new ArrayList<>(col.size());
         for (Object o : col) {list.add(o.toString());}
         Collections.sort(list);
         for (String e : list) {buf.append(e).append("<br>");}
@@ -1644,7 +1644,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
     /** debug */
     private static void toString(StringBuilder buf, Map<?, ?> map) {
-        List<String> list = new ArrayList<String>(map.size());
+        List<String> list = new ArrayList<>(map.size());
         for (Map.Entry<?, ?> entry : map.entrySet()) {
             String key = entry.getKey().toString();
             String val = entry.getValue().toString();

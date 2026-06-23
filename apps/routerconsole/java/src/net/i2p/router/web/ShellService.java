@@ -137,7 +137,7 @@ public class ShellService implements ClientApp {
 
     // private String[] trimArgs(String[] args) {
     private ArrayList<String> trimArgs(String[] args) {
-        ArrayList<String> newargs = new ArrayList<String>();
+        ArrayList<String> newargs = new ArrayList<>();
         for (int i = 0; i < args.length; i++) {
             if (args[i].startsWith(NAME_OPTION)) {
                 if (args[i].contains("=")) {

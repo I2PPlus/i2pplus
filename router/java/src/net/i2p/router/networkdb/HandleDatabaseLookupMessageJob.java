@@ -216,7 +216,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         // to pass to findNearestRouters()
         Set<Hash> dontInclude = _message.getDontIncludePeers();
         if (dontInclude == null && lookupType == DatabaseLookupMessage.Type.EXPL) {
-            dontInclude = new HashSet<Hash>(2);
+            dontInclude = new HashSet<>(2);
             dontInclude.add(_us);
             dontInclude.add(Hash.FAKE_HASH);
         } else if (dontInclude == null) {dontInclude = Collections.singleton(_us);}

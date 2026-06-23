@@ -28,7 +28,7 @@ class MessageHandler implements I2PSessionMuxedListener {
     public MessageHandler(I2PAppContext ctx, ConnectionManager mgr) {
         _manager = mgr;
         _context = ctx;
-        _listeners = new CopyOnWriteArraySet<DisconnectListener>();
+        _listeners = new CopyOnWriteArraySet<>();
         _log = ctx.logManager().getLog(MessageHandler.class);
         _context.statManager().createRateStat("stream.packetReceiveFailure",
                                               "Number of times we fail to decrypt or otherwise receive a packet sent to us",

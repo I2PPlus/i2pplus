@@ -37,7 +37,7 @@ public class Clock implements Timestamper.UpdateListener {
 
     public Clock(I2PAppContext context) {
         _context = context;
-        _listeners = new CopyOnWriteArraySet<ClockUpdateListener>();
+        _listeners = new CopyOnWriteArraySet<>();
         long now = System.currentTimeMillis();
         long min = BuildTime.getEarliestTime();
         long max = BuildTime.getLatestTime();

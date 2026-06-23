@@ -67,7 +67,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *  Does not support EC
      *  @since 0.9.21
      */
-    private static final Set<Hash> _ecUnsupported = new HashSet<Hash>(16);
+    private static final Set<Hash> _ecUnsupported = new HashSet<>(16);
     private static final String[] EC_UNSUPPORTED_HASHES = {
         // list from http://zzz.i2p/topics/1682?page=1#p8414
         // bzr.welterde.i2p
@@ -104,7 +104,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *  Does not support Ed
      *  @since 0.9.23
      */
-    private static final Set<Hash> _edUnsupported = new HashSet<Hash>(16);
+    private static final Set<Hash> _edUnsupported = new HashSet<>(16);
     private static final String[] ED_UNSUPPORTED_HASHES = {
         // list from http://zzz.i2p/topics/1682?page=1#p8414
         // minus those tested to support Ed
@@ -154,7 +154,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /** cache of the property to detect changes */
     private static volatile String _userDsaList = "";
-    private static final Set<Hash> _userDsaOnly = new ConcurrentHashSet<Hash>(4);
+    private static final Set<Hash> _userDsaOnly = new ConcurrentHashSet<>(4);
     private static final String PROP_DSALIST = "i2p.streaming.dsalist";
 
     /**
@@ -195,7 +195,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
                 IncomingConnectionFilter connectionFilter) {
         _context = context;
         _session = session;
-        _subsessions = new ConcurrentHashSet<I2PSession>(4);
+        _subsessions = new ConcurrentHashSet<>(4);
         _log = _context.logManager().getLog(I2PSocketManagerFull.class);
 
         _name = name + " " + (__managerId.incrementAndGet());
@@ -629,7 +629,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
             // rebuild _userDsaOnly when property changes
             synchronized(_userDsaOnly) {
                 if (hashes.length() > 0) {
-                    Set<Hash> newSet = new HashSet<Hash>();
+                    Set<Hash> newSet = new HashSet<>();
                     StringTokenizer tok = new StringTokenizer(hashes, ",; ");
                     while (tok.hasMoreTokens()) {
                         String hashstr = tok.nextToken();
@@ -760,7 +760,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      */
     public Set<I2PSocket> listSockets() {
         Set<Connection> connections = _connectionManager.listConnections();
-        Set<I2PSocket> rv = new HashSet<I2PSocket>(connections.size());
+        Set<I2PSocket> rv = new HashSet<>(connections.size());
         for (Connection con : connections) {
             if (con.getSocket() != null)
                 rv.add(con.getSocket());

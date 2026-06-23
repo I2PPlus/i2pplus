@@ -35,8 +35,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class EventDispatcherImpl implements EventDispatcher {
 
     private boolean _ignore = false;
-    private final Map<String, Object> _events = new ConcurrentHashMap<String, Object>(4);
-    private final List<EventDispatcher> _attached = new CopyOnWriteArrayList<EventDispatcher>();
+    private final Map<String, Object> _events = new ConcurrentHashMap<>(4);
+    private final List<EventDispatcher> _attached = new CopyOnWriteArrayList<>();
 
     @Override
     public EventDispatcher getEventDispatcher() {
@@ -79,7 +79,7 @@ public class EventDispatcherImpl implements EventDispatcher {
     @Override
     public Set<String> getEvents() {
         if (_ignore) return Collections.emptySet();
-        return new HashSet<String>(_events.keySet());
+        return new HashSet<>(_events.keySet());
     }
 
     @Override

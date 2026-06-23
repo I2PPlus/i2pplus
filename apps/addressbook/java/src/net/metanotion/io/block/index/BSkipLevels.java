@@ -134,8 +134,8 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
 	 *  @since 0.9.20
 	 */
 	public void initializeLevels() {
-		List<BSkipLevels<K, V>> toInit = new ArrayList<BSkipLevels<K, V>>(32);
-		List<BSkipLevels<K, V>> nextInit = new ArrayList<BSkipLevels<K, V>>(32);
+		List<BSkipLevels<K, V>> toInit = new ArrayList<>(32);
+		List<BSkipLevels<K, V>> nextInit = new ArrayList<>(32);
 		initializeLevels(toInit);
 		while (!toInit.isEmpty()) {
 			for (BSkipLevels<K, V> bsl : toInit) {
@@ -163,7 +163,7 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
 				levels[i] = bsl.levelHash.get(Integer.valueOf(lp));
 				if(levels[i] == null) {
 					try {
-						BSkipLevels<K, V> lev = new BSkipLevels<K, V>(bf, lp, bsl);
+						BSkipLevels<K, V> lev = new BSkipLevels<>(bf, lp, bsl);
 						levels[i] = lev;
 						nextInit.add(lev);
 					} catch (IOException ioe) {
@@ -283,7 +283,7 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
 			BSkipLevels.init(bf, page, bss.page, levels);
 			if (bf.log.shouldDebug())
 				bf.log.debug("New BSkipLevels height " + levels + " page " + page);
-			return new BSkipLevels<K, V>(bf, page, bsl);
+			return new BSkipLevels<>(bf, page, bsl);
 			// do not need to call initLevels() here
 		} catch (IOException ioe) { throw new RuntimeException("Error creating database page", ioe); }
 	}
@@ -312,7 +312,7 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
 	 *  @since 0.8.8
 	 */
 	private boolean blvlfix() {
-		TreeSet<SkipLevels<K, V>> lvls = new TreeSet<SkipLevels<K, V>>(new LevelComparator<K, V>());
+		TreeSet<SkipLevels<K, V>> lvls = new TreeSet<>(new LevelComparator<>());
 		if (bf.log.shouldDebug())
 			bf.log.debug("Starting level search");
 		getAllLevels(this, lvls);

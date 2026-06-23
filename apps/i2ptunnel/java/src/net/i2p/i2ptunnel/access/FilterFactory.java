@@ -28,7 +28,7 @@ public class FilterFactory {
     public static StatefulConnectionFilter createFilter(I2PAppContext context,
                                                         File definition)
         throws IOException, InvalidDefinitionException {
-        List<String> linesList = new ArrayList<String>();
+        List<String> linesList = new ArrayList<>();
 
         BufferedReader reader = null;
         try {

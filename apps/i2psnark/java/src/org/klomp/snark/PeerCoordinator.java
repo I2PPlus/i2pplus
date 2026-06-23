@@ -190,12 +190,12 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         this.snark = torrent;
         bwListener = bwl;
 
-        wantedPieces = new ArrayList<Piece>();
+        wantedPieces = new ArrayList<>();
         setWantedPieces();
-        partialPieces = new ArrayList<PartialPiece>(getMaxConnections() + 1);
-        peers = new LinkedBlockingDeque<Peer>();
+        partialPieces = new ArrayList<>(getMaxConnections() + 1);
+        peers = new LinkedBlockingDeque<>();
         magnetState = new MagnetState(infohash, metainfo);
-        pexPeers = new ConcurrentHashSet<PeerID>();
+        pexPeers = new ConcurrentHashSet<>();
 
         // Install a timer to check the uploaders.
         // Randomize the first start time so multiple tasks are spread out,
@@ -304,7 +304,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
     /** for web page detailed stats */
     public List<Peer> peerList() {
-        return new ArrayList<Peer>(peers);
+        return new ArrayList<>(peers);
     }
 
     public byte[] getID() {
@@ -647,7 +647,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
     public void halt() {
         halted = true;
-        List<Peer> removed = new ArrayList<Peer>();
+        List<Peer> removed = new ArrayList<>();
         synchronized (peers) {
             // Stop peer checker task.
             timer.cancel();
@@ -888,7 +888,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         // linked list will contain all interested peers that we choke.
         // At the start are the peers that have us unchoked at the end the
         // other peer that are interested, but are choking us.
-        List<Peer> interested = new LinkedList<Peer>();
+        List<Peer> interested = new LinkedList<>();
         int count = 0;
         int unchokedCount = 0;
         int maxUploaders = allowedUploaders();
@@ -988,7 +988,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         }
 
         Piece piece = null;
-        List<Piece> requested = new ArrayList<Piece>();
+        List<Piece> requested = new ArrayList<>();
         int wantedSize = END_GAME_THRESHOLD + 1;
         synchronized (wantedPieces) {
             if (record) {
@@ -1127,7 +1127,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             _log.debug("Updated piece priorities called but no priorities to set?");
             return;
         }
-        List<Piece> toCancel = new ArrayList<Piece>();
+        List<Piece> toCancel = new ArrayList<>();
         synchronized (wantedPieces) {
             // Add incomplete and previously unwanted pieces to the list
             // Temp to avoid O(n**2)
@@ -1331,7 +1331,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
         // Announce to the world we have it!
         // Disconnect from other seeders when we get the last piece
-        List<Peer> toDisconnect = done ? new ArrayList<Peer>() : null;
+        List<Peer> toDisconnect = done ? new ArrayList<>() : null;
         for (Peer p : peers) {
             if (p.isConnected()) {
                 if (done && p.isCompleted()) {
@@ -1696,7 +1696,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         }
         try {
             if (bev.getMap().get(ExtensionHandler.TYPE_PEX) != null) {
-                List<Peer> pList = new ArrayList<Peer>();
+                List<Peer> pList = new ArrayList<>();
                 long t = peer.getPexLastSent();
                 for (Peer p : peers) {
                     if (p.equals(peer) || p.isWebPeer()) {
@@ -2026,7 +2026,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      */
     public synchronized void banWebPeer(String host, boolean isPermanent) {
         if (_webPeerBans == null) {
-            _webPeerBans = new HashMap<String, Long>(4);
+            _webPeerBans = new HashMap<>(4);
         }
         Long time;
         if (isPermanent) {

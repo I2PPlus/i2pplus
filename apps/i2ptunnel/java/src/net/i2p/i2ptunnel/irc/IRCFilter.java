@@ -47,7 +47,7 @@ abstract class IRCFilter {
                 "ACCOUNT",  // https://ircv3.net/specs/extensions/account-notify
                 "CHGHOST"   // https://ircv3.net/specs/extensions/chghost
         };
-        _allowedInbound = new HashSet<String>(Arrays.asList(allowedCommands));
+        _allowedInbound = new HashSet<>(Arrays.asList(allowedCommands));
     }
 
     /*************************************************************************
@@ -273,7 +273,7 @@ abstract class IRCFilter {
                 "WALLOPS",
                 "ZLINE"
         };
-        _allowedOutbound = new HashSet<String>(Arrays.asList(allowedCommands));
+        _allowedOutbound = new HashSet<>(Arrays.asList(allowedCommands));
     }
 
     /*************************************************************************

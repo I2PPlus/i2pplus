@@ -26,11 +26,11 @@ public class ConfigurationManager {
     private boolean _changed;
 
     //Configurations with a String as value
-    private final Map<String, String> stringConfigurations = new HashMap<String, String>();
+    private final Map<String, String> stringConfigurations = new HashMap<>();
     //Configurations with a Boolean as value
-    private final Map<String, Boolean> booleanConfigurations = new HashMap<String, Boolean>();
+    private final Map<String, Boolean> booleanConfigurations = new HashMap<>();
     //Configurations with an Integer as value
-    private final Map<String, Integer> integerConfigurations = new HashMap<String, Integer>();
+    private final Map<String, Integer> integerConfigurations = new HashMap<>();
 
 
 

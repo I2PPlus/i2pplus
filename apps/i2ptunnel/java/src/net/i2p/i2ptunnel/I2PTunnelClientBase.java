@@ -59,7 +59,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     protected long _clientId;
     protected final Object sockLock = new Object(); // Guards sockMgr and mySockets
     protected I2PSocketManager sockMgr; // should be final and use a factory. LINT
-    protected final List<I2PSocket> mySockets = new ArrayList<I2PSocket>();
+    protected final List<I2PSocket> mySockets = new ArrayList<>();
     protected boolean _ownDest;
     protected Destination dest;
     private volatile int localPort;
@@ -715,7 +715,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 // Was already done in GeneralHelper.updateTunnelConfig() when saving the config.
                 // We should never be generating the cert here.
                 // Add the local interface and all targets to the cert.
-                Set<String> altNames = new HashSet<String>(4);
+                Set<String> altNames = new HashSet<>(4);
                 String intfc = getTunnel().listenHost;
                 if (intfc != null && !intfc.equals("0.0.0.0") && !intfc.equals("::") &&
                     !intfc.equals("0:0:0:0:0:0:0:0")) {altNames.add(intfc);}

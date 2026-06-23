@@ -954,9 +954,9 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
         // Don't think these would ever be accessed simultaneously,
         // but avoid concurrent modification just in case
         Set<Hash> accessList, blackList;
-        if (accessListEnabled) {accessList = new HashSet<Hash>();}
+        if (accessListEnabled) {accessList = new HashSet<>();}
         else {accessList = Collections.emptySet();}
-        if (blackListEnabled) {blackList = new HashSet<Hash>();}
+        if (blackListEnabled) {blackList = new HashSet<>();}
         else {blackList = Collections.emptySet();}
         if (accessListEnabled || blackListEnabled) {
             String hashes = opts.getProperty(PROP_ACCESS_LIST);

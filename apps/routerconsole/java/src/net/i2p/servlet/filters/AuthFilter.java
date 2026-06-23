@@ -32,8 +32,8 @@ public class AuthFilter implements Filter {
     private static final String PROP_ENFORCE_LOGIN = "routerconsole.enforceLogin";
     private static final String DEFAULT_THEME = "dark";
 
-    private static final Set<String> PUBLIC_PATHS = new HashSet<String>();
-    private static final Set<String> PUBLIC_FILES = new HashSet<String>();
+    private static final Set<String> PUBLIC_PATHS = new HashSet<>();
+    private static final Set<String> PUBLIC_FILES = new HashSet<>();
     static {
         PUBLIC_PATHS.add("/index.jsp");
         PUBLIC_PATHS.add("/login");

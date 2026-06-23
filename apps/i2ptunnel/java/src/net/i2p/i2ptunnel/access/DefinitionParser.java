@@ -210,8 +210,8 @@ class DefinitionParser {
 
     private static class DefinitionBuilder {
         private Threshold threshold;
-        private List<FilterDefinitionElement> elements = new ArrayList<FilterDefinitionElement>();
-        private List<Recorder> recorders = new ArrayList<Recorder>();
+        private List<FilterDefinitionElement> elements = new ArrayList<>();
+        private List<Recorder> recorders = new ArrayList<>();
 
         void setDefaultThreshold(Threshold threshold) throws InvalidDefinitionException {
             if (this.threshold != null)

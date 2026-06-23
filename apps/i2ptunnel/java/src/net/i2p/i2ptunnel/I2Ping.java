@@ -171,7 +171,7 @@ public class I2Ping extends I2PTunnelClientBase {
             try {
                 br = new BufferedReader(new InputStreamReader(new FileInputStream(hostListFile), "UTF-8"));
                 String line;
-                List<PingHandler> pingHandlers = new ArrayList<PingHandler>();
+                List<PingHandler> pingHandlers = new ArrayList<>();
                 int i = 0;
                 while ((line = br.readLine()) != null) {
                     line = line.trim();
@@ -331,7 +331,7 @@ public class I2Ping extends I2PTunnelClientBase {
             int pass = 0;
             long totalTime = 0;
             boolean allSuccess = true;
-            List<PingResult> results = new ArrayList<PingResult>();
+            List<PingResult> results = new ArrayList<>();
 
             for (int i = 0; i < cnt; i++) {
                 l.log(" • Attempting ping " + (i + 1) + "/" + cnt + "...");

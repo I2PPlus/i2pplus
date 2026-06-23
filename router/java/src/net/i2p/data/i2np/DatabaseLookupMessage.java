@@ -287,7 +287,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     public Set<Hash> getDontIncludePeers() {
         if (_dontIncludePeers == null)
             return null;
-        return new HashSet<Hash>(_dontIncludePeers);
+        return new HashSet<>(_dontIncludePeers);
     }
 
     /**
@@ -300,7 +300,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     public void setDontIncludePeers(Collection<Hash> peers) {
         _hasChecksum = false;
         if (peers != null)
-            _dontIncludePeers = new ArrayList<Hash>(peers);
+            _dontIncludePeers = new ArrayList<>(peers);
         else
             _dontIncludePeers = null;
     }
@@ -314,7 +314,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
      */
     public void addDontIncludePeer(Hash peer) {
         if (_dontIncludePeers == null)
-            _dontIncludePeers = new ArrayList<Hash>();
+            _dontIncludePeers = new ArrayList<>();
         else if (_dontIncludePeers.contains(peer))
             return;
         _hasChecksum = false;
@@ -331,7 +331,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     public void addDontIncludePeers(Collection<Hash> peers) {
         _hasChecksum = false;
         if (_dontIncludePeers == null) {
-            _dontIncludePeers = new ArrayList<Hash>(peers);
+            _dontIncludePeers = new ArrayList<>(peers);
         } else {
             for (Hash peer : peers) {
                 if (!_dontIncludePeers.contains(peer))
@@ -400,7 +400,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         // Check bounds before reading peers
         if (numPeers > 0 && curIndex + numPeers * Hash.HASH_LENGTH > endIndex)
             throw new I2NPMessageException("Data too short for peer list");
-        List<Hash> peers = numPeers > 0 ? new ArrayList<Hash>(numPeers) : null;
+        List<Hash> peers = numPeers > 0 ? new ArrayList<>(numPeers) : null;
         for (int i = 0; i < numPeers; i++) {
             //byte peer[] = new byte[Hash.HASH_LENGTH];
             //System.arraycopy(data, curIndex, peer, 0, Hash.HASH_LENGTH);

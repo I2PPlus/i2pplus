@@ -22,7 +22,7 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
     private final Object _sessionCreateLock = new Object();
     private final Object _namingReplyLock = new Object();
     private final Object _streamStatusLock = new Object();
-    private final Map<String,String> _namingReplies = new HashMap<String,String>();
+    private final Map<String,String> _namingReplies = new HashMap<>();
 
     public SAMEventHandler(I2PAppContext ctx) {
         //_context = ctx;

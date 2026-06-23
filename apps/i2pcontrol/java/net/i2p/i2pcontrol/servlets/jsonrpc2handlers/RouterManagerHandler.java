@@ -77,7 +77,7 @@ public class RouterManagerHandler implements RequestHandler {
                                         req.getID());
         }
         Map<String, Object> inParams = req.getNamedParams();
-        final Map<String, Object> outParams = new HashMap<String, Object>(4);
+        final Map<String, Object> outParams = new HashMap<>(4);
 
         if (inParams.containsKey("Shutdown")) {
             outParams.put("Shutdown", null);

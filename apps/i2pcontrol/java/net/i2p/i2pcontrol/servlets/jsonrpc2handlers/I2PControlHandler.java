@@ -84,7 +84,7 @@ public class I2PControlHandler implements RequestHandler {
         }
 ****/
         Map<String, Object> inParams = req.getNamedParams();
-        Map<String, Object> outParams = new HashMap<String, Object>(4);
+        Map<String, Object> outParams = new HashMap<>(4);
 
         boolean restartNeeded = false;
         boolean settingsSaved = false;

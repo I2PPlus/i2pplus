@@ -44,9 +44,9 @@ abstract class FloodSearchJob extends JobImpl {
         _log = ctx.logManager().getLog(getClass());
         _facade = facade;
         _key = key;
-        _onFind = new CopyOnWriteArrayList<Job>();
+        _onFind = new CopyOnWriteArrayList<>();
         if (onFind != null) {_onFind.add(onFind);}
-        _onFailed = new CopyOnWriteArrayList<Job>();
+        _onFailed = new CopyOnWriteArrayList<>();
         if (onFailed != null) {_onFailed.add(onFailed);}
         int timeout = timeoutMs / FLOOD_SEARCH_TIME_FACTOR;
         if (timeout < timeoutMs) {timeout = timeoutMs;}

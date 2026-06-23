@@ -32,7 +32,7 @@ public class ObjectCounter<K> implements Serializable {
     private final ConcurrentHashMap<K, AtomicInteger> map;
 
     public ObjectCounter() {
-        this.map = new ConcurrentHashMap<K, AtomicInteger>();
+        this.map = new ConcurrentHashMap<>();
     }
 
     /**

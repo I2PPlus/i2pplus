@@ -28,7 +28,7 @@ class ConnThrottler {
     ConnThrottler(int max, int totalMax, long period, SimpleTimer2 timer) {
         _max = max;
         _totalMax = totalMax;
-        this.counter = new ObjectCounter<Hash>();
+        this.counter = new ObjectCounter<>();
         _currentTotal = new AtomicInteger();
         // Only schedule cleanup if we have at least one limit set
         if (max > 0 || totalMax > 0) {

@@ -67,7 +67,7 @@ public class WebAppConfiguration implements Configuration {
             // WebAppContext doesn't provide a remove method, so we must
             // convert to a list, remove the wildcard entry, add ours, then
             // add the wildcard back, then reset.
-            List<String> classes = new ArrayList<String>(16);
+            List<String> classes = new ArrayList<>(16);
             classes.addAll(Arrays.asList(wac.getServerClasses()));
             classes.remove("org.eclipse.jetty.");
             classes.add("-org.eclipse.jetty.http.");
@@ -165,7 +165,7 @@ public class WebAppConfiguration implements Configuration {
      * @since 0.9
      */
     private static Set<URI> getSystemClassPath(I2PAppContext ctx) {
-        Set<URI> rv = new HashSet<URI>(32);
+        Set<URI> rv = new HashSet<>(32);
         ClassLoader loader = ClassLoader.getSystemClassLoader();
         if (loader instanceof URLClassLoader) {
             // through Java 8, not available in Java 9

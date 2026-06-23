@@ -114,7 +114,7 @@ public class TunnelPoolSettings {
         if (_isExploratory && !_isInbound)
             _priority = EXPLORATORY_PRIORITY;
         if (!_isExploratory)
-            _aliases = new ConcurrentHashSet<Hash>(4);
+            _aliases = new ConcurrentHashSet<>(4);
         else
             _aliases = null;
     }

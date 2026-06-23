@@ -132,7 +132,7 @@ class TrackerInfo {
     private static Set<Peer> getPeers(
             List<BEValue> l, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util)
             throws IOException {
-        Set<Peer> peers = new HashSet<Peer>(l.size());
+        Set<Peer> peers = new HashSet<>(l.size());
 
         for (BEValue bev : l) {
             PeerID peerID;
@@ -166,7 +166,7 @@ class TrackerInfo {
             byte[] l, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util)
             throws IOException {
         int count = l.length / HASH_LENGTH;
-        Set<Peer> peers = new HashSet<Peer>(count);
+        Set<Peer> peers = new HashSet<>(count);
 
         for (int i = 0; i < count; i++) {
             PeerID peerID;
@@ -194,7 +194,7 @@ class TrackerInfo {
         if (hashes == null) {
             return Collections.emptySet();
         }
-        Set<Peer> peers = new HashSet<Peer>(hashes.size());
+        Set<Peer> peers = new HashSet<>(hashes.size());
         for (Hash h : hashes) {
             PeerID peerID;
             byte[] hash = new byte[HASH_LENGTH];

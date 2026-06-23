@@ -73,10 +73,10 @@ class MailCache {
 		  String host, int port, String user, String pass) throws IOException {
 		_log = ctx.logManager().getLog(MailCache.class);
 		this.mailbox = mailbox;
-		mails = new HashMap<String, Mail>();
+		mails = new HashMap<>();
 		disk = new PersistentMailCache(ctx, host, port, user, pass, folderName);
 		_context = ctx;
-		Folder<String> folder = new Folder<String>();
+		Folder<String> folder = new Folder<>();
 		// setElements() sorts, so configure the sorting first
 		//sessionObject.folder.addSorter( SORT_ID, new IDSorter( sessionObject.mailCache ) );
 		if (folderName.equals(WebMail.DIR_DRAFTS) || folderName.equals(WebMail.DIR_SENT))
@@ -298,7 +298,7 @@ class MailCache {
 	 * @since 0.9.13
 	 */
 	public String[] getUIDLs() {
-		List<String> uidls = new ArrayList<String>(mails.size());
+		List<String> uidls = new ArrayList<>(mails.size());
 		synchronized(mails) {
 			for (Mail mail : mails.values()) {
 				if (!mail.markForDeletion)
@@ -417,7 +417,7 @@ class MailCache {
 		Collection<String> popKnown = mailbox.getUIDLs();
 		if (popKnown == null)
 			return false;
-		List<POP3Request> fetches = new ArrayList<POP3Request>();
+		List<POP3Request> fetches = new ArrayList<>();
 		//  Fill in the answers from the cache and make a list of
 		//  requests.to send off
 		for (String uidl : popKnown) {
@@ -559,7 +559,7 @@ class MailCache {
 	 * @since 0.9.13
 	 */
 	public void delete(Collection<String> uidls) {
-		List<String> toDelete = new ArrayList<String>(uidls.size());
+		List<String> toDelete = new ArrayList<>(uidls.size());
 		for (String uidl : uidls) {
 			disk.deleteMail(uidl);
 			synchronized(mails) {

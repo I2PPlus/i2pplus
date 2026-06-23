@@ -35,7 +35,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
         super(ctx);
         _context = ctx;
         _log = ctx.logManager().getLog(RouterAppManager.class);
-        _clients = new ConcurrentHashMap<ClientApp, String[]>(16);
+        _clients = new ConcurrentHashMap<>(16);
         ctx.addShutdownTask(new Shutdown());
     }
 
@@ -200,7 +200,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
      *  @since 0.9.6
      */
     public synchronized void shutdown() {
-        Set<ClientApp> apps = new HashSet<ClientApp>(_clients.keySet());
+        Set<ClientApp> apps = new HashSet<>(_clients.keySet());
         for (ClientApp app : apps) {
             ClientAppState state = app.getState();
             if (state == RUNNING || state == STARTING) {
@@ -247,7 +247,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
      *  @since 0.9.6
      */
     private void toString1(StringBuilder buf) {
-        List<String> list = new ArrayList<String>(_clients.size());
+        List<String> list = new ArrayList<>(_clients.size());
         for (Map.Entry<ClientApp, String[]> entry : _clients.entrySet()) {
             ClientApp key = entry.getKey();
             String[] val = entry.getValue();
@@ -264,7 +264,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
      *  @since 0.9.6
      */
     private void toString2(StringBuilder buf) {
-        List<String> list = new ArrayList<String>(_registered.size());
+        List<String> list = new ArrayList<>(_registered.size());
         for (Map.Entry<String, ClientApp> entry : _registered.entrySet()) {
             String key = entry.getKey();
             ClientApp val = entry.getValue();

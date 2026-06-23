@@ -150,7 +150,7 @@ public class NamingServiceBean extends AddressbookBean {
         debug("[" + service + "] Performing search for: '" + search + "' with filter: '" + filter + "'");
         String message = "";
         try {
-            LinkedList<AddressBean> list = new LinkedList<AddressBean>();
+            LinkedList<AddressBean> list = new LinkedList<>();
             Map<String, Destination> results;
             boolean sortByDate = "latest".equals(filter);
             Properties searchProps = new Properties();
@@ -189,7 +189,7 @@ public class NamingServiceBean extends AddressbookBean {
             if (reverse != null) {
                 List<String> names = service.reverseLookupAll(reverse);
                 if (names != null) {
-                    results = new HashMap<String, Destination>(names.size());
+                    results = new HashMap<>(names.size());
                     for (String name : names) {
                         Destination d = service.lookup(name, searchProps, null);
                         if (d != null) {results.put(name, d);}
@@ -475,7 +475,7 @@ public class NamingServiceBean extends AddressbookBean {
                     } else {message = _t("No valid entries selected to delete.");}
                     if (action.equals(_t("Delete Entry"))) {search = null;} // clear search when deleting
                 } else if (action.equals(_t("Blacklist Selected"))) {
-                    List<String> hostsToBlacklist = new ArrayList<String>();
+                    List<String> hostsToBlacklist = new ArrayList<>();
                     for (String n : deletionMarks) {
                         hostsToBlacklist.add(n);
                     }
@@ -516,7 +516,7 @@ public class NamingServiceBean extends AddressbookBean {
             return;
         }
         Properties nsOptions = new Properties();
-        List<Properties> propsList = new ArrayList<Properties>(4);
+        List<Properties> propsList = new ArrayList<>(4);
         nsOptions.setProperty("list", getFileName());
         List<Destination> dests = getNamingService().lookupAll(detail, nsOptions, propsList);
         if (dests == null) {return;}
@@ -612,7 +612,7 @@ public class NamingServiceBean extends AddressbookBean {
             return null;
         }
         Properties nsOptions = new Properties();
-        List<Properties> propsList = new ArrayList<Properties>(4);
+        List<Properties> propsList = new ArrayList<>(4);
         nsOptions.setProperty("list", getFileName());
         List<Destination> dests = getNamingService().lookupAll(this.detail, nsOptions, propsList);
         if (dests == null) {return null;}
@@ -623,7 +623,7 @@ public class NamingServiceBean extends AddressbookBean {
             return null;
         }
 
-        List<AddressBean> rv = new ArrayList<AddressBean>(dests.size());
+        List<AddressBean> rv = new ArrayList<>(dests.size());
         for (int i = 0; i < dests.size(); i++) {
             AddressBean ab = new AddressBean(this.detail, dests.get(i));
             ab.setProperties(propsList.get(i));

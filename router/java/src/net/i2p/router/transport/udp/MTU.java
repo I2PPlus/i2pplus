@@ -65,7 +65,7 @@ public class MTU {
         }
         if (ifcs != null) {
             // save for fallback loop below, so we don't have to call getNetworkInterfaces() again
-            List<NetworkInterface> interfaces = new ArrayList<NetworkInterface>();
+            List<NetworkInterface> interfaces = new ArrayList<>();
             while (ifcs.hasMoreElements()) {
                 NetworkInterface ifc = ifcs.nextElement();
                 try {
@@ -222,7 +222,7 @@ public class MTU {
             Enumeration<NetworkInterface> ifcs = NetworkInterface.getNetworkInterfaces();
             if (ifcs != null) {
                 // address to MTU
-                Map<InetAddress, Integer> sorted = new TreeMap<InetAddress, Integer>(new IAComparator());
+                Map<InetAddress, Integer> sorted = new TreeMap<>(new IAComparator());
                 // this is O(n**2) through the interfaces and very slow on windows
                 while (ifcs.hasMoreElements()) {
                     NetworkInterface ifc = ifcs.nextElement();

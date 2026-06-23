@@ -137,7 +137,7 @@ public class BlacklistBean extends BaseBean {
         File file = blacklistFile();
         try {
             // trim, validate, and sort
-            List<String> entries = new ArrayList<String>();
+            List<String> entries = new ArrayList<>();
             InputStream in = new ByteArrayInputStream(content.getBytes("UTF-8"));
             String line;
             while ((line = DataHelper.readLine(in)) != null) {
@@ -376,7 +376,7 @@ public class BlacklistBean extends BaseBean {
         // Load current content from file (not cache) to avoid static field issues
         String currentContent = loadContentFromFile();
         int added = 0;
-        List<String> newEntries = new ArrayList<String>();
+        List<String> newEntries = new ArrayList<>();
         for (String entry : entries) {
             if (entry != null && entry.trim().length() > 0) {
                 String trimmedEntry = entry.trim();
@@ -451,7 +451,7 @@ public class BlacklistBean extends BaseBean {
     private void appendEntriesToFile(List<String> newEntries, String currentContent) {
         File file = blacklistFile();
         try {
-            List<String> allEntries = new ArrayList<String>();
+            List<String> allEntries = new ArrayList<>();
             // Add existing entries
             if (currentContent != null && !currentContent.isEmpty()) {
                 String[] lines = currentContent.split("\\n");

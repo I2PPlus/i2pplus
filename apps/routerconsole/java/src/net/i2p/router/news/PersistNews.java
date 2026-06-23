@@ -101,7 +101,7 @@ class PersistNews {
     public static List<NewsEntry> load(I2PAppContext ctx) {
         Log log = ctx.logManager().getLog(PersistNews.class);
         File dir = new File(ctx.getConfigDir(), DIR);
-        List<NewsEntry> rv = new ArrayList<NewsEntry>();
+        List<NewsEntry> rv = new ArrayList<>();
         File[] files = dir.listFiles(new FileSuffixFilter(PFX, SFX));
         if (files == null)
             return rv;

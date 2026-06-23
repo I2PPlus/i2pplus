@@ -66,7 +66,7 @@ public class ConfigBanHandler extends FormHandler {
     }
 
     private void resetToDefaults() {
-        Map<String, String> defaults = new HashMap<String, String>();
+        Map<String, String> defaults = new HashMap<>();
         defaults.put(PROP_MAX_OFFENSES, "3");
         defaults.put(PROP_OFFENSE_WINDOW, String.valueOf(15*60*1000));
         defaults.put(PROP_STARTUP_GRACE, String.valueOf(3*60*1000));
@@ -110,7 +110,7 @@ public class ConfigBanHandler extends FormHandler {
      * Save ban configuration settings.
      */
     private void saveChanges() {
-        Map<String, String> changes = new HashMap<String, String>();
+        Map<String, String> changes = new HashMap<>();
 
         if (_maxOffenses != null && _maxOffenses.length() > 0) {
             try {

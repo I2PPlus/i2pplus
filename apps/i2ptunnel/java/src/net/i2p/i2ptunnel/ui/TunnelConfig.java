@@ -100,8 +100,8 @@ public class TunnelConfig {
 
     public TunnelConfig() {
         _context = I2PAppContext.getGlobalContext();
-        _booleanOptions = new ConcurrentHashSet<String>(4);
-        _otherOptions = new ConcurrentHashMap<String, String>(4);
+        _booleanOptions = new ConcurrentHashSet<>(4);
+        _otherOptions = new ConcurrentHashMap<>(4);
     }
 
     /**
@@ -385,7 +385,7 @@ public class TunnelConfig {
      * @since 0.9.41
      */
     public void revokeClients(String[] s) {
-        _clientRevocations = new HashSet<Integer>(4);
+        _clientRevocations = new HashSet<>(4);
         for (String k : s) {
             try {
                 _clientRevocations.add(Integer.valueOf(Integer.parseInt(k)));
@@ -1113,10 +1113,10 @@ public class TunnelConfig {
         List<String> clientAuth = null;
         if (pfx != null) {
             if (_clientNames != null && _clientKeys != null && _clientNames.length == _clientKeys.length) {
-                clientAuth = new ArrayList<String>(4);
+                clientAuth = new ArrayList<>(4);
             } else if (_addClientAuth || _encryptMode == 6 || _encryptMode == 7) {
                 // force one client for per-client PSK
-                clientAuth = new ArrayList<String>(1);
+                clientAuth = new ArrayList<>(1);
                 if (!_addClientAuth) {
                     _addClientAuth = true;
                     if (_newClientName == null || _newClientName.length() == 0)
@@ -1271,8 +1271,8 @@ public class TunnelConfig {
         "proxyUsername", "proxyPassword"
         };
 
-    static final Set<String> _noShowSet = new HashSet<String>(128);
-    static final Set<String> _nonProxyNoShowSet = new HashSet<String>(4);
+    static final Set<String> _noShowSet = new HashSet<>(128);
+    static final Set<String> _nonProxyNoShowSet = new HashSet<>(4);
     static {
         _noShowSet.addAll(Arrays.asList(_noShowOpts));
         _noShowSet.addAll(Arrays.asList(_booleanClientOpts));
@@ -1402,7 +1402,7 @@ public class TunnelConfig {
      *  @since 0.9.43
      */
     private static Map<String, String> parseCustomOptions(String args) {
-        Map<String, String> rv = new HashMap<String, String>(8);
+        Map<String, String> rv = new HashMap<>(8);
         StringBuilder buf = new StringBuilder(32);
         boolean isQuoted = false;
         String key = null;

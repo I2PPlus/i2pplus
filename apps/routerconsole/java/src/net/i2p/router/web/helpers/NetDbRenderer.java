@@ -181,7 +181,7 @@ class NetDbRenderer {
                                      String ipv6Address, String ssuCapabilities, String transport, int cost, int introducerCount) throws IOException {
         StringBuilder buf = new StringBuilder(4 * 1024);
         NetworkDatabaseFacade networkDatabase = _context.netDb();
-        List<Hash> sybilHashes = sybil != null ? new ArrayList<Hash>(128) : null;
+        List<Hash> sybilHashes = sybil != null ? new ArrayList<>(128) : null;
 
         // Handle special cases (local or single router lookup)
         if (".".equals(routerPrefix)) {
@@ -965,11 +965,11 @@ class NetDbRenderer {
         else {netdb = _context.clientNetDb(client);}
         if (notLocal) {
             ourRKey = _context.routerHash();
-            leases = new TreeSet<LeaseSet>(new LeaseSetRoutingKeyComparator(ourRKey));
+            leases = new TreeSet<>(new LeaseSetRoutingKeyComparator(ourRKey));
             fmt = TWO_DECIMALS;
         } else {
             ourRKey = null;
-            leases = new TreeSet<LeaseSet>(new LeaseSetComparator());
+            leases = new TreeSet<>(new LeaseSetComparator());
             fmt = null;
         }
         if (notLocal) {leases.addAll(netdb.getLeases());}
@@ -1099,7 +1099,7 @@ class NetDbRenderer {
             netdb = _context.netDb();
             LeaseSet ls = netdb.lookupLeaseSetLocally(hash);
             Set<LeaseSet> leases;
-            leases = new TreeSet<LeaseSet>(new LeaseSetComparator());
+            leases = new TreeSet<>(new LeaseSetComparator());
             leases.addAll(netdb.getLeases());
             if (ls == null) {
                 LookupWaiter lw = new LookupWaiter();

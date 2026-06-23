@@ -97,8 +97,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         _log = ctx.logManager().getLog(UDPTrackerClient.class);
         _rPort = TrackerClient.PORT - 1;
         _myHash = session.getMyDestination().calculateHash();
-        _trackers = new ConcurrentHashMap<HostPort, Tracker>(8);
-        _sentQueries = new ConcurrentHashMap<Integer, ReplyWaiter>(32);
+        _trackers = new ConcurrentHashMap<>(8);
+        _sentQueries = new ConcurrentHashMap<>(32);
     }
 
     /** Can't be restarted after stopping? */
@@ -614,7 +614,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             }
             Set<Hash> hashes;
             if (peers > 0) {
-                hashes = new HashSet<Hash>(peers);
+                hashes = new HashSet<>(peers);
                 for (int off = 20;
                         off <= payload.length - Hash.HASH_LENGTH;
                         off += Hash.HASH_LENGTH) {

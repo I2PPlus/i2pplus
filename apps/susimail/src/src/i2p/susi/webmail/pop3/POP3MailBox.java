@@ -80,8 +80,8 @@ public class POP3MailBox implements NewMailListener {
         this.port = port;
         this.user = user;
         this.pass = pass;
-        uidlToID = new HashMap<String, Integer>();
-        sizes = new HashMap<Integer, Integer>();
+        uidlToID = new HashMap<>();
+        sizes = new HashMap<>();
         synchronizer = new Object();
         lastLine = _t("No response from server");
         lastActive = new AtomicLong(System.currentTimeMillis());
@@ -159,7 +159,7 @@ public class POP3MailBox implements NewMailListener {
      * @since 0.9.13
      */
     public void getBodies(Collection<FetchRequest> requests) {
-        List<SendRecv> srs = new ArrayList<SendRecv>(requests.size());
+        List<SendRecv> srs = new ArrayList<>(requests.size());
         synchronized(synchronizer) {
             try {checkConnection();} // we must be connected to know the UIDL to ID mapping
             catch (IOException ioe) {
@@ -582,7 +582,7 @@ public class POP3MailBox implements NewMailListener {
                 boolean loginOK = false;
                 if (ok) {
                     // TODO APOP (unsupported by postman)
-                    List<SendRecv> cmds = new ArrayList<SendRecv>(4);
+                    List<SendRecv> cmds = new ArrayList<>(4);
                     cmds.add(new SendRecv("USER " + user, Mode.A1));
                     cmds.add(new SendRecv("PASS " + pass, Mode.A1));
                     socket.setSoTimeout(60*1000);
@@ -634,7 +634,7 @@ public class POP3MailBox implements NewMailListener {
      * @since 0.9.13
      */
     private boolean doHandshake() throws IOException {
-        List<SendRecv> cmds = new ArrayList<SendRecv>(2);
+        List<SendRecv> cmds = new ArrayList<>(2);
         cmds.add(new SendRecv(null, Mode.A1));
         SendRecv capa = null;
         if (gotCAPA) {
@@ -673,7 +673,7 @@ public class POP3MailBox implements NewMailListener {
      */
     private boolean doCheckMail() throws IOException {
         if (!isConnected()) {throw new IOException("not connected");}
-        List<SendRecv> cmds = new ArrayList<SendRecv>(4);
+        List<SendRecv> cmds = new ArrayList<>(4);
         SendRecv stat = new SendRecv("STAT", Mode.A1);
         cmds.add(stat);
         SendRecv uidl = new SendRecv("UIDL", Mode.LS);
@@ -710,7 +710,7 @@ public class POP3MailBox implements NewMailListener {
         // delete all pending deletions
         Collection<String> uidls = delayedDeleter.getQueued();
         if (uidls.isEmpty()) {return;}
-        List<SendRecv> cmds = new ArrayList<SendRecv>(uidls.size());
+        List<SendRecv> cmds = new ArrayList<>(uidls.size());
         for (String uid : uidls) {
             int id = getIDfromUIDL(uid);
             if (id < 0) {
@@ -1010,7 +1010,7 @@ public class POP3MailBox implements NewMailListener {
      * @since 0.9.13
      */
     private List<String> getResultNl() throws IOException {
-        List<String> rv = new ArrayList<String>(16);
+        List<String> rv = new ArrayList<>(16);
         long timeOut = 120*1000;
         InputStream input = socket.getInputStream();
         long startTime = System.currentTimeMillis();
@@ -1164,7 +1164,7 @@ public class POP3MailBox implements NewMailListener {
      */
     public Collection<String> getUIDLs() {
         if (!isConnected()) {return null;}
-        synchronized(synchronizer) {return new ArrayList<String>(uidlToID.keySet());}
+        synchronized(synchronizer) {return new ArrayList<>(uidlToID.keySet());}
     }
 
     /** for SendRecv */

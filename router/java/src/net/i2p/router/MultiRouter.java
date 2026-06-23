@@ -52,7 +52,7 @@ public class MultiRouter {
     private static int nbrRouters;
 
     private static PrintStream _out;
-    private static ArrayList<Router> _routers = new ArrayList<Router>(8);
+    private static ArrayList<Router> _routers = new ArrayList<>(8);
     private static I2PAppContext _defaultContext;
 
     public static void main(String args[]) {
@@ -137,7 +137,7 @@ public class MultiRouter {
 
     private static void internalReseed() {
 
-        HashSet<RouterInfo> riSet = new HashSet<RouterInfo>();
+        HashSet<RouterInfo> riSet = new HashSet<>();
         for(Router r : _routers) {
     		riSet.addAll(r.getContext().netDb().getRouters());
         }

@@ -159,7 +159,7 @@ public class AdvancedSettingsHandler implements RequestHandler {
                 }
                 String getStr = (String) obj;
                 String getVal = getAdvancedSetting(getStr);
-                Map<String, String> outMap = new HashMap<String, String>();
+                Map<String, String> outMap = new HashMap<>();
                 outMap.put(getStr, getVal);
                 outParams.put("get", outMap);
             }
@@ -194,7 +194,7 @@ public class AdvancedSettingsHandler implements RequestHandler {
         Set<String> unsetKeys = null;
 
         if (clearConfig) {
-            unsetKeys = new HashSet<String>(_context.router().getConfigSettings());
+            unsetKeys = new HashSet<>(_context.router().getConfigSettings());
 
             for (String key : newSettings.keySet()) {
                 unsetKeys.remove(key);

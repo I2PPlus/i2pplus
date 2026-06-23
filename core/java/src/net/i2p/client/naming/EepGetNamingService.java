@@ -54,7 +54,7 @@ public class EepGetNamingService extends DummyNamingService {
     private List<String> getURLs() {
         String list = _context.getProperty(PROP_EEPGET_LIST, DEFAULT_EEPGET_LIST);
         StringTokenizer tok = new StringTokenizer(list, ",");
-        List<String> rv = new ArrayList<String>(tok.countTokens());
+        List<String> rv = new ArrayList<>(tok.countTokens());
         while (tok.hasMoreTokens()) rv.add(tok.nextToken());
         return rv;
     }

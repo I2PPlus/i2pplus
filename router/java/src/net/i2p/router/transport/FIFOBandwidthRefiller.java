@@ -154,7 +154,7 @@ public class FIFOBandwidthRefiller implements Runnable {
     public void run() {
         // bootstrap 'em with nothing
         _lastRefillTime = _limiter.now();
-        List<FIFOBandwidthLimiter.Request> buffer = new ArrayList<Request>(2);
+        List<FIFOBandwidthLimiter.Request> buffer = new ArrayList<>(2);
         byte i = 0;
         while (_isRunning) {
             long now = _limiter.now();

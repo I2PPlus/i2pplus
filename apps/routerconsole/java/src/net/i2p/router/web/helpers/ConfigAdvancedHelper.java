@@ -33,10 +33,10 @@ public class ConfigAdvancedHelper extends HelperBase {
             "router.reseedProxy.password", "router.reseedSSLProxy.password",
             RouterConsoleRunner.PROP_KEY_PASSWORD, RouterConsoleRunner.PROP_KEYSTORE_PASSWORD
         };
-        _hideKeys = new HashSet<String>(Arrays.asList(keys));
+        _hideKeys = new HashSet<>(Arrays.asList(keys));
     }
 
-    private static final Map<String, String> _headers = new HashMap<String, String>(16);
+    private static final Map<String, String> _headers = new HashMap<>(16);
     static {
         _headers.put("crypto", "Crypto");
         _headers.put("desktopgui", "System Tray");
@@ -54,7 +54,7 @@ public class ConfigAdvancedHelper extends HelperBase {
 
     public String getSettings() {
         StringBuilder buf = new StringBuilder(4*1024);
-        TreeMap<String, String> sorted = new TreeMap<String, String>();
+        TreeMap<String, String> sorted = new TreeMap<>();
         sorted.putAll(_context.router().getConfigMap());
         boolean adv = isAdvanced();
         String lastType = null;

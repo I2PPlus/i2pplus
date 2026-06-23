@@ -76,8 +76,8 @@ public class RouterTimestamper extends Timestamper {
     public RouterTimestamper(I2PAppContext ctx, UpdateListener lsnr, boolean daemon) {
         super();
         // moved here to prevent problems with synchronized statements.
-        _servers = new ArrayList<String>(3);
-        _listeners = new CopyOnWriteArrayList<UpdateListener>();
+        _servers = new ArrayList<>(3);
+        _listeners = new CopyOnWriteArrayList<>();
         _context = ctx;
         _daemon = daemon;
         // DO NOT initialize _log here, stack overflow via LogManager init loop
@@ -220,7 +220,7 @@ public class RouterTimestamper extends Timestamper {
                     // NOW we set up logging
                     _log = _context.logManager().getLog(RouterTimestamper.class);
                     if (lastFailed) {
-                        List<String> all = new ArrayList<String>(9);
+                        List<String> all = new ArrayList<>(9);
                         if (_priorityServers != null) {
                             for (List<String> servers : _priorityServers) {
                                 all.addAll(servers);
@@ -353,15 +353,15 @@ public class RouterTimestamper extends Timestamper {
             }
             if (country != null &&  country.length() > 0 &&
                 !country.equals("a1") && !country.equals("a2")) {
-                _priorityServers = new ArrayList<List<String>>(2);
-                List<String> p1 = new ArrayList<String>(3);
+                _priorityServers = new ArrayList<>(2);
+                List<String> p1 = new ArrayList<>(3);
                 for (int i = 0; i < 3; i++) {
                      p1.add(i + "." + country + ".pool.ntp.org");
                 }
                 _priorityServers.add(p1);
                 String zone = _zones.getZone(country);
                 if (zone != null) {
-                    List<String> p2 = new ArrayList<String>(3);
+                    List<String> p2 = new ArrayList<>(3);
                     for (int i = 0; i < 3; i++) {
                         p2.add(i + "." + zone + ".pool.ntp.org");
                     }

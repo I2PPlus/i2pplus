@@ -118,7 +118,7 @@ public class HostInterface {
     public static final InetAddress[] getInetAddress(int ipfilter, String[] interfaces) {
         Enumeration<NetworkInterface> nis;
         if (interfaces != null) {
-            Vector<NetworkInterface> iflist = new Vector<NetworkInterface>();
+            Vector<NetworkInterface> iflist = new Vector<>();
             for (int i = 0; i < interfaces.length; i++) {
                 NetworkInterface ni;
                 try {
@@ -136,7 +136,7 @@ public class HostInterface {
                 return null;
             }
         }
-        ArrayList<InetAddress> addresses = new ArrayList<InetAddress>();
+        ArrayList<InetAddress> addresses = new ArrayList<>();
         while (nis.hasMoreElements()) {
             NetworkInterface ni = nis.nextElement();
             Enumeration<InetAddress> addrs = ni.getInetAddresses();

@@ -734,7 +734,7 @@ public class SidebarHelper extends HelperBase {
      */
     public String getDestinations() {
         // convert the set to a list so we can sort by name and not lose duplicates
-        List<Destination> clients = new ArrayList<Destination>(_context.clientManager().listClients());
+        List<Destination> clients = new ArrayList<>(_context.clientManager().listClients());
 
         StringBuilder buf = new StringBuilder(512);
         boolean link = isI2PTunnelRunning();
@@ -1409,7 +1409,7 @@ public class SidebarHelper extends HelperBase {
         Map<String, String> sectionNames = SidebarRenderer.SECTION_NAMES;
         List<String> sections = getSummaryBarSections("default");
         // translated section name to section id
-        TreeMap<String, String> sortedSections = new TreeMap<String, String>(Collator.getInstance());
+        TreeMap<String, String> sortedSections = new TreeMap<>(Collator.getInstance());
 
         // Forward-convert old section names
         int pos = sections.indexOf("General");

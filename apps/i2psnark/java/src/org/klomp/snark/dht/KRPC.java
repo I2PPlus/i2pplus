@@ -211,10 +211,10 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         _log = ctx.logManager().getLog(KRPC.class);
         _tracker = new DHTTracker(ctx);
 
-        _sentQueries = new ConcurrentHashMap<MsgID, ReplyWaiter>();
-        _outgoingTokens = new ConcurrentHashMap<Token, NodeInfo>();
-        _incomingTokens = new ConcurrentHashMap<NID, Token>();
-        _blacklist = new ConcurrentHashSet<NID>();
+        _sentQueries = new ConcurrentHashMap<>();
+        _outgoingTokens = new ConcurrentHashMap<>();
+        _incomingTokens = new ConcurrentHashMap<>();
+        _blacklist = new ConcurrentHashSet<>();
 
         // Construct my NodeInfo
         // Pick ports over a big range to marginally increase security
@@ -294,9 +294,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             if (_log.shouldWarn()) _log.info("DHT is empty, cannot explore");
             return;
         }
-        SortedSet<NodeInfo> toTry = new TreeSet<NodeInfo>(new NodeInfoComparator(target));
+        SortedSet<NodeInfo> toTry = new TreeSet<>(new NodeInfoComparator(target));
         toTry.addAll(nodes);
-        Set<NodeInfo> tried = new HashSet<NodeInfo>();
+        Set<NodeInfo> tried = new HashSet<>();
 
         if (_log.shouldInfo()) _log.info("Starting explore of [" + target + "]");
         for (int i = 0; i < maxNodes; i++) {
@@ -384,7 +384,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         Collection<Hash> rv = _tracker.getPeers(iHash, max, noSeeds);
         rv.remove(_myNodeInfo.getHash());
         if (rv.size() >= max) return rv;
-        rv = new HashSet<Hash>(rv);
+        rv = new HashSet<>(rv);
         long endTime = _context.clock().now() + maxWait;
 
         // needs to be much higher than log(size) since many lookups will fail
@@ -393,10 +393,10 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         // Initial set to try, will get added to as we go
         List<NodeInfo> nodes = _knownNodes.findClosest(iHash, maxNodes);
         NodeInfoComparator comp = new NodeInfoComparator(iHash);
-        SortedSet<NodeInfo> toTry = new TreeSet<NodeInfo>(comp);
-        SortedSet<NodeInfo> heardFrom = new TreeSet<NodeInfo>(comp);
+        SortedSet<NodeInfo> toTry = new TreeSet<>(comp);
+        SortedSet<NodeInfo> heardFrom = new TreeSet<>(comp);
         toTry.addAll(nodes);
-        SortedSet<NodeInfo> tried = new TreeSet<NodeInfo>(comp);
+        SortedSet<NodeInfo> tried = new TreeSet<>(comp);
 
         if (_log.shouldInfo())
             _log.info(
@@ -775,9 +775,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (_log.shouldDebug()) {
             _log.debug("Sending ping to " + nInfo);
         }
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("q", "ping");
-        Map<String, Object> args = new HashMap<String, Object>();
+        Map<String, Object> args = new HashMap<>();
         map.put("a", args);
         return sendQuery(nInfo, map, true);
     }
@@ -793,9 +793,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (_log.shouldInfo()) {
             _log.info("Sending find_node of [" + tID + "]\n* Target: " + nInfo);
         }
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("q", "find_node");
-        Map<String, Object> args = new HashMap<String, Object>();
+        Map<String, Object> args = new HashMap<>();
         args.put("target", tID.getData());
         map.put("a", args);
         return sendQuery(nInfo, map, true);
@@ -818,9 +818,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                             + "\n* Torrent: "
                             + ih);
         }
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("q", "get_peers");
-        Map<String, Object> args = new HashMap<String, Object>();
+        Map<String, Object> args = new HashMap<>();
         args.put("info_hash", ih.getData());
         if (noSeeds) {
             args.put("noseed", Integer.valueOf(1));
@@ -844,9 +844,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (_log.shouldInfo()) {
             _log.info("Sending announce of " + ih + "\n* Target: " + nInfo + " seed? " + isSeed);
         }
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("q", "announce_peer");
-        Map<String, Object> args = new HashMap<String, Object>();
+        Map<String, Object> args = new HashMap<>();
         args.put("info_hash", ih.getData());
         args.put("port", Integer.valueOf(TrackerClient.PORT)); // port ignored
         args.put("token", token.getData());
@@ -867,8 +867,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (_log.shouldDebug()) {
             _log.debug("Sending pong to " + nInfo);
         }
-        Map<String, Object> map = new HashMap<String, Object>();
-        Map<String, Object> resps = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> resps = new HashMap<>();
         map.put("r", resps);
         return sendResponse(nInfo, msgID, map);
     }
@@ -888,8 +888,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (_log.shouldInfo()) {
             _log.info("Sending nodes to " + nInfo);
         }
-        Map<String, Object> map = new HashMap<String, Object>();
-        Map<String, Object> resps = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> resps = new HashMap<>();
         map.put("r", resps);
         if (token != null) {
             resps.put("token", token.getData());
@@ -905,8 +905,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (_log.shouldInfo()) {
             _log.info("Sending peers to " + nInfo);
         }
-        Map<String, Object> map = new HashMap<String, Object>();
-        Map<String, Object> resps = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> resps = new HashMap<>();
         map.put("r", resps);
         resps.put("token", token.getData());
         resps.put("values", peers);
@@ -1416,7 +1416,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             if (peers.isEmpty()) {
                 hashes = Collections.emptyList();
             } else {
-                hashes = new ArrayList<byte[]>(peers.size());
+                hashes = new ArrayList<>(peers.size());
                 for (Hash peer : peers) {
                     hashes.add(peer.getData());
                 }
@@ -1510,7 +1510,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             throws InvalidBEncodingException {
         // Azureus sends 20
         int max = Math.min(3 * K, ids.length / NodeInfo.LENGTH);
-        List<NodeInfo> rv = new ArrayList<NodeInfo>(max);
+        List<NodeInfo> rv = new ArrayList<>(max);
         for (int off = 0; off < ids.length && rv.size() < max; off += NodeInfo.LENGTH) {
             NodeInfo nInf = new NodeInfo(ids, off);
             if (_blacklist.contains(nInf.getNID())) {
@@ -1543,7 +1543,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             _log.info("Received peers from " + nInfo);
         }
         int max = Math.min(MAX_WANT * 2, peers.size());
-        List<Hash> rv = new ArrayList<Hash>(max);
+        List<Hash> rv = new ArrayList<>(max);
         for (BEValue bev : peers) {
             byte[] b = bev.getBytes();
             if (b.length != Hash.HASH_LENGTH) {

@@ -175,14 +175,14 @@ public class IterativeSearchJob extends FloodSearchJob {
         _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
         _expiration = _timeoutMs + ctx.clock().now();
         _rkey = ctx.routingKeyGenerator().getRoutingKey(key);
-        _toTry = new TreeSet<Hash>(new XORComparator<Hash>(_rkey));
+        _toTry = new TreeSet<>(new XORComparator<>(_rkey));
         _totalSearchLimit = ctx.getProperty("netdb.searchLimit", totalSearchLimit);
         _ipSet = new MaskedIPSet(2 * (_totalSearchLimit + EXTRA_PEERS));
         _singleSearchTime = ctx.getProperty("netdb.singleSearchTime", SINGLE_SEARCH_TIME);
-        _unheardFrom = new HashSet<Hash>(CONCURRENT_SEARCHES);
-        _failedPeers = new HashSet<Hash>(_totalSearchLimit);
-        _skippedPeers = new HashSet<Hash>(4);
-        _sentTime = new ConcurrentHashMap<Hash, Long>(_totalSearchLimit);
+        _unheardFrom = new HashSet<>(CONCURRENT_SEARCHES);
+        _failedPeers = new HashSet<>(_totalSearchLimit);
+        _skippedPeers = new HashSet<>(4);
+        _sentTime = new ConcurrentHashMap<>(_totalSearchLimit);
         _fromLocalDest = fromLocalDest;
         _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);
         _maxConcurrent = (ctx.router().getUptime() > 30*60*1000 || known > 1000) ? ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT) :
@@ -262,7 +262,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             // Ideally we would add the key to an exclude list, so we don't try to query a ff peer for itself,
             // but we're passing the rkey not the key, so we do it below instead in certain cases.
             floodfillPeers = ((FloodfillPeerSelector)_facade.getPeerSelector()).selectFloodfillParticipants(_rkey, _totalSearchLimit + EXTRA_PEERS, ks);
-        } else {floodfillPeers = new ArrayList<Hash>(_totalSearchLimit);}
+        } else {floodfillPeers = new ArrayList<>(_totalSearchLimit);}
 
         /*
          * For testing or local networks... we will pretend that the specified router is floodfill,
@@ -283,7 +283,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             if (_log.shouldWarn() && uptime > 2*60*1000) {
                 _log.warn("Cannot query remote floodfills -> None known (this should resolve shortly)");
             }
-            List<Hash> all = new ArrayList<Hash>(_facade.getAllRouters());
+            List<Hash> all = new ArrayList<>(_facade.getAllRouters());
             if (all.isEmpty()) {
                 if (_log.shouldLog(Log.ERROR) && uptime > 3*60*1000) {
                   _log.error("No peers in NetDb - reseed required");
@@ -291,7 +291,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 failed();
                 return;
             }
-            Iterator<Hash> iter = new RandomIterator<Hash>(all);
+            Iterator<Hash> iter = new RandomIterator<>(all);
             // Limit non-FF to 3, because we don't sort the FFs ahead of the non-FFS,
             // so once we get some FFs we want to be sure to query them
             for (int i = 0; iter.hasNext() && i < MAX_NON_FF; i++) {floodfillPeers.add(iter.next());}
@@ -790,7 +790,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         final List<Hash> unheard;
         synchronized(this) {
             tries = _unheardFrom.size() + _failedPeers.size();
-            unheard = new ArrayList<Hash>(_unheardFrom);
+            unheard = new ArrayList<>(_unheardFrom);
         }
         // Blame the unheard-from (others already blamed in failed() above)
         for (Hash h : unheard) {getContext().profileManager().dbLookupFailed(h);}

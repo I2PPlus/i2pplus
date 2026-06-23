@@ -88,7 +88,7 @@ public class Storage implements Closeable {
     private final AtomicInteger _allocateCount = new AtomicInteger();
     private final AtomicInteger _checkProgress = new AtomicInteger();
     private final AtomicLong _activity = new AtomicLong();
-    private List<String> _filesExcluded = new ArrayList<String>();
+    private List<String> _filesExcluded = new ArrayList<>();
 
     /** The default piece size for new torrents. */
     private static final int DEFAULT_PIECE_SIZE = 256 * 1024;
@@ -112,7 +112,7 @@ public class Storage implements Closeable {
     public static final int PRIORITY_NORMAL = 0;
 
     private static final Map<String, String> _filterNameCache =
-            new ConcurrentHashMap<String, String>();
+            new ConcurrentHashMap<>();
 
     private static final boolean _isWindows = SystemVersion.isWindows();
     private static final boolean _isARM = SystemVersion.isARM();
@@ -155,7 +155,7 @@ public class Storage implements Closeable {
         total_length = metainfo.getTotalLength();
         List<List<String>> files = metainfo.getFiles();
         int sz = files != null ? files.size() : 1;
-        _torrentFiles = new ArrayList<TorrentFile>(sz);
+        _torrentFiles = new ArrayList<>(sz);
         _preserveFileNames = preserveFileNames;
     }
 
@@ -228,7 +228,7 @@ public class Storage implements Closeable {
         _torrentFiles = getFiles(baseFile, filters);
 
         long total = 0;
-        ArrayList<Long> lengthsList = new ArrayList<Long>(_torrentFiles.size());
+        ArrayList<Long> lengthsList = new ArrayList<>(_torrentFiles.size());
         for (TorrentFile tf : _torrentFiles) {
             long length = tf.length;
             total += length;
@@ -266,9 +266,9 @@ public class Storage implements Closeable {
         bitfield = new BitField(pieces);
         needed = 0;
 
-        List<List<String>> files = new ArrayList<List<String>>(_torrentFiles.size());
+        List<List<String>> files = new ArrayList<>(_torrentFiles.size());
         for (TorrentFile tf : _torrentFiles) {
-            List<String> file = new ArrayList<String>();
+            List<String> file = new ArrayList<>();
             StringTokenizer st = new StringTokenizer(tf.name, File.separator);
             while (st.hasMoreTokens()) {
                 String part = st.nextToken();
@@ -330,11 +330,11 @@ public class Storage implements Closeable {
         if (base.getAbsolutePath().equals("/")) {
             throw new IOException("Don't seed root");
         }
-        List<File> files = new ArrayList<File>();
+        List<File> files = new ArrayList<>();
         addFiles(files, base, filters);
 
         int size = files.size();
-        List<TorrentFile> rv = new ArrayList<TorrentFile>(size);
+        List<TorrentFile> rv = new ArrayList<>(size);
 
         for (File f : files) {
             rv.add(new TorrentFile(base, f));
@@ -720,7 +720,7 @@ public class Storage implements Closeable {
             List<TorrentFile> sorted = _torrentFiles;
             int sz = sorted.size();
             if (sz > 1) {
-                sorted = new ArrayList<TorrentFile>(sorted);
+                sorted = new ArrayList<>(sorted);
                 Collections.sort(sorted, new FileNameComparator());
             }
             for (int i = 0; i < sz; i++) {
@@ -919,7 +919,7 @@ public class Storage implements Closeable {
                     if (f.equals(_torrentFiles.get(j).RAFfile)) {
                         // Rename and start the check over again
                         // Copy path since metainfo list is unmodifiable
-                        path = new ArrayList<String>(path);
+                        path = new ArrayList<>(path);
                         int last = path.size() - 1;
                         String lastPath = path.get(last);
                         int dot = lastPath.lastIndexOf('.');
@@ -1258,7 +1258,7 @@ public class Storage implements Closeable {
      * @since 0.9.15
      */
     public List<File> getFiles() {
-        List<File> rv = new ArrayList<File>(_torrentFiles.size());
+        List<File> rv = new ArrayList<>(_torrentFiles.size());
         for (TorrentFile tf : _torrentFiles) {
             rv.add(tf.RAFfile);
         }
@@ -1283,7 +1283,7 @@ public class Storage implements Closeable {
      */
     public SortedSet<File> getDirectories() {
         if (!_base.isDirectory()) return null;
-        SortedSet<File> rv = new TreeSet<File>(Collections.reverseOrder());
+        SortedSet<File> rv = new TreeSet<>(Collections.reverseOrder());
         rv.add(_base);
         for (TorrentFile tf : _torrentFiles) {
             File f = tf.RAFfile;
@@ -1984,7 +1984,7 @@ public class Storage implements Closeable {
                         break;
 
                     case 'w':
-                        if (url_list == null) url_list = new ArrayList<String>();
+                        if (url_list == null) url_list = new ArrayList<>();
                         url_list.add(g.getOptarg());
                         break;
 

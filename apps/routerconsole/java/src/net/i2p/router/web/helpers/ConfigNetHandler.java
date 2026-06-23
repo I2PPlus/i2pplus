@@ -53,7 +53,7 @@ public class ConfigNetHandler extends FormHandler {
     private String _ipv6Mode;
     private boolean _ipv4Firewalled;
     private boolean _ipv6Firewalled;
-    private final Map<String, String> changes = new HashMap<String, String>();
+    private final Map<String, String> changes = new HashMap<>();
     private static final String PROP_HIDDEN = Router.PROP_HIDDEN_HIDDEN; // see Router for other choice
 
     @Override
@@ -164,7 +164,7 @@ public class ConfigNetHandler extends FormHandler {
         boolean restartRequired = false;
         boolean fullRestartRequired = false;
         boolean error = false;
-        List<String> removes = new ArrayList<String>();
+        List<String> removes = new ArrayList<>();
 
         if (!_ratesOnly) {
             // IP Settings
@@ -179,7 +179,7 @@ public class ConfigNetHandler extends FormHandler {
                 if (_udpAutoIP.equals("fixed")) {
                     if (_settings == null)
                         _settings = Collections.EMPTY_MAP;
-                    Set<String> addrs = new TreeSet<String>();
+                    Set<String> addrs = new TreeSet<>();
                     for (Object o : _settings.keySet()) {
                         String k = (String) o;
                         if (k.startsWith("addr_")) {

@@ -236,7 +236,7 @@ public class WizardHelper extends HelperBase {
         _runner = _mlab.runNDT(lsnr);
         boolean rv = _runner != null;
         if (!rv) {
-            Map<String, Object> map = new HashMap<String, Object>(2);
+            Map<String, Object> map = new HashMap<>(2);
             lsnr.complete(map);
         }
         _listener = lsnr; // replace the old listener

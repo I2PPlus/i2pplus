@@ -140,11 +140,11 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     private final ConcurrentHashMap<String, NonceInfo> _nonces;
     private final AtomicInteger _nonceCleanCounter = new AtomicInteger();
     // clearnet host to proxy
-    private final Map<String, String> _proxyCache = new LHMCache<String, String>(32);
+    private final Map<String, String> _proxyCache = new LHMCache<>(32);
     // very simple, remember last-failed only
     private String _lastFailedProxy;
     // clearnet host to proxy
-    private final Map<String, String> _proxySSLCache = new LHMCache<String, String>(32);
+    private final Map<String, String> _proxySSLCache = new LHMCache<>(32);
     // very simple, remember last-failed only
     private String _lastFailedSSLProxy;
 
@@ -203,7 +203,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                 List<String> tmpList;
                 if (_lastFailedProxy != null) {
                     // don't use last failed one
-                    tmpList = new ArrayList<String>(_proxyList);
+                    tmpList = new ArrayList<>(_proxyList);
                     tmpList.remove(_lastFailedProxy);
                     size = tmpList.size();
                 } else {tmpList = _proxyList;}
@@ -249,7 +249,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                 List<String> tmpList;
                 if (_lastFailedSSLProxy != null) {
                     // don't use last failed one
-                    tmpList = new ArrayList<String>(Arrays.asList(p));
+                    tmpList = new ArrayList<>(Arrays.asList(p));
                     tmpList.remove(_lastFailedSSLProxy);
                     size = tmpList.size();
                 } else {tmpList = Arrays.asList(p);}
@@ -326,10 +326,10 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         Properties opts = tunnel.getClientOptions();
         opts.setProperty("i2p.streaming.connectDelay", "500");
         opts.remove("i2p.streaming.maxWindowSize");
-        _proxyList = new ArrayList<String>(4);
+        _proxyList = new ArrayList<>(4);
         _proxyNonce = new byte[PROXYNONCE_BYTES];
         _context.random().nextBytes(_proxyNonce);
-        _nonces = new ConcurrentHashMap<String, NonceInfo>();
+        _nonces = new ConcurrentHashMap<>();
     }
 
     /**
@@ -346,10 +346,10 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         Properties opts = tunnel.getClientOptions();
         opts.setProperty("i2p.streaming.connectDelay", "500");
         opts.remove("i2p.streaming.maxWindowSize");
-        _proxyList = new ArrayList<String>(4);
+        _proxyList = new ArrayList<>(4);
         _proxyNonce = new byte[PROXYNONCE_BYTES];
         _context.random().nextBytes(_proxyNonce);
-        _nonces = new ConcurrentHashMap<String, NonceInfo>();
+        _nonces = new ConcurrentHashMap<>();
     }
 
     //////// Authorization stuff

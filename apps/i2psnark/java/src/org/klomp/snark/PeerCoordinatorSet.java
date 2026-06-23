@@ -29,7 +29,7 @@ class PeerCoordinatorSet implements Iterable<PeerCoordinator> {
     private final Map<SHA1Hash, PeerCoordinator> _coordinators;
 
     public PeerCoordinatorSet() {
-        _coordinators = new ConcurrentHashMap<SHA1Hash, PeerCoordinator>();
+        _coordinators = new ConcurrentHashMap<>();
     }
 
     public Iterator<PeerCoordinator> iterator() {

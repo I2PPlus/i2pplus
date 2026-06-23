@@ -28,7 +28,7 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
     private static final LinkedBlockingQueue<ReusableGZIPOutputStream> _available;
 
     static {
-        if (ENABLE_CACHING) _available = new LinkedBlockingQueue<ReusableGZIPOutputStream>(16);
+        if (ENABLE_CACHING) _available = new LinkedBlockingQueue<>(16);
         else _available = null;
     }
 

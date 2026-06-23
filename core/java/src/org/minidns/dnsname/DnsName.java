@@ -459,7 +459,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         int c = dis.readUnsignedByte();
         if ((c & 0xc0) == 0xc0) {
             c = ((c & 0x3f) << 8) + dis.readUnsignedByte();
-            HashSet<Integer> jumps = new HashSet<Integer>();
+            HashSet<Integer> jumps = new HashSet<>();
             jumps.add(c);
             return parse(data, c, jumps);
         }

@@ -267,7 +267,7 @@ public class TunnelController implements Logging {
         _tunnel = new I2PTunnel(this);
         _log = I2PAppContext.getGlobalContext().logManager().getLog(TunnelController.class);
         setConfig(config, prefix);
-        _messages = new ArrayList<String>(4);
+        _messages = new ArrayList<>(4);
         boolean keyOK = true;
         if (createKey && (!isClient() || getPersistentClientKey())) {
             keyOK = createPrivateKey();
@@ -707,7 +707,7 @@ public class TunnelController implements Logging {
         // We use _sessions AND the tunnel sessions as
         // _sessions will be null for delay-open tunnels - see acquire().
         // We want the current sessions.
-        Set<I2PSession> sessions = new HashSet<I2PSession>(_tunnel.getSessions());
+        Set<I2PSession> sessions = new HashSet<>(_tunnel.getSessions());
         if (_sessions != null) {sessions.addAll(_sessions);}
         return sessions;
     }
@@ -1590,7 +1590,7 @@ public class TunnelController implements Logging {
     public List<String> clearMessages() {
         List<String> rv;
         synchronized (_messages) {
-            rv = new ArrayList<String>(_messages);
+            rv = new ArrayList<>(_messages);
             _messages.clear();
         }
         return rv;
@@ -1621,8 +1621,8 @@ public class TunnelController implements Logging {
          */
         public PKFChecker(File f, File f2) {
             super(SimpleTimer2.getInstance());
-            files = new ArrayList<File>(2);
-            stamps = new ArrayList<Long>(2);
+            files = new ArrayList<>(2);
+            stamps = new ArrayList<>(2);
             files.add(f);
             stamps.add(Long.valueOf(f.lastModified()));
             if (f2 != null) {
